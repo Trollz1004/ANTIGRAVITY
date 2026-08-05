@@ -1,0 +1,7602 @@
+{
+  "scannedAt": "2026-08-05T19:54:29.660Z",
+  "roots": [
+    "C:\\",
+    "F:\\",
+    "C:\\Users\\joshl\\OneDrive",
+    "C:\\Users\\joshl\\_worktrees"
+  ],
+  "count": 411,
+  "assets": [
+    {
+      "path": "C:\\Users\\joshl\\.claude",
+      "name": ".claude",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-08-05T19:54:24.521Z",
+      "entries": 33,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 8
+    },
+    {
+      "path": "C:\\Users\\joshl",
+      "name": "joshl",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-08-05T19:53:45.053Z",
+      "entries": 270,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": true
+      },
+      "skillCount": 35
+    },
+    {
+      "path": "F:\\ANTIGRAVITY",
+      "name": "ANTIGRAVITY",
+      "kinds": [
+        "git-repo",
+        "mcp-config",
+        "node-project",
+        "claude-doc"
+      ],
+      "mtime": "2026-08-05T19:49:55.896Z",
+      "entries": 146,
+      "drive": "F",
+      "git": {
+        "remote": "https://github.com/Trollz1004/ANTIGRAVITY.git",
+        "branch": "main",
+        "head": "1d3f93b4",
+        "upstream": "origin/main",
+        "dirtyCount": 1,
+        "ahead": 0,
+        "behind": 0,
+        "lastCommitISO": "2026-08-05T15:50:36-04:00",
+        "lastCommitMsg": "fix(mcp): repoint .mcp.json at F: and drop dead entries"
+      },
+      "has": {
+        "mcpJson": true,
+        "claudeMd": true,
+        "agentsMd": true,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 232
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex",
+      "name": ".codex",
+      "kinds": [
+        "skills",
+        "claude-doc"
+      ],
+      "mtime": "2026-08-05T19:42:11.977Z",
+      "entries": 52,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": true,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 35
+    },
+    {
+      "path": "C:\\ANTIGRAVITY\\ANTIGRAVITY",
+      "name": "ANTIGRAVITY",
+      "kinds": [
+        "git-repo",
+        "mcp-config",
+        "node-project",
+        "claude-doc"
+      ],
+      "mtime": "2026-08-05T19:12:23.751Z",
+      "entries": 141,
+      "drive": "C",
+      "git": {
+        "remote": "https://github.com/Trollz1004/ANTIGRAVITY.git",
+        "branch": "main",
+        "head": "d682beef",
+        "upstream": "origin/main",
+        "dirtyCount": 0,
+        "ahead": 0,
+        "behind": 0,
+        "lastCommitISO": "2026-08-05T15:15:15-04:00",
+        "lastCommitMsg": "fix(readme): restore #TeamClaudeForLife meme deleted by cleanup sweep"
+      },
+      "has": {
+        "mcpJson": true,
+        "claudeMd": true,
+        "agentsMd": true,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 228
+    },
+    {
+      "path": "C:\\Users\\joshl\\ANTIGRAVITY-WORK\\ANTIGRAVITY",
+      "name": "ANTIGRAVITY",
+      "kinds": [
+        "git-repo",
+        "mcp-config",
+        "node-project",
+        "claude-doc"
+      ],
+      "mtime": "2026-08-05T00:07:56.917Z",
+      "entries": 141,
+      "drive": "C",
+      "git": {
+        "remote": "https://github.com/Trollz1004/ANTIGRAVITY.git",
+        "branch": "main",
+        "head": "dcf993e",
+        "upstream": "origin/main",
+        "dirtyCount": 1,
+        "ahead": 0,
+        "behind": 0,
+        "lastCommitISO": "2026-08-05T03:14:30-04:00",
+        "lastCommitMsg": "docs(sales): TG 4170 delivered; Gmail signed-out blocker"
+      },
+      "has": {
+        "mcpJson": true,
+        "claudeMd": true,
+        "agentsMd": true,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 228
+    },
+    {
+      "path": "C:\\Users\\joshl\\Downloads\\Telegram Desktop",
+      "name": "Telegram Desktop",
+      "kinds": [
+        "node-project",
+        "claude-doc"
+      ],
+      "mtime": "2026-08-04T20:28:18.058Z",
+      "entries": 114,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": true,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\ANTIGRAVITY",
+      "name": "ANTIGRAVITY",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-08-04T18:42:50.105Z",
+      "entries": 14,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": true
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.claude\\skills\\orchestration",
+      "name": "orchestration",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-08-04T18:39:04.442Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\orchestration",
+      "name": "orchestration",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-08-04T18:39:04.424Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.claude\\skills\\orca-cli",
+      "name": "orca-cli",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-08-04T18:39:04.198Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\orca-cli",
+      "name": "orca-cli",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-08-04T18:39:04.180Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.claude\\skills\\computer-use",
+      "name": "computer-use",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-08-04T18:39:03.965Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\computer-use",
+      "name": "computer-use",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-08-04T18:39:03.941Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Python314\\Lib\\site-packages\\litellm",
+      "name": "litellm",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-08-04T12:36:08.878Z",
+      "entries": 70,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 1
+    },
+    {
+      "path": "F:\\ANTIGRAVITY-PAPERCLIP",
+      "name": "ANTIGRAVITY-PAPERCLIP",
+      "kinds": [
+        "git-repo"
+      ],
+      "mtime": "2026-08-04T10:59:28.780Z",
+      "entries": 1,
+      "drive": "F",
+      "git": {
+        "remote": "https://github.com/Trollz1004/ANTIGRAVITY.git",
+        "branch": null,
+        "head": null,
+        "upstream": null,
+        "dirtyCount": 0,
+        "ahead": null,
+        "behind": null,
+        "lastCommitISO": null,
+        "lastCommitMsg": null
+      },
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\OneDrive\\Desktop\\joshuaclaw-flagship-beta-testing\\free-claude-code-main",
+      "name": "free-claude-code-main",
+      "kinds": [
+        "py-project",
+        "claude-doc"
+      ],
+      "mtime": "2026-08-04T06:59:48.571Z",
+      "entries": 20,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": true,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\OneDrive\\Desktop\\joshuaclaw-flagship-beta-testing",
+      "name": "joshuaclaw-flagship-beta-testing",
+      "kinds": [
+        "mcp-config",
+        "node-project"
+      ],
+      "mtime": "2026-08-04T06:59:42.532Z",
+      "entries": 35,
+      "drive": "C",
+      "has": {
+        "mcpJson": true,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\OneDrive\\e-commerce-orchestrator-v2\\Documents\\laptop setup to use compute from nodes",
+      "name": "laptop setup to use compute from nodes",
+      "kinds": [
+        "git-repo"
+      ],
+      "mtime": "2026-07-31T19:34:29.827Z",
+      "entries": 12,
+      "drive": "C",
+      "git": {
+        "remote": null,
+        "branch": null,
+        "head": null,
+        "upstream": null,
+        "dirtyCount": 0,
+        "ahead": null,
+        "behind": null,
+        "lastCommitISO": null,
+        "lastCommitMsg": null
+      },
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\OneDrive\\JOSHUA's-DO-NOT-COMMIT-TO-GITHUB\\ARCHIVE-2026-07-31\\vault-mirror",
+      "name": "vault-mirror",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-07-31T16:57:47.330Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": true,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\OneDrive\\Personal Vault-DESKTOP-H4B53GL",
+      "name": "Personal Vault-DESKTOP-H4B53GL",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-07-30T03:38:01.046Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": true,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\ANTIGRAVITY\\mission-control-v5",
+      "name": "mission-control-v5",
+      "kinds": [
+        "git-repo",
+        "node-project"
+      ],
+      "mtime": "2026-07-29T19:40:18.332Z",
+      "entries": 12,
+      "drive": "C",
+      "git": {
+        "remote": "https://github.com/Trollz1004/mission-control-v5.git",
+        "branch": "rescue/sabretooth-uncommitted-2026-08-05",
+        "head": "485f560",
+        "upstream": null,
+        "dirtyCount": 0,
+        "ahead": null,
+        "behind": null,
+        "lastCommitISO": "2026-08-05T13:57:52-04:00",
+        "lastCommitMsg": "rescue: snapshot uncommitted Sabretooth working state"
+      },
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.claude\\skills\\agent-reach",
+      "name": "agent-reach",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-26T19:00:49.496Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\agent-reach",
+      "name": "agent-reach",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-26T19:00:49.216Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\Downloads\\_TRASH\\revenue-core-_-launchpad-os",
+      "name": "revenue-core-_-launchpad-os",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-26T11:27:23.482Z",
+      "entries": 17,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": true,
+        "nodeMods": true
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\Downloads\\opusfrommanus_extracted",
+      "name": "opusfrommanus_extracted",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-25T22:54:38.754Z",
+      "entries": 18,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\linksfix",
+      "name": "linksfix",
+      "kinds": [
+        "git-repo"
+      ],
+      "mtime": "2026-07-23T11:11:58.307Z",
+      "entries": 3,
+      "drive": "C",
+      "git": {
+        "remote": "https://github.com/Trollz1004/youandinotai-links.git",
+        "branch": "main",
+        "head": "161439c",
+        "upstream": null,
+        "dirtyCount": 0,
+        "ahead": null,
+        "behind": null,
+        "lastCommitISO": "2026-07-23T07:11:59-04:00",
+        "lastCommitMsg": "add Pages workflow + landing"
+      },
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\Claude\\Scheduled\\paperclip-health-checkin",
+      "name": "paperclip-health-checkin",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-22T22:34:52.294Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\OneDrive\\e-commerce-orchestrator-v2\\Documents\\Claude\\Scheduled\\daily-funding-inbox-check",
+      "name": "daily-funding-inbox-check",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-21T15:55:37.366Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\OneDrive\\e-commerce-orchestrator-v2\\Documents\\Claude\\Scheduled\\send-final-3-outreach",
+      "name": "send-final-3-outreach",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-21T09:40:19.165Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\acpx",
+      "name": "acpx",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-17T14:27:37.550Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.claude\\skills\\acpx",
+      "name": "acpx",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-16T00:19:19.859Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.claude\\skills\\supabase",
+      "name": "supabase",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-16T00:09:42.771Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\supabase",
+      "name": "supabase",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-16T00:09:42.691Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.claude\\skills\\supabase-postgres-best-practices",
+      "name": "supabase-postgres-best-practices",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-16T00:09:35.709Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\supabase-postgres-best-practices",
+      "name": "supabase-postgres-best-practices",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-16T00:09:34.500Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\Claude\\Scheduled\\paperweight-daily-memory",
+      "name": "paperweight-daily-memory",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-15T07:19:58.355Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops",
+      "name": "antigravity-paperclip-dateapp-ops",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-07-15T02:58:58.777Z",
+      "entries": 28,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": true,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\youandinotai-ceo",
+      "name": "youandinotai-ceo",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-07-15T02:19:47.350Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "F:\\CLAUDE's-N-Joshua's-Dream-Online-MMORPG",
+      "name": "CLAUDE's-N-Joshua's-Dream-Online-MMORPG",
+      "kinds": [
+        "git-repo",
+        "claude-doc"
+      ],
+      "mtime": "2026-07-13T08:08:45.069Z",
+      "entries": 25,
+      "drive": "F",
+      "git": {
+        "remote": null,
+        "branch": null,
+        "head": null,
+        "upstream": null,
+        "dirtyCount": 0,
+        "ahead": null,
+        "behind": null,
+        "lastCommitISO": null,
+        "lastCommitMsg": null
+      },
+      "has": {
+        "mcpJson": false,
+        "claudeMd": true,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RA2GZWT\\ANTIGRAVITY",
+      "name": "ANTIGRAVITY",
+      "kinds": [
+        "git-repo",
+        "mcp-config",
+        "skills",
+        "node-project",
+        "claude-doc"
+      ],
+      "mtime": "2026-07-07T10:55:45.137Z",
+      "entries": 134,
+      "drive": "C",
+      "git": {
+        "remote": "https://github.com/Trollz1004/ANTIGRAVITY.git",
+        "branch": "main",
+        "head": "b61123b5",
+        "upstream": "origin/main",
+        "dirtyCount": 0,
+        "ahead": 0,
+        "behind": 0,
+        "lastCommitISO": "2026-07-07T05:53:38-04:00",
+        "lastCommitMsg": "Merge pull request #196 from Trollz1004/ai/codex/governance-contracts"
+      },
+      "has": {
+        "mcpJson": true,
+        "claudeMd": true,
+        "agentsMd": true,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 199
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RA2GZWT\\hermes-workspace",
+      "name": "hermes-workspace",
+      "kinds": [
+        "git-repo",
+        "skills",
+        "node-project",
+        "claude-doc"
+      ],
+      "mtime": "2026-07-07T10:55:30.544Z",
+      "entries": 52,
+      "drive": "C",
+      "git": {
+        "remote": "https://github.com/outsourc-e/hermes-workspace.git",
+        "branch": "main",
+        "head": "c1e6ed97",
+        "upstream": "origin/main",
+        "dirtyCount": 0,
+        "ahead": 0,
+        "behind": 0,
+        "lastCommitISO": "2026-07-05T10:36:52-04:00",
+        "lastCommitMsg": "chore(deps-dev): bump vitest from 3.2.4 to 3.2.6 (#609)"
+      },
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": true,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 1
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$R23XPED\\desktop",
+      "name": "desktop",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-07T10:34:27.551Z",
+      "entries": 18,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\backend\\fastapi-app",
+      "name": "fastapi-app",
+      "kinds": [
+        "py-project"
+      ],
+      "mtime": "2026-07-07T10:04:23.892Z",
+      "entries": 35,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\backend",
+      "name": "backend",
+      "kinds": [
+        "py-project"
+      ],
+      "mtime": "2026-07-07T10:04:23.863Z",
+      "entries": 13,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp",
+      "name": "antigravity-origin-main-dateapp",
+      "kinds": [
+        "skills",
+        "node-project",
+        "claude-doc"
+      ],
+      "mtime": "2026-07-07T10:04:23.862Z",
+      "entries": 97,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": true,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 6
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$R3XN6CG\\whatsapp-bridge",
+      "name": "whatsapp-bridge",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-07T10:03:55.555Z",
+      "entries": 12,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RYX3SGG",
+      "name": "$RYX3SGG",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-07T09:48:22.187Z",
+      "entries": 12,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RYX3SGG\\docs\\user-guide",
+      "name": "user-guide",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T09:48:22.097Z",
+      "entries": 21,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 2
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RHM8V5H",
+      "name": "$RHM8V5H",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-07T09:48:21.850Z",
+      "entries": 12,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": true
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQTUI4P\\packages\\hermes-ink",
+      "name": "hermes-ink",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-07T09:48:21.654Z",
+      "entries": 7,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$ROJKJP0",
+      "name": "$ROJKJP0",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T09:48:21.254Z",
+      "entries": 142,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 0
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\research\\research-paper-writing",
+      "name": "research-paper-writing",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T09:48:19.996Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\research\\research-paper-writing",
+      "name": "research-paper-writing",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T09:48:19.996Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\claude-design",
+      "name": "claude-design",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T09:48:19.992Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\claude-design",
+      "name": "claude-design",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T09:48:19.992Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\autonomous-ai-agents\\hermes-agent",
+      "name": "hermes-agent",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T09:48:19.989Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\autonomous-ai-agents\\hermes-agent",
+      "name": "hermes-agent",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T09:48:19.989Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQ8X987\\google_meet",
+      "name": "google_meet",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T09:48:19.760Z",
+      "entries": 11,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\security\\unbroker",
+      "name": "unbroker",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T09:48:19.708Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$R23XPED\\bootstrap-installer",
+      "name": "bootstrap-installer",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-07T09:48:18.195Z",
+      "entries": 9,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\microsoft-foundry",
+      "name": "microsoft-foundry",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T05:50:02.028Z",
+      "entries": 10,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\Downloads\\claude-official",
+      "name": "claude-official",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-07T04:41:07.047Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": true
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\workspace-memory",
+      "name": "workspace-memory",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T00:41:23.855Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\system-connector",
+      "name": "system-connector",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T00:41:23.824Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\skill-creator",
+      "name": "skill-creator",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T00:41:23.638Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\desktop-commander-guide",
+      "name": "desktop-commander-guide",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-07T00:41:23.463Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\devops\\self-hosted-hermes-workspace",
+      "name": "self-hosted-hermes-workspace",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T22:47:27.877Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\devops\\windows-startup-watchdog-triage",
+      "name": "windows-startup-watchdog-triage",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T22:13:36.385Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\github\\repo-catchup-triage",
+      "name": "repo-catchup-triage",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T21:23:24.471Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\productivity\\bootstrapped-revenue-ops",
+      "name": "bootstrapped-revenue-ops",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T20:57:51.279Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\software-development\\artifact-verification",
+      "name": "artifact-verification",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:37:23.089Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\frontend\\react-app",
+      "name": "react-app",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-06T19:25:39.798Z",
+      "entries": 29,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": true,
+        "nodeMods": true
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\skills\\self-improving-system",
+      "name": "self-improving-system",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:21:01.615Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\skills\\revenue-model",
+      "name": "revenue-model",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:21:01.610Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\skills\\payments",
+      "name": "payments",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:21:01.608Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\skills\\mission-control",
+      "name": "mission-control",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:21:01.605Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\skills\\antigravity-mission-orchestrator",
+      "name": "antigravity-mission-orchestrator",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:21:01.601Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\skills\\antigravity-doctrine",
+      "name": "antigravity-doctrine",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:21:01.595Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\services\\mission-mcp",
+      "name": "mission-mcp",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-06T19:21:01.582Z",
+      "entries": 10,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\services\\mission-control-api",
+      "name": "mission-control-api",
+      "kinds": [
+        "py-project"
+      ],
+      "mtime": "2026-07-06T19:21:01.484Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\services\\hermes-router",
+      "name": "hermes-router",
+      "kinds": [
+        "py-project"
+      ],
+      "mtime": "2026-07-06T19:21:01.344Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\services\\health-aggregator",
+      "name": "health-aggregator",
+      "kinds": [
+        "py-project"
+      ],
+      "mtime": "2026-07-06T19:21:01.325Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\services\\agent-hub",
+      "name": "agent-hub",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-06T19:21:01.291Z",
+      "entries": 8,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\paperclip\\agents\\mission-guardian",
+      "name": "mission-guardian",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-07-06T19:21:00.585Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\paperclip\\agents\\hermes",
+      "name": "hermes",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-07-06T19:21:00.578Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\paperclip\\agents\\cto",
+      "name": "cto",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-07-06T19:21:00.573Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\paperclip\\agents\\cmo",
+      "name": "cmo",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-07-06T19:21:00.568Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\paperclip\\agents\\cfo",
+      "name": "cfo",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-07-06T19:21:00.562Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\paperclip\\agents\\ceo",
+      "name": "ceo",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-07-06T19:21:00.557Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\mcp-server",
+      "name": "mcp-server",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-06T19:21:00.328Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\income-engine\\skills\\graph-knowledge",
+      "name": "graph-knowledge",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:20:59.788Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\income-engine",
+      "name": "income-engine",
+      "kinds": [
+        "mcp-config",
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:20:59.787Z",
+      "entries": 14,
+      "drive": "C",
+      "has": {
+        "mcpJson": true,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 1
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\income-engine\\paperclip",
+      "name": "paperclip",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:20:59.786Z",
+      "entries": 11,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 7
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\income-engine\\paperclip\\skills\\shared",
+      "name": "shared",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:20:59.781Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\income-engine\\paperclip\\skills\\self-improving-system",
+      "name": "self-improving-system",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:20:59.779Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\income-engine\\paperclip\\skills\\fetcher",
+      "name": "fetcher",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:20:59.776Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\income-engine\\paperclip\\skills\\cto",
+      "name": "cto",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:20:59.769Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\income-engine\\paperclip\\skills\\cmo",
+      "name": "cmo",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:20:59.761Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\income-engine\\paperclip\\skills\\cfo",
+      "name": "cfo",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:20:59.752Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\income-engine\\paperclip\\skills\\ceo",
+      "name": "ceo",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-07-06T19:20:59.740Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\income-engine\\manus-gui-extract",
+      "name": "manus-gui-extract",
+      "kinds": [
+        "node-project",
+        "claude-doc"
+      ],
+      "mtime": "2026-07-06T19:20:59.723Z",
+      "entries": 38,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": true,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\hermes\\agents",
+      "name": "agents",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-07-06T19:20:59.645Z",
+      "entries": 23,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\frontend",
+      "name": "frontend",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-06T19:20:59.570Z",
+      "entries": 12,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\contracts",
+      "name": "contracts",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-06T19:20:58.575Z",
+      "entries": 12,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\brain-mcp",
+      "name": "brain-mcp",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-07-06T19:20:58.123Z",
+      "entries": 8,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\ClawX",
+      "name": "ClawX",
+      "kinds": [
+        "skills",
+        "node-project"
+      ],
+      "mtime": "2026-07-06T19:20:55.067Z",
+      "entries": 12,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 0
+    },
+    {
+      "path": "C:\\Users\\joshl\\_worktrees\\antigravity-origin-main-dateapp\\ClawX\\src\\docs",
+      "name": "docs",
+      "kinds": [
+        "claude-doc"
+      ],
+      "mtime": "2026-07-06T19:20:55.041Z",
+      "entries": 8,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": true,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\vendor_imports\\skills",
+      "name": "skills",
+      "kinds": [
+        "git-repo",
+        "skills"
+      ],
+      "mtime": "2026-06-28T09:07:37.490Z",
+      "entries": 5,
+      "drive": "C",
+      "git": {
+        "remote": "https://github.com/openai/skills.git",
+        "branch": "main",
+        "head": "49f948f",
+        "upstream": "origin/main",
+        "dirtyCount": 0,
+        "ahead": 0,
+        "behind": 0,
+        "lastCommitISO": "2026-06-23T19:36:12-07:00",
+        "lastCommitMsg": "[codex] Update skill installer post-install guidance (#507)"
+      },
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 1
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RYX3SGG\\src\\pages",
+      "name": "pages",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:47.947Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 0
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQTUI4P",
+      "name": "$RQTUI4P",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-06-24T02:36:46.078Z",
+      "entries": 11,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\yuanbao",
+      "name": "yuanbao",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.604Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\yuanbao",
+      "name": "yuanbao",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.604Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\software-development\\test-driven-development",
+      "name": "test-driven-development",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.602Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\software-development\\test-driven-development",
+      "name": "test-driven-development",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.602Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\software-development\\systematic-debugging",
+      "name": "systematic-debugging",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.600Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\software-development\\systematic-debugging",
+      "name": "systematic-debugging",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.600Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\software-development\\spike",
+      "name": "spike",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.598Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\software-development\\spike",
+      "name": "spike",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.598Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\software-development\\simplify-code",
+      "name": "simplify-code",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.596Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\software-development\\simplify-code",
+      "name": "simplify-code",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.596Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\software-development\\requesting-code-review",
+      "name": "requesting-code-review",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.595Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\software-development\\requesting-code-review",
+      "name": "requesting-code-review",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.595Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\software-development\\python-debugpy",
+      "name": "python-debugpy",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.593Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\software-development\\python-debugpy",
+      "name": "python-debugpy",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.593Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\software-development\\plan",
+      "name": "plan",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.591Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\software-development\\plan",
+      "name": "plan",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.591Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\software-development\\node-inspect-debugger",
+      "name": "node-inspect-debugger",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.589Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\software-development\\node-inspect-debugger",
+      "name": "node-inspect-debugger",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.589Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\software-development\\hermes-agent-skill-authoring",
+      "name": "hermes-agent-skill-authoring",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.587Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\software-development\\hermes-agent-skill-authoring",
+      "name": "hermes-agent-skill-authoring",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.587Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\social-media\\xurl",
+      "name": "xurl",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.584Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\social-media\\xurl",
+      "name": "xurl",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.584Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\smart-home\\openhue",
+      "name": "openhue",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.580Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\smart-home\\openhue",
+      "name": "openhue",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.580Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\research\\polymarket",
+      "name": "polymarket",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.487Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\research\\polymarket",
+      "name": "polymarket",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.487Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\research\\llm-wiki",
+      "name": "llm-wiki",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.481Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\research\\llm-wiki",
+      "name": "llm-wiki",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.481Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\research\\blogwatcher",
+      "name": "blogwatcher",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.479Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\research\\blogwatcher",
+      "name": "blogwatcher",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.479Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\research\\arxiv",
+      "name": "arxiv",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.477Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\research\\arxiv",
+      "name": "arxiv",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.477Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\productivity\\teams-meeting-pipeline",
+      "name": "teams-meeting-pipeline",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.472Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\productivity\\teams-meeting-pipeline",
+      "name": "teams-meeting-pipeline",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.472Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\productivity\\powerpoint",
+      "name": "powerpoint",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.397Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\productivity\\powerpoint",
+      "name": "powerpoint",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.397Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\productivity\\petdex",
+      "name": "petdex",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.389Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\productivity\\petdex",
+      "name": "petdex",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.389Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\productivity\\ocr-and-documents",
+      "name": "ocr-and-documents",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.385Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\productivity\\ocr-and-documents",
+      "name": "ocr-and-documents",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.385Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\productivity\\notion",
+      "name": "notion",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.380Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\productivity\\notion",
+      "name": "notion",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.380Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\productivity\\nano-pdf",
+      "name": "nano-pdf",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.376Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\productivity\\nano-pdf",
+      "name": "nano-pdf",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.376Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\productivity\\maps",
+      "name": "maps",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.373Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\productivity\\maps",
+      "name": "maps",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.373Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\productivity\\google-workspace",
+      "name": "google-workspace",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.362Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\productivity\\google-workspace",
+      "name": "google-workspace",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.362Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\productivity\\airtable",
+      "name": "airtable",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.356Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\productivity\\airtable",
+      "name": "airtable",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.356Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\note-taking\\obsidian",
+      "name": "obsidian",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.353Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\note-taking\\obsidian",
+      "name": "obsidian",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.353Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\mlops\\huggingface-hub",
+      "name": "huggingface-hub",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.304Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\mlops\\huggingface-hub",
+      "name": "huggingface-hub",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.304Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\media\\youtube-content",
+      "name": "youtube-content",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.275Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\media\\youtube-content",
+      "name": "youtube-content",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.275Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\media\\songsee",
+      "name": "songsee",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.269Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\media\\songsee",
+      "name": "songsee",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.269Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\media\\heartmula",
+      "name": "heartmula",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.266Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\media\\heartmula",
+      "name": "heartmula",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.266Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\media\\gif-search",
+      "name": "gif-search",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.263Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\media\\gif-search",
+      "name": "gif-search",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.263Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\github\\github-repo-management",
+      "name": "github-repo-management",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.237Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\github\\github-repo-management",
+      "name": "github-repo-management",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.237Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\github\\github-pr-workflow",
+      "name": "github-pr-workflow",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.229Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\github\\github-pr-workflow",
+      "name": "github-pr-workflow",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.229Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\github\\github-issues",
+      "name": "github-issues",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.219Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\github\\github-issues",
+      "name": "github-issues",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.219Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\github\\github-code-review",
+      "name": "github-code-review",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.214Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\github\\github-code-review",
+      "name": "github-code-review",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.214Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\github\\github-auth",
+      "name": "github-auth",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.210Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\github\\github-auth",
+      "name": "github-auth",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.210Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\github\\codebase-inspection",
+      "name": "codebase-inspection",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.204Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\github\\codebase-inspection",
+      "name": "codebase-inspection",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.204Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\email\\himalaya",
+      "name": "himalaya",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.199Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\email\\himalaya",
+      "name": "himalaya",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.199Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\dogfood",
+      "name": "dogfood",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.193Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\dogfood",
+      "name": "dogfood",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.193Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\data-science\\jupyter-live-kernel",
+      "name": "jupyter-live-kernel",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.188Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\data-science\\jupyter-live-kernel",
+      "name": "jupyter-live-kernel",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.188Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\touchdesigner-mcp",
+      "name": "touchdesigner-mcp",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.183Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\touchdesigner-mcp",
+      "name": "touchdesigner-mcp",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.183Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\songwriting-and-ai-music",
+      "name": "songwriting-and-ai-music",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.147Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\songwriting-and-ai-music",
+      "name": "songwriting-and-ai-music",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.147Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\sketch",
+      "name": "sketch",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.144Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\sketch",
+      "name": "sketch",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.144Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\pretext",
+      "name": "pretext",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.139Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\pretext",
+      "name": "pretext",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.139Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\popular-web-designs",
+      "name": "popular-web-designs",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.027Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\popular-web-designs",
+      "name": "popular-web-designs",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.027Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\p5js",
+      "name": "p5js",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.023Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\p5js",
+      "name": "p5js",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.023Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\manim-video",
+      "name": "manim-video",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.000Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\manim-video",
+      "name": "manim-video",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:42.000Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\humanizer",
+      "name": "humanizer",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.975Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\humanizer",
+      "name": "humanizer",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.975Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\excalidraw",
+      "name": "excalidraw",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.972Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\excalidraw",
+      "name": "excalidraw",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.972Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\design-md",
+      "name": "design-md",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.964Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\design-md",
+      "name": "design-md",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.964Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\comfyui",
+      "name": "comfyui",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.948Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\comfyui",
+      "name": "comfyui",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.948Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\baoyu-infographic",
+      "name": "baoyu-infographic",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.847Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\baoyu-infographic",
+      "name": "baoyu-infographic",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.847Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\ascii-video",
+      "name": "ascii-video",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.827Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\ascii-video",
+      "name": "ascii-video",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.827Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\ascii-art",
+      "name": "ascii-art",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.821Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\ascii-art",
+      "name": "ascii-art",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.821Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\creative\\architecture-diagram",
+      "name": "architecture-diagram",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.819Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\creative\\architecture-diagram",
+      "name": "architecture-diagram",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.819Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\computer-use",
+      "name": "computer-use",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.811Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\computer-use",
+      "name": "computer-use",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.811Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\autonomous-ai-agents\\opencode",
+      "name": "opencode",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.810Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\autonomous-ai-agents\\opencode",
+      "name": "opencode",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.810Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\autonomous-ai-agents\\codex",
+      "name": "codex",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.802Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\autonomous-ai-agents\\codex",
+      "name": "codex",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.802Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\autonomous-ai-agents\\claude-code",
+      "name": "claude-code",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.800Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\autonomous-ai-agents\\claude-code",
+      "name": "claude-code",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.800Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\apple\\imessage",
+      "name": "imessage",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.796Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\apple\\imessage",
+      "name": "imessage",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.796Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\apple\\findmy",
+      "name": "findmy",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.795Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\apple\\findmy",
+      "name": "findmy",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.795Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\apple\\apple-reminders",
+      "name": "apple-reminders",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.793Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\apple\\apple-reminders",
+      "name": "apple-reminders",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.793Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RAHRILY\\apple\\apple-notes",
+      "name": "apple-notes",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.791Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RQWUYQE\\apple\\apple-notes",
+      "name": "apple-notes",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.791Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\web-development\\page-agent",
+      "name": "page-agent",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.157Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\web-development\\cloudflare-temporary-deploy",
+      "name": "cloudflare-temporary-deploy",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.154Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\software-development\\subagent-driven-development",
+      "name": "subagent-driven-development",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.146Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\software-development\\rest-graphql-debug",
+      "name": "rest-graphql-debug",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.142Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\software-development\\code-wiki",
+      "name": "code-wiki",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.137Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\security\\web-pentest",
+      "name": "web-pentest",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.129Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\security\\sherlock",
+      "name": "sherlock",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.115Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\security\\oss-forensics",
+      "name": "oss-forensics",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.106Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\security\\godmode",
+      "name": "godmode",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.092Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\security\\1password",
+      "name": "1password",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.074Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\research\\searxng-search",
+      "name": "searxng-search",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.067Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\research\\scrapling",
+      "name": "scrapling",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.064Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\research\\qmd",
+      "name": "qmd",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.060Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\research\\parallel-cli",
+      "name": "parallel-cli",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.058Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\research\\osint-investigation",
+      "name": "osint-investigation",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.055Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\research\\gitnexus-explorer",
+      "name": "gitnexus-explorer",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.012Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\research\\duckduckgo-search",
+      "name": "duckduckgo-search",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.007Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\research\\drug-discovery",
+      "name": "drug-discovery",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:41.002Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\research\\domain-intel",
+      "name": "domain-intel",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.996Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\research\\darwinian-evolver",
+      "name": "darwinian-evolver",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.990Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\research\\bioinformatics",
+      "name": "bioinformatics",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.980Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\productivity\\telephony",
+      "name": "telephony",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.976Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\productivity\\siyuan",
+      "name": "siyuan",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.971Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\productivity\\shopify",
+      "name": "shopify",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.969Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\productivity\\shop",
+      "name": "shop",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.956Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\productivity\\memento-flashcards",
+      "name": "memento-flashcards",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.949Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\productivity\\here-now",
+      "name": "here-now",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.944Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\productivity\\canvas",
+      "name": "canvas",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.939Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\payments\\stripe-projects",
+      "name": "stripe-projects",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.934Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\payments\\stripe-link-cli",
+      "name": "stripe-link-cli",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.931Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\payments\\mpp-agent",
+      "name": "mpp-agent",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.926Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\whisper",
+      "name": "whisper",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.919Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\torchtitan",
+      "name": "torchtitan",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.834Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\tensorrt-llm",
+      "name": "tensorrt-llm",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.825Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\stable-diffusion",
+      "name": "stable-diffusion",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.821Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\slime",
+      "name": "slime",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.816Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\simpo",
+      "name": "simpo",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.810Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\saelens",
+      "name": "saelens",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.803Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\qdrant",
+      "name": "qdrant",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.789Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\pytorch-lightning",
+      "name": "pytorch-lightning",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.782Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\pytorch-fsdp",
+      "name": "pytorch-fsdp",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.774Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\pinecone",
+      "name": "pinecone",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.769Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\peft",
+      "name": "peft",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.764Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\obliteratus",
+      "name": "obliteratus",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.758Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\nemo-curator",
+      "name": "nemo-curator",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.750Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\modal",
+      "name": "modal",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.745Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\llava",
+      "name": "llava",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.741Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\lambda-labs",
+      "name": "lambda-labs",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.736Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\instructor",
+      "name": "instructor",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.731Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\huggingface-tokenizers",
+      "name": "huggingface-tokenizers",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.714Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\guidance",
+      "name": "guidance",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.708Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\flash-attention",
+      "name": "flash-attention",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.703Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\faiss",
+      "name": "faiss",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.699Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\clip",
+      "name": "clip",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.696Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\chroma",
+      "name": "chroma",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.692Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mlops\\accelerate",
+      "name": "accelerate",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.686Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\migration\\openclaw-migration",
+      "name": "openclaw-migration",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.681Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mcp\\mcporter",
+      "name": "mcporter",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.675Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\mcp\\fastmcp",
+      "name": "fastmcp",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.669Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\health\\neuroskill-bci",
+      "name": "neuroskill-bci",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.656Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\health\\fitness-nutrition",
+      "name": "fitness-nutrition",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.651Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\gaming\\pokemon-player",
+      "name": "pokemon-player",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.645Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\gaming\\minecraft-modpack-server",
+      "name": "minecraft-modpack-server",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.644Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\finance\\stocks",
+      "name": "stocks",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.640Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\finance\\pptx-author",
+      "name": "pptx-author",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.636Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\finance\\merger-model",
+      "name": "merger-model",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.635Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\finance\\lbo-model",
+      "name": "lbo-model",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.633Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\finance\\excel-author",
+      "name": "excel-author",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.631Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\finance\\dcf-model",
+      "name": "dcf-model",
+      "kinds": [
+        "skills",
+        "py-project"
+      ],
+      "mtime": "2026-06-24T02:36:40.627Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\finance\\comps-analysis",
+      "name": "comps-analysis",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.621Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\finance\\3-statement-model",
+      "name": "3-statement-model",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.615Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\email\\agentmail",
+      "name": "agentmail",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.611Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\dogfood\\adversarial-ux-test",
+      "name": "adversarial-ux-test",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.609Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\devops\\watchers",
+      "name": "watchers",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.601Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\devops\\pinggy-tunnel",
+      "name": "pinggy-tunnel",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.598Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\devops\\hermes-s6-container-supervision",
+      "name": "hermes-s6-container-supervision",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.596Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\devops\\docker-management",
+      "name": "docker-management",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.594Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\devops\\cli",
+      "name": "cli",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.588Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\creative\\pixel-art",
+      "name": "pixel-art",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.581Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\creative\\meme-generation",
+      "name": "meme-generation",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.570Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\creative\\kanban-video-orchestrator",
+      "name": "kanban-video-orchestrator",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.562Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\creative\\hyperframes",
+      "name": "hyperframes",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.544Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\creative\\creative-ideation",
+      "name": "creative-ideation",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.492Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\creative\\concept-diagrams",
+      "name": "concept-diagrams",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.488Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\creative\\blender-mcp",
+      "name": "blender-mcp",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.460Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\creative\\baoyu-comic",
+      "name": "baoyu-comic",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.408Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\creative\\baoyu-article-illustrator",
+      "name": "baoyu-article-illustrator",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.350Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\communication\\one-three-one-rule",
+      "name": "one-three-one-rule",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.342Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\blockchain\\solana",
+      "name": "solana",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.337Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\blockchain\\hyperliquid",
+      "name": "hyperliquid",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.332Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\blockchain\\evm",
+      "name": "evm",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.326Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\autonomous-ai-agents\\openhands",
+      "name": "openhands",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.321Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\autonomous-ai-agents\\honcho",
+      "name": "honcho",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.319Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\autonomous-ai-agents\\grok",
+      "name": "grok",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.317Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\autonomous-ai-agents\\blackbox",
+      "name": "blackbox",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.314Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$RI32T7M\\autonomous-ai-agents\\antigravity-cli",
+      "name": "antigravity-cli",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-24T02:36:40.311Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\$Recycle.Bin\\S-1-5-21-1536730849-140043065-4262015595-1001\\$R23XPED\\shared",
+      "name": "shared",
+      "kinds": [
+        "node-project"
+      ],
+      "mtime": "2026-06-24T02:36:39.725Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\pi-worker",
+      "name": "pi-worker",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:31:12.143Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\support-compliance",
+      "name": "support-compliance",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:14.571Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\pi-worker",
+      "name": "pi-worker",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:14.387Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\openrouter-openai-regular-worker",
+      "name": "openrouter-openai-regular-worker",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:14.204Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\openrouter-openai-codex-worker",
+      "name": "openrouter-openai-codex-worker",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:14.021Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\openrouter-nvidia-worker",
+      "name": "openrouter-nvidia-worker",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:13.820Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\openrouter-grok-worker",
+      "name": "openrouter-grok-worker",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:13.604Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\opencode-ollama-worker",
+      "name": "opencode-ollama-worker",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:13.421Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\opencode-free-cloud-worker",
+      "name": "opencode-free-cloud-worker",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:13.221Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\official-openclaw-support",
+      "name": "official-openclaw-support",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:13.038Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\gemini-cloud-worker",
+      "name": "gemini-cloud-worker",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:12.837Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\fcc-worker",
+      "name": "fcc-worker",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:12.646Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\date-app-ux",
+      "name": "date-app-ux",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:12.453Z",
+      "entries": 7,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\date-app-research",
+      "name": "date-app-research",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:12.237Z",
+      "entries": 7,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\context-sentry",
+      "name": "context-sentry",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:12.007Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\codex-ceo",
+      "name": "codex-ceo",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:11.831Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\codex-auth-operator",
+      "name": "codex-auth-operator",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:11.623Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\antigravity-paperclip-dateapp-ops\\agents\\cloudflare-operator",
+      "name": "cloudflare-operator",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-23T05:28:11.423Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\OneDrive\\e-commerce-orchestrator-v2\\Documents\\Claude\\Scheduled\\paperweight-daily-memory",
+      "name": "paperweight-daily-memory",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-06-22T14:20:35.336Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\OneDrive\\e-commerce-orchestrator-v2\\Documents\\New project",
+      "name": "New project",
+      "kinds": [
+        "git-repo"
+      ],
+      "mtime": "2026-06-10T20:07:40.407Z",
+      "entries": 6,
+      "drive": "C",
+      "git": {
+        "remote": null,
+        "branch": null,
+        "head": null,
+        "upstream": null,
+        "dirtyCount": 4,
+        "ahead": null,
+        "behind": null,
+        "lastCommitISO": null,
+        "lastCommitMsg": null
+      },
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.claude\\skills\\skill-creator",
+      "name": "skill-creator",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-04-20T01:42:21.903Z",
+      "entries": 7,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\imagegen",
+      "name": "imagegen",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-11T19:52:01.467Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\transcribe",
+      "name": "transcribe",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-11T19:51:59.530Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\security-threat-model",
+      "name": "security-threat-model",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-11T19:51:57.474Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\screenshot",
+      "name": "screenshot",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-11T19:51:54.492Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\speech",
+      "name": "speech",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-11T19:51:47.233Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\security-ownership-map",
+      "name": "security-ownership-map",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-11T19:51:46.568Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\doc",
+      "name": "doc",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-11T19:51:45.648Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\sora",
+      "name": "sora",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:12:26.102Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\sentry",
+      "name": "sentry",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:12:19.360Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\playwright",
+      "name": "playwright",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:12:09.567Z",
+      "entries": 7,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\jupyter-notebook",
+      "name": "jupyter-notebook",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:12:07.699Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\render-deploy",
+      "name": "render-deploy",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:12:06.715Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\security-best-practices",
+      "name": "security-best-practices",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:12:05.490Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\vercel-deploy",
+      "name": "vercel-deploy",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:12:00.176Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\yeet",
+      "name": "yeet",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:53.142Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\winui-app",
+      "name": "winui-app",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:51.879Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\pdf",
+      "name": "pdf",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:43.580Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\playwright-interactive",
+      "name": "playwright-interactive",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:41.530Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\openai-docs",
+      "name": "openai-docs",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:38.004Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\notion-research-documentation",
+      "name": "notion-research-documentation",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:35.594Z",
+      "entries": 7,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\notion-spec-to-implementation",
+      "name": "notion-spec-to-implementation",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:34.109Z",
+      "entries": 7,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\netlify-deploy",
+      "name": "netlify-deploy",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:30.370Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\linear",
+      "name": "linear",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:29.168Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\notion-meeting-intelligence",
+      "name": "notion-meeting-intelligence",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:28.203Z",
+      "entries": 7,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\notion-knowledge-capture",
+      "name": "notion-knowledge-capture",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:27.075Z",
+      "entries": 7,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\gh-fix-ci",
+      "name": "gh-fix-ci",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:24.007Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\gh-address-comments",
+      "name": "gh-address-comments",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:22.059Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\figma-implement-design",
+      "name": "figma-implement-design",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:19.794Z",
+      "entries": 4,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\figma",
+      "name": "figma",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:18.129Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\develop-web-game",
+      "name": "develop-web-game",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:15.672Z",
+      "entries": 6,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\aspnet-core",
+      "name": "aspnet-core",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:11.462Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\cloudflare-deploy",
+      "name": "cloudflare-deploy",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:11:04.082Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\skills\\chatgpt-apps",
+      "name": "chatgpt-apps",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:10:58.147Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.codex\\vendor_imports",
+      "name": "vendor_imports",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-07T16:05:43.071Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 2
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents",
+      "name": ".agents",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:16.871Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": true,
+        "dist": false,
+        "nodeMods": false
+      },
+      "skillCount": 35
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\entra-app-registration",
+      "name": "entra-app-registration",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:16.162Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-validate",
+      "name": "azure-validate",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:16.132Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-storage",
+      "name": "azure-storage",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:16.107Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-resource-lookup",
+      "name": "azure-resource-lookup",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:16.087Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-resource-visualizer",
+      "name": "azure-resource-visualizer",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:16.087Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-rbac",
+      "name": "azure-rbac",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:16.078Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-prepare",
+      "name": "azure-prepare",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.764Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-observability",
+      "name": "azure-observability",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.725Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-messaging",
+      "name": "azure-messaging",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.695Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-kusto",
+      "name": "azure-kusto",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.685Z",
+      "entries": 1,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-hosted-copilot-sdk",
+      "name": "azure-hosted-copilot-sdk",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.673Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-diagnostics",
+      "name": "azure-diagnostics",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.651Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-deploy",
+      "name": "azure-deploy",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.605Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-cost-optimization",
+      "name": "azure-cost-optimization",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.576Z",
+      "entries": 3,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-compute",
+      "name": "azure-compute",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.556Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-compliance",
+      "name": "azure-compliance",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.526Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-cloud-migrate",
+      "name": "azure-cloud-migrate",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.492Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-aigateway",
+      "name": "azure-aigateway",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.474Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\azure-ai",
+      "name": "azure-ai",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.435Z",
+      "entries": 2,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\.agents\\skills\\appinsights-instrumentation",
+      "name": "appinsights-instrumentation",
+      "kinds": [
+        "skills"
+      ],
+      "mtime": "2026-03-01T01:03:15.411Z",
+      "entries": 5,
+      "drive": "C",
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": false,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    },
+    {
+      "path": "C:\\Users\\joshl\\E",
+      "name": "E",
+      "kinds": [
+        "git-repo",
+        "claude-doc"
+      ],
+      "mtime": "2026-02-26T19:10:27.574Z",
+      "entries": 9,
+      "drive": "C",
+      "git": {
+        "remote": null,
+        "branch": null,
+        "head": null,
+        "upstream": null,
+        "dirtyCount": 8,
+        "ahead": null,
+        "behind": null,
+        "lastCommitISO": null,
+        "lastCommitMsg": null
+      },
+      "has": {
+        "mcpJson": false,
+        "claudeMd": false,
+        "agentsMd": true,
+        "skills": false,
+        "dist": false,
+        "nodeMods": false
+      }
+    }
+  ]
+}
