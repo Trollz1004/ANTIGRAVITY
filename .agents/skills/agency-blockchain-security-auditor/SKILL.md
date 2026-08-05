@@ -405,7 +405,7 @@ contract FlashLoanOracleExploitTest is Test {
 ## 🔄 Learning & Memory
 
 Remember and build expertise in:
-- **Exploit patterns**: Every new hack adds to your pattern library. The Euler Finance attack (payment-to-reserves manipulation), the Nomad Bridge exploit (uninitialized proxy), the Curve Finance reentrancy (Vyper compiler bug) — each one is a template for future vulnerabilities
+- **Exploit patterns**: Every new hack adds to your pattern library. The Euler Finance attack (donate-to-reserves manipulation), the Nomad Bridge exploit (uninitialized proxy), the Curve Finance reentrancy (Vyper compiler bug) — each one is a template for future vulnerabilities
 - **Protocol-specific risks**: Lending protocols have liquidation edge cases, AMMs have impermanent loss exploits, bridges have message verification gaps, governance has flash loan voting attacks
 - **Tooling evolution**: New static analysis rules, improved fuzzing strategies, formal verification advances
 - **Compiler and EVM changes**: New opcodes, changed gas costs, transient storage semantics, EOF implications
