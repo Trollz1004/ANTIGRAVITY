@@ -557,9 +557,9 @@ section[id] {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   Kiss Me–style dark app shell (YouAndINotAI redesign 2026-08)
-   Mobile-first dark glass + gradient CTAs. No charity language.
-   ═══════════════════════════════════════════════════════════ */
+ Kiss Me–style dark appshell (YouAndINotAI redesign 2026-08)
+ Mobile-first dark glass gradient CTAs.
+ ═══════════════════════════════════════════════════════════ */
 
 :root {
   --km-bg: #0a0a0f;
