@@ -1,39 +1,49 @@
 #!/usr/bin/env bash
-# canonical-guard — blocks banned language on CUSTOMER SURFACES only.
+# canonical-guard — blocks banned language and split logic REPO-WIDE.
 #
-# WHY THIS FILE HOLDS THE LIST:
-# The list used to live in BRIEFING.md. Commit d245c23a ("chore: purge
-# split/charity/cap/non-business language") swept the repo for those words and
-# scrubbed them out of the very document that defined them, leaving empty
-# backticks. The specification destroyed itself. A shell script is not a
-# customer surface and is not a markdown doc, so sanitizer sweeps skip it.
+# SCOPE CHANGED 2026-08-05, ON JOSH'S EXPLICIT INSTRUCTION.
+# The first version checked CUSTOMER SURFACES ONLY, reasoning that
+# payment-processor bots read the deployed site and that a tax-strategist skill
+# should be free to say "charitable deduction". That reasoning was mine, not
+# Josh's, and it was wrong. His rule, stated plainly: "never in my code, never
+# a split, never a damn thing." BRIEFING.md said it too and I read past it:
+# "My code AND my customer surfaces must contain ZERO of the following."
+#
+# The narrow version let a repair job restore the split ratio 60/30/10 into two
+# skill files. That is the exact failure this guard exists to prevent.
+# Repo-wide is the rule. Do not narrow it again.
+#
+# WHY THE LIST LIVES IN THIS FILE:
+# It used to live in BRIEFING.md. Commit d245c23a ("purge split/charity/cap
+# language") swept the repo for those words and scrubbed them out of the very
+# document that DEFINED them, leaving empty backticks. The specification
+# destroyed itself and nothing could enforce it afterwards. A shell script is
+# not markdown and not a customer surface, so sanitizer sweeps skip it.
 # THIS FILE IS THE SOURCE OF TRUTH. Do not "clean" it.
 #
-# WHY CUSTOMER SURFACES ONLY:
-# Payment-processor flag bots keyword-match the LIVE deployed site. Even a
-# denial ("this is NOT a charitable solicitation") trips them. So on anything
-# a customer can load, the words must never appear at all.
-# Everywhere else they are FINE and often necessary — a tax-strategist skill
-# must be able to say "charitable deduction". The d245c23a purge got this
-# wrong by sweeping globally, which is what damaged 10 skill files.
+# Only NEWLY STAGED files are checked, so pre-existing occurrences do not block
+# every commit. This stops the bleeding; a full purge is separate work.
 
 set -uo pipefail
 
-# ---- customer surfaces: paths a customer's browser can actually reach ----
-SURFACE_RE='^(frontend/|apps/[^/]*frontend[^/]*/|ops/sales/public-surface/|[^/]*\.html$|.*/public/|.*/marketing/)'
+# ---- exclusions: vendored third-party code, and this guard itself ----
+# Not Josh's code. Purging a dependency's changelog achieves nothing and breaks
+# it. The guard's own files must be exempt or it blocks itself.
+EXCLUDE_RE='^(\.githooks/|omniroute/|\.agents/skills/microsoft-foundry/|\.agents/skills/skills/microsoft-foundry/|node_modules/|.*/node_modules/)'
 
-# ---- canonical-7 banned words (recovered from d245c23a^ BRIEFING.md) ----
+# ---- banned words (recovered from d245c23a^ BRIEFING.md) ----
 BANNED_WORDS='charity|charitable|donate|donation|donations|solicitation|disbursement|tax-deductible|giving back|non-?profit|501\(c\)|proceeds go to|every dollar|funds children'
 
-# ---- revenue-split logic ----
-BANNED_SPLITS='CharityRouter|GospelDonation|100% to charity|donation splitter|split ?contract|60/30/10|revenue ?split|charity ?split'
+# ---- split logic. 60/30/10 got restored once by mistake; never again ----
+BANNED_SPLITS='CharityRouter|GospelDonation|100% to charity|donation splitter|split ?contract|60/30/10|revenue ?split|charity ?split|charitable_percent|charitable_amount|percentage.?to.?cause'
 
 fail=0
 staged=$(git diff --cached --name-only --diff-filter=ACM)
 [ -z "$staged" ] && exit 0
 
 while IFS= read -r f; do
-  echo "$f" | grep -qE "$SURFACE_RE" || continue
+  [ -z "$f" ] && continue
+  echo "$f" | grep -qE "$EXCLUDE_RE" && continue
   [ -f "$f" ] || continue
 
   hits=$(git show ":$f" 2>/dev/null | grep -nIiE "$BANNED_WORDS|$BANNED_SPLITS" | head -5)
@@ -41,8 +51,8 @@ while IFS= read -r f; do
     if [ "$fail" -eq 0 ]; then
       echo ""
       echo "ERROR: canonical-guard blocked this commit."
-      echo "Banned language found on a CUSTOMER SURFACE. Payment-processor flag"
-      echo "bots keyword-match the live site; the words must never appear at all."
+      echo "Banned language or split logic found. The rule is repo-wide:"
+      echo "never in the code, never a split, no exceptions."
       echo ""
       fail=1
     fi
@@ -53,9 +63,12 @@ done <<< "$staged"
 
 if [ "$fail" -eq 1 ]; then
   echo ""
-  echo "Fix: remove the wording. Do not rephrase around it, do not add a denial."
-  echo "Non-surface paths (skills, docs, backend logic) are NOT checked and may"
-  echo "use these words freely."
+  echo "Fix: remove the wording. Do not rephrase around it and do not add a denial —"
+  echo "a sentence saying 'this is NOT a charitable solicitation' still trips a"
+  echo "keyword match. The words simply never appear."
+  echo ""
+  echo "Excluded: .githooks/ (this guard), omniroute/ and microsoft-foundry/"
+  echo "(vendored third-party), node_modules/."
   echo ""
   exit 1
 fi
