@@ -12,6 +12,16 @@ export interface AgentDef {
   brainExecutor?: string;
 }
 
+export type SubagentHealth = 'green' | 'yellow' | 'red';
+
+export interface SubagentNode {
+  id: string;
+  name: string;
+  health: SubagentHealth;
+  updatedAt: string;
+  files: Record<'SOUL.md' | 'HEARTBEAT.md' | 'TOOLS.md' | 'SKILLS.md', string>;
+}
+
 export interface PhaseNote {
   phase: 'plan' | 'work' | 'validate' | 'journal' | 'deliver';
   detail: string;

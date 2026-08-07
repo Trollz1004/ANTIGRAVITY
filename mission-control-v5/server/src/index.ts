@@ -4,7 +4,7 @@
  * Four orchestrator harnesses; roles come from the skill catalog and ride on
  * sub-agents. No model is named in the UI — OmniRoute resolves it at run time.
  */
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import cors from 'cors';
@@ -37,6 +37,39 @@ loadState();
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '1mb' }));
+
+const SUBAGENT_FILES = ['SOUL.md', 'HEARTBEAT.md', 'TOOLS.md', 'SKILLS.md'] as const;
+const subagentsRoot = join(__dirname, '../../../.agents/subagents');
+
+function subagentHealth(heartbeat: string, updatedAt: Date) {
+  const reports = heartbeat.match(/^\s*(?:[-*]\s*)?(GREEN|YELLOW|RED):.*$/gim);
+  const explicit = reports?.at(-1)?.match(/(?:[-*]\s*)?(GREEN|YELLOW|RED):/i)?.[1]?.toLowerCase();
+  if (explicit) return explicit;
+  return Date.now() - updatedAt.getTime() > 24 * 60 * 60 * 1000 ? 'red' : 'yellow';
+}
+
+// Fixed-root reader: graph clients can inspect agent doctrine, never arbitrary files.
+app.get('/api/subagents', (_req, res) => {
+  if (!existsSync(subagentsRoot)) return res.json({ agents: [] });
+  const agents = readdirSync(subagentsRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => {
+      const files = Object.fromEntries(SUBAGENT_FILES.map((name) => {
+        const path = join(subagentsRoot, entry.name, name);
+        return [name, existsSync(path) ? readFileSync(path, 'utf8') : ''];
+      }));
+      const heartbeatPath = join(subagentsRoot, entry.name, 'HEARTBEAT.md');
+      const updatedAt = existsSync(heartbeatPath) ? statSync(heartbeatPath).mtime : new Date(0);
+      return {
+        id: entry.name,
+        name: files['SOUL.md'].match(/^#\s+(.+?)(?:\s+SOUL(?:\.md)?)?$/m)?.[1] ?? entry.name,
+        health: subagentHealth(files['HEARTBEAT.md'], updatedAt),
+        updatedAt: updatedAt.toISOString(),
+        files,
+      };
+    });
+  res.json({ agents });
+});
 
 // ── Health / router status ────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {
