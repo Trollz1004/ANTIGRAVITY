@@ -13,6 +13,7 @@ import type {
   Health,
   Mode,
   ServiceStatus,
+  SubagentNode,
   SwarmTask,
 } from './types';
 
@@ -33,6 +34,7 @@ export const api = {
     request<{ total: number; count: number; categories: CategoryDef[]; agents: AgentDef[] }>(
       '/api/agents',
     ),
+  subagents: () => request<{ agents: SubagentNode[] }>('/api/subagents'),
   tasks: () => request<{ tasks: SwarmTask[] }>('/api/tasks'),
   createTask: (input: { title?: string; prompt: string; agentIds: string[]; mode: Mode; executor?: string }) =>
     request<{ task: SwarmTask }>('/api/tasks', { method: 'POST', body: JSON.stringify(input) }),
