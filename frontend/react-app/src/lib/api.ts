@@ -2,7 +2,12 @@
  * API client with JWT auth for the YouAndiNotAi backend.
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
+const PUBLIC_API_BASE = 'https://api.youandinotai.com/api/v1';
+const PUBLIC_APP_HOSTS = new Set(['youandinotai.com', 'www.youandinotai.com']);
+
+const API_BASE =
+  import.meta.env.VITE_API_URL ||
+  (PUBLIC_APP_HOSTS.has(window.location.hostname) ? PUBLIC_API_BASE : '/api/v1');
 
 class ApiError extends Error {
   constructor(
