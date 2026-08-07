@@ -7,10 +7,11 @@ import Header, { type Tab } from './components/Header';
 import KanbanBoard from './components/KanbanBoard';
 import ServicesPanel from './components/ServicesPanel';
 import SwarmEngine from './components/SwarmEngine';
+import Graphy from './components/Graphy';
 import type { AgentDef, CategoryDef, Health, SwarmTask } from './types';
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>('library');
+  const [tab, setTab] = useState<Tab>('graphy');
   const [agents, setAgents] = useState<AgentDef[]>([]);
   const [categories, setCategories] = useState<CategoryDef[]>([]);
   const [tasks, setTasks] = useState<SwarmTask[]>([]);
@@ -90,6 +91,7 @@ export default function App() {
           selectedCount={selected.size}
         />
         <main className="main">
+          {tab === 'graphy' && <Graphy />}
           {tab === 'library' && (
             <AgentLibrary
               agents={agents}
