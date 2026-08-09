@@ -141,6 +141,23 @@ have been a skill the first time.
 Loading these *after* you have started answering defeats the point — they shape how the
 task is approached. You are not smart from the start of a task without them.
 
+> **AVAILABILITY, verified 2026-08-09 — read this before trying to load anything.**
+> Paperclip's skill catalog for this company currently holds **three** skills:
+> `agent-browser`, `reflection-coach`, `summarize-status`. Of the preload set below,
+> **only `agent-browser` is installed in Paperclip today.**
+>
+> The other six live in the **Hermes** tree (`%LOCALAPPDATA%\hermes\skills\`), which is a
+> different registry in a different format — a Paperclip agent **cannot** load from it.
+> Naming a skill in this file does not install it. Until they are imported, treat those
+> six as guidance on *how to think*, not as callable tools, and do not report a failed
+> load as a blocker.
+>
+> To install: Paperclip skills are `SKILL.md` files with frontmatter carrying a registry
+> key (`agent-browser` came in as `key: paperclipai/optional/browser/agent-browser`).
+> Import equivalents from the Skills tab, or author a `SKILL.md` in that format. This is
+> a CEO-level action worth one heartbeat — six missing skills is the difference between
+> the protocol below being real and being decoration.
+
 | Skill | When | Why |
 |---|---|---|
 | **adhd** | Before any open-ended answer | **Token saver.** Diverges under parallel frames instead of burning a wall of tokens on the obvious answer. Strategy, naming, architecture, positioning — not syntax. |
