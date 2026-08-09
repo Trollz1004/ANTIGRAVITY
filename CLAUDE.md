@@ -1,6 +1,6 @@
 # CLAUDE.md - ANTIGRAVITY Current Agent Guide
 
-Updated: 2026-07-31
+Updated: 2026-08-09
 
 ## MANDATORY: Skills Protocol — low-context sessions, zero excuses
 
@@ -9,18 +9,28 @@ system in your head, so skills are not optional:
 
 1. **Session start:** read state BEFORE anything else — `AGENTS.md`, the
    relevant `STATE.md` / `MEMORY.md`, and today's briefing.
-2. **Before EVERY task:** load the matching skill from `E:\ANTIGRAVITY\skills\`.
+2. **Before EVERY task:** load the matching skill. There are THREE skill trees and
+   they are NOT interchangeable (verified 2026-08-09) — `E:\ANTIGRAVITY\skills\`
+   never existed and is dead twice over:
+   - `C:\Users\joshl\AppData\Local\hermes\skills\` — **53**, holds the preload set
+   - `F:\ANTIGRAVITY\.agents\skills\` — 230 (184 are unused `agency-*`)
+   - `C:\Users\joshl\.agents\skills\` — 35, what the OpenCode harness reads
+
    Always-available toolbox (load before tasking, no exceptions):
-   - `agent-browser` — any web or browser work
-   - `find-skills` — locate the right skill for a task
-   - `self-improvement` / skill-creator — write the missing skill, then use it
-   - `caveman` — knows skills.sh and how the skill system works
-   - Hermes hub + Claw hub — cross-agent coordination
-   A task executed without loading a skill is a task done wrong.
+   - `adhd` — TOKEN SAVER. Run before any open-ended answer; you are in a low
+     context window and this is what stops you burning it on the obvious answer.
+   - `agent-browser` — any web or browser work. **The name is `agent-browser`**;
+     plain `browser` is a *plugin* and fails when called as a skill.
+   - `find-skills` — locate the right skill; ~90k reachable via skills.sh, ClawHub,
+     and the Hermes/Nous Research hub
+   - `create-skill` — write the missing skill, then use it
+   - `creative` — **there is no `superpowers` skill installed**; this is it
+   - `brainstorming`, `agent-reach` — framing and research
+     A task executed without loading a skill is a task done wrong.
 3. **Session end:** write state back (what changed, what's blocked, next step)
    before the window closes. The next session starts blind without it.
 
-This file is the Claude-facing operational guide for `C:\antigravity`.
+This file is the Claude-facing operational guide for `F:\ANTIGRAVITY`.
 If older exports, memories, downloads, or cached project files conflict with this file,
 follow this file and `AGENTS.md`.
 
@@ -47,45 +57,47 @@ The current doctrine file is:
 
 ## Source Of Truth
 
-- Repo: `C:\antigravity`
-- Branch: `main`
+- Repo: `F:\ANTIGRAVITY`  — **not `C:\antigravity`, not `E:\`**
+- Branch: `main` (the only branch — merge and delete any other)
 - Remote: `Trollz1004/ANTIGRAVITY`
 - Public date app domain: `youandinotai.com`
 - Public API domain: `api.youandinotai.com`
-- Front-door node: T5500
-- Brain/agent node: Sabretooth
-- Dev/support node: 9020
+- **Single node: SABRETOOTH-NODE (192.168.0.8).** It is the front door, the brain,
+  and the dev box. The T5500 is retired — its disk was physically moved into
+  Sabretooth on 2026-08-09 and now mounts as `F:`. Any path starting `E:\` and any
+  host at `192.168.0.15` is dead. Prefer `127.0.0.1` in configs; there is nothing
+  else to reach.
+- 9020: still retired, still undecided.
 
 Do not use retired workspaces, downloads, exported project folders, or backup clones as live
 truth unless Joshua explicitly says they are the target.
 
-## Paperclip Decision Lanes
+## Decision Lanes
 
-Paperclip, Hermes, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Ollama, and other lanes may lead only when Joshua directly assigns them or when their role map already covers the task. Otherwise they collect evidence, draft proposals, and report to the active lead.
+Hermes, OpenClaw, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Ollama, and other lanes may lead only when Joshua directly assigns them or when their role map already covers the task. Otherwise they collect evidence, draft proposals, and report to the active lead.
 
-FCC may be installed in Paperclip as a worker model through its MCP bridge for
-OpenCode, NVIDIA, and Ollama-backed work. FCC can scan, summarize, draft, and
-propose patches. It does not make final decisions.
+**Current shape (set 2026-08-09):**
 
-Current T5500 Paperclip setup:
+- **OpenCode = CEO.** Contract: `C:\Users\joshl\.opencode\claude.md`, mirrored to
+  `agent-contracts/OPENCODE-CEO.md`.
+- **Hermes = agent** — research, outreach, revenue, content. `agent-contracts/HERMES-AGENT.md`.
+- **OpenClaw = agent** — engineering and verification. `agent-contracts/OPENCLAW-AGENT.md`.
+- **Mission Control v5 on `:3151` = the board** (kanban, agents, Graphy, MCP).
+  Mission Control v6 on `:8787` is a *health monitor only* — different program.
+- Shared rules for all three: `agent-contracts/AGENTS.md`.
 
-- Date-app/customer-support only.
-- Ops package: `C:\antigravity-paperclip-dateapp-ops`
-- T5500 scheduled task: `PaperclipDateAppLoopback`
-- Paperclip local URL on T5500: `http://127.0.0.1:3100`
-- Company: Antigravity
-- Active lead: assigned per task by Joshua
-- Workers: `Date App UX`, `Cloudflare Operator`, `Official OpenClaw Support`,
-  `FCC Worker`, `Support Compliance`, `Context Sentry`
-- Starter issues: `ANT-1`, `ANT-3`, `ANT-5`, `ANT-7`, `ANT-9`, `ANT-11`
+FCC can scan, summarize, draft, and propose patches. It does not make final
+decisions. **`fcc-claude` reads `CLAUDE.md` and `.claude.json` and behaves as real
+Claude Code** — so anything stale in this file becomes a stale instruction it
+follows. Keep it current.
 
-The starter issues are intentionally `todo` and unassigned until the runtime
-adapters are configured. Do not auto-assign them just because the agents exist.
-Hermes is intentionally not part of the T5500 date-app/customer-support package.
-
-9020 Hermes Paperclip is separate and undecided. It may become a marketing node
-or an AI-solutions/business-exchange lane, but no agent should assume that role
-until Joshua explicitly decides it.
+**PAPERCLIP IS RETIRED (2026-08-09).** Do not call `:3120` or `:3100`, do not post
+task callbacks to it, do not treat it as the board. Its data and hourly backups are
+preserved; only the server is stopped. It was retired because it duplicated the
+Mission Control board, its agents' instructions file contained nothing but
+`# Agent instructions` so they ran on stock built-in contracts, its skill catalog
+held 3 entries against the 53 the work needed, and its adapter spawned real
+`claude.exe` against the Max subscription every 30 seconds.
 
 FCC compatibility rule: FCC may identify itself as Claude or primarily load
 `CLAUDE.md`-style files. In this workspace that does not make FCC/Claude the CEO
@@ -98,7 +110,7 @@ next actions for the active lead / Joshua review.
 
 There is no permanent AI boss.
 
-When Joshua directly assigns a task to Claude, Codex/OpenAI, Gemini, Meta/Llama, Manus, Hermes, Paperclip, FCC, OpenCode, Ollama, or another capable system, that named system becomes the active lead for that task.
+When Joshua directly assigns a task to Claude, Codex/OpenAI, Gemini, Meta/Llama, Manus, Hermes, OpenClaw, FCC, OpenCode, Ollama, or another capable system, that named system becomes the active lead for that task.
 
 The guardrails restrict autonomous or delegated model behavior, not Joshua's direct instruction.
 
@@ -142,11 +154,20 @@ Not allowed in active public copy:
 
 ## Node Roles
 
-- T5500: public tunnels, domains, payments, Cloudflare/Wrangler deployment.
-- Sabretooth: agent coordination, local model work, Paperclip/Paperweight brain services.
-- 9020: dev/support checkout only.
+**SABRETOOTH-NODE does everything.** It is the only node: public tunnels, domains,
+payments, Cloudflare/Wrangler deployment, agent coordination, local model work, and
+brain services all run here.
 
-Do not move public tunnel responsibility off T5500 unless Joshua explicitly changes node roles.
+- T5500: **retired.** Its disk is now `F:` in Sabretooth. This file previously said
+  "do not move public tunnel responsibility off T5500" — that instruction is now
+  impossible to follow and was actively misleading, since Sabretooth already serves
+  the tunnel via the `Cloudflared` Windows service.
+- 9020: still retired, dev/support checkout only if it ever returns.
+
+Hardware note: Sabretooth's GPU is a **GTX 1050 Ti with 4 GB** (the T5500 had 8 GB).
+`ornith:9b` is 5.6 GB and **no longer fits** — any executor chain still ending there
+has no working local floor. The CPU is an i7-4960X, which unlike the old Xeon has
+AVX, so CPU inference is worth measuring before buying hardware.
 
 ## OpenClaw
 
@@ -169,13 +190,21 @@ Prefer the canonical commands in `.github/workflows/` and local package scripts.
 For the date app frontend:
 
 ```powershell
-Set-Location C:\antigravity\frontend\react-app
+Set-Location F:\ANTIGRAVITY\frontend\react-app
 npm run build
 ```
 
+**Building is not serving.** `server.ts` only serves `dist/` when
+`NODE_ENV=production` is set in the process that starts it — without it the server
+mounts Vite dev middleware and publishes the **unbuilt source** to the internet at
+HTTP 200. That has happened twice. Start it with
+`mission-control-v5\scripts\tab-dateapp.cmd`, which sets both `NODE_ENV` and
+`PORT=3200`, then verify the PUBLIC page references `assets/index-<hash>.js` and
+**not** `/@vite/client`.
+
 Generated static output for direct deploy lives under:
 
-`C:\antigravity\apps\youandinotai-static`
+`F:\ANTIGRAVITY\apps\youandinotai-static`
 
 Remove stale generated assets when refreshing that folder so old bundle chunks do not keep
 serving retired copy.
@@ -186,7 +215,7 @@ Before calling a public-copy cleanup complete:
 
 - scan active source paths
 - scan generated public artifacts
-- scan T5500 and 9020 active mirrors
+- scan Sabretooth active mirrors (T5500 and 9020 are retired)
 - scan local AI handoff docs that agents read
 - keep env/key/cert/database files out of output
 
