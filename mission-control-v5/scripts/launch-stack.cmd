@@ -13,10 +13,14 @@ rem   2. dateapp-3200    - youandinotai.com production build. Second because it
 rem                        is the only public product. The TUNNEL is not here:
 rem                        the Windows service "Cloudflared" (Auto) owns it and
 rem                        starts before logon. Two connectors split traffic.
-rem   3. mission-control - :3151 dashboard. LOCAL ONLY, this server has no auth.
-rem   4. fcc-server      - Free Claude Code proxy :8082, admin UI at /admin
-rem   5. fcc-claude      - Claude Code CLI through that proxy (waits for :8082)
-rem   6. hermes-dash     - Hermes web GUI :9119
+rem   3. mission-control - v5 AGENT SWARM on :3151 - Graphy, executors, kanban,
+rem                        and the MCP server Hermes talks to at /api/mcp.
+rem                        LOCAL ONLY, this server has no auth.
+rem   4. mc-v6-health    - v6 HEALTH MONITOR on :8787 (its own default port).
+rem                        Different program, different job - see the tab file.
+rem   5. fcc-server      - Free Claude Code proxy :8082, admin UI at /admin
+rem   6. fcc-claude      - Claude Code CLI through that proxy (waits for :8082)
+rem   7. hermes-dash     - Hermes web GUI :9119
 rem
 rem OPENCLAW HAS NO TAB, DELIBERATELY. ClawX auto-starts both the gateway
 rem (:18789) and its own TUI at logon, and it reads the OpenClaw config either
@@ -40,6 +44,7 @@ wt -w antigravity ^
   new-tab --title "omniroute" cmd /k "%SCRIPTS%tab-omniroute.cmd" ; ^
   new-tab --title "dateapp-3200" cmd /k "%SCRIPTS%tab-dateapp.cmd" ; ^
   new-tab --title "mission-control-3151" cmd /k "%SCRIPTS%tab-mission-control.cmd" ; ^
+  new-tab --title "mc-v6-health-8787" cmd /k "%SCRIPTS%tab-mission-control-v6.cmd" ; ^
   new-tab --title "fcc-server" cmd /k "%SCRIPTS%tab-fcc-serve.cmd" ; ^
   new-tab --title "fcc-claude" cmd /k "%SCRIPTS%tab-fcc-claude.cmd" ; ^
   new-tab --title "hermes-dash-9119" cmd /k "%SCRIPTS%tab-hermes-dash.cmd"
@@ -50,6 +55,7 @@ if errorlevel 1 (
   start "omniroute" cmd /k "%SCRIPTS%tab-omniroute.cmd"
   start "dateapp-3200" cmd /k "%SCRIPTS%tab-dateapp.cmd"
   start "mission-control-3151" cmd /k "%SCRIPTS%tab-mission-control.cmd"
+  start "mc-v6-health-8787" cmd /k "%SCRIPTS%tab-mission-control-v6.cmd"
   start "fcc-server" cmd /k "%SCRIPTS%tab-fcc-serve.cmd"
   start "fcc-claude" cmd /k "%SCRIPTS%tab-fcc-claude.cmd"
   start "hermes-dash-9119" cmd /k "%SCRIPTS%tab-hermes-dash.cmd"
