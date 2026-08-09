@@ -16,15 +16,7 @@ import { describeExecutors, describeProviders, routerLive } from './omniroute.js
 import { PIECES_MCP_URL, pingPieces } from './pieces.js';
 import { registerMcpServer } from './mcpServer.js';
 import { loadState } from './store.js';
-import {
-  activeCount,
-  createTask,
-  deleteTask,
-  listTasks,
-  moveTask,
-  retryTask,
-  subscribe,
-} from './swarm.js';
+import { activeCount, createTask, deleteTask, listTasks, moveTask, retryTask, subscribe } from './swarm.js';
 import type { Column } from './types.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -41,10 +33,53 @@ app.use(express.json({ limit: '1mb' }));
 const SUBAGENT_FILES = ['SOUL.md', 'HEARTBEAT.md', 'TOOLS.md', 'SKILLS.md'] as const;
 const subagentsRoot = join(__dirname, '../../../.agents/subagents');
 
+/**
+ * Sections that DOCUMENT the report format rather than containing a report.
+ *
+ * Every HEARTBEAT.md carries a "Report shape" block spelling out the format:
+ *
+ *   - GREEN: fact + evidence handle (URL, path, exit 0)
+ *   - RED: fact + blocker + next action
+ *
+ * The old parser matched those template lines and took the LAST one — and since
+ * RED is always documented after GREEN, EVERY agent resolved to red forever,
+ * whatever its real state. The graph was colouring itself from the instructions,
+ * not the status, which is worse than showing nothing: a board that is always
+ * red is a board nobody reads.
+ */
+const TEMPLATE_HEADING = /^#{1,6}\s*(report\s*shape|format|template|example|legend|schema)\b/i;
+
+/** Drop sections that only describe the format, so their examples cannot be read as status. */
+function stripTemplateSections(markdown: string): string {
+  const lines = markdown.split(/\r?\n/);
+  const kept: string[] = [];
+  let skipDepth = 0;
+  for (const line of lines) {
+    const heading = line.match(/^(#{1,6})\s/);
+    if (heading) {
+      const depth = heading[1].length;
+      if (skipDepth && depth <= skipDepth) skipDepth = 0; // section ended
+      if (!skipDepth && TEMPLATE_HEADING.test(line)) {
+        skipDepth = depth;
+        continue;
+      }
+    }
+    if (!skipDepth) kept.push(line);
+  }
+  return kept.join('\n');
+}
+
 function subagentHealth(heartbeat: string, updatedAt: Date) {
-  const reports = heartbeat.match(/^\s*(?:[-*]\s*)?(GREEN|YELLOW|RED):.*$/gim);
-  const explicit = reports?.at(-1)?.match(/(?:[-*]\s*)?(GREEN|YELLOW|RED):/i)?.[1]?.toLowerCase();
+  const reports = stripTemplateSections(heartbeat).match(
+    /^\s*(?:[-*]\s*)?(GREEN|YELLOW|RED):.*$/gim,
+  );
+  const explicit = reports
+    ?.at(-1)
+    ?.match(/(?:[-*]\s*)?(GREEN|YELLOW|RED):/i)?.[1]
+    ?.toLowerCase();
   if (explicit) return explicit;
+  // No real report: fall back to freshness. Yellow means "no status filed",
+  // which is honest — it is not a claim that the agent is healthy.
   return Date.now() - updatedAt.getTime() > 24 * 60 * 60 * 1000 ? 'red' : 'yellow';
 }
 
@@ -54,10 +89,12 @@ app.get('/api/subagents', (_req, res) => {
   const agents = readdirSync(subagentsRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => {
-      const files = Object.fromEntries(SUBAGENT_FILES.map((name) => {
-        const path = join(subagentsRoot, entry.name, name);
-        return [name, existsSync(path) ? readFileSync(path, 'utf8') : ''];
-      }));
+      const files = Object.fromEntries(
+        SUBAGENT_FILES.map((name) => {
+          const path = join(subagentsRoot, entry.name, name);
+          return [name, existsSync(path) ? readFileSync(path, 'utf8') : ''];
+        }),
+      );
       const heartbeatPath = join(subagentsRoot, entry.name, 'HEARTBEAT.md');
       const updatedAt = existsSync(heartbeatPath) ? statSync(heartbeatPath).mtime : new Date(0);
       return {
@@ -167,7 +204,7 @@ async function pingService(
       lanReachable,
       status: 'down',
       ms,
-      detail: aborted ? `timeout (${timeoutMs}ms)` : (err instanceof Error ? err.message : String(err)),
+      detail: aborted ? `timeout (${timeoutMs}ms)` : err instanceof Error ? err.message : String(err),
     };
   } finally {
     clearTimeout(timer);
@@ -195,8 +232,7 @@ app.get('/api/services', async (_req, res) => {
   // the live model count instead of a status code.
   // `||`, not `??`: OPENAI_COMPAT_API_KEY is present but empty in .env, and `??`
   // would hand back that empty string instead of falling through to the real key.
-  const omniKey =
-    (process.env.OPENAI_COMPAT_API_KEY ?? '').trim() || (process.env.OMNIROUTE_API_KEY ?? '').trim();
+  const omniKey = (process.env.OPENAI_COMPAT_API_KEY ?? '').trim() || (process.env.OMNIROUTE_API_KEY ?? '').trim();
   const results = await Promise.all([
     ...services.map((s) =>
       pingService(
@@ -230,14 +266,14 @@ app.get('/api/services', async (_req, res) => {
 
 // ── Agent library ─────────────────────────────────────────────────────────────
 app.get('/api/agents', (req, res) => {
-  const q = String(req.query.q ?? '').trim().toLowerCase();
+  const q = String(req.query.q ?? '')
+    .trim()
+    .toLowerCase();
   const category = String(req.query.category ?? '').trim();
   let agents = AGENTS;
   if (category) agents = agents.filter((agent) => agent.category === category);
   if (q) {
-    agents = agents.filter(
-      (agent) => agent.id.includes(q) || agent.description.toLowerCase().includes(q),
-    );
+    agents = agents.filter((agent) => agent.id.includes(q) || agent.description.toLowerCase().includes(q));
   }
   res.json({ total: AGENTS.length, count: agents.length, categories: CATEGORIES, agents });
 });
