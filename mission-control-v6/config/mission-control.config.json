@@ -12,21 +12,48 @@
   "notifiers": [
     { "type": "console" },
     { "type": "file", "path": "logs/mission-control-alerts.jsonl" },
-    { "type": "webhook", "url": "${MC_WEBHOOK_URL:-}", "enabled": false,
-      "_note": "set MC_WEBHOOK_URL (Discord/Slack/generic) and enabled=true — payload auto-formats for Discord" },
-    { "type": "smtp", "enabled": false, "host": "smtp.gmail.com", "port": 587,
-      "username": "", "password": "", "sender": "", "recipients": ["you@example.com"] },
-    { "type": "windows-toast", "enabled": false,
-      "_note": "desktop toast via BurntToast or msg.exe — handy on the Windows host" }
+    {
+      "type": "webhook",
+      "url": "${MC_WEBHOOK_URL:-}",
+      "enabled": false,
+      "_note": "set MC_WEBHOOK_URL (Discord/Slack/generic) and enabled=true — payload auto-formats for Discord"
+    },
+    {
+      "type": "smtp",
+      "enabled": false,
+      "host": "smtp.gmail.com",
+      "port": 587,
+      "username": "",
+      "password": "",
+      "sender": "",
+      "recipients": ["you@example.com"]
+    },
+    {
+      "type": "windows-toast",
+      "enabled": false,
+      "_note": "desktop toast via BurntToast or msg.exe — handy on the Windows host"
+    }
   ],
   "links": [
-    { "id": "hermes-dashboard", "label": "Hermes Dashboard :9119", "url": "http://localhost:${HERMES_DASH_PORT:-9119}" },
+    {
+      "id": "hermes-dashboard",
+      "label": "Hermes Dashboard :9119",
+      "url": "http://localhost:${HERMES_DASH_PORT:-9119}"
+    },
     { "id": "openclaw-ui", "label": "OpenClaw Web UI", "url": "http://localhost:${OPENCLAW_PORT:-18789}" },
     { "id": "omniroute", "label": "OmniRoute :20128", "url": "http://localhost:20128" },
     { "id": "dateapp-ui", "label": "Date App UI :3200", "url": "http://localhost:${FRONTEND_PORT:-3200}" },
-    { "id": "dateapp-preorder", "label": "Pre-order / Elite", "url": "http://localhost:${FRONTEND_PORT:-3200}/app/preorder" },
+    {
+      "id": "dateapp-preorder",
+      "label": "Pre-order / Elite",
+      "url": "http://localhost:${FRONTEND_PORT:-3200}/app/preorder"
+    },
     { "id": "dateapp-create", "label": "Create Studio", "url": "http://localhost:${FRONTEND_PORT:-3200}/app/create" },
-    { "id": "affiliate-landing", "label": "Affiliate Landing", "url": "https://trollz1004.github.io/youandinotai-links/?ref=clean-repo" },
+    {
+      "id": "affiliate-landing",
+      "label": "Affiliate Landing",
+      "url": "https://trollz1004.github.io/youandinotai-links/?ref=clean-repo"
+    },
     { "id": "mission-control", "label": "Mission Control :8787", "url": "http://localhost:${MC_PORT:-8787}" },
     { "id": "github", "label": "GitHub Repo", "url": "https://github.com/Trollz1004/ANTIGRAVITY" }
   ],
@@ -61,15 +88,17 @@
     },
     {
       "id": "hermes-router",
-      "name": "Hermes Router",
+      "name": "Hermes Router (OmniRoute)",
       "group": "Agents",
       "kind": "http",
-      "url": "http://127.0.0.1:${HERMES_ROUTER_PORT:-11435}/healthz",
-      "expected_status": "any",
+      "_note": "WSL-only hermes-router on :11435 was retired; OmniRoute on :20128 is the live LLM router.",
+      "url": "http://127.0.0.1:20128/v1/models",
+      "expected_status": [200, 401, 403],
       "expected": true,
       "interval_s": 30,
-      "playbook": "start-hermes-router",
-      "link_url": "http://localhost:${HERMES_ROUTER_PORT:-11435}/healthz"
+      "timeout_s": 9,
+      "playbook": "start-omniroute",
+      "link_url": "http://localhost:20128"
     },
     {
       "id": "openclaw",
@@ -173,13 +202,13 @@
     },
     {
       "id": "postgres",
-      "name": "Postgres (prod compose)",
+      "name": "Postgres",
       "group": "Database",
       "kind": "tcp",
       "host": "127.0.0.1",
       "port": 5432,
-      "expected": false,
-      "_note": "flip expected to true on hosts running docker-compose.prod.yml",
+      "expected": true,
+      "_note": "native Postgres is running on this host (not the prod-compose container)",
       "interval_s": 60,
       "playbook": "start-postgres"
     },
@@ -226,10 +255,28 @@
       "cooldown_s": 90,
       "commands": {
         "windows": [
-          ["cmd", "/c", "start", "", "cmd", "/c", "hermes", "dashboard", "--port", "9119", "--host", "127.0.0.1", "--no-open"]
+          [
+            "cmd",
+            "/c",
+            "start",
+            "",
+            "cmd",
+            "/c",
+            "hermes",
+            "dashboard",
+            "--port",
+            "9119",
+            "--host",
+            "127.0.0.1",
+            "--no-open"
+          ]
         ],
         "linux": [
-          ["bash", "-lc", "nohup hermes dashboard --port ${HERMES_DASH_PORT:-9119} --host 127.0.0.1 >\"{repo_root}/logs/hermes-dashboard.log\" 2>&1 &"]
+          [
+            "bash",
+            "-lc",
+            "nohup hermes dashboard --port ${HERMES_DASH_PORT:-9119} --host 127.0.0.1 >\"{repo_root}/logs/hermes-dashboard.log\" 2>&1 &"
+          ]
         ]
       }
     },
@@ -248,7 +295,13 @@
       "timeout_s": 30,
       "commands": {
         "windows": [["cmd", "/c", "start", "", "{repo_root}\\scripts\\start-hermes-router.cmd"]],
-        "linux": [["bash", "-lc", "nohup bash \"{repo_root}/scripts/start-hermes-router.sh\" >\"{repo_root}/logs/hermes-router.log\" 2>&1 &"]]
+        "linux": [
+          [
+            "bash",
+            "-lc",
+            "nohup bash \"{repo_root}/scripts/start-hermes-router.sh\" >\"{repo_root}/logs/hermes-router.log\" 2>&1 &"
+          ]
+        ]
       }
     },
     "start-openclaw": {
@@ -260,9 +313,7 @@
         "windows": [
           ["cmd", "/c", "start", "", "cmd", "/c", "C:\\Users\\joshl\\AppData\\Roaming\\npm\\openclaw.cmd", "gateway"]
         ],
-        "linux": [
-          ["bash", "-lc", "nohup openclaw gateway >\"{repo_root}/logs/openclaw.log\" 2>&1 &"]
-        ]
+        "linux": [["bash", "-lc", "nohup openclaw gateway >\"{repo_root}/logs/openclaw.log\" 2>&1 &"]]
       }
     },
     "start-omniroute": {
@@ -289,10 +340,22 @@
       "timeout_s": 45,
       "commands": {
         "windows": [
-          ["cmd", "/c", "start", "", "cmd", "/c", "cd /d {repo_root}\\backend\\fastapi-app && .venv\\Scripts\\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port ${BACKEND_PORT:-8000}"]
+          [
+            "cmd",
+            "/c",
+            "start",
+            "",
+            "cmd",
+            "/c",
+            "cd /d {repo_root}\\backend\\fastapi-app && .venv\\Scripts\\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port ${BACKEND_PORT:-8000}"
+          ]
         ],
         "linux": [
-          ["bash", "-lc", "cd \"{repo_root}/backend/fastapi-app\" && nohup .venv/bin/python -m uvicorn app.main:app --host 0.0.0.0 --port ${BACKEND_PORT:-8000} >\"{repo_root}/logs/backend.log\" 2>&1 &"]
+          [
+            "bash",
+            "-lc",
+            "cd \"{repo_root}/backend/fastapi-app\" && nohup .venv/bin/python -m uvicorn app.main:app --host 0.0.0.0 --port ${BACKEND_PORT:-8000} >\"{repo_root}/logs/backend.log\" 2>&1 &"
+          ]
         ]
       }
     },
@@ -301,11 +364,13 @@
       "script": "fix-scripts/fix-frontend.cmd",
       "timeout_s": 90,
       "commands": {
-        "windows": [
-          ["cmd", "/c", "{repo_root}\\mission-control-v6\\fix-scripts\\fix-frontend.cmd"]
-        ],
+        "windows": [["cmd", "/c", "{repo_root}\\mission-control-v6\\fix-scripts\\fix-frontend.cmd"]],
         "linux": [
-          ["bash", "-lc", "cd \"{repo_root}/frontend/react-app\" && npm run build && nohup npm run preview -- --host 127.0.0.1 --port ${FRONTEND_PORT:-3200} >\"{repo_root}/logs/frontend.log\" 2>&1 &"]
+          [
+            "bash",
+            "-lc",
+            "cd \"{repo_root}/frontend/react-app\" && npm run build && nohup npm run preview -- --host 127.0.0.1 --port ${FRONTEND_PORT:-3200} >\"{repo_root}/logs/frontend.log\" 2>&1 &"
+          ]
         ]
       }
     },
@@ -315,7 +380,13 @@
       "timeout_s": 45,
       "commands": {
         "windows": [["cmd", "/c", "{repo_root}\\mission-control-v6\\fix-scripts\\fix-opencode.cmd"]],
-        "linux": [["bash", "-lc", "nohup opencode serve --port 4096 --hostname 127.0.0.1 >\"{repo_root}/logs/opencode.log\" 2>&1 &"]]
+        "linux": [
+          [
+            "bash",
+            "-lc",
+            "nohup opencode serve --port 4096 --hostname 127.0.0.1 >\"{repo_root}/logs/opencode.log\" 2>&1 &"
+          ]
+        ]
       }
     },
     "start-paperclip": {
