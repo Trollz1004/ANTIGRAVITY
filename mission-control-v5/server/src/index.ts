@@ -5,6 +5,7 @@
  * sub-agents. No model is named in the UI — OmniRoute resolves it at run time.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { networkInterfaces } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import cors from 'cors';
@@ -142,11 +143,32 @@ interface ServiceStatus {
 }
 
 /**
- * LAN address of this node. The dashboard gets opened from the laptop, where
- * 127.0.0.1 means the laptop — a dead link. DHCP assigns this, so it is
- * overridable rather than hardcoded.
+ * LAN address of this node, DETECTED — never hardcoded.
+ *
+ * This used to default to a literal '192.168.0.15'. When the disk moved from
+ * the T5500 into Sabretooth (192.168.0.8) that address died, and because the
+ * OmniRoute entry built its PROBE url from it, Mission Control spent 9s timing
+ * out against a machine that no longer exists and reported its own gateway
+ * DOWN while the gateway was serving perfectly on loopback.
+ *
+ * Detecting it means the next hardware move fixes itself. NODE_LAN_HOST still
+ * overrides, for the case where the guess is wrong.
  */
-const LAN_HOST = (process.env.NODE_LAN_HOST ?? '192.168.0.15').trim();
+function detectLanHost(): string {
+  const candidates: string[] = [];
+  for (const addrs of Object.values(networkInterfaces())) {
+    for (const a of addrs ?? []) {
+      if (a.family !== 'IPv4' || a.internal) continue;
+      candidates.push(a.address);
+    }
+  }
+  // Prefer a real LAN address. 172.16/12 is where Docker and WSL put their
+  // virtual switches — picking one of those yields a link nothing can reach.
+  const preferred = candidates.find((ip) => /^(192\.168\.|10\.)/.test(ip));
+  return preferred ?? candidates.find((ip) => !/^(172\.(1[6-9]|2\d|3[01])\.|169\.254\.)/.test(ip)) ?? '127.0.0.1';
+}
+
+const LAN_HOST = (process.env.NODE_LAN_HOST ?? detectLanHost()).trim();
 
 function lanUrl(url: string): string {
   return url.replace(/(127\.0\.0\.1|localhost)/, LAN_HOST);
@@ -224,7 +246,10 @@ app.get('/api/services', async (_req, res) => {
     // that every other node actually uses — not loopback. (Its dashboard also
     // lists 172.17.x / 172.25.x; those are the Docker and WSL bridges, not the
     // LAN.) DHCP assigns this, so NODE_LAN_HOST overrides it.
-    { name: 'OmniRoute', url: `http://${LAN_HOST}:20128/v1/models`, timeoutMs: 9000, lan: true },
+    // PROBE ON LOOPBACK. This server runs on the node, so 127.0.0.1 is always
+    // correct and instant; only the clickable "open" link below needs the LAN
+    // address, because the dashboard is opened from the laptop.
+    { name: 'OmniRoute', url: 'http://127.0.0.1:20128/v1/models', timeoutMs: 4000, lan: true },
     { name: 'Ollama', url: 'http://127.0.0.1:11434/api/tags', timeoutMs: 2500, lan: false },
   ];
   // The gateway requires auth on /v1/*. Probing without the key returns 401 and
