@@ -25,25 +25,15 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from sqlalchemy import select
 
-from app.main import app
 from app.models import RevenueAllocation, User, VerificationEvent, WebhookEvent
 from app.payment_truth import build_checkout_reference
 from app.routers import webhooks
 from tests.conftest import generate_square_signature
+from tests.helpers import seed
 
 JWT_SECRET = "test-secret-that-is-at-least-32-characters-long-for-security"
 PAYMENT_URL = "http://testserver/api/v1/webhooks/square-payment"
 BOOKING_URL = "http://testserver/api/v1/webhooks/square-booking"
-
-
-def _seed(*items, db_session_factory) -> None:
-    async def _run():
-        async with db_session_factory() as session:
-            for item in items:
-                session.add(item)
-            await session.commit()
-
-    asyncio.run(_run())
 
 
 def _make_user(**overrides) -> User:
@@ -89,7 +79,9 @@ def _payment_payload(
     }
 
 
-def _post_signed(client, url: str, payload: dict, *, signature_key="test-square-signature"):
+def _post_signed(
+    client, url: str, payload: dict, *, signature_key="test-square-signature"
+):
     body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
     signature = generate_square_signature(body, signature_key, url)
     return client.post(
@@ -121,7 +113,7 @@ def test_royalty_payment_sets_tier_and_completes_bound_event(
         status="passed",
         amount_cents=100,
     )
-    _seed(user, liveness, db_session_factory=db_session_factory)
+    seed(user, liveness, db_session_factory=db_session_factory)
 
     checkout_ref = build_checkout_reference(
         user_id=user.id, event_id=liveness.id, tier="royalty", secret=JWT_SECRET
@@ -157,7 +149,7 @@ def test_three_month_payment_activates_subscription_with_expiry(
     client, db_session_factory
 ):
     user = _make_user(email="three-month@example.com")
-    _seed(user, db_session_factory=db_session_factory)
+    seed(user, db_session_factory=db_session_factory)
 
     payload = _payment_payload(
         event_id="evt_3mo_1",
@@ -179,7 +171,7 @@ def test_three_month_payment_activates_subscription_with_expiry(
 
 def test_twelve_month_payment_links_square_customer_id(client, db_session_factory):
     user = _make_user(email="twelve@example.com", square_customer_id=None)
-    _seed(user, db_session_factory=db_session_factory)
+    seed(user, db_session_factory=db_session_factory)
 
     payload = _payment_payload(
         event_id="evt_12mo_1",
@@ -203,10 +195,8 @@ def test_user_lookup_by_square_customer_id_and_existing_mapping(
     client, db_session_factory
 ):
     """A user already mapped to a Square customer id is found directly."""
-    user = _make_user(
-        email="mapped@example.com", square_customer_id="CUST-EXISTING-9"
-    )
-    _seed(user, db_session_factory=db_session_factory)
+    user = _make_user(email="mapped@example.com", square_customer_id="CUST-EXISTING-9")
+    seed(user, db_session_factory=db_session_factory)
 
     payload = _payment_payload(
         event_id="evt_cust_lookup",
@@ -249,7 +239,7 @@ def test_completed_payment_unknown_customer_is_acked(client, db_session_factory)
 
 def test_completed_payment_unmappable_tier_is_acked(client, db_session_factory):
     user = _make_user(email="nomap@example.com")
-    _seed(user, db_session_factory=db_session_factory)
+    seed(user, db_session_factory=db_session_factory)
 
     payload = _payment_payload(
         event_id="evt_unmappable",
@@ -273,7 +263,7 @@ def test_bot_shield_valid_binding_sends_welcome_email(client, db_session_factory
         status="passed",
         amount_cents=100,
     )
-    _seed(user, liveness, db_session_factory=db_session_factory)
+    seed(user, liveness, db_session_factory=db_session_factory)
 
     checkout_ref = build_checkout_reference(
         user_id=user.id, event_id=liveness.id, tier="bot_shield", secret=JWT_SECRET
@@ -314,7 +304,7 @@ def test_bot_shield_payment_does_not_duplicate_existing_payment_event(
         status="passed",
         amount_cents=100,
     )
-    _seed(user, liveness, db_session_factory=db_session_factory)
+    seed(user, liveness, db_session_factory=db_session_factory)
 
     checkout_ref = build_checkout_reference(
         user_id=user.id, event_id=liveness.id, tier="bot_shield", secret=JWT_SECRET
@@ -328,7 +318,7 @@ def test_bot_shield_payment_does_not_duplicate_existing_payment_event(
         amount_cents=100,
         square_payment_id=payment_id,
     )
-    _seed(existing_payment_event, db_session_factory=db_session_factory)
+    seed(existing_payment_event, db_session_factory=db_session_factory)
 
     payload = _payment_payload(
         event_id="evt_dupe_payment_event",
@@ -374,7 +364,7 @@ def test_already_verified_bot_shield_payment_sends_no_welcome_email(
         status="passed",
         amount_cents=100,
     )
-    _seed(user, liveness, db_session_factory=db_session_factory)
+    seed(user, liveness, db_session_factory=db_session_factory)
 
     checkout_ref = build_checkout_reference(
         user_id=user.id, event_id=liveness.id, tier="bot_shield", secret=JWT_SECRET
@@ -418,7 +408,7 @@ def _subscription_payload(*, event_id, event_type, sub_status, user_email):
 
 def test_subscription_created_activates_founding_member(client, db_session_factory):
     user = _make_user(email="sub-created@example.com")
-    _seed(user, db_session_factory=db_session_factory)
+    seed(user, db_session_factory=db_session_factory)
 
     payload = {
         "event_id": "evt_sub_created_1",
@@ -469,7 +459,7 @@ def test_subscription_updated_cancel_deactivates(client, db_session_factory):
         subscription_active=True,
         subscription_tier="founding_member",
     )
-    _seed(user, db_session_factory=db_session_factory)
+    seed(user, db_session_factory=db_session_factory)
 
     payload = {
         "event_id": "evt_sub_cancel_1",
@@ -498,7 +488,7 @@ def test_subscription_updated_cancel_deactivates(client, db_session_factory):
 
 def test_subscription_updated_active_reactivates(client, db_session_factory):
     user = _make_user(email="reactivate@example.com", subscription_active=False)
-    _seed(user, db_session_factory=db_session_factory)
+    seed(user, db_session_factory=db_session_factory)
 
     payload = {
         "event_id": "evt_sub_active_1",
@@ -595,7 +585,7 @@ def test_commit_integrity_error_returns_duplicate_ack(client, db_session_factory
         payload={},
         processed=False,
     )
-    _seed(duplicate_row, db_session_factory=db_session_factory)
+    seed(duplicate_row, db_session_factory=db_session_factory)
 
     with patch(
         "app.routers.webhooks.webhook_event_exists", new=AsyncMock(return_value=False)
@@ -691,7 +681,9 @@ def test_booking_webhook_rejects_invalid_json(client, tmp_path):
         settings.square_webhook_notification_url = ""
         mock_get_settings.return_value = settings
 
-        signature = generate_square_signature(body, "test-square-signature", BOOKING_URL)
+        signature = generate_square_signature(
+            body, "test-square-signature", BOOKING_URL
+        )
         resp = client.post(
             "/api/v1/webhooks/square-booking",
             headers={"x-square-hmacsha256-signature": signature},
@@ -725,7 +717,10 @@ def test_resolve_square_log_dir_configured_absolute_and_relative(tmp_path):
     with patch.object(webhooks, "CONTAINER_EWASTE_MOUNT", tmp_path / "mount"):
         (tmp_path / "mount").mkdir()
         settings = MagicMock(square_booking_log_dir="")
-        assert webhooks._resolve_square_log_dir(settings) == tmp_path / "mount" / "bookings"
+        assert (
+            webhooks._resolve_square_log_dir(settings)
+            == tmp_path / "mount" / "bookings"
+        )
 
     with patch.object(webhooks, "CONTAINER_EWASTE_MOUNT", tmp_path / "missing"):
         settings = MagicMock(square_booking_log_dir="")
@@ -739,7 +734,10 @@ def test_load_square_booking_payload_shapes():
     assert webhooks._load_square_booking(nested) == {"id": "b1"}
 
     flat_object = {"data": {"object": {"id": "b2", "status": "ACCEPTED"}}}
-    assert webhooks._load_square_booking(flat_object) == {"id": "b2", "status": "ACCEPTED"}
+    assert webhooks._load_square_booking(flat_object) == {
+        "id": "b2",
+        "status": "ACCEPTED",
+    }
 
     data_booking = {"data": {"object": {}, "booking": {"id": "b3"}}}
     assert webhooks._load_square_booking(data_booking) == {"id": "b3"}
@@ -837,12 +835,8 @@ async def test_fetch_square_order_paths():
 
 
 def test_extract_square_customer_email_from_receipt_url():
-    payment = {
-        "receipt_url": "https://squareup.com/receipt?email=Person%40Example.com"
-    }
-    assert (
-        webhooks._extract_square_customer_email(payment) == "person@example.com"
-    )
+    payment = {"receipt_url": "https://squareup.com/receipt?email=Person%40Example.com"}
+    assert webhooks._extract_square_customer_email(payment) == "person@example.com"
     assert webhooks._extract_square_customer_email({}) is None
 
     # unparseable receipt urls are ignored safely

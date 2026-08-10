@@ -262,6 +262,41 @@ def _build_ollama_prompt(message: str, transcript: list[dict[str, str]]) -> str:
     )
 
 
+def _decision_from_payload(
+    parsed: dict,
+    *,
+    message: str,
+    preset_key: str,
+) -> SupportDecision | None:
+    """Normalize a model's JSON support payload into a SupportDecision."""
+    reply = _normalize_text(str(parsed.get("reply") or ""))
+    if not reply:
+        return None
+
+    category = (
+        _normalize_text(str(parsed.get("category") or "general"))
+        .lower()
+        .replace(" ", "_")
+    )
+    subject = _truncate(
+        _normalize_text(str(parsed.get("subject") or ""))
+        or _build_subject(category, message),
+        MAX_SUBJECT_LENGTH,
+    )
+    escalation_reason = (
+        _normalize_text(str(parsed.get("escalation_reason") or "")) or None
+    )
+
+    return SupportDecision(
+        reply=reply,
+        category=category or "general",
+        preset_key=preset_key,
+        should_escalate=bool(parsed.get("should_escalate")),
+        escalation_reason=escalation_reason,
+        subject=subject,
+    )
+
+
 async def _ask_ollama_support(
     *,
     message: str,
@@ -293,32 +328,7 @@ async def _ask_ollama_support(
         logger.warning("Support Ollama reply failed: %s", exc)
         return None
 
-    reply = _normalize_text(str(parsed.get("reply") or ""))
-    if not reply:
-        return None
-
-    category = (
-        _normalize_text(str(parsed.get("category") or "general"))
-        .lower()
-        .replace(" ", "_")
-    )
-    subject = _truncate(
-        _normalize_text(str(parsed.get("subject") or ""))
-        or _build_subject(category, message),
-        MAX_SUBJECT_LENGTH,
-    )
-    escalation_reason = (
-        _normalize_text(str(parsed.get("escalation_reason") or "")) or None
-    )
-
-    return SupportDecision(
-        reply=reply,
-        category=category or "general",
-        preset_key="ollama_support",
-        should_escalate=bool(parsed.get("should_escalate")),
-        escalation_reason=escalation_reason,
-        subject=subject,
-    )
+    return _decision_from_payload(parsed, message=message, preset_key="ollama_support")
 
 
 async def _ask_support_openclaw(
@@ -356,32 +366,7 @@ async def _ask_support_openclaw(
         logger.warning("Support OpenClaw reply failed: %s", exc)
         return None
 
-    reply = _normalize_text(str(parsed.get("reply") or ""))
-    if not reply:
-        return None
-
-    category = (
-        _normalize_text(str(parsed.get("category") or "general"))
-        .lower()
-        .replace(" ", "_")
-    )
-    subject = _truncate(
-        _normalize_text(str(parsed.get("subject") or ""))
-        or _build_subject(category, message),
-        MAX_SUBJECT_LENGTH,
-    )
-    escalation_reason = (
-        _normalize_text(str(parsed.get("escalation_reason") or "")) or None
-    )
-
-    return SupportDecision(
-        reply=reply,
-        category=category or "general",
-        preset_key="supportclaw",
-        should_escalate=bool(parsed.get("should_escalate")),
-        escalation_reason=escalation_reason,
-        subject=subject,
-    )
+    return _decision_from_payload(parsed, message=message, preset_key="supportclaw")
 
 
 async def generate_support_decision(

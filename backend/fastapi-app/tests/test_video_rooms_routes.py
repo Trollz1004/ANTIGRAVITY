@@ -21,6 +21,7 @@ import httpx
 from app.auth import get_current_user, hash_password
 from app.main import app
 from app.models import User
+from tests.helpers import override_user
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -36,13 +37,6 @@ def _make_user(email: str = "rooms_user@example.com") -> User:
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
-
-
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
 
 
 # ── Auth boundary ─────────────────────────────────────────────────────────────
@@ -68,7 +62,7 @@ def test_create_room_invalid_token_rejected(client):
 
 def test_create_room_non_uuid_match_id_returns_422(client):
     user = _make_user("rooms_bad_id@example.com")
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.post("/api/v1/video/rooms/not-a-uuid")
         assert resp.status_code == 422
@@ -82,7 +76,7 @@ def test_create_room_non_uuid_match_id_returns_422(client):
 def test_create_room_without_api_key_returns_503(client):
     """A missing Daily.co key must never fabricate a fake joinable room URL."""
     user = _make_user("rooms_dev@example.com")
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     match_id = uuid.uuid4()
     try:
         with patch("app.routers.video_rooms.settings") as mock_settings:
@@ -104,7 +98,7 @@ def test_create_room_without_api_key_returns_503(client):
 
 def test_create_room_live_mode_happy_path(client):
     user = _make_user("rooms_live@example.com")
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     match_id = uuid.uuid4()
     room_name = f"match-{match_id}"
     room_url = f"https://youandinotai.daily.co/{room_name}"
@@ -140,7 +134,7 @@ def test_create_room_live_mode_happy_path(client):
 def test_create_room_requests_max_2_participants(client):
     """Room creation payload must set max_participants=2 to enforce pair-only calls."""
     user = _make_user("rooms_capacity@example.com")
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     match_id = uuid.uuid4()
 
     captured_payload = {}
@@ -183,7 +177,7 @@ def test_create_room_requests_max_2_participants(client):
 
 def test_create_room_daily_api_error_returns_502(client):
     user = _make_user("rooms_api_error@example.com")
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     match_id = uuid.uuid4()
 
     mock_response = MagicMock()
@@ -209,7 +203,7 @@ def test_create_room_daily_api_error_returns_502(client):
 
 def test_create_room_daily_connection_error_returns_502(client):
     user = _make_user("rooms_conn_error@example.com")
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     match_id = uuid.uuid4()
 
     try:
@@ -239,7 +233,7 @@ def test_create_room_daily_connection_error_returns_502(client):
 def test_create_room_handles_existing_room_conflict(client):
     """If Daily.co returns 400 'already exists', router should retrieve existing room."""
     user = _make_user("rooms_existing@example.com")
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     match_id = uuid.uuid4()
     room_name = f"match-{match_id}"
     room_url = f"https://youandinotai.daily.co/{room_name}"
