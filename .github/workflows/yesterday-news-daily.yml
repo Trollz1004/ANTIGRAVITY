@@ -1,0 +1,75 @@
+name: Yesterday's News Daily Brief
+
+on:
+  schedule:
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: yesterday-news-daily
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate daily brief
+        shell: bash
+        env:
+          ANTIGRAVITY_RUNTIME_ROOT: ${{ runner.temp }}/ag-runtime
+          NEWS_MODE: both
+          NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+          OMNI_BASE_URL: ${{ secrets.OMNI_BASE_URL }}
+          OMNI_API_KEY: ${{ secrets.OMNI_API_KEY }}
+          OMNI_MODEL: ${{ secrets.OMNI_MODEL }}
+        run: |
+          set -euo pipefail
+          python scripts/dashboard-aidoesitall/yesterday-news-today.py --mode generate
+
+      - name: Collect brief into repo content dir
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="${{ runner.temp }}/ag-runtime/yesterday-news/content"
+          if [ ! -d "$SRC" ] || [ -z "$(ls -A "$SRC")" ]; then
+            echo "No brief generated (feeds may have had no matching articles)."
+            exit 0
+          fi
+          mkdir -p content/yesterday-news
+          cp -r "$SRC"/. content/yesterday-news/
+
+      - name: Upload brief artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: yesterday-news-brief
+          path: content/yesterday-news/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Commit daily brief
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add content/yesterday-news || true
+
+          if git diff --cached --quiet; then
+            echo "No new brief content to commit."
+            exit 0
+          fi
+
+          git commit -m "chore(news): daily yesterday-news brief [skip ci]"
+          git push

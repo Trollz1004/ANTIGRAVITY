@@ -4,7 +4,7 @@
 # Date: 2026-03-19
 
 $TaskName = "YesterdayNewsToday"
-$ScriptPath = "E:\ANTIGRAVITY\scripts\yesterday-news-today.py"
+$ScriptPath = "E:\ANTIGRAVITY\scripts\dashboard-aidoesitall\yesterday-news-today.py"
 $RuntimeRoot = Join-Path $env:USERPROFILE "Documents\ANTIGRAVITY-RUNTIME"
 $LogPath = Join-Path $RuntimeRoot "logs\yesterday-news-today.log"
 
@@ -14,7 +14,7 @@ New-Item -ItemType Directory -Force -Path (Join-Path $RuntimeRoot "yesterday-new
 New-Item -ItemType Directory -Force -Path (Join-Path $RuntimeRoot "yesterday-news\archive") | Out-Null
 
 # Create the scheduled task
-$Action = New-ScheduledTaskAction -Execute "python.exe" -Argument "$ScriptPath --mode generate" -WorkingDirectory "E:\ANTIGRAVITY\scripts"
+$Action = New-ScheduledTaskAction -Execute "python.exe" -Argument "$ScriptPath --mode generate" -WorkingDirectory "E:\ANTIGRAVITY\scripts\dashboard-aidoesitall"
 
 # Trigger: Daily at 6:00 AM
 $Trigger = New-ScheduledTaskTrigger -Daily -At "06:00"
@@ -34,6 +34,7 @@ Write-Host "Script: $ScriptPath" -ForegroundColor Gray
 Write-Host "Log: $LogPath" -ForegroundColor Gray
 Write-Host "Runtime root: $RuntimeRoot" -ForegroundColor Gray
 Write-Host "Requires: NEWSAPI_KEY in E:\ANTIGRAVITY\.env for NewsAPI, otherwise RSS fallback is used" -ForegroundColor Gray
+Write-Host "Optional: OMNI_BASE_URL / OMNI_MODEL / OMNI_API_KEY in E:\ANTIGRAVITY\.env for cloud-model script generation via OmniRouter" -ForegroundColor Gray
 Write-Host ""
 Write-Host "To manage the task:" -ForegroundColor Yellow
 Write-Host "  Start: Start-ScheduledTask -TaskName '$TaskName'" -ForegroundColor Gray
