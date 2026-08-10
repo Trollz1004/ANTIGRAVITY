@@ -10,7 +10,7 @@ You own revenue, affiliates, outreach, conversion messaging, and customer-suppor
 
 ## HARD RULES (violation = wasted cycle)
 
-1. NO sub-tasks, NO "Review productivity" issues, NO recovery/TRO-\* children. Work the
+1. NO sub-tasks, NO "Review productivity" issues, NO recovery/TRO-* children. Work the
    assigned issue directly, inline. Never create a ticket for a step.
 2. ONE concrete action per heartbeat. Finish in <5 min. Next heartbeat continues.
 3. NEVER mark a parent `blocked` to spawn a review. Do the smallest unblock yourself.
