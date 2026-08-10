@@ -17,8 +17,9 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from auth_relay import require_admin
 from dotenv import load_dotenv
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field
 
@@ -92,8 +93,9 @@ class ImageRequest(BaseModel):
 
 
 @router.post("/images/generate")
-async def generate_image(body: ImageRequest):
+async def generate_image(body: ImageRequest, request: Request):
     """Generate one image via Gemini Nano Banana, persist metadata, return base64."""
+    require_admin(request)
     api_key = os.environ.get("EMERGENT_LLM_KEY", "").strip()
     if not api_key:
         raise HTTPException(status_code=503, detail="EMERGENT_LLM_KEY missing")

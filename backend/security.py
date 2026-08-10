@@ -17,6 +17,7 @@ import os
 from pathlib import Path
 from typing import Any, Dict, List
 
+from auth_relay import require_admin
 from dotenv import load_dotenv
 from fastapi import APIRouter, Request
 
@@ -55,6 +56,7 @@ CHANNEL_BINDINGS = {
 @router.get("/posture")
 async def security_posture(request: Request):
     """Boris&Dario · the read-once 'is anything actually protected?' panel."""
+    require_admin(request)
     ip = _client_ip(request)
     allowlist = _ip_allowlist()
 

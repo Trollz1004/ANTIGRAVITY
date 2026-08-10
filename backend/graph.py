@@ -26,7 +26,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, HTTPException
+from auth_relay import require_admin
+from fastapi import APIRouter, HTTPException, Request
 
 import shutil
 APP_ROOT = Path("/app")
@@ -127,8 +128,9 @@ async def graphify_status():
     }
 
 @router.post("/graphify/regraph")
-async def graphify_regraph():
+async def graphify_regraph(request: Request):
     """Synchronously re-run graphify on the workspace. Blocks until done."""
+    require_admin(request)
     if _graph_lock.locked():
         raise HTTPException(status_code=409, detail="graphify already running — wait for current run to complete")
 

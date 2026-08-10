@@ -39,6 +39,35 @@ router = APIRouter(prefix="/api")
 SESSION_COOKIE = "opc_session"
 SESSION_TTL_S = 8 * 60 * 60  # 8 hours
 
+# Brute-force throttle for the single shared admin password.
+LOGIN_MAX_ATTEMPTS = 5
+LOGIN_WINDOW_S = 300
+_login_attempts: Dict[str, List[float]] = {}
+
+
+def _cookie_secure() -> bool:
+    """Secure cookies by default; opt out only for plain-HTTP local deploys."""
+    return os.environ.get("ADMIN_COOKIE_INSECURE", "").strip().lower() not in ("1", "true", "yes")
+
+
+def _caller_ip(request: Request) -> str:
+    cf = request.headers.get("cf-connecting-ip", "").strip()
+    if cf:
+        return cf
+    fwd = request.headers.get("x-forwarded-for", "").strip()
+    if fwd:
+        return fwd.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+def _throttle_login(ip: str) -> None:
+    now = time.time()
+    recent = [t for t in _login_attempts.get(ip, []) if now - t < LOGIN_WINDOW_S]
+    if len(recent) >= LOGIN_MAX_ATTEMPTS:
+        _login_attempts[ip] = recent
+        raise HTTPException(status_code=429, detail="too many failed sign-in attempts — wait 5 minutes")
+    _login_attempts[ip] = recent
+
 
 def _admin_password() -> str:
     return os.environ.get("ADMIN_PASSWORD", "").strip()
@@ -94,7 +123,9 @@ async def auth_status(request: Request):
 
 
 @router.post("/auth/login")
-async def auth_login(body: LoginRequest, response: Response):
+async def auth_login(body: LoginRequest, request: Request, response: Response):
+    ip = _caller_ip(request)
+    _throttle_login(ip)
     pw = _admin_password()
     if not pw or not _session_secret():
         raise HTTPException(
@@ -103,12 +134,14 @@ async def auth_login(body: LoginRequest, response: Response):
         )
     # constant-time compare to avoid timing oracles
     if not hmac.compare_digest(body.password, pw):
+        _login_attempts.setdefault(ip, []).append(time.time())
         raise HTTPException(status_code=401, detail="invalid password")
+    _login_attempts.pop(ip, None)
     token = _mint_token()
     response.set_cookie(
         key=SESSION_COOKIE, value=token,
         max_age=SESSION_TTL_S, httponly=True, samesite="lax",
-        secure=False,  # local-deploy compatible; Cloudflare-fronted edge will upgrade
+        secure=_cookie_secure(),
         path="/",
     )
     return {"ok": True, "ttl_s": SESSION_TTL_S}

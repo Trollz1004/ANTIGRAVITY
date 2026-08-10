@@ -20,8 +20,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
 
+from auth_relay import require_admin
 from dotenv import load_dotenv
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field
 
@@ -117,7 +118,8 @@ async def list_agents():
 
 
 @router.post("/agents/{agent_id}/heartbeat")
-async def beat(agent_id: str, payload: HeartbeatPayload):
+async def beat(agent_id: str, payload: HeartbeatPayload, request: Request):
+    require_admin(request)
     if agent_id not in AGENT_BY_ID:
         raise HTTPException(status_code=404, detail=f"unknown agent '{agent_id}'")
     doc = {"agent": agent_id, "at": _now(), "state": payload.state, "note": payload.note}
@@ -141,7 +143,8 @@ async def list_tasks(
 
 
 @router.post("")
-async def create_task(payload: TaskCreate):
+async def create_task(payload: TaskCreate, request: Request):
+    require_admin(request)
     if payload.owner not in AGENT_BY_ID:
         raise HTTPException(status_code=400, detail=f"unknown owner '{payload.owner}'")
     task = {
@@ -167,7 +170,8 @@ async def create_task(payload: TaskCreate):
 
 
 @router.patch("/{task_id}")
-async def update_task(task_id: str, payload: TaskUpdate):
+async def update_task(task_id: str, payload: TaskUpdate, request: Request):
+    require_admin(request)
     existing = await TASKS.find_one({"id": task_id}, {"_id": 0})
     if not existing:
         raise HTTPException(status_code=404, detail="task not found")
@@ -186,7 +190,8 @@ async def update_task(task_id: str, payload: TaskUpdate):
 
 
 @router.delete("/{task_id}")
-async def delete_task(task_id: str):
+async def delete_task(task_id: str, request: Request):
+    require_admin(request)
     existing = await TASKS.find_one({"id": task_id}, {"_id": 0})
     if not existing:
         raise HTTPException(status_code=404, detail="task not found")
@@ -199,8 +204,9 @@ async def delete_task(task_id: str):
 
 
 @router.post("/dispatch")
-async def dispatch(payload: DispatchRequest):
+async def dispatch(payload: DispatchRequest, request: Request):
     """Fan a single brief out to multiple agents. Returns the created task ids."""
+    require_admin(request)
     bad = [o for o in payload.owners if o not in AGENT_BY_ID]
     if bad:
         raise HTTPException(status_code=400, detail=f"unknown owners: {bad}")
