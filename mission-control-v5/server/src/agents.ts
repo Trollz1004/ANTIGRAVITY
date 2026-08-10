@@ -10,9 +10,7 @@
  */
 import type { AgentDef, CategoryDef } from './types.js';
 
-export const CATEGORIES: CategoryDef[] = [
-  { id: 'orchestrators', label: 'ORCHESTRATORS' },
-];
+export const CATEGORIES: CategoryDef[] = [{ id: 'orchestrators', label: 'ORCHESTRATORS' }];
 
 /**
  * The shared doctrine. One source ("one of everything"), injected verbatim
@@ -34,7 +32,8 @@ export const AGENTS: AgentDef[] = [
     category: 'orchestrators',
     description:
       'Orchestrates through the Hermes harness — skill hub (skills.sh), YouTube and memory built-ins, Telegram surface, and CLI delegation: it can hand a subtask to fcc-claude or fcc-codex as a real worker process. Plans, delegates to skill-loaded sub-agents, validates by content, journals. Never does the work itself.',
-    harness: 'Hermes skill hub (skills.sh) · delegates to fcc-claude / fcc-codex CLIs · YouTube · memory store · Telegram',
+    harness:
+      'Hermes skill hub (skills.sh) · delegates to fcc-claude / fcc-codex CLIs · YouTube · memory store · Telegram',
     platformId: 'hermes',
     brainExecutor: 'auto',
   },

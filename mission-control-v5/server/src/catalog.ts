@@ -14,21 +14,14 @@ import { join, relative, sep, basename, dirname } from 'node:path';
 
 const env = (k: string, d = ''): string => (process.env[k] ?? d).trim();
 
-export const CATALOG_ROOT =
-  env('CATALOG_ROOT') || 'E:\\ANTIGRAVITY';
+export const CATALOG_ROOT = env('CATALOG_ROOT') || 'E:\\ANTIGRAVITY';
 
-const SKILL_GLOBS = env(
-  'CATALOG_SKILL_GLOBS',
-  'skills/**/SKILL.md',
-)
+const SKILL_GLOBS = env('CATALOG_SKILL_GLOBS', 'skills/**/SKILL.md')
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean);
 
-const TASK_GLOBS = env(
-  'CATALOG_TASK_GLOBS',
-  'tasks/**/*.md',
-)
+const TASK_GLOBS = env('CATALOG_TASK_GLOBS', 'tasks/**/*.md')
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean);
@@ -193,10 +186,7 @@ export function loadCatalog(): BrainCatalog {
     const now = Date.now();
     if (cache && cache.key === key && now - cache.at < CACHE_TTL_MS) return cache.data;
 
-    const skills = [
-      ...skillPaths.map((p) => buildEntry(p, 'skill')),
-      ...taskPaths.map((p) => buildEntry(p, 'task')),
-    ]
+    const skills = [...skillPaths.map((p) => buildEntry(p, 'skill')), ...taskPaths.map((p) => buildEntry(p, 'task'))]
       .filter((s): s is BrainSkill => s !== null)
       .sort((a, b) => a.label.localeCompare(b.label));
 
