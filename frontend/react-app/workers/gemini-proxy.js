@@ -37,7 +37,10 @@ export default {
     };
 
     if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders });
+      return new Response(null, {
+        status: originAllowed ? 204 : 403,
+        headers: corsHeaders,
+      });
     }
 
     if (!originAllowed) {
