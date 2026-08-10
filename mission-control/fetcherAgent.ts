@@ -24,26 +24,40 @@ const QUALIFICATION_THRESHOLDS = {
 };
 
 /**
- * Scan Reddit r/forhire for leads
+ * A lead is qualified when it is recent enough and, if a budget is known,
+ * that budget clears the minimum.
  */
-export async function scanRedditForhire(): Promise<FetcherLead[]> {
+function isQualified(postedAt: Date, budget: number | undefined): boolean {
+  const hoursAgo = (Date.now() - postedAt.getTime()) / (1000 * 60 * 60);
+  return (
+    hoursAgo <= QUALIFICATION_THRESHOLDS.MAX_HOURS_AGO &&
+    (budget === undefined || budget >= QUALIFICATION_THRESHOLDS.MIN_BUDGET)
+  );
+}
+
+/**
+ * Scan a subreddit's new listings for leads.
+ */
+async function scanSubreddit(
+  subreddit: string,
+  source: FetcherLead["source"]
+): Promise<FetcherLead[]> {
   try {
-    const response = await axios.get("https://www.reddit.com/r/forhire/new.json", {
-      headers: {
-        "User-Agent": "OpenClaw-FETCHER/1.0",
-      },
-      params: {
-        limit: 50,
-      },
-    });
+    const response = await axios.get(
+      `https://www.reddit.com/r/${subreddit}/new.json`,
+      {
+        headers: {
+          "User-Agent": "OpenClaw-FETCHER/1.0",
+        },
+        params: {
+          limit: 50,
+        },
+      }
+    );
 
-    const leads: FetcherLead[] = [];
-    const now = new Date();
-
-    for (const post of response.data.data.children) {
+    return response.data.data.children.map((post) => {
       const data = post.data;
       const postedAt = new Date(data.created_utc * 1000);
-      const hoursAgo = (now.getTime() - postedAt.getTime()) / (1000 * 60 * 60);
 
       // Extract budget from title (common patterns: $XXX, $X,XXX, USD XXX)
       const budgetMatch = data.title.match(/\$[\d,]+/);
@@ -51,75 +65,34 @@ export async function scanRedditForhire(): Promise<FetcherLead[]> {
         ? parseInt(budgetMatch[0].replace(/[$,]/g, ""))
         : undefined;
 
-      const qualified =
-        hoursAgo <= QUALIFICATION_THRESHOLDS.MAX_HOURS_AGO &&
-        (budget === undefined || budget >= QUALIFICATION_THRESHOLDS.MIN_BUDGET);
-
-      leads.push({
-        source: "reddit_forhire",
+      return {
+        source,
         title: data.title,
         url: `https://reddit.com${data.permalink}`,
         budget,
         postedAt,
         deliverable: data.selftext.substring(0, 500),
-        qualified,
-      });
-    }
-
-    return leads;
+        qualified: isQualified(postedAt, budget),
+      };
+    });
   } catch (error) {
-    console.error("Failed to scan Reddit r/forhire:", error);
+    console.error(`Failed to scan Reddit r/${subreddit}:`, error);
     return [];
   }
+}
+
+/**
+ * Scan Reddit r/forhire for leads
+ */
+export async function scanRedditForhire(): Promise<FetcherLead[]> {
+  return scanSubreddit("forhire", "reddit_forhire");
 }
 
 /**
  * Scan Reddit r/websiteservices for leads
  */
 export async function scanRedditWebsiteServices(): Promise<FetcherLead[]> {
-  try {
-    const response = await axios.get("https://www.reddit.com/r/websiteservices/new.json", {
-      headers: {
-        "User-Agent": "OpenClaw-FETCHER/1.0",
-      },
-      params: {
-        limit: 50,
-      },
-    });
-
-    const leads: FetcherLead[] = [];
-    const now = new Date();
-
-    for (const post of response.data.data.children) {
-      const data = post.data;
-      const postedAt = new Date(data.created_utc * 1000);
-      const hoursAgo = (now.getTime() - postedAt.getTime()) / (1000 * 60 * 60);
-
-      const budgetMatch = data.title.match(/\$[\d,]+/);
-      const budget = budgetMatch
-        ? parseInt(budgetMatch[0].replace(/[$,]/g, ""))
-        : undefined;
-
-      const qualified =
-        hoursAgo <= QUALIFICATION_THRESHOLDS.MAX_HOURS_AGO &&
-        (budget === undefined || budget >= QUALIFICATION_THRESHOLDS.MIN_BUDGET);
-
-      leads.push({
-        source: "reddit_websiteservices",
-        title: data.title,
-        url: `https://reddit.com${data.permalink}`,
-        budget,
-        postedAt,
-        deliverable: data.selftext.substring(0, 500),
-        qualified,
-      });
-    }
-
-    return leads;
-  } catch (error) {
-    console.error("Failed to scan Reddit r/websiteservices:", error);
-    return [];
-  }
+  return scanSubreddit("websiteservices", "reddit_websiteservices");
 }
 
 /**
@@ -138,32 +111,21 @@ export async function scanUpwork(apiKey: string): Promise<FetcherLead[]> {
       },
     });
 
-    const leads: FetcherLead[] = [];
-    const now = new Date();
-
-    for (const job of response.data.jobs) {
+    return response.data.jobs.map((job) => {
       const postedAt = new Date(job.posted_on * 1000);
-      const hoursAgo = (now.getTime() - postedAt.getTime()) / (1000 * 60 * 60);
-
       const budget = job.budget?.amount || undefined;
 
-      const qualified =
-        hoursAgo <= QUALIFICATION_THRESHOLDS.MAX_HOURS_AGO &&
-        (budget === undefined || budget >= QUALIFICATION_THRESHOLDS.MIN_BUDGET);
-
-      leads.push({
-        source: "upwork",
+      return {
+        source: "upwork" as const,
         title: job.title,
         url: job.url,
         budget,
         postedAt,
         deliverable: job.description?.substring(0, 500),
         estimatedHourlyRate: job.hourly_rate,
-        qualified,
-      });
-    }
-
-    return leads;
+        qualified: isQualified(postedAt, budget),
+      };
+    });
   } catch (error) {
     console.error("Failed to scan Upwork:", error);
     return [];
@@ -186,31 +148,20 @@ export async function scanFiverr(apiKey: string): Promise<FetcherLead[]> {
       },
     });
 
-    const leads: FetcherLead[] = [];
-    const now = new Date();
-
-    for (const gig of response.data.gigs) {
+    return response.data.gigs.map((gig) => {
       const postedAt = new Date(gig.created_at);
-      const hoursAgo = (now.getTime() - postedAt.getTime()) / (1000 * 60 * 60);
-
       const budget = gig.price_min ? gig.price_min * 100 : undefined; // Convert to cents
 
-      const qualified =
-        hoursAgo <= QUALIFICATION_THRESHOLDS.MAX_HOURS_AGO &&
-        (budget === undefined || budget >= QUALIFICATION_THRESHOLDS.MIN_BUDGET);
-
-      leads.push({
-        source: "fiverr",
+      return {
+        source: "fiverr" as const,
         title: gig.title,
         url: gig.url,
         budget,
         postedAt,
         deliverable: gig.description?.substring(0, 500),
-        qualified,
-      });
-    }
-
-    return leads;
+        qualified: isQualified(postedAt, budget),
+      };
+    });
   } catch (error) {
     console.error("Failed to scan Fiverr:", error);
     return [];

@@ -3,24 +3,14 @@ refresh payload guards, and the bcrypt-fallback beta password path."""
 
 import asyncio
 import uuid
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 from unittest.mock import patch
 
-import jose
 from jose import jwt as jose_jwt
 
 from app.auth import create_access_token, decode_token
 from app.routers import auth as auth_router
-
-
-def _seed(*items, db_session_factory) -> None:
-    async def _run():
-        async with db_session_factory() as session:
-            for item in items:
-                session.add(item)
-            await session.commit()
-
-    asyncio.run(_run())
+from tests.helpers import seed
 
 
 def _register_payload(email="new-user@example.com", **overrides):
@@ -51,11 +41,16 @@ def test_register_duplicate_email_returns_409(client, db_session_factory):
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
-    _seed(existing, db_session_factory=db_session_factory)
+    seed(existing, db_session_factory=db_session_factory)
 
-    resp = client.post("/api/v1/auth/register", json=_register_payload("dup@example.com"))
+    resp = client.post(
+        "/api/v1/auth/register", json=_register_payload("dup@example.com")
+    )
     assert resp.status_code == 409
-    assert "already registered" in resp.json()["message"].lower() or "already registered" in resp.text.lower()
+    assert (
+        "already registered" in resp.json()["message"].lower()
+        or "already registered" in resp.text.lower()
+    )
 
 
 # ── Beta access ──────────────────────────────────────────────────────────────
@@ -126,9 +121,7 @@ def test_beta_password_hash_bcrypt_fallback():
 
 def test_refresh_rejects_access_token_type(client):
     token = create_access_token(str(uuid.uuid4()))
-    resp = client.post(
-        "/api/v1/auth/refresh", json={"refresh_token": token}
-    )
+    resp = client.post("/api/v1/auth/refresh", json={"refresh_token": token})
     assert resp.status_code == 401
     assert "Not a refresh token" in resp.text
 
@@ -218,9 +211,7 @@ def test_google_login_invalid_token_and_missing_email(client):
         resp = client.post("/api/v1/auth/google", json={"id_token": "x"})
     assert resp.status_code == 401
 
-    with patch.object(
-        auth_router, "verify_google_token", return_value={"sub": "s"}
-    ):
+    with patch.object(auth_router, "verify_google_token", return_value={"sub": "s"}):
         resp = client.post("/api/v1/auth/google", json={"id_token": "x"})
     assert resp.status_code == 400
 
@@ -275,7 +266,6 @@ def test_refresh_user_not_found_and_inactive(client, db_session_factory):
     from datetime import timedelta
 
     from app.auth import _hash_token, create_refresh_token
-    from app.models import User
     from app.models_refresh_token import RefreshToken
 
     # Unknown user → 401

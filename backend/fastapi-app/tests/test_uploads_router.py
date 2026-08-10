@@ -19,6 +19,8 @@ from app.routers import uploads
 from app.upload_progress import (
     CLEANUP_THRESHOLD_SECONDS,
     UploadProgress,
+    _periodic_cleanup,
+    _store,
     complete_upload,
     create_upload,
     fail_upload,
@@ -28,9 +30,8 @@ from app.upload_progress import (
     set_processing,
     set_uploaded_bytes,
     update_progress,
-    _periodic_cleanup,
-    _store,
 )
+from tests.helpers import override_user
 
 
 @pytest.fixture(autouse=True)
@@ -51,18 +52,11 @@ def _make_user() -> User:
     )
 
 
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
-
-
 @pytest.fixture()
 def authed_client(client, tmp_path):
     """Client with an authenticated user override and tmp storage settings."""
     user = _make_user()
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
 
     fake_settings = MagicMock()
     fake_settings.upload_max_size_bytes = 1024 * 1024
@@ -125,6 +119,7 @@ def test_standard_upload_rejects_disallowed_type(authed_client):
 
 def test_standard_upload_rejects_virus_positive(authed_client, tmp_path):
     with patch.object(uploads, "_scan_virus", return_value=False) as _scan:
+
         async def _no(*args, **kwargs):
             return False
 

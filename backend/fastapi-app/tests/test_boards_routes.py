@@ -9,13 +9,13 @@ Endpoints covered:
 - POST /api/v1/boards/posts/{post_id}/report
 """
 
-import asyncio
 import uuid
 from datetime import datetime, timezone
 
 from app.auth import get_current_user
 from app.main import app
 from app.models import User
+from tests.helpers import override_user, seed
 
 
 def _make_user(*, email: str, display_name: str = "Board User") -> User:
@@ -29,30 +29,13 @@ def _make_user(*, email: str, display_name: str = "Board User") -> User:
     )
 
 
-def _seed(*items, db_session_factory) -> None:
-    async def _run():
-        async with db_session_factory() as session:
-            for item in items:
-                session.add(item)
-            await session.commit()
-
-    asyncio.run(_run())
-
-
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
-
-
 # ── GET /api/v1/boards ────────────────────────────────────────────────────────
 
 
 def test_list_boards_auto_creates_defaults(client, db_session_factory):
     user = _make_user(email="boards_list@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.get("/api/v1/boards")
         assert resp.status_code == 200
@@ -70,8 +53,8 @@ def test_list_boards_auto_creates_defaults(client, db_session_factory):
 def test_list_boards_idempotent(client, db_session_factory):
     """Calling /boards twice should not duplicate the default boards."""
     user = _make_user(email="boards_idem@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp1 = client.get("/api/v1/boards")
         resp2 = client.get("/api/v1/boards")
@@ -85,8 +68,8 @@ def test_list_boards_idempotent(client, db_session_factory):
 
 def test_list_posts_empty(client, db_session_factory):
     user = _make_user(email="posts_empty@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         client.get("/api/v1/boards")  # ensure default boards exist
         resp = client.get("/api/v1/boards/general/posts")
@@ -98,8 +81,8 @@ def test_list_posts_empty(client, db_session_factory):
 
 def test_list_posts_unknown_board_returns_404(client, db_session_factory):
     user = _make_user(email="posts_404@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.get("/api/v1/boards/nonexistent-board/posts")
         assert resp.status_code == 404
@@ -112,8 +95,8 @@ def test_list_posts_unknown_board_returns_404(client, db_session_factory):
 
 def test_create_post_returns_201(client, db_session_factory):
     user = _make_user(email="post_create@example.com", display_name="Alice")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         client.get("/api/v1/boards")  # ensure boards exist
         resp = client.post(
@@ -131,8 +114,8 @@ def test_create_post_returns_201(client, db_session_factory):
 
 def test_create_post_unknown_board_returns_404(client, db_session_factory):
     user = _make_user(email="post_404@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.post(
             "/api/v1/boards/no-such-board/posts",
@@ -148,8 +131,8 @@ def test_create_post_unknown_board_returns_404(client, db_session_factory):
 
 def test_list_comments_empty(client, db_session_factory):
     user = _make_user(email="comments_empty@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         client.get("/api/v1/boards")
         post_resp = client.post(
@@ -169,8 +152,8 @@ def test_list_comments_empty(client, db_session_factory):
 
 def test_create_comment_returns_201(client, db_session_factory):
     user = _make_user(email="comment_create@example.com", display_name="Bob")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         client.get("/api/v1/boards")
         post_resp = client.post(
@@ -193,8 +176,8 @@ def test_create_comment_returns_201(client, db_session_factory):
 
 def test_create_comment_unknown_post_returns_404(client, db_session_factory):
     user = _make_user(email="comment_404@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         client.get("/api/v1/boards")
         resp = client.post(
@@ -211,8 +194,8 @@ def test_create_comment_unknown_post_returns_404(client, db_session_factory):
 
 def test_report_post_returns_200(client, db_session_factory):
     user = _make_user(email="report_post@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         client.get("/api/v1/boards")
         post_resp = client.post(
@@ -235,8 +218,8 @@ def test_report_post_returns_200(client, db_session_factory):
 
 def test_report_unknown_post_returns_404(client, db_session_factory):
     user = _make_user(email="report_404@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.post(
             f"/api/v1/boards/posts/{uuid.uuid4()}/report",
