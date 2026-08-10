@@ -23,8 +23,7 @@ export class PiecesError extends Error {
 
 const env = (key: string): string => (process.env[key] ?? '').trim();
 
-export const PIECES_MCP_URL =
-  env('PIECES_MCP_URL') || 'http://localhost:39300/model_context_protocol/2025-03-26/mcp';
+export const PIECES_MCP_URL = env('PIECES_MCP_URL') || 'http://localhost:39300/model_context_protocol/2025-03-26/mcp';
 export const PIECES_LTM_TOOL = env('PIECES_LTM_TOOL') || 'ask_pieces_ltm';
 
 const CALL_TIMEOUT_MS = 120_000;
@@ -201,7 +200,11 @@ export async function pingPieces(timeoutMs = 9_000): Promise<boolean> {
         jsonrpc: '2.0',
         id: 1,
         method: 'initialize',
-        params: { protocolVersion: PROTOCOL_VERSION, capabilities: {}, clientInfo: { name: 'mc-ping', version: '1.0.0' } },
+        params: {
+          protocolVersion: PROTOCOL_VERSION,
+          capabilities: {},
+          clientInfo: { name: 'mc-ping', version: '1.0.0' },
+        },
       }),
       signal: controller.signal,
     });
