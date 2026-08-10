@@ -1,10 +1,9 @@
 """
-Mission Ledger — every dollar committed to the kids fund, tracked.
+Revenue Ledger — every transaction committed and tracked.
 
-Replaces the mirror DAO band with real persistent revenue tracking. External
-systems (Square, Stripe, Cloudflare workers, etc.) post to the webhook
-endpoints and the totals propagate to the Mission ribbon visible on every
-screen.
+Persistent revenue tracking for the platform. External systems (Square,
+Stripe, Cloudflare workers, etc.) post to the webhook endpoints and the
+totals propagate to the revenue ribbon visible on every screen.
 
 Doctrine compliance:
   - All amounts are recorded — never claim contributions or requests.
