@@ -188,3 +188,6 @@ omniroute/
 /tui.json
 /search.html
 /*.tui-migration.bak
+
+# recoverable drift quarantine (paperclip purge 2026-08-10)
+.drift-quarantine/

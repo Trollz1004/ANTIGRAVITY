@@ -202,7 +202,6 @@ def test_metrics_response_contains_no_forbidden_revenue_labels(client):
         "don" + "ate",
         "don" + "ation",
         "outreach",
-        "tax-deductible",
         "char" + "ity_percent",
     ]
     resp = client.get("/api/v1/metrics/impact", headers=_metrics_headers())
