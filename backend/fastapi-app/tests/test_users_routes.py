@@ -10,7 +10,6 @@ Risk surface:
   - Rate limit enforcement
 """
 
-import asyncio
 import uuid
 from datetime import date, datetime, timezone
 
@@ -18,18 +17,9 @@ import pytest
 
 from app.auth import hash_password
 from app.models import User
+from tests.helpers import seed
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
-
-
-def _seed(*items, db_session_factory):
-    async def _run():
-        async with db_session_factory() as session:
-            for item in items:
-                session.add(item)
-            await session.commit()
-
-    asyncio.run(_run())
 
 
 def _make_existing_user(email: str) -> User:
@@ -157,7 +147,7 @@ def test_register_empty_body_returns_422(client):
 
 def test_register_duplicate_email_returns_409(client, db_session_factory):
     existing = _make_existing_user("duplicate_reg@example.com")
-    _seed(existing, db_session_factory=db_session_factory)
+    seed(existing, db_session_factory=db_session_factory)
 
     resp = client.post(
         "/api/v1/users/register",
@@ -173,7 +163,7 @@ def test_register_duplicate_email_returns_409(client, db_session_factory):
 def test_register_email_is_case_insensitive_for_dedup(client, db_session_factory):
     """Emails stored lowercase must catch mixed-case duplicate attempts."""
     existing = _make_existing_user("casecheck@example.com")
-    _seed(existing, db_session_factory=db_session_factory)
+    seed(existing, db_session_factory=db_session_factory)
 
     resp = client.post(
         "/api/v1/users/register",

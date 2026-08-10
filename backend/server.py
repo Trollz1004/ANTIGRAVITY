@@ -25,22 +25,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
 
-from dotenv import load_dotenv
-from fastapi import APIRouter, FastAPI, HTTPException, Request, Response
+from fastapi import APIRouter, FastAPI, HTTPException, Response
 from fastapi.staticfiles import StaticFiles
-from motor.motor_asyncio import AsyncIOMotorClient
+from mongo import ROOT_DIR, close_client, get_db
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.middleware.cors import CORSMiddleware
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / ".env")
-
-from auth_relay import require_admin  # noqa: E402
-
 # ---------- infra ---------------------------------------------------------- #
-mongo_url = os.environ["MONGO_URL"]
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ["DB_NAME"]]
+db = get_db()
 
 app = FastAPI(title="OpusPawClaw · Mission Control")
 api = APIRouter(prefix="/api")
@@ -530,4 +522,4 @@ logger = logging.getLogger(__name__)
 
 @app.on_event("shutdown")
 async def _shutdown():
-    client.close()
+    close_client()

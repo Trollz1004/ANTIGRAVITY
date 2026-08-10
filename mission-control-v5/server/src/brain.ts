@@ -99,9 +99,7 @@ export function registerBrainRoutes(app: Express): void {
       // Query shorthand: the default LTM tool (ask_pieces_ltm / ask_memory) takes
       // a `question` field, so map the shorthand to that. Explicit `arguments`
       // pass through untouched.
-      const args =
-        req.body?.arguments ??
-        (req.body?.query !== undefined ? { question: String(req.body.query) } : {});
+      const args = req.body?.arguments ?? (req.body?.query !== undefined ? { question: String(req.body.query) } : {});
       const started = Date.now();
       const result = await callTool(tool, args);
       res.json({ result, tool, ms: Date.now() - started });
@@ -132,15 +130,17 @@ export function registerBrainRoutes(app: Express): void {
   app.get('/api/brain/catalog', (req, res) => {
     try {
       const { skills, categories } = loadCatalog();
-      const q = String(req.query.q ?? '').trim().toLowerCase();
-      const category = String(req.query.category ?? '').trim().toLowerCase();
+      const q = String(req.query.q ?? '')
+        .trim()
+        .toLowerCase();
+      const category = String(req.query.category ?? '')
+        .trim()
+        .toLowerCase();
       const filtered = skills.filter((s) => {
         if (category && s.category !== category) return false;
         if (!q) return true;
         return (
-          s.id.toLowerCase().includes(q) ||
-          s.label.toLowerCase().includes(q) ||
-          s.description.toLowerCase().includes(q)
+          s.id.toLowerCase().includes(q) || s.label.toLowerCase().includes(q) || s.description.toLowerCase().includes(q)
         );
       });
       res.json({ skills: filtered, categories });

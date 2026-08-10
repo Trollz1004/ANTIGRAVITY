@@ -122,7 +122,13 @@ export function safeJoin(root: string, candidate: string): string | null {
 }
 
 function slug(s: string): string {
-  return (s || 'task').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || 'task';
+  return (
+    (s || 'task')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 48) || 'task'
+  );
 }
 
 async function git(args: string[]): Promise<string> {

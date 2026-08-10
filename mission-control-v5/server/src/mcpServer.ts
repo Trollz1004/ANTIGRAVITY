@@ -132,12 +132,12 @@ async function dispatch(name: string, args: Record<string, unknown>): Promise<un
     case 'list-tasks':
       return listTasks();
     case 'list-skills': {
-      const q = String(args?.q ?? '').trim().toLowerCase();
+      const q = String(args?.q ?? '')
+        .trim()
+        .toLowerCase();
       const { skills } = loadCatalog();
       const filtered = q
-        ? skills.filter((s) =>
-            [s.id, s.label, s.description].some((f) => f.toLowerCase().includes(q)),
-          )
+        ? skills.filter((s) => [s.id, s.label, s.description].some((f) => f.toLowerCase().includes(q)))
         : skills;
       return filtered.map((s) => ({
         id: s.id,

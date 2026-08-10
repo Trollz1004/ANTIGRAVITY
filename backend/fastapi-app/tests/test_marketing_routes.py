@@ -20,6 +20,7 @@ from datetime import datetime, timezone
 from app.auth import get_current_user
 from app.main import app
 from app.models import User
+from tests.helpers import override_user, seed
 
 
 def _make_user(*, email: str = "marketing@example.com") -> User:
@@ -31,23 +32,6 @@ def _make_user(*, email: str = "marketing@example.com") -> User:
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
-
-
-def _seed(*items, db_session_factory) -> None:
-    async def _run():
-        async with db_session_factory() as session:
-            for item in items:
-                session.add(item)
-            await session.commit()
-
-    asyncio.run(_run())
-
-
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
 
 
 def _valid_payload(**overrides):
@@ -88,8 +72,8 @@ def test_marketing_list_requires_auth(client):
 
 def test_create_content_persists_to_database(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.post("/api/v1/marketing/content", json=_valid_payload())
         assert resp.status_code == 201, resp.text
@@ -127,8 +111,8 @@ def test_create_content_persists_to_database(client, db_session_factory):
 
 def test_create_content_requires_branded_hashtag(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.post(
             "/api/v1/marketing/content",
@@ -142,8 +126,8 @@ def test_create_content_requires_branded_hashtag(client, db_session_factory):
 
 def test_create_content_rejects_too_many_hashtags_for_x(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.post(
             "/api/v1/marketing/content",
@@ -160,13 +144,15 @@ def test_create_content_rejects_too_many_hashtags_for_x(client, db_session_facto
 
 def test_create_content_rejects_out_of_range_hashtags(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         # Instagram requires 3-7 hashtags
         resp = client.post(
             "/api/v1/marketing/content",
-            json=_valid_payload(platforms=["instagram"], hashtag_block=["#YouAndINotAI"]),
+            json=_valid_payload(
+                platforms=["instagram"], hashtag_block=["#YouAndINotAI"]
+            ),
         )
         assert resp.status_code == 400
         assert "requires 3-7 hashtags" in resp.json()["detail"]
@@ -174,9 +160,7 @@ def test_create_content_rejects_out_of_range_hashtags(client, db_session_factory
         # Unknown platforms are not limit-checked
         resp = client.post(
             "/api/v1/marketing/content",
-            json=_valid_payload(
-                platforms=["myspace"], hashtag_block=["#YouAndINotAI"]
-            ),
+            json=_valid_payload(platforms=["myspace"], hashtag_block=["#YouAndINotAI"]),
         )
         assert resp.status_code == 201, resp.text
     finally:
@@ -185,8 +169,8 @@ def test_create_content_rejects_out_of_range_hashtags(client, db_session_factory
 
 def test_create_content_missing_required_fields_returns_422(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.post("/api/v1/marketing/content", json={"campaign_name": "X"})
         assert resp.status_code == 422
@@ -199,8 +183,8 @@ def test_create_content_missing_required_fields_returns_422(client, db_session_f
 
 def test_list_content_returns_persisted_items(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         assert client.get("/api/v1/marketing/content").json() == []
 
@@ -230,8 +214,8 @@ def test_list_content_returns_persisted_items(client, db_session_factory):
 
 def test_list_content_filters_by_published_state(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         first = client.post("/api/v1/marketing/content", json=_valid_payload()).json()
         client.post(
@@ -258,8 +242,8 @@ def test_list_content_filters_by_published_state(client, db_session_factory):
 
 def test_get_content_returns_stored_record(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         created = client.post("/api/v1/marketing/content", json=_valid_payload())
         content_id = created.json()["id"]
@@ -275,8 +259,8 @@ def test_get_content_returns_stored_record(client, db_session_factory):
 def test_get_content_unknown_id_returns_404(client, db_session_factory):
     """No fabricated payloads — unknown IDs are 404."""
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.get(f"/api/v1/marketing/content/{uuid.uuid4()}")
         assert resp.status_code == 404
@@ -293,8 +277,8 @@ def test_get_content_unknown_id_returns_404(client, db_session_factory):
 
 def test_put_content_full_replace_updates_database(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         created = client.post("/api/v1/marketing/content", json=_valid_payload())
         content_id = created.json()["id"]
@@ -304,9 +288,7 @@ def test_put_content_full_replace_updates_database(client, db_session_factory):
             primary_caption="New caption #YouAndINotAI",
             hashtag_block=["#YouAndINotAI", "#VerifiedMembers", "#BotShield"],
         )
-        resp = client.put(
-            f"/api/v1/marketing/content/{content_id}", json=replacement
-        )
+        resp = client.put(f"/api/v1/marketing/content/{content_id}", json=replacement)
         assert resp.status_code == 200, resp.text
         data = resp.json()
         assert data["id"] == content_id
@@ -326,8 +308,8 @@ def test_put_content_full_replace_updates_database(client, db_session_factory):
 
 def test_put_content_validates_hashtags_and_unknown_id(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         # Missing branded hashtag -> 400
         resp = client.put(
@@ -350,8 +332,8 @@ def test_put_content_validates_hashtags_and_unknown_id(client, db_session_factor
 
 def test_patch_content_partial_update(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         created = client.post("/api/v1/marketing/content", json=_valid_payload())
         content_id = created.json()["id"]
@@ -373,8 +355,8 @@ def test_patch_content_partial_update(client, db_session_factory):
 
 def test_patch_content_can_update_all_fields(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         created = client.post("/api/v1/marketing/content", json=_valid_payload())
         content_id = created.json()["id"]
@@ -404,8 +386,8 @@ def test_patch_content_can_update_all_fields(client, db_session_factory):
 
 def test_patch_content_rejects_unbranded_hashtags(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         created = client.post("/api/v1/marketing/content", json=_valid_payload())
         content_id = created.json()["id"]
@@ -430,8 +412,8 @@ def test_patch_content_rejects_unbranded_hashtags(client, db_session_factory):
 
 def test_patch_content_unknown_id_returns_404(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.patch(
             f"/api/v1/marketing/content/{uuid.uuid4()}",
@@ -447,8 +429,8 @@ def test_patch_content_unknown_id_returns_404(client, db_session_factory):
 
 def test_publish_content_marks_published(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         created = client.post("/api/v1/marketing/content", json=_valid_payload())
         content_id = created.json()["id"]
@@ -474,8 +456,8 @@ def test_publish_content_marks_published(client, db_session_factory):
 
 def test_delete_content_removes_record(client, db_session_factory):
     user = _make_user()
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         created = client.post("/api/v1/marketing/content", json=_valid_payload())
         content_id = created.json()["id"]
@@ -484,15 +466,12 @@ def test_delete_content_removes_record(client, db_session_factory):
         assert resp.status_code == 204
 
         # Gone from the database, not just from the API surface
-        assert (
-            client.get(f"/api/v1/marketing/content/{content_id}").status_code == 404
-        )
+        assert client.get(f"/api/v1/marketing/content/{content_id}").status_code == 404
         assert client.get("/api/v1/marketing/content").json() == []
 
         # Deleting again -> 404
         assert (
-            client.delete(f"/api/v1/marketing/content/{content_id}").status_code
-            == 404
+            client.delete(f"/api/v1/marketing/content/{content_id}").status_code == 404
         )
     finally:
         app.dependency_overrides.pop(get_current_user, None)

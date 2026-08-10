@@ -9,7 +9,6 @@ Coverage targets:
 Risk surface: FL §496.405 compliance gate; no-free-verification Iron Wall.
 """
 
-import asyncio
 import uuid
 from datetime import date, datetime, timezone
 from unittest.mock import patch
@@ -19,6 +18,7 @@ import pytest
 from app.auth import create_access_token, get_current_user, hash_password
 from app.main import app
 from app.models import User, VerificationEvent
+from tests.helpers import override_user, seed
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -43,26 +43,9 @@ def _make_user(
     )
 
 
-def _seed(*items, db_session_factory):
-    async def _run():
-        async with db_session_factory() as session:
-            for item in items:
-                session.add(item)
-            await session.commit()
-
-    asyncio.run(_run())
-
-
 def _auth_headers(user: User) -> dict[str, str]:
     token = create_access_token(str(user.id))
     return {"Authorization": f"Bearer {token}"}
-
-
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
 
 
 # ── POST /verify/challenge ────────────────────────────────────────────────────
@@ -71,8 +54,8 @@ def _override_user(user: User):
 class TestVerifyChallenge:
     def test_challenge_happy_path_returns_question(self, client, db_session_factory):
         user = _make_user(email="challenge_happy@example.com")
-        _seed(user, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             resp = client.post("/api/v1/verify/challenge")
             assert resp.status_code == 200, resp.text
@@ -89,8 +72,8 @@ class TestVerifyChallenge:
         user = _make_user(
             email="already_verified@example.com", bot_shield_verified=True
         )
-        _seed(user, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             resp = client.post("/api/v1/verify/challenge")
             assert resp.status_code == 400
@@ -128,8 +111,8 @@ class TestVerifySubmit:
 
     def test_submit_nonexistent_challenge_returns_404(self, client, db_session_factory):
         user = _make_user(email="submit_noexist@example.com")
-        _seed(user, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             resp = client.post(
                 "/api/v1/verify/submit",
@@ -145,8 +128,8 @@ class TestVerifySubmit:
     def test_submit_wrong_answer_returns_failed(self, client, db_session_factory):
         """Wrong answer should mark failed and return passed=False."""
         user = _make_user(email="submit_wrong@example.com")
-        _seed(user, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             challenge = self._create_challenge(client, user)
 
@@ -179,8 +162,8 @@ class TestVerifySubmit:
         bug: the router lacks input validation on challenge_id before parsing).
         """
         user = _make_user(email="submit_malformed@example.com")
-        _seed(user, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             try:
                 resp = client.post(
@@ -203,8 +186,8 @@ class TestVerifySubmit:
     def test_submit_too_fast_returns_passed_false(self, client, db_session_factory):
         """Solving the challenge below MIN_SOLVE_TIME should return passed=False."""
         user = _make_user(email="submit_fast@example.com")
-        _seed(user, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             challenge = self._create_challenge(client, user)
             # MIN_SOLVE_TIME defaults to 3 seconds; TestClient is instant
@@ -231,8 +214,8 @@ class TestVerifyStatus:
 
     def test_status_unverified_user(self, client, db_session_factory):
         user = _make_user(email="status_unverified@example.com")
-        _seed(user, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             resp = client.get("/api/v1/verify/status")
             assert resp.status_code == 200
@@ -250,8 +233,8 @@ class TestVerifyStatus:
 
     def test_status_verified_user_shows_gold_tier(self, client, db_session_factory):
         user = _make_user(email="status_gold@example.com", bot_shield_verified=True)
-        _seed(user, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             resp = client.get("/api/v1/verify/status")
             assert resp.status_code == 200
@@ -269,8 +252,8 @@ class TestVerifyStatus:
             bot_shield_verified=True,
             subscription_active=True,
         )
-        _seed(user, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             resp = client.get("/api/v1/verify/status")
             assert resp.status_code == 200
@@ -282,8 +265,8 @@ class TestVerifyStatus:
     def test_status_response_has_no_pii(self, client, db_session_factory):
         """Verify that /status response schema contains no PII fields."""
         user = _make_user(email="status_pii_check@example.com")
-        _seed(user, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             resp = client.get("/api/v1/verify/status")
             assert resp.status_code == 200
@@ -315,8 +298,8 @@ class TestVerifyConfirm:
     def test_confirm_without_liveness_rejected_400(self, client, db_session_factory):
         """No liveness challenge on record → 400."""
         user = _make_user(email="confirm_no_liveness@example.com")
-        _seed(user, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             resp = client.post("/api/v1/verify/confirm")
             assert resp.status_code == 400
@@ -338,8 +321,8 @@ class TestVerifyConfirm:
             challenge_token="tok:hash",
             created_at=datetime.now(timezone.utc),
         )
-        _seed(user, passed_event, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, passed_event, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             resp = client.post("/api/v1/verify/confirm")
             assert resp.status_code == 402
@@ -369,10 +352,8 @@ class TestVerifyConfirm:
             amount_cents=100,
             created_at=datetime.now(timezone.utc),
         )
-        _seed(
-            user, liveness_event, payment_event, db_session_factory=db_session_factory
-        )
-        app.dependency_overrides[get_current_user] = _override_user(user)
+        seed(user, liveness_event, payment_event, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
         try:
             resp = client.post("/api/v1/verify/confirm")
             assert resp.status_code == 200, resp.text
