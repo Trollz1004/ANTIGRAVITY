@@ -1,11 +1,11 @@
-# Paperclip — Repo Authority & Skills Protocol
+# Mission Control — Repo Authority & Skills Protocol
 
-Applies to **every** Paperclip agent (CEO, CTO, CMO) on **every** heartbeat.
+Applies to **every** agent on **every** heartbeat.
 Role files add to this; nothing in them overrides it.
 
 ---
 
-## 1. Paperclip owns the repo
+## 1. The repo is owned by the stack, not one agent
 
 The repo is `F:\ANTIGRAVITY` on **SABRETOOTH-NODE**. It is the single source of
 truth for all code, config, and agent instructions.
@@ -14,6 +14,13 @@ truth for all code, config, and agent instructions.
 Any path starting `E:\` is dead; any host at `192.168.0.15` is dead
 (this node is `192.168.0.8`, and prefer `127.0.0.1` in configs). If you find
 either, fix it — do not work around it.
+
+**Paperclip is retired.** Do not call `:3120`, do not post task callbacks to it,
+and do not treat it as the board. Mission Control on `:3151` is the board.
+Paperclip's data is preserved and backed up, but the server is stopped by
+decision — it duplicated the board, ran agents on stock instructions with an
+empty skills catalog, and spawned real Claude Code against the Max subscription
+every 30 seconds.
 
 ## 2. No work exists until it is pushed
 
@@ -86,33 +93,37 @@ honest *unverified* is worth more than a false *done*.
 
 ## 5. Skills — search before you hand-roll
 
-**Assume the capability already exists.** With 229 skills installed locally and
+**Assume the capability already exists.** With 229+ skills installed locally and
 ~90,000 more reachable, writing a bespoke solution to a solved problem is the
 most expensive mistake available to you.
 
-### Installed here — TWO separate trees, verified 2026-08-09
+### Installed here — THREE separate trees, verified 2026-08-09
 
 They are not the same set, and a skill in one is **not** loadable from the other.
-Check both before concluding something is missing.
+Check all three before concluding something is missing.
 
-**A. `%LOCALAPPDATA%\hermes\skills\` — 53 skills.** This is where the preload set
-below actually lives. Also: `essential-skills`, `research`, `orchestration`,
-`node-and-repo-verification`, `repo-consolidation`, `computer-use`, `github`,
-`copywriting`, `marketing-psychology`, `cold-email`, `seo-audit`,
-`revenue-2k-swarm`, `dating-app-social-marketing`.
+**A. Hermes profile skills (`%LOCALAPPDATA%\hermes\skills\`) — 53 skills.** This is
+where the preload set below actually lives. Also: `essential-skills`, `research`,
+`orchestration`, `node-and-repo-verification`, `repo-consolidation`,
+`computer-use`, `github`, `copywriting`, `marketing-psychology`, `cold-email`,
+`seo-audit`, `revenue-2k-swarm`, `dating-app-social-marketing`.
 
-**B. `F:\ANTIGRAVITY\.agents\skills\` — 229 directories.** Repo-side:
+**B. Repo-side skills (`F:\ANTIGRAVITY\.agents\skills\`) — 229 directories.**
 
 | Group | Count | Notes |
 |---|---|---|
-| `agency-*` | 184 | Bulk-imported role agents (frontend-developer, growth-hacker, …) |
+| `agency-*` | 184 | Bulk-imported role agents |
 | `azure-*` | 18 | Azure tooling |
-| Everything else | 27 | The hand-built ones: `agent-reach`, `skill-creator`, `mission-control`, `payments`, `supabase`, `ui-ux-pro-max`, `workspace-memory`, `hermes-evolution`, `dateapp-*`, … |
+| Everything else | 27 | Hand-built: `agent-reach`, `skill-creator`, `mission-control`, `payments`, `supabase`, `ui-ux-pro-max`, `workspace-memory`, `hermes-evolution`, `dateapp-*`, … |
 
-Also present but **not** skills: `%LOCALAPPDATA%\hermes\hermes-agent\plugins\`
-holds `browser`, `memory`, `kanban`, `image_gen`, `web` — loaded as plugins, not
-via a skill call. And `hermes-agent\optional-skills\` is a staging area, not
-active; several names appear in both, so confirm which copy you are loading.
+**C. OpenCode/Claude harness skills (`C:\Users\joshl\.agents\skills\`) — ~35 skills.**
+This is what the OpenCode/Claude harness reads. It is separate from both trees
+above.
+
+Also present but **not** skills:
+- `%LOCALAPPDATA%\hermes\hermes-agent\plugins\` holds `browser`, `memory`,
+  `kanban`, `image_gen`, `web` — loaded as plugins, not via a skill call.
+- `hermes-agent\optional-skills\` is a staging area, not active.
 
 ### Registries you can pull from
 
@@ -178,6 +189,8 @@ stop and report instead.
   (`sk-2d6...2541`) is **not** a key; writing one back to disk breaks auth while
   everything still looks configured.
 - **Square only** for payments. No Stripe.
-- **Verify before claiming done.** See §4.
+- **No orange UI. No fundraiser language.** Keep full dating product routes. No face
+  swaps, no fake personas.
 - **Do not touch another agent's in-flight files.** Write your own; leave theirs.
 - **The README meme stays.** It is not clutter and is never to be removed.
+- **Verify before claiming done.** See §4.
