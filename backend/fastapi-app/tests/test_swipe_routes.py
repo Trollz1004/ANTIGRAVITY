@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from app.auth import get_current_user
 from app.main import app
 from app.models import Match, Swipe, User
+from tests.helpers import override_user, seed
 
 
 def _make_user(*, email: str, display_name: str = "Test User") -> User:
@@ -27,30 +28,13 @@ def _make_user(*, email: str, display_name: str = "Test User") -> User:
     )
 
 
-def _seed(*users: User, db_session_factory) -> None:
-    async def _run():
-        async with db_session_factory() as session:
-            for u in users:
-                session.add(u)
-            await session.commit()
-
-    asyncio.run(_run())
-
-
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
-
-
 # ── POST /api/v1/swipe ────────────────────────────────────────────────────────
 
 
 def test_swipe_self_returns_400(client, db_session_factory):
     actor = _make_user(email="actor@example.com")
-    _seed(actor, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    seed(actor, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         resp = client.post(
             "/api/v1/swipe", json={"target_id": str(actor.id), "direction": "like"}
@@ -64,8 +48,8 @@ def test_swipe_self_returns_400(client, db_session_factory):
 def test_swipe_like_no_mutual_no_match(client, db_session_factory):
     actor = _make_user(email="actor2@example.com")
     target = _make_user(email="target2@example.com")
-    _seed(actor, target, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    seed(actor, target, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         resp = client.post(
             "/api/v1/swipe", json={"target_id": str(target.id), "direction": "like"}
@@ -81,8 +65,8 @@ def test_swipe_like_no_mutual_no_match(client, db_session_factory):
 def test_swipe_pass_never_creates_match(client, db_session_factory):
     actor = _make_user(email="actor3@example.com")
     target = _make_user(email="target3@example.com")
-    _seed(actor, target, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    seed(actor, target, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         resp = client.post(
             "/api/v1/swipe", json={"target_id": str(target.id), "direction": "pass"}
@@ -114,7 +98,7 @@ def test_swipe_mutual_like_creates_match(client, db_session_factory):
 
     asyncio.run(_run())
 
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         resp = client.post(
             "/api/v1/swipe", json={"target_id": str(target.id), "direction": "like"}
@@ -146,7 +130,7 @@ def test_duplicate_swipe_returns_409(client, db_session_factory):
 
     asyncio.run(_run())
 
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         resp = client.post(
             "/api/v1/swipe", json={"target_id": str(target.id), "direction": "like"}
@@ -168,8 +152,8 @@ def test_swipe_unauthenticated_returns_403(client):
 
 def test_get_matches_empty(client, db_session_factory):
     actor = _make_user(email="matches_empty@example.com")
-    _seed(actor, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    seed(actor, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         resp = client.get("/api/v1/matches")
         assert resp.status_code == 200
@@ -197,7 +181,7 @@ def test_get_matches_returns_active_match(client, db_session_factory):
 
     asyncio.run(_run())
 
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         resp = client.get("/api/v1/matches")
         assert resp.status_code == 200
@@ -225,7 +209,7 @@ def test_discover_excludes_self(client, db_session_factory):
 
     asyncio.run(_run())
 
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         resp = client.get("/api/v1/discover")
         assert resp.status_code == 200
@@ -259,7 +243,7 @@ def test_breeze_bypass_toggle(client, db_session_factory):
 
     asyncio.run(_run())
 
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         resp = client.patch(f"/api/v1/matches/{match.id}/breeze-bypass?enabled=true")
         assert resp.status_code == 200
@@ -289,7 +273,7 @@ def test_breeze_bypass_non_participant_returns_404(client, db_session_factory):
 
     asyncio.run(_run())
 
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         resp = client.patch(f"/api/v1/matches/{match.id}/breeze-bypass?enabled=true")
         assert resp.status_code == 404

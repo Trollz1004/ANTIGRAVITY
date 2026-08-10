@@ -203,42 +203,66 @@ async def list_double_dates(
     return [await _serialize_session(db, session) for session in sessions]
 
 
+async def _load_participant_session(
+    db: AsyncSession,
+    session_id: uuid.UUID,
+    user_id: uuid.UUID,
+    *,
+    reject_declined: bool = False,
+) -> tuple[DoubleDateSession, uuid.UUID]:
+    """Return the proposal plus the caller's match id, or raise."""
+    session = await db.get(DoubleDateSession, session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Double-date proposal not found")
+    if reject_declined and session.status == "declined":
+        raise HTTPException(
+            status_code=409, detail="This proposal has already been declined"
+        )
+
+    user_match_id = await _get_user_match_id(db, session, user_id)
+    if not user_match_id:
+        raise HTTPException(status_code=403, detail="You are not part of this proposal")
+
+    return session, user_match_id
+
+
+async def _set_acceptance(
+    db: AsyncSession,
+    session: DoubleDateSession,
+    match_id: uuid.UUID,
+    accepted: bool,
+) -> None:
+    """Upsert the caller's acceptance row for a proposal."""
+    acceptance = await db.scalar(
+        select(DoubleDateAcceptance).where(
+            DoubleDateAcceptance.session_id == session.id,
+            DoubleDateAcceptance.match_id == match_id,
+        )
+    )
+    if acceptance:
+        acceptance.accepted = accepted
+    else:
+        db.add(
+            DoubleDateAcceptance(
+                id=uuid.uuid4(),
+                session_id=session.id,
+                match_id=match_id,
+                accepted=accepted,
+                created_at=datetime.now(timezone.utc),
+            )
+        )
+
+
 @router.post("/{session_id}/accept", response_model=DoubleDateSessionResponse)
 async def accept_double_date(
     session_id: uuid.UUID,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> DoubleDateSessionResponse:
-    session = await db.get(DoubleDateSession, session_id)
-    if not session:
-        raise HTTPException(status_code=404, detail="Double-date proposal not found")
-    if session.status == "declined":
-        raise HTTPException(
-            status_code=409, detail="This proposal has already been declined"
-        )
-
-    user_match_id = await _get_user_match_id(db, session, user.id)
-    if not user_match_id:
-        raise HTTPException(status_code=403, detail="You are not part of this proposal")
-
-    acceptance = await db.scalar(
-        select(DoubleDateAcceptance).where(
-            DoubleDateAcceptance.session_id == session_id,
-            DoubleDateAcceptance.match_id == user_match_id,
-        )
+    session, user_match_id = await _load_participant_session(
+        db, session_id, user.id, reject_declined=True
     )
-    if acceptance:
-        acceptance.accepted = True
-    else:
-        db.add(
-            DoubleDateAcceptance(
-                id=uuid.uuid4(),
-                session_id=session.id,
-                match_id=user_match_id,
-                accepted=True,
-                created_at=datetime.now(timezone.utc),
-            )
-        )
+    await _set_acceptance(db, session, user_match_id, True)
 
     accepted_match_ids = set(
         (
@@ -268,32 +292,8 @@ async def decline_double_date(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> DoubleDateSessionResponse:
-    session = await db.get(DoubleDateSession, session_id)
-    if not session:
-        raise HTTPException(status_code=404, detail="Double-date proposal not found")
-
-    user_match_id = await _get_user_match_id(db, session, user.id)
-    if not user_match_id:
-        raise HTTPException(status_code=403, detail="You are not part of this proposal")
-
-    acceptance = await db.scalar(
-        select(DoubleDateAcceptance).where(
-            DoubleDateAcceptance.session_id == session_id,
-            DoubleDateAcceptance.match_id == user_match_id,
-        )
-    )
-    if acceptance:
-        acceptance.accepted = False
-    else:
-        db.add(
-            DoubleDateAcceptance(
-                id=uuid.uuid4(),
-                session_id=session.id,
-                match_id=user_match_id,
-                accepted=False,
-                created_at=datetime.now(timezone.utc),
-            )
-        )
+    session, user_match_id = await _load_participant_session(db, session_id, user.id)
+    await _set_acceptance(db, session, user_match_id, False)
 
     session.status = "declined"
     await db.commit()

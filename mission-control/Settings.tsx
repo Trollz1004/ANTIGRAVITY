@@ -10,6 +10,29 @@ import { useLocation } from "wouter";
 import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+function SaveConfigButton({
+  onClick,
+  isLoading,
+}: {
+  onClick: () => void;
+  isLoading: boolean;
+}) {
+  return (
+    <Button
+      onClick={onClick}
+      disabled={isLoading}
+      className="bg-accent hover:bg-accent/90 text-accent-foreground w-full"
+    >
+      {isLoading ? (
+        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+      ) : (
+        <Save className="w-4 h-4 mr-2" />
+      )}
+      Save Configuration
+    </Button>
+  );
+}
+
 export default function Settings() {
   const { user } = useAuth();
   const [, navigate] = useLocation();
@@ -57,39 +80,24 @@ export default function Settings() {
     },
   });
 
-  const handleSaveOllama = async () => {
+  const saveConfig = async (
+    provider: string,
+    values: { baseUrl?: string; apiKey: string },
+  ) => {
     setIsLoading(true);
-    await updateConfigMutation.mutateAsync({
-      provider: "ollama",
-      baseUrl: ollamaUrl,
-      apiKey: ollamaKey,
-    });
+    await updateConfigMutation.mutateAsync({ provider, ...values });
   };
 
-  const handleSaveOpenRouter = async () => {
-    setIsLoading(true);
-    await updateConfigMutation.mutateAsync({
-      provider: "openrouter",
-      apiKey: openrouterKey,
-    });
-  };
+  const handleSaveOllama = () =>
+    saveConfig("ollama", { baseUrl: ollamaUrl, apiKey: ollamaKey });
 
-  const handleSaveOpenAI = async () => {
-    setIsLoading(true);
-    await updateConfigMutation.mutateAsync({
-      provider: "openai",
-      baseUrl: openaiUrl,
-      apiKey: openaiKey,
-    });
-  };
+  const handleSaveOpenRouter = () =>
+    saveConfig("openrouter", { apiKey: openrouterKey });
 
-  const handleSaveManus = async () => {
-    setIsLoading(true);
-    await updateConfigMutation.mutateAsync({
-      provider: "manus",
-      apiKey: manusKey,
-    });
-  };
+  const handleSaveOpenAI = () =>
+    saveConfig("openai", { baseUrl: openaiUrl, apiKey: openaiKey });
+
+  const handleSaveManus = () => saveConfig("manus", { apiKey: manusKey });
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -152,18 +160,10 @@ export default function Settings() {
                       className="bg-input border-border mt-2"
                     />
                   </div>
-                  <Button
+                  <SaveConfigButton
                     onClick={handleSaveOllama}
-                    disabled={isLoading}
-                    className="bg-accent hover:bg-accent/90 text-accent-foreground w-full"
-                  >
-                    {isLoading ? (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    ) : (
-                      <Save className="w-4 h-4 mr-2" />
-                    )}
-                    Save Configuration
-                  </Button>
+                    isLoading={isLoading}
+                  />
                 </div>
               </Card>
             </TabsContent>
@@ -197,18 +197,10 @@ export default function Settings() {
                       </a>
                     </p>
                   </div>
-                  <Button
+                  <SaveConfigButton
                     onClick={handleSaveOpenRouter}
-                    disabled={isLoading}
-                    className="bg-accent hover:bg-accent/90 text-accent-foreground w-full"
-                  >
-                    {isLoading ? (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    ) : (
-                      <Save className="w-4 h-4 mr-2" />
-                    )}
-                    Save Configuration
-                  </Button>
+                    isLoading={isLoading}
+                  />
                 </div>
               </Card>
             </TabsContent>
@@ -243,18 +235,10 @@ export default function Settings() {
                       className="bg-input border-border mt-2"
                     />
                   </div>
-                  <Button
+                  <SaveConfigButton
                     onClick={handleSaveOpenAI}
-                    disabled={isLoading}
-                    className="bg-accent hover:bg-accent/90 text-accent-foreground w-full"
-                  >
-                    {isLoading ? (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    ) : (
-                      <Save className="w-4 h-4 mr-2" />
-                    )}
-                    Save Configuration
-                  </Button>
+                    isLoading={isLoading}
+                  />
                 </div>
               </Card>
             </TabsContent>
@@ -280,18 +264,10 @@ export default function Settings() {
                       Get your API key from the Manus dashboard
                     </p>
                   </div>
-                  <Button
+                  <SaveConfigButton
                     onClick={handleSaveManus}
-                    disabled={isLoading}
-                    className="bg-accent hover:bg-accent/90 text-accent-foreground w-full"
-                  >
-                    {isLoading ? (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    ) : (
-                      <Save className="w-4 h-4 mr-2" />
-                    )}
-                    Save Configuration
-                  </Button>
+                    isLoading={isLoading}
+                  />
                 </div>
               </Card>
             </TabsContent>

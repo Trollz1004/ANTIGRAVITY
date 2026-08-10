@@ -19,6 +19,8 @@ logger = logging.getLogger("youandinotai.api.rate_limits")
 router = APIRouter(prefix="/api/v1/rate-limits", tags=["rate-limits"])
 settings = get_settings()
 
+DEFAULT_REQUESTS_PER_MINUTE = 60
+
 # ---------------------------------------------------------------------------
 # In-memory statistics store (resets on restart — sufficient for dashboard)
 # ---------------------------------------------------------------------------
@@ -81,6 +83,23 @@ class RateLimitConfig(BaseModel):
     windowSeconds: int
 
 
+def _current_status() -> RateLimitStatus:
+    """Snapshot the in-process counters as a rate limit status payload."""
+    _reset_window_if_needed()
+    _reset_day_if_needed()
+
+    # Top 5 endpoints by count
+    sorted_eps = sorted(_request_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+
+    return RateLimitStatus(
+        requestsThisMinute=_requests_this_minute,
+        requestsPerMinute=DEFAULT_REQUESTS_PER_MINUTE,
+        resetInSeconds=max(0, int(60 - (time.time() - _window_start))),
+        totalRequestsToday=_total_today,
+        topEndpoints=[EndpointStat(path=p, count=c) for p, c in sorted_eps],
+    )
+
+
 # ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
@@ -91,23 +110,7 @@ async def get_rate_limit_status(
     user: User = Depends(get_current_user),
 ) -> RateLimitStatus:
     """Return current rate limit status and usage statistics."""
-    _reset_window_if_needed()
-    _reset_day_if_needed()
-
-    rpm = 60  # default requests per minute
-    reset_in = max(0, int(60 - (time.time() - _window_start)))
-
-    # Top 5 endpoints by count
-    sorted_eps = sorted(_request_counts.items(), key=lambda x: x[1], reverse=True)[:5]
-    top = [EndpointStat(path=p, count=c) for p, c in sorted_eps]
-
-    return RateLimitStatus(
-        requestsThisMinute=_requests_this_minute,
-        requestsPerMinute=rpm,
-        resetInSeconds=reset_in,
-        totalRequestsToday=_total_today,
-        topEndpoints=top,
-    )
+    return _current_status()
 
 
 @router.get("/stats", response_model=RateLimitStatus)
@@ -115,22 +118,7 @@ async def get_rate_limit_stats(
     user: User = Depends(get_current_user),
 ) -> RateLimitStatus:
     """Return rate limit statistics for authenticated dashboard users."""
-    _reset_window_if_needed()
-    _reset_day_if_needed()
-
-    rpm = 60
-    reset_in = max(0, int(60 - (time.time() - _window_start)))
-
-    sorted_eps = sorted(_request_counts.items(), key=lambda x: x[1], reverse=True)[:5]
-    top = [EndpointStat(path=p, count=c) for p, c in sorted_eps]
-
-    return RateLimitStatus(
-        requestsThisMinute=_requests_this_minute,
-        requestsPerMinute=rpm,
-        resetInSeconds=reset_in,
-        totalRequestsToday=_total_today,
-        topEndpoints=top,
-    )
+    return _current_status()
 
 
 @router.get("/config", response_model=RateLimitConfig)
@@ -139,7 +127,7 @@ async def get_rate_limit_config(
 ) -> RateLimitConfig:
     """Return rate limit configuration."""
     return RateLimitConfig(
-        requestsPerMinute=60,
+        requestsPerMinute=DEFAULT_REQUESTS_PER_MINUTE,
         burstSize=10,
         windowSeconds=60,
     )
