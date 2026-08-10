@@ -87,8 +87,9 @@ class ImageRequest(BaseModel):
 
 
 @router.post("/images/generate")
-async def generate_image(body: ImageRequest):
+async def generate_image(body: ImageRequest, request: Request):
     """Generate one image via Gemini Nano Banana, persist metadata, return base64."""
+    require_admin(request)
     api_key = os.environ.get("EMERGENT_LLM_KEY", "").strip()
     if not api_key:
         raise HTTPException(status_code=503, detail="EMERGENT_LLM_KEY missing")

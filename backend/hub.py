@@ -21,7 +21,8 @@ import uuid
 from typing import Any, Dict, List, Optional
 
 import httpx
-from fastapi import APIRouter, HTTPException, Response
+from auth_relay import require_admin
+from fastapi import APIRouter, HTTPException, Request, Response
 from pydantic import BaseModel
 
 logger = logging.getLogger("hub")
@@ -232,8 +233,9 @@ async def list_providers():
 
 
 @router.post("/chat/send")
-async def chat_send(body: UnifiedChatRequest, response: Response):
+async def chat_send(body: UnifiedChatRequest, request: Request, response: Response):
     """Unified send. Routes by provider id; surfaces real model + latency headers."""
+    require_admin(request)
     p = PLATFORM_BY_ID.get(body.provider)
     if not p:
         raise HTTPException(status_code=400, detail=f"unknown provider '{body.provider}'")
@@ -347,12 +349,14 @@ class BroadcastRequest(BaseModel):
 
 
 @router.post("/broadcast/telegram")
-async def broadcast_telegram(body: BroadcastRequest):
+async def broadcast_telegram(body: BroadcastRequest, request: Request):
+    require_admin(request)
     return await _telegram_send(f"💠 *{body.source}*\n\n{body.text}\n\n_via OpusPawClaw Mission Control · #UntilNoKidInNeed_")
 
 
 @router.post("/broadcast/whatsapp")
-async def broadcast_whatsapp(body: BroadcastRequest):
+async def broadcast_whatsapp(body: BroadcastRequest, request: Request):
+    require_admin(request)
     return await _whatsapp_send(f"*{body.source}*\n\n{body.text}\n\n— OpusPawClaw Mission Control · #UntilNoKidInNeed")
 
 

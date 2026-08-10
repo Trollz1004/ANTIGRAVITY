@@ -6,10 +6,30 @@
  * The SDK sends: https://this-worker.dev/v1beta/models/gemini-2.0-flash:generateContent?key=DUMMY
  * We forward:    https://generativelanguage.googleapis.com/v1beta/models/...?key=REAL_KEY
  */
+const DEFAULT_ALLOWED_ORIGINS = [
+  'https://youandinotai.com',
+  'https://www.youandinotai.com',
+];
+
+function allowedOrigins(env) {
+  const configured = (env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+  return configured.length ? configured : DEFAULT_ALLOWED_ORIGINS;
+}
+
 export default {
   async fetch(request, env) {
+    const origin = request.headers.get('Origin') || '';
+    const allowed = allowedOrigins(env);
+    // Without an origin check this worker is an open proxy that lends the
+    // Gemini key to any site on the internet.
+    const originAllowed = allowed.includes(origin);
+
     const corsHeaders = {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': originAllowed ? origin : allowed[0],
+      Vary: 'Origin',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers':
         'Content-Type, x-goog-api-key, x-goog-api-client',
@@ -17,7 +37,17 @@ export default {
     };
 
     if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders });
+      return new Response(null, {
+        status: originAllowed ? 204 : 403,
+        headers: corsHeaders,
+      });
+    }
+
+    if (!originAllowed) {
+      return new Response(
+        JSON.stringify({ error: 'origin not allowed' }),
+        { status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders } },
+      );
     }
 
     const url = new URL(request.url);
