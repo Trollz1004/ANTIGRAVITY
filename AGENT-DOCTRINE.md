@@ -64,36 +64,40 @@ file does not change it, only restates it as part of the 4-lane picture.)
 
 ## 1 Memory Graph
 
-Pieces LTM (`mcp__pieces__*`) is the one shared, cross-agent-readable
-memory graph — already connected and documented as usable by
-Claude/Cursor/ChatGPT/Goose/Perplexity. All four lanes read/write here
-instead of keeping separate private memory stores that drift out of
-sync with each other.
+RETIRED (Joshua, 2026-08-10): Pieces LTM is no longer free and is no
+longer part of this stack. Do not read from or write to `mcp__pieces__*`,
+and do not treat old Pieces memories as live truth.
 
-- Write with `create_pieces_memory` — short, evidence-backed, timestamped.
-- Read with `ask_memory` / `search_memory` before assuming a fact is
-  still true — verify against live files/services first if the memory
-  names a specific file, function, or flag (see Claude Code's own
-  auto-memory doctrine on this point).
-- This does not replace Claude's own `~/.claude/projects/.../memory/`
-  system — that is Claude-only personal preference/memory per
-  `feedback_claude_memory_exclusivity`. Pieces is the *shared
-  operational* graph the other three lanes also use; it is not the
-  place for Josh's personal preferences.
+The shared memory system is now in-repo markdown, versioned with the code:
+
+- **Journals** — append-only per-seat journal/wheel-log files (the
+  wheel-log pattern at `paperclip-tro/agents/ceo/wheel-log-*.md`,
+  generalized per seat). Short, evidence-backed, timestamped entries.
+- **STATE.md files** — the session diary convention
+  (`ops/ceo-harness/STATE.md` template, ≤15 lines, overwritten each
+  session): what changed, nodes, TODO, quota.
+- **Graphify** — the graph *view* over the workspace
+  (`graphify-out/graph.html`); a visualization of state, not a separate
+  store of truth.
+
+Before assuming a remembered fact is still true, verify against live
+files/services — memory entries that name a specific file, function, or
+flag go stale. Claude's own `~/.claude/projects/.../memory/` remains
+Claude-only personal memory and is unchanged by this.
 
 ## 1 Heartbeat
 
 Every session, each of the 4 lanes should, at minimum:
 
 1. State what tools are actually available this session (OmniRoute
-   reachable? Pieces MCP connected? journal path?) — don't assume last
-   session's tool list still holds.
+   reachable? journal path writable?) — don't assume last session's
+   tool list still holds.
 2. Read its own journal/seat file before acting (Claude: wheel-log at
    `paperclip-tro/agents/ceo/`; Hermes/OpenClaw/FCC: their own seat dirs
    once created — not yet built, see Open Items below).
 3. Write a short status line to its journal and, for anything
-   durable/cross-lane-relevant, to Pieces via `create_pieces_memory`
-   before ending the session.
+   durable/cross-lane-relevant, to the shared STATE.md before ending
+   the session.
 
 This is a lightweight convention, not new infrastructure — it matches
 the wheel-log pattern already in live use at the CEO seat
@@ -104,8 +108,9 @@ instead of reinvented per-agent.
 
 - Hermes/OpenClaw/FCC seats do not yet have their own HEARTBEAT/journal
   files — only the Claude/CEO seat does (as wheel-logs).
-- Unverified whether Hermes/OpenClaw/FCC currently have live Pieces MCP
-  credentials/access at all, or only this Claude session does.
+- Pieces retirement (2026-08-10): any remaining `mcp__pieces__*` wiring
+  in configs/scripts should be removed as encountered; nothing new may
+  depend on it.
 - Global boot doctrine's skills section (`~/.claude/CLAUDE.md`) still
   says "219 registered" — verified actual count is 26 symlinked /
   197 master copies. Correction drafted, not yet applied — awaiting
