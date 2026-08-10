@@ -1,6 +1,5 @@
 """Tests for app/main.py — root endpoints, middleware, and exception handlers."""
 
-import gzip
 import json
 import uuid
 from datetime import datetime, timezone
@@ -18,6 +17,7 @@ from app.main import (
     global_exception_handler,
 )
 from app.models import User
+from tests.helpers import override_user
 
 
 def _make_user() -> User:
@@ -29,13 +29,6 @@ def _make_user() -> User:
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
-
-
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
 
 
 # ── Root endpoints ───────────────────────────────────────────────────────────
@@ -70,7 +63,7 @@ def test_telemetry_health_requires_auth(client):
 
 def test_telemetry_health_with_auth(client):
     user = _make_user()
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.get("/api/v1/health/telemetry")
         assert resp.status_code == 200
@@ -83,11 +76,9 @@ def test_telemetry_health_with_auth(client):
 
 def test_detailed_health_dashboard_with_auth(client):
     user = _make_user()
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
-        with patch(
-            "app.main.redis_health_check", side_effect=RuntimeError("no redis")
-        ):
+        with patch("app.main.redis_health_check", side_effect=RuntimeError("no redis")):
             resp = client.get("/api/v1/health/detailed")
         assert resp.status_code == 200, resp.text
         data = resp.json()
@@ -97,7 +88,10 @@ def test_detailed_health_dashboard_with_auth(client):
         assert data["total_check_latency_ms"] >= 0
         assert data["rate_limiting"]["requests_per_minute"] > 0
         # Endpoint summary only lists real API routes and skips the dashboard itself
-        assert all(not e["path"].startswith("/api/v1/health/detailed") for e in data["endpoints"])
+        assert all(
+            not e["path"].startswith("/api/v1/health/detailed")
+            for e in data["endpoints"]
+        )
         assert any(e["path"].startswith("/api/v1/") for e in data["endpoints"])
     finally:
         app.dependency_overrides.pop(get_current_user, None)
@@ -105,12 +99,12 @@ def test_detailed_health_dashboard_with_auth(client):
 
 def test_detailed_health_dashboard_healthy_path(client):
     user = _make_user()
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
-        with patch(
-            "app.main.redis_health_check", return_value={"status": "ok"}
-        ), patch("app.main.check_db_health", return_value=True), patch(
-            "app.main._square_health_ready", return_value=True
+        with (
+            patch("app.main.redis_health_check", return_value={"status": "ok"}),
+            patch("app.main.check_db_health", return_value=True),
+            patch("app.main._square_health_ready", return_value=True),
         ):
             resp = client.get("/api/v1/health/detailed")
         assert resp.status_code == 200
@@ -188,15 +182,15 @@ def test_suitability_guard_middleware_logs_and_passes(client, db_session_factory
         matched_at=datetime.now(timezone.utc),
     )
 
-    async def _seed():
+    async def seed():
         async with db_session_factory() as session:
             session.add(alice)
             session.add(bob)
             session.add(match)
             await session.commit()
 
-    asyncio.run(_seed())
-    app.dependency_overrides[get_current_user] = _override_user(alice)
+    asyncio.run(seed())
+    app.dependency_overrides[get_current_user] = override_user(alice)
     try:
         with patch("app.main._log_suitability_flags") as mock_log:
             resp = client.post(

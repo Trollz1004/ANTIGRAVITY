@@ -14,22 +14,15 @@ Storage: MongoDB collections `tasks`, `audit`, `heartbeats`. Stable string IDs
 """
 from __future__ import annotations
 
-import os
 import uuid
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
 
-from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
-from motor.motor_asyncio import AsyncIOMotorClient
+from mongo import get_db
 from pydantic import BaseModel, Field
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / ".env")
-
-_client = AsyncIOMotorClient(os.environ["MONGO_URL"])
-_db = _client[os.environ["DB_NAME"]]
+_db = get_db()
 TASKS = _db.tasks
 AUDIT = _db.audit
 HEARTBEATS = _db.heartbeats

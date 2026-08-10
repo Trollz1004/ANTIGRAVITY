@@ -1,7 +1,5 @@
 """Tests for app/database.py utilities and app/routers/health.py endpoints."""
 
-import asyncio
-import uuid
 from datetime import datetime, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
 
@@ -16,6 +14,7 @@ from app.database import (
     get_pool_status,
     reconcile_legacy_schema,
 )
+from tests.helpers import seed
 
 
 @pytest.mark.asyncio
@@ -36,9 +35,7 @@ class TestDatabaseUtilities:
 
         fail_engine = MagicMock()
         fail_cm = AsyncMock()
-        fail_cm.__aenter__ = AsyncMock(
-            side_effect=RuntimeError("connection refused")
-        )
+        fail_cm.__aenter__ = AsyncMock(side_effect=RuntimeError("connection refused"))
         fail_cm.__aexit__ = AsyncMock(return_value=False)
         fail_engine.connect = MagicMock(return_value=fail_cm)
 
@@ -73,16 +70,6 @@ class TestDatabaseUtilities:
 # ── Health router endpoints ──────────────────────────────────────────────────
 
 
-def _seed(*items, db_session_factory) -> None:
-    async def _run():
-        async with db_session_factory() as session:
-            for item in items:
-                session.add(item)
-            await session.commit()
-
-    asyncio.run(_run())
-
-
 def test_health_endpoint_full_shape(client):
     resp = client.get("/api/v1/health")
     assert resp.status_code == 200
@@ -112,7 +99,7 @@ def test_health_allocations_empty_and_populated(client, db_session_factory):
         operating_amount_cents=100,
         payer_type="customer",
     )
-    _seed(allocation, db_session_factory=db_session_factory)
+    seed(allocation, db_session_factory=db_session_factory)
 
     resp = client.get("/api/v1/health/allocations")
     assert resp.status_code == 200
@@ -145,7 +132,7 @@ def test_health_allocations_summary_groups_by_payer(client, db_session_factory):
         operating_amount_cents=1499,
         payer_type="founder_test",
     )
-    _seed(customer, founder, db_session_factory=db_session_factory)
+    seed(customer, founder, db_session_factory=db_session_factory)
 
     resp = client.get("/api/v1/health/allocations/summary")
     assert resp.status_code == 200
@@ -177,7 +164,7 @@ def test_health_webhooks_listing(client, db_session_factory):
         processed=True,
         created_at=datetime.now(timezone.utc),
     )
-    _seed(event, db_session_factory=db_session_factory)
+    seed(event, db_session_factory=db_session_factory)
 
     resp = client.get("/api/v1/health/webhooks")
     assert resp.status_code == 200
@@ -216,7 +203,7 @@ def test_health_wallet_rails_proven_with_square_labels(client, db_session_factor
         processed=True,
         created_at=datetime.now(timezone.utc),
     )
-    _seed(event, db_session_factory=db_session_factory)
+    seed(event, db_session_factory=db_session_factory)
 
     resp = client.get("/api/v1/health")
     assert resp.status_code == 200

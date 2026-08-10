@@ -56,51 +56,13 @@ def decrypt_data(encrypted_data: str | None) -> str | None:
         return None
 
 
-class EncryptedDate:
+class _EncryptedField:
     """
-    A descriptor for SQLAlchemy ORM that encrypts date data before saving
-    and decrypts it after reading from the database.
-    """
+    Base descriptor for SQLAlchemy ORM attributes whose value is encrypted
+    before saving and decrypted after reading from the database.
 
-    def __init__(self, mapped_column):
-        self.mapped_column = mapped_column
-        self.private_name = None
-
-    def __set_name__(self, owner, name):
-        self.public_name = name
-        self.private_name = f"_{name}"
-        setattr(owner, self.private_name, None)
-
-    def __get__(self, instance, owner):
-        if instance is None:
-            return self
-
-        encrypted_value = getattr(instance, self.private_name)
-        decrypted_str = decrypt_data(encrypted_value)
-        if decrypted_str:
-            return datetime.strptime(decrypted_str, "%Y-%m-%d").date()
-        return None
-
-    def __set__(self, instance, value):
-        if instance is None:
-            return
-
-        encrypted_value = encrypt_data(value.isoformat()) if value else None
-        setattr(instance, self.private_name, encrypted_value)
-
-    @property
-    def comparator(self):
-        return self.mapped_column.comparator
-
-    @property
-    def expression(self):
-        return self.mapped_column.expression
-
-
-class EncryptedString:
-    """
-    A descriptor for SQLAlchemy ORM that encrypts string data before saving
-    and decrypts it after reading from the database.
+    Subclasses convert between the Python-side value and the plaintext string
+    that is handed to Fernet via ``_to_plaintext`` / ``_from_plaintext``.
     """
 
     def __init__(self, mapped_column):
@@ -112,19 +74,27 @@ class EncryptedString:
         self.private_name = f"_{name}"
         setattr(owner, self.private_name, None)
 
+    @staticmethod
+    def _to_plaintext(value):
+        return value
+
+    @staticmethod
+    def _from_plaintext(plaintext):
+        return plaintext
+
     def __get__(self, instance, owner):
         if instance is None:
             return self
 
-        encrypted_value = getattr(instance, self.private_name)
-        return decrypt_data(encrypted_value)
+        decrypted = decrypt_data(getattr(instance, self.private_name))
+        return None if decrypted is None else self._from_plaintext(decrypted)
 
     def __set__(self, instance, value):
         if instance is None:
             return
 
-        encrypted_value = encrypt_data(value)
-        setattr(instance, self.private_name, encrypted_value)
+        plaintext = None if value is None else self._to_plaintext(value)
+        setattr(instance, self.private_name, encrypt_data(plaintext))
 
     # Allow direct assignment of mapped_column for SQLAlchemy to pick up column type
     @property
@@ -134,3 +104,21 @@ class EncryptedString:
     @property
     def expression(self):
         return self.mapped_column.expression
+
+
+class EncryptedDate(_EncryptedField):
+    """Encrypted ORM attribute storing a ``date`` as an ISO-8601 string."""
+
+    @staticmethod
+    def _to_plaintext(value):
+        return value.isoformat()
+
+    @staticmethod
+    def _from_plaintext(plaintext):
+        if not plaintext:
+            return None
+        return datetime.strptime(plaintext, "%Y-%m-%d").date()
+
+
+class EncryptedString(_EncryptedField):
+    """Encrypted ORM attribute storing a plain string."""

@@ -19,6 +19,7 @@ from app.auth import create_access_token, get_current_user, hash_password
 from app.main import app
 from app.models import Match, Message, User, UserBlock
 from app.routers import messages as messages_module
+from tests.helpers import override_user, seed
 
 
 def _make_user(email: str | None = None, *, is_active: bool = True) -> User:
@@ -43,23 +44,6 @@ def _make_match(user_a: User, user_b: User, *, status: str = "active") -> Match:
         status=status,
         matched_at=datetime.now(timezone.utc),
     )
-
-
-def _seed(*items, db_session_factory) -> None:
-    async def _run():
-        async with db_session_factory() as session:
-            for item in items:
-                session.add(item)
-            await session.commit()
-
-    asyncio.run(_run())
-
-
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
 
 
 @pytest.fixture()
@@ -89,8 +73,8 @@ def test_get_messages_returns_oldest_first(client, db_session_factory):
         content="second",
         created_at=datetime.now(timezone.utc),
     )
-    _seed(alice, bob, match, old, new, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(alice)
+    seed(alice, bob, match, old, new, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(alice)
     try:
         resp = client.get(f"/api/v1/messages/{match.id}")
         assert resp.status_code == 200
@@ -119,13 +103,11 @@ def test_get_messages_before_filter(client, db_session_factory):
         content="recent",
         created_at=datetime.now(timezone.utc),
     )
-    _seed(alice, bob, match, stale, recent, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(alice)
+    seed(alice, bob, match, stale, recent, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(alice)
     try:
         cutoff = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
-        resp = client.get(
-            f"/api/v1/messages/{match.id}?before={cutoff}&limit=10"
-        )
+        resp = client.get(f"/api/v1/messages/{match.id}?before={cutoff}&limit=10")
         assert resp.status_code == 200
         assert [m["content"] for m in resp.json()] == ["old"]
     finally:
@@ -135,8 +117,8 @@ def test_get_messages_before_filter(client, db_session_factory):
 def test_get_messages_non_member_returns_404(client, db_session_factory):
     alice, bob, eve = _make_user(), _make_user(), _make_user()
     match = _make_match(alice, bob)
-    _seed(alice, bob, eve, match, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(eve)
+    seed(alice, bob, eve, match, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(eve)
     try:
         resp = client.get(f"/api/v1/messages/{match.id}")
         assert resp.status_code == 404
@@ -152,8 +134,8 @@ def test_get_messages_blocked_relationship_returns_403(client, db_session_factor
     alice, bob = _make_user(), _make_user()
     match = _make_match(alice, bob)
     block = UserBlock(id=uuid.uuid4(), blocker_id=bob.id, blocked_id=alice.id)
-    _seed(alice, bob, match, block, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(alice)
+    seed(alice, bob, match, block, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(alice)
     try:
         resp = client.get(f"/api/v1/messages/{match.id}")
         assert resp.status_code == 403
@@ -169,8 +151,8 @@ def test_send_message_persists_and_broadcasts(
 ):
     alice, bob = _make_user(), _make_user()
     match = _make_match(alice, bob)
-    _seed(alice, bob, match, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(alice)
+    seed(alice, bob, match, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(alice)
 
     listener = AsyncMock()
     messages_module._connections[str(match.id)].append(listener)
@@ -179,9 +161,7 @@ def test_send_message_persists_and_broadcasts(
     messages_module._connections[str(match.id)].append(broken)
 
     try:
-        resp = client.post(
-            f"/api/v1/messages/{match.id}", json={"content": "hello"}
-        )
+        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": "hello"})
         assert resp.status_code == 201, resp.text
         data = resp.json()
         assert data["content"] == "hello"
@@ -210,18 +190,14 @@ def test_send_message_persists_and_broadcasts(
 def test_send_message_gates(client, db_session_factory, clean_connections):
     alice, bob, eve = _make_user(), _make_user(), _make_user()
     match = _make_match(alice, bob)
-    _seed(alice, bob, eve, match, db_session_factory=db_session_factory)
+    seed(alice, bob, eve, match, db_session_factory=db_session_factory)
 
     # Non-member → 404
-    app.dependency_overrides[get_current_user] = _override_user(eve)
+    app.dependency_overrides[get_current_user] = override_user(eve)
     try:
-        resp = client.post(
-            f"/api/v1/messages/{match.id}", json={"content": "hi"}
-        )
+        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": "hi"})
         assert resp.status_code == 404
-        resp = client.post(
-            f"/api/v1/messages/{uuid.uuid4()}", json={"content": "hi"}
-        )
+        resp = client.post(f"/api/v1/messages/{uuid.uuid4()}", json={"content": "hi"})
         assert resp.status_code == 404
     finally:
         app.dependency_overrides.pop(get_current_user, None)
@@ -236,23 +212,19 @@ def test_send_message_gates(client, db_session_factory, clean_connections):
             await session.commit()
 
     asyncio.run(_update())
-    app.dependency_overrides[get_current_user] = _override_user(alice)
+    app.dependency_overrides[get_current_user] = override_user(alice)
     try:
-        resp = client.post(
-            f"/api/v1/messages/{match.id}", json={"content": "hi"}
-        )
+        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": "hi"})
         assert resp.status_code == 400
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 
     # Blocked → 403
     block = UserBlock(id=uuid.uuid4(), blocker_id=alice.id, blocked_id=bob.id)
-    _seed(block, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(alice)
+    seed(block, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(alice)
     try:
-        resp = client.post(
-            f"/api/v1/messages/{match.id}", json={"content": "hi"}
-        )
+        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": "hi"})
         assert resp.status_code == 403
     finally:
         app.dependency_overrides.pop(get_current_user, None)
@@ -261,12 +233,10 @@ def test_send_message_gates(client, db_session_factory, clean_connections):
 def test_send_message_validation_rejects_empty(client, db_session_factory):
     alice, bob = _make_user(), _make_user()
     match = _make_match(alice, bob)
-    _seed(alice, bob, match, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(alice)
+    seed(alice, bob, match, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(alice)
     try:
-        resp = client.post(
-            f"/api/v1/messages/{match.id}", json={"content": ""}
-        )
+        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": ""})
         assert resp.status_code == 422
     finally:
         app.dependency_overrides.pop(get_current_user, None)
@@ -282,7 +252,7 @@ def _patched_session_local(db_session_factory):
 def test_ws_chat_full_roundtrip(client, db_session_factory, clean_connections):
     alice, bob = _make_user(), _make_user()
     match = _make_match(alice, bob)
-    _seed(alice, bob, match, db_session_factory=db_session_factory)
+    seed(alice, bob, match, db_session_factory=db_session_factory)
     token = create_access_token(str(alice.id))
 
     with _patched_session_local(db_session_factory):
@@ -315,20 +285,18 @@ def test_ws_chat_full_roundtrip(client, db_session_factory, clean_connections):
 def test_ws_chat_rejects_non_member(client, db_session_factory, clean_connections):
     alice, bob, eve = _make_user(), _make_user(), _make_user()
     match = _make_match(alice, bob)
-    _seed(alice, bob, eve, match, db_session_factory=db_session_factory)
+    seed(alice, bob, eve, match, db_session_factory=db_session_factory)
     token = create_access_token(str(eve.id))
 
     with _patched_session_local(db_session_factory):
         with pytest.raises(WebSocketDisconnect):
-            with client.websocket_connect(
-                f"/api/v1/ws/chat/{match.id}?token={token}"
-            ):
+            with client.websocket_connect(f"/api/v1/ws/chat/{match.id}?token={token}"):
                 pass
 
 
 def test_ws_chat_rejects_unknown_match(client, db_session_factory, clean_connections):
     alice = _make_user()
-    _seed(alice, db_session_factory=db_session_factory)
+    seed(alice, db_session_factory=db_session_factory)
     token = create_access_token(str(alice.id))
 
     with _patched_session_local(db_session_factory):
@@ -345,12 +313,10 @@ def test_ws_chat_rejects_blocked_relationship(
     alice, bob = _make_user(), _make_user()
     match = _make_match(alice, bob)
     block = UserBlock(id=uuid.uuid4(), blocker_id=bob.id, blocked_id=alice.id)
-    _seed(alice, bob, match, block, db_session_factory=db_session_factory)
+    seed(alice, bob, match, block, db_session_factory=db_session_factory)
     token = create_access_token(str(alice.id))
 
     with _patched_session_local(db_session_factory):
         with pytest.raises(WebSocketDisconnect):
-            with client.websocket_connect(
-                f"/api/v1/ws/chat/{match.id}?token={token}"
-            ):
+            with client.websocket_connect(f"/api/v1/ws/chat/{match.id}?token={token}"):
                 pass

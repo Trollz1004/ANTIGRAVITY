@@ -36,6 +36,36 @@ async def _get_existing_pending_request(
     )
 
 
+def _action_response(log: DataPrivacyLog) -> PrivacyActionResponse:
+    return PrivacyActionResponse(
+        status=log.status,
+        action=log.action,
+        request_id=log.id,
+        scheduled_for=log.scheduled_for,
+    )
+
+
+async def _record_action(
+    db: AsyncSession,
+    user_id: uuid.UUID,
+    action: str,
+    status: str,
+    scheduled_for: datetime | None = None,
+) -> DataPrivacyLog:
+    log = DataPrivacyLog(
+        id=uuid.uuid4(),
+        user_id=user_id,
+        action=action,
+        status=status,
+        scheduled_for=scheduled_for,
+        created_at=datetime.now(timezone.utc),
+    )
+    db.add(log)
+    await db.commit()
+    await db.refresh(log)
+    return log
+
+
 @router.get("/my-data", response_model=PrivacyMyDataResponse)
 async def get_my_data(
     user: User = Depends(get_current_user),
@@ -108,30 +138,10 @@ async def request_data_export(
 ) -> PrivacyActionResponse:
     existing = await _get_existing_pending_request(db, user.id, "export_requested")
     if existing:
-        return PrivacyActionResponse(
-            status=existing.status,
-            action=existing.action,
-            request_id=existing.id,
-            scheduled_for=existing.scheduled_for,
-        )
+        return _action_response(existing)
 
-    log = DataPrivacyLog(
-        id=uuid.uuid4(),
-        user_id=user.id,
-        action="export_requested",
-        status="pending",
-        created_at=datetime.now(timezone.utc),
-    )
-    db.add(log)
-    await db.commit()
-    await db.refresh(log)
-
-    return PrivacyActionResponse(
-        status=log.status,
-        action=log.action,
-        request_id=log.id,
-        scheduled_for=log.scheduled_for,
-    )
+    log = await _record_action(db, user.id, "export_requested", "pending")
+    return _action_response(log)
 
 
 @router.post("/delete", response_model=PrivacyActionResponse, status_code=202)
@@ -141,32 +151,16 @@ async def request_account_deletion(
 ) -> PrivacyActionResponse:
     existing = await _get_existing_pending_request(db, user.id, "delete_requested")
     if existing:
-        return PrivacyActionResponse(
-            status=existing.status,
-            action=existing.action,
-            request_id=existing.id,
-            scheduled_for=existing.scheduled_for,
-        )
+        return _action_response(existing)
 
-    scheduled_for = datetime.now(timezone.utc) + timedelta(days=30)
-    log = DataPrivacyLog(
-        id=uuid.uuid4(),
-        user_id=user.id,
-        action="delete_requested",
-        status="pending",
-        scheduled_for=scheduled_for,
-        created_at=datetime.now(timezone.utc),
+    log = await _record_action(
+        db,
+        user.id,
+        "delete_requested",
+        "pending",
+        scheduled_for=datetime.now(timezone.utc) + timedelta(days=30),
     )
-    db.add(log)
-    await db.commit()
-    await db.refresh(log)
-
-    return PrivacyActionResponse(
-        status=log.status,
-        action=log.action,
-        request_id=log.id,
-        scheduled_for=log.scheduled_for,
-    )
+    return _action_response(log)
 
 
 @router.post("/location/disable", response_model=PrivacyActionResponse)
@@ -179,20 +173,5 @@ async def disable_location_tracking(
         raise HTTPException(status_code=404, detail="Profile not found")
 
     profile.location_enabled = False
-    log = DataPrivacyLog(
-        id=uuid.uuid4(),
-        user_id=user.id,
-        action="location_disabled",
-        status="completed",
-        created_at=datetime.now(timezone.utc),
-    )
-    db.add(log)
-    await db.commit()
-    await db.refresh(log)
-
-    return PrivacyActionResponse(
-        status=log.status,
-        action=log.action,
-        request_id=log.id,
-        scheduled_for=log.scheduled_for,
-    )
+    log = await _record_action(db, user.id, "location_disabled", "completed")
+    return _action_response(log)

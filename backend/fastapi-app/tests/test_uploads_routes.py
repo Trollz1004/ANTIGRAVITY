@@ -16,6 +16,7 @@ import pytest
 from app.auth import get_current_user, hash_password
 from app.main import app
 from app.models import User
+from tests.helpers import override_user
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -31,15 +32,6 @@ def _make_user(email: str = "upload_user@example.com") -> User:
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
-
-
-def _override_user(user: User):
-    """get_current_user returns a User ORM object — the router now uses it as one."""
-
-    async def _dep():
-        return user
-
-    return _dep
 
 
 # ── Auth boundary ─────────────────────────────────────────────────────────────
@@ -67,7 +59,7 @@ def test_upload_invalid_token_rejected(client):
 
 def test_upload_oversized_file_rejected(client):
     user = _make_user("oversized@example.com")
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         # Patch max size to 1 byte so any real file triggers 413
         with tempfile.TemporaryDirectory() as storage_root:
@@ -92,7 +84,7 @@ def test_upload_oversized_file_rejected(client):
 
 def test_upload_disallowed_mime_type_rejected(client):
     user = _make_user("badmime@example.com")
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         with tempfile.TemporaryDirectory() as storage_root:
             with patch("app.routers.uploads.settings") as mock_settings:
@@ -136,7 +128,7 @@ def test_upload_path_traversal_filename_is_sanitized(client):
     (KeyError: 'filename' in LogRecord) fires, we xfail to document it.
     """
     user = _make_user("traversal@example.com")
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         with tempfile.TemporaryDirectory() as storage_root:
             try:
@@ -200,7 +192,7 @@ def test_upload_valid_image_returns_201(client):
     The test documents this: when the logger bug is fixed, expect 201.
     """
     user = _make_user("happy_upload@example.com")
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         with tempfile.TemporaryDirectory() as storage_root:
             with patch("app.routers.uploads.settings") as mock_settings:
@@ -250,7 +242,7 @@ def test_upload_valid_image_returns_201(client):
 
 def test_upload_missing_file_field_returns_422(client):
     user = _make_user("missing_file@example.com")
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.post("/api/v1/uploads/", data={})
         assert resp.status_code == 422
