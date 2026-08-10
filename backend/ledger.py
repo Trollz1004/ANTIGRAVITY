@@ -1,10 +1,9 @@
 """
-Mission Ledger — every dollar committed to the kids fund, tracked.
+Revenue Ledger — every transaction committed and tracked.
 
-Replaces the mirror DAO band with real persistent revenue tracking. External
-systems (Square, Stripe, Cloudflare workers, etc.) post to the webhook
-endpoints and the totals propagate to the Mission ribbon visible on every
-screen.
+Persistent revenue tracking for the platform. External systems (Square,
+Stripe, Cloudflare workers, etc.) post to the webhook endpoints and the
+totals propagate to the revenue ribbon visible on every screen.
 
 Doctrine compliance:
   - All amounts are recorded — never claim contributions or requests.
@@ -17,19 +16,13 @@ from __future__ import annotations
 import os
 import uuid
 from datetime import datetime, timezone, timedelta
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
-from motor.motor_asyncio import AsyncIOMotorClient
+from mongo import get_db
 from pydantic import BaseModel, Field
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / ".env")
-
-_client = AsyncIOMotorClient(os.environ["MONGO_URL"])
-_db = _client[os.environ["DB_NAME"]]
+_db = get_db()
 LEDGER = _db.ledger
 
 # Per-kid funding threshold — covers a meaningful unit of medical-care

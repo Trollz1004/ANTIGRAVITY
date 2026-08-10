@@ -19,6 +19,7 @@ from app.models import (
     UserBlock,
     UserReport,
 )
+from tests.helpers import override_user, seed
 
 
 def _make_user(*, email: str, display_name: str = "Safety User") -> User:
@@ -53,30 +54,13 @@ def _make_match(user_a: User, user_b: User, *, status: str = "active") -> Match:
     )
 
 
-def _seed(*items, db_session_factory) -> None:
-    async def _run():
-        async with db_session_factory() as session:
-            for item in items:
-                session.add(item)
-            await session.commit()
-
-    asyncio.run(_run())
-
-
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
-
-
 def test_block_user_closes_match_and_hides_it_from_matches(client, db_session_factory):
     actor = _make_user(email="safety_actor@example.com", display_name="Actor")
     target = _make_user(email="safety_target@example.com", display_name="Target")
     match = _make_match(actor, target)
-    _seed(actor, target, match, db_session_factory=db_session_factory)
+    seed(actor, target, match, db_session_factory=db_session_factory)
 
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         response = client.post(
             f"/api/v1/safety/users/{target.id}/block",
@@ -122,7 +106,7 @@ def test_discover_excludes_blocked_users(client, db_session_factory):
         blocked_id=blocked_target.id,
         reason="No contact",
     )
-    _seed(
+    seed(
         actor,
         blocked_target,
         visible_target,
@@ -133,7 +117,7 @@ def test_discover_excludes_blocked_users(client, db_session_factory):
         db_session_factory=db_session_factory,
     )
 
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         response = client.get("/api/v1/discover")
         assert response.status_code == 200, response.text
@@ -154,9 +138,9 @@ def test_blocked_match_rejects_message_access(client, db_session_factory):
         blocked_id=target.id,
         reason="Stop contact",
     )
-    _seed(actor, target, match, block, db_session_factory=db_session_factory)
+    seed(actor, target, match, block, db_session_factory=db_session_factory)
 
-    app.dependency_overrides[get_current_user] = _override_user(actor)
+    app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         get_response = client.get(f"/api/v1/messages/{match.id}")
         assert get_response.status_code == 403
@@ -178,12 +162,12 @@ def test_report_user_creates_report_and_support_ticket(
 
     reporter = _make_user(email="reporter@example.com", display_name="Reporter")
     target = _make_user(email="report_target@example.com", display_name="Reported User")
-    _seed(reporter, target, db_session_factory=db_session_factory)
+    seed(reporter, target, db_session_factory=db_session_factory)
 
     notify_mock = AsyncMock(return_value=True)
     monkeypatch.setattr(safety_router, "notify_support_ticket", notify_mock)
 
-    app.dependency_overrides[get_current_user] = _override_user(reporter)
+    app.dependency_overrides[get_current_user] = override_user(reporter)
     try:
         response = client.post(
             f"/api/v1/safety/users/{target.id}/report",
@@ -232,12 +216,12 @@ def test_report_board_post_creates_support_ticket(
         title="Unsafe post",
         body="Bad content",
     )
-    _seed(reporter, author, board, post, db_session_factory=db_session_factory)
+    seed(reporter, author, board, post, db_session_factory=db_session_factory)
 
     notify_mock = AsyncMock(return_value=True)
     monkeypatch.setattr(boards_router, "notify_support_ticket", notify_mock)
 
-    app.dependency_overrides[get_current_user] = _override_user(reporter)
+    app.dependency_overrides[get_current_user] = override_user(reporter)
     try:
         response = client.post(
             f"/api/v1/boards/posts/{post.id}/report",
