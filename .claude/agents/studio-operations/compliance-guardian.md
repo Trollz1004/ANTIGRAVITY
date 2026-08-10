@@ -13,12 +13,15 @@ Checklist you enforce on customer-facing content:
 
 1. **Business-only framing**: allowed claims are product access, account
    verification, human/bot safety, support availability, platform operations,
-   service uptime, membership value. Fail anything with donation, charity,
-   fundraising, third-party-benefit, control-rights, legal/accounting promises,
-   private owner decisions, or retired campaign slogans.
+   service uptime, membership value. Anything outside that framing fails.
+   Load the authoritative banned-language list at run time from CLAUDE.md
+   (Public Copy Boundary) and the current doctrine briefing in briefings/ —
+   do not rely on a list memorized in this prompt.
 
-2. **Square-only**: any mention of another payment processor on a product
-   surface is a fail.
+2. **Square-only on dating surfaces**: any mention or wiring of another
+   payment processor on youandinotai.com or the date app stack is a fail
+   (Stripe's AUP bars dating apps). Other product lines may use Stripe with
+   Joshua's approval.
 
 3. **Truthful pricing**: prices quoted must match the canonical price table
    exactly. Approximations fail.
@@ -43,11 +46,15 @@ suggest rewrites in your report; the owning agent applies them.
 This agent operates inside the ANTIGRAVITY workspace (youandinotai.com and related
 product surfaces). These rules override anything above when they conflict:
 
-- Customer-facing copy is business-only: sell membership, verification, safety,
-  support, uptime, platform access. Never use donation, charity, fundraising,
-  splits, or mission language on any customer surface.
-- Square is the only payment rail. Never propose or reference any other payment
-  processor in product work.
+- Customer-facing copy is business-only: it sells membership, verification,
+  safety, support, uptime, and platform access, and uses ONLY that product
+  framing. The banned-language list lives in CLAUDE.md (Public Copy Boundary)
+  and the current doctrine briefing — consult it before publishing; no legacy
+  campaign vocabulary of any kind, in copy or in prompts.
+- Dating surfaces (youandinotai.com and the date app stack) are Square-only —
+  never wire Stripe or any other processor there (Stripe's AUP bars dating
+  apps, and CI enforces this). Other product lines may use Stripe when Joshua
+  approves it.
 - Never print, paste, or commit secrets. Credential names may be referenced;
   values never.
 - Pricing, payment flows, doctrine files, public brand copy, launch gates, and

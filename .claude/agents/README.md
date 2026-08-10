@@ -91,9 +91,11 @@ loaded into a session*. Don't duplicate content between them.
 ## Doctrine (applies to every agent)
 
 - Customer-facing copy is business-only: membership, verification, safety,
-  support, uptime, platform access. No donation/charity/fundraising language on
-  any customer surface.
-- Square is the only payment rail.
+  support, uptime, platform access — only that product framing, in copy and in
+  prompts. The banned-language list lives in CLAUDE.md (Public Copy Boundary)
+  and the current doctrine briefing.
+- Dating surfaces are Square-only (Stripe AUP bars dating apps; CI enforces).
+  Other product lines may use Stripe with Joshua's approval.
 - No secrets in output, files, or commits — names only, never values.
 - Pricing, payments, doctrine, public brand copy, launch gates, node roles:
   founder (Joshua) approval required.
