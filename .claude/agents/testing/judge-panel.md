@@ -1,6 +1,6 @@
 ---
 name: judge-panel
-description: Use this agent before landing any non-trivial code change — it convenes the multi-model judge panel (Claude in-session; Grok and Gemini via OmniRouter when reachable) for max-reasoning review of the diff, and gates the merge on the panel verdict. Examples:\n\n<example>\nContext: Feature branch ready to merge\nuser: "The checkout flow change is done, land it"\nassistant: "Before merging, let me use the judge-panel agent to run the diff past the full judge panel."\n</example>\n\n<example>\nContext: Risky refactor\nuser: "I rewrote the webhook signature verification"\nassistant: "Payment-path code gets the full panel. I'll use the judge-panel agent to collect verdicts before this lands."\n</example>
+description: Use this agent before landing any non-trivial code change — it convenes the multi-model judge panel (Claude in-session; Grok and Gemini via OmniRouter when reachable) for max-reasoning review of the diff, and reports an advisory verdict to the active lead. Examples:\n\n<example>\nContext: Feature branch ready to merge\nuser: "The checkout flow change is done, land it"\nassistant: "Before merging, let me use the judge-panel agent to run the diff past the full judge panel."\n</example>\n\n<example>\nContext: Risky refactor\nuser: "I rewrote the webhook signature verification"\nassistant: "Payment-path code gets the full panel. I'll use the judge-panel agent to collect verdicts before this lands."\n</example>
 color: purple
 tools: Read, Grep, Glob, Bash, WebFetch
 ---
@@ -31,9 +31,13 @@ Procedure:
    regression risk. Each returns APPROVE, APPROVE-WITH-CHANGES, or REJECT with
    reasons.
 
-3. **Verdict**: majority gates the merge. Any single REJECT on a payment-path,
-   auth, or doctrine file escalates to Joshua regardless of majority. Ties
-   escalate to Joshua.
+3. **Verdict (advisory)**: report the majority position and each judge's
+   reasons as evidence to the active lead, who decides whether to land the
+   change — per AGENTS.md, models do not outrank the assigned lead or Joshua,
+   and a panel verdict never blocks Joshua's direct instruction. Escalate to
+   Joshua only the approval categories policy already reserves for him
+   (payments/pricing, doctrine, public copy, launch gates, node roles) when a
+   judge REJECTS a change touching one of them.
 
 4. **Record**: write the panel composition, per-judge verdicts, and final
    decision into the PR discussion or state write-back so the review trail

@@ -133,9 +133,7 @@ class TestProcessRetryQueue:
         assert kwargs["payload"] == {"x": 1}
         assert (
             await session.scalar(
-                select(WebhookRetryQueue).where(
-                    WebhookRetryQueue.event_id == "evt_ok"
-                )
+                select(WebhookRetryQueue).where(WebhookRetryQueue.event_id == "evt_ok")
             )
         ) is None
 
@@ -180,9 +178,7 @@ class TestProcessRetryQueue:
         assert processed == ["evt_exhaust"]
         assert entry.moved_to_dead_letter is True
         dead = await session.scalar(
-            select(WebhookDeadLetter).where(
-                WebhookDeadLetter.event_id == "evt_exhaust"
-            )
+            select(WebhookDeadLetter).where(WebhookDeadLetter.event_id == "evt_exhaust")
         )
         assert dead is not None
         assert dead.final_error == "permanent"
@@ -254,9 +250,7 @@ class TestListOperations:
         assert len(rest) == 1
 
     async def test_retry_queue_excludes_dead_lettered(self, session):
-        active = await enqueue_retry(
-            session, event_id="evt_active", event_type="t", payload={}
-        )
+        await enqueue_retry(session, event_id="evt_active", event_type="t", payload={})
         moved = await enqueue_retry(
             session, event_id="evt_moved", event_type="t", payload={}
         )

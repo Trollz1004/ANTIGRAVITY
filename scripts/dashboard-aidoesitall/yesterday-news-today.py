@@ -460,6 +460,13 @@ class YesterdayNewsBot:
             if meta_file.exists():
                 with open(meta_file, 'r') as f:
                     content = json.load(f)
+                # Script text lives in script.txt, not metadata.json.
+                script_file = project_dir / "script.txt"
+                if "script" not in content and script_file.exists():
+                    content["script"] = script_file.read_text(encoding="utf-8")
+                if "script" not in content:
+                    log.error(f"No script found for {date['display']}")
+                    return False
                 return self.post_to_youtube(content)
             
         return False

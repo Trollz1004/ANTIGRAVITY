@@ -132,7 +132,7 @@ def test_superseded_connection_replaces_old_socket(client, ws_session_factory):
     with patch.object(video_module, "SessionLocal", db_session_factory):
         with client.websocket_connect(_ws_url(call_id, alice)):
             first_socket = video_module._video_connections[call_id][str(alice.id)]
-            with client.websocket_connect(_ws_url(call_id, alice)) as second:
+            with client.websocket_connect(_ws_url(call_id, alice)):
                 new_socket = video_module._video_connections[call_id][str(alice.id)]
                 assert new_socket is not first_socket
 
@@ -194,6 +194,7 @@ def test_two_peer_flow_buffers_relays_hangs_up(client, ws_session_factory):
             deadline = time.time() + 5
             call = None
             while time.time() < deadline:
+
                 async def _final_call():
                     async with db_session_factory() as session:
                         return await session.get(VideoCall, uuid.UUID(call_id))

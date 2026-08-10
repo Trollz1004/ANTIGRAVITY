@@ -48,8 +48,13 @@ export function VideoCallPage() {
         <div className="glass-strong rounded-[2rem] p-8 text-center">
           <div className="app-kicker mb-3">Video</div>
           <h1 className="app-title">missing match.</h1>
-          <p className="app-subtitle mt-3">Open video from a match or conversation.</p>
-          <Link to="/app/matches" className="app-button-accent mt-8 inline-flex">
+          <p className="app-subtitle mt-3">
+            Open video from a match or conversation.
+          </p>
+          <Link
+            to="/app/matches"
+            className="app-button-accent mt-8 inline-flex"
+          >
             <Video size={16} /> Matches
           </Link>
         </div>
@@ -63,11 +68,16 @@ export function VideoCallPage() {
         <div>
           <div className="app-kicker">Video</div>
           <h1 className="app-title">face to face.</h1>
-          <p className="app-subtitle mt-2">Camera and mic are local-only until both people accept the call.</p>
+          <p className="app-subtitle mt-2">
+            Camera and mic are local-only until both people accept the call.
+          </p>
         </div>
         <button
           onClick={() => {
-            if (!starting.current) localStorage.removeItem(`video-call-${matchId}-${user?.id || 'guest'}-started`);
+            if (!starting.current)
+              localStorage.removeItem(
+                `video-call-${matchId}-${user?.id || 'guest'}-started`
+              );
             navigate('/app/matches');
           }}
           className="app-button-outline inline-flex items-center gap-2"
@@ -87,7 +97,10 @@ export function VideoCallPage() {
           callId={matchId}
           initiator
           onHangUp={() => {
-            if (!starting.current) localStorage.removeItem(`video-call-${matchId}-${user?.id || 'guest'}-started`);
+            if (!starting.current)
+              localStorage.removeItem(
+                `video-call-${matchId}-${user?.id || 'guest'}-started`
+              );
             navigate('/app/matches');
           }}
         />

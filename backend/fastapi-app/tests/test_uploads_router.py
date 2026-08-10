@@ -19,6 +19,8 @@ from app.routers import uploads
 from app.upload_progress import (
     CLEANUP_THRESHOLD_SECONDS,
     UploadProgress,
+    _periodic_cleanup,
+    _store,
     complete_upload,
     create_upload,
     fail_upload,
@@ -28,8 +30,6 @@ from app.upload_progress import (
     set_processing,
     set_uploaded_bytes,
     update_progress,
-    _periodic_cleanup,
-    _store,
 )
 
 
@@ -125,6 +125,7 @@ def test_standard_upload_rejects_disallowed_type(authed_client):
 
 def test_standard_upload_rejects_virus_positive(authed_client, tmp_path):
     with patch.object(uploads, "_scan_virus", return_value=False) as _scan:
+
         async def _no(*args, **kwargs):
             return False
 

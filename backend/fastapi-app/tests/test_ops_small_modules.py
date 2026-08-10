@@ -51,10 +51,14 @@ def authed_client(client):
 class TestSquarePaymentLink:
     async def test_missing_token_or_location_returns_none(self):
         settings = MagicMock(square_access_token="", square_location_id="loc")
-        assert await create_square_payment_link(request_body={}, settings=settings) is None
+        assert (
+            await create_square_payment_link(request_body={}, settings=settings) is None
+        )
 
         settings = MagicMock(square_access_token="tok", square_location_id="")
-        assert await create_square_payment_link(request_body={}, settings=settings) is None
+        assert (
+            await create_square_payment_link(request_body={}, settings=settings) is None
+        )
 
     async def test_success_returns_checkout_url(self):
         settings = MagicMock(
@@ -113,8 +117,9 @@ class TestSquarePaymentLink:
 
 class TestTelemetrySetup:
     def test_setup_without_app_or_engine(self):
-        with patch("app.telemetry.BatchSpanProcessor") as _proc, patch(
-            "app.telemetry.OTLPSpanExporter"
+        with (
+            patch("app.telemetry.BatchSpanProcessor") as _proc,
+            patch("app.telemetry.OTLPSpanExporter"),
         ):
             status = setup_telemetry()
         assert status["service_name"] == "youandinotai-api"
@@ -267,9 +272,7 @@ class TestClawxRouter:
             )
         assert resp.status_code == 200, resp.text
         assert resp.json() == {"name": "agent-a", "status": "rotated"}
-        fake_client.rotate_key.assert_called_once_with(
-            "agent-a", "sk-abcdefghijklmnop"
-        )
+        fake_client.rotate_key.assert_called_once_with("agent-a", "sk-abcdefghijklmnop")
 
     def test_rotate_key_unknown_agent_404(self, authed_client):
         from app.clawx_integration import KeyNotFoundError

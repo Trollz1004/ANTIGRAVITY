@@ -100,9 +100,7 @@ class TestBlocking:
         _seed(alice, db_session_factory=db_session_factory)
         app.dependency_overrides[get_current_user] = _override_user(alice)
         try:
-            resp = client.post(
-                f"/api/v1/safety/users/{alice.id}/block", json={}
-            )
+            resp = client.post(f"/api/v1/safety/users/{alice.id}/block", json={})
             assert resp.status_code == 400
         finally:
             app.dependency_overrides.pop(get_current_user, None)
@@ -334,7 +332,15 @@ class TestMyData:
             status="pending",
             created_at=datetime.now(timezone.utc),
         )
-        _seed(alice, bob, profile, match, message, pending, db_session_factory=db_session_factory)
+        _seed(
+            alice,
+            bob,
+            profile,
+            match,
+            message,
+            pending,
+            db_session_factory=db_session_factory,
+        )
         app.dependency_overrides[get_current_user] = _override_user(alice)
         try:
             resp = client.get("/api/v1/privacy/my-data")
@@ -347,8 +353,7 @@ class TestMyData:
             assert data["profile"]["bio"] == "Bio"
             assert data["profile"]["location_enabled"] is True
             assert any(
-                log["action"] == "export_requested"
-                for log in data["pending_requests"]
+                log["action"] == "export_requested" for log in data["pending_requests"]
             )
         finally:
             app.dependency_overrides.pop(get_current_user, None)
@@ -443,7 +448,14 @@ class TestSwipeGaps:
             matched_at=datetime.now(timezone.utc),
         )
         block = UB(id=uuid.uuid4(), blocker_id=alice.id, blocked_id=ghost)
-        _seed(alice, bob, match_ok, match_blocked, block, db_session_factory=db_session_factory)
+        _seed(
+            alice,
+            bob,
+            match_ok,
+            match_blocked,
+            block,
+            db_session_factory=db_session_factory,
+        )
         app.dependency_overrides[get_current_user] = _override_user(alice)
         try:
             resp = client.get("/api/v1/matches")

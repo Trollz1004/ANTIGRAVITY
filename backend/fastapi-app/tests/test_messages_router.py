@@ -123,9 +123,7 @@ def test_get_messages_before_filter(client, db_session_factory):
     app.dependency_overrides[get_current_user] = _override_user(alice)
     try:
         cutoff = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
-        resp = client.get(
-            f"/api/v1/messages/{match.id}?before={cutoff}&limit=10"
-        )
+        resp = client.get(f"/api/v1/messages/{match.id}?before={cutoff}&limit=10")
         assert resp.status_code == 200
         assert [m["content"] for m in resp.json()] == ["old"]
     finally:
@@ -179,9 +177,7 @@ def test_send_message_persists_and_broadcasts(
     messages_module._connections[str(match.id)].append(broken)
 
     try:
-        resp = client.post(
-            f"/api/v1/messages/{match.id}", json={"content": "hello"}
-        )
+        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": "hello"})
         assert resp.status_code == 201, resp.text
         data = resp.json()
         assert data["content"] == "hello"
@@ -215,13 +211,9 @@ def test_send_message_gates(client, db_session_factory, clean_connections):
     # Non-member → 404
     app.dependency_overrides[get_current_user] = _override_user(eve)
     try:
-        resp = client.post(
-            f"/api/v1/messages/{match.id}", json={"content": "hi"}
-        )
+        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": "hi"})
         assert resp.status_code == 404
-        resp = client.post(
-            f"/api/v1/messages/{uuid.uuid4()}", json={"content": "hi"}
-        )
+        resp = client.post(f"/api/v1/messages/{uuid.uuid4()}", json={"content": "hi"})
         assert resp.status_code == 404
     finally:
         app.dependency_overrides.pop(get_current_user, None)
@@ -238,9 +230,7 @@ def test_send_message_gates(client, db_session_factory, clean_connections):
     asyncio.run(_update())
     app.dependency_overrides[get_current_user] = _override_user(alice)
     try:
-        resp = client.post(
-            f"/api/v1/messages/{match.id}", json={"content": "hi"}
-        )
+        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": "hi"})
         assert resp.status_code == 400
     finally:
         app.dependency_overrides.pop(get_current_user, None)
@@ -250,9 +240,7 @@ def test_send_message_gates(client, db_session_factory, clean_connections):
     _seed(block, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = _override_user(alice)
     try:
-        resp = client.post(
-            f"/api/v1/messages/{match.id}", json={"content": "hi"}
-        )
+        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": "hi"})
         assert resp.status_code == 403
     finally:
         app.dependency_overrides.pop(get_current_user, None)
@@ -264,9 +252,7 @@ def test_send_message_validation_rejects_empty(client, db_session_factory):
     _seed(alice, bob, match, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = _override_user(alice)
     try:
-        resp = client.post(
-            f"/api/v1/messages/{match.id}", json={"content": ""}
-        )
+        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": ""})
         assert resp.status_code == 422
     finally:
         app.dependency_overrides.pop(get_current_user, None)
@@ -320,9 +306,7 @@ def test_ws_chat_rejects_non_member(client, db_session_factory, clean_connection
 
     with _patched_session_local(db_session_factory):
         with pytest.raises(WebSocketDisconnect):
-            with client.websocket_connect(
-                f"/api/v1/ws/chat/{match.id}?token={token}"
-            ):
+            with client.websocket_connect(f"/api/v1/ws/chat/{match.id}?token={token}"):
                 pass
 
 
@@ -350,7 +334,5 @@ def test_ws_chat_rejects_blocked_relationship(
 
     with _patched_session_local(db_session_factory):
         with pytest.raises(WebSocketDisconnect):
-            with client.websocket_connect(
-                f"/api/v1/ws/chat/{match.id}?token={token}"
-            ):
+            with client.websocket_connect(f"/api/v1/ws/chat/{match.id}?token={token}"):
                 pass

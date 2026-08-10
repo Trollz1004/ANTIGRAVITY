@@ -25,7 +25,6 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from sqlalchemy import select
 
-from app.main import app
 from app.models import RevenueAllocation, User, VerificationEvent, WebhookEvent
 from app.payment_truth import build_checkout_reference
 from app.routers import webhooks
@@ -89,7 +88,9 @@ def _payment_payload(
     }
 
 
-def _post_signed(client, url: str, payload: dict, *, signature_key="test-square-signature"):
+def _post_signed(
+    client, url: str, payload: dict, *, signature_key="test-square-signature"
+):
     body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
     signature = generate_square_signature(body, signature_key, url)
     return client.post(
@@ -203,9 +204,7 @@ def test_user_lookup_by_square_customer_id_and_existing_mapping(
     client, db_session_factory
 ):
     """A user already mapped to a Square customer id is found directly."""
-    user = _make_user(
-        email="mapped@example.com", square_customer_id="CUST-EXISTING-9"
-    )
+    user = _make_user(email="mapped@example.com", square_customer_id="CUST-EXISTING-9")
     _seed(user, db_session_factory=db_session_factory)
 
     payload = _payment_payload(
@@ -691,7 +690,9 @@ def test_booking_webhook_rejects_invalid_json(client, tmp_path):
         settings.square_webhook_notification_url = ""
         mock_get_settings.return_value = settings
 
-        signature = generate_square_signature(body, "test-square-signature", BOOKING_URL)
+        signature = generate_square_signature(
+            body, "test-square-signature", BOOKING_URL
+        )
         resp = client.post(
             "/api/v1/webhooks/square-booking",
             headers={"x-square-hmacsha256-signature": signature},
@@ -725,7 +726,10 @@ def test_resolve_square_log_dir_configured_absolute_and_relative(tmp_path):
     with patch.object(webhooks, "CONTAINER_EWASTE_MOUNT", tmp_path / "mount"):
         (tmp_path / "mount").mkdir()
         settings = MagicMock(square_booking_log_dir="")
-        assert webhooks._resolve_square_log_dir(settings) == tmp_path / "mount" / "bookings"
+        assert (
+            webhooks._resolve_square_log_dir(settings)
+            == tmp_path / "mount" / "bookings"
+        )
 
     with patch.object(webhooks, "CONTAINER_EWASTE_MOUNT", tmp_path / "missing"):
         settings = MagicMock(square_booking_log_dir="")
@@ -739,7 +743,10 @@ def test_load_square_booking_payload_shapes():
     assert webhooks._load_square_booking(nested) == {"id": "b1"}
 
     flat_object = {"data": {"object": {"id": "b2", "status": "ACCEPTED"}}}
-    assert webhooks._load_square_booking(flat_object) == {"id": "b2", "status": "ACCEPTED"}
+    assert webhooks._load_square_booking(flat_object) == {
+        "id": "b2",
+        "status": "ACCEPTED",
+    }
 
     data_booking = {"data": {"object": {}, "booking": {"id": "b3"}}}
     assert webhooks._load_square_booking(data_booking) == {"id": "b3"}
@@ -837,12 +844,8 @@ async def test_fetch_square_order_paths():
 
 
 def test_extract_square_customer_email_from_receipt_url():
-    payment = {
-        "receipt_url": "https://squareup.com/receipt?email=Person%40Example.com"
-    }
-    assert (
-        webhooks._extract_square_customer_email(payment) == "person@example.com"
-    )
+    payment = {"receipt_url": "https://squareup.com/receipt?email=Person%40Example.com"}
+    assert webhooks._extract_square_customer_email(payment) == "person@example.com"
     assert webhooks._extract_square_customer_email({}) is None
 
     # unparseable receipt urls are ignored safely

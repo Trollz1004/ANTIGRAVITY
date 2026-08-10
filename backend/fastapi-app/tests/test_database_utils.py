@@ -1,7 +1,6 @@
 """Tests for app/database.py utilities and app/routers/health.py endpoints."""
 
 import asyncio
-import uuid
 from datetime import datetime, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
 
@@ -36,9 +35,7 @@ class TestDatabaseUtilities:
 
         fail_engine = MagicMock()
         fail_cm = AsyncMock()
-        fail_cm.__aenter__ = AsyncMock(
-            side_effect=RuntimeError("connection refused")
-        )
+        fail_cm.__aenter__ = AsyncMock(side_effect=RuntimeError("connection refused"))
         fail_cm.__aexit__ = AsyncMock(return_value=False)
         fail_engine.connect = MagicMock(return_value=fail_cm)
 

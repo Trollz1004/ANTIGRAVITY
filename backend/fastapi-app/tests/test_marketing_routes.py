@@ -166,7 +166,9 @@ def test_create_content_rejects_out_of_range_hashtags(client, db_session_factory
         # Instagram requires 3-7 hashtags
         resp = client.post(
             "/api/v1/marketing/content",
-            json=_valid_payload(platforms=["instagram"], hashtag_block=["#YouAndINotAI"]),
+            json=_valid_payload(
+                platforms=["instagram"], hashtag_block=["#YouAndINotAI"]
+            ),
         )
         assert resp.status_code == 400
         assert "requires 3-7 hashtags" in resp.json()["detail"]
@@ -174,9 +176,7 @@ def test_create_content_rejects_out_of_range_hashtags(client, db_session_factory
         # Unknown platforms are not limit-checked
         resp = client.post(
             "/api/v1/marketing/content",
-            json=_valid_payload(
-                platforms=["myspace"], hashtag_block=["#YouAndINotAI"]
-            ),
+            json=_valid_payload(platforms=["myspace"], hashtag_block=["#YouAndINotAI"]),
         )
         assert resp.status_code == 201, resp.text
     finally:
@@ -304,9 +304,7 @@ def test_put_content_full_replace_updates_database(client, db_session_factory):
             primary_caption="New caption #YouAndINotAI",
             hashtag_block=["#YouAndINotAI", "#VerifiedMembers", "#BotShield"],
         )
-        resp = client.put(
-            f"/api/v1/marketing/content/{content_id}", json=replacement
-        )
+        resp = client.put(f"/api/v1/marketing/content/{content_id}", json=replacement)
         assert resp.status_code == 200, resp.text
         data = resp.json()
         assert data["id"] == content_id
@@ -484,15 +482,12 @@ def test_delete_content_removes_record(client, db_session_factory):
         assert resp.status_code == 204
 
         # Gone from the database, not just from the API surface
-        assert (
-            client.get(f"/api/v1/marketing/content/{content_id}").status_code == 404
-        )
+        assert client.get(f"/api/v1/marketing/content/{content_id}").status_code == 404
         assert client.get("/api/v1/marketing/content").json() == []
 
         # Deleting again -> 404
         assert (
-            client.delete(f"/api/v1/marketing/content/{content_id}").status_code
-            == 404
+            client.delete(f"/api/v1/marketing/content/{content_id}").status_code == 404
         )
     finally:
         app.dependency_overrides.pop(get_current_user, None)

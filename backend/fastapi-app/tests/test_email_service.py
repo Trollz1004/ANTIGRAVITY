@@ -25,19 +25,19 @@ from app.email_service import (
 
 
 def _settings(**overrides) -> Settings:
-    base = dict(
-        smtp_host="smtp.example.com",
-        smtp_port=587,
-        smtp_username="mailer",
-        smtp_password="secret",
-        smtp_use_ssl=False,
-        smtp_use_starttls=True,
-        email_from_address="noreply@youandinotai.com",
-        email_from_name="YouAndINotAI",
-        email_reply_to="support@youandinotai.com",
-        app_url="https://youandinotai.com",
-        support_operator_emails="ops@youandinotai.com",
-    )
+    base = {
+        "smtp_host": "smtp.example.com",
+        "smtp_port": 587,
+        "smtp_username": "mailer",
+        "smtp_password": "secret",
+        "smtp_use_ssl": False,
+        "smtp_use_starttls": True,
+        "email_from_address": "noreply@youandinotai.com",
+        "email_from_name": "YouAndINotAI",
+        "email_reply_to": "support@youandinotai.com",
+        "app_url": "https://youandinotai.com",
+        "support_operator_emails": "ops@youandinotai.com",
+    }
     base.update(overrides)
     return Settings(**base)
 
@@ -60,8 +60,7 @@ class TestSmtpConfigured:
 
     def test_unauthenticated_smtp_is_allowed(self):
         assert (
-            _smtp_is_configured(_settings(smtp_username="", smtp_password=""))
-            is True
+            _smtp_is_configured(_settings(smtp_username="", smtp_password="")) is True
         )
 
 
@@ -76,12 +75,8 @@ class TestMessageBuilders:
         assert "https://youandinotai.com" in body
 
     def test_founder_badge_text_falls_back_to_generic_name(self):
-        assert "Hi there," in _build_founder_badge_text(
-            display_name="  ", app_url="x"
-        )
-        assert "Hi there," in _build_founder_badge_text(
-            display_name=None, app_url="x"
-        )
+        assert "Hi there," in _build_founder_badge_text(display_name="  ", app_url="x")
+        assert "Hi there," in _build_founder_badge_text(display_name=None, app_url="x")
 
     def test_founder_badge_html_escapes_name(self):
         html = _build_founder_badge_html(

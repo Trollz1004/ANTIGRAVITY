@@ -4,7 +4,8 @@ import { Check, Copy, Crown, Shield, Sparkles, Zap } from 'lucide-react';
 
 /** Launch window: 10 days from 2026-08-04 → 2026-08-14 (14-day alt: Aug 18) */
 const LAUNCH_ISO = '2026-08-14T17:00:00-04:00';
-const LANDING = 'https://trollz1004.github.io/youandinotai-links/?ref=clean-repo';
+const LANDING =
+  'https://trollz1004.github.io/youandinotai-links/?ref=clean-repo';
 const AFFILIATE_BASE = 'https://trollz1004.github.io/youandinotai-links/';
 
 const PLANS = [
@@ -96,9 +97,11 @@ export function PreOrder() {
         Elite access before launch day
       </h1>
       <p className="mt-2 text-sm text-[var(--km-muted)]">
-        Target launch: <strong className="text-[var(--km-text)]">Aug 14, 2026</strong> (10-day
-        window). Fallback: Aug 18 (14 days). Verified-human dating with video + optional animated
-        avatar. Payments: Square primary · PayPal · Cash App Business · Plaid verify. No Stripe.
+        Target launch:{' '}
+        <strong className="text-[var(--km-text)]">Aug 14, 2026</strong> (10-day
+        window). Fallback: Aug 18 (14 days). Verified-human dating with video +
+        optional animated avatar. Payments: Square primary · PayPal · Cash App
+        Business · Plaid verify. No Stripe.
       </p>
 
       <section className="km-card km-card-glow mt-6 p-5">
@@ -115,7 +118,10 @@ export function PreOrder() {
               [c.mins, 'Min'],
               [c.secs, 'Sec'],
             ].map(([v, l]) => (
-              <div key={String(l)} className="rounded-2xl bg-[var(--km-surface-2)] px-2 py-3">
+              <div
+                key={String(l)}
+                className="rounded-2xl bg-[var(--km-surface-2)] px-2 py-3"
+              >
                 <div className="text-2xl font-semibold tabular-nums">{v}</div>
                 <div className="text-[0.65rem] uppercase tracking-wider text-[var(--km-muted)]">
                   {l}
@@ -143,7 +149,9 @@ export function PreOrder() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2 font-semibold">
-                  {p.highlight && <Sparkles size={16} className="text-[var(--km-accent)]" />}
+                  {p.highlight && (
+                    <Sparkles size={16} className="text-[var(--km-accent)]" />
+                  )}
                   {p.name}
                 </div>
                 <div className="mt-1 text-xl font-semibold">{p.price}</div>
@@ -152,7 +160,10 @@ export function PreOrder() {
                   {p.rail}
                 </div>
               </div>
-              <Link to={p.checkout} className="km-btn-gradient shrink-0 no-underline text-sm">
+              <Link
+                to={p.checkout}
+                className="km-btn-gradient shrink-0 no-underline text-sm"
+              >
                 Pre-order
               </Link>
             </div>
@@ -162,17 +173,20 @@ export function PreOrder() {
 
       <section className="km-card mt-6 p-5">
         <div className="flex items-center gap-2 font-semibold">
-          <Shield size={16} className="text-[var(--km-accent)]" /> Elite affiliate link
+          <Shield size={16} className="text-[var(--km-accent)]" /> Elite
+          affiliate link
         </div>
         <p className="mt-2 text-sm text-[var(--km-muted)]">
-          Share the landing with <code>?ref=</code> — never raw square short links (ref gets
-          stripped on redirect).
+          Share the landing with <code>?ref=</code> — never raw square short
+          links (ref gets stripped on redirect).
         </p>
         <label className="mt-3 block text-xs text-[var(--km-muted)]">
           Your ref code
           <input
             value={affCode}
-            onChange={e => setAffCode(e.target.value.replace(/[^a-zA-Z0-9_-]/g, ''))}
+            onChange={e =>
+              setAffCode(e.target.value.replace(/[^a-zA-Z0-9_-]/g, ''))
+            }
             className="km-input mt-1"
             placeholder="clean-repo"
           />
@@ -186,7 +200,10 @@ export function PreOrder() {
         </button>
       </section>
 
-      <Link to="/app/pay" className="km-btn-ghost mt-4 inline-flex no-underline">
+      <Link
+        to="/app/pay"
+        className="km-btn-ghost mt-4 inline-flex no-underline"
+      >
         Payment methods & verification
       </Link>
     </div>

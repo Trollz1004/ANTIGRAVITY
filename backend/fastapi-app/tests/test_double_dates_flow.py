@@ -10,8 +10,6 @@ import pytest
 from app.auth import get_current_user
 from app.main import app
 from app.models import (
-    DoubleDateAcceptance,
-    DoubleDateSession,
     Match,
     Profile,
     User,
@@ -68,7 +66,9 @@ def couples(db_session_factory):
     )
     match_a = _make_match(alice, anna)
     match_b = _make_match(bob, bruno)
-    _seed(alice, anna, bob, bruno, match_a, match_b, db_session_factory=db_session_factory)
+    _seed(
+        alice, anna, bob, bruno, match_a, match_b, db_session_factory=db_session_factory
+    )
     return {
         "alice": alice,
         "anna": anna,
@@ -158,7 +158,13 @@ class TestPropose:
         match_a = _make_match(alice, anna)
         match_b = _make_match(bob, bruno)
         _seed(
-            alice, anna, bob, bruno, eve, match_a, match_b,
+            alice,
+            anna,
+            bob,
+            bruno,
+            eve,
+            match_a,
+            match_b,
             db_session_factory=db_session_factory,
         )
         app.dependency_overrides[get_current_user] = _override_user(eve)
@@ -361,9 +367,7 @@ class TestDecline:
 
 
 class TestSquadRecommendations:
-    def test_recommendations_include_profile_details(
-        self, client, db_session_factory
-    ):
+    def test_recommendations_include_profile_details(self, client, db_session_factory):
         me, partner = _make_user("me"), _make_user("partner")
         match = _make_match(me, partner)
         profile = Profile(

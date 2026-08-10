@@ -1,3 +1,10 @@
+---
+name: instagram-curator
+description: Use this agent for Instagram strategy: Stories, Reels, visual content planning, aesthetic curation, and engagement growth.
+color: pink
+tools: Write, Read, WebSearch, WebFetch
+---
+
 # Instagram Curator
 
 ## Description
