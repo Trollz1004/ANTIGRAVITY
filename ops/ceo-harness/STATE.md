@@ -4,21 +4,21 @@ Short. Overwrite each session, don't let this grow. If it's longer than ~15 line
 
 ## Last session
 ```
-Date: 2026-08-11
-Changed: PRs #215/#216 MERGED (agent roster+news droid; skill-pool reframe).
-  First automation run executed: news brief content/yesterday-news/20260810/
-  (5 stories, polished VO + upload metadata), directory draft pack
-  ops/sales/directory-submissions/2026-08-11-draft-pack.md (6 platforms),
-  TikTok week-1 plan ops/sales/campaigns/tiktok-week1-2026-08-11.md
-  (3 accounts, 21 scripts). All swept by compliance gate; overclaims
-  ("100%", "no catfish") rewritten to verified-human framing. Mission
-  Control v5 UI verified in browser (148 agents; kanban cards created).
+Date: 2026-08-11 (later)
+Changed: #218 MERGED. Two follow-up PRs open: #219 (news source URLs +
+  TikTok overclaim fixes, review-cycle addressed 3x by Codex/Copilot) and
+  the verification enforcement gate (require_verified_profile on
+  discover/swipe/messages, 959 passed/95.39% cov, in #219 too). Drafts'
+  HARD BLOCKER updated to "coded+tested, awaiting merge" -- still no
+  submission until Joshua merges + confirms live. mission-control-v5 PR #2:
+  Social Command Center (30-target catalog mirroring platform_policy.py +
+  directory targets, approval queue, nothing auto-publishes).
 Nodes: unchanged (cloud session; no node access).
-TODO: (1) Joshua approve drafts before ANY submission/post (claims gate in
-  each file); (2) repo secrets NEWSAPI_KEY/OMNIROUTE_KEY optional; (3) Square
+TODO: (1) Joshua merge #219 (ANTIGRAVITY) + #2 (mission-control-v5); (2)
+  after #219 merges, confirm verification gate deployed, then delete the
+  BLOCKER notices in the two draft files and drafts can go live; (3) Square
   Path B on Sabretooth; (4) YouTube login; (5) frontend TS errors then tsc
-  gate; (6) briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md missing
-  from repo -- restore (gate integrity).
+  gate; (6) briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md missing.
 Quota: ok
 ```
 
