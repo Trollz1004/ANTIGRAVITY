@@ -392,9 +392,23 @@ class YesterdayNewsBot:
     def post_to_youtube(self, content, video_path=None):
         """Post content to YouTube community tab or upload video."""
         try:
-            # Import the poster from social_engine
-            sys.path.insert(0, str(Path(__file__).resolve().parent / "social_engine"))
+            # Import the poster from social_engine. Both paths are needed:
+            # this dir for `social_engine.platforms.*` package imports inside
+            # the posters, and the package dir for direct module imports here.
+            here = Path(__file__).resolve().parent
+            sys.path.insert(0, str(here))
+            sys.path.insert(0, str(here / "social_engine"))
+            from platform_policy import live_post_allowed
             from platforms.youtube_poster import YouTubePoster
+
+            # Honor the repo publication gate — same check the social-engine
+            # registry applies. YouTube is draft-only until policy changes.
+            if not live_post_allowed("youtube"):
+                log.warning(
+                    "Live posting to YouTube is disabled by platform_policy — "
+                    "content stays draft; review and post manually or update policy."
+                )
+                return False
             
             poster = YouTubePoster()
             

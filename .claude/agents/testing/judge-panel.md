@@ -1,6 +1,6 @@
 ---
 name: judge-panel
-description: Use this agent before landing any non-trivial code change — it convenes the multi-model judge panel (Claude in-session; Grok and Gemini via OmniRouter when reachable) for max-reasoning review of the diff, and reports an advisory verdict to the active lead. Examples:\n\n<example>\nContext: Feature branch ready to merge\nuser: "The checkout flow change is done, land it"\nassistant: "Before merging, let me use the judge-panel agent to run the diff past the full judge panel."\n</example>\n\n<example>\nContext: Risky refactor\nuser: "I rewrote the webhook signature verification"\nassistant: "Payment-path code gets the full panel. I'll use the judge-panel agent to collect verdicts before this lands."\n</example>
+description: 'Use this agent before landing any non-trivial code change — it convenes the multi-model judge panel (Claude in-session; Grok and Gemini via OmniRouter when reachable) for max-reasoning review of the diff, and reports an advisory verdict to the active lead. Examples:\n\n<example>\nContext: Feature branch ready to merge\nuser: "The checkout flow change is done, land it"\nassistant: "Before merging, let me use the judge-panel agent to run the diff past the full judge panel."\n</example>\n\n<example>\nContext: Risky refactor\nuser: "I rewrote the webhook signature verification"\nassistant: "Payment-path code gets the full panel. I''ll use the judge-panel agent to collect verdicts before this lands."\n</example>'
 color: purple
 tools: Read, Grep, Glob, Bash, WebFetch
 ---

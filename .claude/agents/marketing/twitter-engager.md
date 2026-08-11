@@ -1,6 +1,6 @@
 ---
 name: twitter-engager
-description: Use this agent for Twitter/X strategy: real-time engagement, trend-jacking, viral thread writing, and community building.
+description: 'Use this agent for Twitter/X strategy: real-time engagement, trend-jacking, viral thread writing, and community building.'
 color: blue
 tools: Write, Read, WebSearch, WebFetch
 ---

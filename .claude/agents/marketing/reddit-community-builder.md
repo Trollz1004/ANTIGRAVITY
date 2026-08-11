@@ -1,6 +1,6 @@
 ---
 name: reddit-community-builder
-description: Use this agent for Reddit strategy: authentic community participation, subreddit selection, value-first posting, and reputation building without getting banned.
+description: 'Use this agent for Reddit strategy: authentic community participation, subreddit selection, value-first posting, and reputation building without getting banned.'
 color: orange
 tools: Write, Read, WebSearch, WebFetch
 ---

@@ -1,6 +1,6 @@
 ---
 name: content-creator
-description: Use this agent for cross-platform content creation: writing blog posts, video scripts, social media content, and repurposing content across formats. Executes the FUNA-7 30-day content calendar for youandinotai.com.
+description: 'Use this agent for cross-platform content creation: writing blog posts, video scripts, social media content, and repurposing content across formats. Executes the FUNA-7 30-day content calendar for youandinotai.com.'
 color: purple
 tools: Write, Read, WebSearch, WebFetch
 ---

@@ -1,6 +1,6 @@
 ---
 name: revenue-tracker
-description: Use this agent when tracking actual sales against the product catalog, reconciling Square activity with campaign expectations, or deciding whether a revenue channel deserves more work or a post-mortem. Examples:\n\n<example>\nContext: Daily revenue check\nuser: "Did we sell anything yesterday?"\nassistant: "I'll use the revenue-tracker agent to reconcile the last 24h of Square activity against the active campaigns and report by SKU."\n</example>\n\n<example>\nContext: Channel not converting\nuser: "TikTok has been running 3 days with no sales"\nassistant: "Let me use the revenue-tracker agent to run the channel post-mortem — traffic, CTR, checkout starts — and name the exact drop-off point."\n</example>
+description: 'Use this agent when tracking actual sales against the product catalog, reconciling Square activity with campaign expectations, or deciding whether a revenue channel deserves more work or a post-mortem. Examples:\n\n<example>\nContext: Daily revenue check\nuser: "Did we sell anything yesterday?"\nassistant: "I''ll use the revenue-tracker agent to reconcile the last 24h of Square activity against the active campaigns and report by SKU."\n</example>\n\n<example>\nContext: Channel not converting\nuser: "TikTok has been running 3 days with no sales"\nassistant: "Let me use the revenue-tracker agent to run the channel post-mortem — traffic, CTR, checkout starts — and name the exact drop-off point."\n</example>'
 color: green
 tools: Read, Write, Grep, Glob, WebFetch
 ---
