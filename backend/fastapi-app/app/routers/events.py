@@ -98,6 +98,10 @@ async def rsvp_event(
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
 
+    organizer = await db.get(User, event.organizer_id)
+    if not organizer or not organizer.bot_shield_verified:
+        raise HTTPException(status_code=404, detail="Event not found")
+
     existing = await db.scalar(
         select(EventRSVP).where(
             EventRSVP.event_id == event_id, EventRSVP.user_id == user.id

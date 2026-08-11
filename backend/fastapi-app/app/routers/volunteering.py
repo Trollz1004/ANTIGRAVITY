@@ -294,6 +294,10 @@ async def signup_volunteer(
     if not opp:
         raise HTTPException(status_code=404, detail="Opportunity not found")
 
+    creator = await db.get(User, opp.created_by)
+    if not creator or not creator.bot_shield_verified:
+        raise HTTPException(status_code=404, detail="Opportunity not found")
+
     existing = await db.scalar(
         select(VolunteerSignup).where(
             VolunteerSignup.opportunity_id == opp_id,
