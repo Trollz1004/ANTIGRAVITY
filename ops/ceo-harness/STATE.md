@@ -14,8 +14,10 @@ Changed: Added .claude/agents/ roster (42 agents, doctrine-injected) +
   Branch claude/droid-automation-setup-1fgft2, PR to main.
 Nodes: unchanged (cloud session; no node access).
 Ornith: retired per Josh -- cloud models via OmniRouter instead.
-TODO: (1) merge PR; (2) optional repo secrets NEWSAPI_KEY / OMNI_*;
-  (3) Square Path B config on T5500 (see runbook); (4) YouTube login on 9020.
+TODO: (1) merge PR; (2) optional repo secrets NEWSAPI_KEY / OMNIROUTE_KEY;
+  (3) Square Path B config on T5500 (see runbook); (4) YouTube login on 9020;
+  (5) fix 9 pre-existing frontend TS errors (VideoCall user.id, dialog prop,
+  socket.io-client, validation.ts) then enable tsc --noEmit gate in CI.
 Quota: ok
 ```
 
