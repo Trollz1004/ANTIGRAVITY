@@ -448,10 +448,16 @@ class YesterdayNewsBot:
         if mode == "generate":
             return self.run_daily_cycle()
         elif mode == "publish":
-            # Load today's content and publish
+            # Load today's content and publish. Prefer the local runtime dir;
+            # fall back to briefs the cloud workflow committed into the repo
+            # (content/yesterday-news/) and pulled onto this node.
             date = self.get_yesterday_date()
             project_dir = CONTENT_DIR / date["file"]
-            
+            if not project_dir.exists():
+                repo_dir = REPO_DIR / "content" / "yesterday-news" / date["file"]
+                if repo_dir.exists():
+                    project_dir = repo_dir
+
             if not project_dir.exists():
                 log.error(f"No content found for {date['display']}")
                 return False

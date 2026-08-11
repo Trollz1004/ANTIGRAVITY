@@ -42,14 +42,17 @@ jobs:
         with:
           node-version: '20'
 
-      # Build youandinotai frontend
+      # Build youandinotai frontend — whichever layout this repo carries.
       - name: Build YouAndINotAI
         run: |
-          if [ ! -d apps/youandinotai-frontend ]; then
-            echo "::notice::apps/youandinotai-frontend not present in this repo layout — skipping build"
-            exit 0
+          if [ -d apps/youandinotai-frontend ]; then
+            cd apps/youandinotai-frontend
+          elif [ -d frontend/react-app ]; then
+            cd frontend/react-app
+          else
+            echo "::error::No frontend directory found (apps/youandinotai-frontend or frontend/react-app) — repo layout changed; update ci-validate.yml"
+            exit 1
           fi
-          cd apps/youandinotai-frontend
           npm ci
           npm run build
 
