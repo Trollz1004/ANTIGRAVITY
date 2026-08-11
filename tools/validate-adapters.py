@@ -1,72 +1,112 @@
 #!/usr/bin/env python3
-"""Validate adapter manifests under adapters/.
+"""Validate adapter packages and manifests.
 
-Referenced by .github/workflows/policy-guard.yml and .pre-commit-config.yaml
-(files: ^adapters/). The adapters/ directory holds YAML/JSON adapter
-manifests; each must parse and be a top-level mapping with a name.
+Referenced by .github/workflows/policy-guard.yml and .pre-commit-config.yaml.
+Two targets:
 
-Exit codes: 0 = all manifests valid (or none to validate), 1 = failures.
+1. paperclip/packages/adapters/<name>/ — the live adapter packages. Each
+   package.json must parse and carry name + version, and adapter runtime
+   source must honor the AUTHORING.md no-remote-git contract (no `git push`
+   from adapter runtime code; cross-run state lives in the local cwd).
+2. adapters/ at repo root — YAML/JSON manifests, if that layout ever
+   (re)appears: each must parse to a mapping with a name.
+
+Exit codes: 0 = everything valid, 1 = failures.
 """
 
 import json
+import re
 import sys
 from pathlib import Path
 
 import yaml
 
-ADAPTERS_DIR = Path(__file__).resolve().parents[1] / "adapters"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+PACKAGES_DIR = REPO_ROOT / "paperclip" / "packages" / "adapters"
+MANIFESTS_DIR = REPO_ROOT / "adapters"
+
+GIT_PUSH_RE = re.compile(r"\bgit\s+push\b")
 
 
-def validate_manifest(path: Path) -> str | None:
-    """Return an error string, or None if the manifest is valid."""
-    try:
-        text = path.read_text(encoding="utf-8")
-    except OSError as exc:
-        return f"unreadable: {exc}"
+def fail(msg: str, failures: list) -> None:
+    print(f"FAIL {msg}")
+    failures.append(msg)
 
-    try:
-        if path.suffix == ".json":
-            data = json.loads(text)
-        else:
-            data = yaml.safe_load(text)
-    except Exception as exc:
-        return f"parse error: {exc}"
 
-    if not isinstance(data, dict):
-        return "top level must be a mapping"
-    if not data.get("name"):
-        return "missing required 'name' key"
-    return None
+def validate_adapter_packages(failures: list) -> int:
+    if not PACKAGES_DIR.is_dir():
+        print("No paperclip/packages/adapters/ directory — skipping package checks.")
+        return 0
+
+    checked = 0
+    for pkg_json in sorted(PACKAGES_DIR.glob("*/package.json")):
+        rel = pkg_json.relative_to(REPO_ROOT)
+        checked += 1
+        try:
+            data = json.loads(pkg_json.read_text(encoding="utf-8"))
+        except Exception as exc:
+            fail(f"{rel}: parse error: {exc}", failures)
+            continue
+        if not isinstance(data, dict) or not data.get("name"):
+            fail(f"{rel}: missing required 'name'", failures)
+        if isinstance(data, dict) and not data.get("version"):
+            fail(f"{rel}: missing required 'version'", failures)
+
+        # AUTHORING.md no-remote-git contract: adapter runtime code must not
+        # push to a git remote; cross-run state lives in the local cwd.
+        src_dir = pkg_json.parent / "src"
+        if src_dir.is_dir():
+            for src in src_dir.rglob("*.ts"):
+                if ".test." in src.name:
+                    continue
+                try:
+                    text = src.read_text(encoding="utf-8")
+                except OSError:
+                    continue
+                for lineno, line in enumerate(text.splitlines(), 1):
+                    if GIT_PUSH_RE.search(line) and "Never" not in line:
+                        fail(
+                            f"{src.relative_to(REPO_ROOT)}:{lineno}: "
+                            "adapter runtime code must not `git push` "
+                            "(AUTHORING.md no-remote-git contract)",
+                            failures,
+                        )
+    print(f"Checked {checked} adapter package(s) under {PACKAGES_DIR.relative_to(REPO_ROOT)}.")
+    return checked
+
+
+def validate_root_manifests(failures: list) -> int:
+    if not MANIFESTS_DIR.is_dir():
+        return 0
+    checked = 0
+    for manifest in sorted(MANIFESTS_DIR.rglob("*")):
+        if manifest.suffix not in (".yml", ".yaml", ".json") or not manifest.is_file():
+            continue
+        checked += 1
+        rel = manifest.relative_to(REPO_ROOT)
+        try:
+            text = manifest.read_text(encoding="utf-8")
+            data = json.loads(text) if manifest.suffix == ".json" else yaml.safe_load(text)
+        except Exception as exc:
+            fail(f"{rel}: parse error: {exc}", failures)
+            continue
+        if not isinstance(data, dict) or not data.get("name"):
+            fail(f"{rel}: top level must be a mapping with a 'name'", failures)
+    if checked:
+        print(f"Checked {checked} manifest(s) under adapters/.")
+    return checked
 
 
 def main() -> int:
-    if not ADAPTERS_DIR.is_dir():
-        print("No adapters/ directory present — nothing to validate.")
-        return 0
-
-    manifests = sorted(
-        p
-        for p in ADAPTERS_DIR.rglob("*")
-        if p.suffix in (".yml", ".yaml", ".json") and p.is_file()
-    )
-    if not manifests:
-        print("adapters/ contains no manifest files — nothing to validate.")
-        return 0
-
-    failures = 0
-    for manifest in manifests:
-        error = validate_manifest(manifest)
-        rel = manifest.relative_to(ADAPTERS_DIR.parent)
-        if error:
-            print(f"FAIL {rel}: {error}")
-            failures += 1
-        else:
-            print(f"ok   {rel}")
-
+    failures: list = []
+    total = validate_adapter_packages(failures) + validate_root_manifests(failures)
     if failures:
-        print(f"{failures} invalid manifest(s).")
+        print(f"{len(failures)} problem(s) found.")
         return 1
-    print(f"All {len(manifests)} adapter manifest(s) valid.")
+    if total == 0:
+        print("Nothing to validate in this repo layout.")
+    else:
+        print("All adapter checks passed.")
     return 0
 
 
