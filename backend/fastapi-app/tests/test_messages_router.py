@@ -19,7 +19,7 @@ from app.auth import create_access_token, get_current_user, hash_password
 from app.main import app
 from app.models import Match, Message, User, UserBlock
 from app.routers import messages as messages_module
-from tests.helpers import override_user, seed
+from tests.helpers import override_user, seed, verified_profile
 
 
 def _make_user(email: str | None = None, *, is_active: bool = True) -> User:
@@ -151,7 +151,13 @@ def test_send_message_persists_and_broadcasts(
 ):
     alice, bob = _make_user(), _make_user()
     match = _make_match(alice, bob)
-    seed(alice, bob, match, db_session_factory=db_session_factory)
+    seed(
+        alice,
+        bob,
+        verified_profile(alice),
+        match,
+        db_session_factory=db_session_factory,
+    )
     app.dependency_overrides[get_current_user] = override_user(alice)
 
     listener = AsyncMock()
@@ -190,7 +196,15 @@ def test_send_message_persists_and_broadcasts(
 def test_send_message_gates(client, db_session_factory, clean_connections):
     alice, bob, eve = _make_user(), _make_user(), _make_user()
     match = _make_match(alice, bob)
-    seed(alice, bob, eve, match, db_session_factory=db_session_factory)
+    seed(
+        alice,
+        bob,
+        eve,
+        verified_profile(alice),
+        verified_profile(eve),
+        match,
+        db_session_factory=db_session_factory,
+    )
 
     # Non-member → 404
     app.dependency_overrides[get_current_user] = override_user(eve)
@@ -233,7 +247,13 @@ def test_send_message_gates(client, db_session_factory, clean_connections):
 def test_send_message_validation_rejects_empty(client, db_session_factory):
     alice, bob = _make_user(), _make_user()
     match = _make_match(alice, bob)
-    seed(alice, bob, match, db_session_factory=db_session_factory)
+    seed(
+        alice,
+        bob,
+        verified_profile(alice),
+        match,
+        db_session_factory=db_session_factory,
+    )
     app.dependency_overrides[get_current_user] = override_user(alice)
     try:
         resp = client.post(f"/api/v1/messages/{match.id}", json={"content": ""})
@@ -252,7 +272,13 @@ def _patched_session_local(db_session_factory):
 def test_ws_chat_full_roundtrip(client, db_session_factory, clean_connections):
     alice, bob = _make_user(), _make_user()
     match = _make_match(alice, bob)
-    seed(alice, bob, match, db_session_factory=db_session_factory)
+    seed(
+        alice,
+        bob,
+        verified_profile(alice),
+        match,
+        db_session_factory=db_session_factory,
+    )
     token = create_access_token(str(alice.id))
 
     with _patched_session_local(db_session_factory):
@@ -285,7 +311,14 @@ def test_ws_chat_full_roundtrip(client, db_session_factory, clean_connections):
 def test_ws_chat_rejects_non_member(client, db_session_factory, clean_connections):
     alice, bob, eve = _make_user(), _make_user(), _make_user()
     match = _make_match(alice, bob)
-    seed(alice, bob, eve, match, db_session_factory=db_session_factory)
+    seed(
+        alice,
+        bob,
+        eve,
+        verified_profile(eve),
+        match,
+        db_session_factory=db_session_factory,
+    )
     token = create_access_token(str(eve.id))
 
     with _patched_session_local(db_session_factory):
@@ -296,7 +329,7 @@ def test_ws_chat_rejects_non_member(client, db_session_factory, clean_connection
 
 def test_ws_chat_rejects_unknown_match(client, db_session_factory, clean_connections):
     alice = _make_user()
-    seed(alice, db_session_factory=db_session_factory)
+    seed(alice, verified_profile(alice), db_session_factory=db_session_factory)
     token = create_access_token(str(alice.id))
 
     with _patched_session_local(db_session_factory):
@@ -313,7 +346,14 @@ def test_ws_chat_rejects_blocked_relationship(
     alice, bob = _make_user(), _make_user()
     match = _make_match(alice, bob)
     block = UserBlock(id=uuid.uuid4(), blocker_id=bob.id, blocked_id=alice.id)
-    seed(alice, bob, match, block, db_session_factory=db_session_factory)
+    seed(
+        alice,
+        bob,
+        verified_profile(alice),
+        match,
+        block,
+        db_session_factory=db_session_factory,
+    )
     token = create_access_token(str(alice.id))
 
     with _patched_session_local(db_session_factory):

@@ -14,11 +14,11 @@ from fastapi import (
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
+from app.auth import get_current_user, require_verified_profile
 from app.database import SessionLocal, get_db
 from app.dependencies.websocket_auth import get_current_websocket_user
 from app.error_responses import bad_request, forbidden, not_found
-from app.models import Match, Message, User
+from app.models import Match, Message, Profile, User
 from app.moderation import has_block_relationship
 from app.schemas import MessageResponse, MessageSendRequest
 
@@ -68,7 +68,7 @@ async def get_messages(
 async def send_message(
     match_id: uuid.UUID,
     payload: MessageSendRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> MessageResponse:
     match = await db.get(Match, match_id)
@@ -124,8 +124,16 @@ async def websocket_chat(
 ):
     user_id = str(user.id)
 
-    # Verify match membership
+    # Verify sender verification + match membership
     async with SessionLocal() as db:
+        sender_profile = await db.scalar(
+            select(Profile).where(Profile.user_id == uuid.UUID(user_id))
+        )
+        if sender_profile is None or not sender_profile.verified:
+            await websocket.close(
+                code=status.WS_1008_POLICY_VIOLATION, reason="Verification required"
+            )
+            return
         match = await db.get(Match, uuid.UUID(match_id))
         if not match or (str(match.user_a) != user_id and str(match.user_b) != user_id):
             await websocket.close(

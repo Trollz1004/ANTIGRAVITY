@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
+from app.auth import get_current_user, require_verified_profile
 from app.database import get_db
 from app.models import Match, Profile, Swipe, User
 from app.moderation import (
@@ -28,7 +28,7 @@ router = APIRouter()
 @router.post("/swipe", response_model=SwipeResponse)
 async def swipe(
     payload: SwipeRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> SwipeResponse:
     if payload.target_id == user.id:
@@ -165,7 +165,7 @@ async def get_match(
 
 @router.get("/discover", response_model=list[DiscoverProfileResponse])
 async def discover(
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
     limit: int = 20,
 ) -> list[DiscoverProfileResponse]:
@@ -174,7 +174,7 @@ async def discover(
     blocked_by_me = blocked_by_user_subquery(user.id)
     blocked_me = blocked_user_subquery(user.id)
 
-    # Get profiles excluding self and already-swiped
+    # Get verified profiles excluding self and already-swiped
     profiles = (
         await db.scalars(
             select(Profile)
@@ -183,6 +183,7 @@ async def discover(
                 Profile.user_id.notin_(swiped_subq),
                 Profile.user_id.notin_(blocked_by_me),
                 Profile.user_id.notin_(blocked_me),
+                Profile.verified.is_(True),
             )
             .order_by(func.random())
             .limit(limit)

@@ -6,8 +6,20 @@ Both used to be copy-pasted into every test module.
 """
 
 import asyncio
+import uuid
 
-from app.models import User
+from app.models import Profile, User
+
+
+def verified_profile(user: User, **kwargs) -> Profile:
+    """Build a verified ``Profile`` for ``user``.
+
+    Interaction endpoints (discover, swipe, send message) require the caller
+    to have a verified profile, so route tests seed one for their actor.
+    """
+    defaults: dict = {"id": uuid.uuid4(), "user_id": user.id, "verified": True}
+    defaults.update(kwargs)
+    return Profile(**defaults)
 
 
 def seed(*items, db_session_factory) -> None:

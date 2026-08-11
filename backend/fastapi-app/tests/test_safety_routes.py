@@ -138,7 +138,14 @@ def test_blocked_match_rejects_message_access(client, db_session_factory):
         blocked_id=target.id,
         reason="Stop contact",
     )
-    seed(actor, target, match, block, db_session_factory=db_session_factory)
+    seed(
+        actor,
+        target,
+        _make_profile(actor),
+        match,
+        block,
+        db_session_factory=db_session_factory,
+    )
 
     app.dependency_overrides[get_current_user] = override_user(actor)
     try:

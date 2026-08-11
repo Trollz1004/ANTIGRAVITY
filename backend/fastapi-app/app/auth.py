@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.database import get_db
-from app.models import User
+from app.models import Profile, User
 from app.models_refresh_token import RefreshToken
 from app.subscriptions import sync_subscription_state
 
@@ -101,6 +101,30 @@ async def get_current_user(
     sync_subscription_state(user)
     if user.subscription_active != prior_state:
         await db.commit()
+    return user
+
+
+VERIFICATION_REQUIRED_DETAIL = (
+    "Verification required — complete verification to browse, match, and message"
+)
+
+
+async def require_verified_profile(
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> User:
+    """Require the caller to have a verified profile.
+
+    Interaction endpoints (discover, swipe, send message) depend on this
+    instead of ``get_current_user`` so unverified accounts cannot browse,
+    match, or message. A missing profile counts as unverified.
+    """
+    profile = await db.scalar(select(Profile).where(Profile.user_id == user.id))
+    if profile is None or not profile.verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=VERIFICATION_REQUIRED_DETAIL,
+        )
     return user
 
 
