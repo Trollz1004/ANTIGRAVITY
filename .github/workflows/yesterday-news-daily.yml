@@ -100,4 +100,19 @@ jobs:
           fi
 
           git commit -m "chore(news): daily yesterday-news brief [skip ci]"
-          git push
+
+          # main may have moved since checkout — rebase and retry so the
+          # brief isn't dropped on a non-fast-forward rejection. Our commit
+          # only adds content/yesterday-news/ files, so conflicts are
+          # effectively impossible; bail loudly if one ever happens.
+          for attempt in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            echo "Push rejected (attempt $attempt) — rebasing on latest main"
+            git fetch origin main
+            git rebase origin/main || { echo "::error::Rebase conflict on generated content — manual review needed"; exit 1; }
+            sleep $((attempt * 5))
+          done
+          echo "::error::Push failed after 3 rebase attempts"
+          exit 1

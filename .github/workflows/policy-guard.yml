@@ -23,12 +23,7 @@ jobs:
         run: pip install pyyaml
 
       - name: Run adapter validator
-        run: |
-          if [ ! -f tools/validate-adapters.py ]; then
-            echo "::notice::tools/validate-adapters.py not present in this repo layout — skipping"
-            exit 0
-          fi
-          python tools/validate-adapters.py
+        run: python tools/validate-adapters.py
 
   forbidden-pattern-scan:
     name: Scan for forbidden patterns
