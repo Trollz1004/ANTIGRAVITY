@@ -335,7 +335,7 @@ Day numbering: DAY 1–7 below are CONTENT days. They begin only after each acco
 
 ## 3. Posting Schedule (all times US Central; adjust to audience analytics after Day 3)
 
-Days 1–2 are warm-up (Section 1): scroll + 1 non-promo post per account, no app mention. The 21 scripts run Days 1–7 as drafted only AFTER founder approval; if approval lands mid-week, shift the whole grid — never skip warm-up.
+Warm-up happens BEFORE Day 1 (Section 1): 2 days of scroll + 1 non-promo post per account, no app mention. The 21 scripts are the 7 promo days that follow (Days 1–7), and should run only AFTER founder approval; if approval lands mid-week, shift the whole grid — never skip warm-up.
 
 | Slot | Account 1 (Bot Radar) | Account 2 (Audit) | Account 3 (Swipe Safe) |
 |------|----------------------|-------------------|------------------------|
