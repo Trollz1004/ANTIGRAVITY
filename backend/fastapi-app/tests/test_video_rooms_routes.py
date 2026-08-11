@@ -7,7 +7,8 @@ Risk surface:
   - Auth boundary: unauthenticated requests rejected
   - Invalid match_id (non-UUID) returns 422
   - Room capacity: max_participants = 2 (verified via mock response)
-  - Access control: only authenticated users can create rooms
+  - Access control: caller must be verified and an active-match participant,
+    and the other participant must be currently verified too
   - Misconfiguration (no API key): 503, never a fabricated room URL
   - Daily.co API error: 502 propagated
 """
@@ -20,8 +21,8 @@ import httpx
 
 from app.auth import get_current_user, hash_password
 from app.main import app
-from app.models import User
-from tests.helpers import override_user
+from app.models import Match, User
+from tests.helpers import override_user, seed
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -34,9 +35,34 @@ def _make_user(email: str = "rooms_user@example.com") -> User:
         display_name="Rooms Tester",
         date_of_birth=date(1993, 9, 5),
         is_active=True,
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
+
+
+def _seed_active_match(user: User, db_session_factory) -> Match:
+    """Create an active Match between ``user`` and a verified partner."""
+    partner = User(
+        id=uuid.uuid4(),
+        email=f"rooms_partner_{uuid.uuid4().hex[:8]}@example.com",
+        password_hash=hash_password("password123"),
+        display_name="Rooms Partner",
+        date_of_birth=date(1993, 9, 5),
+        is_active=True,
+        bot_shield_verified=True,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    match = Match(
+        id=uuid.uuid4(),
+        user_a=user.id,
+        user_b=partner.id,
+        status="active",
+        matched_at=datetime.now(timezone.utc),
+    )
+    seed(user, partner, match, db_session_factory=db_session_factory)
+    return match
 
 
 # ── Auth boundary ─────────────────────────────────────────────────────────────
@@ -57,6 +83,67 @@ def test_create_room_invalid_token_rejected(client):
     assert resp.status_code == 401
 
 
+# ── Match-participation and verification gating ───────────────────────────────
+
+
+def test_create_room_unknown_match_returns_404(client):
+    """A match_id with no backing Match row must never hand out a room."""
+    user = _make_user("rooms_no_match@example.com")
+    app.dependency_overrides[get_current_user] = override_user(user)
+    try:
+        resp = client.post(f"/api/v1/video/rooms/{uuid.uuid4()}")
+        assert resp.status_code == 404
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_create_room_non_participant_returns_404(client, db_session_factory):
+    """A caller who isn't in the match must not be able to create its room."""
+    owner = _make_user("rooms_owner@example.com")
+    match = _seed_active_match(owner, db_session_factory)
+    outsider = _make_user("rooms_outsider@example.com")
+    seed(outsider, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(outsider)
+    try:
+        resp = client.post(f"/api/v1/video/rooms/{match.id}")
+        assert resp.status_code == 404
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_create_room_unverified_other_participant_returns_403(
+    client, db_session_factory
+):
+    """The other participant losing verified status must close the room, too."""
+    user = _make_user("rooms_caller@example.com")
+    partner = User(
+        id=uuid.uuid4(),
+        email=f"rooms_unverified_{uuid.uuid4().hex[:8]}@example.com",
+        password_hash=hash_password("password123"),
+        display_name="Unverified Partner",
+        date_of_birth=date(1993, 9, 5),
+        is_active=True,
+        bot_shield_verified=False,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    match = Match(
+        id=uuid.uuid4(),
+        user_a=user.id,
+        user_b=partner.id,
+        status="active",
+        matched_at=datetime.now(timezone.utc),
+    )
+    seed(user, partner, match, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
+    try:
+        resp = client.post(f"/api/v1/video/rooms/{match.id}")
+        assert resp.status_code == 403
+        assert "not verified" in resp.json()["detail"]
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
 # ── Validation ────────────────────────────────────────────────────────────────
 
 
@@ -73,11 +160,12 @@ def test_create_room_non_uuid_match_id_returns_422(client):
 # ── Misconfiguration: no API key is a 503, never a fake room ─────────────────
 
 
-def test_create_room_without_api_key_returns_503(client):
+def test_create_room_without_api_key_returns_503(client, db_session_factory):
     """A missing Daily.co key must never fabricate a fake joinable room URL."""
     user = _make_user("rooms_dev@example.com")
+    match = _seed_active_match(user, db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
-    match_id = uuid.uuid4()
+    match_id = match.id
     try:
         with patch("app.routers.video_rooms.settings") as mock_settings:
             mock_settings.daily_api_key = ""  # provider not configured
@@ -96,10 +184,11 @@ def test_create_room_without_api_key_returns_503(client):
 # ── Live mode: successful Daily.co API call ───────────────────────────────────
 
 
-def test_create_room_live_mode_happy_path(client):
+def test_create_room_live_mode_happy_path(client, db_session_factory):
     user = _make_user("rooms_live@example.com")
+    match = _seed_active_match(user, db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
-    match_id = uuid.uuid4()
+    match_id = match.id
     room_name = f"match-{match_id}"
     room_url = f"https://youandinotai.daily.co/{room_name}"
 
@@ -131,11 +220,12 @@ def test_create_room_live_mode_happy_path(client):
 # ── Room capacity: max_participants enforced in request ───────────────────────
 
 
-def test_create_room_requests_max_2_participants(client):
+def test_create_room_requests_max_2_participants(client, db_session_factory):
     """Room creation payload must set max_participants=2 to enforce pair-only calls."""
     user = _make_user("rooms_capacity@example.com")
+    match = _seed_active_match(user, db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
-    match_id = uuid.uuid4()
+    match_id = match.id
 
     captured_payload = {}
 
@@ -175,10 +265,11 @@ def test_create_room_requests_max_2_participants(client):
 # ── Daily.co API error: 502 propagated ───────────────────────────────────────
 
 
-def test_create_room_daily_api_error_returns_502(client):
+def test_create_room_daily_api_error_returns_502(client, db_session_factory):
     user = _make_user("rooms_api_error@example.com")
+    match = _seed_active_match(user, db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
-    match_id = uuid.uuid4()
+    match_id = match.id
 
     mock_response = MagicMock()
     mock_response.status_code = 500
@@ -201,10 +292,11 @@ def test_create_room_daily_api_error_returns_502(client):
         app.dependency_overrides.pop(get_current_user, None)
 
 
-def test_create_room_daily_connection_error_returns_502(client):
+def test_create_room_daily_connection_error_returns_502(client, db_session_factory):
     user = _make_user("rooms_conn_error@example.com")
+    match = _seed_active_match(user, db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
-    match_id = uuid.uuid4()
+    match_id = match.id
 
     try:
         with patch("app.routers.video_rooms.settings") as mock_settings:
@@ -230,11 +322,12 @@ def test_create_room_daily_connection_error_returns_502(client):
 # ── Existing room conflict (already exists) ───────────────────────────────────
 
 
-def test_create_room_handles_existing_room_conflict(client):
+def test_create_room_handles_existing_room_conflict(client, db_session_factory):
     """If Daily.co returns 400 'already exists', router should retrieve existing room."""
     user = _make_user("rooms_existing@example.com")
+    match = _seed_active_match(user, db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
-    match_id = uuid.uuid4()
+    match_id = match.id
     room_name = f"match-{match_id}"
     room_url = f"https://youandinotai.daily.co/{room_name}"
 

@@ -27,6 +27,24 @@ def _user_in_match(match: Match | None, user_id: uuid.UUID) -> bool:
     return user_id in {match.user_a, match.user_b}
 
 
+async def _match_fully_verified(db: AsyncSession, match: Match) -> bool:
+    """Both members of a match must be currently verified.
+
+    require_verified_profile only checks the proposer/acceptor -- a double
+    date pairs up to four people, and a legacy match (formed before the
+    verification gate, or where a member since lost verified status) can
+    still have the caller verified while their partner isn't. Without this,
+    the unverified partner's name/photo would be exposed via
+    _serialize_session and they'd be treated as an active session
+    participant despite never passing the gate themselves.
+    """
+    for member_id in (match.user_a, match.user_b):
+        member = await db.get(User, member_id)
+        if not member or not member.bot_shield_verified:
+            return False
+    return True
+
+
 async def _build_couple_response(
     db: AsyncSession,
     match: Match | None,
@@ -122,6 +140,14 @@ async def propose_double_date(
     if not (_user_in_match(match_a, user.id) or _user_in_match(match_b, user.id)):
         raise HTTPException(
             status_code=403, detail="You must belong to one of the couples"
+        )
+
+    if not await _match_fully_verified(db, match_a) or not await _match_fully_verified(
+        db, match_b
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail="Both members of each couple must be verified for a double date",
         )
 
     existing = await db.scalar(

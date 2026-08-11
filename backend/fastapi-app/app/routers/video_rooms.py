@@ -5,10 +5,12 @@ import uuid
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
+from app.auth import require_verified_profile
 from app.config import get_settings
-from app.models import User
+from app.database import get_db
+from app.models import Match, User
 
 router = APIRouter(prefix="/video/rooms")
 settings = get_settings()
@@ -17,10 +19,36 @@ settings = get_settings()
 @router.post("/{match_id}")
 async def create_video_room(
     match_id: uuid.UUID,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
+    db: AsyncSession = Depends(get_db),
 ):
-    """Creates a Daily.co video room for a match session."""
-    # Logic follows the exact requested patterns
+    """Creates a Daily.co video room for a match session.
+
+    This is the actual entry point VideoCall.tsx calls before connecting to
+    /ws/video/{call_id} -- gating only the signaling WebSocket left this
+    route reachable by any authenticated (even unverified) caller with an
+    arbitrary match_id, handing out a public, joinable Daily.co room URL
+    with no membership or verification check at all. Requires the caller to
+    be verified and an actual participant in an active match, and the other
+    participant to be currently verified too, matching /ws/video.
+    """
+    match = await db.get(Match, match_id)
+    if (
+        not match
+        or match.status != "active"
+        or user.id
+        not in (
+            match.user_a,
+            match.user_b,
+        )
+    ):
+        raise HTTPException(status_code=404, detail="Match not found")
+
+    other_id = match.user_b if match.user_a == user.id else match.user_a
+    other_user = await db.get(User, other_id)
+    if not other_user or not other_user.bot_shield_verified:
+        raise HTTPException(status_code=403, detail="The other member is not verified")
+
     room_name = f"match-{match_id}"
 
     # A missing Daily.co API key is a server configuration error — never
