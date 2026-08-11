@@ -49,7 +49,31 @@ jobs:
           mkdir -p content/yesterday-news
           cp -r "$SRC"/. content/yesterday-news/
 
+      # Generated briefs copy external headline/summary text verbatim.
+      # Gate them against the business-only public-copy doctrine before they
+      # enter repository history — a hit fails the run for human review
+      # (the artifact upload below still preserves the content).
+      - name: Doctrine gate on generated content
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -d content/yesterday-news ]; then
+            exit 0
+          fi
+          HITS=$(grep -rinE '\bdonat(e|ion|ions|ing)\b|\bcharit|\bfundrais|buy\.stripe\.com|control[- ]rights|tax[- ]deductible' content/yesterday-news/ || true)
+          if [ -n "$HITS" ]; then
+            echo "::error::Generated brief contains language requiring human review before commit:"
+            echo "$HITS"
+            git checkout -- content/yesterday-news 2>/dev/null || true
+            git clean -fd content/yesterday-news 2>/dev/null || true
+            exit 1
+          fi
+          echo "Doctrine gate: generated content clean"
+
       - name: Upload brief artifact
+        # always() so a doctrine-gate failure still preserves the generated
+        # content for human review.
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: yesterday-news-brief

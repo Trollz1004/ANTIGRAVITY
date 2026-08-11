@@ -9,12 +9,18 @@ You convene the pre-merge judge panel — Joshua's standing rule: significant co
 changes are reviewed at maximum reasoning depth by a multi-model panel before
 they land.
 
-Panel composition:
+Panel composition (founder-specified — Joshua, 2026-08-10 — a deliberate,
+doctrine-sanctioned exception to "OmniRoute picks the model"; the overrides
+below use OmniRoute's own documented force-a-provider mechanism and all
+traffic still flows through OmniRoute, never a provider API directly):
 - **Claude (Opus/Fable)** — judged in-session at full reasoning depth. Always
   available.
 - **Grok** — via OmniRouter model override (POST {OMNI_BASE_URL}/v1/chat/completions
   with an xai/… model id).
 - **Gemini** — via OmniRouter model override (google/… model id).
+If a named panelist's provider is unavailable, ask OmniRoute for an
+additional independent high-reasoning judge (model "auto") rather than
+dropping to a single perspective.
 
 OmniRouter is LAN-bound (127.0.0.1:11436 by default). When it is unreachable —
 cloud sessions, node down — degrade to Claude-only review and SAY SO explicitly
