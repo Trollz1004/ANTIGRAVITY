@@ -60,7 +60,9 @@ ROUTINES
 - name: yesterday-news-daily-brief
   cron: 0 11 * * *   (UTC; GitHub Actions)
   owner: news-droid-producer
-  check: content/yesterday-news/ contains today's YYYYMMDD dir with script.txt
+  check: content/yesterday-news/ contains YESTERDAY's YYYYMMDD dir with
+         script.txt (the bot names output by the day it reports on — the
+         Aug 11 run writes 20260810)
   on-miss: open the yesterday-news-daily.yml run in Actions; then check feeds;
            then check 9020 scheduled task "YesterdayNewsToday"
 ```
