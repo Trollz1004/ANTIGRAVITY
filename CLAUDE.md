@@ -1,6 +1,29 @@
 # CLAUDE.md - ANTIGRAVITY Current Agent Guide
 
-Updated: 2026-06-22
+Updated: 2026-08-11
+
+## NO-DRIFT ORDER — 2026-08-11 (Joshua, verbatim authority)
+
+Newest dated founder order wins. Older docs, memories, exports, and archived
+code NEVER override this section. Any agent that re-introduces retired framing
+is in drift and must stop and re-read this file.
+
+1. **No splits in code.** No revenue-splitting contracts, no percentage
+   routing, no multi-wallet payout logic anywhere. PlatformSplitter and all
+   split patterns stay retired. One wallet, one treasury.
+2. **No mission in code.** Zero mission language, donation/benefit logic, or
+   third-party-benefit routing in contracts, scripts, product code, or
+   customer surfaces. Code is business-only.
+3. **Mission knowledge lane:** only official first-party AI sessions — Claude
+   (claude.ai), Gemini, ChatGPT, Manus, Grok — carry mission context, plus
+   internal briefings/. It goes nowhere else. Never into code, never onto
+   customer surfaces.
+4. **Cost recovery first.** Proceeds repay Joshua's 16 months of accrued
+   costs, then fund operations. Mission activation comes only after that.
+   See `briefings/STAKING-DOCTRINE-YNAI-2026-08-11.md` §0.
+5. **Drift check before proposing:** if an old doc suggests splits, mission
+   code, or retired structures, it is history — do not resurrect it. When in
+   doubt, ask Joshua; do not "helpfully" re-add what he removed.
 
 This file is the Claude-facing operational guide for `C:\antigravity`.
 If older exports, memories, downloads, or cached project files conflict with this file,
