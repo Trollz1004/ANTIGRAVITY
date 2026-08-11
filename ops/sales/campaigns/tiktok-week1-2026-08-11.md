@@ -274,7 +274,7 @@ Day numbering: DAY 1–7 below are CONTENT days. They begin only after each acco
 - Hook: `Matched. Chatted. Account vanished. Again.`
 - Slide 2: `Disappearing accounts are the signature move of fake profiles.`
 - Slide 3: `Verification checks for a human at the door →`
-- Slide 4: `youandinotai.com — every member passed human verification to get in.`
+- Slide 4: `youandinotai.com — standard membership requires human verification to get in.`
 - Slide 5: `Ghosting by a real person: survivable. Talking to nobody: avoidable.`
 - Slide 6 (CTA): `Talk to people who exist. youandinotai.com`
 - Caption: `The vanish isn't rejection — it usually wasn't a person. youandinotai.com`

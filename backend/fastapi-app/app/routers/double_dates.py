@@ -226,7 +226,16 @@ async def list_double_dates(
         )
     ).all()
 
-    return [await _serialize_session(db, session) for session in sessions]
+    results = []
+    for session in sessions:
+        match_a = await db.get(Match, session.match_a_id)
+        match_b = await db.get(Match, session.match_b_id)
+        if not await _match_fully_verified(
+            db, match_a
+        ) or not await _match_fully_verified(db, match_b):
+            continue
+        results.append(await _serialize_session(db, session))
+    return results
 
 
 async def _load_participant_session(

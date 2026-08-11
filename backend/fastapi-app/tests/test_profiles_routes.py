@@ -21,6 +21,7 @@ def _make_user(*, email: str, display_name: str = "Profile User") -> User:
         email=email,
         password_hash="hashed",
         display_name=display_name,
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
