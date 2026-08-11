@@ -13,7 +13,9 @@ from app.secrets_rotation import SecretsRotationManager
 
 
 def _write_config(base_dir, config: dict) -> None:
-    with open(os.path.join(base_dir, SecretsRotationManager.CONFIG_FILE_NAME), "w") as f:
+    with open(
+        os.path.join(base_dir, SecretsRotationManager.CONFIG_FILE_NAME), "w"
+    ) as f:
         json.dump(config, f)
 
 
@@ -161,16 +163,12 @@ class TestRotateSecret:
         assert "Rotation initiated" in audit
 
     def test_rotate_unknown_secret_returns_false(self, tmp_path):
-        manager = _make_manager(
-            tmp_path, {"secrets": [{"name": "known"}]}
-        )
+        manager = _make_manager(tmp_path, {"secrets": [{"name": "known"}]})
         assert manager.rotate_secret("unknown") is False
 
 
 class TestZeroDowntimePattern:
-    def test_successful_pattern_updates_timestamp_and_logs_all_steps(
-        self, tmp_path
-    ):
+    def test_successful_pattern_updates_timestamp_and_logs_all_steps(self, tmp_path):
         manager = _make_manager(
             tmp_path,
             {"secrets": [{"name": "jwt_secret", "last_rotated": None}]},
@@ -216,20 +214,19 @@ class TestZeroDowntimePattern:
 
 class TestAuditAndSaveResilience:
     def test_save_config_oserror_is_logged_not_raised(self, tmp_path, monkeypatch):
-        manager = _make_manager(
-            tmp_path, {"secrets": [{"name": "x"}]}
+        manager = _make_manager(tmp_path, {"secrets": [{"name": "x"}]})
+        monkeypatch.setattr(
+            "os.makedirs",
+            lambda *_args, **_kwargs: (_ for _ in ()).throw(OSError("nope")),
         )
-        monkeypatch.setattr("os.makedirs", lambda *a, **k: (_ for _ in ()).throw(OSError("nope")))
         # Must not raise
         manager._save_config()
 
     def test_audit_log_oserror_is_logged_not_raised(self, tmp_path, monkeypatch):
-        manager = _make_manager(
-            tmp_path, {"secrets": [{"name": "x"}]}
-        )
+        manager = _make_manager(tmp_path, {"secrets": [{"name": "x"}]})
         monkeypatch.setattr(
             "builtins.open",
-            lambda *a, **k: (_ for _ in ()).throw(OSError("nope")),
+            lambda *_args, **_kwargs: (_ for _ in ()).throw(OSError("nope")),
         )
         # Must not raise
         manager._log_audit("x", "action", "details")

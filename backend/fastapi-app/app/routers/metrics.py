@@ -129,9 +129,7 @@ async def impact_metrics(db: AsyncSession = Depends(get_db)):
     return await _impact_payload(db)
 
 
-@router.get(
-    "/metrics/founding-members", dependencies=[Depends(_require_metrics_key)]
-)
+@router.get("/metrics/founding-members", dependencies=[Depends(_require_metrics_key)])
 async def founding_member_funnel(db: AsyncSession = Depends(get_db)):
     """Report progress toward the first 50 real founding-member conversions.
 

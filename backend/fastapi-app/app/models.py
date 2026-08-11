@@ -29,6 +29,7 @@ from app.allocation_compat import (
 )
 from app.database import Base
 
+
 class User(Base):
     __tablename__ = "users"
 
@@ -80,6 +81,7 @@ class User(Base):
         back_populates="user", uselist=False
     )
 
+
 class Profile(Base):
     __tablename__ = "profiles"
 
@@ -115,6 +117,7 @@ class Profile(Base):
 
     user: Mapped["User"] = relationship(back_populates="profile")
 
+
 class UserBlock(Base):
     __tablename__ = "user_blocks"
     __table_args__ = (
@@ -143,6 +146,7 @@ class UserBlock(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
+
 class Swipe(Base):
     __tablename__ = "swipes"
 
@@ -161,6 +165,7 @@ class Swipe(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
 
 class Match(Base):
     __tablename__ = "matches"
@@ -186,6 +191,7 @@ class Match(Base):
         DateTime(timezone=True), nullable=True
     )
 
+
 class Message(Base):
     __tablename__ = "messages"
 
@@ -208,6 +214,7 @@ class Message(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
 
 class WebhookEvent(Base):
     __tablename__ = "webhook_events"
@@ -235,6 +242,7 @@ class WebhookEvent(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
 
 class RevenueAllocation(Base):
     """Internal ledger for founder-directed platform revenue allocations."""
@@ -296,6 +304,7 @@ class RevenueAllocation(Base):
         DateTime(timezone=True), nullable=True
     )
 
+
 class Board(Base):
     __tablename__ = "boards"
 
@@ -310,6 +319,7 @@ class Board(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
 
 class Post(Base):
     __tablename__ = "posts"
@@ -333,6 +343,7 @@ class Post(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
+
 class Comment(Base):
     __tablename__ = "comments"
 
@@ -352,6 +363,7 @@ class Comment(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
 
 class Event(Base):
     __tablename__ = "events"
@@ -374,6 +386,7 @@ class Event(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
+
 class EventRSVP(Base):
     __tablename__ = "event_rsvps"
 
@@ -390,6 +403,7 @@ class EventRSVP(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
 
 class VolunteerOpportunity(Base):
     __tablename__ = "volunteer_opportunities"
@@ -414,6 +428,7 @@ class VolunteerOpportunity(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
+
 class VolunteerSignup(Base):
     __tablename__ = "volunteer_signups"
 
@@ -431,6 +446,7 @@ class VolunteerSignup(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
 
 class VerificationEvent(Base):
     """Tracks liveness verification attempts and their outcomes."""
@@ -464,6 +480,7 @@ class VerificationEvent(Base):
         DateTime(timezone=True), nullable=True
     )
 
+
 class DataPrivacyLog(Base):
     __tablename__ = "data_privacy_logs"
 
@@ -481,6 +498,7 @@ class DataPrivacyLog(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
 
 class SupportTicket(Base):
     __tablename__ = "support_tickets"
@@ -511,6 +529,7 @@ class SupportTicket(Base):
         onupdate=func.now(),
         nullable=False,
     )
+
 
 class UserReport(Base):
     __tablename__ = "user_reports"
@@ -543,6 +562,7 @@ class UserReport(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
+
 class VideoCall(Base):
     __tablename__ = "video_calls"
 
@@ -564,6 +584,7 @@ class VideoCall(Base):
         DateTime(timezone=True), nullable=True
     )
 
+
 class DoubleDateSession(Base):
     __tablename__ = "double_date_sessions"
 
@@ -580,6 +601,7 @@ class DoubleDateSession(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
 
 class DoubleDateAcceptance(Base):
     __tablename__ = "double_date_acceptances"
@@ -599,6 +621,7 @@ class DoubleDateAcceptance(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
 
 class MarketingContent(Base):
     """Persisted marketing content item produced by AI agents.

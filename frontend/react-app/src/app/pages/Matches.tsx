@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CalendarCheck, Heart, MessageCircle, ShieldCheck, Video } from 'lucide-react';
+import {
+  CalendarCheck,
+  Heart,
+  MessageCircle,
+  ShieldCheck,
+  Video,
+} from 'lucide-react';
 
 import { api } from '../../lib/api';
 
@@ -128,14 +134,14 @@ export function Matches() {
                       <Link
                         to={`/app/chat/${match.match_id}`}
                         className="flex h-12 w-12 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-transform group-hover:-translate-y-0.5"
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={e => e.stopPropagation()}
                       >
                         <MessageCircle size={18} />
                       </Link>
                       <Link
                         to={`/app/video/${match.match_id}`}
                         className="flex h-12 w-12 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-[#ff4f00] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-transform group-hover:-translate-y-0.5"
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={e => e.stopPropagation()}
                       >
                         <Video size={18} />
                       </Link>

@@ -1,0 +1,122 @@
+name: Yesterday's News Daily Brief
+
+on:
+  schedule:
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: yesterday-news-daily
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Briefs land on main only (one-branch policy) — pin the ref so a
+          # manual dispatch from another branch can't publish there.
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate daily brief
+        shell: bash
+        env:
+          ANTIGRAVITY_RUNTIME_ROOT: ${{ runner.temp }}/ag-runtime
+          NEWS_MODE: both
+          NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+          OMNI_BASE_URL: ${{ secrets.OMNI_BASE_URL }}
+          OMNIROUTE_KEY: ${{ secrets.OMNIROUTE_KEY }}
+          OMNI_MODEL: ${{ secrets.OMNI_MODEL }}
+        run: |
+          set -euo pipefail
+          python scripts/dashboard-aidoesitall/yesterday-news-today.py --mode generate
+
+      - name: Collect brief into repo content dir
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="${{ runner.temp }}/ag-runtime/yesterday-news/content"
+          if [ ! -d "$SRC" ] || [ -z "$(ls -A "$SRC")" ]; then
+            echo "No brief generated (feeds may have had no matching articles)."
+            exit 0
+          fi
+          mkdir -p content/yesterday-news
+          cp -r "$SRC"/. content/yesterday-news/
+
+      # Generated briefs copy external headline/summary text verbatim.
+      # Gate them against the business-only public-copy doctrine before they
+      # enter repository history — a hit fails the run for human review
+      # (the artifact upload below still preserves the content).
+      - name: Doctrine gate on generated content
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -d content/yesterday-news ]; then
+            exit 0
+          fi
+          # Campaign-specific markers only — generic words (kids, voting,
+          # investment) appear in ordinary news headlines and would
+          # false-fail the pipeline; those cases are caught at publish
+          # review, not here.
+          HITS=$(grep -rinE '\bdonat(e|ion|ions|ing)\b|\bcharit|\bfundrais|\bcrowdfund|buy\.stripe\.com|control[- ]rights|tax[- ]deductible|ownership[- ]sale|revenue[- ]split|founder[- ]cap|\bDAO\b|investment[- ]return|100% (to|of (net |gross )?proceeds)' content/yesterday-news/ || true)
+          if [ -n "$HITS" ]; then
+            echo "::error::Generated brief contains language requiring human review before commit:"
+            echo "$HITS"
+            git checkout -- content/yesterday-news 2>/dev/null || true
+            git clean -fd content/yesterday-news 2>/dev/null || true
+            exit 1
+          fi
+          echo "Doctrine gate: generated content clean"
+
+      - name: Upload brief artifact
+        # always() so a doctrine-gate failure still preserves the generated
+        # content for human review.
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: yesterday-news-brief
+          path: ${{ runner.temp }}/ag-runtime/yesterday-news/content/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Commit daily brief
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add content/yesterday-news || true
+
+          if git diff --cached --quiet; then
+            echo "No new brief content to commit."
+            exit 0
+          fi
+
+          git commit -m "chore(news): daily yesterday-news brief [skip ci]"
+
+          # main may have moved since checkout — rebase and retry so the
+          # brief isn't dropped on a non-fast-forward rejection. Our commit
+          # only adds content/yesterday-news/ files, so conflicts are
+          # effectively impossible; bail loudly if one ever happens.
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Push rejected (attempt $attempt) — rebasing on latest main"
+            git fetch origin main
+            git rebase origin/main || { echo "::error::Rebase conflict on generated content — manual review needed"; exit 1; }
+            sleep $((attempt * 5))
+          done
+          echo "::error::Push failed after 3 rebase attempts"
+          exit 1
