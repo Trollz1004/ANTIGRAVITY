@@ -11,10 +11,18 @@
 ## Global rules applied to every draft below
 
 - Business-only framing: membership, verification, safety, support, uptime, platform access.
-- Differentiator leads everywhere: **V8 Cloud Verification — every member is a verified human. Bots never get in.**
+- Differentiator leads everywhere: **V8 Cloud Verification — every member is a verified human. Built to keep bots out.**
 - Claim discipline: "verified human" is the provable claim. Do NOT promise "no catfish"
   (a verified human can still misrepresent themselves) or any "100%" guarantee unless
   Joshua explicitly approves that claim strength in writing.
+- **HARD BLOCKER (verified in code 2026-08-11):** the backend does not yet enforce
+  verification before interaction — `backend/fastapi-app/app/routers/swipe.py` and
+  `messages.py` contain no `verified` gate, so unverified accounts can currently
+  browse, match, and message. Every draft below claiming members "must pass
+  verification before they can interact" is inaccurate until that enforcement
+  ships. NO SUBMISSION until Joshua either (a) approves shipping the enforcement
+  gate (small backend change, ~3 routers) or (b) directs softening the copy to
+  verification-as-offered ("look for the verified badge").
 - **NO pricing figures appear in any draft.** Pricing statements must be copied verbatim
   from the live Square catalog at submission time. Placeholder used: `[PRICE — copy from Square catalog]`.
 - No fabricated metrics, no fabricated testimonials, no user-count claims.
@@ -55,7 +63,7 @@
 **Topics:** Dating, Social Networking, Safety
 
 **Short description:**
-> YouAndINotAI is a dating platform built around one promise: everyone you match with is a real, verified human. Our V8 Cloud Verification checks every member before they can interact, so every profile you see belongs to a real person — bots never get in. Membership includes verified access, human support, and a platform we run and operate ourselves.
+> YouAndINotAI is a dating platform built around one promise: everyone you match with is a real, verified human. Our V8 Cloud Verification checks every member before they can interact, so every profile you see belongs to a real, verified person. Membership includes verified access, human support, and a platform we run and operate ourselves.
 
 **Maker's first comment:**
 > Hey Product Hunt — maker here.
@@ -98,7 +106,7 @@
 **Startup name:** YouAndINotAI
 
 **Pitch (one-liner):**
-> A dating platform where every member is a verified human — bots never get in.
+> A dating platform where every member is a verified human — built to keep bots out.
 
 **Description:**
 > Online dating has a trust problem: you never know if the profile on the other side is a real person. YouAndINotAI fixes that at the door. Every member passes V8 Cloud Verification before they can interact with anyone on the platform. The result is a dating experience where every match, every message, and every profile is a verified human being.
@@ -117,7 +125,7 @@
 **Format:** Title + URL, with the text below posted as a first comment — or a text post if a comment-first approach is preferred. Plain voice, no marketing language, honest about limitations.
 
 **Title (<=80 chars):**
-> Show HN: YouAndINotAI – a dating site where every member is verified human
+> Show HN: YouAndINotAI – a dating site where every member is a verified human
 
 **Post text / first comment:**
 > Hi HN. I built a dating site with one core constraint: nobody can interact with anyone until they've passed human verification. The name is the pitch — you, and I, not AI.
@@ -151,9 +159,9 @@
 > I launched a dating platform where verification is the product, not a feature
 
 **Post:**
-> Every dating app says it fights bots. I decided to build one where bots structurally can't exist: nobody gets access to other members until they've passed human verification.
+> Every dating app says it fights bots. I decided to build one where verification comes first: nobody gets access to other members until they've passed human verification.
 >
-> The product is YouAndINotAI (youandinotai.com — the name is the positioning). The differentiator is V8 Cloud Verification: every member is checked before they can match or message. What members buy is simple — verified access, a bot-free environment, human support, and a platform we operate ourselves.
+> The product is YouAndINotAI (youandinotai.com — the name is the positioning). The differentiator is V8 Cloud Verification: every member is checked before they can match or message. What members buy is simple — verified access, a verified-human member pool, human support, and a platform we operate ourselves.
 >
 > Builder notes:
 > - I self-host on my own hardware behind Cloudflare tunnels. Higher ops burden, near-zero hosting bill, full control.
@@ -182,7 +190,7 @@
 > Dating platform where every member is a verified human. V8 Cloud Verification blocks bots before they can ever interact.
 
 **Full description:**
-> YouAndINotAI is an online dating platform built on mandatory human verification. Every member must pass V8 Cloud Verification before they can browse, match, or message — which means every profile on the platform belongs to a real, verified person. Bots never get in the door.
+> YouAndINotAI is an online dating platform built on mandatory human verification. Every member must pass V8 Cloud Verification before they can browse, match, or message — which means every profile on the platform belongs to a real, verified person — verification is designed to stop bots at the door.
 >
 > Membership includes verified platform access, a safety-first environment, human customer support, and an independently operated platform. Web-based; membership and verification checkout handled through Square.
 

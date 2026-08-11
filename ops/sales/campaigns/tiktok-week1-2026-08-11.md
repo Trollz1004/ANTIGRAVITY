@@ -11,9 +11,18 @@ Payments rail is Square — but pricing/checkout NEVER appears in TikTok copy. C
 
 ## 0. Before Anything: Claims Gate
 
+> **HARD BLOCKER (verified in code 2026-08-11):** the backend does not yet
+> enforce verification before interaction — `swipe.py` discover/match and
+> `messages.py` send_message contain no `verified` checks, so an unverified
+> account can currently browse, match, and message. Every script below that
+> says "verified before they can match/message/talk to you" is INACCURATE
+> until that gate ships (or the copy is softened to "every member is offered
+> verification / look for the verified badge"). Joshua decides: ship the
+> enforcement gate, or soften all scripts. NOTHING POSTS BEFORE THAT DECISION.
+
 Every slide below sells exactly one idea: **youandinotai.com human-verifies every profile, so you match with real people.**
 
-- APPROVED framing (pending founder confirmation, see end of file): "every profile passes human verification," "built to keep bots and catfish out," "verified-human matching," "real people, verified."
+- APPROVED framing (pending founder confirmation, see end of file): "every profile passes human verification," "built to keep bots out," "verified-human matching," "real people, verified."
 - BANNED in all copy: percentages or counts we can't source ("90% of matches are bots"), fake user quotes, "guaranteed," pricing, plan names, payment words, charity/mission language, Stripe (never), competitor defamation by name ("Tinder is full of bots" → say "most dating apps" instead).
 - Hooks may describe **relatable scenarios** (POV, "ever matched with…") — scenarios are honest; invented statistics are not.
 
@@ -28,7 +37,7 @@ Do all of this from the phone. One account per day max on a fresh device profile
 - [ ] Personal account type (NOT business) — personal accounts keep full trending-sound access, which slideshows need. Switch to business later only if we need the instant bio link.
 - [ ] Profile photo: brand-adjacent graphic from `/marketing-assets/youandinotai-public/` (no faces, no logos of other apps).
 - [ ] Bio set (copy below). Until TikTok unlocks the clickable bio link (typically 1K followers on personal accounts), the CTA lives in captions and final slides as plain text: "youandinotai.com".
-- [ ] Warm-up: Days 1–2, no promo. Spend 15–20 min/day scrolling dating-niche content, like/save/comment like a human, follow 10–15 niche creators. Post 1 non-promo slideshow each warm-up day (generic dating-red-flags content with NO app mention).
+- [ ] Warm-up: the first 2 calendar days after account creation (label them W1–W2 — these are NOT content Days 1–7), no promo. Spend 15–20 min/day scrolling dating-niche content, like/save/comment like a human, follow 10–15 niche creators. Post 1 non-promo slideshow each warm-up day (generic dating-red-flags content with NO app mention). Content DAY 1 starts only after W2 completes.
 - [ ] Turn on analytics (Creator tools → Analytics) day one so week-1 data exists.
 
 ### Account 1 — "Bot Radar" (anti-bot / spot-the-fake niche)
@@ -60,6 +69,8 @@ Format for every post: 5–7 image slides, big bold text (readable with sound of
 Assets: app screenshots + stock/aesthetic b-roll stills from `/marketing-assets/youandinotai-public/`. No faces of real users, no invented testimonials.
 
 Naming: D{day}-{A1|A2|A3}. Each script belongs to its account's angle. If a script overperforms, re-skin it (new images, same text) for the other two accounts 48+ hours later.
+
+Day numbering: DAY 1–7 below are CONTENT days. They begin only after each account finishes its W1–W2 warm-up (Section 1) — never post promo scripts during warm-up.
 
 ---
 
@@ -104,7 +115,7 @@ Naming: D{day}-{A1|A2|A3}. Each script belongs to its account's angle. If a scri
 - Slide 2: `Camera "broken." Always traveling. Photos never candid.`
 - Slide 3: `You shouldn't need detective skills to date →`
 - Slide 4: `youandinotai.com verifies every human before they ever appear in your matches.`
-- Slide 5: `The catfish can't get in the door.`
+- Slide 5: `Bots and mass-run fake accounts don't make it through the door.`
 - Slide 6 (CTA): `Skip the investigation. youandinotai.com`
 - Caption: `Three weeks. No video call. We all know. youandinotai.com`
 - Hashtags: `#catfish #onlinedating #datingstorytime #datingapps #redflags`
@@ -124,7 +135,7 @@ Naming: D{day}-{A1|A2|A3}. Each script belongs to its account's angle. If a scri
 - Slide 2: `It's your evenings. Your attention. Your hope.`
 - Slide 3: `Protect the resource that doesn't refill →`
 - Slide 4: `youandinotai.com — human-verified members only, so your time goes to real people.`
-- Slide 5: `You can't get scammed by someone who was never allowed in.`
+- Slide 5: `Verification is one strong filter — fewer fakes in the pool, fewer ways to get burned.`
 - Slide 6 (CTA): `Spend your time on humans. youandinotai.com`
 - Caption: `Nobody refunds you the three months you spent on a fake. youandinotai.com`
 - Hashtags: `#onlinedatingsafety #catfish #datingtips #selfrespect #datingapps`
@@ -368,4 +379,4 @@ Network-level: if all 3 angles hit KILL criteria, do NOT add accounts — this i
 4. Bio link destination and whether a UTM-tagged URL should replace the bare homepage once bio links unlock (needed for the FUNA-7 2%+ CTR measurement).
 5. Handle selections and whether these three angles are approved as the initial 3-of-5 FUNA-7 accounts.
 
-Nothing in this file is posted anywhere. No git operations performed. File awaits review.
+Nothing in this file is posted anywhere. File awaits founder review.
