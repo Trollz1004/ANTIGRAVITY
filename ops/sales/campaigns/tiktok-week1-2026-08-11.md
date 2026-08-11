@@ -113,7 +113,7 @@ Day numbering: DAY 1–7 below are CONTENT days. They begin only after each acco
 - Slide 2: `Replies in under 3 seconds. Every time. At 4am.`
 - Slide 3: `Their photos look perfect but reverse-search goes nowhere. There's an easier fix →`
 - Slide 4: `youandinotai.com — every profile passes human verification before it can match with you.`
-- Slide 5: `No guessing games. You talk to people, not scripts.`
+- Slide 5: `No guessing games. Every profile had to pass a human check to get in.`
 - Slide 6 (CTA): `Verified humans only. youandinotai.com`
 - Caption: `The 3am instant reply is never a good sign. Where do you see this the most? youandinotai.com`
 - Hashtags: `#datingapps #onlinedating #catfish #datingappfails #datingadvice #bots`
@@ -315,7 +315,7 @@ Day numbering: DAY 1–7 below are CONTENT days. They begin only after each acco
 **D7-A1 — "Verification, explained simply"**
 - Hook: `What "human verification" actually means (30 seconds)`
 - Slide 2: `Every account proves a real human is behind it — before it can match or message.`
-- Slide 3: `That single requirement removes bots, scripts, and mass-run fakes →`
+- Slide 3: `That single requirement blocks mass-run fakes at the door →`
 - Slide 4: `youandinotai.com is built on exactly that requirement.`
 - Slide 5: `Simple rule. Different experience.`
 - Slide 6 (CTA): `See it in action. youandinotai.com`

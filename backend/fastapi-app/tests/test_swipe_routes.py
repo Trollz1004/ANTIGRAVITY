@@ -11,6 +11,8 @@ import asyncio
 import uuid
 from datetime import datetime, timezone
 
+from sqlalchemy import select
+
 from app.auth import get_current_user
 from app.main import app
 from app.models import Match, Swipe, User
@@ -48,7 +50,13 @@ def test_swipe_self_returns_400(client, db_session_factory):
 def test_swipe_like_no_mutual_no_match(client, db_session_factory):
     actor = _make_user(email="actor2@example.com")
     target = _make_user(email="target2@example.com")
-    seed(actor, target, verified_profile(actor), db_session_factory=db_session_factory)
+    seed(
+        actor,
+        target,
+        verified_profile(actor),
+        verified_profile(target),
+        db_session_factory=db_session_factory,
+    )
     app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         resp = client.post(
@@ -65,7 +73,13 @@ def test_swipe_like_no_mutual_no_match(client, db_session_factory):
 def test_swipe_pass_never_creates_match(client, db_session_factory):
     actor = _make_user(email="actor3@example.com")
     target = _make_user(email="target3@example.com")
-    seed(actor, target, verified_profile(actor), db_session_factory=db_session_factory)
+    seed(
+        actor,
+        target,
+        verified_profile(actor),
+        verified_profile(target),
+        db_session_factory=db_session_factory,
+    )
     app.dependency_overrides[get_current_user] = override_user(actor)
     try:
         resp = client.post(
@@ -128,6 +142,7 @@ def test_duplicate_swipe_returns_409(client, db_session_factory):
             session.add(actor)
             session.add(target)
             session.add(verified_profile(actor))
+            session.add(verified_profile(target))
             session.add(existing)
             await session.commit()
 
@@ -139,6 +154,45 @@ def test_duplicate_swipe_returns_409(client, db_session_factory):
             "/api/v1/swipe", json={"target_id": str(target.id), "direction": "like"}
         )
         assert resp.status_code == 409
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_swipe_unverified_target_returns_404_and_never_stores_swipe(
+    client, db_session_factory
+):
+    """An unverified target (e.g. UUID obtained from the open event/
+    volunteering listings) must be rejected before any Swipe row is stored --
+    otherwise a later 409 permanently blocks retrying once they verify."""
+    actor = _make_user(email="actor_unverified_target@example.com")
+    target = _make_user(email="target_unverified@example.com")
+    seed(actor, target, verified_profile(actor), db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(actor)
+    try:
+        resp = client.post(
+            "/api/v1/swipe", json={"target_id": str(target.id), "direction": "like"}
+        )
+        assert resp.status_code == 404
+
+        async def _count_swipes():
+            async with db_session_factory() as session:
+                return (await session.scalars(select(Swipe))).all()
+
+        assert asyncio.run(_count_swipes()) == []
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_swipe_nonexistent_target_returns_404(client, db_session_factory):
+    actor = _make_user(email="actor_nonexistent_target@example.com")
+    seed(actor, verified_profile(actor), db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(actor)
+    try:
+        resp = client.post(
+            "/api/v1/swipe",
+            json={"target_id": str(uuid.uuid4()), "direction": "like"},
+        )
+        assert resp.status_code == 404
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 

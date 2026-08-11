@@ -38,6 +38,16 @@ async def swipe(
             status_code=403, detail="That profile is unavailable due to safety settings"
         )
 
+    # Reject an unverified (or nonexistent) target before ever storing the
+    # swipe. A target obtained from a surface that doesn't filter on
+    # verification (e.g. the intentionally open event/volunteering listings)
+    # must not get a Swipe row: once stored, a duplicate-swipe 409 would
+    # permanently block the caller from swiping again even after the target
+    # verifies, and swiped_subq would permanently hide them from discovery.
+    target_user = await db.get(User, payload.target_id)
+    if not target_user or not target_user.bot_shield_verified:
+        raise HTTPException(status_code=404, detail="Profile not found")
+
     # Check for duplicate swipe
     existing = await db.scalar(
         select(Swipe).where(
@@ -68,16 +78,10 @@ async def swipe(
                 Swipe.direction == "like",
             )
         )
-        # The target may have swiped before the verification gate existed, or
-        # may have lost verified status since. require_verified_profile only
-        # checks the caller; a match must not form unless both sides are
-        # currently verified, or the "every match is a verified human" claim
-        # breaks for legacy swipe rows. Checks the canonical
-        # User.bot_shield_verified flag, not the Profile.verified mirror.
-        target_verified = mutual and await db.scalar(
-            select(User.bot_shield_verified).where(User.id == payload.target_id)
-        )
-        if mutual and target_verified:
+        # target_user.bot_shield_verified was already confirmed True above
+        # (the swipe is rejected before it's ever stored if the target isn't
+        # currently verified), so no separate re-check is needed here.
+        if mutual:
             match = Match(
                 id=uuid.uuid4(),
                 user_a=user.id,

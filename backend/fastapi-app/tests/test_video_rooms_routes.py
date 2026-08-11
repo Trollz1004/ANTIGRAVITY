@@ -184,13 +184,15 @@ def test_create_room_without_api_key_returns_503(client, db_session_factory):
 # ── Live mode: successful Daily.co API call ───────────────────────────────────
 
 
-def _mock_daily_post(room_response, token_response):
-    """Route mocked POSTs by URL: room creation vs. meeting-token issuance."""
+def _mock_daily_post(create_response, token_response, update_response=None):
+    """Route mocked POSTs by URL: create vs. privatize-existing vs. token issuance."""
 
     async def _post(url, **kwargs):
         if url.endswith("/meeting-tokens"):
             return token_response
-        return room_response
+        if url == "https://api.daily.co/v1/rooms":
+            return create_response
+        return update_response
 
     return _post
 
@@ -388,7 +390,8 @@ def test_create_room_daily_connection_error_returns_502(client, db_session_facto
 
 
 def test_create_room_handles_existing_room_conflict(client, db_session_factory):
-    """If Daily.co returns 400 'already exists', router should retrieve existing room."""
+    """A pre-existing PRIVATE room (already created by this code) skips the
+    privatize step and goes straight to token issuance."""
     user = _make_user("rooms_existing@example.com")
     match = _seed_active_match(user, db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
@@ -402,7 +405,15 @@ def test_create_room_handles_existing_room_conflict(client, db_session_factory):
 
     get_response = MagicMock()
     get_response.status_code = 200
-    get_response.json.return_value = {"url": room_url, "name": room_name}
+    get_response.json.return_value = {
+        "url": room_url,
+        "name": room_name,
+        "privacy": "private",
+    }
+
+    update_response = MagicMock()
+    update_response.status_code = 200
+    update_response.json.return_value = {}
 
     token_response = MagicMock()
     token_response.status_code = 200
@@ -414,7 +425,9 @@ def test_create_room_handles_existing_room_conflict(client, db_session_factory):
             mock_settings.daily_api_key = "test-daily-key"
 
             mock_client = AsyncMock()
-            mock_client.post = _mock_daily_post(conflict_response, token_response)
+            mock_client.post = _mock_daily_post(
+                conflict_response, token_response, update_response
+            )
             mock_client.get = AsyncMock(return_value=get_response)
             mock_client.__aenter__ = AsyncMock(return_value=mock_client)
             mock_client.__aexit__ = AsyncMock(return_value=False)
@@ -427,5 +440,113 @@ def test_create_room_handles_existing_room_conflict(client, db_session_factory):
         assert data["room_url"] == room_url
         assert data["room_name"] == room_name
         assert data["token"] == "test-meeting-token"
+        # Already private -- no privatize call should have been needed.
+        update_response.json.assert_not_called()
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_create_room_privatizes_legacy_public_room(client, db_session_factory):
+    """A room left over from the pre-fix public-room code must be privatized
+    before a token is issued -- otherwise the token is meaningless, since
+    Daily still lets anyone with the URL join a public room without one."""
+    user = _make_user("rooms_legacy_public@example.com")
+    match = _seed_active_match(user, db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
+    match_id = match.id
+    room_name = f"match-{match_id}"
+    room_url = f"https://youandinotai.daily.co/{room_name}"
+
+    conflict_response = MagicMock()
+    conflict_response.status_code = 400
+    conflict_response.text = "Room already exists"
+
+    get_response = MagicMock()
+    get_response.status_code = 200
+    get_response.json.return_value = {
+        "url": room_url,
+        "name": room_name,
+        "privacy": "public",
+    }
+
+    update_response = MagicMock()
+    update_response.status_code = 200
+    update_response.json.return_value = {
+        "url": room_url,
+        "name": room_name,
+        "privacy": "private",
+    }
+
+    token_response = MagicMock()
+    token_response.status_code = 200
+    token_response.json.return_value = {"token": "test-meeting-token"}
+    token_response.text = ""
+
+    try:
+        with patch("app.routers.video_rooms.settings") as mock_settings:
+            mock_settings.daily_api_key = "test-daily-key"
+
+            mock_client = AsyncMock()
+            mock_client.post = _mock_daily_post(
+                conflict_response, token_response, update_response
+            )
+            mock_client.get = AsyncMock(return_value=get_response)
+            mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+            mock_client.__aexit__ = AsyncMock(return_value=False)
+
+            with patch("httpx.AsyncClient", return_value=mock_client):
+                resp = client.post(f"/api/v1/video/rooms/{match_id}")
+
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["room_url"] == room_url
+        assert data["room_name"] == room_name
+        assert data["token"] == "test-meeting-token"
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_create_room_privatize_failure_returns_502(client, db_session_factory):
+    """If Daily rejects the privatize call, never hand back a token for a
+    room that's still public."""
+    user = _make_user("rooms_privatize_fail@example.com")
+    match = _seed_active_match(user, db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
+    match_id = match.id
+    room_name = f"match-{match_id}"
+    room_url = f"https://youandinotai.daily.co/{room_name}"
+
+    conflict_response = MagicMock()
+    conflict_response.status_code = 400
+    conflict_response.text = "Room already exists"
+
+    get_response = MagicMock()
+    get_response.status_code = 200
+    get_response.json.return_value = {
+        "url": room_url,
+        "name": room_name,
+        "privacy": "public",
+    }
+
+    update_error_response = MagicMock()
+    update_error_response.status_code = 500
+    update_error_response.text = "Room update service unavailable"
+
+    try:
+        with patch("app.routers.video_rooms.settings") as mock_settings:
+            mock_settings.daily_api_key = "test-daily-key"
+
+            mock_client = AsyncMock()
+            mock_client.post = _mock_daily_post(
+                conflict_response, None, update_error_response
+            )
+            mock_client.get = AsyncMock(return_value=get_response)
+            mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+            mock_client.__aexit__ = AsyncMock(return_value=False)
+
+            with patch("httpx.AsyncClient", return_value=mock_client):
+                resp = client.post(f"/api/v1/video/rooms/{match_id}")
+
+        assert resp.status_code == 502
     finally:
         app.dependency_overrides.pop(get_current_user, None)

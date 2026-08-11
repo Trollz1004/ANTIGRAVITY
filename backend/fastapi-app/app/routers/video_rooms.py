@@ -98,6 +98,26 @@ async def create_video_room(
                 )
                 if get_response.status_code == 200:
                     room_data = get_response.json()
+                    # A room created by the pre-fix code (or otherwise left
+                    # public) must be privatized before handing out a token --
+                    # a token on a public room is meaningless, since Daily
+                    # still lets anyone with the URL join without one.
+                    if room_data.get("privacy") != "private":
+                        update_response = await client.post(
+                            f"https://api.daily.co/v1/rooms/{room_name}",
+                            headers={
+                                "Authorization": f"Bearer {settings.daily_api_key}",
+                                "Content-Type": "application/json",
+                            },
+                            json={"privacy": "private"},
+                            timeout=10.0,
+                        )
+                        if update_response.status_code != 200:
+                            raise HTTPException(
+                                status_code=502,
+                                detail=f"Daily.co API error: {update_response.text}",
+                            )
+                        room_data = update_response.json()
                     token = await _issue_meeting_token(
                         client, room_name=room_name, user=user, expiry=expiry
                     )
