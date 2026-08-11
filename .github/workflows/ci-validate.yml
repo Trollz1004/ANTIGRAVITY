@@ -388,12 +388,9 @@ jobs:
       - name: Run dependency audit
         run: |
           # Monorepo uses pnpm — npm audit requires a package-lock.json it doesn't have.
-          # Critical advisories block. High advisories warn pending a dedicated
-          # dependency-upgrade pass; the OWASP step above also blocks on CVSS >= 7.
-          npx -y pnpm@9.15.4 audit --audit-level critical
-          if ! npx -y pnpm@9.15.4 audit --audit-level high; then
-            echo "::warning::pnpm audit found high-severity vulnerabilities — schedule a dependency-upgrade pass"
-          fi
+          # High and critical advisories block (workspace was cleared to 1 low via
+          # pnpm overrides, 2026-08-11); the OWASP step above also blocks on CVSS >= 7.
+          npx -y pnpm@9.15.4 audit --audit-level high
 
       - name: Install pip-audit and run
         run: |

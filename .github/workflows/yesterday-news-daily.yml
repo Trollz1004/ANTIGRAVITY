@@ -60,7 +60,11 @@ jobs:
           if [ ! -d content/yesterday-news ]; then
             exit 0
           fi
-          HITS=$(grep -rinE '\bdonat(e|ion|ions|ing)\b|\bcharit|\bfundrais|buy\.stripe\.com|control[- ]rights|tax[- ]deductible' content/yesterday-news/ || true)
+          # Campaign-specific markers only — generic words (kids, voting,
+          # investment) appear in ordinary news headlines and would
+          # false-fail the pipeline; those cases are caught at publish
+          # review, not here.
+          HITS=$(grep -rinE '\bdonat(e|ion|ions|ing)\b|\bcharit|\bfundrais|\bcrowdfund|buy\.stripe\.com|control[- ]rights|tax[- ]deductible|ownership[- ]sale|revenue[- ]split|founder[- ]cap|\bDAO\b|investment[- ]return|100% (to|of (net |gross )?proceeds)' content/yesterday-news/ || true)
           if [ -n "$HITS" ]; then
             echo "::error::Generated brief contains language requiring human review before commit:"
             echo "$HITS"
