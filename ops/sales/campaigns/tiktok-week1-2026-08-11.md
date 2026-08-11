@@ -35,7 +35,7 @@ Do all of this from the phone. One account per day max on a fresh device profile
 ### Shared setup steps (repeat per account)
 - [ ] New email alias per account (no reuse). Record handle + email in the tracker table (Section 5), never passwords in this repo.
 - [ ] Personal account type (NOT business) — personal accounts keep full trending-sound access, which slideshows need. Switch to business later only if we need the instant bio link.
-- [ ] Profile photo: brand-adjacent graphic from `/marketing-assets/youandinotai-public/` (no faces, no logos of other apps).
+- [ ] Profile photo: brand-adjacent graphic from the repo's real asset pool `frontend/react-app/public/` (e.g. `bot-shield-logo.png`, `fingerprint-heart.jpg`, `faceless-avatar.svg` — no faces, no logos of other apps). Note: `/marketing-assets/youandinotai-public/` does not exist in this repo; if Joshua has a separate asset pack on the node, he supplies it, otherwise use the public/ pool.
 - [ ] Bio set (copy below). Until TikTok unlocks the clickable bio link (typically 1K followers on personal accounts), the CTA lives in captions and final slides as plain text: "youandinotai.com".
 - [ ] Warm-up: the first 2 calendar days after account creation (label them W1–W2 — these are NOT content Days 1–7), no promo. Spend 15–20 min/day scrolling dating-niche content, like/save/comment like a human, follow 10–15 niche creators. Post 1 non-promo slideshow each warm-up day (generic dating-red-flags content with NO app mention). Content DAY 1 starts only after W2 completes.
 - [ ] Turn on analytics (Creator tools → Analytics) day one so week-1 data exists.
@@ -56,8 +56,17 @@ Do all of this from the phone. One account per day max on a fresh device profile
 - Bio (draft): `Online dating, but safer. Verify before you trust. Human-verified matching → youandinotai.com`
 
 ### Link strategy
-- Week 1: plain-text CTA "youandinotai.com" in caption + final slide. No link shorteners, no Square/checkout URLs, no pricing pages — homepage only.
-- When bio link unlocks: point to `https://youandinotai.com` (founder may later approve a UTM-tagged landing URL; do not invent one).
+- **Attribution setup (LAUNCH BLOCKER — founder, ~10 min, before any promo post):** create three
+  Cloudflare redirect rules on youandinotai.com — `/tt1`, `/tt2`, `/tt3` → homepage — one per
+  account (A1=tt1, A2=tt2, A3=tt3). Each account's CTA then uses ITS path
+  (`youandinotai.com/tt1` etc.) in captions, final slides, and later the bio link. Cloudflare
+  analytics shows requests per path, which is the only way week-1 SCALE/HOLD/KILL can see
+  whether an account produced site visits — without this, conversion attribution is blind and
+  the experiment only measures TikTok-side engagement.
+- Week 1: plain-text CTA with the account's tracked path in caption + final slide. No link
+  shorteners, no Square/checkout URLs, no pricing pages — tracked homepage path only.
+- When bio link unlocks: point to `https://youandinotai.com/<account path>` (founder may later
+  approve full UTM tagging; do not invent other URLs).
 - Never put checkout links, pricing, or plan names anywhere on TikTok.
 
 ---
@@ -66,7 +75,7 @@ Do all of this from the phone. One account per day max on a fresh device profile
 
 Format for every post: 5–7 image slides, big bold text (readable with sound off), trending calm/aesthetic sound (pick day-of from the For You page — must be a currently-trending sound, commercial-safe). **App reveal lands on slide 3–4** (FUNA-7 bookmark-optimization rule), never the last slide. Final slide is always the CTA slide.
 
-Assets: app screenshots + stock/aesthetic b-roll stills from `/marketing-assets/youandinotai-public/`. No faces of real users, no invented testimonials.
+Assets: app screenshots + the repo's real image pool at `frontend/react-app/public/` (bot-shield/fingerprint-heart/card-art images work as slideshow backgrounds). Stock b-roll stills, if wanted, must be sourced by the operator from a licensed/free library (note the source per post). No faces of real users, no invented testimonials. (`/marketing-assets/youandinotai-public/` does not exist in this repo — do not reference it.)
 
 Naming: D{day}-{A1|A2|A3}. Each script belongs to its account's angle. If a script overperforms, re-skin it (new images, same text) for the other two accounts 48+ hours later.
 
@@ -216,7 +225,7 @@ Day numbering: DAY 1–7 below are CONTENT days. They begin only after each acco
 - Hook: `POV: you're flirting with 40 lines of code`
 - Slide 2: `It compliments you. It agrees with everything. It has one goal: a link.`
 - Slide 3: `Flirt with people instead →`
-- Slide 4: `youandinotai.com — verified-human members only. Code doesn't get a profile.`
+- Slide 4: `youandinotai.com — verified-human members only. Built to shut bots out.`
 - Slide 5: `Chemistry requires a pulse.`
 - Slide 6 (CTA): `Humans only. youandinotai.com`
 - Caption: `If they agree with literally everything… run. youandinotai.com`
@@ -344,8 +353,12 @@ Never: buy engagement, follow/unfollow churn, comment identical text across post
 
 ### Daily log (per post — keep in this folder as `tiktok-metrics-week1.md`, one row per post)
 
-| Date | Post ID | Acct | Views 3h | Views 24h | Likes | Comments | "What app?" count | Saves (bookmarks) | Shares | Profile visits | Follows | Notes |
-|------|---------|------|----------|-----------|-------|----------|--------------------|--------------------|--------|----------------|---------|-------|
+| Date | Post ID | Acct | Views 3h | Views 24h | Likes | Comments | "What app?" count | Saves (bookmarks) | Shares | Profile visits | Follows | Site visits (acct path, 24h) | Square orders same-day (founder-reported) | Notes |
+|------|---------|------|----------|-----------|-------|----------|--------------------|--------------------|--------|----------------|---------|------------------------------|-------------------------------------------|-------|
+
+Site visits come from Cloudflare analytics filtered to the account's `/tt*` path (see Link
+strategy — attribution is a launch blocker). Square orders are reported by the founder from the
+Square dashboard; log the count only, never customer details.
 
 Derived daily: bookmark rate = saves/views (target 2%+, FUNA-7), share rate = shares/views, comment quality = count of "what's the app" comments (FUNA-7 target: 5+/video at scale).
 
@@ -358,6 +371,9 @@ SCALE an account (move to 2–3 posts/day in week 2) if ALL of:
 - Median 24h views across its 7 promo posts ≥ 300
 - At least one post with bookmark rate ≥ 2% OR ≥ 3 "what app?" comments
 - Zero moderation strikes / content removals
+- Week-1 review MUST also record each account's total `/tt*` site visits and any same-day
+  Square orders — an account driving real site visits outranks one with prettier TikTok
+  numbers when deciding where week-2 effort goes
 
 HOLD an account (repeat week-1 cadence with rewritten hooks) if:
 - Median views 100–300, or engagement exists but no saves — the niche is right, hooks are weak. Rewrite hooks on the 3 best-saving scripts and rerun.
