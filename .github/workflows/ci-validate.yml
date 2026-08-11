@@ -392,6 +392,12 @@ jobs:
           # pnpm overrides, 2026-08-11); the OWASP step above also blocks on CVSS >= 7.
           npx -y pnpm@9.15.4 audit --audit-level high
 
+      - name: Audit frontend lockfile
+        working-directory: frontend/react-app
+        # The production frontend keeps its own npm lockfile outside the pnpm
+        # workspace — audit it separately (cleared to 2 moderates, 2026-08-11).
+        run: npm audit --audit-level=high
+
       - name: Install pip-audit and run
         run: |
           python -m pip install --upgrade pip
