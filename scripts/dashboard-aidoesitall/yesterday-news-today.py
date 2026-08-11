@@ -502,11 +502,14 @@ def main():
             import time
             time.sleep(3600)  # Check every hour
     else:
+        # Propagate failure so schedulers (GitHub Actions, Task Scheduler) go
+        # red instead of silently green when no brief was produced.
         if args.mode == "both":
-            bot.run("generate")
-            bot.run("publish")
+            ok = bot.run("generate")
+            ok = bot.run("publish") and ok
         else:
-            bot.run(args.mode)
+            ok = bot.run(args.mode)
+        sys.exit(0 if ok else 1)
 
 
 if __name__ == "__main__":

@@ -59,7 +59,7 @@ jobs:
       # Verify no Stripe links in built output
       - name: Check for stale Stripe links
         run: |
-          if grep -r "buy\.stripe\.com" apps/youandinotai-frontend/.next/ 2>/dev/null; then
+          if grep -r "buy\.stripe\.com" apps/youandinotai-frontend/.next/ frontend/react-app/dist/ 2>/dev/null; then
             echo "::error::Found Stripe links in built output — should be Square"
             exit 1
           fi
@@ -69,7 +69,7 @@ jobs:
       - name: Block Stripe wiring on dating surfaces
         run: |
           set -u
-          CANDIDATES=(apps/youandinotai-frontend backend/fastapi-app/app apps/mission-control-public)
+          CANDIDATES=(apps/youandinotai-frontend frontend/react-app/src backend/fastapi-app/app apps/mission-control-public)
           TARGETS=()
           for t in "${CANDIDATES[@]}"; do
             if [ -d "$t" ]; then
@@ -374,25 +374,25 @@ jobs:
           out: 'reports'
           args: '--failOnCVSS 7 --disableNodeAudit --disablePnpmAudit --disableYarnAudit'
 
-      - name: Run dependency audit (report-only)
+      - name: Run dependency audit
         run: |
           # Monorepo uses pnpm — npm audit requires a package-lock.json it doesn't have.
-          # Report-only for now: the workspace carries known pre-existing vulnerabilities
-          # that need a dedicated dependency-upgrade pass. The OWASP step above remains
-          # the blocking gate for CVSS >= 7 findings.
+          # Critical advisories block. High advisories warn pending a dedicated
+          # dependency-upgrade pass; the OWASP step above also blocks on CVSS >= 7.
+          npx -y pnpm@9.15.4 audit --audit-level critical
           if ! npx -y pnpm@9.15.4 audit --audit-level high; then
-            echo "::warning::pnpm audit found high/critical vulnerabilities — schedule a dependency-upgrade pass"
+            echo "::warning::pnpm audit found high-severity vulnerabilities — schedule a dependency-upgrade pass"
           fi
 
-      - name: Install pip-audit and run (report-only)
+      - name: Install pip-audit and run
         run: |
           python -m pip install --upgrade pip
           pip install pip-audit
-          # Audit the app's actual dependency manifest rather than the runner's
-          # preinstalled environment. Report-only pending a dependency-upgrade pass.
-          if ! pip-audit --strict -r backend/fastapi-app/requirements.txt; then
-            echo "::warning::pip-audit found vulnerable Python dependencies — schedule a dependency-upgrade pass"
-          fi
+          # Audit the app's dependency manifest. Blocking, with one documented
+          # exception: PYSEC-2026-1325 (ecdsa, transitive) has no fixed release
+          # yet — remove the ignore once upstream ships a patched version.
+          pip-audit --strict -r backend/fastapi-app/requirements.txt \
+            --ignore-vuln PYSEC-2026-1325
 
   # Aggregator gate — single required status check named "code".
   # Required by the "No extra repo branches" ruleset (Settings → Rules).
