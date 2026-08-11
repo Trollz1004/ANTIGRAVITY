@@ -187,6 +187,7 @@ def test_suitability_guard_middleware_logs_and_passes(client, db_session_factory
             session.add(alice)
             session.add(bob)
             session.add(verified_profile(alice))
+            session.add(verified_profile(bob))
             session.add(match)
             await session.commit()
 

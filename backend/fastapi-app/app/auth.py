@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.database import get_db
-from app.models import Profile, User
+from app.models import User
 from app.models_refresh_token import RefreshToken
 from app.subscriptions import sync_subscription_state
 
@@ -111,16 +111,23 @@ VERIFICATION_REQUIRED_DETAIL = (
 
 async def require_verified_profile(
     user: User = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db),
 ) -> User:
-    """Require the caller to have a verified profile.
+    """Require the caller to be verified.
 
     Interaction endpoints (discover, swipe, send message) depend on this
     instead of ``get_current_user`` so unverified accounts cannot browse,
-    match, or message. A missing profile counts as unverified.
+    match, or message.
+
+    Checks ``User.bot_shield_verified`` — the canonical flag every
+    verification path (``/verify/confirm``, beta-access grants) sets — not
+    ``Profile.verified``, which is only a best-effort mirror of it: a user
+    can be genuinely verified with no profile row yet (beta-access creates
+    one with no profile), or verified before their profile existed (the
+    mirror in ``promote_user_verification_if_ready`` only writes to a
+    profile that already exists at promotion time). Gating on the mirror
+    would 403 legitimately verified users.
     """
-    profile = await db.scalar(select(Profile).where(Profile.user_id == user.id))
-    if profile is None or not profile.verified:
+    if not user.bot_shield_verified:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=VERIFICATION_REQUIRED_DETAIL,

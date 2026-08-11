@@ -12,11 +12,16 @@ from app.models import Profile, User
 
 
 def verified_profile(user: User, **kwargs) -> Profile:
-    """Build a verified ``Profile`` for ``user``.
+    """Build a ``Profile`` for ``user`` and sync its verification state.
 
-    Interaction endpoints (discover, swipe, send message) require the caller
-    to have a verified profile, so route tests seed one for their actor.
+    Interaction endpoints (discover, swipe, send message) gate on
+    ``User.bot_shield_verified`` — the canonical flag every verification path
+    sets — not ``Profile.verified``, which is only a best-effort mirror of it
+    (see ``require_verified_profile``). This helper sets both from the same
+    ``verified`` kwarg so route tests only have one flag to reason about.
     """
+    verified = kwargs.get("verified", True)
+    user.bot_shield_verified = verified
     defaults: dict = {"id": uuid.uuid4(), "user_id": user.id, "verified": True}
     defaults.update(kwargs)
     return Profile(**defaults)

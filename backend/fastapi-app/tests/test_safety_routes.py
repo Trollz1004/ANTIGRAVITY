@@ -97,6 +97,8 @@ def test_discover_excludes_blocked_users(client, db_session_factory):
     visible_target = _make_user(
         email="visible_target@example.com", display_name="Visible Target"
     )
+    actor.bot_shield_verified = True
+    visible_target.bot_shield_verified = True
     actor_profile = _make_profile(actor)
     blocked_profile = _make_profile(blocked_target)
     visible_profile = _make_profile(visible_target)
@@ -138,6 +140,7 @@ def test_blocked_match_rejects_message_access(client, db_session_factory):
         blocked_id=target.id,
         reason="Stop contact",
     )
+    actor.bot_shield_verified = True
     seed(
         actor,
         target,

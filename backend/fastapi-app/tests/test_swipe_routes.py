@@ -94,6 +94,7 @@ def test_swipe_mutual_like_creates_match(client, db_session_factory):
             session.add(actor)
             session.add(target)
             session.add(verified_profile(actor))
+            session.add(verified_profile(target))
             session.add(mutual_swipe)
             await session.commit()
 

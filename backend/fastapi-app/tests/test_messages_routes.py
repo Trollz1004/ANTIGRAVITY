@@ -42,7 +42,14 @@ def test_get_messages_non_participant_returns_404(client, db_session_factory):
     user_a = _make_user(email="msg_a@example.com")
     user_b = _make_user(email="msg_b@example.com")
     match = _make_match(user_a, user_b)
-    seed(stranger, user_a, user_b, match, db_session_factory=db_session_factory)
+    seed(
+        stranger,
+        user_a,
+        user_b,
+        verified_profile(stranger),
+        match,
+        db_session_factory=db_session_factory,
+    )
 
     app.dependency_overrides[get_current_user] = override_user(stranger)
     try:
@@ -56,7 +63,13 @@ def test_get_messages_participant_returns_200_empty(client, db_session_factory):
     user_a = _make_user(email="get_msg_a@example.com")
     user_b = _make_user(email="get_msg_b@example.com")
     match = _make_match(user_a, user_b)
-    seed(user_a, user_b, match, db_session_factory=db_session_factory)
+    seed(
+        user_a,
+        user_b,
+        verified_profile(user_a),
+        match,
+        db_session_factory=db_session_factory,
+    )
 
     app.dependency_overrides[get_current_user] = override_user(user_a)
     try:
@@ -87,7 +100,15 @@ def test_get_messages_returns_oldest_first(client, db_session_factory):
         created_at=datetime(2025, 1, 1, 11, 0, 0, tzinfo=timezone.utc),
     )
 
-    seed(user_a, user_b, match, msg1, msg2, db_session_factory=db_session_factory)
+    seed(
+        user_a,
+        user_b,
+        verified_profile(user_a),
+        match,
+        msg1,
+        msg2,
+        db_session_factory=db_session_factory,
+    )
 
     app.dependency_overrides[get_current_user] = override_user(user_a)
     try:
@@ -103,7 +124,7 @@ def test_get_messages_returns_oldest_first(client, db_session_factory):
 
 def test_get_messages_unknown_match_returns_404(client, db_session_factory):
     user = _make_user(email="unknown_match_user@example.com")
-    seed(user, db_session_factory=db_session_factory)
+    seed(user, verified_profile(user), db_session_factory=db_session_factory)
 
     app.dependency_overrides[get_current_user] = override_user(user)
     try:
@@ -146,6 +167,7 @@ def test_send_message_returns_201_and_persists(client, db_session_factory):
         user_a,
         user_b,
         verified_profile(user_a),
+        verified_profile(user_b),
         match,
         db_session_factory=db_session_factory,
     )

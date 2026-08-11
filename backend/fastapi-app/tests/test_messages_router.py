@@ -73,7 +73,15 @@ def test_get_messages_returns_oldest_first(client, db_session_factory):
         content="second",
         created_at=datetime.now(timezone.utc),
     )
-    seed(alice, bob, match, old, new, db_session_factory=db_session_factory)
+    seed(
+        alice,
+        bob,
+        verified_profile(alice),
+        match,
+        old,
+        new,
+        db_session_factory=db_session_factory,
+    )
     app.dependency_overrides[get_current_user] = override_user(alice)
     try:
         resp = client.get(f"/api/v1/messages/{match.id}")
@@ -103,7 +111,15 @@ def test_get_messages_before_filter(client, db_session_factory):
         content="recent",
         created_at=datetime.now(timezone.utc),
     )
-    seed(alice, bob, match, stale, recent, db_session_factory=db_session_factory)
+    seed(
+        alice,
+        bob,
+        verified_profile(alice),
+        match,
+        stale,
+        recent,
+        db_session_factory=db_session_factory,
+    )
     app.dependency_overrides[get_current_user] = override_user(alice)
     try:
         cutoff = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
@@ -117,7 +133,14 @@ def test_get_messages_before_filter(client, db_session_factory):
 def test_get_messages_non_member_returns_404(client, db_session_factory):
     alice, bob, eve = _make_user(), _make_user(), _make_user()
     match = _make_match(alice, bob)
-    seed(alice, bob, eve, match, db_session_factory=db_session_factory)
+    seed(
+        alice,
+        bob,
+        eve,
+        verified_profile(eve),
+        match,
+        db_session_factory=db_session_factory,
+    )
     app.dependency_overrides[get_current_user] = override_user(eve)
     try:
         resp = client.get(f"/api/v1/messages/{match.id}")
@@ -155,6 +178,7 @@ def test_send_message_persists_and_broadcasts(
         alice,
         bob,
         verified_profile(alice),
+        verified_profile(bob),
         match,
         db_session_factory=db_session_factory,
     )
@@ -276,6 +300,7 @@ def test_ws_chat_full_roundtrip(client, db_session_factory, clean_connections):
         alice,
         bob,
         verified_profile(alice),
+        verified_profile(bob),
         match,
         db_session_factory=db_session_factory,
     )

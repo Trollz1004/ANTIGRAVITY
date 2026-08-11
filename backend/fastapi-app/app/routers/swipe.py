@@ -68,7 +68,16 @@ async def swipe(
                 Swipe.direction == "like",
             )
         )
-        if mutual:
+        # The target may have swiped before the verification gate existed, or
+        # may have lost verified status since. require_verified_profile only
+        # checks the caller; a match must not form unless both sides are
+        # currently verified, or the "every match is a verified human" claim
+        # breaks for legacy swipe rows. Checks the canonical
+        # User.bot_shield_verified flag, not the Profile.verified mirror.
+        target_verified = mutual and await db.scalar(
+            select(User.bot_shield_verified).where(User.id == payload.target_id)
+        )
+        if mutual and target_verified:
             match = Match(
                 id=uuid.uuid4(),
                 user_a=user.id,
@@ -174,16 +183,21 @@ async def discover(
     blocked_by_me = blocked_by_user_subquery(user.id)
     blocked_me = blocked_user_subquery(user.id)
 
-    # Get verified profiles excluding self and already-swiped
+    # Get verified profiles excluding self and already-swiped. Filters on
+    # User.bot_shield_verified (the canonical verification flag every
+    # verification path sets), not Profile.verified, which is only a
+    # best-effort mirror and can be stale or never-set for legitimately
+    # verified users (see require_verified_profile).
     profiles = (
         await db.scalars(
             select(Profile)
+            .join(User, User.id == Profile.user_id)
             .where(
                 Profile.user_id != user.id,
                 Profile.user_id.notin_(swiped_subq),
                 Profile.user_id.notin_(blocked_by_me),
                 Profile.user_id.notin_(blocked_me),
-                Profile.verified.is_(True),
+                User.bot_shield_verified.is_(True),
             )
             .order_by(func.random())
             .limit(limit)
