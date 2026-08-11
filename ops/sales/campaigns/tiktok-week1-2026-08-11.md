@@ -25,6 +25,12 @@ Every slide below sells exactly one idea: **youandinotai.com human-verifies ever
 - APPROVED framing (pending founder confirmation, see end of file): "every profile passes human verification," "built to keep bots out," "verified-human matching," "real people, verified."
 - BANNED in all copy: percentages or counts we can't source ("90% of matches are bots"), fake user quotes, "guaranteed," pricing, plan names, payment words, charity/mission language, Stripe (never), competitor defamation by name ("Tinder is full of bots" → say "most dating apps" instead).
 - Hooks may describe **relatable scenarios** (POV, "ever matched with…") — scenarios are honest; invented statistics are not.
+- **AFFILIATION DISCLOSURE (required, FTC endorsement guides + TikTok policy):** these are
+  company-operated accounts. Every bio states the affiliation plainly ("from the team behind
+  youandinotai.com") and every promo caption must read as self-promotion by the platform team —
+  never as an independent user's or reviewer's recommendation. No neutral-reviewer pretense,
+  no first-person "a stranger recommended this to me" framing. If a script reads like an
+  unaffiliated endorsement, add the team framing to its caption before posting.
 
 ---
 
@@ -43,17 +49,17 @@ Do all of this from the phone. One account per day max on a fresh device profile
 ### Account 1 — "Bot Radar" (anti-bot / spot-the-fake niche)
 - Angle: teaches people to spot bots, fake profiles, and catfish on dating apps. The app is the payoff: "or just use a platform that verifies humans."
 - Handle ideas (check availability): `botradar.dating`, `spotthebot.dating`, `notabot.check`
-- Bio (draft): `Spotting bots + fake profiles so you don't waste another swipe. Real, verified humans → youandinotai.com`
+- Bio (draft): `From the team behind youandinotai.com. Spotting bots + fake profiles so you don't waste another swipe.`
 
 ### Account 2 — "Dating App Audit" (reviewer / comparison niche)
-- Angle: deadpan "auditor" voice reviewing the state of online dating — what apps don't tell you, what verification should look like. Never names competitors negatively; says "most apps."
+- Angle: deadpan "auditor" voice on the state of online dating — what apps don't tell you, what verification should look like — CLEARLY as the youandinotai.com team's own perspective, never posing as an independent reviewer. Never names competitors negatively; says "most apps."
 - Handle ideas: `datingapp.audit`, `theswipe.audit`, `dating.fineprint`
-- Bio (draft): `Auditing how dating apps actually work. Verification matters. See it done right → youandinotai.com`
+- Bio (draft): `We build youandinotai.com. Auditing how dating apps handle verification — and how we do it.`
 
 ### Account 3 — "Swipe Safe" (safety-first niche, women-leaning audience)
 - Angle: online-dating safety habits — verifying who you're talking to, catfish red flags, safe first-date basics. Product fit: human verification as a safety layer.
 - Handle ideas: `swipesafe.club`, `verifiedfirst`, `safeswiping`
-- Bio (draft): `Online dating, but safer. Verify before you trust. Human-verified matching → youandinotai.com`
+- Bio (draft): `Online dating safety, from the team behind youandinotai.com. Verify before you trust.`
 
 ### Link strategy
 - **Attribution setup (LAUNCH BLOCKER — founder, ~10 min, before any promo post):** create three
@@ -63,6 +69,12 @@ Do all of this from the phone. One account per day max on a fresh device profile
   analytics shows requests per path, which is the only way week-1 SCALE/HOLD/KILL can see
   whether an account produced site visits — without this, conversion attribution is blind and
   the experiment only measures TikTok-side engagement.
+- **Honesty limit: attribution is VISITS-level in week 1.** The current checkout stores no
+  campaign tag (Path A static Square links; Path B `create_checkout_link` takes only a tier),
+  so an order can NEVER be attributed to an account — same-day order counts are context, not
+  proof of referral. Order-level attribution requires propagating a ref tag into the
+  account-bound checkout record; that is queued with the Square Path B work (see
+  ops/runbooks/YESTERDAY-NEWS-DROID-2026-08-10.md follow-up) and is NOT claimed by this plan.
 - Week 1: plain-text CTA with the account's tracked path in caption + final slide. No link
   shorteners, no Square/checkout URLs, no pricing pages — tracked homepage path only.
 - When bio link unlocks: point to `https://youandinotai.com/<account path>` (founder may later
@@ -358,7 +370,9 @@ Never: buy engagement, follow/unfollow churn, comment identical text across post
 
 Site visits come from Cloudflare analytics filtered to the account's `/tt*` path (see Link
 strategy — attribution is a launch blocker). Square orders are reported by the founder from the
-Square dashboard; log the count only, never customer details.
+Square dashboard; log the count only, never customer details. Order counts are CONTEXT ONLY —
+the checkout carries no campaign tag yet, so no order can be attributed to any account or to
+TikTok at all (see Link strategy honesty limit). Never report an order as "from TikTok".
 
 Derived daily: bookmark rate = saves/views (target 2%+, FUNA-7), share rate = shares/views, comment quality = count of "what's the app" comments (FUNA-7 target: 5+/video at scale).
 
