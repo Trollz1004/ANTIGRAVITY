@@ -77,12 +77,18 @@ async def list_posts(
     results = []
     for post in posts:
         author = await db.get(User, post.author_id)
+        # A post from a legacy unverified author (created before this gate,
+        # or whose author later lost verified status) must not surface to
+        # verified members -- same precedent as excluding unverified users
+        # from discover/matches.
+        if not author or not author.bot_shield_verified:
+            continue
         results.append(
             PostResponse(
                 id=post.id,
                 board_slug=slug,
                 author_id=post.author_id,
-                author_name=author.display_name if author else "Unknown",
+                author_name=author.display_name,
                 title=post.title,
                 body=post.body,
                 like_count=post.like_count,
@@ -144,11 +150,13 @@ async def list_comments(
     results = []
     for comment in comments:
         author = await db.get(User, comment.author_id)
+        if not author or not author.bot_shield_verified:
+            continue
         results.append(
             CommentResponse(
                 id=comment.id,
                 author_id=comment.author_id,
-                author_name=author.display_name if author else "Unknown",
+                author_name=author.display_name,
                 body=comment.body,
                 created_at=comment.created_at,
             )
@@ -168,6 +176,10 @@ async def create_comment(
 ) -> CommentResponse:
     post = await db.get(Post, post_id)
     if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    post_author = await db.get(User, post.author_id)
+    if not post_author or not post_author.bot_shield_verified:
         raise HTTPException(status_code=404, detail="Post not found")
 
     comment = Comment(
