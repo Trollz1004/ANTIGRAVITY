@@ -35,6 +35,10 @@ def _make_user(email: str = "video_user@example.com") -> User:
         display_name="Video Tester",
         date_of_birth=date(1991, 7, 22),
         is_active=True,
+        # /ws/video requires verification like every other interaction
+        # endpoint; this file tests signaling behavior, not the gate itself,
+        # so its actors are verified by default.
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )

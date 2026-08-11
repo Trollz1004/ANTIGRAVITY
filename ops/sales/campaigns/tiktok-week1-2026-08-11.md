@@ -13,12 +13,15 @@ Payments rail is Square — but pricing/checkout NEVER appears in TikTok copy. C
 
 > **BLOCKER STATUS (updated 2026-08-11):** the enforcement gate is CODED and
 > TESTED (959 passed, 95.39% coverage) in PR `claude/scc-followup-fixes` —
-> discover/swipe/messages now reject unverified callers with 403, and
-> discover excludes unverified profiles. NOT YET MERGED to main or deployed.
-> Every script below that says "verified before they can match/message/talk
-> to you" stays INACCURATE, and NOTHING POSTS, until Joshua merges that PR
-> and confirms the gate is live in production. Once confirmed live, delete
-> this notice.
+> discover/swipe/messages/`/ws/chat`/`/ws/video` now reject unverified callers,
+> and discover excludes unverified profiles. NOT YET MERGED to main or
+> deployed. Every script below that says "verified before they can
+> match/message/talk to you" stays INACCURATE, and NOTHING POSTS, until
+> Joshua merges that PR, confirms the gate is live in production, AND
+> confirms no other interaction surface was missed — the video-calling gap
+> was found by review after the gate was first called "coded," so this list
+> is provisional, not a completeness guarantee. Once confirmed complete and
+> live, delete this notice.
 
 Every slide below sells exactly one idea: **youandinotai.com human-verifies every profile, so you match with real people.**
 
@@ -270,7 +273,7 @@ Day numbering: DAY 1–7 below are CONTENT days. They begin only after each acco
 **D6-A1 — "The unmatch mystery"**
 - Hook: `Matched. Chatted. Account vanished. Again.`
 - Slide 2: `Disappearing accounts are the signature move of fake profiles.`
-- Slide 3: `Verification checks the human at the door — not disposable bot accounts →`
+- Slide 3: `Verification checks for a human at the door →`
 - Slide 4: `youandinotai.com — every member passed human verification to get in.`
 - Slide 5: `Ghosting by a real person: survivable. Talking to nobody: avoidable.`
 - Slide 6 (CTA): `Talk to people who exist. youandinotai.com`

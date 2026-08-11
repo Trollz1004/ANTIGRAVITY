@@ -57,11 +57,15 @@ def _clean_signaling_state():
 
 
 def _seed_pair(db_session_factory):
+    # /ws/video requires verification like every other interaction endpoint;
+    # this file tests signaling behavior, not the gate itself, so its actors
+    # are verified by default.
     alice = User(
         id=uuid.uuid4(),
         email=f"alice-{uuid.uuid4().hex[:8]}@example.com",
         password_hash="hashed",
         display_name="Alice",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -70,6 +74,7 @@ def _seed_pair(db_session_factory):
         email=f"bob-{uuid.uuid4().hex[:8]}@example.com",
         password_hash="hashed",
         display_name="Bob",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -104,6 +109,7 @@ def test_room_full_rejects_third_peer(client, ws_session_factory):
         email=f"carol-{uuid.uuid4().hex[:8]}@example.com",
         password_hash="hashed",
         display_name="Carol",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -218,6 +224,7 @@ def test_pairing_without_match_closes(client, ws_session_factory):
         email=f"n1-{uuid.uuid4().hex[:8]}@example.com",
         password_hash="hashed",
         display_name="N1",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -226,6 +233,7 @@ def test_pairing_without_match_closes(client, ws_session_factory):
         email=f"n2-{uuid.uuid4().hex[:8]}@example.com",
         password_hash="hashed",
         display_name="N2",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )

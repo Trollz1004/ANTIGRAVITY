@@ -16,12 +16,15 @@
   (a verified human can still misrepresent themselves) or any "100%" guarantee unless
   Joshua explicitly approves that claim strength in writing.
 - **BLOCKER STATUS (updated 2026-08-11):** the enforcement gate (`require_verified_profile`
-  on discover/swipe/messages, 403 for unverified callers, unverified profiles excluded
-  from discover) is CODED and TESTED (959 passed, 95.39% coverage) in PR
-  `claude/scc-followup-fixes` — but NOT YET MERGED to main / deployed. Every draft below
-  claiming members "must pass verification before they can interact" stays inaccurate,
-  and NO SUBMISSION happens, until Joshua merges that PR and confirms it's live in
-  production. Once live, this line can be deleted.
+  on discover/swipe/messages/`/ws/chat`/`/ws/video`, 403 or WS-close for unverified callers,
+  unverified profiles excluded from discover) is CODED and TESTED (959 passed, 95.39%
+  coverage) in PR `claude/scc-followup-fixes` — but NOT YET MERGED to main / deployed. Every
+  draft below claiming members "must pass verification before they can interact" stays
+  inaccurate, and NO SUBMISSION happens, until Joshua merges that PR, confirms it's live in
+  production, AND confirms no other interaction surface (e.g. any future call/media/upload
+  endpoint) was missed — the video-calling gap was caught by review after the first "coded"
+  claim, so treat this list as provisional until a full audit, not proof of completeness.
+  Once confirmed complete and live, this line can be deleted.
 - **NO pricing figures appear in any draft.** Pricing statements must be copied verbatim
   from the live Square catalog at submission time. Placeholder used: `[PRICE — copy from Square catalog]`.
 - No fabricated metrics, no fabricated testimonials, no user-count claims.

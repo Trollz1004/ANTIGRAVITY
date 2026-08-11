@@ -126,7 +126,12 @@ async def get_matches(
                 photos=(other_profile.photos or []) if other_profile else [],
                 matched_at=match.matched_at,
                 last_message_at=match.last_message_at,
-                verified=(other_profile.verified if other_profile else False),
+                # Profile.verified is only a best-effort mirror of the
+                # canonical User.bot_shield_verified flag (see
+                # require_verified_profile) -- serialize the canonical one so
+                # a verified beta-access/pre-profile user doesn't show as
+                # unverified in the UI.
+                verified=(other_user.bot_shield_verified if other_user else False),
                 subscription_active=(
                     user_has_active_subscription(other_user) if other_user else False
                 ),
@@ -166,7 +171,8 @@ async def get_match(
         photos=(other_profile.photos or []) if other_profile else [],
         matched_at=match.matched_at,
         last_message_at=match.last_message_at,
-        verified=(other_profile.verified if other_profile else False),
+        # Canonical flag, not the Profile.verified mirror -- see get_matches above.
+        verified=other_user.bot_shield_verified,
         subscription_active=user_has_active_subscription(other_user),
         breeze_bypass_enabled=match.breeze_bypass_enabled,
     )
@@ -218,7 +224,8 @@ async def discover(
                 photos=profile.photos or [],
                 interests=profile.interests or [],
                 location=profile.location,
-                verified=profile.verified,
+                # Canonical flag, not the Profile.verified mirror -- see get_matches above.
+                verified=profile_user.bot_shield_verified,
                 subscription_active=user_has_active_subscription(profile_user),
                 engagement_score=profile_user.engagement_score,
                 member_badge=profile_user.member_badge,
