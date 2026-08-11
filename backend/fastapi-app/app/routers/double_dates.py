@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
+from app.auth import require_verified_profile
 from app.database import get_db
 from app.models import DoubleDateAcceptance, DoubleDateSession, Match, Profile, User
 from app.schemas import (
@@ -101,7 +101,7 @@ async def _get_user_match_id(
 @router.post("/propose", response_model=DoubleDateSessionResponse, status_code=201)
 async def propose_double_date(
     payload: DoubleDateProposeRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> DoubleDateSessionResponse:
     if payload.match_a_id == payload.match_b_id:
@@ -173,7 +173,7 @@ async def propose_double_date(
 
 @router.get("", response_model=list[DoubleDateSessionResponse])
 async def list_double_dates(
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> list[DoubleDateSessionResponse]:
     user_match_ids = (
@@ -256,7 +256,7 @@ async def _set_acceptance(
 @router.post("/{session_id}/accept", response_model=DoubleDateSessionResponse)
 async def accept_double_date(
     session_id: uuid.UUID,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> DoubleDateSessionResponse:
     session, user_match_id = await _load_participant_session(
@@ -289,7 +289,7 @@ async def accept_double_date(
 @router.post("/{session_id}/decline", response_model=DoubleDateSessionResponse)
 async def decline_double_date(
     session_id: uuid.UUID,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> DoubleDateSessionResponse:
     session, user_match_id = await _load_participant_session(db, session_id, user.id)
@@ -305,7 +305,7 @@ async def decline_double_date(
     "/squad-recommendations", response_model=list[DoubleDateSquadRecommendation]
 )
 async def get_squad_recommendations(
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> list[DoubleDateSquadRecommendation]:
     """Recommend matches for double-dates based on engagement score."""

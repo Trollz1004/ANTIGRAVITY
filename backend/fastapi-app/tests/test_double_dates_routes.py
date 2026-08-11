@@ -13,6 +13,7 @@ def test_propose_and_accept_double_date(client, db_session_factory):
         email="a1@example.com",
         password_hash="hashed",
         display_name="Alex",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -21,6 +22,7 @@ def test_propose_and_accept_double_date(client, db_session_factory):
         email="a2@example.com",
         password_hash="hashed",
         display_name="Jordan",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -29,6 +31,7 @@ def test_propose_and_accept_double_date(client, db_session_factory):
         email="b1@example.com",
         password_hash="hashed",
         display_name="Taylor",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -37,6 +40,7 @@ def test_propose_and_accept_double_date(client, db_session_factory):
         email="b2@example.com",
         password_hash="hashed",
         display_name="Morgan",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -132,6 +136,7 @@ def test_squad_recommendations_sort_by_engagement_score(client, db_session_facto
         email="initiator@example.com",
         password_hash="hashed",
         display_name="Initiator",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )

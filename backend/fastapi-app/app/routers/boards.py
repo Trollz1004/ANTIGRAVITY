@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
+from app.auth import get_current_user, require_verified_profile
 from app.config import get_settings
 from app.database import get_db
 from app.models import Board, Comment, Post, SupportTicket, User
@@ -55,7 +55,7 @@ async def list_boards(
 @router.get("/{slug}/posts", response_model=list[PostResponse])
 async def list_posts(
     slug: str,
-    _user: User = Depends(get_current_user),
+    _user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
     limit: int = 30,
     offset: int = 0,
@@ -96,7 +96,7 @@ async def list_posts(
 async def create_post(
     slug: str,
     payload: PostCreateRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> PostResponse:
     board = await db.scalar(select(Board).where(Board.slug == slug))
@@ -130,7 +130,7 @@ async def create_post(
 async def list_comments(
     slug: str,
     post_id: uuid.UUID,
-    _user: User = Depends(get_current_user),
+    _user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> list[CommentResponse]:
     comments = (
@@ -163,7 +163,7 @@ async def create_comment(
     slug: str,
     post_id: uuid.UUID,
     payload: CommentCreateRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> CommentResponse:
     post = await db.get(Post, post_id)

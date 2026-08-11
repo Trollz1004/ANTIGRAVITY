@@ -114,6 +114,13 @@ async def get_matches(
         if await has_block_relationship(db, user_a=user.id, user_b=other_id):
             continue
         other_user = await db.get(User, other_id)
+        # Legacy matches (formed before this gate, or where the other side
+        # lost verified status) must not surface an unverified member's
+        # name/photos/metadata to a verified caller -- discover and new
+        # matches already exclude unverified members entirely; the match
+        # list should too, same as send_message closing the conversation.
+        if not other_user or not other_user.bot_shield_verified:
+            continue
         other_profile = await db.scalar(
             select(Profile).where(Profile.user_id == other_id)
         )
@@ -160,9 +167,11 @@ async def get_match(
         raise HTTPException(status_code=404, detail="Match not found")
 
     other_user = await db.get(User, other_id)
-    other_profile = await db.scalar(select(Profile).where(Profile.user_id == other_id))
-    if not other_user:
+    # Same as get_matches above: don't surface a legacy match whose other
+    # participant is unverified.
+    if not other_user or not other_user.bot_shield_verified:
         raise HTTPException(status_code=404, detail="Match not found")
+    other_profile = await db.scalar(select(Profile).where(Profile.user_id == other_id))
 
     return MatchResponse(
         match_id=match.id,

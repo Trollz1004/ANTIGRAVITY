@@ -200,6 +200,7 @@ def test_get_matches_returns_active_match(client, db_session_factory):
     actor = _make_user(email="matches_actor@example.com")
     actor.bot_shield_verified = True
     other = _make_user(email="matches_other@example.com")
+    other.bot_shield_verified = True
     match = Match(
         id=uuid.uuid4(),
         user_a=actor.id,

@@ -388,6 +388,7 @@ class TestSwipeGaps:
 
         alice, bob = _make_user("ma"), _make_user("mb")
         alice.bot_shield_verified = True
+        bob.bot_shield_verified = True
         match = Match(
             id=uuid.uuid4(),
             user_a=alice.id,
@@ -420,6 +421,7 @@ class TestSwipeGaps:
 
         alice, bob, ghost = _make_user("la"), _make_user("lb"), uuid.uuid4()
         alice.bot_shield_verified = True
+        bob.bot_shield_verified = True
         match_ok = Match(
             id=uuid.uuid4(),
             user_a=alice.id,

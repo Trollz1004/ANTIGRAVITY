@@ -68,6 +68,7 @@ def test_list_boards_idempotent(client, db_session_factory):
 
 def test_list_posts_empty(client, db_session_factory):
     user = _make_user(email="posts_empty@example.com")
+    user.bot_shield_verified = True
     seed(user, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
     try:
@@ -81,6 +82,7 @@ def test_list_posts_empty(client, db_session_factory):
 
 def test_list_posts_unknown_board_returns_404(client, db_session_factory):
     user = _make_user(email="posts_404@example.com")
+    user.bot_shield_verified = True
     seed(user, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
     try:
@@ -95,6 +97,7 @@ def test_list_posts_unknown_board_returns_404(client, db_session_factory):
 
 def test_create_post_returns_201(client, db_session_factory):
     user = _make_user(email="post_create@example.com", display_name="Alice")
+    user.bot_shield_verified = True
     seed(user, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
     try:
@@ -114,6 +117,7 @@ def test_create_post_returns_201(client, db_session_factory):
 
 def test_create_post_unknown_board_returns_404(client, db_session_factory):
     user = _make_user(email="post_404@example.com")
+    user.bot_shield_verified = True
     seed(user, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
     try:
@@ -131,6 +135,7 @@ def test_create_post_unknown_board_returns_404(client, db_session_factory):
 
 def test_list_comments_empty(client, db_session_factory):
     user = _make_user(email="comments_empty@example.com")
+    user.bot_shield_verified = True
     seed(user, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
     try:
@@ -152,6 +157,7 @@ def test_list_comments_empty(client, db_session_factory):
 
 def test_create_comment_returns_201(client, db_session_factory):
     user = _make_user(email="comment_create@example.com", display_name="Bob")
+    user.bot_shield_verified = True
     seed(user, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
     try:
@@ -176,6 +182,7 @@ def test_create_comment_returns_201(client, db_session_factory):
 
 def test_create_comment_unknown_post_returns_404(client, db_session_factory):
     user = _make_user(email="comment_404@example.com")
+    user.bot_shield_verified = True
     seed(user, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
     try:
@@ -194,6 +201,7 @@ def test_create_comment_unknown_post_returns_404(client, db_session_factory):
 
 def test_report_post_returns_200(client, db_session_factory):
     user = _make_user(email="report_post@example.com")
+    user.bot_shield_verified = True
     seed(user, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
     try:
