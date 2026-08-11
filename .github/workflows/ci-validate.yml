@@ -124,7 +124,7 @@ jobs:
           # monorepo restructure; the FastAPI app now lives at backend/fastapi-app/app/.
           # Pre-existing grep was passing silently when youandinotai-api/app/ disappeared
           # because grep exited 2 (error) and `if grep ...; then` only fires on exit 0.
-          CANDIDATES=(apps/youandinotai-frontend backend/fastapi-app/app)
+          CANDIDATES=(apps/youandinotai-frontend frontend/react-app/src backend/fastapi-app/app)
           TARGETS=()
           for t in "${CANDIDATES[@]}"; do
             if [ -d "$t" ]; then
