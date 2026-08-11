@@ -33,7 +33,7 @@
     "Good News Network"
   ],
   "story_count": 5,
-  "source_note": "This run predates the per-story URL fix in yesterday-news-today.py (2026-08-11) — the RSS parser did not capture <link> at generation time, so individual article URLs for this brief were not preserved and are not reconstructed here. Only the feed homepage (https://www.goodnewsnetwork.org) is verifiable for this date. Every brief generated after the fix carries a 'sources' array with a real url per story in metadata.json.",
+  "source_note": "This run predates the per-story URL fix in yesterday-news-today.py (2026-08-11) — the RSS parser did not capture <link> at generation time, so individual article URLs for this brief were not preserved and are not reconstructed here. Only the feed homepage (https://www.goodnewsnetwork.org) is verifiable for this date. Every brief generated after the fix carries a 'sources' array with title/source/url per story; url is populated when the feed or API supplies one and is an empty string otherwise (not every RSS item includes a <link>).",
   "polish": {
     "by": "claude-producer",
     "at": "2026-08-11",
