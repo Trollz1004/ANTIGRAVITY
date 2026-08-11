@@ -47,7 +47,7 @@ either one producing a brief is a green day.
 |---|---|---|
 | `NEWSAPI_KEY` | Better headlines via NewsAPI | Optional. Without it the RSS fallback runs keyless. Repo secret for cloud; `.env` on node. |
 | `OMNI_BASE_URL` | Cloud-model script generation | Optional. OmniRouter-compatible endpoint. On-LAN default is `http://127.0.0.1:11436`; the Actions runner can only use it once a routed/public endpoint exists. Unset ⇒ template script. |
-| `OMNI_API_KEY` | Auth to the above | Optional; sent as Bearer only if set. |
+| `OMNIROUTE_KEY` | Auth to the above | Optional; canonical OmniRoute auth var (AGENT-DOCTRINE.md), sent as Bearer only if set. `OMNI_API_KEY` accepted as a legacy alias. |
 | `OMNI_MODEL` | Model override | Optional; defaults to `auto` (router picks the tier). |
 | YouTube login | `--mode publish` | Not an API key: a persistent logged-in Playwright browser profile on the publishing node. Log in once (interactive, Joshua at the keyboard) with `python scripts/dashboard-aidoesitall/social-engine-24x7.py --login youtube`. Note `scripts/clawx-control/daemon-login.py` is a retired shim that only prints guidance. |
 

@@ -34,7 +34,7 @@ Write-Host "Script: $ScriptPath" -ForegroundColor Gray
 Write-Host "Log: $LogPath" -ForegroundColor Gray
 Write-Host "Runtime root: $RuntimeRoot" -ForegroundColor Gray
 Write-Host "Requires: NEWSAPI_KEY in E:\ANTIGRAVITY\.env for NewsAPI, otherwise RSS fallback is used" -ForegroundColor Gray
-Write-Host "Optional: OMNI_BASE_URL / OMNI_MODEL / OMNI_API_KEY in E:\ANTIGRAVITY\.env for cloud-model script generation via OmniRouter" -ForegroundColor Gray
+Write-Host "Optional: OMNI_BASE_URL / OMNI_MODEL / OMNIROUTE_KEY in E:\ANTIGRAVITY\.env for cloud-model script generation via OmniRouter" -ForegroundColor Gray
 Write-Host ""
 Write-Host "To manage the task:" -ForegroundColor Yellow
 Write-Host "  Start: Start-ScheduledTask -TaskName '$TaskName'" -ForegroundColor Gray

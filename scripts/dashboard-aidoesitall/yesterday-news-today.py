@@ -285,7 +285,12 @@ class YesterdayNewsBot:
         ).encode("utf-8")
 
         headers = {"Content-Type": "application/json"}
-        api_key = os.getenv("OMNI_API_KEY", "").strip()
+        # OMNIROUTE_KEY is the canonical auth var (AGENT-DOCTRINE.md);
+        # OMNI_API_KEY kept as a compatibility alias.
+        api_key = (
+            os.getenv("OMNIROUTE_KEY", "").strip()
+            or os.getenv("OMNI_API_KEY", "").strip()
+        )
         if api_key:
             headers["Authorization"] = f"Bearer {api_key}"
 

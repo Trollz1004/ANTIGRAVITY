@@ -56,14 +56,24 @@ jobs:
           npm ci
           npm run build
 
-      # Verify no Stripe links in built output
+      # Verify no Stripe links in built output. Build the operand list from
+      # directories that exist — grep exits 2 (error) on a missing operand even
+      # when another operand matched, which would skip the failure branch.
       - name: Check for stale Stripe links
         run: |
-          if grep -r "buy\.stripe\.com" apps/youandinotai-frontend/.next/ frontend/react-app/dist/ 2>/dev/null; then
+          BUILT=()
+          for d in apps/youandinotai-frontend/.next frontend/react-app/dist; do
+            [ -d "$d" ] && BUILT+=("$d")
+          done
+          if [ ${#BUILT[@]} -eq 0 ]; then
+            echo "::error::No built frontend output found to scan — build step should have produced one"
+            exit 1
+          fi
+          if grep -r "buy\.stripe\.com" "${BUILT[@]}"; then
             echo "::error::Found Stripe links in built output — should be Square"
             exit 1
           fi
-          echo "No Stripe links found in build output"
+          echo "No Stripe links found in build output: ${BUILT[*]}"
 
       # Stripe AUP guard -- dating surfaces must never initialize Stripe.
       - name: Block Stripe wiring on dating surfaces

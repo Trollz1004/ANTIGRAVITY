@@ -31,7 +31,7 @@ jobs:
           NEWS_MODE: both
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
           OMNI_BASE_URL: ${{ secrets.OMNI_BASE_URL }}
-          OMNI_API_KEY: ${{ secrets.OMNI_API_KEY }}
+          OMNIROUTE_KEY: ${{ secrets.OMNIROUTE_KEY }}
           OMNI_MODEL: ${{ secrets.OMNI_MODEL }}
         run: |
           set -euo pipefail
