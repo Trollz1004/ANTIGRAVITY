@@ -56,6 +56,7 @@ def _make_match(user_a: User, user_b: User, *, status: str = "active") -> Match:
 
 def test_block_user_closes_match_and_hides_it_from_matches(client, db_session_factory):
     actor = _make_user(email="safety_actor@example.com", display_name="Actor")
+    actor.bot_shield_verified = True
     target = _make_user(email="safety_target@example.com", display_name="Target")
     match = _make_match(actor, target)
     seed(actor, target, match, db_session_factory=db_session_factory)

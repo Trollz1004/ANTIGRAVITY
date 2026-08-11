@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user, require_verified_profile
+from app.auth import require_verified_profile
 from app.database import get_db
 from app.models import Match, Profile, Swipe, User
 from app.moderation import (
@@ -94,7 +94,7 @@ async def swipe(
 
 @router.get("/matches", response_model=list[MatchResponse])
 async def get_matches(
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> list[MatchResponse]:
     matches = (
@@ -144,7 +144,7 @@ async def get_matches(
 @router.get("/matches/{match_id}", response_model=MatchResponse)
 async def get_match(
     match_id: uuid.UUID,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> MatchResponse:
     match = await db.get(Match, match_id)
@@ -238,7 +238,7 @@ async def discover(
 async def toggle_breeze_bypass(
     match_id: uuid.UUID,
     enabled: bool,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ):
     """Breeze Bypass: Toggle zero-chat handshake mode for a specific match."""

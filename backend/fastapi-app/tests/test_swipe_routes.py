@@ -185,6 +185,7 @@ def test_swipe_actor_without_profile_returns_403(client, db_session_factory):
 
 def test_get_matches_empty(client, db_session_factory):
     actor = _make_user(email="matches_empty@example.com")
+    actor.bot_shield_verified = True
     seed(actor, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(actor)
     try:
@@ -197,6 +198,7 @@ def test_get_matches_empty(client, db_session_factory):
 
 def test_get_matches_returns_active_match(client, db_session_factory):
     actor = _make_user(email="matches_actor@example.com")
+    actor.bot_shield_verified = True
     other = _make_user(email="matches_other@example.com")
     match = Match(
         id=uuid.uuid4(),
@@ -293,6 +295,7 @@ def test_discover_excludes_unverified_profiles(client, db_session_factory):
 
 def test_breeze_bypass_toggle(client, db_session_factory):
     actor = _make_user(email="breeze_actor@example.com")
+    actor.bot_shield_verified = True
     other = _make_user(email="breeze_other@example.com")
     match = Match(
         id=uuid.uuid4(),
@@ -322,6 +325,7 @@ def test_breeze_bypass_toggle(client, db_session_factory):
 
 def test_breeze_bypass_non_participant_returns_404(client, db_session_factory):
     actor = _make_user(email="breeze_actor2@example.com")
+    actor.bot_shield_verified = True
     user_a = _make_user(email="breeze_a@example.com")
     user_b = _make_user(email="breeze_b@example.com")
     match = Match(
