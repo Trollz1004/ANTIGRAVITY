@@ -64,38 +64,36 @@ async def list_posts(
     if not board:
         raise HTTPException(status_code=404, detail="Board not found")
 
-    posts = (
-        await db.scalars(
-            select(Post)
-            .where(Post.board_id == board.id)
+    # Join and filter on the author's verification BEFORE offset/limit --
+    # filtering in Python after the SQL page was cut would silently drop
+    # verified posts that fell past the page boundary once legacy
+    # unverified posts were excluded, and neither board client in the
+    # frontend advances `offset`, so those posts would become permanently
+    # invisible instead of just reordered.
+    rows = (
+        await db.execute(
+            select(Post, User)
+            .join(User, User.id == Post.author_id)
+            .where(Post.board_id == board.id, User.bot_shield_verified.is_(True))
             .order_by(Post.created_at.desc())
             .offset(offset)
             .limit(limit)
         )
     ).all()
 
-    results = []
-    for post in posts:
-        author = await db.get(User, post.author_id)
-        # A post from a legacy unverified author (created before this gate,
-        # or whose author later lost verified status) must not surface to
-        # verified members -- same precedent as excluding unverified users
-        # from discover/matches.
-        if not author or not author.bot_shield_verified:
-            continue
-        results.append(
-            PostResponse(
-                id=post.id,
-                board_slug=slug,
-                author_id=post.author_id,
-                author_name=author.display_name,
-                title=post.title,
-                body=post.body,
-                like_count=post.like_count,
-                created_at=post.created_at,
-            )
+    return [
+        PostResponse(
+            id=post.id,
+            board_slug=slug,
+            author_id=post.author_id,
+            author_name=author.display_name,
+            title=post.title,
+            body=post.body,
+            like_count=post.like_count,
+            created_at=post.created_at,
         )
-    return results
+        for post, author in rows
+    ]
 
 
 @router.post("/{slug}/posts", response_model=PostResponse, status_code=201)

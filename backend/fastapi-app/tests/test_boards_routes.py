@@ -160,6 +160,69 @@ def test_list_posts_excludes_unverified_author(client, db_session_factory):
         app.dependency_overrides.pop(get_current_user, None)
 
 
+def test_list_posts_pagination_does_not_hide_verified_post_behind_unverified(
+    client, db_session_factory
+):
+    """Filtering must happen before offset/limit -- a newer unverified post
+    must not push an older verified post off the page (neither board client
+    advances `offset`, so a post pushed off is invisible for good)."""
+    reader = _make_user(email="posts_pagination_reader@example.com")
+    reader.bot_shield_verified = True
+    unverified_author = _make_user(
+        email="posts_pagination_unverified@example.com",
+        display_name="Unverified Author",
+    )
+    verified_author = _make_user(
+        email="posts_pagination_verified@example.com", display_name="Verified Author"
+    )
+    verified_author.bot_shield_verified = True
+
+    board = Board(
+        id=uuid.uuid4(),
+        name="Pagination Board",
+        slug="pagination-board",
+        description="",
+    )
+    older_verified_post = Post(
+        id=uuid.uuid4(),
+        board_id=board.id,
+        author_id=verified_author.id,
+        title="Older verified post",
+        body="Should still be visible",
+        created_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+    )
+    newer_unverified_post = Post(
+        id=uuid.uuid4(),
+        board_id=board.id,
+        author_id=unverified_author.id,
+        title="Newer legacy post",
+        body="Should be excluded",
+        created_at=datetime(2026, 1, 2, tzinfo=timezone.utc),
+    )
+    seed(
+        reader,
+        unverified_author,
+        verified_author,
+        board,
+        older_verified_post,
+        newer_unverified_post,
+        db_session_factory=db_session_factory,
+    )
+
+    app.dependency_overrides[get_current_user] = override_user(reader)
+    try:
+        # limit=1: the naive newest-first-then-filter approach would fetch
+        # only the newer unverified post, filter it out, and return [] --
+        # hiding the older verified post entirely.
+        resp = client.get("/api/v1/boards/pagination-board/posts?limit=1")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert len(data) == 1
+        assert data[0]["title"] == "Older verified post"
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
 # ── GET /api/v1/boards/{slug}/posts/{post_id}/comments ───────────────────────
 
 
