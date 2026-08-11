@@ -18,14 +18,17 @@ GitHub Actions (daily 11:00 UTC ≈ 06:00 ET)
        └─ commits content/yesterday-news/YYYYMMDD/{script.txt, metadata.json}
             + uploads same as a workflow artifact (14-day retention)
 
-9020 node (local mirror, Windows Task Scheduler "YesterdayNewsToday", daily 06:00)
+OPTIONAL legacy local mirror (Windows Task Scheduler "YesterdayNewsToday", daily 06:00)
   scripts/dashboard-aidoesitall/setup-yesterday-news-scheduler.ps1  (register once)
   scripts/dashboard-aidoesitall/start-yesterday-news.bat            (manual run)
   └─ same generator, writes %USERPROFILE%\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\
 ```
 
-The cloud path runs even when every node is off. The two paths are independent;
-either one producing a brief is a green day.
+The GitHub Actions path is PRIMARY and runs even when every node is off. The
+local mirror is the bot's original 9020 deployment (its own header carries that
+founder assignment) — but current doctrine leaves 9020's role undecided, so do
+NOT register the scheduled task on any node until Joshua explicitly assigns the
+node role. The scripts are kept working for whichever node he picks.
 
 ## How a node picks up and publishes
 
@@ -64,7 +67,8 @@ ROUTINES
          script.txt (the bot names output by the day it reports on — the
          Aug 11 run writes 20260810)
   on-miss: open the yesterday-news-daily.yml run in Actions; then check feeds;
-           then check 9020 scheduled task "YesterdayNewsToday"
+           then, if a local mirror node has been assigned, check its
+           scheduled task "YesterdayNewsToday"
 ```
 
 ## Troubleshooting
@@ -73,7 +77,7 @@ ROUTINES
   run in GitHub Actions. "No brief generated" in the collect step means the
   feeds had no articles dated yesterday — check `NEWS_MODE` (workflow uses
   `both`) and feed health in the run log.
-- **No brief today (9020):** `Get-ScheduledTask YesterdayNewsToday` → check
+- **No brief today (local mirror, if a node is assigned):** `Get-ScheduledTask YesterdayNewsToday` → check
   `%USERPROFILE%\Documents\ANTIGRAVITY-RUNTIME\logs\yesterday-news-today.log`.
 - **`generator: template` every day despite OMNI secrets:** endpoint
   unreachable from the runner — the bot logs `OmniRouter script generation
