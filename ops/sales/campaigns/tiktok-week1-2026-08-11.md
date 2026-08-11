@@ -20,8 +20,16 @@ Payments rail is Square — but pricing/checkout NEVER appears in TikTok copy. C
 > Joshua merges that PR, confirms the gate is live in production, AND
 > confirms no other interaction surface was missed — the video-calling gap
 > was found by review after the gate was first called "coded," so this list
-> is provisional, not a completeness guarantee. Once confirmed complete and
-> live, delete this notice.
+> is provisional, not a completeness guarantee. Separately, `POST
+> /auth/beta-access` creates a founding-member account with
+> `bot_shield_verified=True` on possession of a valid code alone, without
+> running the human challenge — so "every profile passes human
+> verification" (the approved framing below, and several slides throughout
+> this file) stays false for beta members even once the gate above is
+> live. Deleting this notice also requires Joshua to either narrow those
+> claims to exclude beta access, or change beta-access to run the same
+> human challenge as standard signup. Once BOTH conditions are confirmed,
+> delete this notice.
 
 Every slide below sells exactly one idea: **youandinotai.com human-verifies every profile, so you match with real people.**
 
