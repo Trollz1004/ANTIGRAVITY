@@ -16,6 +16,7 @@ on:
       - '.github/workflows/ci-validate.yml'
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   paperweight-tests:
