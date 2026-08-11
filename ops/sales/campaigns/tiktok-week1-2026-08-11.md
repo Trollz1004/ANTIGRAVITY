@@ -270,8 +270,8 @@ Day numbering: DAY 1–7 below are CONTENT days. They begin only after each acco
 **D6-A1 — "The unmatch mystery"**
 - Hook: `Matched. Chatted. Account vanished. Again.`
 - Slide 2: `Disappearing accounts are the signature move of fake profiles.`
-- Slide 3: `Verified members are real people, not disposable bot accounts →`
-- Slide 4: `youandinotai.com — humans verified at the door, so the account across from you isn't a script.`
+- Slide 3: `Verification checks the human at the door — not disposable bot accounts →`
+- Slide 4: `youandinotai.com — every member passed human verification to get in.`
 - Slide 5: `Ghosting by a real person: survivable. Talking to nobody: avoidable.`
 - Slide 6 (CTA): `Talk to people who exist. youandinotai.com`
 - Caption: `The vanish isn't rejection — it usually wasn't a person. youandinotai.com`
