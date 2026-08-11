@@ -106,7 +106,7 @@ Your primary responsibilities:
 
 **Analytics Tool Stack Recommendations**:
 1. **Core Analytics**: Google Analytics 4, Mixpanel, or Amplitude
-2. **Revenue**: RevenueCat, Stripe Analytics
+2. **Revenue**: Square Dashboard / Square reporting APIs (canonical for youandinotai.com — the only place real conversions and payment failures live); Stripe Analytics only for approved non-dating product lines
 3. **Attribution**: Adjust, AppsFlyer, Branch
 4. **Heatmaps**: Hotjar, FullStory
 5. **Dashboards**: Tableau, Looker, custom solutions
