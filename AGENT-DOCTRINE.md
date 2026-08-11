@@ -70,12 +70,20 @@ and do not treat old Pieces memories as live truth.
 
 The shared memory system is now in-repo markdown, versioned with the code:
 
-- **Journals** — append-only per-seat journal/wheel-log files (the
-  wheel-log pattern at `paperclip-tro/agents/ceo/wheel-log-*.md`,
-  generalized per seat). Short, evidence-backed, timestamped entries.
-- **STATE.md files** — the session diary convention
-  (`ops/ceo-harness/STATE.md` template, ≤15 lines, overwritten each
-  session): what changed, nodes, TODO, quota.
+- **Per-seat journals** — append-only files under
+  `.agents/memory/private/<seat>/` (seats exist today for fcc-claude,
+  hermes, ollama-worker, opencode-worker; add a directory for a new
+  seat). Short, evidence-backed, timestamped entries. Never overwrite
+  another seat's journal.
+- **Shared cross-lane state** — `.agents/memory/shared/`: append durable
+  cross-lane facts to `ledger.jsonl`, keep `current-state.md` and
+  `open-issues.md` updated. This is the merge point between lanes —
+  append/update, never wholesale overwrite, so one lane's session-end
+  write cannot erase another lane's handoff.
+- **STATE.md session diaries** — the `ops/ceo-harness/STATE.md`
+  convention (≤15 lines, overwritten each session by its single owning
+  seat): what changed, nodes, TODO, quota. Overwrite applies only to a
+  seat's own diary, never to shared files.
 - **Graphify** — the graph *view* over the workspace
   (`graphify-out/graph.html`); a visualization of state, not a separate
   store of truth.
@@ -92,12 +100,13 @@ Every session, each of the 4 lanes should, at minimum:
 1. State what tools are actually available this session (OmniRoute
    reachable? journal path writable?) — don't assume last session's
    tool list still holds.
-2. Read its own journal/seat file before acting (Claude: wheel-log at
-   `paperclip-tro/agents/ceo/`; Hermes/OpenClaw/FCC: their own seat dirs
-   once created — not yet built, see Open Items below).
-3. Write a short status line to its journal and, for anything
-   durable/cross-lane-relevant, to the shared STATE.md before ending
-   the session.
+2. Read its own journal/seat file before acting
+   (`.agents/memory/private/<seat>/`, plus
+   `.agents/memory/shared/current-state.md` for the cross-lane picture).
+3. Write a short status line to its own journal and, for anything
+   durable/cross-lane-relevant, append it to
+   `.agents/memory/shared/ledger.jsonl` (and update `current-state.md`)
+   before ending the session.
 
 This is a lightweight convention, not new infrastructure — it matches
 the wheel-log pattern already in live use at the CEO seat
