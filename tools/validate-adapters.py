@@ -19,7 +19,13 @@ import re
 import sys
 from pathlib import Path
 
-import yaml
+# PyYAML is only needed for YAML manifests under a root adapters/ directory.
+# The pre-commit hook runs with `language: system`, so keep the import lazy
+# to avoid ModuleNotFoundError in bare environments where nothing needs it.
+try:
+    import yaml
+except ImportError:
+    yaml = None
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PACKAGES_DIR = REPO_ROOT / "paperclip" / "packages" / "adapters"
@@ -84,6 +90,9 @@ def validate_root_manifests(failures: list) -> int:
             continue
         checked += 1
         rel = manifest.relative_to(REPO_ROOT)
+        if manifest.suffix != ".json" and yaml is None:
+            fail(f"{rel}: PyYAML required to validate YAML manifests (pip install pyyaml)", failures)
+            continue
         try:
             text = manifest.read_text(encoding="utf-8")
             data = json.loads(text) if manifest.suffix == ".json" else yaml.safe_load(text)
