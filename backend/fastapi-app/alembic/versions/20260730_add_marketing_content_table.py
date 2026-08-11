@@ -59,7 +59,5 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index(
-        "ix_marketing_content_created_by", table_name="marketing_content"
-    )
+    op.drop_index("ix_marketing_content_created_by", table_name="marketing_content")
     op.drop_table("marketing_content")

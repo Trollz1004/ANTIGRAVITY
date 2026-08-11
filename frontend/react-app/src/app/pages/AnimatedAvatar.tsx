@@ -49,7 +49,14 @@ export function AnimatedAvatar() {
       ctx.clearRect(0, 0, w, h);
 
       // Soft vignette background
-      const g = ctx.createRadialGradient(w / 2, h / 2, w * 0.1, w / 2, h / 2, w * 0.7);
+      const g = ctx.createRadialGradient(
+        w / 2,
+        h / 2,
+        w * 0.1,
+        w / 2,
+        h / 2,
+        w * 0.7
+      );
       g.addColorStop(0, '#1a1428');
       g.addColorStop(1, '#0a0a0f');
       ctx.fillStyle = g;
@@ -123,10 +130,12 @@ export function AnimatedAvatar() {
       <div className="mb-2 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-[var(--km-accent)]">
         Animate
       </div>
-      <h1 className="text-2xl font-semibold tracking-tight">Photo → living avatar</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">
+        Photo → living avatar
+      </h1>
       <p className="mt-2 text-sm text-[var(--km-muted)]">
-        Soft motion only — no face-swap identity games. Your verification badge stays on the real
-        you.
+        Soft motion only — no face-swap identity games. Your verification badge
+        stays on the real you.
       </p>
 
       <div className="km-card mt-6 flex flex-col items-center p-5">
@@ -164,11 +173,19 @@ export function AnimatedAvatar() {
               />
             </label>
             <div className="flex flex-wrap gap-2">
-              <button type="button" className="km-btn-ghost" onClick={() => setPlaying(p => !p)}>
+              <button
+                type="button"
+                className="km-btn-ghost"
+                onClick={() => setPlaying(p => !p)}
+              >
                 {playing ? <Pause size={16} /> : <Play size={16} />}
                 {playing ? 'Pause' : 'Play'}
               </button>
-              <button type="button" className="km-btn-ghost" onClick={downloadPng}>
+              <button
+                type="button"
+                className="km-btn-ghost"
+                onClick={downloadPng}
+              >
                 <Download size={16} /> Snapshot
               </button>
               <label className="km-btn-ghost cursor-pointer">
@@ -187,13 +204,19 @@ export function AnimatedAvatar() {
 
       <div className="km-card mt-4 p-4 text-sm text-[var(--km-muted)]">
         <div className="mb-1 flex items-center gap-2 font-semibold text-[var(--km-text)]">
-          <Sparkles size={16} className="text-[var(--km-accent)]" /> How it works
+          <Sparkles size={16} className="text-[var(--km-accent)]" /> How it
+          works
         </div>
-        Client-side canvas breath + parallax. Server deep-animation endpoint can plug in later at{' '}
-        <code className="text-xs">POST /api/v1/avatar/animate</code> without changing this UI.
+        Client-side canvas breath + parallax. Server deep-animation endpoint can
+        plug in later at{' '}
+        <code className="text-xs">POST /api/v1/avatar/animate</code> without
+        changing this UI.
       </div>
 
-      <Link to="/app/create" className="km-btn-ghost mt-4 inline-flex no-underline">
+      <Link
+        to="/app/create"
+        className="km-btn-ghost mt-4 inline-flex no-underline"
+      >
         Back to Create
       </Link>
     </div>

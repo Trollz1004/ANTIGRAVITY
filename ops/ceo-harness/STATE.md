@@ -4,24 +4,21 @@ Short. Overwrite each session, don't let this grow. If it's longer than ~15 line
 
 ## Last session
 ```
-Date: 2026-07-22
-Changed: Built ops/ceo-harness/*. Pointed live CEO agent's Capabilities field
-  at ONE-ENTRY-POINT.md. Merged Josh's standing-facts correction: Laptop is
-  browser/control seat only, NOT a live Paperclip instance (T5500 is).
-  Added Hermes GUI (9119) / OpenClaw (18789) port distinction. Committed
-  locally: 9e319a7 "Add CEO agent harness...". 1 commit ahead of
-  origin/main, NOT pushed yet -- Cowork bridge has no network for git push.
-Nodes: CONFIRMED -- Paperclip/Hermes runs on T5500, not Sabretooth, not
-  Laptop. OmniRoute gate host (Sabretooth vs Laptop) still open.
-Ornith: not pulled anywhere yet. T5500 is the priority node.
-Git note: bridge git leaves stale .git/*.lock and objects/tmp_obj_* files
-  after every call (can't unlink, only mv -- moved 13+ into
-  C:\clean\_to_delete\, safe to delete that folder anytime). Repo itself is
-  clean and correct; only debris is cosmetic.
-TODO: (1) Josh runs `git push origin main` from his own client -- commit is
-  already made, nothing else to stage. (2) Pull ornith:9b on T5500 first.
-  (3) OmniRoute gate host still needs confirming.
-Quota: n/a this session
+Date: 2026-08-10
+Changed: Added .claude/agents/ roster (42 agents, doctrine-injected) +
+  judge-panel rule. Fixed ci-validate.yml broken YAML (stray rebase line).
+  Fixed yesterday-news bot paths (parents[2], social_engine import,
+  ps1/bat E:\ paths) + optional OmniRouter cloud script gen (OMNI_* env).
+  New workflow yesterday-news-daily.yml (11:00 UTC daily -> commits
+  content/yesterday-news/). Runbook ops/runbooks/YESTERDAY-NEWS-DROID-*.
+  Branch claude/droid-automation-setup-1fgft2, PR to main.
+Nodes: unchanged (cloud session; no node access).
+Ornith: retired per Josh -- cloud models via OmniRouter instead.
+TODO: (1) merge PR; (2) optional repo secrets NEWSAPI_KEY / OMNIROUTE_KEY;
+  (3) Square Path B config on T5500 (see runbook); (4) YouTube login on 9020;
+  (5) fix 9 pre-existing frontend TS errors (VideoCall user.id, dialog prop,
+  socket.io-client, validation.ts) then enable tsc --noEmit gate in CI.
+Quota: ok
 ```
 
 ## Template for next update

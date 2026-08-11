@@ -56,7 +56,8 @@ const DEMO_PROFILES: Profile[] = [
     verified: true,
     subscription_active: true,
     gender: 'female',
-    prompt: 'My ideal first date is coffee, a bookstore, and no pressure to perform.',
+    prompt:
+      'My ideal first date is coffee, a bookstore, and no pressure to perform.',
     intent: 'Relationship ready',
     availability: 'Free this weekend',
     compatibility: 'Shared pace and safety-first dating',
@@ -73,7 +74,8 @@ const DEMO_PROFILES: Profile[] = [
     verified: true,
     subscription_active: false,
     gender: 'male',
-    prompt: 'Green flag: you can make a plan and still leave room for real life.',
+    prompt:
+      'Green flag: you can make a plan and still leave room for real life.',
     intent: 'Open to serious',
     availability: 'Weeknights after 7',
     compatibility: 'Same distance range and meetup comfort',
@@ -118,7 +120,8 @@ const DEMO_PROFILES: Profile[] = [
     verified: true,
     subscription_active: false,
     gender: 'nonbinary',
-    prompt: 'The best plans are simple: public place, easy exit, good conversation.',
+    prompt:
+      'The best plans are simple: public place, easy exit, good conversation.',
     intent: 'See where it goes',
     availability: 'Friday evening',
     compatibility: 'Shared date comfort and interests',

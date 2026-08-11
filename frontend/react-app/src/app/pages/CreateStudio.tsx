@@ -38,9 +38,14 @@ export function CreateStudio() {
         <div className="mt-4 flex items-center justify-between">
           <div>
             <div className="text-sm font-semibold">Free Plan</div>
-            <div className="text-xs text-[var(--km-muted)]">Upgrade unlocks Elite tools</div>
+            <div className="text-xs text-[var(--km-muted)]">
+              Upgrade unlocks Elite tools
+            </div>
           </div>
-          <Link to="/app/preorder" className="km-btn-gradient px-5 py-2.5 text-sm no-underline">
+          <Link
+            to="/app/preorder"
+            className="km-btn-gradient px-5 py-2.5 text-sm no-underline"
+          >
             Upgrade
           </Link>
         </div>
@@ -82,16 +87,24 @@ export function CreateStudio() {
       <section className="mt-8 flex min-h-[280px] flex-col items-center justify-center text-center">
         {tab === 'character' && (
           <>
-            <div className="mb-3 text-sm text-[var(--km-muted)]">No Character</div>
+            <div className="mb-3 text-sm text-[var(--km-muted)]">
+              No Character
+            </div>
             <p className="mb-6 max-w-xs text-sm text-[var(--km-muted)]">
-              Start with your real photos. Optionally animate one photo into a soft looping avatar
-              for chat — you stay verified human.
+              Start with your real photos. Optionally animate one photo into a
+              soft looping avatar for chat — you stay verified human.
             </p>
             <div className="flex flex-col gap-3 w-full max-w-xs">
-              <Link to="/app/profile" className="km-btn-gradient w-full justify-center no-underline">
+              <Link
+                to="/app/profile"
+                className="km-btn-gradient w-full justify-center no-underline"
+              >
                 <Wand2 size={18} /> Start Creating
               </Link>
-              <Link to="/app/avatar" className="km-btn-ghost w-full justify-center no-underline">
+              <Link
+                to="/app/avatar"
+                className="km-btn-ghost w-full justify-center no-underline"
+              >
                 <Sparkles size={18} /> Animate my photo
               </Link>
             </div>
@@ -103,8 +116,8 @@ export function CreateStudio() {
             <ImageIcon className="mb-3 text-[var(--km-muted)]" size={36} />
             <div className="mb-2 text-sm font-semibold">Image studio</div>
             <p className="mb-6 max-w-xs text-sm text-[var(--km-muted)]">
-              Upload profile photos. AI only helps with framing/safety checks — never fakes who you
-              are.
+              Upload profile photos. AI only helps with framing/safety checks —
+              never fakes who you are.
             </p>
             <Link to="/app/profile" className="km-btn-gradient no-underline">
               Manage photos
@@ -117,9 +130,13 @@ export function CreateStudio() {
             <Video className="mb-3 text-[var(--km-muted)]" size={36} />
             <div className="mb-2 text-sm font-semibold">Video dates</div>
             <p className="mb-6 max-w-xs text-sm text-[var(--km-muted)]">
-              Face-to-face calls with matches. Camera stays off until both accept.
+              Face-to-face calls with matches. Camera stays off until both
+              accept.
             </p>
-            <Link to="/app/video-lobby" className="km-btn-gradient no-underline">
+            <Link
+              to="/app/video-lobby"
+              className="km-btn-gradient no-underline"
+            >
               Open video lobby
             </Link>
           </>

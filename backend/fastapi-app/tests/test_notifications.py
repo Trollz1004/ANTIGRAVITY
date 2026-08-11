@@ -129,7 +129,9 @@ class TestWebSocketEndpoint:
 
         app.dependency_overrides[get_current_user] = _noop
         try:
-            with client.websocket_connect(f"/api/v1/ws/notifications?token={token}") as ws:
+            with client.websocket_connect(
+                f"/api/v1/ws/notifications?token={token}"
+            ) as ws:
                 json.loads(ws.receive_text())  # connected ack
 
                 resp = client.post(
