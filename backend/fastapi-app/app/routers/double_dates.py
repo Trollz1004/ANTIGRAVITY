@@ -288,6 +288,17 @@ async def accept_double_date(
     session, user_match_id = await _load_participant_session(
         db, session_id, user.id, reject_declined=True
     )
+
+    match_a = await db.get(Match, session.match_a_id)
+    match_b = await db.get(Match, session.match_b_id)
+    if not await _match_fully_verified(db, match_a) or not await _match_fully_verified(
+        db, match_b
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail="Both members of each couple must be verified for a double date",
+        )
+
     await _set_acceptance(db, session, user_match_id, True)
 
     accepted_match_ids = set(
@@ -347,7 +358,7 @@ async def get_squad_recommendations(
     for m in all_matches:
         target_id = m.user_b if m.user_a == user.id else m.user_a
         target_user = await db.get(User, target_id)
-        if not target_user:
+        if not target_user or not target_user.bot_shield_verified:
             continue
         target_profile = await db.scalar(
             select(Profile).where(Profile.user_id == target_id)

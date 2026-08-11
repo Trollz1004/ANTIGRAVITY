@@ -147,6 +147,7 @@ def test_squad_recommendations_sort_by_engagement_score(client, db_session_facto
         display_name="First",
         engagement_score=4.5,
         member_badge="Founder",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -157,6 +158,7 @@ def test_squad_recommendations_sort_by_engagement_score(client, db_session_facto
         display_name="Second",
         engagement_score=9.0,
         member_badge="Premium",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -210,5 +212,78 @@ def test_squad_recommendations_sort_by_engagement_score(client, db_session_facto
         assert [item["display_name"] for item in payload] == ["Second", "First"]
         assert payload[0]["engagement_score"] == 9.0
         assert payload[0]["member_badge"] == "Premium"
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_squad_recommendations_excludes_unverified_targets(client, db_session_factory):
+    """A legacy match with an unverified partner must not surface as a squad rec."""
+    initiator = User(
+        id=uuid.uuid4(),
+        email="squad_initiator@example.com",
+        password_hash="hashed",
+        display_name="Initiator",
+        bot_shield_verified=True,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    verified_partner = User(
+        id=uuid.uuid4(),
+        email="squad_verified@example.com",
+        password_hash="hashed",
+        display_name="Verified Partner",
+        engagement_score=5.0,
+        bot_shield_verified=True,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    unverified_partner = User(
+        id=uuid.uuid4(),
+        email="squad_unverified@example.com",
+        password_hash="hashed",
+        display_name="Unverified Partner",
+        engagement_score=9.9,
+        bot_shield_verified=False,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    verified_match = Match(
+        id=uuid.uuid4(),
+        user_a=initiator.id,
+        user_b=verified_partner.id,
+        status="active",
+    )
+    unverified_match = Match(
+        id=uuid.uuid4(),
+        user_a=initiator.id,
+        user_b=unverified_partner.id,
+        status="active",
+    )
+
+    async def seed_data():
+        async with db_session_factory() as session:
+            session.add_all(
+                [
+                    initiator,
+                    verified_partner,
+                    unverified_partner,
+                    verified_match,
+                    unverified_match,
+                ]
+            )
+            await session.commit()
+
+    asyncio.run(seed_data())
+
+    async def override_current_user():
+        return initiator
+
+    app.dependency_overrides[get_current_user] = override_current_user
+    try:
+        response = client.get("/api/v1/double-dates/squad-recommendations")
+        assert response.status_code == 200
+        payload = response.json()
+        names = [item["display_name"] for item in payload]
+        assert names == ["Verified Partner"]
     finally:
         app.dependency_overrides.pop(get_current_user, None)
