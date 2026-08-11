@@ -31,6 +31,7 @@ from app.upload_progress import (
     set_uploaded_bytes,
     update_progress,
 )
+from tests.helpers import override_user
 
 
 @pytest.fixture(autouse=True)
@@ -51,18 +52,11 @@ def _make_user() -> User:
     )
 
 
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
-
-
 @pytest.fixture()
 def authed_client(client, tmp_path):
     """Client with an authenticated user override and tmp storage settings."""
     user = _make_user()
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
 
     fake_settings = MagicMock()
     fake_settings.upload_max_size_bytes = 1024 * 1024

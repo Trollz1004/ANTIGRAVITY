@@ -14,20 +14,15 @@ import logging
 import os
 import uuid
 from datetime import datetime, timezone, timedelta
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
-from motor.motor_asyncio import AsyncIOMotorClient
+from mongo import get_db
 from pydantic import BaseModel, Field
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / ".env")
 log = logging.getLogger("watchdog")
 
-_client = AsyncIOMotorClient(os.environ["MONGO_URL"])
-_db = _client[os.environ["DB_NAME"]]
+_db = get_db()
 HEARTBEATS = _db.heartbeats
 IMAGES = _db.images
 
@@ -92,8 +87,9 @@ class ImageRequest(BaseModel):
 
 
 @router.post("/images/generate")
-async def generate_image(body: ImageRequest):
+async def generate_image(body: ImageRequest, request: Request):
     """Generate one image via Gemini Nano Banana, persist metadata, return base64."""
+    require_admin(request)
     api_key = os.environ.get("EMERGENT_LLM_KEY", "").strip()
     if not api_key:
         raise HTTPException(status_code=503, detail="EMERGENT_LLM_KEY missing")

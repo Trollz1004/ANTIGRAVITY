@@ -141,3 +141,53 @@ free/*/vendor/
 
 # OmniRoute upstream source clone (1.8GB, has its own origin)
 omniroute/
+.worktrees/
+
+# ── Agent scratch output at the repo root ────────────────────────────────────
+# Agents run `curl ... -o something.json` from the repo root and never clean up.
+# 96 such files accumulated by 2026-08-09, burying the ~20 real root documents
+# and making `git status` useless for spotting actual work.
+#
+# Scoped with a leading slash so ONLY the repo root is affected — real .json and
+# .html inside subdirectories (configs, fixtures, the DateApp) are untouched.
+# Anything genuinely worth keeping can still be added with `git add -f`.
+/*-comments.json
+/*-current.json
+/*-live.json
+/*-latest.json
+/*-latest2.json
+/*-now.json
+/*-next.json
+/*-fresh.json
+/*-check.json
+/*-cycle.json
+/*-heart.json
+/*-agent.json
+/standing*.json
+/issue.json
+/issues.json
+/all-issues.json
+/live-issues.json
+/heartbeat-issues.json
+/assigned_issues.json
+/comments.json
+/source_*.json
+/recovery*.json
+/route-*.json
+/prospect-*.json
+/prospect-*.html
+/candidate-*.html
+/target-*.html
+/new-*.html
+/*-results.html
+/*-response.html
+/*-contact.html
+/graph-issue.json
+/mc_live.json
+/owner_agent.json
+/tui.json
+/search.html
+/*.tui-migration.bak
+
+# recoverable drift quarantine (paperclip purge 2026-08-10)
+.drift-quarantine/

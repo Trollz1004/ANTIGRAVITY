@@ -17,6 +17,7 @@ from app.main import (
     global_exception_handler,
 )
 from app.models import User
+from tests.helpers import override_user
 
 
 def _make_user() -> User:
@@ -28,13 +29,6 @@ def _make_user() -> User:
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
-
-
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
 
 
 # ── Root endpoints ───────────────────────────────────────────────────────────
@@ -69,7 +63,7 @@ def test_telemetry_health_requires_auth(client):
 
 def test_telemetry_health_with_auth(client):
     user = _make_user()
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.get("/api/v1/health/telemetry")
         assert resp.status_code == 200
@@ -82,7 +76,7 @@ def test_telemetry_health_with_auth(client):
 
 def test_detailed_health_dashboard_with_auth(client):
     user = _make_user()
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         with patch("app.main.redis_health_check", side_effect=RuntimeError("no redis")):
             resp = client.get("/api/v1/health/detailed")
@@ -105,7 +99,7 @@ def test_detailed_health_dashboard_with_auth(client):
 
 def test_detailed_health_dashboard_healthy_path(client):
     user = _make_user()
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         with (
             patch("app.main.redis_health_check", return_value={"status": "ok"}),
@@ -188,15 +182,15 @@ def test_suitability_guard_middleware_logs_and_passes(client, db_session_factory
         matched_at=datetime.now(timezone.utc),
     )
 
-    async def _seed():
+    async def seed():
         async with db_session_factory() as session:
             session.add(alice)
             session.add(bob)
             session.add(match)
             await session.commit()
 
-    asyncio.run(_seed())
-    app.dependency_overrides[get_current_user] = _override_user(alice)
+    asyncio.run(seed())
+    app.dependency_overrides[get_current_user] = override_user(alice)
     try:
         with patch("app.main._log_suitability_flags") as mock_log:
             resp = client.post(

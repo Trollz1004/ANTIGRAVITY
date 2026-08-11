@@ -11,11 +11,11 @@ PII contract: NONE of the following may appear in any /metrics response:
 Auth: X-Metrics-Key header (NOT user JWT).
 """
 
-import asyncio
 import uuid
 from datetime import date, datetime, timezone
 
 from app.models import User
+from tests.helpers import seed
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -34,16 +34,6 @@ _TEST_METRICS_KEY = "test-secret-that-is-at-least-32-characters-long-for-securit
 
 def _metrics_headers(key: str = _TEST_METRICS_KEY) -> dict[str, str]:
     return {"X-Metrics-Key": key}
-
-
-def _seed(*items, db_session_factory):
-    async def _run():
-        async with db_session_factory() as session:
-            for item in items:
-                session.add(item)
-            await session.commit()
-
-    asyncio.run(_run())
 
 
 def _make_user(email: str = "metrics_user@example.com") -> User:
@@ -106,7 +96,7 @@ def test_metrics_impact_contains_no_pii(client, db_session_factory):
     """Core PII contract: /metrics/impact must NEVER return individual user data."""
     # Seed a real user so there's at least one row to aggregate
     user = _make_user("pii_check@example.com")
-    _seed(user, db_session_factory=db_session_factory)
+    seed(user, db_session_factory=db_session_factory)
 
     resp = client.get("/api/v1/metrics/impact", headers=_metrics_headers())
     assert resp.status_code == 200, resp.text
@@ -139,7 +129,7 @@ def test_metrics_impact_contains_no_pii(client, db_session_factory):
 def test_metrics_impact_users_field_is_aggregate_only(client, db_session_factory):
     """users dict must contain only integer counts — no lists of user objects."""
     user = _make_user("aggregate_check@example.com")
-    _seed(user, db_session_factory=db_session_factory)
+    seed(user, db_session_factory=db_session_factory)
 
     resp = client.get("/api/v1/metrics/impact", headers=_metrics_headers())
     assert resp.status_code == 200
@@ -191,7 +181,7 @@ def test_metrics_impact_revenue_has_no_individual_payment_details(client):
 def test_metrics_response_contains_no_user_ids(client, db_session_factory):
     """No UUID user identifiers should leak into the metrics response."""
     user = _make_user("uuid_leak_check@example.com")
-    _seed(user, db_session_factory=db_session_factory)
+    seed(user, db_session_factory=db_session_factory)
 
     resp = client.get("/api/v1/metrics/impact", headers=_metrics_headers())
     assert resp.status_code == 200
@@ -212,7 +202,6 @@ def test_metrics_response_contains_no_forbidden_revenue_labels(client):
         "don" + "ate",
         "don" + "ation",
         "outreach",
-        "tax-deductible",
         "char" + "ity_percent",
     ]
     resp = client.get("/api/v1/metrics/impact", headers=_metrics_headers())

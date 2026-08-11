@@ -25,20 +25,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
 
-from dotenv import load_dotenv
 from fastapi import APIRouter, FastAPI, HTTPException, Response
 from fastapi.staticfiles import StaticFiles
-from motor.motor_asyncio import AsyncIOMotorClient
+from mongo import ROOT_DIR, close_client, get_db
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.middleware.cors import CORSMiddleware
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / ".env")
-
 # ---------- infra ---------------------------------------------------------- #
-mongo_url = os.environ["MONGO_URL"]
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ["DB_NAME"]]
+db = get_db()
 
 app = FastAPI(title="OpusPawClaw · Mission Control")
 api = APIRouter(prefix="/api")
@@ -136,7 +130,8 @@ def _bridge_via_emergent(bridge_provider: str, bridge_model: str, session_id: st
     return asyncio.run(chat.send_message(UserMessage(text=last_user.content)))  # type: ignore
 
 @api.post("/hermes/v1/chat/completions")
-async def hermes_chat_completions(body: ChatCompletionsRequest, response: Response):
+async def hermes_chat_completions(body: ChatCompletionsRequest, request: Request, response: Response):
+    require_admin(request)
     start = time.perf_counter()
 
     alias = body.model
@@ -273,7 +268,8 @@ def _git(*args: str) -> str:
         return f"[git unavailable: {exc}]"
 
 @api.get("/git/status")
-async def git_status():
+async def git_status(request: Request):
+    require_admin(request)
     current = _git("rev-parse", "--abbrev-ref", "HEAD")
     porcelain = _git("status", "--porcelain")
     modified, not_added, deleted = [], [], []
@@ -351,8 +347,9 @@ async def skills_available():
     }
 
 @api.get("/skills/state")
-async def skills_state():
+async def skills_state(request: Request):
     """Read FCC state from .fcc/STATE.md to track skill usage"""
+    require_admin(request)
     state_path = Path("C:\\Users\\joshl\\.fcc\\STATE.md")
     if state_path.exists():
         return {
@@ -388,8 +385,9 @@ async def pieces_health():
         }
 
 @api.get("/harness/routing")
-async def harness_routing():
+async def harness_routing(request: Request):
     """Agent harness routing configuration (OmniRoute VS Code token endpoint on LAN)"""
+    require_admin(request)
     import http.client
     
     # Token is read from master .env at runtime, never exposed in code
@@ -486,21 +484,34 @@ async def mission_metrics():
 
 # ---------- wiring -------------------------------------------------------- #
 app.include_router(api)
+from auth_relay import router as auth_router  # noqa: E402
+from security import router as security_router  # noqa: E402
 from hub import router as hub_router  # noqa: E402
 from tasks import router as tasks_router  # noqa: E402
 from ledger import router as ledger_router  # noqa: E402
 from services import router as services_router, install_watchdog  # noqa: E402
 from graph import router as graph_router  # noqa: E402
+app.include_router(auth_router)
+app.include_router(security_router)
 app.include_router(hub_router)
 app.include_router(tasks_router)
 app.include_router(ledger_router)
 app.include_router(services_router)
 app.include_router(graph_router)
 install_watchdog(app)
+# CORS: never pair a wildcard origin with credentials. When CORS_ORIGINS is
+# unset we fall back to local dev origins instead of opening the API to every
+# site on the internet with the admin session cookie attached.
+DEFAULT_CORS_ORIGINS = "http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173"
+_cors_origins = [
+    o.strip() for o in os.environ.get("CORS_ORIGINS", DEFAULT_CORS_ORIGINS).split(",") if o.strip()
+]
+_cors_wildcard = "*" in _cors_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
+    allow_credentials=not _cors_wildcard,
+    allow_origins=_cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["X-Hermes-Provider", "X-Hermes-Real-Model", "X-Hermes-Latency-Ms"],
@@ -511,4 +522,4 @@ logger = logging.getLogger(__name__)
 
 @app.on_event("shutdown")
 async def _shutdown():
-    client.close()
+    close_client()

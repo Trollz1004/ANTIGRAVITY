@@ -16,6 +16,7 @@ from app.routers import clawx as clawx_router
 from app.routers import ops_runs as ops_runs_router
 from app.square_checkout import create_square_payment_link
 from app.telemetry import get_tracer_status, setup_telemetry
+from tests.helpers import override_user
 
 
 def _make_user() -> User:
@@ -29,17 +30,10 @@ def _make_user() -> User:
     )
 
 
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
-
-
 @pytest.fixture()
 def authed_client(client):
     user = _make_user()
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     yield client
     app.dependency_overrides.pop(get_current_user, None)
 

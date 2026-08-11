@@ -1,22 +1,15 @@
 from __future__ import annotations
 
 import asyncio
-import os
 import uuid
 from datetime import datetime, timezone, timedelta
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException, Request
-from motor.motor_asyncio import AsyncIOMotorClient
+from mongo import get_db
 from pydantic import BaseModel, Field
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / ".env")
-
-_client = AsyncIOMotorClient(os.environ["MONGO_URL"])
-_db = _client[os.environ["DB_NAME"]]
+_db = get_db()
 SPRINTS = _db.sprints
 API_GATES = _db.api_gates
 

@@ -16,6 +16,7 @@ from app.models import (
     UserBlock,
     UserReport,
 )
+from tests.helpers import override_user, seed
 
 
 def _make_user(name: str) -> User:
@@ -27,23 +28,6 @@ def _make_user(name: str) -> User:
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
-
-
-def _seed(*items, db_session_factory) -> None:
-    async def _run():
-        async with db_session_factory() as session:
-            for item in items:
-                session.add(item)
-            await session.commit()
-
-    asyncio.run(_run())
-
-
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
 
 
 # ── Safety ───────────────────────────────────────────────────────────────────
@@ -59,8 +43,8 @@ class TestBlocking:
             status="active",
             matched_at=datetime.now(timezone.utc),
         )
-        _seed(alice, bob, match, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        seed(alice, bob, match, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             # Block bob → active match records are closed
             resp = client.post(
@@ -97,8 +81,8 @@ class TestBlocking:
 
     def test_block_self_rejected(self, client, db_session_factory):
         alice = _make_user("selfy")
-        _seed(alice, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        seed(alice, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             resp = client.post(f"/api/v1/safety/users/{alice.id}/block", json={})
             assert resp.status_code == 400
@@ -109,7 +93,7 @@ class TestBlocking:
         alice = _make_user("blocker")
         ghost = uuid.uuid4()
         inactive = _make_user("inactive")
-        _seed(alice, inactive, db_session_factory=db_session_factory)
+        seed(alice, inactive, db_session_factory=db_session_factory)
 
         async def _deactivate():
             async with db_session_factory() as session:
@@ -119,7 +103,7 @@ class TestBlocking:
 
         asyncio.run(_deactivate())
 
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             resp = client.post(f"/api/v1/safety/users/{ghost}/block", json={})
             assert resp.status_code == 404
@@ -130,7 +114,7 @@ class TestBlocking:
 
     def test_list_blocks_skips_deleted_users(self, client, db_session_factory):
         alice, gone = _make_user("keeper"), _make_user("gone")
-        _seed(alice, db_session_factory=db_session_factory)
+        seed(alice, db_session_factory=db_session_factory)
 
         block = UserBlock(
             id=uuid.uuid4(),
@@ -138,10 +122,10 @@ class TestBlocking:
             blocked_id=gone.id,
             reason="old",
         )
-        _seed(block, db_session_factory=db_session_factory)
+        seed(block, db_session_factory=db_session_factory)
 
         # Blocked user row is deleted → skipped in listing
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             assert client.get("/api/v1/safety/blocks").json() == []
         finally:
@@ -151,8 +135,8 @@ class TestBlocking:
 class TestReporting:
     def test_report_creates_ticket_and_report(self, client, db_session_factory):
         alice, bob = _make_user("reporter"), _make_user("reported")
-        _seed(alice, bob, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        seed(alice, bob, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             with patch(
                 "app.routers.safety.notify_support_ticket", new=AsyncMock()
@@ -192,8 +176,8 @@ class TestReporting:
 
     def test_report_self_rejected(self, client, db_session_factory):
         alice = _make_user("selfreport")
-        _seed(alice, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        seed(alice, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             resp = client.post(
                 f"/api/v1/safety/users/{alice.id}/report",
@@ -210,8 +194,8 @@ class TestReporting:
 class TestPrivacyActions:
     def test_export_request_created_and_idempotent(self, client, db_session_factory):
         alice = _make_user("exporter")
-        _seed(alice, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        seed(alice, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             resp = client.post("/api/v1/privacy/export")
             assert resp.status_code == 202, resp.text
@@ -229,8 +213,8 @@ class TestPrivacyActions:
 
     def test_delete_request_scheduled_30_days_out(self, client, db_session_factory):
         alice = _make_user("deleter")
-        _seed(alice, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        seed(alice, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             before = datetime.now(timezone.utc)
             resp = client.post("/api/v1/privacy/delete")
@@ -255,8 +239,8 @@ class TestPrivacyActions:
             user_id=alice.id,
             location_enabled=True,
         )
-        _seed(alice, profile, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        seed(alice, profile, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             resp = client.post("/api/v1/privacy/location/disable")
             assert resp.status_code == 200, resp.text
@@ -284,8 +268,8 @@ class TestPrivacyActions:
 
     def test_location_disable_without_profile_404(self, client, db_session_factory):
         alice = _make_user("profileless")
-        _seed(alice, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        seed(alice, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             resp = client.post("/api/v1/privacy/location/disable")
             assert resp.status_code == 404
@@ -332,7 +316,7 @@ class TestMyData:
             status="pending",
             created_at=datetime.now(timezone.utc),
         )
-        _seed(
+        seed(
             alice,
             bob,
             profile,
@@ -341,7 +325,7 @@ class TestMyData:
             pending,
             db_session_factory=db_session_factory,
         )
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             resp = client.get("/api/v1/privacy/my-data")
             assert resp.status_code == 200, resp.text
@@ -360,8 +344,8 @@ class TestMyData:
 
     def test_my_data_without_profile(self, client, db_session_factory):
         alice = _make_user("naked")
-        _seed(alice, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        seed(alice, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             resp = client.get("/api/v1/privacy/my-data")
             assert resp.status_code == 200
@@ -381,8 +365,8 @@ class TestSwipeGaps:
 
         alice, bob = _make_user("swiper"), _make_user("target")
         block = UB(id=uuid.uuid4(), blocker_id=bob.id, blocked_id=alice.id)
-        _seed(alice, bob, block, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        seed(alice, bob, block, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             resp = client.post(
                 "/api/v1/swipe/",
@@ -409,8 +393,8 @@ class TestSwipeGaps:
             status="active",
             matched_at=datetime.now(timezone.utc),
         )
-        _seed(alice, bob, match, db_session_factory=db_session_factory)
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        seed(alice, bob, match, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             # Baseline fetch works
             resp = client.get(f"/api/v1/matches/{match.id}")
@@ -423,7 +407,7 @@ class TestSwipeGaps:
 
             # Once blocked, the match is hidden as 404
             block = UB(id=uuid.uuid4(), blocker_id=bob.id, blocked_id=alice.id)
-            _seed(block, db_session_factory=db_session_factory)
+            seed(block, db_session_factory=db_session_factory)
             resp = client.get(f"/api/v1/matches/{match.id}")
             assert resp.status_code == 404
         finally:
@@ -448,7 +432,7 @@ class TestSwipeGaps:
             matched_at=datetime.now(timezone.utc),
         )
         block = UB(id=uuid.uuid4(), blocker_id=alice.id, blocked_id=ghost)
-        _seed(
+        seed(
             alice,
             bob,
             match_ok,
@@ -456,7 +440,7 @@ class TestSwipeGaps:
             block,
             db_session_factory=db_session_factory,
         )
-        app.dependency_overrides[get_current_user] = _override_user(alice)
+        app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             resp = client.get("/api/v1/matches")
             assert resp.status_code == 200

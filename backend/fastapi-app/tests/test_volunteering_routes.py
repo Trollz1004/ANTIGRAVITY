@@ -8,13 +8,13 @@ Endpoints covered:
 - GET  /api/v1/volunteer/my-signups
 """
 
-import asyncio
 import uuid
 from datetime import datetime, timezone
 
 from app.auth import get_current_user
 from app.main import app
 from app.models import User
+from tests.helpers import override_user, seed
 
 
 def _make_user(*, email: str, display_name: str = "Vol User") -> User:
@@ -26,23 +26,6 @@ def _make_user(*, email: str, display_name: str = "Vol User") -> User:
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
-
-
-def _seed(*items, db_session_factory) -> None:
-    async def _run():
-        async with db_session_factory() as session:
-            for item in items:
-                session.add(item)
-            await session.commit()
-
-    asyncio.run(_run())
-
-
-def _override_user(user: User):
-    async def _dep():
-        return user
-
-    return _dep
 
 
 def _opp_payload(**overrides) -> dict:
@@ -64,8 +47,8 @@ def _opp_payload(**overrides) -> dict:
 
 def test_list_opportunities_empty(client, db_session_factory):
     user = _make_user(email="vol_list_empty@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.get("/api/v1/volunteer")
         assert resp.status_code == 200
@@ -76,8 +59,8 @@ def test_list_opportunities_empty(client, db_session_factory):
 
 def test_list_opportunities_returns_created(client, db_session_factory):
     user = _make_user(email="vol_list_user@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         # Create one opportunity
         client.post("/api/v1/volunteer", json=_opp_payload())
@@ -90,8 +73,8 @@ def test_list_opportunities_returns_created(client, db_session_factory):
 
 def test_list_opportunities_location_filter(client, db_session_factory):
     user = _make_user(email="vol_filter@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         client.post("/api/v1/volunteer", json=_opp_payload(location="Orlando, FL"))
         client.post(
@@ -111,8 +94,8 @@ def test_list_opportunities_location_filter(client, db_session_factory):
 
 def test_create_opportunity_returns_201(client, db_session_factory):
     user = _make_user(email="vol_create@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.post("/api/v1/volunteer", json=_opp_payload())
         assert resp.status_code == 201
@@ -129,8 +112,8 @@ def test_create_opportunity_returns_201(client, db_session_factory):
 
 def test_signup_success(client, db_session_factory):
     user = _make_user(email="vol_signup@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         create_resp = client.post("/api/v1/volunteer", json=_opp_payload())
         opp_id = create_resp.json()["id"]
@@ -143,8 +126,8 @@ def test_signup_success(client, db_session_factory):
 
 def test_duplicate_signup_returns_409(client, db_session_factory):
     user = _make_user(email="vol_dup@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         create_resp = client.post("/api/v1/volunteer", json=_opp_payload())
         opp_id = create_resp.json()["id"]
@@ -158,10 +141,10 @@ def test_duplicate_signup_returns_409(client, db_session_factory):
 def test_signup_capacity_full_returns_400(client, db_session_factory):
     user = _make_user(email="vol_full_creator@example.com")
     signer = _make_user(email="vol_full_signer@example.com")
-    _seed(user, signer, db_session_factory=db_session_factory)
+    seed(user, signer, db_session_factory=db_session_factory)
 
     # Create opp with spots=1
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         create_resp = client.post("/api/v1/volunteer", json=_opp_payload(spots=1))
         opp_id = create_resp.json()["id"]
@@ -171,7 +154,7 @@ def test_signup_capacity_full_returns_400(client, db_session_factory):
         app.dependency_overrides.pop(get_current_user, None)
 
     # Second user tries to sign up — should be full
-    app.dependency_overrides[get_current_user] = _override_user(signer)
+    app.dependency_overrides[get_current_user] = override_user(signer)
     try:
         resp = client.post(f"/api/v1/volunteer/{opp_id}/signup")
         assert resp.status_code == 400
@@ -185,8 +168,8 @@ def test_signup_capacity_full_returns_400(client, db_session_factory):
 
 def test_signup_unknown_opportunity_returns_404(client, db_session_factory):
     user = _make_user(email="vol_404@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.post(f"/api/v1/volunteer/{uuid.uuid4()}/signup")
         assert resp.status_code == 404
@@ -199,8 +182,8 @@ def test_signup_unknown_opportunity_returns_404(client, db_session_factory):
 
 def test_impact_returns_zero_stats_when_empty(client, db_session_factory):
     user = _make_user(email="vol_impact_empty@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.get("/api/v1/volunteer/impact")
         assert resp.status_code == 200
@@ -214,8 +197,8 @@ def test_impact_returns_zero_stats_when_empty(client, db_session_factory):
 
 def test_impact_counts_after_signup(client, db_session_factory):
     user = _make_user(email="vol_impact_count@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         create_resp = client.post("/api/v1/volunteer", json=_opp_payload())
         opp_id = create_resp.json()["id"]
@@ -235,8 +218,8 @@ def test_impact_counts_after_signup(client, db_session_factory):
 
 def test_my_signups_empty(client, db_session_factory):
     user = _make_user(email="my_signups_empty@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.get("/api/v1/volunteer/my-signups")
         assert resp.status_code == 200
@@ -247,8 +230,8 @@ def test_my_signups_empty(client, db_session_factory):
 
 def test_my_signups_returns_signed_up_opportunity(client, db_session_factory):
     user = _make_user(email="my_signups_user@example.com")
-    _seed(user, db_session_factory=db_session_factory)
-    app.dependency_overrides[get_current_user] = _override_user(user)
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
     try:
         create_resp = client.post(
             "/api/v1/volunteer", json=_opp_payload(title="Beach Cleanup")

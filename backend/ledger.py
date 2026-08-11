@@ -1,10 +1,9 @@
 """
-Mission Ledger — every dollar committed to the kids fund, tracked.
+Revenue Ledger — every transaction committed and tracked.
 
-Replaces the mirror DAO band with real persistent revenue tracking. External
-systems (Square, Stripe, Cloudflare workers, etc.) post to the webhook
-endpoints and the totals propagate to the Mission ribbon visible on every
-screen.
+Persistent revenue tracking for the platform. External systems (Square,
+Stripe, Cloudflare workers, etc.) post to the webhook endpoints and the
+totals propagate to the revenue ribbon visible on every screen.
 
 Doctrine compliance:
   - All amounts are recorded — never claim contributions or requests.
@@ -14,22 +13,17 @@ Doctrine compliance:
 """
 from __future__ import annotations
 
+import hmac
 import os
 import uuid
 from datetime import datetime, timezone, timedelta
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
-from motor.motor_asyncio import AsyncIOMotorClient
+from mongo import get_db
 from pydantic import BaseModel, Field
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / ".env")
-
-_client = AsyncIOMotorClient(os.environ["MONGO_URL"])
-_db = _client[os.environ["DB_NAME"]]
+_db = get_db()
 LEDGER = _db.ledger
 
 # Per-kid funding threshold — covers a meaningful unit of medical-care
@@ -64,7 +58,8 @@ router = APIRouter(prefix="/api/ledger")
 
 
 @router.post("/contribute")
-async def contribute(payload: ContributionCreate):
+async def contribute(payload: ContributionCreate, request: Request):
+    require_admin(request)
     if payload.bucket not in BUCKET_NAMES:
         raise HTTPException(status_code=400, detail=f"unknown bucket {payload.bucket}")
     entry = {
@@ -132,8 +127,28 @@ class WebhookPayload(BaseModel):
     raw: Optional[Dict[str, Any]] = None
 
 
+def _verify_webhook_secret(provided: Optional[str]) -> None:
+    """Shared-secret gate for ledger intake.
+
+    Fails closed: with no LEDGER_WEBHOOK_SECRET configured the endpoint is
+    disabled rather than accepting anonymous writes to the money ledger.
+    """
+    expected = os.environ.get("LEDGER_WEBHOOK_SECRET", "").strip()
+    if not expected:
+        raise HTTPException(
+            status_code=503,
+            detail="ledger webhook not configured — set LEDGER_WEBHOOK_SECRET in /app/backend/.env",
+        )
+    if not provided or not hmac.compare_digest(provided.strip(), expected):
+        raise HTTPException(status_code=401, detail="invalid or missing X-Ledger-Secret header")
+
+
 @router.post("/webhook/{source}")
-async def webhook(source: str, body: WebhookPayload):
+async def webhook(
+    source: str,
+    body: WebhookPayload,
+    x_ledger_secret: Optional[str] = Header(default=None, alias="X-Ledger-Secret"),
+):
     """Permissive intake. Square (Location LY5GN09F5AN83) is the only live
     payment processor — Stripe is dead per doctrine, any stripe hit returns 410.
     Cloudflare workers + manual + test accepted. Default bucket 1 (Kids Fund)."""
@@ -142,6 +157,7 @@ async def webhook(source: str, body: WebhookPayload):
             status_code=410,
             detail="stripe is dead per doctrine — use /api/ledger/webhook/square (Location LY5GN09F5AN83)",
         )
+    _verify_webhook_secret(x_ledger_secret)
     if source not in {"square", "cloudflare", "manual", "test"}:
         raise HTTPException(status_code=400, detail=f"unknown source '{source}' — use square|cloudflare|manual|test")
     amount_usd = body.amount_usd
@@ -169,7 +185,8 @@ async def webhook(source: str, body: WebhookPayload):
 
 
 @router.delete("/{entry_id}")
-async def delete_entry(entry_id: str):
+async def delete_entry(entry_id: str, request: Request):
+    require_admin(request)
     res = await LEDGER.delete_one({"id": entry_id})
     if res.deleted_count == 0:
         raise HTTPException(status_code=404, detail="entry not found")
