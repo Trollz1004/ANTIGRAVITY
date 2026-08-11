@@ -72,7 +72,14 @@ async def create_video_room(
                 },
                 json={
                     "name": room_name,
-                    "privacy": "public",
+                    # Private: verification/participant checks above only
+                    # gate who can create or retrieve this URL, not who can
+                    # join it -- a public room lets anyone with the link (or
+                    # who finds it in browser/network history) occupy a
+                    # participant slot with no app-level check. A private
+                    # room plus a per-participant meeting token below makes
+                    # Daily itself enforce the gate at join time.
+                    "privacy": "private",
                     "properties": {
                         "enable_chat": True,
                         "max_participants": 2,
@@ -91,9 +98,13 @@ async def create_video_room(
                 )
                 if get_response.status_code == 200:
                     room_data = get_response.json()
+                    token = await _issue_meeting_token(
+                        client, room_name=room_name, user=user, expiry=expiry
+                    )
                     return {
                         "room_url": room_data["url"],
                         "room_name": room_data["name"],
+                        "token": token,
                     }
 
             if response.status_code != 200:
@@ -102,9 +113,48 @@ async def create_video_room(
                 )
 
             room_data = response.json()
-            return {"room_url": room_data["url"], "room_name": room_data["name"]}
+            token = await _issue_meeting_token(
+                client, room_name=room_name, user=user, expiry=expiry
+            )
+            return {
+                "room_url": room_data["url"],
+                "room_name": room_data["name"],
+                "token": token,
+            }
 
         except httpx.RequestError as exc:
             raise HTTPException(
                 status_code=502, detail=f"Connection to Daily.co failed: {exc}"
             )
+
+
+async def _issue_meeting_token(
+    client: httpx.AsyncClient, *, room_name: str, user: User, expiry: int
+) -> str:
+    """Issue a Daily.co meeting token scoped to this room and participant.
+
+    Required for a private room: without a token, no one -- including the
+    two intended participants -- can join.
+    """
+    response = await client.post(
+        "https://api.daily.co/v1/meeting-tokens",
+        headers={
+            "Authorization": f"Bearer {settings.daily_api_key}",
+            "Content-Type": "application/json",
+        },
+        json={
+            "properties": {
+                "room_name": room_name,
+                "user_id": str(user.id),
+                "user_name": user.display_name,
+                "exp": expiry,
+                "is_owner": False,
+            }
+        },
+        timeout=10.0,
+    )
+    if response.status_code != 200:
+        raise HTTPException(
+            status_code=502, detail=f"Daily.co token error: {response.text}"
+        )
+    return response.json()["token"]

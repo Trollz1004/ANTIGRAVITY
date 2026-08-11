@@ -184,6 +184,17 @@ def test_create_room_without_api_key_returns_503(client, db_session_factory):
 # ── Live mode: successful Daily.co API call ───────────────────────────────────
 
 
+def _mock_daily_post(room_response, token_response):
+    """Route mocked POSTs by URL: room creation vs. meeting-token issuance."""
+
+    async def _post(url, **kwargs):
+        if url.endswith("/meeting-tokens"):
+            return token_response
+        return room_response
+
+    return _post
+
+
 def test_create_room_live_mode_happy_path(client, db_session_factory):
     user = _make_user("rooms_live@example.com")
     match = _seed_active_match(user, db_session_factory)
@@ -197,12 +208,17 @@ def test_create_room_live_mode_happy_path(client, db_session_factory):
     mock_response.json.return_value = {"url": room_url, "name": room_name}
     mock_response.text = ""
 
+    token_response = MagicMock()
+    token_response.status_code = 200
+    token_response.json.return_value = {"token": "test-meeting-token"}
+    token_response.text = ""
+
     try:
         with patch("app.routers.video_rooms.settings") as mock_settings:
             mock_settings.daily_api_key = "test-daily-key"
 
             mock_client = AsyncMock()
-            mock_client.post = AsyncMock(return_value=mock_response)
+            mock_client.post = _mock_daily_post(mock_response, token_response)
             mock_client.__aenter__ = AsyncMock(return_value=mock_client)
             mock_client.__aexit__ = AsyncMock(return_value=False)
 
@@ -213,6 +229,7 @@ def test_create_room_live_mode_happy_path(client, db_session_factory):
         data = resp.json()
         assert data["room_url"] == room_url
         assert data["room_name"] == room_name
+        assert data["token"] == "test-meeting-token"
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 
@@ -220,14 +237,16 @@ def test_create_room_live_mode_happy_path(client, db_session_factory):
 # ── Room capacity: max_participants enforced in request ───────────────────────
 
 
-def test_create_room_requests_max_2_participants(client, db_session_factory):
-    """Room creation payload must set max_participants=2 to enforce pair-only calls."""
+def test_create_room_requests_max_2_participants_and_is_private(
+    client, db_session_factory
+):
+    """Room payload must set max_participants=2 and privacy=private."""
     user = _make_user("rooms_capacity@example.com")
     match = _seed_active_match(user, db_session_factory)
     app.dependency_overrides[get_current_user] = override_user(user)
     match_id = match.id
 
-    captured_payload = {}
+    captured_room_payload = {}
 
     mock_response = MagicMock()
     mock_response.status_code = 200
@@ -237,8 +256,15 @@ def test_create_room_requests_max_2_participants(client, db_session_factory):
     }
     mock_response.text = ""
 
+    token_response = MagicMock()
+    token_response.status_code = 200
+    token_response.json.return_value = {"token": "test-meeting-token"}
+    token_response.text = ""
+
     async def capture_post(url, **kwargs):
-        captured_payload.update(kwargs.get("json", {}))
+        if url.endswith("/meeting-tokens"):
+            return token_response
+        captured_room_payload.update(kwargs.get("json", {}))
         return mock_response
 
     try:
@@ -254,7 +280,10 @@ def test_create_room_requests_max_2_participants(client, db_session_factory):
                 resp = client.post(f"/api/v1/video/rooms/{match_id}")
 
         assert resp.status_code == 200
-        props = captured_payload.get("properties", {})
+        assert (
+            captured_room_payload.get("privacy") == "private"
+        ), "Room must be private -- a public room lets anyone with the link join, bypassing the verification gate"
+        props = captured_room_payload.get("properties", {})
         assert (
             props.get("max_participants") == 2
         ), f"Room max_participants should be 2 to enforce pair-only access, got {props.get('max_participants')}"
@@ -281,6 +310,42 @@ def test_create_room_daily_api_error_returns_502(client, db_session_factory):
 
             mock_client = AsyncMock()
             mock_client.post = AsyncMock(return_value=mock_response)
+            mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+            mock_client.__aexit__ = AsyncMock(return_value=False)
+
+            with patch("httpx.AsyncClient", return_value=mock_client):
+                resp = client.post(f"/api/v1/video/rooms/{match_id}")
+
+        assert resp.status_code == 502
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_create_room_token_issuance_failure_returns_502(client, db_session_factory):
+    """A room without a joinable token defeats the private-room gate -- must 502."""
+    user = _make_user("rooms_token_error@example.com")
+    match = _seed_active_match(user, db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
+    match_id = match.id
+
+    room_response = MagicMock()
+    room_response.status_code = 200
+    room_response.json.return_value = {
+        "url": f"https://youandinotai.daily.co/match-{match_id}",
+        "name": f"match-{match_id}",
+    }
+    room_response.text = ""
+
+    token_error_response = MagicMock()
+    token_error_response.status_code = 500
+    token_error_response.text = "Token service unavailable"
+
+    try:
+        with patch("app.routers.video_rooms.settings") as mock_settings:
+            mock_settings.daily_api_key = "test-daily-key"
+
+            mock_client = AsyncMock()
+            mock_client.post = _mock_daily_post(room_response, token_error_response)
             mock_client.__aenter__ = AsyncMock(return_value=mock_client)
             mock_client.__aexit__ = AsyncMock(return_value=False)
 
@@ -339,12 +404,17 @@ def test_create_room_handles_existing_room_conflict(client, db_session_factory):
     get_response.status_code = 200
     get_response.json.return_value = {"url": room_url, "name": room_name}
 
+    token_response = MagicMock()
+    token_response.status_code = 200
+    token_response.json.return_value = {"token": "test-meeting-token"}
+    token_response.text = ""
+
     try:
         with patch("app.routers.video_rooms.settings") as mock_settings:
             mock_settings.daily_api_key = "test-daily-key"
 
             mock_client = AsyncMock()
-            mock_client.post = AsyncMock(return_value=conflict_response)
+            mock_client.post = _mock_daily_post(conflict_response, token_response)
             mock_client.get = AsyncMock(return_value=get_response)
             mock_client.__aenter__ = AsyncMock(return_value=mock_client)
             mock_client.__aexit__ = AsyncMock(return_value=False)
@@ -356,5 +426,6 @@ def test_create_room_handles_existing_room_conflict(client, db_session_factory):
         data = resp.json()
         assert data["room_url"] == room_url
         assert data["room_name"] == room_name
+        assert data["token"] == "test-meeting-token"
     finally:
         app.dependency_overrides.pop(get_current_user, None)
