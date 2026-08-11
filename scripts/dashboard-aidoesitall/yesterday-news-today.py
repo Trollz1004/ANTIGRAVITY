@@ -19,7 +19,7 @@ from urllib.request import urlopen, Request
 import xml.etree.ElementTree as ET
 
 # Paths
-REPO_DIR = Path(__file__).resolve().parents[1]
+REPO_DIR = Path(__file__).resolve().parents[2]
 RUNTIME_ROOT = Path(
     os.getenv(
         "ANTIGRAVITY_RUNTIME_ROOT",
@@ -243,10 +243,82 @@ class YesterdayNewsBot:
             log.warning("RSS fallback returned no usable articles")
         return items
 
+    def _generate_script_llm(self, news_items, date):
+        """
+        Generate the voiceover script with a cloud model through an
+        OmniRouter-compatible endpoint (OpenAI chat-completions shape).
+
+        Opt-in via OMNI_BASE_URL. Returns None on any failure so the caller
+        falls back to the template script — this method must never raise.
+        """
+        base_url = os.getenv("OMNI_BASE_URL", "").strip()
+        if not base_url:
+            return None
+
+        system_prompt = (
+            "You write neutral daily news recap voiceovers for a YouTube Short "
+            "titled \"Yesterday's News Today\". Write a 60-90 second spoken "
+            "script covering the provided stories: a one-line dated welcome, "
+            "each story in one or two plain sentences naming its source, then "
+            "a one-line close ending with 'Subscribe for daily updates.' "
+            "Neutral tone only. Do not add opinion, payment, fundraising, or "
+            "promotional claims. Output only the script text."
+        )
+        story_lines = [
+            f"- {item['title']} ({item['source']}): {item['summary']}"
+            for item in news_items[:5]
+        ]
+        user_prompt = (
+            f"Date: {date['display']}\nStories:\n" + "\n".join(story_lines)
+        )
+
+        body = json.dumps(
+            {
+                "model": os.getenv("OMNI_MODEL", "auto").strip() or "auto",
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                "max_tokens": 900,
+                "temperature": 0.7,
+            }
+        ).encode("utf-8")
+
+        headers = {"Content-Type": "application/json"}
+        # OMNIROUTE_KEY is the canonical auth var (AGENT-DOCTRINE.md);
+        # OMNI_API_KEY kept as a compatibility alias.
+        api_key = (
+            os.getenv("OMNIROUTE_KEY", "").strip()
+            or os.getenv("OMNI_API_KEY", "").strip()
+        )
+        if api_key:
+            headers["Authorization"] = f"Bearer {api_key}"
+
+        url = f"{base_url.rstrip('/')}/v1/chat/completions"
+        try:
+            req = Request(url, data=body, headers=headers, method="POST")
+            with urlopen(req, timeout=45) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            script = (
+                (payload.get("choices") or [{}])[0]
+                .get("message", {})
+                .get("content", "")
+            ).strip()
+        except Exception as exc:
+            log.warning(f"OmniRouter script generation failed: {exc}")
+            return None
+
+        if not script:
+            log.warning("OmniRouter returned an empty script")
+            return None
+
+        log.info("Script generated via OmniRouter cloud model")
+        return script
+
     def generate_content(self, news_items):
         """Generate YouTube video content from news items."""
         date = self.get_yesterday_date()
-        
+
         # Title template
         title = f"Yesterday's News Today — {date['display']}"
         
@@ -270,10 +342,19 @@ class YesterdayNewsBot:
             "",
             "#YesterdaysNewsToday #DailyNews #NewsRecap"
         ])
-        
+
+        script = "\n".join(script_lines)
+        generator = "template"
+
+        llm_script = self._generate_script_llm(news_items, date)
+        if llm_script:
+            script = llm_script
+            generator = "omni"
+
         return {
             "title": title,
-            "script": "\n".join(script_lines),
+            "script": script,
+            "generator": generator,
             "tags": ["news", "daily news", "yesterday's news", "news recap", "daily update"],
             "date": date["iso"]
         }
@@ -306,6 +387,7 @@ class YesterdayNewsBot:
                 "title": content["title"],
                 "tags": content["tags"],
                 "date": content["date"],
+                "generator": content.get("generator", "template"),
                 "status": "draft"
             }, f, indent=2)
         
@@ -315,9 +397,23 @@ class YesterdayNewsBot:
     def post_to_youtube(self, content, video_path=None):
         """Post content to YouTube community tab or upload video."""
         try:
-            # Import the poster from social_engine
-            sys.path.insert(0, str(REPO_DIR / "scripts" / "social_engine"))
+            # Import the poster from social_engine. Both paths are needed:
+            # this dir for `social_engine.platforms.*` package imports inside
+            # the posters, and the package dir for direct module imports here.
+            here = Path(__file__).resolve().parent
+            sys.path.insert(0, str(here))
+            sys.path.insert(0, str(here / "social_engine"))
+            from platform_policy import live_post_allowed
             from platforms.youtube_poster import YouTubePoster
+
+            # Honor the repo publication gate — same check the social-engine
+            # registry applies. YouTube is draft-only until policy changes.
+            if not live_post_allowed("youtube"):
+                log.warning(
+                    "Live posting to YouTube is disabled by platform_policy — "
+                    "content stays draft; review and post manually or update policy."
+                )
+                return False
             
             poster = YouTubePoster()
             
@@ -371,10 +467,16 @@ class YesterdayNewsBot:
         if mode == "generate":
             return self.run_daily_cycle()
         elif mode == "publish":
-            # Load today's content and publish
+            # Load today's content and publish. Prefer the local runtime dir;
+            # fall back to briefs the cloud workflow committed into the repo
+            # (content/yesterday-news/) and pulled onto this node.
             date = self.get_yesterday_date()
             project_dir = CONTENT_DIR / date["file"]
-            
+            if not project_dir.exists():
+                repo_dir = REPO_DIR / "content" / "yesterday-news" / date["file"]
+                if repo_dir.exists():
+                    project_dir = repo_dir
+
             if not project_dir.exists():
                 log.error(f"No content found for {date['display']}")
                 return False
@@ -383,6 +485,13 @@ class YesterdayNewsBot:
             if meta_file.exists():
                 with open(meta_file, 'r') as f:
                     content = json.load(f)
+                # Script text lives in script.txt, not metadata.json.
+                script_file = project_dir / "script.txt"
+                if "script" not in content and script_file.exists():
+                    content["script"] = script_file.read_text(encoding="utf-8")
+                if "script" not in content:
+                    log.error(f"No script found for {date['display']}")
+                    return False
                 return self.post_to_youtube(content)
             
         return False
@@ -412,11 +521,14 @@ def main():
             import time
             time.sleep(3600)  # Check every hour
     else:
+        # Propagate failure so schedulers (GitHub Actions, Task Scheduler) go
+        # red instead of silently green when no brief was produced.
         if args.mode == "both":
-            bot.run("generate")
-            bot.run("publish")
+            ok = bot.run("generate")
+            ok = bot.run("publish") and ok
         else:
-            bot.run(args.mode)
+            ok = bot.run(args.mode)
+        sys.exit(0 if ok else 1)
 
 
 if __name__ == "__main__":

@@ -576,8 +576,16 @@ section[id] {
 
 .km-shell {
   background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(167, 139, 250, 0.18), transparent 55%),
-    radial-gradient(circle at 90% 80%, rgba(103, 232, 249, 0.06), transparent 35%),
+    radial-gradient(
+      ellipse 80% 50% at 50% -10%,
+      rgba(167, 139, 250, 0.18),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(103, 232, 249, 0.06),
+      transparent 35%
+    ),
     var(--km-bg);
   color: var(--km-text);
   min-height: 100vh;
@@ -606,7 +614,11 @@ section[id] {
 .km-card {
   border: 1px solid var(--km-border);
   border-radius: 1.25rem;
-  background: linear-gradient(180deg, rgba(28, 28, 40, 0.95), rgba(20, 20, 28, 0.92));
+  background: linear-gradient(
+    180deg,
+    rgba(28, 28, 40, 0.95),
+    rgba(20, 20, 28, 0.92)
+  );
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
 }
 
@@ -758,7 +770,11 @@ section[id] {
 
 .km-nav-item-active {
   color: var(--km-text);
-  background: linear-gradient(90deg, rgba(167, 139, 250, 0.16), rgba(103, 232, 249, 0.08));
+  background: linear-gradient(
+    90deg,
+    rgba(167, 139, 250, 0.16),
+    rgba(103, 232, 249, 0.08)
+  );
   border: 1px solid rgba(167, 139, 250, 0.25);
 }
 

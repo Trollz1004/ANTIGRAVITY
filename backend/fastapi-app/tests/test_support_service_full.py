@@ -10,7 +10,6 @@ import pytest
 from app.config import Settings
 from app.models import SupportTicket, User
 from app.support_service import (
-    MAX_SUBJECT_LENGTH,
     SupportDecision,
     _ask_ollama_support,
     _ask_support_openclaw,
@@ -29,16 +28,16 @@ from app.support_service import (
 
 
 def _settings(**overrides) -> Settings:
-    base = dict(
-        support_ollama_base_url="",
-        support_openclaw_url="",
-        telegram_bot_token="",
-        telegram_chat_id="",
-        whatsapp_phone_id="",
-        whatsapp_token="",
-        whatsapp_to="",
-        support_operator_emails="ops@youandinotai.com",
-    )
+    base = {
+        "support_ollama_base_url": "",
+        "support_openclaw_url": "",
+        "telegram_bot_token": "",
+        "telegram_chat_id": "",
+        "whatsapp_phone_id": "",
+        "whatsapp_token": "",
+        "whatsapp_to": "",
+        "support_operator_emails": "ops@youandinotai.com",
+    }
     base.update(overrides)
     return Settings(**base)
 
@@ -535,12 +534,7 @@ class TestOperatorQueue:
             password_hash="h",
             display_name="Op",
         )
-        assert (
-            user_can_view_operator_queue(
-                user=user, settings=_settings()
-            )
-            is True
-        )
+        assert user_can_view_operator_queue(user=user, settings=_settings()) is True
 
     def test_non_operator_rejected(self):
         user = User(
@@ -549,12 +543,7 @@ class TestOperatorQueue:
             password_hash="h",
             display_name="Member",
         )
-        assert (
-            user_can_view_operator_queue(
-                user=user, settings=_settings()
-            )
-            is False
-        )
+        assert user_can_view_operator_queue(user=user, settings=_settings()) is False
 
 
 class TestPromptBuilder:

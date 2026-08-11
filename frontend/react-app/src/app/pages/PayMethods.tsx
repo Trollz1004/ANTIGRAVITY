@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Banknote, CreditCard, Landmark, QrCode, ShieldCheck, Wallet } from 'lucide-react';
+import {
+  Banknote,
+  CreditCard,
+  Landmark,
+  QrCode,
+  ShieldCheck,
+  Wallet,
+} from 'lucide-react';
 import { api } from '../../lib/api';
 
 type Rail = 'square' | 'paypal' | 'paypal_qr' | 'cashapp' | 'plaid';
@@ -37,39 +44,55 @@ export function PayMethods() {
     try {
       if (rail === 'paypal_qr') {
         window.open(PAYPAL_QR[qrWhich].href, '_blank', 'noopener,noreferrer');
-        setMsg('Opened PayPal QR link. Prefer Square for account-bound memberships.');
+        setMsg(
+          'Opened PayPal QR link. Prefer Square for account-bound memberships.'
+        );
         return;
       }
       if (rail === 'square') {
-        const res = await api.post<{ checkout_url: string }>('/billing/checkout-link', {
-          tier,
-        });
+        const res = await api.post<{ checkout_url: string }>(
+          '/billing/checkout-link',
+          {
+            tier,
+          }
+        );
         window.location.href = res.checkout_url;
         return;
       }
       if (rail === 'paypal') {
         try {
-          const res = await api.post<{ approve_url: string }>('/billing/paypal/create-order', {
-            tier,
-          });
+          const res = await api.post<{ approve_url: string }>(
+            '/billing/paypal/create-order',
+            {
+              tier,
+            }
+          );
           window.location.href = res.approve_url;
           return;
         } catch {
           // API not configured — fall through to managed QR
           window.open(PAYPAL_QR.primary.href, '_blank', 'noopener,noreferrer');
-          setMsg('PayPal API not configured — opened Joshua Coleman QR receive link instead.');
+          setMsg(
+            'PayPal API not configured — opened Joshua Coleman QR receive link instead.'
+          );
           return;
         }
       }
       if (rail === 'cashapp') {
-        const res = await api.post<{ checkout_url: string }>('/billing/cashapp/checkout', {
-          tier,
-        });
+        const res = await api.post<{ checkout_url: string }>(
+          '/billing/cashapp/checkout',
+          {
+            tier,
+          }
+        );
         window.location.href = res.checkout_url;
         return;
       }
       if (rail === 'plaid') {
-        const res = await api.post<{ link_token: string }>('/billing/plaid/link-token', {});
+        const res = await api.post<{ link_token: string }>(
+          '/billing/plaid/link-token',
+          {}
+        );
         setMsg(
           `Plaid Link token ready (${res.link_token.slice(0, 12)}…). Wire Plaid Link JS in production build to open the bank UI.`
         );
@@ -82,7 +105,12 @@ export function PayMethods() {
     }
   };
 
-  const rails: { id: Rail; name: string; icon: typeof CreditCard; note: string }[] = [
+  const rails: {
+    id: Rail;
+    name: string;
+    icon: typeof CreditCard;
+    note: string;
+  }[] = [
     {
       id: 'square',
       name: 'Square',
@@ -124,8 +152,12 @@ export function PayMethods() {
       </div>
       <h1 className="text-2xl font-semibold">Checkout rails</h1>
       <p className="mt-2 text-sm text-[var(--km-muted)]">
-        Dating surface uses Square, PayPal, Cash App Business, and optional Plaid verification.
-        <span className="font-semibold text-[#f87171]"> Stripe is not used here.</span>
+        Dating surface uses Square, PayPal, Cash App Business, and optional
+        Plaid verification.
+        <span className="font-semibold text-[#f87171]">
+          {' '}
+          Stripe is not used here.
+        </span>
       </p>
 
       <div className="mt-5 grid gap-2">
@@ -165,7 +197,9 @@ export function PayMethods() {
               Tip Jar
             </button>
           </div>
-          <div className="text-center text-sm font-semibold">{activeQr.label}</div>
+          <div className="text-center text-sm font-semibold">
+            {activeQr.label}
+          </div>
           <img
             src={activeQr.image}
             alt={`${activeQr.label} PayPal QR`}
@@ -179,7 +213,9 @@ export function PayMethods() {
           >
             Open PayPal link
           </a>
-          <p className="mt-2 text-center text-xs text-[var(--km-muted)]">Scan. Pay. Go.</p>
+          <p className="mt-2 text-center text-xs text-[var(--km-muted)]">
+            Scan. Pay. Go.
+          </p>
         </section>
       )}
 
@@ -223,19 +259,23 @@ export function PayMethods() {
       <div className="km-card mt-6 flex gap-3 p-4 text-sm text-[var(--km-muted)]">
         <ShieldCheck className="shrink-0 text-emerald-400" size={18} />
         <div>
-          Account-bound sessions for Square stay linked to your login email. Affiliate traffic must
-          enter via{' '}
+          Account-bound sessions for Square stay linked to your login email.
+          Affiliate traffic must enter via{' '}
           <a
             className="text-[var(--km-accent)] underline"
             href="https://trollz1004.github.io/youandinotai-links/?ref=clean-repo"
           >
             the public landing
           </a>
-          . PayPal QRs are receive links for soft-open / tips; memberships prefer Square.
+          . PayPal QRs are receive links for soft-open / tips; memberships
+          prefer Square.
         </div>
       </div>
 
-      <Link to="/app/preorder" className="km-btn-ghost mt-4 inline-flex no-underline">
+      <Link
+        to="/app/preorder"
+        className="km-btn-ghost mt-4 inline-flex no-underline"
+      >
         Back to pre-order
       </Link>
     </div>

@@ -166,9 +166,7 @@ def _validate_post(content: MarketingPost) -> None:
     _validate_platform_limits(content.platforms, content.hashtag_block)
 
 
-async def _get_or_404(
-    content_id: uuid.UUID, db: AsyncSession
-) -> MarketingContent:
+async def _get_or_404(content_id: uuid.UUID, db: AsyncSession) -> MarketingContent:
     """Fetch a stored content item or raise 404 — never fabricate one."""
     record = await db.get(MarketingContent, content_id)
     if record is None:

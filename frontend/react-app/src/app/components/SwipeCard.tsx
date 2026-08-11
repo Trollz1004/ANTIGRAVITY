@@ -1,10 +1,4 @@
-import {
-  CalendarCheck,
-  Diamond,
-  Heart,
-  MapPin,
-  X,
-} from 'lucide-react';
+import { CalendarCheck, Diamond, Heart, MapPin, X } from 'lucide-react';
 import { motion, PanInfo, useMotionValue, useTransform } from 'motion/react';
 import { VerifiedBadge } from './VerifiedBadge';
 

@@ -88,7 +88,10 @@ export function AppShell() {
             </div>
             <div className="mt-1 text-xs text-[var(--km-muted)]">Free Plan</div>
           </div>
-          <button onClick={handleLogout} className="km-btn-ghost w-full justify-start gap-3">
+          <button
+            onClick={handleLogout}
+            className="km-btn-ghost w-full justify-start gap-3"
+          >
             <LogOut size={18} />
             Sign out
           </button>

@@ -238,9 +238,9 @@ async def paypal_create_order(
 
     amount = TIER_AMOUNTS_USD[payload.tier]
     label = TIER_LABELS[payload.tier]
-    app_url = str(getattr(settings, "app_url", "https://youandinotai.com") or "").rstrip(
-        "/"
-    )
+    app_url = str(
+        getattr(settings, "app_url", "https://youandinotai.com") or ""
+    ).rstrip("/")
     base = str(
         getattr(settings, "paypal_api_base_url", "https://api-m.paypal.com")
         or "https://api-m.paypal.com"

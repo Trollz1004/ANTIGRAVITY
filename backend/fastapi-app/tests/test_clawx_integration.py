@@ -137,7 +137,9 @@ class TestConnectivity:
         assert "CLAWX_BASE_URL" in result["error"]
 
     async def test_specific_unknown_agent_returns_error(self):
-        client = _client({"claude": GOOD_KEY}, enabled=True, base_url="http://claw.test")
+        client = _client(
+            {"claude": GOOD_KEY}, enabled=True, base_url="http://claw.test"
+        )
         result = await client.check_connectivity(agent_name="ghost")
         assert result["reachable"] is False
         assert "ghost" in result["error"]
@@ -149,7 +151,9 @@ class TestConnectivity:
         assert "No ClawX agents" in result["error"]
 
     async def test_successful_health_check(self):
-        client = _client({"claude": GOOD_KEY}, enabled=True, base_url="http://claw.test")
+        client = _client(
+            {"claude": GOOD_KEY}, enabled=True, base_url="http://claw.test"
+        )
         response = MagicMock(status_code=200)
         mock_http = AsyncMock()
         mock_http.get = AsyncMock(return_value=response)
@@ -164,7 +168,9 @@ class TestConnectivity:
         assert headers["Authorization"] == f"Bearer {GOOD_KEY}"
 
     async def test_server_error_status_is_unreachable(self):
-        client = _client({"claude": GOOD_KEY}, enabled=True, base_url="http://claw.test")
+        client = _client(
+            {"claude": GOOD_KEY}, enabled=True, base_url="http://claw.test"
+        )
         response = MagicMock(status_code=503)
         mock_http = AsyncMock()
         mock_http.get = AsyncMock(return_value=response)
@@ -176,7 +182,9 @@ class TestConnectivity:
         assert result["status_code"] == 503
 
     async def test_http_error_is_captured(self):
-        client = _client({"claude": GOOD_KEY}, enabled=True, base_url="http://claw.test")
+        client = _client(
+            {"claude": GOOD_KEY}, enabled=True, base_url="http://claw.test"
+        )
         mock_http = AsyncMock()
         mock_http.get = AsyncMock(side_effect=httpx.ConnectError("refused"))
         mock_http.__aenter__ = AsyncMock(return_value=mock_http)
