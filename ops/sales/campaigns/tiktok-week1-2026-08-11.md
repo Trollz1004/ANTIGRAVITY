@@ -11,14 +11,14 @@ Payments rail is Square — but pricing/checkout NEVER appears in TikTok copy. C
 
 ## 0. Before Anything: Claims Gate
 
-> **HARD BLOCKER (verified in code 2026-08-11):** the backend does not yet
-> enforce verification before interaction — `swipe.py` discover/match and
-> `messages.py` send_message contain no `verified` checks, so an unverified
-> account can currently browse, match, and message. Every script below that
-> says "verified before they can match/message/talk to you" is INACCURATE
-> until that gate ships (or the copy is softened to "every member is offered
-> verification / look for the verified badge"). Joshua decides: ship the
-> enforcement gate, or soften all scripts. NOTHING POSTS BEFORE THAT DECISION.
+> **BLOCKER STATUS (updated 2026-08-11):** the enforcement gate is CODED and
+> TESTED (959 passed, 95.39% coverage) in PR `claude/scc-followup-fixes` —
+> discover/swipe/messages now reject unverified callers with 403, and
+> discover excludes unverified profiles. NOT YET MERGED to main or deployed.
+> Every script below that says "verified before they can match/message/talk
+> to you" stays INACCURATE, and NOTHING POSTS, until Joshua merges that PR
+> and confirms the gate is live in production. Once confirmed live, delete
+> this notice.
 
 Every slide below sells exactly one idea: **youandinotai.com human-verifies every profile, so you match with real people.**
 

@@ -15,14 +15,13 @@
 - Claim discipline: "verified human" is the provable claim. Do NOT promise "no catfish"
   (a verified human can still misrepresent themselves) or any "100%" guarantee unless
   Joshua explicitly approves that claim strength in writing.
-- **HARD BLOCKER (verified in code 2026-08-11):** the backend does not yet enforce
-  verification before interaction — `backend/fastapi-app/app/routers/swipe.py` and
-  `messages.py` contain no `verified` gate, so unverified accounts can currently
-  browse, match, and message. Every draft below claiming members "must pass
-  verification before they can interact" is inaccurate until that enforcement
-  ships. NO SUBMISSION until Joshua either (a) approves shipping the enforcement
-  gate (small backend change, ~3 routers) or (b) directs softening the copy to
-  verification-as-offered ("look for the verified badge").
+- **BLOCKER STATUS (updated 2026-08-11):** the enforcement gate (`require_verified_profile`
+  on discover/swipe/messages, 403 for unverified callers, unverified profiles excluded
+  from discover) is CODED and TESTED (959 passed, 95.39% coverage) in PR
+  `claude/scc-followup-fixes` — but NOT YET MERGED to main / deployed. Every draft below
+  claiming members "must pass verification before they can interact" stays inaccurate,
+  and NO SUBMISSION happens, until Joshua merges that PR and confirms it's live in
+  production. Once live, this line can be deleted.
 - **NO pricing figures appear in any draft.** Pricing statements must be copied verbatim
   from the live Square catalog at submission time. Placeholder used: `[PRICE — copy from Square catalog]`.
 - No fabricated metrics, no fabricated testimonials, no user-count claims.
