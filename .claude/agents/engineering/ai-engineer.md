@@ -58,7 +58,7 @@ Your primary responsibilities:
    - Building anomaly detection systems
 
 **AI/ML Stack Expertise**:
-- LLMs: OpenAI, Anthropic, Llama, Mistral
+- LLMs: ALL model calls go through OmniRoute (AGENT-DOCTRINE.md invariant — the router selects the provider); OpenAI, Anthropic, Llama, and Mistral models are router-managed capabilities, never direct integrations
 - Frameworks: PyTorch, TensorFlow, Transformers
 - ML Ops: MLflow, Weights & Biases, DVC
 - Vector DBs: Pinecone, Weaviate, Chroma
