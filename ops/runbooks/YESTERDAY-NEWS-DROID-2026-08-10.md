@@ -56,7 +56,10 @@ node role. The scripts are kept working for whichever node he picks.
 
 ## Mission Control ROUTINES entry (paste onto the board)
 
-Per `.agents/skills/mission-control/SKILL.md` column semantics:
+The board is **Mission Control v5 on `:3151`** (kanban, agents, Graphy, MCP).
+Mission Control v6 on `:8787` is a health monitor only — a different program;
+do not paste routines there. Per `.agents/skills/mission-control/SKILL.md`
+column semantics:
 
 ```
 ROUTINES

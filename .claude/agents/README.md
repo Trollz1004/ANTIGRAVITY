@@ -1,16 +1,34 @@
-# ANTIGRAVITY Claude Code Agents
+# ANTIGRAVITY Skill Pool (Claude Code subagent format)
 
-Claude Code subagent roster for the ANTIGRAVITY workspace. Vendored from the
-open-source Contains Studio agents collection, with an ANTIGRAVITY doctrine
-section injected into every agent and mission-specific agents added on top.
+Skill pool for the ANTIGRAVITY workspace, in Claude Code subagent format.
+Vendored from the open-source Contains Studio collection, with an ANTIGRAVITY
+doctrine section injected into every file and mission-specific entries added
+on top.
 
-Claude Code discovers these automatically (recursively) and delegates when a
-task matches an agent's description. Invoke explicitly by asking for an agent
-by name, e.g. "use the tiktok-strategist agent".
+**These files are not autonomous workers.** The operating model (set by
+Joshua, mirrored in `mission-control-v5` `harnesses.ts`):
 
-This roster is separate from `.agents/skills/` (the SKILL.md library, a
-different format). Agents are *who does the work*; skills are *reference
-loaded into a session*. Don't duplicate content between them.
+- **The three harnesses do the work** — Hermes (research/outreach/revenue/
+  content), OpenClaw (engineering/verification), OpenCode (CEO). A harness
+  spins up sub-agents and loads entries from the skill pool as their skill
+  set (minimum 5 skills per sub-agent). The pool spans ~148 skills across
+  the trees: the 42 files here, the active entries under `.agents/skills/`,
+  and the node-local trees (Hermes preload set, OpenCode's
+  `~/.agents/skills`) — counts per tree live in `CLAUDE.md`.
+- **High-reasoning judgment gates the output.** Before a non-trivial change
+  lands, the judge panel (`testing/judge-panel.md` — Opus/Fable, Grok, Gemini
+  at max reasoning via OmniRoute) reviews the diff and reports an advisory
+  verdict to the active lead.
+- **Mission Control v5 on `:3151` is the board** where this work is
+  coordinated. Mission Control v6 on `:8787` is a *health monitor only* — a
+  different program; never treat it as the board.
+
+Claude Code sessions also discover these files automatically (recursively)
+and can delegate directly when a task matches a description — that's the
+same pool, driven by a different harness.
+
+This pool complements `.agents/skills/` (the SKILL.md library, a different
+format). Don't duplicate content between them.
 
 ## Departments
 
