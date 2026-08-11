@@ -35,8 +35,11 @@ either one producing a brief is a green day.
    `omni` (cloud model) or `template` (deterministic fallback).
 3. Render: TTS + visuals from `script.txt` (renderer of choice; not yet automated).
 4. Publish: `python yesterday-news-today.py --mode publish` posts the script to
-   the YouTube community tab via `social_engine`. Full video upload is manual
-   until a renderer is wired.
+   the YouTube community tab via `social_engine`. Note: publishing honors
+   `social_engine/platform_policy.py`, which currently marks YouTube
+   draft-only (live posting disabled) — briefs stay draft for manual review
+   until Joshua flips that policy. Full video upload is manual until a
+   renderer is wired.
 
 ## Credentials (names only — values live in the vault / local env, never in git)
 
