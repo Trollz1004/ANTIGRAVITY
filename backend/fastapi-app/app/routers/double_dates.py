@@ -344,6 +344,35 @@ async def decline_double_date(
     session.status = "declined"
     await db.commit()
     await db.refresh(session)
+
+    # Declining (unlike propose/accept) is a safe, reject-only action that
+    # should always be available -- but a legacy session can still pair the
+    # caller with an unverified participant, so don't let the response leak
+    # that participant's name/photo via _serialize_session.
+    match_a = await db.get(Match, session.match_a_id)
+    match_b = await db.get(Match, session.match_b_id)
+    if not await _match_fully_verified(db, match_a) or not await _match_fully_verified(
+        db, match_b
+    ):
+        accepted_match_ids = (
+            await db.scalars(
+                select(DoubleDateAcceptance.match_id).where(
+                    DoubleDateAcceptance.session_id == session_id,
+                    DoubleDateAcceptance.accepted.is_(True),
+                )
+            )
+        ).all()
+        return DoubleDateSessionResponse(
+            id=session.id,
+            match_a_id=session.match_a_id,
+            match_b_id=session.match_b_id,
+            status=session.status,
+            created_at=session.created_at,
+            accepted_match_ids=list(accepted_match_ids),
+            couple_a=None,
+            couple_b=None,
+        )
+
     return await _serialize_session(db, session)
 
 

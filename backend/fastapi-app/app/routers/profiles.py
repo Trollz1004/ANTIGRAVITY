@@ -134,7 +134,7 @@ async def get_user_profile(
         raise not_found(message="Profile not found")
 
     user = await db.get(User, user_id)
-    if not user:
-        raise not_found(message="User not found")
+    if not user or not user.bot_shield_verified:
+        raise not_found(message="Profile not found")
 
     return _profile_response(user, profile)

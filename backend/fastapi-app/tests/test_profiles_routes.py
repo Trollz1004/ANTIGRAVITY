@@ -271,3 +271,25 @@ def test_get_user_profile_nonexistent_user_returns_404(client, db_session_factor
         assert resp.status_code == 404
     finally:
         app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_get_user_profile_unverified_target_returns_404(client, db_session_factory):
+    """A verified viewer must not be able to read an unverified member's profile."""
+    viewer = _make_user(email="viewer4@example.com")
+    target = User(
+        id=uuid.uuid4(),
+        email="unverified_target@example.com",
+        password_hash="hashed",
+        display_name="Unverified Target",
+        bot_shield_verified=False,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    profile = Profile(id=uuid.uuid4(), user_id=target.id, bio="Should be hidden")
+    seed(viewer, target, profile, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(viewer)
+    try:
+        resp = client.get(f"/api/v1/profiles/{target.id}")
+        assert resp.status_code == 404
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)

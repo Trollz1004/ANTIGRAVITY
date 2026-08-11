@@ -24,7 +24,13 @@
   production, AND confirms no other interaction surface (e.g. any future call/media/upload
   endpoint) was missed — the video-calling gap was caught by review after the first "coded"
   claim, so treat this list as provisional until a full audit, not proof of completeness.
-  Once confirmed complete and live, this line can be deleted.
+  Separately, `POST /auth/beta-access` creates a founding-member account with
+  `bot_shield_verified=True` on possession of a valid code alone, without running the
+  human challenge — so "every member is a verified human" (the differentiator above) stays
+  false for beta members even once the gate above is live. Deleting this line also requires
+  either Joshua narrowing that claim to exclude beta access, or beta-access being changed to
+  run the same human challenge as standard signup. Once BOTH conditions are confirmed, this
+  line can be deleted.
 - **NO pricing figures appear in any draft.** Pricing statements must be copied verbatim
   from the live Square catalog at submission time. Placeholder used: `[PRICE — copy from Square catalog]`.
 - No fabricated metrics, no fabricated testimonials, no user-count claims.
