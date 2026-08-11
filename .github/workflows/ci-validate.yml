@@ -135,7 +135,9 @@ jobs:
             echo "::error::Doctrine drift scan has no valid target directories — repo layout changed; update ci-validate.yml"
             exit 1
           fi
-          PATTERN='ai-solutions\.store|Router100||100% to '
+          # NOTE: an empty alternative (||) here would make grep match every
+          # line — keep exactly one pipe between markers.
+          PATTERN='ai-solutions\.store|Router100|100% to '
           # grep exit codes: 0=match, 1=no match, 2=error. Trailing `|| true` collapses
           # 1 (no match) into a clean empty result; an actual error would surface via set -u
           # on an unset later var, but we explicitly guard the empty case below.
