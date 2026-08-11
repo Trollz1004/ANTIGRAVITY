@@ -58,8 +58,13 @@ node role. The scripts are kept working for whichever node he picks.
 
 The board is **Mission Control v5 on `:3151`** (kanban, agents, Graphy, MCP).
 Mission Control v6 on `:8787` is a health monitor only — a different program;
-do not paste routines there. Per `.agents/skills/mission-control/SKILL.md`
-column semantics:
+do not paste routines there. The ROUTINES column (cron, owner, last/next
+fire) is part of the board's operating contract in
+`.agents/skills/mission-control/SKILL.md`; the `mission-control-v5/` snapshot
+vendored in this repo is older than that contract (its types stop at
+NOW/NEXT/BLOCKED/DONE) — the live board on the node is the reference, and
+per the skill: "If this is not literally true, open an ops-drift issue."
+Column semantics:
 
 ```
 ROUTINES

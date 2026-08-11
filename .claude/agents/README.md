@@ -6,7 +6,11 @@ doctrine section injected into every file and mission-specific entries added
 on top.
 
 **These files are not autonomous workers.** The operating model (set by
-Joshua, mirrored in `mission-control-v5` `harnesses.ts`):
+Joshua, encoded in `harnesses.ts` in the standalone
+[`Trollz1004/mission-control-v5`](https://github.com/Trollz1004/mission-control-v5)
+repo — note the `mission-control-v5/` snapshot vendored *inside this repo*
+predates that refactor: its `agents.ts` still lists a four-orchestrator
+roster including retired Ornith, and is not the contract):
 
 - **The three harnesses do the work** — Hermes (research/outreach/revenue/
   content), OpenClaw (engineering/verification), OpenCode (CEO). A harness
