@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
+from app.auth import get_current_user, require_verified_profile
 from app.config import get_settings
 from app.database import get_db
 from app.models import Board, Comment, Post, SupportTicket, User
@@ -55,7 +55,7 @@ async def list_boards(
 @router.get("/{slug}/posts", response_model=list[PostResponse])
 async def list_posts(
     slug: str,
-    _user: User = Depends(get_current_user),
+    _user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
     limit: int = 30,
     offset: int = 0,
@@ -64,39 +64,43 @@ async def list_posts(
     if not board:
         raise HTTPException(status_code=404, detail="Board not found")
 
-    posts = (
-        await db.scalars(
-            select(Post)
-            .where(Post.board_id == board.id)
+    # Join and filter on the author's verification BEFORE offset/limit --
+    # filtering in Python after the SQL page was cut would silently drop
+    # verified posts that fell past the page boundary once legacy
+    # unverified posts were excluded, and neither board client in the
+    # frontend advances `offset`, so those posts would become permanently
+    # invisible instead of just reordered.
+    rows = (
+        await db.execute(
+            select(Post, User)
+            .join(User, User.id == Post.author_id)
+            .where(Post.board_id == board.id, User.bot_shield_verified.is_(True))
             .order_by(Post.created_at.desc())
             .offset(offset)
             .limit(limit)
         )
     ).all()
 
-    results = []
-    for post in posts:
-        author = await db.get(User, post.author_id)
-        results.append(
-            PostResponse(
-                id=post.id,
-                board_slug=slug,
-                author_id=post.author_id,
-                author_name=author.display_name if author else "Unknown",
-                title=post.title,
-                body=post.body,
-                like_count=post.like_count,
-                created_at=post.created_at,
-            )
+    return [
+        PostResponse(
+            id=post.id,
+            board_slug=slug,
+            author_id=post.author_id,
+            author_name=author.display_name,
+            title=post.title,
+            body=post.body,
+            like_count=post.like_count,
+            created_at=post.created_at,
         )
-    return results
+        for post, author in rows
+    ]
 
 
 @router.post("/{slug}/posts", response_model=PostResponse, status_code=201)
 async def create_post(
     slug: str,
     payload: PostCreateRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> PostResponse:
     board = await db.scalar(select(Board).where(Board.slug == slug))
@@ -130,7 +134,7 @@ async def create_post(
 async def list_comments(
     slug: str,
     post_id: uuid.UUID,
-    _user: User = Depends(get_current_user),
+    _user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> list[CommentResponse]:
     comments = (
@@ -144,11 +148,13 @@ async def list_comments(
     results = []
     for comment in comments:
         author = await db.get(User, comment.author_id)
+        if not author or not author.bot_shield_verified:
+            continue
         results.append(
             CommentResponse(
                 id=comment.id,
                 author_id=comment.author_id,
-                author_name=author.display_name if author else "Unknown",
+                author_name=author.display_name,
                 body=comment.body,
                 created_at=comment.created_at,
             )
@@ -163,11 +169,15 @@ async def create_comment(
     slug: str,
     post_id: uuid.UUID,
     payload: CommentCreateRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> CommentResponse:
     post = await db.get(Post, post_id)
     if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    post_author = await db.get(User, post.author_id)
+    if not post_author or not post_author.bot_shield_verified:
         raise HTTPException(status_code=404, detail="Post not found")
 
     comment = Comment(

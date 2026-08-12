@@ -8,7 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.age_gate import ensure_adult
-from app.auth import get_current_user
+from app.auth import get_current_user, require_verified_profile
 from app.database import get_db
 from app.error_responses import conflict, not_found
 from app.models import Profile, User
@@ -123,7 +123,7 @@ async def patch_my_profile(
 @router.get("/{user_id}", response_model=ProfileResponse)
 async def get_user_profile(
     user_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> ProfileResponse:
     if await has_block_relationship(db, user_a=current_user.id, user_b=user_id):
@@ -134,7 +134,7 @@ async def get_user_profile(
         raise not_found(message="Profile not found")
 
     user = await db.get(User, user_id)
-    if not user:
-        raise not_found(message="User not found")
+    if not user or not user.bot_shield_verified:
+        raise not_found(message="Profile not found")
 
     return _profile_response(user, profile)

@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
+from app.auth import get_current_user, require_verified_profile
 from app.database import get_db
 from app.models import Event, EventRSVP, User
 from app.schemas import EventCreateRequest, EventResponse, EventRSVPResponse
@@ -56,7 +56,7 @@ async def list_events(
 @router.post("", response_model=EventResponse, status_code=201)
 async def create_event(
     payload: EventCreateRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> EventResponse:
     event = Event(
@@ -91,11 +91,15 @@ async def create_event(
 @router.post("/{event_id}/rsvp", response_model=EventRSVPResponse)
 async def rsvp_event(
     event_id: uuid.UUID,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> EventRSVP:
     event = await db.get(Event, event_id)
     if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+
+    organizer = await db.get(User, event.organizer_id)
+    if not organizer or not organizer.bot_shield_verified:
         raise HTTPException(status_code=404, detail="Event not found")
 
     existing = await db.scalar(

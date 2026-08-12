@@ -20,7 +20,7 @@ from fastapi import (
     WebSocketDisconnect,
 )
 
-from app.auth import get_current_user
+from app.auth import require_verified_profile
 from app.dependencies.websocket_auth import get_current_websocket_user
 from app.models import User
 
@@ -204,7 +204,7 @@ async def websocket_notifications(
 @router.post("/notifications/broadcast", status_code=202)
 async def broadcast_notification(
     payload: dict[str, Any],
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
 ) -> dict[str, Any]:
     """Broadcast a notification to all connected WebSocket clients.
 

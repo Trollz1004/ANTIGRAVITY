@@ -25,6 +25,7 @@ def _seed_user(db_session_factory, **overrides) -> User:
         password_hash="hashed",
         display_name="WS User",
         is_active=overrides.get("is_active", True),
+        bot_shield_verified=overrides.get("bot_shield_verified", True),
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )

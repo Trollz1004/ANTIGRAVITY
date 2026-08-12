@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from app.auth import get_current_user
 from app.main import app
 from app.models import Match, Message, User
-from tests.helpers import override_user, seed
+from tests.helpers import override_user, seed, verified_profile
 
 
 def _make_user(*, email: str, display_name: str = "Msg User") -> User:
@@ -42,7 +42,14 @@ def test_get_messages_non_participant_returns_404(client, db_session_factory):
     user_a = _make_user(email="msg_a@example.com")
     user_b = _make_user(email="msg_b@example.com")
     match = _make_match(user_a, user_b)
-    seed(stranger, user_a, user_b, match, db_session_factory=db_session_factory)
+    seed(
+        stranger,
+        user_a,
+        user_b,
+        verified_profile(stranger),
+        match,
+        db_session_factory=db_session_factory,
+    )
 
     app.dependency_overrides[get_current_user] = override_user(stranger)
     try:
@@ -56,7 +63,13 @@ def test_get_messages_participant_returns_200_empty(client, db_session_factory):
     user_a = _make_user(email="get_msg_a@example.com")
     user_b = _make_user(email="get_msg_b@example.com")
     match = _make_match(user_a, user_b)
-    seed(user_a, user_b, match, db_session_factory=db_session_factory)
+    seed(
+        user_a,
+        user_b,
+        verified_profile(user_a),
+        match,
+        db_session_factory=db_session_factory,
+    )
 
     app.dependency_overrides[get_current_user] = override_user(user_a)
     try:
@@ -87,7 +100,15 @@ def test_get_messages_returns_oldest_first(client, db_session_factory):
         created_at=datetime(2025, 1, 1, 11, 0, 0, tzinfo=timezone.utc),
     )
 
-    seed(user_a, user_b, match, msg1, msg2, db_session_factory=db_session_factory)
+    seed(
+        user_a,
+        user_b,
+        verified_profile(user_a),
+        match,
+        msg1,
+        msg2,
+        db_session_factory=db_session_factory,
+    )
 
     app.dependency_overrides[get_current_user] = override_user(user_a)
     try:
@@ -103,7 +124,7 @@ def test_get_messages_returns_oldest_first(client, db_session_factory):
 
 def test_get_messages_unknown_match_returns_404(client, db_session_factory):
     user = _make_user(email="unknown_match_user@example.com")
-    seed(user, db_session_factory=db_session_factory)
+    seed(user, verified_profile(user), db_session_factory=db_session_factory)
 
     app.dependency_overrides[get_current_user] = override_user(user)
     try:
@@ -121,7 +142,14 @@ def test_send_message_non_participant_returns_404(client, db_session_factory):
     user_a = _make_user(email="send_a@example.com")
     user_b = _make_user(email="send_b@example.com")
     match = _make_match(user_a, user_b)
-    seed(stranger, user_a, user_b, match, db_session_factory=db_session_factory)
+    seed(
+        stranger,
+        user_a,
+        user_b,
+        verified_profile(stranger),
+        match,
+        db_session_factory=db_session_factory,
+    )
 
     app.dependency_overrides[get_current_user] = override_user(stranger)
     try:
@@ -135,7 +163,14 @@ def test_send_message_returns_201_and_persists(client, db_session_factory):
     user_a = _make_user(email="send_ok_a@example.com")
     user_b = _make_user(email="send_ok_b@example.com")
     match = _make_match(user_a, user_b)
-    seed(user_a, user_b, match, db_session_factory=db_session_factory)
+    seed(
+        user_a,
+        user_b,
+        verified_profile(user_a),
+        verified_profile(user_b),
+        match,
+        db_session_factory=db_session_factory,
+    )
 
     app.dependency_overrides[get_current_user] = override_user(user_a)
     try:
@@ -155,7 +190,13 @@ def test_send_message_to_inactive_match_returns_400(client, db_session_factory):
     user_a = _make_user(email="inactive_a@example.com")
     user_b = _make_user(email="inactive_b@example.com")
     match = _make_match(user_a, user_b, status="closed")
-    seed(user_a, user_b, match, db_session_factory=db_session_factory)
+    seed(
+        user_a,
+        user_b,
+        verified_profile(user_a),
+        match,
+        db_session_factory=db_session_factory,
+    )
 
     app.dependency_overrides[get_current_user] = override_user(user_a)
     try:
@@ -165,11 +206,52 @@ def test_send_message_to_inactive_match_returns_400(client, db_session_factory):
         app.dependency_overrides.pop(get_current_user, None)
 
 
+def test_send_message_unverified_sender_returns_403(client, db_session_factory):
+    user_a = _make_user(email="unverified_sender_a@example.com")
+    user_b = _make_user(email="unverified_sender_b@example.com")
+    match = _make_match(user_a, user_b)
+    seed(
+        user_a,
+        user_b,
+        verified_profile(user_a, verified=False),
+        match,
+        db_session_factory=db_session_factory,
+    )
+
+    app.dependency_overrides[get_current_user] = override_user(user_a)
+    try:
+        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": "Hey"})
+        assert resp.status_code == 403
+        assert "verification" in resp.json()["detail"].lower()
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_send_message_sender_without_profile_returns_403(client, db_session_factory):
+    user_a = _make_user(email="no_profile_sender_a@example.com")
+    user_b = _make_user(email="no_profile_sender_b@example.com")
+    match = _make_match(user_a, user_b)
+    seed(user_a, user_b, match, db_session_factory=db_session_factory)
+
+    app.dependency_overrides[get_current_user] = override_user(user_a)
+    try:
+        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": "Hey"})
+        assert resp.status_code == 403
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
 def test_send_empty_content_returns_422(client, db_session_factory):
     user_a = _make_user(email="empty_content_a@example.com")
     user_b = _make_user(email="empty_content_b@example.com")
     match = _make_match(user_a, user_b)
-    seed(user_a, user_b, match, db_session_factory=db_session_factory)
+    seed(
+        user_a,
+        user_b,
+        verified_profile(user_a),
+        match,
+        db_session_factory=db_session_factory,
+    )
 
     app.dependency_overrides[get_current_user] = override_user(user_a)
     try:

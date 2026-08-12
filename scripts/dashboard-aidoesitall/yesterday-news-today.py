@@ -111,12 +111,13 @@ class YesterdayNewsBot:
             "short": yesterday.strftime("%b %d")
         }
 
-    def _normalize_news_item(self, title: str, summary: str, source: str, published_at: str | None = None):
+    def _normalize_news_item(self, title: str, summary: str, source: str, published_at: str | None = None, url: str | None = None):
         return {
             "title": title.strip(),
             "summary": summary.strip(),
             "source": source.strip(),
             "published_at": published_at or "",
+            "url": (url or "").strip(),
         }
 
     def _fetch_newsapi(self, limit: int = 5):
@@ -157,9 +158,10 @@ class YesterdayNewsBot:
             description = (article.get("description") or article.get("content") or "").strip()
             source = (article.get("source") or {}).get("name") or "NewsAPI"
             published_at = article.get("publishedAt") or ""
+            article_url = article.get("url") or ""
             if not title or not description:
                 continue
-            items.append(self._normalize_news_item(title, description, source, published_at))
+            items.append(self._normalize_news_item(title, description, source, published_at, article_url))
             if len(items) >= limit:
                 break
 
@@ -219,6 +221,7 @@ class YesterdayNewsBot:
                 title = (item.findtext("title") or "").strip()
                 summary = (item.findtext("description") or "").strip()
                 published_raw = (item.findtext("pubDate") or "").strip()
+                article_url = (item.findtext("link") or "").strip()
                 if not title or not summary:
                     continue
 
@@ -230,7 +233,7 @@ class YesterdayNewsBot:
                     except Exception:
                         pass
 
-                items.append(self._normalize_news_item(title, summary, source_name, published_raw))
+                items.append(self._normalize_news_item(title, summary, source_name, published_raw, article_url))
                 if len(items) >= limit:
                     break
 
@@ -351,12 +354,18 @@ class YesterdayNewsBot:
             script = llm_script
             generator = "omni"
 
+        sources = [
+            {"title": item["title"], "source": item["source"], "url": item.get("url", "")}
+            for item in news_items[:5]
+        ]
+
         return {
             "title": title,
             "script": script,
             "generator": generator,
             "tags": ["news", "daily news", "yesterday's news", "news recap", "daily update"],
-            "date": date["iso"]
+            "date": date["iso"],
+            "sources": sources,
         }
     
     def fetch_news(self):
@@ -388,6 +397,7 @@ class YesterdayNewsBot:
                 "tags": content["tags"],
                 "date": content["date"],
                 "generator": content.get("generator", "template"),
+                "sources": content.get("sources", []),
                 "status": "draft"
             }, f, indent=2)
         

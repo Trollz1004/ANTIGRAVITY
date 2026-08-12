@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
+from app.auth import require_verified_profile
 from app.database import get_db
 from app.models import Match, Profile, Swipe, User
 from app.moderation import (
@@ -28,7 +28,7 @@ router = APIRouter()
 @router.post("/swipe", response_model=SwipeResponse)
 async def swipe(
     payload: SwipeRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> SwipeResponse:
     if payload.target_id == user.id:
@@ -37,6 +37,16 @@ async def swipe(
         raise HTTPException(
             status_code=403, detail="That profile is unavailable due to safety settings"
         )
+
+    # Reject an unverified (or nonexistent) target before ever storing the
+    # swipe. A target obtained from a surface that doesn't filter on
+    # verification (e.g. the intentionally open event/volunteering listings)
+    # must not get a Swipe row: once stored, a duplicate-swipe 409 would
+    # permanently block the caller from swiping again even after the target
+    # verifies, and swiped_subq would permanently hide them from discovery.
+    target_user = await db.get(User, payload.target_id)
+    if not target_user or not target_user.bot_shield_verified:
+        raise HTTPException(status_code=404, detail="Profile not found")
 
     # Check for duplicate swipe
     existing = await db.scalar(
@@ -68,6 +78,9 @@ async def swipe(
                 Swipe.direction == "like",
             )
         )
+        # target_user.bot_shield_verified was already confirmed True above
+        # (the swipe is rejected before it's ever stored if the target isn't
+        # currently verified), so no separate re-check is needed here.
         if mutual:
             match = Match(
                 id=uuid.uuid4(),
@@ -85,7 +98,7 @@ async def swipe(
 
 @router.get("/matches", response_model=list[MatchResponse])
 async def get_matches(
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> list[MatchResponse]:
     matches = (
@@ -105,6 +118,13 @@ async def get_matches(
         if await has_block_relationship(db, user_a=user.id, user_b=other_id):
             continue
         other_user = await db.get(User, other_id)
+        # Legacy matches (formed before this gate, or where the other side
+        # lost verified status) must not surface an unverified member's
+        # name/photos/metadata to a verified caller -- discover and new
+        # matches already exclude unverified members entirely; the match
+        # list should too, same as send_message closing the conversation.
+        if not other_user or not other_user.bot_shield_verified:
+            continue
         other_profile = await db.scalar(
             select(Profile).where(Profile.user_id == other_id)
         )
@@ -117,7 +137,12 @@ async def get_matches(
                 photos=(other_profile.photos or []) if other_profile else [],
                 matched_at=match.matched_at,
                 last_message_at=match.last_message_at,
-                verified=(other_profile.verified if other_profile else False),
+                # Profile.verified is only a best-effort mirror of the
+                # canonical User.bot_shield_verified flag (see
+                # require_verified_profile) -- serialize the canonical one so
+                # a verified beta-access/pre-profile user doesn't show as
+                # unverified in the UI.
+                verified=(other_user.bot_shield_verified if other_user else False),
                 subscription_active=(
                     user_has_active_subscription(other_user) if other_user else False
                 ),
@@ -130,7 +155,7 @@ async def get_matches(
 @router.get("/matches/{match_id}", response_model=MatchResponse)
 async def get_match(
     match_id: uuid.UUID,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> MatchResponse:
     match = await db.get(Match, match_id)
@@ -146,9 +171,11 @@ async def get_match(
         raise HTTPException(status_code=404, detail="Match not found")
 
     other_user = await db.get(User, other_id)
-    other_profile = await db.scalar(select(Profile).where(Profile.user_id == other_id))
-    if not other_user:
+    # Same as get_matches above: don't surface a legacy match whose other
+    # participant is unverified.
+    if not other_user or not other_user.bot_shield_verified:
         raise HTTPException(status_code=404, detail="Match not found")
+    other_profile = await db.scalar(select(Profile).where(Profile.user_id == other_id))
 
     return MatchResponse(
         match_id=match.id,
@@ -157,7 +184,8 @@ async def get_match(
         photos=(other_profile.photos or []) if other_profile else [],
         matched_at=match.matched_at,
         last_message_at=match.last_message_at,
-        verified=(other_profile.verified if other_profile else False),
+        # Canonical flag, not the Profile.verified mirror -- see get_matches above.
+        verified=other_user.bot_shield_verified,
         subscription_active=user_has_active_subscription(other_user),
         breeze_bypass_enabled=match.breeze_bypass_enabled,
     )
@@ -165,7 +193,7 @@ async def get_match(
 
 @router.get("/discover", response_model=list[DiscoverProfileResponse])
 async def discover(
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
     limit: int = 20,
 ) -> list[DiscoverProfileResponse]:
@@ -174,15 +202,21 @@ async def discover(
     blocked_by_me = blocked_by_user_subquery(user.id)
     blocked_me = blocked_user_subquery(user.id)
 
-    # Get profiles excluding self and already-swiped
+    # Get verified profiles excluding self and already-swiped. Filters on
+    # User.bot_shield_verified (the canonical verification flag every
+    # verification path sets), not Profile.verified, which is only a
+    # best-effort mirror and can be stale or never-set for legitimately
+    # verified users (see require_verified_profile).
     profiles = (
         await db.scalars(
             select(Profile)
+            .join(User, User.id == Profile.user_id)
             .where(
                 Profile.user_id != user.id,
                 Profile.user_id.notin_(swiped_subq),
                 Profile.user_id.notin_(blocked_by_me),
                 Profile.user_id.notin_(blocked_me),
+                User.bot_shield_verified.is_(True),
             )
             .order_by(func.random())
             .limit(limit)
@@ -203,7 +237,8 @@ async def discover(
                 photos=profile.photos or [],
                 interests=profile.interests or [],
                 location=profile.location,
-                verified=profile.verified,
+                # Canonical flag, not the Profile.verified mirror -- see get_matches above.
+                verified=profile_user.bot_shield_verified,
                 subscription_active=user_has_active_subscription(profile_user),
                 engagement_score=profile_user.engagement_score,
                 member_badge=profile_user.member_badge,
@@ -216,7 +251,7 @@ async def discover(
 async def toggle_breeze_bypass(
     match_id: uuid.UUID,
     enabled: bool,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ):
     """Breeze Bypass: Toggle zero-chat handshake mode for a specific match."""

@@ -1,5 +1,5 @@
 {
-  "title": "Yesterday's News Today \u2014 August 10, 2026",
+  "title": "Yesterday's News Today — August 10, 2026",
   "tags": [
     "news",
     "daily news",
@@ -9,5 +9,34 @@
   ],
   "date": "2026-08-10",
   "generator": "template",
-  "status": "draft"
+  "status": "draft",
+  "upload": {
+    "title": "Yesterday's News Today — August 10, 2026 | Voyager 2 Power Fix, Rewilded Elephants & More",
+    "description": "Your 90-second recap of August 10, 2026. NASA engineers buy Voyager 2 another year of science, rewilded zoo elephants show strong coping skills in South Africa, Binghamton University reports early motor gains in a Duchenne muscular dystrophy drug study, the Toronto Zoo welcomes an endangered pygmy hippo calf, and the Smithsonian Institution marks 180 years since its charter.\n\nSources:\n- Good News Network (all five stories): https://www.goodnewsnetwork.org\n  - Voyager 2 power engineering (NASA / Jet Propulsion Laboratory)\n  - Elephant rewilding study (Elephant Reintegration Trust of South Africa)\n  - Vamorolone / Duchenne muscular dystrophy research (Binghamton University)\n  - Pygmy hippo birth (Toronto Zoo)\n  - Good News in History, August 10 (Smithsonian Institution charter)",
+    "tags": [
+      "news",
+      "daily news",
+      "yesterday's news",
+      "news recap",
+      "daily update",
+      "voyager 2",
+      "nasa",
+      "wildlife",
+      "muscular dystrophy",
+      "toronto zoo",
+      "smithsonian",
+      "science news"
+    ],
+    "community_post": "Yesterday's News Today for August 10, 2026 is up: a Voyager 2 power rescue, rewilded elephants thriving, an early win against Duchenne muscular dystrophy, a pygmy hippo birth in Toronto, and 180 years of the Smithsonian. All stories via Good News Network."
+  },
+  "sources": [
+    "Good News Network"
+  ],
+  "story_count": 5,
+  "source_note": "This run predates the per-story URL fix in yesterday-news-today.py (2026-08-11) — the RSS parser did not capture <link> at generation time, so individual article URLs for this brief were not preserved and are not reconstructed here. Only the feed homepage (https://www.goodnewsnetwork.org) is verifiable for this date. Every brief generated after the fix carries a 'sources' array with title/source/url per story; url is populated when the feed or API supplies one and is an empty string otherwise (not every RSS item includes a <link>).",
+  "polish": {
+    "by": "claude-producer",
+    "at": "2026-08-11",
+    "notes": "Rewrote template output as spoken voiceover; stripped raw RSS HTML; added per-story attribution; no factual claims beyond collected summaries."
+  }
 }

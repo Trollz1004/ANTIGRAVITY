@@ -27,3 +27,26 @@ awaiting Joshua's ci-validate dispatch for fresh checks.
   router honestly OFFLINE in container (no provider keys) — cards BLOCKED by design.
 - Gate-integrity gap: briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md absent from repo.
 - Next: Joshua approves drafts → submissions go live; nothing posts until then.
+
+## 2026-08-11 (later) — #218 merged, verification gate shipped, Command Center built
+- #218 merged. Two stranded Codex findings (rate-limit-delayed reviews) fixed
+  in follow-up #219: news bot now captures per-story RSS/NewsAPI URLs (was
+  dropping <link> entirely); TikTok D6-A1 overclaim fixed TWICE (Codex caught
+  my first fix as still-an-absolute -- "isn't a script" -- softened again to
+  only what verification proves).
+- BIG ONE: shipped the verification enforcement gate the marketing always
+  claimed but the backend never had. discover/swipe/messages now require
+  require_verified_profile (403 unverified); discover excludes unverified
+  profiles. Backend agent hit a session-limit mid-task; I verified/finished
+  it myself rather than trust its odd sign-off -- ran the full suite exactly
+  as CI does (959 passed, 95.39% cov, black+ruff clean). This closes the P1
+  Codex raised against the marketing drafts (#218): they can now truthfully
+  claim gated interaction once #219 merges and deploys. Both draft files'
+  HARD BLOCKER updated to reflect "coded, not yet live" -- still Joshua's
+  call to merge/deploy/launch.
+- Built Social Command Center in mission-control-v5 (PR #2): 30-target
+  catalog (22 social platforms 1:1 with platform_policy.py + 8 directory
+  targets), approval queue, nothing auto-publishes. Verified live in browser
+  via Playwright -- submit/approve/reject/list all smoke-tested against a
+  running server.
+- Both PRs open, subscribed, hourly check-ins to arm.

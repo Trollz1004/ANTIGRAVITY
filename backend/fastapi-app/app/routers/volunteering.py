@@ -14,7 +14,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import distinct, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
+from app.auth import get_current_user, require_verified_profile
 from app.database import get_db
 from app.models import User, VolunteerOpportunity, VolunteerSignup
 from app.schemas import (
@@ -248,7 +248,7 @@ async def list_opportunities(
 @router.post("", response_model=VolunteerResponse, status_code=201)
 async def create_opportunity(
     payload: VolunteerCreateRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> VolunteerResponse:
     opp = VolunteerOpportunity(
@@ -287,11 +287,15 @@ async def create_opportunity(
 @router.post("/{opp_id}/signup")
 async def signup_volunteer(
     opp_id: uuid.UUID,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ):
     opp = await db.get(VolunteerOpportunity, opp_id)
     if not opp:
+        raise HTTPException(status_code=404, detail="Opportunity not found")
+
+    creator = await db.get(User, opp.created_by)
+    if not creator or not creator.bot_shield_verified:
         raise HTTPException(status_code=404, detail="Opportunity not found")
 
     existing = await db.scalar(

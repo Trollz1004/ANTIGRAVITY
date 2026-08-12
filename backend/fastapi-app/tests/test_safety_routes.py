@@ -56,6 +56,7 @@ def _make_match(user_a: User, user_b: User, *, status: str = "active") -> Match:
 
 def test_block_user_closes_match_and_hides_it_from_matches(client, db_session_factory):
     actor = _make_user(email="safety_actor@example.com", display_name="Actor")
+    actor.bot_shield_verified = True
     target = _make_user(email="safety_target@example.com", display_name="Target")
     match = _make_match(actor, target)
     seed(actor, target, match, db_session_factory=db_session_factory)
@@ -97,6 +98,8 @@ def test_discover_excludes_blocked_users(client, db_session_factory):
     visible_target = _make_user(
         email="visible_target@example.com", display_name="Visible Target"
     )
+    actor.bot_shield_verified = True
+    visible_target.bot_shield_verified = True
     actor_profile = _make_profile(actor)
     blocked_profile = _make_profile(blocked_target)
     visible_profile = _make_profile(visible_target)
@@ -138,7 +141,15 @@ def test_blocked_match_rejects_message_access(client, db_session_factory):
         blocked_id=target.id,
         reason="Stop contact",
     )
-    seed(actor, target, match, block, db_session_factory=db_session_factory)
+    actor.bot_shield_verified = True
+    seed(
+        actor,
+        target,
+        _make_profile(actor),
+        match,
+        block,
+        db_session_factory=db_session_factory,
+    )
 
     app.dependency_overrides[get_current_user] = override_user(actor)
     try:

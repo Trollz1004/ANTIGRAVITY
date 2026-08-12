@@ -17,7 +17,7 @@ from app.main import (
     global_exception_handler,
 )
 from app.models import User
-from tests.helpers import override_user
+from tests.helpers import override_user, verified_profile
 
 
 def _make_user() -> User:
@@ -186,6 +186,8 @@ def test_suitability_guard_middleware_logs_and_passes(client, db_session_factory
         async with db_session_factory() as session:
             session.add(alice)
             session.add(bob)
+            session.add(verified_profile(alice))
+            session.add(verified_profile(bob))
             session.add(match)
             await session.commit()
 

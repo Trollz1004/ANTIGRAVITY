@@ -22,6 +22,12 @@ def _make_user(name: str) -> User:
         email=f"dd-{name}-{uuid.uuid4().hex[:6]}@example.com",
         password_hash="hashed",
         display_name=name.title(),
+        # double_dates.py routes require verification now; this file tests
+        # proposal/accept/decline/recommendation flow, not the gate itself,
+        # so actors are verified by default (no test here targets
+        # unverified-specific behavior -- the 403s are outsider/non-member
+        # checks, unrelated to verification).
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )

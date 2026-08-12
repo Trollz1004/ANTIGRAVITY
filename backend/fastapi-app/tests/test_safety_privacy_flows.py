@@ -16,7 +16,7 @@ from app.models import (
     UserBlock,
     UserReport,
 )
-from tests.helpers import override_user, seed
+from tests.helpers import override_user, seed, verified_profile
 
 
 def _make_user(name: str) -> User:
@@ -364,8 +364,9 @@ class TestSwipeGaps:
         from app.models import UserBlock as UB
 
         alice, bob = _make_user("swiper"), _make_user("target")
+        alice_profile = verified_profile(alice)
         block = UB(id=uuid.uuid4(), blocker_id=bob.id, blocked_id=alice.id)
-        seed(alice, bob, block, db_session_factory=db_session_factory)
+        seed(alice, bob, alice_profile, block, db_session_factory=db_session_factory)
         app.dependency_overrides[get_current_user] = override_user(alice)
         try:
             resp = client.post(
@@ -386,6 +387,8 @@ class TestSwipeGaps:
         from app.models import UserBlock as UB
 
         alice, bob = _make_user("ma"), _make_user("mb")
+        alice.bot_shield_verified = True
+        bob.bot_shield_verified = True
         match = Match(
             id=uuid.uuid4(),
             user_a=alice.id,
@@ -417,6 +420,8 @@ class TestSwipeGaps:
         from app.models import UserBlock as UB
 
         alice, bob, ghost = _make_user("la"), _make_user("lb"), uuid.uuid4()
+        alice.bot_shield_verified = True
+        bob.bot_shield_verified = True
         match_ok = Match(
             id=uuid.uuid4(),
             user_a=alice.id,
