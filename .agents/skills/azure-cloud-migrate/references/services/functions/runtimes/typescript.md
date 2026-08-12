@@ -17,7 +17,7 @@ app.http('httpFunction', {
   handler: async (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> => {
     const name = request.query.get('name') || (await request.text());
     return { body: `Hello, ${name}!` };
-  }
+  },
 });
 ```
 
@@ -32,7 +32,7 @@ app.storageBlob('blobTrigger', {
   source: 'EventGrid',
   handler: async (blob: Buffer, context: InvocationContext): Promise<void> => {
     context.log(`Blob: ${context.triggerMetadata.name}, Size: ${blob.length}`);
-  }
+  },
 });
 ```
 
@@ -44,7 +44,7 @@ app.storageQueue('queueTrigger', {
   connection: 'AzureWebJobsStorage',
   handler: async (queueItem: unknown, context: InvocationContext): Promise<void> => {
     context.log('Queue item:', queueItem);
-  }
+  },
 });
 ```
 
@@ -57,7 +57,7 @@ app.timer('timerFunction', {
   schedule: '0 */5 * * * *',
   handler: async (myTimer: Timer, context: InvocationContext): Promise<void> => {
     context.log('Timer fired at:', myTimer.scheduleStatus?.last);
-  }
+  },
 });
 ```
 
@@ -70,8 +70,8 @@ app.cosmosDB('cosmosDBTrigger', {
   containerName: 'mycontainer',
   createLeaseContainerIfNotExists: true,
   handler: async (documents: unknown[], context: InvocationContext): Promise<void> => {
-    documents.forEach(doc => context.log('Changed doc:', doc));
-  }
+    documents.forEach((doc) => context.log('Changed doc:', doc));
+  },
 });
 ```
 
@@ -83,7 +83,7 @@ app.serviceBusQueue('sbQueueTrigger', {
   connection: 'ServiceBusConnection',
   handler: async (message: unknown, context: InvocationContext): Promise<void> => {
     context.log('Message:', message);
-  }
+  },
 });
 ```
 
@@ -95,7 +95,7 @@ import { app, EventGridEvent, InvocationContext } from '@azure/functions';
 app.eventGrid('eventGridTrigger', {
   handler: async (event: EventGridEvent, context: InvocationContext): Promise<void> => {
     context.log('Event:', event.subject, event.eventType);
-  }
+  },
 });
 ```
 
@@ -107,8 +107,8 @@ app.eventHub('eventHubTrigger', {
   connection: 'EventHubConnection',
   cardinality: 'many',
   handler: async (events: unknown[], context: InvocationContext): Promise<void> => {
-    events.forEach(event => context.log('Event:', event));
-  }
+    events.forEach((event) => context.log('Event:', event));
+  },
 });
 ```
 

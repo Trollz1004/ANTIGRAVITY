@@ -1,1 +1,13 @@
-{"nodes": [{"id": "app_frontend_craco_config_js", "label": "craco.config.js", "file_type": "code", "source_file": "/app/frontend/craco.config.js", "source_location": "L1"}], "edges": [], "raw_calls": []}
+{
+  "nodes": [
+    {
+      "id": "app_frontend_craco_config_js",
+      "label": "craco.config.js",
+      "file_type": "code",
+      "source_file": "/app/frontend/craco.config.js",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [],
+  "raw_calls": []
+}

@@ -1,5 +1,5 @@
-import React from "react";
-import { Code2, Terminal } from "lucide-react";
+import React from 'react';
+import { Code2, Terminal } from 'lucide-react';
 
 export function CodeMode() {
   return (
@@ -13,8 +13,8 @@ export function CodeMode() {
           </div>
         </div>
         <p className="text-sm text-[#6b82a6] leading-relaxed mb-6">
-          In the Electron flagship this hosts the Monaco editor + xTerm.js terminal. The
-          web build links out — your Hermes Router and Ollama agents live on your workstation.
+          In the Electron flagship this hosts the Monaco editor + xTerm.js terminal. The web build links out — your
+          Hermes Router and Ollama agents live on your workstation.
         </p>
         <div className="bg-[#1a2332] border border-[#2a3a52] rounded-md p-6 space-y-3">
           <div className="flex items-center gap-2">
@@ -22,7 +22,7 @@ export function CodeMode() {
             <span className="text-xs font-bold tracking-wide">QUICKSTART</span>
           </div>
           <pre className="mono text-[12px] text-[#e8f0ff] bg-[#0a0f1a] border border-[#2a3a52] rounded p-3 overflow-x-auto">
-{`# clone + run the flagship
+            {`# clone + run the flagship
 git clone https://github.com/Trollz1004/OpusPawClaw.git
 cd OpusPawClaw
 npm install

@@ -40,11 +40,11 @@ Read-only commands accept `--output json` and never require `--force`. Write com
 
 After `azd ai agent init`, every hosted agent is defined as a **service block in `azure.yaml`** (`host: azure.ai.agent`) plus the active azd env; init consolidates the sample's definition into `azure.yaml`.
 
-| Location | What it holds |
-|------|---------------|
+| Location                                 | What it holds                                                                                                                                                                                                                               |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `azure.yaml services.<name>` (the agent) | `host: azure.ai.agent`, `kind`, `name`, `project`, `language`, `uses`, `protocols`, `environmentVariables`, `codeConfiguration` / `docker` / `image`, `container.resources`, `description`, `agentEndpoint`, `agentCard`, `startupCommand`. |
-| `azure.yaml services.ai-project` | Model `deployments[]` (`host: azure.ai.project`). The agent links to it via `uses: [ai-project]`. |
-| `.azure/<env>/.env` (`azd env set`) | Secrets and `PARAM_<CONN>_<KEY>` credential values referenced from `azure.yaml`. |
+| `azure.yaml services.ai-project`         | Model `deployments[]` (`host: azure.ai.project`). The agent links to it via `uses: [ai-project]`.                                                                                                                                           |
+| `.azure/<env>/.env` (`azd env set`)      | Secrets and `PARAM_<CONN>_<KEY>` credential values referenced from `azure.yaml`.                                                                                                                                                            |
 
 `azd deploy` reads the agent service block and creates a new immutable agent version. `azd provision` reads `services.ai-project.deployments[]` (and any connection/toolbox services) and applies them via Bicep.
 
@@ -63,7 +63,7 @@ services:
         model:
           format: OpenAI
           name: gpt-4.1-mini
-          version: "2024-04-09"
+          version: '2024-04-09'
         sku:
           name: GlobalStandard
           capacity: 50
@@ -79,10 +79,10 @@ services:
     codeConfiguration:
       runtime: python_3_13
       entryPoint: main.py
-      dependencyResolution: remote_build   # or "bundled"
+      dependencyResolution: remote_build # or "bundled"
     container:
       resources:
-        cpu: "0.5"
+        cpu: '0.5'
         memory: 1Gi
     environmentVariables:
       - name: AZURE_AI_MODEL_DEPLOYMENT_NAME
@@ -103,13 +103,13 @@ services:
 
 ## State (azd env vars)
 
-| Variable | Read by | Where to set |
-|----------|---------|--------------|
-| `AZURE_AI_PROJECT_ENDPOINT` | Every `azd ai agent` command | `azd env set` or `azd ai project show` |
-| `AZURE_AI_PROJECT_ID` | `azd ai agent show` (playground URL) | `azd env set` |
-| `AZURE_SUBSCRIPTION_ID`, `AZURE_LOCATION` | `azd provision` | `azd init --subscription/-l` (or `azd config set defaults.subscription/location`) |
-| `AGENT_<SVC>_NAME` / `_VERSION` / `_<PROTO>_ENDPOINT` | Auto-written by deploy | Auto |
-| `PARAM_<CONN>_<KEY>` | Connection credentials in `azure.yaml` | `azd env set` |
+| Variable                                              | Read by                                | Where to set                                                                      |
+| ----------------------------------------------------- | -------------------------------------- | --------------------------------------------------------------------------------- |
+| `AZURE_AI_PROJECT_ENDPOINT`                           | Every `azd ai agent` command           | `azd env set` or `azd ai project show`                                            |
+| `AZURE_AI_PROJECT_ID`                                 | `azd ai agent show` (playground URL)   | `azd env set`                                                                     |
+| `AZURE_SUBSCRIPTION_ID`, `AZURE_LOCATION`             | `azd provision`                        | `azd init --subscription/-l` (or `azd config set defaults.subscription/location`) |
+| `AGENT_<SVC>_NAME` / `_VERSION` / `_<PROTO>_ENDPOINT` | Auto-written by deploy                 | Auto                                                                              |
+| `PARAM_<CONN>_<KEY>`                                  | Connection credentials in `azure.yaml` | `azd env set`                                                                     |
 
 Manage with `azd env get-values`, `azd env set`, `azd env list`, `azd env new`, `azd env select`.
 

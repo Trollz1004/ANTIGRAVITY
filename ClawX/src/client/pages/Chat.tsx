@@ -378,8 +378,8 @@ function BroadcastView({
 
 function MessageBubble({ message }: { message: any }) {
   const isUser = message.role === 'user';
-  const Icon = message.providerSlug ? providerIcons[message.providerSlug] ?? Bot : null;
-  const color = message.providerSlug ? providerColors[message.providerSlug] ?? '#6366f1' : undefined;
+  const Icon = message.providerSlug ? (providerIcons[message.providerSlug] ?? Bot) : null;
+  const color = message.providerSlug ? (providerColors[message.providerSlug] ?? '#6366f1') : undefined;
 
   return (
     <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}>

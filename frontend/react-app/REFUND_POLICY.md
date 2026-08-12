@@ -28,6 +28,7 @@ All refunds are processed through **Square**, our payment processor. Refunds typ
 The $1 Bot-Shield fee pays for the current launch verification flow. Once you start the Bot-Shield challenge and payment checkpoint, the service has been rendered regardless of the outcome. This fee covers challenge processing, payment handling, and verification-state updates tied to your account.
 
 Exceptions:
+
 - If our system charged you for verification but the verification process completely failed to run (technical error on our end, not a failed verification), we will refund the $1
 - If you were charged more than once for the same verification, we will refund the duplicate charge(s)
 
@@ -42,6 +43,7 @@ Exceptions:
 - There is no cancellation fee
 
 **How to cancel:**
+
 1. Use the subscription management link in your Square confirmation email, or
 2. Email joshlcoleman@gmail.com with the subject "Cancel Subscription"
 
@@ -74,6 +76,7 @@ The same rules as the 3-Month Plan apply:
 The Royalty Card is a limited-edition premium membership product — only 5 will ever be issued. Because of its scarcity and the account-access benefits attached to it, Royalty Card purchases are final and non-refundable.
 
 What you should know before purchasing:
+
 - Only 5 Royalty Cards exist. This is not a mass-market product.
 - The Royalty Card includes lifetime VIP access, priority support, and premium launch-era account benefits.
 - The Royalty Card is non-transferable at launch unless we provide a written account-transfer process later.
@@ -127,11 +130,13 @@ We are a small operation run by one person. We are not trying to keep your money
 ## 7. Account Termination and Refunds
 
 If **you** delete your account:
+
 - Active monthly subscriptions will be canceled at the end of the current billing period (no partial-month refund)
 - Prepaid plans (3-month, 12-month) are eligible for prorated refunds per the terms above
 - Bot-Shield and Royalty Card purchases are non-refundable
 
 If **we** terminate your account for violating our Terms of Service:
+
 - We are not obligated to issue any refund
 - We may, at our sole discretion, issue a partial refund for prepaid plans depending on the circumstances
 
@@ -153,13 +158,13 @@ We may update this Refund Policy from time to time. When we do:
 
 ## 11. Summary Table
 
-| Product | Price | Refundable? | Details |
-|---------|-------|-------------|---------|
-| Bot-Shield | $1 | No | Service rendered at submission |
-| Monthly Subscription | $14.99/mo | No partial refund | Cancel anytime, access through end of period |
-| 3-Month Plan | $39.99 | 14-day full / prorated after | Full refund if no matches within 14 days |
-| 12-Month Plan | $99.99 | 14-day full / prorated after | Full refund if no matches within 14 days |
-| Royalty Card | $2,500 | No | Limited edition, final sale |
+| Product              | Price     | Refundable?                  | Details                                      |
+| -------------------- | --------- | ---------------------------- | -------------------------------------------- |
+| Bot-Shield           | $1        | No                           | Service rendered at submission               |
+| Monthly Subscription | $14.99/mo | No partial refund            | Cancel anytime, access through end of period |
+| 3-Month Plan         | $39.99    | 14-day full / prorated after | Full refund if no matches within 14 days     |
+| 12-Month Plan        | $99.99    | 14-day full / prorated after | Full refund if no matches within 14 days     |
+| Royalty Card         | $2,500    | No                           | Limited edition, final sale                  |
 
 ## 12. Contact
 
@@ -172,4 +177,4 @@ For refund requests or questions about this policy:
 
 ---
 
-*This refund policy was drafted by the founder with AI assistance and has not yet been reviewed by a licensed attorney. Users are encouraged to read it carefully. The operator intends to obtain professional legal review.*
+_This refund policy was drafted by the founder with AI assistance and has not yet been reviewed by a licensed attorney. Users are encouraged to read it carefully. The operator intends to obtain professional legal review._

@@ -9,6 +9,7 @@ metadata:
   author: antigravity
   category: meta
 ---
+
 # Self-Improving Agent Skills Reference
 
 ## Quick Reference
@@ -17,13 +18,13 @@ Read `/mnt/c/antigravity/skills/self-improving-system/skills.md` for the complet
 
 ## File Locations
 
-| Type | Path |
-|------|------|
-| Skills index | `/mnt/c/antigravity/skills/self-improving-system/skills.md` |
-| Session notes | `/mnt/c/antigravity/skills/self-improving-system/session-notes.md` |
-| Core skills | `.agents/skills/<skill-name>/SKILL.md` |
-| Secondary skills | `skills/<skill-name>/SKILL.md` |
-| Pi agent skills | See skill system (`agent-browser skills get <name>` or `/home/josh/.pi/agent/skills/`) |
+| Type             | Path                                                                                   |
+| ---------------- | -------------------------------------------------------------------------------------- |
+| Skills index     | `/mnt/c/antigravity/skills/self-improving-system/skills.md`                            |
+| Session notes    | `/mnt/c/antigravity/skills/self-improving-system/session-notes.md`                     |
+| Core skills      | `.agents/skills/<skill-name>/SKILL.md`                                                 |
+| Secondary skills | `skills/<skill-name>/SKILL.md`                                                         |
+| Pi agent skills  | See skill system (`agent-browser skills get <name>` or `/home/josh/.pi/agent/skills/`) |
 
 ## Usage
 

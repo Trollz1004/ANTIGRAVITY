@@ -5,6 +5,7 @@ Full Docker Compose setup for ANTIGRAVITY: Hermes Agent + Workspace + existing s
 ## What's Included
 
 ### Core Services (Always Start)
+
 - **hermes-agent** (port 8642) — Nous's Hermes Agent gateway with API server enabled
 - **hermes-dashboard** (port 9119) — Dashboard for sessions, skills, config, MCP, jobs
 - **hermes-workspace** (port 3000) — Web UI (built from `./hermes/Dockerfile`)
@@ -15,6 +16,7 @@ Full Docker Compose setup for ANTIGRAVITY: Hermes Agent + Workspace + existing s
 - **date-service** (port 8888) — Simple timestamp API
 
 ### Optional Services (Profiles)
+
 - **cloudflare-tunnel** — Expose services via Cloudflare Tunnel (use `--profile cloudflare`)
 - **wrangler-dev** (port 8787) — Cloudflare Workers dev server (use `--profile wrangler`)
 
@@ -25,11 +27,13 @@ Full Docker Compose setup for ANTIGRAVITY: Hermes Agent + Workspace + existing s
 ### 1. Configure Environment
 
 Copy the template:
+
 ```bash
 cp .env.docker .env.docker  # Already created; edit if needed
 ```
 
 Add **at least one** LLM provider key to `.env.docker`:
+
 ```env
 OPENAI_API_KEY=sk-...              # OR
 OPENROUTER_API_KEY=sk-or-v1-...   # OR
@@ -39,26 +43,31 @@ GOOGLE_API_KEY=AIza...             # OR any provider
 ### 2. Start Services
 
 **Core stack only** (Hermes, Redis, Qdrant, OpenClaw, Date):
+
 ```bash
 docker-compose up -d
 ```
 
 **Or use the batch script** (Windows):
+
 ```bash
 START-DOCKER-STACK.bat
 ```
 
 **With Cloudflare tunnel** (requires `CLOUDFLARE_TUNNEL_TOKEN` in `.env.docker`):
+
 ```bash
 docker-compose --profile cloudflare up -d
 ```
 
 **With Wrangler dev**:
+
 ```bash
 docker-compose --profile wrangler up -d
 ```
 
 **Everything** (core + cloudflare + wrangler):
+
 ```bash
 docker-compose --profile cloudflare --profile wrangler up -d
 ```
@@ -68,6 +77,7 @@ docker-compose --profile cloudflare --profile wrangler up -d
 Open **http://localhost:3000** in your browser.
 
 **First time?** Complete the onboarding:
+
 1. Wait for "Hermes Agent connected" status
 2. Check Dashboard visibility
 3. Chat with your configured LLM
@@ -100,18 +110,19 @@ curl http://127.0.0.1:8888/                # Date service
 
 ## Port Map
 
-| Service | Port | Access | Purpose |
-|---------|------|--------|---------|
-| Hermes Workspace | 3000 | http://localhost:3000 | Web UI |
-| Hermes Agent Gateway | 8642 | localhost only | Core APIs (chat, models, jobs) |
-| Hermes Dashboard | 9119 | localhost only | Sessions, skills, config, MCP |
-| Redis | 6379 | localhost only | Cache |
-| Qdrant | 6333/6334 | localhost only | Vector DB |
-| OpenClaw | 3200 | localhost only | WhatsApp bridge |
-| Date Service | 8888 | localhost only | Timestamp API |
-| Wrangler Dev | 8787 | localhost only | Cloudflare Workers (profile: wrangler) |
+| Service              | Port      | Access                | Purpose                                |
+| -------------------- | --------- | --------------------- | -------------------------------------- |
+| Hermes Workspace     | 3000      | http://localhost:3000 | Web UI                                 |
+| Hermes Agent Gateway | 8642      | localhost only        | Core APIs (chat, models, jobs)         |
+| Hermes Dashboard     | 9119      | localhost only        | Sessions, skills, config, MCP          |
+| Redis                | 6379      | localhost only        | Cache                                  |
+| Qdrant               | 6333/6334 | localhost only        | Vector DB                              |
+| OpenClaw             | 3200      | localhost only        | WhatsApp bridge                        |
+| Date Service         | 8888      | localhost only        | Timestamp API                          |
+| Wrangler Dev         | 8787      | localhost only        | Cloudflare Workers (profile: wrangler) |
 
 **Note:** Most services bind to `127.0.0.1` for security. To access from other devices:
+
 1. Modify port mappings (remove `127.0.0.1:`)
 2. Set `HERMES_PASSWORD` in `.env.docker`
 3. Set `COOKIE_SECURE=0` for HTTP-only deployments
@@ -123,18 +134,21 @@ curl http://127.0.0.1:8888/                # Date service
 ### Workspace shows "Offline" or "Disconnected"
 
 **Check Hermes Agent:**
+
 ```bash
 curl http://127.0.0.1:8642/health
 # Should return: {"status":"ok"}
 ```
 
 **Check Dashboard:**
+
 ```bash
 curl http://127.0.0.1:9119/api/status
 # Should return: {"status":"ok", ...}
 ```
 
 **Restart both:**
+
 ```bash
 docker-compose restart hermes-agent hermes-dashboard
 docker-compose logs -f hermes-workspace
@@ -145,11 +159,13 @@ docker-compose logs -f hermes-workspace
 **Error:** Chat returns empty or "No model available"
 
 **Fix:** Edit `.env.docker` and add an API key for at least one provider:
+
 ```env
 OPENAI_API_KEY=sk-your-key-here
 ```
 
 Then restart the agent:
+
 ```bash
 docker-compose restart hermes-agent
 ```
@@ -157,6 +173,7 @@ docker-compose restart hermes-agent
 ### Permission denied on volumes
 
 On Linux, if you get permission errors:
+
 ```bash
 sudo chown -R $USER:$USER hermes-data
 ```
@@ -166,6 +183,7 @@ Or run docker-compose with `sudo`.
 ### Out of memory
 
 If containers are exiting with 137 or OOM errors:
+
 ```bash
 docker stats    # Check memory usage
 ```
@@ -177,6 +195,7 @@ Increase Docker Desktop memory (Settings → Resources → Memory).
 **Error:** `CLOUDFLARE_TUNNEL_TOKEN is not set`
 
 **Fix:** Get your token from [Cloudflare Tunnel dashboard](https://dash.cloudflare.com/), then:
+
 ```bash
 echo "CLOUDFLARE_TUNNEL_TOKEN=your-token-here" >> .env.docker
 docker-compose --profile cloudflare restart cloudflare-tunnel
@@ -188,14 +207,14 @@ docker-compose --profile cloudflare restart cloudflare-tunnel
 
 All `.env.docker` keys:
 
-| Key | Default | Purpose |
-|-----|---------|---------|
-| `OPENAI_API_KEY` | (none) | OpenAI API key for GPT models |
-| `OPENROUTER_API_KEY` | (none) | OpenRouter API key (multi-provider) |
-| `GOOGLE_API_KEY` | (none) | Google Gemini API key |
-| `ANTHROPIC_API_KEY` | (none) | Anthropic Claude API key |
-| `HERMES_PASSWORD` | `antigravity` | Web UI password |
-| `CLOUDFLARE_TUNNEL_TOKEN` | (none) | Cloudflare Tunnel auth token |
+| Key                       | Default       | Purpose                             |
+| ------------------------- | ------------- | ----------------------------------- |
+| `OPENAI_API_KEY`          | (none)        | OpenAI API key for GPT models       |
+| `OPENROUTER_API_KEY`      | (none)        | OpenRouter API key (multi-provider) |
+| `GOOGLE_API_KEY`          | (none)        | Google Gemini API key               |
+| `ANTHROPIC_API_KEY`       | (none)        | Anthropic Claude API key            |
+| `HERMES_PASSWORD`         | `antigravity` | Web UI password                     |
+| `CLOUDFLARE_TUNNEL_TOKEN` | (none)        | Cloudflare Tunnel auth token        |
 
 Only `OPENAI_API_KEY` (or one other provider key) is strictly required. Others are optional.
 
@@ -209,12 +228,14 @@ Hermes Agent reads from Docker volumes mounted to `/root/.hermes`. To configure 
 Settings → Connection → (manage)
 
 **Or via shell:**
+
 ```bash
 docker-compose exec hermes-agent hermes setup
 docker-compose exec hermes-agent hermes model select
 ```
 
 **Or edit config directly:**
+
 ```bash
 docker-compose exec -it hermes-agent sh
 vi ~/.hermes/config.yaml

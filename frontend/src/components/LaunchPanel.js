@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Copy, Terminal as TerminalIcon } from "lucide-react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Copy, Terminal as TerminalIcon } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -17,17 +17,25 @@ export function LaunchPanel() {
     let cancelled = false;
     axios
       .get(`${API}/agents`, { timeout: 4000 })
-      .then((r) => { if (!cancelled) setAgents(r.data.agents || []); })
-      .catch(() => { if (!cancelled) setAgents([]); });
-    return () => { cancelled = true; };
+      .then((r) => {
+        if (!cancelled) setAgents(r.data.agents || []);
+      })
+      .catch(() => {
+        if (!cancelled) setAgents([]);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const copy = (cmd) => navigator.clipboard?.writeText(cmd);
-  const dispatch = (cmd) =>
-    window.dispatchEvent(new CustomEvent("opuspawclaw-task", { detail: { task: cmd } }));
+  const dispatch = (cmd) => window.dispatchEvent(new CustomEvent('opuspawclaw-task', { detail: { task: cmd } }));
 
   return (
-    <div data-testid="launch-panel" className="flex flex-col h-full bg-[#111827] text-[#e8f0ff] overflow-y-auto custom-scrollbar p-4 border border-[#2a3a52] rounded-md">
+    <div
+      data-testid="launch-panel"
+      className="flex flex-col h-full bg-[#111827] text-[#e8f0ff] overflow-y-auto custom-scrollbar p-4 border border-[#2a3a52] rounded-md"
+    >
       <div className="mb-4">
         <h2 className="text-sm font-bold text-white uppercase tracking-wider mb-1">Launch</h2>
         <p className="text-[10px] text-[#6b82a6] bg-[#2a3a52]/30 px-2 py-1 rounded inline-block">
@@ -36,9 +44,7 @@ export function LaunchPanel() {
       </div>
 
       <div className="space-y-4">
-        {agents.length === 0 && (
-          <div className="text-[10px] text-[#4a5568] italic">endpoint unreachable — retry</div>
-        )}
+        {agents.length === 0 && <div className="text-[10px] text-[#4a5568] italic">endpoint unreachable — retry</div>}
         {agents.map((agent, i) => (
           <div key={i} className="flex gap-3">
             <div

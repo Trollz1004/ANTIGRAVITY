@@ -1,6 +1,4 @@
-import type { Health } from '../types';
-
-export type Tab = 'graphy' | 'library' | 'swarm' | 'board' | 'services' | 'brain';
+import type { Health, Tab } from '../types';
 
 interface Props {
   tab: Tab;
@@ -59,6 +57,12 @@ export default function Header({ tab, onTab, health, runningCount, selectedCount
           onClick={() => onTab('brain')}
         >
           BRAIN
+        </button>
+        <button
+          className={`header__tab ${tab === 'bridge' ? 'header__tab--active' : ''}`}
+          onClick={() => onTab('bridge')}
+        >
+          BRIDGE
         </button>
       </nav>
 

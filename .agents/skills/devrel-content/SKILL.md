@@ -30,15 +30,16 @@ If the context file doesn't exist, run the `developer-audience-context` skill fi
 
 Before writing anything, validate the topic is worth writing about.
 
-| Research Type | What to Do |
-|--------------|------------|
-| **Search intent** | Google your topic. What already ranks? What's missing? |
+| Research Type         | What to Do                                                           |
+| --------------------- | -------------------------------------------------------------------- |
+| **Search intent**     | Google your topic. What already ranks? What's missing?               |
 | **Community signals** | Search Reddit, HN, Stack Overflow. Are developers asking about this? |
-| **Competitor gaps** | What have competitors written? What haven't they covered? |
-| **Internal data** | Support tickets, Discord questions, GitHub issues about this topic |
-| **Keyword research** | Use Ahrefs/SEMrush for search volume on technical terms |
+| **Competitor gaps**   | What have competitors written? What haven't they covered?            |
+| **Internal data**     | Support tickets, Discord questions, GitHub issues about this topic   |
+| **Keyword research**  | Use Ahrefs/SEMrush for search volume on technical terms              |
 
 **Red flags** — Don't write if:
+
 - You're the only one who cares about this topic
 - 10 identical articles already exist
 - The topic is too broad ("Introduction to JavaScript")
@@ -48,15 +49,15 @@ Before writing anything, validate the topic is worth writing about.
 
 Choose the right format for your goal:
 
-| Content Type | Best For | Structure |
-|-------------|----------|-----------|
-| **Tutorial** | Teaching a specific skill | Step-by-step, code-heavy |
-| **Guide** | Covering a topic comprehensively | Sections, reference material |
-| **Comparison** | Helping with decisions | Table-based, pros/cons |
-| **Announcement** | Launching features/products | News lead, what/why/how |
-| **Thought leadership** | Building authority | Opinion, predictions, takes |
-| **Case study** | Social proof | Problem → Solution → Results |
-| **Troubleshooting** | Solving specific errors | Error → Cause → Fix |
+| Content Type           | Best For                         | Structure                    |
+| ---------------------- | -------------------------------- | ---------------------------- |
+| **Tutorial**           | Teaching a specific skill        | Step-by-step, code-heavy     |
+| **Guide**              | Covering a topic comprehensively | Sections, reference material |
+| **Comparison**         | Helping with decisions           | Table-based, pros/cons       |
+| **Announcement**       | Launching features/products      | News lead, what/why/how      |
+| **Thought leadership** | Building authority               | Opinion, predictions, takes  |
+| **Case study**         | Social proof                     | Problem → Solution → Results |
+| **Troubleshooting**    | Solving specific errors          | Error → Cause → Fix          |
 
 ### Phase 3: Outline Structure
 
@@ -66,35 +67,43 @@ Use this outline template:
 # [Title that promises specific value]
 
 ## Hook (2-3 sentences)
+
 - State the problem or opportunity
 - Establish credibility ("We migrated 10,000 repos...")
 - Promise what the reader will learn
 
 ## Context (optional)
+
 - Brief background if needed
 - Link to prerequisites
 
 ## The Meat
+
 ### Section 1: [First major concept]
+
 - Explanation
 - Code example
 - Common pitfall
 
 ### Section 2: [Second major concept]
+
 - Explanation
 - Code example
 - Real-world application
 
 ### Section 3: [Third major concept]
+
 - Explanation
 - Code example
 - Advanced tip
 
 ## Putting It Together
+
 - Complete example
 - Working code
 
 ## What's Next
+
 - Links to deeper content
 - Call to action (try the product, join Discord, etc.)
 ```
@@ -109,13 +118,13 @@ Code is the content. Get it right.
 
 Every code example must:
 
-| Requirement | Why It Matters |
-|------------|----------------|
+| Requirement                  | Why It Matters                                           |
+| ---------------------------- | -------------------------------------------------------- |
 | **Run without modification** | Developers will copy-paste. If it fails, you lose trust. |
-| **Include imports** | Don't assume they know which libraries to import. |
-| **Show output** | What should they see when it works? |
-| **Handle errors** | Real code has error handling. Show it. |
-| **Use real values** | No `foo`, `bar`, `example.com` unless necessary. |
+| **Include imports**          | Don't assume they know which libraries to import.        |
+| **Show output**              | What should they see when it works?                      |
+| **Handle errors**            | Real code has error handling. Show it.                   |
+| **Use real values**          | No `foo`, `bar`, `example.com` unless necessary.         |
 
 ### Code Example Structure
 
@@ -134,24 +143,24 @@ import { Client } from 'your-library';
 import axios from 'axios';
 
 const client = new Client({
-  apiKey: process.env.YOUR_API_KEY // Use environment variables
+apiKey: process.env.YOUR_API_KEY // Use environment variables
 });
 
 async function fetchUserData(userId) {
-  try {
-    const user = await client.users.get(userId);
-    console.log(`Fetched user: ${user.name}`);
-    return user;
-  } catch (error) {
-    console.error(`Failed to fetch user: ${error.message}`);
-    throw error;
-  }
+try {
+const user = await client.users.get(userId);
+console.log(`Fetched user: ${user.name}`);
+return user;
+} catch (error) {
+console.error(`Failed to fetch user: ${error.message}`);
+throw error;
+}
 }
 
 // Example usage
 fetchUserData('user_123')
-  .then(user => console.log(user))
-  .catch(err => process.exit(1));
+.then(user => console.log(user))
+.catch(err => process.exit(1));
 \`\`\`
 
 Run it:
@@ -170,14 +179,14 @@ Fetched user: Jane Developer
 
 ### Language-Specific Conventions
 
-| Language | Code Block | Package Install | Env Vars |
-|----------|-----------|-----------------|----------|
-| JavaScript/Node | `javascript` or `js` | `npm install` | `process.env.VAR` |
-| TypeScript | `typescript` or `ts` | `npm install` | `process.env.VAR` |
-| Python | `python` or `py` | `pip install` | `os.environ['VAR']` |
-| Go | `go` | `go get` | `os.Getenv("VAR")` |
-| Rust | `rust` | `cargo add` | `std::env::var("VAR")` |
-| Shell | `bash` or `shell` | N/A | `$VAR` |
+| Language        | Code Block           | Package Install | Env Vars               |
+| --------------- | -------------------- | --------------- | ---------------------- |
+| JavaScript/Node | `javascript` or `js` | `npm install`   | `process.env.VAR`      |
+| TypeScript      | `typescript` or `ts` | `npm install`   | `process.env.VAR`      |
+| Python          | `python` or `py`     | `pip install`   | `os.environ['VAR']`    |
+| Go              | `go`                 | `go get`        | `os.Getenv("VAR")`     |
+| Rust            | `rust`               | `cargo add`     | `std::env::var("VAR")` |
+| Shell           | `bash` or `shell`    | N/A             | `$VAR`                 |
 
 ---
 
@@ -185,16 +194,16 @@ Fetched user: Jane Developer
 
 Run through before publishing:
 
-| Check | How to Verify |
-|-------|---------------|
-| **Code runs** | Copy-paste every snippet and run it |
-| **Versions match** | Are you using the current library version? |
-| **Links work** | Click every link |
-| **Commands work** | Run every CLI command |
+| Check                   | How to Verify                                |
+| ----------------------- | -------------------------------------------- |
+| **Code runs**           | Copy-paste every snippet and run it          |
+| **Versions match**      | Are you using the current library version?   |
+| **Links work**          | Click every link                             |
+| **Commands work**       | Run every CLI command                        |
 | **Screenshots current** | Do UI screenshots match the current product? |
-| **No deprecated APIs** | Check if any APIs used are deprecated |
-| **Security review** | No hardcoded secrets, SQL injection, etc. |
-| **Peer review** | Have an engineer read it for accuracy |
+| **No deprecated APIs**  | Check if any APIs used are deprecated        |
+| **Security review**     | No hardcoded secrets, SQL injection, etc.    |
+| **Peer review**         | Have an engineer read it for accuracy        |
 
 ---
 
@@ -204,34 +213,34 @@ Developers use Google differently than consumers.
 
 ### Developer Search Patterns
 
-| Pattern | Example Searches |
-|---------|-----------------|
+| Pattern            | Example Searches                                     |
+| ------------------ | ---------------------------------------------------- |
 | **Error messages** | "TypeError: Cannot read property 'map' of undefined" |
-| **How to** | "how to deploy next.js to vercel" |
-| **Comparison** | "prisma vs typeorm 2024" |
-| **Best practices** | "typescript project structure best practices" |
-| **Alternatives** | "alternatives to firebase" |
-| **With** | "react with typescript tutorial" |
+| **How to**         | "how to deploy next.js to vercel"                    |
+| **Comparison**     | "prisma vs typeorm 2024"                             |
+| **Best practices** | "typescript project structure best practices"        |
+| **Alternatives**   | "alternatives to firebase"                           |
+| **With**           | "react with typescript tutorial"                     |
 
 ### Technical SEO Checklist
 
-| Element | Best Practice |
-|---------|--------------|
-| **Title** | Include primary keyword, framework names, year if relevant |
-| **Meta description** | 150 chars, include keyword, promise specific outcome |
-| **H1** | Match or closely match title |
-| **H2s** | Include secondary keywords, make scannable |
-| **Code blocks** | Use proper syntax highlighting (helps featured snippets) |
-| **Internal links** | Link to related docs, tutorials, API reference |
-| **External links** | Link to official docs of tools mentioned |
-| **URL slug** | Lowercase, hyphens, include keyword |
+| Element              | Best Practice                                              |
+| -------------------- | ---------------------------------------------------------- |
+| **Title**            | Include primary keyword, framework names, year if relevant |
+| **Meta description** | 150 chars, include keyword, promise specific outcome       |
+| **H1**               | Match or closely match title                               |
+| **H2s**              | Include secondary keywords, make scannable                 |
+| **Code blocks**      | Use proper syntax highlighting (helps featured snippets)   |
+| **Internal links**   | Link to related docs, tutorials, API reference             |
+| **External links**   | Link to official docs of tools mentioned                   |
+| **URL slug**         | Lowercase, hyphens, include keyword                        |
 
 ### Example Optimized Title
 
-| Bad | Good |
-|-----|------|
-| "Using Our API" | "How to Authenticate with the YourProduct API (Node.js)" |
-| "Database Guide" | "PostgreSQL Connection Pooling: Complete Guide with pgBouncer" |
+| Bad               | Good                                                                 |
+| ----------------- | -------------------------------------------------------------------- |
+| "Using Our API"   | "How to Authenticate with the YourProduct API (Node.js)"             |
+| "Database Guide"  | "PostgreSQL Connection Pooling: Complete Guide with pgBouncer"       |
 | "Getting Started" | "Getting Started with YourProduct: Your First API Call in 5 Minutes" |
 
 ---
@@ -311,9 +320,11 @@ What separates great devrel content from mediocre:
 ## Troubleshooting
 
 ### [Common Error 1]
+
 [Solution]
 
 ### [Common Error 2]
+
 [Solution]
 
 ## What's Next
@@ -332,11 +343,11 @@ What separates great devrel content from mediocre:
 
 ## Quick Comparison
 
-| Feature | Tool A | Tool B |
-|---------|--------|--------|
-| [Feature 1] | | |
-| [Feature 2] | | |
-| [Feature 3] | | |
+| Feature     | Tool A | Tool B |
+| ----------- | ------ | ------ |
+| [Feature 1] |        |        |
+| [Feature 2] |        |        |
+| [Feature 3] |        |        |
 
 ## When to Choose [Tool A]
 
@@ -353,9 +364,11 @@ What separates great devrel content from mediocre:
 ## Deep Dive: [Specific Aspect]
 
 ### Tool A Approach
+
 [Explanation + code]
 
 ### Tool B Approach
+
 [Explanation + code]
 
 ## Our Recommendation
@@ -369,20 +382,21 @@ What separates great devrel content from mediocre:
 
 ### Metrics to Track
 
-| Metric | What It Tells You |
-|--------|------------------|
-| **Page views** | Reach (but vanity without context) |
-| **Time on page** | Engagement (are they reading?) |
-| **Scroll depth** | Did they read to the end? |
-| **Bounce rate** | Did they find what they needed? |
-| **Search rankings** | SEO performance |
-| **Backlinks** | Authority and reference value |
-| **Social shares** | Resonance (especially HN, Twitter, Reddit) |
-| **Conversion events** | Sign-ups, installs, docs clicks |
+| Metric                | What It Tells You                          |
+| --------------------- | ------------------------------------------ |
+| **Page views**        | Reach (but vanity without context)         |
+| **Time on page**      | Engagement (are they reading?)             |
+| **Scroll depth**      | Did they read to the end?                  |
+| **Bounce rate**       | Did they find what they needed?            |
+| **Search rankings**   | SEO performance                            |
+| **Backlinks**         | Authority and reference value              |
+| **Social shares**     | Resonance (especially HN, Twitter, Reddit) |
+| **Conversion events** | Sign-ups, installs, docs clicks            |
 
 ### Content → Conversion Path
 
 Track the journey:
+
 1. Search/social → Blog post
 2. Blog post → Docs / quickstart
 3. Docs → Sign up / install
@@ -392,15 +406,15 @@ Track the journey:
 
 ## Tools
 
-| Tool | Use Case |
-|------|----------|
+| Tool                                 | Use Case                                                                                                                                             |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **[Octolens](https://octolens.com)** | Monitor where your content gets shared (HN, Reddit, Twitter). Track competitor content performance. Find content ideas from developer conversations. |
-| **Grammarly / Hemingway** | Readability and grammar checking |
-| **Carbon / Ray.so** | Beautiful code screenshots |
-| **Excalidraw** | Technical diagrams |
-| **Loom** | Quick video walkthroughs |
-| **Ahrefs / SEMrush** | Keyword research and SEO tracking |
-| **Google Search Console** | Track search performance |
+| **Grammarly / Hemingway**            | Readability and grammar checking                                                                                                                     |
+| **Carbon / Ray.so**                  | Beautiful code screenshots                                                                                                                           |
+| **Excalidraw**                       | Technical diagrams                                                                                                                                   |
+| **Loom**                             | Quick video walkthroughs                                                                                                                             |
+| **Ahrefs / SEMrush**                 | Keyword research and SEO tracking                                                                                                                    |
+| **Google Search Console**            | Track search performance                                                                                                                             |
 
 ---
 

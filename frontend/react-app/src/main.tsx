@@ -40,12 +40,11 @@ const LazyMeetupsDiscovery = lazy(
 const LazyLoveBot = lazy(() => import('./components/LoveBot'));
 const LazyRoyaltyDeck = lazy(() => import('./components/RoyaltyDeck'));
 const LazySocialBoards = lazy(() => import('./components/SocialBoards'));
-const LazyCosmicWall = lazy(() => import('./components/CosmicWall'));
-
-const LazyDiscover = lazy(() => import('./app/pages/Discover'));
 const LazyLoveBotPage = lazy(() => import('./app/pages/LoveBotPage'));
-const LazyBoards = lazy(() => import('./app/pages/Boards'));
 const LazyVolunteering = lazy(() => import('./app/pages/Volunteering'));
+const LazyCosmicWall = lazy(() => import('./components/CosmicWall'));
+const LazyDiscover = lazy(() => import('./app/pages/Discover'));
+const LazyBoards = lazy(() => import('./app/pages/Boards'));
 const LazySupport = lazy(() => import('./app/pages/Support'));
 const LazyVerify = lazy(() => import('./app/pages/Verify'));
 const LazyCheckoutLaunch = lazy(() => import('./app/pages/CheckoutLaunch'));

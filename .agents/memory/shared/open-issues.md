@@ -1,25 +1,31 @@
 # Open Issues
+
 > Each agent appends blockers here. CEOs triage and assign resolution.
 
 ## CRITICAL
+
 - [ ] GitHub branch protection on main: enable now (block force pushes going forward). 30-sec job in GitHub Settings → Branches → Add rule for `main`.
 
 ## RESOLVED 2026-07-09
+
 - Restore of 66c8390: OBSOLETE — origin/main moved 4 commits past Gordon's force-push (78272ada → 360e652a) with real work. Restoring would have destroyed those commits. Agent-setup landed via fast-forward as 25c63dde onto current main instead. No restore needed.
 
 ## HIGH
+
 - [ ] Codex governance prompt: run after restore (adds gordon to roster, bundles fixes)
 - [ ] Desktop Commander: re-enable in claude.ai Settings
 - [ ] ANTIGRAVITY MCP :3140: run RUN-FIRST-TIME.bat, add cloudflared ingress
 - [ ] WSL2 + Claude Code: install on T5500 (needs one UAC click)
 
 ## MEDIUM
+
 - [ ] OmniRouter on T5500: set OMNI_ROUTER_PROXY_ENABLED=1 + provider env vars, then start
 - [ ] 9020 resync: after main restore, sync 9020 node
 - [ ] GA4 tags: verify tag installation on all 3 domains (aidoesitall.org, ai-solutions.store, onlinerecycle.org)
 - [ ] QuickBooks: not connected — financial health check incomplete without it
 
 ## LOW
+
 - [ ] FCC setup: enable OpenRouter free NVIDIA/Nemotron path in OmniRouter; remove dependency on :8082 proxy
 - [ ] FCC hijack runbook: retire; proxy no longer used
 - [ ] Reboot test: validate ANTIGRAVITY-Bootstrap + power-loss recovery on T5500

@@ -1,451 +1,649 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>AntiGravity · 60s Walkthrough</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --bg: #0a070f;
-      --ink: #f4f0f8;
-      --ink-2: #b9adc6;
-      --ink-3: #8c7d9d;
-      --ink-4: #5e5170;
-      --odoo: #714B67;
-      --odoo-300: #b3a2bf;
-      --odoo-glow: rgba(126,94,142,0.55);
-      --rose: #e36a76;
-      --green: #3fbf72;
-      --amber: #e6a93a;
-      --line: rgba(255,255,255,0.06);
-      --line-2: rgba(255,255,255,0.10);
-      --line-strong: rgba(255,255,255,0.18);
-    }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      -webkit-font-smoothing: antialiased;
-    }
-    .mono { font-family: 'JetBrains Mono', monospace; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AntiGravity · 60s Walkthrough</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a070f;
+        --ink: #f4f0f8;
+        --ink-2: #b9adc6;
+        --ink-3: #8c7d9d;
+        --ink-4: #5e5170;
+        --odoo: #714b67;
+        --odoo-300: #b3a2bf;
+        --odoo-glow: rgba(126, 94, 142, 0.55);
+        --rose: #e36a76;
+        --green: #3fbf72;
+        --amber: #e6a93a;
+        --line: rgba(255, 255, 255, 0.06);
+        --line-2: rgba(255, 255, 255, 0.1);
+        --line-strong: rgba(255, 255, 255, 0.18);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+      }
+      .mono {
+        font-family: 'JetBrains Mono', monospace;
+      }
 
-    .stage {
-      position: fixed; inset: 0;
-      display: grid;
-      grid-template-rows: 1fr auto;
-    }
+      .stage {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        grid-template-rows: 1fr auto;
+      }
 
-    .frame {
-      position: relative;
-      overflow: hidden;
-    }
-    .frame::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(900px 600px at 80% 10%, var(--odoo-glow), transparent 70%),
-        radial-gradient(700px 500px at 0% 80%, rgba(227,106,118,0.10), transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .frame::after {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0);
-      background-size: 22px 22px;
-      pointer-events: none;
-      z-index: 0;
-    }
+      .frame {
+        position: relative;
+        overflow: hidden;
+      }
+      .frame::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(900px 600px at 80% 10%, var(--odoo-glow), transparent 70%),
+          radial-gradient(700px 500px at 0% 80%, rgba(227, 106, 118, 0.1), transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+      }
+      .frame::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.04) 1px, transparent 0);
+        background-size: 22px 22px;
+        pointer-events: none;
+        z-index: 0;
+      }
 
-    .device {
-      position: absolute;
-      inset: 6vh 8vw 6vh 8vw;
-      border-radius: 22px;
-      overflow: hidden;
-      border: 1px solid var(--line-strong);
-      background: #100918;
-      box-shadow:
-        0 30px 80px rgba(0,0,0,0.7),
-        0 0 0 1px var(--line-strong),
-        0 0 80px var(--odoo-glow);
-      z-index: 1;
-      transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-    .device.fade { opacity: 0.2; transform: scale(0.98); }
-    .device iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-    }
+      .device {
+        position: absolute;
+        inset: 6vh 8vw 6vh 8vw;
+        border-radius: 22px;
+        overflow: hidden;
+        border: 1px solid var(--line-strong);
+        background: #100918;
+        box-shadow:
+          0 30px 80px rgba(0, 0, 0, 0.7),
+          0 0 0 1px var(--line-strong),
+          0 0 80px var(--odoo-glow);
+        z-index: 1;
+        transition:
+          opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+          transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .device.fade {
+        opacity: 0.2;
+        transform: scale(0.98);
+      }
+      .device iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
+      }
 
-    .caption {
-      position: absolute;
-      bottom: 8vh;
-      left: 8vw;
-      max-width: 540px;
-      z-index: 3;
-      background: rgba(10,7,15,0.78);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid var(--line-strong);
-      border-radius: 22px;
-      padding: 22px 26px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-      animation: pop 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-    @keyframes pop { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-    .cap-eyebrow {
-      display: flex; align-items: center; gap: 10px;
-      font: 800 10px/1 'JetBrains Mono', monospace;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--odoo-300);
-    }
-    .cap-eyebrow .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--green); box-shadow: 0 0 8px var(--green); }
-    .cap-h {
-      font-weight: 900;
-      font-size: 36px;
-      line-height: 1;
-      letter-spacing: -0.035em;
-      margin-top: 12px;
-    }
-    .cap-h .accent { color: var(--odoo-300); }
-    .cap-sub {
-      margin-top: 12px;
-      color: var(--ink-2);
-      font-size: 15px;
-      line-height: 1.55;
-    }
-    .cap-sub strong { color: var(--ink); font-weight: 700; }
+      .caption {
+        position: absolute;
+        bottom: 8vh;
+        left: 8vw;
+        max-width: 540px;
+        z-index: 3;
+        background: rgba(10, 7, 15, 0.78);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid var(--line-strong);
+        border-radius: 22px;
+        padding: 22px 26px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        animation: pop 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      @keyframes pop {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .cap-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font:
+          800 10px/1 'JetBrains Mono',
+          monospace;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--odoo-300);
+      }
+      .cap-eyebrow .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--green);
+        box-shadow: 0 0 8px var(--green);
+      }
+      .cap-h {
+        font-weight: 900;
+        font-size: 36px;
+        line-height: 1;
+        letter-spacing: -0.035em;
+        margin-top: 12px;
+      }
+      .cap-h .accent {
+        color: var(--odoo-300);
+      }
+      .cap-sub {
+        margin-top: 12px;
+        color: var(--ink-2);
+        font-size: 15px;
+        line-height: 1.55;
+      }
+      .cap-sub strong {
+        color: var(--ink);
+        font-weight: 700;
+      }
 
-    /* corner ID badge */
-    .corner {
-      position: absolute;
-      top: 6vh; right: 8vw;
-      z-index: 3;
-      display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
-    }
-    .corner .id {
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(10,7,15,0.78);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--line-strong);
-      font: 800 10px/1 'JetBrains Mono', monospace;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--ink);
-    }
-    .corner .id .accent { color: var(--odoo-300); }
-    .corner .brand {
-      display: flex; align-items: center; gap: 10px;
-    }
-    .corner .brand .mark {
-      width: 28px; height: 28px;
-      border-radius: 9px;
-      background: linear-gradient(135deg, var(--odoo) 0%, #2a1235 100%);
-      display: grid; place-items: center;
-      box-shadow: 0 0 0 1px var(--line-strong), 0 4px 14px var(--odoo-glow);
-    }
-    .corner .brand .label { font: 800 10px/1 'JetBrains Mono', monospace; letter-spacing: 0.22em; text-transform: uppercase; }
-    .corner .brand .label small { display: block; color: var(--ink-3); font-weight: 500; margin-top: 4px; font-size: 8px; letter-spacing: 0.3em; }
+      /* corner ID badge */
+      .corner {
+        position: absolute;
+        top: 6vh;
+        right: 8vw;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+      }
+      .corner .id {
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(10, 7, 15, 0.78);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--line-strong);
+        font:
+          800 10px/1 'JetBrains Mono',
+          monospace;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--ink);
+      }
+      .corner .id .accent {
+        color: var(--odoo-300);
+      }
+      .corner .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .corner .brand .mark {
+        width: 28px;
+        height: 28px;
+        border-radius: 9px;
+        background: linear-gradient(135deg, var(--odoo) 0%, #2a1235 100%);
+        display: grid;
+        place-items: center;
+        box-shadow:
+          0 0 0 1px var(--line-strong),
+          0 4px 14px var(--odoo-glow);
+      }
+      .corner .brand .label {
+        font:
+          800 10px/1 'JetBrains Mono',
+          monospace;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+      .corner .brand .label small {
+        display: block;
+        color: var(--ink-3);
+        font-weight: 500;
+        margin-top: 4px;
+        font-size: 8px;
+        letter-spacing: 0.3em;
+      }
 
-    /* controls */
-    .controls {
-      padding: 18px 24px;
-      background: rgba(10,7,15,0.85);
-      backdrop-filter: blur(14px);
-      border-top: 1px solid var(--line);
-      display: flex; align-items: center; gap: 18px;
-      z-index: 4;
-    }
-    .pb-wrap { flex: 1; display: flex; align-items: center; gap: 14px; }
-    .pb-label { font: 700 10px/1 'JetBrains Mono', monospace; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3); min-width: 60px; }
-    .pb {
-      flex: 1; height: 4px; background: var(--line-2); border-radius: 999px; overflow: hidden; position: relative;
-    }
-    .pb > i {
-      display: block; height: 100%;
-      background: linear-gradient(90deg, var(--odoo) 0%, var(--odoo-300) 100%);
-      border-radius: 999px;
-      transition: width 0.2s linear;
-      box-shadow: 0 0 14px var(--odoo-glow);
-    }
-    .chips { display: flex; gap: 6px; }
-    .chip {
-      appearance: none;
-      background: transparent;
-      border: 1px solid var(--line);
-      color: var(--ink-3);
-      font: 700 9.5px/1 'JetBrains Mono', monospace;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      padding: 8px 12px;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-    }
-    .chip:hover { color: var(--ink); border-color: var(--line-2); }
-    .chip.on {
-      background: linear-gradient(135deg, var(--odoo) 0%, #2a1235 100%);
-      border-color: var(--odoo-300);
-      color: white;
-      box-shadow: 0 0 14px var(--odoo-glow);
-    }
-    .btn {
-      appearance: none;
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 16px;
-      border-radius: 999px;
-      background: var(--bg);
-      border: 1px solid var(--line-2);
-      color: var(--ink);
-      font: 800 10px/1 'JetBrains Mono', monospace;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-    .btn:hover { border-color: var(--line-strong); }
-    .btn.primary {
-      background: linear-gradient(135deg, var(--odoo) 0%, #2a1235 100%);
-      border-color: var(--odoo-300);
-      color: white;
-      box-shadow: 0 4px 14px var(--odoo-glow);
-    }
-    .ctrl-meta { font: 700 10px/1 'JetBrains Mono', monospace; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3); }
-    .ctrl-meta strong { color: var(--ink); }
+      /* controls */
+      .controls {
+        padding: 18px 24px;
+        background: rgba(10, 7, 15, 0.85);
+        backdrop-filter: blur(14px);
+        border-top: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        z-index: 4;
+      }
+      .pb-wrap {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .pb-label {
+        font:
+          700 10px/1 'JetBrains Mono',
+          monospace;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+        min-width: 60px;
+      }
+      .pb {
+        flex: 1;
+        height: 4px;
+        background: var(--line-2);
+        border-radius: 999px;
+        overflow: hidden;
+        position: relative;
+      }
+      .pb > i {
+        display: block;
+        height: 100%;
+        background: linear-gradient(90deg, var(--odoo) 0%, var(--odoo-300) 100%);
+        border-radius: 999px;
+        transition: width 0.2s linear;
+        box-shadow: 0 0 14px var(--odoo-glow);
+      }
+      .chips {
+        display: flex;
+        gap: 6px;
+      }
+      .chip {
+        appearance: none;
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--ink-3);
+        font:
+          700 9.5px/1 'JetBrains Mono',
+          monospace;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        padding: 8px 12px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          color 0.15s,
+          border-color 0.15s;
+      }
+      .chip:hover {
+        color: var(--ink);
+        border-color: var(--line-2);
+      }
+      .chip.on {
+        background: linear-gradient(135deg, var(--odoo) 0%, #2a1235 100%);
+        border-color: var(--odoo-300);
+        color: white;
+        box-shadow: 0 0 14px var(--odoo-glow);
+      }
+      .btn {
+        appearance: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: var(--bg);
+        border: 1px solid var(--line-2);
+        color: var(--ink);
+        font:
+          800 10px/1 'JetBrains Mono',
+          monospace;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .btn:hover {
+        border-color: var(--line-strong);
+      }
+      .btn.primary {
+        background: linear-gradient(135deg, var(--odoo) 0%, #2a1235 100%);
+        border-color: var(--odoo-300);
+        color: white;
+        box-shadow: 0 4px 14px var(--odoo-glow);
+      }
+      .ctrl-meta {
+        font:
+          700 10px/1 'JetBrains Mono',
+          monospace;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .ctrl-meta strong {
+        color: var(--ink);
+      }
 
-    /* HIDE controls when recording */
-    body.recording .controls { display: none; }
-    body.recording .corner .brand { display: none; }
+      /* HIDE controls when recording */
+      body.recording .controls {
+        display: none;
+      }
+      body.recording .corner .brand {
+        display: none;
+      }
 
-    /* cover slide */
-    .cover {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column;
-      text-align: center;
-      padding: 0 6vw;
-      z-index: 5;
-      background: var(--bg);
-      animation: fade-out 1s 4s forwards;
-    }
-    @keyframes fade-out { to { opacity: 0; pointer-events: none; } }
-    .cover::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(900px 600px at 80% 10%, var(--odoo-glow), transparent 70%),
-        radial-gradient(700px 500px at 0% 80%, rgba(227,106,118,0.16), transparent 70%);
-    }
-    .cover::after {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0);
-      background-size: 22px 22px;
-    }
-    .cover > * { position: relative; z-index: 1; }
-    .cover .eyebrow {
-      font: 800 12px/1 'JetBrains Mono', monospace;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--odoo-300);
-    }
-    .cover h1 {
-      font-weight: 900;
-      font-size: clamp(56px, 8vw, 120px);
-      line-height: 0.95;
-      letter-spacing: -0.045em;
-      margin: 24px 0 0;
-    }
-    .cover h1 .accent { color: var(--odoo-300); }
-    .cover .sub {
-      margin-top: 24px;
-      color: var(--ink-2);
-      font-size: 18px;
-      max-width: 620px;
-      line-height: 1.55;
-    }
-    .cover .meta {
-      margin-top: 36px;
-      font: 700 11px/1.5 'JetBrains Mono', monospace;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--ink-3);
-    }
-  </style>
-</head>
-<body>
-
-  <div class="stage">
-    <div class="frame" id="frame">
-
-      <!-- cover splash -->
-      <div class="cover">
-        <span class="eyebrow"><span style="display: inline-block; width: 6px; height: 6px; border-radius: 999px; background: var(--rose); margin-right: 10px; vertical-align: middle;"></span> A 60-SECOND WALKTHROUGH</span>
-        <h1>Anti<span class="accent">Gravity</span></h1>
-        <p class="sub">An AI-orchestrated operator console. Built by a real human and his AI partners. A share of net proceeds is designated for families who need medical care.</p>
-        <div class="meta">#UntilNoKidInNeed · v3 · Sabertooth</div>
-      </div>
-
-      <div class="corner">
-        <div class="brand">
-          <div class="mark">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2 4 8v10l8 4 8-4V8l-8-6Z" stroke="white" stroke-width="1.6" stroke-linejoin="round"/>
-              <path d="M12 6 8 9v6l4 2 4-2V9l-4-3Z" stroke="white" stroke-width="1.4" stroke-linejoin="round" opacity="0.65"/>
-              <circle cx="12" cy="12" r="1.6" fill="white"/>
-            </svg>
-          </div>
-          <div class="label">ANTIGRAVITY <small>#UntilNoKidInNeed</small></div>
+      /* cover slide */
+      .cover {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        padding: 0 6vw;
+        z-index: 5;
+        background: var(--bg);
+        animation: fade-out 1s 4s forwards;
+      }
+      @keyframes fade-out {
+        to {
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+      .cover::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(900px 600px at 80% 10%, var(--odoo-glow), transparent 70%),
+          radial-gradient(700px 500px at 0% 80%, rgba(227, 106, 118, 0.16), transparent 70%);
+      }
+      .cover::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.04) 1px, transparent 0);
+        background-size: 22px 22px;
+      }
+      .cover > * {
+        position: relative;
+        z-index: 1;
+      }
+      .cover .eyebrow {
+        font:
+          800 12px/1 'JetBrains Mono',
+          monospace;
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        color: var(--odoo-300);
+      }
+      .cover h1 {
+        font-weight: 900;
+        font-size: clamp(56px, 8vw, 120px);
+        line-height: 0.95;
+        letter-spacing: -0.045em;
+        margin: 24px 0 0;
+      }
+      .cover h1 .accent {
+        color: var(--odoo-300);
+      }
+      .cover .sub {
+        margin-top: 24px;
+        color: var(--ink-2);
+        font-size: 18px;
+        max-width: 620px;
+        line-height: 1.55;
+      }
+      .cover .meta {
+        margin-top: 36px;
+        font:
+          700 11px/1.5 'JetBrains Mono',
+          monospace;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage">
+      <div class="frame" id="frame">
+        <!-- cover splash -->
+        <div class="cover">
+          <span class="eyebrow"
+            ><span
+              style="
+                display: inline-block;
+                width: 6px;
+                height: 6px;
+                border-radius: 999px;
+                background: var(--rose);
+                margin-right: 10px;
+                vertical-align: middle;
+              "
+            ></span>
+            A 60-SECOND WALKTHROUGH</span
+          >
+          <h1>Anti<span class="accent">Gravity</span></h1>
+          <p class="sub">
+            An AI-orchestrated operator console. Built by a real human and his AI partners. A share of net proceeds is
+            designated for families who need medical care.
+          </p>
+          <div class="meta">#UntilNoKidInNeed · v3 · Sabertooth</div>
         </div>
-        <div class="id">SLIDE <span id="idx-cur" class="accent">01</span> / <span id="idx-tot">04</span></div>
+
+        <div class="corner">
+          <div class="brand">
+            <div class="mark">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2 4 8v10l8 4 8-4V8l-8-6Z" stroke="white" stroke-width="1.6" stroke-linejoin="round" />
+                <path
+                  d="M12 6 8 9v6l4 2 4-2V9l-4-3Z"
+                  stroke="white"
+                  stroke-width="1.4"
+                  stroke-linejoin="round"
+                  opacity="0.65"
+                />
+                <circle cx="12" cy="12" r="1.6" fill="white" />
+              </svg>
+            </div>
+            <div class="label">ANTIGRAVITY <small>#UntilNoKidInNeed</small></div>
+          </div>
+          <div class="id">SLIDE <span id="idx-cur" class="accent">01</span> / <span id="idx-tot">04</span></div>
+        </div>
+
+        <iframe
+          class="device"
+          id="device"
+          src="AntiGravity Prototype.html#dashboard"
+          title="AntiGravity Console"
+        ></iframe>
+
+        <div class="caption" id="caption">
+          <div class="cap-eyebrow"><span class="dot"></span> <span id="cap-eye">01 · MISSION CONTROL</span></div>
+          <div class="cap-h" id="cap-h">Bento <span class="accent">overview</span>.</div>
+          <div class="cap-sub" id="cap-sub">
+            Designed to earn for a real mission. Live agent fleet, revenue pulse, Hermes 9020 hops &mdash; all in one
+            density-first grid.
+          </div>
+        </div>
       </div>
 
-      <iframe class="device" id="device" src="AntiGravity Prototype.html#dashboard" title="AntiGravity Console"></iframe>
-
-      <div class="caption" id="caption">
-        <div class="cap-eyebrow"><span class="dot"></span> <span id="cap-eye">01 · MISSION CONTROL</span></div>
-        <div class="cap-h" id="cap-h">Bento <span class="accent">overview</span>.</div>
-        <div class="cap-sub" id="cap-sub">Designed to earn for a real mission. Live agent fleet, revenue pulse, Hermes 9020 hops &mdash; all in one density-first grid.</div>
+      <div class="controls">
+        <div class="chips" id="chips"></div>
+        <div class="pb-wrap">
+          <span class="pb-label">PROGRESS</span>
+          <div class="pb"><i id="pb"></i></div>
+        </div>
+        <div class="ctrl-meta"><strong id="ctrl-state">PLAYING</strong> · LOOP ON</div>
+        <button class="btn" id="btn-rec" title="Hide UI for clean screen recording">Hide UI</button>
+        <button class="btn" id="btn-play">⏸ Pause</button>
+        <a class="btn primary" href="AntiGravity Prototype.html" target="_blank">Open Live →</a>
       </div>
-
     </div>
 
-    <div class="controls">
-      <div class="chips" id="chips"></div>
-      <div class="pb-wrap">
-        <span class="pb-label">PROGRESS</span>
-        <div class="pb"><i id="pb"></i></div>
-      </div>
-      <div class="ctrl-meta"><strong id="ctrl-state">PLAYING</strong> · LOOP ON</div>
-      <button class="btn" id="btn-rec" title="Hide UI for clean screen recording">Hide UI</button>
-      <button class="btn" id="btn-play">⏸ Pause</button>
-      <a class="btn primary" href="AntiGravity Prototype.html" target="_blank">Open Live →</a>
-    </div>
-  </div>
+    <script>
+      const SLIDES = [
+        {
+          id: 'dashboard',
+          eye: '01 · MISSION CONTROL',
+          h: 'Bento <span class="accent">overview</span>.',
+          sub: 'Hero #UntilNoKidInNeed module, Opus + Gemini orchestrating, six workers, live ticker, Hermes node health — all in one density-first grid.',
+          dur: 9000,
+        },
+        {
+          id: 'comms',
+          eye: '02 · UNIVERSAL COMMS',
+          h: 'Transparent <span class="accent">bridge</span>.',
+          sub: 'Discord/Telegram-style channels. Every human and every agent sees the same stream. Hermes posts route + memory + policy attachments. Nothing hidden. Ever.',
+          dur: 9000,
+        },
+        {
+          id: 'paperweight',
+          eye: '03 · PAPERWEIGHT',
+          h: 'Sticky-note <span class="accent">delegation</span>.',
+          sub: 'Corkboard or kanban — drop a sticky, route it to an agent, watch it complete. Persists to episodic memory for the Self-Improving loop.',
+          dur: 9000,
+        },
+        {
+          id: 'hermes',
+          eye: '04 · HERMES NODE 9020',
+          h: 'Local <span class="accent">routing</span>.',
+          sub: 'One toggle routes everything through the local OpenClaw node. Ollama, Gemma4, Codex, Pi, plus Claude · Gemini · Perplexity in the cloud. Every hop logged.',
+          dur: 11000,
+        },
+      ];
 
-  <script>
-    const SLIDES = [
-      { id: 'dashboard',   eye: '01 · MISSION CONTROL',         h: 'Bento <span class="accent">overview</span>.',                      sub: 'Hero #UntilNoKidInNeed module, Opus + Gemini orchestrating, six workers, live ticker, Hermes node health — all in one density-first grid.', dur: 9000 },
-      { id: 'comms',       eye: '02 · UNIVERSAL COMMS',         h: 'Transparent <span class="accent">bridge</span>.',                 sub: 'Discord/Telegram-style channels. Every human and every agent sees the same stream. Hermes posts route + memory + policy attachments. Nothing hidden. Ever.', dur: 9000 },
-      { id: 'paperweight', eye: '03 · PAPERWEIGHT',             h: 'Sticky-note <span class="accent">delegation</span>.',             sub: 'Corkboard or kanban — drop a sticky, route it to an agent, watch it complete. Persists to episodic memory for the Self-Improving loop.', dur: 9000 },
-      { id: 'hermes',      eye: '04 · HERMES NODE 9020',        h: 'Local <span class="accent">routing</span>.',                      sub: 'One toggle routes everything through the local OpenClaw node. Ollama, Gemma4, Codex, Pi, plus Claude · Gemini · Perplexity in the cloud. Every hop logged.', dur: 11000 },
-    ];
+      const device = document.getElementById('device');
+      const cap = document.getElementById('caption');
+      const capEye = document.getElementById('cap-eye');
+      const capH = document.getElementById('cap-h');
+      const capSub = document.getElementById('cap-sub');
+      const pb = document.getElementById('pb');
+      const idxCur = document.getElementById('idx-cur');
+      const idxTot = document.getElementById('idx-tot');
+      const chipsEl = document.getElementById('chips');
+      const btnPlay = document.getElementById('btn-play');
+      const btnRec = document.getElementById('btn-rec');
+      const ctrlState = document.getElementById('ctrl-state');
 
-    const device = document.getElementById('device');
-    const cap = document.getElementById('caption');
-    const capEye = document.getElementById('cap-eye');
-    const capH = document.getElementById('cap-h');
-    const capSub = document.getElementById('cap-sub');
-    const pb = document.getElementById('pb');
-    const idxCur = document.getElementById('idx-cur');
-    const idxTot = document.getElementById('idx-tot');
-    const chipsEl = document.getElementById('chips');
-    const btnPlay = document.getElementById('btn-play');
-    const btnRec  = document.getElementById('btn-rec');
-    const ctrlState = document.getElementById('ctrl-state');
+      let i = 0;
+      let playing = true;
+      let t0 = 0;
+      let pausedAt = 0;
+      let raf = null;
 
-    let i = 0;
-    let playing = true;
-    let t0 = 0;
-    let pausedAt = 0;
-    let raf = null;
+      idxTot.textContent = String(SLIDES.length).padStart(2, '0');
 
-    idxTot.textContent = String(SLIDES.length).padStart(2, '0');
+      // chips
+      SLIDES.forEach((s, idx) => {
+        const b = document.createElement('button');
+        b.className = 'chip';
+        b.textContent = s.id.toUpperCase();
+        b.addEventListener('click', () => goTo(idx));
+        chipsEl.appendChild(b);
+      });
 
-    // chips
-    SLIDES.forEach((s, idx) => {
-      const b = document.createElement('button');
-      b.className = 'chip';
-      b.textContent = s.id.toUpperCase();
-      b.addEventListener('click', () => goTo(idx));
-      chipsEl.appendChild(b);
-    });
+      function paintCaption(slide, idx) {
+        capEye.textContent = slide.eye;
+        capH.innerHTML = slide.h;
+        capSub.innerHTML = slide.sub;
+        idxCur.textContent = String(idx + 1).padStart(2, '0');
+        [...chipsEl.children].forEach((c, ci) => c.classList.toggle('on', ci === idx));
+        cap.style.animation = 'none';
+        // reflow
+        void cap.offsetWidth;
+        cap.style.animation = '';
+      }
 
-    function paintCaption(slide, idx) {
-      capEye.textContent = slide.eye;
-      capH.innerHTML = slide.h;
-      capSub.innerHTML = slide.sub;
-      idxCur.textContent = String(idx + 1).padStart(2, '0');
-      [...chipsEl.children].forEach((c, ci) => c.classList.toggle('on', ci === idx));
-      cap.style.animation = 'none';
-      // reflow
-      void cap.offsetWidth;
-      cap.style.animation = '';
-    }
+      function loadSlide(idx) {
+        const s = SLIDES[idx];
+        device.classList.add('fade');
+        paintCaption(s, idx);
+        setTimeout(() => {
+          device.src = 'AntiGravity Prototype.html#' + s.id;
+          device.classList.remove('fade');
+        }, 250);
+      }
 
-    function loadSlide(idx) {
-      const s = SLIDES[idx];
-      device.classList.add('fade');
-      paintCaption(s, idx);
-      setTimeout(() => {
-        device.src = 'AntiGravity Prototype.html#' + s.id;
-        device.classList.remove('fade');
-      }, 250);
-    }
+      function tick() {
+        if (!playing) {
+          raf = requestAnimationFrame(tick);
+          return;
+        }
+        const s = SLIDES[i];
+        const elapsed = performance.now() - t0;
+        const pct = Math.min(1, elapsed / s.dur);
+        pb.style.width = pct * 100 + '%';
+        if (pct >= 1) {
+          i = (i + 1) % SLIDES.length;
+          t0 = performance.now();
+          loadSlide(i);
+        }
+        raf = requestAnimationFrame(tick);
+      }
 
-    function tick() {
-      if (!playing) { raf = requestAnimationFrame(tick); return; }
-      const s = SLIDES[i];
-      const elapsed = performance.now() - t0;
-      const pct = Math.min(1, elapsed / s.dur);
-      pb.style.width = (pct * 100) + '%';
-      if (pct >= 1) {
-        i = (i + 1) % SLIDES.length;
+      function goTo(idx) {
+        i = idx;
         t0 = performance.now();
+        pb.style.width = '0%';
         loadSlide(i);
       }
-      raf = requestAnimationFrame(tick);
-    }
 
-    function goTo(idx) {
-      i = idx;
-      t0 = performance.now();
-      pb.style.width = '0%';
-      loadSlide(i);
-    }
-
-    function setPlaying(v) {
-      playing = v;
-      if (v) {
-        // resume: shift t0 so we don't jump
-        t0 = performance.now() - pausedAt;
-        btnPlay.textContent = '⏸ Pause';
-        ctrlState.textContent = 'PLAYING';
-      } else {
-        pausedAt = performance.now() - t0;
-        btnPlay.textContent = '▶ Play';
-        ctrlState.textContent = 'PAUSED';
+      function setPlaying(v) {
+        playing = v;
+        if (v) {
+          // resume: shift t0 so we don't jump
+          t0 = performance.now() - pausedAt;
+          btnPlay.textContent = '⏸ Pause';
+          ctrlState.textContent = 'PLAYING';
+        } else {
+          pausedAt = performance.now() - t0;
+          btnPlay.textContent = '▶ Play';
+          ctrlState.textContent = 'PAUSED';
+        }
       }
-    }
 
-    btnPlay.addEventListener('click', () => setPlaying(!playing));
-    btnRec.addEventListener('click', () => {
-      document.body.classList.toggle('recording');
-      btnRec.textContent = document.body.classList.contains('recording') ? 'Show UI' : 'Hide UI';
-    });
+      btnPlay.addEventListener('click', () => setPlaying(!playing));
+      btnRec.addEventListener('click', () => {
+        document.body.classList.toggle('recording');
+        btnRec.textContent = document.body.classList.contains('recording') ? 'Show UI' : 'Hide UI';
+      });
 
-    window.addEventListener('keydown', (e) => {
-      if (e.key === ' ')      { e.preventDefault(); setPlaying(!playing); }
-      if (e.key === 'ArrowRight') goTo((i + 1) % SLIDES.length);
-      if (e.key === 'ArrowLeft')  goTo((i - 1 + SLIDES.length) % SLIDES.length);
-      if (e.key === 'h' || e.key === 'H') btnRec.click();
-    });
+      window.addEventListener('keydown', (e) => {
+        if (e.key === ' ') {
+          e.preventDefault();
+          setPlaying(!playing);
+        }
+        if (e.key === 'ArrowRight') goTo((i + 1) % SLIDES.length);
+        if (e.key === 'ArrowLeft') goTo((i - 1 + SLIDES.length) % SLIDES.length);
+        if (e.key === 'h' || e.key === 'H') btnRec.click();
+      });
 
-    // start after cover settles
-    setTimeout(() => {
-      loadSlide(0);
-      t0 = performance.now();
-      raf = requestAnimationFrame(tick);
-    }, 4500);
-  </script>
-
-</body>
+      // start after cover settles
+      setTimeout(() => {
+        loadSlide(0);
+        t0 = performance.now();
+        raf = requestAnimationFrame(tick);
+      }, 4500);
+    </script>
+  </body>
 </html>

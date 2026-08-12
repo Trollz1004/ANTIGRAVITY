@@ -1,4 +1,5 @@
 # MISSION CONTROL: AGENCY SWARM v5
+
 ### Haiku-Sonnet 3.5 Edition
 
 Production-grade orchestration dashboard for **148 specialized agents** across **15 divisions**, routed through **OmniRoute**.
@@ -45,16 +46,16 @@ npm start              # server serves API + static client on :3151
 
 ## API
 
-| Method | Path | Purpose |
-|---|---|---|
-| GET | `/api/health` | Router status, provider list, counts |
-| GET | `/api/agents?q=&category=` | Agent library with filters |
-| GET | `/api/tasks` | All tasks (board state) |
-| POST | `/api/tasks` | `{ title?, prompt, agentIds[], mode }` — launch swarm task |
-| PATCH | `/api/tasks/:id` | `{ column }` — move card (BLOCKED→NEXT re-queues) |
-| POST | `/api/tasks/:id/retry` | Re-queue a finished/failed task |
-| DELETE | `/api/tasks/:id` | Remove task |
-| GET | `/api/events` | SSE stream — real-time board/feed updates |
+| Method | Path                       | Purpose                                                    |
+| ------ | -------------------------- | ---------------------------------------------------------- |
+| GET    | `/api/health`              | Router status, provider list, counts                       |
+| GET    | `/api/agents?q=&category=` | Agent library with filters                                 |
+| GET    | `/api/tasks`               | All tasks (board state)                                    |
+| POST   | `/api/tasks`               | `{ title?, prompt, agentIds[], mode }` — launch swarm task |
+| PATCH  | `/api/tasks/:id`           | `{ column }` — move card (BLOCKED→NEXT re-queues)          |
+| POST   | `/api/tasks/:id/retry`     | Re-queue a finished/failed task                            |
+| DELETE | `/api/tasks/:id`           | Remove task                                                |
+| GET    | `/api/events`              | SSE stream — real-time board/feed updates                  |
 
 ## Env reference
 

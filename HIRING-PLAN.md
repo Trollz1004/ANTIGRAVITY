@@ -9,16 +9,16 @@
 
 ## Current Team Structure
 
-| Role | Agent/Person | Focus |
-|------|--------------|-------|
-| CEO | Claude (this seat) | Orchestration, delegation, roadmap |
-| Hermes | Revenue research | Lead gen, opportunity scoring |
-| OpenClaw | Support-only | Customer support routing |
-| CTO | Fleet agent | Architecture, demos, builds |
-| CFO | Fleet agent | Financial gating |
-| CMO | Fleet agent | Marketing, copy |
-| Engineer | Fleet agent | Feature implementation |
-| UX Designer | Fleet agent | Interface design |
+| Role        | Agent/Person       | Focus                              |
+| ----------- | ------------------ | ---------------------------------- |
+| CEO         | Claude (this seat) | Orchestration, delegation, roadmap |
+| Hermes      | Revenue research   | Lead gen, opportunity scoring      |
+| OpenClaw    | Support-only       | Customer support routing           |
+| CTO         | Fleet agent        | Architecture, demos, builds        |
+| CFO         | Fleet agent        | Financial gating                   |
+| CMO         | Fleet agent        | Marketing, copy                    |
+| Engineer    | Fleet agent        | Feature implementation             |
+| UX Designer | Fleet agent        | Interface design                   |
 
 **Gap:** No dedicated human engineer. All engineering is agent-mediated through fleet prompts and Claude Code sessions.
 
@@ -29,6 +29,7 @@
 ### Title: Founding Full-Stack Engineer
 
 ### Why This Role First
+
 1. **Platform is live** — youandinotai.com serves real customers
 2. **Agent orchestration needs a human anchor** — someone to validate agent output, fix edge cases, and own production
 3. **Speed** — agents can draft, but a human ships with confidence
@@ -36,17 +37,18 @@
 
 ### Responsibilities
 
-| Area | Scope |
-|------|-------|
-| Frontend | React app, verification pages, signup flow, Square checkout integration |
-| Backend | FastAPI services, API endpoints, database schema |
-| DevOps | Cloudflare deployment, T5500 node management, CI/CD |
-| Agent QA | Review agent-generated code, merge with caution, own production quality |
-| Documentation | Keep AGENTS.md, CLAUDE.md, and routing tables current |
+| Area          | Scope                                                                   |
+| ------------- | ----------------------------------------------------------------------- |
+| Frontend      | React app, verification pages, signup flow, Square checkout integration |
+| Backend       | FastAPI services, API endpoints, database schema                        |
+| DevOps        | Cloudflare deployment, T5500 node management, CI/CD                     |
+| Agent QA      | Review agent-generated code, merge with caution, own production quality |
+| Documentation | Keep AGENTS.md, CLAUDE.md, and routing tables current                   |
 
 ### Requirements
 
 **Must-have:**
+
 - React + TypeScript (frontend is customer-facing)
 - Python + FastAPI (backend powers the platform)
 - Cloudflare Workers/Pages deployment experience
@@ -54,17 +56,18 @@
 - Ability to work with AI agents as collaborators (not just tools)
 
 **Nice-to-have:**
+
 - Square API integration experience
 - Real-time features (WebSockets, presence)
 - Security mindset (auth, secrets, rate limiting)
 
 ### Compensation Model
 
-| Option | Structure | Notes |
-|--------|-----------|-------|
-| Equity-first | 0.5-2% vesting over 4 years | For true co-founder caliber |
-| Revenue-share | Base + % of platform revenue | Aligns with mission |
-| Contract-to-hire | $50-100/hr, 3-month trial | Lower risk, faster start |
+| Option           | Structure                    | Notes                       |
+| ---------------- | ---------------------------- | --------------------------- |
+| Equity-first     | 0.5-2% vesting over 4 years  | For true co-founder caliber |
+| Revenue-share    | Base + % of platform revenue | Aligns with mission         |
+| Contract-to-hire | $50-100/hr, 3-month trial    | Lower risk, faster start    |
 
 **Recommendation:** Start with contract-to-hire. Prove fit before equity.
 
@@ -89,23 +92,23 @@
 
 Per CLAUDE.md routing (2026-07-14):
 
-| Seat | Agent | Model Route |
-|------|-------|-------------|
-| CEO | Claude (this) | Max-authenticated Claude Code CLI |
-| Hermes | Revenue research | OmniRoute (T5500 gate) |
-| OpenClaw | Support | Local/self-hosted inference |
+| Seat     | Agent            | Model Route                       |
+| -------- | ---------------- | --------------------------------- |
+| CEO      | Claude (this)    | Max-authenticated Claude Code CLI |
+| Hermes   | Revenue research | OmniRoute (T5500 gate)            |
+| OpenClaw | Support          | Local/self-hosted inference       |
 
 The "founding trio" is the decision-making layer. The first engineer joins as a **worker** who executes under CEO direction, not as a co-equal decision maker.
 
 ### Decision Authority Matrix
 
-| Decision | Who Decides | Who Executes |
-|----------|-------------|--------------|
-| Roadmap priorities | Josh → CEO | Engineer |
-| Deploy to production | Josh → CEO | Engineer (with approval) |
-| Payment changes | Josh only | Nobody else |
-| Public copy | CEO reviews | CMO drafts |
-| Architecture | CEO + CTO | Engineer |
+| Decision             | Who Decides | Who Executes             |
+| -------------------- | ----------- | ------------------------ |
+| Roadmap priorities   | Josh → CEO  | Engineer                 |
+| Deploy to production | Josh → CEO  | Engineer (with approval) |
+| Payment changes      | Josh only   | Nobody else              |
+| Public copy          | CEO reviews | CMO drafts               |
+| Architecture         | CEO + CTO   | Engineer                 |
 
 ---
 
@@ -113,49 +116,49 @@ The "founding trio" is the decision-making layer. The first engineer joins as a 
 
 ### P0 — Immediate (This Week)
 
-| Task | Assignee | Est. | Dependencies |
-|------|----------|------|--------------|
-| Verify youandinotai.com returns 200 | Engineer | 1h | None |
-| Run FastAPI test suite, document baseline | Engineer | 2h | None |
-| Audit customer-facing copy for TOS compliance | CMO | 3h | None |
-| Cloudflare UI promotion (T-001) | Josh (interactive) | 15m | None |
+| Task                                          | Assignee           | Est. | Dependencies |
+| --------------------------------------------- | ------------------ | ---- | ------------ |
+| Verify youandinotai.com returns 200           | Engineer           | 1h   | None         |
+| Run FastAPI test suite, document baseline     | Engineer           | 2h   | None         |
+| Audit customer-facing copy for TOS compliance | CMO                | 3h   | None         |
+| Cloudflare UI promotion (T-001)               | Josh (interactive) | 15m  | None         |
 
 ### P1 — Week 1-2
 
-| Task | Assignee | Est. | Dependencies |
-|------|----------|------|--------------|
-| Deploy verified signup/verification page | Engineer | 4h | T-001 |
-| Seed mission-mcp with Genspark tasks | Hermes | 3h | Mission-mcp stable |
-| Seed mission-mcp with content calendar | Hermes | 3h | Mission-mcp stable |
-| Reddit/Discord posting cadence setup | CMO | 4h | Content calendar |
-| FastAPI pytest suite: get to >200 passing | Engineer | 8h | Baseline doc |
+| Task                                      | Assignee | Est. | Dependencies       |
+| ----------------------------------------- | -------- | ---- | ------------------ |
+| Deploy verified signup/verification page  | Engineer | 4h   | T-001              |
+| Seed mission-mcp with Genspark tasks      | Hermes   | 3h   | Mission-mcp stable |
+| Seed mission-mcp with content calendar    | Hermes   | 3h   | Mission-mcp stable |
+| Reddit/Discord posting cadence setup      | CMO      | 4h   | Content calendar   |
+| FastAPI pytest suite: get to >200 passing | Engineer | 8h   | Baseline doc       |
 
 ### P2 — Week 3-4
 
-| Task | Assignee | Est. | Dependencies |
-|------|----------|------|--------------|
-| Daily content-prep loop operational | CEO + CMO | 6h | Mission-mcp seeded |
-| Product Hunt submission prep | CMO | 4h | Landing page live |
-| BetaList submission prep | CMO | 2h | Landing page live |
-| onlinerecycle.org TOS audit | CMO | 3h | None |
-| Square checkout verification flow test | Engineer | 4h | Signup page live |
+| Task                                   | Assignee  | Est. | Dependencies       |
+| -------------------------------------- | --------- | ---- | ------------------ |
+| Daily content-prep loop operational    | CEO + CMO | 6h   | Mission-mcp seeded |
+| Product Hunt submission prep           | CMO       | 4h   | Landing page live  |
+| BetaList submission prep               | CMO       | 2h   | Landing page live  |
+| onlinerecycle.org TOS audit            | CMO       | 3h   | None               |
+| Square checkout verification flow test | Engineer  | 4h   | Signup page live   |
 
 ### P3 — Month 2 (August)
 
-| Task | Assignee | Est. | Dependencies |
-|------|----------|------|--------------|
-| ai-solutions.store MVP (5 products) | CTO + Engineer | 16h | Vercel deploy ready |
-| onlinerecycle.org: 5 new service tiers | Hermes + CMO | 8h | eBay OAuth |
-| Super Likes feature (Bucket 2) | Engineer | 12h | Signup flow stable |
-| AIS product feedback loop | CMO | 4h | Products live |
+| Task                                   | Assignee       | Est. | Dependencies        |
+| -------------------------------------- | -------------- | ---- | ------------------- |
+| ai-solutions.store MVP (5 products)    | CTO + Engineer | 16h  | Vercel deploy ready |
+| onlinerecycle.org: 5 new service tiers | Hermes + CMO   | 8h   | eBay OAuth          |
+| Super Likes feature (Bucket 2)         | Engineer       | 12h  | Signup flow stable  |
+| AIS product feedback loop              | CMO            | 4h   | Products live       |
 
 ### P4 — Month 3 (September)
 
-| Task | Assignee | Est. | Dependencies |
-|------|----------|------|--------------|
-| Signup conversion funnel optimization | Engineer + CMO | 8h | 30 days of data |
-| Engagement metrics analysis | CEO + Hermes | 4h | Analytics setup |
-| Q3 retro draft | CEO | 4h | All above complete |
+| Task                                  | Assignee       | Est. | Dependencies       |
+| ------------------------------------- | -------------- | ---- | ------------------ |
+| Signup conversion funnel optimization | Engineer + CMO | 8h   | 30 days of data    |
+| Engagement metrics analysis           | CEO + Hermes   | 4h   | Analytics setup    |
+| Q3 retro draft                        | CEO            | 4h   | All above complete |
 
 ---
 
@@ -165,14 +168,14 @@ Every agent in the fleet must have these mandatory skills:
 
 ### Mandatory Skills
 
-| Skill | Purpose | Location |
-|-------|---------|----------|
-| **caveman** | Token-efficient communication (40-70% savings) | `skills/caveman/SKILL.md` |
+| Skill                | Purpose                                        | Location                           |
+| -------------------- | ---------------------------------------------- | ---------------------------------- |
+| **caveman**          | Token-efficient communication (40-70% savings) | `skills/caveman/SKILL.md`          |
 | **self-improvement** | Session-end evaluation + improvement proposals | `skills/self-improvement/SKILL.md` |
-| **proactive-agent** | Take initiative within defined boundaries | `skills/proactive-agent/SKILL.md` |
-| **agent-reach** | Internet research (search + fetch) | `skills/agent-reach/SKILL.md` |
-| **agent-browser** | Browser automation for live web interaction | `skills/agent-browser/SKILL.md` |
-| **find-skills** | Discover and install skills from index | `skills/find-skills/SKILL.md` |
+| **proactive-agent**  | Take initiative within defined boundaries      | `skills/proactive-agent/SKILL.md`  |
+| **agent-reach**      | Internet research (search + fetch)             | `skills/agent-reach/SKILL.md`      |
+| **agent-browser**    | Browser automation for live web interaction    | `skills/agent-browser/SKILL.md`    |
+| **find-skills**      | Discover and install skills from index         | `skills/find-skills/SKILL.md`      |
 
 ### State Protocol
 
@@ -192,16 +195,16 @@ Created → Active → (2 warnings) → Suspended → Review → Reactivated/Rem
 
 ### Hiring Plan: Agent Assignments
 
-| Agent Role | Model Route | Skills Required | State File |
-|------------|-------------|-----------------|------------|
-| CEO (Claude) | anthropic/claude-opus-4-7 | All mandatory + proactive-agent (aggressive) | state/ceo.md |
-| CTO | anthropic/claude-sonnet-4-6 | All mandatory | state/cto.md |
-| CMO | hermes-router/marketing | All mandatory | state/cmo.md |
-| CFO | hermes-router/cfo | All mandatory | state/cfo.md |
-| Engineer | ollama-local/qwen2.5:7b | All mandatory + agent-browser | state/engineer.md |
-| UX Designer | openrouter/free | All mandatory | state/ux-designer.md |
-| Hermes | omniroute/auto/best-reasoning | All mandatory + agent-reach | state/hermes.md |
-| OpenClaw | Local/self-hosted | All mandatory + caveman | state/openclaw.md |
+| Agent Role   | Model Route                   | Skills Required                              | State File           |
+| ------------ | ----------------------------- | -------------------------------------------- | -------------------- |
+| CEO (Claude) | anthropic/claude-opus-4-7     | All mandatory + proactive-agent (aggressive) | state/ceo.md         |
+| CTO          | anthropic/claude-sonnet-4-6   | All mandatory                                | state/cto.md         |
+| CMO          | hermes-router/marketing       | All mandatory                                | state/cmo.md         |
+| CFO          | hermes-router/cfo             | All mandatory                                | state/cfo.md         |
+| Engineer     | ollama-local/qwen2.5:7b       | All mandatory + agent-browser                | state/engineer.md    |
+| UX Designer  | openrouter/free               | All mandatory                                | state/ux-designer.md |
+| Hermes       | omniroute/auto/best-reasoning | All mandatory + agent-reach                  | state/hermes.md      |
+| OpenClaw     | Local/self-hosted             | All mandatory + caveman                      | state/openclaw.md    |
 
 ---
 

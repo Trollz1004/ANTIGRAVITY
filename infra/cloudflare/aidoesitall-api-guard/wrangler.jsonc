@@ -5,7 +5,7 @@
   "routes": [
     {
       "pattern": "api.aidoesitall.website/*",
-      "zone_name": "aidoesitall.website"
-    }
-  ]
+      "zone_name": "aidoesitall.website",
+    },
+  ],
 }

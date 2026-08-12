@@ -3,6 +3,7 @@
 Short. Overwrite each session, don't let this grow. If it's longer than ~15 lines, you're keeping too much.
 
 ## Last session
+
 ```
 Date: 2026-08-11
 Changed: PRs #215/#216 MERGED (agent roster+news droid; skill-pool reframe).
@@ -23,6 +24,7 @@ Quota: ok
 ```
 
 ## Template for next update
+
 ```
 Date: YYYY-MM-DD
 Changed: <one line>

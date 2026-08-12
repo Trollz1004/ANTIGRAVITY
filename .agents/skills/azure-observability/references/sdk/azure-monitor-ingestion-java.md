@@ -5,12 +5,14 @@
 > in the **azure-monitor-ingestion-java** plugin skill if installed.
 
 ## Install
+
 ```xml
 <dependency><groupId>com.azure</groupId><artifactId>azure-monitor-ingestion</artifactId></dependency>
 <dependency><groupId>com.azure</groupId><artifactId>azure-identity</artifactId></dependency>
 ```
 
 ## Quick Start
+
 ```java
 import com.azure.monitor.ingestion.LogsIngestionClient;
 import com.azure.monitor.ingestion.LogsIngestionClientBuilder;
@@ -22,6 +24,7 @@ client.upload("<dcr-rule-id>", "<stream-name>", logs);
 ```
 
 ## Best Practices
+
 - Batch logs rather than uploading one at a time
 - Set maxConcurrency via LogsUploadOptions for large uploads
 - Handle partial failures with setLogsUploadErrorConsumer

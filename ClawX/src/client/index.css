@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -121,14 +121,14 @@
     @apply bg-background text-foreground;
   }
   button:not(:disabled),
-  [role="button"]:not([aria-disabled="true"]),
-  [type="button"]:not(:disabled),
-  [type="submit"]:not(:disabled),
-  [type="reset"]:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  [type='button']:not(:disabled),
+  [type='submit']:not(:disabled),
+  [type='reset']:not(:disabled),
   a[href],
   select:not(:disabled),
-  input[type="checkbox"]:not(:disabled),
-  input[type="radio"]:not(:disabled) {
+  input[type='checkbox']:not(:disabled),
+  input[type='radio']:not(:disabled) {
     @apply cursor-pointer;
   }
 }
@@ -176,26 +176,58 @@
   }
 }
 /* Provider accent colors */
-.provider-manus { --provider-color: #6366f1; }
-.provider-claude { --provider-color: #d97706; }
-.provider-gemini { --provider-color: #4285f4; }
-.provider-perplexity { --provider-color: #22c55e; }
-.provider-grok { --provider-color: #ef4444; }
-.provider-ollama { --provider-color: #8b5cf6; }
+.provider-manus {
+  --provider-color: #6366f1;
+}
+.provider-claude {
+  --provider-color: #d97706;
+}
+.provider-gemini {
+  --provider-color: #4285f4;
+}
+.provider-perplexity {
+  --provider-color: #22c55e;
+}
+.provider-grok {
+  --provider-color: #ef4444;
+}
+.provider-ollama {
+  --provider-color: #8b5cf6;
+}
 
 /* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: oklch(0.35 0 0); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: oklch(0.45 0 0); }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(0.35 0 0);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.45 0 0);
+}
 
 /* Streaming animation */
 @keyframes pulse-dot {
-  0%, 80%, 100% { opacity: 0; }
-  40% { opacity: 1; }
+  0%,
+  80%,
+  100% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
 }
 .streaming-dot {
   animation: pulse-dot 1.4s infinite ease-in-out both;
 }
-.streaming-dot:nth-child(1) { animation-delay: -0.32s; }
-.streaming-dot:nth-child(2) { animation-delay: -0.16s; }
+.streaming-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+.streaming-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}

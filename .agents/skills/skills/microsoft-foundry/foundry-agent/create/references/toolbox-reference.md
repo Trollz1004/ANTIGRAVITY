@@ -6,10 +6,10 @@ Endpoint format, MCP protocol details, authentication, OAuth consent handling, e
 
 The toolbox MCP endpoint is constructed from the **project endpoint** + **toolbox name**:
 
-| Endpoint | URL |
-|----------|-----|
-| Latest version (default) | `{project_endpoint}/toolboxes/{toolbox_name}/mcp?api-version=v1` |
-| Specific version | `{project_endpoint}/toolboxes/{toolbox_name}/versions/{version}/mcp?api-version=v1` |
+| Endpoint                 | URL                                                                                 |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| Latest version (default) | `{project_endpoint}/toolboxes/{toolbox_name}/mcp?api-version=v1`                    |
+| Specific version         | `{project_endpoint}/toolboxes/{toolbox_name}/versions/{version}/mcp?api-version=v1` |
 
 - **Project endpoint** format: `https://<account>.services.ai.azure.com/api/projects/<project>`
 - The latest-version endpoint always serves the toolbox's `default_version`.
@@ -110,13 +110,13 @@ Valid combinations include:
 
 When calling an `azure_ai_search` tool through the toolbox MCP endpoint, citation metadata is returned under `result.structuredContent.documents[]` — **not** in a separate `citations` array. Treat each document as one citation:
 
-| Field | Meaning |
-|-------|---------|
-| `title` | Citation display text |
-| `url` | Source link |
-| `id` | Source identifier |
-| `score` | Retrieval relevance score |
-| `knowledgeSourceIndex` | Source grouping / index |
+| Field                  | Meaning                   |
+| ---------------------- | ------------------------- |
+| `title`                | Citation display text     |
+| `url`                  | Source link               |
+| `id`                   | Source identifier         |
+| `score`                | Retrieval relevance score |
+| `knowledgeSourceIndex` | Source grouping / index   |
 
 Verification checklist:
 
@@ -179,19 +179,19 @@ curl -sS -X POST "$TOOLBOX_URL" \
 
 ## Troubleshooting
 
-| Error | Cause | Resolution |
-|-------|-------|------------|
-| `CONSENT_REQUIRED` (nested string code inside an outer `-32006` error) | OAuth MCP connection needs user consent | Parse the consent URL from the nested error `message`, open it in a browser, complete OAuth, retry |
-| 401 on MCP calls | Expired token or wrong scope | Use scope `https://ai.azure.com/.default` (not `cognitiveservices`) and refresh token on every request |
-| OAuth/ARA errors when calling MCP directly from agent | Direct MCP wiring without toolbox token passthrough | Wire the MCP server into a toolbox and call the toolbox endpoint instead — Foundry handles consent + refresh |
-| 400 `invalid_payload: Multiple tools without identifiers found` | Two unnamed tools of the same type (or duplicate `server_label`) in one toolbox | Keep at most one unnamed tool per type; give each MCP tool a unique `server_label` |
-| `tools/list` returns 0 tools | Toolbox version still provisioning, or tool type not yet available in the region | Wait ~10s and retry; try a different region |
-| `tools/list` returns 0 tools for MCP/A2A only | Invalid or missing connection credentials | Verify `project_connection_id` exists and credentials are correct; for MI auth, check RBAC on the target service |
-| `tools/list` returns 0 tools for OpenAPI only | Invalid OpenAPI spec (malformed paths, missing operationIds) | Validate the spec against OpenAPI 3.0/3.1; for MI auth, also verify RBAC |
-| Tool not found on `tools/call` | Missing `server_label___` prefix for MCP-sourced tools | Call as `{server_label}___{tool_name}` (three underscores) |
-| 500 on `prompts/list` | Not supported by toolbox endpoint | Pass `load_prompts=False` to MCP client constructor |
-| 500 on `send_ping()` (MAF `MCPStreamableHTTPTool._ensure_connected`) | Toolbox MCP server doesn't implement `ping` | Disable the ping check or override with a no-op |
-| 500 with non-streaming `tools/call` | Non-streaming not supported | Always use `stream=True` for toolbox MCP tools |
-| 400 missing `api-version` | Query string dropped | Append `?api-version=v1` to every toolbox URL |
-| Environment variable silently overwritten at runtime | Foundry reserves `FOUNDRY_`-prefixed env vars | Rename to a non-`FOUNDRY_` name (e.g. `TOOLBOX_ENDPOINT`) |
-| 403 on `POST /toolboxes` or `PUT .../connections/...` | Caller lacks `Foundry User` (or `Azure AI Developer` / `Cognitive Services Contributor`) on the project | Grant the role at the project scope |
+| Error                                                                  | Cause                                                                                                   | Resolution                                                                                                       |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `CONSENT_REQUIRED` (nested string code inside an outer `-32006` error) | OAuth MCP connection needs user consent                                                                 | Parse the consent URL from the nested error `message`, open it in a browser, complete OAuth, retry               |
+| 401 on MCP calls                                                       | Expired token or wrong scope                                                                            | Use scope `https://ai.azure.com/.default` (not `cognitiveservices`) and refresh token on every request           |
+| OAuth/ARA errors when calling MCP directly from agent                  | Direct MCP wiring without toolbox token passthrough                                                     | Wire the MCP server into a toolbox and call the toolbox endpoint instead — Foundry handles consent + refresh     |
+| 400 `invalid_payload: Multiple tools without identifiers found`        | Two unnamed tools of the same type (or duplicate `server_label`) in one toolbox                         | Keep at most one unnamed tool per type; give each MCP tool a unique `server_label`                               |
+| `tools/list` returns 0 tools                                           | Toolbox version still provisioning, or tool type not yet available in the region                        | Wait ~10s and retry; try a different region                                                                      |
+| `tools/list` returns 0 tools for MCP/A2A only                          | Invalid or missing connection credentials                                                               | Verify `project_connection_id` exists and credentials are correct; for MI auth, check RBAC on the target service |
+| `tools/list` returns 0 tools for OpenAPI only                          | Invalid OpenAPI spec (malformed paths, missing operationIds)                                            | Validate the spec against OpenAPI 3.0/3.1; for MI auth, also verify RBAC                                         |
+| Tool not found on `tools/call`                                         | Missing `server_label___` prefix for MCP-sourced tools                                                  | Call as `{server_label}___{tool_name}` (three underscores)                                                       |
+| 500 on `prompts/list`                                                  | Not supported by toolbox endpoint                                                                       | Pass `load_prompts=False` to MCP client constructor                                                              |
+| 500 on `send_ping()` (MAF `MCPStreamableHTTPTool._ensure_connected`)   | Toolbox MCP server doesn't implement `ping`                                                             | Disable the ping check or override with a no-op                                                                  |
+| 500 with non-streaming `tools/call`                                    | Non-streaming not supported                                                                             | Always use `stream=True` for toolbox MCP tools                                                                   |
+| 400 missing `api-version`                                              | Query string dropped                                                                                    | Append `?api-version=v1` to every toolbox URL                                                                    |
+| Environment variable silently overwritten at runtime                   | Foundry reserves `FOUNDRY_`-prefixed env vars                                                           | Rename to a non-`FOUNDRY_` name (e.g. `TOOLBOX_ENDPOINT`)                                                        |
+| 403 on `POST /toolboxes` or `PUT .../connections/...`                  | Caller lacks `Foundry User` (or `Azure AI Developer` / `Cognitive Services Contributor`) on the project | Grant the role at the project scope                                                                              |

@@ -1,1 +1,54 @@
-{"nodes": [{"id": "app_frontend_src_components_ui_checkbox_jsx", "label": "checkbox.jsx", "file_type": "code", "source_file": "/app/frontend/src/components/ui/checkbox.jsx", "source_location": "L1"}], "edges": [{"source": "app_frontend_src_components_ui_checkbox_jsx", "target": "react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/ui/checkbox.jsx", "source_location": "L1", "weight": 1.0}, {"source": "app_frontend_src_components_ui_checkbox_jsx", "target": "react_checkbox", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/ui/checkbox.jsx", "source_location": "L2", "weight": 1.0}, {"source": "app_frontend_src_components_ui_checkbox_jsx", "target": "lucide_react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/ui/checkbox.jsx", "source_location": "L3", "weight": 1.0}, {"source": "app_frontend_src_components_ui_checkbox_jsx", "target": "utils", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/ui/checkbox.jsx", "source_location": "L5", "weight": 1.0}], "raw_calls": []}
+{
+  "nodes": [
+    {
+      "id": "app_frontend_src_components_ui_checkbox_jsx",
+      "label": "checkbox.jsx",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/ui/checkbox.jsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_frontend_src_components_ui_checkbox_jsx",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/ui/checkbox.jsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_ui_checkbox_jsx",
+      "target": "react_checkbox",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/ui/checkbox.jsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_ui_checkbox_jsx",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/ui/checkbox.jsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_ui_checkbox_jsx",
+      "target": "utils",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/ui/checkbox.jsx",
+      "source_location": "L5",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": []
+}

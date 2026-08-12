@@ -6,22 +6,22 @@ Keep the laptop free of model-processing load while still using OpenCode from th
 
 ## Shape
 
-| Layer | Runs on | Purpose |
-|---|---|---|
-| OpenCode | Laptop and T5500 Paperclip adapters | Interactive coding UI/CLI |
-| OmniRoute | Laptop and T5500 | Lightweight router and policy control for local-node models only |
-| Claude Code | Laptop | Direct vendor CLI; keep off OmniRoute |
-| Local model servers | Sabretooth and 9020 node | Heavy inference |
-| Paperclip | T5500 | Single clean-repo coordination app |
+| Layer               | Runs on                             | Purpose                                                          |
+| ------------------- | ----------------------------------- | ---------------------------------------------------------------- |
+| OpenCode            | Laptop and T5500 Paperclip adapters | Interactive coding UI/CLI                                        |
+| OmniRoute           | Laptop and T5500                    | Lightweight router and policy control for local-node models only |
+| Claude Code         | Laptop                              | Direct vendor CLI; keep off OmniRoute                            |
+| Local model servers | Sabretooth and 9020 node            | Heavy inference                                                  |
+| Paperclip           | T5500                               | Single clean-repo coordination app                               |
 
 ## Current Node Facts
 
-| Node | LAN IP | Status |
-|---|---:|---|
-| Laptop | `192.168.0.13` | Control seat |
-| T5500 | `192.168.0.15` | Paperclip host |
-| Sabretooth | `192.168.0.8` | Compute node |
-| 9020 node | `192.168.0.5` | Compute node |
+| Node       |         LAN IP | Status         |
+| ---------- | -------------: | -------------- |
+| Laptop     | `192.168.0.13` | Control seat   |
+| T5500      | `192.168.0.15` | Paperclip host |
+| Sabretooth |  `192.168.0.8` | Compute node   |
+| 9020 node  |  `192.168.0.5` | Compute node   |
 
 ## OpenCode
 

@@ -1,13 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
-import type {
-  BrainCatalog,
-  BrainMcpStatus,
-  BrainPiecesStatus,
-  BrainSkill,
-  BrainState,
-  BrainTool,
-} from '../types';
+import type { BrainCatalog, BrainMcpStatus, BrainPiecesStatus, BrainSkill, BrainState, BrainTool } from '../types';
 
 type View = 'state' | 'catalog' | 'journal';
 
@@ -174,8 +167,7 @@ export default function BrainPanel() {
     setInfo(null);
     setSubmittingAsk(true);
     try {
-      const input =
-        toolName === '' ? { query } : { tool: toolName, arguments: { query } };
+      const input = toolName === '' ? { query } : { tool: toolName, arguments: { query } };
       const res = await api.brainAsk(input);
       setAskResult(formatResult(res.result));
     } catch (err) {
@@ -192,11 +184,7 @@ export default function BrainPanel() {
     setSubmittingJournal(true);
     try {
       const w = await api.brainWriteJournal(selected, draft);
-      setInfo(
-        w.truncated
-          ? `Saved ${w.bytes}B — TRUNCATED to cap.`
-          : `Saved ${w.bytes}B · ${w.updatedAt}`,
-      );
+      setInfo(w.truncated ? `Saved ${w.bytes}B — TRUNCATED to cap.` : `Saved ${w.bytes}B · ${w.updatedAt}`);
       const next = await api.brainState();
       setState(next);
     } catch (err) {
@@ -286,9 +274,7 @@ export default function BrainPanel() {
           <div className="brain-card">
             <div className="brain-card__top">
               <span className="brain-card__name">PLATFORM JOURNALS</span>
-              <span className="brain-card__status mono">
-                {state?.platforms.length ?? 0} CONFIGURED
-              </span>
+              <span className="brain-card__status mono">{state?.platforms.length ?? 0} CONFIGURED</span>
             </div>
 
             <div className="brain__platforms">
@@ -331,7 +317,9 @@ export default function BrainPanel() {
             <div className="brain-card__url mono">{mcp?.url ?? '—'}</div>
             <div className="brain__mcp-tools">
               {(mcp?.toolNames ?? []).map((n) => (
-                <span key={n} className="badge badge--ghost">{n}</span>
+                <span key={n} className="badge badge--ghost">
+                  {n}
+                </span>
               ))}
             </div>
             <button
@@ -365,10 +353,7 @@ export default function BrainPanel() {
               onChange={(e) => setCatSearch(e.target.value)}
             />
             <div className="brain__chips">
-              <button
-                className={`chip ${catFilter === '' ? 'chip--active' : ''}`}
-                onClick={() => setCatFilter('')}
-              >
+              <button className={`chip ${catFilter === '' ? 'chip--active' : ''}`} onClick={() => setCatFilter('')}>
                 ALL · {catalog?.skills.length ?? 0}
               </button>
               {(catalog?.categories ?? []).map((c) => (
@@ -389,11 +374,7 @@ export default function BrainPanel() {
               <div className="services__empty">NO SKILLS MATCH — check CATALOG_ROOT</div>
             )}
             {catalog?.skills.map((s) => (
-              <button
-                key={`${s.kind}/${s.id}`}
-                className="brain__skill-card"
-                onClick={() => openSkill(s)}
-              >
+              <button key={`${s.kind}/${s.id}`} className="brain__skill-card" onClick={() => openSkill(s)}>
                 <div className="brain__skill-top">
                   <span className="brain__skill-label">{s.label}</span>
                   <span className="badge">{s.kind.toUpperCase()}</span>
@@ -403,7 +384,9 @@ export default function BrainPanel() {
                 {s.tools.length > 0 && (
                   <div className="brain__skill-tools">
                     {s.tools.slice(0, 4).map((t, i) => (
-                      <span key={i} className="badge badge--ghost">{t}</span>
+                      <span key={i} className="badge badge--ghost">
+                        {t}
+                      </span>
                     ))}
                     {s.tools.length > 4 && <span className="badge badge--ghost">+{s.tools.length - 4}</span>}
                   </div>
@@ -417,7 +400,9 @@ export default function BrainPanel() {
               <div className="brain__detail-head">
                 <span className="label">{detail.label}</span>
                 <span className="badge">{detail.kind.toUpperCase()}</span>
-                <button className="btn" onClick={() => setDetail(null)}>CLOSE</button>
+                <button className="btn" onClick={() => setDetail(null)}>
+                  CLOSE
+                </button>
               </div>
               <div className="brain__detail-path mono">{detail.path}</div>
               <pre className="result__output brain__result-pre mono">{detail.body}</pre>
@@ -441,11 +426,7 @@ export default function BrainPanel() {
             onChange={(e) => setDraft(e.target.value.slice(0, activePlatform.maxChars + 64))}
           />
           <div className="brain__editor-actions">
-            <button
-              className="btn btn--primary"
-              disabled={submittingJournal || !selected}
-              onClick={save}
-            >
+            <button className="btn btn--primary" disabled={submittingJournal || !selected} onClick={save}>
               {submittingJournal ? 'SAVING…' : 'SAVE JOURNAL'}
             </button>
             {info && <span className="notice">{info}</span>}

@@ -1,1 +1,58 @@
-{"nodes": [{"id": "app_frontend_src_components_agegate_js", "label": "AgeGate.js", "file_type": "code", "source_file": "/app/frontend/src/components/AgeGate.js", "source_location": "L1"}, {"id": "components_agegate_agegate", "label": "AgeGate()", "file_type": "code", "source_file": "/app/frontend/src/components/AgeGate.js", "source_location": "L4"}], "edges": [{"source": "app_frontend_src_components_agegate_js", "target": "react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/AgeGate.js", "source_location": "L1", "weight": 1.0}, {"source": "app_frontend_src_components_agegate_js", "target": "lucide_react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/AgeGate.js", "source_location": "L2", "weight": 1.0}, {"source": "app_frontend_src_components_agegate_js", "target": "components_agegate_agegate", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/AgeGate.js", "source_location": "L4", "weight": 1.0}], "raw_calls": [{"caller_nid": "components_agegate_agegate", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/components/AgeGate.js", "source_location": "L5"}]}
+{
+  "nodes": [
+    {
+      "id": "app_frontend_src_components_agegate_js",
+      "label": "AgeGate.js",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/AgeGate.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "components_agegate_agegate",
+      "label": "AgeGate()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/AgeGate.js",
+      "source_location": "L4"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_frontend_src_components_agegate_js",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/AgeGate.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_agegate_js",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/AgeGate.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_agegate_js",
+      "target": "components_agegate_agegate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/AgeGate.js",
+      "source_location": "L4",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "components_agegate_agegate",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/AgeGate.js",
+      "source_location": "L5"
+    }
+  ]
+}

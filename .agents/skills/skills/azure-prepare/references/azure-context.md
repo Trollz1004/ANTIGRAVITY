@@ -46,6 +46,7 @@ azd config get defaults
 ```
 
 Returns JSON with any configured defaults:
+
 ```json
 {
   "subscription": "25fd0362-aa79-488b-b37b-d6e892009fdf",
@@ -56,6 +57,7 @@ Returns JSON with any configured defaults:
 Use these as **recommended** values if present.
 
 If no defaults, fall back to az CLI:
+
 ```bash
 az account show --query "{name:name, id:id}" -o json
 ```
@@ -65,6 +67,7 @@ az account show --query "{name:name, id:id}" -o json
 Use `ask_user` with the **actual subscription name and ID**:
 
 ✅ **Correct:**
+
 ```
 Question: "Which Azure subscription would you like to deploy to?"
 Choices: [
@@ -74,6 +77,7 @@ Choices: [
 ```
 
 ❌ **Wrong** (never do this):
+
 ```
 Choices: [
   "Use default subscription",  // ← Does not show actual name
@@ -82,6 +86,7 @@ Choices: [
 ```
 
 If user wants a different subscription:
+
 ```bash
 az account list --output table
 ```
@@ -114,6 +119,7 @@ After confirmation, record in `.azure/plan.md`:
 
 ```markdown
 ## Azure Context
+
 - **Subscription**: jongdevdiv (25fd0362-aa79-488b-b37b-d6e892009fdf)
 - **Location**: eastus2
 ```
@@ -159,6 +165,7 @@ azd env get-values
 ```
 
 **Why this is critical:**
+
 - `az account show` returns the Azure CLI's default subscription
 - `azd` maintains its own configuration with potentially different defaults
 - If you don't set `AZURE_SUBSCRIPTION_ID` explicitly, azd will use its own default

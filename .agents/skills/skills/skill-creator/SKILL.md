@@ -29,6 +29,7 @@ Skills are modular, self-contained packages that extend the AI's capabilities by
 ### Where Skills Live
 
 Skills are stored in `~/.agents/skills/`. The Desktop Commander app:
+
 - Watches this directory for changes
 - Shows available skills in the sidebar
 - Injects skill metadata into conversations automatically
@@ -114,13 +115,15 @@ This skill uses [company logo](assets/logo.png) and [invoice template](assets/te
 ```
 
 **Why relative paths?**
+
 - Users can click links in the preview to navigate between skill files
 - Creates an Obsidian/Zettelkasten-style interconnected knowledge graph
 - Each skill becomes a self-contained, explorable documentation set
 
 **Path examples:**
+
 - Script: `[script-name.py](scripts/script-name.py)`
-- Reference: `[Reference Title](references/reference-name.md)`  
+- Reference: `[Reference Title](references/reference-name.md)`
 - Asset: `[asset description](assets/filename.ext)`
 - Sub-skill: `[Sub-workflow](references/sub-workflow.md)`
 
@@ -135,6 +138,7 @@ Follow these steps in order when creating a new skill.
 To create an effective skill, clearly understand concrete examples of how the skill will be used.
 
 Ask the user:
+
 - "Can you walk me through exactly what you do step by step?"
 - "What are the inputs you start with?"
 - "What should the final output look like?"
@@ -151,11 +155,13 @@ Analyze what would be helpful when executing this workflow repeatedly:
 3. **Assets**: Are there templates or files used in output? → Add to assets
 
 Example analysis for an `invoice-pdf` skill:
+
 - Creating invoices requires the same PDF generation code → create `scripts/generate_invoice.py`
 - Polish invoice format has specific requirements → create `references/polish-format.md`
 - Company logo needed in output → add `assets/logo.png`
 
 Then in SKILL.md, reference these as **clickable markdown links** (not backticks):
+
 - `[generate_invoice.py](scripts/generate_invoice.py)`
 - `[Polish Format](references/polish-format.md)`
 - `[logo](assets/logo.png)`
@@ -209,6 +215,7 @@ Uses [template](assets/template.xlsx) for output generation.
 **Writing Style:** Use imperative/infinitive form (verb-first instructions), not second person. Use objective, instructional language (e.g., "To accomplish X, do Y" rather than "You should do X").
 
 Answer these questions in the skill:
+
 1. What is the purpose of the skill?
 2. When should the skill be used?
 3. How should the workflow be executed step by step?
@@ -284,6 +291,7 @@ Only update skills when all four checks pass.
 Skills should capture knowledge specific to the user's setup and preferences:
 
 **Worth adding to skills:**
+
 - Specific formats, templates, naming conventions
 - Where things live ("invoices go to ~/Documents/Invoices/YYYY/")
 - Tool behaviors discovered through trial and error
@@ -292,6 +300,7 @@ Skills should capture knowledge specific to the user's setup and preferences:
 - Recently changed tool behavior or new features
 
 **Skip these (general knowledge):**
+
 - Standard best practices for the domain
 - Common tool usage documented everywhere
 - Universal quality guidelines
@@ -303,12 +312,14 @@ Skills should capture knowledge specific to the user's setup and preferences:
 When a fix is **clearly general** (would benefit all future uses) AND passes the Signal Quality Filter, update the skill immediately and inform the user.
 
 ✅ Auto-update examples:
+
 - Fixing output format issues that broke rendering
 - Adding validation steps that caught errors
 - Discovered workarounds for tool limitations
 - New tool features or changed behavior you learned about
 
 ⚠️ Ask first examples:
+
 - Style or formatting preferences
 - Adding steps the user didn't request
 - Changes that might affect other use cases
@@ -331,7 +342,7 @@ For updates that aren't obvious wins, present a clear proposal before changing a
 
 **Why this passes the filter:**
 - General: [yes/no - applies beyond this task]
-- Durable: [yes/no - stable preference]  
+- Durable: [yes/no - stable preference]
 - Actionable: [yes/no - clear instruction]
 - Novel: [yes/no - specific to user's setup, not general knowledge]
 
@@ -339,11 +350,13 @@ Apply? [y/n]
 ```
 
 **HIGH confidence** (apply immediately, then inform):
+
 - Clear error fixes
 - User explicitly said "always" or "never"
 - Discovered tool behavior that was breaking output
 
 **MEDIUM confidence** (propose first, wait for approval):
+
 - Style or format preferences
 - Changes that might affect other use cases
 - Anything you're unsure about
@@ -390,6 +403,7 @@ Skills should minimize token usage. The biggest waste: **copying templates throu
 ### The Problem: Template Copy-Through
 
 Bad pattern:
+
 1. Read `assets/template.html` into LLM context (hundreds of lines)
 2. LLM rewrites whole file with placeholders filled
 3. Write output file
@@ -421,12 +435,10 @@ const template = readFileSync(join(__dirname, '../assets/template.html'), 'utf-8
 
 // Read variable content from STDIN
 let input = '';
-process.stdin.on('data', chunk => input += chunk);
+process.stdin.on('data', (chunk) => (input += chunk));
 process.stdin.on('end', () => {
   const { title, content, outputPath } = JSON.parse(input);
-  const output = template
-    .replace('{{TITLE}}', title)
-    .replace('{{CONTENT}}', content);
+  const output = template.replace('{{TITLE}}', title).replace('{{CONTENT}}', content);
   writeFileSync(outputPath, output);
   console.log(`Written to ${outputPath}`);
 });
@@ -445,13 +457,13 @@ process.stdin.on('end', () => {
 
 ### When to Use Renderer Scripts
 
-| Scenario | Use Renderer? |
-|----------|---------------|
-| HTML page with template | ✅ Yes |
-| PDF from template | ✅ Yes |
-| Markdown report with boilerplate | ✅ Yes |
-| Small config file (<50 lines) | ❌ No, LLM is fine |
-| Fully dynamic content (no template) | ❌ No |
+| Scenario                            | Use Renderer?      |
+| ----------------------------------- | ------------------ |
+| HTML page with template             | ✅ Yes             |
+| PDF from template                   | ✅ Yes             |
+| Markdown report with boilerplate    | ✅ Yes             |
+| Small config file (<50 lines)       | ❌ No, LLM is fine |
+| Fully dynamic content (no template) | ❌ No              |
 
 ## Fail-Fast Validation
 
@@ -505,13 +517,13 @@ try {
 
 ### Common Validators
 
-| Format | Validation Method |
-|--------|-------------------|
-| Mermaid | `npx @mermaid-js/mermaid-cli -i file.mmd` |
-| JSON | `node -e "JSON.parse(require('fs').readFileSync('file.json'))"` |
-| YAML | `npx yaml-lint file.yaml` |
-| SQL | Database-specific linter or dry-run |
-| HTML | `npx html-validate file.html` |
+| Format  | Validation Method                                               |
+| ------- | --------------------------------------------------------------- |
+| Mermaid | `npx @mermaid-js/mermaid-cli -i file.mmd`                       |
+| JSON    | `node -e "JSON.parse(require('fs').readFileSync('file.json'))"` |
+| YAML    | `npx yaml-lint file.yaml`                                       |
+| SQL     | Database-specific linter or dry-run                             |
+| HTML    | `npx html-validate file.html`                                   |
 
 ## Single Source of Truth
 
@@ -520,6 +532,7 @@ try {
 ### The Duplication Trap
 
 Bad pattern:
+
 1. Write Mermaid to `diagram.mmd` (payload #1)
 2. Embed Mermaid into HTML (payload #2 - LLM emits it twice!)
 
@@ -539,13 +552,13 @@ validates extracted content
 
 ### Decision Table: Where Does Content Go?
 
-| Content Type | Location | Reasoning |
-|--------------|----------|-----------|
-| Large template (100+ lines) | `assets/` + renderer script | Never enters LLM context |
-| Reference documentation | `references/` | Loaded only when needed |
-| Generated output | Single file | Don't duplicate across files |
-| Reusable code | `scripts/` | Execute, don't regenerate |
-| Variable content | LLM generates | This is what LLM is for |
+| Content Type                | Location                    | Reasoning                    |
+| --------------------------- | --------------------------- | ---------------------------- |
+| Large template (100+ lines) | `assets/` + renderer script | Never enters LLM context     |
+| Reference documentation     | `references/`               | Loaded only when needed      |
+| Generated output            | Single file                 | Don't duplicate across files |
+| Reusable code               | `scripts/`                  | Execute, don't regenerate    |
+| Variable content            | LLM generates               | This is what LLM is for      |
 
 ## Parse-Safe Generation Rules
 
@@ -557,12 +570,12 @@ Some tools (Mermaid, regex, YAML) break on "normal-looking" characters. Skills s
 
 Common Mermaid parse errors:
 
-| Problem | Breaks | Fix |
-|---------|--------|-----|
-| Quotes in edge labels | `A -->\|Click "Sign in"\| B` | Remove quotes: `Click Sign in` |
-| Literal `\n` in labels | `A -->\|Line1\nLine2\| B` | Use `<br/>` instead |
-| Parentheses in labels | `(client_secret if confidential)` | Rewrite: `client_secret if confidential` |
-| Label syntax on dotted arrows | `A -.->\|label\| B` | Use: `A -. label .-> B` |
+| Problem                       | Breaks                            | Fix                                      |
+| ----------------------------- | --------------------------------- | ---------------------------------------- |
+| Quotes in edge labels         | `A -->\|Click "Sign in"\| B`      | Remove quotes: `Click Sign in`           |
+| Literal `\n` in labels        | `A -->\|Line1\nLine2\| B`         | Use `<br/>` instead                      |
+| Parentheses in labels         | `(client_secret if confidential)` | Rewrite: `client_secret if confidential` |
+| Label syntax on dotted arrows | `A -.->\|label\| B`               | Use: `A -. label .-> B`                  |
 
 **Add to skill:**
 
@@ -570,6 +583,7 @@ Common Mermaid parse errors:
 ## Parse-Safe Rules for Mermaid
 
 When generating Mermaid diagrams:
+
 - No quotes inside edge labels
 - No literal \n - use <br/> for line breaks
 - Avoid parentheses in labels - rewrite without them
@@ -592,10 +606,10 @@ For any sensitive parser, add a "Parse-Safe Rules" section to your skill:
 
 ### Why Extend Rather Than Copy?
 
-| Approach | Problem |
-|----------|---------|
-| Copy & modify | Base skill updates are lost; you maintain duplicate content |
-| Extend & reference | Base updates flow through; you only maintain your delta |
+| Approach           | Problem                                                     |
+| ------------------ | ----------------------------------------------------------- |
+| Copy & modify      | Base skill updates are lost; you maintain duplicate content |
+| Extend & reference | Base updates flow through; you only maintain your delta     |
 
 ### How to Extend a Skill
 
@@ -619,14 +633,17 @@ For the core invoice generation process, see [invoice-generator](skill:invoice-g
 ## My Customizations
 
 ### Company Branding
+
 - Always use Acme Corp logo from `~/Documents/brand/logo.png`
 - Footer text: "Thank you for your business - Acme Corp"
 
 ### Tax Handling
+
 - Polish VAT: Apply 23% VAT rate
 - EU customers: Reverse charge mechanism
 
 ### Output Location
+
 - Save all invoices to `~/Documents/Invoices/YYYY/MM/`
 
 ## When to Use
@@ -637,24 +654,30 @@ Use this skill instead of base [invoice-generator](skill:invoice-generator) when
 ### Extension Patterns
 
 **Pattern 1: Add company-specific rules**
+
 ```markdown
 Extends [skill-creator](skill:skill-creator) with our team's conventions:
+
 - All skills must include version numbers
 - Scripts must have error handling
 - References must include "Last updated" dates
 ```
 
 **Pattern 2: Specialize for a domain**
+
 ```markdown
 Extends [data-analysis](skill:data-analysis) for financial data:
+
 - Expect columns: Date, Amount, Category, Account
 - Always check for currency formatting
 - Generate monthly summaries
 ```
 
 **Pattern 3: Add personal preferences**
+
 ```markdown
 Extends [report-writer](skill:report-writer) with my style:
+
 - Use British English spelling
 - Maximum 2 pages unless specified
 - Include executive summary first
@@ -663,6 +686,7 @@ Extends [report-writer](skill:report-writer) with my style:
 ### Bundled Skills
 
 Some skills ship with Desktop Commander (marked with 🔒 in sidebar). These are:
+
 - **Read-only**: Auto-updated with app updates
 - **Designed for extension**: Create your own skill referencing them
 

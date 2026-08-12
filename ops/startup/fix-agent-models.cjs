@@ -3,7 +3,7 @@ const c = new Client({ host: '127.0.0.1', port: 54329, user: 'postgres', databas
 const TARGET = 'ollama/qwen2.5:7b';
 c.connect()
   .then(() => c.query('select id,name,adaptertype,adapterconfig from agents'))
-  .then(r => {
+  .then((r) => {
     console.log('agents found:', r.rows.length);
     const fixes = [];
     for (const x of r.rows) {
@@ -19,5 +19,11 @@ c.connect()
     }
     return Promise.all(fixes);
   })
-  .then(() => { console.log('DONE'); return c.end(); })
-  .catch(e => { console.log('ERR', e.message); process.exit(1); });
+  .then(() => {
+    console.log('DONE');
+    return c.end();
+  })
+  .catch((e) => {
+    console.log('ERR', e.message);
+    process.exit(1);
+  });

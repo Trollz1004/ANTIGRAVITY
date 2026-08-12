@@ -1,29 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>YouAndiNotAi</title>
-<meta name="robots" content="noindex"/>
-<script>
-const SLUGS = { josh:{ref:'josh'}, launch:{ref:'launch'}, partner:{ref:'partner'} };
-(function(){
-  const parts=location.pathname.replace(/\/+$/,'').split('/');
-  const slug=(parts[parts.length-1]||'').toLowerCase();
-  const entry=SLUGS[slug];
-  const ref=entry?entry.ref:(slug||'unknown');
-  const exp=new Date(Date.now()+30*24*3600*1000).toUTCString();
-  document.cookie='yni_aff='+encodeURIComponent(ref)+'; path=/; expires='+exp+'; SameSite=Lax';
-  location.replace('/founding.html?ref='+encodeURIComponent(ref)+'&utm_source=affiliate&utm_medium=link&utm_campaign='+encodeURIComponent(ref));
-})();
-</script>
-</head>
-<body style="background:#020617;color:#e2e8f0;font-family:system-ui;display:grid;place-items:center;min-height:100vh;padding:24px">
-  <div style="max-width:420px;text-align:center">
-    <p>Taking you to founding checkout…</p>
-    <p><a style="color:#22d3ee" href="https://youandinotai.com/founding.html">Continue</a></p>
-    <p><a style="color:#22d3ee" href="https://square.link/u/cxwjcn0s">Founding $14.99/mo</a> ·
-       <a style="color:#22d3ee" href="https://square.link/u/Qc5mxUy7">Bot-Shield $1</a></p>
-  </div>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YouAndiNotAi</title>
+    <meta name="robots" content="noindex" />
+    <script>
+      const SLUGS = {
+        josh: { ref: 'josh' },
+        launch: { ref: 'launch' },
+        partner: { ref: 'partner' },
+      };
+      (function () {
+        const parts = location.pathname.replace(/\/+$/, '').split('/');
+        const slug = (parts[parts.length - 1] || '').toLowerCase();
+        const entry = SLUGS[slug];
+        const ref = entry ? entry.ref : slug || 'unknown';
+        const exp = new Date(Date.now() + 30 * 24 * 3600 * 1000).toUTCString();
+        document.cookie =
+          'yni_aff=' +
+          encodeURIComponent(ref) +
+          '; path=/; expires=' +
+          exp +
+          '; SameSite=Lax';
+        location.replace(
+          '/founding.html?ref=' +
+            encodeURIComponent(ref) +
+            '&utm_source=affiliate&utm_medium=link&utm_campaign=' +
+            encodeURIComponent(ref)
+        );
+      })();
+    </script>
+  </head>
+  <body
+    style="
+      background: #020617;
+      color: #e2e8f0;
+      font-family: system-ui;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 24px;
+    "
+  >
+    <div style="max-width: 420px; text-align: center">
+      <p>Taking you to founding checkout…</p>
+      <p>
+        <a style="color: #22d3ee" href="https://youandinotai.com/founding.html"
+          >Continue</a
+        >
+      </p>
+      <p>
+        <a style="color: #22d3ee" href="https://square.link/u/cxwjcn0s"
+          >Founding $14.99/mo</a
+        >
+        ·
+        <a style="color: #22d3ee" href="https://square.link/u/Qc5mxUy7"
+          >Bot-Shield $1</a
+        >
+      </p>
+    </div>
+  </body>
 </html>

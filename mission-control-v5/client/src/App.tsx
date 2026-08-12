@@ -3,12 +3,13 @@ import { api, subscribeEvents } from './api';
 import AgentLibrary from './components/AgentLibrary';
 import BrainPanel from './components/BrainPanel';
 import BrowserPanel from './components/BrowserPanel';
-import Header, { type Tab } from './components/Header';
+import BridgePanel from './components/BridgePanel';
+import Header from './components/Header';
 import KanbanBoard from './components/KanbanBoard';
 import ServicesPanel from './components/ServicesPanel';
 import SwarmEngine from './components/SwarmEngine';
 import Graphy from './components/Graphy';
-import type { AgentDef, CategoryDef, Health, SwarmTask } from './types';
+import type { AgentDef, CategoryDef, Health, SwarmTask, Tab } from './types';
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('graphy');
@@ -41,11 +42,7 @@ export default function App() {
   useEffect(() => {
     (async () => {
       try {
-        const [libraryRes, tasksRes, healthRes] = await Promise.all([
-          api.agents(),
-          api.tasks(),
-          api.health(),
-        ]);
+        const [libraryRes, tasksRes, healthRes] = await Promise.all([api.agents(), api.tasks(), api.health()]);
         setAgents(libraryRes.agents);
         setCategories(libraryRes.categories);
         setTasks(tasksRes.tasks);
@@ -83,22 +80,11 @@ export default function App() {
   return (
     <div className={`app${isElectron ? ' app--electron' : ''}`}>
       <div className="app__dashboard">
-        <Header
-          tab={tab}
-          onTab={setTab}
-          health={health}
-          runningCount={runningCount}
-          selectedCount={selected.size}
-        />
+        <Header tab={tab} onTab={setTab} health={health} runningCount={runningCount} selectedCount={selected.size} />
         <main className="main">
           {tab === 'graphy' && <Graphy />}
           {tab === 'library' && (
-            <AgentLibrary
-              agents={agents}
-              categories={categories}
-              selected={selected}
-              onDeploy={deployAgent}
-            />
+            <AgentLibrary agents={agents} categories={categories} selected={selected} onDeploy={deployAgent} />
           )}
           {tab === 'swarm' && (
             <SwarmEngine
@@ -112,13 +98,14 @@ export default function App() {
           )}
           {tab === 'board' && <KanbanBoard tasks={tasks} />}
           {tab === 'services' && <ServicesPanel />}
-          {tab === 'brain' && <BrainPanel />}
-        </main>
+          {tab === 'brain' && <BrainPanel />}\n          {tab === 'bridge' && <BridgePanel />}\n        </main>
         <footer className="footer">
-          <span>MISSION CONTROL v{health?.version ?? '5.0.0'} — {health?.edition ?? 'HAIKU-SONNET 3.5 EDITION'}</span>
           <span>
-            OMNIROUTE: {health?.routerLive ? 'LIVE' : 'OFFLINE'} · TASKS: {tasks.length} · REAL
-            OUTPUT ONLY — NO SIMULATED DATA
+            MISSION CONTROL v{health?.version ?? '5.0.0'} — {health?.edition ?? 'HAIKU-SONNET 3.5 EDITION'}
+          </span>
+          <span>
+            OMNIROUTE: {health?.routerLive ? 'LIVE' : 'OFFLINE'} · TASKS: {tasks.length} · REAL OUTPUT ONLY — NO
+            SIMULATED DATA
           </span>
         </footer>
       </div>

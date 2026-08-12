@@ -1,145 +1,363 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About OnlineRecycle.org | Florida Electronics Recycling</title>
-  <meta name="description" content="Learn how OnlineRecycle.org handles electronics intake, data destruction, reuse, and recycling in Central Florida.">
-  <meta property="og:image" content="https://d2xsxph8kpxj0f.cloudfront.net/310519663206571867/ei6fszVC8uoKxVHB43tfro/og-image-v2-Qot8rGQdWAZNRgxhyQBwXR.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="keywords" content="electronics recycling Florida, secure data destruction, device pickup Sorrento, OnlineRecycle">
-  <link rel="canonical" href="https://onlinerecycle.org/about.html">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root { --bg:#f8fafc; --panel:#ffffff; --text:#0f172a; --muted:#475569; --accent:#16a34a; --accent-hover:#15803d; --line:#e2e8f0; }
-    * { box-sizing:border-box; }
-    body { margin:0; background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; line-height:1.7; -webkit-font-smoothing:antialiased; }
-    .topbar { background:var(--accent); color:#fff; text-align:center; padding:10px 16px; font-size:0.9rem; font-weight:600; }
-    header { background:var(--panel); border-bottom:1px solid var(--line); padding:16px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
-    .brand { font-size:1.3rem; font-weight:800; color:var(--text); text-decoration:none; }
-    .brand span { color:var(--accent); }
-    nav a { font-size:0.88rem; color:var(--muted); text-decoration:none; margin-left:20px; }
-    nav a:hover { color:var(--accent); }
-    .hero { background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%); padding:64px 24px 48px; text-align:center; border-bottom:1px solid var(--line); }
-    .hero h1 { font-size:2.4rem; font-weight:800; margin:0 0 16px; }
-    .hero p { font-size:1.1rem; color:var(--muted); max-width:680px; margin:0 auto; }
-    .wrap { max-width:900px; margin:0 auto; padding:56px 24px 80px; }
-    .section { margin-bottom:64px; }
-    h2 { font-size:1.5rem; font-weight:800; margin:0 0 8px; }
-    .section-sub { color:#94a3b8; font-size:0.85rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; }
-    p { color:var(--muted); margin:0 0 16px; }
-    .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; margin-top:24px; }
-    .card { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:24px; }
-    .card-icon { font-size:2rem; margin-bottom:12px; }
-    .card h3 { font-size:1rem; font-weight:700; margin:0 0 8px; }
-    .card p { font-size:0.9rem; color:var(--muted); margin:0; }
-    .split-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:24px; }
-    @media(max-width:640px) { .split-grid { grid-template-columns:1fr; } .hero h1 { font-size:1.8rem; } }
-    .note { background:#f8fafc; border:1px solid var(--line); border-radius:16px; padding:24px; margin-top:24px; }
-    .cta-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:32px; }
-    .btn-primary { background:var(--accent); color:#fff; padding:14px 28px; border-radius:10px; font-weight:700; font-size:0.95rem; text-decoration:none; display:inline-block; }
-    .btn-primary:hover { background:var(--accent-hover); }
-    .btn-secondary { background:#fff; color:var(--text); padding:14px 28px; border-radius:10px; font-weight:700; font-size:0.95rem; text-decoration:none; border:1.5px solid var(--line); display:inline-block; }
-    .btn-secondary:hover { border-color:#94a3b8; }
-    footer { border-top:1px solid var(--line); padding:24px; text-align:center; font-size:0.85rem; color:#94a3b8; }
-    footer a { color:var(--muted); text-decoration:underline; margin:0 8px; }
-  </style>
-</head>
-<body>
-  <div class="topbar">Secure device handling · Free pickup in Central Florida</div>
-  <header>
-    <a href="/" class="brand">♻️ <span>OnlineRecycle</span>.org</a>
-    <nav>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About OnlineRecycle.org | Florida Electronics Recycling</title>
+    <meta
+      name="description"
+      content="Learn how OnlineRecycle.org handles electronics intake, data destruction, reuse, and recycling in Central Florida."
+    />
+    <meta
+      property="og:image"
+      content="https://d2xsxph8kpxj0f.cloudfront.net/310519663206571867/ei6fszVC8uoKxVHB43tfro/og-image-v2-Qot8rGQdWAZNRgxhyQBwXR.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      name="keywords"
+      content="electronics recycling Florida, secure data destruction, device pickup Sorrento, OnlineRecycle"
+    />
+    <link rel="canonical" href="https://onlinerecycle.org/about.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #f8fafc;
+        --panel: #ffffff;
+        --text: #0f172a;
+        --muted: #475569;
+        --accent: #16a34a;
+        --accent-hover: #15803d;
+        --line: #e2e8f0;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Inter', sans-serif;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+      .topbar {
+        background: var(--accent);
+        color: #fff;
+        text-align: center;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+      header {
+        background: var(--panel);
+        border-bottom: 1px solid var(--line);
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .brand {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--text);
+        text-decoration: none;
+      }
+      .brand span {
+        color: var(--accent);
+      }
+      nav a {
+        font-size: 0.88rem;
+        color: var(--muted);
+        text-decoration: none;
+        margin-left: 20px;
+      }
+      nav a:hover {
+        color: var(--accent);
+      }
+      .hero {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        padding: 64px 24px 48px;
+        text-align: center;
+        border-bottom: 1px solid var(--line);
+      }
+      .hero h1 {
+        font-size: 2.4rem;
+        font-weight: 800;
+        margin: 0 0 16px;
+      }
+      .hero p {
+        font-size: 1.1rem;
+        color: var(--muted);
+        max-width: 680px;
+        margin: 0 auto;
+      }
+      .wrap {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 56px 24px 80px;
+      }
+      .section {
+        margin-bottom: 64px;
+      }
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin: 0 0 8px;
+      }
+      .section-sub {
+        color: #94a3b8;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
+      }
+      p {
+        color: var(--muted);
+        margin: 0 0 16px;
+      }
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+        margin-top: 24px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 24px;
+      }
+      .card-icon {
+        font-size: 2rem;
+        margin-bottom: 12px;
+      }
+      .card h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 0 0 8px;
+      }
+      .card p {
+        font-size: 0.9rem;
+        color: var(--muted);
+        margin: 0;
+      }
+      .split-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        margin-top: 24px;
+      }
+      @media (max-width: 640px) {
+        .split-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero h1 {
+          font-size: 1.8rem;
+        }
+      }
+      .note {
+        background: #f8fafc;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 24px;
+        margin-top: 24px;
+      }
+      .cta-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 32px;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #fff;
+        padding: 14px 28px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-primary:hover {
+        background: var(--accent-hover);
+      }
+      .btn-secondary {
+        background: #fff;
+        color: var(--text);
+        padding: 14px 28px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        text-decoration: none;
+        border: 1.5px solid var(--line);
+        display: inline-block;
+      }
+      .btn-secondary:hover {
+        border-color: #94a3b8;
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 24px;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #94a3b8;
+      }
+      footer a {
+        color: var(--muted);
+        text-decoration: underline;
+        margin: 0 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">Secure device handling · Free pickup in Central Florida</div>
+    <header>
+      <a href="/" class="brand">♻️ <span>OnlineRecycle</span>.org</a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about.html">About</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <h1>About OnlineRecycle.org</h1>
+      <p>
+        OnlineRecycle.org is a Central Florida electronics recycling and resale service focused on secure intake,
+        responsible reuse, and practical local pickup and drop-off.
+      </p>
+    </div>
+
+    <div class="wrap">
+      <div class="section">
+        <div class="section-sub">Who We Are</div>
+        <h2>Trash Or Treasure Online Recycler LLC</h2>
+        <p>
+          OnlineRecycle.org is operated by <strong>Trash Or Treasure Online Recycler LLC</strong>, a Florida limited
+          liability company based in Sorrento. We collect unwanted electronics for reuse, resale, parts recovery, or
+          responsible recycling.
+        </p>
+        <p>
+          Our service is built for households and small businesses that want a simple way to clear out old devices
+          without dumping them in a landfill or guessing how to handle data-bearing equipment.
+        </p>
+        <div class="split-grid">
+          <div>
+            <strong style="font-size: 0.9rem; color: var(--text)">Service Area</strong>
+            <p style="font-size: 0.88rem; margin-top: 4px">
+              Sorrento, Lake County, Orange County, Seminole County, and nearby Central Florida communities.
+            </p>
+          </div>
+          <div>
+            <strong style="font-size: 0.9rem; color: var(--text)">Contact</strong>
+            <p style="font-size: 0.88rem; margin-top: 4px">
+              <a href="tel:+13213962008" style="color: var(--accent); text-decoration: none">(321) 396-2008</a><br /><a
+                href="mailto:collaboration@youandinotai.com"
+                style="color: var(--accent); text-decoration: none"
+                >collaboration@youandinotai.com</a
+              ><br />Mon-Sun, 8am-6pm
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-sub">Our Process</div>
+        <h2>Secure Handling and Responsible Recycling</h2>
+        <p>
+          Every device is treated like it may contain personal or business data. We assess condition, identify storage
+          media, and decide whether the item should be wiped, dismantled, recycled, or prepared for resale.
+        </p>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-icon">🔍</div>
+            <h3>Intake and Assessment</h3>
+            <p>
+              Devices are logged, photographed, and reviewed for resale value, recycling needs, and any obvious
+              data-storage components.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🗑️</div>
+            <h3>Wipe or Destruction</h3>
+            <p>
+              Storage devices are wiped or physically destroyed before resale or recycling. Customers should still
+              factory-reset devices before turning them in whenever possible.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">♻️</div>
+            <h3>Reuse First</h3>
+            <p>
+              Usable gear is evaluated for resale or parts recovery. Non-resalable material is sorted into responsible
+              recycling streams.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📋</div>
+            <h3>Service Records</h3>
+            <p>
+              Booking, intake, and resale records are maintained internally so the customer-facing site can stay focused
+              on service details instead of backend operations.
+            </p>
+          </div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.88rem; color: #94a3b8">
+          <strong>Important:</strong> We make reasonable efforts to wipe or destroy data using standard processes, but
+          customers should always back up and factory-reset devices before surrendering them.
+        </p>
+      </div>
+
+      <div class="section">
+        <div class="section-sub">Business Note</div>
+        <h2>Service First, Reporting Separate</h2>
+        <div class="note">
+          <p>
+            OnlineRecycle.org is a for-profit service business. Customer purchases and pickup bookings are service
+            transactions, not tax-deductible gifts to a tax-exempt entity.
+          </p>
+          <p>
+            This service site stays focused on pickup, resale, recycling, data handling, pricing, and customer support.
+            Any owner-private accounting or operating decision is outside the customer checkout contract.
+          </p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-sub">Get Started</div>
+        <h2>Ready to Recycle?</h2>
+        <p>
+          Book a pickup or reserve a drop-off slot through Square. We will confirm next steps and provide the local
+          address after booking.
+        </p>
+        <div class="cta-row">
+          <a
+            href="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary"
+            >Book Service</a
+          >
+          <a href="/" class="btn-secondary">Back to Home</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
       <a href="/">Home</a>
       <a href="/about.html">About</a>
       <a href="/terms.html">Terms</a>
       <a href="/privacy.html">Privacy</a>
-    </nav>
-  </header>
-
-  <div class="hero">
-    <h1>About OnlineRecycle.org</h1>
-    <p>OnlineRecycle.org is a Central Florida electronics recycling and resale service focused on secure intake, responsible reuse, and practical local pickup and drop-off.</p>
-  </div>
-
-  <div class="wrap">
-    <div class="section">
-      <div class="section-sub">Who We Are</div>
-      <h2>Trash Or Treasure Online Recycler LLC</h2>
-      <p>OnlineRecycle.org is operated by <strong>Trash Or Treasure Online Recycler LLC</strong>, a Florida limited liability company based in Sorrento. We collect unwanted electronics for reuse, resale, parts recovery, or responsible recycling.</p>
-      <p>Our service is built for households and small businesses that want a simple way to clear out old devices without dumping them in a landfill or guessing how to handle data-bearing equipment.</p>
-      <div class="split-grid">
-        <div>
-          <strong style="font-size:0.9rem;color:var(--text);">Service Area</strong>
-          <p style="font-size:0.88rem;margin-top:4px;">Sorrento, Lake County, Orange County, Seminole County, and nearby Central Florida communities.</p>
-        </div>
-        <div>
-          <strong style="font-size:0.9rem;color:var(--text);">Contact</strong>
-          <p style="font-size:0.88rem;margin-top:4px;"><a href="tel:+13213962008" style="color:var(--accent);text-decoration:none;">(321) 396-2008</a><br><a href="mailto:collaboration@youandinotai.com" style="color:var(--accent);text-decoration:none;">collaboration@youandinotai.com</a><br>Mon-Sun, 8am-6pm</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-sub">Our Process</div>
-      <h2>Secure Handling and Responsible Recycling</h2>
-      <p>Every device is treated like it may contain personal or business data. We assess condition, identify storage media, and decide whether the item should be wiped, dismantled, recycled, or prepared for resale.</p>
-      <div class="card-grid">
-        <div class="card">
-          <div class="card-icon">🔍</div>
-          <h3>Intake and Assessment</h3>
-          <p>Devices are logged, photographed, and reviewed for resale value, recycling needs, and any obvious data-storage components.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🗑️</div>
-          <h3>Wipe or Destruction</h3>
-          <p>Storage devices are wiped or physically destroyed before resale or recycling. Customers should still factory-reset devices before turning them in whenever possible.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">♻️</div>
-          <h3>Reuse First</h3>
-          <p>Usable gear is evaluated for resale or parts recovery. Non-resalable material is sorted into responsible recycling streams.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">📋</div>
-          <h3>Service Records</h3>
-          <p>Booking, intake, and resale records are maintained internally so the customer-facing site can stay focused on service details instead of backend operations.</p>
-        </div>
-      </div>
-      <p style="margin-top:20px;font-size:0.88rem;color:#94a3b8;"><strong>Important:</strong> We make reasonable efforts to wipe or destroy data using standard processes, but customers should always back up and factory-reset devices before surrendering them.</p>
-    </div>
-
-    <div class="section">
-      <div class="section-sub">Business Note</div>
-      <h2>Service First, Reporting Separate</h2>
-      <div class="note">
-        <p>OnlineRecycle.org is a for-profit service business. Customer purchases and pickup bookings are service transactions, not tax-deductible gifts to a tax-exempt entity.</p>
-        <p>This service site stays focused on pickup, resale, recycling, data handling, pricing, and customer support. Any owner-private accounting or operating decision is outside the customer checkout contract.</p>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-sub">Get Started</div>
-      <h2>Ready to Recycle?</h2>
-      <p>Book a pickup or reserve a drop-off slot through Square. We will confirm next steps and provide the local address after booking.</p>
-      <div class="cta-row">
-        <a href="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services" target="_blank" rel="noopener noreferrer" class="btn-primary">Book Service</a>
-        <a href="/" class="btn-secondary">Back to Home</a>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <a href="/">Home</a>
-    <a href="/about.html">About</a>
-    <a href="/terms.html">Terms</a>
-    <a href="/privacy.html">Privacy</a>
-    <a href="/disclaimer.html">Disclaimer</a>
-    <br><br>
-    © 2026 Trash Or Treasure Online Recycler LLC · Sorrento, Florida
-  </footer>
-</body>
+      <a href="/disclaimer.html">Disclaimer</a>
+      <br /><br />
+      © 2026 Trash Or Treasure Online Recycler LLC · Sorrento, Florida
+    </footer>
+  </body>
 </html>

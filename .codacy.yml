@@ -10,6 +10,6 @@ engines:
     enabled: true
 max-allowed-issues: 0
 exclude_paths:
-  - "docs/**"
-  - "assets/**"
-  - "**/*.md"
+  - 'docs/**'
+  - 'assets/**'
+  - '**/*.md'

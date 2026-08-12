@@ -1,6 +1,6 @@
 @echo off
 title fcc-claude (Claude Code via FCC proxy :8082)
-cd /d E:\ANTIGRAVITY
+cd /d F:\ANTIGRAVITY
 echo [fcc-claude] waiting for fcc-server on :8082...
 :wait
 curl -s -o nul --max-time 2 http://127.0.0.1:8082/ && goto up

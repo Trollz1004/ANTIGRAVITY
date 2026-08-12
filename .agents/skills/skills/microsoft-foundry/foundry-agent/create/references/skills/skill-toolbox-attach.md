@@ -13,13 +13,13 @@ azd extension install azure.ai.toolboxes    # toolbox management
 
 ## CLI surface — `azd ai toolbox skill`
 
-| Command | What it does |
-|---------|--------------|
-| `azd ai toolbox skill add <toolbox> <skill>` | Attach skill (follows default version); new immutable toolbox version. |
-| `azd ai toolbox skill add <toolbox> <skill>@<ver>` | Attach skill pinned to a specific version. |
-| `azd ai toolbox skill add <toolbox> --from-file <path>` | Attach multiple skills from JSON/YAML. |
-| `azd ai toolbox skill list <toolbox>` | List skill references in the toolbox. |
-| `azd ai toolbox skill remove <toolbox> <skill> [<skill>...] [--force]` | Detach skills; one new version. |
+| Command                                                                | What it does                                                           |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `azd ai toolbox skill add <toolbox> <skill>`                           | Attach skill (follows default version); new immutable toolbox version. |
+| `azd ai toolbox skill add <toolbox> <skill>@<ver>`                     | Attach skill pinned to a specific version.                             |
+| `azd ai toolbox skill add <toolbox> --from-file <path>`                | Attach multiple skills from JSON/YAML.                                 |
+| `azd ai toolbox skill list <toolbox>`                                  | List skill references in the toolbox.                                  |
+| `azd ai toolbox skill remove <toolbox> <skill> [<skill>...] [--force]` | Detach skills; one new version.                                        |
 
 > Every `skill add` / `skill remove` creates a new immutable toolbox version but does **not** change the default. Run `azd ai toolbox publish <toolbox> <version>` to promote.
 
@@ -50,7 +50,7 @@ connections:
 skills:
   - name: support-style
   - name: escalation-policy
-    version: "2"         # pin to version 2; omit to follow default
+    version: '2' # pin to version 2; omit to follow default
 tools:
   - type: web_search
     name: web

@@ -1,6 +1,6 @@
 ---
 name: azure-cost-optimization
-description: "Identify and quantify cost savings across Azure subscriptions by analyzing actual costs, utilization metrics, and generating actionable optimization recommendations. USE FOR: optimize Azure costs, reduce Azure spending, reduce Azure expenses, analyze Azure costs, find cost savings, generate cost optimization report, find orphaned resources, rightsize VMs, cost analysis, reduce waste, Azure spending analysis, find unused resources, optimize Redis costs. DO NOT USE FOR: deploying resources (use azure-deploy), general Azure diagnostics (use azure-diagnostics), security issues (use azure-security)"
+description: 'Identify and quantify cost savings across Azure subscriptions by analyzing actual costs, utilization metrics, and generating actionable optimization recommendations. USE FOR: optimize Azure costs, reduce Azure spending, reduce Azure expenses, analyze Azure costs, find cost savings, generate cost optimization report, find orphaned resources, rightsize VMs, cost analysis, reduce waste, Azure spending analysis, find unused resources, optimize Redis costs. DO NOT USE FOR: deploying resources (use azure-deploy), general Azure diagnostics (use azure-diagnostics), security issues (use azure-security)'
 ---
 
 # Azure Cost Optimization Skill
@@ -10,6 +10,7 @@ Analyze Azure subscriptions to identify cost savings through orphaned resource c
 ## When to Use This Skill
 
 Use this skill when the user asks to:
+
 - Optimize Azure costs or reduce spending
 - Analyze Azure subscription for cost savings
 - Generate cost optimization report
@@ -27,16 +28,19 @@ Follow these steps in conversation with the user:
 Before starting, verify these tools and permissions are available:
 
 **Required Tools:**
+
 - Azure CLI installed and authenticated (`az login`)
 - Azure CLI extensions: `costmanagement`, `resource-graph`
 - Azure Quick Review (azqr) installed - See [Azure Quick Review](./references/azure-quick-review.md) for details
 
 **Required Permissions:**
+
 - Cost Management Reader role
 - Monitoring Reader role
 - Reader role on subscription/resource group
 
 **Verification commands:**
+
 ```powershell
 az --version
 az account show
@@ -51,10 +55,10 @@ Get Azure cost optimization best practices to inform recommendations:
 ```javascript
 // Use Azure MCP best practices tool
 mcp_azure_mcp_get_azure_bestpractices({
-  intent: "Get cost optimization best practices",
-  command: "get_bestpractices",
-  parameters: { resource: "cost-optimization", action: "all" }
-})
+  intent: 'Get cost optimization best practices',
+  command: 'get_bestpractices',
+  parameters: { resource: 'cost-optimization', action: 'all' },
+});
 ```
 
 ### Step 1.5: Redis-Specific Analysis (Conditional)
@@ -64,26 +68,31 @@ mcp_azure_mcp_get_azure_bestpractices({
 📋 **Reference**: [Azure Redis Cost Optimization](./references/azure-redis.md)
 
 **When to use Redis-specific analysis:**
+
 - User mentions "Redis", "Azure Cache for Redis", or "Azure Managed Redis"
 - Focus is on Redis resource optimization, not general subscription analysis
 - User wants Redis-specific recommendations (SKU downgrade, failed caches, etc.)
 
 **Key capabilities:**
+
 - Interactive subscription filtering (prefix, ID, or "all subscriptions")
 - Redis-specific optimization rules (failed caches, oversized tiers, missing tags)
 - Pre-built report templates for Redis cost analysis
 - Uses `redis_list` command
 
 **Report templates available:**
+
 - [Subscription-level Redis summary](./templates/redis-subscription-level-report.md)
 - [Detailed Redis cache analysis](./templates/redis-detailed-cache-analysis.md)
 
 > **Note**: For general subscription-wide cost optimization (including Redis), continue with Step 2. For Redis-only focused analysis, follow the instructions in the Redis-specific reference document.
+
 ### Step 1.6: Choose Analysis Scope (for Redis-specific analysis)
 
 **If performing Redis cost optimization**, ask the user to select their analysis scope:
 
 **Prompt the user with these options:**
+
 1. **Specific Subscription ID** - Analyze a single subscription
 2. **Subscription Name** - Use display name instead of ID
 3. **Subscription Prefix** - Analyze all subscriptions starting with a prefix (e.g., "CacheTeam")
@@ -101,12 +110,13 @@ Run azqr to find orphaned resources (immediate cost savings):
 ```javascript
 // Use Azure MCP extension_azqr tool
 extension_azqr({
-  subscription: "<SUBSCRIPTION_ID>",
-  "resource-group": "<RESOURCE_GROUP>"  // optional
-})
+  subscription: '<SUBSCRIPTION_ID>',
+  'resource-group': '<RESOURCE_GROUP>', // optional
+});
 ```
 
 **What to look for in azqr results:**
+
 - Orphaned resources: unattached disks, unused NICs, idle NAT gateways
 - Over-provisioned resources: excessive retention periods, oversized SKUs
 - Missing cost tags: resources without proper cost allocation
@@ -139,12 +149,13 @@ Get actual cost data from Azure Cost Management API (last 30 days):
 **Create cost query file:**
 
 Create `temp/cost-query.json` with:
+
 ```json
 {
   "type": "ActualCost",
   "timeframe": "Custom",
   "timePeriod": {
-    "from": "<START_DATE>",  
+    "from": "<START_DATE>",
     "to": "<END_DATE>"
   },
   "dataset": {
@@ -168,6 +179,7 @@ Create `temp/cost-query.json` with:
 > **Action Required**: Calculate `<START_DATE>` (30 days ago) and `<END_DATE>` (today) in ISO 8601 format (e.g., `2025-11-03T00:00:00Z`).
 
 **Execute cost query:**
+
 ```powershell
 # Create temp folder
 New-Item -ItemType Directory -Path "temp" -Force
@@ -187,12 +199,13 @@ Fetch current pricing from official Azure pricing pages using `fetch_webpage`:
 ```javascript
 // Validate pricing for key services
 fetch_webpage({
-  urls: ["https://azure.microsoft.com/en-us/pricing/details/container-apps/"],
-  query: "pricing tiers and costs"
-})
+  urls: ['https://azure.microsoft.com/en-us/pricing/details/container-apps/'],
+  query: 'pricing tiers and costs',
+});
 ```
 
 **Key services to validate:**
+
 - Container Apps: https://azure.microsoft.com/pricing/details/container-apps/
 - Virtual Machines: https://azure.microsoft.com/pricing/details/virtual-machines/
 - App Service: https://azure.microsoft.com/pricing/details/app-service/
@@ -244,34 +257,45 @@ Create a comprehensive cost optimization report in the `output/` folder:
 **Use the `create_file` tool** with path `output/costoptimizereport<YYYYMMDD_HHMMSS>.md`:
 
 **Report Structure:**
+
 ```markdown
 # Azure Cost Optimization Report
+
 **Generated**: <timestamp>
 
 ## Executive Summary
+
 - Total Monthly Cost: $X (💰 ACTUAL DATA)
 - Top Cost Drivers: [List top 3 resources with Azure Portal links]
 
 ## Cost Breakdown
+
 [Table with top 10 resources by cost, including Azure Portal links]
 
 ## Free Tier Analysis
+
 [Resources operating within free tiers showing $0 cost]
 
 ## Orphaned Resources (Immediate Savings)
+
 [From azqr - resources that can be deleted immediately]
+
 - Resource name with Portal link - $X/month savings
 
 ## Optimization Recommendations
 
 ### Priority 1: High Impact, Low Risk
+
 [Example: Delete orphaned resources]
+
 - 💰 ACTUAL cost: $X/month
 - 📊 ESTIMATED savings: $Y/month
 - Commands to execute (with warnings)
 
 ### Priority 2: Medium Impact, Medium Risk
+
 [Example: Rightsize VM from D4s_v5 to D2s_v5]
+
 - 💰 ACTUAL baseline: D4s_v5, $X/month
 - 📈 ACTUAL metrics: CPU 8%, Memory 30%
 - 💵 VALIDATED pricing: D4s_v5 $Y/hr, D2s_v5 $Z/hr
@@ -279,18 +303,22 @@ Create a comprehensive cost optimization report in the `output/` folder:
 - Commands to execute
 
 ### Priority 3: Long-term Optimization
+
 [Example: Reserved Instances, Storage tiering]
 
 ## Total Estimated Savings
+
 - Monthly: $X
 - Annual: $Y
 
 ## Implementation Commands
+
 [Safe commands with approval warnings]
 
 ## Validation Appendix
 
 ### Data Sources and Files
+
 - **Cost Query Results**: `output/cost-query-result<timestamp>.json`
   - Raw cost data from Azure Cost Management API
   - Audit trail proving actual costs at report generation time
@@ -303,6 +331,7 @@ Create a comprehensive cost optimization report in the `output/` folder:
 ```
 
 **Portal Link Format:**
+
 ```
 https://portal.azure.com/#@<TENANT_ID>/resource/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/<RESOURCE_GROUP>/providers/<RESOURCE_PROVIDER>/<RESOURCE_TYPE>/<RESOURCE_NAME>/overview
 ```
@@ -322,8 +351,8 @@ Save all cost query results for validation:
     {
       "queryType": "ActualCost",
       "timeframe": "MonthToDate",
-      "query": { },
-      "response": { }
+      "query": {},
+      "response": {}
     }
   ]
 }
@@ -343,6 +372,7 @@ Remove-Item -Path "temp" -Recurse -Force -ErrorAction SilentlyContinue
 ## Output
 
 The skill generates:
+
 1. **Cost Optimization Report** (`output/costoptimizereport<timestamp>.md`)
    - Executive summary with total costs and top drivers
    - Detailed cost breakdown with Azure Portal links
@@ -356,12 +386,14 @@ The skill generates:
 ## Important Notes
 
 ### Data Classification
+
 - 💰 **ACTUAL DATA** = Retrieved from Azure Cost Management API
 - 📈 **ACTUAL METRICS** = Retrieved from Azure Monitor
 - 💵 **VALIDATED PRICING** = Retrieved from official Azure pricing pages
 - 📊 **ESTIMATED SAVINGS** = Calculated based on actual data and validated pricing
 
 ### Best Practices
+
 - Always query actual costs first - never estimate or assume
 - Validate pricing from official sources - account for free tiers
 - Use REST API for cost queries (more reliable than `az costmanagement query`)
@@ -372,6 +404,7 @@ The skill generates:
 - Never execute destructive operations without explicit approval
 
 ### Common Pitfalls
+
 - **Assuming costs**: Always query actual data from Cost Management API
 - **Ignoring free tiers**: Many services have generous allowances (e.g., Container Apps: 180K vCPU-sec free/month)
 - **Using wrong date ranges**: 30 days for costs, 14 days for utilization
@@ -379,6 +412,7 @@ The skill generates:
 - **Cost query failures**: Use `az rest` with JSON body, not `az costmanagement query`
 
 ### Safety Requirements
+
 - Get approval before deleting resources
 - Test changes in non-production first
 - Provide dry-run commands for validation

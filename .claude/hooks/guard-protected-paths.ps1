@@ -45,7 +45,7 @@ if ($p -match 'hermes\\config\.yaml' -or $p -match 'hermes\\profiles\\.*\\config
     $p -match '\.openclaw\\openclaw\.json' -or $p -match '\.omniroute\\\.env') {
   Deny "$path is a live agent config." @"
 Back it up first, change one key at a time, then re-validate with:
-  powershell -File E:\ANTIGRAVITY\.claude\hooks\verify-stack-integrity.ps1
+  powershell -File F:\ANTIGRAVITY\.claude\hooks\verify-stack-integrity.ps1
 If this edit is intended, run it as an explicit Bash command so it is visible
 in the transcript rather than an invisible file write.
 "@
@@ -54,7 +54,7 @@ in the transcript rather than an invisible file write.
 # ── stale repo root ───────────────────────────────────────────────────────
 if ($p -match '^c:\\antigravity\\') {
   Deny "C:\antigravity is the OLD repo root and still exists on disk." @"
-The live root is E:\ANTIGRAVITY. Anything written to C:\antigravity is
+The live root is F:\ANTIGRAVITY. Anything written to C:\antigravity is
 invisible to the running stack and to git.
 "@
 }

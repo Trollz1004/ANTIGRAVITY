@@ -6,10 +6,10 @@ Plain-English instructions. Read this if a node has been factory-reset and you n
 
 ## Which script to run
 
-| Node | Role | Script |
-|---|---|---|
+| Node               | Role                                | Script                                        |
+| ------------------ | ----------------------------------- | --------------------------------------------- |
 | Sabretooth or 9020 | Helper node (Ollama compute worker) | `scripts/post-wipe-bootstrap-helper-node.ps1` |
-| T5500 | Primary orchestrator | `scripts/post-wipe-bootstrap-T5500.ps1` |
+| T5500              | Primary orchestrator                | `scripts/post-wipe-bootstrap-T5500.ps1`       |
 
 When in doubt: if it is NOT the big workstation with the RTX card that runs the full Hermes GUI, it is a helper node.
 
@@ -20,6 +20,7 @@ When in doubt: if it is NOT the big workstation with the RTX card that runs the 
 **Sign into OneDrive first as joshlcoleman@gmail.com.**
 
 That is the only thing you have to do manually before launching the script. OneDrive carries:
+
 - The credential vault (Personal Vault / MASTER-UNIVERSAL-ENV-TROLLZ1004.env)
 - The Claude memory mirror (doctrine files that every Claude session needs)
 - The earlier install script for OpenCode / Gemini
@@ -42,36 +43,40 @@ Wait until the OneDrive tray icon shows a checkmark (sync complete). Then run th
    ```
 
 **Single command to copy-paste for a helper node:**
+
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force; & "C:\Antigravity\scripts\post-wipe-bootstrap-helper-node.ps1"
 ```
 
 **Single command for T5500:**
+
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force; & "C:\Antigravity\scripts\post-wipe-bootstrap-T5500.ps1"
 ```
 
 If the ANTIGRAVITY repo is not cloned yet (brand-new wipe before the script has ever run), grab the script from OneDrive:
+
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force
 & "C:\Users\joshl\OneDrive\install-helper-node-after-windows-clean.ps1"
 ```
+
 That earlier script will clone ANTIGRAVITY, after which you can run the full bootstrap above.
 
 ---
 
 ## Estimated time
 
-| Phase | Time |
-|---|---|
-| Core toolchain (Chocolatey, Git, Node, Python, winget packages) | ~10 min |
+| Phase                                                             | Time                                   |
+| ----------------------------------------------------------------- | -------------------------------------- |
+| Core toolchain (Chocolatey, Git, Node, Python, winget packages)   | ~10 min                                |
 | Ollama install + model pulls (~8 GB for helper, ~15 GB for T5500) | ~20-40 min depending on internet speed |
-| Hermes Workspace install | ~5 min |
-| Hermes Agent CLI + config | ~3 min |
-| Claude Code + Codex CLIs | ~3 min |
-| Memory sync + service registration | ~2 min |
-| **Helper node total** | **~40-60 min** |
-| **T5500 total (heavier models + mission-mcp build)** | **~60-90 min** |
+| Hermes Workspace install                                          | ~5 min                                 |
+| Hermes Agent CLI + config                                         | ~3 min                                 |
+| Claude Code + Codex CLIs                                          | ~3 min                                 |
+| Memory sync + service registration                                | ~2 min                                 |
+| **Helper node total**                                             | **~40-60 min**                         |
+| **T5500 total (heavier models + mission-mcp build)**              | **~60-90 min**                         |
 
 ---
 
@@ -95,17 +100,17 @@ The script writes a verbose log to `C:\bootstrap-helper-YYYYMMDD-HHmmss.log` (he
 
 ### Common failures and fixes
 
-| Failure | Cause | Fix |
-|---|---|---|
-| "OneDrive not found" | OneDrive not signed in | Sign in as joshlcoleman@gmail.com, wait for sync, re-run |
-| Vault env file missing | Personal Vault locked | Open File Explorer → OneDrive → Personal Vault → authenticate |
-| `winget` not found | Very fresh Windows install | Run Windows Update once; winget ships with App Installer. Or install from Microsoft Store. |
-| Ollama model pull timeout | Slow internet or Ollama not running | Re-run script; the model pull section is idempotent and resumes |
-| `hermes` not found after pip install | pip installed to wrong Python | Run `pip show hermes-agent` to find install location; add to PATH |
-| `pnpm` not found | corepack enable failed | Run `npm install -g pnpm` as fallback |
-| mission-mcp service fails (T5500) | Build not complete or Node version mismatch | `cd C:\Antigravity\services\mission-mcp && pnpm install && pnpm build` then re-run |
-| cloudflared tunnel not configured | Fresh install, no tunnel credentials | Follow `TUNNEL-MIGRATION-RUNBOOK-2026-05-12.md` manually |
-| OPENROUTER_API_KEY warning | Vault not loaded | Set it manually: `$env:OPENROUTER_API_KEY = "sk-or-v1-..."` (from vault) then add to User env |
+| Failure                              | Cause                                       | Fix                                                                                           |
+| ------------------------------------ | ------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| "OneDrive not found"                 | OneDrive not signed in                      | Sign in as joshlcoleman@gmail.com, wait for sync, re-run                                      |
+| Vault env file missing               | Personal Vault locked                       | Open File Explorer → OneDrive → Personal Vault → authenticate                                 |
+| `winget` not found                   | Very fresh Windows install                  | Run Windows Update once; winget ships with App Installer. Or install from Microsoft Store.    |
+| Ollama model pull timeout            | Slow internet or Ollama not running         | Re-run script; the model pull section is idempotent and resumes                               |
+| `hermes` not found after pip install | pip installed to wrong Python               | Run `pip show hermes-agent` to find install location; add to PATH                             |
+| `pnpm` not found                     | corepack enable failed                      | Run `npm install -g pnpm` as fallback                                                         |
+| mission-mcp service fails (T5500)    | Build not complete or Node version mismatch | `cd C:\Antigravity\services\mission-mcp && pnpm install && pnpm build` then re-run            |
+| cloudflared tunnel not configured    | Fresh install, no tunnel credentials        | Follow `TUNNEL-MIGRATION-RUNBOOK-2026-05-12.md` manually                                      |
+| OPENROUTER_API_KEY warning           | Vault not loaded                            | Set it manually: `$env:OPENROUTER_API_KEY = "sk-or-v1-..."` (from vault) then add to User env |
 
 ---
 
@@ -139,6 +144,7 @@ Invoke-WebRequest http://localhost:3901/ -SkipHttpErrorCheck -UseBasicParsing
 ```
 
 From T5500, verify a helper node's Ollama is reachable:
+
 ```powershell
 # Replace HELPER-IP with the helper node's LAN IP or Tailscale IP
 Invoke-RestMethod http://HELPER-IP:11434/api/tags
@@ -151,6 +157,7 @@ Invoke-RestMethod http://HELPER-IP:11434/api/tags
 Once both T5500 and the helper node are up:
 
 1. **On the helper node:** confirm Ollama is running and listening on `0.0.0.0:11434`:
+
    ```powershell
    ollama list  # shows models
    netstat -an | findstr 11434  # shows 0.0.0.0:11434 LISTENING
@@ -158,11 +165,12 @@ Once both T5500 and the helper node are up:
 
 2. **On T5500:** add the helper node to the Hermes router config. Find the hermes-agent config at:
    `%LOCALAPPDATA%\hermes\hermes-agent\config.yaml`
-   
+
    Add the node under the model routing section or create an Ollama endpoint entry pointing to:
    `http://<HELPER-IP>:11434/v1`
 
 3. **Verify routing from T5500:**
+
    ```powershell
    # Quick test — ask the helper's Ollama to complete a prompt
    Invoke-RestMethod -Method Post -Uri "http://HELPER-IP:11434/api/generate" `
@@ -178,6 +186,7 @@ Once both T5500 and the helper node are up:
 ## Preserve branches (do not delete)
 
 The following branches on `Trollz1004/ANTIGRAVITY` are permanent archives and must never be deleted:
+
 - `9020-preserve-20260511` (SHA `d68b49fb`)
 - `sabretooth-preserve-20260511` (SHA `ef952284`)
 

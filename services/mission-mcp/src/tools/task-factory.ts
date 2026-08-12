@@ -1,6 +1,6 @@
-import { createHash } from "node:crypto";
+import { createHash } from 'node:crypto';
 
-export type GeneratedTaskStatus = "pending" | "active" | "done";
+export type GeneratedTaskStatus = 'pending' | 'active' | 'done';
 
 export interface TaskFactoryTemplate {
   seed: string;
@@ -53,7 +53,7 @@ export interface GeneratedTaskBatchResult {
 const DEFAULT_COUNT = 100;
 const DEFAULT_BATCH_SIZE = 100;
 const DEFAULT_PRIORITY = 3;
-const DEFAULT_BODY_PATTERN = "Task {{index}}/{{count}} assigned to {{assignee}}";
+const DEFAULT_BODY_PATTERN = 'Task {{index}}/{{count}} assigned to {{assignee}}';
 
 const MIN_PADDED_INDEX_WIDTH = 3;
 
@@ -62,11 +62,11 @@ function canonicalize(value: unknown): unknown {
     return value.map(canonicalize);
   }
 
-  if (value !== null && typeof value === "object") {
+  if (value !== null && typeof value === 'object') {
     return Object.fromEntries(
       Object.entries(value as Record<string, unknown>)
         .sort(([left], [right]) => left.localeCompare(right))
-        .map(([key, nested]) => [key, canonicalize(nested)])
+        .map(([key, nested]) => [key, canonicalize(nested)]),
     );
   }
 
@@ -74,9 +74,9 @@ function canonicalize(value: unknown): unknown {
 }
 
 function stableHash(value: unknown, length = 16): string {
-  return createHash("sha256")
+  return createHash('sha256')
     .update(JSON.stringify(canonicalize(value)))
-    .digest("hex")
+    .digest('hex')
     .slice(0, length);
 }
 
@@ -88,33 +88,32 @@ function assertPositiveInteger(name: string, value: number): void {
 
 function renderPattern(
   pattern: string,
-  variables: Record<string, string | number | boolean | null | undefined>
+  variables: Record<string, string | number | boolean | null | undefined>,
 ): string {
   return pattern.replace(/{{\s*([a-zA-Z0-9_.-]+)\s*}}/g, (_, key: string) => {
     const value = variables[key];
-    return value === null || value === undefined ? "" : String(value);
+    return value === null || value === undefined ? '' : String(value);
   });
 }
 
 export function generateTaskBatch(
   template: TaskFactoryTemplate,
-  options: TaskFactoryOptions = {}
+  options: TaskFactoryOptions = {},
 ): GeneratedTaskBatchResult {
   if (!template.seed?.trim()) {
-    throw new Error("template.seed must not be empty");
+    throw new Error('template.seed must not be empty');
   }
   if (!template.titlePattern?.trim()) {
-    throw new Error("template.titlePattern must not be empty");
+    throw new Error('template.titlePattern must not be empty');
   }
 
   const count = options.count ?? DEFAULT_COUNT;
   const batchSize = options.batchSize ?? DEFAULT_BATCH_SIZE;
-  assertPositiveInteger("count", count);
-  assertPositiveInteger("batchSize", batchSize);
+  assertPositiveInteger('count', count);
+  assertPositiveInteger('batchSize', batchSize);
 
   const parentTaskId = template.parent_task_id ?? template.parentTaskId ?? null;
-  const assignedAgentId =
-    template.assigned_agent_id ?? template.assignedAgentId ?? template.assignee ?? null;
+  const assignedAgentId = template.assigned_agent_id ?? template.assignedAgentId ?? template.assignee ?? null;
   const assignee = template.assignee ?? assignedAgentId;
   const bodyPattern = template.body ?? template.description ?? DEFAULT_BODY_PATTERN;
   const rootBatchId = `batch_${stableHash({ seed: template.seed, count, batchSize })}`;
@@ -123,18 +122,18 @@ export function generateTaskBatch(
   const tasks: GeneratedTask[] = Array.from({ length: count }, (_, offset) => {
     const index = offset + 1;
     const batchNumber = Math.floor(offset / batchSize) + 1;
-    const batch_id = `${rootBatchId}_${String(batchNumber).padStart(3, "0")}`;
+    const batch_id = `${rootBatchId}_${String(batchNumber).padStart(3, '0')}`;
     const context = {
       ...(template.variables ?? {}),
       index,
       zeroBasedIndex: offset,
-      paddedIndex: String(index).padStart(paddedIndexWidth, "0"),
+      paddedIndex: String(index).padStart(paddedIndexWidth, '0'),
       count,
       batchNumber,
       batchSize,
-      assignee: assignee ?? "",
-      assigned_agent_id: assignedAgentId ?? "",
-      parent_task_id: parentTaskId ?? "",
+      assignee: assignee ?? '',
+      assigned_agent_id: assignedAgentId ?? '',
+      parent_task_id: parentTaskId ?? '',
     };
     const id = `task_${stableHash({ seed: template.seed, index, count, parentTaskId, assignedAgentId })}`;
     const title = renderPattern(template.titlePattern, context);
@@ -145,7 +144,7 @@ export function generateTaskBatch(
       title,
       body,
       description: body,
-      status: "pending",
+      status: 'pending',
       priority: template.priority ?? DEFAULT_PRIORITY,
       parent_task_id: parentTaskId,
       assigned_agent_id: assignedAgentId,

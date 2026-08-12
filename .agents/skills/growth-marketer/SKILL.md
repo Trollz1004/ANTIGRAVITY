@@ -14,6 +14,7 @@ metadata:
   updated: 2026-03-31
   tags: [growth, experimentation, acquisition, retention, viral]
 ---
+
 # Growth Marketer
 
 The agent operates as a senior growth marketer, delivering experiment-driven strategies for scalable user acquisition, activation, retention, referral, and revenue optimization.
@@ -30,13 +31,13 @@ The agent operates as a senior growth marketer, delivering experiment-driven str
 
 ## AARRR Funnel (Pirate Metrics)
 
-| Stage | Key Question | Metrics | Benchmark |
-|-------|-------------|---------|-----------|
-| Acquisition | How do users find us? | Traffic, CAC, channel mix | CAC < 1/3 LTV |
-| Activation | Great first experience? | Activation rate, time to value | 40%+ activation |
-| Retention | Do users come back? | D1/D7/D30 retention, churn | SaaS: D30 30% |
-| Referral | Do users tell others? | Viral coefficient (K), NPS | K-factor > 0.5 |
-| Revenue | How do we monetize? | ARPU, LTV, conversion rate | LTV:CAC > 3:1 |
+| Stage       | Key Question            | Metrics                        | Benchmark       |
+| ----------- | ----------------------- | ------------------------------ | --------------- |
+| Acquisition | How do users find us?   | Traffic, CAC, channel mix      | CAC < 1/3 LTV   |
+| Activation  | Great first experience? | Activation rate, time to value | 40%+ activation |
+| Retention   | Do users come back?     | D1/D7/D30 retention, churn     | SaaS: D30 30%   |
+| Referral    | Do users tell others?   | Viral coefficient (K), NPS     | K-factor > 0.5  |
+| Revenue     | How do we monetize?     | ARPU, LTV, conversion rate     | LTV:CAC > 3:1   |
 
 ## Experimentation Framework
 
@@ -46,36 +47,40 @@ The agent operates as a senior growth marketer, delivering experiment-driven str
 # Experiment: Onboarding Checklist v2
 
 ## Hypothesis
+
 If we add a progress bar to the onboarding checklist, then activation rate
 will increase by 15% because users respond to completion motivation.
 
 ## Metrics
+
 - Primary: 7-day activation rate
 - Secondary: Time to first value action
 - Guardrails: Support ticket volume, bounce rate
 
 ## Design
+
 - Type: A/B test
 - Sample: 8,200 per variant (5% baseline, 15% MDE, 95% confidence)
 - Duration: 14 days
 - Segments: New signups only
 
 ## Results
-| Variant   | Users  | Activation | Lift  | p-value |
-|-----------|--------|------------|-------|---------|
-| Control   | 8,350  | 5.1%       | -     | -       |
-| Treatment | 8,280  | 6.2%       | +21%  | 0.003   |
+
+| Variant   | Users | Activation | Lift | p-value |
+| --------- | ----- | ---------- | ---- | ------- |
+| Control   | 8,350 | 5.1%       | -    | -       |
+| Treatment | 8,280 | 6.2%       | +21% | 0.003   |
 
 ## Decision: Ship
 ```
 
 ### ICE Prioritization
 
-| Experiment | Impact (1-10) | Confidence (1-10) | Ease (1-10) | ICE Score |
-|------------|---------------|-------------------|-------------|-----------|
-| Onboarding checklist v2 | 8 | 7 | 9 | 24 |
-| Referral incentive test | 6 | 8 | 7 | 21 |
-| Pricing page redesign | 9 | 5 | 6 | 20 |
+| Experiment              | Impact (1-10) | Confidence (1-10) | Ease (1-10) | ICE Score |
+| ----------------------- | ------------- | ----------------- | ----------- | --------- |
+| Onboarding checklist v2 | 8             | 7                 | 9           | 24        |
+| Referral incentive test | 6             | 8                 | 7           | 21        |
+| Pricing page redesign   | 9             | 5                 | 6           | 20        |
 
 ### Sample Size Calculator
 
@@ -107,24 +112,24 @@ def sample_size(baseline_rate, mde, alpha=0.05, power=0.8):
 
 ## Acquisition Channel Analysis
 
-| Channel | CAC | Volume | Quality | Scalability |
-|---------|-----|--------|---------|-------------|
-| Organic Search | $20 | High | High | Medium |
-| Paid Search | $50 | Medium | High | High |
-| Social Organic | $10 | Medium | Medium | Low |
-| Social Paid | $40 | High | Medium | High |
-| Content | $15 | Medium | High | Medium |
-| Referral | $5 | Low | Very High | Medium |
-| Partnerships | $30 | Medium | High | Medium |
+| Channel        | CAC | Volume | Quality   | Scalability |
+| -------------- | --- | ------ | --------- | ----------- |
+| Organic Search | $20 | High   | High      | Medium      |
+| Paid Search    | $50 | Medium | High      | High        |
+| Social Organic | $10 | Medium | Medium    | Low         |
+| Social Paid    | $40 | High   | Medium    | High        |
+| Content        | $15 | Medium | High      | Medium      |
+| Referral       | $5  | Low    | Very High | Medium      |
+| Partnerships   | $30 | Medium | High      | Medium      |
 
 ## Retention Benchmarks
 
-| Category | D1 | D7 | D30 |
-|----------|-----|-----|------|
-| SaaS | 60% | 40% | 30% |
-| Social | 50% | 30% | 20% |
+| Category   | D1  | D7  | D30 |
+| ---------- | --- | --- | --- |
+| SaaS       | 60% | 40% | 30% |
+| Social     | 50% | 30% | 20% |
 | E-commerce | 25% | 15% | 10% |
-| Games | 35% | 15% | 8% |
+| Games      | 35% | 15% | 8%  |
 
 ### Cohort Analysis Example
 
@@ -190,14 +195,14 @@ python scripts/growth_model.py --current 10000 --growth 0.1 --months 12
 
 ## Troubleshooting
 
-| Symptom | Likely Cause | Resolution |
-|---------|-------------|------------|
-| K-factor below 0.1 despite referral program | Invite UX has too much friction or incentive misaligned with user value | Reduce invite flow to one click; align incentive with product value (usage credits > cash) |
-| Activation rate below 20% for new signups | Time-to-value too long or onboarding not guiding users to aha moment | Map activation events, identify first value action, build guided onboarding to reach it in under 5 minutes |
-| Growth stalls after initial PLG ramp | Free tier captures low-intent users who never convert; paid conversion rate below 3% | Tighten free tier limits around high-value features, add contextual upgrade prompts at usage gates |
-| A/B test results not reaching significance | Sample size too small for the minimum detectable effect being tested | Use sample size calculator; increase traffic to test or accept larger MDE |
-| Cohort retention curves flatten at under 15% | Product does not build enough habit; no ongoing value loop | Implement engagement hooks (notifications, reports, streaks); investigate which features drive retention |
-| Experiments consistently show no lift | Testing cosmetic changes rather than meaningful value propositions | Focus experiments on activation flow, pricing, and value communication — not button colors |
+| Symptom                                      | Likely Cause                                                                         | Resolution                                                                                                 |
+| -------------------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| K-factor below 0.1 despite referral program  | Invite UX has too much friction or incentive misaligned with user value              | Reduce invite flow to one click; align incentive with product value (usage credits > cash)                 |
+| Activation rate below 20% for new signups    | Time-to-value too long or onboarding not guiding users to aha moment                 | Map activation events, identify first value action, build guided onboarding to reach it in under 5 minutes |
+| Growth stalls after initial PLG ramp         | Free tier captures low-intent users who never convert; paid conversion rate below 3% | Tighten free tier limits around high-value features, add contextual upgrade prompts at usage gates         |
+| A/B test results not reaching significance   | Sample size too small for the minimum detectable effect being tested                 | Use sample size calculator; increase traffic to test or accept larger MDE                                  |
+| Cohort retention curves flatten at under 15% | Product does not build enough habit; no ongoing value loop                           | Implement engagement hooks (notifications, reports, streaks); investigate which features drive retention   |
+| Experiments consistently show no lift        | Testing cosmetic changes rather than meaningful value propositions                   | Focus experiments on activation flow, pricing, and value communication — not button colors                 |
 
 ---
 
@@ -225,8 +230,8 @@ python scripts/growth_model.py --current 10000 --growth 0.1 --months 12
 
 ## Scripts
 
-| Script | Purpose | Usage |
-|--------|---------|-------|
-| `scripts/growth_loop_modeler.py` | Model viral, PLG, and content growth loops with forecasts | `python scripts/growth_loop_modeler.py --type viral --users 1000 --k-factor 0.6 --months 12` |
+| Script                                    | Purpose                                                         | Usage                                                                                          |
+| ----------------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `scripts/growth_loop_modeler.py`          | Model viral, PLG, and content growth loops with forecasts       | `python scripts/growth_loop_modeler.py --type viral --users 1000 --k-factor 0.6 --months 12`   |
 | `scripts/viral_coefficient_calculator.py` | Calculate K-factor, branching factor, and improvement scenarios | `python scripts/viral_coefficient_calculator.py --invites 5000 --conversions 800 --users 2000` |
-| `scripts/experiment_prioritizer.py` | Prioritize growth experiments using ICE or RICE scoring | `python scripts/experiment_prioritizer.py experiments.json --framework ice --demo` |
+| `scripts/experiment_prioritizer.py`       | Prioritize growth experiments using ICE or RICE scoring         | `python scripts/experiment_prioritizer.py experiments.json --framework ice --demo`             |

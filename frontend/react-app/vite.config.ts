@@ -10,6 +10,26 @@ import { defineConfig, loadEnv } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 import type { Plugin } from 'vite';
 
+/**
+ * Injects <link rel="dns-prefetch"> and <link rel="preconnect"> resource hints
+ * into the HTML head when a CDN base URL is configured for production builds.
+ */
+function cdnResourceHintsPlugin(cdnBase: string): Plugin {
+  return {
+    name: 'cdn-resource-hints',
+    enforce: 'post',
+    transformIndexHtml(html) {
+      if (!cdnBase) return html;
+      const origin = new URL(cdnBase).origin;
+      const hints = [
+        `<link rel="dns-prefetch" href="${origin}">`,
+        `<link rel="preconnect" href="${origin}" crossorigin>`,
+      ].join('\n    ');
+      return html.replace('</head>', `    ${hints}\n  </head>`);
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   const isProduction = mode === 'production';
@@ -19,21 +39,16 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       tailwindcss(),
-      // Plugin to inject resource hints (dns-prefetch, preconnect) into HTML
-      // when a CDN base URL is configured for production builds.
       cdnResourceHintsPlugin(cdnBase),
-      // Bundle analyzer — generates stats.html and bundle-stats.json on build
-      // Opens automatically in production; set open: false to suppress.
       visualizer({
         filename: 'bundle-stats.html',
         open: false,
         gzipSize: true,
         brotliSize: true,
-        template: 'treemap', // sunburst, treemap, network, list
+        template: 'treemap',
       }) as Plugin,
     ],
     define: {
-      // Make CDN base URL available in client code if needed
       __CDN_BASE_URL__: JSON.stringify(cdnBase),
     },
     resolve: {
@@ -41,88 +56,18 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, '.'),
       },
     },
-    // CDN base URL — set VITE_CDN_BASE_URL in production to serve static assets
-    // from a CDN (e.g. https://cdn.youandinotai.com or R2 public bucket URL).
-    // When empty, assets are served relative to the app origin.
     base: cdnBase || undefined,
+    server: {
+      hmr: false,
+    },
     build: {
-      // Asset fingerprinting: Vite already hashes by default, but we make it
-      // explicit here so the policy is visible and auditable.
       rollupOptions: {
         output: {
-          // Use content hash for all chunks and assets.
-          // Vite default is [name]-[hash].js — we keep that pattern.
           entryFileNames: 'assets/[name]-[hash].js',
           chunkFileNames: 'assets/[name]-[hash].js',
-          assetFileNames: (assetInfo) => {
-            // Keep fingerprinted pattern for all asset types.
-            // Images/fonts go to assets/ with hash; CSS stays with hash.
-            const info = assetInfo.name || '';
-            if (/\.(css)$/i.test(info)) {
-              return 'assets/[name]-[hash][extname]';
-            }
-            if (/\.(png|jpe?g|gif|svg|webp|ico|avif)$/i.test(info)) {
-              return 'assets/images/[name]-[hash][extname]';
-            }
-            if (/\.(woff2?|ttf|otf|eot)$/i.test(info)) {
-              return 'assets/fonts/[name]-[hash][extname]';
-            }
-            return 'assets/[name]-[hash][extname]';
-          },
-          // Manual chunks for better code splitting — separates vendor libs
-          // from application code so they can be cached independently.
-          manualChunks: {
-            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-            'vendor-motion': ['motion', 'framer-motion'],
-            'vendor-crypto': ['crypto-js'],
-          },
+          assetFileNames: 'assets/[name]-[hash].[ext]',
         },
       },
-      // Ensure source maps are generated for production (optional, useful for debugging)
-      sourcemap: isProduction ? 'hidden' : true,
-      // Generate bundle stats JSON for CI/CD tracking
-      reportCompressedSize: true,
-    },
-    server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
-      hmr: process.env.DISABLE_HMR !== 'true',
     },
   };
 });
-
-/**
- * Vite plugin that injects CDN resource hints into the HTML <head>.
- *
- * When a CDN base URL is configured, adds:
- *   <link rel="dns-prefetch" href="//cdn.youandinotai.com">
- *   <link rel="preconnect" href="https://cdn.youandinotai.com" crossorigin>
- *
- * This allows the browser to resolve DNS and establish a connection to the
- * CDN domain before the first asset request, reducing latency.
- */
-function cdnResourceHintsPlugin(cdnBaseUrl) {
-  return {
-    name: 'cdn-resource-hints',
-    transformIndexHtml(html) {
-      if (!cdnBaseUrl) {
-        return html;
-      }
-
-      try {
-        const cdnUrl = new URL(cdnBaseUrl);
-        const dnsPrefetch = `<link rel="dns-prefetch" href="//${cdnUrl.hostname}">`;
-        const preconnect = `<link rel="preconnect" href="${cdnUrl.origin}" crossorigin>`;
-
-        // Inject after the viewport meta tag (early in <head>)
-        return html.replace(
-          /(<meta name="viewport"[^>]*>)/,
-          `$1\n  ${dnsPrefetch}\n  ${preconnect}`,
-        );
-      } catch {
-        // Invalid URL — skip resource hints
-        return html;
-      }
-    },
-  };
-}

@@ -30,10 +30,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const api = {
   health: () => request<Health>('/api/health'),
-  agents: () =>
-    request<{ total: number; count: number; categories: CategoryDef[]; agents: AgentDef[] }>(
-      '/api/agents',
-    ),
+  agents: () => request<{ total: number; count: number; categories: CategoryDef[]; agents: AgentDef[] }>('/api/agents'),
   subagents: () => request<{ agents: SubagentNode[] }>('/api/subagents'),
   tasks: () => request<{ tasks: SwarmTask[] }>('/api/tasks'),
   createTask: (input: { title?: string; prompt: string; agentIds: string[]; mode: Mode; executor?: string }) =>
@@ -43,19 +40,17 @@ export const api = {
       method: 'PATCH',
       body: JSON.stringify({ column }),
     }),
-  retryTask: (id: string) =>
-    request<{ task: SwarmTask }>(`/api/tasks/${id}/retry`, { method: 'POST' }),
+  retryTask: (id: string) => request<{ task: SwarmTask }>(`/api/tasks/${id}/retry`, { method: 'POST' }),
   deleteTask: (id: string) => request<void>(`/api/tasks/${id}`, { method: 'DELETE' }),
   services: () => request<{ services: ServiceStatus[] }>('/api/services'),
   // ── Brain hub ────────────────────────────────────────────────────────────────
   brainState: () => request<BrainState>('/api/brain/state'),
-  brainJournal: (platformId: string) =>
-    request<BrainJournal>(`/api/brain/journal/${platformId}`),
+  brainJournal: (platformId: string) => request<BrainJournal>(`/api/brain/journal/${platformId}`),
   brainWriteJournal: (platformId: string, content: string) =>
-    request<{ bytes: number; truncated: boolean; updatedAt: string }>(
-      `/api/brain/journal/${platformId}`,
-      { method: 'POST', body: JSON.stringify({ content }) },
-    ),
+    request<{ bytes: number; truncated: boolean; updatedAt: string }>(`/api/brain/journal/${platformId}`, {
+      method: 'POST',
+      body: JSON.stringify({ content }),
+    }),
   brainTools: () => request<{ tools: BrainTool[] }>('/api/brain/tools'),
   brainAsk: (input: { tool?: string; arguments?: unknown; query?: string }) =>
     request<BrainAskResult>('/api/brain/ask', { method: 'POST', body: JSON.stringify(input) }),
@@ -68,8 +63,7 @@ export const api = {
     const qs = params.toString();
     return request<BrainCatalog>(`/api/brain/catalog${qs ? `?${qs}` : ''}`);
   },
-  brainCatalogEntry: (kind: 'skills' | 'tasks', id: string) =>
-    request<BrainSkill>(`/api/brain/catalog/${kind}/${id}`),
+  brainCatalogEntry: (kind: 'skills' | 'tasks', id: string) => request<BrainSkill>(`/api/brain/catalog/${kind}/${id}`),
   brainMcpStatus: () => request<BrainMcpStatus>('/api/mcp/status'),
 };
 

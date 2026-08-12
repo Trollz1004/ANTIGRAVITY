@@ -3,9 +3,7 @@
   "providers": {
     "opencode": {
       "base_url": "http://127.0.0.1:11434/v1",
-      "models": [
-        "ornith:9b"
-      ]
+      "models": ["ornith:9b"]
     }
   },
   "fallback_providers": [
@@ -69,9 +67,7 @@
     "anthropic": "random",
     "ollama-cloud": "random"
   },
-  "toolsets": [
-    "hermes-cli"
-  ],
+  "toolsets": ["hermes-cli"],
   "agent": {
     "max_turns": 134,
     "gateway_timeout": 1800,
@@ -112,9 +108,7 @@
     "modal_mode": "direct",
     "cwd": ".",
     "timeout": 180,
-    "env_passthrough": [
-      "OLLAMA_API_KEY"
-    ],
+    "env_passthrough": ["OLLAMA_API_KEY"],
     "shell_init_files": [],
     "auto_source_bashrc": true,
     "docker_image": "nikolaik/python-nodejs:python3.11-nodejs20",
@@ -358,11 +352,7 @@
     "platforms": {},
     "runtime_footer": {
       "enabled": true,
-      "fields": [
-        "model",
-        "context_pct",
-        "cwd"
-      ]
+      "fields": ["model", "context_pct", "cwd"]
     },
     "copy_shortcut": "auto",
     "tool_progress": "verbose"
@@ -511,12 +501,8 @@
   },
   "whatsapp": {
     "enabled": true,
-    "send_only_to": [
-      "+13529735909"
-    ],
-    "receive_only_from": [
-      "+13529735909"
-    ],
+    "send_only_to": ["+13529735909"],
+    "receive_only_from": ["+13529735909"],
     "reactive_only": true,
     "auto_reply": true,
     "auto_reply_template": "Hermes here. Message received from +13529735909 only. Routing to PAPERWEIGHT.",
@@ -531,14 +517,7 @@
     "reactions": false,
     "channel_prompts": {},
     "allowed_chats": "",
-    "allowed_users": [
-      [
-        "PHONE"
-      ],
-      [
-        "PHONE"
-      ]
-    ]
+    "allowed_users": [["PHONE"], ["PHONE"]]
   },
   "mattermost": null,
   "matrix": {
@@ -757,15 +736,9 @@
     ]
   },
   "known_plugin_toolsets": {
-    "cli": [
-      "spotify"
-    ],
-    "telegram": [
-      "spotify"
-    ],
-    "whatsapp": [
-      "spotify"
-    ]
+    "cli": ["spotify"],
+    "telegram": ["spotify"],
+    "whatsapp": ["spotify"]
   },
   "plugins": {
     "enabled": [

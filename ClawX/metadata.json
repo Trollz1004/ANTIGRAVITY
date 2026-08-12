@@ -4,9 +4,5 @@
   "owner": "sabretooth",
   "nodeId": "sabretooth",
   "humanOwner": "joshlcoleman@gmail.com",
-  "requestFramePermissions": [
-    "microphone",
-    "geolocation",
-    "camera"
-  ]
+  "requestFramePermissions": ["microphone", "geolocation", "camera"]
 }

@@ -33,8 +33,8 @@ jobs:
           SQUARE_WEBHOOK_SIGNATURE_KEY: ${{ secrets.SQUARE_WEBHOOK_SIGNATURE_KEY }}
           SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL: https://api.youandinotai.com/api/v1/webhooks/square-payment
           SQUARE_WEBHOOK_NOTIFICATION_URL: https://api.youandinotai.com/api/v1/webhooks/square-payment
-          SQUARE_WEBHOOK_VERIFY_SIGNATURE: "true"
-          SQUARE_API_VERSION: "2026-01-22"
+          SQUARE_WEBHOOK_VERIFY_SIGNATURE: 'true'
+          SQUARE_API_VERSION: '2026-01-22'
         run: |
           EXTRA_ENV_ARGS=()
           add_env_var() {

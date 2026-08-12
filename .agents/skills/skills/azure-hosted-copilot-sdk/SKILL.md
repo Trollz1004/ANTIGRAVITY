@@ -1,19 +1,19 @@
 ---
 name: azure-hosted-copilot-sdk
-description: "Build and deploy GitHub Copilot SDK apps to Azure. USE FOR: build copilot app, create copilot app, copilot SDK, @github/copilot-sdk, scaffold copilot project, copilot-powered app, deploy copilot app, host on azure, azure model, BYOM, bring your own model, use my own model, azure openai model, DefaultAzureCredential, self-hosted model, copilot SDK service, chat app with copilot, copilot-sdk-service template, azd init copilot, CopilotClient, createSession, sendAndWait, GitHub Models API. DO NOT USE FOR: using Copilot (not building with it), Copilot Extensions, Azure Functions without Copilot, general web apps without copilot SDK, Foundry agent hosting (use microsoft-foundry skill), agent evaluation (use microsoft-foundry skill)."
+description: 'Build and deploy GitHub Copilot SDK apps to Azure. USE FOR: build copilot app, create copilot app, copilot SDK, @github/copilot-sdk, scaffold copilot project, copilot-powered app, deploy copilot app, host on azure, azure model, BYOM, bring your own model, use my own model, azure openai model, DefaultAzureCredential, self-hosted model, copilot SDK service, chat app with copilot, copilot-sdk-service template, azd init copilot, CopilotClient, createSession, sendAndWait, GitHub Models API. DO NOT USE FOR: using Copilot (not building with it), Copilot Extensions, Azure Functions without Copilot, general web apps without copilot SDK, Foundry agent hosting (use microsoft-foundry skill), agent evaluation (use microsoft-foundry skill).'
 ---
 
 # GitHub Copilot SDK on Azure
 
 ## Step 1: Route
 
-| User wants | Action |
-|------------|--------|
-| Build new (empty project) | Step 2A (scaffold) |
-| Add new SDK service to existing repo | Step 2B (scaffold alongside) |
-| Deploy existing SDK app to Azure | Step 2C (add infra to existing SDK app) |
-| Add SDK to existing app code | [Integrate SDK](references/existing-project-integration.md) |
-| Use Azure/own model | Step 3 (BYOM config) |
+| User wants                           | Action                                                      |
+| ------------------------------------ | ----------------------------------------------------------- |
+| Build new (empty project)            | Step 2A (scaffold)                                          |
+| Add new SDK service to existing repo | Step 2B (scaffold alongside)                                |
+| Deploy existing SDK app to Azure     | Step 2C (add infra to existing SDK app)                     |
+| Add SDK to existing app code         | [Integrate SDK](references/existing-project-integration.md) |
+| Use Azure/own model                  | Step 3 (BYOM config)                                        |
 
 ## Step 2A: Scaffold New (Greenfield)
 
@@ -33,11 +33,11 @@ User already has a working Copilot SDK app and needs Azure infra. See [deploy ex
 
 Three model paths (layers on top of 2A/2B):
 
-| Path | Config |
-|------|--------|
-| **GitHub default** | No `model` param — SDK picks default |
-| **GitHub specific** | `model: "<name>"` — use `listModels()` to discover |
-| **Azure BYOM** | `model` + `provider` with `bearerToken` via `DefaultAzureCredential` |
+| Path                | Config                                                               |
+| ------------------- | -------------------------------------------------------------------- |
+| **GitHub default**  | No `model` param — SDK picks default                                 |
+| **GitHub specific** | `model: "<name>"` — use `listModels()` to discover                   |
+| **Azure BYOM**      | `model` + `provider` with `bearerToken` via `DefaultAzureCredential` |
 
 See [model config ref](references/azure-model-config.md).
 

@@ -11,12 +11,12 @@ The Agent Framework SDK injects skill names/descriptions into the system prompt 
 
 ## Choosing an approach
 
-| | Direct Download | Via Toolbox MCP |
-|--|---|---|
-| How | Downloads ZIPs at startup, builds provider from local files | Connects to toolbox MCP; SDK reads `resources/list` → `load_skill` |
-| Skill updates | Redeploy agent | Consumer endpoint picks up new version automatically |
-| Header | `Foundry-Features: Skills=V1Preview` | Not required |
-| When to use | No toolbox; need explicit version control | Already have a toolbox; want dynamic updates |
+|               | Direct Download                                             | Via Toolbox MCP                                                    |
+| ------------- | ----------------------------------------------------------- | ------------------------------------------------------------------ |
+| How           | Downloads ZIPs at startup, builds provider from local files | Connects to toolbox MCP; SDK reads `resources/list` → `load_skill` |
+| Skill updates | Redeploy agent                                              | Consumer endpoint picks up new version automatically               |
+| Header        | `Foundry-Features: Skills=V1Preview`                        | Not required                                                       |
+| When to use   | No toolbox; need explicit version control                   | Already have a toolbox; want dynamic updates                       |
 
 ---
 
@@ -25,15 +25,16 @@ The Agent Framework SDK injects skill names/descriptions into the system prompt 
 At startup, the agent downloads skill ZIPs from the Foundry Skills API, extracts them to a local directory, and builds a skills provider. The SDK advertises skill names/descriptions in the system prompt and synthesizes a `load_skill` tool for on-demand loading.
 
 **Prerequisites:**
+
 - Skills provisioned in the Foundry project — see [skill-manage.md](skill-manage.md)
 
 **Env vars** — set in `.env` for local run, and in the agent service's `environmentVariables` in `azure.yaml` for deployed agents:
 
-| Variable | Purpose |
-|----------|---------|
-| `FOUNDRY_PROJECT_ENDPOINT` | Project endpoint for SDK calls |
-| `AZURE_AI_MODEL_DEPLOYMENT_NAME` | Model deployment for the agent |
-| `SKILL_NAMES` | Comma-separated skill names to download |
+| Variable                         | Purpose                                 |
+| -------------------------------- | --------------------------------------- |
+| `FOUNDRY_PROJECT_ENDPOINT`       | Project endpoint for SDK calls          |
+| `AZURE_AI_MODEL_DEPLOYMENT_NAME` | Model deployment for the agent          |
+| `SKILL_NAMES`                    | Comma-separated skill names to download |
 
 ### Python
 
@@ -54,16 +55,17 @@ Full working sample: [agent-skills (C#)](https://github.com/microsoft-foundry/fo
 The agent connects to a toolbox MCP endpoint at startup. The SDK discovers skills via `resources/list`, advertises them in the system prompt, and synthesizes a `load_skill` tool that reads skill content via `resources/read` on demand.
 
 **Prerequisites:**
+
 - Skills provisioned in the Foundry project — see [skill-manage.md](skill-manage.md)
 - Skills attached to a toolbox — see [skill-toolbox-attach.md](skill-toolbox-attach.md)
 
 **Env vars** — set in `.env` for local run, and in the agent service's `environmentVariables` in `azure.yaml` for deployed agents:
 
-| Variable | Purpose |
-|----------|---------|
-| `FOUNDRY_PROJECT_ENDPOINT` | Project endpoint for SDK calls |
-| `AZURE_AI_MODEL_DEPLOYMENT_NAME` | Model deployment for the agent |
-| `TOOLBOX_NAME` | Toolbox name — SDK constructs endpoint |
+| Variable                         | Purpose                                |
+| -------------------------------- | -------------------------------------- |
+| `FOUNDRY_PROJECT_ENDPOINT`       | Project endpoint for SDK calls         |
+| `AZURE_AI_MODEL_DEPLOYMENT_NAME` | Model deployment for the agent         |
+| `TOOLBOX_NAME`                   | Toolbox name — SDK constructs endpoint |
 
 ### C#
 
@@ -121,16 +123,16 @@ The agent now produces the text response with skills applied.
 
 ## Troubleshooting
 
-| Symptom | Likely cause | Fix |
-|---------|------------|-----|
-| `SKILL.md not found` after download | ZIP doesn't contain `SKILL.md` at root | Create skill from directory with `SKILL.md` at root |
-| Agent ignores skills | Descriptions don't match user queries | Improve `description` in SKILL.md front matter |
-| Skills load but agent doesn't follow | Instructions vague or conflicting | Refine skill body; add canary token to verify loading |
-| `asyncio.TimeoutError` (Python) | Slow network or large packages | Increase bootstrap timeout (default 60s) |
-| `allow_preview` error (Python) | SDK client missing preview flag | Set `allow_preview=True` on the project client |
-| HTTP 500 on skill download (C#) | Missing feature header | Add `Skills=V1Preview` feature header to requests |
-| `SKILL_NAMES` not in deployed agent | Env var missing from `azure.yaml` | Add to the agent service's `environmentVariables`, redeploy |
-| MCP timeout (Toolbox) | Auth token expired or wrong scope | Use `https://ai.azure.com/.default`; refresh per request |
+| Symptom                              | Likely cause                           | Fix                                                         |
+| ------------------------------------ | -------------------------------------- | ----------------------------------------------------------- |
+| `SKILL.md not found` after download  | ZIP doesn't contain `SKILL.md` at root | Create skill from directory with `SKILL.md` at root         |
+| Agent ignores skills                 | Descriptions don't match user queries  | Improve `description` in SKILL.md front matter              |
+| Skills load but agent doesn't follow | Instructions vague or conflicting      | Refine skill body; add canary token to verify loading       |
+| `asyncio.TimeoutError` (Python)      | Slow network or large packages         | Increase bootstrap timeout (default 60s)                    |
+| `allow_preview` error (Python)       | SDK client missing preview flag        | Set `allow_preview=True` on the project client              |
+| HTTP 500 on skill download (C#)      | Missing feature header                 | Add `Skills=V1Preview` feature header to requests           |
+| `SKILL_NAMES` not in deployed agent  | Env var missing from `azure.yaml`      | Add to the agent service's `environmentVariables`, redeploy |
+| MCP timeout (Toolbox)                | Auth token expired or wrong scope      | Use `https://ai.azure.com/.default`; refresh per request    |
 
 ## References
 

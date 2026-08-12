@@ -187,11 +187,13 @@ Use the comparison framing from [how-dc-differs-from-other-tools](references/how
 Do NOT dump all capabilities, use cases, AI access info, and model recommendations in one message. Treat this as the start of a dialog, not a product brochure. Only expand on topics (models, MCPs, skills, billing) when the user asks about them.
 
 **Good first response pattern:**
+
 1. One sentence: what Desktop Commander is (a technical assistant that works on your actual computer)
 2. Two to three personalized suggestions based on the workspace scan (e.g., "I see you have a Node.js project — I could help you explore the codebase, audit dependencies, or set up tests")
 3. A short invitation to pick one or tell you what they need
 
 **Bad first response pattern:**
+
 - Long bulleted lists of every capability
 - Sections with headers covering features, apps, models, and billing
 - Generic suggestions not tied to the user's workspace

@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
-import { ExternalLink, Sprout, Trash2, Tag, ShoppingBag, AlertCircle, Loader2 } from "lucide-react";
+import React, { useEffect, useState, useCallback } from 'react';
+import axios from 'axios';
+import { ExternalLink, Sprout, Trash2, Tag, ShoppingBag, AlertCircle, Loader2 } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -21,7 +21,7 @@ export function StorefrontMode() {
   const [loading, setLoading] = useState(true);
   const [admin, setAdmin] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState("");
+  const [err, setErr] = useState('');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -30,41 +30,48 @@ export function StorefrontMode() {
         axios.get(`${API}/public/site`).then((x) => x.data),
         axios.get(`${API}/public/products`).then((x) => x.data),
         axios.get(`${API}/public/runway`).then((x) => x.data),
-        axios.get(`${API}/auth/status`, { withCredentials: true }).then((x) => x.data).catch(() => ({})),
+        axios
+          .get(`${API}/auth/status`, { withCredentials: true })
+          .then((x) => x.data)
+          .catch(() => ({})),
       ]);
       setSite(s);
       setProducts(p.products || []);
       setRunway(r);
       setAdmin(!!a?.signed_in);
     } catch (e) {
-      setErr(e?.response?.data?.detail || e.message || "load failed");
+      setErr(e?.response?.data?.detail || e.message || 'load failed');
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const seedStarter = async () => {
-    setBusy(true); setErr("");
+    setBusy(true);
+    setErr('');
     try {
       await axios.post(`${API}/public/products/seed`, {}, { withCredentials: true });
       await load();
     } catch (e) {
-      setErr(e?.response?.data?.detail || "seed failed — sign in as admin first");
+      setErr(e?.response?.data?.detail || 'seed failed — sign in as admin first');
     } finally {
       setBusy(false);
     }
   };
 
   const removeProduct = async (id) => {
-    if (!window.confirm("Remove this SKU?")) return;
-    setBusy(true); setErr("");
+    if (!window.confirm('Remove this SKU?')) return;
+    setBusy(true);
+    setErr('');
     try {
       await axios.delete(`${API}/public/products/${id}`, { withCredentials: true });
       await load();
     } catch (e) {
-      setErr(e?.response?.data?.detail || "delete failed");
+      setErr(e?.response?.data?.detail || 'delete failed');
     } finally {
       setBusy(false);
     }
@@ -77,9 +84,11 @@ export function StorefrontMode() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2">
               <ShoppingBag size={14} className="text-[#00e676]" />
-              <span className="text-[10px] tracking-[0.3em] uppercase text-[#00e676] font-bold">Public Storefront · Square + Stripe hosted</span>
+              <span className="text-[10px] tracking-[0.3em] uppercase text-[#00e676] font-bold">
+                Public Storefront · Square + Stripe hosted
+              </span>
             </div>
-            <h1 className="text-3xl font-bold tracking-tight">{site?.name || "OpusPawClaw"}</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{site?.name || 'OpusPawClaw'}</h1>
             <p className="text-sm text-[#6b82a6] mt-1">{site?.tagline}</p>
             <p className="text-[10px] tracking-widest uppercase mt-2 text-[#e040fb] font-bold">{site?.mission_tag}</p>
           </div>
@@ -87,24 +96,24 @@ export function StorefrontMode() {
         </header>
 
         {err && (
-          <div data-testid="storefront-error" className="mb-6 px-4 py-3 rounded-md border border-[#ff1744]/40 bg-[#ff1744]/10 text-[#ff5572] text-xs flex items-center gap-2">
+          <div
+            data-testid="storefront-error"
+            className="mb-6 px-4 py-3 rounded-md border border-[#ff1744]/40 bg-[#ff1744]/10 text-[#ff5572] text-xs flex items-center gap-2"
+          >
             <AlertCircle size={14} /> {err}
           </div>
         )}
 
         {loading ? (
-          <div className="flex items-center gap-2 text-[#6b82a6] text-xs"><Loader2 size={14} className="animate-spin" /> loading catalogue…</div>
+          <div className="flex items-center gap-2 text-[#6b82a6] text-xs">
+            <Loader2 size={14} className="animate-spin" /> loading catalogue…
+          </div>
         ) : products.length === 0 ? (
           <EmptyCatalogue admin={admin} onSeed={seedStarter} busy={busy} />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {products.map((p) => (
-              <ProductCard
-                key={p.id}
-                p={p}
-                admin={admin}
-                onDelete={() => removeProduct(p.id)}
-              />
+              <ProductCard key={p.id} p={p} admin={admin} onDelete={() => removeProduct(p.id)} />
             ))}
           </div>
         )}
@@ -119,16 +128,24 @@ export function StorefrontMode() {
 
 function RunwayCard({ runway, site }) {
   if (!runway) return null;
-  const tone = runway.emergent_key_configured ? "#00e676" : "#ff1744";
+  const tone = runway.emergent_key_configured ? '#00e676' : '#ff1744';
   const kidsUsd = site?.totals?.kids_fund_usd ?? 0;
   return (
-    <div data-testid="storefront-runway-card" className="bg-[#111827] border border-[#2a3a52] rounded-lg px-5 py-3 min-w-[260px]">
+    <div
+      data-testid="storefront-runway-card"
+      className="bg-[#111827] border border-[#2a3a52] rounded-lg px-5 py-3 min-w-[260px]"
+    >
       <div className="flex items-center gap-2 mb-2">
         <span className="h-1.5 w-1.5 rounded-full" style={{ background: tone, boxShadow: `0 0 8px ${tone}` }} />
-        <span className="text-[9px] tracking-[0.25em] uppercase font-bold" style={{ color: tone }}>{runway.compute_tier}</span>
+        <span className="text-[9px] tracking-[0.25em] uppercase font-bold" style={{ color: tone }}>
+          {runway.compute_tier}
+        </span>
       </div>
       <div className="grid grid-cols-2 gap-3 text-xs">
-        <Cell label="default model" value={`${runway.default_bridge.provider}/${runway.default_bridge.model.replace("gemini-", "")}`} />
+        <Cell
+          label="default model"
+          value={`${runway.default_bridge.provider}/${runway.default_bridge.model.replace('gemini-', '')}`}
+        />
         <Cell label="runway" value={`${runway.runway_days}d`} />
         <Cell label="committed" value={`$${Number(runway.committed_usd).toFixed(2)}`} />
         <Cell label="kids fund" value={`$${Number(kidsUsd).toFixed(2)}`} />
@@ -149,11 +166,17 @@ function Cell({ label, value }) {
 
 function EmptyCatalogue({ admin, onSeed, busy }) {
   return (
-    <div data-testid="storefront-empty" className="border border-dashed border-[#2a3a52] rounded-lg px-8 py-12 text-center">
+    <div
+      data-testid="storefront-empty"
+      className="border border-dashed border-[#2a3a52] rounded-lg px-8 py-12 text-center"
+    >
       <Sprout size={28} className="mx-auto text-[#00e676] mb-3" />
       <h2 className="text-lg font-bold mb-2">Honest empty state · no SKUs yet</h2>
       <p className="text-sm text-[#6b82a6] max-w-md mx-auto mb-5">
-        No fabricated products. {admin ? "Seed the 4 starter SKUs and paste real Square checkout URLs from your dashboard." : "Sign in as admin to seed starter SKUs."}
+        No fabricated products.{' '}
+        {admin
+          ? 'Seed the 4 starter SKUs and paste real Square checkout URLs from your dashboard.'
+          : 'Sign in as admin to seed starter SKUs.'}
       </p>
       {admin && (
         <button
@@ -170,12 +193,15 @@ function EmptyCatalogue({ admin, onSeed, busy }) {
 }
 
 function ProductCard({ p, admin, onDelete }) {
-  const url = p.square_checkout_url || "";
-  const placeholderUrl = url.includes("SET-THIS-IN-");
-  const processorLabel = "buy via Square";
-  const accentClasses = "bg-[#00d4ff]/15 border border-[#00d4ff]/40 text-[#00d4ff] hover:bg-[#00d4ff]/25";
+  const url = p.square_checkout_url || '';
+  const placeholderUrl = url.includes('SET-THIS-IN-');
+  const processorLabel = 'buy via Square';
+  const accentClasses = 'bg-[#00d4ff]/15 border border-[#00d4ff]/40 text-[#00d4ff] hover:bg-[#00d4ff]/25';
   return (
-    <div data-testid={`storefront-product-${p.id}`} className="bg-[#111827] border border-[#2a3a52] rounded-lg overflow-hidden flex flex-col hover:border-[#00d4ff]/40 transition-colors">
+    <div
+      data-testid={`storefront-product-${p.id}`}
+      className="bg-[#111827] border border-[#2a3a52] rounded-lg overflow-hidden flex flex-col hover:border-[#00d4ff]/40 transition-colors"
+    >
       {p.image_data_uri ? (
         <img src={p.image_data_uri} alt={p.title} className="w-full h-40 object-cover" />
       ) : (
@@ -191,17 +217,19 @@ function ProductCard({ p, admin, onDelete }) {
         <p className="text-xs text-[#6b82a6] flex-1">{p.description}</p>
         {p.sku && <div className="text-[9px] tracking-widest uppercase text-[#4a5568]">sku · {p.sku}</div>}
         {placeholderUrl && admin && (
-          <div className="text-[9px] text-[#ffb300] italic">⚠ checkout URL is a placeholder — paste real Square link in admin edit.</div>
+          <div className="text-[9px] text-[#ffb300] italic">
+            ⚠ checkout URL is a placeholder — paste real Square link in admin edit.
+          </div>
         )}
         <div className="flex items-center gap-2 mt-2">
           <a
             data-testid={`storefront-buy-${p.id}`}
-            href={p.square_checkout_url || "#"}
+            href={p.square_checkout_url || '#'}
             target="_blank"
             rel="noopener noreferrer"
             className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs font-bold uppercase tracking-widest transition-colors ${
               placeholderUrl
-                ? "bg-[#2a3a52]/40 border border-[#2a3a52] text-[#4a5568] cursor-not-allowed"
+                ? 'bg-[#2a3a52]/40 border border-[#2a3a52] text-[#4a5568] cursor-not-allowed'
                 : accentClasses
             }`}
             onClick={(e) => placeholderUrl && e.preventDefault()}

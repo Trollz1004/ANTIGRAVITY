@@ -15,9 +15,9 @@ Long-running orchestrations with checkpointing and state management.
 const df = require('durable-functions');
 
 module.exports = df.orchestrator(function* (context) {
-    const result1 = yield context.df.callActivity('Step1');
-    const result2 = yield context.df.callActivity('Step2', result1);
-    return result2;
+  const result1 = yield context.df.callActivity('Step1');
+  const result2 = yield context.df.callActivity('Step2', result1);
+  return result2;
 });
 ```
 
@@ -25,7 +25,7 @@ module.exports = df.orchestrator(function* (context) {
 
 ```javascript
 module.exports = async function (context, input) {
-    return `Processed: ${input}`;
+  return `Processed: ${input}`;
 };
 ```
 
@@ -35,8 +35,8 @@ module.exports = async function (context, input) {
 const df = require('durable-functions');
 
 module.exports = async function (context, req) {
-    const client = df.getClient(context);
-    const instanceId = await client.startNew('OrchestratorFunction', undefined, req.body);
-    return client.createCheckStatusResponse(context.bindingData.req, instanceId);
+  const client = df.getClient(context);
+  const instanceId = await client.startNew('OrchestratorFunction', undefined, req.body);
+  return client.createCheckStatusResponse(context.bindingData.req, instanceId);
 };
 ```

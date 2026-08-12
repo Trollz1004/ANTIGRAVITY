@@ -31,21 +31,22 @@ Get-Content logs\watchdog-silent-$(Get-Date -Format 'yyyyMMdd').log
 
 ### All Monitored Services on T5500
 
-| Service | Port | Role | Auto-Restart | Monitor Only |
-|---------|------|------|--------------|--------------|
-| **OmniRoute** | :20128 | Gateway + load balancer + credentials | ✓ Yes | - |
-| **Mission Control** | :3151 | Agent orchestrator + execution | ✓ Yes | - |
-| **DateApp Frontend** | :3200 | Production youandinotai.com UI | ✓ Yes | - |
-| **DateApp Backend** | :8000 | FastAPI services + data layer | - | ✓ Log only |
-| **Paperclip** | :3120 | Agent runtime + adapters | - | ✓ Log only |
-| **Hermes** | :9119 | Agent dashboard + chat | - | ✓ Log only |
-| **OpenClaw** | :18789 | ClawX gateway + support | - | ✓ Log only |
-| **Ollama** | :11434 | Local model inference | - | ✓ Log only |
-| **FCC** | :8082 | Claude MCP proxy + admin UI | - | ✓ Log only |
+| Service              | Port   | Role                                  | Auto-Restart | Monitor Only |
+| -------------------- | ------ | ------------------------------------- | ------------ | ------------ |
+| **OmniRoute**        | :20128 | Gateway + load balancer + credentials | ✓ Yes        | -            |
+| **Mission Control**  | :3151  | Agent orchestrator + execution        | ✓ Yes        | -            |
+| **DateApp Frontend** | :3200  | Production youandinotai.com UI        | ✓ Yes        | -            |
+| **DateApp Backend**  | :8000  | FastAPI services + data layer         | -            | ✓ Log only   |
+| **Paperclip**        | :3120  | Agent runtime + adapters              | -            | ✓ Log only   |
+| **Hermes**           | :9119  | Agent dashboard + chat                | -            | ✓ Log only   |
+| **OpenClaw**         | :18789 | ClawX gateway + support               | -            | ✓ Log only   |
+| **Ollama**           | :11434 | Local model inference                 | -            | ✓ Log only   |
+| **FCC**              | :8082  | Claude MCP proxy + admin UI           | -            | ✓ Log only   |
 
 ### Silent Watchdog Loop
 
 Every 30 seconds (pure background):
+
 1. Test TCP connections to all 9 ports (:20128, :3151, :3200, :8000, :3120, :9119, :18789, :11434, :8082)
 2. **Auto-restart only:** OmniRoute (:20128), Mission Control (:3151), DateApp (:3200)
 3. **Monitor-only (log, no restart):** DateApp Backend, Paperclip, Hermes, OpenClaw, Ollama, FCC
@@ -64,6 +65,7 @@ Every 30 seconds (pure background):
 Serves `F:\ANTIGRAVITY\graphify-out\graph.html` with CORS headers.
 
 **In Mission Control UI:**
+
 - Add a "Repository" tab pointing to `/graphify`
 - Displays repo dependency graph in real-time
 
@@ -74,6 +76,7 @@ Serves `F:\ANTIGRAVITY\graphify-out\graph.html` with CORS headers.
 **Route:** Static mount at `/graphify`
 
 OmniRoute config (already wired):
+
 ```yaml
 routes:
   /graphify:
@@ -95,6 +98,7 @@ powershell -ExecutionPolicy Bypass -File F:\ANTIGRAVITY\scripts\register-silent-
 ```
 
 This:
+
 - ✓ Removes any old watchdog tasks
 - ✓ Registers `ANTIGRAVITY-Silent-Watchdog-T5500` as SYSTEM (highest privilege)
 - ✓ Triggers: At Startup + At Logon
@@ -257,12 +261,14 @@ Stop-Process -Id $proc.OwningProcess -Force
 ## Deployment Timeline
 
 **Before Reboot:**
+
 - F:\ repo cleaned and ready (✓ done)
 - Graphify endpoints wired (✓ done)
 - Silent watchdog script created (✓ done)
 - Services tested manually (⏳ Josh to verify)
 
 **After Reboot:**
+
 1. Windows startup completes
 2. Scheduled task fires silently (SYSTEM user, hidden window)
 3. Watchdog checks all ports → detects all offline
@@ -273,6 +279,7 @@ Stop-Process -Id $proc.OwningProcess -Force
 8. Continues monitoring for 8 hours
 
 **Expected Timeline:**
+
 - T+0s: Windows startup
 - T+10s: Watchdog process starts (completely invisible)
 - T+15s: OmniRoute begins startup

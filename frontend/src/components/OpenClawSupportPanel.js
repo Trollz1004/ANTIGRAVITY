@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Copy, Check } from "lucide-react";
+import React, { useEffect, useState } from 'react';
+import { Copy, Check } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
-const SUPPORT_URL = "http://127.0.0.1:18789";
-const CMD_HEALTH = "curl http://127.0.0.1:18789/healthz";
-const CMD_TAIL = "powershell -NoProfile -Command \"Get-Content E:/ANTIGRAVITY\\logs\\openclaw-support.log -Tail 80 -Wait\"";
+const SUPPORT_URL = 'http://127.0.0.1:18789';
+const CMD_HEALTH = 'curl http://127.0.0.1:18789/healthz';
+const CMD_TAIL =
+  'powershell -NoProfile -Command "Get-Content E:/ANTIGRAVITY\\logs\\openclaw-support.log -Tail 80 -Wait"';
 
 export function OpenClawSupportPanel() {
-  const [health, setHealth] = useState({ status: "loading", data: null });
+  const [health, setHealth] = useState({ status: 'loading', data: null });
   const [copied, setCopied] = useState(null);
 
   const fetchHealth = async () => {
@@ -17,9 +18,9 @@ export function OpenClawSupportPanel() {
     try {
       const r = await fetch(`${API}/openclaw/health`, { signal: ctrl.signal });
       const data = await r.json();
-      setHealth({ status: r.ok ? "ok" : "down", data });
+      setHealth({ status: r.ok ? 'ok' : 'down', data });
     } catch (e) {
-      setHealth({ status: e.name === "AbortError" ? "timeout" : "down", data: null });
+      setHealth({ status: e.name === 'AbortError' ? 'timeout' : 'down', data: null });
     } finally {
       clearTimeout(timer);
     }
@@ -40,10 +41,13 @@ export function OpenClawSupportPanel() {
   };
 
   const dot =
-    health.status === "ok" ? "bg-[#00e676] shadow-[0_0_6px_#00e676]" :
-    health.status === "timeout" ? "bg-[#ffb300] shadow-[0_0_6px_#ffb300]" :
-    health.status === "loading" ? "bg-[#6b82a6]" :
-    "bg-[#ff1744] shadow-[0_0_6px_#ff1744] animate-pulse";
+    health.status === 'ok'
+      ? 'bg-[#00e676] shadow-[0_0_6px_#00e676]'
+      : health.status === 'timeout'
+        ? 'bg-[#ffb300] shadow-[0_0_6px_#ffb300]'
+        : health.status === 'loading'
+          ? 'bg-[#6b82a6]'
+          : 'bg-[#ff1744] shadow-[0_0_6px_#ff1744] animate-pulse';
 
   return (
     <div data-testid="openclaw-support-panel" className="bg-[#1a2332] border border-[#2a3a52] rounded-md">
@@ -80,39 +84,51 @@ export function OpenClawSupportPanel() {
           </div>
         ) : (
           <div className="text-[10px] text-[#4a5568] italic">
-            {health.status === "timeout" ? "TIMEOUT - retry" : "endpoint unreachable - retry"}
+            {health.status === 'timeout' ? 'TIMEOUT - retry' : 'endpoint unreachable - retry'}
           </div>
         )}
 
         <div className="space-y-1.5">
           <button
             data-testid="openclaw-copy-health"
-            onClick={() => copy("health", CMD_HEALTH)}
+            onClick={() => copy('health', CMD_HEALTH)}
             className="w-full flex items-center justify-between bg-[#0a0f1a] border border-[#2a3a52] hover:border-[#ffb300] rounded px-2.5 py-2 transition-all group"
           >
             <span className="flex items-center gap-2">
               <span className="text-[8px] tracking-widest uppercase text-[#ffb300]">copy</span>
               <code className="mono text-[10px] text-[#e8f0ff] truncate">health check</code>
             </span>
-            {copied === "health" ? <Check size={12} className="text-[#00e676]" /> : <Copy size={12} className="text-[#6b82a6] group-hover:text-[#ffb300]" />}
+            {copied === 'health' ? (
+              <Check size={12} className="text-[#00e676]" />
+            ) : (
+              <Copy size={12} className="text-[#6b82a6] group-hover:text-[#ffb300]" />
+            )}
           </button>
 
           <button
             data-testid="openclaw-copy-tail"
-            onClick={() => copy("tail", CMD_TAIL)}
+            onClick={() => copy('tail', CMD_TAIL)}
             className="w-full flex items-center justify-between bg-[#0a0f1a] border border-[#2a3a52] hover:border-[#ffb300] rounded px-2.5 py-2 transition-all group"
           >
             <span className="flex items-center gap-2">
               <span className="text-[8px] tracking-widest uppercase text-[#ffb300]">copy</span>
               <code className="mono text-[10px] text-[#e8f0ff] truncate">tail support log</code>
             </span>
-            {copied === "tail" ? <Check size={12} className="text-[#00e676]" /> : <Copy size={12} className="text-[#6b82a6] group-hover:text-[#ffb300]" />}
+            {copied === 'tail' ? (
+              <Check size={12} className="text-[#00e676]" />
+            ) : (
+              <Copy size={12} className="text-[#6b82a6] group-hover:text-[#ffb300]" />
+            )}
           </button>
         </div>
 
         <div className="text-[9px] mono text-[#6b82a6] space-y-0.5 border-t border-[#2a3a52] pt-2">
-          <div><span className="text-[#4a5568] uppercase tracking-widest text-[8px]">gateway</span> - {SUPPORT_URL}</div>
-          <div><span className="text-[#4a5568] uppercase tracking-widest text-[8px]">mode</span> - customer service support</div>
+          <div>
+            <span className="text-[#4a5568] uppercase tracking-widest text-[8px]">gateway</span> - {SUPPORT_URL}
+          </div>
+          <div>
+            <span className="text-[#4a5568] uppercase tracking-widest text-[8px]">mode</span> - customer service support
+          </div>
         </div>
       </div>
     </div>

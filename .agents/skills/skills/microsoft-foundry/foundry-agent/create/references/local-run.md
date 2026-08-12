@@ -3,20 +3,24 @@
 Use this when iterating on a hosted agent before deploying.
 
 > **Prerequisite:** Local run does NOT require `azd provision` or any deployed Azure infrastructure. The agent runs on your machine and calls the Foundry model endpoint directly using your local credentials (`DefaultAzureCredential` — falls back to `az login` / VS Code identity). You only need a `.env` file in the agent directory with:
+>
 > ```env
 > FOUNDRY_PROJECT_ENDPOINT=https://<account>.services.ai.azure.com/api/projects/<project>
 > AZURE_AI_MODEL_DEPLOYMENT_NAME=<model-deployment-name>
 > ```
+>
 > If you already ran `azd provision`, extract these from `azd env get-values`.
 >
 > 🚦 **If no project endpoint is configured (not in the message, `azd env`, or `.env`) and the user hasn't asked to create one, stop and ask them to pick an existing project or confirm creating a new one — don't silently select or `azd provision` one.** Once they choose, follow [deploy.md Step 2](../../deploy/deploy.md#step-2----provision-azure-resources-one-time-per-env) to provision or resolve the project, then return here for local iteration before deploying the agent.
 >
 > **Critical: keep `.env` and `azd env` in sync.** `azd ai agent run` injects the active `azd env` values into the agent process before Python loads `.env`. Many samples use `load_dotenv(override=False)`, so an existing process environment value wins over `.env`. If you change the project endpoint or model deployment, update both `.env` and `azd env`:
+>
 > ```bash
 > azd env set FOUNDRY_PROJECT_ENDPOINT "https://<account>.services.ai.azure.com/api/projects/<project>"
 > azd env set AZURE_AI_MODEL_DEPLOYMENT_NAME "<model-deployment-name>"
 > azd env get-values
 > ```
+>
 > A stale `AZURE_AI_MODEL_DEPLOYMENT_NAME` in `azd env` can make local run call the wrong deployment even when `.env` is correct, commonly surfacing as a Foundry responses API `404 Not Found`.
 
 ## Prepare the local environment
@@ -57,11 +61,11 @@ Do **not** start `azd ai agent run` as a detached process that you cannot monito
 
 ## Useful flags
 
-| Flag | Purpose |
-|------|---------|
-| `--port <n>` / `-p <n>` | Override the listen port. Useful when 8088 is taken. |
+| Flag                                     | Purpose                                                                            |
+| ---------------------------------------- | ---------------------------------------------------------------------------------- |
+| `--port <n>` / `-p <n>`                  | Override the listen port. Useful when 8088 is taken.                               |
 | `--start-command "<cmd>"` / `-c "<cmd>"` | Override `azure.yaml` and auto-detect. Example: `--start-command "python app.py"`. |
-| `--no-inspector` | Skip opening Agent Inspector. Use in CI / SSH. |
+| `--no-inspector`                         | Skip opening Agent Inspector. Use in CI / SSH.                                     |
 
 Pass the service name when there are multiple `ai.agent` services:
 
@@ -87,7 +91,7 @@ services:
     language: python
     host: azure.ai.agent
     config:
-      startupCommand: "uvicorn app:app --host 0.0.0.0 --port 4001"
+      startupCommand: 'uvicorn app:app --host 0.0.0.0 --port 4001'
 ```
 
 If detection fails and no override is set, `run` errors with the project dir and asks for `--start-command` or `startupCommand`.
@@ -113,12 +117,12 @@ Run one representative local invocation before deploying. If the local invocatio
 
 Other useful flags:
 
-| Flag | Purpose |
-|------|---------|
-| `--protocol responses` (default) / `--protocol invocations` | Wire format your agent speaks. |
-| `--input-file request.json` / `-f request.json` | Send a file body instead of a string message. |
-| `--new-session` | Drop the saved local session and start fresh. |
-| `--port <n>` | Match the port you started `run` with. |
+| Flag                                                        | Purpose                                       |
+| ----------------------------------------------------------- | --------------------------------------------- |
+| `--protocol responses` (default) / `--protocol invocations` | Wire format your agent speaks.                |
+| `--input-file request.json` / `-f request.json`             | Send a file body instead of a string message. |
+| `--new-session`                                             | Drop the saved local session and start fresh. |
+| `--port <n>`                                                | Match the port you started `run` with.        |
 
 After the local invocation completes, stop the `azd ai agent run` process you started before moving on.
 
@@ -136,11 +140,11 @@ Next step -> [deploy/deploy.md](../../deploy/deploy.md).
 
 ## Common failures
 
-| Symptom | Likely cause | Fix |
-|---------|--------------|-----|
-| `could not connect to localhost:<port>` | `run` not started, or wrong port | Start `azd ai agent run`; pass `--port` to `invoke --local` if non-default. |
-| `could not detect project type in <dir>` | Missing project marker file | Set `startupCommand` in `azure.yaml` or pass `--start-command`. |
-| `cannot use --local with a named agent` | Named-agent invoke against localhost | Drop the name; only one local agent at a time. |
-| `cannot use --version with --local` | `--version` is remote-only | Drop `--version`, or remove `--local` to hit the deployed agent. |
-| Inspector never opens | Headless env, or extension install failed | Pass `--no-inspector`, or run `azd extension install azure.ai.inspector`. |
-| Auth / connection errors against Azure services | Local credentials not wired | Expected -- `DefaultAzureCredential` falls back to your `az login` / VS Code identity. Use `azd auth login` if needed. |
+| Symptom                                         | Likely cause                              | Fix                                                                                                                    |
+| ----------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `could not connect to localhost:<port>`         | `run` not started, or wrong port          | Start `azd ai agent run`; pass `--port` to `invoke --local` if non-default.                                            |
+| `could not detect project type in <dir>`        | Missing project marker file               | Set `startupCommand` in `azure.yaml` or pass `--start-command`.                                                        |
+| `cannot use --local with a named agent`         | Named-agent invoke against localhost      | Drop the name; only one local agent at a time.                                                                         |
+| `cannot use --version with --local`             | `--version` is remote-only                | Drop `--version`, or remove `--local` to hit the deployed agent.                                                       |
+| Inspector never opens                           | Headless env, or extension install failed | Pass `--no-inspector`, or run `azd extension install azure.ai.inspector`.                                              |
+| Auth / connection errors against Azure services | Local credentials not wired               | Expected -- `DefaultAzureCredential` falls back to your `az login` / VS Code identity. Use `azd auth login` if needed. |

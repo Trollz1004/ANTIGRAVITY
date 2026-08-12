@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { ShieldCheck, Lock, AlertTriangle, KeyRound } from "lucide-react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { ShieldCheck, Lock, AlertTriangle, KeyRound } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -16,7 +16,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
  */
 export function SignInGate({ children }) {
   const [state, setState] = useState({ loading: true });
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [busy, setBusy] = useState(false);
 
@@ -29,32 +29,42 @@ export function SignInGate({ children }) {
     }
   };
 
-  useEffect(() => { refresh(); }, []);
+  useEffect(() => {
+    refresh();
+  }, []);
 
   const signIn = async (e) => {
     e?.preventDefault();
-    setBusy(true); setError(null);
+    setBusy(true);
+    setError(null);
     try {
       await axios.post(`${API}/auth/login`, { password }, { withCredentials: true });
-      setPassword("");
+      setPassword('');
       await refresh();
     } catch (err) {
       setError(err.response?.data?.detail || err.message);
-    } finally { setBusy(false); }
+    } finally {
+      setBusy(false);
+    }
   };
 
   const signOut = async () => {
-    try { await axios.post(`${API}/auth/logout`, {}, { withCredentials: true }); }
-    catch (err) {
+    try {
+      await axios.post(`${API}/auth/logout`, {}, { withCredentials: true });
+    } catch (err) {
       // logout endpoint failed — still clear local state via refresh()
       // eslint-disable-next-line no-console
-      console.warn("signout request failed:", err?.message || err);
+      console.warn('signout request failed:', err?.message || err);
     }
     refresh();
   };
 
   if (state.loading) {
-    return <div className="h-screen flex items-center justify-center bg-[#0a0f1a] text-[#6b82a6] text-xs tracking-widest uppercase">checking auth…</div>;
+    return (
+      <div className="h-screen flex items-center justify-center bg-[#0a0f1a] text-[#6b82a6] text-xs tracking-widest uppercase">
+        checking auth…
+      </div>
+    );
   }
 
   // Configured + signed in → render the app, with a small sign-out chip pinned.
@@ -94,23 +104,32 @@ export function SignInGate({ children }) {
               <span className="text-[8px] tracking-[0.25em] uppercase text-[#6b82a6] mb-1 block">Admin password</span>
               <input
                 data-testid="signin-password"
-                type="password" autoFocus required
-                value={password} onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                autoFocus
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="mono w-full bg-[#0a0f1a] border border-[#2a3a52] rounded px-3 py-2 text-sm text-[#e8f0ff] focus:border-[#fb923c] focus:ring-1 focus:ring-[#fb923c]/20 outline-none"
               />
             </label>
-            {error && <div data-testid="signin-error" className="mono text-[11px] text-[#ff1744]">{error}</div>}
+            {error && (
+              <div data-testid="signin-error" className="mono text-[11px] text-[#ff1744]">
+                {error}
+              </div>
+            )}
             <button
               data-testid="signin-submit"
-              type="submit" disabled={busy || !password}
+              type="submit"
+              disabled={busy || !password}
               className="w-full py-2.5 rounded-md bg-[#fb923c] text-[#0a0f1a] text-xs font-bold uppercase tracking-[0.3em] disabled:opacity-30 hover:bg-[#fbb05a] transition-all flex items-center justify-center gap-2"
             >
-              <KeyRound size={12} /> {busy ? "signing in…" : "Sign in"}
+              <KeyRound size={12} /> {busy ? 'signing in…' : 'Sign in'}
             </button>
           </form>
           <div className="mt-4 pt-4 border-t border-[#2a3a52] text-[9px] mono text-[#6b82a6] leading-relaxed">
             8-hour HTTP-only session cookie. Sole authority: Joshua Coleman.
-            <br />#UntilNoKidInNeed · no trust-me-bro doctrine.
+            <br />
+            #UntilNoKidInNeed · no trust-me-bro doctrine.
           </div>
         </div>
       </div>
@@ -129,13 +148,13 @@ export function SignInGate({ children }) {
           </div>
         </div>
         <p className="text-sm text-[#e8f0ff] leading-relaxed mb-4">
-          Per directive ("local-deploy admin dashboards must require sign-in"),
-          Mission Control should be password-gated. Currently <span className="mono text-[#ffb300]">
-          {(state.missing_env || []).join(", ")}</span> are blank in
+          Per directive ("local-deploy admin dashboards must require sign-in"), Mission Control should be
+          password-gated. Currently <span className="mono text-[#ffb300]">{(state.missing_env || []).join(', ')}</span>{' '}
+          are blank in
           <span className="mono text-[#00d4ff]"> /app/backend/.env</span>.
         </p>
         <div className="bg-[#0a0f1a] border border-[#2a3a52] rounded p-3 mono text-[10px] text-[#6b82a6] mb-4 whitespace-pre">
-{`ADMIN_PASSWORD=<set a strong one>
+          {`ADMIN_PASSWORD=<set a strong one>
 ADMIN_SESSION_SECRET=<openssl rand -hex 32>`}
         </div>
         <button

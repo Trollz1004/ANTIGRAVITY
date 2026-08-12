@@ -18,6 +18,7 @@ python services/mission-mcp/scripts/seed-income-engine.py
 ```
 
 **40 Tasks to Create:**
+
 - 10 directory submissions (Product Hunt, BetaList, etc.)
 - 30 content calendar days (Reddit, TikTok, Discord, social actions)
 
@@ -26,9 +27,11 @@ python services/mission-mcp/scripts/seed-income-engine.py
 ## Action 2: Launch Content Calendar Day 1 (Ready Now)
 
 ### Platform: Reddit r/datingapps
+
 **Hook Strategy:** "YEARS of dealing with bots on dating apps and NOW I find one that actually verifies humans"
 
 ### Draft 1 - Casual Comment Style
+
 ```
 ### Draft #1
 **Platform:** Reddit r/datingapps
@@ -46,6 +49,7 @@ but worth a look if you're tired of the usual spam.
 ```
 
 ### Draft 2 - Direct Experience
+
 ```
 ### Draft #2
 **Platform:** Reddit r/datingapps
@@ -68,14 +72,17 @@ Still building out features but the core problem they're solving is real.
 ## Action 3: Create TikTok Faceless Content (Ready Now)
 
 ### Hook Template: "Why is nobody talking about bot-free dating?"
+
 **Format:** 6-second loop with app screenshot
 
 ### Video Script Structure
+
 1. **Seconds 1-2:** Text overlay: "3 years of dating apps and..."
 2. **Seconds 3-4:** Text overlay: "...I'm only NOW finding one with real people"
 3. **Seconds 5-6:** App screenshot + subtle logo reveal
 
 ### Caption Bank Entry
+
 ```
 Why is nobody talking about bot-free dating?? 😭
 
@@ -90,6 +97,7 @@ verifies profiles before matching. Not sponsored, just relieved.
 ## Action 4: Directory Submission - Product Hunt (Ready Now)
 
 ### Product Hunt Submission Draft
+
 ```
 ### Submission Draft — Product Hunt
 **Tagline:** AI-powered dating with real human verification
@@ -116,6 +124,7 @@ but the core problem is solved. feedback welcome.
 ## Action 5: Create Ambassador Recruitment Angle (Ready Now)
 
 ### Discord Server Introduction Template
+
 ```
 Hey everyone - been working on a dating app that actually verifies people
 are real before they can match/message. youandinotai.com - built it because
@@ -129,13 +138,13 @@ Happy to answer questions about the tech or the problem it solves.
 
 ## Execution Priority
 
-| Priority | Action | Time Required | Owner |
-|----------|--------|---------------|-------|
-| 1 | Seed mission-mcp task board | 5 min (dry-run) + 5 min (commit) | CEO |
-| 2 | Write Product Hunt submission | 15 min | CEO |
-| 3 | Draft Day 1-3 Reddit content | 20 min | Content Assistant |
-| 4 | Create 5 TikTok accounts | 30 min | CEO |
-| 5 | Post 3x/day per account (Days 1-7) | 15 min/day | CEO |
+| Priority | Action                             | Time Required                    | Owner             |
+| -------- | ---------------------------------- | -------------------------------- | ----------------- |
+| 1        | Seed mission-mcp task board        | 5 min (dry-run) + 5 min (commit) | CEO               |
+| 2        | Write Product Hunt submission      | 15 min                           | CEO               |
+| 3        | Draft Day 1-3 Reddit content       | 20 min                           | Content Assistant |
+| 4        | Create 5 TikTok accounts           | 30 min                           | CEO               |
+| 5        | Post 3x/day per account (Days 1-7) | 15 min/day                       | CEO               |
 
 ---
 
@@ -151,6 +160,7 @@ Happy to answer questions about the tech or the problem it solves.
 ## Mission Alignment
 
 This work directly serves the #UntilNoKidInNeed mission through:
+
 1. **Product revenue** → youandinotai.com memberships
 2. **10% reserve** → contractual revenue payout to qualifying operations
 3. **No public funding claims** → revenue-first, mission-second positioning
@@ -165,6 +175,7 @@ This work directly serves the #UntilNoKidInNeed mission through:
 4. **Submit to Product Hunt** this week
 
 Joshua - which action should I prioritize? Options:
+
 - **A**: Activate mission-mcp and seed all 40 tasks
 - **B**: Create Product Hunt submission ready for immediate launch
 - **C**: Draft 7 days of TikTok content for faceless account testing

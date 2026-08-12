@@ -86,4 +86,3 @@ If you want a local process-spawned MCP entry, add a local `.mcp.json` entry sim
 ```
 
 Keep that file local. The repo ignores `.mcp.json`.
-

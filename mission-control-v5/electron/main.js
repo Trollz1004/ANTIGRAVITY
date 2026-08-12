@@ -24,12 +24,14 @@ let win = null;
 let browser = null;
 
 function history(wc) {
-  return wc.navigationHistory || {
-    canGoBack: () => wc.canGoBack(),
-    goBack: () => wc.goBack(),
-    canGoForward: () => wc.canGoForward(),
-    goForward: () => wc.goForward(),
-  };
+  return (
+    wc.navigationHistory || {
+      canGoBack: () => wc.canGoBack(),
+      goBack: () => wc.goBack(),
+      canGoForward: () => wc.canGoForward(),
+      goForward: () => wc.goForward(),
+    }
+  );
 }
 
 function pushState() {

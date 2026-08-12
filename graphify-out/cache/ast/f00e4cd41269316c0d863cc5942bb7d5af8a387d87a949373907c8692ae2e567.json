@@ -1,1 +1,409 @@
-{"nodes": [{"id": "app_frontend_src_app_js", "label": "App.js", "file_type": "code", "source_file": "/app/frontend/src/App.js", "source_location": "L1"}, {"id": "src_app_app", "label": "App()", "file_type": "code", "source_file": "/app/frontend/src/App.js", "source_location": "L20"}], "edges": [{"source": "app_frontend_src_app_js", "target": "react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L1", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_components_agegate", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L2", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "components_agegate_agegate", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L2", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_components_titlebar", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L3", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "components_titlebar_titlebar", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L3", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_components_sidebar", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L4", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "components_sidebar_sidebar", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L4", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_components_taskcommander", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L5", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "components_taskcommander_taskcommander", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L5", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_components_floatingguide", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L6", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "components_floatingguide_floatingguide", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L6", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_components_commandpalette", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L7", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "components_commandpalette_commandpalette", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L7", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_contexts_chatcontext", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L8", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "contexts_chatcontext_chatprovider", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L8", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_modes_chatmode", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L9", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "modes_chatmode_chatmode", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L9", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_modes_codemode", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L10", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "modes_codemode_codemode", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L10", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_modes_createmode", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L11", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "modes_createmode_createmode", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L11", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_modes_researchmode", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L12", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "modes_researchmode_researchmode", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L12", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_modes_missionmode", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L13", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "modes_missionmode_missionmode", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L13", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_modes_roundtablemode", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L14", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "modes_roundtablemode_roundtablemode", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L14", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_modes_tasksmode", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L15", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "modes_tasksmode_tasksmode", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L15", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_modes_ledgermode", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L16", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "modes_ledgermode_ledgermode", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L16", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_components_missionribbon", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L17", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "components_missionribbon_missionribbon", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L17", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "app_frontend_src_components_settingspanel", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L18", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "components_settingspanel_settingspanel", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L18", "weight": 1.0}, {"source": "app_frontend_src_app_js", "target": "src_app_app", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/App.js", "source_location": "L20", "weight": 1.0}], "raw_calls": [{"caller_nid": "src_app_app", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/App.js", "source_location": "L21"}, {"caller_nid": "src_app_app", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/App.js", "source_location": "L22"}, {"caller_nid": "src_app_app", "callee": "useEffect", "is_member_call": true, "source_file": "/app/frontend/src/App.js", "source_location": "L26"}, {"caller_nid": "src_app_app", "callee": "renderMode", "is_member_call": false, "source_file": "/app/frontend/src/App.js", "source_location": "L58"}]}
+{
+  "nodes": [
+    {
+      "id": "app_frontend_src_app_js",
+      "label": "App.js",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_app_app",
+      "label": "App()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L20"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_components_agegate",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "components_agegate_agegate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_components_titlebar",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "components_titlebar_titlebar",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_components_sidebar",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "components_sidebar_sidebar",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_components_taskcommander",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "components_taskcommander_taskcommander",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_components_floatingguide",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "components_floatingguide_floatingguide",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_components_commandpalette",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "components_commandpalette_commandpalette",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_contexts_chatcontext",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "contexts_chatcontext_chatprovider",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_modes_chatmode",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "modes_chatmode_chatmode",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_modes_codemode",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "modes_codemode_codemode",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_modes_createmode",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "modes_createmode_createmode",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_modes_researchmode",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "modes_researchmode_researchmode",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_modes_missionmode",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "modes_missionmode_missionmode",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_modes_roundtablemode",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "modes_roundtablemode_roundtablemode",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_modes_tasksmode",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "modes_tasksmode_tasksmode",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_modes_ledgermode",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "modes_ledgermode_ledgermode",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_components_missionribbon",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "components_missionribbon_missionribbon",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "app_frontend_src_components_settingspanel",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "components_settingspanel_settingspanel",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_app_js",
+      "target": "src_app_app",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L20",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "src_app_app",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L21"
+    },
+    {
+      "caller_nid": "src_app_app",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "src_app_app",
+      "callee": "useEffect",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L26"
+    },
+    {
+      "caller_nid": "src_app_app",
+      "callee": "renderMode",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/App.js",
+      "source_location": "L58"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Network, RefreshCw, AlertTriangle, CheckCircle2, Server, BookOpen } from "lucide-react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Network, RefreshCw, AlertTriangle, CheckCircle2, Server, BookOpen } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -23,31 +23,43 @@ export function GraphifyMode() {
         axios.get(`${API}/node/identity`).then((r) => r.data),
         axios.get(`${API}/doctrine`).then((r) => r.data),
       ]);
-      setStatus(s); setIdentity(i); setDoctrine(d);
-    } catch (e) { setError(e.message); }
+      setStatus(s);
+      setIdentity(i);
+      setDoctrine(d);
+    } catch (e) {
+      setError(e.message);
+    }
   };
 
   useEffect(() => {
     refresh();
-    const iv = setInterval(() => { if (!document.hidden) refresh(); }, 20_000);
+    const iv = setInterval(() => {
+      if (!document.hidden) refresh();
+    }, 20_000);
     return () => clearInterval(iv);
   }, []);
 
   const regraph = async () => {
-    setBusy(true); setError(null);
+    setBusy(true);
+    setError(null);
     try {
       await axios.post(`${API}/graphify/regraph`, {}, { timeout: 300_000 });
       await refresh();
     } catch (e) {
       setError(e.response?.data?.detail || e.message);
-    } finally { setBusy(false); }
+    } finally {
+      setBusy(false);
+    }
   };
 
   const summary = status?.summary || {};
   const stale = status?.staleness?.stale;
 
   return (
-    <div data-testid="graphify-mode" className="h-full bg-[#0a0f1a] text-[#e8f0ff] overflow-y-auto custom-scrollbar p-6">
+    <div
+      data-testid="graphify-mode"
+      className="h-full bg-[#0a0f1a] text-[#e8f0ff] overflow-y-auto custom-scrollbar p-6"
+    >
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center gap-3">
           <Network size={22} className="text-[#00d4ff]" />
@@ -61,8 +73,8 @@ export function GraphifyMode() {
             disabled={busy}
             className="ml-auto flex items-center gap-1.5 text-[10px] tracking-widest uppercase px-3 py-1.5 rounded bg-[#00d4ff] text-[#0a0f1a] font-bold disabled:opacity-30 hover:bg-[#33ddff] transition-all"
           >
-            <RefreshCw size={12} className={busy ? "animate-spin" : ""} />
-            {busy ? "regraphing…" : "regraph"}
+            <RefreshCw size={12} className={busy ? 'animate-spin' : ''} />
+            {busy ? 'regraphing…' : 'regraph'}
           </button>
         </div>
 
@@ -75,14 +87,14 @@ export function GraphifyMode() {
         {/* Status counters */}
         {status && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <Counter label="Nodes"        value={String(summary.node_count ?? "—")} color="#00d4ff" />
-            <Counter label="Edges"        value={String(summary.edge_count ?? "—")} color="#00e676" />
-            <Counter label="Communities"  value={String(summary.communities ?? "—")} color="#ffb300" />
+            <Counter label="Nodes" value={String(summary.node_count ?? '—')} color="#00d4ff" />
+            <Counter label="Edges" value={String(summary.edge_count ?? '—')} color="#00e676" />
+            <Counter label="Communities" value={String(summary.communities ?? '—')} color="#ffb300" />
             <Counter
               label="Freshness"
-              value={stale ? "STALE" : "FRESH"}
-              color={stale ? "#ff1744" : "#00e676"}
-              sub={stale ? `${status.staleness.stale_seconds}s of edits since rebuild` : "in sync with workspace"}
+              value={stale ? 'STALE' : 'FRESH'}
+              color={stale ? '#ff1744' : '#00e676'}
+              sub={stale ? `${status.staleness.stale_seconds}s of edits since rebuild` : 'in sync with workspace'}
             />
           </div>
         )}
@@ -104,7 +116,9 @@ export function GraphifyMode() {
                 const pct = (n / summary.node_count) * 100;
                 return (
                   <div key={k} className="flex items-center gap-2">
-                    <span className="mono text-[10px] tracking-widest uppercase text-[#6b82a6] w-32 shrink-0 truncate">{k}</span>
+                    <span className="mono text-[10px] tracking-widest uppercase text-[#6b82a6] w-32 shrink-0 truncate">
+                      {k}
+                    </span>
                     <div className="flex-1 h-2 bg-[#0a0f1a] rounded-full overflow-hidden">
                       <div className="h-full bg-[#00d4ff]" style={{ width: `${pct}%` }} />
                     </div>
@@ -122,7 +136,9 @@ export function GraphifyMode() {
             <div className="bg-[#111827] border-b border-[#2a3a52] px-3 py-2 flex items-center gap-2">
               <Server size={12} className="text-[#fb923c]" />
               <span className="text-xs font-bold tracking-wide">NODE IDENTITY</span>
-              <span className="ml-auto text-[8px] tracking-widest uppercase text-[#fb923c]">read this before assuming auth</span>
+              <span className="ml-auto text-[8px] tracking-widest uppercase text-[#fb923c]">
+                read this before assuming auth
+              </span>
             </div>
             <div className="p-4 space-y-3">
               <div className="bg-[#fb923c]/10 border border-[#fb923c]/30 rounded p-3 mono text-[11px] text-[#fb923c] leading-relaxed">
@@ -131,7 +147,7 @@ export function GraphifyMode() {
               <div className="grid grid-cols-2 gap-2 text-[11px]">
                 <Row label="hostname" value={identity.this_node.hostname} />
                 <Row label="platform" value={identity.this_node.platform} />
-                <Row label="ip(s)" value={(identity.this_node.ip_addresses || []).join(", ") || "—"} />
+                <Row label="ip(s)" value={(identity.this_node.ip_addresses || []).join(', ') || '—'} />
                 <Row label="authority" value={identity.authority} />
               </div>
               <div className="border-t border-[#2a3a52] pt-3 space-y-1.5">
@@ -146,7 +162,7 @@ export function GraphifyMode() {
               </div>
               <div className="border-t border-[#2a3a52] pt-3 space-y-1 text-[10px]">
                 <Row label="canonical" value={identity.repos.canonical} />
-                <Row label="sandbox"   value={identity.repos.sandbox} />
+                <Row label="sandbox" value={identity.repos.sandbox} />
               </div>
             </div>
           </div>
@@ -158,7 +174,9 @@ export function GraphifyMode() {
             <div className="bg-[#111827] border-b border-[#2a3a52] px-3 py-2 flex items-center gap-2">
               <CheckCircle2 size={12} className="text-[#e040fb]" />
               <span className="text-xs font-bold tracking-wide">BINDING DOCTRINE</span>
-              <span className="ml-auto text-[8px] tracking-widest uppercase text-[#6b82a6]">v · {doctrine.updated_at}</span>
+              <span className="ml-auto text-[8px] tracking-widest uppercase text-[#6b82a6]">
+                v · {doctrine.updated_at}
+              </span>
             </div>
             <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -173,23 +191,34 @@ export function GraphifyMode() {
                 <div className="text-[9px] tracking-[0.3em] uppercase text-[#6b82a6]">infrastructure</div>
                 <Row label="hosting" value={doctrine.infrastructure_doctrine.hosting} />
                 <Row label="payments live" value={doctrine.infrastructure_doctrine.payments_live} />
-                <Row label="payments dead" value={(doctrine.infrastructure_doctrine.payments_dead || []).join(", ")} />
+                <Row label="payments dead" value={(doctrine.infrastructure_doctrine.payments_dead || []).join(', ')} />
                 <Row label="orchestration" value={doctrine.infrastructure_doctrine.orchestration} />
-                <Row label="founding four" value={(doctrine.infrastructure_doctrine.founding_four_peer_level || []).join(" · ")} />
+                <Row
+                  label="founding four"
+                  value={(doctrine.infrastructure_doctrine.founding_four_peer_level || []).join(' · ')}
+                />
                 <Row label="peer rule" value={doctrine.infrastructure_doctrine.peer_rule} />
               </div>
               <div className="md:col-span-2 border-t border-[#2a3a52] pt-3">
-                <div className="text-[9px] tracking-[0.3em] uppercase text-[#6b82a6] mb-2">forbidden in UI · use replacements</div>
+                <div className="text-[9px] tracking-[0.3em] uppercase text-[#6b82a6] mb-2">
+                  forbidden in UI · use replacements
+                </div>
                 <div className="flex flex-wrap gap-1.5">
                   {doctrine.forbidden_words_in_ui.map((w) => (
-                    <span key={w} className="mono text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full bg-[#ff1744]/10 border border-[#ff1744]/30 text-[#ff1744]">
+                    <span
+                      key={w}
+                      className="mono text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full bg-[#ff1744]/10 border border-[#ff1744]/30 text-[#ff1744]"
+                    >
                       ✗ {w}
                     </span>
                   ))}
                 </div>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {Object.entries(doctrine.replacement_wording).map(([from, to]) => (
-                    <span key={from} className="mono text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full bg-[#00e676]/10 border border-[#00e676]/30 text-[#00e676]">
+                    <span
+                      key={from}
+                      className="mono text-[10px] tracking-widest uppercase px-2 py-0.5 rounded-full bg-[#00e676]/10 border border-[#00e676]/30 text-[#00e676]"
+                    >
                       {from} → {to}
                     </span>
                   ))}
@@ -197,7 +226,9 @@ export function GraphifyMode() {
               </div>
               <div className="md:col-span-2 border-t border-[#2a3a52] pt-3">
                 <div className="mono text-[10px] text-[#e8f0ff] italic leading-relaxed">"{doctrine.motto}"</div>
-                <div className="text-[9px] tracking-widest uppercase text-[#e040fb] font-bold mt-1">{doctrine.mission_tag} · sole authority · {doctrine.sole_authority}</div>
+                <div className="text-[9px] tracking-widest uppercase text-[#e040fb] font-bold mt-1">
+                  {doctrine.mission_tag} · sole authority · {doctrine.sole_authority}
+                </div>
               </div>
             </div>
           </div>
@@ -218,7 +249,9 @@ function Counter({ label, value, color, sub }) {
   return (
     <div className="bg-[#1a2332] border border-[#2a3a52] rounded-md p-3">
       <div className="text-[8px] tracking-[0.3em] uppercase text-[#6b82a6] mb-1">{label}</div>
-      <div className="mono font-bold leading-tight" style={{ color, fontSize: "1.5rem" }}>{value}</div>
+      <div className="mono font-bold leading-tight" style={{ color, fontSize: '1.5rem' }}>
+        {value}
+      </div>
       {sub && <div className="text-[8px] mono text-[#4a5568] mt-1">{sub}</div>}
     </div>
   );
@@ -228,7 +261,9 @@ function Row({ label, value }) {
   return (
     <div className="flex items-baseline justify-between gap-3 text-[11px]">
       <span className="mono text-[#6b82a6] uppercase tracking-widest text-[9px] shrink-0">{label}</span>
-      <span className="text-[#e8f0ff] text-right truncate" title={String(value)}>{value || "—"}</span>
+      <span className="text-[#e8f0ff] text-right truncate" title={String(value)}>
+        {value || '—'}
+      </span>
     </div>
   );
 }

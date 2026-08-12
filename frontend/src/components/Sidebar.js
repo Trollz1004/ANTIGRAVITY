@@ -1,28 +1,41 @@
-import React from "react";
-import { Compass, Code2, Image as ImageIcon, Search, MessageSquare, Settings, Plus, Rocket, Radio, ListTodo, BookOpen, Network } from "lucide-react";
-import { useChat } from "../contexts/ChatContext";
-import { DAOMonitor } from "./DAOMonitor";
-import { SystemStatus } from "./SystemStatus";
+import React from 'react';
+import {
+  Compass,
+  Code2,
+  Image as ImageIcon,
+  Search,
+  MessageSquare,
+  Settings,
+  Plus,
+  Rocket,
+  Radio,
+  ListTodo,
+  BookOpen,
+  Network,
+} from 'lucide-react';
+import { useChat } from '../contexts/ChatContext';
+import { DAOMonitor } from './DAOMonitor';
+import { SystemStatus } from './SystemStatus';
 
 const MODES = [
-  { id: "mission",    label: "Mission Control", Icon: Compass,       tone: "magenta" },
-  { id: "ledger",     label: "Mission Ledger",  Icon: BookOpen,      tone: "magenta" },
-  { id: "graphify",   label: "Graphify",        Icon: Network,       tone: "magenta" },
-  { id: "roundtable", label: "AI Roundtable",   Icon: Radio,         tone: "magenta" },
-  { id: "tasks",      label: "Tasks",           Icon: ListTodo,      tone: "magenta" },
-  { id: "code",       label: "Code Mode",       Icon: Code2,         tone: "cyan" },
-  { id: "create",     label: "Create · Banana", Icon: ImageIcon,     tone: "cyan" },
-  { id: "research",   label: "Research Mode",   Icon: Search,        tone: "cyan" },
-  { id: "chat",       label: "Chat Mode",       Icon: MessageSquare, tone: "cyan" },
+  { id: 'mission', label: 'Mission Control', Icon: Compass, tone: 'magenta' },
+  { id: 'ledger', label: 'Mission Ledger', Icon: BookOpen, tone: 'magenta' },
+  { id: 'graphify', label: 'Graphify', Icon: Network, tone: 'magenta' },
+  { id: 'roundtable', label: 'AI Roundtable', Icon: Radio, tone: 'magenta' },
+  { id: 'tasks', label: 'Tasks', Icon: ListTodo, tone: 'magenta' },
+  { id: 'code', label: 'Code Mode', Icon: Code2, tone: 'cyan' },
+  { id: 'create', label: 'Create · Banana', Icon: ImageIcon, tone: 'cyan' },
+  { id: 'research', label: 'Research Mode', Icon: Search, tone: 'cyan' },
+  { id: 'chat', label: 'Chat Mode', Icon: MessageSquare, tone: 'cyan' },
 ];
 
-export function Sidebar({ activeMode = "mission", onModeChange }) {
+export function Sidebar({ activeMode = 'mission', onModeChange }) {
   const { conversations, activeConversationId, selectConversation, createNewConversation } = useChat();
 
   const btnClass = (mode, tone) => {
     const active = activeMode === mode;
-    const activeColor = tone === "magenta" ? "text-[#e040fb] bg-[#1a2332]" : "text-[#00d4ff] bg-[#1a2332]";
-    return `p-2 rounded-lg transition-colors flex items-center gap-3 w-full text-left ${active ? activeColor : "text-[#6b82a6] hover:text-[#e8f0ff] hover:bg-[#1a2332]"}`;
+    const activeColor = tone === 'magenta' ? 'text-[#e040fb] bg-[#1a2332]' : 'text-[#00d4ff] bg-[#1a2332]';
+    return `p-2 rounded-lg transition-colors flex items-center gap-3 w-full text-left ${active ? activeColor : 'text-[#6b82a6] hover:text-[#e8f0ff] hover:bg-[#1a2332]'}`;
   };
 
   return (
@@ -38,9 +51,16 @@ export function Sidebar({ activeMode = "mission", onModeChange }) {
             onClick={() => onModeChange?.(id)}
             className={btnClass(id, tone)}
           >
-            <Icon size={18} className={id === "mission" || id === "roundtable" || id === "tasks" || id === "ledger" || id === "graphify" ? "text-[#e040fb]" : ""} />
+            <Icon
+              size={18}
+              className={
+                id === 'mission' || id === 'roundtable' || id === 'tasks' || id === 'ledger' || id === 'graphify'
+                  ? 'text-[#e040fb]'
+                  : ''
+              }
+            />
             <span className="text-sm font-medium">{label}</span>
-            {(id === "mission" || id === "roundtable" || id === "tasks" || id === "ledger" || id === "graphify") && (
+            {(id === 'mission' || id === 'roundtable' || id === 'tasks' || id === 'ledger' || id === 'graphify') && (
               <span className="ml-auto text-[8px] font-bold text-[#e040fb] uppercase tracking-widest opacity-80">
                 NEW
               </span>
@@ -54,7 +74,10 @@ export function Sidebar({ activeMode = "mission", onModeChange }) {
           <span className="text-[10px] font-bold text-[#4a5568] uppercase tracking-widest">History</span>
           <button
             data-testid="sidebar-new-chat"
-            onClick={() => { createNewConversation("New Chat", activeMode); onModeChange?.("chat"); }}
+            onClick={() => {
+              createNewConversation('New Chat', activeMode);
+              onModeChange?.('chat');
+            }}
             className="p-1 text-[#6b82a6] hover:text-[#00d4ff] transition-colors"
           >
             <Plus size={14} />
@@ -66,11 +89,14 @@ export function Sidebar({ activeMode = "mission", onModeChange }) {
             <button
               key={conv.id}
               data-testid={`sidebar-conv-${conv.id}`}
-              onClick={() => { selectConversation(conv.id); onModeChange?.("chat"); }}
+              onClick={() => {
+                selectConversation(conv.id);
+                onModeChange?.('chat');
+              }}
               className={`w-full text-left px-3 py-2 rounded-md text-xs transition-all truncate border ${
                 activeConversationId === conv.id
-                  ? "bg-[#1a2332] border-[#00d4ff]/30 text-[#00d4ff]"
-                  : "border-transparent text-[#6b82a6] hover:bg-[#1a2332] hover:text-[#e8f0ff]"
+                  ? 'bg-[#1a2332] border-[#00d4ff]/30 text-[#00d4ff]'
+                  : 'border-transparent text-[#6b82a6] hover:bg-[#1a2332] hover:text-[#e8f0ff]'
               }`}
             >
               {conv.title}
@@ -89,8 +115,8 @@ export function Sidebar({ activeMode = "mission", onModeChange }) {
       <div className="px-4 mt-4 pt-4 border-t border-[#2a3a52] flex flex-col gap-2">
         <button
           data-testid="sidebar-settings-btn"
-          onClick={() => onModeChange?.("settings")}
-          className={btnClass("settings", "cyan")}
+          onClick={() => onModeChange?.('settings')}
+          className={btnClass('settings', 'cyan')}
         >
           <Settings size={18} /> <span className="text-sm font-medium">Settings</span>
         </button>

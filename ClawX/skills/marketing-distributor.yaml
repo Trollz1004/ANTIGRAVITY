@@ -9,13 +9,13 @@
 # =============================================================================
 
 name: marketing-distributor
-version: "1.0.0"
+version: '1.0.0'
 description: >
   Distribute AI-generated content to social/community platforms.
   CONTENT IS ALWAYS PROVIDED BY THE CALLER (Perplexity or Opus AI).
   This skill only publishes — it never writes, edits, or generates posts.
   Supports: X/Twitter (xurl), Discord (webhook), Bluesky (HTTP API), WhatsApp (wacli).
-author: "Perplexity/Comet + Joshua Coleman #ForTheKids"
+author: 'Perplexity/Comet + Joshua Coleman #ForTheKids'
 tags:
   - marketing
   - distribution
@@ -30,34 +30,34 @@ tags:
 env:
   # X / Twitter (via xurl CLI)
   - name: TWITTER_API_KEY
-    description: "X/Twitter API Key (OAuth 1.0a)"
+    description: 'X/Twitter API Key (OAuth 1.0a)'
     required: false
   - name: TWITTER_API_SECRET
-    description: "X/Twitter API Secret"
+    description: 'X/Twitter API Secret'
     required: false
   - name: TWITTER_ACCESS_TOKEN
-    description: "X/Twitter Access Token"
+    description: 'X/Twitter Access Token'
     required: false
   - name: TWITTER_ACCESS_SECRET
-    description: "X/Twitter Access Token Secret"
+    description: 'X/Twitter Access Token Secret'
     required: false
 
   # Discord (webhook — no bot required)
   - name: DISCORD_WEBHOOK_URL
-    description: "Discord channel webhook URL"
+    description: 'Discord channel webhook URL'
     required: false
 
   # Bluesky (HTTP API)
   - name: BLUESKY_HANDLE
-    description: "Bluesky handle e.g. youandinotai.bsky.social"
+    description: 'Bluesky handle e.g. youandinotai.bsky.social'
     required: false
   - name: BLUESKY_APP_PASSWORD
-    description: "Bluesky app-specific password"
+    description: 'Bluesky app-specific password'
     required: false
 
   # WhatsApp (via wacli CLI)
   - name: WHATSAPP_TARGET
-    description: "WhatsApp phone number or group JID to broadcast to"
+    description: 'WhatsApp phone number or group JID to broadcast to'
     required: false
 
 # ---------------------------------------------------------------------------
@@ -65,10 +65,10 @@ env:
 # ---------------------------------------------------------------------------
 bins:
   - name: xurl
-    install: "npm install -g xurl  # or: winget install xurl"
+    install: 'npm install -g xurl  # or: winget install xurl'
     required: false
   - name: wacli
-    install: "go install github.com/steipete/wacli@latest"
+    install: 'go install github.com/steipete/wacli@latest'
     required: false
   - name: curl
     required: false
@@ -89,19 +89,19 @@ tools:
       properties:
         post_text:
           type: string
-          description: "The exact post content to publish. Must be provided by caller (Perplexity/Opus). This skill does NOT write content."
+          description: 'The exact post content to publish. Must be provided by caller (Perplexity/Opus). This skill does NOT write content.'
         image_url:
           type: string
-          description: "Optional public URL of an image to attach (platform-dependent support)"
+          description: 'Optional public URL of an image to attach (platform-dependent support)'
         platforms:
           type: array
           items:
             type: string
-            enum: ["twitter", "discord", "bluesky", "whatsapp", "all"]
-          description: "Which platforms to post to. Defaults to all configured platforms if omitted."
+            enum: ['twitter', 'discord', 'bluesky', 'whatsapp', 'all']
+          description: 'Which platforms to post to. Defaults to all configured platforms if omitted.'
         dry_run:
           type: boolean
-          description: "If true, validate config and show what would be posted without actually posting."
+          description: 'If true, validate config and show what would be posted without actually posting.'
           default: false
     script: |
       #!/usr/bin/env node
@@ -240,7 +240,7 @@ tools:
       };
 
   - name: check_distribution_status
-    description: "Check which distribution platforms are currently configured and ready."
+    description: 'Check which distribution platforms are currently configured and ready.'
     parameters:
       type: object
       properties: {}

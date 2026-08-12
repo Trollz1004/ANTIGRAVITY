@@ -1,6 +1,6 @@
 ---
 name: azure-diagnostics
-description: "Debug and troubleshoot production issues on Azure. Covers Container Apps and Function Apps diagnostics, log analysis with KQL, health checks, and common issue resolution for image pulls, cold starts, health probes, and function invocation failures. USE FOR: debug production issues, troubleshoot container apps, troubleshoot function apps, troubleshoot Azure Functions, analyze logs with KQL, fix image pull failures, resolve cold start issues, investigate health probe failures, check resource health, view application logs, find root cause of errors, function app not working, function invocation failures DO NOT USE FOR: deploying applications (use azure-deploy), creating new resources (use azure-prepare), setting up monitoring (use azure-observability), cost optimization (use azure-cost-optimization)"
+description: 'Debug and troubleshoot production issues on Azure. Covers Container Apps and Function Apps diagnostics, log analysis with KQL, health checks, and common issue resolution for image pulls, cold starts, health probes, and function invocation failures. USE FOR: debug production issues, troubleshoot container apps, troubleshoot function apps, troubleshoot Azure Functions, analyze logs with KQL, fix image pull failures, resolve cold start issues, investigate health probe failures, check resource health, view application logs, find root cause of errors, function app not working, function invocation failures DO NOT USE FOR: deploying applications (use azure-deploy), creating new resources (use azure-prepare), setting up monitoring (use azure-observability), cost optimization (use azure-cost-optimization)'
 ---
 
 # Azure Diagnostics
@@ -12,6 +12,7 @@ description: "Debug and troubleshoot production issues on Azure. Covers Containe
 ## Triggers
 
 Activate this skill when user wants to:
+
 - Debug or troubleshoot production issues
 - Diagnose errors in Azure services
 - Analyze application logs or metrics
@@ -43,10 +44,10 @@ Activate this skill when user wants to:
 
 ## Troubleshooting Guides by Service
 
-| Service | Common Issues | Reference |
-|---------|---------------|-----------|
-| **Container Apps** | Image pull failures, cold starts, health probes, port mismatches | [container-apps/](references/container-apps/README.md) |
-| **Function Apps** | App details, invocation failures, timeouts, binding errors, cold starts, missing app settings | [functions/](references/functions/README.md) |
+| Service            | Common Issues                                                                                 | Reference                                              |
+| ------------------ | --------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| **Container Apps** | Image pull failures, cold starts, health probes, port mismatches                              | [container-apps/](references/container-apps/README.md) |
+| **Function Apps**  | App details, invocation failures, timeouts, binding errors, cold starts, missing app settings | [functions/](references/functions/README.md)           |
 
 ---
 
@@ -72,6 +73,7 @@ az monitor app-insights query --apps APP-INSIGHTS -g RG \
 ### AppLens (MCP Tools)
 
 For AI-powered diagnostics, use:
+
 ```
 mcp_azure_mcp_applens
   intent: "diagnose issues with <resource-name>"
@@ -88,6 +90,7 @@ Provides:
 ### Azure Monitor (MCP Tools)
 
 For querying logs and metrics:
+
 ```
 mcp_azure_mcp_monitor
   intent: "query logs for <resource-name>"

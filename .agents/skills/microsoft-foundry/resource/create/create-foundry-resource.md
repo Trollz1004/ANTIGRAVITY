@@ -6,10 +6,10 @@ description: |
   DO NOT USE FOR: creating ML workspace hubs (use microsoft-foundry:project/create), deploying models (use microsoft-foundry:models/deploy), managing permissions (use microsoft-foundry:rbac), monitoring resource usage (use microsoft-foundry:quota).
 compatibility:
   required:
-    - azure-cli: ">=2.0"
+    - azure-cli: '>=2.0'
   optional:
-    - powershell: ">=7.0"
-    - azure-portal: "any"
+    - powershell: '>=7.0'
+    - azure-portal: 'any'
 ---
 
 # Create Foundry Resource
@@ -24,13 +24,13 @@ This sub-skill orchestrates creation of Azure AI Services multi-service resource
 
 ## Quick Reference
 
-| Property | Value |
-|----------|-------|
-| **Classification** | WORKFLOW SKILL |
-| **Operation Type** | Control Plane (Management) |
-| **Primary Method** | Azure CLI: `az cognitiveservices account create` |
-| **Resource Type** | `Microsoft.CognitiveServices/accounts` (kind: `AIServices`) |
-| **Resource Kind** | `AIServices` (multi-service) |
+| Property           | Value                                                       |
+| ------------------ | ----------------------------------------------------------- |
+| **Classification** | WORKFLOW SKILL                                              |
+| **Operation Type** | Control Plane (Management)                                  |
+| **Primary Method** | Azure CLI: `az cognitiveservices account create`            |
+| **Resource Type**  | `Microsoft.CognitiveServices/accounts` (kind: `AIServices`) |
+| **Resource Kind**  | `AIServices` (multi-service)                                |
 
 ## When to Use
 
@@ -42,6 +42,7 @@ Use this sub-skill when you need to:
 - **Manual resource creation** - CLI-based resource provisioning
 
 **Do NOT use for:**
+
 - Creating ML workspace hubs/projects (use `microsoft-foundry:project/create`)
 - Deploying AI models (use `microsoft-foundry:models/deploy`)
 - Managing RBAC permissions (use `microsoft-foundry:rbac`)

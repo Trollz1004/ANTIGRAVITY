@@ -28,10 +28,10 @@ The helper must not guess between multiple host roots on disk. It uses the host 
 
 Why this location:
 
-- *Skills are shareable, credentials are not.* The skill bundle may be copied, versioned, or distributed; secrets must stay in user-owned storage.
-- *Host-aligned.* The connector's data lives beside the host that runs it, so the user has one predictable place to look.
-- *No cross-host ambiguity.* Installing under Desktop Commander means using Desktop Commander’s connector directory, not Claude’s or Codex’s.
-- *Easy cleanup.* Deleting `<active-host-root>/connectors/<system>/` removes the connector’s private state without touching the skill bundle.
+- _Skills are shareable, credentials are not._ The skill bundle may be copied, versioned, or distributed; secrets must stay in user-owned storage.
+- _Host-aligned._ The connector's data lives beside the host that runs it, so the user has one predictable place to look.
+- _No cross-host ambiguity._ Installing under Desktop Commander means using Desktop Commander’s connector directory, not Claude’s or Codex’s.
+- _Easy cleanup._ Deleting `<active-host-root>/connectors/<system>/` removes the connector’s private state without touching the skill bundle.
 
 ## What the helper must do
 
@@ -122,9 +122,9 @@ This text is the canonical hand-off blurb. Do not strip out its three guarantees
 
 The guarantees that must remain present:
 
-1. *Assistant doesn't read the values.* The assistant may create the empty placeholder, but it does not read the real filled-in `.env`.
-2. *Helper reads it locally.* The script on the user's machine consumes the values.
-3. *Secrets stay out of chat.* Nothing the user fills in belongs in the transcript.
+1. _Assistant doesn't read the values._ The assistant may create the empty placeholder, but it does not read the real filled-in `.env`.
+2. _Helper reads it locally._ The script on the user's machine consumes the values.
+3. _Secrets stay out of chat._ Nothing the user fills in belongs in the transcript.
 
 Replace `<path>` with the actual resolved path and `<helper>` with the real helper filename.
 
@@ -140,19 +140,19 @@ Replace `<path>` with the actual resolved path and `<helper>` with the real help
 
 ## Edge cases
 
-*User asks the assistant to read `.env` to check it*: refuse. Run `python3 <helper>.py test` instead.
+_User asks the assistant to read `.env` to check it_: refuse. Run `python3 <helper>.py test` instead.
 
-*User pastes a secret into chat anyway*: tell them to move it into the real `.env`, recommend rotation, and do not act on the pasted value.
+_User pastes a secret into chat anyway_: tell them to move it into the real `.env`, recommend rotation, and do not act on the pasted value.
 
-*Vendor gives a JSON key file, PEM file, or similar*: store the path to that file in `.env`, not its contents.
+_Vendor gives a JSON key file, PEM file, or similar_: store the path to that file in `.env`, not its contents.
 
-*Helper is being run from tests or CI*: set `CONNECTOR_ENV_PATH` explicitly.
+_Helper is being run from tests or CI_: set `CONNECTOR_ENV_PATH` explicitly.
 
-*The helper is on disk but not installed under a host `skills/` tree*: do not guess another host. Install it correctly or use `CONNECTOR_ENV_PATH`.
+_The helper is on disk but not installed under a host `skills/` tree_: do not guess another host. Install it correctly or use `CONNECTOR_ENV_PATH`.
 
-*User wants multiple installations such as prod and staging*: create separate slugs like `<system>-prod` and `<system>-staging` with separate `.env` files.
+_User wants multiple installations such as prod and staging_: create separate slugs like `<system>-prod` and `<system>-staging` with separate `.env` files.
 
-*Uninstalling the skill*: leaves credentials on disk by design. The user deletes `<active-host-root>/connectors/<system>/` if they want to remove them.
+_Uninstalling the skill_: leaves credentials on disk by design. The user deletes `<active-host-root>/connectors/<system>/` if they want to remove them.
 
 ## Surfacing variable acquisition — the inline-handoff template
 

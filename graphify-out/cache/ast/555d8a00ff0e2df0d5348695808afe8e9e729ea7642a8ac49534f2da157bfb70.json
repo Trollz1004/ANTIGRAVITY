@@ -1,1 +1,165 @@
-{"nodes": [{"id": "app_frontend_src_components_settingspanel_js", "label": "SettingsPanel.js", "file_type": "code", "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L1"}, {"id": "components_settingspanel_settingspanel", "label": "SettingsPanel()", "file_type": "code", "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L7"}, {"id": "components_settingspanel_card", "label": "Card()", "file_type": "code", "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L117"}, {"id": "components_settingspanel_row", "label": "Row()", "file_type": "code", "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L129"}, {"id": "components_settingspanel_broadcastrow", "label": "BroadcastRow()", "file_type": "code", "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L138"}], "edges": [{"source": "app_frontend_src_components_settingspanel_js", "target": "react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L1", "weight": 1.0}, {"source": "app_frontend_src_components_settingspanel_js", "target": "axios", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L2", "weight": 1.0}, {"source": "app_frontend_src_components_settingspanel_js", "target": "lucide_react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L3", "weight": 1.0}, {"source": "app_frontend_src_components_settingspanel_js", "target": "components_settingspanel_settingspanel", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L7", "weight": 1.0}, {"source": "app_frontend_src_components_settingspanel_js", "target": "components_settingspanel_card", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L117", "weight": 1.0}, {"source": "app_frontend_src_components_settingspanel_js", "target": "components_settingspanel_row", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L129", "weight": 1.0}, {"source": "app_frontend_src_components_settingspanel_js", "target": "components_settingspanel_broadcastrow", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L138", "weight": 1.0}], "raw_calls": [{"caller_nid": "components_settingspanel_settingspanel", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L9"}, {"caller_nid": "components_settingspanel_settingspanel", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L10"}, {"caller_nid": "components_settingspanel_settingspanel", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L11"}, {"caller_nid": "components_settingspanel_settingspanel", "callee": "useEffect", "is_member_call": false, "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L13"}, {"caller_nid": "components_settingspanel_settingspanel", "callee": "map", "is_member_call": true, "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L47"}, {"caller_nid": "components_settingspanel_broadcastrow", "callee": "join", "is_member_call": true, "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L164"}, {"caller_nid": "components_settingspanel_broadcastrow", "callee": "slice", "is_member_call": true, "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L173"}, {"caller_nid": "components_settingspanel_broadcastrow", "callee": "stringify", "is_member_call": true, "source_file": "/app/frontend/src/components/SettingsPanel.js", "source_location": "L173"}]}
+{
+  "nodes": [
+    {
+      "id": "app_frontend_src_components_settingspanel_js",
+      "label": "SettingsPanel.js",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "components_settingspanel_settingspanel",
+      "label": "SettingsPanel()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L7"
+    },
+    {
+      "id": "components_settingspanel_card",
+      "label": "Card()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L117"
+    },
+    {
+      "id": "components_settingspanel_row",
+      "label": "Row()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L129"
+    },
+    {
+      "id": "components_settingspanel_broadcastrow",
+      "label": "BroadcastRow()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L138"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_frontend_src_components_settingspanel_js",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_settingspanel_js",
+      "target": "axios",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_settingspanel_js",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_settingspanel_js",
+      "target": "components_settingspanel_settingspanel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_settingspanel_js",
+      "target": "components_settingspanel_card",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L117",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_settingspanel_js",
+      "target": "components_settingspanel_row",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L129",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_settingspanel_js",
+      "target": "components_settingspanel_broadcastrow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L138",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "components_settingspanel_settingspanel",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L9"
+    },
+    {
+      "caller_nid": "components_settingspanel_settingspanel",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L10"
+    },
+    {
+      "caller_nid": "components_settingspanel_settingspanel",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L11"
+    },
+    {
+      "caller_nid": "components_settingspanel_settingspanel",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L13"
+    },
+    {
+      "caller_nid": "components_settingspanel_settingspanel",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L47"
+    },
+    {
+      "caller_nid": "components_settingspanel_broadcastrow",
+      "callee": "join",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L164"
+    },
+    {
+      "caller_nid": "components_settingspanel_broadcastrow",
+      "callee": "slice",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L173"
+    },
+    {
+      "caller_nid": "components_settingspanel_broadcastrow",
+      "callee": "stringify",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/components/SettingsPanel.js",
+      "source_location": "L173"
+    }
+  ]
+}

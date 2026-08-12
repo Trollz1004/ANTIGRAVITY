@@ -23,32 +23,32 @@ Use this contract for Microsoft Foundry agent folders. In azd projects, `.foundr
 
 Resolve deployment and evaluation context by layering sources in this order:
 
-| Value | Preferred source | Fallbacks | Metadata write behavior |
-|-------|------------------|-----------|-------------------------|
-| Agent root | `azure.yaml` service `project` for `host: azure.ai.agent` | `.foundry` discovery, user path | Do not write except to initialize cache |
-| Environment | user/session, then azd env/default | metadata `defaultEnvironment` | Store azd binding only when useful |
-| Project endpoint | `azd env get-values` | metadata, user input | Do not duplicate azd values |
-| Agent name/version | azd `AGENT_<SERVICE>_*` vars | `azure.yaml`, metadata, user input | Do not duplicate azd values |
-| ACR | azd registry vars | metadata, user input | Do not duplicate azd values |
-| Observability | azd App Insights vars | metadata, user input | Do not copy secrets if azd has them |
-| Local eval draft | `eval.yaml` | metadata, user input | Sync to `.foundry` only after remote lookup/registration |
-| Remote suite/cache refs | metadata | Foundry lookups | Persist in `.foundry` |
+| Value                   | Preferred source                                          | Fallbacks                          | Metadata write behavior                                  |
+| ----------------------- | --------------------------------------------------------- | ---------------------------------- | -------------------------------------------------------- |
+| Agent root              | `azure.yaml` service `project` for `host: azure.ai.agent` | `.foundry` discovery, user path    | Do not write except to initialize cache                  |
+| Environment             | user/session, then azd env/default                        | metadata `defaultEnvironment`      | Store azd binding only when useful                       |
+| Project endpoint        | `azd env get-values`                                      | metadata, user input               | Do not duplicate azd values                              |
+| Agent name/version      | azd `AGENT_<SERVICE>_*` vars                              | `azure.yaml`, metadata, user input | Do not duplicate azd values                              |
+| ACR                     | azd registry vars                                         | metadata, user input               | Do not duplicate azd values                              |
+| Observability           | azd App Insights vars                                     | metadata, user input               | Do not copy secrets if azd has them                      |
+| Local eval draft        | `eval.yaml`                                               | metadata, user input               | Sync to `.foundry` only after remote lookup/registration |
+| Remote suite/cache refs | metadata                                                  | Foundry lookups                    | Persist in `.foundry`                                    |
 
 If azd and metadata both provide the same value and differ, stop and ask which source is authoritative. If they match, use the azd value and omit the duplicate on future metadata rewrites.
 
 ## Environment Overlay Model
 
-| Field | Required when | Purpose |
-|-------|---------------|---------|
-| `defaultEnvironment` | Any metadata file exists | Default key inside this overlay file |
-| `environments.<env>.azd.environmentName` | Optional | Binds overlay to an azd environment |
-| `environments.<env>.azd.service` | Optional | Binds overlay to an `azure.yaml` service |
-| `environments.<env>.projectEndpoint` | Required for non-azd/manual workflows | Explicit override when azd cannot resolve it |
-| `environments.<env>.agentName` / `agentVersion` | `agentName` required for non-azd/manual workflows; `agentVersion` optional | Explicit override when azd cannot resolve it |
-| `environments.<env>.azureContainerRegistry` | Required for non-azd/manual hosted-agent Docker/ACR deploy flow | Explicit override when azd cannot resolve it |
-| `environments.<env>.observability.*` | Required only for trace workflows when azd cannot resolve observability | Trace lookup config when azd cannot resolve it |
-| `environments.<env>.evaluationSuites[]` | Required after evaluation setup/sync | Remote suite/dataset/evaluator refs plus local cache paths |
-| `environments.<env>.lastEval` | Optional | Last local result summary and result file path |
+| Field                                           | Required when                                                              | Purpose                                                    |
+| ----------------------------------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `defaultEnvironment`                            | Any metadata file exists                                                   | Default key inside this overlay file                       |
+| `environments.<env>.azd.environmentName`        | Optional                                                                   | Binds overlay to an azd environment                        |
+| `environments.<env>.azd.service`                | Optional                                                                   | Binds overlay to an `azure.yaml` service                   |
+| `environments.<env>.projectEndpoint`            | Required for non-azd/manual workflows                                      | Explicit override when azd cannot resolve it               |
+| `environments.<env>.agentName` / `agentVersion` | `agentName` required for non-azd/manual workflows; `agentVersion` optional | Explicit override when azd cannot resolve it               |
+| `environments.<env>.azureContainerRegistry`     | Required for non-azd/manual hosted-agent Docker/ACR deploy flow            | Explicit override when azd cannot resolve it               |
+| `environments.<env>.observability.*`            | Required only for trace workflows when azd cannot resolve observability    | Trace lookup config when azd cannot resolve it             |
+| `environments.<env>.evaluationSuites[]`         | Required after evaluation setup/sync                                       | Remote suite/dataset/evaluator refs plus local cache paths |
+| `environments.<env>.lastEval`                   | Optional                                                                   | Last local result summary and result file path             |
 
 ## Example azd Overlay
 
@@ -62,19 +62,19 @@ environments:
     evaluationSuites:
       - id: smoke-core
         suiteName: <foundry-suite-name>
-        suiteVersion: "1"
+        suiteVersion: '1'
         generationSource: eval-yaml
         tags:
           tier: smoke
           purpose: baseline
         suiteFile: .foundry/suites/<suite>-v1.json
         dataset: <dataset-name>
-        datasetVersion: "1"
+        datasetVersion: '1'
         datasetFile: .foundry/datasets/<agent>-<dataset>-v1.ref.json
         datasetUri: <foundry-dataset-uri>
         evaluators:
           - name: <evaluator-name>
-            version: "1"
+            version: '1'
             threshold: 4
             definitionFile: .foundry/evaluators/<evaluator>-v1.json
 ```
@@ -100,20 +100,20 @@ environments:
 
 When `eval.yaml` exists in the selected agent root, treat it as local evaluation intent, not proof of a Foundry suite.
 
-| eval.yaml field | Use |
-|-----------------|-----|
-| `agent.name` | Candidate target agent; verify it matches selected context |
-| `dataset.local_uri` | Local seed dataset candidate |
-| `dataset.name`, `dataset.version` | Registered dataset candidate |
-| `validation_dataset` | Optional validation dataset candidate |
-| `evaluators[]` | Candidate evaluator names; verify with `evaluator_catalog_get` |
-| `name` | Candidate eval/suite name; verify remotely before storing as `suiteName` |
-| `options.eval_model` | Candidate judge/generation deployment |
-| `options.optimization_model` | Candidate optimizer reasoning deployment |
-| `options.max_candidates` | Candidate optimization iteration limit |
-| `options.optimization_config.model_search_space` | Candidate target model search space |
-| `options.pass_threshold` | Candidate evaluator threshold/default pass gate |
-| `max_samples`, `trace_days`, `generation_instruction` | Suite setup defaults |
+| eval.yaml field                                       | Use                                                                      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------ |
+| `agent.name`                                          | Candidate target agent; verify it matches selected context               |
+| `dataset.local_uri`                                   | Local seed dataset candidate                                             |
+| `dataset.name`, `dataset.version`                     | Registered dataset candidate                                             |
+| `validation_dataset`                                  | Optional validation dataset candidate                                    |
+| `evaluators[]`                                        | Candidate evaluator names; verify with `evaluator_catalog_get`           |
+| `name`                                                | Candidate eval/suite name; verify remotely before storing as `suiteName` |
+| `options.eval_model`                                  | Candidate judge/generation deployment                                    |
+| `options.optimization_model`                          | Candidate optimizer reasoning deployment                                 |
+| `options.max_candidates`                              | Candidate optimization iteration limit                                   |
+| `options.optimization_config.model_search_space`      | Candidate target model search space                                      |
+| `options.pass_threshold`                              | Candidate evaluator threshold/default pass gate                          |
+| `max_samples`, `trace_days`, `generation_instruction` | Suite setup defaults                                                     |
 
 Legacy `dataset_file`, `dataset_reference`, and `validation_reference` keys may be normalized in memory when reading older files, but new files should use `dataset` and `validation_dataset`.
 

@@ -12,9 +12,9 @@ YouAndINotAI is the dating platform where **everyone is verified human.** No bot
 
 ### Taglines
 
-- *"Real people. Verified human. Zero bots."*
-- *"The dating app that proves you're human — and so is everyone else."*
-- *"Stop swiping on bots. Start meeting real people."*
+- _"Real people. Verified human. Zero bots."_
+- _"The dating app that proves you're human — and so is everyone else."_
+- _"Stop swiping on bots. Start meeting real people."_
 
 ### Audience pain points
 

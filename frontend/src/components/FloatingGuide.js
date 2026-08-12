@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { HelpCircle, X } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { HelpCircle, X } from 'lucide-react';
 
 const TIPS = [
-  "Type ⌘/Ctrl + any key while focused — TaskCommander dispatches across active agents.",
-  "Every chat message shows X-Hermes-Provider + X-Hermes-Real-Model footers.",
-  "Hermes pill tester lives on Mission Control — click a pill to open the prompt box.",
-  "Runbook viewer is sandboxed — HTML files cannot exfiltrate from the iframe.",
-  "DAO band is mirrored — replace with Base L2 reader when you deploy.",
+  'Type ⌘/Ctrl + any key while focused — TaskCommander dispatches across active agents.',
+  'Every chat message shows X-Hermes-Provider + X-Hermes-Real-Model footers.',
+  'Hermes pill tester lives on Mission Control — click a pill to open the prompt box.',
+  'Runbook viewer is sandboxed — HTML files cannot exfiltrate from the iframe.',
+  'DAO band is mirrored — replace with Base L2 reader when you deploy.',
 ];
 
 export function FloatingGuide() {
@@ -35,11 +35,11 @@ export function FloatingGuide() {
             <span className="w-2 h-2 rounded-full bg-[#e040fb] animate-pulse shadow-[0_0_5px_#e040fb]" />
             <span className="text-xs font-bold tracking-wide">GEMMA · GUIDE</span>
           </div>
-          <div className="p-3 text-[11px] leading-relaxed text-[#e8f0ff] min-h-[88px]">
-            {TIPS[tipIdx]}
-          </div>
+          <div className="p-3 text-[11px] leading-relaxed text-[#e8f0ff] min-h-[88px]">{TIPS[tipIdx]}</div>
           <div className="px-3 py-2 border-t border-[#2a3a52] flex items-center justify-between text-[8px] tracking-widest uppercase text-[#6b82a6]">
-            <span>tip {tipIdx + 1}/{TIPS.length}</span>
+            <span>
+              tip {tipIdx + 1}/{TIPS.length}
+            </span>
             <button
               data-testid="floating-guide-next"
               onClick={() => setTipIdx((i) => (i + 1) % TIPS.length)}

@@ -1,1 +1,3 @@
-{"comment": "Health check done: Paperclip UP (3100), OmniRoute UP (20128), Hermes DOWN (8642/11435). Watchdog script exists but Hermes offline. Not restarting without Josh go."}
+{
+  "comment": "Health check done: Paperclip UP (3100), OmniRoute UP (20128), Hermes DOWN (8642/11435). Watchdog script exists but Hermes offline. Not restarting without Josh go."
+}

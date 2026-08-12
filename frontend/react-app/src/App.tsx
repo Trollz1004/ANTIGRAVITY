@@ -45,13 +45,13 @@ const PLATFORM_CARDS = [
     title: 'AI as a Shield',
     body: 'AI stays behind the scenes for fraud pressure, safety signals, and launch operations. It does not fake your personality or your connection.',
     tone: 'bg-[#111111] text-white',
-    iconTone: 'bg-[#ff5a1f] text-white',
+    iconTone: 'bg-[#a78bfa] text-white',
   },
   {
     icon: Users,
     title: 'Built for Real Life',
     body: 'Dating, meetups, and real-world follow-through live in one product flow. The goal is less swiping theater and more actual conversation off-screen.',
-    tone: 'bg-[#ff5a1f] text-[#111111]',
+    tone: 'bg-[#a78bfa] text-[#111111]',
     iconTone: 'bg-white text-[#111111]',
   },
 ] as const;
@@ -90,7 +90,7 @@ const PRICING_PLANS = [
     price: '$2,500',
     desc: 'Premium founder product. Current terms are provided privately at checkout.',
     link: SECURE_PLAN_LINKS.royalty,
-    tone: 'bg-[#ff5a1f] text-white',
+    tone: 'bg-[#a78bfa] text-white',
   },
 ] as const;
 
@@ -116,7 +116,7 @@ function BrutalButton({
     <a
       href={href}
       className={`inline-flex items-center justify-center border-4 border-[#111111] px-6 py-3 text-sm font-black uppercase tracking-[0.18em] no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 ${
-        dark ? 'bg-[#111111] text-white' : 'bg-[#ff5a1f] text-white'
+        dark ? 'bg-[#111111] text-white' : 'bg-[#a78bfa] text-white'
       } shadow-[6px_6px_0_0_#111111]`}
     >
       {children}
@@ -133,7 +133,7 @@ function SignupCTA() {
         </span>
         <a
           href={SECURE_PLAN_LINKS.bot_shield}
-          className="inline-flex items-center justify-center border-4 border-white bg-[#ff5a1f] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-white no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[3px_3px_0_0_#ffffff] md:px-5 md:py-2 md:text-xs md:tracking-[0.18em] md:shadow-[4px_4px_0_0_#ffffff]"
+          className="inline-flex items-center justify-center border-4 border-white bg-[#a78bfa] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-white no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[3px_3px_0_0_#ffffff] md:px-5 md:py-2 md:text-xs md:tracking-[0.18em] md:shadow-[4px_4px_0_0_#ffffff]"
         >
           Get Verified
         </a>
@@ -251,7 +251,7 @@ function VerificationSteps() {
           {steps.map(step => (
             <div
               key={step.num}
-              className="border-4 border-white bg-[#1a1a1a] p-4 shadow-[6px_6px_0_0_#ff5a1f] md:p-6"
+              className="border-4 border-white bg-[#1a1a1a] p-4 shadow-[6px_6px_0_0_#a78bfa] md:p-6"
             >
               <div className="mb-2 text-3xl font-black tracking-tighter text-[#ff8b61] md:mb-4 md:text-5xl">
                 {step.num}
@@ -277,7 +277,7 @@ function PricingSection() {
       className="border-b-4 border-[#111111] bg-[#f4efe7] px-4 py-10 md:px-12 md:py-16"
     >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#a78bfa] md:mb-4 md:text-xs md:tracking-[0.24em]">
           Section 03 // Founder Pricing
         </div>
         <h2 className="mb-3 text-3xl font-black tracking-tighter text-[#111111] md:mb-4 md:text-7xl">
@@ -365,7 +365,7 @@ function WaitlistForm() {
           Get early access updates without the noise. The waitlist is simple by
           design.
         </p>
-        <div className="mt-5 border-4 border-white bg-[#f4efe7] p-4 text-[#111111] shadow-[8px_8px_0_0_#ff5a1f] md:mt-8 md:p-6">
+        <div className="mt-5 border-4 border-white bg-[#f4efe7] p-4 text-[#111111] shadow-[8px_8px_0_0_#a78bfa] md:mt-8 md:p-6">
           {submitted ? (
             <div className="space-y-2 text-center md:space-y-3">
               <div className="flex items-center justify-center gap-2 text-xs font-black uppercase tracking-[0.14em] md:gap-3 md:text-sm md:tracking-[0.18em]">
@@ -413,7 +413,7 @@ function WaitlistForm() {
               </div>
               <button
                 type="submit"
-                className="border-4 border-[#111111] bg-[#ff5a1f] px-6 py-3 text-xs font-black uppercase tracking-[0.14em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 disabled:opacity-60 shadow-[6px_6px_0_0_#111111] md:px-8 md:text-sm md:tracking-[0.18em]"
+                className="border-4 border-[#111111] bg-[#a78bfa] px-6 py-3 text-xs font-black uppercase tracking-[0.14em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 disabled:opacity-60 shadow-[6px_6px_0_0_#111111] md:px-8 md:text-sm md:tracking-[0.18em]"
               >
                 Join Now
               </button>
@@ -535,7 +535,7 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
       <div className="mx-auto grid max-w-7xl gap-6 md:gap-8 md:grid-cols-[1.2fr_0.8fr_1fr]">
         <div>
           <div className="text-2xl font-black uppercase tracking-tighter md:text-3xl">
-            YOUANDINOTAI<span className="text-[#ff5a1f]">.</span>
+            YOUANDINOTAI<span className="text-[#a78bfa]">.</span>
           </div>
           <p className="mt-3 max-w-lg text-xs font-medium leading-6 text-[#3f3a34] md:mt-4 md:text-sm md:leading-7">
             Human-first social platform for dating, meetups, and real-world
@@ -547,18 +547,18 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
             Launch Links
           </h4>
           <div className="mt-3 flex flex-col gap-2 text-xs font-bold uppercase tracking-[0.1em] md:mt-4 md:gap-3 md:text-sm md:tracking-[0.12em]">
-            <a href="#pricing" className="no-underline hover:text-[#ff5a1f]">
+            <a href="#pricing" className="no-underline hover:text-[#a78bfa]">
               Pricing
             </a>
-            <a href="#join" className="no-underline hover:text-[#ff5a1f]">
+            <a href="#join" className="no-underline hover:text-[#a78bfa]">
               Waitlist
             </a>
-            <a href="/support" className="no-underline hover:text-[#ff5a1f]">
+            <a href="/support" className="no-underline hover:text-[#a78bfa]">
               Support
             </a>
             <a
               href="mailto:[EMAIL]"
-              className="no-underline hover:text-[#ff5a1f]"
+              className="no-underline hover:text-[#a78bfa]"
             >
               Contact
             </a>
@@ -609,13 +609,13 @@ export function PublicSupportPage() {
               >
                 Back Home
               </a>
-              <div className="border-4 border-white bg-[#ff5a1f] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_0_#ffffff]">
+              <div className="border-4 border-white bg-[#a78bfa] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_0_#ffffff]">
                 Support
               </div>
             </div>
 
-            <section className="border-4 border-white bg-[#f4efe7] p-8 text-[#111111] shadow-[10px_10px_0_0_#ff5a1f]">
-              <p className="text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+            <section className="border-4 border-white bg-[#f4efe7] p-8 text-[#111111] shadow-[10px_10px_0_0_#a78bfa]">
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-[#a78bfa]">
                 YouAndiNotAi Support
               </p>
               <h1 className="mt-4 text-4xl font-black tracking-tighter md:text-6xl">
@@ -694,7 +694,7 @@ export default function App() {
         <nav className="sticky top-0 z-50 border-b-4 border-[#111111] bg-white px-4 py-3 md:px-12 md:py-5">
           <div className="flex items-center justify-between gap-2 md:gap-4">
             <div className="text-xl font-black uppercase tracking-tighter md:text-3xl">
-              YOUANDINOTAI<span className="text-[#ff5a1f]">.</span>
+              YOUANDINOTAI<span className="text-[#a78bfa]">.</span>
             </div>
 
             <div className="hidden items-center gap-8 md:flex">
@@ -702,7 +702,7 @@ export default function App() {
                 <a
                   key={item.label}
                   href={item.href}
-                  className="text-sm font-black uppercase tracking-[0.16em] no-underline hover:text-[#ff5a1f]"
+                  className="text-sm font-black uppercase tracking-[0.16em] no-underline hover:text-[#a78bfa]"
                 >
                   {item.label}
                 </a>
@@ -753,7 +753,7 @@ export default function App() {
         >
           <div className="border-b-4 border-[#111111] bg-white px-4 py-8 md:col-span-8 md:border-b-0 md:border-r-4 md:px-12 md:py-20">
             <div className="max-w-4xl">
-              <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+              <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#a78bfa] md:mb-4 md:text-xs md:tracking-[0.24em]">
                 Section 01 // Human Only
               </div>
               <h1 className="text-4xl font-black lowercase leading-[0.9] tracking-tighter md:text-8xl xl:text-9xl">
@@ -766,7 +766,7 @@ export default function App() {
                 real-world connection. AI is used to protect the experience, not
                 perform it.
               </p>
-              <div className="mt-5 inline-block border-l-4 border-[#ff5a1f] bg-[#fff6f1] px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#111111] md:mt-8 md:px-4 md:py-3 md:text-sm md:tracking-[0.16em]">
+              <div className="mt-5 inline-block border-l-4 border-[#a78bfa] bg-[#fff6f1] px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#111111] md:mt-8 md:px-4 md:py-3 md:text-sm md:tracking-[0.16em]">
                 Bot-Shield verification and account-bound checkout are live now.
               </div>
 
@@ -779,7 +779,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="bg-[#ff5a1f] px-4 py-8 text-[#111111] md:col-span-4 md:px-10 md:py-16">
+          <div className="bg-[#a78bfa] px-4 py-8 text-[#111111] md:col-span-4 md:px-10 md:py-16">
             <div className="space-y-4 md:space-y-6">
               <div className="border-t-4 border-[#111111] pt-4 md:pt-6">
                 <h2 className="text-2xl font-black uppercase tracking-tighter md:text-4xl">
@@ -793,7 +793,7 @@ export default function App() {
 
               <div className="grid gap-3 sm:grid-cols-2 md:gap-4">
                 <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
-                  <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#ff5a1f] md:text-xs md:tracking-[0.18em]">
+                  <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#a78bfa] md:text-xs md:tracking-[0.18em]">
                     Live
                   </div>
                   <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
@@ -805,7 +805,7 @@ export default function App() {
                   </p>
                 </div>
                 <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
-                  <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#ff5a1f] md:text-xs md:tracking-[0.18em]">
+                  <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#a78bfa] md:text-xs md:tracking-[0.18em]">
                     Status
                   </div>
                   <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
@@ -826,7 +826,7 @@ export default function App() {
           className="border-b-4 border-[#111111] bg-[#f4efe7] px-4 py-10 md:px-12 md:py-16"
         >
           <div className="mx-auto max-w-7xl">
-            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#a78bfa] md:mb-4 md:text-xs md:tracking-[0.24em]">
               The Social
             </div>
             <h2 className="mb-6 text-3xl font-black tracking-tighter md:mb-10 md:text-7xl">
@@ -863,7 +863,7 @@ export default function App() {
           className="border-b-4 border-[#111111] bg-white px-4 py-10 md:px-12 md:py-16"
         >
           <div className="mx-auto max-w-5xl">
-            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#a78bfa] md:mb-4 md:text-xs md:tracking-[0.24em]">
               Section 04 // Trust
             </div>
             <h2 className="text-3xl font-black tracking-tighter md:text-7xl">
@@ -877,7 +877,7 @@ export default function App() {
                   support.
                 </p>
               </div>
-              <div className="border-4 border-[#111111] bg-[#111111] p-4 text-white shadow-[6px_6px_0_0_#ff5a1f] md:p-6">
+              <div className="border-4 border-[#111111] bg-[#111111] p-4 text-white shadow-[6px_6px_0_0_#a78bfa] md:p-6">
                 <p className="text-sm font-medium leading-7 text-[#d7d3cc] md:text-lg md:leading-8">
                   Customer purchases are commercial transactions for platform
                   value delivered. No non-product sales claim is attached to
@@ -885,7 +885,7 @@ export default function App() {
                 </p>
               </div>
             </div>
-            <div className="mt-6 border-4 border-[#111111] bg-[#ff5a1f] px-4 py-5 text-center text-lg font-black italic tracking-tight text-white shadow-[8px_8px_0_0_#111111] md:mt-10 md:px-6 md:py-8 md:text-2xl">
+            <div className="mt-6 border-4 border-[#111111] bg-[#a78bfa] px-4 py-5 text-center text-lg font-black italic tracking-tight text-white shadow-[8px_8px_0_0_#111111] md:mt-10 md:px-6 md:py-8 md:text-2xl">
               &quot;The Silent Founder would thank you, but he stays
               silent.&quot;
             </div>
@@ -896,7 +896,7 @@ export default function App() {
 
         <section className="border-b-4 border-[#111111] bg-white px-4 py-10 text-center md:px-12 md:py-16">
           <div className="mx-auto max-w-xl">
-            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#a78bfa] md:mb-4 md:text-xs md:tracking-[0.24em]">
               Section 06 // Share
             </div>
             <h2 className="text-3xl font-black tracking-tighter md:text-6xl">

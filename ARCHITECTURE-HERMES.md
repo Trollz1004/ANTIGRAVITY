@@ -16,18 +16,21 @@
 ## Node Distribution
 
 ### Sabretooth (Primary Gateway)
+
 - **IP:** `192.168.0.8`
 - **Purpose:** Primary orchestration, Hermes gateway, cockpit dashboard
 - **Services:** Hermes agent execution, API endpoints, WhatsApp/Telegram bridge
 - **Status:** ACTIVE — primary authority
 
 ### T5500 Node (Infrastructure)
+
 - **IP:** `192.168.0.15`
 - **Purpose:** Cloudflare workers, wranglers, edge deployments
 - **Services:** DNS, tunnel management, static assets
 - **Status:** ACTIVE — optional
 
 ### 9020 Node (Pending Wipe)
+
 - **IP:** `192.168.0.5`
 - **Purpose:** DEPRECATED — being phased out
 - **Status:** PENDING WIPE (preserve branch `9020-preserve-20260511` if needed)
@@ -92,7 +95,7 @@ Return result → Hermes → WhatsApp/Telegram reply
 ## Key Files to Understand
 
 1. **hermes/HERMES-SETUP-GUIDE.md** — This entire architecture
-2. **hermes/agents/HERMES-CEO-*.md** — Hermes brain contracts (HEARTBEAT, SOUL, TOOLS)
+2. **hermes/agents/HERMES-CEO-\*.md** — Hermes brain contracts (HEARTBEAT, SOUL, TOOLS)
 3. **hermes/agents/AGENTS.md** — Fleet and role definitions
 4. **hermes/agents/HEARTBEAT.md** — Self-improvement loop
 5. **services/hermes-router/hermes_router.py** — Execution engine

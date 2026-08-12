@@ -1,17 +1,17 @@
 ---
 name: azure-compliance
-description: "Comprehensive Azure compliance and security auditing capabilities including best practices assessment, Key Vault expiration monitoring, and resource configuration validation. USE FOR: compliance scan, security audit, azqr, Azure best practices, Key Vault expiration check, compliance assessment, resource review, configuration validation, expired certificates, expiring secrets, orphaned resources, policy compliance, security posture evaluation. DO NOT USE FOR: deploying resources (use azure-deploy), cost analysis alone (use azure-cost-optimization), active security hardening (use azure-security-hardening), general Azure Advisor queries (use azure-observability)."
+description: 'Comprehensive Azure compliance and security auditing capabilities including best practices assessment, Key Vault expiration monitoring, and resource configuration validation. USE FOR: compliance scan, security audit, azqr, Azure best practices, Key Vault expiration check, compliance assessment, resource review, configuration validation, expired certificates, expiring secrets, orphaned resources, policy compliance, security posture evaluation. DO NOT USE FOR: deploying resources (use azure-deploy), cost analysis alone (use azure-cost-optimization), active security hardening (use azure-security-hardening), general Azure Advisor queries (use azure-observability).'
 ---
 
 # Azure Compliance & Security Auditing
 
 ## Quick Reference
 
-| Property | Details |
-|---|---|
-| Best for | Compliance scans, security audits, Key Vault expiration checks |
-| Primary capabilities | Comprehensive Resources Assessment, Key Vault Expiration Monitoring |
-| MCP tools | azqr, subscription and resource group listing, Key Vault item inspection |
+| Property             | Details                                                                  |
+| -------------------- | ------------------------------------------------------------------------ |
+| Best for             | Compliance scans, security audits, Key Vault expiration checks           |
+| Primary capabilities | Comprehensive Resources Assessment, Key Vault Expiration Monitoring      |
+| MCP tools            | azqr, subscription and resource group listing, Key Vault item inspection |
 
 ## When to Use This Skill
 
@@ -23,6 +23,7 @@ description: "Comprehensive Azure compliance and security auditing capabilities 
 ## Skill Activation Triggers
 
 Activate this skill when user wants to:
+
 - Check Azure compliance or best practices
 - Assess Azure resources for configuration issues
 - Run azqr or Azure Quick Review
@@ -41,25 +42,25 @@ Activate this skill when user wants to:
 
 ## Assessments
 
-| Assessment | Reference |
-|------------|-----------|
-| Comprehensive Compliance (azqr) | [references/azure-quick-review.md](references/azure-quick-review.md) |
-| Key Vault Expiration | [references/azure-keyvault-expiration-audit.md](references/azure-keyvault-expiration-audit.md) |
-| Resource Graph Queries | [references/azure-resource-graph.md](references/azure-resource-graph.md) |
+| Assessment                      | Reference                                                                                      |
+| ------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Comprehensive Compliance (azqr) | [references/azure-quick-review.md](references/azure-quick-review.md)                           |
+| Key Vault Expiration            | [references/azure-keyvault-expiration-audit.md](references/azure-keyvault-expiration-audit.md) |
+| Resource Graph Queries          | [references/azure-resource-graph.md](references/azure-resource-graph.md)                       |
 
 ## MCP Tools
 
-| Tool | Purpose |
-|------|---------|
-| `mcp_azure_mcp_extension_azqr` | Run azqr compliance scans |
-| `mcp_azure_mcp_subscription_list` | List available subscriptions |
-| `mcp_azure_mcp_group_list` | List resource groups |
-| `keyvault_key_list` | List all keys in vault |
-| `keyvault_key_get` | Get key details including expiration |
-| `keyvault_secret_list` | List all secrets in vault |
-| `keyvault_secret_get` | Get secret details including expiration |
-| `keyvault_certificate_list` | List all certificates in vault |
-| `keyvault_certificate_get` | Get certificate details including expiration |
+| Tool                              | Purpose                                      |
+| --------------------------------- | -------------------------------------------- |
+| `mcp_azure_mcp_extension_azqr`    | Run azqr compliance scans                    |
+| `mcp_azure_mcp_subscription_list` | List available subscriptions                 |
+| `mcp_azure_mcp_group_list`        | List resource groups                         |
+| `keyvault_key_list`               | List all keys in vault                       |
+| `keyvault_key_get`                | Get key details including expiration         |
+| `keyvault_secret_list`            | List all secrets in vault                    |
+| `keyvault_secret_get`             | Get secret details including expiration      |
+| `keyvault_certificate_list`       | List all certificates in vault               |
+| `keyvault_certificate_get`        | Get certificate details including expiration |
 
 ## Assessment Workflow
 
@@ -71,20 +72,20 @@ Activate this skill when user wants to:
 
 ### Priority Classification
 
-| Priority | Guidance |
-|---|---|
+| Priority | Guidance                                                |
+| -------- | ------------------------------------------------------- |
 | Critical | Immediate remediation required for high-impact exposure |
-| High | Resolve within days to reduce risk |
-| Medium | Plan a resolution in the next sprint |
-| Low | Track and fix during regular maintenance |
+| High     | Resolve within days to reduce risk                      |
+| Medium   | Plan a resolution in the next sprint                    |
+| Low      | Track and fix during regular maintenance                |
 
 ## Error Handling
 
-| Error | Message | Remediation |
-|---|---|---|
-| Authentication required | "Please login" | Run `az login` and retry |
-| Access denied | "Forbidden" | Confirm permissions and fix role assignments |
-| Missing resource | "Not found" | Verify subscription and resource group selection |
+| Error                   | Message        | Remediation                                      |
+| ----------------------- | -------------- | ------------------------------------------------ |
+| Authentication required | "Please login" | Run `az login` and retry                         |
+| Access denied           | "Forbidden"    | Confirm permissions and fix role assignments     |
+| Missing resource        | "Not found"    | Verify subscription and resource group selection |
 
 ## Best Practices
 
@@ -101,4 +102,3 @@ For programmatic Key Vault access, see the condensed SDK guides:
 - **Secrets**: [TypeScript](references/sdk/azure-keyvault-secrets-ts.md) | [Rust](references/sdk/azure-keyvault-secrets-rust.md) | [Java](references/sdk/azure-security-keyvault-secrets-java.md)
 - **Keys**: [.NET](references/sdk/azure-security-keyvault-keys-dotnet.md) | [Java](references/sdk/azure-security-keyvault-keys-java.md) | [TypeScript](references/sdk/azure-keyvault-keys-ts.md) | [Rust](references/sdk/azure-keyvault-keys-rust.md)
 - **Certificates**: [Rust](references/sdk/azure-keyvault-certificates-rust.md)
-

@@ -119,12 +119,7 @@ export default function BrowserPanel() {
         >
           ⟳
         </button>
-        <button
-          type="button"
-          className="browser-btn"
-          title="Open Hermes (Telegram)"
-          onClick={() => mc?.home()}
-        >
+        <button type="button" className="browser-btn" title="Open Hermes (Telegram)" onClick={() => mc?.home()}>
           ⌂
         </button>
         <form className="browser-addr-form" onSubmit={submit}>
@@ -153,12 +148,7 @@ export default function BrowserPanel() {
             </option>
           ))}
         </select>
-        <button
-          type="button"
-          className="browser-btn"
-          title="Open in browser"
-          onClick={openExternal}
-        >
+        <button type="button" className="browser-btn" title="Open in browser" onClick={openExternal}>
           ⤢
         </button>
       </div>

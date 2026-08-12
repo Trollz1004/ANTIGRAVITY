@@ -1,17 +1,17 @@
-import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
-import { Plus, X, Send, ListTodo, Activity, CheckCircle2, AlertTriangle, Archive, Heart, Trash2 } from "lucide-react";
+import React, { useEffect, useMemo, useState } from 'react';
+import axios from 'axios';
+import { Plus, X, Send, ListTodo, Activity, CheckCircle2, AlertTriangle, Archive, Heart, Trash2 } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const STATUS_COLUMNS = [
-  { id: "open",        label: "Open",        Icon: ListTodo,         tone: "#6b82a6" },
-  { id: "in_progress", label: "In Progress", Icon: Activity,         tone: "#00d4ff" },
-  { id: "blocked",     label: "Blocked",     Icon: AlertTriangle,    tone: "#ff1744" },
-  { id: "done",        label: "Done",        Icon: CheckCircle2,     tone: "#00e676" },
+  { id: 'open', label: 'Open', Icon: ListTodo, tone: '#6b82a6' },
+  { id: 'in_progress', label: 'In Progress', Icon: Activity, tone: '#00d4ff' },
+  { id: 'blocked', label: 'Blocked', Icon: AlertTriangle, tone: '#ff1744' },
+  { id: 'done', label: 'Done', Icon: CheckCircle2, tone: '#00e676' },
 ];
 
-const PRIORITY_COLOR = { p0: "#ff1744", p1: "#ffb300", p2: "#6b82a6" };
+const PRIORITY_COLOR = { p0: '#ff1744', p1: '#ffb300', p2: '#6b82a6' };
 
 export function TasksMode() {
   const [tasks, setTasks] = useState([]);
@@ -27,20 +27,29 @@ export function TasksMode() {
       axios.get(`${API}/tasks/agents`).then((r) => r.data.agents),
       axios.get(`${API}/tasks/stats`).then((r) => r.data),
     ]);
-    setTasks(t || []); setAgents(a || []); setStats(s || null);
+    setTasks(t || []);
+    setAgents(a || []);
+    setStats(s || null);
   };
 
   useEffect(() => {
     refresh();
-    const onTask = (e) => setShowDispatch({ prefill: e.detail?.task || "" });
-    window.addEventListener("opuspawclaw-task", onTask);
-    const iv = setInterval(() => { if (!document.hidden) refresh(); }, 8000);
-    return () => { window.removeEventListener("opuspawclaw-task", onTask); clearInterval(iv); };
+    const onTask = (e) => setShowDispatch({ prefill: e.detail?.task || '' });
+    window.addEventListener('opuspawclaw-task', onTask);
+    const iv = setInterval(() => {
+      if (!document.hidden) refresh();
+    }, 8000);
+    return () => {
+      window.removeEventListener('opuspawclaw-task', onTask);
+      clearInterval(iv);
+    };
   }, []);
 
   const grouped = useMemo(() => {
     const g = { open: [], in_progress: [], blocked: [], done: [] };
-    tasks.forEach((t) => { if (g[t.status]) g[t.status].push(t); });
+    tasks.forEach((t) => {
+      if (g[t.status]) g[t.status].push(t);
+    });
     return g;
   }, [tasks]);
 
@@ -49,7 +58,7 @@ export function TasksMode() {
     refresh();
   };
   const remove = async (id) => {
-    if (!window.confirm("Archive this task permanently?")) return;
+    if (!window.confirm('Archive this task permanently?')) return;
     await axios.delete(`${API}/tasks/${id}`);
     refresh();
   };
@@ -69,7 +78,7 @@ export function TasksMode() {
         <div className="flex items-center gap-2">
           <button
             data-testid="tasks-dispatch-btn"
-            onClick={() => setShowDispatch({ prefill: "" })}
+            onClick={() => setShowDispatch({ prefill: '' })}
             className="flex items-center gap-1.5 text-[10px] tracking-widest uppercase px-3 py-1.5 rounded bg-[#e040fb]/15 border border-[#e040fb]/40 text-[#e040fb] hover:bg-[#e040fb]/25 transition-all"
           >
             <Send size={12} /> Dispatch
@@ -99,9 +108,13 @@ export function TasksMode() {
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 min-w-0">
                     <div className="w-2 h-2 rounded-full shrink-0" style={{ background: a.color }} />
-                    <span className="text-[10px] font-bold truncate" style={{ color: a.color }}>{a.label}</span>
+                    <span className="text-[10px] font-bold truncate" style={{ color: a.color }}>
+                      {a.label}
+                    </span>
                   </div>
-                  <span className="mono text-[9px] text-[#6b82a6] shrink-0">{a.active_tasks}/{a.task_cap}</span>
+                  <span className="mono text-[9px] text-[#6b82a6] shrink-0">
+                    {a.active_tasks}/{a.task_cap}
+                  </span>
                 </div>
                 <div className="h-1 w-full bg-[#0a0f1a] rounded-full overflow-hidden">
                   <div className="h-full rounded-full" style={{ width: `${pct}%`, background: a.color }} />
@@ -121,11 +134,17 @@ export function TasksMode() {
         <main className="col-span-9 lg:col-span-10 overflow-hidden p-3">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 h-full">
             {STATUS_COLUMNS.map((col) => (
-              <div key={col.id} data-testid={`column-${col.id}`} className="bg-[#1a2332] border border-[#2a3a52] rounded-md flex flex-col overflow-hidden">
+              <div
+                key={col.id}
+                data-testid={`column-${col.id}`}
+                className="bg-[#1a2332] border border-[#2a3a52] rounded-md flex flex-col overflow-hidden"
+              >
                 <div className="bg-[#111827] border-b border-[#2a3a52] px-3 py-2 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <col.Icon size={12} style={{ color: col.tone }} />
-                    <span className="text-[11px] font-bold tracking-wide" style={{ color: col.tone }}>{col.label}</span>
+                    <span className="text-[11px] font-bold tracking-wide" style={{ color: col.tone }}>
+                      {col.label}
+                    </span>
                   </div>
                   <span className="mono text-[9px] text-[#6b82a6]">{grouped[col.id].length}</span>
                 </div>
@@ -145,7 +164,11 @@ export function TasksMode() {
                           <div className="text-[12px] font-bold leading-snug flex-1">{t.title}</div>
                           <span
                             className="mono text-[8px] tracking-widest uppercase px-1 py-0.5 rounded shrink-0"
-                            style={{ background: `${PRIORITY_COLOR[t.priority]}20`, color: PRIORITY_COLOR[t.priority], border: `1px solid ${PRIORITY_COLOR[t.priority]}40` }}
+                            style={{
+                              background: `${PRIORITY_COLOR[t.priority]}20`,
+                              color: PRIORITY_COLOR[t.priority],
+                              border: `1px solid ${PRIORITY_COLOR[t.priority]}40`,
+                            }}
                           >
                             {t.priority}
                           </span>
@@ -157,9 +180,13 @@ export function TasksMode() {
                               <span className="w-1.5 h-1.5 rounded-full" style={{ background: owner.color }} />
                               <span style={{ color: owner.color }}>{owner.label}</span>
                             </span>
-                          ) : <span className="text-[9px] mono text-[#4a5568]">—</span>}
+                          ) : (
+                            <span className="text-[9px] mono text-[#4a5568]">—</span>
+                          )}
                           {t.bucket && (
-                            <span className="mono text-[8px] tracking-widest uppercase text-[#ffb300]">B{String(t.bucket).padStart(2,"0")}</span>
+                            <span className="mono text-[8px] tracking-widest uppercase text-[#ffb300]">
+                              B{String(t.bucket).padStart(2, '0')}
+                            </span>
                           )}
                         </div>
                         <div className="flex items-center gap-1 opacity-50 group-hover:opacity-100 transition-opacity pt-1 border-t border-[#2a3a52]">
@@ -169,7 +196,11 @@ export function TasksMode() {
                             onChange={(e) => updateStatus(t.id, e.target.value)}
                             className="mono text-[9px] flex-1 bg-[#1a2332] border border-[#2a3a52] rounded px-1 py-0.5 text-[#e8f0ff] outline-none"
                           >
-                            {STATUS_COLUMNS.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                            {STATUS_COLUMNS.map((c) => (
+                              <option key={c.id} value={c.id}>
+                                {c.label}
+                              </option>
+                            ))}
                             <option value="archived">Archive</option>
                           </select>
                           <button
@@ -199,19 +230,26 @@ export function TasksMode() {
 
       {showNew && <TaskForm agents={agents} onClose={() => setShowNew(false)} onSaved={refresh} />}
       {editing && <TaskForm task={editing} agents={agents} onClose={() => setEditing(null)} onSaved={refresh} />}
-      {showDispatch && <DispatchForm prefill={showDispatch.prefill} agents={agents} onClose={() => setShowDispatch(false)} onSaved={refresh} />}
+      {showDispatch && (
+        <DispatchForm
+          prefill={showDispatch.prefill}
+          agents={agents}
+          onClose={() => setShowDispatch(false)}
+          onSaved={refresh}
+        />
+      )}
     </div>
   );
 }
 
 function TaskForm({ task, agents, onClose, onSaved }) {
   const [form, setForm] = useState({
-    title: task?.title || "",
-    body: task?.body || "",
-    owner: task?.owner || "ceo",
-    priority: task?.priority || "p1",
-    bucket: task?.bucket || "",
-    status: task?.status || "open",
+    title: task?.title || '',
+    body: task?.body || '',
+    owner: task?.owner || 'ceo',
+    priority: task?.priority || 'p1',
+    bucket: task?.bucket || '',
+    status: task?.status || 'open',
   });
   const [busy, setBusy] = useState(false);
   const editing = !!task;
@@ -223,45 +261,105 @@ function TaskForm({ task, agents, onClose, onSaved }) {
       const payload = { ...form, bucket: form.bucket ? Number(form.bucket) : null };
       if (editing) await axios.patch(`${API}/tasks/${task.id}`, payload);
       else await axios.post(`${API}/tasks`, payload);
-      onSaved(); onClose();
-    } finally { setBusy(false); }
+      onSaved();
+      onClose();
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
-    <Modal title={editing ? "Edit Task" : "New Task"} onClose={onClose}>
+    <Modal title={editing ? 'Edit Task' : 'New Task'} onClose={onClose}>
       <form onSubmit={submit} className="space-y-3" data-testid="task-form">
         <Field label="Title">
-          <input data-testid="task-form-title" required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className={inputCls} />
+          <input
+            data-testid="task-form-title"
+            required
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            className={inputCls}
+          />
         </Field>
         <Field label="Body">
-          <textarea data-testid="task-form-body" value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} rows={3} className={`${inputCls} resize-none`} />
+          <textarea
+            data-testid="task-form-body"
+            value={form.body}
+            onChange={(e) => setForm({ ...form, body: e.target.value })}
+            rows={3}
+            className={`${inputCls} resize-none`}
+          />
         </Field>
         <div className="grid grid-cols-3 gap-2">
           <Field label="Owner">
-            <select data-testid="task-form-owner" value={form.owner} onChange={(e) => setForm({ ...form, owner: e.target.value })} className={inputCls}>
-              {agents.map((a) => <option key={a.id} value={a.id}>{a.label}</option>)}
+            <select
+              data-testid="task-form-owner"
+              value={form.owner}
+              onChange={(e) => setForm({ ...form, owner: e.target.value })}
+              className={inputCls}
+            >
+              {agents.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.label}
+                </option>
+              ))}
             </select>
           </Field>
           <Field label="Priority">
-            <select data-testid="task-form-priority" value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })} className={inputCls}>
-              <option value="p0">P0</option><option value="p1">P1</option><option value="p2">P2</option>
+            <select
+              data-testid="task-form-priority"
+              value={form.priority}
+              onChange={(e) => setForm({ ...form, priority: e.target.value })}
+              className={inputCls}
+            >
+              <option value="p0">P0</option>
+              <option value="p1">P1</option>
+              <option value="p2">P2</option>
             </select>
           </Field>
           <Field label="Bucket (1-10)">
-            <input data-testid="task-form-bucket" type="number" min="1" max="10" value={form.bucket} onChange={(e) => setForm({ ...form, bucket: e.target.value })} className={inputCls} />
+            <input
+              data-testid="task-form-bucket"
+              type="number"
+              min="1"
+              max="10"
+              value={form.bucket}
+              onChange={(e) => setForm({ ...form, bucket: e.target.value })}
+              className={inputCls}
+            />
           </Field>
         </div>
         {editing && (
           <Field label="Status">
-            <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} className={inputCls}>
-              {STATUS_COLUMNS.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+            <select
+              value={form.status}
+              onChange={(e) => setForm({ ...form, status: e.target.value })}
+              className={inputCls}
+            >
+              {STATUS_COLUMNS.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.label}
+                </option>
+              ))}
               <option value="archived">Archived</option>
             </select>
           </Field>
         )}
         <div className="flex justify-end gap-2 pt-2">
-          <button type="button" onClick={onClose} className="text-[10px] tracking-widest uppercase px-3 py-1.5 text-[#6b82a6] hover:text-[#e8f0ff]">cancel</button>
-          <button data-testid="task-form-submit" type="submit" disabled={busy || !form.title.trim()} className="text-[10px] tracking-widest uppercase px-4 py-1.5 rounded bg-[#00d4ff] text-[#0a0f1a] font-bold disabled:opacity-30 hover:bg-[#33ddff]">{busy ? "saving…" : editing ? "Save" : "Create"}</button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-[10px] tracking-widest uppercase px-3 py-1.5 text-[#6b82a6] hover:text-[#e8f0ff]"
+          >
+            cancel
+          </button>
+          <button
+            data-testid="task-form-submit"
+            type="submit"
+            disabled={busy || !form.title.trim()}
+            className="text-[10px] tracking-widest uppercase px-4 py-1.5 rounded bg-[#00d4ff] text-[#0a0f1a] font-bold disabled:opacity-30 hover:bg-[#33ddff]"
+          >
+            {busy ? 'saving…' : editing ? 'Save' : 'Create'}
+          </button>
         </div>
       </form>
     </Modal>
@@ -269,35 +367,54 @@ function TaskForm({ task, agents, onClose, onSaved }) {
 }
 
 function DispatchForm({ prefill, agents, onClose, onSaved }) {
-  const [title, setTitle] = useState(prefill || "");
-  const [body, setBody] = useState("");
-  const [priority, setPriority] = useState("p1");
-  const [bucket, setBucket] = useState("");
+  const [title, setTitle] = useState(prefill || '');
+  const [body, setBody] = useState('');
+  const [priority, setPriority] = useState('p1');
+  const [bucket, setBucket] = useState('');
   const [owners, setOwners] = useState([]);
   const [busy, setBusy] = useState(false);
 
-  const toggle = (id) => setOwners((p) => p.includes(id) ? p.filter((x) => x !== id) : [...p, id]);
+  const toggle = (id) => setOwners((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
 
   const submit = async (e) => {
     e.preventDefault();
     setBusy(true);
     try {
       await axios.post(`${API}/tasks/dispatch`, {
-        title, body, priority, bucket: bucket ? Number(bucket) : null, owners,
-        source: "Mission Control · TaskCommander",
+        title,
+        body,
+        priority,
+        bucket: bucket ? Number(bucket) : null,
+        owners,
+        source: 'Mission Control · TaskCommander',
       });
-      onSaved(); onClose();
-    } finally { setBusy(false); }
+      onSaved();
+      onClose();
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
     <Modal title="Dispatch Task to Multiple Agents" onClose={onClose}>
       <form onSubmit={submit} className="space-y-3" data-testid="dispatch-form">
         <Field label="Title">
-          <input data-testid="dispatch-title" required value={title} onChange={(e) => setTitle(e.target.value)} className={inputCls} />
+          <input
+            data-testid="dispatch-title"
+            required
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className={inputCls}
+          />
         </Field>
         <Field label="Body">
-          <textarea data-testid="dispatch-body" value={body} onChange={(e) => setBody(e.target.value)} rows={3} className={`${inputCls} resize-none`} />
+          <textarea
+            data-testid="dispatch-body"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            rows={3}
+            className={`${inputCls} resize-none`}
+          />
         </Field>
         <div className="grid grid-cols-2 gap-2">
           <Field label="Priority">
@@ -308,7 +425,14 @@ function DispatchForm({ prefill, agents, onClose, onSaved }) {
             </select>
           </Field>
           <Field label="Bucket (1-10)">
-            <input type="number" min="1" max="10" value={bucket} onChange={(e) => setBucket(e.target.value)} className={inputCls} />
+            <input
+              type="number"
+              min="1"
+              max="10"
+              value={bucket}
+              onChange={(e) => setBucket(e.target.value)}
+              className={inputCls}
+            />
           </Field>
         </div>
         <Field label={`Agents · ${owners.length} selected`}>
@@ -317,11 +441,12 @@ function DispatchForm({ prefill, agents, onClose, onSaved }) {
               const on = owners.includes(a.id);
               return (
                 <button
-                  key={a.id} type="button"
+                  key={a.id}
+                  type="button"
                   data-testid={`dispatch-toggle-${a.id}`}
                   onClick={() => toggle(a.id)}
-                  className={`text-[10px] mono px-2 py-1 rounded border transition-all ${on ? "border-[var(--c)] bg-[var(--c)]/15" : "border-[#2a3a52] bg-[#0a0f1a] hover:border-[var(--c)]"}`}
-                  style={{ "--c": a.color, color: on ? a.color : "#6b82a6" }}
+                  className={`text-[10px] mono px-2 py-1 rounded border transition-all ${on ? 'border-[var(--c)] bg-[var(--c)]/15' : 'border-[#2a3a52] bg-[#0a0f1a] hover:border-[var(--c)]'}`}
+                  style={{ '--c': a.color, color: on ? a.color : '#6b82a6' }}
                 >
                   {a.label}
                 </button>
@@ -330,9 +455,20 @@ function DispatchForm({ prefill, agents, onClose, onSaved }) {
           </div>
         </Field>
         <div className="flex justify-end gap-2 pt-2">
-          <button type="button" onClick={onClose} className="text-[10px] tracking-widest uppercase px-3 py-1.5 text-[#6b82a6] hover:text-[#e8f0ff]">cancel</button>
-          <button data-testid="dispatch-submit" type="submit" disabled={busy || !title.trim() || owners.length === 0} className="text-[10px] tracking-widest uppercase px-4 py-1.5 rounded bg-[#e040fb] text-[#0a0f1a] font-bold disabled:opacity-30 hover:bg-[#f070fe]">
-            {busy ? "dispatching…" : `Dispatch to ${owners.length}`}
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-[10px] tracking-widest uppercase px-3 py-1.5 text-[#6b82a6] hover:text-[#e8f0ff]"
+          >
+            cancel
+          </button>
+          <button
+            data-testid="dispatch-submit"
+            type="submit"
+            disabled={busy || !title.trim() || owners.length === 0}
+            className="text-[10px] tracking-widest uppercase px-4 py-1.5 rounded bg-[#e040fb] text-[#0a0f1a] font-bold disabled:opacity-30 hover:bg-[#f070fe]"
+          >
+            {busy ? 'dispatching…' : `Dispatch to ${owners.length}`}
           </button>
         </div>
       </form>
@@ -342,11 +478,19 @@ function DispatchForm({ prefill, agents, onClose, onSaved }) {
 
 function Modal({ title, children, onClose }) {
   return (
-    <div className="fixed inset-0 bg-[#0a0f1a]/85 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="w-full max-w-lg bg-[#1a2332] border border-[#2a3a52] rounded-md shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 bg-[#0a0f1a]/85 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-lg bg-[#1a2332] border border-[#2a3a52] rounded-md shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="bg-[#111827] border-b border-[#2a3a52] px-4 py-2.5 flex items-center justify-between">
           <span className="text-xs font-bold tracking-wide">{title}</span>
-          <button onClick={onClose} className="text-[#6b82a6] hover:text-[#ff1744]"><X size={14} /></button>
+          <button onClick={onClose} className="text-[#6b82a6] hover:text-[#ff1744]">
+            <X size={14} />
+          </button>
         </div>
         <div className="p-4">{children}</div>
       </div>
@@ -354,7 +498,8 @@ function Modal({ title, children, onClose }) {
   );
 }
 
-const inputCls = "w-full bg-[#0a0f1a] border border-[#2a3a52] rounded px-2.5 py-1.5 text-sm text-[#e8f0ff] focus:border-[#00d4ff] focus:ring-1 focus:ring-[#00d4ff]/20 outline-none mono";
+const inputCls =
+  'w-full bg-[#0a0f1a] border border-[#2a3a52] rounded px-2.5 py-1.5 text-sm text-[#e8f0ff] focus:border-[#00d4ff] focus:ring-1 focus:ring-[#00d4ff]/20 outline-none mono';
 
 function Field({ label, children }) {
   return (

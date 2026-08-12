@@ -38,9 +38,7 @@ export default function ServicesPanel() {
       </div>
       <div className="services__grid">
         {!loaded && <div className="services__empty">PROBING…</div>}
-        {loaded && services.length === 0 && (
-          <div className="services__empty">NO SERVICES CONFIGURED</div>
-        )}
+        {loaded && services.length === 0 && <div className="services__empty">NO SERVICES CONFIGURED</div>}
         {services.map((svc) => (
           <a
             key={svc.name}
@@ -56,9 +54,7 @@ export default function ServicesPanel() {
                 }`}
               />
               <span className="service-card__name">{svc.name}</span>
-              <span className="service-card__status">
-                {svc.status === 'up' ? 'UP' : 'DOWN'}
-              </span>
+              <span className="service-card__status">{svc.status === 'up' ? 'UP' : 'DOWN'}</span>
             </div>
             <div className="service-card__url mono">{svc.openUrl ?? svc.url}</div>
             <div className="service-card__meta">

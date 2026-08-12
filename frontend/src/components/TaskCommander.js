@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { Sparkles } from "lucide-react";
+import React, { useState } from 'react';
+import { Sparkles } from 'lucide-react';
 
 export function TaskCommander() {
-  const [task, setTask] = useState("");
+  const [task, setTask] = useState('');
 
   const dispatch = (e) => {
     e?.preventDefault();
     if (!task.trim()) return;
     // Fan out: TasksMode listens for this and opens the Dispatch dialog with prefill.
-    window.dispatchEvent(new CustomEvent("opuspawclaw-task", { detail: { task } }));
+    window.dispatchEvent(new CustomEvent('opuspawclaw-task', { detail: { task } }));
     // Also bubble a request to switch to tasks mode if a parent wired it up.
-    window.dispatchEvent(new CustomEvent("opuspawclaw-mode", { detail: { mode: "tasks" } }));
-    setTask("");
+    window.dispatchEvent(new CustomEvent('opuspawclaw-mode', { detail: { mode: 'tasks' } }));
+    setTask('');
   };
 
   return (
@@ -39,7 +39,7 @@ export function TaskCommander() {
             disabled={!task.trim()}
             className="absolute right-2 p-1.5 text-[#00d4ff] hover:bg-[#2a3a52]/80 disabled:opacity-30 rounded-lg transition-all"
           >
-            <Sparkles size={18} className={task.trim() ? "animate-pulse" : ""} />
+            <Sparkles size={18} className={task.trim() ? 'animate-pulse' : ''} />
           </button>
         </div>
       </form>

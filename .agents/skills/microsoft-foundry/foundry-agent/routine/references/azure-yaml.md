@@ -9,21 +9,21 @@ services:
     host: azure.ai.agent
     # ... agent service block ...
 
-  daily-digest:                 # service key = routine name
+  daily-digest: # service key = routine name
     host: azure.ai.routine
     uses:
-      - my-agent                # order the agent ahead of the routine that invokes it
+      - my-agent # order the agent ahead of the routine that invokes it
     description: Daily 8am digest
     enabled: true
     triggers:
       default:
-        type: schedule          # recurring cron; see type table below
-        cron_expression: "0 8 * * *"
+        type: schedule # recurring cron; see type table below
+        cron_expression: '0 8 * * *'
         time_zone: America/New_York
     action:
-      type: invoke_agent_responses_api   # see type table below
-      agent_name: my-agent      # target agent (distinct from the routine name)
-      input: "Summarize activity for ${AZURE_ENV_NAME}"
+      type: invoke_agent_responses_api # see type table below
+      agent_name: my-agent # target agent (distinct from the routine name)
+      input: 'Summarize activity for ${AZURE_ENV_NAME}'
 ```
 
 Then:

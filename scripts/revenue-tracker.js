@@ -24,7 +24,7 @@ const revenueData = {
       bucket: 1,
       description: 'Repository audit, doctrine purge, secret rotation, compliance scan.',
       payment_link: 'https://buy.stripe.com/3cI3cwcR6c3910p18peEo09?ref=clean-repo',
-      landing: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html'
+      landing: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html',
     },
     agentic_workflows: {
       name: 'Agentic Workflows',
@@ -33,7 +33,7 @@ const revenueData = {
       bucket: 2,
       description: 'Multi-agent orchestration, swarm deployment, autonomous task execution.',
       payment_link: 'https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a?ref=clean-repo',
-      landing: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html'
+      landing: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html',
     },
     storefront_deployment: {
       name: 'Storefront Deployment',
@@ -42,7 +42,7 @@ const revenueData = {
       bucket: 5,
       description: 'Digital storefront deployment with Square checkout, affiliate links.',
       payment_link: 'https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j?ref=clean-repo',
-      landing: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html'
+      landing: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html',
     },
     tech_debt_cleanup: {
       name: 'Tech Debt Cleanup',
@@ -50,7 +50,7 @@ const revenueData = {
       bucket: 7,
       description: 'Legacy code modernization, dependency updates, architecture refactoring.',
       payment_link: 'https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c?ref=clean-repo',
-      landing: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html'
+      landing: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html',
     },
     api_management: {
       name: 'API Management',
@@ -59,13 +59,13 @@ const revenueData = {
       bucket: 8,
       description: 'API gateway deployment, rate limiting, authentication, monitoring.',
       payment_link: 'https://buy.stripe.com/dRmcN604kebheRf2cteEo0d?ref=clean-repo',
-      landing: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html'
-    }
+      landing: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html',
+    },
   },
   landing_pages: {
     main: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-main.html',
     omnirouter: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-omnirouter.html',
-    revenue: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html'
+    revenue: 'E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html',
   },
   saas_product: 'E:/ANTIGRAVITY/services/omni-router/api-server.js',
   channels: ['landing-pages', 'saas-product', 'stripe-checkout'],
@@ -74,13 +74,13 @@ const revenueData = {
     payment_links_verified: true,
     landing_pages_deployed: true,
     saas_product_created: true,
-    revenue_verified: false
-  }
+    revenue_verified: false,
+  },
 };
 
 fs.writeFileSync(logFile, JSON.stringify(revenueData, null, 2));
 console.log('Revenue tracker written: ' + logFile);
 console.log('Payment links:');
-Object.values(revenueData.revenue_streams).forEach(s => {
+Object.values(revenueData.revenue_streams).forEach((s) => {
   console.log('  ' + s.name + ': ' + s.payment_link);
 });

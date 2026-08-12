@@ -31,9 +31,7 @@
   "paths": {
     "/api/v1/health": {
       "get": {
-        "tags": [
-          "health"
-        ],
+        "tags": ["health"],
         "summary": "Health check",
         "description": "Returns app readiness status including database and Redis, with Square configuration reported separately.",
         "operationId": "health_check_api_v1_health_get",
@@ -82,9 +80,7 @@
     },
     "/api/v1/health/allocations": {
       "get": {
-        "tags": [
-          "health"
-        ],
+        "tags": ["health"],
         "summary": "Check Allocations",
         "operationId": "check_allocations_api_v1_health_allocations_get",
         "responses": {
@@ -101,9 +97,7 @@
     },
     "/api/v1/health/allocations/summary": {
       "get": {
-        "tags": [
-          "health"
-        ],
+        "tags": ["health"],
         "summary": "Allocations Summary",
         "description": "Two-figure revenue summary: gross-with-test vs customer-only.\n\ncustomer_only is real customer revenue. with_test keeps founder-test\npayments visible for audit without counting them as customers.",
         "operationId": "allocations_summary_api_v1_health_allocations_summary_get",
@@ -121,9 +115,7 @@
     },
     "/api/v1/health/webhooks": {
       "get": {
-        "tags": [
-          "health"
-        ],
+        "tags": ["health"],
         "summary": "Check Webhooks",
         "operationId": "check_webhooks_api_v1_health_webhooks_get",
         "responses": {
@@ -140,10 +132,7 @@
     },
     "/api/v1/lovebot/compatibility": {
       "post": {
-        "tags": [
-          "lovebot",
-          "LoveBot"
-        ],
+        "tags": ["lovebot", "LoveBot"],
         "summary": "Check Compatibility",
         "description": "Check name and optional birthday compatibility.",
         "operationId": "check_compatibility_api_v1_lovebot_compatibility_post",
@@ -188,10 +177,7 @@
     },
     "/api/v1/lovebot/quotes": {
       "get": {
-        "tags": [
-          "lovebot",
-          "LoveBot"
-        ],
+        "tags": ["lovebot", "LoveBot"],
         "summary": "Get Love Quotes",
         "description": "Get a random love quote or pickup line.",
         "operationId": "get_love_quotes_api_v1_lovebot_quotes_get",
@@ -244,10 +230,7 @@
     },
     "/api/v1/lovebot/tips": {
       "get": {
-        "tags": [
-          "lovebot",
-          "LoveBot"
-        ],
+        "tags": ["lovebot", "LoveBot"],
         "summary": "Get Dating Tips",
         "description": "Get expert dating tips and lessons.",
         "operationId": "get_dating_tips_api_v1_lovebot_tips_get",
@@ -294,10 +277,7 @@
     },
     "/api/v1/lovebot/gifts": {
       "get": {
-        "tags": [
-          "lovebot",
-          "LoveBot"
-        ],
+        "tags": ["lovebot", "LoveBot"],
         "summary": "Get Gift Ideas",
         "description": "Get personalized gift ideas for your soulmate.",
         "operationId": "get_gift_ideas_api_v1_lovebot_gifts_get",
@@ -344,9 +324,7 @@
     },
     "/api/v1/auth/register": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "Register a new user",
         "description": "Create a new user account. Requires email, password (8-128 chars), display name, date of birth, and acceptance of terms.",
         "operationId": "register_api_v1_auth_register_post",
@@ -407,9 +385,7 @@
     },
     "/api/v1/auth/login": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "Log in",
         "description": "Authenticate with email and password. Returns JWT access and refresh tokens.",
         "operationId": "login_api_v1_auth_login_post",
@@ -466,9 +442,7 @@
     },
     "/api/v1/auth/google": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "Google Login",
         "operationId": "google_login_api_v1_auth_google_post",
         "requestBody": {
@@ -507,9 +481,7 @@
     },
     "/api/v1/auth/beta-access": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "Beta Access",
         "operationId": "beta_access_api_v1_auth_beta_access_post",
         "requestBody": {
@@ -548,9 +520,7 @@
     },
     "/api/v1/auth/refresh": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "Refresh tokens",
         "description": "Refresh an access token using refresh token rotation (OPU-47). The old refresh token is validated, revoked, and replaced with a new one.",
         "operationId": "refresh_token_api_v1_auth_refresh_post",
@@ -607,9 +577,7 @@
     },
     "/api/v1/auth/me": {
       "get": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "Get current user",
         "description": "Return the authenticated user's profile including subscription status, verification badges, and engagement score.",
         "operationId": "get_me_api_v1_auth_me_get",
@@ -657,9 +625,7 @@
     },
     "/api/v1/profiles/me": {
       "get": {
-        "tags": [
-          "profiles"
-        ],
+        "tags": ["profiles"],
         "summary": "Get My Profile",
         "operationId": "get_my_profile_api_v1_profiles_me_get",
         "responses": {
@@ -681,9 +647,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "profiles"
-        ],
+        "tags": ["profiles"],
         "summary": "Update My Profile",
         "operationId": "update_my_profile_api_v1_profiles_me_put",
         "requestBody": {
@@ -725,9 +689,7 @@
         ]
       },
       "patch": {
-        "tags": [
-          "profiles"
-        ],
+        "tags": ["profiles"],
         "summary": "Patch My Profile",
         "operationId": "patch_my_profile_api_v1_profiles_me_patch",
         "requestBody": {
@@ -771,9 +733,7 @@
     },
     "/api/v1/profiles/{user_id}": {
       "get": {
-        "tags": [
-          "profiles"
-        ],
+        "tags": ["profiles"],
         "summary": "Get User Profile",
         "operationId": "get_user_profile_api_v1_profiles__user_id__get",
         "security": [
@@ -819,9 +779,7 @@
     },
     "/api/v1/swipe": {
       "post": {
-        "tags": [
-          "swipe"
-        ],
+        "tags": ["swipe"],
         "summary": "Swipe",
         "operationId": "swipe_api_v1_swipe_post",
         "requestBody": {
@@ -865,9 +823,7 @@
     },
     "/api/v1/matches": {
       "get": {
-        "tags": [
-          "swipe"
-        ],
+        "tags": ["swipe"],
         "summary": "Get Matches",
         "operationId": "get_matches_api_v1_matches_get",
         "responses": {
@@ -895,9 +851,7 @@
     },
     "/api/v1/matches/{match_id}": {
       "get": {
-        "tags": [
-          "swipe"
-        ],
+        "tags": ["swipe"],
         "summary": "Get Match",
         "operationId": "get_match_api_v1_matches__match_id__get",
         "security": [
@@ -943,9 +897,7 @@
     },
     "/api/v1/discover": {
       "get": {
-        "tags": [
-          "swipe"
-        ],
+        "tags": ["swipe"],
         "summary": "Discover",
         "operationId": "discover_api_v1_discover_get",
         "security": [
@@ -995,9 +947,7 @@
     },
     "/api/v1/matches/{match_id}/breeze-bypass": {
       "patch": {
-        "tags": [
-          "swipe"
-        ],
+        "tags": ["swipe"],
         "summary": "Toggle Breeze Bypass",
         "description": "Breeze Bypass: Toggle zero-chat handshake mode for a specific match.",
         "operationId": "toggle_breeze_bypass_api_v1_matches__match_id__breeze_bypass_patch",
@@ -1051,9 +1001,7 @@
     },
     "/api/v1/messages/{match_id}": {
       "get": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "Get Messages",
         "operationId": "get_messages_api_v1_messages__match_id__get",
         "security": [
@@ -1127,9 +1075,7 @@
         }
       },
       "post": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "Send Message",
         "operationId": "send_message_api_v1_messages__match_id__post",
         "security": [
@@ -1185,9 +1131,7 @@
     },
     "/api/v1/boards": {
       "get": {
-        "tags": [
-          "boards"
-        ],
+        "tags": ["boards"],
         "summary": "List Boards",
         "operationId": "list_boards_api_v1_boards_get",
         "responses": {
@@ -1209,9 +1153,7 @@
     },
     "/api/v1/boards/{slug}/posts": {
       "get": {
-        "tags": [
-          "boards"
-        ],
+        "tags": ["boards"],
         "summary": "List Posts",
         "operationId": "list_posts_api_v1_boards__slug__posts_get",
         "security": [
@@ -1278,9 +1220,7 @@
         }
       },
       "post": {
-        "tags": [
-          "boards"
-        ],
+        "tags": ["boards"],
         "summary": "Create Post",
         "operationId": "create_post_api_v1_boards__slug__posts_post",
         "security": [
@@ -1335,9 +1275,7 @@
     },
     "/api/v1/boards/{slug}/posts/{post_id}/comments": {
       "get": {
-        "tags": [
-          "boards"
-        ],
+        "tags": ["boards"],
         "summary": "List Comments",
         "operationId": "list_comments_api_v1_boards__slug__posts__post_id__comments_get",
         "security": [
@@ -1394,9 +1332,7 @@
         }
       },
       "post": {
-        "tags": [
-          "boards"
-        ],
+        "tags": ["boards"],
         "summary": "Create Comment",
         "operationId": "create_comment_api_v1_boards__slug__posts__post_id__comments_post",
         "security": [
@@ -1461,9 +1397,7 @@
     },
     "/api/v1/boards/posts/{post_id}/report": {
       "post": {
-        "tags": [
-          "boards"
-        ],
+        "tags": ["boards"],
         "summary": "Report Post",
         "operationId": "report_post_api_v1_boards_posts__post_id__report_post",
         "security": [
@@ -1517,9 +1451,7 @@
     },
     "/api/v1/events": {
       "get": {
-        "tags": [
-          "events"
-        ],
+        "tags": ["events"],
         "summary": "List Events",
         "operationId": "list_events_api_v1_events_get",
         "security": [
@@ -1583,9 +1515,7 @@
         }
       },
       "post": {
-        "tags": [
-          "events"
-        ],
+        "tags": ["events"],
         "summary": "Create Event",
         "operationId": "create_event_api_v1_events_post",
         "security": [
@@ -1629,9 +1559,7 @@
     },
     "/api/v1/events/{event_id}/rsvp": {
       "post": {
-        "tags": [
-          "events"
-        ],
+        "tags": ["events"],
         "summary": "Rsvp Event",
         "operationId": "rsvp_event_api_v1_events__event_id__rsvp_post",
         "security": [
@@ -1677,9 +1605,7 @@
     },
     "/api/v1/volunteer/impact": {
       "get": {
-        "tags": [
-          "volunteering"
-        ],
+        "tags": ["volunteering"],
         "summary": "Volunteer Impact",
         "description": "Aggregate volunteer activity shown on the Volunteering Hub dashboard.",
         "operationId": "volunteer_impact_api_v1_volunteer_impact_get",
@@ -1734,9 +1660,7 @@
     },
     "/api/v1/volunteer/my-signups": {
       "get": {
-        "tags": [
-          "volunteering"
-        ],
+        "tags": ["volunteering"],
         "summary": "My Signups",
         "description": "Get the current user's volunteer signup history.",
         "operationId": "my_signups_api_v1_volunteer_my_signups_get",
@@ -1765,9 +1689,7 @@
     },
     "/api/v1/volunteer": {
       "get": {
-        "tags": [
-          "volunteering"
-        ],
+        "tags": ["volunteering"],
         "summary": "List Opportunities",
         "description": "List volunteer opportunities with optional location and category filters.",
         "operationId": "list_opportunities_api_v1_volunteer_get",
@@ -1852,9 +1774,7 @@
         }
       },
       "post": {
-        "tags": [
-          "volunteering"
-        ],
+        "tags": ["volunteering"],
         "summary": "Create Opportunity",
         "operationId": "create_opportunity_api_v1_volunteer_post",
         "security": [
@@ -1898,9 +1818,7 @@
     },
     "/api/v1/volunteer/{opp_id}/signup": {
       "post": {
-        "tags": [
-          "volunteering"
-        ],
+        "tags": ["volunteering"],
         "summary": "Signup Volunteer",
         "operationId": "signup_volunteer_api_v1_volunteer__opp_id__signup_post",
         "security": [
@@ -1944,9 +1862,7 @@
     },
     "/api/v1/webhooks/square-payment": {
       "post": {
-        "tags": [
-          "webhooks"
-        ],
+        "tags": ["webhooks"],
         "summary": "Square Payment Webhook",
         "description": "Handle Square payment webhooks for Bot-Shield and subscription purchases.\n\nProcesses:\n  - payment.completed \u2192 Bot-Shield $1 verification + subscription purchases\n  - payment.updated \u2192 Status changes\n  - subscription.created \u2192 New subscriptions\n  - subscription.updated \u2192 Subscription changes (cancellation, renewal)\n\nIron Wall enforcement:\n  - Creates a 'payment' VerificationEvent on successful Bot-Shield payment\n  - Updates user.bot_shield_verified and subscription_active flags\n  - Same tier logic as the retired payment handler, now wired to Square",
         "operationId": "square_payment_webhook_api_v1_webhooks_square_payment_post",
@@ -1994,9 +1910,7 @@
     },
     "/api/v1/webhooks/square": {
       "post": {
-        "tags": [
-          "webhooks"
-        ],
+        "tags": ["webhooks"],
         "summary": "Square Payment Webhook",
         "description": "Handle Square payment webhooks for Bot-Shield and subscription purchases.\n\nProcesses:\n  - payment.completed \u2192 Bot-Shield $1 verification + subscription purchases\n  - payment.updated \u2192 Status changes\n  - subscription.created \u2192 New subscriptions\n  - subscription.updated \u2192 Subscription changes (cancellation, renewal)\n\nIron Wall enforcement:\n  - Creates a 'payment' VerificationEvent on successful Bot-Shield payment\n  - Updates user.bot_shield_verified and subscription_active flags\n  - Same tier logic as the retired payment handler, now wired to Square",
         "operationId": "square_payment_webhook_api_v1_webhooks_square_post",
@@ -2044,9 +1958,7 @@
     },
     "/api/v1/webhooks/square-booking": {
       "post": {
-        "tags": [
-          "webhooks"
-        ],
+        "tags": ["webhooks"],
         "summary": "Square Booking Webhook",
         "description": "Handle Square booking webhooks for e-waste pickups (OnlineRecycle.org).",
         "operationId": "square_booking_webhook_api_v1_webhooks_square_booking_post",
@@ -2094,9 +2006,7 @@
     },
     "/api/v1/webhooks/stripe": {
       "post": {
-        "tags": [
-          "webhooks"
-        ],
+        "tags": ["webhooks"],
         "summary": "Stripe Webhook Retired",
         "operationId": "stripe_webhook_retired_api_v1_webhooks_stripe_post",
         "responses": {
@@ -2116,10 +2026,7 @@
     },
     "/api/v1/webhooks/retry/{event_id}": {
       "post": {
-        "tags": [
-          "webhooks",
-          "webhooks"
-        ],
+        "tags": ["webhooks", "webhooks"],
         "summary": "Retry Webhook Event",
         "description": "Manually retry a failed webhook event.\n\nWorks for events in the retry queue or dead-letter table.\nResets the retry count and schedules immediate processing.",
         "operationId": "retry_webhook_event_api_v1_webhooks_retry__event_id__post",
@@ -2166,10 +2073,7 @@
     },
     "/api/v1/webhooks/dead-letter": {
       "get": {
-        "tags": [
-          "webhooks",
-          "webhooks"
-        ],
+        "tags": ["webhooks", "webhooks"],
         "summary": "List Dead Letter",
         "description": "List webhook events that exhausted all retries and were moved to dead-letter.",
         "operationId": "list_dead_letter_api_v1_webhooks_dead_letter_get",
@@ -2230,10 +2134,7 @@
     },
     "/api/v1/webhooks/retry-queue": {
       "get": {
-        "tags": [
-          "webhooks",
-          "webhooks"
-        ],
+        "tags": ["webhooks", "webhooks"],
         "summary": "List Retry Queue",
         "description": "List active webhook events in the retry queue.",
         "operationId": "list_retry_queue_api_v1_webhooks_retry_queue_get",
@@ -2294,9 +2195,7 @@
     },
     "/api/v1/verify/challenge": {
       "post": {
-        "tags": [
-          "verification"
-        ],
+        "tags": ["verification"],
         "summary": "Create Challenge",
         "description": "Start a V8 liveness challenge. Returns a math question with a time window.",
         "operationId": "create_challenge_api_v1_verify_challenge_post",
@@ -2321,9 +2220,7 @@
     },
     "/api/v1/verify/submit": {
       "post": {
-        "tags": [
-          "verification"
-        ],
+        "tags": ["verification"],
         "summary": "Submit Challenge",
         "description": "Submit the answer to a liveness challenge. Returns trust score + checkout URL on pass.",
         "operationId": "submit_challenge_api_v1_verify_submit_post",
@@ -2368,9 +2265,7 @@
     },
     "/api/v1/verify/status": {
       "get": {
-        "tags": [
-          "verification"
-        ],
+        "tags": ["verification"],
         "summary": "Verification Status",
         "description": "Get current verification status and trust score.",
         "operationId": "verification_status_api_v1_verify_status_get",
@@ -2395,9 +2290,7 @@
     },
     "/api/v1/verify/confirm": {
       "post": {
-        "tags": [
-          "verification"
-        ],
+        "tags": ["verification"],
         "summary": "Confirm Verification",
         "description": "Called after payment succeeds (webhook or client-side confirmation).\n\nSECURITY: This endpoint requires BOTH:\n  1. A passed liveness challenge\n  2. A completed payment event (challenge_type == 'payment', status == 'completed')\n\nWithout both conditions met, verification is denied.\nThis prevents free verification bypass (Iron Wall enforcement).",
         "operationId": "confirm_verification_api_v1_verify_confirm_post",
@@ -2423,9 +2316,7 @@
     },
     "/api/v1/billing/checkout-link": {
       "post": {
-        "tags": [
-          "billing"
-        ],
+        "tags": ["billing"],
         "summary": "Create Checkout Link",
         "operationId": "create_checkout_link_api_v1_billing_checkout_link_post",
         "requestBody": {
@@ -2469,9 +2360,7 @@
     },
     "/api/v1/metrics": {
       "get": {
-        "tags": [
-          "metrics"
-        ],
+        "tags": ["metrics"],
         "summary": "Prometheus Metrics",
         "description": "Expose Prometheus metrics for scraping.\n\nReturns metrics in Prometheus text format including:\n- youandinotai_http_requests_total: Total HTTP requests (labeled by method, endpoint, status_code)\n- youandinotai_http_request_duration_seconds: Request duration histogram (labeled by method, endpoint)\n- youandinotai_http_requests_in_progress: Currently in-flight requests gauge",
         "operationId": "prometheus_metrics_api_v1_metrics_get",
@@ -2489,9 +2378,7 @@
     },
     "/api/v1/metrics/impact": {
       "get": {
-        "tags": [
-          "metrics"
-        ],
+        "tags": ["metrics"],
         "summary": "Impact Metrics",
         "description": "Aggregate platform metrics with no individual user or payment records.",
         "operationId": "impact_metrics_api_v1_metrics_impact_get",
@@ -2537,9 +2424,7 @@
     },
     "/api/v1/metrics/security-audit": {
       "get": {
-        "tags": [
-          "metrics"
-        ],
+        "tags": ["metrics"],
         "summary": "Security Audit Metrics",
         "description": "Expose a minimal aggregate security status for ops dashboards.",
         "operationId": "security_audit_metrics_api_v1_metrics_security_audit_get",
@@ -2585,9 +2470,7 @@
     },
     "/api/v1/privacy/my-data": {
       "get": {
-        "tags": [
-          "privacy"
-        ],
+        "tags": ["privacy"],
         "summary": "Get My Data",
         "operationId": "get_my_data_api_v1_privacy_my_data_get",
         "responses": {
@@ -2611,9 +2494,7 @@
     },
     "/api/v1/privacy/export": {
       "post": {
-        "tags": [
-          "privacy"
-        ],
+        "tags": ["privacy"],
         "summary": "Request Data Export",
         "operationId": "request_data_export_api_v1_privacy_export_post",
         "responses": {
@@ -2637,9 +2518,7 @@
     },
     "/api/v1/privacy/delete": {
       "post": {
-        "tags": [
-          "privacy"
-        ],
+        "tags": ["privacy"],
         "summary": "Request Account Deletion",
         "operationId": "request_account_deletion_api_v1_privacy_delete_post",
         "responses": {
@@ -2663,9 +2542,7 @@
     },
     "/api/v1/privacy/location/disable": {
       "post": {
-        "tags": [
-          "privacy"
-        ],
+        "tags": ["privacy"],
         "summary": "Disable Location Tracking",
         "operationId": "disable_location_tracking_api_v1_privacy_location_disable_post",
         "responses": {
@@ -2689,9 +2566,7 @@
     },
     "/api/v1/safety/blocks": {
       "get": {
-        "tags": [
-          "safety"
-        ],
+        "tags": ["safety"],
         "summary": "List Blocked Users",
         "operationId": "list_blocked_users_api_v1_safety_blocks_get",
         "responses": {
@@ -2719,9 +2594,7 @@
     },
     "/api/v1/safety/users/{user_id}/block": {
       "post": {
-        "tags": [
-          "safety"
-        ],
+        "tags": ["safety"],
         "summary": "Block User",
         "operationId": "block_user_api_v1_safety_users__user_id__block_post",
         "security": [
@@ -2775,9 +2648,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "safety"
-        ],
+        "tags": ["safety"],
         "summary": "Unblock User",
         "operationId": "unblock_user_api_v1_safety_users__user_id__block_delete",
         "security": [
@@ -2823,9 +2694,7 @@
     },
     "/api/v1/safety/users/{user_id}/report": {
       "post": {
-        "tags": [
-          "safety"
-        ],
+        "tags": ["safety"],
         "summary": "Report User",
         "operationId": "report_user_api_v1_safety_users__user_id__report_post",
         "security": [
@@ -2881,9 +2750,7 @@
     },
     "/api/v1/support/chat": {
       "post": {
-        "tags": [
-          "support"
-        ],
+        "tags": ["support"],
         "summary": "Support Chat",
         "operationId": "support_chat_api_v1_support_chat_post",
         "requestBody": {
@@ -2927,9 +2794,7 @@
     },
     "/api/v1/support/tickets": {
       "get": {
-        "tags": [
-          "support"
-        ],
+        "tags": ["support"],
         "summary": "List My Support Tickets",
         "operationId": "list_my_support_tickets_api_v1_support_tickets_get",
         "responses": {
@@ -2955,9 +2820,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "support"
-        ],
+        "tags": ["support"],
         "summary": "Create Support Ticket",
         "operationId": "create_support_ticket_api_v1_support_tickets_post",
         "requestBody": {
@@ -3001,9 +2864,7 @@
     },
     "/api/v1/support/operator/tickets": {
       "get": {
-        "tags": [
-          "support"
-        ],
+        "tags": ["support"],
         "summary": "List Operator Support Tickets",
         "operationId": "list_operator_support_tickets_api_v1_support_operator_tickets_get",
         "responses": {
@@ -3031,9 +2892,7 @@
     },
     "/api/v1/support/whatsapp/webhook": {
       "get": {
-        "tags": [
-          "support"
-        ],
+        "tags": ["support"],
         "summary": "Verify Whatsapp Webhook",
         "operationId": "verify_whatsapp_webhook_api_v1_support_whatsapp_webhook_get",
         "parameters": [
@@ -3090,9 +2949,7 @@
         }
       },
       "post": {
-        "tags": [
-          "support"
-        ],
+        "tags": ["support"],
         "summary": "Receive Whatsapp Webhook",
         "operationId": "receive_whatsapp_webhook_api_v1_support_whatsapp_webhook_post",
         "responses": {
@@ -3112,9 +2969,7 @@
     },
     "/api/v1/video/rooms/{match_id}": {
       "post": {
-        "tags": [
-          "video-rooms"
-        ],
+        "tags": ["video-rooms"],
         "summary": "Create Video Room",
         "description": "Creates a Daily.co video room for a match session.",
         "operationId": "create_video_room_api_v1_video_rooms__match_id__post",
@@ -3159,9 +3014,7 @@
     },
     "/api/v1/double-dates/propose": {
       "post": {
-        "tags": [
-          "double-dates"
-        ],
+        "tags": ["double-dates"],
         "summary": "Propose Double Date",
         "operationId": "propose_double_date_api_v1_double_dates_propose_post",
         "requestBody": {
@@ -3205,9 +3058,7 @@
     },
     "/api/v1/double-dates": {
       "get": {
-        "tags": [
-          "double-dates"
-        ],
+        "tags": ["double-dates"],
         "summary": "List Double Dates",
         "operationId": "list_double_dates_api_v1_double_dates_get",
         "responses": {
@@ -3235,9 +3086,7 @@
     },
     "/api/v1/double-dates/{session_id}/accept": {
       "post": {
-        "tags": [
-          "double-dates"
-        ],
+        "tags": ["double-dates"],
         "summary": "Accept Double Date",
         "operationId": "accept_double_date_api_v1_double_dates__session_id__accept_post",
         "security": [
@@ -3283,9 +3132,7 @@
     },
     "/api/v1/double-dates/{session_id}/decline": {
       "post": {
-        "tags": [
-          "double-dates"
-        ],
+        "tags": ["double-dates"],
         "summary": "Decline Double Date",
         "operationId": "decline_double_date_api_v1_double_dates__session_id__decline_post",
         "security": [
@@ -3331,9 +3178,7 @@
     },
     "/api/v1/double-dates/squad-recommendations": {
       "get": {
-        "tags": [
-          "double-dates"
-        ],
+        "tags": ["double-dates"],
         "summary": "Get Squad Recommendations",
         "description": "Recommend matches for double-dates based on engagement score.",
         "operationId": "get_squad_recommendations_api_v1_double_dates_squad_recommendations_get",
@@ -3362,9 +3207,7 @@
     },
     "/api/v1/users/register": {
       "post": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "Register a user (legacy)",
         "description": "Legacy user registration endpoint with IP-based rate limiting. Prefer `POST /api/v1/auth/register` for new integrations.",
         "operationId": "register_user_api_v1_users_register_post",
@@ -3430,9 +3273,7 @@
     },
     "/api/v1/waitlist": {
       "post": {
-        "tags": [
-          "waitlist"
-        ],
+        "tags": ["waitlist"],
         "summary": "Signup Waitlist",
         "operationId": "signup_waitlist_api_v1_waitlist_post",
         "requestBody": {
@@ -3471,10 +3312,7 @@
     },
     "/api/v1/marketing/content": {
       "get": {
-        "tags": [
-          "marketing",
-          "marketing"
-        ],
+        "tags": ["marketing", "marketing"],
         "summary": "List Content Items",
         "description": "List all marketing content items.",
         "operationId": "list_content_items_api_v1_marketing_content_get",
@@ -3501,10 +3339,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "marketing",
-          "marketing"
-        ],
+        "tags": ["marketing", "marketing"],
         "summary": "Create Content Item",
         "description": "Create a new marketing content item from AI agent.\n\nThis endpoint accepts structured content from AI agents and stores it for publishing.",
         "operationId": "create_content_item_api_v1_marketing_content_post",
@@ -3549,10 +3384,7 @@
     },
     "/api/v1/marketing/content/{content_id}": {
       "get": {
-        "tags": [
-          "marketing",
-          "marketing"
-        ],
+        "tags": ["marketing", "marketing"],
         "summary": "Get Content Item",
         "description": "Get a specific marketing content item.",
         "operationId": "get_content_item_api_v1_marketing_content__content_id__get",
@@ -3596,10 +3428,7 @@
         }
       },
       "put": {
-        "tags": [
-          "marketing",
-          "marketing"
-        ],
+        "tags": ["marketing", "marketing"],
         "summary": "Update Content Item",
         "description": "Update a marketing content item (full replace).",
         "operationId": "update_content_item_api_v1_marketing_content__content_id__put",
@@ -3653,10 +3482,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "marketing",
-          "marketing"
-        ],
+        "tags": ["marketing", "marketing"],
         "summary": "Patch Content Item",
         "description": "Partially update a marketing content item.\nOnly fields explicitly provided in the request body are updated;\nomitted fields retain their current values.",
         "operationId": "patch_content_item_api_v1_marketing_content__content_id__patch",
@@ -3712,9 +3538,7 @@
     },
     "/api/v1/admin/flags/": {
       "get": {
-        "tags": [
-          "feature-flags"
-        ],
+        "tags": ["feature-flags"],
         "summary": "List all feature flags",
         "operationId": "list_flags_api_v1_admin_flags__get",
         "responses": {
@@ -3739,9 +3563,7 @@
     },
     "/api/v1/admin/flags/{name}": {
       "get": {
-        "tags": [
-          "feature-flags"
-        ],
+        "tags": ["feature-flags"],
         "summary": "Get a feature flag value",
         "operationId": "read_flag_api_v1_admin_flags__name__get",
         "security": [
@@ -3785,9 +3607,7 @@
         }
       },
       "put": {
-        "tags": [
-          "feature-flags"
-        ],
+        "tags": ["feature-flags"],
         "summary": "Update a feature flag value",
         "operationId": "update_flag_api_v1_admin_flags__name__put",
         "security": [
@@ -3843,9 +3663,7 @@
     },
     "/api/v1/ops-runs": {
       "post": {
-        "tags": [
-          "ops-runs"
-        ],
+        "tags": ["ops-runs"],
         "summary": "Record an ops run event",
         "operationId": "create_ops_run_api_v1_ops_runs_post",
         "security": [
@@ -3887,9 +3705,7 @@
         }
       },
       "get": {
-        "tags": [
-          "ops-runs"
-        ],
+        "tags": ["ops-runs"],
         "summary": "List recent ops run events",
         "operationId": "list_ops_runs_api_v1_ops_runs_get",
         "security": [
@@ -3952,9 +3768,7 @@
     },
     "/api/v1/ops-runs/{run_id}": {
       "get": {
-        "tags": [
-          "ops-runs"
-        ],
+        "tags": ["ops-runs"],
         "summary": "Get a single ops run event",
         "operationId": "get_ops_run_api_v1_ops_runs__run_id__get",
         "security": [
@@ -3999,10 +3813,7 @@
     },
     "/api/v1/api/v1/clawx/agents": {
       "get": {
-        "tags": [
-          "clawx",
-          "clawx"
-        ],
+        "tags": ["clawx", "clawx"],
         "summary": "List ClawX agents",
         "description": "Return all 6 ClawX operator agents and their configuration status.\n\nKeys are never returned \u2014 only a masked prefix for configured agents.",
         "operationId": "list_clawx_agents_api_v1_api_v1_clawx_agents_get",
@@ -4027,10 +3838,7 @@
     },
     "/api/v1/api/v1/clawx/agents/{agent_name}/rotate": {
       "post": {
-        "tags": [
-          "clawx",
-          "clawx"
-        ],
+        "tags": ["clawx", "clawx"],
         "summary": "Rotate an agent's API key",
         "description": "Replace the API key for *agent_name* with the provided ``new_key``.\n\nThe new key must be at least 16 characters long and contain only\nalphanumeric characters, hyphens, underscores, dots, or colons.",
         "operationId": "rotate_agent_key_api_v1_api_v1_clawx_agents__agent_name__rotate_post",
@@ -4086,10 +3894,7 @@
     },
     "/api/v1/api/v1/clawx/health": {
       "get": {
-        "tags": [
-          "clawx",
-          "clawx"
-        ],
+        "tags": ["clawx", "clawx"],
         "summary": "ClawX health check",
         "description": "Check connectivity to the ClawX service.\n\nTests the ClawX base URL with a round-robin selected agent key.\nReturns whether the service is reachable and any error details.",
         "operationId": "clawx_health_api_v1_api_v1_clawx_health_get",
@@ -4114,9 +3919,7 @@
     },
     "/api/v1/notifications/broadcast": {
       "post": {
-        "tags": [
-          "notifications"
-        ],
+        "tags": ["notifications"],
         "summary": "Broadcast Notification",
         "description": "Broadcast a notification to all connected WebSocket clients.\n\nThis endpoint is used by other services/routers to trigger real-time\nnotification broadcasts. The payload must include a `type` field\ndescribing the event type.\n\nSupported event types:\n- \"task_status_change\" \u2014 a task changed status\n- \"new_issue\" \u2014 a new issue was created\n- \"agent_activity\" \u2014 an agent performed an action\n\nExample payload:\n{\n    \"type\": \"task_status_change\",\n    \"task_id\": \"abc-123\",\n    \"task_title\": \"Deploy frontend\",\n    \"old_status\": \"in_progress\",\n    \"new_status\": \"completed\"\n}",
         "operationId": "broadcast_notification_api_v1_notifications_broadcast_post",
@@ -4163,9 +3966,7 @@
     },
     "/api/v1/rate-limits/status": {
       "get": {
-        "tags": [
-          "rate-limits"
-        ],
+        "tags": ["rate-limits"],
         "summary": "Get Rate Limit Status",
         "description": "Return current rate limit status and usage statistics.",
         "operationId": "get_rate_limit_status_api_v1_rate_limits_status_get",
@@ -4190,9 +3991,7 @@
     },
     "/api/v1/rate-limits/stats": {
       "get": {
-        "tags": [
-          "rate-limits"
-        ],
+        "tags": ["rate-limits"],
         "summary": "Get Rate Limit Stats",
         "description": "Return rate limit statistics for authenticated dashboard users.",
         "operationId": "get_rate_limit_stats_api_v1_rate_limits_stats_get",
@@ -4217,9 +4016,7 @@
     },
     "/api/v1/rate-limits/config": {
       "get": {
-        "tags": [
-          "rate-limits"
-        ],
+        "tags": ["rate-limits"],
         "summary": "Get Rate Limit Config",
         "description": "Return rate limit configuration.",
         "operationId": "get_rate_limit_config_api_v1_rate_limits_config_get",
@@ -4244,9 +4041,7 @@
     },
     "/api/v1/rate-limits/reset": {
       "post": {
-        "tags": [
-          "rate-limits"
-        ],
+        "tags": ["rate-limits"],
         "summary": "Reset Rate Limit Stats",
         "description": "Reset rate limit statistics (admin only).",
         "operationId": "reset_rate_limit_stats_api_v1_rate_limits_reset_post",
@@ -4308,9 +4103,7 @@
     },
     "/api/v1/uploads/": {
       "post": {
-        "tags": [
-          "uploads"
-        ],
+        "tags": ["uploads"],
         "summary": "Upload File",
         "description": "Secure file upload with validation, size limits, and virus scanning.",
         "operationId": "upload_file_api_v1_uploads__post",
@@ -4353,9 +4146,7 @@
     },
     "/api/v1/uploads/chunked/init": {
       "post": {
-        "tags": [
-          "uploads"
-        ],
+        "tags": ["uploads"],
         "summary": "Init Chunked Upload",
         "description": "Initialize a chunked upload session.\n\nReturns an upload_id to use for subsequent chunk uploads.",
         "operationId": "init_chunked_upload_api_v1_uploads_chunked_init_post",
@@ -4412,9 +4203,7 @@
     },
     "/api/v1/uploads/chunked/{upload_id}": {
       "post": {
-        "tags": [
-          "uploads"
-        ],
+        "tags": ["uploads"],
         "summary": "Upload Chunk",
         "description": "Upload a single chunk of a file.\n\nThe Content-Range header must be present and follow the format:\n    bytes <start>-<end>/<total>\n\nChunks are stored in a temporary directory and combined on finalize.",
         "operationId": "upload_chunk_api_v1_uploads_chunked__upload_id__post",
@@ -4472,9 +4261,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "uploads"
-        ],
+        "tags": ["uploads"],
         "summary": "Cancel Chunked Upload",
         "description": "Cancel a chunked upload and clean up all temporary data.",
         "operationId": "cancel_chunked_upload_api_v1_uploads_chunked__upload_id__delete",
@@ -4518,9 +4305,7 @@
     },
     "/api/v1/uploads/progress/{upload_id}": {
       "get": {
-        "tags": [
-          "uploads"
-        ],
+        "tags": ["uploads"],
         "summary": "Get Upload Progress",
         "description": "Get the current progress of an upload.",
         "operationId": "get_upload_progress_api_v1_uploads_progress__upload_id__get",
@@ -4564,9 +4349,7 @@
     },
     "/api/v1/uploads/chunked/{upload_id}/finalize": {
       "post": {
-        "tags": [
-          "uploads"
-        ],
+        "tags": ["uploads"],
         "summary": "Finalize Chunked Upload",
         "description": "Combine all uploaded chunks into the final file and run validation.",
         "operationId": "finalize_chunked_upload_api_v1_uploads_chunked__upload_id__finalize_post",
@@ -4672,9 +4455,7 @@
     },
     "/api/v1/health/detailed": {
       "get": {
-        "tags": [
-          "health"
-        ],
+        "tags": ["health"],
         "summary": "Detailed API health dashboard",
         "description": "Returns comprehensive health status including endpoint response times, availability, and dependency checks.",
         "operationId": "detailed_health_dashboard_api_v1_health_detailed_get",
@@ -4771,10 +4552,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "name",
-          "configured"
-        ],
+        "required": ["name", "configured"],
         "title": "AgentInfo"
       },
       "AgentListResponse": {
@@ -4796,11 +4574,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "agents",
-          "total",
-          "configured_count"
-        ],
+        "required": ["agents", "total", "configured_count"],
         "title": "AgentListResponse"
       },
       "AuthBetaAccessRequest": {
@@ -4813,9 +4587,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "code"
-        ],
+        "required": ["code"],
         "title": "AuthBetaAccessRequest"
       },
       "AuthLoginRequest": {
@@ -4831,10 +4603,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
+        "required": ["email", "password"],
         "title": "AuthLoginRequest"
       },
       "AuthRefreshRequest": {
@@ -4845,9 +4614,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "refresh_token"
-        ],
+        "required": ["refresh_token"],
         "title": "AuthRefreshRequest"
       },
       "AuthRegisterRequest": {
@@ -4924,11 +4691,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "access_token",
-          "refresh_token",
-          "user_id"
-        ],
+        "required": ["access_token", "refresh_token", "user_id"],
         "title": "AuthTokenResponse"
       },
       "Body_upload_file_api_v1_uploads__post": {
@@ -4940,9 +4703,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "file"
-        ],
+        "required": ["file"],
         "title": "Body_upload_file_api_v1_uploads__post"
       },
       "ChallengeResponse": {
@@ -4969,13 +4730,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "challenge_id",
-          "challenge_type",
-          "question",
-          "issued_at",
-          "expires_at"
-        ],
+        "required": ["challenge_id", "challenge_type", "question", "issued_at", "expires_at"],
         "title": "ChallengeResponse"
       },
       "ChallengeResult": {
@@ -5005,11 +4760,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "passed",
-          "trust_score",
-          "message"
-        ],
+        "required": ["passed", "trust_score", "message"],
         "title": "ChallengeResult"
       },
       "ChallengeSubmitRequest": {
@@ -5024,29 +4775,19 @@
           }
         },
         "type": "object",
-        "required": [
-          "challenge_id",
-          "answer"
-        ],
+        "required": ["challenge_id", "answer"],
         "title": "ChallengeSubmitRequest"
       },
       "CheckoutLinkRequest": {
         "properties": {
           "tier": {
             "type": "string",
-            "enum": [
-              "founding_member",
-              "3_month",
-              "12_month",
-              "royalty"
-            ],
+            "enum": ["founding_member", "3_month", "12_month", "royalty"],
             "title": "Tier"
           }
         },
         "type": "object",
-        "required": [
-          "tier"
-        ],
+        "required": ["tier"],
         "title": "CheckoutLinkRequest"
       },
       "CheckoutLinkResponse": {
@@ -5061,10 +4802,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "checkout_url",
-          "session_id"
-        ],
+        "required": ["checkout_url", "session_id"],
         "title": "CheckoutLinkResponse"
       },
       "CommentCreateRequest": {
@@ -5077,9 +4815,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "body"
-        ],
+        "required": ["body"],
         "title": "CommentCreateRequest"
       },
       "CommentResponse": {
@@ -5109,13 +4845,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "author_id",
-          "author_name",
-          "body",
-          "created_at"
-        ],
+        "required": ["id", "author_id", "author_name", "body", "created_at"],
         "title": "CommentResponse"
       },
       "ContentItem": {
@@ -5150,14 +4880,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "title",
-          "content",
-          "tags",
-          "created_at",
-          "published"
-        ],
+        "required": ["id", "title", "content", "tags", "created_at", "published"],
         "title": "ContentItem"
       },
       "DiscoverProfileResponse": {
@@ -5246,15 +4969,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "user_id",
-          "display_name",
-          "bio",
-          "age",
-          "photos",
-          "interests",
-          "location"
-        ],
+        "required": ["user_id", "display_name", "bio", "age", "photos", "interests", "location"],
         "title": "DiscoverProfileResponse"
       },
       "DoubleDateCoupleResponse": {
@@ -5273,10 +4988,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "match_id",
-          "members"
-        ],
+        "required": ["match_id", "members"],
         "title": "DoubleDateCoupleResponse"
       },
       "DoubleDateParticipantResponse": {
@@ -5303,10 +5015,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "user_id",
-          "display_name"
-        ],
+        "required": ["user_id", "display_name"],
         "title": "DoubleDateParticipantResponse"
       },
       "DoubleDateProposeRequest": {
@@ -5323,10 +5032,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "match_a_id",
-          "match_b_id"
-        ],
+        "required": ["match_a_id", "match_b_id"],
         "title": "DoubleDateProposeRequest"
       },
       "DoubleDateSessionResponse": {
@@ -5385,13 +5091,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "match_a_id",
-          "match_b_id",
-          "status",
-          "created_at"
-        ],
+        "required": ["id", "match_a_id", "match_b_id", "status", "created_at"],
         "title": "DoubleDateSessionResponse"
       },
       "DoubleDateSquadRecommendation": {
@@ -5433,13 +5133,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "match_id",
-          "display_name",
-          "photo_url",
-          "engagement_score",
-          "member_badge"
-        ],
+        "required": ["match_id", "display_name", "photo_url", "engagement_score", "member_badge"],
         "title": "DoubleDateSquadRecommendation"
       },
       "EndpointStat": {
@@ -5454,10 +5148,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "path",
-          "count"
-        ],
+        "required": ["path", "count"],
         "title": "EndpointStat"
       },
       "EventCreateRequest": {
@@ -5510,11 +5201,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "title",
-          "description",
-          "event_date"
-        ],
+        "required": ["title", "description", "event_date"],
         "title": "EventCreateRequest"
       },
       "EventRSVPResponse": {
@@ -5545,13 +5232,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "event_id",
-          "user_id",
-          "status",
-          "created_at"
-        ],
+        "required": ["id", "event_id", "user_id", "status", "created_at"],
         "title": "EventRSVPResponse"
       },
       "EventResponse": {
@@ -5642,9 +5323,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "value"
-        ],
+        "required": ["value"],
         "title": "FlagUpdate"
       },
       "GoogleLoginRequest": {
@@ -5655,9 +5334,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id_token"
-        ],
+        "required": ["id_token"],
         "title": "GoogleLoginRequest"
       },
       "HTTPValidationError": {
@@ -5729,10 +5406,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "enabled",
-          "base_url"
-        ],
+        "required": ["enabled", "base_url"],
         "title": "HealthCheckResponse"
       },
       "HealthResponse": {
@@ -5797,15 +5471,11 @@
             "minLength": 16,
             "title": "New Key",
             "description": "The new API key to assign to the agent.",
-            "examples": [
-              "sk-REDACTED"
-            ]
+            "examples": ["sk-REDACTED"]
           }
         },
         "type": "object",
-        "required": [
-          "new_key"
-        ],
+        "required": ["new_key"],
         "title": "KeyRotateRequest"
       },
       "LoveBotCompatibilityRequest": {
@@ -5848,10 +5518,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "name1",
-          "name2"
-        ],
+        "required": ["name1", "name2"],
         "title": "LoveBotCompatibilityRequest"
       },
       "LoveBotCompatibilityResponse": {
@@ -5866,10 +5533,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "score",
-          "message"
-        ],
+        "required": ["score", "message"],
         "title": "LoveBotCompatibilityResponse"
       },
       "LoveBotGiftResponse": {
@@ -5887,10 +5551,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "recipient",
-          "ideas"
-        ],
+        "required": ["recipient", "ideas"],
         "title": "LoveBotGiftResponse"
       },
       "LoveBotQuoteResponse": {
@@ -5909,11 +5570,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "text",
-          "author",
-          "category"
-        ],
+        "required": ["text", "author", "category"],
         "title": "LoveBotQuoteResponse"
       },
       "LoveBotTipResponse": {
@@ -5931,10 +5588,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "category",
-          "tips"
-        ],
+        "required": ["category", "tips"],
         "title": "LoveBotTipResponse"
       },
       "MarketingPost": {
@@ -6188,14 +5842,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "match_id",
-          "user_id",
-          "display_name",
-          "photos",
-          "matched_at",
-          "last_message_at"
-        ],
+        "required": ["match_id", "user_id", "display_name", "photos", "matched_at", "last_message_at"],
         "title": "MatchResponse"
       },
       "MessageResponse": {
@@ -6233,13 +5880,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "sender_id",
-          "content",
-          "read_at",
-          "created_at"
-        ],
+        "required": ["id", "sender_id", "content", "read_at", "created_at"],
         "title": "MessageResponse"
       },
       "MessageSendRequest": {
@@ -6252,9 +5893,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "content"
-        ],
+        "required": ["content"],
         "title": "MessageSendRequest"
       },
       "MySignupResponse": {
@@ -6369,10 +6008,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "script",
-          "status"
-        ],
+        "required": ["script", "status"],
         "title": "OpsRunCreate"
       },
       "OpsRunResponse": {
@@ -6417,14 +6053,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "script",
-          "status",
-          "duration_ms",
-          "details",
-          "recorded_at"
-        ],
+        "required": ["id", "script", "status", "duration_ms", "details", "recorded_at"],
         "title": "OpsRunResponse"
       },
       "PostCreateRequest": {
@@ -6443,10 +6072,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "title",
-          "body"
-        ],
+        "required": ["title", "body"],
         "title": "PostCreateRequest"
       },
       "PostReportRequest": {
@@ -6471,9 +6097,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "reason"
-        ],
+        "required": ["reason"],
         "title": "PostReportRequest"
       },
       "PostResponse": {
@@ -6515,16 +6139,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "board_slug",
-          "author_id",
-          "author_name",
-          "title",
-          "body",
-          "like_count",
-          "created_at"
-        ],
+        "required": ["id", "board_slug", "author_id", "author_name", "title", "body", "like_count", "created_at"],
         "title": "PostResponse"
       },
       "PrivacyActionResponse": {
@@ -6556,11 +6171,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "status",
-          "action",
-          "request_id"
-        ],
+        "required": ["status", "action", "request_id"],
         "title": "PrivacyActionResponse"
       },
       "PrivacyMyDataResponse": {
@@ -6700,16 +6311,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "bio",
-          "age",
-          "gender",
-          "looking_for",
-          "location",
-          "interests",
-          "verified",
-          "location_enabled"
-        ],
+        "required": ["bio", "age", "gender", "looking_for", "location", "interests", "verified", "location_enabled"],
         "title": "PrivacyProfileSummary"
       },
       "PrivacyRequestResponse": {
@@ -6746,12 +6348,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "action",
-          "status",
-          "created_at"
-        ],
+        "required": ["id", "action", "status", "created_at"],
         "title": "PrivacyRequestResponse"
       },
       "ProfilePatchRequest": {
@@ -7046,11 +6643,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "requestsPerMinute",
-          "burstSize",
-          "windowSeconds"
-        ],
+        "required": ["requestsPerMinute", "burstSize", "windowSeconds"],
         "title": "RateLimitConfig"
       },
       "RateLimitStatus": {
@@ -7080,13 +6673,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "requestsThisMinute",
-          "requestsPerMinute",
-          "resetInSeconds",
-          "totalRequestsToday",
-          "topEndpoints"
-        ],
+        "required": ["requestsThisMinute", "requestsPerMinute", "resetInSeconds", "totalRequestsToday", "topEndpoints"],
         "title": "RateLimitStatus"
       },
       "RotateResponse": {
@@ -7102,9 +6689,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "title": "RotateResponse"
       },
       "SafetyBlockRequest": {
@@ -7143,10 +6728,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "status",
-          "blocked_user_id"
-        ],
+        "required": ["status", "blocked_user_id"],
         "title": "SafetyBlockResponse"
       },
       "SafetyBlockedUserResponse": {
@@ -7178,21 +6760,14 @@
           }
         },
         "type": "object",
-        "required": [
-          "blocked_user_id",
-          "display_name",
-          "created_at"
-        ],
+        "required": ["blocked_user_id", "display_name", "created_at"],
         "title": "SafetyBlockedUserResponse"
       },
       "SupportChatMessage": {
         "properties": {
           "role": {
             "type": "string",
-            "enum": [
-              "user",
-              "assistant"
-            ],
+            "enum": ["user", "assistant"],
             "title": "Role"
           },
           "content": {
@@ -7203,10 +6778,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "role",
-          "content"
-        ],
+        "required": ["role", "content"],
         "title": "SupportChatMessage"
       },
       "SupportChatRequest": {
@@ -7231,9 +6803,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "message"
-        ],
+        "required": ["message"],
         "title": "SupportChatRequest"
       },
       "SupportChatResponse": {
@@ -7273,11 +6843,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "reply",
-          "escalated",
-          "category"
-        ],
+        "required": ["reply", "escalated", "category"],
         "title": "SupportChatResponse"
       },
       "SupportTicketResponse": {
@@ -7374,10 +6940,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "target_id",
-          "direction"
-        ],
+        "required": ["target_id", "direction"],
         "title": "SwipeRequest"
       },
       "SwipeResponse": {
@@ -7400,9 +6963,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "matched"
-        ],
+        "required": ["matched"],
         "title": "SwipeResponse"
       },
       "UserMeResponse": {
@@ -7505,10 +7066,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "email",
-          "display_name"
-        ],
+        "required": ["email", "display_name"],
         "title": "UserRegisterRequest"
       },
       "UserRegisterResponse": {
@@ -7524,10 +7082,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "user_id",
-          "session_token"
-        ],
+        "required": ["user_id", "session_token"],
         "title": "UserRegisterResponse"
       },
       "UserReportRequest": {
@@ -7552,21 +7107,13 @@
           },
           "source": {
             "type": "string",
-            "enum": [
-              "profile",
-              "chat",
-              "match",
-              "board",
-              "other"
-            ],
+            "enum": ["profile", "chat", "match", "board", "other"],
             "title": "Source",
             "default": "profile"
           }
         },
         "type": "object",
-        "required": [
-          "reason"
-        ],
+        "required": ["reason"],
         "title": "UserReportRequest"
       },
       "UserReportResponse": {
@@ -7599,11 +7146,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "status",
-          "report_id",
-          "reported_user_id"
-        ],
+        "required": ["status", "report_id", "reported_user_id"],
         "title": "UserReportResponse"
       },
       "ValidationError": {
@@ -7632,11 +7175,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
+        "required": ["loc", "msg", "type"],
         "title": "ValidationError"
       },
       "VerificationStatus": {
@@ -7667,14 +7206,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "verified",
-          "trust_score",
-          "tier",
-          "bot_shield_paid",
-          "subscription_active",
-          "checks_completed"
-        ],
+        "required": ["verified", "trust_score", "tier", "bot_shield_paid", "subscription_active", "checks_completed"],
         "title": "VerificationStatus"
       },
       "VolunteerCreateRequest": {
@@ -7753,11 +7285,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "title",
-          "organization",
-          "description"
-        ],
+        "required": ["title", "organization", "description"],
         "title": "VolunteerCreateRequest"
       },
       "VolunteerImpactResponse": {
@@ -7928,9 +7456,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "email"
-        ],
+        "required": ["email"],
         "title": "WaitlistSignupRequest"
       },
       "WaitlistSignupResponse": {
@@ -7976,10 +7502,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "event_id",
-          "processed"
-        ],
+        "required": ["event_id", "processed"],
         "title": "WebhookAckResponse"
       }
     },

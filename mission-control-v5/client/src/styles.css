@@ -136,7 +136,9 @@ body {
   letter-spacing: 0.14em;
   padding: 0 calc(var(--unit) * 3);
   cursor: pointer;
-  transition: color 80ms linear, background 80ms linear;
+  transition:
+    color 80ms linear,
+    background 80ms linear;
 }
 
 .header__tab:hover {

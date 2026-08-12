@@ -10,16 +10,16 @@ Use this when the request is to create a new hosted Foundry agent end-to-end —
 
 ## Quick Reference
 
-| Property | Default (when user is silent) | Override |
-|----------|-------------------------------|----------|
-| Language / runtime | Python 3.13 (`python_3_13`) | Any of `python_3_13`, `python_3_14`, `dotnet_10` |
-| Sample | Featured basic starter for the chosen language (`azd ai agent sample list --featured-only --language <lang> --output json`) | User may name a different featured sample |
-| Subscription | `az account show` | User may supply |
-| Region | `northcentralus` | Ask user to confirm or pick another |
-| Foundry project | Ask if the user doesn't mention one | create new → no `--project-id`; existing → pass `--project-id` (ARM ID / endpoint); no mention → stop and ask (existing vs new) |
-| Model deployment | Whatever the sample's manifest declares | If user supplies a deployment name, `azd env set AZURE_AI_MODEL_DEPLOYMENT_NAME` after init |
-| Deploy mode | `code` (no Docker, no ACR build) | — |
-| Stops at | Deployed agent + remote smoke invoke + eval generation submitted | — |
+| Property           | Default (when user is silent)                                                                                               | Override                                                                                                                        |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Language / runtime | Python 3.13 (`python_3_13`)                                                                                                 | Any of `python_3_13`, `python_3_14`, `dotnet_10`                                                                                |
+| Sample             | Featured basic starter for the chosen language (`azd ai agent sample list --featured-only --language <lang> --output json`) | User may name a different featured sample                                                                                       |
+| Subscription       | `az account show`                                                                                                           | User may supply                                                                                                                 |
+| Region             | `northcentralus`                                                                                                            | Ask user to confirm or pick another                                                                                             |
+| Foundry project    | Ask if the user doesn't mention one                                                                                         | create new → no `--project-id`; existing → pass `--project-id` (ARM ID / endpoint); no mention → stop and ask (existing vs new) |
+| Model deployment   | Whatever the sample's manifest declares                                                                                     | If user supplies a deployment name, `azd env set AZURE_AI_MODEL_DEPLOYMENT_NAME` after init                                     |
+| Deploy mode        | `code` (no Docker, no ACR build)                                                                                            | —                                                                                                                               |
+| Stops at           | Deployed agent + remote smoke invoke + eval generation submitted                                                            | —                                                                                                                               |
 
 ## Workflow
 
@@ -44,14 +44,14 @@ Act on the summary prefixes:
 
 For any values **not** already in the prompt, ask the rest in a single `AskUserQuestion` round:
 
-| Value | Default | Notes |
-|-------|---------|-------|
-| Project / agent name | `ai-agent-<random6>` (6 lowercase alphanumeric chars) | Used as agent name, service key, and project directory. |
-| Language | `python_3_13` | One of `python_3_13`, `python_3_14`, `dotnet_10`. |
-| Subscription | `az account show --query id -o tsv` | Must be a GUID. |
-| Region | `northcentralus` | Confirm or override. |
-| Foundry project | Ask if the user doesn't mention one | User said create new → create a new one (no `--project-id`). User gave an existing project → use its ARM resource ID *or* Foundry project endpoint URL. User didn't mention a project at all → stop and ask, offering existing vs new. |
-| Existing model deployment? | No (use sample manifest's model) | If Yes: collect the deployment name. |
+| Value                      | Default                                               | Notes                                                                                                                                                                                                                                  |
+| -------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Project / agent name       | `ai-agent-<random6>` (6 lowercase alphanumeric chars) | Used as agent name, service key, and project directory.                                                                                                                                                                                |
+| Language                   | `python_3_13`                                         | One of `python_3_13`, `python_3_14`, `dotnet_10`.                                                                                                                                                                                      |
+| Subscription               | `az account show --query id -o tsv`                   | Must be a GUID.                                                                                                                                                                                                                        |
+| Region                     | `northcentralus`                                      | Confirm or override.                                                                                                                                                                                                                   |
+| Foundry project            | Ask if the user doesn't mention one                   | User said create new → create a new one (no `--project-id`). User gave an existing project → use its ARM resource ID _or_ Foundry project endpoint URL. User didn't mention a project at all → stop and ask, offering existing vs new. |
+| Existing model deployment? | No (use sample manifest's model)                      | If Yes: collect the deployment name.                                                                                                                                                                                                   |
 
 If the user supplied only a **Foundry project endpoint** (not an ARM ID), resolve the ARM ID before Step 6:
 
@@ -74,10 +74,10 @@ Pick the basic starter (e.g. `azd-ai-starter-basic` for Python — avoid samples
 
 Step 6 needs `--runtime` and `--entry-point` values. These are CLI args, **not** fields in the manifest — use these standard defaults for the chosen language:
 
-| Language | `--runtime` | `--entry-point` |
-|----------|-------------|-----------------|
-| Python | `python_3_13` | `main.py` |
-| .NET | `dotnet_10` | `MyAgent.dll` |
+| Language | `--runtime`   | `--entry-point` |
+| -------- | ------------- | --------------- |
+| Python   | `python_3_13` | `main.py`       |
+| .NET     | `dotnet_10`   | `MyAgent.dll`   |
 
 ### Step 4 — Create the project directory
 
@@ -88,7 +88,7 @@ cd <project-name>
 
 ### Step 5 — Pre-bootstrap with core `azd init`
 
-This step writes `AZURE_SUBSCRIPTION_ID` + `AZURE_LOCATION` into the azd env *before* `azd ai agent init` runs, which prevents init from deferring model resolution and leaving the `{{AZURE_AI_MODEL_DEPLOYMENT_NAME}}` placeholder in the agent service's `environmentVariables`.
+This step writes `AZURE_SUBSCRIPTION_ID` + `AZURE_LOCATION` into the azd env _before_ `azd ai agent init` runs, which prevents init from deferring model resolution and leaving the `{{AZURE_AI_MODEL_DEPLOYMENT_NAME}}` placeholder in the agent service's `environmentVariables`.
 
 > `azd init` requires an **empty** directory — `--no-prompt` does **not** bypass the overwrite prompt and exits non-zero if files already exist. Step 4 created a fresh directory, so this is satisfied.
 
@@ -153,18 +153,18 @@ This project was built with the microsoft-foundry skill. Before working on or an
 
 Verify all four before continuing. If any check fails, pick **one** recovery path, then re-verify:
 
-| Check | Expected | If failed |
-|-------|----------|-----------|
-| `azure.yaml services.ai-project.deployments[]` | Non-empty array with `name`, `model.{name,format,version}`, `sku.{name,capacity}` | Model resolution deferred — use recovery |
-| Agent service `environmentVariables` `AZURE_AI_MODEL_DEPLOYMENT_NAME` (in `azure.yaml`) | Literal name **or** `${AZURE_AI_MODEL_DEPLOYMENT_NAME}` substitution | If literal `{{AZURE_AI_MODEL_DEPLOYMENT_NAME}}` (double braces): use recovery |
-| Agent service `codeConfiguration.entryPoint:` (in `azure.yaml`) | Matches a real file in `src/<project>/` (e.g. `main.py` and `main.py` exists) | If mismatch (e.g. `entryPoint: app.py` but only `main.py` exists): edit `azure.yaml` to the real filename, then re-verify. Most often caused by passing a wrong `--entry-point` in Step 6. |
-| `azure.yaml services:` keys | Only one `<project>` entry | If `<project>-2` exists: init was re-run; use recovery |
+| Check                                                                                   | Expected                                                                          | If failed                                                                                                                                                                                  |
+| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `azure.yaml services.ai-project.deployments[]`                                          | Non-empty array with `name`, `model.{name,format,version}`, `sku.{name,capacity}` | Model resolution deferred — use recovery                                                                                                                                                   |
+| Agent service `environmentVariables` `AZURE_AI_MODEL_DEPLOYMENT_NAME` (in `azure.yaml`) | Literal name **or** `${AZURE_AI_MODEL_DEPLOYMENT_NAME}` substitution              | If literal `{{AZURE_AI_MODEL_DEPLOYMENT_NAME}}` (double braces): use recovery                                                                                                              |
+| Agent service `codeConfiguration.entryPoint:` (in `azure.yaml`)                         | Matches a real file in `src/<project>/` (e.g. `main.py` and `main.py` exists)     | If mismatch (e.g. `entryPoint: app.py` but only `main.py` exists): edit `azure.yaml` to the real filename, then re-verify. Most often caused by passing a wrong `--entry-point` in Step 6. |
+| `azure.yaml services:` keys                                                             | Only one `<project>` entry                                                        | If `<project>-2` exists: init was re-run; use recovery                                                                                                                                     |
 
 **Recovery paths** (pick based on whether Step 7 has already customized `src/<project>/`):
 
-1. **Hand-fix in place** *(use when Step 7 customization is already done — preserves user code)* — edit `azure.yaml services.ai-project.deployments[]` to add the model block, replace `{{AZURE_AI_MODEL_DEPLOYMENT_NAME}}` in the agent service's `environmentVariables` with `${AZURE_AI_MODEL_DEPLOYMENT_NAME}`, then `azd env set AZURE_AI_MODEL_DEPLOYMENT_NAME <deployment-name>`.
-2. **Clean re-init** *(use only when Step 7 has not run yet — destructive: deletes `src/<project>/`)* — delete `src/<project>/`, remove the `services.<project>:` block from `azure.yaml`, re-run Step 6.
-3. **Interactive overwrite** *(loses Step 7 edits — re-resolves the model from the original manifest)* — re-run Step 6 *without* `--no-prompt`. When the collision prompt appears, **arrow-up to "Overwrite existing"** (default is *not* overwrite).
+1. **Hand-fix in place** _(use when Step 7 customization is already done — preserves user code)_ — edit `azure.yaml services.ai-project.deployments[]` to add the model block, replace `{{AZURE_AI_MODEL_DEPLOYMENT_NAME}}` in the agent service's `environmentVariables` with `${AZURE_AI_MODEL_DEPLOYMENT_NAME}`, then `azd env set AZURE_AI_MODEL_DEPLOYMENT_NAME <deployment-name>`.
+2. **Clean re-init** _(use only when Step 7 has not run yet — destructive: deletes `src/<project>/`)_ — delete `src/<project>/`, remove the `services.<project>:` block from `azure.yaml`, re-run Step 6.
+3. **Interactive overwrite** _(loses Step 7 edits — re-resolves the model from the original manifest)_ — re-run Step 6 _without_ `--no-prompt`. When the collision prompt appears, **arrow-up to "Overwrite existing"** (default is _not_ overwrite).
 
 Never `azd env set AI_PROJECT_DEPLOYMENTS '[...]'` (single-escaped JSON breaks Bicep parse). Never `az cognitiveservices account deployment create` against this account (creates the deployment outside the azd lifecycle).
 
@@ -195,7 +195,7 @@ FOUNDRY_PROJECT_ENDPOINT=https://<account>.services.ai.azure.com/api/projects/<p
 AZURE_AI_MODEL_DEPLOYMENT_NAME=<deployment-name>
 ```
 
-Also mirror them into the azd env (so `azd ai agent run` injects the right values — it reads azd env *before* `.env`):
+Also mirror them into the azd env (so `azd ai agent run` injects the right values — it reads azd env _before_ `.env`):
 
 ```bash
 azd env set AZURE_AI_PROJECT_ENDPOINT "<endpoint>"
@@ -209,6 +209,7 @@ Set up a venv with `uv` installed first. `azd ai agent run` installs Python depe
 > **Important:** the venv must live in `src/<project>/` (next to `requirements.txt`). `azd ai agent run` resolves the venv relative to the service source directory; a venv at the project root is ignored and azd silently creates a second one without `uv`, wasting the speedup.
 
 **Python:**
+
 ```bash
 cd src/<project>
 python -m venv .venv
@@ -223,9 +224,10 @@ cd -                                             # back to project root for the 
 
 Run the agent locally. For Python, do this **with the service-dir venv still activated** — activation is what lets `azd ai agent run` find `uv` for the fast dependency install. `azd ai agent run` **is** the local server — a foreground process holding port 8088 that must stay alive from start, through every `invoke --local`, until you explicitly stop it.
 
-Start it in a **managed** background session your shell tool can poll and stop (most tools detect a long-running foreground process and return a session/shell id — use that id). Do **not** use job operators (`bash &`, `nohup`, `start /B`, popped windows): on Linux/macOS the child gets `SIGHUP` and **dies when its parent bash exits**, so the next command sees `could not connect` even though `ss` from inside the *same* bash just showed `:8088` bound.
+Start it in a **managed** background session your shell tool can poll and stop (most tools detect a long-running foreground process and return a session/shell id — use that id). Do **not** use job operators (`bash &`, `nohup`, `start /B`, popped windows): on Linux/macOS the child gets `SIGHUP` and **dies when its parent bash exits**, so the next command sees `could not connect` even though `ss` from inside the _same_ bash just showed `:8088` bound.
 
 > ⚠️ **Readiness gate — do not skip.** After starting `azd ai agent run`, **watch the server log for the ready line, something like `Running` (e.g. `Running on http://0.0.0.0:8088`) — not just `Starting …`**, which azd prints as a banner before the Python process has bound the socket. Invoking before the socket is bound fails with `could not connect`.
+>
 > - **Never invoke before the most recent log read shows the ready line.** Premature invokes waste a poll cycle and return a misleading `could not connect`.
 > - **Poll short — 2–5s per read.** Boot time is unbounded; long sleeps cost wall-clock directly. No 15s+ blocks or `sleep N` waits.
 > - **Don't substitute log polling** with `sleep N && curl`, `netstat` / `ss` / `lsof`, or `ps aux` probes — only the log tells you readiness.
@@ -266,7 +268,7 @@ Remote invoke (billed):
 azd ai agent invoke "<short representative prompt>"
 ```
 
-`azd ai agent invoke` has **no `--force` flag**. If the command succeeds, read the response. If it surfaces a confirmation prompt or message, summarize the cost implication for the user (*"this will call the deployed agent and incur model usage charges"*), get explicit consent, and re-run — do **not** invent flags.
+`azd ai agent invoke` has **no `--force` flag**. If the command succeeds, read the response. If it surfaces a confirmation prompt or message, summarize the cost implication for the user (_"this will call the deployed agent and incur model usage charges"_), get explicit consent, and re-run — do **not** invent flags.
 
 ### Step 15 — Submit eval suite generation (async, fire-and-forget)
 
@@ -291,7 +293,7 @@ Eval generate submitted (async)
 
 Generation runs server-side and takes several minutes. Tell the user:
 
-> *"Eval suite generation submitted. Run `azd ai agent eval run` whenever you're ready — it'll wait for generation to finish and execute the eval in one step."*
+> _"Eval suite generation submitted. Run `azd ai agent eval run` whenever you're ready — it'll wait for generation to finish and execute the eval in one step."_
 
 ### Step 16 — Final summary
 
@@ -317,19 +319,17 @@ azd down                                    # tear down all resources when done
 
 ## Error Handling
 
-| Symptom | Fix |
-|---------|-----|
-| `azd ai agent init` fails with `--runtime must be one of: python_3_13, python_3_14, dotnet_10` | You passed a bare value like `python`. Use the full runtime token (e.g. `python_3_13`). |
-| `azd ai agent init` fails with `--entry-point is required when using --deploy-mode code with --no-prompt` | Pass `--entry-point <filename>` matching the entry-point file the sample declares (from Step 3). |
-| `codeConfiguration.entryPoint` doesn't match any file in `src/<project>/` | You guessed the entry-point in Step 6. Edit the agent service in `azure.yaml` to the real filename (verify with `ls src/<project>/`). No re-init needed. |
-| `azd deploy` postdeploy hook fails with missing `AZURE_TENANT_ID` | Run `az account show --query tenantId -o tsv` and `azd env set AZURE_TENANT_ID <tenant-id>`, then re-run `azd deploy --no-prompt`. The deployed agent version from the first deploy is still valid; the postdeploy hook just registers env vars. |
-| Scaffold sanity check fails (Step 9) | Pick a recovery path from Step 9. If still failing → [create-hosted.md](create-hosted.md). |
-| Local invoke returns model `404` / wrong deployment | Stale `AZURE_AI_MODEL_DEPLOYMENT_NAME` in azd env overrides `.env`. Re-run Step 11 to sync both. |
-| `azd ai agent invoke ... --force` returns `unknown flag: --force` | `--force` is not a valid flag for invoke. Re-run without it. |
-| Anything else | Escape to [create-hosted.md](create-hosted.md). |
+| Symptom                                                                                                   | Fix                                                                                                                                                                                                                                              |
+| --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `azd ai agent init` fails with `--runtime must be one of: python_3_13, python_3_14, dotnet_10`            | You passed a bare value like `python`. Use the full runtime token (e.g. `python_3_13`).                                                                                                                                                          |
+| `azd ai agent init` fails with `--entry-point is required when using --deploy-mode code with --no-prompt` | Pass `--entry-point <filename>` matching the entry-point file the sample declares (from Step 3).                                                                                                                                                 |
+| `codeConfiguration.entryPoint` doesn't match any file in `src/<project>/`                                 | You guessed the entry-point in Step 6. Edit the agent service in `azure.yaml` to the real filename (verify with `ls src/<project>/`). No re-init needed.                                                                                         |
+| `azd deploy` postdeploy hook fails with missing `AZURE_TENANT_ID`                                         | Run `az account show --query tenantId -o tsv` and `azd env set AZURE_TENANT_ID <tenant-id>`, then re-run `azd deploy --no-prompt`. The deployed agent version from the first deploy is still valid; the postdeploy hook just registers env vars. |
+| Scaffold sanity check fails (Step 9)                                                                      | Pick a recovery path from Step 9. If still failing → [create-hosted.md](create-hosted.md).                                                                                                                                                       |
+| Local invoke returns model `404` / wrong deployment                                                       | Stale `AZURE_AI_MODEL_DEPLOYMENT_NAME` in azd env overrides `.env`. Re-run Step 11 to sync both.                                                                                                                                                 |
+| `azd ai agent invoke ... --force` returns `unknown flag: --force`                                         | `--force` is not a valid flag for invoke. Re-run without it.                                                                                                                                                                                     |
+| Anything else                                                                                             | Escape to [create-hosted.md](create-hosted.md).                                                                                                                                                                                                  |
 
 ## Escape Hatch
 
 If any step fails in a way not covered above, the output looks unexpected, or the user's request drifts outside what this quickstart covers → **stop improvising**. Read [create-hosted.md](create-hosted.md) and follow its full workflow.
-
-

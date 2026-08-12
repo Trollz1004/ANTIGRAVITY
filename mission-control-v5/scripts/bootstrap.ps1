@@ -8,7 +8,7 @@
   stack in order, with health checks + self-heal, and never lets one failing
   service block the others:
 
-    1. OmniRoute gateway        :20128   omniroute serve (from E:\ANTIGRAVITY)
+    1. OmniRoute gateway        :20128   omniroute serve (from F:\ANTIGRAVITY)
     2. Ollama                   :11434   ollama serve
     3. Mission Control server   :3151    tsx production server + built client
     4. Electron dashboard               the ONLY visible window (loads :3151)
@@ -41,10 +41,10 @@
   runtime from the existing C:\Users\joshl\.openclaw\gateway.cmd and never logged.
 
 .PARAMETER RepoRoot
-  Mission Control v5 checkout. Defaults to E:\ANTIGRAVITY\mission-control-v5.
+  Mission Control v5 checkout. Defaults to F:\ANTIGRAVITY\mission-control-v5.
 
 .PARAMETER AntigravityRoot
-  E:\ANTIGRAVITY — where omniroute serve and the DateApp backend/frontend live.
+  F:\ANTIGRAVITY — where omniroute serve and the DateApp backend/frontend live.
 
 .PARAMETER DashUrl
   URL Electron loads. Defaults to http://localhost:3151 (production server).
@@ -60,8 +60,8 @@
   pwsh -NoProfile -WindowStyle Hidden -File bootstrap.ps1 -Mode Deploy
 #>
 param(
-  [string]$RepoRoot        = 'E:\ANTIGRAVITY\mission-control-v5',
-  [string]$AntigravityRoot  = 'E:\ANTIGRAVITY',
+  [string]$RepoRoot        = 'F:\ANTIGRAVITY\mission-control-v5',
+  [string]$AntigravityRoot  = 'F:\ANTIGRAVITY',
   [string]$DashUrl          = 'http://localhost:3151',
   [ValidateSet('Deploy','Watch')][string]$Mode = 'Deploy',
   [int]$WatchIntervalSec   = 60,

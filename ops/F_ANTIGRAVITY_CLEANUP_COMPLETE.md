@@ -9,6 +9,7 @@
 ## What Was Deleted
 
 ### Directories (1.2 GB bloat)
+
 - `tools/` (1.1 GB) - agent-reach, cockpit, watchdog-sentry, etc. — obsolete
 - `income-engine/` (73 MB) — not in active mission
 - `.paperclip-local/` (69 MB) — temp paperclip data
@@ -19,7 +20,9 @@
 - `.wrangler/`, `.openclaw/`, `qdrant-data/` — temp files
 
 ### Documents (18 files)
+
 Removed superseded/historical docs:
+
 - HERMES-INTEGRATION-COMPLETE.md (replaced by working mission-control)
 - OPUS-MASTER-BRIEFING-FULL-REPLACEMENT.md (historical)
 - Q3-2026-STRATEGIC-ROADMAP.md (outdated)
@@ -29,17 +32,20 @@ Removed superseded/historical docs:
 ## What Was Kept
 
 ### Core Mission
+
 - `backend/` — Mission Control Python uvicorn server (:3151)
 - `mission-control-v5/`, `mission-control-v6/` — TUI/Electron apps
 - `omniroute/` — Router/gateway at :20128
 - `paperclip/` — Paperclip core (status: healthy on :3120)
 
 ### Critical Services
+
 - `scripts/` — watchdog, port-manager, verification scripts
 - `graphify-out/` — Graphify HTML output (static, needs serving)
 - `html/` — stack-monitor.html (status dashboard)
 
 ### Docs (essential)
+
 - README.md, ARCHITECTURE-HERMES.md
 - PUBLIC-STATUS.md, REPOSITORY_RECORD.md
 - PORT-MANAGEMENT-GUIDE.md, SECURITY.md
@@ -47,30 +53,32 @@ Removed superseded/historical docs:
 
 ## Health Check Results
 
-| Service | Port | Status | Notes |
-|---------|------|--------|-------|
-| OmniRoute | :20128 | 🟢 OPEN | Requires `OMNIROUTE_API_KEY` env var for auth |
-| Paperclip | :3120 | 🟢 HEALTHY | Version 2026.428.0, bootstrapped, auth ready |
-| Date App | :3200 | 🟢 OPEN | Working |
-| Mission Control | :3151 | ⏳ Not deployed | Ready via watchdog startup.py |
-| Ollama | :11434 | 🟢 OPEN | - |
-| Hermes | :9119 | 🟢 OPEN | - |
-| Redis | :6379 | 🟢 OPEN | - |
-| OpenClaw | :18789 | 🔴 CLOSED | **Blocker** — See resolution below |
+| Service         | Port   | Status          | Notes                                         |
+| --------------- | ------ | --------------- | --------------------------------------------- |
+| OmniRoute       | :20128 | 🟢 OPEN         | Requires `OMNIROUTE_API_KEY` env var for auth |
+| Paperclip       | :3120  | 🟢 HEALTHY      | Version 2026.428.0, bootstrapped, auth ready  |
+| Date App        | :3200  | 🟢 OPEN         | Working                                       |
+| Mission Control | :3151  | ⏳ Not deployed | Ready via watchdog startup.py                 |
+| Ollama          | :11434 | 🟢 OPEN         | -                                             |
+| Hermes          | :9119  | 🟢 OPEN         | -                                             |
+| Redis           | :6379  | 🟢 OPEN         | -                                             |
+| OpenClaw        | :18789 | 🔴 CLOSED       | **Blocker** — See resolution below            |
 
 ## OpenClaw Blocker (Port 18789)
 
 **Current Status:** CLOSED — not listening
 
 **Analysis:**
+
 - E:\ANTIGRAVITY has `.openclaw/` directory (deleted from F:)
 - No active process on 18789
 - Watchdog scripts reference it but no auto-restart defined
 
 **Recommended Resolution:**
+
 1. Verify if OpenClaw is needed for mission (likely: NO, replaced by OmniRoute)
 2. If NOT needed: Document as "deprecated" in roadmap
-3. If needed: 
+3. If needed:
    - Check `E:\ANTIGRAVITY\.openclaw/` for config
    - Restore startup command to `scripts/port-watchdog.ps1`
    - Add to Mission Control :3151 tab
@@ -82,11 +90,13 @@ Removed superseded/historical docs:
 **Current State:** Static HTML exists but not integrated
 
 **Findings:**
+
 - `graphify-out/graph.html` exists (last built from unknown HEAD)
 - Not tracked in git (in .gitignore) — intentional, output only
 - No active serving in Mission Control or Paperclip
 
 **Recommendations:**
+
 1. **Option A (Recommended):** Add Graphify to Mission Control :3151
    - Include `html/stack-monitor.html` as dashboard tab
    - Link to `graphify-out/graph.html` from status page
@@ -105,7 +115,7 @@ Removed superseded/historical docs:
 ## Git Commit
 
 ```
-cca4de3e cleanup: remove 1.2GB of obsolete tools, legacy docs, and bloat. 
+cca4de3e cleanup: remove 1.2GB of obsolete tools, legacy docs, and bloat.
            Keep only active mission: backend, mission-control, omniroute, paperclip, graphify
 ```
 
@@ -114,13 +124,15 @@ cca4de3e cleanup: remove 1.2GB of obsolete tools, legacy docs, and bloat.
 ## Repo State Summary
 
 **Before:**
+
 - 11,985 tracked + untracked files
 - 1.4 GB total
 - 89 disparate modules (many dead)
 - Confusing for new builds
 
 **After:**
-- 7,124 tracked files  
+
+- 7,124 tracked files
 - 150 MB total
 - Single focus: ANTIGRAVITY mission via OmniRoute + Mission Control
 - Clean, deployable, auditable
@@ -128,6 +140,7 @@ cca4de3e cleanup: remove 1.2GB of obsolete tools, legacy docs, and bloat.
 ## Manual Actions Required (Josh)
 
 ### On Laptop (http://192.168.0.15:...)
+
 ```powershell
 # Optional: Verify F: changes reached origin
 git clone https://github.com/Trollz1004/ANTIGRAVITY.git F:\ANTIGRAVITY-REFRESH
@@ -136,6 +149,7 @@ git log --oneline -5  # Should see cleanup commit
 ```
 
 ### On T5500
+
 ```powershell
 # If using F:\ANTIGRAVITY (not E:\):
 cd F:\ANTIGRAVITY
@@ -149,14 +163,16 @@ powershell -ExecutionPolicy Bypass -File "scripts\register-port-watchdog.ps1"
 ```
 
 ### Graphify Decision
+
 ```
 Choose: A (Mission Control tab), B (OmniRoute route), or C (manual)
 Then notify to wire the integration.
 ```
 
 ### OpenClaw Investigation
+
 ```
-If critical to mission: 
+If critical to mission:
   - Check E:\ANTIGRAVITY\.openclaw/ for startup files
   - Add process monitor to watchdog.ps1
 Else:
@@ -176,6 +192,6 @@ du -sh .             # Should show ~150 MB (Windows: Get-ChildItem -Recurse -For
 
 **Mission Status:** READY  
 **Repo State:** PRODUCTION-CLEAN  
-**Next Phase:** Deploy watchdog + decide Graphify path + resolve OpenClaw  
+**Next Phase:** Deploy watchdog + decide Graphify path + resolve OpenClaw
 
 **End of Cleanup Report**

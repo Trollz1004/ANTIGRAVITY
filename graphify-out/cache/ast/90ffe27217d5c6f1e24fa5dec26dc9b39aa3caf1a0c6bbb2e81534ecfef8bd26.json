@@ -1,1 +1,631 @@
-{"nodes": [{"id": "app_backend_storefront_py", "label": "storefront.py", "file_type": "code", "source_file": "/app/backend/storefront.py", "source_location": "L1"}, {"id": "backend_storefront_now", "label": "_now()", "file_type": "code", "source_file": "/app/backend/storefront.py", "source_location": "L49"}, {"id": "backend_storefront_productin", "label": "ProductIn", "file_type": "code", "source_file": "/app/backend/storefront.py", "source_location": "L53"}, {"id": "basemodel", "label": "BaseModel", "file_type": "code", "source_file": "", "source_location": ""}, {"id": "backend_storefront_list_products", "label": "list_products()", "file_type": "code", "source_file": "/app/backend/storefront.py", "source_location": "L94"}, {"id": "backend_storefront_site_config", "label": "site_config()", "file_type": "code", "source_file": "/app/backend/storefront.py", "source_location": "L100"}, {"id": "backend_storefront_upsert_product", "label": "upsert_product()", "file_type": "code", "source_file": "/app/backend/storefront.py", "source_location": "L129"}, {"id": "backend_storefront_delete_product", "label": "delete_product()", "file_type": "code", "source_file": "/app/backend/storefront.py", "source_location": "L140"}, {"id": "backend_storefront_runway_status", "label": "runway_status()", "file_type": "code", "source_file": "/app/backend/storefront.py", "source_location": "L149"}, {"id": "backend_storefront_seed_starter_skus", "label": "seed_starter_skus()", "file_type": "code", "source_file": "/app/backend/storefront.py", "source_location": "L186"}, {"id": "backend_storefront_rationale_1", "label": "Public storefront + auto-broadcast \u2014 solo-founder revenue surface.  Joshua's rea", "file_type": "rationale", "source_file": "/app/backend/storefront.py", "source_location": "L1"}, {"id": "backend_storefront_rationale_101", "label": "Public landing-page payload \u2014 no admin numbers, no fabrications.", "file_type": "rationale", "source_file": "/app/backend/storefront.py", "source_location": "L101"}, {"id": "backend_storefront_rationale_150", "label": "Cost-aware runway pulse for the always-on ribbon.      Honest read of where Josh", "file_type": "rationale", "source_file": "/app/backend/storefront.py", "source_location": "L150"}, {"id": "backend_storefront_rationale_187", "label": "One-click seed: drops the 4 starter SKUs if the catalogue is empty.", "file_type": "rationale", "source_file": "/app/backend/storefront.py", "source_location": "L187"}], "edges": [{"source": "app_backend_storefront_py", "target": "os", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L24", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "uuid", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L25", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "datetime", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L26", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "pathlib", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L27", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "typing", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L28", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "dotenv", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L30", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "fastapi", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L31", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "motor_motor_asyncio", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L32", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "pydantic", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L33", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "auth_relay", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L43", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "backend_storefront_now", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L49", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "backend_storefront_productin", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L53", "weight": 1.0}, {"source": "backend_storefront_productin", "target": "basemodel", "relation": "inherits", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L53", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "backend_storefront_list_products", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L94", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "backend_storefront_site_config", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L100", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "backend_storefront_upsert_product", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L129", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "backend_storefront_delete_product", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L140", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "backend_storefront_runway_status", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L149", "weight": 1.0}, {"source": "app_backend_storefront_py", "target": "backend_storefront_seed_starter_skus", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L186", "weight": 1.0}, {"source": "backend_storefront_upsert_product", "target": "backend_storefront_now", "relation": "calls", "context": "call", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L133", "weight": 1.0}, {"source": "backend_storefront_seed_starter_skus", "target": "backend_storefront_now", "relation": "calls", "context": "call", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L195", "weight": 1.0}, {"source": "backend_storefront_rationale_1", "target": "app_backend_storefront_py", "relation": "rationale_for", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L1", "weight": 1.0}, {"source": "backend_storefront_rationale_101", "target": "backend_storefront_site_config", "relation": "rationale_for", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L101", "weight": 1.0}, {"source": "backend_storefront_rationale_150", "target": "backend_storefront_runway_status", "relation": "rationale_for", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L150", "weight": 1.0}, {"source": "backend_storefront_rationale_187", "target": "backend_storefront_seed_starter_skus", "relation": "rationale_for", "confidence": "EXTRACTED", "source_file": "/app/backend/storefront.py", "source_location": "L187", "weight": 1.0}], "raw_calls": [{"caller_nid": "backend_storefront_now", "callee": "isoformat", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L50"}, {"caller_nid": "backend_storefront_now", "callee": "now", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L50"}, {"caller_nid": "backend_storefront_list_products", "callee": "to_list", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L95"}, {"caller_nid": "backend_storefront_list_products", "callee": "sort", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L95"}, {"caller_nid": "backend_storefront_list_products", "callee": "find", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L95"}, {"caller_nid": "backend_storefront_list_products", "callee": "len", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L96"}, {"caller_nid": "backend_storefront_site_config", "callee": "to_list", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L104"}, {"caller_nid": "backend_storefront_site_config", "callee": "aggregate", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L104"}, {"caller_nid": "backend_storefront_site_config", "callee": "to_list", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L105"}, {"caller_nid": "backend_storefront_site_config", "callee": "aggregate", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L105"}, {"caller_nid": "backend_storefront_site_config", "callee": "float", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L108"}, {"caller_nid": "backend_storefront_site_config", "callee": "get", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L108"}, {"caller_nid": "backend_storefront_site_config", "callee": "round", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L109"}, {"caller_nid": "backend_storefront_site_config", "callee": "float", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L109"}, {"caller_nid": "backend_storefront_site_config", "callee": "round", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L110"}, {"caller_nid": "backend_storefront_site_config", "callee": "float", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L110"}, {"caller_nid": "backend_storefront_site_config", "callee": "int", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L119"}, {"caller_nid": "backend_storefront_upsert_product", "callee": "require_admin", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L130"}, {"caller_nid": "backend_storefront_upsert_product", "callee": "model_dump", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L131"}, {"caller_nid": "backend_storefront_upsert_product", "callee": "uuid4", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L132"}, {"caller_nid": "backend_storefront_upsert_product", "callee": "insert_one", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L135"}, {"caller_nid": "backend_storefront_upsert_product", "callee": "copy", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L135"}, {"caller_nid": "backend_storefront_delete_product", "callee": "require_admin", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L141"}, {"caller_nid": "backend_storefront_delete_product", "callee": "delete_one", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L142"}, {"caller_nid": "backend_storefront_delete_product", "callee": "HTTPException", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L144"}, {"caller_nid": "backend_storefront_runway_status", "callee": "bool", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L158"}, {"caller_nid": "backend_storefront_runway_status", "callee": "strip", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L158"}, {"caller_nid": "backend_storefront_runway_status", "callee": "get", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L158"}, {"caller_nid": "backend_storefront_runway_status", "callee": "float", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L161"}, {"caller_nid": "backend_storefront_runway_status", "callee": "get", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L161"}, {"caller_nid": "backend_storefront_runway_status", "callee": "to_list", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L164"}, {"caller_nid": "backend_storefront_runway_status", "callee": "aggregate", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L164"}, {"caller_nid": "backend_storefront_runway_status", "callee": "round", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L167"}, {"caller_nid": "backend_storefront_runway_status", "callee": "float", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L167"}, {"caller_nid": "backend_storefront_runway_status", "callee": "round", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L168"}, {"caller_nid": "backend_storefront_seed_starter_skus", "callee": "require_admin", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L188"}, {"caller_nid": "backend_storefront_seed_starter_skus", "callee": "count_documents", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L189"}, {"caller_nid": "backend_storefront_seed_starter_skus", "callee": "uuid4", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L194"}, {"caller_nid": "backend_storefront_seed_starter_skus", "callee": "insert_one", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L196"}, {"caller_nid": "backend_storefront_seed_starter_skus", "callee": "copy", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L196"}, {"caller_nid": "backend_storefront_seed_starter_skus", "callee": "append", "is_member_call": true, "source_file": "/app/backend/storefront.py", "source_location": "L197"}, {"caller_nid": "backend_storefront_seed_starter_skus", "callee": "len", "is_member_call": false, "source_file": "/app/backend/storefront.py", "source_location": "L198"}]}
+{
+  "nodes": [
+    {
+      "id": "app_backend_storefront_py",
+      "label": "storefront.py",
+      "file_type": "code",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_storefront_now",
+      "label": "_now()",
+      "file_type": "code",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L49"
+    },
+    {
+      "id": "backend_storefront_productin",
+      "label": "ProductIn",
+      "file_type": "code",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L53"
+    },
+    { "id": "basemodel", "label": "BaseModel", "file_type": "code", "source_file": "", "source_location": "" },
+    {
+      "id": "backend_storefront_list_products",
+      "label": "list_products()",
+      "file_type": "code",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L94"
+    },
+    {
+      "id": "backend_storefront_site_config",
+      "label": "site_config()",
+      "file_type": "code",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L100"
+    },
+    {
+      "id": "backend_storefront_upsert_product",
+      "label": "upsert_product()",
+      "file_type": "code",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L129"
+    },
+    {
+      "id": "backend_storefront_delete_product",
+      "label": "delete_product()",
+      "file_type": "code",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L140"
+    },
+    {
+      "id": "backend_storefront_runway_status",
+      "label": "runway_status()",
+      "file_type": "code",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L149"
+    },
+    {
+      "id": "backend_storefront_seed_starter_skus",
+      "label": "seed_starter_skus()",
+      "file_type": "code",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L186"
+    },
+    {
+      "id": "backend_storefront_rationale_1",
+      "label": "Public storefront + auto-broadcast \u2014 solo-founder revenue surface.  Joshua's rea",
+      "file_type": "rationale",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_storefront_rationale_101",
+      "label": "Public landing-page payload \u2014 no admin numbers, no fabrications.",
+      "file_type": "rationale",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L101"
+    },
+    {
+      "id": "backend_storefront_rationale_150",
+      "label": "Cost-aware runway pulse for the always-on ribbon.      Honest read of where Josh",
+      "file_type": "rationale",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L150"
+    },
+    {
+      "id": "backend_storefront_rationale_187",
+      "label": "One-click seed: drops the 4 starter SKUs if the catalogue is empty.",
+      "file_type": "rationale",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L187"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_backend_storefront_py",
+      "target": "os",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "uuid",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "datetime",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "typing",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "dotenv",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "fastapi",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "motor_motor_asyncio",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "pydantic",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "auth_relay",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "backend_storefront_now",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "backend_storefront_productin",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_storefront_productin",
+      "target": "basemodel",
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "backend_storefront_list_products",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L94",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "backend_storefront_site_config",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L100",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "backend_storefront_upsert_product",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L129",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "backend_storefront_delete_product",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L140",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "backend_storefront_runway_status",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L149",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_storefront_py",
+      "target": "backend_storefront_seed_starter_skus",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L186",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_storefront_upsert_product",
+      "target": "backend_storefront_now",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L133",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_storefront_seed_starter_skus",
+      "target": "backend_storefront_now",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L195",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_storefront_rationale_1",
+      "target": "app_backend_storefront_py",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_storefront_rationale_101",
+      "target": "backend_storefront_site_config",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L101",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_storefront_rationale_150",
+      "target": "backend_storefront_runway_status",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L150",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_storefront_rationale_187",
+      "target": "backend_storefront_seed_starter_skus",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L187",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "backend_storefront_now",
+      "callee": "isoformat",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L50"
+    },
+    {
+      "caller_nid": "backend_storefront_now",
+      "callee": "now",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L50"
+    },
+    {
+      "caller_nid": "backend_storefront_list_products",
+      "callee": "to_list",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L95"
+    },
+    {
+      "caller_nid": "backend_storefront_list_products",
+      "callee": "sort",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L95"
+    },
+    {
+      "caller_nid": "backend_storefront_list_products",
+      "callee": "find",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L95"
+    },
+    {
+      "caller_nid": "backend_storefront_list_products",
+      "callee": "len",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L96"
+    },
+    {
+      "caller_nid": "backend_storefront_site_config",
+      "callee": "to_list",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L104"
+    },
+    {
+      "caller_nid": "backend_storefront_site_config",
+      "callee": "aggregate",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L104"
+    },
+    {
+      "caller_nid": "backend_storefront_site_config",
+      "callee": "to_list",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L105"
+    },
+    {
+      "caller_nid": "backend_storefront_site_config",
+      "callee": "aggregate",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L105"
+    },
+    {
+      "caller_nid": "backend_storefront_site_config",
+      "callee": "float",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "backend_storefront_site_config",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "backend_storefront_site_config",
+      "callee": "round",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L109"
+    },
+    {
+      "caller_nid": "backend_storefront_site_config",
+      "callee": "float",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L109"
+    },
+    {
+      "caller_nid": "backend_storefront_site_config",
+      "callee": "round",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "backend_storefront_site_config",
+      "callee": "float",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "backend_storefront_site_config",
+      "callee": "int",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L119"
+    },
+    {
+      "caller_nid": "backend_storefront_upsert_product",
+      "callee": "require_admin",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L130"
+    },
+    {
+      "caller_nid": "backend_storefront_upsert_product",
+      "callee": "model_dump",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L131"
+    },
+    {
+      "caller_nid": "backend_storefront_upsert_product",
+      "callee": "uuid4",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L132"
+    },
+    {
+      "caller_nid": "backend_storefront_upsert_product",
+      "callee": "insert_one",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L135"
+    },
+    {
+      "caller_nid": "backend_storefront_upsert_product",
+      "callee": "copy",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L135"
+    },
+    {
+      "caller_nid": "backend_storefront_delete_product",
+      "callee": "require_admin",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L141"
+    },
+    {
+      "caller_nid": "backend_storefront_delete_product",
+      "callee": "delete_one",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L142"
+    },
+    {
+      "caller_nid": "backend_storefront_delete_product",
+      "callee": "HTTPException",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L144"
+    },
+    {
+      "caller_nid": "backend_storefront_runway_status",
+      "callee": "bool",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L158"
+    },
+    {
+      "caller_nid": "backend_storefront_runway_status",
+      "callee": "strip",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L158"
+    },
+    {
+      "caller_nid": "backend_storefront_runway_status",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L158"
+    },
+    {
+      "caller_nid": "backend_storefront_runway_status",
+      "callee": "float",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L161"
+    },
+    {
+      "caller_nid": "backend_storefront_runway_status",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L161"
+    },
+    {
+      "caller_nid": "backend_storefront_runway_status",
+      "callee": "to_list",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L164"
+    },
+    {
+      "caller_nid": "backend_storefront_runway_status",
+      "callee": "aggregate",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L164"
+    },
+    {
+      "caller_nid": "backend_storefront_runway_status",
+      "callee": "round",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L167"
+    },
+    {
+      "caller_nid": "backend_storefront_runway_status",
+      "callee": "float",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L167"
+    },
+    {
+      "caller_nid": "backend_storefront_runway_status",
+      "callee": "round",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L168"
+    },
+    {
+      "caller_nid": "backend_storefront_seed_starter_skus",
+      "callee": "require_admin",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L188"
+    },
+    {
+      "caller_nid": "backend_storefront_seed_starter_skus",
+      "callee": "count_documents",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L189"
+    },
+    {
+      "caller_nid": "backend_storefront_seed_starter_skus",
+      "callee": "uuid4",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L194"
+    },
+    {
+      "caller_nid": "backend_storefront_seed_starter_skus",
+      "callee": "insert_one",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L196"
+    },
+    {
+      "caller_nid": "backend_storefront_seed_starter_skus",
+      "callee": "copy",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L196"
+    },
+    {
+      "caller_nid": "backend_storefront_seed_starter_skus",
+      "callee": "append",
+      "is_member_call": true,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L197"
+    },
+    {
+      "caller_nid": "backend_storefront_seed_starter_skus",
+      "callee": "len",
+      "is_member_call": false,
+      "source_file": "/app/backend/storefront.py",
+      "source_location": "L198"
+    }
+  ]
+}

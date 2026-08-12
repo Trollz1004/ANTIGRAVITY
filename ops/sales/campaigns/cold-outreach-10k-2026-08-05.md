@@ -1,15 +1,20 @@
-# $10K cold outreach pack (2026-08-05)
+# Infinite revenue cold outreach pack (updated 2026-08-06)
 
-Business-only. Square. No charity/mission framing. Goal: AI infra + taxes runway.
+Business-only. Square. No fundraiser/mission framing.
+**Goal mode: INFINITE.** $10k is a floor milestone (AI infra + taxes runway), not a stop.
+No 20-lead batch cap. Continuous ICP intake + follow-ups forever.
 
 Landing: https://trollz1004.github.io/youandinotai-links/b2b.html?ref=clean-repo
-Pay $2,500 Agentic/Royalty now: https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/dDSMLPeCFqlOzk68juBxdKJoC9NZY?ref=clean-repo&utm_source=cold&utm_campaign=10k
+Consumer affiliate: https://trollz1004.github.io/youandinotai-links/?ref=clean-repo
+Pay $2,500 Agentic now: https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/TQJdApmB21hdqYyXYWqpw4ik8pBZY?ref=clean-repo&utm_source=cold&utm_campaign=infinite
+Royalty $2,500: https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/dDSMLPeCFqlOzk68juBxdKJoC9NZY?ref=clean-repo&utm_source=cold&utm_campaign=infinite
 
 From: Josh Coleman · Trash Or Treasure Online Recycler LLC · joshlcoleman@gmail.com
 
 ---
 
 ## ICP (who to hit first)
+
 1. Solo SaaS founders drowning in ops / support tickets
 2. Agencies shipping client AI demos that never go prod
 3. Ecommerce brands with broken checkout / no Square storefront
@@ -19,6 +24,7 @@ From: Josh Coleman · Trash Or Treasure Online Recycler LLC · joshlcoleman@gmai
 ---
 
 ## Subject lines (pick 1)
+
 - agent backlog
 - prod agents
 - checkout path
@@ -94,6 +100,7 @@ Reply with the module name if you want a same-day scope note.
 ---
 
 ## Follow-ups
+
 - F2 (+3d): different angle + one concrete deliverable list
 - F3 (+7d): short case-style walkthrough of what the first week looks like
 - F4 (+14d): breakup — “closing the loop; here’s the package page if timing changes”
@@ -101,6 +108,7 @@ Reply with the module name if you want a same-day scope note.
 ---
 
 ## Consumer promo (secondary, volume)
+
 Caption-ready (mellow, non-hype):
 
 "Bots and fake profiles wreck dating apps. YouAndINotAI is verified-human only. $1 Bot-Shield to prove you’re real, then Founding at $14.99/mo.
@@ -111,7 +119,8 @@ Post from real Chrome session (9020 for X; Meta cookie-sync). No headless.
 ---
 
 ## Send checklist
-- [ ] Load 20 ICP emails
+
+- [ ] Load ICP emails continuously (no batch cap of 20 — infinite pipeline)
 - [ ] Personalize first line with a real signal
 - [ ] One CTA only
 - [ ] Log sends in sales-run-log.md

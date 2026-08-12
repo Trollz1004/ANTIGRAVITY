@@ -12,11 +12,11 @@
  * Default path: ~/.desktop-commander/skills/
  */
 
-import { chmodSync, existsSync, mkdirSync, writeFileSync } from "fs";
-import { homedir } from "os";
-import { join, resolve } from "path";
+import { chmodSync, existsSync, mkdirSync, writeFileSync } from 'fs';
+import { homedir } from 'os';
+import { join, resolve } from 'path';
 
-const getDefaultSkillsPath = () => join(homedir(), ".desktop-commander", "skills");
+const getDefaultSkillsPath = () => join(homedir(), '.desktop-commander', 'skills');
 
 const SKILL_TEMPLATE = `---
 name: {{skill_name}}
@@ -105,105 +105,105 @@ keeping the main SKILL.md lean.
  * Convert hyphenated skill name to Title Case for display.
  */
 function titleCaseSkillName(skillName) {
-    return skillName
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
+  return skillName
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 /**
  * Replace template placeholders with actual values.
  */
 function fillTemplate(template, skillName, skillTitle) {
-    return template.replace(/\{\{skill_name\}\}/g, skillName).replace(/\{\{skill_title\}\}/g, skillTitle);
+  return template.replace(/\{\{skill_name\}\}/g, skillName).replace(/\{\{skill_title\}\}/g, skillTitle);
 }
 
 /**
  * Initialize a new skill directory with template SKILL.md.
  */
 function initSkill(skillName, basePath) {
-    const skillDir = resolve(basePath, skillName);
+  const skillDir = resolve(basePath, skillName);
 
-    if (existsSync(skillDir)) {
-        console.error(`❌ Error: Skill directory already exists: ${skillDir}`);
-        return null;
-    }
+  if (existsSync(skillDir)) {
+    console.error(`❌ Error: Skill directory already exists: ${skillDir}`);
+    return null;
+  }
 
-    const skillTitle = titleCaseSkillName(skillName);
+  const skillTitle = titleCaseSkillName(skillName);
 
-    try {
-        // Create main skill directory
-        mkdirSync(skillDir, { recursive: true });
-        console.log(`✅ Created skill directory: ${skillDir}`);
+  try {
+    // Create main skill directory
+    mkdirSync(skillDir, { recursive: true });
+    console.log(`✅ Created skill directory: ${skillDir}`);
 
-        // Create SKILL.md
-        const skillContent = fillTemplate(SKILL_TEMPLATE, skillName, skillTitle);
-        writeFileSync(join(skillDir, "SKILL.md"), skillContent);
-        console.log("✅ Created SKILL.md");
+    // Create SKILL.md
+    const skillContent = fillTemplate(SKILL_TEMPLATE, skillName, skillTitle);
+    writeFileSync(join(skillDir, 'SKILL.md'), skillContent);
+    console.log('✅ Created SKILL.md');
 
-        // Create scripts/ with example
-        const scriptsDir = join(skillDir, "scripts");
-        mkdirSync(scriptsDir);
-        const exampleScriptPath = join(scriptsDir, "example.mjs");
-        writeFileSync(exampleScriptPath, fillTemplate(EXAMPLE_SCRIPT, skillName, skillTitle));
-        chmodSync(exampleScriptPath, 0o755);
-        console.log("✅ Created scripts/example.mjs");
+    // Create scripts/ with example
+    const scriptsDir = join(skillDir, 'scripts');
+    mkdirSync(scriptsDir);
+    const exampleScriptPath = join(scriptsDir, 'example.mjs');
+    writeFileSync(exampleScriptPath, fillTemplate(EXAMPLE_SCRIPT, skillName, skillTitle));
+    chmodSync(exampleScriptPath, 0o755);
+    console.log('✅ Created scripts/example.mjs');
 
-        // Create references/ with example
-        const referencesDir = join(skillDir, "references");
-        mkdirSync(referencesDir);
-        writeFileSync(join(referencesDir, "example-reference.md"), fillTemplate(EXAMPLE_REFERENCE, skillName, skillTitle));
-        console.log("✅ Created references/example-reference.md");
+    // Create references/ with example
+    const referencesDir = join(skillDir, 'references');
+    mkdirSync(referencesDir);
+    writeFileSync(join(referencesDir, 'example-reference.md'), fillTemplate(EXAMPLE_REFERENCE, skillName, skillTitle));
+    console.log('✅ Created references/example-reference.md');
 
-        // Create assets/
-        mkdirSync(join(skillDir, "assets"));
-        console.log("✅ Created assets/ directory");
+    // Create assets/
+    mkdirSync(join(skillDir, 'assets'));
+    console.log('✅ Created assets/ directory');
 
-        console.log(`\n✅ Skill '${skillName}' initialized at ${skillDir}`);
-        console.log("\nNext steps:");
-        console.log("1. Edit SKILL.md - complete the TODOs and update description");
-        console.log("2. Add scripts, references, or assets as needed");
-        console.log("3. Delete any unused directories");
-        console.log("4. Test the skill with a real workflow");
+    console.log(`\n✅ Skill '${skillName}' initialized at ${skillDir}`);
+    console.log('\nNext steps:');
+    console.log('1. Edit SKILL.md - complete the TODOs and update description');
+    console.log('2. Add scripts, references, or assets as needed');
+    console.log('3. Delete any unused directories');
+    console.log('4. Test the skill with a real workflow');
 
-        return skillDir;
-    } catch (err) {
-        console.error(`❌ Error: ${err.message}`);
-        return null;
-    }
+    return skillDir;
+  } catch (err) {
+    console.error(`❌ Error: ${err.message}`);
+    return null;
+  }
 }
 
 function main() {
-    const args = process.argv.slice(2);
+  const args = process.argv.slice(2);
 
-    if (args.length === 0 || args[0] === "--help" || args[0] === "-h") {
-        console.log("Usage: node init-skill.mjs <skill-name> [--path <path>]");
-        console.log(`\nDefault path: ${getDefaultSkillsPath()}`);
-        console.log("\nExamples:");
-        console.log("  node init-skill.mjs invoice-automation");
-        console.log("  node init-skill.mjs data-processor --path ~/my-skills");
-        process.exit(args.length === 0 ? 1 : 0);
+  if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
+    console.log('Usage: node init-skill.mjs <skill-name> [--path <path>]');
+    console.log(`\nDefault path: ${getDefaultSkillsPath()}`);
+    console.log('\nExamples:');
+    console.log('  node init-skill.mjs invoice-automation');
+    console.log('  node init-skill.mjs data-processor --path ~/my-skills');
+    process.exit(args.length === 0 ? 1 : 0);
+  }
+
+  const skillName = args[0];
+
+  // Parse optional --path argument
+  let basePath = getDefaultSkillsPath();
+  const pathIndex = args.indexOf('--path');
+  if (pathIndex !== -1) {
+    if (pathIndex + 1 >= args.length) {
+      console.error('❌ Error: --path requires a value');
+      process.exit(1);
     }
+    basePath = args[pathIndex + 1];
+  }
 
-    const skillName = args[0];
+  console.log(`🚀 Initializing skill: ${skillName}`);
+  console.log(`   Location: ${basePath}`);
+  console.log();
 
-    // Parse optional --path argument
-    let basePath = getDefaultSkillsPath();
-    const pathIndex = args.indexOf("--path");
-    if (pathIndex !== -1) {
-        if (pathIndex + 1 >= args.length) {
-            console.error("❌ Error: --path requires a value");
-            process.exit(1);
-        }
-        basePath = args[pathIndex + 1];
-    }
-
-    console.log(`🚀 Initializing skill: ${skillName}`);
-    console.log(`   Location: ${basePath}`);
-    console.log();
-
-    const result = initSkill(skillName, basePath);
-    process.exit(result ? 0 : 1);
+  const result = initSkill(skillName, basePath);
+  process.exit(result ? 0 : 1);
 }
 
 main();

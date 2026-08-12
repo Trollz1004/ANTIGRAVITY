@@ -19,6 +19,7 @@ https://ai.azure.com/nextgen/r/{encodedSubId},{resourceGroup},,{accountName},{pr
 ```
 
 Where:
+
 - `{encodedSubId}` — subscription GUID as URL-safe base64 (no `=` padding):
   ```bash
   python -c "import base64,uuid;print(base64.urlsafe_b64encode(uuid.UUID('<SUBSCRIPTION_ID>').bytes).rstrip(b'=').decode())"
@@ -40,19 +41,18 @@ Then navigate: select your project → **Build** → **Guardrails** → **Create
 ## Intervention Points
 
 | Intervention Point | Models | Agents (Preview) | Toolbox |
-|---|---|---|---|
-| User input | Yes | Yes | No |
-| Tool call | No | Yes | Yes |
-| Tool response | No | Yes | Yes |
-| Output | Yes | Yes | No |
+| ------------------ | ------ | ---------------- | ------- |
+| User input         | Yes    | Yes              | No      |
+| Tool call          | No     | Yes              | Yes     |
+| Tool response      | No     | Yes              | Yes     |
+| Output             | Yes    | Yes              | No      |
 
 Tool call and tool response are agent-only (and toolbox). An agent's guardrail fully overrides its model deployment's guardrail at all intervention points.
 
 ## Default Guardrails
 
-| Policy Name | Description | Editable |
-|-------------|-------------|----------|
-| `Microsoft.Default` | Base default policy (4 categories) | No |
-| `Microsoft.DefaultV2` | Updated default with jailbreak + protected material | No |
-| Custom policies | User-created policies | Yes |
-
+| Policy Name           | Description                                         | Editable |
+| --------------------- | --------------------------------------------------- | -------- |
+| `Microsoft.Default`   | Base default policy (4 categories)                  | No       |
+| `Microsoft.DefaultV2` | Updated default with jailbreak + protected material | No       |
+| Custom policies       | User-created policies                               | Yes      |

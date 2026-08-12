@@ -5,9 +5,11 @@
 > in the **azure-monitor-query-py** plugin skill if installed.
 
 ## Install
+
 pip install azure-monitor-query azure-identity
 
 ## Quick Start
+
 > **Auth:** `DefaultAzureCredential` is for local development. See [auth-best-practices.md](../auth-best-practices.md) for production patterns.
 
 ```python
@@ -17,6 +19,7 @@ client = LogsQueryClient(DefaultAzureCredential())
 ```
 
 ## Best Practices
+
 - Use timedelta for relative time ranges
 - Handle partial results for large queries (check LogsQueryStatus.PARTIAL)
 - Use batch queries when running multiple queries

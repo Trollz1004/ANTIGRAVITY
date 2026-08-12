@@ -75,8 +75,8 @@ async def test_another_isolated_test(isolated_db_session: AsyncSession):
 
 The `isolated_client` and `isolated_db_session` fixtures are defined in `tests/conftest.py` and rely on a nested transaction pattern.
 
--   `db_session_factory` (from `conftest.py`): Provides a factory for creating SQLAlchemy async sessions, typically backed by a temporary in-memory SQLite database for the test session.
--   `isolated_db_session` (new in `conftest.py`): This fixture wraps a session from `db_session_factory` with a `SAVEPOINT` (nested transaction). It yields the session to the test and then rolls back to the `SAVEPOINT` in its `finally` block, effectively undoing all changes.
--   `isolated_client` (new in `conftest.py`): This fixture provides a FastAPI `TestClient`. It overrides the application's `get_db` dependency to use the `isolated_db_session`, ensuring all API calls made through this client operate within the isolated transaction.
+- `db_session_factory` (from `conftest.py`): Provides a factory for creating SQLAlchemy async sessions, typically backed by a temporary in-memory SQLite database for the test session.
+- `isolated_db_session` (new in `conftest.py`): This fixture wraps a session from `db_session_factory` with a `SAVEPOINT` (nested transaction). It yields the session to the test and then rolls back to the `SAVEPOINT` in its `finally` block, effectively undoing all changes.
+- `isolated_client` (new in `conftest.py`): This fixture provides a FastAPI `TestClient`. It overrides the application's `get_db` dependency to use the `isolated_db_session`, ensuring all API calls made through this client operate within the isolated transaction.
 
 This setup ensures that each test, whether interacting directly with the database via `isolated_db_session` or through API calls via `isolated_client`, starts with a clean slate and leaves no lingering data for subsequent tests.
