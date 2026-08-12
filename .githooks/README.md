@@ -21,6 +21,7 @@ git config core.hooksPath .githooks
 If a commit is blocked, remove the secret from staged content and use env/vault references instead.
 
 ---
+
 > "AI for kids in need, not adults with greed."
-> 
+>
 > **Until no kid is in need. #FORtheKIDS 🚀**

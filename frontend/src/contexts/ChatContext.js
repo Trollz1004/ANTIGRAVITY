@@ -1,5 +1,5 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
-import axios from "axios";
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -22,18 +22,21 @@ export function ChatProvider({ children }) {
     setConversations((prev) => prev);
   }, []);
 
-  const selectConversation = useCallback((id) => {
-    setActiveConversationId(id);
-    const conv = conversations.find((c) => c.id === id);
-    setMessages(conv?.messages || []);
-  }, [conversations]);
+  const selectConversation = useCallback(
+    (id) => {
+      setActiveConversationId(id);
+      const conv = conversations.find((c) => c.id === id);
+      setMessages(conv?.messages || []);
+    },
+    [conversations],
+  );
 
   const createNewConversation = useCallback((title, mode) => {
     const id = Date.now();
     const conv = {
       id,
-      title: title || "New Chat",
-      mode: mode || "chat",
+      title: title || 'New Chat',
+      mode: mode || 'chat',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       messages: [],
@@ -44,19 +47,20 @@ export function ChatProvider({ children }) {
     return id;
   }, []);
 
-  const addMessage = useCallback((conversationId, role, content, model, meta) => {
-    const msg = { role, content, model, created_at: new Date().toISOString(), meta: meta || null };
-    setConversations((prev) =>
-      prev.map((c) =>
-        c.id === conversationId
-          ? { ...c, messages: [...c.messages, msg], updated_at: msg.created_at }
-          : c,
-      ),
-    );
-    if (conversationId === activeConversationId) {
-      setMessages((m) => [...m, msg]);
-    }
-  }, [activeConversationId]);
+  const addMessage = useCallback(
+    (conversationId, role, content, model, meta) => {
+      const msg = { role, content, model, created_at: new Date().toISOString(), meta: meta || null };
+      setConversations((prev) =>
+        prev.map((c) =>
+          c.id === conversationId ? { ...c, messages: [...c.messages, msg], updated_at: msg.created_at } : c,
+        ),
+      );
+      if (conversationId === activeConversationId) {
+        setMessages((m) => [...m, msg]);
+      }
+    },
+    [activeConversationId],
+  );
 
   /**
    * Calls the Hermes Router mirror.
@@ -71,26 +75,36 @@ export function ChatProvider({ children }) {
         { model, messages: msgs, stream: false, session_id: sessionId },
         { timeout: 60_000 },
       );
-      const reply = res.data?.choices?.[0]?.message?.content || "";
+      const reply = res.data?.choices?.[0]?.message?.content || '';
       return {
         reply,
-        provider: res.headers["x-hermes-provider"] || res.data.provider,
-        realModel: res.headers["x-hermes-real-model"] || res.data.real_model,
-        latencyMs: Number(res.headers["x-hermes-latency-ms"] || res.data.latency_ms || 0),
+        provider: res.headers['x-hermes-provider'] || res.data.provider,
+        realModel: res.headers['x-hermes-real-model'] || res.data.real_model,
+        latencyMs: Number(res.headers['x-hermes-latency-ms'] || res.data.latency_ms || 0),
       };
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  useEffect(() => { loadConversations(); }, [loadConversations]);
+  useEffect(() => {
+    loadConversations();
+  }, [loadConversations]);
 
   return (
-    <ChatContext.Provider value={{
-      conversations, activeConversationId, messages, isLoading,
-      loadConversations, selectConversation, createNewConversation, addMessage,
-      sendThroughHermes,
-    }}>
+    <ChatContext.Provider
+      value={{
+        conversations,
+        activeConversationId,
+        messages,
+        isLoading,
+        loadConversations,
+        selectConversation,
+        createNewConversation,
+        addMessage,
+        sendThroughHermes,
+      }}
+    >
       {children}
     </ChatContext.Provider>
   );
@@ -98,6 +112,6 @@ export function ChatProvider({ children }) {
 
 export function useChat() {
   const ctx = useContext(ChatContext);
-  if (!ctx) throw new Error("useChat must be used within ChatProvider");
+  if (!ctx) throw new Error('useChat must be used within ChatProvider');
   return ctx;
 }

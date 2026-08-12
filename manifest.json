@@ -6,7 +6,7 @@
     "description": "Mission-first impact venture pitch deck. Built to fund the mission, not just describe it. #UntilNoKidInNeed",
     "author": "Joshua Coleman"
   },
-  "canvas": {"width": 1920, "height": 1080},
+  "canvas": { "width": 1920, "height": 1080 },
   "playlist": [
     "01-cover.html",
     "02-thesis.html",

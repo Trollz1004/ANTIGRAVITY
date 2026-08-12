@@ -12,14 +12,7 @@ interface Props {
   onGoLibrary: () => void;
 }
 
-export default function SwarmEngine({
-  agents,
-  selected,
-  onToggleAgent,
-  tasks,
-  health,
-  onGoLibrary,
-}: Props) {
+export default function SwarmEngine({ agents, selected, onToggleAgent, tasks, health, onGoLibrary }: Props) {
   const [title, setTitle] = useState('');
   const [prompt, setPrompt] = useState('');
   // No speed/quality switch: OmniRoute resolves the model, and good models are
@@ -34,7 +27,6 @@ export default function SwarmEngine({
   const executors = health?.executors ?? [
     { id: 'auto', label: 'AUTO', description: 'OmniRoute provider order.', chain: [] },
   ];
-
 
   const submit = async () => {
     setError('');
@@ -110,8 +102,8 @@ export default function SwarmEngine({
 
         {!routerLive && (
           <div className="notice">
-            OMNIROUTE OFFLINE — no provider configured. Tasks will queue and BLOCK with an
-            honest error until a provider key is set in server/.env. Zero simulated output.
+            OMNIROUTE OFFLINE — no provider configured. Tasks will queue and BLOCK with an honest error until a provider
+            key is set in server/.env. Zero simulated output.
           </div>
         )}
         {error && <div className="notice notice--error">{error}</div>}
@@ -121,9 +113,7 @@ export default function SwarmEngine({
           disabled={submitting || selected.size === 0 || prompt.trim().length === 0}
           onClick={submit}
         >
-          {submitting
-            ? 'SUBMITTING…'
-            : `LAUNCH → ${selected.size} ORCHESTRATOR${selected.size === 1 ? '' : 'S'}`}
+          {submitting ? 'SUBMITTING…' : `LAUNCH → ${selected.size} ORCHESTRATOR${selected.size === 1 ? '' : 'S'}`}
         </button>
       </section>
 

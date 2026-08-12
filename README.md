@@ -5,7 +5,7 @@
 > **FOUNDER DOCTRINE - 2026-05-19**
 > See `briefings/FOUNDER-DOCTRINE-2026-05-19.md`. AI sessions must verify current facts before public claims.
 
-> *Gravity keeps us grounded. AI built ANTIGRAVITY to lift us up.*
+> _Gravity keeps us grounded. AI built ANTIGRAVITY to lift us up._
 
 <p align="center">
   <img src="assets/teamclaudeforlife-meme.jpg" alt="Me reviewing code written by Claude before pushing it to prod - #TeamClaudeForLife" width="520" />
@@ -19,14 +19,14 @@ ANTIGRAVITY is a product ecosystem. Public copy should describe live products, o
 
 ## The Ecosystem
 
-| Platform | Status | What It Does |
-|---|---|---|
-| [YouAndINotAI](https://youandinotai.com) | **Public** | Dating and community platform with Bot-Shield verification, message boards, and memberships. |
-| [Business Exchange](https://aidoesitall.website) | **Live** | Marketplace for services, referrals, and business sales. The B2B routing layer for the ecosystem. |
-| DAO Roadmap | **Paused** | Governance and token-sale concepts are offline until attorney review is complete. |
-| [Customer Support](https://dashboard.aidoesitall.website) | **Active** | Direct support surface â€” visible, reachable, not buried. |
-| [OnlineRecycle](https://onlinerecycle.net) | **Live** | Central Florida electronics recycling â€” intake, pickup, secure resale. |
-| [AI-Solutions Store](https://ai-solutions.store) | **Live** | Storefront for digital products and automation offers. |
+| Platform                                                  | Status     | What It Does                                                                                      |
+| --------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------- |
+| [YouAndINotAI](https://youandinotai.com)                  | **Public** | Dating and community platform with Bot-Shield verification, message boards, and memberships.      |
+| [Business Exchange](https://aidoesitall.website)          | **Live**   | Marketplace for services, referrals, and business sales. The B2B routing layer for the ecosystem. |
+| DAO Roadmap                                               | **Paused** | Governance and token-sale concepts are offline until attorney review is complete.                 |
+| [Customer Support](https://dashboard.aidoesitall.website) | **Active** | Direct support surface â€” visible, reachable, not buried.                                        |
+| [OnlineRecycle](https://onlinerecycle.net)                | **Live**   | Central Florida electronics recycling â€” intake, pickup, secure resale.                          |
+| [AI-Solutions Store](https://ai-solutions.store)          | **Live**   | Storefront for digital products and automation offers.                                            |
 
 A visitor should understand within seconds: this is a real operating ecosystem. The dating app and marketplace are product surfaces. DAO, token, and funding concepts remain offline until attorney review is complete.
 
@@ -69,13 +69,13 @@ Support is not decoration â€” it is a trust signal and conversion layer.
 
 ## Live Products
 
-| Project | Status | What It Does |
-|---|---|---|
-| [YouAndINotAI.com](https://youandinotai.com/) | Live | Human-first social platform â€” verification, moderation, founder-plan checkout |
-| [OnlineRecycle.net](https://onlinerecycle.net/) | Live | Central Florida electronics recycling â€” intake, pickup, secure resale |
-| [AI-Solutions.Store](https://ai-solutions.store/) | Live | Storefront for digital products and automation offers |
-| [AIDoesItAll.website](https://www.aidoesitall.website/) | Live | Public gateway routing visitors to active products and trusted business access |
-| [Dashboard](https://dashboard.aidoesitall.website/) | Live | Authenticated operator workspace |
+| Project                                                 | Status | What It Does                                                                    |
+| ------------------------------------------------------- | ------ | ------------------------------------------------------------------------------- |
+| [YouAndINotAI.com](https://youandinotai.com/)           | Live   | Human-first social platform â€” verification, moderation, founder-plan checkout |
+| [OnlineRecycle.net](https://onlinerecycle.net/)         | Live   | Central Florida electronics recycling â€” intake, pickup, secure resale         |
+| [AI-Solutions.Store](https://ai-solutions.store/)       | Live   | Storefront for digital products and automation offers                           |
+| [AIDoesItAll.website](https://www.aidoesitall.website/) | Live   | Public gateway routing visitors to active products and trusted business access  |
+| [Dashboard](https://dashboard.aidoesitall.website/)     | Live   | Authenticated operator workspace                                                |
 
 ---
 

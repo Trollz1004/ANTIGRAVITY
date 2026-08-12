@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { BookOpen, Upload, X } from "lucide-react";
+import React, { useRef, useState } from 'react';
+import { BookOpen, Upload, X } from 'lucide-react';
 
 /**
  * RunbookViewer — loads HTML runbooks into a sandboxed iframe. Matches spec:
@@ -22,18 +22,19 @@ export function RunbookViewer() {
   const clear = () => {
     setContent(null);
     setFileName(null);
-    if (inputRef.current) inputRef.current.value = "";
+    if (inputRef.current) inputRef.current.value = '';
   };
 
   return (
-    <div data-testid="runbook-viewer" className="bg-[#1a2332] border border-[#2a3a52] rounded-md flex flex-col overflow-hidden">
+    <div
+      data-testid="runbook-viewer"
+      className="bg-[#1a2332] border border-[#2a3a52] rounded-md flex flex-col overflow-hidden"
+    >
       <div className="bg-[#111827] border-b border-[#2a3a52] px-3 py-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <BookOpen size={12} className="text-[#e040fb]" />
           <span className="text-xs font-bold tracking-wide">RUNBOOKS</span>
-          {fileName && (
-            <span className="mono text-[9px] text-[#6b82a6] truncate max-w-[180px]">{fileName}</span>
-          )}
+          {fileName && <span className="mono text-[9px] text-[#6b82a6] truncate max-w-[180px]">{fileName}</span>}
         </div>
         <div className="flex items-center gap-1">
           <input
@@ -76,12 +77,8 @@ export function RunbookViewer() {
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center gap-3">
             <BookOpen size={32} className="text-[#4a5568]" />
-            <div className="text-[10px] tracking-widest uppercase text-[#6b82a6]">
-              Select a runbook
-            </div>
-            <div className="mono text-[10px] text-[#4a5568]">
-              c:\Antigravity\briefings\runbooks\
-            </div>
+            <div className="text-[10px] tracking-widest uppercase text-[#6b82a6]">Select a runbook</div>
+            <div className="mono text-[10px] text-[#4a5568]">c:\Antigravity\briefings\runbooks\</div>
           </div>
         )}
       </div>

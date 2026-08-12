@@ -25,18 +25,18 @@ below is non-negotiable.
 
 ---
 
-## 1. #1 PRIORITY BEFORE ANY WIPE — NO  LANGUAGE, NO SPLITS IN CODE
+## 1. #1 PRIORITY BEFORE ANY WIPE — NO LANGUAGE, NO SPLITS IN CODE
 
 **My code and my customer surfaces must contain ZERO of the following:**
 
-- canonical-7 banned words: ``, ``, `payment`, `payment`,
+- canonical-7 banned words: `, `, `payment`, `payment`,
   `outreach`, `payout`, `tax-deductible`, ``, `for-profit`,
-  `501(c)`, `proceeds go to`, `every dollar`, `funds children`.
+`501(c)`, `proceeds go to`, `every dollar`, `funds children`.
 - ** logic**: no , no `Router`, no `Gospelpayment`,
   no "100% to ", no on-chain payment splitter, no split contracts.
 
 **Why:** flag bots read the LIVE deployed site and keyword-match. A sentence
-saying "this is NOT a  outreach" still trips. The only safe rule
+saying "this is NOT a outreach" still trips. The only safe rule
 on customer surfaces is: the words never appear at all. My legal 10% per-bucket
 giving is REAL, SMART, and PRIVATE — it lives with my accountant and Claude-only
 memory. It does not belong in code or on a page.
@@ -47,7 +47,7 @@ Exit 0 = clean. Exit 1 = BLOCKED, do not deploy. This gate is dumb regex on
 purpose; it does not read intent, it reads words. Internal docs like THIS file
 will trip it — that is why internal docs never live in a deploy folder.
 
-**Before I wipe:** every repo must be scrubbed of  language and split
+**Before I wipe:** every repo must be scrubbed of language and split
 logic. That scrub is the gate on the wipe.
 
 ---
@@ -72,6 +72,7 @@ I am collapsing the fleet onto **T5500** to stop the bleed and prove ROI before
 I spend another dollar or hour spreading across nodes.
 
 **T5500 (192.168.0.15) runs everything, for now:**
+
 - **Load balancer** — already runs on auto-start here. Keep it.
 - **Paperclip** — already runs on auto-start here. This is the **date-app**
   backend/orchestration.
@@ -106,20 +107,20 @@ daily PC unless I explicitly say that machine carries the service.
 Doctrine is ONE repo: **ANTIGRAVITY**. Everything else is legacy, backup, or
 in-flight to be merged/archived. Do not create new root spellings.
 
-| Repo | Role |
-| --- | --- |
-| ANTIGRAVITY | **Canonical mission repo.** Everything lives here. |
-| mission-control-v5 | Newest control dashboard (in-flight). |
-| ANTIGRAVITY-v2 | Legacy/experimental — do not treat as canonical. |
-| dream-online / DREAM-ONLINE-MMORPG-... | Dream Online game project. |
-| ai-marketplace-grok-production | ai-solutions.store marketplace build. |
-| command-center / antigravity-dashboard / OpenclawDash | Dashboards (Claude-facing). |
-| MANUS-Has-Hands | 9020 income project (Manus-built lead-gen). |
-| income-engine | Legacy income project → merge into ANTIGRAVITY, then archive. |
-| sabretooth/9020/t5500-hermes-backup | Node backups. |
-| ANTIGRAVITYclip | Paperclip variant. |
-| Trollz1004 | Profile readme. |
-| Electrician-who-lies-...-ForTheKIDS- (x2) | Legacy. |
+| Repo                                                  | Role                                                          |
+| ----------------------------------------------------- | ------------------------------------------------------------- |
+| ANTIGRAVITY                                           | **Canonical mission repo.** Everything lives here.            |
+| mission-control-v5                                    | Newest control dashboard (in-flight).                         |
+| ANTIGRAVITY-v2                                        | Legacy/experimental — do not treat as canonical.              |
+| dream-online / DREAM-ONLINE-MMORPG-...                | Dream Online game project.                                    |
+| ai-marketplace-grok-production                        | ai-solutions.store marketplace build.                         |
+| command-center / antigravity-dashboard / OpenclawDash | Dashboards (Claude-facing).                                   |
+| MANUS-Has-Hands                                       | 9020 income project (Manus-built lead-gen).                   |
+| income-engine                                         | Legacy income project → merge into ANTIGRAVITY, then archive. |
+| sabretooth/9020/t5500-hermes-backup                   | Node backups.                                                 |
+| ANTIGRAVITYclip                                       | Paperclip variant.                                            |
+| Trollz1004                                            | Profile readme.                                               |
+| Electrician-who-lies-...-ForTheKIDS- (x2)             | Legacy.                                                       |
 
 ---
 

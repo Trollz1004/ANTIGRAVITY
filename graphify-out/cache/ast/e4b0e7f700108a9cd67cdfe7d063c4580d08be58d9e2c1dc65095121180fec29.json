@@ -1,1 +1,144 @@
-{"nodes": [{"id": "app_frontend_src_contexts_chatcontext_js", "label": "ChatContext.js", "file_type": "code", "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L1"}, {"id": "contexts_chatcontext_chatprovider", "label": "ChatProvider()", "file_type": "code", "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L14"}, {"id": "contexts_chatcontext_usechat", "label": "useChat()", "file_type": "code", "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L99"}], "edges": [{"source": "app_frontend_src_contexts_chatcontext_js", "target": "react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L1", "weight": 1.0}, {"source": "app_frontend_src_contexts_chatcontext_js", "target": "axios", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L2", "weight": 1.0}, {"source": "app_frontend_src_contexts_chatcontext_js", "target": "contexts_chatcontext_chatprovider", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L14", "weight": 1.0}, {"source": "app_frontend_src_contexts_chatcontext_js", "target": "contexts_chatcontext_usechat", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L99", "weight": 1.0}], "raw_calls": [{"caller_nid": "contexts_chatcontext_chatprovider", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L15"}, {"caller_nid": "contexts_chatcontext_chatprovider", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L16"}, {"caller_nid": "contexts_chatcontext_chatprovider", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L17"}, {"caller_nid": "contexts_chatcontext_chatprovider", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L18"}, {"caller_nid": "contexts_chatcontext_chatprovider", "callee": "useCallback", "is_member_call": false, "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L20"}, {"caller_nid": "contexts_chatcontext_chatprovider", "callee": "useCallback", "is_member_call": false, "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L25"}, {"caller_nid": "contexts_chatcontext_chatprovider", "callee": "useCallback", "is_member_call": false, "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L31"}, {"caller_nid": "contexts_chatcontext_chatprovider", "callee": "useCallback", "is_member_call": false, "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L47"}, {"caller_nid": "contexts_chatcontext_chatprovider", "callee": "useCallback", "is_member_call": false, "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L66"}, {"caller_nid": "contexts_chatcontext_chatprovider", "callee": "useEffect", "is_member_call": false, "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L86"}, {"caller_nid": "contexts_chatcontext_usechat", "callee": "useContext", "is_member_call": false, "source_file": "/app/frontend/src/contexts/ChatContext.js", "source_location": "L100"}]}
+{
+  "nodes": [
+    {
+      "id": "app_frontend_src_contexts_chatcontext_js",
+      "label": "ChatContext.js",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "contexts_chatcontext_chatprovider",
+      "label": "ChatProvider()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L14"
+    },
+    {
+      "id": "contexts_chatcontext_usechat",
+      "label": "useChat()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L99"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_frontend_src_contexts_chatcontext_js",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_contexts_chatcontext_js",
+      "target": "axios",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_contexts_chatcontext_js",
+      "target": "contexts_chatcontext_chatprovider",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_contexts_chatcontext_js",
+      "target": "contexts_chatcontext_usechat",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L99",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "contexts_chatcontext_chatprovider",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L15"
+    },
+    {
+      "caller_nid": "contexts_chatcontext_chatprovider",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L16"
+    },
+    {
+      "caller_nid": "contexts_chatcontext_chatprovider",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "contexts_chatcontext_chatprovider",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "contexts_chatcontext_chatprovider",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L20"
+    },
+    {
+      "caller_nid": "contexts_chatcontext_chatprovider",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L25"
+    },
+    {
+      "caller_nid": "contexts_chatcontext_chatprovider",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "contexts_chatcontext_chatprovider",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L47"
+    },
+    {
+      "caller_nid": "contexts_chatcontext_chatprovider",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L66"
+    },
+    {
+      "caller_nid": "contexts_chatcontext_chatprovider",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L86"
+    },
+    {
+      "caller_nid": "contexts_chatcontext_usechat",
+      "callee": "useContext",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/contexts/ChatContext.js",
+      "source_location": "L100"
+    }
+  ]
+}

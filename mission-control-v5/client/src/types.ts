@@ -1,6 +1,7 @@
 export type Mode = 'speed' | 'reasoning';
 export type Column = 'NOW' | 'NEXT' | 'BLOCKED' | 'DONE';
 export type TaskStatus = 'queued' | 'running' | 'done' | 'error';
+export type Tab = 'graphy' | 'library' | 'swarm' | 'board' | 'services' | 'brain' | 'bridge';
 
 export interface AgentDef {
   id: string;
@@ -12,23 +13,17 @@ export interface AgentDef {
   brainExecutor?: string;
 }
 
-export type SubagentHealth = 'green' | 'yellow' | 'red';
-
-export interface SubagentNode {
+export interface CategoryDef {
   id: string;
-  name: string;
-  health: SubagentHealth;
-  updatedAt: string;
-  files: Record<'SOUL.md' | 'HEARTBEAT.md' | 'TOOLS.md' | 'SKILLS.md', string>;
+  label: string;
 }
 
 export interface PhaseNote {
-  phase: 'plan' | 'work' | 'validate' | 'journal' | 'deliver';
+  phase: 'plan' | 'work' | 'validate' | 'judge' | 'journal' | 'deliver';
   detail: string;
   ms?: number;
 }
 
-/** Where a finished task's files actually landed. Null workspace = text only. */
 export interface TaskArtifacts {
   workspace: string | null;
   files: string[];
@@ -36,11 +31,6 @@ export interface TaskArtifacts {
   committed: boolean;
   pushed: boolean;
   note: string;
-}
-
-export interface CategoryDef {
-  id: string;
-  label: string;
 }
 
 export interface AgentResult {
@@ -106,6 +96,16 @@ export interface Health {
   categories: number;
   activeTasks: number;
   time: string;
+}
+
+export type SubagentHealth = 'green' | 'yellow' | 'red';
+
+export interface SubagentNode {
+  id: string;
+  name: string;
+  health: SubagentHealth;
+  updatedAt: string;
+  files: Record<'SOUL.md' | 'HEARTBEAT.md' | 'TOOLS.md' | 'SKILLS.md', string>;
 }
 
 // ── Brain hub ──────────────────────────────────────────────────────────────────
@@ -176,3 +176,9 @@ export interface BrainMcpStatus {
   protocolVersion: string;
   serverInfo: { name: string; version: string };
 }
+
+export type BridgeMessage = {
+  sender: 'user' | 'fcc-claude' | 'openclaw';
+  text: string;
+  timestamp: string;
+};

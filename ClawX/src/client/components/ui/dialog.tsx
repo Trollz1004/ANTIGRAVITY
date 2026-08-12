@@ -15,11 +15,7 @@ export interface DialogProps {
 }
 
 export function Dialog({ open = false, onOpenChange = () => {}, children }: DialogProps) {
-  return (
-    <DialogContext.Provider value={{ open, onOpenChange }}>
-      {children}
-    </DialogContext.Provider>
-  );
+  return <DialogContext.Provider value={{ open, onOpenChange }}>{children}</DialogContext.Provider>;
 }
 
 export interface DialogTriggerProps {
@@ -73,12 +69,7 @@ export function DialogHeader({ className = '', ...props }: React.HTMLAttributes<
 }
 
 export function DialogTitle({ className = '', ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h2
-      className={['text-lg font-semibold leading-none tracking-tight', className].join(' ')}
-      {...props}
-    />
-  );
+  return <h2 className={['text-lg font-semibold leading-none tracking-tight', className].join(' ')} {...props} />;
 }
 
 export function DialogDescription({ className = '', ...props }: React.HTMLAttributes<HTMLParagraphElement>) {

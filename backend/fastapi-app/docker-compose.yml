@@ -22,8 +22,8 @@ services:
       timeout: 5s
       retries: 5
     labels:
-      - "logging=promtail"
-      - "logging.jobname=uandinotai-postgres"
+      - 'logging=promtail'
+      - 'logging.jobname=uandinotai-postgres'
 
   redis:
     image: redis:7-alpine
@@ -40,8 +40,8 @@ services:
       timeout: 5s
       retries: 5
     labels:
-      - "logging=promtail"
-      - "logging.jobname=uandinotai-redis"
+      - 'logging=promtail'
+      - 'logging.jobname=uandinotai-redis'
 
   app:
     build: .
@@ -98,8 +98,8 @@ services:
       retries: 3
       start_period: 40s
     labels:
-      - "logging=promtail"
-      - "logging.jobname=uandinotai-app"
+      - 'logging=promtail'
+      - 'logging.jobname=uandinotai-app'
 
 volumes:
   postgres_data:

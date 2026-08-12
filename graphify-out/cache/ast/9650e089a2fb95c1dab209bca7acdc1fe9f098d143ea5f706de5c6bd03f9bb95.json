@@ -1,1 +1,104 @@
-{"nodes": [{"id": "app_frontend_src_components_ui_command_jsx", "label": "command.jsx", "file_type": "code", "source_file": "/app/frontend/src/components/ui/command.jsx", "source_location": "L1"}, {"id": "ui_command_commanddialog", "label": "CommandDialog()", "file_type": "code", "source_file": "/app/frontend/src/components/ui/command.jsx", "source_location": "L19"}, {"id": "ui_command_commandshortcut", "label": "CommandShortcut()", "file_type": "code", "source_file": "/app/frontend/src/components/ui/command.jsx", "source_location": "L94"}], "edges": [{"source": "app_frontend_src_components_ui_command_jsx", "target": "react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/ui/command.jsx", "source_location": "L1", "weight": 1.0}, {"source": "app_frontend_src_components_ui_command_jsx", "target": "cmdk", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/ui/command.jsx", "source_location": "L2", "weight": 1.0}, {"source": "app_frontend_src_components_ui_command_jsx", "target": "lucide_react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/ui/command.jsx", "source_location": "L3", "weight": 1.0}, {"source": "app_frontend_src_components_ui_command_jsx", "target": "utils", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/ui/command.jsx", "source_location": "L5", "weight": 1.0}, {"source": "app_frontend_src_components_ui_command_jsx", "target": "dialog", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/ui/command.jsx", "source_location": "L6", "weight": 1.0}, {"source": "app_frontend_src_components_ui_command_jsx", "target": "ui_command_commanddialog", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/ui/command.jsx", "source_location": "L19", "weight": 1.0}, {"source": "app_frontend_src_components_ui_command_jsx", "target": "ui_command_commandshortcut", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/ui/command.jsx", "source_location": "L94", "weight": 1.0}], "raw_calls": [{"caller_nid": "ui_command_commandshortcut", "callee": "cn", "is_member_call": false, "source_file": "/app/frontend/src/components/ui/command.jsx", "source_location": "L100"}]}
+{
+  "nodes": [
+    {
+      "id": "app_frontend_src_components_ui_command_jsx",
+      "label": "command.jsx",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/ui/command.jsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "ui_command_commanddialog",
+      "label": "CommandDialog()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/ui/command.jsx",
+      "source_location": "L19"
+    },
+    {
+      "id": "ui_command_commandshortcut",
+      "label": "CommandShortcut()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/ui/command.jsx",
+      "source_location": "L94"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_frontend_src_components_ui_command_jsx",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/ui/command.jsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_ui_command_jsx",
+      "target": "cmdk",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/ui/command.jsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_ui_command_jsx",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/ui/command.jsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_ui_command_jsx",
+      "target": "utils",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/ui/command.jsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_ui_command_jsx",
+      "target": "dialog",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/ui/command.jsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_ui_command_jsx",
+      "target": "ui_command_commanddialog",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/ui/command.jsx",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_ui_command_jsx",
+      "target": "ui_command_commandshortcut",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/ui/command.jsx",
+      "source_location": "L94",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "ui_command_commandshortcut",
+      "callee": "cn",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/ui/command.jsx",
+      "source_location": "L100"
+    }
+  ]
+}

@@ -5,6 +5,7 @@ azd show
 ```
 
 Expected output:
+
 ```
 Showing deployed resources:
   Resource Group: rg-myapp-dev

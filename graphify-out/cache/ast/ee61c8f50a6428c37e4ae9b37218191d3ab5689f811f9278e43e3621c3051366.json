@@ -1,1 +1,908 @@
-{"nodes": [{"id": "app_backend_tests_test_graphify_doctrine_py", "label": "test_graphify_doctrine.py", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L1"}, {"id": "tests_test_graphify_doctrine_client", "label": "client()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L21"}, {"id": "tests_test_graphify_doctrine_testgraphifystatus", "label": "TestGraphifyStatus", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L28"}, {"id": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape", "label": ".test_status_shape()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L29"}, {"id": "tests_test_graphify_doctrine_testgraphifyregraph", "label": "TestGraphifyRegraph", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L47"}, {"id": "tests_test_graphify_doctrine_testgraphifyregraph_test_regraph_completes", "label": ".test_regraph_completes()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L48"}, {"id": "tests_test_graphify_doctrine_testgraphifyregraph_test_status_fresh_after_regraph", "label": ".test_status_fresh_after_regraph()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L56"}, {"id": "tests_test_graphify_doctrine_testdoctrine", "label": "TestDoctrine", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L63"}, {"id": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload", "label": ".test_doctrine_payload()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L64"}, {"id": "tests_test_graphify_doctrine_testnodeidentity", "label": "TestNodeIdentity", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L92"}, {"id": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload", "label": ".test_identity_payload()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L93"}, {"id": "tests_test_graphify_doctrine_testledgerwebhooks", "label": "TestLedgerWebhooks", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L112"}, {"id": "tests_test_graphify_doctrine_testledgerwebhooks_test_stripe_is_dead_410", "label": ".test_stripe_is_dead_410()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L113"}, {"id": "tests_test_graphify_doctrine_testledgerwebhooks_test_paypal_unknown_source_400", "label": ".test_paypal_unknown_source_400()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L121"}, {"id": "tests_test_graphify_doctrine_testledgerwebhooks_test_square_webhook_cents_works", "label": ".test_square_webhook_cents_works()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L126"}, {"id": "tests_test_graphify_doctrine_sweep", "label": "_sweep()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L139"}, {"id": "tests_test_graphify_doctrine_testdoctrinesweep", "label": "TestDoctrineSweep", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L148"}, {"id": "tests_test_graphify_doctrine_test_endpoint_clean", "label": "test_endpoint_clean()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L153"}, {"id": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "label": ".test_doctrine_endpoint_only_in_allowed_locations()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L159"}, {"id": "tests_test_graphify_doctrine_testregression", "label": "TestRegression", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L181"}, {"id": "tests_test_graphify_doctrine_testregression_test_providers_13", "label": ".test_providers_13()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L182"}, {"id": "tests_test_graphify_doctrine_testregression_test_tasks_stats", "label": ".test_tasks_stats()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L190"}, {"id": "tests_test_graphify_doctrine_testregression_test_ledger_stats", "label": ".test_ledger_stats()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L195"}, {"id": "tests_test_graphify_doctrine_testregression_test_watchdog_status", "label": ".test_watchdog_status()", "file_type": "code", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L201"}, {"id": "tests_test_graphify_doctrine_rationale_1", "label": "Iteration 4 tests \u2014 Graphify + Doctrine + Node Identity + Stripe-410 webhook.  C", "file_type": "rationale", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L1"}, {"id": "tests_test_graphify_doctrine_rationale_160", "label": "The /doctrine endpoint intentionally lists forbidden words inside         forbid", "file_type": "rationale", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L160"}], "edges": [{"source": "app_backend_tests_test_graphify_doctrine_py", "target": "os", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L7", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "re", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L8", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "pytest", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L10", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "requests", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L11", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "dotenv", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L12", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "pathlib", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L13", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "tests_test_graphify_doctrine_client", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L21", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "tests_test_graphify_doctrine_testgraphifystatus", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L28", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testgraphifystatus", "target": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L29", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "tests_test_graphify_doctrine_testgraphifyregraph", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L47", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testgraphifyregraph", "target": "tests_test_graphify_doctrine_testgraphifyregraph_test_regraph_completes", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L48", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testgraphifyregraph", "target": "tests_test_graphify_doctrine_testgraphifyregraph_test_status_fresh_after_regraph", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L56", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "tests_test_graphify_doctrine_testdoctrine", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L63", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testdoctrine", "target": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L64", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "tests_test_graphify_doctrine_testnodeidentity", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L92", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testnodeidentity", "target": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L93", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "tests_test_graphify_doctrine_testledgerwebhooks", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L112", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testledgerwebhooks", "target": "tests_test_graphify_doctrine_testledgerwebhooks_test_stripe_is_dead_410", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L113", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testledgerwebhooks", "target": "tests_test_graphify_doctrine_testledgerwebhooks_test_paypal_unknown_source_400", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L121", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testledgerwebhooks", "target": "tests_test_graphify_doctrine_testledgerwebhooks_test_square_webhook_cents_works", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L126", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "tests_test_graphify_doctrine_sweep", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L139", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "tests_test_graphify_doctrine_testdoctrinesweep", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L148", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "tests_test_graphify_doctrine_test_endpoint_clean", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L153", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testdoctrinesweep", "target": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L159", "weight": 1.0}, {"source": "app_backend_tests_test_graphify_doctrine_py", "target": "tests_test_graphify_doctrine_testregression", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L181", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testregression", "target": "tests_test_graphify_doctrine_testregression_test_providers_13", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L182", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testregression", "target": "tests_test_graphify_doctrine_testregression_test_tasks_stats", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L190", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testregression", "target": "tests_test_graphify_doctrine_testregression_test_ledger_stats", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L195", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testregression", "target": "tests_test_graphify_doctrine_testregression_test_watchdog_status", "relation": "method", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L201", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_test_endpoint_clean", "target": "tests_test_graphify_doctrine_sweep", "relation": "calls", "context": "call", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L156", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "target": "tests_test_graphify_doctrine_sweep", "relation": "calls", "context": "call", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L170", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_rationale_1", "target": "app_backend_tests_test_graphify_doctrine_py", "relation": "rationale_for", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L1", "weight": 1.0}, {"source": "tests_test_graphify_doctrine_rationale_160", "target": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "relation": "rationale_for", "confidence": "EXTRACTED", "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L160", "weight": 1.0}], "raw_calls": [{"caller_nid": "tests_test_graphify_doctrine_client", "callee": "Session", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L22"}, {"caller_nid": "tests_test_graphify_doctrine_client", "callee": "update", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L23"}, {"caller_nid": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L30"}, {"caller_nid": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L32"}, {"caller_nid": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape", "callee": "isinstance", "is_member_call": false, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L40"}, {"caller_nid": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape", "callee": "len", "is_member_call": false, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L40"}, {"caller_nid": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape", "callee": "isinstance", "is_member_call": false, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L42"}, {"caller_nid": "tests_test_graphify_doctrine_testgraphifyregraph_test_regraph_completes", "callee": "post", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L49"}, {"caller_nid": "tests_test_graphify_doctrine_testgraphifyregraph_test_regraph_completes", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L51"}, {"caller_nid": "tests_test_graphify_doctrine_testgraphifyregraph_test_regraph_completes", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L52"}, {"caller_nid": "tests_test_graphify_doctrine_testgraphifyregraph_test_status_fresh_after_regraph", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L57"}, {"caller_nid": "tests_test_graphify_doctrine_testgraphifyregraph_test_status_fresh_after_regraph", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L59"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L65"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L67"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload", "callee": "lower", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L69"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload", "callee": "lower", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L78"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload", "callee": "any", "is_member_call": false, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L83"}, {"caller_nid": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L94"}, {"caller_nid": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L96"}, {"caller_nid": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload", "callee": "isinstance", "is_member_call": false, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L98"}, {"caller_nid": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload", "callee": "lower", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L99"}, {"caller_nid": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload", "callee": "lower", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L101"}, {"caller_nid": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload", "callee": "len", "is_member_call": false, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L104"}, {"caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_stripe_is_dead_410", "callee": "post", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L114"}, {"caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_stripe_is_dead_410", "callee": "lower", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L116"}, {"caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_stripe_is_dead_410", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L116"}, {"caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_stripe_is_dead_410", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L116"}, {"caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_paypal_unknown_source_400", "callee": "post", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L122"}, {"caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_paypal_unknown_source_400", "callee": "lower", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L124"}, {"caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_paypal_unknown_source_400", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L124"}, {"caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_square_webhook_cents_works", "callee": "post", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L127"}, {"caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_square_webhook_cents_works", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L129"}, {"caller_nid": "tests_test_graphify_doctrine_sweep", "callee": "lower", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L141"}, {"caller_nid": "tests_test_graphify_doctrine_sweep", "callee": "search", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L143"}, {"caller_nid": "tests_test_graphify_doctrine_sweep", "callee": "escape", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L143"}, {"caller_nid": "tests_test_graphify_doctrine_sweep", "callee": "append", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L144"}, {"caller_nid": "tests_test_graphify_doctrine_test_endpoint_clean", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L154"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L162"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L164"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "callee": "dict", "is_member_call": false, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L166"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "callee": "pop", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L167"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "callee": "pop", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L168"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "callee": "dumps", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L170"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L174"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "callee": "pop", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L175"}, {"caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations", "callee": "dumps", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L176"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_providers_13", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L183"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_providers_13", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L185"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_providers_13", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L186"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_providers_13", "callee": "isinstance", "is_member_call": false, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L187"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_providers_13", "callee": "len", "is_member_call": false, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L188"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_tasks_stats", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L191"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_tasks_stats", "callee": "isinstance", "is_member_call": false, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L193"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_tasks_stats", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L193"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_ledger_stats", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L196"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_ledger_stats", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L198"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_watchdog_status", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L202"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_watchdog_status", "callee": "json", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L204"}, {"caller_nid": "tests_test_graphify_doctrine_testregression_test_watchdog_status", "callee": "get", "is_member_call": true, "source_file": "/app/backend/tests/test_graphify_doctrine.py", "source_location": "L205"}]}
+{
+  "nodes": [
+    {
+      "id": "app_backend_tests_test_graphify_doctrine_py",
+      "label": "test_graphify_doctrine.py",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_client",
+      "label": "client()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L21"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testgraphifystatus",
+      "label": "TestGraphifyStatus",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L28"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape",
+      "label": ".test_status_shape()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L29"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testgraphifyregraph",
+      "label": "TestGraphifyRegraph",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L47"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testgraphifyregraph_test_regraph_completes",
+      "label": ".test_regraph_completes()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L48"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testgraphifyregraph_test_status_fresh_after_regraph",
+      "label": ".test_status_fresh_after_regraph()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L56"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testdoctrine",
+      "label": "TestDoctrine",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L63"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload",
+      "label": ".test_doctrine_payload()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L64"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testnodeidentity",
+      "label": "TestNodeIdentity",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L92"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload",
+      "label": ".test_identity_payload()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L93"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testledgerwebhooks",
+      "label": "TestLedgerWebhooks",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L112"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testledgerwebhooks_test_stripe_is_dead_410",
+      "label": ".test_stripe_is_dead_410()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L113"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testledgerwebhooks_test_paypal_unknown_source_400",
+      "label": ".test_paypal_unknown_source_400()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L121"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testledgerwebhooks_test_square_webhook_cents_works",
+      "label": ".test_square_webhook_cents_works()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L126"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_sweep",
+      "label": "_sweep()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L139"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testdoctrinesweep",
+      "label": "TestDoctrineSweep",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L148"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_test_endpoint_clean",
+      "label": "test_endpoint_clean()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L153"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "label": ".test_doctrine_endpoint_only_in_allowed_locations()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L159"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testregression",
+      "label": "TestRegression",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L181"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testregression_test_providers_13",
+      "label": ".test_providers_13()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L182"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testregression_test_tasks_stats",
+      "label": ".test_tasks_stats()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L190"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testregression_test_ledger_stats",
+      "label": ".test_ledger_stats()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L195"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_testregression_test_watchdog_status",
+      "label": ".test_watchdog_status()",
+      "file_type": "code",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L201"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_rationale_1",
+      "label": "Iteration 4 tests \u2014 Graphify + Doctrine + Node Identity + Stripe-410 webhook.  C",
+      "file_type": "rationale",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_test_graphify_doctrine_rationale_160",
+      "label": "The /doctrine endpoint intentionally lists forbidden words inside         forbid",
+      "file_type": "rationale",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L160"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "os",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "re",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "pytest",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "requests",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "dotenv",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "tests_test_graphify_doctrine_client",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "tests_test_graphify_doctrine_testgraphifystatus",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testgraphifystatus",
+      "target": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "tests_test_graphify_doctrine_testgraphifyregraph",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testgraphifyregraph",
+      "target": "tests_test_graphify_doctrine_testgraphifyregraph_test_regraph_completes",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L48",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testgraphifyregraph",
+      "target": "tests_test_graphify_doctrine_testgraphifyregraph_test_status_fresh_after_regraph",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L56",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "tests_test_graphify_doctrine_testdoctrine",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testdoctrine",
+      "target": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L64",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "tests_test_graphify_doctrine_testnodeidentity",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L92",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testnodeidentity",
+      "target": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L93",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "tests_test_graphify_doctrine_testledgerwebhooks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testledgerwebhooks",
+      "target": "tests_test_graphify_doctrine_testledgerwebhooks_test_stripe_is_dead_410",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L113",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testledgerwebhooks",
+      "target": "tests_test_graphify_doctrine_testledgerwebhooks_test_paypal_unknown_source_400",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L121",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testledgerwebhooks",
+      "target": "tests_test_graphify_doctrine_testledgerwebhooks_test_square_webhook_cents_works",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L126",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "tests_test_graphify_doctrine_sweep",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L139",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "tests_test_graphify_doctrine_testdoctrinesweep",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L148",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "tests_test_graphify_doctrine_test_endpoint_clean",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L153",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testdoctrinesweep",
+      "target": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L159",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_tests_test_graphify_doctrine_py",
+      "target": "tests_test_graphify_doctrine_testregression",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L181",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testregression",
+      "target": "tests_test_graphify_doctrine_testregression_test_providers_13",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L182",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testregression",
+      "target": "tests_test_graphify_doctrine_testregression_test_tasks_stats",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L190",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testregression",
+      "target": "tests_test_graphify_doctrine_testregression_test_ledger_stats",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L195",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testregression",
+      "target": "tests_test_graphify_doctrine_testregression_test_watchdog_status",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L201",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_test_endpoint_clean",
+      "target": "tests_test_graphify_doctrine_sweep",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L156",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "target": "tests_test_graphify_doctrine_sweep",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L170",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_rationale_1",
+      "target": "app_backend_tests_test_graphify_doctrine_py",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_graphify_doctrine_rationale_160",
+      "target": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L160",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "tests_test_graphify_doctrine_client",
+      "callee": "Session",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_client",
+      "callee": "update",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L23"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L30"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L32"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape",
+      "callee": "isinstance",
+      "is_member_call": false,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape",
+      "callee": "len",
+      "is_member_call": false,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testgraphifystatus_test_status_shape",
+      "callee": "isinstance",
+      "is_member_call": false,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L42"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testgraphifyregraph_test_regraph_completes",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L49"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testgraphifyregraph_test_regraph_completes",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L51"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testgraphifyregraph_test_regraph_completes",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L52"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testgraphifyregraph_test_status_fresh_after_regraph",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L57"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testgraphifyregraph_test_status_fresh_after_regraph",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L65"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L67"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload",
+      "callee": "lower",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L69"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload",
+      "callee": "lower",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L78"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrine_test_doctrine_payload",
+      "callee": "any",
+      "is_member_call": false,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L83"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L94"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L96"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload",
+      "callee": "isinstance",
+      "is_member_call": false,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L98"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload",
+      "callee": "lower",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L99"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload",
+      "callee": "lower",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L101"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testnodeidentity_test_identity_payload",
+      "callee": "len",
+      "is_member_call": false,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L104"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_stripe_is_dead_410",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L114"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_stripe_is_dead_410",
+      "callee": "lower",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_stripe_is_dead_410",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_stripe_is_dead_410",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_paypal_unknown_source_400",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L122"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_paypal_unknown_source_400",
+      "callee": "lower",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L124"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_paypal_unknown_source_400",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L124"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_square_webhook_cents_works",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L127"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testledgerwebhooks_test_square_webhook_cents_works",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L129"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_sweep",
+      "callee": "lower",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L141"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_sweep",
+      "callee": "search",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L143"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_sweep",
+      "callee": "escape",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L143"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_sweep",
+      "callee": "append",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L144"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_test_endpoint_clean",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L154"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L162"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L164"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "callee": "dict",
+      "is_member_call": false,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L166"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "callee": "pop",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L167"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "callee": "pop",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L168"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "callee": "dumps",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L170"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L174"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "callee": "pop",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L175"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testdoctrinesweep_test_doctrine_endpoint_only_in_allowed_locations",
+      "callee": "dumps",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L176"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_providers_13",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L183"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_providers_13",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L185"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_providers_13",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L186"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_providers_13",
+      "callee": "isinstance",
+      "is_member_call": false,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L187"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_providers_13",
+      "callee": "len",
+      "is_member_call": false,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L188"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_tasks_stats",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L191"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_tasks_stats",
+      "callee": "isinstance",
+      "is_member_call": false,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L193"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_tasks_stats",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L193"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_ledger_stats",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L196"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_ledger_stats",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L198"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_watchdog_status",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L202"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_watchdog_status",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L204"
+    },
+    {
+      "caller_nid": "tests_test_graphify_doctrine_testregression_test_watchdog_status",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/tests/test_graphify_doctrine.py",
+      "source_location": "L205"
+    }
+  ]
+}

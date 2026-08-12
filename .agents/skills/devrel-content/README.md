@@ -23,6 +23,7 @@ Target: backend developers building APIs.
 ```
 
 The skill will:
+
 1. Load your developer audience context
 2. Help you research and validate the topic
 3. Guide you through the outline and structure
@@ -41,6 +42,7 @@ The skill will:
 ### Code Example Requirements
 
 Every code snippet must:
+
 - Run without modification
 - Include all imports
 - Show expected output
@@ -50,6 +52,7 @@ Every code snippet must:
 ### SEO for Developers
 
 Developers search differently:
+
 - Error messages ("TypeError: Cannot read property...")
 - How-to queries ("how to deploy next.js")
 - Comparisons ("prisma vs typeorm 2024")
@@ -57,8 +60,8 @@ Developers search differently:
 
 ## Files
 
-| File | Description |
-|------|-------------|
+| File       | Description                            |
+| ---------- | -------------------------------------- |
 | `SKILL.md` | Full skill instructions with templates |
 
 ## Templates Included

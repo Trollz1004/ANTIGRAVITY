@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Rocket, ShieldCheck } from "lucide-react";
+import React, { useState } from 'react';
+import { Rocket, ShieldCheck } from 'lucide-react';
 
 export function AgeGate({ onVerified }) {
   const [ack, setAck] = useState(false);
@@ -19,10 +19,9 @@ export function AgeGate({ onVerified }) {
         </div>
 
         <p className="text-sm text-[#6b82a6] leading-relaxed mb-6">
-          This is the orchestrator surface for the ANTIGRAVITY stack. Opus conducts; agents
-          execute on Ollama, Hermes Router, and OpenClaw support. By entering you confirm you are{" "}
-          <span className="text-[#e8f0ff] font-semibold">18 or older</span> and authorized to
-          operate this node.
+          This is the orchestrator surface for the ANTIGRAVITY stack. Opus conducts; agents execute on Ollama, Hermes
+          Router, and OpenClaw support. By entering you confirm you are{' '}
+          <span className="text-[#e8f0ff] font-semibold">18 or older</span> and authorized to operate this node.
         </p>
 
         <label className="flex items-start gap-3 text-xs text-[#e8f0ff] cursor-pointer select-none mb-6">

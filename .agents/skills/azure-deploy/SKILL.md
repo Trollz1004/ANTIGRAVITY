@@ -1,6 +1,6 @@
 ---
 name: azure-deploy
-description: "Deploy already-prepared applications to Azure by running azd up, azd deploy, or infrastructure provisioning commands. Supports Bicep and Terraform projects. WHEN: \"run azd up\", \"run azd deploy\", \"execute deployment\", \"provision infrastructure\", \"push to production\", \"push to cloud\", \"go live\", \"ship it\", \"bicep deploy\", \"terraform apply\", \"publish to Azure\", \"launch on Azure\"."
+description: 'Deploy already-prepared applications to Azure by running azd up, azd deploy, or infrastructure provisioning commands. Supports Bicep and Terraform projects. WHEN: "run azd up", "run azd deploy", "execute deployment", "provision infrastructure", "push to production", "push to cloud", "go live", "ship it", "bicep deploy", "terraform apply", "publish to Azure", "launch on Azure".'
 ---
 
 # Azure Deploy
@@ -16,6 +16,7 @@ description: "Deploy already-prepared applications to Azure by running azd up, a
 > 2. **azure-validate** was invoked and passed → plan status = `Validated`
 >
 > If EITHER is missing, **STOP IMMEDIATELY**:
+>
 > - No plan? → Invoke **azure-prepare** skill first
 > - Status not `Validated`? → Invoke **azure-validate** skill first
 >
@@ -30,6 +31,7 @@ description: "Deploy already-prepared applications to Azure by running azd up, a
 ## Triggers
 
 Activate this skill when user wants to:
+
 - Deploy their application to Azure
 - Publish, host, or launch their app
 - Push updates to existing deployment
@@ -51,14 +53,14 @@ Activate this skill when user wants to:
 
 ## Steps
 
-| # | Action | Reference |
-|---|--------|-----------|
-| 1 | **Check Plan** — Read `.azure/plan.md`, verify status = `Validated` AND **Validation Proof** section is populated | `.azure/plan.md` |
-| 2 | **Pre-Deploy Checklist** — MUST complete ALL steps | [Pre-Deploy Checklist](references/pre-deploy-checklist.md) |
-| 3 | **Load Recipe** — Based on `recipe.type` in `.azure/plan.md` | [recipes/README.md](references/recipes/README.md) |
-| 4 | **Execute Deploy** — Follow recipe steps | Recipe README |
-| 5 | **Handle Errors** — See recipe's `errors.md` | — |
-| 6 | **Verify Success** — Confirm deployment completed and endpoints are accessible | — |
+| #   | Action                                                                                                            | Reference                                                  |
+| --- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| 1   | **Check Plan** — Read `.azure/plan.md`, verify status = `Validated` AND **Validation Proof** section is populated | `.azure/plan.md`                                           |
+| 2   | **Pre-Deploy Checklist** — MUST complete ALL steps                                                                | [Pre-Deploy Checklist](references/pre-deploy-checklist.md) |
+| 3   | **Load Recipe** — Based on `recipe.type` in `.azure/plan.md`                                                      | [recipes/README.md](references/recipes/README.md)          |
+| 4   | **Execute Deploy** — Follow recipe steps                                                                          | Recipe README                                              |
+| 5   | **Handle Errors** — See recipe's `errors.md`                                                                      | —                                                          |
+| 6   | **Verify Success** — Confirm deployment completed and endpoints are accessible                                    | —                                                          |
 
 > **⛔ VALIDATION PROOF CHECK**
 >
@@ -71,11 +73,11 @@ Activate this skill when user wants to:
 
 ## MCP Tools
 
-| Tool | Purpose |
-|------|---------|
-| `mcp_azure_mcp_subscription_list` | List available subscriptions |
-| `mcp_azure_mcp_group_list` | List resource groups in subscription |
-| `mcp_azure_mcp_azd` | Execute AZD commands |
+| Tool                              | Purpose                              |
+| --------------------------------- | ------------------------------------ |
+| `mcp_azure_mcp_subscription_list` | List available subscriptions         |
+| `mcp_azure_mcp_group_list`        | List resource groups in subscription |
+| `mcp_azure_mcp_azd`               | Execute AZD commands                 |
 
 ## References
 

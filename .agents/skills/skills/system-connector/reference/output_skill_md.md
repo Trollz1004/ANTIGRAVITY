@@ -78,17 +78,17 @@ This is the deterministic seed catalog. Include only researched facts:
     "default_method": "<exact header format>",
     "advertised_alternative": "<other supported auth methods>",
     "session_cookie": "<cookie name if any>",
-    "anonymous_endpoints": ["..."]
+    "anonymous_endpoints": ["..."],
   },
   "url_patterns": {
-    "<operation_name>": "<HTTP method> <path pattern>"
+    "<operation_name>": "<HTTP method> <path pattern>",
   },
   "filter_dsl": {
     "operators": ["..."],
     "logical": ["and", "or"],
     "form_constraint": "<if any>",
     "text_quoting": "<escape rules>",
-    "url_encoding": "<rules>"
+    "url_encoding": "<rules>",
   },
   "classes": {
     "<EntityName>": {
@@ -97,10 +97,10 @@ This is the deterministic seed catalog. Include only researched facts:
       "description_<localelang>": "...",
       "list_class": "<paired list>",
       "common_fields": {
-        "<field>": "<meaning>"
-      }
-    }
-  }
+        "<field>": "<meaning>",
+      },
+    },
+  },
 }
 ```
 

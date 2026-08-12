@@ -39,12 +39,7 @@ export interface DropdownMenuContentProps extends React.HTMLAttributes<HTMLDivEl
   sideOffset?: number;
 }
 
-export function DropdownMenuContent({
-  className = '',
-  align = 'start',
-  children,
-  ...props
-}: DropdownMenuContentProps) {
+export function DropdownMenuContent({ className = '', align = 'start', children, ...props }: DropdownMenuContentProps) {
   const { open, setOpen } = useContext(DropdownMenuContext);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -76,7 +71,12 @@ export function DropdownMenuContent({
   );
 }
 
-export function DropdownMenuItem({ className = '', onClick, children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+export function DropdownMenuItem({
+  className = '',
+  onClick,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   const { setOpen } = useContext(DropdownMenuContext);
   return (
     <div
@@ -102,5 +102,7 @@ export function DropdownMenuSeparator({ className = '', ...props }: React.HTMLAt
 }
 
 export function DropdownMenuLabel({ className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={['px-2 py-1.5 text-xs font-semibold text-muted-foreground', className].join(' ')} {...props} />;
+  return (
+    <div className={['px-2 py-1.5 text-xs font-semibold text-muted-foreground', className].join(' ')} {...props} />
+  );
 }

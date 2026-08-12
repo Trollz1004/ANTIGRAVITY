@@ -1,12 +1,12 @@
-import { defineConfig, Plugin } from "vitest/config";
-import { readFileSync } from "fs";
+import { defineConfig, Plugin } from 'vitest/config';
+import { readFileSync } from 'fs';
 
 function sqlPlugin(): Plugin {
   return {
-    name: "sql-loader",
+    name: 'sql-loader',
     transform(code, id) {
-      if (id.endsWith(".sql")) {
-        const content = readFileSync(id, "utf-8");
+      if (id.endsWith('.sql')) {
+        const content = readFileSync(id, 'utf-8');
         return {
           code: `export default ${JSON.stringify(content)};`,
           map: null,
@@ -19,8 +19,8 @@ function sqlPlugin(): Plugin {
 export default defineConfig({
   plugins: [sqlPlugin()],
   test: {
-    environment: "node",
-    include: ["tests/**/*.test.ts"],
+    environment: 'node',
+    include: ['tests/**/*.test.ts'],
     poolOptions: {
       threads: {
         singleThread: true,

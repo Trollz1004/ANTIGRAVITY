@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import { Activity, Send, Zap } from "lucide-react";
+import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import { Activity, Send, Zap } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 // Virtual-model pill list — mirrors hermes-router config at localhost:11435.
-const PILLS = ["hermes", "hermes-deep", "cfo", "code", "marketing", "kimi", "fast"];
+const PILLS = ['hermes', 'hermes-deep', 'cfo', 'code', 'marketing', 'kimi', 'fast'];
 
 /**
  * HermesRouterPanel — mirrors the spec from MISSION-CONTROL-GUI-PROMPT:
@@ -19,9 +19,9 @@ const PILLS = ["hermes", "hermes-deep", "cfo", "code", "marketing", "kimi", "fas
  *    + X-Hermes-Real-Model from response headers.
  */
 export function HermesRouterPanel() {
-  const [health, setHealth] = useState({ status: "loading", data: null });
+  const [health, setHealth] = useState({ status: 'loading', data: null });
   const [active, setActive] = useState(null);
-  const [prompt, setPrompt] = useState("Hello from Mission Control — acknowledge in one short line.");
+  const [prompt, setPrompt] = useState('Hello from Mission Control — acknowledge in one short line.');
   const [result, setResult] = useState(null);
   const [busy, setBusy] = useState(false);
   const abortRef = useRef(null);
@@ -32,9 +32,9 @@ export function HermesRouterPanel() {
     try {
       const r = await fetch(`${API}/hermes/healthz`, { signal: ctrl.signal });
       const data = await r.json();
-      setHealth({ status: r.ok ? "ok" : "down", data });
+      setHealth({ status: r.ok ? 'ok' : 'down', data });
     } catch (e) {
-      setHealth({ status: e.name === "AbortError" ? "timeout" : "down", data: null });
+      setHealth({ status: e.name === 'AbortError' ? 'timeout' : 'down', data: null });
     } finally {
       clearTimeout(timer);
     }
@@ -42,8 +42,13 @@ export function HermesRouterPanel() {
 
   useEffect(() => {
     fetchHealth();
-    const iv = setInterval(() => { if (!document.hidden) fetchHealth(); }, 5000);
-    return () => { clearInterval(iv); abortRef.current?.abort(); };
+    const iv = setInterval(() => {
+      if (!document.hidden) fetchHealth();
+    }, 5000);
+    return () => {
+      clearInterval(iv);
+      abortRef.current?.abort();
+    };
   }, []);
 
   const test = async () => {
@@ -57,11 +62,11 @@ export function HermesRouterPanel() {
     const timer = setTimeout(() => ctrl.abort(), 60_000);
     try {
       const res = await fetch(`${API}/hermes/v1/chat/completions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: active,
-          messages: [{ role: "user", content: prompt }],
+          messages: [{ role: 'user', content: prompt }],
           stream: false,
         }),
         signal: ctrl.signal,
@@ -69,13 +74,13 @@ export function HermesRouterPanel() {
       const body = await res.json();
       setResult({
         ok: res.ok,
-        provider: res.headers.get("x-hermes-provider") || body.provider,
-        realModel: res.headers.get("x-hermes-real-model") || body.real_model,
-        latencyMs: Number(res.headers.get("x-hermes-latency-ms") || body.latency_ms || 0),
-        text: body?.choices?.[0]?.message?.content || body?.detail || "(empty)",
+        provider: res.headers.get('x-hermes-provider') || body.provider,
+        realModel: res.headers.get('x-hermes-real-model') || body.real_model,
+        latencyMs: Number(res.headers.get('x-hermes-latency-ms') || body.latency_ms || 0),
+        text: body?.choices?.[0]?.message?.content || body?.detail || '(empty)',
       });
     } catch (e) {
-      setResult({ ok: false, text: e.name === "AbortError" ? "TIMEOUT — retry" : `ERROR: ${e.message}` });
+      setResult({ ok: false, text: e.name === 'AbortError' ? 'TIMEOUT — retry' : `ERROR: ${e.message}` });
     } finally {
       clearTimeout(timer);
       setBusy(false);
@@ -83,10 +88,13 @@ export function HermesRouterPanel() {
   };
 
   const dot =
-    health.status === "ok"      ? "bg-[#00e676] shadow-[0_0_6px_#00e676]" :
-    health.status === "timeout" ? "bg-[#ffb300] shadow-[0_0_6px_#ffb300]" :
-    health.status === "loading" ? "bg-[#6b82a6]" :
-                                  "bg-[#ff1744] shadow-[0_0_6px_#ff1744] animate-pulse";
+    health.status === 'ok'
+      ? 'bg-[#00e676] shadow-[0_0_6px_#00e676]'
+      : health.status === 'timeout'
+        ? 'bg-[#ffb300] shadow-[0_0_6px_#ffb300]'
+        : health.status === 'loading'
+          ? 'bg-[#6b82a6]'
+          : 'bg-[#ff1744] shadow-[0_0_6px_#ff1744] animate-pulse';
 
   const providers = health.data?.providers || [];
 
@@ -131,8 +139,8 @@ export function HermesRouterPanel() {
               onClick={() => setActive(active === p ? null : p)}
               className={`mono text-[10px] px-2 py-1 rounded-full border transition-all ${
                 active === p
-                  ? "bg-[#00d4ff] text-[#0a0f1a] border-[#00d4ff] font-bold"
-                  : "bg-[#0a0f1a] text-[#e8f0ff] border-[#2a3a52] hover:border-[#00d4ff]"
+                  ? 'bg-[#00d4ff] text-[#0a0f1a] border-[#00d4ff] font-bold'
+                  : 'bg-[#0a0f1a] text-[#e8f0ff] border-[#2a3a52] hover:border-[#00d4ff]'
               }`}
             >
               {p}
@@ -144,9 +152,7 @@ export function HermesRouterPanel() {
           <div className="bg-[#0a0f1a] border border-[#2a3a52] rounded-md p-3 space-y-2">
             <div className="flex items-center gap-2">
               <Activity size={10} className="text-[#e040fb]" />
-              <span className="text-[9px] tracking-widest uppercase text-[#6b82a6]">
-                virtual model · {active}
-              </span>
+              <span className="text-[9px] tracking-widest uppercase text-[#6b82a6]">virtual model · {active}</span>
             </div>
             <textarea
               data-testid="hermes-prompt"
@@ -164,26 +170,30 @@ export function HermesRouterPanel() {
                 disabled={busy || !prompt.trim()}
                 className="flex items-center gap-1.5 bg-[#00d4ff] text-[#0a0f1a] text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded disabled:opacity-30 hover:bg-[#33ddff] transition-all"
               >
-                <Send size={10} /> {busy ? "TESTING…" : "TEST"}
+                <Send size={10} /> {busy ? 'TESTING…' : 'TEST'}
               </button>
             </div>
 
             {result && (
               <div className="mt-2 border-t border-[#2a3a52] pt-2 space-y-1" data-testid="hermes-result">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className={`text-[8px] tracking-widest uppercase px-1.5 py-0.5 rounded-full border ${
-                    result.ok ? "bg-[#00e676]/10 border-[#00e676]/30 text-[#00e676]" : "bg-[#ff1744]/10 border-[#ff1744]/30 text-[#ff1744]"
-                  }`}>
-                    {result.ok ? "OK" : "FAIL"}
+                  <span
+                    className={`text-[8px] tracking-widest uppercase px-1.5 py-0.5 rounded-full border ${
+                      result.ok
+                        ? 'bg-[#00e676]/10 border-[#00e676]/30 text-[#00e676]'
+                        : 'bg-[#ff1744]/10 border-[#ff1744]/30 text-[#ff1744]'
+                    }`}
+                  >
+                    {result.ok ? 'OK' : 'FAIL'}
                   </span>
                   {result.provider && (
                     <span className="mono text-[9px] text-[#6b82a6]">X-Hermes-Provider: {result.provider}</span>
                   )}
-                  {result.realModel && (
-                    <span className="mono text-[9px] text-[#6b82a6]">Real: {result.realModel}</span>
-                  )}
+                  {result.realModel && <span className="mono text-[9px] text-[#6b82a6]">Real: {result.realModel}</span>}
                   {result.latencyMs > 0 && (
-                    <span className="mono text-[9px] text-[#ffb300] flex items-center gap-0.5"><Zap size={8}/> {result.latencyMs}ms</span>
+                    <span className="mono text-[9px] text-[#ffb300] flex items-center gap-0.5">
+                      <Zap size={8} /> {result.latencyMs}ms
+                    </span>
                   )}
                 </div>
                 <pre className="mono text-[11px] text-[#e8f0ff] whitespace-pre-wrap bg-[#111827] border border-[#2a3a52] rounded p-2 max-h-48 overflow-y-auto custom-scrollbar">

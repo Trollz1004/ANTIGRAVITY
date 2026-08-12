@@ -137,7 +137,7 @@ the auto-launch. Everything stays visible and closable; nothing hides.
 ## Port map - who owns what
 
 | Port  | Service                     |
-|-------|-----------------------------|
+| ----- | --------------------------- |
 | 20128 | OmniRoute gateway + UI      |
 | 11434 | Ollama                      |
 | 3151  | Mission Control             |

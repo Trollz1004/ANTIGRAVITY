@@ -6,11 +6,11 @@ services:
     container_name: supportclaw
     restart: unless-stopped
     ports:
-      - "18895:18895"
+      - '18895:18895'
     environment:
       OPENCLAW_STATE_DIR: /var/lib/supportclaw/state
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - 'host.docker.internal:host-gateway'
     volumes:
       - ./state:/var/lib/supportclaw/state
       - ./workspace:/var/lib/supportclaw/workspace

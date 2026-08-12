@@ -85,16 +85,16 @@ paths:
             minimum: 0
             default: 0
       responses:
-        "200":
+        '200':
           description: Paginated list of pitches
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PitchListResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalError"
+                $ref: '#/components/schemas/PitchListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
     post:
       tags: [pitches]
@@ -108,20 +108,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PitchCreateRequest"
+              $ref: '#/components/schemas/PitchCreateRequest'
       responses:
-        "201":
+        '201':
           description: Pitch created successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PitchResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "422":
-          $ref: "#/components/responses/ValidationError"
-        "500":
-          $ref: "#/components/responses/InternalError"
+                $ref: '#/components/schemas/PitchResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
   /api/v1/pitches/{pitch_id}:
     get:
@@ -139,20 +139,20 @@ paths:
             type: string
             format: uuid
       responses:
-        "200":
+        '200':
           description: Pitch details
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PitchResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalError"
+                $ref: '#/components/schemas/PitchResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
     patch:
       tags: [pitches]
@@ -173,24 +173,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PitchUpdateRequest"
+              $ref: '#/components/schemas/PitchUpdateRequest'
       responses:
-        "200":
+        '200':
           description: Updated pitch
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PitchResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "422":
-          $ref: "#/components/responses/ValidationError"
-        "500":
-          $ref: "#/components/responses/InternalError"
+                $ref: '#/components/schemas/PitchResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
   /api/v1/deals:
     get:
@@ -238,16 +238,16 @@ paths:
             minimum: 0
             default: 0
       responses:
-        "200":
+        '200':
           description: Paginated list of deals
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DealListResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalError"
+                $ref: '#/components/schemas/DealListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
   /api/v1/deals/{deal_id}:
     get:
@@ -263,18 +263,18 @@ paths:
             type: string
             format: uuid
       responses:
-        "200":
+        '200':
           description: Deal details
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DealResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalError"
+                $ref: '#/components/schemas/DealResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
   /api/v1/deals/{deal_id}/invest:
     post:
@@ -295,24 +295,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/InvestmentCreateRequest"
+              $ref: '#/components/schemas/InvestmentCreateRequest'
       responses:
-        "201":
+        '201':
           description: Investment commitment recorded
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InvestmentResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "409":
-          $ref: "#/components/responses/Conflict"
-        "422":
-          $ref: "#/components/responses/ValidationError"
-        "500":
-          $ref: "#/components/responses/InternalError"
+                $ref: '#/components/schemas/InvestmentResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
   /api/v1/investments:
     get:
@@ -345,16 +345,16 @@ paths:
             minimum: 0
             default: 0
       responses:
-        "200":
+        '200':
           description: Paginated list of investments
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InvestmentListResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalError"
+                $ref: '#/components/schemas/InvestmentListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
   /api/v1/investments/{investment_id}:
     get:
@@ -370,18 +370,18 @@ paths:
             type: string
             format: uuid
       responses:
-        "200":
+        '200':
           description: Investment details
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InvestmentResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalError"
+                $ref: '#/components/schemas/InvestmentResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
     patch:
       tags: [investments]
@@ -402,24 +402,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/InvestmentUpdateRequest"
+              $ref: '#/components/schemas/InvestmentUpdateRequest'
       responses:
-        "200":
+        '200':
           description: Updated investment
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InvestmentResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "422":
-          $ref: "#/components/responses/ValidationError"
-        "500":
-          $ref: "#/components/responses/InternalError"
+                $ref: '#/components/schemas/InvestmentResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
   /api/v1/billing/checkout-link:
     post:
@@ -434,28 +434,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CheckoutLinkRequest"
+              $ref: '#/components/schemas/CheckoutLinkRequest'
       responses:
-        "200":
+        '200':
           description: Checkout URL generated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CheckoutLinkResponse"
-        "400":
+                $ref: '#/components/schemas/CheckoutLinkResponse'
+        '400':
           description: Invalid email or tier
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "503":
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '503':
           description: Square checkout temporarily unavailable
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: '#/components/schemas/ErrorResponse'
 
   /api/v1/funding-platform/summary:
     get:
@@ -466,16 +466,16 @@ paths:
         capital, and closed deal count.
       operationId: getFundingSummary
       responses:
-        "200":
+        '200':
           description: Aggregate funding metrics
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FundingSummaryResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalError"
+                $ref: '#/components/schemas/FundingSummaryResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
 components:
   securitySchemes:
@@ -584,7 +584,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/PitchResponse"
+            $ref: '#/components/schemas/PitchResponse'
         total:
           type: integer
         limit:
@@ -640,7 +640,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/DealResponse"
+            $ref: '#/components/schemas/DealResponse'
         total:
           type: integer
         limit:
@@ -714,7 +714,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/InvestmentResponse"
+            $ref: '#/components/schemas/InvestmentResponse'
         total:
           type: integer
         limit:
@@ -779,7 +779,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           example:
             code: INVALID_CREDENTIALS
             message: Authentication required
@@ -790,7 +790,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           example:
             code: INSUFFICIENT_PERMISSIONS
             message: Not authorized to access this resource
@@ -801,7 +801,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           example:
             code: NOT_FOUND
             message: Resource not found
@@ -812,7 +812,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           example:
             code: ALREADY_EXISTS
             message: Investment already committed
@@ -823,7 +823,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           example:
             code: VALIDATION_ERROR
             message: Request validation failed
@@ -838,7 +838,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           example:
             code: INTERNAL_ERROR
             message: An unexpected error occurred

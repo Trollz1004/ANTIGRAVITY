@@ -1,1 +1,207 @@
-{"nodes": [{"id": "app_frontend_src_components_missionribbon_js", "label": "MissionRibbon.js", "file_type": "code", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L1"}, {"id": "components_missionribbon_missionribbon", "label": "MissionRibbon()", "file_type": "code", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L12"}, {"id": "components_missionribbon_stat", "label": "Stat()", "file_type": "code", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L81"}, {"id": "components_missionribbon_formatusd", "label": "formatUsd()", "file_type": "code", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L91"}], "edges": [{"source": "app_frontend_src_components_missionribbon_js", "target": "react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L1", "weight": 1.0}, {"source": "app_frontend_src_components_missionribbon_js", "target": "axios", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L2", "weight": 1.0}, {"source": "app_frontend_src_components_missionribbon_js", "target": "lucide_react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L3", "weight": 1.0}, {"source": "app_frontend_src_components_missionribbon_js", "target": "app_frontend_src_components_sharemissionmodal", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L4", "weight": 1.0}, {"source": "app_frontend_src_components_missionribbon_js", "target": "components_sharemissionmodal_sharemissionmodal", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L4", "weight": 1.0}, {"source": "app_frontend_src_components_missionribbon_js", "target": "components_missionribbon_missionribbon", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L12", "weight": 1.0}, {"source": "app_frontend_src_components_missionribbon_js", "target": "components_missionribbon_stat", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L81", "weight": 1.0}, {"source": "app_frontend_src_components_missionribbon_js", "target": "components_missionribbon_formatusd", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L91", "weight": 1.0}, {"source": "components_missionribbon_missionribbon", "target": "components_missionribbon_formatusd", "relation": "calls", "context": "call", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L57", "weight": 1.0}], "raw_calls": [{"caller_nid": "components_missionribbon_missionribbon", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L13"}, {"caller_nid": "components_missionribbon_missionribbon", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L14"}, {"caller_nid": "components_missionribbon_missionribbon", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L15"}, {"caller_nid": "components_missionribbon_missionribbon", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L16"}, {"caller_nid": "components_missionribbon_missionribbon", "callee": "useEffect", "is_member_call": false, "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L18"}, {"caller_nid": "components_missionribbon_missionribbon", "callee": "useEffect", "is_member_call": false, "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L24"}, {"caller_nid": "components_missionribbon_missionribbon", "callee": "String", "is_member_call": false, "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L59"}, {"caller_nid": "components_missionribbon_missionribbon", "callee": "join", "is_member_call": true, "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L64"}, {"caller_nid": "components_missionribbon_missionribbon", "callee": "map", "is_member_call": true, "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L64"}, {"caller_nid": "components_missionribbon_formatusd", "callee": "toFixed", "is_member_call": true, "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L92"}, {"caller_nid": "components_missionribbon_formatusd", "callee": "toFixed", "is_member_call": true, "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L93"}, {"caller_nid": "components_missionribbon_formatusd", "callee": "Number", "is_member_call": false, "source_file": "/app/frontend/src/components/MissionRibbon.js", "source_location": "L93"}]}
+{
+  "nodes": [
+    {
+      "id": "app_frontend_src_components_missionribbon_js",
+      "label": "MissionRibbon.js",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "components_missionribbon_missionribbon",
+      "label": "MissionRibbon()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L12"
+    },
+    {
+      "id": "components_missionribbon_stat",
+      "label": "Stat()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L81"
+    },
+    {
+      "id": "components_missionribbon_formatusd",
+      "label": "formatUsd()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L91"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_frontend_src_components_missionribbon_js",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_missionribbon_js",
+      "target": "axios",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_missionribbon_js",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_missionribbon_js",
+      "target": "app_frontend_src_components_sharemissionmodal",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_missionribbon_js",
+      "target": "components_sharemissionmodal_sharemissionmodal",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_missionribbon_js",
+      "target": "components_missionribbon_missionribbon",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_missionribbon_js",
+      "target": "components_missionribbon_stat",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_missionribbon_js",
+      "target": "components_missionribbon_formatusd",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L91",
+      "weight": 1.0
+    },
+    {
+      "source": "components_missionribbon_missionribbon",
+      "target": "components_missionribbon_formatusd",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L57",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "components_missionribbon_missionribbon",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L13"
+    },
+    {
+      "caller_nid": "components_missionribbon_missionribbon",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L14"
+    },
+    {
+      "caller_nid": "components_missionribbon_missionribbon",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L15"
+    },
+    {
+      "caller_nid": "components_missionribbon_missionribbon",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L16"
+    },
+    {
+      "caller_nid": "components_missionribbon_missionribbon",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "components_missionribbon_missionribbon",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "components_missionribbon_missionribbon",
+      "callee": "String",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "components_missionribbon_missionribbon",
+      "callee": "join",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L64"
+    },
+    {
+      "caller_nid": "components_missionribbon_missionribbon",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L64"
+    },
+    {
+      "caller_nid": "components_missionribbon_formatusd",
+      "callee": "toFixed",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L92"
+    },
+    {
+      "caller_nid": "components_missionribbon_formatusd",
+      "callee": "toFixed",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L93"
+    },
+    {
+      "caller_nid": "components_missionribbon_formatusd",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/MissionRibbon.js",
+      "source_location": "L93"
+    }
+  ]
+}

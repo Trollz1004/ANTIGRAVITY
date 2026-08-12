@@ -4,11 +4,11 @@ Package: `@azure/event-hubs` | [README](https://github.com/Azure/azure-sdk-for-j
 
 ## Common Errors
 
-| Error | Code | Fix |
-|-------|------|-----|
-| `MessagingError` (connection:forced) | Idle disconnect | Auto-recovers; no action needed |
-| `MessagingError` (Unauthorized) | Bad credentials | Verify connection string, SAS, or RBAC roles |
-| `MessagingError` (retryable: true) | Transient issue | Auto-retried per `RetryOptions`. If surfaced, all retries exhausted |
+| Error                                | Code            | Fix                                                                 |
+| ------------------------------------ | --------------- | ------------------------------------------------------------------- |
+| `MessagingError` (connection:forced) | Idle disconnect | Auto-recovers; no action needed                                     |
+| `MessagingError` (Unauthorized)      | Bad credentials | Verify connection string, SAS, or RBAC roles                        |
+| `MessagingError` (retryable: true)   | Transient issue | Auto-retried per `RetryOptions`. If surfaced, all retries exhausted |
 
 `MessagingError` fields: `name`, `code`, `retryable`, `info`, `address`, `errno`, `port`, `syscall`.
 
@@ -26,8 +26,9 @@ export DEBUG=azure:*:(error|warning),rhea-promise:error,rhea:events,rhea:frames,
 ```
 
 Browser:
+
 ```javascript
-localStorage.debug = "azure:*:info";
+localStorage.debug = 'azure:*:info';
 ```
 
 ## Key Issues
@@ -44,19 +45,23 @@ localStorage.debug = "azure:*:info";
 Package: `@azure/eventhubs-checkpointstore-blob`
 
 ```javascript
-const { BlobCheckpointStore } = require("@azure/eventhubs-checkpointstore-blob");
-const { BlobServiceClient } = require("@azure/storage-blob");
+const { BlobCheckpointStore } = require('@azure/eventhubs-checkpointstore-blob');
+const { BlobServiceClient } = require('@azure/storage-blob');
 
-const containerClient = new BlobServiceClient(storageEndpoint, credential)
-  .getContainerClient("checkpointstore");
+const containerClient = new BlobServiceClient(storageEndpoint, credential).getContainerClient('checkpointstore');
 const checkpointStore = new BlobCheckpointStore(containerClient);
 
 const consumerClient = new EventHubConsumerClient(
-  consumerGroup, fullyQualifiedNamespace, eventHubName, credential, checkpointStore
+  consumerGroup,
+  fullyQualifiedNamespace,
+  eventHubName,
+  credential,
+  checkpointStore,
 );
 ```
 
 **Common issues:**
+
 - **Soft delete / blob versioning**: Disable both on the storage account — they cause delays during load balancing.
 - **412 precondition failures**: Normal during partition ownership negotiation; not an error.
 - **Checkpoint frequency**: Call `updateCheckpoint()` per batch, not per event, to reduce storage calls.

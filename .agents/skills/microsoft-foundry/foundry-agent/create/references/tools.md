@@ -35,31 +35,31 @@ To auto-pick up new default versions without redeploying, drop the `/versions/<v
 
 ## CLI surface
 
-| Command | What it does |
-|---------|--------------|
-| `azd ai toolbox create <name> --from-file <path>` | Create toolbox + its first version. File must list at least one connection, skill, or tool. |
-| `azd ai toolbox connection add <toolbox> <connection> [--index ...] [--instance-name ...]` | Attach one; creates a new version (default unchanged). |
-| `azd ai toolbox connection add <toolbox> --from-file <path>` | Attach many in one call; ONE new version (default unchanged). |
-| `azd ai toolbox connection remove <toolbox> <connection>` | Detach; creates a new version (default unchanged). Refuses to leave zero tools. |
-| `azd ai toolbox show <name> [--version <ver>]` | Show toolbox + MCP endpoint URL. |
-| `azd ai toolbox list` | List toolboxes. |
-| `azd ai toolbox versions list <toolbox>` | List versions. |
-| `azd ai toolbox publish <name> <version>` | Promote a version to default (also used to roll back). |
-| `azd ai toolbox delete <name> [--version <ver>] [--force]` | Delete toolbox or one version. |
+| Command                                                                                    | What it does                                                                                |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `azd ai toolbox create <name> --from-file <path>`                                          | Create toolbox + its first version. File must list at least one connection, skill, or tool. |
+| `azd ai toolbox connection add <toolbox> <connection> [--index ...] [--instance-name ...]` | Attach one; creates a new version (default unchanged).                                      |
+| `azd ai toolbox connection add <toolbox> --from-file <path>`                               | Attach many in one call; ONE new version (default unchanged).                               |
+| `azd ai toolbox connection remove <toolbox> <connection>`                                  | Detach; creates a new version (default unchanged). Refuses to leave zero tools.             |
+| `azd ai toolbox show <name> [--version <ver>]`                                             | Show toolbox + MCP endpoint URL.                                                            |
+| `azd ai toolbox list`                                                                      | List toolboxes.                                                                             |
+| `azd ai toolbox versions list <toolbox>`                                                   | List versions.                                                                              |
+| `azd ai toolbox publish <name> <version>`                                                  | Promote a version to default (also used to roll back).                                      |
+| `azd ai toolbox delete <name> [--version <ver>] [--force]`                                 | Delete toolbox or one version.                                                              |
 
 Every mutation publishes a new immutable version but does **not** change the default; run `azd ai toolbox publish <name> <version>` to promote one.
 
 ## `--from-file` shape
 
 ```yaml
-description: research toolbox    # only on `create`
+description: research toolbox # only on `create`
 connections:
-  - name: my-mcp                 # RemoteTool
-  - name: my-search              # CognitiveSearch -- needs index
+  - name: my-mcp # RemoteTool
+  - name: my-search # CognitiveSearch -- needs index
     index: products
-  - name: my-bing                # GroundingWithCustomSearch -- needs instance_name
+  - name: my-bing # GroundingWithCustomSearch -- needs instance_name
     instance_name: docs-config
-  - name: my-a2a                 # RemoteA2A
+  - name: my-a2a # RemoteA2A
 ```
 
 ## Recipe: GitHub MCP
@@ -123,7 +123,7 @@ For authenticated peers, use `--auth-type project-managed-identity --audience ht
 
 ```yaml
 # tools.yaml
-description: "GitHub MCP + AI Search + A2A peer."
+description: 'GitHub MCP + AI Search + A2A peer.'
 connections:
   - name: github-mcp-conn
   - name: my-search-conn
@@ -193,13 +193,13 @@ azd ai agent invoke "list the tools you have access to"
 
 ## Troubleshooting
 
-| Symptom | Likely cause |
-|---------|--------------|
-| `TOOLBOX_<NAME>_MCP_ENDPOINT` not set | Run `azd ai toolbox show` + `azd env set`. |
-| Env var missing in deployed agent | Add to the agent service's `environmentVariables` in `azure.yaml`, `azd deploy`. |
-| `401` on MCP calls | Expired / wrong-scope token. Use `https://ai.azure.com/.default`; refresh per request. |
-| `403 Forbidden` | Caller missing `Foundry User` role. |
-| `500` on `prompts/list` / ping | Disable in MCP client (`load_prompts=False`). |
-| Empty response, tool never called | `require_approval: always` with no handler. Pass `approval_mode="never_require"`. |
-| `tools/list` returns zero | Bad credentials, or toolbox version still provisioning. |
-| Tool names don't match | Use `{server_label}___{tool_name}` (three underscores). |
+| Symptom                               | Likely cause                                                                           |
+| ------------------------------------- | -------------------------------------------------------------------------------------- |
+| `TOOLBOX_<NAME>_MCP_ENDPOINT` not set | Run `azd ai toolbox show` + `azd env set`.                                             |
+| Env var missing in deployed agent     | Add to the agent service's `environmentVariables` in `azure.yaml`, `azd deploy`.       |
+| `401` on MCP calls                    | Expired / wrong-scope token. Use `https://ai.azure.com/.default`; refresh per request. |
+| `403 Forbidden`                       | Caller missing `Foundry User` role.                                                    |
+| `500` on `prompts/list` / ping        | Disable in MCP client (`load_prompts=False`).                                          |
+| Empty response, tool never called     | `require_approval: always` with no handler. Pass `approval_mode="never_require"`.      |
+| `tools/list` returns zero             | Bad credentials, or toolbox version still provisioning.                                |
+| Tool names don't match                | Use `{server_label}___{tool_name}` (three underscores).                                |

@@ -1,6 +1,6 @@
 ---
 name: azure-compute
-description: "Recommend Azure VM sizes, VM Scale Sets (VMSS), and configurations based on workload requirements, performance needs, and budget constraints. No Azure account required — uses public documentation and the Azure Retail Prices API. USE FOR: recommend VM size, which VM should I use, choose Azure VM, VM for web/database/ML/batch/HPC, GPU VM, compare VM sizes, cheapest VM, best VM for workload, VM pricing, cost estimate, burstable/compute/memory/storage optimized VM, confidential computing, VM trade-offs, VM families, VMSS, scale set recommendation, autoscale VMs, load balanced VMs, VMSS vs VM, scale out, horizontal scaling, flexible orchestration. DO NOT USE FOR: deploying VMs or VMSS, deploying apps (use azure-deploy), looking up existing VMs (use azure-resource-lookup), cost optimization of running VMs (use azure-cost-optimization), non-VM services like App Service or AKS."
+description: 'Recommend Azure VM sizes, VM Scale Sets (VMSS), and configurations based on workload requirements, performance needs, and budget constraints. No Azure account required — uses public documentation and the Azure Retail Prices API. USE FOR: recommend VM size, which VM should I use, choose Azure VM, VM for web/database/ML/batch/HPC, GPU VM, compare VM sizes, cheapest VM, best VM for workload, VM pricing, cost estimate, burstable/compute/memory/storage optimized VM, confidential computing, VM trade-offs, VM families, VMSS, scale set recommendation, autoscale VMs, load balanced VMs, VMSS vs VM, scale out, horizontal scaling, flexible orchestration. DO NOT USE FOR: deploying VMs or VMSS, deploying apps (use azure-deploy), looking up existing VMs (use azure-resource-lookup), cost optimization of running VMs (use azure-cost-optimization), non-VM services like App Service or AKS.'
 ---
 
 # Azure Compute Skill
@@ -87,16 +87,18 @@ Needs autoscaling?
 
 1. Review [VM Family Guide](references/vm-families.md) to identify 2-3 candidate VM families that match the workload requirements
 2. **REQUIRED: verify specifications** for your chosen candidates by fetching current documentation:
+
    ```bash
    web_fetch https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/<family-category>/<series-name>
    ```
-   
+
    Examples:
    - B-series: `https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/general-purpose/b-family`
    - D-series: `https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/general-purpose/ddsv5-series`
    - GPU: `https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/gpu-accelerated/nc-family`
 
 3. **If considering Spot VMs**, also fetch:
+
    ```bash
    web_fetch https://learn.microsoft.com/en-us/azure/virtual-machine-scale-sets/use-spot
    ```
@@ -126,9 +128,10 @@ Provide **2–3 options** with trade-offs:
 | Why            | Fit for the workload                            |
 | Trade-off      | What the user gives up                          |
 
-> **Tip:** Always explain *why* a family fits and what the user trades off (cost vs cores, burstable vs dedicated, single VM simplicity vs VMSS scalability, etc.).
+> **Tip:** Always explain _why_ a family fits and what the user trades off (cost vs cores, burstable vs dedicated, single VM simplicity vs VMSS scalability, etc.).
 
 For VMSS recommendations, also mention:
+
 - Recommended orchestration mode (Flexible for most new workloads)
 - Autoscale strategy (metric-based, schedule-based, or both)
 - Load balancer type (Azure Load Balancer for L4, Application Gateway for L7/TLS)

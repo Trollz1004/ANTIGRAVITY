@@ -159,6 +159,7 @@ that bypass the migration pipeline.
 ## Best Practices
 
 1. **Always backup before migrations in production**
+
    ```bash
    pg_dump $DATABASE_URL > backup_$(date +%Y%m%d_%H%M%S).sql
    ```

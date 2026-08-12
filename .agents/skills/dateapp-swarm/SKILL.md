@@ -2,22 +2,39 @@
 name: dateapp-swarm
 description: Use when running the YouAndINotAI launch swarm (GUI, payments, growth, ops).
 ---
+
 # Date App Agent Swarm
 
-## Agents (each has ≥4 skills under `.agents/skills/<agent>/`)
-| Agent | Skills dir | Lane |
-|-------|------------|------|
-| GUI | dateapp-gui-agent | Kiss Me shell, create, avatar, video UI |
-| Payments | dateapp-payments-agent | Square/PayPal/CashApp/Plaid, no Stripe |
-| Growth | dateapp-growth-agent | 10-day launch, Elite affiliate, funnel, copy |
-| Ops | dateapp-ops-agent | Mission Control, C: workspace, health |
+## Summonable sub-agents (OPUS-tier packs)
+
+See `.agents/subagents/SUMMON.md` and `.agents/subagents/registry.json`.
+
+| Lane     | Sub-agent id       | Pack                                  |
+| -------- | ------------------ | ------------------------------------- |
+| GUI      | `dateapp-gui`      | `.agents/subagents/dateapp-gui/`      |
+| Payments | `dateapp-payments` | `.agents/subagents/dateapp-payments/` |
+| Growth   | `dateapp-growth`   | `.agents/subagents/dateapp-growth/`   |
+| Ops      | `dateapp-ops`      | `.agents/subagents/dateapp-ops/`      |
+
+Each pack has the required 7 files: SOUL, HEARTBEAT, TOOLS, SKILLS, AGENT, MEMORY, SKILL.
+
+## Skill trees (still load per lane)
+
+| Agent    | Skills dir                               |
+| -------- | ---------------------------------------- |
+| GUI      | `.agents/skills/dateapp-gui-agent/`      |
+| Payments | `.agents/skills/dateapp-payments-agent/` |
+| Growth   | `.agents/skills/dateapp-growth-agent/`   |
+| Ops      | `.agents/skills/dateapp-ops-agent/`      |
 
 ## Protocol
-1. Load this skill + the lane skill pack.
-2. Work only under `C:\Users\joshl\ANTIGRAVITY-WORK\ANTIGRAVITY`.
-3. Ship evidence (curl, screenshot, test output).
-4. After redesign stable → start Mission Control.
-5. Affiliate links via landing `?ref=` only.
 
-## Launch
-See `docs/LAUNCH-10-DAY-2026-08-14.md` — target **2026-08-14**.
+1. Parent Hermes/OpenClaw summons one lane pack
+2. Sub-agent loads its 7 MD files + lane skills listed in SKILLS.md
+3. Workspace: `F:\ANTIGRAVITY`
+4. Ship evidence (curl, screenshot, test output)
+5. Affiliate links via landing `?ref=` only
+
+## Parents
+
+Hermes + OpenClaw only. No extra standing agents.

@@ -7,21 +7,22 @@
 > every service. Josh sees red, Josh tells Claude. Otherwise hands-off.
 >
 > **Memory protection:** two layers — Windows file ACLs (`lock-memory.ps1`)
-> + a Claude-runtime hook (`memory-protection-hook.sh` wired in
-> `.claude/settings.json`). First-party Claude.ai can override either layer.
-> Third-party wrappers (Manus, Emergent, etc.) cannot.
+>
+> - a Claude-runtime hook (`memory-protection-hook.sh` wired in
+>   `.claude/settings.json`). First-party Claude.ai can override either layer.
+>   Third-party wrappers (Manus, Emergent, etc.) cannot.
 
 ## Files
 
-| File | Purpose |
-|---|---|
-| `bootstrap-claude-node.cmd` | Per-node auto-start at user logon. Kills rogue agents, `git pull`, brings up Docker stack (T5500 only), starts Hermes router + sentry. |
-| `sentry.py` | Health watchdog. Every 60s, writes `~/OneDrive/Personal Vault/sentry-<HOSTNAME>.json` with ports + Docker container + URL liveness checks. |
-| `dashboard.html` | Static dashboard. Reads all `sentry-*.json` files from the same directory. Auto-refreshes every 30s. No build step. |
-| `serve-dashboard.cmd` | Mini-ASUS-only: starts a localhost HTTP server on `:7321` serving the Vault folder so the dashboard can fetch JSONs. Pin a browser tab to it on the always-on display. |
-| `register-task.ps1` | One-shot installer. Registers either `ANTIGRAVITY-Bootstrap` (T5500 / Sabretooth / 9020) or `ANTIGRAVITY-Dashboard` (mini-ASUS) as a Windows Scheduled Task at logon. |
-| `lock-memory.ps1` | Filesystem-level lock on protected memory files (Windows `attrib +R`). Survives non-Claude runtimes. |
-| `memory-protection-hook.sh` | Claude-runtime hook that blocks Edit/Write on protected memory files unless `CLAUDE_AUTHORITY=first-party` is set. |
+| File                        | Purpose                                                                                                                                                                |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bootstrap-claude-node.cmd` | Per-node auto-start at user logon. Kills rogue agents, `git pull`, brings up Docker stack (T5500 only), starts Hermes router + sentry.                                 |
+| `sentry.py`                 | Health watchdog. Every 60s, writes `~/OneDrive/Personal Vault/sentry-<HOSTNAME>.json` with ports + Docker container + URL liveness checks.                             |
+| `dashboard.html`            | Static dashboard. Reads all `sentry-*.json` files from the same directory. Auto-refreshes every 30s. No build step.                                                    |
+| `serve-dashboard.cmd`       | Mini-ASUS-only: starts a localhost HTTP server on `:7321` serving the Vault folder so the dashboard can fetch JSONs. Pin a browser tab to it on the always-on display. |
+| `register-task.ps1`         | One-shot installer. Registers either `ANTIGRAVITY-Bootstrap` (T5500 / Sabretooth / 9020) or `ANTIGRAVITY-Dashboard` (mini-ASUS) as a Windows Scheduled Task at logon.  |
+| `lock-memory.ps1`           | Filesystem-level lock on protected memory files (Windows `attrib +R`). Survives non-Claude runtimes.                                                                   |
+| `memory-protection-hook.sh` | Claude-runtime hook that blocks Edit/Write on protected memory files unless `CLAUDE_AUTHORITY=first-party` is set.                                                     |
 
 ## Install — one node at a time
 
@@ -68,7 +69,8 @@ Each node card shows three groups of green/red checks:
   ≠ verified" rule)
 
 Card border turns amber if the sentry's last write is >3 minutes old, red if
->10 minutes — that's how Josh sees "sentry itself died" vs "service died."
+
+> 10 minutes — that's how Josh sees "sentry itself died" vs "service died."
 
 ## Uninstall
 

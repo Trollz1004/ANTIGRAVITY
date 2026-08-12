@@ -1,6 +1,7 @@
 # OmniRouter Migration: Sabretooth → T5500 (ANTIGRAVITY Local Stack)
 
 ## Current State
+
 - **Sabretooth:** OmniRouter running at `C:\paperclip\omniroute` (ports 20128, 20129)
 - **T5500 (Local Stack):** Dockerfile + docker-compose template ready at `C:\ANTIGRAVITY\omniroute/`
 
@@ -25,6 +26,7 @@ if (Test-Path "$source\.env") {
 ## Step 2: Transfer to T5500
 
 **Option A: USB/External Drive**
+
 ```powershell
 # On sabretooth:
 Copy-Item "C:\omniroute-backup-*.zip" "E:\" -Force
@@ -34,6 +36,7 @@ Expand-Archive -Path "E:\omniroute-backup-*.zip" -DestinationPath "C:\ANTIGRAVIT
 ```
 
 **Option B: Network Copy (if both on same LAN)**
+
 ```powershell
 # On sabretooth:
 New-SmbShare -Name "omniroute" -Path "C:\paperclip\omniroute" -FullAccess "Everyone"
@@ -44,6 +47,7 @@ Copy-Item "\\sabretooth\omniroute\*" "C:\ANTIGRAVITY\omniroute\" -Recurse -Force
 ```
 
 **Option C: SCP (if SSH is configured)**
+
 ```bash
 scp -r joshl@sabretooth:C:/paperclip/omniroute/* C:\ANTIGRAVITY\omniroute\
 ```
@@ -51,6 +55,7 @@ scp -r joshl@sabretooth:C:/paperclip/omniroute/* C:\ANTIGRAVITY\omniroute\
 ## Step 3: Update Configuration on T5500
 
 Edit `.env.docker`:
+
 ```env
 # OmniRouter (from sabretooth .env, update secrets for security)
 JWT_SECRET=NEW-JWT-SECRET-FOR-T5500
@@ -64,6 +69,7 @@ GOOGLE_API_KEY=AIza...
 ```
 
 If sabretooth `.env` has secrets you want to reuse:
+
 ```powershell
 # Copy from sabretooth (secure transfer only):
 Copy-Item "\\sabretooth\omniroute\.env" "C:\ANTIGRAVITY\.env.omniroute.backup"
@@ -122,6 +128,7 @@ docker compose exec hermes-agent bash -c "
 ```
 
 Or manually edit Hermes config in the volume:
+
 ```powershell
 # Find Hermes config (in hermes-data volume)
 docker inspect hermes-agent --format='{{json .Mounts}}' | ConvertFrom-Json | Where {$_.Destination -eq "/root/.hermes"} | Select Source
@@ -138,6 +145,7 @@ T5500 Hermes Workspace (:3000)
 ```
 
 Test:
+
 1. Open http://127.0.0.1:3000 (Hermes Workspace)
 2. Send a chat message
 3. Monitor: `docker compose logs -f omni-router`
@@ -146,18 +154,21 @@ Test:
 ## Troubleshooting
 
 ### OmniRouter won't start
+
 ```powershell
 docker compose logs omni-router | tail -50
 # Check Node version, memory limits, port conflicts
 ```
 
 ### Redis connection failed
+
 ```powershell
 docker compose ps | grep redis
 docker compose logs redis
 ```
 
 ### Hermes Agent can't reach OmniRouter
+
 ```powershell
 # Test from hermes-agent container
 docker compose exec hermes-agent curl -v http://omni-router:20129/health
@@ -167,6 +178,7 @@ docker network inspect antigravity_default
 ```
 
 ### Port 20128/20129 already in use
+
 ```powershell
 Get-NetTCPConnection -LocalPort 20128,20129
 # Kill conflicting process or change ports in docker-compose.yml
@@ -175,6 +187,7 @@ Get-NetTCPConnection -LocalPort 20128,20129
 ## Rollback
 
 If needed, revert to sabretooth-only setup:
+
 ```powershell
 # Stop T5500 OmniRouter
 docker compose stop omni-router

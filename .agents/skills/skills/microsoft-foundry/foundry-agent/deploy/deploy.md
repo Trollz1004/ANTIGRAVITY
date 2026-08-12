@@ -8,14 +8,14 @@ For **prompt agents** (LLM + instructions, no custom code), use the Foundry MCP 
 
 ## Quick Reference
 
-| Property | Value |
-|----------|-------|
-| Hosted (recommended) | `azd provision` when needed, direct code deployment via `azd deploy` (`codeConfiguration` present), `azd ai agent invoke` |
-| Hosted (container) | `azd provision` when needed, container/ACR deployment via `azd deploy` (requires Docker/Podman + ACR, no `codeConfiguration:` in the `azure.yaml` service block) |
-| Prompt MCP | `agent_definition_schema_get`, `agent_update`, `agent_get`, `agent_delete` |
-| Versioning | Each successful `azd deploy` creates an immutable agent version |
-| Endpoint-only patch | `azd ai agent endpoint update` (no new version) |
-| Local dev | [create-hosted](../create/create-hosted.md), [local-run](../create/references/local-run.md) |
+| Property             | Value                                                                                                                                                            |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hosted (recommended) | `azd provision` when needed, direct code deployment via `azd deploy` (`codeConfiguration` present), `azd ai agent invoke`                                        |
+| Hosted (container)   | `azd provision` when needed, container/ACR deployment via `azd deploy` (requires Docker/Podman + ACR, no `codeConfiguration:` in the `azure.yaml` service block) |
+| Prompt MCP           | `agent_definition_schema_get`, `agent_update`, `agent_get`, `agent_delete`                                                                                       |
+| Versioning           | Each successful `azd deploy` creates an immutable agent version                                                                                                  |
+| Endpoint-only patch  | `azd ai agent endpoint update` (no new version)                                                                                                                  |
+| Local dev            | [create-hosted](../create/create-hosted.md), [local-run](../create/references/local-run.md)                                                                      |
 
 ## Hosted vs Prompt
 
@@ -26,10 +26,10 @@ For **prompt agents** (LLM + instructions, no custom code), use the Foundry MCP 
 
 Before running `azd deploy`, inspect the agent's service block in `azure.yaml`.
 
-| Service block state | Deployment path |
-|------------------|-----------------|
-| `codeConfiguration:` present | **Direct code deploy** through `azd deploy`; no Docker/ACR build. |
-| No `codeConfiguration:` | **Container/ACR deploy** through `azd deploy`; builds/pushes an image or uses a pre-built `image:`. |
+| Service block state          | Deployment path                                                                                     |
+| ---------------------------- | --------------------------------------------------------------------------------------------------- |
+| `codeConfiguration:` present | **Direct code deploy** through `azd deploy`; no Docker/ACR build.                                   |
+| No `codeConfiguration:`      | **Container/ACR deploy** through `azd deploy`; builds/pushes an image or uses a pre-built `image:`. |
 
 `codeConfiguration:` example in the `azure.yaml` service block:
 
@@ -139,14 +139,14 @@ Run one remote invocation only unless the user explicitly asked to test multi-tu
 
 This step runs automatically after deploy. Ask the user which source to use and start it right after deploy succeeds — with `--no-wait`, `generate` returns in seconds and generation runs server-side, so it overlaps with invoke/test steps and finishes faster overall.
 
-> *"Your agent is deployed. Want me to set up an evaluation suite now? (a) Yes — current agent instructions (synthetic Q&A), (b) Yes — historical traces (last 3 days), (c) Yes — use existing `eval.yaml`, (d) No / later."*
+> _"Your agent is deployed. Want me to set up an evaluation suite now? (a) Yes — current agent instructions (synthetic Q&A), (b) Yes — historical traces (last 3 days), (c) Yes — use existing `eval.yaml`, (d) No / later."_
 
-| Choice | Command | What's next |
-|---|---|---|
-| (a) Agent instructions | `azd ai agent eval generate --gen-instruction "<agent purpose>" --no-wait --no-prompt` — `--gen-instruction` is required (hosted agents don't auto-derive it); use the service's `description:` in `azure.yaml`. | Generation runs server-side. Tell the user: *"Suite submitted. Run `azd ai agent eval run` whenever you're ready — it'll finalize `eval.yaml` and execute the eval in one step."* |
-| (b) Historical traces | `azd ai agent eval generate --trace-days 3 --max-samples 50 --no-wait --no-prompt` | Same as (a). |
-| (c) Existing `eval.yaml` | Skip `generate`. | Tell the user: *"Using existing `eval.yaml`. Run `azd ai agent eval run` when ready."* |
-| (d) No / later | Skip. | Tell the user: *"You can run `azd ai agent eval generate` (and then `eval run`) anytime."* |
+| Choice                   | Command                                                                                                                                                                                                          | What's next                                                                                                                                                                       |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| (a) Agent instructions   | `azd ai agent eval generate --gen-instruction "<agent purpose>" --no-wait --no-prompt` — `--gen-instruction` is required (hosted agents don't auto-derive it); use the service's `description:` in `azure.yaml`. | Generation runs server-side. Tell the user: _"Suite submitted. Run `azd ai agent eval run` whenever you're ready — it'll finalize `eval.yaml` and execute the eval in one step."_ |
+| (b) Historical traces    | `azd ai agent eval generate --trace-days 3 --max-samples 50 --no-wait --no-prompt`                                                                                                                               | Same as (a).                                                                                                                                                                      |
+| (c) Existing `eval.yaml` | Skip `generate`.                                                                                                                                                                                                 | Tell the user: _"Using existing `eval.yaml`. Run `azd ai agent eval run` when ready."_                                                                                            |
+| (d) No / later           | Skip.                                                                                                                                                                                                            | Tell the user: _"You can run `azd ai agent eval generate` (and then `eval run`) anytime."_                                                                                        |
 
 Other useful flags on `generate`: `--dataset <path-or-name>` to reuse an existing dataset instead of generating one, `--evaluator <name>` (repeatable) to pin built-in or custom evaluators, `--eval-model <name>` to choose the model used for generation and evaluation, `--reset-defaults` to overwrite an existing eval config, `--name <suite-name>` and `--out-file <path>` (default `eval.yaml`).
 
@@ -186,23 +186,23 @@ Each env has its own `AGENT_<SVC>_*` vars.
 
 ## Common failure modes -- Hosted
 
-| Error | Fix |
-|-------|-----|
-| `missing_project_endpoint` | Run `azd env set AZURE_AI_PROJECT_ENDPOINT <url>`, or run `azd provision` for a new project. |
-| `invalid_agent_manifest` | `azd ai agent doctor`; fix the named field. |
-| `invalid_connection` | Inspect with `azd ai connection show <name>`. |
-| Docker daemon not running | You are on the container path. Add/fix `codeConfiguration` and retry direct code deploy. Only install Docker or try remote image build if you specifically need container deploy. |
-| ACR push 403 | Foundry project RBAC is missing `AcrPush` for your identity. Consider switching to direct code deployment to avoid ACR entirely. |
-| `container registry endpoint not found` | ACR is not configured. Use `azd env set AZURE_CONTAINER_REGISTRY_ENDPOINT <url>`, or switch to direct code deployment. |
-| Agent version poll times out | Build still running; retry `azd ai agent show` after a minute. |
-| `session_not_ready` (424) | Cold start or readiness delay. Wait 15-30 seconds and retry. If persistent, use `1` CPU / `2Gi` memory minimum, verify the model deployment name, capability host, and agent identity role. |
-| `invalid value "json" for --output` from `azd ai agent invoke` | Invoke supports only `default` and `raw` currently. Retry without `--output json`. |
-| `could not resolve agent service in azd project: no azure.ai.agent service named '<agentName>' found in azure.yaml` from `azd ai agent invoke` | Name mismatch. Use the service name, update the `azure.yaml` service block, or invoke through the Foundry MCP `agent_invoke` tool. |
-| `subscription quota exceeded` | Ask user to request quota; do not auto-retry. |
-| Bicep deploy errors | Forward `error.details[]` verbatim to the user. |
-| `RoleAssignmentUpdateNotPermitted` during provision | A role assignment already exists but conflicts. Check for existing role assignments with `az role assignment list --scope <resource-scope>`. The provision may have succeeded for all resources except RBAC — verify with `azd ai project show` and manually assign the `Cognitive Services User` role to the agent identity if needed. |
-| `eval generate`: `one of --gen-instruction ... is required` | Retry with `--gen-instruction "<agent purpose>"` (Step 5 option (a)). |
-| `unknown command "init" for "azd ai agent eval"` | Command was renamed: use `azd ai agent eval generate` (requires azd CLI with `azure.ai.agents` extension up to date). |
+| Error                                                                                                                                          | Fix                                                                                                                                                                                                                                                                                                                                     |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `missing_project_endpoint`                                                                                                                     | Run `azd env set AZURE_AI_PROJECT_ENDPOINT <url>`, or run `azd provision` for a new project.                                                                                                                                                                                                                                            |
+| `invalid_agent_manifest`                                                                                                                       | `azd ai agent doctor`; fix the named field.                                                                                                                                                                                                                                                                                             |
+| `invalid_connection`                                                                                                                           | Inspect with `azd ai connection show <name>`.                                                                                                                                                                                                                                                                                           |
+| Docker daemon not running                                                                                                                      | You are on the container path. Add/fix `codeConfiguration` and retry direct code deploy. Only install Docker or try remote image build if you specifically need container deploy.                                                                                                                                                       |
+| ACR push 403                                                                                                                                   | Foundry project RBAC is missing `AcrPush` for your identity. Consider switching to direct code deployment to avoid ACR entirely.                                                                                                                                                                                                        |
+| `container registry endpoint not found`                                                                                                        | ACR is not configured. Use `azd env set AZURE_CONTAINER_REGISTRY_ENDPOINT <url>`, or switch to direct code deployment.                                                                                                                                                                                                                  |
+| Agent version poll times out                                                                                                                   | Build still running; retry `azd ai agent show` after a minute.                                                                                                                                                                                                                                                                          |
+| `session_not_ready` (424)                                                                                                                      | Cold start or readiness delay. Wait 15-30 seconds and retry. If persistent, use `1` CPU / `2Gi` memory minimum, verify the model deployment name, capability host, and agent identity role.                                                                                                                                             |
+| `invalid value "json" for --output` from `azd ai agent invoke`                                                                                 | Invoke supports only `default` and `raw` currently. Retry without `--output json`.                                                                                                                                                                                                                                                      |
+| `could not resolve agent service in azd project: no azure.ai.agent service named '<agentName>' found in azure.yaml` from `azd ai agent invoke` | Name mismatch. Use the service name, update the `azure.yaml` service block, or invoke through the Foundry MCP `agent_invoke` tool.                                                                                                                                                                                                      |
+| `subscription quota exceeded`                                                                                                                  | Ask user to request quota; do not auto-retry.                                                                                                                                                                                                                                                                                           |
+| Bicep deploy errors                                                                                                                            | Forward `error.details[]` verbatim to the user.                                                                                                                                                                                                                                                                                         |
+| `RoleAssignmentUpdateNotPermitted` during provision                                                                                            | A role assignment already exists but conflicts. Check for existing role assignments with `az role assignment list --scope <resource-scope>`. The provision may have succeeded for all resources except RBAC — verify with `azd ai project show` and manually assign the `Cognitive Services User` role to the agent identity if needed. |
+| `eval generate`: `one of --gen-instruction ... is required`                                                                                    | Retry with `--gen-instruction "<agent purpose>"` (Step 5 option (a)).                                                                                                                                                                                                                                                                   |
+| `unknown command "init" for "azd ai agent eval"`                                                                                               | Command was renamed: use `azd ai agent eval generate` (requires azd CLI with `azure.ai.agents` extension up to date).                                                                                                                                                                                                                   |
 
 For deeper logs, see [troubleshoot](../troubleshoot/troubleshoot.md).
 
@@ -212,12 +212,12 @@ Prompt agents are not containerized -- they are a model + instructions + optiona
 
 ### MCP tools
 
-| Tool | Purpose |
-|------|---------|
-| `agent_definition_schema_get` | Get the schema (`schemaType: "prompt"`). |
-| `agent_update` | Create or update; supports `isCloneRequest` + `cloneTargetAgentName`. |
-| `agent_get` | List or fetch one. |
-| `agent_delete` | Delete an agent. |
+| Tool                          | Purpose                                                               |
+| ----------------------------- | --------------------------------------------------------------------- |
+| `agent_definition_schema_get` | Get the schema (`schemaType: "prompt"`).                              |
+| `agent_update`                | Create or update; supports `isCloneRequest` + `cloneTargetAgentName`. |
+| `agent_get`                   | List or fetch one.                                                    |
+| `agent_delete`                | Delete an agent.                                                      |
 
 ### Steps
 
@@ -234,23 +234,23 @@ Prompt agents are not containerized -- they are a model + instructions + optiona
 
 This step runs automatically after deploy. Ask the user which source to use and start it right after deploy succeeds — with `--no-wait`, `generate` returns in seconds and generation runs server-side, so it overlaps with invoke/test steps and finishes faster overall.
 
-> *"Your agent is deployed. Want me to set up an evaluation suite now? (a) Yes — current agent instructions (synthetic Q&A), (b) Yes — historical traces (last 3 days), (c) Yes — use existing `eval.yaml`, (d) No / later."*
+> _"Your agent is deployed. Want me to set up an evaluation suite now? (a) Yes — current agent instructions (synthetic Q&A), (b) Yes — historical traces (last 3 days), (c) Yes — use existing `eval.yaml`, (d) No / later."_
 
-| Choice | Command | What's next |
-|---|---|---|
-| (a) Agent instructions | `azd ai agent eval generate --gen-instruction "<agent purpose>" --no-wait --no-prompt` | Generation runs server-side. Tell the user: *"Suite submitted. Run `azd ai agent eval run` whenever you're ready — it'll finalize `eval.yaml` and execute the eval in one step."* |
-| (b) Historical traces | `azd ai agent eval generate --trace-days 3 --max-samples 50 --no-wait --no-prompt` | Same as (a). |
-| (c) Existing `eval.yaml` | Skip `generate`. | Tell the user: *"Using existing `eval.yaml`. Run `azd ai agent eval run` when ready."* |
-| (d) No / later | Skip. | Tell the user: *"You can run `azd ai agent eval generate` (and then `eval run`) anytime."* |
+| Choice                   | Command                                                                                | What's next                                                                                                                                                                       |
+| ------------------------ | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| (a) Agent instructions   | `azd ai agent eval generate --gen-instruction "<agent purpose>" --no-wait --no-prompt` | Generation runs server-side. Tell the user: _"Suite submitted. Run `azd ai agent eval run` whenever you're ready — it'll finalize `eval.yaml` and execute the eval in one step."_ |
+| (b) Historical traces    | `azd ai agent eval generate --trace-days 3 --max-samples 50 --no-wait --no-prompt`     | Same as (a).                                                                                                                                                                      |
+| (c) Existing `eval.yaml` | Skip `generate`.                                                                       | Tell the user: _"Using existing `eval.yaml`. Run `azd ai agent eval run` when ready."_                                                                                            |
+| (d) No / later           | Skip.                                                                                  | Tell the user: _"You can run `azd ai agent eval generate` (and then `eval run`) anytime."_                                                                                        |
 
 ## Common failure modes -- Prompt
 
-| Error | Fix |
-|-------|-----|
-| Schema fetch failed | Verify endpoint format: `https://<resource>.services.ai.azure.com/api/projects/<project>`. |
-| Agent creation failed | Use `agent_definition_schema_get` to verify the definition. |
-| Permission denied | User needs `Foundry User` role on the project. |
-| Model not found | Deploy the model first via [models/deploy-model](../../models/deploy-model/SKILL.md). |
+| Error                 | Fix                                                                                        |
+| --------------------- | ------------------------------------------------------------------------------------------ |
+| Schema fetch failed   | Verify endpoint format: `https://<resource>.services.ai.azure.com/api/projects/<project>`. |
+| Agent creation failed | Use `agent_definition_schema_get` to verify the definition.                                |
+| Permission denied     | User needs `Foundry User` role on the project.                                             |
+| Model not found       | Deploy the model first via [models/deploy-model](../../models/deploy-model/SKILL.md).      |
 
 ## Display agent details (both flows)
 
@@ -306,7 +306,7 @@ When local files under `datasets/<suite>/` or `evaluators/<suite>/` change, run 
 
 ### 5. Prompt User
 
-*"Your agent is deployed and evaluation suite generation is **submitted server-side** (still running, takes several minutes). Would you like to run an evaluation now? `azd ai agent eval run` will wait for generation to finish, then execute the eval."*
+_"Your agent is deployed and evaluation suite generation is **submitted server-side** (still running, takes several minutes). Would you like to run an evaluation now? `azd ai agent eval run` will wait for generation to finish, then execute the eval."_
 
 - **Yes** → run `azd ai agent eval run` (this resumes the pending generation, then runs the eval — may take several minutes the first time), then follow the [observe skill](../observe/observe.md) to interpret results.
 - **No** → stop. The user can return later via `azd ai agent eval run` — it will pick up wherever the pending generation is.

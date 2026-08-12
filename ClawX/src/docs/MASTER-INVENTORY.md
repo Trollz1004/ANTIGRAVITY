@@ -18,22 +18,22 @@ Use these files first:
 
 ## Product / Site Inventory
 
-| Surface | Role | Status |
-| --- | --- | --- |
-| `youandinotai.com` | Human-first social platform | Live |
-| `onlinerecycle.org` | Electronics recycler / service lane | Live |
-| `ai-solutions.store` | AI products storefront source | Live |
-| `dashboard.aidoesitall.website` | Authenticated business-access gateway | Live |
-| `mcp.youandinotai.com` | Private PaperClip workspace | Live |
+| Surface                         | Role                                  | Status |
+| ------------------------------- | ------------------------------------- | ------ |
+| `youandinotai.com`              | Human-first social platform           | Live   |
+| `onlinerecycle.org`             | Electronics recycler / service lane   | Live   |
+| `ai-solutions.store`            | AI products storefront source         | Live   |
+| `dashboard.aidoesitall.website` | Authenticated business-access gateway | Live   |
+| `mcp.youandinotai.com`          | Private PaperClip workspace           | Live   |
 
 ## Node Inventory
 
-| Node | Address | Role | Status |
-| --- | --- | --- | --- |
-| `SABRETOOTH` | `192.168.0.8` | Primary command post / canonical repo node | Primary |
-| `9020` | `192.168.0.5` | Marketing/support utility node | Cold / opt-in |
-| `T5500` | `192.168.0.15` | Build/media utility node | Cold / opt-in |
-| `MINI-ASUS-PC` | local workstation | Auxiliary remote-access workstation | Non-authoritative |
+| Node           | Address           | Role                                       | Status            |
+| -------------- | ----------------- | ------------------------------------------ | ----------------- |
+| `SABRETOOTH`   | `192.168.0.8`     | Primary command post / canonical repo node | Primary           |
+| `9020`         | `192.168.0.5`     | Marketing/support utility node             | Cold / opt-in     |
+| `T5500`        | `192.168.0.15`    | Build/media utility node                   | Cold / opt-in     |
+| `MINI-ASUS-PC` | local workstation | Auxiliary remote-access workstation        | Non-authoritative |
 
 ## Repo / Lane Rules
 
@@ -44,11 +44,11 @@ Use these files first:
 
 ## Payments
 
-| Lane | Provider | Status |
-| --- | --- | --- |
-| `YouAndINotAI` | Square | Live |
-| `OnlineRecycle / commerce` | Square | Live |
-| `Stripe` | Legacy only | Retired from live doctrine |
+| Lane                       | Provider    | Status                     |
+| -------------------------- | ----------- | -------------------------- |
+| `YouAndINotAI`             | Square      | Live                       |
+| `OnlineRecycle / commerce` | Square      | Live                       |
+| `Stripe`                   | Legacy only | Retired from live doctrine |
 
 ## Historical Contract Note
 

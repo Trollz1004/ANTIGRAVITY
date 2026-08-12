@@ -5,12 +5,14 @@
 > in the **azure-monitor-query-java** plugin skill if installed.
 
 ## Install
+
 ```xml
 <dependency><groupId>com.azure</groupId><artifactId>azure-monitor-query</artifactId></dependency>
 <dependency><groupId>com.azure</groupId><artifactId>azure-identity</artifactId></dependency>
 ```
 
 ## Quick Start
+
 > **Auth:** `DefaultAzureCredential` is for local development. See [auth-best-practices.md](../auth-best-practices.md) for production patterns.
 
 ```java
@@ -22,6 +24,7 @@ LogsQueryClient client = new LogsQueryClientBuilder()
 ```
 
 ## Best Practices
+
 - Use batch queries to combine multiple queries into a single request
 - Set appropriate timeouts for long-running queries
 - Limit result size with `top` or `take` in Kusto queries

@@ -10,7 +10,7 @@ This skill helps a non-technical user build a connector to a third-party system.
 ## Operating principles
 
 1. **Cheapest path wins by default.** A working setup using something that already exists beats a custom build every time. When one path is clearly simpler, safer, or easier to maintain, take it. When discovery surfaces **2-3 genuinely easy paths** with meaningfully different trade-offs, present those options briefly, recommend one, and let the user choose before building.
-2. **Non-technical user, just-do-it-for-me, always.** Treat every user as if they picked "Just do it for me" — walk them through every step, do the technical bits yourself. Never ask about OAuth scopes, REST verbs, or rate limits unless the answer affects what *they* need to do. Translate jargon. Don't ask "are you a developer?" — assume not.
+2. **Non-technical user, just-do-it-for-me, always.** Treat every user as if they picked "Just do it for me" — walk them through every step, do the technical bits yourself. Never ask about OAuth scopes, REST verbs, or rate limits unless the answer affects what _they_ need to do. Translate jargon. Don't ask "are you a developer?" — assume not.
 3. **Minimum-friction interview.** Ask the user the smallest possible set of questions that actually changes what gets built. In practice this is one question at most: which specific product do they mean, when the name is ambiguous. Don't ask about use cases, account status, or comfort level — defaults handle all three (see Phase 1).
 4. **Default scope: all non-destructive operations.** When you build an artifact, cover every read / list / query / search / introspection endpoint the API exposes — without asking. Writes (create / update / delete / anything that changes state on the vendor's side) are produced **only when the user explicitly asks for a specific write operation** during the conversation that follows the artifact hand-off. Reads are safe-by-default; writes are opt-in.
 5. **Structured question tools are for logic only, never for connection values.** Logic = "which product?", "include the experimental write commands?". Connection values = base URL, API token, region, environment — those go in `.env`. See `reference/credentials.md`.
@@ -27,15 +27,15 @@ Goal: confirm which specific product the user means, if and only if the name is 
 
 **Default assumptions — don't ask about any of these:**
 
-- *Use cases.* Default scope of the artifact is **every read / list / query / search / introspection endpoint the API exposes**. Don't ask "what do you want the assistant to do?" — covering all reads is the default. Writes are opt-in later (the user asks "add a create-customer command" once they've used the read tools and want more).
-- *Account status.* Assume the user may or may not have an account/installation set up. The hand-off walks them through both cases (here's how to verify if you have one; here's how to obtain one if you don't). Don't ask "do you already have a login?".
-- *Technical comfort level.* Always treat the user as if they picked "Just do it for me." Walk them through every step. Don't ask "are you a developer?".
+- _Use cases._ Default scope of the artifact is **every read / list / query / search / introspection endpoint the API exposes**. Don't ask "what do you want the assistant to do?" — covering all reads is the default. Writes are opt-in later (the user asks "add a create-customer command" once they've used the read tools and want more).
+- _Account status._ Assume the user may or may not have an account/installation set up. The hand-off walks them through both cases (here's how to verify if you have one; here's how to obtain one if you don't). Don't ask "do you already have a login?".
+- _Technical comfort level._ Always treat the user as if they picked "Just do it for me." Walk them through every step. Don't ask "are you a developer?".
 
-**The one question worth asking — disambiguation.** When the system name is ambiguous, ask one concise question: *"Which <name> do you mean?"*, listing the plausible products plus their distinguishing details. If the host offers a structured multiple-choice question tool, use it; otherwise ask in plain text. Patterns that justify asking (described abstractly so this guidance applies to anything the user names):
+**The one question worth asking — disambiguation.** When the system name is ambiguous, ask one concise question: _"Which <name> do you mean?"_, listing the plausible products plus their distinguishing details. If the host offers a structured multiple-choice question tool, use it; otherwise ask in plain text. Patterns that justify asking (described abstractly so this guidance applies to anything the user names):
 
-- *Family-name shadowing.* The name refers to multiple distinct products from different vendors with different APIs.
-- *Edition divergence.* One vendor ships several editions or SKUs with materially different APIs — legacy vs. modern, on-prem vs. cloud, free vs. enterprise, regional editions.
-- *Same name, different category.* The name belongs to a popular product in one category and an unrelated tool in another.
+- _Family-name shadowing._ The name refers to multiple distinct products from different vendors with different APIs.
+- _Edition divergence._ One vendor ships several editions or SKUs with materially different APIs — legacy vs. modern, on-prem vs. cloud, free vs. enterprise, regional editions.
+- _Same name, different category._ The name belongs to a popular product in one category and an unrelated tool in another.
 
 Patterns that **don't** justify asking (proceed straight to Phase 2):
 
@@ -54,7 +54,7 @@ Before researching anything new, check whether the work is already done. Read `r
 - **A public skill/plugin already covers it and the current host can install it cleanly** → use that path instead of building a new helper.
 - **Nothing safe and usable exists** → continue to Phase 3.
 
-When discovery finds something, *tell the user what you found and why it's the right fit* before suggesting it. Don't just dump a name. **Don't recommend a third-party MCP whose source you can't read** — if the install page is blocked or the repo is private, treat it as not-found and continue to research.
+When discovery finds something, _tell the user what you found and why it's the right fit_ before suggesting it. Don't just dump a name. **Don't recommend a third-party MCP whose source you can't read** — if the install page is blocked or the repo is private, treat it as not-found and continue to research.
 
 ### Phase 3 — Research
 
@@ -78,14 +78,14 @@ If one output type is clearly the best fit, propose that path and proceed after 
 
 Keep this brief. The goal is to let the user choose among the realistic low-friction options, not to dump every theoretical architecture.
 
-| Situation | Output | Why |
-|---|---|---|
-| Current host already exposes connected tools for the service | **Use the host's existing integration** | Already done. |
-| Public MCP server + readable source | **MCP config snippet** (`reference/output_mcp_config.md`) | Fastest, official, kept up to date by the vendor. Credentials still follow `reference/credentials.md`. |
-| Public REST/HTTP API, ≤10 endpoints needed | **SKILL.md + helper script + tests** (`reference/output_skill_md.md`) | The default for nearly all integrations. The helper script makes calls deterministic; the tests prove the parsing logic; the SKILL.md is a tight cookbook on top. |
-| OAuth + many stateful endpoints, or vendor expects a long-running server | **Full MCP server** (`reference/output_mcp_server.md`, delegates to the official `mcp-builder` capability) | The integration needs real code and lifecycle management. Credentials still follow `reference/credentials.md`. |
-| **No public API at all** (niche ERP, on-prem desktop app, regional software) | **SKILL.md + helper, non-API integration** | File watching, CSV/Excel import-export, local DB read, or Desktop Commander to drive the app's UI. See `reference/output_skill_md.md` "non-API integrations" section. |
-| Service has no usable integration surface | **Honest stop** | Don't ship a snippet that won't work. Tell the user what's missing. Let them pick. |
+| Situation                                                                    | Output                                                                                                     | Why                                                                                                                                                                   |
+| ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Current host already exposes connected tools for the service                 | **Use the host's existing integration**                                                                    | Already done.                                                                                                                                                         |
+| Public MCP server + readable source                                          | **MCP config snippet** (`reference/output_mcp_config.md`)                                                  | Fastest, official, kept up to date by the vendor. Credentials still follow `reference/credentials.md`.                                                                |
+| Public REST/HTTP API, ≤10 endpoints needed                                   | **SKILL.md + helper script + tests** (`reference/output_skill_md.md`)                                      | The default for nearly all integrations. The helper script makes calls deterministic; the tests prove the parsing logic; the SKILL.md is a tight cookbook on top.     |
+| OAuth + many stateful endpoints, or vendor expects a long-running server     | **Full MCP server** (`reference/output_mcp_server.md`, delegates to the official `mcp-builder` capability) | The integration needs real code and lifecycle management. Credentials still follow `reference/credentials.md`.                                                        |
+| **No public API at all** (niche ERP, on-prem desktop app, regional software) | **SKILL.md + helper, non-API integration**                                                                 | File watching, CSV/Excel import-export, local DB read, or Desktop Commander to drive the app's UI. See `reference/output_skill_md.md` "non-API integrations" section. |
+| Service has no usable integration surface                                    | **Honest stop**                                                                                            | Don't ship a snippet that won't work. Tell the user what's missing. Let them pick.                                                                                    |
 
 A bare markdown SKILL.md with curl one-liners is **not** an acceptable output for any non-trivial integration. If the system has a real API, you owe the user a helper script with tests.
 

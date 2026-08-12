@@ -17,7 +17,7 @@ stages:
     dependsOn: Dev
     jobs:
       - deployment: DeployProd
-        environment: prod  # Configure approval in Azure DevOps
+        environment: prod # Configure approval in Azure DevOps
         strategy:
           runOnce:
             deploy:

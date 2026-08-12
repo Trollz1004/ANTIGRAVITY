@@ -1,11 +1,13 @@
 # CFO-HEARTBEAT.md
 
 ## Pulse
+
 - [ ] Task status update on PAPERWEIGHT (localhost:3100)
 - [ ] Resource usage check
 - [ ] Blockage report
 
 ## File Locations (for token-efficient heartbeats)
+
 - AGENTS.md: /mnt/c/antigravity/AGENTS.md
 - CLAUDE.md: /mnt/c/antigravity/CLAUDE.md
 - HERMES.md: /mnt/c/antigravity/HERMES.md

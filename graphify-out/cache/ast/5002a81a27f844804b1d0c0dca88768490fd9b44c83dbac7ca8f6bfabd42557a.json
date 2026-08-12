@@ -1,1 +1,103 @@
-{"nodes": [{"id": "app_frontend_src_components_daomonitor_js", "label": "DAOMonitor.js", "file_type": "code", "source_file": "/app/frontend/src/components/DAOMonitor.js", "source_location": "L1"}, {"id": "components_daomonitor_daomonitor", "label": "DAOMonitor()", "file_type": "code", "source_file": "/app/frontend/src/components/DAOMonitor.js", "source_location": "L11"}], "edges": [{"source": "app_frontend_src_components_daomonitor_js", "target": "react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/DAOMonitor.js", "source_location": "L1", "weight": 1.0}, {"source": "app_frontend_src_components_daomonitor_js", "target": "axios", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/DAOMonitor.js", "source_location": "L2", "weight": 1.0}, {"source": "app_frontend_src_components_daomonitor_js", "target": "lucide_react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/DAOMonitor.js", "source_location": "L3", "weight": 1.0}, {"source": "app_frontend_src_components_daomonitor_js", "target": "components_daomonitor_daomonitor", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/DAOMonitor.js", "source_location": "L11", "weight": 1.0}], "raw_calls": [{"caller_nid": "components_daomonitor_daomonitor", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/components/DAOMonitor.js", "source_location": "L12"}, {"caller_nid": "components_daomonitor_daomonitor", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/components/DAOMonitor.js", "source_location": "L13"}, {"caller_nid": "components_daomonitor_daomonitor", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/components/DAOMonitor.js", "source_location": "L14"}, {"caller_nid": "components_daomonitor_daomonitor", "callee": "useEffect", "is_member_call": false, "source_file": "/app/frontend/src/components/DAOMonitor.js", "source_location": "L16"}, {"caller_nid": "components_daomonitor_daomonitor", "callee": "toFixed", "is_member_call": true, "source_file": "/app/frontend/src/components/DAOMonitor.js", "source_location": "L55"}, {"caller_nid": "components_daomonitor_daomonitor", "callee": "map", "is_member_call": true, "source_file": "/app/frontend/src/components/DAOMonitor.js", "source_location": "L62"}]}
+{
+  "nodes": [
+    {
+      "id": "app_frontend_src_components_daomonitor_js",
+      "label": "DAOMonitor.js",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/DAOMonitor.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "components_daomonitor_daomonitor",
+      "label": "DAOMonitor()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/DAOMonitor.js",
+      "source_location": "L11"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_frontend_src_components_daomonitor_js",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/DAOMonitor.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_daomonitor_js",
+      "target": "axios",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/DAOMonitor.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_daomonitor_js",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/DAOMonitor.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_daomonitor_js",
+      "target": "components_daomonitor_daomonitor",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/DAOMonitor.js",
+      "source_location": "L11",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "components_daomonitor_daomonitor",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/DAOMonitor.js",
+      "source_location": "L12"
+    },
+    {
+      "caller_nid": "components_daomonitor_daomonitor",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/DAOMonitor.js",
+      "source_location": "L13"
+    },
+    {
+      "caller_nid": "components_daomonitor_daomonitor",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/DAOMonitor.js",
+      "source_location": "L14"
+    },
+    {
+      "caller_nid": "components_daomonitor_daomonitor",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/components/DAOMonitor.js",
+      "source_location": "L16"
+    },
+    {
+      "caller_nid": "components_daomonitor_daomonitor",
+      "callee": "toFixed",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/components/DAOMonitor.js",
+      "source_location": "L55"
+    },
+    {
+      "caller_nid": "components_daomonitor_daomonitor",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/components/DAOMonitor.js",
+      "source_location": "L62"
+    }
+  ]
+}

@@ -14,10 +14,10 @@
 
 ## Services with LIMITED Region Availability
 
-| Service | Availability | Details |
-|---------|--------------|---------|
-| Static Web Apps | Limited (5 regions) | [Region Details](services/static-web-apps/region-availability.md) |
-| Azure AI Foundry | Very limited (by model) | [Region Details](services/foundry/region-availability.md) |
+| Service          | Availability            | Details                                                           |
+| ---------------- | ----------------------- | ----------------------------------------------------------------- |
+| Static Web Apps  | Limited (5 regions)     | [Region Details](services/static-web-apps/region-availability.md) |
+| Azure AI Foundry | Very limited (by model) | [Region Details](services/foundry/region-availability.md)         |
 
 ---
 
@@ -35,5 +35,3 @@ These services are available in all major Azure regions — no special considera
 - Service Bus
 - Event Grid
 - Application Insights / Log Analytics
-
-
