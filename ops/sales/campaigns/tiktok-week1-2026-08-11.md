@@ -11,14 +11,25 @@ Payments rail is Square — but pricing/checkout NEVER appears in TikTok copy. C
 
 ## 0. Before Anything: Claims Gate
 
-> **HARD BLOCKER (verified in code 2026-08-11):** the backend does not yet
-> enforce verification before interaction — `swipe.py` discover/match and
-> `messages.py` send_message contain no `verified` checks, so an unverified
-> account can currently browse, match, and message. Every script below that
-> says "verified before they can match/message/talk to you" is INACCURATE
-> until that gate ships (or the copy is softened to "every member is offered
-> verification / look for the verified badge"). Joshua decides: ship the
-> enforcement gate, or soften all scripts. NOTHING POSTS BEFORE THAT DECISION.
+> **BLOCKER STATUS (updated 2026-08-11):** the enforcement gate is CODED and
+> TESTED (959 passed, 95.39% coverage) in PR `claude/scc-followup-fixes` —
+> discover/swipe/messages/`/ws/chat`/`/ws/video` now reject unverified callers,
+> and discover excludes unverified profiles. NOT YET MERGED to main or
+> deployed. Every script below that says "verified before they can
+> match/message/talk to you" stays INACCURATE, and NOTHING POSTS, until
+> Joshua merges that PR, confirms the gate is live in production, AND
+> confirms no other interaction surface was missed — the video-calling gap
+> was found by review after the gate was first called "coded," so this list
+> is provisional, not a completeness guarantee. Separately, `POST
+> /auth/beta-access` creates a founding-member account with
+> `bot_shield_verified=True` on possession of a valid code alone, without
+> running the human challenge — so "every profile passes human
+> verification" (the approved framing below, and several slides throughout
+> this file) stays false for beta members even once the gate above is
+> live. Deleting this notice also requires Joshua to either narrow those
+> claims to exclude beta access, or change beta-access to run the same
+> human challenge as standard signup. Once BOTH conditions are confirmed,
+> delete this notice.
 
 Every slide below sells exactly one idea: **youandinotai.com human-verifies every profile, so you match with real people.**
 
@@ -102,7 +113,7 @@ Day numbering: DAY 1–7 below are CONTENT days. They begin only after each acco
 - Slide 2: `Replies in under 3 seconds. Every time. At 4am.`
 - Slide 3: `Their photos look perfect but reverse-search goes nowhere. There's an easier fix →`
 - Slide 4: `youandinotai.com — every profile passes human verification before it can match with you.`
-- Slide 5: `No guessing games. You talk to people, not scripts.`
+- Slide 5: `No guessing games. Every profile had to pass a human check to get in.`
 - Slide 6 (CTA): `Verified humans only. youandinotai.com`
 - Caption: `The 3am instant reply is never a good sign. Where do you see this the most? youandinotai.com`
 - Hashtags: `#datingapps #onlinedating #catfish #datingappfails #datingadvice #bots`
@@ -270,8 +281,8 @@ Day numbering: DAY 1–7 below are CONTENT days. They begin only after each acco
 **D6-A1 — "The unmatch mystery"**
 - Hook: `Matched. Chatted. Account vanished. Again.`
 - Slide 2: `Disappearing accounts are the signature move of fake profiles.`
-- Slide 3: `Verified members don't evaporate →`
-- Slide 4: `youandinotai.com — humans verified at the door, so conversations don't vanish into thin air.`
+- Slide 3: `Verification checks for a human at the door →`
+- Slide 4: `youandinotai.com — standard membership requires human verification to get in.`
 - Slide 5: `Ghosting by a real person: survivable. Talking to nobody: avoidable.`
 - Slide 6 (CTA): `Talk to people who exist. youandinotai.com`
 - Caption: `The vanish isn't rejection — it usually wasn't a person. youandinotai.com`
@@ -304,7 +315,7 @@ Day numbering: DAY 1–7 below are CONTENT days. They begin only after each acco
 **D7-A1 — "Verification, explained simply"**
 - Hook: `What "human verification" actually means (30 seconds)`
 - Slide 2: `Every account proves a real human is behind it — before it can match or message.`
-- Slide 3: `That single requirement removes bots, scripts, and mass-run fakes →`
+- Slide 3: `That single requirement blocks mass-run fakes at the door →`
 - Slide 4: `youandinotai.com is built on exactly that requirement.`
 - Slide 5: `Simple rule. Different experience.`
 - Slide 6 (CTA): `See it in action. youandinotai.com`

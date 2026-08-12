@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 
 from app.auth import get_current_user
 from app.main import app
-from app.models import Match, Profile, User
+from app.models import DoubleDateSession, Match, Profile, User
 
 
 def test_propose_and_accept_double_date(client, db_session_factory):
@@ -13,6 +13,7 @@ def test_propose_and_accept_double_date(client, db_session_factory):
         email="a1@example.com",
         password_hash="hashed",
         display_name="Alex",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -21,6 +22,7 @@ def test_propose_and_accept_double_date(client, db_session_factory):
         email="a2@example.com",
         password_hash="hashed",
         display_name="Jordan",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -29,6 +31,7 @@ def test_propose_and_accept_double_date(client, db_session_factory):
         email="b1@example.com",
         password_hash="hashed",
         display_name="Taylor",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -37,6 +40,7 @@ def test_propose_and_accept_double_date(client, db_session_factory):
         email="b2@example.com",
         password_hash="hashed",
         display_name="Morgan",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -132,6 +136,7 @@ def test_squad_recommendations_sort_by_engagement_score(client, db_session_facto
         email="initiator@example.com",
         password_hash="hashed",
         display_name="Initiator",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -142,6 +147,7 @@ def test_squad_recommendations_sort_by_engagement_score(client, db_session_facto
         display_name="First",
         engagement_score=4.5,
         member_badge="Founder",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -152,6 +158,7 @@ def test_squad_recommendations_sort_by_engagement_score(client, db_session_facto
         display_name="Second",
         engagement_score=9.0,
         member_badge="Premium",
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -205,5 +212,257 @@ def test_squad_recommendations_sort_by_engagement_score(client, db_session_facto
         assert [item["display_name"] for item in payload] == ["Second", "First"]
         assert payload[0]["engagement_score"] == 9.0
         assert payload[0]["member_badge"] == "Premium"
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_squad_recommendations_excludes_unverified_targets(client, db_session_factory):
+    """A legacy match with an unverified partner must not surface as a squad rec."""
+    initiator = User(
+        id=uuid.uuid4(),
+        email="squad_initiator@example.com",
+        password_hash="hashed",
+        display_name="Initiator",
+        bot_shield_verified=True,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    verified_partner = User(
+        id=uuid.uuid4(),
+        email="squad_verified@example.com",
+        password_hash="hashed",
+        display_name="Verified Partner",
+        engagement_score=5.0,
+        bot_shield_verified=True,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    unverified_partner = User(
+        id=uuid.uuid4(),
+        email="squad_unverified@example.com",
+        password_hash="hashed",
+        display_name="Unverified Partner",
+        engagement_score=9.9,
+        bot_shield_verified=False,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    verified_match = Match(
+        id=uuid.uuid4(),
+        user_a=initiator.id,
+        user_b=verified_partner.id,
+        status="active",
+    )
+    unverified_match = Match(
+        id=uuid.uuid4(),
+        user_a=initiator.id,
+        user_b=unverified_partner.id,
+        status="active",
+    )
+
+    async def seed_data():
+        async with db_session_factory() as session:
+            session.add_all(
+                [
+                    initiator,
+                    verified_partner,
+                    unverified_partner,
+                    verified_match,
+                    unverified_match,
+                ]
+            )
+            await session.commit()
+
+    asyncio.run(seed_data())
+
+    async def override_current_user():
+        return initiator
+
+    app.dependency_overrides[get_current_user] = override_current_user
+    try:
+        response = client.get("/api/v1/double-dates/squad-recommendations")
+        assert response.status_code == 200
+        payload = response.json()
+        names = [item["display_name"] for item in payload]
+        assert names == ["Verified Partner"]
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_list_double_dates_excludes_session_with_unverified_participant(
+    client, db_session_factory
+):
+    """A legacy pending session with an unverified member must not be listed."""
+    caller = User(
+        id=uuid.uuid4(),
+        email="list_caller@example.com",
+        password_hash="hashed",
+        display_name="Caller",
+        bot_shield_verified=True,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    caller_partner = User(
+        id=uuid.uuid4(),
+        email="list_caller_partner@example.com",
+        password_hash="hashed",
+        display_name="Caller Partner",
+        bot_shield_verified=True,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    other_verified = User(
+        id=uuid.uuid4(),
+        email="list_other_verified@example.com",
+        password_hash="hashed",
+        display_name="Other Verified",
+        bot_shield_verified=True,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    other_unverified = User(
+        id=uuid.uuid4(),
+        email="list_other_unverified@example.com",
+        password_hash="hashed",
+        display_name="Other Unverified",
+        bot_shield_verified=False,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    caller_match = Match(
+        id=uuid.uuid4(),
+        user_a=caller.id,
+        user_b=caller_partner.id,
+        status="active",
+    )
+    other_match = Match(
+        id=uuid.uuid4(),
+        user_a=other_verified.id,
+        user_b=other_unverified.id,
+        status="active",
+    )
+    session = DoubleDateSession(
+        id=uuid.uuid4(),
+        match_a_id=caller_match.id,
+        match_b_id=other_match.id,
+        status="pending",
+    )
+
+    async def seed_data():
+        async with db_session_factory() as db:
+            db.add_all(
+                [
+                    caller,
+                    caller_partner,
+                    other_verified,
+                    other_unverified,
+                    caller_match,
+                    other_match,
+                    session,
+                ]
+            )
+            await db.commit()
+
+    asyncio.run(seed_data())
+
+    async def override_current_user():
+        return caller
+
+    app.dependency_overrides[get_current_user] = override_current_user
+    try:
+        response = client.get("/api/v1/double-dates")
+        assert response.status_code == 200
+        assert response.json() == []
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_decline_legacy_session_redacts_unverified_participant(
+    client, db_session_factory
+):
+    """Decline still works on a legacy session, but never leaks the couples."""
+    caller = User(
+        id=uuid.uuid4(),
+        email="decline_caller@example.com",
+        password_hash="hashed",
+        display_name="Decline Caller",
+        bot_shield_verified=True,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    caller_partner = User(
+        id=uuid.uuid4(),
+        email="decline_caller_partner@example.com",
+        password_hash="hashed",
+        display_name="Decline Caller Partner",
+        bot_shield_verified=True,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    other_verified = User(
+        id=uuid.uuid4(),
+        email="decline_other_verified@example.com",
+        password_hash="hashed",
+        display_name="Decline Other Verified",
+        bot_shield_verified=True,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    other_unverified = User(
+        id=uuid.uuid4(),
+        email="decline_other_unverified@example.com",
+        password_hash="hashed",
+        display_name="Decline Other Unverified",
+        bot_shield_verified=False,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    caller_match = Match(
+        id=uuid.uuid4(),
+        user_a=caller.id,
+        user_b=caller_partner.id,
+        status="active",
+    )
+    other_match = Match(
+        id=uuid.uuid4(),
+        user_a=other_verified.id,
+        user_b=other_unverified.id,
+        status="active",
+    )
+    session = DoubleDateSession(
+        id=uuid.uuid4(),
+        match_a_id=caller_match.id,
+        match_b_id=other_match.id,
+        status="pending",
+    )
+
+    async def seed_data():
+        async with db_session_factory() as db:
+            db.add_all(
+                [
+                    caller,
+                    caller_partner,
+                    other_verified,
+                    other_unverified,
+                    caller_match,
+                    other_match,
+                    session,
+                ]
+            )
+            await db.commit()
+
+    asyncio.run(seed_data())
+
+    async def override_current_user():
+        return caller
+
+    app.dependency_overrides[get_current_user] = override_current_user
+    try:
+        response = client.post(f"/api/v1/double-dates/{session.id}/decline")
+        assert response.status_code == 200
+        payload = response.json()
+        assert payload["status"] == "declined"
+        assert payload["couple_a"] is None
+        assert payload["couple_b"] is None
     finally:
         app.dependency_overrides.pop(get_current_user, None)

@@ -104,6 +104,37 @@ async def get_current_user(
     return user
 
 
+VERIFICATION_REQUIRED_DETAIL = (
+    "Verification required — complete verification to browse, match, and message"
+)
+
+
+async def require_verified_profile(
+    user: User = Depends(get_current_user),
+) -> User:
+    """Require the caller to be verified.
+
+    Interaction endpoints (discover, swipe, send message) depend on this
+    instead of ``get_current_user`` so unverified accounts cannot browse,
+    match, or message.
+
+    Checks ``User.bot_shield_verified`` — the canonical flag every
+    verification path (``/verify/confirm``, beta-access grants) sets — not
+    ``Profile.verified``, which is only a best-effort mirror of it: a user
+    can be genuinely verified with no profile row yet (beta-access creates
+    one with no profile), or verified before their profile existed (the
+    mirror in ``promote_user_verification_if_ready`` only writes to a
+    profile that already exists at promotion time). Gating on the mirror
+    would 403 legitimately verified users.
+    """
+    if not user.bot_shield_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=VERIFICATION_REQUIRED_DETAIL,
+        )
+    return user
+
+
 def verify_google_token(token: str) -> dict:
     try:
         id_info = id_token.verify_oauth2_token(

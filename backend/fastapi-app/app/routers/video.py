@@ -130,6 +130,16 @@ async def websocket_video_signaling(
         )
         return
 
+    # Video calling is an interaction endpoint like discover/swipe/messages —
+    # require verification here too, or an unverified account can talk to a
+    # matched pair over WebRTC even though every other interaction path is
+    # gated (see require_verified_profile).
+    if not user.bot_shield_verified:
+        await websocket.close(
+            code=status.WS_1008_POLICY_VIOLATION, reason="Verification required"
+        )
+        return
+
     room = _video_connections[call_id]
     if len(room) >= 2 and user_id not in room:
         await websocket.close(code=4008, reason="Call already has two peers")

@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 
 from app.auth import get_current_user
 from app.main import app
-from app.models import User
+from app.models import User, VolunteerOpportunity
 from tests.helpers import override_user, seed
 
 
@@ -23,6 +23,7 @@ def _make_user(*, email: str, display_name: str = "Vol User") -> User:
         email=email,
         password_hash="hashed",
         display_name=display_name,
+        bot_shield_verified=True,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -172,6 +173,34 @@ def test_signup_unknown_opportunity_returns_404(client, db_session_factory):
     app.dependency_overrides[get_current_user] = override_user(user)
     try:
         resp = client.post(f"/api/v1/volunteer/{uuid.uuid4()}/signup")
+        assert resp.status_code == 404
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_signup_unverified_creator_returns_404(client, db_session_factory):
+    """A verified volunteer must not be able to sign up for an unverified creator's opportunity."""
+    creator = User(
+        id=uuid.uuid4(),
+        email="vol_unverified_creator@example.com",
+        password_hash="hashed",
+        display_name="Unverified Creator",
+        bot_shield_verified=False,
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    volunteer = _make_user(email="vol_signer_verified@example.com")
+    opp = VolunteerOpportunity(
+        id=uuid.uuid4(),
+        created_by=creator.id,
+        title="Legacy Opportunity",
+        organization="Legacy Org",
+        description="Created before the gate",
+    )
+    seed(creator, volunteer, opp, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(volunteer)
+    try:
+        resp = client.post(f"/api/v1/volunteer/{opp.id}/signup")
         assert resp.status_code == 404
     finally:
         app.dependency_overrides.pop(get_current_user, None)

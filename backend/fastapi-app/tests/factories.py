@@ -41,7 +41,7 @@ def ProfileFactory(user_id: uuid.UUID | None = None, **kwargs) -> dict:
         "location": "Test City, TS",
         "photos": [],
         "interests": ["coding", "reading"],
-        "verified": False,
+        "verified": True,
         "location_enabled": True,
         "created_at": datetime.now(timezone.utc),
         "updated_at": datetime.now(timezone.utc),

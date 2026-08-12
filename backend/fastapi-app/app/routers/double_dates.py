@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
+from app.auth import require_verified_profile
 from app.database import get_db
 from app.models import DoubleDateAcceptance, DoubleDateSession, Match, Profile, User
 from app.schemas import (
@@ -25,6 +25,24 @@ def _user_in_match(match: Match | None, user_id: uuid.UUID) -> bool:
     if not match:
         return False
     return user_id in {match.user_a, match.user_b}
+
+
+async def _match_fully_verified(db: AsyncSession, match: Match) -> bool:
+    """Both members of a match must be currently verified.
+
+    require_verified_profile only checks the proposer/acceptor -- a double
+    date pairs up to four people, and a legacy match (formed before the
+    verification gate, or where a member since lost verified status) can
+    still have the caller verified while their partner isn't. Without this,
+    the unverified partner's name/photo would be exposed via
+    _serialize_session and they'd be treated as an active session
+    participant despite never passing the gate themselves.
+    """
+    for member_id in (match.user_a, match.user_b):
+        member = await db.get(User, member_id)
+        if not member or not member.bot_shield_verified:
+            return False
+    return True
 
 
 async def _build_couple_response(
@@ -101,7 +119,7 @@ async def _get_user_match_id(
 @router.post("/propose", response_model=DoubleDateSessionResponse, status_code=201)
 async def propose_double_date(
     payload: DoubleDateProposeRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> DoubleDateSessionResponse:
     if payload.match_a_id == payload.match_b_id:
@@ -122,6 +140,14 @@ async def propose_double_date(
     if not (_user_in_match(match_a, user.id) or _user_in_match(match_b, user.id)):
         raise HTTPException(
             status_code=403, detail="You must belong to one of the couples"
+        )
+
+    if not await _match_fully_verified(db, match_a) or not await _match_fully_verified(
+        db, match_b
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail="Both members of each couple must be verified for a double date",
         )
 
     existing = await db.scalar(
@@ -173,7 +199,7 @@ async def propose_double_date(
 
 @router.get("", response_model=list[DoubleDateSessionResponse])
 async def list_double_dates(
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> list[DoubleDateSessionResponse]:
     user_match_ids = (
@@ -200,7 +226,16 @@ async def list_double_dates(
         )
     ).all()
 
-    return [await _serialize_session(db, session) for session in sessions]
+    results = []
+    for session in sessions:
+        match_a = await db.get(Match, session.match_a_id)
+        match_b = await db.get(Match, session.match_b_id)
+        if not await _match_fully_verified(
+            db, match_a
+        ) or not await _match_fully_verified(db, match_b):
+            continue
+        results.append(await _serialize_session(db, session))
+    return results
 
 
 async def _load_participant_session(
@@ -256,12 +291,23 @@ async def _set_acceptance(
 @router.post("/{session_id}/accept", response_model=DoubleDateSessionResponse)
 async def accept_double_date(
     session_id: uuid.UUID,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> DoubleDateSessionResponse:
     session, user_match_id = await _load_participant_session(
         db, session_id, user.id, reject_declined=True
     )
+
+    match_a = await db.get(Match, session.match_a_id)
+    match_b = await db.get(Match, session.match_b_id)
+    if not await _match_fully_verified(db, match_a) or not await _match_fully_verified(
+        db, match_b
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail="Both members of each couple must be verified for a double date",
+        )
+
     await _set_acceptance(db, session, user_match_id, True)
 
     accepted_match_ids = set(
@@ -289,7 +335,7 @@ async def accept_double_date(
 @router.post("/{session_id}/decline", response_model=DoubleDateSessionResponse)
 async def decline_double_date(
     session_id: uuid.UUID,
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> DoubleDateSessionResponse:
     session, user_match_id = await _load_participant_session(db, session_id, user.id)
@@ -298,6 +344,35 @@ async def decline_double_date(
     session.status = "declined"
     await db.commit()
     await db.refresh(session)
+
+    # Declining (unlike propose/accept) is a safe, reject-only action that
+    # should always be available -- but a legacy session can still pair the
+    # caller with an unverified participant, so don't let the response leak
+    # that participant's name/photo via _serialize_session.
+    match_a = await db.get(Match, session.match_a_id)
+    match_b = await db.get(Match, session.match_b_id)
+    if not await _match_fully_verified(db, match_a) or not await _match_fully_verified(
+        db, match_b
+    ):
+        accepted_match_ids = (
+            await db.scalars(
+                select(DoubleDateAcceptance.match_id).where(
+                    DoubleDateAcceptance.session_id == session_id,
+                    DoubleDateAcceptance.accepted.is_(True),
+                )
+            )
+        ).all()
+        return DoubleDateSessionResponse(
+            id=session.id,
+            match_a_id=session.match_a_id,
+            match_b_id=session.match_b_id,
+            status=session.status,
+            created_at=session.created_at,
+            accepted_match_ids=list(accepted_match_ids),
+            couple_a=None,
+            couple_b=None,
+        )
+
     return await _serialize_session(db, session)
 
 
@@ -305,7 +380,7 @@ async def decline_double_date(
     "/squad-recommendations", response_model=list[DoubleDateSquadRecommendation]
 )
 async def get_squad_recommendations(
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> list[DoubleDateSquadRecommendation]:
     """Recommend matches for double-dates based on engagement score."""
@@ -321,7 +396,7 @@ async def get_squad_recommendations(
     for m in all_matches:
         target_id = m.user_b if m.user_a == user.id else m.user_a
         target_user = await db.get(User, target_id)
-        if not target_user:
+        if not target_user or not target_user.bot_shield_verified:
             continue
         target_profile = await db.scalar(
             select(Profile).where(Profile.user_id == target_id)
