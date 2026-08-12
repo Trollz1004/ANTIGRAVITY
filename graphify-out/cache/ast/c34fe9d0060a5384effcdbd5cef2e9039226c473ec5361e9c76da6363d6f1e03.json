@@ -1,1 +1,151 @@
-{"nodes": [{"id": "app_dropin_mission_control_src_components_paperclipworkerpanel_tsx", "label": "PaperclipWorkerPanel.tsx", "file_type": "code", "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L1"}, {"id": "components_paperclipworkerpanel_fetchhealth", "label": "fetchHealth()", "file_type": "code", "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L25"}, {"id": "components_paperclipworkerpanel_copy", "label": "copy()", "file_type": "code", "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L47"}], "edges": [{"source": "app_dropin_mission_control_src_components_paperclipworkerpanel_tsx", "target": "react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L9", "weight": 1.0}, {"source": "app_dropin_mission_control_src_components_paperclipworkerpanel_tsx", "target": "lucide_react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L10", "weight": 1.0}, {"source": "app_dropin_mission_control_src_components_paperclipworkerpanel_tsx", "target": "components_paperclipworkerpanel_fetchhealth", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L25", "weight": 1.0}, {"source": "app_dropin_mission_control_src_components_paperclipworkerpanel_tsx", "target": "components_paperclipworkerpanel_copy", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L47", "weight": 1.0}], "raw_calls": [{"caller_nid": "components_paperclipworkerpanel_fetchhealth", "callee": "setTimeout", "is_member_call": false, "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L27"}, {"caller_nid": "components_paperclipworkerpanel_fetchhealth", "callee": "fetch", "is_member_call": false, "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L29"}, {"caller_nid": "components_paperclipworkerpanel_fetchhealth", "callee": "catch", "is_member_call": true, "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L30"}, {"caller_nid": "components_paperclipworkerpanel_fetchhealth", "callee": "json", "is_member_call": true, "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L30"}, {"caller_nid": "components_paperclipworkerpanel_fetchhealth", "callee": "setStatus", "is_member_call": false, "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L31"}, {"caller_nid": "components_paperclipworkerpanel_fetchhealth", "callee": "setInfo", "is_member_call": false, "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L32"}, {"caller_nid": "components_paperclipworkerpanel_fetchhealth", "callee": "setStatus", "is_member_call": false, "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L34"}, {"caller_nid": "components_paperclipworkerpanel_fetchhealth", "callee": "setInfo", "is_member_call": false, "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L35"}, {"caller_nid": "components_paperclipworkerpanel_fetchhealth", "callee": "clearTimeout", "is_member_call": false, "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L37"}, {"caller_nid": "components_paperclipworkerpanel_copy", "callee": "writeText", "is_member_call": true, "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L48"}, {"caller_nid": "components_paperclipworkerpanel_copy", "callee": "setCopied", "is_member_call": false, "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L49"}, {"caller_nid": "components_paperclipworkerpanel_copy", "callee": "setTimeout", "is_member_call": false, "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx", "source_location": "L50"}]}
+{
+  "nodes": [
+    {
+      "id": "app_dropin_mission_control_src_components_paperclipworkerpanel_tsx",
+      "label": "PaperclipWorkerPanel.tsx",
+      "file_type": "code",
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "components_paperclipworkerpanel_fetchhealth",
+      "label": "fetchHealth()",
+      "file_type": "code",
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L25"
+    },
+    {
+      "id": "components_paperclipworkerpanel_copy",
+      "label": "copy()",
+      "file_type": "code",
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L47"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_dropin_mission_control_src_components_paperclipworkerpanel_tsx",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "app_dropin_mission_control_src_components_paperclipworkerpanel_tsx",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "app_dropin_mission_control_src_components_paperclipworkerpanel_tsx",
+      "target": "components_paperclipworkerpanel_fetchhealth",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "app_dropin_mission_control_src_components_paperclipworkerpanel_tsx",
+      "target": "components_paperclipworkerpanel_copy",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L47",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "components_paperclipworkerpanel_fetchhealth",
+      "callee": "setTimeout",
+      "is_member_call": false,
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L27"
+    },
+    {
+      "caller_nid": "components_paperclipworkerpanel_fetchhealth",
+      "callee": "fetch",
+      "is_member_call": false,
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L29"
+    },
+    {
+      "caller_nid": "components_paperclipworkerpanel_fetchhealth",
+      "callee": "catch",
+      "is_member_call": true,
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L30"
+    },
+    {
+      "caller_nid": "components_paperclipworkerpanel_fetchhealth",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L30"
+    },
+    {
+      "caller_nid": "components_paperclipworkerpanel_fetchhealth",
+      "callee": "setStatus",
+      "is_member_call": false,
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "components_paperclipworkerpanel_fetchhealth",
+      "callee": "setInfo",
+      "is_member_call": false,
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L32"
+    },
+    {
+      "caller_nid": "components_paperclipworkerpanel_fetchhealth",
+      "callee": "setStatus",
+      "is_member_call": false,
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L34"
+    },
+    {
+      "caller_nid": "components_paperclipworkerpanel_fetchhealth",
+      "callee": "setInfo",
+      "is_member_call": false,
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "components_paperclipworkerpanel_fetchhealth",
+      "callee": "clearTimeout",
+      "is_member_call": false,
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L37"
+    },
+    {
+      "caller_nid": "components_paperclipworkerpanel_copy",
+      "callee": "writeText",
+      "is_member_call": true,
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L48"
+    },
+    {
+      "caller_nid": "components_paperclipworkerpanel_copy",
+      "callee": "setCopied",
+      "is_member_call": false,
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L49"
+    },
+    {
+      "caller_nid": "components_paperclipworkerpanel_copy",
+      "callee": "setTimeout",
+      "is_member_call": false,
+      "source_file": "/app/dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
+      "source_location": "L50"
+    }
+  ]
+}

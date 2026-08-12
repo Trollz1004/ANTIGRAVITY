@@ -9,7 +9,7 @@ name: <suite-or-optimization-name>
 agent:
   name: <agent-name>
   kind: hosted
-  version: "<agent-version>"
+  version: '<agent-version>'
   model: <baseline-model-deployment-name>
   config: .agent_configs/baseline/metadata.yaml
 dataset:
@@ -22,7 +22,7 @@ dataset:
 evaluators:
   - <evaluator-name>
   - name: <custom-evaluator-name>
-    version: "<evaluator-version>"
+    version: '<evaluator-version>'
     local_uri: <local-evaluator-json>
 options:
   eval_model: <existing-chat-model-deployment-name>
@@ -76,16 +76,16 @@ Keep `target_attributes` omitted so azd can auto-detect optimizable attributes.
 
 ## Source mapping
 
-| Source | eval.yaml field |
-|--------|-----------------|
-| effective azd context | `agent.name`, `agent.version`, `agent.kind` |
-| baseline config | `agent.model`, `agent.config` |
-| selected local dataset JSONL | `dataset.local_uri` |
-| selected remote/local dataset | `dataset.name`, `dataset.version`, `dataset.local_uri` |
-| selected validation dataset | `validation_dataset` |
-| selected Foundry/local evaluators | `evaluators[]` |
-| selected judge/eval deployment | `options.eval_model` |
-| selected optimizer deployment | `options.optimization_model` |
-| selected target model candidates | `options.optimization_config.model_search_space` |
+| Source                            | eval.yaml field                                        |
+| --------------------------------- | ------------------------------------------------------ |
+| effective azd context             | `agent.name`, `agent.version`, `agent.kind`            |
+| baseline config                   | `agent.model`, `agent.config`                          |
+| selected local dataset JSONL      | `dataset.local_uri`                                    |
+| selected remote/local dataset     | `dataset.name`, `dataset.version`, `dataset.local_uri` |
+| selected validation dataset       | `validation_dataset`                                   |
+| selected Foundry/local evaluators | `evaluators[]`                                         |
+| selected judge/eval deployment    | `options.eval_model`                                   |
+| selected optimizer deployment     | `options.optimization_model`                           |
+| selected target model candidates  | `options.optimization_config.model_search_space`       |
 
 Treat older `dataset_file`, `dataset_reference`, `validation_reference`, `max_iterations`, and `optimization_config.model` as legacy inputs when reading existing files, but write new files with the current contract above.

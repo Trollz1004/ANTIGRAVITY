@@ -1,167 +1,984 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="AI Solutions Store sells production AI apps, automation systems, and implementation passes with Stripe checkout and post-purchase license delivery." />
-  <title>AI Solutions Store — Production AI Apps</title>
-  <style>
-    :root {
-      --bg:#06070b; --panel:#0d111a; --panel2:#121826; --ink:#f8fbff; --muted:#a8b3c7;
-      --line:rgba(255,255,255,.12); --accent:#6ee7f9; --accent2:#a78bfa; --ok:#34d399; --warn:#fbbf24;
-      --shadow:0 24px 80px rgba(0,0,0,.45); --radius:24px;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:
-      radial-gradient(circle at 10% 0%, rgba(103,232,249,.18), transparent 32%),
-      radial-gradient(circle at 85% 15%, rgba(167,139,250,.18), transparent 35%), var(--bg); color:var(--ink);}
-    a{color:inherit} .wrap{width:min(1180px, calc(100% - 32px)); margin:0 auto}
-    .nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(18px);background:rgba(6,7,11,.72);border-bottom:1px solid var(--line)}
-    .nav .inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:18px}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:-.04em} .mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#020617;box-shadow:0 0 36px rgba(110,231,249,.35)}
-    .navlinks{display:flex;gap:18px;color:var(--muted);font-size:14px} .navlinks a{text-decoration:none} .navlinks a:hover{color:var(--ink)}
-    .hero{padding:88px 0 48px;text-align:center} .eyebrow{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.05);color:var(--accent);font-weight:800;font-size:13px}
-    h1{font-size:clamp(44px,8vw,96px);line-height:.92;margin:24px auto 18px;letter-spacing:-.08em;max-width:980px} .grad{background:linear-gradient(90deg,#fff,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent}
-    .sub{max-width:760px;margin:0 auto;color:var(--muted);font-size:clamp(18px,2.4vw,24px);line-height:1.5}
-    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px} .btn{border:0;border-radius:999px;padding:14px 20px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:.2s transform,.2s filter}
-    .btn:hover{transform:translateY(-2px);filter:brightness(1.08)} .primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#020617} .ghost{background:rgba(255,255,255,.08);color:var(--ink);border:1px solid var(--line)}
-    .proof{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:42px auto 0;max-width:980px} .proof div{padding:16px;border:1px solid var(--line);background:rgba(255,255,255,.05);border-radius:18px;color:var(--muted)} .proof strong{display:block;color:#fff;font-size:18px}
-    section{padding:44px 0} .section-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:22px} h2{font-size:clamp(30px,5vw,54px);letter-spacing:-.06em;margin:0} .section-head p{max-width:520px;color:var(--muted);line-height:1.6;margin:0}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px} .card{position:relative;padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035));box-shadow:var(--shadow);overflow:hidden}
-    .card:before{content:"";position:absolute;inset:-1px;background:radial-gradient(circle at 20% 0%,rgba(110,231,249,.16),transparent 35%);pointer-events:none} .card>*{position:relative} .tag{display:inline-flex;font-size:12px;font-weight:900;color:#001018;background:var(--accent);border-radius:999px;padding:6px 10px;margin-bottom:14px}
-    .icon{font-size:34px;margin-bottom:12px} h3{font-size:24px;margin:0 0 8px;letter-spacing:-.04em} .type{color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:900} .desc{color:var(--muted);line-height:1.55}
-    ul{padding-left:18px;color:#d6deeb;line-height:1.7} .price{font-size:34px;font-weight:950;letter-spacing:-.05em;margin:18px 0 4px} .note{color:var(--muted);font-size:14px;min-height:38px}
-    .card .btn{width:100%;justify-content:center;margin-top:18px} .wide{grid-column:span 2} .premium{border-color:rgba(251,191,36,.42);background:linear-gradient(180deg,rgba(251,191,36,.11),rgba(255,255,255,.035))} .premium .tag{background:var(--warn)}
-    .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:16px} .step{padding:22px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.045)} .num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(110,231,249,.16);color:var(--accent);font-weight:900;margin-bottom:12px}
-    .admin{border:1px solid rgba(52,211,153,.35);background:linear-gradient(135deg,rgba(52,211,153,.12),rgba(110,231,249,.06));border-radius:var(--radius);padding:26px;display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center}
-    .qr-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.qr-card{border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.055);padding:16px;text-align:center}.qr-card img{width:100%;max-width:150px;border-radius:14px;background:#fff;padding:8px}.qr-card strong{display:block;margin-top:10px}.pay-rail{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.pay-pill{border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:999px;padding:8px 12px;color:var(--muted);font-size:13px}
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="AI Solutions Store sells production AI apps, automation systems, and implementation passes with Stripe checkout and post-purchase license delivery."
+    />
+    <title>AI Solutions Store — Production AI Apps</title>
+    <style>
+      :root {
+        --bg: #06070b;
+        --panel: #0d111a;
+        --panel2: #121826;
+        --ink: #f8fbff;
+        --muted: #a8b3c7;
+        --line: rgba(255, 255, 255, 0.12);
+        --accent: #6ee7f9;
+        --accent2: #a78bfa;
+        --ok: #34d399;
+        --warn: #fbbf24;
+        --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+        --radius: 24px;
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at 10% 0%, rgba(103, 232, 249, 0.18), transparent 32%),
+          radial-gradient(circle at 85% 15%, rgba(167, 139, 250, 0.18), transparent 35%), var(--bg);
+        color: var(--ink);
+      }
+      a {
+        color: inherit;
+      }
+      .wrap {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(18px);
+        background: rgba(6, 7, 11, 0.72);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav .inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0;
+        gap: 18px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+      .mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        display: grid;
+        place-items: center;
+        color: #020617;
+        box-shadow: 0 0 36px rgba(110, 231, 249, 0.35);
+      }
+      .navlinks {
+        display: flex;
+        gap: 18px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .navlinks a {
+        text-decoration: none;
+      }
+      .navlinks a:hover {
+        color: var(--ink);
+      }
+      .hero {
+        padding: 88px 0 48px;
+        text-align: center;
+      }
+      .eyebrow {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 8px 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--accent);
+        font-weight: 800;
+        font-size: 13px;
+      }
+      h1 {
+        font-size: clamp(44px, 8vw, 96px);
+        line-height: 0.92;
+        margin: 24px auto 18px;
+        letter-spacing: -0.08em;
+        max-width: 980px;
+      }
+      .grad {
+        background: linear-gradient(90deg, #fff, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+      .sub {
+        max-width: 760px;
+        margin: 0 auto;
+        color: var(--muted);
+        font-size: clamp(18px, 2.4vw, 24px);
+        line-height: 1.5;
+      }
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 28px;
+      }
+      .btn {
+        border: 0;
+        border-radius: 999px;
+        padding: 14px 20px;
+        font-weight: 900;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition:
+          0.2s transform,
+          0.2s filter;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.08);
+      }
+      .primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: #020617;
+      }
+      .ghost {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--ink);
+        border: 1px solid var(--line);
+      }
+      .proof {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin: 42px auto 0;
+        max-width: 980px;
+      }
+      .proof div {
+        padding: 16px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 18px;
+        color: var(--muted);
+      }
+      .proof strong {
+        display: block;
+        color: #fff;
+        font-size: 18px;
+      }
+      section {
+        padding: 44px 0;
+      }
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: end;
+        margin-bottom: 22px;
+      }
+      h2 {
+        font-size: clamp(30px, 5vw, 54px);
+        letter-spacing: -0.06em;
+        margin: 0;
+      }
+      .section-head p {
+        max-width: 520px;
+        color: var(--muted);
+        line-height: 1.6;
+        margin: 0;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .card {
+        position: relative;
+        padding: 24px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035));
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .card:before {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        background: radial-gradient(circle at 20% 0%, rgba(110, 231, 249, 0.16), transparent 35%);
+        pointer-events: none;
+      }
+      .card > * {
+        position: relative;
+      }
+      .tag {
+        display: inline-flex;
+        font-size: 12px;
+        font-weight: 900;
+        color: #001018;
+        background: var(--accent);
+        border-radius: 999px;
+        padding: 6px 10px;
+        margin-bottom: 14px;
+      }
+      .icon {
+        font-size: 34px;
+        margin-bottom: 12px;
+      }
+      h3 {
+        font-size: 24px;
+        margin: 0 0 8px;
+        letter-spacing: -0.04em;
+      }
+      .type {
+        color: var(--accent);
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-weight: 900;
+      }
+      .desc {
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      ul {
+        padding-left: 18px;
+        color: #d6deeb;
+        line-height: 1.7;
+      }
+      .price {
+        font-size: 34px;
+        font-weight: 950;
+        letter-spacing: -0.05em;
+        margin: 18px 0 4px;
+      }
+      .note {
+        color: var(--muted);
+        font-size: 14px;
+        min-height: 38px;
+      }
+      .card .btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: 18px;
+      }
+      .wide {
+        grid-column: span 2;
+      }
+      .premium {
+        border-color: rgba(251, 191, 36, 0.42);
+        background: linear-gradient(180deg, rgba(251, 191, 36, 0.11), rgba(255, 255, 255, 0.035));
+      }
+      .premium .tag {
+        background: var(--warn);
+      }
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .step {
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.045);
+      }
+      .num {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: rgba(110, 231, 249, 0.16);
+        color: var(--accent);
+        font-weight: 900;
+        margin-bottom: 12px;
+      }
+      .admin {
+        border: 1px solid rgba(52, 211, 153, 0.35);
+        background: linear-gradient(135deg, rgba(52, 211, 153, 0.12), rgba(110, 231, 249, 0.06));
+        border-radius: var(--radius);
+        padding: 26px;
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 20px;
+        align-items: center;
+      }
+      .qr-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+      }
+      .qr-card {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.055);
+        padding: 16px;
+        text-align: center;
+      }
+      .qr-card img {
+        width: 100%;
+        max-width: 150px;
+        border-radius: 14px;
+        background: #fff;
+        padding: 8px;
+      }
+      .qr-card strong {
+        display: block;
+        margin-top: 10px;
+      }
+      .pay-rail {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .pay-pill {
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 999px;
+        padding: 8px 12px;
+        color: var(--muted);
+        font-size: 13px;
+      }
 
-    .admin-tools{display:grid;gap:12px}.admin-tools input,.chat-box input{width:100%;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.28);color:var(--ink);padding:12px}.admin-status{border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.22);padding:12px;min-height:44px}.admin-status.ok{border-color:rgba(52,211,153,.55);color:#bbf7d0}.admin-status.bad{border-color:rgba(248,113,113,.55);color:#fecaca}
-    .chat-widget{position:fixed;right:18px;bottom:18px;width:min(380px,calc(100% - 36px));z-index:50;border:1px solid var(--line);border-radius:24px;background:rgba(13,17,26,.96);box-shadow:var(--shadow);overflow:hidden}.chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:linear-gradient(135deg,rgba(110,231,249,.16),rgba(167,139,250,.14));cursor:pointer}.chat-head strong{display:block}.chat-body{display:none;padding:14px}.chat-widget.open .chat-body{display:block}.chat-log{height:220px;overflow:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:12px}.chat-msg{border:1px solid var(--line);border-radius:16px;padding:10px 12px;background:rgba(255,255,255,.055);color:#d6deeb}.chat-msg.me{background:rgba(110,231,249,.12);align-self:flex-end}.chat-msg.bot{align-self:flex-start}.chat-box{display:flex;gap:8px}.chat-box input{flex:1}.chat-box button{white-space:nowrap}.chat-note{font-size:12px;color:var(--muted);line-height:1.45;margin-top:8px}
-    code{background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;padding:3px 7px;color:#c4f1ff} .small{font-size:13px;color:var(--muted);line-height:1.6}
-    footer{padding:48px 0 40px;color:var(--muted);border-top:1px solid var(--line);margin-top:40px} .sticky{position:static;background:rgba(6,7,11,.82);border-top:1px solid var(--line);border-bottom:1px solid var(--line);backdrop-filter:blur(18px);z-index:30;margin:24px 0 0} .sticky .inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0} .sticky strong{display:block}
-    @media(max-width:900px){.grid,.flow,.proof,.admin,.qr-grid{grid-template-columns:1fr}.wide{grid-column:auto}.navlinks{display:none}.section-head{display:block}.sticky .small{display:none}}
-  </style>
-</head>
-<body>
-  <nav class="nav"><div class="wrap inner"><div class="brand"><div class="mark">AI</div><span>AI Solutions Store</span></div><div class="navlinks"><a href="#apps">Apps</a><a href="#platform">Platform</a><a href="#delivery">Delivery</a><a href="#admin">Admin</a></div><a class="btn ghost" href="mailto:sales@aidoesitall.website?subject=AI%20Solutions%20Store%20concierge%20request">Concierge</a></div></nav>
-  <main class="wrap">
-    <section class="hero">
-      <div class="eyebrow">Production AI systems · Verified license delivery · Premium build quality</div>
-      <h1>Production-grade AI automation, <span class="grad">ready for your stack.</span></h1>
-      <p class="sub">Enterprise automation layers and implementation passes. Every purchase includes receipt-verified license keys for instant deployment, tracking, and full audit trail.</p>
-      <div class="hero-actions"><a class="btn primary" href="#apps">Browse catalog</a><a class="btn ghost" href="#delivery">License delivery</a></div>
-      <div class="proof"><div><strong>Verified</strong>receipt-linked keys</div><div><strong>Premium</strong>deployment-ready</div><div><strong>Auditable</strong>full purchase trail</div><div><strong>Support</strong>implementation options</div></div>
-    </section>
-    <section id="apps">
-      <div class="section-head"><h2>Production catalog</h2><p>Focused, deployment-ready products. Choose implementation passes when you want verified install, wiring, and handoff for your environment.</p></div>
-      <div class="grid">
-        <article class="card"><span class="tag">Security</span><div class="icon">🛡️</div><h3>BotShield Checkout Guard</h3><div class="type">fraud / bot defense</div><p class="desc">A hardened intake and checkout protection layer for stores, waitlists, demos, and private drops.</p><ul><li>bot heuristics + rate controls</li><li>receipt-linked buyer records</li><li>admin review trail</li></ul><div class="price">$299</div><div class="note">Best first install for any payment surface.</div><a class="btn primary" data-product="bot-shield" href="https://buy.stripe.com/3cI3cwcR6c3910p18peEo09">Buy with Stripe</a></article>
-        <article class="card"><span class="tag">Founder</span><div class="icon">🚀</div><h3>Founding Member Stack</h3><div class="type">early access bundle</div><p class="desc">Access pass for the core AI app catalog plus private update drops as the platform expands.</p><ul><li>member license key</li><li>release channel access</li><li>priority onboarding queue</li></ul><div class="price">$499</div><div class="note">For buyers who want the full ecosystem track.</div><a class="btn primary" data-product="founding-member" href="https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a">Buy with Stripe</a></article>
-        <article class="card"><span class="tag">Automation</span><div class="icon">🎬</div><h3>Content Droid Suite</h3><div class="type">video + marketing automation</div><p class="desc">Short-form content generation, scheduled marketing output, and analytics-ready campaign loops.</p><ul><li>script + voice + render flow</li><li>posting schedule templates</li><li>metrics-ready database</li></ul><div class="price">$799</div><div class="note">Use the 3-month implementation pass below for setup.</div><a class="btn primary" data-product="three-month" href="https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j">Start 3-month pass</a></article>
-        <article class="card"><span class="tag">Ops</span><div class="icon">🤖</div><h3>Agent Operations Kit</h3><div class="type">business automation</div><p class="desc">A practical automation layer for GitHub, cloud tasks, message routing, and repetitive ops handoffs.</p><ul><li>agent runbooks</li><li>workflow templates</li><li>deployment checklist</li></ul><div class="price">$999</div><div class="note">Included in annual implementation scope.</div><a class="btn primary" data-product="twelve-month" href="https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c">Start 12-month pass</a></article>
-        <article class="card"><span class="tag">Platform</span><div class="icon">🧩</div><h3>White-Label Platform Modules</h3><div class="type">dashboards / portals / automations</div><p class="desc">Composable modules for customer portals, admin dashboards, license gates, and delivery automation.</p><ul><li>dashboard shell</li><li>license gate hooks</li><li>deployment notes</li></ul><div class="price">Custom</div><div class="note">We scope platform work before payment.</div><a class="btn ghost" href="mailto:sales@aidoesitall.website?subject=Platform%20module%20scope%20request">Request scope</a></article>
-        <article class="card"><span class="tag">Separate merchant</span><div class="icon">💠</div><h3>Human Verification Layer</h3><div class="type">standalone app surface</div><p class="desc">The verification-first app line is handled under its own merchant path and is not sold through this Stripe catalog.</p><ul><li>private checkout path</li><li>separate account handling</li><li>custom verification scope</li></ul><div class="price">Private</div><div class="note">Kept separate for clean accounting and testing.</div><a class="btn ghost" href="mailto:sales@aidoesitall.website?subject=Separate%20merchant%20app%20scope">Request access</a></article>
+      .admin-tools {
+        display: grid;
+        gap: 12px;
+      }
+      .admin-tools input,
+      .chat-box input {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.28);
+        color: var(--ink);
+        padding: 12px;
+      }
+      .admin-status {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.22);
+        padding: 12px;
+        min-height: 44px;
+      }
+      .admin-status.ok {
+        border-color: rgba(52, 211, 153, 0.55);
+        color: #bbf7d0;
+      }
+      .admin-status.bad {
+        border-color: rgba(248, 113, 113, 0.55);
+        color: #fecaca;
+      }
+      .chat-widget {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        width: min(380px, calc(100% - 36px));
+        z-index: 50;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: rgba(13, 17, 26, 0.96);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .chat-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+        background: linear-gradient(135deg, rgba(110, 231, 249, 0.16), rgba(167, 139, 250, 0.14));
+        cursor: pointer;
+      }
+      .chat-head strong {
+        display: block;
+      }
+      .chat-body {
+        display: none;
+        padding: 14px;
+      }
+      .chat-widget.open .chat-body {
+        display: block;
+      }
+      .chat-log {
+        height: 220px;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .chat-msg {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 10px 12px;
+        background: rgba(255, 255, 255, 0.055);
+        color: #d6deeb;
+      }
+      .chat-msg.me {
+        background: rgba(110, 231, 249, 0.12);
+        align-self: flex-end;
+      }
+      .chat-msg.bot {
+        align-self: flex-start;
+      }
+      .chat-box {
+        display: flex;
+        gap: 8px;
+      }
+      .chat-box input {
+        flex: 1;
+      }
+      .chat-box button {
+        white-space: nowrap;
+      }
+      .chat-note {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.45;
+        margin-top: 8px;
+      }
+      code {
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 3px 7px;
+        color: #c4f1ff;
+      }
+      .small {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      footer {
+        padding: 48px 0 40px;
+        color: var(--muted);
+        border-top: 1px solid var(--line);
+        margin-top: 40px;
+      }
+      .sticky {
+        position: static;
+        background: rgba(6, 7, 11, 0.82);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        backdrop-filter: blur(18px);
+        z-index: 30;
+        margin: 24px 0 0;
+      }
+      .sticky .inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 0;
+      }
+      .sticky strong {
+        display: block;
+      }
+      @media (max-width: 900px) {
+        .grid,
+        .flow,
+        .proof,
+        .admin,
+        .qr-grid {
+          grid-template-columns: 1fr;
+        }
+        .wide {
+          grid-column: auto;
+        }
+        .navlinks {
+          display: none;
+        }
+        .section-head {
+          display: block;
+        }
+        .sticky .small {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="wrap inner">
+        <div class="brand">
+          <div class="mark">AI</div>
+          <span>AI Solutions Store</span>
+        </div>
+        <div class="navlinks">
+          <a href="#apps">Apps</a><a href="#platform">Platform</a><a href="#delivery">Delivery</a
+          ><a href="#admin">Admin</a>
+        </div>
+        <a
+          class="btn ghost"
+          href="mailto:sales@aidoesitall.website?subject=AI%20Solutions%20Store%20concierge%20request"
+          >Concierge</a
+        >
       </div>
-    </section>
-    <section id="platform"><div class="section-head"><h2>Implementation passes</h2><p>For buyers who want the work done, not just the files. Each pass is tied to a receipt and license key so every install has an auditable handoff.</p></div><div class="grid"><article class="card wide"><span class="tag">3 months</span><h3>Build + Launch Pass</h3><p class="desc">Best for one product, one deployment target, and a practical support window.</p><div class="price">3-month pass</div><a class="btn primary" data-product="three-month" href="https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j">Checkout</a></article><article class="card premium"><span class="tag">12 months</span><h3>Platform Partner Pass</h3><p class="desc">Best for multi-app builds, recurring automation updates, and hands-on platform support.</p><div class="price">12-month pass</div><a class="btn primary" data-product="twelve-month" href="https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c">Checkout</a></article></div></section>
-    <section><div class="section-head"><h2>Royalty Deck</h2><p>Limited premium access card for serious operators. Purchase terms are handled through Stripe and confirmed in writing.</p></div><div class="grid"><article class="card premium wide"><span class="tag">Limited</span><div class="icon">👑</div><h3>Royalty Access Card</h3><p class="desc">Priority support, lifetime product access terms, and early access to future drops under the written program terms.</p><div class="price">$1,000</div><a class="btn primary" data-product="royalty" href="https://buy.stripe.com/dRmcN604kebheRf2cteEo0d">Claim via Stripe</a></article><article class="card"><h3>Concierge scope</h3><p class="desc">Need a custom SKU, business invoice, or platform scope before payment?</p><a class="btn ghost" href="mailto:sales@aidoesitall.website?subject=AI%20Solutions%20custom%20invoice">Email sales</a></article></div></section>
-    <section id="delivery"><div class="section-head"><h2>Receipt → key → delivery</h2><p>The fulfillment service is designed around Stripe webhooks. Your checkout receipt becomes the purchase fingerprint for license generation.</p></div><div class="flow"><div class="step"><div class="num">1</div><h3>Checkout</h3><p class="small">Stripe records the product/payment link and buyer email.</p></div><div class="step"><div class="num">2</div><h3>Key issue</h3><p class="small">The fulfillment worker signs a product-specific license key from the receipt/session fingerprint.</p></div><div class="step"><div class="num">3</div><h3>Email handoff</h3><p class="small">Buyer receives the key, activation instructions, and support contact. Duplicate webhooks return the same key.</p></div></div></section>
-    <section id="pay-qr"><div class="section-head"><h2>Scan-to-pay QR codes</h2><p>Stripe-only checkout path for phones and live demos. These QR codes point to the same Stripe links as the buttons above.</p></div><div class="qr-grid"><a class="qr-card" href="https://buy.stripe.com/3cI3cwcR6c3910p18peEo09"><img src="assets/qr/bot-shield.png" alt="BotShield Stripe QR"><strong>BotShield</strong><span class="small">Stripe checkout</span></a><a class="qr-card" href="https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a"><img src="assets/qr/founding-member.png" alt="Founding Member Stripe QR"><strong>Founder Stack</strong><span class="small">Stripe checkout</span></a><a class="qr-card" href="https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j"><img src="assets/qr/three-month.png" alt="3-month pass Stripe QR"><strong>3-month pass</strong><span class="small">Stripe checkout</span></a><a class="qr-card" href="https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c"><img src="assets/qr/twelve-month.png" alt="12-month pass Stripe QR"><strong>12-month pass</strong><span class="small">Stripe checkout</span></a><a class="qr-card" href="https://buy.stripe.com/dRmcN604kebheRf2cteEo0d"><img src="assets/qr/royalty.png" alt="Royalty Stripe QR"><strong>Royalty</strong><span class="small">Stripe checkout</span></a></div><div class="pay-rail"><span class="pay-pill">Stripe only on this store to keep merchant rails clean</span><span class="pay-pill">Square/Cash App reserved for separate commerce surfaces</span></div></section>
-    <section id="admin"><div class="admin"><div><h2>Admin testing path</h2><p class="small">Paste Josh's admin key here to unlock the on-site test console and verify the sold-app flow without making a purchase. The page stores only a SHA-256 hash check; the actual key is not embedded in the public HTML.</p><p><code>sideworld admin-key --email you@example.com --product all-access</code></p></div><div class="admin-tools"><label class="small" for="admin-key-input">Admin test key</label><input id="admin-key-input" autocomplete="off" spellcheck="false" placeholder="AIS-ALL-ACCESS-..."/><button class="btn primary" type="button" onclick="validateAdminKey()">Unlock test console</button><div id="admin-test-result" class="admin-status">Locked. Paste the admin key to test from this site.</div></div></div></section>
-  </main>
-  <footer><div class="wrap"><strong>AI Solutions Store</strong> · Trash or Treasure Online Recycler LLC<br/>sales@aidoesitall.website · support@aidoesitall.website<br/><span class="small">Built for serious operators. Payments by Stripe. License fulfillment is receipt-linked and auditable.</span><br/><span class="small"><a href="/terms">Terms of Service</a> · <a href="/privacy">Privacy Policy</a></span></div></footer>
-  <div class="sticky"><div class="wrap inner"><div><strong>Best value: 12-month implementation pass</strong><span class="small">Stripe checkout + receipt-linked license key.</span></div><a class="btn primary" data-product="twelve-month" href="https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c">Checkout</a></div></div>
-
-  <div id="support-chat-widget" class="chat-widget" aria-live="polite">
-    <div class="chat-head" onclick="toggleSupportChat()"><div><strong>AI-Solutions SupportClaw</strong><span class="small">Bot youandinotai / ai-solutions · T5500 logs</span></div><span>↕</span></div>
-    <div class="chat-body">
-      <div id="support-chat-log" class="chat-log"><div class="chat-msg bot">SupportClaw is online. Ask about checkout, keys, installs, or escalation. If the T5500 bridge is unavailable, this widget keeps a local transcript and opens an escalation email.</div></div>
-      <form class="chat-box" onsubmit="sendSupportMessage(event)"><input id="support-chat-input" placeholder="Type a support message..."/><button class="btn primary" type="submit">Send</button></form>
-      <div class="chat-note">Routes to <code>/api/support/chat</code>, which proxies to SupportClaw on T5500 when configured. Escalations are marked for Hermes/human step-in.</div>
+    </nav>
+    <main class="wrap">
+      <section class="hero">
+        <div class="eyebrow">Production AI systems · Verified license delivery · Premium build quality</div>
+        <h1>Production-grade AI automation, <span class="grad">ready for your stack.</span></h1>
+        <p class="sub">
+          Enterprise automation layers and implementation passes. Every purchase includes receipt-verified license keys
+          for instant deployment, tracking, and full audit trail.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#apps">Browse catalog</a
+          ><a class="btn ghost" href="#delivery">License delivery</a>
+        </div>
+        <div class="proof">
+          <div><strong>Verified</strong>receipt-linked keys</div>
+          <div><strong>Premium</strong>deployment-ready</div>
+          <div><strong>Auditable</strong>full purchase trail</div>
+          <div><strong>Support</strong>implementation options</div>
+        </div>
+      </section>
+      <section id="apps">
+        <div class="section-head">
+          <h2>Production catalog</h2>
+          <p>
+            Focused, deployment-ready products. Choose implementation passes when you want verified install, wiring, and
+            handoff for your environment.
+          </p>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <span class="tag">Security</span>
+            <div class="icon">🛡️</div>
+            <h3>BotShield Checkout Guard</h3>
+            <div class="type">fraud / bot defense</div>
+            <p class="desc">
+              A hardened intake and checkout protection layer for stores, waitlists, demos, and private drops.
+            </p>
+            <ul>
+              <li>bot heuristics + rate controls</li>
+              <li>receipt-linked buyer records</li>
+              <li>admin review trail</li>
+            </ul>
+            <div class="price">$299</div>
+            <div class="note">Best first install for any payment surface.</div>
+            <a class="btn primary" data-product="bot-shield" href="https://buy.stripe.com/3cI3cwcR6c3910p18peEo09"
+              >Buy with Stripe</a
+            >
+          </article>
+          <article class="card">
+            <span class="tag">Founder</span>
+            <div class="icon">🚀</div>
+            <h3>Founding Member Stack</h3>
+            <div class="type">early access bundle</div>
+            <p class="desc">
+              Access pass for the core AI app catalog plus private update drops as the platform expands.
+            </p>
+            <ul>
+              <li>member license key</li>
+              <li>release channel access</li>
+              <li>priority onboarding queue</li>
+            </ul>
+            <div class="price">$499</div>
+            <div class="note">For buyers who want the full ecosystem track.</div>
+            <a class="btn primary" data-product="founding-member" href="https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a"
+              >Buy with Stripe</a
+            >
+          </article>
+          <article class="card">
+            <span class="tag">Automation</span>
+            <div class="icon">🎬</div>
+            <h3>Content Droid Suite</h3>
+            <div class="type">video + marketing automation</div>
+            <p class="desc">
+              Short-form content generation, scheduled marketing output, and analytics-ready campaign loops.
+            </p>
+            <ul>
+              <li>script + voice + render flow</li>
+              <li>posting schedule templates</li>
+              <li>metrics-ready database</li>
+            </ul>
+            <div class="price">$799</div>
+            <div class="note">Use the 3-month implementation pass below for setup.</div>
+            <a class="btn primary" data-product="three-month" href="https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j"
+              >Start 3-month pass</a
+            >
+          </article>
+          <article class="card">
+            <span class="tag">Ops</span>
+            <div class="icon">🤖</div>
+            <h3>Agent Operations Kit</h3>
+            <div class="type">business automation</div>
+            <p class="desc">
+              A practical automation layer for GitHub, cloud tasks, message routing, and repetitive ops handoffs.
+            </p>
+            <ul>
+              <li>agent runbooks</li>
+              <li>workflow templates</li>
+              <li>deployment checklist</li>
+            </ul>
+            <div class="price">$999</div>
+            <div class="note">Included in annual implementation scope.</div>
+            <a class="btn primary" data-product="twelve-month" href="https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c"
+              >Start 12-month pass</a
+            >
+          </article>
+          <article class="card">
+            <span class="tag">Platform</span>
+            <div class="icon">🧩</div>
+            <h3>White-Label Platform Modules</h3>
+            <div class="type">dashboards / portals / automations</div>
+            <p class="desc">
+              Composable modules for customer portals, admin dashboards, license gates, and delivery automation.
+            </p>
+            <ul>
+              <li>dashboard shell</li>
+              <li>license gate hooks</li>
+              <li>deployment notes</li>
+            </ul>
+            <div class="price">Custom</div>
+            <div class="note">We scope platform work before payment.</div>
+            <a class="btn ghost" href="mailto:sales@aidoesitall.website?subject=Platform%20module%20scope%20request"
+              >Request scope</a
+            >
+          </article>
+          <article class="card">
+            <span class="tag">Separate merchant</span>
+            <div class="icon">💠</div>
+            <h3>Human Verification Layer</h3>
+            <div class="type">standalone app surface</div>
+            <p class="desc">
+              The verification-first app line is handled under its own merchant path and is not sold through this Stripe
+              catalog.
+            </p>
+            <ul>
+              <li>private checkout path</li>
+              <li>separate account handling</li>
+              <li>custom verification scope</li>
+            </ul>
+            <div class="price">Private</div>
+            <div class="note">Kept separate for clean accounting and testing.</div>
+            <a class="btn ghost" href="mailto:sales@aidoesitall.website?subject=Separate%20merchant%20app%20scope"
+              >Request access</a
+            >
+          </article>
+        </div>
+      </section>
+      <section id="platform">
+        <div class="section-head">
+          <h2>Implementation passes</h2>
+          <p>
+            For buyers who want the work done, not just the files. Each pass is tied to a receipt and license key so
+            every install has an auditable handoff.
+          </p>
+        </div>
+        <div class="grid">
+          <article class="card wide">
+            <span class="tag">3 months</span>
+            <h3>Build + Launch Pass</h3>
+            <p class="desc">Best for one product, one deployment target, and a practical support window.</p>
+            <div class="price">3-month pass</div>
+            <a class="btn primary" data-product="three-month" href="https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j"
+              >Checkout</a
+            >
+          </article>
+          <article class="card premium">
+            <span class="tag">12 months</span>
+            <h3>Platform Partner Pass</h3>
+            <p class="desc">Best for multi-app builds, recurring automation updates, and hands-on platform support.</p>
+            <div class="price">12-month pass</div>
+            <a class="btn primary" data-product="twelve-month" href="https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c"
+              >Checkout</a
+            >
+          </article>
+        </div>
+      </section>
+      <section>
+        <div class="section-head">
+          <h2>Royalty Deck</h2>
+          <p>
+            Limited premium access card for serious operators. Purchase terms are handled through Stripe and confirmed
+            in writing.
+          </p>
+        </div>
+        <div class="grid">
+          <article class="card premium wide">
+            <span class="tag">Limited</span>
+            <div class="icon">👑</div>
+            <h3>Royalty Access Card</h3>
+            <p class="desc">
+              Priority support, lifetime product access terms, and early access to future drops under the written
+              program terms.
+            </p>
+            <div class="price">$1,000</div>
+            <a class="btn primary" data-product="royalty" href="https://buy.stripe.com/dRmcN604kebheRf2cteEo0d"
+              >Claim via Stripe</a
+            >
+          </article>
+          <article class="card">
+            <h3>Concierge scope</h3>
+            <p class="desc">Need a custom SKU, business invoice, or platform scope before payment?</p>
+            <a class="btn ghost" href="mailto:sales@aidoesitall.website?subject=AI%20Solutions%20custom%20invoice"
+              >Email sales</a
+            >
+          </article>
+        </div>
+      </section>
+      <section id="delivery">
+        <div class="section-head">
+          <h2>Receipt → key → delivery</h2>
+          <p>
+            The fulfillment service is designed around Stripe webhooks. Your checkout receipt becomes the purchase
+            fingerprint for license generation.
+          </p>
+        </div>
+        <div class="flow">
+          <div class="step">
+            <div class="num">1</div>
+            <h3>Checkout</h3>
+            <p class="small">Stripe records the product/payment link and buyer email.</p>
+          </div>
+          <div class="step">
+            <div class="num">2</div>
+            <h3>Key issue</h3>
+            <p class="small">
+              The fulfillment worker signs a product-specific license key from the receipt/session fingerprint.
+            </p>
+          </div>
+          <div class="step">
+            <div class="num">3</div>
+            <h3>Email handoff</h3>
+            <p class="small">
+              Buyer receives the key, activation instructions, and support contact. Duplicate webhooks return the same
+              key.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="pay-qr">
+        <div class="section-head">
+          <h2>Scan-to-pay QR codes</h2>
+          <p>
+            Stripe-only checkout path for phones and live demos. These QR codes point to the same Stripe links as the
+            buttons above.
+          </p>
+        </div>
+        <div class="qr-grid">
+          <a class="qr-card" href="https://buy.stripe.com/3cI3cwcR6c3910p18peEo09"
+            ><img src="assets/qr/bot-shield.png" alt="BotShield Stripe QR" /><strong>BotShield</strong
+            ><span class="small">Stripe checkout</span></a
+          ><a class="qr-card" href="https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a"
+            ><img src="assets/qr/founding-member.png" alt="Founding Member Stripe QR" /><strong>Founder Stack</strong
+            ><span class="small">Stripe checkout</span></a
+          ><a class="qr-card" href="https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j"
+            ><img src="assets/qr/three-month.png" alt="3-month pass Stripe QR" /><strong>3-month pass</strong
+            ><span class="small">Stripe checkout</span></a
+          ><a class="qr-card" href="https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c"
+            ><img src="assets/qr/twelve-month.png" alt="12-month pass Stripe QR" /><strong>12-month pass</strong
+            ><span class="small">Stripe checkout</span></a
+          ><a class="qr-card" href="https://buy.stripe.com/dRmcN604kebheRf2cteEo0d"
+            ><img src="assets/qr/royalty.png" alt="Royalty Stripe QR" /><strong>Royalty</strong
+            ><span class="small">Stripe checkout</span></a
+          >
+        </div>
+        <div class="pay-rail">
+          <span class="pay-pill">Stripe only on this store to keep merchant rails clean</span
+          ><span class="pay-pill">Square/Cash App reserved for separate commerce surfaces</span>
+        </div>
+      </section>
+      <section id="admin">
+        <div class="admin">
+          <div>
+            <h2>Admin testing path</h2>
+            <p class="small">
+              Paste Josh's admin key here to unlock the on-site test console and verify the sold-app flow without making
+              a purchase. The page stores only a SHA-256 hash check; the actual key is not embedded in the public HTML.
+            </p>
+            <p><code>sideworld admin-key --email you@example.com --product all-access</code></p>
+          </div>
+          <div class="admin-tools">
+            <label class="small" for="admin-key-input">Admin test key</label
+            ><input
+              id="admin-key-input"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="AIS-ALL-ACCESS-..."
+            /><button class="btn primary" type="button" onclick="validateAdminKey()">Unlock test console</button>
+            <div id="admin-test-result" class="admin-status">Locked. Paste the admin key to test from this site.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="wrap">
+        <strong>AI Solutions Store</strong> · Trash or Treasure Online Recycler LLC<br />sales@aidoesitall.website ·
+        support@aidoesitall.website<br /><span class="small"
+          >Built for serious operators. Payments by Stripe. License fulfillment is receipt-linked and auditable.</span
+        ><br /><span class="small"><a href="/terms">Terms of Service</a> · <a href="/privacy">Privacy Policy</a></span>
+      </div>
+    </footer>
+    <div class="sticky">
+      <div class="wrap inner">
+        <div>
+          <strong>Best value: 12-month implementation pass</strong
+          ><span class="small">Stripe checkout + receipt-linked license key.</span>
+        </div>
+        <a class="btn primary" data-product="twelve-month" href="https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c"
+          >Checkout</a
+        >
+      </div>
     </div>
-  </div>
-  <script>
 
-    const ADMIN_TEST_KEY_SHA256 = "74e610a0360cfba3977c1f17cdf3d9befac953330e9e76531894ea4c70e72794";
-    const SUPPORT_SESSION_ID = (() => {
-      try {
-        const existing = localStorage.getItem('aiSolutionsSupportSessionId');
-        if (existing) return existing;
-        const fresh = 'ais-' + crypto.randomUUID();
-        localStorage.setItem('aiSolutionsSupportSessionId', fresh);
-        return fresh;
-      } catch (_) { return 'ais-session-fallback'; }
-    })();
-    async function sha256Hex(value) {
-      const bytes = new TextEncoder().encode(value.trim());
-      const hash = await crypto.subtle.digest('SHA-256', bytes);
-      return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, '0')).join('');
-    }
-    async function validateAdminKey() {
-      const input = document.getElementById('admin-key-input');
-      const result = document.getElementById('admin-test-result');
-      const digest = await sha256Hex(input.value || '');
-      if (digest === ADMIN_TEST_KEY_SHA256) {
-        try { localStorage.setItem('aiSolutionsAdminUnlocked', 'true'); } catch (_) {}
-        result.className = 'admin-status ok';
-        result.textContent = 'Unlocked: admin key accepted. You can now test checkout buttons, QR links, and SupportClaw chat from this site without a purchase.';
-      } else {
-        result.className = 'admin-status bad';
-        result.textContent = 'Key rejected. Use the all-access admin key generated from Sideworld.';
+    <div id="support-chat-widget" class="chat-widget" aria-live="polite">
+      <div class="chat-head" onclick="toggleSupportChat()">
+        <div>
+          <strong>AI-Solutions SupportClaw</strong
+          ><span class="small">Bot youandinotai / ai-solutions · T5500 logs</span>
+        </div>
+        <span>↕</span>
+      </div>
+      <div class="chat-body">
+        <div id="support-chat-log" class="chat-log">
+          <div class="chat-msg bot">
+            SupportClaw is online. Ask about checkout, keys, installs, or escalation. If the T5500 bridge is
+            unavailable, this widget keeps a local transcript and opens an escalation email.
+          </div>
+        </div>
+        <form class="chat-box" onsubmit="sendSupportMessage(event)">
+          <input id="support-chat-input" placeholder="Type a support message..." /><button
+            class="btn primary"
+            type="submit"
+          >
+            Send
+          </button>
+        </form>
+        <div class="chat-note">
+          Routes to <code>/api/support/chat</code>, which proxies to SupportClaw on T5500 when configured. Escalations
+          are marked for Hermes/human step-in.
+        </div>
+      </div>
+    </div>
+    <script>
+      const ADMIN_TEST_KEY_SHA256 = '74e610a0360cfba3977c1f17cdf3d9befac953330e9e76531894ea4c70e72794';
+      const SUPPORT_SESSION_ID = (() => {
+        try {
+          const existing = localStorage.getItem('aiSolutionsSupportSessionId');
+          if (existing) return existing;
+          const fresh = 'ais-' + crypto.randomUUID();
+          localStorage.setItem('aiSolutionsSupportSessionId', fresh);
+          return fresh;
+        } catch (_) {
+          return 'ais-session-fallback';
+        }
+      })();
+      async function sha256Hex(value) {
+        const bytes = new TextEncoder().encode(value.trim());
+        const hash = await crypto.subtle.digest('SHA-256', bytes);
+        return Array.from(new Uint8Array(hash))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join('');
       }
-    }
-    function toggleSupportChat() { document.getElementById('support-chat-widget').classList.toggle('open'); }
-    function appendChatMessage(text, who) {
-      const log = document.getElementById('support-chat-log');
-      const node = document.createElement('div');
-      node.className = 'chat-msg ' + who;
-      node.textContent = text;
-      log.appendChild(node);
-      log.scrollTop = log.scrollHeight;
-    }
-    function saveLocalChat(record) {
-      try {
-        const key = 'aiSolutionsSupportTranscript';
-        const rows = JSON.parse(localStorage.getItem(key) || '[]');
-        rows.push(record);
-        localStorage.setItem(key, JSON.stringify(rows.slice(-50)));
-      } catch (_) {}
-    }
-    async function sendSupportMessage(event) {
-      event.preventDefault();
-      const input = document.getElementById('support-chat-input');
-      const message = (input.value || '').trim();
-      if (!message) return;
-      input.value = '';
-      appendChatMessage(message, 'me');
-      const payload = { sessionId: SUPPORT_SESSION_ID, source: 'ai-solutions.store', message };
-      saveLocalChat({ ...payload, role: 'user', timestamp: new Date().toISOString() });
-      try {
-        const res = await fetch('/api/support/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        if (!res.ok) throw new Error('support bridge returned ' + res.status);
-        const data = await res.json();
-        const reply = data.reply || 'Logged. SupportClaw will review this transcript.';
-        appendChatMessage(reply + (data.should_escalate ? ' Escalation flagged for Hermes/human step-in.' : ''), 'bot');
-        saveLocalChat({ ...data, role: 'bot', timestamp: new Date().toISOString() });
-      } catch (err) {
-        const fallback = 'Bridge not reachable from this deploy yet. I saved the local transcript and can escalate through support@aidoesitall.website.';
-        appendChatMessage(fallback, 'bot');
-        saveLocalChat({ sessionId: SUPPORT_SESSION_ID, role: 'bot', reply: fallback, error: String(err), should_escalate: true, timestamp: new Date().toISOString() });
+      async function validateAdminKey() {
+        const input = document.getElementById('admin-key-input');
+        const result = document.getElementById('admin-test-result');
+        const digest = await sha256Hex(input.value || '');
+        if (digest === ADMIN_TEST_KEY_SHA256) {
+          try {
+            localStorage.setItem('aiSolutionsAdminUnlocked', 'true');
+          } catch (_) {}
+          result.className = 'admin-status ok';
+          result.textContent =
+            'Unlocked: admin key accepted. You can now test checkout buttons, QR links, and SupportClaw chat from this site without a purchase.';
+        } else {
+          result.className = 'admin-status bad';
+          result.textContent = 'Key rejected. Use the all-access admin key generated from Sideworld.';
+        }
       }
-    }
-    const CHECKOUT_LINKS = {
-      "bot-shield": "https://buy.stripe.com/3cI3cwcR6c3910p18peEo09",
-      "founding-member": "https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a",
-      "three-month": "https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j",
-      "twelve-month": "https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c",
-      "royalty": "https://buy.stripe.com/dRmcN604kebheRf2cteEo0d"
-};
-    document.querySelectorAll('[data-product]').forEach((el) => {
-      el.addEventListener('click', () => {
-        try { localStorage.setItem('lastCheckoutProduct', el.dataset.product || ''); } catch (_) {}
+      function toggleSupportChat() {
+        document.getElementById('support-chat-widget').classList.toggle('open');
+      }
+      function appendChatMessage(text, who) {
+        const log = document.getElementById('support-chat-log');
+        const node = document.createElement('div');
+        node.className = 'chat-msg ' + who;
+        node.textContent = text;
+        log.appendChild(node);
+        log.scrollTop = log.scrollHeight;
+      }
+      function saveLocalChat(record) {
+        try {
+          const key = 'aiSolutionsSupportTranscript';
+          const rows = JSON.parse(localStorage.getItem(key) || '[]');
+          rows.push(record);
+          localStorage.setItem(key, JSON.stringify(rows.slice(-50)));
+        } catch (_) {}
+      }
+      async function sendSupportMessage(event) {
+        event.preventDefault();
+        const input = document.getElementById('support-chat-input');
+        const message = (input.value || '').trim();
+        if (!message) return;
+        input.value = '';
+        appendChatMessage(message, 'me');
+        const payload = { sessionId: SUPPORT_SESSION_ID, source: 'ai-solutions.store', message };
+        saveLocalChat({ ...payload, role: 'user', timestamp: new Date().toISOString() });
+        try {
+          const res = await fetch('/api/support/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          if (!res.ok) throw new Error('support bridge returned ' + res.status);
+          const data = await res.json();
+          const reply = data.reply || 'Logged. SupportClaw will review this transcript.';
+          appendChatMessage(
+            reply + (data.should_escalate ? ' Escalation flagged for Hermes/human step-in.' : ''),
+            'bot',
+          );
+          saveLocalChat({ ...data, role: 'bot', timestamp: new Date().toISOString() });
+        } catch (err) {
+          const fallback =
+            'Bridge not reachable from this deploy yet. I saved the local transcript and can escalate through support@aidoesitall.website.';
+          appendChatMessage(fallback, 'bot');
+          saveLocalChat({
+            sessionId: SUPPORT_SESSION_ID,
+            role: 'bot',
+            reply: fallback,
+            error: String(err),
+            should_escalate: true,
+            timestamp: new Date().toISOString(),
+          });
+        }
+      }
+      const CHECKOUT_LINKS = {
+        'bot-shield': 'https://buy.stripe.com/3cI3cwcR6c3910p18peEo09',
+        'founding-member': 'https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a',
+        'three-month': 'https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j',
+        'twelve-month': 'https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c',
+        royalty: 'https://buy.stripe.com/dRmcN604kebheRf2cteEo0d',
+      };
+      document.querySelectorAll('[data-product]').forEach((el) => {
+        el.addEventListener('click', () => {
+          try {
+            localStorage.setItem('lastCheckoutProduct', el.dataset.product || '');
+          } catch (_) {}
+        });
       });
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>

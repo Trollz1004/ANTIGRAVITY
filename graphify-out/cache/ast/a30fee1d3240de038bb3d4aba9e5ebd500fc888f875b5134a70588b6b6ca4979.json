@@ -1,1 +1,40 @@
-{"nodes": [{"id": "app_frontend_src_components_titlebar_js", "label": "TitleBar.js", "file_type": "code", "source_file": "/app/frontend/src/components/TitleBar.js", "source_location": "L1"}, {"id": "components_titlebar_titlebar", "label": "TitleBar()", "file_type": "code", "source_file": "/app/frontend/src/components/TitleBar.js", "source_location": "L3"}], "edges": [{"source": "app_frontend_src_components_titlebar_js", "target": "react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/TitleBar.js", "source_location": "L1", "weight": 1.0}, {"source": "app_frontend_src_components_titlebar_js", "target": "components_titlebar_titlebar", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/components/TitleBar.js", "source_location": "L3", "weight": 1.0}], "raw_calls": []}
+{
+  "nodes": [
+    {
+      "id": "app_frontend_src_components_titlebar_js",
+      "label": "TitleBar.js",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/TitleBar.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "components_titlebar_titlebar",
+      "label": "TitleBar()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/components/TitleBar.js",
+      "source_location": "L3"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_frontend_src_components_titlebar_js",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/TitleBar.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_components_titlebar_js",
+      "target": "components_titlebar_titlebar",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/components/TitleBar.js",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": []
+}

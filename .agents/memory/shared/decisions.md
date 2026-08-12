@@ -1,7 +1,9 @@
 # Shared Decisions Log
+
 > append-only, dated
 
 ## 2026-07-09
+
 - T5500 = ANTIGRAVITY business authority. Sabretooth = DREAM Online MMO only. Final.
 - OmniRouter cost policy: Ollama (free) → OpenRouter free NVIDIA/Nemotron → OpenRouter paid → OpenAI
 - OmniRouter decision policy: OpenAI → OpenRouter paid → xAI → NVIDIA → OpenRouter free → Ollama

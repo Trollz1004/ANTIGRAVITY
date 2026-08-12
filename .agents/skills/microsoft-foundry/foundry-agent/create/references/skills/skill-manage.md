@@ -25,7 +25,6 @@ skills/
 name: my-skill-name
 description: What this skill does and when the agent should load it
 ---
-
 # My Skill
 
 Instructions the agent follows when this skill is loaded on demand...
@@ -37,19 +36,19 @@ The `description` field drives skill discovery at runtime: the Agent Framework S
 
 ## CLI surface — `azd ai skill`
 
-| Command | What it does |
-|---------|--------------|
-| `azd ai skill create <name> --file <path>` | Create skill + publish v1. Accepts SKILL.md, .zip, or directory. |
-| `azd ai skill create <name> --description "..." --instructions "..."` | Inline create (no file). |
-| `azd ai skill create <name> --file <path> --force` | Delete existing + recreate. Safe to re-run after edits. |
-| `azd ai skill update <name> --file <path>` | New immutable version, promoted to default. |
-| `azd ai skill update <name> --set-default-version <ver>` | Repoint default (rollback) without uploading new content. |
-| `azd ai skill show <name>` | Show metadata (default_version, latest_version). |
-| `azd ai skill list` | List skills in the project. |
-| `azd ai skill download <name>` | Extract to `./.agents/skills/<name>/`. |
-| `azd ai skill download <name> --version <ver>` | Download a specific version. |
-| `azd ai skill download <name> --raw` | Write raw ZIP without extracting. |
-| `azd ai skill delete <name> [--force]` | Delete skill. |
+| Command                                                               | What it does                                                     |
+| --------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `azd ai skill create <name> --file <path>`                            | Create skill + publish v1. Accepts SKILL.md, .zip, or directory. |
+| `azd ai skill create <name> --description "..." --instructions "..."` | Inline create (no file).                                         |
+| `azd ai skill create <name> --file <path> --force`                    | Delete existing + recreate. Safe to re-run after edits.          |
+| `azd ai skill update <name> --file <path>`                            | New immutable version, promoted to default.                      |
+| `azd ai skill update <name> --set-default-version <ver>`              | Repoint default (rollback) without uploading new content.        |
+| `azd ai skill show <name>`                                            | Show metadata (default_version, latest_version).                 |
+| `azd ai skill list`                                                   | List skills in the project.                                      |
+| `azd ai skill download <name>`                                        | Extract to `./.agents/skills/<name>/`.                           |
+| `azd ai skill download <name> --version <ver>`                        | Download a specific version.                                     |
+| `azd ai skill download <name> --raw`                                  | Write raw ZIP without extracting.                                |
+| `azd ai skill delete <name> [--force]`                                | Delete skill.                                                    |
 
 Every mutation creates a new immutable version. `create` promotes v1 to default; `update` promotes the new version to default.
 
@@ -83,6 +82,7 @@ azd ai skill update my-skill --file ./skills/my-skill/
 ```
 
 After update:
+
 - Toolbox skill references (without pinned version) follow the new `default_version` — live immediately, no toolbox republish needed.
 - `SkillsProvider` downloads at agent startup — redeploy agent to pick up the new version.
 
@@ -115,11 +115,11 @@ Skills require **Foundry User** on the Foundry project scope (for both the devel
 
 ## Troubleshooting
 
-| Symptom | Likely cause | Fix |
-|---------|------------|-----|
-| HTTP 500 on skill create | Quoted `name` or `description` in YAML front matter | Remove quotes from front matter values |
-| `403 Forbidden` | Missing RBAC | Grant **Foundry User** on the project scope |
-| `azd ai skill` not recognized | Extension not installed | `azd extension install azure.ai.skills` |
+| Symptom                                           | Likely cause                                                              | Fix                                                       |
+| ------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------- |
+| HTTP 500 on skill create                          | Quoted `name` or `description` in YAML front matter                       | Remove quotes from front matter values                    |
+| `403 Forbidden`                                   | Missing RBAC                                                              | Grant **Foundry User** on the project scope               |
+| `azd ai skill` not recognized                     | Extension not installed                                                   | `azd extension install azure.ai.skills`                   |
 | Agent still uses old skill content after `update` | Toolbox skill pinned to old version, or skills provider caches at startup | Use consumer endpoint (no version pin), or redeploy agent |
 
 ## References

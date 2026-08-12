@@ -3,6 +3,7 @@
 Short. Overwrite each session, don't let this grow. If it's longer than ~15 lines, you're keeping too much.
 
 ## Last session
+
 ```
 Date: 2026-08-11 (later)
 Changed: #218 MERGED. Two follow-up PRs open: #219 (news source URLs +
@@ -23,6 +24,7 @@ Quota: ok
 ```
 
 ## Template for next update
+
 ```
 Date: YYYY-MM-DD
 Changed: <one line>

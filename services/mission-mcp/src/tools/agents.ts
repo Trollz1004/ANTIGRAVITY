@@ -1,5 +1,5 @@
-import { z } from "zod";
-import type Database from "better-sqlite3";
+import { z } from 'zod';
+import type Database from 'better-sqlite3';
 
 // ── Schemas ───────────────────────────────────────────────────────────────────
 
@@ -28,21 +28,14 @@ export interface AgentRow {
  * List registered agent processes. Returns an empty array if no agents have
  * registered yet — this is the correct contract; do not fabricate agent data.
  */
-export function listAgents(
-  db: Database.Database,
-  input: z.infer<typeof ListAgentsInput>
-): AgentRow[] {
+export function listAgents(db: Database.Database, input: z.infer<typeof ListAgentsInput>): AgentRow[] {
   const parsed = ListAgentsInput.parse(input);
 
   if (parsed.active_since_ms !== undefined) {
     return db
-      .prepare(
-        "SELECT * FROM agents WHERE last_heartbeat >= ? ORDER BY last_heartbeat DESC"
-      )
+      .prepare('SELECT * FROM agents WHERE last_heartbeat >= ? ORDER BY last_heartbeat DESC')
       .all(parsed.active_since_ms) as AgentRow[];
   }
 
-  return db
-    .prepare("SELECT * FROM agents ORDER BY last_heartbeat DESC")
-    .all() as AgentRow[];
+  return db.prepare('SELECT * FROM agents ORDER BY last_heartbeat DESC').all() as AgentRow[];
 }

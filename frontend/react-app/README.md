@@ -10,8 +10,7 @@ View your app in AI Studio: https://ai.studio/apps/2c8050ad-ec52-410c-822c-c083d
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
-
+**Prerequisites:** Node.js
 
 1. Install dependencies:
    `npm install`
@@ -20,4 +19,5 @@ View your app in AI Studio: https://ai.studio/apps/2c8050ad-ec52-410c-822c-c083d
    `npm run dev`
 
 ---
+
 Business-only launch surface. Sell product value, verification, safety, support, and platform access.

@@ -9,60 +9,95 @@
 /* ─────────────────────────────────────────────────────────────────────── */
 
 :root {
-  --bg-primary:    #0a0f1a;
-  --bg-secondary:  #111827;
-  --bg-card:       #1a2332;
-  --border:        #2a3a52;
-  --accent-cyan:   #00d4ff;
-  --accent-magenta:#e040fb;
-  --accent-gold:   #ffb300;
-  --accent-green:  #00e676;
+  --bg-primary: #0a0f1a;
+  --bg-secondary: #111827;
+  --bg-card: #1a2332;
+  --border: #2a3a52;
+  --accent-cyan: #00d4ff;
+  --accent-magenta: #e040fb;
+  --accent-gold: #ffb300;
+  --accent-green: #00e676;
   --accent-danger: #ff1744;
-  --text-primary:  #e8f0ff;
-  --text-muted:    #6b82a6;
-  --text-dim:      #4a5568;
+  --text-primary: #e8f0ff;
+  --text-muted: #6b82a6;
+  --text-dim: #4a5568;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: ui-sans-serif, system-ui, 'Segoe UI', Roboto, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code, pre, .mono {
-  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+code,
+pre,
+.mono {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-.custom-scrollbar::-webkit-scrollbar         { width: 6px; height: 6px; }
-.custom-scrollbar::-webkit-scrollbar-track   { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb   { background: var(--border); border-radius: 3px; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
 
 @keyframes mc-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
-.animate-spin-slow { animation: mc-spin 3s linear infinite; }
+.animate-spin-slow {
+  animation: mc-spin 3s linear infinite;
+}
 
 @keyframes mc-pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.35; transform: scale(1.15); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(1.15);
+  }
 }
-.animate-heartbeat { animation: mc-pulse-dot 2s ease-in-out infinite; }
+.animate-heartbeat {
+  animation: mc-pulse-dot 2s ease-in-out infinite;
+}
 
 @keyframes mc-ticker {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
-.animate-ticker { animation: mc-ticker 38s linear infinite; }
+.animate-ticker {
+  animation: mc-ticker 38s linear infinite;
+}
 
 /* subtle orbital grain over the whole app */
 .grain::before {
-  content: "";
+  content: '';
   pointer-events: none;
   position: fixed;
   inset: 0;
@@ -96,8 +131,14 @@ code, pre, .mono {
     --ring: 191 100% 50%;
     --radius: 0.5rem;
   }
-  * { @apply border-border; }
-  body { @apply bg-background text-foreground; }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-[data-debug-wrapper="true"] { display: contents !important; }
+[data-debug-wrapper='true'] {
+  display: contents !important;
+}

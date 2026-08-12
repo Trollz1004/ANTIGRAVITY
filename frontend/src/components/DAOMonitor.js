@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Activity, ChevronRight, LayoutDashboard, Users, Wallet, Gavel, TrendingUp, Globe, Code2 } from "lucide-react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Activity, ChevronRight, LayoutDashboard, Users, Wallet, Gavel, TrendingUp, Globe, Code2 } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -14,7 +14,10 @@ export function DAOMonitor() {
   const [uptime, setUptime] = useState(99.98);
 
   useEffect(() => {
-    axios.get(`${API}/dao/stats`, { timeout: 4000 }).then((r) => setData(r.data)).catch(() => setData(null));
+    axios
+      .get(`${API}/dao/stats`, { timeout: 4000 })
+      .then((r) => setData(r.data))
+      .catch(() => setData(null));
     const iv = setInterval(() => {
       setUptime((p) => Math.min(100, p + (Math.random() - 0.5) * 0.01));
     }, 5000);
@@ -38,7 +41,7 @@ export function DAOMonitor() {
             Antigravity DAO
           </span>
         </div>
-        <ChevronRight size={12} className={`text-[#4a5568] transition-transform ${expanded ? "rotate-90" : ""}`} />
+        <ChevronRight size={12} className={`text-[#4a5568] transition-transform ${expanded ? 'rotate-90' : ''}`} />
       </button>
 
       {expanded && (
@@ -65,8 +68,13 @@ export function DAOMonitor() {
                   <div key={t.symbol} className="flex flex-col gap-1">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded-sm" style={{ background: `${t.color}26`, border: `1px solid ${t.color}` }} />
-                        <span className="mono text-[10px] font-bold" style={{ color: t.color }}>${t.symbol}</span>
+                        <div
+                          className="w-4 h-4 rounded-sm"
+                          style={{ background: `${t.color}26`, border: `1px solid ${t.color}` }}
+                        />
+                        <span className="mono text-[10px] font-bold" style={{ color: t.color }}>
+                          ${t.symbol}
+                        </span>
                       </div>
                       <span className="mono text-[9px] text-[#e8f0ff]">
                         {t.circulating.toLocaleString()}/{(t.cap / 1_000_000).toFixed(1)}M
@@ -101,7 +109,8 @@ export function DAOMonitor() {
 
           <div className="px-1 text-center">
             <p className="text-[7px] text-[#4a5568] uppercase leading-tight italic">
-              Antigravity Platforms DAO v1.0<br />
+              Antigravity Platforms DAO v1.0
+              <br />
               <span className="text-[#00d4ff]/40">#UntilNoKidInNeed</span>
             </p>
           </div>

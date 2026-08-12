@@ -8,6 +8,7 @@
 > Shared rules (bindings over SDKs, latest runtime, identity-first auth) → [global-rules.md](../global-rules.md)
 
 JS-specific:
+
 - Use `extraInputs` / `extraOutputs` with binding path expressions (e.g., `{queueTrigger}`) for dynamic blob I/O
 - Access metadata via `context.triggerMetadata`
 - `package.json`: `"@azure/functions": "^4.0.0"`
@@ -20,12 +21,12 @@ const { app, input, output } = require('@azure/functions');
 // Use bindings for blob I/O instead of BlobServiceClient SDK
 const blobInput = input.storageBlob({
   path: 'source-container/{queueTrigger}',
-  connection: 'AzureWebJobsStorage'
+  connection: 'AzureWebJobsStorage',
 });
 
 const blobOutput = output.storageBlob({
   path: 'destination-container/{queueTrigger}',
-  connection: 'AzureWebJobsStorage'
+  connection: 'AzureWebJobsStorage',
 });
 
 app.storageQueue('processImage', {
@@ -38,7 +39,7 @@ app.storageQueue('processImage', {
     context.log(`Processing blob: ${queueItem}`);
     // Process the blob...
     context.extraOutputs.set(blobOutput, processedBuffer);
-  }
+  },
 });
 ```
 
@@ -53,7 +54,7 @@ app.http('httpFunction', {
   handler: async (request, context) => {
     const name = request.query.get('name') || (await request.text());
     return { body: `Hello, ${name}!` };
-  }
+  },
 });
 ```
 
@@ -67,19 +68,19 @@ app.storageBlob('blobTrigger', {
   source: 'EventGrid',
   handler: async (blob, context) => {
     context.log(`Blob: ${context.triggerMetadata.name}, Size: ${blob.length}`);
-  }
+  },
 });
 
 // Input binding
 const blobInput = input.storageBlob({
   path: 'samples-workitems/{queueTrigger}',
-  connection: 'AzureWebJobsStorage'
+  connection: 'AzureWebJobsStorage',
 });
 
 // Output binding
 const blobOutput = output.storageBlob({
   path: 'samples-output/{name}-out',
-  connection: 'AzureWebJobsStorage'
+  connection: 'AzureWebJobsStorage',
 });
 ```
 
@@ -101,13 +102,13 @@ const { DefaultAzureCredential } = require('@azure/identity');
 const createClient = require('@azure-rest/ai-vision-image-analysis').default;
 
 const credential = new DefaultAzureCredential({
-  managedIdentityClientId: process.env.AZURE_CLIENT_ID  // Required for UAMI
+  managedIdentityClientId: process.env.AZURE_CLIENT_ID, // Required for UAMI
 });
 const client = createClient(process.env.COMPUTER_VISION_ENDPOINT, credential);
 
 const result = await client.path('/imageanalysis:analyze').post({
   body: { url: blobUrl },
-  queryParameters: { features: ['People'] }  // Use 'People' for face detection
+  queryParameters: { features: ['People'] }, // Use 'People' for face detection
 });
 ```
 
@@ -122,13 +123,13 @@ app.storageQueue('queueTrigger', {
   connection: 'AzureWebJobsStorage',
   handler: async (queueItem, context) => {
     context.log('Queue item:', queueItem);
-  }
+  },
 });
 
 // Output
 const queueOutput = output.storageQueue({
   queueName: 'outqueue',
-  connection: 'AzureWebJobsStorage'
+  connection: 'AzureWebJobsStorage',
 });
 ```
 
@@ -139,7 +140,7 @@ app.timer('timerFunction', {
   schedule: '0 */5 * * * *', // Every 5 minutes (NCRONTAB)
   handler: async (myTimer, context) => {
     context.log('Timer fired at:', myTimer.scheduleStatus.last);
-  }
+  },
 });
 ```
 
@@ -150,13 +151,13 @@ app.timer('timerFunction', {
 app.eventGrid('eventGridTrigger', {
   handler: async (event, context) => {
     context.log('Event:', event.subject, event.eventType);
-  }
+  },
 });
 
 // Output
 const eventGridOutput = output.eventGrid({
   topicEndpointUri: 'MyEventGridTopicUriSetting',
-  topicKeySetting: 'MyEventGridTopicKeySetting'
+  topicKeySetting: 'MyEventGridTopicKeySetting',
 });
 ```
 
@@ -170,8 +171,8 @@ app.cosmosDB('cosmosDBTrigger', {
   containerName: 'mycontainer',
   createLeaseContainerIfNotExists: true,
   handler: async (documents, context) => {
-    documents.forEach(doc => context.log('Changed doc:', doc.id));
-  }
+    documents.forEach((doc) => context.log('Changed doc:', doc.id));
+  },
 });
 
 // Input
@@ -180,14 +181,14 @@ const cosmosInput = input.cosmosDB({
   databaseName: 'mydb',
   containerName: 'mycontainer',
   id: '{id}',
-  partitionKey: '{partitionKey}'
+  partitionKey: '{partitionKey}',
 });
 
 // Output
 const cosmosOutput = output.cosmosDB({
   connectionStringSetting: 'CosmosDBConnection',
   databaseName: 'mydb',
-  containerName: 'mycontainer'
+  containerName: 'mycontainer',
 });
 ```
 
@@ -200,7 +201,7 @@ app.serviceBusQueue('sbQueueTrigger', {
   connection: 'ServiceBusConnection',
   handler: async (message, context) => {
     context.log('Message:', message);
-  }
+  },
 });
 
 // Topic Trigger
@@ -210,13 +211,13 @@ app.serviceBusTopic('sbTopicTrigger', {
   connection: 'ServiceBusConnection',
   handler: async (message, context) => {
     context.log('Topic message:', message);
-  }
+  },
 });
 
 // Output
 const sbOutput = output.serviceBusQueue({
   queueName: 'outqueue',
-  connection: 'ServiceBusConnection'
+  connection: 'ServiceBusConnection',
 });
 ```
 
@@ -229,14 +230,14 @@ app.eventHub('eventHubTrigger', {
   connection: 'EventHubConnection',
   cardinality: 'many',
   handler: async (events, context) => {
-    events.forEach(event => context.log('Event:', event));
-  }
+    events.forEach((event) => context.log('Event:', event));
+  },
 });
 
 // Output
 const ehOutput = output.eventHub({
   eventHubName: 'outeventhub',
-  connection: 'EventHubConnection'
+  connection: 'EventHubConnection',
 });
 ```
 
@@ -248,13 +249,13 @@ const tableInput = input.table({
   tableName: 'mytable',
   partitionKey: '{partitionKey}',
   rowKey: '{rowKey}',
-  connection: 'AzureWebJobsStorage'
+  connection: 'AzureWebJobsStorage',
 });
 
 // Output
 const tableOutput = output.table({
   tableName: 'mytable',
-  connection: 'AzureWebJobsStorage'
+  connection: 'AzureWebJobsStorage',
 });
 ```
 
@@ -265,8 +266,8 @@ const tableOutput = output.table({
 app.generic('sqlTrigger', {
   trigger: { type: 'sqlTrigger', tableName: 'dbo.MyTable', connectionStringSetting: 'SqlConnection' },
   handler: async (changes, context) => {
-    changes.forEach(change => context.log('Change:', change));
-  }
+    changes.forEach((change) => context.log('Change:', change));
+  },
 });
 
 // Input
@@ -274,13 +275,13 @@ const sqlInput = input.sql({
   commandText: 'SELECT * FROM dbo.MyTable WHERE Id = @Id',
   commandType: 'Text',
   parameters: '@Id={id}',
-  connectionStringSetting: 'SqlConnection'
+  connectionStringSetting: 'SqlConnection',
 });
 
 // Output
 const sqlOutput = output.sql({
   commandText: 'dbo.MyTable',
-  connectionStringSetting: 'SqlConnection'
+  connectionStringSetting: 'SqlConnection',
 });
 ```
 
@@ -291,7 +292,7 @@ const sqlOutput = output.sql({
 const signalROutput = output.generic({
   type: 'signalR',
   hubName: 'myhub',
-  connectionStringSetting: 'AzureSignalRConnectionString'
+  connectionStringSetting: 'AzureSignalRConnectionString',
 });
 ```
 
@@ -302,7 +303,7 @@ const sendGridOutput = output.generic({
   type: 'sendGrid',
   apiKey: 'SendGridApiKey',
   from: 'noreply@example.com',
-  to: '{email}'
+  to: '{email}',
 });
 ```
 
@@ -318,7 +319,7 @@ app.http('processItem', {
     const doc = context.extraInputs.get(cosmosInput);
     context.extraOutputs.set(queueOutput, JSON.stringify(doc));
     return { body: 'Processed' };
-  }
+  },
 });
 ```
 

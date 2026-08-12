@@ -1,14 +1,14 @@
-import { z } from "zod";
-import type Database from "better-sqlite3";
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
-import { resolve, join, normalize, dirname } from "path";
-import { applyPatch } from "diff";
-import { logEvent } from "../events.js";
+import { z } from 'zod';
+import type Database from 'better-sqlite3';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { resolve, join, normalize, dirname } from 'path';
+import { applyPatch } from 'diff';
+import { logEvent } from '../events.js';
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
 export function getFileRoot(): string {
-  return process.env.MISSION_FILE_ROOT ?? "C:\\Antigravity";
+  return process.env.MISSION_FILE_ROOT ?? 'C:\\Antigravity';
 }
 
 // ── Schemas ───────────────────────────────────────────────────────────────────
@@ -35,14 +35,8 @@ export function resolveSafePath(relPath: string, root?: string): string {
   const fileRoot = root ?? getFileRoot();
 
   // Reject absolute paths
-  if (
-    relPath.startsWith("/") ||
-    relPath.startsWith("\\") ||
-    /^[A-Za-z]:/.test(relPath)
-  ) {
-    throw new Error(
-      `Absolute paths are not allowed. Use a path relative to the repo root.`
-    );
+  if (relPath.startsWith('/') || relPath.startsWith('\\') || /^[A-Za-z]:/.test(relPath)) {
+    throw new Error(`Absolute paths are not allowed. Use a path relative to the repo root.`);
   }
 
   const normalized = normalize(relPath);
@@ -50,15 +44,10 @@ export function resolveSafePath(relPath: string, root?: string): string {
   const rootResolved = resolve(fileRoot);
 
   // Reject traversal outside root
-  if (!absolute.startsWith(rootResolved + "/") && absolute !== rootResolved) {
+  if (!absolute.startsWith(rootResolved + '/') && absolute !== rootResolved) {
     // Windows path separator
-    if (
-      !absolute.startsWith(rootResolved + "\\") &&
-      absolute !== rootResolved
-    ) {
-      throw new Error(
-        `Path traversal rejected: ${relPath} resolves outside repo root.`
-      );
+    if (!absolute.startsWith(rootResolved + '\\') && absolute !== rootResolved) {
+      throw new Error(`Path traversal rejected: ${relPath} resolves outside repo root.`);
     }
   }
 
@@ -69,7 +58,7 @@ export function resolveSafePath(relPath: string, root?: string): string {
 
 export function readFileTool(
   db: Database.Database,
-  input: z.infer<typeof ReadFileInput>
+  input: z.infer<typeof ReadFileInput>,
 ): { path: string; content: string; truncated: boolean } {
   const parsed = ReadFileInput.parse(input);
   const absPath = resolveSafePath(parsed.path);
@@ -80,10 +69,10 @@ export function readFileTool(
 
   const raw = readFileSync(absPath);
   const truncated = raw.length > parsed.max_bytes;
-  const content = raw.slice(0, parsed.max_bytes).toString("utf-8");
+  const content = raw.slice(0, parsed.max_bytes).toString('utf-8');
 
   logEvent(db, {
-    kind: "file_read",
+    kind: 'file_read',
     payload: { path: parsed.path, bytes: content.length, truncated },
   });
 
@@ -92,7 +81,7 @@ export function readFileTool(
 
 export function writeFileTool(
   db: Database.Database,
-  input: z.infer<typeof WriteFileInput>
+  input: z.infer<typeof WriteFileInput>,
 ): { path: string; created: boolean } {
   const parsed = WriteFileInput.parse(input);
   const absPath = resolveSafePath(parsed.path);
@@ -100,16 +89,14 @@ export function writeFileTool(
   const existed = existsSync(absPath);
 
   if (parsed.create_only && existed) {
-    throw new Error(
-      `create_only=true but file already exists: ${parsed.path}`
-    );
+    throw new Error(`create_only=true but file already exists: ${parsed.path}`);
   }
 
   mkdirSync(dirname(absPath), { recursive: true });
-  writeFileSync(absPath, parsed.content, "utf-8");
+  writeFileSync(absPath, parsed.content, 'utf-8');
 
   logEvent(db, {
-    kind: "file_write",
+    kind: 'file_write',
     payload: { path: parsed.path, created: !existed },
   });
 
@@ -118,7 +105,7 @@ export function writeFileTool(
 
 export function patchFileTool(
   db: Database.Database,
-  input: z.infer<typeof PatchFileInput>
+  input: z.infer<typeof PatchFileInput>,
 ): { path: string; applied: boolean } {
   const parsed = PatchFileInput.parse(input);
   const absPath = resolveSafePath(parsed.path);
@@ -127,17 +114,17 @@ export function patchFileTool(
     throw new Error(`File not found: ${parsed.path}`);
   }
 
-  const original = readFileSync(absPath, "utf-8");
+  const original = readFileSync(absPath, 'utf-8');
   const result = applyPatch(original, parsed.diff);
 
   if (result === false) {
     throw new Error(`Patch did not apply cleanly to ${parsed.path}`);
   }
 
-  writeFileSync(absPath, result, "utf-8");
+  writeFileSync(absPath, result, 'utf-8');
 
   logEvent(db, {
-    kind: "file_patch",
+    kind: 'file_patch',
     payload: { path: parsed.path },
   });
 

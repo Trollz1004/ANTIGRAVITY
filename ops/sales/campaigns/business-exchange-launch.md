@@ -10,6 +10,7 @@
 ## Overview
 
 Business Exchange is a B2B marketplace for services, referrals, and business sales. It has:
+
 - Listing system for services
 - Deal pipeline management
 - Messaging between buyers and sellers
@@ -41,6 +42,7 @@ Business Exchange is a B2B marketplace for services, referrals, and business sal
 **Tagline:** "B2B services, referrals, and business sales — one marketplace."
 
 **Hooks:**
+
 - "Find services, sell services, or list a business for sale."
 - "The B2B marketplace with AI-powered matching."
 - "Verified businesses. Real services. No middleman."

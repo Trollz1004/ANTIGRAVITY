@@ -1,32 +1,35 @@
 ---
 name: azure-observability
-description: "Azure Observability Services including Azure Monitor, Application Insights, Log Analytics, Alerts, and Workbooks. Provides metrics, APM, distributed tracing, KQL queries, and interactive reports. USE FOR: Azure Monitor, Application Insights, Log Analytics, Alerts, Workbooks, metrics, APM, distributed tracing, KQL queries, interactive reports, observability, monitoring dashboards. DO NOT USE FOR: instrumenting apps with App Insights SDK (use appinsights-instrumentation), querying Kusto/ADX clusters (use azure-kusto), cost analysis (use azure-cost-optimization)."
+description: 'Azure Observability Services including Azure Monitor, Application Insights, Log Analytics, Alerts, and Workbooks. Provides metrics, APM, distributed tracing, KQL queries, and interactive reports. USE FOR: Azure Monitor, Application Insights, Log Analytics, Alerts, Workbooks, metrics, APM, distributed tracing, KQL queries, interactive reports, observability, monitoring dashboards. DO NOT USE FOR: instrumenting apps with App Insights SDK (use appinsights-instrumentation), querying Kusto/ADX clusters (use azure-kusto), cost analysis (use azure-cost-optimization).'
 ---
 
 # Azure Observability Services
 
 ## Services
 
-| Service | Use When | MCP Tools | CLI |
-|---------|----------|-----------|-----|
-| Azure Monitor | Metrics, alerts, dashboards | `azure__monitor` | `az monitor` |
-| Application Insights | APM, distributed tracing | `azure__applicationinsights` | `az monitor app-insights` |
-| Log Analytics | Log queries, KQL | `azure__kusto` | `az monitor log-analytics` |
-| Alerts | Notifications, actions | - | `az monitor alert` |
-| Workbooks | Interactive reports | `azure__workbooks` | - |
+| Service              | Use When                    | MCP Tools                    | CLI                        |
+| -------------------- | --------------------------- | ---------------------------- | -------------------------- |
+| Azure Monitor        | Metrics, alerts, dashboards | `azure__monitor`             | `az monitor`               |
+| Application Insights | APM, distributed tracing    | `azure__applicationinsights` | `az monitor app-insights`  |
+| Log Analytics        | Log queries, KQL            | `azure__kusto`               | `az monitor log-analytics` |
+| Alerts               | Notifications, actions      | -                            | `az monitor alert`         |
+| Workbooks            | Interactive reports         | `azure__workbooks`           | -                          |
 
 ## MCP Server (Preferred)
 
 When Azure MCP is enabled:
 
 ### Monitor
+
 - `azure__monitor` with command `monitor_metrics_query` - Query metrics
 - `azure__monitor` with command `monitor_logs_query` - Query logs with KQL
 
 ### Application Insights
+
 - `azure__applicationinsights` with command `applicationinsights_component_list` - List App Insights resources
 
 ### Log Analytics
+
 - `azure__kusto` with command `kusto_cluster_list` - List clusters
 - `azure__kusto` with command `kusto_query` - Execute KQL queries
 
@@ -79,13 +82,13 @@ AzureMetrics
 
 ## Monitoring Strategy
 
-| What to Monitor | Service | Metric/Log |
-|-----------------|---------|------------|
-| Application errors | App Insights | Exceptions, failed requests |
-| Performance | App Insights | Response time, dependencies |
-| Infrastructure | Azure Monitor | CPU, memory, disk |
-| Security | Log Analytics | Sign-ins, audit logs |
-| Costs | Cost Management | Budget alerts |
+| What to Monitor    | Service         | Metric/Log                  |
+| ------------------ | --------------- | --------------------------- |
+| Application errors | App Insights    | Exceptions, failed requests |
+| Performance        | App Insights    | Response time, dependencies |
+| Infrastructure     | Azure Monitor   | CPU, memory, disk           |
+| Security           | Log Analytics   | Sign-ins, audit logs        |
+| Costs              | Cost Management | Budget alerts               |
 
 ## SDK Quick References
 

@@ -1,15 +1,25 @@
 {
-  "campaign": "revenue-10k-swarm",
+  "campaign": "revenue-infinite-swarm",
   "status": "ACTIVE",
-  "target_usd": 10000,
+  "goal_mode": "infinite",
+  "floor_usd": 10000,
+  "target_usd": null,
+  "ceiling_usd": null,
   "collected_usd_verified": 0,
-  "updated_at": "2026-08-05T07:01:15.151821+00:00",
-  "goal_note": "Cover AI costs a year in advance (GPU/server updates for AI team) + catch up on taxes. Not canceled.",
+  "updated_at": "2026-08-06T23:45:00+00:00",
+  "goal_note": "INFINITE revenue loop. $10,000 is a FLOOR milestone (AI costs a year ahead + GPU/server updates + tax catch-up) — NOT a stop line. Keep selling after $10k. No batch caps (not 20 leads, not one sprint).",
+  "pipeline_policy": {
+    "icp_batch_cap": null,
+    "icp_mode": "continuous",
+    "stop_when_10k": false,
+    "follow_ups_forever": true
+  },
   "primary_currency": "USD",
   "square_account_email": "ebaytrashortreasure@gmail.com",
   "square_location_id": "LY5GN09F5AN83",
   "square_merchant_id": "ML3C7FMTQS5KX",
   "payment_policy": "Square long_url checkout only. Never square.link/u short links (404). No Stripe in public surfaces.",
+  "affiliate_canonical": "https://trollz1004.github.io/youandinotai-links/?ref=clean-repo",
   "consumer_plans": {
     "bot_shield": {
       "name": "Bot-Shield Verification",
@@ -115,10 +125,13 @@
     "No outbound email stack (AgentMail/Himalaya) on this node",
     "Zero verified Square paid orders yet (FUNDING_NOT_VERIFIED)"
   ],
-  "path_to_10k": [
-    "4x Agentic Workflows ($2500) = $10,000",
-    "OR Tech Debt $4000 + Agentic $2500 + Security $1500 + API $1200 = $9200 (+ storefront/prepaid)",
-    "OR 4x Royalty Card consumer $2500"
-  ],
-  "note": "B2B SKUs minted 2026-08-05 via Square payment-links API. Public b2b.html uses long_url only."
+  "path_milestones": {
+    "floor_10k": [
+      "4x Agentic Workflows ($2500) = $10,000",
+      "OR Tech Debt $4000 + Agentic $2500 + Security $1500 + API $1200 = $9200 (+ storefront/prepaid)",
+      "OR 4x Royalty Card consumer $2500"
+    ],
+    "after_floor": "Continue infinite loop: more B2B packs + date-app affiliate recurring + creator refs. Never declare campaign DONE solely because floor was hit."
+  },
+  "note": "B2B SKUs minted 2026-08-05 via Square payment-links API. Public b2b.html uses long_url only. Goal mode infinite as of 2026-08-06 (Josh: not 20)."
 }

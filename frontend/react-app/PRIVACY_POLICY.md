@@ -92,27 +92,32 @@ We do **not** use your information for:
 We share your information only in these circumstances:
 
 ### 6.1 With Other Users
+
 Your profile information (name, photos, bio, interests) is visible to other users of the platform. That is the core function of a dating app. Your government ID, verification photos, payment details, and email address are **never** shared with other users.
 
 ### 6.2 With Service Providers
+
 We use the following third-party services that process data on our behalf:
 
-| Service | Purpose | What They Receive |
-|---------|---------|-------------------|
-| **Square** | Payment processing | Name, email, payment method, billing address |
-| **Square** | Merchandise sales (separate store) | Name, email, shipping address, payment method |
-| **Google Gemini** | AI matchmaking and icebreakers | Anonymized profile preferences (no real names, no photos, no government IDs) |
-| **Cloudflare** | Security, DNS, CDN | IP address, request headers, traffic data |
-| **V8 Cloud Verification** | Identity verification | Government ID photo, selfie, device data |
-| **GitHub Pages / GCP Cloud Run** | Hosting | Server logs, IP addresses |
+| Service                          | Purpose                            | What They Receive                                                            |
+| -------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------- |
+| **Square**                       | Payment processing                 | Name, email, payment method, billing address                                 |
+| **Square**                       | Merchandise sales (separate store) | Name, email, shipping address, payment method                                |
+| **Google Gemini**                | AI matchmaking and icebreakers     | Anonymized profile preferences (no real names, no photos, no government IDs) |
+| **Cloudflare**                   | Security, DNS, CDN                 | IP address, request headers, traffic data                                    |
+| **V8 Cloud Verification**        | Identity verification              | Government ID photo, selfie, device data                                     |
+| **GitHub Pages / GCP Cloud Run** | Hosting                            | Server logs, IP addresses                                                    |
 
 ### 6.3 For Legal Reasons
+
 We may disclose information if required by law, subpoena, court order, or to protect the safety of our users or the public.
 
 ### 6.4 Business Transfers
+
 If Trash Or Treasure Online Recycler LLC is acquired, merged, or sells its assets, user data may be transferred as part of that transaction. We would notify you before your data becomes subject to a different privacy policy.
 
 ### 6.5 With Your Consent
+
 We may share information in other ways if you specifically consent to it.
 
 ## 7. AI Usage — Google Gemini
@@ -136,14 +141,15 @@ Payments are commercial transactions for product value delivered. We do not atta
 
 ### 9.1 What Cookies We Use
 
-| Cookie Type | Purpose | Required? |
-|-------------|---------|-----------|
-| **Essential / Session** | Keeping you logged in, security tokens, CSRF protection | Yes — the site cannot function without these |
-| **Analytics** | Understanding how users interact with the platform (page views, feature usage) | No — you can opt out |
-| **Cloudflare** | Security (bot detection, DDoS protection) | Yes — required for security |
-| **Square** | Payment processing (fraud detection) | Yes — required to process payments |
+| Cookie Type             | Purpose                                                                        | Required?                                    |
+| ----------------------- | ------------------------------------------------------------------------------ | -------------------------------------------- |
+| **Essential / Session** | Keeping you logged in, security tokens, CSRF protection                        | Yes — the site cannot function without these |
+| **Analytics**           | Understanding how users interact with the platform (page views, feature usage) | No — you can opt out                         |
+| **Cloudflare**          | Security (bot detection, DDoS protection)                                      | Yes — required for security                  |
+| **Square**              | Payment processing (fraud detection)                                           | Yes — required to process payments           |
 
 ### 9.2 How to Manage Cookies
+
 You can manage cookies through your browser settings. Blocking essential cookies will prevent you from using the platform. Most browsers allow you to:
 
 - See what cookies are set
@@ -152,6 +158,7 @@ You can manage cookies through your browser settings. Blocking essential cookies
 - Block all third-party cookies
 
 ### 9.3 Do Not Track
+
 Some browsers send a "Do Not Track" (DNT) signal. There is no industry standard for how to respond to DNT signals. We do not currently alter our data practices based on DNT signals, but we also do not engage in cross-site tracking of our users.
 
 ## 10. Data Security
@@ -209,14 +216,14 @@ We retain your data for as long as your account is active, plus a reasonable per
 
 Specific retention periods:
 
-| Data Type | Retention Period |
-|-----------|-----------------|
-| Account/profile data | Until you delete your account + 30 days |
-| Payment records | 7 years (tax/legal requirements) |
+| Data Type                      | Retention Period                                                                      |
+| ------------------------------ | ------------------------------------------------------------------------------------- |
+| Account/profile data           | Until you delete your account + 30 days                                               |
+| Payment records                | 7 years (tax/legal requirements)                                                      |
 | Verification data (ID, selfie) | 90 days after verification is complete, unless required longer for dispute resolution |
-| Server logs | 90 days |
-| Messages between users | Until either user deletes their account |
-| Support emails | 2 years after resolution |
+| Server logs                    | 90 days                                                                               |
+| Messages between users         | Until either user deletes their account                                               |
+| Support emails                 | 2 years after resolution                                                              |
 
 After these periods, data is permanently deleted or anonymized.
 
@@ -256,4 +263,4 @@ We aim to respond to all privacy inquiries within 30 days (45 days for formal CC
 
 ---
 
-*This privacy policy was drafted by the founder with AI assistance and has not yet been reviewed by a licensed attorney. Users are encouraged to read it carefully. The operator intends to obtain professional legal review.*
+_This privacy policy was drafted by the founder with AI assistance and has not yet been reviewed by a licensed attorney. Users are encouraged to read it carefully. The operator intends to obtain professional legal review._

@@ -1,4 +1,4 @@
-import { ulid as _ulid } from "ulid";
+import { ulid as _ulid } from 'ulid';
 
 /** Generate a new ULID string */
 export function ulid(): string {

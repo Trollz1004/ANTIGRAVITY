@@ -1,1 +1,716 @@
-{"nodes": [{"id": "app_backend_ledger_py", "label": "ledger.py", "file_type": "code", "source_file": "/app/backend/ledger.py", "source_location": "L1"}, {"id": "backend_ledger_maybe_broadcast", "label": "_maybe_broadcast()", "file_type": "code", "source_file": "/app/backend/ledger.py", "source_location": "L36"}, {"id": "backend_ledger_now", "label": "_now()", "file_type": "code", "source_file": "/app/backend/ledger.py", "source_location": "L72"}, {"id": "backend_ledger_new_id", "label": "_new_id()", "file_type": "code", "source_file": "/app/backend/ledger.py", "source_location": "L76"}, {"id": "backend_ledger_contributioncreate", "label": "ContributionCreate", "file_type": "code", "source_file": "/app/backend/ledger.py", "source_location": "L80"}, {"id": "basemodel", "label": "BaseModel", "file_type": "code", "source_file": "", "source_location": ""}, {"id": "backend_ledger_contribute", "label": "contribute()", "file_type": "code", "source_file": "/app/backend/ledger.py", "source_location": "L92"}, {"id": "backend_ledger_list_contributions", "label": "list_contributions()", "file_type": "code", "source_file": "/app/backend/ledger.py", "source_location": "L111"}, {"id": "backend_ledger_stats", "label": "stats()", "file_type": "code", "source_file": "/app/backend/ledger.py", "source_location": "L120"}, {"id": "backend_ledger_webhookpayload", "label": "WebhookPayload", "file_type": "code", "source_file": "/app/backend/ledger.py", "source_location": "L153"}, {"id": "backend_ledger_webhook", "label": "webhook()", "file_type": "code", "source_file": "/app/backend/ledger.py", "source_location": "L162"}, {"id": "backend_ledger_delete_entry", "label": "delete_entry()", "file_type": "code", "source_file": "/app/backend/ledger.py", "source_location": "L196"}, {"id": "backend_ledger_rationale_1", "label": "Mission Ledger \u2014 every dollar committed to the kids fund, tracked.  Replaces the", "file_type": "rationale", "source_file": "/app/backend/ledger.py", "source_location": "L1"}, {"id": "backend_ledger_rationale_37", "label": "Fire-and-forget Telegram notice when a contribution lands.      Free distributio", "file_type": "rationale", "source_file": "/app/backend/ledger.py", "source_location": "L37"}, {"id": "backend_ledger_rationale_121", "label": "Aggregate stats \u2014 drives the Mission ribbon.", "file_type": "rationale", "source_file": "/app/backend/ledger.py", "source_location": "L121"}, {"id": "backend_ledger_rationale_163", "label": "Permissive intake. Payment surface diversified per latest directive:     Square", "file_type": "rationale", "source_file": "/app/backend/ledger.py", "source_location": "L163"}], "edges": [{"source": "app_backend_ledger_py", "target": "os", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L17", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "uuid", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L18", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "datetime", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L19", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "pathlib", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L20", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "typing", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L21", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "dotenv", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L23", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "fastapi", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L24", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "motor_motor_asyncio", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L25", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "pydantic", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L26", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "backend_ledger_maybe_broadcast", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L36", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "backend_ledger_now", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L72", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "backend_ledger_new_id", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L76", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "backend_ledger_contributioncreate", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L80", "weight": 1.0}, {"source": "backend_ledger_contributioncreate", "target": "basemodel", "relation": "inherits", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L80", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "backend_ledger_contribute", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L92", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "backend_ledger_list_contributions", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L111", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "backend_ledger_stats", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L120", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "backend_ledger_webhookpayload", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L153", "weight": 1.0}, {"source": "backend_ledger_webhookpayload", "target": "basemodel", "relation": "inherits", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L153", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "backend_ledger_webhook", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L162", "weight": 1.0}, {"source": "app_backend_ledger_py", "target": "backend_ledger_delete_entry", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L196", "weight": 1.0}, {"source": "backend_ledger_contribute", "target": "backend_ledger_new_id", "relation": "calls", "context": "call", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L96", "weight": 1.0}, {"source": "backend_ledger_contribute", "target": "backend_ledger_now", "relation": "calls", "context": "call", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L103", "weight": 1.0}, {"source": "backend_ledger_contribute", "target": "backend_ledger_maybe_broadcast", "relation": "calls", "context": "call", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L106", "weight": 1.0}, {"source": "backend_ledger_webhook", "target": "backend_ledger_new_id", "relation": "calls", "context": "call", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L180", "weight": 1.0}, {"source": "backend_ledger_webhook", "target": "backend_ledger_now", "relation": "calls", "context": "call", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L188", "weight": 1.0}, {"source": "backend_ledger_webhook", "target": "backend_ledger_maybe_broadcast", "relation": "calls", "context": "call", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L191", "weight": 1.0}, {"source": "backend_ledger_rationale_1", "target": "app_backend_ledger_py", "relation": "rationale_for", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L1", "weight": 1.0}, {"source": "backend_ledger_rationale_37", "target": "backend_ledger_maybe_broadcast", "relation": "rationale_for", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L37", "weight": 1.0}, {"source": "backend_ledger_rationale_121", "target": "backend_ledger_stats", "relation": "rationale_for", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L121", "weight": 1.0}, {"source": "backend_ledger_rationale_163", "target": "backend_ledger_webhook", "relation": "rationale_for", "confidence": "EXTRACTED", "source_file": "/app/backend/ledger.py", "source_location": "L163", "weight": 1.0}], "raw_calls": [{"caller_nid": "backend_ledger_maybe_broadcast", "callee": "strip", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L43"}, {"caller_nid": "backend_ledger_maybe_broadcast", "callee": "get", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L43"}, {"caller_nid": "backend_ledger_maybe_broadcast", "callee": "strip", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L44"}, {"caller_nid": "backend_ledger_maybe_broadcast", "callee": "get", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L44"}, {"caller_nid": "backend_ledger_maybe_broadcast", "callee": "get", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L52"}, {"caller_nid": "backend_ledger_maybe_broadcast", "callee": "_telegram_send", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L55"}, {"caller_nid": "backend_ledger_now", "callee": "isoformat", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L73"}, {"caller_nid": "backend_ledger_now", "callee": "now", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L73"}, {"caller_nid": "backend_ledger_new_id", "callee": "uuid4", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L77"}, {"caller_nid": "backend_ledger_contribute", "callee": "HTTPException", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L94"}, {"caller_nid": "backend_ledger_contribute", "callee": "round", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L97"}, {"caller_nid": "backend_ledger_contribute", "callee": "insert_one", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L105"}, {"caller_nid": "backend_ledger_contribute", "callee": "copy", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L105"}, {"caller_nid": "backend_ledger_list_contributions", "callee": "to_list", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L115"}, {"caller_nid": "backend_ledger_list_contributions", "callee": "sort", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L115"}, {"caller_nid": "backend_ledger_list_contributions", "callee": "find", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L115"}, {"caller_nid": "backend_ledger_list_contributions", "callee": "len", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L116"}, {"caller_nid": "backend_ledger_stats", "callee": "to_list", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L126"}, {"caller_nid": "backend_ledger_stats", "callee": "aggregate", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L126"}, {"caller_nid": "backend_ledger_stats", "callee": "range", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L129"}, {"caller_nid": "backend_ledger_stats", "callee": "next", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L130"}, {"caller_nid": "backend_ledger_stats", "callee": "float", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L131"}, {"caller_nid": "backend_ledger_stats", "callee": "int", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L132"}, {"caller_nid": "backend_ledger_stats", "callee": "append", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L134"}, {"caller_nid": "backend_ledger_stats", "callee": "round", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L134"}, {"caller_nid": "backend_ledger_stats", "callee": "next", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L136"}, {"caller_nid": "backend_ledger_stats", "callee": "to_list", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L137"}, {"caller_nid": "backend_ledger_stats", "callee": "aggregate", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L137"}, {"caller_nid": "backend_ledger_stats", "callee": "round", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L142"}, {"caller_nid": "backend_ledger_stats", "callee": "round", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L143"}, {"caller_nid": "backend_ledger_stats", "callee": "int", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L145"}, {"caller_nid": "backend_ledger_stats", "callee": "round", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L147"}, {"caller_nid": "backend_ledger_stats", "callee": "float", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L147"}, {"caller_nid": "backend_ledger_stats", "callee": "int", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L147"}, {"caller_nid": "backend_ledger_webhook", "callee": "HTTPException", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L169"}, {"caller_nid": "backend_ledger_webhook", "callee": "join", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L169"}, {"caller_nid": "backend_ledger_webhook", "callee": "sorted", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L169"}, {"caller_nid": "backend_ledger_webhook", "callee": "HTTPException", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L174"}, {"caller_nid": "backend_ledger_webhook", "callee": "HTTPException", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L177"}, {"caller_nid": "backend_ledger_webhook", "callee": "round", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L181"}, {"caller_nid": "backend_ledger_webhook", "callee": "insert_one", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L190"}, {"caller_nid": "backend_ledger_webhook", "callee": "copy", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L190"}, {"caller_nid": "backend_ledger_delete_entry", "callee": "delete_one", "is_member_call": true, "source_file": "/app/backend/ledger.py", "source_location": "L197"}, {"caller_nid": "backend_ledger_delete_entry", "callee": "HTTPException", "is_member_call": false, "source_file": "/app/backend/ledger.py", "source_location": "L199"}]}
+{
+  "nodes": [
+    {
+      "id": "app_backend_ledger_py",
+      "label": "ledger.py",
+      "file_type": "code",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_ledger_maybe_broadcast",
+      "label": "_maybe_broadcast()",
+      "file_type": "code",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L36"
+    },
+    {
+      "id": "backend_ledger_now",
+      "label": "_now()",
+      "file_type": "code",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L72"
+    },
+    {
+      "id": "backend_ledger_new_id",
+      "label": "_new_id()",
+      "file_type": "code",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L76"
+    },
+    {
+      "id": "backend_ledger_contributioncreate",
+      "label": "ContributionCreate",
+      "file_type": "code",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L80"
+    },
+    { "id": "basemodel", "label": "BaseModel", "file_type": "code", "source_file": "", "source_location": "" },
+    {
+      "id": "backend_ledger_contribute",
+      "label": "contribute()",
+      "file_type": "code",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L92"
+    },
+    {
+      "id": "backend_ledger_list_contributions",
+      "label": "list_contributions()",
+      "file_type": "code",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L111"
+    },
+    {
+      "id": "backend_ledger_stats",
+      "label": "stats()",
+      "file_type": "code",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L120"
+    },
+    {
+      "id": "backend_ledger_webhookpayload",
+      "label": "WebhookPayload",
+      "file_type": "code",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L153"
+    },
+    {
+      "id": "backend_ledger_webhook",
+      "label": "webhook()",
+      "file_type": "code",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L162"
+    },
+    {
+      "id": "backend_ledger_delete_entry",
+      "label": "delete_entry()",
+      "file_type": "code",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L196"
+    },
+    {
+      "id": "backend_ledger_rationale_1",
+      "label": "Mission Ledger \u2014 every dollar committed to the kids fund, tracked.  Replaces the",
+      "file_type": "rationale",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_ledger_rationale_37",
+      "label": "Fire-and-forget Telegram notice when a contribution lands.      Free distributio",
+      "file_type": "rationale",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L37"
+    },
+    {
+      "id": "backend_ledger_rationale_121",
+      "label": "Aggregate stats \u2014 drives the Mission ribbon.",
+      "file_type": "rationale",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L121"
+    },
+    {
+      "id": "backend_ledger_rationale_163",
+      "label": "Permissive intake. Payment surface diversified per latest directive:     Square",
+      "file_type": "rationale",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L163"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_backend_ledger_py",
+      "target": "os",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "uuid",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "datetime",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "typing",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "dotenv",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "fastapi",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "motor_motor_asyncio",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "pydantic",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "backend_ledger_maybe_broadcast",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "backend_ledger_now",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "backend_ledger_new_id",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "backend_ledger_contributioncreate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_ledger_contributioncreate",
+      "target": "basemodel",
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "backend_ledger_contribute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L92",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "backend_ledger_list_contributions",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L111",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "backend_ledger_stats",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L120",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "backend_ledger_webhookpayload",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L153",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_ledger_webhookpayload",
+      "target": "basemodel",
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L153",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "backend_ledger_webhook",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L162",
+      "weight": 1.0
+    },
+    {
+      "source": "app_backend_ledger_py",
+      "target": "backend_ledger_delete_entry",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L196",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_ledger_contribute",
+      "target": "backend_ledger_new_id",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_ledger_contribute",
+      "target": "backend_ledger_now",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L103",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_ledger_contribute",
+      "target": "backend_ledger_maybe_broadcast",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L106",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_ledger_webhook",
+      "target": "backend_ledger_new_id",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L180",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_ledger_webhook",
+      "target": "backend_ledger_now",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L188",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_ledger_webhook",
+      "target": "backend_ledger_maybe_broadcast",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L191",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_ledger_rationale_1",
+      "target": "app_backend_ledger_py",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_ledger_rationale_37",
+      "target": "backend_ledger_maybe_broadcast",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_ledger_rationale_121",
+      "target": "backend_ledger_stats",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L121",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_ledger_rationale_163",
+      "target": "backend_ledger_webhook",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L163",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "backend_ledger_maybe_broadcast",
+      "callee": "strip",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "backend_ledger_maybe_broadcast",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "backend_ledger_maybe_broadcast",
+      "callee": "strip",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L44"
+    },
+    {
+      "caller_nid": "backend_ledger_maybe_broadcast",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L44"
+    },
+    {
+      "caller_nid": "backend_ledger_maybe_broadcast",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L52"
+    },
+    {
+      "caller_nid": "backend_ledger_maybe_broadcast",
+      "callee": "_telegram_send",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L55"
+    },
+    {
+      "caller_nid": "backend_ledger_now",
+      "callee": "isoformat",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L73"
+    },
+    {
+      "caller_nid": "backend_ledger_now",
+      "callee": "now",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L73"
+    },
+    {
+      "caller_nid": "backend_ledger_new_id",
+      "callee": "uuid4",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L77"
+    },
+    {
+      "caller_nid": "backend_ledger_contribute",
+      "callee": "HTTPException",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L94"
+    },
+    {
+      "caller_nid": "backend_ledger_contribute",
+      "callee": "round",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L97"
+    },
+    {
+      "caller_nid": "backend_ledger_contribute",
+      "callee": "insert_one",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L105"
+    },
+    {
+      "caller_nid": "backend_ledger_contribute",
+      "callee": "copy",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L105"
+    },
+    {
+      "caller_nid": "backend_ledger_list_contributions",
+      "callee": "to_list",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L115"
+    },
+    {
+      "caller_nid": "backend_ledger_list_contributions",
+      "callee": "sort",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L115"
+    },
+    {
+      "caller_nid": "backend_ledger_list_contributions",
+      "callee": "find",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L115"
+    },
+    {
+      "caller_nid": "backend_ledger_list_contributions",
+      "callee": "len",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "to_list",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L126"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "aggregate",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L126"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "range",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L129"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "next",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L130"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "float",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L131"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "int",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L132"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "append",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L134"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "round",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L134"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "next",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L136"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "to_list",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L137"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "aggregate",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L137"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "round",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L142"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "round",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L143"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "int",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L145"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "round",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L147"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "float",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L147"
+    },
+    {
+      "caller_nid": "backend_ledger_stats",
+      "callee": "int",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L147"
+    },
+    {
+      "caller_nid": "backend_ledger_webhook",
+      "callee": "HTTPException",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L169"
+    },
+    {
+      "caller_nid": "backend_ledger_webhook",
+      "callee": "join",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L169"
+    },
+    {
+      "caller_nid": "backend_ledger_webhook",
+      "callee": "sorted",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L169"
+    },
+    {
+      "caller_nid": "backend_ledger_webhook",
+      "callee": "HTTPException",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L174"
+    },
+    {
+      "caller_nid": "backend_ledger_webhook",
+      "callee": "HTTPException",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L177"
+    },
+    {
+      "caller_nid": "backend_ledger_webhook",
+      "callee": "round",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L181"
+    },
+    {
+      "caller_nid": "backend_ledger_webhook",
+      "callee": "insert_one",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L190"
+    },
+    {
+      "caller_nid": "backend_ledger_webhook",
+      "callee": "copy",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L190"
+    },
+    {
+      "caller_nid": "backend_ledger_delete_entry",
+      "callee": "delete_one",
+      "is_member_call": true,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L197"
+    },
+    {
+      "caller_nid": "backend_ledger_delete_entry",
+      "callee": "HTTPException",
+      "is_member_call": false,
+      "source_file": "/app/backend/ledger.py",
+      "source_location": "L199"
+    }
+  ]
+}

@@ -6,16 +6,16 @@ Create, read, update, and delete Microsoft Foundry **routines** with the Azure D
 
 ## Quick Reference
 
-| Property | Value |
-|----------|-------|
-| Primary CLI | `azd ai routine` (extension `azure.ai.routines`) |
-| Install extension | `azd extension install azure.ai.routines` |
-| CRUD verbs | `create`, `list`, `show`, `update`, `delete` |
-| Routine operations | `enable`, `disable`, `dispatch`, `run list` |
-| Declarative form | `azure.yaml` service with `host: azure.ai.routine`, upserted by `azd deploy` / `azd up` |
+| Property           | Value                                                                                                                                                                                                                         |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Primary CLI        | `azd ai routine` (extension `azure.ai.routines`)                                                                                                                                                                              |
+| Install extension  | `azd extension install azure.ai.routines`                                                                                                                                                                                     |
+| CRUD verbs         | `create`, `list`, `show`, `update`, `delete`                                                                                                                                                                                  |
+| Routine operations | `enable`, `disable`, `dispatch`, `run list`                                                                                                                                                                                   |
+| Declarative form   | `azure.yaml` service with `host: azure.ai.routine`, upserted by `azd deploy` / `azd up`                                                                                                                                       |
 | Agent prompt/input | Set `action.input` in a routine manifest or `azure.yaml`; use a string for the agent `responses` protocol and the target payload for the agent `invocations` protocol. `azd ai routine create` flags do not include `--input` |
-| Project endpoint | `--project-endpoint`, then `AZURE_AI_PROJECT_ENDPOINT`, global `azd ai project set`, then `FOUNDRY_PROJECT_ENDPOINT` |
-| Output format | `--output json` or `--output table` (default) |
+| Project endpoint   | `--project-endpoint`, then `AZURE_AI_PROJECT_ENDPOINT`, global `azd ai project set`, then `FOUNDRY_PROJECT_ENDPOINT`                                                                                                          |
+| Output format      | `--output json` or `--output table` (default)                                                                                                                                                                                 |
 
 ## When to Use This Skill
 
@@ -101,27 +101,27 @@ Declare the routine as a `host: azure.ai.routine` service in `azure.yaml`, then 
 
 ### Which path?
 
-| Situation | Path |
-|-----------|------|
-| One-off schedule, quick experiment, or no `azure.yaml` in play | Way 1 — imperative |
-| Routine versioned with the agent, reproduced per environment, GitOps / CI/CD | Way 2 — declarative |
-| Unsure and already in an azd project with the agent | Way 2 — declarative keeps the routine and agent in sync |
+| Situation                                                                    | Path                                                    |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------- |
+| One-off schedule, quick experiment, or no `azure.yaml` in play               | Way 1 — imperative                                      |
+| Routine versioned with the agent, reproduced per environment, GitOps / CI/CD | Way 2 — declarative                                     |
+| Unsure and already in an azd project with the agent                          | Way 2 — declarative keeps the routine and agent in sync |
 
 Read, update, enable/disable, manually dispatch, inspect past runs, and delete are imperative-only operations that work on a routine regardless of how it was created — see [CLI CRUD and Operations](references/cli-crud.md).
 
 ## Error Handling
 
-| Symptom | Cause | Resolution |
-|---------|-------|------------|
-| `unknown command "routine"` / `unknown command "ai"` | Extension not installed or azd too old | `azd extension install azure.ai.routines`; ensure `azd >= 1.27.0` |
-| Missing project endpoint error | No endpoint resolved | Set `AZURE_AI_PROJECT_ENDPOINT`, run `azd ai project set <url>`, or pass `-p <url>` |
-| `routine "<name>" already exists` on create | Name collision | Re-run with `--force` to upsert, or choose a different name |
-| `--trigger cannot be changed on an existing routine` (same for `--action`) | Trigger/action type is immutable | Delete then create with the new type |
-| `--force is required when --no-prompt is set` on delete | Non-interactive delete without confirmation | Add `--force` |
-| `routine "<name>" not found` | Wrong name or wrong project | Check the name and resolved endpoint with `show` / `list` |
-| `host "..." is not a recognized Foundry host` | Endpoint host invalid | Use `https://<account>.services.ai.azure.com/api/projects/<project>` (no port) |
+| Symptom                                                                                | Cause                                                                             | Resolution                                                                                                                                                           |
+| -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `unknown command "routine"` / `unknown command "ai"`                                   | Extension not installed or azd too old                                            | `azd extension install azure.ai.routines`; ensure `azd >= 1.27.0`                                                                                                    |
+| Missing project endpoint error                                                         | No endpoint resolved                                                              | Set `AZURE_AI_PROJECT_ENDPOINT`, run `azd ai project set <url>`, or pass `-p <url>`                                                                                  |
+| `routine "<name>" already exists` on create                                            | Name collision                                                                    | Re-run with `--force` to upsert, or choose a different name                                                                                                          |
+| `--trigger cannot be changed on an existing routine` (same for `--action`)             | Trigger/action type is immutable                                                  | Delete then create with the new type                                                                                                                                 |
+| `--force is required when --no-prompt is set` on delete                                | Non-interactive delete without confirmation                                       | Add `--force`                                                                                                                                                        |
+| `routine "<name>" not found`                                                           | Wrong name or wrong project                                                       | Check the name and resolved endpoint with `show` / `list`                                                                                                            |
+| `host "..." is not a recognized Foundry host`                                          | Endpoint host invalid                                                             | Use `https://<account>.services.ai.azure.com/api/projects/<project>` (no port)                                                                                       |
 | `json: cannot unmarshal number into Go struct field Routine.created_at of type string` | The routines extension could not decode a routine response after the service call | Do not assume the operation failed. Check with `show <name>` and `list`; if both decode badly, the routine may exist but cannot be decoded by the current extension. |
-| Network isolation / `PublicNetworkAccessDisabled` / `403` | Project has public access disabled | See [Network Isolation Errors](../../SKILL.md#network-isolation-errors) |
+| Network isolation / `PublicNetworkAccessDisabled` / `403`                              | Project has public access disabled                                                | See [Network Isolation Errors](../../SKILL.md#network-isolation-errors)                                                                                              |
 
 ## Additional Resources
 

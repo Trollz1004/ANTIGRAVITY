@@ -23,10 +23,7 @@
   ],
   "gmail": {
     "status": "signed_out",
-    "accounts_shown": [
-      "joshlcoleman@gmail.com",
-      "aicollab4kids@gmail.com"
-    ]
+    "accounts_shown": ["joshlcoleman@gmail.com", "aicollab4kids@gmail.com"]
   },
   "blocker": "Need live authenticated outbound (Gmail sign-in / Reddit session / 9020 X). Pay rails already live."
 }

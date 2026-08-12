@@ -13,6 +13,7 @@ mcp_azure_mcp_subscription_list
 ```
 
 **CLI fallback:**
+
 ```bash
 az account show --query "{name:name, id:id}" -o json
 ```
@@ -22,6 +23,7 @@ az account show --query "{name:name, id:id}" -o json
 **You MUST use `ask_user`** to confirm the subscription. Find the default subscription (marked `isDefault: true`) from Step 1 results and present it as the recommended choice.
 
 ✅ **Correct — show actual name and ID as a choice:**
+
 ```
 ask_user(
   question: "Which Azure subscription would you like to deploy to?",
@@ -33,6 +35,7 @@ ask_user(
 ```
 
 ❌ **Wrong — never use freeform input for subscription:**
+
 ```
 ask_user(
   question: "Which Azure subscription should I deploy to? I'll need the subscription name or ID."
@@ -46,16 +49,19 @@ ask_user(
 > ⛔ **DO NOT** manually create `.azure/` folder with `mkdir` or `New-Item`. Let `azd` create it.
 
 **For new projects (no azure.yaml):**
+
 ```bash
 azd init -e <environment-name>
 ```
 
 **For existing projects (azure.yaml exists):**
+
 ```bash
 azd env new <environment-name>
 ```
 
 Both commands create:
+
 - `.azure/<env-name>/` folder with config files
 - Set the environment as default
 
@@ -75,11 +81,13 @@ mcp_azure_mcp_group_list
 Then check if `rg-<environment-name>` exists in the results.
 
 **CLI fallback:**
+
 ```bash
 az group show --name rg-<environment-name> --query "{location:location}" -o json 2>&1
 ```
 
 **If RG exists:**
+
 - Use `ask_user` to offer choices:
   1. Use existing RG location (show the location)
   2. Choose a different environment name
@@ -113,6 +121,7 @@ See [Region Availability](region-availability.md) for service-specific limitatio
 Environment should already be configured during **azure-validate**. Run `azd env get-values` to confirm.
 
 Verify settings:
+
 ```bash
 azd env get-values
 ```
@@ -146,24 +155,26 @@ azd up --no-prompt
 
 ## Common Mistakes to Avoid
 
-| ❌ Wrong | ✅ Correct |
-|----------|-----------|
-| `azd up --location eastus2` | `azd env set AZURE_LOCATION eastus2` then `azd up` |
-| Running `azd up` without environment | `azd env new <name>` first |
-| Assuming location without checking RG | Check `az group show` before choosing |
-| Ignoring tag conflicts in target RG | Check `az resource list --resource-group rg-<env>` before deploy |
+| ❌ Wrong                              | ✅ Correct                                                       |
+| ------------------------------------- | ---------------------------------------------------------------- |
+| `azd up --location eastus2`           | `azd env set AZURE_LOCATION eastus2` then `azd up`               |
+| Running `azd up` without environment  | `azd env new <name>` first                                       |
+| Assuming location without checking RG | Check `az group show` before choosing                            |
+| Ignoring tag conflicts in target RG   | Check `az resource list --resource-group rg-<env>` before deploy |
 
 ---
 
 ## Non-AZD Deployments
 
 **For Azure CLI / Bicep:**
+
 ```bash
 az account set --subscription <subscription-id-or-name>
 # Pass location as parameter: --location <location>
 ```
 
 **For Terraform:**
+
 ```bash
 az account set --subscription <subscription-id-or-name>
 # Set in terraform.tfvars or -var="location=<location>"

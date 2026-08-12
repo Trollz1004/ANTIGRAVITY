@@ -26,19 +26,19 @@ Use for: Event broadcasting, multiple consumers
 > **Auth:** `DefaultAzureCredential` is for local development. See [auth-best-practices.md](../../auth-best-practices.md) for production patterns.
 
 ```javascript
-const { ServiceBusClient } = require("@azure/service-bus");
-const { DefaultAzureCredential } = require("@azure/identity");
+const { ServiceBusClient } = require('@azure/service-bus');
+const { DefaultAzureCredential } = require('@azure/identity');
 
 const credential = new DefaultAzureCredential();
-const fullyQualifiedNamespace = process.env.SERVICEBUS_NAMESPACE + ".servicebus.windows.net";
+const fullyQualifiedNamespace = process.env.SERVICEBUS_NAMESPACE + '.servicebus.windows.net';
 const client = new ServiceBusClient(fullyQualifiedNamespace, credential);
 
 // Send
-const sender = client.createSender("orders");
-await sender.sendMessages({ body: { orderId: "123" } });
+const sender = client.createSender('orders');
+await sender.sendMessages({ body: { orderId: '123' } });
 
 // Receive
-const receiver = client.createReceiver("orders");
+const receiver = client.createReceiver('orders');
 const messages = await receiver.receiveMessages(10);
 for (const message of messages) {
   await receiver.completeMessage(message);
@@ -97,6 +97,7 @@ foreach (var message in messages)
 ```
 
 > 💡 **Required Permissions:**
+>
 > - `Azure Service Bus Data Sender` (69a216fc-b8fb-44d8-bc22-1f3c2cd27a39) - for sending
 > - `Azure Service Bus Data Receiver` (4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0) - for receiving
 
@@ -105,16 +106,16 @@ foreach (var message in messages)
 #### Node.js
 
 ```javascript
-const { ServiceBusClient } = require("@azure/service-bus");
+const { ServiceBusClient } = require('@azure/service-bus');
 
 const client = new ServiceBusClient(process.env.SERVICEBUS_CONNECTION_STRING);
 
 // Send
-const sender = client.createSender("orders");
-await sender.sendMessages({ body: { orderId: "123" } });
+const sender = client.createSender('orders');
+await sender.sendMessages({ body: { orderId: '123' } });
 
 // Receive
-const receiver = client.createReceiver("orders");
+const receiver = client.createReceiver('orders');
 const messages = await receiver.receiveMessages(10);
 for (const message of messages) {
   await receiver.completeMessage(message);
@@ -149,7 +150,7 @@ await sender.SendMessageAsync(new ServiceBusMessage("{\"orderId\": \"123\"}"));
 ## Dead Letter Handling
 
 ```javascript
-const dlqReceiver = client.createReceiver("orders", {
-    subQueueType: "deadLetter"
+const dlqReceiver = client.createReceiver('orders', {
+  subQueueType: 'deadLetter',
 });
 ```

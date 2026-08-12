@@ -12,7 +12,7 @@ Azure load balancers and reverse proxies sit in front of your app. Without trust
 const app = express();
 
 // REQUIRED for Azure - trust the Azure load balancer
-app.set('trust proxy', 1);  // Trust first proxy
+app.set('trust proxy', 1); // Trust first proxy
 
 // Or trust all proxies (less secure but simpler)
 app.set('trust proxy', true);
@@ -23,20 +23,23 @@ app.set('trust proxy', true);
 Azure's infrastructure requires specific cookie settings:
 
 ```javascript
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',  // HTTPS only in prod
-    sameSite: 'lax',  // Required for Azure
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000  // 24 hours
-  }
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production', // HTTPS only in prod
+      sameSite: 'lax', // Required for Azure
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  }),
+);
 ```
 
 **Key settings:**
+
 - `sameSite: 'lax'` — Required for cookies through Azure's proxy
 - `secure: true` — Only in production (HTTPS)
 - `httpOnly: true` — Prevent XSS attacks
@@ -52,6 +55,7 @@ app.get('/health', (req, res) => {
 ```
 
 **Configure in Container Apps:**
+
 ```bash
 az containerapp update \
   --name APP \
@@ -113,17 +117,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Session (if using)
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'dev-secret-change-in-prod',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: isProduction,
-    sameSite: 'lax',
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000
-  }
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'dev-secret-change-in-prod',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: isProduction,
+      sameSite: 'lax',
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  }),
+);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -187,6 +193,7 @@ CMD ["node", "app.js"]
 **Symptom:** Session lost between requests
 
 **Fix:**
+
 1. Add `app.set('trust proxy', 1)`
 2. Set `sameSite: 'lax'` in cookie config
 3. Set `secure: true` only if using HTTPS
@@ -202,6 +209,7 @@ CMD ["node", "app.js"]
 **Symptom:** Infinite redirects when forcing HTTPS
 
 **Fix:**
+
 ```javascript
 const TRUSTED_HOST = process.env.APP_PUBLIC_HOSTNAME;
 
@@ -219,6 +227,7 @@ app.use((req, res, next) => {
 **Symptom:** Container restarts repeatedly
 
 **Fix:**
+
 1. Ensure `/health` endpoint returns 200
 2. Check app starts within startup probe timeout
 3. Verify port matches container configuration
@@ -232,11 +241,13 @@ app.use((req, res, next) => {
 > **`azd env set`** sets variables for the **azd provisioning process**, NOT application runtime. These are used by azd and Bicep during deployment.
 >
 > **Application environment variables** must be configured via:
+>
 > 1. **Bicep templates** — Define in the resource's `env` property
 > 2. **Azure CLI** — Use `az containerapp update --set-env-vars`
 > 3. **azure.yaml** — Use the `env` section in service configuration
 
 **Azure CLI:**
+
 ```bash
 az containerapp update \
   --name APP \
@@ -248,16 +259,18 @@ az containerapp update \
 ```
 
 **azure.yaml:**
+
 ```yaml
 services:
   api:
     host: containerapp
     env:
       NODE_ENV: production
-      PORT: "3000"
+      PORT: '3000'
 ```
 
 **Bicep:**
+
 ```bicep
 env: [
   { name: 'NODE_ENV', value: 'production' }

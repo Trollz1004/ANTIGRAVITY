@@ -1,10 +1,10 @@
 ---
 name: microsoft-foundry
-description: "Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, optimize prompt, improve prompt, optimize agent instructions, agent optimizer, deploy model, Foundry project, RBAC, role assignment, permissions, quota, capacity, region, troubleshoot agent, deployment failure, AI Services, create Foundry resource, provision, knowledge index, customize deployment, onboard, availability, fine-tune, SFT, DPO, RFT, training-data, grader, distillation, fine-tuned model, large file upload. DO NOT USE FOR: Azure Functions, App Service, general Azure deploy (use azure-deploy), general Azure prep (use azure-prepare)."
+description: 'Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, optimize prompt, improve prompt, optimize agent instructions, agent optimizer, deploy model, Foundry project, RBAC, role assignment, permissions, quota, capacity, region, troubleshoot agent, deployment failure, AI Services, create Foundry resource, provision, knowledge index, customize deployment, onboard, availability, fine-tune, SFT, DPO, RFT, training-data, grader, distillation, fine-tuned model, large file upload. DO NOT USE FOR: Azure Functions, App Service, general Azure deploy (use azure-deploy), general Azure prep (use azure-prepare).'
 license: MIT
 metadata:
   author: Microsoft
-  version: "1.1.36"
+  version: '1.1.36'
 ---
 
 # Microsoft Foundry Skill
@@ -21,26 +21,26 @@ Before using Foundry MCP operations, call the Azure MCP `foundry` tool and inspe
 
 This skill includes specialized sub-skills for specific workflows. **Use these instead of the main skill when they match your task:**
 
-| Sub-Skill | When to Use | Reference |
-|-----------|-------------|-----------|
-| **deploy** | Deploy hosted agents to Foundry, smoke-test a deployment, create or update prompt agents, and manage agent versions and multi-environment deploys. | [deploy](foundry-agent/deploy/deploy.md) |
-| **invoke** | Send messages to an agent, single or multi-turn conversations | [invoke](foundry-agent/invoke/invoke.md) |
-| **routine** | Schedule or event-trigger Foundry agents with routines; use `azd` for CRUD, enable/disable, manual dispatch, and viewing past runs, or define routines in `azure.yaml`. | [routine](foundry-agent/routine/routine.md) |
-| **invocations-ws** | Build, deploy, and connect to hosted agents that speak the `invocations_ws` duplex WebSocket protocol — voice agents, real-time streams, and signaling for out-of-band media transports. | [invocations-ws](foundry-agent/invocations-ws/invocations-ws.md) |
-| **observe** | Evaluate agent quality, run batch evals, analyze failures, optimize prompts, improve agent instructions, compare versions, set up CI/CD monitoring, and enable continuous production evaluation | [observe](foundry-agent/observe/observe.md) |
-| **trace** | Query traces, analyze latency/failures, correlate eval results to specific responses via App Insights `customEvents` | [trace](foundry-agent/trace/trace.md) |
-| **troubleshoot** | View hosted agent logs, query telemetry, diagnose failures | [troubleshoot](foundry-agent/troubleshoot/troubleshoot.md) |
-| **create (quick start)** | Create a new hosted Foundry agent from scratch end-to-end — scaffold, provision or use an existing Foundry project, deploy, and smoke-test. Opinionated happy-path that accepts common overrides (language, region, sample, topic, existing project, existing model). For anything not covered by the quickstart, use **create**. | [create/quick-start-hosted.md](foundry-agent/create/quick-start-hosted.md) |
-| **create** | Use when the standard end-to-end happy path doesn't fit — lifting existing agent code into the project, deploying outside the default code path, wiring connections at scaffold time, advanced setup, or recovering from a failed quickstart run. | [create](foundry-agent/create/create-hosted.md) |
-| **agent-optimizer** | Make existing Python hosted-agent code optimization-ready, configure eval.yaml, run Agent Optimizer jobs, apply candidates locally, and deploy through azd after review. | [agent-optimizer](foundry-agent/agent-optimizer/agent-optimizer.md) |
-| **eval-datasets** | Harvest production traces into evaluation datasets, manage dataset versions and splits, track evaluation metrics over time, detect regressions, and maintain full lineage from trace to deployment. Use for: create dataset from traces, dataset versioning, evaluation trending, regression detection, dataset comparison, eval lineage. | [eval-datasets](foundry-agent/eval-datasets/eval-datasets.md) |
-| **project/create** | Creating a new Azure AI Foundry project for hosting agents and models. Use when onboarding to Foundry or setting up new infrastructure. | [project/create/create-foundry-project.md](project/create/create-foundry-project.md) |
-| **resource/create** | Creating Azure AI Services multi-service resource (Foundry resource) using Azure CLI. Use when manually provisioning AI Services resources with granular control. | [resource/create/create-foundry-resource.md](resource/create/create-foundry-resource.md) |
-| **private-network** | Answer questions about Foundry network isolation **and** deploy Foundry with VNet isolation (BYO VNet, Managed VNet, hybrid). Covers architecture concepts, template selection, deployment, and post-deployment validation. | [resource/private-network/private-network.md](resource/private-network/private-network.md) |
-| **models/deploy-model** | Unified model deployment with intelligent routing. Handles quick preset deployments, fully customized deployments (version/SKU/capacity/RAI), and capacity discovery across regions. Routes to sub-skills: `preset` (quick deploy), `customize` (full control), `capacity` (find availability). | [models/deploy-model/SKILL.md](models/deploy-model/SKILL.md) |
-| **quota** | Managing quotas and capacity for Microsoft Foundry resources. Use when checking quota usage, troubleshooting deployment failures due to insufficient quota, requesting quota increases, or planning capacity. | [quota/quota.md](quota/quota.md) |
-| **rbac** | Managing RBAC permissions, role assignments, managed identities, and service principals for Microsoft Foundry resources. Use for access control, auditing permissions, and CI/CD setup. | [rbac/rbac.md](rbac/rbac.md) |
-| **finetuning** | Fine-tune models on Azure AI Foundry — SFT distillation, DPO preference optimization, RFT with graders and tool calling. Dataset preparation, grader calibration, training, checkpoint selection, deployment, evaluation. Use for: fine-tune, SFT, DPO, RFT, training data, grader, distillation, fine-tuned model, large file upload. | [finetuning/SKILL.md](finetuning/SKILL.md) |
+| Sub-Skill                | When to Use                                                                                                                                                                                                                                                                                                                               | Reference                                                                                  |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **deploy**               | Deploy hosted agents to Foundry, smoke-test a deployment, create or update prompt agents, and manage agent versions and multi-environment deploys.                                                                                                                                                                                        | [deploy](foundry-agent/deploy/deploy.md)                                                   |
+| **invoke**               | Send messages to an agent, single or multi-turn conversations                                                                                                                                                                                                                                                                             | [invoke](foundry-agent/invoke/invoke.md)                                                   |
+| **routine**              | Schedule or event-trigger Foundry agents with routines; use `azd` for CRUD, enable/disable, manual dispatch, and viewing past runs, or define routines in `azure.yaml`.                                                                                                                                                                   | [routine](foundry-agent/routine/routine.md)                                                |
+| **invocations-ws**       | Build, deploy, and connect to hosted agents that speak the `invocations_ws` duplex WebSocket protocol — voice agents, real-time streams, and signaling for out-of-band media transports.                                                                                                                                                  | [invocations-ws](foundry-agent/invocations-ws/invocations-ws.md)                           |
+| **observe**              | Evaluate agent quality, run batch evals, analyze failures, optimize prompts, improve agent instructions, compare versions, set up CI/CD monitoring, and enable continuous production evaluation                                                                                                                                           | [observe](foundry-agent/observe/observe.md)                                                |
+| **trace**                | Query traces, analyze latency/failures, correlate eval results to specific responses via App Insights `customEvents`                                                                                                                                                                                                                      | [trace](foundry-agent/trace/trace.md)                                                      |
+| **troubleshoot**         | View hosted agent logs, query telemetry, diagnose failures                                                                                                                                                                                                                                                                                | [troubleshoot](foundry-agent/troubleshoot/troubleshoot.md)                                 |
+| **create (quick start)** | Create a new hosted Foundry agent from scratch end-to-end — scaffold, provision or use an existing Foundry project, deploy, and smoke-test. Opinionated happy-path that accepts common overrides (language, region, sample, topic, existing project, existing model). For anything not covered by the quickstart, use **create**.         | [create/quick-start-hosted.md](foundry-agent/create/quick-start-hosted.md)                 |
+| **create**               | Use when the standard end-to-end happy path doesn't fit — lifting existing agent code into the project, deploying outside the default code path, wiring connections at scaffold time, advanced setup, or recovering from a failed quickstart run.                                                                                         | [create](foundry-agent/create/create-hosted.md)                                            |
+| **agent-optimizer**      | Make existing Python hosted-agent code optimization-ready, configure eval.yaml, run Agent Optimizer jobs, apply candidates locally, and deploy through azd after review.                                                                                                                                                                  | [agent-optimizer](foundry-agent/agent-optimizer/agent-optimizer.md)                        |
+| **eval-datasets**        | Harvest production traces into evaluation datasets, manage dataset versions and splits, track evaluation metrics over time, detect regressions, and maintain full lineage from trace to deployment. Use for: create dataset from traces, dataset versioning, evaluation trending, regression detection, dataset comparison, eval lineage. | [eval-datasets](foundry-agent/eval-datasets/eval-datasets.md)                              |
+| **project/create**       | Creating a new Azure AI Foundry project for hosting agents and models. Use when onboarding to Foundry or setting up new infrastructure.                                                                                                                                                                                                   | [project/create/create-foundry-project.md](project/create/create-foundry-project.md)       |
+| **resource/create**      | Creating Azure AI Services multi-service resource (Foundry resource) using Azure CLI. Use when manually provisioning AI Services resources with granular control.                                                                                                                                                                         | [resource/create/create-foundry-resource.md](resource/create/create-foundry-resource.md)   |
+| **private-network**      | Answer questions about Foundry network isolation **and** deploy Foundry with VNet isolation (BYO VNet, Managed VNet, hybrid). Covers architecture concepts, template selection, deployment, and post-deployment validation.                                                                                                               | [resource/private-network/private-network.md](resource/private-network/private-network.md) |
+| **models/deploy-model**  | Unified model deployment with intelligent routing. Handles quick preset deployments, fully customized deployments (version/SKU/capacity/RAI), and capacity discovery across regions. Routes to sub-skills: `preset` (quick deploy), `customize` (full control), `capacity` (find availability).                                           | [models/deploy-model/SKILL.md](models/deploy-model/SKILL.md)                               |
+| **quota**                | Managing quotas and capacity for Microsoft Foundry resources. Use when checking quota usage, troubleshooting deployment failures due to insufficient quota, requesting quota increases, or planning capacity.                                                                                                                             | [quota/quota.md](quota/quota.md)                                                           |
+| **rbac**                 | Managing RBAC permissions, role assignments, managed identities, and service principals for Microsoft Foundry resources. Use for access control, auditing permissions, and CI/CD setup.                                                                                                                                                   | [rbac/rbac.md](rbac/rbac.md)                                                               |
+| **finetuning**           | Fine-tune models on Azure AI Foundry — SFT distillation, DPO preference optimization, RFT with graders and tool calling. Dataset preparation, grader calibration, training, checkpoint selection, deployment, evaluation. Use for: fine-tune, SFT, DPO, RFT, training data, grader, distillation, fine-tuned model, large file upload.    | [finetuning/SKILL.md](finetuning/SKILL.md)                                                 |
 
 > 💡 **Tip:** For a complete onboarding flow: `project/create` (public) or `private-network` (VNet isolation) → `models/deploy-model` → agent workflows (`create` → `deploy` → `invoke`).
 
@@ -54,31 +54,31 @@ This skill includes specialized sub-skills for specific workflows. **Use these i
 
 Match user intent to the correct infrastructure workflow.
 
-| User Intent | Workflow |
-|-------------|---------|
+| User Intent                                     | Workflow                                                                                                                                                                                                                                                                                                                                               |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | "Create Foundry" / "Set up Foundry" (ambiguous) | Use `AskUserQuestion`: (a) just an AI Services resource, (b) a project with public access, or (c) a project with network isolation? Route: (a) → [resource/create](resource/create/create-foundry-resource.md), (b) → [project/create](project/create/create-foundry-project.md), (c) → [private-network](resource/private-network/private-network.md) |
-| Set up Foundry with VNet isolation | [private-network](resource/private-network/private-network.md) |
-| Create a Foundry project (public) | [project/create](project/create/create-foundry-project.md) |
-| Create a bare Foundry resource | [resource/create](resource/create/create-foundry-resource.md) |
+| Set up Foundry with VNet isolation              | [private-network](resource/private-network/private-network.md)                                                                                                                                                                                                                                                                                         |
+| Create a Foundry project (public)               | [project/create](project/create/create-foundry-project.md)                                                                                                                                                                                                                                                                                             |
+| Create a bare Foundry resource                  | [resource/create](resource/create/create-foundry-resource.md)                                                                                                                                                                                                                                                                                          |
 
 ## Agent Development Lifecycle
 
 Match user intent to the correct agent workflow. Read each sub-skill in order before executing.
 
-| User Intent | Workflow (read in order) |
-|-------------|------------------------|
-| Create a new hosted agent end-to-end (scaffold + deploy + test) | [quick-start-hosted](foundry-agent/create/quick-start-hosted.md) (self-contained end-to-end) |
-| Anything beyond the standard quickstart (existing code, deployment customization, scaffold-time connections, recovery) | [create](foundry-agent/create/create-hosted.md) → [deploy](foundry-agent/deploy/deploy.md) → [invoke](foundry-agent/invoke/invoke.md) |
-| Optimize existing Python hosted agent | [agent-optimizer](foundry-agent/agent-optimizer/agent-optimizer.md) → scaffold/review → eval.yaml → optimize → apply candidate → deploy → invoke |
-| Deploy an agent (code already exists) | deploy (includes eval-suite setup) → invoke → observe (evaluate/optimize) |
-| Update/redeploy an agent after code changes | deploy (includes eval-suite setup) → invoke → observe (evaluate/optimize) |
-| Invoke/test/chat with an agent | invoke |
-| Schedule/event-trigger an agent, or CRUD/enable/disable/dispatch a routine | routine |
-| Optimize / improve agent prompt or instructions | observe (Step 4: Optimize) |
-| Evaluate and optimize agent (full loop) | observe |
-| Enable continuous evaluation monitoring | observe (Step 6: CI/CD & Monitoring) |
-| Troubleshoot an agent issue | invoke → troubleshoot |
-| Fix a broken agent (troubleshoot + redeploy) | invoke → troubleshoot → apply fixes → deploy → invoke |
+| User Intent                                                                                                            | Workflow (read in order)                                                                                                                         |
+| ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Create a new hosted agent end-to-end (scaffold + deploy + test)                                                        | [quick-start-hosted](foundry-agent/create/quick-start-hosted.md) (self-contained end-to-end)                                                     |
+| Anything beyond the standard quickstart (existing code, deployment customization, scaffold-time connections, recovery) | [create](foundry-agent/create/create-hosted.md) → [deploy](foundry-agent/deploy/deploy.md) → [invoke](foundry-agent/invoke/invoke.md)            |
+| Optimize existing Python hosted agent                                                                                  | [agent-optimizer](foundry-agent/agent-optimizer/agent-optimizer.md) → scaffold/review → eval.yaml → optimize → apply candidate → deploy → invoke |
+| Deploy an agent (code already exists)                                                                                  | deploy (includes eval-suite setup) → invoke → observe (evaluate/optimize)                                                                        |
+| Update/redeploy an agent after code changes                                                                            | deploy (includes eval-suite setup) → invoke → observe (evaluate/optimize)                                                                        |
+| Invoke/test/chat with an agent                                                                                         | invoke                                                                                                                                           |
+| Schedule/event-trigger an agent, or CRUD/enable/disable/dispatch a routine                                             | routine                                                                                                                                          |
+| Optimize / improve agent prompt or instructions                                                                        | observe (Step 4: Optimize)                                                                                                                       |
+| Evaluate and optimize agent (full loop)                                                                                | observe                                                                                                                                          |
+| Enable continuous evaluation monitoring                                                                                | observe (Step 6: CI/CD & Monitoring)                                                                                                             |
+| Troubleshoot an agent issue                                                                                            | invoke → troubleshoot                                                                                                                            |
+| Fix a broken agent (troubleshoot + redeploy)                                                                           | invoke → troubleshoot → apply fixes → deploy → invoke                                                                                            |
 
 ## Agent: .foundry Workspace Standard
 
@@ -132,26 +132,28 @@ If `azure.yaml` is present, resolve the azd environment first:
 
 Run `azd env get-values` for the selected environment when project/deployment values are not already known. Prefer azd values for deployment context:
 
-| azd Variable | Resolves To |
-|-------------|-------------|
-| `AZURE_AI_PROJECT_ENDPOINT` or `AZURE_AIPROJECT_ENDPOINT` | Project endpoint |
-| `AGENT_<SERVICE>_NAME` | Agent name for the selected azd service |
-| `AGENT_<SERVICE>_VERSION` | Agent version for the selected azd service |
-| `AZURE_CONTAINER_REGISTRY_NAME` or `AZURE_CONTAINER_REGISTRY_ENDPOINT` | ACR registry name / image URL prefix |
-| `APPLICATIONINSIGHTS_CONNECTION_STRING` | App Insights connection string for trace workflows |
-| `AZURE_SUBSCRIPTION_ID`, `AZURE_RESOURCE_GROUP`, `AZURE_AI_ACCOUNT_NAME`, `AZURE_AI_PROJECT_NAME` | Azure resource lookup and Playground links |
+| azd Variable                                                                                      | Resolves To                                        |
+| ------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `AZURE_AI_PROJECT_ENDPOINT` or `AZURE_AIPROJECT_ENDPOINT`                                         | Project endpoint                                   |
+| `AGENT_<SERVICE>_NAME`                                                                            | Agent name for the selected azd service            |
+| `AGENT_<SERVICE>_VERSION`                                                                         | Agent version for the selected azd service         |
+| `AZURE_CONTAINER_REGISTRY_NAME` or `AZURE_CONTAINER_REGISTRY_ENDPOINT`                            | ACR registry name / image URL prefix               |
+| `APPLICATIONINSIGHTS_CONNECTION_STRING`                                                           | App Insights connection string for trace workflows |
+| `AZURE_SUBSCRIPTION_ID`, `AZURE_RESOURCE_GROUP`, `AZURE_AI_ACCOUNT_NAME`, `AZURE_AI_PROJECT_NAME` | Azure resource lookup and Playground links         |
 
 When azd supplies these values, use them as the source of truth and do not copy them into `.foundry/agent-metadata*.yaml` on metadata writes.
 
 ### Step 3: Select Metadata Overlay and Resolve Environment
 
 Inside the selected agent root, choose the metadata file in this order:
+
 1. Metadata filename or path explicitly provided by the user or workflow
 2. If an explicit environment is already known and `.foundry/agent-metadata.<env>.yaml` exists, use that file
 3. `.foundry/agent-metadata.yaml`
 4. If multiple metadata files remain and no rule above selects one, prompt the user to choose
 
 Read the selected metadata file and resolve any remaining environment choice in this order:
+
 1. Environment explicitly named by the user
 2. If the selected metadata file defines exactly one environment, use it
 3. Environment already selected earlier in the session
@@ -187,13 +189,13 @@ Layer sources in this order:
 
 If azd and metadata both provide the same value and they differ, stop and ask which source is authoritative. If they match, use the azd value and avoid rewriting the duplicate on future metadata writes.
 
-| Effective Value | Preferred Source | Used By |
-|-----------------|------------------|---------|
-| Project endpoint | azd env | deploy, invoke, observe, trace, troubleshoot |
-| Agent name/version | azd agent variables, then `azure.yaml` | invoke, observe, trace, troubleshoot |
-| ACR | azd env | deploy |
-| Evaluation suites and cache paths | `.foundry/agent-metadata*.yaml` | observe, eval-datasets |
-| Local seed dataset/evaluator intent | `eval.yaml` | observe, eval-datasets |
+| Effective Value                     | Preferred Source                       | Used By                                      |
+| ----------------------------------- | -------------------------------------- | -------------------------------------------- |
+| Project endpoint                    | azd env                                | deploy, invoke, observe, trace, troubleshoot |
+| Agent name/version                  | azd agent variables, then `azure.yaml` | invoke, observe, trace, troubleshoot         |
+| ACR                                 | azd env                                | deploy                                       |
+| Evaluation suites and cache paths   | `.foundry/agent-metadata*.yaml`        | observe, eval-datasets                       |
+| Local seed dataset/evaluator intent | `eval.yaml`                            | observe, eval-datasets                       |
 
 ### Step 6: Write Metadata Overlay (Create/Deploy/Observe Only)
 
@@ -208,6 +210,7 @@ Do not copy azd-owned deployment values into metadata when azd already provides 
 ### Step 7: Collect Missing Values
 
 Use the `ask_user` or `askQuestions` tool **only for values not resolved** from the user's message, session context, metadata, or azd bootstrap. Common values skills may need:
+
 - **Agent root** — Target azd service project folder or folder containing `.foundry/agent-metadata*.yaml`
 - **Metadata file** — `agent-metadata.yaml` for local/dev, or an explicit sidecar such as `agent-metadata.prod.yaml`
 - **Environment** — azd environment, `dev`, `prod`, or another environment key from metadata
@@ -220,10 +223,10 @@ Use the `ask_user` or `askQuestions` tool **only for values not resolved** from 
 
 All agent skills support two agent types:
 
-| Type | Kind | Description |
-|------|------|-------------|
+| Type       | Kind       | Description                                   |
+| ---------- | ---------- | --------------------------------------------- |
 | **Prompt** | `"prompt"` | LLM-based agents backed by a model deployment |
-| **Hosted** | `"hosted"` | Container-based agents running custom code |
+| **Hosted** | `"hosted"` | Container-based agents running custom code    |
 
 Use `agent_get` MCP tool to determine an agent's type when needed.
 
