@@ -1,12 +1,9 @@
-import type Database from "better-sqlite3";
-import { logEvent } from "./events.js";
-import { ulid } from "./ulid.js";
-import {
-  generateTaskBatch,
-  type TaskFactoryTemplate,
-} from "./tools/task-factory.js";
+import type Database from 'better-sqlite3';
+import { logEvent } from './events.js';
+import { ulid } from './ulid.js';
+import { generateTaskBatch, type TaskFactoryTemplate } from './tools/task-factory.js';
 
-export type TaskPoolStatus = "pending" | "active" | "done";
+export type TaskPoolStatus = 'pending' | 'active' | 'done';
 
 export interface InsertBatchTaskInput {
   id?: string;
@@ -49,8 +46,8 @@ export interface TaskPoolRefillLog {
 
 export interface TaskPoolAlertLog {
   timestamp: string;
-  severity: "critical";
-  reason: "pool_refill_failed" | "pool_below_threshold_too_long";
+  severity: 'critical';
+  reason: 'pool_refill_failed' | 'pool_below_threshold_too_long';
   previous_count: number;
   new_count: number;
   threshold: number;
@@ -74,18 +71,13 @@ const DEFAULT_REFILL_TARGET = 100;
 const DEFAULT_MAX_BELOW_MS = 5 * 60 * 1000;
 
 export function get_active_count(db: Database.Database): number {
-  const row = db
-    .prepare(
-      "SELECT COUNT(*) AS count FROM tasks WHERE status IN ('pending', 'active')"
-    )
-    .get() as { count: number };
+  const row = db.prepare("SELECT COUNT(*) AS count FROM tasks WHERE status IN ('pending', 'active')").get() as {
+    count: number;
+  };
   return row.count;
 }
 
-export function insert_batch(
-  db: Database.Database,
-  tasks: InsertBatchTaskInput[]
-): TaskPoolRow[] {
+export function insert_batch(db: Database.Database, tasks: InsertBatchTaskInput[]): TaskPoolRow[] {
   if (tasks.length === 0) return [];
 
   const batchId = tasks[0]?.batch_id ?? ulid();
@@ -107,30 +99,28 @@ export function insert_batch(
       updated_at,
       completed_at,
       batch_id
-    ) VALUES (?, ?, ?, ?, ?, 3, NULL, ?, ?, NULL, ?, ?, ?, ?)`
+    ) VALUES (?, ?, ?, ?, ?, 3, NULL, ?, ?, NULL, ?, ?, ?, ?)`,
   );
 
-  const select = db.prepare(
-    "SELECT id, title, body, status, assignee, created_at, batch_id FROM tasks WHERE id = ?"
-  );
+  const select = db.prepare('SELECT id, title, body, status, assignee, created_at, batch_id FROM tasks WHERE id = ?');
 
   const run = db.transaction((items: InsertBatchTaskInput[]) => {
     const rows: TaskPoolRow[] = [];
 
     for (const item of items) {
       if (item.title.trim().length === 0) {
-        throw new Error("task title must not be empty");
+        throw new Error('task title must not be empty');
       }
       if (item.body.trim().length === 0) {
-        throw new Error("task body must not be empty");
+        throw new Error('task body must not be empty');
       }
 
       const id = item.id ?? ulid();
       const createdAt = item.created_at ?? now;
-      const status = item.status ?? "pending";
+      const status = item.status ?? 'pending';
       const itemBatchId = item.batch_id ?? batchId;
       const assignee = item.assignee ?? null;
-      const completedAt = status === "done" ? createdAt : null;
+      const completedAt = status === 'done' ? createdAt : null;
 
       insert.run(
         id,
@@ -143,7 +133,7 @@ export function insert_batch(
         createdAt,
         createdAt,
         completedAt,
-        itemBatchId
+        itemBatchId,
       );
 
       rows.push(select.get(id) as TaskPoolRow);
@@ -155,18 +145,15 @@ export function insert_batch(
   return run(tasks);
 }
 
-export function refill_task_pool(
-  db: Database.Database,
-  options: RefillTaskPoolOptions
-): TaskPoolRefillResult {
+export function refill_task_pool(db: Database.Database, options: RefillTaskPoolOptions): TaskPoolRefillResult {
   const threshold = options.threshold ?? DEFAULT_REFILL_THRESHOLD;
   const target = options.target ?? DEFAULT_REFILL_TARGET;
   const maxBelowMs = options.maxBelowMs ?? DEFAULT_MAX_BELOW_MS;
   const now = options.now ?? Date.now();
 
-  assertNonNegativeInteger("threshold", threshold);
-  assertNonNegativeInteger("target", target);
-  assertNonNegativeInteger("maxBelowMs", maxBelowMs);
+  assertNonNegativeInteger('threshold', threshold);
+  assertNonNegativeInteger('target', target);
+  assertNonNegativeInteger('maxBelowMs', maxBelowMs);
 
   const previousCount = get_active_count(db);
   let batchId: string | null = null;
@@ -181,7 +168,7 @@ export function refill_task_pool(
           ...options.template,
           seed: `${options.template.seed}:refill:${ulid()}`,
         },
-        { count: inserted }
+        { count: inserted },
       );
       batchId = batch.batches[0]?.batch_id ?? null;
       insert_batch(
@@ -193,13 +180,13 @@ export function refill_task_pool(
           status: task.status,
           assignee: task.assignee,
           batch_id: task.batch_id,
-        }))
+        })),
       );
     }
   } catch (err: unknown) {
     alert = makeAlert({
       now,
-      reason: "pool_refill_failed",
+      reason: 'pool_refill_failed',
       previousCount,
       newCount: get_active_count(db),
       threshold,
@@ -207,7 +194,7 @@ export function refill_task_pool(
       batchId,
       message: err instanceof Error ? err.message : String(err),
     });
-    logEvent(db, { kind: "task_pool_alert", payload: alert });
+    logEvent(db, { kind: 'task_pool_alert', payload: alert });
     throw err;
   }
 
@@ -223,18 +210,14 @@ export function refill_task_pool(
   };
 
   if (inserted > 0) {
-    logEvent(db, { kind: "task_pool_refill", payload: log });
+    logEvent(db, { kind: 'task_pool_refill', payload: log });
   }
 
   const belowSinceMs = options.belowSinceMs;
-  if (
-    newCount <= threshold &&
-    belowSinceMs !== undefined &&
-    now - belowSinceMs > maxBelowMs
-  ) {
+  if (newCount <= threshold && belowSinceMs !== undefined && now - belowSinceMs > maxBelowMs) {
     alert = makeAlert({
       now,
-      reason: "pool_below_threshold_too_long",
+      reason: 'pool_below_threshold_too_long',
       previousCount,
       newCount,
       threshold,
@@ -242,7 +225,7 @@ export function refill_task_pool(
       batchId,
       message: `task pool active count stayed at ${newCount} (threshold ${threshold}) for ${now - belowSinceMs}ms`,
     });
-    logEvent(db, { kind: "task_pool_alert", payload: alert });
+    logEvent(db, { kind: 'task_pool_alert', payload: alert });
   }
 
   return {
@@ -264,7 +247,7 @@ function assertNonNegativeInteger(name: string, value: number): void {
 
 function makeAlert(opts: {
   now: number;
-  reason: TaskPoolAlertLog["reason"];
+  reason: TaskPoolAlertLog['reason'];
   previousCount: number;
   newCount: number;
   threshold: number;
@@ -274,7 +257,7 @@ function makeAlert(opts: {
 }): TaskPoolAlertLog {
   return {
     timestamp: new Date(opts.now).toISOString(),
-    severity: "critical",
+    severity: 'critical',
     reason: opts.reason,
     previous_count: opts.previousCount,
     new_count: opts.newCount,

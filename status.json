@@ -1,1 +1,72 @@
-{"ts":1785172012865,"results":[{"id":"ollama","name":"Ollama","port":11434,"group":"Models","ok":true,"status":"open","ms":66},{"id":"omniroute","name":"OmniRoute","port":20128,"group":"Gateway","ok":true,"status":"open","ms":72},{"id":"openclaw","name":"OpenClaw","port":18789,"group":"Gateway","ok":true,"status":"open","ms":51},{"id":"auth-proxy","name":"Auth Proxy","port":3110,"group":"Gateway","ok":false,"status":"closed","ms":null},{"id":"backend","name":"Backend","port":8000,"group":"Date App","ok":true,"status":"open","ms":29},{"id":"paperclip","name":"Paperclip","port":3120,"group":"Services","ok":false,"status":"closed","ms":null},{"id":"mission-control","name":"Mission Control","port":8787,"group":"Services","ok":false,"status":"closed","ms":null},{"id":"dashboard","name":"Dashboard","port":5678,"group":"Services","ok":true,"status":"open","ms":23},{"id":"frontend","name":"Frontend","port":3200,"group":"Date App","ok":false,"status":"closed","ms":null},{"id":"postgres","name":"Postgres","port":5432,"group":"Database","ok":false,"status":"closed","ms":null}],"repo":"E:\\ANTIGRAVITY"}
+{
+  "ts": 1785172012865,
+  "results": [
+    { "id": "ollama", "name": "Ollama", "port": 11434, "group": "Models", "ok": true, "status": "open", "ms": 66 },
+    {
+      "id": "omniroute",
+      "name": "OmniRoute",
+      "port": 20128,
+      "group": "Gateway",
+      "ok": true,
+      "status": "open",
+      "ms": 72
+    },
+    { "id": "openclaw", "name": "OpenClaw", "port": 18789, "group": "Gateway", "ok": true, "status": "open", "ms": 51 },
+    {
+      "id": "auth-proxy",
+      "name": "Auth Proxy",
+      "port": 3110,
+      "group": "Gateway",
+      "ok": false,
+      "status": "closed",
+      "ms": null
+    },
+    { "id": "backend", "name": "Backend", "port": 8000, "group": "Date App", "ok": true, "status": "open", "ms": 29 },
+    {
+      "id": "paperclip",
+      "name": "Paperclip",
+      "port": 3120,
+      "group": "Services",
+      "ok": false,
+      "status": "closed",
+      "ms": null
+    },
+    {
+      "id": "mission-control",
+      "name": "Mission Control",
+      "port": 8787,
+      "group": "Services",
+      "ok": false,
+      "status": "closed",
+      "ms": null
+    },
+    {
+      "id": "dashboard",
+      "name": "Dashboard",
+      "port": 5678,
+      "group": "Services",
+      "ok": true,
+      "status": "open",
+      "ms": 23
+    },
+    {
+      "id": "frontend",
+      "name": "Frontend",
+      "port": 3200,
+      "group": "Date App",
+      "ok": false,
+      "status": "closed",
+      "ms": null
+    },
+    {
+      "id": "postgres",
+      "name": "Postgres",
+      "port": 5432,
+      "group": "Database",
+      "ok": false,
+      "status": "closed",
+      "ms": null
+    }
+  ],
+  "repo": "E:\\ANTIGRAVITY"
+}

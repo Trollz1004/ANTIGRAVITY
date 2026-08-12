@@ -15,6 +15,7 @@
 YouAndINotAI is a dating platform where **everyone is verified human.** Bot-Shield verification ($1 one-time) proves every profile is real before they enter the discovery lane. No bots, no catfish, no crypto spam.
 
 **How it works:**
+
 1. Create a profile with your intent, interests, and a date cue
 2. Pass Bot-Shield human verification ($1)
 3. Discover verified profiles with compatibility context
@@ -22,6 +23,7 @@ YouAndINotAI is a dating platform where **everyone is verified human.** Bot-Shie
 5. Use Plans to prepare a safer first meetup
 
 **Why founding member ($14.99/mo):**
+
 - Full app access — profiles, matching, chat, plans
 - Verification included
 - Launch-year pricing locks in the lowest rate
@@ -38,6 +40,7 @@ YouAndINotAI is a dating platform where **everyone is verified human.** Bot-Shie
 > Would love your feedback. What's the #1 feature you wish dating apps had?
 
 ## Screenshots needed
+
 - [ ] Phone mockup showing verified profile discovery
 - [ ] Bot-Shield verification flow
 - [ ] Plans and safety features
@@ -45,10 +48,12 @@ YouAndINotAI is a dating platform where **everyone is verified human.** Bot-Shie
 - [ ] Profile creation with intent + date cue
 
 ## Hunter suggestions
+
 - [ ] Post in Product Hunt community Slack/forums
 - [ ] Make first upvoter list in founder communities
 
 ## Launch checklist
+
 - [ ] Checkout UX solid (TRO-8)
 - [ ] Landing page copy finalized
 - [ ] Screenshots captured

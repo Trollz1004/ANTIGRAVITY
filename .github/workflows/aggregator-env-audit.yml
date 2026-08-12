@@ -3,15 +3,15 @@ name: aggregator-env-audit
 on:
   pull_request:
     paths:
-      - "services/health-aggregator/**"
-      - ".github/workflows/aggregator-env-audit.yml"
-      - "scripts/hermes-env-audit.ps1"
+      - 'services/health-aggregator/**'
+      - '.github/workflows/aggregator-env-audit.yml'
+      - 'scripts/hermes-env-audit.ps1'
   push:
     branches: [main]
     paths:
-      - "services/health-aggregator/**"
-      - ".github/workflows/aggregator-env-audit.yml"
-      - "scripts/hermes-env-audit.ps1"
+      - 'services/health-aggregator/**'
+      - '.github/workflows/aggregator-env-audit.yml'
+      - 'scripts/hermes-env-audit.ps1'
 
 jobs:
   no-anthropic-env:

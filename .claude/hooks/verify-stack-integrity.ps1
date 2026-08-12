@@ -32,7 +32,7 @@ $cfgs = @(
   "$env:LOCALAPPDATA\hermes\config.yaml",
   "$env:USERPROFILE\.omniroute\.env",
   "$env:USERPROFILE\.env",
-  'E:\ANTIGRAVITY\mission-control-v5\server\.env'
+  'F:\ANTIGRAVITY\mission-control-v5\server\.env'
 )
 $masked = 0
 foreach ($c in $cfgs) {
@@ -56,7 +56,7 @@ if ($omni.Count -gt 2) { Warn "$($omni.Count) OmniRoute processes - desktop app 
 
 # ── 4. paths that point at nothing real ───────────────────────────────────
 Head 'Paths'
-if (Test-Path 'C:\antigravity') { Warn 'stale C:\antigravity still exists on disk' 'live root is E:\ANTIGRAVITY - agents writing here lose work silently' }
+if (Test-Path 'C:\antigravity') { Warn 'stale C:\antigravity still exists on disk' 'live root is F:\ANTIGRAVITY - agents writing here lose work silently' }
 else { Ok 'no stale C:\antigravity' }
 $hermesCfg = "$env:LOCALAPPDATA\hermes\config.yaml"
 if (Test-Path $hermesCfg) {
@@ -64,7 +64,7 @@ if (Test-Path $hermesCfg) {
   if ($raw -match 'cwd:\s*(\S+)') {
     $cwd = $matches[1]
     if ($cwd -match '^[A-Za-z]:[^\\/]') { Bad "Hermes cwd '$cwd' is missing its separator" 'a drive letter without a backslash means "current dir on that drive"' }
-    elseif ($cwd -notmatch '(?i)^E:\\ANTIGRAVITY') { Warn "Hermes cwd is '$cwd'" 'expected E:\ANTIGRAVITY' }
+    elseif ($cwd -notmatch '(?i)^F:\\ANTIGRAVITY') { Warn "Hermes cwd is '$cwd'" 'expected F:\ANTIGRAVITY' }
     else { Ok "Hermes cwd = $cwd" }
   }
   if ($raw -match 'db_path:\s*(\S+)') {
@@ -84,7 +84,7 @@ try { $tags = (Invoke-RestMethod 'http://127.0.0.1:11434/api/tags' -TimeoutSec 6
 if ($tags.Count -eq 0) { Warn 'Ollama not reachable - cannot verify local model tags' 'ollama serve' }
 else {
   $referenced = @()
-  foreach ($f in @($hermesCfg, 'E:\ANTIGRAVITY\mission-control-v5\server\.env')) {
+  foreach ($f in @($hermesCfg, 'F:\ANTIGRAVITY\mission-control-v5\server\.env')) {
     if (Test-Path $f) { $referenced += ([regex]::Matches((Get-Content $f -Raw), '(?m)(?:EXEC_\w*MODEL=|model:\s*)([a-z0-9._\-]+:?[a-z0-9._\-]*)') | ForEach-Object { $_.Groups[1].Value }) }
   }
   $local = $referenced | Where-Object { $_ -match '^(ornith|gemma|qwen|llama|nomic)' } | Select-Object -Unique
@@ -107,7 +107,7 @@ foreach ($b in @(@{p=$vault;n='memory rescue'}, @{p=$arch;n='session archive'}))
 
 # ── 7. config files still parse ───────────────────────────────────────────
 Head 'Config syntax'
-foreach ($j in @("$env:USERPROFILE\.openclaw\openclaw.json", 'E:\ANTIGRAVITY\.mcp.json')) {
+foreach ($j in @("$env:USERPROFILE\.openclaw\openclaw.json", 'F:\ANTIGRAVITY\.mcp.json')) {
   if (Test-Path $j) {
     try { Get-Content $j -Raw | ConvertFrom-Json | Out-Null; Ok "$(Split-Path $j -Leaf) parses" }
     catch { Bad "$(Split-Path $j -Leaf) is invalid JSON" 'restore from the newest .bak beside it' }

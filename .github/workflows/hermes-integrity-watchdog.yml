@@ -51,7 +51,7 @@ jobs:
         id: authz
         env:
           ACTOR: ${{ github.actor }}
-          AUTHORIZED: "Trollz1004 joshlcoleman github-actions[bot]"
+          AUTHORIZED: 'Trollz1004 joshlcoleman github-actions[bot]'
         run: |
           if echo "$AUTHORIZED" | grep -qw "$ACTOR"; then
             echo "authorized=true" >> "$GITHUB_OUTPUT"

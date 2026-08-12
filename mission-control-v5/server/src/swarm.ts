@@ -182,7 +182,7 @@ async function runOrchestrationCycle(task: SwarmTask, agentId: string): Promise<
       
       while (attempt < 2 && !passed) {
         // WORK: Sub-agents execute with preloaded skills
-        const skills = (sub.skillIds || []).map(id => getCatalogEntry(id)).filter(Boolean) as BrainSkill[];
+        const skills = (sub.skillIds || []).map((id: string) => getCatalogEntry(id)).filter(Boolean) as BrainSkill[];
         const workerText = await route({
           mode: 'speed',
           system: workerSystem(sub, skills, agent.name),

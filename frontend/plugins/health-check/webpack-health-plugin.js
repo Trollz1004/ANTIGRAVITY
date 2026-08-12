@@ -4,7 +4,7 @@
 class WebpackHealthPlugin {
   constructor() {
     this.status = {
-      state: 'idle',           // idle, compiling, success, failed
+      state: 'idle', // idle, compiling, success, failed
       errors: [],
       warnings: [],
       lastCompileTime: null,
@@ -42,7 +42,7 @@ class WebpackHealthPlugin {
 
       if (stats.hasErrors()) {
         this.status.state = 'failed';
-        this.status.errors = info.errors.map(err => ({
+        this.status.errors = info.errors.map((err) => ({
           message: err.message || String(err),
           stack: err.stack,
           moduleName: err.moduleName,
@@ -55,7 +55,7 @@ class WebpackHealthPlugin {
       }
 
       if (stats.hasWarnings()) {
-        this.status.warnings = info.warnings.map(warn => ({
+        this.status.warnings = info.warnings.map((warn) => ({
           message: warn.message || String(warn),
           moduleName: warn.moduleName,
           loc: warn.loc,
@@ -68,10 +68,12 @@ class WebpackHealthPlugin {
     // Hook: Compilation failed
     compiler.hooks.failed.tap(pluginName, (error) => {
       this.status.state = 'failed';
-      this.status.errors = [{
-        message: error.message,
-        stack: error.stack,
-      }];
+      this.status.errors = [
+        {
+          message: error.message,
+          stack: error.stack,
+        },
+      ];
       this.status.compileDuration = Date.now() - this.status.lastCompileTime;
     });
 

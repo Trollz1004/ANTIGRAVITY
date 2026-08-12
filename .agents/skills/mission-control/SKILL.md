@@ -6,11 +6,13 @@ description: PAPERWEIGHT kanban (NOW/NEXT/BLOCKED/DONE-24H/ROUTINES/ADAPTERS/HER
 # Ops Control & PAPERWEIGHT
 
 ## Verified 100% Working State (the statement Josh can say back)
+
 "All resolved issues. Ops control is working and verified. LIVE STATUS of all tasks is on the board. Goals, routines, and the PAPERWEIGHT kanban are wired. All adapters are online."
 
 If this is not literally true, open an ops-drift issue.
 
 ## Board Columns (strict semantics)
+
 - NOW: active work, owner + elapsed timer, green pulse.
 - NEXT: queued and ready.
 - BLOCKED: exact question surfaced for Josh; red.
@@ -20,6 +22,7 @@ If this is not literally true, open an ops-drift issue.
 - HERMES HEARTBEAT: last action + bridge status.
 
 ## Routines (examples)
+
 - Adapter health every 15m
 - Business-only public-surface audit hourly
 - Payment reconciliation daily 06:00
@@ -27,6 +30,7 @@ If this is not literally true, open an ops-drift issue.
 - Weekly agent/fleet check-in
 
 ## When to Use
+
 - Reading or updating the ops board state.
 - Adding routines, adapters, or agent reporting.
 - Building or fixing the HTML/TSX at apps/mission-control/ or the backend that feeds it.

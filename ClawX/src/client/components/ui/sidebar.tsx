@@ -52,13 +52,7 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   disableTransition?: boolean;
 }
 
-export function Sidebar({
-  className = '',
-  children,
-  collapsible,
-  disableTransition,
-  ...props
-}: SidebarProps) {
+export function Sidebar({ className = '', children, collapsible, disableTransition, ...props }: SidebarProps) {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
   return (
@@ -103,13 +97,7 @@ export interface SidebarMenuButtonProps extends React.ButtonHTMLAttributes<HTMLB
   tooltip?: string;
 }
 
-export function SidebarMenuButton({
-  className = '',
-  isActive,
-  tooltip,
-  children,
-  ...props
-}: SidebarMenuButtonProps) {
+export function SidebarMenuButton({ className = '', isActive, tooltip, children, ...props }: SidebarMenuButtonProps) {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
   return (
@@ -126,9 +114,7 @@ export function SidebarMenuButton({
       ].join(' ')}
       {...props}
     >
-      {isCollapsed
-        ? React.Children.toArray(children)[0]
-        : children}
+      {isCollapsed ? React.Children.toArray(children)[0] : children}
     </button>
   );
 }

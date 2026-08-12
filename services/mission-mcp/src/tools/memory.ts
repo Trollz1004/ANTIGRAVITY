@@ -1,18 +1,15 @@
-import { z } from "zod";
-import type Database from "better-sqlite3";
-import { ulid } from "../ulid.js";
-import { logEvent } from "../events.js";
-import { writeMemoryFile, readMemoryFile } from "../memory-store.js";
+import { z } from 'zod';
+import type Database from 'better-sqlite3';
+import { ulid } from '../ulid.js';
+import { logEvent } from '../events.js';
+import { writeMemoryFile, readMemoryFile } from '../memory-store.js';
 
 // ── Schemas ───────────────────────────────────────────────────────────────────
 
 export const StoreMemoryInput = z.object({
-  content: z.string().min(1, "content must not be empty"),
+  content: z.string().min(1, 'content must not be empty'),
   tags: z.array(z.string()).optional().default([]),
-  kind: z
-    .enum(["user", "feedback", "project", "reference", "finding", "artifact"])
-    .optional()
-    .default("reference"),
+  kind: z.enum(['user', 'feedback', 'project', 'reference', 'finding', 'artifact']).optional().default('reference'),
 });
 
 export const SearchMemoryInput = z.object({
@@ -36,10 +33,7 @@ export interface MemoryResult extends MemoryIndexRow {
 
 // ── Implementations ───────────────────────────────────────────────────────────
 
-export function storeMemory(
-  db: Database.Database,
-  input: z.infer<typeof StoreMemoryInput>
-): MemoryIndexRow {
+export function storeMemory(db: Database.Database, input: z.infer<typeof StoreMemoryInput>): MemoryIndexRow {
   const parsed = StoreMemoryInput.parse(input);
   const id = ulid();
   const now = Date.now();
@@ -49,30 +43,23 @@ export function storeMemory(
 
   db.prepare(
     `INSERT INTO memory_index (id, kind, content_ref, tags, created_at)
-     VALUES (?, ?, ?, ?, ?)`
+     VALUES (?, ?, ?, ?, ?)`,
   ).run(id, parsed.kind, filePath, tagsJson, now);
 
   logEvent(db, {
-    kind: "memory_stored",
+    kind: 'memory_stored',
     payload: { id, kind: parsed.kind, tags: parsed.tags },
   });
 
-  return db
-    .prepare("SELECT * FROM memory_index WHERE id = ?")
-    .get(id) as MemoryIndexRow;
+  return db.prepare('SELECT * FROM memory_index WHERE id = ?').get(id) as MemoryIndexRow;
 }
 
-export function searchMemory(
-  db: Database.Database,
-  input: z.infer<typeof SearchMemoryInput>
-): MemoryResult[] {
+export function searchMemory(db: Database.Database, input: z.infer<typeof SearchMemoryInput>): MemoryResult[] {
   const parsed = SearchMemoryInput.parse(input);
   const query = parsed.query.toLowerCase();
 
   // Load all index rows then filter in-memory (simple keyword search)
-  const rows = db
-    .prepare("SELECT * FROM memory_index ORDER BY created_at DESC LIMIT 500")
-    .all() as MemoryIndexRow[];
+  const rows = db.prepare('SELECT * FROM memory_index ORDER BY created_at DESC LIMIT 500').all() as MemoryIndexRow[];
 
   const results: MemoryResult[] = [];
   for (const row of rows) {

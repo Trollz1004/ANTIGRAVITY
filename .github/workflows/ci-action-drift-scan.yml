@@ -3,13 +3,13 @@ name: ci-action-drift-scan
 on:
   push:
     paths:
-      - ".github/workflows/**"
+      - '.github/workflows/**'
   schedule:
-    - cron: "0 6 * * 1"
+    - cron: '0 6 * * 1'
   workflow_dispatch:
     inputs:
       report_only:
-        description: "Report only (do not post issues)"
+        description: 'Report only (do not post issues)'
         type: boolean
         default: true
 

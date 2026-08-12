@@ -24,7 +24,6 @@ az rest --method GET \
   --url "https://management.azure.com/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.CognitiveServices/accounts/${ACCOUNT_NAME}/raiPolicies?api-version=2024-10-01"
 ```
 
-
 ## Step 3: Create a Guardrail
 
 Minimal example — `guardrail-policy.json`:

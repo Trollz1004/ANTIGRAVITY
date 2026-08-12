@@ -22,19 +22,24 @@ app.get('/health', (req, res) => {
 // Support chat endpoint
 app.post('/chat', (req, res) => {
   const { sessionId, message } = req.body;
-  
+
   if (!message) {
     return res.status(400).json({ error: 'message required' });
   }
 
   // Basic routing logic for support
-  const isShouldEscalate = message.toLowerCase().includes('escalate') || 
-                           message.toLowerCase().includes('problem') ||
-                           message.toLowerCase().includes('help');
-  
-  const category = message.toLowerCase().includes('receipt') ? 'billing' :
-                   message.toLowerCase().includes('verification') ? 'verification' :
-                   message.toLowerCase().includes('app') ? 'technical' : 'general';
+  const isShouldEscalate =
+    message.toLowerCase().includes('escalate') ||
+    message.toLowerCase().includes('problem') ||
+    message.toLowerCase().includes('help');
+
+  const category = message.toLowerCase().includes('receipt')
+    ? 'billing'
+    : message.toLowerCase().includes('verification')
+      ? 'verification'
+      : message.toLowerCase().includes('app')
+        ? 'technical'
+        : 'general';
 
   res.json({
     sessionId,
@@ -43,7 +48,7 @@ app.post('/chat', (req, res) => {
     category,
     subject: `Support ticket for: ${category}`,
     escalation_reason: isShouldEscalate ? 'Complex request requiring human review' : null,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 

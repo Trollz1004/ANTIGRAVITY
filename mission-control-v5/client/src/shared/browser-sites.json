@@ -14,5 +14,9 @@
   { "id": "repo", "name": "GitHub — ANTIGRAVITY", "url": "https://github.com/Trollz1004/ANTIGRAVITY" },
   { "id": "cloudflare", "name": "Cloudflare — dashboard", "url": "https://dash.cloudflare.com/" },
   { "id": "claude", "name": "claude.ai", "url": "https://claude.ai/" },
-  { "id": "crd", "name": "Chrome Remote Desktop", "url": "https://remotedesktop.google.com/u/1/access/?lfhs=2&pageId=none" }
+  {
+    "id": "crd",
+    "name": "Chrome Remote Desktop",
+    "url": "https://remotedesktop.google.com/u/1/access/?lfhs=2&pageId=none"
+  }
 ]

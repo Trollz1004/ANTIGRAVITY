@@ -5,10 +5,12 @@
 > in the **azure-mgmt-applicationinsights-dotnet** plugin skill if installed.
 
 ## Install
+
 dotnet add package Azure.ResourceManager.ApplicationInsights
 dotnet add package Azure.Identity
 
 ## Quick Start
+
 > **Auth:** `DefaultAzureCredential` is for local development. See [auth-best-practices.md](../auth-best-practices.md) for production patterns.
 
 ```csharp
@@ -20,6 +22,7 @@ var components = resourceGroup.GetApplicationInsightsComponents();
 ```
 
 ## Best Practices
+
 - Use workspace-based App Insights (current standard)
 - Link to Log Analytics for better querying
 - Set appropriate retention to balance cost vs data availability

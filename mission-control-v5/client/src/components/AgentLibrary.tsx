@@ -69,10 +69,7 @@ export default function AgentLibrary({ agents, categories, selected, onDeploy }:
           {filtered.map((agent) => {
             const isSelected = selected.has(agent.id);
             return (
-              <article
-                key={agent.id}
-                className={`agent-card ${isSelected ? 'agent-card--selected' : ''}`}
-              >
+              <article key={agent.id} className={`agent-card ${isSelected ? 'agent-card--selected' : ''}`}>
                 <div className="agent-card__top">
                   <span className="agent-card__name">{agent.name}</span>
                   <span className="agent-card__cat">{catLabel(agent.category)}</span>
@@ -80,10 +77,7 @@ export default function AgentLibrary({ agents, categories, selected, onDeploy }:
                 {agent.harness && <p className="agent-card__harness">{agent.harness}</p>}
                 <p className="agent-card__desc">{agent.description}</p>
                 <div className="agent-card__actions">
-                  <button
-                    className={`btn ${isSelected ? '' : 'btn--primary'}`}
-                    onClick={() => onDeploy(agent.id)}
-                  >
+                  <button className={`btn ${isSelected ? '' : 'btn--primary'}`} onClick={() => onDeploy(agent.id)}>
                     {isSelected ? 'DEPLOYED ✓' : 'DEPLOY'}
                   </button>
                 </div>

@@ -92,17 +92,13 @@ export function ResultBlock({ result }: { result: AgentResult }) {
             <li key={i} className={`result__phase result__phase--${p.phase}`}>
               <span className="result__phase-tag">{PHASE_LABEL[p.phase] ?? p.phase.toUpperCase()}</span>
               <span className="result__phase-detail">{p.detail}</span>
-              {typeof p.ms === 'number' && (
-                <span className="result__phase-ms">{(p.ms / 1000).toFixed(1)}s</span>
-              )}
+              {typeof p.ms === 'number' && <span className="result__phase-ms">{(p.ms / 1000).toFixed(1)}s</span>}
             </li>
           ))}
         </ol>
       )}
       {open && result.output && <pre className="result__output">{result.output}</pre>}
-      {open && result.error && (
-        <pre className="result__output result__output--error">{result.error}</pre>
-      )}
+      {open && result.error && <pre className="result__output result__output--error">{result.error}</pre>}
     </div>
   );
 }

@@ -29,21 +29,21 @@ Generated: {timestamp}
 
 ## 2. Requirements
 
-| Attribute | Value |
-|-----------|-------|
-| Classification | POC / Development / Production |
-| Scale | Small / Medium / Large |
-| Budget | Cost-Optimized / Balanced / Performance |
+| Attribute        | Value                                               |
+| ---------------- | --------------------------------------------------- |
+| Classification   | POC / Development / Production                      |
+| Scale            | Small / Medium / Large                              |
+| Budget           | Cost-Optimized / Balanced / Performance             |
 | **Subscription** | {subscription-name-or-id} ⚠️ MUST confirm with user |
-| **Location** | {azure-region} ⚠️ MUST confirm with user |
+| **Location**     | {azure-region} ⚠️ MUST confirm with user            |
 
 ---
 
 ## 3. Components Detected
 
-| Component | Type | Technology | Path |
-|-----------|------|------------|------|
-| {name} | Frontend / API / Worker | {stack} | {path} |
+| Component | Type                    | Technology | Path   |
+| --------- | ----------------------- | ---------- | ------ |
+| {name}    | Frontend / API / Worker | {stack}    | {path} |
 
 ---
 
@@ -61,24 +61,25 @@ Generated: {timestamp}
 
 ### Service Mapping
 
-| Component | Azure Service | SKU |
-|-----------|---------------|-----|
+| Component   | Azure Service   | SKU   |
+| ----------- | --------------- | ----- |
 | {component} | {azure-service} | {sku} |
 
 ### Supporting Services
 
-| Service | Purpose |
-|---------|---------|
-| Log Analytics | Centralized logging |
-| Application Insights | Monitoring & APM |
-| Key Vault | Secrets management |
-| Managed Identity | Service-to-service auth |
+| Service              | Purpose                 |
+| -------------------- | ----------------------- |
+| Log Analytics        | Centralized logging     |
+| Application Insights | Monitoring & APM        |
+| Key Vault            | Secrets management      |
+| Managed Identity     | Service-to-service auth |
 
 ---
 
 ## 6. Execution Checklist
 
 ### Phase 1: Planning
+
 - [ ] Analyze workspace
 - [ ] Gather requirements
 - [ ] Confirm subscription and location with user
@@ -88,6 +89,7 @@ Generated: {timestamp}
 - [ ] **User approved this plan**
 
 ### Phase 2: Execution
+
 - [ ] Research components (load references, invoke skills)
 - [ ] **⛔ For Azure Functions: Load composition rules** (`services/functions/templates/selection.md` → `services/functions/templates/recipes/composition.md`) and use `azd init -t <template>` — NEVER hand-write Bicep/Terraform
 - [ ] For other services: Generate infrastructure files following service-specific guidance
@@ -97,12 +99,14 @@ Generated: {timestamp}
 - [ ] Update plan status to "Ready for Validation"
 
 ### Phase 3: Validation
+
 - [ ] Invoke azure-validate skill
 - [ ] All validation checks pass
 - [ ] Update plan status to "Validated"
 - [ ] Record validation proof below
 
 ### Phase 4: Deployment
+
 - [ ] Invoke azure-deploy skill
 - [ ] Deployment successful
 - [ ] Update plan status to "Deployed"
@@ -113,8 +117,8 @@ Generated: {timestamp}
 
 > **⛔ REQUIRED**: The azure-validate skill MUST populate this section before setting status to `Validated`. If this section is empty and status is `Validated`, the validation was bypassed improperly.
 
-| Check | Command Run | Result | Timestamp |
-|-------|-------------|--------|-----------|
+| Check        | Command Run               | Result            | Timestamp   |
+| ------------ | ------------------------- | ----------------- | ----------- |
 | {check-name} | {actual command executed} | ✅ Pass / ❌ Fail | {timestamp} |
 
 **Validated by:** azure-validate skill
@@ -124,12 +128,12 @@ Generated: {timestamp}
 
 ## 8. Files to Generate
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `.azure/plan.md` | This plan | ✅ |
-| `azure.yaml` | AZD configuration | ⏳ |
-| `infra/main.bicep` | Infrastructure | ⏳ |
-| `src/{component}/Dockerfile` | Container build | ⏳ |
+| File                         | Purpose           | Status |
+| ---------------------------- | ----------------- | ------ |
+| `.azure/plan.md`             | This plan         | ✅     |
+| `azure.yaml`                 | AZD configuration | ⏳     |
+| `infra/main.bicep`           | Infrastructure    | ⏳     |
+| `src/{component}/Dockerfile` | Container build   | ⏳     |
 
 ---
 

@@ -8,19 +8,19 @@ A routine is a **trigger** (when it fires) plus an **action** (what it does). Th
 
 **Triggers**
 
-| Fires on | `--trigger` alias | manifest `type:` | Key fields |
-|----------|-------------------|------------------|------------|
-| A single moment (one-shot) | `timer` | `timer` | `at` (ISO 8601 UTC) |
-| A recurring cron schedule | `recurring` | `schedule` | `cron_expression`, `time_zone` |
-| A GitHub issue event | `github-issue` | `github_issue` | `connection_id`, `owner`, `repository`, `issue_event` |
-| A custom external event | `custom` | `custom` | `provider`, `event_name`, `parameters` |
+| Fires on                   | `--trigger` alias | manifest `type:` | Key fields                                            |
+| -------------------------- | ----------------- | ---------------- | ----------------------------------------------------- |
+| A single moment (one-shot) | `timer`           | `timer`          | `at` (ISO 8601 UTC)                                   |
+| A recurring cron schedule  | `recurring`       | `schedule`       | `cron_expression`, `time_zone`                        |
+| A GitHub issue event       | `github-issue`    | `github_issue`   | `connection_id`, `owner`, `repository`, `issue_event` |
+| A custom external event    | `custom`          | `custom`         | `provider`, `event_name`, `parameters`                |
 
 **Actions** — both invoke the target agent; they differ only in which agent protocol is called and which field resumes prior context.
 
-| Invokes the agent using | `--action` alias | manifest `type:` | Resume field |
-|-------------------------|------------------|------------------|--------------|
-| the agent `responses` protocol | `agent-response` (default) | `invoke_agent_responses_api` | `conversation` |
-| the agent `invocations` protocol | `agent-invoke` | `invoke_agent_invocations_api` | `session_id` |
+| Invokes the agent using          | `--action` alias           | manifest `type:`               | Resume field   |
+| -------------------------------- | -------------------------- | ------------------------------ | -------------- |
+| the agent `responses` protocol   | `agent-response` (default) | `invoke_agent_responses_api`   | `conversation` |
+| the agent `invocations` protocol | `agent-invoke`             | `invoke_agent_invocations_api` | `session_id`   |
 
 ## Create
 
@@ -31,11 +31,11 @@ Put the prompt or payload the routine sends to the agent in `action.input`. What
 triggers:
   default:
     type: schedule
-    cron_expression: "0 * * * *"
+    cron_expression: '0 * * * *'
 action:
   type: invoke_agent_responses_api
   agent_name: my-agent
-  input: "Say hi."
+  input: 'Say hi.'
 ```
 
 ```bash
@@ -72,21 +72,21 @@ azd ai routine create on-custom-event \
 
 ## Create Flags
 
-| Flag | Applies to | Notes |
-|------|------------|-------|
-| `--trigger` | all | `timer` \| `recurring` \| `github-issue` \| `custom` (required unless `--file`) |
-| `--at` | timer | ISO 8601 UTC datetime, e.g. `<YYYY-MM-DDTHH:MM:SSZ>` |
-| `--cron` | recurring | 5-field cron; minimum interval 5 minutes |
-| `--time-zone` | recurring | IANA zone, e.g. `America/New_York` (default `UTC`; not valid for timer) |
-| `--connection-id`, `--owner`, `--repository`, `--issue-event` | github-issue | all four required; `--issue-event` is `opened` or `closed` |
-| `--provider`, `--event-name`, `--parameters` | custom | `--provider` and JSON-object `--parameters` required |
-| `--action` | all | `agent-response` (default) \| `agent-invoke` |
-| `--agent-name` \| `--agent-endpoint-id` | action | exactly one; identifies the target agent |
-| `--conversation-id` | agent-response | continue an existing conversation (preview) |
-| `--session-id` | agent-invoke | continue an existing hosted-agent session |
-| `--description` | all | free-text description |
-| `--enabled` | all | enabled by default; pass `--enabled=false` to create disabled |
-| `--force` | all | overwrite an existing routine of the same name (upsert) |
+| Flag                                                          | Applies to     | Notes                                                                           |
+| ------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------- |
+| `--trigger`                                                   | all            | `timer` \| `recurring` \| `github-issue` \| `custom` (required unless `--file`) |
+| `--at`                                                        | timer          | ISO 8601 UTC datetime, e.g. `<YYYY-MM-DDTHH:MM:SSZ>`                            |
+| `--cron`                                                      | recurring      | 5-field cron; minimum interval 5 minutes                                        |
+| `--time-zone`                                                 | recurring      | IANA zone, e.g. `America/New_York` (default `UTC`; not valid for timer)         |
+| `--connection-id`, `--owner`, `--repository`, `--issue-event` | github-issue   | all four required; `--issue-event` is `opened` or `closed`                      |
+| `--provider`, `--event-name`, `--parameters`                  | custom         | `--provider` and JSON-object `--parameters` required                            |
+| `--action`                                                    | all            | `agent-response` (default) \| `agent-invoke`                                    |
+| `--agent-name` \| `--agent-endpoint-id`                       | action         | exactly one; identifies the target agent                                        |
+| `--conversation-id`                                           | agent-response | continue an existing conversation (preview)                                     |
+| `--session-id`                                                | agent-invoke   | continue an existing hosted-agent session                                       |
+| `--description`                                               | all            | free-text description                                                           |
+| `--enabled`                                                   | all            | enabled by default; pass `--enabled=false` to create disabled                   |
+| `--force`                                                     | all            | overwrite an existing routine of the same name (upsert)                         |
 
 ## Read
 

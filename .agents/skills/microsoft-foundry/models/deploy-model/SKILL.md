@@ -1,10 +1,10 @@
 ---
 name: deploy-model
-description: "Unified Azure OpenAI model deployment skill with intelligent intent-based routing. Handles quick preset deployments, fully customized deployments (version/SKU/capacity/RAI policy), and capacity discovery across regions and projects. USE FOR: deploy model, deploy gpt, create deployment, model deployment, deploy openai model, set up model, provision model, find capacity, check model availability, where can I deploy, best region for model, capacity analysis. DO NOT USE FOR: listing existing deployments (use foundry_models_deployments_list MCP tool), deleting deployments, agent creation (use agent/create), project creation (use project/create)."
+description: 'Unified Azure OpenAI model deployment skill with intelligent intent-based routing. Handles quick preset deployments, fully customized deployments (version/SKU/capacity/RAI policy), and capacity discovery across regions and projects. USE FOR: deploy model, deploy gpt, create deployment, model deployment, deploy openai model, set up model, provision model, find capacity, check model availability, where can I deploy, best region for model, capacity analysis. DO NOT USE FOR: listing existing deployments (use foundry_models_deployments_list MCP tool), deleting deployments, agent creation (use agent/create), project creation (use project/create).'
 license: MIT
 metadata:
   author: Microsoft
-  version: "1.0.0"
+  version: '1.0.0'
 ---
 
 # Deploy Model
@@ -15,11 +15,11 @@ Unified entry point for all Azure OpenAI model deployment workflows. Analyzes us
 
 ## Quick Reference
 
-| Mode | When to Use | Sub-Skill |
-|------|-------------|-----------|
-| **Preset** | Quick deployment, no customization needed | [preset/SKILL.md](preset/SKILL.md) |
-| **Customize** | Full control: version, SKU, capacity, RAI policy | [customize/SKILL.md](customize/SKILL.md) |
-| **Capacity Discovery** | Find where you can deploy with specific capacity | [capacity/SKILL.md](capacity/SKILL.md) |
+| Mode                   | When to Use                                      | Sub-Skill                                |
+| ---------------------- | ------------------------------------------------ | ---------------------------------------- |
+| **Preset**             | Quick deployment, no customization needed        | [preset/SKILL.md](preset/SKILL.md)       |
+| **Customize**          | Full control: version, SKU, capacity, RAI policy | [customize/SKILL.md](customize/SKILL.md) |
+| **Capacity Discovery** | Find where you can deploy with specific capacity | [capacity/SKILL.md](capacity/SKILL.md)   |
 
 ## Intent Detection
 
@@ -51,15 +51,15 @@ User Prompt
 
 ### Routing Rules
 
-| Signal in Prompt | Route To | Reason |
-|------------------|----------|--------|
-| Just model name, no options | **Preset** | User wants quick deployment |
-| "custom", "configure", "choose", "select" | **Customize** | User wants control |
-| "find", "check", "where", "which region", "available" | **Capacity** | User wants discovery |
-| Specific capacity number + "best region" | **Capacity → Preset** | Discover then deploy quickly |
-| Specific capacity number + "custom" keywords | **Capacity → Customize** | Discover then deploy with options |
-| "PTU", "provisioned throughput" | **Customize** | PTU requires SKU selection |
-| "optimal region", "best region" (no capacity target) | **Preset** | Region optimization is preset's specialty |
+| Signal in Prompt                                      | Route To                 | Reason                                    |
+| ----------------------------------------------------- | ------------------------ | ----------------------------------------- |
+| Just model name, no options                           | **Preset**               | User wants quick deployment               |
+| "custom", "configure", "choose", "select"             | **Customize**            | User wants control                        |
+| "find", "check", "where", "which region", "available" | **Capacity**             | User wants discovery                      |
+| Specific capacity number + "best region"              | **Capacity → Preset**    | Discover then deploy quickly              |
+| Specific capacity number + "custom" keywords          | **Capacity → Customize** | Discover then deploy with options         |
+| "PTU", "provisioned throughput"                       | **Customize**            | PTU requires SKU selection                |
+| "optimal region", "best region" (no capacity target)  | **Preset**               | Region optimization is preset's specialty |
 
 ### Multi-Mode Chaining
 
@@ -67,6 +67,7 @@ Some prompts require two modes in sequence:
 
 **Pattern: Capacity → Deploy**
 When a user specifies a capacity requirement AND wants deployment:
+
 1. Run **Capacity Discovery** to find regions/projects with sufficient quota
 2. Present findings to user
 3. Ask: "Would you like to deploy with **quick defaults** or **customize settings**?"
@@ -117,9 +118,11 @@ Projects in <region>:
 Before presenting any deployment options (SKU, capacity), always validate both of these:
 
 1. **Model supports the SKU** — query the model catalog to confirm the selected model+version supports the target SKU:
+
    ```bash
    az cognitiveservices model list --location <region> --subscription <sub-id> -o json
    ```
+
    Filter for the model, extract `.model.skus[].name` to get supported SKUs.
 
 2. **Subscription has available quota** — check that the user's subscription has unallocated quota for the SKU+model combination:
@@ -135,6 +138,7 @@ Before presenting any deployment options (SKU, capacity), always validate both o
 ## Prerequisites
 
 All deployment modes require:
+
 - Azure CLI installed and authenticated (`az login`)
 - Active Azure subscription with deployment permissions
 - Azure AI Foundry project resource ID (or agent will help discover it via `PROJECT_RESOURCE_ID` env var)

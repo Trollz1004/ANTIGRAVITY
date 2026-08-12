@@ -1,1 +1,251 @@
-{"nodes": [{"id": "app_frontend_src_modes_storefrontmode_js", "label": "StorefrontMode.js", "file_type": "code", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L1"}, {"id": "modes_storefrontmode_storefrontmode", "label": "StorefrontMode()", "file_type": "code", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L17"}, {"id": "modes_storefrontmode_runwaycard", "label": "RunwayCard()", "file_type": "code", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L120"}, {"id": "modes_storefrontmode_cell", "label": "Cell()", "file_type": "code", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L141"}, {"id": "modes_storefrontmode_emptycatalogue", "label": "EmptyCatalogue()", "file_type": "code", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L150"}, {"id": "modes_storefrontmode_productcard", "label": "ProductCard()", "file_type": "code", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L172"}], "edges": [{"source": "app_frontend_src_modes_storefrontmode_js", "target": "react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L1", "weight": 1.0}, {"source": "app_frontend_src_modes_storefrontmode_js", "target": "axios", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L2", "weight": 1.0}, {"source": "app_frontend_src_modes_storefrontmode_js", "target": "lucide_react", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L3", "weight": 1.0}, {"source": "app_frontend_src_modes_storefrontmode_js", "target": "modes_storefrontmode_storefrontmode", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L17", "weight": 1.0}, {"source": "app_frontend_src_modes_storefrontmode_js", "target": "modes_storefrontmode_runwaycard", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L120", "weight": 1.0}, {"source": "app_frontend_src_modes_storefrontmode_js", "target": "modes_storefrontmode_cell", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L141", "weight": 1.0}, {"source": "app_frontend_src_modes_storefrontmode_js", "target": "modes_storefrontmode_emptycatalogue", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L150", "weight": 1.0}, {"source": "app_frontend_src_modes_storefrontmode_js", "target": "modes_storefrontmode_productcard", "relation": "contains", "confidence": "EXTRACTED", "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L172", "weight": 1.0}], "raw_calls": [{"caller_nid": "modes_storefrontmode_storefrontmode", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L18"}, {"caller_nid": "modes_storefrontmode_storefrontmode", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L19"}, {"caller_nid": "modes_storefrontmode_storefrontmode", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L20"}, {"caller_nid": "modes_storefrontmode_storefrontmode", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L21"}, {"caller_nid": "modes_storefrontmode_storefrontmode", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L22"}, {"caller_nid": "modes_storefrontmode_storefrontmode", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L23"}, {"caller_nid": "modes_storefrontmode_storefrontmode", "callee": "useState", "is_member_call": false, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L24"}, {"caller_nid": "modes_storefrontmode_storefrontmode", "callee": "useCallback", "is_member_call": false, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L26"}, {"caller_nid": "modes_storefrontmode_storefrontmode", "callee": "useEffect", "is_member_call": false, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L46"}, {"caller_nid": "modes_storefrontmode_storefrontmode", "callee": "map", "is_member_call": true, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L101"}, {"caller_nid": "modes_storefrontmode_runwaycard", "callee": "replace", "is_member_call": true, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L131"}, {"caller_nid": "modes_storefrontmode_runwaycard", "callee": "toFixed", "is_member_call": true, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L133"}, {"caller_nid": "modes_storefrontmode_runwaycard", "callee": "Number", "is_member_call": false, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L133"}, {"caller_nid": "modes_storefrontmode_runwaycard", "callee": "toFixed", "is_member_call": true, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L134"}, {"caller_nid": "modes_storefrontmode_runwaycard", "callee": "Number", "is_member_call": false, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L134"}, {"caller_nid": "modes_storefrontmode_productcard", "callee": "includes", "is_member_call": true, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L173"}, {"caller_nid": "modes_storefrontmode_productcard", "callee": "toFixed", "is_member_call": true, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L186"}, {"caller_nid": "modes_storefrontmode_productcard", "callee": "Number", "is_member_call": false, "source_file": "/app/frontend/src/modes/StorefrontMode.js", "source_location": "L186"}]}
+{
+  "nodes": [
+    {
+      "id": "app_frontend_src_modes_storefrontmode_js",
+      "label": "StorefrontMode.js",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "modes_storefrontmode_storefrontmode",
+      "label": "StorefrontMode()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L17"
+    },
+    {
+      "id": "modes_storefrontmode_runwaycard",
+      "label": "RunwayCard()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L120"
+    },
+    {
+      "id": "modes_storefrontmode_cell",
+      "label": "Cell()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L141"
+    },
+    {
+      "id": "modes_storefrontmode_emptycatalogue",
+      "label": "EmptyCatalogue()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L150"
+    },
+    {
+      "id": "modes_storefrontmode_productcard",
+      "label": "ProductCard()",
+      "file_type": "code",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L172"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_frontend_src_modes_storefrontmode_js",
+      "target": "react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_modes_storefrontmode_js",
+      "target": "axios",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_modes_storefrontmode_js",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_modes_storefrontmode_js",
+      "target": "modes_storefrontmode_storefrontmode",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_modes_storefrontmode_js",
+      "target": "modes_storefrontmode_runwaycard",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L120",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_modes_storefrontmode_js",
+      "target": "modes_storefrontmode_cell",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L141",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_modes_storefrontmode_js",
+      "target": "modes_storefrontmode_emptycatalogue",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L150",
+      "weight": 1.0
+    },
+    {
+      "source": "app_frontend_src_modes_storefrontmode_js",
+      "target": "modes_storefrontmode_productcard",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L172",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "modes_storefrontmode_storefrontmode",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_storefrontmode",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L19"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_storefrontmode",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L20"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_storefrontmode",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L21"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_storefrontmode",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_storefrontmode",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L23"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_storefrontmode",
+      "callee": "useState",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_storefrontmode",
+      "callee": "useCallback",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L26"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_storefrontmode",
+      "callee": "useEffect",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_storefrontmode",
+      "callee": "map",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L101"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_runwaycard",
+      "callee": "replace",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L131"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_runwaycard",
+      "callee": "toFixed",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L133"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_runwaycard",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L133"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_runwaycard",
+      "callee": "toFixed",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L134"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_runwaycard",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L134"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_productcard",
+      "callee": "includes",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L173"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_productcard",
+      "callee": "toFixed",
+      "is_member_call": true,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L186"
+    },
+    {
+      "caller_nid": "modes_storefrontmode_productcard",
+      "callee": "Number",
+      "is_member_call": false,
+      "source_file": "/app/frontend/src/modes/StorefrontMode.js",
+      "source_location": "L186"
+    }
+  ]
+}
