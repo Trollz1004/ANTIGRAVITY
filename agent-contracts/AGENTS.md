@@ -157,7 +157,7 @@ capability is warranted).
 
 ### Skills hygiene
 
-The local set needs pruning and it is a CEO-level call, not a silent one. The
+The local set needs pruning and it is Joshua's call, not a silent one. The
 184 `agency-*` entries were bulk-imported; most have never been used, and they
 dominate every search result, which makes the 27 real skills harder to find than
 if they were not indexed at all.

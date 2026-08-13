@@ -1,5 +1,5 @@
 {
-  "_comment": "ANTIGRAVITY Mission Control v6 registry — every service that 'shouldn't be down' gets expected=true, a probe, and a fix playbook. Every notification embeds the easy button + script.",
+  "_comment": "ANTIGRAVITY Stack Health (formerly mission-control-v6) registry — every service that 'shouldn't be down' gets expected=true, a probe, and a fix playbook. Every notification embeds the easy button + script.",
   "server": {
     "host": "127.0.0.1",
     "port": "${MC_PORT:-8787}",
@@ -54,7 +54,7 @@
       "label": "Affiliate Landing",
       "url": "https://trollz1004.github.io/youandinotai-links/?ref=clean-repo"
     },
-    { "id": "mission-control", "label": "Mission Control :8787", "url": "http://localhost:${MC_PORT:-8787}" },
+    { "id": "mission-control", "label": "Stack Health :8787", "url": "http://localhost:${MC_PORT:-8787}" },
     { "id": "github", "label": "GitHub Repo", "url": "https://github.com/Trollz1004/ANTIGRAVITY" }
   ],
   "services": [

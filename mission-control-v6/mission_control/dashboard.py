@@ -84,7 +84,7 @@ a.link:hover { text-decoration: underline; }
   <h2>SERVICES</h2>
   <div id="services"></div>
 </main>
-<footer>Mission Control v__VERSION__ · checks recorded in SQLite · FIX runs allow-listed playbooks only · <span id="foot"></span></footer>
+<footer>Stack Health v__VERSION__ (the health monitor — the board is Mission Control :3151) · checks recorded in SQLite · FIX runs allow-listed playbooks only · <span id="foot"></span></footer>
 <div id="toast"></div>
 <script>
 const $ = (id) => document.getElementById(id);
@@ -233,5 +233,5 @@ setInterval(refresh, 5000);
 
 
 def render_dashboard(config: Config) -> str:
-    title = escape(f"ANTIGRAVITY — MISSION CONTROL v{__version__}")
+    title = escape(f"ANTIGRAVITY — STACK HEALTH v{__version__}")
     return PAGE.replace("__TITLE__", title).replace("__VERSION__", escape(__version__))

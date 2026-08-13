@@ -1,12 +1,12 @@
 @echo off
 :: ═══════════════════════════════════════════════════════════════
-::  ANTIGRAVITY MISSION CONTROL v6 — launcher
+::  ANTIGRAVITY STACK HEALTH — launcher (the health monitor; the BOARD is Mission Control :3151)
 ::  Watches the whole stack, pages you when something that should be
 ::  up goes down, and every alert carries its own FIX button + script.
 ::  Dashboard: http://127.0.0.1:8787   (set MC_PORT to change)
 ::  Idempotent — safe to double-click any time.
 :: ═══════════════════════════════════════════════════════════════
-title ANTIGRAVITY Mission Control v6
+title ANTIGRAVITY Stack Health (:8787)
 setlocal EnableDelayedExpansion
 
 cd /d "%~dp0"
