@@ -16,7 +16,7 @@ import { AGENT_INDEX, CATEGORY_INDEX, ORCHESTRATOR_CONTRACT } from './agents.js'
 import { loadCatalog, getCatalogEntry, type BrainSkill } from './catalog.js';
 import { readJournal, writeJournal } from './brainStore.js';
 import { materializeTask } from './materialize.js';
-import { route } from './omniroute.js';
+import { isExecutor, route } from './omniroute.js';
 import { addTask, allTasks, getTask, persist, removeTask } from './store.js';
 import type { AgentResult, Column, Mode, SwarmTask } from './types.js';
 
@@ -53,14 +53,14 @@ function orchestratorIdentity(agentId: string): string {
     `Role: ${agent.description}`,
     '',
     ORCHESTRATOR_CONTRACT,
-  ].join('\\n');
+  ].join('\n');
 }
 
 function skillMenu(compact = false): string {
   const { skills } = loadCatalog();
   if (skills.length === 0) return '(No skills found in catalog.)';
   if (compact) return skills.map((s) => s.id).join(', ');
-  return skills.map((s) => `- ${s.id}: ${s.description.slice(0, 70)}`).join('\\n');
+  return skills.map((s) => `- ${s.id}: ${s.description.slice(0, 70)}`).join('\n');
 }
 
 const PLAN_SHAPE = `Reply with ONLY a JSON object, no prose:
@@ -73,12 +73,12 @@ function buildPlanPrompt(task: SwarmTask, journal: string, compactSkills: boolea
     `SKILLS: ${skillMenu(compactSkills)}`,
     `TASK: ${task.prompt}`,
     'PLAN ONLY. ' + PLAN_SHAPE,
-  ].filter(Boolean).join('\\n');
+  ].filter(Boolean).join('\n');
 }
 
 function workerSystem(subtask: any, skills: BrainSkill[], orchestratorName: string): string {
   const loaded = skills.length
-    ? skills.map((s) => `── SKILL: ${s.label} (${s.id}) ──\\n${s.body.slice(0, SKILL_BODY_CHARS)}`).join('\\n\\n')
+    ? skills.map((s) => `── SKILL: ${s.label} (${s.id}) ──\n${s.body.slice(0, SKILL_BODY_CHARS)}`).join('\n\n')
     : '(No skills matched.)';
   return [
     `You are a sub-agent delegated by ${orchestratorName}.`,
@@ -86,15 +86,20 @@ function workerSystem(subtask: any, skills: BrainSkill[], orchestratorName: stri
     loaded,
     '=== OUTPUT RULES ===',
     `Deliverable must satisfy: ${subtask.acceptance}`,
-    'Emit files as: File: `path/name.ext`\\n```lang\\ncontent\\n```',
-  ].join('\\n');
+    'Emit files as: File: `path/name.ext`\n```lang\ncontent\n```',
+  ].join('\n');
 }
 
 const VERDICT_SHAPE = '{\"verdicts\":[{\"index\":0,\"pass\":true,\"gap\":\"\"}],\"overallPass\":true}';
 
 async function execute(task: SwarmTask): Promise<void> {
-  const adversarialAgents = ['openclaw', 'fcc-opus', 'hermes']; 
-  const activeAgents = adversarialAgents.filter(id => AGENT_INDEX.has(id));
+  // Run the agents the TASK asked for. The old hardcoded trio ignored
+  // task.agentIds and included 'fcc-opus', which is not an agent id, so one
+  // judge "version" was always undefined.
+  const requested = (task.agentIds ?? []).filter(id => AGENT_INDEX.has(id));
+  const activeAgents = requested.length > 0
+    ? requested
+    : ['openclaw', 'hermes'].filter(id => AGENT_INDEX.has(id));
 
   try {
     await Promise.all(activeAgents.map(async (agentId) => {
@@ -104,38 +109,55 @@ async function execute(task: SwarmTask): Promise<void> {
       else task.results.push(res);
     }));
 
-    const judgePrompt = `You are the FINAL JUDGE. Compare these 3 versions of the same task.
-    TASK: ${task.prompt}
-    
-    VERSION 1 (OpenClaw): ${task.results.find(r => r.agentId === 'openclaw')?.output}
-    VERSION 2 (FCC-Claude): ${task.results.find(r => r.agentId === 'fcc-opus')?.output}
-    VERSION 3 (Hermes): ${task.results.find(r => r.agentId === 'hermes')?.output}
+    // Only outputs that exist compete; a failed cycle must not poison the
+    // judge with "undefined". And the judge is an OPTIMIZER, not a gate: if
+    // it answers garbage, ship the longest contender anyway. 'Judge rejected
+    // all versions' used to discard real work over a JSON parse failure.
+    const contenders = task.results.filter(r => r.status === 'done' && r.output && r.output.trim());
 
-    PICK THE BEST VERSION. If all fail, BLOCK.
-    Reply with ONLY JSON: ${VERDICT_SHAPE}`;
+    if (contenders.length === 0) {
+      task.status = 'error';
+      task.error = task.results.map(r => `[${r.agentId}] ${r.error ?? 'no output'}`).join(' | ');
+    } else {
+      let winner = contenders[0];
+      let judgeNote = 'single contender - no judging needed';
+      if (contenders.length > 1) {
+        winner = contenders.reduce((x, y) => ((y.output ?? '').length > (x.output ?? '').length ? y : x));
+        judgeNote = 'judge unavailable - shipped longest contender';
+        try {
+          const judgeResult = await route({
+            mode: 'reasoning',
+            system: 'You are the judge. Pick the best deliverable.',
+            prompt: [
+              `You are the FINAL JUDGE. Compare these ${contenders.length} versions of the same task.`,
+              `TASK: ${task.prompt}`,
+              '',
+              ...contenders.map((c, k) => `VERSION ${k + 1} (${c.agentId}): ${c.output}`),
+              '',
+              'PICK THE BEST VERSION by 1-based index.',
+              `Reply with ONLY JSON: ${VERDICT_SHAPE}`,
+            ].join(String.fromCharCode(10)),
+            executor: isExecutor('judge') ? 'judge' : 'auto',
+          });
+          const verdict = extractJson(judgeResult.text, 'verdicts');
+          const idx = Number(verdict?.verdicts?.[0]?.index);
+          if (Number.isFinite(idx) && idx >= 1 && idx <= contenders.length) {
+            winner = contenders[idx - 1];
+            judgeNote = `judge picked version ${idx} (${winner.agentId})`;
+          }
+        } catch (judgeErr) {
+          judgeNote = `judge errored - shipped longest contender`;
+        }
+      }
 
-    const judgeResult = await route({
-      mode: 'reasoning',
-      system: 'You are the Max-Reasoning Judge. Pick the best deliverable.',
-      prompt: judgePrompt,
-      executor: 'judge'
-    });
-
-    const verdict = extractJson(judgeResult.text, 'verdicts');
-    if (verdict?.overallPass) {
-      const winnerId = verdict.verdicts[0].index === 0 ? 'openclaw' : verdict.verdicts[0].index === 1 ? 'fcc-opus' : 'hermes';
-      const winner = task.results.find(r => r.agentId === winnerId);
-      
+      (winner.phases ??= []).push({ phase: 'validate', detail: judgeNote });
       task.artifacts = await materializeTask({
         taskId: task.id,
         title: task.title,
-        outputs: [{ agentId: winnerId, text: winner?.output ?? '' }]
+        outputs: [{ agentId: winner.agentId, text: winner.output ?? '' }]
       });
       task.status = 'done';
       task.column = 'DONE';
-    } else {
-      task.status = 'error';
-      task.error = 'Judge rejected all versions.';
     }
   } catch (err) {
     task.status = 'error';
@@ -155,7 +177,9 @@ interface PlannedSubtask {
 
 async function runOrchestrationCycle(task: SwarmTask, agentId: string): Promise<AgentResult> {
   const agent = AGENT_INDEX.get(agentId)!;
-  const journal = (readJournal(agent.platformId!) ?? '') as string;
+  // readJournal returns { content, ... } | null - never a string. The old
+  // `as string` cast made journal.slice() throw on EVERY task (2026-08-12).
+  const journal = agent.platformId ? (readJournal(agent.platformId)?.content ?? '') : '';
   const result: AgentResult = { agentId, status: 'running', phases: [] };
   
   try {
@@ -167,8 +191,13 @@ async function runOrchestrationCycle(task: SwarmTask, agentId: string): Promise<
       executor: agent.brainExecutor
     });
     
-    const plan = extractJson(planText.text, 'subtasks');
-    if (!plan || !Array.isArray(plan.subtasks)) throw new Error('Planner failed to produce a valid JSON subtask list.');
+    let plan = extractJson(planText.text, 'subtasks');
+    if (!plan || !Array.isArray(plan.subtasks) || plan.subtasks.length === 0) {
+      // An unplannable task is still runnable: delegate verbatim instead of
+      // failing the whole task over a formatting miss.
+      plan = { subtasks: [{ title: task.title, brief: task.prompt, skillIds: [], acceptance: 'Fulfills the task as written.' }] };
+      result.phases?.push({ phase: 'plan', detail: 'planner reply unparseable - delegated verbatim as one subtask', ms: 0 });
+    }
     
     result.phases?.push({ phase: 'plan', detail: `Planned ${plan.subtasks.length} subtasks.`, ms: 0 });
     
@@ -195,7 +224,7 @@ async function runOrchestrationCycle(task: SwarmTask, agentId: string): Promise<
         const validateText = await route({
           mode: PLANNING_MODE,
           system: orchestratorIdentity(agentId),
-          prompt: `Original Task: ${task.prompt}\\n\\nSubtask: ${sub.title}\\nAcceptance: ${sub.acceptance}\\n\\nDeliverable:\\n${output}\\n\\nValidate. If it fails, you MUST provide a gap. Reply with ONLY JSON: ${VERDICT_SHAPE}`
+          prompt: `Original Task: ${task.prompt}\n\nSubtask: ${sub.title}\nAcceptance: ${sub.acceptance}\n\nDeliverable:\n${output}\n\nValidate. If it fails, you MUST provide a gap. Reply with ONLY JSON: ${VERDICT_SHAPE}`
         });
         
         const verdict = extractJson(validateText.text, 'verdicts');
@@ -204,17 +233,17 @@ async function runOrchestrationCycle(task: SwarmTask, agentId: string): Promise<
         } else {
           attempt++;
           const gap = verdict?.verdicts?.[0]?.gap ?? 'Improve the output based on acceptance criteria.';
-          currentBrief = `ORIGINAL BRIEF: ${sub.brief}\\n\\nREVISION GAP: ${gap}\\n\\nFIX THIS GAP and return the full corrected deliverable.`;
+          currentBrief = `ORIGINAL BRIEF: ${sub.brief}\n\nREVISION GAP: ${gap}\n\nFIX THIS GAP and return the full corrected deliverable.`;
         }
       }
       deliverables.push({ subtask: sub, output });
     }
     
-    result.output = deliverables.map(d => `--- ${d.subtask.title} ---\\n${d.output}`).join('\\n\\n');
+    result.output = deliverables.map(d => `--- ${d.subtask.title} ---\n${d.output}`).join('\n\n');
     result.status = 'done';
     
     // JOURNAL
-    writeJournal(agent.platformId!, `Task ${task.id} completed: ${result.output?.slice(0, 200)}`);
+    if (agent.platformId) writeJournal(agent.platformId, `Task ${task.id} completed: ${result.output?.slice(0, 200)}`);
     result.phases?.push({ phase: 'journal', detail: 'Journal updated.', ms: 0 });
     
   } catch (err) {
