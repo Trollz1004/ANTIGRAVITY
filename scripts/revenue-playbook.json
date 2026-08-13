@@ -1,0 +1,75 @@
+{
+  "_comment": "Daily revenue-asset playbook for the ANTIGRAVITY-RevenueTasks routine. assign-revenue-tasks.ps1 posts the day's entries to Mission Control (:3151); the swarm produces files; the materializer commits them to mission-control-output/. Rules: every prompt is self-contained (workers see ONLY the brief), truthful (no invented metrics, no fake customer claims), business-only framing, Square only. Deliverables MUST be emitted as File: blocks so they land in the repo instead of dying as chat text.",
+  "doctrine": "HARD RULES for this task: (1) TRUTH ONLY — never invent statistics, customer names, integrations, or results; YouAndINotAI has zero paying customers today and you must not imply otherwise. Describe what the product actually does: human verification for dating (phone + selfie checks), video chat, Square checkout. (2) Business-product framing only — no fundraising language, no third-party-benefit promises. (3) Square is the only payment processor — never mention Stripe. (4) Every deliverable must be a complete file emitted exactly as:  File: `relative/path.ext`  followed by a fenced code block with the FULL contents. Prose outside fences is not saved. Relative paths only.",
+  "days": {
+    "Monday": [
+      {
+        "title": "B2B outreach drafts — dating platform founders",
+        "agent": "hermes",
+        "prompt": "Write 5 distinct cold-outreach email drafts aimed at founders of small/mid dating apps and communities, pitching YouAndINotAI's human-verification approach (phone + selfie verification, video chat, bot-free positioning, youandinotai.com). Each email: subject line, under 140 words, one concrete call to action, personalization slot {{name}}/{{app}}. Vary the angle across the 5 (bot complaints, trust badge, chargeback reduction as a QUESTION not a claim, partnership, white-label). Output as File: outreach/dating-founders-batch.md"
+      },
+      {
+        "title": "Directory submission copy — 2 platforms",
+        "agent": "hermes",
+        "prompt": "Produce ready-to-paste launch submissions for youandinotai.com for (a) AlternativeTo and (b) SaaSHub. For each: 60-char tagline, 260-char short description, 1000-char long description, 5 tags, one suggested category. Position honestly: a dating platform whose product is proof-of-human — verification plus video chat, paid membership via Square. Output as File: outreach/directory-alternativeto.md and File: outreach/directory-saashub.md"
+      }
+    ],
+    "Tuesday": [
+      {
+        "title": "SEO article — bot-free dating",
+        "agent": "hermes",
+        "prompt": "Write a 900-word article for the youandinotai.com blog titled around the search intent 'how to tell if a dating profile is a bot'. Practical, genuinely useful checklist content; mention YouAndINotAI once near the end as the platform built around human verification — no invented statistics anywhere. Include meta title (<60 chars) and meta description (<155 chars) at the top. Output as File: content/blog/spot-dating-bots.md"
+      },
+      {
+        "title": "Social captions week pack",
+        "agent": "hermes",
+        "prompt": "Write 10 short social captions (X/Threads length) for YouAndINotAI on the theme 'dating apps are full of bots; we verify humans'. Punchy, honest, zero fake numbers, each with one hashtag max. Output as File: content/social/captions-weekly.md"
+      }
+    ],
+    "Wednesday": [
+      {
+        "title": "ai-solutions.store product copy pass",
+        "agent": "hermes",
+        "prompt": "Write improved product-page copy for ai-solutions.store's 'Yesterday's News Today' daily AI news brief SKU: headline, 3 benefit bullets (truthful — it is an automated daily brief generated from public RSS sources), pricing blurb slot, FAQ (5 Q&As including 'is this AI-generated?' answered honestly YES). Output as File: content/store/news-droid-copy.md"
+      },
+      {
+        "title": "Claude Droid outreach — niche newsletters",
+        "agent": "hermes",
+        "prompt": "Write 3 cold-outreach drafts offering the automated daily news brief (ai-solutions.store) as white-label content for small newsletter operators. Honest framing: AI-generated, human-reviewable, delivered daily. Subject + <120 words each. Output as File: outreach/news-droid-newsletters.md"
+      }
+    ],
+    "Thursday": [
+      {
+        "title": "Checkout funnel copy variant",
+        "agent": "hermes",
+        "prompt": "Write an alternative membership/checkout section for youandinotai.com: headline, subhead, 3 value bullets (verification, video chat, human-only community), one CTA button label, and short reassurance line naming Square as the processor. Truthful, no urgency-fakery ('only 3 left' is banned). Output as File: content/site/checkout-variant-b.md"
+      },
+      {
+        "title": "Objection-handling FAQ",
+        "agent": "hermes",
+        "prompt": "Write a 10-question FAQ handling the real objections to paying for a small new dating platform (empty-network problem, why pay, privacy of selfie verification, refunds, data handling). Answer honestly — the network is small and early adopters are joining a new community; never invent user counts. Output as File: content/site/objections-faq.md"
+      }
+    ],
+    "Friday": [
+      {
+        "title": "Weekly revenue-asset digest + next-week plan",
+        "agent": "openclaw",
+        "prompt": "You are reviewing a week of generated revenue assets that were committed under mission-control-output/ (outreach drafts, directory copy, blog + social content, store copy). Write a one-page digest: what asset types exist now, which are ready to ship as-is, which need a human pass before sending (anything outbound), and a prioritized 5-item plan for next week focused on the shortest path to a FIRST verified sale via Square. Be blunt about what is blocked on Joshua (sending emails, submitting directories, posting socials — agents draft, a human ships). Output as File: reports/week-digest.md"
+      }
+    ],
+    "Saturday": [
+      {
+        "title": "Community post drafts — value-first",
+        "agent": "hermes",
+        "prompt": "Write 2 value-first community post drafts (one for r/OnlineDating-style subreddits, one for Indie Hackers) about building a bot-free dating platform as a solo founder. Genuinely useful lessons content; the product is mentioned only in a single closing line. No fake metrics, no growth-hack cringe. Output as File: content/community/reddit-draft.md and File: content/community/indiehackers-draft.md"
+      }
+    ],
+    "Sunday": [
+      {
+        "title": "Next-week content calendar",
+        "agent": "hermes",
+        "prompt": "Produce a 7-day content calendar for YouAndINotAI: per day one social post theme, one outreach batch target, and one site/store improvement, each in one line. Keep it executable by one person in under an hour a day. Output as File: content/calendar-next-week.md"
+      }
+    ]
+  }
+}
