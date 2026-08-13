@@ -78,12 +78,16 @@ Hermes, OpenClaw, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Ollam
 
 **Current shape (set 2026-08-09):**
 
-- **OpenCode = CEO.** Contract: `C:\Users\joshl\.opencode\claude.md`, mirrored to
-  `agent-contracts/OPENCODE-CEO.md`.
+- **No CEO. No Paperclip. No AI boss.** Joshua is the owner; the active lead on
+  any task is whichever agent he directly assigns, per the rule below.
+- **OpenCode = agent/harness.** Contract: `C:\Users\joshl\.opencode\claude.md`,
+  mirrored to `agent-contracts/OPENCODE-AGENT.md`.
 - **Hermes = agent** — research, outreach, revenue, content. `agent-contracts/HERMES-AGENT.md`.
 - **OpenClaw = agent** — engineering and verification. `agent-contracts/OPENCLAW-AGENT.md`.
-- **Mission Control v5 on `:3151` = the board** (kanban, agents, Graphy, MCP).
-  Mission Control v6 on `:8787` is a *health monitor only* — different program.
+- **Mission Control on `:3151` = the board** (kanban, agents, Graphy, MCP; dir `mission-control-v5`).
+  **Stack Health on `:8787`** is the health monitor (dir `mission-control-v6`) — a
+  different program, deliberately no longer called "Mission Control" so the two
+  stop sounding like versions of the same thing.
 - Shared rules for all three: `agent-contracts/AGENTS.md`.
 
 FCC can scan, summarize, draft, and propose patches. It does not make final

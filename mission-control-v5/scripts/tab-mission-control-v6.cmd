@@ -1,5 +1,5 @@
 @echo off
-rem ── Mission Control v6 — stack health monitor (:8787) ─────────────────────
+rem ── Stack Health — the health monitor (:8787, dir mission-control-v6) ─────
 rem
 rem THIS IS NOT THE AGENT SWARM. v6 is a Python/FastAPI monitor - checks.py,
 rem monitor.py, remediation.py. It watches ports and pages you when something
@@ -14,7 +14,7 @@ rem Restored 2026-08-09: v5 on 3151, v6 on 8787.
 rem
 rem A red on this board means "go verify", not "broken" - it has already shown
 rem false reds from checks aimed at dead ports.
-title mission-control-v6 (:8787)
+title stack-health (:8787)
 cd /d F:\ANTIGRAVITY\mission-control-v6
 
 rem Scope MC_PORT to this window only, so nothing else on the machine inherits
