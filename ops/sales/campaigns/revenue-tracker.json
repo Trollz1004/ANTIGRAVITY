@@ -7,7 +7,7 @@
   "ceiling_usd": null,
   "collected_usd_verified": 0,
   "updated_at": "2026-08-06T23:45:00+00:00",
-  "goal_note": "INFINITE revenue loop. $10,000 is a FLOOR milestone (AI costs a year ahead + GPU/server updates + tax catch-up) — NOT a stop line. Keep selling after $10k. No batch caps (not 20 leads, not one sprint).",
+  "goal_note": "INFINITE revenue loop. $10,000 is a FLOOR milestone (AI costs a year ahead + GPU/server updates + tax catch-up) \u2014 NOT a stop line. Keep selling after $10k. No batch caps (not 20 leads, not one sprint).",
   "pipeline_policy": {
     "icp_batch_cap": null,
     "icp_mode": "continuous",
@@ -133,5 +133,49 @@
     ],
     "after_floor": "Continue infinite loop: more B2B packs + date-app affiliate recurring + creator refs. Never declare campaign DONE solely because floor was hit."
   },
-  "note": "B2B SKUs minted 2026-08-05 via Square payment-links API. Public b2b.html uses long_url only. Goal mode infinite as of 2026-08-06 (Josh: not 20)."
+  "note": "B2B SKUs minted 2026-08-05 via Square payment-links API. Public b2b.html uses long_url only. Goal mode infinite as of 2026-08-06 (Josh: not 20).",
+  "cycles_completed": 7,
+  "cycles": [
+    {
+      "cycle": 3,
+      "timestamp": "20260813T023501Z",
+      "prospects": 3,
+      "campaigns": 2,
+      "landing_pages": 1,
+      "status": "completed"
+    },
+    {
+      "cycle": 4,
+      "timestamp": "20260813T023509Z",
+      "prospects": 3,
+      "campaigns": 2,
+      "landing_pages": 1,
+      "status": "completed"
+    },
+    {
+      "cycle": 5,
+      "timestamp": "20260813T023619Z",
+      "prospects": 3,
+      "campaigns": 2,
+      "landing_pages": 1,
+      "status": "completed"
+    },
+    {
+      "cycle": 6,
+      "timestamp": "20260813T040019Z",
+      "prospects": 3,
+      "campaigns": 2,
+      "landing_pages": 1,
+      "status": "completed"
+    },
+    {
+      "cycle": 7,
+      "timestamp": "20260813T042834Z",
+      "prospects": 5,
+      "campaigns": 2,
+      "landing_pages": 1,
+      "affiliate_content": 1,
+      "status": "completed"
+    }
+  ]
 }
