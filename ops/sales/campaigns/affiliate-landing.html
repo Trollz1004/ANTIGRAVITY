@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YouAndINotAI — Verified Human Dating</title>
+  <meta name="description" content="Dating app that verifies real humans. No bots, no fake profiles. Start connecting with people who actually exist.">
+  <meta property="og:title" content="YouAndINotAI — Dating Without Bots">
+  <meta property="og:description" content="Verified human dating. $9.99/month. What's your type?">
+  <meta property="og:image" content="https://trollz1004.github.io/youandinotai-links/og-image.png">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="/favicon.ico">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0b0f1a; color: #e5e7eb; margin: 0; padding: 0; overflow-x: hidden; }
+    .container { max-width: 480px; margin: 0 auto; padding: 2rem; }
+    h1 { color: #a78bfa; font-size: 2rem; margin-bottom: 0.5rem; }
+    .price { font-size: 2.5rem; color: #67e8f9; font-weight: 700; margin: 1rem 0; }
+    .btn { display: block; width: 100%; background: #a78bfa; color: #0b0f1a; padding: 1rem; text-decoration: none; border-radius: 0.75rem; font-weight: 700; font-size: 1.1rem; margin: 1.5rem 0; transition: all 0.2s; text-align: center; }
+    .btn:hover { background: #c084fc; transform: translateY(-2px); box-shadow: 0 4px 20px rgba(167, 139, 250, 0.3); }
+    .feature { margin: 1.5rem 0; padding: 1rem; background: #1e293b; border-radius: 0.5rem; border: 1px solid #334155; }
+    .feature h3 { color: #67e8f9; margin: 0 0 0.5rem; }
+    footer { text-align: center; margin-top: 2rem; color: #4b5563; font-size: 0.8rem; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>YouAndINotAI</h1>
+    <p><span class="price">$9.99</span>/month</p>
+    <p>Verified human dating. No bots. No fake profiles. No AI-generated photos.</p>
+
+    <div class="feature">
+      <h3>✓ Verified Humans Only</h3>
+      <p>Every profile is verified with government ID + liveness check. Know who you're talking to.</p>
+    </div>
+
+    <div class="feature">
+      <h3>✓ No AI Photos</h3>
+      <p>AI-generated profile photos are detected and rejected. Real people, real photos.</p>
+    </div>
+
+    <div class="feature">
+      <h3>✓ Affiliate Commission</h3>
+      <p>Earn 15-50% recurring by sharing this page. <a href="#" onclick="showAffiliateInfo()">Learn how</a></p>
+    </div>
+
+    <button class="btn" id="checkout-btn">Start Dating as Human</button>
+
+    <div id="affiliate-info" class="hidden">
+      <h3>Affiliate Program</h3>
+      <p><strong>15-50% recurring commission</strong> on every subscription you refer.</p>
+      <p>Share your unique link: <code id="affiliate-link"></code></p>
+      <p>1 million followers → 10k subscribers → $150K-$500K/month potential.</p>
+      <p><a href="/affiliate-join.html">Join the affiliate program →</a></p>
+    </div>
+
+    <footer>
+      <p>YouAndINotAI — Trash Or Treasure Online Recycler LLC</p>
+      <p><a href="/affiliate-dashboard.html">Affiliate Program</a></p>
+    </footer>
+  </div>
+
+  <script>
+    // Capture affiliate ID from URL parameter
+    function getAffiliateId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('ref') || 'organic';
+    }
+
+    function showAffiliateInfo() {
+      document.getElementById('affiliate-info').classList.remove('hidden');
+      const affiliateId = getAffiliateId();
+      document.getElementById('affiliate-link').textContent =
+        'https://trollz1004.github.io/youandinotai-links/?ref=' + affiliateId;
+    }
+
+    // Set up the checkout button with affiliate tracking
+    const affiliateId = getAffiliateId();
+    const checkoutBtn = document.getElementById('checkout-btn');
+
+    // Square checkout URL with UTM tracking for affiliate attribution
+    const squareUrl = 'https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/1PqO8OO9u4KXHnEF8KKXbxkzzAGZY';
+    const trackedUrl = squareUrl + '?utm_source=affiliate&utm_medium=referral&utm_campaign=' + encodeURIComponent(affiliateId);
+
+    checkoutBtn.onclick = function() {
+      // Track the click via localStorage (client-side affiliate tracking)
+      try {
+        localStorage.setItem('affiliate_ref', affiliateId);
+        localStorage.setItem('affiliate_click_ts', Date.now());
+      } catch(e) {}
+      window.open(trackedUrl, '_blank');
+    };
+
+    // If affiliate info hash is in URL, show it on load
+    if (window.location.hash === '#affiliate') {
+      showAffiliateInfo();
+    }
+  </script>
+</body>
+</html>

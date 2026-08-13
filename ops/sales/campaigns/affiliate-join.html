@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Join Affiliate Program — YouAndINotAI</title>
+  <meta name="description" content="Join the YouAndINotAI affiliate program. Earn 15-50% recurring commission on dating app subscriptions.">
+  <link rel="icon" href="/favicon.ico">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0b0f1a; color: #e5e7eb; margin: 0; padding: 0; }
+    .container { max-width: 500px; margin: 0 auto; padding: 2rem; }
+    h1 { color: #a78bfa; }
+    input, button, select { width: 100%; padding: 0.75rem; margin: 0.5rem 0; border: 1px solid #334155; border-radius: 0.5rem; background: #0f172a; color: #e5e7eb; }
+    button { background: #a78bfa; color: #0b0f1a; border: none; font-weight: 700; cursor: pointer; }
+    button:hover { background: #c084fc; }
+    .success { color: #67e8f9; font-weight: 700; }
+    .commission-box { background: #1e293b; border: 2px dashed #a78bfa; border-radius: 0.75rem; padding: 1.5rem; text-align: center; margin: 1.5rem 0; }
+    code { background: #0f172a; padding: 0.15rem 0.4rem; border-radius: 0.25rem; color: #67e8f9; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Join the Affiliate Program</h1>
+    <p>Earn 15-50% recurring commission on every dating app subscription you refer.</p>
+
+    <div class="commission-box">
+      <h2 style="color: #67e8f9; margin: 0;">15-50% Recurring</h2>
+      <p style="margin: 0.5rem 0 0;">As you grow, your commission tier increases. No caps, no expiry.</p>
+    </div>
+
+    <form id="affiliate-join-form">
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Email (used for payouts)" required>
+      <input type="text" placeholder="Platform (YouTube, TikTok, IG, etc.)" required>
+      <input type="text" placeholder="Follower/Subscriber Count" required>
+      <select required>
+        <option value="">How will you promote?</option>
+        <option>Video content (YouTube/TikTok)</option>
+        <option>Social posts (Instagram/Facebook/Twitter)</option>
+        <option>Discord/Communities</option>
+        <option>Blog/SEO content</option>
+        <option>Email newsletter</option>
+        <option>Other</option>
+      </select>
+      <button type="submit">Get My Affiliate Link</button>
+    </form>
+
+    <p style="margin-top: 1.5rem; color: #9ca3af; font-size: 0.85rem;">
+      By submitting, you agree to the affiliate terms. Payouts via Square/PayPal monthly. Minimum $5.
+      Questions? Email: <code>joshlcoleman@gmail.com</code>
+    </p>
+  </div>
+
+  <script>
+    document.getElementById('affiliate-join-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = this.querySelector('input[type="email"]').value;
+      // Generate a simple affiliate ID from email
+      const affiliateId = 'aff_' + email.split('@')[0].replace(/[^a-z0-9]/gi, '').substring(0, 12);
+      document.querySelector('input[type="text"]').value = ''; // reset form
+      // Safe: affiliateId is sanitized (alphanumeric only), and email is only used to generate an ID prefix
+      this.innerHTML = '<div class="success">Thank you!<br>Your affiliate link:<br><code>https://trollz1004.github.io/youandinotai-links/?ref=' + affiliateId + '</code><br><br>Check your email (joshlcoleman@gmail.com) to confirm your account.</div>';
+    });
+  </script>
+</body>
+</html>

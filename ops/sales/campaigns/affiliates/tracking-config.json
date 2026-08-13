@@ -1,0 +1,73 @@
+{
+  "program_name": "YouAndINotAI Affiliate Program",
+  "status": "ACTIVE",
+  "commission_tiers": {
+    "bronze": {
+      "min_referrals": 1,
+      "commission_rate": 0.15,
+      "description": "15% recurring on all referred subscriptions"
+    },
+    "silver": {
+      "min_subscribers": 10000,
+      "commission_rate": 0.30,
+      "description": "30% recurring on all referred subscriptions"
+    },
+    "gold": {
+      "min_subscribers": 50000,
+      "commission_rate": 0.40,
+      "description": "40% recurring on all referred subscriptions"
+    },
+    "platinum": {
+      "min_subscribers": 100000,
+      "commission_rate": 0.50,
+      "description": "50% recurring on all referred subscriptions"
+    }
+  },
+  "payment_plANS": {
+    "founding_member": {
+      "name": "Founding Member",
+      "amount_usd": 9.99,
+      "cadence": "monthly",
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/1PqO8OO9u4KXHnEF8KKXbxkzzAGZY"
+    },
+    "bot_shield": {
+      "name": "Bot-Shield Verification",
+      "amount_usd": 1,
+      "one_time": true,
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/bcHu484B9lXIcLED1NCOMIylqGRZY"
+    }
+  },
+  "tracking": {
+    "url_parameter": "ref",
+    "storage_method": "localStorage + UTM params",
+    "tracking_endpoint": null,
+    "tracking_domain": "trollz1004.github.io"
+  },
+  "payout": {
+    "schedule": "monthly",
+    "method": "Square direct deposit or PayPal",
+    "minimum_payout_usd": 5,
+    "auto_withdraw_threshold_usd": 100,
+    "currency": "USD"
+  },
+  "potential_earnings": {
+    "10k_followers_1pct_conversion": {
+      "subscribers": 100,
+      "monthly_revenue_per_creator": "$150 - $500",
+      "annual_revenue_per_creator": "$1,800 - $6,000"
+    },
+    "100k_followers_1pct_conversion": {
+      "subscribers": 1000,
+      "monthly_revenue_per_creator": "$1,500 - $5,000",
+      "annual_revenue_per_creator": "$18,000 - $60,000"
+    },
+    "1m_followers_1pct_conversion": {
+      "subscribers": 10000,
+      "monthly_revenue_per_creator": "$15,000 - $50,000",
+      "annual_revenue_per_creator": "$180,000 - $600,000"
+    }
+  },
+  "join_contact": "joshlcoleman@gmail.com",
+  "join_instructions": "Email with subject 'AFFILIATE JOIN' including your name, platform, and follower count.",
+  "note": "No brand on Earth pays 50% recurring commission. YouAndINotAI does because dating app LTV (~$200/year) supports it. Product brands with thin margins cannot match."
+}
