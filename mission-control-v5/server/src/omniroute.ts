@@ -233,6 +233,17 @@ function executorChains(): Record<string, ExecutorLink[]> {
       { provider: 'openai_compat', model: env('EXEC_FCC_OPUS_FALLBACK_MODEL') || 'auto/best-free' },
       { provider: 'ollama', model: env('EXEC_LOCAL_FALLBACK_MODEL') || 'ornith:9b' },
     ],
+    // THE JUDGE — highest-reasoning route, deliberately NOT any model the three
+    // worker lanes run on, and deliberately WITHOUT a local floor: a 9B local
+    // model must never hold gate authority over the swarm's output. If the
+    // judge is unreachable the task goes BLOCKED for human review instead of
+    // being rubber-stamped. Point EXEC_JUDGE_MODEL at the strongest reasoning
+    // route available (grok-4.5 max thinking / gemini max reasoning / opus)
+    // that is not serving as a worker.
+    judge: [
+      { provider: 'openai_compat', model: env('EXEC_JUDGE_MODEL') || 'auto/best-reasoning' },
+      { provider: 'openai_compat', model: env('EXEC_JUDGE_FALLBACK_MODEL') || 'auto/best-free' },
+    ],
   };
 }
 
@@ -248,6 +259,11 @@ const EXECUTOR_META: Record<string, { label: string; description: string }> = {
   'fcc-opus': {
     label: 'DEEP · FREE',
     description: 'Free coding-tier routes for heavier reasoning. Was cc/claude-opus, which billed the Max subscription — automation never does that.',
+  },
+  judge: {
+    label: 'JUDGE',
+    description:
+      'The adversarial judge lane — highest reasoning route, never one of the worker models, no local floor. The only lane with authority to accept, edit, or deny swarm output; repo push/merge/branch-delete happens only on judge-accepted work.',
   },
 };
 
