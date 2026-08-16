@@ -5,7 +5,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 $services = @(
   @{ Name = 'OmniRoute gateway'; Port = 20128; Cmd = 'omniroute serve  (or the OmniRoute desktop app)'; Core = $true },
   @{ Name = 'Ollama';            Port = 11434; Cmd = 'ollama serve  (usually already running)';         Core = $true },
-  @{ Name = 'Mission Control';   Port = 3151;  Cmd = 'cd F:\ANTIGRAVITY\mission-control-v5 && npm start'; Core = $true },
+  @{ Name = 'Mission Control';   Port = 3151;  Cmd = 'cd C:\ANTIGRAVITY\mission-control-v5 && npm start'; Core = $true },
   @{ Name = 'FCC proxy';         Port = 8082;  Cmd = 'fcc-serve';                                      Core = $false },
   @{ Name = 'Hermes dashboard';  Port = 9119;  Cmd = 'hermes dashboard';                               Core = $false },
   @{ Name = 'OpenClaw (ClawX)';  Port = 18789; Cmd = 'ClawX starts this itself - never run a 2nd one'; Core = $false },

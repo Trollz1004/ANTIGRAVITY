@@ -8,7 +8,7 @@ rem
 rem Starts it only if nothing already answers on :11434, so it will not fight
 rem the tray app if that is what brought it up.
 title ollama (:11434)
-cd /d F:\ANTIGRAVITY
+cd /d C:\ANTIGRAVITY
 
 curl -s -o nul --max-time 3 http://127.0.0.1:11434/api/tags && (
   echo [ollama] already serving on :11434 - leaving it alone.

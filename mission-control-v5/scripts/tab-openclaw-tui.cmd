@@ -10,7 +10,7 @@ rem
 rem So: if a TUI is already running, this tab stays out of the way. It never
 rem starts a gateway of its own - a second gateway clobbers openclaw.json.
 title openclaw-tui
-cd /d F:\ANTIGRAVITY
+cd /d C:\ANTIGRAVITY
 
 powershell -NoProfile -ExecutionPolicy Bypass -Command ^
   "exit ((Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'openclaw\.mjs.+tui' } | Measure-Object).Count)"

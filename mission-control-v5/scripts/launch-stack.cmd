@@ -1,5 +1,5 @@
 @echo off
-cd /d F:\ANTIGRAVITY
+cd /d C:\ANTIGRAVITY
 rem ANTIGRAVITY stack launcher
 rem
 rem Opens ONE Windows Terminal window with every stack service as a VISIBLE,
