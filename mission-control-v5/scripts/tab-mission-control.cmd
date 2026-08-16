@@ -10,6 +10,6 @@ rem until an API key check or Cloudflare Access sits in front of it. The 530 on
 rem mission-control.youandinotai.com is currently the only thing preventing
 rem anyone on the internet from spending your model budget.
 title mission-control (:3151)
-cd /d F:\ANTIGRAVITY\mission-control-v5
+cd /d C:\ANTIGRAVITY\mission-control-v5
 echo [mission-control] http://localhost:3151/  (LOCAL ONLY - no auth on this server)
 npm start

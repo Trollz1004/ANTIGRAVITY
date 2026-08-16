@@ -15,7 +15,7 @@ rem
 rem A red on this board means "go verify", not "broken" - it has already shown
 rem false reds from checks aimed at dead ports.
 title stack-health (:8787)
-cd /d F:\ANTIGRAVITY\mission-control-v6
+cd /d C:\ANTIGRAVITY\mission-control-v6
 
 rem Scope MC_PORT to this window only, so nothing else on the machine inherits
 rem it. A leaked PORT variable is what caused the 2026-07-31 crash-loop.

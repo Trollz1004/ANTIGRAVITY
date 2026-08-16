@@ -25,7 +25,7 @@
   pwsh -NoProfile -ExecutionPolicy Bypass -File install-bootstrap.ps1
 #>
 param(
-  [string]$Bootstrap = 'F:\ANTIGRAVITY\mission-control-v5\scripts\bootstrap.ps1',
+  [string]$Bootstrap = 'C:\ANTIGRAVITY\mission-control-v5\scripts\bootstrap.ps1',
   [switch]$DryRun
 )
 $ErrorActionPreference = 'Continue'
