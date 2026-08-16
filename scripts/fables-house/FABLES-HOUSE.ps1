@@ -80,14 +80,18 @@ $Stages = @(
 
     @{ Name = 'Stack Health :8787'; Required = $false
        Probe = { Test-Http 'http://127.0.0.1:8787/' 8 }
-       Heal  = { $t = 'C:\ANTIGRAVITY\mission-control-v5\scripts\tab-mission-control-v6.cmd'
-                 if (Test-Path $t) { Start-Process cmd -ArgumentList '/c',$t -WindowStyle Hidden } } }
+       Heal  = { $py = 'C:\ANTIGRAVITY\mission-control-v6\.venv\Scripts\python.exe'
+                 if (Test-Path $py) {
+                     $env:MC_PORT = '8787'   # child inherits; works on PS 5.1 and 7
+                     Start-Process $py -ArgumentList '-m','mission_control','serve' -WorkingDirectory 'C:\ANTIGRAVITY\mission-control-v6' -WindowStyle Hidden
+                     Remove-Item Env:MC_PORT -ErrorAction SilentlyContinue
+                 } } }
 
     @{ Name = 'Ollama :11434'; Required = $false
        Probe = { Test-Port 11434 }
-       Heal  = { $o = Get-Command ollama -ErrorAction SilentlyContinue
-                 if ($o) { Start-Process $o.Source -ArgumentList 'serve' -WindowStyle Hidden }
-                 else { Log '  Ollama not installed on this node (optional — RTX 3070 8GB can host it; winget install Ollama.Ollama)' 'DarkYellow' } } }
+       Heal  = { $o = "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe"
+                 if (Test-Path $o) { Start-Process $o -ArgumentList 'serve' -WindowStyle Hidden }
+                 else { Log '  Ollama missing: winget install Ollama.Ollama' 'DarkYellow' } } }
 )
 
 function Invoke-Stage($stage, [int]$maxAttempts = 0) {
