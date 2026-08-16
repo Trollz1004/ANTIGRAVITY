@@ -194,10 +194,10 @@ brain services all run here.
   the tunnel via the `Cloudflared` Windows service.
 - 9020: still retired, dev/support checkout only if it ever returns.
 
-Hardware note: Sabretooth's GPU is a **GTX 1050 Ti with 4 GB** (the T5500 had 8 GB).
-`ornith:9b` is 5.6 GB and **no longer fits** — any executor chain still ending there
-has no working local floor. The CPU is an i7-4960X, which unlike the old Xeon has
-AVX, so CPU inference is worth measuring before buying hardware.
+Hardware note (verified 2026-08-16): Sabretooth's GPU is an **RTX 3070 with 8 GB**
+(driver 595.95) — the old "GTX 1050 Ti 4 GB, nothing local fits" doctrine is
+obsolete. `ornith:9b` (5.6 GB) fits again; a local executor floor is viable once
+Ollama is reinstalled. The CPU is an i7-4960X with AVX.
 
 ## OpenClaw
 
