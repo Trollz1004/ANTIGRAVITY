@@ -426,6 +426,13 @@ registerBrainRoutes(app);
 // task + capability set defined by the monorepo. See server/src/mcpServer.ts.
 registerMcpServer(app);
 
+// ── PAPERWEIGHT command center (static page; roster + metrics are sample data,
+// not live feeds — do not publish outside the LAN) ───────────────────────────
+const paperweightDir = join(__dirname, '..', '..', '..', 'apps', 'paperweight');
+if (existsSync(paperweightDir)) {
+  app.use('/paperweight', express.static(paperweightDir));
+}
+
 // ── Static client (production build) ─────────────────────────────────────────
 const clientDist = join(__dirname, '..', '..', 'client', 'dist');
 if (existsSync(clientDist)) {
