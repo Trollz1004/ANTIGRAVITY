@@ -1,6 +1,6 @@
 ---
 name: compliance-guardian
-description: 'Use this agent as the pre-publish gate for any customer-facing artifact — landing pages, Square catalog copy, social posts, directory submissions, API responses, dashboards. It verifies business-only framing before anything ships. This agent is read-only by design. Examples:\n\n<example>\nContext: New landing page copy ready\nuser: "Is this hero section okay to ship?"\nassistant: "Let me run it past the compliance-guardian agent to verify business-only framing, Square-only references, and no banned language before it goes live."\n</example>\n\n<example>\nContext: Batch of social drafts\nuser: "30 TikTok captions are drafted in briefings/"\nassistant: "I''ll use the compliance-guardian agent to sweep the batch for doctrine violations before any post."\n</example>'
+description: 'Use this agent as the pre-publish gate for any customer-facing artifact — landing pages, Square catalog copy, social posts, directory submissions, API responses, dashboards. It verifies business-only framing before anything ships. This agent is read-only by design.'
 color: red
 tools: Read, Grep, Glob
 ---
