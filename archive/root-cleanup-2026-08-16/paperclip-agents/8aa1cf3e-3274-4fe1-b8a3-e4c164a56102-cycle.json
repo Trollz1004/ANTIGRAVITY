@@ -1,0 +1,200 @@
+[
+  {
+    "id": "66f1ec36-9ae6-44bf-aeab-21818665aad8",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x00000213C8620900>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-28](/TRO/issues/TRO-28)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T04:33:07.880Z",
+    "updatedAt": "2026-08-07T04:33:07.880Z"
+  },
+  {
+    "id": "f23809a1-31b9-4a81-87d1-0d503bfe2304",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x000002D5772847C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-26](/TRO/issues/TRO-26)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T04:25:34.776Z",
+    "updatedAt": "2026-08-07T04:25:34.776Z"
+  },
+  {
+    "id": "6b03f9f1-61f4-420c-9fcb-5ab00339aea0",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x00000178419807C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-25](/TRO/issues/TRO-25)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T04:15:35.363Z",
+    "updatedAt": "2026-08-07T04:15:35.363Z"
+  },
+  {
+    "id": "d13a3885-b3e0-4600-8cea-17c0eae4a989",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x00000245976B47C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-24](/TRO/issues/TRO-24)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T04:09:18.092Z",
+    "updatedAt": "2026-08-07T04:09:18.092Z"
+  },
+  {
+    "id": "fed00c16-e586-45f1-9bc9-8622cfcc5a38",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x0000020AE15047C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-22](/TRO/issues/TRO-22)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T03:56:06.433Z",
+    "updatedAt": "2026-08-07T03:56:06.433Z"
+  },
+  {
+    "id": "15e00d05-486b-4da9-bdba-970b427939da",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x00000235602902C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-20](/TRO/issues/TRO-20)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T03:41:47.921Z",
+    "updatedAt": "2026-08-07T03:41:47.921Z"
+  },
+  {
+    "id": "6800727c-1179-49bd-a3a5-36fe6607349e",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x000001D6603207C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-18](/TRO/issues/TRO-18)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T03:28:48.229Z",
+    "updatedAt": "2026-08-07T03:28:48.229Z"
+  },
+  {
+    "id": "486c67a7-1189-4dff-a555-71a6ce849178",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x000002CA6A3407C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-15](/TRO/issues/TRO-15)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T03:21:35.023Z",
+    "updatedAt": "2026-08-07T03:21:35.023Z"
+  },
+  {
+    "id": "47425003-bb1b-435c-a5a1-b047668bf029",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x0000025130E047C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-14](/TRO/issues/TRO-14)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T03:12:38.633Z",
+    "updatedAt": "2026-08-07T03:12:38.633Z"
+  },
+  {
+    "id": "f216e5c5-8f4d-4006-ba0a-16cb1021620a",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "1952b385-1649-42fd-8a49-17959edc1794",
+    "body": "Heartbeat 2026-08-07 03:11Z: CTO completed TRO-11 production checkout proof. Health and Square integration pass; all four tier checkout links return 200 and reach checkout.square.site. CTO fixed browser API fallback in commit 1171b88e. No paid transaction executed: processor receipt IDs=none, verified revenue=$0. Assigned next useful CTO task 50536b19: wire sub-agent heartbeat data into Graphy nodes. CMO remains on revenue outreach; owner-authenticated email/social session remains blocker.",
+    "createdAt": "2026-08-07T03:11:33.355Z",
+    "updatedAt": "2026-08-07T03:11:33.355Z"
+  },
+  {
+    "id": "06fa7c01-83df-41d7-bf83-df39c0434b13",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x000001FC78A247C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-13](/TRO/issues/TRO-13)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T03:03:05.192Z",
+    "updatedAt": "2026-08-07T03:03:05.192Z"
+  },
+  {
+    "id": "4859a837-107d-4334-9be4-bc17552483c4",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "594c5a88-8569-498a-ab1e-c62f78a24915",
+    "body": "Heartbeat 2026-08-07 03:02Z: CEO operator check complete. CTO remains active on critical TRO-11 checkout/telemetry proof; CMO remains active on revenue outreach. Current verified totals: delivered=1, replies=0, orders=0, processor receipt IDs=none, revenue=$0. Owner unblock still authenticated email/social session plus TRO-2 funding/platform access. Both executives assigned; no churn or duplicate work created.",
+    "createdAt": "2026-08-07T03:02:52.713Z",
+    "updatedAt": "2026-08-07T03:02:52.713Z"
+  },
+  {
+    "id": "2695f121-f789-433c-938f-d88d4dc852b2",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "014f65e0-a4e9-4726-ab0c-a13fe6aeca29",
+    "body": "Heartbeat 2026-08-07 03:01Z: CTO active on TRO-11 production checkout/telemetry proof. CMO attempted four qualified agency contact routes; anti-bot/SMTP failures leave cumulative delivered sends=1, replies=0, orders=0, receipt IDs=none, verified revenue=$0. CMO next unblock requires owner-authenticated email/social session. TRO-2 remains blocked on owner funding/platform access. Both executives have highest-value work; no duplicate task created.",
+    "createdAt": "2026-08-07T03:01:15.847Z",
+    "updatedAt": "2026-08-07T03:01:15.847Z"
+  },
+  {
+    "id": "7f3b2cd4-d8b1-4c65-9e7a-0cda2a1ec692",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x000001F71BE902C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-12](/TRO/issues/TRO-12)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T02:53:08.530Z",
+    "updatedAt": "2026-08-07T02:53:08.530Z"
+  },
+  {
+    "id": "e9b63ccd-d52b-4c48-8c0a-103929233a3d",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "21a8866d-55ed-4005-92f9-44b836a67c09",
+    "body": "Heartbeat 2026-08-07 02:52Z: CMO active on first outbound batch (095946ed-dfa3-41dd-9328-6d23058d9e6d). CTO had no open task after route recovery, so assigned TRO-11 critical: verify production checkout plus receipt/order telemetry end-to-end. TRO-2 and TRO-9 remain blocked by owner funding/platform work; no revenue claimed without transaction proof.",
+    "createdAt": "2026-08-07T02:52:59.550Z",
+    "updatedAt": "2026-08-07T02:52:59.550Z"
+  },
+  {
+    "id": "63f1ab7d-94cf-41b7-a5bd-cd0ac289055c",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x00000254AB4442C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-10](/TRO/issues/TRO-10)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T02:40:22.311Z",
+    "updatedAt": "2026-08-07T02:40:22.311Z"
+  },
+  {
+    "id": "51ec210b-2576-49b0-aaee-bad5c38f7648",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "3fa812e8-2099-4a1c-b5b2-0552755fccac",
+    "body": "Correction/clarification: verified revenue remains $0. Zero processor receipts or order proof supplied yet.",
+    "createdAt": "2026-08-07T02:40:07.108Z",
+    "updatedAt": "2026-08-07T02:40:07.108Z"
+  },
+  {
+    "id": "ae0094f0-9b37-4e75-9006-68543c71e444",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "3fa812e8-2099-4a1c-b5b2-0552755fccac",
+    "body": "Heartbeat 2026-08-07 02:39Z: CMO owns in-progress outbound batch; demanded sends/replies/orders/receipt IDs and prohibited unsupported revenue claims. CTO product-route issue requeued critical after adapter failure, with route/build proof required. Current verified revenue: no receipt/order evidence found, so $0 claimed. Backlog remains available; next check inspect agent evidence and resolve TRO-9 only after live route proof.",
+    "createdAt": "2026-08-07T02:39:46.653Z",
+    "updatedAt": "2026-08-07T02:39:46.653Z"
+  }
+]

@@ -1,0 +1,187 @@
+{
+  "id": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+  "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+  "projectId": null,
+  "projectWorkspaceId": null,
+  "goalId": "a75e4986-14af-4aa0-ba39-c8dab6a086af",
+  "parentId": null,
+  "title": "Run company continuously: delegate, unblock, verify revenue",
+  "description": "Standing CEO loop. Every heartbeat: ensure CTO and CMO have useful assigned work, unblock stale tasks, verify receipts/orders before revenue claims, create next useful task when backlog is empty, and leave concise status proof. Revenue goal infinite; $10k floor.",
+  "status": "in_progress",
+  "priority": "urgent",
+  "assigneeAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+  "assigneeUserId": null,
+  "checkoutRunId": "3ffd1b64-ff5d-4802-87e9-56e2c965bcba",
+  "executionRunId": "3ffd1b64-ff5d-4802-87e9-56e2c965bcba",
+  "executionAgentNameKey": "ceo",
+  "executionLockedAt": "2026-08-07T03:54:20.421Z",
+  "createdByAgentId": null,
+  "createdByUserId": null,
+  "issueNumber": null,
+  "identifier": null,
+  "originKind": "manual",
+  "originId": null,
+  "originRunId": null,
+  "originFingerprint": "default",
+  "requestDepth": 0,
+  "billingCode": null,
+  "assigneeAdapterOverrides": null,
+  "executionPolicy": null,
+  "executionState": null,
+  "executionWorkspaceId": null,
+  "executionWorkspacePreference": null,
+  "executionWorkspaceSettings": null,
+  "startedAt": "2026-08-07T03:54:20.518Z",
+  "completedAt": null,
+  "cancelledAt": null,
+  "hiddenAt": null,
+  "createdAt": "2026-08-07T02:24:32.868Z",
+  "updatedAt": "2026-08-07T03:54:20.518Z",
+  "labels": [],
+  "labelIds": [],
+  "ancestors": [],
+  "blockerAttention": {
+    "state": "none",
+    "reason": null,
+    "unresolvedBlockerCount": 0,
+    "coveredBlockerCount": 0,
+    "stalledBlockerCount": 0,
+    "attentionBlockerCount": 0,
+    "sampleBlockerIdentifier": null,
+    "sampleStalledBlockerIdentifier": null
+  },
+  "productivityReview": null,
+  "blockedBy": [
+    {
+      "id": "e530b662-c009-4909-b060-e73083404677",
+      "identifier": "TRO-20",
+      "title": "Recover stalled issue Run company continuously: delegate, unblock, verify revenue",
+      "status": "done",
+      "priority": "urgent",
+      "assigneeAgentId": "7d648600-5fa8-4ddf-951b-4cdb16cee0fa",
+      "assigneeUserId": null
+    }
+  ],
+  "blocks": [],
+  "relatedWork": {
+    "outbound": [
+      {
+        "issue": {
+          "id": "7b3892c1-d2cf-4c66-b817-37d6e211ed35",
+          "identifier": "TRO-11",
+          "title": "Verify production checkout and revenue telemetry end-to-end",
+          "status": "done",
+          "priority": "critical",
+          "assigneeAgentId": "7d648600-5fa8-4ddf-951b-4cdb16cee0fa",
+          "assigneeUserId": null
+        },
+        "mentionCount": 4,
+        "sources": [
+          {
+            "kind": "comment",
+            "sourceRecordId": "2695f121-f789-433c-938f-d88d4dc852b2",
+            "label": "comment",
+            "matchedText": "TRO-11"
+          },
+          {
+            "kind": "comment",
+            "sourceRecordId": "4859a837-107d-4334-9be4-bc17552483c4",
+            "label": "comment",
+            "matchedText": "TRO-11"
+          },
+          {
+            "kind": "comment",
+            "sourceRecordId": "e9b63ccd-d52b-4c48-8c0a-103929233a3d",
+            "label": "comment",
+            "matchedText": "TRO-11"
+          },
+          {
+            "kind": "comment",
+            "sourceRecordId": "f216e5c5-8f4d-4006-ba0a-16cb1021620a",
+            "label": "comment",
+            "matchedText": "TRO-11"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "id": "6625a502-a773-4d63-b606-cbaf96aaf36c",
+          "identifier": "TRO-2",
+          "title": "CREATE A GOAL $5,000 dollars funded from DATE APP subscriptions and marketing of affiliate links to date app ... set routine every hr check on agents tasks being done have 50 always ready and make sure using omniroute endpoints for any agent also use .agent/skills on sub agents ANY AGENT GIVEN A TASK DOESNT DO THE TASK IT ASIGNS TASKS TO SUB AGENTS WITH THE PROPER SKILLS NO TASKS IS DONE WITH OUT NO LESS THAN $ SKILLS USED ON THAT TASK  F:\\ANTIGRAVITY\\paperclip",
+          "status": "blocked",
+          "priority": "critical",
+          "assigneeAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+          "assigneeUserId": null
+        },
+        "mentionCount": 3,
+        "sources": [
+          {
+            "kind": "comment",
+            "sourceRecordId": "2695f121-f789-433c-938f-d88d4dc852b2",
+            "label": "comment",
+            "matchedText": "TRO-2"
+          },
+          {
+            "kind": "comment",
+            "sourceRecordId": "4859a837-107d-4334-9be4-bc17552483c4",
+            "label": "comment",
+            "matchedText": "TRO-2"
+          },
+          {
+            "kind": "comment",
+            "sourceRecordId": "e9b63ccd-d52b-4c48-8c0a-103929233a3d",
+            "label": "comment",
+            "matchedText": "TRO-2"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "id": "1fd5d4e1-b62d-42da-b238-c36e9eb945cd",
+          "identifier": "TRO-9",
+          "title": "Recover stalled issue Restore full date-app product routes",
+          "status": "done",
+          "priority": "high",
+          "assigneeAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+          "assigneeUserId": null
+        },
+        "mentionCount": 2,
+        "sources": [
+          {
+            "kind": "comment",
+            "sourceRecordId": "ae0094f0-9b37-4e75-9006-68543c71e444",
+            "label": "comment",
+            "matchedText": "TRO-9"
+          },
+          {
+            "kind": "comment",
+            "sourceRecordId": "e9b63ccd-d52b-4c48-8c0a-103929233a3d",
+            "label": "comment",
+            "matchedText": "TRO-9"
+          }
+        ]
+      }
+    ],
+    "inbound": []
+  },
+  "referencedIssueIdentifiers": ["TRO-11", "TRO-2", "TRO-9"],
+  "planDocument": null,
+  "documentSummaries": [],
+  "legacyPlanDocument": null,
+  "project": null,
+  "goal": {
+    "id": "a75e4986-14af-4aa0-ba39-c8dab6a086af",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "title": "Mission Control 3D Graphy + Date App Full Restore",
+    "description": "CEO-level goal from Hermes (brain). See docs/ceo-briefs/2026-08-06-mission-control-graphy-dateapp.md for full brief.\n\nKey deliverables:\n1. 3D Graphy UI for Mission Control (dark portal, interactive force graph, agent/skill nodes, real-time health)\n2. Full date-app product routes restored (matches, inbox, chat, video, profile, create)\n3. Animated avatar flow (client canvas, likeness-preserving)\n4. Sub-agent heartbeat data wired into Graphy nodes\n5. Revenue outreach pipeline (needs email/social unblock first)",
+    "level": "initiative",
+    "status": "active",
+    "parentId": null,
+    "ownerAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "createdAt": "2026-08-07T01:16:05.778Z",
+    "updatedAt": "2026-08-07T02:37:59.802Z"
+  },
+  "mentionedProjects": [],
+  "currentExecutionWorkspace": null,
+  "workProducts": []
+}

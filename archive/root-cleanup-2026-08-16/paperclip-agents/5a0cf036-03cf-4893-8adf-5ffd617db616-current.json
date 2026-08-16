@@ -1,0 +1,73 @@
+{
+  "id": "5a0cf036-03cf-4893-8adf-5ffd617db616",
+  "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+  "name": "CMO",
+  "role": "cmo",
+  "title": "Chief Marketing Officer",
+  "icon": "globe",
+  "status": "running",
+  "reportsTo": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+  "capabilities": "Owns marketing strategy, growth, affiliate programs, brand. Manages marketing campaigns and user acquisition.",
+  "adapterType": "hermes_local",
+  "adapterConfig": {
+    "cwd": "F:/ANTIGRAVITY",
+    "model": "auto/best-coding",
+    "provider": "custom:omniroute-(127.0.0.1:20128)",
+    "toolsets": "terminal,file,web",
+    "timeoutSec": 600,
+    "checkpoints": false,
+    "worktreeMode": false,
+    "persistSession": true,
+    "instructionsFilePath": "F:/ANTIGRAVITY/paperclip-agent-instructions/CMO-AGENTS.md"
+  },
+  "runtimeConfig": {
+    "heartbeat": {
+      "enabled": true,
+      "cooldownSec": 30,
+      "intervalSec": 300,
+      "wakeOnDemand": true,
+      "maxConcurrentRuns": 1
+    }
+  },
+  "defaultEnvironmentId": null,
+  "budgetMonthlyCents": 0,
+  "spentMonthlyCents": 0,
+  "pauseReason": null,
+  "pausedAt": null,
+  "permissions": { "canCreateAgents": false },
+  "lastHeartbeatAt": "2026-08-07T04:19:13.579Z",
+  "metadata": null,
+  "createdAt": "2026-08-07T00:58:49.605Z",
+  "updatedAt": "2026-08-07T04:19:13.947Z",
+  "urlKey": "cmo",
+  "chainOfCommand": [
+    { "id": "79dcb306-2e37-4116-90db-a3f1c86ad5e2", "name": "CEO", "role": "ceo", "title": "CHIEF CODE" }
+  ],
+  "access": {
+    "canAssignTasks": true,
+    "taskAssignSource": "explicit_grant",
+    "membership": {
+      "id": "f6d14315-1f13-4a39-8bab-a2bbda5b566a",
+      "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+      "principalType": "agent",
+      "principalId": "5a0cf036-03cf-4893-8adf-5ffd617db616",
+      "status": "active",
+      "membershipRole": "member",
+      "createdAt": "2026-08-07T00:58:49.612Z",
+      "updatedAt": "2026-08-07T00:58:49.612Z"
+    },
+    "grants": [
+      {
+        "id": "c8b46880-0fe4-405d-ad0a-772b31b0c848",
+        "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+        "principalType": "agent",
+        "principalId": "5a0cf036-03cf-4893-8adf-5ffd617db616",
+        "permissionKey": "tasks:assign",
+        "scope": null,
+        "grantedByUserId": null,
+        "createdAt": "2026-08-07T00:58:49.627Z",
+        "updatedAt": "2026-08-07T00:58:49.627Z"
+      }
+    ]
+  }
+}

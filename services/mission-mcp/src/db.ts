@@ -1,11 +1,12 @@
 import Database from 'better-sqlite3';
 import { mkdirSync } from 'fs';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
+import { homedir } from 'os';
 import migration001 from './migrations/001_initial.sql';
 import migration002 from './migrations/002_agents_and_completed_at.sql';
 import migration003 from './migrations/003_task_pool_batch_fields.sql';
 
-const DEFAULT_DB_PATH = 'C:\\Users\\joshl\\.hermes\\state.db';
+const DEFAULT_DB_PATH = join(homedir(), '.hermes', 'state.db');
 
 export function openDb(dbPath?: string): Database.Database {
   const path = dbPath ?? process.env.MISSION_MCP_DB ?? DEFAULT_DB_PATH;

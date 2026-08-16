@@ -1,0 +1,1415 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <!-- Slick Slider CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+    <link rel="stylesheet" href="assets/css/style.css?v=7564" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+    <link rel="stylesheet" href="assets/css/animation.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="icon" href="assets/images/favicon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <meta name="ip2loc" content="71.1.146.94" />
+    <meta name="page_url" content="www.algosecom.com/contact-us.php" />
+    <title>Ecommerce Automation Agency - algosecom</title>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-W58W3WVQ');
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <style>
+      .social-fixed {
+        position: absolute;
+        left: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        padding: 15px 8px;
+        /*background: linear-gradient(180deg, #000 0%, #0a0a0a 100%);*/
+        border-radius: 0 12px 12px 0;
+      }
+
+      .social-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        gap: 8px;
+      }
+
+      /* Rotated Text */
+      .social-text {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        color: #fff;
+        text-align: center;
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 30px;
+      }
+
+      /* Icon Placeholder */
+      .social-icon {
+        /*width: 40px;*/
+        /*height: 40px;*/
+        /*background: #f4c430;*/
+        /*border-radius: 8px;*/
+      }
+
+      /* Hover Effects */
+      .social-item:hover .social-icon {
+        transform: scale(1.1);
+      }
+
+      .social-item:hover .social-text {
+        color: #f4c430;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .social-fixed {
+          left: auto;
+          right: 0;
+          border-radius: 12px 0 0 12px;
+        }
+
+        .social-text {
+          font-size: 14px;
+        }
+
+        .social-icon {
+          width: 34px;
+          height: 34px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .social-fixed {
+          gap: 18px;
+          padding: 10px 6px;
+        }
+
+        .social-text {
+          font-size: 12px;
+        }
+
+        .social-icon {
+          width: 28px;
+          height: 28px;
+        }
+      }
+      .whatsapp {
+        position: absolute;
+        right: 30px;
+        top: 43%;
+      }
+      .whatsapp a img {
+        width: 70px;
+      }
+
+      .how_we_can_help {
+        padding: 220px 0px 100px;
+      }
+      .image_box_wwch img {
+        top: -10px;
+      }
+      /*.sec_road_map {*/
+      /*    background: unset;*/
+      /*    min-height: unset;*/
+      /*    margin: unset;*/
+      /*    border-radius: unset;*/
+      /*    z-index: unset;*/
+      /*    position: unset;*/
+      /*    padding: unset;*/
+      /*}*/
+      /*.sec_road_map .container {*/
+      /*    background: #fff;*/
+      /*    min-height: 500px;*/
+      /*    margin: -80px auto 0;*/
+      /*    border-radius: 38px;*/
+      /*    z-index: 9999;*/
+      /*    position: relative;*/
+      /*    padding: 100px 0px;*/
+      /*}*/
+      section.sec_road_map {
+        width: 90%;
+        margin: -100px auto;
+        padding: 30px 0;
+      }
+      .first_meeting {
+        padding: 100px 0 0;
+      }
+      section.sec_road_map.new h6 {
+        color: #fff;
+        text-align: center;
+        font-family: Poppins;
+        font-size: 17.714px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 33px;
+        letter-spacing: -0.354px;
+        border-radius: 63.265px;
+        background: var(--Brand-Color, linear-gradient(90deg, #ffb545 0%, #fdc82a 100%));
+        width: 721.578px;
+        height: 36.694px;
+      }
+      .content_t_h h3 {
+        color: #332626;
+        font-family: Poppins;
+        font-size: 45px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 46px;
+      }
+      section.sec_road_map.new {
+        min-height: 100px;
+      }
+      .services_wrapper_awfba_box_content h6 {
+        color: #332626;
+        font-family: Poppins;
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 110%;
+        text-transform: capitalize;
+      }
+      .services_wrapper_awfba_box_content p {
+        color: #676767;
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 22px;
+      }
+      a.scale-btn {
+        color: #303030;
+        font-family: Poppins;
+        font-size: 17px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 23px;
+      }
+      .banner_text.banner_text_left.tiktok-new h1 {
+        color: #fff;
+        font-family: Poppins;
+        font-size: 65px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 65px;
+        letter-spacing: -1.3px;
+        text-align: left;
+      }
+      .banner_text.banner_text_left.tiktok-new p {
+        text-align: left;
+        font-family: Poppins;
+        font-size: 23px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 31px;
+        letter-spacing: -0.25px;
+        background: linear-gradient(90deg, #e97224 0%, #fecb2a 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0;
+      }
+      ul.bnr-tik li img {
+        padding-right: 5px;
+      }
+      ul.bnr-tik {
+        padding-left: 0;
+        margin-bottom: 0;
+      }
+      ul.bnr-tik li {
+        color: #fff;
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 30px;
+        list-style: none;
+      }
+      .bnr-btns {
+        display: flex;
+        gap: 15px;
+      }
+      a.btn-getstarted.btnn_style_2 p span {
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 15px;
+      }
+      a.btn-getstarted.btnn_style_2 p {
+        color: #fff;
+        font-family: Poppins;
+        font-size: 23px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 22px;
+        text-decoration: none;
+        background: unset !important;
+        -webkit-background-clip: unset !important;
+        -webkit-text-fill-color: unset !important;
+      }
+      a.btn-getstarted.btnn_style_2 img {
+        width: 40px;
+        height: 40px;
+      }
+      a.btn-getstarted.btnn_style_2 {
+        display: flex;
+        gap: 10px;
+        margin: 5px 0 -5px;
+        text-decoration: none;
+      }
+      .bnr-logos {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+      }
+      section.banner_home.tiktok-new {
+        height: 90vh;
+      }
+      .right_image_banner_tiktok {
+        top: -130px;
+      }
+      .row.tiktok {
+        margin-top: 55px;
+      }
+      .banner_text.banner_text_left.tiktok-new p.bnr {
+        line-height: 25px;
+        margin-top: -5px;
+      }
+      .services_wrapper_awfba_warpper {
+        margin: 100px 0 30px 0;
+      }
+      .services_wrapper_awfba_box {
+        min-height: 300px;
+      }
+      .bnr-btns.bnraftr {
+        justify-content: center;
+        padding-top: 20px;
+      }
+      .services_whats_we_can.new img.after {
+        position: absolute;
+        bottom: -240px;
+        left: 480px;
+        z-index: -1;
+        opacity: 0.5;
+      }
+      .services_whats_we_can.new {
+        position: relative;
+      }
+      .services_whats_we_can.new img.before {
+        position: absolute;
+        width: 54%;
+        height: auto;
+        z-index: -1;
+      }
+      section.how_we_can_help.new h3 {
+        color: #332626;
+        font-family: Poppins;
+        font-size: 38px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 45px;
+      }
+      section.how_we_can_help.new h4 {
+        color: #000;
+        font-family: Poppins;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 119%;
+      }
+      section.how_we_can_help.new .content_t_h p,
+      .brs__target__list p {
+        color: #000;
+      }
+      section.how_we_can_help.new h4 span {
+        display: inline-block;
+        width: 52px;
+        height: 8px;
+        border-radius: 50px;
+        background: var(--Brand-Color, linear-gradient(90deg, #ffb545 0%, #fdc82a 100%));
+        position: relative;
+        top: -5px;
+      }
+      .content_area_wwch:before {
+        content: '';
+        border: 3px solid var(--Brand-Color, #ffb545);
+        height: 109%;
+        position: absolute;
+        width: 250%;
+        left: -120%;
+        border-radius: 10px;
+        top: 0;
+      }
+      .content_t_h {
+        position: relative;
+      }
+      .stuggle-img img {
+        margin-right: 15px;
+      }
+      .how_we_can_help.new .content_area_wwch::after {
+        content: 'Start today with your TikTok Shop Growth Analysis! ';
+        border-radius: 189px;
+        background: linear-gradient(90deg, #e97224 0%, #fecb2a 100%);
+        width: 527px;
+        height: 45px;
+        position: absolute;
+        color: #fff;
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 42px;
+        letter-spacing: -0.16px;
+        bottom: -73px;
+        left: -10px;
+        text-align: center;
+      }
+      section.how_we_can_help.new .content_t_h p,
+      .brs__target__list p {
+        padding-bottom: 0;
+        margin-bottom: 0;
+      }
+      section.brs__amazon__store.ptop-100.newtiktok ul.slick-dots {
+        display: none !important;
+      }
+      section.brs__cta.ptop-100.newtiktok h4 {
+        color: #fff;
+        font-family: Poppins;
+        font-size: 45px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 58px;
+        letter-spacing: -0.9px;
+      }
+      section.brs__cta.ptop-100.newtiktok p {
+        color: #fff;
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 23px;
+        width: 605.984px;
+        letter-spacing: -0.18px;
+      }
+      .header_btns.tiktok a {
+        width: 310px;
+      }
+      section.amazon_acount_suspension.brs__store.tiktok .content_t_h p,
+      .brs__target__list p {
+        margin-bottom: 0;
+      }
+      section.amazon_acount_suspension.brs__store.tiktok .acount-suspension-img-ab {
+        width: 50%;
+        right: 30px;
+      }
+      .managed-shop {
+        padding: 60px 0;
+        background: #fff;
+        overflow: hidden;
+      }
+
+      .managed-shop .container {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 0 15px;
+        width: 100%;
+      }
+
+      .managed-shop-head {
+        text-align: center;
+        max-width: 760px;
+        margin: 0 auto 35px;
+      }
+
+      .managed-shop-head h2 {
+        margin: 0 0 12px;
+        color: #332626;
+        text-align: center;
+        font-family: Poppins;
+        font-size: 50px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 55px;
+        letter-spacing: -0.75px;
+      }
+
+      .managed-shop-head p {
+        margin: 0;
+        color: #676767;
+        text-align: center;
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 23px;
+      }
+
+      .managed-shop-row {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        align-items: center;
+        gap: 35px;
+      }
+
+      .managed-shop-img {
+        text-align: center;
+      }
+
+      .managed-shop-img img {
+        width: 100%;
+        /*max-width: 470px;*/
+        display: block;
+        margin: 0 auto;
+      }
+
+      .managed-shop-content {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+
+      .shop-feature {
+        display: grid;
+        grid-template-columns: 5px 1fr;
+        gap: 18px;
+        align-items: flex-start;
+      }
+
+      .feature-line {
+        width: 5px;
+        height: 100%;
+        min-height: 85px;
+        border-radius: 20px;
+        background: linear-gradient(180deg, #ed1e79 0%, #16c5f5 100%);
+      }
+
+      .feature-icon img {
+        width: 42px;
+        height: 42px;
+        object-fit: contain;
+        margin-bottom: 5px;
+      }
+
+      .feature-info h3 {
+        margin: 0 0 6px;
+        color: #303030;
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 22px; /* 137.5% */
+      }
+
+      .feature-info p {
+        color: #333;
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px;
+        line-height: 18px;
+        font-weight: 400;
+        margin: 0;
+      }
+
+      /* Responsive */
+      @media (max-width: 991px) {
+        .managed-shop-head h2 {
+          font-size: 34px;
+          line-height: 40px;
+        }
+
+        .managed-shop-row {
+          grid-template-columns: 1fr;
+          gap: 35px;
+        }
+
+        .managed-shop-img img {
+          /*max-width: 420px;*/
+        }
+      }
+
+      @media (max-width: 575px) {
+        .managed-shop {
+          padding: 45px 0;
+        }
+
+        .managed-shop-head h2 {
+          font-size: 28px;
+          line-height: 34px;
+        }
+
+        .managed-shop-head p {
+          font-size: 12px;
+          line-height: 18px;
+        }
+
+        .managed-shop-content {
+          gap: 18px;
+        }
+
+        .shop-feature {
+          gap: 12px;
+        }
+
+        .feature-info h3 {
+          font-size: 19px;
+          line-height: 24px;
+        }
+
+        .feature-info p {
+          font-size: 12px;
+          line-height: 18px;
+        }
+
+        .feature-line {
+          min-height: 95px;
+        }
+      }
+
+      .services_wrapper_awfba_box {
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .image_box_wwch.resto img {
+        top: -145px;
+      }
+      .resto-cta img {
+        top: 60px;
+      }
+      .brs__tabs .content .nav-tabs .nav-link.active {
+        font-weight: 700;
+      }
+      .brs__tabs .content .nav-tabs .nav-link.active {
+        border-bottom: 3px solid #eb7b25;
+      }
+      .brs__tabs .content .nav-tabs .nav-link:hover {
+        border-color: 3px solid #eb7b25;
+      }
+      .brs__amazon__store.resto .left__content img {
+        height: 760px;
+      }
+      .right_image_banner.right_image_banner_tiktok img {
+        width: 100%;
+      }
+      .right_image_banner.right_image_banner_tiktok.setup {
+        top: -74px;
+      }
+      section.sec_road_map.new.resto h6 {
+        width: 293.691px;
+      }
+      .services_wrapper_awfba_box_content.setup h6 {
+        font-size: 25px;
+      }
+      .image_box_wwch.resto.setup img {
+        top: -110px;
+      }
+      .resto-cta.setup img {
+        top: 15px;
+      }
+
+      .resto-cta.setup {
+        position: absolute;
+        width: 100%;
+        top: -30px;
+      }
+      section.brs__cta.ptop-100.newtiktok.setup .container .row {
+        height: 290px;
+      }
+      .resto-cta.setup img {
+        top: 10px;
+        right: 100px;
+      }
+      section.brs__cta.setup .left__content {
+        padding: 0 0;
+      }
+      .managed-shop-img.setup img {
+        width: 75%;
+        float: right;
+      }
+      section.banner_home.banner_about.align-items-center.tiktok-new.resortation {
+        height: 100vh;
+      }
+      .right_image_banner.right_image_banner_tiktok.restor {
+        top: -100px;
+      }
+      .image_box_wwch.resto img {
+        top: -30px;
+      }
+
+      @media (max-width: 1600px) {
+        .first_meeting {
+          padding: 50px 0 0;
+        }
+        section.banner_home.tiktok-new {
+          height: 103vh;
+        }
+        section.banner_home.banner_about.align-items-center.tiktok-new.resortation.setup {
+          height: 107vh;
+        }
+        section.banner_home.banner_about.align-items-center.tiktok-new.resortation {
+          height: 105vh;
+        }
+      }
+
+      @media (max-width: 1500px) {
+        .faqs {
+          width: 100%;
+          padding: 50px 0px 0;
+        }
+        section.sec_road_map {
+          margin: -55px auto;
+        }
+        .right_image_banner_tiktok {
+          top: -140px;
+        }
+        section.banner_home.banner_about.align-items-center.tiktok-new.resortation.setup {
+          height: 102vh;
+        }
+        .right_image_banner.right_image_banner_tiktok.restor {
+          top: -75px;
+        }
+      }
+
+      @media (max-width: 1400px) {
+        section.banner_home.tiktok-new {
+          height: 104vh;
+        }
+        section.how_we_can_help.new h3 {
+          font-size: 35px;
+        }
+        .social-fixed {
+          left: 0;
+        }
+        .right_image_banner_tiktok {
+          top: -112px;
+        }
+        .header {
+          padding: 15px 0;
+        }
+        .container,
+        .container-lg,
+        .container-md,
+        .container-sm,
+        .container-xl,
+        .container-xxl {
+          max-width: 1230px;
+        }
+        .social-fixed {
+          left: 15px;
+        }
+        .resto-cta.setup img {
+          top: 22px;
+          right: 100px;
+        }
+        section.banner_home.banner_about.align-items-center.tiktok-new.resortation.setup {
+          height: 105vh;
+        }
+        .right_image_banner.right_image_banner_tiktok.setup {
+          top: -41px;
+        }
+      }
+
+      @media (max-width: 1366px) {
+        .whatsapp {
+          right: 10px;
+        }
+        section.banner_home.banner_about.align-items-center.tiktok-new.resortation.setup {
+          height: 103vh;
+        }
+
+        section.banner_home.tiktok-new {
+          height: 90vh;
+        }
+        section.banner_home.banner_about.align-items-center.tiktok-new {
+          height: 96vh;
+        }
+
+        section.banner_home.tiktok-new.resortation .right_image_banner img {
+          top: 32px;
+        }
+        h3.resto-tiktok {
+          font-size: 35px !important;
+        }
+        .right_image_banner img {
+          top: 10px;
+        }
+        .header {
+          padding: 37px 0;
+        }
+        .social-fixed {
+          left: 0;
+        }
+      }
+
+      @media only screen and (max-width: 800px) and (min-width: 320px) {
+        .social-fixed,
+        .whatsapp {
+          display: none;
+        }
+        section.banner_home.banner_about.align-items-center.tiktok-new {
+          padding: 40px 0 0;
+        }
+        .banner_text.banner_text_left.tiktok-new h1 {
+          font-size: 55px;
+          line-height: 50px;
+        }
+        ul.bnr-tik li img {
+          width: 18px;
+          height: 18px;
+          margin: 5px 0 0;
+        }
+        ul.bnr-tik li {
+          display: flex;
+          line-height: 20px;
+          padding-bottom: 5px;
+        }
+        .bnr-btns {
+          display: contents;
+        }
+        .right_image_banner.right_image_banner_tiktok {
+          display: none;
+        }
+        .bnr-logos {
+          margin-bottom: 70px;
+        }
+        .bnr-logos a img {
+          width: 100%;
+        }
+        .content_t_h h3 {
+          font-size: 32px;
+          line-height: 37px;
+        }
+        .services_whats_we_can.new {
+          top: -40px;
+        }
+        section.sec_road_map.new h6 {
+          width: 100%;
+          height: auto;
+          line-height: 16px;
+          padding: 10px 15px;
+        }
+        section.sec_road_map {
+          margin: 0 auto;
+        }
+        .services_wrapper_awfba_warpper {
+          margin: 42px 0 30px 0;
+        }
+        .how_we_can_help {
+          padding: 0px 0px 100px;
+        }
+        .content_area_wwch {
+          padding: 30px 0 0 0;
+        }
+        section.how_we_can_help.new h3 {
+          font-size: 32px;
+          line-height: 30px;
+        }
+        section.how_we_can_help.new h4 {
+          font-size: 17px;
+        }
+        section.how_we_can_help.new h4 span {
+          top: -2px;
+        }
+        .image_box_wwch {
+          display: none;
+        }
+        section.how_we_can_help.new .stuggle-img img {
+          margin-right: 15px;
+          width: 23%;
+        }
+        .how_we_can_help.new .content_area_wwch::after {
+          width: 100%;
+          left: 0;
+          padding: 5px 5px;
+          height: auto;
+          line-height: 20px;
+          margin: 0;
+        }
+        section.brs__amazon__store.ptop-100 {
+          padding: 20px 0;
+        }
+        section.brs__cta.ptop-100.newtiktok {
+          padding-top: 0;
+        }
+        section.brs__cta.ptop-100.newtiktok h4 {
+          font-size: 30px;
+          line-height: 35px;
+        }
+        section.brs__cta.ptop-100.newtiktok p {
+          width: 100%;
+        }
+        .header_btns.tiktok a {
+          justify-content: center;
+        }
+        section.amazon_acount_suspension.brs__store.tiktok {
+          padding: 50px 0 0;
+        }
+        .managed-shop {
+          padding: 20px 0 0;
+        }
+        html,
+        body {
+          width: 100%;
+          overflow-x: hidden;
+        }
+        section.amazon_acount_suspension.brs__store.tiktok h3 {
+          width: 100% !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-W58W3WVQ"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div class="social-fixed">
+      <a href="https://www.linkedin.com/company/algosecom/" target="blank" class="social-item linkedin">
+        <span class="social-text">Linkedin</span>
+        <span class="social-icon"><img src="assets/images/linkedin-ico.svg" alt="" /></span>
+      </a>
+
+      <a href="https://www.instagram.com/algosecom" target="blank" class="social-item instagram">
+        <span class="social-text">Instagram</span>
+        <span class="social-icon"><img src="assets/images/instagram-ico.svg" alt="" /></span>
+      </a>
+
+      <a href="https://www.facebook.com/algosecom" target="blank" class="social-item facebook">
+        <span class="social-text">Facebook</span>
+        <span class="social-icon"><img src="assets/images/facebook-ico.svg" alt="" /></span>
+      </a>
+    </div>
+
+    <!-- <div class="whatsapp">
+    <a href="tel:+18668351080"><img src="assets/images/whatsapp-ico.svg" alt=""></a>
+</div> -->
+
+    <header id="header" class="header d-flex align-items-center fixed-top">
+      <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+        <a href="index.php" class="logo d-flex align-items-center">
+          <!-- Uncomment the line below if you also wish to use an image logo -->
+          <!-- <img src="assets/img/logo.png" alt=""> -->
+          <h1 class="sitename"><img src="assets/images/logo.png" /></h1>
+          <span>.</span>
+        </a>
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <!--     <li><a href="index.php" class="active">Home<br></a></li>
+            <li><a href="about-us.php">About</a></li>
+            <li class="dropdown"><a href="#services">Automation</a>
+            <ul class="dropdown-content">
+              <li><a href="amazon-wholesale-fba.php">Amazon Wholesale FBA</a></li>
+              <li><a href="shopify-dropshipping.php">Shopify Dropshipping</a></li>
+              <li><a href="account-reinstatement.php">Account Reinstatement</a></li>
+              <li><a href="ecom-private-label.php">Ecom Private Label</a></li>
+              <li><a href="tiktok-automation.php">Tiktok Shop</a></li>
+            </ul>
+          </li>
+          <li><a href="contact-us.php">Contact us</a></li> -->
+
+            <li><a href="amazon-services.php">Amazon</a></li>
+            <li><a href="walmart-services.php">Walmart</a></li>
+            <li><a href="tiktok-automation.php">Tiktok Shop</a></li>
+            <li><a href="shopify-dropshipping.php">Shopify </a></li>
+            <li><a href="ebay-automation.php">Ebay Automation</a></li>
+            <li><a href="etsy-services.php">Etsy </a></li>
+          </ul>
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+
+        <div class="header_btns d-lg-flex d-none">
+          <!-- <a class="btn-getstarted btnn_style_1" href="#meeting">Get Started <img src="assets/images/bta-arrow.png"></a> -->
+          <a class="btn-getstarted btnn_style_1" href="tel:(855) 252-3351">(855) 252-3351 </a>
+        </div>
+      </div>
+    </header>
+    <section class="banner_home banner_about align-items-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="banner_text banner_text_about banner_text_left">
+              <h5>Your eCommerce Partners</h5>
+              <h1>Let’s Connect, and Kickstart Your Journey.</h1>
+              <!--  <p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+          </p> -->
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="right_image_banner right_image_banner_contact">
+              <img src="assets/images/contact_us/contact-us-banner-img.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="contact_page_section">
+      <div class="container">
+        <div class="wrapper_contact_us">
+          <div class="content_t_h align-items-center text-center">
+            <h3>
+              Connect Today. Enjoy a <br />
+              Prosperous Tomorrow!
+            </h3>
+            <form action="/thank-you.php" method="post">
+              <div class="row">
+                <div class="col-sm-6">
+                  <input
+                    type="text"
+                    name=""
+                    class="text_field_style"
+                    placeholder="First Name"
+                    required=""
+                    onkeypress="
+                      return (
+                        (event.charCode >= 65 && event.charCode <= 90) ||
+                        (event.charCode >= 97 && event.charCode <= 122) ||
+                        event.charCode == 32
+                      );
+                    "
+                  />
+                </div>
+
+                <div class="col-sm-6">
+                  <input
+                    type="text"
+                    name=""
+                    class="text_field_style"
+                    placeholder="Last Name"
+                    required=""
+                    onkeypress="
+                      return (
+                        (event.charCode >= 65 && event.charCode <= 90) ||
+                        (event.charCode >= 97 && event.charCode <= 122) ||
+                        event.charCode == 32
+                      );
+                    "
+                  />
+                </div>
+
+                <div class="col-sm-6">
+                  <input type="email" name="" class="text_field_style" placeholder="Your Email" required="" />
+                </div>
+
+                <div class="col-sm-6">
+                  <input
+                    type="text"
+                    name=""
+                    class="text_field_style"
+                    placeholder="Your Phone"
+                    required=""
+                    onkeypress="return event.charCode >= 48 && event.charCode <= 57;"
+                  />
+                </div>
+                <div class="col-sm-12">
+                  <div class="mb-3">
+                    <textarea class="text_field_style" placeholder="Your Message" rows="4" placeholder=""></textarea>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required="" />
+                    <label class="form-check-label terms" for="flexCheckDefault">
+                      I have read and accept the policy & privacy
+                    </label>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <button type="submit" class="btn-getstarted btnn_style_1 btn_submit" href="index.html#about">
+                    Get Started <img src="assets/images/bta-arrow.png" />
+                  </button>
+
+                  <input type="hidden" name="send" value="1" />
+                  <input type="hidden" id="lead_area_popup" name="lead_area" value="for $19" />
+                  <input type="hidden" id="lead_org_price" name="lead_org_price" value="19" />
+                  <input type="hidden" name="send" value="1" />
+                  <input type="hidden" name="service_id" value="5731" class="service_id" />
+
+                  <input type="hidden" name="lb_source" value="" />
+                  <input type="hidden" name="lb_source_cat" value="" />
+                  <input type="hidden" name="lb_source_nam" value="" />
+                  <input type="hidden" name="lb_source_ema" value="" />
+                  <input type="hidden" name="lb_source_con" value="" />
+                  <input type="hidden" name="lb_source_pho" value="" />
+                  <input type="hidden" name="lb_source_off" value="" />
+
+                  <input type="hidden" name="fullpageurl" value="" />
+                  <input type="hidden" name="pageurl" value="" />
+
+                  <input type="hidden" name="ip2loc_ip" value="" />
+                  <input type="hidden" name="ip2loc_isp" value="" />
+                  <input type="hidden" name="ip2loc_org" value="" />
+                  <input type="hidden" name="ip2loc_country" value="" />
+                  <input type="hidden" name="ip2loc_region" value="" />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- <section class="testimonils_sec">
+  
+  <div class="container">
+    
+    <div class="content_t_h align-items-center text-center">
+      <div class="text-reveal">
+        <h5> Reviews </h5>
+      </div>
+      <div class="text-reveal">
+        <h3> Hear It From Our Clients </h3>
+      </div>
+    </div>
+    <div class="testimonils_wrapper">
+      
+      <div class="row slcik_testimonils">
+        <div class="col">
+          <div class="testimonils_box">
+            <div class="testimonils_box_contnet">
+              <div class="image_name">
+                <img src="assets/images/home/testimonils-icon-1.png">
+                
+                <h5> Abraham  <br> <span>Store Owner</span> </h5>
+              </div>
+              <p>
+                Before stepping into eCommerce, I was told it is much easier to manage than a physical retail store. Well, in just a few months of starting it, I was swamped. After researching, I learned about eCommerce automation and many eCom automation agencies. And Algosecom was the first eCommerce automation agency that came up. Choosing them has been the best decision ever for me.
+              </p>
+              <div class="seperator"> </div>
+              <div class="fact_figures">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h5>  98% <span> Customer satisfaction </span> </h5>
+                  </div>
+                  <div class="col-sm-6">
+                    <h5>  $130+ <span> Made through TGD </span> </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="testimonils_box_image">
+              <img src="assets/images/home/testimonils-img-1.png">
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="testimonils_box">
+            <div class="testimonils_box_contnet">
+              <div class="image_name">
+                <img src="assets/images/home/testimonils-icon-1.png">
+                <h5> Damian J. <br> <span>Store Owner</span> </h5>
+              </div>
+              <p>
+                I was managing the fulfillment of my orders through Amazon myself, but due to the high number of orders, I needed help to keep up. I hired a 3PL, but it was a mess. There were so many issues that my account got shut down. I was devastated. The Algosecom team was very supportive and understood my concern.
+              </p>
+              <div class="seperator"> </div>
+              <div class="fact_figures">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h5>  98% <span> Customer satisfaction </span> </h5>
+                  </div>
+                  <div class="col-sm-6">
+                    <h5>  $130+ <span> Made through TGD </span> </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="testimonils_box_image">
+              <img src="assets/images/home/testimonils-img-1.png">
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="testimonils_box">
+            <div class="testimonils_box_contnet">
+              <div class="image_name">
+                <img src="assets/images/home/testimonils-icon-1.png">
+                <h5> Alex  A. <br> <span>Store Owner</span> </h5>
+              </div>
+              <p>
+                I was so stressed that my two years of hard work were about to be wasted when my fully functional Amazon account was suspended because of an intellectual property issue. I did not know what to do, but another friend who runs an Amazon store who was also working with an eCom automation agency connected me with Algosecom, one of the most trusted eCommerce automation agencies.
+              </p>
+              <div class="seperator"> </div>
+              <div class="fact_figures">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h5>  98% <span> Customer satisfaction </span> </h5>
+                  </div>
+                  <div class="col-sm-6">
+                    <h5>  $130+ <span> Made through TGD </span> </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="testimonils_box_image">
+              <img src="assets/images/home/testimonils-img-1.png">
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</section> -->
+    <section class="faqs">
+      <div class="container">
+        <div class="content_t_h align-items-center text-center">
+          <!-- <h5> What Our </h5> -->
+          <div class="text-reveal">
+            <h3>FAQs</h3>
+          </div>
+        </div>
+        <div class="faqs_wrapper">
+          <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseOne"
+                  aria-expanded="false"
+                  aria-controls="flush-collapseOne"
+                >
+                  Do I have to handle the inventory in the automation process?
+                </button>
+              </h2>
+              <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                  That’s the outstanding thing about our e-commerce automation services. You don’t have to dive into the
+                  hassle of managing the inventory, which leads to reduced costs.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseTwo"
+                  aria-expanded="false"
+                  aria-controls="flush-collapseTwo"
+                >
+                  Are your eCommerce services customized?
+                </button>
+              </h2>
+              <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                  Yes, our process is customized according to your business requirements. During the initial
+                  consultation, we ensure that we ask about your expectations to keep up with your unique operational
+                  procedures.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseThree"
+                  aria-expanded="false"
+                  aria-controls="flush-collapseThree"
+                >
+                  Does your automation agency track metrics?
+                </button>
+              </h2>
+              <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                  Yes, our automation processes include tracking service metrics to analyze the customer trends
+                  associated with your products. We use this data to improve your sales and customer feedback.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="faqs_cta">
+            <h4>Can't find your answer? <a href="contact-us.php"> Contact us </a></h4>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="first_meeting" id="meeting">
+      <div class="container">
+        <div class="content_t_h align-items-center text-center">
+          <div class="text-reveal">
+            <h5>Ready?</h5>
+          </div>
+          <div class="text-reveal">
+            <h3>Let’s Connect: Won’t Cost You a Dime!</h3>
+          </div>
+          <div class="text-reveal">
+            <p>
+              Have questions or wish to get started with us? Book a free meeting with us and we will take care of the
+              rest!
+            </p>
+          </div>
+        </div>
+        <div class="book_meeting">
+          <!-- Calendly inline widget begin -->
+          <div
+            class="calendly-inline-widget"
+            data-url="https://calendly.com/algosecom/30min?primary_color=ffb545"
+            style="min-width: 320px; height: 700px"
+          ></div>
+          <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+          <!-- Calendly inline widget end -->
+
+          <!-- <img src="assets/images/book-meeting.png"> -->
+        </div>
+        <div class="book_meeting_cta">
+          <div class="text-reveal">
+            <h4>Prefer to chat with us first?</h4>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="footer">
+      <div class="container">
+        <div class="footer_wrapper">
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="footer_box">
+                <img src="assets/images/logo.png" />
+                <p>
+                  Ready to kickstart your venture? Let us help you create your automated store on Amazon, Shopify,
+                  Facebook Marketplace, Walmart, and more!
+                </p>
+              </div>
+            </div>
+            <div class="col">
+              <div class="footer_box">
+                <h6>Quick Links</h6>
+                <ul>
+                  <li><a href="/"> Home </a></li>
+                  <li><a href="about-us.php">About us</a></li>
+                  <!-- <li> <a href="#">Testimonials</a> </li> -->
+                  <li><a href="contact-us.php">Contact us</a></li>
+                  <li><a href="refund-policy.php">Refund Policy</a></li>
+                  <li><a href="terms-and-conditions.php"> Terms & Condition </a></li>
+                  <li><a href="privacy-policy.php"> Privacy Policy </a></li>
+                  <li><a href="opt-out-policy.php"> Opt-Out Policy </a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col">
+              <div class="footer_box">
+                <h6>Our Services</h6>
+                <ul>
+                  <li><a href="amazon-wholesale-fba.php">Amazon Wholesale FBA</a></li>
+                  <li><a href="ecom-private-label.php">Ecom Private Label</a></li>
+                  <li><a href="walmart-automation.php">Walmart Automation </a></li>
+                  <li><a href="tiktok-automation.php">Tiktok Shop </a></li>
+                  <li><a href="shopify-dropshipping.php">Shopify Dropshipping</a></li>
+                  <li><a href="ebay-automation.php">Ebay Automation </a></li>
+                  <li><a href="etsy-automation.php">Etsy Automation </a></li>
+                  <li><a href="account-reinstatement.php">Account Reinstatement</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col">
+              <div class="footer_box">
+                <h6>Quick Links</h6>
+                <ul>
+                  <li><a href="mailto:info@algosecom.com"> info@algosecom.com </a></li>
+                  <li><a href="tel:(855) 252-3351"> (855) 252-3351 </a></li>
+                  <li><a href="javascript:;"> 218 S Main St, Naperville, IL 60540, United States </a></li>
+                </ul>
+
+                <div class="social_media">
+                  <a href="https://www.facebook.com/algosecom" target="_blank">
+                    <i class="fa-brands fa-facebook"></i>
+                  </a>
+                  <a href="https://www.instagram.com/algosecom" target="_blank">
+                    <i class="fa-brands fa-instagram"></i>
+                  </a>
+                  <a href="https://www.linkedin.com/company/algosecom/" target="_blank">
+                    <i class="fa-brands fa-linkedin"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="copyrights row">
+          <div class="col-sm-12 text-center">
+            <p>Copyright © 2025 - 2030 Algosecom All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="assets/js/custom.js?v=8467"></script>
+    <script src="assets/js/animation.js"></script>
+    <script>
+      (function (d, t) {
+        const b = 'https://widget.voo.chat/widget.js';
+        const g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+        g.src = b;
+        g.defer = true;
+        g.async = true;
+        s.parentNode.insertBefore(g, s);
+        g.onload = function () {
+          window.$widget = {
+            isOpen: false,
+            position: 'right',
+            websiteToken: 'aHR0cHM6Ly93d3cuYWxnb3NlY29tLmNvbS8=',
+            property: '3pZH43blCbgg6ADWpBRd',
+            widget: 'sprsO30tWH',
+          };
+          window.initChat();
+        };
+      })(document, 'script');
+    </script>
+  </body>
+</html>

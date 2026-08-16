@@ -1,0 +1,1780 @@
+{
+  "data": {
+    "catalog": {
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": null
+      },
+      "nodes": [
+        {
+          "__typename": "CatalogItem",
+          "id": "ZNOYNLP6MQLNVVEYJ3WRYMVB",
+          "version": 1786870478931,
+          "isDeleted": false,
+          "updatedAt": "2026-08-16T08:54:38Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": {
+            "id": "R24DGZV7LPULZCRH7DJONYGK"
+          },
+          "description": "Drop off or schedule pickup for your old electronics — computers, laptops, TVs, phones, tablets, and e-waste. Recovered resale value is automatically disbursed via Protocol Omega smart contract on Base Mainnet: 60% to Shriners Children's Hospitals, 30% operations, 10% reinvestment. This is a contractual revenue split, not a charitable solicitation. OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida. Powered by Perplexity AI — perplexity.ai",
+          "images": [
+            {
+              "id": "CBMTQ7JI4LIORLJXAGVWRCSW",
+              "url": "https://items-images-production.s3.us-west-2.amazonaws.com/files/1e897b3ae842a03991fa63f4acd1fa218290f219/original.jpeg"
+            }
+          ],
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Support OnlineRecycle — E-Waste Resale & Revenue Disbursement",
+          "productType": "LEGACY_SQUARE_ONLINE_SERVICE",
+          "skipModifierScreen": true,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "KVZ5YCAJIE4GUHBCAYHC3AFX",
+              "name": "Regular"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "JXQPLLMBPVRF7CN2P4C3ROMJ",
+          "version": 1777474950275,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:30Z",
+          "absentAt": null,
+          "presentAt": [
+            {
+              "id": "LY5GN09F5AN83"
+            }
+          ],
+          "presentAtAll": false,
+          "abbreviation": "Do",
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": {
+            "id": "R24DGZV7LPULZCRH7DJONYGK"
+          },
+          "description": "Donate to Support Recycling Online For Charity",
+          "images": [
+            {
+              "id": "CKESRK3NB3FEF2LNWG6F3E3Q",
+              "url": "https://items-images-production.s3.us-west-2.amazonaws.com/files/71048b98a88a0844310156864e90741be8a4a63b/original.jpeg"
+            }
+          ],
+          "options": null,
+          "labelColor": "F25B3D",
+          "modifierListInfos": null,
+          "name": "Donation",
+          "productType": "APPOINTMENTS_SERVICE",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "2GE37HZPVI6PYKPG7Z3I46SF",
+              "name": "Regular"
+            },
+            {
+              "id": "YM6ODBAJEIDBU3X452NAMLYK",
+              "name": "5"
+            },
+            {
+              "id": "YYBBTXM6UJGR5MBG3XLWXS2I",
+              "name": "10"
+            },
+            {
+              "id": "ZSHVIESKPLCKZLC3FSHWINB7",
+              "name": "20"
+            },
+            {
+              "id": "244ORHKJKG75O6MC535TNPHA",
+              "name": "50"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "DBM52CMYOGLAP7BPRTZ55ZZM",
+          "version": 1777474950275,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:30Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": "Recycle",
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Embark on a heartwarming journey of giving back with our convenient drop-off donation service. At our easily accessible locations, you can make a difference effortlessly by booking an appointment for your donation drop-off. Support a noble cause and spread kindness as you contribute to those in need. The process is simple and seamless, ensuring that your act of generosity leaves a lasting impact. Book your appointment today, and let your donations spark hope and joy in the lives of others. Join us in making a difference, one drop-off at a time!",
+          "images": null,
+          "options": null,
+          "labelColor": "00B23B",
+          "modifierListInfos": null,
+          "name": "Drop off Donations",
+          "productType": "APPOINTMENTS_SERVICE",
+          "skipModifierScreen": false,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "YCIMZXZJ5AE5GTOM4QXXUATX",
+              "name": "Regular"
+            },
+            {
+              "id": "6XSMOIXOR5DQH4ZZEV6UNDSH",
+              "name": "Large item quantity drop off"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "5TTNJLFAP6RMBNBOZSIRA7KF",
+          "version": 1777474950275,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:30Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Experience the convenience and security of making cash donations through our streamlined appointment booking service. With a user-friendly platform and easy payment process, you can schedule an appointment to make your contribution hassle-free. By booking a dedicated time slot for your donation appointment, you ensure a smooth and efficient transaction process. Your support for the cause is invaluable, and our appointment service ensures that your donation is received promptly and securely. Book now to make a difference and join us in our mission to create a positive impact in the community.",
+          "images": [
+            {
+              "id": "W3P26ADFNIYLL3FZUKCVXLTB",
+              "url": "https://items-images-production.s3.us-west-2.amazonaws.com/files/d2a357e95fa13738ac649763e71205039dc0096c/original.png"
+            }
+          ],
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Cash Donations",
+          "productType": "APPOINTMENTS_SERVICE",
+          "skipModifierScreen": false,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "6K3E74KDEXSLD3DUN7YIJPK4",
+              "name": "In Person Cash Donation"
+            },
+            {
+              "id": "XW65GX5HRDMSDWLUFVSDFPEE",
+              "name": "Online Donation"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "RHNVNGIOH5DOCF6MOANJEKY5",
+          "version": 1777474951244,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:31Z",
+          "absentAt": null,
+          "presentAt": [
+            {
+              "id": "LY5GN09F5AN83"
+            }
+          ],
+          "presentAtAll": false,
+          "abbreviation": "Co",
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": {
+            "id": "ZDDRMMJCCO3HVOICHJ3B7PJZ"
+          },
+          "description": "Discover high-quality computer tune up /, expert repair services, and lightning-fast upgrades for your computer. Elevate your tech experience with our top-notch products and services today!",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Computer Service",
+          "productType": "APPOINTMENTS_SERVICE",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "C5FBHEBROPLIBLDTYFQ5R4X3",
+              "name": "Regular"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "SXFP3QDFUIC2OATUYLOJIQZQ",
+          "version": 1780107506639,
+          "isDeleted": false,
+          "updatedAt": "2026-05-30T02:18:26Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": false,
+          "abbreviation": "yo",
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": {
+            "id": "ZDDRMMJCCO3HVOICHJ3B7PJZ"
+          },
+          "description": "The youandinotai.com Membership offers exclusive access",
+          "images": null,
+          "options": [
+            {
+              "id": "FD5AFS26NXHM6OEKLQKKCVK4",
+              "name": "Weekly Subscription"
+            }
+          ],
+          "labelColor": "",
+          "modifierListInfos": null,
+          "name": "youandinotai.com Membership ",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "SBSDPKSOTB6DNMNC5W33Y7CK",
+              "name": "https://square.link/u/cic2fnIG"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "Q64UX3HV3CDP3OXCQ6QDWVXW",
+          "version": 1780107505421,
+          "isDeleted": false,
+          "updatedAt": "2026-05-30T02:18:25Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": false,
+          "abbreviation": "We",
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": {
+            "id": "UDMTCIT3GXI67TMLY6Z3OA37"
+          },
+          "description": "The Weekly Subscription offers convenience and cost-effective access to paid features",
+          "images": null,
+          "options": [
+            {
+              "id": "FD5AFS26NXHM6OEKLQKKCVK4",
+              "name": "Weekly Subscription"
+            }
+          ],
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Weekly Subscription ",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "TOMYRK7OV5JSY4ITD4MZ3VVV",
+              "name": "https://square.link/u/cic2fnIG"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "MSKDBHGLQSAWDPF4IPIXWAG4",
+          "version": 1777474955222,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:35Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Payment flow test - FOR THE KIDS",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Test - Dating App",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "QKAZRP2SLZ3EZGUNZMBJDL2C",
+              "name": "Test"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "W67ZNG5SZ6PRVDPR6AHJTRBM",
+          "version": 1777474955222,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:35Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Automatically converts news into YouTube Shorts with AI scripts, voiceovers, and rendering.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Claude Droid - AI Video Generator",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "FCGATSCMWQYLKZDH2XDUPZQ5",
+              "name": "One-time License"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "JZMCTMLPJMMLQZIM2SS3FXXR",
+          "version": 1777474955222,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:35Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Generates 4 revenue-optimized videos daily for YouTube monetization.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Income Droid - Video Monetization",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "KLWQCO22PNUNGICILKWMACMV",
+              "name": "One-time License"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "TAUULL5KJFJUBATL3P4TRZLB",
+          "version": 1777474955868,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:35Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Auto-generates and posts marketing content to social media 4x daily.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Marketing Content Engine",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "NL6JTZMOFWY5L4WFMWSOT5TR",
+              "name": "One-time License"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "2CI6YPSCXKW63EKF677OZJDX",
+          "version": 1777474955868,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:35Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Gemini-powered business director for Git, AWS, GCP automation.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Jules AI Assistant",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "5OK4H4YNYQGQZIEPZ2ILNK74",
+              "name": "One-time License"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "C7PCRTTAMEQUUIELLEYBSMY2",
+          "version": 1777474955868,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:35Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "White-label affiliate platform with tiered commissions and tracking.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Affiliate System",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "NXIXZAYRTEL2OXODHF5TPVYY",
+              "name": "One-time License"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "FI5YAPWETHB6DVNNYGVA2VGK",
+          "version": 1777474955868,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:35Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Complete dating app with human verification and anti-AI detection.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "YouAndINotAI Dating Platform",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "7LGHOSETNCBQLQXKYOTTKLZU",
+              "name": "Full License"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "HR6G6ZINXH7QTKCJGWFUJI44",
+          "version": 1777474956546,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:36Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "30-minute consultation to discuss your AI automation needs.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "AI Consultation - 30 min",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "LXYYJLL2YLR2MLK57KCFGCVN",
+              "name": "30 min session"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "7WDIRHAEBMXCUCVKELR3AUZ5",
+          "version": 1777474956546,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:36Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Bold statement tee - I am Human Verified. Are You?",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Anti-AI Human Verified T-Shirt",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "7OPQJZ4FRCE5TMNOVNIDMMXB",
+              "name": "Standard"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "QHVBXXXYWGYZKX25MLNGFVDP",
+          "version": 1777474956546,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:36Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Premium hoodie with Verified Human branding.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Anti-AI Hoodie",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "B6DLD2K7XLG7AX42U5MUA2IX",
+              "name": "Standard"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "OZZX4OS22AO7V4IXYNMWTT35",
+          "version": 1777474956546,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:36Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Future AI Builder - Inspire the next generation.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Kid AI Creator T-Shirt",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "ZOTRA2HYQDGGNGSW2ZOWNYRE",
+              "name": "Standard"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "45Q3MENH4NKAY6V5Q4FG7OXS",
+          "version": 1777474957187,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:37Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "This Coffee Was Made By A Human.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Human Verified Coffee Mug",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "4AYUICKROWKL4K77LM2BEMZZ",
+              "name": "Standard"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "WR227KMHVGJX246BT47LI2UE",
+          "version": 1777474957187,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:37Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "10 stickers for laptop, water bottle, everywhere.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Anti-AI Sticker Pack (10)",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "WLOJE3ZE3I2QEAOIXSL24JBU",
+              "name": "10 pack"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "TL2QA2TD7ZMOUPT2XIHICSYA",
+          "version": 1777474957187,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:37Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Tee + Hoodie + Mug + Stickers. Save 25 dollars!",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Ultimate Merch Bundle",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "HO7LTDEGBTECTTUMPQZGL5FA",
+              "name": "Complete Bundle"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "3PMZKQC6LDLD7IKWXXVUKWN2",
+          "version": 1777474957187,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:37Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "3 months Premium access at launch + Joker drawing entry. FOR THE KIDS - 60% to Verified Pediatric Charities",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "YouAndINotAI 3-Month Founder Preorder",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "LYWQ62GFW74YODX63YFAZIA5",
+              "name": "3-Month Founder Access"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "NOVR45RUF7HIACUCE4HFGG6O",
+          "version": 1777474957860,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:37Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Full year Premium + Exclusive Founder Badge + 5x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "YouAndINotAI 12-Month Founder Preorder",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "CUKJXQLRLEILYUR6WMYIRZFK",
+              "name": "12-Month Founder Access"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "PHYBDJDP7Y6YC2DLGJH6CRFE",
+          "version": 1777474957860,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:37Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Premium for LIFE + Diamond Badge + 10x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "YouAndINotAI Diamond Founder",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "OAMP365CN4XJQQNEQR2W3Z4B",
+              "name": "Diamond Founder - Lifetime Premium"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "JRXS3MWLFTSN3DH5KK7IGE7Z",
+          "version": 1777474957860,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:37Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Everything + Early Beta Access + Platinum Badge + 25x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "YouAndINotAI Platinum Founder",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "3LBGFTKJHB3E3WR6CGWWYXFX",
+              "name": "Platinum Founder - Beta + Lifetime"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "HHHPYQXYZWVZLFBLNDV3STP3",
+          "version": 1777474957860,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:37Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "VIP Matching + Concierge Service + Elite Badge + 50x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "YouAndINotAI Elite Founder",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "JXNIYOZOJ7RII7R6QNM4QNKL",
+              "name": "Elite Founder - VIP Concierge"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "43FSI3ZD4RCX52AZKRNAHA3D",
+          "version": 1777474958539,
+          "isDeleted": false,
+          "updatedAt": "2026-04-29T15:02:38Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "One of 5 exclusive Royalty Cards - Premium FREE FOR LIFE + All perks + Governance rights. FOR THE KIDS - 60% to Verified Pediatric Charities",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "YouAndINotAI Royalty Founder Card",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "EZQP76FT27HMBU3QAZPALOT6",
+              "name": "Royalty Founder Card (Only 5 Exist)"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "3T6Z4F4EBC2NSOSR2B7V5NF6",
+          "version": 1785343045370,
+          "isDeleted": false,
+          "updatedAt": "2026-07-29T16:37:25Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Repository audit, doctrine purge, secret rotation, compliance scan.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Security Cleanup",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "TKZBPOQPALKZAB7FU75V4URU",
+              "name": "Standard"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "U65AR4PEQRTJ6E6237FTFNVS",
+          "version": 1785343154461,
+          "isDeleted": false,
+          "updatedAt": "2026-07-29T16:39:14Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Repository audit, doctrine purge, secret rotation, compliance scan.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Security Cleanup",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "J3XR6TWLA226GPT6FQCF7TFC",
+              "name": "Standard"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "QYZLSE4ULQSHXYEDP2AUVW5B",
+          "version": 1785343155437,
+          "isDeleted": false,
+          "updatedAt": "2026-07-29T16:39:15Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Multi-agent orchestration, swarm deployment, autonomous task execution.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Agentic Workflows",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "KVH3ZHQQ5P5VMS22OWKFYWWV",
+              "name": "Standard"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "5B4VO72E7K3I47N5FBUBKRF5",
+          "version": 1785343156894,
+          "isDeleted": false,
+          "updatedAt": "2026-07-29T16:39:16Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "Legacy code modernization, dependency updates, architecture refactoring.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "Tech Debt Cleanup",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "A7QUE2ZAPD3JCOWIDRC4SOLK",
+              "name": "Standard"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogItem",
+          "id": "FH3CMVNK5MFBIYC2APEKKQYZ",
+          "version": 1785343157515,
+          "isDeleted": false,
+          "updatedAt": "2026-07-29T16:39:17Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "abbreviation": null,
+          "availableElectronically": null,
+          "availableForPickup": null,
+          "availableOnline": null,
+          "category": null,
+          "description": "API gateway deployment, rate limiting, authentication, monitoring.",
+          "images": null,
+          "options": null,
+          "labelColor": null,
+          "modifierListInfos": null,
+          "name": "API Management",
+          "productType": "REGULAR",
+          "skipModifierScreen": null,
+          "taxes": [
+            {
+              "id": "F654GP44762YZEA4VNOHBLUA",
+              "name": "lake"
+            }
+          ],
+          "variations": [
+            {
+              "id": "4N2I5PZLRE4LXL6DFA7ZWCRY",
+              "name": "Standard"
+            }
+          ]
+        },
+        {
+          "__typename": "CatalogCategory",
+          "id": "R24DGZV7LPULZCRH7DJONYGK",
+          "version": 1754524144226,
+          "isDeleted": false,
+          "updatedAt": "2025-08-06T23:49:04Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "name": "Donate"
+        },
+        {
+          "__typename": "CatalogCategory",
+          "id": "MBS3QMGVJ3UQNL75MGS3ACYJ",
+          "version": 1754524144226,
+          "isDeleted": false,
+          "updatedAt": "2025-08-06T23:49:04Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "name": "eBay Store For Recycled Items to Raise funds for Shriners Hospitals for Children"
+        },
+        {
+          "__typename": "CatalogCategory",
+          "id": "ZDDRMMJCCO3HVOICHJ3B7PJZ",
+          "version": 1754524144226,
+          "isDeleted": false,
+          "updatedAt": "2025-08-06T23:49:04Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "name": "Computer parts and services or upgrades."
+        },
+        {
+          "__typename": "CatalogCategory",
+          "id": "YM2IEFDFBUEP6NEBEKKXCPVG",
+          "version": 1754524144226,
+          "isDeleted": false,
+          "updatedAt": "2025-08-06T23:49:04Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "name": "Home"
+        },
+        {
+          "__typename": "CatalogCategory",
+          "id": "LAEY4BCWPS3EIHUTP2FMFOVS",
+          "version": 1754524144226,
+          "isDeleted": false,
+          "updatedAt": "2025-08-06T23:49:04Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "name": "Other"
+        },
+        {
+          "__typename": "CatalogCategory",
+          "id": "PSZNF5EDNPC3SBZVMCK4DES7",
+          "version": 1754524144226,
+          "isDeleted": false,
+          "updatedAt": "2025-08-06T23:49:04Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "name": "Movies Games Music"
+        },
+        {
+          "__typename": "CatalogCategory",
+          "id": "UDMTCIT3GXI67TMLY6Z3OA37",
+          "version": 1757802519270,
+          "isDeleted": false,
+          "updatedAt": "2025-09-13T22:28:39Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "name": "subscription "
+        },
+        {
+          "__typename": "CatalogTax",
+          "id": "F654GP44762YZEA4VNOHBLUA",
+          "version": 1780107505421,
+          "isDeleted": false,
+          "updatedAt": "2026-05-30T02:18:25Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": false
+        },
+        {
+          "__typename": "CatalogDiscount",
+          "id": "PAKDS5BTRIKGKA5MZHXY6OEK",
+          "version": 1780107505421,
+          "isDeleted": false,
+          "updatedAt": "2026-05-30T02:18:25Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": false
+        },
+        {
+          "__typename": "CatalogDiscount",
+          "id": "YYMSYLV6IRKRXW3OTDWGTBRS",
+          "version": 1744973208156,
+          "isDeleted": false,
+          "updatedAt": "2025-04-18T10:46:48Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogDiscount",
+          "id": "SAQ25IA7OZCRGJAUDMQ4K5GC",
+          "version": 1744973208156,
+          "isDeleted": false,
+          "updatedAt": "2025-04-18T10:46:48Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogDiscount",
+          "id": "X2HXIYTREYPX7QAOWF4QU7AO",
+          "version": 1744973208156,
+          "isDeleted": false,
+          "updatedAt": "2025-04-18T10:46:48Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogDiscount",
+          "id": "QCL5WC4ALD4R7WZ2DQ7ZDERF",
+          "version": 1744973208156,
+          "isDeleted": false,
+          "updatedAt": "2025-04-18T10:46:48Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogDiscount",
+          "id": "DN5H7TX5PDSZBARWZXUVQWU4",
+          "version": 1744973208156,
+          "isDeleted": false,
+          "updatedAt": "2025-04-18T10:46:48Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogDiscount",
+          "id": "GVDA7AMF4YJXUJ65R2MQS4NF",
+          "version": 1744973208156,
+          "isDeleted": false,
+          "updatedAt": "2025-04-18T10:46:48Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogDiscount",
+          "id": "5PKD5XNNSOMDAM73XW24NJ7H",
+          "version": 1775869060845,
+          "isDeleted": false,
+          "updatedAt": "2026-04-11T00:57:40Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogDiscount",
+          "id": "4LUVOTHUQTJHEID2DXK3SF7F",
+          "version": 1775869197462,
+          "isDeleted": false,
+          "updatedAt": "2026-04-11T00:59:57Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogDiscount",
+          "id": "HXTHOPTTIVPTLBWUNFOAZSBP",
+          "version": 1775869197571,
+          "isDeleted": false,
+          "updatedAt": "2026-04-11T00:59:57Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogDiscount",
+          "id": "Q634SFFSZ66PUKXNJTFHJU75",
+          "version": 1780107505421,
+          "isDeleted": false,
+          "updatedAt": "2026-05-30T02:18:25Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": false
+        },
+        {
+          "__typename": "CatalogPricingRule",
+          "id": "CHSIZ62BGU2Z6P57JHRIXKPE",
+          "version": 1775869060845,
+          "isDeleted": false,
+          "updatedAt": "2026-04-11T00:57:40Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogPricingRule",
+          "id": "D3LLQKUSMHRQ7MQ5HAFKAUQR",
+          "version": 1775869197462,
+          "isDeleted": false,
+          "updatedAt": "2026-04-11T00:59:57Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogPricingRule",
+          "id": "BWN2RJEWV6V65EHMKDCC5PGK",
+          "version": 1775869197571,
+          "isDeleted": false,
+          "updatedAt": "2026-04-11T00:59:57Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogPricingRule",
+          "id": "AO3SH424OWU2YWU5SD6TOCTR",
+          "version": 1780107505421,
+          "isDeleted": false,
+          "updatedAt": "2026-05-30T02:18:25Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": false
+        },
+        {
+          "__typename": "CatalogProductSet",
+          "id": "2VAHURINLDNNRYDZDBWLEEC5",
+          "version": 1744964097081,
+          "isDeleted": false,
+          "updatedAt": "2025-04-18T08:14:57Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "allProducts": true,
+          "name": null,
+          "allSetProducts": [],
+          "anySetProducts": [],
+          "quantityExact": null,
+          "quantityMax": null,
+          "quantityMin": null
+        },
+        {
+          "__typename": "CatalogProductSet",
+          "id": "FNYGHYGTSJPLVHZB4SCTKUAQ",
+          "version": 1775869060845,
+          "isDeleted": false,
+          "updatedAt": "2026-04-11T00:57:40Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true,
+          "allProducts": true,
+          "name": "Coupons MATCH_ALL Product Set",
+          "allSetProducts": [],
+          "anySetProducts": [],
+          "quantityExact": null,
+          "quantityMax": null,
+          "quantityMin": null
+        },
+        {
+          "__typename": "CatalogMeasurementUnit",
+          "id": "QD2CWGML7S37ZBAAHH6NXNJV",
+          "version": 1757802775721,
+          "isDeleted": false,
+          "updatedAt": "2025-09-13T22:32:55Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogMeasurementUnit",
+          "id": "BLSPETYGMXMLSZRHEBCX5YX2",
+          "version": 1757802817305,
+          "isDeleted": false,
+          "updatedAt": "2025-09-13T22:33:37Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogSubscriptionPlanVariation",
+          "id": "KRWXFJC7NWTYOY2QOAVZWHY2",
+          "version": 1758289559587,
+          "isDeleted": false,
+          "updatedAt": "2025-09-19T13:45:59Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogSubscriptionPlanVariation",
+          "id": "XVMMVUP6BBD272KNEAXMNU4X",
+          "version": 1761145880952,
+          "isDeleted": false,
+          "updatedAt": "2025-10-22T15:11:20Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogSubscriptionPlanVariation",
+          "id": "E7DO7MPRWT6DJMV6ZWWHYCWA",
+          "version": 1761145880952,
+          "isDeleted": false,
+          "updatedAt": "2025-10-22T15:11:20Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogSubscriptionPlanVariation",
+          "id": "2IUQQV2AGVJMMP4TWUD7UXJU",
+          "version": 1761145880952,
+          "isDeleted": false,
+          "updatedAt": "2025-10-22T15:11:20Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogItemOption",
+          "id": "FCACH466MDQ7ET63ZA7PHUAN",
+          "version": 1744975304195,
+          "isDeleted": false,
+          "updatedAt": "2025-04-18T11:21:44Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogItemOption",
+          "id": "FD5AFS26NXHM6OEKLQKKCVK4",
+          "version": 1757802726155,
+          "isDeleted": false,
+          "updatedAt": "2025-09-13T22:32:06Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "XHMY6N7QV47ZCHIW2G6U7NXN",
+          "version": 1744966753977,
+          "isDeleted": false,
+          "updatedAt": "2025-04-18T08:59:13Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "YHJGTS2HVSLSXCFT7KJM27NK",
+          "version": 1745153980298,
+          "isDeleted": false,
+          "updatedAt": "2025-04-20T12:59:40Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "YEVOFRVZGOJVQC373JQFR7AW",
+          "version": 1745153980298,
+          "isDeleted": false,
+          "updatedAt": "2025-04-20T12:59:40Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "JY4N7Z2UZRN74522FWPTTGDV",
+          "version": 1745153980298,
+          "isDeleted": false,
+          "updatedAt": "2025-04-20T12:59:40Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "PHTJWECMWD5TQC2NFE6OJXTI",
+          "version": 1745153980298,
+          "isDeleted": false,
+          "updatedAt": "2025-04-20T12:59:40Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "NGJ4LDM4WBSEH5MNEGWRLJEK",
+          "version": 1745153980298,
+          "isDeleted": false,
+          "updatedAt": "2025-04-20T12:59:40Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "KHOEWTF6DTR7I6RWOBOLLEMP",
+          "version": 1745153980298,
+          "isDeleted": false,
+          "updatedAt": "2025-04-20T12:59:40Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "TFCHETHPFP42IOR7JFQ5RPNE",
+          "version": 1745153980298,
+          "isDeleted": false,
+          "updatedAt": "2025-04-20T12:59:40Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "GSO4GFNHTMLUZ3UHLSOOWTL6",
+          "version": 1745153980298,
+          "isDeleted": false,
+          "updatedAt": "2025-04-20T12:59:40Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "RUL6ASM7NT7QNZC5AJ4L2LS4",
+          "version": 1748008925212,
+          "isDeleted": false,
+          "updatedAt": "2025-05-23T14:02:05Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "BP5SBADZGN5POW2UCQVLEMFH",
+          "version": 1748008925815,
+          "isDeleted": false,
+          "updatedAt": "2025-05-23T14:02:05Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "QQWQSBEKTOJH6YF2ERIB3OUI",
+          "version": 1748008926304,
+          "isDeleted": false,
+          "updatedAt": "2025-05-23T14:02:06Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "AH7JYKUF7DMRS4FHF4IH26F3",
+          "version": 1748008926812,
+          "isDeleted": false,
+          "updatedAt": "2025-05-23T14:02:06Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "L5PCH6B6D53NY6WZCTUGJQ6M",
+          "version": 1748008927281,
+          "isDeleted": false,
+          "updatedAt": "2025-05-23T14:02:07Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "GFEF6XMMEFV7Z4QCHKARKNWQ",
+          "version": 1748008927743,
+          "isDeleted": false,
+          "updatedAt": "2025-05-23T14:02:07Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "WRYRD7A4ERPMFPXZBH4BNJHE",
+          "version": 1748008928257,
+          "isDeleted": false,
+          "updatedAt": "2025-05-23T14:02:08Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "RBCAZPGSTRQAJTZZ7RDCPWTW",
+          "version": 1748008928757,
+          "isDeleted": false,
+          "updatedAt": "2025-05-23T14:02:08Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "JOS6XU42Q6QZL4YSJORL73H2",
+          "version": 1748008929254,
+          "isDeleted": false,
+          "updatedAt": "2025-05-23T14:02:09Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogCustomAttributeDefinition",
+          "id": "D6HZGWYRECOAVVDNWEPMTEXT",
+          "version": 1748008929720,
+          "isDeleted": false,
+          "updatedAt": "2025-05-23T14:02:09Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogSubscriptionPlan",
+          "id": "54WVEY2FH2PKEZMD6B22DTYQ",
+          "version": 1758289559587,
+          "isDeleted": false,
+          "updatedAt": "2025-09-19T13:45:59Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogSubscriptionPlan",
+          "id": "QO6S5U25PRMMNJKPAFNZOBCP",
+          "version": 1761145880952,
+          "isDeleted": false,
+          "updatedAt": "2025-10-22T15:11:20Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogSubscriptionPlan",
+          "id": "FW5HXEHKMMVDNKMWEZLPD6M4",
+          "version": 1761145880952,
+          "isDeleted": false,
+          "updatedAt": "2025-10-22T15:11:20Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        },
+        {
+          "__typename": "CatalogSubscriptionPlan",
+          "id": "KVQCTWKVD4QOACMTONB4H3PM",
+          "version": 1761145880952,
+          "isDeleted": false,
+          "updatedAt": "2025-10-22T15:11:20Z",
+          "absentAt": null,
+          "presentAt": null,
+          "presentAtAll": true
+        }
+      ]
+    }
+  }
+}

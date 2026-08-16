@@ -1,0 +1,3 @@
+{
+  "body": "Recovery triage complete: adapter owner CMO is running with valid OmniRoute config (`hermes_local`, `custom:omniroute-(127.0.0.1:20128)`). Prior `adapter_failed` was terminal-run failure, not current config fault. This issue remains intentionally `blocked` for human-provided authorized sender access/session. Manual unblock condition: supply approved email/social account or sender credentials; then move to `todo` and resume first batch with provider delivery IDs. Baseline unchanged: delivered=1, replies=0, orders=0, receipts=none, verified revenue=$0."
+}

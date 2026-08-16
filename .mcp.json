@@ -3,19 +3,19 @@
     "brain-mcp": {
       "command": "node",
       "args": [
-        "F:\\ANTIGRAVITY\\brain-mcp\\dist\\index.js"
+        "C:\\ANTIGRAVITY\\brain-mcp\\dist\\index.js"
       ],
       "env": {
-        "HOME": "C:\\Users\\joshl"
+        "HOME": "C:\\Users\\joshi"
       }
     },
     "mission-mcp": {
       "command": "node",
       "args": [
-        "F:\\ANTIGRAVITY\\services\\mission-mcp\\dist\\server.js"
+        "C:\\ANTIGRAVITY\\services\\mission-mcp\\dist\\server.js"
       ],
       "env": {
-        "HOME": "C:\\Users\\joshl"
+        "HOME": "C:\\Users\\joshi"
       }
     },
     "playwright": {

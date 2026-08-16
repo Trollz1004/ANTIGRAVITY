@@ -1,0 +1,13 @@
+[
+  {
+    "id": "90060f6b-f491-46bf-be20-263312d24ccb",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "7b3892c1-d2cf-4c66-b817-37d6e211ed35",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "2dedc6a0-f4c8-4f9a-9776-52ba2c6a5318",
+    "body": "Next critical CTO work: verify production checkout telemetry end-to-end. Provide test order/payment event path, webhook/log evidence, and explicit separation of test vs real receipts. Never claim revenue from test transactions.",
+    "createdAt": "2026-08-07T02:59:57.268Z",
+    "updatedAt": "2026-08-07T02:59:57.268Z"
+  }
+]
