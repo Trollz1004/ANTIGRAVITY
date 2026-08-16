@@ -13,8 +13,9 @@ cd /d "%~dp0"
 set "MC_DIR=%~dp0"
 set "REPO=%MC_DIR%.."
 
-:: pick the repo backend venv first (already has fastapi/uvicorn/httpx)
-set "PY=%REPO%\backend\fastapi-app\.venv\Scripts\python.exe"
+:: pick v6's own venv first, then the repo backend venv, then system python
+set "PY=%MC_DIR%.venv\Scripts\python.exe"
+if not exist "%PY%" set "PY=%REPO%\backend\.venv\Scripts\python.exe"
 if not exist "%PY%" set "PY=python"
 
 :: already running?
