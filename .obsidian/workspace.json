@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "frontend/react-app/node_modules/react-router/docs/how-to/webhook.md",
+                "file": "ops/skills/skills-hub-reference.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "webhook"
+              "title": "skills-hub-reference"
             }
           }
         ]
@@ -60,7 +60,7 @@
                 "explainSearch": false,
                 "collapseAll": false,
                 "extraContext": false,
-                "sortOrder": "byModifiedTime"
+                "sortOrder": "byCreatedTime"
               },
               "icon": "lucide-search",
               "title": "Search"
@@ -79,8 +79,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -100,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "frontend/react-app/node_modules/react-router/docs/how-to/webhook.md",
+                "file": "ops/skills/skills-hub-reference.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -189,18 +188,31 @@
       "bases:Create new base": false
     }
   },
-  "active": "5accef5e8f4a214c",
+  "active": "df13514450e2da2f",
   "lastOpenFiles": [
+    "mission-control-v6/logs/mission-control-alerts.jsonl",
+    "mission-control-v6/logs",
+    "mission-control-v6/state/mission-control.db-wal",
+    "mission-control-v6/state/mission-control.db-shm",
+    "mission-control-v6/state/mission-control.db",
+    "mission-control-v6/state",
+    "mission-control-v6/mission_control/__pycache__/dashboard.cpython-313.pyc",
+    "mission-control-v6/mission_control/__pycache__/api.cpython-313.pyc",
+    "mission-control-v6/mission_control/__pycache__/store.cpython-313.pyc",
+    "mission-control-v6/mission_control/__pycache__/notify.cpython-313.pyc",
+    "mission-control-v6/mission_control/__pycache__/remediation.cpython-313.pyc",
+    "mission-control-v5/server/data/brain/free-claude-code.STATE.md",
+    "ops/skills/SKILLS-HUB.md",
+    "ops/skills/skills-hub-reference.md",
+    "frontend/react-app/node_modules/react-router/docs/how-to/webhook.md",
+    "frontend/react-app/node_modules/react-router/docs/how-to/index.md",
+    "frontend/react-app/node_modules/react-router/docs/explanation/index.md",
+    "frontend/react-app/node_modules/react-router/docs/explanation/route-matching.md",
+    "frontend/react-app/node_modules/react-router/docs/how-to/suspense.md",
+    "frontend/react-app/node_modules/@typescript-eslint/eslint-plugin/docs/rules/README.md",
     "ROOT-MAP.md",
-    "ROOT-MAP.md.tmp.20140.add1cbee7c90",
     "frontend/react-app/node_modules/react-router/docs/start/framework/testing.md",
     "frontend/react-app/node_modules/react-router/docs/upgrading/v6.md",
-    "CLAUDE.md.tmp.20140.7a40c3ad1a2d",
-    "scripts/verify_implementation.py",
-    "scripts/QUICK_VERIFY.ps1",
-    "scripts/install.ps1",
-    "scripts/post-comment.ps1",
-    "scripts/complete-issue.ps1",
     "docs/2026-08-16.md",
     "docs/FUNA-7-IMPLEMENTATION-PLAN.md",
     "docs/FUNA-7-FUNDING-STRATEGY-PROPOSAL.md",
@@ -214,19 +226,6 @@
     "docs/ARCHITECTURE-HERMES.md",
     "briefings/marketing-launch-assets.md",
     "briefings/BRIEFING.md",
-    "briefings",
-    "omniroute/docs/guides/CLI-INTEGRATIONS.md",
-    "omniroute/docs/guides/ELECTRON_GUIDE.md",
-    "archive/root-cleanup-2026-08-16/legacy/bootstrap.cmd",
-    "archive/root-cleanup-2026-08-16/legacy/START-ANTIGRAVITY.bat",
-    "archive/root-cleanup-2026-08-16/legacy/agents/youandinotai-ceo/PROMPT.md",
-    "archive/root-cleanup-2026-08-16/legacy/agents/youandinotai-ceo/CLAUDE.md",
-    "archive/root-cleanup-2026-08-16/legacy/agents/fleet/UXDESIGNER-SOUL.md",
-    "archive/root-cleanup-2026-08-16/legacy/agents/fleet/UXDESIGNER-SKILLS.md",
-    "archive/root-cleanup-2026-08-16/legacy/agents/fleet/UXDESIGNER-HEARTBEAT.md",
-    "archive/root-cleanup-2026-08-16/legacy/agents/fleet/ENGINEER-SOUL.md",
-    "archive/root-cleanup-2026-08-16/legacy/agents/fleet/ENGINEER-HEARTBEAT.md",
-    "archive/root-cleanup-2026-08-16/legacy/agents/fleet/CTO-SOUL.md",
     "archive/root-cleanup-2026-08-16/legacy/_deploy/ai-solutions-store/assets/qr/twelve-month.png",
     "archive/root-cleanup-2026-08-16/legacy/_deploy/ai-solutions-store/assets/qr/three-month.png",
     "archive/root-cleanup-2026-08-16/legacy/_deploy/ai-solutions-store/assets/qr/royalty.png",

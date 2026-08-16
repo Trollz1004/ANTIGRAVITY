@@ -191,3 +191,6 @@ omniroute/
 
 # recoverable drift quarantine (paperclip purge 2026-08-10)
 .drift-quarantine/
+
+# Redis snapshot dropped by local stack when cwd is repo root
+dump.rdb
