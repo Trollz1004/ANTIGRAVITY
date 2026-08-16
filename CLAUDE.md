@@ -51,9 +51,10 @@ Active customer-facing work sells product value only:
 Do not use old non-product framing, private accounting mechanics, control-rights claims,
 or owner-private decisions as customer-facing claims or as reasons to block checkout.
 
-The current doctrine file is:
-
-`briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md`
+The doctrine lives in this file's **Public Copy Boundary** section below and in
+`briefings/BRIEFING.md`. (The old pointer `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md`
+is a dead file — it survived on no disk after the 2026-08-16 reinstall; verified
+gone from C:, F:, and OneDrive. Do not chase it.)
 
 ## Source Of Truth
 

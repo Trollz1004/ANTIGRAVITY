@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "3dd32e76672cc1f9",
+        "id": "daf69aeee6c5566a",
         "type": "tabs",
         "children": [
           {
-            "id": "9c1ecd9e46687603",
+            "id": "5accef5e8f4a214c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2026-08-16.md",
+                "file": "frontend/react-app/node_modules/react-router/docs/how-to/webhook.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-08-16"
+              "title": "webhook"
             }
           }
         ]
@@ -55,12 +55,12 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "[\"title\"]",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
                 "extraContext": false,
-                "sortOrder": "alphabetical"
+                "sortOrder": "byModifiedTime"
               },
               "icon": "lucide-search",
               "title": "Search"
@@ -79,7 +79,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -99,9 +100,9 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2026-08-16.md",
-                "collapseAll": false,
-                "extraContext": false,
+                "file": "frontend/react-app/node_modules/react-router/docs/how-to/webhook.md",
+                "collapseAll": true,
+                "extraContext": true,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
                 "searchQuery": "",
@@ -170,12 +171,12 @@
               "title": "Outline"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -188,26 +189,54 @@
       "bases:Create new base": false
     }
   },
-  "active": "9c1ecd9e46687603",
+  "active": "5accef5e8f4a214c",
   "lastOpenFiles": [
-    "archive/root-cleanup-2026-08-16/prospecting/ecomaticx-submit-response.html",
-    "archive/root-cleanup-2026-08-16/prospecting/new-www-sidegrowth-com.html",
-    "archive/root-cleanup-2026-08-16/prospecting/new-ecomaticx-com.html",
-    "archive/root-cleanup-2026-08-16/prospecting/new-devcommerce-agency-com.html",
-    "archive/root-cleanup-2026-08-16/prospecting/candidate-www-algosecom-com.html",
-    "archive/root-cleanup-2026-08-16/prospecting/candidate-ecomkinetic-com.html",
-    "archive/root-cleanup-2026-08-16/prospecting/candidate-ecomhyped-com.html",
-    "archive/root-cleanup-2026-08-16/prospecting/candidate-amzwave-co.html",
+    "ROOT-MAP.md",
+    "ROOT-MAP.md.tmp.20140.add1cbee7c90",
+    "frontend/react-app/node_modules/react-router/docs/start/framework/testing.md",
+    "frontend/react-app/node_modules/react-router/docs/upgrading/v6.md",
+    "CLAUDE.md.tmp.20140.7a40c3ad1a2d",
+    "scripts/verify_implementation.py",
+    "scripts/QUICK_VERIFY.ps1",
+    "scripts/install.ps1",
+    "scripts/post-comment.ps1",
+    "scripts/complete-issue.ps1",
+    "docs/2026-08-16.md",
+    "docs/FUNA-7-IMPLEMENTATION-PLAN.md",
+    "docs/FUNA-7-FUNDING-STRATEGY-PROPOSAL.md",
+    "docs/cmo-domain-validation.md",
+    "docs/START_ALL_AUTOSTART_INSTRUCTIONS.md",
+    "docs/START-STACK.md",
+    "docs/PR-MERGE-GUIDE.md",
+    "docs/OMNIROUTE-MIGRATION.md",
+    "docs/F_PRODUCTION_SETUP.md",
+    "docs/DOCKER-STACK-README.md",
+    "docs/ARCHITECTURE-HERMES.md",
+    "briefings/marketing-launch-assets.md",
+    "briefings/BRIEFING.md",
+    "briefings",
+    "omniroute/docs/guides/CLI-INTEGRATIONS.md",
+    "omniroute/docs/guides/ELECTRON_GUIDE.md",
+    "archive/root-cleanup-2026-08-16/legacy/bootstrap.cmd",
+    "archive/root-cleanup-2026-08-16/legacy/START-ANTIGRAVITY.bat",
+    "archive/root-cleanup-2026-08-16/legacy/agents/youandinotai-ceo/PROMPT.md",
+    "archive/root-cleanup-2026-08-16/legacy/agents/youandinotai-ceo/CLAUDE.md",
+    "archive/root-cleanup-2026-08-16/legacy/agents/fleet/UXDESIGNER-SOUL.md",
+    "archive/root-cleanup-2026-08-16/legacy/agents/fleet/UXDESIGNER-SKILLS.md",
+    "archive/root-cleanup-2026-08-16/legacy/agents/fleet/UXDESIGNER-HEARTBEAT.md",
+    "archive/root-cleanup-2026-08-16/legacy/agents/fleet/ENGINEER-SOUL.md",
+    "archive/root-cleanup-2026-08-16/legacy/agents/fleet/ENGINEER-HEARTBEAT.md",
+    "archive/root-cleanup-2026-08-16/legacy/agents/fleet/CTO-SOUL.md",
+    "archive/root-cleanup-2026-08-16/legacy/_deploy/ai-solutions-store/assets/qr/twelve-month.png",
+    "archive/root-cleanup-2026-08-16/legacy/_deploy/ai-solutions-store/assets/qr/three-month.png",
+    "archive/root-cleanup-2026-08-16/legacy/_deploy/ai-solutions-store/assets/qr/royalty.png",
+    "archive/root-cleanup-2026-08-16/legacy/_deploy/ai-solutions-store/assets/qr/founding-member.png",
+    "archive/root-cleanup-2026-08-16/legacy/_deploy/ai-solutions-store/assets/qr/bot-shield.png",
+    "archive/root-cleanup-2026-08-16/legacy/_deploy/youandinotai/og-image.svg",
+    "archive/root-cleanup-2026-08-16/legacy/_deploy/youandinotai/favicon.svg",
+    "archive/root-cleanup-2026-08-16/legacy/_deploy/aidoesitall-www/favicon.svg",
     "archive/root-cleanup-2026-08-16/agent-work-products/graphy-state.png",
     "archive/root-cleanup-2026-08-16/agent-work-products/graphy-fixed.png",
-    "archive/root-cleanup-2026-08-16/agent-work-products/Microsoft.Services.Store.winmd",
-    "archive/root-cleanup-2026-08-16/agent-work-products/dump.rdb",
-    "archive/root-cleanup-2026-08-16/agent-work-products/date_backend.txt",
-    "payments/botchargeafterfee.png",
-    "payments/botcharge.png",
-    "payments/Screenshot 2026-08-16 054308.png",
-    "botchargeafterfee .png",
-    "Untitled.canvas",
-    "2026-08-16.md"
+    "Untitled.canvas"
   ]
 }
