@@ -1,0 +1,46 @@
+[
+  {
+    "id": "6b2ab90a-a611-49a2-b40b-f1657e3ea731",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "4565abe2-9b0a-4254-a84d-e12d4debc535",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x0000022C068F07C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-23](/TRO/issues/TRO-23)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T03:57:25.757Z",
+    "updatedAt": "2026-08-07T03:57:25.757Z"
+  },
+  {
+    "id": "11a6103c-7208-4db2-9c39-3a89f892401e",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "4565abe2-9b0a-4254-a84d-e12d4debc535",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "5a025fd0-78b7-4822-8ffb-273d2c557355",
+    "body": "Requeued after adapter recovery. Execute smallest client-canvas avatar flow preserving user identity; fallback avatar allowed, no face swap. Return changed files and build/test output.",
+    "createdAt": "2026-08-07T03:54:40.439Z",
+    "updatedAt": "2026-08-07T03:54:40.439Z"
+  },
+  {
+    "id": "6dad1349-81f9-4d99-b2e1-d2c360cb49d1",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "4565abe2-9b0a-4254-a84d-e12d4debc535",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x0000021522AA47C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-21](/TRO/issues/TRO-21)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T03:44:51.669Z",
+    "updatedAt": "2026-08-07T03:44:51.669Z"
+  },
+  {
+    "id": "4b3ab0f8-71bb-4655-a3e7-5d011c4e185f",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "4565abe2-9b0a-4254-a84d-e12d4debc535",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "d5f40676-6277-447b-a544-cd554d2e9f82",
+    "body": "Next CTO task. Build only existing requested avatar flow, mobile-first. Require code diff plus build/test proof. Reuse current Graphy/state data; no new framework.",
+    "createdAt": "2026-08-07T03:40:03.630Z",
+    "updatedAt": "2026-08-07T03:40:03.630Z"
+  }
+]

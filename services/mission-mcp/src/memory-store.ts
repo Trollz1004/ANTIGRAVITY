@@ -1,7 +1,8 @@
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
+import { homedir } from 'os';
 
-const DEFAULT_MEMORIES_DIR = 'C:\\Users\\joshl\\.hermes\\memories';
+const DEFAULT_MEMORIES_DIR = join(homedir(), '.hermes', 'memories');
 
 export function getMemoriesDir(): string {
   return process.env.MISSION_MEMORIES_DIR ?? DEFAULT_MEMORIES_DIR;

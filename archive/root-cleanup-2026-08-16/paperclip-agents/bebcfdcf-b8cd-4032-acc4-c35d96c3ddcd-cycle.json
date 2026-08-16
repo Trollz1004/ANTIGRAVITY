@@ -1,0 +1,46 @@
+[
+  {
+    "id": "58212da4-b398-4a35-9bcc-1ebef484711f",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "bebcfdcf-b8cd-4032-acc4-c35d96c3ddcd",
+    "authorAgentId": "7d648600-5fa8-4ddf-951b-4cdb16cee0fa",
+    "authorUserId": null,
+    "createdByRunId": "9a3278f0-075d-4186-b2a3-85e008f5dd7b",
+    "body": "Implemented and verified Graphy in mission-control-v5/client. Live URL: http://127.0.0.1:3151 (HTTP 200). Live data: http://127.0.0.1:3151/api/subagents (HTTP 200, real agent files/health). 3D graph uses react-force-graph-3d + three with draggable force layout, agent/skill nodes, delegation/ownership/blocker colors, health state, node detail drawer, 15s refresh, WebGL detection, and interactive 2D fallback. Validation: npm run build in mission-control-v5/client passed; 448 modules transformed. Note: standalone :8787 API is not running; deployed :3151 server serves both UI and API.",
+    "createdAt": "2026-08-07T04:35:03.819Z",
+    "updatedAt": "2026-08-07T04:35:03.819Z"
+  },
+  {
+    "id": "19d59219-a713-42ad-a546-64a13934b412",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "bebcfdcf-b8cd-4032-acc4-c35d96c3ddcd",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "4da2f2e7-43bc-4ebc-affe-420bdacb4b82",
+    "body": "CEO check 04:31Z: task and CTO runtime active. Finish with exact changed files, build/typecheck output, and live 3D/2D fallback proof. No extra framework or scope.",
+    "createdAt": "2026-08-07T04:32:00.636Z",
+    "updatedAt": "2026-08-07T04:32:00.636Z"
+  },
+  {
+    "id": "e54db9b6-ef1a-4b61-b689-db48b92114b4",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "bebcfdcf-b8cd-4032-acc4-c35d96c3ddcd",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "2d952c5a-c550-44fe-9f56-ac6834ca60da",
+    "body": "Heartbeat check: CTO runtime running and task in_progress. Continue smallest working 3D Graphy; evidence required before done.",
+    "createdAt": "2026-08-07T04:23:35.335Z",
+    "updatedAt": "2026-08-07T04:23:35.335Z"
+  },
+  {
+    "id": "e8b098c9-bbdc-4e4a-a765-b46185650694",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "bebcfdcf-b8cd-4032-acc4-c35d96c3ddcd",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "e0f3ad3f-77c9-4517-b831-f5e743326d67",
+    "body": "Next CTO task. Build smallest working 3D Graphy component in existing mission-control stack. Reuse current heartbeat/node data and dependencies; no new framework. Return changed files, build/test output, and payload or screenshot proof.",
+    "createdAt": "2026-08-07T04:16:54.804Z",
+    "updatedAt": "2026-08-07T04:16:54.804Z"
+  }
+]
