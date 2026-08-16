@@ -50,3 +50,16 @@ awaiting Joshua's ci-validate dispatch for fresh checks.
   via Playwright -- submit/approve/reject/list all smoke-tested against a
   running server.
 - Both PRs open, subscribed, hourly check-ins to arm.
+
+## 2026-08-16 — CI green-up session (local, Fable 5)
+- gh CLI restored: v2.97.0 via winget, browser device-flow login as Trollz1004 (keyring).
+- Killed the failing-check emails, three commits pushed direct to main per Joshua:
+  f27dfcb5 (zombie daily-doctrine-audit.yml deleted; fast-uri 3.1.5 in brain-mcp +
+  mission-mcp lockfiles; black/ruff pass over backend/fastapi-app), 21484b51
+  (root pnpm.overrides clearing vitest critical + 9 high advisories → workspace
+  audits 5 low/3 moderate), f6e37264 (all actions to Node 24 majors).
+- CI Validate verified green via workflow_dispatch (runs 31956025342, 31956278280) —
+  root package.json is OUTSIDE its push path filter; dispatch is the only proof.
+- Durable notes mirrored here as memory-ci-truth-2026-08-16.md and
+  memory-sabretooth-reinstall-2026-08-16.md (canonical copies in the Claude Code
+  auto-memory dir on Sabretooth).
