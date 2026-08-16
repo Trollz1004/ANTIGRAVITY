@@ -329,6 +329,10 @@ export function retryTask(id: string): SwarmTask {
   if (!task) throw new Error('Task not found.');
   task.status = 'queued';
   task.column = 'NEXT';
+  // A retry is a fresh attempt: stale failure text must not survive next to a
+  // fresh verdict (verified live 2026-08-16 — a DONE task still showed the
+  // previous attempt's provider error).
+  delete task.error;
   queue.push(task.id);
   pump();
   return task;

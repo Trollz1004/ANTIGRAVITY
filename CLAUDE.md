@@ -18,7 +18,7 @@ system in your head, so skills are not optional:
    profile is now `C:\Users\joshi` — `C:\Users\joshl\...` is GONE, and with it
    the Hermes profile tree (53 skills) and the OpenCode harness tree (35).
    The ONE live tree is the repo's own:
-   - `F:\ANTIGRAVITY\.agents\skills\` — **44 skills** (the `agency-*` bulk was
+   - `C:\ANTIGRAVITY\.agents\skills\` — **44 skills** (the `agency-*` bulk was
      purged in cleanup). This is the tree Mission Control's swarm loads from.
    The old preload set (`adhd`, `agent-browser`, `find-skills`, `create-skill`,
    `creative`, `brainstorming`, `agent-reach`) lived in the wiped profile trees
@@ -30,7 +30,7 @@ system in your head, so skills are not optional:
    `POST :3151/api/brain/journal/<platformId>` or your seat file. The next
    session starts blind without it.
 
-This file is the Claude-facing operational guide for `F:\ANTIGRAVITY`.
+This file is the Claude-facing operational guide for `C:\ANTIGRAVITY`.
 If older exports, memories, downloads, or cached project files conflict with this file,
 follow this file and `AGENTS.md`.
 
@@ -57,7 +57,12 @@ The current doctrine file is:
 
 ## Source Of Truth
 
-- Repo: `F:\ANTIGRAVITY`  — **not `C:\antigravity`, not `E:\`**
+- Repo: **`C:\ANTIGRAVITY` on every node** (Joshua's directive 2026-08-16:
+  the working copy always lives at `C:\ANTIGRAVITY` no matter the node, so new
+  nodes never hit per-install drive-letter drift — the data disk came back as
+  `D:` after a reinstall and had to be re-lettered, never again). `E:\` is dead.
+  `F:\ANTIGRAVITY` is the old-disk clone, now an ARCHIVE — do not work in it;
+  it is no longer the source of truth.
 - Branch: `main` (the only branch — merge and delete any other)
 - Remote: `Trollz1004/ANTIGRAVITY`
 - Public date app domain: `youandinotai.com`
@@ -215,7 +220,7 @@ Prefer the canonical commands in `.github/workflows/` and local package scripts.
 For the date app frontend:
 
 ```powershell
-Set-Location F:\ANTIGRAVITY\frontend\react-app
+Set-Location C:\ANTIGRAVITY\frontend\react-app
 npm run build
 ```
 
@@ -229,7 +234,7 @@ HTTP 200. That has happened twice. Start it with
 
 Generated static output for direct deploy lives under:
 
-`F:\ANTIGRAVITY\apps\youandinotai-static`
+`C:\ANTIGRAVITY\apps\youandinotai-static`
 
 Remove stale generated assets when refreshing that folder so old bundle chunks do not keep
 serving retired copy.
