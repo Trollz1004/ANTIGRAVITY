@@ -2,21 +2,34 @@
   "mcpServers": {
     "brain-mcp": {
       "command": "node",
-      "args": ["F:\\ANTIGRAVITY\\brain-mcp\\dist\\index.js"],
+      "args": [
+        "F:\\ANTIGRAVITY\\brain-mcp\\dist\\index.js"
+      ],
       "env": {
         "HOME": "C:\\Users\\joshl"
       }
     },
     "mission-mcp": {
       "command": "node",
-      "args": ["F:\\ANTIGRAVITY\\services\\mission-mcp\\dist\\server.js"],
+      "args": [
+        "F:\\ANTIGRAVITY\\services\\mission-mcp\\dist\\server.js"
+      ],
       "env": {
         "HOME": "C:\\Users\\joshl"
       }
     },
     "playwright": {
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@playwright/mcp@latest"
+      ]
+    },
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=jmvgdqomvnkfgknmgwxp&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching%2Cstorage"
     }
   }
 }
