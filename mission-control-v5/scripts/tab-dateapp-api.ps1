@@ -21,6 +21,16 @@ Get-Content $VaultEnv | ForEach-Object {
     }
 }
 
+# The stash holds two DATABASE_URL lines (dating + legacy crosslist); the loop
+# above lets the last win. Pin the dating one (postgresql+asyncpg → uandinotai_dating).
+$dating = (Get-Content $VaultEnv | Where-Object { $_ -match '^DATABASE_URL=postgresql\+asyncpg://' } | Select-Object -First 1)
+if ($dating) { [Environment]::SetEnvironmentVariable('DATABASE_URL', $dating.Substring('DATABASE_URL='.Length).Trim(), 'Process') }
+
+# The stash's REDIS_URL points at the retired stack's Redis; this node runs a
+# local portable Redis (see scripts\sabretooth-stack-up.cmd).
+$env:REDIS_URL = 'redis://localhost:6379/0'
+Remove-Item Env:REDIS_PASSWORD -ErrorAction SilentlyContinue
+
 $env:APP_ENV = 'production'
 $env:PORT    = '8000'
 
