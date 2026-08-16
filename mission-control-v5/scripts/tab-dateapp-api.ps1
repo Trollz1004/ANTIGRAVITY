@@ -40,6 +40,11 @@ if (Test-Path $SupaEnv) {
 $env:REDIS_URL = 'redis://localhost:6379/0'
 Remove-Item Env:REDIS_PASSWORD -ErrorAction SilentlyContinue
 
+# The stash holds duplicate SQUARE_LOCATION_ID lines and last-wins picks a dead
+# location (Square rejects it, killing every checkout link). Pin the ACTIVE
+# location for merchant ML3C7FMTQS5KX, verified via Square API 2026-08-16.
+$env:SQUARE_LOCATION_ID = 'LY5GN09F5AN83'
+
 $env:APP_ENV = 'production'
 $env:PORT    = '8000'
 
