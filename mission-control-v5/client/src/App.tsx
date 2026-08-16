@@ -98,7 +98,9 @@ export default function App() {
           )}
           {tab === 'board' && <KanbanBoard tasks={tasks} />}
           {tab === 'services' && <ServicesPanel />}
-          {tab === 'brain' && <BrainPanel />}\n          {tab === 'bridge' && <BridgePanel />}\n        </main>
+          {tab === 'brain' && <BrainPanel />}
+          {tab === 'bridge' && <BridgePanel />}
+        </main>
         <footer className="footer">
           <span>
             MISSION CONTROL v{health?.version ?? '5.0.0'} — {health?.edition ?? 'HAIKU-SONNET 3.5 EDITION'}
