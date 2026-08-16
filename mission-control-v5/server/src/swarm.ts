@@ -8,8 +8,12 @@
  *    - PLAN: Decomposes task, assigns >= 4 skills per sub-task.
  *    - WORK: Sub-agents execute with those skills preloaded.
  *    - VALIDATE: Orchestrator improves at least 1 thing, reruns, and verifies.
- * 3. ADVERSARIAL JUDGE: All three final results are presented to a MAX Reasoning model.
- * 4. DECISION: Judge picks the best version. Only then is it pushed/merged.
+ * 3. ADVERSARIAL JUDGE: All final results are presented to the JUDGE executor —
+ *    the highest-reasoning route available, never one of the worker models.
+ * 4. DECISION: The judge ACCEPTS one version (optionally with edits), or DENIES
+ *    all of them. Denied or judge-unreachable tasks go BLOCKED for human
+ *    review — the judge is a GATE, not an optimizer. Only judge-accepted work
+ *    may be pushed/merged; workers and orchestrators never push.
  */
 import { randomUUID } from 'node:crypto';
 import { AGENT_INDEX, CATEGORY_INDEX, ORCHESTRATOR_CONTRACT } from './agents.js';
@@ -92,6 +96,10 @@ function workerSystem(subtask: any, skills: BrainSkill[], orchestratorName: stri
 
 const VERDICT_SHAPE = '{\"verdicts\":[{\"index\":0,\"pass\":true,\"gap\":\"\"}],\"overallPass\":true}';
 
+/** The gate verdict. accept = ship version `index` (editedOutput, when present, replaces it verbatim). deny = block all. */
+const JUDGE_SHAPE =
+  '{\"decision\":\"accept|deny\",\"index\":1,\"reason\":\"one-line justification\",\"editedOutput\":\"full corrected deliverable, or empty string to ship as-is\"}';
+
 async function execute(task: SwarmTask): Promise<void> {
   // Run the agents the TASK asked for. The old hardcoded trio ignored
   // task.agentIds and included 'fcc-opus', which is not an agent id, so one
@@ -110,54 +118,66 @@ async function execute(task: SwarmTask): Promise<void> {
     }));
 
     // Only outputs that exist compete; a failed cycle must not poison the
-    // judge with "undefined". And the judge is an OPTIMIZER, not a gate: if
-    // it answers garbage, ship the longest contender anyway. 'Judge rejected
-    // all versions' used to discard real work over a JSON parse failure.
+    // judge with "undefined".
     const contenders = task.results.filter(r => r.status === 'done' && r.output && r.output.trim());
 
     if (contenders.length === 0) {
       task.status = 'error';
       task.error = task.results.map(r => `[${r.agentId}] ${r.error ?? 'no output'}`).join(' | ');
     } else {
-      let winner = contenders[0];
-      let judgeNote = 'single contender - no judging needed';
-      if (contenders.length > 1) {
-        winner = contenders.reduce((x, y) => ((y.output ?? '').length > (x.output ?? '').length ? y : x));
-        judgeNote = 'judge unavailable - shipped longest contender';
-        try {
-          const judgeResult = await route({
-            mode: 'reasoning',
-            system: 'You are the judge. Pick the best deliverable.',
-            prompt: [
-              `You are the FINAL JUDGE. Compare these ${contenders.length} versions of the same task.`,
-              `TASK: ${task.prompt}`,
-              '',
-              ...contenders.map((c, k) => `VERSION ${k + 1} (${c.agentId}): ${c.output}`),
-              '',
-              'PICK THE BEST VERSION by 1-based index.',
-              `Reply with ONLY JSON: ${VERDICT_SHAPE}`,
-            ].join(String.fromCharCode(10)),
-            executor: isExecutor('judge') ? 'judge' : 'auto',
-          });
-          const verdict = extractJson(judgeResult.text, 'verdicts');
-          const idx = Number(verdict?.verdicts?.[0]?.index);
-          if (Number.isFinite(idx) && idx >= 1 && idx <= contenders.length) {
-            winner = contenders[idx - 1];
-            judgeNote = `judge picked version ${idx} (${winner.agentId})`;
-          }
-        } catch (judgeErr) {
-          judgeNote = `judge errored - shipped longest contender`;
-        }
-      }
+      // THE JUDGE IS A GATE (owner directive 2026-08-16): every deliverable —
+      // even a lone contender — needs an explicit ACCEPT from the judge lane
+      // before it lands. DENY or an unreachable judge sends the task BLOCKED
+      // for human review. Nothing ships by default anymore; only judge-accepted
+      // work may ever be pushed or merged, and workers never push.
+      try {
+        const judgeResult = await route({
+          mode: 'reasoning',
+          system: [
+            'You are THE JUDGE — the highest-reasoning gate of the swarm, and you are not any of the workers.',
+            'You alone decide what ships. Accept the best version (optionally with your edits), or deny all.',
+            'Deny anything unverified, fabricated, off-doctrine, or below the acceptance bar.',
+          ].join(' '),
+          prompt: [
+            `Compare these ${contenders.length} version(s) of the same task.`,
+            `TASK: ${task.prompt}`,
+            '',
+            ...contenders.map((c, k) => `VERSION ${k + 1} (${c.agentId}): ${c.output}`),
+            '',
+            'Reply with ONLY JSON:',
+            JUDGE_SHAPE,
+          ].join(String.fromCharCode(10)),
+          executor: isExecutor('judge') ? 'judge' : 'auto',
+        });
+        const verdict = extractJson(judgeResult.text, 'decision');
+        const decision = String(verdict?.decision ?? '').toLowerCase();
+        const idx = Number(verdict?.index);
 
-      (winner.phases ??= []).push({ phase: 'validate', detail: judgeNote });
-      task.artifacts = await materializeTask({
-        taskId: task.id,
-        title: task.title,
-        outputs: [{ agentId: winner.agentId, text: winner.output ?? '' }]
-      });
-      task.status = 'done';
-      task.column = 'DONE';
+        if (decision === 'accept' && Number.isFinite(idx) && idx >= 1 && idx <= contenders.length) {
+          const winner = contenders[idx - 1];
+          const edited = typeof verdict?.editedOutput === 'string' && verdict.editedOutput.trim().length > 0;
+          const finalText = edited ? verdict.editedOutput : (winner.output ?? '');
+          (winner.phases ??= []).push({
+            phase: 'validate',
+            detail: `judge (${judgeResult.model}) ACCEPTED version ${idx} (${winner.agentId})${edited ? ' WITH EDITS' : ''}${verdict?.reason ? ` — ${verdict.reason}` : ''}`,
+          });
+          task.artifacts = await materializeTask({
+            taskId: task.id,
+            title: task.title,
+            outputs: [{ agentId: winner.agentId, text: finalText }]
+          });
+          task.status = 'done';
+          task.column = 'DONE';
+        } else {
+          task.status = 'error';
+          task.column = 'BLOCKED';
+          task.error = `JUDGE DENIED all ${contenders.length} version(s)${verdict?.reason ? `: ${verdict.reason}` : ' (no parseable accept)'} — needs human review.`;
+        }
+      } catch (judgeErr) {
+        task.status = 'error';
+        task.column = 'BLOCKED';
+        task.error = `JUDGE UNREACHABLE — ${judgeErr instanceof Error ? judgeErr.message : String(judgeErr)}. Nothing ships without the judge; task held for human review.`;
+      }
     }
   } catch (err) {
     task.status = 'error';

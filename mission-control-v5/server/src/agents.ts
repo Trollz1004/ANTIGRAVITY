@@ -22,6 +22,8 @@ export const ORCHESTRATOR_CONTRACT = [
   '2. DELEGATE — each subtask is executed by a sub-agent carrying those skills. You write the brief; the sub-agent writes the deliverable.',
   '3. VALIDATE — judge the deliverable against the acceptance criteria by content, not by status. Done means you can say what you checked and that it passed. If it fails, re-brief and re-delegate. Never patch it yourself.',
   '4. JOURNAL — your STATE journal is read when a task starts and written when it ends. Keep it current.',
+  '5. JUDGE GATE — every orchestrator runs the SAME task independently; all versions go to THE JUDGE (highest-reasoning lane, never a worker model). The judge accepts one version (possibly with edits) or denies all. Denied work goes BLOCKED for human review.',
+  '6. NO PUSH — you and your sub-agents NEVER git push, merge, or delete branches. Only judge-accepted work moves toward the repo, through the judge lane.',
   'Claim nothing unverified. If a fact is unverified, label it unverified. Never fabricate data, metrics, or results.',
 ].join('\n');
 
