@@ -7,13 +7,16 @@ Role files add to this; nothing in them overrides it.
 
 ## 1. The repo is owned by the stack, not one agent
 
-The repo is `F:\ANTIGRAVITY` on **SABRETOOTH-NODE**. It is the single source of
-truth for all code, config, and agent instructions.
+The working repo is **`C:\ANTIGRAVITY` — on every node** (Joshua's directive
+2026-08-16). A new node bootstraps with
+`git clone https://github.com/Trollz1004/ANTIGRAVITY C:\ANTIGRAVITY`, then
+loads `.env` files from the vault. Same path everywhere = no per-install
+drive-letter drift when nodes are added.
 
-**`F:` — not `E:`.** The disk was moved out of the T5500 and now mounts as F:.
-Any path starting `E:\` is dead; any host at `192.168.0.15` is dead
-(this node is `192.168.0.8`, and prefer `127.0.0.1` in configs). If you find
-either, fix it — do not work around it.
+**Dead paths:** anything on `E:\`; any host at `192.168.0.15` (this node is
+`192.168.0.8`, prefer `127.0.0.1` in configs). `F:\ANTIGRAVITY` is the old-disk
+clone kept as an ARCHIVE — read-only history, never the working copy. If you
+find a config pointing at any of these, fix it — do not work around it.
 
 **Paperclip is retired.** Do not call `:3120`, do not post task callbacks to it,
 and do not treat it as the board. Mission Control on `:3151` is the board.
@@ -37,10 +40,10 @@ disappears here.**
 Every code change ends this way, in this order:
 
 ```bash
-git -C F:\ANTIGRAVITY add -- <the files you actually changed>
-git -C F:\ANTIGRAVITY commit -m "type(scope): what changed and why"
-git -C F:\ANTIGRAVITY pull --rebase --autostash origin main
-git -C F:\ANTIGRAVITY push origin HEAD
+git -C C:\ANTIGRAVITY add -- <the files you actually changed>
+git -C C:\ANTIGRAVITY commit -m "type(scope): what changed and why"
+git -C C:\ANTIGRAVITY pull --rebase --autostash origin main
+git -C C:\ANTIGRAVITY push origin HEAD
 ```
 
 Rules that are not negotiable:
@@ -61,13 +64,13 @@ extra into `main` and delete it — local and remote — in the same heartbeat.*
 not leave a branch open "for later"; later never comes and the work rots.
 
 ```bash
-git -C F:\ANTIGRAVITY branch -a                       # more than main? fix it now
-git -C F:\ANTIGRAVITY checkout main
-git -C F:\ANTIGRAVITY merge --no-ff <branch>
-git -C F:\ANTIGRAVITY push origin main
-git -C F:\ANTIGRAVITY branch -d <branch>              # -d, not -D: refuses if unmerged
-git -C F:\ANTIGRAVITY push origin --delete <branch>
-git -C F:\ANTIGRAVITY worktree prune                  # stale worktrees lock branches
+git -C C:\ANTIGRAVITY branch -a                       # more than main? fix it now
+git -C C:\ANTIGRAVITY checkout main
+git -C C:\ANTIGRAVITY merge --no-ff <branch>
+git -C C:\ANTIGRAVITY push origin main
+git -C C:\ANTIGRAVITY branch -d <branch>              # -d, not -D: refuses if unmerged
+git -C C:\ANTIGRAVITY push origin --delete <branch>
+git -C C:\ANTIGRAVITY worktree prune                  # stale worktrees lock branches
 ```
 
 `-d` over `-D` on purpose: it refuses to delete anything not merged, so it cannot
@@ -113,7 +116,7 @@ where the preload set below actually lives. Also: `essential-skills`, `research`
 `computer-use`, `github`, `copywriting`, `marketing-psychology`, `cold-email`,
 `seo-audit`, `revenue-2k-swarm`, `dating-app-social-marketing`.
 
-**B. Repo-side skills (`F:\ANTIGRAVITY\.agents\skills\`) — 229 directories.**
+**B. Repo-side skills (`C:\ANTIGRAVITY\.agents\skills\`) — 229 directories.**
 
 | Group | Count | Notes |
 |---|---|---|
