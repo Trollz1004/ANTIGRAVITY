@@ -29,6 +29,11 @@ has produced nothing: the next session starts from the committed state, so
 anything uncommitted is silently lost. **This is the single most common way work
 disappears here.**
 
+> **Amendment (2026-08-16):** WHO pushes is governed by section 7. Swarm-originated
+> work reaches the repo only after judge acceptance; the push flow below is then
+> executed by the judge lane or a session Joshua directly leads. The mechanics
+> (stage-own-files, rebase, verify-landed) are unchanged.
+
 Every code change ends this way, in this order:
 
 ```bash
@@ -194,3 +199,35 @@ stop and report instead.
 - **Do not touch another agent's in-flight files.** Write your own; leave theirs.
 - **The README meme stays.** It is not clutter and is never to be removed.
 - **Verify before claiming done.** See §4.
+
+---
+
+## 7. Judge governance & session protocol (set 2026-08-16, Joshua's directive)
+
+### Tri-execution + the judge gate
+
+- Every swarm task is executed **independently by every assigned orchestrator**
+  — same task, no splitting. Each orchestrator plans, delegates to skill-loaded
+  sub-agents, and **validates its sub-agents' work by content** before
+  submitting its version.
+- All finished versions go to **THE JUDGE**: the highest-reasoning model
+  available that is **not one of the workers** — Claude Opus/Fable, Grok 4.5
+  max thinking, or Gemini max reasoning (`EXEC_JUDGE_MODEL`, default
+  `auto/best-reasoning`, no local floor).
+- The judge **accepts one version** (optionally with its own edits) **or denies
+  all of them**. Denied — or judge unreachable — means the task goes **BLOCKED
+  for human review**. Nothing ships by default.
+- **Only the judge lane may push to the repo, merge, or delete branches.**
+  Workers, orchestrators, and sub-agents never run `git push`. A session that
+  Joshua directly leads carries his authority and may push, as always.
+
+### Session protocol (every agent, every session)
+
+- **Mission start:** load the matching skills; read your memory/STATE/journal;
+  and query the knowledge graph before guessing paths —
+  `GET http://127.0.0.1:3151/api/knowledge/search?q=<term>` (the whole repo,
+  searchable by name, path, and doc content; `/api/knowledge/graph` for the
+  full map, `/api/knowledge/file?path=` for a preview).
+- **Mission end:** write state back — what changed, what's blocked, next step —
+  to your journal (`POST :3151/api/brain/journal/<platformId>`) or seat file.
+  The next session starts blind without it.
