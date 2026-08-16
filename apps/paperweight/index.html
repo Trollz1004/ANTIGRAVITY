@@ -812,12 +812,17 @@
         const live = POSTS.filter((p) => p.status === 'Live');
         const reach = live.reduce((s, p) => s + p.reach, 0);
         const likes = live.reduce((s, p) => s + p.likes, 0);
-        const active = AGENTS.filter((a) => a.status === 'active').length;
+        const h = MC.health;
         $('kpis').innerHTML = [
-          ['📡', reach.toLocaleString(), 'Total Reach', '#a78bfa'],
-          ['❤️', likes.toLocaleString(), 'Total Likes', '#E1306C'],
-          ['◼️', 'Square only', 'Date-App Rail', '#00B388'],
-          ['🤖', `${active}/34`, 'Agents Active', '#f59e0b'],
+          ['📡', reach.toLocaleString(), 'Sample Reach (demo)', '#a78bfa'],
+          ['❤️', likes.toLocaleString(), 'Sample Likes (demo)', '#E1306C'],
+          [
+            '🎛',
+            h ? `LIVE · ${h.routerLive ? 'OMNIROUTE ✓' : 'OMNIROUTE ✗'}` : 'OFFLINE',
+            'Mission Control :3151',
+            h ? '#34d399' : '#ef4444',
+          ],
+          ['🤖', MC.agentCount != null ? `${MC.agentCount} real` : '—', 'MC Agents Registered', '#f59e0b'],
         ]
           .map(
             ([ico, val, label, color]) =>
@@ -848,15 +853,85 @@
             (state.platform === 'all' || p.platform === state.platform) && (state.llm === 'all' || p.llm === state.llm),
         );
       }
-      function submitComment(id) {
+      // ── Mission Control link (same origin :3151) ─────────────────────────────
+      // The composer dispatches real tasks to the MC swarm instead of pretending
+      // a platform post happened. Health + agent count come from the live API.
+      const MC = { health: null, agentCount: null };
+      async function mcFetch(path, init) {
+        try {
+          const res = await fetch(path, { headers: { 'content-type': 'application/json' }, ...init });
+          if (!res.ok) return null;
+          return await res.json();
+        } catch {
+          return null;
+        }
+      }
+      async function pollMc() {
+        MC.health = await mcFetch('/api/health');
+        if (MC.health && MC.agentCount == null) {
+          const a = await mcFetch('/api/agents');
+          if (a) MC.agentCount = a.count ?? a.agents?.length ?? null;
+        }
+        renderKpis();
+      }
+      async function pollDispatched() {
+        const tracked = Object.values(state.comments)
+          .flat()
+          .filter((c) => c.taskId && c.status !== 'done' && c.status !== 'error');
+        if (tracked.length === 0) return;
+        const data = await mcFetch('/api/tasks');
+        if (!data) return;
+        const byId = new Map(data.tasks.map((t) => [t.id, t]));
+        let changed = false;
+        for (const c of tracked) {
+          const t = byId.get(c.taskId);
+          if (t && t.status !== c.status) {
+            c.status = t.status;
+            changed = true;
+          }
+        }
+        if (changed) renderFeed();
+      }
+      window.setInterval(pollMc, 30_000);
+      window.setInterval(pollDispatched, 15_000);
+      pollMc();
+      async function submitComment(id) {
         const input = document.querySelector(`#comment-${id}`);
         const text = input.value.trim();
         if (!text) return;
-        state.comments[id] = [
-          ...(state.comments[id] || []),
-          { text, target: state.commentTarget, ts: new Date().toLocaleTimeString(), author: 'Josh (You)' },
-        ];
+        const post = POSTS.find((p) => p.id === id);
+        const P = PLATFORMS[post?.platform] || {};
+        const entry = {
+          text,
+          target: state.commentTarget,
+          ts: new Date().toLocaleTimeString(),
+          author: 'Josh (You)',
+          taskId: null,
+          status: 'dispatching',
+        };
+        state.comments[id] = [...(state.comments[id] || []), entry];
         input.value = '';
+        renderFeed();
+        const prompt = [
+          'MARKETING ENGAGEMENT — reply dispatch from PAPERWEIGHT.',
+          `Platform: ${P.label ?? post?.platform} (${P.api ?? 'no API on file'}, claw: ${P.claw ?? 'unassigned'})`,
+          `Target type: ${entry.target}`,
+          `Post: "${post?.title ?? 'unknown'}"`,
+          `Reply text from Joshua: """${text}"""`,
+          'Task: publish this reply on the named platform target if a live posting pipeline exists.',
+          'If none exists, return the final ready-to-post reply text plus the exact missing piece',
+          '(credential, API scope, or tool) blocking live publish. Business-only public framing.',
+        ].join('\n');
+        const created = await mcFetch('/api/tasks', {
+          method: 'POST',
+          body: JSON.stringify({ title: `Reply → ${P.label ?? post?.platform} ${entry.target}`, prompt }),
+        });
+        if (created?.task) {
+          entry.taskId = created.task.id;
+          entry.status = created.task.status ?? 'queued';
+        } else {
+          entry.status = 'error';
+        }
         renderFeed();
       }
       function renderFeed() {
@@ -868,13 +943,17 @@
             .map((post) => {
               const P = PLATFORMS[post.platform] || {};
               const open = state.openPost === post.id;
+              const statusColor = (s) =>
+                ({ dispatching: '#f59e0b', queued: '#f59e0b', running: '#2ca5e0', done: '#34d399', error: '#ef4444' })[
+                  s
+                ] || '#64748b';
               const comments = (state.comments[post.id] || [])
                 .map(
                   (c) =>
-                    `<div class="comment"><strong style="color:#a78bfa">${esc(c.author)}</strong><span style="color:#334155;font-size:10px;margin-left:8px">→ ${esc(P.label)} ${esc(c.target)} · ${esc(c.ts)}</span><div style="margin-top:4px">${esc(c.text)}</div></div>`,
+                    `<div class="comment"><strong style="color:#a78bfa">${esc(c.author)}</strong><span style="color:#334155;font-size:10px;margin-left:8px">→ ${esc(P.label)} ${esc(c.target)} · ${esc(c.ts)}</span>${c.status ? `<span class="badge" style="margin-left:8px;background:${statusColor(c.status)}22;color:${statusColor(c.status)}">MC ${esc(c.status.toUpperCase())}${c.taskId ? ` · ${esc(c.taskId.slice(0, 8))}` : ''}</span>` : ''}<div style="margin-top:4px">${esc(c.text)}</div></div>`,
                 )
                 .join('');
-              return `<article class="card post ${open ? 'open' : ''}" onclick="setState({openPost:${open ? 'null' : post.id}})"><div class="post-head"><span style="font-size:18px;color:${P.color}">${P.icon}</span><div style="flex:1;min-width:0"><div class="post-title">${esc(post.title)}</div><div class="post-meta">${esc(P.label)} · ${esc(post.deployed)} · via ${esc(post.agent)}</div></div>${badge(post.llm, LLM_COLORS[post.llm] || '#888')}${badge(post.status, post.status === 'Live' ? '#34d399' : post.status === 'Queued' ? '#f59e0b' : '#64748b')}</div><div class="metrics"><span>📡 ${post.reach.toLocaleString()}</span><span>❤️ ${post.likes}</span><span>💬 ${post.comments}</span><span>🔁 ${post.shares}</span><div class="tags">${post.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div></div>${open ? `<div class="detail" onclick="event.stopPropagation()"><div class="provenance"><span style="color:#475569">🤖 Created by </span><strong style="color:${LLM_COLORS[post.llm] || '#888'}">${post.llm.toUpperCase()}</strong><span style="color:#475569"> → dispatched via </span><strong style="color:#a78bfa">${esc(post.agent)}</strong><span style="color:#475569"> → posted to </span><strong style="color:${P.color}">${esc(P.label)}</strong><span style="color:#475569"> · API: </span><span style="color:#64748b">${esc(P.api)}</span></div>${comments}<div class="composer"><div style="font-size:11px;color:#a78bfa;font-weight:900;margin-bottom:8px">💬 UNIVERSAL COMMENT COMPOSER — ${esc(P.label)}</div><div class="chips" style="margin-bottom:8px">${['post', 'page', 'group', 'thread', 'dm'].map((t) => `<button class="btn ${state.commentTarget === t ? 'active' : ''}" onclick="setState({commentTarget:'${t}'})">${t}</button>`).join('')}</div><textarea id="comment-${post.id}" placeholder="Reply on ${esc(P.label)} ${state.commentTarget}..."></textarea><div style="display:flex;justify-content:flex-end;margin-top:8px"><button class="submit" onclick="submitComment(${post.id})">Post → ${esc(P.label)}</button></div></div></div>` : ''}</article>`;
+              return `<article class="card post ${open ? 'open' : ''}" onclick="setState({openPost:${open ? 'null' : post.id}})"><div class="post-head"><span style="font-size:18px;color:${P.color}">${P.icon}</span><div style="flex:1;min-width:0"><div class="post-title">${esc(post.title)}</div><div class="post-meta">${esc(P.label)} · ${esc(post.deployed)} · via ${esc(post.agent)}</div></div>${badge(post.llm, LLM_COLORS[post.llm] || '#888')}${badge(post.status, post.status === 'Live' ? '#34d399' : post.status === 'Queued' ? '#f59e0b' : '#64748b')}</div><div class="metrics"><span>📡 ${post.reach.toLocaleString()}</span><span>❤️ ${post.likes}</span><span>💬 ${post.comments}</span><span>🔁 ${post.shares}</span><div class="tags">${post.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div></div>${open ? `<div class="detail" onclick="event.stopPropagation()"><div class="provenance"><span style="color:#475569">🤖 Created by </span><strong style="color:${LLM_COLORS[post.llm] || '#888'}">${post.llm.toUpperCase()}</strong><span style="color:#475569"> → dispatched via </span><strong style="color:#a78bfa">${esc(post.agent)}</strong><span style="color:#475569"> → posted to </span><strong style="color:${P.color}">${esc(P.label)}</strong><span style="color:#475569"> · API: </span><span style="color:#64748b">${esc(P.api)}</span></div>${comments}<div class="composer"><div style="font-size:11px;color:#a78bfa;font-weight:900;margin-bottom:8px">💬 UNIVERSAL COMMENT COMPOSER — ${esc(P.label)}</div><div class="chips" style="margin-bottom:8px">${['post', 'page', 'group', 'thread', 'dm'].map((t) => `<button class="btn ${state.commentTarget === t ? 'active' : ''}" onclick="setState({commentTarget:'${t}'})">${t}</button>`).join('')}</div><textarea id="comment-${post.id}" placeholder="Reply on ${esc(P.label)} ${state.commentTarget}..."></textarea><div style="display:flex;justify-content:flex-end;margin-top:8px"><button class="submit" onclick="submitComment(${post.id})">Dispatch → Mission Control (${esc(P.label)})</button></div></div></div>` : ''}</article>`;
             })
             .join('');
       }
