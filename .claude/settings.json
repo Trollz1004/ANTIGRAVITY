@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"F:\\ANTIGRAVITY\\.claude\\hooks\\guard-protected-paths.ps1\""
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\ANTIGRAVITY\\.claude\\hooks\\guard-protected-paths.ps1\""
           }
         ]
       }
