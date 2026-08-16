@@ -26,6 +26,15 @@ Get-Content $VaultEnv | ForEach-Object {
 $dating = (Get-Content $VaultEnv | Where-Object { $_ -match '^DATABASE_URL=postgresql\+asyncpg://' } | Select-Object -First 1)
 if ($dating) { [Environment]::SetEnvironmentVariable('DATABASE_URL', $dating.Substring('DATABASE_URL='.Length).Trim(), 'Process') }
 
+# Supabase cutover: if the vault holds a Supabase DB URL, it wins over the
+# local portable Postgres. Drop a single line DATABASE_URL=postgresql+asyncpg://...
+# into this file to flip the app to cloud Postgres; delete the file to flip back.
+$SupaEnv = 'C:\Users\joshi\.antigravity-vault\supabase-db-url.env'
+if (Test-Path $SupaEnv) {
+    $line = (Get-Content $SupaEnv | Where-Object { $_ -match '^DATABASE_URL=' } | Select-Object -First 1)
+    if ($line) { [Environment]::SetEnvironmentVariable('DATABASE_URL', $line.Substring('DATABASE_URL='.Length).Trim(), 'Process') }
+}
+
 # The stash's REDIS_URL points at the retired stack's Redis; this node runs a
 # local portable Redis (see scripts\sabretooth-stack-up.cmd).
 $env:REDIS_URL = 'redis://localhost:6379/0'
