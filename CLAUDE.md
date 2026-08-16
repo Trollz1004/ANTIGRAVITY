@@ -1,6 +1,6 @@
 # CLAUDE.md - ANTIGRAVITY Current Agent Guide
 
-Updated: 2026-08-09
+Updated: 2026-08-16
 
 ## MANDATORY: Skills Protocol — low-context sessions, zero excuses
 
@@ -8,27 +8,27 @@ Every agent session here runs in a LOW CONTEXT WINDOW. You cannot hold this
 system in your head, so skills are not optional:
 
 1. **Session start:** read state BEFORE anything else — `AGENTS.md`, the
-   relevant `STATE.md` / `MEMORY.md`, and today's briefing.
-2. **Before EVERY task:** load the matching skill. There are THREE skill trees and
-   they are NOT interchangeable (verified 2026-08-09) — `E:\ANTIGRAVITY\skills\`
-   never existed and is dead twice over:
-   - `C:\Users\joshl\AppData\Local\hermes\skills\` — **53**, holds the preload set
-   - `F:\ANTIGRAVITY\.agents\skills\` — 230 (184 are unused `agency-*`)
-   - `C:\Users\joshl\.agents\skills\` — 35, what the OpenCode harness reads
-
-   Always-available toolbox (load before tasking, no exceptions):
-   - `adhd` — TOKEN SAVER. Run before any open-ended answer; you are in a low
-     context window and this is what stops you burning it on the obvious answer.
-   - `agent-browser` — any web or browser work. **The name is `agent-browser`**;
-     plain `browser` is a *plugin* and fails when called as a skill.
-   - `find-skills` — locate the right skill; ~90k reachable via skills.sh, ClawHub,
-     and the Hermes/Nous Research hub
-   - `create-skill` — write the missing skill, then use it
-   - `creative` — **there is no `superpowers` skill installed**; this is it
-   - `brainstorming`, `agent-reach` — framing and research
-     A task executed without loading a skill is a task done wrong.
+   relevant `STATE.md` / `MEMORY.md`, and today's briefing. When Mission
+   Control is up, query the knowledge graph instead of guessing paths:
+   `GET http://127.0.0.1:3151/api/knowledge/search?q=<term>` (repo-wide search
+   by name/path/doc content; `/api/knowledge/graph` = full map, rendered in 3D
+   under GRAPHY → 🧠 KNOWLEDGE on the board).
+2. **Before EVERY task:** load the matching skill.
+   **Skill-tree reality after the 2026-08-16 Windows reinstall:** the user
+   profile is now `C:\Users\joshi` — `C:\Users\joshl\...` is GONE, and with it
+   the Hermes profile tree (53 skills) and the OpenCode harness tree (35).
+   The ONE live tree is the repo's own:
+   - `F:\ANTIGRAVITY\.agents\skills\` — **44 skills** (the `agency-*` bulk was
+     purged in cleanup). This is the tree Mission Control's swarm loads from.
+   The old preload set (`adhd`, `agent-browser`, `find-skills`, `create-skill`,
+   `creative`, `brainstorming`, `agent-reach`) lived in the wiped profile trees
+   — **restore pending**; pull replacements from skills.sh / ClawHub when a
+   harness that reads them is reinstalled. A task executed without loading a
+   skill is a task done wrong.
 3. **Session end:** write state back (what changed, what's blocked, next step)
-   before the window closes. The next session starts blind without it.
+   before the window closes — journal via
+   `POST :3151/api/brain/journal/<platformId>` or your seat file. The next
+   session starts blind without it.
 
 This file is the Claude-facing operational guide for `F:\ANTIGRAVITY`.
 If older exports, memories, downloads, or cached project files conflict with this file,
@@ -76,19 +76,40 @@ truth unless Joshua explicitly says they are the target.
 
 Hermes, OpenClaw, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Ollama, and other lanes may lead only when Joshua directly assigns them or when their role map already covers the task. Otherwise they collect evidence, draft proposals, and report to the active lead.
 
-**Current shape (set 2026-08-09):**
+**Current shape (set 2026-08-09, reality-checked 2026-08-16):**
 
 - **No CEO. No Paperclip. No AI boss.** Joshua is the owner; the active lead on
   any task is whichever agent he directly assigns, per the rule below.
-- **OpenCode = agent/harness.** Contract: `C:\Users\joshl\.opencode\claude.md`,
-  mirrored to `agent-contracts/OPENCODE-AGENT.md`.
+- **HARNESS STATUS after the 2026-08-16 Windows reinstall:** Hermes, OpenClaw,
+  FCC (`fcc-claude`), OpenCode, Ollama, and the OmniRoute gateway (`:20128`)
+  are **NOT INSTALLED on this box** — the reinstall wiped the `joshl` profile
+  they lived in. Their contracts below describe intended roles, not running
+  software. Only real Claude Code (Max, `C:\Users\joshi\.local\bin`), git,
+  Python 3.13, Node 24, and Docker are live. Reinstall or retire each lane
+  deliberately; do not assume a lane is reachable without probing it.
+- **OpenWork 0.18.25** (`different-ai/openwork`, installer in
+  `C:\Users\joshi\Downloads`) is the candidate GUI for the OpenCode lane — a
+  desktop cowork-style wrapper over the OpenCode engine with a permission
+  system, skill manager (opkg), and local-server/Telegram trigger modes.
+  Evaluated 2026-08-16; installing it is Joshua's call, not doctrine yet.
+- **OpenCode = agent/harness.** Contract mirrored at `agent-contracts/OPENCODE-AGENT.md`
+  (the old `C:\Users\joshl\.opencode\claude.md` original is gone).
 - **Hermes = agent** — research, outreach, revenue, content. `agent-contracts/HERMES-AGENT.md`.
 - **OpenClaw = agent** — engineering and verification. `agent-contracts/OPENCLAW-AGENT.md`.
-- **Mission Control on `:3151` = the board** (kanban, agents, Graphy, MCP; dir `mission-control-v5`).
+- **Mission Control on `:3151` = the board** (kanban, agents, Graphy with
+  🤖 AGENTS + 🧠 KNOWLEDGE views, MCP; dir `mission-control-v5`).
   **Stack Health on `:8787`** is the health monitor (dir `mission-control-v6`) — a
   different program, deliberately no longer called "Mission Control" so the two
   stop sounding like versions of the same thing.
-- Shared rules for all three: `agent-contracts/AGENTS.md`.
+- Shared rules for all three: `agent-contracts/AGENTS.md` — including **§7 Judge
+  governance** (set 2026-08-16): every swarm task is executed independently by
+  all assigned orchestrators; all versions go to THE JUDGE — the highest-reasoning
+  model that is NOT one of the workers (Claude Opus/Fable, Grok 4.5 max thinking,
+  or Gemini max reasoning; `EXEC_JUDGE_MODEL`, default `auto/best-reasoning`,
+  no local floor). The judge accepts one version (optionally with edits) or
+  denies all; denied or judge-unreachable work goes BLOCKED for human review.
+  **Only the judge lane pushes, merges, or deletes branches** — workers and
+  sub-agents never run `git push`. Joshua's direct instruction overrides.
 
 FCC can scan, summarize, draft, and propose patches. It does not make final
 decisions. **`fcc-claude` reads `CLAUDE.md` and `.claude.json` and behaves as real
