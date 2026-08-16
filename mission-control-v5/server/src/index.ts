@@ -18,7 +18,7 @@ import { PIECES_MCP_URL, pingPieces } from './pieces.js';
 import { registerMcpServer } from './mcpServer.js';
 import { loadState } from './store.js';
 import { activeCount, createTask, deleteTask, listTasks, moveTask, retryTask, subscribe } from './swarm.js';
-import type { Column } from './types.js';
+import type { AgentDef, Column } from './types.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT ?? 3151) || 3151;
@@ -85,9 +85,25 @@ function subagentHealth(heartbeat: string, updatedAt: Date) {
 }
 
 // Fixed-root reader: graph clients can inspect agent doctrine, never arbitrary files.
+//
+// Two sources, merged: (1) on-disk doctrine under .agents/subagents/<id>/ with
+// real HEARTBEAT.md freshness, and (2) the orchestrator roster in agents.ts.
+// On-disk entries win when present (they carry live heartbeats); any orchestrator
+// with no on-disk folder is synthesized from agents.ts so the live 3D graph always
+// shows the real swarm — never the lone core node an empty directory produced.
 app.get('/api/subagents', (_req, res) => {
-  if (!existsSync(subagentsRoot)) return res.json({ agents: [] });
-  const agents = readdirSync(subagentsRoot, { withFileTypes: true })
+  const agents = readDiskSubagents();
+  const seen = new Set(agents.map((a) => a.id));
+  for (const agent of AGENTS) {
+    if (!seen.has(agent.id)) agents.push(synthesizeSubagent(agent));
+  }
+  res.json({ agents });
+});
+
+/** Read live subagent doctrine from disk; empty when the directory is absent. */
+function readDiskSubagents() {
+  if (!existsSync(subagentsRoot)) return [];
+  return readdirSync(subagentsRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => {
       const files = Object.fromEntries(
@@ -106,8 +122,38 @@ app.get('/api/subagents', (_req, res) => {
         files,
       };
     });
-  res.json({ agents });
-});
+}
+
+/**
+ * Synthesize a subagent node from an orchestrator definition when no live
+ * on-disk doctrine exists for it. Doctrine files are generated from the single
+ * source of truth (agents.ts) so the graph and its drawer stay honest without a
+ * parallel set of files that drift. Health is green: the orchestrator is defined
+ * and available; there is simply no heartbeat writer attached.
+ */
+function synthesizeSubagent(agent: AgentDef) {
+  const skillLines = (agent.harness ?? '')
+    .split('·')
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 4);
+  const files = {
+    'SOUL.md': `# ${agent.name} SOUL\n\n${agent.description}\n`,
+    'HEARTBEAT.md':
+      `# ${agent.name} HEARTBEAT\n\n` +
+      `SKELETON ENTRY — no live heartbeat writer is attached to this orchestrator.\n` +
+      `Status is inferred from its definition in agents.ts, not from a filed report.\n`,
+    'TOOLS.md': `# ${agent.name} TOOLS\n\n${agent.harness ?? '(no harness declared)'}\n`,
+    'SKILLS.md': `${skillLines.map((s) => `- ${s}`).join('\n')}\n`,
+  };
+  return {
+    id: agent.id,
+    name: agent.name,
+    health: 'green' as const,
+    updatedAt: new Date().toISOString(),
+    files,
+  };
+}
 
 // ── Health / router status ────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {

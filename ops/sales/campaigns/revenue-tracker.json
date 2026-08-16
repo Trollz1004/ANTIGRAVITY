@@ -134,7 +134,7 @@
     "after_floor": "Continue infinite loop: more B2B packs + date-app affiliate recurring + creator refs. Never declare campaign DONE solely because floor was hit."
   },
   "note": "B2B SKUs minted 2026-08-05 via Square payment-links API. Public b2b.html uses long_url only. Goal mode infinite as of 2026-08-06 (Josh: not 20).",
-  "cycles_completed": 7,
+  "cycles_completed": 8,
   "cycles": [
     {
       "cycle": 3,
@@ -171,6 +171,15 @@
     {
       "cycle": 7,
       "timestamp": "20260813T042834Z",
+      "prospects": 5,
+      "campaigns": 2,
+      "landing_pages": 1,
+      "affiliate_content": 1,
+      "status": "completed"
+    },
+    {
+      "cycle": 8,
+      "timestamp": "20260813T160008Z",
       "prospects": 5,
       "campaigns": 2,
       "landing_pages": 1,
