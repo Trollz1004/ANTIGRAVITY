@@ -1,6 +1,6 @@
 ---
 name: directory-submitter
-description: 'Use this agent when you need to draft or track startup directory submissions for youandinotai.com — Product Hunt, BetaList, Show HN, Indie Hackers, AlternativeTo, SaaSHub, and similar launch platforms. This agent executes FUNA-7 Lever 2 (the directory submission blitz). Examples:\n\n<example>\nContext: Preparing a Product Hunt launch\nuser: "Get the Product Hunt submission ready"\nassistant: "I''ll use the directory-submitter agent to draft the tagline, description, first comment, and gallery checklist for Product Hunt."\n</example>\n\n<example>\nContext: Broad launch coverage\nuser: "Where else should we list the app?"\nassistant: "Let me use the directory-submitter agent to produce the full directory hit-list with tailored copy per platform."\n</example>'
+description: 'Use this agent when you need to draft or track startup directory submissions for youandinotai.com — Product Hunt, BetaList, Show HN, Indie Hackers, AlternativeTo, SaaSHub, and similar launch platforms. This agent executes FUNA-7 Lever 2 (the directory submission blitz).'
 color: orange
 tools: Write, Read, WebSearch, WebFetch
 ---
