@@ -8,12 +8,12 @@
 
 ## 📡 Primary Sources
 
-| Source | URL | CLI | Notes |
-|--------|-----|-----|-------|
-| **skills.sh** | https://skills.sh/ | `npx skills` | Open ecosystem, 100K+ installs for top skills |
-| **Claw Hub** | Hub inside Hermes claws/claw CLI | `hermes skills` | Hermes native skill management |
-| **Nous Research** | https://hermes-agent.nousresearch.com/docs/skills | Bundled | Official Hermes bundled skills |
-| **GitHub** | Any `owner/repo` | `npx skills add` | Direct from source repos |
+| Source            | URL                                               | CLI              | Notes                                         |
+| ----------------- | ------------------------------------------------- | ---------------- | --------------------------------------------- |
+| **skills.sh**     | https://skills.sh/                                | `npx skills`     | Open ecosystem, 100K+ installs for top skills |
+| **Claw Hub**      | Hub inside Hermes claws/claw CLI                  | `hermes skills`  | Hermes native skill management                |
+| **Nous Research** | https://hermes-agent.nousresearch.com/docs/skills | Bundled          | Official Hermes bundled skills                |
+| **GitHub**        | Any `owner/repo`                                  | `npx skills add` | Direct from source repos                      |
 
 ## 🎯 When to Use Which
 
