@@ -17,14 +17,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # Briefs land on main only (one-branch policy) — pin the ref so a
           # manual dispatch from another branch can't publish there.
           ref: main
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
@@ -82,7 +82,7 @@ jobs:
         # always() so a doctrine-gate failure still preserves the generated
         # content for human review.
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: yesterday-news-brief
           path: ${{ runner.temp }}/ag-runtime/yesterday-news/content/
