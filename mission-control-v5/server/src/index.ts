@@ -13,6 +13,7 @@ import 'dotenv/config';
 import express, { type Request, type Response } from 'express';
 import { AGENTS, CATEGORIES } from './agents.js';
 import { registerBrainRoutes } from './brain.js';
+import { buildKnowledgeGraph, previewFile, searchKnowledge } from './knowledge.js';
 import { describeExecutors, describeProviders, routerLive } from './omniroute.js';
 import { PIECES_MCP_URL, pingPieces } from './pieces.js';
 import { registerMcpServer } from './mcpServer.js';
@@ -425,6 +426,25 @@ registerBrainRoutes(app);
 // Any agent with a streamable-HTTP MCP client can POST to /api/mcp and pull the
 // task + capability set defined by the monorepo. See server/src/mcpServer.ts.
 registerMcpServer(app);
+
+// ── KNOWLEDGE GRAPH — the repo as a navigable, searchable graph ──────────────
+// Agents hit /api/knowledge/search on mission start instead of guessing paths;
+// the Graphy KNOWLEDGE view renders /api/knowledge/graph in 3D. Secrets and
+// build junk are excluded at walk time and re-checked on preview.
+app.get('/api/knowledge/graph', (_req, res) => {
+  res.json(buildKnowledgeGraph());
+});
+app.get('/api/knowledge/search', (req, res) => {
+  const q = String(req.query.q ?? '');
+  res.json({ query: q, hits: searchKnowledge(q) });
+});
+app.get('/api/knowledge/file', (req, res) => {
+  try {
+    res.json(previewFile(String(req.query.path ?? '')));
+  } catch (err) {
+    res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
+  }
+});
 
 // ── PAPERWEIGHT command center (static page; roster + metrics are sample data,
 // not live feeds — do not publish outside the LAN) ───────────────────────────

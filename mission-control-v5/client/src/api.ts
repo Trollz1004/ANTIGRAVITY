@@ -11,6 +11,9 @@ import type {
   CategoryDef,
   Column,
   Health,
+  KnowledgeFilePreview,
+  KnowledgeGraphData,
+  KnowledgeSearchHit,
   Mode,
   ServiceStatus,
   SubagentNode,
@@ -71,6 +74,12 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ prompt }),
     }),
+  // ── Knowledge graph (repo as a navigable graph) ────────────────────────────
+  knowledgeGraph: () => request<KnowledgeGraphData>('/api/knowledge/graph'),
+  knowledgeSearch: (q: string) =>
+    request<{ query: string; hits: KnowledgeSearchHit[] }>(`/api/knowledge/search?q=${encodeURIComponent(q)}`),
+  knowledgeFile: (path: string) =>
+    request<KnowledgeFilePreview>(`/api/knowledge/file?path=${encodeURIComponent(path)}`),
 };
 
 export function subscribeEvents(onEvent: () => void): () => void {

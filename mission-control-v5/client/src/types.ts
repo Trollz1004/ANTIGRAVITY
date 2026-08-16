@@ -182,3 +182,44 @@ export type BridgeMessage = {
   text: string;
   timestamp: string;
 };
+
+// ── Knowledge graph (repo as a navigable graph) ──────────────────────────────
+export interface KnowledgeNode {
+  id: string;
+  name: string;
+  kind: 'root' | 'area' | 'dir' | 'file';
+  ext?: string;
+  size?: number;
+  mtime?: string;
+  description?: string;
+  truncated?: number;
+}
+
+export interface KnowledgeLink {
+  source: string;
+  target: string;
+}
+
+export interface KnowledgeGraphData {
+  nodes: KnowledgeNode[];
+  links: KnowledgeLink[];
+  builtAt: string;
+  root: string;
+}
+
+export interface KnowledgeSearchHit {
+  id: string;
+  name: string;
+  kind: KnowledgeNode['kind'];
+  description?: string;
+  score: number;
+  via: string;
+}
+
+export interface KnowledgeFilePreview {
+  path: string;
+  size: number;
+  mtime: string;
+  truncated: boolean;
+  content: string;
+}

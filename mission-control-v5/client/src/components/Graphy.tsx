@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import ForceGraph3D from 'react-force-graph-3d';
 import * as THREE from 'three';
 import { api } from '../api';
+import KnowledgeGraph from './KnowledgeGraph';
 import type { SubagentNode } from '../types';
 
 const FILES = ['SOUL.md', 'HEARTBEAT.md', 'TOOLS.md', 'SKILLS.md'] as const;
@@ -32,6 +33,10 @@ function supportsWebGL() {
 }
 
 export default function Graphy() {
+  // Two separate graphs under one tab: AGENTS (live swarm doctrine) and
+  // KNOWLEDGE (the repo as a searchable map). Deliberately not merged — the
+  // swarm view stays legible, the repo view stays exhaustive.
+  const [view, setView] = useState<'agents' | 'knowledge'>('agents');
   const [agents, setAgents] = useState<SubagentNode[]>([]);
   const [selected, setSelected] = useState<SubagentNode | null>(null);
   const [file, setFile] = useState<(typeof FILES)[number]>('HEARTBEAT.md');
@@ -86,7 +91,32 @@ export default function Graphy() {
     }
   };
 
+  if (view === 'knowledge') {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+        <div style={{ display: 'flex', gap: 6, padding: '8px 10px' }}>
+          <button className="btn" onClick={() => setView('agents')}>
+            🤖 AGENTS
+          </button>
+          <button className="btn active" onClick={() => setView('knowledge')}>
+            🧠 KNOWLEDGE
+          </button>
+        </div>
+        <KnowledgeGraph />
+      </div>
+    );
+  }
+
   return (
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+      <div style={{ display: 'flex', gap: 6, padding: '8px 10px' }}>
+        <button className="btn active" onClick={() => setView('agents')}>
+          🤖 AGENTS
+        </button>
+        <button className="btn" onClick={() => setView('knowledge')}>
+          🧠 KNOWLEDGE
+        </button>
+      </div>
     <section className="graphy">
       <div className="graphy__stage" ref={stage}>
         {webgl ? (
@@ -177,5 +207,6 @@ export default function Graphy() {
         </aside>
       )}
     </section>
+    </div>
   );
 }
