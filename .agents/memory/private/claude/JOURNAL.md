@@ -63,3 +63,15 @@ awaiting Joshua's ci-validate dispatch for fresh checks.
 - Durable notes mirrored here as memory-ci-truth-2026-08-16.md and
   memory-sabretooth-reinstall-2026-08-16.md (canonical copies in the Claude Code
   auto-memory dir on Sabretooth).
+
+## 2026-08-16 — OmniRoute provider restore (local, Fable 5)
+- Gateway :20128 was healthy but empty (0 providers configured post-reinstall).
+- Restored from the vault export omniroute-legacy-backup-2026-08-16T05-20-49-555Z.json:
+  17 provider connections, coder-cascade combo, settings, API key. Procedure:
+  reset admin password (official reset-password.mjs, DATA_DIR must point at
+  ~\.omniroute\data), login for session cookie, POST /api/settings/import-json,
+  RESTART server (credential cache ignores live imports).
+- Verified: 17 configured / 16 active; live completion routed to nvidia via
+  auto-fallback. grok-cli token expired (needs re-login); claude connection
+  inactive by design. Admin password + backup live in the local vault, not repo.
+- Durable notes mirrored as memory-omniroute-recovery-2026-08-16.md.
