@@ -5,14 +5,9 @@
  * any general bridge. The dashboard may show their connection state, but vote
  * execution remains on each platform's designated official bridge.
  */
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import type { Express } from 'express';
 
-const execFileAsync = promisify(execFile);
-
 export const BRIDGE_TARGET_IDS = [
-  'fcc',
   'hermes',
   'openclaw',
   'claude',
@@ -53,7 +48,6 @@ function definitions(): BridgeDefinition[] {
   const openclawPort = Number(process.env.OPENCLAW_PORT ?? 18789) || 18789;
   const hermesPort = Number(process.env.HERMES_PORT ?? 9119) || 9119;
   return [
-    { id: 'fcc', label: 'FCC-CLAUDE', kind: 'operational', sendEnabled: true },
     {
       id: 'hermes',
       label: 'HERMES',
@@ -90,15 +84,6 @@ async function reachability(url: string): Promise<boolean> {
   }
 }
 
-async function fccAvailable(): Promise<boolean> {
-  try {
-    await execFileAsync('fcc-claude', ['--help'], { timeout: 1500 });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 /** Status does not send prompts, mutate configuration, or resolve model routes. */
 export async function getBridgeStatuses(): Promise<BridgeStatus[]> {
   const now = new Date().toISOString();
@@ -111,16 +96,6 @@ export async function getBridgeStatuses(): Promise<BridgeStatus[]> {
           sendEnabled: false,
           lastSeen: null,
           detail: 'official bridge required; not routed through OmniRoute',
-        };
-      }
-
-      if (definition.id === 'fcc') {
-        const available = await fccAvailable();
-        return {
-          ...definition,
-          state: available ? 'ready' : 'unavailable',
-          lastSeen: available ? now : null,
-          detail: available ? 'local CLI bridge available' : 'local CLI bridge unavailable',
         };
       }
 
@@ -153,11 +128,6 @@ function cleanPrompt(value: unknown): string | undefined {
 }
 
 async function forwardOperationalPrompt(definition: BridgeDefinition, prompt: string): Promise<{ sender: string; text: string }> {
-  if (definition.id === 'fcc') {
-    const { stdout, stderr } = await execFileAsync('fcc-claude', [prompt], { timeout: 120_000, maxBuffer: 1_000_000 });
-    return { sender: 'fcc-claude', text: (stdout || stderr || 'No bridge response.').trim() };
-  }
-
   if (!definition.url) throw new Error('bridge not configured');
   const response = await fetch(definition.url, {
     method: 'POST',

@@ -175,7 +175,6 @@ export interface BrainMcpStatus {
 }
 
 export type BridgeTarget =
-  | 'fcc'
   | 'hermes'
   | 'openclaw'
   | 'claude'
