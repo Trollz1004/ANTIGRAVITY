@@ -4,7 +4,7 @@
  */
 import type { Express } from 'express';
 
-export const OPERATIONAL_BRIDGE_TARGET_IDS = ['hermes', 'openclaw'] as const;
+export const OPERATIONAL_BRIDGE_TARGET_IDS = ['hermes', 'openclaw', 'opencode'] as const;
 export type OperationalBridgeTargetId = (typeof OPERATIONAL_BRIDGE_TARGET_IDS)[number];
 export type OperationalBridgeState = 'ready' | 'unavailable' | 'not-configured';
 
@@ -36,6 +36,7 @@ function definitions(): OperationalBridgeDefinition[] {
   return [
     { id: 'hermes', label: 'HERMES', url: configuredUrl('HERMES_BRIDGE_URL', `http://127.0.0.1:${hermesPort}/api/chat`), sendEnabled: Boolean(process.env.HERMES_BRIDGE_URL?.trim()) },
     { id: 'openclaw', label: 'OPENCLAW', url: configuredUrl('OPENCLAW_BRIDGE_URL', `http://127.0.0.1:${openclawPort}/api/chat`), sendEnabled: true },
+    { id: 'opencode', label: 'OPENCODE', url: configuredUrl('OPENCODE_BRIDGE_URL', `http://127.0.0.1:${Number(process.env.OPENCODE_PORT ?? 4096) || 4096}/api/chat`), sendEnabled: Boolean(process.env.OPENCODE_BRIDGE_URL?.trim()) },
   ];
 }
 
@@ -55,7 +56,7 @@ async function reachability(url: string): Promise<boolean> {
 export async function getOperationalBridgeStatuses(): Promise<OperationalBridgeStatus[]> {
   const now = new Date().toISOString();
   return Promise.all(definitions().map(async (definition): Promise<OperationalBridgeStatus> => {
-    if (!definition.url || (definition.id === 'hermes' && !definition.sendEnabled)) {
+    if (!definition.url || !definition.sendEnabled) {
       return { ...definition, kind: 'operational', state: 'not-configured', lastSeen: null, detail: 'bridge URL not configured' };
     }
     const available = await reachability(definition.url);
