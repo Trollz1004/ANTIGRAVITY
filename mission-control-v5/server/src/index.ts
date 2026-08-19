@@ -17,6 +17,7 @@ import { buildKnowledgeGraph, previewFile, searchKnowledge } from './knowledge.j
 import { describeExecutors, describeProviders, routerLive } from './omniroute.js';
 import { registerMcpServer } from './mcpServer.js';
 import { registerBridgeRoutes } from './bridge.js';
+import { registerOfficialVoteRoutes } from './official-vote-routes.js';
 import { pingService } from './service-health.js';
 import { loadState } from './store.js';
 import { activeCount, createTask, deleteTask, listTasks, moveTask, retryTask, subscribe } from './swarm.js';
@@ -369,6 +370,9 @@ registerBrainRoutes(app);
 
 // ── Bridge hub (official-platform visibility + operational bridges) ───────────
 registerBridgeRoutes(app);
+
+// ── Official vote engine (isolated from general bridge and model routing) ──────
+registerOfficialVoteRoutes(app);
 
 // ── Mission Control AS an MCP server (expose to other AI platforms) ──────────
 // Any agent with a streamable-HTTP MCP client can POST to /api/mcp and pull the
