@@ -79,7 +79,7 @@ export interface ServiceStatus {
   url: string;
   openUrl?: string;
   lanReachable?: boolean;
-  status: 'up' | 'down' | 'mismatch' | 'auth-required' | 'auth-rejected' | 'not-configured';
+  status: 'UP' | 'DOWN' | 'WRONG SERVICE' | 'AUTH MISSING' | 'AUTH REJECTED' | 'NOT CONFIGURED';
   ms: number;
   detail: string;
   checkedAt?: string;
