@@ -238,7 +238,9 @@ app.get('/api/services', async (_req, res) => {
       url: omniRouteHealthUrl,
       openUrl: `http://${LAN_HOST}:20128/dashboard`,
       lanReachable: true,
-      timeoutMs: 4000,
+      // Authorized /api/v1 aggregates every configured provider live and can
+      // exceed 4s with a full provider roster; anonymous requests return fast.
+      timeoutMs: 15_000,
       headers: omniKey ? { authorization: `Bearer ${omniKey}` } : {},
       requiresAuth: true,
       authConfigured: Boolean(omniKey),
