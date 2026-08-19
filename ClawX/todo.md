@@ -192,4 +192,4 @@
 - [x] Audit the v5 root, server, client, current test tooling, and workflows for an authoritative single gate command and server test-runner dependency gap.
 - [x] Add a fail-closed v5-root `npm run gate` that executes server/client typechecks and test suites plus role-wall static checks.
 - [x] Repair the server test dependency issue and add CI-ready Playwright specifications marked runtime-gated; do not execute them while S1 is blocked.
-- [ ] Add pull-request CI for the root gate, run unit and static layers only, and package a judge-ready handoff.
+- [x] Add pull-request CI for the root gate, run unit and static layers only, and package a judge-ready handoff.
