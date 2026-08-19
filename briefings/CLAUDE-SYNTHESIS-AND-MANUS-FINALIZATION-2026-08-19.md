@@ -36,7 +36,9 @@ CLAUDE.md's harness-status block is stale on two points and must not be cited as
 **1.2a LIVE-OBSERVED UPDATE (2026-08-19, Claude driving the hosted app directly via browser):**
 
 - The Manus-hosted deployment at `clawx-aihub-zwxfcstm.manus.space` is **VERIFIED_NOW LIVE and functional**: authenticated session, working chat, working Broadcast Mode fan-out. The repo's missing server call layer **exists and works on the hosted side** — the live API is the repo's exact tRPC surface (`auth.me`, `providers.list`, `conversations.create`, `messages.send`, `messages.list` observed over the wire, all 200).
-- **The directive §2 identity example is now OBSERVED, not just mechanism-corroborated.** Claude selected the **manus seat** and sent an identity probe; the seat answered "I am Gemini, a large language model created by Google" with footer `52 tokens · 0.9s · gemini-3.5-flash-lite`. Joshua's screenshots from the same day show the manus seat footing `gemini-2.5-flash` and `gemini-3.5-flash-lite` on other messages. The "builtin manus-default" seat is served by Gemini models, varying per message.
+- **The directive §2 identity example is now OBSERVED, not just mechanism-corroborated.** Claude selected the **manus seat** and sent an identity probe; the seat answered "I am Gemini, a large language model created by Google" with footer `52 tokens · 0.9s · gemini-3.5-flash-lite`. Every stored manus-seat conversation (seat avatar verified by zoom: the indigo Bot icon) footers `gemini-2.5-flash` or `gemini-3.5-flash-lite`. Per Joshua: Manus **chose the Gemini API as his own seat's backing** — a per-seat routing choice, not a platform pool. The footer honestly discloses the executing model; the identity gap is only that the seat config still claims `manus-default`.
+- **Separate per-seat bridges CONFIRMED structurally:** the stored "test" conversation shows the **ollama seat** failing with its own error — `[Error from ollama]: fetch failed · 0 tokens · llama3.2` — an honest per-bridge failure with **no silent substitution** by another provider. Combined with per-seat key env vars (ANTHROPIC/GEMINI/SONAR/XAI/OPENAI_API_KEY), the ballot audit's real direct Gemini call (`gemini-3.6-flash`, completed, empty payload — responseHash is the SHA-256 of empty string), and a real ~$38 Gemini API bill reported by Joshua (breakdown UNVERIFIED), the bridges are separate per-provider API integrations. The claude/grok/perplexity/codex bridges are configured but **not yet observed answering live** — verifying them requires a multi-seat broadcast send (real API spend; Joshua's call).
+- **Manus's working-file drop (Downloads zip, 2026-08-19)** includes his governance/ballot source set (governance.ts, routers.ts, schema.ts, db.ts, api-keys.ts, Governance.tsx, ballot smoke test + sanitized audit), the Seven-Seat Board Final Validation (live-tested 4/7 critical threshold with persisted records; his own audit honestly flags "each AI ballot produced by a live provider-model API call — Not yet verified"), and a `.env` (values not read; flagged to Joshua as sensitive-at-rest in Downloads).
 - **The hosted seat roster is the OLD v1.0 board** — manus / claude / gemini / perplexity / grok / **ollama** — while the repo's shared config is v1.1 (codex in, ollama demoted). Live build lags the repo roster.
 - **The vote system has progressed on the Manus side:** a "ClawX Gemini Free-Choice Ballot" implementation + test report (2026-08-19, local artifact) documents a provider-backed governance ballot path — direct Gemini call server-side, free-choice approve/reject/abstain, evidence-packet hashing, prompt versioning, response hashing, abstention-safe failure handling, an ASK control in Governance.tsx, and a documented ballot protocol. Status per its own report: compiles and builds locally; the live Gemini smoke returned no text output, so **no validated independent ballot has occurred yet**; DB migration + deploy + key setup remain. Honest claim: implemented-not-yet-proven.
 - Consequence for §2 of this synthesis: the "hardest aspects" (working provider bridges, chat + broadcast fan-out, auditable ballot path) are **done once, on Manus hosting only**. The reconciliation path is to bring those working pieces into the repo/Mission Control side — not to rebuild them.
@@ -220,6 +222,13 @@ the engineering hub) can run them locally:
 3. THE GOVERNANCE BALLOT PATH: your Gemini free-choice ballot code
    (requestProviderBallot, evidence hashing, abstention handling, the ASK
    control, the ballot protocol doc) plus the DB migration it still needs.
+   And FIX THE GEMINI BALLOT ERROR first — your smoke test's Interactions
+   API call completed with an empty payload (responseHash = hash of empty
+   string), while your own manus seat answers through Gemini flawlessly
+   every day. Use your own working Gemini path for the ballot call instead
+   of the broken one; Joshua is already seeing real Gemini API billing, so
+   make every call count. Then run the one clearly-labelled non-production
+   ballot your report says is needed for a validated independent vote.
    Include the vote system only as far as it makes sense with the repo's
    judge-governance doctrine (agent-contracts/AGENTS.md §7): the ClawX board
    vote is an advisory/product surface; the judge lane remains the only
@@ -233,18 +242,20 @@ the engineering hub) can run them locally:
    error strings; sync the roster to v1.1 (codex in, ollama utility) in the
    same pass, updating the stale Chat.tsx/Analytics.tsx icon maps.
 
-5. THE PROVIDER SEAM (critical for portability): we understand your call
-   layer rides the Manus platform's BUILT-IN provider pool (Grok,
-   OpenRouter, Gemini, Perplexity, etc.) with cost-based routing — that is
-   why it works on your hosting and why the manus seat serves varying
-   Gemini models. That built-in pool does NOT travel with the code. Ship
-   the call layer behind a provider interface with two backends: (a) your
-   platform's built-in pool, used on your hosting exactly as today; (b) an
-   OpenAI-compatible endpoint backend (base URL + key from env) so the
-   self-hosted build plugs into the node's local OmniRoute gateway
-   (127.0.0.1:20128, /v1/chat/completions), which holds the same
-   multi-provider auto-fallback role locally. Document which env var NAMES
-   select the backend. Do not hardcode either side.
+5. THE PROVIDER SEAM (critical for portability): Claude verified your
+   bridges are separate per-provider API integrations (per-seat key env
+   vars; the ollama seat fails with its own fetch error rather than being
+   silently substituted — good), and that your manus seat currently rides
+   the Gemini API by your own choice (every stored manus-seat message
+   footers gemini-2.5-flash / gemini-3.5-flash-lite). Keep that design.
+   Additionally ship the call layer behind a provider interface so any
+   seat's backend can alternatively be an OpenAI-compatible endpoint
+   (base URL + key from env): the self-hosted build plugs into the node's
+   local OmniRoute gateway (127.0.0.1:20128, /v1/chat/completions), which
+   holds the multi-provider fallback role locally. Document which env var
+   NAMES select each seat's backend. Do not hardcode either side. And make
+   the manus seat's stored execution identity say what actually served it
+   (today: Gemini) instead of 'manus-default'.
 
 Delivery rule for Part 2: publish to the repo on a branch named
 manus/call-layer with a written summary of what each commit contains, plus
