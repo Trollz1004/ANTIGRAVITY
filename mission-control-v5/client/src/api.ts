@@ -15,6 +15,7 @@ import type {
   ServiceStatus,
   BridgeStatus,
   BridgeTarget,
+  OfficialVoteView,
   SubagentNode,
   SwarmTask,
 } from './types';
@@ -70,6 +71,8 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ prompt }),
     }),
+  // ── Official vote view (read only; no operational bridge method is used) ────
+  officialVoteView: () => request<OfficialVoteView>('/api/official-votes/view'),
   // ── Knowledge graph (repo as a navigable graph) ────────────────────────────
   knowledgeGraph: () => request<KnowledgeGraphData>('/api/knowledge/graph'),
   knowledgeSearch: (q: string) =>

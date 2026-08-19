@@ -64,6 +64,12 @@ export default function Header({ tab, onTab, health, runningCount, selectedCount
         >
           BRIDGE
         </button>
+        <button
+          className={`header__tab ${tab === 'council' ? 'header__tab--active' : ''}`}
+          onClick={() => onTab('council')}
+        >
+          COUNCIL
+        </button>
       </nav>
 
       <div className="header__status">

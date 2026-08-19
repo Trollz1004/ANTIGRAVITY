@@ -16,7 +16,7 @@ function resolver(accountId = 'official-account'): OfficialBridgeIdentityResolve
 
 describe('official vote engine', () => {
   it('keeps official vote handling outside the general operational bridge target set and module imports', () => {
-    expect(OPERATIONAL_BRIDGE_TARGET_IDS).toEqual(['hermes', 'openclaw']);
+    expect(OPERATIONAL_BRIDGE_TARGET_IDS).toEqual(['hermes', 'openclaw', 'opencode']);
     const engineSource = readFileSync(new URL('./official-vote-engine.ts', import.meta.url), 'utf8');
     const routeSource = readFileSync(new URL('./official-vote-routes.ts', import.meta.url), 'utf8');
     for (const source of [engineSource, routeSource]) {

@@ -4,6 +4,7 @@ import AgentLibrary from './components/AgentLibrary';
 import BrainPanel from './components/BrainPanel';
 import BrowserPanel from './components/BrowserPanel';
 import BridgePanel from './components/BridgePanel';
+import CouncilPanel from './components/CouncilPanel';
 import Header from './components/Header';
 import KanbanBoard from './components/KanbanBoard';
 import ServicesPanel from './components/ServicesPanel';
@@ -100,6 +101,7 @@ export default function App() {
           {tab === 'services' && <ServicesPanel />}
           {tab === 'brain' && <BrainPanel />}
           {tab === 'bridge' && <BridgePanel />}
+          {tab === 'council' && <CouncilPanel />}
         </main>
         <footer className="footer">
           <span>

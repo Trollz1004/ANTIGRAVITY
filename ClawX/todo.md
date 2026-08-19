@@ -169,3 +169,11 @@
 - [x] Persist append-only vote events with actor, timestamp, subject, and decision, with no fixed voter-count assumption.
 - [x] Require a Joshua-signed roster configuration before votes are binding; leave membership unspecified until the roster is supplied.
 - [x] Add focused isolation, identity-mismatch, event-persistence, and roster-gate tests; typecheck; package a judge-ready handoff.
+
+## Mission Control v5 Vote Interface
+
+- [x] Preserve S1 as blocked and work only on local `manus/mc-vote-ui`; do not start services, make live probes, push, merge, or delete branches.
+- [x] Audit client extension points and the Step 2 official-vote API contract before building the council interface.
+- [x] Build a governance view with separate official-seat connection states, active ballots, and read-only decision records using only a mockable official-vote API contract.
+- [x] Preserve the seat-panel interaction pattern while excluding Hermes/OpenClaw controls and all general message or operational-send paths from the governance view.
+- [x] Add mocked component tests and client typecheck coverage; package a judge-ready handoff.
