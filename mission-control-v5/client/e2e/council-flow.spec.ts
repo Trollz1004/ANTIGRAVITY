@@ -20,8 +20,10 @@ test.describe('council read flow', () => {
 
     await page.goto('/');
     await page.getByRole('button', { name: 'COUNCIL' }).click();
-    await expect(page.getByText('OFFICIAL SEATS')).toBeVisible();
-    await expect(page.getByText('IMMUTABLE DECISION LOG')).toBeVisible();
+    // Heading roles: the hint line also contains "OFFICIAL SEATS", which
+    // violates strict mode on a bare text locator.
+    await expect(page.getByRole('heading', { name: 'OFFICIAL SEATS' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'IMMUTABLE DECISION LOG' })).toBeVisible();
     await expect(page.getByText('ROSTER SIGNED')).toBeVisible();
     await expect(page.getByText(/send/i)).toHaveCount(0);
     await expect(page.getByPlaceholder(/message/i)).toHaveCount(0);
