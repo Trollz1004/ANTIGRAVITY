@@ -159,3 +159,13 @@
 - [x] Implement identity-checked service tiles using only UP, DOWN, WRONG SERVICE, AUTH MISSING, AUTH REJECTED, and NOT CONFIGURED, without executing live health probes.
 - [x] Set the OpenClaw default port to 18789 and Hermes default port to 9119 wherever v5 defines a default.
 - [x] Run source scans, the project typecheck, and applicable unit tests without service startup; package a bundle or patch series and a concise review packet for the judge lane.
+
+## Mission Control v5 Vote Engine
+
+- [x] Preserve the blocked S1 gate and work only on local `manus/mc-vote-engine`; do not start services, make live probes, push, merge, or delete branches.
+- [x] Audit the v5 governance, bridge, routing, and persistence seams for any route from an official vote path into general operational sending or model routing.
+- [x] Implement a structurally separate official vote module that rejects any dependency on general operational sending or model-routing modules.
+- [x] Require the submitted voter identity to match the signed-in identity for that platform’s official bridge; reject mismatches server-side.
+- [x] Persist append-only vote events with actor, timestamp, subject, and decision, with no fixed voter-count assumption.
+- [x] Require a Joshua-signed roster configuration before votes are binding; leave membership unspecified until the roster is supplied.
+- [x] Add focused isolation, identity-mismatch, event-persistence, and roster-gate tests; typecheck; package a judge-ready handoff.
