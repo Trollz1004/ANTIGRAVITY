@@ -30,6 +30,7 @@ import {
 import { saveUserApiKey, deleteUserApiKey, getUserApiKeyMeta, getUserApiKeys } from './api-keys';
 import { AI_PROVIDER_SLUGS, PROVIDER_CONFIGS } from '../shared/ai-providers';
 import type { ChatMessage } from '../shared/ai-providers';
+import { probeOperationalIntegration } from './operational-status';
 
 const DIRECT_KEY_PROVIDER_SLUGS = ['gemini', 'perplexity', 'grok', 'codex'] as const;
 
@@ -247,11 +248,17 @@ export const appRouter = router({
   operational: router({
     status: protectedProcedure.query(async () => {
       const integrations = [
-        { id: 'hermes', name: 'Hermes', statusUrl: process.env.HERMES_STATUS_URL?.trim() },
+        {
+          id: 'hermes',
+          name: 'Hermes',
+          statusUrl: process.env.HERMES_STATUS_URL?.trim(),
+          expectedMarker: process.env.HERMES_EXPECTED_SERVICE_MARKER?.trim(),
+        },
         {
           id: 'openclaw',
           name: 'OpenClaw',
           statusUrl: process.env.OPENCLAW_STATUS_URL?.trim() || process.env.OPENCLAW_BRIDGE_URL?.trim(),
+          expectedMarker: process.env.OPENCLAW_EXPECTED_SERVICE_MARKER?.trim(),
         },
       ] as const;
       return Promise.all(integrations.map((integration) => probeOperationalIntegration(integration)));
@@ -341,46 +348,6 @@ function getAuthenticatedVoterSlug(email: string): string | undefined {
       : undefined;
   } catch {
     return undefined;
-  }
-}
-
-type OperationalIntegration = {
-  id: 'hermes' | 'openclaw';
-  name: string;
-  statusUrl?: string;
-};
-
-async function probeOperationalIntegration(integration: OperationalIntegration) {
-  if (!integration.statusUrl) {
-    return {
-      ...integration,
-      status: 'not-configured' as const,
-      lastSeen: null,
-      detail: 'status URL not configured',
-    };
-  }
-
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 1500);
-  try {
-    // A 401/403 still proves an intentional service answered. No response body
-    // or raw error is surfaced because operational state is not an API debugger.
-    const response = await fetch(integration.statusUrl, { signal: controller.signal });
-    return {
-      ...integration,
-      status: response.status > 0 ? ('connected' as const) : ('offline' as const),
-      lastSeen: response.status > 0 ? new Date().toISOString() : null,
-      detail: response.status > 0 ? 'service answered status probe' : 'service did not answer',
-    };
-  } catch {
-    return {
-      ...integration,
-      status: 'offline' as const,
-      lastSeen: null,
-      detail: 'service did not answer status probe',
-    };
-  } finally {
-    clearTimeout(timer);
   }
 }
 

@@ -29,6 +29,7 @@ import {
   Lock,
   Unlock,
   TrendingUp,
+  Activity,
 } from 'lucide-react';
 
 const voterIcons: Record<string, React.ElementType> = {
@@ -60,6 +61,23 @@ const OFFICIAL_GOVERNANCE_BRIDGES = [
   'Manus',
 ] as const;
 
+const OFFICIAL_BRIDGE_PROVIDER_SLUGS: Record<(typeof OFFICIAL_GOVERNANCE_BRIDGES)[number], string | null> = {
+  Claude: 'claude',
+  Gemini: 'gemini',
+  'GitHub Copilot': 'codex',
+  'Meta AI': null,
+  'ChatGPT / OpenAI': 'codex',
+  Manus: 'manus',
+};
+
+const operationalStatusStyles: Record<string, string> = {
+  connected: 'border-green-500/50 text-green-600 dark:text-green-400',
+  'auth-required': 'border-amber-500/50 text-amber-600 dark:text-amber-400',
+  mismatch: 'border-red-500/50 text-red-600 dark:text-red-400',
+  offline: 'border-red-500/50 text-red-600 dark:text-red-400',
+  'not-configured': 'border-amber-500/50 text-amber-600 dark:text-amber-400',
+};
+
 export default function Governance() {
   const { user } = useAuth();
   const [showCreate, setShowCreate] = useState(false);
@@ -68,9 +86,14 @@ export default function Governance() {
 
   const { data: voters } = trpc.governance.voters.useQuery();
   const { data: stats } = trpc.governance.stats.useQuery();
+  const { data: providers } = trpc.providers.list.useQuery();
+  const { data: operationalIntegrations } = trpc.operational.status.useQuery();
   const { data: proposals, refetch: refetchProposals } = trpc.governance.proposals.list.useQuery(
     filterStatus !== 'all' ? { status: filterStatus } : {},
   );
+  const activeOperationalFaults = operationalIntegrations?.filter((integration) =>
+    ['offline', 'mismatch', 'auth-required'].includes(integration.status),
+  ) ?? [];
 
   return (
     <div className="space-y-6">
@@ -173,15 +196,58 @@ export default function Governance() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-            {OFFICIAL_GOVERNANCE_BRIDGES.map((platform) => (
-              <div key={platform} className="border border-border/60 bg-secondary/10 p-2 text-center">
-                <p className="text-[11px] font-semibold leading-tight">{platform}</p>
-                <Badge variant="outline" className="mt-1.5 text-[9px] px-1.5 py-0 border-amber-500/50 text-amber-500">
-                  OFFICIAL BRIDGE
-                </Badge>
+            {OFFICIAL_GOVERNANCE_BRIDGES.map((platform) => {
+              const providerSlug = OFFICIAL_BRIDGE_PROVIDER_SLUGS[platform];
+              const operationalProvider = providerSlug ? providers?.find((provider) => provider.slug === providerSlug) : null;
+              const operationalReady = operationalProvider?.isAvailable === true;
+              return (
+                <div key={platform} className="border border-border/60 bg-secondary/10 p-2 text-center">
+                  <p className="text-[11px] font-semibold leading-tight">{platform}</p>
+                  <Badge variant="outline" className="mt-1.5 text-[9px] px-1.5 py-0 border-amber-500/50 text-amber-600 dark:text-amber-400">
+                    OFFICIAL VOTE PATH
+                  </Badge>
+                  <p className={`mt-1 text-[9px] ${operationalReady ? 'text-green-600 dark:text-green-400' : 'text-muted-foreground'}`}>
+                    {operationalProvider ? `chat ${operationalReady ? 'ready' : 'not configured'}` : 'chat state unavailable'}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className={activeOperationalFaults.length > 0 ? 'border-red-500/50 bg-red-500/[0.03]' : 'bg-card border-border'}>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Activity className="h-4 w-4 text-primary" />
+            Governance Workflow Service Health
+          </CardTitle>
+          <p className="text-xs text-muted-foreground">
+            Hermes and OpenClaw status checks distinguish no service, an authorization boundary, and an unexpected service identity. They do not execute or substitute official governance votes.
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {(operationalIntegrations ?? []).map((integration) => (
+              <div key={integration.id} className="border border-border/60 bg-secondary/10 p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-semibold">{integration.name}</span>
+                  <Badge variant="outline" className={operationalStatusStyles[integration.status] ?? 'border-border text-muted-foreground'}>
+                    {integration.status.replace('-', ' ').toUpperCase()}
+                  </Badge>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">{integration.detail}</p>
+                <p className="mt-1 text-[10px] text-muted-foreground/70">Last seen: {integration.lastSeen ? new Date(integration.lastSeen).toLocaleString() : 'not observed'}</p>
               </div>
             ))}
+            {!operationalIntegrations && <p className="text-sm text-muted-foreground">Checking operational integrations…</p>}
           </div>
+          {activeOperationalFaults.length > 0 && (
+            <div className="mt-3 flex items-center gap-2 text-xs text-red-600 dark:text-red-400">
+              <AlertTriangle className="h-4 w-4 shrink-0" />
+              {activeOperationalFaults.length} operational integration {activeOperationalFaults.length === 1 ? 'requires' : 'require'} review before work in its affected lane continues.
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -525,7 +591,7 @@ function CreateProposalForm({ onSuccess }: { onSuccess: () => void }) {
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="e.g., Update  to 70/20/10"
+          placeholder="e.g., Approve an operational release-readiness change"
         />
       </div>
       <div>
