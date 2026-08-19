@@ -168,4 +168,4 @@
 - [x] Require the submitted voter identity to match the signed-in identity for that platform’s official bridge; reject mismatches server-side.
 - [x] Persist append-only vote events with actor, timestamp, subject, and decision, with no fixed voter-count assumption.
 - [x] Require a Joshua-signed roster configuration before votes are binding; leave membership unspecified until the roster is supplied.
-- [ ] Add focused isolation, identity-mismatch, event-persistence, and roster-gate tests; typecheck; package a judge-ready handoff.
+- [x] Add focused isolation, identity-mismatch, event-persistence, and roster-gate tests; typecheck; package a judge-ready handoff.
