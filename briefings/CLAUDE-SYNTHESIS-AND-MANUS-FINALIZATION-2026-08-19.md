@@ -249,10 +249,13 @@ the engineering hub) can run them locally:
    the Gemini API by your own choice (every stored manus-seat message
    footers gemini-2.5-flash / gemini-3.5-flash-lite). Keep that design.
    Additionally ship the call layer behind a provider interface so any
-   seat's backend can alternatively be an OpenAI-compatible endpoint
-   (base URL + key from env): the self-hosted build plugs into the node's
-   local OmniRoute gateway (127.0.0.1:20128, /v1/chat/completions), which
-   holds the multi-provider fallback role locally. Document which env var
+   seat's backend can alternatively point at the node's local OmniRoute
+   gateway via base URL + key from env — and note the gateway speaks each
+   provider's NATIVE format (verified live on its endpoint catalog,
+   v3.8.49, 318 endpoints): OpenAI format at /api/v1/chat/completions,
+   Anthropic format at /api/v1/messages, Gemini generateContent at
+   /api/v1beta/models/{path}. Each seat bridge (including the Gemini
+   ballot call) can keep its native SDK and swap only the base URL. Document which env var
    NAMES select each seat's backend. Do not hardcode either side. And make
    the manus seat's stored execution identity say what actually served it
    (today: Gemini) instead of 'manus-default'.
