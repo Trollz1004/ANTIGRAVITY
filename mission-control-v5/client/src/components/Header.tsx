@@ -18,7 +18,7 @@ export default function Header({ tab, onTab, health, runningCount, selectedCount
         <div className="header__title">
           MISSION CONTROL <em>// AGENCY SWARM v5</em>
         </div>
-        <div className="header__edition">ORCHESTRATOR EDITION — 4 HARNESSES · SKILLS ON SUB-AGENTS</div>
+        <div className="header__edition">ORCHESTRATOR EDITION — 3 HARNESSES · SKILLS ON SUB-AGENTS</div>
       </div>
 
       <nav className="header__nav">
