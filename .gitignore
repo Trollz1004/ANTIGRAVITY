@@ -195,3 +195,4 @@ omniroute/
 # Redis snapshot dropped by local stack when cwd is repo root
 dump.rdb
 .obsidian/workspace.json
+.ao.env
