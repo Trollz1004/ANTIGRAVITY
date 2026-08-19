@@ -65,7 +65,7 @@ export default function CouncilPanel({ load = api.officialVoteView }: CouncilPan
       <section className="council__section" aria-labelledby="official-seats-heading">
         <div className="council__section-head">
           <h2 id="official-seats-heading">OFFICIAL SEATS</h2>
-          <span className="mono">{view.seats.length} CONFIGURED</span>
+          <span className="mono">{view.seats.length} SEATS · {view.seats.filter((seat) => seat.state === 'UP').length} CONNECTED</span>
         </div>
         <div className="council__seat-grid">
           {view.seats.map((seat) => (
