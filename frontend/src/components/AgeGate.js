@@ -17,36 +17,19 @@ export function AgeGate({ onVerified }) {
             <div className="text-lg font-bold tracking-tight">Mission Control</div>
           </div>
         </div>
-
         <p className="text-sm text-[#6b82a6] leading-relaxed mb-6">
-          This is the orchestrator surface for the ANTIGRAVITY stack. Opus conducts; agents execute on Ollama, Hermes
-          Router, and OpenClaw support. By entering you confirm you are{' '}
-          <span className="text-[#e8f0ff] font-semibold">18 or older</span> and authorized to operate this node.
+          This workspace coordinates product operations. By entering, you confirm that you are{' '}
+          <span className="text-[#e8f0ff] font-semibold">18 or older</span> and authorized to use this workspace.
         </p>
-
         <label className="flex items-start gap-3 text-xs text-[#e8f0ff] cursor-pointer select-none mb-6">
-          <input
-            data-testid="agegate-checkbox"
-            type="checkbox"
-            checked={ack}
-            onChange={(e) => setAck(e.target.checked)}
-            className="mt-0.5 accent-[#00d4ff]"
-          />
+          <input data-testid="agegate-checkbox" type="checkbox" checked={ack} onChange={(e) => setAck(e.target.checked)} className="mt-0.5 accent-[#00d4ff]" />
           <span>
-            I am 18+ and acknowledge this node operates Opus-directed agents. .
-            <span className="block text-[10px] text-[#e040fb] font-bold uppercase tracking-[0.25em] mt-1">
-              #UntilNoKidInNeed
-            </span>
+            I am 18+ and authorized to use this workspace.
+            <span className="block text-[10px] text-[#e040fb] font-bold uppercase tracking-[0.25em] mt-1">Product-first workspace</span>
           </span>
         </label>
-
-        <button
-          data-testid="agegate-enter"
-          disabled={!ack}
-          onClick={onVerified}
-          className="w-full py-3 rounded-md bg-[#00d4ff] text-[#0a0f1a] text-xs font-bold uppercase tracking-[0.3em] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#33ddff] transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,212,255,0.25)]"
-        >
-          <ShieldCheck size={14} /> Enter Mission Control
+        <button data-testid="agegate-enter" disabled={!ack} onClick={onVerified} className="w-full py-3 rounded-md bg-[#00d4ff] text-[#0a0f1a] text-xs font-bold uppercase tracking-[0.3em] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#33ddff] transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,212,255,0.25)]">
+          <ShieldCheck size={14} /> Enter Workspace
         </button>
       </div>
     </div>

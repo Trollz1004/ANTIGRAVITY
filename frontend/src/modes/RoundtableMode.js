@@ -17,7 +17,7 @@ export function RoundtableMode() {
   });
   const [active, setActive] = useState({}); // { providerId: model }
   const [prompt, setPrompt] = useState(
-    "Mission Control roundtable — every model say one short line on building tools that fund kids' medical care.",
+    'Mission Control roundtable — provide one concise, evidence-based product-operations recommendation.',
   );
   const [responses, setResponses] = useState({}); // { providerId: { state, reply, real_model, latency_ms, error } }
   const [broadcastOn, setBroadcastOn] = useState({ telegram: false, whatsapp: false });
@@ -166,9 +166,9 @@ export function RoundtableMode() {
         {/* LEFT — platform picker */}
         <aside className="col-span-3 border-r border-[#2a3a52] overflow-y-auto custom-scrollbar bg-[#0a0f1a] p-3 space-y-4">
           {[
-            { tier: 'emergent', label: 'Bridged · Emergent Universal', note: 'Live · no setup' },
-            { tier: 'byok', label: 'BYOK · Direct API', note: 'Set key in /app/backend/.env' },
-            { tier: 'local', label: 'Local · Workstation', note: "localhost — Joshua's node only" },
+            { tier: 'emergent', label: 'Configured bridge', note: 'Availability is reported by the workspace' },
+            { tier: 'byok', label: 'Direct provider', note: 'Configuration remains private' },
+            { tier: 'local', label: 'Local workspace', note: 'Available only where configured' },
           ].map((g) => (
             <div key={g.tier}>
               <div className="text-[8px] tracking-[0.25em] uppercase text-[#4a5568] mb-2">{g.label}</div>
@@ -227,7 +227,7 @@ export function RoundtableMode() {
                       )}
                       {!p.ready && p.tier === 'byok' && (
                         <div className="text-[8px] mono text-[#ffb300] px-2 py-1 border-t border-[#2a3a52]">
-                          set <span className="text-[#e8f0ff]">{p.env}</span>
+                          provider configuration is unavailable in this public view
                         </div>
                       )}
                       {p.tier === 'local' && (
@@ -357,7 +357,7 @@ export function RoundtableMode() {
             </div>
             <div className="mt-2 text-center text-[9px] tracking-widest uppercase text-[#4a5568]">
               fan-out across {Object.keys(active).length} platform{Object.keys(active).length === 1 ? '' : 's'} ·
-              #UntilNoKidInNeed
+              product collaboration
             </div>
           </form>
         </main>

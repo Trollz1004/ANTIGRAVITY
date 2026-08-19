@@ -90,7 +90,7 @@ export default function App() {
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-[8px] font-bold text-[#e040fb] uppercase tracking-widest opacity-80">
-                  #UntilNoKidInNeed
+                  Product-first operations
                 </span>
                 <span className="text-[8px] font-bold text-[#00d4ff] uppercase tracking-widest px-2 py-0.5 bg-[#00d4ff]/10 rounded-full border border-[#00d4ff]/20">
                   PAWCLAW-ELITE-V1
