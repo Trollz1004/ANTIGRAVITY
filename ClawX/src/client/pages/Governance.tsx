@@ -51,6 +51,15 @@ const voterColors: Record<string, string> = {
   codex: '#8b5cf6',
 };
 
+const OFFICIAL_GOVERNANCE_BRIDGES = [
+  'Claude',
+  'Gemini',
+  'GitHub Copilot',
+  'Meta AI',
+  'ChatGPT / OpenAI',
+  'Manus',
+] as const;
+
 export default function Governance() {
   const { user } = useAuth();
   const [showCreate, setShowCreate] = useState(false);
@@ -147,6 +156,31 @@ export default function Governance() {
             </span>
             <Separator orientation="vertical" className="h-4" />
             <span>6 AI (Even) + 1 Human (Odd) = 7 Total | Majority = 4 Votes</span>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-card border-border">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Server className="h-4 w-4 text-primary" />
+            Official Platform Bridge Visibility
+          </CardTitle>
+          <p className="text-xs text-muted-foreground">
+            Governance votes use each platform&apos;s designated official bridge. OmniRoute is excluded from vote execution and
+            cannot substitute an official platform response.
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+            {OFFICIAL_GOVERNANCE_BRIDGES.map((platform) => (
+              <div key={platform} className="border border-border/60 bg-secondary/10 p-2 text-center">
+                <p className="text-[11px] font-semibold leading-tight">{platform}</p>
+                <Badge variant="outline" className="mt-1.5 text-[9px] px-1.5 py-0 border-amber-500/50 text-amber-500">
+                  OFFICIAL BRIDGE
+                </Badge>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
@@ -369,6 +403,7 @@ function ProposalVoteDetail({
 }) {
   const { data: votes, refetch: refetchVotes } = trpc.governance.votes.list.useQuery({ proposalId });
   const { data: voters } = trpc.governance.voters.useQuery();
+  const { data: authenticatedVoter } = trpc.governance.votes.identity.useQuery();
   const castVote = trpc.governance.votes.cast.useMutation({
     onSuccess: () => {
       refetchVotes();
@@ -414,6 +449,7 @@ function ProposalVoteDetail({
                   {existingVote?.vote === 'approve' ? 'YES' : 'NO'}
                 </span>
               ) : status === 'pending' ? (
+              authenticatedVoter?.voterSlug === voter.slug ? (
                 <div className="flex gap-1">
                   <button
                     className="h-5 w-5 rounded bg-green-500/20 hover:bg-green-500/40 flex items-center justify-center transition-colors"
@@ -430,6 +466,9 @@ function ProposalVoteDetail({
                     <XCircle className="h-3 w-3 text-red-500" />
                   </button>
                 </div>
+              ) : (
+                <span className="text-[9px] text-muted-foreground">OFFICIAL BRIDGE</span>
+              )
               ) : (
                 <span className="text-[9px] text-muted-foreground">—</span>
               )}
