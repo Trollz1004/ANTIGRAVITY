@@ -1,7 +1,7 @@
 export type Mode = 'speed' | 'reasoning';
 export type Column = 'NOW' | 'NEXT' | 'BLOCKED' | 'DONE';
 export type TaskStatus = 'queued' | 'running' | 'done' | 'error';
-export type Tab = 'graphy' | 'library' | 'swarm' | 'board' | 'services' | 'brain' | 'bridge';
+export type Tab = 'graphy' | 'library' | 'swarm' | 'board' | 'services' | 'brain' | 'bridge' | 'council';
 
 export interface AgentDef {
   id: string;
@@ -174,20 +174,12 @@ export interface BrainMcpStatus {
   serverInfo: { name: string; version: string };
 }
 
-export type BridgeTarget =
-  | 'hermes'
-  | 'openclaw'
-  | 'claude'
-  | 'gemini'
-  | 'github-copilot'
-  | 'meta-ai'
-  | 'chatgpt'
-  | 'manus';
+export type BridgeTarget = 'hermes' | 'openclaw';
 
 export interface BridgeStatus {
   id: BridgeTarget;
   label: string;
-  kind: 'operational' | 'official-governance';
+  kind: 'operational';
   state: 'ready' | 'unavailable' | 'not-configured';
   sendEnabled: boolean;
   lastSeen: string | null;
@@ -199,6 +191,40 @@ export type BridgeMessage = {
   text: string;
   timestamp: string;
 };
+
+export type OfficialPlatform = 'claude' | 'gemini' | 'github-copilot' | 'meta-ai' | 'chatgpt' | 'manus';
+export type OfficialSeatState = 'NOT CONFIGURED' | 'AUTH MISSING' | 'AUTH REJECTED' | 'UP';
+
+export interface OfficialSeat {
+  platform: OfficialPlatform;
+  label: string;
+  state: OfficialSeatState;
+  detail: string;
+}
+
+export interface ActiveBallot {
+  id: string;
+  subject: string;
+  status: 'OPEN' | 'CLOSED';
+  decisions: number;
+}
+
+export interface DecisionEvent {
+  id: string;
+  actor: string;
+  platform: OfficialPlatform;
+  timestamp: string;
+  subject: string;
+  decision: 'approve' | 'reject' | 'abstain';
+  binding: boolean;
+}
+
+export interface OfficialVoteView {
+  roster: { state: 'missing' | 'invalid' | 'signed'; bindingEnabled: boolean };
+  seats: OfficialSeat[];
+  ballots: ActiveBallot[];
+  events: DecisionEvent[];
+}
 
 // ── Knowledge graph (repo as a navigable graph) ──────────────────────────────
 export interface KnowledgeNode {
