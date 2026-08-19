@@ -138,3 +138,4 @@
 - [x] Publish a concise read-only Supabase and Obsidian readiness report for human-facing Mission Control use, including connection blockers and no-change boundaries.
 - [x] Publish a task-aware skills preflight matrix that compares the attached doctrine with active Hermes, OpenClaw, and OpenCode contracts.
 - [x] Create an editable presentation covering Mission Control human tools, Supabase/Obsidian readiness, task-aware skill selection, built-in secret redaction, and safe human-visible agentic operations.
+- [x] Refresh the portable branch bundle and patch after the final safety commit, then prepare a user-testing handoff with runtime still blocked.
