@@ -33,6 +33,14 @@ CLAUDE.md's harness-status block is stale on two points and must not be cited as
 - **Identity-collapse mechanism confirmed in code** (directive §2's motivating example is mechanism-corroborated, not repo-observed): `messages.send` accepts unvalidated `modelOverrides` (routers.ts:127) and stores `providerSlug` (seat) and `model` (handler-reported) separately (routers.ts:155-162), while the UI keys tabs/icons/colors ONLY on seat, with model as fine print. The **manus seat is a designed identity black hole**: type `builtin`, model string `manus-default`, env `BUILT_IN_FORGE_API_KEY` — whatever model Manus's platform routes to answers under the seat name with no disclosure.
 - Additional confirmed defects: governance `castVote` takes a client-supplied `voterSlug` with **no per-voter auth** (any logged-in user can vote as any board member); raw provider error strings persisted and returned to clients (routers.ts:158); vite config injects `process.env.API_KEY` into the **client bundle** with `@google/genai` as a client dep (browser Gemini-key path if the hosted build kept it); stale icon maps in Chat.tsx AND Analytics.tsx (ollama present, codex missing); two divergent council rosters (ClawX board has codex; `backend/fastapi-app/app/clawx_integration.py` still has ollama).
 
+**1.2a LIVE-OBSERVED UPDATE (2026-08-19, Claude driving the hosted app directly via browser):**
+
+- The Manus-hosted deployment at `clawx-aihub-zwxfcstm.manus.space` is **VERIFIED_NOW LIVE and functional**: authenticated session, working chat, working Broadcast Mode fan-out. The repo's missing server call layer **exists and works on the hosted side** — the live API is the repo's exact tRPC surface (`auth.me`, `providers.list`, `conversations.create`, `messages.send`, `messages.list` observed over the wire, all 200).
+- **The directive §2 identity example is now OBSERVED, not just mechanism-corroborated.** Claude selected the **manus seat** and sent an identity probe; the seat answered "I am Gemini, a large language model created by Google" with footer `52 tokens · 0.9s · gemini-3.5-flash-lite`. Joshua's screenshots from the same day show the manus seat footing `gemini-2.5-flash` and `gemini-3.5-flash-lite` on other messages. The "builtin manus-default" seat is served by Gemini models, varying per message.
+- **The hosted seat roster is the OLD v1.0 board** — manus / claude / gemini / perplexity / grok / **ollama** — while the repo's shared config is v1.1 (codex in, ollama demoted). Live build lags the repo roster.
+- **The vote system has progressed on the Manus side:** a "ClawX Gemini Free-Choice Ballot" implementation + test report (2026-08-19, local artifact) documents a provider-backed governance ballot path — direct Gemini call server-side, free-choice approve/reject/abstain, evidence-packet hashing, prompt versioning, response hashing, abstention-safe failure handling, an ASK control in Governance.tsx, and a documented ballot protocol. Status per its own report: compiles and builds locally; the live Gemini smoke returned no text output, so **no validated independent ballot has occurred yet**; DB migration + deploy + key setup remain. Honest claim: implemented-not-yet-proven.
+- Consequence for §2 of this synthesis: the "hardest aspects" (working provider bridges, chat + broadcast fan-out, auditable ballot path) are **done once, on Manus hosting only**. The reconciliation path is to bring those working pieces into the repo/Mission Control side — not to rebuild them.
+
 ### 1.3 OmniRoute (the routing spine)
 
 - Live catalog: 2,458 models across 27 `owned_by` groups (cline 966, kilocode 882, github 152, openrouter 56, codex 55, combo/auto 39, …). Counts cited by `owned_by` methodology only. Claude-branded models appear **only via third-party proxies** (aug/, ddgw/) — there is **no native anthropic provider group**, and the `claude` connection is INACTIVE by design.
@@ -148,30 +156,91 @@ Each stage is independently verifiable and preserves availability; stop on any r
 
 ---
 
-## 7. MANUS FINALIZATION PROMPT
+## 7. MANUS FINALIZATION PROMPT — v2 (2026-08-19, supersedes the v1 prompt that shipped in commit 434db940)
 
-*(Self-contained; paste to Manus as-is. Scope note recorded here, outside the prompt: this prompt intentionally contains nothing about any other hosting platform and nothing about removing the Manus-hosted page — both are out of scope for this step per directive line 150.)*
+*(Self-contained; paste to Manus as-is. Scope note recorded here, outside the prompt: this prompt intentionally contains nothing about any other hosting platform and nothing about removing the Manus-hosted page — both are out of scope for this step per directive line 150. v2 adds the port-back mandate after live verification confirmed the hosted call layer, broadcast, and ballot path all exist and work on Manus hosting only.)*
 
 ```text
-MANUS — ANTIGRAVITY FINALIZATION: CONSOLIDATE ONTO YOUR WORKING PAGE
+MANUS — ANTIGRAVITY FINALIZATION: CONSOLIDATE, THEN PORT THE HARD PARTS HOME
 
 You are receiving the verified AI-to-AI synthesis for Trollz1004/ANTIGRAVITY,
 produced by Claude (Fable 5) on 2026-08-19 from an 11-agent evidence sweep of
-the live repository and node. Your task has two parts, in order.
+the live repository and node, PLUS a live browser verification of your hosted
+ClawX deployment performed by Claude the same day. Your task has three parts,
+in order.
+
+WHAT CLAUDE VERIFIED LIVE ON YOUR DEPLOYMENT (2026-08-19):
+- clawx-aihub-zwxfcstm.manus.space is up and functional: chat works,
+  Broadcast Mode fan-out works, the tRPC API over the wire is the repo's
+  exact router surface (auth.me, providers.list, conversations.create,
+  messages.send, messages.list — all observed 200).
+- Identity observation: the manus seat, probed directly, answered "I am
+  Gemini, a large language model created by Google" (footer: 52 tokens,
+  0.9s, gemini-3.5-flash-lite); same-day screenshots show gemini-2.5-flash
+  on other manus-seat messages. The builtin manus-default seat is served by
+  Gemini models. This is exactly the surface-vs-execution identity split the
+  directive requires us to make honest — it is evidence, not an accusation.
+- Your hosted seat roster is the old v1.0 board (ollama seat, no codex);
+  the repo's shared config is v1.1 (codex in, ollama utility).
+- Your Gemini Free-Choice Ballot work (implementation + test report) is
+  acknowledged: provider-backed ballot, evidence hashing, abstention-safe
+  handling — compiled and built, with no validated live ballot yet per your
+  own report. Honest status: implemented-not-yet-proven.
 
 PART 1 — ADD ALL OF IT TO YOUR WORKING MANUS PAGE.
 Incorporate the full synthesis into the working Manus page you already
-maintain — all seven sections: verified current state, architecture
-reconciliation, conflicts and risks, Claude's recommendations (P0/P1/P2),
-the implementation sequence (S1–S7), the acceptance gates, and this prompt's
-task list. Source of truth for the full text:
+maintain — all sections: verified current state (including the live
+observations above), architecture reconciliation, conflicts and risks,
+Claude's recommendations (P0/P1/P2), the implementation sequence (S1–S7),
+the acceptance gates, and this prompt's task list. Source of truth:
 briefings/CLAUDE-SYNTHESIS-AND-MANUS-FINALIZATION-2026-08-19.md on main.
 Do not summarize it away — the page should let any capable AI inspect,
 reconcile, implement, and verify without inventing missing architecture.
 Keep your page's existing content; this consolidates onto it, it does not
 replace it.
 
-PART 2 — FINALIZE THE DESIGN AND IMPLEMENTATION PLAN IN PLACE.
+PART 2 — PORT THE HARDEST DONE WORK INTO MISSION CONTROL / THE REPO.
+The hardest aspects of this system are already DONE — but they exist only
+on your hosting. The repo's server/ai-providers.ts is a throw-stub; nothing
+on Sabretooth can run the seats. Close that gap by publishing your working
+implementations into the repository so Mission Control (mission-control-v5,
+the engineering hub) can run them locally:
+
+1. THE PROVIDER CALL LAYER (highest value): the real server-side
+   implementations behind the claude / gemini / perplexity / grok seats and
+   the builtin manus seat — the code that makes messages.send actually
+   answer. Land it as the repo's src/server/ai-providers.ts (replacing the
+   stub) plus whatever supporting modules it needs. Keys stay server-side
+   env/DB-encrypted exactly as your current design does; never in source,
+   never in the client bundle.
+2. THE CHAT + BROADCAST FAN-OUT, working end to end against that call
+   layer, including the server bootstrap the repo is missing (there is
+   currently no express/listen entry point at all) so the app can run
+   self-hosted on Sabretooth behind Mission Control.
+3. THE GOVERNANCE BALLOT PATH: your Gemini free-choice ballot code
+   (requestProviderBallot, evidence hashing, abstention handling, the ASK
+   control, the ballot protocol doc) plus the DB migration it still needs.
+   Include the vote system only as far as it makes sense with the repo's
+   judge-governance doctrine (agent-contracts/AGENTS.md §7): the ClawX board
+   vote is an advisory/product surface; the judge lane remains the only
+   canonical Git gate; Joshua remains final authority. Say so on your page.
+4. IDENTITY PROVENANCE, required in the ported code: validate
+   modelOverrides against each seat's availableModels; store
+   execution_provider and execution_model (and route id where available)
+   alongside providerSlug on every message; the manus seat must record the
+   real serving model (observed today: Gemini) instead of the opaque
+   'manus-default'; per-voter authentication on castVote; sanitize provider
+   error strings; sync the roster to v1.1 (codex in, ollama utility) in the
+   same pass, updating the stale Chat.tsx/Analytics.tsx icon maps.
+
+Delivery rule for Part 2: publish to the repo on a branch named
+manus/call-layer with a written summary of what each commit contains, plus
+the exact env var NAMES (never values) the self-hosted deployment needs.
+Joshua or the judge lane lands it on main per repo doctrine. If any piece
+cannot be exported from your environment, say exactly which piece and why —
+do not substitute a rewrite silently.
+
+PART 3 — FINALIZE THE DESIGN AND IMPLEMENTATION PLAN IN PLACE.
 Inspect and improve the EXISTING setup. Do not start over. Resolve conflicts;
 do not reopen settled history unless repository evidence contradicts it.
 
@@ -252,11 +321,13 @@ implementation sequence S1–S7 and acceptance gates 1–6 unless repository
 evidence forces a deviation — and if it does, record the deviation and why
 on your page.
 
-Deliverable: your updated working Manus page containing the full synthesis
-plus your finalized, stage-by-stage implementation plan with evidence
-requirements, rollback steps, and a GO/NO-GO line per stage — and a short
-report back to Joshua listing what you changed, what is OPEN, and what you
-verified about your own hosted deployment.
+Deliverable: (1) your updated working Manus page containing the full
+synthesis plus your finalized, stage-by-stage implementation plan with
+evidence requirements, rollback steps, and a GO/NO-GO line per stage;
+(2) the manus/call-layer branch on the repo with the ported call layer,
+server bootstrap, broadcast fan-out, and ballot path; (3) a short report
+back to Joshua listing what you ported, what could not be exported and why,
+what is OPEN, and what you verified about your own hosted deployment.
 ```
 
 ---
