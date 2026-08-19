@@ -51,7 +51,7 @@ const TOOLS: ToolDef[] = [
     description: "Read a platform's STATE.md journal (read-on-start memory). Returns {content, updatedAt, bytes}.",
     inputSchema: {
       type: 'object',
-      properties: { platformId: { type: 'string', description: 'e.g. free-claude-code, hermes' } },
+      properties: { platformId: { type: 'string', description: 'e.g. hermes, openclaw, opencode' } },
       required: ['platformId'],
     },
   },
