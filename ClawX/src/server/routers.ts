@@ -1,9 +1,10 @@
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 import { COOKIE_NAME } from '@shared/const';
 import { getSessionCookieOptions } from './_core/cookies';
 import { systemRouter } from './_core/systemRouter';
 import { publicProcedure, protectedProcedure, router } from './_core/trpc';
-import { callProvider } from './ai-providers';
+import { callProvider, getProviderAvailability } from './ai-providers';
 import {
   createProposal,
   getProposals,
@@ -28,7 +29,9 @@ import {
 } from './db';
 import { saveUserApiKey, deleteUserApiKey, getUserApiKeyMeta, getUserApiKeys } from './api-keys';
 import { AI_PROVIDER_SLUGS, PROVIDER_CONFIGS } from '../shared/ai-providers';
-import type { AiProviderSlug, ChatMessage } from '../shared/ai-providers';
+import type { ChatMessage } from '../shared/ai-providers';
+
+const DIRECT_KEY_PROVIDER_SLUGS = ['gemini', 'perplexity', 'grok', 'codex'] as const;
 
 export const appRouter = router({
   system: systemRouter,
@@ -57,7 +60,7 @@ export const appRouter = router({
     save: protectedProcedure
       .input(
         z.object({
-          providerSlug: z.enum(AI_PROVIDER_SLUGS),
+          providerSlug: z.enum(DIRECT_KEY_PROVIDER_SLUGS),
           key: z.string().min(8, 'API key must be at least 8 characters'),
           label: z.string().optional(),
         }),
@@ -125,9 +128,17 @@ export const appRouter = router({
           content: z.string().min(1),
           providers: z.array(z.enum(AI_PROVIDER_SLUGS)).min(1),
           modelOverrides: z.record(z.string(), z.string()).optional(),
+          bridgePurpose: z.enum(['operational', 'governance']).default('operational'),
         }),
       )
       .mutation(async ({ ctx, input }) => {
+        if (input.bridgePurpose === 'governance') {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Governance votes must use their designated official-platform bridge.',
+          });
+        }
+
         // Load user's stored API keys (decrypted, server-side only)
         const userApiKeys = await getUserApiKeys(ctx.user.id);
 
@@ -158,6 +169,8 @@ export const appRouter = router({
               content: response.error ? `[Error from ${slug}]: ${response.error}` : response.content,
               providerSlug: slug,
               model: response.model,
+              executionProvider: response.executionProvider,
+              executionModel: response.executionModel,
               inputTokens: response.inputTokens,
               outputTokens: response.outputTokens,
               responseTimeMs: response.responseTimeMs,
@@ -172,7 +185,7 @@ export const appRouter = router({
             await addUsageLog({
               userId: ctx.user.id,
               providerSlug: slug,
-              model: response.model,
+              model: response.executionModel,
               inputTokens: response.inputTokens,
               outputTokens: response.outputTokens,
               responseTimeMs: response.responseTimeMs,
@@ -192,7 +205,10 @@ export const appRouter = router({
             outputTokens: 0,
             responseTimeMs: 0,
             model: 'unknown',
-            error: r.reason instanceof Error ? r.reason.message : 'Unknown error',
+            executionProvider: 'unknown',
+            executionModel: 'unknown',
+            status: 'failed' as const,
+            error: 'Provider request failed. Try again later.',
           };
         });
       }),
@@ -210,19 +226,35 @@ export const appRouter = router({
 
       return AI_PROVIDER_SLUGS.map((slug) => {
         const config = PROVIDER_CONFIGS[slug];
-        const hasEnvKey = checkEnvKey(slug);
         const userKey = userKeyMap.get(slug);
         const hasUserKey = !!userKey?.isActive;
-        const hasKey = hasEnvKey || hasUserKey;
+        const availability = getProviderAvailability(slug, hasUserKey ? { [slug]: 'configured' } : {});
+        const hasKey = availability.available;
 
         return {
           ...config,
           isAvailable: hasKey,
           status: hasKey ? ('ready' as const) : ('no-key' as const),
-          keySource: hasUserKey ? ('user' as const) : hasEnvKey ? ('env' as const) : ('none' as const),
+          keySource: hasUserKey && availability.route === 'direct' ? ('user' as const) : hasKey ? ('env' as const) : ('none' as const),
+          executionRoute: availability.route,
           keyHint: userKey?.keyHint ?? null,
         };
       });
+    }),
+  }),
+
+  // ─── Operational Integrations ───────────────────────────────────
+  operational: router({
+    status: protectedProcedure.query(async () => {
+      const integrations = [
+        { id: 'hermes', name: 'Hermes', statusUrl: process.env.HERMES_STATUS_URL?.trim() },
+        {
+          id: 'openclaw',
+          name: 'OpenClaw',
+          statusUrl: process.env.OPENCLAW_STATUS_URL?.trim() || process.env.OPENCLAW_BRIDGE_URL?.trim(),
+        },
+      ] as const;
+      return Promise.all(integrations.map((integration) => probeOperationalIntegration(integration)));
     }),
   }),
 
@@ -266,6 +298,8 @@ export const appRouter = router({
         .input(z.object({ proposalId: z.number() }))
         .query(({ input }) => getVotesForProposal(input.proposalId)),
 
+      identity: protectedProcedure.query(({ ctx }) => ({ voterSlug: getAuthenticatedVoterSlug(ctx.user.email) ?? null })),
+
       cast: protectedProcedure
         .input(
           z.object({
@@ -275,28 +309,78 @@ export const appRouter = router({
             reasoning: z.string().optional(),
           }),
         )
-        .mutation(({ input }) => castVote(input)),
+        .mutation(({ ctx, input }) => {
+          const authenticatedVoterSlug = getAuthenticatedVoterSlug(ctx.user.email);
+          if (!authenticatedVoterSlug) {
+            throw new TRPCError({
+              code: 'FORBIDDEN',
+              message: 'No governance voter identity is configured for this signed-in account.',
+            });
+          }
+          if (input.voterSlug !== authenticatedVoterSlug) {
+            throw new TRPCError({ code: 'FORBIDDEN', message: 'The requested voter does not match this session.' });
+          }
+          return castVote({ ...input, voterSlug: authenticatedVoterSlug });
+        }),
     }),
   }),
 });
 
-/** Check if an env-level API key is configured for a provider */
-function checkEnvKey(slug: AiProviderSlug): boolean {
-  switch (slug) {
-    case 'manus':
-      return true; // Always available via built-in LLM
-    case 'claude':
-      return !!process.env.ANTHROPIC_API_KEY;
-    case 'gemini':
-      return !!process.env.GEMINI_API_KEY;
-    case 'perplexity':
-      return !!process.env.SONAR_API_KEY;
-    case 'grok':
-      return !!process.env.XAI_API_KEY;
-    case 'codex':
-      return !!process.env.OPENAI_API_KEY;
-    default:
-      return false;
+/**
+ * Governance voter identities are supplied as a JSON email-to-voter mapping
+ * in runtime configuration. The mapping is never sent to clients or logged.
+ */
+function getAuthenticatedVoterSlug(email: string): string | undefined {
+  const rawMapping = process.env.GOVERNANCE_VOTER_EMAIL_MAP;
+  if (!rawMapping) return undefined;
+  try {
+    const mapping = JSON.parse(rawMapping) as Record<string, unknown>;
+    const voterSlug = mapping[email.trim().toLowerCase()];
+    return typeof voterSlug === 'string' && VOTERS.some((voter) => voter.slug === voterSlug)
+      ? voterSlug
+      : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+type OperationalIntegration = {
+  id: 'hermes' | 'openclaw';
+  name: string;
+  statusUrl?: string;
+};
+
+async function probeOperationalIntegration(integration: OperationalIntegration) {
+  if (!integration.statusUrl) {
+    return {
+      ...integration,
+      status: 'not-configured' as const,
+      lastSeen: null,
+      detail: 'status URL not configured',
+    };
+  }
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 1500);
+  try {
+    // A 401/403 still proves an intentional service answered. No response body
+    // or raw error is surfaced because operational state is not an API debugger.
+    const response = await fetch(integration.statusUrl, { signal: controller.signal });
+    return {
+      ...integration,
+      status: response.status > 0 ? ('connected' as const) : ('offline' as const),
+      lastSeen: response.status > 0 ? new Date().toISOString() : null,
+      detail: response.status > 0 ? 'service answered status probe' : 'service did not answer',
+    };
+  } catch {
+    return {
+      ...integration,
+      status: 'offline' as const,
+      lastSeen: null,
+      detail: 'service did not answer status probe',
+    };
+  } finally {
+    clearTimeout(timer);
   }
 }
 

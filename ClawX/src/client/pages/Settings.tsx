@@ -11,14 +11,15 @@ import { Eye, EyeOff, Key, Trash2, CheckCircle2, XCircle, Lock, ShieldCheck } fr
 import { PROVIDER_CONFIGS } from '../../shared/ai-providers';
 import type { AiProviderSlug } from '../../shared/ai-providers';
 
-const PROVIDERS_WITH_KEYS: AiProviderSlug[] = ['claude', 'gemini', 'perplexity', 'grok', 'codex'];
+const PROVIDERS_WITH_KEYS = ['gemini', 'perplexity', 'grok', 'codex'] as const satisfies readonly AiProviderSlug[];
+type DirectKeyProviderSlug = (typeof PROVIDERS_WITH_KEYS)[number];
 
 const PROVIDER_KEY_LABELS: Record<AiProviderSlug, { placeholder: string; docsUrl: string; envVar: string }> = {
   manus: { placeholder: 'Built-in — no key required', docsUrl: '', envVar: '' },
   claude: {
-    placeholder: 'Anthropic API key',
-    docsUrl: 'https://console.anthropic.com/settings/keys',
-    envVar: 'ANTHROPIC_API_KEY',
+    placeholder: 'Authenticated OmniRoute bridge',
+    docsUrl: '',
+    envVar: 'OPENAI_COMPAT_API_KEY',
   },
   gemini: {
     placeholder: 'AIza...',
@@ -54,13 +55,15 @@ export default function Settings() {
   const { data: providers } = trpc.providers.list.useQuery(undefined, { enabled: isAuthenticated });
 
   const saveMutation = trpc.apiKeys.save.useMutation({
-    onSuccess: (_, vars: { providerSlug: AiProviderSlug; key: string; label?: string }) => {
+    onSuccess: (_, vars) => {
+      if (!vars) return;
       toast.success(`${PROVIDER_CONFIGS[vars.providerSlug]?.name} key saved securely`);
       setInputValues((prev) => ({ ...prev, [vars.providerSlug]: '' }));
       setSaving((prev) => ({ ...prev, [vars.providerSlug]: false }));
       refetchKeys();
     },
-    onError: (err, vars: { providerSlug: AiProviderSlug; key: string; label?: string }) => {
+    onError: (err, vars) => {
+      if (!vars) return;
       toast.error(`Failed to save key: ${err.message}`);
       setSaving((prev) => ({ ...prev, [vars.providerSlug]: false }));
     },
@@ -77,7 +80,7 @@ export default function Settings() {
   const keyMetaMap = new Map(keyMeta?.map((k) => [k.providerSlug, k]) ?? []);
   const providerStatusMap = new Map(providers?.map((p) => [p.slug, p]) ?? []);
 
-  const handleSave = async (slug: AiProviderSlug) => {
+  const handleSave = async (slug: DirectKeyProviderSlug) => {
     const key = inputValues[slug]?.trim();
     if (!key || key.length < 8) {
       toast.error('API key must be at least 8 characters');

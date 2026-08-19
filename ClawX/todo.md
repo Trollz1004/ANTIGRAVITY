@@ -56,3 +56,21 @@
 - [x] Server-side key encryption using AES-256 before storing in DB
 - [x] Auto-inject user API keys into all provider calls after login
 - [x] Show provider status (Ready/No Key) based on stored keys on dashboard
+
+## Mission Control Bridge and Runtime Health
+
+- [x] Read and apply the canonical 2026-08-19 Claude synthesis before porting any completed work.
+- [ ] Keep runtime execution and production readiness explicitly blocked until the synthesis S1 doctrine-supersession gate is landed by the authorized lane; limit this branch to code, tests, documentation, and non-production probes.
+- [x] Define a server-side official-provider bridge contract for Claude, Gemini, GitHub Copilot, Meta AI, ChatGPT/OpenAI, and Manus without storing secrets in source, logs, or client code.
+- [x] Route normal work through the best suitable OmniRoute cloud model, including free cloud options where appropriate; expose self-hosted Ollama only as an explicit fail-safe path, never as the default task route.
+- [x] Use `http://localhost:20129/v1` as the configurable OpenAI-compatible OmniRoute bridge base; report the gateway and the optional `omniroute --mcp` process as separate health signals so an idle/offline MCP process is never misreported as a gateway outage.
+- [ ] Add a shared chat/broadcast surface that shows bridge availability, supported capabilities, and verified response state for each configured provider.
+- [x] Add Hermes and OpenClaw as operational integrations in the ClawX dashboard, with explicit connection state and last-seen status rather than simulated activity.
+- [x] Add a service-health contract for expected port, expected service identity, probe URL, timeout, and last verified response.
+- [x] Implement runtime checks that distinguish a port being down from an unexpected legacy service responding on the expected port, including the Date App backend expected on port 3200.
+- [ ] Surface service health and mismatches in the ClawX command center and make active faults visible to the governance workflow.
+- [x] Add tests for provider bridge configuration validation, provider-unavailable handling, port-down detection, and wrong-service-on-port detection.
+- [x] Document implemented bridge boundaries, unavailable official APIs, configuration names only, and verified versus unverified integrations.
+- [x] Evaluate OmniRoute's authenticated API-v1 root-status contract against its dedicated monitoring-health route; select one read-only probe for Mission Control and document configuration names only.
+- [x] Require authenticated runtime configuration for every real-time OmniRoute bridge request, and report missing or rejected gateway authorization separately from down and wrong-service states.
+- [x] Enforce official-governance isolation: official-platform votes must use their own designated bridge paths and must never be executed, impersonated, or substituted by OmniRoute; restrict OmniRoute routing to operational work for explicitly permitted integrations.

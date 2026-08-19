@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useLocation } from 'wouter';
-import { Bot, Brain, Sparkles, Search, Zap, Code2, MessageSquare, BarChart3, Radio, Shield } from 'lucide-react';
+import { Bot, Brain, Sparkles, Search, Zap, Code2, MessageSquare, BarChart3, Radio, Shield, Server } from 'lucide-react';
 
 const providerIcons: Record<string, React.ElementType> = {
   manus: Bot,
@@ -29,6 +29,7 @@ export default function Home() {
   const [, setLocation] = useLocation();
   const { data: providers, isLoading: providersLoading } = trpc.providers.list.useQuery();
   const { data: stats } = trpc.analytics.stats.useQuery();
+  const { data: operationalIntegrations } = trpc.operational.status.useQuery(undefined, { refetchInterval: 15_000 });
 
   const availableCount = providers?.filter((p) => p.isAvailable).length ?? 0;
   const totalRequests = stats?.reduce((sum, s) => sum + Number(s.totalRequests ?? 0), 0) ?? 0;
@@ -102,6 +103,49 @@ export default function Home() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      <div>
+        <h2 className="text-lg font-semibold mb-3">Operational Integrations</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {operationalIntegrations?.map((integration) => {
+            const connected = integration.status === 'connected';
+            const configured = integration.status !== 'not-configured';
+            return (
+              <Card key={integration.id} className="bg-card border-border">
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <Server className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-medium">{integration.name}</p>
+                        <p className="text-xs text-muted-foreground">{integration.detail}</p>
+                      </div>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className={
+                        connected
+                          ? 'border-green-500/30 text-green-500'
+                          : configured
+                            ? 'border-red-500/30 text-red-500'
+                            : 'border-amber-500/30 text-amber-500'
+                      }
+                    >
+                      {integration.status.replace('-', ' ').toUpperCase()}
+                    </Badge>
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Last seen:{' '}
+                    {integration.lastSeen ? new Date(integration.lastSeen).toLocaleString() : 'No verified response yet'}
+                  </p>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
       </div>
 
       {/* Provider Grid */}

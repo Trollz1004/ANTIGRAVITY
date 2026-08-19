@@ -65,6 +65,8 @@ export const messages = mysqlTable('messages', {
   content: text('content').notNull(),
   providerSlug: varchar('providerSlug', { length: 32 }),
   model: varchar('model', { length: 128 }),
+  executionProvider: varchar('executionProvider', { length: 64 }),
+  executionModel: varchar('executionModel', { length: 128 }),
   inputTokens: int('inputTokens'),
   outputTokens: int('outputTokens'),
   responseTimeMs: int('responseTimeMs'),
