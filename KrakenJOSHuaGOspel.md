@@ -25,6 +25,25 @@
 - Official votes are structurally isolated: the vote modules cannot import the operational bridge or model routing; ballots reject on server-side identity mismatch; nothing is binding until a Joshua-signed roster file exists.
 - No Anthropic key, no Claude through OmniRoute in any form (Claude Code provider Disabled, Claude Web at zero connections), no FCC/opusnot identifiers — all CI-enforced.
 
+## UPDATE — VERIFIED LIVE (same day, post-lift)
+
+Joshua lifted the runtime gate and started the server by hand. The judge then verified everything live on :3151:
+health UP · vote engine fails closed (identity 503, roster non-binding) · governance isolation real (official target via operational bridge = 404) · three harness lanes on the board · six-state service vocabulary truthful (OmniRoute UP 12ms identity-verified after the 15s probe fix; Ollama UP; down things say DOWN) · Playwright e2e 2/2 against the live server · dashboard header reads 3 HARNESSES · brain journals are exactly Hermes/OpenClaw/OpenCode from `.agents/journals/` (the longhand retired-bridge journal was purged and the role-wall scanner now catches the spelled-out name in data JSON).
+
+Additional landings after the original record: `d3304f8e` (OmniRoute probe budget), `faf759cd` (e2e strict-mode selectors), `c2a53dfb` (header count), `c119a87a` (council seat counter), `73c6c375` (retired-journal purge + scanner widening), `b40a34ad` (bootstrap below).
+
+## Restart protocol — the never-touch-Sabretooth-again piece
+
+`mission-control-v5/scripts/bootstrap.ps1` now brings up the full stack in order with health checks and self-heal between every step: OmniRoute → Ollama → Mission Control server (:3151, built client) → Electron dashboard → OpenClaw gateway (:18789, idempotent — in-use means already up, never doubled) → Hermes dashboard (:9119, auto-start when `HERMES_START_CMD` holds its launch command line; skipped with an honest log until then) → DateApp backend/frontend (best-effort) → cloudflared tunnel. `-Mode Watch` keeps re-checking and restarts anything that dies.
+
+**One-time install (Joshua, elevated PowerShell):**
+
+```
+pwsh -NoProfile -File C:\ANTIGRAVITY\mission-control-v5\scripts\install-bootstrap.ps1
+```
+
+That registers the logon task. After it: restart the PC, the whole stack comes back verified step by step, and the dashboard at http://localhost:3151 is the only surface anyone needs to touch. Set `HERMES_START_CMD` (user env var, full command line for the Python dashboard) to bring Hermes into the auto-start set.
+
 ## Runtime state — the one thing left
 
 S1 lift is **authorized** (Joshua delegated runtime authority to the judge lane; recorded in memory). The harness permission layer requires the server launch to come from Joshua's hands in this session.
