@@ -2,8 +2,8 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, resolve, join } from 'node:path';
 
 const root = resolve(process.argv[2] ?? '..');
-const scanRoots = ['server/src', 'client/src', 'scripts'];
-const sourceExtensions = new Set(['.ts', '.tsx', '.js', '.mjs', '.cjs', '.cmd', '.ps1', '.sh']);
+const scanRoots = ['server/src', 'client/src', 'scripts', 'server/data'];
+const sourceExtensions = new Set(['.ts', '.tsx', '.js', '.mjs', '.cjs', '.cmd', '.ps1', '.sh', '.json']);
 const retiredIdentifier = ['f', 'cc'].join('');
 const prohibitedKeyName = ['ANTHROPIC', 'API', 'KEY'].join('_');
 const sourceFiles = [];
@@ -24,7 +24,8 @@ const violations = [];
 const officialVoteName = /^official-vote.*\.(ts|tsx|js)$/;
 const importViolation = /(?:from\s+|import\s+)['"]\.\/(bridge|omniroute)\.js['"]/;
 const mutationPattern = /git\s+(push|merge|branch\s+.*(?:-d|--delete))/i;
-const retiredPattern = new RegExp(retiredIdentifier, 'i');
+// Also catch the retired identifier spelled out longhand, which a literal scan misses.
+const retiredPattern = new RegExp(`${retiredIdentifier}|free[ -]?claude`, 'i');
 const prohibitedKeyPattern = new RegExp(`${prohibitedKeyName}|sk-ant-[A-Za-z0-9_-]+`);
 
 for (const file of sourceFiles) {
