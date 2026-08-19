@@ -12,17 +12,10 @@ interface BridgeMessage {
 const TARGETS: { id: BridgeTarget; label: string; hint: string }[] = [
   { id: 'hermes', label: 'HERMES', hint: 'operational bridge' },
   { id: 'openclaw', label: 'OPENCLAW', hint: 'operational bridge' },
-  { id: 'claude', label: 'CLAUDE', hint: 'official governance bridge' },
-  { id: 'gemini', label: 'GEMINI', hint: 'official governance bridge' },
-  { id: 'github-copilot', label: 'GITHUB COPILOT', hint: 'official governance bridge' },
-  { id: 'meta-ai', label: 'META AI', hint: 'official governance bridge' },
-  { id: 'chatgpt', label: 'CHATGPT / OPENAI', hint: 'official governance bridge' },
-  { id: 'manus', label: 'MANUS', hint: 'official governance bridge' },
 ];
 
 function statusLabel(status: BridgeStatus | undefined): string {
   if (!status) return 'CHECKING';
-  if (status.kind === 'official-governance') return 'OFFICIAL BRIDGE';
   return status.state.toUpperCase().replace('-', ' ');
 }
 
@@ -117,11 +110,7 @@ export default function BridgePanel() {
         <div className="brain__result" ref={logRef} style={{ maxHeight: '50vh', overflowY: 'auto' }}>
           {messages.length === 0 && (
             <div className="services__empty">
-              {activeStatus?.kind === 'official-governance'
-                ? 'OFFICIAL GOVERNANCE VOTES STAY ON THE DESIGNATED PLATFORM BRIDGE.'
-                : canSend
-                  ? 'SEND A PROMPT TO OPEN THE OPERATIONAL BRIDGE.'
-                  : activeStatus?.detail ?? 'CHECKING BRIDGE STATUS…'}
+              {canSend ? 'SEND A PROMPT TO OPEN THE OPERATIONAL BRIDGE.' : activeStatus?.detail ?? 'CHECKING BRIDGE STATUS…'}
             </div>
           )}
           {messages.map((m, i) => (
