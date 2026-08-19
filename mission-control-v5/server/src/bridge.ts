@@ -50,7 +50,7 @@ function configuredUrl(name: string, fallback?: string): string | undefined {
 }
 
 function definitions(): BridgeDefinition[] {
-  const openclawPort = Number(process.env.OPENCLAW_PORT ?? 9120) || 9120;
+  const openclawPort = Number(process.env.OPENCLAW_PORT ?? 18789) || 18789;
   const hermesPort = Number(process.env.HERMES_PORT ?? 9119) || 9119;
   return [
     { id: 'fcc', label: 'FCC-CLAUDE', kind: 'operational', sendEnabled: true },

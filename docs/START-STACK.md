@@ -113,12 +113,13 @@ the site 403s if Vite's allowedHosts is wrong:
 
     curl -s -o nul -w "youandinotai.com -> HTTP %%{http_code}\n" https://youandinotai.com/
 
-### 7. OpenClaw - do NOT start a gateway
+### 7. OpenClaw - do NOT start a second gateway
 
-ClawX starts the gateway itself on :18789 at login. Running a second one makes
-both write `openclaw.json` and produces the `.clobbered` backups. For the TUI:
-
-    "C:\Program Files\ClawX\resources\cli\openclaw.cmd" tui
+OpenClaw runs on its factory port :18789 (its own Windows startup task). If
+:18789 answers, it is already up - do not start another gateway; two gateways
+both write `openclaw.json` and produce the `.clobbered` backups. Its own web
+UI at http://localhost:18789/ is the dashboard. Note: "ClawX" is Josh's
+governance platform (the council page), NOT this gateway or any launcher of it.
 
 ### 8. llama.cpp embeddings (:8081) - optional
 
@@ -143,7 +144,7 @@ the auto-launch. Everything stays visible and closable; nothing hides.
 | 3151  | Mission Control             |
 | 8082  | FCC proxy                   |
 | 9119  | Hermes dashboard            |
-| 18789 | OpenClaw gateway (ClawX)    |
+| 18789 | OpenClaw gateway + web UI   |
 | 3200  | DateApp frontend            |
 | 8000  | DateApp backend             |
 | 8081  | llama.cpp embeddings        |
