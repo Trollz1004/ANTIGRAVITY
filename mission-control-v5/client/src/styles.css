@@ -994,6 +994,19 @@ body {
   background: var(--bg-hover);
 }
 
+.service-card--mismatch {
+  box-shadow: inset 3px 0 0 var(--amber);
+}
+
+.service-card--auth-required,
+.service-card--auth-rejected {
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.service-card--not-configured {
+  box-shadow: inset 3px 0 0 var(--text-faint);
+}
+
 .service-card__top {
   display: flex;
   align-items: center;
@@ -1024,6 +1037,22 @@ body {
 .service-card--down .service-card__status {
   color: var(--red);
   border-color: rgba(255, 59, 59, 0.4);
+}
+
+.service-card--mismatch .service-card__status {
+  color: var(--amber);
+  border-color: rgba(255, 176, 32, 0.55);
+}
+
+.service-card--auth-required .service-card__status,
+.service-card--auth-rejected .service-card__status {
+  color: var(--accent);
+  border-color: rgba(0, 229, 255, 0.45);
+}
+
+.service-card--not-configured .service-card__status {
+  color: var(--text-faint);
+  border-color: var(--border-strong);
 }
 
 .service-card__url {
@@ -1116,6 +1145,22 @@ body {
   border: 1px solid var(--border-strong);
   padding: 2px 6px;
   color: var(--text-dim);
+}
+
+.bridge-state--ready {
+  color: var(--green);
+  border-color: rgba(0, 255, 136, 0.4);
+}
+
+.bridge-state--unavailable {
+  color: var(--red);
+  border-color: rgba(255, 59, 59, 0.4);
+}
+
+.bridge-state--not-configured,
+.bridge-state--checking {
+  color: var(--amber);
+  border-color: rgba(255, 176, 32, 0.45);
 }
 
 .brain-card__url {

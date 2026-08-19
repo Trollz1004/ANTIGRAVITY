@@ -17,6 +17,8 @@ import { buildKnowledgeGraph, previewFile, searchKnowledge } from './knowledge.j
 import { describeExecutors, describeProviders, routerLive } from './omniroute.js';
 import { PIECES_MCP_URL, pingPieces } from './pieces.js';
 import { registerMcpServer } from './mcpServer.js';
+import { registerBridgeRoutes } from './bridge.js';
+import { pingService, type ServiceStatus } from './service-health.js';
 import { loadState } from './store.js';
 import { activeCount, createTask, deleteTask, listTasks, moveTask, retryTask, subscribe } from './swarm.js';
 import type { AgentDef, Column } from './types.js';
@@ -174,21 +176,6 @@ app.get('/api/health', (_req, res) => {
 });
 
 // ── Services reachability ─────────────────────────────────────────────────────
-interface ServiceStatus {
-  name: string;
-  url: string;
-  /**
-   * Where the OPEN link goes. This is not always the probed URL: an API
-   * endpoint answers a token-bearing probe but shows a browser only an auth
-   * error, so link the human page and probe the API.
-   */
-  openUrl: string;
-  lanReachable: boolean;
-  status: 'up' | 'down';
-  ms: number;
-  detail: string;
-}
-
 /**
  * LAN address of this node, DETECTED — never hardcoded.
  *
@@ -216,108 +203,63 @@ function detectLanHost(): string {
 }
 
 const LAN_HOST = (process.env.NODE_LAN_HOST ?? detectLanHost()).trim();
-
-function lanUrl(url: string): string {
-  return url.replace(/(127\.0\.0\.1|localhost)/, LAN_HOST);
-}
-
-async function pingService(
-  name: string,
-  url: string,
-  timeoutMs = 2500,
-  lanReachable = false,
-  headers: Record<string, string> = {},
-  openOverride?: string,
-): Promise<ServiceStatus> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  const started = Date.now();
-  const openUrl = openOverride ?? (lanReachable ? lanUrl(url) : url);
-  try {
-    const res = await fetch(url, { signal: controller.signal, headers });
-    const ms = Date.now() - started;
-    // 401/403 means the service answered and enforced auth — that is UP, not
-    // down. Judging liveness purely by 2xx reported healthy gateways as dead.
-    const authGated = res.status === 401 || res.status === 403;
-    let detail = res.ok ? 'OK' : authGated ? `auth required (HTTP ${res.status})` : `HTTP ${res.status}`;
-    // Verify by content where the body says something meaningful.
-    if (res.ok) {
-      try {
-        const body: any = await res.json();
-        const count = Array.isArray(body?.data)
-          ? body.data.length
-          : Array.isArray(body?.models)
-            ? body.models.length
-            : null;
-        if (count !== null) detail = `OK · ${count} models`;
-      } catch {
-        /* not JSON — plain OK stands */
-      }
-    }
-    return {
-      name,
-      url,
-      openUrl,
-      lanReachable,
-      status: res.ok || authGated ? 'up' : 'down',
-      ms,
-      detail,
-    };
-  } catch (err) {
-    const ms = Date.now() - started;
-    const aborted = err instanceof Error && err.name === 'AbortError';
-    return {
-      name,
-      url,
-      openUrl,
-      lanReachable,
-      status: 'down',
-      ms,
-      detail: aborted ? `timeout (${timeoutMs}ms)` : err instanceof Error ? err.message : String(err),
-    };
-  } finally {
-    clearTimeout(timer);
-  }
-}
+const OMNIROUTE_GATEWAY_BASE_URL = (process.env.OPENAI_COMPAT_BASE_URL ?? 'http://localhost:20129/v1').replace(/\/+$/, '');
 
 app.get('/api/services', async (_req, res) => {
   const openclawPort = Number(process.env.OPENCLAW_PORT ?? 9120) || 9120;
+  const hermesPort = Number(process.env.HERMES_PORT ?? 9119) || 9119;
+  const dateAppHealthUrl = process.env.DATE_APP_HEALTH_URL ?? 'http://192.168.0.15:3200/health';
   // Per-service ping timeout. OmniRoute's /v1/models aggregates models from
   // backends and answers in ~3s, so it needs a longer window than a fast
   // fail-closed ECONNREFUSED on an idle port. Others fail fast, keeping the
   // panel snappy.
-  const services = [
-    { name: 'Hermes', url: 'http://127.0.0.1:9119', timeoutMs: 2500, lan: false },
-    { name: 'OpenClaw', url: `http://127.0.0.1:${openclawPort}`, timeoutMs: 2500, lan: false },
-    // OmniRoute is probed at the address it advertises as its Local Server and
-    // that every other node actually uses — not loopback. (Its dashboard also
-    // lists 172.17.x / 172.25.x; those are the Docker and WSL bridges, not the
-    // LAN.) DHCP assigns this, so NODE_LAN_HOST overrides it.
-    // PROBE ON LOOPBACK. This server runs on the node, so 127.0.0.1 is always
-    // correct and instant; only the clickable "open" link below needs the LAN
-    // address, because the dashboard is opened from the laptop.
-    { name: 'OmniRoute', url: 'http://127.0.0.1:20128/v1/models', timeoutMs: 4000, lan: true },
-    { name: 'Ollama', url: 'http://127.0.0.1:11434/api/tags', timeoutMs: 2500, lan: false },
-  ];
-  // The gateway requires auth on /v1/*. Probing without the key returns 401 and
-  // reads as DOWN on a perfectly healthy gateway; with it, the card can report
-  // the live model count instead of a status code.
-  // `||`, not `??`: OPENAI_COMPAT_API_KEY is present but empty in .env, and `??`
-  // would hand back that empty string instead of falling through to the real key.
+  // The authenticated API-v1 root returns basic gateway status. It is separate
+  // from the inference gateway and the optional omniroute MCP process.
   const omniKey = (process.env.OPENAI_COMPAT_API_KEY ?? '').trim() || (process.env.OMNIROUTE_API_KEY ?? '').trim();
   const results = await Promise.all([
-    ...services.map((s) =>
-      pingService(
-        s.name,
-        s.url,
-        s.timeoutMs,
-        s.lan,
-        s.name === 'OmniRoute' && omniKey ? { authorization: `Bearer ${omniKey}` } : {},
-        // /v1/models is an API: a browser cannot send the token and just sees
-        // AUTH_002. Send the click to the gateway UI instead.
-        s.name === 'OmniRoute' ? `http://${LAN_HOST}:20128/dashboard` : undefined,
-      ),
-    ),
+    pingService({
+      name: 'Hermes',
+      url: `http://127.0.0.1:${hermesPort}`,
+      timeoutMs: 2500,
+      anyHttpResponseMeansReachable: true,
+    }),
+    pingService({
+      name: 'OpenClaw',
+      url: `http://127.0.0.1:${openclawPort}`,
+      timeoutMs: 2500,
+      anyHttpResponseMeansReachable: true,
+    }),
+    pingService({
+      name: 'OmniRoute',
+      url: 'http://127.0.0.1:20128/api/v1',
+      openUrl: `http://${LAN_HOST}:20128/dashboard`,
+      lanReachable: true,
+      timeoutMs: 4000,
+      headers: omniKey ? { authorization: `Bearer ${omniKey}` } : {},
+      requiresAuth: true,
+      authConfigured: Boolean(omniKey),
+    }),
+    // This is intentionally independent from the gateway. An idle or offline
+    // `omniroute --mcp` process must never turn the main cloud gateway red.
+    pingService({
+      name: 'OmniRoute MCP',
+      url: process.env.OMNIROUTE_MCP_STATUS_URL?.trim() ?? '',
+      timeoutMs: 2500,
+      anyHttpResponseMeansReachable: true,
+    }),
+    pingService({
+      name: 'Ollama Fail-safe',
+      url: 'http://127.0.0.1:11434/api/tags',
+      timeoutMs: 2500,
+    }),
+    pingService({
+      name: 'Date App Backend',
+      url: dateAppHealthUrl,
+      openUrl: dateAppHealthUrl,
+      lanReachable: true,
+      timeoutMs: 3000,
+      expectedServiceMarker: { field: 'status', allowedValues: ['ok', 'degraded'] },
+    }),
     // Pieces LTM speaks MCP, not plain HTTP — a raw GET would 400. Probe it with
     // a real initialize roundtrip and fold the result into the services list.
     pingPieces(9_000).then(async (up) => {
@@ -327,13 +269,14 @@ app.get('/api/services', async (_req, res) => {
         url: PIECES_MCP_URL,
         openUrl: PIECES_MCP_URL, // loopback-only: Pieces OS binds 127.0.0.1
         lanReachable: false,
-        status: (up ? 'up' : 'down') as 'up' | 'down',
+        status: (up ? 'up' : 'down') as ServiceStatus['status'],
         ms: Date.now() - started,
         detail: up ? 'OK' : 'MCP initialize failed',
+        checkedAt: new Date().toISOString(),
       };
     }),
   ]);
-  res.json({ services: results });
+  res.json({ services: results, gatewayBaseUrl: OMNIROUTE_GATEWAY_BASE_URL });
 });
 
 // ── Agent library ─────────────────────────────────────────────────────────────
@@ -421,6 +364,9 @@ app.get('/api/events', (req: Request, res: Response) => {
 
 // ── Brain hub (Pieces LTM + per-platform journals) ────────────────────────────
 registerBrainRoutes(app);
+
+// ── Bridge hub (official-platform visibility + operational bridges) ───────────
+registerBridgeRoutes(app);
 
 // ── Mission Control AS an MCP server (expose to other AI platforms) ──────────
 // Any agent with a streamable-HTTP MCP client can POST to /api/mcp and pull the

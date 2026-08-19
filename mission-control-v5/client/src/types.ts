@@ -79,9 +79,11 @@ export interface ServiceStatus {
   url: string;
   openUrl?: string;
   lanReachable?: boolean;
-  status: 'up' | 'down';
+  status: 'up' | 'down' | 'mismatch' | 'auth-required' | 'auth-rejected' | 'not-configured';
   ms: number;
   detail: string;
+  checkedAt?: string;
+  expectedServiceMarker?: string;
 }
 
 export interface Health {
@@ -177,8 +179,29 @@ export interface BrainMcpStatus {
   serverInfo: { name: string; version: string };
 }
 
+export type BridgeTarget =
+  | 'fcc'
+  | 'hermes'
+  | 'openclaw'
+  | 'claude'
+  | 'gemini'
+  | 'github-copilot'
+  | 'meta-ai'
+  | 'chatgpt'
+  | 'manus';
+
+export interface BridgeStatus {
+  id: BridgeTarget;
+  label: string;
+  kind: 'operational' | 'official-governance';
+  state: 'ready' | 'unavailable' | 'not-configured';
+  sendEnabled: boolean;
+  lastSeen: string | null;
+  detail: string;
+}
+
 export type BridgeMessage = {
-  sender: 'user' | 'fcc-claude' | 'openclaw';
+  sender: string;
   text: string;
   timestamp: string;
 };

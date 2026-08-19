@@ -1,69 +1,196 @@
 /**
- * BRIDGE HUB — Wires external AI CLI tools (fcc-claude, OpenClaw) into the MC v5 API.
- * This allows the dashboard to act as a unified chat interface for the bridge.
+ * BRIDGE HUB — operational bridges and official-platform visibility.
+ *
+ * Official governance votes are deliberately not proxied through OmniRoute or
+ * any general bridge. The dashboard may show their connection state, but vote
+ * execution remains on each platform's designated official bridge.
  */
-import { exec } from 'node:child_process';
+import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import type { Express } from 'express';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
-export async function registerBridgeRoutes(app: Express): Promise<void> {
-  // ── FCC-Claude Bridge ──────────────────────────────────────────────────────
-  // Route: POST /api/bridge/fcc
-  // Body: { prompt: string }
-  app.post('/api/bridge/fcc', async (req, res) => {
-    try {
-      const { prompt } = req.body;
-      if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
+export const BRIDGE_TARGET_IDS = [
+  'fcc',
+  'hermes',
+  'openclaw',
+  'claude',
+  'gemini',
+  'github-copilot',
+  'meta-ai',
+  'chatgpt',
+  'manus',
+] as const;
 
-      // We wrap the prompt in a way that the FCC CLI can handle it
-      // Assuming 'fcc-claude' is on the system PATH
-      const { stdout, stderr } = await execAsync(`fcc-claude "${prompt.replace(/"/g, '\\"')}"`);
-      
-      res.json({ 
-        sender: 'fcc-claude',
-        text: stdout || stderr,
-        timestamp: new Date().toISOString()
-      });
-    } catch (err) {
-      res.status(502).json({ 
-        error: 'FCC-Claude bridge failure', 
-        detail: err instanceof Error ? err.message : String(err) 
-      });
-    }
+export type BridgeTargetId = (typeof BRIDGE_TARGET_IDS)[number];
+export type BridgeState = 'ready' | 'unavailable' | 'not-configured';
+
+export interface BridgeStatus {
+  id: BridgeTargetId;
+  label: string;
+  kind: 'operational' | 'official-governance';
+  state: BridgeState;
+  sendEnabled: boolean;
+  lastSeen: string | null;
+  detail: string;
+}
+
+interface BridgeDefinition {
+  id: BridgeTargetId;
+  label: string;
+  kind: BridgeStatus['kind'];
+  url?: string;
+  sendEnabled: boolean;
+}
+
+function configuredUrl(name: string, fallback?: string): string | undefined {
+  const value = process.env[name]?.trim();
+  return value || fallback;
+}
+
+function definitions(): BridgeDefinition[] {
+  const openclawPort = Number(process.env.OPENCLAW_PORT ?? 9120) || 9120;
+  const hermesPort = Number(process.env.HERMES_PORT ?? 9119) || 9119;
+  return [
+    { id: 'fcc', label: 'FCC-CLAUDE', kind: 'operational', sendEnabled: true },
+    {
+      id: 'hermes',
+      label: 'HERMES',
+      kind: 'operational',
+      url: configuredUrl('HERMES_BRIDGE_URL', `http://127.0.0.1:${hermesPort}/api/chat`),
+      sendEnabled: Boolean(process.env.HERMES_BRIDGE_URL?.trim()),
+    },
+    {
+      id: 'openclaw',
+      label: 'OPENCLAW',
+      kind: 'operational',
+      url: configuredUrl('OPENCLAW_BRIDGE_URL', `http://127.0.0.1:${openclawPort}/api/chat`),
+      sendEnabled: true,
+    },
+    { id: 'claude', label: 'CLAUDE', kind: 'official-governance', sendEnabled: false },
+    { id: 'gemini', label: 'GEMINI', kind: 'official-governance', sendEnabled: false },
+    { id: 'github-copilot', label: 'GITHUB COPILOT', kind: 'official-governance', sendEnabled: false },
+    { id: 'meta-ai', label: 'META AI', kind: 'official-governance', sendEnabled: false },
+    { id: 'chatgpt', label: 'CHATGPT / OPENAI', kind: 'official-governance', sendEnabled: false },
+    { id: 'manus', label: 'MANUS', kind: 'official-governance', sendEnabled: false },
+  ];
+}
+
+async function reachability(url: string): Promise<boolean> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 1500);
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    return response.status > 0;
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function fccAvailable(): Promise<boolean> {
+  try {
+    await execFileAsync('fcc-claude', ['--help'], { timeout: 1500 });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Status does not send prompts, mutate configuration, or resolve model routes. */
+export async function getBridgeStatuses(): Promise<BridgeStatus[]> {
+  const now = new Date().toISOString();
+  return Promise.all(
+    definitions().map(async (definition): Promise<BridgeStatus> => {
+      if (definition.kind === 'official-governance') {
+        return {
+          ...definition,
+          state: 'not-configured',
+          sendEnabled: false,
+          lastSeen: null,
+          detail: 'official bridge required; not routed through OmniRoute',
+        };
+      }
+
+      if (definition.id === 'fcc') {
+        const available = await fccAvailable();
+        return {
+          ...definition,
+          state: available ? 'ready' : 'unavailable',
+          lastSeen: available ? now : null,
+          detail: available ? 'local CLI bridge available' : 'local CLI bridge unavailable',
+        };
+      }
+
+      if (!definition.url || (definition.id === 'hermes' && !definition.sendEnabled)) {
+        return {
+          ...definition,
+          state: 'not-configured',
+          lastSeen: null,
+          detail: 'bridge URL not configured',
+        };
+      }
+
+      const available = await reachability(definition.url);
+      return {
+        ...definition,
+        state: available ? 'ready' : 'unavailable',
+        lastSeen: available ? now : null,
+        detail: available ? 'operational bridge reachable' : 'operational bridge unavailable',
+      };
+    }),
+  );
+}
+
+function bridgeDefinition(target: string): BridgeDefinition | undefined {
+  return definitions().find((definition) => definition.id === target);
+}
+
+function cleanPrompt(value: unknown): string | undefined {
+  return typeof value === 'string' && value.trim() ? value.trim() : undefined;
+}
+
+async function forwardOperationalPrompt(definition: BridgeDefinition, prompt: string): Promise<{ sender: string; text: string }> {
+  if (definition.id === 'fcc') {
+    const { stdout, stderr } = await execFileAsync('fcc-claude', [prompt], { timeout: 120_000, maxBuffer: 1_000_000 });
+    return { sender: 'fcc-claude', text: (stdout || stderr || 'No bridge response.').trim() };
+  }
+
+  if (!definition.url) throw new Error('bridge not configured');
+  const response = await fetch(definition.url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: prompt }),
+  });
+  if (!response.ok) throw new Error('bridge request failed');
+  const data = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+  const text = typeof data.reply === 'string' ? data.reply : typeof data.text === 'string' ? data.text : null;
+  if (!text) throw new Error('bridge response invalid');
+  return { sender: definition.id, text };
+}
+
+export function registerBridgeRoutes(app: Express): void {
+  app.get('/api/bridge/status', async (_req, res) => {
+    res.json({ bridges: await getBridgeStatuses() });
   });
 
-  // ── OpenClaw Bridge ─────────────────────────────────────────────────────────
-  // Route: POST /api/bridge/openclaw
-  // Body: { prompt: string }
-  app.post('/api/bridge/openclaw', async (req, res) => {
+  app.post('/api/bridge/:target', async (req, res) => {
+    const definition = bridgeDefinition(req.params.target);
+    if (!definition) return res.status(404).json({ error: 'Unknown bridge target.' });
+    if (definition.kind === 'official-governance') {
+      return res.status(409).json({ error: 'Official governance votes require their designated platform bridge.' });
+    }
+    if (!definition.sendEnabled) return res.status(409).json({ error: 'Operational bridge is not configured.' });
+
+    const prompt = cleanPrompt(req.body?.prompt);
+    if (!prompt) return res.status(400).json({ error: 'Missing prompt.' });
     try {
-      const { prompt } = req.body;
-      if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
-
-      // OpenClaw is usually driven via its own API or a CLI wrapper
-      // Here we implement a placeholder that calls the local OpenClaw API if configured
-      const openclawPort = process.env.OPENCLAW_PORT || '18789';
-      const response = await fetch(`http://127.0.0.1:${openclawPort}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: prompt })
-      });
-
-      if (!response.ok) throw new Error(`OpenClaw responded with ${response.status}`);
-      
-      const data = await response.json() as any;
-      res.json({
-        sender: 'openclaw',
-        text: data.reply || data.text || 'No response from OpenClaw',
-        timestamp: new Date().toISOString()
-      });
-    } catch (err) {
-      res.status(502).json({ 
-        error: 'OpenClaw bridge failure', 
-        detail: err instanceof Error ? err.message : String(err) 
-      });
+      const reply = await forwardOperationalPrompt(definition, prompt);
+      return res.json({ ...reply, timestamp: new Date().toISOString() });
+    } catch {
+      return res.status(502).json({ error: 'Bridge request failed. Check its operational status.' });
     }
   });
 }
