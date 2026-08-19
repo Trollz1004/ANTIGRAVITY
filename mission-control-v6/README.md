@@ -84,8 +84,8 @@ You never have to remember how to restart anything — the fix travels with the 
 Only **expected** services page you ("down that shouldn't be"). Standby
 services stay visible on the board in gray.
 
-OpenClaw's port is whatever you run it on: set `OPENCLAW_PORT=9120` (or any
-port) in the environment and both the probe and the dashboard link follow.
+OpenClaw stays on its factory port :18789. `OPENCLAW_PORT` exists as an
+override for the probe and dashboard link, but do not move it off :18789.
 
 ## Configuration
 

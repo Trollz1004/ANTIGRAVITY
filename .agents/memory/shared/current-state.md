@@ -32,7 +32,7 @@
 
 - OmniRouter :11436 — token routing (start: scripts/start-omni-router.ps1)
 - Agent Hub :3130 — task dispatch + leads CRM
-- Hermes workspace :3000, dashboard :9119
+- Hermes dashboard :9119 (factory port; the :3000 workspace GUI is retired)
 - FCC proxy :8082
 - YouAndINotAI API :8000
 - Ollama :11434

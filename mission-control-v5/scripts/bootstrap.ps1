@@ -12,9 +12,9 @@
     2. Ollama                   :11434   ollama serve
     3. Mission Control server   :3151    tsx production server + built client
     4. Electron dashboard               the ONLY visible window (loads :3151)
-    5. OpenClaw gateway         :9120    openclaw gateway (moved off :9119 to
-                                         avoid colliding with the Hermes
-                                         dashboard that you launch manually)
+    5. OpenClaw gateway         :18789   factory port; health-check only (if
+                                         the port answers it is already up —
+                                         never start a second gateway)
     6. DateApp backend          :8000    uvicorn (needs Docker Postgres/Redis,
                                          best-effort)
     7. DateApp frontend         :3200    static/dev frontend (best-effort; PORT
@@ -419,10 +419,10 @@ function Invoke-Deploy {
   Ensure-Service -Name 'Ollama' -Port 11434 -HealthUrl 'http://127.0.0.1:11434/api/tags' `
     -TimeoutSec 60 -Start ${function:Start-Ollama} -Heal {}
 
-  # OpenClaw: ClawX auto-starts THE gateway on :18789 at every login. Never
-  # start a second gateway here — dual gateways fight over openclaw.json and
-  # produce the .clobbered backups. Health-check only, no Start block.
-  Ensure-Service -Name 'OpenClaw (ClawX)' -Port 18789 -HealthUrl '' `
+  # OpenClaw: runs on its factory port :18789 (its own Windows startup task).
+  # Never start a second gateway here — dual gateways fight over openclaw.json
+  # and produce the .clobbered backups. Health-check only, no Start block.
+  Ensure-Service -Name 'OpenClaw' -Port 18789 -HealthUrl '' `
     -TimeoutSec 30 -Start {} -Heal {}
 
   Ensure-Service -Name 'DateAppBackend' -Port 8000 -HealthUrl 'http://127.0.0.1:8000/api/v1/health' `
@@ -447,7 +447,7 @@ function Invoke-Watch {
       @{ Name='OmniRoute';           Port=20128; Url=''; Start=${function:Start-Omniroute} },
       @{ Name='MissionControlServer'; Port=3151; Url='http://localhost:3151/api/health'; Start=${function:Start-MissionControlServer} },
       @{ Name='Ollama';              Port=11434; Url='http://127.0.0.1:11434/api/tags'; Start=${function:Start-Ollama} },
-      @{ Name='OpenClaw (ClawX)';    Port=18789; Url=''; Start={} },
+      @{ Name='OpenClaw';            Port=18789; Url=''; Start={} },
       @{ Name='DateAppBackend';      Port=8000;  Url='http://127.0.0.1:8000/api/v1/health'; Start=${function:Start-DateAppBackend} },
       @{ Name='DateAppFrontend';     Port=3200;  Url='http://127.0.0.1:3200/'; Start=${function:Start-DateAppFrontend} }
     )

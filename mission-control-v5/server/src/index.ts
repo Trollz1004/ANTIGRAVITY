@@ -205,7 +205,7 @@ const LAN_HOST = (process.env.NODE_LAN_HOST ?? detectLanHost()).trim();
 const OMNIROUTE_GATEWAY_BASE_URL = (process.env.OPENAI_COMPAT_BASE_URL ?? 'http://localhost:20129/v1').replace(/\/+$/, '');
 
 app.get('/api/services', async (_req, res) => {
-  const openclawPort = Number(process.env.OPENCLAW_PORT ?? 9120) || 9120;
+  const openclawPort = Number(process.env.OPENCLAW_PORT ?? 18789) || 18789;
   const hermesPort = Number(process.env.HERMES_PORT ?? 9119) || 9119;
   const dateAppHealthUrl = process.env.DATE_APP_HEALTH_URL ?? 'http://192.168.0.15:3200/health';
   const oneminShimStatusUrl = process.env.ONEMIN_SHIM_STATUS_URL?.trim() ?? '';

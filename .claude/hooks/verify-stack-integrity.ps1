@@ -50,7 +50,7 @@ if ($masked -eq 0) { Ok 'no masked/redacted values saved as credentials' }
 # Two gateways on one config file is how openclaw.json got clobbered.
 Head 'Single-instance rules'
 $gw = @(Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'openclaw.*gateway' })
-if ($gw.Count -gt 1) { Bad "$($gw.Count) OpenClaw gateways running" 'ClawX owns :18789 - kill the extras' } else { Ok 'single OpenClaw gateway' }
+if ($gw.Count -gt 1) { Bad "$($gw.Count) OpenClaw gateways running" 'OpenClaw owns :18789 (factory port) - kill the extras' } else { Ok 'single OpenClaw gateway' }
 $omni = @(Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'omniroute.*(serve|server-ws)' })
 if ($omni.Count -gt 2) { Warn "$($omni.Count) OmniRoute processes - desktop app AND CLI may both be running" 'run one or the other, not both' } else { Ok 'OmniRoute instance count sane' }
 

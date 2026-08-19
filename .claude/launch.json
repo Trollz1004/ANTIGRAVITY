@@ -41,7 +41,7 @@
       "url": "http://127.0.0.1:8082"
     },
     {
-      "name": "openclaw-clawx",
+      "name": "openclaw",
       "port": 18789,
       "url": "http://127.0.0.1:18789"
     }

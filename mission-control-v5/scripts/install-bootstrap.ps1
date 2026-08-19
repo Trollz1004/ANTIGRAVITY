@@ -7,7 +7,7 @@
   Registers a single hidden scheduled task that fires at logon and runs the
   self-healing supervisor (bootstrap.ps1 -Mode Watch). The supervisor's first
   pass deploys the whole stack (OmniRoute, Ollama, v5 server, Electron dashboard,
-  OpenClaw :9120, DateApp backend/frontend, youandinotai tunnel) and then keeps
+  OpenClaw :18789, DateApp backend/frontend, youandinotai tunnel) and then keeps
   health-checking and restarting anything that dies — including Electron.
 
   It also removes the stale duplicate Mission Control / DateApp scheduled tasks

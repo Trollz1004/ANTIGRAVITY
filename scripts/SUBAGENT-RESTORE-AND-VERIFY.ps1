@@ -80,7 +80,6 @@ docker system df 2>&1 | ForEach-Object { L $_ }
 L '--- compose up -d ---'
 docker-compose --env-file .env.docker up -d 2>&1 | Select-Object -Last 6 | ForEach-Object { L $_ }
 $targets = @(
-  @{n='workspace :3000'; u='http://127.0.0.1:3000/'},
   @{n='gateway  :8642';  u='http://127.0.0.1:8642/health'},
   @{n='dashbrd  :9119';  u='http://127.0.0.1:9119/api/status'}
 )
