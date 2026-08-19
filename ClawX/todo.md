@@ -74,3 +74,21 @@
 - [x] Evaluate OmniRoute's authenticated API-v1 root-status contract against its dedicated monitoring-health route; select one read-only probe for Mission Control and document configuration names only.
 - [x] Require authenticated runtime configuration for every real-time OmniRoute bridge request, and report missing or rejected gateway authorization separately from down and wrong-service states.
 - [x] Enforce official-governance isolation: official-platform votes must use their own designated bridge paths and must never be executed, impersonated, or substituted by OmniRoute; restrict OmniRoute routing to operational work for explicitly permitted integrations.
+
+## Delivery, S1 Draft, and Post-Reinstall Alignment
+
+- [ ] Deliver `manus/call-layer` as a portable git bundle and plain patch fallback before any further implementation work; never push or commit to `main`.
+- [x] Diagnose the Gemini ballot empty-payload path, reuse the known working request shape, and run one explicitly non-production validation ballot with a sanitized audit artifact.
+- [x] Draft the S1 doctrine-supersession patch for stale root guidance and council-packet sections without landing the runtime gate.
+- [x] Rewrite the Hermes, OpenClaw, and OpenCode harness contracts for the post-reinstall topology, and draft the FCC contract or a retirement note.
+- [x] Add an identity-aware Mission Control health card for `onemin-shim` using its configured status URL and `NOT CONFIGURED` semantics.
+- [x] Maintain a working-page delivery record that marks each requested item DELIVERED, DRAFTED, or BLOCKED with evidence and no secrets.
+- [x] Ensure every S1 draft header and replacement contract states that `C:\ANTIGRAVITY` is the sole canonical working tree; label all F-drive claims as historical, superseded, and non-executable.
+- [x] Remove Pieces LTM as an active Mission Control dependency and replace its dashboard/API contract with repository knowledge and Graphy/Obsidian-compatible status.
+- [x] Give Hermes, OpenClaw, and OpenCode independent repository `STATE.md` journals that are read at session start and written at session end.
+- [x] Require the skills-first readiness sequence in each harness contract: i-have-adhd token-saving discipline, Superpowers brainstorming, Agent-Reach, browser-use cookie-sync where authenticated browser work is needed, and find/create-skill discovery through skills.sh, ClawHub, and the Hermes skill hub.
+- [x] Install the user-specified `i-have-adhd`, Agent-Reach, find-skills, TDD, browser-use, brainstorming, and systematic-debugging skills into the repository skill tree after reviewing their skill-installation instructions.
+- [x] State that every harness must load the task-relevant skills before planning or assigning subagents, and record the loaded skills in its end-of-session journal entry.
+- [x] Audit active root instructions, agent contracts, Mission Control runtime scripts, and configuration examples for executable stale paths, retired services, old profiles, and conflicting authority rules; replace or explicitly supersede every confirmed hit.
+- [x] Reconcile `ops/skills/skills-hub-reference.md` with the installed skills and add the user-specified skills to its authoritative catalog.
+- [x] Provide Hermes a documented, verified skill-authoring workflow so it can create or update repository skill/configuration artifacts without a recurring permission-warning loop.

@@ -155,7 +155,7 @@ let cache: { graph: KnowledgeGraph; at: number } | null = null;
 
 export function buildKnowledgeGraph(force = false): KnowledgeGraph {
   if (!force && cache && Date.now() - cache.at < CACHE_TTL_MS) return cache.graph;
-  const nodes: KnowledgeNode[] = [{ id: '', name: 'ANTIGRAVITY', kind: 'root', description: 'Repo root — F:\\ANTIGRAVITY' }];
+  const nodes: KnowledgeNode[] = [{ id: '', name: 'ANTIGRAVITY', kind: 'root', description: 'Canonical repository root — C:\\ANTIGRAVITY' }];
   const links: KnowledgeLink[] = [];
   walk(REPO_ROOT, '', 0, nodes, links);
   const graph: KnowledgeGraph = { nodes, links, builtAt: new Date().toISOString(), root: 'ANTIGRAVITY' };

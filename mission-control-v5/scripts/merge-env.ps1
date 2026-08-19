@@ -3,18 +3,19 @@
 # print in full: only *_API_KEY / *_TOKEN / *_KEY are masked; ports, URLs,
 # models and other non-secret values are shown so topology can be verified.
 #
-# Vault keys overwrite server/.env; keys unique to server/.env (brain / pieces
-# / catalog config) are preserved. Idempotent — safe to re-run after rotating.
+# Vault keys overwrite server/.env; keys unique to server/.env (brain and catalog
+# configuration) are preserved. Idempotent — safe to re-run after rotating.
 #
 #   pwsh -File scripts/merge-env.ps1
 #   pwsh -File scripts/merge-env.ps1 -Vault <path> -Target <path>
 [CmdletBinding()]
 param(
-  [string]$Vault = "C:\Users\joshl\OneDrive\Personal Vault-DESKTOP-H4B53GL\missioncontrolv5.env.txt",
+  [string]$Vault = '',
   [string]$Target = (Join-Path $PSScriptRoot "..\server\.env")
 )
 $ErrorActionPreference = 'Stop'
 
+if (-not $Vault) { throw 'Pass -Vault with the approved local vault path; no profile-specific default is configured.' }
 if (-not (Test-Path $Vault))  { throw "vault not found: $Vault" }
 if (-not (Test-Path $Target)) { throw "target .env not found: $Target" }
 $Target = (Resolve-Path $Target).Path

@@ -23,9 +23,6 @@
                                          t5500-dateapp token (best-effort;
                                          liveness via pid file + metrics :20243;
                                          separate from the Hermes tunnel on :20242)
-    9. Pieces LTM              :39300    Pieces OS long-term-memory MCP server
-                                         (best-effort; v5's pingPieces does the
-                                         real MCP health check)
 
   Each service: verify deps -> heal missing deps -> start hidden if the port
   is not already listening -> health-check -> retry up to -MaxRestarts -> log
@@ -37,8 +34,8 @@
                  health checks and restarts any dead service, relaunching
                  Electron only if it has died. Used by the watchdog task.
 
-  Pure operations only. No secrets in this file — OpenClaw keys are read at
-  runtime from the existing C:\Users\joshl\.openclaw\gateway.cmd and never logged.
+  Pure operations only. No secrets or profile-bound credential paths are stored
+  in this file.
 
 .PARAMETER RepoRoot
   Mission Control v5 checkout. Defaults to C:\ANTIGRAVITY\mission-control-v5.
@@ -73,13 +70,18 @@ param(
   [string]$DateAppFrontendPort = '3200',
   # cloudflared named-tunnel metrics port (default 20243 for the dateapp tunnel).
   [int]$TunnelMetricsPort   = 20243,
-  # Pieces OS packaged-app AUMID (the os_server host that owns :39300). Launch via
-  # shell:AppsFolder; non-critical — v5's pingPieces does the real MCP health check.
-  [string]$PiecesAppId      = 'MeshIntelligentTechnologi.PiecesOS_xpmeezj2q5frg!osserver',
   [switch]$SkipGui
 )
 
 $ErrorActionPreference = 'Continue'
+
+# No service may start from this draft-era bootstrap unless the judge lane has
+# explicitly landed the S1 runtime gate. This protects the current machine from
+# stale profile paths, retired launch surfaces, and accidental duplicate workers.
+if ($env:MISSION_CONTROL_RUNTIME_GATE -ne 'LANDED_BY_JUDGE') {
+  Write-Host 'Mission Control runtime is BLOCKED pending the S1 judge-lane gate.'
+  exit 0
+}
 
 # ── KILL SWITCH ──────────────────────────────────────────────────────────────
 # The MissionControlWatchdog scheduled task was registered elevated and cannot
@@ -248,32 +250,6 @@ function Start-MissionControlServer {
     -WorkDir $RepoRoot -LogBase (Join-Path $LogDir 'mc-server') | Out-Null
 }
 
-function Start-OpenClaw {
-  # Read OpenClaw keys from the existing gateway.cmd at runtime — never log them,
-  # never write them into the repo. Move the gateway off :9119 (Hermes dashboard)
-  # to :9120 to avoid the port clash.
-  $gw = 'C:\Users\joshl\.openclaw\gateway.cmd'
-  $module = 'C:\Users\joshl\AppData\Roaming\npm\node_modules\openclaw\dist\index.js'
-  if (-not (Test-Path $module)) { Write-Log "openclaw module missing: $module" 'ERR'; return }
-  if (Test-Path $gw) {
-    foreach ($line in Get-Content $gw) {
-      if ($line -match '^\s*set\s+"([^"]+)=(.+?)"\s*$') {
-        $k = $Matches[1]; $v = $Matches[2]
-        if ($k -in 'OPENAI_API_KEY','KIMI_API_KEY','HOME','TMPDIR') { Set-Item -Path "Env:$k" -Value $v }
-      }
-    }
-  } else {
-    Write-Log 'gateway.cmd missing — OpenClaw keys unavailable' 'ERR'
-  }
-  Set-Item -Path 'Env:OPENCLAW_GATEWAY_PORT' -Value '9120'
-  # Validate the config before each start (read-only, non-blocking) so a bad
-  # agents.defaults.memorySearch doesn't keep OpenClaw down. Single shot, no loop.
-  Assert-OpenClawConfig
-  Start-HiddenWorker -FilePath 'C:\Program Files\nodejs\node.exe' `
-    -Arguments @($module, 'gateway', '--port', '9120') `
-    -WorkDir $env:USERPROFILE -LogBase (Join-Path $LogDir 'openclaw') | Out-Null
-}
-
 # Read-only config health check. We hand-fixed agents.defaults.memorySearch
 # (provider ollama + model nomic-embed-text) and removed the legacy `store` block
 # that caused the cold-test DEGRADED state; `openclaw config validate` confirms
@@ -295,32 +271,12 @@ function Assert-OpenClawConfig {
   } catch { Write-Log "openclaw validate error: $($_.Exception.Message)" 'ERR' }
 }
 
-# Pieces OS hosts the LTM MCP server on :39300. It auto-starts at login via its own
-# installer; we only launch it if :39300 is dark. Packaged app — start via its AUMID
-# through shell:AppsFolder, falling back to the Start Menu shortcut. Non-critical.
-function Start-Pieces {
-  if (Test-Port -Port 39300) { return }
-  Write-Log 'Pieces :39300 dark — attempting launch'
-  $launched = $false
-  try {
-    Start-Process -FilePath "shell:AppsFolder\$PiecesAppId" -ErrorAction Stop | Out-Null
-    $launched = $true
-  } catch {
-    $lnk = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Pieces for Developers.lnk'
-    if (Test-Path $lnk) {
-      try { Start-Process -FilePath $lnk -ErrorAction Stop | Out-Null; $launched = $true }
-      catch { Write-Log "Pieces launch via shortcut failed: $($_.Exception.Message)" 'ERR' }
-    } else { Write-Log "Pieces shortcut missing; cannot auto-launch (AUMID=$PiecesAppId)" 'ERR' }
-  }
-  if ($launched) { Write-Log 'Pieces launch requested (packaged app — waits for os_server)' }
-}
-
 function Start-DateAppBackend {
   $docker = 'C:\Program Files\Docker\Docker\resources\bin\docker.exe'
   $dd     = 'C:\Program Files\Docker\Docker\Docker Desktop.exe'
-  $py     = 'C:\Users\joshl\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\python.exe'
+  $py     = $env:DATEAPP_PYTHON_EXE
   $backend = Join-Path $AntigravityRoot 'backend\fastapi-app'
-  if (-not (Test-Path $py))     { Write-Log 'python/uv not found; DateApp backend skipped' 'ERR'; return }
+  if (-not $py -or -not (Test-Path $py)) { Write-Log 'DATEAPP_PYTHON_EXE is not configured; DateApp backend skipped' 'ERR'; return }
   if (-not (Test-Path $backend)) { Write-Log "backend missing: $backend" 'ERR'; return }
 
   # The backend reads its own .env via pydantic (DATABASE_URL / SUPABASE_DB_URL /
@@ -411,9 +367,9 @@ function Test-Tunnel {
 
 function Start-YouAndINotAITunnel {
   $cf = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
-  $tokenFile = 'C:\Users\joshl\.cloudflared\t5500-dateapp.token'
+  $tokenFile = $env:DATEAPP_CLOUDFLARE_TOKEN_FILE
   if (-not (Test-Path $cf))        { Write-Log 'cloudflared.exe missing; tunnel skipped' 'ERR'; return }
-  if (-not (Test-Path $tokenFile)) { Write-Log 't5500-dateapp.token missing; tunnel skipped' 'ERR'; return }
+  if (-not $tokenFile -or -not (Test-Path $tokenFile)) { Write-Log 'DATEAPP_CLOUDFLARE_TOKEN_FILE is not configured; tunnel skipped' 'ERR'; return }
   # Don't start a second dateapp tunnel — pid file or metrics port already alive.
   if (Test-Tunnel) { Write-Log 'dateapp cloudflared tunnel already running'; return }
   $token = (Get-Content -LiteralPath $tokenFile -Raw).Trim()
@@ -475,10 +431,6 @@ function Invoke-Deploy {
   Ensure-Service -Name 'DateAppFrontend' -Port 3200 -HealthUrl 'http://127.0.0.1:3200/' `
     -TimeoutSec 90 -Start ${function:Start-DateAppFrontend} -Heal {}
 
-  # Pieces LTM — port-only health (v5's pingPieces does the real MCP check). Non-critical.
-  Ensure-Service -Name 'Pieces LTM' -Port 39300 -HealthUrl '' `
-    -TimeoutSec 60 -Start ${function:Start-Pieces} -Heal {}
-
   # Tunnel has no app port; start it and verify via pid/metrics.
   Start-YouAndINotAITunnel
   Start-Sleep -Seconds 3
@@ -497,8 +449,7 @@ function Invoke-Watch {
       @{ Name='Ollama';              Port=11434; Url='http://127.0.0.1:11434/api/tags'; Start=${function:Start-Ollama} },
       @{ Name='OpenClaw (ClawX)';    Port=18789; Url=''; Start={} },
       @{ Name='DateAppBackend';      Port=8000;  Url='http://127.0.0.1:8000/api/v1/health'; Start=${function:Start-DateAppBackend} },
-      @{ Name='DateAppFrontend';     Port=3200;  Url='http://127.0.0.1:3200/'; Start=${function:Start-DateAppFrontend} },
-      @{ Name='Pieces LTM';          Port=39300; Url='';                         Start=${function:Start-Pieces} }
+      @{ Name='DateAppFrontend';     Port=3200;  Url='http://127.0.0.1:3200/'; Start=${function:Start-DateAppFrontend} }
     )
     foreach ($c in $checks) {
       $healthy = if (Test-Port -Port $c.Port) { if ($c.Url) { Test-Http -Url $c.Url } else { $true } } else { $false }

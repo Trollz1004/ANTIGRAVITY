@@ -15,10 +15,9 @@ import { AGENTS, CATEGORIES } from './agents.js';
 import { registerBrainRoutes } from './brain.js';
 import { buildKnowledgeGraph, previewFile, searchKnowledge } from './knowledge.js';
 import { describeExecutors, describeProviders, routerLive } from './omniroute.js';
-import { PIECES_MCP_URL, pingPieces } from './pieces.js';
 import { registerMcpServer } from './mcpServer.js';
 import { registerBridgeRoutes } from './bridge.js';
-import { pingService, type ServiceStatus } from './service-health.js';
+import { pingService } from './service-health.js';
 import { loadState } from './store.js';
 import { activeCount, createTask, deleteTask, listTasks, moveTask, retryTask, subscribe } from './swarm.js';
 import type { AgentDef, Column } from './types.js';
@@ -209,6 +208,7 @@ app.get('/api/services', async (_req, res) => {
   const openclawPort = Number(process.env.OPENCLAW_PORT ?? 9120) || 9120;
   const hermesPort = Number(process.env.HERMES_PORT ?? 9119) || 9119;
   const dateAppHealthUrl = process.env.DATE_APP_HEALTH_URL ?? 'http://192.168.0.15:3200/health';
+  const oneminShimStatusUrl = process.env.ONEMIN_SHIM_STATUS_URL?.trim() ?? '';
   // Per-service ping timeout. OmniRoute's /v1/models aggregates models from
   // backends and answers in ~3s, so it needs a longer window than a fast
   // fail-closed ECONNREFUSED on an idle port. Others fail fast, keeping the
@@ -260,20 +260,12 @@ app.get('/api/services', async (_req, res) => {
       timeoutMs: 3000,
       expectedServiceMarker: { field: 'status', allowedValues: ['ok', 'degraded'] },
     }),
-    // Pieces LTM speaks MCP, not plain HTTP — a raw GET would 400. Probe it with
-    // a real initialize roundtrip and fold the result into the services list.
-    pingPieces(9_000).then(async (up) => {
-      const started = Date.now();
-      return {
-        name: 'Pieces LTM',
-        url: PIECES_MCP_URL,
-        openUrl: PIECES_MCP_URL, // loopback-only: Pieces OS binds 127.0.0.1
-        lanReachable: false,
-        status: (up ? 'up' : 'down') as ServiceStatus['status'],
-        ms: Date.now() - started,
-        detail: up ? 'OK' : 'MCP initialize failed',
-        checkedAt: new Date().toISOString(),
-      };
+    pingService({
+      name: 'onemin-shim',
+      url: oneminShimStatusUrl,
+      openUrl: oneminShimStatusUrl || undefined,
+      timeoutMs: 2500,
+      expectedServiceMarker: { field: 'service', allowedValues: ['onemin-shim'] },
     }),
   ]);
   res.json({ services: results, gatewayBaseUrl: OMNIROUTE_GATEWAY_BASE_URL });
@@ -362,7 +354,7 @@ app.get('/api/events', (req: Request, res: Response) => {
   });
 });
 
-// ── Brain hub (Pieces LTM + per-platform journals) ────────────────────────────
+// ── Brain hub (repository knowledge, Graphy, Obsidian status, and journals) ──
 registerBrainRoutes(app);
 
 // ── Bridge hub (official-platform visibility + operational bridges) ───────────

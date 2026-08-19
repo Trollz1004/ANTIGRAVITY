@@ -1,6 +1,8 @@
 # COUNCIL FINAL ARCHITECTURE PACKET — 2026-08-17
 
-**Purpose:** canonical adversarial-review packet for the final Grok pass before the result is handed onward for synthesis/execution.
+> **SUPERSEDED FOR EXECUTION:** The old-drive and Paperclip-runtime assertions in this historical packet are non-executable. The S1 draft names `C:\ANTIGRAVITY` as the sole canonical working tree and states that no Paperclip runtime is active. See `briefings/S1-DOCTRINE-SUPERSESSION-DRAFT-2026-08-19.md`.
+
+**Purpose:** historical adversarial-review packet retained for provenance.
 
 **Repository:** `Trollz1004/ANTIGRAVITY`
 
@@ -41,7 +43,7 @@ Your review is the final opportunity in this pass to challenge assumptions befor
 
 ---
 
-# 1. CURRENT AUTHORITY THAT WINS OVER STALE MATERIAL
+# 1. SUPERSEDED HISTORICAL AUTHORITY CLAIMS — DO NOT EXECUTE
 
 For this review, the current root repo instructions establish these working truths:
 
@@ -60,7 +62,7 @@ Do not silently rewrite old docs merely to make them look current. Classify them
 
 ---
 
-# 2. REAL PAPERCLIP — NO PARALLEL QUEUE MASQUERADING AS PAPERCLIP
+# 2. SUPERSEDED PAPERCLIP RUNTIME REQUIREMENTS — DO NOT EXECUTE
 
 The final stack must prove that submitted work becomes a **real Paperclip task**, is associated with a **real Paperclip agent/run/heartbeat**, traverses a registered Paperclip adapter/boundary, and ends with authoritative status visible through Paperclip.
 
@@ -83,7 +85,7 @@ If a custom service maintains a separate authoritative queue/status lifecycle th
 
 ---
 
-# 3. OMNIROUTE IS THE EXECUTION FRONT DOOR
+# 3. HISTORICAL OMNIROUTE MODEL — SEE CURRENT S1 DRAFT
 
 Required conceptual chain:
 
@@ -103,7 +105,7 @@ Any bypass exception must be explicit and approved by Joshua, not inherited from
 
 ---
 
-# 4. GIT / REPO COORDINATION — MAIN ONLY, NO LOST WORK
+# 4. SUPERSEDED GIT / REPO COORDINATION — DO NOT EXECUTE
 
 The canonical repository is `Trollz1004/ANTIGRAVITY`, working root `F:\ANTIGRAVITY`.
 

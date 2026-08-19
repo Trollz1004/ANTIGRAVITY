@@ -1,29 +1,22 @@
 [
   {
-    "id": "free-claude-code",
-    "label": "Free Claude Code",
-    "statePath": "C:/Users/joshl/.fcc/STATE.md",
-    "maxChars": 4000,
-    "enabled": true
-  },
-  {
     "id": "hermes",
     "label": "Hermes",
-    "statePath": "C:/Users/joshl/AppData/Local/hermes/STATE.md",
+    "statePath": "C:/ANTIGRAVITY/.agents/journals/hermes/STATE.md",
     "maxChars": 4000,
     "enabled": true
   },
   {
     "id": "openclaw",
     "label": "OpenClaw",
-    "statePath": "C:/Users/joshl/.openclaw/STATE.md",
+    "statePath": "C:/ANTIGRAVITY/.agents/journals/openclaw/STATE.md",
     "maxChars": 4000,
     "enabled": true
   },
   {
-    "id": "ornith",
-    "label": "Ornith (local)",
-    "statePath": "C:/Users/joshl/.ornith/STATE.md",
+    "id": "opencode",
+    "label": "OpenCode",
+    "statePath": "C:/ANTIGRAVITY/.agents/journals/opencode/STATE.md",
     "maxChars": 4000,
     "enabled": true
   }

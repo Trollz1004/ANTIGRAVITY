@@ -55,4 +55,15 @@ describe('service identity health contract', () => {
     expect(result.status).toBe('auth-required');
     expect(result.detail).toBe('bridge authorization not configured');
   });
+
+  it('reports an optional onemin-shim as not configured until its explicit status URL is enabled', async () => {
+    const result = await pingService({
+      name: 'onemin-shim',
+      url: '',
+      expectedServiceMarker: { field: 'service', allowedValues: ['onemin-shim'] },
+    });
+
+    expect(result.status).toBe('not-configured');
+    expect(result.detail).toBe('status probe not configured');
+  });
 });

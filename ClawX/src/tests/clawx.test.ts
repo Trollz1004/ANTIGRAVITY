@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { callProvider, getProviderAvailability } from '../server/ai-providers';
+import { requestProviderBallot } from '../server/provider-ballot';
 import { AI_PROVIDER_SLUGS, PROVIDER_CONFIGS } from '../shared/ai-providers';
 
 const messages = [{ role: 'user' as const, content: 'Check bridge handling.' }];
@@ -76,5 +77,59 @@ describe('ClawX board configuration', () => {
 
   it('does not configure a direct Anthropic environment variable for the Claude seat', () => {
     expect(PROVIDER_CONFIGS.claude.apiKeyEnvVar).toBe('OPENAI_COMPAT_API_KEY');
+  });
+});
+
+describe('Gemini official ballot bridge', () => {
+  it('uses Gemini generateContent directly and returns a sanitized non-production audit record', async () => {
+    let requestedUrl = '';
+    let requestBody: Record<string, unknown> | undefined;
+    const audit = await requestProviderBallot(
+      { ballotId: 'test-ballot', proposal: 'Validation only: no changes.' },
+      {
+        env: { GEMINI_API_KEY: 'test-only-placeholder' },
+        createId: () => 'unused',
+        now: () => 0,
+        fetchImpl: async (url, init) => {
+          requestedUrl = String(url);
+          requestBody = JSON.parse(String(init?.body));
+          return new Response(
+            JSON.stringify({
+              candidates: [{ content: { parts: [{ text: '{"decision":"abstain","reasoning":"No production action."}' }] } }],
+              usageMetadata: { promptTokenCount: 6, candidatesTokenCount: 8 },
+            }),
+            { status: 200, headers: { 'Content-Type': 'application/json' } },
+          );
+        },
+      },
+    );
+
+    expect(requestedUrl).toContain('generativelanguage.googleapis.com');
+    expect(requestedUrl).toContain(':generateContent');
+    expect(requestBody?.generationConfig).toEqual({ responseMimeType: 'application/json', temperature: 0 });
+    expect(audit).toMatchObject({
+      nonProduction: true,
+      provider: 'gemini',
+      executionProvider: 'gemini',
+      executionModel: 'gemini-2.5-flash',
+      decision: 'abstain',
+      status: 'completed',
+    });
+    expect(audit.responseHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(audit.reasoningHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(JSON.stringify(audit)).not.toContain('No production action.');
+  });
+
+  it('records a provider-unavailable result without a raw response or secret material', async () => {
+    const audit = await requestProviderBallot({ proposal: 'Validation only.' }, { env: {} });
+
+    expect(audit).toMatchObject({
+      nonProduction: true,
+      status: 'unavailable',
+      errorLabel: 'provider-unavailable',
+      responseHash: null,
+      reasoningHash: null,
+      decision: null,
+    });
   });
 });
