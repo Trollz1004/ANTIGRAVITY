@@ -2,8 +2,8 @@
  * SWARM ORCHESTRATOR — Adversarial Judge Edition.
  *
  * WORKFLOW:
- * 1. TRI-EXECUTION: For every task, THREE orchestrators (OpenClaw, FCC-Claude, Hermes)
- *    must execute the task independently using their best skills.
+ * 1. MULTI-EXECUTION: Task-selected orchestrators execute independently using
+ *    their relevant skills.
  * 2. SUB-AGENT SWARM: Each orchestrator:
  *    - PLAN: Decomposes task, assigns >= 4 skills per sub-task.
  *    - WORK: Sub-agents execute with those skills preloaded.
@@ -102,7 +102,7 @@ const JUDGE_SHAPE =
 
 async function execute(task: SwarmTask): Promise<void> {
   // Run the agents the TASK asked for. The old hardcoded trio ignored
-  // task.agentIds and included 'fcc-opus', which is not an agent id, so one
+  // task.agentIds and included a retired executor identifier, which is not an agent id, so one
   // judge "version" was always undefined.
   const requested = (task.agentIds ?? []).filter(id => AGENT_INDEX.has(id));
   const activeAgents = requested.length > 0
@@ -309,7 +309,9 @@ export function createTask(input: any): SwarmTask {
     id: randomUUID(),
     title: input.title || 'Task',
     prompt: input.prompt,
-    agentIds: ['openclaw', 'fcc-opus', 'hermes'],
+    agentIds: Array.isArray(input.agentIds)
+      ? input.agentIds.filter((id: unknown): id is string => typeof id === 'string' && AGENT_INDEX.has(id))
+      : ['openclaw', 'hermes'].filter(id => AGENT_INDEX.has(id)),
     mode: 'reasoning',
     executor: 'auto',
     column: 'NEXT',

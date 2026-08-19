@@ -207,6 +207,9 @@ const OMNIROUTE_GATEWAY_BASE_URL = (process.env.OPENAI_COMPAT_BASE_URL ?? 'http:
 app.get('/api/services', async (_req, res) => {
   const openclawPort = Number(process.env.OPENCLAW_PORT ?? 18789) || 18789;
   const hermesPort = Number(process.env.HERMES_PORT ?? 9119) || 9119;
+  const hermesHealthUrl = process.env.HERMES_HEALTH_URL?.trim() || `http://127.0.0.1:${hermesPort}/health`;
+  const openclawHealthUrl = process.env.OPENCLAW_HEALTH_URL?.trim() || `http://127.0.0.1:${openclawPort}/health`;
+  const omniRouteHealthUrl = process.env.OMNIROUTE_HEALTH_URL?.trim() || 'http://127.0.0.1:20128/api/v1';
   const dateAppHealthUrl = process.env.DATE_APP_HEALTH_URL ?? 'http://192.168.0.15:3200/health';
   const oneminShimStatusUrl = process.env.ONEMIN_SHIM_STATUS_URL?.trim() ?? '';
   // Per-service ping timeout. OmniRoute's /v1/models aggregates models from
@@ -219,25 +222,26 @@ app.get('/api/services', async (_req, res) => {
   const results = await Promise.all([
     pingService({
       name: 'Hermes',
-      url: `http://127.0.0.1:${hermesPort}`,
+      url: hermesHealthUrl,
       timeoutMs: 2500,
-      anyHttpResponseMeansReachable: true,
+      expectedServiceMarker: { field: 'service', allowedValues: [process.env.HERMES_EXPECTED_SERVICE?.trim() || 'hermes'] },
     }),
     pingService({
       name: 'OpenClaw',
-      url: `http://127.0.0.1:${openclawPort}`,
+      url: openclawHealthUrl,
       timeoutMs: 2500,
-      anyHttpResponseMeansReachable: true,
+      expectedServiceMarker: { field: 'service', allowedValues: [process.env.OPENCLAW_EXPECTED_SERVICE?.trim() || 'openclaw'] },
     }),
     pingService({
       name: 'OmniRoute',
-      url: 'http://127.0.0.1:20128/api/v1',
+      url: omniRouteHealthUrl,
       openUrl: `http://${LAN_HOST}:20128/dashboard`,
       lanReachable: true,
       timeoutMs: 4000,
       headers: omniKey ? { authorization: `Bearer ${omniKey}` } : {},
       requiresAuth: true,
       authConfigured: Boolean(omniKey),
+      expectedServiceMarker: { field: 'service', allowedValues: [process.env.OMNIROUTE_EXPECTED_SERVICE?.trim() || 'omniroute'] },
     }),
     // This is intentionally independent from the gateway. An idle or offline
     // `omniroute --mcp` process must never turn the main cloud gateway red.
@@ -245,12 +249,13 @@ app.get('/api/services', async (_req, res) => {
       name: 'OmniRoute MCP',
       url: process.env.OMNIROUTE_MCP_STATUS_URL?.trim() ?? '',
       timeoutMs: 2500,
-      anyHttpResponseMeansReachable: true,
+      expectedServiceMarker: { field: 'service', allowedValues: [process.env.OMNIROUTE_MCP_EXPECTED_SERVICE?.trim() || 'omniroute-mcp'] },
     }),
     pingService({
       name: 'Ollama Fail-safe',
       url: 'http://127.0.0.1:11434/api/tags',
       timeoutMs: 2500,
+      expectedServiceMarker: { field: 'models', requiresArray: true },
     }),
     pingService({
       name: 'Date App Backend',

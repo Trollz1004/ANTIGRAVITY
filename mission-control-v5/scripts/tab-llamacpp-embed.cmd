@@ -1,6 +1,6 @@
 @echo off
 rem ?? llama.cpp embedding server (:8081) ????????????????????????????????????
-rem Fills the LLAMACPP_BASE_URL slot that FCC and OmniRoute both expect.
+rem Fills the LLAMACPP_BASE_URL slot used by the local embeddings integration.
 rem Runs embeddinggemma-300m (tiny, ~300 MB) ? fast even on this Xeon, and it
 rem is the exact model OpenClaw's memorySearch wanted before it was pointed at
 rem ollama/nomic-embed-text.

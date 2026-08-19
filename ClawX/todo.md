@@ -151,3 +151,11 @@
 - [ ] Obtain owner confirmation of credential rotation before the judge lane executes any history purge plan for the tracked root configuration file.
 - [ ] Diagnose Cloudflare custom-domain ownership/attachment through a working read-only access path; obtain a separate confirmation before any DNS, Pages, Worker, or domain change.
 - [ ] Rebuild the remediated frontend in a trusted dependency environment; this sandbox clone lacks installed dependencies and no lockfile-backed install was used.
+
+## Mission Control v5 Surface Hardening
+
+- [x] Preserve S1 as blocked and keep all work on the local-only `manus/mc-surface` branch; do not start services, make live probes, push, merge, or delete branches.
+- [x] Audit Mission Control v5 server, client, and Electron code for retired FCC bridge references, disallowed service states, incorrect default OpenClaw/Hermes ports, and noncanonical drive paths; treat v6 as reference-only.
+- [x] Implement identity-checked service tiles using only UP, DOWN, WRONG SERVICE, AUTH MISSING, AUTH REJECTED, and NOT CONFIGURED, without executing live health probes.
+- [x] Set the OpenClaw default port to 18789 and Hermes default port to 9119 wherever v5 defines a default.
+- [ ] Run source scans, the project typecheck, and applicable unit tests without service startup; package a bundle or patch series and a concise review packet for the judge lane.

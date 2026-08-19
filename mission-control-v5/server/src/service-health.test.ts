@@ -12,7 +12,7 @@ describe('service identity health contract', () => {
       },
     );
 
-    expect(result.status).toBe('down');
+    expect(result.status).toBe('DOWN');
     expect(result.detail).toBe('connection refused');
   });
 
@@ -26,7 +26,7 @@ describe('service identity health contract', () => {
       { fetchImpl: async () => new Response(JSON.stringify({ service: 'legacy-vite' }), { status: 200 }) },
     );
 
-    expect(result.status).toBe('mismatch');
+    expect(result.status).toBe('WRONG SERVICE');
     expect(result.detail).toBe('wrong service response');
   });
 
@@ -40,7 +40,7 @@ describe('service identity health contract', () => {
       { fetchImpl: async () => new Response(JSON.stringify({ status: 'degraded' }), { status: 503 }) },
     );
 
-    expect(result.status).toBe('up');
+    expect(result.status).toBe('UP');
     expect(result.detail).toContain('degraded');
   });
 
@@ -52,7 +52,7 @@ describe('service identity health contract', () => {
       authConfigured: false,
     });
 
-    expect(result.status).toBe('auth-required');
+    expect(result.status).toBe('AUTH MISSING');
     expect(result.detail).toBe('bridge authorization not configured');
   });
 
@@ -63,7 +63,45 @@ describe('service identity health contract', () => {
       expectedServiceMarker: { field: 'service', allowedValues: ['onemin-shim'] },
     });
 
-    expect(result.status).toBe('not-configured');
+    expect(result.status).toBe('NOT CONFIGURED');
     expect(result.detail).toBe('status probe not configured');
+  });
+
+  it('reports configured credentials rejected by an authenticated identity endpoint', async () => {
+    const result = await pingService(
+      {
+        name: 'OmniRoute',
+        url: 'http://127.0.0.1:20128/api/v1',
+        requiresAuth: true,
+        authConfigured: true,
+        expectedServiceMarker: { field: 'service', allowedValues: ['omniroute'] },
+      },
+      { fetchImpl: async () => new Response(null, { status: 403 }) },
+    );
+
+    expect(result.status).toBe('AUTH REJECTED');
+  });
+
+  it('does not mark an unidentifiable HTTP response as up', async () => {
+    const result = await pingService(
+      { name: 'Unidentified', url: 'http://127.0.0.1:9999/health' },
+      { fetchImpl: async () => new Response(JSON.stringify({ ok: true }), { status: 200 }) },
+    );
+
+    expect(result.status).toBe('NOT CONFIGURED');
+    expect(result.detail).toBe('identity marker not configured');
+  });
+
+  it('accepts an identity response with a documented array-shaped marker', async () => {
+    const result = await pingService(
+      {
+        name: 'Ollama Fail-safe',
+        url: 'http://127.0.0.1:11434/api/tags',
+        expectedServiceMarker: { field: 'models', requiresArray: true },
+      },
+      { fetchImpl: async () => new Response(JSON.stringify({ models: [] }), { status: 200 }) },
+    );
+
+    expect(result.status).toBe('UP');
   });
 });
