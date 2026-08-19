@@ -234,6 +234,29 @@ function Start-Ollama {
     -WorkDir $env:USERPROFILE -LogBase (Join-Path $LogDir 'ollama') | Out-Null
 }
 
+function Start-OpenClawGateway {
+  # Factory port :18789. Ensure-Service only calls this when the port is dead,
+  # so an already-running gateway is reported in-use and never doubled — dual
+  # gateways fight over openclaw.json and produce the .clobbered backups.
+  if (-not (Get-Command openclaw -ErrorAction SilentlyContinue)) {
+    Write-Log 'openclaw CLI not resolved; cannot start gateway' 'ERR'; return
+  }
+  Start-HiddenWorker -FilePath 'cmd.exe' -Arguments @('/c','openclaw','gateway') `
+    -WorkDir $AntigravityRoot -LogBase (Join-Path $LogDir 'openclaw-gateway') | Out-Null
+}
+
+function Start-HermesDashboard {
+  # Hermes is a Python dashboard on factory :9119. Its launch command is machine
+  # configuration, not repo knowledge: set HERMES_START_CMD to the full command
+  # line in the environment. Without it this logs and skips — no guessing.
+  $cmdLine = ($env:HERMES_START_CMD ?? '').Trim()
+  if (-not $cmdLine) {
+    Write-Log 'HERMES_START_CMD not set — Hermes dashboard start skipped (set it to enable auto-start)' 'WARN'; return
+  }
+  Start-HiddenWorker -FilePath 'cmd.exe' -Arguments @('/c', $cmdLine) `
+    -WorkDir $AntigravityRoot -LogBase (Join-Path $LogDir 'hermes-dashboard') | Out-Null
+}
+
 function Start-MissionControlServer {
   # Never let a leaked PORT reach the server — index.ts reads process.env.PORT
   # (default 3151); a leaked 3200 makes it serve the dashboard on DateApp's port.
@@ -419,11 +442,13 @@ function Invoke-Deploy {
   Ensure-Service -Name 'Ollama' -Port 11434 -HealthUrl 'http://127.0.0.1:11434/api/tags' `
     -TimeoutSec 60 -Start ${function:Start-Ollama} -Heal {}
 
-  # OpenClaw: runs on its factory port :18789 (its own Windows startup task).
-  # Never start a second gateway here — dual gateways fight over openclaw.json
-  # and produce the .clobbered backups. Health-check only, no Start block.
+  # OpenClaw gateway on factory :18789 — idempotent: in-use means already up.
   Ensure-Service -Name 'OpenClaw' -Port 18789 -HealthUrl '' `
-    -TimeoutSec 30 -Start {} -Heal {}
+    -TimeoutSec 45 -Start ${function:Start-OpenClawGateway} -Heal {}
+
+  # Hermes dashboard on factory :9119 — starts only when HERMES_START_CMD is set.
+  Ensure-Service -Name 'Hermes' -Port 9119 -HealthUrl '' `
+    -TimeoutSec 45 -Start ${function:Start-HermesDashboard} -Heal {}
 
   Ensure-Service -Name 'DateAppBackend' -Port 8000 -HealthUrl 'http://127.0.0.1:8000/api/v1/health' `
     -TimeoutSec 120 -Start ${function:Start-DateAppBackend} -Heal {}
@@ -447,7 +472,8 @@ function Invoke-Watch {
       @{ Name='OmniRoute';           Port=20128; Url=''; Start=${function:Start-Omniroute} },
       @{ Name='MissionControlServer'; Port=3151; Url='http://localhost:3151/api/health'; Start=${function:Start-MissionControlServer} },
       @{ Name='Ollama';              Port=11434; Url='http://127.0.0.1:11434/api/tags'; Start=${function:Start-Ollama} },
-      @{ Name='OpenClaw';            Port=18789; Url=''; Start={} },
+      @{ Name='OpenClaw';            Port=18789; Url=''; Start=${function:Start-OpenClawGateway} },
+      @{ Name='Hermes';              Port=9119;  Url=''; Start=${function:Start-HermesDashboard} },
       @{ Name='DateAppBackend';      Port=8000;  Url='http://127.0.0.1:8000/api/v1/health'; Start=${function:Start-DateAppBackend} },
       @{ Name='DateAppFrontend';     Port=3200;  Url='http://127.0.0.1:3200/'; Start=${function:Start-DateAppFrontend} }
     )
