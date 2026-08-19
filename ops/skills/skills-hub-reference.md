@@ -68,3 +68,20 @@ author: Hermes Agent
 - `create-skills` — Guide for creating effective skills
 - `find-skills` — Discover and install agent skills
 - `hermes-agent-skill-authoring` — In-repo SKILL.md authoring
+
+### Installed Mission Skills
+
+| Skill | Use before work or delegation |
+|---|---|
+| `i-have-adhd` | Concise, action-first, token-saving human updates; this is not a diagnosis. |
+| `agent-reach` | External research, source discovery, and capability comparison. |
+| `find-skills` | Discover an existing skill before hand-rolling a repeated capability. |
+| `tdd` | Test-first implementation at agreed public seams. |
+| `browser-use` | Interactive or authenticated browser work; use approved cookie sync only when needed. |
+| `brainstorming` | Feature or behavior design before implementation. |
+| `systematic-debugging` | Root-cause investigation before any proposed bug fix. |
+| `hermes-agent-skill-authoring` | Scoped in-repo skills and Hermes configuration authoring through `author-hermes-artifact`. |
+
+### Hermes Authoring Boundary
+
+Hermes may author only these repository paths through Mission Control MCP: `.agents/skills/<name>/SKILL.md`, `.agents/harness-config/hermes.yaml`, `ops/skills/`, and `agent-contracts/`. The tool rejects environment files, credential-like content, and any path outside `C:\ANTIGRAVITY`. This gives Hermes a usable authoring path without granting access to runtime secrets or arbitrary service configuration.

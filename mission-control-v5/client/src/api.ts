@@ -1,13 +1,10 @@
 import type {
   AgentDef,
-  BrainAskResult,
   BrainCatalog,
   BrainJournal,
   BrainMcpStatus,
-  BrainPiecesStatus,
   BrainSkill,
   BrainState,
-  BrainTool,
   CategoryDef,
   Column,
   Health,
@@ -16,6 +13,8 @@ import type {
   KnowledgeSearchHit,
   Mode,
   ServiceStatus,
+  BridgeStatus,
+  BridgeTarget,
   SubagentNode,
   SwarmTask,
 } from './types';
@@ -54,10 +53,6 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ content }),
     }),
-  brainTools: () => request<{ tools: BrainTool[] }>('/api/brain/tools'),
-  brainAsk: (input: { tool?: string; arguments?: unknown; query?: string }) =>
-    request<BrainAskResult>('/api/brain/ask', { method: 'POST', body: JSON.stringify(input) }),
-  brainPieces: () => request<BrainPiecesStatus>('/api/brain/pieces'),
   // ── Brain catalog (monorepo skills + tasks) ────────────────────────────────────
   brainCatalog: (q?: string, category?: string) => {
     const params = new URLSearchParams();
@@ -69,7 +64,8 @@ export const api = {
   brainCatalogEntry: (kind: 'skills' | 'tasks', id: string) => request<BrainSkill>(`/api/brain/catalog/${kind}/${id}`),
   brainMcpStatus: () => request<BrainMcpStatus>('/api/mcp/status'),
   // ── Bridge hub (external AI CLI tools) ─────────────────────────────────────
-  bridgeSend: (target: 'fcc' | 'openclaw', prompt: string) =>
+  bridgeStatus: () => request<{ bridges: BridgeStatus[] }>('/api/bridge/status'),
+  bridgeSend: (target: BridgeTarget, prompt: string) =>
     request<{ sender: string; text: string; timestamp: string }>(`/api/bridge/${target}`, {
       method: 'POST',
       body: JSON.stringify({ prompt }),

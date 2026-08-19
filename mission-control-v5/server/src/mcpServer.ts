@@ -4,8 +4,8 @@
  * Hand-rolled JSON-RPC 2.0 over POST /api/mcp — no SDK dependency for ~6 trivial
  * tools. Any AI-platform agent (Cursor, Claude Desktop, …) can point its MCP
  * client at http://localhost:3151/api/mcp and pull the task + capability set the
- * monorepo defines: ask the shared Pieces LTM, read/write a platform journal,
- * list swarm tasks, list monorepo skills, list configured platforms.
+ * monorepo defines: read/write a platform journal, list swarm tasks, list
+ * repository skills, and list configured platforms.
  *
  * Wire format: `initialize` returns an `mcp-session-id` response header that the
  * client must echo on subsequent requests. `notifications/initialized` is
@@ -15,9 +15,9 @@
  */
 import { randomUUID } from 'node:crypto';
 import type { Express, Request } from 'express';
-import { callTool, PIECES_LTM_TOOL } from './pieces.js';
 import { loadBrainPlatforms, platformSummary, readJournal, writeJournal } from './brainStore.js';
 import { loadCatalog } from './catalog.js';
+import { authorHermesArtifact } from './hermes-authoring.js';
 import { listTasks } from './swarm.js';
 
 const env = (k: string): string => (process.env[k] ?? '').trim();
@@ -47,16 +47,6 @@ interface ToolDef {
 
 const TOOLS: ToolDef[] = [
   {
-    name: 'ask-pieces-ltm',
-    description:
-      'Ask the shared Pieces Long-Term Memory a natural-language question. Returns historical + contextual recall across all workstreams.',
-    inputSchema: {
-      type: 'object',
-      properties: { query: { type: 'string', description: 'The question for the Pieces LTM.' } },
-      required: ['query'],
-    },
-  },
-  {
     name: 'read-journal',
     description: "Read a platform's STATE.md journal (read-on-start memory). Returns {content, updatedAt, bytes}.",
     inputSchema: {
@@ -85,7 +75,7 @@ const TOOLS: ToolDef[] = [
   },
   {
     name: 'list-skills',
-    description: 'List skills + tasks defined in the E:\\ANTIGRAVITY monorepo. Optional query filter.',
+        description: 'List skills and task capabilities defined in the C:\\ANTIGRAVITY repository. Optional query filter.',
     inputSchema: {
       type: 'object',
       properties: { q: { type: 'string', description: 'Optional substring filter on id/label/description.' } },
@@ -96,26 +86,23 @@ const TOOLS: ToolDef[] = [
     description: 'List configured brain platforms (per-AI-platform journals) with byte usage.',
     inputSchema: { type: 'object', properties: {} },
   },
+  {
+    name: 'author-hermes-artifact',
+    description: 'Author a scoped repository skill, skill-hub document, contract, or Hermes YAML config. Rejects credentials and paths outside the allowlist.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        relativePath: { type: 'string', description: 'Allowed: .agents/skills/<name>/SKILL.md, .agents/harness-config/hermes.yaml, ops/skills/, or agent-contracts/.' },
+        content: { type: 'string', description: 'Complete artifact content without credentials.' },
+      },
+      required: ['relativePath', 'content'],
+    },
+  },
 ];
 
 // ── Tool dispatch ──────────────────────────────────────────────────────────────
 async function dispatch(name: string, args: Record<string, unknown>): Promise<unknown> {
   switch (name) {
-    case 'ask-pieces-ltm': {
-      const query = String(args?.query ?? '').trim();
-      if (!query) throw new Error('query is required');
-      const raw = await callTool(PIECES_LTM_TOOL, { question: query });
-      // Pieces returns its own MCP envelope {content:[{type:'text',text:'<json>'}]};
-      // unwrap the inner text and parse it so callers get one clean object, not a
-      // nested envelope. If the inner text isn't JSON, fall back to the raw text.
-      try {
-        const text = (raw as any)?.content?.find((b: any) => b?.type === 'text')?.text;
-        if (text) return JSON.parse(text);
-      } catch {
-        /* fall through */
-      }
-      return raw;
-    }
     case 'read-journal': {
       const id = String(args?.platformId ?? '');
       const j = readJournal(id);
@@ -151,6 +138,11 @@ async function dispatch(name: string, args: Record<string, unknown>): Promise<un
     }
     case 'list-platforms':
       return loadBrainPlatforms().map(platformSummary);
+    case 'author-hermes-artifact':
+      return authorHermesArtifact({
+        relativePath: String(args?.relativePath ?? ''),
+        content: String(args?.content ?? ''),
+      });
     default:
       throw new Error(`Unknown tool: ${name}`);
   }
