@@ -1,8 +1,9 @@
-export type ServiceState = 'up' | 'down' | 'mismatch' | 'auth-required' | 'auth-rejected' | 'not-configured';
+export type ServiceState = 'UP' | 'DOWN' | 'WRONG SERVICE' | 'AUTH MISSING' | 'AUTH REJECTED' | 'NOT CONFIGURED';
 
 export interface ExpectedServiceMarker {
   field: string;
-  allowedValues: readonly string[];
+  allowedValues?: readonly string[];
+  requiresArray?: boolean;
 }
 
 export interface ServiceProbe {
@@ -15,8 +16,6 @@ export interface ServiceProbe {
   expectedServiceMarker?: ExpectedServiceMarker;
   requiresAuth?: boolean;
   authConfigured?: boolean;
-  /** Use only when the service has no documented identity response yet. */
-  anyHttpResponseMeansReachable?: boolean;
 }
 
 export interface ServiceStatus {
@@ -49,13 +48,19 @@ function transportDetail(error: unknown, timeoutMs: number): string {
 }
 
 function markerDescription(marker?: ExpectedServiceMarker): string | undefined {
-  return marker ? `${marker.field}=${marker.allowedValues.join('|')}` : undefined;
+  if (!marker) return undefined;
+  if (marker.requiresArray) return `${marker.field}=[array]`;
+  return `${marker.field}=${(marker.allowedValues ?? []).join('|')}`;
+}
+
+function markerMatches(marker: ExpectedServiceMarker, value: unknown): boolean {
+  if (marker.requiresArray) return Array.isArray(value);
+  return (marker.allowedValues ?? []).includes(String(value));
 }
 
 /**
- * Probes reachability and, where available, verifies the identity of the
- * service that responded. A listening but unexpected application is a
- * mismatch, never an UP result.
+ * Resolves a service only through an expected identity response. A reachable port
+ * without an identity rule is NOT CONFIGURED; a different responder is WRONG SERVICE.
  */
 export async function pingService(probe: ServiceProbe, options: ServiceHealthOptions = {}): Promise<ServiceStatus> {
   const timeoutMs = probe.timeoutMs ?? 2500;
@@ -72,11 +77,10 @@ export async function pingService(probe: ServiceProbe, options: ServiceHealthOpt
   };
 
   if (!probe.url.trim()) {
-    return { ...base, status: 'not-configured', ms: 0, detail: 'status probe not configured', checkedAt };
+    return { ...base, status: 'NOT CONFIGURED', ms: 0, detail: 'status probe not configured', checkedAt };
   }
-
   if (probe.requiresAuth && !probe.authConfigured) {
-    return { ...base, status: 'auth-required', ms: 0, detail: 'bridge authorization not configured', checkedAt };
+    return { ...base, status: 'AUTH MISSING', ms: 0, detail: 'bridge authorization not configured', checkedAt };
   }
 
   const controller = new AbortController();
@@ -84,11 +88,10 @@ export async function pingService(probe: ServiceProbe, options: ServiceHealthOpt
   try {
     const response = await fetchImpl(probe.url, { signal: controller.signal, headers: probe.headers });
     const ms = now() - started;
-    const authGated = response.status === 401 || response.status === 403;
-    if (authGated) {
+    if (response.status === 401 || response.status === 403) {
       return {
         ...base,
-        status: probe.authConfigured ? 'auth-rejected' : 'auth-required',
+        status: probe.authConfigured ? 'AUTH REJECTED' : 'AUTH MISSING',
         ms,
         detail: probe.authConfigured ? 'bridge authorization rejected' : 'bridge authorization required',
         checkedAt,
@@ -102,47 +105,24 @@ export async function pingService(probe: ServiceProbe, options: ServiceHealthOpt
       body = null;
     }
 
-    if (probe.expectedServiceMarker) {
-      const marker = probe.expectedServiceMarker;
-      const value = body?.[marker.field];
-      if (!marker.allowedValues.includes(String(value))) {
-        return {
-          ...base,
-          status: 'mismatch',
-          ms,
-          detail: 'wrong service response',
-          checkedAt,
-        };
-      }
-      return {
-        ...base,
-        status: 'up',
-        ms,
-        detail: String(value) === 'degraded' ? 'identified service reports degraded' : 'identified service response verified',
-        checkedAt,
-      };
+    if (!probe.expectedServiceMarker) {
+      return { ...base, status: 'NOT CONFIGURED', ms, detail: 'identity marker not configured', checkedAt };
     }
 
-    if (response.ok || probe.anyHttpResponseMeansReachable) {
-      const count = Array.isArray(body?.data) ? body.data.length : Array.isArray(body?.models) ? body.models.length : null;
-      return {
-        ...base,
-        status: 'up',
-        ms,
-        detail: count === null ? 'OK' : `OK · ${count} models`,
-        checkedAt,
-      };
+    const marker = probe.expectedServiceMarker;
+    if (!markerMatches(marker, body?.[marker.field])) {
+      return { ...base, status: 'WRONG SERVICE', ms, detail: 'wrong service response', checkedAt };
     }
 
-    return { ...base, status: 'down', ms, detail: `HTTP ${response.status}`, checkedAt };
-  } catch (error) {
     return {
       ...base,
-      status: 'down',
-      ms: now() - started,
-      detail: transportDetail(error, timeoutMs),
+      status: 'UP',
+      ms,
+      detail: String(body?.[marker.field]) === 'degraded' ? 'identified service reports degraded' : 'identified service response verified',
       checkedAt,
     };
+  } catch (error) {
+    return { ...base, status: 'DOWN', ms: now() - started, detail: transportDetail(error, timeoutMs), checkedAt };
   } finally {
     clearTimeout(timer);
   }
