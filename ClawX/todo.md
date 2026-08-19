@@ -64,11 +64,11 @@
 - [x] Define a server-side official-provider bridge contract for Claude, Gemini, GitHub Copilot, Meta AI, ChatGPT/OpenAI, and Manus without storing secrets in source, logs, or client code.
 - [x] Route normal work through the best suitable OmniRoute cloud model, including free cloud options where appropriate; expose self-hosted Ollama only as an explicit fail-safe path, never as the default task route.
 - [x] Use `http://localhost:20129/v1` as the configurable OpenAI-compatible OmniRoute bridge base; report the gateway and the optional `omniroute --mcp` process as separate health signals so an idle/offline MCP process is never misreported as a gateway outage.
-- [ ] Add a shared chat/broadcast surface that shows bridge availability, supported capabilities, and verified response state for each configured provider.
+- [x] Add a shared chat/broadcast surface that shows bridge availability, supported capabilities, and verified response state for each configured provider.
 - [x] Add Hermes and OpenClaw as operational integrations in the ClawX dashboard, with explicit connection state and last-seen status rather than simulated activity.
 - [x] Add a service-health contract for expected port, expected service identity, probe URL, timeout, and last verified response.
 - [x] Implement runtime checks that distinguish a port being down from an unexpected legacy service responding on the expected port, including the Date App backend expected on port 3200.
-- [ ] Surface service health and mismatches in the ClawX command center and make active faults visible to the governance workflow.
+- [x] Surface service health and mismatches in the ClawX command center and make active faults visible to the governance workflow.
 - [x] Add tests for provider bridge configuration validation, provider-unavailable handling, port-down detection, and wrong-service-on-port detection.
 - [x] Document implemented bridge boundaries, unavailable official APIs, configuration names only, and verified versus unverified integrations.
 - [x] Evaluate OmniRoute's authenticated API-v1 root-status contract against its dedicated monitoring-health route; select one read-only probe for Mission Control and document configuration names only.
@@ -124,3 +124,5 @@
 - [x] Inventory archive, duplicate-service, and retired-source candidates against the active Mission Control topology without modifying any item during discovery.
 - [x] Remove only artifacts verified as duplicated or retired, retaining a sanitized removal record and preserving all uncertain, active, or security-sensitive material.
 - [x] Verify the remaining source tree, focused tests, and branch status after cleanup; preserve the unrelated pre-existing script modification as excluded work.
+- [x] Replace static governance bridge labels with verified bridge availability state and surface identity-aware service faults in the governance workflow.
+- [x] Remove retired allocation-language placeholder text from the governance proposal form and replace it with neutral business-change guidance.
