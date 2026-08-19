@@ -241,7 +241,12 @@ app.get('/api/services', async (_req, res) => {
       headers: omniKey ? { authorization: `Bearer ${omniKey}` } : {},
       requiresAuth: true,
       authConfigured: Boolean(omniKey),
-      expectedServiceMarker: { field: 'service', allowedValues: [process.env.OMNIROUTE_EXPECTED_SERVICE?.trim() || 'omniroute'] },
+      // OmniRoute's /api/v1 answers with an OpenAI-style model list and no
+      // `service` field, so the default marker verifies that documented shape.
+      // Set OMNIROUTE_EXPECTED_SERVICE only if the gateway gains a service field.
+      expectedServiceMarker: process.env.OMNIROUTE_EXPECTED_SERVICE?.trim()
+        ? { field: 'service', allowedValues: [process.env.OMNIROUTE_EXPECTED_SERVICE.trim()] }
+        : { field: 'object', allowedValues: ['list'] },
     }),
     // This is intentionally independent from the gateway. An idle or offline
     // `omniroute --mcp` process must never turn the main cloud gateway red.
