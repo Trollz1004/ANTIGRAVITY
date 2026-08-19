@@ -126,3 +126,15 @@
 - [x] Verify the remaining source tree, focused tests, and branch status after cleanup; preserve the unrelated pre-existing script modification as excluded work.
 - [x] Replace static governance bridge labels with verified bridge availability state and surface identity-aware service faults in the governance workflow.
 - [x] Remove retired allocation-language placeholder text from the governance proposal form and replace it with neutral business-change guidance.
+- [x] Prepare a bounded GitHub Copilot repository-agent brief that requires skills-first preflight, branch-only work, no runtime execution, no secrets, and evidence-backed tests.
+- [x] Run a read-only Copilot drift audit for stale drive paths, retired skill and agent references, legacy Python scripts, batch files, launch scripts, and obsolete automation configuration.
+- [x] Classify Copilot audit findings as active, historical, generated, security-sensitive, or uncertain before approving any deletion or rewrite.
+- [x] Preserve Copilot's sanitized drift-audit state file as GitHub-side repository memory on a dedicated non-main audit branch, then reconcile it with manus/call-layer.
+- [x] Reconcile Copilot's published main-branch audit findings against the controlled manus/call-layer branch and record active, historical, remediated, sensitive, and uncertain classifications.
+- [x] Inventory the post-cleanup assets area, retain non-secret domain topology metadata, and identify any remaining unreferenced marketing payloads without opening sensitive files.
+- [x] Complete final static verification for Mission Control and ClawX without enabling runtime execution, then prepare a user-inspectable testing handoff.
+- [x] Replace the confirmed legacy root autostart scheduler registration script with a fail-closed S1 runtime-gate block and remove its stale E-drive execution guidance.
+- [x] Replace the confirmed dead Hermes watchdog path filters with current repository-owned Hermes contract and configuration paths, preserving its flag-only behavior.
+- [x] Publish a concise read-only Supabase and Obsidian readiness report for human-facing Mission Control use, including connection blockers and no-change boundaries.
+- [x] Publish a task-aware skills preflight matrix that compares the attached doctrine with active Hermes, OpenClaw, and OpenCode contracts.
+- [x] Create an editable presentation covering Mission Control human tools, Supabase/Obsidian readiness, task-aware skill selection, built-in secret redaction, and safe human-visible agentic operations.

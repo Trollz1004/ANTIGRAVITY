@@ -3,16 +3,18 @@ name: Hermes Integrity Watchdog
 on:
   push:
     paths:
-      - 'paperclip-9020/agents/hermes-ceo/**.md'
-      - 'paperclip-9020/config/integrity-watchdog.json'
-      - 'paperclip-9020/config/adapter-allowlist.json'
-      - 'paperclip-9020/config/plugins.json'
+      - 'agent-contracts/HERMES-AGENT.md'
+      - 'agent-contracts/JOURNAL-PROTOCOL.md'
+      - '.agents/harness-config/hermes.yaml'
+      - '.agents/journals/hermes/STATE.md'
+      - '.agents/skills/hermes-agent-skill-authoring/SKILL.md'
   pull_request:
     paths:
-      - 'paperclip-9020/agents/hermes-ceo/**.md'
-      - 'paperclip-9020/config/integrity-watchdog.json'
-      - 'paperclip-9020/config/adapter-allowlist.json'
-      - 'paperclip-9020/config/plugins.json'
+      - 'agent-contracts/HERMES-AGENT.md'
+      - 'agent-contracts/JOURNAL-PROTOCOL.md'
+      - '.agents/harness-config/hermes.yaml'
+      - '.agents/journals/hermes/STATE.md'
+      - '.agents/skills/hermes-agent-skill-authoring/SKILL.md'
 
 permissions:
   contents: read
@@ -37,10 +39,11 @@ jobs:
           HEAD_SHA="${{ github.sha }}"
           echo "Comparing $BASE_SHA..$HEAD_SHA"
           git diff "$BASE_SHA" "$HEAD_SHA" -- \
-            'paperclip-9020/agents/hermes-ceo/*.md' \
-            'paperclip-9020/config/integrity-watchdog.json' \
-            'paperclip-9020/config/adapter-allowlist.json' \
-            'paperclip-9020/config/plugins.json' > /tmp/hermes.diff || true
+            'agent-contracts/HERMES-AGENT.md' \
+            'agent-contracts/JOURNAL-PROTOCOL.md' \
+            '.agents/harness-config/hermes.yaml' \
+            '.agents/journals/hermes/STATE.md' \
+            '.agents/skills/hermes-agent-skill-authoring/SKILL.md' > /tmp/hermes.diff || true
           {
             echo 'diff<<DIFFEOF'
             cat /tmp/hermes.diff
@@ -65,14 +68,11 @@ jobs:
           {
             echo 'hashes<<HASHEOF'
             sha256sum \
-              paperclip-9020/agents/hermes-ceo/AGENTS.md \
-              paperclip-9020/agents/hermes-ceo/TOOLS.md \
-              paperclip-9020/agents/hermes-ceo/HEARTBEAT.md \
-              paperclip-9020/agents/hermes-ceo/SOUL.md \
-              paperclip-9020/agents/hermes-ceo/SKILLS.md \
-              paperclip-9020/config/integrity-watchdog.json \
-              paperclip-9020/config/adapter-allowlist.json \
-              paperclip-9020/config/plugins.json 2>/dev/null || true
+              agent-contracts/HERMES-AGENT.md \
+              agent-contracts/JOURNAL-PROTOCOL.md \
+              .agents/harness-config/hermes.yaml \
+              .agents/journals/hermes/STATE.md \
+              .agents/skills/hermes-agent-skill-authoring/SKILL.md 2>/dev/null || true
             echo 'HASHEOF'
           } >> "$GITHUB_OUTPUT"
 
@@ -95,7 +95,7 @@ jobs:
             const severity = authorized === 'true' ? 'REVIEW' : 'URGENT-UNAUTHORIZED';
             const title = `INTEGRITY [${severity}]: Hermes MD/config modified by ${actor}`;
             const body = [
-              '## Hermes Integrity Watchdog',
+              '## Hermes Contract Integrity Watchdog',
               '',
               `**Severity:** ${severity}`,
               `**Actor:** ${actor}`,
@@ -105,7 +105,7 @@ jobs:
               '> This watchdog FLAGS drift only. It does NOT auto-resolve, revert, or close.',
               '> Joshua Coleman is the sole authority to resolve this issue.',
               '',
-              '### New SHA-256 baselines (update `integrity-watchdog.json` if approved)',
+              '### Current SHA-256 review values',
               '```',
               hashes,
               '```',
@@ -117,8 +117,8 @@ jobs:
               '',
               '### Next steps for Josh',
               '1. Review the diff above',
-              '2. If legit: update `integrity-watchdog.json` baselines and close this issue',
-              '3. If not legit: `git revert` the commit and rotate credentials of the actor',
+              '2. If legitimate: record the approved contract/configuration update and close this issue',
+              '3. If not legitimate: use the approved review lane to determine remediation',
               '',
               'Hermes is in `safe_mode` until this issue closes.'
             ].join('\n');
