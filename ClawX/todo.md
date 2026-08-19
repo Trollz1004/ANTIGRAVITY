@@ -176,4 +176,4 @@
 - [x] Audit client extension points and the Step 2 official-vote API contract before building the council interface.
 - [x] Build a governance view with separate official-seat connection states, active ballots, and read-only decision records using only a mockable official-vote API contract.
 - [x] Preserve the seat-panel interaction pattern while excluding Hermes/OpenClaw controls and all general message or operational-send paths from the governance view.
-- [ ] Add mocked component tests and client typecheck coverage; package a judge-ready handoff.
+- [x] Add mocked component tests and client typecheck coverage; package a judge-ready handoff.
