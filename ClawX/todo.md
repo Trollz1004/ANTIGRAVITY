@@ -92,3 +92,11 @@
 - [x] Audit active root instructions, agent contracts, Mission Control runtime scripts, and configuration examples for executable stale paths, retired services, old profiles, and conflicting authority rules; replace or explicitly supersede every confirmed hit.
 - [x] Reconcile `ops/skills/skills-hub-reference.md` with the installed skills and add the user-specified skills to its authoritative catalog.
 - [x] Provide Hermes a documented, verified skill-authoring workflow so it can create or update repository skill/configuration artifacts without a recurring permission-warning loop.
+
+## Reusable Safety Workflow and Presentation
+
+- [x] Create and validate a reusable repository skill for branch delivery, active-instruction drift audits, runtime-gate verification, and sanitized evidence reporting.
+- [x] Verify the S1 runtime gate remains blocked and that the Hermes, OpenClaw, and OpenCode repository journals are independent and readable in the canonical workspace.
+- [x] Inspect the installed i-have-adhd and Hermes authoring skill configuration and run their token-discipline and authoring-boundary tests.
+- [x] Reframe the installed i-have-adhd skill as neutral token-saving output discipline, with no user diagnosis or persistent diagnostic mode.
+- [x] Prepare and generate an editable presentation summarizing the complete `manus/call-layer` delivery and Hermes authoring boundaries.
