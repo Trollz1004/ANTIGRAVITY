@@ -1,5 +1,5 @@
 /**
- * Catalog — scans the monorepo (E:\ANTIGRAVITY) for skill + task definitions so
+ * Catalog — scans the canonical C:\ANTIGRAVITY workspace for skill and task definitions so
  * any agent can discover what it must do and which tools/skills it may access.
  *
  * Pure file scan, no dependencies. Frontmatter is parsed by a tiny hand-rolled
@@ -14,9 +14,9 @@ import { join, relative, sep, basename, dirname } from 'node:path';
 
 const env = (k: string, d = ''): string => (process.env[k] ?? d).trim();
 
-export const CATALOG_ROOT = env('CATALOG_ROOT') || 'E:\\ANTIGRAVITY';
+export const CATALOG_ROOT = env('CATALOG_ROOT') || 'C:\\ANTIGRAVITY';
 
-const SKILL_GLOBS = env('CATALOG_SKILL_GLOBS', 'skills/**/SKILL.md')
+const SKILL_GLOBS = env('CATALOG_SKILL_GLOBS', '.agents/skills/**/SKILL.md')
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean);

@@ -1,0 +1,31 @@
+version: 1
+status: draft
+journal: .agents/journals/hermes/STATE.md
+knowledge:
+  source: repository
+  graph: Mission Control Graphy
+  obsidian_mirror: optional
+preflight_skills:
+  required:
+    - i-have-adhd
+    - hermes-agent-skill-authoring
+  conditional:
+    design: brainstorming
+    research: agent-reach
+    authenticated_browser: browser-use
+    capability_discovery: find-skills
+    code_change: tdd
+    unexpected_behavior: systematic-debugging
+authoring:
+  mcp_tool: author-hermes-artifact
+  allowed_paths:
+    - .agents/skills/<name>/SKILL.md
+    - .agents/harness-config/hermes.yaml
+    - ops/skills/
+    - agent-contracts/
+  blocked_paths:
+    - .env
+    - runtime credentials
+    - paths outside C:\ANTIGRAVITY
+delivery:
+  judge_only_push_merge_delete: true

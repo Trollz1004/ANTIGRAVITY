@@ -53,7 +53,9 @@ export const PROVIDER_CONFIGS: Record<AiProviderSlug, ProviderConfig> = {
     color: '#d97706',
     costPerInputToken: 0.015,
     costPerOutputToken: 0.075,
-    apiKeyEnvVar: 'ANTHROPIC_API_KEY',
+    // Direct Anthropic credentials are intentionally unsupported. Claude uses
+    // the authenticated OmniRoute OpenAI-compatible bridge.
+    apiKeyEnvVar: 'OPENAI_COMPAT_API_KEY',
   },
   gemini: {
     slug: 'gemini',

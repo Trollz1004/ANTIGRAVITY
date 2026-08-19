@@ -24,6 +24,7 @@ import {
   Clock,
   Hash,
   ChevronDown,
+  Code2,
 } from 'lucide-react';
 import type { AiProviderSlug } from '../../shared/ai-providers';
 
@@ -33,7 +34,7 @@ const providerIcons: Record<string, React.ElementType> = {
   gemini: Sparkles,
   perplexity: Search,
   grok: Zap,
-  ollama: Server,
+  codex: Code2,
 };
 
 const providerColors: Record<string, string> = {
@@ -42,7 +43,7 @@ const providerColors: Record<string, string> = {
   gemini: '#4285f4',
   perplexity: '#22c55e',
   grok: '#ef4444',
-  ollama: '#8b5cf6',
+  codex: '#8b5cf6',
 };
 
 export default function Chat() {
@@ -237,6 +238,24 @@ export default function Chat() {
               </Button>
             );
           })}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 pb-3 text-xs">
+          {providers?.map((provider) => {
+            const Icon = providerIcons[provider.slug] ?? Bot;
+            const isReady = provider.isAvailable;
+            return (
+              <Badge
+                key={`availability-${provider.slug}`}
+                variant="outline"
+                className={isReady ? 'border-green-500/50 text-green-600 dark:text-green-400' : 'border-amber-500/50 text-amber-600 dark:text-amber-400'}
+              >
+                <Icon className="mr-1 h-3 w-3" />
+                {provider.slug}: {isReady ? `READY · ${provider.executionRoute}` : 'NOT CONFIGURED'}
+              </Badge>
+            );
+          })}
+          {!providers && <span className="text-muted-foreground">Checking bridge availability…</span>}
         </div>
 
         {/* Messages Area */}

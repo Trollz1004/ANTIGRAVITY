@@ -1,5 +1,4 @@
 @echo off
-title fcc-server (Free Claude Code proxy :8082)
-cd /d C:\ANTIGRAVITY
-echo [fcc-server] Free Claude Code proxy ? Admin UI: http://127.0.0.1:8082/admin
-"C:\Users\joshl\.local\bin\fcc-server.exe"
+rem RETIRED: the former FCC proxy is not an active Mission Control runtime surface.
+echo RETIRED — use authenticated OmniRoute cloud routing after the S1 runtime gate is landed.
+exit /b 0

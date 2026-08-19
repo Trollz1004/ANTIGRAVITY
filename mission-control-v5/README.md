@@ -1,6 +1,6 @@
 # MISSION CONTROL: AGENCY SWARM v5
 
-### Haiku-Sonnet 3.5 Edition
+### Orchestrator Edition
 
 Production-grade orchestration dashboard for **148 specialized agents** across **15 divisions**, routed through **OmniRoute**.
 
@@ -10,12 +10,12 @@ Production-grade orchestration dashboard for **148 specialized agents** across *
 
 - **Frontend** — React 18 + TypeScript + Vite. Swiss high-contrast dark design system (near-black `#0a0a0a`, cyan accent, Inter + IBM Plex Mono, 1px borders, zero rounded corners).
 - **Backend** — Node.js + Express + TypeScript (`tsx` runtime). SSE for real-time updates, atomic JSON persistence for board state.
-- **OmniRoute** — provider-agnostic model routing layer. Adapters: `anthropic` (direct), `openai_compat` (any OpenAI-compatible endpoint/proxy), `ollama` (local). Priority order is env-driven; first configured healthy provider wins, with automatic failover down the chain.
+- **OmniRoute** — authenticated OpenAI-compatible cloud routing layer. It is the normal execution route; local Ollama is an explicit fail-safe, not the default.
 
 ## Modules
 
 1. **Agent Library** — searchable/filterable grid of all 148 agents, organized by division, each with name, division, description, and DEPLOY.
-2. **3.5 Swarm Engine** — select agents, write a task, pick **SPEED** (Claude 3.5 Haiku) or **REASONING** (Claude 3.5 Sonnet), launch, and watch the live execution feed with per-agent attribution (provider, model, latency, output).
+2. **Swarm Engine** — select agents, write a task, pick **SPEED** or **REASONING**, launch, and watch the live execution feed with execution provider, model, latency, and output attribution.
 3. **Hermes Kanban** — NOW / NEXT / BLOCKED / DONE board. Drag-and-drop, synced with the orchestrator: cards auto-move as tasks queue, run, finish, or fail. Dragging a failed card back into NEXT/NOW re-queues it for real. Retry/delete on-card.
 
 ## Honest-by-design
@@ -34,7 +34,7 @@ npm run install:all    # server + client
 
 # 2. configure
 cp .env.example server/.env
-# set ANTHROPIC_API_KEY (or an OpenAI-compatible base URL, or Ollama)
+# set the authenticated OPENAI_COMPAT_* or OMNIROUTE_* bridge values
 
 # 3. develop (server :3151 + client :5173 with proxy)
 npm run dev
@@ -59,7 +59,7 @@ npm start              # server serves API + static client on :3151
 
 ## Env reference
 
-See `.env.example`. Key vars: `OMNI_PROVIDER_ORDER`, `ANTHROPIC_API_KEY`, `OMNI_MODEL_SPEED`, `OMNI_MODEL_REASONING`, `OPENAI_COMPAT_BASE_URL`, `OLLAMA_BASE_URL`, `SWARM_CONCURRENCY`. Optional `AGENT_HUB_URL` + `AGENT_HUB_API_KEY` mirror finished tasks to an external AgentTask API (disabled unless both are set).
+See `.env.example`. Key vars: `OMNI_PROVIDER_ORDER`, `OPENAI_COMPAT_BASE_URL`, `OPENAI_COMPAT_API_KEY`, `OMNIROUTE_API_KEY`, `OLLAMA_BASE_URL`, and `SWARM_CONCURRENCY`. Optional `AGENT_HUB_URL` + `AGENT_HUB_API_KEY` mirror finished tasks to an external AgentTask API (disabled unless both are set).
 
 Default port **3151** (no collision with services on 3130/3200).
 

@@ -1,7 +1,6 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { api } from '../api';
-
-type BridgeTarget = 'fcc' | 'openclaw';
+import type { BridgeStatus, BridgeTarget } from '../types';
 
 interface BridgeMessage {
   sender: string;
@@ -11,16 +10,48 @@ interface BridgeMessage {
 }
 
 const TARGETS: { id: BridgeTarget; label: string; hint: string }[] = [
-  { id: 'fcc', label: 'FCC-CLAUDE', hint: 'fcc-claude CLI on PATH' },
-  { id: 'openclaw', label: 'OPENCLAW', hint: 'local OpenClaw API (support-only)' },
+  { id: 'fcc', label: 'FCC-CLAUDE', hint: 'operational CLI bridge' },
+  { id: 'hermes', label: 'HERMES', hint: 'operational bridge' },
+  { id: 'openclaw', label: 'OPENCLAW', hint: 'operational bridge' },
+  { id: 'claude', label: 'CLAUDE', hint: 'official governance bridge' },
+  { id: 'gemini', label: 'GEMINI', hint: 'official governance bridge' },
+  { id: 'github-copilot', label: 'GITHUB COPILOT', hint: 'official governance bridge' },
+  { id: 'meta-ai', label: 'META AI', hint: 'official governance bridge' },
+  { id: 'chatgpt', label: 'CHATGPT / OPENAI', hint: 'official governance bridge' },
+  { id: 'manus', label: 'MANUS', hint: 'official governance bridge' },
 ];
+
+function statusLabel(status: BridgeStatus | undefined): string {
+  if (!status) return 'CHECKING';
+  if (status.kind === 'official-governance') return 'OFFICIAL BRIDGE';
+  return status.state.toUpperCase().replace('-', ' ');
+}
 
 export default function BridgePanel() {
   const [target, setTarget] = useState<BridgeTarget>('fcc');
   const [messages, setMessages] = useState<BridgeMessage[]>([]);
   const [prompt, setPrompt] = useState('');
   const [sending, setSending] = useState(false);
+  const [statuses, setStatuses] = useState<BridgeStatus[]>([]);
   const logRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    const refresh = async () => {
+      try {
+        const { bridges } = await api.bridgeStatus();
+        if (alive) setStatuses(bridges);
+      } catch {
+        if (alive) setStatuses([]);
+      }
+    };
+    refresh();
+    const poll = window.setInterval(refresh, 15_000);
+    return () => {
+      alive = false;
+      window.clearInterval(poll);
+    };
+  }, []);
 
   const scrollToEnd = () => {
     window.setTimeout(() => {
@@ -55,6 +86,8 @@ export default function BridgePanel() {
   };
 
   const active = TARGETS.find((t) => t.id === target)!;
+  const activeStatus = statuses.find((status) => status.id === target);
+  const canSend = Boolean(activeStatus?.sendEnabled && activeStatus.state === 'ready');
 
   return (
     <div className="brain">
@@ -71,19 +104,27 @@ export default function BridgePanel() {
             </button>
           ))}
         </nav>
-        <span className="services__hint">{active.hint}</span>
+          <span className="services__hint">{active.hint}</span>
       </div>
 
       <div className="brain-card">
         <div className="brain-card__top">
           <span className="brain-card__name">CHAT · {active.label}</span>
-          <span className="brain-card__status mono">
-            {messages.length === 0 ? 'no messages' : `${messages.length} message${messages.length === 1 ? '' : 's'}`}
+          <span className={`brain-card__status mono bridge-state--${activeStatus?.state ?? 'checking'}`}>
+            {statusLabel(activeStatus)}
           </span>
         </div>
 
         <div className="brain__result" ref={logRef} style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-          {messages.length === 0 && <div className="services__empty">SEND A PROMPT TO OPEN THE BRIDGE.</div>}
+          {messages.length === 0 && (
+            <div className="services__empty">
+              {activeStatus?.kind === 'official-governance'
+                ? 'OFFICIAL GOVERNANCE VOTES STAY ON THE DESIGNATED PLATFORM BRIDGE.'
+                : canSend
+                  ? 'SEND A PROMPT TO OPEN THE OPERATIONAL BRIDGE.'
+                  : activeStatus?.detail ?? 'CHECKING BRIDGE STATUS…'}
+            </div>
+          )}
           {messages.map((m, i) => (
             <div key={i} className={`notice${m.error ? ' notice--error' : ''}`}>
               <div className="label">
@@ -105,7 +146,7 @@ export default function BridgePanel() {
               if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) send();
             }}
           />
-          <button className="btn btn--primary" disabled={sending || prompt.trim().length === 0} onClick={send}>
+          <button className="btn btn--primary" disabled={!canSend || sending || prompt.trim().length === 0} onClick={send}>
             {sending ? 'SENDING…' : 'SEND →'}
           </button>
         </div>

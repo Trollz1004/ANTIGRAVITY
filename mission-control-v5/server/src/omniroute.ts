@@ -2,7 +2,7 @@
  * OMNIROUTE — provider-agnostic model routing layer.
  *
  * Routes every swarm task to the first configured, healthy provider in
- * OMNI_PROVIDER_ORDER. Adapters: anthropic | openai_compat | ollama.
+ * OMNI_PROVIDER_ORDER. Adapters: openai_compat | ollama.
  *
  * Fail-closed by design:
  *  - No provider configured  -> OmniRouteError('NO_PROVIDER'), task goes BLOCKED.
@@ -49,6 +49,7 @@ interface ProviderAdapter {
 }
 
 const REQUEST_TIMEOUT_MS = 120_000;
+const DEFAULT_OMNIROUTE_BASE_URL = 'http://localhost:20129/v1';
 
 async function postJson(url: string, headers: Record<string, string>, body: unknown): Promise<any> {
   const controller = new AbortController();
@@ -70,39 +71,12 @@ async function postJson(url: string, headers: Record<string, string>, body: unkn
   }
 }
 
-// ── Adapter: Anthropic direct ─────────────────────────────────────────────────
-const anthropic: ProviderAdapter = {
-  id: 'anthropic',
-  configured: () => env('ANTHROPIC_API_KEY').length > 0,
-  modelFor: (mode) =>
-    mode === 'speed'
-      ? env('OMNI_MODEL_SPEED') || 'claude-3-5-haiku-20241022'
-      : env('OMNI_MODEL_REASONING') || 'claude-3-5-sonnet-20241022',
-  async complete(req) {
-    const model = req.model ?? this.modelFor(req.mode)!;
-    const data = await postJson(
-      'https://api.anthropic.com/v1/messages',
-      { 'x-api-key': env('ANTHROPIC_API_KEY'), 'anthropic-version': '2023-06-01' },
-      {
-        model,
-        max_tokens: req.maxTokens ?? 4096,
-        system: req.system,
-        messages: [{ role: 'user', content: req.prompt }],
-      },
-    );
-    const text = (data.content ?? [])
-      .filter((b: any) => b.type === 'text')
-      .map((b: any) => b.text)
-      .join('\n');
-    if (!text) throw new Error('Empty completion from Anthropic.');
-    return text;
-  },
-};
-
 // ── Adapter: any OpenAI-compatible endpoint ───────────────────────────────────
 const openaiCompat: ProviderAdapter = {
   id: 'openai_compat',
-  configured: () => env('OPENAI_COMPAT_BASE_URL').length > 0,
+  configured: () =>
+    (env('OPENAI_COMPAT_BASE_URL') || DEFAULT_OMNIROUTE_BASE_URL).length > 0 &&
+    (env('OPENAI_COMPAT_API_KEY').length > 0 || env('OMNIROUTE_API_KEY').length > 0),
   modelFor: (mode) =>
     mode === 'speed'
       ? env('OPENAI_COMPAT_MODEL_SPEED') || null
@@ -112,7 +86,7 @@ const openaiCompat: ProviderAdapter = {
     if (!model) {
       throw new Error(`OPENAI_COMPAT_MODEL_${req.mode === 'speed' ? 'SPEED' : 'REASONING'} not set.`);
     }
-    let base = env('OPENAI_COMPAT_BASE_URL').replace(/\/+$/, '');
+    let base = (env('OPENAI_COMPAT_BASE_URL') || DEFAULT_OMNIROUTE_BASE_URL).replace(/\/+$/, '');
     if (!/\/v1$/.test(base)) base = `${base}/v1`;
     // The OmniRoute gateway now requires auth on /v1/* — fall back to the
     // OMNIROUTE_API_KEY already present in .env so requests stop 401ing.
@@ -180,7 +154,6 @@ const ollama: ProviderAdapter = {
 };
 
 const ADAPTERS: Record<string, ProviderAdapter> = {
-  anthropic,
   openai_compat: openaiCompat,
   ollama,
 };
@@ -282,7 +255,7 @@ export function isExecutor(id: string): boolean {
 }
 
 function providerOrder(): ProviderAdapter[] {
-  const order = (env('OMNI_PROVIDER_ORDER') || 'anthropic,openai_compat,ollama')
+  const order = (env('OMNI_PROVIDER_ORDER') || 'openai_compat,ollama')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean);
@@ -340,7 +313,7 @@ export async function route(req: RouteRequest): Promise<RouteResult> {
   if (candidates.length === 0) {
     throw new OmniRouteError(
       'NO_PROVIDER',
-      'OmniRoute has no configured provider. Set ANTHROPIC_API_KEY, OPENAI_COMPAT_BASE_URL, or OLLAMA_BASE_URL in server/.env. This system never fabricates output.',
+      'OmniRoute has no configured authenticated cloud bridge or explicit local fail-safe. This system never fabricates output.',
     );
   }
   const failures: string[] = [];

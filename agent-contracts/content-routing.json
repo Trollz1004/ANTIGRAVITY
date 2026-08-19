@@ -1,91 +1,33 @@
 {
-  "$schema": "https://antigravity.local/schemas/content-routing.v1.json",
-  "version": "1.0.0",
-  "updated": "2026-08-10",
-  "authority": "Mission Control v5 (:3151) is the orchestration brain. SCC (:3000) is the account-linked executor. OmniRoute (:20128) is the only model gateway.",
-  "gateway": {
-    "omniroute": "http://127.0.0.1:20128/v1",
-    "note": "Port 20128 confirmed from the omniroute npm package source + hermes.md + HERMES.md + mission-control-v6 config. (AGENTS.md prose referenced 20182 earlier; repo is already consistent on 20128.)"
+  "$schema": "https://antigravity.local/schemas/content-routing.v2.json",
+  "version": "2.0.0-draft",
+  "updated": "2026-08-19",
+  "status": "draft-only; no publishing action is authorized by this file",
+  "authority": "Joshua is the sole authority. Mission Control is a dashboard and evidence surface, not an agent command authority.",
+  "workspace": "C:\\ANTIGRAVITY",
+  "routing": {
+    "normal_model_access": "authenticated OmniRoute OpenAI-compatible gateway via OPENAI_COMPAT_BASE_URL",
+    "local_model_access": "Ollama fail-safe only",
+    "official_governance": "designated official-platform bridge; never OmniRoute"
   },
   "roles": {
     "mission_control_v5": {
       "port": 3151,
-      "job": "Orchestration: task state, kanban, executor chains, and the CONTENT PLAN (what/where/why). Holds no platform credentials.",
-      "knows_where_content_goes": true
+      "job": "Dashboard for task state, repository knowledge, Graphy, service identity, and harness journals.",
+      "holds_platform_credentials": false
     },
-    "scc": {
-      "launcher": "F:\\ANTIGRAVITY\\ops\\launch-scc.cmd",
-      "port": 3000,
-      "job": "Account-linked executor. Owns real platform logins, generates copy via OmniRoute, publishes to linked accounts. This is why API/post credentials live here, NOT in Mission Control.",
-      "clone_dir": "C:\\Users\\joshl\\scc_local"
-    },
-    "omniroute": {
-      "port": 20128,
-      "job": "Single model gateway. All generation (including SCC copy) routes through it. Fail-closed."
+    "harnesses": {
+      "active": ["hermes", "openclaw", "opencode"],
+      "journal_root": ".agents/journals",
+      "preflight": "Read own STATE.md and load relevant skills before planning or delegation."
     }
   },
-  "content_destinations": [
-    {
-      "id": "landing",
-      "label": "Affiliate landing (primary, no-login funding path)",
-      "target": "https://trollz1004.github.io/youandinotai-links/",
-      "ref_param": "ref=clean-repo",
-      "executor": "scc",
-      "status": "active"
-    },
-    {
-      "id": "instagram",
-      "label": "Instagram",
-      "executor": "scc",
-      "auth": "linked-account-in-scc",
-      "status": "active"
-    },
-    {
-      "id": "facebook",
-      "label": "Facebook / Meta",
-      "executor": "scc",
-      "auth": "linked-account-in-scc",
-      "status": "active"
-    },
-    {
-      "id": "linkedin",
-      "label": "LinkedIn",
-      "executor": "scc",
-      "auth": "linked-account-in-scc",
-      "status": "active"
-    },
-    {
-      "id": "youtube",
-      "label": "YouTube (brand + future stream)",
-      "executor": "scc",
-      "auth": "linked-account-in-scc",
-      "status": "active"
-    },
-    {
-      "id": "tiktok",
-      "label": "TikTok",
-      "executor": "scc",
-      "auth": "linked-account-in-scc",
-      "status": "active"
-    },
-    {
-      "id": "x_twitter",
-      "label": "X / Twitter",
-      "executor": "scc",
-      "status": "deprioritized",
-      "note": "Node-locked to 9020; Josh deprioritized. Not a primary path."
-    },
-    {
-      "id": "reddit",
-      "label": "Reddit",
-      "executor": "none",
-      "status": "dead-end",
-      "note": "No public posting API. Research only via Agent-Reach."
-    }
-  ],
-  "flow": "Mission Control plans the content + destination -> SCC generates copy via OmniRoute (:20128) -> human approves in SCC -> SCC publishes to the linked account. MC shows the plan; SCC does the post.",
+  "publishing": {
+    "status": "not-configured",
+    "rule": "A future publishing integration must use an explicitly authorized account bridge, preserve source and destination evidence, and never store credentials in Mission Control."
+  },
   "doctrine": {
-    "secrets": "Platform credentials live only in SCC / .env. Mission Control holds the plan, never the keys.",
-    "compliance": "AGENTS.md rule 3 enforced repo-wide; no exceptions."
+    "secrets": "Credentials stay in runtime configuration and are never copied into repository contracts or dashboard records.",
+    "public_copy": "Business-only product copy. Internal governance, routing, and owner decisions are not public copy."
   }
 }

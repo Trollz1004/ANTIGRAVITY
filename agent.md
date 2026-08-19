@@ -1,161 +1,38 @@
-# agent.md - ANTIGRAVITY Universal Agent Prompt
+# S1 Agent Bootstrap — ACTIVE (S1 landed 2026-08-19)
 
-Updated: 2026-06-22
+> **Status:** LANDED by the judge lane 2026-08-19. Active doctrine. Does not activate runtime work or override Joshua’s direct authority.
 
-This is the root prompt for spawned agents working around `C:\antigravity`.
-If older exports, memories, downloads, archives, or model memory conflict with this file,
-follow this file, `AGENTS.md`, and `CLAUDE.md`.
+## Canonical Workspace
 
-## Current Rule
+The only canonical repository path is `C:\ANTIGRAVITY`. Do not execute against archive paths, exported folders, old node notes, downloads, or historical boot-order files.
 
-ANTIGRAVITY and YouAndINotAI are business-only product surfaces.
+## Authority and Scope
 
-Customer-facing work sells:
+Joshua is the sole authority. An agent performs the task Joshua assigns, records evidence, and reports uncertainty rather than inventing a state. No agent has permanent authority over another agent.
 
-- membership
-- verification
-- safety
-- support
-- uptime
-- matching quality
-- account access
-- checkout and receipt facts
+## Bootstrap Sequence
 
-Do not use private owner accounting, tax handling, ownership/control promises,
-non-product fundraising, or investment-return claims as public copy or checkout blockers.
+1. Read the current task and the relevant section of `CLAUDE.md`.
+2. Read the matching harness contract under `agent-contracts/`.
+3. Confirm the target is inside `C:\ANTIGRAVITY`.
+4. Read the assigned harness journal in `.agents/journals/`, load task-relevant skills, and then inspect the current source and service identity.
+5. Use repository knowledge/Graphy for context; Obsidian may mirror the repository journals when configured. No retired external-memory dependency is active.
+6. Work on a scoped branch or produce a patch/bundle as directed.
+7. Test the changed surface and report **VERIFIED**, **UNVERIFIED**, or **BLOCKED** with evidence.
 
-## Source Of Truth
+## Execution Rules
 
-- Live repo: `Trollz1004/ANTIGRAVITY`
-- Windows root: `c:\antigravity`
-- WSL root: `/mnt/c/antigravity`
-- Merge target: `main`
-- Current root files: `AGENTS.md`, `CLAUDE.md`, `agent.md`
-- Current doctrine: `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md`
-- Current audit: `briefings/BUSINESS-ONLY-AUDIT-2026-06-22.md`
+- Use authenticated OmniRoute for normal harness model access. Ollama is fail-safe only.
+- Official-platform governance actions use designated official bridges; they never route through OmniRoute.
+- Only the judge lane may push, merge, or delete branches unless Joshua directly authorizes otherwise.
+- Never print or commit secrets, populated environment files, token aliases, or private credential-bearing URLs.
+- Public product copy stays business-only and uses Square for checkout unless Joshua changes it.
 
-Do not use OneDrive copies, downloads, backup clones, archived briefings, exported chats,
-or cached project folders as current operating truth unless Joshua points to them for recovery.
-
-## Authority
-
-Joshua Coleman is the sole human authority.
-
-No AI, wrapper, dashboard, process, or node outranks Joshua or another approved AI lane.
-Agents execute assigned work, preserve evidence, and keep public product surfaces clean.
-
-The active lead is whichever capable agent Joshua directly assigns in the active conversation. Paperclip, Hermes, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Ollama, and other lanes may lead only when Joshua directly assigns them or when their role map already covers the task. Otherwise they collect evidence, draft proposals, and report to the active lead.
-
-Current T5500 Paperclip state:
-
-- T5500 package: `C:\antigravity-paperclip-dateapp-ops`
-- T5500 scheduled task: `PaperclipDateAppLoopback`
-- Local Paperclip URL on T5500: `http://127.0.0.1:3100`
-- Scope: date app, customer support, Cloudflare handoff, compact heartbeats
-- Excluded: Hermes
-- Decision lane: active lead assigned by Joshua per task
-- Support lane: Official OpenClaw support-only
-- Worker lane: FCC/OpenCode worker-only
-
-The matching briefing is
-`briefings/PAPERCLIP-DATEAPP-T5500-SETUP-2026-06-22.md`.
-
-9020 Hermes Paperclip work is separate and not yet assigned to marketing or
-AI-solutions/business exchange. Treat 9020 as dev/support checkout until Joshua
-sets that lane.
-
-FCC may be used as a Paperclip worker model through its MCP bridge for OpenCode,
-NVIDIA, and Ollama-backed work. FCC must report evidence and proposed actions to
-the active lead unless Joshua explicitly assigns it as a decision lane for a specific task.
-
-No model below Codex 5.5 or Opus-level may decide repo doctrine, payment rules,
-public copy, launch gates, merge/push flow, production node roles, or founder
-authority. Lower-capability models must return evidence, risks, and proposed next actions for the active lead / Joshua review.
-
-There is no permanent AI boss.
-
-When Joshua directly assigns a task to Claude, Codex/OpenAI, Gemini, Meta/Llama, Manus, Hermes, Paperclip, FCC, OpenCode, Ollama, or another capable system, that named system becomes the active lead for that task.
-
-The guardrails restrict autonomous or delegated model behavior, not Joshua's direct instruction.
-
-## Boot Order
-
-Read in order:
-
-1. `agent.md`
-2. `AGENTS.md`
-3. `CLAUDE.md`
-4. `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md`
-5. `memory/activeContext.md`
-6. Lane-specific file only if the task explicitly requires it
-
-Then report:
-
-```text
-AGENT BOOTED
-ROOT: c:\antigravity
-TASK: <one line>
-LANE: <active lead assigned by Joshua|FCC Worker|Gemini|Claude|Hermes|OpenClaw|Other>
-STATUS: <starting|blocked>
-BLOCKER: <none or exact blocker>
-```
-
-## Payments And Public Copy
-
-YouAndINotAI uses Square for live checkout unless Joshua changes it.
-
-Checkout copy must describe what the customer receives: membership, verification,
-access, support, safety, pricing, receipt, refund terms, and account status.
-
-Do not add legal/control structures, private accounting, owner planning, or non-product claims
-to checkout, pricing pages, Square catalog entries, public APIs, public dashboards, or ads.
-
-## Node Roles
-
-- T5500: public backend, domains, tunnels, payments, Wrangler.
-- Sabretooth: Codex/operator work, repo cleanup, local model support.
-- 9020: dev/support checkout.
-- OpenClaw: customer support only.
-
-Do not move public tunnel or payment responsibility off T5500 unless Joshua explicitly changes
-the role map.
-
-## Secret Rules
-
-Allowed:
-
-- read placeholder examples
-- output variable names
-- record missing variable names
-
-Forbidden:
-
-- reading `.fcc\.env`
-- printing populated env files
-- committing vault files
-- copying secrets into repo docs or chat
-
-## Task Rule
-
-When assigned work:
-
-1. Confirm the target is in or connected to `c:\antigravity`.
-2. Inspect current state before acting.
-3. Fix active drift directly.
-4. Build/test/scan the changed surface.
-5. Commit and push founder-approved completed repo changes.
-6. Sync T5500 and 9020 when node-facing prompts, docs, or runtime files changed.
-
-## Completion Report
-
-Use this format:
+## Completion Record
 
 ```text
 FILES CHANGED: <paths or none>
-WHAT I DID: <one line>
-VERIFICATION: <commands/checks or not run>
-RISKS: <none or exact risk>
-NEXT: <single next action>
+STATUS: <VERIFIED | UNVERIFIED | BLOCKED>
+EVIDENCE: <test, file, sanitized audit, or exact blocker>
+NEXT: <one bounded next action>
 ```
-
-No fake green. If a check was not run, say so.
