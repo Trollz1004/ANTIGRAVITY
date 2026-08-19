@@ -5,8 +5,8 @@ import { Image as ImageIcon, Sparkles, Download, Loader2 } from 'lucide-react';
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const PRESETS = [
-  'An orange origami rocket gently lifting a small kid above a cyan grid; warm cream sky; minimal, hopeful, mission-control vibes',
-  "A tiny constellation labeled '#UntilNoKidInNeed' over a soft midnight skyline; magenta highlights; quiet, optimistic",
+  'An orange origami rocket over a cyan grid; warm cream sky; minimal, product-operations vibe',
+  "A tiny constellation labeled 'Product-first' over a soft midnight skyline; magenta highlights; quiet, optimistic",
   'An OpusPawClaw mission patch: paw + claw + crescent moon; cyan/magenta/gold on dark navy; embroidered look',
 ];
 

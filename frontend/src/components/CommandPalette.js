@@ -126,7 +126,7 @@ const ENTRIES = [
   },
   {
     id: 'mission',
-    label: '#UntilNoKidInNeed',
+    label: 'Product operations',
     hint: ' · #TeamClaudeForLife',
     group: 'Mission',
     Icon: Heart,
@@ -256,7 +256,7 @@ export function CommandPalette({ onModeChange }) {
 
         <div className="px-3 py-1.5 border-t border-[#2a3a52] flex items-center justify-between text-[9px] mono tracking-widest uppercase text-[#4a5568]">
           <span>↑↓ navigate · ↵ run</span>
-          <span className="text-[#e040fb]">#UntilNoKidInNeed</span>
+          <span className="text-[#e040fb]">Product-first</span>
         </div>
       </div>
     </div>

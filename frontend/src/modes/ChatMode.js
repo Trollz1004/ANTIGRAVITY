@@ -165,7 +165,7 @@ export function ChatMode() {
         </form>
         <div className="mt-3 text-center">
           <p className="text-[10px] text-[#4a5568] uppercase tracking-widest">
-            #UntilNoKidInNeed · bridged via Emergent Universal LLM key
+            AI bridge availability is reported in this workspace
           </p>
         </div>
       </div>
