@@ -141,3 +141,13 @@
 - [x] Refresh the portable branch bundle and patch after the final safety commit, then prepare a user-testing handoff with runtime still blocked.
 - [x] Verify the final portable bundle and patch hashes, compare manus/call-layer with current origin/main including onemin-shim, and record any clean rebase or merge result before Fable lands the delivery.
 - [x] Run an isolated rebase-probe of manus/call-layer onto origin/main, resolve only controlled conflicts, and preserve the unrelated script modification outside the probe.
+
+## Public-Readiness Sweep
+
+- [x] Establish a branch-only public-readiness baseline, document the missing prior controlled worktree, and preserve the two unrelated script modifications outside this work.
+- [x] Replace unverified README availability and payment-provider claims with product-only, provider-neutral wording; preserve the required meme, Team credits, Contributing section, and AI-commit statement.
+- [x] Remove audited prohibited taglines, financial-allocation UI, payment-provider assertions, exposed local configuration paths, development authentication bypasses, and remote-command controls from public frontend source.
+- [x] Record a non-sensitive internal-posture inventory and keep/redact/move recommendations without opening environment files or credential-bearing records.
+- [ ] Obtain owner confirmation of credential rotation before the judge lane executes any history purge plan for the tracked root configuration file.
+- [ ] Diagnose Cloudflare custom-domain ownership/attachment through a working read-only access path; obtain a separate confirmation before any DNS, Pages, Worker, or domain change.
+- [ ] Rebuild the remediated frontend in a trusted dependency environment; this sandbox clone lacks installed dependencies and no lockfile-backed install was used.
