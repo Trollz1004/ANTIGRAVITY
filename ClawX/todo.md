@@ -100,3 +100,27 @@
 - [x] Inspect the installed i-have-adhd and Hermes authoring skill configuration and run their token-discipline and authoring-boundary tests.
 - [x] Reframe the installed i-have-adhd skill as neutral token-saving output discipline, with no user diagnosis or persistent diagnostic mode.
 - [x] Prepare and generate an editable presentation summarizing the complete `manus/call-layer` delivery and Hermes authoring boundaries.
+
+## Skills Doctrine Reconciliation
+
+- [x] Extract the attached skills-doctrine task categories and identify the non-negotiable expectations for planning, testing, browser work, UI work, marketing, and mobile work.
+- [x] Compare the extracted skills doctrine with active Hermes, OpenClaw, and OpenCode preflight contracts; separate valid task-aware requirements from conflicts with branch, authority, secrecy, and runtime boundaries.
+- [x] Draft a task-aware skills preflight matrix that loads all relevant skills for a task category without indiscriminately loading unrelated skills.
+- [ ] Obtain approval before changing shared harness contracts or installing additional third-party skills from the doctrine.
+
+## Human-Facing Mission Control Tools
+
+- [x] Inspect current Supabase and Obsidian integration readiness, data boundaries, and existing Mission Control surfaces without enabling runtime execution.
+- [x] Design Supabase as a human-facing Mission Control tool for operational records, task views, and controlled data access rather than hidden agent-only memory.
+- [x] Design Obsidian as an optional human-facing knowledge and journal viewer/editor with repository ownership and safe mirror semantics.
+- [ ] Obtain approval before adding new integration credentials, modifying schemas, enabling runtime services, or changing the S1 gate.
+- [x] Map the current Mission Control service roles—frontend, backend, mission-mcp, and onemin-shim—and decide whether OmniRoute, Supabase, Obsidian, or Hermes require a distinct service, a mounted tool panel, or an external connector.
+- [x] Prevent duplicate MCP, gateway, and storage services by documenting a single owning component and health signal for each integration.
+- [x] Replace residual Pieces UI and polling in the Mission Control Brain panel with human-facing repository, Graphy, journals, Supabase-readiness, and Obsidian-readiness surfaces.
+- [x] Add a read-only Mission Control integration-status contract that reports configured, unavailable, and not-configured states without exposing credentials.
+- [x] Add focused verification for the human-facing integration-status contract and the removal of residual Pieces client wiring.
+- [x] Inventory the August 16 vault manifest and handoff artifacts without opening certificates, environment files, passwords, tokens, or credential-bearing backups.
+- [x] Classify each non-secret vault artifact as safe historical context, current integration evidence, or excluded sensitive material before using it in Mission Control planning.
+- [x] Inventory archive, duplicate-service, and retired-source candidates against the active Mission Control topology without modifying any item during discovery.
+- [x] Remove only artifacts verified as duplicated or retired, retaining a sanitized removal record and preserving all uncertain, active, or security-sensitive material.
+- [x] Verify the remaining source tree, focused tests, and branch status after cleanup; preserve the unrelated pre-existing script modification as excluded work.

@@ -127,28 +127,23 @@ export interface BrainJournal {
   bytes: number;
 }
 
-export interface BrainTool {
-  name: string;
-  description: string;
-  inputSchema: unknown;
-}
+export type HumanToolState = 'configured' | 'unavailable' | 'not-configured';
 
-export interface BrainAskResult {
-  result: unknown;
-  tool: string;
-  ms: number;
-}
-
-export interface BrainPiecesStatus {
-  up: boolean;
-  url: string;
-  session: string | null;
-  tools: number;
+export interface HumanToolStatus {
+  id: 'repository' | 'graphy' | 'supabase' | 'obsidian';
+  label: string;
+  state: HumanToolState;
+  detail: string;
+  humanFacing: true;
+  openUrl?: string;
 }
 
 export interface BrainState {
   platforms: BrainPlatform[];
-  piecesUp: boolean;
+  knowledge: { source: 'repository'; graphEndpoint: string; searchEndpoint: string };
+  graphy: { agentsEndpoint: string; knowledgeEndpoint: string };
+  obsidian: { status: 'not-configured' | 'configured' | 'unavailable' };
+  humanTools: HumanToolStatus[];
 }
 
 // ── Brain catalog (monorepo skills + tasks) ───────────────────────────────────
