@@ -18,7 +18,7 @@ export interface RouteRequest {
   system: string;
   prompt: string;
   maxTokens?: number;
-  /** Named executor (ornith | fcc-opus | auto). Pins provider+model chains. */
+  /** Named executor (ornith | auto | judge). Pins provider+model chains. */
   executor?: string;
   /** Explicit model override — set internally by the executor chain. */
   model?: string;
@@ -163,8 +163,6 @@ const ADAPTERS: Record<string, ProviderAdapter> = {
 // generic OMNI_PROVIDER_ORDER. Each link is tried in order; first success wins.
 //  - ornith    : the local Ornith model, falling back to the smallest local
 //                gemma4 (browser-capable) when Ornith is unavailable/OOM.
-//  - fcc-opus  : Claude Opus via the OmniRoute gateway's FCC/Claude-Code
-//                provider, falling back to the gateway's auto Opus route.
 //  - auto      : the classic provider-order behavior (default).
 interface ExecutorLink {
   provider: keyof typeof ADAPTERS;
@@ -201,11 +199,6 @@ function executorChains(): Record<string, ExecutorLink[]> {
       { provider: 'ollama', model: env('EXEC_ORNITH_FALLBACK_MODEL') || 'gemma4:31b-cloud' },
       { provider: 'ollama', model: env('EXEC_ORNITH_FALLBACK2_MODEL') || 'gemma2:latest' },
     ],
-    'fcc-opus': [
-      { provider: 'openai_compat', model: env('EXEC_FCC_OPUS_MODEL') || 'auto/coding:free' },
-      { provider: 'openai_compat', model: env('EXEC_FCC_OPUS_FALLBACK_MODEL') || 'auto/best-free' },
-      { provider: 'ollama', model: env('EXEC_LOCAL_FALLBACK_MODEL') || 'ornith:9b' },
-    ],
     // THE JUDGE — highest-reasoning route, deliberately NOT any model the three
     // worker lanes run on, and deliberately WITHOUT a local floor: a 9B local
     // model must never hold gate authority over the swarm's output. If the
@@ -228,10 +221,6 @@ const EXECUTOR_META: Record<string, { label: string; description: string }> = {
   ornith: {
     label: 'ORNITH',
     description: 'Local Ornith (ollama), gemma4 smallest as browser-capable local fallback.',
-  },
-  'fcc-opus': {
-    label: 'DEEP · FREE',
-    description: 'Free coding-tier routes for heavier reasoning. Was cc/claude-opus, which billed the Max subscription — automation never does that.',
   },
   judge: {
     label: 'JUDGE',
