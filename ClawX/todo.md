@@ -158,4 +158,4 @@
 - [x] Audit Mission Control v5 server, client, and Electron code for retired FCC bridge references, disallowed service states, incorrect default OpenClaw/Hermes ports, and noncanonical drive paths; treat v6 as reference-only.
 - [x] Implement identity-checked service tiles using only UP, DOWN, WRONG SERVICE, AUTH MISSING, AUTH REJECTED, and NOT CONFIGURED, without executing live health probes.
 - [x] Set the OpenClaw default port to 18789 and Hermes default port to 9119 wherever v5 defines a default.
-- [ ] Run source scans, the project typecheck, and applicable unit tests without service startup; package a bundle or patch series and a concise review packet for the judge lane.
+- [x] Run source scans, the project typecheck, and applicable unit tests without service startup; package a bundle or patch series and a concise review packet for the judge lane.
