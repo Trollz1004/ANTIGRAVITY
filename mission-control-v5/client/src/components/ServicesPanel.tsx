@@ -2,6 +2,23 @@ import { useEffect, useState } from 'react';
 import { api } from '../api';
 import type { ServiceStatus } from '../types';
 
+const STATUS_LABEL: Record<ServiceStatus['status'], string> = {
+  up: 'UP',
+  down: 'DOWN',
+  mismatch: 'WRONG SERVICE',
+  'auth-required': 'AUTH MISSING',
+  'auth-rejected': 'AUTH REJECTED',
+  'not-configured': 'NOT CONFIGURED',
+};
+
+function dotClass(status: ServiceStatus['status']): string {
+  if (status === 'up') return 'dot--green';
+  if (status === 'mismatch') return 'dot--amber';
+  if (status === 'auth-required' || status === 'auth-rejected') return 'dot--accent';
+  if (status === 'not-configured') return 'dot--idle';
+  return 'dot--red';
+}
+
 export default function ServicesPanel() {
   const [services, setServices] = useState<ServiceStatus[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -42,23 +59,23 @@ export default function ServicesPanel() {
         {services.map((svc) => (
           <a
             key={svc.name}
-            className={`service-card ${svc.status === 'up' ? 'service-card--up' : 'service-card--down'}`}
+            className={`service-card service-card--${svc.status}`}
             href={svc.openUrl ?? svc.url}
             target="_blank"
             rel="noreferrer noopener"
           >
             <div className="service-card__top">
               <span
-                className={`dot ${svc.status === 'up' ? 'dot--green' : 'dot--red'} ${
-                  svc.status === 'up' ? '' : 'dot--pulse'
+                className={`dot ${dotClass(svc.status)} ${
+                  svc.status === 'down' || svc.status === 'auth-rejected' ? 'dot--pulse' : ''
                 }`}
               />
               <span className="service-card__name">{svc.name}</span>
-              <span className="service-card__status">{svc.status === 'up' ? 'UP' : 'DOWN'}</span>
+              <span className="service-card__status">{STATUS_LABEL[svc.status]}</span>
             </div>
             <div className="service-card__url mono">{svc.openUrl ?? svc.url}</div>
             <div className="service-card__meta">
-              <span className="mono">{svc.status === 'up' ? `${svc.ms}ms` : '—'}</span>
+              <span className="mono">{svc.status === 'down' || svc.status === 'not-configured' ? '—' : `${svc.ms}ms`}</span>
               <span className="service-card__detail mono">{svc.detail}</span>
               <span className="service-card__open">OPEN ↗</span>
             </div>

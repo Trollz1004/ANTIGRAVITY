@@ -16,6 +16,8 @@ import type {
   KnowledgeSearchHit,
   Mode,
   ServiceStatus,
+  BridgeStatus,
+  BridgeTarget,
   SubagentNode,
   SwarmTask,
 } from './types';
@@ -69,7 +71,8 @@ export const api = {
   brainCatalogEntry: (kind: 'skills' | 'tasks', id: string) => request<BrainSkill>(`/api/brain/catalog/${kind}/${id}`),
   brainMcpStatus: () => request<BrainMcpStatus>('/api/mcp/status'),
   // ── Bridge hub (external AI CLI tools) ─────────────────────────────────────
-  bridgeSend: (target: 'fcc' | 'openclaw', prompt: string) =>
+  bridgeStatus: () => request<{ bridges: BridgeStatus[] }>('/api/bridge/status'),
+  bridgeSend: (target: BridgeTarget, prompt: string) =>
     request<{ sender: string; text: string; timestamp: string }>(`/api/bridge/${target}`, {
       method: 'POST',
       body: JSON.stringify({ prompt }),
