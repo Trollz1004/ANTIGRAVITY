@@ -174,7 +174,7 @@ export interface BrainMcpStatus {
   serverInfo: { name: string; version: string };
 }
 
-export type BridgeTarget = 'hermes' | 'openclaw';
+export type BridgeTarget = 'hermes' | 'openclaw' | 'opencode';
 
 export interface BridgeStatus {
   id: BridgeTarget;

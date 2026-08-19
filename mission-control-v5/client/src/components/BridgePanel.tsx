@@ -12,6 +12,7 @@ interface BridgeMessage {
 const TARGETS: { id: BridgeTarget; label: string; hint: string }[] = [
   { id: 'hermes', label: 'HERMES', hint: 'operational bridge' },
   { id: 'openclaw', label: 'OPENCLAW', hint: 'operational bridge' },
+  { id: 'opencode', label: 'OPENCODE', hint: 'operational bridge' },
 ];
 
 function statusLabel(status: BridgeStatus | undefined): string {
