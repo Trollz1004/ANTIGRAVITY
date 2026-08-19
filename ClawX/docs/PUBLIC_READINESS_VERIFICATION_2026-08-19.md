@@ -3,6 +3,9 @@
 > **Branch:** `manus/public-readiness-sweep`
 > **Scope:** Public-copy and posture remediation only. No service was started, no runtime gate changed, no secret value was read, no history was rewritten, no Cloudflare configuration changed, and the repository was not published.
 
+> **Implementation commit:** `ec429db5`
+> **Portable artifacts:** `public-readiness-sweep-2026-08-19.bundle` (`d82044ec29439702dc43e1f93795388638514d706de9d335b8f174096fee9ae8`) and `public-readiness-sweep-2026-08-19.patch` (`f5e4c6c9fbc7d43f8e96e7d60cdadc9fb6ab340d78df5c76e948501468a6ec1f`).
+
 ## Verdicts
 
 | Work item | Verdict | Evidence and boundary |
