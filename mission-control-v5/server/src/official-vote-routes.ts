@@ -1,11 +1,21 @@
 import type { Express } from 'express';
 import {
+  OFFICIAL_PLATFORM_IDS,
   OfficialVoteEngine,
   OfficialVoteError,
   type OfficialBridgeIdentityResolver,
   type OfficialPlatformId,
   type VoteDecision,
 } from './official-vote-engine.js';
+
+const PLATFORM_LABELS: Record<OfficialPlatformId, string> = {
+  claude: 'CLAUDE',
+  gemini: 'GEMINI',
+  'github-copilot': 'GITHUB COPILOT',
+  'meta-ai': 'META AI',
+  chatgpt: 'CHATGPT / OPENAI',
+  manus: 'MANUS',
+};
 
 class UnavailableOfficialBridgeResolver implements OfficialBridgeIdentityResolver {
   async resolve(_platform: OfficialPlatformId) {
@@ -27,6 +37,25 @@ export function registerOfficialVoteRoutes(app: Express, options: OfficialVoteRo
 
   app.get('/api/official-votes/status', (_req, res) => {
     res.json({ roster: engine.rosterStatus() });
+  });
+
+  // Read-only projection for the council UI. Seats report NOT CONFIGURED until
+  // each platform's official identity resolver integration is approved.
+  app.get('/api/official-votes/view', async (_req, res) => {
+    const events = engine.events();
+    const seats = await Promise.all(OFFICIAL_PLATFORM_IDS.map(async (platform) => {
+      const identity = await (options.resolver ?? new UnavailableOfficialBridgeResolver()).resolve(platform).catch(() => null);
+      return {
+        platform,
+        label: PLATFORM_LABELS[platform],
+        state: identity ? 'UP' : 'NOT CONFIGURED',
+        detail: identity ? 'official bridge identity resolved' : 'official bridge not configured',
+      };
+    }));
+    const bySubject = new Map<string, number>();
+    for (const event of events) bySubject.set(event.subject, (bySubject.get(event.subject) ?? 0) + 1);
+    const ballots = [...bySubject.entries()].map(([subject, decisions]) => ({ id: subject, subject, status: 'OPEN' as const, decisions }));
+    res.json({ roster: engine.rosterStatus(), seats, ballots, events });
   });
 
   app.post('/api/official-votes', async (req, res) => {

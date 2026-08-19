@@ -107,7 +107,7 @@ async function execute(task: SwarmTask): Promise<void> {
   const requested = (task.agentIds ?? []).filter(id => AGENT_INDEX.has(id));
   const activeAgents = requested.length > 0
     ? requested
-    : ['openclaw', 'hermes'].filter(id => AGENT_INDEX.has(id));
+    : ['openclaw', 'opencode', 'hermes'].filter(id => AGENT_INDEX.has(id));
 
   try {
     await Promise.all(activeAgents.map(async (agentId) => {
@@ -311,7 +311,7 @@ export function createTask(input: any): SwarmTask {
     prompt: input.prompt,
     agentIds: Array.isArray(input.agentIds)
       ? input.agentIds.filter((id: unknown): id is string => typeof id === 'string' && AGENT_INDEX.has(id))
-      : ['openclaw', 'hermes'].filter(id => AGENT_INDEX.has(id)),
+      : ['openclaw', 'opencode', 'hermes'].filter(id => AGENT_INDEX.has(id)),
     mode: 'reasoning',
     executor: 'auto',
     column: 'NEXT',
