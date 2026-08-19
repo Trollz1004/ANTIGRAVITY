@@ -10,7 +10,6 @@ interface BridgeMessage {
 }
 
 const TARGETS: { id: BridgeTarget; label: string; hint: string }[] = [
-  { id: 'fcc', label: 'FCC-CLAUDE', hint: 'operational CLI bridge' },
   { id: 'hermes', label: 'HERMES', hint: 'operational bridge' },
   { id: 'openclaw', label: 'OPENCLAW', hint: 'operational bridge' },
   { id: 'claude', label: 'CLAUDE', hint: 'official governance bridge' },
@@ -28,7 +27,7 @@ function statusLabel(status: BridgeStatus | undefined): string {
 }
 
 export default function BridgePanel() {
-  const [target, setTarget] = useState<BridgeTarget>('fcc');
+  const [target, setTarget] = useState<BridgeTarget>('openclaw');
   const [messages, setMessages] = useState<BridgeMessage[]>([]);
   const [prompt, setPrompt] = useState('');
   const [sending, setSending] = useState(false);
