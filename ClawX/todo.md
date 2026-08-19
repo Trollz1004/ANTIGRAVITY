@@ -177,3 +177,11 @@
 - [x] Build a governance view with separate official-seat connection states, active ballots, and read-only decision records using only a mockable official-vote API contract.
 - [x] Preserve the seat-panel interaction pattern while excluding Hermes/OpenClaw controls and all general message or operational-send paths from the governance view.
 - [x] Add mocked component tests and client typecheck coverage; package a judge-ready handoff.
+
+## Mission Control Role Wall
+
+- [x] Preserve S1 as blocked and work only on local `manus/mc-role-wall`; do not start services, make live probes, push, merge, or delete branches.
+- [x] Audit Mission Control v5 server, swarm, and scripts for harness-controlled push, merge, or branch-deletion paths and gate each Git mutation behind an explicit judge approval step.
+- [x] Align tri-execution lanes to OpenClaw, Hermes, and OpenCode without assigning a retired executor identifier to an agent lane.
+- [x] Add CI-runnable static checks that reject vote-module imports of model-routing or operational bridge modules and reject retired bridge identifiers or prohibited API-key patterns in source.
+- [ ] Add focused role-wall tests, run typecheck without services, and package a judge-ready handoff.

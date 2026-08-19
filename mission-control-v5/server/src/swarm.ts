@@ -16,7 +16,7 @@
  *    may be pushed/merged; workers and orchestrators never push.
  */
 import { randomUUID } from 'node:crypto';
-import { AGENT_INDEX, CATEGORY_INDEX, ORCHESTRATOR_CONTRACT } from './agents.js';
+import { AGENT_INDEX, CATEGORY_INDEX, HARNESS_LANE_IDS, ORCHESTRATOR_CONTRACT } from './agents.js';
 import { loadCatalog, getCatalogEntry, type BrainSkill } from './catalog.js';
 import { readJournal, writeJournal } from './brainStore.js';
 import { materializeTask } from './materialize.js';
@@ -101,13 +101,7 @@ const JUDGE_SHAPE =
   '{\"decision\":\"accept|deny\",\"index\":1,\"reason\":\"one-line justification\",\"editedOutput\":\"full corrected deliverable, or empty string to ship as-is\"}';
 
 async function execute(task: SwarmTask): Promise<void> {
-  // Run the agents the TASK asked for. The old hardcoded trio ignored
-  // task.agentIds and included a retired executor identifier, which is not an agent id, so one
-  // judge "version" was always undefined.
-  const requested = (task.agentIds ?? []).filter(id => AGENT_INDEX.has(id));
-  const activeAgents = requested.length > 0
-    ? requested
-    : ['openclaw', 'hermes'].filter(id => AGENT_INDEX.has(id));
+  const activeAgents = HARNESS_LANE_IDS.filter((id) => AGENT_INDEX.has(id));
 
   try {
     await Promise.all(activeAgents.map(async (agentId) => {
@@ -309,9 +303,7 @@ export function createTask(input: any): SwarmTask {
     id: randomUUID(),
     title: input.title || 'Task',
     prompt: input.prompt,
-    agentIds: Array.isArray(input.agentIds)
-      ? input.agentIds.filter((id: unknown): id is string => typeof id === 'string' && AGENT_INDEX.has(id))
-      : ['openclaw', 'hermes'].filter(id => AGENT_INDEX.has(id)),
+    agentIds: [...HARNESS_LANE_IDS],
     mode: 'reasoning',
     executor: 'auto',
     column: 'NEXT',

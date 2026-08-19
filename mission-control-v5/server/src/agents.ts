@@ -1,5 +1,5 @@
 /**
- * THE FOUR ORCHESTRATORS — the only agents Mission Control ever needs.
+ * THE THREE HARNESS LANES — the only worker lanes Mission Control uses.
  *
  * Agents are task harnesses, not authorities. Roles live in the canonical
  * C:\ANTIGRAVITY skill catalog and are loaded before planning or delegation.
@@ -10,6 +10,7 @@
 import type { AgentDef, CategoryDef } from './types.js';
 
 export const CATEGORIES: CategoryDef[] = [{ id: 'orchestrators', label: 'ORCHESTRATORS' }];
+export const HARNESS_LANE_IDS = ['openclaw', 'hermes', 'opencode'] as const;
 
 /**
  * The shared doctrine. One source ("one of everything"), injected verbatim
@@ -29,6 +30,16 @@ export const ORCHESTRATOR_CONTRACT = [
 
 export const AGENTS: AgentDef[] = [
   {
+    id: 'openclaw',
+    name: 'OPENCLAW',
+    category: 'orchestrators',
+    description:
+      'Handles assigned engineering, verification, and support work through its repository journal, skill catalog, and authenticated OmniRoute. It verifies service identity rather than trusting a port alone.',
+    harness: 'ClawHub registry · repository journal · service-identity verification · authenticated OmniRoute',
+    platformId: 'openclaw',
+    brainExecutor: 'auto',
+  },
+  {
     id: 'hermes',
     name: 'HERMES',
     category: 'orchestrators',
@@ -37,16 +48,6 @@ export const AGENTS: AgentDef[] = [
     harness:
       'Hermes skill hub · repository journal · Mission Control knowledge/Graphy · authenticated OmniRoute',
     platformId: 'hermes',
-    brainExecutor: 'auto',
-  },
-  {
-    id: 'openclaw',
-    name: 'OPENCLAW',
-    category: 'orchestrators',
-    description:
-      'Handles assigned engineering, verification, and support work through its repository journal, skill catalog, and authenticated OmniRoute. It verifies service identity rather than trusting a port alone.',
-    harness: 'ClawHub registry · repository journal · service-identity verification · authenticated OmniRoute',
-    platformId: 'openclaw',
     brainExecutor: 'auto',
   },
   {
@@ -66,6 +67,6 @@ export const CATEGORY_INDEX = new Map(CATEGORIES.map((c) => [c.id, c]));
 
 // Exactly three active harness lanes. Roles are skills; adding a fourth lane
 // without an explicit contract is drift.
-if (AGENTS.length !== 3) {
-  throw new Error(`Orchestrator roster must be exactly 3 — found ${AGENTS.length}.`);
+if (AGENTS.length !== HARNESS_LANE_IDS.length || AGENTS.some((agent, index) => agent.id !== HARNESS_LANE_IDS[index])) {
+  throw new Error('Harness roster must be exactly OpenClaw, Hermes, and OpenCode.');
 }
