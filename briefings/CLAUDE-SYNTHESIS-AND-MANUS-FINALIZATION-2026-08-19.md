@@ -233,12 +233,26 @@ the engineering hub) can run them locally:
    error strings; sync the roster to v1.1 (codex in, ollama utility) in the
    same pass, updating the stale Chat.tsx/Analytics.tsx icon maps.
 
+5. THE PROVIDER SEAM (critical for portability): we understand your call
+   layer rides the Manus platform's BUILT-IN provider pool (Grok,
+   OpenRouter, Gemini, Perplexity, etc.) with cost-based routing — that is
+   why it works on your hosting and why the manus seat serves varying
+   Gemini models. That built-in pool does NOT travel with the code. Ship
+   the call layer behind a provider interface with two backends: (a) your
+   platform's built-in pool, used on your hosting exactly as today; (b) an
+   OpenAI-compatible endpoint backend (base URL + key from env) so the
+   self-hosted build plugs into the node's local OmniRoute gateway
+   (127.0.0.1:20128, /v1/chat/completions), which holds the same
+   multi-provider auto-fallback role locally. Document which env var NAMES
+   select the backend. Do not hardcode either side.
+
 Delivery rule for Part 2: publish to the repo on a branch named
 manus/call-layer with a written summary of what each commit contains, plus
 the exact env var NAMES (never values) the self-hosted deployment needs.
 Joshua or the judge lane lands it on main per repo doctrine. If any piece
-cannot be exported from your environment, say exactly which piece and why —
-do not substitute a rewrite silently.
+cannot be exported from your environment — including any part of the
+built-in provider pool integration that is platform-private — say exactly
+which piece and why; do not substitute a rewrite silently.
 
 PART 3 — FINALIZE THE DESIGN AND IMPLEMENTATION PLAN IN PLACE.
 Inspect and improve the EXISTING setup. Do not start over. Resolve conflicts;
