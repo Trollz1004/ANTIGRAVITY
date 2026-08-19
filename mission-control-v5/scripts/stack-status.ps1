@@ -11,8 +11,7 @@ $services = @(
   @{ Name = 'OpenClaw (ClawX)';  Port = 18789; Cmd = 'ClawX starts this itself - never run a 2nd one'; Core = $false },
   @{ Name = 'DateApp frontend';  Port = 3200;  Cmd = 'see START-STACK.md step 6';                      Core = $false },
   @{ Name = 'DateApp backend';   Port = 8000;  Cmd = 'see START-STACK.md step 6';                      Core = $false },
-  @{ Name = 'llama.cpp embed';   Port = 8081;  Cmd = 'scripts\tab-llamacpp-embed.cmd  (optional)';     Core = $false },
-  @{ Name = 'Pieces LTM';        Port = 39300; Cmd = 'Pieces OS app (auto-starts)';                    Core = $false }
+  @{ Name = 'llama.cpp embed';   Port = 8081;  Cmd = 'scripts\tab-llamacpp-embed.cmd  (optional)';     Core = $false }
 )
 
 $down = @()

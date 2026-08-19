@@ -27,13 +27,11 @@ import { promisify } from 'node:util';
 
 const run = promisify(execFile);
 
-// F:, not E: — the repo disk moved into Sabretooth 2026-08-09 and this default
-// was the last E:\ reference left in running code. With E:\ absent, every task
-// died at DELIVER with ENOENT even though the swarm had produced a winner.
-const REPO_ROOT = (process.env.MATERIALIZE_REPO_ROOT ?? 'F:\\ANTIGRAVITY').trim();
+// The canonical workspace is C:\ANTIGRAVITY. Materialization stays local and
+// uncommitted by default; the judge lane controls any later delivery action.
+const REPO_ROOT = (process.env.MATERIALIZE_REPO_ROOT ?? 'C:\\ANTIGRAVITY').trim();
 const OUT_DIR = (process.env.MATERIALIZE_OUT_DIR ?? 'mission-control-output').trim();
-const AUTO_COMMIT = (process.env.MATERIALIZE_AUTO_COMMIT ?? '1').trim() === '1';
-const AUTO_PUSH = (process.env.MATERIALIZE_AUTO_PUSH ?? '1').trim() === '1';
+const AUTO_COMMIT = (process.env.MATERIALIZE_AUTO_COMMIT ?? '0').trim() === '1';
 
 export interface ExtractedFile {
   path: string;
@@ -140,11 +138,8 @@ async function git(args: string[]): Promise<string> {
 }
 
 /**
- * Write every file a task produced into its own workspace, then commit (and
- * push) so nothing is lost between sessions or nodes.
- *
- * Commits straight to the current branch on purpose: Josh's rule is one branch,
- * no leftovers to merge or delete.
+ * Write every file a task produced into its own workspace. Materialization does
+ * not push; uncommitted output is the default so the judge lane can inspect it.
  */
 export async function materializeTask(params: {
   taskId: string;
@@ -225,16 +220,8 @@ export async function materializeTask(params: {
     await git(['commit', '-q', '-m', msg]);
     result.committed = true;
 
-    if (AUTO_PUSH) {
-      try {
-        await git(['push', '-q', 'origin', 'HEAD']);
-        result.pushed = true;
-      } catch (err) {
-        result.note = `Committed locally; push failed: ${err instanceof Error ? err.message.split('\n')[0] : String(err)}`;
-      }
-    }
     if (!result.note) {
-      result.note = `Wrote ${result.files.length} file(s), committed${result.pushed ? ' and pushed' : ''}.`;
+      result.note = `Wrote ${result.files.length} file(s), committed locally; judge review is still required before delivery.`;
     }
   } catch (err) {
     result.note = `Wrote ${result.files.length} file(s); git failed: ${err instanceof Error ? err.message.split('\n')[0] : String(err)}`;

@@ -199,11 +199,12 @@ async function callOpenAiCompatible(
   }
 }
 
-async function callGeminiDirect(
+export async function callGeminiDirect(
   apiKey: string,
   model: string,
   messages: ChatMessage[],
   options: Required<Pick<ProviderCallOptions, 'fetchImpl' | 'now'>>,
+  generationConfig?: Record<string, unknown>,
 ): Promise<ProviderResponse> {
   const startedAt = options.now();
   try {
@@ -222,6 +223,7 @@ async function callGeminiDirect(
         body: JSON.stringify({
           contents,
           ...(systemInstruction ? { systemInstruction: { parts: [{ text: systemInstruction.content }] } } : {}),
+          ...(generationConfig ? { generationConfig } : {}),
         }),
       },
     );
