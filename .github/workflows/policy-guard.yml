@@ -68,6 +68,20 @@ jobs:
             echo "No forbidden patterns found (allowlisted fake test fixtures suppressed)."
           fi
 
+  mission-control-role-wall:
+    name: Enforce Mission Control role wall
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run role-wall source check
+        run: node mission-control-v5/server/scripts/role-wall-check.mjs mission-control-v5
+
   pre-commit-checks:
     name: Pre-commit validation
     runs-on: ubuntu-latest
