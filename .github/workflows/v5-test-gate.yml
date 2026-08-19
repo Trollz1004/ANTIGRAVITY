@@ -1,0 +1,33 @@
+name: V5 Test Gate
+
+on:
+  pull_request:
+    paths:
+      - 'mission-control-v5/**'
+      - '.github/workflows/v5-test-gate.yml'
+  workflow_dispatch: {}
+
+jobs:
+  gate:
+    name: Unit and static gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            mission-control-v5/server/package-lock.json
+            mission-control-v5/client/package-lock.json
+
+      - name: Install server dependencies
+        run: npm ci --ignore-scripts --prefix mission-control-v5/server
+
+      - name: Install client dependencies
+        run: npm ci --ignore-scripts --prefix mission-control-v5/client
+
+      - name: Run fail-closed gate
+        run: npm --prefix mission-control-v5 run gate
