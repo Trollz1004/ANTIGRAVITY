@@ -185,3 +185,11 @@
 - [x] Align tri-execution lanes to OpenClaw, Hermes, and OpenCode without assigning a retired executor identifier to an agent lane.
 - [x] Add CI-runnable static checks that reject vote-module imports of model-routing or operational bridge modules and reject retired bridge identifiers or prohibited API-key patterns in source.
 - [x] Add focused role-wall tests, run typecheck without services, and package a judge-ready handoff.
+
+## Mission Control v5 Test Gate
+
+- [x] Preserve S1 as blocked and work only on local `manus/mc-test-gate`; do not start services, make live probes, push, merge, or delete branches.
+- [x] Audit the v5 root, server, client, current test tooling, and workflows for an authoritative single gate command and server test-runner dependency gap.
+- [x] Add a fail-closed v5-root `npm run gate` that executes server/client typechecks and test suites plus role-wall static checks.
+- [x] Repair the server test dependency issue and add CI-ready Playwright specifications marked runtime-gated; do not execute them while S1 is blocked.
+- [x] Add pull-request CI for the root gate, run unit and static layers only, and package a judge-ready handoff.
