@@ -139,3 +139,5 @@
 - [x] Publish a task-aware skills preflight matrix that compares the attached doctrine with active Hermes, OpenClaw, and OpenCode contracts.
 - [x] Create an editable presentation covering Mission Control human tools, Supabase/Obsidian readiness, task-aware skill selection, built-in secret redaction, and safe human-visible agentic operations.
 - [x] Refresh the portable branch bundle and patch after the final safety commit, then prepare a user-testing handoff with runtime still blocked.
+- [ ] Verify the final portable bundle and patch hashes, compare manus/call-layer with current origin/main including onemin-shim, and record any clean rebase or merge result before Fable lands the delivery.
+- [ ] Run an isolated rebase-probe of manus/call-layer onto origin/main, resolve only controlled conflicts, and preserve the unrelated script modification outside the probe.
