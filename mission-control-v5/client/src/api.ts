@@ -1,13 +1,10 @@
 import type {
   AgentDef,
-  BrainAskResult,
   BrainCatalog,
   BrainJournal,
   BrainMcpStatus,
-  BrainPiecesStatus,
   BrainSkill,
   BrainState,
-  BrainTool,
   CategoryDef,
   Column,
   Health,
@@ -56,10 +53,6 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ content }),
     }),
-  brainTools: () => request<{ tools: BrainTool[] }>('/api/brain/tools'),
-  brainAsk: (input: { tool?: string; arguments?: unknown; query?: string }) =>
-    request<BrainAskResult>('/api/brain/ask', { method: 'POST', body: JSON.stringify(input) }),
-  brainPieces: () => request<BrainPiecesStatus>('/api/brain/pieces'),
   // ── Brain catalog (monorepo skills + tasks) ────────────────────────────────────
   brainCatalog: (q?: string, category?: string) => {
     const params = new URLSearchParams();

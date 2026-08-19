@@ -9,10 +9,85 @@ import { loadBrainPlatforms, platformSummary, readJournal, writeJournal } from '
 import { getCatalogEntry, loadCatalog } from './catalog.js';
 import { buildKnowledgeGraph, searchKnowledge } from './knowledge.js';
 
-function obsidianStatus(): { status: 'not-configured' | 'configured' | 'unavailable'; vaultPath?: string } {
-  const vaultPath = (process.env.OBSIDIAN_VAULT_PATH ?? '').trim();
+export type HumanToolState = 'configured' | 'unavailable' | 'not-configured';
+
+export interface HumanToolStatus {
+  id: 'repository' | 'graphy' | 'supabase' | 'obsidian';
+  label: string;
+  state: HumanToolState;
+  detail: string;
+  humanFacing: true;
+  openUrl?: string;
+}
+
+type BrainEnvironment = Record<string, string | undefined>;
+
+function obsidianStatus(environment: BrainEnvironment = process.env): {
+  status: 'not-configured' | 'configured' | 'unavailable';
+  vaultPath?: string;
+} {
+  const vaultPath = (environment.OBSIDIAN_VAULT_PATH ?? '').trim();
   if (!vaultPath) return { status: 'not-configured' };
   return existsSync(vaultPath) ? { status: 'configured', vaultPath } : { status: 'unavailable', vaultPath };
+}
+
+function safeDashboardUrl(rawValue: string | undefined): string | undefined {
+  const value = (rawValue ?? '').trim();
+  if (!value) return undefined;
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' ? url.toString() : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Human-facing readiness only. This does not open a database connection, read a
+ * credential, or expose a local vault path to browser clients.
+ */
+export function buildHumanTools(environment: BrainEnvironment = process.env): HumanToolStatus[] {
+  const supabaseDashboard = safeDashboardUrl(environment.SUPABASE_DASHBOARD_URL);
+  const obsidian = obsidianStatus(environment);
+
+  return [
+    {
+      id: 'repository',
+      label: 'Repository Knowledge',
+      state: 'configured',
+      detail: 'Canonical repository knowledge and harness journals are available through Mission Control.',
+      humanFacing: true,
+    },
+    {
+      id: 'graphy',
+      label: 'Graphy Context',
+      state: 'configured',
+      detail: 'Repository graph and agent context are available through Mission Control.',
+      humanFacing: true,
+    },
+    {
+      id: 'supabase',
+      label: 'Supabase Operations Workspace',
+      state: supabaseDashboard ? 'configured' : 'not-configured',
+      detail: supabaseDashboard
+        ? 'Human dashboard link is configured. Read-only Mission Control data access requires a separately reviewed server-side adapter.'
+        : 'No human dashboard link or reviewed Mission Control read adapter is configured.',
+      humanFacing: true,
+      ...(supabaseDashboard ? { openUrl: supabaseDashboard } : {}),
+    },
+    {
+      id: 'obsidian',
+      label: 'Obsidian Human Knowledge Workspace',
+      state: obsidian.status,
+      detail:
+        obsidian.status === 'configured'
+          ? 'An optional local vault is available for a future read-first mirror; repository journals remain authoritative.'
+          : obsidian.status === 'unavailable'
+            ? 'A vault location is configured but currently unavailable; it is not treated as an outage of repository knowledge.'
+            : 'No optional local vault is configured. Repository knowledge and journals remain available.',
+      humanFacing: true,
+    },
+  ];
 }
 
 export function registerBrainRoutes(app: Express): void {
@@ -24,6 +99,7 @@ export function registerBrainRoutes(app: Express): void {
         knowledge: { source: 'repository', graphEndpoint: '/api/knowledge/graph', searchEndpoint: '/api/knowledge/search' },
         graphy: { agentsEndpoint: '/api/subagents', knowledgeEndpoint: '/api/knowledge/graph' },
         obsidian: obsidianStatus(),
+        humanTools: buildHumanTools(),
       });
     } catch (err) {
       res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
