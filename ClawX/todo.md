@@ -77,7 +77,7 @@
 
 ## Delivery, S1 Draft, and Post-Reinstall Alignment
 
-- [ ] Deliver `manus/call-layer` as a portable git bundle and plain patch fallback before any further implementation work; never push or commit to `main`.
+- [x] Deliver `manus/call-layer` as a portable git bundle and plain patch fallback before any further implementation work; never push or commit to `main`.
 - [x] Diagnose the Gemini ballot empty-payload path, reuse the known working request shape, and run one explicitly non-production validation ballot with a sanitized audit artifact.
 - [x] Draft the S1 doctrine-supersession patch for stale root guidance and council-packet sections without landing the runtime gate.
 - [x] Rewrite the Hermes, OpenClaw, and OpenCode harness contracts for the post-reinstall topology, and draft the FCC contract or a retirement note.
