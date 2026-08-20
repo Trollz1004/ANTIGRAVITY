@@ -3,7 +3,9 @@ import { api } from '../api';
 import type { OfficialVoteView, OfficialSeatState } from '../types';
 
 const STATE_CLASS: Record<OfficialSeatState, string> = {
-  UP: 'council-seat__state--up',
+  AVAILABLE: 'council-seat__state--up',
+  'CAPACITY LIMITED': 'council-seat__state--auth-missing',
+  BLOCKED: 'council-seat__state--auth-rejected',
   'NOT CONFIGURED': 'council-seat__state--not-configured',
   'AUTH MISSING': 'council-seat__state--auth-missing',
   'AUTH REJECTED': 'council-seat__state--auth-rejected',
@@ -47,8 +49,8 @@ export default function CouncilPanel({ load = api.officialVoteView }: CouncilPan
     <div className="council">
       <div className="council__toolbar">
         <div>
-          <span className="label">COUNCIL</span>
-          <p className="council__hint">OFFICIAL SEATS · READ ONLY · SEPARATE FROM OPERATIONAL BRIDGES</p>
+          <span className="label">INDEPENDENT JUDGES</span>
+          <p className="council__hint">OFFICIAL ACCOUNT-AUTHENTICATED CLIENTS · ADVISORY EVIDENCE · NO ROUTED FALLBACKS</p>
         </div>
         <div className="council__toolbar-actions">
           <span className={`brain-card__status ${view.roster.bindingEnabled ? 'council-seat__state--up' : 'council-seat__state--not-configured'}`}>
@@ -65,7 +67,7 @@ export default function CouncilPanel({ load = api.officialVoteView }: CouncilPan
       <section className="council__section" aria-labelledby="official-seats-heading">
         <div className="council__section-head">
           <h2 id="official-seats-heading">OFFICIAL SEATS</h2>
-          <span className="mono">{view.seats.length} SEATS · {view.seats.filter((seat) => seat.state === 'UP').length} CONNECTED</span>
+          <span className="mono">{view.seats.length} LANES · {view.seats.filter((seat) => seat.state === 'AVAILABLE').length} VERIFIED</span>
         </div>
         <div className="council__seat-grid">
           {view.seats.map((seat) => (
@@ -76,6 +78,9 @@ export default function CouncilPanel({ load = api.officialVoteView }: CouncilPan
               </div>
               <span className={`council-seat__status ${STATE_CLASS[seat.state]}`}>{seat.state}</span>
               <p className="council-seat__detail">{seat.detail}</p>
+              <p className="council-seat__detail">CLIENT · {seat.officialClient}</p>
+              <p className="council-seat__detail">REQUESTED · {seat.requestedModel}</p>
+              <p className="council-seat__detail">ACTUAL · {seat.actualModel ?? 'NOT VERIFIED'}</p>
             </article>
           ))}
           {view.seats.length === 0 && <p className="services__empty">NO OFFICIAL SEAT STATUS AVAILABLE</p>}
@@ -116,7 +121,9 @@ export default function CouncilPanel({ load = api.officialVoteView }: CouncilPan
                   <time className="mono">{event.timestamp}</time>
                 </div>
                 <p>{event.subject}</p>
-                <span className="council-event__meta">{event.platform.toUpperCase()} · {event.actor} · {event.binding ? 'BINDING' : 'NON-BINDING'}</span>
+                <span className="council-event__meta">{event.platform.toUpperCase()} · {event.officialClient} · {event.laneState}</span>
+                <span className="council-event__meta">REQUESTED {event.requestedModel} · ACTUAL {event.actualModel}</span>
+                <span className="council-event__meta">EVIDENCE · {event.evidenceSummary}</span>
               </article>
             ))}
             {view.events.length === 0 && <p className="services__empty">NO DECISIONS RECORDED</p>}

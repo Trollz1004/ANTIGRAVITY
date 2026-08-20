@@ -1,7 +1,7 @@
 export type Mode = 'speed' | 'reasoning';
 export type Column = 'NOW' | 'NEXT' | 'BLOCKED' | 'DONE';
 export type TaskStatus = 'queued' | 'running' | 'done' | 'error';
-export type Tab = 'graphy' | 'library' | 'swarm' | 'board' | 'services' | 'brain' | 'bridge' | 'council';
+export type Tab = 'control' | 'papermates' | 'graphy' | 'library' | 'swarm' | 'board' | 'services' | 'brain' | 'bridge' | 'council';
 
 export interface AgentDef {
   id: string;
@@ -86,8 +86,75 @@ export interface ServiceStatus {
   expectedServiceMarker?: string;
 }
 
+export interface ControlAlert {
+  id: string;
+  kind: 'service-down' | 'service-recovered' | 'service-state-change';
+  subject: string;
+  previousState: ServiceStatus['status'];
+  state: ServiceStatus['status'];
+  detail: string;
+  createdAt: string;
+  acknowledgedAt: string | null;
+}
+
+export type SupportPriority = 'low' | 'normal' | 'high' | 'urgent';
+export type SupportCaseStatus = 'open' | 'assigned' | 'waiting' | 'resolved';
+
+export interface SupportCase {
+  id: string;
+  source: 'local' | 'openclaw';
+  subject: string;
+  summary: string;
+  priority: SupportPriority;
+  status: SupportCaseStatus;
+  assignee: string | null;
+  internalNote: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type PaperMatesTrustKind = 'report' | 'bot-check' | 'check-in' | 'circle-date';
+export type PaperMatesTrustState = 'received' | 'needs_review' | 'limited' | 'resolved' | 'appealed';
+export type PaperMatesTrustSeverity = 'low' | 'moderate' | 'high' | 'urgent';
+
+export interface PaperMatesTrustCase {
+  id: string;
+  kind: PaperMatesTrustKind;
+  state: PaperMatesTrustState;
+  severity: PaperMatesTrustSeverity;
+  subject: string;
+  summary: string;
+  reference: string | null;
+  reviewer: string | null;
+  decisionNote: string | null;
+  appealAvailable: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaperMatesLaunchItem {
+  id: string;
+  label: string;
+  state: 'prototype' | 'policy required' | 'backend required';
+  dependency: string;
+}
+
+export interface PaperMatesSkill {
+  id: string;
+  description: string;
+  state: 'VALIDATED';
+}
+
+export interface PaperMatesOverview {
+  brand: string;
+  aiSupport: { state: 'NOT CONFIGURED'; detail: string };
+  launchItems: PaperMatesLaunchItem[];
+  skills: PaperMatesSkill[];
+}
+
 export interface Health {
   ok: boolean;
+  service?: 'mission-control';
   name: string;
   edition: string;
   version: string;
@@ -192,13 +259,22 @@ export type BridgeMessage = {
   timestamp: string;
 };
 
-export type OfficialPlatform = 'claude' | 'gemini' | 'github-copilot' | 'meta-ai' | 'chatgpt' | 'manus';
-export type OfficialSeatState = 'NOT CONFIGURED' | 'AUTH MISSING' | 'AUTH REJECTED' | 'UP';
+export type OfficialPlatform = 'claude' | 'gemini' | 'github-copilot' | 'grok' | 'openai-codex';
+export type OfficialSeatState =
+  | 'AVAILABLE'
+  | 'CAPACITY LIMITED'
+  | 'BLOCKED'
+  | 'NOT CONFIGURED'
+  | 'AUTH MISSING'
+  | 'AUTH REJECTED';
 
 export interface OfficialSeat {
   platform: OfficialPlatform;
   label: string;
+  officialClient: string;
   state: OfficialSeatState;
+  requestedModel: string;
+  actualModel: string | null;
   detail: string;
 }
 
@@ -213,14 +289,19 @@ export interface DecisionEvent {
   id: string;
   actor: string;
   platform: OfficialPlatform;
+  officialClient: string;
+  laneState: OfficialSeatState;
+  requestedModel: string;
+  actualModel: string;
   timestamp: string;
   subject: string;
   decision: 'approve' | 'reject' | 'abstain';
-  binding: boolean;
+  evidenceSummary: string;
+  binding: false;
 }
 
 export interface OfficialVoteView {
-  roster: { state: 'missing' | 'invalid' | 'signed'; bindingEnabled: boolean };
+  roster: { state: 'missing' | 'invalid' | 'signed'; bindingEnabled: false };
   seats: OfficialSeat[];
   ballots: ActiveBallot[];
   events: DecisionEvent[];

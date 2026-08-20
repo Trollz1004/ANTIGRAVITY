@@ -1,0 +1,21 @@
+﻿<!doctype html>
+<html lang="en" data-theme="iris" data-contrast="standard" class="dark">
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="theme-color" content="#070a12" /><meta name="description" content="Optional PaperMates verification controls." /><title>PaperMates â€” Verification choice</title><link rel="stylesheet" href="afterglow.css" /></head>
+  <body>
+    <div class="aurora" aria-hidden="true"><div class="starfield"></div></div>
+    <main class="shell">
+      <header class="topbar"><a class="brand" href="afterglow-landing.html"><span class="brand-mark">âœ¦</span>PaperMates</a><div class="top-actions"><a class="text-link" href="afterglow-bot-shield.html">Back to Bot Shield</a><a class="icon-button" href="afterglow-profile.html" aria-label="Open profile settings">â—Œ</a></div></header>
+      <div class="page-grid">
+        <section class="main-card glass"><div class="eyebrow">Optional verification</div><h1 class="page-title">More confidence should never mean less control.</h1><p class="page-copy">You can explore an optional identity-verification path. Verification can confirm only the specific checks completed; it is not a background check or a guarantee of safety.</p>
+          <div class="status-card"><span class="pill warn"><i></i><span data-verification-state>Not started</span></span><h3>Consent comes first.</h3><p data-verification-detail>Read what is being requested before you begin. This static prototype does not initialize Plaid, create a Link token, collect credentials, or contact any third party.</p><div class="hero-actions"><button class="btn primary" type="button" data-verify-action="start">Stage consent flow</button><button class="btn secondary" type="button" data-verify-action="skip">Not now</button></div></div>
+          <div class="steps"><div class="step"><div class="step-index">1</div><div><b>Choose whether to participate</b><span>You can continue using the app without selecting verification in this concept.</span></div></div><div class="step"><div class="step-index">2</div><div><b>Understand the request</b><span>A real integration must explain provider, data categories, retention, and support before a verification session begins.</span></div></div><div class="step"><div class="step-index">3</div><div><b>Wait for server confirmation</b><span>A client callback means submission only. A verified state must come from a backend status or webhook result.</span></div></div></div>
+        </section>
+        <aside class="side-card glass"><div class="eyebrow">Provider boundary</div><h2>Plaid is not embedded here.</h2><p class="page-copy">GitHub secrets are intentionally server-side. The frontend never receives a Plaid client secret, access token, or webhook secret.</p><div class="settings-list"><div class="setting"><div><b>Frontend role</b><p>Explain consent and show status.</p></div><span class="pill good"><i></i>Included</span></div><div class="setting"><div><b>Backend role</b><p>Create sessions and verify webhook results.</p></div><span class="pill warn"><i></i>Future work</span></div><div class="setting"><div><b>Safety boundary</b><p>No verification badge before confirmed status.</p></div><span class="pill">Required</span></div></div><button class="btn secondary wide" style="margin-top:18px" type="button" data-verify-action="retry">Reset prototype state</button></aside>
+      </div>
+      <footer class="footer">No financial credential or identity data is processed by this static frontend. <a href="privacy.html">Privacy</a> Â· <a href="safety.html">Safety</a></footer>
+    </main>
+    <nav class="floating-nav" aria-label="PaperMates navigation"><a href="afterglow-orbit.html"><span class="nav-icon">â—Ž</span>Orbit</a><a class="active" href="afterglow-bot-shield.html"><span class="nav-icon">âœ¦</span>Signals</a><a href="afterglow-profile.html"><span class="nav-icon">â—Œ</span>You</a></nav>
+    <script src="afterglow.js"></script>
+  </body>
+</html>
+

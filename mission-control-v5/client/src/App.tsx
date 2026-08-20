@@ -5,6 +5,8 @@ import BrainPanel from './components/BrainPanel';
 import BrowserPanel from './components/BrowserPanel';
 import BridgePanel from './components/BridgePanel';
 import CouncilPanel from './components/CouncilPanel';
+import ControlCenter from './components/ControlCenter';
+import PaperMatesPanel from './components/PaperMatesPanel';
 import Header from './components/Header';
 import KanbanBoard from './components/KanbanBoard';
 import ServicesPanel from './components/ServicesPanel';
@@ -13,7 +15,7 @@ import Graphy from './components/Graphy';
 import type { AgentDef, CategoryDef, Health, SwarmTask, Tab } from './types';
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>('graphy');
+  const [tab, setTab] = useState<Tab>('control');
   const [agents, setAgents] = useState<AgentDef[]>([]);
   const [categories, setCategories] = useState<CategoryDef[]>([]);
   const [tasks, setTasks] = useState<SwarmTask[]>([]);
@@ -83,6 +85,8 @@ export default function App() {
       <div className="app__dashboard">
         <Header tab={tab} onTab={setTab} health={health} runningCount={runningCount} selectedCount={selected.size} />
         <main className="main">
+          {tab === 'control' && <ControlCenter health={health} tasks={tasks} onNavigate={setTab} />}
+          {tab === 'papermates' && <PaperMatesPanel onNavigate={setTab} />}
           {tab === 'graphy' && <Graphy />}
           {tab === 'library' && (
             <AgentLibrary agents={agents} categories={categories} selected={selected} onDeploy={deployAgent} />

@@ -8,15 +8,6 @@ import {
   type VoteDecision,
 } from './official-vote-engine.js';
 
-const PLATFORM_LABELS: Record<OfficialPlatformId, string> = {
-  claude: 'CLAUDE',
-  gemini: 'GEMINI',
-  'github-copilot': 'GITHUB COPILOT',
-  'meta-ai': 'META AI',
-  chatgpt: 'CHATGPT / OPENAI',
-  manus: 'MANUS',
-};
-
 class UnavailableOfficialBridgeResolver implements OfficialBridgeIdentityResolver {
   async resolve(_platform: OfficialPlatformId) {
     return null;
@@ -29,29 +20,22 @@ export interface OfficialVoteRouteOptions {
 }
 
 /**
- * Official votes use this module only. It imports neither the operational bridge
- * module nor any model-routing client, so those paths cannot be selected here.
+ * Official judges are independent from workers, OmniRoute, provider APIs, and
+ * general operational bridges. Until a dedicated official-client identity
+ * resolver is installed, every lane truthfully reports NOT CONFIGURED.
  */
 export function registerOfficialVoteRoutes(app: Express, options: OfficialVoteRouteOptions = {}): void {
-  const engine = options.engine ?? new OfficialVoteEngine({ resolver: options.resolver ?? new UnavailableOfficialBridgeResolver() });
+  const resolver = options.resolver ?? new UnavailableOfficialBridgeResolver();
+  const engine = options.engine ?? new OfficialVoteEngine({ resolver });
 
-  app.get('/api/official-votes/status', (_req, res) => {
-    res.json({ roster: engine.rosterStatus() });
+  app.get('/api/official-votes/status', async (_req, res) => {
+    const lanes = await Promise.all(OFFICIAL_PLATFORM_IDS.map((platform) => engine.laneStatus(platform)));
+    res.json({ roster: engine.rosterStatus(), lanes });
   });
 
-  // Read-only projection for the council UI. Seats report NOT CONFIGURED until
-  // each platform's official identity resolver integration is approved.
   app.get('/api/official-votes/view', async (_req, res) => {
     const events = engine.events();
-    const seats = await Promise.all(OFFICIAL_PLATFORM_IDS.map(async (platform) => {
-      const identity = await (options.resolver ?? new UnavailableOfficialBridgeResolver()).resolve(platform).catch(() => null);
-      return {
-        platform,
-        label: PLATFORM_LABELS[platform],
-        state: identity ? 'UP' : 'NOT CONFIGURED',
-        detail: identity ? 'official bridge identity resolved' : 'official bridge not configured',
-      };
-    }));
+    const seats = await Promise.all(OFFICIAL_PLATFORM_IDS.map((platform) => engine.laneStatus(platform)));
     const bySubject = new Map<string, number>();
     for (const event of events) bySubject.set(event.subject, (bySubject.get(event.subject) ?? 0) + 1);
     const ballots = [...bySubject.entries()].map(([subject, decisions]) => ({ id: subject, subject, status: 'OPEN' as const, decisions }));
@@ -65,6 +49,9 @@ export function registerOfficialVoteRoutes(app: Express, options: OfficialVoteRo
         voterIdentity: req.body?.voterIdentity,
         subject: req.body?.subject,
         decision: req.body?.decision as VoteDecision,
+        requestedModel: req.body?.requestedModel,
+        actualModel: req.body?.actualModel,
+        evidenceSummary: req.body?.evidenceSummary,
       });
       res.status(201).json({ event });
     } catch (error) {
@@ -73,7 +60,7 @@ export function registerOfficialVoteRoutes(app: Express, options: OfficialVoteRo
         res.status(status).json({ error: error.code });
         return;
       }
-      res.status(400).json({ error: 'INVALID_SUBMISSION' });
+      res.status(400).json({ error: 'INVALID_OFFICIAL_JUDGE_SUBMISSION' });
     }
   });
 }

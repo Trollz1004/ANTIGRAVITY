@@ -18,6 +18,15 @@ import type {
   OfficialVoteView,
   SubagentNode,
   SwarmTask,
+  ControlAlert,
+  SupportCase,
+  SupportCaseStatus,
+  SupportPriority,
+  PaperMatesOverview,
+  PaperMatesTrustCase,
+  PaperMatesTrustKind,
+  PaperMatesTrustSeverity,
+  PaperMatesTrustState,
 } from './types';
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -45,7 +54,21 @@ export const api = {
     }),
   retryTask: (id: string) => request<{ task: SwarmTask }>(`/api/tasks/${id}/retry`, { method: 'POST' }),
   deleteTask: (id: string) => request<void>(`/api/tasks/${id}`, { method: 'DELETE' }),
-  services: () => request<{ services: ServiceStatus[] }>('/api/services'),
+  services: () => request<{ services: ServiceStatus[]; alerts?: ControlAlert[] }>('/api/services'),
+  controlAlerts: () => request<{ alerts: ControlAlert[] }>('/api/control/alerts'),
+  acknowledgeAlert: (id: string) => request<{ alert: ControlAlert }>(`/api/control/alerts/${id}/ack`, { method: 'POST' }),
+  supportCases: () => request<{ cases: SupportCase[] }>('/api/control/support'),
+  createSupportCase: (input: { source?: 'local' | 'openclaw'; subject: string; summary: string; priority?: SupportPriority; assignee?: string }) =>
+    request<{ supportCase: SupportCase }>('/api/control/support', { method: 'POST', body: JSON.stringify(input) }),
+  updateSupportCase: (id: string, input: { status?: SupportCaseStatus; priority?: SupportPriority; assignee?: string; internalNote?: string }) =>
+    request<{ supportCase: SupportCase }>(`/api/control/support/${id}`, { method: 'PATCH', body: JSON.stringify(input) }),
+  // ── PaperMates — static readiness and local redacted trust records ───────────
+  paperMatesOverview: () => request<PaperMatesOverview>('/api/papermates/overview'),
+  paperMatesTrust: () => request<{ cases: PaperMatesTrustCase[] }>('/api/papermates/trust'),
+  createPaperMatesTrust: (input: { kind: PaperMatesTrustKind; severity: PaperMatesTrustSeverity; subject: string; summary: string; reference?: string; reviewer?: string; appealAvailable?: boolean }) =>
+    request<{ trustCase: PaperMatesTrustCase }>('/api/papermates/trust', { method: 'POST', body: JSON.stringify(input) }),
+  updatePaperMatesTrust: (id: string, input: { state?: PaperMatesTrustState; severity?: PaperMatesTrustSeverity; reviewer?: string; decisionNote?: string; appealAvailable?: boolean }) =>
+    request<{ trustCase: PaperMatesTrustCase }>(`/api/papermates/trust/${id}`, { method: 'PATCH', body: JSON.stringify(input) }),
   // ── Brain hub ────────────────────────────────────────────────────────────────
   brainState: () => request<BrainState>('/api/brain/state'),
   brainJournal: (platformId: string) => request<BrainJournal>(`/api/brain/journal/${platformId}`),

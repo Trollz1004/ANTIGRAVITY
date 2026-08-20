@@ -10,88 +10,23 @@ interface Props {
 
 export default function Header({ tab, onTab, health, runningCount, selectedCount }: Props) {
   const routerLive = health?.routerLive ?? false;
-  const configured = health?.providers.filter((p) => p.configured).length ?? 0;
+  const configured = health?.providers.filter((provider) => provider.configured).length ?? 0;
 
   return (
     <header className="header">
       <div className="header__brand">
-        <div className="header__title">
-          MISSION CONTROL <em>// AGENCY SWARM v5</em>
-        </div>
-        <div className="header__edition">ORCHESTRATOR EDITION — 3 HARNESSES · SKILLS ON SUB-AGENTS</div>
+        <div className="header__title">MISSION CONTROL <em>// GOVERNED DESKTOP</em></div>
+        <div className="header__edition">ONE OPERATOR CONSOLE · DETAILED SURFACES OPEN FROM CONTEXT</div>
       </div>
-
-      <nav className="header__nav">
-        <button
-          className={`header__tab ${tab === 'graphy' ? 'header__tab--active' : ''}`}
-          onClick={() => onTab('graphy')}
-        >
-          GRAPHY
-        </button>
-        <button
-          className={`header__tab ${tab === 'library' ? 'header__tab--active' : ''}`}
-          onClick={() => onTab('library')}
-        >
-          AGENT LIBRARY
-        </button>
-        <button
-          className={`header__tab ${tab === 'swarm' ? 'header__tab--active' : ''}`}
-          onClick={() => onTab('swarm')}
-        >
-          SWARM ENGINE{selectedCount > 0 ? ` [${selectedCount}]` : ''}
-        </button>
-        <button
-          className={`header__tab ${tab === 'board' ? 'header__tab--active' : ''}`}
-          onClick={() => onTab('board')}
-        >
-          HERMES KANBAN
-        </button>
-        <button
-          className={`header__tab ${tab === 'services' ? 'header__tab--active' : ''}`}
-          onClick={() => onTab('services')}
-        >
-          SERVICES
-        </button>
-        <button
-          className={`header__tab ${tab === 'brain' ? 'header__tab--active' : ''}`}
-          onClick={() => onTab('brain')}
-        >
-          BRAIN
-        </button>
-        <button
-          className={`header__tab ${tab === 'bridge' ? 'header__tab--active' : ''}`}
-          onClick={() => onTab('bridge')}
-        >
-          BRIDGE
-        </button>
-        <button
-          className={`header__tab ${tab === 'council' ? 'header__tab--active' : ''}`}
-          onClick={() => onTab('council')}
-        >
-          COUNCIL
+      <nav className="header__nav" aria-label="Primary navigation">
+        <button className={`header__tab ${tab === 'control' ? 'header__tab--active' : ''}`} onClick={() => onTab('control')}>
+          CONTROL CENTER{selectedCount > 0 ? ` [${selectedCount}]` : ''}
         </button>
       </nav>
-
       <div className="header__status">
-        <span className="status-item">
-          <span className={`dot ${health ? 'dot--green' : 'dot--red'}`} />
-          API {health ? 'LIVE' : 'DOWN'}
-        </span>
-        <span className="status-item">
-          <span
-            className={`dot ${routerLive ? 'dot--green' : 'dot--red'}`}
-            title={routerLive ? 'OmniRoute live' : 'No provider configured'}
-          />
-          OMNIROUTE {routerLive ? `LIVE ×${configured}` : 'OFFLINE'}
-        </span>
-        <span className="status-item">
-          <span className={`dot ${runningCount > 0 ? 'dot--amber dot--pulse' : 'dot--idle'}`} />
-          {runningCount > 0 ? `${runningCount} RUNNING` : 'IDLE'}
-        </span>
-        <span className="status-item">
-          <span className="dot dot--accent" />
-          {health ? `${health.agents} ORCHESTRATORS` : '—'}
-        </span>
+        <span className="status-item"><span className={`dot ${health ? 'dot--green' : 'dot--red'}`} />API {health ? 'IDENTIFIED' : 'UNAVAILABLE'}</span>
+        <span className="status-item"><span className={`dot ${routerLive ? 'dot--green' : 'dot--idle'}`} title={routerLive ? 'OmniRoute live' : 'No provider configured'} />OMNIROUTE {routerLive ? `LIVE ×${configured}` : 'OFFLINE'}</span>
+        <span className="status-item"><span className={`dot ${runningCount > 0 ? 'dot--amber dot--pulse' : 'dot--idle'}`} />{runningCount > 0 ? `${runningCount} ACTIVE` : 'IDLE'}</span>
       </div>
     </header>
   );
