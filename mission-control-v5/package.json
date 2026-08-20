@@ -20,5 +20,11 @@
   "devDependencies": {
     "concurrently": "^9.1.0",
     "electron": "^43.2.0"
+  },
+  "dependencies": {
+    "agent": "^0.0.4",
+    "all": "^0.0.0",
+    "dashboard": "^0.0.1",
+    "hermes": "^0.0.8"
   }
 }

@@ -162,17 +162,34 @@ export interface JournalWrite {
   updatedAt: string;
 }
 
+export interface SessionCloseout {
+  taskId: string;
+  objective: string;
+  skills: string[];
+  evidence: string[];
+  blocker: string | null;
+  nextAction: string;
+}
+
+function redactJournalText(value: string): string {
+  return value
+    .replace(/\b(?:sk|xai)-[A-Za-z0-9_-]{16,}\b/g, '[REDACTED_TOKEN]')
+    .replace(/\b(?:authorization|api[_-]?key|token)\s*[:=]\s*[^\s]+/gi, '[REDACTED_CREDENTIAL]');
+}
+
+function capJournal(value: string, max: number): { body: string; truncated: boolean } {
+  if (value.length <= max) return { body: value, truncated: false };
+  return { body: value.slice(-Math.max(0, max - 20)) + '\n…<truncated-tail>', truncated: true };
+}
+
 export function writeJournal(platformId: string, content: string): JournalWrite | null {
   const platform = findPlatform(platformId);
   if (!platform) return null;
   const updatedAt = new Date().toISOString();
-  let body = content ?? '';
-  let truncated = false;
   const max = platform.maxChars || DEFAULT_MAX_CHARS;
-  if (body.length > max) {
-    body = body.slice(0, Math.max(0, max - 16)) + '\n…<truncated>';
-    truncated = true;
-  }
+  const capped = capJournal(redactJournalText(content ?? ''), max);
+  const body = capped.body;
+  const truncated = capped.truncated;
   const stamped = `<!-- updated: ${updatedAt} -->\n${body}`;
   // Write the harness-owned journal first, then maintain a best-effort mirror.
   try {
@@ -188,6 +205,36 @@ export function writeJournal(platformId: string, content: string): JournalWrite 
   const bytes = Buffer.byteLength(stamped, 'utf8');
   appendAudit(platformId, 'write', bytes);
   return { bytes, truncated, updatedAt };
+}
+
+export function appendSessionCloseout(platformId: string, closeout: SessionCloseout): JournalWrite | null {
+  const platform = findPlatform(platformId);
+  if (!platform) return null;
+  const previous = readJournal(platformId)?.content ?? '';
+  const updatedAt = new Date().toISOString();
+  const safe = redactJournalText(
+    [
+      `## Session closeout · ${updatedAt}`,
+      `- Task: ${closeout.taskId}`,
+      `- Objective: ${closeout.objective}`,
+      `- Skills: ${closeout.skills.join(', ') || 'not recorded'}`,
+      `- Evidence: ${closeout.evidence.join('; ') || 'not recorded'}`,
+      `- Blocker: ${closeout.blocker || 'none'}`,
+      `- Next action: ${closeout.nextAction}`,
+    ].join('\n'),
+  );
+  const max = platform.maxChars || DEFAULT_MAX_CHARS;
+  const capped = capJournal(`${previous.trimEnd()}\n\n${safe}\n`, max);
+  const stamped = `<!-- updated: ${updatedAt} -->\n${capped.body}`;
+  try {
+    atomicWriteText(platform.statePath, stamped);
+    atomicWriteText(mirrorPath(platformId), stamped);
+  } catch (err) {
+    console.error(`[brain] session closeout write failed for ${platformId}:`, err);
+  }
+  const bytes = Buffer.byteLength(stamped, 'utf8');
+  appendAudit(platformId, 'write', bytes);
+  return { bytes, truncated: capped.truncated, updatedAt };
 }
 
 export function platformSummary(platform: BrainPlatform): BrainPlatform & { bytes: number; updatedAt: string | null } {

@@ -5,6 +5,7 @@
  * sub-agents. No model is named in the UI — OmniRoute resolves it at run time.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
 import { networkInterfaces } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,19 +20,41 @@ import { registerMcpServer } from './mcpServer.js';
 import { registerBridgeRoutes } from './bridge.js';
 import { registerOfficialVoteRoutes } from './official-vote-routes.js';
 import { pingService } from './service-health.js';
+import { verifyProvenance } from './attestation.js';
 import { loadState } from './store.js';
+import { acknowledgeAlert, createPaperMatesTrustCase, createSupportCase, listAlerts, listPaperMatesTrustCases, listSupportCases, loadControlState, observeServices, updatePaperMatesTrustCase, updateSupportCase } from './control-store.js';
 import { activeCount, createTask, deleteTask, listTasks, moveTask, retryTask, subscribe } from './swarm.js';
 import type { AgentDef, Column } from './types.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT ?? 3151) || 3151;
-const VERSION = '5.0.0';
-const EDITION = 'Orchestrator Edition';
+const HOST = (process.env.MISSION_CONTROL_BIND_HOST ?? '127.0.0.1').trim();
+const VERSION = '5.1.0';
+const EDITION = 'Governed Desktop Edition';
+const INSTANCE_ID = (process.env.MISSION_CONTROL_INSTANCE_ID ?? '').trim() || randomUUID();
+const STARTED_AT = new Date().toISOString();
+const RUNTIME_AUTHORIZED = process.env.MISSION_CONTROL_RUNTIME_AUTHORIZED === '1';
+const LOCAL_ORIGINS = new Set([
+  'http://127.0.0.1:5173',
+  'http://localhost:5173',
+  `http://127.0.0.1:${PORT}`,
+  `http://localhost:${PORT}`,
+]);
 
 loadState();
+loadControlState();
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin(origin, callback) {
+      // Electron/file requests omit Origin. Browser development is deliberately
+      // limited to the two loopback Vite origins, never a LAN wildcard.
+      if (!origin || LOCAL_ORIGINS.has(origin)) return callback(null, true);
+      return callback(new Error('MISSION_CONTROL_ORIGIN_BLOCKED'));
+    },
+  }),
+);
 app.use(express.json({ limit: '1mb' }));
 
 const SUBAGENT_FILES = ['SOUL.md', 'HEARTBEAT.md', 'TOOLS.md', 'SKILLS.md'] as const;
@@ -158,10 +181,25 @@ function synthesizeSubagent(agent: AgentDef) {
   };
 }
 
-// ── Health / router status ────────────────────────────────────────────────────
+// ── Runtime identity / health ─────────────────────────────────────────────────
+// A port or 200 alone is not proof. Electron and operators must first compare
+// this response with the expected Mission Control service identity.
+app.get('/api/identity', (_req, res) => {
+  res.json({
+    service: 'mission-control',
+    instanceId: INSTANCE_ID,
+    apiVersion: 'v1',
+    version: VERSION,
+    edition: EDITION,
+    startedAt: STARTED_AT,
+    bindHost: HOST,
+  });
+});
+
 app.get('/api/health', (_req, res) => {
   res.json({
     ok: true,
+    service: 'mission-control',
     name: 'Mission Control: Agency Swarm v5',
     edition: EDITION,
     version: VERSION,
@@ -281,7 +319,8 @@ app.get('/api/services', async (_req, res) => {
       expectedServiceMarker: { field: 'service', allowedValues: ['onemin-shim'] },
     }),
   ]);
-  res.json({ services: results, gatewayBaseUrl: OMNIROUTE_GATEWAY_BASE_URL });
+  const createdAlerts = observeServices(results);
+  res.json({ services: results, gatewayBaseUrl: OMNIROUTE_GATEWAY_BASE_URL, alerts: createdAlerts });
 });
 
 // ── Agent library ─────────────────────────────────────────────────────────────
@@ -346,6 +385,98 @@ app.delete('/api/tasks/:id', (req, res) => {
   else res.status(404).json({ error: 'Task not found.' });
 });
 
+// ── Unified control center: local support metadata + alert acknowledgments ───
+// Customer support content is intentionally limited to redacted local metadata.
+// This increment never delivers an external message, changes a payment, or reads
+// account/identity information.
+app.get('/api/control/alerts', (_req, res) => {
+  res.json({ alerts: listAlerts() });
+});
+
+app.post('/api/control/alerts/:id/ack', (req, res) => {
+  try {
+    res.json({ alert: acknowledgeAlert(req.params.id) });
+  } catch (error) {
+    res.status(404).json({ error: error instanceof Error ? error.message : String(error) });
+  }
+});
+
+app.get('/api/control/support', (_req, res) => {
+  res.json({ cases: listSupportCases() });
+});
+
+app.post('/api/control/support', (req, res) => {
+  try {
+    res.status(201).json({ supportCase: createSupportCase(req.body ?? {}) });
+  } catch (error) {
+    res.status(400).json({ error: error instanceof Error ? error.message : String(error) });
+  }
+});
+
+app.patch('/api/control/support/:id', (req, res) => {
+  try {
+    res.json({ supportCase: updateSupportCase(req.params.id, req.body ?? {}) });
+  } catch (error) {
+    res.status(404).json({ error: error instanceof Error ? error.message : String(error) });
+  }
+});
+
+// ── PaperMates: static readiness, validated skill inventory, local trust queue ─
+// All externally consequential actions remain disabled. This is intentionally
+// not a model route, moderation engine, or customer-message sender.
+const PAPERMATES_LAUNCH_ITEMS = [
+  { id: 'adult-consent', label: 'Adult Gate and Consent Ledger', state: 'prototype', dependency: 'Backend consent record and regional policy' },
+  { id: 'orbit', label: 'Orbit Introductions', state: 'prototype', dependency: 'Matching and messaging service' },
+  { id: 'intent', label: 'Intent Card', state: 'prototype', dependency: 'Profile data contract' },
+  { id: 'bot-check', label: 'Bot Check', state: 'policy required', dependency: 'Signal policy, evaluation, and appeal flow' },
+  { id: 'report-block', label: 'Report and Block', state: 'prototype', dependency: 'Backend enforcement and response SLA' },
+  { id: 'check-in', label: 'Safe Check-In Plan', state: 'backend required', dependency: 'Consent, retention, and trusted-contact workflow' },
+  { id: 'circle-date', label: 'Circle Date', state: 'prototype', dependency: 'Group membership and permission model' },
+  { id: 'quiet-pass', label: 'Quiet Pass', state: 'prototype', dependency: 'Matching preference contract' },
+  { id: 'founding-signal', label: 'Founding Signal', state: 'policy required', dependency: 'Eligibility, rate limits, and truthful launch terms' },
+  { id: 'help-appeal', label: 'Human Help and Appeal', state: 'prototype', dependency: 'Support policy and review workflow' },
+] as const;
+
+const PAPERMATES_SKILLS = [
+  ['accessibility-review', 'WCAG, keyboard, motion, contrast, and touch-target review'],
+  ['design-critique', 'Hierarchy, usability, interaction, and trust-language review'],
+  ['design-handoff', 'Component states, data boundaries, and acceptance criteria'],
+  ['design-system', 'Tokens, variants, accessibility notes, and visual consistency'],
+  ['research-synthesis', 'Redacted evidence themes and prioritized product learning'],
+  ['user-research', 'Adult-only, consent-led research planning'],
+  ['ux-copy', 'Dignified consent, trust, support, and error-state language'],
+  ['papermates-trust-support', 'Local cases, review boundaries, and assisted-draft policy'],
+] as const;
+
+app.get('/api/papermates/overview', (_req, res) => {
+  res.json({
+    brand: 'PaperMates — You&i, watched over by AI',
+    aiSupport: { state: 'NOT CONFIGURED', detail: 'Human-reviewed Gemini or Claude drafting is proposed but not activated.' },
+    launchItems: PAPERMATES_LAUNCH_ITEMS,
+    skills: PAPERMATES_SKILLS.map(([id, description]) => ({ id, description, state: 'VALIDATED' })),
+  });
+});
+
+app.get('/api/papermates/trust', (_req, res) => {
+  res.json({ cases: listPaperMatesTrustCases() });
+});
+
+app.post('/api/papermates/trust', (req, res) => {
+  try {
+    res.status(201).json({ trustCase: createPaperMatesTrustCase(req.body ?? {}) });
+  } catch (error) {
+    res.status(400).json({ error: error instanceof Error ? error.message : String(error) });
+  }
+});
+
+app.patch('/api/papermates/trust/:id', (req, res) => {
+  try {
+    res.json({ trustCase: updatePaperMatesTrustCase(req.params.id, req.body ?? {}) });
+  } catch (error) {
+    res.status(404).json({ error: error instanceof Error ? error.message : String(error) });
+  }
+});
+
 // ── Real-time: Server-Sent Events ────────────────────────────────────────────
 app.get('/api/events', (req: Request, res: Response) => {
   res.writeHead(200, {
@@ -400,6 +531,12 @@ app.get('/api/knowledge/file', (req, res) => {
   }
 });
 
+// ── Provenance — checks committed Markdown artifacts without reading secrets ───
+app.post('/api/evidence/verify', async (req, res) => {
+  const result = await verifyProvenance(join(__dirname, '../../..'), req.body ?? {});
+  res.status(result.state === 'BLOCKED' ? 400 : 200).json(result);
+});
+
 // ── PAPERWEIGHT command center (static page; roster + metrics are sample data,
 // not live feeds — do not publish outside the LAN) ───────────────────────────
 const paperweightDir = join(__dirname, '..', '..', '..', 'apps', 'paperweight');
@@ -414,11 +551,19 @@ if (existsSync(clientDist)) {
   app.get(/^\/(?!api\/).*/, (_req, res) => res.sendFile(join(clientDist, 'index.html')));
 }
 
-app.listen(PORT, () => {
-  const live = routerLive();
-  console.log(`[mission-control] v${VERSION} (${EDITION}) on :${PORT}`);
-  console.log(`[mission-control] agents=${AGENTS.length} divisions=${CATEGORIES.length}`);
-  console.log(
-    `[omniroute] ${live ? 'LIVE' : 'OFFLINE — no provider configured (fail-closed, tasks will BLOCK honestly)'}`,
-  );
-});
+if (!RUNTIME_AUTHORIZED) {
+  // Runtime start is deliberately separate from source changes and must be an
+  // explicit owner action. This guard prevents an accidental `npm start` from
+  // claiming that a task-control runtime has been authorized.
+  console.error('[mission-control] RUNTIME AUTHORIZATION REQUIRED — set MISSION_CONTROL_RUNTIME_AUTHORIZED=1 after explicit owner approval.');
+  process.exitCode = 3;
+} else {
+  app.listen(PORT, HOST, () => {
+    const live = routerLive();
+    console.log(`[mission-control] identity=mission-control instance=${INSTANCE_ID} v${VERSION} (${EDITION}) on ${HOST}:${PORT}`);
+    console.log(`[mission-control] agents=${AGENTS.length} divisions=${CATEGORIES.length}`);
+    console.log(
+      `[omniroute] ${live ? 'LIVE' : 'OFFLINE — no provider configured (fail-closed, tasks will BLOCK honestly)'}`,
+    );
+  });
+}

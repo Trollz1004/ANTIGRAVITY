@@ -199,17 +199,6 @@ function executorChains(): Record<string, ExecutorLink[]> {
       { provider: 'ollama', model: env('EXEC_ORNITH_FALLBACK_MODEL') || 'gemma4:31b-cloud' },
       { provider: 'ollama', model: env('EXEC_ORNITH_FALLBACK2_MODEL') || 'gemma2:latest' },
     ],
-    // THE JUDGE — highest-reasoning route, deliberately NOT any model the three
-    // worker lanes run on, and deliberately WITHOUT a local floor: a 9B local
-    // model must never hold gate authority over the swarm's output. If the
-    // judge is unreachable the task goes BLOCKED for human review instead of
-    // being rubber-stamped. Point EXEC_JUDGE_MODEL at the strongest reasoning
-    // route available (grok-4.5 max thinking / gemini max reasoning / opus)
-    // that is not serving as a worker.
-    judge: [
-      { provider: 'openai_compat', model: env('EXEC_JUDGE_MODEL') || 'auto/best-reasoning' },
-      { provider: 'openai_compat', model: env('EXEC_JUDGE_FALLBACK_MODEL') || 'auto/best-free' },
-    ],
   };
 }
 
@@ -221,11 +210,6 @@ const EXECUTOR_META: Record<string, { label: string; description: string }> = {
   ornith: {
     label: 'ORNITH',
     description: 'Local Ornith (ollama), gemma4 smallest as browser-capable local fallback.',
-  },
-  judge: {
-    label: 'JUDGE',
-    description:
-      'The adversarial judge lane — highest reasoning route, never one of the worker models, no local floor. The only lane with authority to accept, edit, or deny swarm output; repo push/merge/branch-delete happens only on judge-accepted work.',
   },
 };
 
@@ -240,6 +224,8 @@ export function describeExecutors(): ExecutorInfo[] {
 }
 
 export function isExecutor(id: string): boolean {
+  // Official judges are intentionally absent. They authenticate through their
+  // own first-party clients and cannot be selected as OmniRoute executors.
   return id === 'auto' || id in executorChains();
 }
 

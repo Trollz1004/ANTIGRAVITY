@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" data-theme="iris" data-contrast="standard" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#070a12" />
+    <meta name="description" content="PaperMates Safety Center: clear controls, consent, and support routes." />
+    <title>PaperMates — Safety Center</title>
+    <link rel="stylesheet" href="afterglow.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <div class="aurora" aria-hidden="true"><div class="starfield"></div></div>
+    <main id="main-content" class="shell">
+      <header class="topbar">
+        <a class="brand" href="afterglow-landing.html" aria-label="PaperMates home"><span class="brand-mark">✦</span>PaperMates</a>
+        <div class="top-actions"><a class="text-link" href="afterglow-profile.html">My controls</a><a class="icon-button" href="papermates-launch.html" aria-label="Open launch details">◌</a></div>
+      </header>
+
+      <section class="section glass pm-safety-hero">
+        <div class="eyebrow">PaperMates safety center</div>
+        <h1>Choice before chemistry.</h1>
+        <p class="lede">These controls are designed to make expectations legible. This frontend prototype does not create an account, verify age, contact anyone, or make a safety decision.</p>
+        <div class="trust-row"><span><b>18+</b> Adult-only scope</span><span><b>◎</b> Consent choices</span><span><b>!</b> Reports need review</span></div>
+      </section>
+
+      <section class="pm-safety-grid" aria-label="Safety and consent controls">
+        <article class="pm-safety-card glass">
+          <span class="mini-icon">18+</span><h2>Adult Gate</h2>
+          <p>PaperMates is intended for adults. A production service must apply its age policy before profile creation and keep the policy easy to review.</p>
+          <button class="btn secondary wide" type="button" data-safety-action="age">Review age scope</button>
+        </article>
+        <article class="pm-safety-card glass">
+          <span class="mini-icon">◎</span><h2>Consent and cookies</h2>
+          <p>Essential functions should be explained separately from optional preferences. You can revise a non-essential choice later.</p>
+          <div class="choice-row"><button class="btn ghost" type="button" data-consent-choice="essential" aria-pressed="true">Essential only</button><button class="btn secondary" type="button" data-consent-choice="preferences" aria-pressed="false">Allow preferences</button></div>
+          <output class="notice" data-consent-status aria-live="polite">No optional preference choice is stored in this prototype.</output>
+        </article>
+        <article class="pm-safety-card glass">
+          <span class="mini-icon">◌</span><h2>Bot Check</h2>
+          <p>A signal is not a verdict. PaperMates should explain what a status means, offer a review path, and avoid public risk labels.</p>
+          <button class="btn secondary wide" type="button" data-safety-action="bot-check">See trust-state example</button>
+        </article>
+        <article class="pm-safety-card glass">
+          <span class="mini-icon">!</span><h2>Report and block</h2>
+          <p>Reports should be specific and blocked people should disappear from your space immediately. A review remains separate from an accusation.</p>
+          <div class="choice-row"><button class="btn ghost" type="button" data-safety-action="report">Stage a report</button><button class="btn secondary" type="button" data-safety-action="block">Stage a block</button></div>
+        </article>
+        <article class="pm-safety-card glass">
+          <span class="mini-icon">↗</span><h2>Check-in plan</h2>
+          <p>Set a personal reminder after a date. Sharing anything with a trusted contact is optional and needs explicit production consent.</p>
+          <button class="btn secondary wide" type="button" data-safety-action="check-in">Create a personal reminder</button>
+        </article>
+        <article class="pm-safety-card glass">
+          <span class="mini-icon">◉</span><h2>Circle Date</h2>
+          <p>Coordinate an optional double date with clear membership and leave controls. No location or identity is shared automatically.</p>
+          <button class="btn secondary wide" type="button" data-safety-action="circle-date">Explore Circle Date</button>
+        </article>
+      </section>
+      <output class="notice pm-safety-status" data-safety-status aria-live="polite" aria-atomic="true">Choose a control to see what this frontend demonstration can and cannot do.</output>
+
+      <section class="section glass pm-callout">
+        <div><div class="eyebrow">Need help?</div><h2>A route to a person matters.</h2><p>Customer support, trust review, and appeals require a documented response process. Gemini or Claude drafting, if enabled later, stays human-reviewed and is not currently configured.</p></div>
+        <a class="btn primary" href="afterglow-bot-shield.html">Open Bot Shield</a>
+      </section>
+      <footer class="footer">Frontend concept only. No real accounts, identity data, location, messages, payment, or verification sessions are created here. <a href="privacy.html">Privacy</a> · <a href="safety.html">Safety</a> · <a href="community-guidelines.html">Community guidelines</a></footer>
+    </main>
+    <script src="afterglow.js"></script>
+  </body>
+</html>
+
+
