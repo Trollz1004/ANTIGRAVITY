@@ -35,7 +35,7 @@ def test_support_openclaw_accepts_direct_reply_payload(monkeypatch):
     monkeypatch.setattr("app.support_service.httpx.AsyncClient", DummyClient)
 
     settings = SimpleNamespace(
-        support_openclaw_url="http://192.168.0.15:18895",
+        support_openclaw_url="http://192.168.0.8:18895",
         support_openclaw_timeout_seconds=15.0,
     )
 

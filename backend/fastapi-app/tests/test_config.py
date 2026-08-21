@@ -30,7 +30,7 @@ def test_primary_database_url_falls_back_to_database_url(monkeypatch) -> None:
     monkeypatch.delenv("SUPABASE_DB_URL", raising=False)
     monkeypatch.delenv("DATABASE_URL", raising=False)
     fallback_url = (
-        "postgresql+asyncpg://postgres:postgres@192.168.0.15:5432/youandinotai"
+        "postgresql+asyncpg://postgres:postgres@192.168.0.8:5432/youandinotai"
     )
     settings = Settings(
         _env_file=None,

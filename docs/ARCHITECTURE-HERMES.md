@@ -24,7 +24,7 @@
 
 ### T5500 Node (Infrastructure)
 
-- **IP:** `192.168.0.15`
+- **IP:** `192.168.0.8`
 - **Purpose:** Cloudflare workers, wranglers, edge deployments
 - **Services:** DNS, tunnel management, static assets
 - **Status:** ACTIVE — optional

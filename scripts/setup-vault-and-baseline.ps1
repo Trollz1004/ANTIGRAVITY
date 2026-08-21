@@ -17,7 +17,7 @@ $ErrorActionPreference = 'Stop'
 $Vault      = 'C:\Users\joshl\OneDrive\Personal Vault-Sabretooth'
 $MasterEnv  = 'MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
 $MasterPath = Join-Path $Vault $MasterEnv
-$T5500      = '\\192.168.0.15\C$\OPUS\env'
+$T5500      = '\\192.168.0.8\C$\OPUS\env'
 $N9020      = '\\192.168.0.5\D$\OPUSONLY\env'
 $Local      = 'C:\OPUS\baseline\sabretooth-manifest.txt'
 

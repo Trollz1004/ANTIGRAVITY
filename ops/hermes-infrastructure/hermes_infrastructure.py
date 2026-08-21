@@ -42,7 +42,7 @@ class SolConfig:
     omni_auth_mode: str = "OMNIROUTE_KEY_ONLY"
     omni_fail_closed: bool = True
     max_concurrent_nodes: int = 6
-    primary_node: str = "T5500 (192.168.0.15:20128 - GTX 1070)"
+    primary_node: str = "T5500 (192.168.0.8:20128 - GTX 1070)"
     secondary_node: str = ""
     paperclip_node: str = "T5500 (paperclip-local)"
     cloud_wrapper: str = "VS Code CLI (glm-5.2:cloud)"

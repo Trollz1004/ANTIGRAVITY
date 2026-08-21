@@ -116,7 +116,7 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     tier: 'first_party_limited',
     participationMode: 'required',
     certificationAuthority: false,
-    allowedIps: ['192.168.0.15'],
+    allowedIps: ['192.168.0.8'],
     allowedPathPrefixes: ['E:\\ANTIGRAVITY-CLAWBOTS'],
     blockedPathPrefixes: ['C:\\ANTIGRAVITY'],
   },
@@ -160,7 +160,7 @@ const DEFAULT_NODES: NodeDefinition[] = [
   {
     id: 't5500',
     displayName: 'T5500',
-    ip: '192.168.0.15',
+    ip: '192.168.0.8',
     roles: ['Manus media sandbox', 'Crossfire lane on E:'],
   },
 ];

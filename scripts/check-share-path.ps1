@@ -1,6 +1,6 @@
 $ErrorActionPreference='SilentlyContinue'
 try {
-  $r=Invoke-WebRequest -Uri 'http://192.168.0.15:3110/status' -UseBasicParsing -TimeoutSec 4
+  $r=Invoke-WebRequest -Uri 'http://192.168.0.8:3110/status' -UseBasicParsing -TimeoutSec 4
   Write-Host ('proxy_status='+$r.Content)
 } catch {
   Write-Host ('proxy_status_failed='+$_.Exception.Message)

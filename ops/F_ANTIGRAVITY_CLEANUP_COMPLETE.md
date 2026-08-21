@@ -104,7 +104,7 @@ Removed superseded/historical docs:
 
 2. **Option B:** Serve via OmniRoute
    - Add static route in omniroute config
-   - Serve at `http://192.168.0.15:20128/graphify`
+   - Serve at `http://192.168.0.8:20128/graphify`
 
 3. **Option C:** CLI only
    - Keep current setup (manual file:// access)
@@ -139,7 +139,7 @@ cca4de3e cleanup: remove 1.2GB of obsolete tools, legacy docs, and bloat.
 
 ## Manual Actions Required (Josh)
 
-### On Laptop (http://192.168.0.15:...)
+### On Laptop (http://192.168.0.8:...)
 
 ```powershell
 # Optional: Verify F: changes reached origin
