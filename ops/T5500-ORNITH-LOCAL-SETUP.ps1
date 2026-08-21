@@ -15,7 +15,7 @@ $headers = @{}
 if ($env:OMNIROUTE_API_KEY) {
   $headers.Authorization = "Bearer $env:OMNIROUTE_API_KEY"
 }
-Invoke-WebRequest -Uri 'http://192.168.0.15:20128/api/v1/models' -Headers $headers -UseBasicParsing | Select-Object StatusCode
+Invoke-WebRequest -Uri 'http://192.168.0.8:20128/api/v1/models' -Headers $headers -UseBasicParsing | Select-Object StatusCode
 
 '== Optional Paperclip patch =='
 'After Paperclip adapter models include ollama/ornith:9b, patch these agents from qwen fallback to ornith:'
@@ -47,7 +47,7 @@ $headers = @{
 foreach ($agentId in $agentIds) {
   $body = @{
     adapterConfig = @{
-      baseURL = 'http://192.168.0.15:20128/api/v1'
+      baseURL = 'http://192.168.0.8:20128/api/v1'
       model = 'ollama/ornith:9b'
       provider = 'ollama'
       selfHosted = $true

@@ -10,7 +10,7 @@ CEO agent reference. Read only when a task touches infra. Confirm before you tru
 - **Confirmed 2026-07-22 (Josh): NOT where Paperclip/Hermes runs.** CEO agent's "Hermes Agent (local)" adapter targets T5500, not here. OmniRoute gate host (:20128) is still a separate open question — see Laptop below.
 - Ollama port 11434 local.
 
-## T5500 — 192.168.0.15 (`DESKTOP-H4B53GL`)
+## T5500 — 192.168.0.8 (`DESKTOP-H4B53GL`)
 
 - Runs the **live** Paperclip clean instance: local API `http://127.0.0.1:3120`, public via Cloudflare tunnel `hermes-t5500` → https://paperclip.youandinotai.com (alias https://paperclip-clean.youandinotai.com).
 - Repo bound: `E:\clean` (Trollz1004/clean, `main` only).

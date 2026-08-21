@@ -391,7 +391,7 @@ async def harness_routing(request: Request):
     import http.client
     
     # Token is read from master .env at runtime, never exposed in code
-    omniroute_base = "http://192.168.0.15:20128/api/v1/vscode/REDACTED_TOKEN"
+    omniroute_base = "http://192.168.0.8:20128/api/v1/vscode/REDACTED_TOKEN"
     
     harnesses = {
         "opencode": {
@@ -402,7 +402,7 @@ async def harness_routing(request: Request):
             "auth": "Token from C:\\Users\\joshl\\.env (master vault)",
             "fallback": "fcc-claude",
             "description": "OpenCode harness through OmniRoute VS Code endpoint (LAN accessible)",
-            "notes": "Uses 192.168.0.15 for laptop/shared access; token auth (REDACTED)"
+            "notes": "Uses 192.168.0.8 for laptop/shared access; token auth (REDACTED)"
         },
         "fcc-claude": {
             "priority": 2,
@@ -420,7 +420,7 @@ async def harness_routing(request: Request):
     omni_status = "unreachable"
     omni_model_count = 0
     try:
-        conn = http.client.HTTPConnection("192.168.0.15", 20128, timeout=3)
+        conn = http.client.HTTPConnection("192.168.0.8", 20128, timeout=3)
         conn.request("GET", "/api/v1/vscode/health")  # Generic health endpoint
         resp = conn.getresponse()
         if resp.status == 200:
@@ -430,13 +430,13 @@ async def harness_routing(request: Request):
     
     return {
         "primary_harness": "opencode",
-        "routing_via": "OmniRoute 192.168.0.15:20128/api/v1/vscode/{TOKEN}/ (LAN + token)",
+        "routing_via": "OmniRoute 192.168.0.8:20128/api/v1/vscode/{TOKEN}/ (LAN + token)",
         "omniroute_status": omni_status,
         "harnesses": harnesses,
         "skills_dir": str(Path(ROOT_DIR).parent / ".agents" / "skills"),
         "mcp_endpoint": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
-        "workflow": "OpenCode task → OmniRoute (192.168.0.15, token auth) → model catalog → Result to Paperclip :3120",
-        "laptop_access": "Laptop at 192.168.0.15 reaches all T5500 services via LAN with token auth",
+        "workflow": "OpenCode task → OmniRoute (192.168.0.8, token auth) → model catalog → Result to Paperclip :3120",
+        "laptop_access": "Laptop at 192.168.0.8 reaches all T5500 services via LAN with token auth",
         "api_keys_location": "C:\\Users\\joshl\\.env (master vault, NEVER committed)",
         "key_rotation": "Update C:\\Users\\joshl\\.env only, restart OmniRoute service",
         "cli_wrappers": {
@@ -444,7 +444,7 @@ async def harness_routing(request: Request):
                 "type": "python",
                 "entry": "python C:\\Users\\joshl\\.hermes\\hermes_agent.py",
                 "config": "C:\\Users\\joshl\\.hermes\\config.yaml",
-                "routing": "omniroute (192.168.0.15:20128)",
+                "routing": "omniroute (192.168.0.8:20128)",
                 "mcp": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
                 "skills": "C:\\Users\\joshl\\.agents\\skills"
             },
@@ -459,7 +459,7 @@ async def harness_routing(request: Request):
             "opencode": {
                 "type": "json",
                 "config": "C:\\Users\\joshl\\.opencode\\opencode.json",
-                "routing": "omniroute (192.168.0.15:20128)",
+                "routing": "omniroute (192.168.0.8:20128)",
                 "models": ["omniroute/auto/best-coding", "omniroute/auto/best-fast", "ollama/ornith:9b"],
                 "mcp": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
                 "skills": "C:\\Users\\joshl\\.agents\\skills"

@@ -217,7 +217,7 @@ app.get('/api/health', (_req, res) => {
 /**
  * LAN address of this node, DETECTED — never hardcoded.
  *
- * This used to default to a literal '192.168.0.15'. When the disk moved from
+ * This used to default to a literal '192.168.0.8'. When the disk moved from
  * the T5500 into Sabretooth (192.168.0.8) that address died, and because the
  * OmniRoute entry built its PROBE url from it, Mission Control spent 9s timing
  * out against a machine that no longer exists and reported its own gateway
@@ -249,7 +249,7 @@ app.get('/api/services', async (_req, res) => {
   const hermesHealthUrl = process.env.HERMES_HEALTH_URL?.trim() || `http://127.0.0.1:${hermesPort}/health`;
   const openclawHealthUrl = process.env.OPENCLAW_HEALTH_URL?.trim() || `http://127.0.0.1:${openclawPort}/health`;
   const omniRouteHealthUrl = process.env.OMNIROUTE_HEALTH_URL?.trim() || 'http://127.0.0.1:20128/api/v1';
-  const dateAppHealthUrl = process.env.DATE_APP_HEALTH_URL ?? 'http://192.168.0.15:3200/health';
+  const dateAppHealthUrl = process.env.DATE_APP_HEALTH_URL ?? 'http://192.168.0.8:3200/health';
   const oneminShimStatusUrl = process.env.ONEMIN_SHIM_STATUS_URL?.trim() ?? '';
   // Per-service ping timeout. OmniRoute's /v1/models aggregates models from
   // backends and answers in ~3s, so it needs a longer window than a fast

@@ -2,7 +2,7 @@
 inherit = "core"
 
 [shell_environment_policy.set]
-DOCKER_HOST = "ssh://joshl@192.168.0.15"
+DOCKER_HOST = "ssh://joshl@192.168.0.8"
 COMPOSE_PROJECT_NAME = "antigravity"
 
 [mcp_servers.brain-mcp]

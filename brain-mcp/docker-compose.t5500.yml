@@ -1,4 +1,4 @@
-# brain-mcp: 24/7 HTTP MCP server — T5500 (192.168.0.15)
+# brain-mcp: 24/7 HTTP MCP server — T5500 (192.168.0.8)
 # Deploy:  docker compose -f docker-compose.t5500.yml up -d
 # Rebuild: docker compose -f docker-compose.t5500.yml up -d --build
 

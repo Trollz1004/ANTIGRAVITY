@@ -57,7 +57,7 @@ const { chromium } = require('E:/ANTIGRAVITY\\apps\\mission-control\\node_module
 
   // network analysis — page is on 127.0.0.1:8788 with relative URLs, so every
   // request should land on the same origin. Anything off-host is a bug.
-  const offendingUrls = requests.filter((u) => u.includes('192.168.0.8') || u.includes('192.168.0.15'));
+  const offendingUrls = requests.filter((u) => u.includes('192.168.0.8') || u.includes('192.168.0.8'));
   const wrongHostUrls = requests.filter((u) => u.startsWith('http://') && !u.startsWith('http://127.0.0.1:8788/'));
   // give the page a few more ticks to make sure no late off-host requests slip in
   await page.waitForTimeout(3000);

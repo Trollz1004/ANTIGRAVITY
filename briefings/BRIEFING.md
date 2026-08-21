@@ -71,7 +71,7 @@ picks a provider directly.
 I am collapsing the fleet onto **T5500** to stop the bleed and prove ROI before
 I spend another dollar or hour spreading across nodes.
 
-**T5500 (192.168.0.15) runs everything, for now:**
+**T5500 (192.168.0.8) runs everything, for now:**
 
 - **Load balancer** — already runs on auto-start here. Keep it.
 - **Paperclip** — already runs on auto-start here. This is the **date-app**
