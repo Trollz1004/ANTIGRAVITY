@@ -1,0 +1,30 @@
+# Rendered at container start by the nginx image's envsubst entrypoint
+# (/docker-entrypoint.d/20-envsubst-on-templates.sh). ${API_UPSTREAM} is the
+# only substituted token; every $-prefixed name below is an nginx variable.
+server {
+    listen 80;
+
+    # Health check endpoint
+    location /health {
+        return 200 "OK";
+        add_header Content-Type text/plain;
+    }
+
+    # Proxy API requests to the backend so the browser stays same-origin
+    # (the SPA calls both VITE_API_URL and hardcoded /api/v1/... paths).
+    location /api/ {
+        proxy_pass ${API_UPSTREAM};
+        proxy_http_version 1.1;
+        proxy_set_header Host $proxy_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_ssl_server_name on;
+    }
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+}
