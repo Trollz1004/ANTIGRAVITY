@@ -28,29 +28,12 @@ FROM nginx:alpine AS production
 # Copy built assets from builder
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Minimal nginx config for serving SPA
-RUN echo 'server { \
-    listen 80; \
-    location / { \
-        root /usr/share/nginx/html; \
-        index index.html; \
-        try_files $uri $uri/ /index.html; \
-    } \
-    # Proxy API requests to the active upstream (handled by the main nginx) \
-    location /api/ { \
-        proxy_pass http://upstreams; \
-        proxy_http_version 1.1; \
-        proxy_set_header Host $host; \
-        proxy_set_header X-Real-IP $remote_addr; \
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; \
-        proxy_set_header X-Forwarded-Proto $scheme; \
-    } \
-    # Health check endpoint \
-    location /health { \
-        return 200 "OK"; \
-        add_header Content-Type text/plain; \
-    } \
-}' > /etc/nginx/conf.d/default.conf
+# SPA + API-proxy config. Templated so the backend origin is injected at
+# container start rather than baked in; the previous config proxied to an
+# upstream group named "upstreams" that this file never defined, so nginx
+# refused to start anywhere the outer nginx wasn't also present.
+ENV API_UPSTREAM=http://localhost:8000
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 
 EXPOSE 80
 
