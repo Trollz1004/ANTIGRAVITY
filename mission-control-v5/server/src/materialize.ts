@@ -20,18 +20,13 @@
  * UNC paths and .. traversal are rejected — everything is forced inside the
  * task's own workspace directory.
  */
-import { execFile } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, normalize, resolve, sep } from 'node:path';
-import { promisify } from 'node:util';
-
-const run = promisify(execFile);
 
 // The canonical workspace is C:\ANTIGRAVITY. Materialization stays local and
 // uncommitted by default; the judge lane controls any later delivery action.
 const REPO_ROOT = (process.env.MATERIALIZE_REPO_ROOT ?? 'C:\\ANTIGRAVITY').trim();
 const OUT_DIR = (process.env.MATERIALIZE_OUT_DIR ?? 'mission-control-output').trim();
-const AUTO_COMMIT = (process.env.MATERIALIZE_AUTO_COMMIT ?? '0').trim() === '1';
 
 export interface ExtractedFile {
   path: string;
@@ -132,10 +127,7 @@ function slug(s: string): string {
   );
 }
 
-async function git(args: string[]): Promise<string> {
-  const { stdout } = await run('git', ['-C', REPO_ROOT, ...args], { windowsHide: true });
-  return stdout.trim();
-}
+
 
 /**
  * Write every file a task produced into its own workspace. Materialization does
@@ -195,37 +187,8 @@ export async function materializeTask(params: {
     return result;
   }
 
-  if (!AUTO_COMMIT) {
-    result.note = `Wrote ${result.files.length} file(s). Auto-commit disabled.`;
-    return result;
-  }
-
-  try {
-    await git(['add', '--', result.workspace!]);
-    const staged = await git(['diff', '--cached', '--name-only', '--', result.workspace!]);
-    if (!staged) {
-      result.note = `Wrote ${result.files.length} file(s); git reported nothing to commit.`;
-      return result;
-    }
-    const msg = [
-      `chore(mission-control): task output — ${params.title}`.slice(0, 100),
-      '',
-      `Task ${params.taskId}`,
-      `Agents: ${params.outputs.map((o) => o.agentId).join(', ')}`,
-      `Files: ${result.files.length}`,
-      '',
-      'Written by the Mission Control materializer so task output lands in the',
-      'repo instead of existing only as chat text.',
-    ].join('\n');
-    await git(['commit', '-q', '-m', msg]);
-    result.committed = true;
-
-    if (!result.note) {
-      result.note = `Wrote ${result.files.length} file(s), committed locally; judge review is still required before delivery.`;
-    }
-  } catch (err) {
-    result.note = `Wrote ${result.files.length} file(s); git failed: ${err instanceof Error ? err.message.split('\n')[0] : String(err)}`;
-  }
-
+  // Workers produce local, scoped review artifacts only. They are never staged,
+  // committed, pushed, merged, or deleted by Mission Control worker code.
+  result.note = `Wrote ${result.files.length} file(s) as a local review artifact. Git delivery requires a separately authorized judge lane.`;
   return result;
 }

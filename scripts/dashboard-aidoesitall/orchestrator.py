@@ -27,7 +27,7 @@ NODES = {
         "capabilities": ["crossfire", "content_gen", "social_posting"]
     },
     "t5500": {
-        "host": "192.168.0.15",
+        "host": "192.168.0.8",
         "role": "build",
         "ssh_alias": "t5500",
         "work_dir": "E:/ANTIGRAVITY",

@@ -9,7 +9,7 @@ try {
   Write-Host ('paperclip_local_failed='+$_.Exception.Message)
 }
 try {
-  $q=Invoke-WebRequest -Uri 'http://192.168.0.15:3110/' -UseBasicParsing -TimeoutSec 4
+  $q=Invoke-WebRequest -Uri 'http://192.168.0.8:3110/' -UseBasicParsing -TimeoutSec 4
   Write-Host ('proxy='+$q.StatusCode)
 } catch {
   Write-Host ('proxy_failed='+$_.Exception.Message)

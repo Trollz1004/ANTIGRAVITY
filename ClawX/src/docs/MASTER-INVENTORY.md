@@ -32,7 +32,7 @@ Use these files first:
 | -------------- | ----------------- | ------------------------------------------ | ----------------- |
 | `SABRETOOTH`   | `192.168.0.8`     | Primary command post / canonical repo node | Primary           |
 | `9020`         | `192.168.0.5`     | Marketing/support utility node             | Cold / opt-in     |
-| `T5500`        | `192.168.0.15`    | Build/media utility node                   | Cold / opt-in     |
+| `T5500`        | `192.168.0.8`    | Build/media utility node                   | Cold / opt-in     |
 | `MINI-ASUS-PC` | local workstation | Auxiliary remote-access workstation        | Non-authoritative |
 
 ## Repo / Lane Rules

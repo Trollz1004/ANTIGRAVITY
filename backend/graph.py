@@ -207,7 +207,7 @@ async def doctrine():
 # ── Node identity ──────────────────────────────────────────────────────── #
 NODE_TOPOLOGY = [
     {"name": "SABRETOOTH", "ip": "192.168.0.8",  "role": "Live command post · authoritative coding root · ONLY node allowed to push to origin/main"},
-    {"name": "T5500",      "ip": "192.168.0.15", "role": "Sandbox / Utility — cold-start via SSH"},
+    {"name": "T5500",      "ip": "192.168.0.8", "role": "Sandbox / Utility — cold-start via SSH"},
     {"name": "9020",       "ip": "192.168.0.5",  "role": "Read-only mirror — cold-start via SSH"},
 ]
 

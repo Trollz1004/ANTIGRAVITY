@@ -19,6 +19,30 @@ const path = require('path');
 const SITES = require(path.join(__dirname, '..', 'client', 'src', 'shared', 'browser-sites.json'));
 const HOME_URL = SITES[0].url;
 const DASH_URL = process.env.MC_DASH_URL || 'http://localhost:5173';
+const ALLOWED_BROWSER_ORIGINS = new Set(
+  SITES.map((site) => {
+    try {
+      return new URL(site.url).origin;
+    } catch {
+      return '';
+    }
+  }).filter(Boolean),
+);
+
+function isAllowedBrowserUrl(candidate) {
+  try {
+    const parsed = new URL(candidate);
+    return ['http:', 'https:'].includes(parsed.protocol) && ALLOWED_BROWSER_ORIGINS.has(parsed.origin);
+  } catch {
+    return false;
+  }
+}
+
+function navigateBrowser(url) {
+  if (!browser || !isAllowedBrowserUrl(url)) return false;
+  void browser.webContents.loadURL(url);
+  return true;
+}
 
 let win = null;
 let browser = null;
@@ -58,8 +82,11 @@ function attachBrowser() {
   win.contentView.addChildView(browser);
   const wc = browser.webContents;
   wc.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
+    if (isAllowedBrowserUrl(url)) void shell.openExternal(url);
     return { action: 'deny' };
+  });
+  wc.on('will-navigate', (event, url) => {
+    if (!isAllowedBrowserUrl(url)) event.preventDefault();
   });
   wc.on('did-navigate', pushState);
   wc.on('did-navigate-in-page', pushState);
@@ -118,7 +145,7 @@ ipcMain.on('browser:set-bounds', (_e, rect) => {
   });
   pushState();
 });
-ipcMain.on('browser:navigate', (_e, url) => browser && browser.webContents.loadURL(url));
+ipcMain.on('browser:navigate', (_e, url) => navigateBrowser(url));
 ipcMain.on('browser:back', () => {
   if (!browser) return;
   const h = history(browser.webContents);
@@ -130,7 +157,7 @@ ipcMain.on('browser:forward', () => {
   if (h.canGoForward()) h.goForward();
 });
 ipcMain.on('browser:reload', () => browser && browser.webContents.reload());
-ipcMain.on('browser:home', () => browser && browser.webContents.loadURL(HOME_URL));
+ipcMain.on('browser:home', () => navigateBrowser(HOME_URL));
 ipcMain.on('browser:open-external', (_e, url) => {
-  if (url) shell.openExternal(url);
+  if (isAllowedBrowserUrl(url)) void shell.openExternal(url);
 });

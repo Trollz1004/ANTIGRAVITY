@@ -19,7 +19,7 @@ Keep the laptop free of model-processing load while still using OpenCode from th
 | Node       |         LAN IP | Status         |
 | ---------- | -------------: | -------------- |
 | Laptop     | `192.168.0.13` | Control seat   |
-| T5500      | `192.168.0.15` | Paperclip host |
+| T5500      | `192.168.0.8` | Paperclip host |
 | Sabretooth |  `192.168.0.8` | Compute node   |
 | 9020 node  |  `192.168.0.5` | Compute node   |
 
@@ -28,13 +28,13 @@ Keep the laptop free of model-processing load while still using OpenCode from th
 Laptop OpenCode should talk only to laptop OmniRoute:
 
 ```text
-http://192.168.0.15:20128/api/v1
+http://192.168.0.8:20128/api/v1
 ```
 
 T5500 Paperclip `opencode_local` agents should talk only to T5500 OmniRoute at the same loopback URL from T5500's point of view:
 
 ```text
-http://192.168.0.15:20128/api/v1
+http://192.168.0.8:20128/api/v1
 ```
 
 Do not point a T5500 Paperclip adapter at the laptop's `127.0.0.1`; loopback is machine-local.
@@ -68,9 +68,9 @@ Do not point Claude Code at OmniRoute. It should stay direct so OmniRoute does n
 Live Paperclip agents aligned to OmniRoute:
 
 ```text
-CEO OmniRoute Local Models via OpenCode -> auto/best-coding -> http://192.168.0.15:20128/api/v1
-Founding Engineer -> auto/best-coding -> http://192.168.0.15:20128/api/v1
-OpenCode Self-Hosted Models -> auto/best-coding -> http://192.168.0.15:20128/api/v1
+CEO OmniRoute Local Models via OpenCode -> auto/best-coding -> http://192.168.0.8:20128/api/v1
+Founding Engineer -> auto/best-coding -> http://192.168.0.8:20128/api/v1
+OpenCode Self-Hosted Models -> auto/best-coding -> http://192.168.0.8:20128/api/v1
 ```
 
 These are intentionally OmniRoute aliases, not Claude, OpenAI, Ollama Cloud, or OpenRouter model IDs.
@@ -96,7 +96,7 @@ OpenCode on laptop -> OmniRoute on laptop -> Ollama/OpenAI-compatible endpoints 
 ## Health Checks
 
 ```powershell
-Invoke-WebRequest http://192.168.0.15:20128/api/v1/models -UseBasicParsing
+Invoke-WebRequest http://192.168.0.8:20128/api/v1/models -UseBasicParsing
 Invoke-WebRequest http://192.168.0.8:11434/api/tags -UseBasicParsing
 ```
 

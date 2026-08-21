@@ -25,7 +25,7 @@ foreach ($port in $ports) {
 '== HTTP health =='
 $checks = @(
   'https://paperclip-clean.youandinotai.com/api/health',
-  'http://192.168.0.15:20128/api/v1/models'
+  'http://192.168.0.8:20128/api/v1/models'
 )
 
 foreach ($url in $checks) {
