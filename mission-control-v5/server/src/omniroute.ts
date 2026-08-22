@@ -74,9 +74,16 @@ async function postJson(url: string, headers: Record<string, string>, body: unkn
 // ── Adapter: any OpenAI-compatible endpoint ───────────────────────────────────
 const openaiCompat: ProviderAdapter = {
   id: 'openai_compat',
-  configured: () =>
-    (env('OPENAI_COMPAT_BASE_URL') || DEFAULT_OMNIROUTE_BASE_URL).length > 0 &&
-    (env('OPENAI_COMPAT_API_KEY').length > 0 || env('OMNIROUTE_API_KEY').length > 0),
+  configured: () => {
+    const base = env('OPENAI_COMPAT_BASE_URL') || DEFAULT_OMNIROUTE_BASE_URL;
+    if (!base) return false;
+    // Local gateway (localhost/127.0.0.1) is trusted without a key — OmniRoute
+    // on loopback is wide open and that is by design for the single-operator
+    // workstation. Remote endpoints still require an API key.
+    const isLocal = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])/.test(base);
+    if (isLocal) return true;
+    return env('OPENAI_COMPAT_API_KEY').length > 0 || env('OMNIROUTE_API_KEY').length > 0;
+  },
   modelFor: (mode) =>
     mode === 'speed'
       ? env('OPENAI_COMPAT_MODEL_SPEED') || null

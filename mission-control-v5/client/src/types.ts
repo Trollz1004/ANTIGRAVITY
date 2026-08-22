@@ -1,7 +1,7 @@
 export type Mode = 'speed' | 'reasoning';
 export type Column = 'NOW' | 'NEXT' | 'BLOCKED' | 'DONE';
 export type TaskStatus = 'queued' | 'running' | 'done' | 'error';
-export type Tab = 'control' | 'papermates' | 'graphy' | 'library' | 'swarm' | 'board' | 'services' | 'brain' | 'bridge' | 'council';
+export type Tab = 'control' | 'papermates' | 'graphy' | 'library' | 'swarm' | 'board' | 'services' | 'brain' | 'bridge' | 'council' | 'dateapp' | 'support';
 
 export interface AgentDef {
   id: string;
@@ -347,3 +347,25 @@ export interface KnowledgeFilePreview {
   truncated: boolean;
   content: string;
 }
+
+// ── Date App metrics (real production data) ─────────────────────────────────
+export interface DateAppMetrics {
+  health: {
+    status: string;
+    db_connected: boolean;
+    redis_connected: boolean;
+    square_connected: boolean;
+    square_signature_configured: boolean;
+    wallet_rails_proven: boolean;
+    wallet_rails_status: string;
+    payment_proof_labels: string[];
+    user_count: number;
+  };
+  allocations: {
+    customer_only?: { payments: number; gross_cents: number; reserve_cents: number; operating_cents: number };
+    with_test?: { payments: number; gross_cents: number; reserve_cents: number; operating_cents: number };
+  } | null;
+  frontend: { url: string; reachable: boolean };
+  public: { site: string; api: string };
+}
+

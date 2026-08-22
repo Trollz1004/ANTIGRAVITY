@@ -1,23 +1,16 @@
-[shell_environment_policy]
-inherit = "core"
-
-[shell_environment_policy.set]
-DOCKER_HOST = "ssh://joshl@192.168.0.8"
-COMPOSE_PROJECT_NAME = "antigravity"
-
 [mcp_servers.brain-mcp]
 command = "node"
-args = ['C:\Antigravity\brain-mcp\dist\index.js']
+args = ['C:\ANTIGRAVITY\brain-mcp\dist\index.js']
 
 [mcp_servers.brain-mcp.env]
-HOME = 'C:\Users\joshl'
+HOME = 'C:\Users\joshi'
 
 [mcp_servers.mission-mcp]
 command = "node"
-args = ['C:\Antigravity\services\mission-mcp\dist\server.js']
+args = ['C:\ANTIGRAVITY\services\mission-mcp\dist\server.js']
 
 [mcp_servers.mission-mcp.env]
-HOME = 'C:\Users\joshl'
+HOME = 'C:\Users\joshi'
 
 [mcp_servers.playwright]
 command = "cmd"
@@ -27,3 +20,6 @@ args = [
     "-y",
     "@playwright/mcp@latest",
 ]
+
+[mcp_servers.supabase]
+url = "https://mcp.supabase.com/mcp?project_ref=jmvgdqomvnkfgknmgwxp&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching%2Cstorage"

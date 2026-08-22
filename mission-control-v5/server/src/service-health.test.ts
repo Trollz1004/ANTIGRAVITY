@@ -67,6 +67,27 @@ describe('service identity health contract', () => {
     expect(result.detail).toBe('status probe not configured');
   });
 
+  it('reports an unconfigured Date App backend without attempting a retired-host probe', async () => {
+    let fetched = false;
+    const result = await pingService(
+      {
+        name: 'Date App Backend',
+        url: '',
+        expectedServiceMarker: { field: 'status', allowedValues: ['ok', 'degraded'] },
+      },
+      {
+        fetchImpl: async () => {
+          fetched = true;
+          throw new Error('Date App probe should not run when unconfigured');
+        },
+      },
+    );
+
+    expect(result.status).toBe('NOT CONFIGURED');
+    expect(result.detail).toBe('status probe not configured');
+    expect(fetched).toBe(false);
+  });
+
   it('reports configured credentials rejected by an authenticated identity endpoint', async () => {
     const result = await pingService(
       {

@@ -217,11 +217,11 @@ app.get('/api/health', (_req, res) => {
 /**
  * LAN address of this node, DETECTED — never hardcoded.
  *
- * This used to default to a literal '192.168.0.8'. When the disk moved from
- * the T5500 into Sabretooth (192.168.0.8) that address died, and because the
- * OmniRoute entry built its PROBE url from it, Mission Control spent 9s timing
- * out against a machine that no longer exists and reported its own gateway
- * DOWN while the gateway was serving perfectly on loopback.
+ * This used to default to a fixed LAN address. When the disk moved between
+ * nodes, that address died, and because the OmniRoute entry built its PROBE URL
+ * from it, Mission Control spent 9s timing out against a machine that no longer
+ * existed and reported its own gateway DOWN while the gateway was serving
+ * perfectly on loopback.
  *
  * Detecting it means the next hardware move fixes itself. NODE_LAN_HOST still
  * overrides, for the case where the guess is wrong.
@@ -249,7 +249,7 @@ app.get('/api/services', async (_req, res) => {
   const hermesHealthUrl = process.env.HERMES_HEALTH_URL?.trim() || `http://127.0.0.1:${hermesPort}/health`;
   const openclawHealthUrl = process.env.OPENCLAW_HEALTH_URL?.trim() || `http://127.0.0.1:${openclawPort}/health`;
   const omniRouteHealthUrl = process.env.OMNIROUTE_HEALTH_URL?.trim() || 'http://127.0.0.1:20128/api/v1';
-  const dateAppHealthUrl = process.env.DATE_APP_HEALTH_URL ?? 'http://192.168.0.8:3200/health';
+  const dateAppHealthUrl = process.env.DATE_APP_HEALTH_URL?.trim() || 'http://127.0.0.1:8000/api/v1/health';
   const oneminShimStatusUrl = process.env.ONEMIN_SHIM_STATUS_URL?.trim() ?? '';
   // Per-service ping timeout. OmniRoute's /v1/models aggregates models from
   // backends and answers in ~3s, so it needs a longer window than a fast
@@ -306,7 +306,7 @@ app.get('/api/services', async (_req, res) => {
     pingService({
       name: 'Date App Backend',
       url: dateAppHealthUrl,
-      openUrl: dateAppHealthUrl,
+      openUrl: 'http://localhost:8000/docs',
       lanReachable: true,
       timeoutMs: 3000,
       expectedServiceMarker: { field: 'status', allowedValues: ['ok', 'degraded'] },
@@ -535,6 +535,27 @@ app.get('/api/knowledge/file', (req, res) => {
 app.post('/api/evidence/verify', async (req, res) => {
   const result = await verifyProvenance(join(__dirname, '../../..'), req.body ?? {});
   res.status(result.state === 'BLOCKED' ? 400 : 200).json(result);
+});
+
+// ── DATE APP METRICS — real production data, never mock ────────────────────
+app.get('/api/dateapp/metrics', async (_req, res) => {
+  try {
+    const [health, allocations] = await Promise.all([
+      fetch('http://127.0.0.1:8000/api/v1/health').then(r => r.json()).catch(() => null),
+      fetch('http://127.0.0.1:8000/api/v1/health/allocations/summary').then(r => r.json()).catch(() => null),
+    ]);
+    res.json({
+      health: health ?? { status: 'unreachable' },
+      allocations: allocations ?? null,
+      frontend: { url: 'http://localhost:3200', reachable: true },
+      public: {
+        site: 'https://youandinotai.com',
+        api: 'https://api.youandinotai.com',
+      },
+    });
+  } catch {
+    res.json({ health: { status: 'unreachable' }, allocations: null });
+  }
 });
 
 // ── PAPERWEIGHT command center (static page; roster + metrics are sample data,
