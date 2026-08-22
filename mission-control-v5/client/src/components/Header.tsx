@@ -22,6 +22,18 @@ export default function Header({ tab, onTab, health, runningCount, selectedCount
         <button className={`header__tab ${tab === 'control' ? 'header__tab--active' : ''}`} onClick={() => onTab('control')}>
           CONTROL CENTER{selectedCount > 0 ? ` [${selectedCount}]` : ''}
         </button>
+        <button
+          className={`header__tab ${tab === 'dateapp' ? 'header__tab--active' : ''}`}
+          onClick={() => onTab('dateapp')}
+        >
+          DATE APP
+        </button>
+        <button
+          className={`header__tab ${tab === 'support' ? 'header__tab--active' : ''}`}
+          onClick={() => onTab('support')}
+        >
+          SUPPORT
+        </button>
       </nav>
       <div className="header__status">
         <span className="status-item"><span className={`dot ${health ? 'dot--green' : 'dot--red'}`} />API {health ? 'IDENTIFIED' : 'UNAVAILABLE'}</span>

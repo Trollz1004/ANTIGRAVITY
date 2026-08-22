@@ -1932,3 +1932,154 @@ body {
 @media (max-width: 1100px) { .pm-summary { grid-template-columns: repeat(2, 1fr); } .pm-grid { grid-template-columns: 1fr; } .pm-panel--wide { grid-column: auto; } .pm-trust-layout { grid-template-columns: 1fr; } }
 @media (max-width: 720px) { .papermates { padding: calc(var(--unit) * 1.5); } .papermates__hero { grid-template-columns: 1fr; padding: calc(var(--unit) * 2); } .papermates__hero-note { margin-top: calc(var(--unit) * 2); } .papermates__orbit-art { right: -74px; top: -18px; opacity: .38; } .pm-summary { grid-template-columns: 1fr; } .pm-panel header { align-items: flex-start; flex-direction: column; } .pm-launch-card { grid-template-columns: 24px 1fr; } .pm-launch-card .pm-state { grid-column: 2; justify-self: start; } .pm-fields { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .papermates__orbit-art { transform: none; } .papermates *, .papermates *::before, .papermates *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }
+/* ── LIVE WORK PREVIEW ─────────────────────────────────────────────────── */
+.live-work {
+  border: 1px solid var(--border);
+  margin-bottom: var(--unit);
+  background: var(--bg-panel);
+}
+
+.live-work--idle {
+  opacity: 0.65;
+}
+
+.live-work__header {
+  display: flex;
+  align-items: center;
+  gap: var(--unit);
+  padding: 10px var(--unit);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-raised);
+}
+
+.live-work__title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text);
+}
+
+.live-work__card {
+  padding: var(--unit);
+  border-bottom: 1px solid var(--border);
+}
+
+.live-work__card:last-child {
+  border-bottom: 0;
+}
+
+.live-work__card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--unit);
+  margin-bottom: 8px;
+}
+
+.live-work__phases {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  padding: 6px 0;
+}
+
+.phase-pip {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  color: var(--text-faint);
+  background: var(--bg);
+  transition: all 0.2s;
+}
+
+.phase-pip--done {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(0, 255, 255, 0.08);
+}
+
+.phase-pip--current {
+  border-color: var(--amber);
+  color: var(--amber);
+  background: rgba(255, 183, 77, 0.15);
+  animation: pipPulse 1s ease-in-out infinite;
+}
+
+@keyframes pipPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ── DATE APP PANEL ─────────────────────────────────────────────────────── */
+.panel {
+  padding: var(--unit);
+}
+
+.panel__title {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: var(--text);
+}
+
+.panel__subtitle {
+  font-size: 12px;
+  color: var(--text-faint);
+  margin: 0 0 var(--unit);
+}
+
+.panel__section {
+  margin-top: calc(var(--unit) * 2);
+  border-top: 1px solid var(--border);
+  padding-top: var(--unit);
+}
+
+.panel__section h3 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  margin: 0 0 var(--unit);
+}
+
+.service-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.service-card {
+  display: flex;
+  align-items: center;
+  gap: var(--unit);
+  padding: 10px var(--unit);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+}
+
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ── BADGE VARIANTS ─────────────────────────────────────────────────────── */
+.badge--phase {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  font-size: 9px;
+}
+
+.badge--queued { color: var(--text-faint); }
+.badge--plan { color: var(--accent); }
+.badge--work { color: var(--amber); }
+.badge--validate { color: var(--green); }
+.badge--judge { color: var(--accent); font-weight: 700; }
+.badge--error { color: var(--red); background: rgba(244,67,54,0.1); border-color: var(--red); }
+.badge--amber { color: var(--amber); background: rgba(255,183,77,0.1); border-color: var(--amber); }

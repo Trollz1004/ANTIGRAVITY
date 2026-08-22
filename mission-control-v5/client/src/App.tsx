@@ -6,10 +6,12 @@ import BrowserPanel from './components/BrowserPanel';
 import BridgePanel from './components/BridgePanel';
 import CouncilPanel from './components/CouncilPanel';
 import ControlCenter from './components/ControlCenter';
+import DateAppPanel from './components/DateAppPanel';
 import PaperMatesPanel from './components/PaperMatesPanel';
 import Header from './components/Header';
 import KanbanBoard from './components/KanbanBoard';
 import ServicesPanel from './components/ServicesPanel';
+import SupportPanel from './components/SupportPanel';
 import SwarmEngine from './components/SwarmEngine';
 import Graphy from './components/Graphy';
 import type { AgentDef, CategoryDef, Health, SwarmTask, Tab } from './types';
@@ -106,6 +108,8 @@ export default function App() {
           {tab === 'brain' && <BrainPanel />}
           {tab === 'bridge' && <BridgePanel />}
           {tab === 'council' && <CouncilPanel />}
+          {tab === 'dateapp' && <DateAppPanel />}
+          {tab === 'support' && <SupportPanel />}
         </main>
         <footer className="footer">
           <span>

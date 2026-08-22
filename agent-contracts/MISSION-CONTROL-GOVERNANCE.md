@@ -26,6 +26,14 @@ FCC is not a harness, not a judge, and has no place in Mission Control. Any FCC 
 
 No wrapper, harness, router, or third-party service is ever a judge. Once Mission Control is live, a push that originated from a wrapper or harness rather than from a judge means the pipeline was not built as specified, and that is the single clearest failure signal available. Before cutover this test does not apply, because delivery agents working under an official judge's direction are the interim path by design.
 
+## The orchestrator seat (added 2026-08-22 at Joshua's direction)
+
+FreeBuff Desktop App — the free-tier desktop coding agent (DeepSeek V4 Pro) — is the task orchestrator. Joshua hands it an objective; it fans that objective to the three harnesses (Hermes, OpenClaw, OpenCode), collects their packets, and presents the collected work to a judge. The orchestrator sits on the worker side of the wall in every respect: it is not a judge, it never pushes, merges, or deletes, and dispatching work grants it no review authority. If FreeBuff is unavailable, Joshua tasks the harnesses directly; nothing about the wall changes.
+
+Judges remain exactly the five official first-party platforms. An official judge surface includes both the platform's CLI and its official browser tools and extensions reached via CLI bridge or MCP — those surfaces can see local ports, so a judge can inspect the running work directly (the live dashboard, the dev server, the test output) before ruling, rather than trusting a pasted claim.
+
+Judge-cost routing: routine packet verdicts go to the flat-rate official subscriptions (Gemini CLI on the Pro plan, GitHub Copilot, Codex). Claude on the Max plan is reserved for the final merge gate — the judge action that actually lands work — so the most expensive reasoning tier is spent only where a push happens, never on per-task review churn.
+
 ## Authentication rules per judge
 
 Claude judges through the claude.ai MCP setup or the official Claude Code CLI logged in by account auth on a Max-tier subscription. No Anthropic API key is ever needed and none may ever exist. If an Anthropic API key is used again, the design has failed in every respect that matters.

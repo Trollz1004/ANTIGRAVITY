@@ -7,6 +7,7 @@ import type {
   BrainState,
   CategoryDef,
   Column,
+  DateAppMetrics,
   Health,
   KnowledgeFilePreview,
   KnowledgeGraphData,
@@ -102,6 +103,8 @@ export const api = {
     request<{ query: string; hits: KnowledgeSearchHit[] }>(`/api/knowledge/search?q=${encodeURIComponent(q)}`),
   knowledgeFile: (path: string) =>
     request<KnowledgeFilePreview>(`/api/knowledge/file?path=${encodeURIComponent(path)}`),
+  // ── Date App metrics (real production data) ─────────────────────────────────
+  dateappMetrics: () => request<DateAppMetrics>('/api/dateapp/metrics'),
 };
 
 export function subscribeEvents(onEvent: () => void): () => void {

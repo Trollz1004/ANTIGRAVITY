@@ -12,6 +12,79 @@ interface Props {
   onGoLibrary: () => void;
 }
 
+const PHASE_ORDER = ['plan', 'work', 'validate', 'judge', 'journal', 'deliver'] as const;
+function currentPhase(task: SwarmTask): string | null {
+  const allPhases = task.results.flatMap((r) => r.phases ?? []);
+  if (allPhases.length === 0) return task.status === 'running' ? 'plan' : null;
+  // Find the last phase any agent reached
+  const reached = new Set(allPhases.map((p) => p.phase));
+  for (let i = PHASE_ORDER.length - 1; i >= 0; i--) {
+    if (reached.has(PHASE_ORDER[i])) return PHASE_ORDER[i];
+  }
+  return PHASE_ORDER[0];
+}
+
+function LiveWorkPreview({ tasks }: { tasks: SwarmTask[] }) {
+  const live = tasks.filter((t) => t.status === 'running' || t.status === 'queued');
+  if (live.length === 0) {
+    return (
+      <div className="live-work live-work--idle">
+        <div className="live-work__header">
+          <span className="dot dot--idle" />
+          <span className="live-work__title">LIVE WORK PREVIEW — IDLE</span>
+        </div>
+        <div className="kanban__empty">NO ACTIVE TASKS. SUBMIT A TASK ABOVE TO SEE IT EXECUTE LIVE.</div>
+      </div>
+    );
+  }
+  return (
+    <div className="live-work">
+      <div className="live-work__header">
+        <span className="dot dot--amber dot--pulse" />
+        <span className="live-work__title">LIVE WORK PREVIEW — {live.length} ACTIVE</span>
+      </div>
+      {live.map((task) => {
+        const phase = currentPhase(task);
+        const phaseLabel = phase ? phase.toUpperCase() : task.status.toUpperCase();
+        return (
+          <div key={task.id} className="live-work__card">
+            <div className="live-work__card-head">
+              <StatusDot status={task.status} />
+              <strong>{task.title || task.id.slice(0, 8)}</strong>
+              <span className={`badge badge--phase badge--${phase ?? 'queued'}`}>
+                {phaseLabel}
+              </span>
+              <span className="result__meta">
+                {task.results.length} orchestrator{task.results.length !== 1 ? 's' : ''} working
+              </span>
+            </div>
+            <div className="live-work__phases">
+              {PHASE_ORDER.map((p) => {
+                const isReached = task.results.some((r) => (r.phases ?? []).some((ph) => ph.phase === p));
+                const isCurrent = phase === p;
+                return (
+                  <span
+                    key={p}
+                    className={`phase-pip ${isReached ? 'phase-pip--done' : ''} ${isCurrent ? 'phase-pip--current' : ''}`}
+                    title={p.toUpperCase()}
+                  >
+                    {p[0].toUpperCase()}
+                  </span>
+                );
+              })}
+            </div>
+            <div className="run-card__body">
+              {task.results.map((result) => (
+                <ResultBlock key={result.agentId} result={result} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function SwarmEngine({ agents, selected, onToggleAgent, tasks, health, onGoLibrary }: Props) {
   const [title, setTitle] = useState('');
   const [prompt, setPrompt] = useState('');
@@ -118,7 +191,8 @@ export default function SwarmEngine({ agents, selected, onToggleAgent, tasks, he
       </section>
 
       <section className="swarm__feed">
-        <div className="label swarm__section-title">EXECUTION FEED — LIVE</div>
+        <LiveWorkPreview tasks={tasks} />
+        <div className="label swarm__section-title" style={{ marginTop: 24 }}>EXECUTION FEED — ALL TASKS</div>
         {tasks.length === 0 && <div className="kanban__empty">NO TASKS YET</div>}
         {tasks.map((task) => (
           <article key={task.id} className="run-card">

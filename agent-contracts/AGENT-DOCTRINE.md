@@ -2,7 +2,7 @@
 
 > **DRAFT ONLY:** This document supersedes older multi-lane, external-memory, retired-runtime, and stale-path instructions. It becomes active only when the judge lane lands the S1 supersession.
 
-## Current Operating Model
+## Current Operating Model and any Ai model should do the same regarding a journal it reads on session starts writes to on session end even for JUDGES
 
 The active harnesses are **Hermes**, **OpenClaw**, and **OpenCode**. They are not permanent authorities. Joshua assigns work; the assigned harness performs its bounded scope and reports evidence.
 
