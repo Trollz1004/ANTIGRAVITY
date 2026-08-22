@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "mission-control",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["start"],
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "set MISSION_CONTROL_RUNTIME_AUTHORIZED=1&& npm start"],
       "cwd": "C:\\ANTIGRAVITY\\mission-control-v5",
       "port": 3151,
       "url": "http://localhost:3151"
