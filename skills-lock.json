@@ -55,6 +55,32 @@
       "skillPath": "skills/i-have-adhd/SKILL.md",
       "computedHash": "8a95bc49a1ac2224fa227081a5cbe386f7d2b3edee6e5324120b9555d9fbd55f"
     },
+    "paperclip": {
+      "source": "paperclip-adapter-openrouter",
+      "sourceType": "node_modules",
+      "computedHash": "2deb518803ef68d9e88af57324ea80968dde393a0abc556aaa52fb3a7ee5dddc"
+    },
+    "paperclip-create-agent": {
+      "source": "paperclip-adapter-openrouter",
+      "sourceType": "node_modules",
+      "computedHash": "76c81419d8d5f00447c862ecd228e7ba05c3f69a5ab8e7b3a24b8e6eeccb4bc6"
+    },
+    "paperclip-create-plugin": {
+      "source": "paperclip-adapter-openrouter",
+      "sourceType": "node_modules",
+      "computedHash": "27d7a689e0b60d34d920a9b2f9fb423eaa4652e4ad897f850c5371a437fa1538"
+    },
+    "para-memory-files": {
+      "source": "paperclip-adapter-openrouter",
+      "sourceType": "node_modules",
+      "computedHash": "54a6ac702edf6ca6a31808b21b67de9d8cedc828da2941273d38002a96128b91"
+    },
+    "planning-with-files": {
+      "source": "othmanadi/planning-with-files",
+      "sourceType": "github",
+      "skillPath": "skills/planning-with-files/SKILL.md",
+      "computedHash": "648eb43044e5ccf573bdeaa1f5e715e33788ff32e218daf88f10c04c097c5e34"
+    },
     "sleek-design-mobile-apps": {
       "source": "sleekdotdesign/agent-skills",
       "sourceType": "github",
