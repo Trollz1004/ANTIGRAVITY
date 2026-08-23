@@ -33,6 +33,12 @@ export interface MarketingItem {
   title: string;
   body: string;
   status: MarketingStatus;
+  /**
+   * Public-surface compliance terms found in the copy (FL 496.405 vocabulary
+   * plus the "split" wording trap). Non-empty means legal review before
+   * approval — the queue surfaces it, it never auto-denies.
+   */
+  complianceFlags: string[];
   /** Joshua's response text sent back with the decision, if any. */
   response: string | null;
   createdAt: string;
@@ -64,6 +70,26 @@ const str = (v: unknown, cap: number): string => String(v ?? '').trim().slice(0,
 
 const KINDS = new Set(['post', 'reply', 'campaign', 'listing', 'other']);
 
+// Customer-facing copy may never contain these (canonical record surface rule,
+// FL 496.405), and "split" falsely trips fraud/structuring reviews.
+const COMPLIANCE_TERMS = [
+  'donate',
+  'donation',
+  'solicitation',
+  'charity',
+  'charitable',
+  'giving back',
+  'disbursement',
+  'tax-deductible',
+  'tax deductible',
+  'split',
+];
+
+function scanCompliance(title: string, body: string): string[] {
+  const hay = `${title}\n${body}`.toLowerCase();
+  return COMPLIANCE_TERMS.filter((term) => hay.includes(term));
+}
+
 export function createMarketingItem(input: Record<string, unknown>): MarketingItem {
   const title = str(input.title, 300);
   const body = str(input.body, 20_000);
@@ -77,6 +103,7 @@ export function createMarketingItem(input: Record<string, unknown>): MarketingIt
     title,
     body,
     status: 'pending',
+    complianceFlags: scanCompliance(title, body),
     response: null,
     createdAt: now,
     updatedAt: now,
