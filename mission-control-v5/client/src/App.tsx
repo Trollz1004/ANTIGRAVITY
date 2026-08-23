@@ -7,6 +7,7 @@ import BridgePanel from './components/BridgePanel';
 import CouncilPanel from './components/CouncilPanel';
 import ControlCenter from './components/ControlCenter';
 import DateAppPanel from './components/DateAppPanel';
+import PreviewPanel from './components/PreviewPanel';
 import PaperMatesPanel from './components/PaperMatesPanel';
 import Header from './components/Header';
 import KanbanBoard from './components/KanbanBoard';
@@ -110,6 +111,7 @@ export default function App() {
           {tab === 'council' && <CouncilPanel />}
           {tab === 'dateapp' && <DateAppPanel />}
           {tab === 'support' && <SupportPanel />}
+          {tab === 'preview' && <PreviewPanel />}
         </main>
         <footer className="footer">
           <span>

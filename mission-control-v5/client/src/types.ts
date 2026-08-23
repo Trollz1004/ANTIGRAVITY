@@ -1,7 +1,7 @@
 export type Mode = 'speed' | 'reasoning';
 export type Column = 'NOW' | 'NEXT' | 'BLOCKED' | 'DONE';
 export type TaskStatus = 'queued' | 'running' | 'done' | 'error';
-export type Tab = 'control' | 'papermates' | 'graphy' | 'library' | 'swarm' | 'board' | 'services' | 'brain' | 'bridge' | 'council' | 'dateapp' | 'support';
+export type Tab = 'control' | 'papermates' | 'graphy' | 'library' | 'swarm' | 'board' | 'services' | 'brain' | 'bridge' | 'council' | 'dateapp' | 'support' | 'preview';
 
 export interface AgentDef {
   id: string;

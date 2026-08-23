@@ -23,6 +23,12 @@ export default function Header({ tab, onTab, health, runningCount, selectedCount
           CONTROL CENTER{selectedCount > 0 ? ` [${selectedCount}]` : ''}
         </button>
         <button
+          className={`header__tab ${tab === 'preview' ? 'header__tab--active' : ''}`}
+          onClick={() => onTab('preview')}
+        >
+          PREVIEW
+        </button>
+        <button
           className={`header__tab ${tab === 'dateapp' ? 'header__tab--active' : ''}`}
           onClick={() => onTab('dateapp')}
         >
