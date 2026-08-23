@@ -5,6 +5,10 @@ knowledge:
   source: repository
   graph: Mission Control Graphy
   obsidian_mirror: optional
+mcp_servers:
+  required: [brain-mcp, mission-mcp, antigravity-files, playwright]
+  optional: [supabase]   # read-first; live DB writes route through the Supabase seat + judge
+  spec: agent-contracts/CAPABILITY-BASELINE.md
 preflight_skills:
   required:
     - i-have-adhd

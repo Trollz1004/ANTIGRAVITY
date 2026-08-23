@@ -53,5 +53,5 @@ When Joshua gives a task:
 5. Present to a judge for ACCEPT/DENY
 6. Report VERIFIED, UNVERIFIED, or BLOCKED with evidence
 
-- Session-start standing skills — every agent, judges included, before anything else: agent-reach, your journal (read STATE.md now, write it at session end), find-skills, skill-creator, i-have-adhd (concise output), superpowers brainstorming, agent-browser, planning-with-files, and self-learning in proposal mode — learnings are written to your journal and memory files; a skill-file change you want becomes a packet for a judge, never a self-edit, and never a hook. Task work then loads its own minimum of five task-relevant skills on top.
+- Session-start standing skills — every agent, judges included, before anything else: agent-reach, your journal (read STATE.md now, write it at session end), find-skills, skill-creator, i-have-adhd (concise output), superpowers brainstorming, agent-browser, planning-with-files, and para-memory-files (PARA file-based memory) for capturing learnings — a skill-file change you want becomes a packet for a judge, never a self-edit, and never a hook. Task work then loads its own minimum of five task-relevant skills on top.
 - Identity: self-hosted/local agents are OPUS-ALMOSTS — always labeled as the real model running, task-tracked, never signing as Claude/Opus or any platform they are not.
