@@ -34,6 +34,16 @@ Judges remain exactly the five official first-party platforms. An official judge
 
 Judge-cost routing: routine packet verdicts go to the flat-rate official subscriptions (Gemini CLI on the Pro plan, GitHub Copilot, Codex). Claude on the Max plan is reserved for the final merge gate — the judge action that actually lands work — so the most expensive reasoning tier is spent only where a push happens, never on per-task review churn.
 
+## Foundation ruling (judge decision under Joshua's delegation, 2026-08-23)
+
+Joshua delegated the foundation call. Evidence from the first live pipeline run: three tasks dispatched to Hermes, OpenClaw, and OpenCode sat `pending` and produced nothing, because `mission-mcp list_agents` returns empty — **no harness has ever registered, no poller exists anywhere in the repo, and OpenCode is not even installed on this node.** The tri-harness queue is target state that has completed zero tasks. The ceremony was costing shipped work. Therefore:
+
+**The loop is: FreeBuff builds → the judge reviews → the judge pushes.** Both halves are proven working. FreeBuff Desktop is the orchestrator and the executor: free cloud models, its own GUI and preview pane, MCP servers wired, skills loaded, and it does not consume OmniRoute capacity. It still never pushes, merges, or deletes — that wall is unchanged and is the entire point.
+
+**Three opinions are available on demand, not as a mandatory gate.** When a decision is genuinely contested or expensive to get wrong, Hermes fans the question to three sub-agents on three different OmniRoute providers and returns the comparison. That preserves the value of tri-execution — independent perspectives before a judge rules — without requiring three daemon harnesses that do not exist. Routine work does not pay that tax.
+
+**Retired as active architecture:** the three-harness polling queue, until someone deliberately builds pollers and Joshua asks for it. Packets, journals, evidence standards, and judge-only Git all remain exactly as written.
+
 ## Marketing architecture ruling (final — judge decision under Joshua's delegation, 2026-08-22)
 
 Mission Control on Sabretooth natively owns support, Date App uptime monitoring, legal-compliance scanning, and marketing approvals. Paperclip runs only on the 9020 node, as a marketing producer and nothing else: it writes drops into `ops/marketing-inbox/` at the one repo root and holds no repository, governance, or publishing authority. Mission Control is never exposed on the LAN or tunneled for any of this — producers deliver by file drop at the shared root (the 9020 node syncs to the same vault/repo), and cloud routines read repo state, never live ports. Compliance scanning runs at queue intake (the FL 496.405 vocabulary plus the "split" wording trap) and informs Joshua's decision; it never auto-denies. Nothing publishes without a decision recorded in the approval queue.
