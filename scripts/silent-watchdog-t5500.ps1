@@ -123,7 +123,6 @@ $serviceStates = @{
     "Hermes"          = @{Port=9119;  Failures=0; LastCheck=$null; Restart=$false; Service="hermes"}
     "OpenClaw"        = @{Port=18789; Failures=0; LastCheck=$null; Restart=$false; Service="openclaw"}
     "Ollama"          = @{Port=11434; Failures=0; LastCheck=$null; Restart=$false; Service="ollama"}
-    "FCC"             = @{Port=8082;  Failures=0; LastCheck=$null; Restart=$false; Service="fcc"}
 }
 
 $startTime = Get-Date
