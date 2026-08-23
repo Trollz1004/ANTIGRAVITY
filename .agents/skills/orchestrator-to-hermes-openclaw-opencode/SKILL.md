@@ -9,7 +9,7 @@ Goal: one objective in, three independent harness packets out, one summary prese
 
 ## Before anything (every session, every agent — judges included)
 
-Load the standing set: agent-reach, your journal (`.agents/journals/<role>/STATE.md` — read now, write at session end), find-skills, skill-creator, i-have-adhd (concise output), superpowers brainstorming. Each harness then loads a minimum of five task-relevant skills before its subagents act (floor: writing-plans, test-driven-development, systematic-debugging, verification-before-completion, requesting-code-review).
+Load the standing set: agent-reach, your journal (`.agents/journals/<role>/STATE.md` — read now, write at session end), find-skills, skill-creator, i-have-adhd (concise output), superpowers brainstorming, agent-browser, planning-with-files, and self-learning in proposal mode (learnings go to your journal/memory files; skill-file edits become judge packets — never self-edits, never hooks). Each harness then loads a minimum of five task-relevant skills before its subagents act (floor: writing-plans, test-driven-development, systematic-debugging, verification-before-completion, requesting-code-review).
 
 ## Workflow
 
