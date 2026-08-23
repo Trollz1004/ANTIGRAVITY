@@ -1,32 +1,27 @@
-# orchestrator STATE
+# Orchestrator Journal — Session 2026-08-23
 
-## Identity
-- **Role:** FreeBuff Desktop (DeepSeek V4 Pro) — orchestrator seat
-- **Side:** Worker. Never judge, never push, never merge, never delete.
-- **Status:** OPUS-ALMOST — labeled as the real model running, never signing as Claude/Opus.
+## Task
+harness-capability — confirm all three harnesses (hermes, openclaw, opencode) have the shared MCP servers and standing skills per agent-contracts/CAPABILITY-BASELINE.md.
 
-## Last Session — 2026-08-22 (Loadout Complete)
+## Dispatch
+Created 3 tasks on mission-mcp board, all pending:
+- hermes: 01M0PPD2CRCE6MVD4ECJD4CWEB
+- openclaw: 01M0PPDMFBPPVW944KSS0VGDGR
+- opencode: 01M0PPDMFFTHJWNQY7B6H3AGK1
 
-- **Task:** Loadout — install skills, create guardrail, create preflight skill
-- **Skills loaded:** orchestrator-to-hermes-openclaw-opencode (primary), agent-reach, find-skills, skill-creator, i-have-adhd, superpowers brainstorming (standing set)
-- **Skills installed (3 external):**
-  - agent-browser (vercel-labs) — ✓ installed to .agents/skills/agent-browser/ (Gen: Safe, Socket: 0 alerts, Snyk: Med)
-  - planning-with-files (othmanadi) — ✓ installed to .agents/skills/planning-with-files/ + 6 locales (Gen: Safe, Socket: 0-1 alerts, Snyk: Low-Med)
-  - self-learning (philschmid) — ✓ installed to .agents/skills/self-learning/ (Gen: High Risk, Socket: 0 alerts, Snyk: Med)
-- **Guardrail created:** ANTIGRAVITY-GUARDRAIL.md placed alongside self-learning/SKILL.md — proposal mode only, no direct writes to skills/, no hooks, no auto-mutation
-- **Preflight skill created:** .agents/skills/orchestrator-preflight/SKILL.md — standing set → git pull → port verify → harness journals → preflight table → wait for objective
-- **Evidence:**
-  - Git: `C:\ANTIGRAVITY` on main, pulled --ff-only, up to date
-  - All three `npx skills add` commands completed successfully (3/3)
-  - `npx skills experimental_sync` — 4 Paperclip skills synced from node_modules, no errors on our skills
-  - Files confirmed on disk (5/5)
-- **Blocker:** none
-- **Next action:** Awaiting Joshua's objective to fan to hermes, openclaw, opencode
+## Skills loaded
+orchestrator-to-hermes-openclaw-opencode, orchestrator-preflight, i-have-adhd, agent-reach, find-skills, skill-creator, brainstorming, planning-with-files, para-memory-files, agent-browser
 
-## Standing Set (loaded every session)
-- [x] agent-reach
-- [x] orchestrator journal (read at start, write at end)
-- [x] find-skills
-- [x] skill-creator
-- [x] i-have-adhd (concise output)
-- [x] superpowers brainstorming
+## Evidence
+- Git: main at c4f4f95b — up to date
+- MCPs on orchestrator: brain-mcp ✓ mission-mcp ✓ antigravity-files ✓ playwright ✓ supabase ✓
+- All services UP: MC :3151, OmniRoute :20128/:20129, Hermes :9119, OpenClaw :18789, DateApp :3200/:8000
+- Standing skill catalog: 60+ skills in .agents/skills/, 144+ agency-* skills indexed
+
+## Next
+Poll for task completion. Collect packets. Write SUMMARY.md. Present to Joshua for judge.
+
+## Blocker
+None currently — awaiting harness response.
+
+GREEN: dispatch complete, 3 tasks pending on mission-mcp board — orchestrator/STATE.md
