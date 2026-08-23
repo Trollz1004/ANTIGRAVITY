@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "c20ef252-3306-4229-927d-28d7c8dd5bdc",
+      "source": "paperclip-9020",
+      "platform": "instagram",
+      "kind": "post",
+      "title": "TEST — routing proof: 9020 inbox to Approvals tab",
+      "body": "This item proves the Paperclip-to-Mission-Control approval route. Safe to deny.",
+      "status": "denied",
+      "response": "Routing test verified end-to-end � denying the test item.",
+      "createdAt": "2026-08-23T00:17:55.166Z",
+      "updatedAt": "2026-08-23T00:18:06.856Z",
+      "decidedAt": "2026-08-23T00:18:06.856Z"
+    }
+  ]
+}

@@ -355,6 +355,7 @@
         <div class="subtitle">PAPERWEIGHT Command Center · 34 agents · 24 APIs · Square-ready date-app rail</div>
       </div>
       <nav class="tabs" id="tabs"></nav>
+      <a href="/canonical/" style="font-size:11px;font-weight:800;color:#f59e0b;text-decoration:none;border:1px solid #33415555;border-radius:999px;padding:6px 12px">📜 Canonical Record</a>
     </header>
 
     <section class="kpis" id="kpis"></section>
@@ -370,6 +371,7 @@
         <section id="analytics" class="hidden"></section>
         <section id="agents-tab" class="hidden"></section>
         <section id="apimap" class="hidden"></section>
+        <section id="approvals" class="hidden"></section>
       </main>
     </div>
 
@@ -801,6 +803,7 @@
           ['analytics', '📊 Analytics'],
           ['agents', '🤖 Agents'],
           ['apimap', '🗺 API Map'],
+          ['approvals', `🔔 Approvals${APPROVALS.pending ? ` (${APPROVALS.pending})` : ''}`],
         ]
           .map(
             ([id, label]) =>
@@ -1003,6 +1006,47 @@
             )
             .join('')}`;
       }
+      // ── MARKETING APPROVALS — REAL queue from /api/marketing/queue. Paperclip
+      // on the 9020 node drops JSON into ops/marketing-inbox/ at the repo root;
+      // Mission Control ingests it; Joshua rules here. Nothing publishes without
+      // an approval recorded in this queue.
+      const APPROVALS = { items: [], pending: 0, loaded: false };
+      async function pollApprovals() {
+        const data = await mcFetch('/api/marketing/queue');
+        if (data) {
+          APPROVALS.items = data.items || [];
+          APPROVALS.pending = data.pending || 0;
+          APPROVALS.loaded = true;
+          renderTabs();
+          renderApprovals();
+        }
+      }
+      async function decideMarketing(id, decision) {
+        const box = document.querySelector(`#resp-${id}`);
+        const response = box ? box.value.trim() : '';
+        const out = await mcFetch(`/api/marketing/queue/${id}/decide`, {
+          method: 'POST',
+          body: JSON.stringify({ decision, response }),
+        });
+        if (out) await pollApprovals();
+      }
+      function renderApprovals() {
+        $('approvals').classList.toggle('hidden', state.tab !== 'approvals');
+        if (state.tab !== 'approvals') return;
+        const st = (s) => ({ pending: '#f59e0b', approved: '#34d399', denied: '#ef4444' })[s] || '#64748b';
+        const rows = APPROVALS.items
+          .map((i) => {
+            const open = i.status === 'pending';
+            return `<article class="card post"><div class="post-head"><span style="font-size:16px">${open ? '🔔' : i.status === 'approved' ? '✅' : '⛔'}</span><div style="flex:1;min-width:0"><div class="post-title">${esc(i.title)}</div><div class="post-meta">${esc(i.source)} → ${esc(i.platform)} · ${esc(i.kind)} · ${esc(new Date(i.createdAt).toLocaleString())}</div></div>${badge(i.status.toUpperCase(), st(i.status))}</div><div class="detail" onclick="event.stopPropagation()"><div class="comment" style="white-space:pre-wrap">${esc(i.body)}</div>${i.response ? `<div class="provenance">↩ Joshua: ${esc(i.response)}</div>` : ''}${open ? `<div class="composer"><textarea id="resp-${i.id}" placeholder="Optional response back to the producer (edits, conditions, reply text)..."></textarea><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px"><button class="btn" style="background:#ef4444;color:#0d0f14" onclick="decideMarketing('${i.id}','denied')">DENY</button><button class="submit" onclick="decideMarketing('${i.id}','approved')">APPROVE</button></div></div>` : ''}</div></article>`;
+          })
+          .join('');
+        $('approvals').innerHTML =
+          `<div class="card notice" style="margin-bottom:12px">🔔 REAL approval queue — not sample data. Producers (Paperclip on 9020, agents, scripts) file items via <code>ops/marketing-inbox/*.json</code> at the repo root or POST <code>/api/marketing/queue</code> on loopback. ${APPROVALS.loaded ? `${APPROVALS.pending} pending / ${APPROVALS.items.length} total.` : 'Loading…'}</div>` +
+          (rows || '<div class="card" style="color:#64748b">Queue is empty. Drop a JSON file in ops/marketing-inbox/ ({source, platform, kind, title, body}) and it appears here.</div>');
+      }
+      window.decideMarketing = decideMarketing;
+      window.setInterval(pollApprovals, 20_000);
+      pollApprovals();
       function render() {
         renderTabs();
         renderKpis();
@@ -1011,6 +1055,7 @@
         renderAnalytics();
         renderAgents();
         renderApiMap();
+        renderApprovals();
       }
       window.setState = setState;
       window.submitComment = submitComment;
