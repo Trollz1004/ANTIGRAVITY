@@ -346,22 +346,6 @@ async def skills_available():
         "preload_on_agent_start": ["find-skills", "workspace-memory", "system-connector"]
     }
 
-@api.get("/skills/state")
-async def skills_state(request: Request):
-    """Read FCC state from .fcc/STATE.md to track skill usage"""
-    require_admin(request)
-    state_path = Path("C:\\Users\\joshl\\.fcc\\STATE.md")
-    if state_path.exists():
-        return {
-            "state_file": str(state_path),
-            "content": state_path.read_text()[:500],  # first 500 chars
-            "status": "FCC CLI state loaded"
-        }
-    return {
-        "state_file": str(state_path),
-        "status": "FCC state not found (FCC-Claude wrapper not yet initialized)"
-    }
-
 @api.get("/mcp/pieces-health")
 async def pieces_health():
     """Check Pieces LTM MCP endpoint health"""
@@ -400,19 +384,9 @@ async def harness_routing(request: Request):
             "models_endpoint": f"{omniroute_base}/models",
             "chat_endpoint": f"{omniroute_base}/chat/completions",
             "auth": "Token from C:\\Users\\joshl\\.env (master vault)",
-            "fallback": "fcc-claude",
+            "fallback": None,
             "description": "OpenCode harness through OmniRoute VS Code endpoint (LAN accessible)",
             "notes": "Uses 192.168.0.8 for laptop/shared access; token auth (REDACTED)"
-        },
-        "fcc-claude": {
-            "priority": 2,
-            "base_url": f"{omniroute_base}/",
-            "models_endpoint": f"{omniroute_base}/models",
-            "chat_endpoint": f"{omniroute_base}/chat/completions",
-            "auth": "Token from C:\\Users\\joshl\\.env (master vault)",
-            "fallback": None,
-            "description": "FCC-Claude wrapper CLI (fallback to OpenCode)",
-            "notes": "Same OmniRoute endpoint for consistency"
         }
     }
     
@@ -445,14 +419,6 @@ async def harness_routing(request: Request):
                 "entry": "python C:\\Users\\joshl\\.hermes\\hermes_agent.py",
                 "config": "C:\\Users\\joshl\\.hermes\\config.yaml",
                 "routing": "omniroute (192.168.0.8:20128)",
-                "mcp": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
-                "skills": "C:\\Users\\joshl\\.agents\\skills"
-            },
-            "fcc-claude": {
-                "type": "cli",
-                "entry": "fcc-claude",
-                "config": "C:\\Users\\joshl\\.fcc\\.env",
-                "routing": "omniroute (via FCC proxy)",
                 "mcp": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
                 "skills": "C:\\Users\\joshl\\.agents\\skills"
             },
