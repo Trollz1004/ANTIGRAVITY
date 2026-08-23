@@ -196,3 +196,6 @@ omniroute/
 dump.rdb
 .obsidian/workspace.json
 .ao.env
+mission-control-v5/server/data/*.json
+!mission-control-v5/server/data/*.example.json
+ops/marketing-inbox/processed/
