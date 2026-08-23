@@ -206,3 +206,5 @@ ops/marketing-inbox/processed/
 /skills/
 # FreeBuff machine-local project state
 /.freebuff/
+# stale runtime pid files (machine-local)
+/.bootstrap/

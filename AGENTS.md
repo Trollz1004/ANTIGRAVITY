@@ -40,6 +40,10 @@ Customer-facing work is business-only. Keep private owner decisions, internal ro
 
 Do not claim completion from an exit code, a status code, or a dashboard color alone. Cite the file, commit, sanitized audit, test output, or identity response actually observed. If a check was not run, say so plainly.
 
+## Capability Baseline
+
+Every agent and every harness — the FreeBuff orchestrator included — runs with the shared MCP servers and standing skills defined in `agent-contracts/CAPABILITY-BASELINE.md`. A worker loads its standing skills and confirms its MCP tools answer before it starts task work; a harness that cannot reach the baseline reports **BLOCKED** rather than proceeding degraded. The orchestrator's job on any capability change is to hand each harness that file, have it wire its own runtime config, and collect a tested confirmation — never to grant itself authority or push the result.
+
 ## Standing Safety Rules
 
 - Do not alter payments, public doctrine, governance rules, or launch gates without Joshua’s instruction and the required review lane.
