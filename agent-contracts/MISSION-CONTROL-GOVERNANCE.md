@@ -34,6 +34,10 @@ Judges remain exactly the five official first-party platforms. An official judge
 
 Judge-cost routing: routine packet verdicts go to the flat-rate official subscriptions (Gemini CLI on the Pro plan, GitHub Copilot, Codex). Claude on the Max plan is reserved for the final merge gate — the judge action that actually lands work — so the most expensive reasoning tier is spent only where a push happens, never on per-task review churn.
 
+## Marketing architecture ruling (final — judge decision under Joshua's delegation, 2026-08-22)
+
+Mission Control on Sabretooth natively owns support, Date App uptime monitoring, legal-compliance scanning, and marketing approvals. Paperclip runs only on the 9020 node, as a marketing producer and nothing else: it writes drops into `ops/marketing-inbox/` at the one repo root and holds no repository, governance, or publishing authority. Mission Control is never exposed on the LAN or tunneled for any of this — producers deliver by file drop at the shared root (the 9020 node syncs to the same vault/repo), and cloud routines read repo state, never live ports. Compliance scanning runs at queue intake (the FL 496.405 vocabulary plus the "split" wording trap) and informs Joshua's decision; it never auto-denies. Nothing publishes without a decision recorded in the approval queue.
+
 ## Authentication rules per judge
 
 Claude judges through the claude.ai MCP setup or the official Claude Code CLI logged in by account auth on a Max-tier subscription. No Anthropic API key is ever needed and none may ever exist. If an Anthropic API key is used again, the design has failed in every respect that matters.
