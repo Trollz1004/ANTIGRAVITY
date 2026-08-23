@@ -58,6 +58,8 @@ Step five. If and only if the judge approves and the test suite passes, the judg
 
 ## Minimum skill sets
 
+Before role floors, the session-start standing set (added 2026-08-22, Joshua's direction) applies to every agent — harnesses, subagents, the orchestrator, and judges alike: agent-reach, the agent's own journal (read at session start, written at session end), find-skills, skill-creator, i-have-adhd for concise output, and superpowers brainstorming. These load at session start, before any task; the five task-relevant skills below are on top of them, per task. Self-hosted and local-model agents operating under these contracts are OPUS-ALMOSTS: always labeled as the real model running, task-tracked, never signing as Claude/Opus or any platform they are not.
+
 Every agent carries at least five skills. These are the floors per role.
 
 Harness workers and their subagents load, at minimum: writing-plans so the work is planned before code is touched; test-driven-development so the failing test comes first and the change stays minimal; systematic-debugging so faults are found by hypothesis and test rather than by random edits; verification-before-completion so nothing is called done without a verification pass; and requesting-code-review so the packet handed to a judge is self-reviewed, covered by tests, and properly described.

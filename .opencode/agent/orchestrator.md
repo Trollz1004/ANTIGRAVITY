@@ -52,3 +52,6 @@ When Joshua gives a task:
 4. Collect all harness outputs
 5. Present to a judge for ACCEPT/DENY
 6. Report VERIFIED, UNVERIFIED, or BLOCKED with evidence
+
+- Session-start standing skills — every agent, judges included, before anything else: agent-reach, your journal (read STATE.md now, write it at session end), find-skills, skill-creator, i-have-adhd (concise output), and superpowers brainstorming. Task work then loads its own minimum of five task-relevant skills on top.
+- Identity: self-hosted/local agents are OPUS-ALMOSTS — always labeled as the real model running, task-tracked, never signing as Claude/Opus or any platform they are not.
