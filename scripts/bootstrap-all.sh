@@ -3,15 +3,13 @@ set -euo pipefail
 
 # ════════════════════════════════════════════════════════════════════
 # ANTIGRAVITY BOOTSTRAP — ALL SERVICES (WSL/Linux side)
-# Sabretooth node | Paperclip + OpenCode + GPU Ollama + FCC + Hermes
+# Sabretooth node | Paperclip + OpenCode + GPU Ollama + Hermes
 # Auto-starts everything in dependency order, idempotent, safe to rerun.
 # ════════════════════════════════════════════════════════════════════
 
 REPO_ROOT="/mnt/c/Antigravity"
 LOG_DIR="$REPO_ROOT/logs"
 LOG_FILE="$LOG_DIR/bootstrap-$(date +%Y-%m-%d).log"
-FCC_HOME="/home/josh/.fcc"
-FCC_BIN="/home/josh/.local/bin/free-claude-code"
 
 mkdir -p "$LOG_DIR"
 
@@ -79,22 +77,8 @@ else
     sleep 3
 fi
 
-# ── 5. FCC SERVER (port 8082) ────────────────────────────────
-log "[5/6] Free Claude Code — API server + admin GUI"
-if systemctl --user is-active --quiet fcc-server.service 2>/dev/null; then
-    log "  Already running (systemd)"
-elif port_listening 8082; then
-    log "  Already running (port 8082 up)"
-else
-    log "  Starting FCC server..."
-    cd "$FCC_HOME"
-    nohup "$FCC_BIN" > "$LOG_DIR/fcc-server.log" 2>&1 &
-    cd "$REPO_ROOT"
-    wait_for_port 8082 "FCC Server" 30
-fi
-
-# ── 6. HERMES DASHBOARD (port 9119) ──────────────────────────
-log "[6/6] Hermes Dashboard — web UI"
+# ── 5. HERMES DASHBOARD (port 9119) ──────────────────────────
+log "[5/5] Hermes Dashboard — web UI"
 if systemctl --user is-active --quiet hermes-dashboard.service 2>/dev/null; then
     log "  Already running (systemd)"
 elif port_listening 9119; then
@@ -128,7 +112,6 @@ if port_listening 3100;  then log " 3100   Paperclip         http://localhost:31
 if port_listening 4096;  then log " 4096   OpenCode Server   http://localhost:4096"; fi
 if port_listening 11434; then log " 11434  Ollama            http://localhost:11434"; fi
 if port_listening 11435; then log " 11435  Hermes Router     http://localhost:11435/healthz"; fi
-if port_listening 8082;  then log " 8082   FCC Server        http://localhost:8082 + /admin"; fi
 if port_listening 9119;  then log " 9119   Hermes Dashboard  http://localhost:9119"; fi
 log ""
 log " Run START-ALL.bat from Windows to open all GUIs."
