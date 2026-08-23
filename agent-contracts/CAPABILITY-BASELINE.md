@@ -25,6 +25,18 @@ Then, per task, load a minimum of five task-relevant skills on top (floor: `writ
 
 Capture learnings in your journal and `para-memory-files`. A change you want to a SKILL.md, a contract, or settings becomes a **packet in `ops/packets/` for a judge to land** — never a self-edit, never a hook, never an autonomous web-to-skill generator. That is why `self-learning` is not in the standing set: judged out as an injection surface.
 
+## Where each harness's identity lives (keeps AGENTS.md lean)
+
+AGENTS.md carries repo-wide doctrine only and is not edited per agent. Per-agent identity lives natively with the agent, and Mission Control's Graphy reads it from `.agents/subagents/<id>/`:
+
+| Harness | Identity home | Capability |
+|---------|---------------|------------|
+| **Hermes** | `.agents/subagents/hermes/` — SOUL · HEARTBEAT · TOOLS · SKILLS, plus `.agents/harness-config/hermes.yaml` | inherits this file |
+| **OpenClaw** | `.agents/subagents/openclaw/` — SOUL · HEARTBEAT · TOOLS · SKILLS | inherits this file |
+| **OpenCode** | `.opencode/agent/opencode.md` — Claude-native skill loading: it reads the skills directory and auto-loads; there is no per-skill picker to configure | inherits this file |
+
+SOUL and HEARTBEAT are Joshua's to set — mission and status. TOOLS and SKILLS **reference this baseline rather than restating it**, so a capability change lands here once and every agent inherits it. HEARTBEAT reports `GREEN:` / `YELLOW:` / `RED:` with an evidence handle; the dashboard reads the last real status line, never the format example.
+
 ## Confirmation each harness returns
 
 1. MCP config edited (name the file: `.agents/harness-config/hermes.yaml`, OpenClaw's config, `.opencode/opencode.json`).
