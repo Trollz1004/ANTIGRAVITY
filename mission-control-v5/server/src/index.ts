@@ -23,6 +23,7 @@ import { pingService } from './service-health.js';
 import { verifyProvenance } from './attestation.js';
 import { loadState } from './store.js';
 import { acknowledgeAlert, createPaperMatesTrustCase, createSupportCase, listAlerts, listPaperMatesTrustCases, listSupportCases, loadControlState, observeServices, updatePaperMatesTrustCase, updateSupportCase } from './control-store.js';
+import { createMarketingItem, decideMarketingItem, ingestMarketingInbox, listMarketingItems, loadMarketingState } from './marketing-queue.js';
 import { activeCount, createTask, deleteTask, listTasks, moveTask, retryTask, subscribe } from './swarm.js';
 import type { AgentDef, Column } from './types.js';
 
@@ -43,6 +44,7 @@ const LOCAL_ORIGINS = new Set([
 
 loadState();
 loadControlState();
+loadMarketingState();
 
 const app = express();
 app.use(
@@ -558,11 +560,42 @@ app.get('/api/dateapp/metrics', async (_req, res) => {
   }
 });
 
+// ── MARKETING APPROVAL QUEUE — Paperclip (9020) routes marketing here for
+// Joshua's approval and response before anything publishes ──────────────────
+app.get('/api/marketing/queue', (_req, res) => {
+  ingestMarketingInbox();
+  const all = listMarketingItems();
+  res.json({ items: all, pending: all.filter((i) => i.status === 'pending').length });
+});
+
+app.post('/api/marketing/queue', (req, res) => {
+  try {
+    res.status(201).json({ item: createMarketingItem(req.body ?? {}) });
+  } catch (err) {
+    res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
+  }
+});
+
+app.post('/api/marketing/queue/:id/decide', (req, res) => {
+  try {
+    res.json({ item: decideMarketingItem(req.params.id, req.body ?? {}) });
+  } catch (err) {
+    res.status(400).json({ error: err instanceof Error ? err.message : String(err) });
+  }
+});
+
 // ── PAPERWEIGHT command center (static page; roster + metrics are sample data,
 // not live feeds — do not publish outside the LAN) ───────────────────────────
 const paperweightDir = join(__dirname, '..', '..', '..', 'apps', 'paperweight');
 if (existsSync(paperweightDir)) {
   app.use('/paperweight', express.static(paperweightDir));
+}
+
+// ── CANONICAL RECORD — Joshua's signed, hash-anchored doctrine page. Served
+// verbatim; the page verifies its own SHA-256 in the browser ────────────────
+const canonicalDir = join(__dirname, '..', '..', '..', 'apps', 'canonical-record');
+if (existsSync(canonicalDir)) {
+  app.use('/canonical', express.static(canonicalDir));
 }
 
 // ── Static client (production build) ─────────────────────────────────────────
