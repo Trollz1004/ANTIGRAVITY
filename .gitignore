@@ -60,7 +60,8 @@ paperclip-ceo/
 .paperclip/
 
 # OpenCode local config
-.opencode/
+.opencode/*
+!.opencode/agent/
 
 # Deploy staging
 _deploy/*/node_modules/
