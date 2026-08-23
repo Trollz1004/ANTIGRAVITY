@@ -1,0 +1,6 @@
+{
+  "name": "YouAndINotAI — Galaxy",
+  "description": "Interactive 3D orbital space visualizer and ambient screensaver showcasing kinetic connection graphs, celestial node mechanics, and dynamic audio-reactive waveforms for youandinotai.com.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
