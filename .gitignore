@@ -202,3 +202,5 @@ mission-control-v5/server/data/*.json
 ops/marketing-inbox/processed/
 # Obsidian root-vault daily notes (vault == repo root)
 /20[0-9][0-9]-[0-9][0-9]-[0-9][0-9].md
+# npx skills compat symlink farm (machine-local, regenerable)
+/skills/
