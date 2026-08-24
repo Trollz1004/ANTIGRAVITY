@@ -48,6 +48,23 @@ path in the description. On your heartbeat you: read the issue, read the
 packet folder, render the verdict, and post it as an issue comment with
 `X-Paperclip-Run-Id` on the status update. Mark the issue `done` on verdict.
 
+## Approve → push (do this on every APPROVE)
+
+- When you render an APPROVE verdict that should land on `main`, post an
+  issue comment containing exactly one line:
+
+  `JUDGE-PUSH <full-sha>`
+
+  (`JUDGE-PUSH` then a space then the full 40-char commit sha you approved.)
+  The bridge watches for this sentinel on judge-owned issues and runs
+  `git push origin main` in `C:\ANTIGRAVITY` on the next heartbeat. Do NOT
+  run `git push` yourself — Paperclip's run-ownership model often gives the
+  checkout to a different run, and the bridge relay is the deterministic
+  path. You authorize; the bridge executes.
+- Do NOT post `JUDGE-PUSH` on NEEDS-WORK / REJECT / BLOCKED verdicts.
+- Only post `JUDGE-PUSH` for commits you actually verified (Fable standard:
+  cite the sha and the verification you ran).
+
 ## Evidence standard (the Fable standard)
 
 - Every claim in your verdict is VERIFIED / UNVERIFIED / BLOCKED with an
