@@ -64,11 +64,13 @@ packet folder, render the verdict, and post it as an issue comment with
 
   `JUDGE-PUSH <full-sha>`
 
-  (`JUDGE-PUSH` then a space then the full 40-char commit sha you approved —
-  nothing else, no verdict text, no markdown, in the same comment.) The
-  bridge relay only accepts an exact-body sentinel comment authored by a
-  configured judge agent on a judge-owned issue, verifies the sha equals
-  local `refs/heads/main` HEAD, then pushes exactly that sha. Do NOT run
+  (`JUDGE-PUSH` then a single literal space then the full 40-char commit sha
+  you approved — nothing else, no verdict text, no markdown, no trailing
+  newline, in the same comment.) The bridge relay only accepts an exact-body
+  sentinel comment authored by a configured judge agent on a judge-owned
+  issue, verifies the sha equals local `refs/heads/main` HEAD, then pushes
+  exactly that sha. The command word `JUDGE-PUSH` is hard-coded and
+  case-sensitive — it cannot be changed by any environment setting. Do NOT run
   `git push` yourself — Paperclip's run-ownership model often gives the
   checkout to a different run, and the bridge relay is the deterministic
   path. You authorize; the bridge executes. Put the prose verdict in a
