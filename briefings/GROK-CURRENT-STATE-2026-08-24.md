@@ -18,6 +18,7 @@ This file supersedes `briefings/GROK-FINAL-REVIEW-2026-08-17.md` (STALE) whereve
 - **Pipeline:** Buffy assigns → Hermes / OpenClaw / OpenCode do the work (no git push) → official CLI judges review → if APPROVE, judges may push, merge, or delete branches **only** to keep **1 repo · 1 root · 1 branch** (`Trollz1004/ANTIGRAVITY`, `C:\ANTIGRAVITY`, `main`).
 - Official judge CLIs: Grok, Codex, Claude (last resort / DREAM), Gemini (GCA currently BLOCKED). Land via `JUDGE-PUSH <full-sha>`. Never force-push. Never create feature branches.
 - Workers (Hermes, OpenClaw, OpenCode, Buffy HTTP adapter) do not push. They do not route official-platform ballots or Grok X.com posts through OmniRoute.
+- **X.com exclusive:** only Grok (X Marketing + Grok Judge) may use anything associated with X.com. Official X Developer API is the limited/billed path; grok.com native X tools are the higher-rate first-party path. Playbook: `ops/paperclip-ceo/X-GROK-STRATEGY.md`.
 
 ---
 
