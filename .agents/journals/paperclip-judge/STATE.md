@@ -260,3 +260,7 @@ Rules: judges only push/merge/delete on main after verdict chain; never create b
 - blocked: different live run owns ANT-68; no review, verdict, issue write, or push allowed
 - next: owner run be2650d7 completes review; requeue only if abandoned
 - state: RED; issue checkout conflict
+
+## 2026-08-24 (grok judge lane verification)
+- target: Grok Judge first genuine review cycle after CLI fix (v1.0.5).
+- prior: Grok Judge status was error (arg-parsing failure `unexpected argument 'note:' found`); CLI updated, agent status now terminated (clean).
