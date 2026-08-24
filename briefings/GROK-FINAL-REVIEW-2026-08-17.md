@@ -1,5 +1,13 @@
 # GROK FINAL ADVERSARIAL ARCHITECTURE REVIEW — 2026-08-17
 
+> **STALE as of 2026-08-24.** Historical evidence only. Do not execute this review as current doctrine.
+> Current Grok / Paperclip / youandinotai.com state: `briefings/GROK-CURRENT-STATE-2026-08-24.md`.
+> Paperclip is live on `:3100` for marketing/business ops (not repo authority). Grok is a Joshua-approved trusted official platform (pre-CLI and grok.exe). Canonical root is `C:\ANTIGRAVITY`.
+>
+> Original review body kept below for the 2026-08-17 packet record.
+
+# GROK FINAL ADVERSARIAL ARCHITECTURE REVIEW — 2026-08-17
+
 **Reviewer:** Grok (adversarial pass)
 **Target packet:** `briefings/COUNCIL-FINAL-ARCHITECTURE-PACKET-2026-08-17.md`
 **Packet commit:** `2beb56f5f43fd13e8c4e3a08aa1725c61792a238`

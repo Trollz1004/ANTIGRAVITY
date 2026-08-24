@@ -3,6 +3,34 @@
 Session record. Latest entry on top. Maintained by the Freebuff CEO agent each
 session (per `.agents/skills/paperclip-ceo/SKILL.md`).
 
+## 2026-08-24 — company goal: youandinotai.com first $5,000
+
+**Status: ACTIVE** — first revenue source of the mission.
+
+- Company goal `0f8c2e9d` youandinotai.com first $5,000 revenue (Buffy)
+- Child: marketing-ready repo+Paperclip `b738b74d` → [ANT-64](/ANT/issues/ANT-64)
+- Child: $5,000 Square receipts `bdba0af8` → [ANT-65](/ANT/issues/ANT-65) X Marketing, [ANT-66](/ANT/issues/ANT-66) receipts
+- Project ANTIGRAVITY linked. Public copy business-only; Square; costs-covered story stays internal.
+
+## 2026-08-24 — Grok Judge self-heal (Buffy must remember)
+
+**Status: GREEN** for Grok Judge after Windows wrapper / cwd / org repair.
+Playbook for all official CLI judges: **ANT-63**.
+
+### Remember
+
+| Failure | Fix |
+| ---- | ---- |
+| `unexpected argument 'exactly'` / `'note:'` | `command` = native `grok.exe`, not `grok.cmd` |
+| cwd `x-workspace` | `C:/ANTIGRAVITY` for judges |
+| model `grok-build` missing | `grok-4.6` |
+| no reportsTo; "never executes repo changes" | reportsTo Buffy; `JUDGE-PUSH` after APPROVE |
+| Grok Judge 2 duplicate from invite | Joshua terminated extra; live id `44a7bbb7` urlKey `grok-judge` |
+| 403 on instructions PATCH as agent | board caller; `skills/sync` needs `mode` |
+
+Issue: [ANT-63](/ANT/issues/ANT-63) · lock `ops/paperclip-ceo/GROK-OFFICIAL.lock.md` · commit `86a3a230`.
+Official lane only (grok.com / claude / codex / gemini CLIs). Never OmniRoute as judge or X model.
+
 ## 2026-08-24 — judge-approved push relay (Buffy / Freebuff)
 
 **Status: GREEN** — judge-approved verdicts now actually push via bridge

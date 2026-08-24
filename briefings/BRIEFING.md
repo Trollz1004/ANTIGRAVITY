@@ -1,11 +1,25 @@
 # BRIEFING.md — UNIVERSAL AI ONBOARDING (READ THIS FIRST, EVERY TIME)
 
+> **CURRENT (2026-08-24):** `briefings/GROK-CURRENT-STATE-2026-08-24.md` is the live
+> Grok + Paperclip + youandinotai.com first-revenue snapshot. Canonical root
+> `C:\ANTIGRAVITY`. Grok is a Joshua-approved trusted official platform (before
+> grok CLI and after). Official judges use grok.com / Codex / Claude / Gemini
+> CLIs. OmniRoute is the worker gateway, not the Grok judge or X.com model lane.
+> Paperclip `:3100` is marketing/business ops only. First revenue goal: $5,000
+> Square membership/access on youandinotai.com ([ANT-64](/ANT/issues/ANT-64) /
+> [ANT-65](/ANT/issues/ANT-65) / [ANT-66](/ANT/issues/ANT-66)).
+>
+> Body below is 2026-07-14 onboarding history. Where it conflicts with S1
+> (`Agents.md` / `CLAUDE.md` landed 2026-08-19) or the 2026-08-24 Grok briefing,
+> those later files win. This file is internal doctrine, NOT a customer surface.
+
 > **This file is internal doctrine, NOT a customer surface. It intentionally
 > names banned words in order to ban them. It must never be deployed to a live
 > URL or shown to a customer.**
 
 **Authority:** Joshua Coleman (Josh) — CEO, electrician, sole final say. You execute.
 **Written:** 2026-07-14. **Repo:** Trollz1004/ANTIGRAVITY (private).
+**Current snapshot:** 2026-08-24 — see the CURRENT box above.
 
 ---
 

@@ -9,6 +9,6 @@ Each session end, write one status line the dashboard reads:
 
 ## Current
 
-GREEN: Paperclip 2026.817.0 UP at 127.0.0.1:3100; company ANTIGRAVITY Marketing
-Co + CEO agent created; bridge UP at 127.0.0.1:3140; first heartbeat proven
-end-to-end (run 175d2d57, wake done, ANT-1 done) — ops/paperclip-ceo/STATE.md.
+GREEN: Company goal active — youandinotai.com first $5,000 Square
+membership revenue. Marketing-ready ANT-64, X drafts ANT-65, receipts ANT-66.
+Evidence: goal 0f8c2e9d — ops/paperclip-ceo/STATE.md.

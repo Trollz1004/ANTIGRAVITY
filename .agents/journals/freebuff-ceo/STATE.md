@@ -4,6 +4,38 @@ Read at session start, write at session end (standing-set contract). Latest
 entry on top. The dashboard reads the last HEARTBEAT status line from
 `.agents/subagents/freebuff-ceo/HEARTBEAT.md`.
 
+## 2026-08-24 — first revenue goal $5k youandinotai.com
+
+Set company goal: youandinotai.com first $5,000 membership/access (Square).
+First revenue source so Joshua can start the rest; helps cover ~2 years of
+solo platform costs (internal only — not public copy).
+
+- Goal `0f8c2e9d` active, owner Buffy
+- ANT-64 marketing-ready gate; ANT-65 X drafts to inbox; ANT-66 receipt proof
+- Project ANTIGRAVITY attached
+
+## 2026-08-24 — Grok Judge self-heal (remember this)
+
+Grok Judge came up `error` and was mis-wired. Resolution is standing knowledge
+for Buffy and for every official CLI judge (Codex / Grok / Claude / Gemini).
+
+Playbook issue: [ANT-63](/ANT/issues/ANT-63)
+Playbook doc: [ANT-63#document-playbook](/ANT/issues/ANT-63#document-playbook)
+Lock: `ops/paperclip-ceo/GROK-OFFICIAL.lock.md` (commit `86a3a230`)
+Live Grok Judge: `44a7bbb7-d01e-4f88-aa45-899b60f987de` urlKey `grok-judge` reportsTo Buffy.
+
+What broke / what fixed:
+
+- Windows `grok.cmd` `%*` splits `--single` prompts → clap `unexpected argument 'exactly'` / `'note:'`. Command must be native `C:/Users/joshi/.grok/bin/grok.exe`, never `grok` shim. Same class of bug possible on other `.cmd` CLIs.
+- cwd was `ops/paperclip-ceo/x-workspace` (X Marketing). Judges use `C:/ANTIGRAVITY`.
+- Default model `grok-build` not in `grok models`. Use `grok-4.6`.
+- reportsTo empty; capabilities said never execute repo changes. Hang judges on Buffy. After APPROVE they authorize `JUDGE-PUSH <full-sha>` (exact-body comment). Never OmniRoute as the judge/X model lane.
+- Invite while a same-name agent exists created Grok Judge 2. Joshua terminated the extra and dropped "2". Do not hire a duplicate.
+- Agent JWT cannot PATCH instruction bundle paths (403). Board (no agent bearer) for those writes. `skills/sync` needs `mode=replace|add|remove`. Member-permissions PATCH is humans only.
+- Standing skills: caveman ultra + i-have-adhd + grok-standing. Quality/X skills on demand. X.com uses grok.com native X tools, not a third-party X API.
+
+Status: GREEN for Grok Judge (adapter test hello-probe pass). Gemini still BLOCKED (GCA key). Codex/Claude idle.
+
 ## 2026-08-23 — identity + capability pre-load
 
 Session: setup of the CEO's agency identity and capability pre-load.
