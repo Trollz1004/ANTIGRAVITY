@@ -51,6 +51,9 @@ const BACKEND_HEALTH_URL = process.env.PAPERCLIP_BACKEND_HEALTH_URL || "http://1
 const SUPPORT_CHAT_URL = process.env.PAPERCLIP_SUPPORT_CHAT_URL || "http://127.0.0.1:8000/api/v1/support/chat";
 const SITE_HOST = process.env.PAPERCLIP_SITE_HOST || "youandinotai.com";
 const CLOUDFLARED_PROCESS = process.env.PAPERCLIP_CLOUDFLARED_PROCESS || "cloudflared";
+// Where the grok/claude adapters materialize agent skills (stale .tmp-* files
+// here break the atomic rename with EPERM). Env-overridable for tests.
+const SKILLS_DIR = process.env.PAPERCLIP_SKILLS_DIR || "C:\\ANTIGRAVITY\\.claude\\skills";
 
 // Judge-approved push: the bridge executes `git push` ONLY when an issue
 // assigned to a judge agent carries an explicit judge APPROVE sentinel in a
@@ -188,6 +191,42 @@ async function apiGet(url) {
   try {
     const res = await fetch(url, {
       headers: AGENT_KEY ? { Authorization: `Bearer ${AGENT_KEY}` } : {},
+      signal: controller.signal,
+    });
+    const text = await res.text();
+    let json = null;
+    try {
+      json = text ? JSON.parse(text) : null;
+    } catch {
+      json = null;
+    }
+    return { ok: res.ok, status: res.status, json, text: text.slice(0, 500) };
+  } catch (err) {
+    return {
+      ok: false,
+      status: 0,
+      json: null,
+      text: err instanceof Error ? err.message : String(err),
+    };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function apiPatchJson(url, body, runId) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 20000);
+  try {
+    const res = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        ...(AGENT_KEY ? { Authorization: `Bearer ${AGENT_KEY}` } : {}),
+        // Cross-issue writes (comment + status on a routine issue) must be
+        // attributed to a heartbeat run or Paperclip rejects them.
+        ...(runId ? { "x-paperclip-run-id": runId } : {}),
+      },
+      body: JSON.stringify(body),
       signal: controller.signal,
     });
     const text = await res.text();
@@ -570,7 +609,147 @@ async function runHealthChecks() {
   return { checks, healthy: !anyNotUp };
 }
 
-async function runMissionControl() {
+// Routine-created watchdog issues are titled exactly this way (see the
+// paperclip-health-watchdog routine). The bridge auto-disposes them with the
+// mechanical scan evidence it already produced; a session is only needed when
+// the mission reports something DOWN.
+const WATCHDOG_TITLE_PREFIX = "Paperclip system-health watchdog";
+
+function buildWatchdogSummary(health, pool, topUp, judgePush) {
+  const up = Object.values(health?.checks || {})
+    .map((c) => `${Object.keys(health.checks).find((k) => health.checks[k] === c)}:${c.status}`)
+    .join(" ");
+  return [
+    "WATCHDOG AUTO-DISPOSED (mechanical scan; no session needed) — VERIFIED.",
+    `Health: ${health && health.healthy ? "healthy" : "DEGRADED"} [${up}]`,
+    `Pool: ready=${pool && pool.count} target=${POOL_TARGET} topUpAt=${TOP_UP_AT} topUpCreated=${topUp && topUp.created ? topUp.created.length : 0}`,
+    `Judge push relay: checked=${judgePush && judgePush.checked} seen=${judgePush && judgePush.seen} pushed=${judgePush && judgePush.pushed}`,
+    "Auto-disposed by the Freebuff CEO bridge mission loop. Deeper scans (blocked issues, errored agents) run in session cycles.",
+  ].join("\n");
+}
+
+/**
+ * Post a disposition for the routine-created watchdog issue scoped to THIS
+ * wake (the runId only authorizes writes to the wake's own issue — PATCHing
+ * any other open watchdog issue is a cross-issue write Paperclip rejects).
+ * Safety: only touches the wake's issue when its title starts with
+ * WATCHDOG_TITLE_PREFIX and its status is in_progress/blocked. When health is
+ * DOWN we leave the issue pending for a session (escalation) instead of
+ * auto-closing it. disposeIssueId is null on timer-only wakes.
+ */
+async function disposeWatchdogIssues(health, pool, topUp, judgePush, runId, disposeIssueId) {
+  // No issue-scoped run is the more fundamental precondition: without one,
+  // Paperclip rejects cross-issue writes, so there is nothing to attempt
+  // regardless of config.
+  if (!runId) {
+    return { ok: true, checked: 0, disposed: 0, reason: "no issue-scoped run; timer-only wake skips dispose" };
+  }
+  if (!COMPANY_ID || !AGENT_KEY) {
+    return { ok: true, checked: 0, disposed: 0, reason: "auto-disposition not configured (COMPANY_ID/AGENT_KEY)" };
+  }
+  // The run only owns THIS wake's issue. If the wake is not scoped to a
+  // watchdog issue, there is nothing to auto-dispose — skip without an API
+  // call (no cross-issue sweep attempts).
+  if (!disposeIssueId) {
+    return { ok: true, checked: 0, disposed: 0, reason: "wake not scoped to a watchdog issue; no dispose" };
+  }
+  const listUrl = `${PAPERCLIP_API_BASE}/api/companies/${COMPANY_ID}/issues?limit=500`;
+  const list = await apiGet(listUrl);
+  if (!list.ok || !Array.isArray(list.json)) {
+    return { ok: false, checked: 0, disposed: 0, reason: `list issues failed: ${list.text || list.status}` };
+  }
+  const open = list.json.filter(
+    (i) =>
+      i &&
+      i.id === disposeIssueId &&
+      typeof i.title === "string" &&
+      i.title.startsWith(WATCHDOG_TITLE_PREFIX) &&
+      (i.status === "in_progress" || i.status === "blocked")
+  );
+  if (open.length === 0) return { ok: true, checked: 0, disposed: 0, reason: "wake's issue is not an open watchdog issue" };
+  // Do not auto-close when the mission reports something DOWN — that needs a
+  // session's judgment and stays escalated as a pending wake.
+  if (!health || !health.healthy) {
+    return { ok: true, checked: open.length, disposed: 0, reason: "health not healthy; left for session escalation" };
+  }
+  const summary = buildWatchdogSummary(health, pool, topUp, judgePush);
+  const issue = open[0];
+  const res = await apiPatchJson(
+    `${PAPERCLIP_API_BASE}/api/issues/${issue.id}`,
+    { status: "done", comment: summary },
+    runId
+  );
+  if (res.ok) {
+    return { ok: true, checked: 1, disposed: 1, disposedIds: [issue.id], reason: "disposed 1/1 open watchdog issue(s)" };
+  }
+  appendLog({ t: new Date().toISOString(), watchdogDispose: "failed", issue: issue.identifier || issue.id, text: res.text.slice(0, 200) });
+  return { ok: true, checked: 1, disposed: 0, reason: `dispose failed: ${res.text.slice(0, 120)}` };
+}
+
+// EPERM self-heal: when an agent's heartbeat run failed on the stale
+// `.claude/skills/*.tmp-*` rename (EPERM: operation not permitted), the
+// adapter cannot re-materialize its skills. Clear the stale temp artifacts so
+// the next run succeeds, and resume the agent if it errored. Scoped to the
+// wake's OWN agent, EPERM-class failures only, bounded lookback. Filesystem
+// cleanup is limited to `.tmp-*` entries — symlinks and real skill dirs are
+// never touched.
+const EPERM_LOOKBACK_MS = 10 * 60 * 1000;
+const EPERM_SKILLS_MARKER = /EPERM: operation not permitted, rename .*\.claude[\\/\\]skills/i;
+
+function clearStaleSkillsTmp(dir) {
+  let removed = 0;
+  try {
+    for (const name of fs.readdirSync(dir)) {
+      if (name.includes(".tmp-")) {
+        fs.rmSync(path.join(dir, name), { recursive: true, force: true });
+        removed += 1;
+      }
+    }
+  } catch (err) {
+    return { removed, error: err instanceof Error ? err.message : String(err) };
+  }
+  return { removed, error: null };
+}
+
+async function selfHealEperm(agentId) {
+  // Needs an agent context (from the wake) and a configured API key.
+  if (!agentId) return { ok: true, scanned: 0, removed: 0, resumed: false, reason: "no agent context; skipped" };
+  if (!COMPANY_ID || !AGENT_KEY) {
+    return { ok: true, scanned: 0, removed: 0, resumed: false, reason: "self-heal not configured (COMPANY_ID/AGENT_KEY)" };
+  }
+  const listUrl = `${PAPERCLIP_API_BASE}/api/companies/${COMPANY_ID}/heartbeat-runs?agentId=${encodeURIComponent(agentId)}&limit=20`;
+  const list = await apiGet(listUrl);
+  const runs = Array.isArray(list.json) ? list.json : [];
+  const cutoff = Date.now() - EPERM_LOOKBACK_MS;
+  const hit = runs.find((r) => {
+    if (!r || r.status !== "failed") return false;
+    const t = new Date(r.startedAt || r.createdAt || 0).getTime();
+    if (!t || t < cutoff) return false;
+    return EPERM_SKILLS_MARKER.test(r.summary || r.errorMessage || r.error || "");
+  });
+  if (!hit) return { ok: true, scanned: runs.length, removed: 0, resumed: false, reason: "no EPERM skills failure in lookback" };
+  const cleaned = clearStaleSkillsTmp(SKILLS_DIR);
+  let resumed = false;
+  if (cleaned.removed > 0 && !cleaned.error) {
+    const resume = await apiPostJson(`${PAPERCLIP_API_BASE}/api/agents/${agentId}/resume`, {});
+    resumed = resume.ok;
+    if (!resume.ok) {
+      appendLog({ t: new Date().toISOString(), epermSelfHeal: "resume failed", agent: agentId, text: resume.text.slice(0, 200) });
+    }
+  }
+  appendLog({
+    t: new Date().toISOString(),
+    epermSelfHeal: "applied",
+    agent: agentId,
+    run: hit.id || null,
+    removed: cleaned.removed,
+    resumed,
+    error: cleaned.error || null,
+  });
+  return { ok: true, scanned: runs.length, removed: cleaned.removed, resumed, reason: cleaned.error ? `cleared ${cleaned.removed}; ${cleaned.error}` : `cleared ${cleaned.removed} stale tmp; resumed=${resumed}` };
+}
+
+async function runMissionControl(runId, disposeIssueId, agentId) {
   const t0 = Date.now();
   const [pool, health] = await Promise.all([countReadyTasks(), runHealthChecks()]);
   let topUp = { ok: false, created: 0, reason: "not run" };
@@ -585,12 +764,35 @@ async function runMissionControl() {
     ok: false,
     reason: err instanceof Error ? err.message : String(err),
   }));
+  // Watchdog auto-disposition: the routine-created watchdog issue is the same
+  // mechanical scan this bridge already runs (pool, health, judge push). When
+  // the mission is healthy, auto-post the disposition (evidence-backed summary
+  // comment + status done) so scheduled cycles resolve without a session. When
+  // health is DOWN the wake stays pending for a session instead.
+  const watchdog = await disposeWatchdogIssues(health, pool, topUp, judgePush, runId, disposeIssueId).catch((err) => ({
+    ok: false,
+    disposed: 0,
+    disposedIds: [],
+    reason: err instanceof Error ? err.message : String(err),
+  }));
+  // EPERM self-heal: agent-scoped (the wake's own agent), EPERM-class only.
+  // Cheap — one bounded runs list + rare filesystem sweep — and runs on every
+  // wake so a failed skill-materialization rename self-heals within one cadence.
+  const eperm = await selfHealEperm(agentId).catch((err) => ({
+    ok: false,
+    scanned: 0,
+    removed: 0,
+    resumed: false,
+    reason: err instanceof Error ? err.message : String(err),
+  }));
   const state = {
     updatedAt: new Date().toISOString(),
     pool: { ok: pool.ok, ready: pool.count, total: pool.total || null, target: POOL_TARGET, topUpAt: TOP_UP_AT },
     topUp,
     health,
     judgePush,
+    watchdog,
+    eperm,
     ms: Date.now() - t0,
   };
   ensureDir(STATE_DIR);
@@ -615,8 +817,25 @@ function listWakes() {
   return out;
 }
 
+// Extract the issue/task a wake is scoped to. Paperclip sends the assigned
+// issue in body.context (taskId/issueId/paperclipWake.issue) on issue-scoped
+// CEO heartbeats; the top-level taskId is often null. Pure and testable.
+function extractWakeIssueId(body) {
+  if (!body || typeof body !== "object") return null;
+  const ctx = body.context || {};
+  return (
+    body.taskId ||
+    body.issueId ||
+    ctx.taskId ||
+    ctx.issueId ||
+    (ctx.paperclipWake && ctx.paperclipWake.issue && ctx.paperclipWake.issue.id) ||
+    (ctx.paperclipIssue && ctx.paperclipIssue.id) ||
+    null
+  );
+}
+
 async function handleHeartbeat(req, res, body) {
-  const { runId, agentId, companyId, taskId, wakeReason } = body;
+  const { runId, agentId, companyId, wakeReason } = body;
   if (!runId) {
     return send(res, 400, { error: "missing runId" });
   }
@@ -624,10 +843,17 @@ async function handleHeartbeat(req, res, body) {
   // Mission control runs mechanically on EVERY wake (30s cadence). This is
   // what keeps the 50-task pool topped up and the Date App surfaces verified
   // even when no Freebuff session is open.
+  //
+  // Watchdog auto-disposition requires an ISSUE-SCOPED run: Paperclip rejects
+  // cross-issue writes from unassigned timer runs (cross_issue_influence_run_
+  // context_required), so the dispose only gets a runId when this wake carries
+  // the issue it should dispose. Timer-only wakes skip the dispose step.
+  const wakeIssueId = extractWakeIssueId(body);
+  const issueScopedRunId = wakeIssueId ? runId : null;
   let mission = null;
   let missionError = null;
   try {
-    mission = await runMissionControl();
+    mission = await runMissionControl(issueScopedRunId, wakeIssueId, agentId);
   } catch (err) {
     missionError = err instanceof Error ? err.message : String(err);
   }
@@ -636,16 +862,30 @@ async function handleHeartbeat(req, res, body) {
   const toppedUp = mission && mission.topUp && Array.isArray(mission.topUp.created) && mission.topUp.created.length > 0;
   const poolFailed = mission && (!mission.pool.ok || !mission.topUp.ok);
 
-  // Escalate to a Freebuff CEO session only when judgment is needed:
-  // health DOWN/WRONG SERVICE, a top-up happened, or the pool check failed.
-  // Routine heartbeats stay local (wake file still recorded for audit).
-  const needsCEO = Boolean(healthDown || toppedUp || poolFailed || missionError);
+  // Escalate to a Freebuff CEO session when judgment is needed: health
+  // DOWN/WRONG SERVICE, a top-up happened, the pool check failed, OR the wake
+  // is scoped to a real issue. An issue-scoped heartbeat means Paperclip
+  // assigned the CEO work that needs a disposition; without escalation the
+  // wake is auto-completed, no session works the issue, and Paperclip blocks
+  // it with "missing disposition". Bare timer heartbeats (no issue) stay local.
+  const issueId = wakeIssueId;
+  const needsCEO = Boolean(healthDown || toppedUp || poolFailed || missionError || issueId);
+
+  // When the mechanical watchdog auto-disposed THIS wake's own issue (the
+  // disposer swept it and the PATCH landed), the disposition already exists
+  // and no session judgment is needed — complete the wake locally instead of
+  // leaving it pending forever. The 202-accept already marked the run
+  // succeeded, and a callback would 404 in build 2026.817.0, so local
+  // completion is the correct record. Health-DOWN, top-ups, and non-watchdog
+  // issues still stay pending for a session.
+  const watchdogIds = mission && mission.watchdog && Array.isArray(mission.watchdog.disposedIds) ? mission.watchdog.disposedIds : [];
+  const autoDisposed = Boolean(issueId) && watchdogIds.includes(issueId);
 
   const wake = {
     runId,
     agentId: agentId || null,
     companyId: companyId || null,
-    taskId: taskId || body.issueId || null,
+    taskId: issueId,
     wakeReason: wakeReason || "heartbeat",
     wakeCommentId: body.wakeCommentId || null,
     approvalId: body.approvalId || null,
@@ -653,8 +893,11 @@ async function handleHeartbeat(req, res, body) {
     issueIds: body.issueIds || null,
     context: body.context || {},
     receivedAt: new Date().toISOString(),
-    status: needsCEO ? "pending" : "done", // pending | done | failed
+    status: autoDisposed ? "done" : needsCEO ? "pending" : "done", // pending | done | failed
     needsCEO,
+    autoDisposed: autoDisposed || undefined,
+    completedAt: autoDisposed ? new Date().toISOString() : undefined,
+    callback: autoDisposed ? { ok: true, auto: "watchdog-dispose", note: "issue auto-disposed by mission loop; wake completed locally" } : undefined,
     mission: mission || { error: missionError },
   };
   writeJson(wakePath(runId), wake);
@@ -763,6 +1006,12 @@ if (process.env.PAPERCLIP_BRIDGE_NO_LISTEN === "1") {
     resolveFullSha,
     runGit,
     relayJudgeApprovedPushes,
+    extractWakeIssueId,
+    disposeWatchdogIssues,
+    buildWatchdogSummary,
+    selfHealEperm,
+    clearStaleSkillsTmp,
+    WATCHDOG_TITLE_PREFIX,
     JUDGE_PUSH_SENTINEL,
     JUDGE_AGENT_IDS,
   };

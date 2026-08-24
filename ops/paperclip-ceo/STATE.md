@@ -3,6 +3,60 @@
 Session record. Latest entry on top. Maintained by the Freebuff CEO agent each
 session (per `.agents/skills/paperclip-ceo/SKILL.md`).
 
+## 2026-08-24 — watchdog routine + wake escalation + auto-disposition (Buffy)
+
+**Status: GREEN** — watchdog loop now self-resolving end-to-end.
+
+### Routine
+
+- Routine `9f71b233` "Paperclip system-health watchdog: resolve reds and
+  blockers", assignee Buffy (CEO `55461934`), priority high, schedule trigger
+  `609d7d16` `*/30 * * * *` UTC (next run every 30 min). First manual cycles:
+  ANT-71/73/74/75/76.
+
+### Bridge defects found + fixed (adversarial pass)
+
+1. **Issue-scoped wakes never escalated**: `handleHeartbeat` only read `taskId`
+   from the top-level body, but Paperclip sends the issue in `body.context`
+   (context.taskId/issueId/paperclipWake.issue). 31 of the last 200 CEO
+   heartbeats were issue-scoped and ALL were auto-completed
+   (`needsCEO: false`) — no session ever worked them, so Paperclip blocked each
+   with "missing disposition" (ANT-55/61/71 trap).
+   Fix: `extractWakeIssueId(body)` reads top-level + context; issue-scoped
+   wakes now escalate `needsCEO: true, status: pending`.
+2. **No auto-disposition**: routine fires created issues that blocked awaiting a
+   session. Fix: `disposeWatchdogIssues()` runs in the mission loop — scans for
+   open `Paperclip system-health watchdog` issues, and when the mechanical
+   mission is healthy posts `WATCHDOG AUTO-DISPOSED ... VERIFIED` comment +
+   status done, attributed to the issue-scoped heartbeat run
+   (`x-paperclip-run-id` header — cross-issue writes require a run; unassigned
+   timer runs are rejected by Paperclip). When health is DOWN it leaves the
+   issue pending for a session instead.
+
+### Proof
+
+- 35 tests pass (`node ops/paperclip-ceo/bridge/relay.test.js`): 6 wake
+  extraction, 3 summary, 1 timer-guard, 25 relay.
+- Live: routine run created ANT-76 → bridge mission loop auto-disposed it
+  (`WATCHDOG AUTO-DISPOSED ... VERIFIED. Health: healthy` comment by CEO
+  agent, `createdByRunId d94c6317`), status `done`, no session involved.
+  ANT-73/74/75 also `done`. Pending wakes: 0.
+- Bridge restarted on the hardened code (was PID 35252; check `netstat :3140`
+  for current). Run doc: `.freebuff/run.md`.
+
+### Gemini Judge (still BLOCKED — needs Joshua)
+
+`gemini_local` adapter, agent `1d135700`. Was `error`; resumed to `idle`;
+heartbeat `01f5ae9e` failed: "Gemini API key is missing or not configured."
+Root cause: settings.json had no auth method — fixed to
+`security.auth.selectedType: "oauth-personal"` (CLI now validates it), but
+Google's OAuth endpoint rejects the client: `UNSUPPORTED_CLIENT` ("no longer
+supported for Gemini Code Assist for individuals — migrate to Antigravity
+suite") and the bound project lacks `cloudaicompanion.licenses.selfAssign`.
+No `GEMINI_API_KEY` exists in any env file. **Decision needed: provide a
+GEMINI_API_KEY (aistudio.google.com/apikey) or retire the Gemini Judge lane.**
+Agent currently honest `status: error`.
+
 ## 2026-08-24 — pipeline machine (Buffy assigns)
 
 Freebuff = GUI + free ads API (ads play in it; free is always good). Buffy is

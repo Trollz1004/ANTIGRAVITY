@@ -264,3 +264,75 @@ Rules: judges only push/merge/delete on main after verdict chain; never create b
 ## 2026-08-24 (grok judge lane verification)
 - target: Grok Judge first genuine review cycle after CLI fix (v1.0.5).
 - prior: Grok Judge status was error (arg-parsing failure `unexpected argument 'note:' found`); CLI updated, agent status now terminated (clean).
+
+## 2026-08-24 (judge, 6477864d)
+- did: found ANT-70 in inbox; checkout once then curl confirm; stopped; no review/verdict/comment/status/push
+- verified: GET me=Grok Judge 2 55c972d4; inbox ANT-70 in_progress; POST checkout HTTP 409 checkoutRunId=05dcf688; owner run live pid 20940 lastOutput 04:36:03; this run on_demand pid 38268; HEAD=3f9c63aa505bafb210b10b96471eb5852bcf230f
+- skills: grok-standing, self-improving-system, caveman, i-have-adhd, paperclip, verification-before-completion
+- blocked: different live run owns ANT-70; contract forbids retry 409
+- next: owner run 05dcf688 complete ANT-70 review; requeue only if that run dies
+- state: RED; checkout conflict, live continuation on 05dcf688
+
+## 2026-08-24 (judge, 05dcf688)
+- did: reviewed 3f9c63aa; APPROVE; posted verdict + exact JUDGE-PUSH; closed ANT-70; bridge landed SHA
+- verified: HEAD=origin/main=ls-remote=3f9c63aa505bafb210b10b96471eb5852bcf230f; 1 journal file +4; append-only; diff-check 0; grok 1.0.5 5115b46bc9; cbae58e9 terminated; comments bc3622c5 + ca19f256; issue done
+- skills: grok-standing, self-improving-system, caveman, i-have-adhd, paperclip, verification-before-completion, requesting-code-review
+- blocked: NONE
+- next: leave unrelated dirty files uncommitted; do not mix them into landed SHA
+- state: GREEN; APPROVE, JUDGE-PUSH, origin/main match
+
+## 2026-08-24 (judge, 96b421b9)
+- did: checked official Codex Judge identity; checked assigned inbox; no issue work authorized
+- verified: GET /api/agents/me = Codex Judge 32375fe9; GET /api/agents/me/inbox-lite = []
+- skills: grok-standing, self-improving-system, caveman, i-have-adhd, paperclip
+- blocked: NONE
+- next: await assigned packet-review issue
+- state: GREEN; empty inbox
+
+## 2026-08-24 (judge, c68fda9e)
+- did: checked official Codex Judge identity; checked assigned inbox; no issue work authorized
+- verified: GET /api/agents/me = Codex Judge 32375fe9; GET /api/agents/me/inbox-lite = []; wake=heartbeat_timer
+- skills: grok-standing, self-improving-system, caveman, i-have-adhd, paperclip, verification-before-completion
+- blocked: NONE
+- next: await assigned packet-review issue
+- state: GREEN; empty inbox
+
+## 2026-08-24 (judge, cceefcbf)
+- did: checked official Codex Judge identity; checked assigned inbox; no issue work authorized
+- verified: GET /api/agents/me = Codex Judge 32375fe9; GET /api/agents/me/inbox-lite = []; wake=heartbeat_timer
+- skills: grok-standing, self-improving-system, caveman, i-have-adhd, paperclip
+- blocked: NONE
+- next: await assigned packet-review issue
+- state: GREEN; empty inbox
+
+## 2026-08-24 (judge, 7b5420e4)
+- did: checked official Codex Judge identity; checked assigned inbox; no issue work authorized
+- verified: GET /api/agents/me = Codex Judge 32375fe9; GET /api/agents/me/inbox-lite count = 0; wake=heartbeat_timer; main HEAD=3f9c63aa505bafb210b10b96471eb5852bcf230f
+- skills: grok-standing, self-improving-system, caveman ultra, i-have-adhd, paperclip, test-driven-development, systematic-debugging, verification-before-completion, requesting-code-review
+- blocked: NONE
+- next: await assigned packet-review issue
+- state: GREEN; empty inbox; no checkout, verdict, status write, or JUDGE-PUSH authorized
+
+## 2026-08-24 (judge, 813a2b8e)
+- did: checked official Codex Judge identity; checked assigned inbox; no issue work authorized
+- verified: GET /api/agents/me = Codex Judge 32375fe9; GET /api/agents/me/inbox-lite count = 0; wake=heartbeat_timer
+- skills: grok-standing, self-improving-system, caveman ultra, i-have-adhd, paperclip, verification-before-completion
+- blocked: NONE
+- next: await assigned packet-review issue
+- state: GREEN; empty inbox; no checkout, verdict, status write, or JUDGE-PUSH authorized
+
+## 2026-08-24 (judge, a723c996)
+- did: checked official Codex Judge identity; checked assigned inbox; no issue work authorized
+- verified: GET /api/agents/me = Codex Judge 32375fe9; GET /api/agents/me/inbox-lite count = 0; wake=heartbeat_timer
+- skills: grok-standing, self-improving-system, caveman ultra, i-have-adhd, paperclip, verification-before-completion, requesting-code-review
+- blocked: NONE
+- next: await assigned packet-review issue
+- state: GREEN; empty inbox; no checkout, verdict, status write, or JUDGE-PUSH authorized
+
+## 2026-08-24 (judge, baac25ea)
+- did: checked Codex Judge identity; checked inbox; no issue work authorized
+- verified: GET /api/agents/me=Codex Judge 32375fe9; inbox-lite=[]; MCP brain/mission/files/playwright answered; wake=heartbeat_timer
+- skills: grok-standing, self-improving-system, caveman ultra, i-have-adhd, paperclip, verification-before-completion, requesting-code-review
+- blocked: Supabase MCP not exposed; irrelevant to empty inbox
+- next: await assigned packet-review issue
+- state: GREEN; empty inbox; no checkout, verdict, status write, or JUDGE-PUSH authorized

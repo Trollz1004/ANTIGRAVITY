@@ -141,3 +141,41 @@ heartbeat proven; skills catalog audit filed; see ops/paperclip-ceo/STATE.md).
 - blocked: NONE.
 - next: verify Grok Judge lane (Joshua fixed his CLI); run CEO heartbeat cadence.
 - state: GREEN (judge lane delivered relay commit to origin/main; governance: judge approves, relay pushes).
+
+## 2026-08-24 — watchdog routine + wake escalation + auto-disposition
+
+- Created routine 9f71b233 (health watchdog, */30, trigger 609d7d16) per Joshua.
+- Adversarial pass found + fixed 2 bridge defects: (1) issue-scoped CEO
+  heartbeats never escalated (taskId only read from top-level body; context
+  ignored) → 31 wakes auto-completed, issues blocked "missing disposition";
+  (2) no auto-disposition → routine issues required a session.
+- Fix: extractWakeIssueId (top-level+context) + needsCEO escalation +
+  disposeWatchdogIssues in mission loop with x-paperclip-run-id attribution
+  (cross-issue writes require an issue-scoped run; timer runs rejected).
+- Proof: 35 tests pass; live run ANT-76 auto-disposed done by bridge with
+  "WATCHDOG AUTO-DISPOSED — VERIFIED. Health: healthy" comment; pending 0.
+- Gemini Judge 1d135700: config fixed (settings.json security.auth.selectedType
+  = oauth-personal) but Google rejects client (UNSUPPORTED_CLIENT, GCA
+  individuals deprecated; project lacks cloudaicompanion.licenses.selfAssign).
+  BLOCKED — needs GEMINI_API_KEY or lane retirement. Honest status: error.
+- State: ops/paperclip-ceo/STATE.md, run doc .freebuff/run.md updated.
+
+## 2026-08-24 — X Marketing (Grok) lane recovery (EPERM skills race)
+- Found via board: X Marketing (Grok) `805d66b4` status=error, heartbeat 5600a5dc failed: `EPERM: operation not permitted, rename 'C:\ANTIGRAVITY\.claude\skills\growth-marketer--132a6d2655.tmp-...'`.
+- Root cause: concurrent skill materialization raced the paperclip server's own writer; a stale `dateapp-growth-agent--756884c702` dir + `.tmp-*` file blocked the atomic rename.
+- Fix: removed the stale dir + tmp file (no config change). Resumed the agent, ran one heartbeat: genuine Grok session (worked ANT-72/ANT-78), no EPERM; agent back to `running`.
+- VERIFIED: `agent list` shows status=running; run `6bc1875e` completed past the materialization step. Recommend a watchdog rule: if a run fails with EPERM on `.claude\skills`, clear stale `.tmp-*`/orphan skill dirs and resume.
+
+## 2026-08-24 — Adversarial pass on watchdog auto-disposition (2nd)
+- Found: auto-dispose marked the watchdog ISSUE done but left the WAKE `pending` forever (ANT-80's wake e3862184 hung from 05:30). Per-cycle leak: one dangling pending wake per routine fire, contradicting "no session needed" design.
+- Fix (small, tested): `disposeWatchdogIssues` now returns `disposedIds`; `handleHeartbeat` completes the wake locally (`status: done, autoDisposed: true`) when the disposer disposed THIS wake's own issue. 202-accept already marks the run succeeded; callback would 404 in build 2026.817.0, so local completion is the correct record. Health-DOWN / top-ups / non-watchdog issues still stay pending for a session.
+- Also fixed: async `test` harness silently dropped promise rejections (unhandled, not counted) — added async-aware `testAsync`; stub API now forwards `req` for header assertions.
+- Proof (live, natural fire): routine fired 06:00:12Z → ANT-81 created → wake 5b39cdb7 `status: done, autoDisposed: true, completedAt: 06:00:13` — one second, no session. 37 tests green. 10 stale pending wakes from the restart gap (05:35) closed via bridge `/done` no-op path → **0 pending** of 289.
+- VERIFIED: mission-control.json healthy; bridge UP (PID 39140).
+
+## 2026-08-24 — Adversarial pass on watchdog auto-disposition (3rd, scoped dispose)
+- Found: the disposer swept ALL open watchdog issues on any issue-scoped wake, but the run is only scoped to the wake's OWN issue — PATCHing a different open watchdog issue (e.g. one left open by a health-DOWN cycle) is a cross-issue write Paperclip rejects (same rejection class as the pre-fix 05:15-05:17 failures).
+- Fix: `disposeWatchdogIssues(health, pool, topUp, judgePush, runId, disposeIssueId)` now targets ONLY the wake's own issue (id match + watchdog title + in_progress/blocked). Non-watchdog wakes (harness tasks ANT-77/78/79) do one list fetch and skip with reason "wake's issue is not an open watchdog issue" — no cross-issue attempt, no failed-PATCH log spam. `handleHeartbeat` passes `extractWakeIssueId(body)`; `runMissionControl` threads it.
+- Tests: 38 green. New: wake's-own-issue disposal with a second open watchdog issue present (asserted NOT swept), non-watchdog skip (list only, no PATCH route = no attempt), health-DOWN escalation retained.
+- Proof (live, natural fire): ANT-82 fired 06:30:12Z → wake a0d22fae `status: done, autoDisposed: true, completedAt: 06:30:14`; mission watchdog `{checked:1, disposed:1, disposedIds:[5cb0844d...]}`; 0 pending wakes; ZERO watchdogDispose failures since the 06:04 restart (last failure 05:17, pre-fix).
+- VERIFIED: bridge UP (PID 38284), Paperclip :3100 UP, 38/38 tests.
