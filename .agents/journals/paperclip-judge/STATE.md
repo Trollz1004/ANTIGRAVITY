@@ -165,6 +165,22 @@ Rules: judges only push/merge/delete on main after verdict chain; never create b
 - next: commit+push scoped setup (Joshua authorized)
 - state: GREEN
 
+## 2026-08-24 (judge, ANT-63-playbook)
+- did: wrote CEO journals; opened ANT-63 official CLI judge self-heal playbook; notified Codex/Grok/Claude/Gemini
+- verified: issue c7c8771d identifier ANT-63; comment 864533c6; playbook document PUT
+- skills: paperclip, paperclip-ceo, grok-standing, caveman
+- blocked: NONE
+- next: judges ack on ANT-63; Gemini still GCA BLOCKED
+- state: GREEN
+
+## 2026-08-24 (judge, briefing-push)
+- did: wrote briefings/GROK-CURRENT-STATE-2026-08-24.md; STALE-stamped 2026-08-17 grok review; CURRENT box on BRIEFING.md; push authorized as trusted official Grok
+- verified: files on disk; no secrets in briefing
+- skills: grok-standing, caveman, paperclip, revenue-model
+- blocked: NONE
+- next: commit+push briefing + CEO/judge journals
+- state: GREEN
+
 ## 2026-08-24 (judge, 6de5eaef)
 - did: reviewed c6fe7e70; rendered REJECT; posted verdict; closed ANT-60; no sentinel
 - verified: HEAD=c6fe7e70dd737dc3e4bde0198436920dcfce5e6c; committed relay tests 14/14; bridge syntax clean; diff-check clean; comment c7ebba13; issue done
@@ -180,3 +196,19 @@ Rules: judges only push/merge/delete on main after verdict chain; never create b
 - blocked: ANT-61 comment write rejected (run unassigned / cross-issue); no JUDGE-PUSH
 - next: Buffy dispatch implementer on ANT-61; routine judge reviews new commit; do not push c6fe7e70/bd3722d2
 - state: GREEN; ANT-61 live on Buffy, Grok Judge inbox empty
+
+## 2026-08-24 (judge, 9cf0d714)
+- did: found assigned ANT-62; attempted mandatory checkout once
+- verified: inbox ANT-62 owner run 541b96ce; current run 9cf0d714; checkout HTTP 409
+- skills: self-improving-system, caveman, i-have-adhd, paperclip
+- blocked: different live run owns ANT-62; contract forbids review, verdict, issue write, or push
+- next: Paperclip/Joshua end run 541b96ce; requeue ANT-62; wake Codex Judge
+- state: RED; issue checkout conflict
+
+## 2026-08-24 (judge, 541b96ce)
+- did: reviewed 3bd583fc; rendered NEEDS-WORK; posted verdict; closed ANT-62; no sentinel
+- verified: HEAD=3bd583fc419d22a3a28bfce22bb06aa85d6610d5 on main; origin/main...HEAD=0 1; 2 files +257/-74; syntax clean; relay tests 24/24; diff-check clean; issue done
+- skills: orchestrator-preflight, grok-standing, self-improving-system, caveman, i-have-adhd, paperclip, writing-plans, test-driven-development, systematic-debugging, verification-before-completion, requesting-code-review
+- blocked: push; sentinel remains env-configurable at bridge.js:62; claimed 28 tests but 24 ran; packet absent
+- next: hard-code literal JUDGE-PUSH; add env-override negative test; create packet; resubmit routine review
+- state: YELLOW; NEEDS-WORK, no JUDGE-PUSH
