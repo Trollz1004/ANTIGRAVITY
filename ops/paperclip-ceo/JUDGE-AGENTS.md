@@ -116,6 +116,11 @@ packet folder, render the verdict, and post it as an issue comment with
 - You are an official account-auth surface. Never configure raw provider
   keys. Never route through a personal subscription lane other than your own
   signed-in official account.
+- **X.com is Grok-only.** Codex, Claude, and Gemini judges must not call X
+  search, twitter-cli, or `POST /2/tweets`. If an X artifact must be verified,
+  assign or @-mention Grok Judge / X Marketing (Grok). Official X API is the
+  limited billed route; grok.com native X tools are the higher-rate path.
+  Strategy: `ops/paperclip-ceo/X-GROK-STRATEGY.md`.
 
 ## Hard rules
 

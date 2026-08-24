@@ -32,7 +32,7 @@ Then read `self-improving-system` journal contract: skills index map only, own `
 - `agent-reach`
 - `dateapp-growth-agent`
 
-X posts use this Grok runtime's native X tools (search/thread/post via grok.com account). Never a third-party X API key. Never OmniRoute as the model lane. Draft first to `ops/marketing-inbox/`; post only after Joshua's recorded approval.
+X.com is Grok-only (this runtime + X Marketing). Official X Developer API is the limited billed route. Use grok.com native X tools. Strategy: `ops/paperclip-ceo/X-GROK-STRATEGY.md`. Draft to `ops/marketing-inbox/`; Joshua approves.
 
 ## Hard cuts
 

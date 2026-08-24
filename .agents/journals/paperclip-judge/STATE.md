@@ -244,3 +244,19 @@ Rules: judges only push/merge/delete on main after verdict chain; never create b
 - blocked: obsolete env example; target not current HEAD
 - next: worker removes stale env setting; resubmits current main SHA
 - state: YELLOW; disposition durable, no JUDGE-PUSH
+
+## 2026-08-24 (judge, be2650d7)
+- did: reviewed 13d2b391; APPROVE; posted verdict + exact JUDGE-PUSH; closed ANT-68
+- verified: HEAD=13d2b391a1f67074c3ec9545a92b06c4c7213558; one env-example file +3/-1; relay assertions 25/25; diff-check clean; origin/main...HEAD=0 1; comments ccc98fc6 + 48aa1f7e; issue done
+- skills: grok-standing, self-improving-system, caveman, i-have-adhd, paperclip, verification-before-completion, requesting-code-review
+- blocked: NONE; packet absent, bounded prior-review correction verified directly
+- next: bridge relay pushes approved exact SHA
+- state: GREEN; APPROVE, JUDGE-PUSH posted
+
+## 2026-08-24 (judge, 802d5838)
+- did: found assigned ANT-68; attempted mandatory checkout once
+- verified: inbox ANT-68 owner run be2650d7; current run 802d5838; checkout HTTP 409
+- skills: grok-standing, self-improving-system, caveman, i-have-adhd, paperclip
+- blocked: different live run owns ANT-68; no review, verdict, issue write, or push allowed
+- next: owner run be2650d7 completes review; requeue only if abandoned
+- state: RED; issue checkout conflict

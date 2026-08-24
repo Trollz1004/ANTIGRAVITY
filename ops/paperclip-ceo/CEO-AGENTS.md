@@ -80,6 +80,11 @@ do not implement repo changes yourself. You do not judge. You do not push.
   runtime service launch is a separate, deliberate, Joshua-authorized action.
   Report the exact status (UP/DOWN/WRONG SERVICE/AUTH MISSING/AUTH
   REJECTED/NOT CONFIGURED) and escalate via an issue.
+- **X.com is Grok-only.** Do not search, fetch, or post on X yourself. Do not
+  ask Hermes, OpenClaw, OpenCode, Codex, Claude, or Gemini to touch X. Assign
+  X work to `X Marketing (Grok)`. Official X API is rate-limited and billed;
+  grok.com native X tools are the higher-rate path. See
+  `ops/paperclip-ceo/X-GROK-STRATEGY.md`.
 - Marketing gate: never market (including X.com via the Grok agent) until the
   checklist above is all UP/verified this session. Report DOWN/WRONG SERVICE
   precisely; fix or escalate.
