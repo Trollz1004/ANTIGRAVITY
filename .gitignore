@@ -54,8 +54,14 @@ __env_diff.txt
 # Docker
 docker-compose.override.yml
 
-# Paperclip (decommissioned)
+# Paperclip (revived 2026-08-23, Joshua direction: marketing/business-ops only, Freebuff CEO)
+# Historical decommission entries kept for stale paths; the live ops/paperclip-ceo code is tracked.
 paperclip-ceo/
+!ops/paperclip-ceo/
+ops/paperclip-ceo/wakes/
+ops/paperclip-ceo/state/
+ops/paperclip-ceo/bridge/.env
+ops/paperclip-ceo/bridge/bridge.log
 .paperclip-context.json
 .paperclip/
 
