@@ -868,18 +868,24 @@ async function handleHeartbeat(req, res, body) {
   // assigned the CEO work that needs a disposition; without escalation the
   // wake is auto-completed, no session works the issue, and Paperclip blocks
   // it with "missing disposition". Bare timer heartbeats (no issue) stay local.
-  const issueId = wakeIssueId;
-  const needsCEO = Boolean(healthDown || toppedUp || poolFailed || missionError || issueId);
-
-  // When the mechanical watchdog auto-disposed THIS wake's own issue (the
-  // disposer swept it and the PATCH landed), the disposition already exists
-  // and no session judgment is needed — complete the wake locally instead of
-  // leaving it pending forever. The 202-accept already marked the run
-  // succeeded, and a callback would 404 in build 2026.817.0, so local
+  //
+  // Exception: when the mechanical watchdog auto-disposed THIS wake's own
+  // issue (the disposer swept it and the PATCH landed), the disposition
+  // already exists and no session judgment is needed — the wake is stored
+  // done and the response is NOT an escalation. The 202-accept already marked
+  // the run succeeded, and a callback would 404 in build 2026.817.0, so local
   // completion is the correct record. Health-DOWN, top-ups, and non-watchdog
   // issues still stay pending for a session.
+  const issueId = wakeIssueId;
   const watchdogIds = mission && mission.watchdog && Array.isArray(mission.watchdog.disposedIds) ? mission.watchdog.disposedIds : [];
-  const autoDisposed = Boolean(issueId) && watchdogIds.includes(issueId);
+  const { autoDisposed, needsCEO, status: wakeStatus } = wakeDisposition({
+    issueId,
+    autoDisposedIds: watchdogIds,
+    healthDown,
+    toppedUp,
+    poolFailed,
+    missionError,
+  });
 
   const wake = {
     runId,
@@ -893,7 +899,7 @@ async function handleHeartbeat(req, res, body) {
     issueIds: body.issueIds || null,
     context: body.context || {},
     receivedAt: new Date().toISOString(),
-    status: autoDisposed ? "done" : needsCEO ? "pending" : "done", // pending | done | failed
+    status: wakeStatus, // pending | done | failed
     needsCEO,
     autoDisposed: autoDisposed || undefined,
     completedAt: autoDisposed ? new Date().toISOString() : undefined,
@@ -903,6 +909,15 @@ async function handleHeartbeat(req, res, body) {
   writeJson(wakePath(runId), wake);
   // Async pattern: accept immediately, Freebuff session works, then callbacks.
   return send(res, 202, { status: "accepted", runId, needsCEO });
+}
+
+// Pure response-contract decision: what status + needsCEO does a wake get,
+// and what does the 202 response return? Extracted so the handler contract
+// (stored wake state === returned escalation state) has a regression test.
+function wakeDisposition({ issueId, autoDisposedIds, healthDown, toppedUp, poolFailed, missionError }) {
+  const autoDisposed = Boolean(issueId) && Array.isArray(autoDisposedIds) && autoDisposedIds.includes(issueId);
+  const needsCEO = !autoDisposed && Boolean(healthDown || toppedUp || poolFailed || missionError || issueId);
+  return { autoDisposed, needsCEO, status: autoDisposed ? "done" : needsCEO ? "pending" : "done" };
 }
 
 async function handleDone(req, res, runId, body, failed) {
@@ -1011,6 +1026,7 @@ if (process.env.PAPERCLIP_BRIDGE_NO_LISTEN === "1") {
     buildWatchdogSummary,
     selfHealEperm,
     clearStaleSkillsTmp,
+    wakeDisposition,
     WATCHDOG_TITLE_PREFIX,
     JUDGE_PUSH_SENTINEL,
     JUDGE_AGENT_IDS,
