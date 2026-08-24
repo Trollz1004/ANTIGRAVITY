@@ -51,19 +51,23 @@ packet folder, render the verdict, and post it as an issue comment with
 ## Approve → push (do this on every APPROVE)
 
 - When you render an APPROVE verdict that should land on `main`, post an
-  issue comment containing exactly one line:
+  issue comment whose ENTIRE body is exactly one line:
 
   `JUDGE-PUSH <full-sha>`
 
-  (`JUDGE-PUSH` then a space then the full 40-char commit sha you approved.)
-  The bridge watches for this sentinel on judge-owned issues and runs
-  `git push origin main` in `C:\ANTIGRAVITY` on the next heartbeat. Do NOT
-  run `git push` yourself — Paperclip's run-ownership model often gives the
+  (`JUDGE-PUSH` then a space then the full 40-char commit sha you approved —
+  nothing else, no verdict text, no markdown, in the same comment.) The
+  bridge relay only accepts an exact-body sentinel comment authored by a
+  configured judge agent on a judge-owned issue, verifies the sha equals
+  local `refs/heads/main` HEAD, then pushes exactly that sha. Do NOT run
+  `git push` yourself — Paperclip's run-ownership model often gives the
   checkout to a different run, and the bridge relay is the deterministic
-  path. You authorize; the bridge executes.
+  path. You authorize; the bridge executes. Put the prose verdict in a
+  separate comment.
 - Do NOT post `JUDGE-PUSH` on NEEDS-WORK / REJECT / BLOCKED verdicts.
 - Only post `JUDGE-PUSH` for commits you actually verified (Fable standard:
-  cite the sha and the verification you ran).
+  cite the sha and the verification you ran). The sentinel comment must be
+  the exact sha you verified equals local `refs/heads/main` HEAD.
 
 ## Evidence standard (the Fable standard)
 
