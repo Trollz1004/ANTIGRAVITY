@@ -93,6 +93,14 @@ Rules: judges only push/merge/delete on main after verdict chain; never create b
 - next: Paperclip/Joshua end owner run 5b8f4d56; requeue ANT-57; wake Codex Judge
 - state: RED; control-plane run ownership mismatch
 
+## 2026-08-24 (judge, fe1d7239)
+- did: found ANT-59; attempted mandatory checkout; attempted blocked disposition
+- verified: inbox ANT-59 owner run d4bb62c9; RUN_MATCH=NO; checkout HTTP 500; PATCH blocked HTTP 409
+- skills: orchestrator-preflight, self-improving-system, caveman, i-have-adhd, paperclip
+- blocked: different active run owns ANT-59; no review, verdict, comment, status, or push allowed
+- next: Paperclip/Joshua end run d4bb62c9; requeue ANT-59; wake Codex Judge
+- state: RED; issue run ownership conflict
+
 ## 2026-08-24 (judge, 2ce18072)
 - did: reviewed e5c0fa53; rendered APPROVE; posted verdict + JUDGE-PUSH; closed ANT-58
 - verified: full SHA e5c0fa536cc38236309f8a4e0313ff4951cfa8af; main HEAD; one journal file/11 insertions; diff-check clean; append prefix true; ANT-53 comment 4a3db939 proves NEEDS-WORK review; verdict 010ce3bf; sentinel 15477a76; issue done
@@ -116,3 +124,59 @@ Rules: judges only push/merge/delete on main after verdict chain; never create b
 - blocked: different run owns ANT-58; no review, verdict, comment, status, or push allowed
 - next: Paperclip/Joshua end owner run 2ce18072; requeue ANT-58; wake Codex Judge
 - state: RED; control-plane run ownership mismatch
+
+## 2026-08-24 (judge, d4bb62c9)
+- did: reviewed bd3722d2; rendered REJECT; posted verdict; closed ANT-59; no push
+- verified: full SHA bd3722d2b9b42503f990b80af7f2ff4a238b1458; main HEAD; origin/main...HEAD=0 1; 6 files +240/-1; node --check exit 0; diff-check clean; verdict comment a4e8896a; issue done
+- skills: orchestrator-preflight, self-improving-system, caveman, i-have-adhd, paperclip, writing-plans, test-driven-development, systematic-debugging, verification-before-completion, requesting-code-review
+- blocked: push; relay does not authenticate sentinel comment author; validates one SHA but pushes current main; packet/tests absent
+- next: bind sentinel to judge author + exact full SHA + main HEAD; push exact SHA refspec; add forged/mismatch negative tests; resubmit
+- state: YELLOW; REJECT, no JUDGE-PUSH
+
+## 2026-08-24 (judge, b7522f8a)
+- did: acknowledged completed ANT-59 REJECT wake; closure-only; no sentinel
+- verified: GET /api/issues/$PAPERCLIP_TASK_ID = ANT-59 done; wake comment a4e8896a matches verdict
+- skills: orchestrator-preflight, self-improving-system, caveman, i-have-adhd, paperclip
+- blocked: push remains denied by REJECT
+- next: await fixed relay commit and new review issue
+- state: YELLOW; ANT-59 done, no JUDGE-PUSH
+
+## 2026-08-24 (judge, 299de3bc)
+- did: found assigned ANT-60; attempted mandatory checkout once
+- verified: inbox ANT-60 owner run 6de5eaef; current run 299de3bc; checkout HTTP 409
+- skills: self-improving-system, caveman, i-have-adhd, paperclip
+- blocked: different active run owns ANT-60; contract forbids review, verdict, status write, or push
+- next: Paperclip/Joshua end run 6de5eaef; requeue ANT-60; wake Codex Judge
+- state: RED; issue run ownership conflict
+
+## 2026-08-24 (judge, grok-skills-x)
+- did: standing grok preload (caveman/i-have-adhd/quality); imported local skills to Paperclip; assigned judge vs X-marketing sets; X Marketing now grok.exe; joined as Grok Judge 2
+- verified: company skills include caveman/tdd/agent-reach; judge desiredSkills count=10; X Marketing desiredSkills count=9; X status idle after grok.exe; ~/.grok/skills/grok-standing
+- skills: grok-standing, caveman, paperclip, self-improving-system
+- blocked: two grok-judge agents (original + join Grok Judge 2)
+- next: Joshua pick one grok-judge; use grok.com native X tools for marketing
+- state: GREEN; grok skills + X lane wired
+
+## 2026-08-24 (judge, grok-official-lock)
+- did: locked/signed grok setup; live agent is Grok Judge 44a7bbb7 urlKey grok-judge (Grok 2 name dropped, extra terminated); X Marketing reportsTo CEO
+- verified: grok.exe 1.0.5 5115b46bc9; lock file ops/paperclip-ceo/GROK-OFFICIAL.lock.md
+- skills: grok-standing, caveman, paperclip, self-improving-system
+- blocked: NONE
+- next: commit+push scoped setup (Joshua authorized)
+- state: GREEN
+
+## 2026-08-24 (judge, 6de5eaef)
+- did: reviewed c6fe7e70; rendered REJECT; posted verdict; closed ANT-60; no sentinel
+- verified: HEAD=c6fe7e70dd737dc3e4bde0198436920dcfce5e6c; committed relay tests 14/14; bridge syntax clean; diff-check clean; comment c7ebba13; issue done
+- skills: orchestrator-preflight, self-improving-system, caveman, i-have-adhd, paperclip, writing-plans, test-driven-development, systematic-debugging, verification-before-completion, requesting-code-review
+- blocked: push; parser trim/case-insensitive/whitespace accepts bodies outside exact required regex; tests copy helpers; packet absent
+- next: enforce literal case-sensitive one-space sentinel; test production relay negative cases; resubmit routine review
+- state: YELLOW; REJECT, no JUDGE-PUSH
+
+## 2026-08-24 (judge, ca24edb5)
+- did: empty inbox; ANT-60 done REJECT no child; created ANT-61 assigned Buffy; did not implement/push
+- verified: GET inbox-lite=[]; POST ANT-61 HTTP 201 id=2e812116 ident=ANT-61; GET ANT-61 status=in_progress assignee=55461934; comment POST HTTP 403 x2 (stop retry)
+- skills: grok-standing, paperclip, self-improving-system, caveman, i-have-adhd
+- blocked: ANT-61 comment write rejected (run unassigned / cross-issue); no JUDGE-PUSH
+- next: Buffy dispatch implementer on ANT-61; routine judge reviews new commit; do not push c6fe7e70/bd3722d2
+- state: GREEN; ANT-61 live on Buffy, Grok Judge inbox empty
