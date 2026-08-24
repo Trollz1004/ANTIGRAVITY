@@ -277,22 +277,28 @@ function runGit(args, opts = {}) {
   }
 }
 
-function resolveFullSha(ref) {
-  const r = runGit(["rev-parse", `${ref}^{commit}`]);
+function resolveFullSha(ref, gitFn = runGit) {
+  const r = gitFn(["rev-parse", `${ref}^{commit}`]);
   return r.ok ? r.out.trim() : null;
 }
 
 /**
- * Exact sentinel parse: the WHOLE comment body must be `JUDGE-PUSH <40-hex>`.
- * A sentinel embedded in a paragraph or with extra content is NOT accepted
- * (forged/misread text must never authorize a push). Returns the sha or null.
+ * Strict sentinel parse: the ENTIRE comment body must match, literally and
+ * case-sensitively, `^JUDGE-PUSH [0-9a-f]{40}$` — one literal space, no
+ * trimming, no case folding, no tabs/newlines. Any deviation (leading/trailing
+ * whitespace, lowercase command, embedded text, extra line) is REJECTED, per
+ * Codex Judge REJECT on c6fe7e70. Returns the sha or null.
  */
 function parseJudgePushSentinel(body, sentinel = JUDGE_PUSH_SENTINEL) {
   if (typeof body !== "string") return null;
-  const m = body.trim().match(/^([A-Z0-9-]+)\s+([0-9a-f]{40})$/i);
+  const pattern = new RegExp(`^${escapeRegExp(sentinel)} ([0-9a-f]{40})$`);
+  const m = body.match(pattern);
   if (!m) return null;
-  if (m[1].toUpperCase() !== sentinel.toUpperCase()) return null;
-  return m[2].toLowerCase();
+  return m[1].toLowerCase();
+}
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 /** The approved sha must equal local refs/heads/main HEAD (exact binding). */
@@ -301,10 +307,10 @@ function sentinelBindsToHead(approvedSha, localHeadSha) {
 }
 
 /** A sha is pushable if local, not yet an ancestor of origin/main. */
-function isPushableSha(sha) {
-  const local = resolveFullSha(sha);
+function isPushableSha(sha, gitFn = runGit) {
+  const local = resolveFullSha(sha, gitFn);
   if (!local) return { ok: false, reason: `not a local commit: ${sha}` };
-  const merged = runGit(["merge-base", "--is-ancestor", sha, "refs/remotes/origin/main"]);
+  const merged = gitFn(["merge-base", "--is-ancestor", sha, "refs/remotes/origin/main"]);
   if (merged.ok) return { ok: false, reason: `${sha} already on origin/main` };
   // Remote may not be fetched on this host; tolerate so push is attempted.
   return { ok: true, sha: local };
@@ -338,10 +344,14 @@ function appendJudgePush(entry) {
  *  4. SAFE REFSPEC — push the exact approved sha (`sha:refs/heads/main`),
  *     never a bare `git push origin main` that could carry a different HEAD.
  */
-async function relayJudgeApprovedPushes() {
+async function relayJudgeApprovedPushes(overrides = {}) {
   if (!COMPANY_ID || JUDGE_AGENT_IDS.length === 0) {
     return { ok: true, checked: 0, reason: "judge push relay not configured (JUDGE_AGENT_IDS empty)" };
   }
+  // Test seam: relay.test.js injects { git } to assert no git call happens on
+  // rejected authorizations without touching the real repo. Production calls
+  // this with no argument and uses the real runGit below.
+  const gitFn = typeof overrides.git === "function" ? overrides.git : runGit;
   const listUrl = `${PAPERCLIP_API_BASE}/api/companies/${COMPANY_ID}/issues?limit=200`;
   const list = await apiGet(listUrl);
   if (!list.ok || !Array.isArray(list.json)) {
@@ -365,18 +375,18 @@ async function relayJudgeApprovedPushes() {
       if (!sha) continue;
       seen += 1;
       // COMMIT BINDING: approved sha must equal local main HEAD.
-      const headSha = resolveFullSha("refs/heads/main");
+      const headSha = resolveFullSha("refs/heads/main", gitFn);
       if (!sentinelBindsToHead(sha, headSha)) {
         appendJudgePush({ at: new Date().toISOString(), issue: issue.identifier || issue.id, sha, ok: false, reason: `approved sha ${sha} != local refs/heads/main ${headSha || "unknown"}` });
         continue;
       }
-      const pushable = isPushableSha(sha);
+      const pushable = isPushableSha(sha, gitFn);
       if (!pushable.ok) {
         appendJudgePush({ at: new Date().toISOString(), issue: issue.identifier || issue.id, sha, ok: false, reason: pushable.reason });
         continue;
       }
       // SAFE REFSPEC: push the exact approved sha to refs/heads/main.
-      const push = runGit(["push", "origin", `${sha}:refs/heads/main`]);
+      const push = gitFn(["push", "origin", `${sha}:refs/heads/main`]);
       const result = { at: new Date().toISOString(), issue: issue.identifier || issue.id, sha: pushable.sha, ok: push.ok, out: push.out.slice(0, 300) };
       appendJudgePush(result);
       if (push.ok) pushed += 1;
@@ -739,9 +749,26 @@ const server = http.createServer(async (req, res) => {
 
 ensureDir(WAKES_DIR);
 ensureDir(STATE_DIR);
-server.listen(PORT, HOST, () => {
-  console.log(`[bridge] paperclip-freebuff-ceo-bridge UP on http://${HOST}:${PORT}`);
-  console.log(`[bridge] wakes dir: ${WAKES_DIR}`);
-  console.log(`[bridge] paperclip api: ${PAPERCLIP_API_BASE}`);
-  console.log(`[bridge] agent key configured: ${Boolean(AGENT_KEY)} | token configured: ${Boolean(BRIDGE_TOKEN)}`);
-});
+
+// Test seam: relay.test.js requires this module. When PAPERCLIP_BRIDGE_NO_LISTEN
+// is set, export the pure helpers and do NOT bind the port. Production start
+// (start.js -> require bridge.js) leaves the env unset and listens normally.
+if (process.env.PAPERCLIP_BRIDGE_NO_LISTEN === "1") {
+  module.exports = {
+    parseJudgePushSentinel,
+    sentinelBindsToHead,
+    isPushableSha,
+    resolveFullSha,
+    runGit,
+    relayJudgeApprovedPushes,
+    JUDGE_PUSH_SENTINEL,
+    JUDGE_AGENT_IDS,
+  };
+} else {
+  server.listen(PORT, HOST, () => {
+    console.log(`[bridge] paperclip-freebuff-ceo-bridge UP on http://${HOST}:${PORT}`);
+    console.log(`[bridge] wakes dir: ${WAKES_DIR}`);
+    console.log(`[bridge] paperclip api: ${PAPERCLIP_API_BASE}`);
+    console.log(`[bridge] agent key configured: ${Boolean(AGENT_KEY)} | token configured: ${Boolean(BRIDGE_TOKEN)}`);
+  });
+}
