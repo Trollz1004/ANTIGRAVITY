@@ -33,6 +33,10 @@ Read this index on session start. DO NOT preload skills — read the SKILL.md yo
 - **orchestrator-preflight** — Orchestrator session start ritual
 - **orchestrator-to-hermes-openclaw-opencode** — Fan-out to 3 harnesses, present to judge
 
+## YouTube / video (Hermes lane)
+- **hermes-youtube-faceless-news** — Faceless daily-news YouTube shorts from `content/yesterday-news/<date>/`
+- **hermes-youtube-avatar-head** — Scripted avatar-head talking videos (no real face)
+
 ## Testing
 - **test-driven-development** — TDD: failing test → minimal fix → verify
 - **tdd** — TDD variant

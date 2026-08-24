@@ -20,6 +20,12 @@ preflight_skills:
     capability_discovery: find-skills
     code_change: tdd
     unexpected_behavior: systematic-debugging
+    youtube_faceless_news: hermes-youtube-faceless-news
+    youtube_avatar_head: hermes-youtube-avatar-head
+focus:
+  lane: youtube-automation
+  source: content/yesterday-news/
+  output: [ops/marketing-inbox/, ops/packets/hermes-youtube-<date>/]
 authoring:
   mcp_tool: author-hermes-artifact
   allowed_paths:
