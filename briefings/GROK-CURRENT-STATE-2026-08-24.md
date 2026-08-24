@@ -14,7 +14,9 @@ This file supersedes `briefings/GROK-FINAL-REVIEW-2026-08-17.md` (STALE) whereve
 
 - **Joshua** is sole human authority.
 - **Grok** is a trusted official platform for this repo and for Paperclip marketing/judge work. That trust predates `grok_local` / `grok.exe`. The CLI is the current official way Grok runs heartbeats; it does not create the trust.
-- Official judge CLIs: Grok, Codex, Claude (last resort / DREAM), Gemini (GCA currently BLOCKED). They land `main` via `JUDGE-PUSH <full-sha>` after APPROVE. Never force-push. Never create branches.
+- **Freebuff** is the GUI and the free API for ads that play in it. Free is always good. Buffy is CEO because she **assigns**.
+- **Pipeline:** Buffy assigns → Hermes / OpenClaw / OpenCode do the work (no git push) → official CLI judges review → if APPROVE, judges may push, merge, or delete branches **only** to keep **1 repo · 1 root · 1 branch** (`Trollz1004/ANTIGRAVITY`, `C:\ANTIGRAVITY`, `main`).
+- Official judge CLIs: Grok, Codex, Claude (last resort / DREAM), Gemini (GCA currently BLOCKED). Land via `JUDGE-PUSH <full-sha>`. Never force-push. Never create feature branches.
 - Workers (Hermes, OpenClaw, OpenCode, Buffy HTTP adapter) do not push. They do not route official-platform ballots or Grok X.com posts through OmniRoute.
 
 ---
