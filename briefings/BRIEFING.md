@@ -1,13 +1,13 @@
 # BRIEFING.md — UNIVERSAL AI ONBOARDING (READ THIS FIRST, EVERY TIME)
 
-> **CURRENT (2026-08-24):** `briefings/GROK-CURRENT-STATE-2026-08-24.md` is the live
-> Grok + Paperclip + youandinotai.com first-revenue snapshot. Canonical root
-> `C:\ANTIGRAVITY`. Grok is a Joshua-approved trusted official platform (before
-> grok CLI and after). Official judges use grok.com / Codex / Claude / Gemini
-> CLIs. OmniRoute is the worker gateway, not the Grok judge or X.com model lane.
-> Paperclip `:3100` is marketing/business ops only. First revenue goal: $5,000
-> Square membership/access on youandinotai.com ([ANT-64](/ANT/issues/ANT-64) /
-> [ANT-65](/ANT/issues/ANT-65) / [ANT-66](/ANT/issues/ANT-66)).
+> **CURRENT (2026-08-24):** `briefings/GROK-CURRENT-STATE-2026-08-24.md`.
+> Freebuff = GUI + free ads API (ads play in it; free is always good). Buffy
+> CEO **assigns** to Hermes / OpenClaw / OpenCode. Harnesses never push.
+> Official CLI judges (Grok trusted pre-CLI and grok.exe, Codex, Claude last
+> resort, Gemini) land **1 repo · 1 root · 1 branch** (`Trollz1004/ANTIGRAVITY`,
+> `C:\ANTIGRAVITY`, `main`) via `JUDGE-PUSH`. OmniRoute is the worker gateway.
+> Paperclip `:3100` is marketing/ops only. First revenue: $5,000 Square on
+> youandinotai.com (ANT-64 / ANT-65 / ANT-66).
 >
 > Body below is 2026-07-14 onboarding history. Where it conflicts with S1
 > (`Agents.md` / `CLAUDE.md` landed 2026-08-19) or the 2026-08-24 Grok briefing,

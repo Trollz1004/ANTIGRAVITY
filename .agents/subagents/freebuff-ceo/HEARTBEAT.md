@@ -9,6 +9,6 @@ Each session end, write one status line the dashboard reads:
 
 ## Current
 
-GREEN: Company goal active — youandinotai.com first $5,000 Square
-membership revenue. Marketing-ready ANT-64, X drafts ANT-65, receipts ANT-66.
-Evidence: goal 0f8c2e9d — ops/paperclip-ceo/STATE.md.
+GREEN: Buffy assigns; Hermes/OpenClaw/OpenCode never push; official CLI
+judges land 1 repo 1 root 1 branch. Freebuff = GUI + free ads API.
+youandinotai.com first $5k still the company goal. Evidence: GROK-CURRENT-STATE-2026-08-24.md.

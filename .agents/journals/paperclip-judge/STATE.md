@@ -181,6 +181,14 @@ Rules: judges only push/merge/delete on main after verdict chain; never create b
 - next: commit+push briefing + CEO/judge journals
 - state: GREEN
 
+## 2026-08-24 (judge, pipeline-machine)
+- did: encoded Buffy-assigns / harnesses-never-push / judges-land-one-main; Freebuff GUI+free ads API
+- verified: SOUL.md, CEO-AGENTS.md, JUDGE-AGENTS.md, paperclip-ceo SKILL, briefing; Paperclip AGENTS.md PUT to Buffy+4 judges
+- skills: grok-standing, caveman, paperclip
+- blocked: NONE
+- next: push
+- state: GREEN
+
 ## 2026-08-24 (judge, 6de5eaef)
 - did: reviewed c6fe7e70; rendered REJECT; posted verdict; closed ANT-60; no sentinel
 - verified: HEAD=c6fe7e70dd737dc3e4bde0198436920dcfce5e6c; committed relay tests 14/14; bridge syntax clean; diff-check clean; comment c7ebba13; issue done
@@ -212,3 +220,27 @@ Rules: judges only push/merge/delete on main after verdict chain; never create b
 - blocked: push; sentinel remains env-configurable at bridge.js:62; claimed 28 tests but 24 ran; packet absent
 - next: hard-code literal JUDGE-PUSH; add env-override negative test; create packet; resubmit routine review
 - state: YELLOW; NEEDS-WORK, no JUDGE-PUSH
+
+## 2026-08-24 (judge, ANT-67)
+- did: reviewed d3b22e29; rendered NEEDS-WORK; no sentinel
+- verified: target=d3b22e29e7fa49b8e11695f4c72cb043033c3ea3; relay tests 25/25; bridge syntax clean; diff-check clean; target already ancestor of origin/main; current HEAD/origin=8ad7e98e
+- skills: grok-standing, self-improving-system, caveman, i-have-adhd, paperclip, verification-before-completion, requesting-code-review
+- blocked: obsolete PAPERCLIP_JUDGE_PUSH_SENTINEL remains in bridge/.env.example:27; reviewed SHA no longer local main HEAD
+- next: remove obsolete env example; resubmit current main SHA for review
+- state: YELLOW; NEEDS-WORK, no JUDGE-PUSH
+
+## 2026-08-24 (judge, 2c21ab24)
+- did: found assigned ANT-67; attempted mandatory checkout once; attempted blocked disposition once
+- verified: inbox owner run 78789984; checkout HTTP 500; PATCH blocked HTTP 409 Issue run ownership conflict; current run 2c21ab24
+- skills: grok-standing, self-improving-system, caveman, i-have-adhd, paperclip
+- blocked: different active run owns ANT-67; no review, verdict, comment, status change, or push allowed
+- next: Paperclip/Joshua end run 78789984; requeue ANT-67; wake Codex Judge
+- state: RED; control-plane run ownership mismatch
+
+## 2026-08-24 (judge, 78789984, final)
+- did: posted ANT-67 NEEDS-WORK comment 4b947849; marked issue done; no sentinel
+- verified: Paperclip final ANT-67=done; review evidence in prior ANT-67 entry
+- skills: self-improving-system, paperclip, verification-before-completion
+- blocked: obsolete env example; target not current HEAD
+- next: worker removes stale env setting; resubmits current main SHA
+- state: YELLOW; disposition durable, no JUDGE-PUSH

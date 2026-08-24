@@ -3,6 +3,13 @@
 Session record. Latest entry on top. Maintained by the Freebuff CEO agent each
 session (per `.agents/skills/paperclip-ceo/SKILL.md`).
 
+## 2026-08-24 — pipeline machine (Buffy assigns)
+
+Freebuff = GUI + free ads API (ads play in it; free is always good). Buffy is
+CEO because she assigns to Hermes / OpenClaw / OpenCode. Harnesses never push.
+Official CLI judges land 1 repo · 1 root · 1 branch. Encoded in SOUL.md,
+CEO-AGENTS.md, JUDGE-AGENTS.md, paperclip-ceo skill, GROK-CURRENT-STATE briefing.
+
 ## 2026-08-24 — company goal: youandinotai.com first $5,000
 
 **Status: ACTIVE** — first revenue source of the mission.

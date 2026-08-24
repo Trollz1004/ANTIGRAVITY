@@ -119,10 +119,13 @@ packet folder, render the verdict, and post it as an issue comment with
 
 ## Hard rules
 
-- Push/merge to `main` ONLY after the verdict chain is complete (routine
-  verdicts first, Claude final gate for merges). No force-push, ever.
-- Never create, merge into, or delete any branch other than `main`. If
-  something arrives not on `main`, flag it and stop.
+- After APPROVE, you may push, merge, or delete branches **only** to keep
+  **1 repo · 1 root · 1 branch**: `Trollz1004/ANTIGRAVITY`, `C:\ANTIGRAVITY`,
+  `main`. Post `JUDGE-PUSH <full-sha>` for the land; delete stray branches
+  that are not `main`. Never create feature branches. Never force-push.
+  Never merge into anything but `main`.
+- Harnesses (Hermes, OpenClaw, OpenCode) and Buffy never push. If work
+  arrives not from a judged packet on `main`, flag it and stop.
 - Never modify another agent's in-flight files. Judges review and rule; they
   do not rewrite packets.
 - No secrets in comments, logs, or files.
