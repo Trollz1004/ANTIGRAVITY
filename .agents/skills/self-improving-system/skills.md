@@ -10,6 +10,7 @@ Read this index on session start. DO NOT preload skills — read the SKILL.md yo
 - **self-improving-system** — THIS skill: journal + index contract
 - **find-skills** — Discover/install new skills
 - **skill-creator** — Author SKILL.md files
+- **grok-standing** — Grok Paperclip standing preload (caveman ultra + quality/X on demand). Locked to official grok.com CLI.
 - **caveman** — Ultra-compressed communication (mandatory)
 - **i-have-adhd** — Concise action-forward output discipline (mandatory)
 - **brainstorming** — Ideation/decomposition before creative work
