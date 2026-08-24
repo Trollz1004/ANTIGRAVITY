@@ -93,6 +93,19 @@ test("sentinel constant is the literal JUDGE-PUSH", () => {
   assert.strictEqual(JUDGE_PUSH_SENTINEL, "JUDGE-PUSH");
 });
 
+test("env cannot alter the authorization literal (module-reload negative)", () => {
+  process.env.PAPERCLIP_JUDGE_PUSH_SENTINEL = "WORKER-PUSH";
+  delete require.cache[require.resolve("./bridge.js")];
+  const fresh = require("./bridge.js");
+  // The production constant must still be the hard-coded literal.
+  assert.strictEqual(fresh.JUDGE_PUSH_SENTINEL, "JUDGE-PUSH");
+  // And the parser must still accept ONLY JUDGE-PUSH, never the env value.
+  assert.strictEqual(fresh.parseJudgePushSentinel(`WORKER-PUSH ${SHA}`), null);
+  assert.strictEqual(fresh.parseJudgePushSentinel(`JUDGE-PUSH ${SHA}`), SHA);
+  delete process.env.PAPERCLIP_JUDGE_PUSH_SENTINEL;
+  delete require.cache[require.resolve("./bridge.js")];
+});
+
 // -------------------------------------------------------------------------
 // 2. Commit binding
 // -------------------------------------------------------------------------

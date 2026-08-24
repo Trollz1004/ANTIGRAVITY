@@ -59,7 +59,11 @@ const CLOUDFLARED_PROCESS = process.env.PAPERCLIP_CLOUDFLARED_PROCESS || "cloudf
 // 409 by never having the judge's own codex run do the git push.
 const REPO_ROOT = process.env.PAPERCLIP_REPO_ROOT || "C:/ANTIGRAVITY";
 const JUDGE_AGENT_IDS = (process.env.PAPERCLIP_JUDGE_AGENT_IDS || "").split(",").map((s) => s.trim()).filter(Boolean);
-const JUDGE_PUSH_SENTINEL = process.env.PAPERCLIP_JUDGE_PUSH_SENTINEL || "JUDGE-PUSH";
+// Non-negotiable authorization literal: the ENTIRE sentinel comment must be
+// exactly `JUDGE-PUSH <40-hex>` (per Codex Judge REJECT on 3bd583fc). This is
+// hard-coded — deliberately NOT env-configurable — so an environment change
+// can never loosen the authorization gate.
+const JUDGE_PUSH_SENTINEL = "JUDGE-PUSH";
 
 function ensureDir(dir) {
   fs.mkdirSync(dir, { recursive: true });
@@ -285,20 +289,18 @@ function resolveFullSha(ref, gitFn = runGit) {
 /**
  * Strict sentinel parse: the ENTIRE comment body must match, literally and
  * case-sensitively, `^JUDGE-PUSH [0-9a-f]{40}$` — one literal space, no
- * trimming, no case folding, no tabs/newlines. Any deviation (leading/trailing
- * whitespace, lowercase command, embedded text, extra line) is REJECTED, per
- * Codex Judge REJECT on c6fe7e70. Returns the sha or null.
+ * trimming, no case folding, no tabs/newlines, and the command word is the
+ * hard-coded literal `JUDGE-PUSH` (never read from env). Any deviation
+ * (leading/trailing whitespace, lowercase command, embedded text, extra line)
+ * is REJECTED, per Codex Judge REJECTs on c6fe7e70 and 3bd583fc.
+ * Returns the sha or null.
  */
 function parseJudgePushSentinel(body, sentinel = JUDGE_PUSH_SENTINEL) {
   if (typeof body !== "string") return null;
-  const pattern = new RegExp(`^${escapeRegExp(sentinel)} ([0-9a-f]{40})$`);
-  const m = body.match(pattern);
+  const m = body.match(/^JUDGE-PUSH ([0-9a-f]{40})$/);
   if (!m) return null;
+  if (sentinel !== JUDGE_PUSH_SENTINEL) return null;
   return m[1].toLowerCase();
-}
-
-function escapeRegExp(value) {
-  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 /** The approved sha must equal local refs/heads/main HEAD (exact binding). */
