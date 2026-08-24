@@ -93,3 +93,11 @@ heartbeat proven; skills catalog audit filed; see ops/paperclip-ceo/STATE.md).
   governance breach recorded here. Judge journal records this correctly.
 - This entry preserves all prior text (append-only). Resubmitted for judge
   APPROVE -> JUDGE-PUSH sentinel -> bridge push.
+
+## 2026-08-24 (freebuff-ceo, session: judge-approved push relay)
+- did: diagnosed no-push root cause (run-ownership 409, NOT adapter); added bridge relayJudgeApprovedPushes (JUDGE-PUSH sentinel -> git push origin main); updated JUDGE-AGENTS.md + pushed to 4 judges; ran E2E ANT-56/57/58 rounds; judge APPROVE -> bridge pushed e5c0fa53.
+- verified: state/judge-push.json {ok:true}; origin/main == e5c0fa53 == local, 0 unpushed; bridge UP (start.js, env loaded); node --check clean.
+- skills: paperclip, paperclip-ceo, self-improving-system.
+- blocked: NONE (run-ownership 409 now handled via reset-session + bridge relay).
+- next: investigate Grok/Gemini judge status=error; consider git merge/delete relay for judge lane if needed.
+- state: GREEN (judge-approved push proven end-to-end; journal audit corrections landed).

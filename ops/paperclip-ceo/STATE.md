@@ -3,6 +3,23 @@
 Session record. Latest entry on top. Maintained by the Freebuff CEO agent each
 session (per `.agents/skills/paperclip-ceo/SKILL.md`).
 
+## 2026-08-24 — judge-approved push relay (Buffy / Freebuff)
+
+**Status: GREEN** — judge-approved verdicts now actually push via bridge
+relay; end-to-end proven (ANT-58 APPROVE → JUDGE-PUSH sentinel → git push →
+origin/main updated).
+
+### What was done (VERIFIED)
+
+| Item | Evidence |
+| ---- | -------- |
+| DIAGNOSIS: codex_local adapter relays git fine | codex ran `tools.exec_command({cmd, workdir:C:\ANTIGRAVITY})`, elevated sandbox (`codex-home/config.toml` `sandbox=elevated`); ANT-52 session 23-07-27 |
+| Root cause of no-push | Paperclip run-ownership 409: issue owned by one run, judge heartbeat another → judge abstains (ANT-53/54 sessions: `owned by run…checkout 409`); `runtime-state:reset-session` clears stale owner |
+| FIX: bridge judge-push relay | `relayJudgeApprovedPushes()` in mission control; judge posts `JUDGE-PUSH <sha>` on APPROVE; bridge runs `git push origin main` in C:\ANTIGRAVITY; push gated on judge verdict |
+| PROOF end-to-end | ANT-58: judge APPROVE + `JUDGE-PUSH e5c0fa53…`; `state/judge-push.json` `{ok:true}`; `origin/main == e5c0fa53` == local, 0 unpushed; second scan idempotent |
+| Judge instructions updated | JUDGE-AGENTS.md sentinel contract pushed to all 4 judges; .env/.env.example document 3 new vars |
+| AUDIT CORRECTION | freebuff-ceo journal falsely claimed judge approval of ab57793c; corrected append-only across 5afda981/5c16ea67/e5c0fa53 after judge NEEDS-WORK/REJECT rounds |
+
 ## 2026-08-24 — mission control + judge lane + Grok (Buffy / Freebuff)
 
 **Status: GREEN** — CEO on 30s heartbeat; bridge runs mission control
