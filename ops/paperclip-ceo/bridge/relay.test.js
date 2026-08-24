@@ -28,6 +28,7 @@ const {
   sentinelBindsToHead,
   extractWakeIssueId,
   buildWatchdogSummary,
+  wakeDisposition,
   WATCHDOG_TITLE_PREFIX,
   JUDGE_PUSH_SENTINEL,
 } = bridge;
@@ -565,6 +566,39 @@ async function closeStub(stub) {
     assert.deepStrictEqual(kept, ["agent-browser"], "non-tmp entries untouched");
     assert.ok(res.reason.includes("no EPERM"), res.reason);
   });
+
+  // Handler response-contract: the stored wake state and the returned
+  // escalation state must agree. Auto-disposed wakes are NOT escalations.
+  {
+    const d = wakeDisposition({ issueId: "w1", autoDisposedIds: ["w1"], healthDown: false, toppedUp: false, poolFailed: false, missionError: null });
+    test("wakeDisposition: auto-disposed wake returns needsCEO=false + status done", () => {
+      assert.strictEqual(d.needsCEO, false);
+      assert.strictEqual(d.status, "done");
+      assert.strictEqual(d.autoDisposed, true);
+    });
+  }
+  {
+    const d = wakeDisposition({ issueId: "x1", autoDisposedIds: ["w1"], healthDown: false, toppedUp: false, poolFailed: false, missionError: null });
+    test("wakeDisposition: non-watchdog issue wake stays pending escalation", () => {
+      assert.strictEqual(d.needsCEO, true);
+      assert.strictEqual(d.status, "pending");
+      assert.strictEqual(d.autoDisposed, false);
+    });
+  }
+  {
+    const d = wakeDisposition({ issueId: "w1", autoDisposedIds: ["w1"], healthDown: true, toppedUp: false, poolFailed: false, missionError: null });
+    test("wakeDisposition: auto-dispose wins over health-DOWN (wake done, no escalation)", () => {
+      assert.strictEqual(d.needsCEO, false);
+      assert.strictEqual(d.status, "done");
+    });
+  }
+  {
+    const d = wakeDisposition({ issueId: null, autoDisposedIds: [], healthDown: false, toppedUp: false, poolFailed: false, missionError: null });
+    test("wakeDisposition: bare timer wake stays local (done, no escalation)", () => {
+      assert.strictEqual(d.needsCEO, false);
+      assert.strictEqual(d.status, "done");
+    });
+  }
 
   await testAsync("disposeWatchdogIssues skips sweep when health is DOWN (escalation)", async () => {
     const stub = stubApi({
