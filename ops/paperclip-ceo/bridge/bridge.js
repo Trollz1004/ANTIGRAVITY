@@ -282,6 +282,24 @@ function resolveFullSha(ref) {
   return r.ok ? r.out.trim() : null;
 }
 
+/**
+ * Exact sentinel parse: the WHOLE comment body must be `JUDGE-PUSH <40-hex>`.
+ * A sentinel embedded in a paragraph or with extra content is NOT accepted
+ * (forged/misread text must never authorize a push). Returns the sha or null.
+ */
+function parseJudgePushSentinel(body, sentinel = JUDGE_PUSH_SENTINEL) {
+  if (typeof body !== "string") return null;
+  const m = body.trim().match(/^([A-Z0-9-]+)\s+([0-9a-f]{40})$/i);
+  if (!m) return null;
+  if (m[1].toUpperCase() !== sentinel.toUpperCase()) return null;
+  return m[2].toLowerCase();
+}
+
+/** The approved sha must equal local refs/heads/main HEAD (exact binding). */
+function sentinelBindsToHead(approvedSha, localHeadSha) {
+  return typeof approvedSha === "string" && typeof localHeadSha === "string" && approvedSha === localHeadSha;
+}
+
 /** A sha is pushable if local, not yet an ancestor of origin/main. */
 function isPushableSha(sha) {
   const local = resolveFullSha(sha);
@@ -308,8 +326,17 @@ function appendJudgePush(entry) {
 }
 
 /**
- * Scan judge-owned issues for an explicit APPEND sentinel + sha, run the push.
- * Sentinel format on the issue comment: `JUDGE-PUSH <full-sha>`.
+ * Scan judge-owned issues for an exact APPROVE sentinel, run the push.
+ *
+ * Safety contract (per Codex Judge REJECT on bd3722d2):
+ *  1. AUTHORIZATION — the sentinel comment must be authored by one of the
+ *     configured judge agents (c.authorAgentId in JUDGE_AGENT_IDS), on an
+ *     issue assigned to a judge agent.
+ *  2. EXACT BODY — the whole comment must be `JUDGE-PUSH <40-hex>`. A sentinel
+ *     embedded in a longer comment is ignored.
+ *  3. COMMIT BINDING — the approved sha must equal local refs/heads/main HEAD.
+ *  4. SAFE REFSPEC — push the exact approved sha (`sha:refs/heads/main`),
+ *     never a bare `git push origin main` that could carry a different HEAD.
  */
 async function relayJudgeApprovedPushes() {
   if (!COMPANY_ID || JUDGE_AGENT_IDS.length === 0) {
@@ -331,18 +358,25 @@ async function relayJudgeApprovedPushes() {
     const commentsRes = await apiGet(`${PAPERCLIP_API_BASE}/api/issues/${issue.id}/comments`);
     if (!commentsRes.ok || !Array.isArray(commentsRes.json)) continue;
     for (const c of commentsRes.json) {
-      const body = typeof c.body === "string" ? c.body : "";
-      const m = body.split(/[\r\n]+/).map((l) => l.trim()).find((l) => l.toUpperCase().startsWith(`${JUDGE_PUSH_SENTINEL.toUpperCase()} `));
-      if (!m) continue;
-      seen += 1;
-      const sha = m.split(/\s+/)[1] ? m.split(/\s+/)[1].trim() : null;
+      // AUTHORIZATION: only a configured judge agent's comment can authorize.
+      if (!c || !judgeSet.has(c.authorAgentId)) continue;
+      // EXACT BODY: full comment must be the sentinel + 40-hex sha.
+      const sha = parseJudgePushSentinel(c.body);
       if (!sha) continue;
+      seen += 1;
+      // COMMIT BINDING: approved sha must equal local main HEAD.
+      const headSha = resolveFullSha("refs/heads/main");
+      if (!sentinelBindsToHead(sha, headSha)) {
+        appendJudgePush({ at: new Date().toISOString(), issue: issue.identifier || issue.id, sha, ok: false, reason: `approved sha ${sha} != local refs/heads/main ${headSha || "unknown"}` });
+        continue;
+      }
       const pushable = isPushableSha(sha);
       if (!pushable.ok) {
         appendJudgePush({ at: new Date().toISOString(), issue: issue.identifier || issue.id, sha, ok: false, reason: pushable.reason });
         continue;
       }
-      const push = runGit(["push", "origin", "main"]);
+      // SAFE REFSPEC: push the exact approved sha to refs/heads/main.
+      const push = runGit(["push", "origin", `${sha}:refs/heads/main`]);
       const result = { at: new Date().toISOString(), issue: issue.identifier || issue.id, sha: pushable.sha, ok: push.ok, out: push.out.slice(0, 300) };
       appendJudgePush(result);
       if (push.ok) pushed += 1;
