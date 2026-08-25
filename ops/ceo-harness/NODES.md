@@ -1,64 +1,96 @@
-# NODES — clean repo
+# NODES — infrastructure reference
 
-CEO agent reference. Read only when a task touches infra. Confirm before you trust — 2026-07-21 notes flag some of this unverified.
+CEO agent reference. Read when a task touches infra.
 
-## Sabretooth — 192.168.0.8
+**Rewritten 2026-08-25 by the judge lane.** Everything below was measured against
+the running machine on that date, not carried forward from notes. The previous
+version of this file described a four-node topology with Paperclip on a T5500 at
+`:3120` behind a `paperclip.youandinotai.com` tunnel, and a repo at `E:\clean`.
+None of that was true, and an agent acting on it would have chased a hostname
+that does not exist and a drive letter that exists on no node. If you find a
+claim here you cannot reproduce, report it **UNVERIFIED** rather than working
+around it.
 
-- NIC: Intel 82579V Gigabit, MAC `54-04-A6-28-BB-4E`, link 1000/1000
-- GPU dead: GTX 1070 (Pascal) + driver 560.94 can't run Ollama 0.31.2 CUDA kernels. Forced `OLLAMA_LLM_LIBRARY=cpu`. Fix = driver 580+, then drop that env line.
-- May host OmniRoute gate (:20128) — **UNCONFIRMED**, launcher `C:\antigravity\scripts\bootstrap\Start-OmniRoute.cmd`. Laptop also claims this role. Verify with Josh before assuming either.
-- **Confirmed 2026-07-22 (Josh): NOT where Paperclip/Hermes runs.** CEO agent's "Hermes Agent (local)" adapter targets T5500, not here. OmniRoute gate host (:20128) is still a separate open question — see Laptop below.
-- Ollama port 11434 local.
+## Sabretooth is the only node
 
-## T5500 — 192.168.0.8 (`DESKTOP-H4B53GL`)
+`C:\ANTIGRAVITY` is the sole canonical working tree. There is no T5500, no 9020,
+no laptop node, and **no E: drive anywhere in this topology**. Text asserting
+otherwise is stale evidence, not instruction.
 
-- Runs the **live** Paperclip clean instance: local API `http://127.0.0.1:3120`, public via Cloudflare tunnel `hermes-t5500` → https://paperclip.youandinotai.com (alias https://paperclip-clean.youandinotai.com).
-- Repo bound: `E:\clean` (Trollz1004/clean, `main` only).
-- Health: `curl -sS https://paperclip.youandinotai.com/api/health` → expect `"status":"ok"`.
-- **Confirmed 2026-07-22 (Josh): this is where Paperclip / Hermes runs.** CEO agent's "Hermes Agent (local)" adapter targets this node. This is also the node that created the Trollz1004/clean repo (2026-07-21 report).
-- **Priority node for the Ornith install runbook** — the live CEO agent's HTTP 404 "model 'ornith' not found" failure traces here. Pull `ornith:9b` on T5500 first; see `ORNITH-INSTALL.md`.
-- Ollama port 11434 local.
+- GPU: NVIDIA GeForce GTX 1070, 8 GB VRAM, driver `32.0.15.6094`.
+- RAM: 64 GB. Free space on `C:` was 277 GB when this was written.
+- Ollama is installed and answering, and is a **fail-safe path only** — never the
+  default route.
 
-## 9020 — 192.168.0.5
+## Verified services
 
-- Minimal notes on file. Treat as unconfirmed role until Josh specifies — do not assume it runs Paperclip or the gate.
-- Ollama port 11434 local, assume until checked.
+Measured 2026-08-25. A port answering is not proof of identity; check the
+identity column before reporting anything **UP**.
 
-## Laptop — 192.168.0.13
+| Service | Port | State | Identity check |
+| --- | --- | --- | --- |
+| Paperclip (Mission Control) | 3100 | LISTENING | `GET /api/openapi.json` → `.info.title` must be `"Paperclip API"`. `/api/health` returns `status` and a version but never names the product. |
+| Date App frontend | 3200 | LISTENING | page title `YouAndiNotAi` |
+| Date App backend | 8000 | LISTENING | `GET /health` → `status`, `db_connected`, `square_connected` |
+| Mission Control v5 | 3151 | LISTENING | `GET /api/health`. **No longer the hub** — Paperclip is. Still serves the static `/paperweight/` demo page. |
+| OmniRoute gateway | 20128 / 20129 | LISTENING | `GET /api/v1/models`. Harness route only; judges never use it. |
+| Hermes | 9119 | LISTENING | owns this port — see the collision note below |
+| Ollama | 11434 | LISTENING | `GET /api/tags` → 200 |
+| OpenClaw (ClawX) | 18789 | **DOWN** | nothing listening as of 2026-08-25 |
+| DreamOps Bridge | 9133 | not running | DREAM service, expected down unless you started it |
+| Live NPC Lab | 9127 | not running | DREAM service, expected down unless you started it |
 
-- **Confirmed 2026-07-22 (Josh): browser/control seat only.** Does NOT run its own live Paperclip instance — supersedes `ops/PAPERCLIP-LAPTOP.md`'s setup instructions, which describe a local Paperclip bind that isn't the live one in practice. Paperclip itself lives on T5500 (see above).
-- This is the node this Cowork session bridges to (device `laptop-cqunbkl9`) and where the connected Chrome browser lives — used to drive the live dashboard at the canonical URL below.
-- May still host the OmniRoute gate (:20128) via `C:\antigravity\scripts\bootstrap\Start-OmniRoute.cmd` — **UNCONFIRMED**, separate question from Paperclip/Hermes above.
-- Session sees the repo at `C:\clean` — cross-check against `E:\clean` used in Paperclip configs elsewhere. Same repo, confirm drive letter isn't drifted.
-- Ollama port 11434 local.
+**Port 9119 collision.** Hermes owns 9119 and is listening on it. DREAM's original
+port document also claimed 9119 for the DreamOps Bridge. Joshua moved the bridge
+to **9133** on 2026-08-25. Do not reassign 9119.
 
-## Canonical URLs / ports (confirmed 2026-07-22, Josh)
+**FCC is permanently banned.** The old version of this table listed an
+`FCC-Server` on `:8082`. Nothing listens there, and nothing should. See
+`agent-contracts/FCC-STATUS.md`.
 
-- Dashboard: `https://paperclip-clean.youandinotai.com` — this is the one to use, not any alternate alias.
-- T5500 Paperclip origin: port `3120` (matches table below).
-- Hermes GUI: port `9119`.
-- OpenClaw gateway: port `18789` — **not** `9119` (that's Hermes GUI's port; don't cross them). Note from Josh: "setup from opencode" — unclear context, flagged here rather than guessed at.
+## Date App public surface — Paperclip maintains this
 
-## Shared reference (all nodes)
+Paperclip owns Date App uptime, the tunnel, and marketing. These are the real
+values; do not guess at hostnames.
 
-| Service                  | Port  | Health                                                                        |
-| ------------------------ | ----- | ----------------------------------------------------------------------------- |
-| Ollama                   | 11434 | `/api/tags`                                                                   |
-| OmniRoute (THE GATE)     | 20128 | `/api/v1/models`                                                              |
-| FCC-Server               | 8082  | `/health`                                                                     |
-| Agent Hub                | 3130  | `/health`                                                                     |
-| Mission Control          | 3110  | `/health`                                                                     |
-| Mission Control v5       | 3151  | `/api/health`                                                                 |
-| Paperclip (clean, T5500) | 3120  | `/api/health`                                                                 |
-| Hermes GUI               | 9119  | —                                                                             |
-| OpenClaw (ClawX)         | 18789 | `/`                                                                           |
-| Hermes Router            | 11435 | disabled by sentinel `~\.openclaw\workspace\DISABLE_SABRETOOTH_HERMES_ROUTER` |
+- `cloudflared` is running. Tunnel id `515b70b2-9730-45af-9691-6e14fd73eff3`,
+  config at `C:\Users\joshi\.cloudflared\config.yml`.
+- Ingress, and this is the complete list:
 
-DNS: 192.168.0.1, 205.171.2.26.
+  | Hostname | Origin |
+  | --- | --- |
+  | `youandinotai.com` | `http://127.0.0.1:3200` |
+  | `www.youandinotai.com` | `http://127.0.0.1:3200` |
+  | `api.youandinotai.com` | `http://127.0.0.1:8000` |
 
-## Rules for CEO agent using these nodes
+  Everything else returns `http_status:404`. There is **no** `paperclip.youandinotai.com`
+  and no `paperclip-clean.youandinotai.com`; those hostnames were in the previous
+  version of this file and do not exist.
 
-1. Never talk to a model provider directly. Only through OmniRoute (:20128). See `SOUL.md`.
-2. Never treat "may host" / "UNCONFIRMED" lines as fact. Ask Josh once, then wait — don't guess and act.
-3. This harness has no remote-exec path to Sabretooth/T5500/9020 from a Cowork cloud session. Node work on those three needs a human or an agent already running on that box.
-4. Log any node-status change you confirm into `STATE.md`, not into this file — this file is the stable reference, `STATE.md` is the session diary.
+- **`wrangler` is not installed** on this node. If a task needs Cloudflare Workers
+  or Pages tooling, report **NOT CONFIGURED** and ask before installing it —
+  tunnel work does not require wrangler, and the two are easy to conflate.
+- Tunnel changes are infrastructure. Never start, restart, or reconfigure a
+  service to make a check pass; verify what is actually answering first and
+  report the state.
+
+## Payments — no split
+
+The Date App revenue ledger reports **payments and gross only**. There is no
+reserve, no operating share, and no split of any kind; `PLATFORM_RESERVE_PERCENT`
+is `0` and the fields were removed from every API surface on 2026-08-25. Do not
+reintroduce them, and do not describe revenue in terms of allocation. Square is
+the only payment rail. Founder-test payments are tracked separately from customer
+revenue so Joshua's own flow tests never inflate a customer figure.
+
+## Rules for the CEO agent using this node
+
+1. Never talk to a model provider directly. Harness model access goes through
+   OmniRoute; judges use their own official CLIs.
+2. Never treat an unverified line as fact. Report **UNVERIFIED** and ask once.
+3. Never start or restart a service to make a health check pass. Runtime service
+   launch is a separate, deliberate, Joshua-authorized action.
+4. Report **UP**, **DOWN**, **WRONG SERVICE**, **AUTH MISSING**, **AUTH REJECTED**,
+   or **NOT CONFIGURED** — never an unqualified green or red.
+5. Log node-status changes you confirm into `STATE.md`, not into this file. This
+   file is the stable reference; `STATE.md` is the session diary.
