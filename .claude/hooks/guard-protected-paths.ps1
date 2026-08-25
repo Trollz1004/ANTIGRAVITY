@@ -52,11 +52,15 @@ in the transcript rather than an invisible file write.
 }
 
 # ── stale repo root ───────────────────────────────────────────────────────
-if ($p -match '^f:\\antigravity\\') {
-  Deny "F:\ANTIGRAVITY is the ARCHIVE clone (old disk), not the live repo." @"
+# Match ANY drive but C:. Drive letters move when disks are added or swapped -
+# the old F:\ANTIGRAVITY became D:\ANTIGRAVITY on 2026-08-25 and a letter-
+# specific guard would have silently stopped guarding anything.
+if ($p -match '^(?!c:)[a-z]:\\antigravity\\') {
+  $clone = ($p -split '\\')[0].ToUpper() + '\ANTIGRAVITY'
+  Deny "$clone is an ARCHIVE clone (old disk), not the live repo." @"
 The live root is C:\ANTIGRAVITY (canonical-path directive 2026-08-16, same on
-every node). Anything written to F:\ANTIGRAVITY changes the archive, not the
-running stack or git.
+every node). Anything written to $clone changes the archive, not the running
+stack or git.
 "@
 }
 

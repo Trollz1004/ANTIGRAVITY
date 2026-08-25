@@ -56,8 +56,8 @@ $cfgs = @(
   "$env:USERPROFILE\.openclaw\openclaw.json",
   "$env:USERPROFILE\.env",
   "$env:USERPROFILE\.omniroute\.env",
-  'F:\ANTIGRAVITY\mission-control-v5\server\.env',
-  'F:\ANTIGRAVITY\.mcp.json'
+  'C:\ANTIGRAVITY\mission-control-v5\server\.env',
+  'C:\ANTIGRAVITY\.mcp.json'
 )
 $cfgDir = Join-Path $dest 'configs'
 New-Item -ItemType Directory -Force -Path $cfgDir | Out-Null
