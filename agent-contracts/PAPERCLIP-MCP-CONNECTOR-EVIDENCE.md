@@ -73,7 +73,7 @@ The fix belongs upstream — Paperclip performing an MCP handshake before `tools
 
 **Gemini Judge — `The command line is too long.`** The `gemini_local` adapter runs non-interactively with `--prompt` rather than stdin, so the whole prompt goes on the command line and hits the Windows ~8191-character limit. This is the cause behind `ANT-144` and `ANT-149`. It is an adapter-side limit, not a credential or model problem.
 
-**OpenCode — `Access denied outside allowed hours (08:00–18:00 America/New_York)`.** Working as configured. Runs attempted outside the window fail by design; this is a false red on the board and should not be chased.
+**OpenCode — `Access denied outside allowed hours (08:00–18:00 America/New_York)`.** Superseded 2026-08-25. This was recorded as "working as configured". It was not. Joshua never set a working-hours rule; the 403 came from an OmniRoute `accessSchedule` toggle on an API key, and no such schedule exists in OmniRoute storage. Treat a recurrence as a gateway misconfiguration to clear, not as policy.
 
 **ox-alpha — `No inference provider configured`** from the Hermes gateway. Needs a provider selected in `~/.hermes/.env`.
 

@@ -22,7 +22,9 @@ There are exactly two roles and no seat sits in both. A platform may hold a seat
 
 **Harness workers.** Hermes, OpenClaw, and OpenCode. That is the complete harness roster. They plan, write code, run their own tests, fix their own findings, and prepare a review packet. They have no push rights, no merge rights, and no branch-deletion rights. A harness is never a judge, not even of another harness's work. Since 2026-08-25 the harnesses are no longer the whole build side - the CEO seat and the Grok X.com seat also build, under exactly those restrictions.
 
-Each harness now holds a standing lane under Mission Control rather than waiting on a shared fan-out. Hermes owns YouTube automation. OpenClaw owns marketing. OpenCode owns eBay and recycling automation and is time-gated by policy to 08:00-18:00 America/New_York, so a run refused outside that window is the policy working and must not be reported as a fault. X.com is Grok-only and goes through the grok.com native path, never the X Developer API.
+Each harness now holds a standing lane under Mission Control rather than waiting on a shared fan-out. Hermes owns YouTube automation. OpenClaw owns marketing. OpenCode owns eBay and recycling automation. X.com is Grok-only and goes through the grok.com native path, never the X Developer API.
+
+**No lane is time-gated.** An earlier version of this document said OpenCode was restricted to 08:00-18:00 America/New_York and that a refusal outside that window was "policy working". That was wrong. Joshua never set a working-hours rule. The `403 Access denied outside allowed hours` seen on the board came from an OmniRoute `accessSchedule` toggle on an API key — a gateway setting, observed once in a journal and then mistakenly promoted into governance. No such schedule exists in OmniRoute storage as of 2026-08-25. If the error reappears, clear the schedule on the key and treat the lane as available; never restate it as doctrine.
 
 **Judges.** Only official, first-party platforms reached through an authenticated account sign-in, running the highest reasoning tier available on that account. The judge roster is Claude, Grok, GitHub Copilot, and OpenAI/Codex. Gemini was dropped from the roster on 2026-08-25 at Joshua's direction; the reason is recorded below. A judge reviews a harness's packet, may edit or clean it, and then approves or denies. Only a judge pushes.
 
@@ -78,7 +80,7 @@ The pattern across all four is identical: authenticated subscription sign-in, of
 
 ## The pipeline
 
-Step one. The objective enters as a Paperclip board issue and is dispatched to the agent whose standing lane covers it — Hermes for YouTube, OpenClaw for marketing, OpenCode for eBay and recycling inside its allowed hours, Grok for X.com, the CEO seat for board and company work. One owner per issue. Fanning the same objective at all three harnesses at once was the pre-2026-08-25 pipeline and is no longer how work is assigned; use the on-demand three-opinion path above when a decision genuinely needs independent perspectives.
+Step one. The objective enters as a Paperclip board issue and is dispatched to the agent whose standing lane covers it — Hermes for YouTube, OpenClaw for marketing, OpenCode for eBay and recycling, Grok for X.com, the CEO seat for board and company work. One owner per issue. Fanning the same objective at all three harnesses at once was the pre-2026-08-25 pipeline and is no longer how work is assigned; use the on-demand three-opinion path above when a decision genuinely needs independent perspectives.
 
 Step two. Each harness assigns its subagents a minimum of five skills before any subagent does anything. Five is a floor, not a target. An agent working without its skill set loaded is not permitted to start.
 

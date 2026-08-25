@@ -9,9 +9,10 @@
 > `agent-contracts/PAPERCLIP-MCP-CONNECTOR-EVIDENCE.md`.
 > Freebuff = GUI + free ads API (ads play in it; free is always good). Buffy CEO
 > **assigns** the harness lanes: Hermes → YouTube automation, OpenClaw →
-> marketing, OpenCode → eBay/recycling automation, time-gated 08:00–18:00
-> America/New_York by policy — a failure outside that window is expected, not a
-> fault. X.com is Grok-only through grok.com, not the X Developer API.
+> marketing, OpenCode → eBay/recycling automation. **No lane is time-gated** —
+> the 08:00–18:00 America/New_York window this line used to assert was an
+> OmniRoute `accessSchedule` toggle mistaken for policy, never Joshua's rule.
+> X.com is Grok-only through grok.com, not the X Developer API.
 > **Harnesses never push.** The judge-only wall did not move in the pivot:
 > official CLI judges (Grok trusted pre-CLI and grok.exe, Codex, Claude last
 > resort, Gemini) land **1 repo · 1 root · 1 branch** (`Trollz1004/ANTIGRAVITY`,

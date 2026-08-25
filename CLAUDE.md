@@ -18,7 +18,9 @@ Ollama is installed. It is a fail-safe path only; do not assume a usable local m
 
 Paperclip is an active runtime on the Sabretooth node: `paperclipai@2026.824.0` at `http://127.0.0.1:3100`, company `ANTIGRAVITY Marketing Co` (`ANT`). Joshua designated it Mission Control on 2026-08-25. That supersedes two earlier rulings, both kept here as history: the S1 statement of 2026-08-19 that no Paperclip runtime was active, and the 2026-08-23 revival scope that limited it to marketing and business operations with no repository authority or task governance. Paperclip now holds task governance and runs the judge lanes. It does not hold Git delivery — Rule 5 is unchanged, and only official first-party judges push, merge, or delete. Runtime, connector, and judge-lane state is evidenced in `agent-contracts/PAPERCLIP-MCP-CONNECTOR-EVIDENCE.md`.
 
-Harness lanes are assigned under Paperclip: Hermes to YouTube automation, OpenClaw to marketing, OpenCode to eBay and recycling automation inside its 08:00–18:00 America/New_York policy window. X.com work is Grok-only through the grok.com path, not the X Developer API.
+Harness lanes are assigned under Paperclip: Hermes to YouTube automation, OpenClaw to marketing, OpenCode to eBay and recycling automation. X.com work is Grok-only through the grok.com path, not the X Developer API.
+
+There is no working-hours restriction on any lane. A `403 Access denied outside allowed hours` from OmniRoute is an `accessSchedule` toggle on an API key, not governance — Joshua never set that rule. If one appears, clear the schedule on the key; do not write it back into doctrine.
 
 ## Operating Rules
 
