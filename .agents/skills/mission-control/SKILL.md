@@ -1,39 +1,55 @@
 ---
 name: mission-control
-description: PAPERWEIGHT kanban (NOW/NEXT/BLOCKED/DONE-24H/ROUTINES/ADAPTERS/HERMES HEARTBEAT), WhatsApp/Telegram bridge, adapter health, routines, and verified operating state. Use for task tracking, agent reporting, support workflow, or status queries.
+description: Paperclip is Mission Control on the Sabretooth node — company board at :3100, agent heartbeats via adapter, issues/inbox workflow. Use for task tracking, agent reporting, or status queries.
 ---
 
-# Ops Control & PAPERWEIGHT
+# Mission Control — Paperclip on Sabretooth
 
-## Verified 100% Working State (the statement Josh can say back)
+## Current Truth (2026-08-25)
 
-"All resolved issues. Ops control is working and verified. LIVE STATUS of all tasks is on the board. Goals, routines, and the PAPERWEIGHT kanban are wired. All adapters are online."
+- **Mission Control surface = Paperclip** (`ANTIGRAVITY Marketing Co`), chosen for its
+  built-in official judge CLI. The old PAPERWEIGHT kanban, WhatsApp/Telegram bridge,
+  and T5500 customer-service OpenClaw are retired surfaces — do not reference or revive them.
+- **Node topology:** Sabretooth is the ONLY node. Everything runs on this box:
+  repo `C:\ANTIGRAVITY`, Paperclip API `http://127.0.0.1:3100`, Hermes gateway
+  `http://127.0.0.1:8642` (profile `paperclip-mc`). No T5500, no remote nodes.
+- Health probe: `GET http://127.0.0.1:3100/api/health` → expect `{"status":"ok"}`.
+  Connection refused = Paperclip down; report DOWN with evidence, do not start a
+  second instance on the port.
 
-If this is not literally true, open an ops-drift issue.
+## Board Semantics (Paperclip issues)
 
-## Board Columns (strict semantics)
+| Paperclip concept | Old PAPERWEIGHT column |
+|---|---|
+| Issue `todo` / `in_progress` | NOW |
+| Issue assigned, not checked out | NEXT |
+| Issue `blocked` + comment surfacing the exact question | BLOCKED |
+| Issues closed in last 24h (activity log) | DONE-24H |
+| Heartbeat routines / scheduler heartbeats | ROUTINES |
+| Agent status + adapter config (`/api/agents/me`) | ADAPTERS |
+| Wakeup/heartbeat run history (`/api/wakeups/{id}`) | HERMES HEARTBEAT |
 
-- NOW: active work, owner + elapsed timer, green pulse.
-- NEXT: queued and ready.
-- BLOCKED: exact question surfaced for Josh; red.
-- DONE-24H: last 24h achievements (who + one-line), archived daily at 00:00 to DONE-7D.
-- ROUTINES: cron expression, owner, last fire, next fire (blue).
-- ADAPTERS: every model provider with last successful timestamp + payload shape (green/yellow/red).
-- HERMES HEARTBEAT: last action + bridge status.
+## Agents & Adapters
 
-## Routines (examples)
+- Agents join via invite (`adapterType: hermes_gateway`), get approved by the board,
+  then claim an API key once (stored privately, never echoed).
+- ox-alpha runs from the dedicated Hermes profile `paperclip-mc`
+  (`~\AppData\Local\hermes\profiles\paperclip-mc`) — separate memory, sessions, skills.
+- Dispatch test: `POST /api/agents/{agentId}/wakeup` with
+  `{"source":"on_demand","triggerDetail":"manual","reason":"..."}`.
+- Full API surface: `GET http://127.0.0.1:3100/api/openapi.json`.
+- Heartbeat procedure and issue workflow: see `.agents/skills/paperclip/SKILL.md`.
 
-- Adapter health every 15m
-- Business-only public-surface audit hourly
-- Payment reconciliation daily 06:00
-- T5500 customer-service OpenClaw health every 5m
-- Weekly agent/fleet check-in
+## Verified Operating State
 
-## When to Use
+"All resolved issues. Paperclip is answering on :3100, agents are connected through
+their adapters, wakeup dispatch reaches them, and live task state is on the issues board."
 
-- Reading or updating the ops board state.
-- Adding routines, adapters, or agent reporting.
-- Building or fixing the HTML/TSX at apps/mission-control/ or the backend that feeds it.
-- Checking "is ops control working?" - compare against the verified statement.
+If this is not literally true — verified by probes you actually ran — open an ops-drift
+issue instead of claiming it.
 
-Deployed at https://mission-control.youandinotai.com (or current). Customer-service OpenClaw on T5500 pins it always-on.
+## Governance (unchanged)
+
+- Joshua alone sets authority. Harnesses are delivery-only: no push/merge/delete,
+  no self-approval. Judge-gated landings only; no judge available = BLOCKED.
+- Evidence standard: cite the health response, run record, or commit actually observed.
