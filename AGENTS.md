@@ -28,9 +28,13 @@ Never route automation through a personal subscription lane. Never expose keys, 
 
 ## Runtime and Dashboard Boundary
 
-Mission Control is the intended operational dashboard. A running process, port, or HTTP status alone is not proof of the intended service: verify the expected identity response and report **UP**, **DOWN**, **WRONG SERVICE**, **AUTH MISSING**, **AUTH REJECTED**, or **NOT CONFIGURED**.
+Mission Control is the operational dashboard, and Mission Control is Paperclip: `paperclipai` on the Sabretooth node at `http://127.0.0.1:3100`, company `ANTIGRAVITY Marketing Co` (`ANT`). A running process, port, or HTTP status alone is not proof of the intended service: verify the expected identity response and report **UP**, **DOWN**, **WRONG SERVICE**, **AUTH MISSING**, **AUTH REJECTED**, or **NOT CONFIGURED**.
 
-There is no active Paperclip runtime. If one is deliberately revived later, its scope is limited to marketing and business operations; it is not a repository authority, agent command layer, or Git gate.
+Paperclip is an active runtime and is the agent command layer: agents are hired, waked, heartbeated, and given their tool profiles there, and the judge lanes run inside it as CLI adapters. It does not hold Git delivery. The source-control wall above is unchanged — the judge lane is still the only lane that lands work — and Paperclip is only where a judge records that authorization: the documented path is a `JUDGE-PUSH <full-sha>` sentinel comment that the bridge relay executes as exactly that push (`ops/paperclip-ceo/JUDGE-AGENTS.md`). It is never a path for a worker to push.
+
+The 2026-08-19 ruling — that there is no active Paperclip runtime, and that any revived one would be confined to marketing and business operations with no repository, agent-command, or Git authority — was **superseded by Joshua on 2026-08-25**. It is kept here as history, not as instruction.
+
+Lane assignments and their time gates live in Paperclip. A run refused outside its permitted window is policy, not a fault; do not chase it as a red. Runtime state observed on 2026-08-25 — judge lanes, adapters, connectors, and which of them are genuinely broken — is recorded in `agent-contracts/PAPERCLIP-MCP-CONNECTOR-EVIDENCE.md`.
 
 ## Public Product Boundary
 
@@ -42,7 +46,9 @@ Do not claim completion from an exit code, a status code, or a dashboard color a
 
 ## Capability Baseline
 
-Every agent and every harness — the FreeBuff orchestrator included — runs with the shared MCP servers and standing skills defined in `agent-contracts/CAPABILITY-BASELINE.md`. A worker loads its standing skills and confirms its MCP tools answer before it starts task work; a harness that cannot reach the baseline reports **BLOCKED** rather than proceeding degraded. The orchestrator's job on any capability change is to hand each harness that file, have it wire its own runtime config, and collect a tested confirmation — never to grant itself authority or push the result.
+Every agent and every harness — the FreeBuff orchestrator included — runs with the shared MCP servers and standing skills defined in `agent-contracts/CAPABILITY-BASELINE.md`. A worker loads its standing skills and confirms its tools answer with a real call before it starts task work; "configured" is not a confirmation. A harness that cannot reach the baseline reports **BLOCKED** rather than proceeding degraded. The orchestrator's job on any capability change is to hand each harness that file, have it wire its own runtime config, and collect a tested confirmation — never to grant itself authority or push the result.
+
+Paperclip now also delivers this baseline to the lanes it runs, which changes where to look when a tool is missing rather than changing the rule. A tool connection installed company-wide reaches a run only through a tool-profile binding — an install with no binding is inert. A CLI lane additionally reads its own MCP config and speaks MCP itself, so Paperclip's broker and a lane's own tool set can disagree; verify the one you are actually calling through, with a real call.
 
 ## Standing Safety Rules
 

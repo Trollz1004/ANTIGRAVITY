@@ -26,6 +26,5 @@
 
 ## LOW
 
-- [ ] FCC setup: enable OpenRouter free NVIDIA/Nemotron path in OmniRouter; remove dependency on :8082 proxy
-- [ ] FCC hijack runbook: retire; proxy no longer used
+- [x] FCC: purged from the repository 2026-08-25 and permanently banned. Both FCC items here are closed by that ban, not by completion — see `agent-contracts/FCC-STATUS.md`. Do not reopen.
 - [ ] Reboot test: validate ANTIGRAVITY-Bootstrap + power-loss recovery on T5500

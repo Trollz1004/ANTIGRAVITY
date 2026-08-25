@@ -219,7 +219,7 @@ export interface BrainMcpStatus {
   servers: Array<{ name: string; status: string; toolsCount: number }>;
 }
 
-export type BridgeTarget = 'FCC-Claude' | 'OpenClaw' | 'Tri-Agent Swarm';
+export type BridgeTarget = 'Hermes' | 'OpenClaw' | 'Tri-Agent Swarm';
 
 export interface BridgeStatus {
   name: BridgeTarget;

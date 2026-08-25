@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# TAB 1 - REAL OPUS COFOUNDER (Claude Pro subscription, NOT fcc, NOT ollama)
+# TAB 1 - REAL OPUS COFOUNDER (Claude subscription account auth, NOT ollama)
 # Banner should read "Claude Pro". If it says API usage billing or a model
 # name, you are NOT in the real Opus tab - surface it.
 set +e

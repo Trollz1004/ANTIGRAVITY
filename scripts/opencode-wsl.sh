@@ -1,23 +1,30 @@
 #!/usr/bin/env bash
-# OpenCode WSL launcher — sources FCC env for all provider keys
+# OpenCode WSL launcher.
+#
+# Model access goes through the authenticated OmniRoute OpenAI-compatible
+# gateway, which is the normal route for harness work. Configure it in the
+# environment before launching (see agent-contracts/CAPABILITY-BASELINE.md);
+# never hardcode a credential here.
+#
+# There is deliberately no ANTHROPIC_API_KEY. Claude is reached through the
+# official CLI under account auth, and doctrine is explicit that an Anthropic
+# API key is never needed and may never exist.
 set -euo pipefail
 
 REPO_ROOT="/mnt/c/ANTIGRAVITY"
-FCC_ENV="${HOME}/.fcc/.env"
 OPCODE_BIN="${HOME}/.opencode/bin/opencode"
 
-# Source FCC env for API keys (Gemini, Grok, OpenRouter, etc.)
-if [[ -f "${FCC_ENV}" ]]; then
+# Optional local env for the gateway endpoint and any provider keys OpenCode
+# needs. Keep it outside the repository.
+OPENCODE_ENV="${OPENCODE_ENV:-${HOME}/.opencode/.env}"
+if [[ -f "${OPENCODE_ENV}" ]]; then
   set -a
-  source "${FCC_ENV}"
+  # shellcheck disable=SC1090
+  source "${OPENCODE_ENV}"
   set +a
 fi
 
-# Export key vars with defaults from FCC env
-export GEMINI_API_KEY="${GEMINI_API_KEY:-}"
-export XAI_API_KEY="${XAI_API_KEY:-}"
-export OPENROUTER_API_KEY="${OPENROUTER_API_KEY:-}"
-export ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-fcc-no-auth}"
+export OPENAI_COMPAT_BASE_URL="${OPENAI_COMPAT_BASE_URL:-}"
 
 export TERM=xterm-256color
 export NO_COLOR=0

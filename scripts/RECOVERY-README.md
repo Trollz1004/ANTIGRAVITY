@@ -2,6 +2,8 @@
 
 Plain-English instructions. Read this if a node has been factory-reset and you need to bring it back online.
 
+**Superseded 2026-08-25.** One ruling in this guide is no longer in force. The line under "What is NOT in these scripts" that read "Paperclip in any form. Paperclip is retired. Do not install it." is itself retired. Paperclip is the live Mission Control runtime on Sabretooth, and a rebuilt Sabretooth is not recovered until it is back. See that section, and `agent-contracts/PAPERCLIP-MCP-CONNECTOR-EVIDENCE.md` for the observed state of that runtime. Nothing else in this guide was re-verified in that pass. In particular the node table and every T5500 instruction below pre-date the Sabretooth-only ruling recorded in `.agents/skills/mission-control/SKILL.md`, and the tunnel runbook this guide links twice is no longer in the tree.
+
 ---
 
 ## Which script to run
@@ -136,6 +138,12 @@ codex --version
 # Hermes dashboard (after hermes auth login)
 # Open browser: http://127.0.0.1:9119
 
+# Paperclip Mission Control (Sabretooth) - check identity, not just the port.
+# /api/health reports status and a version but never names the product, so a 200 there
+# proves only that something is listening. Check the name as well.
+Invoke-RestMethod http://127.0.0.1:3100/api/health                    # expect status "ok"
+(Invoke-RestMethod http://127.0.0.1:3100/api/openapi.json).info.title # expect "Paperclip API"
+
 # mission-mcp (T5500 only)
 Invoke-WebRequest http://localhost:3901/ -SkipHttpErrorCheck -UseBasicParsing
 
@@ -196,7 +204,7 @@ These contain the pre-wipe state of each node and are the source of truth if you
 
 ## What is NOT in these scripts
 
-- Paperclip in any form. Paperclip is retired. Do not install it.
+- Paperclip installation or restore steps. The scripts do not stand Paperclip up, and that has not changed — but the ruling that used to sit here, "Paperclip is retired, do not install it," is **superseded as of 2026-08-25**. Paperclip is the active Mission Control runtime on Sabretooth (`paperclipai`, `http://127.0.0.1:3100`, company "ANTIGRAVITY Marketing Co"), and the judge lanes and Paperclip's own MCP connectors hang off it. Bringing it back after a Sabretooth rebuild is a separate, deliberate step taken once the bootstrap script has finished; the node is not recovered without it. Its observed state and the open blockers are recorded in `agent-contracts/PAPERCLIP-MCP-CONNECTOR-EVIDENCE.md`. Mission Control does not move the push wall: harnesses still never push, merge, or delete, and only the judge lane delivers.
 - Any credential values. All secrets come from the OneDrive Personal Vault at runtime.
 - The youandinotai.com Cloudflare Pages binding — that is managed via Cloudflare Pages dashboard (custom domains UI), separate from the tunnel work.
 - The tunnel migration itself (wiring cloudflared to serve `mcp.youandinotai.com`, `hermes.youandinotai.com`, `dashboard.aidoesitall.website` from T5500) — that is covered in `C:\Antigravity\briefings\TUNNEL-MIGRATION-RUNBOOK-2026-05-12.md`.
