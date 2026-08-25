@@ -102,7 +102,7 @@ export default function DateAppPanel() {
                   <span className="badge">{key === 'customer_only' ? 'CUSTOMER' : 'WITH TEST'}</span>
                   <span>{a.payments} payment{a.payments === 1 ? '' : 's'}</span>
                   <span className="result__meta">
-                    gross {money(a.gross_cents)} · reserve {money(a.reserve_cents)} · operating {money(a.operating_cents)}
+                    gross {money(a.gross_cents)}
                   </span>
                 </div>
               );

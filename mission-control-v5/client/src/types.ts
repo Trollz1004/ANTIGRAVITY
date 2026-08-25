@@ -362,8 +362,10 @@ export interface DateAppMetrics {
     user_count: number;
   };
   allocations: {
-    customer_only?: { payments: number; gross_cents: number; reserve_cents: number; operating_cents: number };
-    with_test?: { payments: number; gross_cents: number; reserve_cents: number; operating_cents: number };
+    // Payments and gross only. There is no revenue split; do not reintroduce
+    // reserve/operating fields here or in the API that feeds them.
+    customer_only?: { payments: number; gross_cents: number };
+    with_test?: { payments: number; gross_cents: number };
   } | null;
   frontend: { url: string; reachable: boolean };
   public: { site: string; api: string };
