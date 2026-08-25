@@ -53,6 +53,37 @@ Check identity, not the port. `/api/health` returns `status: ok` and a version
 but never names the product; `GET /api/openapi.json` → `info.title` must read
 `"Paperclip API"`. A 200 alone proves only that something is listening.
 
+## The stack, as finalized 2026-08-25
+
+One command owns bring-up: `C:\ANTIGRAVITY\FABLES-HOUSE.cmd`. Never hand-start a
+service before trying it, and never start a second instance because a port looks
+down — check identity first.
+
+| What | Where | How to know it is really it |
+| --- | --- | --- |
+| Paperclip = Mission Control | `127.0.0.1:3100` | `GET /api/openapi.json` → `.info.title` == `Paperclip API` |
+| Date App frontend / backend | `:3200` / `:8000` | backend `/health` → `db_connected`, `square_connected` |
+| OmniRoute (harness route) | `:20128` / `:20129` | `/api/v1/models`. Judges never use it |
+| Hermes | `:9119` | owns this port; DreamOps Bridge is 9133 |
+| Mission Control v5 | `:3151` | legacy, not the hub; serves the static `/paperweight/` demo |
+
+Public surface is one cloudflared tunnel: apex and `www` → `:3200`,
+`api.youandinotai.com` → `:8000`. Nothing else. There is no `paperclip.*`
+hostname. `wrangler` is not installed — report **NOT CONFIGURED** rather than
+assuming it.
+
+**MCP tools.** Your own session loads them from `~/.agents/mcp.json`. Paperclip's
+broker is a *separate* path with its own catalog — the two can disagree, so
+verify the one you are actually calling through. As of 2026-08-25 the broker
+carries 57 tools across four stdio servers (brain 8, mission 11, files 14,
+playwright 24), bound to the "Always-on MCP (all agents + CEO)" profile.
+OmniRoute and Supabase are **BLOCKED** in that broker for reasons recorded in
+the evidence packet; neither blocks a judge.
+
+**Payments.** There is no revenue split. The ledger reports payments and gross
+only. Square is the only rail. Do not reintroduce reserve or operating fields,
+and do not describe revenue as an allocation.
+
 ## 2. Work
 
 Normal doctrine applies and this skill does not soften any of it. Harnesses

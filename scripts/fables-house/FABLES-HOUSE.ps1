@@ -60,6 +60,23 @@ $Stages = @(
                  if (Test-Path $omni) { Start-Process -FilePath $omni -WindowStyle Hidden }
                  else { Log '  OmniRoute npm-global missing — npm i -g omniroute needed' 'Red' } } }
 
+    # Paperclip IS Mission Control (Joshua, 2026-08-25). It carries the board,
+    # the agents, and the judge CLI lanes, and it runs its own embedded Postgres.
+    # The probe is an IDENTITY check, not a port check: a port answering proves
+    # only that something is listening, and starting a second instance on 3100
+    # would be worse than leaving it down.
+    @{ Name = 'Paperclip :3100 (Mission Control)'; Required = $true
+       Probe = { Test-Http 'http://127.0.0.1:3100/api/openapi.json' 20 'Paperclip API' }
+       Heal  = { if (Test-Port 3100) {
+                     Log '  :3100 answers but is NOT Paperclip — WRONG SERVICE. Not starting a second one.' 'Red'
+                 } else {
+                     $npx = "$env:APPDATA
+pm
+px.cmd"
+                     if (-not (Test-Path $npx)) { $npx = 'npx' }
+                     Start-Process -FilePath $npx -ArgumentList '-y','paperclipai','run' -WindowStyle Hidden
+                 } } }
+
     @{ Name = 'Frontend :3200 (production bundle)'; Required = $true
        Probe = { Test-Http 'http://127.0.0.1:3200/' 10 'assets/index-' }
        Heal  = { Start-Process cmd -ArgumentList '/c','C:\ANTIGRAVITY\mission-control-v5\scripts\tab-dateapp.cmd' -WindowStyle Hidden } }
@@ -74,7 +91,9 @@ $Stages = @(
                      Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config','C:\Users\joshi\.cloudflared\config.yml','run','sabretooth-main' -WindowStyle Hidden
                  } else { Log '  cloudflared runs but public probe failed — check Cloudflare edge / DNS' 'Yellow' } } }
 
-    @{ Name = 'Mission Control :3151'; Required = $true
+    # No longer the hub - Paperclip is. Kept optional because it still serves the
+    # static /paperweight/ page. A failure here must never block bring-up.
+    @{ Name = 'Mission Control v5 :3151 (legacy)'; Required = $false
        Probe = { Test-Http 'http://127.0.0.1:3151/' 10 }
        Heal  = { Start-Process cmd -ArgumentList '/c','C:\ANTIGRAVITY\mission-control-v5\scripts\tab-mission-control.cmd' -WindowStyle Hidden } }
 
@@ -92,6 +111,45 @@ $Stages = @(
        Heal  = { $o = "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe"
                  if (Test-Path $o) { Start-Process $o -ArgumentList 'serve' -WindowStyle Hidden }
                  else { Log '  Ollama missing: winget install Ollama.Ollama' 'DarkYellow' } } }
+
+    # Hermes owns 9119. DREAM's DreamOps Bridge was moved to 9133 in 2026-08-25
+    # precisely so it stops fighting this. Do not reassign 9119.
+    @{ Name = 'Hermes :9119'; Required = $false
+       Probe = { Test-Port 9119 }
+       Heal  = { $h = "$env:LOCALAPPDATA\hermes\hermes-agentin\hermes.exe"
+                 if (Test-Path $h) { Start-Process $h -ArgumentList 'serve' -WindowStyle Hidden }
+                 else { Log '  Hermes not installed at %LOCALAPPDATA%\hermes — skipping' 'DarkYellow' } } }
+
+    @{ Name = 'OpenClaw :18789'; Required = $false
+       Probe = { Test-Port 18789 }
+       Heal  = { $oc = "$env:APPDATA
+pm\openclaw.cmd"
+                 if (Test-Path $oc) { Start-Process -FilePath $oc -WindowStyle Hidden }
+                 else { Log '  OpenClaw npm-global missing — npm i -g openclaw needed' 'DarkYellow' } } }
+
+    # READ-ONLY verification, never a launcher. The judge lanes (Claude, Codex,
+    # Grok), the CEO seat, OpenCode and FreeBuff are Paperclip AGENTS driven by
+    # its heartbeat scheduler - they are not services with ports, and starting
+    # them from here would duplicate what Paperclip already owns. This stage
+    # just reports whether Paperclip is actually carrying them, so a silent
+    # empty board does not look like a healthy stack.
+    @{ Name = 'Paperclip lanes + MCP tools (report only)'; Required = $false
+       Probe = { try {
+                     $cid = '92223de0-b36b-4d63-93ca-50ebe5007e68'
+                     $ag = Invoke-RestMethod -Uri "http://127.0.0.1:3100/api/companies/$cid/agents" -TimeoutSec 15
+                     $agents = if ($ag.agents) { $ag.agents } else { $ag }
+                     $errored = @($agents | Where-Object { $_.status -eq 'error' })
+                     $prof = Invoke-RestMethod -Uri "http://127.0.0.1:3100/api/companies/$cid/tools/profiles" -TimeoutSec 15
+                     $profiles = if ($prof.profiles) { $prof.profiles } else { $prof }
+                     $always = $profiles | Where-Object { $_.name -like 'Always-on MCP*' } | Select-Object -First 1
+                     $tools = if ($always) { @($always.entries).Count } else { 0 }
+                     Log ("  lanes: {0} agents, {1} errored | always-on MCP profile: {2} connections" -f @($agents).Count, $errored.Count, $tools) 'DarkGray'
+                     if ($errored.Count -gt 0) {
+                         Log ("  errored lanes: {0}" -f (($errored | ForEach-Object { $_.name }) -join ', ')) 'Yellow'
+                     }
+                     return $true
+                 } catch { return $false } }
+       Heal  = { Log '  Paperclip not answering its agent API yet — it heals via the :3100 stage, not here.' 'DarkYellow' } }
 )
 
 function Invoke-Stage($stage, [int]$maxAttempts = 0) {
