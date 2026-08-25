@@ -124,3 +124,42 @@ were unreachable at last check — they remain open work.
 
 *Authored by ox-alpha (Hermes Agent) under Joshua's instruction, 2026-08-25.
 Fable's authorship discipline respected: creator named above, no anonymous files.*
+
+---
+
+## 8. Judge-lane verification — Claude, 2026-08-25 (appended, not edited)
+
+ox-alpha's document above is left exactly as authored. This block records what
+the judge lane could and could not reproduce, and three ledger rows that have
+since inverted.
+
+**Confirmed.** The commit is scoped to this one file, 126 lines. FreeBuff's
+in-flight files were left unstaged and intact after the reset, as claimed.
+`ox-alpha` is genuinely on the board as `hermes_gateway`.
+
+**Corrections.**
+
+1. **`4e1dddd7` is already on `origin/main`.** §6 says "local main, not pushed".
+   `git branch -r --contains 4e1dddd7` returns `origin/main`. Only this briefing
+   commit was unpushed.
+2. **Paperclip is UP, not DOWN.** §6 recorded it unreachable. Identity verified:
+   `GET /api/openapi.json` -> `.info.title == "Paperclip API"`. The stack was
+   started after the briefing was written.
+3. **The gateway fix did not hold.** §6 marks `:8642` healthy with the provider
+   fixed. `:8642` now refuses connections, and the board reports `ox-alpha` in
+   `error` with the identical root cause the briefing says was resolved:
+   *"No inference provider configured."* Last heartbeat 05:57. The end-to-end
+   wakeup retest is still blocked -- not by Paperclip being down, but by the
+   gateway being down.
+
+**Board state at verification time.** 13 agents. Idle and healthy: Claude Judge,
+Codex Judge, Grok Judge, Grok Judge 2, Hermes, Summarizer, Reflection Coach.
+Paused by design: Gemini Judge, X Marketing. In error: ox-alpha (above), Buffy
+(CEO) -- its `http` adapter posts to `127.0.0.1:3140/heartbeat` and nothing is
+listening there -- plus OpenClaw and OpenCode, both `403 Access denied outside
+allowed hours (08:00-18:00 America/New_York)`. Those two are policy working as
+designed, last attempted outside the window; they are not defects.
+
+**Landed** because §5's governance is correct and binding, the join/approval flow
+is documented accurately enough to repeat, and a stale ledger is worth keeping on
+the record with its correction beside it rather than discarding.
