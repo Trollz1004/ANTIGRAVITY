@@ -10,6 +10,8 @@ There are **86 loadable top-level skills** in `.agents/skills`. The nested dupli
 
 Every harness reads its own `.agents/journals/<harness>/STATE.md` at session start and writes a compact state entry at session end. Repository knowledge and the Graphy views are the active context surfaces; Obsidian may mirror the repository journals when Joshua configures a vault. No retired external-memory dependency is active.
 
+**The Claude judge lane loads `judge-house` at session start, before planning or touching code.** It reads what previous sessions landed and left blocked, and it writes the record another judge — or the next Claude session, which will remember none of this — needs to act on the work. It also carries the judge-routing rule: Claude is reserved for DREAM Online and the final merge gate, while routine marketing and Date App verdicts go to Codex and Grok.
+
 Skills are loaded before planning or assigning subagents. `i-have-adhd` is a token-saving, concise-output skill—not a diagnosis. Use Superpowers brainstorming for behavior or feature design, Agent-Reach for external research, browser-use with approved cookie sync for authenticated browser work, find-skills before hand-rolling, TDD for code changes, and systematic debugging for a failure or unexpected result.
 
 Ollama is installed. It is a fail-safe path only; do not assume a usable local model is present without checking its live catalog. The OmniRoute gateway is installed as a global npm service and is the normal authenticated OpenAI-compatible route for harness work. Use `OPENAI_COMPAT_BASE_URL` and its runtime authorization configuration; do not hardcode credentials or endpoint secrets.
