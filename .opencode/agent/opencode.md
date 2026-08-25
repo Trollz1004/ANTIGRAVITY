@@ -16,8 +16,10 @@ OpenCode owns **eBay listings and onlinerecycle.net** automation:
   local worker (`onlinerecycle-local-worker.js` + PowerShell launchers),
   live-audit (`ewaste-intake-live-ok-audit.js`), HTML export
   (`export-ebay-ready-html.js`).
-- Rules: 1-wallet, 10% reserve, founder-directed. Never payment/fundraiser
-  wording. Never claim all proceeds go to Shriners.
+- Rules: single wallet, founder-directed. There is no revenue split and no
+  reserve percentage; do not reintroduce either. Never use payment, fundraiser,
+  or charitable wording in any surface, and never claim proceeds go to any
+  third party or cause.
 - Output: code, tests, and verification evidence (real command output) —
   nothing publishes/lands without the judge lane.
 
