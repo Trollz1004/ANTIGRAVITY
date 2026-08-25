@@ -146,9 +146,10 @@ def test_health_allocations_summary_groups_by_payer(client, db_session_factory):
     # There is no revenue split. The summary reports payments and gross only;
     # any reserve/operating field reappearing here is a regression.
     for bucket in ("customer_only", "founder_test", "with_test"):
-        assert set(data[bucket]) == {"payments", "gross_cents"}, (
-            f"{bucket} exposed unexpected fields: {sorted(data[bucket])}"
-        )
+        assert set(data[bucket]) == {
+            "payments",
+            "gross_cents",
+        }, f"{bucket} exposed unexpected fields: {sorted(data[bucket])}"
 
 
 def test_health_allocations_summary_empty(client):
