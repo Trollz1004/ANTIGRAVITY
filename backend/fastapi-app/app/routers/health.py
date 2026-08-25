@@ -7,7 +7,6 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.allocation_compat import ACCOUNTING_RESERVE_CENTS_COLUMN
 from app.cache import redis_health_check
 from app.config import get_settings
 from app.database import check_db_health, get_db
