@@ -73,15 +73,16 @@ do not implement repo changes yourself. You do not judge. You do not push.
   DNS). State: `ops/paperclip-ceo/state/mission-control.json`. Read it — you
   must know the pool count and every health check.
 - Keep the full repo and services up: `git pull --ff-only origin main` in
-  C:\ANTIGRAVITY (never push), probe Mission Control :3151, OmniRoute
-  :20128/:20129 (`/v1/models`), Paperclip :3100, bridge :3140, DateApp
+  C:\ANTIGRAVITY (never push), probe Mission Control — which is Paperclip
+  :3100, not the retired :3151 app — OmniRoute
+  :20128/:20129 (`/v1/models`), bridge :3140, DateApp
   :3200/:8000, cloudflared + DNS, support routes. Verify identity first
   (a port answering is not identity). NEVER start or restart services —
   runtime service launch is a separate, deliberate, Joshua-authorized action.
   Report the exact status (UP/DOWN/WRONG SERVICE/AUTH MISSING/AUTH
   REJECTED/NOT CONFIGURED) and escalate via an issue.
 - **X.com is Grok-only.** Do not search, fetch, or post on X yourself. Do not
-  ask Hermes, OpenClaw, OpenCode, Codex, Claude, or Gemini to touch X. Assign
+  ask Hermes, OpenClaw, OpenCode, Codex, or Claude to touch X. Assign
   X work to `X Marketing (Grok)`. Official X API is rate-limited and billed;
   grok.com native X tools are the higher-rate path. See
   `ops/paperclip-ceo/X-GROK-STRATEGY.md`.
@@ -105,9 +106,12 @@ do not implement repo changes yourself. You do not judge. You do not push.
 - Judge lane: `Claude Judge` (claude_local, final gate, **LAST RESORT** —
   reserved for Joshua's DREAM Online MMORPG work; use only when no other
   judge can handle it and say why), `Codex Judge` + `Grok Judge` (routine),
-  `Gemini Judge` (routine; GCA tier BLOCKED at Google). Route packets to
-  judges via issues. Only a judge pushes, merges, or deletes branches, and
-  only to keep one `main`. Prefer Codex/Grok/Gemini for every routine verdict.
+  and `GitHub Copilot`. `Gemini Judge` was **dropped from the roster
+  2026-08-25** — Google no longer supports the CLI for individuals — and its
+  lane is paused; do not route to it or revive it. Route packets to judges via
+  issues. Every packet an agent hands you goes to a judge; you never land work
+  and never review in a judge's place. Only a judge pushes, merges, or deletes
+  branches, and only to keep one `main`. Prefer Codex/Grok for routine verdicts.
   Grok is a Joshua-approved trusted official platform (pre-CLI and grok.exe).
 - Journal each session in `ops/paperclip-ceo/STATE.md`.
 

@@ -1,5 +1,17 @@
 # Shared Agent Memory — Current State
 
+> **SUPERSEDED — DO NOT READ AS CURRENT (marked 2026-08-25, judge lane).**
+> Everything below is a snapshot from 2026-07-09 describing a topology that no
+> longer exists: a T5500 business node, Sabretooth as a DREAM-only node, an
+> Agent Hub, an OmniRouter on :11436, and FCC agents on :8082. None of that is
+> true now. Sabretooth is the only node, `C:\ANTIGRAVITY` is the sole working
+> tree, Mission Control is Paperclip at `http://127.0.0.1:3100`, and **FCC is
+> permanently banned** (`agent-contracts/FCC-STATUS.md`). Any `fcc-claude`
+> provider entry in the table below is a dead record, not a configured agent.
+> For real current state read `AGENTS.md`, `CLAUDE.md`, and
+> `agent-contracts/MISSION-CONTROL-GOVERNANCE.md`. Kept only as append-only
+> history.
+
 > Append-only after decisions. All agents may READ. No agent may SUMMARIZE or MODIFY another agent's private journal.
 > updated: 2026-07-09T07:41:00Z
 

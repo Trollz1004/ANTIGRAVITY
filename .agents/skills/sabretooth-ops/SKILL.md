@@ -15,7 +15,11 @@ command here was executed and verified on this machine that day.
 - Installed: Claude Code (`~\.local\bin\claude.exe`), git, Node 24 + pnpm via
   corepack, Python 3.13, Docker (daemon flaky — don't depend on it),
   OmniRoute (npm global), OpenWork desktop (`%LOCALAPPDATA%\Programs\@openworkdesktop`).
-- NOT installed (wiped 2026-08-16): Hermes, OpenClaw, FCC, OpenCode harnesses, Ollama.
+- Harnesses (Hermes, OpenClaw, OpenCode) were wiped 2026-08-16 and now run as
+  lanes on the Paperclip board rather than as standalone installs; check the
+  board for their real state instead of assuming. Ollama is installed and is a
+  fail-safe path only. FCC is permanently purged — not "not installed" but
+  banned; see agent-contracts/FCC-STATUS.md.
 - `drift.cmd` (in `~\.local\bin`, Win+R-able) = resume Claude in C:\ANTIGRAVITY
   with permissions bypassed.
 
@@ -68,7 +72,7 @@ Get-CimInstance Win32_Process -Filter "Name='node.exe'" |
 - Health: `/api/health` — note `routerLive`/"OMNIROUTE LIVE" means *configured*,
   not *answering*. Probe :20128 directly for the truth.
 - Serves: board UI, `/paperweight/` (static command center; sample data),
-  knowledge graph API, bridge (`/api/bridge/fcc|openclaw`), MCP at `/api/mcp`.
+  knowledge graph API, bridge (`/api/bridge/openclaw`), MCP at `/api/mcp`.
 - Typecheck/build: `npm run typecheck` / `npm run build` at `mission-control-v5\`.
 
 ## The judge-gated swarm (governance — AGENTS.md §7)

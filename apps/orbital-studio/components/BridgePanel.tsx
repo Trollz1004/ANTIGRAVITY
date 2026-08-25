@@ -3,19 +3,19 @@ import { Send, Bot, Terminal, Cpu, CheckCircle2, Shield, Sparkles } from 'lucide
 
 interface BridgeMessage {
   id: string;
-  sender: 'User' | 'FCC-Claude' | 'OpenClaw' | 'Hermes' | 'Adversarial Judge';
+  sender: 'User' | 'Hermes' | 'OpenClaw' | 'Adversarial Judge';
   text: string;
   timestamp: string;
   skillsUsed?: string[];
 }
 
 export const BridgePanel: React.FC = () => {
-  const [targetAgent, setTargetAgent] = useState<'FCC-Claude' | 'OpenClaw' | 'Tri-Agent Swarm'>('FCC-Claude');
+  const [targetAgent, setTargetAgent] = useState<'Hermes' | 'OpenClaw' | 'Tri-Agent Swarm'>('Hermes');
   const [inputMessage, setInputMessage] = useState('');
   const [messages, setMessages] = useState<BridgeMessage[]>([
     {
       id: '1',
-      sender: 'FCC-Claude',
+      sender: 'Hermes',
       text: 'Bridge online. Standing by for direct code architecture & refactoring commands.',
       timestamp: new Date().toLocaleTimeString(),
       skillsUsed: ['system_skills/gemini_api', 'self-improving-agent']
@@ -46,11 +46,11 @@ export const BridgePanel: React.FC = () => {
 
     setTimeout(() => {
       let reply: BridgeMessage;
-      if (targetAgent === 'FCC-Claude') {
+      if (targetAgent === 'Hermes') {
         reply = {
           id: `reply-${Date.now()}`,
-          sender: 'FCC-Claude',
-          text: `FCC-Claude validated prompt "${userMsg.text}". Refactored component tree and verified strict TypeScript safety across 4 mandated skills.`,
+          sender: 'Hermes',
+          text: `Hermes received prompt "${userMsg.text}". A harness prepares a review packet; only a judge validates and lands it.`,
           timestamp: new Date().toLocaleTimeString(),
           skillsUsed: ['system_skills/gemini_api', 'system_skills/firebase-skill', 'self-improving-agent', 'system_skills/realtime_guidelines']
         };
@@ -88,13 +88,13 @@ export const BridgePanel: React.FC = () => {
             <h3 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
               AI Bridge Panel
             </h3>
-            <p className="text-[10px] font-mono text-gray-400 uppercase">Direct Relay to FCC-Claude & OpenClaw</p>
+            <p className="text-[10px] font-mono text-gray-400 uppercase">Direct Relay to Hermes &amp; OpenClaw</p>
           </div>
         </div>
 
         {/* Agent Selector */}
         <div className="flex bg-black/40 p-1 rounded-xl border border-white/10 text-xs font-mono">
-          {(['FCC-Claude', 'OpenClaw', 'Tri-Agent Swarm'] as const).map(agent => (
+          {(['Hermes', 'OpenClaw', 'Tri-Agent Swarm'] as const).map(agent => (
             <button
               key={agent}
               onClick={() => setTargetAgent(agent)}
@@ -125,7 +125,7 @@ export const BridgePanel: React.FC = () => {
           >
             <div className="flex justify-between items-center mb-1.5 text-[10px] text-gray-400 font-sans">
               <span className="font-black uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
-                {msg.sender === 'FCC-Claude' && <Cpu size={12} className="text-indigo-400" />}
+                {msg.sender === 'Hermes' && <Cpu size={12} className="text-indigo-400" />}
                 {msg.sender === 'OpenClaw' && <Terminal size={12} className="text-green-400" />}
                 {msg.sender === 'Adversarial Judge' && <Shield size={12} className="text-yellow-400" />}
                 {msg.sender}

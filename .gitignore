@@ -83,9 +83,7 @@ apps/paperweight/data/
 
 # Agent harness configs (NEVER commit — token/key storage)
 .opencode/.env
-.fcc/.env
 .opencode/STATE.md
-.fcc/STATE.md
 .hermes/.env
 .hermes/STATE.yaml
 .hermes/state.yaml
