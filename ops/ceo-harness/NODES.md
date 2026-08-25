@@ -17,10 +17,37 @@ around it.
 no laptop node, and **no E: drive anywhere in this topology**. Text asserting
 otherwise is stale evidence, not instruction.
 
-- GPU: NVIDIA GeForce GTX 1070, 8 GB VRAM, driver `32.0.15.6094`.
-- RAM: 64 GB. Free space on `C:` was 277 GB when this was written.
-- Ollama is installed and answering, and is a **fail-safe path only** — never the
-  default route.
+- GPU: **AMD Radeon RX 6800, 16 GB VRAM**, driver `32.0.21045.5002`, installed
+  2026-08-25. It replaced the GTX 1070 — the 1070 is out of the machine. Stale
+  NVIDIA driver keys remain in the registry and `nvidia-smi` is still on PATH;
+  neither means an NVIDIA card is present. Check `Win32_VideoController`.
+- RAM: 64 GB.
+- Ollama is installed and is a **fail-safe path only** — never the default route.
+  Its CUDA path went out with the 1070, so treat local-model acceleration as
+  **UNVERIFIED** until someone measures it on the AMD card.
+
+### Disks
+
+Two disks, and only two. There is still **no E: drive**, and `C:\ANTIGRAVITY` is
+still the only repo root.
+
+| Disk | Size | Letter | Label | Holds |
+| --- | --- | --- | --- | --- |
+| 0 (Fanxiang S101, MBR, boot) | 476 GB | `C:` | SABRETOOTHNODE | OS, `C:\ANTIGRAVITY` — the live tree |
+| 1 (SSD 1TB, GPT) | 931 GB | `F:` → `D:` pending | DREAM ONLINE MMORPG | DREAM Online, `hermes-workspace`, an ANTIGRAVITY **archive clone** |
+
+Disk 1 is being returned to its original letter `D:`. That needs an elevated
+shell, so until someone confirms it, **read the letter off the machine** rather
+than off this table: `Get-Volume | Where-Object FileSystemLabel -like 'DREAM*'`.
+
+Disk 1 came out of an earlier build — its folders carry Windows SIDs from user
+accounts that no longer exist on this node, and it still has a `c\Users\joshl`
+tree from the pre-reinstall profile name. Git refuses to read its repos until
+they are added to `safe.directory`. That is expected, not corruption.
+
+`<drive>:\ANTIGRAVITY` on disk 1 is an **archive**, last commit `6d8cf196`. It is
+not the live repo and nothing runs from it. `.claude/hooks/guard-protected-paths.ps1`
+denies writes to an ANTIGRAVITY path on any drive except `C:`.
 
 ## Verified services
 
