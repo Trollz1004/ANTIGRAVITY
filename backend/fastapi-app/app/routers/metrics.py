@@ -41,15 +41,6 @@ async def _impact_payload(db: AsyncSession) -> dict:
     total_revenue_cents = await _count(
         db, select(func.coalesce(func.sum(RevenueAllocation.gross_amount_cents), 0))
     )
-    reserve_cents = await _count(
-        db,
-        select(func.coalesce(func.sum(RevenueAllocation.reserve_amount_cents), 0)),
-    )
-    operating_cents = await _count(
-        db,
-        select(func.coalesce(func.sum(RevenueAllocation.operating_amount_cents), 0)),
-    )
-
     total_users = await _count(db, select(func.count(User.id)))
     active_users = await _count(
         db, select(func.count(User.id)).where(User.is_active.is_(True))
@@ -81,9 +72,6 @@ async def _impact_payload(db: AsyncSession) -> dict:
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "revenue": {
             "total_revenue_cents": total_revenue_cents,
-            "reserve_cents": reserve_cents,
-            "operating_cents": operating_cents,
-            "reserve_percent": 0,
         },
         "users": {
             "total": total_users,

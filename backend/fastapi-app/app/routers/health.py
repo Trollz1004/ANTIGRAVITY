@@ -174,9 +174,7 @@ async def check_allocations(db: AsyncSession = Depends(get_db)):
     try:
         result = await db.execute(
             text(
-                "SELECT square_payment_id, payer_type, gross_amount_cents, "
-                f"{ACCOUNTING_RESERVE_CENTS_COLUMN} AS reserve_amount_cents, "
-                "operating_amount_cents, status "
+                "SELECT square_payment_id, payer_type, gross_amount_cents, status "
                 "FROM revenue_allocations ORDER BY created_at DESC LIMIT 5"
             )
         )
@@ -200,9 +198,7 @@ async def allocations_summary(db: AsyncSession = Depends(get_db)):
             text(
                 "SELECT payer_type, "
                 "COUNT(*) AS payments, "
-                "COALESCE(SUM(gross_amount_cents), 0) AS gross_cents, "
-                f"COALESCE(SUM({ACCOUNTING_RESERVE_CENTS_COLUMN}), 0) AS reserve_cents, "
-                "COALESCE(SUM(operating_amount_cents), 0) AS operating_cents "
+                "COALESCE(SUM(gross_amount_cents), 0) AS gross_cents "
                 "FROM revenue_allocations "
                 "GROUP BY payer_type"
             )
@@ -210,17 +206,10 @@ async def allocations_summary(db: AsyncSession = Depends(get_db)):
         by_payer = {row["payer_type"]: dict(row) for row in result.mappings().all()}
 
         def _tot(key: str) -> dict:
-            row = by_payer.get(key) or {
-                "payments": 0,
-                "gross_cents": 0,
-                "reserve_cents": 0,
-                "operating_cents": 0,
-            }
+            row = by_payer.get(key) or {"payments": 0, "gross_cents": 0}
             return {
                 "payments": int(row["payments"]),
                 "gross_cents": int(row["gross_cents"]),
-                "reserve_cents": int(row["reserve_cents"]),
-                "operating_cents": int(row["operating_cents"]),
             }
 
         customer = _tot("customer")
@@ -228,10 +217,6 @@ async def allocations_summary(db: AsyncSession = Depends(get_db)):
         with_test = {
             "payments": customer["payments"] + founder_test["payments"],
             "gross_cents": customer["gross_cents"] + founder_test["gross_cents"],
-            "reserve_cents": customer["reserve_cents"] + founder_test["reserve_cents"],
-            "operating_cents": (
-                customer["operating_cents"] + founder_test["operating_cents"]
-            ),
         }
         return {
             "customer_only": customer,
