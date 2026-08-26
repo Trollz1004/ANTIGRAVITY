@@ -21,39 +21,50 @@ Skills are organized by category:
 | `supabase-postgres-best-practices` | Postgres performance optimization                                 |
 | `ui-ux-pro-max`                    | UI/UX design across 10 technology stacks                          |
 
-## Agency Skills
 
-All 144+ Agency agents are available as skills prefixed with `agency-`:
+## Agency Skills — NOT INSTALLED
 
-- **Engineering**: `agency-frontend-developer`, `agency-backend-architect`, `agency-mobile-app-builder`, etc.
-- **Design**: `agency-ui-designer`, `agency-ux-researcher`, `agency-brand-guardian`, etc.
-- **Marketing**: `agency-growth-hacker`, `agency-content-creator`, `agency-tiktok-strategist`, etc.
-- **Sales**: `agency-outbound-strategist`, `agency-deal-strategist`, `agency-sales-engineer`, etc.
-- **Product**: `agency-product-manager`, `agency-sprint-prioritizer`, etc.
-- **Project Management**: `agency-project-shepherd`, `agency-studio-producer`, etc.
-- **Testing**: `agency-reality-checker`, `agency-evidence-collector`, etc.
-- **Support**: `agency-support-responder`, `agency-analytics-reporter`, etc.
-- **Paid Media**: `agency-ppc-campaign-strategist`, `agency-paid-social-strategist`, etc.
-- **Spatial Computing**: `agency-xr-interface-architect`, `agency-visionos-spatial-engineer`, etc.
-- **Specialized**: `agency-mcp-builder`, `agency-blockchain-security-auditor`, etc.
-- **Finance**: `agency-bookkeeper-controller`, `agency-financial-analyst`, etc.
-- **Game Development**: `agency-game-designer`, `agency-unity-architect`, `agency-unreal-systems-engineer`, etc.
-- **Strategy**: `agency-chief-of-staff` |
-- **Academic**: `agency-anthropologist`, `agency-historian`, etc.
+**This section previously advertised "144+ Agency agents … available as skills
+prefixed with `agency-`", and listed Engineering, Design, Game Development
+(`agency-unity-architect`, `agency-unreal-systems-engineer`), Spatial Computing,
+Finance and other families. None of it was true.**
 
-### Using Agency Skills
-
-Activate any skill in Antigravity:
+Verified 2026-08-26 on Sabretooth:
 
 ```
-Use the agency-frontend-developer skill to review this component.
+ls -d .agents/skills/agency-*   -> 0 directories
+ls -d .agents/skills/*/         -> 88 directories
+test -d agency-agents           -> MISSING
 ```
 
-### Regenerating Agency Skills
+Not one `agency-*` skill exists on disk. The `agency-agents/` source tree that the
+old "Regenerating" instructions told you to run `convert.sh` and `install.sh` from
+does not exist either, so those commands could never have worked. Either the install
+never happened or it was removed, and the README was never updated to match.
 
-After modifying agent definitions in `agency-agents/`:
+**This cost real time.** The claimed game-development entries led to a standing
+belief that roughly five Unreal skills were available for the DREAM project. There
+are none — no Unreal skill, no Unity skill, no game-engine skill of any kind. The
+only directory that matches a search for "engine" is `social-growth-engineer`.
+
+Related, and equally worth knowing before planning Unreal work: Unreal Engine is not
+installed on this machine, no `.uproject` exists, and Hermes' `unreal-engine` MCP
+entry is `enabled: false` pointing at `http://127.0.0.1:8000/mcp` — an address the
+YouAndINotAI dating-app backend already owns. See
+`.agents/harness-config/hermes.yaml` for the parked note.
+
+**Do not restore the old list.** If Agency skills are ever installed, regenerate this
+section from a directory listing rather than from an inventory of what was intended.
+
+## The 88 skills that do exist
+
+The table above names the durable, hand-maintained ones. For the full live list,
+read the directory — it is the only trustworthy source:
 
 ```bash
-./agency-agents/scripts/convert.sh --tool antigravity
-./agency-agents/scripts/install.sh --tool antigravity --no-interactive
+ls -d .agents/skills/*/ | sed 's|.*/skills/||; s|/$||' | sort
 ```
+
+Skills carrying a `--<hash>` suffix are installed copies pinned to a marketplace
+version; the unsuffixed sibling of the same name, where one exists, is the local
+working copy.
