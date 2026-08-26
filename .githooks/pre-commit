@@ -1,11 +1,34 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Blocks commits that include likely secrets.
-# This checks staged content only.
+# Blocks commits containing likely secrets. Staged content only.
+#
+# 2026-08-26: this script used to carry its own INLINE regex list and never read
+# secret-patterns.txt, despite that file's header claiming "Read verbatim by
+# pre-commit". Two lists, one of them dead. The inline list was also missing
+# Square (EAAA) and xAI (xai-) -- two of the vendors whose keys reached public
+# git history. There is now exactly one list, and it is the file.
 
 if ! command -v perl >/dev/null 2>&1; then
   echo "ERROR: perl is required for secret scanning in pre-commit hook."
+  exit 1
+fi
+
+hook_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+patterns_file="${hook_dir}/secret-patterns.txt"
+
+if [[ ! -f "${patterns_file}" ]]; then
+  echo "ERROR: ${patterns_file} is missing. Refusing to commit unscanned."
+  echo "A secret scanner that cannot find its patterns must fail closed, not open."
+  exit 1
+fi
+
+# One regex per line; '#' comments and blanks ignored. No shell interpolation --
+# the file is read verbatim, so $ { } ' \" inside a pattern are safe.
+regex="$(grep -vE '^\s*(#|$)' "${patterns_file}" | paste -sd '|' -)"
+
+if [[ -z "${regex}" ]]; then
+  echo "ERROR: ${patterns_file} contains no usable patterns. Failing closed."
   exit 1
 fi
 
@@ -14,33 +37,34 @@ if [[ -z "${staged_patch}" ]]; then
   exit 0
 fi
 
-# High-confidence secret patterns.
-github_pat_prefix='ghp'
-regex="
-${github_pat_prefix}_[A-Za-z0-9]{30,}|
-github_pat_[A-Za-z0-9_]{40,}|
-sk_live_[A-Za-z0-9]{16,}|
-AKIA[0-9A-Z]{16}|
------BEGIN (RSA|EC|OPENSSH|DSA) PRIVATE KEY-----|
-xox[baprs]-[A-Za-z0-9-]{10,}|
-AIza[0-9A-Za-z_\-]{20,}|
-ANTHROPIC_API_KEY\s*=\s*[A-Za-z0-9_-]{20,}|
-TELEGRAM_BOT_TOKEN\s*=\s*[0-9]{6,}:[A-Za-z0-9_-]{20,}|
-GITHUB_PERSONAL_ACCESS_TOKEN\s*=\s*(?![\"'\'']?\$)(?![\"'\'']?\{)[A-Za-z0-9_]{20,}
-"
+# Scan added lines only. A '-' line is content being REMOVED -- blocking on it
+# makes the scrubbing commit impossible, which is how a leak gets left in place.
+added="$(printf '%s' "${staged_patch}" | grep -E '^\+' || true)"
 
-if printf '%s' "${staged_patch}" | perl -0777 -ne "exit((/\b(?:${regex})\b/is) ? 1 : 0)"; then
-  # Secrets clean. Now run the canonical-guard (banned language on customer
-  # surfaces). Kept in a separate file so a markdown sanitizer sweep cannot
-  # eat the word list the way commit d245c23a ate BRIEFING.md's copy.
-  hook_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  if [[ -f "${hook_dir}/pre-commit-canonical" ]]; then
-    exec bash "${hook_dir}/pre-commit-canonical"
+if [[ -n "${added}" ]]; then
+  if printf '%s' "${added}" | PAT="${regex}" perl -0777 -ne 'exit(/$ENV{PAT}/i ? 1 : 0)'; then
+    : # clean
+  else
+    echo "ERROR: Commit blocked by secret scanner."
+    echo "A potential secret/token/private-key pattern was found in ADDED lines."
+    echo ""
+    printf '%s' "${added}" | PAT="${regex}" perl -ne '
+      if (/($ENV{PAT})/i) {
+        my $m = $1; my $head = substr($m, 0, 4);
+        print "  line $.: matched " . $head . "***REDACTED*** (" . length($m) . " chars)\n";
+      }' | head -10
+    echo ""
+    echo "Action: remove the value, reference it via env/vault instead."
+    echo "If it is a genuine test fixture, add it to .github/policy-guard-allowlist.txt."
+    echo "If it is REAL: rotate it first -- SECRETS.md, 'Restriction is not the remedy'."
+    exit 1
   fi
-  exit 0
 fi
 
-echo "ERROR: Commit blocked by secret scanner."
-echo "A potential secret/token/private key pattern was found in staged changes."
-echo "Action: remove/redact secret and use env/vault references instead."
-exit 1
+# Secrets clean. Run the canonical guard (banned language on customer surfaces).
+# Kept in a separate file so a markdown sweep cannot eat the word list the way
+# commit d245c23a ate BRIEFING.md's copy.
+if [[ -f "${hook_dir}/pre-commit-canonical" ]]; then
+  exec bash "${hook_dir}/pre-commit-canonical"
+fi
+exit 0
