@@ -230,3 +230,8 @@ ops/marketing-inbox/processed/
 ops/*/state/
 # logs/ is ignored wholesale, but this marker is read by scripts/sabretooth-watchdog.ps1
 !logs/watchdog-boot-marker.txt
+
+# Paperclip materialized skill copies -- clones of skills already present here,
+# marked by .paperclip-materialized-skill.json. Paperclip re-creates them on
+# demand; committing them double-counts the skill inventory.
+.agents/skills/*--[0-9a-f]*/
