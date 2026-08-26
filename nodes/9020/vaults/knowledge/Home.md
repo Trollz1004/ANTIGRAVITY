@@ -18,6 +18,7 @@ This vault is Josh's knowledge graph for node 9020 (the marketing node). It hold
 - [[scc-paperclip]] - Social Command Center tied into Paperclip
 - [[youandinotai]] - product: human verification, anti-bot matching, community boards, volunteer meetups
 - [[dream-online]] - product: persistent-memory AI NPCs, kid-safe, free-to-play
+- [[paperclip-capability-baseline]] - MCPs, skills, and adapters every Paperclip agent gets (wired 2026-08-25)
 - [[security-findings]] - 2026-08-21 security audit summary
 
 ## Ground rules

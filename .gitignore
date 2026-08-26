@@ -212,3 +212,21 @@ ops/marketing-inbox/processed/
 /.freebuff/
 # stale runtime pid files (machine-local)
 /.bootstrap/
+
+# --- root cleanup 2026-08-26 (judge lane) ---
+# /route-*.json above uses a HYPHEN; every real file uses an UNDERSCORE,
+# so that rule never matched anything. Both spellings now covered.
+/route_*.json
+/route_*.txt
+# Obsidian vault mirror named after the GitHub account; 17 MB of duplicated
+# .agents/.obsidian/.freebuff that landed inside the repo root.
+/Trollz1004/
+# empty Obsidian canvas scratch
+/Untitled*.canvas
+# python tool caches
+.pytest_cache/
+.ruff_cache/
+# per-run engine state, not work (matches ops/paperclip-ceo/state/ precedent)
+ops/*/state/
+# logs/ is ignored wholesale, but this marker is read by scripts/sabretooth-watchdog.ps1
+!logs/watchdog-boot-marker.txt
