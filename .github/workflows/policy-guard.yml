@@ -79,24 +79,28 @@ jobs:
         with:
           node-version: '22'
 
-      # Guarded so mission-control-v5 can be retired without locking the repo:
-      # this job has no path filter and runs on EVERY push to main, so an
-      # unguarded `node <path>` here fails every push the moment that directory
-      # goes away. It must not pass vacuously either -- if the directory is
-      # still present but the checker is gone, that is tampering, not removal.
+      # The checker now lives at tools/role-wall-check.mjs, ported out of
+      # mission-control-v5 so that app can be retired without taking the role
+      # wall with it. It is dependency-free (node:fs + node:path only), so it
+      # runs wherever it sits. mission-control-v5/ stays the SCAN TARGET while
+      # it exists; when it is gone, the wall applies to whatever replaces it.
+      #
+      # This job has no path filter and runs on EVERY push to main, so it must
+      # never fail merely because a directory moved -- and must never pass
+      # vacuously when the checker itself is missing, which would be tampering.
       - name: Run role-wall source check
         run: |
-          if [ ! -d mission-control-v5 ]; then
-            echo "::notice::mission-control-v5 is not present in this tree - role wall not applicable, skipping."
-            exit 0
-          fi
-          if [ ! -f mission-control-v5/server/scripts/role-wall-check.mjs ]; then
-            echo "::error::mission-control-v5/ exists but role-wall-check.mjs is missing."
-            echo "The role wall cannot be enforced. Restore the checker, or remove"
-            echo "mission-control-v5/ entirely if it is being retired."
+          if [ ! -f tools/role-wall-check.mjs ]; then
+            echo "::error::tools/role-wall-check.mjs is missing."
+            echo "The role wall cannot be enforced. Restore it -- do not delete"
+            echo "the enforcement to make a build pass."
             exit 1
           fi
-          node mission-control-v5/server/scripts/role-wall-check.mjs mission-control-v5
+          if [ ! -d mission-control-v5 ]; then
+            echo "::notice::mission-control-v5 is not present - nothing to scan, skipping."
+            exit 0
+          fi
+          node tools/role-wall-check.mjs mission-control-v5
 
   pre-commit-checks:
     name: Pre-commit validation
