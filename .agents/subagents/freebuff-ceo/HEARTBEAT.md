@@ -9,6 +9,4 @@ Each session end, write one status line the dashboard reads:
 
 ## Current
 
-GREEN: Buffy assigns; Hermes/OpenClaw/OpenCode never push; official CLI
-judges land 1 repo 1 root 1 branch. Freebuff = GUI + free ads API.
-youandinotai.com first $5k still the company goal. Evidence: GROK-CURRENT-STATE-2026-08-24.md.
+RED: CEO bridge :3140 and OpenClaw :18789 are down; OmniRoute API requires authentication. Paperclip :3100 is healthy. Evidence: 2026-08-26 session probes.
