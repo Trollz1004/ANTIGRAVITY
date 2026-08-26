@@ -31,15 +31,12 @@ when something needs it** — don't wire anything up from inside `archive/`.
 | `EMERGENT` | 6 |
 | `command-center` | 3 |
 
-They contain the split and giving language that `BRIEFING.md` §1 bans repo-wide:
-They contain the language `BRIEFING.md` �1 bans repo-wide -- ratio figures,
-  on-chain contract addresses, a Solidity contract name, routing percentages, and
-  the exact terms the Florida �496.405 compliance wall exists to keep off any
-  surface. The specific words are not repeated here: they live in
-  `.githooks/secret-patterns.txt`' sibling guard and nowhere else, because
-  markdown gets swept and a shell script does not.
-percentages, and the words the Florida §496.405 compliance wall exists to keep
-off any surface.
+They carry the split and giving language that `BRIEFING.md` §1 bans repo-wide:
+ratio figures, on-chain contract addresses, a Solidity contract name, routing
+percentages, and the exact terms the Florida §496.405 compliance wall exists to
+keep off any surface. The specific words are deliberately not repeated here —
+they live in the guard's own pattern file and nowhere else, because markdown
+gets swept in a scrub and a shell script does not.
 
 **The consolidation goal and the language ban collided, and the ban wins.**
 `Trollz1004/ANTIGRAVITY` is public. Folding these four verbatim would publish
