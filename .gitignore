@@ -65,6 +65,10 @@ ops/paperclip-ceo/bridge/bridge.log
 .paperclip-context.json
 .paperclip/
 
+# DateApp marketing engine runtime rotation state (machine-local, regenerable)
+ops/dateapp-marketing-engine/state/
+ops/paperclip-growth-engine/state/
+
 # OpenCode local config
 .opencode/*
 !.opencode/agent/

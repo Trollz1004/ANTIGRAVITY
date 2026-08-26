@@ -1,0 +1,14 @@
+{
+  "name": "paperclip-growth-engine",
+  "version": "1.0.0",
+  "description": "Paperclip growth engine — the 5 ways to improve marketing/SEO/YouTube presence (faceless or animated, avatars ok): daily rotation of up to 3 topics per way, 3 variants each with a different 3-tag set, dated DRAFT output to ops/marketing-inbox/ for approval.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test engine.test.js"
+  },
+  "exports": {
+    ".": "./engine.js",
+    "./data": "./data.js"
+  }
+}
