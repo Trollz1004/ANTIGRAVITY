@@ -584,12 +584,6 @@ app.post('/api/marketing/queue/:id/decide', (req, res) => {
   }
 });
 
-// ── PAPERWEIGHT command center (static page; roster + metrics are sample data,
-// not live feeds — do not publish outside the LAN) ───────────────────────────
-const paperweightDir = join(__dirname, '..', '..', '..', 'apps', 'paperweight');
-if (existsSync(paperweightDir)) {
-  app.use('/paperweight', express.static(paperweightDir));
-}
 
 // ── CANONICAL RECORD — Joshua's signed, hash-anchored doctrine page. Served
 // verbatim; the page verifies its own SHA-256 in the browser ────────────────
