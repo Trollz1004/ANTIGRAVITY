@@ -9,6 +9,17 @@ mcp_servers:
   required: [brain-mcp, mission-mcp, antigravity-files, playwright]
   optional: [supabase]   # read-first; live DB writes route through the Supabase seat + judge
   spec: agent-contracts/CAPABILITY-BASELINE.md
+  remote_future:
+    # unreal-engine MCP — PARKED (enabled: false). Hardware split per Joshua
+    # 2026-08-26: the game runs on a SEPARATE box (this node runs hot with
+    # Hermes + the stack alone). Unreal is not installed here, and Unreal's
+    # default http://127.0.0.1:8000/mcp collides with the DateApp backend that
+    # owns port 8000 on Sabretooth. When the game box is live, point Hermes at
+    # the remote Unreal MCP URL there (Epic: Editor Preferences > Model Context
+    # Protocol > port/path if the default conflicts). NOT enabled on this node.
+    unreal-engine:
+      url: http://127.0.0.1:8000/mcp
+      enabled: false
 preflight_skills:
   required:
     - i-have-adhd

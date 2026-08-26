@@ -3,6 +3,53 @@
 Session record. Latest entry on top. Maintained by the Freebuff CEO agent each
 session (per `.agents/skills/paperclip-ceo/SKILL.md`).
 
+## 2026-08-26 — Codex Judge heartbeat = approval lane (Joshua directive)
+
+**Status: LANDED in runtime (bundle) + tracked file; branch/local only, NOT pushed.**
+
+### What Joshua asked
+
+Setup heartbeat on Codex: tasks created are the approval lane; heartbeat
+judges existing tasks; APPROVE → push/merge/delete; DENY → never just block —
+blocking is not allowed in Paperclip, the task gets passed off to someone who
+can fix it. Plus a warning: if Hermes/OpenClaw do nothing and OpenCode soon,
+he will be making changes.
+
+### What was done (VERIFIED)
+
+| Item | Evidence |
+| ---- | -------- |
+| Codex Judge runtime instructions updated | `instructions-file:put` to `32375fe9` → 8849 bytes entry `AGENTS.md`, new `## Heartbeat — the approval lane` section live in the managed bundle |
+| Tracked file matches | `ops/paperclip-ceo/JUDGE-AGENTS.md` updated (30 ins / 1 del); git diff clean; runtime bundle identical to tracked file |
+| Old anti-pattern removed | "Mark the issue `done` on verdict" → "done **only on APPROVE**; on NEEDS-WORK/REJECT pass to the fixer (reassign + todo)" |
+| Pass-off demonstrated live | ANT-215 + ANT-217 were closed `done` by Codex Judge with NEEDS-WORK verdicts (old rule). Reopened to fixer Buffy via issue-scoped wake run `d8137a6c`; both now `in_progress`, assignee `55461934` |
+| Paperclip UP | `/api/health` ok, authReady, local_trusted |
+| Codex Judge heartbeat config | `enabled: true, intervalSec: 900, maxConcurrentRuns: 2`, model gpt-5.6-sol |
+
+### Harness activity check (Joshua's warning)
+
+- Hermes (`b3006045`): heartbeat ON, **0 task sessions, 0 open assigned issues** — idle.
+- OpenClaw (`84c9a325`): heartbeat ON, **0 task sessions, 0 open assigned issues** — idle.
+- OpenCode (`26bfb5a5`): **heartbeat DISABLED**, 0 task sessions, 0 open assigned issues — idle.
+- Root cause of "nothing doing": the 50-task pool is topped up from
+  `task-bank.json` as **unassigned** issues (49/50 todo unassigned), and
+  Paperclip agents only work *assigned* tasks — nothing is routed to the three
+  harnesses. Blocked queue: 24 (incl. watchdog ANT-218/219, OpenClaw lane
+  ANT-78). Needs a routing decision from Joshua (assign pool to harnesses,
+  enable OpenCode heartbeat, or both).
+
+### Notes
+
+- The `agent wake`/`heartbeat:invoke` runs auto-complete through the bridge in
+  ~4s; cross-issue writes need an issue-scoped run — used a tracking issue +
+  issue-scoped wake (`d8137a6c`) to attribute the pass-off PATCHes.
+- Only Codex Judge's runtime bundle was updated (Joshua said "codex"). Grok /
+  Claude / Gemini Judge bundles still carry the old done-on-verdict text until
+  the shared file is re-pushed to them.
+- Token: short-lived local-cli key, nothing written to disk or committed.
+- No push/merge/delete performed — judge lane owns landing.
+
+
 ## 2026-08-24 — watchdog routine + wake escalation + auto-disposition (Buffy)
 
 **Status: GREEN** — watchdog loop now self-resolving end-to-end.

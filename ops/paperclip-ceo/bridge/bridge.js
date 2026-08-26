@@ -45,6 +45,32 @@ const TASK_BANK_FILE = process.env.PAPERCLIP_CEO_TASK_BANK || path.join(__dirnam
 const POOL_TARGET = Number(process.env.PAPERCLIP_POOL_TARGET || 50);
 const TOP_UP_AT = Number(process.env.PAPERCLIP_TOP_UP_AT || 10);
 
+// Harness lane routing for pool top-ups (Joshua directive 2026-08-26: the
+// harnesses did nothing because pool tasks were created unassigned and
+// Paperclip agents only work assigned tasks). task-bank categories map to
+// lanes; env-overridable for tests and roster changes.
+const LANE_HERMES = process.env.PAPERCLIP_LANE_HERMES || "b3006045-4353-4c53-8111-4bec58c44e49";
+const LANE_OPENCLAW = process.env.PAPERCLIP_LANE_OPENCLAW || "84c9a325-db4a-44ce-845d-84462b5c7c6b";
+const LANE_OPENCODE = process.env.PAPERCLIP_LANE_OPENCODE || "26bfb5a5-6751-4fb3-b5b7-6540d4f89797";
+const LANE_XMARKETING = process.env.PAPERCLIP_LANE_XMARKETING || "805d66b4-1d3c-4482-9604-a6d28a62721c";
+
+// task-bank category -> lane. Content splits: devrel-ish pieces (blog, press,
+// testimonial, FAQ) go to Hermes (content producer); conversion copy goes to
+// OpenClaw (marketing).
+function laneForCategory(category, title) {
+  const c = (category || "ops").toLowerCase();
+  const t = (title || "").toLowerCase();
+  if (c === "x-marketing") return LANE_XMARKETING;
+  if (c === "social") return LANE_HERMES;
+  if (c === "support" || c === "analytics") return LANE_OPENCLAW;
+  if (c === "quality" || c === "ops") return LANE_OPENCODE;
+  if (c === "content") {
+    if (["blog", "press", "testimonial", "faq"].some((k) => t.includes(k))) return LANE_HERMES;
+    return LANE_OPENCLAW;
+  }
+  return LANE_OPENCODE;
+}
+
 // Health-check targets (Date App + cloudflared).
 const FRONTEND_URL = process.env.PAPERCLIP_FRONTEND_URL || "http://127.0.0.1:3200";
 const BACKEND_HEALTH_URL = process.env.PAPERCLIP_BACKEND_HEALTH_URL || "http://127.0.0.1:8000/health";
@@ -489,6 +515,9 @@ async function topUpPool(readyCount) {
     cursor += 1;
     // Skip templates already ready in the company OR created this pass.
     if (existingTitles.has(t.title) || created.some((c) => c.title === t.title)) continue;
+    // Route the created task to its lane assignee so harnesses actually pick
+    // it up (unassigned pool tasks were the root cause of idle lanes).
+    const assigneeAgentId = laneForCategory(t.category, t.title);
     const res = await apiPostJson(
       `${PAPERCLIP_API_BASE}/api/companies/${COMPANY_ID}/issues`,
       {
@@ -497,6 +526,7 @@ async function topUpPool(readyCount) {
         status: "todo",
         priority: t.priority || "medium",
         parentId: parent.id,
+        assigneeAgentId,
       }
     );
     if (res.ok && res.json && res.json.id) {
@@ -1027,9 +1057,16 @@ if (process.env.PAPERCLIP_BRIDGE_NO_LISTEN === "1") {
     selfHealEperm,
     clearStaleSkillsTmp,
     wakeDisposition,
+    topUpPool,
+    laneForCategory,
+    countReadyTasks,
     WATCHDOG_TITLE_PREFIX,
     JUDGE_PUSH_SENTINEL,
     JUDGE_AGENT_IDS,
+    LANE_HERMES,
+    LANE_OPENCLAW,
+    LANE_OPENCODE,
+    LANE_XMARKETING,
   };
 } else {
   server.listen(PORT, HOST, () => {
