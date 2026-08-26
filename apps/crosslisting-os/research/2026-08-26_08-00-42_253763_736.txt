@@ -1,0 +1,209 @@
+# Terminal Full Output
+# Terminal: list_trollz1004_repositories
+# Command: gh repo list trollz1004 --limit 100 --json nameWithOwner,name,description,isPrivate,url,updatedAt,licenseInfo --jq '.[] | {nameWithOwner, name, description, isPrivate, url, updatedAt, license: (.licenseInfo.spdxId // "NOASSERTION")}'
+# PID: 736
+# Timestamp: 2026-08-26_08-00-42.253763
+# Original Length: 13869 characters
+# ----------------------------------------
+
+[32mubuntu@sandbox:~$ [0mgh repo list trollz1004 --limit 100 --json nameWithOwner,name,description,isPrivate,url,updatedAt,licenseInfo --jq '.[] | {nameWithOwner, name, description, isPrivate, url, updatedAt, license: (.licenseInfo.spdxId // "NOASSERTION")}'
+[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"AI-agent infrastructure monorepo — platform, products, and operations of Trash Or Treasure Online Recycler LLC."[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mfalse[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"ANTIGRAVITY"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/ANTIGRAVITY"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-08-25T16:12:10Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/ANTIGRAVITY"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m""[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mfalse[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"dream-online"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/dream-online"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-08-25T15:13:24Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/dream-online"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m""[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"saas-microservices"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/saas-microservices"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-08-21T14:35:36Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/saas-microservices"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m""[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"mission-control-v5"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/mission-control-v5"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-08-12T20:20:12Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/mission-control-v5"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m""[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"SIDE-WORK"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/SIDE-WORK"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-08-10T02:47:36Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/SIDE-WORK"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"YouAndINotAI public join/verify landing (affiliate ref=clean-repo)"[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mfalse[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"youandinotai-links"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/youandinotai-links"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-08-06T09:36:54Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/youandinotai-links"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"YouAndINotAI — join the Founding membership. Live checkout links."[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mfalse[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"youandinotai-join"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/youandinotai-join"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-08-05T07:06:08Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/youandinotai-join"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"ANTIGRAVITY Social Command Center — AI content approval desk. #ForTheKids"[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"command-center"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/command-center"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-07-13T12:26:05Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/command-center"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"ANTIGRAVITY v2 — clean slate. Dating app, agent hub, skills library."[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"ANTIGRAVITY-v2"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/ANTIGRAVITY-v2"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-07-10T10:42:14Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/ANTIGRAVITY-v2"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"Grok Production AI Marketplace - Self-hosted, legally compliant (18+ TOS enforced), realtime payments, charity buckets, Hermes swarm GUI, Grok brain + MCP memory. Highest free OSS."[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"ai-marketplace-grok-production"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/ai-marketplace-grok-production"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-06-29T09:20:31Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/ai-marketplace-grok-production"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"GROUP BOSS FIGHTS  grind for exp- craft -fish or just DANCE !!"[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"DREAM-ONLINE-MMORPG-PvP-OPENWORLD-OR-OPEN-DREAM-"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/DREAM-ONLINE-MMORPG-PvP-OPENWORLD-OR-OPEN-DREAM-"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-06-29T06:06:14Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/DREAM-ONLINE-MMORPG-PvP-OPENWORLD-OR-OPEN-DREAM-"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"A self-hosted GUI interface for AI models (Ollama, OpenRouter, Manus API) with a built-in FETCHER agent for job scanning. Features a chat interface, model selector, and session management. · Built with Manus"[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"MANUS-Has-Hands"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/MANUS-Has-Hands"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-06-21T00:58:06Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/MANUS-Has-Hands"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"Sabretooth node Hermes backup — daily timestamped snapshots of Hermes work, memory, configs. For disaster recovery only."[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"sabretooth-hermes-backup"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/sabretooth-hermes-backup"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-06-16T07:02:20Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/sabretooth-hermes-backup"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"A presentation showcasing the OpenAI participation proposal with Team Claude collaboration · Built with Manus"[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"OpenclawDash"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/OpenclawDash"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-06-07T21:35:37Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/OpenclawDash"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m""[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"ANTIGRAVITYclip"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/ANTIGRAVITYclip"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-06-05T17:42:06Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/ANTIGRAVITYclip"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"ANTIGRAVITY Mission Control — Secured Personal Dashboard. GitHub OAuth + Cloudflare Pages. #ForTheKids"[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"antigravity-dashboard"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/antigravity-dashboard"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-03-27T07:18:11Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/antigravity-dashboard"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"9020 node Hermes backup — daily timestamped snapshots of Hermes work, memory, configs. For disaster recovery only."[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"9020-hermes-backup"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/9020-hermes-backup"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-05-17T04:02:17Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/9020-hermes-backup"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"T5500 node Hermes backup — daily timestamped snapshots of Hermes work, memory, configs. For disaster recovery only."[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"t5500-hermes-backup"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/t5500-hermes-backup"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-05-17T04:00:41Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/t5500-hermes-backup"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m""[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"Trollz1004"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/Trollz1004"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-07-13T12:39:54Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/Trollz1004"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"Income engine — Paperclip-built lead-gen pipeline (consolidated from AidoesitAll 2026-05-10)"[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"income-engine"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/income-engine"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-05-11T10:05:09Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/income-engine"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m""[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"Electrician-who-lies-i-KNIOW-CODE-ELECTRICAL-CODE---ForTheKIDS-"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/Electrician-who-lies-i-KNIOW-CODE-ELECTRICAL-CODE---ForTheKIDS-"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-07-13T12:26:14Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/Electrician-who-lies-i-KNIOW-CODE-ELECTRICAL-CODE---ForTheKIDS-"
+[m[1;38m}
+[m[1;38m{
+[m  [1;34m"description"[m[1;38m:[m [32m"Electrician-who-lies-i-KNIOW-CODE-ELECTRICAL-CODE---ForTheKIDS-"[m[1;38m,
+[m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
+[m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
+[m  [1;34m"name"[m[1;38m:[m [32m"Electrician-who-lies-i-KNIOW-CODE-ELECTRICAL-CODE---ForTheKIDS-2"[m[1;38m,
+[m  [1;34m"nameWithOwner"[m[1;38m:[m [32m"Trollz1004/Electrician-who-lies-i-KNIOW-CODE-ELECTRICAL-CODE---ForTheKIDS-2"[m[1;38m,
+[m  [1;34m"updatedAt"[m[1;38m:[m [32m"2026-04-28T08:21:29Z"[m[1;38m,
+[m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/Electrician-who-lies-i-KNIOW-CODE-ELECTRICAL-CODE---ForTheKIDS-2"
+[m[1;38m}
+[mubuntu@sandbox:~$ ;1R
+[32mubuntu@sandbox:~$ [0m
