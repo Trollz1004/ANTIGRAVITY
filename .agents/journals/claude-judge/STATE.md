@@ -106,3 +106,76 @@ ox-alpha `:8642` still **DOWN**.
 Joshua rotates the GitHub PAT and the Stripe live key. Then the judge lane runs
 `git filter-repo` across `main` + the two pushed tags, after `git fetch --tags`
 closes the unscanned-tag gap.
+
+---
+
+## 2026-08-26 (continued) — blocker cleared by measurement
+
+The dashboard consolidation was recorded above as "blocked on evidence that
+Paperclip covers the governance functions." That was answerable, not waitable.
+Answered: `agent-contracts/PAPERCLIP-COVERAGE-RULING-2026-08-26.md`, from 526
+routes enumerated off the live `/api/openapi.json` after verifying identity.
+
+**Ruling.** Approvals (15 routes, full lifecycle) and decisions/triage (25
+routes) — **covered**, retire the local surfaces. The official vote engine —
+**not covered**; Paperclip's only vote route is `/api/issues/{id}/feedback-votes`,
+which is thumbs on an issue, not council ballots. The role wall — **not
+covered, and a category error**: Paperclip's role routes are runtime RBAC while
+`role-wall-check.mjs` is a static source check in CI; a permission model cannot
+enforce a compile-time rule about source contents. Uptime — **partial**;
+Paperclip can probe on a schedule via routines but has no anti-flap state
+machine, no alert delivery, and no auto-fix playbooks, so **mission-control-v6
+stays**.
+
+Net: MC5 and MC6 both survive, for different and now-documented reasons. Do not
+re-litigate this from the slogan; re-run the route check.
+
+### Landed since
+
+- `43d5e147` — the coverage ruling, plus the `policy-guard.yml` fix. That job had
+  **no path filter** and ran `role-wall-check.mjs` on every push to `main`, so
+  deleting MC5 would have failed every subsequent push. Now skips with a notice
+  when `mission-control-v5/` is absent (deliberate retirement) and **fails loudly**
+  when the directory exists but the checker is gone (tampering) — retirement is
+  possible without a vacuous pass.
+- `06515301` — PAPERWEIGHT retired: `apps/paperweight/`, its MC5 `express.static`
+  mount, its PreviewPanel tile, and the `paperweight-tests` CI job. That job ran
+  on every push and PR, spun up a runner plus Python, and checked for a file that
+  has never existed in this repo — burning Actions minutes to print a skip notice.
+- `7448cce8` — folded `revenue-first-products` and `ai-marketplace-grok-production`
+  to `archive/folded-repos/`.
+- `24f0faf5` — recovered 4 skills from ANTIGRAVITY-v2. **`dream-live-npc` is the
+  one that mattered**: Joshua's original CC BY-NC-SA design carrying a priority
+  claim that reads "first committed to github.com/Trollz1004/ANTIGRAVITY
+  2026-07-01. Git history is the timestamp" — and it was missing from ANTIGRAVITY,
+  surviving only in a repo queued for archive. The evidence for the claim had been
+  deleted from the repo the claim points at. Restored.
+
+**Not folded, deliberately:** the 184 `agency-*` skills in v2. 33 are already live
+agent types in this harness; the other 151 are a generic third-party pack
+(`baidu-seo-specialist`, `bilibili-content-strategist`, `blender-add-on-engineer`).
+An archived repo stays readable if one is ever wanted.
+
+### Repos: 24 -> 13 active, 11 archived
+
+Archived this pass: `llc-crosslisting-os`, `saas-microservices`, `SIDE-WORK`,
+`9020-hermes-backup`, `t5500-hermes-backup`, `revenue-first-products` (org),
+`ai-marketplace-grok-production`, `ANTIGRAVITY-v2`, `DREAM-ONLINE-MMORPG-PvP-...`.
+
+Still active and why: `ANTIGRAVITY` + `dream-online` (the keepers); `Trollz1004`
+(profile README — must keep this exact name to render); `youandinotai-links` /
+`youandinotai-join` (**live** Pages, standing exception); `mission-control-v5`
+(vote engine + role wall, per the ruling); `crm` (folded on branch, archive after
+merge); `command-center` (1 open PR + 1 open issue to resolve first);
+`OpenclawDash`, `ANTIGRAVITYclip`, `sabretooth-hermes-backup` (art assets only —
+they exist nowhere else) — all pending mechanical folds; `MANUS-Has-Hands`
+(**blocked**: committed credential dump, audit and rotate before folding);
+`antigravity-dashboard` (**do not archive yet** — `antigravity-dashboard.pages.dev`
+returns 200 but serves `<title>frontend</title>`, which does not match that repo's
+`index.html`; the binding is unresolved and an ambiguous live signal is not an
+archive signal).
+
+### Next bounded action
+
+Unchanged and still Joshua's: rotate the 11 credentials, GitHub PAT first. The
+history purge follows rotation, never precedes it.
