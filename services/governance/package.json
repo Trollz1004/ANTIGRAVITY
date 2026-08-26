@@ -1,0 +1,20 @@
+{
+  "name": "official-vote-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Council ballots, carved out of mission-control-v5 so that app can be retired",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
