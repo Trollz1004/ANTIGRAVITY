@@ -25,31 +25,44 @@ up and its 401 is the token gate working, not a fault.
 | `:11434` | **UP** | Ollama — fail-safe only |
 | `:9119` | **UP** | Hermes |
 | `:8000` | **UP** | Date-app backend |
-| `:8642` | **DOWN** | **ox-alpha Hermes gateway — the one real gap** |
+| `:8642` | **UP** (restarted this session) | ox-alpha Hermes gateway |
 
 Ollama's catalog was read rather than assumed, because doctrine says never to
 presume a usable local model is present. **4 models**, so the fail-safe path is
 real: `nomic-embed-text`, `rolandroland/llama3.1-uncensored`, `ornith-1.5:9b`,
 `joshlcoleman/CFO-Until-No-Kid-In-Need`.
 
-## The one open fault
+## The one open fault - CLOSED this session
 
-**`:8642` is not listening.** That is `ox-alpha`'s gateway, and it is why the
-board reports that agent in `error` with *"No inference provider configured."*
-The Hermes bot briefing recorded this as fixed on 2026-08-25 — the fix did not
-survive a restart. Paperclip itself is healthy; the bot's own gateway is down.
-
-Restart with the profile that owns it, then re-verify:
+`:8642` was not listening, which is why the board reported `ox-alpha` in `error`
+with *"No inference provider configured."* Restarted:
 
 ```bash
 hermes --profile paperclip-mc gateway run --replace --accept-hooks
-curl -s http://127.0.0.1:8642/health     # this build serves /health, NOT /api/health
 ```
 
-A profile needs its own `model.default`, `model.provider`, `model.base_url` and
-its own `auth.json`, or every dispatched run fails with `hermes_gateway_run_failed`.
-That is the exact failure recorded and "fixed" before; a fix that does not survive
-a restart is a config that was never written to the profile.
+Bound within ~20s. Verified by identity, not by the port answering:
+
+```
+GET http://127.0.0.1:8642/health   -> {"status":"ok","platform":"hermes-agent","version":"0.20.5"}
+GET http://127.0.0.1:8642/api/health -> 404
+```
+
+That 404 confirms this build's quirk: the gateway serves **`/health`**, not
+`/api/health`. A health check written against `/api/health` reports this gateway
+down while it is running perfectly.
+
+**Correction to an earlier draft of this file.** It concluded the provider config
+"was never written into the profile." That was wrong, and inferred rather than
+checked. `%LOCALAPPDATA%\hermes\profiles\paperclip-mc\` holds `config.yaml`
+with `model.default: stealth/ox-alpha`, `model.provider: nous`, a `model.base_url`,
+plus its own `auth.json` and `.env`. The config was complete the whole time. The
+process was simply not running - the 2026-08-25 fix was real and did not survive
+a restart, which is a supervision gap, not a configuration gap.
+
+**The remaining question is durability, not configuration.** Nothing restarts this
+gateway on boot or on crash. It will be down again after the next reboot unless
+something supervises it.
 
 ## Verdict
 
