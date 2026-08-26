@@ -16,13 +16,6 @@ interface Surface {
  * out rather than showing an empty box and pretending.
  */
 const SURFACES: Surface[] = [
-  {
-    id: 'paperweight',
-    label: 'MARKETING',
-    url: '/paperweight/',
-    note: 'PAPERWEIGHT command center — approvals, feed, agents, API map',
-    embeddable: true,
-  },
   { id: 'dateapp', label: 'DATE APP', url: 'http://localhost:3200', note: 'Local frontend', embeddable: true },
   {
     id: 'dateapi',

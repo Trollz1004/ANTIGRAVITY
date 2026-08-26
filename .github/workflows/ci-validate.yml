@@ -19,21 +19,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  paperweight-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-        with:
-          python-version: '3.12'
-      - name: Paperweight unit + migration tests (stdlib, zero deps)
-        run: |
-          if [ ! -f apps/paperweight/test_paperweight.py ]; then
-            echo "::notice::apps/paperweight/test_paperweight.py not present in this repo layout — skipping"
-            exit 0
-          fi
-          python apps/paperweight/test_paperweight.py
-
   validate:
     runs-on: ubuntu-latest
     steps:
