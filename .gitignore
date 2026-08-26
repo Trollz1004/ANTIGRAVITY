@@ -235,3 +235,8 @@ ops/*/state/
 # marked by .paperclip-materialized-skill.json. Paperclip re-creates them on
 # demand; committing them double-counts the skill inventory.
 .agents/skills/*--[0-9a-f]*/
+
+# graph.json is per-viewer Obsidian UI state, same as workspace.json above:
+# collapse-filter, hideUnresolved, showOrphans flip every time the graph pane
+# opens. Generates phantom diffs. Not repo content.
+.obsidian/graph.json
