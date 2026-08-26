@@ -2,7 +2,7 @@
  * OMNI ROUTER — provider-agnostic model routing layer.
  *
  * Routes every swarm task to the first configured, healthy provider in
- * OMNI_PROVIDER_ORDER. Adapters: anthropic | openai_compat | ollama.
+ * OMNI_PROVIDER_ORDER. Adapters: openai_compat | ollama.
  *
  * Fail-closed by design:
  *  - No provider configured  -> OmniRouterError('NO_PROVIDER'), task goes BLOCKED.
@@ -66,34 +66,12 @@ async function postJson(url: string, headers: Record<string, string>, body: unkn
   }
 }
 
-// ── Adapter: Anthropic direct ─────────────────────────────────────────────────
-const anthropic: ProviderAdapter = {
-  id: 'anthropic',
-  configured: () => env('ANTHROPIC_API_KEY').length > 0,
-  modelFor: (mode) =>
-    mode === 'speed'
-      ? env('OMNI_MODEL_SPEED') || 'claude-3-5-haiku-20241022'
-      : env('OMNI_MODEL_REASONING') || 'claude-3-5-sonnet-20241022',
-  async complete(req) {
-    const model = this.modelFor(req.mode)!;
-    const data = await postJson(
-      'https://api.anthropic.com/v1/messages',
-      { 'x-api-key': env('ANTHROPIC_API_KEY'), 'anthropic-version': '2023-06-01' },
-      {
-        model,
-        max_tokens: req.maxTokens ?? 4096,
-        system: req.system,
-        messages: [{ role: 'user', content: req.prompt }],
-      },
-    );
-    const text = (data.content ?? [])
-      .filter((b: any) => b.type === 'text')
-      .map((b: any) => b.text)
-      .join('\n');
-    if (!text) throw new Error('Empty completion from Anthropic.');
-    return text;
-  },
-};
+// Adapter: Anthropic direct — REMOVED 2026-08-26 (judge lane).
+// SECRETS.md: "Anthropic / Claude — CLI auth on subscription only. No Anthropic
+// API key exists in this stack, ever." This adapter offered exactly the path that
+// rule forbids, and role-wall-check.mjs fails the build on the key name alone.
+// Claude access is the official CLI on account auth; workers route via OmniRoute
+// (openai_compat below). Do not reinstate it.
 
 // ── Adapter: any OpenAI-compatible endpoint ───────────────────────────────────
 const openaiCompat: ProviderAdapter = {
@@ -156,13 +134,12 @@ const ollama: ProviderAdapter = {
 };
 
 const ADAPTERS: Record<string, ProviderAdapter> = {
-  anthropic,
   openai_compat: openaiCompat,
   ollama,
 };
 
 function providerOrder(): ProviderAdapter[] {
-  const order = (env('OMNI_PROVIDER_ORDER') || 'anthropic,openai_compat,ollama')
+  const order = (env('OMNI_PROVIDER_ORDER') || 'openai_compat,ollama')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean);
@@ -196,7 +173,7 @@ export async function route(req: RouteRequest): Promise<RouteResult> {
   if (candidates.length === 0) {
     throw new OmniRouterError(
       'NO_PROVIDER',
-      'Omni Router has no configured provider. Set ANTHROPIC_API_KEY, OPENAI_COMPAT_BASE_URL, or OLLAMA_BASE_URL in server/.env. This system never fabricates output.',
+      'Omni Router has no configured provider. Set OPENAI_COMPAT_BASE_URL or OLLAMA_BASE_URL in server/.env. This system never fabricates output.',
     );
   }
   const failures: string[] = [];
