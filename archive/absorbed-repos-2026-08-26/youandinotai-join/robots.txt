@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://trollz1004.github.io/youandinotai-join/sitemap.xml
