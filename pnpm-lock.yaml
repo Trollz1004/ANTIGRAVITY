@@ -20,6 +20,9 @@ importers:
 
   .:
     dependencies:
+      agent-browser:
+        specifier: ^0.35.0
+        version: 0.35.1
       fdir:
         specifier: ^6.5.0
         version: 6.5.0(picomatch@4.0.7)
@@ -1822,6 +1825,11 @@ packages:
   acorn@8.16.0:
     resolution: {integrity: sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==}
     engines: {node: '>=0.4.0'}
+    hasBin: true
+
+  agent-browser@0.35.1:
+    resolution: {integrity: sha512-lbVEtcKvZcQQLSKhcH2G0oEGMT04MKj6CBLdM7koGRSs6DqsFO9UVKZuYTpikskJoAklnvtDjbtgCfSbW/yZjQ==}
+    engines: {node: '>=24.0.0', pnpm: '>=11.0.0'}
     hasBin: true
 
   ajv-formats@3.0.1:
@@ -5724,6 +5732,8 @@ snapshots:
       acorn: 8.16.0
 
   acorn@8.16.0: {}
+
+  agent-browser@0.35.1: {}
 
   ajv-formats@3.0.1(ajv@8.20.0):
     optionalDependencies:
