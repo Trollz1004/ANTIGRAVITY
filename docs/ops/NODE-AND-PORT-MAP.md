@@ -97,6 +97,34 @@ Blocking, and none of it is fixed by hardware:
 
 The first action on the new box is creating the `.uproject`, not migrating a service.
 
+### Unreal skills — available, deliberately not installed here
+
+Correcting an earlier finding: `.agents/skills/` contains no Unreal skill, and
+that remains true — but Unreal skills **do exist** and are installable from the
+skills marketplace. "None installed" is not "none available."
+
+They are **not** being installed on Sabretooth. Unreal is not on this box, the
+DREAM machine does not exist yet, and adding 30+ `ue-*` skills to a tree being
+de-cluttered would recreate the mess. Install them on the DREAM box, once it is
+the machine actually running the Editor.
+
+Shortlist, in install order, first-party first:
+
+| Skill | Source | Why |
+|---|---|---|
+| `unreal-mcp` | `epicgames/unreal-engine-skills-for-claude-code-plugin` | **Official Epic.** Pairs with the MCP server that runs inside Unreal Editor — the piece this whole question hinges on. |
+| `unreal-skill` | `epicgames/…-plugin` | Official companion to the above. |
+| `unreal-mcp` | `nousresearch/hermes-agent` | Hermes' own. Counterpart to `optional-mcps/unreal-engine/manifest.yaml`, already present in the Hermes install. |
+| `ue-project-context`, `ue-gameplay-framework`, `ue-networking-replication` | `quodsoler/unreal-engine-skills` | The three that matter for an open-world MMO. That publisher has ~30 `ue-*` skills; take these first, not the set. |
+
+Neither `epicgames/…` nor `quodsoler/…` nor `nousresearch/hermes-agent` is a
+registered marketplace on this machine — only `claude-plugins-official` and
+`cloudflare` are. Each has to be added before its skills can be installed, so
+this is a deliberate step on the new box, not something that happens by accident.
+
+Take the Epic ones first. They are first-party, and the Editor-side MCP server is
+the actual integration point; the rest is authoring assistance that can wait.
+
 ## Port rule
 
 Before binding anything new, check the table above and then check the machine.
