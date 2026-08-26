@@ -1,5 +1,11 @@
 # Open Issues
 
+> **STALE NODE REFERENCES (judge lane, 2026-08-26).** Issues below that target
+> "T5500" cannot be actioned as written: there is no T5500. `192.168.0.8` is
+> SABRETOOTH, this machine. Re-scope such an issue to Sabretooth or close it —
+> do not go looking for the other box.
+
+
 > Each agent appends blockers here. CEOs triage and assign resolution.
 
 ## CRITICAL
