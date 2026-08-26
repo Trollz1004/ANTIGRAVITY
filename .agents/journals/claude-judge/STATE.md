@@ -53,11 +53,30 @@ answers on this LAN. Any plan to "move Hermes to T5500" has no destination.
 
 **Hermes Unreal MCP is not the backend API — they collide.** Hermes'
 `unreal-engine` entry is `enabled: false` at `127.0.0.1:8000/mcp`; the
-YouAndINotAI FastAPI backend owns `:8000`. Unreal is not installed, no `.uproject`
-exists, and there are **zero** Unreal/Unity/game skills. `.agents/skills/README.md`
-advertised "144+ agency-* skills" including two Unreal ones — none exist, and the
-`agency-agents/` source tree the regeneration commands pointed at is absent. That
-README was the origin of the belief; rewritten with verified counts in `6341ba5c`.
+YouAndINotAI FastAPI backend owns `:8000`. Unreal is not installed and no
+`.uproject` exists. That part stands.
+
+**RETRACTED same day — the Unreal-skills claim here was wrong.** This entry
+originally read "there are **zero** Unreal/Unity/game skills" and said the
+README's "144+ agency-*" line described an install that never happened. False.
+They exist, in the laptop vault at
+`OneDrive\Personal Vault-Laptop\ANTIGRAVITY\.agents\skills\` — **229 skill
+directories, 184 of them `agency-*`**, including four Unreal:
+`agency-unreal-systems-engineer`, `-world-builder`, `-multiplayer-architect`,
+`-technical-artist`. Joshua said "like 5 unreal agency skills." There are 4, and
+he was right that they existed.
+
+The error: `C:\ANTIGRAVITY\.agents\skills` was checked, found to hold no
+`agency-*`, and that single directory was generalised into a claim about the
+whole machine — against Joshua's firsthand statement that he had them. The old
+README was **accurate about the pack and stale only about the path**. The honest
+fix was a path, not a demolition; the demolition landed in `6341ba5c` and was
+corrected in `35ed3680` and `76c08f78`, which folded 11 game-dev skills into this
+tree and rewrote the README.
+
+**Rule this produced:** when the owner states from firsthand use that something
+exists and one directory disagrees, the directory is the weaker evidence. Widen
+the search before writing a negative into doctrine.
 
 **Six control planes, not three** — and **not one references `:3100`.** "Paperclip
 handles it" is true as governance and **unproven as engineering**; there is no
@@ -151,10 +170,13 @@ re-litigate this from the slogan; re-run the route check.
   surviving only in a repo queued for archive. The evidence for the claim had been
   deleted from the repo the claim points at. Restored.
 
-**Not folded, deliberately:** the 184 `agency-*` skills in v2. 33 are already live
-agent types in this harness; the other 151 are a generic third-party pack
-(`baidu-seo-specialist`, `bilibili-content-strategist`, `blender-add-on-engineer`).
-An archived repo stays readable if one is ever wanted.
+**Not folded wholesale:** the 184 `agency-*` skills in v2 — but read the
+retraction above before repeating any "just a third-party pack" framing. They are
+real, installed, and Joshua's; 33 overlap live agent types in this harness. The
+reason to leave 173 in the vault is **volume during a de-cluttering pass**, not
+worthlessness — dropping 184 directories into a tree being cleaned trades one
+mess for another. Copy what a task needs. The 11 game-dev skills were folded in
+`35ed3680` precisely because a task needed them.
 
 ### Repos: 24 -> 13 active, 11 archived
 

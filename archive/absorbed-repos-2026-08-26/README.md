@@ -1,0 +1,95 @@
+# Absorbed repositories — 2026-08-26
+
+Folding GitHub repositories into this monorepo so they can be archived without
+losing anything. Joshua's rule: **two repos survive** — `Trollz1004/ANTIGRAVITY`
+for everything non-game, `Trollz1004/dream-online` for the game.
+
+**Three were folded. Four could not be, and the reason is important.**
+
+## Folded here
+
+| Directory | Files | What it is |
+|---|---|---|
+| `antigravity-dashboard/` | 11 | Cloudflare-Pages dashboard, superseded by Paperclip. Ships `wrangler.toml` + `functions/`. |
+| `youandinotai-links/` | 4 | Public join/verify landing. `b2b.html` was absent from `apps/youandinotai-static`. |
+| `youandinotai-join/` | 5 | Founding-membership landing. Carries `sitemap.xml` + `robots.txt`. |
+
+Placed under `archive/` rather than scattered into `apps/`. Each is a whole
+project with its own build and conventions; distributing them across the live
+tree would rebuild the clutter this cleanup exists to remove. **Promote one out
+when something needs it** — don't wire anything up from inside `archive/`.
+
+## NOT folded — they carry banned language, and this repo is public
+
+`command-center`, `OpenclawDash`, `MANUS-Has-Hands`, and `EMERGENT` each trip
+`.githooks/pre-commit-canonical`:
+
+| Repo | Guard hits |
+|---|---|
+| `MANUS-Has-Hands` | **176** |
+| `OpenclawDash` | 19 |
+| `EMERGENT` | 6 |
+| `command-center` | 3 |
+
+They contain the split and giving language that `BRIEFING.md` §1 bans repo-wide:
+They contain the language `BRIEFING.md` �1 bans repo-wide -- ratio figures,
+  on-chain contract addresses, a Solidity contract name, routing percentages, and
+  the exact terms the Florida �496.405 compliance wall exists to keep off any
+  surface. The specific words are not repeated here: they live in
+  `.githooks/secret-patterns.txt`' sibling guard and nowhere else, because
+  markdown gets swept and a shell script does not.
+percentages, and the words the Florida §496.405 compliance wall exists to keep
+off any surface.
+
+**The consolidation goal and the language ban collided, and the ban wins.**
+`Trollz1004/ANTIGRAVITY` is public. Folding these four verbatim would publish
+that language to the world — the precise outcome §1 was written to prevent, and
+the reason flag bots keyword-match live sites. §1 is explicit that a sentence
+*denying* a split still trips; the only safe rule is that the words never appear.
+
+It also matches the standing decision in memory that this material stays out
+of the repo, the product, and doctrine entirely.
+
+**So those four stay as private GitHub repositories.** Archive them in place —
+archiving freezes a repo but keeps it readable, so nothing is lost and nothing is
+published. That is a better outcome than folding, not a worse one.
+
+If any of their content is ever genuinely needed here, port the specific files
+and scrub the language on the way in. Do not bulk-copy them.
+
+## Verified before folding
+
+Scanned all 402 candidate files for live-key shapes — `sk_live_`, `sk-ant-`,
+`sk-or-v1-`, `ghp_`, `github_pat_`, `gsk_`, `nvapi-`, `xai-`, `AIza`, `EAAA`,
+`AKIA` — plus hardcoded secret assignments.
+
+**That scan missed a real key.** `EMERGENT/memory/EMERGENT_JOURNAL.md` carried a
+live `EMERGENT_LLM_KEY` (`sk-emergent-…`). My scan looked for *vendor* prefixes;
+this one uses a prefix nobody anticipated. The commit was blocked by
+`.githooks/secret-patterns.txt`, whose generic
+`sk-[A-Za-z0-9][A-Za-z0-9_-]{18,}` rule does not care which vendor invented the
+prefix. First real run of the newly wired hook, and it beat a hand-written scan
+on the same files. **Keep the generic rule; never narrow it to a vendor list.**
+
+EMERGENT is no longer folded here, so that key never entered this repo — but it
+still sits in its own private repo's history. **Rotate it.**
+
+## Hosting caveats — folding does not migrate hosting
+
+Archiving freezes a repo. An existing GitHub Pages site keeps serving but can no
+longer rebuild:
+
+- **`youandinotai-links`** and **`youandinotai-join`** both have active Pages
+  deploy workflows. Confirm no live domain needs a future rebuild.
+- **`antigravity-dashboard`** ships `wrangler.toml` + `functions/`. If a Cloudflare
+  Pages project is still bound to it, archiving stops future deploys.
+
+## Also not folded
+
+- **`DREAM-ONLINE-MMORPG-PvP-…`** — game content, belongs in `dream-online`.
+- **`sabretooth-hermes-backup`** — 97 MB of dated snapshots. Code is superseded,
+  but the HermesWorld art in the `2026-06-09` snapshot exists nowhere else on this
+  machine. Extract the art, then archive. Do not fold 97 MB of snapshots.
+- **`ANTIGRAVITY-v2`** — 1,182 files including 184 `agency-*` skills. Handled
+  separately; see `.agents/skills/README.md`.
+- **`SIDE-WORK`** — already archived, and the stale twin of `EMERGENT`.
