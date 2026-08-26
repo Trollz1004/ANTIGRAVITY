@@ -20,7 +20,16 @@ Paperclip is an active runtime on the Sabretooth node: `paperclipai@2026.824.0` 
 
 Harness lanes are assigned under Paperclip: Hermes to YouTube automation, OpenClaw to marketing, OpenCode to eBay and recycling automation. X.com work is Grok-only through the grok.com path, not the X Developer API.
 
-There is no working-hours restriction on any lane. A `403 Access denied outside allowed hours` from OmniRoute is an `accessSchedule` toggle on an API key, not governance — Joshua never set that rule. If one appears, clear the schedule on the key; do not write it back into doctrine.
+There is no working-hours restriction on any lane. A `403 Access denied outside allowed hours` from OmniRoute is a per-API-key schedule, not governance — Joshua never set that rule.
+
+**One was found live and cleared on 2026-08-26.** The API key named `FABLE` carried `{"enabled":true,"from":"08:00","until":"18:00","days":[0,1,2,3,4,5,6],"tz":"America/New_York"}`. It was gating OpenCode as recently as 23:30 that night. Cleared to `NULL`; OpenCode then completed a heartbeat at 23:46 with no error, which is the proof the gate is gone.
+
+**Where to look, exactly** — an earlier sweep declared "no schedule exists" and was wrong twice over, so use these coordinates rather than a keyword search:
+
+- Database: `~/.omniroute/data/storage.sqlite` — note the `data/` subdirectory. A stale `~/.omniroute/storage.sqlite` also exists and is **not** the live one.
+- Table `api_keys`, column **`access_schedule`** — snake_case. Searching the file for the string `accessSchedule` finds nothing, because the column name never appears inside its own JSON value. That false negative is what produced the wrong all-clear.
+
+Clear it by setting the column to `NULL` (back the database up first). Do not write the restriction back into doctrine, and do not report a schedule as absent unless that exact column has been read.
 
 ## Operating Rules
 
