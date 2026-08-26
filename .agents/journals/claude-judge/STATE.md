@@ -201,3 +201,55 @@ archive signal).
 
 Unchanged and still Joshua's: rotate the 11 credentials, GitHub PAT first. The
 history purge follows rotation, never precedes it.
+
+---
+
+## 2026-08-26 (third pass) — worked the board, and a second retraction
+
+**RETRACTED: "the allowed-hours 403 is stale."** I said that twice, in two
+sessions, and it was wrong twice. The gate was live. The OmniRoute API key named
+`FABLE` carried `access_schedule` = `{"enabled":true,"from":"08:00",
+"until":"18:00","days":[0..6],"tz":"America/New_York"}`, and it rejected OpenCode
+at **23:30 tonight** — an hour before I looked.
+
+Two compounding search errors made the false all-clear:
+
+1. **Wrong database.** I searched `~/.omniroute/storage.sqlite`. The live file is
+   `~/.omniroute/data/storage.sqlite` — the one with `-wal`/`-shm` beside it.
+2. **Wrong string.** I grepped values for `accessSchedule`. The column is
+   `access_schedule`, snake_case, and a column name never appears inside its own
+   JSON value, so nothing could ever have matched.
+
+Cleared to `NULL` after backing up to
+`db_backups/db_pre-accessschedule-clear-2026-08-26.sqlite`. **Verified by effect,
+not by re-reading the row**: woke OpenCode, which had been failing on this exact
+403, and it heartbeat at 23:46 — nearly six hours outside the old window — and
+returned to `idle` with `errorReason` cleared. Coordinates recorded in
+`CLAUDE.md` so the next agent uses a path and a column name instead of a keyword.
+
+**Rule, same shape as the Unreal-skills retraction earlier today:** a negative
+result is only as strong as the search that produced it. Two wrong searches
+produced two confident wrong answers. State what was searched, so a bad search is
+visible as a bad search rather than as an absence.
+
+### Board
+
+`GET /api/agents/me`-equivalent shows **Claude Judge holds zero assignments** —
+nothing was waiting on this lane. Board went 7 healthy -> **8** when OpenCode
+recovered.
+
+Still in error, with distinct causes:
+- **Fables Eye in the Sky** — `Process adapter missing command`. Created 19:53
+  today with `adapterType: process` but no `command` in `adapterConfig`; its own
+  note says it runs "through the operator's authenticated Claude session" via
+  browser. The adapter type looks wrong for what it is. **Not guessed at** —
+  registration belongs to whoever created it.
+- **Summarizer** — `Process lost, server may have restarted`. Stale; wake issued.
+- **Hermes** — `Timed out`. **OpenClaw** — gateway run timed out after 600000ms.
+
+### Reported to Mission Control
+
+**ANT-271** — consolidation result plus the credential blocker — created and
+assigned to **Buffy (CEO)** at `critical`. The rotation genuinely cannot be an
+agent action (vendor dashboards, and agents do not handle credentials), so it is
+escalated to the CEO lane to be chased rather than left in a chat log.
