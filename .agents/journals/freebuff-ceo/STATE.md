@@ -1,5 +1,12 @@
 # Freebuff CEO journal
 
+## 2026-08-26 — session orientation
+- VERIFIED: canonical root `C:\ANTIGRAVITY`, branch `main`, Paperclip identity/health `ok` on `:3100`, `local_trusted`, version `2026.824.0`.
+- BLOCKED: CEO bridge `:3140` and OpenClaw `:18789` did not answer; OmniRoute `:20128/api/status` returned HTTP 401 `AUTH_001` without credentials. No services were started or reconfigured.
+- VERIFIED: Mission MCP `list_tasks` returned real pending tasks. Mission Control v5 `:3151` served its legacy static page.
+- LOADED: ceo-standing-session, brainstorming, paperclip-create-plugin, dateapp-swarm, fables-house, verification-before-completion, growth-marketer, writing-plans, browser-use, agent-reach, and agent-browser. No implementation or creative work was started.
+- Evidence: `.agents/memory/2026-08-26.md`.
+
 Read at session start, write at session end (standing-set contract). Latest
 entry on top. The dashboard reads the last HEARTBEAT status line from
 `.agents/subagents/freebuff-ceo/HEARTBEAT.md`.
@@ -179,3 +186,11 @@ heartbeat proven; skills catalog audit filed; see ops/paperclip-ceo/STATE.md).
 - Tests: 38 green. New: wake's-own-issue disposal with a second open watchdog issue present (asserted NOT swept), non-watchdog skip (list only, no PATCH route = no attempt), health-DOWN escalation retained.
 - Proof (live, natural fire): ANT-82 fired 06:30:12Z → wake a0d22fae `status: done, autoDisposed: true, completedAt: 06:30:14`; mission watchdog `{checked:1, disposed:1, disposedIds:[5cb0844d...]}`; 0 pending wakes; ZERO watchdogDispose failures since the 06:04 restart (last failure 05:17, pre-fix).
 - VERIFIED: bridge UP (PID 38284), Paperclip :3100 UP, 38/38 tests.
+
+## 2026-08-24 — Judge-lane delivery COMPLETE (Codex Judge APPROVE + relay push)
+- EPERM self-heal added to bridge (step 1): agent-scoped scan of the wake's own agent's runs (10-min lookback), EPERM-class only, clears stale .claude/skills .tmp-* (never symlinks/real dirs), resumes errored agent. 2 focused tests (44 total green). Live: `eperm: {scanned:20, removed:0, resumed:false}`.
+- Delivery (step 2): committed a01a0816 (+ harness lanes + skills + packets), then 3 correction rounds from Codex Judge NEEDS-WORK:
+  1. `wakeDisposition` response contract — auto-disposed wakes return needsCEO=false (stored==returned), 4 regression tests; allowlist restored with Codex Judge 32375fe9 in .env + .env.example; ops/packets/ evidence packet created.
+  2. Packet corrected — ANT-82 labeled pre-fix; genuine post-fix evidence (ANT-85 wake 300b2e2f, needsCEO:false) captured at 07:00:15Z and cited.
+  3. Placeholder table cell replaced with exact ANT-85 evidence.
+- FINAL: Codex Judge **APPROVE** on ANT-87 + separate exact-body `JUDGE-PUSH ef06ed10…` → relay executed push `{ok: true}` at 07:09:16Z. **origin/main == local HEAD == ef06ed10235d4bec0b194cc854526fc700c6d34f, 0 unpushed, confirmed via ls-remote.** No manual push anywhere.

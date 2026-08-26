@@ -1,3 +1,4 @@
+<!-- updated: 2026-08-25T07:19:51.556Z -->
 # OpenCode State Journal
 
 **Status:** UNVERIFIED — S1 draft journal created; no runtime heartbeat has written this file.
