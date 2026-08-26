@@ -90,3 +90,58 @@ longer rebuild:
 - **`ANTIGRAVITY-v2`** — 1,182 files including 184 `agency-*` skills. Handled
   separately; see `.agents/skills/README.md`.
 - **`SIDE-WORK`** — already archived, and the stale twin of `EMERGENT`.
+
+## Addendum — `ANTIGRAVITYclip` joins the not-folded list (judge lane, 2026-08-26)
+
+Checked after the four above, and it lands the same way. The newer copy is local
+(`C:\Users\joshi\projects\ANTIGRAVITYclip`, 262 files excluding `node_modules`,
+more recent than the GitHub remote), so it was assessed from there rather than
+from the repo.
+
+**38 files carry the banned language.** No credential material — scanned for
+Anthropic, Stripe live, Groq, Google, GitHub PAT and Square token shapes, zero
+hits — so this is purely a §1 problem, not a secrets problem.
+
+Same ruling, same reason: `Trollz1004/ANTIGRAVITY` is public, folding 38 such
+files would publish exactly what §1 exists to prevent, and archiving keeps the
+repo readable while publishing nothing. **Archived in place.**
+
+That makes five repos held back by the language ban rather than by their value:
+`command-center`, `OpenclawDash`, `MANUS-Has-Hands`, `EMERGENT`, `ANTIGRAVITYclip`.
+
+## Where the consolidation actually ends
+
+Six repositories remain active, and only one of them is a loose end:
+
+| Repo | Why it stays |
+|---|---|
+| `ANTIGRAVITY` | keeper — everything non-game |
+| `dream-online` | keeper — the game |
+| `Trollz1004` | GitHub profile README; it must keep this exact name to render on the profile and cannot be folded anywhere |
+| `youandinotai-links` | **live** GitHub Pages (HTTP 200); campaign traffic is pointed at it |
+| `youandinotai-join` | **live** GitHub Pages (HTTP 200) |
+| `ANTIGRAVITYclip` | archived per the addendum above |
+
+"Two repos" is the right target and this is as close as it goes honestly: two
+keepers, one profile README that cannot move, and two live customer surfaces that
+are deployment targets rather than code. Everything else is archived — readable,
+frozen, and publishing nothing.
+
+## `ANTIGRAVITYclip` — refused for an instructive reason
+
+Not folded. Its local working copy (`~/projects/ANTIGRAVITYclip`, 262 files, newer
+than the repo) trips `pre-commit-canonical` on `backend/graph.py`, which defines a
+`FORBIDDEN_WORDS` list.
+
+**That file is *enforcing* the ban, not violating it.** The guard cannot tell the
+difference, and it is not supposed to: `BRIEFING.md` §1 says it is dumb regex on
+purpose — *"it does not read intent, it reads words."* An enforcement list and a
+violation look identical to a keyword matcher, which is exactly why §1 keeps the
+canonical word list in a shell script instead of in markdown.
+
+The same thing happened to this README on its first commit attempt, for the same
+reason. Both are the rule working, not failing.
+
+So `ANTIGRAVITYclip` stays a private repo, archived in place — consistent with the
+other four. If its code is ever needed here, port the specific files and keep the
+word list out.
