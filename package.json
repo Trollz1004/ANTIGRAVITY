@@ -23,6 +23,7 @@
     "prettier": "^3.8.3"
   },
   "dependencies": {
+    "agent-browser": "^0.35.0",
     "fdir": "^6.5.0",
     "paperclip-adapter-openrouter": "^5.0.1",
     "typescript": "^6.0.3"
