@@ -633,11 +633,35 @@ async function closeStub(stub) {
     assert.ok(res.reason.includes("session escalation"), res.reason);
   });
 
+  // Lane routing for pool top-ups (Joshua directive 2026-08-26): pool tasks
+  // must be created ASSIGNED so the harnesses actually pick them up.
+  {
+    const { laneForCategory, LANE_HERMES, LANE_OPENCLAW, LANE_OPENCODE, LANE_XMARKETING } = bridge;
+    const cases = [
+      ["x-marketing", "X post draft", LANE_XMARKETING],
+      ["social", "Reels hook", LANE_HERMES],
+      ["support", "Ticket triage", LANE_OPENCLAW],
+      ["analytics", "Funnel report", LANE_OPENCLAW],
+      ["quality", "Regression sweep", LANE_OPENCODE],
+      ["ops", "Deploy checklist", LANE_OPENCODE],
+      ["content", "Write a blog post", LANE_HERMES],
+      ["content", "Landing page copy", LANE_OPENCLAW],
+      ["content", "Press release draft", LANE_HERMES],
+      ["content", "FAQ answers", LANE_HERMES],
+      ["weird-category", "Anything else", LANE_OPENCODE],
+    ];
+    for (const [category, title, expected] of cases) {
+      test(`laneForCategory routes ${category}/${title} to ${expected}`, () => {
+        assert.strictEqual(laneForCategory(category, title), expected);
+      });
+    }
+  }
+
   if (failures) {
     console.error(`\nRELAY TESTS FAILED (${failures} failure(s))`);
     process.exit(1);
   } else {
-    console.log("\nRELAY TESTS PASSED — strict parser + binding + authorization + watchdog dispose (all green)");
+    console.log("\nRELAY TESTS PASSED — strict parser + binding + authorization + watchdog dispose + lane routing (all green)");
   }
 })().catch((err) => {
   console.error("RELAY TESTS ERRORED:", err);

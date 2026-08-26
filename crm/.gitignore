@@ -1,0 +1,15 @@
+# Runtime + local junk — never commit
+.runtime/
+*.log
+backend/.venv/
+frontend/node_modules/
+frontend/build/
+frontend/.env*.local
+backend/.env
+__pycache__/
+*.pyc
+
+# Emergent-host leftovers + stray artifacts
+.emergent/
+.gitconfig
+backend/=2.0.0

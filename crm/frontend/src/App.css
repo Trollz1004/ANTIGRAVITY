@@ -1,0 +1,160 @@
+/* Main App Styles */
+.app-container {
+    min-height: 100vh;
+    background-color: hsl(var(--background));
+}
+
+/* Sidebar */
+.sidebar {
+    @apply fixed left-0 top-0 h-full w-64 bg-card border-r border-border p-6 z-40;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-collapsed {
+    transform: translateX(-100%);
+}
+
+/* Main Content */
+.main-content {
+    @apply ml-64 p-6 md:p-8;
+    min-height: 100vh;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
+}
+
+/* Stat Card */
+.stat-card {
+    @apply bg-card border border-border rounded-xl p-6 transition-all duration-200 ease-in-out;
+}
+
+.stat-card:hover {
+    @apply shadow-lg border-primary/20;
+}
+
+.stat-value {
+    @apply text-3xl font-heading font-semibold text-foreground;
+}
+
+.stat-label {
+    @apply text-sm text-muted-foreground mt-1;
+}
+
+/* Content Card */
+.content-card {
+    @apply bg-card border border-border rounded-xl overflow-hidden transition-all duration-200 ease-in-out;
+}
+
+.content-card-header {
+    @apply p-4 border-b border-border bg-muted/30;
+}
+
+.content-card-body {
+    @apply p-6;
+}
+
+/* Table Styles */
+.data-table {
+    @apply w-full;
+}
+
+.data-table th {
+    @apply text-left text-xs uppercase tracking-wider text-muted-foreground font-semibold p-4 bg-muted/50;
+}
+
+.data-table td {
+    @apply p-4 border-t border-border;
+}
+
+.data-table tr:hover {
+    @apply bg-muted/30;
+}
+
+/* Badge variants */
+.badge-primary {
+    @apply bg-primary/10 text-primary px-2.5 py-1 rounded-full text-xs font-medium;
+}
+
+.badge-accent {
+    @apply bg-accent/10 text-accent px-2.5 py-1 rounded-full text-xs font-medium;
+}
+
+.badge-muted {
+    @apply bg-muted text-muted-foreground px-2.5 py-1 rounded-full text-xs font-medium;
+}
+
+/* Chart container */
+.chart-container {
+    @apply w-full h-64 md:h-80;
+}
+
+/* Navigation */
+.nav-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-all duration-200;
+}
+
+.nav-item.active {
+    @apply bg-primary/10 text-primary font-medium;
+}
+
+/* Form inputs focus */
+.input-focus {
+    @apply focus:ring-2 focus:ring-primary/20 focus:border-primary;
+}
+
+/* Loading states */
+.loading-shimmer {
+    @apply animate-pulse bg-muted rounded;
+}
+
+/* Responsive mobile menu */
+@media (max-width: 768px) {
+    .sidebar {
+        @apply -translate-x-full;
+    }
+    
+    .sidebar.open {
+        @apply translate-x-0;
+    }
+    
+    .main-content {
+        @apply ml-0;
+    }
+}
+
+/* Hashtag pill */
+.hashtag-pill {
+    @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm bg-primary/10 text-primary hover:bg-primary/20 transition-colors cursor-pointer mr-2 mb-2;
+}
+
+/* Engagement indicator */
+.engagement-high {
+    @apply text-green-600 bg-green-100;
+}
+
+.engagement-medium {
+    @apply text-yellow-600 bg-yellow-100;
+}
+
+.engagement-low {
+    @apply text-red-600 bg-red-100;
+}
+
+/* City card */
+.city-card {
+    @apply relative overflow-hidden rounded-xl border border-border bg-card;
+}
+
+.city-card-image {
+    @apply w-full h-32 object-cover opacity-80;
+}
+
+.city-card-overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent;
+}
+
+.city-card-content {
+    @apply relative p-4 -mt-8;
+}

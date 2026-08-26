@@ -12,8 +12,11 @@ Available to every agent. For FreeBuff and its subagents these live in `~/.agent
 | `mission-mcp` | `node C:\ANTIGRAVITY\services\mission-mcp\dist\server.js` (env `HOME=C:\Users\joshi`) | Tasks, agents, files, memory in Mission Control |
 | `antigravity-files` | `npx -y @modelcontextprotocol/server-filesystem C:\ANTIGRAVITY` | Filesystem scoped to the one repo root — never outside it |
 | `playwright` | `npx -y @playwright/mcp@latest` | Browser automation for verification and webapp testing |
+| `openviking` | streamable HTTP `http://127.0.0.1:1933/mcp` (server started by `.freebuff/startup.sh`) | Context database — semantic recall (`find`/`search`), L0/L1 hierarchical reads, session memory (`remember`/`write`). Seeded: `.agents`, Obsidian vault, briefings, paperclip ops, CRM. Full protocol in `.agents/skills/openviking/SKILL.md` |
 
 `supabase` is available read-first for docs and inspection, but any live database write routes through the Supabase seat and the judge path — the read-first allowlist is still pending judge review. A worker never gets standing write access to production data.
+
+`crm` (self-hosted lead-gen platform, `briefings/CRM-SELFHOST-2026-08-26.md`) is reachable as an HTTP service, not an MCP server: API `http://127.0.0.1:8001/api/`, app `http://127.0.0.1:3001/`. Marketing lanes (OpenClaw, X Marketing/Grok) exercise it daily per the workflow graphy — qualifies leads, runs drips, tracks funnel toward the $5k goal. The `emergentintegrations` SDK is gone; AI runs on the OmniRoute gateway (`http://127.0.0.1:20128/v1`).
 
 ## Standing skills (session-start, before any task — judges included)
 
