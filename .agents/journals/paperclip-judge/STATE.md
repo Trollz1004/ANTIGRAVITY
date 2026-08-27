@@ -2012,3 +2012,18 @@ prefixes, the key was `sk-emergent-`. **Keep the generic `sk-` rule.**
 PAT first) and the `EMERGENT_LLM_KEY`; then decide on the `git filter-repo`
 history purge, which rewrites `main` and two pushed tags. Migrate the two
 youandinotai Pages surfaces before archiving them.
+
+## 2026-08-26 (judge, 01f128b6)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and both assigned-queue endpoints; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; GET /api/agents/me/inbox-lite count = 0; assigned todo,in_progress,blocked count = 0; wake=heartbeat_timer; task=null; comment=null
+- skills: self-improving-system, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: NONE; default pwsh launcher inaccessible with Windows error 1920; system Windows PowerShell succeeded
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+## 2026-08-26 (judge, 557bc03b)
+- did: loaded mandatory judge contracts; verified runtime identity and compact inbox; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; GET /api/agents/me/inbox-lite = empty; wake=heartbeat_timer; task=null; comment=null
+- skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: NONE; default pwsh launcher inaccessible with Windows error 1920; system Windows PowerShell succeeded
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
