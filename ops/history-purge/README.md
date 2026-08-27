@@ -74,3 +74,35 @@ entire `.env` public while looking like a finished cleanup.**
 Forks and GitHub's commit cache survive a force-push. Ask GitHub Support to
 expire cached views of the old objects. Anyone with an existing clone still has
 the old history — which is why rotation, not the purge, is the actual remedy.
+
+---
+
+## Update 2026-08-26 — the exposing tag was deleted from the remote
+
+`refs/tags/archive/no-drift-staking-doctrine` (`b46c27c3`) has been **deleted from
+GitHub**, on Joshua's explicit authorization, ahead of rotation.
+
+Why ahead of rotation: that tag was the reason a plain `git clone` handed anyone
+the complete production `.env`. Deleting it removes the automatic path
+immediately, rather than waiting for rotation and a full purge.
+
+**Backed up first, so this is reversible:**
+`~/.antigravity-ref-backups/tag-no-drift-staking-doctrine.bundle` — 103 MB,
+`git bundle verify` reports *"The bundle records a complete history."* Restore with
+`git fetch <bundle> 'refs/tags/*:refs/tags/*'` then push the tag back.
+
+**Verified by fresh clone, not by assumption.** Cloned
+`https://github.com/Trollz1004/ANTIGRAVITY.git` afresh: it sees only
+`mc-fix-2026-05-06` and `stable/2026-04-16-session-checkpoint`, blob `59e967a1`
+is absent, and `git rev-list --objects --all | grep ' \.env$'` returns **0**.
+
+**What this does NOT do.** GitHub keeps unreachable objects addressable by SHA
+until it garbage-collects, and forks and cached commit views survive. Anyone who
+already cloned still holds the old history. This shrank the window; it did not
+close it. **Rotation remains the actual remedy, and it has not happened.**
+
+**Effect on the purge procedure.** The path list is unchanged — leave `.env` and
+the rest in `purge-paths.txt`. Those paths still exist in `main`-reachable history
+for several of the credentials, and the tag can be restored from the bundle. Run
+the purge with `--mirror` exactly as written; if the tag has been restored by
+then, `--mirror` covers it, and if it has not, the procedure still succeeds.
