@@ -2027,3 +2027,47 @@ youandinotai Pages surfaces before archiving them.
 - blocked: NONE; default pwsh launcher inaccessible with Windows error 1920; system Windows PowerShell succeeded
 - next: wait for assigned packet-review issue or explicit mention handoff
 - state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-26 (judge, cf0a9782)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and both assigned queues; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite count=0; assigned todo,in_progress,blocked count=0; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=b258229d5cced9c3e4309b33d5bab183e66dad46; dirtyCount=0
+- skills: self-improving-system, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: NONE; default pwsh launcher inaccessible with Windows error 1920; system Windows PowerShell succeeded
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+
+## 2026-08-26 (late) — consolidation complete: 2 repos
+
+**24 -> 2 live.** `ANTIGRAVITY` and `dream-online`. 22 archived, org emptied,
+nothing deleted.
+
+**Correction I repeated three times before testing it.** I claimed
+`Trollz1004/Trollz1004` could not be archived because GitHub requires a repo
+named after the account for the profile README to render, so archiving it would
+"delete your profile page." **Wrong.** Archived it and checked the live page:
+the README still renders — 163 content matches, including the heading
+`Trash Or Treasure Online Recycler LLC`, served verbatim from an archived repo.
+
+Archiving makes a repo read-only. It does not stop GitHub serving its content.
+The same property is why the two youandinotai Pages sites still return 200 after
+archiving. I already knew that about Pages and failed to apply it here, then
+stated the opposite as fact in three consecutive reports.
+
+**The lesson worth keeping:** "X cannot be archived because Y would break" is a
+testable claim, and archiving is reversible in one click. Test it instead of
+asserting it.
+
+## Still open, and genuinely gated on Joshua
+
+1. **Rotate the 12 credentials** in public git history — Stripe live key and the
+   GitHub PAT first. Plus the `EMERGENT_LLM_KEY` the new hook caught.
+2. **`git filter-repo` history purge** — rewrites `main` and two pushed tags.
+   Irreversible for anyone holding a clone. Only after rotation.
+3. **MC5 deletion** — its engine is migrated to `:9134` with byte-identical
+   parity and it has no external consumer, so the API blocker is gone. What
+   remains is that deleting MC5 also deletes its UI. That is a preference, not a
+   fact I can measure.
+
+Items 1 and 2 destroy or expose things; item 3 removes an interface Joshua may
+use. None should be done on inference.
