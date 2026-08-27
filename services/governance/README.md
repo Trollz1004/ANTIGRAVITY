@@ -13,11 +13,22 @@ are a different thing, and operating rule 4 holds that official-platform
 governance ballots never route through OmniRoute. So this could not simply be
 deleted with MC5.
 
-## Status: SCAFFOLDED, NOT RUNNING
+## Status: RUNNING, PARITY PROVEN
 
-Dependencies are **not** installed and nothing is started. Sabretooth already
-runs 15 services (`docs/ops/NODE-AND-PORT-MAP.md`); this one goes up
-deliberately, as part of the MC5 cutover, not as a side effect of a cleanup.
+Built and running on `127.0.0.1:9134`. Identity verified:
+`GET /health` -> `{"status":"ok","service":"official-vote-service","port":9134}`.
+
+**Parity against live MC5 is proven, not assumed** — measured 2026-08-26 with
+both services up:
+
+| Route | MC5 `:3151` | this `:9134` | Result |
+|---|---|---|---|
+| `GET /api/official-votes/view` | 1525 B | 1525 B | **byte-identical** |
+| `GET /api/official-votes/status` | 1500 B | 1500 B | **byte-identical** |
+| `POST /api/official-votes` (invalid body) | 409 | 409 | same error path |
+
+No ballot has ever been cast — no `official-judge-events.ndjson` exists anywhere
+on this machine — so the migration carries no historical state at risk.
 
 ## Cutover, in order
 
@@ -48,10 +59,18 @@ diff <(curl -s http://127.0.0.1:3151/api/official-votes/view) \
 Identical output is the evidence the cutover is safe. **Do not skip this** — the
 whole point of carving the engine out was to avoid losing ballots.
 
-**3. Repoint the client.** `apps/orbital-studio/api.ts:98` calls
-`/api/official-votes/view`. It is the only consumer found. Until it points here,
-**deleting MC5 breaks the live council-vote API** — MC5 answers that route with
-200 today.
+**3. The client question — smaller than it looked.**
+
+`apps/orbital-studio/api.ts:98` calls `/api/official-votes/view`, but it uses a
+**relative** path through `fetch(path)`, not a hardcoded `:3151`, and
+`apps/orbital-studio` has **no vite proxy config at all** — so those calls
+currently resolve nowhere. That app is staged, not integrated
+(`README-STAGING.md` says so), and its `node_modules` holds 11 entries, i.e. it
+is not installed. **It is not a live consumer.**
+
+The real consumer is **MC5's own client**: `mission-control-v5/client/vite.config`
+proxies `/api` to `http://localhost:3151`. The vote API's only live consumer is
+the app that serves it. Nothing external breaks when MC5 goes.
 
 **4. Only then** retire `mission-control-v5/`. CI is already prepared:
 `policy-guard.yml` calls the ported `tools/role-wall-check.mjs` and skips
