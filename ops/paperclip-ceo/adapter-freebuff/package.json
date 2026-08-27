@@ -1,0 +1,11 @@
+{
+  "name": "paperclip-freebuff-adapter",
+  "version": "1.0.0",
+  "description": "External Paperclip adapter that runs agent tasks through the Freebuff (Buffy CEO) session via the wake-file bridge.",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "private": true
+}

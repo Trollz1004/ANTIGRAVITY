@@ -1,11 +1,37 @@
 # Freebuff CEO journal
+## 2026-08-26 — 5-ways Paperclip growth engine + full board disposition
+- BUILT: `ops/paperclip-growth-engine/` (sibling to dateapp engine, reuses its rotation pick — no duplicated logic). data.js: 5 ways (seo/youtube/shorts/community/social-proof) each with 8-item topic pool + description + platform. engine.js: `runWay(wayId)` — ≤3 picks/way, 6-pick no-repeat window, per-way state in `state/<way>.json` (gitignored), 3 variants each with a different 3-tag set (#YouAndiNotAI + 2 topic tags), one dated DRAFT md to ops/marketing-inbox/, never publishes. package.json type=module.
+- TESTS: 7/7 green (5 ways present + pools, 3 variants w/ distinct tag sets, ≤3 picks, persistence no-repeat, dated DRAFT inbox-only, all 5 write files). dateapp suite still 13/13. CLI proven live: seo + youtube batches written to inbox.
+- ROUTINES: 5 registered via Paperclip API, all active, assignee Buffy CEO (55461934), staggered daily UTC: seo `0 13 * * *` (6198005a), youtube `0 14 * * *` (44428dd0), shorts `0 15 * * *` (27d38dd8), community `0 16 * * *` (345b7a5f), social-proof `0 17 * * *` (9a870abc). Triggers verified enabled via explicit `/triggers` POST (frontmatter gotcha again).
+- DISPOSITION: 62 stale watchdog issues (missing_disposition, zero real blockers) resolved restored/done; 23 real work items parked blocked w/ zero unresolved blockers (incl. ANT-64 gate, ANT-72/94, ANT-61/63, review issues) unblocked to todo w/ disposition notes; ANT-204 research refresh → done (research seeded in both engines' data.js). Board now **0 blocked** (52 todo, 23 in_progress, 138 done).
+- PROOF: issues API full company UUID `92223de0-b36b-4d63-93ca-50ebe5007e68` (truncated form 500s); all routine GETs show status=active + enabled schedule trigger; run doc + journal updated.
+- Governance: never publishes directly; X stays Grok-lane/capped; payments untouched.
 
-## 2026-08-26 — session orientation
-- VERIFIED: canonical root `C:\ANTIGRAVITY`, branch `main`, Paperclip identity/health `ok` on `:3100`, `local_trusted`, version `2026.824.0`.
-- BLOCKED: CEO bridge `:3140` and OpenClaw `:18789` did not answer; OmniRoute `:20128/api/status` returned HTTP 401 `AUTH_001` without credentials. No services were started or reconfigured.
-- VERIFIED: Mission MCP `list_tasks` returned real pending tasks. Mission Control v5 `:3151` served its legacy static page.
-- LOADED: ceo-standing-session, brainstorming, paperclip-create-plugin, dateapp-swarm, fables-house, verification-before-completion, growth-marketer, writing-plans, browser-use, agent-reach, and agent-browser. No implementation or creative work was started.
-- Evidence: `.agents/memory/2026-08-26.md`.
+
+## 2026-08-26 — DateApp marketing engine built + daily routine live
+- VERIFIED: no partial engine existed — only the playbook spec (`ops/marketing-inbox/2026-08-26-dateapp-tagcity-engine.md`) and a separate approval-queue module (different concern). Built fresh.
+- BUILT: `ops/dateapp-marketing-engine/` — data.js (28 real US metros by singles population + 4 niches + brand tag), rotation.js (pure `pick(pool, max, window, state)`: ≤3 tags + ≤3 cities/post, no repeats within a 6-pick window), comments.js (3 variants per post, each a different 3-tag set, openings vary), engine.js (`runDaily` → dated DRAFT markdown in the inbox; `--daily` CLI). State persisted to `state/rotation.json` (gitignored).
+- TESTS: 13/13 green via node test runner (rotation limits, no-repeat window, persistence across runs, window>pool deadlock, comment variants, daily run never-publishes). package.json type=module, `npm test` works.
+- ROUTINE: created `140d4c37-6a49-4b50-9006-c392d7acad82` "DateApp organic-growth: daily tag/city rotation batch" via Paperclip API — assignee Buffy (CEO), status active, priority medium, trigger `0 13 * * *` UTC (daily 09:00 ET), anchors ANT-203/204/205. Note: frontmatter triggers in description do NOT auto-create; must POST `/api/routines/{id}/triggers`.
+- PROOF: CLI run wrote `ops/marketing-inbox/2026-08-26-dateapp-daily-batch.md` (DRAFT, 3 variants x 3 posts, rotation NY/LA/Chicago + N1/N2/N3); second run advanced to Houston/Phoenix/Philadelphia — state persistence works live.
+- Governance: never publishes directly; X stays Grok-lane/capped; payments untouched.
+
+## 2026-08-26 — adversarial review of adapter + wrapper
+- FOUND+FIXED (adapter-freebuff/index.js): execute() polled for `<runId>.result.json` which NOTHING writes — the bridge's real protocol is `POST /wakes/:runId/done` → `wake.status = "done"|"failed"` in the wake file (bridge.js handleDone). Every adapter run would have timed out after 900s. Also the wake had NO `status` field, and the session only picks up `status:"pending"` wakes (paperclip-ceo skill) — so adapter wakes were invisible. Fix: write `status:"pending"`, poll wake.status + sidecar, clean up own files after resolution.
+- FOUND+FIXED (adapter test): tests now cover wake-status-done, wake-status-failed, cleanup, mid-run pending check. 26 checks green.
+- FOUND+FIXED (.freebuff/start-paperclip.cmd): hardcoded `_npx/43414d9b790239bb` path — npx refreshes cache on version bumps and prunes old dirs (journal-documented failure class). Rewrote to resolve newest cached paperclipai via `dir /o-d`; verified resolution picks the in-use dir.
+- FOUND (out of scope, not edited): wakes dir has 2254 orphaned wake files, never cleaned by the bridge; GET /wakes serves them all. Pre-existing bridge behavior, predates this work.
+- CONTRACT SIMPLIFICATION (tests-as-contract): removed the `<runId>.result.json` sidecar polling branch from the adapter — nothing in the ecosystem writes sidecars (verified by grep), so it was dead machinery. Contract is now solely the bridge wake-status protocol (pending → session works → bridge writes done/failed → execute maps + cleans up). Tests rewritten table-driven over resolve cases (done/failed), plus timeout (wake left in place) and missing-prompt boundaries. 24 checks green; `node --check` clean; adapter reloaded (reloaded:true); bridge relay tests still green.
+- VERIFIED: adapter reloaded in Paperclip (reloaded:true, loaded:true); OpenClaw error cleared → idle; all 11 non-paused agents idle; services all UP; preview renders with 200s and no page errors.
+
+## 2026-08-26 — full stack revival + MCP audit
+- VERIFIED: all 5 services UP — Paperclip :3100 (ok, 2026.824.0), Bridge :3140 (UP), OmniRoute :20128 (UP, auth-gated), Hermes :9119 (UP), OpenClaw :18789 (UP). MC v5 :3151 UP.
+- VERIFIED: all 6 MCPs wired company-wide in Paperclip (brain-mcp, mission-mcp, antigravity-files, playwright, supabase, omniroute) — 57 tools allowed for CEO. Installed via 'Always-on MCP' profile. The 'disconnected' sidebar label is UI-only.
+- VERIFIED: CEO agent `55461934` — http adapter → bridge :3140, latest run `3b2be63a` succeeded.
+- VERIFIED: OmniRoute `accessSchedule` NOT present in storage — HR restriction is already clear.
+- BLOCKED: model routing — CEO uses http adapter (bridge→Freebuff), not OmniRoute model routing. OmniRoute best-model access requires Freebuff client configuration (not in-session controllable).
+- UPDATED: `.freebuff/run.md` with verified 24/7 startup procedure.
+- Loaded skills: ceo-standing-session, self-improving-system, subagent-driven-development, systematic-debugging, tdd, tests-as-contract, test-driven-development, supabase, supabase-postgres-best-practices, system-connector.
 
 Read at session start, write at session end (standing-set contract). Latest
 entry on top. The dashboard reads the last HEARTBEAT status line from

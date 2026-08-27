@@ -1,0 +1,16 @@
+{
+  "name": "dateapp-marketing-engine",
+  "version": "1.0.0",
+  "description": "Date App organic-growth engine: rotation (≤3 tags + ≤3 cities/post, no repeats within a window), comment generator (3 variants per post, different 3-tag sets), daily routine output to ops/marketing-inbox/ for approval.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test engine.test.js"
+  },
+  "exports": {
+    ".": "./engine.js",
+    "./rotation": "./rotation.js",
+    "./comments": "./comments.js",
+    "./data": "./data.js"
+  }
+}
