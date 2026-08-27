@@ -71,3 +71,55 @@ simply stops triggering when the directory goes — no change needed there.
 Do not retire a control plane on the strength of "Paperclip handles it." It
 handles approvals and decisions. It does not handle ballots or the role wall, and
 it only partly handles uptime. The route list is one `curl` away — check it.
+
+
+---
+
+## Addendum — the MC5 decision, reduced to one question
+
+Everything measurable about retiring `mission-control-v5` has now been measured.
+What is left is a preference, and it is stated here so it can be answered in one
+word rather than re-derived.
+
+**The API blocker is gone.** The council-vote engine runs standalone on `:9134`
+(`services/governance/`), and parity against MC5 was proven byte-identical:
+
+| Route | `:3151` | `:9134` |
+|---|---|---|
+| `GET /api/official-votes/view` | 1525 B | 1525 B — identical |
+| `GET /api/official-votes/status` | 1500 B | 1500 B — identical |
+| `POST /api/official-votes` (invalid) | 409 | 409 |
+
+No ballot has ever been cast — no `official-judge-events.ndjson` exists on this
+machine — so no history is at risk.
+
+**And it has no external consumer.** An earlier draft of this file claimed
+deleting MC5 would break a live council-vote API for `apps/orbital-studio`. That
+was wrong. `apps/orbital-studio/api.ts:98` uses a **relative** path via
+`fetch(path)`, `apps/orbital-studio` has **no vite proxy config at all**, and its
+`node_modules` holds 11 entries — it is staged, not installed, and those calls
+resolve nowhere. The only live consumer is MC5's own client
+(`mission-control-v5/client/vite.config` proxies `/api` -> `localhost:3151`).
+The vote API's sole consumer is the app that serves it.
+
+**What deleting MC5 still costs — measured, not assumed.** `:3151` serves a real
+built UI, not just an API:
+
+```
+GET http://127.0.0.1:3151/  ->  <title>MISSION CONTROL — AGENCY SWARM v5</title>
+mission-control-v5/client/dist/index.html                     exists
+mission-control-v5/server/src/index.ts:598  express.static(clientDist)
+mission-control-v5/server/src/index.ts:599  catch-all -> index.html
+```
+
+So the trade is exact: **the engine is already safe elsewhere; deleting MC5
+removes a working dashboard interface.** Whether that interface is worth keeping
+is Joshua's call and cannot be measured from here.
+
+CI is already prepared either way — `policy-guard.yml` calls the ported
+`tools/role-wall-check.mjs` and skips cleanly when `mission-control-v5/` is
+absent; `v5-test-gate.yml` is path-filtered and simply stops triggering.
+
+**MC6 and `crm` are not part of this question.** MC6 is the only uptime and
+alerting system in the repo and Paperclip does not replace it. `crm` is the only
+lead-generation system. Neither is a duplicate of anything.
