@@ -132,3 +132,32 @@ the actual integration point; the rest is authoring assistance that can wait.
 Before binding anything new, check the table above and then check the machine.
 A port answering is not identity — verify the service identity, per operating
 rule 7. `:9119` returning 200 is Hermes, not whatever you hoped was there.
+
+#### Shortlist verified against the publishers — 2026-08-26 (judge lane)
+
+Checked before the DREAM box gets built on it, because a shortlist is an
+inventory and this repo has burned a full session on inventories nobody checked.
+All three publishers exist and every named skill is really there:
+
+| Source | Verified |
+|---|---|
+| `epicgames/unreal-engine-skills-for-claude-code-plugin` | exists (231 stars, pushed 2026-07-22). Ships exactly three skills: **`unreal-mcp`**, **`unreal-skill`**, `create-toolset`. Both named skills confirmed. |
+| `nousresearch/hermes-agent` | exists. Carries `optional-skills/creative/unreal-mcp/SKILL.md` **and** `optional-mcps/unreal-engine/manifest.yaml` — the same manifest already sitting parked in the local Hermes install, so the two halves line up. |
+| `quodsoler/unreal-engine-skills` | exists (322 stars). **27** `ue-*` skills, not ~30. `ue-project-context`, `ue-gameplay-framework`, `ue-networking-replication` all confirmed present. |
+
+**Add a fourth from quodsoler: `ue-mass-entity`.** It covers Mass Entity — UE5's
+ECS for large-scale entity simulation, MassCrowd, MassProcessor, MassSpawner,
+ISM crowds. DREAM's design is an open world with no instances, one shared world
+for every player, and NPCs that all carry memory and adapt. That is a
+large-scale-entity problem before it is anything else, and Mass is the framework
+Unreal ships for it. Taking it later means retrofitting actor-per-NPC code into
+ECS, which is the expensive direction.
+
+Revised install order for the DREAM box: Epic's `unreal-mcp` and `unreal-skill`
+first (first-party, and the Editor-side MCP server is the actual integration
+point), then Hermes' `unreal-mcp`, then quodsoler's `ue-project-context`,
+`ue-gameplay-framework`, `ue-networking-replication`, `ue-mass-entity`.
+
+Marketplace registration is still a deliberate step — none of these three
+publishers is registered on Sabretooth, and that is correct, since none of it
+belongs on a machine with no Unreal Editor.
