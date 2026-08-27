@@ -29,6 +29,8 @@ Plan for one node until a second one is physically standing up.
 | 8001 | python3.13 | CRM backend |
 | 8787 | python3.13 | mission-control-v6 (uptime watchdog) |
 | 9119 | python | Hermes |
+| **8642** | python | **ox-alpha Hermes gateway.** Serves `/health`, **not** `/api/health` — a check written against `/api/health` reports it down while it runs. Restarted 2026-08-26; nothing supervises it, so it dies on reboot. |
+| **9134** | node | **official-vote-service** — council ballots, carved out of MC5 so that app can be retired. Parity with `:3151` proven byte-identical. Loopback only: governance, not a public surface. Also unsupervised. |
 | 11434 | ollama | Ollama (fail-safe route only) |
 | 20128/20129 | node | OmniRoute gateway |
 | 27017 | mongod | CRM database |
