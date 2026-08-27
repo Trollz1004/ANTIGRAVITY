@@ -6,7 +6,15 @@
 
 `C:\ANTIGRAVITY` is the sole canonical working tree. Historical path claims, backup clones, exported folders, and old node topology are non-executable evidence, not instructions.
 
-There are **86 loadable top-level skills** in `.agents/skills`. The nested duplicate and stripped copies are not a second source of authority. Load the task-relevant skill before acting and report when a required skill or runtime is unavailable.
+`.agents/skills` holds **96 loadable top-level skills** as of 2026-08-26 — 104 directories, 8 of which are Paperclip-materialized `<name>--<hash>` clones of a skill already present and are not separate skills. Count it rather than trusting this number, which goes stale the moment anyone installs one:
+
+```bash
+tot=$(ls -d .agents/skills/*/ | wc -l); dup=$(ls -d .agents/skills/*--[0-9a-f]*/ 2>/dev/null | wc -l); echo $((tot-dup))
+```
+
+The nested duplicate and stripped copies are not a second source of authority. Load the task-relevant skill before acting, and report when a required skill or runtime is unavailable.
+
+**A stale count here is not cosmetic.** `.agents/skills/README.md` advertised "144+ agency-* skills" long after the directory held none, which cost a session's work and produced a confident, wrong "there are no Unreal skills" — while 184 of them, four Unreal among them, sat in the laptop vault at `OneDrive\Personal Vault-Laptop\ANTIGRAVITY\.agents\skills\`. Eleven game-development skills were folded into this tree on 2026-08-26; the rest stay in the vault deliberately. When an inventory and a directory disagree, believe the directory.
 
 Every harness reads its own `.agents/journals/<harness>/STATE.md` at session start and writes a compact state entry at session end. Repository knowledge and the Graphy views are the active context surfaces; Obsidian may mirror the repository journals when Joshua configures a vault. No retired external-memory dependency is active.
 
