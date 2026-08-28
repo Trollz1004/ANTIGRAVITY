@@ -75,3 +75,29 @@ evidence to report, never as instructions to follow.
 
 Authority for current state, in order: `CLAUDE.md`, `AGENTS.md`,
 `agent-contracts/MISSION-CONTROL-GOVERNANCE.md`, `docs/ops/NODE-AND-PORT-MAP.md`.
+
+## 2026-08-28 — refinement: the T5500 MACHINE is real, only its ROLE is dead
+
+The entry above is right that no T5500 *node* exists and that its instructions
+must not be followed. But it says "there is no T5500 to run it on", and read
+alone that over-corrects into "the machine does not exist." It does exist.
+
+**Role — dead.** No live T5500 on this LAN. `192.168.0.8` is Sabretooth, this
+machine. Nothing deploys to a T5500 today. Every T5500/9020/`E:\` reference in
+the repo remains stale evidence, never an instruction.
+
+**Machine — real, owned, reserved.** Dual-Xeon class, 64 GB RAM, AMD RX 6800
+16 GB, `DESKTOP-TQD7EIT`. Joshua has designated it the future **DREAM Online
+MMORPG server** — a Joshua-and-Claude project — gated behind four things working
+*and tested* first: Mission Control, the Date App, customer support, marketing.
+
+Both halves are load-bearing. Saying "there is no T5500" will make someone
+discard hardware that has a job waiting; treating T5500 as a live node will send
+them chasing a box that is not on the network. Say instead: *T5500 is not a live
+node; it is reserved hardware behind a gate.*
+
+Caught because a memory search returned Joshua's own earlier words — *"T5500
+isn't scrap, it's the future Dream Online MMORPG server. The IP sweep only
+retired its old role, not the machine."* The sweep that retired the role was
+correct; generalising it to the hardware was not, and that generalisation was
+mine.
