@@ -14,6 +14,18 @@ Aurora/Alienware on this LAN. Other ARP neighbours exist (`.4 .6 .7 .9 .12 .20
 
 Plan for one node until a second one is physically standing up.
 
+**But separate the ROLE from the MACHINE.** The T5500 *node role* is dead — there
+is no live T5500 on this LAN and `192.168.0.8` is Sabretooth. The T5500 *machine*
+is real and owned: dual-Xeon / i7-4960X class, 64 GB RAM, AMD RX 6800 16 GB,
+device name `DESKTOP-TQD7EIT`. Joshua has earmarked it as the **DREAM Online
+MMORPG server**, gated behind four things working *and tested* first: Mission
+Control, Date App, customer support, marketing.
+
+Saying "there is no T5500" is wrong and was said repeatedly in this repo. Say
+instead: *T5500 is not a live node; it is reserved hardware behind a gate.* When
+it comes online, Unreal Engine and its in-editor MCP server go there and Hermes
+points at that remote URL.
+
 ## What is bound right now — 15 services on one box
 
 | Port | Process | Service |
