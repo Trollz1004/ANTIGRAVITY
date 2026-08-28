@@ -157,12 +157,21 @@
       "name": "CRM + data",
       "targets": [
         {
+          "id": "crmhosted",
+          "label": "CRM (hosted, WORKING)",
+          "kind": "http",
+          "url": "https://civic-marketplace-1.preview.emergentagent.com/",
+          "public": true,
+          "fix": null,
+          "note": "The emergent-hosted copy of the SAME CRM code. This one has live data (100 leads, 29 hot). The local :3001 copy renders an identical shell with NO stat cards and a DISABLED Refresh button, because its MongoDB cannot start on this CPU. Both return HTTP 200 -- which is exactly why a status code is not a health check."
+        },
+        {
           "id": "crmui",
-          "label": "CRM frontend",
+          "label": "CRM frontend (local, DATA-DEAD)",
           "port": 3001,
           "kind": "port",
           "fix": "crm",
-          "note": "Starts via `bash crm/ops/start-crm.sh`. The API needs MongoDB, which is hardware-blocked \u2014 see the MongoDB row."
+          "note": "Renders but has no data: MongoDB is hardware-blocked (see the MongoDB row). Verified by browser -- the hosted copy shows 100 leads, this one shows no stat cards and a DISABLED Refresh button. Same code, same version."
         },
         {
           "id": "crmapi",
