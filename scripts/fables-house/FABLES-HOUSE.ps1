@@ -128,8 +128,12 @@ $Stages = @(
 
     @{ Name = 'OpenClaw :18789'; Required = $false
        Probe = { Test-Port 18789 }
+       # 'gateway' is required. Launching openclaw bare runs the CLI and exits;
+       # :18789 is the WebSocket Gateway and only binds under this subcommand.
+       # Verified 2026-08-28: bare launch left the port closed, `gateway` bound
+       # it in seconds.
        Heal  = { $oc = "$env:APPDATA\npm\openclaw.cmd"
-                 if (Test-Path $oc) { Start-Process -FilePath $oc -WindowStyle Hidden }
+                 if (Test-Path $oc) { Start-Process -FilePath $oc -ArgumentList 'gateway' -WindowStyle Hidden }
                  else { Log '  OpenClaw npm-global missing — npm i -g openclaw needed' 'DarkYellow' } } }
 
     # ── Added 2026-08-28. All three were found DOWN during a session and had
