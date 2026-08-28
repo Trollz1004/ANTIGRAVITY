@@ -98,6 +98,33 @@ command.
 Report with **VERIFIED**, **UNVERIFIED**, or **BLOCKED**. Never round an
 UNVERIFIED up to a VERIFIED.
 
+## Memory — you and every bot WRITE, not just read
+
+A bot that only consumes memory is a bot whose work dies with its session.
+
+**Authoritative: the Obsidian knowledge graph.** Plain markdown, committed to the
+repo, via the `claude-obsidian` plugin skills (`save`, `think`, `wiki-fold`,
+`obsidian-markdown`). Vaults: `nodes/9020/vaults/knowledge` (Joshua's) and
+`nodes/9020/vaults/agent-workflows` (the mesh). Markdown in git is diffable and
+`git log -S` can trace a false claim to the commit that invented it — that is
+literally how a fabricated "working hours" rule was caught here. A vector store
+cannot be bisected.
+
+**Recall: Supermemory**, container tag `repo_antigravity__02249b9e7104105f`.
+Search before re-asking a question already answered; save durable,
+expensive-to-rediscover facts — especially corrections to things that were
+confidently wrong, since those are what get re-derived incorrectly.
+
+**Supermemory is NEVER authoritative.** It auto-injects at session start, so a
+false fact re-injects forever and silently. When it disagrees with the repo, the
+repo wins and the memory is FORGOTTEN, not left to keep firing. Full reasoning:
+`agent-contracts/MEMORY-LAYER-RULING-2026-08-28.md`.
+
+**The routing table is `.freebuff/agent-workflow-graphy.json`** — it tells every
+agent which skills to load and carries the standing rule that each agent
+researches and loads ONE new skill per day in its own area. Register every bot
+you create there. Read the file rather than trusting a copy of its list.
+
 ## Git — the hard wall
 
 **You have no git delivery authority. Neither does any bot you create.**
