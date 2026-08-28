@@ -157,6 +157,15 @@ $Stages = @(
                  if (Test-Path $v) { Start-Process 'node' -ArgumentList $v -WorkingDirectory 'C:\ANTIGRAVITY\services\governance' -WindowStyle Hidden }
                  else { Log '  vote service not built - run: cd services\governance; npm install; npm run build' 'DarkYellow' } } }
 
+    # The wall display. Bound to 0.0.0.0 so the Asus mini PC on the LAN can show
+    # it. Last stage on purpose: it reports on everything above, so it should
+    # come up after the things it watches.
+    @{ Name = "FABLE'S SENTRY :9140 (wall display)"; Required = $false
+       Probe = { Test-Http 'http://127.0.0.1:9140/health' 6 'fables-sentry' }
+       Heal  = { $s = 'C:\ANTIGRAVITY\apps\fables-sentry\server.mjs'
+                 if (Test-Path $s) { Start-Process 'node' -ArgumentList $s -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden }
+                 else { Log '  sentry server.mjs missing' 'DarkYellow' } } }
+
     # READ-ONLY verification, never a launcher. The judge lanes (Claude, Codex,
     # Grok), the CEO seat, OpenCode and FreeBuff are Paperclip AGENTS driven by
     # its heartbeat scheduler - they are not services with ports, and starting
