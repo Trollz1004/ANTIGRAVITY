@@ -1,52 +1,192 @@
 {
-  "_comment": "Fable's Sentry target registry. Edit this file to add a watch target; the server and UI both read it, so nothing is hardcoded in two places. 'identity' is the string that MUST appear in the response body — a port being open is NOT health. That rule exists because on 2026-08-28 Redis was LISTENING on 6379 while answering MISCONF and refusing all writes, and every port-only check called it green for hours.",
+  "_comment": "Fable's Sentry target registry. Edit this file to add a watch target; the server and UI both read it, so nothing is hardcoded in two places. 'identity' is the string that MUST appear in the response body \u2014 a port being open is NOT health. That rule exists because on 2026-08-28 Redis was LISTENING on 6379 while answering MISCONF and refusing all writes, and every port-only check called it green for hours.",
   "groups": [
     {
       "name": "Revenue stack",
       "targets": [
-        { "id": "frontend", "label": "Date App UI", "port": 3200, "kind": "http", "url": "http://127.0.0.1:3200/", "fix": "frontend" },
-        { "id": "backend", "label": "Date App API", "port": 8000, "kind": "http", "url": "http://127.0.0.1:8000/", "identity": "YouAndINotAI", "fix": "backend" },
-        { "id": "postgres", "label": "PostgreSQL", "port": 5432, "kind": "port", "fix": "postgres" },
-        { "id": "redis", "label": "Redis", "port": 6379, "kind": "redis", "fix": "redis",
-          "note": "Probed with PING expecting PONG. A MISCONF reply means writes are disabled even though the port is open." },
-        { "id": "tunnel", "label": "Public site", "kind": "http", "url": "https://youandinotai.com/", "public": true, "fix": "tunnel" },
-        { "id": "publicapi", "label": "Public API", "kind": "http", "url": "https://api.youandinotai.com/api/v1/health", "identity": "db_connected", "public": true, "fix": "tunnel" }
+        {
+          "id": "frontend",
+          "label": "Date App UI",
+          "port": 3200,
+          "kind": "http",
+          "url": "http://127.0.0.1:3200/",
+          "fix": "frontend"
+        },
+        {
+          "id": "backend",
+          "label": "Date App API",
+          "port": 8000,
+          "kind": "http",
+          "url": "http://127.0.0.1:8000/",
+          "identity": "YouAndINotAI",
+          "fix": "backend"
+        },
+        {
+          "id": "postgres",
+          "label": "PostgreSQL",
+          "port": 5432,
+          "kind": "port",
+          "fix": "postgres"
+        },
+        {
+          "id": "redis",
+          "label": "Redis",
+          "port": 6379,
+          "kind": "redis",
+          "fix": "redis",
+          "note": "Probed with PING expecting PONG. A MISCONF reply means writes are disabled even though the port is open."
+        },
+        {
+          "id": "tunnel",
+          "label": "Public site",
+          "kind": "http",
+          "url": "https://youandinotai.com/",
+          "public": true,
+          "fix": "tunnel"
+        },
+        {
+          "id": "publicapi",
+          "label": "Public API",
+          "kind": "http",
+          "url": "https://api.youandinotai.com/api/v1/health",
+          "identity": "db_connected",
+          "public": true,
+          "fix": "tunnel"
+        }
       ]
     },
     {
       "name": "Control planes",
       "targets": [
-        { "id": "paperclip", "label": "Paperclip (Mission Control)", "port": 3100, "kind": "http", "url": "http://127.0.0.1:3100/api/openapi.json", "identity": "Paperclip API", "fix": "paperclip" },
-        { "id": "ceobridge", "label": "CEO bridge (Freebuff seat)", "port": 3140, "kind": "http", "url": "http://127.0.0.1:3140/health", "identity": "paperclip-freebuff-ceo-bridge", "fix": "ceobridge" },
-        { "id": "mc5", "label": "Mission Control v5", "port": 3151, "kind": "http", "url": "http://127.0.0.1:3151/api/marketing/queue", "fix": "mc5" },
-        { "id": "mc6", "label": "Stack Health watchdog", "port": 8787, "kind": "port", "fix": "mc6" },
-        { "id": "votes", "label": "Official vote service", "port": 9134, "kind": "http", "url": "http://127.0.0.1:9134/health", "identity": "official-vote-service", "fix": "votes" }
+        {
+          "id": "paperclip",
+          "label": "Paperclip (Mission Control)",
+          "port": 3100,
+          "kind": "http",
+          "url": "http://127.0.0.1:3100/api/openapi.json",
+          "identity": "Paperclip API",
+          "fix": "paperclip"
+        },
+        {
+          "id": "ceobridge",
+          "label": "CEO bridge (Freebuff seat)",
+          "port": 3140,
+          "kind": "http",
+          "url": "http://127.0.0.1:3140/health",
+          "identity": "paperclip-freebuff-ceo-bridge",
+          "fix": "ceobridge"
+        },
+        {
+          "id": "mc5",
+          "label": "Mission Control v5",
+          "port": 3151,
+          "kind": "http",
+          "url": "http://127.0.0.1:3151/api/marketing/queue",
+          "fix": "mc5"
+        },
+        {
+          "id": "mc6",
+          "label": "Stack Health watchdog",
+          "port": 8787,
+          "kind": "port",
+          "fix": "mc6"
+        },
+        {
+          "id": "votes",
+          "label": "Official vote service",
+          "port": 9134,
+          "kind": "http",
+          "url": "http://127.0.0.1:9134/health",
+          "identity": "official-vote-service",
+          "fix": "votes"
+        }
       ]
     },
     {
       "name": "Model routing",
       "targets": [
-        { "id": "omniroute", "label": "OmniRoute gateway", "port": 20128, "kind": "port", "fix": "omniroute",
-          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models." },
-        { "id": "ollama", "label": "Ollama (fail-safe only)", "port": 11434, "kind": "http", "url": "http://127.0.0.1:11434/api/tags", "identity": "models", "fix": "ollama" }
+        {
+          "id": "omniroute",
+          "label": "OmniRoute gateway",
+          "port": 20128,
+          "kind": "port",
+          "fix": "omniroute",
+          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models."
+        },
+        {
+          "id": "ollama",
+          "label": "Ollama (fail-safe only)",
+          "port": 11434,
+          "kind": "http",
+          "url": "http://127.0.0.1:11434/api/tags",
+          "identity": "models",
+          "fix": "ollama"
+        }
       ]
     },
     {
       "name": "Harnesses",
       "targets": [
-        { "id": "hermes", "label": "Hermes", "port": 9119, "kind": "port", "fix": "hermes" },
-        { "id": "hermesgw", "label": "Hermes gateway (paperclip-mc)", "port": 8642, "kind": "http", "url": "http://127.0.0.1:8642/health", "identity": "hermes-agent", "fix": "hermesgw",
-          "note": "Serves /health, NOT /api/health, on build 0.20.5. A check against /api/health reports a healthy gateway as down." },
-        { "id": "openclaw", "label": "OpenClaw", "port": 18789, "kind": "port", "fix": "openclaw" }
+        {
+          "id": "hermes",
+          "label": "Hermes",
+          "port": 9119,
+          "kind": "port",
+          "fix": "hermes"
+        },
+        {
+          "id": "hermesgw",
+          "label": "Hermes gateway (paperclip-mc)",
+          "port": 8642,
+          "kind": "http",
+          "url": "http://127.0.0.1:8642/health",
+          "identity": "hermes-agent",
+          "fix": "hermesgw",
+          "note": "Serves /health, NOT /api/health, on build 0.20.5. A check against /api/health reports a healthy gateway as down."
+        },
+        {
+          "id": "openclaw",
+          "label": "OpenClaw",
+          "port": 18789,
+          "kind": "port",
+          "fix": "openclaw"
+        }
       ]
     },
     {
       "name": "CRM + data",
       "targets": [
-        { "id": "crmui", "label": "CRM frontend", "port": 3001, "kind": "port", "fix": null },
-        { "id": "crmapi", "label": "CRM backend", "port": 8001, "kind": "port", "fix": null },
-        { "id": "mongo", "label": "MongoDB (CRM)", "port": 27017, "kind": "port", "fix": null },
-        { "id": "pcpg", "label": "Paperclip Postgres", "port": 54329, "kind": "port", "fix": null }
+        {
+          "id": "crmui",
+          "label": "CRM frontend",
+          "port": 3001,
+          "kind": "port",
+          "fix": "crm",
+          "note": "Starts via `bash crm/ops/start-crm.sh`. The API needs MongoDB, which is hardware-blocked \u2014 see the MongoDB row."
+        },
+        {
+          "id": "crmapi",
+          "label": "CRM backend",
+          "port": 8001,
+          "kind": "port",
+          "fix": "crm",
+          "note": "Starts via `bash crm/ops/start-crm.sh`. The API needs MongoDB, which is hardware-blocked \u2014 see the MongoDB row."
+        },
+        {
+          "id": "mongo",
+          "label": "MongoDB (CRM)",
+          "port": 27017,
+          "kind": "port",
+          "fix": null,
+          "note": "BLOCKED, not merely down. mongod 8.0.29 dies at 'Initializing durable catalog' with 0xC000001D STATUS_ILLEGAL_INSTRUCTION. This CPU is an i7-4960X (Ivy Bridge-E): it has AVX but NOT AVX2. The bundled MongoDB cannot run on this hardware at any config. Fix = install a MongoDB build that does not require AVX2, or move the CRM off Mongo. No FIX button, because no restart can help."
+        },
+        {
+          "id": "pcpg",
+          "label": "Paperclip Postgres",
+          "port": 54329,
+          "kind": "port",
+          "fix": null
+        }
       ]
     }
   ]

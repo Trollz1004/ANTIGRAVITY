@@ -58,8 +58,10 @@ const FIXES = {
     run: () => ps("$h=\"$env:LOCALAPPDATA\\hermes\\hermes-agent\\bin\\hermes.exe\"; if(Test-Path $h){Start-Process $h -ArgumentList 'serve' -WindowStyle Hidden}"),
   },
   openclaw: {
-    label: 'Start OpenClaw',
-    run: () => ps("$o=\"$env:APPDATA\\npm\\openclaw.cmd\"; if(Test-Path $o){Start-Process -FilePath $o -WindowStyle Hidden}"),
+    // 'gateway' is required — bare openclaw runs the CLI and exits without
+    // ever binding :18789. Verified 2026-08-28.
+    label: 'Start the OpenClaw gateway',
+    run: () => ps("$o=\"$env:APPDATA\\npm\\openclaw.cmd\"; if(Test-Path $o){Start-Process -FilePath $o -ArgumentList 'gateway' -WindowStyle Hidden}"),
   },
   ollama: { label: 'Start Ollama', run: () => ps("$o=\"$env:LOCALAPPDATA\\Programs\\Ollama\\ollama.exe\"; if(Test-Path $o){Start-Process $o -ArgumentList 'serve' -WindowStyle Hidden}") },
   omniroute: { label: 'Start OmniRoute', run: () => ps("$c=\"$env:APPDATA\\npm\\omniroute.cmd\"; if(Test-Path $c){Start-Process -FilePath $c -ArgumentList 'start' -WindowStyle Hidden}") },
@@ -67,6 +69,11 @@ const FIXES = {
 
   // Anything without a bespoke action falls through to the House, which knows
   // how to bring up every stage and is idempotent — it skips what is already up.
+  crm: {
+    label: 'Start the CRM stack (Mongo + API + UI)',
+    run: () => ps("Start-Process 'bash' -ArgumentList 'crm/ops/start-crm.sh' -WorkingDirectory '" + REPO + "' -WindowStyle Hidden"),
+  },
+
   house: { label: "Run FABLE'S HOUSE bring-up", run: () => psFile(HOUSE) },
 };
 for (const k of ['frontend', 'backend', 'postgres', 'tunnel', 'paperclip', 'mc5']) {
