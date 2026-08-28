@@ -1,9 +1,20 @@
 # Open Issues
 
-> **STALE NODE REFERENCES (judge lane, 2026-08-26).** Issues below that target
-> "T5500" cannot be actioned as written: there is no T5500. `192.168.0.8` is
-> SABRETOOTH, this machine. Re-scope such an issue to Sabretooth or close it —
-> do not go looking for the other box.
+> **STALE NODE REFERENCES (judge lane, 2026-08-26; refined 2026-08-28).**
+> Issues below that target "T5500" or "9020" cannot be actioned as written.
+> `192.168.0.8` is SABRETOOTH, this machine — not a second box. Re-scope such an
+> issue to Sabretooth or close it.
+>
+> **Separate the ROLE from the MACHINE.** The earlier wording here said flatly
+> "there is no T5500", and that over-corrected. The T5500 *node role* is dead —
+> there is no live T5500 on this LAN and nothing to deploy to. The T5500
+> *hardware* is real and owned (dual-Xeon class, 64 GB RAM, AMD RX 6800 16 GB,
+> `DESKTOP-TQD7EIT`) and Joshua has reserved it as the future **DREAM Online
+> MMORPG server**, gated behind Mission Control, the Date App, customer support
+> and marketing all working *and tested* first.
+>
+> So: do not chase a T5500 node today, and do not tell anyone the machine does
+> not exist. Neither statement is true on its own.
 
 
 > Each agent appends blockers here. CEOs triage and assign resolution.
