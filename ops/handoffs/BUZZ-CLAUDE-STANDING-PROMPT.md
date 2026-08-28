@@ -64,6 +64,37 @@ row green, with a FIX button on anything red.
 Bridge-E) has AVX but not AVX2. No restart helps. It needs a different MongoDB
 build or the CRM moved off Mongo — Joshua's call.
 
+## The domains — verified in a browser 2026-08-28, not by status code
+
+**A 200 is not a working page.** Joshua's standard, and it caught two real
+failures the same day. Check what a page SAYS, never just that it answered.
+
+| Domain | Reality |
+|---|---|
+| `youandinotai.com` | **LIVE and correct** — real product page, Bot-Shield flow, founder pricing. On Cloudflare (`keenan.ns.cloudflare.com`). Auto-renews at **Namecheap** — the only domain currently earning. |
+| `ai-solutions.store` | On Cloudflare (`april.ns.cloudflare.com`), HTTPS works. |
+| `onlinerecycle.net` | **BROKEN.** `https://` refuses the connection. `http://` returns **200** and serves an IONOS parking page saying "not yet connected to a website". The real storefront is `onlinerecycle.square.site`. |
+| `dream-online.net` / `.org` / `.info` / `.store` | On IONOS nameservers, **no HTTPS**. Note the HYPHEN — `dreamonline.net` without it is a GoDaddy for-sale page and is NOT Joshua's. |
+| `untilnokidinneed.*`, `aidoesitall.*` | IONOS, no HTTPS; several have no A record at all. |
+
+**Only 2 of 14 domains are actually on Cloudflare.** The rest still delegate to
+IONOS (`ns*.ui-dns.*`), and that delegation *is* the red padlock — Cloudflare
+cannot issue a certificate for a zone it does not serve. Fixing it requires a
+nameserver change **at IONOS**, in Joshua's registrar account. No agent can do
+it, and no Cloudflare token on this machine would help.
+
+## The CRM — same code, two very different healths
+
+The emergent preview (`civic-marketplace-1.preview.emergentagent.com`) and the
+local copy on `:3001` are the **same version** — identical heading, identical ten
+nav links. They are not equally alive:
+
+- hosted: **100 Total Leads, 29 Hot Leads**, Refresh enabled
+- local: **no stat cards at all**, Refresh `[disabled]`
+
+Both answer HTTP 200. The local one is data-dead because its MongoDB cannot start
+on this CPU. Use the hosted copy for anything needing real CRM data.
+
 ## Rules that are not negotiable
 
 1. **Never push, merge, or delete a branch.** Only the official judge lanes do
