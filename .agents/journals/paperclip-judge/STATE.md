@@ -1,5 +1,21 @@
 # Paperclip Judge Journal
 
+## 2026-08-28 (judge, 301d8b4a)
+- did: loaded mandatory judge contracts and standing skills; verified official identity, both assigned approval queues, and canonical Git state; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; GET /api/agents/me/inbox-lite = []; assigned todo,in_progress,blocked = []; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=8a52e1ed3829411346f47e064dc092fff1cc2367; dirtyCount=6
+- skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; default command runner and apply_patch failed applying deny-read ACLs; approved PowerShell and antigravity-files edit succeeded; pre-existing dirty files preserved
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-28 (judge, c1d5d56c)
+- did: loaded mandatory judge contracts; verified runtime identity and both assigned-task surfaces; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; GET /api/agents/me/inbox-lite = null; assigned issue query = []; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=8a52e1ed3829411346f47e064dc092fff1cc2367
+- skills: self-improving-system, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: NONE; sandbox ACL helper failed to start PowerShell; approved external PowerShell path succeeded
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
 ## 2026-08-27 (judge, a978a17c)
 - did: loaded mandatory judge contracts; verified runtime identity and both assigned-task surfaces; no assigned issue; no control-plane write attempted
 - verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; GET /api/agents/me/inbox-lite = empty object; assigned issue query count = 0; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100
@@ -2174,4 +2190,52 @@ use. None should be done on inference.
 - skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip, verification-before-completion
 - blocked: no assigned issue; agent-auth identity and inbox-lite endpoints returned HTTP 401 through board session; local command runner failed before PowerShell start while applying deny-read ACLs; pre-existing dirty tree preserved
 - next: wait for assigned packet-review issue or explicit mention handoff; runtime owner repairs command-runner ACL setup
+- state: YELLOW; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-28 (judge, c62ad030)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and both assigned approval queues; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; GET /api/agents/me/inbox-lite = []; assigned todo,in_progress,blocked = []; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=88f469aaa655d95c573c8026e668c9a510f0f39c
+- skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; default command runner failed applying deny-read ACLs; approved execution succeeded; pre-existing dirty files preserved
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-28 (judge, 95647603)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and both assigned approval queues; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; GET /api/agents/me/inbox-lite count=0; assigned todo,in_progress,blocked count=0; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=8a52e1ed3829411346f47e064dc092fff1cc2367
+- skills: self-improving-system, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; default command runner failed applying deny-read ACLs; approved system PowerShell succeeded
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-28 (judge, 64b81e97)
+- did: loaded mandatory judge contracts and standing skills; verified official identity, both assigned approval queues, Git state, and callable capability baseline; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite count=0; assigned todo,in_progress,blocked count=0; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=8a52e1ed3829411346f47e064dc092fff1cc2367; dirtyCount=3; antigravity-files, brain-mcp, mission-mcp, Playwright answered real calls
+- skills: self-improving-system, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; Supabase and OpenViking NOT CONFIGURED in callable tool profile; default command runner and apply_patch failed applying deny-read ACLs; approved system PowerShell and repository-scoped filesystem binding succeeded; pre-existing dirty files preserved
+- next: wait for assigned packet-review issue or explicit mention handoff; runtime owner binds Supabase and OpenViking to this tool profile
+- state: YELLOW; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-28 (judge, 3de93008)
+- did: loaded mandatory judge contracts; verified official identity, both approval queues, and callable capability baseline; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite count=0; assigned todo,in_progress,blocked count=0; wake=heartbeat_timer; task=null; comment=null; brain-mcp HEAD=8a52e1ed3829411346f47e064dc092fff1cc2367 dirty; antigravity-files, brain-mcp, mission-mcp, Playwright answered real calls
+- skills: self-improving-system, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; OpenViking NOT CONFIGURED in callable tool profile; default command runner failed applying deny-read ACLs; approved PowerShell succeeded; pre-existing dirty files preserved
+- next: wait for assigned packet-review issue or explicit mention handoff; runtime owner binds OpenViking to this tool profile
+- state: YELLOW; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-28 (judge, dc6f5e31)
+- did: loaded mandatory judge contracts and standing skills; verified official identity, both assigned approval queues, and canonical Git state; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; GET /api/agents/me/inbox-lite = []; assigned todo,in_progress,blocked = []; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=8a52e1ed3829411346f47e064dc092fff1cc2367; dirtyCount=3
+- skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; default command runner and apply_patch failed applying deny-read ACLs; approved PowerShell and repository patch MCP succeeded; pre-existing dirty files preserved
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-28 (judge, de1fb40f)
+- did: loaded mandatory judge contracts and standing skills; verified official identity, both approval queues, canonical Git state, and callable capability baseline; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; GET /api/agents/me/inbox-lite = []; assigned todo,in_progress,blocked = []; wake=heartbeat_timer; branch=main; HEAD=8a52e1ed3829411346f47e064dc092fff1cc2367; dirtyCount=3; antigravity-files, brain-mcp, mission-mcp, and Playwright answered real calls
+- skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip, verification-before-completion
+- blocked: no assigned issue; Supabase and OpenViking NOT CONFIGURED in callable tool profile; default command runner and apply_patch failed applying deny-read ACLs; approved PowerShell and repository patch MCP succeeded; pre-existing dirty files preserved
+- next: wait for assigned packet-review issue or explicit mention handoff; runtime owner binds missing baseline tools to this profile
 - state: YELLOW; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
