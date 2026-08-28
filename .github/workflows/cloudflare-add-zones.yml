@@ -1,0 +1,128 @@
+name: Cloudflare — add zones
+
+# WHY THIS EXISTS
+#
+# Twelve of Joshua's fourteen domains still delegate to IONOS nameservers, which
+# is why they have no TLS: Cloudflare cannot issue a certificate for a zone it
+# does not serve. Adding each zone by hand is the tedious half of fixing that.
+#
+# The working CLOUDFLARE_API_TOKEN lives ONLY in GitHub Secrets (write-only, set
+# 2026-03-27). Both copies in the OneDrive vaults are dead -- verified, they
+# return "Invalid API Token". So the token cannot be read onto the workstation,
+# and it should not be: running the work HERE means the secret is used by CI and
+# never passes through an agent or a local shell.
+#
+# This job only ADDS zones and reports the nameservers Cloudflare assigns. It
+# does not touch DNS records and it cannot change nameservers at the registrar --
+# that step is IONOS-side and stays Joshua's, by necessity, not by policy.
+#
+# Manual trigger only. Nothing here runs on push.
+
+on:
+  workflow_dispatch:
+    inputs:
+      domains:
+        description: 'Space-separated domains to add. Leave blank for the full IONOS-delegated set.'
+        required: false
+        default: ''
+      dry_run:
+        description: 'true = report what would be added, change nothing'
+        required: false
+        default: 'true'
+
+permissions:
+  contents: read
+
+jobs:
+  add-zones:
+    name: Add zones to Cloudflare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add zones and report assigned nameservers
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          INPUT_DOMAINS: ${{ github.event.inputs.domains }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          set -uo pipefail
+
+          if [ -z "${CF_TOKEN:-}" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN secret is not set on this repo."
+            exit 1
+          fi
+
+          API=https://api.cloudflare.com/client/v4
+
+          # Verify the token before doing anything. The local vault copies were
+          # dead; do not assume this one is alive.
+          verify=$(curl -sS -m 30 -H "Authorization: Bearer $CF_TOKEN" "$API/user/tokens/verify")
+          if [ "$(echo "$verify" | jq -r '.success')" != "true" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN failed verification. Mint a new one with Zone:Edit and update the repo secret."
+            echo "$verify" | jq -r '.errors[]?.message' | sed 's/^/  /'
+            exit 1
+          fi
+          echo "Token verified. Status: $(echo "$verify" | jq -r '.result.status')"
+
+          # The twelve still delegating to IONOS. youandinotai.com and
+          # ai-solutions.store are already on Cloudflare and are NOT listed.
+          DEFAULT="dream-online.net dream-online.org dream-online.info dream-online.store \
+                   onlinerecycle.net \
+                   untilnokidinneed.com untilnokidinneed.online untilnokidinneed.org untilnokidinneed.store \
+                   aidoesitall.info aidoesitall.online aidoesitall.store aidoesitall.website"
+
+          DOMAINS="${INPUT_DOMAINS:-}"
+          [ -z "$DOMAINS" ] && DOMAINS="$DEFAULT"
+
+          echo ""
+          echo "======================================================================"
+          printf '%-28s %-12s %s\n' DOMAIN RESULT NAMESERVERS
+          echo "======================================================================"
+
+          fail=0
+          for d in $DOMAINS; do
+            # Already present? Report its nameservers rather than erroring.
+            existing=$(curl -sS -m 30 -H "Authorization: Bearer $CF_TOKEN" "$API/zones?name=$d")
+            count=$(echo "$existing" | jq -r '.result | length')
+
+            if [ "$count" != "0" ] && [ "$count" != "null" ]; then
+              ns=$(echo "$existing" | jq -r '.result[0].name_servers | join(", ")')
+              st=$(echo "$existing" | jq -r '.result[0].status')
+              printf '%-28s %-12s %s\n' "$d" "exists($st)" "$ns"
+              continue
+            fi
+
+            if [ "${DRY_RUN}" = "true" ]; then
+              printf '%-28s %-12s %s\n' "$d" "WOULD-ADD" "(dry run)"
+              continue
+            fi
+
+            body=$(jq -nc --arg n "$d" --arg a "$CF_ACCOUNT" \
+                   '{name:$n, type:"full"} + (if $a == "" then {} else {account:{id:$a}} end)')
+            res=$(curl -sS -m 45 -X POST -H "Authorization: Bearer $CF_TOKEN" \
+                       -H "Content-Type: application/json" --data "$body" "$API/zones")
+
+            if [ "$(echo "$res" | jq -r '.success')" = "true" ]; then
+              ns=$(echo "$res" | jq -r '.result.name_servers | join(", ")')
+              printf '%-28s %-12s %s\n' "$d" "ADDED" "$ns"
+            else
+              msg=$(echo "$res" | jq -r '[.errors[]?.message] | join("; ")')
+              printf '%-28s %-12s %s\n' "$d" "FAILED" "$msg"
+              fail=1
+            fi
+          done
+
+          echo "======================================================================"
+          echo ""
+          echo "NEXT STEP -- and it cannot be done from here:"
+          echo "  Set each domain's nameservers to the pair shown above, at IONOS."
+          echo "  Cloudflare assigns a DIFFERENT pair per zone; they are not shared."
+          echo "  Once delegation lands, Cloudflare issues the certificate itself"
+          echo "  and the padlock goes green."
+          echo ""
+          echo "WARNING: for any domain that currently serves real content, add its"
+          echo "  DNS records in Cloudflare BEFORE switching nameservers. Switching"
+          echo "  first points the world at an empty zone and the site goes dark"
+          echo "  instead of merely being certless."
+
+          exit $fail
