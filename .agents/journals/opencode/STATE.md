@@ -28,3 +28,155 @@
 - blocked: no assigned issue; agent identity still retains stale `errorReason` saying access denied outside 08:00-18:00
 - next: clear stale agent errorReason; await assigned work
 - state: GREEN — after-hours heartbeat reached actionable API calls
+
+## 2026-08-27 (opencode, heartbeat_timer)
+- did: checked Paperclip identity and compact inbox
+- verified: `GET /api/agents/me` succeeded; `GET /api/agents/me/inbox-lite` returned 0 assignments
+- skills: self-improving-system, paperclip, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN — no assigned work
+
+## 2026-08-27 (opencode, 40037483)
+- did: verified OpenCode identity and compact inbox; no assigned issue; no control-plane write attempted
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0; wake=heartbeat_timer; task=null
+- skills: self-improving-system, caveman ultra, i-have-adhd, paperclip
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-27 (opencode, 4bbf5cb3)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` succeeded; `GET /api/agents/me/inbox-lite` count = 0; wake=heartbeat_timer; task=null
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-27 (opencode, heartbeat_timer)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` succeeded; agent running; `GET /api/agents/me/inbox-lite` count = 0; task=null
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-27 (opencode, heartbeat_timer)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0; task=null
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-27 (opencode, heartbeat_timer)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0; task=null; wake=heartbeat_timer
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-28 (opencode, heartbeat_timer)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0; task=null; wake=heartbeat_timer
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-28 (opencode, 04f9dd19)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0; task=null; wake=heartbeat_timer
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-28 (opencode, 412bf484)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0; task=null; wake=heartbeat_timer
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-28 (opencode, 7654d360)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0; task=null; wake=heartbeat_timer
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-28 (opencode, e6d2d5a6)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running, healthy chain; `GET /api/agents/me/inbox-lite` count = 0; task=null; wake=heartbeat_timer
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-28 (opencode, heartbeat_timer)
+- did: checked identity and compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-28 (opencode, 9cc1c866)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0; task=null; wake=heartbeat_timer
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-28 (opencode, b8d6ed5e)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0; task=null; wake=heartbeat_timer
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-28 (opencode, 6f3b837f)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0; task=null; wake=heartbeat_timer
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-27 (opencode, current heartbeat)
+- did: checked identity and compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running, healthy chain; `GET /api/agents/me/inbox-lite` count = 0
+- skills: self-improving-system, paperclip, c-drive-workspace, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-27 (opencode, 985bb3b3)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running, healthy chain; `GET /api/agents/me/inbox-lite` count = 0; task=null; wake=heartbeat_timer
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-27 (opencode, 37d1e536)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0; task=null; wake=heartbeat_timer
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required
+
+## 2026-08-27 (opencode, heartbeat_timer)
+- did: checked identity, wake context, compact inbox
+- verified: `GET /api/agents/me` = OpenCode 26bfb5a5, running; `GET /api/agents/me/inbox-lite` count = 0; task=null; wake=heartbeat_timer
+- skills: self-improving-system, paperclip, caveman ultra, i-have-adhd
+- blocked: NONE
+- next: await assigned issue or explicit mention handoff
+- state: GREEN; no checkout or issue disposition required

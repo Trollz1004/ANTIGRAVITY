@@ -1,5 +1,13 @@
 # Paperclip Judge Journal
 
+## 2026-08-27 (judge, a978a17c)
+- did: loaded mandatory judge contracts; verified runtime identity and both assigned-task surfaces; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; GET /api/agents/me/inbox-lite = empty object; assigned issue query count = 0; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100
+- skills: self-improving-system, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: NONE; default pwsh launcher inaccessible with Windows error 1920; system Windows PowerShell succeeded
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
 ## 2026-08-26 (judge, d246dea4)
 - did: loaded mandatory judge contracts; verified runtime identity and compact inbox; no assigned issue; no control-plane write attempted
 - verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; GET /api/agents/me/inbox-lite count = 0; wake=heartbeat_timer; task=null; comment=null
@@ -1866,6 +1874,7 @@ Rules: judges only push/merge/delete on main after verdict chain; never create b
 - next: Joshua/judge-owned runtime restores canonical main when concurrent lane permits; wait for assigned packet-review issue or explicit mention handoff
 - state: YELLOW; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
 
+
 ## 2026-08-26 (judge, fa055afe)
 - did: loaded mandatory judge contracts and standing skills; verified official identity and compact inbox; no assigned issue; no control-plane write attempted
 - verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; GET /api/agents/me/inbox-lite count = 0; wake=heartbeat_timer; task=null; comment=null
@@ -2071,3 +2080,98 @@ asserting it.
 
 Items 1 and 2 destroy or expose things; item 3 removes an interface Joshua may
 use. None should be done on inference.
+
+## 2026-08-26 (judge, f852a32d)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and both assigned queues; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite count=0; assigned todo,in_progress,blocked count=0; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100; dirtyCount=0
+- skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip, verification-before-completion
+- blocked: NONE; default pwsh launcher inaccessible with Windows error 1920; system Windows PowerShell succeeded
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-26 (judge, 62701e10)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and both assigned queues; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite=[]; assigned todo,in_progress,blocked=[]; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100
+- skills: self-improving-system, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; pre-existing concurrent journal changes preserved; default pwsh launcher inaccessible with Windows error 1920
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-26 (judge, 8d1ecea1)
+- did: loaded mandatory judge contracts and review skills; verified official identity and both assigned queues; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite=[]; assigned todo,in_progress,blocked=[]; branch=main; HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100
+- skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip, verification-before-completion, requesting-code-review
+- blocked: no assigned issue; default pwsh launcher inaccessible with Windows error 1920; system Windows PowerShell succeeded
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-27 (judge, 6a9ce6d7)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and both assigned queues; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite count=0; assigned todo,in_progress,blocked count=0; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100
+- skills: self-improving-system, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; pre-existing concurrent journal changes preserved; default pwsh launcher inaccessible with Windows error 1920
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-27 (judge, d50bbf39)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and both assigned queues; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite=[]; assigned todo,in_progress,blocked=[]; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100
+- skills: self-improving-system, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; pre-existing concurrent journal changes preserved; default pwsh launcher inaccessible with Windows error 1920
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-27 (judge, 91775fe7)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and both assigned queues; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite count=0; assigned todo,in_progress,blocked count=0; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100
+- skills: self-improving-system, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; pre-existing concurrent journal changes preserved; default pwsh launcher inaccessible with Windows error 1920; system Windows PowerShell succeeded
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-27 (judge, b48e34a8)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and both assigned queues; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite=[]; assigned todo,in_progress,blocked=[]; wake=heartbeat_timer; branch=main; HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100
+- skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; default pwsh launcher inaccessible with Windows error 1920; system Windows PowerShell succeeded
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-27 (judge, b49b48b7)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and both assigned queues; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite count=0; assigned todo,in_progress,blocked count=0; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100; dirtyCount=2 before journal append
+- skills: self-improving-system, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; pre-existing concurrent journal changes preserved; default pwsh launcher inaccessible with Windows error 1920; system Windows PowerShell succeeded
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+## 2026-08-27 (judge, 2deac1ff)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and compact approval queue; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite count=0; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100; dirty files existed before append
+- skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; default pwsh launcher inaccessible with Windows error 1920; system Windows PowerShell succeeded
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: GREEN; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-28 (judge, browser-fallback)
+- did: loaded mandatory judge contracts and standing skills; queried assigned approval queue through authenticated Paperclip board session; no assigned issue; no control-plane write attempted
+- verified: Paperclip UI identity = ANTIGRAVITY Marketing Co at http://127.0.0.1:3100/ANT/dashboard; assigned todo,in_progress,blocked query for Codex Judge 32375fe9 returned []; antigravity-files, brain-mcp, mission-mcp, and Playwright answered real calls; BRAIN reported canonical root C:\ANTIGRAVITY, HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100, dirty
+- skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; agent-auth inbox endpoint unavailable through board session; local command runner failed before PowerShell start while applying deny-read ACLs; pre-existing dirty tree preserved
+- next: wait for assigned packet-review issue or explicit mention handoff; runtime owner repairs command-runner ACL setup
+- state: YELLOW; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-28 (judge, 88c53e34)
+- did: loaded mandatory judge contracts and standing skills; verified official identity and compact approval queue; no assigned issue; no control-plane write attempted
+- verified: GET /api/agents/me = Codex Judge 32375fe9, codex_local, running; inbox-lite count=0; wake=heartbeat_timer; task=null; comment=null; branch=main; HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100; antigravity-files, brain-mcp, mission-mcp, Playwright answered real calls
+- skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip
+- blocked: no assigned issue; Supabase MCP NOT CONFIGURED in callable tool set; default command runner failed applying deny-read ACLs; approved system Windows PowerShell succeeded; pre-existing dirty files preserved
+- next: wait for assigned packet-review issue or explicit mention handoff
+- state: YELLOW; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
+
+## 2026-08-28 (judge, browser-fallback-2)
+- did: loaded mandatory judge contracts and standing skills; queried assigned approval queue through authenticated Paperclip board session; no assigned issue; no control-plane write attempted
+- verified: Paperclip UI identity = ANTIGRAVITY Marketing Co at http://127.0.0.1:3100/ANT/dashboard; assigned todo,in_progress,blocked query for Codex Judge 32375fe9-c3a3-46bf-ad46-4126d1c3d49e returned HTTP 200 with []; brain-mcp reported canonical root C:\ANTIGRAVITY, HEAD=5c5174476b28d65d7c7def29e23fb06df7ead100, dirty
+- skills: self-improving-system index, grok-standing, caveman ultra, i-have-adhd, paperclip, verification-before-completion
+- blocked: no assigned issue; agent-auth identity and inbox-lite endpoints returned HTTP 401 through board session; local command runner failed before PowerShell start while applying deny-read ACLs; pre-existing dirty tree preserved
+- next: wait for assigned packet-review issue or explicit mention handoff; runtime owner repairs command-runner ACL setup
+- state: YELLOW; no checkout, verdict, issue mutation, repository action, or JUDGE-PUSH authorized
