@@ -30,6 +30,12 @@
     "supabase": {
       "type": "http",
       "url": "https://mcp.supabase.com/mcp?project_ref=jmvgdqomvnkfgknmgwxp&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching%2Cstorage"
+    },
+    "dateapp-desk": {
+      "command": "node",
+      "args": [
+        "C:/ANTIGRAVITY/services/dateapp-desk-mcp/server.mjs"
+      ]
     }
   }
 }
