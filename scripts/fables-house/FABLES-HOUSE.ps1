@@ -170,6 +170,17 @@ $Stages = @(
                  if (Test-Path $s) { Start-Process 'node' -ArgumentList $s -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden }
                  else { Log '  sentry server.mjs missing' 'DarkYellow' } } }
 
+    # Housekeeping. Not a service, so its Probe always reports OK and the work
+    # happens in Heal -- that keeps it on the same bring-up and watchdog cadence
+    # as everything else without inventing a second scheduler. Bounds the wake
+    # queue and the unrotated logs, both of which grow without limit otherwise.
+    @{ Name = 'Housekeeping (wakes + logs)'; Required = $false
+       Probe = { $hk = 'C:\ANTIGRAVITY\scripts\fables-house\HOUSEKEEPING.ps1'
+                 if (-not (Test-Path $hk)) { return $false }
+                 & powershell -NoProfile -ExecutionPolicy Bypass -File $hk | Out-Null
+                 return $true }
+       Heal  = { Log '  housekeeping script missing at scripts\fables-house\HOUSEKEEPING.ps1' 'DarkYellow' } }
+
     # READ-ONLY verification, never a launcher. The judge lanes (Claude, Codex,
     # Grok), the CEO seat, OpenCode and FreeBuff are Paperclip AGENTS driven by
     # its heartbeat scheduler - they are not services with ports, and starting
