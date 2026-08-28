@@ -51,7 +51,15 @@ $Stages = @(
 
     @{ Name = 'Redis :6379'; Required = $true
        Probe = { (& 'C:\Users\joshi\redis-win\redis-cli.exe' -h 127.0.0.1 ping 2>$null) -eq 'PONG' }
-       Heal  = { Start-Process 'C:\Users\joshi\redis-win\redis-server.exe' -ArgumentList '--bind','127.0.0.1','--port','6379','--maxmemory','256mb','--maxmemory-policy','allkeys-lru' -WindowStyle Hidden } }
+       # --dir is NOT optional. Without it Redis inherits the launching shell's
+       # CWD as its RDB directory. On 2026-08-28 that was C:\WINDOWS\system32,
+       # which is not writable: BGSAVE failed, stop-writes-on-bgsave-error
+       # kicked in, and Redis answered PING with MISCONF while still LISTENING.
+       # The date app's writes were disabled and the watchdog "healed" a broken
+       # instance every 60s for hours because the port was open the whole time.
+       Heal  = { $rdir = 'C:\Users\joshi\redis-win\data'
+                 if (-not (Test-Path $rdir)) { New-Item -ItemType Directory -Force -Path $rdir | Out-Null }
+                 Start-Process 'C:\Users\joshi\redis-win\redis-server.exe' -ArgumentList '--bind','127.0.0.1','--port','6379','--dir',$rdir,'--maxmemory','256mb','--maxmemory-policy','allkeys-lru' -WindowStyle Hidden } }
 
     @{ Name = 'OmniRoute :20128'; Required = $true
        Probe = { Test-Port 20128 }
@@ -70,9 +78,7 @@ $Stages = @(
        Heal  = { if (Test-Port 3100) {
                      Log '  :3100 answers but is NOT Paperclip — WRONG SERVICE. Not starting a second one.' 'Red'
                  } else {
-                     $npx = "$env:APPDATA
-pm
-px.cmd"
+                     $npx = "$env:APPDATA\npm\npx.cmd"
                      if (-not (Test-Path $npx)) { $npx = 'npx' }
                      Start-Process -FilePath $npx -ArgumentList '-y','paperclipai','run' -WindowStyle Hidden
                  } } }
@@ -116,16 +122,40 @@ px.cmd"
     # precisely so it stops fighting this. Do not reassign 9119.
     @{ Name = 'Hermes :9119'; Required = $false
        Probe = { Test-Port 9119 }
-       Heal  = { $h = "$env:LOCALAPPDATA\hermes\hermes-agentin\hermes.exe"
+       Heal  = { $h = "$env:LOCALAPPDATA\hermes\hermes-agent\bin\hermes.exe"
                  if (Test-Path $h) { Start-Process $h -ArgumentList 'serve' -WindowStyle Hidden }
                  else { Log '  Hermes not installed at %LOCALAPPDATA%\hermes — skipping' 'DarkYellow' } } }
 
     @{ Name = 'OpenClaw :18789'; Required = $false
        Probe = { Test-Port 18789 }
-       Heal  = { $oc = "$env:APPDATA
-pm\openclaw.cmd"
+       Heal  = { $oc = "$env:APPDATA\npm\openclaw.cmd"
                  if (Test-Path $oc) { Start-Process -FilePath $oc -WindowStyle Hidden }
                  else { Log '  OpenClaw npm-global missing — npm i -g openclaw needed' 'DarkYellow' } } }
+
+    # ── Added 2026-08-28. All three were found DOWN during a session and had
+    # nothing supervising them, so each died again at the next restart. They are
+    # optional: none should block bring-up of the revenue stack above.
+    @{ Name = 'CEO bridge :3140 (Freebuff seat)'; Required = $false
+       Probe = { Test-Http 'http://127.0.0.1:3140/health' 6 'paperclip-freebuff-ceo-bridge' }
+       Heal  = { $b = 'C:\ANTIGRAVITY\ops\paperclip-ceo\bridge\start.js'
+                 if (Test-Path $b) { Start-Process 'node' -ArgumentList $b -WorkingDirectory 'C:\ANTIGRAVITY\ops\paperclip-ceo\bridge' -WindowStyle Hidden }
+                 else { Log '  CEO bridge start.js missing' 'DarkYellow' } } }
+
+    # Serves /health, NOT /api/health, on this build (0.20.5). A probe written
+    # against /api/health reports a healthy gateway as down.
+    @{ Name = 'Hermes gateway :8642 (paperclip-mc)'; Required = $false
+       Probe = { Test-Http 'http://127.0.0.1:8642/health' 6 'hermes-agent' }
+       Heal  = { $h = "$env:LOCALAPPDATA\hermes\hermes-agent\bin\hermes.exe"
+                 if (Test-Path $h) { Start-Process $h -ArgumentList '--profile','paperclip-mc','gateway','run','--replace','--accept-hooks' -WindowStyle Hidden }
+                 else { Log '  Hermes not installed - gateway skipped' 'DarkYellow' } } }
+
+    # Council ballots, carved out of mission-control-v5 so MC5 can be retired.
+    # Paperclip does NOT cover ballots; see PAPERCLIP-COVERAGE-RULING-2026-08-26.md.
+    @{ Name = 'Official vote service :9134 (ballots)'; Required = $false
+       Probe = { Test-Http 'http://127.0.0.1:9134/health' 6 'official-vote-service' }
+       Heal  = { $v = 'C:\ANTIGRAVITY\services\governance\dist\server.js'
+                 if (Test-Path $v) { Start-Process 'node' -ArgumentList $v -WorkingDirectory 'C:\ANTIGRAVITY\services\governance' -WindowStyle Hidden }
+                 else { Log '  vote service not built - run: cd services\governance; npm install; npm run build' 'DarkYellow' } } }
 
     # READ-ONLY verification, never a launcher. The judge lanes (Claude, Codex,
     # Grok), the CEO seat, OpenCode and FreeBuff are Paperclip AGENTS driven by
