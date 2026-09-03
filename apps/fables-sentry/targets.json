@@ -128,7 +128,7 @@
           "url": "http://127.0.0.1:20128/api/v1/models",
           "identity": "auto/best-coding",
           "fix": "omniroute",
-          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models. Identity = the model catalog answering (the built-in combo id must appear). Changed from a port check 2026-09-03: the server child hit ~3 GB working set, /models went from 18 s to a 60 s timeout, completions died, and the port stayed open the whole time — an open port is not health."
+          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models. Identity = the model catalog answering (the built-in combo id must appear). Changed from a port check 2026-09-03: the server child hit ~3 GB working set, /models went from 18 s to a 60 s timeout, completions died, and the port stayed open the whole time \u2014 an open port is not health."
         },
         {
           "id": "ollama",
@@ -183,22 +183,6 @@
           "note": "The emergent-hosted copy of the SAME CRM code. This one has live data (100 leads, 29 hot). The local :3001 copy renders an identical shell with NO stat cards and a DISABLED Refresh button, because its MongoDB cannot start on this CPU. Both return HTTP 200 -- which is exactly why a status code is not a health check."
         },
         {
-          "id": "crmui",
-          "label": "CRM frontend (local, DATA-DEAD)",
-          "port": 3001,
-          "kind": "port",
-          "fix": "crm",
-          "note": "Renders but has no data: MongoDB is hardware-blocked (see the MongoDB row). Verified by browser -- the hosted copy shows 100 leads, this one shows no stat cards and a DISABLED Refresh button. Same code, same version."
-        },
-        {
-          "id": "crmapi",
-          "label": "CRM backend",
-          "port": 8001,
-          "kind": "port",
-          "fix": "crm",
-          "note": "Starts via `bash crm/ops/start-crm.sh`. The API needs MongoDB, which is hardware-blocked \u2014 see the MongoDB row."
-        },
-        {
           "id": "mongo",
           "label": "MongoDB (CRM)",
           "port": 27017,
@@ -212,6 +196,75 @@
           "port": 54329,
           "kind": "port",
           "fix": null
+        }
+      ],
+      "note": "crmui :3001 / crmapi :8001 retired from the wall 2026-09-03 \u2014 the CRM was folded into the monorepo 08-26 and the hosted instance is the live one; two permanent reds for services nobody starts is noise, not health."
+    },
+    {
+      "name": "Public sites",
+      "targets": [
+        {
+          "id": "dreamsite",
+          "label": "dream-online.net",
+          "kind": "http",
+          "url": "https://dream-online.net/",
+          "identity": "DREAM Online",
+          "public": true,
+          "fix": null,
+          "note": "Registered with the hyphen. On IONOS parking until the Cloudflare zone + landing page deploy land (docs/ops/DNS-NAMESERVER-PLAN.md). RED here is the truth until then."
+        },
+        {
+          "id": "missionsite",
+          "label": "untilnokidinneed.com",
+          "kind": "http",
+          "url": "https://untilnokidinneed.com/",
+          "identity": "Until No Kid In Need",
+          "public": true,
+          "fix": null,
+          "note": "Stray A record to a Cloudflare IP with no zone behind it (error 1001) as of 2026-09-03."
+        },
+        {
+          "id": "storesite",
+          "label": "ai-solutions.store",
+          "kind": "http",
+          "url": "https://ai-solutions.store/",
+          "public": true,
+          "fix": null
+        },
+        {
+          "id": "collective",
+          "label": "Open Collective \u00b7 dream-online",
+          "kind": "http",
+          "url": "https://opencollective.com/dream-online",
+          "identity": "DREAM Online",
+          "public": true,
+          "fix": null,
+          "note": "Live 2026-09-03: hosted by the LLC, 4 tiers. Identity = the collective name in the page."
+        }
+      ]
+    },
+    {
+      "name": "Nodes + record",
+      "targets": [
+        {
+          "id": "buzz",
+          "label": "Buzz relay (node ledger)",
+          "kind": "http",
+          "url": "https://trollz1004-antigravity-repo.communities.buzz.xyz/",
+          "identity": "Buzz Relay",
+          "public": true,
+          "fix": null,
+          "note": "The cross-node record (ops/buzz/). Root answers NIP-11 JSON naming the relay; that is the identity."
+        },
+        {
+          "id": "omnilan",
+          "label": "OmniRoute on the LAN (192.168.0.8)",
+          "kind": "http",
+          "url": "http://192.168.0.8:20128/api/v1/models",
+          "identity": "auto/best-coding",
+          "public": true,
+          "fix": null,
+          "note": "What other nodes see. DOWN until the inbound firewall rule for 20128/20129 exists \u2014 bound 0.0.0.0, no rule (verified 2026-09-03). Loopback row above can be UP while this is DOWN; both are true."
         }
       ]
     }
