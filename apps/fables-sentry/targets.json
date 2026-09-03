@@ -124,9 +124,11 @@
           "id": "omniroute",
           "label": "OmniRoute gateway",
           "port": 20128,
-          "kind": "port",
+          "kind": "http",
+          "url": "http://127.0.0.1:20128/api/v1/models",
+          "identity": "auto/best-coding",
           "fix": "omniroute",
-          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models."
+          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models. Identity = the model catalog answering (the built-in combo id must appear). Changed from a port check 2026-09-03: the server child hit ~3 GB working set, /models went from 18 s to a 60 s timeout, completions died, and the port stayed open the whole time — an open port is not health."
         },
         {
           "id": "ollama",
