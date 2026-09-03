@@ -1,0 +1,22 @@
+{
+  "_comment": "Default Fable-tier SEO cadence: one post per platform per day max, staggered 30-60 min within a brand, no two of the 15 rows share a minute. 'time' is HH:MM 24h local. schedule.mjs runs hourly and fires any row whose hour matches now.",
+  "rows": [
+    { "brand": "dre", "platform": "devto", "time": "09:00" },
+    { "brand": "dre", "platform": "hashnode", "time": "09:45" },
+    { "brand": "dre", "platform": "wordpress", "time": "10:30" },
+    { "brand": "dre", "platform": "tumblr", "time": "11:15" },
+    { "brand": "dre", "platform": "blogger", "time": "12:00" },
+
+    { "brand": "ais", "platform": "devto", "time": "09:15" },
+    { "brand": "ais", "platform": "hashnode", "time": "10:00" },
+    { "brand": "ais", "platform": "wordpress", "time": "10:45" },
+    { "brand": "ais", "platform": "tumblr", "time": "11:30" },
+    { "brand": "ais", "platform": "blogger", "time": "12:15" },
+
+    { "brand": "ant", "platform": "devto", "time": "09:30" },
+    { "brand": "ant", "platform": "hashnode", "time": "10:15" },
+    { "brand": "ant", "platform": "wordpress", "time": "11:00" },
+    { "brand": "ant", "platform": "tumblr", "time": "11:45" },
+    { "brand": "ant", "platform": "blogger", "time": "12:30" }
+  ]
+}
