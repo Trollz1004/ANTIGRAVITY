@@ -193,6 +193,13 @@ app = FastAPI(
     servers=SERVERS,
 )
 
+# ANT-108 CORS-preflight workaround — see app/_otel_cors_fix.py for the why.
+# MUST be called before setup_telemetry() which invokes
+# opentelemetry.instrumentation.fastapi.FastAPIInstrumentor.instrument_app(app).
+from app._otel_cors_fix import apply as _apply_otel_cors_fix  # noqa: E402
+_apply_otel_cors_fix()
+
+
 # Set up OpenTelemetry tracing. Skipped under tests so the suite does not block
 # on exporting spans to an OTLP collector that is not running.
 if settings.app_env != "test":
