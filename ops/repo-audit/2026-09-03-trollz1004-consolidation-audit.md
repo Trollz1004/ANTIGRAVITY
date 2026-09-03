@@ -179,3 +179,10 @@ This proposal is a starting point for judge-lane review, not a final ruling —
 Joshua should confirm which of `crm` / `mission-control-v5` (already inside
 `ANTIGRAVITY`) should also get a business-facing copy in `ai-solutions`, since
 their content matches "SaaS company types" too.
+
+## Executed 2026-09-03 (judge lane, Joshua's direction)
+
+- Created `Ai-Solutions-Store/ai-solutions` (private) — https://github.com/Ai-Solutions-Store/ai-solutions
+- `git subtree add --prefix=crosslisting-os` from `Trollz1004/llc-crosslisting-os@main` (161 files, history kept)
+- `git subtree add --prefix=revenue-catalog` from `Ai-Solutions-Store/revenue-first-products@main`
+- Remote `main` = `a4a8f0e2`; tree secret-scan clean. Steps (c)/(d) of `fold-into-org.sh` (BLOCKED repos, archiving sources) **not** run.
