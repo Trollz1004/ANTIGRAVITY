@@ -106,7 +106,7 @@ did" property, for money:
   a Collective — a clean way to pay a DREAM Online contributor from the
   Collective's balance with a public record.
 
-## Blocked on Joshua
+## Needs Joshua's click (his dashboards, not a permission gate)
 
 1. Activate the organization and turn on fiscal hosting (shape A), or apply to
    OSC (shape B).
