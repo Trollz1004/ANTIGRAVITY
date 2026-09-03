@@ -95,7 +95,11 @@ Once all three tasks show `status: "done"` (poll via `list_tasks`):
 
 ### Step 5: Present to a judge
 
-Present the packet folder to an official judge (Claude, Gemini, Grok, Copilot, or Codex — account-auth surfaces only). Routine verdicts go to flat-rate seats; Claude Max judges the final merge gate. Only a judge pushes, merges, or deletes.
+Present the packet folder to an official judge. As of 2026-09-03, **only Codex
+and Claude are judges** — Grok and GitHub Copilot were removed from the judge
+roster (Grok keeps the X.com build lane only; Gemini was already off). Routine
+marketing/Date App verdicts go to Codex; Claude judges DREAM Online and is the
+final merge gate. Only a judge pushes, merges, or deletes.
 
 ## Hard rules (the Fable standard)
 

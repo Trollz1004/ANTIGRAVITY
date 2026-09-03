@@ -20,9 +20,9 @@ and which catalog skill governs each phase. Everything else is task-specific.
    `.agents/memory/YYYY-MM-DD.md`. Past-you wrote it so present-you doesn't guess.
 2. **Identity probes** — a listening port is NOT identity. Probe and classify each
    service UP / DOWN / WRONG SERVICE / AUTH MISSING / NOT CONFIGURED:
-   - Paperclip `:3100` → `/api/health` (expect status ok, local_trusted)
+   - Paperclip (= Mission Control) `:3100` → `/api/health` (expect status ok, local_trusted)
    - CEO bridge `:3140` → `/health`
-   - OmniRoute `:20128`, Mission Control `:3151`, OpenClaw gateway `:18789`
+   - OmniRoute `:20128`, MC5 legacy vote engine `:3151` (not Mission Control), OpenClaw gateway `:18789`
    - If DOWN: restart from the runbook (`ops/paperclip-ceo/`, `.freebuff/run.md`).
      Bridge must start via `node start.js` (loads `.env`) — never bare `bridge.js`.
    - After an npx-cache refresh, restart npx-spawned services — they hold stale code.
@@ -92,5 +92,7 @@ Context is scarce: load ONLY the phase skill, skim, act. Never preload more than
 
 1. Journal entry: what was verified, what changed, what's left.
 2. `mission-mcp store_memory` for any durable finding.
-3. Vault update (`nodes/9020/vaults/knowledge/`) if a durable fact changed.
+3. Vault update (`C:\ANTIGRAVITY\Antigravity\00 HOME.md` for ANT/AIS/YOU, or
+   `D:\DREAM ONLINE\00 HOME.md` for DRE) if a durable fact changed — there is no
+   `nodes/9020/` vault; node 9020 is dead and there are no `nodes/<name>/` vaults.
 4. Leave services UP and log locations recorded.

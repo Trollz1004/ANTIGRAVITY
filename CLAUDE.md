@@ -45,7 +45,7 @@ Clear it by setting the column to `NULL` (back the database up first). Do not wr
 
 1. Work only under `C:\ANTIGRAVITY`.
 2. Use the designated harness contract: `agent-contracts/HERMES-AGENT.md`, `OPENCLAW-AGENT.md`, or `OPENCODE-AGENT.md`.
-3. Normal model access is authenticated OmniRoute; Ollama is explicit fail-safe only.
+3. Normal harness model access is authenticated OmniRoute; Claude never routes through OmniRoute; Ollama is explicit fail-safe only.
 4. Official-platform governance ballots never route through OmniRoute.
 5. The judge lane alone pushes, merges, or deletes branches unless Joshua directly authorizes an exception.
 6. Do not expose secrets, populated environment files, token aliases, or private URLs.

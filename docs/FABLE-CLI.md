@@ -23,7 +23,7 @@ No other root scripts were touched or removed — see the redundancy notes below
 | `fable workflow <name>` | Runs a JSON pipeline from `scripts/fable/workflows/*.json`: a list of `{ "omni": "<action>", "args": {...}, "saveAs": "<var>" }` steps, with `${var}` / `${var.field.path}` interpolation from earlier steps. Ships four: `chat.json`, `image-edit.json`, `transcript.json`, `video.json`. |
 | `fable mcp` | Lists MCP servers from `.mcp.json` and `%USERPROFILE%\.claude.json` (name, transport, whether a stdio script path exists), then checks the Paperclip broker's own OpenAPI spec (`http://127.0.0.1:3100/api/openapi.json`, requires `info.title == "Paperclip API"`) for MCP-related routes and calls the first parameter-free GET one it finds. Never guesses a token — reports AUTH MISSING instead. |
 | `fable ledger [text]` | Wraps `ops/buzz/ledger.sh` (Git Bash), falling back to `ops/buzz/ledger.ps1` if `bash` isn't found. `fable ledger --tail [N]` wraps `ops/buzz/ledger-tail.sh` (default 30). |
-| `fable dns` | `nslookup -type=NS <domain> 8.8.8.8` for the 14 project domains, classified as `CLOUDFLARE` / `IONOS` (`ui-dns`) / `EMPTY` (no NS = delegated nowhere) / `OTHER`. `docs/ops/DNS-NAMESERVER-PLAN.md` does not exist yet, so the list is hardcoded per the task spec. |
+| `fable dns` | `nslookup -type=NS <domain> 8.8.8.8` for the 14 project domains, classified as `CLOUDFLARE` / `IONOS` (`ui-dns`) / `EMPTY` (no NS = delegated nowhere) / `OTHER`. `docs/ops/DNS-NAMESERVER-PLAN.md` holds the per-domain plan; the 14-domain list is also hardcoded so `fable dns` works without it. |
 
 Every subcommand answers `--help`. Exit codes: `0` ok · `1` bad input · `2` target down · `3` auth.
 

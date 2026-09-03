@@ -1,6 +1,6 @@
 ---
 name: grok-standing
-description: ALWAYS load at the start of every Grok Paperclip session (judge or X marketing). Token-saving standing set. Triggers on heartbeat, Paperclip wake, judge review, X.com marketing.
+description: ALWAYS load at the start of every Grok Paperclip session (X marketing — Grok's judge seat was removed 2026-09-03; see judge-house). Token-saving standing set. Triggers on heartbeat, Paperclip wake, X.com marketing.
 ---
 
 # Grok standing set (preload, token-cheap)
@@ -16,7 +16,11 @@ Then read `self-improving-system` journal contract: skills index map only, own `
 
 ## Then, on demand (do not preload bodies)
 
-**Judge / code quality**
+**History — no longer applicable (kept for context only):** the section below
+listed judge/code-quality skills for Grok. As of 2026-09-03 (`judge-house`
+ruling), **Grok is not a judge** — only Codex and Claude review/push. Grok's
+Paperclip role is the X.com build lane only. Do not load these for a judge
+task; route judge/code-quality work to Codex or Claude instead.
 
 - `paperclip` — heartbeat, checkout, comments, `X-Paperclip-Run-Id`
 - `tdd` / `test-driven-development`

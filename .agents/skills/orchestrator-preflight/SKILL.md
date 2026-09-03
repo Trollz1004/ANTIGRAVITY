@@ -43,7 +43,8 @@ Ports to check:
 
 | Port | Service | Expected Check |
 |------|---------|---------------|
-| 3151 | Mission Control v5 server | `GET http://localhost:3151/api/health` |
+| 3100 | Paperclip (= Mission Control) | `GET http://127.0.0.1:3100/api/openapi.json` → `.info.title == "Paperclip API"` |
+| 3151 | MC5 legacy vote engine (NOT Mission Control) | `GET http://localhost:3151/api/health` |
 | 20128 | OmniRoute gateway | `netstat` — listening on 20128 |
 | 20129 | OmniRoute API proxy | `netstat` — listening on 20129 |
 | 9119 | Hermes dashboard | `netstat` — listening on 9119 |
@@ -71,7 +72,8 @@ Output a compact table:
 | Check | Status |
 |-------|--------|
 | Git   | main up to date / diverged / BLOCKED |
-| MC server :3151 | UP / DOWN / WRONG SERVICE / ... |
+| Paperclip (Mission Control) :3100 | UP / DOWN / WRONG SERVICE / ... |
+| MC5 legacy :3151 | UP / DOWN / WRONG SERVICE / ... |
 | OmniRoute :20128 | UP / DOWN |
 | OmniRoute API :20129 | UP / DOWN |
 | Hermes :9119 | UP / DOWN |

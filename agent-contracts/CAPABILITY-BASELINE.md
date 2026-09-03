@@ -16,7 +16,7 @@ Available to every agent. For FreeBuff and its subagents these live in `~/.agent
 
 `supabase` is available read-first for docs and inspection, but any live database write routes through the Supabase seat and the judge path — the read-first allowlist is still pending judge review. A worker never gets standing write access to production data.
 
-`crm` (self-hosted lead-gen platform, `briefings/CRM-SELFHOST-2026-08-26.md`) is reachable as an HTTP service, not an MCP server: API `http://127.0.0.1:8001/api/`, app `http://127.0.0.1:3001/`. Marketing lanes (OpenClaw, X Marketing/Grok) exercise it daily per the workflow graphy — qualifies leads, runs drips, tracks funnel toward the $5k goal. The `emergentintegrations` SDK is gone; AI runs on the OmniRoute gateway (`http://127.0.0.1:20128/v1`).
+`crm` (self-hosted lead-gen platform, `briefings/CRM-SELFHOST-2026-08-26.md`) is reachable as an HTTP service, not an MCP server: API `http://127.0.0.1:8001/api/`, app `http://127.0.0.1:3001/`. Marketing lanes (OpenClaw, X Marketing/Grok) exercise it daily per the workflow graphy — qualifies leads, runs drips, tracks funnel toward the $5k goal. The `emergentintegrations` SDK is gone; AI runs on the OmniRoute gateway (`http://192.168.0.8:20128/v1`).
 
 ## Standing skills (session-start, before any task — judges included)
 

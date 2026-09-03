@@ -1,6 +1,6 @@
 ---
 name: sabretooth-ops
-description: Operate the SABRETOOTH-NODE stack end to end — start/verify OmniRoute (:20128) and Mission Control (:3151), run the judge-gated swarm, search the repo knowledge graph, build/deploy the date app, and follow the session + git governance protocol. Use for any infra, swarm, gateway, build, or repo-ops task on this box.
+description: Operate the SABRETOOTH-NODE stack end to end — start/verify OmniRoute (:20128) and MC5, the legacy vote-engine board (:3151; current Mission Control is Paperclip at :3100 — see the `mission-control` skill), run the judge-gated swarm, search the repo knowledge graph, build/deploy the date app, and follow the session + git governance protocol. Use for any infra, swarm, gateway, build, or repo-ops task on this box.
 ---
 
 # Sabretooth Ops — the whole stack, one skill
@@ -57,7 +57,11 @@ Invoke-WebRequest http://192.168.0.8:20128/v1/models -UseBasicParsing -TimeoutSe
   (felo 400/429, opencode 401) — if workers fail with 429s, point
   `OMNI_MODEL_*` / `EXEC_AUTO_MODEL` at `auto/best-free` in MC5 `server/.env`.
 
-## Mission Control v5 (:3151)
+## MC5 legacy vote engine (:3151) — NOT Mission Control
+
+> **Current truth (2026-09-03):** Mission Control is Paperclip at `:3100`
+> (`GET /api/openapi.json` → `.info.title == "Paperclip API"`). MC5 below is
+> the legacy vote-engine board — historical section, kept as written.
 
 ```powershell
 # Start (background) — NEVER pipe a server through Select-Object -First: the

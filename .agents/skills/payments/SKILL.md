@@ -6,6 +6,13 @@ version: 2.0.0
 
 # Payments (Dating Surface — Multi-Rail, No Stripe)
 
+> **Current truth check (2026-09-03 fact sheet):** governance doctrine states
+> "Date App is Square only (never Stripe)." This file's multi-rail design
+> (Square + PayPal + Cash App + Plaid) below predates that and has not been
+> independently re-confirmed in this audit — treat PayPal/Cash App/Plaid rails
+> as UNVERIFIED against current doctrine and confirm with Joshua before relying
+> on them; Stripe stays banned either way.
+
 ## Hard Rules
 
 - youandinotai dating surface: **Square primary**, plus **PayPal**, **Cash App Business**, **Plaid** (verification).
