@@ -39,6 +39,8 @@ There is no working-hours restriction on any lane. A `403 Access denied outside 
 
 Clear it by setting the column to `NULL` (back the database up first). Do not write the restriction back into doctrine, and do not report a schedule as absent unless that exact column has been read.
 
+**Second gate in the same table, found 2026-09-03:** column **`allowed_quotas`**. When it holds quota ids, the key becomes "quota-exclusive" and OmniRoute answers every completion with a slow (40–100 s) `403 QUOTA_ONLY` — which reads like a hang. The `FABLE` key had two ids while `/api/v1/models` listed zero `quotaShared-*` models, so it could use nothing. Cleared to `'[]'` after backing up to `db_backups/db_pre-allowedquotas-clear-2026-09-03.sqlite`; verified by effect — `auto/best-coding` returned 200 `"OK"` via `codex/gpt-5.6-sol`. If a harness reports OmniRoute "hanging", read the 403 body before reading the socket.
+
 ## Operating Rules
 
 1. Work only under `C:\ANTIGRAVITY`.

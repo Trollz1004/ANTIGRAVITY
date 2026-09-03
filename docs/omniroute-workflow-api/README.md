@@ -167,3 +167,20 @@ A third, older envelope shape also exists in the codebase
 - `postman_collection.json` — Postman v2.1, `{{baseUrl}}`/`{{apiKey}}` variables (empty).
 
 Also copied to `C:\ANTIGRAVITY\ops\omniroute\workflow_api\`.
+
+## Known state update — 2026-09-03 20:35 EDT (judge lane, VERIFIED by effect)
+
+The "every POST hangs" finding above was **not a hang** — it was a slow **403**:
+`{"error":{"code":"QUOTA_ONLY","message":"This quota-exclusive API key may only use quotaShared-* models"}}`
+taking 43–100 s to arrive. The `FABLE` key (the one in `.env` as `OMNI_ROUTE_API_KEY`)
+had `api_keys.allowed_quotas` set to two quota ids while `/api/v1/models` lists
+**zero** `quotaShared-*` models — so the key could use nothing.
+
+Fix applied: `~/.omniroute/data/storage.sqlite` backed up to
+`db_backups/db_pre-allowedquotas-clear-2026-09-03.sqlite`, then
+`UPDATE api_keys SET allowed_quotas='[]' WHERE name='FABLE'`. No restart needed.
+
+Verified after: `POST /api/v1/chat/completions` → **200**, `content: "OK"`,
+`model: codex/gpt-5.6-sol`, for `auto/best-coding` (100 s first call), `auto/best-reasoning`
+(6.8 s), `auto/best-fast` (11.5 s). `auto/fastest` is **not** a combo → 400.
+The `192.168.0.8` timeout (firewall) is a separate, still-open item.
