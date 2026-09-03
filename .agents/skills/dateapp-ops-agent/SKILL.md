@@ -14,7 +14,7 @@ description: Use when dispatching the dateapp-ops-agent lane of the YouAndINotAI
 
 ## Workspace
 
-`C:\\Users\\joshl\\ANTIGRAVITY-WORK\\ANTIGRAVITY` only.
+`C:\ANTIGRAVITY` only (profile `joshi` — `joshl` is retired/wrong).
 
 ## Orchestrator
 

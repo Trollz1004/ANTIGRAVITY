@@ -10,9 +10,11 @@ description: Paperclip is Mission Control on the Sabretooth node — company boa
 - **Mission Control surface = Paperclip** (`ANTIGRAVITY Marketing Co`), chosen for its
   built-in official judge CLI. The old PAPERWEIGHT kanban, WhatsApp/Telegram bridge,
   and T5500 customer-service OpenClaw are retired surfaces — do not reference or revive them.
-- **Node topology:** Sabretooth is the ONLY node. Everything runs on this box:
+- **Node topology:** Sabretooth is the only active node. Everything runs on this box:
   repo `C:\ANTIGRAVITY`, Paperclip API `http://127.0.0.1:3100`, Hermes gateway
-  `http://127.0.0.1:8642` (profile `paperclip-mc`). No T5500, no remote nodes.
+  `http://127.0.0.1:8642` (profile `paperclip-mc`). The T5500 MACHINE exists but is
+  reserved as the DREAM Online server — it is not an active node in this topology;
+  no other remote nodes.
 - Health probe: `GET http://127.0.0.1:3100/api/health` → expect `{"status":"ok"}`.
   Connection refused = Paperclip down; report DOWN with evidence, do not start a
   second instance on the port.

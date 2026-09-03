@@ -31,7 +31,7 @@ Each pack has the required 7 files: SOUL, HEARTBEAT, TOOLS, SKILLS, AGENT, MEMOR
 
 1. Parent Hermes/OpenClaw summons one lane pack
 2. Sub-agent loads its 7 MD files + lane skills listed in SKILLS.md
-3. Workspace: `F:\ANTIGRAVITY`
+3. Workspace: `C:\ANTIGRAVITY` (D:\, E:\, and F:\ANTIGRAVITY are dead — never work there)
 4. Ship evidence (curl, screenshot, test output)
 5. Affiliate links via landing `?ref=` only
 
