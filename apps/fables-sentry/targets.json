@@ -103,6 +103,21 @@
       ]
     },
     {
+      "name": "Knowledge",
+      "targets": [
+        {
+          "id": "obsidian",
+          "label": "Obsidian (Local REST API)",
+          "port": 27123,
+          "kind": "http",
+          "url": "http://127.0.0.1:27123/",
+          "identity": "Obsidian Local REST API",
+          "fix": null,
+          "note": "Sync vault C:\\ANTIGRAVITY\\Antigravity. Served by the obsidian-local-rest-api community plugin (HTTP 27123, HTTPS 27124). No heal: Obsidian is a desktop app Joshua opens; DOWN means the app or the plugin is not running, WRONG SERVICE means something else took the port. The root route answers without auth and names the service, which is the identity check."
+        }
+      ]
+    },
+    {
       "name": "Model routing",
       "targets": [
         {

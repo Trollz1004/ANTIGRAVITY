@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Until No Kid In Need</title>
+<meta name="description" content="A family of online platforms — recycling, AI automation tools, and an online game — carrying one mission: help kids in need.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf9f6;
+    --bg-alt: #f1efe9;
+    --surface: #ffffff;
+    --text: #1c1b19;
+    --text-muted: #55524a;
+    --border: #e3e0d6;
+    --accent: #b5551f;
+    --accent-strong: #8f4118;
+    --accent-soft: #f4e4d6;
+    --focus: #1c6e5c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14130f;
+      --bg-alt: #1b1a15;
+      --surface: #201f19;
+      --text: #f2efe7;
+      --text-muted: #b9b4a6;
+      --border: #34322a;
+      --accent: #e08a4c;
+      --accent-strong: #f2a469;
+      --accent-soft: #3a2a1c;
+      --focus: #6fcdb4;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: 'Sora', system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.2;
+    margin: 0 0 0.5em;
+    color: var(--text);
+  }
+  a { color: var(--accent-strong); }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  img { max-width: 100%; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  .skip-link {
+    position: absolute; left: -9999px; top: 0; background: var(--surface); color: var(--text);
+    padding: 12px 16px; z-index: 100; border-radius: 0 0 8px 0;
+  }
+  .skip-link:focus { left: 0; }
+
+  header.site {
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: var(--bg); z-index: 20;
+  }
+  .site-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 0;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.05rem; text-decoration: none; color: var(--text); }
+  .brand-mark {
+    width: 34px; height: 34px; border-radius: 9px; background: var(--accent);
+    display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; flex-shrink: 0;
+  }
+  nav.links { display: flex; gap: 22px; }
+  nav.links a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500; }
+  nav.links a:hover { color: var(--text); }
+  .nav-toggle { display: none; background: none; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; color: var(--text); font-size: 1.1rem; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px;
+    border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 0.98rem;
+    border: 1px solid transparent; cursor: pointer;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent-strong); }
+  .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent-strong); }
+
+  main { display: block; }
+  .hero { padding: 72px 0 56px; }
+  .eyebrow {
+    display: inline-block; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.78rem;
+    font-weight: 600; color: var(--accent-strong); background: var(--accent-soft);
+    padding: 6px 12px; border-radius: 999px; margin-bottom: 18px;
+  }
+  .hero h1 { font-size: clamp(2rem, 4.2vw, 3.1rem); max-width: 18ch; }
+  .hero p.lede { font-size: 1.15rem; color: var(--text-muted); max-width: 62ch; margin: 18px 0 30px; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+
+  section { padding: 56px 0; border-top: 1px solid var(--border); }
+  section > .wrap > h2 { font-size: clamp(1.5rem, 2.6vw, 2rem); max-width: 30ch; }
+  section > .wrap > p.section-lede { color: var(--text-muted); max-width: 68ch; margin-top: 10px; }
+
+  .grid {
+    display: grid; gap: 20px; margin-top: 34px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 26px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .card .tag {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--accent-strong);
+  }
+  .card h3 { font-size: 1.15rem; }
+  .card p { color: var(--text-muted); margin: 0; font-size: 0.96rem; }
+  .card a.card-link { margin-top: auto; font-weight: 600; text-decoration: none; font-size: 0.92rem; }
+  .card a.card-link:hover { text-decoration: underline; }
+
+  .how-list { margin-top: 30px; display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .how-item .num {
+    font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--accent);
+    margin-bottom: 6px; display: block;
+  }
+  .how-item h3 { font-size: 1.05rem; }
+  .how-item p { color: var(--text-muted); margin: 4px 0 0; font-size: 0.95rem; }
+
+  .support-panel {
+    background: var(--bg-alt); border: 1px solid var(--border); border-radius: 20px;
+    padding: 40px; margin-top: 34px; display: flex; flex-wrap: wrap; gap: 24px;
+    align-items: center; justify-content: space-between;
+  }
+  .support-panel h3 { font-size: 1.3rem; margin-bottom: 6px; }
+  .support-panel p { color: var(--text-muted); margin: 0; max-width: 46ch; }
+
+  .faq { margin-top: 30px; display: grid; gap: 12px; }
+  details {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 4px 20px;
+  }
+  details summary { cursor: pointer; padding: 16px 0; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::after { content: '+'; font-weight: 400; color: var(--text-muted); flex-shrink: 0; }
+  details[open] summary::after { content: '−'; }
+  details p { color: var(--text-muted); margin: 0 0 18px; font-size: 0.95rem; }
+
+  footer.site { border-top: 1px solid var(--border); padding: 40px 0; }
+  .footer-grid { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; }
+  .footer-note { color: var(--text-muted); font-size: 0.88rem; max-width: 56ch; }
+  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+  .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
+  .footer-links a:hover { color: var(--accent-strong); }
+
+  @media (max-width: 720px) {
+    nav.links { display: none; }
+    .nav-toggle { display: inline-flex; }
+    nav.links.open {
+      display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0;
+      background: var(--bg); border-bottom: 1px solid var(--border); padding: 16px 24px; gap: 14px;
+    }
+    .support-panel { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap site-nav">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">U</span>
+      Until No Kid In Need
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">Menu</button>
+    <nav class="links" id="navLinks">
+      <a href="#platforms">Platforms</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#support">Support</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top">
+    <div class="wrap">
+      <span class="eyebrow">A mission behind a family of platforms</span>
+      <h1>Everyday platforms, built with one mission: help kids in need.</h1>
+      <p class="lede">Until No Kid In Need is the mission carried by Trash or Treasure Online Recycler LLC across a small family of online platforms — a recycling marketplace, a set of AI automation tools, and a game in development. Each one is a real, working product first. The mission rides alongside it.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://opencollective.com/until-no-kid-in-need" target="_blank" rel="noopener">View the Open Collective page</a>
+        <a class="btn btn-ghost" href="#platforms">See the platforms</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="platforms">
+    <div class="wrap">
+      <h2>One mission, a few different products</h2>
+      <p class="section-lede">These platforms are operated independently and aimed at different audiences. What connects them is the mission they carry.</p>
+      <div class="grid">
+        <div class="card">
+          <span class="tag">Recycling</span>
+          <h3>Online Recycle</h3>
+          <p>A recycling-focused marketplace connecting people who have recoverable materials with the buyers and processors who want them.</p>
+          <a class="card-link" href="https://onlinerecycle.net" target="_blank" rel="noopener">onlinerecycle.net →</a>
+        </div>
+        <div class="card">
+          <span class="tag">AI tools</span>
+          <h3>AI Solutions Store</h3>
+          <p>A marketplace for AI-driven automations — practical tools built to save people and small businesses time on repetitive work.</p>
+          <a class="card-link" href="https://ai-solutions.store" target="_blank" rel="noopener">ai-solutions.store →</a>
+        </div>
+        <div class="card">
+          <span class="tag">Game</span>
+          <h3>DREAM Online</h3>
+          <p>An open-world MMO in active development, with its own dedicated site and a public repository for anyone following along.</p>
+          <a class="card-link" href="https://dream-online.net" target="_blank" rel="noopener">dream-online.net →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how-it-works">
+    <div class="wrap">
+      <h2>How the mission works</h2>
+      <p class="section-lede">No platform charges you a "cause" fee. Each one is priced as an ordinary product; the mission has its own public page where anyone can back it and see the record.</p>
+      <div class="how-list">
+        <div class="how-item">
+          <span class="num">01</span>
+          <h3>The platforms operate as businesses</h3>
+          <p>Each site sells a real product or service — recycling logistics, AI automation, or a game — and is run to be sustainable on its own.</p>
+        </div>
+        <div class="how-item">
+          <span class="num">02</span>
+          <h3>The mission has its own public page</h3>
+          <p>Until No Kid In Need lives on Open Collective, separate from the product sites. That page — not this one — is where the current, itemized picture is.</p>
+        </div>
+        <div class="how-item">
+          <span class="num">03</span>
+          <h3>Funds are tracked in the open</h3>
+          <p>Every contribution and every expense on the mission is recorded on Open Collective, where anyone can review the ledger.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="support">
+    <div class="wrap">
+      <h2>Support the mission</h2>
+      <p class="section-lede">You can back this directly through Open Collective, or simply use one of the platforms above — either way, it feeds the same effort.</p>
+      <div class="support-panel">
+        <div>
+          <h3>Until No Kid In Need on Open Collective</h3>
+          <p>Multiple platforms to help kids in need. Open financials, transparent contributions, and a clear record of what's been raised and spent.</p>
+        </div>
+        <a class="btn btn-primary" href="https://opencollective.com/until-no-kid-in-need" target="_blank" rel="noopener">Open the collective page</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <h2>A few common questions</h2>
+      <div class="faq">
+        <details>
+          <summary>What is Until No Kid In Need?</summary>
+          <p>The mission name used across this family of platforms, operated by Trash or Treasure Online Recycler LLC. Its public record lives on Open Collective rather than on this site.</p>
+        </details>
+        <details>
+          <summary>How is the mission funded?</summary>
+          <p>Through its Open Collective page, where every contribution and expense is public. This site publishes no figures of its own — the collective page is the source.</p>
+        </details>
+        <details>
+          <summary>Are the recycling, AI tools, and game platforms run by the same team?</summary>
+          <p>They share the same underlying mission and ownership, but each operates as its own product with its own site, its own customers, and its own roadmap.</p>
+        </details>
+        <details>
+          <summary>Where can I follow the game, DREAM Online?</summary>
+          <p>DREAM Online has its own site at dream-online.net and a public GitHub repository for development updates.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap footer-grid">
+    <p class="footer-note">Until No Kid In Need is the mission brand of Trash or Treasure Online Recycler LLC, carried across a family of independently operated platforms.</p>
+    <div class="footer-links">
+      <a href="https://opencollective.com/until-no-kid-in-need" target="_blank" rel="noopener">Open Collective</a>
+      <a href="https://github.com/Trollz1004" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://onlinerecycle.net" target="_blank" rel="noopener">Online Recycle</a>
+      <a href="https://ai-solutions.store" target="_blank" rel="noopener">AI Solutions Store</a>
+      <a href="https://dream-online.net" target="_blank" rel="noopener">DREAM Online</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var toggle = document.getElementById('navToggle');
+    var links = document.getElementById('navLinks');
+    if (!toggle || !links) return;
+    toggle.addEventListener('click', function () {
+      var open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        links.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
+</script>
+</body>
+</html>
