@@ -11,24 +11,38 @@ same fix: leave a record that stands on its own.
 
 Run this at session start, before planning and before touching code.
 
-## Who judges what (2026-08-25, Joshua's direction)
+## Who judges what (2026-09-03, Joshua's direction — supersedes the 2026-08-25 four-lane roster)
+
+**Only Codex and Claude are judges now.** Grok and GitHub Copilot were removed
+from the judge roster on 2026-09-03. Grok keeps its X.com build lane (the
+grok.com native path) but does not review or push. GitHub Copilot no longer
+reviews or pushes at all.
+
+Why Grok came off, in Joshua's words: *"grok judge removal cause his api was
+getting capped when we need in all 3 paperclips for marketing more than judge —
+so my boy grok not get mad."* A capacity decision, not distrust: Grok's quota is
+reserved for marketing in ANT, AIS, and DRE, where it is needed more than a
+second verdict is.
 
 | Lane | Owns |
 |---|---|
 | **Claude** | DREAM Online MMORPG, and the final merge gate |
 | **Codex** | Marketing and Date App review — routine verdicts |
-| **Grok** | Marketing and Date App review, plus the X.com build lane |
-| **GitHub Copilot** | Routine verdicts, flat-rate |
+| **Grok** | X.com build lane only (grok.com path) — not a judge |
+| **GitHub Copilot** | Not a judge |
 
 Claude is **last resort** for marketing and existing Date App work. Those do not
 need this reasoning tier, and spending it there is the expensive mistake. If a
 routine marketing or Date App packet lands in your inbox, the right move is
-usually to route it to Codex or Grok and say why — not to judge it yourself.
-Judge it yourself when Joshua asks, when the other lanes have failed on it, or
-when it is the merge gate.
+usually to route it to Codex and say why — not to judge it yourself. Judge it
+yourself when Joshua asks, when Codex has failed on it, or when it is the
+merge gate.
 
 Gemini is **off the roster** — Google dropped Code Assist for individuals. Do not
 route to it and do not revive it on an API key.
+
+**History:** 2026-08-25 ruling had four judges (Claude, Codex, Grok, GitHub
+Copilot). That is superseded — kept here only as history, not instruction.
 
 ## 1. Read your house first
 

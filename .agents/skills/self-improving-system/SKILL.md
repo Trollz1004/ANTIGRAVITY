@@ -75,11 +75,12 @@ Append only. Never rewrite an old entry; supersede a fact in the new one.
 (PowerShell: `ops\buzz\ledger.ps1`). It is auto-prefixed with time, hostname, lane,
 repo@sha. `ops/buzz/BUZZ-NODE-LEDGER.md` is the rule.
 
-## Governance ties (unchanged)
+## Governance ties (updated 2026-09-03)
 
-- Judge lanes: official first-party CLIs only (Codex, Grok, Claude — Claude is the DREAM
-  Online judge and the final merge gate, last resort elsewhere). Judges push; agents never
-  push, merge, or delete.
+- Judge lanes: Codex and Claude only — Claude is the DREAM Online judge and the final
+  merge gate, last resort elsewhere. Judges push; agents never push, merge, or delete.
+  (History: Grok held a judge seat through 2026-08-25; removed 2026-09-03 — Grok keeps
+  the X.com build lane only.)
 - Joshua asking a judge on an official Claude lane is full authorization (judge-house
   skill, "Joshua's authority — gospel"). "Blocked on Joshua" means he holds the click.
 - One root `C:\ANTIGRAVITY`, one branch `main`, `pull --ff-only`, never force-push.
