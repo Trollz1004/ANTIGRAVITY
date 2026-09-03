@@ -168,6 +168,14 @@ $Stages = @(
     # The wall display. Bound to 0.0.0.0 so the Asus mini PC on the LAN can show
     # it. Last stage on purpose: it reports on everything above, so it should
     # come up after the things it watches.
+    # Obsidian is Joshua's desktop app, not a service the House starts. The
+    # Local REST API plugin (:27123) is how agents read the monorepo vault, so
+    # report it — DOWN means Obsidian or the plugin is not running, which is
+    # Joshua's click, never a heal.
+    @{ Name = 'Obsidian Local REST API :27123 (report only)'; Required = $false
+       Probe = { Test-Http 'http://127.0.0.1:27123/' 6 'Obsidian Local REST API' }
+       Heal  = { Log '  Obsidian REST not answering: open Obsidian (vault C:\ANTIGRAVITY\Antigravity) — plugin obsidian-local-rest-api must be enabled. Not auto-started on purpose.' 'DarkYellow' } }
+
     @{ Name = "FABLE'S SENTRY :9140 (wall display)"; Required = $false
        Probe = { Test-Http 'http://127.0.0.1:9140/health' 6 'fables-sentry' }
        Heal  = { $s = 'C:\ANTIGRAVITY\apps\fables-sentry\server.mjs'
