@@ -1,0 +1,359 @@
+openapi: 3.1.0
+info:
+  title: OmniRoute Gateway API
+  version: "3.8.49"
+  description: >
+    OpenAI-compatible gateway. Generated 2026-09-03 from the installed
+    package at C:\Users\joshi\AppData\Roaming\npm\node_modules\omniroute
+    (version confirmed in package.json). See README.md for VERIFIED /
+    UNVERIFIED provenance of each field.
+servers:
+  - url: http://127.0.0.1:20128/api/v1
+    description: Sabretooth, local (VERIFIED reachable 2026-09-03)
+  - url: http://192.168.0.8:20128/api/v1
+    description: LAN — VERIFIED currently timing out 2026-09-03, see README Known State
+security:
+  - bearerAuth: []
+  - apiKeyHeader: []
+paths:
+  /models:
+    get:
+      summary: List available models, including combo/auto aliases
+      operationId: listModels
+      security: []
+      responses:
+        "200":
+          description: OK — VERIFIED live, 200, 2758 models returned unauthenticated on this instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelList"
+  /chat/completions:
+    post:
+      summary: OpenAI-compatible chat completion
+      operationId: createChatCompletion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatCompletionRequest"
+      responses:
+        "200":
+          description: >
+            Non-streaming JSON response, or SSE stream when stream=true /
+            Accept: text/event-stream. UNVERIFIED live — see README Known State
+            (POST did not return in this session).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatCompletionResponse"
+            text/event-stream:
+              schema:
+                type: string
+                description: SSE frames, each `data: {...}`, terminated by `data: [DONE]`.
+        "401":
+          $ref: "#/components/responses/AuthError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+  /responses:
+    post:
+      summary: Responses-API-shaped endpoint (also reachable via /codex alias)
+      operationId: createResponse
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: UNVERIFIED — route handler source not shipped in this package
+      responses:
+        "200":
+          description: UNVERIFIED body shape
+  /files:
+    post:
+      summary: Upload a file
+      operationId: uploadFile
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                purpose:
+                  type: string
+      responses:
+        "200":
+          description: >
+            VERIFIED schema of stored record from
+            src/lib/db/migrations/028_create_files_and_batches.sql
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FileObject"
+    get:
+      summary: List files
+      operationId: listFiles
+      responses:
+        "200":
+          description: UNVERIFIED response envelope (list endpoint body not read)
+  /images/edits:
+    post:
+      summary: Edit an image (OpenAI-compatible images/edits shape assumed)
+      operationId: createImageEdit
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              description: UNVERIFIED — route handler source not shipped in this package
+      responses:
+        "200":
+          description: UNVERIFIED body shape
+  /audio/transcriptions:
+    post:
+      summary: Transcribe audio (OpenAI-compatible shape assumed)
+      operationId: createTranscription
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              description: UNVERIFIED — route handler source not shipped in this package
+      responses:
+        "200":
+          description: UNVERIFIED body shape
+  /ws:
+    get:
+      summary: WebSocket upgrade / handshake descriptor
+      operationId: wsHandshake
+      security: []
+      parameters:
+        - name: handshake
+          in: query
+          schema:
+            type: string
+            enum: ["1"]
+          description: >
+            VERIFIED (src/server/authz/policies/clientApi.ts) — GET/HEAD/OPTIONS
+            with handshake=1 is treated as an anonymous metadata read even with
+            no API key. Live call did not return a response in this session.
+      responses:
+        "200":
+          description: Handshake metadata (schema UNVERIFIED)
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: >
+        Authorization: Bearer <OMNI_ROUTE_API_KEY>. VERIFIED
+        src/server/authz/policies/clientApi.ts:21-50.
+    apiKeyHeader:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: >
+        Equivalent fallback header, also VERIFIED in the same source. An
+        x-goog-api-key header is accepted too (gemini-cli compatibility).
+  responses:
+    AuthError:
+      description: Authentication required / invalid credential
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+          examples:
+            managementAuthRequired:
+              summary: VERIFIED live — /api/docs with no credential
+              value:
+                error:
+                  code: AUTH_001
+                  message: Authentication required
+                  correlation_id: "ec72d0b4-6054-40ec-8f05-ab3c0a157504"
+            clientApiAuthRequired:
+              summary: VERIFIED in source only (clientApi.ts:77) — not exercised live on this instance
+              value:
+                error:
+                  code: AUTH_002
+                  message: Authentication required
+                  correlation_id: "<uuid>"
+    NotFoundError:
+      description: Unknown API route
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UnknownRouteError"
+          examples:
+            unknownRoute:
+              summary: VERIFIED live
+              value:
+                error:
+                  message: "Unknown API route: /api/v1/does-not-exist-xyz"
+                  type: not_found
+                  code: unknown_route
+                  path: /api/v1/does-not-exist-xyz
+  schemas:
+    ErrorEnvelope:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            correlation_id:
+              type: string
+    UnknownRouteError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            type:
+              type: string
+              enum: [not_found]
+            code:
+              type: string
+              enum: [unknown_route]
+            path:
+              type: string
+    Model:
+      type: object
+      description: VERIFIED live shape from GET /models
+      properties:
+        id:
+          type: string
+          example: auto/best-coding
+        object:
+          type: string
+          enum: [model]
+        created:
+          type: integer
+        owned_by:
+          type: string
+          example: combo
+        permission:
+          type: array
+          items: {}
+        root:
+          type: string
+        parent:
+          type: [string, "null"]
+        context_length:
+          type: integer
+        max_input_tokens:
+          type: integer
+        max_output_tokens:
+          type: integer
+        capabilities:
+          type: object
+          properties:
+            tool_calling:
+              type: boolean
+            reasoning:
+              type: boolean
+            thinking:
+              type: boolean
+            temperature:
+              type: boolean
+    ModelList:
+      type: object
+      properties:
+        object:
+          type: string
+          enum: [list]
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Model"
+    ChatCompletionRequest:
+      type: object
+      description: >
+        Field validation VERIFIED from src/sse/handlers/chat.ts
+        (temperature/top_p/max_tokens/n range checks) and
+        src/sse/handlers/requestBody.ts.
+      required: [model, messages]
+      properties:
+        model:
+          type: string
+          example: auto/best-coding
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                enum: [system, user, assistant, tool]
+              content:
+                type: string
+        stream:
+          type: boolean
+          description: >
+            VERIFIED chat.ts:365-377 — explicit value always wins; if omitted,
+            an Accept: text/event-stream header (without application/json also
+            listed) opts the request into SSE.
+        temperature:
+          type: number
+        top_p:
+          type: number
+          minimum: 0
+          maximum: 1
+        max_tokens:
+          type: integer
+          minimum: 1
+        n:
+          type: integer
+          minimum: 1
+    ChatCompletionResponse:
+      type: object
+      description: UNVERIFIED live (POST did not return in this session); OpenAI-compatible shape assumed
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+        created:
+          type: integer
+        model:
+          type: string
+        choices:
+          type: array
+          items:
+            type: object
+        usage:
+          type: object
+    FileObject:
+      type: object
+      description: >
+        VERIFIED column set from
+        src/lib/db/migrations/028_create_files_and_batches.sql
+      properties:
+        id:
+          type: string
+        bytes:
+          type: integer
+        created_at:
+          type: integer
+        filename:
+          type: string
+        purpose:
+          type: string
+        mime_type:
+          type: [string, "null"]
+        status:
+          type: string
+          default: validating
+        expires_at:
+          type: [integer, "null"]
