@@ -292,3 +292,7 @@ Joshua, verbatim intent: he is *the only human in the entire drift series* (`Tro
 - verified: `curl http://127.0.0.1:27123/` → JSON manifest; `GET /api/companies` shows DRE; secrets POST 16× 201; `obsidian.json` content after relaunch.
 - blocked: OC personal token returns **403** on `graphql/v2` (header-style test in progress; unauthenticated queries still 200) — see next entry. Firewall rule for 20128 still Joshua's elevated shell.
 - next: resolve OC 403 (header name vs token scope), then `oc-create-collective.py` dry-run → apply once the LLC org is a host.
+
+### 2026-09-03 — Open Collective: DONE on Joshua's side, verified from here
+
+Authenticated GraphQL (`Personal-Token`, plus a `User-Agent` — without one the API 403s, which was the earlier false "token rejected") shows: org `until-no-kid-in-need` `isActive:true isHost:true`; collective **`dream-online`** created 20:19:56Z, approved 20:19:58Z by the host, active, 4 tiers (Backer $5+/mo, Founder $25, Sponsor $100+/mo, Guild $2,000 ×50), $0 raised. Token user `untilnokidinneed` is ADMIN of both. Landing page `CROWDFUND_URL` → `opencollective.com/dream-online`. `oc-create-collective.py` retired (reports "already exists"). Open on the OC page: goal + long description. Fable's Sentry restarted properly this time (PowerShell `Stop-Process` on the 9140 owner — `taskkill` had silently failed earlier, same as with Obsidian): `Knowledge | obsidian | UP | identity ok`, `paperclip | UP`.
