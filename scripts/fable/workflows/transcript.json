@@ -1,0 +1,18 @@
+{
+  "_comment": "Transcribe an audio file, then chat-summarize the transcript (audio/transcriptions body schema is UNVERIFIED — see docs/FABLE-CLI.md).",
+  "steps": [
+    {
+      "omni": "transcribe",
+      "args": { "file": "ops/marketing-inbox/sample-audio.wav" },
+      "saveAs": "transcript"
+    },
+    {
+      "omni": "chat",
+      "args": {
+        "model": "auto/best-fast",
+        "message": "Summarize this transcript in two sentences: ${transcript.text}"
+      },
+      "saveAs": "summary"
+    }
+  ]
+}

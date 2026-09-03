@@ -15,7 +15,8 @@
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "fable": "node scripts/fable/fable.mjs"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
