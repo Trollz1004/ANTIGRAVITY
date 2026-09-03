@@ -244,3 +244,8 @@ ops/*/state/
 # collapse-filter, hideUnresolved, showOrphans flip every time the graph pane
 # opens. Generates phantom diffs. Not repo content.
 .obsidian/graph.json
+
+# Paperclip ANT-338 bot drops — one file per tick, machine-generated, never doctrine (ops audit 2026-09-03)
+ops/marketing-inbox/*-listen-refresh-*.md
+ops/marketing-inbox/*-timer-disposition-*.md
+ops/marketing-inbox/*-timer-disposition.md
