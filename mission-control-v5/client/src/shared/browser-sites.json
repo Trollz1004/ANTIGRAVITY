@@ -1,6 +1,6 @@
 [
   { "id": "hermes-chat", "name": "Hermes — chat (:9119)", "url": "http://127.0.0.1:9119/chat" },
-  { "id": "omniroute", "name": "OmniRoute — dashboard (:20128)", "url": "http://localhost:20128/home" },
+  { "id": "omniroute", "name": "OmniRoute — dashboard (:20128)", "url": "http://192.168.0.8:20128/home" },
   { "id": "openclaw", "name": "OpenClaw / ClawX (:18789)", "url": "http://127.0.0.1:18789/" },
   { "id": "mission-control", "name": "Mission Control (:3151)", "url": "http://localhost:3151/" },
   { "id": "hermes-tg", "name": "Hermes — Telegram", "url": "https://web.telegram.org/k/#@hermes_T55oobot" },

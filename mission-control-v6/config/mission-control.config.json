@@ -41,7 +41,7 @@
       "url": "http://localhost:${HERMES_DASH_PORT:-9119}"
     },
     { "id": "openclaw-ui", "label": "OpenClaw Web UI", "url": "http://localhost:${OPENCLAW_PORT:-18789}" },
-    { "id": "omniroute", "label": "OmniRoute :20128", "url": "http://localhost:20128" },
+    { "id": "omniroute", "label": "OmniRoute :20128", "url": "http://192.168.0.8:20128" },
     { "id": "dateapp-ui", "label": "Date App UI :3200", "url": "http://localhost:${FRONTEND_PORT:-3200}" },
     {
       "id": "dateapp-preorder",
@@ -92,13 +92,13 @@
       "group": "Agents",
       "kind": "http",
       "_note": "WSL-only hermes-router on :11435 was retired; OmniRoute on :20128 is the live LLM router.",
-      "url": "http://127.0.0.1:20128/v1/models",
+      "url": "http://192.168.0.8:20128/v1/models",
       "expected_status": [200, 401, 403],
       "expected": true,
       "interval_s": 30,
       "timeout_s": 9,
       "playbook": "start-omniroute",
-      "link_url": "http://localhost:20128"
+      "link_url": "http://192.168.0.8:20128"
     },
     {
       "id": "openclaw",
@@ -120,14 +120,14 @@
       "name": "OmniRoute (LLM router)",
       "group": "Gateway",
       "kind": "http",
-      "url": "http://127.0.0.1:20128/v1/models",
+      "url": "http://192.168.0.8:20128/v1/models",
       "expected_status": [200, 401, 403],
       "expected": true,
       "interval_s": 60,
       "timeout_s": 9,
       "latency_warn_ms": 4000,
       "playbook": "start-omniroute",
-      "link_url": "http://localhost:20128"
+      "link_url": "http://192.168.0.8:20128"
     },
     {
       "id": "ollama",

@@ -8,7 +8,7 @@
     "icon": null,
     "status": "running",
     "reportsTo": null,
-    "capabilities": "Continuous company operator for ANTIGRAVITY. Owns date-app restore, revenue outreach, and exec team coordination. Runs via local OpenCode routed through OmniRoute at 127.0.0.1:20128/v1.",
+    "capabilities": "Continuous company operator for ANTIGRAVITY. Owns date-app restore, revenue outreach, and exec team coordination. Runs via local OpenCode routed through OmniRoute at 192.168.0.8:20128/v1.",
     "adapterType": "opencode_local",
     "adapterConfig": {
       "timeoutSec": 600,
@@ -57,7 +57,7 @@
     "adapterConfig": {
       "cwd": "F:/ANTIGRAVITY",
       "model": "auto/best-coding",
-      "provider": "custom:omniroute-(127.0.0.1:20128)",
+      "provider": "custom:omniroute-(192.168.0.8:20128)",
       "toolsets": "terminal,file,web",
       "timeoutSec": 600,
       "checkpoints": false,
@@ -102,7 +102,7 @@
     "adapterConfig": {
       "cwd": "F:/ANTIGRAVITY",
       "model": "auto/best-coding",
-      "provider": "custom:omniroute-(127.0.0.1:20128)",
+      "provider": "custom:omniroute-(192.168.0.8:20128)",
       "toolsets": "terminal,file,web",
       "timeoutSec": 600,
       "checkpoints": false,

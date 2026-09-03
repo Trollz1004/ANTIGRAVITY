@@ -7,7 +7,7 @@
 
 $ErrorActionPreference = "Stop"
 
-$BaseUrl = if ($env:OPENAI_COMPAT_BASE_URL) { $env:OPENAI_COMPAT_BASE_URL } else { "http://127.0.0.1:20128/api/v1" }
+$BaseUrl = if ($env:OPENAI_COMPAT_BASE_URL) { $env:OPENAI_COMPAT_BASE_URL } else { "http://192.168.0.8:20128/v1" }
 
 if (-not $env:OMNI_ROUTE_API_KEY) {
     Write-Error "OMNI_ROUTE_API_KEY is not set in the environment. Aborting."

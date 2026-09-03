@@ -58,8 +58,8 @@ service you launch from it inherits that port and fights whoever owns it. The
 
     omniroute serve
 
-Dashboard at http://localhost:20128/home, AI endpoint at
-http://localhost:20128/v1. Either run this command **or** launch the OmniRoute
+Dashboard at http://192.168.0.8:20128/home, AI endpoint at
+http://192.168.0.8:20128/v1. Either run this command **or** launch the OmniRoute
 desktop app - never both, they want the same port.
 
 Desktop app instead:

@@ -250,7 +250,7 @@ async function cmdAudit(argv) {
 }
 
 // ══════════════════════════════════════════════════════════════ omni ═════
-const OMNI_BASE = () => (process.env.OPENAI_COMPAT_BASE_URL || 'http://127.0.0.1:20128/api/v1').replace(/\/+$/, '');
+const OMNI_BASE = () => (process.env.OPENAI_COMPAT_BASE_URL || 'http://192.168.0.8:20128/v1').replace(/\/+$/, '');
 
 function omniHeaders(extra) {
   const key = readEnvValue('OMNI_ROUTE_API_KEY');
@@ -409,7 +409,7 @@ const OMNI_ACTIONS = {
 
 function helpOmni() {
   console.log(`fable omni <action> [args] — thin client for OmniRoute
-  Base URL: \${OPENAI_COMPAT_BASE_URL:-http://127.0.0.1:20128/api/v1}
+  Base URL: \${OPENAI_COMPAT_BASE_URL:-http://192.168.0.8:20128/v1}
   Auth:     Authorization: Bearer \$OMNI_ROUTE_API_KEY (env, else parsed from C:\\ANTIGRAVITY\\.env at runtime — never printed)
 
 Actions:

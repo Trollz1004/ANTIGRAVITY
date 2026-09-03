@@ -10,7 +10,7 @@
 
 set -euo pipefail
 
-BASE_URL="${OPENAI_COMPAT_BASE_URL:-http://127.0.0.1:20128/api/v1}"
+BASE_URL="${OPENAI_COMPAT_BASE_URL:-http://192.168.0.8:20128/v1}"
 
 if [ -z "${OMNI_ROUTE_API_KEY:-}" ]; then
   echo "OMNI_ROUTE_API_KEY is not set in the environment. Aborting." >&2

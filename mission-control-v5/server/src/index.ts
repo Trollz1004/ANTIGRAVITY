@@ -250,7 +250,7 @@ app.get('/api/services', async (_req, res) => {
   const hermesPort = Number(process.env.HERMES_PORT ?? 9119) || 9119;
   const hermesHealthUrl = process.env.HERMES_HEALTH_URL?.trim() || `http://127.0.0.1:${hermesPort}/health`;
   const openclawHealthUrl = process.env.OPENCLAW_HEALTH_URL?.trim() || `http://127.0.0.1:${openclawPort}/health`;
-  const omniRouteHealthUrl = process.env.OMNIROUTE_HEALTH_URL?.trim() || 'http://127.0.0.1:20128/api/v1';
+  const omniRouteHealthUrl = process.env.OMNIROUTE_HEALTH_URL?.trim() || 'http://192.168.0.8:20128/v1';
   const dateAppHealthUrl = process.env.DATE_APP_HEALTH_URL?.trim() || 'http://127.0.0.1:8000/api/v1/health';
   const oneminShimStatusUrl = process.env.ONEMIN_SHIM_STATUS_URL?.trim() ?? '';
   // Per-service ping timeout. OmniRoute's /v1/models aggregates models from

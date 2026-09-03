@@ -13,7 +13,7 @@ import sys
 
 import requests
 
-BASE_URL = os.environ.get("OPENAI_COMPAT_BASE_URL", "http://127.0.0.1:20128/api/v1")
+BASE_URL = os.environ.get("OPENAI_COMPAT_BASE_URL", "http://192.168.0.8:20128/v1")
 API_KEY = os.environ.get("OMNI_ROUTE_API_KEY")
 
 if not API_KEY:

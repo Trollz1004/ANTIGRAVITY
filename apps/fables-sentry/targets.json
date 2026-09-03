@@ -122,13 +122,14 @@
       "targets": [
         {
           "id": "omniroute",
-          "label": "OmniRoute gateway",
+          "label": "OmniRoute gateway (192.168.0.8:20128/v1)",
           "port": 20128,
           "kind": "http",
-          "url": "http://127.0.0.1:20128/api/v1/models",
+          "url": "http://192.168.0.8:20128/v1/models",
           "identity": "auto/best-coding",
           "fix": "omniroute",
-          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models. Identity = the model catalog answering (the built-in combo id must appear). Changed from a port check 2026-09-03: the server child hit ~3 GB working set, /models went from 18 s to a 60 s timeout, completions died, and the port stayed open the whole time \u2014 an open port is not health."
+          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models. Identity = the model catalog answering (the built-in combo id must appear). Changed from a port check 2026-09-03: the server child hit ~3 GB working set, /models went from 18 s to a 60 s timeout, completions died, and the port stayed open the whole time \u2014 an open port is not health. 2026-09-03 Joshua: the ONE OmniRoute URL for every client, doc, and probe is http://192.168.0.8:20128/v1 \u2014 verified from his tablet over Wi-Fi; loopback/localhost forms never worked off-box. The separate 'omnilan' row was merged into this one.",
+          "timeoutMs": 20000
         },
         {
           "id": "ollama",
@@ -255,16 +256,6 @@
           "public": true,
           "fix": null,
           "note": "The cross-node record (ops/buzz/). Root answers NIP-11 JSON naming the relay; that is the identity."
-        },
-        {
-          "id": "omnilan",
-          "label": "OmniRoute on the LAN (192.168.0.8)",
-          "kind": "http",
-          "url": "http://192.168.0.8:20128/api/v1/models",
-          "identity": "auto/best-coding",
-          "public": true,
-          "fix": null,
-          "note": "What other nodes see. DOWN until the inbound firewall rule for 20128/20129 exists \u2014 bound 0.0.0.0, no rule (verified 2026-09-03). Loopback row above can be UP while this is DOWN; both are true."
         }
       ]
     }
