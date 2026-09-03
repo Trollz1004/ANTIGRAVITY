@@ -112,3 +112,24 @@ did" property, for money:
    OSC (shape B).
 2. Mint `OPENCOLLECTIVE_TOKEN` → `.env` → Paperclip.
 3. Tier prices and the first milestone wording.
+
+## DONE 2026-09-03 20:19 UTC — the Collective is live (VERIFIED via authenticated GraphQL)
+
+Joshua did the dashboard side the same evening (shape A, exactly as planned):
+- `until-no-kid-in-need` is now `isActive: true`, **`isHost: true`**.
+- Collective **`dream-online`** exists, hosted by the LLC, `isApproved: true`
+  (approved 2 s after creation — host self-approval), `isActive: true`, USD.
+  Description matches the plan verbatim; website `dream-online.net`; GitHub
+  `Trollz1004/dream-online`; tags `gaming`, `open source`.
+- Tiers (Joshua's prices): **Backer** flexible $5+/mo · **Founder** $25 one-time ·
+  **Sponsor** $100+/mo · **Guild** $2,000 one-time, max 50.
+- Balance $0, 0 contributors — page is ready, nothing raised yet.
+- `OPEN_COLLECTIVE_API_KEY` is in `.env` and in the Paperclip store for ANT, AIS,
+  DRE. It authenticates as user `untilnokidinneed` (ADMIN of both the org and
+  the collective). The API needs a `User-Agent` header or it 403s — the script
+  sends one now.
+- Landing page `CROWDFUND_URL` switched to `https://opencollective.com/dream-online`.
+
+Still open: a public **goal** ("playable alpha of the starter zone") and
+`longDescription` on the collective page are empty; `oc-create-collective.py`
+now reports "already exists" and is retired to reference.

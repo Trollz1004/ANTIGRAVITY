@@ -35,7 +35,7 @@ def gql(query, variables, token=None):
     req = urllib.request.Request(
         API,
         data=json.dumps({"query": query, "variables": variables}).encode(),
-        headers={"Content-Type": "application/json", **({"Personal-Token": token} if token else {})},
+        headers={"Content-Type": "application/json", "User-Agent": "antigravity-judge/1.0", **({"Personal-Token": token} if token else {})},
         method="POST",
     )
     with urllib.request.urlopen(req, timeout=30) as r:
