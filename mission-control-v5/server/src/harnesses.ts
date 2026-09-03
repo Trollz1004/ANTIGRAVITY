@@ -90,7 +90,7 @@ export const HARNESSES: HarnessDef[] = [
     role: 'Coding harness. Repo work, refactors, and build/test loops.',
     // OpenCode has no standalone gateway — it rides OmniRoute directly
     // (same routing the agent-hub dispatcher uses for the opencode platform).
-    url: 'http://127.0.0.1:20128',
+    url: 'http://192.168.0.8:20128',
     routing: 'omniroute',
     baseSkills: BASE_SKILLS,
     writesToJournal: true,

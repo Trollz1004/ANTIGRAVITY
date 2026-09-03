@@ -17,7 +17,7 @@ misread as "OmniRoute is down" when nothing about routing was broken.
 
 Client and server disagreed about transport, and each was internally consistent:
 
-- **Client** (`~/.claude.json`) — `{"type":"http","url":"http://127.0.0.1:20128/api/mcp/stream"}`
+- **Client** (`~/.claude.json`) — `{"type":"http","url":"http://192.168.0.8:20128/api/mcp/stream"}`
   with an Authorization header. Correct for streamable-http.
 - **Server** — `key_value` row `namespace='settings'`, `key='mcpTransport'`,
   value `"stdio"`. A stdio server does not answer an HTTP handshake, so it

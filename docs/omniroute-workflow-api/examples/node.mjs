@@ -5,7 +5,7 @@
 //   OMNI_ROUTE_API_KEY=... node node.mjs
 // (or export it beforehand from your own secret store)
 
-const BASE_URL = process.env.OPENAI_COMPAT_BASE_URL || "http://127.0.0.1:20128/api/v1";
+const BASE_URL = process.env.OPENAI_COMPAT_BASE_URL || "http://192.168.0.8:20128/v1";
 const API_KEY = process.env.OMNI_ROUTE_API_KEY;
 
 if (!API_KEY) {

@@ -28,7 +28,7 @@
     {
       "name": "omniroute",
       "port": 20128,
-      "url": "http://localhost:20128"
+      "url": "http://192.168.0.8:20128"
     },
     {
       "name": "hermes-dashboard",

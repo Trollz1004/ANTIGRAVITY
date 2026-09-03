@@ -139,7 +139,10 @@ async function httpCheck(url, identity, ms) {
 }
 
 async function probe(t) {
-  const timeout = t.public ? 8000 : 3000;
+  // Per-target budget wins; else public 8 s, local 3 s. OmniRoute's model
+  // catalog legitimately takes 2–20 s, so it carries its own timeoutMs — the
+  // House gives it the same 20 s. Beyond that it is DOWN, not "slow".
+  const timeout = t.timeoutMs || (t.public ? 8000 : 3000);
   if (t.kind === 'redis') {
     const r = await redisPing();
     return { ...t, ...r, detail: r.detail || 'PONG' };

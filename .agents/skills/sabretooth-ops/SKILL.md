@@ -37,11 +37,11 @@ command here was executed and verified on this machine that day.
 
 One endpoint for ALL model traffic. No agent holds a provider key — providers,
 auto-swap, and compression live inside the gateway. Clients need only
-`OPENAI_COMPAT_BASE_URL=http://127.0.0.1:20128` (+ optional key).
+`OPENAI_COMPAT_BASE_URL=http://192.168.0.8:20128` (+ optional key).
 
 ```powershell
 # Health (also what the keepalive probes):
-Invoke-WebRequest http://127.0.0.1:20128/v1/models -UseBasicParsing -TimeoutSec 5
+Invoke-WebRequest http://192.168.0.8:20128/v1/models -UseBasicParsing -TimeoutSec 5
 # Real end-to-end test (free pool, no keys needed):
 #   POST :20129/v1/chat/completions {"model":"auto/best-free", ...} → expect a completion.
 ```

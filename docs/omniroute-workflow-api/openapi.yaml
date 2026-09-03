@@ -8,9 +8,9 @@ info:
     (version confirmed in package.json). See README.md for VERIFIED /
     UNVERIFIED provenance of each field.
 servers:
-  - url: http://127.0.0.1:20128/api/v1
+  - url: http://192.168.0.8:20128/v1
     description: Sabretooth, local (VERIFIED reachable 2026-09-03)
-  - url: http://192.168.0.8:20128/api/v1
+  - url: http://192.168.0.8:20128/v1
     description: LAN — VERIFIED currently timing out 2026-09-03, see README Known State
 security:
   - bearerAuth: []

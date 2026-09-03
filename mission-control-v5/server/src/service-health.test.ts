@@ -47,7 +47,7 @@ describe('service identity health contract', () => {
   it('reports a required authenticated gateway probe without credentials distinctly from a port outage', async () => {
     const result = await pingService({
       name: 'OmniRoute',
-      url: 'http://127.0.0.1:20128/api/v1',
+      url: 'http://192.168.0.8:20128/v1',
       requiresAuth: true,
       authConfigured: false,
     });
@@ -92,7 +92,7 @@ describe('service identity health contract', () => {
     const result = await pingService(
       {
         name: 'OmniRoute',
-        url: 'http://127.0.0.1:20128/api/v1',
+        url: 'http://192.168.0.8:20128/v1',
         requiresAuth: true,
         authConfigured: true,
         expectedServiceMarker: { field: 'service', allowedValues: ['omniroute'] },

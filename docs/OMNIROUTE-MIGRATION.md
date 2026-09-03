@@ -89,7 +89,7 @@ docker compose up -d omni-router
 
 # Verify
 docker compose ps
-curl http://127.0.0.1:20128/health   # Dashboard health
+curl http://192.168.0.8:20128/health   # Dashboard health
 curl http://127.0.0.1:20129/health   # API health
 ```
 
@@ -108,7 +108,7 @@ docker compose ps
 # - qdrant             :6333 ✓
 
 # Access dashboard
-Start-Process "http://127.0.0.1:20128"
+Start-Process "http://192.168.0.8:20128"
 
 # Test API endpoint
 curl http://127.0.0.1:20129/api/status
@@ -149,7 +149,7 @@ Test:
 1. Open http://127.0.0.1:3000 (Hermes Workspace)
 2. Send a chat message
 3. Monitor: `docker compose logs -f omni-router`
-4. Check OmniRouter dashboard: http://127.0.0.1:20128 (usage, routing, costs)
+4. Check OmniRouter dashboard: http://192.168.0.8:20128 (usage, routing, costs)
 
 ## Troubleshooting
 
