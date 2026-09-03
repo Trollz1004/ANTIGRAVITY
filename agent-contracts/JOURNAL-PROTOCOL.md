@@ -26,3 +26,13 @@ Write a compact state entry containing the task, files changed, skills loaded, e
 Use the `i-have-adhd` skill as output and token discipline only: lead with the action, keep human-facing updates short, suppress repeated tangents, and show the current state. It does **not** label or diagnose a user.
 
 Before delegation, load the applicable skills: `brainstorming` for feature or behavior design, `agent-reach` for external research, `browser-use` for interactive/authenticated browser work with approved cookie sync, `find-skills` when a capability may already exist, `tdd` for test-first code changes, and `systematic-debugging` for any failure or unexpected behavior. `skills.sh`, ClawHub, and the Hermes skill hub remain available for discovery; use `find-skills` before hand-rolling a recurring capability.
+
+## Node ledger (added 2026-09-03, Joshua's direction)
+
+The journal is per-harness and per-box. The **Buzz node ledger** is the one
+record every agent on every node shares — Sabretooth today, the DREAM Online
+server and the AI-Solutions node as they come on. At session start, after your
+`STATE.md`, run `ops/buzz/ledger-tail.sh 30`. At session end, after your
+`STATE.md` write, run `BUZZ_AGENT_NAME=<lane> ops/buzz/ledger.sh "<what landed> · <path> · <evidence>"`.
+The line is auto-prefixed with UTC time, hostname, lane, and repo@sha. Doctrine,
+channel, and new-node bring-up: `ops/buzz/BUZZ-NODE-LEDGER.md`. Never a secret.

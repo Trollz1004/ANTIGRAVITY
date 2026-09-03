@@ -3,7 +3,7 @@
 
 DRY-RUN BY DEFAULT. Pass --apply to send mutations.
 
-Needs OPENCOLLECTIVE_TOKEN in the environment (a personal token from
+Needs OPENCOLLECTIVE_TOKEN (or OPEN_COLLECTIVE_API_KEY, the .env name) in the environment (a personal token from
 Dashboard -> Settings -> For developers). Load it at runtime, never paste it:
 
   set -a; . <(grep '^OPENCOLLECTIVE_TOKEN=' C:/ANTIGRAVITY/.env); set +a
@@ -51,7 +51,7 @@ def main():
     ap.add_argument("--apply", action="store_true")
     args = ap.parse_args()
 
-    token = os.environ.get("OPENCOLLECTIVE_TOKEN")
+    token = os.environ.get("OPENCOLLECTIVE_TOKEN") or os.environ.get("OPEN_COLLECTIVE_API_KEY")
     if not token:
         print("NOT CONFIGURED: OPENCOLLECTIVE_TOKEN is not in the environment. Mint one in the OC dashboard, add to .env, then import into Paperclip.")
         if args.apply:
