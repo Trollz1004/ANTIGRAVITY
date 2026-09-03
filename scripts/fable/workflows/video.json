@@ -1,0 +1,18 @@
+{
+  "_comment": "Draft a video prompt with chat, then hand it to the (UNVERIFIED) /videos route — see docs/FABLE-CLI.md.",
+  "steps": [
+    {
+      "omni": "chat",
+      "args": {
+        "model": "auto/best-coding",
+        "message": "Write a single one-sentence video prompt: a wall-display dashboard turning from red to green."
+      },
+      "saveAs": "prompt"
+    },
+    {
+      "omni": "video",
+      "args": { "model": "auto/best-fast", "prompt": "${prompt.choices.0.message.content}", "seconds": 5 },
+      "saveAs": "video"
+    }
+  ]
+}

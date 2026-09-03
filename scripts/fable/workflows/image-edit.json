@@ -1,0 +1,18 @@
+{
+  "_comment": "Edit an image, then have chat describe the raw response (images/edits is UNVERIFIED schema — see docs/FABLE-CLI.md).",
+  "steps": [
+    {
+      "omni": "image",
+      "args": { "image": "civic-marketplace.png", "prompt": "add a subtle drop shadow" },
+      "saveAs": "edited"
+    },
+    {
+      "omni": "chat",
+      "args": {
+        "model": "auto/best-fast",
+        "message": "The image edit endpoint returned this raw payload — summarize what happened: ${edited.raw}"
+      },
+      "saveAs": "summary"
+    }
+  ]
+}

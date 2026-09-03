@@ -1,0 +1,19 @@
+{
+  "_comment": "100% chat pipeline: ask a question, then ask a follow-up that references the first answer.",
+  "steps": [
+    {
+      "omni": "chat",
+      "args": { "model": "auto/best-coding", "message": "In one sentence, what does OmniRoute do?" },
+      "saveAs": "first"
+    },
+    {
+      "omni": "chat",
+      "args": {
+        "model": "auto/best-coding",
+        "system": "You are terse.",
+        "message": "Rephrase this for a 10-year-old: ${first.choices.0.message.content}"
+      },
+      "saveAs": "second"
+    }
+  ]
+}
