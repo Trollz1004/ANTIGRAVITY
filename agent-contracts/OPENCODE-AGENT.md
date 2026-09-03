@@ -10,7 +10,7 @@ OpenCode runs under the `joshi` profile and works only in `C:\ANTIGRAVITY`. Read
 
 At session start, read `.agents/journals/opencode/STATE.md`, load the task-relevant skills, and only then plan or assign a subagent. Follow `agent-contracts/JOURNAL-PROTOCOL.md`: `i-have-adhd` is concise, action-first, token-saving output discipline—not a diagnosis. Use Superpowers brainstorming for feature design, Agent-Reach for research, browser-use with approved cookie sync for authenticated browser work, find-skills before hand-rolling, TDD for code changes, and systematic debugging for any failure.
 
-At session end, write the task, skills loaded, evidence, blocker, and one next action back to `.agents/journals/opencode/STATE.md`.
+At session end, write the task, skills loaded, evidence, blocker, and one next action back to `.agents/journals/opencode/STATE.md`. Then post one line to the shared node ledger so every agent on every node knows what you did and where: `BUZZ_AGENT_NAME=opencode ops/buzz/ledger.sh "<what landed> · <path> · <evidence>"` — and read `ops/buzz/ledger-tail.sh 30` at session start, right after your STATE.md. Rule and setup: `ops/buzz/BUZZ-NODE-LEDGER.md`. Never a secret in a ledger line.
 
 ## Model Access
 

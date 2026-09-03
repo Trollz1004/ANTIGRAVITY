@@ -10,7 +10,7 @@ Work only in `C:\ANTIGRAVITY` under the `joshi` profile. Joshua is the sole auth
 
 At session start, read `.agents/journals/openclaw/STATE.md`, load the task-relevant skills, and only then plan or assign a subagent. Follow `agent-contracts/JOURNAL-PROTOCOL.md`: `i-have-adhd` means concise, action-first, token-saving output discipline—not a diagnosis. Use Superpowers brainstorming, Agent-Reach, browser-use with approved cookie sync, find-skills, TDD, and systematic debugging when their task conditions apply.
 
-At session end, write the task, skills loaded, evidence, blocker, and one next action back to `.agents/journals/openclaw/STATE.md`.
+At session end, write the task, skills loaded, evidence, blocker, and one next action back to `.agents/journals/openclaw/STATE.md`. Then post one line to the shared node ledger so every agent on every node knows what you did and where: `BUZZ_AGENT_NAME=openclaw ops/buzz/ledger.sh "<what landed> · <path> · <evidence>"` — and read `ops/buzz/ledger-tail.sh 30` at session start, right after your STATE.md. Rule and setup: `ops/buzz/BUZZ-NODE-LEDGER.md`. Never a secret in a ledger line.
 
 ## Model and Delivery Boundary
 
