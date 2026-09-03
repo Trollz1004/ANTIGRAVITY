@@ -62,7 +62,11 @@ $Stages = @(
                  Start-Process 'C:\Users\joshi\redis-win\redis-server.exe' -ArgumentList '--bind','127.0.0.1','--port','6379','--dir',$rdir,'--maxmemory','256mb','--maxmemory-policy','allkeys-lru' -WindowStyle Hidden } }
 
     @{ Name = 'OmniRoute :20128'; Required = $true
-       Probe = { Test-Port 20128 }
+       # Identity + latency, not a port: on 2026-09-03 the server child sat at
+       # ~3 GB, /models took >60 s and completions failed while 20128 stayed
+       # open. If the catalog cannot name its own built-in combo inside 20 s,
+       # the gateway is not serving and the heal (restart) is the right call.
+       Probe = { Test-Http 'http://127.0.0.1:20128/api/v1/models' 20 'auto/best-coding' }
        Heal  = { $env:DATA_DIR = "$env:USERPROFILE\.omniroute\data"
                  $omni = "$env:APPDATA\npm\omniroute.cmd"
                  if (Test-Path $omni) { Start-Process -FilePath $omni -WindowStyle Hidden }
