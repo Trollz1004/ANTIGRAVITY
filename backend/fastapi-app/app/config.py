@@ -154,7 +154,7 @@ class Settings(BaseSettings):
     redis_rate_limit_window: int = 60
 
     cors_origins: str = (
-        "https://youandinotai.com,http://localhost:3000,http://localhost:5173,http://localhost:8000,http://[IP_ADDRESS]:8000"
+        "https://youandinotai.com,http://localhost:3000,http://localhost:5173,http://localhost:8000,http://127.0.0.1:3200,http://[IP_ADDRESS]:8000"
     )
     registration_rate_limit_per_minute: int = 10
     auth_rate_limit_per_minute: int = 10
