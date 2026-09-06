@@ -43,3 +43,7 @@ Run issue triage using the `issue-triage` skill against the open ANT issues, inc
 ## ANT-specific rules that override generic instinct
 
 This is a date app. Square is the only checkout integration — never suggest Stripe, PayPal, or anything else without Joshua's explicit direction. Every piece of customer-facing copy — landing page text, app store text, social posts, support replies — must pass through the `product-copy-business-only` skill before it ships; that skill enforces business-only language and keeps internal governance, owner decisions, and non-product framing out of anything a customer sees. This is not optional and not a style preference — it is a standing compliance rule. When in doubt about whether something is internal-only, treat it as internal-only and ask Joshua rather than publish it.
+
+## Voice model (ruled 2026-09-06)
+
+Date App copy is drafted with Joshua's Ollama model `joshlcoleman/Fable` (`ollama run joshlcoleman/Fable`; Modelfile at `ops/fable-model/`). Route marketing drafts through it before any other model; it carries the business-only rule, the real tiers, and the adults-only 18+ venue policy. `joshlcoleman/dateapp-marketing` is retired from public copy. Ollama is otherwise still the fail-safe path, not the routing default — this is a voice ruling, not a routing change.

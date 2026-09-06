@@ -1,6 +1,6 @@
 @echo off
 rem ═══════════════════════════════════════════════════════════════════════
-rem  drift — Joshua's one way in.                      updated 2026-09-03
+rem  drift — Joshua's one way in.                      updated 2026-09-06
 rem
 rem  Brings the whole Sabretooth stack up AND opens Claude. The bring-up runs
 rem  in its own minimized window so it never blocks the conversation: Claude
@@ -19,11 +19,15 @@ rem                     (npm run fable -- audit) and print the table; no Claude
 rem    drift wall       open FABLE'S SENTRY (http://192.168.0.8:9140/) in the browser
 rem    drift ledger     last 30 lines of the cross-node ledger (ops/buzz)
 rem    drift dns        current nameservers for the 14 project domains
+rem    drift fable      talk to Joshua's house model joshlcoleman/Fable on the
+rem                     local Ollama (the mandatory Date App voice model,
+rem                     ruled 2026-09-06; Modelfile ops/fable-model/)
 rem
 rem  What "the stack" means today (FABLES-HOUSE.ps1 stages, in order):
 rem    PostgreSQL 5432 · Redis 6379 · OmniRoute 20128 (identity+latency probe)
 rem    Paperclip 3100 = Mission Control · Date App 3200/8000 · cloudflared tunnel
-rem    MC5 3151 (vote engine, legacy) · MC6 8787 (uptime) · Ollama 11434 (fail-safe)
+rem    MC5 3151 (vote engine, legacy) · MC6 8787 (uptime) · Ollama 11434 (fail-safe;
+rem    identity = joshlcoleman/Fable present) · OmniRoute is 3.8.50 since 2026-09-06
 rem    Hermes 9119 · OpenClaw 18789 · CEO bridge 3140 · Hermes gateway 8642
 rem    vote service 9134 · FABLE'S SENTRY 9140 (the wall) · Obsidian REST 27123 (report only)
 rem  Not started here, watched by the wall: Buzz relay, Open Collective, the
@@ -39,6 +43,7 @@ if /I "%~1"=="audit"  goto :audit
 if /I "%~1"=="wall"   goto :wall
 if /I "%~1"=="ledger" goto :ledger
 if /I "%~1"=="dns"    goto :dns
+if /I "%~1"=="fable"  goto :fable
 
 if not exist "%HOUSE%" (
   echo [drift] FABLE'S HOUSE script not found at %HOUSE%
@@ -77,4 +82,10 @@ exit /b %ERRORLEVEL%
 
 :dns
 call npm run -s fable -- dns
+exit /b %ERRORLEVEL%
+
+:fable
+rem Joshua's own model, private on ollama.com, built from opsable-model\Modelfile.
+rem Ollama stays the fail-safe route for harnesses; this is the drafting voice.
+ollama run joshlcoleman/Fable %2 %3 %4 %5 %6 %7 %8 %9
 exit /b %ERRORLEVEL%

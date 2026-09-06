@@ -13,7 +13,9 @@ New-Item -ItemType Directory -Force $env:DATA_DIR | Out-Null
 $omni = "$env:APPDATA\npm\omniroute.cmd"
 while ($true) {
     $up = $false
-    try { $up = (Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:20128/v1/models' -TimeoutSec 5).StatusCode -eq 200 } catch {}
+    # /api/health answers 200 without a key; /v1/models is 401 unauthenticated since 3.8.50 (2026-09-06)
+    # and would read as 'down' forever. Liveness only - identity is the House's and the Sentry's job.
+    try { $up = (Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:20128/api/health' -TimeoutSec 5).StatusCode -eq 200 } catch {}
     if (-not $up) {
         $existing = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
             Where-Object { $_.Name -eq 'node.exe' -and $_.CommandLine -match 'omniroute' }

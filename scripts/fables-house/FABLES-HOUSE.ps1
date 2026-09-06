@@ -33,9 +33,26 @@ function Test-Port($port) {
     try { (Test-NetConnection 127.0.0.1 -Port $port -InformationLevel Quiet -WarningAction SilentlyContinue) } catch { $false }
 }
 
-function Test-Http($url, $timeoutSec = 10, $mustContain = $null) {
+# Secret for authenticated probes: read from the repo .env at probe time,
+# never logged. OmniRoute 3.8.50 gates /v1/models behind the API key.
+function Get-EnvKey($name) {
     try {
-        $r = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec $timeoutSec
+        foreach ($line in Get-Content 'C:\ANTIGRAVITY\.env' -ErrorAction Stop) {
+            if ($line -match ('^' + [regex]::Escape($name) + '=(.*)$')) { return $Matches[1].Trim('"') }
+        }
+    } catch {}
+    return ''
+}
+
+function Test-Http($url, $timeoutSec = 10, $mustContain = $null, $bearerEnv = $null) {
+    try {
+        $hdr = @{}
+        if ($bearerEnv) {
+            $k = Get-EnvKey $bearerEnv
+            if (-not $k) { return $false }
+            $hdr['Authorization'] = "Bearer $k"
+        }
+        $r = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec $timeoutSec -Headers $hdr
         if ($r.StatusCode -ne 200) { return $false }
         if ($mustContain -and ($r.Content -notmatch [regex]::Escape($mustContain))) { return $false }
         return $true
@@ -62,11 +79,23 @@ $Stages = @(
                  Start-Process 'C:\Users\joshi\redis-win\redis-server.exe' -ArgumentList '--bind','127.0.0.1','--port','6379','--dir',$rdir,'--maxmemory','256mb','--maxmemory-policy','allkeys-lru' -WindowStyle Hidden } }
 
     @{ Name = 'OmniRoute :20128'; Required = $true
+       # UPGRADE PROCEDURE (learned 2026-09-06, 3.8.49 -> 3.8.50): npm cannot
+       # replace node_modules\omniroute\dist while the gateway runs (EBUSY), and
+       # TWO healers relaunch it within seconds of a stop — this watchdog and
+       # scripts\omniroute-keepalive.ps1. Stop both powershell hosts first, then
+       # the omniroute node/cmd processes, then
+       #   npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,tls-client-node,sharp,@parcel/watcher,@swc/core,protobufjs,koffi,esbuild omniroute@<ver>
+       # (without --allow-scripts the postinstalls are skipped silently), then
+       # start omniroute.cmd, the keepalive, and this watchdog again. First boot
+       # after an upgrade compiles for ~90 s; do not heal-spawn a second copy.
        # Identity + latency, not a port: on 2026-09-03 the server child sat at
        # ~3 GB, /models took >60 s and completions failed while 20128 stayed
        # open. If the catalog cannot name its own built-in combo inside 20 s,
        # the gateway is not serving and the heal (restart) is the right call.
-       Probe = { Test-Http 'http://127.0.0.1:20128/api/v1/models' 20 'auto/best-coding' }
+       # 3.8.50+: the catalog is behind the API key; an unauthenticated probe
+       # reads 401 and this watchdog would heal-spawn a second gateway (and a
+       # dashboard tab) every minute. That spam happened on 2026-09-06.
+       Probe = { Test-Http 'http://192.168.0.8:20128/v1/models' 20 'auto/best-coding' 'OMNI_ROUTE_API_KEY' }
        Heal  = { $env:DATA_DIR = "$env:USERPROFILE\.omniroute\data"
                  $omni = "$env:APPDATA\npm\omniroute.cmd"
                  if (Test-Path $omni) { Start-Process -FilePath $omni -WindowStyle Hidden }
@@ -117,7 +146,9 @@ $Stages = @(
                  } } }
 
     @{ Name = 'Ollama :11434'; Required = $false
-       Probe = { Test-Port 11434 }
+       # Identity = Joshua's house model joshlcoleman/Fable listed in /api/tags
+       # (ruled the mandatory Date App voice model 2026-09-06; ops/fable-model/).
+       Probe = { Test-Http 'http://127.0.0.1:11434/api/tags' 5 'joshlcoleman/Fable' }
        Heal  = { $o = "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe"
                  if (Test-Path $o) { Start-Process $o -ArgumentList 'serve' -WindowStyle Hidden }
                  else { Log '  Ollama missing: winget install Ollama.Ollama' 'DarkYellow' } } }

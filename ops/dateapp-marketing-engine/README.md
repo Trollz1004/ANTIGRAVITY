@@ -50,3 +50,7 @@ The daily routine (created via Paperclip API) instructs the CEO lane to run
 `node ops/dateapp-marketing-engine/engine.js --daily` and route the output
 through the marketing inbox. Anchor tasks: ANT-203 (W1 batch), ANT-204
 (research refresh feeds the pools), ANT-205 (X queue stays Grok-lane).
+
+## Voice model
+
+Copy that this engine's targets receive is drafted with Joshua's Ollama model `joshlcoleman/Fable` (`ops/fable-model/Modelfile`), ruled mandatory 2026-09-06. The older `joshlcoleman/dateapp-marketing` model is retired from public copy.

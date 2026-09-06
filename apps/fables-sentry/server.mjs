@@ -122,11 +122,35 @@ const redisPing = (ms = 2500) =>
     s.on('error', (e) => done({ up: false, detail: String(e.code || e.message) }));
   });
 
-async function httpCheck(url, identity, ms) {
+/**
+ * Secrets for authenticated probes. Read from the repo .env at probe time,
+ * never logged, never sent anywhere but the target that names the key.
+ * OmniRoute 3.8.50 (2026-09-06) put /v1/models behind the API key; the
+ * identity probe must carry it or every catalog check reads 401 = DOWN.
+ */
+function envValue(name) {
+  try {
+    const txt = readFileSync(join(REPO, '.env'), 'utf8');
+    for (const line of txt.split(/\r?\n/)) {
+      const m = /^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/.exec(line.trim());
+      if (m && m[1] === name) return m[2].replace(/^"|"$/g, '');
+    }
+  } catch {}
+  return '';
+}
+
+async function httpCheck(url, identity, ms, authEnv) {
   const c = new AbortController();
   const t = setTimeout(() => c.abort(), ms);
   try {
-    const r = await fetch(url, { signal: c.signal });
+    const headers = {};
+    if (authEnv) {
+      const v = envValue(authEnv);
+      if (!v) return { up: false, detail: 'AUTH MISSING — ' + authEnv + ' not set in .env' };
+      headers.authorization = 'Bearer ' + v;
+    }
+    const r = await fetch(url, { signal: c.signal, headers });
+    if (authEnv && (r.status === 401 || r.status === 403)) return { up: false, detail: 'AUTH REJECTED — HTTP ' + r.status + ' with ' + authEnv };
     const body = (await r.text()).slice(0, 4000);
     if (r.status >= 400) return { up: false, detail: 'HTTP ' + r.status };
     if (identity && !body.includes(identity)) {
@@ -149,7 +173,7 @@ async function probe(t) {
   }
   if (t.kind === 'http') {
     if (t.port && !(await portOpen(t.port))) return { ...t, up: false, detail: 'port ' + t.port + ' closed' };
-    return { ...t, ...(await httpCheck(t.url, t.identity, timeout)) };
+    return { ...t, ...(await httpCheck(t.url, t.identity, timeout, t.authEnv)) };
   }
   const open = await portOpen(t.port);
   return { ...t, up: open, detail: open ? 'port ' + t.port + ' open' : 'port ' + t.port + ' closed' };

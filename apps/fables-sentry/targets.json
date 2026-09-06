@@ -1,5 +1,5 @@
 {
-  "_comment": "Fable's Sentry target registry. Edit this file to add a watch target; the server and UI both read it, so nothing is hardcoded in two places. 'identity' is the string that MUST appear in the response body \u2014 a port being open is NOT health. That rule exists because on 2026-08-28 Redis was LISTENING on 6379 while answering MISCONF and refusing all writes, and every port-only check called it green for hours.",
+  "_comment": "Fable's Sentry target registry. Edit this file to add a watch target; the server and UI both read it, so nothing is hardcoded in two places. 'identity' is the string that MUST appear in the response body — a port being open is NOT health. That rule exists because on 2026-08-28 Redis was LISTENING on 6379 while answering MISCONF and refusing all writes, and every port-only check called it green for hours.",
   "groups": [
     {
       "name": "Revenue stack",
@@ -122,23 +122,25 @@
       "targets": [
         {
           "id": "omniroute",
-          "label": "OmniRoute gateway (192.168.0.8:20128/v1)",
+          "label": "OmniRoute gateway 3.8.50 (192.168.0.8:20128/v1)",
           "port": 20128,
           "kind": "http",
           "url": "http://192.168.0.8:20128/v1/models",
           "identity": "auto/best-coding",
           "fix": "omniroute",
-          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models. Identity = the model catalog answering (the built-in combo id must appear). Changed from a port check 2026-09-03: the server child hit ~3 GB working set, /models went from 18 s to a 60 s timeout, completions died, and the port stayed open the whole time \u2014 an open port is not health. 2026-09-03 Joshua: the ONE OmniRoute URL for every client, doc, and probe is http://192.168.0.8:20128/v1 \u2014 verified from his tablet over Wi-Fi; loopback/localhost forms never worked off-box. The separate 'omnilan' row was merged into this one.",
-          "timeoutMs": 20000
+          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models. Identity = the model catalog answering (the built-in combo id must appear). Changed from a port check 2026-09-03: the server child hit ~3 GB working set, /models went from 18 s to a 60 s timeout, completions died, and the port stayed open the whole time — an open port is not health. 2026-09-03 Joshua: the ONE OmniRoute URL for every client, doc, and probe is http://192.168.0.8:20128/v1 — verified from his tablet over Wi-Fi; loopback/localhost forms never worked off-box. The separate 'omnilan' row was merged into this one. 2026-09-06: upgraded 3.8.49 -> 3.8.50; this build answers /v1/models with 401 unless the API key is sent, so the probe carries OMNI_ROUTE_API_KEY from the repo .env (authEnv). AUTH MISSING / AUTH REJECTED are reported as such, never as a plain DOWN. Upgrade procedure lives in FABLES-HOUSE.ps1 at the OmniRoute stage.",
+          "timeoutMs": 20000,
+          "authEnv": "OMNI_ROUTE_API_KEY"
         },
         {
           "id": "ollama",
-          "label": "Ollama (fail-safe only)",
+          "label": "Ollama (fail-safe) · joshlcoleman/Fable",
           "port": 11434,
           "kind": "http",
           "url": "http://127.0.0.1:11434/api/tags",
-          "identity": "models",
-          "fix": "ollama"
+          "identity": "joshlcoleman/Fable",
+          "fix": "ollama",
+          "note": "Identity = Joshua's house model joshlcoleman/Fable present in /api/tags (ruled the mandatory Date App voice model 2026-09-06; Modelfile ops/fable-model/). A running Ollama without that model is WRONG SERVICE for this row, because the voice ruling depends on it. Ollama remains the fail-safe routing path only."
         }
       ]
     },
@@ -199,7 +201,7 @@
           "fix": null
         }
       ],
-      "note": "crmui :3001 / crmapi :8001 retired from the wall 2026-09-03 \u2014 the CRM was folded into the monorepo 08-26 and the hosted instance is the live one; two permanent reds for services nobody starts is noise, not health."
+      "note": "crmui :3001 / crmapi :8001 retired from the wall 2026-09-03 — the CRM was folded into the monorepo 08-26 and the hosted instance is the live one; two permanent reds for services nobody starts is noise, not health."
     },
     {
       "name": "Public sites",
@@ -234,7 +236,7 @@
         },
         {
           "id": "collective",
-          "label": "Open Collective \u00b7 dream-online",
+          "label": "Open Collective · dream-online",
           "kind": "http",
           "url": "https://opencollective.com/dream-online",
           "identity": "DREAM Online",
