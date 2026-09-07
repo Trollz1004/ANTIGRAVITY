@@ -179,7 +179,7 @@ These load on EVERY session start via [[AGENTS.md]] preload:
 
 ## MCP Connections
 
-- [[omniroute]] — Multi-model routing (Sabertooth 192.168.0.8:20128)
+- [[omniroute]] — Multi-model routing (Sabertooth 192.168.0.8:20128/v1)
 - [[supabase]] — Database and auth
 - [[playwright]] — Browser automation
 - [[openviking]] — L0/L1/L2 hierarchical context
