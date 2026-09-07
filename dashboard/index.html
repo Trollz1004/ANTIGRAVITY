@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hermes Ultimate Dashboard</title>
+<style>
+:root {
+  --bg: #0f1117;
+  --bg-alt: #151821;
+  --card: #1a1d27;
+  --card-hover: #222633;
+  --border: #2a2e3d;
+  --text: #e4e4e7;
+  --text-muted: #8b8fa3;
+  --accent: #6366f1;
+  --accent-glow: rgba(99, 102, 241, 0.15);
+  --green: #22c55e;
+  --yellow: #eab308;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --purple: #a855f7;
+  --orange: #f97316;
+  --sidebar-w: 240px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--bg-alt);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: transform 0.3s;
+}
+
+.sidebar-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sidebar-header h1 {
+  font-size: 1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.nav-item:hover { background: var(--card); color: var(--text); }
+.nav-item.active { background: var(--accent-glow); color: var(--accent); border-left: 3px solid var(--accent); }
+
+.nav-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+.nav-label { flex: 1; }
+.nav-badge { background: var(--accent); color: white; font-size: 0.65rem; padding: 0.1rem 0.4rem; border-radius: 999px; }
+
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Main Content */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.topbar {
+  height: 48px;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.topbar-title { font-weight: 600; font-size: 0.95rem; }
+.topbar-actions { margin-left: auto; display: flex; gap: 0.5rem; }
+
+.btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.15s;
+}
+
+.btn:hover { background: var(--card-hover); border-color: var(--accent); }
+.btn-primary { background: var(--accent); border-color: var(--accent); }
+.btn-primary:hover { opacity: 0.9; }
+.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.7rem; }
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+/* Panels */
+.panel { display: none; height: 100%; }
+.panel.active { display: flex; flex-direction: column; }
+
+/* Grid Layouts */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+/* Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.2s;
+}
+
+.card:hover { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+.card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+.card-icon { font-size: 1.5rem; }
+.card-title { font-weight: 600; font-size: 0.95rem; }
+.card-body { font-size: 0.85rem; color: var(--text-muted); }
+
+/* Terminal / CLI */
+.terminal {
+  background: #000;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.8rem;
+  height: 400px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+}
+
+.terminal-line { margin-bottom: 0.25rem; }
+.terminal-prompt { color: var(--green); }
+.terminal-output { color: var(--text-muted); }
+.terminal-input {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: inherit;
+  width: 80%;
+  outline: none;
+}
+
+/* Chat */
+.chat-container { display: flex; flex-direction: column; height: 100%; }
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  background: var(--bg-alt);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.chat-msg { margin-bottom: 1rem; }
+.chat-msg-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem; }
+.chat-msg-avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+.chat-msg-name { font-weight: 600; font-size: 0.85rem; }
+.chat-msg-time { font-size: 0.7rem; color: var(--text-muted); }
+.chat-msg-body { padding-left: 2.2rem; font-size: 0.85rem; color: var(--text-muted); }
+
+.chat-input {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chat-input input {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.chat-input input:focus { border-color: var(--accent); }
+
+/* Obsidian Notes */
+.notes-list { max-height: 500px; overflow-y: auto; }
+.note-item {
+  padding: 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 0.25rem;
+}
+
+.note-item:hover { background: var(--card); }
+.note-item-title { font-weight: 600; font-size: 0.9rem; }
+.note-item-meta { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+/* Browser Frame */
+.browser-frame {
+  background: var(--bg-alt);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.browser-bar {
+  background: var(--card);
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.browser-url {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.browser-content {
+  flex: 1;
+  background: white;
+  position: relative;
+}
+
+.browser-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Status indicators */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-online { background: var(--green); }
+.status-offline { background: var(--red); }
+.status-idle { background: var(--yellow); }
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; z-index: 100; height: 100vh; transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* Utility */
+.text-muted { color: var(--text-muted); }
+.text-accent { color: var(--accent); }
+.text-green { color: var(--green); }
+.text-red { color: var(--red); }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.flex { display: flex; }
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <span>⚡</span>
+    <h1>Hermes Dash</h1>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" data-panel="overview">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">Overview</span>
+    </div>
+    <div class="nav-item" data-panel="buzz">
+      <span class="nav-icon">💬</span>
+      <span class="nav-label">Buzz</span>
+      <span class="nav-badge">3</span>
+    </div>
+    <div class="nav-item" data-panel="obsidian">
+      <span class="nav-icon">📝</span>
+      <span class="nav-label">Obsidian</span>
+    </div>
+    <div class="nav-item" data-panel="hermes">
+      <span class="nav-icon">🤖</span>
+      <span class="nav-label">Hermes</span>
+    </div>
+    <div class="nav-item" data-panel="claude">
+      <span class="nav-icon">🧠</span>
+      <span class="nav-label">Claude Code</span>
+    </div>
+    <div class="nav-item" data-panel="copilot">
+      <span class="nav-icon">🐙</span>
+      <span class="nav-label">Copilot</span>
+    </div>
+    <div class="nav-item" data-panel="browser">
+      <span class="nav-icon">🌐</span>
+      <span class="nav-label">Browser</span>
+    </div>
+    <div class="nav-item" data-panel="skills">
+      <span class="nav-icon">🛠️</span>
+      <span class="nav-label">Skills</span>
+    </div>
+    <div class="nav-item" data-panel="settings">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">Settings</span>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="flex items-center gap-1">
+      <span class="status-dot status-online"></span>
+      <span>Tablet • Sabertooth</span>
+    </div>
+    <div class="mt-1">Nous Free • 3145 models</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main">
+  <!-- Topbar -->
+  <div class="topbar">
+    <button class="btn btn-sm" onclick="toggleSidebar()">☰</button>
+    <span class="topbar-title" id="topbar-title">Overview</span>
+    <div class="topbar-actions">
+      <button class="btn btn-sm" onclick="refreshAll()">🔄</button>
+      <button class="btn btn-sm btn-primary" onclick="newTask()">+ New</button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content" id="content">
+
+    <!-- Overview Panel -->
+    <div class="panel active" id="panel-overview">
+      <div class="grid-3 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🤖</span>
+            <span class="card-title">Hermes Agent</span>
+          </div>
+          <div class="card-body">
+            <div class="flex items-center gap-1 mb-1">
+              <span class="status-dot status-online"></span>
+              <span class="text-green">Active</span>
+            </div>
+            <div>Model: <span class="text-accent">stepfun/step-3.7-flash</span></div>
+            <div>Provider: Nous Portal (Free)</div>
+            <div>Sessions: 2 • Skills: 12</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🖥️</span>
+            <span class="card-title">Sabertooth Node</span>
+          </div>
+          <div class="card-body">
+            <div class="flex items-center gap-1 mb-1">
+              <span class="status-dot status-online"></span>
+              <span class="text-green">Connected</span>
+            </div>
+            <div>Endpoint: <span class="text-accent">192.168.0.8:20128</span></div>
+            <div>Models: 3,145 available</div>
+            <div>Grok 4.6 • DeepSeek V4 • GLM 5.2</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">📝</span>
+            <span class="card-title">Obsidian Vault</span>
+          </div>
+          <div class="card-body">
+            <div class="flex items-center gap-1 mb-1">
+              <span class="status-dot status-offline"></span>
+              <span class="text-red">Not Connected</span>
+            </div>
+            <div>Install Local REST API plugin</div>
+            <div>Port: 27124</div>
+            <button class="btn btn-sm mt-1" onclick="connectObsidian()">Connect</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3 mb-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🧠</span>
+            <span class="card-title">Claude Code CLI</span>
+          </div>
+          <div class="card-body">
+            <div class="flex items-center gap-1 mb-1">
+              <span class="status-dot status-idle"></span>
+              <span>Ready</span>
+            </div>
+            <div>Headless mode available</div>
+            <div>--print --output-format json</div>
+            <button class="btn btn-sm mt-1" onclick="switchPanel('claude')">Open Terminal</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🐙</span>
+            <span class="card-title">GitHub Copilot</span>
+          </div>
+          <div class="card-body">
+            <div class="flex items-center gap-1 mb-1">
+              <span class="status-dot status-idle"></span>
+              <span>BYOK Ready</span>
+            </div>
+            <div>Point to any OAI endpoint</div>
+            <div>COPILOT_PROVIDER_BASE_URL</div>
+            <button class="btn btn-sm mt-1" onclick="switchPanel('copilot')">Configure</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🌐</span>
+            <span class="card-title">Chrome CDP</span>
+          </div>
+          <div class="card-body">
+            <div class="flex items-center gap-1 mb-1">
+              <span class="status-dot status-offline"></span>
+              <span class="text-red">No Browser</span>
+            </div>
+            <div>Remote debugging port 9222</div>
+            <div>WebSocket control available</div>
+            <button class="btn btn-sm mt-1" onclick="switchPanel('browser')">Launch</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-icon">📊</span>
+          <span class="card-title">Recent Activity</span>
+        </div>
+        <div class="card-body" id="activity-log">
+          <div class="mb-1">• Created 12 custom topic skills</div>
+          <div class="mb-1">• Installed caveman compression skills</div>
+          <div class="mb-1">• Connected Sabertooth Omniroute</div>
+          <div class="mb-1">• Set Nous free models as primary</div>
+          <div class="mb-1">• Built applet dashboard</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buzz Panel (Slack-like) -->
+    <div class="panel" id="panel-buzz">
+      <div class="chat-container">
+        <div class="chat-messages" id="buzz-messages">
+          <div class="chat-msg">
+            <div class="chat-msg-header">
+              <div class="chat-msg-avatar" style="background:var(--accent)">⚡</div>
+              <span class="chat-msg-name">Hermes</span>
+              <span class="chat-msg-time">10:30a</span>
+            </div>
+            <div class="chat-msg-body">Dashboard online. All bridges standing by.</div>
+          </div>
+          <div class="chat-msg">
+            <div class="chat-msg-header">
+              <div class="chat-msg-avatar" style="background:var(--green)">🤖</div>
+              <span class="chat-msg-name">Claude Code</span>
+              <span class="chat-msg-time">10:31a</span>
+            </div>
+            <div class="chat-msg-body">Headless bridge ready. Awaiting tasks.</div>
+          </div>
+          <div class="chat-msg">
+            <div class="chat-msg-header">
+              <div class="chat-msg-avatar" style="background:var(--purple)">🐙</div>
+              <span class="chat-msg-name">Copilot</span>
+              <span class="chat-msg-time">10:32a</span>
+            </div>
+            <div class="chat-msg-body">BYOK mode active. Endpoint configurable.</div>
+          </div>
+        </div>
+        <div class="chat-input">
+          <input type="text" placeholder="Message all agents..." id="buzz-input" onkeypress="if(event.key==='Enter')sendBuzz()">
+          <button class="btn btn-primary" onclick="sendBuzz()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Obsidian Panel -->
+    <div class="panel" id="panel-obsidian">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">📝</span>
+            <span class="card-title">Vault Notes</span>
+          </div>
+          <div class="notes-list" id="obsidian-notes">
+            <div class="note-item">
+              <div class="note-item-title">Loading...</div>
+              <div class="note-item-meta">Connect to Obsidian first</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🔍</span>
+            <span class="card-title">Search</span>
+          </div>
+          <div class="mb-2">
+            <input type="text" placeholder="Search vault..." style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.5rem;border-radius:6px;outline:none;">
+          </div>
+          <div class="card-body">
+            <div class="mb-1">Tags: #hermes #skills #dashboard</div>
+            <div class="mb-1">Recent: Session Memory, TDD Notes</div>
+            <div>Backlinks: 3 notes link here</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hermes Panel -->
+    <div class="panel" id="panel-hermes">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🤖</span>
+            <span class="card-title">Session Memory</span>
+          </div>
+          <div class="card-body" id="hermes-memory">
+            <div class="mb-1"><strong>Last Session:</strong> 2026-09-07</div>
+            <div class="mb-1"><strong>Model:</strong> stepfun/step-3.7-flash</div>
+            <div class="mb-1"><strong>Provider:</strong> Nous Portal (Free)</div>
+            <div class="mb-1"><strong>Sub-agent:</strong> Sabertooth Omniroute</div>
+            <div class="mb-1"><strong>Skills Loaded:</strong> 12 custom + 7 caveman</div>
+            <div><strong>Memory Entries:</strong> 2 sessions logged</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🛠️</span>
+            <span class="card-title">Active Skills</span>
+          </div>
+          <div class="card-body" id="hermes-skills">
+            <div class="mb-1">🪨 caveman (compression)</div>
+            <div class="mb-1">💡 brainstorm (ideation)</div>
+            <div class="mb-1">⚛️ frontend-react</div>
+            <div class="mb-1">▲ nextjs</div>
+            <div class="mb-1">🎨 design-ui</div>
+            <div class="mb-1">📱 mobile</div>
+            <div class="mb-1">🤖 agent-workflow</div>
+            <div class="mb-1">🗄️ database</div>
+            <div class="mb-1">🧪 testing</div>
+            <div class="mb-1">📈 marketing</div>
+            <div class="mb-1">🎬 youtube-automation</div>
+            <div>🧠 session-memory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Claude Code Panel -->
+    <div class="panel" id="panel-claude">
+      <div class="terminal" id="claude-terminal">
+        <div class="terminal-line"><span class="terminal-prompt">$</span> claude --print --output-format json "ready"</div>
+        <div class="terminal-line terminal-output">Claude Code CLI bridge active. Headless mode.</div>
+        <div class="terminal-line terminal-output">Type commands below or use quick actions.</div>
+        <div class="terminal-line terminal-output">---</div>
+      </div>
+      <div class="flex gap-1 mt-1">
+        <button class="btn btn-sm" onclick="claudeCmd('explain')">Explain</button>
+        <button class="btn btn-sm" onclick="claudeCmd('refactor')">Refactor</button>
+        <button class="btn btn-sm" onclick="claudeCmd('test')">Test</button>
+        <button class="btn btn-sm" onclick="claudeCmd('docs')">Docs</button>
+        <input type="text" class="terminal-input" placeholder="claude --print &quot;...&quot;" id="claude-input" onkeypress="if(event.key==='Enter')claudeRun()">
+      </div>
+    </div>
+
+    <!-- Copilot Panel -->
+    <div class="panel" id="panel-copilot">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🐙</span>
+            <span class="card-title">Copilot Bridge</span>
+          </div>
+          <div class="card-body">
+            <div class="mb-2">
+              <label class="text-muted">Provider Base URL</label>
+              <input type="text" value="http://192.168.0.8:20128/v1" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.5rem;border-radius:6px;outline:none;margin-top:0.25rem;">
+            </div>
+            <div class="mb-2">
+              <label class="text-muted">API Key</label>
+              <input type="password" value="ollama" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.5rem;border-radius:6px;outline:none;margin-top:0.25rem;">
+            </div>
+            <div class="mb-2">
+              <label class="text-muted">Model</label>
+              <input type="text" value="xao/grok-4.6" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.5rem;border-radius:6px;outline:none;margin-top:0.25rem;">
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="saveCopilot()">Save Config</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">💬</span>
+            <span class="card-title">Copilot Chat</span>
+          </div>
+          <div class="chat-messages" style="height:250px;">
+            <div class="chat-msg">
+              <div class="chat-msg-header">
+                <div class="chat-msg-avatar" style="background:var(--purple)">🐙</div>
+                <span class="chat-msg-name">Copilot</span>
+              </div>
+              <div class="chat-msg-body">BYOK bridge ready. Configure endpoint to start.</div>
+            </div>
+          </div>
+          <div class="chat-input mt-1">
+            <input type="text" placeholder="Ask Copilot...">
+            <button class="btn btn-primary btn-sm">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Browser Panel -->
+    <div class="panel" id="panel-browser">
+      <div class="browser-frame">
+        <div class="browser-bar">
+          <button class="btn btn-sm" onclick="browserBack()">←</button>
+          <button class="btn btn-sm" onclick="browserForward()">→</button>
+          <button class="btn btn-sm" onclick="browserRefresh()">🔄</button>
+          <input type="text" class="browser-url" value="https://hermes-agent.nousresearch.com" id="browser-url" onkeypress="if(event.key==='Enter')browserNavigate()">
+          <button class="btn btn-sm" onclick="browserNavigate()">Go</button>
+        </div>
+        <div class="browser-content">
+          <iframe id="browser-iframe" src="https://hermes-agent.nousresearch.com" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills Panel -->
+    <div class="panel" id="panel-skills">
+      <div class="grid-3" id="skills-grid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="panel" id="panel-settings">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">⚙️</span>
+            <span class="card-title">Dashboard Settings</span>
+          </div>
+          <div class="card-body">
+            <div class="mb-2">
+              <label class="text-muted">Theme</label>
+              <select style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.5rem;border-radius:6px;outline:none;margin-top:0.25rem;">
+                <option>Dark (Default)</option>
+                <option>Midnight</option>
+                <option>OLED Black</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label class="text-muted">Refresh Interval</label>
+              <select style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.5rem;border-radius:6px;outline:none;margin-top:0.25rem;">
+                <option>5 seconds</option>
+                <option>10 seconds</option>
+                <option>30 seconds</option>
+                <option>Manual</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label class="text-muted">Sidebar</label>
+              <div class="flex gap-1 mt-1">
+                <button class="btn btn-sm btn-primary">Expanded</button>
+                <button class="btn btn-sm">Collapsed</button>
+                <button class="btn btn-sm">Hidden</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🔗</span>
+            <span class="card-title">Bridge Status</span>
+          </div>
+          <div class="card-body">
+            <div class="flex items-center gap-1 mb-1">
+              <span class="status-dot status-online"></span>
+              <span>Hermes Agent — Connected</span>
+            </div>
+            <div class="flex items-center gap-1 mb-1">
+              <span class="status-dot status-online"></span>
+              <span>Sabertooth Node — Connected</span>
+            </div>
+            <div class="flex items-center gap-1 mb-1">
+              <span class="status-dot status-offline"></span>
+              <span>Obsidian — Disconnected</span>
+            </div>
+            <div class="flex items-center gap-1 mb-1">
+              <span class="status-dot status-idle"></span>
+              <span>Claude Code — Ready</span>
+            </div>
+            <div class="flex items-center gap-1 mb-1">
+              <span class="status-dot status-idle"></span>
+              <span>Copilot — Configurable</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="status-dot status-offline"></span>
+              <span>Chrome CDP — No Browser</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+// Panel switching
+function switchPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.querySelector(`.nav-item[data-panel="${name}"]`).classList.add('active');
+  document.getElementById('topbar-title').textContent = name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => switchPanel(item.dataset.panel));
+});
+
+// Sidebar toggle
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Buzz chat
+function sendBuzz() {
+  const input = document.getElementById('buzz-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  const container = document.getElementById('buzz-messages');
+  const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  container.innerHTML += `
+    <div class="chat-msg">
+      <div class="chat-msg-header">
+        <div class="chat-msg-avatar" style="background:var(--orange)">👤</div>
+        <span class="chat-msg-name">You</span>
+        <span class="chat-msg-time">${time}</span>
+      </div>
+      <div class="chat-msg-body">${msg}</div>
+    </div>`;
+  input.value = '';
+  container.scrollTop = container.scrollHeight;
+}
+
+// Claude Code terminal
+function claudeCmd(type) {
+  const term = document.getElementById('claude-terminal');
+  term.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">$</span> claude --print "--${type}"</div>`;
+  term.innerHTML += `<div class="terminal-line terminal-output">Running ${type}...</div>`;
+  term.scrollTop = term.scrollHeight;
+}
+
+function claudeRun() {
+  const input = document.getElementById('claude-input');
+  const cmd = input.value.trim();
+  if (!cmd) return;
+  const term = document.getElementById('claude-terminal');
+  term.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">$</span> ${cmd}</div>`;
+  term.innerHTML += `<div class="terminal-line terminal-output">Executing...</div>`;
+  input.value = '';
+  term.scrollTop = term.scrollHeight;
+}
+
+// Browser
+function browserNavigate() {
+  const url = document.getElementById('browser-url').value;
+  document.getElementById('browser-iframe').src = url;
+}
+
+function browserBack() { document.getElementById('browser-iframe').contentWindow.history.back(); }
+function browserForward() { document.getElementById('browser-iframe').contentWindow.history.forward(); }
+function browserRefresh() { document.getElementById('browser-iframe').src = document.getElementById('browser-iframe').src; }
+
+// Obsidian
+function connectObsidian() {
+  // Would connect to https://127.0.0.1:27124/ in a real implementation
+  alert('Install Obsidian Local REST API plugin first.\nThen enter your API key in Settings.');
+}
+
+// Copilot
+function saveCopilot() {
+  alert('Copilot BYOK config saved.\nSet COPILOT_PROVIDER_BASE_URL in your environment.');
+}
+
+// Refresh
+function refreshAll() {
+  location.reload();
+}
+
+// New task
+function newTask() {
+  const task = prompt('New task:');
+  if (task) {
+    const container = document.getElementById('buzz-messages');
+    const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    container.innerHTML += `
+      <div class="chat-msg">
+        <div class="chat-msg-header">
+          <div class="chat-msg-avatar" style="background:var(--green)">📋</div>
+          <span class="chat-msg-name">Task</span>
+          <span class="chat-msg-time">${time}</span>
+        </div>
+        <div class="chat-msg-body">${task}</div>
+      </div>`;
+    switchPanel('buzz');
+  }
+}
+
+// Populate skills grid
+const skills = [
+  {name:'Caveman', icon:'🪨', desc:'Token compression', color:'var(--red)'},
+  {name:'Brainstorm', icon:'💡', desc:'Ideation', color:'var(--yellow)'},
+  {name:'Frontend React', icon:'⚛️', desc:'React 19 patterns', color:'var(--blue)'},
+  {name:'Next.js', icon:'▲', desc:'App Router', color:'var(--text)'},
+  {name:'Design UI', icon:'🎨', desc:'Design systems', color:'var(--purple)'},
+  {name:'Mobile', icon:'📱', desc:'React Native', color:'var(--green)'},
+  {name:'Agent Workflow', icon:'🤖', desc:'Orchestration', color:'var(--accent)'},
+  {name:'Database', icon:'🗄️', desc:'PostgreSQL/Supabase', color:'var(--orange)'},
+  {name:'Testing', icon:'🧪', desc:'TDD/Playwright', color:'var(--green)'},
+  {name:'Marketing', icon:'📈', desc:'SEO/CRO', color:'var(--yellow)'},
+  {name:'YouTube', icon:'🎬', desc:'Automation', color:'var(--red)'},
+  {name:'Session Memory', icon:'🧠', desc:'Persistence', color:'var(--accent)'},
+];
+
+const skillsGrid = document.getElementById('skills-grid');
+skills.forEach(s => {
+  skillsGrid.innerHTML += `
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">${s.icon}</span>
+        <span class="card-title">${s.name}</span>
+      </div>
+      <div class="card-body">${s.desc}</div>
+    </div>`;
+});
+
+// Auto-refresh
+setInterval(() => {
+  // In real implementation, poll bridges for status
+}, 10000);
+</script>
+
+</body>
+</html>

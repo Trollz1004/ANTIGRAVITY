@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hermes Dashboard — Applets & Skills</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --card-hover: #222633;
+    --border: #2a2e3d;
+    --text: #e4e4e7;
+    --text-muted: #8b8fa3;
+    --accent: #6366f1;
+    --accent-glow: rgba(99, 102, 241, 0.15);
+    --green: #22c55e;
+    --yellow: #eab308;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --purple: #a855f7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+  }
+
+  .header p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem;
+    padding-left: 0.5rem;
+    border-left: 3px solid var(--accent);
+  }
+
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    min-width: 120px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    background: var(--card-hover);
+    border-color: var(--accent);
+    box-shadow: 0 0 20px var(--accent-glow);
+    transform: translateY(-2px);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.3;
+    flex: 1;
+  }
+
+  .card-badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .badge-spanner { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+  .badge-bundled { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+  .badge-drive { background: rgba(234, 179, 8, 0.2); color: #fde047; }
+  .badge-custom { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; }
+  .badge-caveman { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+  .badge-youtube { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+  .badge-tdd { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+
+  .card-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .meta-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .dot-recent { background: var(--green); }
+  .dot-moderate { background: var(--yellow); }
+  .dot-old { background: var(--red); }
+
+  .footer {
+    text-align: center;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 1rem; }
+    .grid { grid-template-columns: 1fr; }
+    .stats { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Hermes Dashboard</h1>
+  <p>Applets, Skills & Tools — All in one place</p>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<h2 class="section-title">Custom Skills (Topic-Based)</h2>
+<div class="grid" id="skills-grid"></div>
+
+<h2 class="section-title">Applets</h2>
+<div class="grid" id="applets-grid"></div>
+
+<div class="footer">
+  Generated 2026-09-07 &mdash; <span id="count"></span> items total
+</div>
+
+<script>
+const customSkills = [
+  { name: "Frontend & React", description: "React 19 patterns, hooks, state management, performance optimization, component design.", badge: "custom", icon: "⚛️" },
+  { name: "Next.js", description: "App Router, server components, ISR, middleware, API routes, Vercel deployment.", badge: "custom", icon: "▲" },
+  { name: "Design & UI", description: "Design systems, shadcn, accessibility, responsive design, Figma-to-code.", badge: "custom", icon: "🎨" },
+  { name: "Mobile", description: "React Native, Expo, iOS/Android patterns, navigation, app store deployment.", badge: "custom", icon: "📱" },
+  { name: "Agent Workflow", description: "Multi-agent orchestration, subagent dispatch, autonomous loops, plan-execute-verify.", badge: "custom", icon: "🤖" },
+  { name: "Database", description: "PostgreSQL, Supabase, Firebase, schema design, migrations, RLS policies.", badge: "custom", icon: "🗄️" },
+  { name: "Testing", description: "TDD loops, Playwright automation, unit/integration/e2e, test pyramids.", badge: "tdd", icon: "🧪" },
+  { name: "Marketing", description: "SEO, copywriting, CRO, growth strategies, social media automation.", badge: "custom", icon: "📈" },
+  { name: "Caveman", description: "Ultra-compressed communication. 65% token reduction, 100% technical accuracy.", badge: "caveman", icon: "🪨" },
+  { name: "YouTube Automation", description: "Upload, SEO, thumbnails, scheduling, analytics, content strategy.", badge: "youtube", icon: "🎬" },
+  { name: "Session Memory", description: "Session start/end memory management with Obsidian integration.", badge: "custom", icon: "🧠" },
+  { name: "TDD (Bundled)", description: "Enforce RED-GREEN-REFACTOR. Tests before code. No exceptions.", badge: "tdd", icon: "✅" }
+];
+
+const applets = [
+  { name: "Paperclip Dashboard", description: "Orchestration dashboard for autonomous AI companies and agents.", lastAccessTime: "2026-09-02T05:29:14.423967Z", firstAccessTime: "2026-03-29T14:31:08.645768Z", sourceType: "SPANNER" },
+  { name: "YouAndINotAI - Human-Only Dating Platform", description: "The world's first 100% human-only dating platform and merch store.", lastAccessTime: "2026-08-29T14:39:22.229058Z", firstAccessTime: "2026-08-29T14:35:05.432822Z", sourceType: "SPANNER" },
+  { name: "AI Talk Radio", description: "Generate complete radio shows from simple prompts with dynamic background music.", lastAccessTime: "2026-08-27T10:18:43.420913Z", firstAccessTime: "2026-07-03T18:09:42.814110Z", sourceType: "BUNDLED" },
+  { name: "command-center", description: "Imported from GitHub: Trollz1004/command-center", lastAccessTime: "2026-08-26T13:39:12.757482Z", firstAccessTime: "2026-07-03T18:11:31.589192Z", sourceType: "SPANNER" },
+  { name: "YouAndINotAI — Galaxy", description: "An ambient 3D galaxy in motion — kinetic orbits, radiant starbursts, audio-reactive waves.", lastAccessTime: "2026-08-26T10:13:21.456650Z", firstAccessTime: "2026-03-01T23:12:47.854688Z", sourceType: "SPANNER" },
+  { name: "UNTILnoKidInNeed MISSION OS", description: "Self-hosted agent tasks to nodes with multi-memory architecture and self-improvement.", lastAccessTime: "2026-08-22T02:47:03.557122Z", firstAccessTime: "2026-08-21T22:50:04.483023Z", sourceType: "SPANNER" },
+  { name: "Remix: Gemini 95", description: "Explore a retro OS that brings back nostalgic memories with an AI twist.", lastAccessTime: "2026-07-11T06:00:36.247728Z", firstAccessTime: "2026-06-15T21:11:15.261958Z", sourceType: "SPANNER" },
+  { name: "JoshuaClaw Flagship BETA", description: "Elite Desktop AI Workstation by Antigravity Platforms.", lastAccessTime: "2026-05-17T17:21:01.623672Z", firstAccessTime: "2026-04-13T18:19:20.955845Z", sourceType: "SPANNER" },
+  { name: "YouandInotai", description: "A mobile-first Social for Good platform with location-based meetups and charity dashboard.", lastAccessTime: "2026-03-19T02:24:24.137721Z", firstAccessTime: "2026-02-24T13:47:34.078682Z", sourceType: "SPANNER" }
+];
+
+function timeAgo(iso) {
+  const now = new Date();
+  const then = new Date(iso);
+  const diff = now - then;
+  const days = Math.floor(diff / 86400000);
+  if (days < 1) return 'Today';
+  if (days < 7) return `${days}d ago`;
+  if (days < 30) return `${Math.floor(days/7)}w ago`;
+  if (days < 365) return `${Math.floor(days/30)}mo ago`;
+  return `${Math.floor(days/365)}y ago`;
+}
+
+function recencyClass(iso) {
+  const days = (new Date() - new Date(iso)) / 86400000;
+  if (days < 7) return 'dot-recent';
+  if (days < 30) return 'dot-moderate';
+  return 'dot-old';
+}
+
+function badgeClass(type) {
+  if (type === 'BUNDLED') return 'badge-bundled';
+  if (type === 'DRIVE') return 'badge-drive';
+  if (type === 'custom') return 'badge-custom';
+  if (type === 'caveman') return 'badge-caveman';
+  if (type === 'youtube') return 'badge-youtube';
+  if (type === 'tdd') return 'badge-tdd';
+  return 'badge-spanner';
+}
+
+// Render stats
+const totalItems = customSkills.length + applets.length;
+const spanner = applets.filter(a => a.sourceType === 'SPANNER').length;
+const bundled = applets.filter(a => a.sourceType === 'BUNDLED').length;
+const custom = customSkills.length;
+const recent = applets.filter(a => (new Date() - new Date(a.lastAccessTime)) / 86400000 < 14).length;
+
+document.getElementById('stats').innerHTML = `
+  <div class="stat"><div class="stat-value">${totalItems}</div><div class="stat-label">Total</div></div>
+  <div class="stat"><div class="stat-value">${custom}</div><div class="stat-label">Skills</div></div>
+  <div class="stat"><div class="stat-value">${applets.length}</div><div class="stat-label">Applets</div></div>
+  <div class="stat"><div class="stat-value">${recent}</div><div class="stat-label">Active (14d)</div></div>
+`;
+
+// Render skills cards
+const skillsGrid = document.getElementById('skills-grid');
+customSkills.forEach(s => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="card-icon">${s.icon}</div>
+      <div class="card-title">${s.name}</div>
+      <span class="card-badge ${badgeClass(s.badge)}">${s.badge.toUpperCase()}</span>
+    </div>
+    <div class="card-desc">${s.description}</div>
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-dot dot-recent"></span>
+        Active
+      </div>
+      <div class="meta-item">
+        Custom Skill
+      </div>
+    </div>
+  `;
+  skillsGrid.appendChild(card);
+});
+
+// Render applet cards
+const appletsGrid = document.getElementById('applets-grid');
+applets.forEach(a => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="card-icon">${a.sourceType === 'BUNDLED' ? '📦' : '⚡'}</div>
+      <div class="card-title">${a.name}</div>
+      <span class="card-badge ${badgeClass(a.sourceType)}">${a.sourceType}</span>
+    </div>
+    <div class="card-desc">${a.description}</div>
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-dot ${recencyClass(a.lastAccessTime)}"></span>
+        Last: ${timeAgo(a.lastAccessTime)}
+      </div>
+      <div class="meta-item">
+        First: ${timeAgo(a.firstAccessTime)}
+      </div>
+    </div>
+  `;
+  appletsGrid.appendChild(card);
+});
+
+document.getElementById('count').textContent = totalItems;
+</script>
+
+</body>
+</html>
