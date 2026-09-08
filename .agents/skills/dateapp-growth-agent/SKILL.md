@@ -1,6 +1,6 @@
 ---
 name: dateapp-growth-agent
-description: Use when dispatching the dateapp-growth-agent lane of the YouAndINotAI dateapp swarm. Growth lane: 10-day launch, Elite affiliate, preorder funnel, business-only copy.
+description: "Use when dispatching the dateapp-growth-agent lane of the YouAndINotAI dateapp swarm. Growth lane: 10-day launch, Elite affiliate, preorder funnel, business-only copy."
 ---
 
 # dateapp-growth-agent

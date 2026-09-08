@@ -1,6 +1,6 @@
 ---
 name: dateapp-payments-agent
-description: Use when dispatching the dateapp-payments-agent lane of the YouAndINotAI dateapp swarm. Payments lane: Square primary, PayPal, Cash App, Plaid verify. No Stripe.
+description: "Use when dispatching the dateapp-payments-agent lane of the YouAndINotAI dateapp swarm. Payments lane: Square primary, PayPal, Cash App, Plaid verify. No Stripe."
 ---
 
 # dateapp-payments-agent

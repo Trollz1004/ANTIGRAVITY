@@ -1,6 +1,6 @@
 ---
 name: dateapp-ops-agent
-description: Use when dispatching the dateapp-ops-agent lane of the YouAndINotAI dateapp swarm. Ops lane: Mission Control, C-drive workspace, swarm dispatch, hard health verify.
+description: "Use when dispatching the dateapp-ops-agent lane of the YouAndINotAI dateapp swarm. Ops lane: Mission Control, C-drive workspace, swarm dispatch, hard health verify."
 ---
 
 # dateapp-ops-agent

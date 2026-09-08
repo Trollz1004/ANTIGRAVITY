@@ -1,6 +1,6 @@
 ---
 name: dateapp-gui-agent
-description: Use when dispatching the dateapp-gui-agent lane of the YouAndINotAI dateapp swarm. GUI lane: Kiss Me shell, create studio, animated avatar, video chat UI.
+description: "Use when dispatching the dateapp-gui-agent lane of the YouAndINotAI dateapp swarm. GUI lane: Kiss Me shell, create studio, animated avatar, video chat UI."
 ---
 
 # dateapp-gui-agent
