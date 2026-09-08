@@ -1,0 +1,32 @@
+{
+  "_comment": "Avatar head through OmniRoute (Joshua 2026-09-08: OmniRoute models, not a local ComfyUI). Step 1 drafts the character prompt with a chat model, step 2 renders it with the one image model the /images/generations route accepts today, and saves the PNG under ops/avatar/out/ (gitignored). Business-only, illustrated original character, no real face, no likeness. Video: no video model is in the gateway catalog and the /videos route is UNVERIFIED, so the clip stage stays with ffmpeg Ken Burns per hermes-youtube-avatar-head. Run: npm run fable -- workflow avatar",
+  "steps": [
+    {
+      "omni": "chat",
+      "args": {
+        "model": "auto/best-fast",
+        "system": "You write image-generation prompts. Output one paragraph, no preamble, no quotes, no list.",
+        "message": "Write a single image prompt for a front-facing bust portrait of an original illustrated character to be used as a channel avatar: friendly confident expression, looking at the camera, clean cel shading, head and shoulders, plain soft-gradient studio background, soft key light, sharp focus. It must be an original character, not a real person or celebrity, not photorealistic. End the prompt with: no text, no watermark, no logo."
+      },
+      "saveAs": "draft"
+    },
+    {
+      "omni": "image-gen",
+      "args": {
+        "model": "antigravity/gemini-3.1-flash-image",
+        "prompt": "${draft.choices.0.message.content}",
+        "size": "1024x1024",
+        "out": "ops/avatar/out/fable-avatar.png"
+      },
+      "saveAs": "still"
+    },
+    {
+      "omni": "chat",
+      "args": {
+        "model": "auto/best-fast",
+        "message": "One line for the packet: the avatar still was rendered by ${still.model}, ${still.bytes} bytes, saved to ${still.files}. Restate that as a plain sentence."
+      },
+      "saveAs": "packet"
+    }
+  ]
+}

@@ -201,3 +201,16 @@ UV_HANDLE_CLOSING), file src\win\async.c` (reproduced in isolation with a
 `ExitSignal` exception instead of calling `process.exit()` directly —
 `fable mcp` (two sequential `fetch()` calls) now exits 0 cleanly where it
 previously crashed with exit 127.
+
+## image-gen and the avatar workflow (2026-09-08)
+
+`fable omni image-gen --prompt <text> [--model <id>] [--size WxH] [--out <file.png>] [--n N]` posts to
+`/images/generations` and writes the returned `b64_json` to `--out`. VERIFIED with
+`antigravity/gemini-3.1-flash-image` (the default): 200 in about 10 s, a real 1024x1024 PNG. Every other
+catalog id that looks like an image model (`kilocode/google/gemini-*-image`, `kilocode/openai/gpt-5-image*`)
+is refused with 400 `Invalid image model` — the route validates against its own image-provider list, not
+the chat catalog. No video model is in the catalog and `/videos` stays UNVERIFIED.
+
+`fable workflow avatar` = draft prompt (chat) → render (image-gen) → packet line (chat), output
+`ops/avatar/out/fable-avatar.png` (gitignored). The ComfyUI kit at `ops/avatar/comfyui/` is the offline fallback.
+

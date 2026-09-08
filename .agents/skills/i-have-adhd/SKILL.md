@@ -1,6 +1,6 @@
 ---
 name: i-have-adhd
-description: Use concise, action-forward output discipline when a task or harness requires token-efficient updates: lead with the next action, bound steps, preserve state, suppress tangents, and make verification visible.
+description: "Use concise, action-forward output discipline when a task or harness requires token-efficient updates: lead with the next action, bound steps, preserve state, suppress tangents, and make verification visible."
 disable-model-invocation: true
 license: MIT
 metadata:

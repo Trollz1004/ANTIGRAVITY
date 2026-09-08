@@ -7,7 +7,7 @@
 // Exit codes: 0 ok · 1 bad input · 2 target down · 3 auth.
 
 import { spawn } from 'node:child_process';
-import { readFileSync, existsSync, readdirSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { connect } from 'node:net';
@@ -351,6 +351,33 @@ async function omniImage({ image, prompt, model }) {
   return { ok: r.ok, status: r.status, data: { raw: text.slice(0, 500) }, summary: r.ok ? 'OK' : `HTTP ${r.status}: ${text.slice(0, 300)}` };
 }
 
+async function omniImageGen({ prompt, model, size, out, n }) {
+  // VERIFIED 2026-09-08: POST /images/generations answers 200 with data[0].b64_json for
+  // antigravity/gemini-3.1-flash-image (about 10 s, 1024x1024). Every other catalog id that
+  // looks like an image model (kilocode/google/..., kilocode/openai/gpt-5-image*) is refused
+  // with 400 "Invalid image model ... Use format: provider/model" — the route validates
+  // against its own image-provider list, not the chat catalog. Keep the default here.
+  if (!prompt) return { ok: false, status: 0, summary: '--prompt <text> is required' };
+  const body = { model: model || 'antigravity/gemini-3.1-flash-image', prompt, n: Number(n) || 1, size: size || '1024x1024', response_format: 'b64_json' };
+  const r = await omniFetch('/images/generations', { method: 'POST', headers: omniHeaders({ 'content-type': 'application/json' }), body: JSON.stringify(body) }, 300000);
+  const text = await r.text();
+  let json; try { json = JSON.parse(text); } catch { json = null; }
+  if (!r.ok || !json?.data?.length) return { ok: false, status: r.status, data: { raw: text.slice(0, 500) }, summary: `HTTP ${r.status}: ${text.slice(0, 300)}` };
+  const files = [];
+  if (out) {
+    mkdirSync(dirname(out), { recursive: true });
+    json.data.forEach((item, i) => {
+      if (!item.b64_json) return;
+      const dest = json.data.length === 1 ? out : out.replace(/(\.\w+)?$/, `-${i + 1}$1`);
+      writeFileSync(dest, Buffer.from(item.b64_json, 'base64'));
+      files.push(dest);
+    });
+  }
+  const bytes = json.data.map((d) => (d.b64_json ? Math.round(d.b64_json.length * 3 / 4) : 0));
+  return { ok: true, status: r.status, data: { model: body.model, files, bytes, urls: json.data.map((d) => d.url).filter(Boolean) },
+    summary: `OK — ${json.data.length} image(s) from ${body.model}, ${bytes.join('/')} bytes${files.length ? ' -> ' + files.join(', ') : ' (no --out, not saved)'}` };
+}
+
 async function omniTranscribe({ file, model }) {
   if (!file || !existsSync(file)) return { ok: false, status: 0, summary: '--file <path> must exist' };
   const fd = new FormData();
@@ -400,6 +427,7 @@ const OMNI_ACTIONS = {
   models: omniModels,
   chat: omniChat,
   image: omniImage,
+  'image-gen': omniImageGen,
   transcribe: omniTranscribe,
   video: omniVideo,
   embed: omniEmbed,
@@ -418,6 +446,8 @@ Actions:
                                                    VERIFIED  — POST /chat/completions
   image --image <path> --prompt <text> [--model <id>]
                                                    UNVERIFIED body schema — POST /images/edits
+  image-gen --prompt <text> [--model <id>] [--size WxH] [--out <file.png>] [--n N]
+                                                   VERIFIED  — POST /images/generations (antigravity/gemini-3.1-flash-image, 2026-09-08)
   transcribe --file <path> [--model <id>]         UNVERIFIED body schema — POST /audio/transcriptions
   video --prompt <text> [--model <id>] [--seconds N]
                                                    UNVERIFIED route+schema — POST /videos

@@ -249,3 +249,6 @@ ops/*/state/
 ops/marketing-inbox/*-listen-refresh-*.md
 ops/marketing-inbox/*-timer-disposition-*.md
 ops/marketing-inbox/*-timer-disposition.md
+
+# avatar renders (local artifacts, cite them in packets)
+ops/avatar/out/
