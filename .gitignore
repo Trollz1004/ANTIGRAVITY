@@ -1,0 +1,254 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Build artifacts
+dist/
+.next/
+build/
+apps/youandinotai-frontend/out/
+apps/youandinotai-static/assets/*.map
+*.egg-info/
+coverage.xml
+bundle-stats.html
+tsconfig.tsbuildinfo
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.env.bak
+.secrets/
+
+# IDE / editor
+.vscode/
+.idea/
+*.code-workspace
+.claude/settings.local.json
+.claude/skills/
+.claude/pc_*.json
+.claude/ralph-prompts/
+
+# Logs
+logs/
+*.log
+
+# Cache / temp
+.cache/
+.graphify/
+.openclaw/
+.hermes/
+.playwright-mcp/
+.wrangler/
+*.zip
+
+# OS junk
+.DS_Store
+Thumbs.db
+__cmd*.txt
+__env_diff.txt
+
+# Docker
+docker-compose.override.yml
+
+# Paperclip (revived 2026-08-23, Joshua direction: marketing/business-ops only, Freebuff CEO)
+# Historical decommission entries kept for stale paths; the live ops/paperclip-ceo code is tracked.
+paperclip-ceo/
+!ops/paperclip-ceo/
+ops/paperclip-ceo/wakes/
+ops/paperclip-ceo/state/
+ops/paperclip-ceo/bridge/.env
+ops/paperclip-ceo/bridge/bridge.log
+.paperclip-context.json
+.paperclip/
+
+# DateApp marketing engine runtime rotation state (machine-local, regenerable)
+ops/dateapp-marketing-engine/state/
+ops/paperclip-growth-engine/state/
+
+# OpenCode local config
+.opencode/*
+!.opencode/agent/
+
+# Deploy staging
+_deploy/*/node_modules/
+**/.env-*.txt
+
+# Handoff (keep directory, ignore large sub-items)
+_handoff-staging-*/_deploy/node_modules/
+
+# Service runtime data
+services/mission-control-api/data/
+infra/paperclip-worker/.wrangler/
+apps/paperweight/data/
+
+# Agent harness configs (NEVER commit — token/key storage)
+.opencode/.env
+.opencode/STATE.md
+.hermes/.env
+.hermes/STATE.yaml
+.hermes/state.yaml
+.hermes/logs/
+
+# Misc generated
+DIRTY_REPO_ALERT*.md
+output/
+youandinotai*.png
+docs/beta-access-after-click.png
+assets/__pycache__/
+marketing-assets/assets/__pycache__/
+scripts/__pycache__/
+services/*/src/*/__pycache__/
+services/health-aggregator/app/__pycache__/
+services/health-aggregator/app/probes/__pycache__/
+services/health-aggregator/tests/__pycache__/
+
+# User Personal Folders (DO NOT TRACK)
+Documents/
+documents/
+Downloads/
+downloads/
+OneDrive/
+onedrive/
+qdrant-data/
+revenue-first-products/
+# ANTIGRAVITY dashboard TypeScript build outputs
+apps/antigravity-dashboard/vite.config.js
+apps/antigravity-dashboard/vite.config.d.ts
+apps/antigravity-dashboard/tsconfig*.tsbuildinfo
+
+# Nested repo checkouts kept out of the canonical root
+ANTIGRAVITY/
+hermes-workspace/
+.paperclip-laptop/
+.paperclip-local/
+
+# llama.cpp prebuilt binaries (240MB+ CUDA runtime) — downloaded, not source
+tools/llama.cpp/
+
+# free-claude-code: cloned upstream tool (its own git repo, ~1GB)
+free-claude-code/
+
+# OpenClaw dreaming plugin artifacts (regenerated, 8MB+)
+memory/.dreams/
+memory/dreaming/
+DREAMS.md
+
+# local-only Claude Code state
+.claude/settings.local.json
+
+# vendored browser libs (downloaded, not source)
+free/*/vendor/
+
+# Exception: this holds no secret (a public API URL) and IS required for a
+# correct production build. Without it the build silently falls back to
+# localhost:8000 and the live site's API dies. Must stay tracked.
+!frontend/react-app/.env.production
+
+# OmniRoute upstream source clone (1.8GB, has its own origin)
+omniroute/
+.worktrees/
+
+# ── Agent scratch output at the repo root ────────────────────────────────────
+# Agents run `curl ... -o something.json` from the repo root and never clean up.
+# 96 such files accumulated by 2026-08-09, burying the ~20 real root documents
+# and making `git status` useless for spotting actual work.
+#
+# Scoped with a leading slash so ONLY the repo root is affected — real .json and
+# .html inside subdirectories (configs, fixtures, the DateApp) are untouched.
+# Anything genuinely worth keeping can still be added with `git add -f`.
+/*-comments.json
+/*-current.json
+/*-live.json
+/*-latest.json
+/*-latest2.json
+/*-now.json
+/*-next.json
+/*-fresh.json
+/*-check.json
+/*-cycle.json
+/*-heart.json
+/*-agent.json
+/standing*.json
+/issue.json
+/issues.json
+/all-issues.json
+/live-issues.json
+/heartbeat-issues.json
+/assigned_issues.json
+/comments.json
+/source_*.json
+/recovery*.json
+/route-*.json
+/prospect-*.json
+/prospect-*.html
+/candidate-*.html
+/target-*.html
+/new-*.html
+/*-results.html
+/*-response.html
+/*-contact.html
+/graph-issue.json
+/mc_live.json
+/owner_agent.json
+/tui.json
+/search.html
+/*.tui-migration.bak
+
+# recoverable drift quarantine (paperclip purge 2026-08-10)
+.drift-quarantine/
+
+# Redis snapshot dropped by local stack when cwd is repo root
+dump.rdb
+.obsidian/workspace.json
+.ao.env
+mission-control-v5/server/data/*.json
+!mission-control-v5/server/data/*.example.json
+ops/marketing-inbox/processed/
+# Obsidian root-vault daily notes (vault == repo root)
+/20[0-9][0-9]-[0-9][0-9]-[0-9][0-9].md
+# npx skills compat symlink farm (machine-local, regenerable)
+/skills/
+# FreeBuff machine-local project state
+/.freebuff/
+# stale runtime pid files (machine-local)
+/.bootstrap/
+
+# --- root cleanup 2026-08-26 (judge lane) ---
+# /route-*.json above uses a HYPHEN; every real file uses an UNDERSCORE,
+# so that rule never matched anything. Both spellings now covered.
+/route_*.json
+/route_*.txt
+# Obsidian vault mirror named after the GitHub account; 17 MB of duplicated
+# .agents/.obsidian/.freebuff that landed inside the repo root.
+/Trollz1004/
+# empty Obsidian canvas scratch
+/Untitled*.canvas
+# python tool caches
+.pytest_cache/
+.ruff_cache/
+# per-run engine state, not work (matches ops/paperclip-ceo/state/ precedent)
+ops/*/state/
+# logs/ is ignored wholesale, but this marker is read by scripts/sabretooth-watchdog.ps1
+!logs/watchdog-boot-marker.txt
+
+# Paperclip materialized skill copies -- clones of skills already present here,
+# marked by .paperclip-materialized-skill.json. Paperclip re-creates them on
+# demand; committing them double-counts the skill inventory.
+.agents/skills/*--[0-9a-f]*/
+
+# graph.json is per-viewer Obsidian UI state, same as workspace.json above:
+# collapse-filter, hideUnresolved, showOrphans flip every time the graph pane
+# opens. Generates phantom diffs. Not repo content.
+.obsidian/graph.json
+
+# Paperclip ANT-338 bot drops — one file per tick, machine-generated, never doctrine (ops audit 2026-09-03)
+ops/marketing-inbox/*-listen-refresh-*.md
+ops/marketing-inbox/*-timer-disposition-*.md
+ops/marketing-inbox/*-timer-disposition.md
+
+# avatar renders (local artifacts, cite them in packets)
+ops/avatar/out/

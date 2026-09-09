@@ -1,0 +1,15 @@
+{
+  "auditVersion": 1,
+  "ballotId": "nonproduction-gemini-bridge-validation-20260819",
+  "nonProduction": true,
+  "provider": "gemini",
+  "executionProvider": "gemini",
+  "executionModel": "gemini-2.5-flash",
+  "promptVersion": "gemini-direct-generate-content-v1",
+  "requestedAt": "2026-08-19T07:39:35.389Z",
+  "requestHash": "c9ac79eab93b1ebb2775978f6836a86e7ec9546d726dafc477a525389c116f20",
+  "responseHash": "d4b1dcee637223418aa19010c46215df901352fab2dfdc583b0b6dfd8e988a21",
+  "reasoningHash": "3563e02a5314402bfaf59dfdcd23322754028c86a18b00cef13cf7e0a74b7cff",
+  "decision": "approve",
+  "status": "completed"
+}

@@ -1,0 +1,80 @@
+{
+  "info": {
+    "name": "OmniRoute Gateway",
+    "description": "OpenAI-compatible gateway. Generated 2026-09-03 from the installed omniroute package (v3.8.49). Variables baseUrl/apiKey are intentionally empty — set them in a Postman environment, never commit values.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "" },
+    { "key": "apiKey", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{apiKey}}", "type": "string" }
+    ]
+  },
+  "item": [
+    {
+      "name": "List models",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/models",
+          "host": ["{{baseUrl}}"],
+          "path": ["models"]
+        }
+      }
+    },
+    {
+      "name": "Chat completion (non-streaming)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"model\": \"auto/best-coding\",\n  \"messages\": [{\"role\": \"user\", \"content\": \"Say OK.\"}],\n  \"max_tokens\": 5,\n  \"stream\": false\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/chat/completions",
+          "host": ["{{baseUrl}}"],
+          "path": ["chat", "completions"]
+        }
+      }
+    },
+    {
+      "name": "Chat completion (streaming SSE)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "text/event-stream" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"model\": \"auto/best-coding\",\n  \"messages\": [{\"role\": \"user\", \"content\": \"Count to 3.\"}],\n  \"stream\": true\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/chat/completions",
+          "host": ["{{baseUrl}}"],
+          "path": ["chat", "completions"]
+        }
+      }
+    },
+    {
+      "name": "Unknown route (expect 404 unknown_route)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/does-not-exist",
+          "host": ["{{baseUrl}}"],
+          "path": ["does-not-exist"]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "id": "55a71f9e-c423-4c93-b957-7da58ee8152e",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "50536b19-02e6-4fac-aad2-83236023eaef",
+    "authorAgentId": "7d648600-5fa8-4ddf-951b-4cdb16cee0fa",
+    "authorUserId": null,
+    "createdByRunId": "472b700d-dc8f-4959-89b7-5fe7a657081f",
+    "body": "Done. Added `/api/subagents` fixed-root reader for `.agents/subagents/*/{SOUL,HEARTBEAT,TOOLS,SKILLS}.md`; health derives latest GREEN/YELLOW/RED report, stale >24h red, otherwise yellow. Added Graphy default tab with 15s heartbeat refresh, pulsing status nodes, click drawer for all four files, mobile layout. Proof: client `npm run build` passed; server `npm run typecheck` passed; isolated server on `:3152` returned HTTP 200 with 7 real sub-agent nodes.",
+    "createdAt": "2026-08-07T03:25:50.009Z",
+    "updatedAt": "2026-08-07T03:25:50.009Z"
+  },
+  {
+    "id": "08926ac9-d870-44b7-a8ee-3d97abf9db67",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "50536b19-02e6-4fac-aad2-83236023eaef",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x000001CAAEE407C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-16](/TRO/issues/TRO-16)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T03:23:10.395Z",
+    "updatedAt": "2026-08-07T03:23:10.395Z"
+  },
+  {
+    "id": "0f1809cf-fabc-43a0-b765-290f3b2055f9",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "50536b19-02e6-4fac-aad2-83236023eaef",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "84129d8a-82c2-45b2-ac3d-5cb891423717",
+    "body": "CTO next task active. Provide code diff, test/build output, and screenshot or API payload proving sub-agent heartbeat data reaches Graphy nodes. Keep scope only heartbeat wiring.",
+    "createdAt": "2026-08-07T03:19:31.800Z",
+    "updatedAt": "2026-08-07T03:19:31.800Z"
+  }
+]

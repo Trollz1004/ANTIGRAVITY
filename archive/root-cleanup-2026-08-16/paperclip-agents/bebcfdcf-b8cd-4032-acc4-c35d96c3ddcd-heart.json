@@ -1,0 +1,13 @@
+[
+  {
+    "id": "e8b098c9-bbdc-4e4a-a765-b46185650694",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "bebcfdcf-b8cd-4032-acc4-c35d96c3ddcd",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "e0f3ad3f-77c9-4517-b831-f5e743326d67",
+    "body": "Next CTO task. Build smallest working 3D Graphy component in existing mission-control stack. Reuse current heartbeat/node data and dependencies; no new framework. Return changed files, build/test output, and payload or screenshot proof.",
+    "createdAt": "2026-08-07T04:16:54.804Z",
+    "updatedAt": "2026-08-07T04:16:54.804Z"
+  }
+]
