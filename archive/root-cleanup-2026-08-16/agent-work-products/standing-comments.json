@@ -1,0 +1,35 @@
+[
+  {
+    "id": "63f1ab7d-94cf-41b7-a5bd-cd0ac289055c",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Exception ignored in: <coroutine object MCPServerTask.run at 0x00000254AB4442C0>. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-10](/TRO/issues/TRO-10)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T02:40:22.311Z",
+    "updatedAt": "2026-08-07T02:40:22.311Z"
+  },
+  {
+    "id": "51ec210b-2576-49b0-aaee-bad5c38f7648",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "3fa812e8-2099-4a1c-b5b2-0552755fccac",
+    "body": "Correction/clarification: verified revenue remains $0. Zero processor receipts or order proof supplied yet.",
+    "createdAt": "2026-08-07T02:40:07.108Z",
+    "updatedAt": "2026-08-07T02:40:07.108Z"
+  },
+  {
+    "id": "ae0094f0-9b37-4e75-9006-68543c71e444",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "8aa1cf3e-3274-4fe1-b8a3-e4c164a56102",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "3fa812e8-2099-4a1c-b5b2-0552755fccac",
+    "body": "Heartbeat 2026-08-07 02:39Z: CMO owns in-progress outbound batch; demanded sends/replies/orders/receipt IDs and prohibited unsupported revenue claims. CTO product-route issue requeued critical after adapter failure, with route/build proof required. Current verified revenue: no receipt/order evidence found, so $0 claimed. Backlog remains available; next check inspect agent evidence and resolve TRO-9 only after live route proof.",
+    "createdAt": "2026-08-07T02:39:46.653Z",
+    "updatedAt": "2026-08-07T02:39:46.653Z"
+  }
+]

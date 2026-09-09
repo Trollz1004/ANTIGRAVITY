@@ -1,0 +1,55 @@
+{
+  "_comment": "ComfyUI API-format workflow: one stylized avatar head, 1024x1024, core nodes only (no custom nodes). POST this object as {\"prompt\": <this>} to http://127.0.0.1:8188/prompt, or run ops/avatar/comfyui/run.py. Node 2 = positive prompt, node 3 = negative, node 5 = sampler (seed lives here), node 1 = checkpoint name. No real face, no likeness: the prompt asks for an illustrated character, per hermes-youtube-avatar-head.",
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": { "title": "Checkpoint (SDXL base or any SDXL merge in models/checkpoints)" },
+    "inputs": { "ckpt_name": "sd_xl_base_1.0.safetensors" }
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "_meta": { "title": "Positive prompt" },
+    "inputs": {
+      "clip": ["1", 1],
+      "text": "front-facing bust portrait of a stylized illustrated character, friendly confident expression, looking straight at camera, clean vector-inspired shading, smooth cel shading, centered composition, head and shoulders, plain soft-gradient studio background, soft key light, sharp focus, high detail, original character design, no text, no watermark, no logo"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "_meta": { "title": "Negative prompt" },
+    "inputs": {
+      "clip": ["1", 1],
+      "text": "photograph, photorealistic, real person, celebrity, deformed, extra fingers, extra limbs, cropped head, side profile, multiple people, text, caption, watermark, logo, signature, blurry, low quality, jpeg artifacts, nsfw"
+    }
+  },
+  "4": {
+    "class_type": "EmptyLatentImage",
+    "_meta": { "title": "Canvas 1024x1024 (use 512x512 for an SD1.5 checkpoint)" },
+    "inputs": { "width": 1024, "height": 1024, "batch_size": 1 }
+  },
+  "5": {
+    "class_type": "KSampler",
+    "_meta": { "title": "Sampler (change seed for a new head)" },
+    "inputs": {
+      "seed": 20260908,
+      "steps": 30,
+      "cfg": 6.5,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": ["1", 0],
+      "positive": ["2", 0],
+      "negative": ["3", 0],
+      "latent_image": ["4", 0]
+    }
+  },
+  "6": {
+    "class_type": "VAEDecode",
+    "_meta": { "title": "Decode" },
+    "inputs": { "samples": ["5", 0], "vae": ["1", 2] }
+  },
+  "7": {
+    "class_type": "SaveImage",
+    "_meta": { "title": "Save -> ComfyUI/output/fable-avatar_*.png" },
+    "inputs": { "filename_prefix": "fable-avatar", "images": ["6", 0] }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "id": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+  "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+  "name": "CEO",
+  "role": "ceo",
+  "title": "CHIEF CODE",
+  "icon": null,
+  "status": "running",
+  "reportsTo": null,
+  "capabilities": "Continuous company operator for ANTIGRAVITY. Owns date-app restore, revenue outreach, and exec team coordination. Runs via local OpenCode routed through OmniRoute at 127.0.0.1:20128/v1.",
+  "adapterType": "opencode_local",
+  "adapterConfig": {
+    "timeoutSec": 600,
+    "persistSession": true,
+    "dangerouslySkipPermissions": true,
+    "model": "omniroute/auto/best-coding",
+    "checkpoints": false,
+    "worktreeMode": false,
+    "cwd": "F:/ANTIGRAVITY",
+    "instructionsFilePath": "F:/ANTIGRAVITY/paperclip-agent-instructions/CEO-AGENTS.md"
+  },
+  "runtimeConfig": {
+    "heartbeat": {
+      "enabled": true,
+      "cooldownSec": 30,
+      "intervalSec": 300,
+      "wakeOnDemand": true,
+      "maxConcurrentRuns": 2
+    }
+  },
+  "defaultEnvironmentId": "66f44ea3-561a-43ff-9d75-769b572fc3eb",
+  "budgetMonthlyCents": 0,
+  "spentMonthlyCents": 0,
+  "pauseReason": null,
+  "pausedAt": null,
+  "permissions": {
+    "canCreateAgents": true
+  },
+  "lastHeartbeatAt": "2026-08-07T03:12:38.663Z",
+  "metadata": null,
+  "createdAt": "2026-08-04T11:48:54.302Z",
+  "updatedAt": "2026-08-07T03:17:42.538Z",
+  "urlKey": "ceo",
+  "chainOfCommand": [],
+  "access": {
+    "canAssignTasks": true,
+    "taskAssignSource": "ceo_role",
+    "membership": {
+      "id": "83a7a6d2-b5c9-4936-a5f8-78fc3d5b1dd6",
+      "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+      "principalType": "agent",
+      "principalId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+      "status": "active",
+      "membershipRole": "member",
+      "createdAt": "2026-08-04T11:48:54.33Z",
+      "updatedAt": "2026-08-04T11:48:54.33Z"
+    },
+    "grants": [
+      {
+        "id": "15703b36-cdd4-4488-b9ad-db7e9a756354",
+        "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+        "principalType": "agent",
+        "principalId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+        "permissionKey": "tasks:assign",
+        "scope": null,
+        "grantedByUserId": "ZBUlDZBCN7eEYOKX1i1SAgN0P4K9A7Gz",
+        "createdAt": "2026-08-04T11:48:54.353Z",
+        "updatedAt": "2026-08-04T11:48:54.353Z"
+      }
+    ]
+  }
+}

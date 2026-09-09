@@ -1,0 +1,52 @@
+version: 1
+status: draft
+journal: .agents/journals/hermes/STATE.md
+knowledge:
+  source: repository
+  graph: Mission Control Graphy
+  obsidian_mirror: optional
+mcp_servers:
+  required: [brain-mcp, mission-mcp, antigravity-files, playwright]
+  optional: [supabase]   # read-first; live DB writes route through the Supabase seat + judge
+  spec: agent-contracts/CAPABILITY-BASELINE.md
+  remote_future:
+    # unreal-engine MCP — PARKED (enabled: false). Hardware split per Joshua
+    # 2026-08-26: the game runs on a SEPARATE box (this node runs hot with
+    # Hermes + the stack alone). Unreal is not installed here, and Unreal's
+    # default http://127.0.0.1:8000/mcp collides with the DateApp backend that
+    # owns port 8000 on Sabretooth. When the game box is live, point Hermes at
+    # the remote Unreal MCP URL there (Epic: Editor Preferences > Model Context
+    # Protocol > port/path if the default conflicts). NOT enabled on this node.
+    unreal-engine:
+      url: http://127.0.0.1:8000/mcp
+      enabled: false
+preflight_skills:
+  required:
+    - i-have-adhd
+    - hermes-agent-skill-authoring
+  conditional:
+    design: brainstorming
+    research: agent-reach
+    authenticated_browser: browser-use
+    capability_discovery: find-skills
+    code_change: tdd
+    unexpected_behavior: systematic-debugging
+    youtube_faceless_news: hermes-youtube-faceless-news
+    youtube_avatar_head: hermes-youtube-avatar-head
+focus:
+  lane: youtube-automation
+  source: content/yesterday-news/
+  output: [ops/marketing-inbox/, ops/packets/hermes-youtube-<date>/]
+authoring:
+  mcp_tool: author-hermes-artifact
+  allowed_paths:
+    - .agents/skills/<name>/SKILL.md
+    - .agents/harness-config/hermes.yaml
+    - ops/skills/
+    - agent-contracts/
+  blocked_paths:
+    - .env
+    - runtime credentials
+    - paths outside C:\ANTIGRAVITY
+delivery:
+  judge_only_push_merge_delete: true

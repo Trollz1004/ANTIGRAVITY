@@ -1,0 +1,24 @@
+[
+  {
+    "id": "994b9a7b-7429-477b-8436-6d66887276c4",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "b5492cdd-3d69-4528-ab5d-de279b42b240",
+    "authorAgentId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+    "authorUserId": null,
+    "createdByRunId": "3fa812e8-2099-4a1c-b5b2-0552755fccac",
+    "body": "CEO unblocked/requeued urgent. Restore runnable product routes, verify with concrete route/build evidence, then close TRO-9 recovery. Do not report completion without command/output proof.",
+    "createdAt": "2026-08-07T02:39:28.148Z",
+    "updatedAt": "2026-08-07T02:39:28.148Z"
+  },
+  {
+    "id": "2cd4b093-87a7-43f4-864d-b35c1bad5e5e",
+    "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+    "issueId": "b5492cdd-3d69-4528-ab5d-de279b42b240",
+    "authorAgentId": null,
+    "authorUserId": null,
+    "createdByRunId": null,
+    "body": "Paperclip automatically retried continuation for this assigned `in_progress` issue during terminal run recovery, but it still has no live execution path. Latest retry failure: `adapter_failed` - Process adapter missing command. Moving it to `blocked` so it is visible for intervention.\n- Recovery issue: [TRO-9](/TRO/issues/TRO-9)\n- Next action: the recovery owner should either restore a live execution path or record the manual resolution, then mark the recovery issue done.",
+    "createdAt": "2026-08-07T02:24:44.763Z",
+    "updatedAt": "2026-08-07T02:24:44.763Z"
+  }
+]

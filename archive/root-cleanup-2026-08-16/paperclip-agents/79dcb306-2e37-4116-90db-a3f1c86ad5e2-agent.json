@@ -1,0 +1,71 @@
+{
+  "id": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+  "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+  "name": "CEO",
+  "role": "ceo",
+  "title": "CHIEF CODE",
+  "icon": null,
+  "status": "running",
+  "reportsTo": null,
+  "capabilities": "[https://github.com/Trollz1004/ANTIGRAVITY.git](https://github.com/Trollz1004/ANTIGRAVITY.git) YOUR REPO FUND IT \\[8/6/2026 7:00 PM] Joshinya: \\[ applet\\_access\\_history.json ] setup mission control on port  3151 the work you do here over seeeing hermes and openclaw RUN THEE REPO FUND THEE REPO. agents/skills are loaded but their sub agents agent reach find skills and createe skills with i have adhd skill caveman mandatory they are to use omniroute end points for their apis you as ceo can use all apis and local models hermes and open claw use sub agents when omniroute server running the adaptors for codex and claud ecan use cc codex cc claude cc pi as their cmds cia omniroute set up hert beats 24/7 ops you lead you audit you hire and fire&#x20;",
+  "adapterType": "hermes_local",
+  "adapterConfig": {
+    "cwd": "F:/ANTIGRAVITY",
+    "model": "auto/best-coding",
+    "provider": "custom:omniroute-(127.0.0.1:20128)",
+    "toolsets": "terminal,file,web",
+    "timeoutSec": 600,
+    "checkpoints": false,
+    "worktreeMode": false,
+    "persistSession": true,
+    "instructionsFilePath": "F:/ANTIGRAVITY/paperclip-agent-instructions/CEO-AGENTS.md"
+  },
+  "runtimeConfig": {
+    "heartbeat": {
+      "enabled": true,
+      "cooldownSec": 30,
+      "intervalSec": 300,
+      "wakeOnDemand": true,
+      "maxConcurrentRuns": 2
+    }
+  },
+  "defaultEnvironmentId": "66f44ea3-561a-43ff-9d75-769b572fc3eb",
+  "budgetMonthlyCents": 0,
+  "spentMonthlyCents": 0,
+  "pauseReason": null,
+  "pausedAt": null,
+  "permissions": { "canCreateAgents": true },
+  "lastHeartbeatAt": "2026-08-07T03:47:54.037Z",
+  "metadata": null,
+  "createdAt": "2026-08-04T11:48:54.302Z",
+  "updatedAt": "2026-08-07T03:53:13.109Z",
+  "urlKey": "ceo",
+  "chainOfCommand": [],
+  "access": {
+    "canAssignTasks": true,
+    "taskAssignSource": "ceo_role",
+    "membership": {
+      "id": "83a7a6d2-b5c9-4936-a5f8-78fc3d5b1dd6",
+      "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+      "principalType": "agent",
+      "principalId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+      "status": "active",
+      "membershipRole": "member",
+      "createdAt": "2026-08-04T11:48:54.330Z",
+      "updatedAt": "2026-08-04T11:48:54.330Z"
+    },
+    "grants": [
+      {
+        "id": "15703b36-cdd4-4488-b9ad-db7e9a756354",
+        "companyId": "f6c2cd28-139e-4df4-ad21-0baf3b9f4909",
+        "principalType": "agent",
+        "principalId": "79dcb306-2e37-4116-90db-a3f1c86ad5e2",
+        "permissionKey": "tasks:assign",
+        "scope": null,
+        "grantedByUserId": "ZBUlDZBCN7eEYOKX1i1SAgN0P4K9A7Gz",
+        "createdAt": "2026-08-04T11:48:54.353Z",
+        "updatedAt": "2026-08-04T11:48:54.353Z"
+      }
+    ]
+  }
+}

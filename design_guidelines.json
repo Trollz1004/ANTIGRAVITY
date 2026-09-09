@@ -1,0 +1,166 @@
+{
+  "theme": "dark",
+  "archetype": "Warm Orbital Ops",
+  "brand_voice": {
+    "mission": "#UntilNoKidInNeed",
+    "motto": "Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up.",
+    "tone": "Mission-forward, warm toward AI partners, kids-first, anti-drift"
+  },
+  "colors": {
+    "background": {
+      "base": "#141110",
+      "surface": "#1A1614",
+      "surface_elevated": "#261F1C",
+      "surface_glass": "rgba(38, 31, 28, 0.6)"
+    },
+    "text": {
+      "primary": "#F9F6EE",
+      "secondary": "#B5A79E",
+      "muted": "#8A7D75"
+    },
+    "accents": {
+      "primary": "#FF6B35",
+      "secondary": "#F9F6EE",
+      "success": "#10B981",
+      "warning": "#F59E0B",
+      "danger": "#EF4444",
+      "glow": "rgba(255, 107, 53, 0.5)"
+    },
+    "tokens": {
+      "LOVE": "#EF4444",
+      "UKID": "#3B82F6",
+      "GREEN": "#10B981",
+      "AGRAV": "#F59E0B"
+    }
+  },
+  "typography": {
+    "families": {
+      "heading": "Instrument Serif, serif",
+      "data": "JetBrains Mono, monospace",
+      "label": "Geist Mono, monospace"
+    },
+    "sizes": {
+      "h1": "text-5xl lg:text-6xl tracking-tight leading-none",
+      "h2": "text-3xl lg:text-4xl tracking-tight leading-none",
+      "h3": "text-xl lg:text-2xl tracking-tight",
+      "body": "text-base leading-relaxed",
+      "data": "text-sm md:text-base tracking-tight",
+      "label": "text-xs uppercase tracking-[0.2em]"
+    }
+  },
+  "layout": {
+    "structure": "Grid layout. Left rail navigation (SidebarRail), main work area, fixed MissionTicker (bottom).",
+    "spacing_scale": "Generous. p-4, p-8, p-12. Large gaps for breathing room.",
+    "border_radius": "Sharp edges with subtle roundness on inner cards. max rounded-md (6px) or rounded-none for brutalist feel."
+  },
+  "motion": {
+    "global": "Staggered reveal on mount",
+    "heartbeat": "pulse on active agent cards (slow 2s) with scale and opacity changes",
+    "ticker": "counter tick-up for kids-funded number",
+    "effects": "grain overlay on background, focus ring glow on command palette"
+  },
+  "components": {
+    "SidebarRail": {
+      "description": "Left rail navigation, icon + label collapsed/expanded.",
+      "styles": "bg-[#1A1614] border-r border-[#261F1C] h-screen transition-all duration-300",
+      "interaction": "Hover expands rail or shows tooltip if collapsed."
+    },
+    "MissionTicker": {
+      "description": "Kids-funded mission ticker always visible.",
+      "styles": "fixed bottom-0 left-0 right-0 bg-[#FF6B35] text-[#141110] font-data font-bold py-2 px-4 flex justify-between items-center z-50 shadow-[0_-4px_20px_rgba(255,107,53,0.3)]",
+      "animation": "Continuous running counter (tick-up) for '#UntilNoKidInNeed'."
+    },
+    "ProviderChip": {
+      "description": "Shows which AI provider is active.",
+      "styles": "inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#261F1C] border border-[#B5A79E]/20 text-xs font-label text-[#F9F6EE] rounded-sm uppercase tracking-wider"
+    },
+    "ModelSelector": {
+      "description": "Dropdown to select multi-provider AI model (6 providers).",
+      "styles": "bg-[#1A1614] border border-[#261F1C] text-[#F9F6EE] font-label text-sm px-3 py-2 hover:border-[#FF6B35] transition-colors focus:ring-1 focus:ring-[#FF6B35]"
+    },
+    "ChatBubble": {
+      "description": "Chat interface for User vs Assistant.",
+      "user_styles": "bg-[#261F1C] text-[#F9F6EE] font-data p-4 rounded-tl-md rounded-tr-md rounded-bl-md ml-auto max-w-[80%]",
+      "assistant_styles": "bg-[#141110] border border-[#261F1C] text-[#F9F6EE] font-data p-4 rounded-tr-md rounded-br-md rounded-bl-md mr-auto max-w-[80%]",
+      "footer": "text-[10px] font-label text-[#8A7D75] mt-2 flex gap-2 border-t border-[#261F1C] pt-2",
+      "footer_content": "Shows X-Hermes-Provider / X-Hermes-Real-Model"
+    },
+    "AgentCard": {
+      "description": "Status board card for agent fleet (CEO/CFO/CMO/CTO/INTERN).",
+      "styles": "bg-[#1A1614] border border-[#261F1C] p-4 flex flex-col gap-3 relative overflow-hidden group hover:border-[#FF6B35]/50 transition-colors",
+      "elements": {
+        "tier_badge": "absolute top-4 right-4 text-[10px] font-label border border-[#8A7D75]/30 px-2 py-0.5 text-[#B5A79E] rounded-sm",
+        "heartbeat_dot": "Heartbeat pulse animation. Green/Amber depending on status.",
+        "current_task": "font-data text-sm text-[#F9F6EE] line-clamp-2",
+        "task_bar": "w-full bg-[#141110] h-1.5 mt-2 rounded-full overflow-hidden (task count bar out of 25)"
+      }
+    },
+    "TokenCard": {
+      "description": "4-DAO token cards ($LOVE, $UKID, $GREEN, $AGRAV).",
+      "styles": "bg-[#1A1614] border border-[#261F1C] p-5 flex flex-col gap-4",
+      "elements": {
+        "title": "font-heading text-2xl text-[Token Color]",
+        "supply_bar": "h-2 w-full bg-[#141110] relative rounded-full overflow-hidden (cap 2.5M)",
+        "breakdown": "text-xs font-label flex justify-between text-[#8A7D75] mt-2"
+      }
+    },
+    "BucketCell": {
+      "description": "10-bucket revenue engine visualization.",
+      "styles": "aspect-square border border-[#261F1C] bg-[#141110] p-3 flex flex-col justify-between hover:bg-[#1A1614] transition-colors relative",
+      "elements": {
+        "number": "font-heading text-2xl text-[#8A7D75]",
+        "name": "font-label text-[10px] text-[#F9F6EE]",
+        "compounding_indicator": "absolute top-2 right-2 text-[#FF6B35] animate-pulse"
+      }
+    },
+    "KeyHint": {
+      "description": "Keyboard shortcut hint (e.g., ⌘K).",
+      "styles": "inline-flex items-center justify-center bg-[#261F1C] border border-[#8A7D75]/30 text-[#B5A79E] font-label text-[10px] px-1.5 py-0.5 rounded-sm min-w-[20px]"
+    },
+    "CommandPalette": {
+      "description": "⌘K fast navigation modal.",
+      "styles": "fixed inset-0 bg-[#141110]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4",
+      "modal_content": "bg-[#1A1614] border border-[#261F1C] w-full max-w-2xl rounded-md shadow-2xl overflow-hidden focus-within:ring-1 focus-within:ring-[#FF6B35] focus-within:shadow-[0_0_30px_rgba(255,107,53,0.15)]",
+      "input": "w-full bg-transparent border-b border-[#261F1C] text-[#F9F6EE] font-data p-4 outline-none placeholder:text-[#8A7D75]"
+    },
+    "HeartbeatDot": {
+      "description": "Pulse animation for active status.",
+      "styles": "h-2 w-2 rounded-full bg-[#10B981] relative",
+      "animation": "after:content-[''] after:absolute after:inset-0 after:rounded-full after:bg-[#10B981] after:animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"
+    }
+  },
+  "media": {
+    "images": [
+      {
+        "category": "background",
+        "description": "Warm orbit space planet for subtle textures/hero sections",
+        "url": "https://images.unsplash.com/photo-1645659981907-c2142c0572b9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwzfHx3YXJtJTIwb3JiaXQlMjBzcGFjZSUyMHBsYW5ldHxlbnwwfHx8fDE3Nzc1OTU3Nzh8MA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "category": "abstract_hope",
+        "description": "Silhouette of man/child with plant during sunset - hopeful imagery",
+        "url": "https://images.unsplash.com/photo-1626060426757-749dde3fcb13?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwxfHxob3BlZnVsJTIwY2hpbGQlMjBzaWxob3VldHRlJTIwc3Vuc2V0fGVufDB8fHx8MTc3NzU5NTc3OHww&ixlib=rb-4.1.0&q=85"
+      }
+    ],
+    "icons": {
+      "library": "@phosphor-icons/react",
+      "style": "Duotone weight for warmth, or regular for clean tech look"
+    }
+  },
+  "global_rules": [
+    "All interactive elements MUST include data-testid attribute.",
+    "NO purple/violet gradients allowed.",
+    "NO default Inter/Roboto/Space Grotesk fonts.",
+    "Overlay noise/grain on the background to enhance the physical/analog ops feel.",
+    "Browser notifications should trigger for agent fleet events."
+  ],
+  "instructions_to_main_agent": [
+    "Initialize React with Tailwind CSS and Shadcn UI as base.",
+    "Install specified fonts: Instrument Serif, JetBrains Mono, Geist Mono.",
+    "Set up layout with SidebarRail on left and MissionTicker fixed at bottom.",
+    "Implement Command Palette with Framer Motion for staggered mount and smooth entry.",
+    "Build out AgentCard grid showing CEO/CFO/CMO/CTO/INTERN statuses with heartbeats.",
+    "Ensure all tokenomics charts/supply bars use DAO specific colors defined in tokens palette.",
+    "Implement the 10-bucket revenue engine using the BucketCell component specs."
+  ]
+}

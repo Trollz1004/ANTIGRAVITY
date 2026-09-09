@@ -1,0 +1,42 @@
+{
+  "platforms": [
+    {
+      "id": "codex-sabretooth",
+      "displayName": "OpenAI Codex",
+      "nodeId": "sabretooth",
+      "tier": "trusted_execution",
+      "participationMode": "required",
+      "certificationAuthority": true,
+      "allowedIps": ["127.0.0.1", "192.168.0.8"],
+      "allowedPathPrefixes": ["C:\\ANTIGRAVITY"],
+      "blockedPathPrefixes": ["C:\\OPUSONLY", "E:\\ANTIGRAVITY"],
+      "tokenHash": "sha256:<replace-me>"
+    },
+    {
+      "id": "claude-opus-sabretooth",
+      "displayName": "Claude Code Opus",
+      "nodeId": "sabretooth",
+      "tier": "trusted_execution",
+      "participationMode": "required",
+      "certificationAuthority": true,
+      "allowedIps": ["127.0.0.1", "192.168.0.8"],
+      "allowedPathPrefixes": ["C:\\ANTIGRAVITY", "E:\\claudes-claw"],
+      "blockedPathPrefixes": ["C:\\OPUSONLY", "E:\\ANTIGRAVITY"],
+      "tokenHash": "sha256:<replace-me>"
+    }
+  ],
+  "secretRefs": {
+    "CLOUDFLARE_API_TOKEN": [
+      {
+        "label": "Sabretooth local env",
+        "path": "C:\\ANTIGRAVITY\\.env",
+        "note": "Rotated 2026-03-23"
+      },
+      {
+        "label": "GitHub Actions secret",
+        "repo": "Trollz1004/ANTIGRAVITY",
+        "secretName": "CLOUDFLARE_API_TOKEN"
+      }
+    ]
+  }
+}

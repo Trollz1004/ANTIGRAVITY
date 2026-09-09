@@ -1,0 +1,270 @@
+version: '3.9'
+
+services:
+  hermes-agent:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes-agent
+    ports:
+      - '127.0.0.1:8642:8642'
+    environment:
+      - API_SERVER_ENABLED=true
+      - API_SERVER_HOST=0.0.0.0
+      - API_SERVER_PORT=8642
+      - GATEWAY_ALLOW_ALL_USERS=true
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+    volumes:
+      - hermes-data:/root/.hermes
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8642/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  omni-router:
+    build:
+      context: ./omniroute
+      dockerfile: Dockerfile
+    container_name: omni-router
+    ports:
+      - '127.0.0.1:20128:20128'
+      - '127.0.0.1:20129:20129'
+    environment:
+      - NODE_ENV=production
+      - NODE_OPTIONS=--max-old-space-size=1024
+      - DASHBOARD_PORT=20128
+      - API_PORT=20129
+      - HOST=0.0.0.0
+      - JWT_SECRET=${JWT_SECRET:-omni-jwt-secret-change-me}
+      - API_KEY_SECRET=${API_KEY_SECRET:-omni-api-key-secret-change-me}
+      - INITIAL_PASSWORD=${INITIAL_PASSWORD:-omniroute}
+      - REDIS_URL=redis://redis:6379
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+    volumes:
+      - omniroute-data:/app/data
+      - omniroute-logs:/app/logs
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:20128/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  localstack:
+    image: localstack/localstack-pro:latest
+    container_name: localstack
+    ports:
+      - '127.0.0.1:4566:4566'
+      - '127.0.0.1:4571:4571'
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LOCALSTACK_API_KEY=${LOCALSTACK_API_KEY:-}
+      - DEBUG=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - localstack-data:/tmp/localstack
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:4566/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - '6379:6379'
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant
+    ports:
+      - '6333:6333'
+      - '6334:6334'
+    volumes:
+      - ./qdrant-data:/qdrant/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:6333/healthz']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  openclaw:
+    build:
+      context: ./openclaw
+      dockerfile: Dockerfile
+    container_name: openclaw
+    ports:
+      - '3200:3200'
+    env_file:
+      - ./openclaw/.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_URL=http://qdrant:6333
+    volumes:
+      - ./logs:/logs
+      - openclaw_wwebjs:/app/.wwebjs_auth
+      - openclaw_wwebjs_cache:/app/.wwebjs_cache
+      - ./openclaw/.env:/app/.env:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3200/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    profiles:
+      - openclaw
+
+  whatsapp-bridge:
+    build:
+      context: ./openclaw
+      dockerfile: Dockerfile
+    container_name: whatsapp-bridge
+    user: root
+    command: node whatsapp-bridge.js
+    env_file:
+      - ./openclaw/.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_URL=http://qdrant:6333
+      - OPENCLAW_URL=http://openclaw:3200
+    volumes:
+      - ./logs:/logs
+      - openclaw_wwebjs:/app/.wwebjs_auth
+      - openclaw_wwebjs_cache:/app/.wwebjs_cache
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      openclaw:
+        condition: service_healthy
+    security_opt:
+      - seccomp:unconfined
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3200/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    profiles:
+      - openclaw
+
+  date-service:
+    image: node:22-alpine
+    container_name: date-service
+    ports:
+      - '127.0.0.1:8888:8888'
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost:8888/']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        cat > /tmp/date-server.js << 'EOF'
+        const http = require('http');
+        const server = http.createServer((req, res) => {
+          res.writeHead(200, {'Content-Type': 'application/json'});
+          res.end(JSON.stringify({timestamp: new Date().toISOString(), unix: Date.now()}));
+        });
+        server.listen(8888, '0.0.0.0', () => console.log('Date service on :8888'));
+        EOF
+        node /tmp/date-server.js
+
+  cloudflare-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflare-tunnel
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN:-placeholder}
+    restart: unless-stopped
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN:-}
+    profiles:
+      - cloudflare
+
+  wrangler-dev:
+    build:
+      context: ./.wrangler
+      dockerfile: Dockerfile
+    container_name: wrangler-dev
+    working_dir: /app
+    command: wrangler dev --host 0.0.0.0 --port 8787
+    ports:
+      - '127.0.0.1:8787:8787'
+    environment:
+      - WRANGLER_SEND_METRICS=false
+    volumes:
+      - ./.wrangler:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost:8787/']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    profiles:
+      - wrangler
+
+  hermes-mcp:
+    build:
+      context: ./hermes/mcp-server
+      dockerfile: Dockerfile
+    container_name: hermes-mcp
+    ports:
+      - '127.0.0.1:8700:8700'
+    env_file:
+      - .env.docker
+    environment:
+      - MCP_OAUTH_SECRET=${MCP_OAUTH_SECRET}
+      - MCP_HOST=0.0.0.0
+      - MCP_PORT=8700
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/app/repo:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8700/mcp']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  openclaw_wwebjs:
+  openclaw_wwebjs_cache:
+  hermes-data:
+  omniroute-data:
+  omniroute-logs:
+  localstack-data:
