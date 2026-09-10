@@ -105,6 +105,7 @@ export const api = {
     request<KnowledgeFilePreview>(`/api/knowledge/file?path=${encodeURIComponent(path)}`),
   // ── Date App metrics (real production data) ─────────────────────────────────
   dateappMetrics: () => request<DateAppMetrics>('/api/dateapp/metrics'),
+  launchClaude: () => request<{ ok: boolean; opened: string; on: string; from: string }>('/api/launch/claude', { method: 'POST' }),
 };
 
 export function subscribeEvents(onEvent: () => void): () => void {

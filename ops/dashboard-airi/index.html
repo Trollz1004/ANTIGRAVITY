@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ANTIGRAVITY Dashboard — Agency × AIRI × OmniRoute × Mission Control</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+      "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3.4.0/lib/three-vrm.module.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <div class="sidebar-header">
+        <h1>ANTIGRAVITY</h1>
+        <span class="subtitle">Agency × AIRI × OmniRoute × Mission Control</span>
+      </div>
+      <ul class="nav-tabs">
+        <li class="nav-tab active" data-tab="dashboard"><span class="nav-icon">◈</span> Dashboard</li>
+        <li class="nav-tab" data-tab="mission-control"><span class="nav-icon">◆</span> Mission Control</li>
+        <li class="nav-tab" data-tab="agents"><span class="nav-icon">⚡</span> Agents</li>
+        <li class="nav-tab" data-tab="graph"><span class="nav-icon">⬡</span> Knowledge Graph</li>
+        <li class="nav-tab" data-tab="avatar"><span class="nav-icon">◉</span> Avatar</li>
+        <li class="nav-tab" data-tab="widgets"><span class="nav-icon">▣</span> Widgets</li>
+        <li class="nav-tab" data-tab="scenes"><span class="nav-icon">▶</span> Scenes</li>
+        <li class="nav-tab" data-tab="image"><span class="nav-icon">◐</span> Image Gen</li>
+        <li class="nav-tab" data-tab="claude"><span class="nav-icon">✦</span> Claude CLI</li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="omni-status">
+          <span class="status-dot live"></span>
+          OmniRoute <span id="omni-model-count">—</span> models
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main">
+      <!-- Dashboard Tab: every number here is read live or shown as unknown -->
+      <section id="tab-dashboard" class="tab-content active">
+        <header class="tab-header">
+          <h2>House at a glance</h2>
+          <p class="tab-desc">Live readings from FABLE'S SENTRY, the skills tree, the Obsidian vault, and the avatar renders. No sample data.</p>
+        </header>
+        <div class="dashboard-grid">
+          <div class="dash-card">
+            <h3>◆ Services</h3>
+            <div class="dash-stat" id="stat-services">—</div>
+            <p id="stat-services-detail">FABLE'S SENTRY identity-checked targets</p>
+          </div>
+          <div class="dash-card">
+            <h3>⚡ Agents</h3>
+            <div class="dash-stat" id="stat-agents">—</div>
+            <p id="stat-agents-detail">loadable skills</p>
+          </div>
+          <div class="dash-card">
+            <h3>⬡ Vault notes</h3>
+            <div class="dash-stat" id="stat-nodes">—</div>
+            <p id="stat-nodes-detail">Obsidian vault</p>
+          </div>
+          <div class="dash-card">
+            <h3>◎ Obsidian REST</h3>
+            <div class="dash-stat" id="stat-vault">—</div>
+            <p id="stat-vault-detail">Local REST API :27123</p>
+          </div>
+          <div class="dash-card">
+            <h3>◉ Avatar renders</h3>
+            <div class="dash-stat" id="stat-avatars">—</div>
+            <p id="stat-avatars-detail">ops/avatar/out</p>
+          </div>
+        </div>
+        <div class="dash-feed">
+          <h3>Recent Activity</h3>
+          <div id="activity-log" class="activity-log"></div>
+        </div>
+      </section>
+
+      <!-- Mission Control Tab -->
+      <section id="tab-mission-control" class="tab-content">
+        <header class="tab-header">
+          <h2>Mission Control v5</h2>
+          <p class="tab-desc">The hub on :3151, embedded from this page's host so it works on the LAN. Hermes dashboard: <a id="hermes-link" href="#" target="_blank" rel="noopener">…</a> · open Mission Control directly: <a id="mission-control-link" href="#" target="_blank" rel="noopener">…</a></p>
+        </header>
+        <div id="mission-control-embed">
+          <iframe id="mission-control-frame" title="Mission Control v5" style="width:100%;height:calc(100vh - 140px);border:1px solid var(--border);border-radius:var(--radius-lg);background:#0d1117"></iframe>
+        </div>
+      </section>
+
+      <!-- Agents Tab -->
+      <section id="tab-agents" class="tab-content">
+        <header class="tab-header">
+          <h2>Agents (skills tree)</h2>
+          <p class="tab-desc">Every loadable skill in .agents/skills, read from disk. Paperclip-materialized clones are skipped.</p>
+        </header>
+        <div class="agents-layout">
+          <div class="agents-sidebar">
+            <input type="text" id="agent-search" placeholder="Search skills..." class="search-input" />
+            <div id="agent-categories" class="category-list"></div>
+          </div>
+          <div class="agents-main">
+            <div id="agent-list" class="agent-grid"></div>
+          </div>
+          <div class="agents-detail">
+            <div id="agent-detail-panel">
+              <p class="placeholder">Select a skill to view its frontmatter</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Knowledge Graph Tab -->
+      <section id="tab-graph" class="tab-content">
+        <header class="tab-header">
+          <h2>Knowledge Graph — Obsidian vault</h2>
+          <p class="tab-desc" id="graph-meta">Notes and [[wikilinks]] from the vault, computed live. Click a note to read it or open it in Obsidian.</p>
+          <div class="graph-controls">
+            <button id="graph-refresh" class="btn">Refresh</button>
+            <button id="graph-fit" class="btn">Fit View</button>
+            <input type="text" id="graph-search" placeholder="Filter notes..." class="search-input inline" />
+          </div>
+        </header>
+        <div class="graph-layout">
+          <div id="graph-canvas-container">
+            <svg id="graph-svg"></svg>
+          </div>
+          <aside id="graph-note" class="graph-note"><p class="placeholder">Click a note</p></aside>
+        </div>
+      </section>
+
+      <!-- Avatar Tab -->
+      <section id="tab-avatar" class="tab-content">
+        <header class="tab-header">
+          <h2>Avatar</h2>
+          <p class="tab-desc">Left: the rendered avatars that ship today (OmniRoute image model, ops/avatar/out). Right: a three.js VRM viewer — empty until a real .vrm is loaded, because none exists on this box.</p>
+          <div class="avatar-controls">
+            <label class="file-label">
+              Load VRM
+              <input type="file" id="avatar-file" accept=".vrm" hidden />
+            </label>
+            <button id="avatar-reset" class="btn">Reset View</button>
+          </div>
+        </header>
+        <div class="avatar-layout">
+          <div id="avatar-gallery" class="avatar-gallery"></div>
+          <div id="avatar-canvas-container">
+            <canvas id="avatar-canvas"></canvas>
+            <div id="avatar-empty" class="loading-overlay hidden">No VRM loaded — this viewer shows a real model only. Load one with the button above.</div>
+            <div id="avatar-loading" class="loading-overlay hidden">Loading model...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Widgets Tab -->
+      <section id="tab-widgets" class="tab-content">
+        <header class="tab-header">
+          <h2>OmniRoute Widgets</h2>
+          <p class="tab-desc">Chat and summarize go through the gateway (key held by the server). Search is the vault. Voice reports the gateway's real answer.</p>
+        </header>
+        <div class="widgets-grid">
+          <div class="widget-card">
+            <h3>💬 Chat</h3>
+            <div class="widget-chat">
+              <div id="widget-chat-log" class="chat-log"></div>
+              <div class="chat-input-row">
+                <input type="text" id="widget-chat-input" placeholder="Ask anything..." class="chat-input" />
+                <button id="widget-chat-send" class="btn primary">Send</button>
+              </div>
+            </div>
+          </div>
+          <div class="widget-card">
+            <h3>🔍 Vault search</h3>
+            <div class="widget-search">
+              <input type="text" id="widget-search-input" placeholder="Search note titles..." class="search-input" />
+              <button id="widget-search-btn" class="btn">Search</button>
+              <div id="widget-search-results" class="search-results"></div>
+            </div>
+          </div>
+          <div class="widget-card">
+            <h3>📝 Summarize</h3>
+            <div class="widget-summarize">
+              <textarea id="widget-summarize-input" placeholder="Paste text to summarize..." class="textarea-input"></textarea>
+              <button id="widget-summarize-btn" class="btn">Summarize</button>
+              <div id="widget-summarize-output" class="output-box"></div>
+            </div>
+          </div>
+          <div class="widget-card">
+            <h3>🎙️ Voice</h3>
+            <div class="widget-voice">
+              <textarea id="widget-tts-input" placeholder="Text to speak..." class="textarea-input"></textarea>
+              <button id="widget-tts-btn" class="btn">Speak</button>
+              <p id="widget-tts-status" class="placeholder">No speech credential is configured on the gateway yet (owner action). The button reports the real answer.</p>
+              <audio id="widget-audio" controls class="hidden"></audio>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scenes Tab -->
+      <section id="tab-scenes" class="tab-content">
+        <header class="tab-header">
+          <h2>Scene Generator</h2>
+          <p class="tab-desc">Renders through the one image model the gateway's /images/generations route accepts.</p>
+        </header>
+        <div class="gen-layout">
+          <div class="gen-controls">
+            <textarea id="scene-prompt" placeholder="Describe your scene..." class="textarea-input large"></textarea>
+            <div class="gen-row">
+              <select id="scene-model" class="select-input">
+                <option value="antigravity/gemini-3.1-flash-image">antigravity/gemini-3.1-flash-image (VERIFIED)</option>
+              </select>
+              <button id="scene-generate" class="btn primary">Generate Scene</button>
+            </div>
+          </div>
+          <div class="gen-output">
+            <div id="scene-result" class="gen-result"><p class="placeholder">Generated scene will appear here</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Image Gen Tab -->
+      <section id="tab-image" class="tab-content">
+        <header class="tab-header">
+          <h2>Image Generation</h2>
+          <p class="tab-desc">Same route as the avatar workflow (npm run fable -- workflow avatar). Video: no video model is in the gateway catalog, so there is no video tab.</p>
+        </header>
+        <div class="gen-layout">
+          <div class="gen-controls">
+            <textarea id="image-prompt" placeholder="Describe the image..." class="textarea-input large"></textarea>
+            <div class="gen-row">
+              <select id="image-model" class="select-input">
+                <option value="antigravity/gemini-3.1-flash-image">antigravity/gemini-3.1-flash-image (VERIFIED)</option>
+              </select>
+              <select id="image-style" class="select-input">
+                <option value="natural">Natural</option>
+                <option value="anime">Anime</option>
+                <option value="cyberpunk">Cyberpunk</option>
+                <option value="photorealistic">Photorealistic</option>
+                <option value="pixel-art">Pixel Art</option>
+              </select>
+              <button id="image-generate" class="btn primary">Generate Image</button>
+            </div>
+          </div>
+          <div class="gen-output">
+            <div id="image-result" class="gen-result"><p class="placeholder">Generated image will appear here</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Claude CLI Tab -->
+      <section id="tab-claude" class="tab-content">
+        <header class="tab-header">
+          <h2>Official Claude CLI</h2>
+          <p class="tab-desc">Claude never routes through OmniRoute. The judge lane is the official CLI on account auth, opened by drift.</p>
+        </header>
+        <div class="widget-card" style="max-width:720px">
+          <p>Command: <code id="claude-command">drift bare</code></p>
+          <p id="claude-note" class="placeholder">Opens the official Claude CLI in a new window on SABRETOOTH.</p>
+          <div class="gen-row" style="margin-top:12px">
+            <button id="claude-launch" class="btn primary">Open Claude on SABRETOOTH</button>
+          </div>
+          <p id="claude-result" class="output-box" style="margin-top:12px"></p>
+          <p class="placeholder" style="margin-top:12px">From another node on the LAN (the Alienware): <code>ssh joshi@192.168.0.8</code> then <code>drift bare</code>. The button above always opens the window on SABRETOOTH's own display.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

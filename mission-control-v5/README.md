@@ -2,7 +2,7 @@
 
 ### Orchestrator Edition
 
-Production-grade orchestration dashboard for **148 specialized agents** across **15 divisions**, routed through **OmniRoute**.
+Orchestration dashboard for the **3 harness orchestrators** (Hermes, OpenClaw, OpenCode) in one division, routed through **OmniRoute**. Mission Control again as of 2026-09-10 (Paperclip parked).
 
 ---
 
@@ -14,13 +14,13 @@ Production-grade orchestration dashboard for **148 specialized agents** across *
 
 ## Modules
 
-1. **Agent Library** — searchable/filterable grid of all 148 agents, organized by division, each with name, division, description, and DEPLOY.
+1. **Agent Library** — grid of the 3 orchestrators (agents.ts enforces exactly three), each with name, division, description, and DEPLOY.
 2. **Swarm Engine** — select agents, write a task, pick **SPEED** or **REASONING**, launch, and watch the live execution feed with execution provider, model, latency, and output attribution.
 3. **Hermes Kanban** — NOW / NEXT / BLOCKED / DONE board. Drag-and-drop, synced with the orchestrator: cards auto-move as tasks queue, run, finish, or fail. Dragging a failed card back into NEXT/NOW re-queues it for real. Retry/delete on-card.
 
 ## Honest-by-design
 
-- **Zero mock data.** All 148 agents are real definitions served by the API. Task output is real model output or nothing.
+- **Zero mock data.** The 3 orchestrators are real definitions served by the API. Task output is real model output or nothing.
 - **Fail-closed router.** No provider configured → tasks BLOCK with an explicit error. The system never fabricates results.
 - **Secrets in env only.** Nothing in code, nothing in git (`.env` is ignored).
 - Server restarts mark interrupted tasks BLOCKED honestly instead of pretending they finished.

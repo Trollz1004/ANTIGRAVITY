@@ -33,6 +33,37 @@ function Test-Port($port) {
     try { (Test-NetConnection 127.0.0.1 -Port $port -InformationLevel Quiet -WarningAction SilentlyContinue) } catch { $false }
 }
 
+# ── One House at a time (2026-09-10). Two watchdogs double every heal: an
+# elevated one from the logon task plus a non-elevated one from drift both ran on
+# 2026-09-10 and neither could see the other's processes. Whoever starts last wins.
+Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
+    Where-Object { $_.ProcessId -ne $PID -and $_.Name -eq 'powershell.exe' -and $_.CommandLine -match 'FABLES-HOUSE[.]ps1' } |
+    ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue; Log ("  stopped an older House process (PID {0}) - one House at a time" -f $_.ProcessId) 'DarkGray' }
+
+# Staleness: a service whose process started before its code was last written is
+# running OLD code. That is not health. The House restarts it (it can, because
+# the logon task runs the House elevated; a non-elevated shell cannot touch those).
+function Get-NewestWriteUtc([string[]]$paths) {
+    $newest = [datetime]::MinValue
+    foreach ($p in $paths) {
+        if (-not (Test-Path $p)) { continue }
+        $items = if ((Get-Item $p).PSIsContainer) { Get-ChildItem $p -Recurse -File -ErrorAction SilentlyContinue } else { Get-Item $p }
+        foreach ($i in $items) { if ($i.LastWriteTimeUtc -gt $newest) { $newest = $i.LastWriteTimeUtc } }
+    }
+    return $newest
+}
+function Test-Fresh($startedAtIso, [string[]]$codePaths) {
+    try { $started = ([datetime]::Parse($startedAtIso)).ToUniversalTime() } catch { return $false }
+    return ($started -gt (Get-NewestWriteUtc $codePaths))
+}
+function Stop-PortOwner($port) {
+    try {
+        Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue |
+            ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue; Log ("  stopped PID {0} on :{1} (stale)" -f $_.OwningProcess, $port) 'DarkGray' }
+        Start-Sleep -Seconds 2
+    } catch {}
+}
+
 # Secret for authenticated probes: read from the repo .env at probe time,
 # never logged. OmniRoute 3.8.50 gates /v1/models behind the API key.
 function Get-EnvKey($name) {
@@ -101,20 +132,17 @@ $Stages = @(
                  if (Test-Path $omni) { Start-Process -FilePath $omni -WindowStyle Hidden }
                  else { Log '  OmniRoute npm-global missing — npm i -g omniroute needed' 'Red' } } }
 
-    # Paperclip IS Mission Control (Joshua, 2026-08-25). It carries the board,
-    # the agents, and the judge CLI lanes, and it runs its own embedded Postgres.
-    # The probe is an IDENTITY check, not a port check: a port answering proves
-    # only that something is listening, and starting a second instance on 3100
-    # would be worse than leaving it down.
-    @{ Name = 'Paperclip :3100 (Mission Control)'; Required = $true
-       Probe = { Test-Http 'http://127.0.0.1:3100/api/openapi.json' 20 'Paperclip API' }
-       Heal  = { if (Test-Port 3100) {
-                     Log '  :3100 answers but is NOT Paperclip — WRONG SERVICE. Not starting a second one.' 'Red'
-                 } else {
-                     $npx = "$env:APPDATA\npm\npx.cmd"
-                     if (-not (Test-Path $npx)) { $npx = 'npx' }
-                     Start-Process -FilePath $npx -ArgumentList '-y','paperclipai','run' -WindowStyle Hidden
-                 } } }
+    # PARKED. Joshua, 2026-09-10: "no more paperclip". Mission Control is the
+    # v5 dashboard on :3151 again. Paperclip is not started, not healed, and its
+    # ANT-Paperclip logon task is disabled. This stage only REPORTS whether a
+    # stray instance is still answering on 3100 so nobody mistakes it for the hub.
+    # History kept in git: it was Mission Control from 2026-08-25 to 2026-09-10.
+    @{ Name = 'Paperclip :3100 (PARKED, report only)'; Required = $false
+       Probe = { if (Test-Http 'http://127.0.0.1:3100/api/openapi.json' 10 'Paperclip API') {
+                     Log '  Paperclip still answering on :3100 - parked, not the hub; stop it or ignore it' 'DarkGray'
+                 } else { Log '  Paperclip parked (not running) - expected' 'DarkGray' }
+                 return $true }
+       Heal  = { } }
 
     @{ Name = 'Frontend :3200 (production bundle)'; Required = $true
        Probe = { Test-Http 'http://127.0.0.1:3200/' 10 'assets/index-' }
@@ -130,11 +158,27 @@ $Stages = @(
                      Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config','C:\Users\joshi\.cloudflared\config.yml','run','sabretooth-main' -WindowStyle Hidden
                  } else { Log '  cloudflared runs but public probe failed — check Cloudflare edge / DNS' 'Yellow' } } }
 
-    # No longer the hub - Paperclip is. Kept optional because it still serves the
-    # static /paperweight/ page. A failure here must never block bring-up.
-    @{ Name = 'Mission Control v5 :3151 (legacy)'; Required = $false
-       Probe = { Test-Http 'http://127.0.0.1:3151/' 10 }
-       Heal  = { Start-Process cmd -ArgumentList '/c','C:\ANTIGRAVITY\mission-control-v5\scripts\tab-mission-control.cmd' -WindowStyle Hidden } }
+    # Mission Control again as of 2026-09-10 (Joshua: "no more paperclip"). The v5
+    # dashboard on :3151 is the hub; it is required and healed.
+    @{ Name = 'Mission Control v5 :3151 (Mission Control)'; Required = $true
+       # Identity (the dashboard title), LAN bind (the Alienware must reach it), and
+       # freshness (started after server/src + client/dist were last written).
+       Probe = { if (-not (Test-Http 'http://127.0.0.1:3151/' 10 'MISSION CONTROL')) { return $false }
+                 try { $id = Invoke-RestMethod -Uri 'http://127.0.0.1:3151/api/identity' -TimeoutSec 10 } catch { return $false }
+                 if ($id.bindHost -ne '0.0.0.0') { Log '  Mission Control is bound to loopback only - restarting for the LAN' 'Yellow'; return $false }
+                 if (-not (Test-Fresh $id.startedAt @('C:\ANTIGRAVITY\mission-control-v5\server\src','C:\ANTIGRAVITY\mission-control-v5\client\dist','C:\ANTIGRAVITY\mission-control-v5\server\.env'))) { Log '  Mission Control is running code older than what is on disk - restarting' 'Yellow'; return $false }
+                 return $true }
+       Heal  = { Stop-PortOwner 3151
+                 Start-Process cmd -ArgumentList '/c','npm','start' -WorkingDirectory 'C:\ANTIGRAVITY\mission-control-v5' -WindowStyle Hidden } }
+
+    @{ Name = 'AIRI dashboard :9150 (Agency x AIRI x OmniRoute x Mission Control)'; Required = $false
+       # The avatar/agents/vault dashboard, served on the LAN by ops/dashboard-airi/server.mjs.
+       Probe = { if (-not (Test-Http 'http://127.0.0.1:9150/health' 6 'airi-dashboard')) { return $false }
+                 try { $hz = Invoke-RestMethod -Uri 'http://127.0.0.1:9150/health' -TimeoutSec 6 } catch { return $false }
+                 if ($hz.startedAt -and -not (Test-Fresh $hz.startedAt @('C:\ANTIGRAVITY\ops\dashboard-airi\server.mjs'))) { Log '  AIRI dashboard server is stale - restarting' 'Yellow'; return $false }
+                 return $true }
+       Heal  = { Stop-PortOwner 9150
+                 Start-Process 'node' -ArgumentList 'C:\ANTIGRAVITY\ops\dashboard-airi\server.mjs' -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden } }
 
     @{ Name = 'Stack Health :8787'; Required = $false
        Probe = { Test-Http 'http://127.0.0.1:8787/' 8 }
@@ -174,15 +218,12 @@ $Stages = @(
     # ── Added 2026-08-28. All three were found DOWN during a session and had
     # nothing supervising them, so each died again at the next restart. They are
     # optional: none should block bring-up of the revenue stack above.
-    @{ Name = 'CEO bridge :3140 (Freebuff seat)'; Required = $false
-       Probe = { Test-Http 'http://127.0.0.1:3140/health' 6 'paperclip-freebuff-ceo-bridge' }
-       Heal  = { $b = 'C:\ANTIGRAVITY\ops\paperclip-ceo\bridge\start.js'
-                 if (Test-Path $b) { Start-Process 'node' -ArgumentList $b -WorkingDirectory 'C:\ANTIGRAVITY\ops\paperclip-ceo\bridge' -WindowStyle Hidden }
-                 else { Log '  CEO bridge start.js missing' 'DarkYellow' } } }
+    # CEO bridge :3140 removed 2026-09-10 with Paperclip (it was the Freebuff seat's
+    # HTTP adapter). Nothing else called it.
 
     # Serves /health, NOT /api/health, on this build (0.20.5). A probe written
     # against /api/health reports a healthy gateway as down.
-    @{ Name = 'Hermes gateway :8642 (paperclip-mc)'; Required = $false
+    @{ Name = 'Hermes gateway :8642 (profile paperclip-mc, Hermes lane)'; Required = $false
        Probe = { Test-Http 'http://127.0.0.1:8642/health' 6 'hermes-agent' }
        Heal  = { $h = "$env:LOCALAPPDATA\hermes\hermes-agent\bin\hermes.exe"
                  if (Test-Path $h) { Start-Process $h -ArgumentList '--profile','paperclip-mc','gateway','run','--replace','--accept-hooks' -WindowStyle Hidden }
@@ -208,9 +249,16 @@ $Stages = @(
        Heal  = { Log '  Obsidian REST not answering: open Obsidian (vault C:\ANTIGRAVITY\Antigravity) — plugin obsidian-local-rest-api must be enabled. Not auto-started on purpose.' 'DarkYellow' } }
 
     @{ Name = "FABLE'S SENTRY :9140 (wall display)"; Required = $false
-       Probe = { Test-Http 'http://127.0.0.1:9140/health' 6 'fables-sentry' }
+       # Identity + freshness: a Sentry started before targets.json or server.mjs
+       # changed is showing a wall that no longer exists (2026-09-10: it kept
+       # listing Paperclip rows for an hour after they were retired).
+       Probe = { if (-not (Test-Http 'http://127.0.0.1:9140/health' 6 'fables-sentry')) { return $false }
+                 try { $hz = Invoke-RestMethod -Uri 'http://127.0.0.1:9140/health' -TimeoutSec 6 } catch { return $false }
+                 if ($hz.startedAt -and -not (Test-Fresh $hz.startedAt @('C:\ANTIGRAVITY\apps\fables-sentry\server.mjs','C:\ANTIGRAVITY\apps\fables-sentry\targets.json','C:\ANTIGRAVITY\apps\fables-sentry\index.html'))) { Log '  Sentry is stale - restarting on the current wall' 'Yellow'; return $false }
+                 if (-not $hz.startedAt) { Log '  Sentry predates the freshness check - restarting once' 'Yellow'; return $false }
+                 return $true }
        Heal  = { $s = 'C:\ANTIGRAVITY\apps\fables-sentry\server.mjs'
-                 if (Test-Path $s) { Start-Process 'node' -ArgumentList $s -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden }
+                 if (Test-Path $s) { Stop-PortOwner 9140; Start-Process 'node' -ArgumentList $s -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden }
                  else { Log '  sentry server.mjs missing' 'DarkYellow' } } }
 
     # Housekeeping. Not a service, so its Probe always reports OK and the work
@@ -224,29 +272,7 @@ $Stages = @(
                  return $true }
        Heal  = { Log '  housekeeping script missing at scripts\fables-house\HOUSEKEEPING.ps1' 'DarkYellow' } }
 
-    # READ-ONLY verification, never a launcher. The judge lanes (Claude, Codex,
-    # Grok), the CEO seat, OpenCode and FreeBuff are Paperclip AGENTS driven by
-    # its heartbeat scheduler - they are not services with ports, and starting
-    # them from here would duplicate what Paperclip already owns. This stage
-    # just reports whether Paperclip is actually carrying them, so a silent
-    # empty board does not look like a healthy stack.
-    @{ Name = 'Paperclip lanes + MCP tools (report only)'; Required = $false
-       Probe = { try {
-                     $cid = '92223de0-b36b-4d63-93ca-50ebe5007e68'
-                     $ag = Invoke-RestMethod -Uri "http://127.0.0.1:3100/api/companies/$cid/agents" -TimeoutSec 15
-                     $agents = if ($ag.agents) { $ag.agents } else { $ag }
-                     $errored = @($agents | Where-Object { $_.status -eq 'error' })
-                     $prof = Invoke-RestMethod -Uri "http://127.0.0.1:3100/api/companies/$cid/tools/profiles" -TimeoutSec 15
-                     $profiles = if ($prof.profiles) { $prof.profiles } else { $prof }
-                     $always = $profiles | Where-Object { $_.name -like 'Always-on MCP*' } | Select-Object -First 1
-                     $tools = if ($always) { @($always.entries).Count } else { 0 }
-                     Log ("  lanes: {0} agents, {1} errored | always-on MCP profile: {2} connections" -f @($agents).Count, $errored.Count, $tools) 'DarkGray'
-                     if ($errored.Count -gt 0) {
-                         Log ("  errored lanes: {0}" -f (($errored | ForEach-Object { $_.name }) -join ', ')) 'Yellow'
-                     }
-                     return $true
-                 } catch { return $false } }
-       Heal  = { Log '  Paperclip not answering its agent API yet — it heals via the :3100 stage, not here.' 'DarkYellow' } }
+    # 'Paperclip lanes + MCP tools' report stage removed 2026-09-10 with Paperclip.
 )
 
 function Invoke-Stage($stage, [int]$maxAttempts = 0) {
@@ -284,8 +310,17 @@ $pubApi = Test-Http 'https://api.youandinotai.com/api/v1/health' 30 '"db_connect
 Log ("  public api.youandinotai.com: {0}" -f ($(if ($pubApi) {'OK'} else {'FAILED'}))) ($(if ($pubApi) {'Green'} else {'Red'}))
 
 if (-not $Watchdog) {
-    Log 'Bring-up complete. This window is done talking - it will not print again.' 'Cyan'
-    Log 'The silent watchdog (hidden, log-file only) guards the House from Startup.' 'Cyan'
+    Log 'Bring-up complete. This window is done talking - it will not print again.' 'Green'
+    if ($Once) { exit 0 }
+    # 2026-09-10: the bring-up spawns the silent watchdog ITSELF, so the watchdog
+    # inherits whatever elevation the bring-up had (the logon task runs Highest).
+    # Services the House starts are then always restartable by the House. The
+    # Startup-folder launcher (fables-house-watchdog.cmd) was retired the same
+    # day: two launchers at logon meant two watchdogs, and a non-elevated one can
+    # never restart an elevated service. One House at a time; the guard at the
+    # top of this script enforces it.
+    Start-Process powershell.exe -ArgumentList '-NonInteractive','-WindowStyle','Hidden','-ExecutionPolicy','Bypass','-File',$PSCommandPath,'-Watchdog' -WindowStyle Hidden
+    Log 'The silent watchdog (hidden, log-file only) was spawned by this bring-up and now guards the House.' 'Cyan'
     exit 0
 }
 

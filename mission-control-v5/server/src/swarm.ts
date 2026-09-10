@@ -266,15 +266,22 @@ function tryParse(slice: string): any | null {
   }
 }
 
+type LaneId = (typeof HARNESS_LANE_IDS)[number];
+function pickLanes(raw: unknown): LaneId[] {
+  const wanted = Array.isArray(raw) ? (raw as unknown[]).filter((id): id is LaneId => typeof id === 'string' && (HARNESS_LANE_IDS as readonly string[]).includes(id)) : [];
+  return wanted.length ? wanted : [...HARNESS_LANE_IDS];
+}
+
 export function createTask(input: any): SwarmTask {
   const now = new Date().toISOString();
   const task: SwarmTask = {
     id: randomUUID(),
     title: input.title || 'Task',
     prompt: input.prompt,
-    agentIds: [...HARNESS_LANE_IDS],
-    mode: 'reasoning',
-    executor: 'auto',
+    // 2026-09-10: honor what the operator picked. Empty/unknown falls back to every lane.
+    agentIds: pickLanes(input.agentIds),
+    mode: input.mode === 'speed' ? 'speed' : 'reasoning',
+    executor: typeof input.executor === 'string' && input.executor ? input.executor : 'auto',
     column: 'NEXT',
     status: 'queued',
     createdAt: now,

@@ -28,6 +28,7 @@ const REPO = process.env.ANTIGRAVITY_ROOT || 'C:\\ANTIGRAVITY';
 const HOUSE = join(REPO, 'scripts', 'fables-house', 'FABLES-HOUSE.ps1');
 
 const REGISTRY = JSON.parse(readFileSync(join(HERE, 'targets.json'), 'utf8'));
+const STARTED_AT = new Date().toISOString(); // the House compares this to the code's mtime (stale = restart)
 
 /** Fix actions. Each spawns detached and returns immediately. */
 const FIXES = {
@@ -41,10 +42,7 @@ const FIXES = {
       "Start-Process 'C:\\Users\\joshi\\redis-win\\redis-server.exe' -ArgumentList '--bind','127.0.0.1','--port','6379','--dir',$d,'--maxmemory','256mb','--maxmemory-policy','allkeys-lru' -WindowStyle Hidden"
     ),
   },
-  ceobridge: {
-    label: 'Start the CEO bridge',
-    run: () => ps("Start-Process 'node' -ArgumentList 'start.js' -WorkingDirectory '" + REPO + "\\ops\\paperclip-ceo\\bridge' -WindowStyle Hidden"),
-  },
+  // ceobridge fix removed 2026-09-10 with Paperclip (parked on Joshua's word).
   hermesgw: {
     label: 'Start the paperclip-mc gateway',
     run: () => ps("$h=\"$env:LOCALAPPDATA\\hermes\\hermes-agent\\bin\\hermes.exe\"; if(Test-Path $h){Start-Process $h -ArgumentList '--profile','paperclip-mc','gateway','run','--replace','--accept-hooks' -WindowStyle Hidden}"),
@@ -54,8 +52,8 @@ const FIXES = {
     run: () => ps("Start-Process 'node' -ArgumentList 'dist/server.js' -WorkingDirectory '" + REPO + "\\services\\governance' -WindowStyle Hidden"),
   },
   hermes: {
-    label: 'Start Hermes',
-    run: () => ps("$h=\"$env:LOCALAPPDATA\\hermes\\hermes-agent\\bin\\hermes.exe\"; if(Test-Path $h){Start-Process $h -ArgumentList 'serve' -WindowStyle Hidden}"),
+    label: 'Start the Hermes dashboard (:9119)',
+    run: () => ps("$h=\"$env:LOCALAPPDATA\\hermes\\hermes-agent\\bin\\hermes.exe\"; if(Test-Path $h){Start-Process $h -ArgumentList 'dashboard','--host','127.0.0.1','--port','9119','--no-open','--skip-build' -WindowStyle Hidden}"),
   },
   openclaw: {
     // 'gateway' is required — bare openclaw runs the CLI and exits without
@@ -74,9 +72,10 @@ const FIXES = {
     run: () => ps("Start-Process 'bash' -ArgumentList 'crm/ops/start-crm.sh' -WorkingDirectory '" + REPO + "' -WindowStyle Hidden"),
   },
 
+  airi: { label: 'Start the AIRI dashboard (:9150)', run: () => ps("Start-Process 'node' -ArgumentList 'C:\\ANTIGRAVITY\\ops\\dashboard-airi\\server.mjs' -WorkingDirectory 'C:\\ANTIGRAVITY' -WindowStyle Hidden") },
   house: { label: "Run FABLE'S HOUSE bring-up", run: () => psFile(HOUSE) },
 };
-for (const k of ['frontend', 'backend', 'postgres', 'tunnel', 'paperclip', 'mc5']) {
+for (const k of ['frontend', 'backend', 'postgres', 'tunnel', 'mc5']) {
   if (!FIXES[k]) FIXES[k] = { label: "Run FABLE'S HOUSE bring-up (handles " + k + ')', run: () => psFile(HOUSE) };
 }
 
@@ -239,7 +238,7 @@ createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   const json = (code, o) => { res.writeHead(code, { 'content-type': 'application/json' }); res.end(JSON.stringify(o)); };
 
-  if (url.pathname === '/health') return json(200, { status: 'ok', service: 'fables-sentry', port: PORT });
+  if (url.pathname === '/health') return json(200, { status: 'ok', service: 'fables-sentry', port: PORT, startedAt: STARTED_AT });
   if (url.pathname === '/api/status') return json(200, await snapshot());
 
   if (url.pathname === '/api/fix' && req.method === 'POST') {

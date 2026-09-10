@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { api } from '../api';
 import type { Health, Tab } from '../types';
 
 interface Props {
@@ -9,6 +11,17 @@ interface Props {
 }
 
 export default function Header({ tab, onTab, health, runningCount, selectedCount }: Props) {
+  const [claudeNote, setClaudeNote] = useState<string>('');
+  async function openClaude() {
+    setClaudeNote('opening…');
+    try {
+      const r = await api.launchClaude();
+      setClaudeNote(`opened on ${r.on}`);
+    } catch (err) {
+      setClaudeNote(`failed: ${err instanceof Error ? err.message : String(err)}`);
+    }
+    setTimeout(() => setClaudeNote(''), 6000);
+  }
   const routerLive = health?.routerLive ?? false;
   const configured = health?.providers.filter((provider) => provider.configured).length ?? 0;
 
@@ -28,7 +41,8 @@ export default function Header({ tab, onTab, health, runningCount, selectedCount
         >
           PREVIEW
         </button>
-        <button
+        <button
+
           className={`header__tab ${tab === 'dateapp' ? 'header__tab--active' : ''}`}
           onClick={() => onTab('dateapp')}
         >
@@ -39,6 +53,9 @@ export default function Header({ tab, onTab, health, runningCount, selectedCount
           onClick={() => onTab('support')}
         >
           SUPPORT
+        </button>
+        <button className="header__tab" onClick={openClaude} title="Open the official Claude CLI (drift bare) in a new window on SABRETOOTH">
+          CLAUDE CLI{claudeNote ? ` · ${claudeNote}` : ''}
         </button>
       </nav>
       <div className="header__status">

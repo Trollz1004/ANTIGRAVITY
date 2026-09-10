@@ -3,7 +3,8 @@
  * mirroring metadata, and per-harness journals. No external memory service is
  * required for active Mission Control operation.
  */
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import type { Express } from 'express';
 import { loadBrainPlatforms, platformSummary, readJournal, writeJournal } from './brainStore.js';
 import { getCatalogEntry, loadCatalog } from './catalog.js';
@@ -31,6 +32,44 @@ function obsidianStatus(environment: BrainEnvironment = process.env): {
   return existsSync(vaultPath) ? { status: 'configured', vaultPath } : { status: 'unavailable', vaultPath };
 }
 
+/** Live read of the Obsidian vault: notes + [[wikilinks]]. Same measures the
+ * obsidian-graph-query skill reports (stats, orphans), computed from the files
+ * so it works whether or not Obsidian is open. Never returns paths to clients. */
+export function vaultSummary(vaultPath: string): { notes: number; wikilinks: number; orphans: number } {
+  const files: string[] = [];
+  const walk = (dir: string) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      if (e.name.startsWith('.')) continue;
+      const p = join(dir, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (e.name.toLowerCase().endsWith('.md')) files.push(p);
+    }
+  };
+  try { walk(vaultPath); } catch { return { notes: 0, wikilinks: 0, orphans: 0 }; }
+  const names = new Set(files.map((f) => f.slice(vaultPath.length + 1).replace(/\\/g, '/').replace(/\.md$/i, '').toLowerCase()));
+  const shorts = new Map<string, string>();
+  for (const n of names) shorts.set(n.split('/').pop() as string, n);
+  const degree = new Map<string, number>();
+  let wikilinks = 0;
+  for (const f of files) {
+    const me = f.slice(vaultPath.length + 1).replace(/\\/g, '/').replace(/\.md$/i, '').toLowerCase();
+    let txt = '';
+    try { txt = readFileSync(f, 'utf8'); } catch { continue; }
+    const seen = new Set<string>();
+    for (const m of txt.matchAll(/\[\[([^\]|#]+)(?:[#|][^\]]*)?\]\]/g)) {
+      const raw = m[1].trim().replace(/\.md$/i, '').toLowerCase();
+      const target = names.has(raw) ? raw : shorts.get(raw);
+      if (!target || target === me || seen.has(target)) continue;
+      seen.add(target);
+      wikilinks++;
+      degree.set(me, (degree.get(me) ?? 0) + 1);
+      degree.set(target, (degree.get(target) ?? 0) + 1);
+    }
+  }
+  const orphans = [...names].filter((n) => !(degree.get(n) ?? 0)).length;
+  return { notes: files.length, wikilinks, orphans };
+}
+
 function safeDashboardUrl(rawValue: string | undefined): string | undefined {
   const value = (rawValue ?? '').trim();
   if (!value) return undefined;
@@ -49,20 +88,30 @@ function safeDashboardUrl(rawValue: string | undefined): string | undefined {
 export function buildHumanTools(environment: BrainEnvironment = process.env): HumanToolStatus[] {
   const supabaseDashboard = safeDashboardUrl(environment.SUPABASE_DASHBOARD_URL);
   const obsidian = obsidianStatus(environment);
+  const repoRoot = (environment.MATERIALIZE_REPO_ROOT ?? '').trim() || 'C:\\ANTIGRAVITY';
+  const journalsDir = join(repoRoot, '.agents', 'journals');
+  const skillsDir = join(repoRoot, '.agents', 'skills');
+  const journalsOk = existsSync(journalsDir);
+  const skillsOk = existsSync(skillsDir);
+  const journalCount = journalsOk ? readdirSync(journalsDir).length : 0;
+  const skillCount = skillsOk ? readdirSync(skillsDir).filter((d) => !/--[0-9a-f]{6,}$/.test(d)).length : 0;
+  const vault = obsidian.status === 'configured' && obsidian.vaultPath ? vaultSummary(obsidian.vaultPath) : null;
 
   return [
     {
       id: 'repository',
       label: 'Repository Knowledge',
-      state: 'configured',
-      detail: 'Canonical repository knowledge and harness journals are available through Mission Control.',
+      state: journalsOk ? 'configured' : 'unavailable',
+      detail: journalsOk
+        ? `Harness journals present under .agents/journals (${journalCount} lanes).`
+        : 'No .agents/journals directory found at the repository root.',
       humanFacing: true,
     },
     {
       id: 'graphy',
       label: 'Graphy Context',
-      state: 'configured',
-      detail: 'Repository graph and agent context are available through Mission Control.',
+      state: skillsOk ? 'configured' : 'unavailable',
+      detail: skillsOk ? `Skills tree present (${skillCount} skill directories).` : 'No .agents/skills directory found.',
       humanFacing: true,
     },
     {
@@ -81,7 +130,7 @@ export function buildHumanTools(environment: BrainEnvironment = process.env): Hu
       state: obsidian.status,
       detail:
         obsidian.status === 'configured'
-          ? 'An optional local vault is available for a future read-first mirror; repository journals remain authoritative.'
+          ? `Vault read live: ${vault?.notes ?? 0} notes, ${vault?.wikilinks ?? 0} wikilinks, ${vault?.orphans ?? 0} orphans. Full graph on the AIRI dashboard (:9150, Knowledge Graph). Repository journals remain authoritative.`
           : obsidian.status === 'unavailable'
             ? 'A vault location is configured but currently unavailable; it is not treated as an outage of repository knowledge.'
             : 'No optional local vault is configured. Repository knowledge and journals remain available.',
