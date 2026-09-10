@@ -4,6 +4,7 @@
  * Four orchestrator harnesses; roles come from the skill catalog and ride on
  * sub-agents. No model is named in the UI — OmniRoute resolves it at run time.
  */
+import { spawn } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { networkInterfaces } from 'node:os';
@@ -53,6 +54,14 @@ app.use(
       // Electron/file requests omit Origin. Browser development is deliberately
       // limited to the two loopback Vite origins, never a LAN wildcard.
       if (!origin || LOCAL_ORIGINS.has(origin)) return callback(null, true);
+      // 2026-09-10: Mission Control is served on the LAN (MISSION_CONTROL_BIND_HOST=0.0.0.0)
+      // for the Alienware node and is embedded by the AIRI dashboard (:9150). Allow the
+      // private-network origins that reach this box; the public internet still cannot.
+      try {
+        const u = new URL(origin);
+        const privateHost = /^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(u.hostname) || u.hostname === ((process.env.NODE_LAN_HOST ?? '').trim() || '192.168.0.8');
+        if (u.protocol === 'http:' && privateHost) return callback(null, true);
+      } catch {}
       return callback(new Error('MISSION_CONTROL_ORIGIN_BLOCKED'));
     },
   }),
@@ -177,7 +186,8 @@ function synthesizeSubagent(agent: AgentDef) {
   return {
     id: agent.id,
     name: agent.name,
-    health: 'green' as const,
+    // Not probed: no heartbeat writer is attached, so this is UNKNOWN, never green.
+    health: 'amber' as const,
     updatedAt: new Date().toISOString(),
     files,
   };
@@ -265,13 +275,16 @@ app.get('/api/services', async (_req, res) => {
       name: 'Hermes',
       url: hermesHealthUrl,
       timeoutMs: 2500,
-      expectedServiceMarker: { field: 'service', allowedValues: [process.env.HERMES_EXPECTED_SERVICE?.trim() || 'hermes'] },
+      // Hermes 0.21.x answers its API server /health with {status, platform:'hermes-agent', version}
+      // (verified 2026-09-10 on :8642); the dashboard on :9119 has no service field at all.
+      expectedServiceMarker: { field: 'platform', allowedValues: [process.env.HERMES_EXPECTED_SERVICE?.trim() || 'hermes-agent'] },
     }),
     pingService({
       name: 'OpenClaw',
       url: openclawHealthUrl,
       timeoutMs: 2500,
-      expectedServiceMarker: { field: 'service', allowedValues: [process.env.OPENCLAW_EXPECTED_SERVICE?.trim() || 'openclaw'] },
+      // OpenClaw gateway /health answers {ok:true, status:'live'} (verified 2026-09-10); no service field.
+      expectedServiceMarker: { field: 'status', allowedValues: [process.env.OPENCLAW_EXPECTED_SERVICE?.trim() || 'live'] },
     }),
     pingService({
       name: 'OmniRoute',
@@ -539,9 +552,32 @@ app.post('/api/evidence/verify', async (req, res) => {
   res.status(result.state === 'BLOCKED' ? 400 : 200).json(result);
 });
 
+// ── OFFICIAL CLAUDE CLI — opened on this box, never routed through OmniRoute ──
+// Joshua 2026-09-10: Mission Control "must reach official cli claude". drift.cmd
+// (his one way in) opens the account-authenticated Claude CLI in a new window
+// on SABRETOOTH's display. Nothing is sent to any API; no key exists for Claude.
+app.post('/api/launch/claude', (req, res) => {
+  const home = process.env.USERPROFILE || 'C:\\Users\\joshi';
+  const candidates = [`${home}\\.local\\bin\\drift.cmd`, 'C:\\ANTIGRAVITY\\scripts\\drift.cmd'];
+  const drift = candidates.find((p) => existsSync(p));
+  if (!drift) return res.status(503).json({ ok: false, error: 'drift.cmd not found' });
+  try {
+    // windowsVerbatimArguments: Node would re-quote the title and `start` would treat it as the command.
+    const child = spawn('cmd.exe', ['/c', `start "Claude (official CLI)" /D "C:\\ANTIGRAVITY" "${drift}" bare`], { cwd: 'C:\\ANTIGRAVITY', detached: true, stdio: 'ignore', windowsHide: false, windowsVerbatimArguments: true });
+    child.unref();
+    console.log(`[mission-control] opened the official Claude CLI (drift bare) for ${req.ip}`);
+    return res.json({ ok: true, opened: `${drift} bare`, on: 'SABRETOOTH', from: req.ip });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err instanceof Error ? err.message : String(err) });
+  }
+});
+
 // ── DATE APP METRICS — real production data, never mock ────────────────────
 app.get('/api/dateapp/metrics', async (_req, res) => {
   try {
+    const frontendUp = await fetch('http://127.0.0.1:3200/', { signal: AbortSignal.timeout(3000) })
+      .then((r) => r.ok)
+      .catch(() => false);
     const [health, allocations] = await Promise.all([
       fetch('http://127.0.0.1:8000/api/v1/health').then(r => r.json()).catch(() => null),
       fetch('http://127.0.0.1:8000/api/v1/health/allocations/summary').then(r => r.json()).catch(() => null),
@@ -549,7 +585,7 @@ app.get('/api/dateapp/metrics', async (_req, res) => {
     res.json({
       health: health ?? { status: 'unreachable' },
       allocations: allocations ?? null,
-      frontend: { url: 'http://localhost:3200', reachable: true },
+      frontend: { url: 'http://localhost:3200', reachable: frontendUp },
       public: {
         site: 'https://youandinotai.com',
         api: 'https://api.youandinotai.com',

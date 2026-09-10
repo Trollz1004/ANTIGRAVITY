@@ -59,30 +59,24 @@
       "name": "Control planes",
       "targets": [
         {
-          "id": "paperclip",
-          "label": "Paperclip (Mission Control)",
-          "port": 3100,
-          "kind": "http",
-          "url": "http://127.0.0.1:3100/api/openapi.json",
-          "identity": "Paperclip API",
-          "fix": "paperclip"
-        },
-        {
-          "id": "ceobridge",
-          "label": "CEO bridge (Freebuff seat)",
-          "port": 3140,
-          "kind": "http",
-          "url": "http://127.0.0.1:3140/health",
-          "identity": "paperclip-freebuff-ceo-bridge",
-          "fix": "ceobridge"
-        },
-        {
           "id": "mc5",
-          "label": "Mission Control v5",
+          "label": "Mission Control v5 (:3151)",
           "port": 3151,
           "kind": "http",
-          "url": "http://127.0.0.1:3151/api/marketing/queue",
-          "fix": "mc5"
+          "url": "http://127.0.0.1:3151/",
+          "fix": "mc5",
+          "identity": "MISSION CONTROL",
+          "note": "Mission Control again as of 2026-09-10 (Joshua: \"no more paperclip\"). Identity = the dashboard title in the page. Served by mission-control-v5 (npm start); the House heals it as a required stage."
+        },
+        {
+          "id": "airi",
+          "label": "AIRI dashboard (:9150)",
+          "port": 9150,
+          "kind": "http",
+          "url": "http://127.0.0.1:9150/health",
+          "identity": "airi-dashboard",
+          "fix": "airi",
+          "note": "Agency x AIRI x OmniRoute x Mission Control page (ops/dashboard-airi), served on the LAN by server.mjs: live skills-tree agents, the Obsidian vault as the knowledge graph, Sentry state, avatar renders, OmniRoute proxied with the key server-side, Mission Control embedded, and the official Claude CLI launcher. Identity = /health service name."
         },
         {
           "id": "mc6",
@@ -100,7 +94,8 @@
           "identity": "official-vote-service",
           "fix": "votes"
         }
-      ]
+      ],
+      "note": "Paperclip (:3100) and the CEO bridge (:3140) retired from the wall 2026-09-10 on Joshua's word: \"no more paperclip\". Paperclip is parked, not healed, its ANT-Paperclip logon task disabled; the v5 dashboard on :3151 is Mission Control. History stays in git and in the judge journal."
     },
     {
       "name": "Knowledge",
@@ -149,14 +144,17 @@
       "targets": [
         {
           "id": "hermes",
-          "label": "Hermes",
+          "label": "Hermes dashboard + gateway (:9119)",
           "port": 9119,
-          "kind": "port",
-          "fix": "hermes"
+          "kind": "http",
+          "fix": "hermes",
+          "url": "http://127.0.0.1:9119/api/health",
+          "identity": "\"ok\":true",
+          "note": "Hermes Agent web dashboard (uvicorn). /api/health answers {ok, version, auth_required}; /api/status carries gateway_running and platform states. Identity = the ok flag, not the port."
         },
         {
           "id": "hermesgw",
-          "label": "Hermes gateway (paperclip-mc)",
+          "label": "Hermes API server (:8642, profile paperclip-mc)",
           "port": 8642,
           "kind": "http",
           "url": "http://127.0.0.1:8642/health",
@@ -192,16 +190,9 @@
           "kind": "port",
           "fix": null,
           "note": "BLOCKED, not merely down. mongod 8.0.29 dies at 'Initializing durable catalog' with 0xC000001D STATUS_ILLEGAL_INSTRUCTION. This CPU is an i7-4960X (Ivy Bridge-E): it has AVX but NOT AVX2. The bundled MongoDB cannot run on this hardware at any config. Fix = install a MongoDB build that does not require AVX2, or move the CRM off Mongo. No FIX button, because no restart can help."
-        },
-        {
-          "id": "pcpg",
-          "label": "Paperclip Postgres",
-          "port": 54329,
-          "kind": "port",
-          "fix": null
         }
       ],
-      "note": "crmui :3001 / crmapi :8001 retired from the wall 2026-09-03 — the CRM was folded into the monorepo 08-26 and the hosted instance is the live one; two permanent reds for services nobody starts is noise, not health."
+      "note": "crmui :3001 / crmapi :8001 retired from the wall 2026-09-03 — the CRM was folded into the monorepo 08-26 and the hosted instance is the live one; two permanent reds for services nobody starts is noise, not health. pcpg :54329 (Paperclip's embedded Postgres) retired with Paperclip 2026-09-10."
     },
     {
       "name": "Public sites",

@@ -1,6 +1,6 @@
 @echo off
 rem ═══════════════════════════════════════════════════════════════════════
-rem  drift — Joshua's one way in.                      updated 2026-09-06
+rem  drift — Joshua's one way in.                      updated 2026-09-10
 rem
 rem  Brings the whole Sabretooth stack up AND opens Claude. The bring-up runs
 rem  in its own minimized window so it never blocks the conversation: Claude
@@ -19,16 +19,20 @@ rem                     (npm run fable -- audit) and print the table; no Claude
 rem    drift wall       open FABLE'S SENTRY (http://192.168.0.8:9140/) in the browser
 rem    drift ledger     last 30 lines of the cross-node ledger (ops/buzz)
 rem    drift dns        current nameservers for the 14 project domains
+rem    drift mc         open Mission Control v5 (http://192.168.0.8:3151/) in the browser
+rem    drift avatar     open the AIRI dashboard (http://192.168.0.8:9150/): agents, vault
+rem                     graph, avatar, OmniRoute widgets, Mission Control embedded, Claude CLI
 rem    drift fable      talk to Joshua's house model joshlcoleman/Fable on the
 rem                     local Ollama (the mandatory Date App voice model,
 rem                     ruled 2026-09-06; Modelfile ops/fable-model/)
 rem
 rem  What "the stack" means today (FABLES-HOUSE.ps1 stages, in order):
 rem    PostgreSQL 5432 · Redis 6379 · OmniRoute 20128 (identity+latency probe)
-rem    Paperclip 3100 = Mission Control · Date App 3200/8000 · cloudflared tunnel
-rem    MC5 3151 (vote engine, legacy) · MC6 8787 (uptime) · Ollama 11434 (fail-safe;
+rem    Mission Control v5 3151 (the hub again; Paperclip PARKED 2026-09-10) · Date App
+rem    3200/8000 · cloudflared tunnel · AIRI dashboard 9150
+rem    MC6 8787 (uptime) · Ollama 11434 (fail-safe;
 rem    identity = joshlcoleman/Fable present) · OmniRoute is 3.8.50 since 2026-09-06
-rem    Hermes 9119 · OpenClaw 18789 · CEO bridge 3140 · Hermes gateway 8642
+rem    Hermes dashboard 9119 · OpenClaw 18789 · Hermes API 8642
 rem    vote service 9134 · FABLE'S SENTRY 9140 (the wall) · Obsidian REST 27123 (report only)
 rem  Not started here, watched by the wall: Buzz relay, Open Collective, the
 rem  public sites. Claude is the judge lane; it never routes through OmniRoute.
@@ -43,7 +47,17 @@ if /I "%~1"=="audit"  goto :audit
 if /I "%~1"=="wall"   goto :wall
 if /I "%~1"=="ledger" goto :ledger
 if /I "%~1"=="dns"    goto :dns
-if /I "%~1"=="fable"  goto :fable
+if /I "%~1"=="fable"  goto :mc
+start "" http://192.168.0.8:3151/
+exit /b 0
+
+:avatar
+start "" http://192.168.0.8:9150/
+exit /b 0
+
+:fable
+if /I "%~1"=="mc"     goto :mc
+if /I "%~1"=="avatar" goto :avatar
 
 if not exist "%HOUSE%" (
   echo [drift] FABLE'S HOUSE script not found at %HOUSE%
@@ -52,9 +66,9 @@ if not exist "%HOUSE%" (
 )
 
 rem Minimized so it never steals focus or the cursor. No -Watchdog here on
-rem purpose: fables-house-watchdog.cmd already runs from Startup and guards
-rem the stack silently, file-log only. Starting a second one would double
-rem every heal and break the no-spam rule.
+rem purpose: the bring-up spawns the silent watchdog itself (2026-09-10; the
+rem Startup-folder launcher is retired, the logon task runs the House elevated).
+rem The House keeps ONE watchdog alive; a second would double every heal.
 echo [drift] Bringing FABLE'S HOUSE up in the background...
 start "FABLE'S HOUSE - bring-up" /min powershell -NoProfile -ExecutionPolicy Bypass -File "%HOUSE%"
 
