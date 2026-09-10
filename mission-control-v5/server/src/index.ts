@@ -562,8 +562,9 @@ app.post('/api/launch/claude', (req, res) => {
   const drift = candidates.find((p) => existsSync(p));
   if (!drift) return res.status(503).json({ ok: false, error: 'drift.cmd not found' });
   try {
-    // windowsVerbatimArguments: Node would re-quote the title and `start` would treat it as the command.
-    const child = spawn('cmd.exe', ['/c', `start "Claude (official CLI)" /D "C:\\ANTIGRAVITY" "${drift}" bare`], { cwd: 'C:\\ANTIGRAVITY', detached: true, stdio: 'ignore', windowsHide: false, windowsVerbatimArguments: true });
+    // VERIFIED 2026-09-10: Start-Process cmd /k "<drift>" bare opens a visible console with the
+    // official CLI inside; `cmd /c start ...` from a hidden server never showed a window.
+    const child = spawn('powershell.exe', ['-NoProfile', '-Command', `Start-Process cmd.exe -ArgumentList '/k','"${drift}" bare' -WorkingDirectory 'C:\ANTIGRAVITY'`], { detached: true, stdio: 'ignore', windowsHide: true });
     child.unref();
     console.log(`[mission-control] opened the official Claude CLI (drift bare) for ${req.ip}`);
     return res.json({ ok: true, opened: `${drift} bare`, on: 'SABRETOOTH', from: req.ip });

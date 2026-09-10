@@ -220,9 +220,10 @@ createServer(async (req, res) => {
     const drift = join(process.env.USERPROFILE || 'C:\\Users\\joshi', '.local', 'bin', 'drift.cmd');
     const cmd = existsSync(drift) ? drift : join(REPO, 'scripts', 'drift.cmd');
     try {
-      // windowsVerbatimArguments: Node would re-quote the title as \"...\" and `start`
-      // then treats it as the command. Verbatim keeps: start "title" "path" bare
-      const c = spawn('cmd.exe', ['/c', `start "Claude (official CLI)" /D "${REPO}" "${cmd}" bare`], { cwd: REPO, detached: true, stdio: 'ignore', windowsHide: false, windowsVerbatimArguments: true });
+      // VERIFIED 2026-09-10: `cmd /k "<drift>" bare` via Start-Process opens a visible
+      // console that stays up with the official CLI inside it. `cmd /c start ...`
+      // from a hidden server never showed a window.
+      const c = spawn('powershell.exe', ['-NoProfile', '-Command', `Start-Process cmd.exe -ArgumentList '/k','"${cmd}" bare' -WorkingDirectory '${REPO}'`], { detached: true, stdio: 'ignore', windowsHide: true });
       c.unref();
       console.log(new Date().toISOString(), 'launch claude from', req.socket.remoteAddress);
       return send(res, 200, { ok: true, opened: cmd + ' bare', on: 'SABRETOOTH', from: req.socket.remoteAddress });
