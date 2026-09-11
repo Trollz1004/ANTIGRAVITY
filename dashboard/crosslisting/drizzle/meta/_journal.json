@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1787730306788,
+      "tag": "0000_clammy_brood",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1787731582824,
+      "tag": "0001_cynical_king_bedlam",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1787732214912,
+      "tag": "0002_acoustic_captain_universe",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1787733026006,
+      "tag": "0003_military_joseph",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1787733368318,
+      "tag": "0004_colossal_purifiers",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1787783323808,
+      "tag": "0005_bright_giant_girl",
+      "breakpoints": true
+    }
+  ]
+}

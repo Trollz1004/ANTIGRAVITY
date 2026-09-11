@@ -1,0 +1,1 @@
+ALTER TABLE `credential_connections` ADD `secretRef` varchar(512);
