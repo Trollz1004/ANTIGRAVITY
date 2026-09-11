@@ -215,7 +215,7 @@ const normalizeToolChoice = (
 const resolveApiUrl = () =>
   ENV.forgeApiUrl && ENV.forgeApiUrl.trim().length > 0
     ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/chat/completions`
-    : "https://forge.manus.im/v1/chat/completions";
+    : "http://127.0.0.1:20128/v1/chat/completions";
 
 const assertApiKey = () => {
   if (!ENV.forgeApiKey) {
@@ -437,7 +437,7 @@ export async function listLLMModels(): Promise<ModelsResponse> {
 
   const url = ENV.forgeApiUrl && ENV.forgeApiUrl.trim().length > 0
     ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/models`
-    : "https://forge.manus.im/v1/models";
+    : "http://127.0.0.1:20128/v1/chat/completions";
 
   const response = await fetchWithBackoff(url, {
     headers: { authorization: `Bearer ${ENV.forgeApiKey}` },
