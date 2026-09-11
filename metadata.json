@@ -1,0 +1,6 @@
+{
+  "name": "DIY NAS & Web Host Setup Guide",
+  "description": "An interactive guide for setting up a PC as a Network Attached Storage (NAS) and web hosting server, featuring step-by-step instructions and AI-powered assistance for troubleshooting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
