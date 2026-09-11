@@ -127,7 +127,10 @@ describe('JARVIS wiring regressions (judge findings)', () => {
     expect(src).toMatch(/await import\('three'\)/)
   })
 
-  it('no personal ssh usernames in the page', () => {
+  it('no personal ssh usernames in the page or server', () => {
     expect(html).not.toMatch(/ssh\s+joshi@/)
+    const server = fs.readFileSync(path.resolve(__dirname, '..', 'server.mjs'), 'utf-8')
+    expect(server).not.toMatch(/joshi@/)
+    expect(server).not.toMatch(/Users\\joshi|Users\/joshi/)
   })
 })

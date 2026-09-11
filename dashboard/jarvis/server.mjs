@@ -172,7 +172,7 @@ createServer(async (req, res) => {
       host, lanIp: LAN_IP, omniRoute: OMNI, omniProxy: '/api/omni',
       missionControl: `http://${host}:3151/`, hermesDashboard: `http://${host}:9119/`, sentry: `http://${host}:9140/`,
       vault: { path: VAULT, name: VAULT_NAME, rest: OBSIDIAN_REST },
-      claude: { launch: '/api/launch/claude', command: 'drift bare', note: 'Opens the official Claude CLI in a new window on SABRETOOTH. From another node: ssh joshi@' + LAN_IP + ' then drift bare.' },
+      claude: { launch: '/api/launch/claude', command: 'drift bare', note: 'Opens the official Claude CLI in a new window on this host. From another node: ssh <user>@' + LAN_IP + ' then drift bare.' },
       at: new Date().toISOString(),
     });
   }
