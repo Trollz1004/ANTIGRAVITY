@@ -38,6 +38,7 @@ export function createGlobe(container, opts = {}) {
         navigationHelpButton: false,
         fullscreenButton: false,
         infoBox: false,
+        baseLayer: false,
         selectionIndicator: false,
         terrainProvider: new Cesium.EllipsoidTerrainProvider(),
       })

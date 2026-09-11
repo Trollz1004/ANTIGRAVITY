@@ -94,3 +94,40 @@ describe('JARVIS avatar billboard', () => {
     expect(avatarMod.DEFAULT_AVATAR_URL).toMatch(/avatar\.(glb|vrm)/)
   })
 })
+
+
+describe('JARVIS wiring regressions (judge findings)', () => {
+  let fs, path, html
+  beforeAll(async () => {
+    fs = (await import('fs')).default
+    path = (await import('path')).default
+    html = fs.readFileSync(path.resolve(__dirname, '..', 'index.html'), 'utf-8')
+  })
+
+  it('every nav data-tab has a matching tab-<name> section', () => {
+    const tabs = [...html.matchAll(/data-tab="([^"]+)"/g)].map(m => m[1])
+    expect(tabs.length).toBeGreaterThan(0)
+    for (const tab of tabs) {
+      expect(html, 'missing section id="tab-' + tab + '"').toContain('id="tab-' + tab + '"')
+    }
+  })
+
+  it('jarvis modules use the /api/omni proxy, never a direct OmniRoute URL', () => {
+    const base = path.resolve(__dirname, '..', 'js')
+    for (const f of ['jarvis/jarvis.js', 'hermes-voice.js']) {
+      const src = fs.readFileSync(path.join(base, f), 'utf-8')
+      expect(src, f + ' hardcodes OmniRoute').not.toMatch(/127[.]0[.]0[.]1:20128|localhost:20128|192[.]168[.]0[.]8:20128/)
+      expect(src).toContain('/api/omni')
+    }
+  })
+
+  it('avatar init does not depend on window.THREE global', () => {
+    const src = fs.readFileSync(path.resolve(__dirname, '..', 'js', 'jarvis', 'jarvis.js'), 'utf-8')
+    expect(src).not.toMatch(/window[.]THREE/)
+    expect(src).toMatch(/await import\('three'\)/)
+  })
+
+  it('no personal ssh usernames in the page', () => {
+    expect(html).not.toMatch(/ssh\s+joshi@/)
+  })
+})

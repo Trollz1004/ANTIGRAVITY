@@ -5,7 +5,8 @@
 // But: uses browser Web Speech API (SpeechRecognition + speechSynthesis)
 // instead of OpenAI Realtime, and OmniRoute for the brain. Zero credentials.
 
-const OMNI = 'http://127.0.0.1:20128/v1';
+// OmniRoute via server proxy — no keys in the browser.
+const OMNI = '/api/omni';
 const STATUS = { idle: 'OFF', listening: 'LISTENING', thinking: 'THINKING', speaking: 'SPEAKING', error: 'ERROR' };
 
 const hermesVoice = {

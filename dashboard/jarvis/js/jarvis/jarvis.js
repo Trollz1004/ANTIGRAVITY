@@ -15,7 +15,8 @@
 import { createGlobe } from './globe.js';
 import { loadAvatar, DEFAULT_AVATAR_URL } from './avatar.js';
 
-const OMNI = 'http://127.0.0.1:20128/v1';
+// All OmniRoute calls go through the server proxy — key stays server-side.
+const OMNI = '/api/omni';
 
 // ── State ────────────────────────────────────────────────────────────────────
 
@@ -285,9 +286,11 @@ function initJarvis() {
 
   // Avatar billboard (three.js if available)
   const avatarHost = document.getElementById('jarvis-avatar');
-  if (avatarHost && typeof window !== 'undefined' && window.THREE) {
+  if (avatarHost) {
+    (async () => {
     try {
-      const THREE = window.THREE;
+      const THREE = await import('three');
+      const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
       camera.position.set(0, 1.2, 3);
@@ -296,7 +299,7 @@ function initJarvis() {
       avatarHost.appendChild(renderer.domElement);
       scene.add(new THREE.AmbientLight(0xffffff, 1));
       loadAvatar(THREE, scene, DEFAULT_AVATAR_URL, {
-        GLTFLoader: window.GLTFLoader,
+        GLTFLoader,
         position: [0, 0, 0],
         scale: 1,
       }).then((handle) => {
@@ -312,6 +315,7 @@ function initJarvis() {
     } catch (e) {
       console.warn('[JARVIS] avatar three:', e);
     }
+    })();
   }
 
   // Initial greeting

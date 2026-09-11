@@ -1,6 +1,6 @@
 /* JARVIS HUD — Ironman-style rotating rings and status panels */
 
-#tab-hermes-jarvis {
+#tab-jarvis {
   background: radial-gradient(ellipse at center, #0a1628 0%, #050a14 70%, #000 100%);
   padding: 0;
 }
