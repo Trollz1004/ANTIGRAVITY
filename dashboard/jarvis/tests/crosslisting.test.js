@@ -4,9 +4,9 @@ import path from 'path'
 
 const root = path.resolve(__dirname, '..')
 
-// The cleaned crosslisting package lives in the PR working tree; allow override.
+// The crosslisting package is a sibling of jarvis in dashboard/; allow override.
 const pkgRoot = process.env.CROSSLISTING_ROOT
-  || 'C:/Users/joshi/AppData/Local/Temp/hermes-jarvis-pr/dashboard/crosslisting'
+  || path.resolve(root, '..', 'crosslisting')
 
 describe('Crosslisting dashboard attachment', () => {
   let html, js
