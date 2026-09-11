@@ -1,6 +1,6 @@
 ---
-last_session: 2026-09-07
-total_sessions: 2
+last_session: 2026-09-11
+total_sessions: 3
 model: stepfun/step-3.7-flash
 provider: nous
 omniroute: http://192.168.0.8:20128/v1
@@ -56,3 +56,25 @@ caveman_skills: 7
 - [ ] Add more skills.sh topic skills as needed
 - [ ] Update Obsidian vault path when configured
 - [ ] Monitor Nous free model availability
+
+## 2026-09-11 (Claude Code, Alienware node 192.168.0.40)
+
+### Decisions
+- Added `CLAUDE.md` (repo guide and session protocol) and a global `~/.claude/CLAUDE.md`.
+- Every session: read memory at start, then activate caveman, brainstorm and test-driven-development. Write memory at end.
+- Claude and Codex are the only judge lanes with push and merge permission. Claude pushes and merges its own work.
+- 90% pass rule: merge only when at least 90% of the affected tests pass.
+- This machine is the Alienware node (192.168.0.40), host of the Dream Online MMO and the dashboard. OmniRoute (:20128/v1) is on Sabertooth (192.168.0.8), not here.
+
+### Changes
+- `CLAUDE.md` (new), `skills/session-memory/memory.md` (this block)
+- Outside the repo: `~/.claude/CLAUDE.md`, and Claude project memory (session-protocol, git-authority, pass-rule-90, node-alienware)
+
+### Lessons
+- The jarvis test suite on master passes 32/35. `tests/crosslisting.test.js` hardcodes a stale temp `pkgRoot`. Set `CROSSLISTING_ROOT` and the suite passes 35/35.
+- `gh`, `pnpm` and `python` are not installed on this node.
+
+### Carry-forward TODOs
+- [ ] Change the `pkgRoot` default in `dashboard/jarvis/tests/crosslisting.test.js` to a repo-relative path
+- [ ] Install pnpm (`corepack enable`) and get a crosslisting test baseline
+- [ ] Change the `NODE_LAN_IP` default for this node (192.168.0.40) or document the env var in a launcher
