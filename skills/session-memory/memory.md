@@ -74,7 +74,14 @@ caveman_skills: 7
 - The jarvis test suite on master passes 32/35. `tests/crosslisting.test.js` hardcodes a stale temp `pkgRoot`. Set `CROSSLISTING_ROOT` and the suite passes 35/35.
 - `gh`, `pnpm` and `python` are not installed on this node.
 
+- Later in the session: the `.env` (gitignored, copied from Sabertooth) was retargeted to this node (node name, IP, root paths). Each unreachable Sabertooth service got a comment. No secret values were touched or printed.
+- Fixed the `pkgRoot` default in `dashboard/jarvis/tests/crosslisting.test.js` to a repo-relative path. The jarvis suite now passes 35/35.
+- The user works from this node about 99% of the time. A new Obsidian vault for this node is planned.
+- The user is upgrading to Windows 11 right after this session.
+
 ### Carry-forward TODOs
-- [ ] Change the `pkgRoot` default in `dashboard/jarvis/tests/crosslisting.test.js` to a repo-relative path
+- [ ] Create the new Obsidian vault for the Alienware node, then set `OBSIDIAN_VAULT_*` and `OBSIDIAN_REST_URL` in `.env`
+- [ ] Make `dashboard/jarvis/server.mjs` read `NODE_LAN_IP` from `.env`. It reads only `process.env` today, and its default is still 192.168.0.8
 - [ ] Install pnpm (`corepack enable`) and get a crosslisting test baseline
-- [ ] Change the `NODE_LAN_IP` default for this node (192.168.0.40) or document the env var in a launcher
+- [ ] Push `master` to origin. The user must sign in to GitHub once (Git Credential Manager has no stored login)
+- [ ] After the Windows 11 upgrade, re-check node, git and credential setup
