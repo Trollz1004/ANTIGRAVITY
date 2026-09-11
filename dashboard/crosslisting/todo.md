@@ -1,0 +1,61 @@
+# Project TODO
+
+- [x] Establish LLC-only terminology across the dashboard, documentation, and configuration labels.
+- [x] Create canonical product, media, inventory, channel-listing, approval, rule, exception, and activity-log database models.
+- [x] Add inventory reservation and sold-item synchronization logic that prevents available quantity from becoming negative.
+- [ ] Build backend procedures for creating, editing, validating, approving, and submitting canonical catalog records.
+- [ ] Create capability-gated channel adapters for eBay, Google Merchant, Facebook Marketplace, Mercari, and Poshmark, with unsupported channels held in review mode.
+- [ ] Add secure server-side configuration models for LLC-owned marketplace credentials, policy mappings, fulfillment defaults, listing rules, and channel enablement; never return secret values to the browser.
+- [ ] Implement eBay integration seams for authorized inventory import, listing create/revise requests, explicit approval checks, and immutable activity logging.
+- [x] Build an elegant internal dashboard using the provided dashboard layout with catalog, listing workflow, inventory, exceptions, activity, and settings views.
+- [x] Create channel-specific payload previews and required-field validation before any submission workflow can run.
+- [x] Add an exception/review queue for incomplete, unsupported, invalid, or failed listing workflows.
+- [x] Add AI-assisted title, description, category, and attribute drafting with source-grounding, review-required, and no-auto-publish safeguards.
+- [x] Add unit tests for approval gating, inventory reservation, unsupported-channel blocking, payload validation, and secret redaction.
+- [x] Verify responsive dashboard rendering, run tests and type checks, and capture final visual validation.
+- [ ] Package the implementation and document the LLC-owned credential inputs required to activate authorized marketplace connections.
+- [x] Store each marketplace credential exclusively as a server-side environment secret and never echo, persist, log, or serialize its value to the browser.
+- [x] Add a credential-status interface that exposes only non-sensitive connection state and never displays secret material.
+- [x] Create a non-secret server configuration template containing only LLC-owned marketplace variable names and safe setup guidance.
+- [x] Inspect the authorized `[redacted]` GitHub repositories and any nominated Emergent repository before copying, merging, or executing third-party code.
+- [x] Record license, attribution, and branding requirements for each approved external component in a visible credits area and project documentation.
+- [x] Add isolated automation-profile records with scoped capabilities, memory references, skill assignments, owner controls, and complete activity logging.
+- [x] Add a unified operations view that correlates marketplace actions, service events, approvals, exceptions, and automation-profile activity.
+- [x] Define service boundaries and deployment options for approved SaaS microservices without granting any profile unrestricted control or unlogged publishing authority.
+- [ ] Create and maintain the LLC Crosslisting OS in a separate private `[redacted]` repository while preserving `saas-microservices` as an unchanged reusable template.
+- [x] Inspect `Ai-Solutions-Store/EMERGENT-if-self-hosted-EMERGENT-GETS-CREDIT-AND-FREEM-BRANDING-MANDATORY-` and `Ai-Solutions-Store/revenue-first-products` as untrusted reference sources before copying or executing code.
+- [x] Capture and display all mandatory upstream credit and branding terms for any approved self-hosted Emergent component.
+- [x] Keep repository secret values non-exportable; request only LLC-authorized deployment credentials through secure server-side settings.
+- [x] Require a clean, secret-free component boundary and completed attribution review before integrating any code from the nominated repositories.
+- [x] Review all LLC Crosslisting OS copy, labels, documentation, and configuration names to remove excluded organization and revenue-sharing language.
+- [x] Inspect the Hermes handoff as untrusted reference material and translate only approved profile, memory, skill, and audit concepts into the LLC-controlled profile model.
+- [x] Keep all current product, listing, credential, profile, and activity workflows within the independently controlled LLC scope unless the user explicitly changes that operating policy.
+- [x] Add a dedicated inventory view with on-hand, reserved, and available quantities plus audited receive, reserve, release, and sale actions.
+- [x] Persist channel-specific listing payload previews, bind them to preflight validation, and route incomplete work to the exception queue.
+- [x] Add a visible credits area for any approved upstream component and keep all source components unapproved until their full terms are reviewed.
+- [x] Complete a redacted review of the Hermes handoff and document only the adopted memory, skill, authorization, and audit concepts.
+- [x] Add channel sold-event ingestion, idempotent reconciliation, and cross-channel quantity synchronization with activity and exception records.
+- [x] Add a dedicated Activity view that correlates catalog, inventory, listing, approval, channel, profile, exception, and system events.
+- [x] Expand the visible Credits view with the exact reviewed Emergent attribution surfaces that would apply to an approved component.
+- [x] Update related channel listing payload quantities and states after a reconciled sale, recording every synchronization outcome.
+- [x] Create and decide approval requests with correlation IDs, then display grouped activity, approval, and exception records together.
+- [x] Wire listing approval requests and decisions into the dashboard, then include complete approval history and system events in each correlation group.
+- [x] Reuse one correlation ID across listing previews, exceptions, approval requests, approval decisions, and system validation events.
+- [ ] Validate the production eBay OAuth refresh-token exchange with the required LLC-owned Sell API scopes before enabling the adapter.
+- [ ] Complete the production eBay refresh-token consent flow through the authorized account session without exposing account credentials or tokens in chat.
+- [x] Add a server-side eBay OAuth callback that validates state and exchanges a production authorization code for a refresh token without returning it to the browser.
+- [ ] Configure the matching production eBay Redirect URL and use the generated RuName to complete the seller consent flow.
+- [ ] Register the deployment-hosted LLC Crosslisting OS callback URL as the production eBay Redirect URL; retain the Square site only as the public application-information link.
+- [x] Deliver a copy-paste Raycast prompt for a Windows-local test workspace under the specified OneDrive path, with secret-safe setup, smoke tests, and rollback instructions.
+- [x] Inspect the connected local [redacted]/Hermes page at the user-provided address as reference data only.
+- [x] Compare its ports, services, paths, and environment-variable conventions against the Windows-local Raycast prompt.
+- [x] Revise and redeliver the Raycast prompt with conflict-safe [redacted]/Hermes integration guidance.
+- [x] Add Sentry-style service health semantics to the local setup prompt: distinguish reachability, identity, write health, and wrong-service responses.
+- [x] Add Redis MISCONF/read-only and closed-port handling to the local smoke-test and rollback rules.
+- [x] Add presence-only checks for local `.env`, Windows environment variables, and secure project configuration, reporting variable names and source location without values.
+- [x] Instruct Raycast to reuse existing configured credentials and stop before issuing replacements unless a named value is missing or invalid.
+- [x] Correct the local setup command names to match the repository scripts and require operator confirmation before any database migration.
+- [x] Audit the populated workspace for tracked secrets, local runtime artifacts, and missing ignore rules before repository seeding.
+- [x] Seed `[redacted]/llc-crosslisting-os` from the populated LLC Crosslisting OS workspace without touching the reusable template repository.
+- [x] Verify the private repository has a commit and excludes `.env`, tokens, cookies, local databases, and runtime logs.
+- [x] Update the local setup prompt so Raycast knows the repository is seeded and can clone it without deleting an existing valid workspace.

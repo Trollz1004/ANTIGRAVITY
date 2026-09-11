@@ -38,6 +38,7 @@
         <li class="nav-tab" data-tab="claude"><span class="nav-icon">✦</span> Claude CLI</li>
         <li class="nav-tab" data-tab="hermes"><span class="nav-icon">🎙</span> Hermes AI</li>
         <li class="nav-tab" data-tab="jarvis"><span class="nav-icon">⬢</span> JARVIS</li>
+        <li class="nav-tab" data-tab="crosslisting"><span class="nav-icon">◫</span> Crosslisting</li>
       </ul>
       <div class="sidebar-footer">
         <div class="omni-status">
@@ -332,11 +333,30 @@
           </div>
         </div>
       </section>
+      <!-- Crosslisting Tab -->
+      <section id="tab-crosslisting" class="tab-content">
+        <header class="tab-header">
+          <h2>Crosslisting</h2>
+          <p class="tab-desc">Catalog, inventory, and marketplace listing controls. Local app on port 3000.</p>
+        </header>
+        <div class="widget-card" style="max-width:900px;margin-bottom:16px">
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+            <span id="crosslisting-status" class="voice-status voice-status-idle">CHECKING</span>
+            <a class="btn primary" href="http://127.0.0.1:3000/" target="_blank" rel="noopener">Open app</a>
+            <button id="crosslisting-refresh" class="btn">Refresh status</button>
+          </div>
+          <p id="crosslisting-detail" class="tab-desc" style="margin-top:12px">Checking local service...</p>
+        </div>
+        <div id="crosslisting-embed">
+          <iframe id="crosslisting-frame" title="Crosslisting" src="http://127.0.0.1:3000/" style="width:100%;height:calc(100vh - 220px);border:1px solid var(--border);border-radius:var(--radius-lg);background:#0d1117"></iframe>
+        </div>
+      </section>
     </main>
   </div>
 
   <script type="module" src="js/app.js"></script>
   <script type="module" src="js/hermes-voice.js"></script>
   <script type="module" src="js/jarvis/jarvis.js"></script>
+  <script type="module" src="js/crosslisting.js"></script>
 </body>
 </html>
