@@ -55,7 +55,7 @@ npm ci
 npx vitest run          # 3 files, 35 tests
 node server.mjs         # http://0.0.0.0:9150 (AIRI_DASHBOARD_PORT)
 ```
-Known issue: `tests/crosslisting.test.js` defaults `pkgRoot` to a stale temp path (`C:/Users/joshi/AppData/Local/Temp/hermes-jarvis-pr/...`). Without an override, 3 "package cleanliness" tests fail (32/35). To fix, set `CROSSLISTING_ROOT` to the absolute path of `dashboard/crosslisting`. The suite then passes 35/35.
+`tests/crosslisting.test.js` reads the sibling `dashboard/crosslisting` package. Override its location with `CROSSLISTING_ROOT`.
 
 **Crosslisting** (`dashboard/crosslisting`, pnpm; pnpm is not installed on this machine yet, so use `npx pnpm` or `corepack enable`):
 ```bash
