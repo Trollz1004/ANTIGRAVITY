@@ -1,0 +1,187 @@
+/* JARVIS HUD — Ironman-style rotating rings and status panels */
+
+#tab-jarvis {
+  background: radial-gradient(ellipse at center, #0a1628 0%, #050a14 70%, #000 100%);
+  padding: 0;
+}
+
+.jarvis-hud-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#jarvis-hud {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jarvis-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+}
+
+.jarvis-title {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  background: linear-gradient(135deg, #58a6ff, #00d4ff, #00ff41);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+}
+
+.jarvis-state-badge {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+}
+
+.jarvis-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  background: var(--text-muted);
+}
+.jarvis-dot-idle { background: var(--text-muted); }
+.jarvis-dot-listening { background: #00ff41; box-shadow: 0 0 8px #00ff41; animation: pulse 1.5s infinite; }
+.jarvis-dot-thinking { background: var(--warning); box-shadow: 0 0 8px var(--warning); animation: pulse 0.8s infinite; }
+.jarvis-dot-speaking { background: var(--cyber-blue); box-shadow: 0 0 8px var(--cyber-blue); animation: pulse 0.4s infinite; }
+.jarvis-dot-error { background: var(--error); box-shadow: 0 0 8px var(--error); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Floating metric panels */
+.jarvis-metrics {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 3;
+}
+
+.jarvis-metric {
+  background: rgba(22, 27, 34, 0.85);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  min-width: 120px;
+}
+
+.jarvis-metric-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.jarvis-metric-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 2px;
+}
+
+.jarvis-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 3;
+}
+
+.jarvis-controls .btn {
+  font-size: 14px;
+  padding: 10px 16px;
+}
+
+.jarvis-controls .chat-input {
+  width: 260px;
+}
+
+/* Chat log */
+.jarvis-log {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 280px;
+  max-height: 40vh;
+  overflow-y: auto;
+  background: rgba(22, 27, 34, 0.85);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  z-index: 3;
+}
+
+.jarvis-msg {
+  margin-bottom: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.jarvis-msg-name {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  margin-right: 6px;
+}
+
+.jarvis-msg-jarvis .jarvis-msg-name { color: #58a6ff; }
+.jarvis-msg-user .jarvis-msg-name { color: #00ff41; }
+
+.jarvis-msg-user { color: var(--text-secondary); }
+.jarvis-msg-jarvis { color: var(--text-primary); }
+
+
+.jarvis-globe {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.55;
+  pointer-events: none;
+}
+.jarvis-avatar {
+  position: absolute;
+  right: 24px;
+  bottom: 80px;
+  width: 180px;
+  height: 260px;
+  z-index: 4;
+  pointer-events: none;
+}
+.jarvis-hud-container > #jarvis-hud,
+.jarvis-hud-container > .jarvis-center,
+.jarvis-hud-container > .jarvis-metrics,
+.jarvis-hud-container > .jarvis-log,
+.jarvis-hud-container > .jarvis-controls {
+  z-index: 5;
+}
