@@ -1,22 +1,31 @@
 #!/usr/bin/env node
 /**
- * AIRI dashboard server — serves ops/dashboard-airi on the LAN and gives the page
+ * JARVIS dashboard server — serves dashboard/jarvis on the LAN and gives the page
  * REAL data with no keys in the browser.
  *
- *   node ops/dashboard-airi/server.mjs            # http://0.0.0.0:9150  (LAN: http://192.168.0.8:9150)
+ *   node server.mjs            # http://0.0.0.0:9150  (LAN: http://<NODE_LAN_IP>:9150)
+ *
+ * Configuration: process.env > <repo>/.env > derived defaults (lib/config.mjs).
+ * Start it from a plain shell, not from inside a Claude Code terminal.
  *
  * Routes (all JSON unless noted):
- *   GET  /                      the dashboard (static files from this folder)
+ *   GET  /                      the dashboard (static files from this folder; lib/, tests/, server.mjs are never served)
  *   GET  /api/config            where things live, computed for the caller's host
- *   ANY  /api/omni/<path>       proxy -> OmniRoute /v1/<path> with OMNI_ROUTE_API_KEY from C:\ANTIGRAVITY\.env
- *   GET  /api/agents            every loadable skill in .agents/skills (name, description, category) — live directory read
- *   GET  /api/vault/graph       Obsidian vault notes + [[wikilinks]] as nodes/links (vault C:\ANTIGRAVITY\Antigravity)
+ *   ANY  /api/omni/<path>       proxy -> OmniRoute /v1/<path> with OMNI_ROUTE_API_KEY from the repo .env
+ *   GET  /api/agents            every loadable skill (SKILL.md frontmatter) — live directory read
+ *   GET  /api/nodes             god's-eye view: both LAN nodes, every service identity-probed (lib/nodes.mjs)
+ *   GET  /api/vault/graph       Obsidian vault notes + [[wikilinks]] as nodes/links
  *   GET  /api/vault/note?p=     one note's markdown (path relative to the vault)
  *   GET  /api/vault/status      is the Obsidian Local REST API answering on :27123 (identity checked)
  *   GET  /api/house             FABLE'S SENTRY snapshot (real service state, identity-checked)
  *   GET  /api/avatars           rendered avatar PNGs in ops/avatar/out
  *   GET  /avatars/<file>        those PNGs
- *   POST /api/launch/claude     open the official Claude CLI on this box (drift.cmd bare) in a new window
+ *   GET  /api/claude/status     Claude CLI bridge capability (lib/bridge-routes.mjs; local-only unless DASHBOARD_BRIDGE_TOKEN)
+ *   POST /api/claude/chat       headless `claude -p` streamed as Server-Sent Events
+ *   POST /api/claude/stop       kill the running bridge child
+ *   POST /api/launch/claude     open the official Claude CLI in a console on this host
+ *   GET  /api/ollama/tags       local Ollama models
+ *   POST /api/ollama/chat       local Ollama chat streamed as Server-Sent Events
  *   GET  /health                {service:"airi-dashboard"}  <- identity string for the wall
  *
  * Zero dependencies. Secrets are read from .env at request time and never logged or returned.
@@ -28,7 +37,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
 import { resolveConfig, readEnvFile } from './lib/config.mjs';
 import { probeAll } from './lib/nodes.mjs';
-import { runClaude, resolveClaudeBinary, bridgeAccess, sse, PERMISSION_MODES, PERSONAS } from './lib/claude-bridge.mjs';
+import { resolveClaudeBinary, killTree, PERMISSION_MODES, PERSONAS } from './lib/claude-bridge.mjs';
+import { handleBridgeRoutes } from './lib/bridge-routes.mjs';
 import { hostname } from 'node:os';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -160,9 +170,13 @@ function serveStatic(res, rel) {
 }
 
 // ── server ────────────────────────────────────────────────────────────────────
+// Bridge + Ollama routes (lib/bridge-routes.mjs) run first: no wildcard CORS, origin-checked, local-only by default.
+const BRIDGE_DEPS = { cfg: CFG, envValue, spawn, killTree: (child) => killTree(child, { spawn }), resolveBinary: () => resolveClaudeBinary(), fetch: globalThis.fetch };
+
 createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   const p = url.pathname;
+  if (await handleBridgeRoutes(req, res, BRIDGE_DEPS)) return;
   if (req.method === 'OPTIONS') { res.writeHead(204, { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET,POST,OPTIONS' }); return res.end(); }
 
   if (p === '/favicon.ico') { res.writeHead(200, { 'content-type': 'image/svg+xml', 'cache-control': 'max-age=86400' }); return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0d1117"/><circle cx="16" cy="16" r="9" fill="none" stroke="#58a6ff" stroke-width="3"/><circle cx="16" cy="16" r="3" fill="#3fb950"/></svg>'); }
@@ -224,45 +238,6 @@ createServer(async (req, res) => {
     if (!full.startsWith(resolve(AVATARS) + sep) || !existsSync(full)) return send(res, 404, { error: 'not found' });
     res.writeHead(200, { 'content-type': MIME[extname(full).toLowerCase()] || 'application/octet-stream' });
     return res.end(readFileSync(full));
-  }
-  // ── Claude CLI bridge (lib/claude-bridge.mjs) ──────────────────────────────
-  const gate = bridgeAccess({ token: envValue('DASHBOARD_BRIDGE_TOKEN') });
-  if (p === '/api/claude/status') {
-    const bin = resolveClaudeBinary();
-    const access = gate(req.socket);
-    return send(res, 200, { bin: bin === 'claude' ? 'claude (PATH)' : bin, installed: bin !== 'claude' || existsSync(bin), access: access.ok, reason: access.reason, cwd: REPO, personas: Object.keys(PERSONAS), permissionModes: PERMISSION_MODES });
-  }
-  if (p === '/api/claude/chat' && req.method === 'POST') {
-    const access = gate({ remoteAddress: req.socket.remoteAddress, headers: req.headers });
-    if (!access.ok) return send(res, 403, { error: 'bridge refused: ' + access.reason });
-    let body = {};
-    try { body = JSON.parse((await readBody(req)).toString('utf8') || '{}'); } catch { return send(res, 400, { error: 'body must be JSON' }); }
-    const prompt = String(body.prompt || '').trim();
-    if (!prompt) return send(res, 400, { error: 'prompt required' });
-    res.writeHead(200, { 'content-type': 'text/event-stream', 'cache-control': 'no-store', connection: 'keep-alive', 'access-control-allow-origin': '*', 'x-accel-buffering': 'no' });
-    let run;
-    try {
-      run = runClaude({
-        prompt, cwd: REPO, sessionId: body.sessionId || '', persona: body.persona || 'claude',
-        permissionMode: body.permissionMode || 'plan', maxTurns: body.maxTurns || 6, model: body.model || '',
-        lean: typeof body.lean === 'boolean' ? body.lean : undefined,
-        onEvent: (ev) => { try { res.write(sse(ev.type, ev)); if (ev.type === 'exit') res.end(); } catch {} },
-      });
-    } catch (e) { res.write(sse('error', { message: String(e.message || e) })); return res.end(); }
-    console.log(new Date().toISOString(), 'claude bridge', body.persona || 'claude', 'from', req.socket.remoteAddress, 'session', body.sessionId || 'new');
-    req.on('close', () => { try { if (run.child.exitCode === null) run.child.kill(); } catch {} });
-    return;
-  }
-  if (p === '/api/launch/claude' && req.method === 'POST') {
-    // Opens the official CLI interactively in a visible console on THIS host.
-    // VERIFIED 2026-09-10 (drift era): `cmd /k` via Start-Process is what actually shows a window from a hidden server.
-    const bin = resolveClaudeBinary();
-    try {
-      const c = spawn('powershell.exe', ['-NoProfile', '-Command', `Start-Process cmd.exe -ArgumentList '/k','"${bin}"' -WorkingDirectory '${REPO}'`], { detached: true, stdio: 'ignore', windowsHide: true, env: { ...process.env, CLAUDECODE: undefined } });
-      c.unref();
-      console.log(new Date().toISOString(), 'launch claude from', req.socket.remoteAddress);
-      return send(res, 200, { ok: true, opened: bin, on: (CFG.nodeName || hostname()).toUpperCase(), from: req.socket.remoteAddress });
-    } catch (e) { return send(res, 500, { ok: false, error: String(e.message || e) }); }
   }
 
   if (p === '/' || p === '/index.html') return serveStatic(res, '/index.html');
