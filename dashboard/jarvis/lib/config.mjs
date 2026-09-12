@@ -1,0 +1,56 @@
+/**
+ * Server configuration for the JARVIS dashboard — pure functions, no side effects.
+ *
+ * Precedence for every setting: process.env > the repo's .env file > a derived default.
+ * The repo root defaults to two levels above this server folder (dashboard/jarvis),
+ * so the server works wherever the repo is checked out. The LAN IP falls back to a
+ * real interface address, never to another node's hardcoded IP.
+ */
+import { readFileSync } from 'node:fs';
+import { networkInterfaces } from 'node:os';
+import { resolve, join } from 'node:path';
+
+const OMNI_DEFAULT = 'http://192.168.0.8:20128/v1'; // Sabertooth router (see CLAUDE.md nodes table)
+
+export function readEnvFile(file) {
+  const out = {};
+  let text;
+  try { text = readFileSync(file, 'utf8'); } catch { return out; }
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line || line.startsWith('#')) continue;
+    const m = /^([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/.exec(line);
+    if (!m) continue;
+    out[m[1]] = m[2].trim().replace(/^"(.*)"$/, '$1').replace(/^'(.*)'$/, '$1');
+  }
+  return out;
+}
+
+function firstLanAddress(interfaces) {
+  for (const list of Object.values(interfaces() || {})) {
+    for (const i of list || []) {
+      if ((i.family === 'IPv4' || i.family === 4) && !i.internal) return i.address;
+    }
+  }
+  return '127.0.0.1';
+}
+
+/**
+ * @param {object} opts
+ * @param {string} opts.here        folder holding server.mjs
+ * @param {object} [opts.env]       process.env (or a stand-in)
+ * @param {function} [opts.readEnv] (file) => map, defaults to readEnvFile
+ * @param {function} [opts.interfaces] defaults to os.networkInterfaces
+ */
+export function resolveConfig({ here, env = process.env, readEnv = readEnvFile, interfaces = networkInterfaces }) {
+  const repoDefault = resolve(here, '..', '..');
+  // The .env lives at the repo root. Read it first so ANTIGRAVITY_ROOT from .env can move the repo.
+  const envFile = env.DASHBOARD_ENV_FILE || join(repoDefault, '.env');
+  const file = readEnv(envFile) || {};
+  const pick = (name) => (env[name] !== undefined && env[name] !== '' ? env[name] : file[name]);
+  const repo = resolve(pick('ANTIGRAVITY_ROOT') || repoDefault);
+  const lanIp = pick('NODE_LAN_IP') || firstLanAddress(interfaces);
+  const port = Number(pick('AIRI_DASHBOARD_PORT') || 9150);
+  const omni = (pick('OPENAI_COMPAT_BASE_URL') || pick('OMNIROUTE_LAN_BASE_URL') || OMNI_DEFAULT).replace(/\/$/, '');
+  return { repo, envFile, lanIp, port, omni, nodeName: pick('NODE_NAME') || '', file };
+}

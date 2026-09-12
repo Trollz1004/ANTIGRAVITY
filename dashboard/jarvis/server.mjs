@@ -26,30 +26,29 @@ import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
+import { resolveConfig, readEnvFile } from './lib/config.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const REPO = process.env.ANTIGRAVITY_ROOT || 'C:\\ANTIGRAVITY';
-const PORT = Number(process.env.AIRI_DASHBOARD_PORT || 9150);
-const LAN_IP = process.env.NODE_LAN_IP || '192.168.0.8';
-const OMNI = (process.env.OPENAI_COMPAT_BASE_URL || `http://${LAN_IP}:20128/v1`).replace(/\/$/, '');
-const VAULT = process.env.OBSIDIAN_VAULT_ANTIGRAVITY || join(REPO, 'Antigravity');
+// process.env > <repo>/.env > derived defaults (lib/config.mjs). The repo root is this checkout.
+const CFG = resolveConfig({ here: HERE });
+const REPO = CFG.repo;
+const PORT = CFG.port;
+const LAN_IP = CFG.lanIp;
+const OMNI = CFG.omni;
+const VAULT = process.env.OBSIDIAN_VAULT_ANTIGRAVITY || CFG.file.OBSIDIAN_VAULT_ANTIGRAVITY || join(REPO, 'Antigravity');
 const VAULT_NAME = 'Antigravity';
 const SENTRY = 'http://127.0.0.1:9140';
 const OBSIDIAN_REST = 'http://127.0.0.1:27123';
-const SKILLS = join(REPO, '.agents', 'skills');
+// Skills tree: the classic .agents/skills layout when present, else this repo's skills/ folder.
+const SKILLS = [join(REPO, '.agents', 'skills'), join(REPO, 'skills')].find((d) => existsSync(d)) || join(REPO, 'skills');
 const AVATARS = join(REPO, 'ops', 'avatar', 'out');
 const STARTED_AT = new Date().toISOString(); // the House restarts this server when server.mjs is newer
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.md': 'text/markdown; charset=utf-8' };
 
+// Secrets are read from the .env at request time and never logged or returned.
 function envValue(name) {
-  try {
-    for (const line of readFileSync(join(REPO, '.env'), 'utf8').split(/\r?\n/)) {
-      const m = /^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/.exec(line.trim());
-      if (m && m[1] === name) return m[2].replace(/^"|"$/g, '');
-    }
-  } catch {}
-  return '';
+  return process.env[name] || readEnvFile(CFG.envFile)[name] || readEnvFile(join(REPO, '.env'))[name] || '';
 }
 
 // ── skills = agents (live directory read; --hash clones are Paperclip copies, skipped) ──
@@ -179,7 +178,7 @@ createServer(async (req, res) => {
 
   if (p.startsWith('/api/omni/')) {
     const key = envValue('OMNI_ROUTE_API_KEY');
-    if (!key) return send(res, 503, { error: 'AUTH MISSING: OMNI_ROUTE_API_KEY not in .env' });
+    if (!key) return send(res, 503, { error: 'AUTH MISSING: OMNI_ROUTE_API_KEY not in ' + CFG.envFile });
     const target = OMNI + p.slice('/api/omni'.length) + url.search;
     const c = new AbortController(); const t = setTimeout(() => c.abort(), 300000);
     try {
