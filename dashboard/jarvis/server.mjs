@@ -27,6 +27,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
 import { resolveConfig, readEnvFile } from './lib/config.mjs';
+import { probeAll } from './lib/nodes.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 // process.env > <repo>/.env > derived defaults (lib/config.mjs). The repo root is this checkout.
@@ -192,6 +193,8 @@ createServer(async (req, res) => {
   }
 
   if (p === '/api/agents') { const a = agents(); return send(res, 200, { count: a.length, source: SKILLS, agents: a, at: new Date().toISOString() }); }
+  // God's-eye view: every LAN service probed with an identity check (lib/nodes.mjs). No sample data.
+  if (p === '/api/nodes') return send(res, 200, await probeAll({ timeoutMs: 3000 }));
   if (p === '/api/vault/graph') return send(res, 200, vaultGraph());
   if (p === '/api/vault/note') return send(res, 200, vaultNote(url.searchParams.get('p') || ''));
   if (p === '/api/vault/status') {
