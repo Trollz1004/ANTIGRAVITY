@@ -78,9 +78,9 @@ total_sessions: 42
 model: stepfun/step-3.7-flash
 provider: nous
 omniroute: http://192.168.0.8:20128/v1
-node: sabertooth
+node: 
 tablet: true
-primary_node: sabertooth
+primary_node: Alienware
 ---
 
 # Session Memory Log

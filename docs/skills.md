@@ -10,7 +10,7 @@ aliases:
   - Skills Dashboard
   - Agent Workflow Graph
 date: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-11
 author: Joshua (Trollz1004)
 version: 2.0.0
 ---
@@ -28,6 +28,7 @@ These load on EVERY session start via [[AGENTS.md]] preload:
 - [[caveman]] — Ultra-compressed communication (65% token reduction)
 - [[brainstorm]] — Structured ideation with scoring
 - [[session-memory]] — Session start/end persistence with Obsidian integration
+- [[copilot-memory]] — Copilot CLI-only session memory (Copilot reads/writes; other agents keep out)
 - [[verification-before-completion]] — Verify before marking done
 - [[find-skills]] — Discover new skills from hub
 - [[create-skills]] — Author new skills from workflows
