@@ -101,3 +101,12 @@ describe('sse', () => {
     expect(b.sse('delta', payload)).toBe('event: delta' + nl + 'data: ' + JSON.stringify(payload) + nl + nl)
   })
 })
+
+describe('lean mode (no MCP servers for chat personas)', () => {
+  it('JARVIS runs with --strict-mcp-config by default; the claude persona keeps its MCP servers; lean can be forced either way', () => {
+    expect(b.buildClaudeArgs({ persona: 'jarvis' })).toContain('--strict-mcp-config')
+    expect(b.buildClaudeArgs({ persona: 'claude' })).not.toContain('--strict-mcp-config')
+    expect(b.buildClaudeArgs({ persona: 'jarvis', lean: false })).not.toContain('--strict-mcp-config')
+    expect(b.buildClaudeArgs({ persona: 'claude', lean: true })).toContain('--strict-mcp-config')
+  })
+})

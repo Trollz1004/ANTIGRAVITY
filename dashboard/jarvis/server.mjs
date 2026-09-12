@@ -245,6 +245,7 @@ createServer(async (req, res) => {
       run = runClaude({
         prompt, cwd: REPO, sessionId: body.sessionId || '', persona: body.persona || 'claude',
         permissionMode: body.permissionMode || 'plan', maxTurns: body.maxTurns || 6, model: body.model || '',
+        lean: typeof body.lean === 'boolean' ? body.lean : undefined,
         onEvent: (ev) => { try { res.write(sse(ev.type, ev)); if (ev.type === 'exit') res.end(); } catch {} },
       });
     } catch (e) { res.write(sse('error', { message: String(e.message || e) })); return res.end(); }
