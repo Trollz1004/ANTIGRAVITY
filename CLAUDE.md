@@ -5,14 +5,14 @@ Guidance for Claude Code in `Trollz1004/hermes` (remote `origin`, default branch
 ## Session protocol (every session)
 
 **Start**
-1. Read memory: the auto-loaded `MEMORY.md` index (project memory, local), `~/.claude/CLAUDE.md` (global), and the Hermes session log `skills/session-memory/memory.md`. Load context silently. Note entries older than 7 days as stale.
+1. Read memory: the auto-loaded `MEMORY.md` index (project memory, local), `~/.claude/CLAUDE.md` (global), and the session logs `skills/session-memory/memory.md` (judge lanes) and `skills/copilot-memory/memory.md` (Copilot CLI only — Copilot reads and writes it; other agents leave it alone). Load context silently. Note entries older than 7 days as stale.
 2. Load the mandatory skills and keep them active for the whole session:
    - `skills/caveman/SKILL.md`: terse replies to save tokens (default level `full`). Its boundaries still apply, so docs, commits, PR text and memory files stay in normal prose.
    - `skills/brainstorm/SKILL.md`: use before choosing an approach for any non-trivial change (diverge, score, pick the top option).
    - test-driven development: RED, then GREEN, then REFACTOR. Write the failing test first, then add the minimum code to make it pass. Patterns are in `frontend-react/testing/SKILL.md` (Vitest, Testing Library, Playwright).
 
 **End**
-1. Append a session block to `skills/session-memory/memory.md`. Include the date, decisions, files changed, lessons and carry-forward TODOs. Update the frontmatter (`last_session`, `total_sessions`). Append, then prune. Never overwrite.
+1. Append a session block to `skills/session-memory/memory.md`. Include the date, decisions, files changed, lessons and carry-forward TODOs. Update the frontmatter (`last_session`, `total_sessions`). Append, then prune. Never overwrite. Copilot CLI sessions instead append to `skills/copilot-memory/memory.md` (same block format, same append-then-prune rule; other agents must not edit it).
 2. Update project memory (local) and `~/.claude/CLAUDE.md` (global) when a durable rule or preference changed.
 3. Push and merge the work (see below).
 
@@ -27,7 +27,7 @@ Guidance for Claude Code in `Trollz1004/hermes` (remote `origin`, default branch
 
 | Path | Contents |
 |---|---|
-| `skills/` | Hermes skills: `caveman*` (7 token-compression skills, including a Python compressor in `caveman-compress/scripts/`), `brainstorm`, `session-memory` (and its `memory.md` log) |
+| `skills/` | Hermes skills: `caveman*` (7 token-compression skills, including a Python compressor in `caveman-compress/scripts/`), `brainstorm`, `session-memory` (and its `memory.md` log), `copilot-memory` (Copilot CLI's own log) |
 | `agent-workflow/`, `frontend-react/`, `design-ui/` | More skills, one `SKILL.md` per folder (orchestration, React/Next.js/DB/testing, design/video/music) |
 | `docs/` | `skills.md` (agent roster and skill matrix, Obsidian wikilinks), `fullstack-session.md` |
 | `dashboard/index.html`, `dashboard/applet.html` | Standalone static dashboards. No build step. |
@@ -40,7 +40,7 @@ The Hermes runtime itself (`~/.hermes/`), the agent skills directory (`C:\ANTIGR
 
 | Node | IP | Role |
 |---|---|---|
-| **Alienware (this machine)**: i7-11700F, 40 GB RAM, AMD Radeon RX 6800 16 GB, 1 TB NVMe, 2.5 GbE, Windows 10 | `192.168.0.40` | Hosts this dashboard and the **Dream Online MMO** |
+| **Alienware (this machine)**: i7-11700F, 40 GB RAM, AMD Radeon RX 6800 16 GB, 1 TB NVMe, 2.5 GbE, Windows 11 | `192.168.0.40` | Hosts this dashboard and the **Dream Online MMO** |
 | Sabertooth | `192.168.0.8` | OmniRoute model router (`:20128/v1`), and `C:\ANTIGRAVITY` in the original setup |
 
 - The OmniRoute endpoint `http://192.168.0.8:20128/v1` is on **Sabertooth, not this node**. Nothing on `192.168.0.40` serves `:20128`. Call it only as a remote LAN service.
