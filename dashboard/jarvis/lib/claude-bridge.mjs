@@ -27,7 +27,7 @@ export function resolveClaudeBinary({ env = process.env, exists = existsSync } =
   return 'claude'; // PATH lookup
 }
 
-export function buildClaudeArgs({ sessionId = '', persona = 'claude', permissionMode = 'plan', maxTurns = 6, model = '' } = {}) {
+export function buildClaudeArgs({ sessionId = '', persona = 'claude', permissionMode = 'plan', maxTurns = 6, model = '', lean } = {}) {
   if (!PERMISSION_MODES.includes(permissionMode)) throw new Error(`permission mode not allowed: ${permissionMode}`);
   if (sessionId && !/^[A-Za-z0-9_-]{6,80}$/.test(sessionId)) throw new Error('session id must be a plain id');
   const args = ['-p', '--output-format', 'stream-json', '--input-format', 'text', '--verbose', '--include-partial-messages',
@@ -36,6 +36,8 @@ export function buildClaudeArgs({ sessionId = '', persona = 'claude', permission
   const system = PERSONAS[persona] ?? '';
   if (system) args.push('--append-system-prompt', system);
   if (model && /^[A-Za-z0-9._:-]{1,80}$/.test(model)) args.push('--model', model);
+  // Lean = no MCP servers: chat personas do not need 600+ connector tools in every turn.
+  if (lean ?? persona !== 'claude') args.push('--strict-mcp-config');
   return args;
 }
 
