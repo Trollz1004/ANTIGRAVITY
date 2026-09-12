@@ -28,6 +28,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
 import { resolveConfig, readEnvFile } from './lib/config.mjs';
 import { probeAll } from './lib/nodes.mjs';
+import { runClaude, resolveClaudeBinary, bridgeAccess, sse, PERMISSION_MODES, PERSONAS } from './lib/claude-bridge.mjs';
+import { hostname } from 'node:os';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 // process.env > <repo>/.env > derived defaults (lib/config.mjs). The repo root is this checkout.
@@ -172,7 +174,12 @@ createServer(async (req, res) => {
       host, lanIp: LAN_IP, omniRoute: OMNI, omniProxy: '/api/omni',
       missionControl: `http://${host}:3151/`, hermesDashboard: `http://${host}:9119/`, sentry: `http://${host}:9140/`,
       vault: { path: VAULT, name: VAULT_NAME, rest: OBSIDIAN_REST },
-      claude: { launch: '/api/launch/claude', command: 'drift bare', note: 'Opens the official Claude CLI in a new window on this host. From another node: ssh <user>@' + LAN_IP + ' then drift bare.' },
+      claude: {
+        chat: '/api/claude/chat', status: '/api/claude/status', launch: '/api/launch/claude',
+        command: 'claude -p --output-format stream-json (headless, account auth)',
+        note: 'Chat streams from the official Claude CLI on ' + (CFG.nodeName || hostname()) + '. Loopback callers only unless DASHBOARD_BRIDGE_TOKEN is set in .env. The launch button opens an interactive window on this host.',
+        personas: Object.keys(PERSONAS), permissionModes: PERMISSION_MODES,
+      },
       at: new Date().toISOString(),
     });
   }
@@ -218,17 +225,42 @@ createServer(async (req, res) => {
     res.writeHead(200, { 'content-type': MIME[extname(full).toLowerCase()] || 'application/octet-stream' });
     return res.end(readFileSync(full));
   }
-  if (p === '/api/launch/claude' && req.method === 'POST') {
-    const drift = join(process.env.USERPROFILE || 'C:\\Users\\joshi', '.local', 'bin', 'drift.cmd');
-    const cmd = existsSync(drift) ? drift : join(REPO, 'scripts', 'drift.cmd');
+  // ── Claude CLI bridge (lib/claude-bridge.mjs) ──────────────────────────────
+  const gate = bridgeAccess({ token: envValue('DASHBOARD_BRIDGE_TOKEN') });
+  if (p === '/api/claude/status') {
+    const bin = resolveClaudeBinary();
+    const access = gate(req.socket);
+    return send(res, 200, { bin: bin === 'claude' ? 'claude (PATH)' : bin, installed: bin !== 'claude' || existsSync(bin), access: access.ok, reason: access.reason, cwd: REPO, personas: Object.keys(PERSONAS), permissionModes: PERMISSION_MODES });
+  }
+  if (p === '/api/claude/chat' && req.method === 'POST') {
+    const access = gate({ remoteAddress: req.socket.remoteAddress, headers: req.headers });
+    if (!access.ok) return send(res, 403, { error: 'bridge refused: ' + access.reason });
+    let body = {};
+    try { body = JSON.parse((await readBody(req)).toString('utf8') || '{}'); } catch { return send(res, 400, { error: 'body must be JSON' }); }
+    const prompt = String(body.prompt || '').trim();
+    if (!prompt) return send(res, 400, { error: 'prompt required' });
+    res.writeHead(200, { 'content-type': 'text/event-stream', 'cache-control': 'no-store', connection: 'keep-alive', 'access-control-allow-origin': '*', 'x-accel-buffering': 'no' });
+    let run;
     try {
-      // VERIFIED 2026-09-10: `cmd /k "<drift>" bare` via Start-Process opens a visible
-      // console that stays up with the official CLI inside it. `cmd /c start ...`
-      // from a hidden server never showed a window.
-      const c = spawn('powershell.exe', ['-NoProfile', '-Command', `Start-Process cmd.exe -ArgumentList '/k','"${cmd}" bare' -WorkingDirectory '${REPO}'`], { detached: true, stdio: 'ignore', windowsHide: true });
+      run = runClaude({
+        prompt, cwd: REPO, sessionId: body.sessionId || '', persona: body.persona || 'claude',
+        permissionMode: body.permissionMode || 'plan', maxTurns: body.maxTurns || 6, model: body.model || '',
+        onEvent: (ev) => { try { res.write(sse(ev.type, ev)); if (ev.type === 'exit') res.end(); } catch {} },
+      });
+    } catch (e) { res.write(sse('error', { message: String(e.message || e) })); return res.end(); }
+    console.log(new Date().toISOString(), 'claude bridge', body.persona || 'claude', 'from', req.socket.remoteAddress, 'session', body.sessionId || 'new');
+    req.on('close', () => { try { if (run.child.exitCode === null) run.child.kill(); } catch {} });
+    return;
+  }
+  if (p === '/api/launch/claude' && req.method === 'POST') {
+    // Opens the official CLI interactively in a visible console on THIS host.
+    // VERIFIED 2026-09-10 (drift era): `cmd /k` via Start-Process is what actually shows a window from a hidden server.
+    const bin = resolveClaudeBinary();
+    try {
+      const c = spawn('powershell.exe', ['-NoProfile', '-Command', `Start-Process cmd.exe -ArgumentList '/k','"${bin}"' -WorkingDirectory '${REPO}'`], { detached: true, stdio: 'ignore', windowsHide: true, env: { ...process.env, CLAUDECODE: undefined } });
       c.unref();
       console.log(new Date().toISOString(), 'launch claude from', req.socket.remoteAddress);
-      return send(res, 200, { ok: true, opened: cmd + ' bare', on: 'SABRETOOTH', from: req.socket.remoteAddress });
+      return send(res, 200, { ok: true, opened: bin, on: (CFG.nodeName || hostname()).toUpperCase(), from: req.socket.remoteAddress });
     } catch (e) { return send(res, 500, { ok: false, error: String(e.message || e) }); }
   }
 
