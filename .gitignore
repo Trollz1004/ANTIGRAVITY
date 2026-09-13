@@ -19,6 +19,8 @@ tsconfig.tsbuildinfo
 # Environment / secrets
 .env
 .env.*
+dev.env
+*.env
 !.env.example
 *.env.bak
 .secrets/
