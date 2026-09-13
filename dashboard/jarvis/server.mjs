@@ -55,6 +55,24 @@ const VAULT = VAULT_CFG.path;
 const VAULT_NAME = VAULT_CFG.name;
 const SENTRY = CFG.sentry; // Fable's Sentry lives on Sabertooth unless FABLES_SENTRY_URL says otherwise
 const OBSIDIAN_REST = 'http://127.0.0.1:27123';
+// Summary providers shared with the bridge so JARVIS's HUD preamble is composed
+ // from exactly the data this server serves the page.
+async function vaultStatusSummary() {
+  const r = await getJson(OBSIDIAN_REST + '/', 5000);
+  const up = r.status === 200 && /Obsidian Local REST API/.test(r.text || '');
+  return { up, state: up ? 'UP' : (r.status ? 'WRONG SERVICE' : 'DOWN'), detail: up ? 'identity ok' : (r.error || 'HTTP ' + r.status) };
+}
+function agentsSummary() {
+  const a = agents();
+  return { count: a.length, source: SKILLS };
+}
+function houseSummary() {
+  return getJson(SENTRY + '/api/status', 20000).then((r) => (!r.json ? { up: false, state: 'DOWN', detail: r.error || 'HTTP ' + r.status } : { up: true, state: 'UP', ...r.json }));
+}
+function vaultGraphSummary() {
+  const g = vaultGraph();
+  return { notes: (g.nodes || []).length, links: (g.links || []).length };
+}
 // Skills tree: the classic .agents/skills layout when present, else this repo's skills/ folder.
 const SKILLS = [join(REPO, '.agents', 'skills'), join(REPO, 'skills')].find((d) => existsSync(d)) || join(REPO, 'skills');
 const AVATARS = join(REPO, 'ops', 'avatar', 'out');
@@ -174,7 +192,11 @@ function serveStatic(res, rel) {
 
 // ── server ────────────────────────────────────────────────────────────────────
 // Bridge + Ollama routes (lib/bridge-routes.mjs) run first: no wildcard CORS, origin-checked, local-only by default.
-const BRIDGE_DEPS = { cfg: CFG, envValue, spawn, killTree: (child) => killTree(child, { spawn }), resolveBinary: () => resolveClaudeBinary(), fetch: globalThis.fetch };
+const BRIDGE_DEPS = {
+  cfg: { ...CFG, vaultName: VAULT_NAME, vaultPath: VAULT },
+  envValue, spawn, killTree: (child) => killTree(child, { spawn }), resolveBinary: () => resolveClaudeBinary(), fetch: globalThis.fetch,
+  probeAll, vaultStatus: vaultStatusSummary, agentsSummary, houseSummary, vaultGraph: vaultGraphSummary,
+};
 
 createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');

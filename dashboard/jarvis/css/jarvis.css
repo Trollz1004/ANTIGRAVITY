@@ -232,3 +232,53 @@
 .jarvis-hud-container > .jarvis-controls {
   z-index: 5;
 }
+
+/* ── Global JARVIS dock (agentic layer on every tab) ─────────────────────── */
+.jarvis-identity {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--accent, #58a6ff);
+  opacity: 0.9;
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+}
+.dock-toggle {
+  color: var(--accent, #58a6ff);
+  border-top: 1px solid var(--border, #30363d);
+  margin-top: 8px;
+  padding-top: 10px;
+}
+.dock-panel {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: min(430px, calc(100vw - 32px));
+  height: min(520px, calc(100vh - 32px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  background: var(--bg-panel, #0d1117);
+  border: 1px solid var(--accent, #58a6ff);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+.dock-panel[hidden] { display: none; }
+.dock-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--accent, #58a6ff);
+}
+.dock-log {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+.dock-row b { color: var(--accent, #58a6ff); }
+.dock-row.dock-you b { color: var(--text-dim, #8b949e); }
