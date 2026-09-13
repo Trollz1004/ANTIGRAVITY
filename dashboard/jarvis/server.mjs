@@ -50,7 +50,7 @@ const LAN_IP = CFG.lanIp;
 const OMNI = CFG.omni;
 const VAULT = process.env.OBSIDIAN_VAULT_ANTIGRAVITY || CFG.file.OBSIDIAN_VAULT_ANTIGRAVITY || join(REPO, 'Antigravity');
 const VAULT_NAME = 'Antigravity';
-const SENTRY = 'http://127.0.0.1:9140';
+const SENTRY = CFG.sentry; // Fable's Sentry lives on Sabertooth unless FABLES_SENTRY_URL says otherwise
 const OBSIDIAN_REST = 'http://127.0.0.1:27123';
 // Skills tree: the classic .agents/skills layout when present, else this repo's skills/ folder.
 const SKILLS = [join(REPO, '.agents', 'skills'), join(REPO, 'skills')].find((d) => existsSync(d)) || join(REPO, 'skills');
@@ -186,7 +186,7 @@ createServer(async (req, res) => {
     const host = (req.headers.host || '').replace(/:\d+$/, '') || LAN_IP;
     return send(res, 200, {
       host, lanIp: LAN_IP, omniRoute: OMNI, omniProxy: '/api/omni',
-      missionControl: `http://${host}:3151/`, hermesDashboard: `http://${host}:9119/`, sentry: `http://${host}:9140/`,
+      missionControl: CFG.missionControl, hermesDashboard: `http://${host}:9119/`, sentry: SENTRY + '/',
       vault: { path: VAULT, name: VAULT_NAME, rest: OBSIDIAN_REST },
       claude: {
         chat: '/api/claude/chat', status: '/api/claude/status', launch: '/api/launch/claude',

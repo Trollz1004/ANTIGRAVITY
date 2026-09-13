@@ -447,7 +447,8 @@ function initMissionControl() {
   const frame = $('#mission-control-frame');
   if (!frame || frame.dataset.ready) return;
   const host = location.hostname || '127.0.0.1';
-  frame.src = `http://${host}:3151/`;
+  // Mission Control runs on Sabertooth; the server says where (config.missionControl), else assume the page host.
+  frame.src = state.config?.missionControl || `http://${host}:3151/`;
   frame.dataset.ready = '1';
   const link = $('#mission-control-link');
   if (link) { link.href = frame.src; link.textContent = frame.src; }

@@ -52,5 +52,8 @@ export function resolveConfig({ here, env = process.env, readEnv = readEnvFile, 
   const lanIp = pick('NODE_LAN_IP') || firstLanAddress(interfaces);
   const port = Number(pick('AIRI_DASHBOARD_PORT') || 9150);
   const omni = (pick('OPENAI_COMPAT_BASE_URL') || pick('OMNIROUTE_LAN_BASE_URL') || OMNI_DEFAULT).replace(/\/$/, '');
-  return { repo, envFile, lanIp, port, omni, nodeName: pick('NODE_NAME') || '', file };
+  // Sentry and Mission Control live on Sabertooth (see CLAUDE.md nodes table) unless .env says otherwise.
+  const sentry = (pick('FABLES_SENTRY_URL') || 'http://192.168.0.8:9140').replace(/\/$/, '');
+  const missionControl = (pick('MISSION_CONTROL_URL') || 'http://192.168.0.8:3151').replace(/\/$/, '') + '/';
+  return { repo, envFile, lanIp, port, omni, sentry, missionControl, nodeName: pick('NODE_NAME') || '', file };
 }

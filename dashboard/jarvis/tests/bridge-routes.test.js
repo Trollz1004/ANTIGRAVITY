@@ -25,7 +25,8 @@ function fakeSpawnFactory(log) {
     log.push({ bin, args, opts, child, get stdin() { return stdin } })
     setTimeout(() => {
       if (child.exitCode !== null) return
-      child.stdout.write(FIXTURE)
+      // A Hermes one-shot prints the answer, then a session trailer; the Claude CLI prints NDJSON.
+      child.stdout.write(/hermes/i.test(String(bin)) ? 'session_id: 20260913_000000_abcdef\nPONG\n' : FIXTURE)
       child.stdout.end()
       child.exitCode = 0
       child.emit('close', 0)
@@ -44,6 +45,7 @@ beforeAll(async () => {
     spawn: fakeSpawnFactory(spawned),
     killTree: (child) => { killed.push(child.pid); child.kill() },
     resolveBinary: () => 'C:/Users/someone/.local/bin/claude.exe',
+    resolveHermes: () => 'C:/Users/someone/AppData/Local/hermes/bin/hermes.exe',
     ollamaBase: 'http://127.0.0.1:11434',
     fetch: async (url) => {
       if (url.endsWith('/api/tags')) return { ok: true, status: 200, text: async () => JSON.stringify({ models: [{ name: 'gemma4:e4b' }] }), json: async () => ({ models: [{ name: 'gemma4:e4b' }] }) }
@@ -176,6 +178,51 @@ describe('Ollama routes', () => {
     const r = await fetch(url('/api/ollama/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ messages: [{ role: 'user', content: 'hi' }] }) })
     expect(r.status).toBe(503)
     deps.fetch = savedFetch
+  })
+})
+
+describe('Hermes as a brain', () => {
+  it('GET /api/hermes/status reports the binary name only and the last latency', async () => {
+    const r = await fetch(url('/api/hermes/status'))
+    expect(r.status).toBe(200)
+    const j = await r.json()
+    expect(j.bin).toBe('hermes.exe')
+    expect(JSON.stringify(j)).not.toMatch(/Users|someone|C:/)
+    expect(j).toHaveProperty('installed')
+    expect(j).toHaveProperty('lastLatencyMs')
+  })
+  it('POST /api/hermes/chat runs a named one-shot session over a query file and streams the plain reply as one result event', async () => {
+    const before = spawned.length
+    const r = await fetch(url('/api/hermes/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'ping hermes' }) })
+    expect(r.status).toBe(200)
+    expect(r.headers.get('content-type')).toMatch(/event-stream/)
+    const text = await r.text()
+    const run = spawned.slice(before).find((s) => /hermes/i.test(s.bin))
+    expect(run).toBeTruthy()
+    expect(run.args).toContain('--query-file')
+    expect(run.args).toContain('--oneshot')
+    expect(run.args).toContain('-Q')
+    expect(run.args.slice(run.args.indexOf('-c') + 1)[0]).toBe('jarvis-hud')
+    expect(run.args).toContain('--create-if-missing')
+    expect(run.args.join(' ')).not.toContain('ping hermes') // prompt travels in the query file
+    expect(text).toMatch(/^event: result$/m)
+    expect(text).toContain('"text":"PONG"')
+    expect(text).not.toContain('session_id')
+  })
+  it('refuses a foreign Origin like the Claude bridge', async () => {
+    expect((await fetch(url('/api/hermes/chat'), { method: 'POST', headers: { 'content-type': 'application/json', origin: 'http://evil.example' }, body: JSON.stringify({ prompt: 'x' }) })).status).toBe(403)
+  })
+})
+
+describe('GET /api/owner', () => {
+  it('returns the first word of the Hermes USER.md memory when it looks like a name, else an empty string', async () => {
+    deps.readOwnerFile = () => 'Joshua is the operator.\nMore lines.'
+    expect(await (await fetch(url('/api/owner'))).json()).toEqual({ name: 'Joshua' })
+    deps.readOwnerFile = () => '# Notes about the user\n'
+    expect(await (await fetch(url('/api/owner'))).json()).toEqual({ name: '' })
+    deps.readOwnerFile = () => { throw new Error('ENOENT') }
+    expect(await (await fetch(url('/api/owner'))).json()).toEqual({ name: '' })
+    delete deps.readOwnerFile
   })
 })
 
