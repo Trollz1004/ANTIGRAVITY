@@ -16,6 +16,7 @@ import { createGlobe } from './globe.js';
 import { loadAvatar, DEFAULT_AVATAR_URL } from './avatar.js';
 import { getBridgeStatus, streamClaude, streamOllama, streamHermes } from './claude-bridge.js';
 import { createPushToTalk, naturalCase, REST_MS } from './voice.js';
+import { greetingFor, installShortcuts } from './shortcuts.js';
 
 // All OmniRoute calls go through the server proxy — key stays server-side.
 const OMNI = '/api/omni';
@@ -26,6 +27,7 @@ export const BRAINS = ['omni', 'claude', 'ollama', 'hermes'];
 const jarvis = {
   state: 'idle', // idle | listening | thinking | speaking
   brain: 'omni',
+  ownerName: '',
   claude: { sessionId: '' },
   history: [
     { role: 'system', content: `You are JARVIS — the AI assistant embedded in this dashboard. 
@@ -122,12 +124,43 @@ const browserSpeech = {
 
 let pushToTalk = null;
 let restTimer = null;
+let conversationStartedAt = null;
+
+function setConversationPanel(live) {
+  const container = document.querySelector('.jarvis-hud-container');
+  const stop = document.getElementById('jarvis-conv-stop');
+  container?.classList?.toggle('jarvis-conversing', live);
+  if (stop) stop.hidden = !live;
+}
+
+function setConversationRowsVisible(visible) {
+  document.querySelectorAll('.jarvis-msg').forEach((row) => {
+    row.hidden = !visible;
+    if (visible) row.removeAttribute?.('hidden');
+    else row.setAttribute?.('hidden', '');
+  });
+}
+
+function beginConversationHud() {
+  if (!conversationStartedAt) {
+    conversationStartedAt = Date.now();
+    document.querySelectorAll('.jarvis-msg').forEach((row) => {
+      const timestamp = Number(row.getAttribute?.('data-ts') || 0);
+      if (timestamp < conversationStartedAt) {
+        row.hidden = true;
+        row.setAttribute?.('hidden', '');
+      }
+    });
+  }
+  if (restTimer) clearTimeout(restTimer);
+  restTimer = null;
+  setConversationPanel(true);
+}
 
 function setVoiceHudState(state, live) {
   const globe = document.getElementById('jarvis-globe');
   if (!live) return;
-  if (restTimer) clearTimeout(restTimer);
-  restTimer = null;
+  beginConversationHud();
   if (globe) globe.style.pointerEvents = 'auto';
   if (state === 'listening' || state === 'latched') setState('listening');
 }
@@ -136,6 +169,7 @@ function restVoiceHud(reason) {
   if (reason === 'unavailable') {
     jarvisLog('JARVIS', 'Speech recognition requires Chrome or Edge. Use the text input below.');
   }
+  conversationStartedAt = null;
   if (restTimer) clearTimeout(restTimer);
   restTimer = setTimeout(() => {
     if (pushToTalk?.isLive()) return;
@@ -143,6 +177,8 @@ function restVoiceHud(reason) {
     const globe = document.getElementById('jarvis-globe');
     if (interim) interim.textContent = '';
     if (globe) globe.style.pointerEvents = 'none';
+    setConversationPanel(false);
+    setConversationRowsVisible(true);
     setState('idle');
   }, REST_MS);
 }
@@ -237,6 +273,13 @@ function setBrain(id) {
   return true;
 }
 
+function greetBrain(id) {
+  if (!setBrain(id)) return;
+  const greeting = greetingFor(id, jarvis.ownerName);
+  jarvisLog('JARVIS', greeting);
+  void jarvisVoice.speak(greeting);
+}
+
 function pickDefaultBrain(status = {}, stored) {
   if (BRAINS.includes(stored) && brainAvailable(stored, status)) return stored;
   if (brainAvailable('claude', status)) return 'claude';
@@ -249,6 +292,7 @@ function addStreamRow() {
   if (!log) return { row: null, body: null };
   const row = document.createElement('div');
   row.className = 'jarvis-msg jarvis-msg-jarvis jarvis-msg-stream';
+  row.setAttribute('data-ts', Date.now());
   const name = document.createElement('span');
   name.className = 'jarvis-msg-name';
   name.textContent = 'JARVIS';
@@ -369,6 +413,7 @@ function jarvisLog(who, text) {
   if (!log) return;
   const div = document.createElement('div');
   div.className = 'jarvis-msg jarvis-msg-' + (who === 'You' ? 'user' : 'jarvis');
+  div.setAttribute('data-ts', Date.now());
   const name = document.createElement('span');
   name.className = 'jarvis-msg-name';
   name.textContent = who === 'You' ? 'YOU' : 'JARVIS';
@@ -455,6 +500,17 @@ function renderNodes(data) {
   }
 }
 
+async function getOwnerName() {
+  try {
+    const response = await fetch('/api/owner', { cache: 'no-store' });
+    if (!response.ok) return '';
+    const owner = await response.json();
+    return String(owner?.name || '').trim();
+  } catch {
+    return '';
+  }
+}
+
 // ── Init ─────────────────────────────────────────────────────────────────────
 
 function initJarvis() {
@@ -480,6 +536,7 @@ function initJarvis() {
   // Voice
   document.getElementById('jarvis-mic')?.addEventListener('click', () => jarvisVoice.startListening());
   document.getElementById('jarvis-stop')?.addEventListener('click', () => jarvisVoice.stop());
+  document.getElementById('jarvis-conv-stop')?.addEventListener('click', () => getPushToTalk().end('conversation-stop'));
   const voiceGlobe = document.getElementById('jarvis-globe');
   if (voiceGlobe) {
     voiceGlobe.style.pointerEvents = 'none';
@@ -495,15 +552,14 @@ function initJarvis() {
   }
   const isVoiceShortcutTarget = (target) => ['input', 'textarea', 'select'].includes(String(target?.tagName || '').toLowerCase());
   document.addEventListener('keydown', (event) => {
-    if (event.repeat || isVoiceShortcutTarget(event.target)) return;
-    if (event.key === 'Escape') getPushToTalk().end('escape');
+    if (event.repeat || event.ctrlKey || event.metaKey || isVoiceShortcutTarget(event.target)) return;
     if (event.key === ' ' || event.key === 'Spacebar') {
       event.preventDefault?.();
       getPushToTalk().press();
     }
   });
   document.addEventListener('keyup', (event) => {
-    if (isVoiceShortcutTarget(event.target)) return;
+    if (event.ctrlKey || event.metaKey || isVoiceShortcutTarget(event.target)) return;
     if (event.key === ' ' || event.key === 'Spacebar') {
       event.preventDefault?.();
       getPushToTalk().release();
@@ -515,7 +571,15 @@ function initJarvis() {
     if (badge) badge.textContent = '';
   });
   const brainSelect = document.getElementById('jarvis-brain');
-  brainSelect?.addEventListener('change', () => setBrain(brainSelect.value));
+  brainSelect?.addEventListener('change', () => greetBrain(brainSelect.value));
+  installShortcuts(document, {
+    onBrain: greetBrain,
+    onEnd: () => getPushToTalk().end('escape'),
+    onHelp: () => {
+      const panel = document.getElementById('jarvis-shortcuts');
+      if (panel) panel.hidden = !panel.hidden;
+    },
+  });
   const input = document.getElementById('jarvis-input');
   const send = document.getElementById('jarvis-send');
   const submit = () => { const t = input.value.trim(); if (t) { input.value = ''; askJarvis(t); } };
@@ -525,15 +589,18 @@ function initJarvis() {
   if ('speechSynthesis' in window) speechSynthesis.getVoices();
 
   (async () => {
-    const bridgeStatus = await getBridgeStatus();
+    const [bridgeStatus, ownerName] = await Promise.all([getBridgeStatus(), getOwnerName()]);
+    jarvis.ownerName = ownerName;
     let storedChoice = '';
     try { if (typeof localStorage !== 'undefined') storedChoice = localStorage.getItem('jarvis.brain') || ''; } catch {}
-    setBrain(pickDefaultBrain(bridgeStatus, storedChoice));
+    const selectedBrain = pickDefaultBrain(bridgeStatus, storedChoice);
+    setBrain(selectedBrain);
     for (const option of brainSelect?.options || []) {
       const available = brainAvailable(option.value, bridgeStatus);
       option.disabled = !available;
-      option.title = available ? '' : brainUnavailableReason(option.value, bridgeStatus);
+      option.title = available ? option.textContent : `${option.textContent}: ${brainUnavailableReason(option.value, bridgeStatus)}`;
     }
+    greetBrain(selectedBrain);
   })();
   
 
@@ -581,13 +648,6 @@ function initJarvis() {
     })();
   }
 
-  // Initial greeting
-  setTimeout(() => {
-    const greeting = 'JARVIS online. How can I assist?';
-    jarvisLog('JARVIS', greeting);
-    jarvisVoice.speak(greeting);
-  }, 500);
-  
   // Start metric updates
   updateMetrics();
   setInterval(updateMetrics, 15000);
@@ -598,4 +658,4 @@ function initJarvis() {
 
 document.addEventListener('DOMContentLoaded', initJarvis);
 
-export { jarvis, jarvisVoice, askJarvis, askClaude, askOllama, askHermes, updateMetrics, initJarvis, setState, setBrain, pickDefaultBrain, renderNodes, createGlobe, loadAvatar, DEFAULT_AVATAR_URL };
+export { jarvis, jarvisVoice, askJarvis, askClaude, askOllama, askHermes, updateMetrics, initJarvis, setState, setBrain, pickDefaultBrain, renderNodes, jarvisLog, addStreamRow, createGlobe, loadAvatar, DEFAULT_AVATAR_URL };
