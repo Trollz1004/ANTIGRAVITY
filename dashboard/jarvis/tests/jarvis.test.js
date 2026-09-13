@@ -50,6 +50,41 @@ beforeAll(async () => {
 })
 
 describe('JARVIS core', () => {
+  it('exports the four supported brains', () => {
+    expect(jarvisMod.BRAINS).toEqual(['omni', 'claude', 'ollama', 'hermes'])
+  })
+
+  it('rejects unknown brains and persists valid choices', () => {
+    const store = { setItem: vi.fn() }
+    global.localStorage = store
+    expect(jarvisMod.setBrain('bogus')).toBe(false)
+    expect(jarvisMod.setBrain('claude')).toBe(true)
+    expect(jarvisMod.jarvis.brain).toBe('claude')
+    expect(store.setItem).toHaveBeenCalledWith('jarvis.brain', 'claude')
+    delete global.localStorage
+  })
+
+  it('selects stored, Claude, Ollama, then Omni by availability', () => {
+    const claude = { installed: true, access: { ok: true } }
+    const ollama = { available: true, models: ['gemma'] }
+    expect(jarvisMod.pickDefaultBrain({ claude, ollama }, 'claude')).toBe('claude')
+    expect(jarvisMod.pickDefaultBrain({ claude, ollama }, 'ollama')).toBe('ollama')
+    expect(jarvisMod.pickDefaultBrain({ claude, ollama }, 'bogus')).toBe('claude')
+    expect(jarvisMod.pickDefaultBrain({ claude: null, ollama: null }, 'bogus')).toBe('omni')
+  })
+
+  it('renders one node row and service row for every /api/nodes entry', () => {
+    global.__els ||= {}
+    const list = global.__els['jarvis-nodes-list'] = new MockEl()
+    jarvisMod.renderNodes({ nodes: [
+      { name: 'Alienware', ip: '192.168.0.40', total: 2, services: [{ label: 'JARVIS', up: true }, { label: 'Ollama', up: false }] },
+      { name: 'Sabertooth', ip: '192.168.0.8', total: 1, services: [{ label: 'OmniRoute', up: true }] },
+    ] })
+    expect(list.children).toHaveLength(2)
+    expect(list.children[0].children).toHaveLength(3)
+    expect(list.children[1].children).toHaveLength(2)
+  })
+
   it('exports jarvis state object', () => {
     expect(jarvisMod.jarvis).toBeDefined()
     expect(jarvisMod.jarvis.state).toBeDefined()
@@ -132,5 +167,20 @@ describe('JARVIS wiring regressions (judge findings)', () => {
     const server = fs.readFileSync(path.resolve(__dirname, '..', 'server.mjs'), 'utf-8')
     expect(server).not.toMatch(/joshi@/)
     expect(server).not.toMatch(/Users\\joshi|Users\/joshi/)
+  })
+
+  it('contains the brain, nodes and session controls without retired routing text', () => {
+    expect(html).toContain('id="jarvis-brain"')
+    expect(html).toContain('id="jarvis-nodes-list"')
+    expect(html).toContain('id="jarvis-session"')
+    expect(html).toContain('id="jarvis-session-new"')
+    expect(html).toContain('id="claude-bridge-status"')
+    expect(html).not.toMatch(/SABRETOOTH|drift bare|ssh <user>@/)
+  })
+
+  it('uses the local gods-eye nodes route instead of old direct service URLs', () => {
+    const src = fs.readFileSync(path.resolve(__dirname, '..', 'js', 'jarvis', 'jarvis.js'), 'utf-8')
+    expect(src).toContain('/api/nodes')
+    expect(src).not.toMatch(/localhost:3151|localhost:9140|127\.0\.0\.1:9140/)
   })
 })
