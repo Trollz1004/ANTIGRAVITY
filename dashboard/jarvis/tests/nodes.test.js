@@ -9,7 +9,7 @@ const okText = (text, status = 200) => async () => ({ status, ok: status < 400, 
 describe('service table', () => {
   it('lists every LAN service with a node, a URL and an identity check', () => {
     const ids = nodes.SERVICES.map((s) => s.id)
-    for (const id of ['jarvis', 'hermes', 'ollama', 'omniroute', 'live-npc-lab', 'dreamops', 'crosslisting', 'obsidian', 'sentry', 'mission-control']) expect(ids).toContain(id)
+    for (const id of ['jarvis', 'hermes', 'ollama', 'omniroute', 'live-npc-lab', 'dreamops', 'crosslisting', 'obsidian', 'sentry']) expect(ids).toContain(id)
     for (const s of nodes.SERVICES) {
       expect(['alienware', 'sabertooth']).toContain(s.node)
       expect(s.url).toMatch(/^http:\/\/(127\.0\.0\.1|192\.168\.0\.\d+):\d+\//)

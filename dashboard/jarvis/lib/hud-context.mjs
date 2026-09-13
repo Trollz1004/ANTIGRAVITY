@@ -47,7 +47,6 @@ export function hudContext({ nodes, house, vault, agents, graph, config } = {}) 
   if (agents) {
     lines.push(`${agents.count ?? 0} skills loadable in ${clean(agents.source)}`);
   }
-  if (config && config.missionControl) lines.push(`Mission Control endpoint: ${config.missionControl}`);
   if (config && config.repo) lines.push(`Repo: ${config.repo}`);
   return lines.filter(Boolean).join('\n');
 }

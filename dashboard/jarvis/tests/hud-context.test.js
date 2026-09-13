@@ -31,19 +31,19 @@ describe('HUD context composer (server-verified JARVIS preamble)', () => {
     expect(ctx).toMatch(/S \(10\.0\.0\.1\): 0\/1 up/)
   })
 
-  it('includes vault notes, agent count, graph size and mission control posture', () => {
+  it('includes vault notes, agent count, graph size; no Sabertooth mission-control line', () => {
     const ctx = hudContext({
       nodes: null,
       vault: { up: false, state: 'DOWN', detail: 'fetch failed' },
       agents: { count: 21, source: 'C:/skills' },
       graph: { notes: 44, links: 1 },
-      config: { repo: 'C:/repo', missionControl: 'http://192.168.0.8:3151/', vaultName: 'AlienwareDream', vaultPath: 'C:/v' },
+      config: { repo: 'C:/repo', vaultName: 'AlienwareDream', vaultPath: 'C:/v' },
     })
     expect(ctx).toContain('Vault AlienwareDream (C:/v): 44 notes, 1 wikilinks')
     expect(ctx).toContain('Obsidian REST DOWN — fetch failed')
     expect(ctx).toContain('21 skills loadable in C:/skills')
-    expect(ctx).toContain('Mission Control endpoint: http://192.168.0.8:3151/')
     expect(ctx).toContain('Repo: C:/repo')
+    expect(ctx).not.toMatch(/192\.168\.0\.8:3151/)
   })
 
   it('reports the sentry house summary with a down-service list when present', () => {

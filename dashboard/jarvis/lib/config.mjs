@@ -52,9 +52,10 @@ export function resolveConfig({ here, env = process.env, readEnv = readEnvFile, 
   const lanIp = pick('NODE_LAN_IP') || firstLanAddress(interfaces);
   const port = Number(pick('AIRI_DASHBOARD_PORT') || 9150);
   const omni = (pick('OPENAI_COMPAT_BASE_URL') || pick('OMNIROUTE_LAN_BASE_URL') || OMNI_DEFAULT).replace(/\/$/, '');
-  // Sentry and Mission Control live on Sabertooth (see CLAUDE.md nodes table) unless .env says otherwise.
+  // Sentry lives on Sabertooth (see AGENTS.md nodes table) unless .env says otherwise.
+  // Mission Control needs no endpoint: THIS dashboard is mission control.
   const sentry = (pick('FABLES_SENTRY_URL') || 'http://192.168.0.8:9140').replace(/\/$/, '');
-  const missionControl = (pick('MISSION_CONTROL_URL') || 'http://192.168.0.8:3151').replace(/\/$/, '') + '/';
+  const missionControl = '';
   return { repo, envFile, lanIp, port, omni, sentry, missionControl, nodeName: pick('NODE_NAME') || '', file };
 }
 

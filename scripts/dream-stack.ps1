@@ -83,8 +83,7 @@ function Get-StackServices {
       Identity = { param($s, $b) $s -eq 401 -or $s -eq 403 -or ($s -eq 200 -and $b -match '"data"\s*:\s*\[') } }
     [pscustomobject]@{ Name = 'sentry'; Label = "Fable's Sentry (Sabertooth)"; Url = "http://$S`:9140/api/status"; Managed = $false; Start = $null
       Identity = { param($s, $b) $s -eq 200 -and $b.Trim().StartsWith('{') } }
-    [pscustomobject]@{ Name = 'mission-control'; Label = 'Mission Control (Sabertooth)'; Url = "http://$S`:3151/"; Managed = $false; Start = $null
-      Identity = { param($s, $b) $s -eq 200 -and $b.Length -gt 0 } }
+    # No Sabertooth mission-control probe: the JARVIS dashboard IS mission control.
   )
 }
 

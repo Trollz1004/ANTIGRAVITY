@@ -5,7 +5,7 @@
  */
 export const NODES = [
   { id: 'alienware', name: 'Alienware', ip: '192.168.0.40', role: 'JARVIS host · Dream Online MMO · Hermes · Ollama (RX 6800)' },
-  { id: 'sabertooth', name: 'Sabertooth', ip: '192.168.0.8', role: 'OmniRoute router · Sentry · Mission Control' },
+  { id: 'sabertooth', name: 'Sabertooth', ip: '192.168.0.8', role: 'OmniRoute router · Sentry' },
 ];
 
 const A = '127.0.0.1';
@@ -22,7 +22,7 @@ export const SERVICES = [
   { id: 'obsidian', label: 'Obsidian Local REST', node: 'alienware', port: 27123, url: `http://${A}:27123/`, identity: ({ text }) => /Obsidian Local REST API/.test(text) },
   { id: 'omniroute', label: 'OmniRoute', node: 'sabertooth', port: 20128, url: `http://${S}:20128/v1/models`, identity: ({ status, json }) => status === 401 || status === 403 || (status === 200 && obj(json) && Array.isArray(json.data)) },
   { id: 'sentry', label: "Fable's Sentry", node: 'sabertooth', port: 9140, url: `http://${S}:9140/api/status`, identity: ({ status, json }) => status === 200 && obj(json) },
-  { id: 'mission-control', label: 'Mission Control', node: 'sabertooth', port: 3151, url: `http://${S}:3151/`, identity: ({ status, text }) => status === 200 && text.length > 0 },
+  // No mission-control entry: THIS dashboard is mission control (the board you are looking at).
 ];
 
 export async function probeService(svc, { fetch: fetchImpl = globalThis.fetch, timeoutMs = 4000 } = {}) {
