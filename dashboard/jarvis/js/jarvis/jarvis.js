@@ -93,17 +93,22 @@ const jarvisVoice = {
   
   speak(text) {
     return new Promise((resolve) => {
-      if (!('speechSynthesis' in window)) return resolve();
+      const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
+      if (!synth || typeof SpeechSynthesisUtterance === 'undefined') return resolve();
       setState('speaking');
+      let done = false;
+      const finish = () => { if (done) return; done = true; clearTimeout(timer); setState('idle'); resolve(); };
+      // Muted, voiceless or headless browsers never fire onend: resolve on a timer sized to the text.
+      const timer = setTimeout(finish, Math.min(20000, 1500 + String(text || '').length * 60));
       const u = new SpeechSynthesisUtterance(text);
-      const voices = speechSynthesis.getVoices();
+      const voices = synth.getVoices ? synth.getVoices() : [];
       u.voice = voices.find(v => /en-US/i.test(v.lang) && /neural|natural|aria|jenny|guy/i.test(v.name))
         || voices.find(v => /en-US/i.test(v.lang)) || voices[0] || null;
       u.rate = 1.05;
       u.pitch = 0.95; // Slightly deeper — JARVIS tone
-      u.onend = () => { setState('idle'); resolve(); };
-      u.onerror = () => { setState('idle'); resolve(); };
-      speechSynthesis.speak(u);
+      u.onend = finish;
+      u.onerror = finish;
+      try { synth.speak(u); } catch { finish(); }
     });
   },
   
@@ -209,6 +214,7 @@ function appendReply(reply, body = null) {
 }
 
 async function askOmni(text) {
+  setState('thinking');
   const res = await fetch(`${OMNI}/chat/completions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -287,7 +293,8 @@ async function askJarvis(text) {
 function setState(s) {
   jarvis.state = s;
   document.querySelectorAll('.jarvis-state').forEach(el => el.textContent = s.toUpperCase());
-  document.querySelectorAll('.jarvis-dot').forEach(el => {
+  // Only the state badge's dot changes colour; the node service dots keep their up/down class.
+  document.querySelectorAll('.jarvis-state-badge .jarvis-dot').forEach(el => {
     el.className = 'jarvis-dot jarvis-dot-' + s;
   });
   const micBtn = document.getElementById('jarvis-mic');
@@ -324,6 +331,17 @@ async function updateMetrics() {
     }
   } catch {}
   
+  // Agents = loadable skills, read from disk by the server
+  try {
+    const r = await fetch('/api/agents', { cache: 'no-store' });
+    if (r.ok) {
+      const d = await r.json();
+      jarvis.metrics.agents = d.count || 0;
+      const el = document.getElementById('jarvis-agents');
+      if (el) el.textContent = jarvis.metrics.agents;
+    }
+  } catch {}
+
   // God's-eye nodes and services
   try {
     const r = await fetch('/api/nodes', { cache: 'no-store' });

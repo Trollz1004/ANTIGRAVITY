@@ -131,7 +131,7 @@
 /* Chat log */
 .jarvis-log {
   position: absolute;
-  top: 20px;
+  top: 54px; /* below .jarvis-log-head (session badge + New session) */
   right: 20px;
   width: 280px;
   max-height: 40vh;
