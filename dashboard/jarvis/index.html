@@ -92,15 +92,18 @@
         </div>
       </section>
 
-      <!-- Mission Control Tab -->
+      <!-- Mission Control Tab: this dashboard IS mission control — live board only, no embeds, no mock -->
       <section id="tab-mission-control" class="tab-content">
         <header class="tab-header">
-          <h2>Mission Control v5</h2>
-          <p class="tab-desc">The hub on :3151, embedded from this page's host so it works on the LAN. Hermes dashboard: <a id="hermes-link" href="#" target="_blank" rel="noopener">…</a> · open Mission Control directly: <a id="mission-control-link" href="#" target="_blank" rel="noopener">…</a></p>
+          <h2>Mission Control</h2>
+          <p class="tab-desc">This dashboard is mission control. Every row below is an identity-checked probe of a real service on this node or Sabertooth — probed live by the server at request time. When something is down it says DOWN, never a stub.</p>
         </header>
-        <div id="mission-control-embed">
-          <iframe id="mission-control-frame" title="Mission Control v5" style="width:100%;height:calc(100vh - 140px);border:1px solid var(--border);border-radius:var(--radius-lg);background:#0d1117"></iframe>
+        <div class="gen-row" style="margin-bottom:12px">
+          <button id="mission-refresh" class="btn">Refresh board</button>
+          <button class="btn dock-ask" data-tab="mission-control" data-question="Read the mission board: what is down, why, and in what order should I bring things back?">⬢ Ask JARVIS</button>
         </div>
+        <p id="mission-board-note" class="tab-desc">Probing every service live…</p>
+        <div id="mission-board" class="mission-board"></div>
       </section>
 
       <!-- Agents Tab -->
@@ -113,6 +116,12 @@
           <div class="agents-sidebar">
             <input type="text" id="agent-search" placeholder="Search skills..." class="search-input" />
             <div id="agent-categories" class="category-list"></div>
+            <div class="widget-card" style="margin-top:16px;padding:12px">
+              <h3 style="margin:0 0 8px">🚀 Launch an agent CLI</h3>
+              <p class="tab-desc" style="margin:0 0 10px">Agency Agents (Tauri app) owns the 200+ persona roster in <code>.agents/skills</code> — the cards on the right. FreeBuff is the free GLM coding agent: interactive console on this node, ad-supported, time-boxed, non-judge lane.</p>
+              <button id="freebuff-launch" class="btn primary" style="width:100%">⚡ Launch FreeBuff CLI</button>
+              <p id="freebuff-result" class="tab-desc" style="margin:8px 0 0"></p>
+            </div>
           </div>
           <div class="agents-main">
             <div id="agent-list" class="agent-grid"></div>

@@ -19,7 +19,7 @@ vi.mock('three', () => ({
 class MockElement {
   constructor(tag = 'div') {
     this.tagName = tag; this.children = []; this.style = {}; this.dataset = {}; this.attrs = {}
-    this.textContent = ''; this._html = ''; this.value = ''; this.id = ''
+    this._ownText = ''; this._html = ''; this.value = ''; this.id = ''
     this.classes = new Set()
     this.classList = {
       add: (c) => this.classes.add(c),
@@ -29,6 +29,8 @@ class MockElement {
     }
     this.listeners = {}
   }
+  get textContent() { return this.children.length ? this.children.map((c) => c.textContent).join('') : this._ownText }
+  set textContent(v) { this._ownText = String(v); this.children = [] }
   get innerHTML() { return this._html }
   set innerHTML(v) { this._html = v; this.children = [] }
   appendChild(c) { this.children.push(c); return c }
@@ -63,9 +65,8 @@ globalThis.location = { hostname: '192.168.0.8' }
 globalThis.requestAnimationFrame = () => {}
 globalThis.URL.createObjectURL = () => 'blob:x'
 
-for (const id of ['activity-log', 'omni-model-count', 'stat-services', 'stat-services-detail', 'stat-agents', 'stat-agents-detail', 'stat-nodes', 'stat-nodes-detail', 'stat-vault', 'stat-vault-detail', 'stat-avatars', 'stat-avatars-detail', 'agent-categories', 'agent-list', 'agent-detail-panel', 'graph-meta', 'graph-note', 'mission-control-link', 'hermes-link', 'claude-command', 'claude-bridge-status', 'claude-note', 'claude-result', 'widget-search-results', 'avatar-gallery']) reg(id)
+for (const id of ['activity-log', 'omni-model-count', 'stat-services', 'stat-services-detail', 'stat-agents', 'stat-agents-detail', 'stat-nodes', 'stat-nodes-detail', 'stat-vault', 'stat-vault-detail', 'stat-avatars', 'stat-avatars-detail', 'agent-categories', 'agent-list', 'agent-detail-panel', 'graph-meta', 'graph-note', 'hermes-link', 'claude-command', 'claude-bridge-status', 'claude-note', 'claude-result', 'freebuff-result', 'mission-board', 'mission-board-note', 'widget-search-results', 'avatar-gallery']) reg(id)
 reg('agent-search', 'input'); reg('graph-search', 'input'); reg('widget-search-input', 'input')
-const frame = reg('mission-control-frame', 'iframe')
 const svg = reg('graph-svg', 'svg'); svg.querySelectorAll = () => []
 const gc = reg('graph-canvas-container'); gc.clientWidth = 800; gc.clientHeight = 600
 
@@ -88,7 +89,19 @@ globalThis.fetch = vi.fn(async (url, options = {}) => {
     { id: 'agency-unity-architect', name: 'agency-unity-architect', description: 'Unity architecture', category: 'agency', path: '.agents/skills/agency-unity-architect/SKILL.md' },
   ] })
   if (url.endsWith('/api/launch/claude')) return json({ ok: true, opened: 'claude.exe', on: 'THIS-NODE', from: '::1' })
+  if (url.endsWith('/api/launch/freebuff')) return json({ ok: true, opened: 'freebuff.cmd', on: 'THIS-NODE', from: '::1' })
   if (url.endsWith('/api/claude/status')) return json({ installed: true, access: { ok: true }, permissionMode: 'plan' })
+  if (url.endsWith('/api/nodes')) return json({ nodes: [
+    { name: 'Alienware', ip: '192.168.0.40', role: 'JARVIS host', up: 2, total: 3, services: [
+      { id: 'crosslisting', label: 'Crosslisting OS', port: 3000, up: true, state: 'UP', detail: 'identity ok', latencyMs: 5 },
+      { id: 'hermes', label: 'Hermes dashboard', port: 9119, up: true, state: 'UP', detail: 'identity ok', latencyMs: 4 },
+      { id: 'mission-control', label: 'Mission Control', port: 3151, up: false, state: 'DOWN', detail: 'timeout' },
+    ] },
+    { name: 'Sabertooth', ip: '192.168.0.8', role: 'OmniRoute router', up: 1, total: 2, services: [
+      { id: 'omniroute', label: 'OmniRoute', port: 20128, up: true, state: 'UP', detail: 'identity ok', latencyMs: 9 },
+      { id: 'sentry', label: "Fable's Sentry", port: 9140, up: false, state: 'DOWN', detail: 'timeout' },
+    ] },
+  ] })
   return json({ error: 'no route ' + url }, false, 404)
 })
 
@@ -122,9 +135,28 @@ describe('tab navigation (the bug that killed every click)', () => {
     tabs.find((t) => t.li.dataset.tab === 'agents').li.click()
     expect(app.state.currentTab).toBe('agents')
   })
-  it('mission-control tab points the iframe at the page host, not localhost', () => {
+  it('mission-control tab has NO iframe embed and NO dead placeholders — the live board is the tab', () => {
     app.switchTab('mission-control')
-    expect(frame.src).toBe('http://192.168.0.8:3151/')
+    expect(registry.get('#mission-control-frame')).toBeUndefined()
+    expect(registry.get('#mission-control-link')).toBeUndefined()
+  })
+  it('mission board renders live per-node service rows from /api/nodes with honest DOWN state', async () => {
+    const board = reg('mission-board', 'div')
+    const note = reg('mission-board-note', 'p')
+    board.innerHTML = ''; note._ownText = ''
+    await app.renderMissionBoard()
+    expect(board.textContent).toContain('Alienware')
+    expect(board.textContent).toContain('Crosslisting OS')
+    expect(board.textContent).toContain('DOWN')
+    expect(board.textContent).not.toContain('undefined')
+    expect(note.textContent).toContain('2 nodes')
+  })
+  it('launchFreebuff opens the FreeBuff CLI via the bridge and reports the result', async () => {
+    const out = reg('freebuff-result', 'p')
+    await app.launchFreebuff()
+    expect(out.textContent).toContain('freebuff.cmd')
+    expect(out.textContent).toContain('THIS-NODE')
+    expect(calls.some((c) => c.url.endsWith('/api/launch/freebuff'))).toBe(true)
   })
 })
 

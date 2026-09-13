@@ -441,19 +441,59 @@ function loadVRMFile(file) {
   reader.readAsArrayBuffer(file);
 }
 
-// ── Mission Control + Claude CLI ───────────────────────────────────────────
+// ── Mission Control (the live board) + Claude CLI ──────────────────────────
 
 function initMissionControl() {
-  const frame = $('#mission-control-frame');
-  if (!frame || frame.dataset.ready) return;
-  const host = location.hostname || '127.0.0.1';
-  // Mission Control runs on Sabertooth; the server says where (config.missionControl), else assume the page host.
-  frame.src = state.config?.missionControl || `http://${host}:3151/`;
-  frame.dataset.ready = '1';
-  const link = $('#mission-control-link');
-  if (link) { link.href = frame.src; link.textContent = frame.src; }
+  // This dashboard IS mission control: the live board is the whole tab. The
+  // old Sabertooth iframe embed is gone — a blank frame was dead weight.
   const hermes = $('#hermes-link');
-  if (hermes) { hermes.href = `http://${host}:9119/`; hermes.textContent = `http://${host}:9119/`; }
+  if (hermes) { const host = location.hostname || '127.0.0.1'; hermes.href = `http://${host}:9119/`; hermes.textContent = `http://${host}:9119/`; }
+  void renderMissionBoard();
+}
+
+/**
+ * The mission board IS this dashboard: a live table of every service on both
+ * LAN nodes from /api/nodes, refreshed with the Refresh button. The Sabertooth
+ * embed stays below as the legacy view for when that instance is up.
+ */
+async function renderMissionBoard() {
+  const board = $('#mission-board');
+  const note = $('#mission-board-note');
+  if (!board) return;
+  try {
+    const data = await api('/api/nodes');
+    board.innerHTML = '';
+    for (const n of data.nodes || []) {
+      const head = el('div', { class: 'mission-node-head' }, [
+        el('h3', { text: `${n.name} (${n.ip})` }),
+        el('span', { class: n.up === n.total ? 'ok' : 'warn', text: `${n.up}/${n.total} up — ${n.role || ''}` }),
+      ]);
+      const rows = (n.services || []).map((s) => el('div', { class: 'mission-row' }, [
+        el('span', { class: 'dot ' + (s.up ? 'ok' : 'down') }),
+        el('span', { class: 'mission-label', text: s.label || s.id || '' }),
+        el('span', { class: 'mission-port', text: s.port ? ':' + s.port : '' }),
+        el('span', { class: s.up ? 'ok' : 'down', text: s.state || (s.up ? 'UP' : 'DOWN') }),
+        el('span', { class: 'mission-detail', text: s.detail || '' }),
+        el('span', { class: 'mission-latency', text: s.latencyMs != null ? s.latencyMs + ' ms' : '' }),
+      ]));
+      board.appendChild(el('section', { class: 'mission-node' }, [head, ...rows]));
+    }
+    if (note) note.textContent = `Live identity-checked board — ${data.nodes?.length || 0} nodes, refreshed ${new Date().toLocaleTimeString()}`;
+  } catch (e) {
+    if (note) note.textContent = 'Board unavailable: ' + e.message;
+  }
+}
+
+async function launchFreebuff() {
+  const out = $('#freebuff-result');
+  if (out) out.textContent = 'Opening FreeBuff CLI…';
+  try {
+    const r = await api('/api/launch/freebuff', { method: 'POST' });
+    if (out) out.textContent = `Opened ${r.opened} on ${r.on} — free GLM agent, ad-supported, time-boxed. Non-judge lane: hand its work to Claude/Codex.`;
+    logActivity(`FreeBuff CLI opened on ${r.on}`);
+  } catch (e) {
+    if (out) out.textContent = `Could not open: ${e.message}`;
+  }
 }
 
 async function initClaude() {
@@ -608,6 +648,8 @@ function init() {
   $('#scene-generate')?.addEventListener('click', () => generateImage('#scene-prompt', '#scene-result', '#scene-model'));
   $('#image-generate')?.addEventListener('click', () => generateImage('#image-prompt', '#image-result', '#image-model', '#image-style'));
   $('#claude-launch')?.addEventListener('click', launchClaude);
+  $('#freebuff-launch')?.addEventListener('click', launchFreebuff);
+  $('#mission-refresh')?.addEventListener('click', () => void renderMissionBoard());
   logActivity('Dashboard initialized');
 }
 
@@ -617,7 +659,7 @@ document.addEventListener('DOMContentLoaded', init);
 export {
   state, $, $$, el, setText, logActivity, initTabs, switchTab, initDashboard, initAgents,
   renderAgentCategories, renderAgentList, showAgentDetail, initGraph, renderGraph, simulateGraph,
-  openNote, initAvatar, loadAvatarGallery, loadVRMFile, initMissionControl, initClaude, launchClaude,
+  openNote, initAvatar, loadAvatarGallery, loadVRMFile, initMissionControl, renderMissionBoard, initClaude, launchClaude, launchFreebuff,
   initWidgets, sendChat, doSearch, doSummarize, doTTS, generateImage, api, omniFetch, omniChat,
   omniImageGen, omniTTS, init, IMAGE_MODEL, CHAT_MODEL, OMNI_PROXY,
 };

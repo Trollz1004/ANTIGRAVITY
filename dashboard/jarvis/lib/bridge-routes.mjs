@@ -11,6 +11,7 @@
  *   GET     /api/hud/context                                   -> the same preamble the bridge would compose (display/debug)
  *   POST    /api/claude/stop                                    -> {ok, killed}
  *   POST    /api/launch/claude                                  -> opens the CLI in a console on this host
+ *   POST    /api/launch/freebuff                                -> opens the FreeBuff CLI (free GLM agent) in a console on this host
  *   GET     /api/ollama/tags                                    -> {available, models}
  *   POST    /api/ollama/chat   {messages, model?}               -> text/event-stream (delta, result)
  *
@@ -23,9 +24,10 @@ import { randomBytes } from 'node:crypto';
 import { spawn as nodeSpawn } from 'node:child_process';
 import { runClaude, resolveClaudeBinary, bridgeAccess, isSameOrigin, sse, killTree as defaultKillTree, effectivePermissionMode, PERMISSION_MODES, PERSONAS } from './claude-bridge.mjs';
 import { hudContext, promptWithContext } from './hud-context.mjs';
+import { readMemory, appendMemory, memoryBlock } from './jarvis-memory.mjs';
 import { pickOllamaModel, streamOllamaChat, resolveOllamaBase } from './ollama.mjs';
 
-const DENY_STATIC = [/^\/lib(\/|$)/, /^\/tests(\/|$)/, /^\/server\.mjs$/, /^\/package(-lock)?\.json$/, /^\/vitest\.config\.js$/, /^\/node_modules(\/|$)/, /^\/\.git(\/|$)/, /^\/\.env/];
+const DENY_STATIC = [/^\/lib(\/|$)/, /^\/tests(\/|$)/, /^\/server\.mjs$/, /^\/package(-lock)?\.json$/, /^\/vitest\.config\.js$/, /^\/node_modules(\/|$)/, /^\/\.git(\/|$)/, /^\/\.env/, /^\/data(\/|$)/];
 const SSE_HEADERS = { 'content-type': 'text/event-stream', 'cache-control': 'no-store', connection: 'keep-alive', 'x-accel-buffering': 'no' };
 const state = { current: null }; // one Claude run at a time: { run, startedAt, persona }
 const hermesState = { current: null, lastLatencyMs: null };
@@ -35,6 +37,15 @@ function resolveHermesBinary(env = process.env) {
   const local = env.LOCALAPPDATA ? join(env.LOCALAPPDATA, 'hermes', 'bin', 'hermes.exe') : '';
   if (local && existsSync(local)) return local;
   return 'hermes'; // PATH lookup
+}
+/** FreeBuff CLI (free GLM agent, npm -g). Its launcher shim is what we open. */
+function resolveFreebuffBinary(env = process.env) {
+  if (env.FREEBUFF_BIN && existsSync(env.FREEBUFF_BIN)) return env.FREEBUFF_BIN;
+  const npm = env.APPDATA ? join(env.APPDATA, 'npm') : '';
+  for (const name of ['freebuff.cmd', 'freebuff.ps1', 'freebuff']) {
+    if (npm && existsSync(join(npm, name))) return join(npm, name);
+  }
+  return ''; // honestly uninstalled
 }
 function readOwnerFileDefault(env = process.env) {
   return readFileSync(join(env.LOCALAPPDATA || '', 'hermes', 'memories', 'USER.md'), 'utf8');
@@ -66,7 +77,7 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
   const url = new URL(req.url || '/', 'http://x');
   const p = url.pathname;
   if (DENY_STATIC.some((rx) => rx.test(p))) { json(res, 404, { error: 'not found' }); return true; }
-  const isBridge = p.startsWith('/api/claude/') || p === '/api/launch/claude' || p.startsWith('/api/hermes/') || p === '/api/hud/context';
+  const isBridge = p.startsWith('/api/claude/') || p === '/api/launch/claude' || p === '/api/launch/freebuff' || p.startsWith('/api/hermes/') || p === '/api/hud/context' || p === '/api/jarvis/memory';
   const isOllama = p.startsWith('/api/ollama/');
   const isOwner = p === '/api/owner';
   if (!isBridge && !isOllama && !isOwner) return false;
@@ -79,6 +90,7 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
   const spawn = deps.spawn || nodeSpawn;
   const killTree = deps.killTree || ((child) => defaultKillTree(child, { spawn }));
   const resolveBinary = deps.resolveBinary || (() => resolveClaudeBinary());
+  const resolveFreebuff = deps.resolveFreebuff || (() => resolveFreebuffBinary());
   const fetchImpl = deps.fetch || globalThis.fetch;
   const ollamaBase = deps.ollamaBase ? String(deps.ollamaBase).replace(/\/$/, '') : resolveOllamaBase({ JARVIS_OLLAMA_URL: envValue('JARVIS_OLLAMA_URL'), OLLAMA_HOST: envValue('OLLAMA_HOST') });
 
@@ -99,7 +111,12 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     return json(res, 200, { context, tab: 'hud', at: new Date().toISOString() });
   }
 
-  // ── Ollama (chat only, no tools: LAN callers are fine) ─────────────────────
+  // ── JARVIS memory: what the bridge remembers, shown honestly ────────────────
+  if (p === '/api/jarvis/memory' && req.method === 'GET') {
+    return json(res, 200, readMemory(deps.jarvisMemory || {}));
+  }
+
+  // ── Ollama (chat only, no tools: LAN callers are fine) ───────────────────────
   if (isOllama) {
     if (p === '/api/ollama/tags' && req.method === 'GET') {
       try {
@@ -212,11 +229,15 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
       const live = {};
       const jobs = Object.entries(depsForCtx).filter(([, f]) => typeof f === 'function').map(async ([k, f]) => { try { live[k] = await f(); } catch { live[k] = null; } });
       await Promise.all(jobs);
+      const memorySection = memoryBlock(readMemory(deps.jarvisMemory || {}));
       finalPrompt = promptWithContext({
-        context: hudContext({ nodes: live.nodes || null, house: live.house || null, vault: live.vault || null, agents: live.agents || null, graph: live.graph || null, config: { repo: cfg.repo, missionControl: cfg.missionControl, vaultName: cfg.vaultName, vaultPath: cfg.vaultPath } }),
+        context: [hudContext({ nodes: live.nodes || null, house: live.house || null, vault: live.vault || null, agents: live.agents || null, graph: live.graph || null, config: { repo: cfg.repo, missionControl: cfg.missionControl, vaultName: cfg.vaultName, vaultPath: cfg.vaultPath } }), memorySection].filter(Boolean).join('\n\n'),
         tab: String(body.tab || ''), user: prompt, at: new Date().toISOString(),
       });
     }
+    // Durable memory: every jarvis-persona turn is captured (result or failure).
+    const remember = (reply, ok) => { try { appendMemory({ ...(deps.jarvisMemory || {}), entry: { prompt, reply, ok } }); } catch {} };
+    let sawResult = false;
     const bin = resolveBinary();
     res.writeHead(200, SSE_HEADERS);
     let run;
@@ -231,6 +252,11 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
         timeoutMs: Number(envValue('CLAUDE_BRIDGE_TIMEOUT_MS')) || 300000,
         onEvent: (ev) => {
           try { res.write(sse(ev.type, ev)); } catch {}
+          if (persona === 'jarvis') {
+            if (ev.type === 'result') { sawResult = true; remember(ev.text || ev.error || '', ev.ok !== false && !ev.error); }
+            else if (ev.type === 'error') { sawResult = true; remember(ev.message || 'error', false); }
+            else if (ev.type === 'exit' && !sawResult) remember(ev.stderr || `exit code ${ev.code}`, false);
+          }
           if (ev.type === 'exit') { console.log(new Date().toISOString(), 'claude bridge exit code', ev.code, 'after', Date.now() - startedAt, 'ms'); finish(); }
         },
       });
@@ -251,6 +277,19 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     };
     if (sock && typeof sock.once === 'function') sock.once('close', onGone); else res.on('close', onGone);
     console.log(new Date().toISOString(), 'claude bridge', persona, 'from', req.socket && req.socket.remoteAddress, 'session', sessionId || 'new');
+    return true;
+  }
+
+  if (p === '/api/launch/freebuff' && req.method === 'POST') {
+    const bin = resolveFreebuff();
+    if (!bin) { json(res, 503, { ok: false, error: 'freebuff CLI not found (npm i -g freebuff, or set FREEBUFF_BIN)' }); return true; }
+    try {
+      // Same verified recipe as the Claude launch: a visible console on this host.
+      const c = spawn('powershell.exe', ['-NoProfile', '-Command', `Start-Process cmd.exe -ArgumentList '/k','"${bin}"' -WorkingDirectory '${cfg.repo || '.'}'`], { detached: true, stdio: 'ignore', windowsHide: true });
+      if (c && typeof c.unref === 'function') c.unref();
+      console.log(new Date().toISOString(), 'launch freebuff from', req.socket && req.socket.remoteAddress);
+      json(res, 200, { ok: true, opened: basename(bin), on: String(cfg.nodeName || hostname()).toUpperCase(), from: req.socket && req.socket.remoteAddress });
+    } catch (e) { json(res, 500, { ok: false, error: String(e.message || e) }); }
     return true;
   }
 

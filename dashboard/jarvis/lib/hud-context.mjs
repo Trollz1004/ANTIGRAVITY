@@ -58,11 +58,7 @@ export function hudContext({ nodes, house, vault, agents, graph, config } = {}) 
  */
 export function promptWithContext({ context = '', tab = '', user = '', at = '' } = {}) {
   const head = `[House context — server-verified by the dashboard server${at ? ' at ' + at : ''}]`;
-  const body = [
-    head,
-    `Current dashboard tab: ${tabName(tab)}`,
-    clean(context),
-    '[/House context]',
-  ].filter((l) => l !== clean('')).join('\n');
+  // Context keeps its own line structure (service lists, the memory block).
+  const body = [head, `Current dashboard tab: ${tabName(tab)}`, String(context || '').trim(), '[/House context]'].filter((l) => l !== '').join('\n');
   return `${body}\n\n${user}`.replace(/\n{3,}/g, '\n\n');
 }
