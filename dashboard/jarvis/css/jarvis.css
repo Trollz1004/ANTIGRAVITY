@@ -22,7 +22,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: opacity 0.2s ease;
 }
+
+.jarvis-conversing #jarvis-hud { opacity: .35; }
 
 .jarvis-center {
   position: absolute;
@@ -122,6 +125,23 @@
   padding: 10px 16px;
 }
 
+#jarvis-conv-stop {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  padding: 0;
+  border: 1px solid var(--border);
+  display: inline-grid;
+  place-items: center;
+}
+
+#jarvis-conv-stop::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background: var(--error);
+}
+
 .jarvis-controls .chat-input {
   width: 260px;
 }
@@ -170,6 +190,7 @@
 .jarvis-dot-down { background: var(--error); }
 .jarvis-msg-stream > span:last-child::after { content: '▍'; animation: jarvis-caret 0.8s step-end infinite; }
 .jarvis-log-head { position: absolute; top: 20px; right: 20px; width: 280px; display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 11px; z-index: 6; }
+.jarvis-shortcuts { position: absolute; right: 20px; bottom: 80px; width: 280px; background: rgba(22, 27, 34, 0.85); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px; color: var(--text-secondary); font-family: var(--font-mono); font-size: 10px; line-height: 1.5; z-index: 6; }
 @keyframes jarvis-caret { 50% { opacity: 0; } }
 
 

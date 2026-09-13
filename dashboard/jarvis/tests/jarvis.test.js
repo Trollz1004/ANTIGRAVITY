@@ -9,11 +9,12 @@ class MockEl {
     this.className = ''
     this.textContent = ''
     this.value = ''
+    this.attributes = {}
     this._listeners = {}
   }
   appendChild(c) { this.children.push(c); return c }
   addEventListener(ev, fn) { (this._listeners[ev] ||= []).push(fn) }
-  setAttribute() {}
+  setAttribute(name, value) { this.attributes[name] = String(value) }
   querySelector() { return new MockEl() }
   querySelectorAll() { return [] }
 }
@@ -102,6 +103,17 @@ describe('JARVIS core', () => {
     expect(jarvisMod.jarvis.state).toBe('idle')
   })
 
+  it('timestamps log and streamed reply rows for conversation filtering', () => {
+    global.__els ||= {}
+    const log = global.__els['jarvis-log'] = new MockEl()
+    const now = vi.spyOn(Date, 'now').mockReturnValue(1234)
+    jarvisMod.jarvisLog('JARVIS', 'Timestamped')
+    jarvisMod.addStreamRow()
+    now.mockRestore()
+    expect(log.children[0].attributes['data-ts']).toBe('1234')
+    expect(log.children[1].attributes['data-ts']).toBe('1234')
+  })
+
   it('speak() resolves even when speech synthesis never fires onend (muted or voiceless browser)', async () => {
     global.window.speechSynthesis = { getVoices: () => [], speak: vi.fn(), cancel: vi.fn() }
     global.SpeechSynthesisUtterance = class { constructor(t) { this.text = t } }
@@ -183,6 +195,8 @@ describe('JARVIS wiring regressions (judge findings)', () => {
     expect(html).toContain('id="jarvis-nodes-list"')
     expect(html).toContain('id="jarvis-session"')
     expect(html).toContain('id="jarvis-session-new"')
+    expect(html).toContain('id="jarvis-conv-stop"')
+    expect(html).toContain('id="jarvis-shortcuts"')
     expect(html).toContain('id="claude-bridge-status"')
     expect(html).not.toMatch(/SABRETOOTH|drift bare|ssh <user>@/)
   })
@@ -191,6 +205,7 @@ describe('JARVIS wiring regressions (judge findings)', () => {
     const src = fs.readFileSync(path.resolve(__dirname, '..', 'js', 'jarvis', 'jarvis.js'), 'utf-8')
     expect(html).toContain('id="jarvis-interim"')
     expect(src).toContain("from './voice.js'")
+    expect(src).toContain("from './shortcuts.js'")
     expect(src).toMatch(/startListening\(\)\s*\{\s*return getPushToTalk\(\)\.tap\(\)/)
     expect(src).not.toMatch(/const SR = window\.SpeechRecognition/)
   })
