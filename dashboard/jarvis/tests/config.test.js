@@ -65,3 +65,35 @@ describe('resolveConfig', () => {
     expect(e.missionControl).toBe('http://10.0.0.8:3151/')
   })
 })
+
+describe('resolveVault', () => {
+  const here = resolve(import.meta.dirname, '..')
+
+  it('returns the configured vault when it exists, with its folder name', () => {
+    const real = mkdtempSync(join(tmpdir(), 'vault-real-'))
+    const v = cfg.resolveVault({ env: { OBSIDIAN_VAULT_ANTIGRAVITY: real }, readEnv: () => ({}) })
+    expect(v.path).toBe(real)
+    expect(v.name).toBe(real.split(/[\\/]/).pop())
+    expect(v.source).toBe('configured')
+  })
+
+  it('ignores a configured path that does not exist and self-heals to an existing candidate', () => {
+    const real = mkdtempSync(join(tmpdir(), 'AlienwareDream-'))
+    const v = cfg.resolveVault({ env: { OBSIDIAN_VAULT_ANTIGRAVITY: 'C:/definitely/not/a/vault' }, readEnv: () => ({}), candidates: [real] })
+    expect(v.path).toBe(real)
+    expect(v.source).toBe('auto')
+  })
+
+  it('falls back to the repo default location when nothing exists', () => {
+    const v = cfg.resolveVault({ env: {}, readEnv: () => ({}), candidates: ['C:/definitely/not/a/vault'] })
+    expect(v.source).toBe('default')
+    expect(v.exists).toBe(false)
+    expect(v.name).toBe('Antigravity')
+  })
+
+  it('prefers env over the .env file and never errors when the file is missing', () => {
+    const real = mkdtempSync(join(tmpdir(), 'vault-env-'))
+    const v = cfg.resolveVault({ env: { OBSIDIAN_VAULT_ANTIGRAVITY: real }, readEnv: () => ({ OBSIDIAN_VAULT_ANTIGRAVITY: 'C:/definitely/not/a/vault' }) })
+    expect(v.path).toBe(real)
+  })
+})
