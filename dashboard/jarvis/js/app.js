@@ -447,7 +447,8 @@ function initMissionControl() {
   const frame = $('#mission-control-frame');
   if (!frame || frame.dataset.ready) return;
   const host = location.hostname || '127.0.0.1';
-  frame.src = `http://${host}:3151/`;
+  // Mission Control runs on Sabertooth; the server says where (config.missionControl), else assume the page host.
+  frame.src = state.config?.missionControl || `http://${host}:3151/`;
   frame.dataset.ready = '1';
   const link = $('#mission-control-link');
   if (link) { link.href = frame.src; link.textContent = frame.src; }
@@ -455,11 +456,17 @@ function initMissionControl() {
   if (hermes) { hermes.href = `http://${host}:9119/`; hermes.textContent = `http://${host}:9119/`; }
 }
 
-function initClaude() {
+async function initClaude() {
   const cfg = state.config?.claude;
   if (cfg) {
     setText('#claude-command', cfg.command);
     setText('#claude-note', cfg.note);
+  }
+  try {
+    const status = await api('/api/claude/status');
+    setText('#claude-bridge-status', `Bridge: ${status.installed ? 'installed' : 'not installed'} · access ${status.access?.ok ? 'ok' : 'refused'} · mode ${status.permissionMode}`);
+  } catch (e) {
+    setText('#claude-bridge-status', 'Bridge: unavailable');
   }
 }
 
@@ -468,8 +475,8 @@ async function launchClaude() {
   if (out) out.textContent = 'Opening…';
   try {
     const r = await api('/api/launch/claude', { method: 'POST' });
-    if (out) out.textContent = `Opened "${r.opened}" on ${r.on} (request from ${r.from}). Look for the new Claude window on that machine.`;
-    logActivity('Official Claude CLI opened on SABRETOOTH (drift bare)');
+    if (out) out.textContent = `Opened ${r.opened} on ${r.on}`;
+    logActivity(`Official Claude CLI opened on ${r.on}`);
   } catch (e) {
     if (out) out.textContent = `Could not open: ${e.message}`;
   }

@@ -1,1 +1,8 @@
 *.env
+
+# local MCP config with tokens, never commit
+mcpServers.jsonl
+# accidental root installs
+node_modules/
+package-lock.json
+package.json

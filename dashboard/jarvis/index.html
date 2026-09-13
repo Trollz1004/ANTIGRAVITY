@@ -264,16 +264,15 @@
       <section id="tab-claude" class="tab-content">
         <header class="tab-header">
           <h2>Official Claude CLI</h2>
-          <p class="tab-desc">Claude never routes through OmniRoute. The judge lane is the official CLI on account auth, opened by drift.</p>
         </header>
         <div class="widget-card" style="max-width:720px">
-          <p>Command: <code id="claude-command">drift bare</code></p>
-          <p id="claude-note" class="placeholder">Opens the official Claude CLI in a new window on SABRETOOTH.</p>
+          <p id="claude-bridge-status" class="placeholder">Checking the Claude CLI bridge…</p>
+          <p>Command: <code id="claude-command">claude</code></p>
+          <p id="claude-note" class="placeholder"></p>
           <div class="gen-row" style="margin-top:12px">
-            <button id="claude-launch" class="btn primary">Open Claude on SABRETOOTH</button>
+            <button id="claude-launch" class="btn primary">Open Claude CLI window on this node</button>
           </div>
           <p id="claude-result" class="output-box" style="margin-top:12px"></p>
-          <p class="placeholder" style="margin-top:12px">From another node on the LAN (the Alienware): <code>ssh &lt;user&gt;@192.168.0.8</code> then <code>drift bare</code>. The button above always opens the window on SABRETOOTH's own display.</p>
         </div>
       </section>
           <!-- Hermes AI Voice Tab -->
@@ -317,6 +316,10 @@
               <div class="jarvis-metric-label">Graph Nodes</div>
               <div class="jarvis-metric-value" id="jarvis-graph">—</div>
             </div>
+            <div class="jarvis-metric" id="jarvis-nodes">
+              <div class="jarvis-metric-label">Nodes</div>
+              <div id="jarvis-nodes-list" class="jarvis-nodes-list"></div>
+            </div>
           </div>
           <div id="jarvis-hud">
             <div class="jarvis-center">
@@ -324,10 +327,19 @@
               <div class="jarvis-state-badge"><span class="jarvis-dot jarvis-dot-idle"></span><span class="jarvis-state">IDLE</span></div>
             </div>
           </div>
+          <div id="jarvis-interim" class="jarvis-interim" aria-live="polite"></div>
+          <div class="jarvis-log-head"><span id="jarvis-session" class="jarvis-session"></span><button id="jarvis-session-new" class="btn" type="button">New session</button></div>
           <div id="jarvis-log" class="jarvis-log"></div>
           <div class="jarvis-controls">
             <button id="jarvis-mic" class="btn primary">🎙 Talk</button>
             <button id="jarvis-stop" class="btn">Stop</button>
+            <select id="jarvis-brain" class="select-input" title="Brain">
+              <option value="omni">OmniRoute</option>
+              <option value="claude">Claude CLI</option>
+              <option value="ollama">Ollama (local)</option>
+              <option value="hermes">Hermes</option>
+            </select>
+            <span id="jarvis-brain-status" class="voice-status voice-status-idle">—</span>
             <input type="text" id="jarvis-input" placeholder="Or type to JARVIS..." class="chat-input" />
             <button id="jarvis-send" class="btn primary">Send</button>
           </div>
