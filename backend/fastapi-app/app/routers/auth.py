@@ -147,6 +147,23 @@ async def register(
     await db.commit()
     await db.refresh(user)
 
+<<<<<<< HEAD
+=======
+    # Track in growth engine if referral code supplied
+    if payload.referral_code:
+        try:
+            import sys
+            growth_dir = "C:/ANTIGRAVITY/ops/growth-engine"
+            if growth_dir not in sys.path:
+                sys.path.insert(0, growth_dir)
+            from growth_engine import create_user as create_growth_user
+            create_growth_user(payload.email.lower(), referred_by=payload.referral_code)
+        except Exception as exc:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning("Growth engine tracking failed for %s: %s", payload.email, exc)
+
+>>>>>>> af0e84c5 (fix: Judge findings — remove dev.env from tracking, fix mutual-like matching, fix test paths, replace silent except with logging)
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
         refresh_token=create_refresh_token(str(user.id)),
