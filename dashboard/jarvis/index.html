@@ -330,14 +330,16 @@
           <div id="jarvis-interim" class="jarvis-interim" aria-live="polite"></div>
           <div class="jarvis-log-head"><span id="jarvis-session" class="jarvis-session"></span><button id="jarvis-session-new" class="btn" type="button">New session</button></div>
           <div id="jarvis-log" class="jarvis-log"></div>
+          <div id="jarvis-shortcuts" class="jarvis-shortcuts" hidden>1 OmniRoute · 2 Claude · 3 Ollama · 4 Hermes · Esc End conversation · ? Toggle shortcuts</div>
           <div class="jarvis-controls">
             <button id="jarvis-mic" class="btn primary">🎙 Talk</button>
+            <button id="jarvis-conv-stop" class="btn" type="button" aria-label="Stop conversation" hidden></button>
             <button id="jarvis-stop" class="btn">Stop</button>
-            <select id="jarvis-brain" class="select-input" title="Brain">
-              <option value="omni">OmniRoute</option>
-              <option value="claude">Claude CLI</option>
-              <option value="ollama">Ollama (local)</option>
-              <option value="hermes">Hermes</option>
+            <select id="jarvis-brain" class="select-input" title="Brain shortcuts: OmniRoute (1), Claude CLI (2), Ollama (3), Hermes (4)">
+              <option value="omni" data-key="1">OmniRoute (1)</option>
+              <option value="claude" data-key="2">Claude CLI (2)</option>
+              <option value="ollama" data-key="3">Ollama (local) (3)</option>
+              <option value="hermes" data-key="4">Hermes (4)</option>
             </select>
             <span id="jarvis-brain-status" class="voice-status voice-status-idle">—</span>
             <input type="text" id="jarvis-input" placeholder="Or type to JARVIS..." class="chat-input" />
