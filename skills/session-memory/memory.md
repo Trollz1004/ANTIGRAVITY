@@ -149,6 +149,6 @@ caveman_skills: 7
 - [ ] Obsidian: enable the Local REST API's plain-HTTP server (or install `vault-curate`) so the `obsidian` MCP connects; enable the Obsidian CLI; set `OBSIDIAN_VAULT_*` in `.env` to `C:\DREAM\AlienwareDream`.
 - [ ] `SUPERMEMORY_API_KEY`: wire the key Joshua keeps in `.env` into the supermemory plugin and Hermes' memory provider.
 - [ ] Unreal Engine 5.8 install needs Joshua's explicit approval; then enable the Unreal MCP plugin (Auto Start Server) and restart Hermes.
-- [ ] "free buff" provider request is still unresolved (no such Hermes provider).
+- [x] "free buff" resolved: FreeBuff is a separate free coding-agent CLI (`npm -g freebuff`), a non-judge implementation lane, not a Hermes provider.
 - [ ] README.md rewrite for this node, docs sweep for Sabertooth/Termux assumptions.
 - [ ] Next Dream Online slices: `ollama-local` provider for T0 ambient NPCs; Sup@ on the real Claude CLI using the bridge's `buildClaudeArgs`/`childEnv`/`killTree` pattern.

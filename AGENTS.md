@@ -18,7 +18,7 @@ The one rulebook for every AI platform that works in this repo (remote `origin`,
 
 ## Merge rules
 
-- **Judge lanes:** Claude Code and Codex are the only lanes with push and merge authority. All other agents (Hermes, Copilot, OpenCode, Gemini, CEO, Coder and others) commit locally on a branch and hand the work to a judge lane with a report.
+- **Judge lanes:** Claude Code and Codex are the only lanes with push and merge authority. All other agents (Hermes, Copilot, OpenCode, Gemini, FreeBuff, CEO, Coder and others) commit locally on a branch and hand the work to a judge lane with a report. FreeBuff (`npm -g freebuff`, free GLM-based coding agent, ad-supported, time-boxed sessions) is a cheap implementation lane for cards, same rules as Hermes.
 - **A judge lane merges its own work.** Do the work on a branch, merge it into `master` with `git merge --no-ff` (the `gh` CLI is not installed on this machine), then `git push origin master`. Never force-push `master`.
 - **90% pass rule:** work is accepted only when at least 90% of the affected test suites pass. Run the suites below before merging. Report the pass rate and name every failure. Never merge below 90%.
 - Commits use conventional types (`feat(dashboard):`, `fix(jarvis):`, `docs:`, `test:`, `chore:`). See `skills/caveman-commit/SKILL.md`.
