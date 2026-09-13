@@ -1,6 +1,6 @@
 ---
-last_session: 2026-09-11
-total_sessions: 4
+last_session: 2026-09-13
+total_sessions: 5
 model: stepfun/step-3.7-flash
 provider: nous
 omniroute: http://192.168.0.8:20128/v1
@@ -120,3 +120,35 @@ caveman_skills: 7
 - [ ] User approves and finishes the Adrenalin 26.9.1 install (installer window is open, waiting on UAC/click-through), then reboots. After reboot: rerun `ollama serve`, confirm `amdhip64_7.dll` exists, and check the ROCm path appears with no "driver too old" warning.
 - [ ] Set `DREAM_ROOT` / `DREAM_REPO_DIR` in `.env` to `C:\DREAM\dream-online` — only with the user present, since they asked to be careful with `.env` edits.
 - [ ] Remaining items from the earlier 2026-09-11 block (Obsidian vault, jarvis `NODE_LAN_IP` from `.env`, pnpm, GitHub sign-in + push, port clash, README rewrite, docs sweep).
+
+## 2026-09-12 to 2026-09-13 (Claude Code, Alienware node 192.168.0.40)
+
+### Decisions
+- JARVIS tab became the God's Eye HUD: interactive globe, a live Nodes panel fed by `GET /api/nodes` (identity-checked probes of both LAN nodes), a brain selector (OmniRoute, Claude CLI, Ollama, Hermes) with streamed replies and a session badge, push-to-talk on the globe (`js/jarvis/voice.js`).
+- Claude CLI bridge: `POST /api/claude/chat` runs the official `claude -p --output-format stream-json` on account auth and streams Server-Sent Events. Local-only unless `DASHBOARD_BRIDGE_TOKEN` is set; permission ceiling `plan`; `.env` files denied to the CLI; one run at a time; child killed when the socket closes. Ollama and Hermes are brains through the same SSE contract.
+- Delegation rule (Joshua, after hitting his Claude usage cap): the judge lane writes cards and judges, Hermes implements. Cards run detached through `hermes chat --query-file <file> -Q --oneshot -c <session> --create-if-missing`; Hermes returns a `HERMES REPORT` block. Config edits are done directly, never delegated.
+- One rulebook per platform: `AGENTS.md` is canonical in this repo, in `C:\DREAM` and in dream-online; `CLAUDE.md` and `GEMINI.md` import it, `.github/copilot-instructions.md` and Hermes `SOUL.md` point at it. The Agency Agents app owns `C:\DREAM\.agents\skills` and the per-platform agent files. Repo skills stay in their folders.
+- Hermes on this node runs on Joshua's sign-ins, never OmniRoute for the main model: `openai-codex` / `gpt-5.6-terra`, fallbacks luna, Grok, Nous; `delegation` uses OmniRoute `auto/best-fast`. `unreal-engine` MCP registered (down until Unreal 5.8 runs its MCP server). `hermes config set model.default codex/...` flips the provider silently; edit `config.yaml` instead.
+- Self-healing supervisor `scripts/dream-stack.ps1` (Pester 11/11, live 7/8 up) with the logon Scheduled Task "DREAM Stack".
+- Claude Code plugins installed at user scope to mirror Sabertooth: `claude-obsidian` and `supermemory`. Obsidian MCP registered but unreachable until the Local REST API's HTTP server is on.
+- Dream Online: Hermes built the disabled-by-default webhook provider in Live NPC Lab; judged, merged to `main`, pushed.
+
+### Changes
+- hermes: `dashboard/jarvis/lib/{config,nodes,claude-bridge,bridge-routes,ollama}.mjs`, `server.mjs`, `index.html`, `js/jarvis/{jarvis,claude-bridge,voice}.js`, `js/app.js`, `css/jarvis.css`, tests (11 files, 111 passing), `tests/fixtures/claude-stream.ndjson`, `scripts/dream-stack.{ps1,cmd,Tests.ps1}`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md`, `.gitignore`. Merged to `master` and pushed.
+- dream-online: `AGENTS.md` (canonical), `CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md`, Live NPC Lab Hermes provider, `.gitignore` for runtime state. Merged to `main` and pushed.
+- Outside the repos: `C:\DREAM\{AGENTS,CLAUDE,GEMINI}.md`, `C:\DREAM\.github\copilot-instructions.md`, Hermes `config.yaml` + `.env` (`HERMES_CUSTOM_OMNIROUTE_API_KEY`), Hermes `SOUL.md`, Scheduled Task "DREAM Stack", Claude Code plugins and the `obsidian` MCP entry, project memory files.
+
+### Lessons
+- Node's request and response `close` events fire while a browser is still connected (about 250 ms after the headers); only the socket's `close` means the client is gone. Curl and Node fetch hid the bug because their events fired before the handler was registered.
+- A page that speaks its greeting speaks through the real speakers even from a headless test browser; mute `speechSynthesis` in test harnesses.
+- `git commit -- <paths>` commits only tracked paths. Never switch branches in a checkout another agent is editing; merge through a temporary worktree. Bash keeps its last `cd`, so use explicit repo paths (`git -C`).
+- `OLLAMA_API` in the repo `.env` is a key, not a URL; the Ollama base comes from `JARVIS_OLLAMA_URL` or `OLLAMA_HOST`.
+
+### Carry-forward TODOs
+- [ ] Card 3 for Hermes (conversation panel, number-key brain switching, `?` shortcuts, `/api/owner` greeting).
+- [ ] Obsidian: enable the Local REST API's plain-HTTP server (or install `vault-curate`) so the `obsidian` MCP connects; enable the Obsidian CLI; set `OBSIDIAN_VAULT_*` in `.env` to `C:\DREAM\AlienwareDream`.
+- [ ] `SUPERMEMORY_API_KEY`: wire the key Joshua keeps in `.env` into the supermemory plugin and Hermes' memory provider.
+- [ ] Unreal Engine 5.8 install needs Joshua's explicit approval; then enable the Unreal MCP plugin (Auto Start Server) and restart Hermes.
+- [ ] "free buff" provider request is still unresolved (no such Hermes provider).
+- [ ] README.md rewrite for this node, docs sweep for Sabertooth/Termux assumptions.
+- [ ] Next Dream Online slices: `ollama-local` provider for T0 ambient NPCs; Sup@ on the real Claude CLI using the bridge's `buildClaudeArgs`/`childEnv`/`killTree` pattern.
