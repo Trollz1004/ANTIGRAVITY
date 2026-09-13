@@ -68,6 +68,13 @@ describe('resolveConfig', () => {
 
 describe('resolveVault', () => {
   const here = resolve(import.meta.dirname, '..')
+  it('carries the stable Obsidian vault id when configured (env beats file)', () => {
+    const r = cfg.resolveVault({ env: { OBSIDIAN_VAULT_ID: 'id-from-env' }, readEnv: () => ({ OBSIDIAN_VAULT_ID: 'id-from-file' }), envFile: 'Z:/x' })
+    expect(r.id).toBe('id-from-env')
+    const f = cfg.resolveVault({ env: {}, readEnv: () => ({ OBSIDIAN_VAULT_ID: '81a626afaf05ce81' }), envFile: 'Z:/x' })
+    expect(f.id).toBe('81a626afaf05ce81')
+    expect(cfg.resolveVault({ env: {}, readEnv: () => ({}), envFile: 'Z:/x' }).id).toBe('')
+  })
 
   it('returns the configured vault when it exists, with its folder name', () => {
     const real = mkdtempSync(join(tmpdir(), 'vault-real-'))
