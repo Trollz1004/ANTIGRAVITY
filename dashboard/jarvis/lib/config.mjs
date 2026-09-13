@@ -70,8 +70,10 @@ export function resolveConfig({ here, env = process.env, readEnv = readEnvFile, 
  * @param {string[]} [opts.candidates] extra fallback folders (repo-relative defaults)
  */
 export function resolveVault({ env = process.env, readEnv = readEnvFile, envFile, candidates = [] }) {
-  const fromEnv = env.OBSIDIAN_VAULT_ANTIGRAVITY || '';
-  const fromFile = envFile ? (readEnv(envFile) || {}).OBSIDIAN_VAULT_ANTIGRAVITY || '' : '';
+  // OBSIDIAN_VAULT is the current name; OBSIDIAN_VAULT_ANTIGRAVITY is accepted as legacy.
+  const fromEnv = env.OBSIDIAN_VAULT || env.OBSIDIAN_VAULT_ANTIGRAVITY || '';
+  const file = envFile ? (readEnv(envFile) || {}) : {};
+  const fromFile = file.OBSIDIAN_VAULT || file.OBSIDIAN_VAULT_ANTIGRAVITY || '';
   const configured = fromEnv || fromFile;
   const fallback = join(resolve(import.meta.dirname, '..', '..'), 'Antigravity');
   const list = [configured, ...candidates, fallback].filter(Boolean);
@@ -82,6 +84,6 @@ export function resolveVault({ env = process.env, readEnv = readEnvFile, envFile
     path,
     name: basename(path) || 'Antigravity',
     exists,
-    source: existing ? (fromEnv || fromFile ? (existing === resolve(configured) ? 'configured' : 'auto') : 'auto') : 'default',
+    source: existing ? (configured ? (existing === resolve(configured) ? 'configured' : 'auto') : 'auto') : 'default',
   };
 }
