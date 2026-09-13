@@ -342,8 +342,10 @@ async function openNote(node) {
   panel.innerHTML = '';
   panel.appendChild(el('h3', { text: node.id, style: 'font-size:14px;margin-bottom:6px;font-family:var(--font-mono)' }));
   panel.appendChild(el('p', { text: `folder ${node.group} · ${node.in} inbound · ${node.out} outbound`, style: 'font-size:12px;color:var(--text-muted)' }));
-  const vaultName = state.graph.meta?.name || 'Antigravity';
-  panel.appendChild(el('a', { class: 'btn', href: `obsidian://open?vault=${encodeURIComponent(vaultName)}&file=${encodeURIComponent(node.id)}`, text: 'Open in Obsidian', style: 'display:inline-block;margin:8px 0' }));
+  // Prefer the stable vault id (survives renames); fall back to the folder name.
+  const vaultId = state.config?.vault?.id || state.graph.meta?.id || '';
+  const vaultRef = vaultId || state.graph.meta?.name || 'Antigravity';
+  panel.appendChild(el('a', { class: 'btn', href: `obsidian://open?vault=${encodeURIComponent(vaultRef)}&file=${encodeURIComponent(node.id)}`, text: 'Open in Obsidian', style: 'display:inline-block;margin:8px 0' }));
   try {
     const note = await api(`/api/vault/note?p=${encodeURIComponent(node.id)}`);
     panel.appendChild(el('pre', { class: 'output-box', text: note.ok ? note.markdown.slice(0, 6000) : note.error, style: 'white-space:pre-wrap;max-height:50vh;overflow:auto' }));

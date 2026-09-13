@@ -53,6 +53,7 @@ const OMNI = CFG.omni;
 const VAULT_CFG = resolveVault({ env: process.env, readEnv: readEnvFile, envFile: CFG.envFile, candidates: [join(REPO, 'Antigravity'), 'C:\\DREAM\\AlienwareDream'] });
 const VAULT = VAULT_CFG.path;
 const VAULT_NAME = VAULT_CFG.name;
+const VAULT_ID = VAULT_CFG.id; // stable Obsidian vault id for obsidian:// deep links
 const SENTRY = CFG.sentry; // Fable's Sentry lives on Sabertooth unless FABLES_SENTRY_URL says otherwise
 const OBSIDIAN_REST = 'http://127.0.0.1:27123';
 // Summary providers shared with the bridge so JARVIS's HUD preamble is composed
@@ -158,7 +159,7 @@ function vaultGraph() {
       src.out++; target.in++;
     }
   }
-  const data = { ok: true, vault: VAULT, name: VAULT_NAME, notes: nodes.length, wikilinks: links.length,
+  const data = { ok: true, vault: VAULT, name: VAULT_NAME, id: VAULT_ID, notes: nodes.length, wikilinks: links.length,
     orphans: nodes.filter((n) => n.in + n.out === 0).length, nodes, links, at: new Date().toISOString() };
   graphCache = { at: Date.now(), data };
   return data;
@@ -193,7 +194,7 @@ function serveStatic(res, rel) {
 // ── server ────────────────────────────────────────────────────────────────────
 // Bridge + Ollama routes (lib/bridge-routes.mjs) run first: no wildcard CORS, origin-checked, local-only by default.
 const BRIDGE_DEPS = {
-  cfg: { ...CFG, vaultName: VAULT_NAME, vaultPath: VAULT },
+  cfg: { ...CFG, vaultName: VAULT_NAME, vaultPath: VAULT, vaultId: VAULT_ID },
   envValue, spawn, killTree: (child) => killTree(child, { spawn }), resolveBinary: () => resolveClaudeBinary(), fetch: globalThis.fetch,
   probeAll, vaultStatus: vaultStatusSummary, agentsSummary, houseSummary, vaultGraph: vaultGraphSummary,
   // Durable JARVIS memory (dashboard/jarvis/data/jarvis-memory.json; /data is never served).
@@ -214,7 +215,7 @@ createServer(async (req, res) => {
     return send(res, 200, {
       host, lanIp: LAN_IP, omniRoute: OMNI, omniProxy: '/api/omni',
       missionControl: CFG.missionControl, hermesDashboard: `http://${host}:9119/`, sentry: SENTRY + '/',
-      vault: { path: VAULT, name: VAULT_NAME, rest: OBSIDIAN_REST },
+      vault: { path: VAULT, name: VAULT_NAME, id: VAULT_ID, rest: OBSIDIAN_REST },
       claude: {
         chat: '/api/claude/chat', status: '/api/claude/status', launch: '/api/launch/claude',
         command: 'claude -p --output-format stream-json (headless, account auth)',

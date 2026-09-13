@@ -81,9 +81,13 @@ export function resolveVault({ env = process.env, readEnv = readEnvFile, envFile
   const existing = list.find((p) => { try { return existsSync(p); } catch { return false; } });
   const path = existing || configured || fallback;
   const exists = Boolean(existing);
+  // Stable vault id from .env (Obsidian's per-vault id): obsidian:// links use
+  // id when known so they survive vault renames. env beats file, '' when unset.
+  const id = env.OBSIDIAN_VAULT_ID || file.OBSIDIAN_VAULT_ID || '';
   return {
     path,
     name: basename(path) || 'Antigravity',
+    id,
     exists,
     source: existing ? (configured ? (existing === resolve(configured) ? 'configured' : 'auto') : 'auto') : 'default',
   };
