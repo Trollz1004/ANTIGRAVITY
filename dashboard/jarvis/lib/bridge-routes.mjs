@@ -169,8 +169,8 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     child.stderr.on('data', (c) => { err += String(c); if (err.length > 8000) err = err.slice(-8000); });
     child.on('error', (e) => finish(-1, { error: String(e.message || e) }));
     child.on('close', (code) => finish(code));
-    const onGone = () => { if (child.exitCode === null) killTree(child); };
-    req.on('close', onGone); res.on('close', onGone);
+    const onGone = () => { if (!res.writableFinished && child.exitCode === null) killTree(child); };
+    if (req.socket && typeof req.socket.once === 'function') req.socket.once('close', onGone); else res.on('close', onGone); // socket close = client really gone
     console.log(new Date().toISOString(), 'hermes bridge session', session, 'from', req.socket && req.socket.remoteAddress);
     return true;
   }
@@ -203,12 +203,27 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
         permissionMode: effectivePermissionMode(String(body.permissionMode || ''), configuredMode),
         maxTurns, model: String(body.model || ''), lean: typeof body.lean === 'boolean' ? body.lean : undefined,
         timeoutMs: Number(envValue('CLAUDE_BRIDGE_TIMEOUT_MS')) || 300000,
-        onEvent: (ev) => { try { res.write(sse(ev.type, ev)); } catch {} if (ev.type === 'exit') finish(); },
+        onEvent: (ev) => {
+          try { res.write(sse(ev.type, ev)); } catch {}
+          if (ev.type === 'exit') { console.log(new Date().toISOString(), 'claude bridge exit code', ev.code, 'after', Date.now() - startedAt, 'ms'); finish(); }
+        },
       });
     } catch (e) { res.write(sse('error', { type: 'error', message: String(e.message || e) })); finish(); return true; }
-    state.current = { run, startedAt: Date.now(), persona };
-    const onGone = () => { if (run.child.exitCode === null) killTree(run.child); };
-    req.on('close', onGone); res.on('close', onGone);
+    const startedAt = Date.now();
+    state.current = { run, startedAt, persona };
+    // Client-disconnect detection: `req` emits 'close' as soon as its body has been consumed, so it
+    // must NOT be used here (it killed every browser call 300 ms after spawn). The response closes
+    // only when the connection drops or after finish(); writableFinished tells the two apart.
+    // Chromium also closes `res` early (~250 ms after the headers) while the connection stays
+    // open, so the detector listens to the socket itself: it closes only when the client is gone.
+    const sock = req.socket;
+    const onGone = () => {
+      if (res.writableFinished || run.child.exitCode !== null) return;
+      console.log(new Date().toISOString(), 'claude bridge client gone, killing pid', run.child.pid,
+        JSON.stringify({ writableEnded: res.writableEnded, resDestroyed: res.destroyed, sockDestroyed: sock && sock.destroyed, reqComplete: req.complete }));
+      killTree(run.child);
+    };
+    if (sock && typeof sock.once === 'function') sock.once('close', onGone); else res.on('close', onGone);
     console.log(new Date().toISOString(), 'claude bridge', persona, 'from', req.socket && req.socket.remoteAddress, 'session', sessionId || 'new');
     return true;
   }

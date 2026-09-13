@@ -101,6 +101,15 @@ describe('JARVIS core', () => {
     jarvisMod.setState('idle')
     expect(jarvisMod.jarvis.state).toBe('idle')
   })
+
+  it('speak() resolves even when speech synthesis never fires onend (muted or voiceless browser)', async () => {
+    global.window.speechSynthesis = { getVoices: () => [], speak: vi.fn(), cancel: vi.fn() }
+    global.SpeechSynthesisUtterance = class { constructor(t) { this.text = t } }
+    const t0 = Date.now()
+    await jarvisMod.jarvisVoice.speak('PONG')
+    expect(Date.now() - t0).toBeLessThan(4000)
+    expect(jarvisMod.jarvis.state).toBe('idle')
+  })
 })
 
 describe('JARVIS globe (keyless OSM Cesium shell)', () => {
@@ -176,6 +185,13 @@ describe('JARVIS wiring regressions (judge findings)', () => {
     expect(html).toContain('id="jarvis-session-new"')
     expect(html).toContain('id="claude-bridge-status"')
     expect(html).not.toMatch(/SABRETOOTH|drift bare|ssh <user>@/)
+  })
+
+  it('setState recolours only the state badge dot, never the node service dots', () => {
+    const src = fs.readFileSync(path.resolve(__dirname, '..', 'js', 'jarvis', 'jarvis.js'), 'utf-8')
+    // A page-wide querySelectorAll('.jarvis-dot') turned every service dot orange when JARVIS was thinking.
+    expect(src).not.toMatch(/querySelectorAll\(\s*['"]\.jarvis-dot['"]\s*\)/)
+    expect(src).toMatch(/querySelectorAll\(\s*['"]\.jarvis-state-badge \.jarvis-dot['"]\s*\)/)
   })
 
   it('uses the local gods-eye nodes route instead of old direct service URLs', () => {

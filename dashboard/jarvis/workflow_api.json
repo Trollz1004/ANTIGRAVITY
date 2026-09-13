@@ -46,7 +46,7 @@
       "services": "FABLE'S SENTRY http://127.0.0.1:9140/api/status",
       "avatars": "ops/avatar/out",
       "mission_control": "http://<host>:3151/",
-      "claude_cli": "POST /api/launch/claude -> drift bare on SABRETOOTH"
+      "claude_cli": "POST /api/claude/chat -> headless claude -p stream-json over SSE on this node; POST /api/launch/claude opens the CLI console here"
     }
   },
   "avatar": {
