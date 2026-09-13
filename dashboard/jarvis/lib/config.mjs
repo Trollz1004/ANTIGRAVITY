@@ -6,9 +6,9 @@
  * so the server works wherever the repo is checked out. The LAN IP falls back to a
  * real interface address, never to another node's hardcoded IP.
  */
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { networkInterfaces } from 'node:os';
-import { resolve, join } from 'node:path';
+import { resolve, join, sep, basename } from 'node:path';
 
 const OMNI_DEFAULT = 'http://192.168.0.8:20128/v1'; // Sabertooth router (see CLAUDE.md nodes table)
 
@@ -56,4 +56,32 @@ export function resolveConfig({ here, env = process.env, readEnv = readEnvFile, 
   const sentry = (pick('FABLES_SENTRY_URL') || 'http://192.168.0.8:9140').replace(/\/$/, '');
   const missionControl = (pick('MISSION_CONTROL_URL') || 'http://192.168.0.8:3151').replace(/\/$/, '') + '/';
   return { repo, envFile, lanIp, port, omni, sentry, missionControl, nodeName: pick('NODE_NAME') || '', file };
+}
+
+/**
+ * Obsidian vault resolution, self-healing: the configured path wins only when it
+ * actually exists on this node (paths migrate between machines); otherwise the
+ * first existing candidate wins; otherwise the configured path is kept as the
+ * default so /api/vault/graph can report exactly what is missing.
+ * @param {object} opts
+ * @param {object} opts.env        process.env (or a stand-in)
+ * @param {function} opts.readEnv  (file) => map
+ * @param {string} [opts.envFile]  repo .env location
+ * @param {string[]} [opts.candidates] extra fallback folders (repo-relative defaults)
+ */
+export function resolveVault({ env = process.env, readEnv = readEnvFile, envFile, candidates = [] }) {
+  const fromEnv = env.OBSIDIAN_VAULT_ANTIGRAVITY || '';
+  const fromFile = envFile ? (readEnv(envFile) || {}).OBSIDIAN_VAULT_ANTIGRAVITY || '' : '';
+  const configured = fromEnv || fromFile;
+  const fallback = join(resolve(import.meta.dirname, '..', '..'), 'Antigravity');
+  const list = [configured, ...candidates, fallback].filter(Boolean);
+  const existing = list.find((p) => { try { return existsSync(p); } catch { return false; } });
+  const path = existing || configured || fallback;
+  const exists = Boolean(existing);
+  return {
+    path,
+    name: basename(path) || 'Antigravity',
+    exists,
+    source: existing ? (fromEnv || fromFile ? (existing === resolve(configured) ? 'configured' : 'auto') : 'auto') : 'default',
+  };
 }
