@@ -19,7 +19,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4",
     "better-sqlite3": "^12.6.2",
-    "diff": "^7.0.0",
+    "diff": "^8.0.3",
     "express": "^4.21.0",
     "ulid": "^2.4.0",
     "zod": "^3.25.76",
