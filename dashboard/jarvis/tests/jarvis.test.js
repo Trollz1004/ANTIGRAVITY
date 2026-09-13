@@ -187,6 +187,14 @@ describe('JARVIS wiring regressions (judge findings)', () => {
     expect(html).not.toMatch(/SABRETOOTH|drift bare|ssh <user>@/)
   })
 
+  it('contains the live interim transcript and imports the globe voice controller', () => {
+    const src = fs.readFileSync(path.resolve(__dirname, '..', 'js', 'jarvis', 'jarvis.js'), 'utf-8')
+    expect(html).toContain('id="jarvis-interim"')
+    expect(src).toContain("from './voice.js'")
+    expect(src).toMatch(/startListening\(\)\s*\{\s*return getPushToTalk\(\)\.tap\(\)/)
+    expect(src).not.toMatch(/const SR = window\.SpeechRecognition/)
+  })
+
   it('setState recolours only the state badge dot, never the node service dots', () => {
     const src = fs.readFileSync(path.resolve(__dirname, '..', 'js', 'jarvis', 'jarvis.js'), 'utf-8')
     // A page-wide querySelectorAll('.jarvis-dot') turned every service dot orange when JARVIS was thinking.

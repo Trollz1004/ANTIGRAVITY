@@ -180,6 +180,21 @@
   opacity: 0.55;
   pointer-events: none;
 }
+.jarvis-interim {
+  position: absolute;
+  left: 50%;
+  bottom: 92px;
+  width: min(520px, calc(100% - 48px));
+  min-height: 1.2em;
+  transform: translateX(-50%);
+  color: #00ff41;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: center;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.55);
+  z-index: 6;
+  pointer-events: none;
+}
 .jarvis-avatar {
   position: absolute;
   right: 24px;
