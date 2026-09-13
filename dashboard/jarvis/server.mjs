@@ -1,22 +1,31 @@
 #!/usr/bin/env node
 /**
- * AIRI dashboard server — serves ops/dashboard-airi on the LAN and gives the page
+ * JARVIS dashboard server — serves dashboard/jarvis on the LAN and gives the page
  * REAL data with no keys in the browser.
  *
- *   node ops/dashboard-airi/server.mjs            # http://0.0.0.0:9150  (LAN: http://192.168.0.8:9150)
+ *   node server.mjs            # http://0.0.0.0:9150  (LAN: http://<NODE_LAN_IP>:9150)
+ *
+ * Configuration: process.env > <repo>/.env > derived defaults (lib/config.mjs).
+ * Start it from a plain shell, not from inside a Claude Code terminal.
  *
  * Routes (all JSON unless noted):
- *   GET  /                      the dashboard (static files from this folder)
+ *   GET  /                      the dashboard (static files from this folder; lib/, tests/, server.mjs are never served)
  *   GET  /api/config            where things live, computed for the caller's host
- *   ANY  /api/omni/<path>       proxy -> OmniRoute /v1/<path> with OMNI_ROUTE_API_KEY from C:\ANTIGRAVITY\.env
- *   GET  /api/agents            every loadable skill in .agents/skills (name, description, category) — live directory read
- *   GET  /api/vault/graph       Obsidian vault notes + [[wikilinks]] as nodes/links (vault C:\ANTIGRAVITY\Antigravity)
+ *   ANY  /api/omni/<path>       proxy -> OmniRoute /v1/<path> with OMNI_ROUTE_API_KEY from the repo .env
+ *   GET  /api/agents            every loadable skill (SKILL.md frontmatter) — live directory read
+ *   GET  /api/nodes             god's-eye view: both LAN nodes, every service identity-probed (lib/nodes.mjs)
+ *   GET  /api/vault/graph       Obsidian vault notes + [[wikilinks]] as nodes/links
  *   GET  /api/vault/note?p=     one note's markdown (path relative to the vault)
  *   GET  /api/vault/status      is the Obsidian Local REST API answering on :27123 (identity checked)
  *   GET  /api/house             FABLE'S SENTRY snapshot (real service state, identity-checked)
  *   GET  /api/avatars           rendered avatar PNGs in ops/avatar/out
  *   GET  /avatars/<file>        those PNGs
- *   POST /api/launch/claude     open the official Claude CLI on this box (drift.cmd bare) in a new window
+ *   GET  /api/claude/status     Claude CLI bridge capability (lib/bridge-routes.mjs; local-only unless DASHBOARD_BRIDGE_TOKEN)
+ *   POST /api/claude/chat       headless `claude -p` streamed as Server-Sent Events
+ *   POST /api/claude/stop       kill the running bridge child
+ *   POST /api/launch/claude     open the official Claude CLI in a console on this host
+ *   GET  /api/ollama/tags       local Ollama models
+ *   POST /api/ollama/chat       local Ollama chat streamed as Server-Sent Events
  *   GET  /health                {service:"airi-dashboard"}  <- identity string for the wall
  *
  * Zero dependencies. Secrets are read from .env at request time and never logged or returned.
@@ -26,30 +35,33 @@ import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
+import { resolveConfig, readEnvFile } from './lib/config.mjs';
+import { probeAll } from './lib/nodes.mjs';
+import { resolveClaudeBinary, killTree, PERMISSION_MODES, PERSONAS } from './lib/claude-bridge.mjs';
+import { handleBridgeRoutes } from './lib/bridge-routes.mjs';
+import { hostname } from 'node:os';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const REPO = process.env.ANTIGRAVITY_ROOT || 'C:\\ANTIGRAVITY';
-const PORT = Number(process.env.AIRI_DASHBOARD_PORT || 9150);
-const LAN_IP = process.env.NODE_LAN_IP || '192.168.0.8';
-const OMNI = (process.env.OPENAI_COMPAT_BASE_URL || `http://${LAN_IP}:20128/v1`).replace(/\/$/, '');
-const VAULT = process.env.OBSIDIAN_VAULT_ANTIGRAVITY || join(REPO, 'Antigravity');
+// process.env > <repo>/.env > derived defaults (lib/config.mjs). The repo root is this checkout.
+const CFG = resolveConfig({ here: HERE });
+const REPO = CFG.repo;
+const PORT = CFG.port;
+const LAN_IP = CFG.lanIp;
+const OMNI = CFG.omni;
+const VAULT = process.env.OBSIDIAN_VAULT_ANTIGRAVITY || CFG.file.OBSIDIAN_VAULT_ANTIGRAVITY || join(REPO, 'Antigravity');
 const VAULT_NAME = 'Antigravity';
-const SENTRY = 'http://127.0.0.1:9140';
+const SENTRY = CFG.sentry; // Fable's Sentry lives on Sabertooth unless FABLES_SENTRY_URL says otherwise
 const OBSIDIAN_REST = 'http://127.0.0.1:27123';
-const SKILLS = join(REPO, '.agents', 'skills');
+// Skills tree: the classic .agents/skills layout when present, else this repo's skills/ folder.
+const SKILLS = [join(REPO, '.agents', 'skills'), join(REPO, 'skills')].find((d) => existsSync(d)) || join(REPO, 'skills');
 const AVATARS = join(REPO, 'ops', 'avatar', 'out');
 const STARTED_AT = new Date().toISOString(); // the House restarts this server when server.mjs is newer
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.md': 'text/markdown; charset=utf-8' };
 
+// Secrets are read from the .env at request time and never logged or returned.
 function envValue(name) {
-  try {
-    for (const line of readFileSync(join(REPO, '.env'), 'utf8').split(/\r?\n/)) {
-      const m = /^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/.exec(line.trim());
-      if (m && m[1] === name) return m[2].replace(/^"|"$/g, '');
-    }
-  } catch {}
-  return '';
+  return process.env[name] || readEnvFile(CFG.envFile)[name] || readEnvFile(join(REPO, '.env'))[name] || '';
 }
 
 // ── skills = agents (live directory read; --hash clones are Paperclip copies, skipped) ──
@@ -158,9 +170,13 @@ function serveStatic(res, rel) {
 }
 
 // ── server ────────────────────────────────────────────────────────────────────
+// Bridge + Ollama routes (lib/bridge-routes.mjs) run first: no wildcard CORS, origin-checked, local-only by default.
+const BRIDGE_DEPS = { cfg: CFG, envValue, spawn, killTree: (child) => killTree(child, { spawn }), resolveBinary: () => resolveClaudeBinary(), fetch: globalThis.fetch };
+
 createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   const p = url.pathname;
+  if (await handleBridgeRoutes(req, res, BRIDGE_DEPS)) return;
   if (req.method === 'OPTIONS') { res.writeHead(204, { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET,POST,OPTIONS' }); return res.end(); }
 
   if (p === '/favicon.ico') { res.writeHead(200, { 'content-type': 'image/svg+xml', 'cache-control': 'max-age=86400' }); return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0d1117"/><circle cx="16" cy="16" r="9" fill="none" stroke="#58a6ff" stroke-width="3"/><circle cx="16" cy="16" r="3" fill="#3fb950"/></svg>'); }
@@ -170,16 +186,21 @@ createServer(async (req, res) => {
     const host = (req.headers.host || '').replace(/:\d+$/, '') || LAN_IP;
     return send(res, 200, {
       host, lanIp: LAN_IP, omniRoute: OMNI, omniProxy: '/api/omni',
-      missionControl: `http://${host}:3151/`, hermesDashboard: `http://${host}:9119/`, sentry: `http://${host}:9140/`,
+      missionControl: CFG.missionControl, hermesDashboard: `http://${host}:9119/`, sentry: SENTRY + '/',
       vault: { path: VAULT, name: VAULT_NAME, rest: OBSIDIAN_REST },
-      claude: { launch: '/api/launch/claude', command: 'drift bare', note: 'Opens the official Claude CLI in a new window on this host. From another node: ssh <user>@' + LAN_IP + ' then drift bare.' },
+      claude: {
+        chat: '/api/claude/chat', status: '/api/claude/status', launch: '/api/launch/claude',
+        command: 'claude -p --output-format stream-json (headless, account auth)',
+        note: 'Chat streams from the official Claude CLI on ' + (CFG.nodeName || hostname()) + '. Loopback callers only unless DASHBOARD_BRIDGE_TOKEN is set in .env. The launch button opens an interactive window on this host.',
+        personas: Object.keys(PERSONAS), permissionModes: PERMISSION_MODES,
+      },
       at: new Date().toISOString(),
     });
   }
 
   if (p.startsWith('/api/omni/')) {
     const key = envValue('OMNI_ROUTE_API_KEY');
-    if (!key) return send(res, 503, { error: 'AUTH MISSING: OMNI_ROUTE_API_KEY not in .env' });
+    if (!key) return send(res, 503, { error: 'AUTH MISSING: OMNI_ROUTE_API_KEY not in ' + CFG.envFile });
     const target = OMNI + p.slice('/api/omni'.length) + url.search;
     const c = new AbortController(); const t = setTimeout(() => c.abort(), 300000);
     try {
@@ -193,6 +214,8 @@ createServer(async (req, res) => {
   }
 
   if (p === '/api/agents') { const a = agents(); return send(res, 200, { count: a.length, source: SKILLS, agents: a, at: new Date().toISOString() }); }
+  // God's-eye view: every LAN service probed with an identity check (lib/nodes.mjs). No sample data.
+  if (p === '/api/nodes') return send(res, 200, await probeAll({ timeoutMs: 3000 }));
   if (p === '/api/vault/graph') return send(res, 200, vaultGraph());
   if (p === '/api/vault/note') return send(res, 200, vaultNote(url.searchParams.get('p') || ''));
   if (p === '/api/vault/status') {
@@ -215,19 +238,6 @@ createServer(async (req, res) => {
     if (!full.startsWith(resolve(AVATARS) + sep) || !existsSync(full)) return send(res, 404, { error: 'not found' });
     res.writeHead(200, { 'content-type': MIME[extname(full).toLowerCase()] || 'application/octet-stream' });
     return res.end(readFileSync(full));
-  }
-  if (p === '/api/launch/claude' && req.method === 'POST') {
-    const drift = join(process.env.USERPROFILE || 'C:\\Users\\joshi', '.local', 'bin', 'drift.cmd');
-    const cmd = existsSync(drift) ? drift : join(REPO, 'scripts', 'drift.cmd');
-    try {
-      // VERIFIED 2026-09-10: `cmd /k "<drift>" bare` via Start-Process opens a visible
-      // console that stays up with the official CLI inside it. `cmd /c start ...`
-      // from a hidden server never showed a window.
-      const c = spawn('powershell.exe', ['-NoProfile', '-Command', `Start-Process cmd.exe -ArgumentList '/k','"${cmd}" bare' -WorkingDirectory '${REPO}'`], { detached: true, stdio: 'ignore', windowsHide: true });
-      c.unref();
-      console.log(new Date().toISOString(), 'launch claude from', req.socket.remoteAddress);
-      return send(res, 200, { ok: true, opened: cmd + ' bare', on: 'SABRETOOTH', from: req.socket.remoteAddress });
-    } catch (e) { return send(res, 500, { ok: false, error: String(e.message || e) }); }
   }
 
   if (p === '/' || p === '/index.html') return serveStatic(res, '/index.html');

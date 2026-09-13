@@ -14,14 +14,19 @@
 
 import { createGlobe } from './globe.js';
 import { loadAvatar, DEFAULT_AVATAR_URL } from './avatar.js';
+import { getBridgeStatus, streamClaude, streamOllama, streamHermes } from './claude-bridge.js';
+import { createPushToTalk, naturalCase, REST_MS } from './voice.js';
 
 // All OmniRoute calls go through the server proxy — key stays server-side.
 const OMNI = '/api/omni';
+export const BRAINS = ['omni', 'claude', 'ollama', 'hermes'];
 
 // ── State ────────────────────────────────────────────────────────────────────
 
 const jarvis = {
   state: 'idle', // idle | listening | thinking | speaking
+  brain: 'omni',
+  claude: { sessionId: '' },
   history: [
     { role: 'system', content: `You are JARVIS — the AI assistant embedded in this dashboard. 
 You have a dry wit and loyalty to your operator. Keep answers short enough to display on a HUD panel (under 4 sentences).
@@ -84,80 +89,261 @@ function createHudRing(container, segments, radius, thickness) {
 
 // ── Voice Engine ─────────────────────────────────────────────────────────────
 
-const jarvisVoice = {
+const browserSpeech = {
   recognition: null,
-  
+  onresult: null,
+  onend: null,
+
+  start() {
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Recognition) return false;
+    if (!this.recognition) {
+      const recognition = new Recognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = true;
+      recognition.continuous = true;
+      recognition.maxAlternatives = 1;
+      recognition.onresult = (event) => this.onresult?.(event);
+      recognition.onend = () => this.onend?.();
+      this.recognition = recognition;
+    }
+    try { this.recognition.start(); } catch {}
+    return true;
+  },
+
+  stop() {
+    try { this.recognition?.stop(); } catch {}
+  },
+
+  cancelSpeaking() {
+    window.speechSynthesis?.cancel();
+  },
+};
+
+let pushToTalk = null;
+let restTimer = null;
+
+function setVoiceHudState(state, live) {
+  const globe = document.getElementById('jarvis-globe');
+  if (!live) return;
+  if (restTimer) clearTimeout(restTimer);
+  restTimer = null;
+  if (globe) globe.style.pointerEvents = 'auto';
+  if (state === 'listening' || state === 'latched') setState('listening');
+}
+
+function restVoiceHud(reason) {
+  if (reason === 'unavailable') {
+    jarvisLog('JARVIS', 'Speech recognition requires Chrome or Edge. Use the text input below.');
+  }
+  if (restTimer) clearTimeout(restTimer);
+  restTimer = setTimeout(() => {
+    if (pushToTalk?.isLive()) return;
+    const interim = document.getElementById('jarvis-interim');
+    const globe = document.getElementById('jarvis-globe');
+    if (interim) interim.textContent = '';
+    if (globe) globe.style.pointerEvents = 'none';
+    setState('idle');
+  }, REST_MS);
+}
+
+function getPushToTalk() {
+  if (pushToTalk) return pushToTalk;
+  pushToTalk = createPushToTalk({
+    globeEl: document.getElementById('jarvis-globe'),
+    speech: browserSpeech,
+    onState: setVoiceHudState,
+    onInterim: (text) => {
+      const interim = document.getElementById('jarvis-interim');
+      if (interim) interim.textContent = text;
+    },
+    onStop: restVoiceHud,
+    onTurn: async (text) => {
+      const interim = document.getElementById('jarvis-interim');
+      if (interim) interim.textContent = '';
+      await askJarvis(text);
+    },
+  });
+  return pushToTalk;
+}
+
+const jarvisVoice = {
+  get recognition() { return browserSpeech.recognition; },
+
   speak(text) {
     return new Promise((resolve) => {
-      if (!('speechSynthesis' in window)) return resolve();
+      const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
+      if (!synth || typeof SpeechSynthesisUtterance === 'undefined') return resolve();
       setState('speaking');
-      const u = new SpeechSynthesisUtterance(text);
-      const voices = speechSynthesis.getVoices();
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        getPushToTalk().resume();
+        if (!getPushToTalk().isLive()) setState('idle');
+        resolve();
+      };
+      // Muted, voiceless or headless browsers never fire onend: resolve on a timer sized to the text.
+      const timer = setTimeout(finish, Math.min(20000, 1500 + String(text || '').length * 60));
+      // Recognition is stopped while replies play; it resumes only after the reply ends or a user interrupt.
+      getPushToTalk().pause();
+      const u = new SpeechSynthesisUtterance(naturalCase(text));
+      const voices = synth.getVoices ? synth.getVoices() : [];
       u.voice = voices.find(v => /en-US/i.test(v.lang) && /neural|natural|aria|jenny|guy/i.test(v.name))
         || voices.find(v => /en-US/i.test(v.lang)) || voices[0] || null;
       u.rate = 1.05;
       u.pitch = 0.95; // Slightly deeper — JARVIS tone
-      u.onend = () => { setState('idle'); resolve(); };
-      u.onerror = () => { setState('idle'); resolve(); };
-      speechSynthesis.speak(u);
+      u.onend = finish;
+      u.onerror = finish;
+      try { synth.speak(u); } catch { finish(); }
     });
   },
   
-  startListening() {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) { jarvisLog('JARVIS', 'Speech recognition requires Chrome or Edge. Use the text input below.'); return; }
-    if (this.recognition) { this.recognition.stop(); this.recognition = null; setState('idle'); return; }
-    
-    const rec = new SR();
-    rec.lang = 'en-US';
-    rec.interimResults = false;
-    rec.maxAlternatives = 1;
-    rec.onstart = () => setState('listening');
-    rec.onresult = (e) => {
-      const text = e.results[0][0].transcript;
-      this.recognition = null;
-      askJarvis(text);
-    };
-    rec.onerror = (e) => {
-      this.recognition = null;
-      setState('error');
-      jarvisLog('JARVIS', 'Mic error: ' + e.error);
-      setTimeout(() => setState('idle'), 2000);
-    };
-    rec.onend = () => { if (jarvis.state === 'listening') setState('idle'); this.recognition = null; };
-    this.recognition = rec;
-    rec.start();
-  },
+  startListening() { return getPushToTalk().tap() },
   
   stop() {
-    speechSynthesis.cancel();
-    if (this.recognition) { this.recognition.stop(); this.recognition = null; }
-    setState('idle');
+    browserSpeech.cancelSpeaking();
+    getPushToTalk().end('stop');
+    fetch('/api/claude/stop', { method: 'POST' }).catch(() => {});
   }
 };
 
-// ── OmniRoute Brain ──────────────────────────────────────────────────────────
+// ── Brain selection and replies ─────────────────────────────────────────────
+
+function brainAvailable(id, status) {
+  if (id === 'omni') return true;
+  if (id === 'claude') return Boolean(status?.claude?.installed && status.claude.access?.ok);
+  if (id === 'ollama') return Boolean(status?.ollama?.available && status.ollama.models?.length);
+  if (id === 'hermes') return Boolean(status?.hermes?.installed && status.hermes.access?.ok);
+  return false;
+}
+
+function brainUnavailableReason(id, status) {
+  if (id === 'claude') return status?.claude?.access?.reason || 'Claude CLI bridge unavailable';
+  if (id === 'ollama') return status?.ollama?.available ? 'No local Ollama model installed' : 'Ollama unavailable';
+  if (id === 'hermes') return status?.hermes?.access?.reason || 'Hermes bridge unavailable';
+  return '';
+}
+
+function setBrain(id) {
+  if (!BRAINS.includes(id)) return false;
+  jarvis.brain = id;
+  try { if (typeof localStorage !== 'undefined') localStorage.setItem('jarvis.brain', id); } catch {}
+  const select = document.getElementById('jarvis-brain');
+  if (select) select.value = id;
+  const status = document.getElementById('jarvis-brain-status');
+  if (status) status.textContent = id.toUpperCase();
+  return true;
+}
+
+function pickDefaultBrain(status = {}, stored) {
+  if (BRAINS.includes(stored) && brainAvailable(stored, status)) return stored;
+  if (brainAvailable('claude', status)) return 'claude';
+  if (brainAvailable('ollama', status)) return 'ollama';
+  return 'omni';
+}
+
+function addStreamRow() {
+  const log = document.getElementById('jarvis-log');
+  if (!log) return { row: null, body: null };
+  const row = document.createElement('div');
+  row.className = 'jarvis-msg jarvis-msg-jarvis jarvis-msg-stream';
+  const name = document.createElement('span');
+  name.className = 'jarvis-msg-name';
+  name.textContent = 'JARVIS';
+  const body = document.createElement('span');
+  row.appendChild(name);
+  row.appendChild(body);
+  log.appendChild(row);
+  return { row, body };
+}
+
+function addToolRow(name) {
+  const log = document.getElementById('jarvis-log');
+  if (!log) return;
+  const row = document.createElement('div');
+  row.className = 'jarvis-msg-tool';
+  row.textContent = `Tool: ${name}`;
+  log.appendChild(row);
+}
+
+function appendReply(reply, body = null) {
+  const text = reply || 'No response.';
+  if (body) body.textContent = text;
+  else jarvisLog('JARVIS', text);
+  jarvis.history.push({ role: 'assistant', content: text });
+  return text;
+}
+
+async function askOmni(text) {
+  setState('thinking');
+  const res = await fetch(`${OMNI}/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'auto/best-fast', messages: jarvis.history, stream: false }),
+  });
+  if (!res.ok) throw new Error(`OmniRoute ${res.status}`);
+  const data = await res.json();
+  const reply = appendReply(data.choices?.[0]?.message?.content, null);
+  await jarvisVoice.speak(reply);
+}
+
+async function askClaude(text, retryWithoutSession = false, stream = null) {
+  setState('thinking');
+  const live = stream || addStreamRow();
+  let resultEvent = null;
+  const result = await streamClaude({
+    prompt: text,
+    sessionId: retryWithoutSession ? '' : jarvis.claude.sessionId,
+    persona: 'jarvis',
+    onEvent: (event, data) => {
+      if (event === 'delta' && live.body) live.body.textContent += data?.text || '';
+      if (event === 'tool') addToolRow(data?.name || data?.tool || 'unknown');
+      if (event === 'result') resultEvent = data;
+    },
+  });
+  const issue = resultEvent?.error || resultEvent?.message || '';
+  if (!retryWithoutSession && /session/i.test(String(issue))) {
+    jarvis.claude.sessionId = '';
+    if (live.body) live.body.textContent = '';
+    return askClaude(text, true, live);
+  }
+  jarvis.claude.sessionId = result.sessionId || '';
+  const badge = document.getElementById('jarvis-session');
+  if (badge) badge.textContent = jarvis.claude.sessionId ? `session ${jarvis.claude.sessionId.slice(0, 8)}` : '';
+  const reply = appendReply(result.text, live.body);
+  await jarvisVoice.speak(reply);
+}
+
+async function askOllama() {
+  setState('thinking');
+  const live = addStreamRow();
+  const result = await streamOllama({
+    messages: jarvis.history,
+    onEvent: (event, data) => { if (event === 'delta' && live.body) live.body.textContent += data?.text || ''; },
+  });
+  const reply = appendReply(result.text, live.body);
+  await jarvisVoice.speak(reply);
+}
+
+async function askHermes(text) {
+  setState('thinking');
+  const result = await streamHermes({ prompt: text, session: 'jarvis-hud' });
+  const reply = appendReply(result.text, null);
+  await jarvisVoice.speak(reply);
+}
 
 async function askJarvis(text) {
   jarvisLog('You', text);
-  setState('thinking');
   jarvis.history.push({ role: 'user', content: text });
-  if (jarvis.history.length > 13) {
-    jarvis.history = [jarvis.history[0], ...jarvis.history.slice(-12)];
-  }
-  
+  if (jarvis.history.length > 13) jarvis.history = [jarvis.history[0], ...jarvis.history.slice(-12)];
   try {
-    const res = await fetch(`${OMNI}/chat/completions`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'auto/best-fast', messages: jarvis.history, stream: false }),
-    });
-    if (!res.ok) throw new Error(`OmniRoute ${res.status}`);
-    const data = await res.json();
-    const reply = data.choices?.[0]?.message?.content || 'No response.';
-    jarvis.history.push({ role: 'assistant', content: reply });
-    jarvisLog('JARVIS', reply);
-    await jarvisVoice.speak(reply);
+    if (jarvis.brain === 'claude') await askClaude(text);
+    else if (jarvis.brain === 'ollama') await askOllama(text);
+    else if (jarvis.brain === 'hermes') await askHermes(text);
+    else await askOmni(text);
+    if (!pushToTalk?.isLive()) setState('idle');
   } catch (e) {
     setState('error');
     jarvisLog('JARVIS', 'Error: ' + e.message);
@@ -170,7 +356,8 @@ async function askJarvis(text) {
 function setState(s) {
   jarvis.state = s;
   document.querySelectorAll('.jarvis-state').forEach(el => el.textContent = s.toUpperCase());
-  document.querySelectorAll('.jarvis-dot').forEach(el => {
+  // Only the state badge's dot changes colour; the node service dots keep their up/down class.
+  document.querySelectorAll('.jarvis-state-badge .jarvis-dot').forEach(el => {
     el.className = 'jarvis-dot jarvis-dot-' + s;
   });
   const micBtn = document.getElementById('jarvis-mic');
@@ -207,27 +394,28 @@ async function updateMetrics() {
     }
   } catch {}
   
-  // Agents
+  // Agents = loadable skills, read from disk by the server
   try {
-    const r = await fetch('http://localhost:3151/api/agents', { cache: 'no-store' });
+    const r = await fetch('/api/agents', { cache: 'no-store' });
     if (r.ok) {
       const d = await r.json();
-      jarvis.metrics.agents = d.count || d.total || 0;
+      jarvis.metrics.agents = d.count || 0;
       const el = document.getElementById('jarvis-agents');
       if (el) el.textContent = jarvis.metrics.agents;
     }
   } catch {}
-  
-  // Services (from Fable's Sentry — proxied)
+
+  // God's-eye nodes and services
   try {
-    const r = await fetch('http://localhost:9140/api/health', { cache: 'no-store' });
+    const r = await fetch('/api/nodes', { cache: 'no-store' });
     if (r.ok) {
       const d = await r.json();
-      const checks = d.checks || d.services || [];
-      const up = checks.filter(c => ['up','ok','connected','live'].includes(c.status || c.state)).length;
-      jarvis.metrics.services = { up, total: checks.length };
+      const services = d.services || (d.nodes || []).flatMap((node) => node.services || []);
+      const up = services.filter((service) => service.up || service.state === 'UP').length;
+      jarvis.metrics.services = { up, total: services.length };
       const el = document.getElementById('jarvis-services');
-      if (el) el.textContent = `${up}/${checks.length}`;
+      if (el) el.textContent = `${up}/${services.length}`;
+      renderNodes(d);
     }
   } catch {}
   
@@ -237,6 +425,33 @@ async function updateMetrics() {
     jarvis.metrics.graphNodes = parseInt(nodesEl.textContent) || 0;
     const el = document.getElementById('jarvis-graph');
     if (el) el.textContent = jarvis.metrics.graphNodes;
+  }
+}
+
+function renderNodes(data) {
+  const list = document.getElementById('jarvis-nodes-list');
+  if (!list) return;
+  list.textContent = '';
+  for (const node of data?.nodes || []) {
+    const row = document.createElement('div');
+    row.className = 'jarvis-node-row';
+    const services = node.services || [];
+    const up = node.up ?? services.filter((service) => service.up || service.state === 'UP').length;
+    const nodeLabel = document.createElement('div');
+    nodeLabel.textContent = `${node.name || node.id} · ${node.ip || '—'} · ${up}/${node.total ?? services.length}`;
+    row.appendChild(nodeLabel);
+    for (const service of services) {
+      const serviceRow = document.createElement('div');
+      serviceRow.className = 'jarvis-service-row';
+      const dot = document.createElement('span');
+      dot.className = `jarvis-dot ${service.up || service.state === 'UP' ? 'jarvis-dot-up' : 'jarvis-dot-down'}`;
+      const label = document.createElement('span');
+      label.textContent = service.label || service.id;
+      serviceRow.appendChild(dot);
+      serviceRow.appendChild(label);
+      row.appendChild(serviceRow);
+    }
+    list.appendChild(row);
   }
 }
 
@@ -265,6 +480,42 @@ function initJarvis() {
   // Voice
   document.getElementById('jarvis-mic')?.addEventListener('click', () => jarvisVoice.startListening());
   document.getElementById('jarvis-stop')?.addEventListener('click', () => jarvisVoice.stop());
+  const voiceGlobe = document.getElementById('jarvis-globe');
+  if (voiceGlobe) {
+    voiceGlobe.style.pointerEvents = 'none';
+    voiceGlobe.addEventListener('pointerdown', (event) => {
+      event.preventDefault?.();
+      getPushToTalk().press();
+    });
+    voiceGlobe.addEventListener('pointerup', (event) => {
+      event.preventDefault?.();
+      getPushToTalk().release();
+    });
+    voiceGlobe.addEventListener('pointercancel', () => getPushToTalk().release());
+  }
+  const isVoiceShortcutTarget = (target) => ['input', 'textarea', 'select'].includes(String(target?.tagName || '').toLowerCase());
+  document.addEventListener('keydown', (event) => {
+    if (event.repeat || isVoiceShortcutTarget(event.target)) return;
+    if (event.key === 'Escape') getPushToTalk().end('escape');
+    if (event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault?.();
+      getPushToTalk().press();
+    }
+  });
+  document.addEventListener('keyup', (event) => {
+    if (isVoiceShortcutTarget(event.target)) return;
+    if (event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault?.();
+      getPushToTalk().release();
+    }
+  });
+  document.getElementById('jarvis-session-new')?.addEventListener('click', () => {
+    jarvis.claude.sessionId = '';
+    const badge = document.getElementById('jarvis-session');
+    if (badge) badge.textContent = '';
+  });
+  const brainSelect = document.getElementById('jarvis-brain');
+  brainSelect?.addEventListener('change', () => setBrain(brainSelect.value));
   const input = document.getElementById('jarvis-input');
   const send = document.getElementById('jarvis-send');
   const submit = () => { const t = input.value.trim(); if (t) { input.value = ''; askJarvis(t); } };
@@ -272,6 +523,18 @@ function initJarvis() {
   input?.addEventListener('keydown', (e) => { if (e.key === 'Enter') submit(); });
   
   if ('speechSynthesis' in window) speechSynthesis.getVoices();
+
+  (async () => {
+    const bridgeStatus = await getBridgeStatus();
+    let storedChoice = '';
+    try { if (typeof localStorage !== 'undefined') storedChoice = localStorage.getItem('jarvis.brain') || ''; } catch {}
+    setBrain(pickDefaultBrain(bridgeStatus, storedChoice));
+    for (const option of brainSelect?.options || []) {
+      const available = brainAvailable(option.value, bridgeStatus);
+      option.disabled = !available;
+      option.title = available ? '' : brainUnavailableReason(option.value, bridgeStatus);
+    }
+  })();
   
 
   // Globe (keyless OSM Cesium if window.Cesium present; else stub)
@@ -335,4 +598,4 @@ function initJarvis() {
 
 document.addEventListener('DOMContentLoaded', initJarvis);
 
-export { jarvis, jarvisVoice, askJarvis, updateMetrics, initJarvis, setState, createGlobe, loadAvatar, DEFAULT_AVATAR_URL };
+export { jarvis, jarvisVoice, askJarvis, askClaude, askOllama, askHermes, updateMetrics, initJarvis, setState, setBrain, pickDefaultBrain, renderNodes, createGlobe, loadAvatar, DEFAULT_AVATAR_URL };
