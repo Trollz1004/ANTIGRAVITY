@@ -196,6 +196,8 @@ const BRIDGE_DEPS = {
   cfg: { ...CFG, vaultName: VAULT_NAME, vaultPath: VAULT },
   envValue, spawn, killTree: (child) => killTree(child, { spawn }), resolveBinary: () => resolveClaudeBinary(), fetch: globalThis.fetch,
   probeAll, vaultStatus: vaultStatusSummary, agentsSummary, houseSummary, vaultGraph: vaultGraphSummary,
+  // Durable JARVIS memory (dashboard/jarvis/data/jarvis-memory.json; /data is never served).
+  jarvisMemory: { dataFile: join(HERE, 'data', 'jarvis-memory.json') },
 };
 
 createServer(async (req, res) => {
@@ -266,6 +268,7 @@ createServer(async (req, res) => {
   }
 
   if (p === '/' || p === '/index.html') return serveStatic(res, '/index.html');
+  if (p === '/data/' || p.startsWith('/data/')) return send(res, 404, { error: 'not found' }); // JARVIS memory stays server-side
   if (p.startsWith('/api/')) return send(res, 404, { error: 'no such route' });
   return serveStatic(res, p);
 }).listen(PORT, '0.0.0.0', () => {

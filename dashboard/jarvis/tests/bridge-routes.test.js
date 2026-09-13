@@ -42,6 +42,7 @@ beforeAll(async () => {
   deps = {
     cfg: { repo: 'C:/some/repo', lanIp: '192.168.0.40', nodeName: 'TESTNODE' },
     envValue: (name) => ({ DASHBOARD_BRIDGE_TOKEN: 'abcdefghijklmnopqrstuvwx', CLAUDE_BRIDGE_PERMISSION_MODE: 'plan' }[name] || ''),
+    jarvisMemory: { dataFile: resolve(__dirname, 'fixtures', 'test-jarvis-memory.json') },
     spawn: fakeSpawnFactory(spawned),
     killTree: (child) => { killed.push(child.pid); child.kill() },
     resolveBinary: () => 'C:/Users/someone/.local/bin/claude.exe',
@@ -66,7 +67,7 @@ const url = (p) => `http://127.0.0.1:${port}${p}`
 
 describe('static deny', () => {
   it('refuses to serve server internals and tests as static files', async () => {
-    for (const p of ['/lib/claude-bridge.mjs', '/tests/config.test.js', '/server.mjs', '/package.json']) {
+    for (const p of ['/lib/claude-bridge.mjs', '/tests/config.test.js', '/server.mjs', '/package.json', '/data/jarvis-memory.json']) {
       const r = await fetch(url(p))
       expect(r.status, p).toBe(404)
     }
@@ -119,6 +120,18 @@ describe('POST /api/claude/chat', () => {
     expect((await fetch(url('/api/claude/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' })).status).toBe(400)
     expect((await fetch(url('/api/claude/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'x', sessionId: 'no spaces allowed' }) })).status).toBe(400)
   })
+  it('reports honestly when FreeBuff is not installed', async () => {
+    deps.resolveFreebuff = () => null
+    expect((await fetch(url('/api/launch/freebuff'), { method: 'POST' })).status).toBe(503)
+  })
+  it('opens the FreeBuff CLI console on this host when installed', async () => {
+    deps.resolveFreebuff = () => 'C:/Users/someone/AppData/Roaming/npm/freebuff.cmd'
+    const r = await fetch(url('/api/launch/freebuff'), { method: 'POST' })
+    expect(r.status).toBe(200)
+    const j = await r.json()
+    expect(j.ok).toBe(true)
+    expect(j.opened).toBe('freebuff.cmd')
+  })
   it('composes the HUD preamble on the server when hud:true and the client cannot forge it', async () => {
     const r = await fetch(url('/api/claude/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'what is down?', persona: 'jarvis', hud: true, hudContext: 'FORGED', tab: 'graph' }) })
     expect(r.status).toBe(200)
@@ -133,6 +146,17 @@ describe('POST /api/claude/chat', () => {
     const r = await fetch(url('/api/claude/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'plain' }) })
     await r.text()
     expect(spawned.at(-1).stdin).toBe('plain')
+  })
+  it('hud turns include the memory block, capture the turn, and GET /api/jarvis/memory serves it', async () => {
+    const r1 = await fetch(url('/api/claude/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'remember the number 41', persona: 'jarvis', hud: true }) })
+    await r1.text()
+    expect(spawned.at(-1).stdin).toContain('[JARVIS memory')
+    const r2 = await fetch(url('/api/jarvis/memory'))
+    expect(r2.status).toBe(200)
+    expect(r2.headers.get('access-control-allow-origin')).toBeNull()
+    const j = await r2.json()
+    expect(j.entries.at(-1).prompt).toBe('remember the number 41')
+    expect(typeof j.owner).toBe('string')
   })
   it('refuses a second concurrent run with 429 and kills the child when the client goes away', async () => {
     const ctrl = new AbortController()
