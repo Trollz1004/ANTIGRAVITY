@@ -126,6 +126,8 @@
   width: 260px;
 }
 
+.jarvis-controls .select-input { width: auto; }
+
 /* Chat log */
 .jarvis-log {
   position: absolute;
@@ -160,6 +162,15 @@
 
 .jarvis-msg-user { color: var(--text-secondary); }
 .jarvis-msg-jarvis { color: var(--text-primary); }
+
+.jarvis-nodes-list { font-size: 11px; max-height: 34vh; overflow: auto; }
+.jarvis-node-row { font-family: var(--font-mono); margin-top: 6px; color: var(--text-primary); }
+.jarvis-service-row { padding-left: 10px; color: var(--text-secondary); }
+.jarvis-dot-up { background: var(--cyber-green); }
+.jarvis-dot-down { background: var(--error); }
+.jarvis-msg-stream > span:last-child::after { content: '▍'; animation: jarvis-caret 0.8s step-end infinite; }
+.jarvis-log-head { position: absolute; top: 20px; right: 20px; width: 280px; display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 11px; z-index: 6; }
+@keyframes jarvis-caret { 50% { opacity: 0; } }
 
 
 .jarvis-globe {
