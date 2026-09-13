@@ -87,6 +87,9 @@
           <h3>Recent Activity</h3>
           <div id="activity-log" class="activity-log"></div>
         </div>
+        <div class="gen-row" style="margin-top:12px">
+          <button class="btn dock-ask" data-tab="dashboard" data-question="Summarize the house right now: what is up, what is down, and what needs me first?">⬢ Ask JARVIS about the house</button>
+        </div>
       </section>
 
       <!-- Mission Control Tab -->
@@ -131,6 +134,7 @@
             <button id="graph-refresh" class="btn">Refresh</button>
             <button id="graph-fit" class="btn">Fit View</button>
             <input type="text" id="graph-search" placeholder="Filter notes..." class="search-input inline" />
+            <button class="btn dock-ask" data-tab="graph" data-question="Give me a guided tour of the knowledge graph: clusters, orphans, and what to write next.">⬢ Ask JARVIS</button>
           </div>
         </header>
         <div class="graph-layout">
@@ -324,6 +328,7 @@
           <div id="jarvis-hud">
             <div class="jarvis-center">
               <div class="jarvis-title">JARVIS</div>
+              <div class="jarvis-identity">Claude Code on this node — repo-aware, house-context aware, plan-mode ceiling</div>
               <div class="jarvis-state-badge"><span class="jarvis-dot jarvis-dot-idle"></span><span class="jarvis-state">IDLE</span></div>
             </div>
           </div>
@@ -358,6 +363,7 @@
             <span id="crosslisting-status" class="voice-status voice-status-idle">CHECKING</span>
             <a class="btn primary" href="http://127.0.0.1:3000/" target="_blank" rel="noopener">Open app</a>
             <button id="crosslisting-refresh" class="btn">Refresh status</button>
+            <button class="btn dock-ask" data-tab="crosslisting" data-question="Check the Crosslisting OS: is it up, what do its guardrails forbid, and what should I do next in it?">⬢ Ask JARVIS</button>
           </div>
           <p id="crosslisting-detail" class="tab-desc" style="margin-top:12px">Checking local service...</p>
         </div>
@@ -371,6 +377,7 @@
   <script type="module" src="js/app.js"></script>
   <script type="module" src="js/hermes-voice.js"></script>
   <script type="module" src="js/jarvis/jarvis.js"></script>
+  <script type="module" src="js/jarvis/dock.js"></script>
   <script type="module" src="js/crosslisting.js"></script>
 </body>
 </html>

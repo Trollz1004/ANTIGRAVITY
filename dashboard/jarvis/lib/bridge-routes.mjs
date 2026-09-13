@@ -6,8 +6,9 @@
  *
  *   OPTIONS /api/claude/*, /api/launch/claude, /api/ollama/*   -> 403 (no CORS)
  *   GET     /api/claude/status                                  -> capability, no absolute paths
- *   POST    /api/claude/chat   {prompt, sessionId?, persona?, permissionMode?, model?, lean?}
+ *   POST    /api/claude/chat   {prompt, sessionId?, persona?, permissionMode?, model?, lean?, hud?, tab?}
  *                                                               -> text/event-stream (init, delta, tool, assistant, result, error, exit)
+ *   GET     /api/hud/context                                   -> the same preamble the bridge would compose (display/debug)
  *   POST    /api/claude/stop                                    -> {ok, killed}
  *   POST    /api/launch/claude                                  -> opens the CLI in a console on this host
  *   GET     /api/ollama/tags                                    -> {available, models}
@@ -21,6 +22,7 @@ import { existsSync, readFileSync, writeFileSync, unlinkSync } from 'node:fs';
 import { randomBytes } from 'node:crypto';
 import { spawn as nodeSpawn } from 'node:child_process';
 import { runClaude, resolveClaudeBinary, bridgeAccess, isSameOrigin, sse, killTree as defaultKillTree, effectivePermissionMode, PERMISSION_MODES, PERSONAS } from './claude-bridge.mjs';
+import { hudContext, promptWithContext } from './hud-context.mjs';
 import { pickOllamaModel, streamOllamaChat, resolveOllamaBase } from './ollama.mjs';
 
 const DENY_STATIC = [/^\/lib(\/|$)/, /^\/tests(\/|$)/, /^\/server\.mjs$/, /^\/package(-lock)?\.json$/, /^\/vitest\.config\.js$/, /^\/node_modules(\/|$)/, /^\/\.git(\/|$)/, /^\/\.env/];
@@ -64,7 +66,7 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
   const url = new URL(req.url || '/', 'http://x');
   const p = url.pathname;
   if (DENY_STATIC.some((rx) => rx.test(p))) { json(res, 404, { error: 'not found' }); return true; }
-  const isBridge = p.startsWith('/api/claude/') || p === '/api/launch/claude' || p.startsWith('/api/hermes/');
+  const isBridge = p.startsWith('/api/claude/') || p === '/api/launch/claude' || p.startsWith('/api/hermes/') || p === '/api/hud/context';
   const isOllama = p.startsWith('/api/ollama/');
   const isOwner = p === '/api/owner';
   if (!isBridge && !isOllama && !isOwner) return false;
@@ -85,6 +87,16 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     try { text = (deps.readOwnerFile || readOwnerFileDefault)(); } catch { text = ''; }
     json(res, 200, { name: ownerNameFrom(text) });
     return true;
+  }
+
+  // ── HUD context: the exact preamble /api/claude/chat would compose ─────────
+  if (p === '/api/hud/context' && req.method === 'GET') {
+    const live = {};
+    const src = { nodes: deps.probeAll, vault: deps.vaultStatus, agents: deps.agentsSummary, graph: deps.vaultGraph, house: deps.houseSummary };
+    const jobs = Object.entries(src).filter(([, f]) => typeof f === 'function').map(async ([k, f]) => { try { live[k] = await f(); } catch { live[k] = null; } });
+    await Promise.all(jobs);
+    const context = hudContext({ nodes: live.nodes || null, house: live.house || null, vault: live.vault || null, agents: live.agents || null, graph: live.graph || null, config: { repo: cfg.repo, missionControl: cfg.missionControl, vaultName: cfg.vaultName, vaultPath: cfg.vaultPath } });
+    return json(res, 200, { context, tab: 'hud', at: new Date().toISOString() });
   }
 
   // ── Ollama (chat only, no tools: LAN callers are fine) ─────────────────────
@@ -191,6 +203,20 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     if (sessionId && !/^[A-Za-z0-9_-]{6,80}$/.test(sessionId)) { json(res, 400, { error: 'sessionId must be a plain id' }); return true; }
     const persona = Object.hasOwn(PERSONAS, String(body.persona || '')) ? String(body.persona) : 'claude';
     if (state.current) { json(res, 429, { error: 'a Claude run is already in progress; stop it first' }); return true; }
+    // The HUD preamble is composed here, from this server's own live data. The
+    // client only asks for it (hud:true) and names its tab — it can never forge
+    // the house state (body.hudContext is ignored on purpose).
+    let finalPrompt = prompt;
+    if (body.hud === true) {
+      const depsForCtx = { nodes: deps.probeAll, vault: deps.vaultStatus, agents: deps.agentsSummary, graph: deps.vaultGraph, house: deps.houseSummary };
+      const live = {};
+      const jobs = Object.entries(depsForCtx).filter(([, f]) => typeof f === 'function').map(async ([k, f]) => { try { live[k] = await f(); } catch { live[k] = null; } });
+      await Promise.all(jobs);
+      finalPrompt = promptWithContext({
+        context: hudContext({ nodes: live.nodes || null, house: live.house || null, vault: live.vault || null, agents: live.agents || null, graph: live.graph || null, config: { repo: cfg.repo, missionControl: cfg.missionControl, vaultName: cfg.vaultName, vaultPath: cfg.vaultPath } }),
+        tab: String(body.tab || ''), user: prompt, at: new Date().toISOString(),
+      });
+    }
     const bin = resolveBinary();
     res.writeHead(200, SSE_HEADERS);
     let run;
@@ -199,7 +225,7 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     if (typeof ping.unref === 'function') ping.unref();
     try {
       run = runClaude({
-        prompt, cwd: cfg.repo, env: process.env, spawn, bin, sessionId, persona,
+        prompt: finalPrompt, cwd: cfg.repo, env: process.env, spawn, bin, sessionId, persona,
         permissionMode: effectivePermissionMode(String(body.permissionMode || ''), configuredMode),
         maxTurns, model: String(body.model || ''), lean: typeof body.lean === 'boolean' ? body.lean : undefined,
         timeoutMs: Number(envValue('CLAUDE_BRIDGE_TIMEOUT_MS')) || 300000,

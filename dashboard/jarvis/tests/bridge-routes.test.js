@@ -119,6 +119,21 @@ describe('POST /api/claude/chat', () => {
     expect((await fetch(url('/api/claude/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' })).status).toBe(400)
     expect((await fetch(url('/api/claude/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'x', sessionId: 'no spaces allowed' }) })).status).toBe(400)
   })
+  it('composes the HUD preamble on the server when hud:true and the client cannot forge it', async () => {
+    const r = await fetch(url('/api/claude/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'what is down?', persona: 'jarvis', hud: true, hudContext: 'FORGED', tab: 'graph' }) })
+    expect(r.status).toBe(200)
+    await r.text()
+    const run = spawned.at(-1)
+    expect(run.stdin).toContain('[House context — server-verified')
+    expect(run.stdin).toContain('[/House context]')
+    expect(run.stdin).not.toContain('FORGED')
+    expect(run.stdin.trimEnd().endsWith('what is down?')).toBe(true)
+  })
+  it('leaves the prompt untouched when hud is not requested', async () => {
+    const r = await fetch(url('/api/claude/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'plain' }) })
+    await r.text()
+    expect(spawned.at(-1).stdin).toBe('plain')
+  })
   it('refuses a second concurrent run with 429 and kills the child when the client goes away', async () => {
     const ctrl = new AbortController()
     const slowSpawn = (bin, args, opts) => { const c = deps.spawn(bin, args, opts); c.stdout.pause(); return c }
