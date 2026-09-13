@@ -7,7 +7,7 @@ Describe 'Get-StackServices' {
   $services = Get-StackServices
   It 'lists every service of the full stack on this node plus the Sabertooth probes' {
     $names = $services | ForEach-Object { $_.Name }
-    foreach ($n in 'jarvis', 'hermes-dashboard', 'ollama', 'live-npc-lab', 'dreamops', 'omniroute', 'sentry', 'mission-control') {
+    foreach ($n in 'jarvis', 'hermes-dashboard', 'ollama', 'live-npc-lab', 'dreamops', 'crosslisting', 'omniroute', 'sentry', 'mission-control') {
       ($names -contains $n) | Should Be $true
     }
   }
@@ -19,6 +19,15 @@ Describe 'Get-StackServices' {
   }
   It 'never carries a personal user path in the table' {
     ($services | ConvertTo-Json -Depth 4) | Should Not Match 'Users\\joshi|Users/joshi'
+  }
+  It 'supervises Crosslisting with an identity-checked probe and a real start command' {
+    $cl = $services | Where-Object Name -eq 'crosslisting'
+    $cl.Managed | Should Be $true
+    $cl.Url | Should Match ':3000'
+    $cl.Identity | Should Not BeNullOrEmpty
+    $cl.Start.File | Should Match 'cmd'
+    ($cl.Start.Args -join ' ') | Should Match 'crosslisting|index\.ts'
+    ($cl.Start.Args -join ' ') | Should Match 'tsx'
   }
 }
 

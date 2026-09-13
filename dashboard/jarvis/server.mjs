@@ -35,7 +35,7 @@ import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
-import { resolveConfig, readEnvFile } from './lib/config.mjs';
+import { resolveConfig, resolveVault, readEnvFile } from './lib/config.mjs';
 import { probeAll } from './lib/nodes.mjs';
 import { resolveClaudeBinary, killTree, PERMISSION_MODES, PERSONAS } from './lib/claude-bridge.mjs';
 import { handleBridgeRoutes } from './lib/bridge-routes.mjs';
@@ -48,8 +48,11 @@ const REPO = CFG.repo;
 const PORT = CFG.port;
 const LAN_IP = CFG.lanIp;
 const OMNI = CFG.omni;
-const VAULT = process.env.OBSIDIAN_VAULT_ANTIGRAVITY || CFG.file.OBSIDIAN_VAULT_ANTIGRAVITY || join(REPO, 'Antigravity');
-const VAULT_NAME = 'Antigravity';
+// Vault resolution self-heals across machines: a configured path that does not exist
+// (e.g. a Sabertooth path on Alienware) is skipped in favour of an existing candidate.
+const VAULT_CFG = resolveVault({ env: process.env, readEnv: readEnvFile, envFile: CFG.envFile, candidates: [join(REPO, 'Antigravity'), 'C:\\DREAM\\AlienwareDream'] });
+const VAULT = VAULT_CFG.path;
+const VAULT_NAME = VAULT_CFG.name;
 const SENTRY = CFG.sentry; // Fable's Sentry lives on Sabertooth unless FABLES_SENTRY_URL says otherwise
 const OBSIDIAN_REST = 'http://127.0.0.1:27123';
 // Skills tree: the classic .agents/skills layout when present, else this repo's skills/ folder.
