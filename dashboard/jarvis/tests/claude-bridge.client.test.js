@@ -46,6 +46,18 @@ describe('browser bridge SSE client', () => {
     expect(fetchImpl.mock.calls[0][1].headers['x-bridge-token']).toBeUndefined()
   })
 
+  it('forwards model and permissionMode when given, and omits them when not', async () => {
+    const fetchImpl = vi.fn(async (_url, options) => responseFromSse('event: result\ndata: {"text":"ok"}\n\n'))
+    await streamClaude({ prompt: 'a', model: 'opusplan', permissionMode: 'acceptEdits', fetchImpl })
+    const body = JSON.parse(fetchImpl.mock.calls[0][1].body)
+    expect(body.model).toBe('opusplan')
+    expect(body.permissionMode).toBe('acceptEdits')
+    await streamClaude({ prompt: 'b', fetchImpl })
+    const bare = JSON.parse(fetchImpl.mock.calls[1][1].body)
+    expect(bare.model).toBeUndefined()
+    expect(bare.permissionMode).toBeUndefined()
+  })
+
   it('sends the bridge token only when one is provided', async () => {
     const fetchImpl = vi.fn(async (_url, options) => responseFromSse('event: result\ndata: {"text":"ok"}\n\n'))
     await streamClaude({ prompt: 'hello', token: 'secret', fetchImpl })

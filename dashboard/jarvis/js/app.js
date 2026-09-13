@@ -524,6 +524,121 @@ async function launchClaude() {
   }
 }
 
+// ── Claudian panel: full Claude Code chat, model roster like the Obsidian plugin ──
+// Grouped by backend exactly as Claudian shows them. The bridge passes --model
+// through to the CLI; a model the CLI cannot route errors honestly in the log.
+const CLAUDIAN_MODELS = [
+  { group: 'Claude', models: ['fable', 'opus', 'sonnet', 'haiku'] },
+  { group: 'Codex', models: ['gpt-5.6-sol', 'gpt-5.6-terra', 'gpt-5.6-luna', 'gpt-5.5', 'gpt-6-astra'] },
+  { group: 'PI (local)', models: ['ornith-1.5:9b'] },
+  { group: 'OpenCode (free)', models: ['opencode/muse-spark-1.3-contributor-free', 'opencode/big-pickle', 'opencode/mimo-v2.5-free', 'opencode/ling-3.0-flash-fin-free', 'opencode/nemotron-3-ultra-free', 'opencode/nemotron-3.5-lightning-free'] },
+];
+const CLAUDIAN_CUSTOM_KEY = 'claudian.models';
+
+function claudianModels() {
+  let custom = [];
+  try { custom = JSON.parse(localStorage.getItem(CLAUDIAN_CUSTOM_KEY) || '[]'); } catch {}
+  const known = new Set(CLAUDIAN_MODELS.flatMap((g) => g.models));
+  return [...CLAUDIAN_MODELS, { group: 'Custom', models: (Array.isArray(custom) ? custom : []).filter((m) => m && !known.has(m)) }];
+}
+
+function addClaudianModel(name) {
+  const m = String(name || '').trim();
+  if (!m || !/^[A-Za-z0-9._:/-]{1,80}$/.test(m)) return false;
+  const all = claudianModels();
+  if (all.some((g) => g.models.includes(m))) return true;
+  const custom = all.find((g) => g.group === 'Custom');
+  custom.models.push(m);
+  try { localStorage.setItem(CLAUDIAN_CUSTOM_KEY, JSON.stringify(custom.models)); } catch {}
+  return true;
+}
+
+function initClaudian() {
+  const model = $('#claudian-model');
+  if (!model || model.dataset.ready) return;
+  model.dataset.ready = '1';
+  for (const g of claudianModels()) {
+    if (!g.models.length) continue;
+    const og = document.createElement('optgroup');
+    og.label = g.group;
+    for (const m of g.models) {
+      const o = document.createElement('option');
+      o.value = m; o.textContent = m;
+      og.appendChild(o);
+    }
+    model.appendChild(og);
+  }
+  const addBtn = $('#claudian-add');
+  const addInput = $('#claudian-add-input');
+  const rebuild = () => {
+    const current = model.value;
+    for (const og of Array.from(model.querySelectorAll('optgroup'))) og.remove();
+    for (const g of claudianModels()) {
+      if (!g.models.length) continue;
+      const og = document.createElement('optgroup');
+      og.label = g.group;
+      for (const m of g.models) {
+        const o = document.createElement('option');
+        o.value = m; o.textContent = m;
+        if (m === current) o.selected = true;
+        og.appendChild(o);
+      }
+      model.appendChild(og);
+    }
+  };
+  addBtn?.addEventListener('click', () => {
+    if (addClaudianModel(addInput?.value)) { rebuild(); if (addInput) addInput.value = ''; }
+    else if (addInput) addInput.value = '';
+  });
+  addInput?.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addBtn?.click(); } });
+
+  const input = $('#claudian-input');
+  const send = $('#claudian-send');
+  const log = $('#claudian-log');
+  const effort = $('#claudian-effort');
+  const badge = $('#claudian-session');
+  const claudian = { sessionId: '', busy: false };
+  const run = async () => {
+    const prompt = String(input?.value || '').trim();
+    if (!prompt || claudian.busy) return;
+    claudian.busy = true;
+    if (input) input.value = '';
+    const row = log ? document.createElement('div') : null;
+    if (row) {
+      row.className = 'claudian-row';
+      row.appendChild(el('b', { text: 'You: ' }));
+      row.appendChild(document.createTextNode(prompt));
+      log.appendChild(row);
+    }
+    const live = log ? document.createElement('div') : null;
+    const liveText = document.createElement('span');
+    if (live) {
+      live.className = 'claudian-row';
+      live.appendChild(el('b', { text: 'Claude: ' }));
+      live.appendChild(liveText);
+      log.appendChild(live);
+    }
+    try {
+      const { streamClaude } = await import('./jarvis/claude-bridge.js');
+      const result = await streamClaude({
+        prompt, persona: 'claude', sessionId: claudian.sessionId || undefined,
+        model: model?.value || undefined, permissionMode: effort?.value || undefined,
+        onEvent: (event, data) => {
+          if (event === 'delta') liveText.textContent += data?.text || '';
+          if (event === 'tool') liveText.textContent += `[${data?.name || 'tool'}] `;
+        },
+      });
+      claudian.sessionId = result.sessionId || claudian.sessionId;
+      if (result.text) liveText.textContent = result.text;
+      if (badge) badge.textContent = claudian.sessionId ? `session ${claudian.sessionId.slice(0, 8)}` : '';
+    } catch (e) {
+      liveText.textContent = `Error: ${e.message}`;
+    } finally { claudian.busy = false; }
+  };
+  send?.addEventListener('click', () => { void run(); });
+  input?.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); void run(); } });
+}
+
 // ── Widgets ────────────────────────────────────────────────────────────────
 
 function initWidgets() {
@@ -652,6 +767,7 @@ function init() {
   $('#claude-launch')?.addEventListener('click', launchClaude);
   $('#freebuff-launch')?.addEventListener('click', launchFreebuff);
   $('#mission-refresh')?.addEventListener('click', () => void renderMissionBoard());
+  initClaudian();
   logActivity('Dashboard initialized');
 }
 
@@ -661,7 +777,8 @@ document.addEventListener('DOMContentLoaded', init);
 export {
   state, $, $$, el, setText, logActivity, initTabs, switchTab, initDashboard, initAgents,
   renderAgentCategories, renderAgentList, showAgentDetail, initGraph, renderGraph, simulateGraph,
-  openNote, initAvatar, loadAvatarGallery, loadVRMFile, initMissionControl, renderMissionBoard, initClaude, launchClaude, launchFreebuff,
+  openNote, initAvatar, loadAvatarGallery, loadVRMFile, initMissionControl, renderMissionBoard, initClaude, launchClaude, launchFreebuff, initClaudian,
+  CLAUDIAN_MODELS, claudianModels, addClaudianModel,
   initWidgets, sendChat, doSearch, doSummarize, doTTS, generateImage, api, omniFetch, omniChat,
   omniImageGen, omniTTS, init, IMAGE_MODEL, CHAT_MODEL, OMNI_PROXY,
 };

@@ -296,3 +296,7 @@
 .mission-row .down, .mission-row .warn { color: #f85149; }
 .mission-port, .mission-latency { color: var(--text-dim, #8b949e); font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
 .mission-detail { color: var(--text-dim, #8b949e); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── Claudian panel (full Claude Code chat on the Claude tab) ────────────── */
+.claudian-row { padding: 4px 0; border-bottom: 1px solid var(--border, #21262d); font-size: 13px; overflow-wrap: anywhere; }
+.claudian-row b { color: var(--accent, #58a6ff); }

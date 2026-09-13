@@ -57,7 +57,7 @@ globalThis.document = {
   querySelectorAll: (sel) => sel === '.nav-tab' ? tabs.map((t) => t.li) : sel === '.tab-content' ? tabs.map((t) => t.sec) : [],
   createElement: (tag) => new MockElement(tag),
   createElementNS: (_ns, tag) => new MockElement(tag),
-  createTextNode: (t) => ({ text: t }),
+  createTextNode: (t) => ({ textContent: t }),
   addEventListener: () => {},
 }
 globalThis.window = { addEventListener: () => {}, devicePixelRatio: 1 }
@@ -150,6 +150,37 @@ describe('tab navigation (the bug that killed every click)', () => {
     expect(board.textContent).not.toContain('undefined')
     expect(note.textContent).toContain('2 nodes')
   })
+  it('claudian panel sends the typed prompt with model/effort, streams the reply, and keeps the session badge', async () => {
+    const input = reg('claudian-input', 'input')
+    const send = reg('claudian-send', 'button')
+    const log = reg('claudian-log', 'div')
+    const model = reg('claudian-model', 'select'); model.value = 'opusplan'
+    const effort = reg('claudian-effort', 'select'); effort.value = 'acceptEdits'
+    const badge = reg('claudian-session', 'span')
+    send.listeners.click = []
+    app.initClaudian()
+    input.value = 'refactor the vault walker'
+    let sentBody = null
+    const realFetch = globalThis.fetch
+    globalThis.fetch = async (url, options = {}) => {
+      if (String(url).includes('/api/claude/chat')) {
+        sentBody = JSON.parse(options.body)
+        return { ok: true, body: { getReader: () => ({ read: async () => ({ done: true, value: undefined }) }) } }
+      }
+      throw new Error('no route ' + url)
+    }
+    try {
+      send.click()
+      await new Promise((r) => setTimeout(r, 10))
+    } finally { globalThis.fetch = realFetch }
+    expect(sentBody.prompt).toBe('refactor the vault walker')
+    expect(sentBody.model).toBe('opusplan')
+    expect(sentBody.permissionMode).toBe('acceptEdits')
+    expect(sentBody.persona).toBe('claude')
+    expect(sentBody.hud).toBeUndefined() // the Claudian panel is raw Claude, not the jarvis preamble
+    expect(log.textContent).toContain('refactor the vault walker')
+  })
+
   it('launchFreebuff opens the FreeBuff CLI via the bridge and reports the result', async () => {
     const out = reg('freebuff-result', 'p')
     await app.launchFreebuff()
