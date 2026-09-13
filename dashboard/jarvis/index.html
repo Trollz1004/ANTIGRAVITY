@@ -278,7 +278,7 @@
         <header class="tab-header">
           <h2>Official Claude CLI</h2>
         </header>
-        <div class="widget-card" style="max-width:720px">
+        <div class="widget-card" style="max-width:760px;margin-bottom:16px">
           <p id="claude-bridge-status" class="placeholder">Checking the Claude CLI bridge…</p>
           <p>Command: <code id="claude-command">claude</code></p>
           <p id="claude-note" class="placeholder"></p>
@@ -286,6 +286,26 @@
             <button id="claude-launch" class="btn primary">Open Claude CLI window on this node</button>
           </div>
           <p id="claude-result" class="output-box" style="margin-top:12px"></p>
+        </div>
+        <div class="widget-card" style="max-width:760px">
+          <h3>Claudian — full Claude Code chat</h3>
+          <p class="tab-desc">The model roster from the Obsidian Claudian plugin, in this dashboard. Model and effort map to real <code>claude -p</code> flags; custom models you add are persisted in this browser.</p>
+          <div class="gen-row" style="margin:10px 0">
+            <select id="claudian-model" class="select-input" title="Model roster (add your own below)"></select>
+            <select id="claudian-effort" class="select-input" title="Permission ceiling — .env may lower what runs">
+              <option value="plan">Effort: Plan (read-only)</option>
+              <option value="default">Effort: Default</option>
+              <option value="acceptEdits">Effort: Accept edits</option>
+            </select>
+            <input type="text" id="claudian-add-input" class="search-input inline" placeholder="Add model id…" style="max-width:220px" />
+            <button id="claudian-add" class="btn">+ Add</button>
+          </div>
+          <div id="claudian-log" class="chat-log" style="height:300px"></div>
+          <div class="chat-input-row" style="margin-top:8px">
+            <input type="text" id="claudian-input" class="chat-input" placeholder="Message Claude Code…" />
+            <button id="claudian-send" class="btn primary">Send</button>
+          </div>
+          <p><span id="claudian-session" class="jarvis-session"></span></p>
         </div>
       </section>
           <!-- Hermes AI Voice Tab -->
