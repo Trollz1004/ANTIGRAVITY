@@ -22,6 +22,7 @@ Guidance for Claude Code in `Trollz1004/hermes` (remote `origin`, default branch
 - **Claude pushes and merges its own work.** Do the work on a branch, merge it into `master`, then `git push origin master`. The `gh` CLI is not installed on this machine, so merge locally with `git merge --no-ff`. Do not force-push `master`.
 - **90% pass rule:** work is accepted only when at least 90% of the affected test suites pass. Run the suites below before merging. Report the pass rate and name every failure. Never merge below 90%.
 - Commits use conventional types (`feat(dashboard):`, `fix(jarvis):`, `docs:`, `test:`, `chore:`). See `skills/caveman-commit/SKILL.md`.
+- **Delegation (Joshua, 2026-09-13):** Claude writes the cards and judges; Hermes implements. Send a card with `hermes chat --query-file <file> -Q --oneshot -c <session> --create-if-missing` and parse the report it returns. Claude keeps only small edits, tests, review and the merge, so Joshua's Claude usage stays low.
 
 ## Repository layout
 
@@ -44,7 +45,8 @@ The Hermes runtime itself (`~/.hermes/`), the agent skills directory (`C:\ANTIGR
 | Sabertooth | `192.168.0.8` | OmniRoute model router (`:20128/v1`), and `C:\ANTIGRAVITY` in the original setup |
 
 - The OmniRoute endpoint `http://192.168.0.8:20128/v1` is on **Sabertooth, not this node**. Nothing on `192.168.0.40` serves `:20128`. Call it only as a remote LAN service.
-- `dashboard/jarvis/server.mjs` defaults `NODE_LAN_IP` to `192.168.0.8` (a Sabertooth default). On this node, run it with `NODE_LAN_IP=192.168.0.40`.
+- `dashboard/jarvis/server.mjs` reads `NODE_LAN_IP`, `ANTIGRAVITY_ROOT` and the OmniRoute URL from the repo `.env` (process.env wins, see `dashboard/jarvis/lib/config.mjs`). Start it from a plain shell, never from inside a Claude Code terminal: the Claude CLI bridge strips the nested-launch guard for its child, but the interactive launcher does not.
+- Hermes on this node (`%LOCALAPPDATA%\hermes`) runs through OmniRoute (`auto/best-fast`) with `opencode-free` as fallback; its web dashboard binds `127.0.0.1:9119`.
 - The GPU is AMD (no CUDA). Use ROCm, DirectML or Vulkan backends for local GPU work.
 
 ## Commands
@@ -52,7 +54,7 @@ The Hermes runtime itself (`~/.hermes/`), the agent skills directory (`C:\ANTIGR
 **JARVIS HUD** (`dashboard/jarvis`, npm):
 ```bash
 npm ci
-npx vitest run          # 3 files, 35 tests
+npx vitest run          # 9 files, 82 tests
 node server.mjs         # http://0.0.0.0:9150 (AIRI_DASHBOARD_PORT)
 ```
 `tests/crosslisting.test.js` reads the sibling `dashboard/crosslisting` package. Override its location with `CROSSLISTING_ROOT`.
@@ -81,11 +83,12 @@ pnpm db:push            # drizzle generate + migrate. Get operator confirmation 
 
 ### JARVIS HUD (`dashboard/jarvis`)
 - `index.html` has tab navigation (Dashboard, Mission Control, Agents, Knowledge Graph, Avatar, Widgets, Scenes, Image Gen, Claude CLI, Hermes AI, JARVIS, Crosslisting). It loads the `js/app.js`, `js/hermes-voice.js`, `js/jarvis/{jarvis,globe,avatar}.js` and `js/crosslisting.js` modules. Cesium comes from a CDN, and three.js/three-vrm render the avatar.
-- `server.mjs` is zero-dependency `node:http`. It serves static files plus `/api/config`, `/api/omni/*` (an OmniRoute proxy that injects `OMNI_ROUTE_API_KEY`), `/api/agents`, `/api/vault/*`, `/api/house`, `/api/avatars`, `POST /api/launch/claude` and `/health`. Paths default to `C:\ANTIGRAVITY` (override with `ANTIGRAVITY_ROOT`). The server reads secrets from `.env` at request time and never returns them.
+- `server.mjs` is zero-dependency `node:http`. It serves static files (never `lib/`, `tests/`, `server.mjs` or package files) plus `/api/config`, `/api/omni/*` (an OmniRoute proxy that injects `OMNI_ROUTE_API_KEY`), `/api/agents`, `/api/nodes` (god's-eye probe of both LAN nodes, identity-checked, `lib/nodes.mjs`), `/api/vault/*`, `/api/house`, `/api/avatars` and `/health`. The repo root defaults to this checkout (override with `ANTIGRAVITY_ROOT`). The server reads secrets from `.env` at request time and never returns them.
+- `lib/bridge-routes.mjs` owns the Claude CLI bridge: `GET /api/claude/status`, `POST /api/claude/chat` (headless `claude -p --output-format stream-json` on account auth, streamed as Server-Sent Events), `POST /api/claude/stop`, `POST /api/launch/claude`, plus `GET /api/ollama/tags` and `POST /api/ollama/chat` (local Ollama as the same SSE contract). The bridge is loopback/own-IP only unless `DASHBOARD_BRIDGE_TOKEN` is set in `.env` and sent as `x-bridge-token`; the permission ceiling is `plan` unless `CLAUDE_BRIDGE_PERMISSION_MODE` raises it; `.env` files are denied to the CLI; foreign Origins and preflights get 403; one run at a time. Ollama's base comes from `JARVIS_OLLAMA_URL` or `OLLAMA_HOST` (`OLLAMA_API` in `.env` is a key, not a URL).
 - Tests run under Node with three.js mocks (`tests/mocks/`, aliased in `vitest.config.js`). `js/crosslisting.js` probes `http://127.0.0.1:3000`.
 
 ## Conventions and constraints
 
 - **Skill files:** YAML frontmatter with `name` (kebab-case), `description` (60 characters or fewer), `version`, `author: Joshua (joshlcoleman), Hermes Agent`, `license: MIT`, `platforms`, `metadata.hermes.tags` and `metadata.hermes.related_skills`. Sections: When to Use, Quick Reference or Procedure, Pitfalls, Verification.
 - **Privacy:** never commit `.env`, tokens, personal usernames or local absolute user paths (see commit `b758d49`). Crosslisting `README.md` and `todo.md` must not contain `antigravity`, `paperclip`, `nsfw`, `trollz` or `youandin`, and a test enforces this.
-- Local service ports referenced in code: Obsidian Local REST `127.0.0.1:27123`, Sentry/House `127.0.0.1:9140`, Mission Control `:3151`, Hermes dashboard `:9119`, JARVIS `:9150`, Crosslisting `:3000`. Each one is up only where it has been installed. Check `/health` or `/api/vault/status` before you assume a service is running.
+- Service ports, by node (`dashboard/jarvis/lib/nodes.mjs` is the tested source of truth). Alienware `192.168.0.40`: JARVIS `:9150`, Hermes dashboard `127.0.0.1:9119`, Ollama `:11434`, Live NPC Lab `:9127`, DreamOps Bridge `:9133`, Crosslisting `:3000`, Obsidian Local REST `:27123`. Sabertooth `192.168.0.8`: OmniRoute `:20128/v1`, Fable's Sentry `:9140`, Mission Control `:3151`. Each one is up only where it has been installed. Check `/health`, `/api/nodes` or `/api/vault/status` before you assume a service is running.

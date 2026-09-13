@@ -15,8 +15,10 @@
  *
  * Static deny: /lib, /tests, server.mjs, package files and node_modules are never served.
  */
-import { basename } from 'node:path';
-import { hostname } from 'node:os';
+import { basename, join } from 'node:path';
+import { hostname, tmpdir } from 'node:os';
+import { existsSync, readFileSync, writeFileSync, unlinkSync } from 'node:fs';
+import { randomBytes } from 'node:crypto';
 import { spawn as nodeSpawn } from 'node:child_process';
 import { runClaude, resolveClaudeBinary, bridgeAccess, isSameOrigin, sse, killTree as defaultKillTree, effectivePermissionMode, PERMISSION_MODES, PERSONAS } from './claude-bridge.mjs';
 import { pickOllamaModel, streamOllamaChat, resolveOllamaBase } from './ollama.mjs';
@@ -24,6 +26,27 @@ import { pickOllamaModel, streamOllamaChat, resolveOllamaBase } from './ollama.m
 const DENY_STATIC = [/^\/lib(\/|$)/, /^\/tests(\/|$)/, /^\/server\.mjs$/, /^\/package(-lock)?\.json$/, /^\/vitest\.config\.js$/, /^\/node_modules(\/|$)/, /^\/\.git(\/|$)/, /^\/\.env/];
 const SSE_HEADERS = { 'content-type': 'text/event-stream', 'cache-control': 'no-store', connection: 'keep-alive', 'x-accel-buffering': 'no' };
 const state = { current: null }; // one Claude run at a time: { run, startedAt, persona }
+const hermesState = { current: null, lastLatencyMs: null };
+
+function resolveHermesBinary(env = process.env) {
+  if (env.HERMES_BIN && existsSync(env.HERMES_BIN)) return env.HERMES_BIN;
+  const local = env.LOCALAPPDATA ? join(env.LOCALAPPDATA, 'hermes', 'bin', 'hermes.exe') : '';
+  if (local && existsSync(local)) return local;
+  return 'hermes'; // PATH lookup
+}
+function readOwnerFileDefault(env = process.env) {
+  return readFileSync(join(env.LOCALAPPDATA || '', 'hermes', 'memories', 'USER.md'), 'utf8');
+}
+/** First word of the first non-empty line, only when it looks like a given name. */
+export function ownerNameFrom(text) {
+  const line = String(text || '').split(/\r?\n/).map((l) => l.trim()).find(Boolean) || '';
+  const word = line.split(/\s+/)[0] || '';
+  return /^[A-Z][a-z]{1,30}$/.test(word) ? word : '';
+}
+/** A Hermes one-shot prints the reply plus a session trailer; keep only the reply. */
+export function cleanHermesReply(text) {
+  return String(text || '').split(/\r?\n/).filter((l) => !/^\s*session_id:\s*\S+\s*$/.test(l)).join('\n').trim();
+}
 
 function json(res, code, body) {
   res.writeHead(code, { 'content-type': 'application/json', 'cache-control': 'no-store' });
@@ -41,9 +64,10 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
   const url = new URL(req.url || '/', 'http://x');
   const p = url.pathname;
   if (DENY_STATIC.some((rx) => rx.test(p))) { json(res, 404, { error: 'not found' }); return true; }
-  const isBridge = p.startsWith('/api/claude/') || p === '/api/launch/claude';
+  const isBridge = p.startsWith('/api/claude/') || p === '/api/launch/claude' || p.startsWith('/api/hermes/');
   const isOllama = p.startsWith('/api/ollama/');
-  if (!isBridge && !isOllama) return false;
+  const isOwner = p === '/api/owner';
+  if (!isBridge && !isOllama && !isOwner) return false;
 
   if (req.method === 'OPTIONS') { json(res, 403, { error: 'no cross-origin access to the bridge' }); return true; }
   if (!isSameOrigin(req.headers)) { json(res, 403, { error: 'origin refused' }); return true; }
@@ -55,6 +79,13 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
   const resolveBinary = deps.resolveBinary || (() => resolveClaudeBinary());
   const fetchImpl = deps.fetch || globalThis.fetch;
   const ollamaBase = deps.ollamaBase ? String(deps.ollamaBase).replace(/\/$/, '') : resolveOllamaBase({ JARVIS_OLLAMA_URL: envValue('JARVIS_OLLAMA_URL'), OLLAMA_HOST: envValue('OLLAMA_HOST') });
+
+  if (isOwner) {
+    let text = '';
+    try { text = (deps.readOwnerFile || readOwnerFileDefault)(); } catch { text = ''; }
+    json(res, 200, { name: ownerNameFrom(text) });
+    return true;
+  }
 
   // ── Ollama (chat only, no tools: LAN callers are fine) ─────────────────────
   if (isOllama) {
@@ -102,7 +133,47 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     });
     return true;
   }
+  // ── Hermes as a brain (runs tools, so it sits behind the same gate) ────────
+  if (p === '/api/hermes/status') {
+    const bin = (deps.resolveHermes || resolveHermesBinary)();
+    json(res, 200, { installed: bin !== 'hermes', bin: bin === 'hermes' ? 'hermes (PATH)' : basename(bin), access: { ok: access.ok, local: access.local }, busy: Boolean(hermesState.current), lastLatencyMs: hermesState.lastLatencyMs, session: 'jarvis-hud' });
+    return true;
+  }
   if (!access.ok) { json(res, 403, { error: 'bridge refused: ' + access.reason }); return true; }
+
+  if (p === '/api/hermes/chat' && req.method === 'POST') {
+    const body = await readJson(req, res); if (!body) return true;
+    const prompt = String(body.prompt || '').trim();
+    if (!prompt || prompt.length > 20000) { json(res, 400, { error: 'prompt required (1..20000 chars)' }); return true; }
+    const session = /^[A-Za-z0-9_-]{3,40}$/.test(String(body.session || '')) ? String(body.session) : 'jarvis-hud';
+    if (hermesState.current) { json(res, 429, { error: 'a Hermes turn is already in progress' }); return true; }
+    const bin = (deps.resolveHermes || resolveHermesBinary)();
+    const file = join(tmpdir(), `jarvis-hermes-${randomBytes(6).toString('hex')}.txt`);
+    writeFileSync(file, prompt, 'utf8'); // the prompt never travels on the command line
+    res.writeHead(200, SSE_HEADERS);
+    const t0 = Date.now();
+    let out = ''; let err = '';
+    const child = spawn(bin, ['chat', '--query-file', file, '-Q', '--oneshot', '-c', session, '--create-if-missing'], { cwd: cfg.repo, env: process.env, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
+    hermesState.current = { child, startedAt: t0 };
+    const finish = (code, extra = {}) => {
+      if (hermesState.current && hermesState.current.child === child) hermesState.current = null;
+      clearTimeout(timer);
+      try { unlinkSync(file); } catch {}
+      const latencyMs = Date.now() - t0;
+      hermesState.lastLatencyMs = latencyMs;
+      try { res.write(sse('result', { type: 'result', ok: code === 0, text: cleanHermesReply(out), latencyMs, session, code, stderr: code ? err.trim().split('\n').slice(-3).join('\n') : '', ...extra })); res.end(); } catch {}
+    };
+    const timer = setTimeout(() => { killTree(child); finish(null, { error: 'timeout' }); }, Number(envValue('HERMES_BRIDGE_TIMEOUT_MS')) || 600000);
+    if (typeof timer.unref === 'function') timer.unref();
+    child.stdout.on('data', (c) => { out += String(c); });
+    child.stderr.on('data', (c) => { err += String(c); if (err.length > 8000) err = err.slice(-8000); });
+    child.on('error', (e) => finish(-1, { error: String(e.message || e) }));
+    child.on('close', (code) => finish(code));
+    const onGone = () => { if (child.exitCode === null) killTree(child); };
+    req.on('close', onGone); res.on('close', onGone);
+    console.log(new Date().toISOString(), 'hermes bridge session', session, 'from', req.socket && req.socket.remoteAddress);
+    return true;
+  }
 
   if (p === '/api/claude/stop' && req.method === 'POST') {
     const cur = state.current;
