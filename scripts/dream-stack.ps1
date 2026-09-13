@@ -76,6 +76,9 @@ function Get-StackServices {
     [pscustomobject]@{ Name = 'dreamops'; Label = 'DreamOps Bridge'; Url = 'http://127.0.0.1:9133/health'; Managed = $true
       Start = @{ File = $node; Args = 'src/server.js'; Cwd = (Join-Path $dream 'game\server\dreamops-bridge') }
       Identity = { param($s, $b) $s -eq 200 -and $b.Trim().StartsWith('{') } }
+    [pscustomobject]@{ Name = 'crosslisting'; Label = 'Crosslisting OS'; Url = 'http://127.0.0.1:3000/'; Managed = $true
+      Start = @{ File = 'cmd.exe'; Args = '/c set NODE_ENV=development&& set PORT=3000&& node node_modules/tsx/dist/cli.mjs server/_core/index.ts'; Cwd = (Join-Path $repo 'dashboard\crosslisting') }
+      Identity = { param($s, $b) $s -eq 200 -and $b -match '<div id="root">' } }
     [pscustomobject]@{ Name = 'omniroute'; Label = 'OmniRoute (Sabertooth)'; Url = "http://$S`:20128/v1/models"; Managed = $false; Start = $null
       Identity = { param($s, $b) $s -eq 401 -or $s -eq 403 -or ($s -eq 200 -and $b -match '"data"\s*:\s*\[') } }
     [pscustomobject]@{ Name = 'sentry'; Label = "Fable's Sentry (Sabertooth)"; Url = "http://$S`:9140/api/status"; Managed = $false; Start = $null
