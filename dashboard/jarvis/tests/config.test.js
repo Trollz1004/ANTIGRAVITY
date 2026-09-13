@@ -91,6 +91,15 @@ describe('resolveVault', () => {
     expect(v.name).toBe('Antigravity')
   })
 
+  it('prefers OBSIDIAN_VAULT over the legacy ANTIGRAVITY name, env over the .env file', () => {
+    const legacy = mkdtempSync(join(tmpdir(), 'vault-legacy-'))
+    const modern = mkdtempSync(join(tmpdir(), 'vault-modern-'))
+    const v = cfg.resolveVault({ env: { OBSIDIAN_VAULT: modern, OBSIDIAN_VAULT_ANTIGRAVITY: legacy }, readEnv: () => ({}) })
+    expect(v.path).toBe(modern)
+    const w = cfg.resolveVault({ env: { OBSIDIAN_VAULT_ANTIGRAVITY: legacy }, readEnv: () => ({}) })
+    expect(w.path).toBe(legacy)
+  })
+
   it('prefers env over the .env file and never errors when the file is missing', () => {
     const real = mkdtempSync(join(tmpdir(), 'vault-env-'))
     const v = cfg.resolveVault({ env: { OBSIDIAN_VAULT_ANTIGRAVITY: real }, readEnv: () => ({ OBSIDIAN_VAULT_ANTIGRAVITY: 'C:/definitely/not/a/vault' }) })
