@@ -15,3 +15,7 @@ package.json
 .codex/
 .github/agents/
 .opencode/
+
+# JARVIS HUD runtime state (never committed)
+dashboard/jarvis/data/
+dashboard/jarvis/tests/fixtures/test-jarvis-memory.json

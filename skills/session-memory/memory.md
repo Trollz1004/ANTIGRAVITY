@@ -1,6 +1,6 @@
 ---
 last_session: 2026-09-13
-total_sessions: 5
+total_sessions: 6
 model: stepfun/step-3.7-flash
 provider: nous
 omniroute: http://192.168.0.8:20128/v1
@@ -152,3 +152,26 @@ caveman_skills: 7
 - [x] "free buff" resolved: FreeBuff is a separate free coding-agent CLI (`npm -g freebuff`), a non-judge implementation lane, not a Hermes provider.
 - [ ] README.md rewrite for this node, docs sweep for Sabertooth/Termux assumptions.
 - [ ] Next Dream Online slices: `ollama-local` provider for T0 ambient NPCs; Sup@ on the real Claude CLI using the bridge's `buildClaudeArgs`/`childEnv`/`killTree` pattern.
+
+## 2026-09-13 (Freebuff, Alienware node 192.168.0.40)
+
+### Decisions
+- Installed Freebuff Desktop (Electron app from CodebuffAI) on this node, not just the `npm -g freebuff` CLI lane.
+
+### Changes
+- Downloaded the Windows x64 installer via `https://freebuff.com/api/desktop/download/windows` to `Downloads/FreebuffSetup.exe` (153 MB, Nullsoft, unsigned build), ran it with `/S` silent install. App at `%LOCALAPPDATA%\Programs\@codebufffreebuff-desktop\Freebuff.exe` with Start Menu shortcut; launched and confirmed running (6 processes).
+
+### Lessons
+- Freebuff's download links live at `/api/desktop/download/{windows,windows-arm64,windows-baseline,mac-arm64,mac-intel,linux,linux-arm64}`; the GitHub `CodebuffAI/freebuff` releases are CI tarballs (`codecane-*`), not installers.
+- The `windows-baseline` build is for CPUs without AVX2 (error 3221225501 at startup); i7-11700F needs the standard x64 build. Builds are unsigned: Windows SmartScreen needs More info → Run anyway.
+
+### Carry-forward TODOs
+- [ ] User signs in to Freebuff Desktop (GitHub or Google) on first launch.
+
+## 2026-09-13 — Freebuff (Buffy): dashboard is mission control; JARVIS memory; FreeBuff lane boundaries
+- **Mission control IS the dashboard.** Sabertooth :3151 iframe embed deleted; Mission Control tab = live identity-checked board (both nodes, honest DOWN rows). No mock/dead content anywhere — rule enforced by test.
+- **JARVIS memory shipped (TDD):** lib/jarvis-memory.mjs (30-entry cap, trimmed bodies, corrupt-store healing); bridge captures every jarvis-persona turn (result/error/exit); memory composed into every hud:true preamble; GET /api/jarvis/memory; /data denied as static. Verified live: turn captured + recalled.
+- **FreeBuff boundaries confirmed by probing:** freebuff@0.0.174 CLI is a TUI launcher only — no headless mode, no local API, no OpenAI-compatible endpoint. It CANNOT be a Hermes provider or a JARVIS chat brain. Wired as a launch option instead: POST /api/launch/freebuff (503 when absent) + Agents-tab button beside the Agency Agents roster note. ANTIGRAVITY repo shows FreeBuff ran as "freebuff-ceo" subagent (journals + SOUL.md in .agents/) — that's Claude-Code-harness, not the npm CLI's own doing.
+- **Hermes config paste:** told Joshua what to change (current model stays openai-codex/gpt-5.6-terra; omniroute stays sub-agents-only; freebuff is not a provider — nothing to paste for it).
+- Suites: jarvis 148/148. Commits: eb2d4ff (dock+context), d4d90bd (memory+freebuff+mission board) on feat/jarvis-gods-eye — awaiting judge lane merge (Claude Code or Codex).
+- Carry-forward: mission-control-v5 boot deferred (cloned at C:\ANTIGRAVITY); Hermes "5 commits behind — run hermes update"; Unreal MCP still down until UE 5.8; judge lane needed for merge+push.
