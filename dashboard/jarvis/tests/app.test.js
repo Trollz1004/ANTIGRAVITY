@@ -92,10 +92,9 @@ globalThis.fetch = vi.fn(async (url, options = {}) => {
   if (url.endsWith('/api/launch/freebuff')) return json({ ok: true, opened: 'freebuff.cmd', on: 'THIS-NODE', from: '::1' })
   if (url.endsWith('/api/claude/status')) return json({ installed: true, access: { ok: true }, permissionMode: 'plan' })
   if (url.endsWith('/api/nodes')) return json({ nodes: [
-    { name: 'Alienware', ip: '192.168.0.40', role: 'JARVIS host', up: 2, total: 3, services: [
+    { name: 'Alienware', ip: '192.168.0.40', role: 'JARVIS host', up: 2, total: 2, services: [
       { id: 'crosslisting', label: 'Crosslisting OS', port: 3000, up: true, state: 'UP', detail: 'identity ok', latencyMs: 5 },
       { id: 'hermes', label: 'Hermes dashboard', port: 9119, up: true, state: 'UP', detail: 'identity ok', latencyMs: 4 },
-      { id: 'mission-control', label: 'Mission Control', port: 3151, up: false, state: 'DOWN', detail: 'timeout' },
     ] },
     { name: 'Sabertooth', ip: '192.168.0.8', role: 'OmniRoute router', up: 1, total: 2, services: [
       { id: 'omniroute', label: 'OmniRoute', port: 20128, up: true, state: 'UP', detail: 'identity ok', latencyMs: 9 },
