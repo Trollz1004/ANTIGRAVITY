@@ -15,6 +15,7 @@
 import { createGlobe } from './globe.js';
 import { loadAvatar, DEFAULT_AVATAR_URL } from './avatar.js';
 import { getBridgeStatus, streamClaude, streamOllama, streamHermes } from './claude-bridge.js';
+import { createPushToTalk, naturalCase, REST_MS } from './voice.js';
 
 // All OmniRoute calls go through the server proxy — key stays server-side.
 const OMNI = '/api/omni';
@@ -88,19 +89,106 @@ function createHudRing(container, segments, radius, thickness) {
 
 // ── Voice Engine ─────────────────────────────────────────────────────────────
 
-const jarvisVoice = {
+const browserSpeech = {
   recognition: null,
-  
+  onresult: null,
+  onend: null,
+
+  start() {
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Recognition) return false;
+    if (!this.recognition) {
+      const recognition = new Recognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = true;
+      recognition.continuous = true;
+      recognition.maxAlternatives = 1;
+      recognition.onresult = (event) => this.onresult?.(event);
+      recognition.onend = () => this.onend?.();
+      this.recognition = recognition;
+    }
+    try { this.recognition.start(); } catch {}
+    return true;
+  },
+
+  stop() {
+    try { this.recognition?.stop(); } catch {}
+  },
+
+  cancelSpeaking() {
+    window.speechSynthesis?.cancel();
+  },
+};
+
+let pushToTalk = null;
+let restTimer = null;
+
+function setVoiceHudState(state, live) {
+  const globe = document.getElementById('jarvis-globe');
+  if (!live) return;
+  if (restTimer) clearTimeout(restTimer);
+  restTimer = null;
+  if (globe) globe.style.pointerEvents = 'auto';
+  if (state === 'listening' || state === 'latched') setState('listening');
+}
+
+function restVoiceHud(reason) {
+  if (reason === 'unavailable') {
+    jarvisLog('JARVIS', 'Speech recognition requires Chrome or Edge. Use the text input below.');
+  }
+  if (restTimer) clearTimeout(restTimer);
+  restTimer = setTimeout(() => {
+    if (pushToTalk?.isLive()) return;
+    const interim = document.getElementById('jarvis-interim');
+    const globe = document.getElementById('jarvis-globe');
+    if (interim) interim.textContent = '';
+    if (globe) globe.style.pointerEvents = 'none';
+    setState('idle');
+  }, REST_MS);
+}
+
+function getPushToTalk() {
+  if (pushToTalk) return pushToTalk;
+  pushToTalk = createPushToTalk({
+    globeEl: document.getElementById('jarvis-globe'),
+    speech: browserSpeech,
+    onState: setVoiceHudState,
+    onInterim: (text) => {
+      const interim = document.getElementById('jarvis-interim');
+      if (interim) interim.textContent = text;
+    },
+    onStop: restVoiceHud,
+    onTurn: async (text) => {
+      const interim = document.getElementById('jarvis-interim');
+      if (interim) interim.textContent = '';
+      await askJarvis(text);
+    },
+  });
+  return pushToTalk;
+}
+
+const jarvisVoice = {
+  get recognition() { return browserSpeech.recognition; },
+
   speak(text) {
     return new Promise((resolve) => {
       const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
       if (!synth || typeof SpeechSynthesisUtterance === 'undefined') return resolve();
       setState('speaking');
       let done = false;
-      const finish = () => { if (done) return; done = true; clearTimeout(timer); setState('idle'); resolve(); };
+      const finish = () => {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        getPushToTalk().resume();
+        if (!getPushToTalk().isLive()) setState('idle');
+        resolve();
+      };
       // Muted, voiceless or headless browsers never fire onend: resolve on a timer sized to the text.
       const timer = setTimeout(finish, Math.min(20000, 1500 + String(text || '').length * 60));
-      const u = new SpeechSynthesisUtterance(text);
+      // Recognition is stopped while replies play; it resumes only after the reply ends or a user interrupt.
+      getPushToTalk().pause();
+      const u = new SpeechSynthesisUtterance(naturalCase(text));
       const voices = synth.getVoices ? synth.getVoices() : [];
       u.voice = voices.find(v => /en-US/i.test(v.lang) && /neural|natural|aria|jenny|guy/i.test(v.name))
         || voices.find(v => /en-US/i.test(v.lang)) || voices[0] || null;
@@ -112,37 +200,12 @@ const jarvisVoice = {
     });
   },
   
-  startListening() {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) { jarvisLog('JARVIS', 'Speech recognition requires Chrome or Edge. Use the text input below.'); return; }
-    if (this.recognition) { this.recognition.stop(); this.recognition = null; setState('idle'); return; }
-    
-    const rec = new SR();
-    rec.lang = 'en-US';
-    rec.interimResults = false;
-    rec.maxAlternatives = 1;
-    rec.onstart = () => setState('listening');
-    rec.onresult = (e) => {
-      const text = e.results[0][0].transcript;
-      this.recognition = null;
-      askJarvis(text);
-    };
-    rec.onerror = (e) => {
-      this.recognition = null;
-      setState('error');
-      jarvisLog('JARVIS', 'Mic error: ' + e.error);
-      setTimeout(() => setState('idle'), 2000);
-    };
-    rec.onend = () => { if (jarvis.state === 'listening') setState('idle'); this.recognition = null; };
-    this.recognition = rec;
-    rec.start();
-  },
+  startListening() { return getPushToTalk().tap() },
   
   stop() {
-    window.speechSynthesis?.cancel();
-    if (this.recognition) { this.recognition.stop(); this.recognition = null; }
+    browserSpeech.cancelSpeaking();
+    getPushToTalk().end('stop');
     fetch('/api/claude/stop', { method: 'POST' }).catch(() => {});
-    setState('idle');
   }
 };
 
@@ -280,7 +343,7 @@ async function askJarvis(text) {
     else if (jarvis.brain === 'ollama') await askOllama(text);
     else if (jarvis.brain === 'hermes') await askHermes(text);
     else await askOmni(text);
-    setState('idle');
+    if (!pushToTalk?.isLive()) setState('idle');
   } catch (e) {
     setState('error');
     jarvisLog('JARVIS', 'Error: ' + e.message);
@@ -417,6 +480,35 @@ function initJarvis() {
   // Voice
   document.getElementById('jarvis-mic')?.addEventListener('click', () => jarvisVoice.startListening());
   document.getElementById('jarvis-stop')?.addEventListener('click', () => jarvisVoice.stop());
+  const voiceGlobe = document.getElementById('jarvis-globe');
+  if (voiceGlobe) {
+    voiceGlobe.style.pointerEvents = 'none';
+    voiceGlobe.addEventListener('pointerdown', (event) => {
+      event.preventDefault?.();
+      getPushToTalk().press();
+    });
+    voiceGlobe.addEventListener('pointerup', (event) => {
+      event.preventDefault?.();
+      getPushToTalk().release();
+    });
+    voiceGlobe.addEventListener('pointercancel', () => getPushToTalk().release());
+  }
+  const isVoiceShortcutTarget = (target) => ['input', 'textarea', 'select'].includes(String(target?.tagName || '').toLowerCase());
+  document.addEventListener('keydown', (event) => {
+    if (event.repeat || isVoiceShortcutTarget(event.target)) return;
+    if (event.key === 'Escape') getPushToTalk().end('escape');
+    if (event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault?.();
+      getPushToTalk().press();
+    }
+  });
+  document.addEventListener('keyup', (event) => {
+    if (isVoiceShortcutTarget(event.target)) return;
+    if (event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault?.();
+      getPushToTalk().release();
+    }
+  });
   document.getElementById('jarvis-session-new')?.addEventListener('click', () => {
     jarvis.claude.sessionId = '';
     const badge = document.getElementById('jarvis-session');
