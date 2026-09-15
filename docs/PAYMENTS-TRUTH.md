@@ -55,5 +55,15 @@ table; anything new is the first real customer and is reported, not
 Re-pull command for the future (read-only, judge lane): Square connector,
 service payments, method list, sort DESC. Nothing else.
 
+
+## History: why this record exists
+
+The original verification record, campaign-deliverables/payment-flow-verification.md
+(2026-06-01, "Fastest-Path Payment Flow — Verified", founder_test vs customer
+classification in backend/fastapi-app/app/revenue_allocation.py), was deleted
+on 2026-08-04 by commit ae749860 ("nuke: delete 37 dead folders"). That is
+why agents kept re-verifying. It is restored beside this file as
+docs/payment-flow-verification-2026-06-01.md. Do not delete either file.
+
 ---
-sha256 of everything above this line: 3b15dceddcc022f09b9db449dff8ed4eea8c7afd3df9fc71b324b165ff22d9b1
+sha256 of everything above this line: c73e0cba3aba14b4963021360915f9acd5fb7163f9acfc6202a608d846051bf9
