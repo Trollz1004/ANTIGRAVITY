@@ -47,17 +47,9 @@ if /I "%~1"=="audit"  goto :audit
 if /I "%~1"=="wall"   goto :wall
 if /I "%~1"=="ledger" goto :ledger
 if /I "%~1"=="dns"    goto :dns
-if /I "%~1"=="fable"  goto :mc
-start "" http://192.168.0.8:3151/
-exit /b 0
-
-:avatar
-start "" http://192.168.0.8:9150/
-exit /b 0
-
-:fable
 if /I "%~1"=="mc"     goto :mc
 if /I "%~1"=="avatar" goto :avatar
+if /I "%~1"=="fable"  goto :fable
 
 if not exist "%HOUSE%" (
   echo [drift] FABLE'S HOUSE script not found at %HOUSE%
@@ -97,6 +89,14 @@ exit /b %ERRORLEVEL%
 :dns
 call npm run -s fable -- dns
 exit /b %ERRORLEVEL%
+
+:mc
+start "" http://192.168.0.8:3151/
+exit /b 0
+
+:avatar
+start "" http://192.168.0.8:9150/
+exit /b 0
 
 :fable
 rem Joshua's own model, private on ollama.com, built from opsable-model\Modelfile.
