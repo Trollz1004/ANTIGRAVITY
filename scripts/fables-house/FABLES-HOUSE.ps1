@@ -93,9 +93,55 @@ function Test-Http($url, $timeoutSec = 10, $mustContain = $null, $bearerEnv = $n
 # ── Stage definitions ─────────────────────────────────────────────────────
 # Each: Name, Required, Probe (must return $true = healthy), Heal (start it)
 $Stages = @(
+    # 2026-09-15: the old Heal below called pg_ctl.exe with a bare `&` (direct,
+    # blocking) invocation. That call runs IN this single-threaded script, so
+    # if pg_ctl doesn't return promptly (stale postmaster.pid, disk/AV
+    # contention, an already-running server it tries to rebind) the ENTIRE
+    # House hangs forever right there — no further stage runs, nothing more
+    # is ever logged. Real runs at 07:55/11:47/12:33/12:51 all died exactly
+    # this way while pg16 was actually healthy the whole time. Redis's Heal
+    # already got this right (Start-Process, non-blocking); Postgres now
+    # matches: Start-Process (hidden, never steals focus) + a BOUNDED wait
+    # on our side (pg_ctl's own -w -t 60 plus slack) so this script always
+    # regains control and keeps logging even if pg_ctl itself misbehaves.
     @{ Name = 'PostgreSQL :5432'; Required = $true
-       Probe = { (& 'C:\Users\joshi\pgsql16\bin\pg_isready.exe' -h 127.0.0.1 -p 5432 -q 2>$null); $LASTEXITCODE -eq 0 }
-       Heal  = { & 'C:\Users\joshi\pgsql16\bin\pg_ctl.exe' -D 'C:\Users\joshi\pgsql16-data' -l 'C:\Users\joshi\pgsql16-data.log' start 2>$null | Out-Null } }
+       Probe = { $pgReady = 'C:\Users\joshi\pgsql16\bin\pg_isready.exe'
+                 if (Test-Path $pgReady) {
+                     (& $pgReady -h 127.0.0.1 -p 5432 -q 2>$null)
+                     return ($LASTEXITCODE -eq 0)
+                 }
+                 Log '  pg_isready.exe missing - falling back to a plain TCP probe on :5432' 'DarkYellow'
+                 return (Test-Port 5432) }
+       Heal  = { $pgCtl   = 'C:\Users\joshi\pgsql16\bin\pg_ctl.exe'
+                 $pgReady = 'C:\Users\joshi\pgsql16\bin\pg_isready.exe'
+                 $dataDir = 'C:\Users\joshi\pgsql16-data'
+                 $pidFile = Join-Path $dataDir 'postmaster.pid'
+
+                 # Already up? postmaster.pid present + pg_isready happy means a
+                 # fresh `start` would only fight the running instance for the
+                 # port. Skip the heal entirely.
+                 if (Test-Path $pidFile) {
+                     $up = $false
+                     if (Test-Path $pgReady) { (& $pgReady -h 127.0.0.1 -p 5432 -q 2>$null); $up = ($LASTEXITCODE -eq 0) }
+                     else { $up = Test-Port 5432 }
+                     if ($up) { Log '  PostgreSQL already running (postmaster.pid present, pg_isready OK) - skipping heal' 'DarkGray'; return }
+                 }
+
+                 if (-not (Test-Path $pgCtl)) { Log '  pg_ctl.exe missing at C:\Users\joshi\pgsql16\bin - cannot heal PostgreSQL' 'Red'; return }
+
+                 # Don't stack a second pg_ctl on top of one already in flight
+                 # from a prior retry that hasn't finished its own -t 60 wait yet.
+                 if (Get-Process -Name 'pg_ctl' -ErrorAction SilentlyContinue) { Log '  pg_ctl already in flight from a previous heal attempt - not starting another' 'DarkGray'; return }
+
+                 $logFile = 'C:\Users\joshi\pgsql16-data.log'
+                 $proc = Start-Process -FilePath $pgCtl -ArgumentList '-D',$dataDir,'-l',$logFile,'-w','-t','60','start' -WindowStyle Hidden -PassThru
+                 # pg_ctl's own -w/-t bounds IT to 60s; we bound OURSELVES a bit
+                 # past that so a misbehaving pg_ctl can never hang this script -
+                 # Wait-Process with -Timeout returns (with a non-fatal error we
+                 # swallow) instead of blocking indefinitely.
+                 Wait-Process -Id $proc.Id -Timeout 75 -ErrorAction SilentlyContinue
+                 if ($proc.HasExited) { Log ("  pg_ctl start exited with code {0}" -f $proc.ExitCode) 'DarkGray' }
+                 else { Log ("  pg_ctl start did not return within 75s (PID {0}) - not waiting further, will re-probe" -f $proc.Id) 'Yellow' } } }
 
     @{ Name = 'Redis :6379'; Required = $true
        Probe = { (& 'C:\Users\joshi\redis-win\redis-cli.exe' -h 127.0.0.1 ping 2>$null) -eq 'PONG' }
