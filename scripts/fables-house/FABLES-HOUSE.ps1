@@ -190,9 +190,31 @@ $Stages = @(
                  return $true }
        Heal  = { } }
 
+    # 2026-09-15: found a foreign CRACO dev server ("Emergent | Fullstack App",
+    # launched from frontend\node_modules\@craco\craco) squatting :3200 - the
+    # port answered but never carried the prod bundle, so this stage retried
+    # forever without ever being able to fix it (tab-dateapp.cmd cannot bind a
+    # port something else already holds). Narrow, named guard only: a squatter
+    # is killed ONLY when its command line matches the known offender exactly
+    # (Hermes is moving that app off :3200 to :3210). Anything else that is
+    # squatting the port is logged, never killed, and the stage just keeps
+    # retrying as it always has.
     @{ Name = 'Frontend :3200 (production bundle)'; Required = $true
        Probe = { Test-Http 'http://127.0.0.1:3200/' 10 'assets/index-' }
-       Heal  = { Start-Process cmd -ArgumentList '/c','C:\ANTIGRAVITY\mission-control-v5\scripts\tab-dateapp.cmd' -WindowStyle Hidden } }
+       Heal  = { if ((Test-Port 3200) -and -not (Test-Http 'http://127.0.0.1:3200/' 10 'assets/index-')) {
+                     Get-NetTCPConnection -LocalPort 3200 -State Listen -ErrorAction SilentlyContinue | ForEach-Object {
+                         $owner = $_.OwningProcess
+                         $cmd = (Get-CimInstance Win32_Process -Filter "ProcessId=$owner" -ErrorAction SilentlyContinue).CommandLine
+                         Log ("  SQUATTER on :3200 pid {0}: {1}" -f $owner, $cmd) 'Red'
+                         if ($cmd -and $cmd -match [regex]::Escape('@craco\craco') -and $cmd -match [regex]::Escape('C:\ANTIGRAVITY\frontend')) {
+                             Stop-Process -Id $owner -Force -ErrorAction SilentlyContinue
+                             Log ("  killed known offender (craco dev server) pid {0} on :3200" -f $owner) 'DarkGray'
+                         } else {
+                             Log '  squatter does not match the known offender - not killing, will keep retrying' 'DarkYellow'
+                         }
+                     }
+                 }
+                 Start-Process cmd -ArgumentList '/c','C:\ANTIGRAVITY\mission-control-v5\scripts\tab-dateapp.cmd' -WindowStyle Hidden } }
 
     @{ Name = 'Backend API :8000 (db connected)'; Required = $true
        Probe = { Test-Http 'http://127.0.0.1:8000/api/v1/health' 30 '"db_connected":true' }
