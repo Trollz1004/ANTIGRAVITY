@@ -19,15 +19,15 @@ if not exist "dist\index.html" (
   call npm run build
 )
 
-rem THE TUNNEL IS NOT STARTED HERE. The Windows service "Cloudflared"
-rem (StartMode=Auto) already runs this tunnel and comes up at boot without
-rem anyone logging on - which is what a public site should depend on. This tab
-rem used to launch a second connector for the SAME tunnel; two connectors
-rem silently split public traffic, so a broken one only breaks half the
-rem requests, which is the worst kind of failure to diagnose.
-rem   Check it:  Get-Service Cloudflared
-rem   Restart:   Restart-Service Cloudflared
-echo [dateapp] tunnel is owned by the Cloudflared service (not this tab).
+rem THE TUNNEL IS NOT STARTED HERE. There is no Windows service named
+rem "Cloudflared" - FABLES-HOUSE.ps1 owns the tunnel: its Cloudflared tunnel
+rem stage starts cloudflared.exe hidden (-WindowStyle Hidden) and heals it if
+rem it falls. This tab used to launch a second connector for the SAME tunnel;
+rem two connectors silently split public traffic, so a broken one only breaks
+rem half the requests, which is the worst kind of failure to diagnose.
+rem   Check it:    Get-Process cloudflared
+rem   Restart it:  let the House heal it, or rerun FABLES-HOUSE.cmd
+echo [dateapp] tunnel is owned by FABLE'S HOUSE (not this tab).
 
 echo [dateapp] serving production build on http://127.0.0.1:3200
 set "NODE_ENV=production"
