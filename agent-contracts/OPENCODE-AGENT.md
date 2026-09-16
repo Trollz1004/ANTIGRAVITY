@@ -25,3 +25,8 @@ Prepare a scoped branch, patch, or bundle. Stage only files you changed. Never f
 ## Verification and Reporting
 
 Verify content and identity, not merely command or HTTP status. Record **VERIFIED**, **UNVERIFIED**, or **BLOCKED** with changed paths, exact test/build evidence, and a bounded next action. Do not reveal populated environment files, tokens, secret aliases, or private credential-bearing URLs.
+
+
+## Date App FROZEN and FOR SALE (ruling 2026-09-16)
+
+youandinotai.com is frozen and listed for sale as of 2026-09-16. The asset is the name pair (youandinotai.com + youandinotai.online, "You and I, not AI"); the app is a bonus in the lot. No new features, no growth engine runs, no digests, no campaigns, no experiments, no audits. Keep the site up and the checkout untouched until the sale closes. Listing copy and outreach note: `ops/sale/YOUANDINOTAI-SALE-LISTING.md`. Joshua's time goes to DREAM Online and the AI Solutions business; YouTube automation stays on the Hermes lane. Any lane that touches the date app beyond keeping it up must cite this section and a direct instruction from Joshua.

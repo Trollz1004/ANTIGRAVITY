@@ -64,3 +64,8 @@ Public product surfaces remain business-only. Keep internal governance, owner de
 ## Reporting
 
 Use **VERIFIED**, **UNVERIFIED**, or **BLOCKED**. Include the changed files, test/build evidence, sanitized audit evidence when applicable, and the next bounded action. Never treat an exit code or a 200 response as proof that the intended system is present.
+
+
+## Date App FROZEN and FOR SALE (ruling 2026-09-16)
+
+youandinotai.com is frozen and listed for sale as of 2026-09-16. The asset is the name pair (youandinotai.com + youandinotai.online, "You and I, not AI"); the app is a bonus in the lot. No new features, no growth engine runs, no digests, no campaigns, no experiments, no audits. Keep the site up and the checkout untouched until the sale closes. Listing copy and outreach note: `ops/sale/YOUANDINOTAI-SALE-LISTING.md`. Joshua's time goes to DREAM Online and the AI Solutions business; YouTube automation stays on the Hermes lane. Any lane that touches the date app beyond keeping it up must cite this section and a direct instruction from Joshua.
