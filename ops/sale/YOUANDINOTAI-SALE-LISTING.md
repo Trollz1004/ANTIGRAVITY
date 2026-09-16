@@ -53,6 +53,10 @@ The app is the bonus. It exists, it runs, it takes payment. Ship it as is, gut i
 
 Two-word brandable domains with a built-in slogan and the matching .com and .online typically list in the mid four figures to low five figures on Atom and Afternic. Pre-revenue apps alone list in the low thousands. This is listed on the brand shelf, with the app as a bonus, not the other way around.
 
+## Status log
+
+- 2026-09-16: Afternic listing submitted by Joshua, buy-now $12,500, minimum offer $8,000. Dan.com is the same platform. Ownership TXT records for Afternic and Atom (both codes) live at the root of youandinotai.com on Cloudflare, TTL 60. Nameservers stay on Cloudflare; the Afternic lander offer was declined because the live site runs through the Cloudflare tunnel. Atom listing created on the Standard tier, awaiting Joshua's click on the bulk-verify check.
+
 ## After listing
 
 Nothing. The listing waits. Inbound goes to joshlcoleman@gmail.com. No further work on the app beyond keeping the site up until the sale closes.
