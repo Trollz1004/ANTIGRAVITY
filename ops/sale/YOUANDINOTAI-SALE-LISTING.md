@@ -1,6 +1,6 @@
 # youandinotai.com + youandinotai.online — sale listing
 
-Prepared 2026-09-16. Owner sets the price. Every number below is recorded, not projected.
+Prepared 2026-09-16. Buy-it-now price set by owner on 2026-09-16: **$12,500** for the whole lot. Every number below is recorded, not projected.
 
 ## What is for sale (one lot, never separated)
 
@@ -45,7 +45,7 @@ The app is the bonus. It exists, it runs, it takes payment. Ship it as is, gut i
 >
 > The lot includes both domains, the brand, and a working dating app on the .com with a validated Square checkout. Pre-revenue, clean handover, registrar transfer on close.
 >
-> Asking [price]. Open to a call this week if the name fits where you are going.
+> Asking $12,500 for the lot. Open to a call this week if the name fits where you are going.
 >
 > Joshua Coleman
 
