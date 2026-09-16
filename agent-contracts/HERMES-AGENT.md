@@ -29,3 +29,8 @@ Hermes may collect health evidence, maintain Kanban hygiene, and surface stale o
 ## Reporting
 
 Report **VERIFIED**, **UNVERIFIED**, or **BLOCKED**, with exact files, sanitized evidence, and next action. Never write secrets or credential-bearing values to a report, repository file, or chat.
+
+
+## Date App FROZEN and FOR SALE (ruling 2026-09-16)
+
+youandinotai.com is frozen and listed for sale as of 2026-09-16. The asset is the name pair (youandinotai.com + youandinotai.online, "You and I, not AI"); the app is a bonus in the lot. No new features, no growth engine runs, no digests, no campaigns, no experiments, no audits. Keep the site up and the checkout untouched until the sale closes. Listing copy and outreach note: `ops/sale/YOUANDINOTAI-SALE-LISTING.md`. Joshua's time goes to DREAM Online and the AI Solutions business; YouTube automation stays on the Hermes lane. Any lane that touches the date app beyond keeping it up must cite this section and a direct instruction from Joshua.

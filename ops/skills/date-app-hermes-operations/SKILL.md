@@ -81,3 +81,4 @@ Campaign copy lives in `ops/marketing-inbox/FULL_CAMPAIGN_PACKAGE.md`. OpenCLI C
 2. Probe `:8000/health`, `:3200`, `:3210` if claiming uptime.
 3. Read latest block in `HERMES-PROMPTS.txt` if Fable/Claude is in the loop.
 4. Do the next concrete date-app/marketing step without waiting.
+> **FROZEN 2026-09-16:** the date app is listed for sale (`ops/sale/YOUANDINOTAI-SALE-LISTING.md`). Keep it up, touch nothing else. Growth, digests, campaigns, audits: off. Ruling in CLAUDE.md.
