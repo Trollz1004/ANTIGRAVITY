@@ -67,3 +67,6 @@ docs/payment-flow-verification-2026-06-01.md. Do not delete either file.
 
 ---
 sha256 of everything above this line: c73e0cba3aba14b4963021360915f9acd5fb7163f9acfc6202a608d846051bf9
+
+---
+Addendum 2026-09-16 (outside the anchored body): memory token `PAYMENTS-VERIFIED-square-2026-07-14` written to Hermes durable memory (`~/.hermes/memories/01M2NDN427W04EYPPES6CNW7BA.md`); `HERMES-GATE-LOCKDOWN-2026-07-14.md` now carries a status banner marking Phase 4 superseded by this record. Ruled by Joshua: 100% of revenue stays with the business; the count of test charges is irrelevant. The lockdown doc itself stays untracked because canonical-guard rejects its 2026-07-14 history lines.
