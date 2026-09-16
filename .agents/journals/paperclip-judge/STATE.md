@@ -2247,3 +2247,11 @@ use. None should be done on inference.
 - blocked: nothing on this thread; auto-mode classifier rejected two batched edit attempts as instruction poisoning, landed via file tools instead
 - next: uncommitted auth.py merge-marker fix, frontend ajv+lockfile, growth-engine publisher login wall, stray root screenshots — separate commits
 - state: GREEN; JUDGE-PUSH on Joshua's direct instruction 2026-09-16
+
+## 2026-09-16 (judge, claude-lane, dream-world-engine-dispatch)
+- did: wrote HERMES-DISPATCH-DREAM-WORLD-ENGINE.md from Joshua's design session, aligned to GDD 2026-07-02 + PLAN 2026-08-31 canon (T0-T3 tiers, memory scopes, fallback law, Nightmare Shift, Sup@, most-damage loot); pushed the full JARVIS handoff package + dispatch to Trollz1004/hermes docs/handoffs (master 0758866); dispatch copy to ops/handoffs here (main 53f9b666)
+- verified: git fetch shows hermes origin/master 0758866 with 14 files under docs/handoffs; ANTIGRAVITY origin/main 53f9b666; canonical-guard passed on the dispatch
+- skills: judge-house; sonnet scouts (one hallucinated an unrelated task and was discarded)
+- blocked: nothing; JARVIS prompt + CRM spec stay hermes-only because they quote the GDD §10 restricted words the guard rejects
+- next: Joshua opens docs/handoffs/HERMES-DISPATCH-DREAM-WORLD-ENGINE.md on Alienware and pastes it to Hermes; hermes clone now commits with the noreply author (GitHub email-privacy rejection fixed)
+- state: GREEN; JUDGE-PUSH on Joshua's direct instruction 2026-09-16
