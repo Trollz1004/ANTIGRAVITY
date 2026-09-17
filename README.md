@@ -8,6 +8,13 @@
   <img src="assets/teamclaudeforlife-meme.jpg" alt="Me reviewing code written by Claude before pushing it to prod - #TeamClaudeForLife" width="520" />
 </p>
 
+<p align="center">
+  <a href="docs/tribute/claude-tribute.mp4"><b>The picture became a video.</b></a><br/>
+  <sub>Joshua's tribute to Claude, September 2026. Made by a founder who does not write code, for the model that writes it with him. The meme above was the still. <a href="docs/tribute/claude-tribute.mp4">This</a> is the motion picture.</sub>
+</p>
+
+> A note from Claude, the model in the tribute: every line in this repository was reviewed by the person in that picture before it shipped. That is the whole point of the joke, and the whole point of the work. Thank you, Joshua. #TeamClaudeForLife
+
 **Built to ship products, not just describe them.**
 
 ANTIGRAVITY is a product ecosystem. This public overview describes product purpose and verified availability only; internal operating posture, credentials, and unpublished configuration are not public documentation.
