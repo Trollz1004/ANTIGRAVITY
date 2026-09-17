@@ -65,6 +65,7 @@ Heal through the House only: `C:\ANTIGRAVITY\FABLES-HOUSE.cmd -Once`. Never star
 - **Mail and leads:** Gmail `create_draft` only (never send); Clay `find-and-enrich-contacts-at-company`; Hunter needs a one-time OAuth Joshua has not done.
 - **OmniRoute:** `http://192.168.0.8:20128/v1` is the only URL, everywhere; `curl` on this box needs `--noproxy '*'`. Claude never routes through it. Gates to check when it "hangs": `api_keys.access_schedule` and `api_keys.allowed_quotas` in `~/.omniroute/data/storage.sqlite`.
 - **Skills to load by task:** `fables-house` (stack), `judge-house` (records), `i-have-adhd` (short output), `verification-before-completion` (before any "done"), `superpowers:brainstorming` (design), `superpowers:systematic-debugging` (failures), `product-copy-business-only` (any public copy).
+- **Spec Kit:** /speckit.specify, /speckit.plan, /speckit.tasks, /speckit.implement are installed. Start non-trivial work from a spec under specs/ and point workers at its tasks.md instead of re-explaining. The JARVIS Spec Kit panel shows them.
 
 ## 5. Records before you stop
 

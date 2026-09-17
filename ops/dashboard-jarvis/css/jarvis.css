@@ -320,4 +320,35 @@ canvas.galaxy-backdrop { position: absolute; inset: 0; width: 100%; height: 100%
 .galaxy-node text { user-select: none; pointer-events: none }
 .galaxy-link { stroke-dasharray: 3 6; animation: galaxy-flow 2.6s linear infinite }
 @keyframes galaxy-flow { to { stroke-dashoffset: -36 } }
+
+/* ── Spec Kit panel (read-only) ── */
+.speckit-layout { display: grid; grid-template-columns: 1fr 320px; gap: 16px; align-items: start; }
+.speckit-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.speckit-card { background: var(--bg-secondary, #161b22); border: 1px solid var(--border, #30363d); border-radius: var(--radius-lg, 12px); padding: 12px 14px; cursor: pointer; transition: border-color .15s; }
+.speckit-card:hover { border-color: var(--accent, #58a6ff); }
+.speckit-card-title { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+.speckit-card-id { color: var(--text-secondary, #8b949e); font-family: 'IBM Plex Mono', monospace; font-size: 11px; margin-bottom: 8px; }
+.speckit-badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.speckit-badge { font-size: 10px; letter-spacing: .05em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--border, #30363d); color: var(--text-secondary, #8b949e); }
+.speckit-badge.yes { color: #3fb950; border-color: rgba(63, 185, 80, .45); }
+.speckit-badge.no { color: #f85149; border-color: rgba(248, 81, 73, .35); opacity: .7; }
+.speckit-count { margin-left: auto; font-size: 11px; color: var(--text-secondary, #8b949e); font-family: 'IBM Plex Mono', monospace; }
+.speckit-detail { background: var(--bg-secondary, #161b22); border: 1px solid var(--border, #30363d); border-radius: var(--radius-lg, 12px); padding: 14px 16px; }
+.speckit-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.speckit-detail-head h3 { margin: 0; font-size: 16px; }
+.speckit-doc-tabs { display: flex; gap: 6px; }
+.speckit-doc-btn.active { background: var(--accent, #58a6ff); border-color: var(--accent, #58a6ff); color: #0d1117; }
+.speckit-doc-body { font-size: 13px; line-height: 1.55; overflow-wrap: anywhere; }
+.speckit-doc-body h1, .speckit-doc-body h2, .speckit-doc-body h3, .speckit-doc-body h4 { margin: 14px 0 6px; }
+.speckit-doc-body code { background: var(--bg-tertiary, #21262d); padding: 1px 5px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; }
+.speckit-doc-body ul { padding-left: 20px; margin: 6px 0; }
+.speckit-tasklist { list-style: none; padding-left: 0 !important; }
+.speckit-tasklist li { display: flex; gap: 6px; align-items: flex-start; padding: 2px 0; }
+.speckit-tasklist li.done { color: var(--text-secondary, #8b949e); text-decoration: line-through; }
+.speckit-check { flex: 0 0 auto; }
+.speckit-side .widget-card { position: sticky; top: 12px; }
+.speckit-constitution { max-height: 70vh; overflow: auto; }
+.lucide-icon { display: inline-flex; align-items: center; justify-content: center; }
+.lucide-icon svg { display: block; }
+@media (max-width: 900px) { .speckit-layout { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .galaxy-link { animation: none } }
