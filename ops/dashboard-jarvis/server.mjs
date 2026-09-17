@@ -63,6 +63,7 @@ import { createProposalStore } from './lib/proposals.mjs';
 import { checkCompliance } from './lib/compliance.mjs';
 import { scoreCopy } from './lib/copy-score.mjs';
 import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff } from './lib/social-adapters.mjs';
+import { buildInbox, performAction } from './lib/inbox.mjs';
 import { hostname, tmpdir, homedir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
@@ -169,6 +170,26 @@ const readLedger = createLedgerReader({ cwd: REPO });
 const COMPLIANCE_HOOK_PATH = join(REPO, '.githooks', 'pre-commit-canonical');
 const MARKETING_INBOX_DIR = join(REPO, 'ops', 'marketing-inbox', 'approved');
 const proposalStore = createProposalStore({ dir: join(HERE, 'data', 'proposals') });
+const TRIGGERS_PATH = join(REPO, 'ops', 'heartbeat', 'TRIGGERS.jsonl');
+const AUDIT_DIR = join(HERE, 'data', 'audit');
+// Approve of a social proposal runs the matching adapter. Manual-handoff platforms
+// write the approved copy to ops/marketing-inbox/approved/ for the lane that posts
+// it (Grok/X, Reddit, TikTok, Hermes/YouTube); syndication platforms (dev.to,
+// Hashnode, WordPress, Tumblr, Blogger) are NOT auto-posted in this phase — the
+// live poster (scripts/seo/post.mjs) still needs a canonical URL + slug this
+// dashboard does not have, and this endpoint must never fire a real network POST
+// silently. It reports FAILED with that explanation rather than faking success.
+const socialAdapters = {
+  execute(proposal) {
+    if (isManualPlatform(proposal.platform)) {
+      return executeManualHandoff({
+        inboxDir: MARKETING_INBOX_DIR, platform: proposal.platform, id: proposal.id,
+        title: proposal.title, body: proposal.body, brand: proposal.brand,
+      });
+    }
+    return { ok: false, error: `syndication auto-post not wired in this phase for "${proposal.platform}" — run scripts/seo/post.mjs manually with the approved copy` };
+  },
+};
 const STARTED_AT = new Date().toISOString(); // the House restarts this server when server.mjs is newer
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.md': 'text/markdown; charset=utf-8' };
@@ -524,6 +545,24 @@ createServer(async (req, res) => {
     });
     return send(res, 201, redact({ proposal: rec }));
   }
+
+  // Approval inbox (Phase C): proposals + TRIGGERS.jsonl + a synthetic RED item
+  // + the always-honest sale-inbound placeholder. approve/reject/snooze require
+  // x-founder-token === JARVIS_FOUNDER_TOKEN; unset env is 503, wrong/missing token is 401.
+  if (p === '/api/inbox' && req.method === 'GET') {
+    return send(res, 200, redact(buildInbox({
+      store: proposalStore, triggersPath: TRIGGERS_PATH,
+      heartbeat: { jsonPath: HEARTBEAT_JSON_PATH, logPath: HEARTBEAT_LOG_PATH },
+    })));
+  }
+  { const m = /^\/api\/inbox\/([^/]+)\/(approve|reject|snooze)$/.exec(p);
+    if (m && req.method === 'POST') {
+      const id = decodeURIComponent(m[1]); const action = m[2];
+      const founderToken = envValue('JARVIS_FOUNDER_TOKEN');
+      const token = req.headers['x-founder-token'];
+      const r = performAction({ store: proposalStore, id, action, token, founderToken, adapters: socialAdapters, auditDir: AUDIT_DIR });
+      return send(res, r.status, redact(r.body));
+    } }
 
   if (p === '/' || p === '/index.html') return serveStatic(res, '/index.html');
   if (p === '/data/' || p.startsWith('/data/')) return send(res, 404, { error: 'not found' }); // JARVIS memory stays server-side
