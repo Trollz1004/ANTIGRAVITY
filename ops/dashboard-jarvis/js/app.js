@@ -567,8 +567,15 @@ function loadVRMFile(file) {
 function initMissionControl() {
   // This dashboard IS mission control: the live board is the whole tab. The
   // old Sabertooth iframe embed is gone — a blank frame was dead weight.
+  // Hermes runs on its own port on the node; that only resolves on the LAN, so
+  // through a single-port tunnel this is a labelled link, not a working frame.
+  // The URL comes from /api/config (server-computed LAN IP), never location.hostname —
+  // through a tunnel location.hostname is the tunnel's own domain, not the LAN.
   const hermes = $('#hermes-link');
-  if (hermes) { const host = location.hostname || '127.0.0.1'; hermes.href = `http://${host}:9119/`; hermes.textContent = `http://${host}:9119/`; }
+  if (hermes) {
+    const url = state.config?.hermesDashboard || '';
+    if (url) { hermes.href = url; hermes.textContent = url; }
+  }
   void renderMissionBoard();
 }
 

@@ -12,6 +12,8 @@
  *   GET  /                      the dashboard (static files from this folder; lib/, tests/, server.mjs are never served)
  *   GET  /api/config            where things live, computed for the caller's host
  *   ANY  /api/omni/<path>       proxy -> OmniRoute /v1/<path> with OMNI_ROUTE_API_KEY from the repo .env
+ *   ANY  /api/proxy/crosslisting/<path>  same-origin reverse proxy -> the local Crosslisting app
+ *                                (keeps its iframe/embed working through a single-port tunnel)
  *   GET  /api/agents            every loadable skill (SKILL.md frontmatter) — live directory read
  *   GET  /api/nodes             god's-eye view: both LAN nodes, every service identity-probed (lib/nodes.mjs)
  *   GET  /api/vault/graph       Obsidian vault notes + [[wikilinks]] as nodes/links
@@ -298,9 +300,12 @@ createServer(async (req, res) => {
     const host = (req.headers.host || '').replace(/:\d+$/, '') || LAN_IP;
     return send(res, 200, {
       host, lanIp: LAN_IP, omniRoute: OMNI, omniProxy: '/api/omni',
-      missionControl: CFG.missionControl, hermesDashboard: `http://${host}:9119/`, sentry: SENTRY + '/',
+      // LAN-only "open in a new tab" links are built from LAN_IP, never req.headers.host:
+      // behind a tunnel that host is the tunnel's own domain (not this LAN), so a link
+      // built from it would be a silently broken URL instead of a clearly-labelled LAN one.
+      missionControl: CFG.missionControl, hermesDashboard: `http://${LAN_IP}:9119/`, sentry: SENTRY + '/',
       vault: { path: VAULT, name: VAULT_NAME, id: VAULT_ID, rest: OBSIDIAN_REST },
-      crosslisting: { base: CROSSLISTING, status: '/api/crosslisting/status' },
+      crosslisting: { base: CROSSLISTING, status: '/api/crosslisting/status', embed: '/api/proxy/crosslisting/' },
       claude: {
         chat: '/api/claude/chat', status: '/api/claude/status', launch: '/api/launch/claude',
         command: 'claude -p --output-format stream-json (headless, account auth)',
@@ -344,6 +349,23 @@ createServer(async (req, res) => {
       res.writeHead(200, { 'content-type': 'audio/wav', 'content-length': stat.size, 'cache-control': 'max-age=3600', 'access-control-allow-origin': '*' });
       return fs.createReadStream(file).pipe(res);
     } catch (e) { return send(res, 404, { error: 'Voice file not found' }); }
+  }
+
+  // Same-origin reverse proxy to the local Crosslisting app, so its iframe embed
+  // (and any future "open service X in this dashboard" panel) works through a
+  // single-port tunnel that can only reach JARVIS's own port. No secrets involved;
+  // this just forwards bytes to a loopback service the browser otherwise cannot reach.
+  if (p === '/api/proxy/crosslisting' || p.startsWith('/api/proxy/crosslisting/')) {
+    const target = CROSSLISTING + p.slice('/api/proxy/crosslisting'.length) + url.search;
+    const c = new AbortController(); const t = setTimeout(() => c.abort(), 20000);
+    try {
+      const body = req.method === 'GET' || req.method === 'HEAD' ? undefined : await readBody(req);
+      const r = await fetch(target, { method: req.method, headers: { 'content-type': req.headers['content-type'] || 'application/json' }, body, signal: c.signal });
+      const buf = Buffer.from(await r.arrayBuffer());
+      res.writeHead(r.status, { 'content-type': r.headers.get('content-type') || 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+      return res.end(buf);
+    } catch (e) { return send(res, 502, { error: 'Crosslisting unreachable: ' + String(e.message || e), target: CROSSLISTING }); }
+    finally { clearTimeout(t); }
   }
 
   if (p.startsWith('/api/omni/')) {
