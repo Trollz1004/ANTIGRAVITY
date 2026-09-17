@@ -43,7 +43,7 @@ Rule for future dashboards: nobody builds a new one. A new view is a JARVIS pane
 
 ## 3. Restart set
 
-The House (`C:\ANTIGRAVITY\FABLES-HOUSE.cmd`, script `scripts/fables-house/FABLES-HOUSE.ps1`, runs elevated from the logon task `ANTIGRAVITY Fables House Auto-Start`, silent watchdog `scripts/fables-house/fables-house-watchdog.cmd`) brings these up on boot and keeps them up:
+The House (`C:\ANTIGRAVITY\FABLES-HOUSE.cmd`, script `scripts/fables-house/FABLES-HOUSE.ps1`) starts from two scheduled tasks, and the House is idempotent (the "one House at a time" guard in the script kills whichever instance started earlier), so both are safe to have registered together: `ANTIGRAVITY Fables House Boot-Start` fires **at boot**, 45 seconds in, principal S4U/Highest under `joshi` — S4U runs the task whether or not anyone is logged on and stores no password — so the stack starts in session 0 with nobody signed in; `ANTIGRAVITY Fables House Auto-Start` still fires **at logon**, Interactive/Highest, for the normal sign-in path. The health probe task `ANTIGRAVITY-Sabretooth-Health` is also S4U now, so it runs pre-login too. Session 0 (S4U) loads `joshi`'s file-system profile (`%APPDATA%`, `%USERPROFILE%`) but not Windows Credential Manager/DPAPI secrets tied to an interactive logon; every required stage here (Postgres, Redis, OmniRoute, the date app, the tunnel, JARVIS) reads its config from plain files or env vars, so all of them come up pre-login. The one stage that depends on Joshua's credential store is the optional VS Code tunnel (row 9) — it needs his one-time `code tunnel user login`, so it stays NOT CONFIGURED until he signs in; that is expected, not a fault. Task XML definitions for the record: `scripts/fables-house/tasks/ANTIGRAVITY Fables House Boot-Start.xml` and `scripts/fables-house/tasks/ANTIGRAVITY-Sabretooth-Health.xml`.
 
 | # | Stage | Port | Identity probe | Required |
 |---|---|---|---|---|
@@ -118,6 +118,8 @@ The old `ANTIGRAVITY-Heartbeat-15min` task ran the social growth loop for the da
 ## 9. What is validated, and how
 
 Validation is a House one-pass plus probes, not a reboot. Recorded in the judge journal on the day it ran. A reboot test is Joshua's call; when he does one, `drift health` afterwards is the evidence and its table goes in the journal.
+
+2026-09-17: a real reboot at 18:11 proved the logon path (all required stages back by 19:01 after sign-in); the boot task was added the same day and validated by a manual session-0 run; the next reboot is its full test, and health.log will show UP lines before any login. That manual run also surfaced a pre-existing, unrelated bug: JARVIS's own code changed after its running process started, the House's freshness check correctly flags it "stale", but the Heal for that stage only kills the old process when the identity probe fails outright — since the stale process still answers `/health` correctly, Heal never kills it and the stage retries forever. Confirmed present under the old logon-task watchdog before the boot task ever ran, so it is not an S4U effect. Not fixed here per instruction not to touch `FABLES-HOUSE.ps1` logic; flagged for a follow-up session.
 
 ## 10. Where DREAM Online goes from here
 
