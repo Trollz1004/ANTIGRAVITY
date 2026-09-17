@@ -60,7 +60,14 @@ function Stop-PortOwner($port) {
     try {
         Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue |
             ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue; Log ("  stopped PID {0} on :{1} (stale)" -f $_.OwningProcess, $port) 'DarkGray' }
-        Start-Sleep -Seconds 2
+        # A killed process can lag in TIME_WAIT/closing before the port frees -
+        # poll instead of a flat sleep so the next Start-Process never races a
+        # port that's still held.
+        $waited = 0
+        while ($waited -lt 10 -and (Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue)) {
+            Start-Sleep -Seconds 1
+            $waited++
+        }
     } catch {}
 }
 
@@ -248,18 +255,20 @@ $Stages = @(
     # server in its place, same env/bind conventions AIRI used (0.0.0.0, repo-.env
     # driven). ops/dashboard-airi/server.mjs stays on disk for now (cleanup commit
     # to follow) but is no longer started by the House.
+    # 2026-09-17 fix: Heal only ran when the LISTENER answered the wrong identity.
+    # A stale-but-correctly-identified process (code on disk newer than the
+    # process start) failed the Probe for freshness, but Heal's own re-check of
+    # identity passed, so it skipped the kill, tried to bind a second server on
+    # the busy port, and looped forever (267009/267014). Heal now runs Stop-PortOwner
+    # unconditionally, same as the MC5 and Sentry stages - Invoke-Stage only calls
+    # Heal after the Probe has already failed, for any reason (wrong identity,
+    # stale, or otherwise unhealthy), so there is nothing left to gate on here.
     @{ Name = 'JARVIS (Mission Control) :9150'; Required = $true
        Probe = { if (-not (Test-Http 'http://127.0.0.1:9150/health' 6 'jarvis-dashboard')) { return $false }
                  try { $hz = Invoke-RestMethod -Uri 'http://127.0.0.1:9150/health' -TimeoutSec 6 } catch { return $false }
                  if ($hz.startedAt -and -not (Test-Fresh $hz.startedAt @('C:\ANTIGRAVITY\ops\dashboard-jarvis\server.mjs'))) { Log '  JARVIS dashboard server is stale - restarting' 'Yellow'; return $false }
                  return $true }
-       Heal  = { if ((Test-Port 9150) -and -not (Test-Http 'http://127.0.0.1:9150/health' 6 'jarvis-dashboard')) {
-                     Get-NetTCPConnection -LocalPort 9150 -State Listen -ErrorAction SilentlyContinue | ForEach-Object {
-                         Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue
-                         Log ("  stopped PID {0} on :9150 (not answering jarvis-dashboard)" -f $_.OwningProcess) 'DarkGray'
-                     }
-                     Start-Sleep -Seconds 2
-                 }
+       Heal  = { Stop-PortOwner 9150
                  Start-Process 'node' -ArgumentList 'C:\ANTIGRAVITY\ops\dashboard-jarvis\server.mjs' -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden } }
 
     # 2026-09-17: keeps JARVIS (:9150) reachable over vscode.dev after a reboot
