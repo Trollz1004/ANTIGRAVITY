@@ -121,3 +121,11 @@ Validation is a House one-pass plus probes, not a reboot. Recorded in the judge 
 ## 10. Where DREAM Online goes from here
 
 Not this node. Alienware runs Unreal, Hermes with the game skills, and the world engine. This node contributes: the dispatch (`ops/handoffs/HERMES-DISPATCH-DREAM-WORLD-ENGINE.md`), the crowdfund package (`ops/marketing/dream-online-crowdfund/`), the Open Collective, and Claude's design sessions with Joshua. A separate Claude runbook for Alienware is the next document, written there.
+
+## 11. Remote access (VS Code dev tunnel)
+
+Single-port rule: through a forwarded tunnel the browser reaches only the JARVIS origin (`:9150`) — no other LAN/loopback port, no separate iframe origin. Every source JARVIS shows (Crosslisting, OmniRoute, vault, node probes) is proxied server-side in `server.mjs` (`/api/omni/*`, `/api/proxy/crosslisting/*`, etc.); the client uses only relative paths, nothing hardcodes another port for a fetch or iframe. Links meant to open a LAN-only service in a new tab (Hermes) stay absolute but are built from `/api/config`, so a tunnel user sees the real LAN URL as a label, not a dead link.
+
+To reach JARVIS remotely: VS Code **Ports** panel → forward `9150` → visibility **Private** → sign in with GitHub on each device — VS Code's tunnel handles auth, JARVIS adds none. For boot persistence without a VS Code window open, Joshua runs `code tunnel service install` once — his click, not automated here.
+
+Later alternative: Cloudflare Access in front of `:9150` (or a Cloudflare Tunnel hostname) — same single-origin constraint, Cloudflare's identity gate instead of GitHub sign-in. Not set up; noted for when the VS Code tunnel isn't the right shape.

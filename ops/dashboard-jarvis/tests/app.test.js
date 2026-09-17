@@ -151,6 +151,13 @@ describe('tab navigation (the bug that killed every click)', () => {
     expect(registry.get('#mission-control-frame')).toBeUndefined()
     expect(registry.get('#mission-control-link')).toBeUndefined()
   })
+  it('hermes-link is built from server config (/api/config), never from location.hostname — a tunnel host is not the LAN', () => {
+    app.state.config = { hermesDashboard: 'http://192.168.0.8:9119/' }
+    app.switchTab('mission-control')
+    const hermes = registry.get('#hermes-link')
+    expect(hermes.attrs.href || hermes.href).toBe('http://192.168.0.8:9119/')
+    expect(hermes.textContent).toBe('http://192.168.0.8:9119/')
+  })
   it('mission board renders live per-node service rows from /api/nodes with honest DOWN state', async () => {
     const board = reg('mission-board', 'div')
     const note = reg('mission-board-note', 'p')

@@ -405,14 +405,16 @@
         <div class="widget-card" style="max-width:900px;margin-bottom:16px">
           <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
             <span id="crosslisting-status" class="voice-status voice-status-idle">CHECKING</span>
-            <a class="btn primary" href="http://127.0.0.1:3000/" target="_blank" rel="noopener">Open app</a>
+            <a id="crosslisting-open" class="btn primary" href="#" target="_blank" rel="noopener">Open app</a>
             <button id="crosslisting-refresh" class="btn">Refresh status</button>
             <button class="btn dock-ask" data-tab="crosslisting" data-question="Check the Crosslisting OS: is it up, what do its guardrails forbid, and what should I do next in it?">⬢ Ask JARVIS</button>
           </div>
           <p id="crosslisting-detail" class="tab-desc" style="margin-top:12px">Checking local service...</p>
         </div>
         <div id="crosslisting-embed">
-          <iframe id="crosslisting-frame" title="Crosslisting" src="http://127.0.0.1:3000/" style="width:100%;height:calc(100vh - 220px);border:1px solid var(--border);border-radius:var(--radius-lg);background:#0d1117"></iframe>
+          <!-- src is set by js/crosslisting.js to the same-origin proxy route (/api/proxy/crosslisting/)
+               so this frame keeps working behind a single-port tunnel; it is never a direct :3000 URL. -->
+          <iframe id="crosslisting-frame" title="Crosslisting" style="width:100%;height:calc(100vh - 220px);border:1px solid var(--border);border-radius:var(--radius-lg);background:#0d1117"></iframe>
         </div>
       </section>
       <section id="tab-board" class="tab-content">

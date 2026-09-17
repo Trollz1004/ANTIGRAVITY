@@ -37,6 +37,47 @@ describe('Crosslisting dashboard attachment', () => {
   })
 })
 
+// Tunnel-safe embed: behind a single-port tunnel (VS Code dev tunnel on :9150) the
+// browser can reach ONLY the JARVIS origin, so the iframe and the "open app" link
+// must never be hardcoded to another port — see SABRETOOTH-NODE-RUNBOOK.md §11.
+describe('Crosslisting embed is tunnel-safe (no direct :3000 in the client)', () => {
+  let html, js, server
+
+  beforeAll(() => {
+    html = fs.readFileSync(path.join(root, 'index.html'), 'utf-8')
+    js = fs.readFileSync(path.join(root, 'js', 'crosslisting.js'), 'utf-8')
+    server = fs.readFileSync(path.join(root, 'server.mjs'), 'utf-8')
+  })
+
+  it('the iframe and "open app" link carry no hardcoded loopback/LAN src or href', () => {
+    expect(html).not.toMatch(/iframe[^>]*src="http/i)
+    expect(html).not.toMatch(/id="crosslisting-open"[^>]*href="http/i)
+    expect(html).toContain('<iframe id="crosslisting-frame"')
+    expect(html).toContain('id="crosslisting-open"')
+  })
+
+  it('crosslisting.js sets the iframe to the same-origin proxy route, not a direct port', () => {
+    expect(js).toContain('/api/proxy/crosslisting/')
+    expect(js).not.toMatch(/127\.0\.0\.1:3000|20128|:3100|:9140/)
+  })
+
+  it('crosslisting.js builds the "open app" link from /api/config rather than hardcoding a URL', () => {
+    expect(js).toMatch(/fetch\(['"]\/api\/config['"]/)
+    expect(js).toContain('cfg.crosslisting')
+  })
+
+  it('exports the embed helpers', async () => {
+    const mod = await import('../js/crosslisting.js')
+    expect(mod.EMBED_URL).toBe('/api/proxy/crosslisting/')
+    expect(typeof mod.wireEmbed).toBe('function')
+  })
+
+  it('server.mjs proxies /api/proxy/crosslisting/* to the configured Crosslisting base, same-origin', () => {
+    expect(server).toMatch(/['"]\/api\/proxy\/crosslisting['"]/)
+    expect(server).toContain("CROSSLISTING + p.slice('/api/proxy/crosslisting'.length)")
+  })
+})
+
 describe('Crosslisting package cleanliness', () => {
   it('package.json cleaned — no runtime tooling leftovers', () => {
     const pkg = JSON.parse(fs.readFileSync(path.join(pkgRoot, 'package.json'), 'utf-8'))
