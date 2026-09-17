@@ -50,9 +50,36 @@ function renderMissionRibbon(el, j) {
   }
 }
 
+// ── Task commander ───────────────────────────────────────────────────────
+async function loadTaskCommander(fetchImpl = fetch) {
+  const el = document.getElementById('ops-tasks');
+  if (!el) return;
+  try {
+    const j = await fetchJson('/api/task-commander', fetchImpl);
+    renderTaskCommander(el, j);
+  } catch (e) {
+    el.innerHTML = `<p class="placeholder">Task commander unavailable: ${escapeHtml(e.message || e)}</p>`;
+  }
+}
+
+function renderTaskCommander(el, j) {
+  const features = j.features || [];
+  if (!features.length) { el.innerHTML = '<p class="placeholder">No specs/*/tasks.md found.</p>'; return; }
+  el.innerHTML = features.map((f) => {
+    const uncheckedHtml = f.unchecked.length
+      ? `<ul>${f.unchecked.map((t) => `<li>${escapeHtml(t)}</li>`).join('')}</ul>`
+      : '<p class="placeholder">All tasks checked.</p>';
+    return `<div class="ops-task-feature">
+      <div class="ops-task-head"><span>${escapeHtml(f.id)}</span><span>${f.done}/${f.total}</span></div>
+      ${uncheckedHtml}
+    </div>`;
+  }).join('');
+}
+
 // ── init ──────────────────────────────────────────────────────────────────
 function loadOps() {
   loadMissionRibbon();
+  loadTaskCommander();
 }
 
 function initOps() {
@@ -69,4 +96,4 @@ if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', initOps);
 }
 
-export { escapeHtml, fetchJson, loadMissionRibbon, renderMissionRibbon, loadOps, initOps };
+export { escapeHtml, fetchJson, loadMissionRibbon, renderMissionRibbon, loadTaskCommander, renderTaskCommander, loadOps, initOps };
