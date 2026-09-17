@@ -84,7 +84,7 @@ describe('JARVIS wiring — server.mjs, index.html', () => {
     const server = fs.readFileSync(path.join(root, 'server.mjs'), 'utf-8')
     expect(server).toContain("from './lib/git-panel.mjs'")
     expect(server).toMatch(/p === '\/api\/git-panel'/)
-    expect(server).toContain('joshi\\\\hermes')
+    expect(server).toContain("join(homedir(), 'hermes')")
   })
 
   it('index.html has the ops-git container', () => {
