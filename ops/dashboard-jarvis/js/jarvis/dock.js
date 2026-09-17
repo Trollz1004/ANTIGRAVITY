@@ -171,6 +171,7 @@ export async function sendFromDock({ fetchImpl = fetch, tab } = {}) {
     if (!response.ok) {
       const text = `Claude bridge refused (${response.status})`;
       if (live) live.textContent = text; else log(logEl, 'JARVIS', text);
+      if (status) { status.textContent = 'ERROR'; status.className = 'voice-status voice-status-error'; }
       return;
     }
     let resultText = '';

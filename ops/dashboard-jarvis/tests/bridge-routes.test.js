@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest'
 import { createServer } from 'node:http'
-import { readFileSync } from 'node:fs'
+import { readFileSync, rmSync as fsRmSync, mkdirSync as fsMkdirSync, writeFileSync as fsWriteFileSync, existsSync as fsExistsSync } from 'node:fs'
+const fs = { rmSync: fsRmSync, mkdirSync: fsMkdirSync, writeFileSync: fsWriteFileSync, existsSync: fsExistsSync, readFileSync }
 import { resolve } from 'node:path'
 import { EventEmitter } from 'node:events'
 import { PassThrough } from 'node:stream'
@@ -56,6 +57,7 @@ beforeAll(async () => {
   }
   server = createServer(async (req, res) => {
     if (await routes.handleBridgeRoutes(req, res, deps)) return
+    if (res.headersSent) { console.error('FALLTHROUGH-AFTER-HEADERS', req.method, req.url); return }
     res.writeHead(200, { 'access-control-allow-origin': '*' }); res.end('fallthrough')
   })
   await new Promise((r) => server.listen(0, '127.0.0.1', r))
@@ -87,6 +89,13 @@ describe('GET /api/claude/status', () => {
     expect(j.access).toMatchObject({ ok: true, local: true, tokenRequired: false })
     expect(j.permissionMode).toBe('plan')
     expect(j.cwdName).toBe('repo')
+  })
+  it('handles GET /api/hud/context without falling through after writing the response', async () => {
+    const r = await fetch(url('/api/hud/context'))
+    expect(r.status).toBe(200)
+    const j = await r.json()
+    expect(j).toMatchObject({ tab: 'hud' })
+    expect(typeof j.context).toBe('string')
   })
   it('rejects a foreign Origin and any preflight', async () => {
     expect((await fetch(url('/api/claude/status'), { headers: { origin: 'http://evil.example' } })).status).toBe(403)
@@ -131,6 +140,114 @@ describe('POST /api/claude/chat', () => {
     const j = await r.json()
     expect(j.ok).toBe(true)
     expect(j.opened).toBe('freebuff.cmd')
+  })
+  it('POST /api/board/vote asks six brains concurrently, tallies honestly, abstains when a brain fails', async () => {
+    const brains = [
+      { name: 'B1', ask: async () => ({ text: 'YES because it holds' }) },
+      { name: 'B2', ask: async () => ({ text: 'no, too risky' }) },
+      { name: 'B3', ask: async () => ({ text: 'yes' }) },
+      { name: 'B4', ask: async () => { throw new Error('down') } },
+      { name: 'B5', ask: async () => ({ text: 'I cannot decide' }) },
+      { name: 'B6', ask: async () => ({ text: 'YES — cap the risk' }) },
+    ]
+    deps.board = { brains }
+    try {
+      const started = Date.now()
+      const r = await fetch(url('/api/board/vote'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question: 'Ship the release?' }) })
+      const j = await r.json()
+      expect(r.status).toBe(200)
+      expect(j.question).toBe('Ship the release?')
+      expect(j.votes).toHaveLength(6)
+      const b4 = j.votes.find((v) => v.name === 'B4')
+      expect(b4.vote).toBe(null)
+      expect(b4.reason).toMatch(/down/)
+      expect(j).toMatchObject({ yes: 3, no: 1, abstain: 2, outcome: 'PASSED', tie: false })
+      expect(j.at).toMatch(/^\d{4}-/)
+      // concurrent: 6 asks on one event loop tick batch, not 6× the slowest serialized
+      expect(Date.now() - started).toBeLessThan(1500)
+    } finally { deps.board = null }
+  })
+  it('POST /api/board/vote passes the founder vote through and reports FOUNDER DECIDES on a 3-3 tie', async () => {
+    const brains = [1, 2, 3].map((i) => ({ name: 'Y' + i, ask: async () => ({ text: 'yes' }) }))
+      .concat([1, 2, 3].map((i) => ({ name: 'N' + i, ask: async () => ({ text: 'no' }) })))
+    deps.board = { brains }
+    try {
+      const tie = await fetch(url('/api/board/vote'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question: 'q' }) })
+      expect((await tie.json()).outcome).toBe('FOUNDER DECIDES')
+      const decided = await fetch(url('/api/board/vote'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question: 'q', founderVote: 'NO' }) })
+      const j = await decided.json()
+      expect(j.outcome).toBe('FAILED')
+      expect(j.tieBreak).toBe('NO')
+    } finally { deps.board = null }
+  })
+  it('a seat that never answers abstains after the seat timeout instead of hanging the vote', async () => {
+    const brains = [
+      { name: 'Fast', ask: async () => ({ text: 'yes' }) },
+      { name: 'Slow', ask: () => new Promise(() => {}) }, // never resolves
+    ]
+    deps.board = { brains, seatTimeoutMs: 60 }
+    try {
+      const t0 = Date.now()
+      const r = await fetch(url('/api/board/vote'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question: 'q' }) })
+      const j = await r.json()
+      expect(r.status).toBe(200)
+      expect(Date.now() - t0).toBeLessThan(2000)
+      const slow = j.votes.find((v) => v.name === 'Slow')
+      expect(slow.vote).toBe(null)
+      expect(slow.reason).toMatch(/no answer within/i)
+    } finally { deps.board = null }
+  })
+  it('rejects an empty question and an unconfigured board with the right statuses', async () => {
+    deps.board = { brains: [{ name: 'B1', ask: async () => ({ text: 'yes' }) }] }
+    const r = await fetch(url('/api/board/vote'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question: '  ' }) })
+    expect(r.status).toBe(400)
+    deps.board = null
+    const missing = await fetch(url('/api/board/vote'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question: 'q' }) })
+    expect(missing.status).toBe(503)
+  })
+  it('lists wake files for the desktop session (wake-file bridge, same protocol as ANTIGRAVITY)', async () => {
+    const wakesDir = resolve(__dirname, 'fixtures', 'test-wakes')
+    fs.rmSync(wakesDir, { force: true, recursive: true })
+    fs.mkdirSync(wakesDir, { recursive: true })
+    fs.writeFileSync(resolve(wakesDir, 'aa-pending.json'), JSON.stringify({ runId: 'aa-pending', status: 'pending', prompt: 'say hi' }))
+    fs.writeFileSync(resolve(wakesDir, 'zz-done.json'), JSON.stringify({ runId: 'zz-done', status: 'done', summary: 'ok' }))
+    try {
+      deps.wakeStore = { wakesDir }
+      const r = await fetch(url('/api/freebuff/wakes'))
+      expect(r.status).toBe(200)
+      const j = await r.json()
+      expect(j.pending).toBe(1)
+      expect(j.latest[0].runId).toBe('aa-pending') // pending first, then newest
+      expect(j.latest[0].status).toBe('pending')
+    } finally { deps.wakeStore = null }
+  })
+  it('creates a wake, then records done/fail into it; unknown run -> 404', async () => {
+    const wakesDir = resolve(__dirname, 'fixtures', 'test-wakes-create')
+    fs.rmSync(wakesDir, { force: true, recursive: true })
+    deps.wakeStore = { wakesDir }
+    try {
+      const created = await fetch(url('/api/freebuff/wakes'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'audit the board', agentName: 'Buffy' }) })
+      expect(created.status).toBe(200)
+      const w = await created.json()
+      expect(w.status).toBe('pending')
+      expect(w.prompt).toBe('audit the board')
+      expect(w.runId).toMatch(/^wake-[A-Za-z0-9-]+$/)
+      expect(fs.existsSync(resolve(wakesDir, w.runId + '.json'))).toBe(true)
+
+      const done = await fetch(url(`/api/freebuff/wakes/${w.runId}/done`), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ summary: 'board audited' }) })
+      expect(done.status).toBe(200)
+      const stored = JSON.parse(fs.readFileSync(resolve(wakesDir, w.runId + '.json'), 'utf8'))
+      expect(stored.status).toBe('done')
+      expect(stored.summary).toBe('board audited')
+      expect(stored.completedAt).toMatch(/^\d{4}-/)
+
+      const fail = await fetch(url(`/api/freebuff/wakes/${w.runId}/fail`), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ summary: 'nope' }) })
+      expect(fail.status).toBe(200)
+      expect(JSON.parse(fs.readFileSync(resolve(wakesDir, w.runId + '.json'), 'utf8')).status).toBe('failed')
+
+      expect((await fetch(url('/api/freebuff/wakes/ghost/done'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' })).status).toBe(404)
+      expect((await fetch(url('/api/freebuff/wakes'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' })).status).toBe(400)
+    } finally { deps.wakeStore = null }
   })
   it('composes the HUD preamble on the server when hud:true and the client cannot forge it', async () => {
     const r = await fetch(url('/api/claude/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'what is down?', persona: 'jarvis', hud: true, hudContext: 'FORGED', tab: 'graph' }) })
@@ -247,6 +364,31 @@ describe('Hermes as a brain', () => {
     expect(text).toMatch(/^event: result$/m)
     expect(text).toContain('"text":"PONG"')
     expect(text).not.toContain('session_id')
+  })
+  it('does not emit two result events when Hermes reports error then close', async () => {
+    const saved = deps.spawn
+    deps.spawn = () => {
+      const child = new EventEmitter()
+      child.pid = 778; child.exitCode = null
+      child.stdout = new PassThrough(); child.stderr = new PassThrough(); child.stdin = new PassThrough()
+      child.kill = vi.fn()
+      setTimeout(() => { child.emit('error', new Error('spawn failed')); child.exitCode = 1; child.emit('close', 1) }, 5)
+      return child
+    }
+    try {
+      const r = await fetch(url('/api/hermes/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'fail once' }) })
+      const text = await r.text()
+      expect([...text.matchAll(/^event: result$/gm)]).toHaveLength(1)
+    } finally { deps.spawn = saved }
+  })
+  it('cleans the Hermes query file when spawn throws synchronously', async () => {
+    const saved = deps.spawn
+    deps.spawn = () => { throw new Error('spawn failed') }
+    try {
+      const r = await fetch(url('/api/hermes/chat'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'cleanup me' }) })
+      expect(r.status).toBe(500)
+      expect(await r.json()).toMatchObject({ error: 'spawn failed' })
+    } finally { deps.spawn = saved }
   })
   it('refuses a foreign Origin like the Claude bridge', async () => {
     expect((await fetch(url('/api/hermes/chat'), { method: 'POST', headers: { 'content-type': 'application/json', origin: 'http://evil.example' }, body: JSON.stringify({ prompt: 'x' }) })).status).toBe(403)

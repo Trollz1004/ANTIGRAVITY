@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -27,7 +27,36 @@ describe('readEnvFile', () => {
   })
 })
 
-describe('resolveConfig', () => {
+describe('resolveConfig — obsidian/crosslisting endpoints', () => {
+  it('reads the Obsidian REST url from env/file; the default is the https port this node serves', () => {
+    // Live-verified 2026-09-16: the vault plugin serves ONLY https://127.0.0.1:27124
+    // (insecure server off, self-signed cert). The old default http://127.0.0.1:27123
+    // is a dead port on this node and reported a healthy vault DOWN.
+    const d = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', readEnv: () => ({}) })
+    expect(d.obsidianRest).toBe('https://127.0.0.1:27124')
+    const e = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', env: { OBSIDIAN_REST_URL: 'https://127.0.0.1:9999' }, readEnv: () => ({}) })
+    expect(e.obsidianRest).toBe('https://127.0.0.1:9999')
+    const f = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', readEnv: () => ({ OBSIDIAN_REST_URL: 'http://127.0.0.1:27123' }) })
+    expect(f.obsidianRest).toBe('http://127.0.0.1:27123') // explicit file config wins over the default
+  })
+  it('carries the crosslisting base with a config override', () => {
+    const d = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', readEnv: () => ({}) })
+    expect(d.crosslisting).toBe('http://127.0.0.1:3000')
+    const o = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', env: { CROSSLISTING_URL: 'http://127.0.0.1:3010' }, readEnv: () => ({}) })
+    expect(o.crosslisting).toBe('http://127.0.0.1:3010')
+  })
+})
+
+describe('resolveConfig — news + trends sources', () => {
+  it('defaults trends to the real notebook file in C:\\DREAM and allows an override', () => {
+    const d = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', readEnv: () => ({}) })
+    expect(d.trendsPath).toBe('C:\\DREAM\\google trends .txt')
+    const o = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', env: { TRENDS_FILE: 'D:/other.json' }, readEnv: () => ({}) })
+    expect(o.trendsPath).toBe('D:/other.json')
+  })
+})
+
+describe('resolveConfig (originals)', () => {
   const here = resolve('C:/some/repo/dashboard/jarvis')
   it('defaults the repo root to two levels above the server folder and the env file to <repo>/.env', () => {
     const c = cfg.resolveConfig({ here, env: {}, readEnv: () => ({}) })

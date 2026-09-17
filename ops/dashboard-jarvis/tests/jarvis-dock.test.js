@@ -139,5 +139,6 @@ describe('JARVIS dock (global agentic drawer)', () => {
     byId['dock-input'].value = 'hi'
     await dock.sendFromDock()
     expect(String(byId['dock-log'].textContentFull)).toContain('429')
+    expect(byId['dock-status'].textContent).toBe('ERROR')
   })
 })

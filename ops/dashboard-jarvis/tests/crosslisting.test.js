@@ -25,15 +25,15 @@ describe('Crosslisting dashboard attachment', () => {
     expect(html).toContain('src="js/crosslisting.js"')
   })
 
-  it('status probe targets only localhost:3000', () => {
-    expect(js).toContain('http://127.0.0.1:3000')
-    expect(js).not.toMatch(/20128|:3100|:9140/)
+  it('status probe goes through the same-origin server, never cross-origin :3000', () => {
+    expect(js).toContain('/api/crosslisting/status')
+    expect(js).not.toMatch(/127\.0\.0\.1:3000|20128|:3100|:9140/)
   })
 
-  it('exports probeCrosslisting and CROSSLISTING_BASE', async () => {
+  it('exports probeCrosslisting and the status URL', async () => {
     const mod = await import('../js/crosslisting.js')
     expect(typeof mod.probeCrosslisting).toBe('function')
-    expect(mod.CROSSLISTING_BASE).toBe('http://127.0.0.1:3000')
+    expect(mod.STATUS_URL).toBe('/api/crosslisting/status')
   })
 })
 
