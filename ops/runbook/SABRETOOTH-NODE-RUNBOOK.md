@@ -87,10 +87,10 @@ Tracked copy of drift: `scripts/drift.cmd`. Installed copy: `C:\Users\joshi\.loc
 On RED it does three things in order, and stops at the first that works:
 
 1. Appends the failure to `ops/heartbeat/TRIGGERS.jsonl` and runs the House one pass.
-2. Re-probes. If still RED and no heal ran in the last 60 minutes, launches a bounded headless Sonnet run: `claude -p --model sonnet --max-turns 12` with the `sabretooth-node` skill, told to heal through the House only and log the result.
+2. Re-probes and rewrites the JSON with the post-heal result. An optional third step exists but is OFF by default: if Joshua creates `ops/heartbeat/.auto-heal-enabled` whose first line is a command (for example a bounded `claude -p --model sonnet --max-turns 12 "/sabretooth-node heal"`), the script runs that command once per 60 minutes while still RED. Nobody but Joshua creates that file; it is his opt-in to an unattended model run.
 3. Leaves the trigger in place. The next `drift` opens Claude with the skill, which reads `TRIGGERS.jsonl` first and acts on it before anything else.
 
-That is the trigger path beyond any timer Claude sets for itself: the machine notices, the machine tries the House, a cheap model tries once, and the expensive model sees it the moment Joshua types `drift`.
+That is the trigger path beyond any timer Claude sets for itself: the machine notices, the machine tries the House, and the judge lane sees the trigger the moment Joshua types `drift`. The unattended model step is available, documented, and off until he turns it on.
 
 The old `ANTIGRAVITY-Heartbeat-15min` task ran the social growth loop for the date app. It is disabled with the freeze.
 
