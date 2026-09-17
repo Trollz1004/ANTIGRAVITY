@@ -1,0 +1,27 @@
+# JARVIS CONSOLIDATION DISPATCH — 2026-09-17
+
+Ruled by Joshua, written by Claude Fable 5.1 (judge lane). Extends the JARVIS dashboard dispatch in the hermes repo (`docs/handoffs/jarvis-dashboard/HERMES-JARVIS-PROMPT.md`). JARVIS now lives in `ops/dashboard-jarvis` of ANTIGRAVITY, serves on :9150 on Sabretooth, is the one Mission Control, and is reached remotely through a VS Code dev tunnel with GitHub sign-in. This dispatch says what JARVIS absorbs next and the rules every panel obeys. Executors: Hermes on its lane, or Sonnet workers dispatched by the judge lane, one phase at a time, each phase validated through the House before the next starts.
+
+## Rules for every panel
+
+Relative URLs only in the browser; every source is proxied by `server.mjs` through :9150 so the tunnel works from anywhere. No provider key in the client; OmniRoute is called server-side with the key kept there. Every secret on screen is redacted at the server before it is sent: keys, tokens, session ids, passwords, connection strings, and email addresses other than Joshua's own show as the first four characters and a mask. Every number on screen is tagged with its source; no projections, no placeholders dressed as data. The restricted-word list from the GDD compliance rules applies to UI strings, field names, routes, and file names. No emoji, no purple, Lucide icons, the ANTIGRAVITY glass tokens. Actions that change the world outside JARVIS go through a Proposal and the judge lanes; read-only views do not. Tests live in `tests/*.test.js` and run with vitest; a phase is done when its tests pass and the House one-pass reports JARVIS UP.
+
+## Phase A — Spec Kit panel (token savings)
+
+Install GitHub Spec Kit into the repo so spec-driven work is the default: `.specify/` with the constitution, templates, and scripts, and the `speckit.*` slash commands under `.claude/commands/`. The constitution states the rulings that never change (one repo, judge-only push, business-only copy, no keys, OmniRoute only, Sonnet for tasks). Add a JARVIS panel "Spec Kit" that lists every feature under `specs/`, shows its spec, plan, and tasks with task completion counts, and shows the constitution. The point is that any Claude or Hermes session starts from a written spec and a task list instead of re-deriving intent, which is where Joshua's tokens have been going. The panel is read-only.
+
+## Phase B — Absorb the Emergent app (:3210)
+
+Port the Emergent dashboard's views into JARVIS as panels, each reading real data through server routes, and stop starting Emergent on this node. Views to port, by name from the Emergent source in `frontend/`: mission ribbon (current rulings and open items, read from CLAUDE.md headings and the judge journal tail), task commander (reads `specs/*/tasks.md` and the judge journal `next` lines), git panel (both repos: branch, clean or dirty, ahead or behind, last five commits, read-only), Hermes router (Hermes :9119 state via proxy), OpenClaw support (OpenClaw :18789 state via proxy), system status (the health JSON written by the 30-minute probe, and the House's last summary), runbook viewer (renders `ops/runbook/*.md`), storefront and ledger (the ledger tail from `npm run fable -- ledger`, and the Square catalog summary read-only through the existing backend, never a checkout). Anything in Emergent that duplicates an existing JARVIS panel is merged, not copied. When every view is present, the Emergent launcher and its Hermes cron relaunch are retired from this node and the runbook is updated.
+
+## Phase C — Social command center and approval inbox
+
+A panel "Social" that posts content through platform APIs, with per-platform configuration read from environment variables the server loads and never echoes: X through the Grok lane's path, Reddit, TikTok, YouTube through the Hermes lane, dev.to, Hashnode, WordPress, Tumblr, Blogger as already wired in the SEO syndication scripts. Every post is a Proposal: it appears in the approval inbox with the platform, the rendered text, the scheduled time, and a compliance check result from the same word list, and nothing posts until Joshua approves it in the inbox. The approval inbox is its own panel: proposals from Social, from the judge lanes, from the health loop's `TRIGGERS.jsonl`, and from the date-app sale (a new inbound email to the sale address, detected through the Gmail connector read-only). Notifications and alerts are displayed in a bell with a count, with browser notifications when the tab is open, and an alerts strip at the top when something is RED. Approve, reject, and snooze are the only actions; approve requires Joshua's session. The audit log is JSONL on disk like the rest of JARVIS. The frozen date app gets no Social posts; the lanes that exist post for DREAM Online and AI Solutions only.
+
+## Phase D — Fleet and judge lanes
+
+The Mission Control panel shows Hermes, OpenClaw, and OpenCode with current task, queue depth, and token spend read from OmniRoute usage, and the judge lanes panel shows the proposal feed with the Claude and Codex columns as the JARVIS dispatch defines. This phase reuses Phase C's proposal store. It waits until Phases A to C are done and validated.
+
+## Order and evidence
+
+A, then B, then C, then D. Each phase ends with: tests passing, a House one-pass showing JARVIS UP, a screenshot of the new panel through the tunnel origin or the LAN origin, a commit with an explicit pathspec, and a line in the judge journal. Recorded numbers only.
