@@ -55,12 +55,13 @@ The House (`C:\ANTIGRAVITY\FABLES-HOUSE.cmd`, script `scripts/fables-house/FABLE
 | 6 | Date app API | 8000 | `/api/v1/health` has `"db_connected":true` | yes |
 | 7 | Cloudflared tunnel `sabretooth-main` | — | `https://youandinotai.com` contains `assets/index-` | yes |
 | 8 | **JARVIS Mission Control** | 9150 | `/health` says `jarvis-dashboard`, LAN bind | **yes** |
-| 9 | MC5 | 3151 | title `MISSION CONTROL` | optional |
-| 10 | Fable's Sentry | 9140 | `/health` says `fables-sentry` | optional |
-| 11 | Hermes | 9119 | TCP | optional (YouTube lane) |
-| 12 | Ollama | 11434 | `/api/tags` lists `joshlcoleman/Fable` | optional, fail-safe only |
-| 13 | OpenClaw | 18789 | TCP | optional |
-| 14 | Obsidian Local REST | 27123 | report-only | Joshua opens Obsidian |
+| 9 | VS Code tunnel (JARVIS remote) | — | `code tunnel status` reports a running tunnel | optional |
+| 10 | MC5 | 3151 | title `MISSION CONTROL` | optional |
+| 11 | Fable's Sentry | 9140 | `/health` says `fables-sentry` | optional |
+| 12 | Hermes | 9119 | TCP | optional (YouTube lane) |
+| 13 | Ollama | 11434 | `/api/tags` lists `joshlcoleman/Fable` | optional, fail-safe only |
+| 14 | OpenClaw | 18789 | TCP | optional |
+| 15 | Obsidian Local REST | 27123 | report-only | Joshua opens Obsidian |
 
 A port answering is never UP. Every stage is judged by its identity string. Report **UP**, **DOWN**, **WRONG SERVICE**, **AUTH MISSING**, **AUTH REJECTED**, or **NOT CONFIGURED**.
 
@@ -126,6 +127,6 @@ Not this node. Alienware runs Unreal, Hermes with the game skills, and the world
 
 Single-port rule: through a forwarded tunnel the browser reaches only the JARVIS origin (`:9150`) — no other LAN/loopback port, no separate iframe origin. Every source JARVIS shows (Crosslisting, OmniRoute, vault, node probes) is proxied server-side in `server.mjs` (`/api/omni/*`, `/api/proxy/crosslisting/*`, etc.); the client uses only relative paths, nothing hardcodes another port for a fetch or iframe. Links meant to open a LAN-only service in a new tab (Hermes) stay absolute but are built from `/api/config`, so a tunnel user sees the real LAN URL as a label, not a dead link.
 
-To reach JARVIS remotely: VS Code **Ports** panel → forward `9150` → visibility **Private** → sign in with GitHub on each device — VS Code's tunnel handles auth, JARVIS adds none. For boot persistence without a VS Code window open, Joshua runs `code tunnel service install` once — his click, not automated here.
+To reach JARVIS remotely: VS Code **Ports** panel → forward `9150` → visibility **Private** → sign in with GitHub on each device — VS Code's tunnel handles auth, JARVIS adds none. Boot persistence needs Joshua's one-time interactive sign-in, `code tunnel user login` — his click, never automated. Once that has happened once, the House's optional "VS Code tunnel (JARVIS remote)" stage (§3, row 9) keeps the tunnel service installed and running after every reboot: it proves the sign-in with the non-interactive `code tunnel user show`, installs `code tunnel service` if missing, and restarts it if stopped, all without ever prompting for login itself.
 
 Later alternative: Cloudflare Access in front of `:9150` (or a Cloudflare Tunnel hostname) — same single-origin constraint, Cloudflare's identity gate instead of GitHub sign-in. Not set up; noted for when the VS Code tunnel isn't the right shape.

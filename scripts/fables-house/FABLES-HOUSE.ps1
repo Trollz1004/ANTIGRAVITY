@@ -262,6 +262,41 @@ $Stages = @(
                  }
                  Start-Process 'node' -ArgumentList 'C:\ANTIGRAVITY\ops\dashboard-jarvis\server.mjs' -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden } }
 
+    # 2026-09-17: keeps JARVIS (:9150) reachable over vscode.dev after a reboot
+    # or a lost LAN path, with no second cloudflared tunnel and no static IP.
+    # First use needs Joshua's own one-time interactive sign-in (`code tunnel
+    # user login`) - this House NEVER runs that command. `code tunnel user
+    # show` proves the sign-in happened without prompting for anything, so the
+    # Probe/Heal below use it to tell "not signed in yet" apart from "signed in,
+    # service just needs installing or restarting."
+    @{ Name = 'VS Code tunnel (JARVIS remote)'; Required = $false
+       Probe = { try { $s = (& code tunnel status 2>$null) | ConvertFrom-Json } catch { return $false }
+                 return [bool]($s -and $s.tunnel) }
+       Heal  = { $who = (& code tunnel user show 2>&1) -join ' '
+                 if ($who -notmatch 'logged in') {
+                     Log '  VS Code tunnel: NOT CONFIGURED - run once: code tunnel user login, then code tunnel service install' 'DarkYellow'
+                     return
+                 }
+                 try { $s = (& code tunnel status 2>$null) | ConvertFrom-Json } catch { $s = $null }
+                 if ($s -and $s.service_installed) {
+                     $svc = Get-Service | Where-Object { $_.Name -like '*code*tunnel*' -or $_.DisplayName -like '*Visual Studio Code Tunnel*' } | Select-Object -First 1
+                     if ($svc -and $svc.Status -ne 'Running') {
+                         Start-Service -Name $svc.Name -ErrorAction SilentlyContinue
+                         Log ("  started stopped VS Code tunnel service ({0})" -f $svc.Name) 'DarkGray'
+                     } elseif (-not $svc) {
+                         # Verified 2026-09-17: on this box `code tunnel service install`
+                         # does not register a real SCM service or scheduled task Get-Service
+                         # can see - it launches `code-tunnel.exe tunnel service internal-run`
+                         # directly. Re-running install is the actual repair path here and is
+                         # idempotent, so it is safe to call again even when already installed.
+                         Start-Process 'code' -ArgumentList 'tunnel','service','install','--accept-server-license-terms','--name','sabretooth' -WindowStyle Hidden -Wait
+                         Log '  no Windows service object for the tunnel - re-ran service install to relaunch it' 'DarkGray'
+                     }
+                 } else {
+                     Start-Process 'code' -ArgumentList 'tunnel','service','install','--accept-server-license-terms','--name','sabretooth' -WindowStyle Hidden -Wait
+                     Log '  installed VS Code tunnel service (name: sabretooth)' 'DarkGray'
+                 } } }
+
     @{ Name = 'Stack Health :8787'; Required = $false
        Probe = { Test-Http 'http://127.0.0.1:8787/' 8 }
        Heal  = { $py = 'C:\ANTIGRAVITY\mission-control-v6\.venv\Scripts\python.exe'
