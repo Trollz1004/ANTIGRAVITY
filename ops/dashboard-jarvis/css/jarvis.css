@@ -1,0 +1,302 @@
+/* JARVIS HUD — Ironman-style rotating rings and status panels */
+
+#tab-jarvis {
+  background: radial-gradient(ellipse at center, #0a1628 0%, #050a14 70%, #000 100%);
+  padding: 0;
+}
+
+.jarvis-hud-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#jarvis-hud {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.jarvis-conversing #jarvis-hud { opacity: .35; }
+
+.jarvis-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+}
+
+.jarvis-title {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  background: linear-gradient(135deg, #58a6ff, #00d4ff, #00ff41);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+}
+
+.jarvis-state-badge {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+}
+
+.jarvis-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  background: var(--text-muted);
+}
+.jarvis-dot-idle { background: var(--text-muted); }
+.jarvis-dot-listening { background: #00ff41; box-shadow: 0 0 8px #00ff41; animation: pulse 1.5s infinite; }
+.jarvis-dot-thinking { background: var(--warning); box-shadow: 0 0 8px var(--warning); animation: pulse 0.8s infinite; }
+.jarvis-dot-speaking { background: var(--cyber-blue); box-shadow: 0 0 8px var(--cyber-blue); animation: pulse 0.4s infinite; }
+.jarvis-dot-error { background: var(--error); box-shadow: 0 0 8px var(--error); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Floating metric panels */
+.jarvis-metrics {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 3;
+}
+
+.jarvis-metric {
+  background: rgba(22, 27, 34, 0.85);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  min-width: 120px;
+}
+
+.jarvis-metric-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.jarvis-metric-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 2px;
+}
+
+.jarvis-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 3;
+}
+
+.jarvis-controls .btn {
+  font-size: 14px;
+  padding: 10px 16px;
+}
+
+#jarvis-conv-stop {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  padding: 0;
+  border: 1px solid var(--border);
+  display: inline-grid;
+  place-items: center;
+}
+
+#jarvis-conv-stop::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background: var(--error);
+}
+
+.jarvis-controls .chat-input {
+  width: 260px;
+}
+
+.jarvis-controls .select-input { width: auto; }
+
+/* Chat log */
+.jarvis-log {
+  position: absolute;
+  top: 54px; /* below .jarvis-log-head (session badge + New session) */
+  right: 20px;
+  width: 280px;
+  max-height: 40vh;
+  overflow-y: auto;
+  background: rgba(22, 27, 34, 0.85);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  z-index: 3;
+}
+
+.jarvis-msg {
+  margin-bottom: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.jarvis-msg-name {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  margin-right: 6px;
+}
+
+.jarvis-msg-jarvis .jarvis-msg-name { color: #58a6ff; }
+.jarvis-msg-user .jarvis-msg-name { color: #00ff41; }
+
+.jarvis-msg-user { color: var(--text-secondary); }
+.jarvis-msg-jarvis { color: var(--text-primary); }
+
+.jarvis-nodes-list { font-size: 11px; max-height: 34vh; overflow: auto; }
+.jarvis-node-row { font-family: var(--font-mono); margin-top: 6px; color: var(--text-primary); }
+.jarvis-service-row { padding-left: 10px; color: var(--text-secondary); }
+.jarvis-dot-up { background: var(--cyber-green); }
+.jarvis-dot-down { background: var(--error); }
+.jarvis-msg-stream > span:last-child::after { content: '▍'; animation: jarvis-caret 0.8s step-end infinite; }
+.jarvis-log-head { position: absolute; top: 20px; right: 20px; width: 280px; display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 11px; z-index: 6; }
+.jarvis-shortcuts { position: absolute; right: 20px; bottom: 80px; width: 280px; background: rgba(22, 27, 34, 0.85); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px; color: var(--text-secondary); font-family: var(--font-mono); font-size: 10px; line-height: 1.5; z-index: 6; }
+@keyframes jarvis-caret { 50% { opacity: 0; } }
+
+
+.jarvis-globe {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.55;
+  pointer-events: none;
+}
+.jarvis-interim {
+  position: absolute;
+  left: 50%;
+  bottom: 92px;
+  width: min(520px, calc(100% - 48px));
+  min-height: 1.2em;
+  transform: translateX(-50%);
+  color: #00ff41;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: center;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.55);
+  z-index: 6;
+  pointer-events: none;
+}
+.jarvis-avatar {
+  position: absolute;
+  right: 24px;
+  bottom: 80px;
+  width: 180px;
+  height: 260px;
+  z-index: 4;
+  pointer-events: none;
+}
+.jarvis-hud-container > #jarvis-hud,
+.jarvis-hud-container > .jarvis-center,
+.jarvis-hud-container > .jarvis-metrics,
+.jarvis-hud-container > .jarvis-log,
+.jarvis-hud-container > .jarvis-controls {
+  z-index: 5;
+}
+
+/* ── Global JARVIS dock (agentic layer on every tab) ─────────────────────── */
+.jarvis-identity {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--accent, #58a6ff);
+  opacity: 0.9;
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+}
+.dock-toggle {
+  color: var(--accent, #58a6ff);
+  border-top: 1px solid var(--border, #30363d);
+  margin-top: 8px;
+  padding-top: 10px;
+}
+.dock-panel {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: min(430px, calc(100vw - 32px));
+  height: min(520px, calc(100vh - 32px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  background: var(--bg-panel, #0d1117);
+  border: 1px solid var(--accent, #58a6ff);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+.dock-panel[hidden] { display: none; }
+.dock-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--accent, #58a6ff);
+}
+.dock-log {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+.dock-row b { color: var(--accent, #58a6ff); }
+.dock-row.dock-you b { color: var(--text-dim, #8b949e); }
+
+/* ── Mission board (this dashboard IS mission control) ───────────────────── */
+.mission-board { display: flex; flex-direction: column; gap: 16px; }
+.mission-node { border: 1px solid var(--border, #30363d); border-radius: var(--radius-lg, 10px); padding: 12px 14px; }
+.mission-node-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.mission-node-head h3 { margin: 0; font-size: 15px; }
+.mission-row { display: grid; grid-template-columns: 14px 1fr 70px 130px 1fr 80px; gap: 10px; align-items: center; padding: 5px 0; border-top: 1px solid var(--border, #21262d); font-size: 13px; }
+.mission-row .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.mission-row .dot.ok { background: #3fb950; }
+.mission-row .dot.down { background: #f85149; }
+.mission-row .ok { color: #3fb950; }
+.mission-row .down, .mission-row .warn { color: #f85149; }
+.mission-port, .mission-latency { color: var(--text-dim, #8b949e); font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+.mission-detail { color: var(--text-dim, #8b949e); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── Claudian panel (full Claude Code chat on the Claude tab) ────────────── */
+.claudian-row { padding: 4px 0; border-bottom: 1px solid var(--border, #21262d); font-size: 13px; overflow-wrap: anywhere; }
+.claudian-row b { color: var(--accent, #58a6ff); }
