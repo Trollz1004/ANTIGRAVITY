@@ -53,6 +53,7 @@ import { loadTrends } from './lib/trends.mjs';
 import { readConstitution, listFeatures, resolveDoc } from './lib/speckit.mjs';
 import { readMissionRibbon } from './lib/mission-ribbon.mjs';
 import { listTaskCommander } from './lib/task-commander.mjs';
+import { gitPanel } from './lib/git-panel.mjs';
 import { hostname, tmpdir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
@@ -138,6 +139,11 @@ const CONSTITUTION_PATH = join(REPO, '.specify', 'memory', 'constitution.md');
 // Ops tab (Phase B): mission ribbon reads CLAUDE.md + the judge journal, both live, no cache.
 const CLAUDE_MD_PATH = join(REPO, 'CLAUDE.md');
 const JUDGE_STATE_PATH = join(REPO, '.agents', 'journals', 'paperclip-judge', 'STATE.md');
+// Git panel (Phase B): both real checkouts on this node, overridable in .env for a moved clone.
+const GIT_REPOS = [
+  { id: 'antigravity', path: REPO },
+  { id: 'hermes', path: envValue('HERMES_REPO_PATH') || 'C:\\Users\\joshi\\hermes' },
+];
 const STARTED_AT = new Date().toISOString(); // the House restarts this server when server.mjs is newer
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.md': 'text/markdown; charset=utf-8' };
@@ -404,6 +410,7 @@ createServer(async (req, res) => {
   // Ops tab (Phase B): mission ribbon (read-only, no cache).
   if (p === '/api/mission-ribbon') return send(res, 200, readMissionRibbon({ claudeMdPath: CLAUDE_MD_PATH, stateMdPath: JUDGE_STATE_PATH }));
   if (p === '/api/task-commander') return send(res, 200, { features: listTaskCommander(SPECS_DIR), at: new Date().toISOString() });
+  if (p === '/api/git-panel') return send(res, 200, { repos: gitPanel(GIT_REPOS), at: new Date().toISOString() });
   { const m = /^\/api\/speckit\/([^/]+)\/([^/]+)$/.exec(p);
     if (m) { const r = resolveDoc(SPECS_DIR, decodeURIComponent(m[1]), decodeURIComponent(m[2])); return send(res, r.ok ? 200 : (r.error === 'not found' ? 404 : 400), r); } }
   // God's-eye view: every LAN service probed with an identity check (lib/nodes.mjs). No sample data.

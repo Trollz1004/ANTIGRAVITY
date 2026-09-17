@@ -76,10 +76,41 @@ function renderTaskCommander(el, j) {
   }).join('');
 }
 
+// ── Git panel ────────────────────────────────────────────────────────────
+async function loadGitPanel(fetchImpl = fetch) {
+  const el = document.getElementById('ops-git');
+  if (!el) return;
+  try {
+    const j = await fetchJson('/api/git-panel', fetchImpl);
+    renderGitPanel(el, j);
+  } catch (e) {
+    el.innerHTML = `<p class="placeholder">Git panel unavailable: ${escapeHtml(e.message || e)}</p>`;
+  }
+}
+
+function renderGitPanel(el, j) {
+  const repos = j.repos || [];
+  if (!repos.length) { el.innerHTML = '<p class="placeholder">No repos configured.</p>'; return; }
+  el.innerHTML = repos.map((r) => {
+    if (!r.ok) {
+      return `<div class="ops-git-repo"><div class="ops-git-head"><b>${escapeHtml(r.id)}</b></div><p class="placeholder">${escapeHtml(r.error || 'unreachable')}</p></div>`;
+    }
+    const aheadBehind = r.ahead == null && r.behind == null
+      ? 'no upstream'
+      : `+${r.ahead ?? 0} / -${r.behind ?? 0}`;
+    const commitsHtml = (r.commits || []).map((c) => `<div class="ops-git-commit">${escapeHtml(c)}</div>`).join('');
+    return `<div class="ops-git-repo">
+      <div class="ops-git-head"><b>${escapeHtml(r.id)}</b> <span>${escapeHtml(r.branch)}</span> <span>dirty ${r.dirty}</span> <span>${escapeHtml(aheadBehind)}</span></div>
+      ${commitsHtml}
+    </div>`;
+  }).join('');
+}
+
 // ── init ──────────────────────────────────────────────────────────────────
 function loadOps() {
   loadMissionRibbon();
   loadTaskCommander();
+  loadGitPanel();
 }
 
 function initOps() {
@@ -96,4 +127,4 @@ if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', initOps);
 }
 
-export { escapeHtml, fetchJson, loadMissionRibbon, renderMissionRibbon, loadTaskCommander, renderTaskCommander, loadOps, initOps };
+export { escapeHtml, fetchJson, loadMissionRibbon, renderMissionRibbon, loadTaskCommander, renderTaskCommander, loadGitPanel, renderGitPanel, loadOps, initOps };
