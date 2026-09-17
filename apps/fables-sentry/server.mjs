@@ -72,7 +72,9 @@ const FIXES = {
     run: () => ps("Start-Process 'bash' -ArgumentList 'crm/ops/start-crm.sh' -WorkingDirectory '" + REPO + "' -WindowStyle Hidden"),
   },
 
-  airi: { label: 'Start the AIRI dashboard (:9150)', run: () => ps("Start-Process 'node' -ArgumentList 'C:\\ANTIGRAVITY\\ops\\dashboard-airi\\server.mjs' -WorkingDirectory 'C:\\ANTIGRAVITY' -WindowStyle Hidden") },
+  // AIRI dashboard retired 2026-09-17; JARVIS took the port. Fix id stays 'airi'
+  // so targets.json's "fix": "airi" pointer keeps working.
+  airi: { label: 'Start JARVIS (Mission Control) (:9150)', run: () => ps("Start-Process 'node' -ArgumentList 'C:\\ANTIGRAVITY\\ops\\dashboard-jarvis\\server.mjs' -WorkingDirectory 'C:\\ANTIGRAVITY' -WindowStyle Hidden") },
   house: { label: "Run FABLE'S HOUSE bring-up", run: () => psFile(HOUSE) },
 };
 for (const k of ['frontend', 'backend', 'postgres', 'tunnel', 'mc5']) {

@@ -32,7 +32,7 @@ describe('service table', () => {
 describe('probeService', () => {
   it('reports UP only when the identity check passes', async () => {
     const svc = nodes.SERVICES.find((s) => s.id === 'jarvis')
-    const up = await nodes.probeService(svc, { fetch: okJson({ service: 'airi-dashboard' }) })
+    const up = await nodes.probeService(svc, { fetch: okJson({ service: 'jarvis-dashboard' }) })
     expect(up.state).toBe('UP'); expect(up.up).toBe(true); expect(typeof up.latencyMs).toBe('number')
     const wrong = await nodes.probeService(svc, { fetch: okJson({ service: 'something-else' }) })
     expect(wrong.state).toBe('WRONG SERVICE'); expect(wrong.up).toBe(false)

@@ -27,7 +27,7 @@
  *   POST /api/launch/claude     open the official Claude CLI in a console on this host
  *   GET  /api/ollama/tags       local Ollama models
  *   POST /api/ollama/chat       local Ollama chat streamed as Server-Sent Events
- *   GET  /health                {service:"airi-dashboard"}  <- identity string for the wall
+ *   GET  /health                {service:"jarvis-dashboard"}  <- identity string for the wall
  *
  * Zero dependencies. Secrets are read from .env at request time and never logged or returned.
  */
@@ -292,7 +292,7 @@ createServer(async (req, res) => {
   if (req.method === 'OPTIONS') { res.writeHead(204, { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET,POST,OPTIONS' }); return res.end(); }
 
   if (p === '/favicon.ico') { res.writeHead(200, { 'content-type': 'image/svg+xml', 'cache-control': 'max-age=86400' }); return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0d1117"/><circle cx="16" cy="16" r="9" fill="none" stroke="#58a6ff" stroke-width="3"/><circle cx="16" cy="16" r="3" fill="#3fb950"/></svg>'); }
-  if (p === '/health') return send(res, 200, { status: 'ok', service: 'airi-dashboard', port: PORT, startedAt: STARTED_AT });
+  if (p === '/health') return send(res, 200, { status: 'ok', service: 'jarvis-dashboard', port: PORT, startedAt: STARTED_AT });
 
   if (p === '/api/config') {
     const host = (req.headers.host || '').replace(/:\d+$/, '') || LAN_IP;
@@ -397,5 +397,5 @@ createServer(async (req, res) => {
   if (p.startsWith('/api/')) return send(res, 404, { error: 'no such route' });
   return serveStatic(res, p);
 }).listen(PORT, '0.0.0.0', () => {
-  console.log(`AIRI dashboard on http://0.0.0.0:${PORT}  (LAN: http://${LAN_IP}:${PORT})  omni=${OMNI}  vault=${VAULT}`);
+  console.log(`JARVIS dashboard on http://0.0.0.0:${PORT}  (LAN: http://${LAN_IP}:${PORT})  omni=${OMNI}  vault=${VAULT}`);
 });
