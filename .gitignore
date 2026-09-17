@@ -266,3 +266,10 @@ HERMES-GATE-LOCKDOWN-2026-07-14.md
 nul
 /*_check.png
 /*_check2.png
+
+# Sabretooth deterministic health probe (ops/heartbeat/sabretooth-health.ps1)
+# outputs, machine-generated every 30 min. Not doctrine; the .ps1 itself is tracked.
+ops/heartbeat/sabretooth-health.json
+ops/heartbeat/TRIGGERS.jsonl
+ops/heartbeat/.heal-lock
+ops/heartbeat/.auto-heal-enabled

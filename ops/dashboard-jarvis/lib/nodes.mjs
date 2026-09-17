@@ -38,7 +38,7 @@ export function insecureTransport(url, { signal } = {}) {
 }
 
 export const SERVICES = [
-  { id: 'jarvis', label: 'JARVIS HUD', node: 'alienware', port: 9150, url: `http://${A}:9150/health`, identity: ({ json }) => obj(json) && json.service === 'airi-dashboard' },
+  { id: 'jarvis', label: 'JARVIS HUD', node: 'alienware', port: 9150, url: `http://${A}:9150/health`, identity: ({ json }) => obj(json) && json.service === 'jarvis-dashboard' },
   { id: 'hermes', label: 'Hermes dashboard', node: 'alienware', port: 9119, url: `http://${A}:9119/api/health`, identity: ({ json }) => obj(json) && json.ok === true && 'version' in json },
   { id: 'ollama', label: 'Ollama (Vulkan)', node: 'alienware', port: 11434, url: `http://${A}:11434/api/tags`, identity: ({ json }) => obj(json) && Array.isArray(json.models) },
   { id: 'live-npc-lab', label: 'Dream Live NPC Lab', node: 'alienware', port: 9127, url: `http://${A}:9127/health`, identity: ({ status, json }) => status === 200 && obj(json) && (json.ok === true || json.status === 'ok' || /npc/i.test(String(json.service || json.name || ''))) },

@@ -226,9 +226,11 @@ $Stages = @(
                      Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config','C:\Users\joshi\.cloudflared\config.yml','run','sabretooth-main' -WindowStyle Hidden
                  } else { Log '  cloudflared runs but public probe failed — check Cloudflare edge / DNS' 'Yellow' } } }
 
-    # Mission Control again as of 2026-09-10 (Joshua: "no more paperclip"). The v5
-    # dashboard on :3151 is the hub; it is required and healed.
-    @{ Name = 'Mission Control v5 :3151 (Mission Control)'; Required = $true
+    # Demoted 2026-09-17 (Sabretooth runbook, ops/runbook/SABRETOOTH-NODE-RUNBOOK.md):
+    # JARVIS is the one Mission Control now. MC5 stays up as an embedded data
+    # source for JARVIS's panels (agent fleet, token spend) but nobody opens it
+    # directly, so a stumble here no longer blocks bring-up.
+    @{ Name = 'Mission Control v5 :3151 (embedded data source for JARVIS; not opened by humans)'; Required = $false
        # Identity (the dashboard title), LAN bind (the Alienware must reach it), and
        # freshness (started after server/src + client/dist were last written).
        Probe = { if (-not (Test-Http 'http://127.0.0.1:3151/' 10 'MISSION CONTROL')) { return $false }
@@ -239,14 +241,26 @@ $Stages = @(
        Heal  = { Stop-PortOwner 3151
                  Start-Process cmd -ArgumentList '/c','npm','start' -WorkingDirectory 'C:\ANTIGRAVITY\mission-control-v5' -WindowStyle Hidden } }
 
-    @{ Name = 'AIRI dashboard :9150 (Agency x AIRI x OmniRoute x Mission Control)'; Required = $false
-       # The avatar/agents/vault dashboard, served on the LAN by ops/dashboard-airi/server.mjs.
-       Probe = { if (-not (Test-Http 'http://127.0.0.1:9150/health' 6 'airi-dashboard')) { return $false }
+    # JARVIS is the one Mission Control on :9150 (ruling 2026-09-17, ops/runbook/
+    # SABRETOOTH-NODE-RUNBOOK.md). AIRI dashboard is retired: this stage heals by
+    # killing whatever is listening on 9150 that does NOT answer /health with
+    # jarvis-dashboard (an old AIRI process included) and starting the JARVIS
+    # server in its place, same env/bind conventions AIRI used (0.0.0.0, repo-.env
+    # driven). ops/dashboard-airi/server.mjs stays on disk for now (cleanup commit
+    # to follow) but is no longer started by the House.
+    @{ Name = 'JARVIS (Mission Control) :9150'; Required = $true
+       Probe = { if (-not (Test-Http 'http://127.0.0.1:9150/health' 6 'jarvis-dashboard')) { return $false }
                  try { $hz = Invoke-RestMethod -Uri 'http://127.0.0.1:9150/health' -TimeoutSec 6 } catch { return $false }
-                 if ($hz.startedAt -and -not (Test-Fresh $hz.startedAt @('C:\ANTIGRAVITY\ops\dashboard-airi\server.mjs'))) { Log '  AIRI dashboard server is stale - restarting' 'Yellow'; return $false }
+                 if ($hz.startedAt -and -not (Test-Fresh $hz.startedAt @('C:\ANTIGRAVITY\ops\dashboard-jarvis\server.mjs'))) { Log '  JARVIS dashboard server is stale - restarting' 'Yellow'; return $false }
                  return $true }
-       Heal  = { Stop-PortOwner 9150
-                 Start-Process 'node' -ArgumentList 'C:\ANTIGRAVITY\ops\dashboard-airi\server.mjs' -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden } }
+       Heal  = { if ((Test-Port 9150) -and -not (Test-Http 'http://127.0.0.1:9150/health' 6 'jarvis-dashboard')) {
+                     Get-NetTCPConnection -LocalPort 9150 -State Listen -ErrorAction SilentlyContinue | ForEach-Object {
+                         Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue
+                         Log ("  stopped PID {0} on :9150 (not answering jarvis-dashboard)" -f $_.OwningProcess) 'DarkGray'
+                     }
+                     Start-Sleep -Seconds 2
+                 }
+                 Start-Process 'node' -ArgumentList 'C:\ANTIGRAVITY\ops\dashboard-jarvis\server.mjs' -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden } }
 
     @{ Name = 'Stack Health :8787'; Required = $false
        Probe = { Test-Http 'http://127.0.0.1:8787/' 8 }

@@ -16,11 +16,14 @@ rem    drift bare       open Claude only, touch nothing
 rem    drift house      bring the stack up only, no Claude
 rem    drift audit      probe every FABLE'S SENTRY target with identity checks
 rem                     (npm run fable -- audit) and print the table; no Claude
+rem    drift health     run the 30-min deterministic health probe now and print
+rem                     the table (ops/heartbeat/sabretooth-health.ps1 -Verbose)
 rem    drift wall       open FABLE'S SENTRY (http://192.168.0.8:9140/) in the browser
 rem    drift ledger     last 30 lines of the cross-node ledger (ops/buzz)
 rem    drift dns        current nameservers for the 14 project domains
-rem    drift mc         open Mission Control v5 (http://192.168.0.8:3151/) in the browser
-rem    drift avatar     open the AIRI dashboard (http://192.168.0.8:9150/): agents, vault
+rem    drift mc         open JARVIS / Mission Control (http://192.168.0.8:9150/)
+rem    drift jarvis     same as drift mc
+rem    drift avatar     open JARVIS (http://192.168.0.8:9150/): agents, vault
 rem                     graph, avatar, OmniRoute widgets, Mission Control embedded, Claude CLI
 rem    drift fable      talk to Joshua's house model joshlcoleman/Fable on the
 rem                     local Ollama (the mandatory Date App voice model,
@@ -28,8 +31,9 @@ rem                     ruled 2026-09-06; Modelfile ops/fable-model/)
 rem
 rem  What "the stack" means today (FABLES-HOUSE.ps1 stages, in order):
 rem    PostgreSQL 5432 · Redis 6379 · OmniRoute 20128 (identity+latency probe)
-rem    Mission Control v5 3151 (the hub again; Paperclip PARKED 2026-09-10) · Date App
-rem    3200/8000 · cloudflared tunnel · AIRI dashboard 9150
+rem    JARVIS (Mission Control) 9150 (the one hub, ruled 2026-09-17; AIRI retired,
+rem    Paperclip PARKED 2026-09-10) · Date App 3200/8000 · cloudflared tunnel ·
+rem    Mission Control v5 3151 (optional; embedded data source for JARVIS) ·
 rem    MC6 8787 (uptime) · Ollama 11434 (fail-safe;
 rem    identity = joshlcoleman/Fable present) · OmniRoute is 3.8.50 since 2026-09-06
 rem    Hermes dashboard 9119 · OpenClaw 18789 · Hermes API 8642
@@ -41,13 +45,16 @@ title ANTIGRAVITY drift
 cd /d C:\ANTIGRAVITY
 
 set "HOUSE=C:\ANTIGRAVITY\scripts\fables-house\FABLES-HOUSE.ps1"
+set "HEALTH=C:\ANTIGRAVITY\ops\heartbeat\sabretooth-health.ps1"
 
 if /I "%~1"=="bare"   goto :claude
 if /I "%~1"=="audit"  goto :audit
+if /I "%~1"=="health" goto :health
 if /I "%~1"=="wall"   goto :wall
 if /I "%~1"=="ledger" goto :ledger
 if /I "%~1"=="dns"    goto :dns
 if /I "%~1"=="mc"     goto :mc
+if /I "%~1"=="jarvis" goto :mc
 if /I "%~1"=="avatar" goto :avatar
 if /I "%~1"=="fable"  goto :fable
 
@@ -70,12 +77,16 @@ if /I "%~1"=="house" (
 )
 
 :claude
-claude --continue --dangerously-skip-permissions
+claude --continue --dangerously-skip-permissions "/sabretooth-node"
 exit /b %ERRORLEVEL%
 
 :audit
 echo [drift] Probing every Sentry target with identity checks...
 call npm run -s fable -- audit
+exit /b %ERRORLEVEL%
+
+:health
+powershell -NoProfile -ExecutionPolicy Bypass -File "%HEALTH%" -Verbose
 exit /b %ERRORLEVEL%
 
 :wall
@@ -91,7 +102,7 @@ call npm run -s fable -- dns
 exit /b %ERRORLEVEL%
 
 :mc
-start "" http://192.168.0.8:3151/
+start "" http://192.168.0.8:9150/
 exit /b 0
 
 :avatar
