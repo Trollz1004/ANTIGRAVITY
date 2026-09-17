@@ -254,3 +254,17 @@ ops/marketing-inbox/*-timer-disposition.md
 
 # avatar renders (local artifacts, cite them in packets)
 ops/avatar/out/
+
+# frozen date-app growth engine (ruling 2026-09-16) and local artifacts
+ops/growth-engine/chrome-profile/
+ops/growth-engine/pending-posts/
+ops/growth-engine/insert_post.py
+ops/growth-engine/publish_pending.py
+data/
+evidence/
+HERMES-GATE-LOCKDOWN-2026-07-14.md
+nul
+/*_check.png
+/*_check2.png
+frontend/package.json
+frontend/package-lock.json
