@@ -2,19 +2,26 @@
 // Architecture adapted from bilawalsidhu/gods-eye-view src/voice/ (MIT):
 //   - status machine (OFF/CONNECTING/LISTENING/EXECUTING/ERROR)
 //   - push-to-talk pattern
-// But: uses browser Web Speech API (SpeechRecognition + speechSynthesis)
-// instead of OpenAI Realtime, and OmniRoute for the brain. Zero credentials.
+// Uses browser Web Speech API (SpeechRecognition + speechSynthesis) and the
+// named Hermes CLI bridge, so replies use Hermes Desktop's configured model.
 
-// OmniRoute via server proxy — no keys in the browser.
-const OMNI = '/api/omni';
+import { streamHermes } from './jarvis/claude-bridge.js';
+import {
+  resolveSpeakVoice,
+  applyPickToUtterance,
+  populateVoiceSelect,
+  setStoredVoiceURI,
+  getLocalPack,
+  setLocalPack,
+} from './jarvis/voice-picker.js';
+
+const LOCAL_PACK_URL = '/api/voices/local-pack.json'; // served by server.mjs (or any static path)
+
 const STATUS = { idle: 'OFF', listening: 'LISTENING', thinking: 'THINKING', speaking: 'SPEAKING', error: 'ERROR' };
 
 const hermesVoice = {
   status: 'idle',
   recognition: null,
-  history: [
-    { role: 'system', content: 'You are Hermes, the AI running this dashboard. Be concise — answers are spoken aloud, keep them under 3 sentences unless asked for detail. You can discuss the dashboard tabs (agents, knowledge graph, 3D avatar, widgets, scenes, image gen, video gen, mission control), OmniRoute models, and general questions.' },
-  ],
 };
 
 function vEl(id) { return document.getElementById(id); }
@@ -44,10 +51,8 @@ function speak(text) {
     setStatus('speaking');
     const u = new SpeechSynthesisUtterance(text);
     const voices = speechSynthesis.getVoices();
-    // Prefer a natural en-US voice
-    u.voice = voices.find(v => /en-US/i.test(v.lang) && /natural|neural|aria|jenny|guy/i.test(v.name))
-      || voices.find(v => /en-US/i.test(v.lang))
-      || voices[0] || null;
+    u.voice = resolveSpeakVoice(voices, { preferLocal: !!getLocalPack() }) || null;
+    applyPickToUtterance(u);
     u.rate = 1.05;
     u.onend = () => { setStatus('idle'); resolve(); };
     u.onerror = () => { setStatus('idle'); resolve(); };
@@ -58,21 +63,9 @@ function speak(text) {
 async function askHermes(text) {
   voiceLog('you', text);
   setStatus('thinking');
-  hermesVoice.history.push({ role: 'user', content: text });
-  // Keep history bounded (system + last 12 turns)
-  if (hermesVoice.history.length > 13) {
-    hermesVoice.history = [hermesVoice.history[0], ...hermesVoice.history.slice(-12)];
-  }
   try {
-    const res = await fetch(`${OMNI}/chat/completions`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'auto/best-fast', messages: hermesVoice.history, stream: false }),
-    });
-    if (!res.ok) throw new Error(`OmniRoute ${res.status}`);
-    const data = await res.json();
-    const reply = data.choices?.[0]?.message?.content || 'No response.';
-    hermesVoice.history.push({ role: 'assistant', content: reply });
+    const result = await streamHermes({ prompt: text, session: 'jarvis-hud' });
+    const reply = result.text || 'No response.';
     voiceLog('hermes', reply);
     await speak(reply);
   } catch (e) {
@@ -118,6 +111,43 @@ function initHermesVoice() {
   send?.addEventListener('click', submit);
   input?.addEventListener('keydown', (e) => { if (e.key === 'Enter') submit(); });
   vEl('hermes-voice-stop')?.addEventListener('click', () => { speechSynthesis.cancel(); setStatus('idle'); });
+
+  // Voice picker wiring
+  const select = vEl('hermes-voice-select');
+  const localToggle = vEl('hermes-voice-local');
+  const dlBtn = vEl('hermes-voice-download');
+  const populate = () => populateVoiceSelect(select, { preferLocal: !!localToggle?.checked });
+  if (select) {
+    populate();
+    select.addEventListener('change', () => {
+      setStoredVoiceURI(select.value || null);
+      voiceLog('hermes', select.value ? 'Voice set: ' + (select.selectedOptions[0]?.textContent || select.value) : 'Voice cleared (using default)');
+    });
+    if ('speechSynthesis' in window) speechSynthesis.addEventListener?.('voiceschanged', populate);
+  }
+  if (localToggle) {
+    localToggle.checked = !!getLocalPack();
+    localToggle.addEventListener('change', () => { populate(); voiceLog('hermes', localToggle.checked ? 'Filtering to local pack' : 'Showing all voices'); });
+  }
+  if (dlBtn) {
+    dlBtn.addEventListener('click', async () => {
+      dlBtn.disabled = true; const prev = dlBtn.textContent; dlBtn.textContent = 'Downloading…';
+      try {
+        const res = await fetch(LOCAL_PACK_URL, { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const pack = await res.json();
+        if (!pack || !Array.isArray(pack.voices)) throw new Error('Invalid pack shape');
+        setLocalPack(pack); voiceLog('hermes', `Local pack loaded: ${pack.voices.length} voice(s)`);
+        if (localToggle && !localToggle.checked) localToggle.checked = true;
+        populate();
+      } catch (e) {
+        voiceLog('hermes', 'Local pack download failed: ' + e.message);
+      } finally {
+        dlBtn.disabled = false; dlBtn.textContent = prev;
+      }
+    });
+  }
+
   // Warm the voice list (Chrome loads async)
   if ('speechSynthesis' in window) speechSynthesis.getVoices();
   setStatus('idle');

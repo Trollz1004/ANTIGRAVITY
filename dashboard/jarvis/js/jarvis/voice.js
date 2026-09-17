@@ -11,6 +11,17 @@ export function naturalCase(text) {
     .replace(/\bHUD\b/g, 'hud')
 }
 
+const FEMALE_VOICE_NAME = /aria|ava|emma|hazel|jenny|libby|michelle|natasha|olivia|sara|sonia|susan|zira/i
+
+export function selectFemaleVoice(voices) {
+  const list = Array.from(voices || [])
+  return list.find((voice) => /en-US/i.test(voice.lang) && FEMALE_VOICE_NAME.test(voice.name))
+    || list.find((voice) => FEMALE_VOICE_NAME.test(voice.name))
+    || list.find((voice) => /en-US/i.test(voice.lang))
+    || list[0]
+    || null
+}
+
 function transcriptFrom(event) {
   if (typeof event === 'string') return event.trim()
   if (event?.transcript) return String(event.transcript).trim()
