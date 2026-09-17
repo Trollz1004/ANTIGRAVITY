@@ -8,10 +8,10 @@
       "computedHash": "a674b7d81066e3cc471a7512ddb4ae724418cbfefa75cbb050b0dc430e4d57a0"
     },
     "agent-reach": {
-      "source": "Panniantong/Agent-Reach",
+      "source": "panniantong/agent-reach",
       "sourceType": "github",
       "skillPath": "agent_reach/skill/SKILL.md",
-      "computedHash": "7887c5920f15988d7c4a9aa3b0b439332a30120e7b52169fd3eee851c3e20da6"
+      "computedHash": "f6b806656fb8850e503c1ba8561abe20b07f8cbf768e3e5c92336e46b395a5f1"
     },
     "brainstorming": {
       "source": "obra/superpowers",
