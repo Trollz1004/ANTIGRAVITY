@@ -52,6 +52,7 @@ import { createNewsService } from './lib/news.mjs';
 import { loadTrends } from './lib/trends.mjs';
 import { readConstitution, listFeatures, resolveDoc } from './lib/speckit.mjs';
 import { readMissionRibbon } from './lib/mission-ribbon.mjs';
+import { listTaskCommander } from './lib/task-commander.mjs';
 import { hostname, tmpdir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
@@ -402,6 +403,7 @@ createServer(async (req, res) => {
   if (p === '/api/speckit') return send(res, 200, { constitution: readConstitution(CONSTITUTION_PATH), features: listFeatures(SPECS_DIR), at: new Date().toISOString() });
   // Ops tab (Phase B): mission ribbon (read-only, no cache).
   if (p === '/api/mission-ribbon') return send(res, 200, readMissionRibbon({ claudeMdPath: CLAUDE_MD_PATH, stateMdPath: JUDGE_STATE_PATH }));
+  if (p === '/api/task-commander') return send(res, 200, { features: listTaskCommander(SPECS_DIR), at: new Date().toISOString() });
   { const m = /^\/api\/speckit\/([^/]+)\/([^/]+)$/.exec(p);
     if (m) { const r = resolveDoc(SPECS_DIR, decodeURIComponent(m[1]), decodeURIComponent(m[2])); return send(res, r.ok ? 200 : (r.error === 'not found' ? 404 : 400), r); } }
   // God's-eye view: every LAN service probed with an identity check (lib/nodes.mjs). No sample data.
