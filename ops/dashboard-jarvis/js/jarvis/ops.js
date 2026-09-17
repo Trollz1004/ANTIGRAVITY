@@ -133,6 +133,37 @@ async function loadOpenClawStatus(fetchImpl = fetch) {
   catch (e) { el.innerHTML = `<p class="placeholder">OpenClaw status unavailable: ${escapeHtml(e.message || e)}</p>`; }
 }
 
+// ── System status (heartbeat) — lives in the existing Mission Control tab ──
+async function loadHeartbeat(fetchImpl = fetch) {
+  const el = document.getElementById('heartbeat-status');
+  if (!el) return;
+  try {
+    const j = await fetchJson('/api/heartbeat', fetchImpl);
+    renderHeartbeat(el, j);
+  } catch (e) {
+    el.innerHTML = `<p class="placeholder">Heartbeat unavailable: ${escapeHtml(e.message || e)}</p>`;
+  }
+}
+
+function renderHeartbeat(el, j) {
+  if (!j.ok || !j.health) {
+    el.innerHTML = `<p class="placeholder">${escapeHtml((j.errors || []).join('; ') || 'No heartbeat data.')}</p>`;
+    return;
+  }
+  const h = j.health;
+  const overall = h.overall || 'UNKNOWN';
+  const rows = (group) => Object.entries(h[group] || {}).map(([name, s]) => {
+    const dot = s.status === 'UP' ? 'ok' : 'down';
+    return `<div class="mission-row" style="grid-template-columns:14px 1fr 1fr"><span class="dot ${dot}"></span><span>${escapeHtml(name)}</span><span class="mission-detail">${escapeHtml(s.detail || '')}</span></div>`;
+  }).join('');
+  const logHtml = (j.logTail || []).map((l) => `<div class="ops-git-commit">${escapeHtml(l)}</div>`).join('');
+  el.innerHTML = `
+    <div style="margin-bottom:8px"><strong>Overall: </strong><span class="${overall === 'GREEN' ? 'ok' : 'down'}">${escapeHtml(overall)}</span> <span class="ops-service-detail">(${escapeHtml(h.ts || '')})</span></div>
+    ${rows('required')}
+    ${rows('optional')}
+    <div style="margin-top:8px"><strong>Last 10 log lines</strong>${logHtml}</div>`;
+}
+
 // ── init ──────────────────────────────────────────────────────────────────
 function loadOps() {
   loadMissionRibbon();
@@ -144,10 +175,12 @@ function loadOps() {
 
 function initOps() {
   document.getElementById('ops-refresh')?.addEventListener('click', loadOps);
-  let loaded = false;
+  let opsLoaded = false;
+  let heartbeatLoaded = false;
   document.querySelectorAll('.nav-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
-      if (tab.dataset && tab.dataset.tab === 'ops' && !loaded) { loaded = true; loadOps(); }
+      if (tab.dataset && tab.dataset.tab === 'ops' && !opsLoaded) { opsLoaded = true; loadOps(); }
+      if (tab.dataset && tab.dataset.tab === 'mission-control' && !heartbeatLoaded) { heartbeatLoaded = true; loadHeartbeat(); }
     });
   });
 }
@@ -156,4 +189,4 @@ if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', initOps);
 }
 
-export { escapeHtml, fetchJson, loadMissionRibbon, renderMissionRibbon, loadTaskCommander, renderTaskCommander, loadGitPanel, renderGitPanel, renderServiceStatus, loadHermesStatus, loadOpenClawStatus, loadOps, initOps };
+export { escapeHtml, fetchJson, loadMissionRibbon, renderMissionRibbon, loadTaskCommander, renderTaskCommander, loadGitPanel, renderGitPanel, renderServiceStatus, loadHermesStatus, loadOpenClawStatus, loadHeartbeat, renderHeartbeat, loadOps, initOps };
