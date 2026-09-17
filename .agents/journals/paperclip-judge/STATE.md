@@ -2271,3 +2271,11 @@ use. None should be done on inference.
 - blocked: dirty feat/jarvis-gods-eye checkout + crm worktree is not on this machine and crm was never pushed; owner of that checkout must commit and push
 - next: Joshua posts the campaign, decides JARVIS voice lane, clicks Atom verify, stops growth crons
 - state: GREEN; JUDGE-PUSH on Joshua's direct instruction
+
+## 2026-09-17 (judge, claude-lane, jarvis-merge-gate)
+- did: judged Trollz1004/hermes feat/jarvis-gods-eye 7ba4623 (8 commits, 44 files, +3738/-161) and merged --no-ff into master c724e4b; refreshed ops/dashboard-jarvis from the merged tree (e9aeb6a3)
+- verified: Sonnet review in a throwaway worktree: npm ci + vitest run = 21 files / 219 tests pass; no secrets, no files >1 MB, no non-OmniRoute provider URLs, no restricted words in UI, no purple, no emoji, no FCC; fetch shows hermes origin/master c724e4b and ANT origin/main e9aeb6a3
+- skills: judge-house; sonnet reviewer
+- blocked: nothing. NOTES for the branch author: (1) the FreeBuff claim of a piper ONNX fetch-on-first-run is NOT on the branch — voice-picker.js is browser speechSynthesis only; (2) commit 6a5961b says "this dashboard IS mission control", superseded by the 2026-09-10 ruling (MC5 :3151 is Mission Control; JARVIS is the :9150 operator surface)
+- next: FreeBuff lands the piper fetch + vendor/.gitkeep + README line on gods-eye; branch kept alive for that
+- state: GREEN; JUDGE-PUSH as merge gate
