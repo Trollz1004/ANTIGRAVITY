@@ -43,11 +43,15 @@ global.fetch = vi.fn()
 let jarvisMod
 let globeMod
 let avatarMod
+let voiceMod
+let hermesVoiceMod
 
 beforeAll(async () => {
   jarvisMod = await import('../js/jarvis/jarvis.js')
   try { globeMod = await import('../js/jarvis/globe.js') } catch { globeMod = null }
   try { avatarMod = await import('../js/jarvis/avatar.js') } catch { avatarMod = null }
+  voiceMod = await import('../js/jarvis/voice.js')
+  hermesVoiceMod = await import('../js/hermes-voice.js')
 })
 
 describe('JARVIS core', () => {
@@ -122,6 +126,24 @@ describe('JARVIS core', () => {
     expect(Date.now() - t0).toBeLessThan(4000)
     expect(jarvisMod.jarvis.state).toBe('idle')
   })
+
+  it('prefers a female English voice when the browser exposes one', () => {
+    const voice = voiceMod.selectFemaleVoice([
+      { name: 'Microsoft Guy Online', lang: 'en-US' },
+      { name: 'Microsoft Jenny Online', lang: 'en-US' },
+    ])
+    expect(voice.name).toBe('Microsoft Jenny Online')
+  })
+
+  it('sends Hermes voice turns through the named Hermes CLI bridge', async () => {
+    global.fetch = vi.fn(async () => ({ ok: false, status: 503 }))
+    await hermesVoiceMod.askHermes('use configured default model')
+    expect(global.fetch).toHaveBeenCalledWith('/api/hermes/chat', expect.objectContaining({
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: 'use configured default model', session: 'jarvis-hud' }),
+    }))
+  })
 })
 
 describe('JARVIS globe (keyless OSM Cesium shell)', () => {
@@ -168,13 +190,14 @@ describe('JARVIS wiring regressions (judge findings)', () => {
     }
   })
 
-  it('jarvis modules use the /api/omni proxy, never a direct OmniRoute URL', () => {
+  it('JARVIS core uses the /api/omni proxy and Hermes voice uses the local Hermes bridge', () => {
     const base = path.resolve(__dirname, '..', 'js')
-    for (const f of ['jarvis/jarvis.js', 'hermes-voice.js']) {
-      const src = fs.readFileSync(path.join(base, f), 'utf-8')
-      expect(src, f + ' hardcodes OmniRoute').not.toMatch(/127[.]0[.]0[.]1:20128|localhost:20128|192[.]168[.]0[.]8:20128/)
-      expect(src).toContain('/api/omni')
-    }
+    const jarvis = fs.readFileSync(path.join(base, 'jarvis/jarvis.js'), 'utf-8')
+    const hermesVoice = fs.readFileSync(path.join(base, 'hermes-voice.js'), 'utf-8')
+    expect(jarvis, 'jarvis/jarvis.js hardcodes OmniRoute').not.toMatch(/127[.]0[.]0[.]1:20128|localhost:20128|192[.]168[.]0[.]8:20128/)
+    expect(jarvis).toContain('/api/omni')
+    expect(hermesVoice, 'hermes-voice.js bypasses the Hermes bridge').not.toMatch(/127[.]0[.]0[.]1:20128|localhost:20128|192[.]168[.]0[.]8:20128/)
+    expect(hermesVoice).toContain('streamHermes')
   })
 
   it('avatar init does not depend on window.THREE global', () => {

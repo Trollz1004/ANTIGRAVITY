@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -27,7 +27,36 @@ describe('readEnvFile', () => {
   })
 })
 
-describe('resolveConfig', () => {
+describe('resolveConfig — obsidian/crosslisting endpoints', () => {
+  it('reads the Obsidian REST url from env/file; the default is the https port this node serves', () => {
+    // Live-verified 2026-09-16: the vault plugin serves ONLY https://127.0.0.1:27124
+    // (insecure server off, self-signed cert). The old default http://127.0.0.1:27123
+    // is a dead port on this node and reported a healthy vault DOWN.
+    const d = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', readEnv: () => ({}) })
+    expect(d.obsidianRest).toBe('https://127.0.0.1:27124')
+    const e = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', env: { OBSIDIAN_REST_URL: 'https://127.0.0.1:9999' }, readEnv: () => ({}) })
+    expect(e.obsidianRest).toBe('https://127.0.0.1:9999')
+    const f = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', readEnv: () => ({ OBSIDIAN_REST_URL: 'http://127.0.0.1:27123' }) })
+    expect(f.obsidianRest).toBe('http://127.0.0.1:27123') // explicit file config wins over the default
+  })
+  it('carries the crosslisting base with a config override', () => {
+    const d = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', readEnv: () => ({}) })
+    expect(d.crosslisting).toBe('http://127.0.0.1:3000')
+    const o = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', env: { CROSSLISTING_URL: 'http://127.0.0.1:3010' }, readEnv: () => ({}) })
+    expect(o.crosslisting).toBe('http://127.0.0.1:3010')
+  })
+})
+
+describe('resolveConfig — news + trends sources', () => {
+  it('defaults trends to the real notebook file in C:\\DREAM and allows an override', () => {
+    const d = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', readEnv: () => ({}) })
+    expect(d.trendsPath).toBe('C:\\DREAM\\google trends .txt')
+    const o = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', env: { TRENDS_FILE: 'D:/other.json' }, readEnv: () => ({}) })
+    expect(o.trendsPath).toBe('D:/other.json')
+  })
+})
+
+describe('resolveConfig (originals)', () => {
   const here = resolve('C:/some/repo/dashboard/jarvis')
   it('defaults the repo root to two levels above the server folder and the env file to <repo>/.env', () => {
     const c = cfg.resolveConfig({ here, env: {}, readEnv: () => ({}) })
@@ -56,18 +85,25 @@ describe('resolveConfig', () => {
     expect(cfg.resolveConfig({ here, env: {}, readEnv: () => ({ OMNIROUTE_LAN_BASE_URL: 'http://192.168.0.8:20128/v1/' }) }).omni).toBe('http://192.168.0.8:20128/v1')
     expect(cfg.resolveConfig({ here, env: { OPENAI_COMPAT_BASE_URL: 'http://x:1/v1' }, readEnv: () => ({}) }).omni).toBe('http://x:1/v1')
   })
-  it('points Sentry and Mission Control at Sabertooth by default, overridable from .env', () => {
+  it('points Sentry at Sabertooth by default, overridable from .env; no Sabertooth mission-control dependency exists', () => {
     const d = cfg.resolveConfig({ here, env: {}, readEnv: () => ({}) })
     expect(d.sentry).toBe('http://192.168.0.8:9140')
-    expect(d.missionControl).toBe('http://192.168.0.8:3151/')
-    const e = cfg.resolveConfig({ here, env: {}, readEnv: () => ({ FABLES_SENTRY_URL: 'http://10.0.0.8:9140/', MISSION_CONTROL_URL: 'http://10.0.0.8:3151' }) })
+    expect(d.missionControl).toBe('') // this dashboard IS mission control
+    const e = cfg.resolveConfig({ here, env: {}, readEnv: () => ({ FABLES_SENTRY_URL: 'http://10.0.0.8:9140/' }) })
     expect(e.sentry).toBe('http://10.0.0.8:9140')
-    expect(e.missionControl).toBe('http://10.0.0.8:3151/')
+    expect(e.missionControl).toBe('')
   })
 })
 
 describe('resolveVault', () => {
   const here = resolve(import.meta.dirname, '..')
+  it('carries the stable Obsidian vault id when configured (env beats file)', () => {
+    const r = cfg.resolveVault({ env: { OBSIDIAN_VAULT_ID: 'id-from-env' }, readEnv: () => ({ OBSIDIAN_VAULT_ID: 'id-from-file' }), envFile: 'Z:/x' })
+    expect(r.id).toBe('id-from-env')
+    const f = cfg.resolveVault({ env: {}, readEnv: () => ({ OBSIDIAN_VAULT_ID: '81a626afaf05ce81' }), envFile: 'Z:/x' })
+    expect(f.id).toBe('81a626afaf05ce81')
+    expect(cfg.resolveVault({ env: {}, readEnv: () => ({}), envFile: 'Z:/x' }).id).toBe('')
+  })
 
   it('returns the configured vault when it exists, with its folder name', () => {
     const real = mkdtempSync(join(tmpdir(), 'vault-real-'))

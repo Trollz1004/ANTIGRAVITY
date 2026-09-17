@@ -42,9 +42,11 @@ function bridgeError(response, label) {
   return new Error(message)
 }
 
-async function streamClaude({ prompt, sessionId, persona = 'jarvis', token, fetchImpl = fetch, onEvent = () => {} }) {
+async function streamClaude({ prompt, sessionId, persona = 'jarvis', model, permissionMode, token, fetchImpl = fetch, onEvent = () => {} }) {
   const body = { prompt, persona }
   if (sessionId) body.sessionId = sessionId
+  if (model) body.model = String(model)
+  if (permissionMode) body.permissionMode = String(permissionMode)
   const headers = { 'Content-Type': 'application/json' }
   if (token) headers['x-bridge-token'] = token
   const response = await fetchImpl('/api/claude/chat', { method: 'POST', headers, body: JSON.stringify(body) })

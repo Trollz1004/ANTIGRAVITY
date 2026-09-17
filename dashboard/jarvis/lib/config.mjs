@@ -11,6 +11,11 @@ import { networkInterfaces } from 'node:os';
 import { resolve, join, sep, basename } from 'node:path';
 
 const OMNI_DEFAULT = 'http://192.168.0.8:20128/v1'; // Sabertooth router (see CLAUDE.md nodes table)
+// Live-verified 2026-09-16: the Obsidian Local REST plugin on this node serves ONLY
+// https://127.0.0.1:27124 (insecure server off, self-signed cert). http://127.0.0.1:27123
+// is a dead port here; probing it reported a healthy vault DOWN. Override with OBSIDIAN_REST_URL.
+const OBSIDIAN_REST_DEFAULT = 'https://127.0.0.1:27124';
+const CROSSLISTING_DEFAULT = 'http://127.0.0.1:3000';
 
 export function readEnvFile(file) {
   const out = {};
@@ -52,10 +57,16 @@ export function resolveConfig({ here, env = process.env, readEnv = readEnvFile, 
   const lanIp = pick('NODE_LAN_IP') || firstLanAddress(interfaces);
   const port = Number(pick('AIRI_DASHBOARD_PORT') || 9150);
   const omni = (pick('OPENAI_COMPAT_BASE_URL') || pick('OMNIROUTE_LAN_BASE_URL') || OMNI_DEFAULT).replace(/\/$/, '');
-  // Sentry and Mission Control live on Sabertooth (see CLAUDE.md nodes table) unless .env says otherwise.
+  // Sentry lives on Sabertooth (see AGENTS.md nodes table) unless .env says otherwise.
+  // Mission Control needs no endpoint: THIS dashboard is mission control.
   const sentry = (pick('FABLES_SENTRY_URL') || 'http://192.168.0.8:9140').replace(/\/$/, '');
-  const missionControl = (pick('MISSION_CONTROL_URL') || 'http://192.168.0.8:3151').replace(/\/$/, '') + '/';
-  return { repo, envFile, lanIp, port, omni, sentry, missionControl, nodeName: pick('NODE_NAME') || '', file };
+  const missionControl = '';
+  // Node-local service endpoints the server probes on behalf of the page (secrets stay server-side).
+  const obsidianRest = (pick('OBSIDIAN_REST_URL') || OBSIDIAN_REST_DEFAULT).replace(/\/$/, '');
+  const crosslisting = (pick('CROSSLISTING_URL') || CROSSLISTING_DEFAULT).replace(/\/$/, '');
+  // The founder's Google Trends notebook, dropped in C:\DREAM as "google trends .txt".
+  const trendsPath = pick('TRENDS_FILE') || 'C:\\DREAM\\google trends .txt';
+  return { repo, envFile, lanIp, port, omni, sentry, missionControl, obsidianRest, crosslisting, trendsPath, nodeName: pick('NODE_NAME') || '', file };
 }
 
 /**
@@ -80,9 +91,13 @@ export function resolveVault({ env = process.env, readEnv = readEnvFile, envFile
   const existing = list.find((p) => { try { return existsSync(p); } catch { return false; } });
   const path = existing || configured || fallback;
   const exists = Boolean(existing);
+  // Stable vault id from .env (Obsidian's per-vault id): obsidian:// links use
+  // id when known so they survive vault renames. env beats file, '' when unset.
+  const id = env.OBSIDIAN_VAULT_ID || file.OBSIDIAN_VAULT_ID || '';
   return {
     path,
     name: basename(path) || 'Antigravity',
+    id,
     exists,
     source: existing ? (configured ? (existing === resolve(configured) ? 'configured' : 'auto') : 'auto') : 'default',
   };
