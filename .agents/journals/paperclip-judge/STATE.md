@@ -2255,3 +2255,11 @@ use. None should be done on inference.
 - blocked: nothing; JARVIS prompt + CRM spec stay hermes-only because they quote the GDD §10 restricted words the guard rejects
 - next: Joshua opens docs/handoffs/HERMES-DISPATCH-DREAM-WORLD-ENGINE.md on Alienware and pastes it to Hermes; hermes clone now commits with the noreply author (GitHub email-privacy rejection fixed)
 - state: GREEN; JUDGE-PUSH on Joshua's direct instruction 2026-09-16
+
+## 2026-09-16 (judge, claude-lane, date-app-frozen-for-sale)
+- did: Joshua's ruling: date app FROZEN, name pair for sale as one lot at $12,500 BIN / $8,000 minimum; listing + outreach note in ops/sale/YOUANDINOTAI-SALE-LISTING.md; ops/sale/OUTREACH-TARGETS.md (12 targets, Clay-enriched, 11 named contacts, emails unverified — Hunter OAuth not authorized); freeze rule in CLAUDE.md, three harness contracts, and the Hermes date-app skill (checklist fixed); three ownership TXT records written to the Cloudflare zone via the cloudflare-api plugin; 6 Gmail outreach drafts created, 2 more requested, nothing sent
+- verified: Afternic listing submitted by Joshua (his paste of the confirmation screen); TXT records resolve from april.ns.cloudflare.com (nslookup); origin/main f735bc71; drafts confirmed via list_drafts by the Sonnet agent
+- skills: judge-house; sonnet agents for scouting, browser, enrichment, drafts
+- blocked: Atom ownership check and Hermes cron stops are Joshua's clicks; auto-mode classifier blocks subagent price entry and marketplace submit/verify clicks
+- next: Joshua clicks Atom bulk-verify, stops the three growth crons in the Hermes gateway, sends drafts by hand; nothing further on the date app beyond keep-alive
+- state: GREEN; JUDGE-PUSH on Joshua's direct instruction 2026-09-16
