@@ -57,6 +57,7 @@ import { gitPanel } from './lib/git-panel.mjs';
 import { sanitizeHeaders, probeService } from './lib/session-proxy.mjs';
 import { readHeartbeat } from './lib/heartbeat.mjs';
 import { listRunbooks, resolveRunbook } from './lib/runbooks.mjs';
+import { createLedgerReader } from './lib/ledger.mjs';
 import { hostname, tmpdir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
@@ -155,6 +156,8 @@ const HEARTBEAT_JSON_PATH = join(REPO, 'ops', 'heartbeat', 'sabretooth-health.js
 const HEARTBEAT_LOG_PATH = join(REPO, 'ops', 'heartbeat', 'health.log');
 // Runbook viewer (Phase B).
 const RUNBOOK_DIR = join(REPO, 'ops', 'runbook');
+// Ledger panel (Phase B): 60s cache, 15s timeout, one reader instance for the process lifetime.
+const readLedger = createLedgerReader({ cwd: REPO });
 const STARTED_AT = new Date().toISOString(); // the House restarts this server when server.mjs is newer
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.md': 'text/markdown; charset=utf-8' };
@@ -451,6 +454,7 @@ createServer(async (req, res) => {
   if (p === '/api/runbooks') return send(res, 200, { runbooks: listRunbooks(RUNBOOK_DIR), at: new Date().toISOString() });
   { const m = /^\/api\/runbooks\/([^/]+)$/.exec(p);
     if (m) { const r = resolveRunbook(RUNBOOK_DIR, decodeURIComponent(m[1])); return send(res, r.ok ? 200 : (r.error === 'not found' ? 404 : 400), r); } }
+  if (p === '/api/ledger') return send(res, 200, await readLedger());
   { const m = /^\/api\/speckit\/([^/]+)\/([^/]+)$/.exec(p);
     if (m) { const r = resolveDoc(SPECS_DIR, decodeURIComponent(m[1]), decodeURIComponent(m[2])); return send(res, r.ok ? 200 : (r.error === 'not found' ? 404 : 400), r); } }
   // God's-eye view: every LAN service probed with an identity check (lib/nodes.mjs). No sample data.
