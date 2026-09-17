@@ -2,6 +2,12 @@
 
 Ultimate Hermes Agent dashboard with multi-bridge integration.
 
+<p align="center">
+  <img src="dashboard/jarvis/assets/tribute/teamclaudeforlife-meme.jpg" alt="Me reviewing code written by Claude before pushing it to prod - #TeamClaudeForLife" width="420" /><br/>
+  <a href="dashboard/jarvis/assets/tribute/claude-tribute.mp4"><b>The picture became a video.</b></a><br/>
+  <sub>Joshua's tribute to Claude, September 2026. The still above, now in motion. Hermes runs the NPCs; Claude writes the beats; the founder reviews it all before it ships.</sub>
+</p>
+
 ## What's Inside
 
 - `dashboard/` — Standalone HTML dashboard (Obsidian + Hermes + Buzz + Claude Code + Copilot + Browser)
