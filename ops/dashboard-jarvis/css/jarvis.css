@@ -300,3 +300,24 @@
 /* ── Claudian panel (full Claude Code chat on the Claude tab) ────────────── */
 .claudian-row { padding: 4px 0; border-bottom: 1px solid var(--border, #21262d); font-size: 13px; overflow-wrap: anywhere; }
 .claudian-row b { color: var(--accent, #58a6ff); }
+
+/* ── ClawX AI Board ── */
+.board-seat { position: relative; min-height: 96px }
+.board-light { display: inline-block; margin: 6px 0; padding: 3px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: .06em }
+.board-yes { background: rgba(46, 204, 113, .18); color: #2ecc71; border: 1px solid rgba(46, 204, 113, .5) }
+.board-no { background: rgba(231, 76, 60, .16); color: #ff6b5e; border: 1px solid rgba(231, 76, 60, .5) }
+.board-abstain { background: rgba(160, 160, 160, .12); color: #9aa4ad; border: 1px solid rgba(160, 160, 160, .35) }
+
+/* ── Knowledge Graph: space galaxy ── */
+#graph-canvas-container { position: relative; overflow: hidden; background: #03040a }
+#graph-canvas-container::after { /* vignette over deep space */
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 52%, rgba(0, 0, 0, .55) 100%);
+}
+canvas.galaxy-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; display: block }
+#graph-svg { position: relative; z-index: 2; display: block; width: 100%; height: 100% }
+.galaxy-node:hover .galaxy-halo { opacity: .3; transition: opacity .25s }
+.galaxy-node text { user-select: none; pointer-events: none }
+.galaxy-link { stroke-dasharray: 3 6; animation: galaxy-flow 2.6s linear infinite }
+@keyframes galaxy-flow { to { stroke-dashoffset: -36 } }
+@media (prefers-reduced-motion: reduce) { .galaxy-link { animation: none } }
