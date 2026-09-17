@@ -207,6 +207,29 @@ async function selectRunbook(name, fetchImpl = fetch) {
   }
 }
 
+// ── Ledger tail ──────────────────────────────────────────────────────────
+async function loadLedger(fetchImpl = fetch) {
+  const el = document.getElementById('ops-ledger');
+  if (!el) return;
+  try {
+    const j = await fetchJson('/api/ledger', fetchImpl);
+    renderLedger(el, j);
+  } catch (e) {
+    el.innerHTML = `<p class="placeholder">Ledger unavailable: ${escapeHtml(e.message || e)}</p>`;
+  }
+}
+
+function renderLedger(el, j) {
+  if (!j.ok) {
+    el.innerHTML = `<p class="placeholder">${escapeHtml(j.error || 'ledger command failed')}</p>`;
+    return;
+  }
+  const lines = j.lines || [];
+  el.innerHTML = lines.length
+    ? `<pre>${escapeHtml(lines.join('\n'))}</pre>`
+    : '<p class="placeholder">No ledger lines.</p>';
+}
+
 // ── init ──────────────────────────────────────────────────────────────────
 function loadOps() {
   loadMissionRibbon();
@@ -215,6 +238,7 @@ function loadOps() {
   loadHermesStatus();
   loadOpenClawStatus();
   loadRunbooks();
+  loadLedger();
 }
 
 function initOps() {
@@ -233,4 +257,4 @@ if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', initOps);
 }
 
-export { escapeHtml, fetchJson, loadMissionRibbon, renderMissionRibbon, loadTaskCommander, renderTaskCommander, loadGitPanel, renderGitPanel, renderServiceStatus, loadHermesStatus, loadOpenClawStatus, loadHeartbeat, renderHeartbeat, loadRunbooks, renderRunbookList, selectRunbook, runbookUrl, runbookState, loadOps, initOps };
+export { escapeHtml, fetchJson, loadMissionRibbon, renderMissionRibbon, loadTaskCommander, renderTaskCommander, loadGitPanel, renderGitPanel, renderServiceStatus, loadHermesStatus, loadOpenClawStatus, loadHeartbeat, renderHeartbeat, loadRunbooks, renderRunbookList, selectRunbook, runbookUrl, runbookState, loadLedger, renderLedger, loadOps, initOps };
