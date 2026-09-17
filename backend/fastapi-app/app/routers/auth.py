@@ -147,8 +147,6 @@ async def register(
     await db.commit()
     await db.refresh(user)
 
-<<<<<<< HEAD
-=======
     # Track in growth engine if referral code supplied
     if payload.referral_code:
         try:
@@ -163,7 +161,6 @@ async def register(
             logger = logging.getLogger(__name__)
             logger.warning("Growth engine tracking failed for %s: %s", payload.email, exc)
 
->>>>>>> af0e84c5 (fix: Judge findings — remove dev.env from tracking, fix mutual-like matching, fix test paths, replace silent except with logging)
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
         refresh_token=create_refresh_token(str(user.id)),
