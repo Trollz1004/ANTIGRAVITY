@@ -2263,3 +2263,11 @@ use. None should be done on inference.
 - blocked: Atom ownership check and Hermes cron stops are Joshua's clicks; auto-mode classifier blocks subagent price entry and marketplace submit/verify clicks
 - next: Joshua clicks Atom bulk-verify, stops the three growth crons in the Hermes gateway, sends drafts by hand; nothing further on the date app beyond keep-alive
 - state: GREEN; JUDGE-PUSH on Joshua's direct instruction 2026-09-16
+
+## 2026-09-17 (judge, claude-lane, tribute-jarvis-crowdfund)
+- did: tribute video + README notes in both repos (ANT c935b403, hermes 347b742); JARVIS dashboard exported from origin/feat/jarvis-gods-eye into ops/dashboard-jarvis (95c81422); DREAM Online crowdfund package ops/marketing/dream-online-crowdfund 01-05 (7b3a1cf7), compliance PASS
+- verified: fetch shows origin/main c935b403 and hermes origin/master 347b742; guard passed after rewording two brand lines and one shot-list term
+- skills: judge-house; sonnet specialist agents (trend-researcher, brand-guardian, content-creator, growth-hacker, compliance-guardian, analytics-reporter)
+- blocked: dirty feat/jarvis-gods-eye checkout + crm worktree is not on this machine and crm was never pushed; owner of that checkout must commit and push
+- next: Joshua posts the campaign, decides JARVIS voice lane, clicks Atom verify, stops growth crons
+- state: GREEN; JUDGE-PUSH on Joshua's direct instruction
