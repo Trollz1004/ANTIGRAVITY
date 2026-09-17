@@ -15,7 +15,7 @@
 import { createGlobe } from './globe.js';
 import { loadAvatar, DEFAULT_AVATAR_URL } from './avatar.js';
 import { getBridgeStatus, streamClaude, streamOllama, streamHermes } from './claude-bridge.js';
-import { createPushToTalk, naturalCase, REST_MS } from './voice.js';
+import { createPushToTalk, naturalCase, REST_MS, selectFemaleVoice } from './voice.js';
 import { greetingFor, installShortcuts } from './shortcuts.js';
 
 // All OmniRoute calls go through the server proxy — key stays server-side.
@@ -226,10 +226,9 @@ const jarvisVoice = {
       getPushToTalk().pause();
       const u = new SpeechSynthesisUtterance(naturalCase(text));
       const voices = synth.getVoices ? synth.getVoices() : [];
-      u.voice = voices.find(v => /en-US/i.test(v.lang) && /neural|natural|aria|jenny|guy/i.test(v.name))
-        || voices.find(v => /en-US/i.test(v.lang)) || voices[0] || null;
+      u.voice = selectFemaleVoice(voices);
       u.rate = 1.05;
-      u.pitch = 0.95; // Slightly deeper — JARVIS tone
+      u.pitch = 1.05;
       u.onend = finish;
       u.onerror = finish;
       try { synth.speak(u); } catch { finish(); }

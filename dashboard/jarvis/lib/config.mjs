@@ -11,6 +11,11 @@ import { networkInterfaces } from 'node:os';
 import { resolve, join, sep, basename } from 'node:path';
 
 const OMNI_DEFAULT = 'http://192.168.0.8:20128/v1'; // Sabertooth router (see CLAUDE.md nodes table)
+// Live-verified 2026-09-16: the Obsidian Local REST plugin on this node serves ONLY
+// https://127.0.0.1:27124 (insecure server off, self-signed cert). http://127.0.0.1:27123
+// is a dead port here; probing it reported a healthy vault DOWN. Override with OBSIDIAN_REST_URL.
+const OBSIDIAN_REST_DEFAULT = 'https://127.0.0.1:27124';
+const CROSSLISTING_DEFAULT = 'http://127.0.0.1:3000';
 
 export function readEnvFile(file) {
   const out = {};
@@ -56,7 +61,12 @@ export function resolveConfig({ here, env = process.env, readEnv = readEnvFile, 
   // Mission Control needs no endpoint: THIS dashboard is mission control.
   const sentry = (pick('FABLES_SENTRY_URL') || 'http://192.168.0.8:9140').replace(/\/$/, '');
   const missionControl = '';
-  return { repo, envFile, lanIp, port, omni, sentry, missionControl, nodeName: pick('NODE_NAME') || '', file };
+  // Node-local service endpoints the server probes on behalf of the page (secrets stay server-side).
+  const obsidianRest = (pick('OBSIDIAN_REST_URL') || OBSIDIAN_REST_DEFAULT).replace(/\/$/, '');
+  const crosslisting = (pick('CROSSLISTING_URL') || CROSSLISTING_DEFAULT).replace(/\/$/, '');
+  // The founder's Google Trends notebook, dropped in C:\DREAM as "google trends .txt".
+  const trendsPath = pick('TRENDS_FILE') || 'C:\\DREAM\\google trends .txt';
+  return { repo, envFile, lanIp, port, omni, sentry, missionControl, obsidianRest, crosslisting, trendsPath, nodeName: pick('NODE_NAME') || '', file };
 }
 
 /**
