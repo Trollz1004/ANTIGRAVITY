@@ -58,6 +58,11 @@ import { sanitizeHeaders, probeService } from './lib/session-proxy.mjs';
 import { readHeartbeat } from './lib/heartbeat.mjs';
 import { listRunbooks, resolveRunbook } from './lib/runbooks.mjs';
 import { createLedgerReader } from './lib/ledger.mjs';
+import { redact } from './lib/redact.mjs';
+import { createProposalStore } from './lib/proposals.mjs';
+import { checkCompliance } from './lib/compliance.mjs';
+import { scoreCopy } from './lib/copy-score.mjs';
+import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff } from './lib/social-adapters.mjs';
 import { hostname, tmpdir, homedir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
@@ -158,6 +163,12 @@ const HEARTBEAT_LOG_PATH = join(REPO, 'ops', 'heartbeat', 'health.log');
 const RUNBOOK_DIR = join(REPO, 'ops', 'runbook');
 // Ledger panel (Phase B): 60s cache, 15s timeout, one reader instance for the process lifetime.
 const readLedger = createLedgerReader({ cwd: REPO });
+// Social command center + approval inbox (Phase C): the compliance list lives in the
+// same hook the repo already enforces at commit time; the proposal store is JSONL
+// under data/ (gitignored), rebuilt into an in-memory index on this line, at start.
+const COMPLIANCE_HOOK_PATH = join(REPO, '.githooks', 'pre-commit-canonical');
+const MARKETING_INBOX_DIR = join(REPO, 'ops', 'marketing-inbox', 'approved');
+const proposalStore = createProposalStore({ dir: join(HERE, 'data', 'proposals') });
 const STARTED_AT = new Date().toISOString(); // the House restarts this server when server.mjs is newer
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.md': 'text/markdown; charset=utf-8' };
@@ -485,6 +496,33 @@ createServer(async (req, res) => {
     if (!full.startsWith(resolve(AVATARS) + sep) || !existsSync(full)) return send(res, 404, { error: 'not found' });
     res.writeHead(200, { 'content-type': MIME[extname(full).toLowerCase()] || 'application/octet-stream' });
     return res.end(readFileSync(full));
+  }
+
+  // Social command center (Phase C): adapter registry + proposal creation.
+  // Every response here goes through redact() — nothing new in this phase
+  // reaches the client unredacted.
+  if (p === '/api/social/platforms') {
+    return send(res, 200, redact({ platforms: listPlatforms({ envValue }), at: new Date().toISOString() }));
+  }
+  if (p === '/api/social/proposals' && req.method === 'GET') {
+    return send(res, 200, redact({ proposals: proposalStore.list().filter((x) => x.source === 'social'), at: new Date().toISOString() }));
+  }
+  if (p === '/api/social/proposals' && req.method === 'POST') {
+    let body;
+    try { body = JSON.parse((await readBody(req)).toString('utf8') || '{}'); }
+    catch { return send(res, 400, { error: 'invalid JSON body' }); }
+    const brandCheck = validateBrand(body.brand);
+    if (!brandCheck.ok) return send(res, 400, { error: brandCheck.error });
+    if (!PLATFORM_IDS.includes(body.platform)) return send(res, 400, { error: 'unknown platform: ' + body.platform });
+    const composite = `${body.title || ''}\n${body.body || ''}`;
+    const compliance = checkCompliance(composite, { hookPath: COMPLIANCE_HOOK_PATH });
+    const copyScore = scoreCopy(composite);
+    const rec = proposalStore.create({
+      source: 'social', kind: 'post', brand: brandCheck.brand, platform: body.platform,
+      title: body.title, body: body.body, scheduledFor: body.scheduledFor || null,
+      checks: { compliance, copyScore },
+    });
+    return send(res, 201, redact({ proposal: rec }));
   }
 
   if (p === '/' || p === '/index.html') return serveStatic(res, '/index.html');
