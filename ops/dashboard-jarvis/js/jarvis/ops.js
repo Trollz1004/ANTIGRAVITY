@@ -6,6 +6,7 @@
  * no sample data — an empty or errored fetch says so instead of drawing a
  * placeholder row as real.
  */
+import { renderMarkdown } from './speckit.js';
 
 function escapeHtml(s) {
   return String(s == null ? '' : s)
@@ -164,6 +165,48 @@ function renderHeartbeat(el, j) {
     <div style="margin-top:8px"><strong>Last 10 log lines</strong>${logHtml}</div>`;
 }
 
+// ── Runbook viewer (reuses the Spec Kit markdown renderer) ─────────────────
+const runbookState = { runbooks: [], selected: null };
+function runbookUrl(name) { return '/api/runbooks/' + encodeURIComponent(name); }
+
+async function loadRunbooks(fetchImpl = fetch) {
+  const listEl = document.getElementById('ops-runbook-list');
+  if (!listEl) return;
+  try {
+    const j = await fetchJson('/api/runbooks', fetchImpl);
+    runbookState.runbooks = j.runbooks || [];
+    renderRunbookList(listEl);
+  } catch (e) {
+    listEl.innerHTML = `<p class="placeholder">Runbooks unavailable: ${escapeHtml(e.message || e)}</p>`;
+  }
+}
+
+function renderRunbookList(listEl) {
+  if (!runbookState.runbooks.length) { listEl.innerHTML = '<p class="placeholder">No files under ops/runbook/.</p>'; return; }
+  listEl.innerHTML = '';
+  for (const r of runbookState.runbooks) {
+    const btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.textContent = r.name;
+    btn.addEventListener('click', () => selectRunbook(r.name));
+    listEl.appendChild(btn);
+  }
+}
+
+async function selectRunbook(name, fetchImpl = fetch) {
+  runbookState.selected = name;
+  document.querySelectorAll('#ops-runbook-list button').forEach((b) => b.classList.toggle('active', b.textContent === name));
+  const body = document.getElementById('ops-runbook-body');
+  if (body) body.innerHTML = '<p class="placeholder">Loading…</p>';
+  try {
+    const j = await fetchJson(runbookUrl(name), fetchImpl);
+    if (!j.ok) throw new Error(j.error || 'load failed');
+    if (body) body.innerHTML = renderMarkdown(j.markdown);
+  } catch (e) {
+    if (body) body.innerHTML = `<p class="placeholder">Could not load ${escapeHtml(name)}: ${escapeHtml(e.message || e)}</p>`;
+  }
+}
+
 // ── init ──────────────────────────────────────────────────────────────────
 function loadOps() {
   loadMissionRibbon();
@@ -171,6 +214,7 @@ function loadOps() {
   loadGitPanel();
   loadHermesStatus();
   loadOpenClawStatus();
+  loadRunbooks();
 }
 
 function initOps() {
@@ -189,4 +233,4 @@ if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', initOps);
 }
 
-export { escapeHtml, fetchJson, loadMissionRibbon, renderMissionRibbon, loadTaskCommander, renderTaskCommander, loadGitPanel, renderGitPanel, renderServiceStatus, loadHermesStatus, loadOpenClawStatus, loadHeartbeat, renderHeartbeat, loadOps, initOps };
+export { escapeHtml, fetchJson, loadMissionRibbon, renderMissionRibbon, loadTaskCommander, renderTaskCommander, loadGitPanel, renderGitPanel, renderServiceStatus, loadHermesStatus, loadOpenClawStatus, loadHeartbeat, renderHeartbeat, loadRunbooks, renderRunbookList, selectRunbook, runbookUrl, runbookState, loadOps, initOps };
