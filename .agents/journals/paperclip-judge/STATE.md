@@ -2279,3 +2279,11 @@ use. None should be done on inference.
 - blocked: nothing. NOTES for the branch author: (1) the FreeBuff claim of a piper ONNX fetch-on-first-run is NOT on the branch — voice-picker.js is browser speechSynthesis only; (2) commit 6a5961b says "this dashboard IS mission control", superseded by the 2026-09-10 ruling (MC5 :3151 is Mission Control; JARVIS is the :9150 operator surface)
 - next: FreeBuff lands the piper fetch + vendor/.gitkeep + README line on gods-eye; branch kept alive for that
 - state: GREEN; JUDGE-PUSH as merge gate
+
+## 2026-09-17 (judge, claude-lane, sabretooth-runbook)
+- did: Joshua /goal delivered. ONE Mission Control = JARVIS :9150 (CLAUDE.md ruling); AIRI retired by House heal, MC5 optional, Sentry retargeted; runbook ops/runbook/SABRETOOTH-NODE-RUNBOOK.md + dashboard inventory; sabretooth-node launch skill (drift loads it); 30-min health probe + scheduled task + TRIGGERS.jsonl, growth heartbeat disabled; repo cleanup to zero dirty; JARVIS tunnel-safe client (6a4f26c5); commits through 984e1054, all pushed
+- verified: drift health = GREEN 7/7 required, 4/4 optional; House log "HEALED JARVIS (Mission Control) :9150"; curls loopback+LAN /health = jarvis-dashboard; both repos 0 dirty and equal to origin (ANT 984e1054, hermes c724e4b); scheduled tasks: Sabretooth-Health Ready (next 15:26), Heartbeat-15min Disabled; drift copies byte-identical; vitest 221/225 (4 pre-existing)
+- skills: judge-house, sabretooth-node (new); sonnet workers for survey, inventory, cleanup, House, audit
+- blocked: nothing. Reboot test not run (Joshua's call); validation was House one-pass + probes. Unattended model heal is opt-in (.auto-heal-enabled absent)
+- next: Joshua forwards 9150 via VS Code (Private), Atom verify click, stop 3 Hermes growth crons, send drafts; Alienware/DREAM Online runbook written on that box
+- state: GREEN; JUDGE-PUSH on Joshua's direct instruction
