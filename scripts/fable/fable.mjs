@@ -611,10 +611,39 @@ fable ledger --tail [N]  — read the last N entries (default 30, ops/buzz/ledge
 
 function runScript(cmd, args) {
   return new Promise((resolve) => {
-    const child = spawn(cmd, args, { stdio: 'inherit' });
+    const child = spawn(cmd, args, { stdio: 'inherit', shell: false });
     child.on('error', () => resolve({ ok: false, code: EXIT.TARGET_DOWN, missing: true }));
     child.on('exit', (code) => resolve({ ok: code === 0, code: code ?? EXIT.TARGET_DOWN }));
   });
+}
+
+// MSYS/Git-Bash's own argv reinterpretation of the Win32 command line strips
+// backslashes out of Windows-style paths when bash.exe is spawned directly
+// (relayed through a bash/shell layer) — "C:\ANTIGRAVITY\ops\..." arrives as
+// "C:ANTIGRAVITYops...". Forward slashes are valid on Windows and bash never
+// touches them, so every path handed to a bash-spawned child goes through
+// here first.
+function toBashPath(p) {
+  return p.split('\\').join('/');
+}
+
+// Plain 'bash' on PATH is ambiguous on this box: from a Git-Bash shell it
+// resolves to Git's own MSYS bash.exe, but from PowerShell/cmd/a spawned
+// dashboard process (no Git\bin on PATH) it resolves instead to
+// C:\Windows\System32\bash.exe — the WSL launcher, which mounts the repo at
+// /mnt/c/ANTIGRAVITY, not C:/ANTIGRAVITY, so the ledger scripts "exist" but
+// are unreachable at the path we pass. Prefer Git's bash.exe explicitly so
+// the ledger subcommand behaves the same from bash, PowerShell, or the
+// JARVIS dashboard's Node process.
+const GIT_BASH_CANDIDATES = [
+  join(process.env.ProgramFiles || 'C:\\Program Files', 'Git', 'bin', 'bash.exe'),
+  'C:\\Program Files\\Git\\bin\\bash.exe',
+];
+function resolveBash() {
+  for (const c of GIT_BASH_CANDIDATES) {
+    if (existsSync(c)) return c;
+  }
+  return 'bash'; // last resort: whatever PATH resolves (may be WSL's bash)
 }
 
 async function cmdLedger(argv) {
@@ -623,8 +652,8 @@ async function cmdLedger(argv) {
 
   if (args.tail !== undefined) {
     const n = args.tail === true ? '30' : String(args.tail);
-    const sh = join(REPO, 'ops', 'buzz', 'ledger-tail.sh');
-    const r = await runScript('bash', [sh, n]);
+    const sh = toBashPath(join(REPO, 'ops', 'buzz', 'ledger-tail.sh'));
+    const r = await runScript(resolveBash(), [sh, n]);
     if (r.missing) fail(EXIT.TARGET_DOWN, 'fable ledger --tail: bash not found — cannot run ledger-tail.sh (no PowerShell tail script exists).');
     process.exitCode = r.code;
     return;
@@ -632,8 +661,8 @@ async function cmdLedger(argv) {
 
   const text = argv.filter((a) => !a.startsWith('--')).join(' ');
   if (!text) fail(EXIT.BAD_INPUT, 'fable ledger: no message text given');
-  const shSh = join(REPO, 'ops', 'buzz', 'ledger.sh');
-  const r1 = await runScript('bash', [shSh, text]);
+  const shSh = toBashPath(join(REPO, 'ops', 'buzz', 'ledger.sh'));
+  const r1 = await runScript(resolveBash(), [shSh, text]);
   if (!r1.missing) { process.exitCode = r1.code; return; }
 
   console.error('fable ledger: bash not found, falling back to PowerShell');
