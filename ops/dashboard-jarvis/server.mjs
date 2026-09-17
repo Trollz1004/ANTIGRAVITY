@@ -51,6 +51,7 @@ import { streamOllamaChat } from './lib/ollama.mjs';
 import { createNewsService } from './lib/news.mjs';
 import { loadTrends } from './lib/trends.mjs';
 import { readConstitution, listFeatures, resolveDoc } from './lib/speckit.mjs';
+import { readMissionRibbon } from './lib/mission-ribbon.mjs';
 import { hostname, tmpdir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
@@ -133,6 +134,9 @@ const AVATARS = join(REPO, 'ops', 'avatar', 'out');
 // Spec Kit panel: specs/<feature>/{spec,plan,tasks}.md and the ratified constitution — both read live, no cache.
 const SPECS_DIR = join(REPO, 'specs');
 const CONSTITUTION_PATH = join(REPO, '.specify', 'memory', 'constitution.md');
+// Ops tab (Phase B): mission ribbon reads CLAUDE.md + the judge journal, both live, no cache.
+const CLAUDE_MD_PATH = join(REPO, 'CLAUDE.md');
+const JUDGE_STATE_PATH = join(REPO, '.agents', 'journals', 'paperclip-judge', 'STATE.md');
 const STARTED_AT = new Date().toISOString(); // the House restarts this server when server.mjs is newer
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.md': 'text/markdown; charset=utf-8' };
@@ -396,6 +400,8 @@ createServer(async (req, res) => {
   if (p === '/api/agents') { const a = agents(); return send(res, 200, { count: a.length, source: SKILLS, agents: a, at: new Date().toISOString() }); }
   // Spec Kit panel (read-only): specs/<feature>/{spec,plan,tasks}.md + the constitution.
   if (p === '/api/speckit') return send(res, 200, { constitution: readConstitution(CONSTITUTION_PATH), features: listFeatures(SPECS_DIR), at: new Date().toISOString() });
+  // Ops tab (Phase B): mission ribbon (read-only, no cache).
+  if (p === '/api/mission-ribbon') return send(res, 200, readMissionRibbon({ claudeMdPath: CLAUDE_MD_PATH, stateMdPath: JUDGE_STATE_PATH }));
   { const m = /^\/api\/speckit\/([^/]+)\/([^/]+)$/.exec(p);
     if (m) { const r = resolveDoc(SPECS_DIR, decodeURIComponent(m[1]), decodeURIComponent(m[2])); return send(res, r.ok ? 200 : (r.error === 'not found' ? 404 : 400), r); } }
   // God's-eye view: every LAN service probed with an identity check (lib/nodes.mjs). No sample data.

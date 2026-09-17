@@ -41,6 +41,7 @@
         <li class="nav-tab" data-tab="crosslisting"><span class="nav-icon">◫</span> Crosslisting</li>
         <li class="nav-tab" data-tab="speckit"><span class="nav-icon lucide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span> Spec Kit</li>
         <li class="nav-tab" data-tab="board"><span class="nav-icon">⚖</span> ClawX Board</li>
+        <li class="nav-tab" data-tab="ops"><span class="nav-icon">◫</span> Ops</li>
       </ul>
       <div class="sidebar-footer">
         <div class="omni-status">
@@ -470,6 +471,49 @@
         </div>
         <div id="board-seats" class="agent-grid"></div>
       </section>
+
+      <!-- Ops Tab (Phase B: Emergent app absorbed as read-only panels) -->
+      <section id="tab-ops" class="tab-content">
+        <header class="tab-header">
+          <h2>Ops</h2>
+          <p class="tab-desc">Read-only operational panels absorbed from the Emergent app (was :3210). Every number below is a live read — CLAUDE.md, the judge journal, git, Hermes, OpenClaw, the runbooks, and the node ledger.</p>
+        </header>
+        <div class="ops-layout">
+          <div id="ops-ribbon" class="ops-ribbon"><p class="placeholder">Loading mission ribbon…</p></div>
+
+          <div class="widget-card">
+            <h3>Task Commander</h3>
+            <div id="ops-tasks" class="ops-tasks"><p class="placeholder">Loading tasks…</p></div>
+          </div>
+
+          <div class="ops-grid">
+            <div class="widget-card">
+              <h3>Git — C:\ANTIGRAVITY &amp; hermes</h3>
+              <div id="ops-git" class="ops-git"><p class="placeholder">Loading git state…</p></div>
+            </div>
+            <div class="widget-card">
+              <h3>Hermes router — :9119</h3>
+              <div id="ops-hermes" class="ops-service"><p class="placeholder">Loading…</p></div>
+            </div>
+            <div class="widget-card">
+              <h3>OpenClaw support — :18789</h3>
+              <div id="ops-openclaw" class="ops-service"><p class="placeholder">Loading…</p></div>
+            </div>
+            <div class="widget-card">
+              <h3>Ledger tail</h3>
+              <div id="ops-ledger" class="ops-ledger"><p class="placeholder">Loading…</p></div>
+            </div>
+          </div>
+
+          <div class="widget-card">
+            <h3>Runbooks</h3>
+            <div id="ops-runbooks" class="ops-runbooks">
+              <div id="ops-runbook-list" class="ops-runbook-list"><p class="placeholder">Loading…</p></div>
+              <div id="ops-runbook-body" class="speckit-doc-body"></div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -480,5 +524,6 @@
   <script type="module" src="js/jarvis/dock.js"></script>
   <script type="module" src="js/crosslisting.js"></script>
   <script type="module" src="js/jarvis/speckit.js"></script>
+  <script type="module" src="js/jarvis/ops.js"></script>
 </body>
 </html>
