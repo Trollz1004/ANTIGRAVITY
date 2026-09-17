@@ -22,6 +22,16 @@ A panel "Social" that posts content through platform APIs, with per-platform con
 
 The Mission Control panel shows Hermes, OpenClaw, and OpenCode with current task, queue depth, and token spend read from OmniRoute usage, and the judge lanes panel shows the proposal feed with the Claude and Codex columns as the JARVIS dispatch defines. This phase reuses Phase C's proposal store. It waits until Phases A to C are done and validated.
 
+## Phase E — Architecture panel, copy score, and the real review workstation
+
+Three outside projects were surveyed on 2026-09-17 (`ops/runbook/ABSORB-SURVEY-2026-09-17.md`). What each contributes, and only this:
+
+**archify** (tt-a1i/archify, MIT). A skill and CLI that renders typed JSON into self-contained architecture, sequence, data-flow, and lifecycle diagrams, with a before and after diff view. Install it as a skill on both nodes. In JARVIS add an "Architecture" panel: the server builds the typed JSON for the live Sabretooth stack from the House stage table and the health JSON (nodes, services, ports, identity state, who proxies whom), shells out to the CLI, and serves the generated HTML through a same-origin route so it works through the tunnel. Add the before and after renderer to the git panel for a chosen commit range. No network calls, no keys.
+
+**SlopMonster** (ItsssssJack/SlopMonster, MIT). A command-line scorer for machine-sounding prose; it overlaps the installed `no-ai-slop` skill, so it is not a panel. Use its scoring rules as a column in the Phase C approval inbox: every Social proposal shows a copy score and the rules it tripped, next to the compliance result, before Joshua approves. The scorer runs locally.
+
+**The Jules code-review dashboard** (Trollz1004/Ai-Solutions-Jules-Code-Review-Agentic-Dashboard). Joshua's own repo, so reuse is his to grant. Its task commander duplicates the one JARVIS already has; skip it. Its dual-agent review workstation is the idea worth keeping, built for real in Phase D's Judge Lanes: a diff goes to Codex and to Claude through their official first-party paths, both verdicts are stored, disagreement is flagged, and the founder approves. Nothing simulated ships: no hardcoded rule counters, no timer standing in for a payment call, no license check that accepts any string with the right prefix. As a storefront product it stays unlisted until its checks, its checkout, and its licensing are real and verified; that is Joshua's own rule about unverified claims.
+
 ## Order and evidence
 
-A, then B, then C, then D. Each phase ends with: tests passing, a House one-pass showing JARVIS UP, a screenshot of the new panel through the tunnel origin or the LAN origin, a commit with an explicit pathspec, and a line in the judge journal. Recorded numbers only.
+A, then B, then C, then D, then E (the archify panel in E may run alongside C because it touches different files). Each phase ends with: tests passing, a House one-pass showing JARVIS UP, a screenshot of the new panel through the tunnel origin or the LAN origin, a commit with an explicit pathspec, and a line in the judge journal. Recorded numbers only.
