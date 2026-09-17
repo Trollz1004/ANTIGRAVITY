@@ -58,7 +58,7 @@ import { sanitizeHeaders, probeService } from './lib/session-proxy.mjs';
 import { readHeartbeat } from './lib/heartbeat.mjs';
 import { listRunbooks, resolveRunbook } from './lib/runbooks.mjs';
 import { createLedgerReader } from './lib/ledger.mjs';
-import { hostname, tmpdir } from 'node:os';
+import { hostname, tmpdir, homedir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -146,7 +146,7 @@ const JUDGE_STATE_PATH = join(REPO, '.agents', 'journals', 'paperclip-judge', 'S
 // Git panel (Phase B): both real checkouts on this node, overridable in .env for a moved clone.
 const GIT_REPOS = [
   { id: 'antigravity', path: REPO },
-  { id: 'hermes', path: envValue('HERMES_REPO_PATH') || 'C:\\Users\\joshi\\hermes' },
+  { id: 'hermes', path: envValue('HERMES_REPO_PATH') || join(homedir(), 'hermes') },
 ];
 // Hermes router + OpenClaw support (Phase B): same-node services, loopback by default.
 const HERMES_URL = (envValue('HERMES_URL') || 'http://127.0.0.1:9119').replace(/\/$/, '');
