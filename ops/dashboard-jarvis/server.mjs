@@ -54,6 +54,7 @@ import { readConstitution, listFeatures, resolveDoc } from './lib/speckit.mjs';
 import { readMissionRibbon } from './lib/mission-ribbon.mjs';
 import { listTaskCommander } from './lib/task-commander.mjs';
 import { gitPanel } from './lib/git-panel.mjs';
+import { sanitizeHeaders, probeService } from './lib/session-proxy.mjs';
 import { hostname, tmpdir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
@@ -144,6 +145,9 @@ const GIT_REPOS = [
   { id: 'antigravity', path: REPO },
   { id: 'hermes', path: envValue('HERMES_REPO_PATH') || 'C:\\Users\\joshi\\hermes' },
 ];
+// Hermes router + OpenClaw support (Phase B): same-node services, loopback by default.
+const HERMES_URL = (envValue('HERMES_URL') || 'http://127.0.0.1:9119').replace(/\/$/, '');
+const OPENCLAW_URL = (envValue('OPENCLAW_URL') || 'http://127.0.0.1:18789').replace(/\/$/, '');
 const STARTED_AT = new Date().toISOString(); // the House restarts this server when server.mjs is newer
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.md': 'text/markdown; charset=utf-8' };
@@ -271,6 +275,23 @@ function readBody(req) { return new Promise((res) => { const b = []; req.on('dat
 function send(res, code, body, type = 'application/json') {
   res.writeHead(code, { 'content-type': type, 'access-control-allow-origin': '*', 'cache-control': 'no-store' });
   res.end(typeof body === 'string' || Buffer.isBuffer(body) ? body : JSON.stringify(body));
+}
+// Same-origin reverse proxy with response headers sanitized (lib/session-proxy.mjs):
+// a session/auth cookie from Hermes or OpenClaw must never reach the browser.
+async function proxyStripped(req, res, url, base, prefix) {
+  const target = base + url.pathname.slice(prefix.length) + url.search;
+  const c = new AbortController(); const t = setTimeout(() => c.abort(), 20000);
+  try {
+    const body = req.method === 'GET' || req.method === 'HEAD' ? undefined : await readBody(req);
+    const r = await fetch(target, { method: req.method, headers: { 'content-type': req.headers['content-type'] || 'application/json' }, body, signal: c.signal, redirect: 'manual' });
+    const buf = Buffer.from(await r.arrayBuffer());
+    const headers = sanitizeHeaders(r.headers);
+    res.writeHead(r.status, { 'content-type': headers['content-type'] || 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+    return res.end(buf);
+  } catch (e) {
+    const label = base.includes('9119') ? 'Hermes' : 'OpenClaw';
+    return send(res, 502, { error: `${label} unreachable: ${String(e.message || e)}`, target });
+  } finally { clearTimeout(t); }
 }
 function serveStatic(res, rel) {
   const full = resolve(HERE, '.' + rel);
@@ -411,6 +432,14 @@ createServer(async (req, res) => {
   if (p === '/api/mission-ribbon') return send(res, 200, readMissionRibbon({ claudeMdPath: CLAUDE_MD_PATH, stateMdPath: JUDGE_STATE_PATH }));
   if (p === '/api/task-commander') return send(res, 200, { features: listTaskCommander(SPECS_DIR), at: new Date().toISOString() });
   if (p === '/api/git-panel') return send(res, 200, { repos: gitPanel(GIT_REPOS), at: new Date().toISOString() });
+
+  // Hermes router + OpenClaw support panels: status probe (identity-checked when JSON,
+  // reachable+TCP when the service only serves HTML) and a session-stripping reverse proxy
+  // so an embedded view never leaks a Set-Cookie / auth header to the browser.
+  if (p === '/api/hermes-status') return send(res, 200, await probeService({ url: HERMES_URL + '/api/health', host: '127.0.0.1', port: 9119 }));
+  if (p === '/api/openclaw-status') return send(res, 200, await probeService({ url: OPENCLAW_URL + '/healthz', host: '127.0.0.1', port: 18789 }));
+  if (p === '/api/proxy/hermes' || p.startsWith('/api/proxy/hermes/')) return proxyStripped(req, res, url, HERMES_URL, '/api/proxy/hermes');
+  if (p === '/api/proxy/openclaw' || p.startsWith('/api/proxy/openclaw/')) return proxyStripped(req, res, url, OPENCLAW_URL, '/api/proxy/openclaw');
   { const m = /^\/api\/speckit\/([^/]+)\/([^/]+)$/.exec(p);
     if (m) { const r = resolveDoc(SPECS_DIR, decodeURIComponent(m[1]), decodeURIComponent(m[2])); return send(res, r.ok ? 200 : (r.error === 'not found' ? 404 : 400), r); } }
   // God's-eye view: every LAN service probed with an identity check (lib/nodes.mjs). No sample data.

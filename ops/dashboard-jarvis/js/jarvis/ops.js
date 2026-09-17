@@ -106,11 +106,40 @@ function renderGitPanel(el, j) {
   }).join('');
 }
 
+// ── Hermes router / OpenClaw support (shared renderer) ──────────────────────
+function renderServiceStatus(el, j, label) {
+  if (!j) { el.innerHTML = `<p class="placeholder">${escapeHtml(label)} status unavailable.</p>`; return; }
+  const ok = !!j.reachable;
+  const dot = ok ? 'ok' : 'down';
+  const detail = j.kind === 'json'
+    ? `identity ok · HTTP ${j.status}`
+    : j.kind === 'html'
+      ? `reachable (HTML) · TCP ${j.tcp ? 'open' : 'closed'}`
+      : `unreachable${j.error ? ' · ' + j.error : ''}`;
+  el.innerHTML = `<div class="ops-service-head"><span class="dot ${dot}"></span><span>${ok ? 'UP' : 'DOWN'}</span></div><div class="ops-service-detail">${escapeHtml(detail)}</div>`;
+}
+
+async function loadHermesStatus(fetchImpl = fetch) {
+  const el = document.getElementById('ops-hermes');
+  if (!el) return;
+  try { renderServiceStatus(el, await fetchJson('/api/hermes-status', fetchImpl), 'Hermes'); }
+  catch (e) { el.innerHTML = `<p class="placeholder">Hermes status unavailable: ${escapeHtml(e.message || e)}</p>`; }
+}
+
+async function loadOpenClawStatus(fetchImpl = fetch) {
+  const el = document.getElementById('ops-openclaw');
+  if (!el) return;
+  try { renderServiceStatus(el, await fetchJson('/api/openclaw-status', fetchImpl), 'OpenClaw'); }
+  catch (e) { el.innerHTML = `<p class="placeholder">OpenClaw status unavailable: ${escapeHtml(e.message || e)}</p>`; }
+}
+
 // ── init ──────────────────────────────────────────────────────────────────
 function loadOps() {
   loadMissionRibbon();
   loadTaskCommander();
   loadGitPanel();
+  loadHermesStatus();
+  loadOpenClawStatus();
 }
 
 function initOps() {
@@ -127,4 +156,4 @@ if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', initOps);
 }
 
-export { escapeHtml, fetchJson, loadMissionRibbon, renderMissionRibbon, loadTaskCommander, renderTaskCommander, loadGitPanel, renderGitPanel, loadOps, initOps };
+export { escapeHtml, fetchJson, loadMissionRibbon, renderMissionRibbon, loadTaskCommander, renderTaskCommander, loadGitPanel, renderGitPanel, renderServiceStatus, loadHermesStatus, loadOpenClawStatus, loadOps, initOps };
