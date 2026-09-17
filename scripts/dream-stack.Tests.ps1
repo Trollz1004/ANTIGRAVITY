@@ -7,7 +7,7 @@ Describe 'Get-StackServices' {
   $services = Get-StackServices
   It 'lists every service of the full stack on this node plus the Sabertooth probes' {
     $names = $services | ForEach-Object { $_.Name }
-    foreach ($n in 'jarvis', 'hermes-dashboard', 'ollama', 'live-npc-lab', 'dreamops', 'crosslisting', 'omniroute', 'sentry', 'mission-control') {
+    foreach ($n in 'jarvis', 'hermes-dashboard', 'ollama', 'live-npc-lab', 'dreamops', 'crosslisting', 'omniroute', 'sentry') {
       ($names -contains $n) | Should Be $true
     }
   }

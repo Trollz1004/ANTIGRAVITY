@@ -682,3 +682,87 @@ audio {
 .voice-status-thinking { color: var(--warning); border-color: var(--warning); }
 .voice-status-speaking { color: var(--cyber-blue); border-color: var(--cyber-blue); box-shadow: 0 0 8px rgba(0,212,255,0.3); }
 .voice-status-error { color: var(--error); border-color: var(--error); }
+
+/* ── Screensaver: the idle galaxy. Click anywhere → gods-eye (JARVIS tab). ── */
+.screensaver {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #020617;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 1.2s ease, visibility 1.2s ease;
+  cursor: pointer;
+}
+.screensaver.visible { opacity: 1; visibility: visible; pointer-events: auto; }
+.ss-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ss-marks {
+  position: absolute; top: 24px; left: 0; right: 0; text-align: center;
+  font-family: "JetBrains Mono", monospace; font-size: 13px; letter-spacing: 0.35em;
+  color: rgba(148, 163, 184, 0.55);
+}
+.ss-news, .ss-trends {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  max-width: 92vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-family: "JetBrains Mono", monospace; font-size: 13px;
+  color: rgba(226, 232, 240, 0.82);
+  background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px; padding: 8px 20px; backdrop-filter: blur(12px);
+}
+.ss-news { bottom: 64px; }
+.ss-trends { bottom: 24px; color: rgba(34, 211, 238, 0.85); }
+.ss-disclaimer {
+  position: absolute; bottom: -100px; left: 0; right: 0; text-align: center;
+  font-size: 11px; letter-spacing: 0.08em; color: rgba(148, 163, 184, 0.4);
+  font-family: Inter, sans-serif;
+}
+.screensaver.visible .ss-disclaimer { bottom: 100px; transition: bottom 1.4s ease 0.6s; }
+
+/* ── You&i hero (finisher particles, founder's palette) ─────────────────── */
+.hero-youi {
+  position: relative;
+  height: 230px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  background: #011a18;
+  transform-style: preserve-3d;
+  will-change: transform;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.hero-youi canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-youi .hero-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  background: radial-gradient(ellipse at center, rgba(1, 26, 24, 0.05) 0%, rgba(1, 26, 24, 0.55) 100%);
+}
+.hero-youi .hero-title {
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin: 0;
+  color: #fcebca;
+  text-shadow: 0 0 24px rgba(249, 93, 7, 0.55), 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+.hero-youi .hero-sub {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #d7f3fe;
+}
+.hero-youi .hero-link {
+  margin-top: 8px;
+  color: #f95d07;
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid rgba(249, 93, 7, 0.4);
+  border-radius: 999px;
+  padding: 6px 16px;
+  transition: background 0.2s, color 0.2s;
+}
+.hero-youi .hero-link:hover { background: #f95d07; color: #011a18; }

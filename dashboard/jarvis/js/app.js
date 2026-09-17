@@ -269,6 +269,63 @@ async function initGraph() {
 
 const PALETTE = ['#58a6ff', '#3fb950', '#d29922', '#f85149', '#bc8cff', '#ff7b72', '#79c0ff', '#00ff41', '#00d4ff', '#ffa657'];
 
+// ── Galaxy backdrop: parallax starfields + nebula clouds on a canvas layer ──
+// Deterministic per-size (seeded), drawn once per render; the SVG sits above it
+// and carries the animated node stars. Pure canvas 2D — no extra dependencies.
+let galaxyCanvas = null;
+
+function paintGalaxy(w, h) {
+  if (!galaxyCanvas) {
+    galaxyCanvas = document.createElement('canvas');
+    galaxyCanvas.className = 'galaxy-backdrop';
+    const container = $('#graph-canvas-container');
+    if (container) container.insertBefore(galaxyCanvas, container.firstChild);
+  }
+  galaxyCanvas.width = w; galaxyCanvas.height = h;
+  const ctx = galaxyCanvas.getContext && galaxyCanvas.getContext('2d');
+  if (!ctx) return;
+  // Deep space base: near-black blue, darker at the rim (vignette comes free via CSS).
+  const bg = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) * 0.75);
+  bg.addColorStop(0, '#0b1026');
+  bg.addColorStop(0.55, '#070a18');
+  bg.addColorStop(1, '#03040a');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+  // Nebula clouds: big soft radial blobs in house colors, screen-ish via alpha.
+  const clouds = [
+    { x: w * 0.22, y: h * 0.3, r: Math.min(w, h) * 0.5, c: 'rgba(88, 166, 255, 0.10)' },
+    { x: w * 0.75, y: h * 0.28, r: Math.min(w, h) * 0.42, c: 'rgba(188, 140, 255, 0.09)' },
+    { x: w * 0.55, y: h * 0.78, r: Math.min(w, h) * 0.55, c: 'rgba(0, 255, 65, 0.05)' },
+    { x: w * 0.12, y: h * 0.82, r: Math.min(w, h) * 0.38, c: 'rgba(248, 81, 73, 0.05)' },
+  ];
+  for (const c of clouds) {
+    const g = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, c.r);
+    g.addColorStop(0, c.c); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+  }
+  // Three star layers for parallax depth; a tiny seeded PRNG keeps it stable per size.
+  let seed = (w * 7919 + h * 104729) | 0;
+  const rand = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+  const layers = [
+    { n: Math.round((w * h) / 2600), rMax: 0.7, a: 0.35 },
+    { n: Math.round((w * h) / 5200), rMax: 1.1, a: 0.6 },
+    { n: Math.round((w * h) / 11000), rMax: 1.7, a: 0.95 },
+  ];
+  for (const L of layers) {
+    for (let i = 0; i < L.n; i++) {
+      const x = rand() * w, y = rand() * h;
+      const r = 0.25 + rand() * L.rMax;
+      const tint = rand();
+      ctx.fillStyle = tint > 0.92 ? `rgba(255, 240, 200, ${L.a})` : tint > 0.84 ? `rgba(150, 200, 255, ${L.a})` : `rgba(235, 240, 255, ${L.a * (0.4 + rand() * 0.6)})`;
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      // A few of the brightest stars get a 4-point sparkle cross.
+      if (r > 1.4 && rand() > 0.55) {
+        ctx.strokeStyle = `rgba(255,255,255,${L.a * 0.5})`; ctx.lineWidth = 0.6;
+        ctx.beginPath(); ctx.moveTo(x - r * 3, y); ctx.lineTo(x + r * 3, y); ctx.moveTo(x, y - r * 3); ctx.lineTo(x, y + r * 3); ctx.stroke();
+      }
+    }
+  }
+}
+
 function renderGraph() {
   const svg = $('#graph-svg');
   const container = $('#graph-canvas-container');
@@ -277,36 +334,98 @@ function renderGraph() {
   const h = container.clientHeight || 600;
   svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
   svg.innerHTML = '';
+  paintGalaxy(w, h);
   const search = ($('#graph-search')?.value || '').toLowerCase();
+
+  // Links: energy filaments — gradient stroke colored by endpoint hues.
+  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+  const glowFilter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+  glowFilter.setAttribute('id', 'galaxy-glow'); glowFilter.setAttribute('x', '-80%'); glowFilter.setAttribute('y', '-80%'); glowFilter.setAttribute('width', '260%'); glowFilter.setAttribute('height', '260%');
+  const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+  blur.setAttribute('stdDeviation', '3.2'); blur.setAttribute('result', 'b');
+  const merge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
+  const mv1 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode'); mv1.setAttribute('in', 'b');
+  const mv2 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode'); mv2.setAttribute('in', 'SourceGraphic');
+  merge.appendChild(mv1); merge.appendChild(mv2); glowFilter.appendChild(blur); glowFilter.appendChild(merge);
+  defs.appendChild(glowFilter);
+  svg.appendChild(defs);
 
   for (const link of state.graph.links) {
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('stroke', '#30363d'); line.setAttribute('stroke-width', '1.5');
+    line.setAttribute('class', 'galaxy-link');
+    line.setAttribute('stroke', '#5b6b8c'); line.setAttribute('stroke-width', '1.2'); line.setAttribute('opacity', '0.55');
+    line.setAttribute('stroke-linecap', 'round');
     svg.appendChild(line);
   }
   for (const node of state.graph.nodes) {
     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'galaxy-node');
     g.style.cursor = 'pointer';
     const color = PALETTE[node.gi % PALETTE.length];
     const dim = search && !node.id.toLowerCase().includes(search);
-    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('r', node.size); circle.setAttribute('fill', color); circle.setAttribute('opacity', dim ? '0.15' : '0.85');
-    circle.setAttribute('stroke', color); circle.setAttribute('stroke-width', '2');
+    if (dim) g.setAttribute('opacity', '0.12');
+    // Outer halo: the node's atmosphere.
+    const halo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    halo.setAttribute('class', 'galaxy-halo');
+    halo.setAttribute('r', node.size * 2.4); halo.setAttribute('fill', color); halo.setAttribute('opacity', '0.12');
+    halo.setAttribute('filter', 'url(#galaxy-glow)');
+    // Mid corona.
+    const corona = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    corona.setAttribute('r', node.size * 1.45); corona.setAttribute('fill', color); corona.setAttribute('opacity', '0.28');
+    // Hot core: white-hot center like a star.
+    const core = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    core.setAttribute('class', 'galaxy-core');
+    core.setAttribute('r', node.size * 0.62); core.setAttribute('fill', '#ffffff'); core.setAttribute('opacity', '0.95');
+    core.setAttribute('stroke', color); core.setAttribute('stroke-width', '1.6');
     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('text-anchor', 'middle'); text.setAttribute('dy', node.size + 12);
-    text.setAttribute('fill', dim ? '#484f58' : '#f0f6fc'); text.setAttribute('font-size', '10'); text.setAttribute('font-family', 'var(--font-sans)');
+    text.setAttribute('text-anchor', 'middle'); text.setAttribute('dy', node.size * 2.4 + 12);
+    text.setAttribute('fill', dim ? '#484f58' : '#dbe7ff'); text.setAttribute('font-size', '10'); text.setAttribute('font-family', 'var(--font-sans)');
+    text.setAttribute('style', 'paint-order:stroke;stroke:#04060f;stroke-width:3px;stroke-linejoin:round');
     text.textContent = node.label;
-    g.appendChild(circle); g.appendChild(text);
+    g.appendChild(halo); g.appendChild(corona); g.appendChild(core); g.appendChild(text);
     g.addEventListener('click', () => openNote(node));
     svg.appendChild(g);
   }
   simulateGraph(w, h);
+  startGalaxy(w, h);
 }
 
-function simulateGraph(w, h) {
+// ── Animation: the sim keeps breathing after the initial layout ────────────
+let galaxyAnim = null;
+
+function startGalaxy(w, h) {
+  stopGalaxy();
+  if (typeof globalThis.requestAnimationFrame !== 'function') return; // test harness
+  let ticks = 0;
+  const step = () => {
+    simulateGraph(w, h, 1); // one gentle tick per frame
+    ticks++;
+    if (ticks % 4 === 0) {
+      const t = ticks * 0.05;
+      // Stars twinkle: pulse every core slightly out of phase.
+      const svg = $('#graph-svg');
+      if (svg) {
+        const cores = svg.querySelectorAll('.galaxy-core');
+        for (let i = 0; i < cores.length; i++) {
+          const pulse = 0.85 + 0.15 * Math.sin(t + i * 1.3);
+          cores[i] && cores[i].setAttribute && cores[i].setAttribute('opacity', String(0.75 + 0.2 * pulse));
+        }
+      }
+    }
+    galaxyAnim = globalThis.requestAnimationFrame(step);
+  };
+  galaxyAnim = globalThis.requestAnimationFrame(step);
+}
+
+function stopGalaxy() {
+  if (galaxyAnim && typeof globalThis.cancelAnimationFrame === 'function') globalThis.cancelAnimationFrame(galaxyAnim);
+  galaxyAnim = null;
+}
+
+function simulateGraph(w, h, ticks = 120) {
   const nodes = state.graph.nodes;
   const links = state.graph.links;
-  for (let i = 0; i < 120; i++) {
+  for (let i = 0; i < ticks; i++) {
     for (const a of nodes) for (const b of nodes) {
       if (a === b) continue;
       const dx = a.x - b.x, dy = a.y - b.y;
@@ -342,8 +461,10 @@ async function openNote(node) {
   panel.innerHTML = '';
   panel.appendChild(el('h3', { text: node.id, style: 'font-size:14px;margin-bottom:6px;font-family:var(--font-mono)' }));
   panel.appendChild(el('p', { text: `folder ${node.group} · ${node.in} inbound · ${node.out} outbound`, style: 'font-size:12px;color:var(--text-muted)' }));
-  const vaultName = state.graph.meta?.name || 'Antigravity';
-  panel.appendChild(el('a', { class: 'btn', href: `obsidian://open?vault=${encodeURIComponent(vaultName)}&file=${encodeURIComponent(node.id)}`, text: 'Open in Obsidian', style: 'display:inline-block;margin:8px 0' }));
+  // Prefer the stable vault id (survives renames); fall back to the folder name.
+  const vaultId = state.config?.vault?.id || state.graph.meta?.id || '';
+  const vaultRef = vaultId || state.graph.meta?.name || 'Antigravity';
+  panel.appendChild(el('a', { class: 'btn', href: `obsidian://open?vault=${encodeURIComponent(vaultRef)}&file=${encodeURIComponent(node.id)}`, text: 'Open in Obsidian', style: 'display:inline-block;margin:8px 0' }));
   try {
     const note = await api(`/api/vault/note?p=${encodeURIComponent(node.id)}`);
     panel.appendChild(el('pre', { class: 'output-box', text: note.ok ? note.markdown.slice(0, 6000) : note.error, style: 'white-space:pre-wrap;max-height:50vh;overflow:auto' }));
@@ -441,19 +562,116 @@ function loadVRMFile(file) {
   reader.readAsArrayBuffer(file);
 }
 
-// ── Mission Control + Claude CLI ───────────────────────────────────────────
+// ── Mission Control (the live board) + Claude CLI ──────────────────────────
 
 function initMissionControl() {
-  const frame = $('#mission-control-frame');
-  if (!frame || frame.dataset.ready) return;
-  const host = location.hostname || '127.0.0.1';
-  // Mission Control runs on Sabertooth; the server says where (config.missionControl), else assume the page host.
-  frame.src = state.config?.missionControl || `http://${host}:3151/`;
-  frame.dataset.ready = '1';
-  const link = $('#mission-control-link');
-  if (link) { link.href = frame.src; link.textContent = frame.src; }
+  // This dashboard IS mission control: the live board is the whole tab. The
+  // old Sabertooth iframe embed is gone — a blank frame was dead weight.
   const hermes = $('#hermes-link');
-  if (hermes) { hermes.href = `http://${host}:9119/`; hermes.textContent = `http://${host}:9119/`; }
+  if (hermes) { const host = location.hostname || '127.0.0.1'; hermes.href = `http://${host}:9119/`; hermes.textContent = `http://${host}:9119/`; }
+  void renderMissionBoard();
+}
+
+/**
+ * The mission board IS this dashboard: a live table of every service on both
+ * LAN nodes and the public domains from /api/nodes, refreshed with the Refresh
+ * button. Public rows carry the live DNS provider (Ionos = not moved to
+ * Cloudflare yet). There is no external mission-control embed.
+ */
+let missionBoardRequest = 0;
+
+async function renderMissionBoard() {
+  const requestId = ++missionBoardRequest;
+  const board = $('#mission-board');
+  const note = $('#mission-board-note');
+  if (!board) return;
+  try {
+    const data = await api('/api/nodes');
+    if (requestId !== missionBoardRequest) return;
+    board.innerHTML = '';
+    for (const n of data.nodes || []) {
+      const head = el('div', { class: 'mission-node-head' }, [
+        el('h3', { text: `${n.name} (${n.ip})` }),
+        el('span', { class: n.up === n.total ? 'ok' : 'warn', text: `${n.up}/${n.total} up — ${n.role || ''}` }),
+      ]);
+      const rows = (n.services || []).map((s) => el('div', { class: 'mission-row' }, [
+        el('span', { class: 'dot ' + (s.up ? 'ok' : 'down') }),
+        el('span', { class: 'mission-label', text: s.label || s.id || '' }),
+        el('span', { class: 'mission-port', text: s.port ? ':' + s.port : '' }),
+        el('span', { class: s.up ? 'ok' : 'down', text: s.state || (s.up ? 'UP' : 'DOWN') }),
+        el('span', { class: 'mission-detail', text: s.ns ? `DNS: ${s.ns}` : (s.detail || '') }),
+        el('span', { class: 'mission-latency', text: s.latencyMs != null ? s.latencyMs + ' ms' : '' }),
+      ]));
+      board.appendChild(el('section', { class: 'mission-node' }, [head, ...rows]));
+    }
+    if (note) note.textContent = `Live identity-checked board — ${data.nodes?.length || 0} nodes, refreshed ${new Date().toLocaleTimeString()}`;
+  } catch (e) {
+    if (requestId === missionBoardRequest && note) note.textContent = 'Board unavailable: ' + e.message;
+  }
+}
+
+async function launchFreebuff() {
+  const out = $('#freebuff-result');
+  if (out) out.textContent = 'Opening FreeBuff CLI…';
+  try {
+    const r = await api('/api/launch/freebuff', { method: 'POST' });
+    if (out) out.textContent = `Opened ${r.opened} on ${r.on} — free GLM agent, ad-supported, time-boxed. Non-judge lane: hand its work to Claude/Codex.`;
+    logActivity(`FreeBuff CLI opened on ${r.on}`);
+  } catch (e) {
+    if (out) out.textContent = `Could not open: ${e.message}`;
+  }
+}
+
+// ── ClawX AI Board: six seats vote separately; the founder breaks ties ──────
+async function callBoardVote() {
+  const q = $('#board-question');
+  const out = $('#board-result');
+  const seats = $('#board-seats');
+  const founder = $('#board-founder');
+  const question = (q && q.value || '').trim();
+  if (!out) return;
+  if (!question) { out.textContent = 'Write the motion first.'; return; }
+  out.textContent = 'Convening the board — six seats thinking…';
+  if (seats) seats.innerHTML = '';
+  try {
+    const body = { question };
+    if (founder && founder.value) body.founderVote = founder.value;
+    const r = await api('/api/board/vote', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    if (seats) {
+      for (const v of r.votes || []) {
+        const card = el('div', { class: 'widget-card board-seat' }, [
+          el('h3', { text: (v.name || 'seat') }),
+          el('span', { class: 'board-light ' + (v.vote === 'YES' ? 'board-yes' : v.vote === 'NO' ? 'board-no' : 'board-abstain'), text: v.vote || 'ABSTAIN' }),
+          el('p', { class: 'tab-desc', text: v.reason || '' }),
+        ]);
+        seats.appendChild(card);
+      }
+    }
+    const tie = r.tie ? ` — 3–3 SPLIT, founder ${r.tieBreak ? 'voted ' + r.tieBreak : 'DECIDES'}` : '';
+    const verdict = r.outcome === 'PASSED' ? '🟢 PASSED' : r.outcome === 'FAILED' ? '🔴 FAILED' : r.outcome === 'NO QUORUM' ? '⚪ NO QUORUM (fewer than 4 seats voted)' : '🟡 FOUNDER DECIDES';
+    if (out) out.textContent = `${verdict} — ${r.yes} yes · ${r.no} no · ${r.abstain} abstain${tie}`;
+    logActivity(`ClawX board: ${r.outcome} (${r.yes}-${r.no}) on "${question.slice(0, 60)}"`);
+  } catch (e) {
+    if (out) out.textContent = 'Vote failed: ' + e.message;
+  }
+}
+
+// Wake bridge: write a pending task for the user's Freebuff desktop session.
+async function createWake() {
+  const input = $('#wake-prompt');
+  const out = $('#wake-result');
+  const prompt = (input && input.value || '').trim();
+  if (!out) return;
+  if (!prompt) { out.textContent = 'Type a task first.'; return; }
+  out.textContent = 'Writing wake…';
+  try {
+    const w = await api('/api/freebuff/wakes', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt }) });
+    if (out) out.textContent = `Wake ${w.runId} is pending — open your Freebuff session; it reports done/fail back here.`;
+    if (input) input.value = '';
+    logActivity(`FreeBuff wake created: ${w.runId}`);
+  } catch (e) {
+    if (out) out.textContent = 'Wake failed: ' + e.message;
+  }
 }
 
 async function initClaude() {
@@ -480,6 +698,121 @@ async function launchClaude() {
   } catch (e) {
     if (out) out.textContent = `Could not open: ${e.message}`;
   }
+}
+
+// ── Claudian panel: full Claude Code chat, model roster like the Obsidian plugin ──
+// Grouped by backend exactly as Claudian shows them. The bridge passes --model
+// through to the CLI; a model the CLI cannot route errors honestly in the log.
+const CLAUDIAN_MODELS = [
+  { group: 'Claude', models: ['fable', 'opus', 'sonnet', 'haiku'] },
+  { group: 'Codex', models: ['gpt-5.6-sol', 'gpt-5.6-terra', 'gpt-5.6-luna', 'gpt-5.5', 'gpt-6-astra'] },
+  { group: 'PI (local)', models: ['ornith-1.5:9b'] },
+  { group: 'OpenCode (free)', models: ['opencode/muse-spark-1.3-contributor-free', 'opencode/big-pickle', 'opencode/mimo-v2.5-free', 'opencode/ling-3.0-flash-fin-free', 'opencode/nemotron-3-ultra-free', 'opencode/nemotron-3.5-lightning-free'] },
+];
+const CLAUDIAN_CUSTOM_KEY = 'claudian.models';
+
+function claudianModels() {
+  let custom = [];
+  try { custom = JSON.parse(localStorage.getItem(CLAUDIAN_CUSTOM_KEY) || '[]'); } catch {}
+  const known = new Set(CLAUDIAN_MODELS.flatMap((g) => g.models));
+  return [...CLAUDIAN_MODELS, { group: 'Custom', models: (Array.isArray(custom) ? custom : []).filter((m) => m && !known.has(m)) }];
+}
+
+function addClaudianModel(name) {
+  const m = String(name || '').trim();
+  if (!m || !/^[A-Za-z0-9._:/-]{1,80}$/.test(m)) return false;
+  const all = claudianModels();
+  if (all.some((g) => g.models.includes(m))) return true;
+  const custom = all.find((g) => g.group === 'Custom');
+  custom.models.push(m);
+  try { localStorage.setItem(CLAUDIAN_CUSTOM_KEY, JSON.stringify(custom.models)); } catch {}
+  return true;
+}
+
+function initClaudian() {
+  const model = $('#claudian-model');
+  if (!model || model.dataset.ready) return;
+  model.dataset.ready = '1';
+  for (const g of claudianModels()) {
+    if (!g.models.length) continue;
+    const og = document.createElement('optgroup');
+    og.label = g.group;
+    for (const m of g.models) {
+      const o = document.createElement('option');
+      o.value = m; o.textContent = m;
+      og.appendChild(o);
+    }
+    model.appendChild(og);
+  }
+  const addBtn = $('#claudian-add');
+  const addInput = $('#claudian-add-input');
+  const rebuild = () => {
+    const current = model.value;
+    for (const og of Array.from(model.querySelectorAll('optgroup'))) og.remove();
+    for (const g of claudianModels()) {
+      if (!g.models.length) continue;
+      const og = document.createElement('optgroup');
+      og.label = g.group;
+      for (const m of g.models) {
+        const o = document.createElement('option');
+        o.value = m; o.textContent = m;
+        if (m === current) o.selected = true;
+        og.appendChild(o);
+      }
+      model.appendChild(og);
+    }
+  };
+  addBtn?.addEventListener('click', () => {
+    if (addClaudianModel(addInput?.value)) { rebuild(); if (addInput) addInput.value = ''; }
+    else if (addInput) addInput.value = '';
+  });
+  addInput?.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addBtn?.click(); } });
+
+  const input = $('#claudian-input');
+  const send = $('#claudian-send');
+  const log = $('#claudian-log');
+  const effort = $('#claudian-effort');
+  const badge = $('#claudian-session');
+  const claudian = { sessionId: '', busy: false };
+  const run = async () => {
+    const prompt = String(input?.value || '').trim();
+    if (!prompt || claudian.busy) return;
+    claudian.busy = true;
+    if (input) input.value = '';
+    const row = log ? document.createElement('div') : null;
+    if (row) {
+      row.className = 'claudian-row';
+      row.appendChild(el('b', { text: 'You: ' }));
+      row.appendChild(document.createTextNode(prompt));
+      log.appendChild(row);
+    }
+    const live = log ? document.createElement('div') : null;
+    const liveText = document.createElement('span');
+    if (live) {
+      live.className = 'claudian-row';
+      live.appendChild(el('b', { text: 'Claude: ' }));
+      live.appendChild(liveText);
+      log.appendChild(live);
+    }
+    try {
+      const { streamClaude } = await import('./jarvis/claude-bridge.js');
+      const result = await streamClaude({
+        prompt, persona: 'claude', sessionId: claudian.sessionId || undefined,
+        model: model?.value || undefined, permissionMode: effort?.value || undefined,
+        onEvent: (event, data) => {
+          if (event === 'delta') liveText.textContent += data?.text || '';
+          if (event === 'tool') liveText.textContent += `[${data?.name || 'tool'}] `;
+        },
+      });
+      claudian.sessionId = result.sessionId || claudian.sessionId;
+      if (result.text) liveText.textContent = result.text;
+      if (badge) badge.textContent = claudian.sessionId ? `session ${claudian.sessionId.slice(0, 8)}` : '';
+    } catch (e) {
+      liveText.textContent = `Error: ${e.message}`;
+    } finally { claudian.busy = false; }
+  };
+  send?.addEventListener('click', () => { void run(); });
+  input?.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); void run(); } });
 }
 
 // ── Widgets ────────────────────────────────────────────────────────────────
@@ -590,6 +923,22 @@ async function generateImage(promptElId, resultElId, modelElId, styleElId = null
   }
 }
 
+// ── Screensaver (idle → galaxy idle state; click → gods-eye) ───────────────
+
+import('./screensaver.js').then(({ createScreensaver }) => {
+  const ss = createScreensaver({ idleMs: 120000 });
+  ss.armIdle();
+  state.screensaver = ss;
+}).catch((e) => logActivity(`screensaver unavailable: ${e.message}`));
+
+// ── You&i hero (finisher particles in the founder's colors, 3D tilt) ──────
+
+import('./header-fx.js').then(({ createHeroFx }) => {
+  const heroRoot = $('#hero-youi');
+  const fx = createHeroFx({ container: heroRoot, FinisherHeader: window.FinisherHeader || null });
+  fx.init();
+}).catch((e) => logActivity(`hero fx unavailable: ${e.message}`));
+
 // ── Init ───────────────────────────────────────────────────────────────────
 
 function init() {
@@ -608,6 +957,11 @@ function init() {
   $('#scene-generate')?.addEventListener('click', () => generateImage('#scene-prompt', '#scene-result', '#scene-model'));
   $('#image-generate')?.addEventListener('click', () => generateImage('#image-prompt', '#image-result', '#image-model', '#image-style'));
   $('#claude-launch')?.addEventListener('click', launchClaude);
+  $('#freebuff-launch')?.addEventListener('click', launchFreebuff);
+  $('#wake-create')?.addEventListener('click', createWake);
+  $('#board-vote')?.addEventListener('click', callBoardVote);
+  $('#mission-refresh')?.addEventListener('click', () => void renderMissionBoard());
+  initClaudian();
   logActivity('Dashboard initialized');
 }
 
@@ -617,7 +971,8 @@ document.addEventListener('DOMContentLoaded', init);
 export {
   state, $, $$, el, setText, logActivity, initTabs, switchTab, initDashboard, initAgents,
   renderAgentCategories, renderAgentList, showAgentDetail, initGraph, renderGraph, simulateGraph,
-  openNote, initAvatar, loadAvatarGallery, loadVRMFile, initMissionControl, initClaude, launchClaude,
+  openNote, initAvatar, loadAvatarGallery, loadVRMFile, initMissionControl, renderMissionBoard, initClaude, launchClaude, launchFreebuff, createWake, callBoardVote, initClaudian, stopGalaxy,
+  CLAUDIAN_MODELS, claudianModels, addClaudianModel,
   initWidgets, sendChat, doSearch, doSummarize, doTTS, generateImage, api, omniFetch, omniChat,
   omniImageGen, omniTTS, init, IMAGE_MODEL, CHAT_MODEL, OMNI_PROXY,
 };

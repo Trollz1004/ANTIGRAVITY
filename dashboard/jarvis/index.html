@@ -39,6 +39,7 @@
         <li class="nav-tab" data-tab="hermes"><span class="nav-icon">🎙</span> Hermes AI</li>
         <li class="nav-tab" data-tab="jarvis"><span class="nav-icon">⬢</span> JARVIS</li>
         <li class="nav-tab" data-tab="crosslisting"><span class="nav-icon">◫</span> Crosslisting</li>
+        <li class="nav-tab" data-tab="board"><span class="nav-icon">⚖</span> ClawX Board</li>
       </ul>
       <div class="sidebar-footer">
         <div class="omni-status">
@@ -52,6 +53,7 @@
     <main id="main">
       <!-- Dashboard Tab: every number here is read live or shown as unknown -->
       <section id="tab-dashboard" class="tab-content active">
+        <div id="hero-youi" class="hero-youi" aria-label="You&i — watched over by AI"></div>
         <header class="tab-header">
           <h2>House at a glance</h2>
           <p class="tab-desc">Live readings from FABLE'S SENTRY, the skills tree, the Obsidian vault, and the avatar renders. No sample data.</p>
@@ -87,17 +89,23 @@
           <h3>Recent Activity</h3>
           <div id="activity-log" class="activity-log"></div>
         </div>
+        <div class="gen-row" style="margin-top:12px">
+          <button class="btn dock-ask" data-tab="dashboard" data-question="Summarize the house right now: what is up, what is down, and what needs me first?">⬢ Ask JARVIS about the house</button>
+        </div>
       </section>
 
-      <!-- Mission Control Tab -->
+      <!-- Mission Control Tab: this dashboard IS mission control — live board only, no embeds, no mock -->
       <section id="tab-mission-control" class="tab-content">
         <header class="tab-header">
-          <h2>Mission Control v5</h2>
-          <p class="tab-desc">The hub on :3151, embedded from this page's host so it works on the LAN. Hermes dashboard: <a id="hermes-link" href="#" target="_blank" rel="noopener">…</a> · open Mission Control directly: <a id="mission-control-link" href="#" target="_blank" rel="noopener">…</a></p>
+          <h2>Mission Control</h2>
+          <p class="tab-desc">This dashboard is mission control. Every row below is an identity-checked probe of a real service — on this node, on Sabertooth, or on the public internet (with a live nameserver check: Ionos means the DNS hasn't moved to Cloudflare yet). Probed live by the server at request time. When something is down it says DOWN, never a stub.</p>
         </header>
-        <div id="mission-control-embed">
-          <iframe id="mission-control-frame" title="Mission Control v5" style="width:100%;height:calc(100vh - 140px);border:1px solid var(--border);border-radius:var(--radius-lg);background:#0d1117"></iframe>
+        <div class="gen-row" style="margin-bottom:12px">
+          <button id="mission-refresh" class="btn">Refresh board</button>
+          <button class="btn dock-ask" data-tab="mission-control" data-question="Read the mission board: what is down, why, and in what order should I bring things back?">⬢ Ask JARVIS</button>
         </div>
+        <p id="mission-board-note" class="tab-desc">Probing every service live…</p>
+        <div id="mission-board" class="mission-board"></div>
       </section>
 
       <!-- Agents Tab -->
@@ -110,6 +118,19 @@
           <div class="agents-sidebar">
             <input type="text" id="agent-search" placeholder="Search skills..." class="search-input" />
             <div id="agent-categories" class="category-list"></div>
+            <div class="widget-card" style="margin-top:16px;padding:12px">
+              <h3 style="margin:0 0 8px">🚀 Launch an agent CLI</h3>
+              <p class="tab-desc" style="margin:0 0 10px">Agency Agents (Tauri app) owns the 200+ persona roster in <code>.agents/skills</code> — the cards on the right. FreeBuff is the free GLM coding agent: interactive console on this node, ad-supported, time-boxed, non-judge lane.</p>
+              <button id="freebuff-launch" class="btn primary" style="width:100%">⚡ Launch FreeBuff CLI</button>
+              <p id="freebuff-result" class="tab-desc" style="margin:8px 0 0"></p>
+              <div style="margin-top:14px;border-top:1px solid rgba(255,255,255,.08);padding-top:12px">
+                <h3 style="margin:0 0 6px">📮 Wake bridge</h3>
+                <p class="tab-desc" style="margin:0 0 8px">Same protocol the Sabertooth CEO bridge uses: a task is written as a <code>pending</code> wake file; the Freebuff desktop session picks it up and reports <code>done</code>/<code>fail</code> back here. It runs in YOUR session, with your models and login.</p>
+                <input type="text" id="wake-prompt" placeholder="Task for the Freebuff session…" class="search-input" style="width:100%" />
+                <button id="wake-create" class="btn" style="width:100%;margin-top:8px">Create wake</button>
+                <p id="wake-result" class="tab-desc" style="margin:8px 0 0"></p>
+              </div>
+            </div>
           </div>
           <div class="agents-main">
             <div id="agent-list" class="agent-grid"></div>
@@ -131,6 +152,7 @@
             <button id="graph-refresh" class="btn">Refresh</button>
             <button id="graph-fit" class="btn">Fit View</button>
             <input type="text" id="graph-search" placeholder="Filter notes..." class="search-input inline" />
+            <button class="btn dock-ask" data-tab="graph" data-question="Give me a guided tour of the knowledge graph: clusters, orphans, and what to write next.">⬢ Ask JARVIS</button>
           </div>
         </header>
         <div class="graph-layout">
@@ -265,7 +287,7 @@
         <header class="tab-header">
           <h2>Official Claude CLI</h2>
         </header>
-        <div class="widget-card" style="max-width:720px">
+        <div class="widget-card" style="max-width:760px;margin-bottom:16px">
           <p id="claude-bridge-status" class="placeholder">Checking the Claude CLI bridge…</p>
           <p>Command: <code id="claude-command">claude</code></p>
           <p id="claude-note" class="placeholder"></p>
@@ -274,18 +296,44 @@
           </div>
           <p id="claude-result" class="output-box" style="margin-top:12px"></p>
         </div>
+        <div class="widget-card" style="max-width:760px">
+          <h3>Claudian — full Claude Code chat</h3>
+          <p class="tab-desc">The model roster from the Obsidian Claudian plugin, in this dashboard. Model and effort map to real <code>claude -p</code> flags; custom models you add are persisted in this browser.</p>
+          <div class="gen-row" style="margin:10px 0">
+            <select id="claudian-model" class="select-input" title="Model roster (add your own below)"></select>
+            <select id="claudian-effort" class="select-input" title="Permission ceiling — .env may lower what runs">
+              <option value="plan">Effort: Plan (read-only)</option>
+              <option value="default">Effort: Default</option>
+              <option value="acceptEdits">Effort: Accept edits</option>
+            </select>
+            <input type="text" id="claudian-add-input" class="search-input inline" placeholder="Add model id…" style="max-width:220px" />
+            <button id="claudian-add" class="btn">+ Add</button>
+          </div>
+          <div id="claudian-log" class="chat-log" style="height:300px"></div>
+          <div class="chat-input-row" style="margin-top:8px">
+            <input type="text" id="claudian-input" class="chat-input" placeholder="Message Claude Code…" />
+            <button id="claudian-send" class="btn primary">Send</button>
+          </div>
+          <p><span id="claudian-session" class="jarvis-session"></span></p>
+        </div>
       </section>
           <!-- Hermes AI Voice Tab -->
       <section id="tab-hermes" class="tab-content">
         <header class="tab-header">
           <h2>Hermes AI</h2>
-          <p class="tab-desc">Talk to Hermes — the AI running this dashboard. Mic uses browser speech recognition; voice replies via speech synthesis; brain via OmniRoute. Zero credentials.</p>
+          <p class="tab-desc">Talk to Hermes — the AI running this dashboard. Mic uses browser speech recognition; replies use a preferred female browser voice; brain uses Hermes' configured model through the local CLI bridge.</p>
         </header>
         <div class="widget-card" style="max-width:760px">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
             <button id="hermes-voice-mic" class="btn primary" style="font-size:18px;padding:12px 20px">🎙 Talk</button>
             <button id="hermes-voice-stop" class="btn">Stop Voice</button>
             <span id="hermes-voice-status" class="voice-status voice-status-idle">OFF</span>
+          </div>
+          <div class="voice-picker-row" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+            <label for="hermes-voice-select" style="font-size:13px;color:#9aa">Voice:</label>
+            <select id="hermes-voice-select" class="voice-select" style="flex:1;min-width:180px"></select>
+            <button id="hermes-voice-pack-download" class="btn" title="Register a locally-downloaded TTS voice pack">Use local</button>
+            <button id="hermes-voice-refresh" class="btn" title="Re-enumerate browser voices">↻</button>
           </div>
           <div id="hermes-voice-log" class="chat-log" style="height:320px"></div>
           <div class="chat-input-row" style="margin-top:8px">
@@ -324,6 +372,7 @@
           <div id="jarvis-hud">
             <div class="jarvis-center">
               <div class="jarvis-title">JARVIS</div>
+              <div class="jarvis-identity">Claude Code on this node — repo-aware, house-context aware, plan-mode ceiling</div>
               <div class="jarvis-state-badge"><span class="jarvis-dot jarvis-dot-idle"></span><span class="jarvis-state">IDLE</span></div>
             </div>
           </div>
@@ -358,6 +407,7 @@
             <span id="crosslisting-status" class="voice-status voice-status-idle">CHECKING</span>
             <a class="btn primary" href="http://127.0.0.1:3000/" target="_blank" rel="noopener">Open app</a>
             <button id="crosslisting-refresh" class="btn">Refresh status</button>
+            <button class="btn dock-ask" data-tab="crosslisting" data-question="Check the Crosslisting OS: is it up, what do its guardrails forbid, and what should I do next in it?">⬢ Ask JARVIS</button>
           </div>
           <p id="crosslisting-detail" class="tab-desc" style="margin-top:12px">Checking local service...</p>
         </div>
@@ -365,12 +415,33 @@
           <iframe id="crosslisting-frame" title="Crosslisting" src="http://127.0.0.1:3000/" style="width:100%;height:calc(100vh - 220px);border:1px solid var(--border);border-radius:var(--radius-lg);background:#0d1117"></iframe>
         </div>
       </section>
+      <section id="tab-board" class="tab-content">
+        <h2>ClawX AI Board — six free thinkers, one founder</h2>
+        <p class="tab-desc">Six AI seats vote <strong>separately</strong> on the question — no seat sees another's vote. Green = yes, red = no, gray = abstain (brain down or uncountable). A 3–3 split goes to Joshua, the founder, whose vote is the seventh. <a id="clawx-link" href="https://clawx-aihub-zwxfcstm.manus.space/" target="_blank" rel="noopener">ClawX AI Hub ↗</a></p>
+        <div class="widget-card" style="margin-bottom:16px">
+          <input type="text" id="board-question" class="search-input" style="width:100%" placeholder="Motion before the board…" />
+          <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+            <button id="board-vote" class="btn primary">⚖ Call the vote</button>
+            <label class="tab-desc" style="display:flex;align-items:center;gap:6px;margin:0">Founder tie-break:
+              <select id="board-founder" class="search-input" style="width:auto;padding:4px 8px">
+                <option value="">— (ask only on a tie)</option>
+                <option value="YES">Joshua: YES</option>
+                <option value="NO">Joshua: NO</option>
+              </select>
+            </label>
+          </div>
+          <p id="board-result" class="tab-desc" style="margin:10px 0 0"></p>
+        </div>
+        <div id="board-seats" class="agent-grid"></div>
+      </section>
     </main>
   </div>
 
+  <script src="js/vendor/finisher-header.es5.min.js"></script>
   <script type="module" src="js/app.js"></script>
   <script type="module" src="js/hermes-voice.js"></script>
   <script type="module" src="js/jarvis/jarvis.js"></script>
+  <script type="module" src="js/jarvis/dock.js"></script>
   <script type="module" src="js/crosslisting.js"></script>
 </body>
 </html>

@@ -6,10 +6,12 @@
  *
  *   OPTIONS /api/claude/*, /api/launch/claude, /api/ollama/*   -> 403 (no CORS)
  *   GET     /api/claude/status                                  -> capability, no absolute paths
- *   POST    /api/claude/chat   {prompt, sessionId?, persona?, permissionMode?, model?, lean?}
+ *   POST    /api/claude/chat   {prompt, sessionId?, persona?, permissionMode?, model?, lean?, hud?, tab?}
  *                                                               -> text/event-stream (init, delta, tool, assistant, result, error, exit)
+ *   GET     /api/hud/context                                   -> the same preamble the bridge would compose (display/debug)
  *   POST    /api/claude/stop                                    -> {ok, killed}
  *   POST    /api/launch/claude                                  -> opens the CLI in a console on this host
+ *   POST    /api/launch/freebuff                                -> opens the FreeBuff CLI (free GLM agent) in a console on this host
  *   GET     /api/ollama/tags                                    -> {available, models}
  *   POST    /api/ollama/chat   {messages, model?}               -> text/event-stream (delta, result)
  *
@@ -17,22 +19,34 @@
  */
 import { basename, join } from 'node:path';
 import { hostname, tmpdir } from 'node:os';
-import { existsSync, readFileSync, writeFileSync, unlinkSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, unlinkSync, readdirSync, mkdirSync } from 'node:fs';
 import { randomBytes } from 'node:crypto';
 import { spawn as nodeSpawn } from 'node:child_process';
 import { runClaude, resolveClaudeBinary, bridgeAccess, isSameOrigin, sse, killTree as defaultKillTree, effectivePermissionMode, PERMISSION_MODES, PERSONAS } from './claude-bridge.mjs';
+import { hudContext, promptWithContext } from './hud-context.mjs';
+import { readMemory, appendMemory, memoryBlock } from './jarvis-memory.mjs';
+import { parseVote, tally } from './board.mjs';
 import { pickOllamaModel, streamOllamaChat, resolveOllamaBase } from './ollama.mjs';
 
-const DENY_STATIC = [/^\/lib(\/|$)/, /^\/tests(\/|$)/, /^\/server\.mjs$/, /^\/package(-lock)?\.json$/, /^\/vitest\.config\.js$/, /^\/node_modules(\/|$)/, /^\/\.git(\/|$)/, /^\/\.env/];
+const DENY_STATIC = [/^\/lib(\/|$)/, /^\/tests(\/|$)/, /^\/server\.mjs$/, /^\/package(-lock)?\.json$/, /^\/vitest\.config\.js$/, /^\/node_modules(\/|$)/, /^\/\.git(\/|$)/, /^\/\.env/, /^\/data(\/|$)/];
 const SSE_HEADERS = { 'content-type': 'text/event-stream', 'cache-control': 'no-store', connection: 'keep-alive', 'x-accel-buffering': 'no' };
 const state = { current: null }; // one Claude run at a time: { run, startedAt, persona }
 const hermesState = { current: null, lastLatencyMs: null };
 
-function resolveHermesBinary(env = process.env) {
+export function resolveHermesBinary(env = process.env) {
   if (env.HERMES_BIN && existsSync(env.HERMES_BIN)) return env.HERMES_BIN;
   const local = env.LOCALAPPDATA ? join(env.LOCALAPPDATA, 'hermes', 'bin', 'hermes.exe') : '';
   if (local && existsSync(local)) return local;
   return 'hermes'; // PATH lookup
+}
+/** FreeBuff CLI (free GLM agent, npm -g). Its launcher shim is what we open. */
+function resolveFreebuffBinary(env = process.env) {
+  if (env.FREEBUFF_BIN && existsSync(env.FREEBUFF_BIN)) return env.FREEBUFF_BIN;
+  const npm = env.APPDATA ? join(env.APPDATA, 'npm') : '';
+  for (const name of ['freebuff.cmd', 'freebuff.ps1', 'freebuff']) {
+    if (npm && existsSync(join(npm, name))) return join(npm, name);
+  }
+  return ''; // honestly uninstalled
 }
 function readOwnerFileDefault(env = process.env) {
   return readFileSync(join(env.LOCALAPPDATA || '', 'hermes', 'memories', 'USER.md'), 'utf8');
@@ -64,7 +78,7 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
   const url = new URL(req.url || '/', 'http://x');
   const p = url.pathname;
   if (DENY_STATIC.some((rx) => rx.test(p))) { json(res, 404, { error: 'not found' }); return true; }
-  const isBridge = p.startsWith('/api/claude/') || p === '/api/launch/claude' || p.startsWith('/api/hermes/');
+  const isBridge = p.startsWith('/api/claude/') || p === '/api/launch/claude' || p === '/api/launch/freebuff' || p.startsWith('/api/freebuff/') || p === '/api/board/vote' || p.startsWith('/api/hermes/') || p === '/api/hud/context' || p === '/api/jarvis/memory';
   const isOllama = p.startsWith('/api/ollama/');
   const isOwner = p === '/api/owner';
   if (!isBridge && !isOllama && !isOwner) return false;
@@ -77,6 +91,7 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
   const spawn = deps.spawn || nodeSpawn;
   const killTree = deps.killTree || ((child) => defaultKillTree(child, { spawn }));
   const resolveBinary = deps.resolveBinary || (() => resolveClaudeBinary());
+  const resolveFreebuff = deps.resolveFreebuff || (() => resolveFreebuffBinary());
   const fetchImpl = deps.fetch || globalThis.fetch;
   const ollamaBase = deps.ollamaBase ? String(deps.ollamaBase).replace(/\/$/, '') : resolveOllamaBase({ JARVIS_OLLAMA_URL: envValue('JARVIS_OLLAMA_URL'), OLLAMA_HOST: envValue('OLLAMA_HOST') });
 
@@ -87,7 +102,24 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     return true;
   }
 
-  // ── Ollama (chat only, no tools: LAN callers are fine) ─────────────────────
+  // ── HUD context: the exact preamble /api/claude/chat would compose ─────────
+  if (p === '/api/hud/context' && req.method === 'GET') {
+    const live = {};
+    const src = { nodes: deps.probeAll, vault: deps.vaultStatus, agents: deps.agentsSummary, graph: deps.vaultGraph, house: deps.houseSummary };
+    const jobs = Object.entries(src).filter(([, f]) => typeof f === 'function').map(async ([k, f]) => { try { live[k] = await f(); } catch { live[k] = null; } });
+    await Promise.all(jobs);
+    const context = hudContext({ nodes: live.nodes || null, house: live.house || null, vault: live.vault || null, agents: live.agents || null, graph: live.graph || null, config: { repo: cfg.repo, missionControl: cfg.missionControl, vaultName: cfg.vaultName, vaultPath: cfg.vaultPath } });
+    json(res, 200, { context, tab: 'hud', at: new Date().toISOString() });
+    return true;
+  }
+
+  // ── JARVIS memory: what the bridge remembers, shown honestly ────────────────
+  if (p === '/api/jarvis/memory' && req.method === 'GET') {
+    json(res, 200, readMemory(deps.jarvisMemory || {}));
+    return true;
+  }
+
+  // ── Ollama (chat only, no tools: LAN callers are fine) ───────────────────────
   if (isOllama) {
     if (p === '/api/ollama/tags' && req.method === 'GET') {
       try {
@@ -150,12 +182,22 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     const bin = (deps.resolveHermes || resolveHermesBinary)();
     const file = join(tmpdir(), `jarvis-hermes-${randomBytes(6).toString('hex')}.txt`);
     writeFileSync(file, prompt, 'utf8'); // the prompt never travels on the command line
-    res.writeHead(200, SSE_HEADERS);
     const t0 = Date.now();
     let out = ''; let err = '';
-    const child = spawn(bin, ['chat', '--query-file', file, '-Q', '--oneshot', '-c', session, '--create-if-missing'], { cwd: cfg.repo, env: process.env, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
+    let child;
+    try {
+      child = spawn(bin, ['chat', '--query-file', file, '-Q', '--oneshot', '-c', session, '--create-if-missing'], { cwd: cfg.repo, env: process.env, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
+    } catch (e) {
+      try { unlinkSync(file); } catch {}
+      json(res, 500, { error: String(e.message || e) });
+      return true;
+    }
+    res.writeHead(200, SSE_HEADERS);
+    let finished = false;
     hermesState.current = { child, startedAt: t0 };
     const finish = (code, extra = {}) => {
+      if (finished) return;
+      finished = true;
       if (hermesState.current && hermesState.current.child === child) hermesState.current = null;
       clearTimeout(timer);
       try { unlinkSync(file); } catch {}
@@ -191,6 +233,24 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     if (sessionId && !/^[A-Za-z0-9_-]{6,80}$/.test(sessionId)) { json(res, 400, { error: 'sessionId must be a plain id' }); return true; }
     const persona = Object.hasOwn(PERSONAS, String(body.persona || '')) ? String(body.persona) : 'claude';
     if (state.current) { json(res, 429, { error: 'a Claude run is already in progress; stop it first' }); return true; }
+    // The HUD preamble is composed here, from this server's own live data. The
+    // client only asks for it (hud:true) and names its tab — it can never forge
+    // the house state (body.hudContext is ignored on purpose).
+    let finalPrompt = prompt;
+    if (body.hud === true) {
+      const depsForCtx = { nodes: deps.probeAll, vault: deps.vaultStatus, agents: deps.agentsSummary, graph: deps.vaultGraph, house: deps.houseSummary };
+      const live = {};
+      const jobs = Object.entries(depsForCtx).filter(([, f]) => typeof f === 'function').map(async ([k, f]) => { try { live[k] = await f(); } catch { live[k] = null; } });
+      await Promise.all(jobs);
+      const memorySection = memoryBlock(readMemory(deps.jarvisMemory || {}));
+      finalPrompt = promptWithContext({
+        context: [hudContext({ nodes: live.nodes || null, house: live.house || null, vault: live.vault || null, agents: live.agents || null, graph: live.graph || null, config: { repo: cfg.repo, missionControl: cfg.missionControl, vaultName: cfg.vaultName, vaultPath: cfg.vaultPath } }), memorySection].filter(Boolean).join('\n\n'),
+        tab: String(body.tab || ''), user: prompt, at: new Date().toISOString(),
+      });
+    }
+    // Durable memory: every jarvis-persona turn is captured (result or failure).
+    const remember = (reply, ok) => { try { appendMemory({ ...(deps.jarvisMemory || {}), entry: { prompt, reply, ok } }); } catch {} };
+    let sawResult = false;
     const bin = resolveBinary();
     res.writeHead(200, SSE_HEADERS);
     let run;
@@ -199,12 +259,17 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     if (typeof ping.unref === 'function') ping.unref();
     try {
       run = runClaude({
-        prompt, cwd: cfg.repo, env: process.env, spawn, bin, sessionId, persona,
+        prompt: finalPrompt, cwd: cfg.repo, env: process.env, spawn, bin, sessionId, persona,
         permissionMode: effectivePermissionMode(String(body.permissionMode || ''), configuredMode),
         maxTurns, model: String(body.model || ''), lean: typeof body.lean === 'boolean' ? body.lean : undefined,
         timeoutMs: Number(envValue('CLAUDE_BRIDGE_TIMEOUT_MS')) || 300000,
         onEvent: (ev) => {
           try { res.write(sse(ev.type, ev)); } catch {}
+          if (persona === 'jarvis') {
+            if (ev.type === 'result') { sawResult = true; remember(ev.text || ev.error || '', ev.ok !== false && !ev.error); }
+            else if (ev.type === 'error') { sawResult = true; remember(ev.message || 'error', false); }
+            else if (ev.type === 'exit' && !sawResult) remember(ev.stderr || `exit code ${ev.code}`, false);
+          }
           if (ev.type === 'exit') { console.log(new Date().toISOString(), 'claude bridge exit code', ev.code, 'after', Date.now() - startedAt, 'ms'); finish(); }
         },
       });
@@ -225,6 +290,110 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     };
     if (sock && typeof sock.once === 'function') sock.once('close', onGone); else res.on('close', onGone);
     console.log(new Date().toISOString(), 'claude bridge', persona, 'from', req.socket && req.socket.remoteAddress, 'session', sessionId || 'new');
+    return true;
+  }
+
+  // ── FreeBuff wake bridge ─────────────────────────────────────────────────────
+  // Same protocol the ANTIGRAVITY CEO bridge uses (ops/paperclip-ceo/adapter-freebuff):
+  // the dashboard writes `<runId>.json` with status "pending"; the user's Freebuff
+  // desktop session watches the dir, does the work, and POSTs /done or /fail here,
+  // which is recorded into the same file. No headless CLI needed.
+  const wakeGate = p === '/api/freebuff/wakes' || /^\/api\/freebuff\/wakes\/[A-Za-z0-9._-]+\/(done|fail)$/.test(p);
+  if (wakeGate) {
+    const store = deps.wakeStore || null;
+    const wakesDir = store && store.wakesDir ? String(store.wakesDir) : '';
+    if (!wakesDir) { json(res, 503, { error: 'wake bridge not configured (set FREEBUFF_WAKES_DIR in .env)' }); return true; }
+
+    if (p === '/api/freebuff/wakes' && req.method === 'GET') {
+      const wake = (id) => { try { return JSON.parse(readFileSync(join(wakesDir, id), 'utf8')); } catch { return null; } };
+      let files = [];
+      try { files = readdirSync(wakesDir).filter((f) => f.endsWith('.json')); } catch { files = []; }
+      const wakes = files.map((f) => ({ file: f, ...wake(f) })).filter((w) => w && typeof w === 'object' && !Array.isArray(w));
+      const order = (a, b) => (a.status === 'pending' ? -1 : b.status === 'pending' ? 1 : String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
+      wakes.sort(order);
+      json(res, 200, { wakesDir, pending: wakes.filter((w) => w.status === 'pending').length, latest: wakes.slice(0, 20), at: new Date().toISOString() });
+      return true;
+    }
+
+    if (p === '/api/freebuff/wakes' && req.method === 'POST') {
+      const body = await readJson(req, res);
+      if (!body) return true;
+      const prompt = String(body.prompt || '').trim();
+      if (!prompt) { json(res, 400, { error: 'prompt is required' }); return true; }
+      const runId = 'wake-' + new Date().toISOString().replace(/[:.]/g, '-') + '-' + randomBytes(3).toString('hex');
+      const record = { kind: 'adapter', status: 'pending', runId, agentName: String(body.agentName || 'Buffy'), prompt, workspace: cfg.repo || null, createdAt: new Date().toISOString() };
+      try {
+        mkdirSync(wakesDir, { recursive: true });
+        writeFileSync(join(wakesDir, runId + '.json'), JSON.stringify(record, null, 2), 'utf8');
+      } catch (e) { json(res, 500, { error: 'could not write wake: ' + String(e.message || e) }); return true; }
+      console.log(new Date().toISOString(), 'freebuff wake created', runId, 'in', wakesDir);
+      json(res, 200, record);
+      return true;
+    }
+
+    const m = /^\/api\/freebuff\/wakes\/([A-Za-z0-9._-]+)\/(done|fail)$/.exec(p);
+    if (m && req.method === 'POST') {
+      const [, id, verdict] = m;
+      const file = join(wakesDir, id + '.json');
+      let wake;
+      try { wake = JSON.parse(readFileSync(file, 'utf8')); } catch { json(res, 404, { error: 'no such wake: ' + id }); return true; }
+      const body = await readJson(req, res).catch(() => ({}));
+      wake.status = verdict === 'done' ? 'done' : 'failed';
+      wake.summary = String((body && body.summary) || '');
+      wake.completedAt = new Date().toISOString();
+      try { writeFileSync(file, JSON.stringify(wake, null, 2), 'utf8'); } catch (e) { json(res, 500, { error: 'could not update wake: ' + String(e.message || e) }); return true; }
+      console.log(new Date().toISOString(), 'freebuff wake', wake.status, id);
+      json(res, 200, { ok: true, runId: id, status: wake.status });
+      return true;
+    }
+  }
+
+  // ── ClawX AI Board: six brains vote separately, founder breaks ties ──────────
+  if (p === '/api/board/vote' && req.method === 'POST') {
+    const board = deps.board || null;
+    if (!board || !Array.isArray(board.brains) || !board.brains.length) {
+      json(res, 503, { error: 'board not configured (no voting brains available)' });
+      return true;
+    }
+    const body = await readJson(req, res);
+    if (!body) return true;
+    const question = String(body.question || '').trim();
+    if (!question) { json(res, 400, { error: 'question is required' }); return true; }
+    const seatTimeoutMs = Number(board.seatTimeoutMs) || 120000;
+    const ask = async (brain) => {
+      try {
+        // A seat that never answers must not hang the vote: timeout = abstain,
+        // same as a down brain. Live-proven: cloud-routed Ollama models can stall.
+        const r = await Promise.race([
+          Promise.resolve(brain.ask(question)),
+          new Promise((_, reject) => {
+            const t = setTimeout(() => reject(new Error(`no answer within ${seatTimeoutMs} ms`)), seatTimeoutMs);
+            if (typeof t.unref === 'function') t.unref();
+          }),
+        ]);
+        const { vote, reason } = parseVote(r && r.text);
+        return { name: brain.name, vote, reason };
+      } catch (e) {
+        return { name: brain.name, vote: null, reason: 'ABSTAIN — brain unavailable: ' + String((e && e.message) || e).slice(0, 120) };
+      }
+    };
+    const votes = await Promise.all(board.brains.map(ask));
+    const result = tally(votes, { founderVote: body.founderVote });
+    console.log(new Date().toISOString(), 'board vote', result.outcome, `${result.yes}-${result.no}`);
+    json(res, 200, { question, votes, ...result, at: new Date().toISOString() });
+    return true;
+  }
+
+  if (p === '/api/launch/freebuff' && req.method === 'POST') {
+    const bin = resolveFreebuff();
+    if (!bin) { json(res, 503, { ok: false, error: 'freebuff CLI not found (npm i -g freebuff, or set FREEBUFF_BIN)' }); return true; }
+    try {
+      // Same verified recipe as the Claude launch: a visible console on this host.
+      const c = spawn('powershell.exe', ['-NoProfile', '-Command', `Start-Process cmd.exe -ArgumentList '/k','"${bin}"' -WorkingDirectory '${cfg.repo || '.'}'`], { detached: true, stdio: 'ignore', windowsHide: true });
+      if (c && typeof c.unref === 'function') c.unref();
+      console.log(new Date().toISOString(), 'launch freebuff from', req.socket && req.socket.remoteAddress);
+      json(res, 200, { ok: true, opened: basename(bin), on: String(cfg.nodeName || hostname()).toUpperCase(), from: req.socket && req.socket.remoteAddress });
+    } catch (e) { json(res, 500, { ok: false, error: String(e.message || e) }); }
     return true;
   }
 

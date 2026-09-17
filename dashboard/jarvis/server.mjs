@@ -16,7 +16,8 @@
  *   GET  /api/nodes             god's-eye view: both LAN nodes, every service identity-probed (lib/nodes.mjs)
  *   GET  /api/vault/graph       Obsidian vault notes + [[wikilinks]] as nodes/links
  *   GET  /api/vault/note?p=     one note's markdown (path relative to the vault)
- *   GET  /api/vault/status      is the Obsidian Local REST API answering on :27123 (identity checked)
+ *   GET  /api/vault/status      is the Obsidian Local REST API answering (identity checked, https cert tolerated)
+ *   GET  /api/crosslisting/status  server-side health probe of the local Crosslisting app
  *   GET  /api/house             FABLE'S SENTRY snapshot (real service state, identity-checked)
  *   GET  /api/avatars           rendered avatar PNGs in ops/avatar/out
  *   GET  /avatars/<file>        those PNGs
@@ -31,15 +32,22 @@
  * Zero dependencies. Secrets are read from .env at request time and never logged or returned.
  */
 import { createServer } from 'node:http';
-import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { request as httpRequest } from 'node:http';
+import { request as httpsRequest } from 'node:https';
+import { readFileSync, existsSync, readdirSync, statSync, writeFileSync, unlinkSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
 import { resolveConfig, resolveVault, readEnvFile } from './lib/config.mjs';
 import { probeAll } from './lib/nodes.mjs';
 import { resolveClaudeBinary, killTree, PERMISSION_MODES, PERSONAS } from './lib/claude-bridge.mjs';
+import { resolveHermesBinary } from './lib/bridge-routes.mjs';
 import { handleBridgeRoutes } from './lib/bridge-routes.mjs';
-import { hostname } from 'node:os';
+import { streamOllamaChat } from './lib/ollama.mjs';
+import { createNewsService } from './lib/news.mjs';
+import { loadTrends } from './lib/trends.mjs';
+import { hostname, tmpdir } from 'node:os';
+import { randomBytes } from 'node:crypto';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 // process.env > <repo>/.env > derived defaults (lib/config.mjs). The repo root is this checkout.
@@ -53,8 +61,67 @@ const OMNI = CFG.omni;
 const VAULT_CFG = resolveVault({ env: process.env, readEnv: readEnvFile, envFile: CFG.envFile, candidates: [join(REPO, 'Antigravity'), 'C:\\DREAM\\AlienwareDream'] });
 const VAULT = VAULT_CFG.path;
 const VAULT_NAME = VAULT_CFG.name;
+const VAULT_ID = VAULT_CFG.id; // stable Obsidian vault id for obsidian:// deep links
 const SENTRY = CFG.sentry; // Fable's Sentry lives on Sabertooth unless FABLES_SENTRY_URL says otherwise
-const OBSIDIAN_REST = 'http://127.0.0.1:27123';
+// Node-local endpoints from config (env > .env > live-verified defaults). The Obsidian
+// plugin serves https with a self-signed cert, so vault probes tolerate the cert.
+const OBSIDIAN_REST = CFG.obsidianRest;
+const CROSSLISTING = CFG.crosslisting;
+// ClawX AI Board voter: one Hermes one-shot per question (its own session, so the
+// board never touches the JARVIS HUD conversation).
+async function hermesBoardAsk(question) {
+  const bin = resolveHermesBinary();
+  const file = join(tmpdir(), `board-hermes-${randomBytes(6).toString('hex')}.txt`);
+  writeFileSync(file, question, 'utf8');
+  try {
+    const out = await new Promise((resolve, reject) => {
+      const child = spawn(bin, ['chat', '--query-file', file, '-Q', '--oneshot', '-c', 'clawx-board', '--create-if-missing'], { cwd: REPO, env: process.env, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
+      let o = '', e = '';
+      const timer = setTimeout(() => { try { child.kill(); } catch {} reject(new Error('hermes timeout')); }, 120000);
+      child.stdout.on('data', (c) => { o += String(c); });
+      child.stderr.on('data', (c) => { e += String(c); });
+      child.on('error', (err) => { clearTimeout(timer); reject(err); });
+      child.on('close', (code) => { clearTimeout(timer); code === 0 ? resolve(o) : reject(new Error(e.trim().slice(-160) || 'hermes exit ' + code)); });
+    });
+    return { text: out };
+  } finally { try { unlinkFileSync(file); } catch {} }
+}
+// Summary providers shared with the bridge so JARVIS's HUD preamble is composed
+ // from exactly the data this server serves the page.
+async function vaultStatusSummary() {
+  const r = OBSIDIAN_REST.startsWith('https:')
+    ? await getJsonInsecure(OBSIDIAN_REST + '/', 5000)
+    : await getJson(OBSIDIAN_REST + '/', 5000);
+  const up = r.status === 200 && /Obsidian Local REST API/.test(r.text || '');
+  return { up, state: up ? 'UP' : (r.status ? 'WRONG SERVICE' : 'DOWN'), detail: up ? 'identity ok' : (r.error || 'HTTP ' + r.status) };
+}
+// Crosslisting health on behalf of the page: the browser cannot read :3000 cross-origin,
+// so its old client probe reported a CORS failure as ONLINE. The tRPC health route is
+// identity-checked server-side ({result:{data:{json:{ok:true}}}}).
+async function crosslistingStatusSummary() {
+  const probe = CROSSLISTING + '/api/trpc/system.health?input=' + encodeURIComponent('{"json":{"timestamp":0}}');
+  const r = await getJson(probe, 5000);
+  const ok = r.status === 200 && r.json && r.json.result && r.json.result.data && r.json.result.data.json && r.json.result.data.json.ok === true;
+  return { up: ok, state: ok ? 'UP' : (r.status ? 'DOWN' : 'DOWN'), detail: ok ? 'health ok' : (r.error || 'HTTP ' + r.status), url: CROSSLISTING };
+}
+function agentsSummary() {
+  const a = agents();
+  return { count: a.length, source: SKILLS };
+}
+function houseSummary() {
+  return getJson(SENTRY + '/api/status', 20000).then((r) => (!r.json ? { up: false, state: 'DOWN', detail: r.error || 'HTTP ' + r.status } : { up: true, state: 'UP', ...r.json }));
+}
+function vaultGraphSummary() {
+  const g = vaultGraph();
+  return { notes: (g.nodes || []).length, links: (g.links || []).length };
+}
+// Screensaver sources: live HN front page + the founder's real Google Trends notebook.
+// Both probed server-side (no CORS, no keys in the browser) and honest when down.
+const newsService = createNewsService({});
+function trendsSummary() {
+  const r = loadTrends(CFG.trendsPath);
+  return r.ok ? { ok: true, source: r.source, summary: r.summary } : { ok: false, error: r.error, source: CFG.trendsPath };
+}
 // Skills tree: the classic .agents/skills layout when present, else this repo's skills/ folder.
 const SKILLS = [join(REPO, '.agents', 'skills'), join(REPO, 'skills')].find((d) => existsSync(d)) || join(REPO, 'skills');
 const AVATARS = join(REPO, 'ops', 'avatar', 'out');
@@ -140,7 +207,7 @@ function vaultGraph() {
       src.out++; target.in++;
     }
   }
-  const data = { ok: true, vault: VAULT, name: VAULT_NAME, notes: nodes.length, wikilinks: links.length,
+  const data = { ok: true, vault: VAULT, name: VAULT_NAME, id: VAULT_ID, notes: nodes.length, wikilinks: links.length,
     orphans: nodes.filter((n) => n.in + n.out === 0).length, nodes, links, at: new Date().toISOString() };
   graphCache = { at: Date.now(), data };
   return data;
@@ -159,6 +226,24 @@ async function getJson(url, ms = 20000, headers = {}) {
   catch (e) { return { status: 0, error: String(e.message || e) }; }
   finally { clearTimeout(t); }
 }
+// fetch with a self-signed certificate tolerated (node:https), same shape as getJson.
+async function getJsonInsecure(url, ms = 20000) {
+  return new Promise((resolve) => {
+    const mod = url.startsWith('https:') ? httpsRequest : httpRequest;
+    const req = mod(url, { rejectUnauthorized: false, timeout: ms }, (r) => {
+      const chunks = [];
+      r.on('data', (c) => chunks.push(c));
+      r.on('end', () => {
+        const text = Buffer.concat(chunks).toString('utf8');
+        let json = null; try { json = JSON.parse(text); } catch {}
+        resolve({ status: r.statusCode, json, text });
+      });
+    });
+    req.on('timeout', () => { req.destroy(new Error('timeout after ' + ms + ' ms')); });
+    req.on('error', (e) => resolve({ status: 0, error: String(e.message || e) }));
+    req.end();
+  });
+}
 function readBody(req) { return new Promise((res) => { const b = []; req.on('data', (c) => b.push(c)); req.on('end', () => res(Buffer.concat(b))); }); }
 function send(res, code, body, type = 'application/json') {
   res.writeHead(code, { 'content-type': type, 'access-control-allow-origin': '*', 'cache-control': 'no-store' });
@@ -174,7 +259,31 @@ function serveStatic(res, rel) {
 
 // ── server ────────────────────────────────────────────────────────────────────
 // Bridge + Ollama routes (lib/bridge-routes.mjs) run first: no wildcard CORS, origin-checked, local-only by default.
-const BRIDGE_DEPS = { cfg: CFG, envValue, spawn, killTree: (child) => killTree(child, { spawn }), resolveBinary: () => resolveClaudeBinary(), fetch: globalThis.fetch };
+const BRIDGE_DEPS = {
+  cfg: { ...CFG, vaultName: VAULT_NAME, vaultPath: VAULT, vaultId: VAULT_ID },
+  envValue, spawn, killTree: (child) => killTree(child, { spawn }), resolveBinary: () => resolveClaudeBinary(), fetch: globalThis.fetch,
+  probeAll, vaultStatus: vaultStatusSummary, agentsSummary, houseSummary, vaultGraph: vaultGraphSummary,
+  // Durable JARVIS memory (dashboard/jarvis/data/jarvis-memory.json; /data is never served).
+  jarvisMemory: { dataFile: join(HERE, 'data', 'jarvis-memory.json') },
+  // FreeBuff wake bridge (wake-file protocol from ANTIGRAVITY's paperclip-ceo):
+  // the dashboard writes pending wakes; the user's Freebuff desktop session watches
+  // this dir and reports done/fail back through POST routes.
+  wakeStore: { wakesDir: envValue('FREEBUFF_WAKES_DIR') || join(REPO, '.freebuff', 'wakes') },
+  // ClawX AI Board: six free-thinking voters over real backends — Hermes plus five
+  // Ollama models verified installed on this node (ollama list, 2026-09-16). A seat
+  // that fails, stalls past the route's seat timeout, or answers without a clear
+  // yes/no ABSTAINS — the tally never counts a dead seat as a vote.
+  board: {
+    seatTimeoutMs: 120000,
+    brains: [
+      { name: 'Hermes', ask: (q) => hermesBoardAsk(q) },
+      ...['gemma4:e4b', 'ornith-1.5:9b', 'deepseek-v4-flash:cloud', 'glm-5.3-flash:cloud', 'qwen3:1.7b'].map((model) => ({
+        name: 'Ollama/' + model.split(':')[0],
+        ask: async (q) => streamOllamaChat({ model, messages: [{ role: 'user', content: q }], onEvent: () => {} }),
+      })),
+    ],
+  },
+};
 
 createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
@@ -190,7 +299,8 @@ createServer(async (req, res) => {
     return send(res, 200, {
       host, lanIp: LAN_IP, omniRoute: OMNI, omniProxy: '/api/omni',
       missionControl: CFG.missionControl, hermesDashboard: `http://${host}:9119/`, sentry: SENTRY + '/',
-      vault: { path: VAULT, name: VAULT_NAME, rest: OBSIDIAN_REST },
+      vault: { path: VAULT, name: VAULT_NAME, id: VAULT_ID, rest: OBSIDIAN_REST },
+      crosslisting: { base: CROSSLISTING, status: '/api/crosslisting/status' },
       claude: {
         chat: '/api/claude/chat', status: '/api/claude/status', launch: '/api/launch/claude',
         command: 'claude -p --output-format stream-json (headless, account auth)',
@@ -199,6 +309,41 @@ createServer(async (req, res) => {
       },
       at: new Date().toISOString(),
     });
+  }
+
+  // Local TTS voice pack manifest. The picker UI downloads this so users can register
+  // a self-hosted/local voice set on this node instead of relying solely on browser/OS voices.
+  // Real voice binaries live in VOICES_DIR (override in .env) and are served by the static
+  // fallback below; this endpoint just describes what's available so the picker can offer them.
+  if (p === '/api/voices/local-pack' || p === '/api/voices/local-pack.json') {
+    const voicesDir = process.env.JARVIS_VOICES_DIR || path.join(ROOT, 'voices');
+    let voices = [];
+    try {
+      const entries = await fs.readdir(voicesDir, { withFileTypes: true });
+      voices = entries.filter(e => e.isFile() && /\.(wav|mp3|ogg|m4a)$/i.test(e.name)).map(e => ({
+        name: e.name.replace(/\.[^.]+$/, ''),
+        uri: '/api/voices/' + encodeURIComponent(e.name),
+        lang: 'en-US',
+        local: true,
+      }));
+    } catch (e) {
+      // Directory missing is fine — return an empty pack so the picker still works.
+      voices = [];
+    }
+    return send(res, 200, { voices, dir: voicesDir, note: 'Drop .wav/.mp3/.ogg/.m4a files into the voices dir and refresh the picker.' });
+  }
+  if (p.startsWith('/api/voices/')) {
+    const voicesDir = process.env.JARVIS_VOICES_DIR || path.join(ROOT, 'voices');
+    const name = decodeURIComponent(p.slice('/api/voices/'.length));
+    if (!name || name.includes('/') || name.includes('..')) return send(res, 400, { error: 'Bad voice name' });
+    const file = path.join(voicesDir, name);
+    if (!file.startsWith(path.resolve(voicesDir))) return send(res, 403, { error: 'Forbidden' });
+    try {
+      const stat = await fs.stat(file);
+      if (!stat.isFile()) return send(res, 404, { error: 'Not a file' });
+      res.writeHead(200, { 'content-type': 'audio/wav', 'content-length': stat.size, 'cache-control': 'max-age=3600', 'access-control-allow-origin': '*' });
+      return fs.createReadStream(file).pipe(res);
+    } catch (e) { return send(res, 404, { error: 'Voice file not found' }); }
   }
 
   if (p.startsWith('/api/omni/')) {
@@ -222,10 +367,14 @@ createServer(async (req, res) => {
   if (p === '/api/vault/graph') return send(res, 200, vaultGraph());
   if (p === '/api/vault/note') return send(res, 200, vaultNote(url.searchParams.get('p') || ''));
   if (p === '/api/vault/status') {
-    const r = await getJson(OBSIDIAN_REST + '/', 5000);
-    const up = r.status === 200 && /Obsidian Local REST API/.test(r.text || '');
-    return send(res, 200, { up, state: up ? 'UP' : (r.status ? 'WRONG SERVICE' : 'DOWN'), detail: up ? 'identity ok' : (r.error || 'HTTP ' + r.status), url: OBSIDIAN_REST });
+    const r = await vaultStatusSummary();
+    return send(res, 200, { ...r, url: OBSIDIAN_REST });
   }
+  if (p === '/api/crosslisting/status') {
+    return send(res, 200, await crosslistingStatusSummary());
+  }
+  if (p === '/api/news') return send(res, 200, await newsService.getTopStories());
+  if (p === '/api/trends') return send(res, 200, trendsSummary());
   if (p === '/api/house') {
     const r = await getJson(SENTRY + '/api/status', 120000);
     if (!r.json) return send(res, 200, { up: false, state: 'DOWN', detail: r.error || ('HTTP ' + r.status), sentry: SENTRY });
@@ -244,6 +393,7 @@ createServer(async (req, res) => {
   }
 
   if (p === '/' || p === '/index.html') return serveStatic(res, '/index.html');
+  if (p === '/data/' || p.startsWith('/data/')) return send(res, 404, { error: 'not found' }); // JARVIS memory stays server-side
   if (p.startsWith('/api/')) return send(res, 404, { error: 'no such route' });
   return serveStatic(res, p);
 }).listen(PORT, '0.0.0.0', () => {
