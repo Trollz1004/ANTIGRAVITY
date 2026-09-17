@@ -15,6 +15,8 @@
  *   ANY  /api/proxy/crosslisting/<path>  same-origin reverse proxy -> the local Crosslisting app
  *                                (keeps its iframe/embed working through a single-port tunnel)
  *   GET  /api/agents            every loadable skill (SKILL.md frontmatter) — live directory read
+ *   GET  /api/speckit           Spec Kit panel: {constitution, features[]} read live from specs/ + .specify/memory/constitution.md
+ *   GET  /api/speckit/<id>/<doc>  one feature's spec|plan|tasks markdown (path-sanitised, specs/ only)
  *   GET  /api/nodes             god's-eye view: both LAN nodes, every service identity-probed (lib/nodes.mjs)
  *   GET  /api/vault/graph       Obsidian vault notes + [[wikilinks]] as nodes/links
  *   GET  /api/vault/note?p=     one note's markdown (path relative to the vault)
@@ -48,6 +50,7 @@ import { handleBridgeRoutes } from './lib/bridge-routes.mjs';
 import { streamOllamaChat } from './lib/ollama.mjs';
 import { createNewsService } from './lib/news.mjs';
 import { loadTrends } from './lib/trends.mjs';
+import { readConstitution, listFeatures, resolveDoc } from './lib/speckit.mjs';
 import { hostname, tmpdir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
@@ -127,6 +130,9 @@ function trendsSummary() {
 // Skills tree: the classic .agents/skills layout when present, else this repo's skills/ folder.
 const SKILLS = [join(REPO, '.agents', 'skills'), join(REPO, 'skills')].find((d) => existsSync(d)) || join(REPO, 'skills');
 const AVATARS = join(REPO, 'ops', 'avatar', 'out');
+// Spec Kit panel: specs/<feature>/{spec,plan,tasks}.md and the ratified constitution — both read live, no cache.
+const SPECS_DIR = join(REPO, 'specs');
+const CONSTITUTION_PATH = join(REPO, '.specify', 'memory', 'constitution.md');
 const STARTED_AT = new Date().toISOString(); // the House restarts this server when server.mjs is newer
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.md': 'text/markdown; charset=utf-8' };
@@ -220,6 +226,10 @@ function vaultNote(rel) {
   if (!existsSync(full)) return { ok: false, error: 'not found' };
   return { ok: true, path: rel, markdown: readFileSync(full, 'utf8').slice(0, 200000) };
 }
+
+// ── Spec Kit panel (Phase A): specs/<feature>/{spec,plan,tasks}.md + the constitution ──
+// Read-only, live off disk every request — no cache, no sample rows (Constitution VIII).
+// Logic lives in lib/speckit.mjs (pure, path-injected) so it is unit-tested without booting this server.
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 async function getJson(url, ms = 20000, headers = {}) {
@@ -384,6 +394,10 @@ createServer(async (req, res) => {
   }
 
   if (p === '/api/agents') { const a = agents(); return send(res, 200, { count: a.length, source: SKILLS, agents: a, at: new Date().toISOString() }); }
+  // Spec Kit panel (read-only): specs/<feature>/{spec,plan,tasks}.md + the constitution.
+  if (p === '/api/speckit') return send(res, 200, { constitution: readConstitution(CONSTITUTION_PATH), features: listFeatures(SPECS_DIR), at: new Date().toISOString() });
+  { const m = /^\/api\/speckit\/([^/]+)\/([^/]+)$/.exec(p);
+    if (m) { const r = resolveDoc(SPECS_DIR, decodeURIComponent(m[1]), decodeURIComponent(m[2])); return send(res, r.ok ? 200 : (r.error === 'not found' ? 404 : 400), r); } }
   // God's-eye view: every LAN service probed with an identity check (lib/nodes.mjs). No sample data.
   if (p === '/api/nodes') return send(res, 200, await probeAll({ timeoutMs: 3000 }));
   if (p === '/api/vault/graph') return send(res, 200, vaultGraph());

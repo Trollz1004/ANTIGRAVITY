@@ -39,6 +39,7 @@
         <li class="nav-tab" data-tab="hermes"><span class="nav-icon">🎙</span> Hermes AI</li>
         <li class="nav-tab" data-tab="jarvis"><span class="nav-icon">⬢</span> JARVIS</li>
         <li class="nav-tab" data-tab="crosslisting"><span class="nav-icon">◫</span> Crosslisting</li>
+        <li class="nav-tab" data-tab="speckit"><span class="nav-icon lucide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span> Spec Kit</li>
         <li class="nav-tab" data-tab="board"><span class="nav-icon">⚖</span> ClawX Board</li>
       </ul>
       <div class="sidebar-footer">
@@ -417,6 +418,39 @@
           <iframe id="crosslisting-frame" title="Crosslisting" style="width:100%;height:calc(100vh - 220px);border:1px solid var(--border);border-radius:var(--radius-lg);background:#0d1117"></iframe>
         </div>
       </section>
+      <!-- Spec Kit Tab: read-only — lists specs/<feature>/{spec,plan,tasks}.md and the constitution -->
+      <section id="tab-speckit" class="tab-content">
+        <header class="tab-header">
+          <h2>Spec Kit</h2>
+          <p class="tab-desc">Every feature under <code>specs/</code>, read live from disk, so a session starts from a written spec and task list instead of re-deriving intent. Read-only.</p>
+        </header>
+        <div class="speckit-layout">
+          <div class="speckit-main">
+            <div class="gen-row" style="margin-bottom:12px">
+              <button id="speckit-refresh" class="btn">Refresh</button>
+              <button class="btn dock-ask" data-tab="speckit" data-question="Walk me through the Spec Kit features: what is specced, planned, tasked, and what is left.">⬢ Ask JARVIS</button>
+            </div>
+            <div id="speckit-list" class="speckit-list"><p class="placeholder">Loading features…</p></div>
+            <div id="speckit-detail" class="speckit-detail" hidden>
+              <div class="speckit-detail-head">
+                <h3 id="speckit-detail-title">—</h3>
+                <div class="speckit-doc-tabs">
+                  <button class="btn speckit-doc-btn" data-doc="spec">Spec</button>
+                  <button class="btn speckit-doc-btn" data-doc="plan">Plan</button>
+                  <button class="btn speckit-doc-btn" data-doc="tasks">Tasks</button>
+                </div>
+              </div>
+              <div id="speckit-doc-body" class="speckit-doc-body"></div>
+            </div>
+          </div>
+          <aside class="speckit-side">
+            <div class="widget-card">
+              <h3>Constitution</h3>
+              <div id="speckit-constitution" class="speckit-doc-body speckit-constitution"><p class="placeholder">Loading…</p></div>
+            </div>
+          </aside>
+        </div>
+      </section>
       <section id="tab-board" class="tab-content">
         <h2>ClawX AI Board — six free thinkers, one founder</h2>
         <p class="tab-desc">Six AI seats vote <strong>separately</strong> on the question — no seat sees another's vote. Green = yes, red = no, gray = abstain (brain down or uncountable). A 3–3 split goes to Joshua, the founder, whose vote is the seventh. <a id="clawx-link" href="https://clawx-aihub-zwxfcstm.manus.space/" target="_blank" rel="noopener">ClawX AI Hub ↗</a></p>
@@ -445,5 +479,6 @@
   <script type="module" src="js/jarvis/jarvis.js"></script>
   <script type="module" src="js/jarvis/dock.js"></script>
   <script type="module" src="js/crosslisting.js"></script>
+  <script type="module" src="js/jarvis/speckit.js"></script>
 </body>
 </html>
