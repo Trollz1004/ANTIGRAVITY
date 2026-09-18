@@ -20,7 +20,7 @@ Dispatch: `ops/handoffs/JARVIS-CONSOLIDATION-DISPATCH-2026-09-17.md` and
 - **Phase A** — Spec Kit: `GET /api/speckit` (constitution + `specs/<feature>/{spec,plan,tasks}.md`).
 - **Phase B** — Ops tab: mission ribbon `GET /api/mission-ribbon`, task commander `GET /api/task-commander`, git panel `GET /api/git-panel`, Hermes/OpenClaw status and proxy (`GET /api/hermes-status`, `GET /api/openclaw-status`, `/api/proxy/hermes*`, `/api/proxy/openclaw*`), system status `GET /api/heartbeat`, runbook viewer `GET /api/runbooks`, ledger `GET /api/ledger`.
 - **Phase C** — Social command center `GET/POST /api/social/*`, approval inbox `GET /api/inbox`.
-- Also live: config (`/api/config`), agents (`/api/agents`), node probes (`/api/nodes`), the Obsidian vault graph and notes (`/api/vault/*`), crosslisting proxy and status (`/api/proxy/crosslisting`, `/api/crosslisting/status`), news and trends (`/api/news`, `/api/trends`), the House (`/api/house`), and avatar renders (`/api/avatars`).
+- Also live: config (`/api/config`), agents (`/api/agents`), node probes (`/api/nodes`), the Obsidian vault graph and notes (`/api/vault/*`), crosslisting proxy and status (`/api/proxy/crosslisting`, `/api/crosslisting/status`), news and trends (`/api/news`, `/api/trends`), the legacy House shape (`/api/house`), and avatar renders (`/api/avatars`). Fable's Sentry — the identity-probe engine, folded into JARVIS 2026-09-18 (`lib/sentry.mjs`, was the standalone `apps/fables-sentry` service on :9140) — is `/api/sentry` (full snapshot: every target's status/latency/identity/lastChecked/group) and `/api/sentry/summary` (`{up, down, total, byGroup}`); both take `?force=1` to bypass the 30s cache (the Audit button on the dashboard tab). `/api/house` now delegates to it in-process.
 
 ## Panels shipped (Phase D+E)
 
@@ -133,8 +133,11 @@ until Joshua sets it — this repo never sets one on his behalf.
   Ollama brain (fail-safe only, never primary).
 - `FREEBUFF_WAKES_DIR`, `FREEBUFF_BIN` — the FreeBuff wake-file bridge.
 - `NODE_LAN_IP`, `NODE_NAME`, `AIRI_DASHBOARD_PORT`, `ANTIGRAVITY_ROOT`,
-  `DASHBOARD_ENV_FILE`, `FABLES_SENTRY_URL`, `CROSSLISTING_URL`,
-  `TRENDS_FILE` — node/repo topology (`lib/config.mjs`).
+  `DASHBOARD_ENV_FILE`, `CROSSLISTING_URL`,
+  `TRENDS_FILE` — node/repo topology (`lib/config.mjs`). `FABLES_SENTRY_URL`
+  is retired: Fable's Sentry (`lib/sentry.mjs`) is folded into this server as
+  of 2026-09-18 and takes no endpoint config — it reads
+  `config/sentry-targets.json` directly.
 - `JARVIS_VOICES_DIR` — the legacy local voice-pack directory
   (`/api/voices/local-pack`, `/api/voices/*`).
 

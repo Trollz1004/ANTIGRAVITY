@@ -66,7 +66,7 @@ globalThis.requestAnimationFrame = () => 1
 globalThis.cancelAnimationFrame = () => {}
 globalThis.URL.createObjectURL = () => 'blob:x'
 
-for (const id of ['activity-log', 'omni-model-count', 'stat-services', 'stat-services-detail', 'stat-agents', 'stat-agents-detail', 'stat-nodes', 'stat-nodes-detail', 'stat-vault', 'stat-vault-detail', 'stat-avatars', 'stat-avatars-detail', 'agent-categories', 'agent-list', 'agent-detail-panel', 'graph-meta', 'graph-note', 'hermes-link', 'claude-command', 'claude-bridge-status', 'claude-note', 'claude-result', 'freebuff-result', 'mission-board', 'mission-board-note', 'widget-search-results', 'avatar-gallery', 'crosslisting-status', 'crosslisting-detail', 'board-question', 'board-result', 'board-seats']) reg(id)
+for (const id of ['activity-log', 'omni-model-count', 'stat-services', 'stat-services-detail', 'sentry-audit-btn', 'stat-agents', 'stat-agents-detail', 'stat-nodes', 'stat-nodes-detail', 'stat-vault', 'stat-vault-detail', 'stat-avatars', 'stat-avatars-detail', 'agent-categories', 'agent-list', 'agent-detail-panel', 'graph-meta', 'graph-note', 'hermes-link', 'claude-command', 'claude-bridge-status', 'claude-note', 'claude-result', 'freebuff-result', 'mission-board', 'mission-board-note', 'widget-search-results', 'avatar-gallery', 'crosslisting-status', 'crosslisting-detail', 'board-question', 'board-result', 'board-seats']) reg(id)
 reg('agent-search', 'input'); reg('graph-search', 'input'); reg('widget-search-input', 'input')
 const svg = reg('graph-svg', 'svg'); svg.querySelectorAll = () => []
 const gc = reg('graph-canvas-container'); gc.clientWidth = 800; gc.clientHeight = 600
@@ -80,7 +80,7 @@ globalThis.fetch = vi.fn(async (url, options = {}) => {
   if (url.endsWith('/api/omni/models')) return json({ data: [{ id: 'auto/best-fast' }, { id: 'antigravity/gemini-3.1-flash-image' }] })
   if (url.endsWith('/api/omni/chat/completions')) return json({ model: 'auto/best-fast', choices: [{ message: { content: 'hi' } }] })
   if (url.endsWith('/api/omni/images/generations')) return json({ data: [{ b64_json: 'AAAA' }] })
-  if (url.endsWith('/api/house')) return json({ up: 28, total: 30, groups: [{ targets: [{ id: 'x', label: 'X', up: true }, { id: 'y', label: 'Y', up: false }] }] })
+  if (url.includes('/api/house')) return json({ up: url.includes('force=1') ? 30 : 28, total: 30, groups: [{ targets: [{ id: 'x', label: 'X', up: true }, { id: 'y', label: 'Y', up: false }] }] })
   if (url.endsWith('/api/vault/status')) return json({ up: true, state: 'UP', url: 'https://127.0.0.1:27124' })
   if (url.endsWith('/api/crosslisting/status')) return json({ up: true, state: 'UP', detail: 'health ok', url: 'http://127.0.0.1:3000' })
   if (url.endsWith('/api/vault/graph')) return json({ ok: true, name: 'Antigravity', notes: 3, wikilinks: 2, orphans: 1, nodes: [{ id: 'A', label: 'A', group: '(root)', in: 0, out: 2 }, { id: 'B', label: 'B', group: '(root)', in: 1, out: 0 }, { id: 'sub/C', label: 'C', group: 'sub', in: 1, out: 0 }], links: [{ source: 'A', target: 'B' }, { source: 'A', target: 'sub/C' }] })
@@ -106,7 +106,7 @@ globalThis.fetch = vi.fn(async (url, options = {}) => {
     ] },
     { name: 'Sabertooth', ip: '192.168.0.8', role: 'OmniRoute router', up: 1, total: 2, services: [
       { id: 'omniroute', label: 'OmniRoute', port: 20128, up: true, state: 'UP', detail: 'identity ok', latencyMs: 9 },
-      { id: 'sentry', label: "Fable's Sentry", port: 9140, up: false, state: 'DOWN', detail: 'timeout' },
+      { id: 'sentry', label: "Fable's Sentry", port: 9150, up: false, state: 'DOWN', detail: 'timeout' },
     ] },
     { name: 'Public web', ip: 'internet', role: 'Landing pages · DNS should be Cloudflare', up: 2, total: 2, services: [
       { id: 'dream-online-net', label: 'dream-online.net', port: 443, up: true, state: 'UP', detail: 'HTTP 200', ns: 'ionos' },
@@ -399,6 +399,12 @@ describe('dashboard stats are live readings', () => {
     expect(registry.get('#stat-services-detail').textContent).toMatch(/DOWN: Y/)
     expect(registry.get('#stat-vault').textContent).toBe('UP')
     expect(registry.get('#stat-avatars').textContent).toBe('1')
+  })
+  it('the Audit button forces a fresh Sentry probe (bypasses the 30s cache) via /api/house?force=1', async () => {
+    await app.refreshServicesStat({ force: true })
+    const c = calls.find((x) => x.url.includes('/api/house') && x.url.includes('force=1'))
+    expect(c).toBeTruthy()
+    expect(registry.get('#stat-services').textContent).toBe('30/30')
   })
 })
 

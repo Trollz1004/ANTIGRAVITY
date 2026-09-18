@@ -57,16 +57,16 @@ export function resolveConfig({ here, env = process.env, readEnv = readEnvFile, 
   const lanIp = pick('NODE_LAN_IP') || firstLanAddress(interfaces);
   const port = Number(pick('AIRI_DASHBOARD_PORT') || 9150);
   const omni = (pick('OPENAI_COMPAT_BASE_URL') || pick('OMNIROUTE_LAN_BASE_URL') || OMNI_DEFAULT).replace(/\/$/, '');
-  // Sentry lives on Sabertooth (see AGENTS.md nodes table) unless .env says otherwise.
-  // Mission Control needs no endpoint: THIS dashboard is mission control.
-  const sentry = (pick('FABLES_SENTRY_URL') || 'http://192.168.0.8:9140').replace(/\/$/, '');
+  // Mission Control needs no endpoint: THIS dashboard is mission control. Fable's
+  // Sentry (formerly a separate URL here, FABLES_SENTRY_URL) was folded into JARVIS
+  // 2026-09-18 — it is lib/sentry.mjs now, called in-process, not a config endpoint.
   const missionControl = '';
   // Node-local service endpoints the server probes on behalf of the page (secrets stay server-side).
   const obsidianRest = (pick('OBSIDIAN_REST_URL') || OBSIDIAN_REST_DEFAULT).replace(/\/$/, '');
   const crosslisting = (pick('CROSSLISTING_URL') || CROSSLISTING_DEFAULT).replace(/\/$/, '');
   // The founder's Google Trends notebook, dropped in C:\DREAM as "google trends .txt".
   const trendsPath = pick('TRENDS_FILE') || 'C:\\DREAM\\google trends .txt';
-  return { repo, envFile, lanIp, port, omni, sentry, missionControl, obsidianRest, crosslisting, trendsPath, nodeName: pick('NODE_NAME') || '', file };
+  return { repo, envFile, lanIp, port, omni, missionControl, obsidianRest, crosslisting, trendsPath, nodeName: pick('NODE_NAME') || '', file };
 }
 
 /**

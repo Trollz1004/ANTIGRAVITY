@@ -1,5 +1,5 @@
 {
-  "_comment": "Fable's Sentry target registry. Edit this file to add a watch target; the server and UI both read it, so nothing is hardcoded in two places. 'identity' is the string that MUST appear in the response body — a port being open is NOT health. That rule exists because on 2026-08-28 Redis was LISTENING on 6379 while answering MISCONF and refusing all writes, and every port-only check called it green for hours.",
+  "_comment": "Fable's Sentry target registry. Moved 2026-09-18 from apps/fables-sentry/targets.json into mission-control/config/ when the separate :9140 wall service was folded into JARVIS (mission-control/lib/sentry.mjs now loads this file directly; no HTTP hop). Edit this file to add a watch target; the schema is unchanged. 'identity' is the string that MUST appear in the response body — a port being open is NOT health. That rule exists because on 2026-08-28 Redis was LISTENING on 6379 while answering MISCONF and refusing all writes, and every port-only check called it green for hours.",
   "groups": [
     {
       "name": "Revenue stack",
@@ -93,6 +93,16 @@
           "url": "http://127.0.0.1:9134/health",
           "identity": "official-vote-service",
           "fix": "votes"
+        },
+        {
+          "id": "domains",
+          "label": "Domains static sites",
+          "port": 9160,
+          "kind": "http",
+          "url": "http://127.0.0.1:9160/health",
+          "identity": "domains-server",
+          "fix": null,
+          "note": "Added 2026-09-18 (Sentry-into-JARVIS consolidation, folding in the Domains phase Unit 2/3 target). Vhost static server for dream-online.net, untilnokidinneed.com, onlinerecycle.net; identity = /health's service name. The House heals it as the optional stage \"Domains static sites :9160\"; no fix action defined here."
         }
       ],
       "note": "Paperclip (:3100) and the CEO bridge (:3140) retired from the wall 2026-09-10 on Joshua's word: \"no more paperclip\". Paperclip is parked, not healed, its ANT-Paperclip logon task disabled; the v5 dashboard on :3151 is Mission Control. History stays in git and in the judge journal."
@@ -224,6 +234,16 @@
           "url": "https://ai-solutions.store/",
           "public": true,
           "fix": null
+        },
+        {
+          "id": "dashboardaccess",
+          "label": "dashboard.aidoesitall.website (Cloudflare Access)",
+          "kind": "http",
+          "url": "https://dashboard.aidoesitall.website/",
+          "identity": "Cloudflare Access",
+          "public": true,
+          "fix": null,
+          "note": "Added 2026-09-18. Deliberately gated behind Cloudflare Access (ops/heartbeat/sabretooth-health.ps1's Test-AccessGate uses the same marker plus cloudflareaccess.com / One-time PIN / Sign in with). Seeing the Access sign-in page IS the healthy state here, not a broken one — a real dashboard response would mean the gate fell off."
         },
         {
           "id": "collective",

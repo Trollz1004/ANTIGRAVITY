@@ -10,6 +10,11 @@ describe('service table', () => {
   it('lists every LAN service with a node, a URL and an identity check', () => {
     const ids = nodes.SERVICES.map((s) => s.id)
     for (const id of ['jarvis', 'hermes', 'ollama', 'omniroute', 'live-npc-lab', 'dreamops', 'crosslisting', 'obsidian', 'sentry', 'date-app', 'directus', 'ludus']) expect(ids).toContain(id)
+    // Fable's Sentry stopped being a separate :9140 service 2026-09-18 (folded into
+    // JARVIS itself, lib/sentry.mjs). This row now reads JARVIS's own /api/sentry.
+    const sentry = nodes.SERVICES.find((s) => s.id === 'sentry')
+    expect(sentry.port).toBe(9150)
+    expect(sentry.url).toBe('http://192.168.0.8:9150/api/sentry')
     // The Obsidian Local REST plugin on this node serves HTTPS on 27124 only
     // (insecure server disabled). The probe URL must be the https one.
     expect(nodes.SERVICES.find((s) => s.id === 'obsidian').url).toBe('https://127.0.0.1:27124/')
@@ -43,6 +48,11 @@ describe('probeService', () => {
     expect(down.state).toBe('DOWN'); expect(down.detail).toMatch(/ECONNREFUSED/)
     const slow = await nodes.probeService(svc, { fetch: (_u, o) => new Promise((_r, rej) => o.signal.addEventListener('abort', () => rej(new Error('aborted')))), timeoutMs: 5 })
     expect(slow.state).toBe('DOWN'); expect(slow.detail).toMatch(/timeout|aborted/i)
+  })
+  it('sentry identity requires the groups array, not just any JSON body (a port answering is not health)', async () => {
+    const svc = nodes.SERVICES.find((s) => s.id === 'sentry')
+    expect((await nodes.probeService(svc, { fetch: okJson({ groups: [] }) })).state).toBe('UP')
+    expect((await nodes.probeService(svc, { fetch: okJson({ ok: true }) })).state).toBe('WRONG SERVICE')
   })
   it('treats an auth challenge from OmniRoute as reachable (the key is never sent by the probe)', async () => {
     const svc = nodes.SERVICES.find((s) => s.id === 'omniroute')

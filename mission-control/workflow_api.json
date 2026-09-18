@@ -43,7 +43,7 @@
     "sources": {
       "agents": ".agents/skills (live directory read)",
       "knowledge_graph": "Obsidian vault C:/ANTIGRAVITY/Antigravity (notes + wikilinks, live)",
-      "services": "FABLE'S SENTRY http://127.0.0.1:9140/api/status",
+      "services": "FABLE'S SENTRY http://127.0.0.1:9150/api/sentry (folded into this dashboard 2026-09-18; no separate :9140 service)",
       "avatars": "ops/avatar/out",
       "mission_control": "http://<host>:3151/",
       "claude_cli": "POST /api/claude/chat -> headless claude -p stream-json over SSE on this node; POST /api/launch/claude opens the CLI console here"

@@ -128,6 +128,34 @@ function switchTab(name) {
 
 // ── Dashboard ──────────────────────────────────────────────────────────────
 
+/**
+ * Services stat, sourced from the Sentry probe engine now living inside this
+ * same server (lib/sentry.mjs via /api/house). `force: true` is the "Audit"
+ * button — it bypasses the 30s cache and reprobes every target now.
+ */
+async function refreshServicesStat({ force = false } = {}) {
+  try {
+    const btn = $('#sentry-audit-btn');
+    if (force && btn) { btn.disabled = true; btn.textContent = 'Auditing…'; }
+    const house = await api(force ? '/api/house?force=1' : '/api/house');
+    if (house.up) {
+      setText('#stat-services', `${house.up}/${house.total}`);
+      const down = [];
+      for (const g of house.groups || []) for (const t of g.targets || []) if (!t.up) down.push(t.label || t.id);
+      setText('#stat-services-detail', down.length ? `DOWN: ${down.join(', ')}` : 'every watched service is UP');
+      logActivity(`FABLE'S SENTRY: ${house.up}/${house.total} up${force ? ' (audit)' : ''}`);
+    } else {
+      setText('#stat-services', 'DOWN');
+      setText('#stat-services-detail', `Sentry ${house.detail || 'not answering'}`);
+    }
+    if (force && btn) { btn.disabled = false; btn.textContent = 'Audit'; }
+  } catch (e) {
+    setText('#stat-services', '?');
+    const btn = $('#sentry-audit-btn');
+    if (force && btn) { btn.disabled = false; btn.textContent = 'Audit'; }
+  }
+}
+
 async function initDashboard() {
   try {
     state.config = await api('/api/config');
@@ -146,19 +174,9 @@ async function initDashboard() {
   }
 
   // Stats: every number below is read from a live source or shown as unknown.
-  try {
-    const house = await api('/api/house');
-    if (house.up) {
-      setText('#stat-services', `${house.up}/${house.total}`);
-      const down = [];
-      for (const g of house.groups || []) for (const t of g.targets || []) if (!t.up) down.push(t.label || t.id);
-      setText('#stat-services-detail', down.length ? `DOWN: ${down.join(', ')}` : 'every watched service is UP');
-      logActivity(`FABLE'S SENTRY: ${house.up}/${house.total} up`);
-    } else {
-      setText('#stat-services', 'DOWN');
-      setText('#stat-services-detail', `Sentry ${house.detail || 'not answering'}`);
-    }
-  } catch (e) { setText('#stat-services', '?'); }
+  await refreshServicesStat();
+  const auditBtn = $('#sentry-audit-btn');
+  if (auditBtn) auditBtn.addEventListener('click', () => refreshServicesStat({ force: true }));
 
   try {
     const g = await api('/api/vault/graph');
@@ -976,7 +994,7 @@ document.addEventListener('DOMContentLoaded', init);
 
 // Exports for testing
 export {
-  state, $, $$, el, setText, logActivity, initTabs, switchTab, initDashboard, initAgents,
+  state, $, $$, el, setText, logActivity, initTabs, switchTab, initDashboard, refreshServicesStat, initAgents,
   renderAgentCategories, renderAgentList, showAgentDetail, initGraph, renderGraph, simulateGraph,
   openNote, initAvatar, loadAvatarGallery, loadVRMFile, initMissionControl, renderMissionBoard, initClaude, launchClaude, launchFreebuff, createWake, callBoardVote, initClaudian, stopGalaxy,
   CLAUDIAN_MODELS, claudianModels, addClaudianModel,

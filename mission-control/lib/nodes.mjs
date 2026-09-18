@@ -46,7 +46,10 @@ export const SERVICES = [
   { id: 'crosslisting', label: 'Crosslisting OS', node: 'alienware', port: 3000, url: `http://${A}:3000/api/trpc/system.health?input=%7B%22json%22%3A%7B%22timestamp%22%3A0%7D%7D`, identity: ({ status, json }) => status === 200 && obj(json) && json.result?.data?.json?.ok === true },
   { id: 'obsidian', label: 'Obsidian Local REST', node: 'alienware', port: 27124, url: `https://${A}:27124/`, insecure: true, identity: ({ text }) => /Obsidian Local REST API/.test(text) },
   { id: 'omniroute', label: 'OmniRoute', node: 'sabertooth', port: 20128, url: `http://${S}:20128/v1/models`, identity: ({ status, json }) => status === 401 || status === 403 || (status === 200 && obj(json) && Array.isArray(json.data)) },
-  { id: 'sentry', label: "Fable's Sentry", node: 'sabertooth', port: 9140, url: `http://${S}:9140/api/status`, identity: ({ status, json }) => status === 200 && obj(json) },
+  // Fable's Sentry stopped being a separate :9140 service 2026-09-18 (folded into
+  // JARVIS, lib/sentry.mjs). This row now reads the SAME dashboard's own /api/sentry
+  // route rather than an external port — port kept at 9150 (JARVIS itself) on purpose.
+  { id: 'sentry', label: "Fable's Sentry", node: 'sabertooth', port: 9150, url: `http://${S}:9150/api/sentry`, identity: ({ status, json }) => status === 200 && obj(json) && Array.isArray(json.groups) },
   // Revenue stack on Sabertooth (Sentry watches these; the ports are HTTP so they probe honestly).
   // For third-party APIs we don't own, "an HTTP server answered with a non-5xx" is the honest identity —
   // guessing deeper health paths would render real services as WRONG SERVICE (seen live: Date App 404s /api/health).

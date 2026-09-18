@@ -22,7 +22,9 @@
  *   GET  /api/vault/note?p=     one note's markdown (path relative to the vault)
  *   GET  /api/vault/status      is the Obsidian Local REST API answering (identity checked, https cert tolerated)
  *   GET  /api/crosslisting/status  server-side health probe of the local Crosslisting app
- *   GET  /api/house             FABLE'S SENTRY snapshot (real service state, identity-checked)
+ *   GET  /api/house             legacy FABLE'S SENTRY snapshot shape (real service state, identity-checked; delegates to lib/sentry.mjs, kept for the dashboard tab)
+ *   GET  /api/sentry            full Sentry snapshot: every target's status/latency/identity/lastChecked/group (lib/sentry.mjs, ?force=1 to bypass the 30s cache)
+ *   GET  /api/sentry/summary    {up, down, total, byGroup} — the compact form for badges and the HUD preamble
  *   GET  /api/avatars           rendered avatar PNGs in ops/avatar/out
  *   GET  /avatars/<file>        those PNGs
  *   GET  /api/claude/status     Claude CLI bridge capability (lib/bridge-routes.mjs; local-only unless DASHBOARD_BRIDGE_TOKEN)
@@ -51,6 +53,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
 import { resolveConfig, resolveVault, readEnvFile } from './lib/config.mjs';
 import { probeAll } from './lib/nodes.mjs';
+import { getSentrySnapshot, getSentrySummary } from './lib/sentry.mjs';
 import { resolveClaudeBinary, killTree, runClaude, PERMISSION_MODES, PERSONAS } from './lib/claude-bridge.mjs';
 import { resolveHermesBinary } from './lib/bridge-routes.mjs';
 import { handleBridgeRoutes } from './lib/bridge-routes.mjs';
@@ -95,7 +98,9 @@ const VAULT_CFG = resolveVault({ env: process.env, readEnv: readEnvFile, envFile
 const VAULT = VAULT_CFG.path;
 const VAULT_NAME = VAULT_CFG.name;
 const VAULT_ID = VAULT_CFG.id; // stable Obsidian vault id for obsidian:// deep links
-const SENTRY = CFG.sentry; // Fable's Sentry lives on Sabertooth unless FABLES_SENTRY_URL says otherwise
+// Fable's Sentry was a separate wall service on Sabertooth :9140 until 2026-09-18,
+// when it was folded into JARVIS itself (lib/sentry.mjs, called in-process — no
+// HTTP hop to a separate port anymore). CFG.sentry / FABLES_SENTRY_URL are retired.
 // Node-local endpoints from config (env > .env > live-verified defaults). The Obsidian
 // plugin serves https with a self-signed cert, so vault probes tolerate the cert.
 const OBSIDIAN_REST = CFG.obsidianRest;
@@ -141,8 +146,18 @@ function agentsSummary() {
   const a = agents();
   return { count: a.length, source: SKILLS };
 }
-function houseSummary() {
-  return getJson(SENTRY + '/api/status', 20000).then((r) => (!r.json ? { up: false, state: 'DOWN', detail: r.error || 'HTTP ' + r.status } : { up: true, state: 'UP', ...r.json }));
+/**
+ * Legacy shape for the dashboard tab's Services stat and the HUD preamble:
+ * `up`/`total` as the aggregate counts (not a boolean — js/app.js reads
+ * `${house.up}/${house.total}` directly), `groups` unchanged from the old
+ * Sentry wall payload, plus a flat `services` list (name/up) for hud-context.mjs.
+ * There is no separate service left to be "down" — a probe failure shows up
+ * as that one target being DOWN inside `groups`, same as always.
+ */
+async function houseSummary({ force = false } = {}) {
+  const snap = await getSentrySnapshot({ force });
+  const services = snap.targets.map((t) => ({ name: t.label || t.id, up: t.up }));
+  return { up: snap.up, total: snap.total, state: 'UP', groups: snap.groups, services, at: snap.at };
 }
 function vaultGraphSummary() {
   const g = vaultGraph();
@@ -492,7 +507,7 @@ createServer(async (req, res) => {
       // LAN-only "open in a new tab" links are built from LAN_IP, never req.headers.host:
       // behind a tunnel that host is the tunnel's own domain (not this LAN), so a link
       // built from it would be a silently broken URL instead of a clearly-labelled LAN one.
-      missionControl: CFG.missionControl, hermesDashboard: `http://${LAN_IP}:9119/`, sentry: SENTRY + '/',
+      missionControl: CFG.missionControl, hermesDashboard: `http://${LAN_IP}:9119/`, sentry: '/api/sentry',
       vault: { path: VAULT, name: VAULT_NAME, id: VAULT_ID, rest: OBSIDIAN_REST },
       crosslisting: { base: CROSSLISTING, status: '/api/crosslisting/status', embed: '/api/proxy/crosslisting/' },
       claude: {
@@ -602,11 +617,9 @@ createServer(async (req, res) => {
   }
   if (p === '/api/news') return send(res, 200, await newsService.getTopStories());
   if (p === '/api/trends') return send(res, 200, trendsSummary());
-  if (p === '/api/house') {
-    const r = await getJson(SENTRY + '/api/status', 120000);
-    if (!r.json) return send(res, 200, { up: false, state: 'DOWN', detail: r.error || ('HTTP ' + r.status), sentry: SENTRY });
-    return send(res, 200, { up: true, state: 'UP', sentry: SENTRY, ...r.json });
-  }
+  if (p === '/api/house') return send(res, 200, await houseSummary({ force: url.searchParams.get('force') === '1' }));
+  if (p === '/api/sentry') return send(res, 200, await getSentrySnapshot({ force: url.searchParams.get('force') === '1' }));
+  if (p === '/api/sentry/summary') return send(res, 200, await getSentrySummary({ force: url.searchParams.get('force') === '1' }));
   if (p === '/api/avatars') {
     const files = existsSync(AVATARS) ? readdirSync(AVATARS).filter((f) => /\.(png|jpg|jpeg|webp)$/i.test(f)).map((f) => ({ file: f, url: '/avatars/' + encodeURIComponent(f), bytes: statSync(join(AVATARS, f)).size, modified: statSync(join(AVATARS, f)).mtime.toISOString() })) : [];
     return send(res, 200, { dir: AVATARS, count: files.length, files });

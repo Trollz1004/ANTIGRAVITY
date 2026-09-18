@@ -85,13 +85,10 @@ describe('resolveConfig (originals)', () => {
     expect(cfg.resolveConfig({ here, env: {}, readEnv: () => ({ OMNIROUTE_LAN_BASE_URL: 'http://192.168.0.8:20128/v1/' }) }).omni).toBe('http://192.168.0.8:20128/v1')
     expect(cfg.resolveConfig({ here, env: { OPENAI_COMPAT_BASE_URL: 'http://x:1/v1' }, readEnv: () => ({}) }).omni).toBe('http://x:1/v1')
   })
-  it('points Sentry at Sabertooth by default, overridable from .env; no Sabertooth mission-control dependency exists', () => {
+  it('has no Sabertooth mission-control dependency, and no separate Sentry endpoint (folded into lib/sentry.mjs 2026-09-18)', () => {
     const d = cfg.resolveConfig({ here, env: {}, readEnv: () => ({}) })
-    expect(d.sentry).toBe('http://192.168.0.8:9140')
     expect(d.missionControl).toBe('') // this dashboard IS mission control
-    const e = cfg.resolveConfig({ here, env: {}, readEnv: () => ({ FABLES_SENTRY_URL: 'http://10.0.0.8:9140/' }) })
-    expect(e.sentry).toBe('http://10.0.0.8:9140')
-    expect(e.missionControl).toBe('')
+    expect(d.sentry).toBeUndefined()
   })
 })
 
