@@ -1,1 +1,0 @@
-ALTER TABLE `external_components` MODIFY COLUMN `sourceUrl` varchar(512) NOT NULL;
