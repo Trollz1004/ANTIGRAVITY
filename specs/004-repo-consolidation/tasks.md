@@ -20,7 +20,7 @@ file-count comparison, and the ANTIGRAVITY commit guard, as described per task.
 
 ## Phase 1: Setup
 
-- [ ] T001 Create `specs/004-repo-consolidation/{spec.md,plan.md,tasks.md}`
+- [x] T001 Create `specs/004-repo-consolidation/{spec.md,plan.md,tasks.md}`
   from `.specify/templates/` and commit them with explicit paths.
 
 ---
@@ -29,10 +29,10 @@ file-count comparison, and the ANTIGRAVITY commit guard, as described per task.
 
 **Purpose**: Confirm remote access and defaults before any fold runs.
 
-- [ ] T002 Confirm default branches for all five source repos via
+- [x] T002 Confirm default branches for all five source repos via
   `gh repo view <owner>/<repo> --json defaultBranchRef` (hermes → `master`;
   OnlineRecycle, ai-solutions, Ai, Jules dashboard → `main`).
-- [ ] T003 Confirm `git subtree` is available in Git Bash
+- [x] T003 Confirm `git subtree` is available in Git Bash
   (`git subtree --help`); note the working `git subtree add --prefix=<p> <url> <branch>`
   syntax to use (no `--squash=false`, since that flag does not exist —
   history-preserving default is the plain `add` form).
@@ -49,19 +49,19 @@ intact.
 **Independent Test**: `git log -- <folded-path>/<file>` shows commits older
 than the fold commit for a sampled file per fold.
 
-- [ ] T004 [US1] Subtree-add Trollz1004/hermes (`master`) at `hermes/`; run the
+- [x] T004 [US1] Subtree-add Trollz1004/hermes (`master`) at `hermes/`; run the
   commit guard; report SHA and `git ls-tree -r --name-only HEAD -- hermes | wc -l`.
-- [ ] T005 [US1] Follow-up commit: delete `hermes/dashboard/jarvis` (stale copy)
+- [x] T005 [US1] Follow-up commit: delete `hermes/dashboard/jarvis` (stale copy)
   and add `hermes/dashboard/jarvis/README.md` (3-line pointer to
   `ops/dashboard-jarvis`), staged as explicit paths only.
-- [ ] T006 [P] [US1] Subtree-add Trollz1004/OnlineRecycle (`main`) at
+- [x] T006 [P] [US1] Subtree-add Trollz1004/OnlineRecycle (`main`) at
   `domains/onlinerecycle.net/`; run the commit guard; report SHA and file count.
-- [ ] T007 [P] [US1] Subtree-add Ai-Solutions-Store/ai-solutions (`main`) at
+- [x] T007 [P] [US1] Subtree-add Ai-Solutions-Store/ai-solutions (`main`) at
   `domains/ai-solutions.store/`; run the commit guard; report SHA and file count.
-- [ ] T008 [US1] Inspect `Ai-Solutions-Store/Ai`; subtree-add (`main`) at
+- [x] T008 [US1] Inspect `Ai-Solutions-Store/Ai`; subtree-add (`main`) at
   `domains/ai-solutions.store/Ai/` regardless of triviality; run the commit
   guard; report SHA, file count, and what it holds.
-- [ ] T009 [P] [US1] Subtree-add
+- [x] T009 [P] [US1] Subtree-add
   Trollz1004/Ai-Solutions-Jules-Code-Review-Agentic-Dashboard (`main`) at
   `domains/ai-solutions.store/jules-code-review-dashboard/`; run the commit
   guard; report SHA and file count.
@@ -80,10 +80,10 @@ unique, and relocate the one real copy out of the domain folder into
 **Independent Test**: comparison numbers (file counts + sample diff) appear in
 the final report with an explicit verdict.
 
-- [ ] T010 [US3] `git mv domains/ai-solutions.store/crosslisting-os
+- [x] T010 [US3] `git mv domains/ai-solutions.store/crosslisting-os
   mission-control/crosslisting-os` in its own commit; leave a 3-line pointer
   README at the old path; run the commit guard.
-- [ ] T011 [US3] Compare `Trollz1004/llc-crosslisting-os` and
+- [x] T011 [US3] Compare `Trollz1004/llc-crosslisting-os` and
   `Ai-Solutions-Store/llc_crosslisting_os` against
   `mission-control/crosslisting-os` using `git ls-tree -r --name-only HEAD |
   wc -l` and a sample-file diff (no fold, no commit); report unique/not-unique.
@@ -101,23 +101,23 @@ updated and pointer READMEs for domains whose code hasn't moved yet.
 `apps/landing` (excluding `node_modules` and `hermes/`) returns no stale
 references.
 
-- [ ] T012 [P] [US2] `git mv apps/landing/untilnokidinneed
+- [x] T012 [P] [US2] `git mv apps/landing/untilnokidinneed
   domains/untilnokidinneed.com` and `git mv apps/landing/dream-online
   domains/dream-online.net` if present (report if either path is absent);
   commit with explicit paths.
-- [ ] T013 [US2] Grep repo for `apps/landing` references in
+- [x] T013 [US2] Grep repo for `apps/landing` references in
   `.md/.json/.mjs/.js/.yml/.ps1/.cmd` (excluding `node_modules` and `hermes/`)
   and update real hits to the new `domains/` paths; commit with explicit paths.
-- [ ] T014 [P] [US2] Write `domains/youandinotai.com/README.md` (pointer:
+- [x] T014 [P] [US2] Write `domains/youandinotai.com/README.md` (pointer:
   code at `backend/fastapi-app` + `frontend/react-app`, frozen/for-sale per
   `ops/sale/`, tunnel maps `youandinotai.com`→:3200 and `api.`→:8000); run the
   commit guard (this domain name is not itself a restricted literal, but
   check anyway); commit.
-- [ ] T015 [P] [US2] Write `domains/aidoesitall.website/README.md` (apex/www
+- [x] T015 [P] [US2] Write `domains/aidoesitall.website/README.md` (apex/www
   proxied through Cloudflare → 302 to ai-solutions.store; `dashboard.`/`api.`
   subdomains; disabled Cloudflare redirect rule that must stay disabled — or
   state UNVERIFIED where CLAUDE.md/docs don't confirm); commit.
-- [ ] T016 [US2] Write `domains/README.md` (one prose paragraph per domain:
+- [x] T016 [US2] Write `domains/README.md` (one prose paragraph per domain:
   folder, what serves it today, live/frozen/off-node state); run the
   restricted-word grep against this file and the two pointer READMEs above;
   commit.
@@ -136,11 +136,11 @@ acting on it.
 **Independent Test**: `git status --short` at the end shows only files other
 workers were already editing at session start.
 
-- [ ] T017 [US4] Run `ls -la ~/.hermes/skills | head -30` (Git Bash) and
+- [x] T017 [US4] Run `ls -la ~/.hermes/skills | head -30` (Git Bash) and
   `Get-Item C:\Users\joshi\.hermes\skills\* | Select-Object
   Name,LinkType,Target -First 30` (PowerShell); report any symlink targets
   pointing at `C:\Users\joshi\hermes` without changing them.
-- [ ] T018 [US4] Run `git status --short`; confirm it is empty except for
+- [x] T018 [US4] Run `git status --short`; confirm it is empty except for
   paths already dirty at session start (`ops/dashboard-jarvis/server.mjs`,
   `ops/dashboard-jarvis/lib/inbox.mjs`, `ops/dashboard-jarvis/tests/
   inbox-routes.test.js`, `ops/dashboard-jarvis/tests/inbox.test.js`,
@@ -187,3 +187,15 @@ git subtree add --prefix=domains/ai-solutions.store/jules-code-review-dashboard 
 - No `npm ci`/install steps are part of this task list.
 - Part 2 (JARVIS folder rename into `mission-control/`, date-app code move,
   archive decisions for superseded repos) is intentionally not planned here.
+
+All 18 tasks ticked 2026-09-17 during Part 2's session, on evidence found on
+disk and in `git log` (the folds and moves above had already landed; only
+the checkboxes were never marked): `hermes/`, `domains/onlinerecycle.net/`,
+`domains/ai-solutions.store/` (with `jules-code-review-dashboard/`),
+`domains/untilnokidinneed.com/`, `domains/dream-online.net/`, and
+`mission-control/crosslisting-os/` all exist with history; the pointer
+READMEs (T005, T014, T015, T016) are in place; `~/.hermes/skills/*` are
+junctions into `.agents/skills`, none pointing at the stale
+`C:\Users\joshi\hermes` clone (T017); and `git status --short` was empty at
+the end of both this session and the Part 2 session (T018). Part 2's own
+record is `docs/REPO-CONSOLIDATION-2026-09-17.md`.
