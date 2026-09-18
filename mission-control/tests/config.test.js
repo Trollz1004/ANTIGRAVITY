@@ -32,33 +32,33 @@ describe('resolveConfig — obsidian/crosslisting endpoints', () => {
     // Live-verified 2026-09-16: the vault plugin serves ONLY https://127.0.0.1:27124
     // (insecure server off, self-signed cert). The old default http://127.0.0.1:27123
     // is a dead port on this node and reported a healthy vault DOWN.
-    const d = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', readEnv: () => ({}) })
+    const d = cfg.resolveConfig({ here: 'X:/r/mission-control', readEnv: () => ({}) })
     expect(d.obsidianRest).toBe('https://127.0.0.1:27124')
-    const e = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', env: { OBSIDIAN_REST_URL: 'https://127.0.0.1:9999' }, readEnv: () => ({}) })
+    const e = cfg.resolveConfig({ here: 'X:/r/mission-control', env: { OBSIDIAN_REST_URL: 'https://127.0.0.1:9999' }, readEnv: () => ({}) })
     expect(e.obsidianRest).toBe('https://127.0.0.1:9999')
-    const f = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', readEnv: () => ({ OBSIDIAN_REST_URL: 'http://127.0.0.1:27123' }) })
+    const f = cfg.resolveConfig({ here: 'X:/r/mission-control', readEnv: () => ({ OBSIDIAN_REST_URL: 'http://127.0.0.1:27123' }) })
     expect(f.obsidianRest).toBe('http://127.0.0.1:27123') // explicit file config wins over the default
   })
   it('carries the crosslisting base with a config override', () => {
-    const d = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', readEnv: () => ({}) })
+    const d = cfg.resolveConfig({ here: 'X:/r/mission-control', readEnv: () => ({}) })
     expect(d.crosslisting).toBe('http://127.0.0.1:3000')
-    const o = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', env: { CROSSLISTING_URL: 'http://127.0.0.1:3010' }, readEnv: () => ({}) })
+    const o = cfg.resolveConfig({ here: 'X:/r/mission-control', env: { CROSSLISTING_URL: 'http://127.0.0.1:3010' }, readEnv: () => ({}) })
     expect(o.crosslisting).toBe('http://127.0.0.1:3010')
   })
 })
 
 describe('resolveConfig — news + trends sources', () => {
   it('defaults trends to the real notebook file in C:\\DREAM and allows an override', () => {
-    const d = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', readEnv: () => ({}) })
+    const d = cfg.resolveConfig({ here: 'X:/r/mission-control', readEnv: () => ({}) })
     expect(d.trendsPath).toBe('C:\\DREAM\\google trends .txt')
-    const o = cfg.resolveConfig({ here: 'X:/r/dashboard/jarvis', env: { TRENDS_FILE: 'D:/other.json' }, readEnv: () => ({}) })
+    const o = cfg.resolveConfig({ here: 'X:/r/mission-control', env: { TRENDS_FILE: 'D:/other.json' }, readEnv: () => ({}) })
     expect(o.trendsPath).toBe('D:/other.json')
   })
 })
 
 describe('resolveConfig (originals)', () => {
-  const here = resolve('C:/some/repo/dashboard/jarvis')
-  it('defaults the repo root to two levels above the server folder and the env file to <repo>/.env', () => {
+  const here = resolve('C:/some/repo/mission-control')
+  it('defaults the repo root to one level above the server folder and the env file to <repo>/.env', () => {
     const c = cfg.resolveConfig({ here, env: {}, readEnv: () => ({}) })
     expect(c.repo).toBe(resolve('C:/some/repo'))
     expect(c.envFile).toBe(resolve('C:/some/repo/.env'))
@@ -121,7 +121,9 @@ describe('resolveVault', () => {
   })
 
   it('falls back to the repo default location when nothing exists', () => {
-    const v = cfg.resolveVault({ env: {}, readEnv: () => ({}), candidates: ['C:/definitely/not/a/vault'] })
+    // A synthetic, guaranteed-nonexistent `here` keeps this isolated from the real
+    // checkout, where C:\ANTIGRAVITY\Antigravity is a real vault that does exist.
+    const v = cfg.resolveVault({ env: {}, readEnv: () => ({}), candidates: ['C:/definitely/not/a/vault'], here: 'C:/definitely/not/a/repo/mission-control/lib' })
     expect(v.source).toBe('default')
     expect(v.exists).toBe(false)
     expect(v.name).toBe('Antigravity')

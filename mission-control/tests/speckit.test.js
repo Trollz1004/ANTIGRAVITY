@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 const root = path.resolve(__dirname, '..')
-const repoRoot = path.resolve(root, '..', '..') // C:\ANTIGRAVITY
+const repoRoot = path.resolve(root, '..') // C:\ANTIGRAVITY
 
 const speckit = await import('../lib/speckit.mjs')
 const clientMod = await import('../js/jarvis/speckit.js')

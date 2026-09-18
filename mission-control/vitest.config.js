@@ -5,6 +5,11 @@ export default defineConfig({
   test: {
     environment: 'node',
     globals: true,
+    // crosslisting-os is a separate app (own package.json, own vitest.config.ts,
+    // own env requirements) that happens to live alongside JARVIS in this folder
+    // since the repo consolidation (2026-09-17). It runs its own `npm test` in
+    // its own directory; it must not be swept into the JARVIS test run.
+    exclude: ['**/node_modules/**', '**/crosslisting-os/**'],
   },
   resolve: {
     alias: {

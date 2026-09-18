@@ -76,7 +76,7 @@
           "url": "http://127.0.0.1:9150/health",
           "identity": "jarvis-dashboard",
           "fix": "airi",
-          "note": "JARVIS is the one Mission Control (ruled 2026-09-17, ops/runbook/SABRETOOTH-NODE-RUNBOOK.md; AIRI dashboard retired). Served on the LAN by ops/dashboard-jarvis/server.mjs: live skills-tree agents, the Obsidian vault as the knowledge graph, Sentry state, avatar renders, OmniRoute proxied with the key server-side, Mission Control v5 embedded (now optional), and the official Claude CLI launcher. Identity = /health service name. id/fix key kept as 'airi' to avoid touching every caller of this target id."
+          "note": "JARVIS is the one Mission Control (ruled 2026-09-17, ops/runbook/SABRETOOTH-NODE-RUNBOOK.md; AIRI dashboard retired). Served on the LAN by mission-control/server.mjs (moved from ops/dashboard-jarvis in the repo consolidation, 2026-09-17): live skills-tree agents, the Obsidian vault as the knowledge graph, Sentry state, avatar renders, OmniRoute proxied with the key server-side, Mission Control v5 embedded (now optional), and the official Claude CLI launcher. Identity = /health service name. id/fix key kept as 'airi' to avoid touching every caller of this target id."
         },
         {
           "id": "mc6",
