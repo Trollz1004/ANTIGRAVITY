@@ -227,11 +227,36 @@ $Stages = @(
        Probe = { Test-Http 'http://127.0.0.1:8000/api/v1/health' 30 '"db_connected":true' }
        Heal  = { Start-Process powershell -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-File','C:\ANTIGRAVITY\scripts\fables-house\tab-dateapp-api.ps1' -WindowStyle Hidden } }
 
+    # 2026-09-18 fix: `Get-Process cloudflared` matches by NAME only, and an
+    # unrelated OmniRoute quick-tunnel process is also named cloudflared.exe.
+    # That let this stage believe sabretooth-main was up (some cloudflared.exe
+    # was running) while sabretooth-main itself was down and never healed. The
+    # real tunnel is identified by its command line instead, via
+    # Win32_Process, so the quick-tunnel is never mistaken for it and never
+    # touched. Command lines are never logged - only the PID and the literal
+    # "sabretooth-main". The public identity probe (youandinotai.com serving
+    # assets/index-) stays the sole source of truth for UP; this check only
+    # decides what Heal does.
     @{ Name = 'Cloudflared tunnel (site PUBLIC)'; Required = $true
        Probe = { Test-Http 'https://youandinotai.com' 20 'assets/index-' }
-       Heal  = { if (-not (Get-Process cloudflared -ErrorAction SilentlyContinue)) {
+       Heal  = { $tunnelProcs = @(Get-CimInstance Win32_Process -Filter "Name='cloudflared.exe'" -ErrorAction SilentlyContinue |
+                     Where-Object { $_.CommandLine -match 'sabretooth-main' })
+                 if ($tunnelProcs.Count -eq 0) {
                      Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config','C:\Users\joshi\.cloudflared\config.yml','run','sabretooth-main' -WindowStyle Hidden
-                 } else { Log '  cloudflared runs but public probe failed — check Cloudflare edge / DNS' 'Yellow' } } }
+                     Log '  started sabretooth-main tunnel (was not running)' 'DarkGray'
+                 } else {
+                     foreach ($p in $tunnelProcs) {
+                         Log ("  stopping sabretooth-main tunnel (PID {0}) before restart" -f $p.ProcessId) 'DarkGray'
+                         Stop-Process -Id $p.ProcessId -Force -ErrorAction SilentlyContinue
+                     }
+                     $waited = 0
+                     while ($waited -lt 5 -and (Get-CimInstance Win32_Process -Filter "Name='cloudflared.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match 'sabretooth-main' })) {
+                         Start-Sleep -Seconds 1
+                         $waited++
+                     }
+                     Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config','C:\Users\joshi\.cloudflared\config.yml','run','sabretooth-main' -WindowStyle Hidden
+                     Log '  restarted sabretooth-main tunnel (was running but public probe failed)' 'DarkGray'
+                 } } }
 
     # JARVIS is the one Mission Control on :9150 (ruling 2026-09-17, ops/runbook/
     # SABRETOOTH-NODE-RUNBOOK.md). AIRI dashboard is retired: this stage heals by

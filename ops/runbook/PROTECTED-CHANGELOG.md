@@ -12,6 +12,7 @@ changed, and the commit that landed it. `.github/CODEOWNERS` and the
 `.claude/hooks/guard-protected-paths.ps1` reminder enforce this
 mechanically; this file is the human-readable record. Newest entries first.
 
+2026-09-18 04:42 UTC | scripts/fables-house/FABLES-HOUSE.ps1 | Cloudflared tunnel stage bugfix: heal now identifies the real sabretooth-main process by command line (Win32_Process filter), not by `Get-Process cloudflared` name-match alone — an unrelated OmniRoute quick-tunnel is also named cloudflared.exe and was making the House believe sabretooth-main was up when it was down. Public identity probe (youandinotai.com / assets/index-) stays the source of truth for UP; command-line match now also drives the stop-before-restart step so the quick-tunnel is never touched. Command lines are never logged, only PID + "sabretooth-main" | pending (fill in real commit hash)
 2026-09-18 04:40 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | added "## 12. Domains" section — vhost static server on :9160, tunnel ingress + DNS for the three landing sites and dashboard.aidoesitall.website, Cloudflare Access sign-in, pending IONOS registrar click, new health probes | 4c92ef74
 
 2026-09-18 04:35 UTC | scripts/fables-house/FABLES-HOUSE.ps1 | added ONE new optional stage "Domains static sites :9160" (probe /health for domains-server identity, heal starts ops/domains-server/server.mjs) — Domains phase Unit 2, no other lines in this file touched | 2f326da4
