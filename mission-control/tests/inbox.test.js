@@ -133,6 +133,48 @@ describe('lib/inbox.mjs — performAction with the right token', () => {
   })
 })
 
+describe('lib/inbox.mjs — performAction on a bridge.run proposal (Phase F, unit 1)', () => {
+  it('approve runs the bridge adapter and resolves EXECUTED with its output as evidence', async () => {
+    const store = createProposalStore({ dir })
+    const p = store.create({ source: 'judge', kind: 'bridge.run', brand: null, platform: null, title: 'bridge.run: claude', body: 'ping', bridge: 'claude', prompt: 'ping' })
+    const bridgeAdapters = { execute: async () => ({ ok: true, output: 'pong' }) }
+    const r = await performAction({ store, id: p.id, action: 'approve', token: 'tok', founderToken: 'tok', bridgeAdapters, auditDir: path.join(dir, 'audit') })
+    expect(r.status).toBe(200)
+    expect(r.body.proposal.state).toBe('EXECUTED')
+    expect(r.body.proposal.evidence).toBe('pong')
+  })
+
+  it('approve resolves FAILED (never a silent success) when the bridge adapter fails or throws', async () => {
+    const store = createProposalStore({ dir })
+    const p = store.create({ source: 'judge', kind: 'bridge.run', brand: null, platform: null, title: 'bridge.run: codex', body: 'ping', bridge: 'codex', prompt: 'ping' })
+    const bridgeAdapters = { execute: async () => { throw new Error('spawn failed') } }
+    const r = await performAction({ store, id: p.id, action: 'approve', token: 'tok', founderToken: 'tok', bridgeAdapters, auditDir: path.join(dir, 'audit') })
+    expect(r.body.proposal.state).toBe('FAILED')
+    expect(r.body.proposal.evidence).toMatch(/spawn failed/)
+  })
+
+  it('a plain (non-Promise) bridge adapter result also resolves cleanly without being awaited by the caller', () => {
+    const store = createProposalStore({ dir })
+    const p = store.create({ source: 'judge', kind: 'bridge.run', brand: null, platform: null, title: 'bridge.run: hermes', body: 'ping', bridge: 'hermes', prompt: 'ping' })
+    const bridgeAdapters = { execute: () => ({ ok: true, output: 'PONG' }) }
+    const maybePromise = performAction({ store, id: p.id, action: 'approve', token: 'tok', founderToken: 'tok', bridgeAdapters, auditDir: path.join(dir, 'audit') })
+    expect(typeof maybePromise.then).toBe('function')
+    return maybePromise.then((r) => {
+      expect(r.body.proposal.state).toBe('EXECUTED')
+      expect(r.body.proposal.evidence).toBe('PONG')
+    })
+  })
+
+  it('reject/snooze never touch the bridge adapter', () => {
+    const store = createProposalStore({ dir })
+    const p = store.create({ source: 'judge', kind: 'bridge.run', brand: null, platform: null, title: 'bridge.run: ollama', body: 'ping', bridge: 'ollama', prompt: 'ping' })
+    const execute = () => { throw new Error('must not be called') }
+    const r = performAction({ store, id: p.id, action: 'reject', token: 'tok', founderToken: 'tok', bridgeAdapters: { execute }, auditDir: path.join(dir, 'audit') })
+    expect(r.status).toBe(200)
+    expect(r.body.proposal.state).toBe('REJECTED')
+  })
+})
+
 describe('lib/inbox.mjs — redaction applied to the route response (unit 7)', () => {
   it('redact() masks a secret-shaped value embedded in a proposal body before it would leave GET /api/inbox', () => {
     const store = createProposalStore({ dir })

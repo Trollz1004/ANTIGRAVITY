@@ -46,14 +46,17 @@ import { createServer } from 'node:http';
 import { request as httpRequest } from 'node:http';
 import { request as httpsRequest } from 'node:https';
 import { readFileSync, existsSync, readdirSync, statSync, writeFileSync, unlinkSync } from 'node:fs';
-import { spawn } from 'node:child_process';
+import { spawn, execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
 import { resolveConfig, resolveVault, readEnvFile } from './lib/config.mjs';
 import { probeAll } from './lib/nodes.mjs';
-import { resolveClaudeBinary, killTree, PERMISSION_MODES, PERSONAS } from './lib/claude-bridge.mjs';
+import { resolveClaudeBinary, killTree, runClaude, PERMISSION_MODES, PERSONAS } from './lib/claude-bridge.mjs';
 import { resolveHermesBinary } from './lib/bridge-routes.mjs';
 import { handleBridgeRoutes } from './lib/bridge-routes.mjs';
+import { buildBridges, findBridge, createBridgeRunProposal, executeBridgeRun, askOmniRoute, BRIDGE_IDS } from './lib/bridges.mjs';
+import { synthesizeSpeech, EDGE_VOICES } from './lib/tts.mjs';
+import { buildSkillsPanel, resolveLaunchCmdPath } from './lib/skills-panel.mjs';
 import { streamOllamaChat } from './lib/ollama.mjs';
 import { createNewsService } from './lib/news.mjs';
 import { loadTrends } from './lib/trends.mjs';
@@ -205,6 +208,44 @@ const ARCHIFY_BIN = join(HERE, 'vendor', 'archify', 'bin', 'archify.mjs');
 const ARCHIFY_WORK_DIR = join(HERE, 'data', 'architecture');
 let architectureHtmlCache = { at: 0, html: null };
 const ARCHITECTURE_CACHE_MS = 5 * 60 * 1000;
+// Bridge registry (Phase F, unit 1): one adapter per outside agent this node
+// can reach. Each identity check reuses the same live endpoints the rest of
+// this file already probes (Hermes/OpenClaw dashboards, the vault, the
+// ledger) rather than opening new ones.
+function resolveCodexBinary(env = process.env) {
+  if (env.CODEX_BIN && existsSync(env.CODEX_BIN)) return env.CODEX_BIN;
+  return 'codex';
+}
+const BRIDGE_DEPS_LIVE = {
+  hermes: { dashboardUrl: HERMES_URL + '/', gatewayUrl: 'http://127.0.0.1:8642/health', resolveHermesBin: resolveHermesBinary },
+  openclaw: { dashboardUrl: OPENCLAW_URL + '/' },
+  claude: { resolveBin: () => resolveClaudeBinary() },
+  codex: { resolveBin: () => resolveCodexBinary() },
+  ollama: { base: envValue('JARVIS_OLLAMA_URL') || 'http://127.0.0.1:11434' },
+  omniroute: { base: OMNI, key: envValue('OMNI_ROUTE_API_KEY') },
+  obsidian: { vaultPath: VAULT, restUrl: OBSIDIAN_REST, restProbe: vaultStatusSummary },
+  browserCdp: {},
+  buzz: { readLedger },
+};
+// Executes an approved bridge.run proposal (only ever called from the
+// founder's own /api/inbox/:id/approve click — see lib/inbox.mjs).
+const bridgeExecutorAdapters = {
+  execute: (proposal) => executeBridgeRun({
+    proposal,
+    deps: {
+      cwd: REPO, resolveHermesBin: resolveHermesBinary, spawn,
+      runClaudeImpl: runClaude,
+      ollamaBase: envValue('JARVIS_OLLAMA_URL') || 'http://127.0.0.1:11434',
+      ollamaModel: envValue('JARVIS_OLLAMA_MODEL'),
+      streamOllamaChatImpl: streamOllamaChat, fetch: globalThis.fetch,
+    },
+  }),
+};
+const TTS_CACHE_DIR = join(HERE, 'data', 'tts');
+const TTS_VENDOR_DIR = join(HERE, 'vendor', 'piper');
+// Skills, plugins, MCP panel (Phase F, unit 3).
+const CLAUDE_HOME = join((process.env.USERPROFILE || process.env.HOME || ''), '.claude');
+const LAUNCH_CMD_PATH = resolveLaunchCmdPath(REPO);
 // Approve of a social proposal runs the matching adapter. Manual-handoff platforms
 // write the approved copy to ops/marketing-inbox/approved/ for the lane that posts
 // it (Grok/X, Reddit, TikTok, Hermes/YouTube); syndication platforms (dev.to,
@@ -347,6 +388,16 @@ async function getJsonInsecure(url, ms = 20000) {
   });
 }
 function readBody(req) { return new Promise((res) => { const b = []; req.on('data', (c) => b.push(c)); req.on('end', () => res(Buffer.concat(b))); }); }
+// Bounded, never-throwing shells for the Skills panel (Phase F, unit 3) — a
+// slow or missing `claude` CLI must never hang or crash this route.
+function spawnSyncText(bin, args, timeoutMs = 15000) {
+  try { return execFileSync(bin, args, { encoding: 'utf8', windowsHide: true, timeout: timeoutMs, stdio: ['ignore', 'pipe', 'pipe'] }); }
+  catch (e) { return (e && e.stdout) ? String(e.stdout) : ''; }
+}
+function spawnSyncJson(bin, args, timeoutMs = 15000) {
+  const text = spawnSyncText(bin, args, timeoutMs);
+  try { return JSON.parse(text); } catch { return []; }
+}
 function send(res, code, body, type = 'application/json') {
   res.writeHead(code, { 'content-type': type, 'access-control-allow-origin': '*', 'cache-control': 'no-store' });
   res.end(typeof body === 'string' || Buffer.isBuffer(body) ? body : JSON.stringify(body));
@@ -438,34 +489,29 @@ createServer(async (req, res) => {
   // Real voice binaries live in VOICES_DIR (override in .env) and are served by the static
   // fallback below; this endpoint just describes what's available so the picker can offer them.
   if (p === '/api/voices/local-pack' || p === '/api/voices/local-pack.json') {
-    const voicesDir = process.env.JARVIS_VOICES_DIR || path.join(ROOT, 'voices');
+    const voicesDir = process.env.JARVIS_VOICES_DIR || join(HERE, 'voices');
     let voices = [];
     try {
-      const entries = await fs.readdir(voicesDir, { withFileTypes: true });
-      voices = entries.filter(e => e.isFile() && /\.(wav|mp3|ogg|m4a)$/i.test(e.name)).map(e => ({
-        name: e.name.replace(/\.[^.]+$/, ''),
-        uri: '/api/voices/' + encodeURIComponent(e.name),
+      voices = readdirSync(voicesDir).filter((f) => /\.(wav|mp3|ogg|m4a)$/i.test(f)).map((f) => ({
+        name: f.replace(/\.[^.]+$/, ''),
+        uri: '/api/voices/' + encodeURIComponent(f),
         lang: 'en-US',
         local: true,
       }));
-    } catch (e) {
+    } catch {
       // Directory missing is fine — return an empty pack so the picker still works.
       voices = [];
     }
     return send(res, 200, { voices, dir: voicesDir, note: 'Drop .wav/.mp3/.ogg/.m4a files into the voices dir and refresh the picker.' });
   }
   if (p.startsWith('/api/voices/')) {
-    const voicesDir = process.env.JARVIS_VOICES_DIR || path.join(ROOT, 'voices');
+    const voicesDir = process.env.JARVIS_VOICES_DIR || join(HERE, 'voices');
     const name = decodeURIComponent(p.slice('/api/voices/'.length));
     if (!name || name.includes('/') || name.includes('..')) return send(res, 400, { error: 'Bad voice name' });
-    const file = path.join(voicesDir, name);
-    if (!file.startsWith(path.resolve(voicesDir))) return send(res, 403, { error: 'Forbidden' });
-    try {
-      const stat = await fs.stat(file);
-      if (!stat.isFile()) return send(res, 404, { error: 'Not a file' });
-      res.writeHead(200, { 'content-type': 'audio/wav', 'content-length': stat.size, 'cache-control': 'max-age=3600', 'access-control-allow-origin': '*' });
-      return fs.createReadStream(file).pipe(res);
-    } catch (e) { return send(res, 404, { error: 'Voice file not found' }); }
+    const file = resolve(voicesDir, name);
+    if (!file.startsWith(resolve(voicesDir) + sep) || !existsSync(file) || !statSync(file).isFile()) return send(res, 404, { error: 'Voice file not found' });
+    res.writeHead(200, { 'content-type': 'audio/wav', 'content-length': statSync(file).size, 'cache-control': 'max-age=3600', 'access-control-allow-origin': '*' });
+    return res.end(readFileSync(file));
   }
 
   // Same-origin reverse proxy to the local Crosslisting app, so its iframe embed
@@ -593,7 +639,7 @@ createServer(async (req, res) => {
       const id = decodeURIComponent(m[1]); const action = m[2];
       const founderToken = envValue('JARVIS_FOUNDER_TOKEN');
       const token = req.headers['x-founder-token'];
-      const r = performAction({ store: proposalStore, id, action, token, founderToken, adapters: socialAdapters, auditDir: AUDIT_DIR });
+      const r = await performAction({ store: proposalStore, id, action, token, founderToken, adapters: socialAdapters, bridgeAdapters: bridgeExecutorAdapters, auditDir: AUDIT_DIR });
       return send(res, r.status, redact(r.body));
     } }
 
@@ -661,6 +707,80 @@ createServer(async (req, res) => {
     if (!r.ok) return send(res, 502, { error: r.error });
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
     return res.end(r.html);
+  }
+
+  // Bridge registry (Phase F, unit 1): identity-checked status for every
+  // outside agent this node can reach. A run is always a bridge.run
+  // Proposal — this route never executes anything itself; only a founder
+  // approve through /api/inbox/:id/approve calls executeBridgeRun.
+  if (p === '/api/bridges' && req.method === 'GET') {
+    const r = await buildBridges(BRIDGE_DEPS_LIVE);
+    return send(res, 200, redact(r));
+  }
+  { const m = /^\/api\/bridges\/([^/]+)$/.exec(p);
+    if (m && req.method === 'GET') {
+      const { bridges } = await buildBridges(BRIDGE_DEPS_LIVE);
+      const row = findBridge(bridges, decodeURIComponent(m[1]));
+      if (!row) return send(res, 404, { error: 'unknown bridge: ' + m[1] });
+      return send(res, 200, redact(row));
+    } }
+  { const m = /^\/api\/bridges\/([^/]+)\/run$/.exec(p);
+    if (m && req.method === 'POST') {
+      let body;
+      try { body = JSON.parse((await readBody(req)).toString('utf8') || '{}'); }
+      catch { return send(res, 400, { error: 'invalid JSON body' }); }
+      const id = decodeURIComponent(m[1]);
+      const { bridges } = await buildBridges(BRIDGE_DEPS_LIVE);
+      const bridgeRow = findBridge(bridges, id);
+      const r = createBridgeRunProposal({ store: proposalStore, id, prompt: body.prompt, bridgeRow });
+      return send(res, r.status, redact(r.body));
+    } }
+  if (p === '/api/ask' && req.method === 'POST') {
+    let body;
+    try { body = JSON.parse((await readBody(req)).toString('utf8') || '{}'); }
+    catch { return send(res, 400, { error: 'invalid JSON body' }); }
+    if (body.bridge === 'omniroute') {
+      const r = await askOmniRoute({ base: OMNI, key: envValue('OMNI_ROUTE_API_KEY'), question: body.question });
+      return send(res, r.status, redact(r.body));
+    }
+    if (!BRIDGE_IDS.includes(String(body.bridge || ''))) return send(res, 400, { error: 'unknown bridge: ' + body.bridge });
+    const { bridges } = await buildBridges(BRIDGE_DEPS_LIVE);
+    const bridgeRow = findBridge(bridges, body.bridge);
+    const r = createBridgeRunProposal({ store: proposalStore, id: body.bridge, prompt: body.question, bridgeRow });
+    return send(res, r.status, redact(r.body));
+  }
+
+  // Voice out (Phase F, unit 2): edge-tts neural voices, cached 24h; a 204
+  // tells the client to fall back to its own browser speechSynthesis.
+  if (p === '/api/tts' && req.method === 'POST') {
+    let body;
+    try { body = JSON.parse((await readBody(req)).toString('utf8') || '{}'); }
+    catch { return send(res, 400, { error: 'invalid JSON body' }); }
+    const r = await synthesizeSpeech({ text: body.text, voice: body.voice, cacheDir: TTS_CACHE_DIR, vendorDir: TTS_VENDOR_DIR });
+    if (r.ok) {
+      res.writeHead(200, { 'content-type': 'audio/mpeg', 'cache-control': 'no-store', 'x-tts-engine': r.engine, 'x-tts-cached': String(Boolean(r.cached)) });
+      return res.end(r.buffer);
+    }
+    if (r.engine === null) { res.writeHead(204, { 'x-tts-reason': String(r.reason || '').slice(0, 200) }); return res.end(); }
+    return send(res, 502, { error: r.error || 'tts failed', engine: r.engine });
+  }
+  if (p === '/api/tts/voices') return send(res, 200, { voices: EDGE_VOICES, default: 'en-US-GuyNeural' });
+
+  // Skills, plugins, and MCP panel (Phase F, unit 3): everything read live
+  // from ~/.claude and this repo at request time, redacted before it leaves.
+  if (p === '/api/skills' && req.method === 'GET') {
+    let settingsJson = null, pluginListJson = [], mcpListText = '', launchCmdText = '';
+    try { settingsJson = JSON.parse(readFileSync(join(CLAUDE_HOME, 'settings.json'), 'utf8')); } catch {}
+    try { pluginListJson = spawnSyncJson('claude', ['plugin', 'list', '--json']); } catch {}
+    try { mcpListText = spawnSyncText('claude', ['mcp', 'list']); } catch {}
+    try { launchCmdText = readFileSync(LAUNCH_CMD_PATH, 'utf8'); } catch {}
+    const obsidianPlugin = (pluginListJson || []).find((pl) => String(pl.id || '').startsWith('obsidian-second-brain'));
+    const r = buildSkillsPanel({
+      settingsJson, pluginListJson, mcpListText, launchCmdText,
+      obsidianPluginInstallPath: obsidianPlugin ? obsidianPlugin.installPath : '',
+      homeDir: process.env.USERPROFILE || process.env.HOME || '', repoRoot: REPO,
+    });
+    return send(res, 200, redact(r));
   }
 
   if (p === '/' || p === '/index.html') return serveStatic(res, '/index.html');

@@ -83,9 +83,12 @@ export function appendAudit({ dir, record, now = () => new Date() }) {
  *   - token missing/wrong         -> 401.
  *   - unknown id                  -> 404.
  * On approve of a `source: 'social'` proposal, `adapters.execute(proposal)`
- * runs and the result becomes EXECUTED (ok) or FAILED (not ok / threw).
+ * runs and the result becomes EXECUTED (ok) or FAILED (not ok / threw). On
+ * approve of a `kind: 'bridge.run'` proposal (Phase F, unit 1),
+ * `bridgeAdapters.execute(proposal)` runs the same way — a bridge only ever
+ * runs after this exact founder click, never on its own.
  */
-export function performAction({ store, id, action, token, founderToken, adapters, auditDir, now = () => new Date() }) {
+export function performAction({ store, id, action, token, founderToken, adapters, bridgeAdapters, auditDir, now = () => new Date() }) {
   if (!ACTIONS.includes(action)) return { status: 400, body: { error: 'unknown action: ' + action } };
   if (!founderToken) {
     return { status: 503, body: { error: 'founder token not configured — set JARVIS_FOUNDER_TOKEN in the repo .env (one line; the value is never shown here)' } };
@@ -119,6 +122,24 @@ export function performAction({ store, id, action, token, founderToken, adapters
       } else {
         evidence = (result && result.error) || 'adapter failed';
         updated = store.transition(id, { state: 'FAILED', evidence });
+      }
+    }
+    if (action === 'approve' && proposal.kind === 'bridge.run' && bridgeAdapters) {
+      // The only asynchronous branch here (a bridge run really shells out or
+      // spawns a process): this function returns a Promise ONLY in this one
+      // case, so every other call site — all synchronous — is unaffected.
+      let runResult;
+      try { runResult = bridgeAdapters.execute ? bridgeAdapters.execute(proposal) : bridgeAdapters(proposal); }
+      catch (e) { runResult = { ok: false, error: String((e && e.message) || e) }; }
+      return Promise.resolve(runResult).then(
+        (result) => finishBridgeRun(result),
+        (e) => finishBridgeRun({ ok: false, error: String((e && e.message) || e) }),
+      );
+      function finishBridgeRun(result) {
+        const ev = (result && result.ok) ? (result.output || '') : ((result && result.error) || 'bridge run failed');
+        updated = store.transition(id, { state: result && result.ok ? 'EXECUTED' : 'FAILED', evidence: ev });
+        appendAudit({ dir: auditDir, record: { id, action, evidence: ev }, now });
+        return { status: 200, body: { proposal: updated } };
       }
     }
   }
