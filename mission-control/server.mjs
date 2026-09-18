@@ -73,7 +73,8 @@ import { createProposalStore } from './lib/proposals.mjs';
 import { checkCompliance } from './lib/compliance.mjs';
 import { scoreCopy } from './lib/copy-score.mjs';
 import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff } from './lib/social-adapters.mjs';
-import { buildInbox, performAction } from './lib/inbox.mjs';
+import { buildInbox, performAction, readTriggers } from './lib/inbox.mjs';
+import { handleMcpRequest } from './lib/mcp-server.mjs';
 import { createReviewProposal, buildJudgeFeed, postVerdict } from './lib/judge.mjs';
 import { buildFleet } from './lib/fleet.mjs';
 import { buildArchitecture, renderArchitectureHtml, renderArchitectureDiff } from './lib/architecture.mjs';
@@ -246,6 +247,19 @@ const TTS_VENDOR_DIR = join(HERE, 'vendor', 'piper');
 // Skills, plugins, MCP panel (Phase F, unit 3).
 const CLAUDE_HOME = join((process.env.USERPROFILE || process.env.HOME || ''), '.claude');
 const LAUNCH_CMD_PATH = resolveLaunchCmdPath(REPO);
+// JARVIS MCP endpoint (Phase F, unit 4): read-only state_record listing,
+// sandboxed the same way vaultNote() is above.
+const STATE_RECORDS_DIR = join(REPO, 'docs');
+function listStateRecords() {
+  if (!existsSync(STATE_RECORDS_DIR)) return [];
+  return readdirSync(STATE_RECORDS_DIR).filter((f) => /^NODE-STATE-.*\.md$/i.test(f)).sort();
+}
+function readStateRecord(name) {
+  if (!name || /\.\.|[\\/]/.test(name) || !/^NODE-STATE-.*\.md$/i.test(name)) return { ok: false, error: 'bad request' };
+  const full = resolve(STATE_RECORDS_DIR, name);
+  if (!full.startsWith(resolve(STATE_RECORDS_DIR) + sep) || !existsSync(full)) return { ok: false, error: 'not found' };
+  return { ok: true, text: readFileSync(full, 'utf8') };
+}
 // Approve of a social proposal runs the matching adapter. Manual-handoff platforms
 // write the approved copy to ops/marketing-inbox/approved/ for the lane that posts
 // it (Grok/X, Reddit, TikTok, Hermes/YouTube); syndication platforms (dev.to,
@@ -781,6 +795,24 @@ createServer(async (req, res) => {
       homeDir: process.env.USERPROFILE || process.env.HOME || '', repoRoot: REPO,
     });
     return send(res, 200, redact(r));
+  }
+
+  // JARVIS MCP endpoint (Phase F, unit 4): Streamable HTTP, read-only, so the
+  // Alienware node's own Claude can read this node's real state over the LAN.
+  // Bearer-gated on JARVIS_MCP_TOKEN (503 unset, 401 wrong) — see lib/mcp-server.mjs.
+  if (p === '/mcp' && req.method === 'POST') {
+    return handleMcpRequest(req, res, {
+      token: envValue('JARVIS_MCP_TOKEN'), readBody,
+      deps: {
+        getHealth: () => readHeartbeat({ jsonPath: HEARTBEAT_JSON_PATH, logPath: HEARTBEAT_LOG_PATH }),
+        getTriggers: () => readTriggers(TRIGGERS_PATH),
+        getProposals: () => proposalStore.list(),
+        getBridges: () => buildBridges(BRIDGE_DEPS_LIVE),
+        listRunbooks: () => listRunbooks(RUNBOOK_DIR),
+        readRunbook: (name) => resolveRunbook(RUNBOOK_DIR, name),
+        listStateRecords, readStateRecord,
+      },
+    });
   }
 
   if (p === '/' || p === '/index.html') return serveStatic(res, '/index.html');

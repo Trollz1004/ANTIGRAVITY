@@ -63,6 +63,51 @@ Dispatch: `ops/handoffs/JARVIS-CONSOLIDATION-DISPATCH-2026-09-17.md` and
   likewise gitignored). Client: the "Architecture" tab
   (`js/jarvis/architecture.js`), an iframe with a refresh button.
 
+## Panels shipped (Phase F)
+
+- **Bridges** (unit 1) — `GET /api/bridges` / `GET /api/bridges/:id` return
+  one identity-checked row per outside agent (Hermes, OpenClaw, Claude Code,
+  Codex, Ollama, OmniRoute, Obsidian, browser CDP, Buzz, Unreal — the last
+  always `PARKED`); status is judged by a marker/JSON identity call, never a
+  bare port. `POST /api/bridges/:id/run` and `POST /api/ask` never execute a
+  bridge directly — they create a `bridge.run` Proposal (same store as
+  Judge Lanes) that only runs after the founder approves it through the
+  existing `POST /api/inbox/:id/approve` control. Client: the "Bridges" tab
+  (`js/jarvis/bridges.js`).
+- **Voice** (unit 2) — `POST /api/tts` `{text, voice}` renders a natural
+  Microsoft neural voice via the `edge-tts` CLI (free, no key), cached 24h by
+  `sha256(voice+text)` under `data/tts/` (gitignored); a real failure with no
+  `vendor/piper/` model answers `204` so the client falls back to the
+  browser's own `speechSynthesis`, labelled a fallback. `GET /api/tts/voices`
+  lists the six offered voices (Guy, Andrew, Brian, Aria, Jenny,
+  Christopher). The global JARVIS dock (`js/jarvis/dock.js`,
+  `js/jarvis/tts-client.js`) gained a push-to-talk mic (browser
+  `SpeechRecognition`; disabled with an explanatory title when unavailable —
+  never auto-sends), a mute toggle, the voice picker, and a "Test voice"
+  button, all persisted per-viewer in `localStorage`.
+- **Skills, plugins, and MCP panel** (unit 3) — `GET /api/skills` reads,
+  live and redacted, `~/.claude/settings.json`'s enabled plugins (versioned
+  from `claude plugin list --json`), `claude mcp list`'s servers by name and
+  connection state, user skills (`~/.claude/skills`), project skills merged
+  across `.claude/skills`, `.agents/skills`, and `ops/skills` (deduped,
+  `--hash` Paperclip clones skipped), the `obsidian-second-brain` plugin's
+  own commands, and what the node's launch command preloads on restart plus
+  that skill's `related_skills`. Client: the "Skills + MCP" tab
+  (`js/jarvis/skills.js`) — links to, rather than repeats, the existing
+  Agents/AIRI skills tree.
+- **JARVIS MCP endpoint** (unit 4) — a minimal, read-only Model Context
+  Protocol server over Streamable HTTP at `POST /mcp` on this same `:9150`
+  port (`@modelcontextprotocol/sdk`), so a remote Claude Code session (e.g.
+  on the Alienware node) can read this node's real state over the LAN.
+  Bearer-gated on `JARVIS_MCP_TOKEN` (`503` when unset, `401` when wrong).
+  Six read-only tools, no write tools in this phase:
+  `node_health`, `triggers`, `proposals`, `bridges`, `runbook`,
+  `state_record`. Connect a remote Claude Code session with:
+
+  ```
+  claude mcp add --transport http jarvis http://192.168.0.8:9150/mcp --header "Authorization: Bearer <JARVIS_MCP_TOKEN>"
+  ```
+
 ## Landing rule (ruled 2026-09-17)
 
 Nothing lands on `main` directly. The judge lane pushes finished work to a
