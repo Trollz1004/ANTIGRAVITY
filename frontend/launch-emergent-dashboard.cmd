@@ -1,7 +1,3 @@
 @echo off
-rem Relaunch Emergent Dashboard on Port 3210 (Hidden, permanent)
-cd /d "C:\ANTIGRAVITY\frontend"
-set PORT=3210
-set BROWSER=none
-powershell -Command "Start-Process 'npx' -ArgumentList 'craco','start' -WorkingDirectory 'C:\ANTIGRAVITY\frontend' -WindowStyle Hidden"
-echo Emergent dashboard launched on port 3210
+echo Emergent retired 2026-09-17; its views live in JARVIS at http://192.168.0.8:9150/
+exit /b 0
