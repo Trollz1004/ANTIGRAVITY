@@ -1,0 +1,34 @@
+# Dependency Audit Workflow Template
+# This is a template for integrating dependency scanning into CI.
+# To use: copy to .github/workflows/dependency-audit.yml (requires workflow scope OAuth token)
+#
+# name: Dependency Security Audit
+# on:
+#   schedule:
+#     - cron: '0 6 * * *'  # Daily at 6 AM UTC
+#   workflow_dispatch:
+#
+# jobs:
+#   audit:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: '3.11'
+#
+#       - name: Install pip-audit
+#         run: pip install pip-audit
+#
+#       - name: Run dependency scan
+#         run: |
+#           cd backend/fastapi-app
+#           python scripts/scan_dependencies.py --output reports/dependency-audit.md
+#
+#       - name: Upload report
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: dependency-audit-report
+#           path: reports/dependency-audit.md

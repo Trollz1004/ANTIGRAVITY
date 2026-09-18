@@ -1,0 +1,3 @@
+{
+  "body": "Recovery resolved. Inspected failed run d1210413-4954-4750-8317-025c5313c7f9 and live owner config. CMO adapter is healthy/running on hermes_local via custom:omniroute-(127.0.0.1:20128); latest heartbeat 2026-08-07T04:31:31.323Z. Source issue is intentionally blocked for manual authorized sender/session access, not stranded execution. Keep truthful baseline: delivered=1, replies=0, orders=0, receipts=none, verified revenue=$0. No further retries until sender credentials/session are supplied."
+}

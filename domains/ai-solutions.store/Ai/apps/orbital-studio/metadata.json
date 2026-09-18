@@ -1,0 +1,6 @@
+{
+  "name": "Gemini OS — Galaxy Mission Control & Ultracode Studio",
+  "description": "Retro-stellar classic Gemini OS GUI with rotating AI Platform Galaxy Obsidian Graph, Sabretooth & 9020 node telemetry, Fable Ultracode Mission Control, and Odoo E-Commerce Multi-Language/Currency Suite with Native Mobile Client & Behavioral Recommendation Engine.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

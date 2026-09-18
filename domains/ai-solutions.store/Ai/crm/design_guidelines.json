@@ -1,0 +1,102 @@
+{
+  "theme": "light",
+  "archetype": "Organic & Earthy",
+  "typography": {
+    "heading_font": "Outfit",
+    "body_font": "Manrope",
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl font-semibold tracking-tight",
+      "h2": "text-2xl sm:text-3xl font-medium tracking-tight",
+      "h3": "text-xl sm:text-2xl font-medium",
+      "h4": "text-lg font-medium",
+      "body": "text-base leading-relaxed",
+      "small": "text-sm text-muted-foreground",
+      "overline": "text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground"
+    }
+  },
+  "colors": {
+    "background": "#FDFBF7",
+    "foreground": "#2D3748",
+    "card": "#FFFFFF",
+    "card_foreground": "#2D3748",
+    "primary": "#4A7B59",
+    "primary_foreground": "#FFFFFF",
+    "secondary": "#EAE6DF",
+    "secondary_foreground": "#2D3748",
+    "accent": "#D97757",
+    "accent_foreground": "#FFFFFF",
+    "muted": "#F3F0E9",
+    "muted_foreground": "#718096",
+    "border": "#E2E8F0",
+    "chart_palette": [
+      "#4A7B59",
+      "#D97757",
+      "#E2E8F0",
+      "#4A90E2",
+      "#D4AF37"
+    ]
+  },
+  "layout_and_spacing": {
+    "spacing_scale": "Generous (p-6 to p-12 for containers)",
+    "container_padding": "p-6 md:p-8",
+    "grid_strategy": "Control Room Grid (Dense but clear)",
+    "dashboard_rules": [
+      "F-pattern layout: North star metric top-left.",
+      "Max 5-7 visualizations per view.",
+      "Use 'Bento' grid style for widgets.",
+      "Sticky headers for data tables."
+    ]
+  },
+  "components": {
+    "cards": "Subtle border (border-border), flat background, no heavy drop shadows. Optional soft lift on hover (-translate-y-1).",
+    "buttons": "Rounded edges (rounded-full or rounded-lg). High contrast text. Active states visibly darker.",
+    "inputs": "Shadcn defaults but softened borders. Focus ring should use primary color (Moss Green).",
+    "charts": "Recharts / Shadcn Chart components. Accessible tooltips and color-blind friendly palettes."
+  },
+  "motion_and_interactions": {
+    "hover": "Subtle background shifts and -translate-y-[2px] on interactive cards.",
+    "transitions": "transition-all duration-200 ease-in-out",
+    "loading": "Skeleton loaders using muted color."
+  },
+  "icons": {
+    "library": "lucide-react",
+    "style": "Clean, line-based, consistent stroke width (2px)."
+  },
+  "media": {
+    "image_urls": [
+      {
+        "url": "https://images.unsplash.com/photo-1758599668547-2b1192c10abb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHwxfHx2b2x1bnRlZXIlMjBncm91cCUyMGRpdmVyc2V8ZW58MHx8fHwxNzc3NTk2MzUxfDA&ixlib=rb-4.1.0&q=85",
+        "category": "volunteer_group",
+        "description": "Volunteers cleaning up a forest with blue bags"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1560220604-1985ebfe28b1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHwyfHx2b2x1bnRlZXIlMjBncm91cCUyMGRpdmVyc2V8ZW58MHx8fHwxNzc3NTk2MzUxfDA&ixlib=rb-4.1.0&q=85",
+        "category": "volunteer_group",
+        "description": "three men wearing yellow Volunteers shirts"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1721322567303-a68c83264858?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHwyfHxjaXR5JTIwc2t5bGluZSUyMGRheWxpZ2h0fGVufDB8fHx8MTc3NzU5NjM1MXww&ixlib=rb-4.1.0&q=85",
+        "category": "city_skyline",
+        "description": "A view of a city with tall buildings"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1587975836560-627bd9314fb3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHwxfHxjaXR5JTIwc2t5bGluZSUyMGRheWxpZ2h0fGVufDB8fHx8MTc3NzU5NjM1MXww&ixlib=rb-4.1.0&q=85",
+        "category": "city_skyline",
+        "description": "White concrete building under blue sky during daytime"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Apply Archetype 1: Organic & Earthy. Do not use standard dark SaaS themes or neon colors.",
+    "Update `tailwind.config.js` with the 'Outfit' and 'Manrope' fonts.",
+    "Update `index.css` to inject the defined custom color variables into the `:root` pseudo-class. Map them exactly as provided.",
+    "Implement the 'Control Room' grid strategy for the dashboard: grid-cols-1 md:grid-cols-3 lg:grid-cols-4. Minimize empty space but maintain 'p-6' internal padding on cards.",
+    "For the City Analytics features, use the provided city_skyline images as subtle headers or background textures for city-specific cards.",
+    "For Volunteer/Charity threads, use the volunteer_group images as thumbnails or list avatars.",
+    "Use Shadcn UI components extensively (Cards, Tables, Select, DatePicker, Charts) but override their default borders to be softer (border-black/5 or border-border) and remove heavy drop shadows (use flat surfaces).",
+    "Ensure all interactive elements have `data-testid` attributes.",
+    "Include a visible sidebar or top navigation bar that is not fully transparent. Avoid hiding links in hamburger menus on desktop.",
+    "Never use `Inter` or `Space Grotesk` fonts. Strictly use `Outfit` and `Manrope`.",
+    "Never use generic placeholder image URLs. Use the exact URLs from the `media` array."
+  ]
+}
