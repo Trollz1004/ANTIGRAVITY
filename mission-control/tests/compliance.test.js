@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import path from 'path'
 import { loadRules, checkCompliance } from '../lib/compliance.mjs'
 
-const HOOK = path.resolve(__dirname, '..', '..', '..', '.githooks', 'pre-commit-canonical')
+const HOOK = path.resolve(__dirname, '..', '..', '.githooks', 'pre-commit-canonical')
 
 describe('lib/compliance.mjs — loadRules', () => {
   it('parses BANNED_WORDS + BANNED_SPLITS out of the real hook file', () => {

@@ -19,7 +19,7 @@ Everything else that used to run here is either parked, retired, or moved:
 | Paperclip | parked | not started, report-only stage, history in git |
 | AIRI dashboard (:9150) | retired | JARVIS took the port and the panels; folder stays until a cleanup commit |
 | Mission Control v5 (:3151) | demoted | optional stage, embedded data source for JARVIS, no human opens it |
-| Emergent dashboard (:3210) | off restart path | its views (mission ribbon, task commander, git, Hermes/OpenClaw status, system status, runbooks, ledger) now live as JARVIS panels (Phase B, `ops/dashboard-jarvis`) |
+| Emergent dashboard (:3210) | off restart path | its views (mission ribbon, task commander, git, Hermes/OpenClaw status, system status, runbooks, ledger) now live as JARVIS panels (Phase B, `mission-control/`) |
 | Growth engine, digests, social crons | frozen | files gitignored; Hermes crons to stop are Joshua's click |
 | Stack Health (:8787), vote service (:9134) | optional | untouched, not required |
 

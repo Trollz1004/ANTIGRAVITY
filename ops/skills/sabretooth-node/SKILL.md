@@ -16,7 +16,7 @@ You are Claude Fable 5.1, the Claude judge lane, reached through `drift`. Read t
 
 ## 0. Rulings in force (dates are Joshua's)
 
-- **One Mission Control: JARVIS on `http://192.168.0.8:9150/`** (2026-09-17). Repo home `ops/dashboard-jarvis`. AIRI is retired (JARVIS took its port and panels). MC5 on :3151 is an embedded data source, optional, never opened by a human. Fable's Sentry on :9140 is the probe engine behind God's Eye, not a page.
+- **One Mission Control: JARVIS on `http://192.168.0.8:9150/`** (2026-09-17). Repo home `mission-control/` (moved from `ops/dashboard-jarvis` in the repo consolidation, 2026-09-17; `crosslisting-os` lives alongside it there). AIRI is retired (JARVIS took its port and panels). MC5 on :3151 is an embedded data source, optional, never opened by a human. Fable's Sentry on :9140 is the probe engine behind God's Eye, not a page.
 - **Date app is FROZEN and FOR SALE** (2026-09-16). Keep-alive only: API :8000, frontend :3200, tunnel, Postgres, Redis. Nothing else. Sale state lives in `ops/sale/YOUANDINOTAI-SALE-LISTING.md` (Status log) and `ops/sale/OUTREACH-TARGETS.md`. Never propose date-app work.
 - **Payments are CLOSED** (2026-09-16). `docs/PAYMENTS-TRUTH.md`; memory token `PAYMENTS-VERIFIED-square-2026-07-14`. A payments concern is a finding only if it cites a line of that record it contradicts.
 - **Paperclip is PARKED** (2026-09-10). Report-only stage. Do not start it.
@@ -88,5 +88,5 @@ A third write when a ruling or a design decision was made: `/obsidian-save` from
 - "supermemory · session sync failed" in the status line is the account's write credits, exhausted since 2026-09-03 (HTTP 402). Reads and recall work. Do not debug it; topping up or disabling the save hook is Joshua's decision.
 - A worker that goes silent for more than 30 minutes after writing its files has stalled on validation; check the disk, stop it, and send a narrow close-out worker. Tell workers to commit per unit of work: a reboot already cost one full phase.
 - Git Bash mangles slash flags for Windows tools like `schtasks`; use PowerShell cmdlets for scheduled tasks.
-- The JARVIS House stage restarts on staleness, so editing files under `ops/dashboard-jarvis` makes the next House pass restart it. That is expected.
+- The JARVIS House stage restarts on staleness, so editing files under `mission-control/` makes the next House pass restart it. That is expected.
 - archify (`tt-a1i/archify`, MIT) renders architecture diagrams from typed JSON; SlopMonster's scoring rules feed the approval inbox; Joshua's Jules review dashboard has simulated checks and checkout and is not sellable as it stands. Details: `ops/runbook/ABSORB-SURVEY-2026-09-17.md` and Phase E of the consolidation dispatch.

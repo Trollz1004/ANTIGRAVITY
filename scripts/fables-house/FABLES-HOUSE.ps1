@@ -266,10 +266,10 @@ $Stages = @(
     @{ Name = 'JARVIS (Mission Control) :9150'; Required = $true
        Probe = { if (-not (Test-Http 'http://127.0.0.1:9150/health' 6 'jarvis-dashboard')) { return $false }
                  try { $hz = Invoke-RestMethod -Uri 'http://127.0.0.1:9150/health' -TimeoutSec 6 } catch { return $false }
-                 if ($hz.startedAt -and -not (Test-Fresh $hz.startedAt @('C:\ANTIGRAVITY\ops\dashboard-jarvis\server.mjs'))) { Log '  JARVIS dashboard server is stale - restarting' 'Yellow'; return $false }
+                 if ($hz.startedAt -and -not (Test-Fresh $hz.startedAt @('C:\ANTIGRAVITY\mission-control\server.mjs'))) { Log '  JARVIS dashboard server is stale - restarting' 'Yellow'; return $false }
                  return $true }
        Heal  = { Stop-PortOwner 9150
-                 Start-Process 'node' -ArgumentList 'C:\ANTIGRAVITY\ops\dashboard-jarvis\server.mjs' -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden } }
+                 Start-Process 'node' -ArgumentList 'C:\ANTIGRAVITY\mission-control\server.mjs' -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden } }
 
     # 2026-09-17: keeps JARVIS (:9150) reachable over vscode.dev after a reboot
     # or a lost LAN path, with no second cloudflared tunnel and no static IP.

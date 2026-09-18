@@ -2,7 +2,7 @@
  * Server configuration for the JARVIS dashboard — pure functions, no side effects.
  *
  * Precedence for every setting: process.env > the repo's .env file > a derived default.
- * The repo root defaults to two levels above this server folder (dashboard/jarvis),
+ * The repo root defaults to one level above this server folder (mission-control),
  * so the server works wherever the repo is checked out. The LAN IP falls back to a
  * real interface address, never to another node's hardcoded IP.
  */
@@ -48,7 +48,7 @@ function firstLanAddress(interfaces) {
  * @param {function} [opts.interfaces] defaults to os.networkInterfaces
  */
 export function resolveConfig({ here, env = process.env, readEnv = readEnvFile, interfaces = networkInterfaces }) {
-  const repoDefault = resolve(here, '..', '..');
+  const repoDefault = resolve(here, '..');
   // The .env lives at the repo root. Read it first so ANTIGRAVITY_ROOT from .env can move the repo.
   const envFile = env.DASHBOARD_ENV_FILE || join(repoDefault, '.env');
   const file = readEnv(envFile) || {};
@@ -79,14 +79,17 @@ export function resolveConfig({ here, env = process.env, readEnv = readEnvFile, 
  * @param {function} opts.readEnv  (file) => map
  * @param {string} [opts.envFile]  repo .env location
  * @param {string[]} [opts.candidates] extra fallback folders (repo-relative defaults)
+ * @param {string} [opts.here]     this file's own folder (lib/), injectable for tests;
+ *                                 defaults to the real lib/ folder so production behavior
+ *                                 is unchanged when the caller does not pass it.
  */
-export function resolveVault({ env = process.env, readEnv = readEnvFile, envFile, candidates = [] }) {
+export function resolveVault({ env = process.env, readEnv = readEnvFile, envFile, candidates = [], here = import.meta.dirname }) {
   // OBSIDIAN_VAULT is the current name; OBSIDIAN_VAULT_ANTIGRAVITY is accepted as legacy.
   const fromEnv = env.OBSIDIAN_VAULT || env.OBSIDIAN_VAULT_ANTIGRAVITY || '';
   const file = envFile ? (readEnv(envFile) || {}) : {};
   const fromFile = file.OBSIDIAN_VAULT || file.OBSIDIAN_VAULT_ANTIGRAVITY || '';
   const configured = fromEnv || fromFile;
-  const fallback = join(resolve(import.meta.dirname, '..', '..'), 'Antigravity');
+  const fallback = join(resolve(here, '..', '..'), 'Antigravity');
   const list = [configured, ...candidates, fallback].filter(Boolean);
   const existing = list.find((p) => { try { return existsSync(p); } catch { return false; } });
   const path = existing || configured || fallback;

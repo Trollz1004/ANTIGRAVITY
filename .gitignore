@@ -273,7 +273,7 @@ ops/heartbeat/sabretooth-health.json
 ops/heartbeat/TRIGGERS.jsonl
 ops/heartbeat/.heal-lock
 ops/heartbeat/.auto-heal-enabled
-ops/dashboard-jarvis/tests/fixtures/
+mission-control/tests/fixtures/
 ops/growth-engine/create_social_posts_table.py
 ops/growth-engine/insert_new_post.py
 ops/growth-engine/screenshots/

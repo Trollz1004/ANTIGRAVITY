@@ -1,6 +1,6 @@
 # JARVIS CONSOLIDATION DISPATCH — 2026-09-17
 
-Ruled by Joshua, written by Claude Fable 5.1 (judge lane). Extends the JARVIS dashboard dispatch in the hermes repo (`docs/handoffs/jarvis-dashboard/HERMES-JARVIS-PROMPT.md`). JARVIS now lives in `ops/dashboard-jarvis` of ANTIGRAVITY, serves on :9150 on Sabretooth, is the one Mission Control, and is reached remotely through a VS Code dev tunnel with GitHub sign-in. This dispatch says what JARVIS absorbs next and the rules every panel obeys. Executors: Hermes on its lane, or Sonnet workers dispatched by the judge lane, one phase at a time, each phase validated through the House before the next starts.
+Ruled by Joshua, written by Claude Fable 5.1 (judge lane). Extends the JARVIS dashboard dispatch in the hermes repo (`docs/handoffs/jarvis-dashboard/HERMES-JARVIS-PROMPT.md`). JARVIS now lives in `mission-control/` of ANTIGRAVITY (moved from `ops/dashboard-jarvis` by the repo consolidation, 2026-09-17), serves on :9150 on Sabretooth, is the one Mission Control, and is reached remotely through a VS Code dev tunnel with GitHub sign-in. This dispatch says what JARVIS absorbs next and the rules every panel obeys. Executors: Hermes on its lane, or Sonnet workers dispatched by the judge lane, one phase at a time, each phase validated through the House before the next starts.
 
 ## Rules for every panel
 
