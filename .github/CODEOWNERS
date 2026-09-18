@@ -1,2 +1,14 @@
 # All changes require owner review
 * @Trollz1004
+
+# Protected files, ruled 2026-09-17: these paths are edited only by official
+# Claude on the judge lane through `drift`, never by Hermes, OpenClaw,
+# OpenCode, a subagent acting on its own, or Joshua himself. Every edit
+# carries a timestamped line in ops/runbook/PROTECTED-CHANGELOG.md.
+scripts/fables-house/** @Trollz1004
+scripts/drift.cmd @Trollz1004
+ops/runbook/** @Trollz1004
+ops/skills/sabretooth-node/** @Trollz1004
+docs/PAYMENTS-TRUTH.md @Trollz1004
+docs/NODE-STATE-*.md @Trollz1004
+.github/** @Trollz1004
