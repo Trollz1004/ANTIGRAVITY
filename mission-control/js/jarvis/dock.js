@@ -4,7 +4,58 @@
  * stream from the official Claude CLI bridge (persona: jarvis) with the HUD
  * context flag set, so the SERVER composes the preamble from live house data.
  * The client never forges context. No sample data, honest errors.
+ *
+ * Phase F, unit 2 (voice): a push-to-talk mic button fills the input with a
+ * transcript (never auto-sent — the operator still presses Send), and a
+ * finished reply is spoken through the server's edge-tts voice, falling back
+ * to the browser's own speechSynthesis when the server has none. Mute and
+ * the chosen voice persist in localStorage as per-viewer conveniences only.
  */
+import { speak as ttsSpeak, isMuted, setMuted, getEdgeVoice, setEdgeVoice } from './tts-client.js'
+import { speak as browserSpeak } from './voice-picker.js'
+
+export const EDGE_VOICE_CHOICES = [
+  { id: 'en-US-GuyNeural', label: 'Guy' },
+  { id: 'en-US-AndrewNeural', label: 'Andrew' },
+  { id: 'en-US-BrianNeural', label: 'Brian' },
+  { id: 'en-US-AriaNeural', label: 'Aria' },
+  { id: 'en-US-JennyNeural', label: 'Jenny' },
+  { id: 'en-US-ChristopherNeural', label: 'Christopher' },
+]
+
+function speechRecognitionCtor() {
+  return (typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition)) || null
+}
+
+/** Push-to-talk: mousedown starts listening, mouseup stops. Transcript only fills the input box. */
+function wirePushToTalk(micButton, inputEl) {
+  const Ctor = speechRecognitionCtor()
+  if (!Ctor) {
+    micButton.disabled = true
+    micButton.title = 'voice input needs Chrome or the HTTPS tunnel'
+    return null
+  }
+  const rec = new Ctor()
+  rec.continuous = true
+  rec.interimResults = true
+  rec.lang = 'en-US'
+  let active = false
+  rec.onresult = (e) => {
+    let text = ''
+    for (let i = 0; i < e.results.length; i++) text += e.results[i][0]?.transcript || ''
+    if (inputEl) inputEl.value = text.trim() // shown, never auto-sent
+  }
+  rec.onend = () => { active = false; micButton.classList.remove('active') }
+  rec.onerror = () => { active = false; micButton.classList.remove('active') }
+  micButton.addEventListener('mousedown', () => {
+    if (active) return
+    active = true
+    micButton.classList.add('active')
+    try { rec.start() } catch {}
+  })
+  micButton.addEventListener('mouseup', () => { try { rec.stop() } catch {} })
+  return rec
+}
 
 function parseSseChunk(buffer) {
   const blocks = buffer.split(/\r?\n\r?\n/);
@@ -96,14 +147,48 @@ export function mountDock({ fetchImpl = fetch } = {}) {
   input.id = 'dock-input';
   input.className = 'chat-input';
   input.placeholder = 'Ask JARVIS about this tab, the house, or the repo...';
+  const mic = document.createElement('button');
+  mic.id = 'dock-mic';
+  mic.className = 'btn dock-mic';
+  mic.title = 'Hold to talk (push-to-talk)';
+  mic.textContent = '\u{1F399}'; // microphone
+  wirePushToTalk(mic, input);
   const send = document.createElement('button');
   send.id = 'dock-send';
   send.className = 'btn primary';
   send.textContent = 'Send';
   const row = document.createElement('div');
   row.className = 'chat-input-row';
-  row.appendChild(input); row.appendChild(send);
-  panel.appendChild(head); panel.appendChild(logEl); panel.appendChild(status); panel.appendChild(row);
+  row.appendChild(mic); row.appendChild(input); row.appendChild(send);
+
+  // Voice settings: mute toggle, a short list of natural voices, a test button.
+  const voiceRow = document.createElement('div');
+  voiceRow.className = 'dock-voice-row';
+  const mute = document.createElement('button');
+  mute.id = 'dock-mute';
+  mute.className = 'btn dock-mute';
+  const refreshMute = () => { mute.textContent = isMuted() ? '\u{1F507} Muted' : '\u{1F50A} Voice on'; };
+  refreshMute();
+  mute.addEventListener('click', () => { setMuted(!isMuted()); refreshMute(); });
+  const voiceSelect = document.createElement('select');
+  voiceSelect.id = 'dock-voice-select';
+  for (const v of EDGE_VOICE_CHOICES) {
+    const opt = document.createElement('option');
+    opt.value = v.id; opt.textContent = v.label;
+    voiceSelect.appendChild(opt);
+  }
+  voiceSelect.value = getEdgeVoice();
+  voiceSelect.addEventListener('change', () => setEdgeVoice(voiceSelect.value));
+  const testVoice = document.createElement('button');
+  testVoice.id = 'dock-voice-test';
+  testVoice.className = 'btn';
+  testVoice.textContent = 'Test voice';
+  testVoice.addEventListener('click', () => {
+    void ttsSpeak('This is JARVIS, testing the selected voice.', { voice: voiceSelect.value, muted: false, fallbackSpeak: (t) => browserSpeak(t) });
+  });
+  voiceRow.appendChild(mute); voiceRow.appendChild(voiceSelect); voiceRow.appendChild(testVoice);
+
+  panel.appendChild(head); panel.appendChild(logEl); panel.appendChild(status); panel.appendChild(row); panel.appendChild(voiceRow);
   document.body.appendChild(panel);
   // Send paths use the current global fetch (tests swap it after mount).
   send.addEventListener('click', () => { void sendFromDock(); });
@@ -185,6 +270,7 @@ export async function sendFromDock({ fetchImpl = fetch, tab } = {}) {
     });
     if (live && resultText) live.textContent = resultText;
     if (status) { status.textContent = 'IDLE'; status.className = 'voice-status voice-status-idle'; }
+    if (resultText) void ttsSpeak(resultText, { fetchImpl, fallbackSpeak: (t) => browserSpeak(t) });
   } catch (e) {
     const text = 'Error: ' + String(e.message || e);
     if (live) live.textContent = text; else log(logEl, 'JARVIS', text);
