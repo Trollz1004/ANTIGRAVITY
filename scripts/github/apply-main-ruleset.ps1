@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   Landing rule (2026-09-17): nothing lands on main without the quality-gate
-  status check passing. This ruleset is the mechanical enforcement of that —
+  status check passing. This ruleset is the mechanical enforcement of that -
   it blocks branch deletion and force pushes on main and requires the
   "quality-gate" status check, with an empty bypass list so even the repo
   admin goes through the gate.
@@ -16,7 +16,7 @@
   passed).
 
   Per the 2026-09-17 landing rule, this script is created but not run with
-  -Apply here — the lead pushes the commits that depend on it first, then
+  -Apply here - the lead pushes the commits that depend on it first, then
   runs -Apply on the lead's go.
 
 .PARAMETER Apply
@@ -84,7 +84,7 @@ if ($Remove) {
     exit 0
   }
   $id = Find-ExistingRulesetId
-  if (-not $id) { Write-Host "No ruleset named '$RulesetName' found on $Repo — nothing to remove." -ForegroundColor Yellow; exit 0 }
+  if (-not $id) { Write-Host "No ruleset named '$RulesetName' found on $Repo - nothing to remove." -ForegroundColor Yellow; exit 0 }
   & gh api --method DELETE "repos/$Repo/rulesets/$id"
   Write-Host "Deleted ruleset '$RulesetName' (id $id) from $Repo." -ForegroundColor Green
   exit 0
@@ -98,7 +98,7 @@ Write-Host $Json
 Write-Host ""
 
 if (-not $Apply) {
-  Write-Host "DRY RUN — no API call made. Pass -Apply to create/update this ruleset." -ForegroundColor Yellow
+  Write-Host "DRY RUN - no API call made. Pass -Apply to create/update this ruleset." -ForegroundColor Yellow
   exit 0
 }
 
