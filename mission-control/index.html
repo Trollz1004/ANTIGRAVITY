@@ -48,6 +48,8 @@
         <li class="nav-tab" data-tab="ops"><span class="nav-icon">◫</span> Ops</li>
         <li class="nav-tab" data-tab="social"><span class="nav-icon lucide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M4 4h16v12H8l-4 4z"/></svg></span> Social</li>
         <li class="nav-tab" data-tab="inbox"><span class="nav-icon lucide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span> Inbox</li>
+        <li class="nav-tab" data-tab="judge"><span class="nav-icon lucide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3Z"/><path d="M8 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3Z"/><path d="M12 13v8"/><path d="M8 21h8"/><path d="M4 21c0-2 1.5-4 4-4"/><path d="M20 21c0-2-1.5-4-4-4"/></svg></span> Judge Lanes</li>
+        <li class="nav-tab" data-tab="architecture"><span class="nav-icon lucide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M10 6.5h4"/><path d="M6.5 10v4"/><path d="M17.5 10v4"/></svg></span> Architecture</li>
       </ul>
       <div class="sidebar-footer">
         <div class="omni-status">
@@ -119,6 +121,12 @@
         <div class="widget-card" style="margin-top:16px">
           <h3>System status — 30-minute heartbeat probe</h3>
           <div id="heartbeat-status"><p class="placeholder">Loading heartbeat…</p></div>
+        </div>
+
+        <div class="widget-card" style="margin-top:16px">
+          <h3>Fleet — Hermes / OpenClaw / OpenCode</h3>
+          <p class="tab-desc" style="margin:0 0 8px">Current task and queue depth from each lane's own STATE.md journal; token spend from OmniRoute usage when a usage route answers, honestly "unavailable" when none does.</p>
+          <div id="fleet-panel"><p class="placeholder">Loading fleet…</p></div>
         </div>
       </section>
 
@@ -585,6 +593,57 @@
           </div>
         </div>
       </section>
+
+      <!-- Judge Lanes Tab (Phase D, unit 1): the real two-lane review workstation -->
+      <section id="tab-judge" class="tab-content">
+        <header class="tab-header">
+          <h2>Judge Lanes</h2>
+          <p class="tab-desc">Every code review is judged by both Claude and Codex through their own official sessions — no model is called from this panel. Both approve moves an item to APPROVED and waits for the founder's EXECUTE (the same control the Inbox tab uses); disagreement stays JUDGED and flagged.</p>
+        </header>
+        <div class="inbox-layout">
+          <div class="widget-card">
+            <h3>Open a code review</h3>
+            <form id="judge-form" class="social-form">
+              <label>Repo
+                <input id="judge-repo" name="repo" type="text" value="antigravity" />
+              </label>
+              <label>Range (base..head or a branch)
+                <input id="judge-range" name="range" type="text" placeholder="main..my-branch" required />
+              </label>
+              <label class="full">Title
+                <input id="judge-title" name="title" type="text" placeholder="What is this diff" />
+              </label>
+              <div class="full" style="display:flex;align-items:center;gap:10px">
+                <button type="submit" class="btn">Compute diff &amp; propose</button>
+                <span id="judge-form-status" class="tab-desc" style="margin:0"></span>
+              </div>
+            </form>
+          </div>
+          <div class="widget-card">
+            <h3>Your judge lane (for posting a verdict from this tab)</h3>
+            <div class="token-prompt">
+              <select id="judge-lane-select"><option value="claude">claude</option><option value="codex">codex</option></select>
+              <input id="judge-lane-token" type="password" placeholder="x-judge-token for this lane" autocomplete="off" />
+              <button id="judge-lane-save" class="btn">Save for this tab</button>
+              <span id="judge-lane-status" class="tab-desc" style="margin:0"></span>
+            </div>
+          </div>
+          <div class="widget-card">
+            <h3>Feed</h3>
+            <div id="judge-feed" class="inbox-list"><p class="placeholder">Loading…</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Architecture Tab (Phase E, unit 3): archify-rendered live stack -->
+      <section id="tab-architecture" class="tab-content">
+        <header class="tab-header">
+          <h2>Architecture</h2>
+          <p class="tab-desc">Built from the House stage table and the health JSON, rendered by archify. A plain text page renders instead if the CLI is unavailable — never an empty frame.</p>
+          <button id="architecture-refresh" class="btn">Refresh</button>
+        </header>
+        <iframe id="architecture-frame" title="Sabertooth architecture" style="width:100%;height:75vh;border:1px solid var(--border,#30363d);border-radius:10px;background:#0d1117"></iframe>
+      </section>
     </main>
   </div>
 
@@ -598,5 +657,8 @@
   <script type="module" src="js/jarvis/ops.js"></script>
   <script type="module" src="js/jarvis/social.js"></script>
   <script type="module" src="js/jarvis/inbox.js"></script>
+  <script type="module" src="js/jarvis/judge.js"></script>
+  <script type="module" src="js/jarvis/fleet.js"></script>
+  <script type="module" src="js/jarvis/architecture.js"></script>
 </body>
 </html>

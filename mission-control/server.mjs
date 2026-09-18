@@ -31,6 +31,13 @@
  *   POST /api/launch/claude     open the official Claude CLI in a console on this host
  *   GET  /api/ollama/tags       local Ollama models
  *   POST /api/ollama/chat       local Ollama chat streamed as Server-Sent Events
+ *   POST /api/judge/reviews     Judge Lanes (Phase D): create a code.review proposal from a real `git diff --stat`
+ *   GET  /api/judge/feed        Judge Lanes: proposal feed, claude/codex verdict columns, live disagreement flag
+ *   POST /api/judge/:id/verdict Judge Lanes: post one lane's verdict (x-judge-token gated per lane)
+ *   GET  /api/fleet             Fleet panel (Phase D): Hermes/OpenClaw/OpenCode status, current task, queue depth, token spend
+ *   GET  /api/architecture.json Architecture panel (Phase E): typed JSON of the live Sabertooth stack (House stage table + health JSON)
+ *   GET  /api/architecture      Architecture panel: archify-rendered HTML (same-origin), plain-text fallback on CLI failure
+ *   GET  /api/architecture/diff?base=&head= before/after architecture diff for a commit range (archify compare)
  *   GET  /health                {service:"jarvis-dashboard"}  <- identity string for the wall
  *
  * Zero dependencies. Secrets are read from .env at request time and never logged or returned.
@@ -64,6 +71,10 @@ import { checkCompliance } from './lib/compliance.mjs';
 import { scoreCopy } from './lib/copy-score.mjs';
 import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff } from './lib/social-adapters.mjs';
 import { buildInbox, performAction } from './lib/inbox.mjs';
+import { createReviewProposal, buildJudgeFeed, postVerdict } from './lib/judge.mjs';
+import { buildFleet } from './lib/fleet.mjs';
+import { buildArchitecture, renderArchitectureHtml, renderArchitectureDiff } from './lib/architecture.mjs';
+import { defaultExec as gitExec } from './lib/git-panel.mjs';
 import { hostname, tmpdir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
@@ -173,6 +184,27 @@ const MARKETING_INBOX_DIR = join(REPO, 'ops', 'marketing-inbox', 'approved');
 const proposalStore = createProposalStore({ dir: join(HERE, 'data', 'proposals') });
 const TRIGGERS_PATH = join(REPO, 'ops', 'heartbeat', 'TRIGGERS.jsonl');
 const AUDIT_DIR = join(HERE, 'data', 'audit');
+// Judge Lanes (Phase D, unit 1): one repo in scope this phase, reusing the
+// same [{id, path}] shape as the git panel above.
+const JUDGE_REPOS = GIT_REPOS;
+// Fleet panel (Phase D, unit 2): each lane's own STATE.md tail + an identity
+// probe target. OpenCode has none configured anywhere in this repo as of
+// 2026-09-17 (checked ops/ and .agents/harness-config/) — its `probe` stays
+// null, which lib/fleet.mjs reports honestly as NOT CONFIGURED.
+const FLEET_HARNESSES = [
+  { lane: 'hermes', stateMdPath: join(REPO, '.agents', 'journals', 'hermes', 'STATE.md'), probe: { url: HERMES_URL + '/api/health', host: '127.0.0.1', port: 9119 } },
+  { lane: 'openclaw', stateMdPath: join(REPO, '.agents', 'journals', 'openclaw', 'STATE.md'), probe: { url: OPENCLAW_URL + '/healthz', host: '127.0.0.1', port: 18789 } },
+  { lane: 'opencode', stateMdPath: join(REPO, '.agents', 'journals', 'opencode', 'STATE.md'), probe: null },
+];
+// Architecture panel (Phase E, unit 3): the House stage table + the health
+// JSON, both already used elsewhere in this file (Ops tab), plus the
+// vendored archify CLI (mission-control/vendor/archify — gitignored,
+// third-party, see vendor/README note in mission-control/.gitignore).
+const HOUSE_SCRIPT_PATH = join(REPO, 'scripts', 'fables-house', 'FABLES-HOUSE.ps1');
+const ARCHIFY_BIN = join(HERE, 'vendor', 'archify', 'bin', 'archify.mjs');
+const ARCHIFY_WORK_DIR = join(HERE, 'data', 'architecture');
+let architectureHtmlCache = { at: 0, html: null };
+const ARCHITECTURE_CACHE_MS = 5 * 60 * 1000;
 // Approve of a social proposal runs the matching adapter. Manual-handoff platforms
 // write the approved copy to ops/marketing-inbox/approved/ for the lane that posts
 // it (Grok/X, Reddit, TikTok, Hermes/YouTube); syndication platforms (dev.to,
@@ -564,6 +596,72 @@ createServer(async (req, res) => {
       const r = performAction({ store: proposalStore, id, action, token, founderToken, adapters: socialAdapters, auditDir: AUDIT_DIR });
       return send(res, r.status, redact(r.body));
     } }
+
+  // Judge Lanes (Phase D, unit 1): a code.review proposal reuses the same
+  // proposal store as Social/Inbox; no model is called here — verdicts are
+  // posted by the judges' own official-CLI sessions.
+  if (p === '/api/judge/reviews' && req.method === 'POST') {
+    let body;
+    try { body = JSON.parse((await readBody(req)).toString('utf8') || '{}'); }
+    catch { return send(res, 400, { error: 'invalid JSON body' }); }
+    const r = createReviewProposal({ store: proposalStore, repos: JUDGE_REPOS, body, exec: gitExec });
+    return send(res, r.status, redact(r.body));
+  }
+  if (p === '/api/judge/feed' && req.method === 'GET') {
+    return send(res, 200, redact(buildJudgeFeed({ store: proposalStore })));
+  }
+  { const m = /^\/api\/judge\/([^/]+)\/verdict$/.exec(p);
+    if (m && req.method === 'POST') {
+      let body;
+      try { body = JSON.parse((await readBody(req)).toString('utf8') || '{}'); }
+      catch { return send(res, 400, { error: 'invalid JSON body' }); }
+      const tokens = { claude: envValue('JARVIS_JUDGE_TOKEN_CLAUDE'), codex: envValue('JARVIS_JUDGE_TOKEN_CODEX') };
+      const r = postVerdict({
+        store: proposalStore, id: decodeURIComponent(m[1]), lane: body.lane, verdict: body.verdict, reasoning: body.reasoning,
+        token: req.headers['x-judge-token'], tokens, auditDir: AUDIT_DIR,
+      });
+      return send(res, r.status, redact(r.body));
+    } }
+
+  // Fleet panel (Phase D, unit 2): identity-probed status + journal tail per
+  // lane + OmniRoute usage (honestly null when no usage route answers).
+  if (p === '/api/fleet') {
+    const r = await buildFleet({
+      harnesses: FLEET_HARNESSES, probeService, omni: { base: OMNI, key: envValue('OMNI_ROUTE_API_KEY') },
+    });
+    return send(res, 200, redact(r));
+  }
+
+  // Architecture panel (Phase E, unit 3): typed JSON from the House stage
+  // table + the health JSON, rendered by the vendored archify CLI with a
+  // 20s timeout and a 5-minute cache; a plain HTML fallback on any CLI
+  // failure so this route never serves an empty frame.
+  if (p === '/api/architecture.json') {
+    return send(res, 200, redact(buildArchitecture({ housePath: HOUSE_SCRIPT_PATH, healthPath: HEARTBEAT_JSON_PATH })));
+  }
+  if (p === '/api/architecture') {
+    if (architectureHtmlCache.html && Date.now() - architectureHtmlCache.at < ARCHITECTURE_CACHE_MS) {
+      res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+      return res.end(architectureHtmlCache.html);
+    }
+    const built = buildArchitecture({ housePath: HOUSE_SCRIPT_PATH, healthPath: HEARTBEAT_JSON_PATH });
+    const r = await renderArchitectureHtml({ json: built.archify, archifyBin: ARCHIFY_BIN, workDir: ARCHIFY_WORK_DIR });
+    architectureHtmlCache = { at: Date.now(), html: r.html };
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+    return res.end(r.html);
+  }
+  if (p === '/api/architecture/diff') {
+    const base = url.searchParams.get('base'); const head = url.searchParams.get('head');
+    if (!base || !head) return send(res, 400, { error: 'base and head query params are required' });
+    if (!JUDGE_REPOS.find((r) => r.id === 'antigravity')) return send(res, 400, { error: 'repo not configured' });
+    const r = await renderArchitectureDiff({
+      repoPath: REPO, base, head, healthPath: HEARTBEAT_JSON_PATH, archifyBin: ARCHIFY_BIN,
+      workDir: ARCHIFY_WORK_DIR, exec: gitExec,
+    });
+    if (!r.ok) return send(res, 502, { error: r.error });
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+    return res.end(r.html);
+  }
 
   if (p === '/' || p === '/index.html') return serveStatic(res, '/index.html');
   if (p === '/data/' || p.startsWith('/data/')) return send(res, 404, { error: 'not found' }); // JARVIS memory stays server-side
