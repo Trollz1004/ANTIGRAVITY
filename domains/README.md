@@ -35,13 +35,13 @@ itself currently resolves only to an IONOS parking page (no HTTPS); the
 landing page in this folder is not yet what the domain serves. State: **code
 present / DNS not yet live**.
 
-**youandinotai.com** (`domains/youandinotai.com/README.md`, pointer only in
-this part) is the You and I, not AI dating app. Its code has not moved —
-it is still at `backend/fastapi-app` and `frontend/react-app` at the
-repository root, reachable through a Cloudflare tunnel mapping the domain to
-`:3200` and `api.` to `:8000`. State: **live and frozen** — for sale as of
-2026-09-16 per `ops/sale/YOUANDINOTAI-SALE-LISTING.md`; keep it up, change
-nothing else.
+**youandinotai.com** (`domains/youandinotai.com/`) is the You and I, not AI
+dating app. Its code moved here in part 2 of the consolidation, 2026-09-17:
+`domains/youandinotai.com/backend` (was `backend/fastapi-app`) and
+`domains/youandinotai.com/frontend` (was `frontend/react-app`), reachable
+through a Cloudflare tunnel mapping the domain to `:3200` and `api.` to
+`:8000`. State: **live and frozen** — for sale as of 2026-09-16 per
+`ops/sale/YOUANDINOTAI-SALE-LISTING.md`; keep it up, change nothing else.
 
 **aidoesitall.website** (`domains/aidoesitall.website/README.md`, pointer
 only) has no app code in this repo. Its apex and `www` are verified live on

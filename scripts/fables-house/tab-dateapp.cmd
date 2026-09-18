@@ -12,7 +12,7 @@ rem
 rem Both are set here rather than exported globally, so nothing else on the
 rem machine inherits PORT.
 title dateapp (:3200)
-cd /d C:\ANTIGRAVITY\frontend\react-app
+cd /d C:\ANTIGRAVITY\domains\youandinotai.com\frontend
 
 if not exist "dist\index.html" (
   echo [dateapp] no production build found - building first...

@@ -60,7 +60,7 @@ jobs:
           gcloud run deploy "$SERVICE" \
             --project "$PROJECT_ID" \
             --region "$REGION" \
-            --source backend/fastapi-app \
+            --source domains/youandinotai.com/backend \
             --allow-unauthenticated \
             --port 8000 \
             "${EXTRA_ENV_ARGS[@]}" \

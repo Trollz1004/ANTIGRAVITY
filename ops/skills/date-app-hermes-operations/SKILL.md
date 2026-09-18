@@ -30,8 +30,8 @@ Fable/Claude communication file (save replies here, they persist after close):
 
 | Port | What | How it stays up |
 |------|------|-----------------|
-| `:3200` | Date app production frontend (`frontend/react-app`). Body must contain `assets/index-<hash>.js`, never `/@vite/client`. | Existing stack / tunnel |
-| `:3210` | Emergent CRACO dashboard (`C:\ANTIGRAVITY\frontend`, NOT `frontend\react-app`). | `C:\ANTIGRAVITY\frontend\launch-emergent-dashboard.cmd` — Health Monitor relaunches if HTTP ≠ 200. **Not** Fable's House. |
+| `:3200` | Date app production frontend (`domains/youandinotai.com/frontend`, moved from `frontend/react-app` by the repo consolidation, 2026-09-17). Body must contain `assets/index-<hash>.js`, never `/@vite/client`. | Fable's House (`scripts/fables-house/tab-dateapp.cmd`) |
+| `:3210` | Emergent CRACO dashboard — **retired 2026-09-17**; its views live as JARVIS panels at `http://192.168.0.8:9150/`. `C:\ANTIGRAVITY\frontend\launch-emergent-dashboard.cmd` is now a 3-line stub the Health Monitor still calls every 15 minutes; it prints the JARVIS pointer and exits 0. Nothing should be listening on :3210 anymore. |
 | `:8000` | FastAPI date-app API | Health Monitor restarts uvicorn if down |
 | `:6379` | Redis | Health Monitor |
 

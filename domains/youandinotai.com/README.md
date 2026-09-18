@@ -1,9 +1,11 @@
 # youandinotai.com
 
-The app code has not moved yet — this is a pointer, not the app. Part 2 of
-the repo consolidation moves it; until then it lives at `backend/fastapi-app`
-(FastAPI + Postgres + Redis) and `frontend/react-app` (React), both at the
-repository root.
+The app code lives here: `domains/youandinotai.com/backend` (FastAPI +
+Postgres + Redis, moved from `backend/fastapi-app`) and
+`domains/youandinotai.com/frontend` (React, moved from `frontend/react-app`),
+moved in part 2 of the repo consolidation, 2026-09-17. The Postgres data
+directory, `.env` files, and `node_modules` did not move and are not
+affected.
 
 **Status: FROZEN and FOR SALE as of 2026-09-16.** No new features, no growth
 engine runs, no digests, no campaigns, no experiments, no audits. Keep the
