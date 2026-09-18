@@ -74,4 +74,28 @@ Windows refuses to rename an open handle. Use SQLite's backup API instead:
 "@
 }
 
+# ── protected files (ruled 2026-09-17): never blocked, always reminded ────
+# Only official Claude, reached through drift on the node, is meant to edit
+# these - the House, drift.cmd, the runbook, the launch skill, the two
+# signed state docs, .github/**, and the drop box. This session IS that
+# editor, so the guard must not block; it only prints a reminder to log the
+# edit. Mirrors .github/CODEOWNERS.
+$protectedPatterns = @(
+  '\\scripts\\fables-house\\',
+  '\\scripts\\drift\.cmd$',
+  '\\ops\\runbook\\',
+  '\\ops\\skills\\sabretooth-node\\',
+  '\\docs\\payments-truth\.md$',
+  '\\docs\\node-state-.*\.md$',
+  '\\\.github\\',
+  '^c:\\users\\joshi\\onedrive\\claude-to-claude\\'
+)
+foreach ($pat in $protectedPatterns) {
+  if ($p -match $pat) {
+    [Console]::Error.WriteLine("protected path -- add a timestamped line to ops/runbook/PROTECTED-CHANGELOG.md")
+    [Console]::Error.Flush()
+    break
+  }
+}
+
 exit 0
