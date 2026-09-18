@@ -4,7 +4,7 @@ Date: 2026-08-11
 Status: **DRAFT — FOR FOUNDER (JOSHUA) REVIEW. DO NOT POST ANYTHING FROM THIS FILE UNTIL APPROVED.**
 Scope: 3 faceless TikTok accounts, slideshow format, week 1 of the FUNA-7 30-day ramp.
 Doctrine: business-only copy — membership, verification, safety, support, uptime, platform access.
-No pricing, no payment claims, no fundraising/charity language, no fabricated statistics, no fake testimonials.
+No pricing, no payment claims, no fundraising/cause language, no fabricated statistics, no fake testimonials.
 Payments rail is Square — but pricing/checkout NEVER appears in TikTok copy. CTA is always youandinotai.com only.
 
 ---
@@ -34,7 +34,7 @@ Payments rail is Square — but pricing/checkout NEVER appears in TikTok copy. C
 Every slide below sells exactly one idea: **youandinotai.com human-verifies every profile, so you match with real people.**
 
 - APPROVED framing (pending founder confirmation, see end of file): "every profile passes human verification," "built to keep bots out," "verified-human matching," "real people, verified."
-- BANNED in all copy: percentages or counts we can't source ("90% of matches are bots"), fake user quotes, "guaranteed," pricing, plan names, payment words, charity/mission language, Stripe (never), competitor defamation by name ("Tinder is full of bots" → say "most dating apps" instead).
+- BANNED in all copy: percentages or counts we can't source ("90% of matches are bots"), fake user quotes, "guaranteed," pricing, plan names, payment words, cause/mission language, Stripe (never), competitor defamation by name ("Tinder is full of bots" → say "most dating apps" instead).
 - Hooks may describe **relatable scenarios** (POV, "ever matched with…") — scenarios are honest; invented statistics are not.
 - **AFFILIATION DISCLOSURE (required, FTC endorsement guides + TikTok policy):** these are
   company-operated accounts. Every bio states the affiliation plainly ("from the team behind

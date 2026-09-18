@@ -21,7 +21,7 @@ PaperMates is a dark-mode, mobile-first, frontend-only concept. The baseline pag
 | Mission Control architecture | Loopback-only binding, runtime authorization, identity verification, redacted persistence, role wall, and advisory-only official judge design. |
 | Judge integrity | Claude, Gemini, GitHub Copilot, Grok, and OpenAI Codex remain separate first-party lanes; no API key, proxy, OmniRoute, provider substitution, or fabricated ballot. |
 | PaperMates safety | Adult scope, consent separation, Bot Check copy, report/block concepts, safe check-in, Circle Date, appeal path, and explicit frontend-only limits. |
-| Launch claims | No review incentives, no unverified safety claim, no active community-benefit claim, and no promise of a match, response, safety result, or donation. |
+| Launch claims | No review incentives, no unverified safety claim, no active community-benefit claim, and no promise of a match, response, safety result, or supply. |
 | Accessibility | Visible focus, a verified skip link, minimum 44 px audited targets, reduced-motion treatment, icon names, polite status feedback, contrast evidence, and clearly stated test limitations. |
 | Provenance | SHA-256 manifests and Git-blob verification are useful evidence only. The historical attestation SHA mismatch remains `MISMATCH`; do not relabel it as verified. |
 

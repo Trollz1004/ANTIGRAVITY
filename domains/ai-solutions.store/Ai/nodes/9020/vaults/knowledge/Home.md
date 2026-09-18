@@ -24,6 +24,6 @@ This vault is Josh's knowledge graph for node 9020 (the marketing node). It hold
 ## Ground rules
 
 - Every piece of marketing content requires explicit approval from Josh before posting. No agent posts autonomously.
-- This node is strictly a marketing/content engine: no payments, wallets, treasury, tax, or revenue-split content anywhere.
-- Pure product marketing only; zero charity buzzwords or solicitation language (FL §496.405).
+- This node is strictly a marketing/content engine: no payments, wallets, treasury, tax, or revenue allocation content anywhere.
+- Pure product marketing only; zero cause buzzwords or outreach language (FL §496.405).
 - Never write secrets into vault notes. Reference them by name and location only.

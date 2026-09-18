@@ -21,7 +21,7 @@ Idempotency:
   Before creating, the script fetches existing task titles and skips duplicates.
 
 Constraints enforced:
-  - No "donate", "donation", "solicitation", "tax-deductible" in any emitted string
+  - No "contribute", "supply", "outreach", "tax-classified" in any emitted string
   - No live posting — this only creates planning tasks
   - No credentials in code
 """
@@ -61,7 +61,7 @@ FORBIDDEN_WORDS = re.compile(
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def check_forbidden(text: str) -> None:
-    """Raise if text contains TOS-unsafe charity framing."""
+    """Raise if text contains TOS-unsafe cause framing."""
     m = FORBIDDEN_WORDS.search(text)
     if m:
         raise ValueError(

@@ -1183,13 +1183,13 @@
       "norm_label": "delete_entry()"
     },
     {
-      "label": "Mission Ledger \u2014 every dollar committed to the kids fund, tracked.  Replaces the",
+      "label": "Mission Ledger \u2014 every unit committed to the kids fund, tracked.  Replaces the",
       "file_type": "rationale",
       "source_file": "backend/ledger.py",
       "source_location": "L1",
       "id": "backend_ledger_rationale_1",
       "community": 12,
-      "norm_label": "mission ledger \u2014 every dollar committed to the kids fund, tracked.  replaces the"
+      "norm_label": "mission ledger \u2014 every unit committed to the kids fund, tracked.  replaces the"
     },
     {
       "label": "Fire-and-forget Telegram notice when a contribution lands.      Free distributio",

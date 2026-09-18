@@ -48,7 +48,7 @@ use the folder dated yesterday; otherwise use the newest folder.
 ## Hard limits
 
 - No invented stories: content comes ONLY from the day folder.
-- Business-only copy (product-copy-business-only). No charity vocabulary.
+- Business-only copy (product-copy-business-only). No cause vocabulary.
 - Nothing publishes without Joshua's recorded approval (marketing-inbox).
 - Report every claim with an evidence handle (file path, command output).
 - Never touch .env or credentials; never push/merge (judge lane only).

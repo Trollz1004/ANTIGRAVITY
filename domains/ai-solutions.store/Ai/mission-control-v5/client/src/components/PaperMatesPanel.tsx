@@ -130,7 +130,7 @@ export default function PaperMatesPanel({ onNavigate }: Props) {
         <article className="pm-panel">
           <header><div><span className="label">Launch voice</span><h2>Quiet, specific, accountable</h2></div></header>
           <blockquote>“Built quietly for more intentional introductions. Clear controls stay louder than marketing.”</blockquote>
-          <p className="pm-copy-note">Founding Signal is a limited, contextual launch benefit—not a promise of a match, reply, safety check, review, or donation. Public community-benefit claims remain disabled until their terms and ledger are published.</p>
+          <p className="pm-copy-note">Founding Signal is a limited, contextual launch benefit—not a promise of a match, reply, safety check, review, or supply. Public community-benefit claims remain disabled until their terms and ledger are published.</p>
           <button className="btn" type="button" onClick={() => onNavigate('control')}>RETURN TO CONTROL CENTER</button>
         </article>
       </section>

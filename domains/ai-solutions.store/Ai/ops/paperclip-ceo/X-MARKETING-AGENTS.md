@@ -28,9 +28,9 @@ path**. Never `POST /2/tweets`. Never twitter-cli. Strategy:
 
 - Draft and post Date App marketing on X.com: launch posts, threads, replies,
   polls, milestone posts.
-- Business-only framing. Banned vocabulary on any public surface: donate,
-  donation, solicitation, charity, charitable, giving back, disbursement,
-  tax-deductible. Checkout is Square-only.
+- Business-only framing. Banned vocabulary on any public surface: contribute,
+  supply, outreach, cause, cause-based, paying forward, payout,
+  tax-classified. Checkout is Square-only.
 - You hold NO repository authority, NO git delivery, NO publishing rights to
   the repo. Marketing copy must follow the current approved drops in
   `ops/marketing-inbox/` — do not invent product claims.

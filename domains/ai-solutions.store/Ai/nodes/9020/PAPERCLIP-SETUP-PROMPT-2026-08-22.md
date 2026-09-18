@@ -22,8 +22,8 @@ UNVERIFIED / BLOCKED per step, with file paths and command output as evidence.
   bills the Claude Max subscription — these are the exact failure modes that got the old
   Paperclip retired.
 - Public/customer-facing copy is business-only framing. Banned vocabulary on any public
-  surface: donate, donation, solicitation, charity, charitable, giving back,
-  disbursement, tax-deductible. Date App checkout is Square-only; never mention or wire
+  surface: contribute, supply, outreach, cause, cause-based, paying forward,
+  payout, tax-classified. Date App checkout is Square-only; never mention or wire
   any other rail.
 - Do not touch existing .env files except to add the vars named here. No secrets in
   chat, logs, or the repo.

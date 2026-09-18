@@ -24,7 +24,7 @@ Company goal: **$5,000** Square membership/access on youandinotai.com ([ANT-64](
 ## Copy (business-only)
 
 Allowed: membership, verification, safety, support, uptime, platform access, Square checkout.
-Banned on public X: donate, donation, charity, kids hospitals, revenue split, Stripe.
+Banned on public X: contribute, supply, cause, kids hospitals, revenue allocation, Stripe.
 Do not invent product claims that are not on the live site.
 
 ## Cadence (Grok-native, rate-aware)

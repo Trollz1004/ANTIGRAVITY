@@ -69,7 +69,7 @@ const revenueData = {
   },
   saas_product: 'E:/ANTIGRAVITY/services/omni-router/api-server.js',
   channels: ['landing-pages', 'saas-product', 'stripe-checkout'],
-  copy_rules: ['business-only', 'no-charity', 'no-kids', 'no-split-framing', 'square-only'],
+  copy_rules: ['business-only', 'no-cause', 'no-kids', 'no-split-framing', 'square-only'],
   verification: {
     payment_links_verified: true,
     landing_pages_deployed: true,

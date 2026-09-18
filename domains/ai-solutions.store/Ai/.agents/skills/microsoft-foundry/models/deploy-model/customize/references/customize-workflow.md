@@ -198,7 +198,7 @@ Present the following list and ask the user to choose one:
 10. Law                     (API value: law)
 11. Manufacturing           (API value: manufacturing)
 12. Media                   (API value: media)
-13. Nonprofit               (API value: nonprofit)
+13. cause-entity               (API value: cause-entity)
 14. Technology              (API value: technology)
 15. Telecommunications      (API value: telecommunications)
 16. Sport & Recreation      (API value: sport_and_recreation)

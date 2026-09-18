@@ -1,6 +1,6 @@
 {
   "terms": [
-    "charity",
+    "cause",
     "split",
     "cap",
     "mission",
@@ -50,11 +50,11 @@
       "sample": [
         [
           15,
-          "- ENIGMA plugin: deleted (no charity issues, Josh confirmed)"
+          "- ENIGMA plugin: deleted (no cause issues, Josh confirmed)"
         ],
         [
           38,
-          "- Iron Wall: ENIGMA (profit) never crosses OMEGA (charity)"
+          "- Iron Wall: ENIGMA (profit) never crosses OMEGA (cause)"
         ]
       ]
     },
@@ -92,7 +92,7 @@
         ],
         [
           57,
-          "4. DAO Platform (aidoesitall.website) - 100% charity layer"
+          "4. DAO Platform (aidoesitall.website) - 100% cause layer"
         ],
         [
           63,
@@ -110,7 +110,7 @@
       "sample": [
         [
           71,
-          "                            splits: { charity: 1250000, infrastructure: 3375000, founder: 7875000 },"
+          "                            splits: { cause: 1250000, infrastructure: 3375000, founder: 7875000 },"
         ],
         [
           116,
@@ -118,7 +118,7 @@
         ],
         [
           148,
-          "                                <h3 className=\"text-3xl font-black text-textmain\">${(data?.splits?.charity / 100).toLocaleString() || '0'}</h3>"
+          "                                <h3 className=\"text-3xl font-black text-textmain\">${(data?.splits?.cause / 100).toLocaleString() || '0'}</h3>"
         ],
         [
           167,
@@ -126,11 +126,11 @@
         ],
         [
           175,
-          "                                        <span className=\"text-accent2\">Charity (Pediatric Care) - 10%</span>"
+          "                                        <span className=\"text-accent2\">cause (Pediatric Care) - 10%</span>"
         ],
         [
           176,
-          "                                        <span className=\"text-textmain\">${(data?.splits?.charity / 100).toLocaleString()}</span>"
+          "                                        <span className=\"text-textmain\">${(data?.splits?.cause / 100).toLocaleString()}</span>"
         ],
         [
           186,
@@ -366,15 +366,15 @@
         ],
         [
           11,
-          "- Current LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`"
+          "- Current LLC-controlled revenue uses a founder-directed conservative `10% cause-based cap`"
         ],
         [
           26,
-          "- that historical `60/30/10` or `100% DAO` doctrine is current for LLC-controlled revenue"
+          "- that historical `internal allocation mix` or `100% DAO` doctrine is current for LLC-controlled revenue"
         ],
         [
           50,
-          "Do not use older ClawX or prompt docs by themselves to justify public `60/30/10`, `100% charity`, or `100% DAO` claims."
+          "Do not use older ClawX or prompt docs by themselves to justify public `internal allocation mix`, `100% cause`, or `100% DAO` claims."
         ]
       ]
     },
@@ -392,7 +392,7 @@
         ],
         [
           76,
-          "Every piece of energy put into this goes towards making an impact. Support the cause and know that 10% of any broader ecosystem support is channeled into providing kids' medical care through our founder-directed charity."
+          "Every piece of energy put into this goes towards making an impact. Support the cause and know that 10% of any broader ecosystem support is channeled into providing kids' medical care through our founder-directed cause."
         ]
       ]
     },
@@ -444,7 +444,7 @@
         ],
         [
           74,
-          "4. DAO Platform (aidoesitall.website) - 100% charity layer"
+          "4. DAO Platform (aidoesitall.website) - 100% cause layer"
         ],
         [
           80,
@@ -474,7 +474,7 @@
         ],
         [
           40,
-          "- ENIGMA and OMEGA are MERGED into Antigravity (tax law changed \u2014 10% max charity credit, no point keeping split)"
+          "- ENIGMA and OMEGA are MERGED into Antigravity (tax law changed \u2014 10% max cause credit, no point keeping split)"
         ],
         [
           47,
@@ -2888,7 +2888,7 @@
       "sample": [
         [
           24,
-          "           splits: { charity: 1250000, infrastructure: 3375000, founder: 7875000 },"
+          "           splits: { cause: 1250000, infrastructure: 3375000, founder: 7875000 },"
         ],
         [
           65,
@@ -2896,7 +2896,7 @@
         ],
         [
           97,
-          "            <h3 className=\"text-3xl font-black text-[#e8f0ff]\">${(data?.splits?.charity / 100).toLocaleString() || '0'}</h3>"
+          "            <h3 className=\"text-3xl font-black text-[#e8f0ff]\">${(data?.splits?.cause / 100).toLocaleString() || '0'}</h3>"
         ],
         [
           116,
@@ -2904,11 +2904,11 @@
         ],
         [
           124,
-          "                   <span className=\"text-[#ff3d00]\">Charity (Pediatric Care) - 10%</span>"
+          "                   <span className=\"text-[#ff3d00]\">cause (Pediatric Care) - 10%</span>"
         ],
         [
           125,
-          "                   <span className=\"text-[#e8f0ff]\">${(data?.splits?.charity / 100).toLocaleString()}</span>"
+          "                   <span className=\"text-[#e8f0ff]\">${(data?.splits?.cause / 100).toLocaleString()}</span>"
         ],
         [
           135,
@@ -3122,27 +3122,27 @@
         ],
         [
           25,
-          "- \u201cImpact credits\u201d flowing from your for\u2011profit platforms into charity projects"
+          "- \u201cImpact credits\u201d flowing from your for\u2011profit platforms into cause projects"
         ],
         [
           42,
-          "- The **impact ledger** that tracks what work supports which charity / DAO pool."
+          "- The **impact ledger** that tracks what work supports which cause / DAO pool."
         ],
         [
           52,
-          "> **Business Exchange**: A multi-tenant B2B marketplace where organizations list offers, needs, and impact-backed deals, with automated routing to AI agents and revenue-sharing toward selected charity pools."
+          "> **Business Exchange**: A multi-tenant B2B marketplace where organizations list offers, needs, and impact-backed deals, with automated routing to AI agents and revenue-sharing toward selected cause pools."
         ],
         [
           60,
-          "- Impact accounting (percent of each transaction to a charity pool or DAO)."
+          "- Impact accounting (percent of each transaction to a cause pool or DAO)."
         ],
         [
           78,
-          "    - Each organization sets: \u201cX% of our revenue here goes to: [Charity Pool A/B/C].\u201d"
+          "    - Each organization sets: \u201cX% of our revenue here goes to: [cause Pool A/B/C].\u201d"
         ],
         [
           91,
-          "    - Next.js (React, SSR for SEO for \u201cbusiness exchange,\u201d \u201ccharity-backed services\u201d)."
+          "    - Next.js (React, SSR for SEO for \u201cbusiness exchange,\u201d \u201ccause-backed services\u201d)."
         ],
         [
           108,
@@ -3150,11 +3150,11 @@
         ],
         [
           110,
-          "This is where \u201cBusiness Exchange\u201d gets aligned with your charity-first vision:"
+          "This is where \u201cBusiness Exchange\u201d gets aligned with your cause-first vision:"
         ],
         [
           112,
-          "- Every transaction is natively **impact-tagged** (which charity pool benefits)."
+          "- Every transaction is natively **impact-tagged** (which cause pool benefits)."
         ],
         [
           119,
@@ -3162,7 +3162,7 @@
         ],
         [
           126,
-          "Is your primary goal for this \u201cBusiness Exchange\u201d to be (a) a marketplace to buy/sell full businesses, or (b) a services/referral marketplace that routes work and revenue into your charity pools?"
+          "Is your primary goal for this \u201cBusiness Exchange\u201d to be (a) a marketplace to buy/sell full businesses, or (b) a services/referral marketplace that routes work and revenue into your cause pools?"
         ]
       ]
     },
@@ -3512,7 +3512,7 @@
         ],
         [
           12,
-          "  2. Universal BRIEFING.md \u2014 written, committed, pushed. It leads with your seriousness and the #1 pre-wipe priority (zero charity"
+          "  2. Universal BRIEFING.md \u2014 written, committed, pushed. It leads with your seriousness and the #1 pre-wipe priority (zero cause"
         ],
         [
           13,
@@ -3524,11 +3524,11 @@
         ],
         [
           18,
-          "  3. Memory saved \u2014 the T5500 consolidation directive and the no-charity/no-splits-before-wipe gate are now durable so no AI loses"
+          "  3. Memory saved \u2014 the T5500 consolidation directive and the no-cause/no-splits-before-wipe gate are now durable so no AI loses"
         ],
         [
           26,
-          "  secret/charity/split language, then commit the good and gitignore the trash. Want me to run that review pass now? That's also the"
+          "  secret/cause/split language, then commit the good and gitignore the trash. Want me to run that review pass now? That's also the"
         ]
       ]
     },
@@ -3636,7 +3636,7 @@
         ],
         [
           153,
-          "CHARITY_WALLET=0x8d3dEADbE2b4B857A43331D459270B5eedC7084e"
+          "cause_WALLET=0x8d3dEADbE2b4B857A43331D459270B5eedC7084e"
         ],
         [
           264,
@@ -3658,7 +3658,7 @@
         ],
         [
           153,
-          "CHARITY_WALLET=0x8d3dEADbE2b4B857A43331D459270B5eedC7084e"
+          "cause_WALLET=0x8d3dEADbE2b4B857A43331D459270B5eedC7084e"
         ],
         [
           262,
@@ -3806,7 +3806,7 @@
         ],
         [
           17,
-          "It's early \u2014 I'll tell you real numbers, even when the real number is zero. What I can promise is the story: single founder, family reasons (my brother is disabled, my niece is autistic \u2014 10% of every dollar goes toward kids who need medical care), and a product your audience actually keeps asking for."
+          "It's early \u2014 I'll tell you real numbers, even when the real number is zero. What I can promise is the story: single founder, family reasons (my brother is disabled, my niece is autistic \u2014 10% of every unit goes toward kids who need medical care), and a product your audience actually keeps asking for."
         ]
       ]
     },
@@ -4114,7 +4114,7 @@
         ],
         [
           73,
-          "The hub currently uses static numbers. If you want the four hero-meta tiles (Kids Helped \u00b7 Gross YTD \u00b7 Nodes Active \u00b7 Charitable Floor) to update live, expose:"
+          "The hub currently uses static numbers. If you want the four hero-meta tiles (Kids Helped \u00b7 Gross YTD \u00b7 Nodes Active \u00b7 cause-based Floor) to update live, expose:"
         ],
         [
           77,
@@ -4126,7 +4126,7 @@
         ],
         [
           125,
-          "**FL \u00a7496.405 customer-language ban** \u00b7 Never on customer surfaces: `donate` \u00b7 `donation` \u00b7 `solicitation` \u00b7 `charity` \u00b7 `charitable` \u00b7 `giving back` \u00b7 `disbursement`. Agent-internal synonym `contractual revenue disbursement` permitted ONLY in `briefings/`, `hermes/agents/`, `AGENTS.md`, `SOUL.md`, `HEARTBEAT.md`, `SKILLS.md`, `TOOLS.md`."
+          "**FL \u00a7496.405 customer-language ban** \u00b7 Never on customer surfaces: `contribute` \u00b7 `supply` \u00b7 `outreach` \u00b7 `cause` \u00b7 `cause-based` \u00b7 `paying forward` \u00b7 `payout`. Agent-internal synonym `contractual revenue payout` permitted ONLY in `briefings/`, `hermes/agents/`, `AGENTS.md`, `SOUL.md`, `HEARTBEAT.md`, `SKILLS.md`, `TOOLS.md`."
         ],
         [
           165,
@@ -4152,7 +4152,7 @@
         ],
         [
           14,
-          "1. Enforce 10/27/63 revenue splits (SOUL.md)"
+          "1. Enforce 10/27/63 revenue allocations (SOUL.md)"
         ],
         [
           15,
@@ -4198,7 +4198,7 @@
       "sample": [
         [
           10,
-          "We are financially redlined, so this must be public, direct, and deployable now. The public site and README must explicitly mention the date app / YouAndINotAI as a live funding engine, the DAO launch as a public launch, customer support, and the Business Exchange marketplace. Do not hide the date app. Do not bury the DAO. Do not use charity-language on customer surfaces. Keep public wording commercially honest and founder-led."
+          "We are financially redlined, so this must be public, direct, and deployable now. The public site and README must explicitly mention the date app / YouAndINotAI as a live funding engine, the DAO launch as a public launch, customer support, and the Business Exchange marketplace. Do not hide the date app. Do not bury the DAO. Do not use cause-language on customer surfaces. Keep public wording commercially honest and founder-led."
         ],
         [
           15,
@@ -4214,11 +4214,11 @@
         ],
         [
           22,
-          "5) Keep all numbers real or zero. Never invent revenue, users, or charity impact."
+          "5) Keep all numbers real or zero. Never invent revenue, users, or cause impact."
         ],
         [
           24,
-          "7) On customer-facing pages, avoid donation/charity wording; use operational and contractual language only."
+          "7) On customer-facing pages, avoid supply/cause wording; use operational and contractual language only."
         ],
         [
           25,
@@ -4306,7 +4306,7 @@
       "sample": [
         [
           5,
-          "We are financially redlined, so this must be public, direct, and deployable now. The public site and README must explicitly mention the date app / YouAndINotAI as a live funding engine, the DAO launch as a public launch, customer support, and the Business Exchange marketplace. Do not hide the date app. Do not bury the DAO. Do not use charity-language on customer surfaces. Keep public wording commercially honest and founder-led."
+          "We are financially redlined, so this must be public, direct, and deployable now. The public site and README must explicitly mention the date app / YouAndINotAI as a live funding engine, the DAO launch as a public launch, customer support, and the Business Exchange marketplace. Do not hide the date app. Do not bury the DAO. Do not use cause-language on customer surfaces. Keep public wording commercially honest and founder-led."
         ],
         [
           10,
@@ -4322,11 +4322,11 @@
         ],
         [
           17,
-          "5) Keep all numbers real or zero. Never invent revenue, users, or charity impact."
+          "5) Keep all numbers real or zero. Never invent revenue, users, or cause impact."
         ],
         [
           19,
-          "7) On customer-facing pages, avoid donation/charity wording; use operational and contractual language only."
+          "7) On customer-facing pages, avoid supply/cause wording; use operational and contractual language only."
         ],
         [
           20,

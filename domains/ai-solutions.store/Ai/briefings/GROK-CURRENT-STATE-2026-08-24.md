@@ -70,7 +70,7 @@ S1 doctrine in `Agents.md` / `CLAUDE.md` (landed 2026-08-19) still wins: one tre
 
 ## Public product (unchanged)
 
-YouAndINotAI / youandinotai.com: Square checkout. Business-only copy. No charity vocabulary on customer surfaces. Marketing publishes only after Joshua's recorded approval.
+YouAndINotAI / youandinotai.com: Square checkout. Business-only copy. No cause vocabulary on customer surfaces. Marketing publishes only after Joshua's recorded approval.
 
 ---
 

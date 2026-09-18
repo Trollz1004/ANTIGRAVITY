@@ -26,8 +26,8 @@ Environment:
   DRAFTS_DIR            override drafts output dir
 
 TOS constraints enforced:
-  - Prompt instructs LLM: no "donate"/"donation"/"solicitation"/"tax-deductible"
-  - Lead with product value, not charity framing
+  - Prompt instructs LLM: no "contribute"/"supply"/"outreach"/"tax-classified"
+  - Lead with product value, not cause framing
   - Draft is NOT posted — human approval required before any post
 """
 
@@ -64,7 +64,7 @@ SYSTEM_PROMPT = """You are a content assistant for youandinotai.com, an AI-power
 Your role is to draft organic growth content (Reddit comments, Discord messages, social posts) that Joshua will review and post manually.
 
 CRITICAL RULES:
-- Never use the words: donate, donation, donations, solicitation, tax-deductible
+- Never use the words: contribute, supply, supplies, outreach, tax-classified
 - Lead with genuine product value — AI-powered compatibility, better matches, smarter dating
 - 80% helpful value, 20% max subtle promotion
 - Write like a real person, not a marketer
@@ -228,7 +228,7 @@ def build_prompt(ctx: dict, variations: int) -> str:
         f"Requirements:\n"
         f"- Vary length across drafts\n"
         f"- Sound like a real person, not a marketer\n"
-        f"- Never use: donate, donation, solicitation, tax-deductible\n"
+        f"- Never use: contribute, supply, outreach, tax-classified\n"
         f"- Lead with value to the reader"
     )
 

@@ -12,9 +12,9 @@ Operating contract for any agent running on node 9020 (i7k32GB1050ti). Read this
 ## Content scope (2026-08-21 directive)
 
 - This node is strictly a marketing/content engine. No payments, wallets, or treasury routing — ever.
-- No tax, deduction, or revenue-split mechanics in any prompt, memory file, or output. If you find such content, strip it and report.
+- No tax, deduction, or revenue allocation mechanics in any prompt, memory file, or output. If you find such content, strip it and report.
 - Campaigns are 100% product marketing: YouAndINotAI (human verification, anti-bot matching, community boards, volunteer meetups), Dream Online (persistent-memory AI NPCs, kid-safe, free-to-play + cosmetics), Business Exchange & AI Solutions (utility software).
-- Zero charity buzzwords, zero solicitation language (FL §496.405 compliance).
+- Zero cause buzzwords, zero outreach language (FL §496.405 compliance).
 
 ## Git authority
 
