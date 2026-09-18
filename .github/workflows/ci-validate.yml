@@ -33,10 +33,10 @@ jobs:
         run: |
           if [ -d apps/youandinotai-frontend ]; then
             cd apps/youandinotai-frontend
-          elif [ -d frontend/react-app ]; then
-            cd frontend/react-app
+          elif [ -d domains/youandinotai.com/frontend ]; then
+            cd domains/youandinotai.com/frontend
           else
-            echo "::error::No frontend directory found (apps/youandinotai-frontend or frontend/react-app) — repo layout changed; update ci-validate.yml"
+            echo "::error::No frontend directory found (apps/youandinotai-frontend or domains/youandinotai.com/frontend) — repo layout changed; update ci-validate.yml"
             exit 1
           fi
           npm ci
@@ -48,7 +48,7 @@ jobs:
       - name: Check for stale Stripe links
         run: |
           BUILT=()
-          for d in apps/youandinotai-frontend/.next frontend/react-app/dist; do
+          for d in apps/youandinotai-frontend/.next domains/youandinotai.com/frontend/dist; do
             [ -d "$d" ] && BUILT+=("$d")
           done
           if [ ${#BUILT[@]} -eq 0 ]; then
@@ -65,7 +65,7 @@ jobs:
       - name: Block Stripe wiring on dating surfaces
         run: |
           set -u
-          CANDIDATES=(apps/youandinotai-frontend frontend/react-app/src backend/fastapi-app/app apps/mission-control-public)
+          CANDIDATES=(apps/youandinotai-frontend domains/youandinotai.com/frontend/src domains/youandinotai.com/backend/app apps/mission-control-public)
           TARGETS=()
           for t in "${CANDIDATES[@]}"; do
             if [ -d "$t" ]; then
@@ -106,10 +106,10 @@ jobs:
         run: |
           set -u
           # Live customer-surface target dirs. youandinotai-api/app/ was removed during the
-          # monorepo restructure; the FastAPI app now lives at backend/fastapi-app/app/.
+          # monorepo restructure; the FastAPI app now lives at domains/youandinotai.com/backend/app/.
           # Pre-existing grep was passing silently when youandinotai-api/app/ disappeared
           # because grep exited 2 (error) and `if grep ...; then` only fires on exit 0.
-          CANDIDATES=(apps/youandinotai-frontend frontend/react-app/src backend/fastapi-app/app)
+          CANDIDATES=(apps/youandinotai-frontend domains/youandinotai.com/frontend/src domains/youandinotai.com/backend/app)
           TARGETS=()
           for t in "${CANDIDATES[@]}"; do
             if [ -d "$t" ]; then
@@ -161,7 +161,7 @@ jobs:
       # TODO scanner — prevent placeholder implementations in production code
       - name: Scan for TODO/FIXME comments
         run: |
-          TODO_COMMENTS=$(git ls-files apps/youandinotai-frontend/ backend/fastapi-app/app/ | xargs grep -n "TODO\|FIXME\|TEMPORARY" || true)
+          TODO_COMMENTS=$(git ls-files apps/youandinotai-frontend/ domains/youandinotai.com/backend/app/ | xargs grep -n "TODO\|FIXME\|TEMPORARY" || true)
           if [ -n "$TODO_COMMENTS" ]; then
             echo "::warning::Found TODO/FIXME comments in code (review for production readiness):"
             echo "$TODO_COMMENTS"
@@ -177,7 +177,7 @@ jobs:
           GITHUB_PAT_PREFIX='ghp'
           PATTERNS="AIza[0-9A-Za-z_-]{20,}|[0-9]{8,10}:[A-Za-z0-9_-]{35}|sk_live_[A-Za-z0-9]{16,}|${GITHUB_PAT_PREFIX}_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}"
           HITS=$(git ls-files \
-            memory/ briefings/ mcp-server/ apps/youandinotai-frontend/ frontend/react-app/ antigravity/ revenue-core/ CLAUDE.md AGENTS.md \
+            memory/ briefings/ mcp-server/ apps/youandinotai-frontend/ domains/youandinotai.com/frontend/ antigravity/ revenue-core/ CLAUDE.md AGENTS.md \
             | grep -E '\.(md|ts|tsx|json|txt)$' \
             | xargs grep -nE "$PATTERNS" 2>/dev/null \
             | grep -v "REDACTED" | grep -v "\.env\.example" | grep -v "\.githooks" | grep -v "scripts/opus-guardian" \
@@ -196,7 +196,7 @@ jobs:
       # TODO endpoint scanner — prevent placeholder endpoints in production
       - name: Scan for TODO endpoints
         run: |
-          TODO_ENDPOINTS=$(git ls-files backend/fastapi-app/app/routers/ | xargs grep -n "TODO\|FIXME\|TEMPORARY" || true)
+          TODO_ENDPOINTS=$(git ls-files domains/youandinotai.com/backend/app/routers/ | xargs grep -n "TODO\|FIXME\|TEMPORARY" || true)
           if [ -n "$TODO_ENDPOINTS" ]; then
             echo "::warning::Found TODO/FIXME markers in endpoint code (review for production readiness):"
             echo "$TODO_ENDPOINTS"
@@ -207,7 +207,7 @@ jobs:
       # Feature flag guidance — flag use of placeholder implementations
       - name: Flag placeholder implementations
         run: |
-          PLACEHOLDER_IMPLS=$(git ls-files backend/fastapi-app/ | xargs grep -n "raise NotImplementedError\|pass  # TODO\|# PLACEHOLDER\|dummy.*implementation" || true)
+          PLACEHOLDER_IMPLS=$(git ls-files domains/youandinotai.com/backend/ | xargs grep -n "raise NotImplementedError\|pass  # TODO\|# PLACEHOLDER\|dummy.*implementation" || true)
           if [ -n "$PLACEHOLDER_IMPLS" ]; then
             echo "::notice::Found placeholder implementations (consider feature flags for gradual rollout):"
             echo "$PLACEHOLDER_IMPLS"
@@ -223,15 +223,15 @@ jobs:
           node-version: '20'
 
       - name: Install frontend dependencies
-        working-directory: frontend/react-app
+        working-directory: domains/youandinotai.com/frontend
         run: npm install
 
       - name: Run ESLint
-        working-directory: frontend/react-app
+        working-directory: domains/youandinotai.com/frontend
         run: npx eslint src --ext .ts,.tsx
 
       - name: Run Prettier check
-        working-directory: frontend/react-app
+        working-directory: domains/youandinotai.com/frontend
         run: npx prettier --check "src/**/*.{ts,tsx,json,css}"
 
   black-ruff-check:
@@ -244,24 +244,24 @@ jobs:
           python-version: '3.12'
 
       - name: Install Python dependencies
-        working-directory: backend/fastapi-app
+        working-directory: domains/youandinotai.com/backend
         run: |
           pip install -r requirements.txt
           pip install black ruff
 
       - name: Run Black check
-        working-directory: backend/fastapi-app
+        working-directory: domains/youandinotai.com/backend
         run: black --check .
 
       - name: Run Ruff check
-        working-directory: backend/fastapi-app
+        working-directory: domains/youandinotai.com/backend
         run: ruff check .
 
   run-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend/fastapi-app
+        working-directory: domains/youandinotai.com/backend
     steps:
       - uses: actions/checkout@v7
 
@@ -380,7 +380,7 @@ jobs:
           npx -y pnpm@9.15.4 audit --audit-level high
 
       - name: Audit frontend lockfile
-        working-directory: frontend/react-app
+        working-directory: domains/youandinotai.com/frontend
         # The production frontend keeps its own npm lockfile outside the pnpm
         # workspace — audit it separately (cleared to 2 moderates, 2026-08-11).
         run: npm audit --audit-level=high
@@ -392,7 +392,7 @@ jobs:
           # Audit the app's dependency manifest. Blocking, with one documented
           # exception: PYSEC-2026-1325 (ecdsa, transitive) has no fixed release
           # yet — remove the ignore once upstream ships a patched version.
-          pip-audit --strict -r backend/fastapi-app/requirements.txt \
+          pip-audit --strict -r domains/youandinotai.com/backend/requirements.txt \
             --ignore-vuln PYSEC-2026-1325
 
   # Aggregator gate — single required status check named "code".

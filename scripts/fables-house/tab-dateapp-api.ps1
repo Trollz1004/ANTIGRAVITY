@@ -1,5 +1,7 @@
 # ── DateApp API — api.youandinotai.com backend (:8000) ────────────────────
-# FastAPI app served by uvicorn from backend\fastapi-app using backend\.venv.
+# FastAPI app served by uvicorn from domains\youandinotai.com\backend (moved
+# from backend\fastapi-app by the repo consolidation, 2026-09-17) using the
+# venv that stayed at backend\.venv (it was never inside fastapi-app).
 #
 # SECRETS: loaded at runtime from the local vault handoff file (outside the
 # repo, never committed, never echoed). Per doctrine: env authority stays in
@@ -7,7 +9,7 @@
 $ErrorActionPreference = 'Stop'
 
 $VaultEnv = 'C:\Users\joshi\.antigravity-vault\vault-handoff\env-stash-from-documents\.env-not-for-github.txt'
-$AppDir   = 'C:\ANTIGRAVITY\backend\fastapi-app'
+$AppDir   = 'C:\ANTIGRAVITY\domains\youandinotai.com\backend'
 $Python   = 'C:\ANTIGRAVITY\backend\.venv\Scripts\python.exe'
 
 if (-not (Test-Path $VaultEnv)) { Write-Error "vault env missing: $VaultEnv"; exit 1 }
