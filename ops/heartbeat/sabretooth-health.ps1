@@ -22,7 +22,6 @@ $ErrorActionPreference = 'Continue'
 [System.Net.WebRequest]::DefaultWebProxy = $null
 
 $Repo = 'C:\ANTIGRAVITY'
-$Hermes = 'C:\Users\joshi\hermes'
 $HeartbeatDir = Join-Path $Repo 'ops\heartbeat'
 $JsonOut = Join-Path $HeartbeatDir 'sabretooth-health.json'
 $LogOut = Join-Path $HeartbeatDir 'health.log'
@@ -148,9 +147,8 @@ function Invoke-ProbePass {
     $required['jarvis_9150'] = @{ status = $(if ($jarvis.ok) { 'UP' } else { 'DOWN' }); detail = $jarvis.detail }
 
     # ── optional targets ──
-    $mc5 = Test-HttpIdentity -Url 'http://127.0.0.1:3151/' -MustContain 'MISSION CONTROL'
-    $optional['mc5_3151'] = @{ status = $(if ($mc5.ok) { 'UP' } else { 'DOWN' }); detail = $mc5.detail }
-
+    # mc5_3151 probe removed 2026-09-17: MC5 is retired, per the One Mission
+    # Control ruling (JARVIS on :9150 absorbed it).
     $sentry = Test-HttpIdentity -Url 'http://127.0.0.1:9140/health' -MustContain 'fables-sentry'
     $optional['sentry_9140'] = @{ status = $(if ($sentry.ok) { 'UP' } else { 'DOWN' }); detail = $sentry.detail }
 
@@ -163,6 +161,9 @@ function Invoke-ProbePass {
     return @{ required = $required; optional = $optional }
 }
 
+# Hermes repo clone check removed 2026-09-17: Trollz1004/hermes is archived
+# (folded into this repo under hermes/); the clone at ~/hermes is a stale
+# leftover, not a repo this node's health should track.
 function Get-GitStatus {
     param([string]$Path, [string]$Branch)
     $result = @{ path = $Path; dirty = $null; ahead_behind_origin = 'unknown' }
@@ -211,7 +212,6 @@ function Write-VerboseTable {
         Write-Host ("  {0,-24} {1,-10} {2}" -f $k, $v.status, $v.detail) -ForegroundColor $color
     }
     Write-Host ("git  {0}: {1} dirty lines, equal_to_origin={2}" -f 'ANTIGRAVITY', $Snapshot.git.antigravity.dirty_lines, $Snapshot.git.antigravity.equal_to_origin) -ForegroundColor DarkGray
-    Write-Host ("git  {0}: {1} dirty lines, equal_to_origin={2}" -f 'hermes', $Snapshot.git.hermes.dirty_lines, $Snapshot.git.hermes.equal_to_origin) -ForegroundColor DarkGray
     Write-Host ("sale: {0}" -f $Snapshot.sale.status_line) -ForegroundColor DarkGray
     Write-Host ''
 }
@@ -221,8 +221,7 @@ function Get-Overall {
     $requiredFailed = @($Pass.required.Values | Where-Object { $_.status -ne 'UP' -and $_.status -ne 'SCHANNEL' })
     if ($requiredFailed.Count -gt 0) { return 'RED' }
     $optionalFailed = @($Pass.optional.Values | Where-Object { $_.status -ne 'UP' })
-    $gitDirtyOrBehind = ($Git.antigravity.dirty_lines -gt 0) -or ($Git.antigravity.equal_to_origin -eq $false) -or
-                        ($Git.hermes.dirty_lines -gt 0) -or ($Git.hermes.equal_to_origin -eq $false)
+    $gitDirtyOrBehind = ($Git.antigravity.dirty_lines -gt 0) -or ($Git.antigravity.equal_to_origin -eq $false)
     if ($optionalFailed.Count -gt 0 -or $gitDirtyOrBehind) { return 'YELLOW' }
     return 'GREEN'
 }
@@ -231,7 +230,6 @@ function Get-Overall {
 $pass = Invoke-ProbePass
 $gitStatus = @{
     antigravity = Get-GitStatus -Path $Repo -Branch 'main'
-    hermes = Get-GitStatus -Path $Hermes -Branch 'master'
 }
 $saleLine = Get-SaleStatusLine
 $overall = Get-Overall -Pass $pass -Git $gitStatus
@@ -267,7 +265,6 @@ if ($overall -eq 'RED') {
     $pass = Invoke-ProbePass
     $gitStatus = @{
         antigravity = Get-GitStatus -Path $Repo -Branch 'main'
-        hermes = Get-GitStatus -Path $Hermes -Branch 'master'
     }
     $saleLine = Get-SaleStatusLine
     $overall = Get-Overall -Pass $pass -Git $gitStatus

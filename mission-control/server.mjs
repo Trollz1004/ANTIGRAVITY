@@ -64,7 +64,7 @@ import { checkCompliance } from './lib/compliance.mjs';
 import { scoreCopy } from './lib/copy-score.mjs';
 import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff } from './lib/social-adapters.mjs';
 import { buildInbox, performAction } from './lib/inbox.mjs';
-import { hostname, tmpdir, homedir } from 'node:os';
+import { hostname, tmpdir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -149,10 +149,11 @@ const CONSTITUTION_PATH = join(REPO, '.specify', 'memory', 'constitution.md');
 // Ops tab (Phase B): mission ribbon reads CLAUDE.md + the judge journal, both live, no cache.
 const CLAUDE_MD_PATH = join(REPO, 'CLAUDE.md');
 const JUDGE_STATE_PATH = join(REPO, '.agents', 'journals', 'paperclip-judge', 'STATE.md');
-// Git panel (Phase B): both real checkouts on this node, overridable in .env for a moved clone.
+// Git panel (Phase B): the one real checkout on this node. The hermes clone
+// entry was dropped 2026-09-17 — Trollz1004/hermes is archived (folded into
+// this repo under hermes/) and the ~/hermes clone is a stale leftover.
 const GIT_REPOS = [
   { id: 'antigravity', path: REPO },
-  { id: 'hermes', path: envValue('HERMES_REPO_PATH') || join(homedir(), 'hermes') },
 ];
 // Hermes router + OpenClaw support (Phase B): same-node services, loopback by default.
 const HERMES_URL = (envValue('HERMES_URL') || 'http://127.0.0.1:9119').replace(/\/$/, '');

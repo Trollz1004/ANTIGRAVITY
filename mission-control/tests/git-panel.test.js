@@ -80,11 +80,11 @@ describe('lib/git-panel.mjs — the real ANTIGRAVITY checkout (worked example)',
 })
 
 describe('JARVIS wiring — server.mjs, index.html', () => {
-  it('server.mjs wires GET /api/git-panel through lib/git-panel.mjs, both repos configured', () => {
+  it('server.mjs wires GET /api/git-panel through lib/git-panel.mjs, antigravity only (hermes clone dropped 2026-09-17 — archived repo, stale ~/hermes clone)', () => {
     const server = fs.readFileSync(path.join(root, 'server.mjs'), 'utf-8')
     expect(server).toContain("from './lib/git-panel.mjs'")
     expect(server).toMatch(/p === '\/api\/git-panel'/)
-    expect(server).toContain("join(homedir(), 'hermes')")
+    expect(server).not.toContain("join(homedir(), 'hermes')")
   })
 
   it('index.html has the ops-git container', () => {
@@ -106,7 +106,7 @@ describe('js/jarvis/ops.js — git panel client slice', () => {
     expect(el.innerHTML).toContain('dirty 3')
     expect(el.innerHTML).toContain('abc first')
 
-    clientMod.renderGitPanel(el, { repos: [{ id: 'hermes', ok: false, error: 'ENOENT: no such repo' }] })
+    clientMod.renderGitPanel(el, { repos: [{ id: 'other-repo', ok: false, error: 'ENOENT: no such repo' }] })
     expect(el.innerHTML).toContain('ENOENT')
   })
 })
