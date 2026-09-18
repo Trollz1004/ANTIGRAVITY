@@ -16,7 +16,7 @@ You are Claude Fable 5.1, the Claude judge lane, reached through `drift`. Read t
 
 ## 0. Rulings in force (dates are Joshua's)
 
-- **One Mission Control: JARVIS on `http://192.168.0.8:9150/`** (2026-09-17). Repo home `mission-control/` (moved from `ops/dashboard-jarvis` in the repo consolidation, 2026-09-17; `crosslisting-os` lives alongside it there). AIRI is retired (JARVIS took its port and panels). MC5 on :3151 is an embedded data source, optional, never opened by a human. Fable's Sentry on :9140 is the probe engine behind God's Eye, not a page.
+- **One Mission Control: JARVIS on `http://192.168.0.8:9150/`** (2026-09-17). Repo home `mission-control/` (moved from `ops/dashboard-jarvis` in the repo consolidation, 2026-09-17; `crosslisting-os` lives alongside it there). AIRI is retired (JARVIS took its port and panels). MC5 on :3151 is an embedded data source, optional, never opened by a human. **Fable's Sentry folded into JARVIS 2026-09-18**: the probe engine lives inside JARVIS itself (`mission-control/lib/sentry.mjs`, routes `/api/sentry` and `/api/sentry/summary`), not a separate :9140 service — the God's Eye panel and `drift audit`/`drift wall` all read it from JARVIS now.
 - **Date app is FROZEN and FOR SALE** (2026-09-16). Keep-alive only: API :8000, frontend :3200, tunnel, Postgres, Redis. Nothing else. Sale state lives in `ops/sale/YOUANDINOTAI-SALE-LISTING.md` (Status log) and `ops/sale/OUTREACH-TARGETS.md`. Never propose date-app work.
 - **Payments are CLOSED** (2026-09-16). `docs/PAYMENTS-TRUTH.md`; memory token `PAYMENTS-VERIFIED-square-2026-07-14`. A payments concern is a finding only if it cites a line of that record it contradicts.
 - **Paperclip is PARKED** (2026-09-10). Report-only stage. Do not start it.
@@ -56,7 +56,6 @@ Fable's weekly cap is the scarce resource. Sonnet subagents do every mechanical 
 | Cloudflared tunnel | — | `https://youandinotai.com` contains `assets/index-` | yes |
 | **JARVIS Mission Control** | 9150 | `/health` says `jarvis-dashboard` | **yes** |
 | MC5 (data source) | 3151 | title `MISSION CONTROL` | optional |
-| Fable's Sentry | 9140 | `/health` says `fables-sentry` | optional |
 | Hermes | 9119 | TCP | optional (YouTube lane) |
 | Ollama | 11434 | `/api/tags` lists `joshlcoleman/Fable` | optional, fail-safe only |
 | OpenClaw | 18789 | TCP | optional |

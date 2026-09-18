@@ -8,7 +8,7 @@ Sabretooth runs exactly four things for the business, plus the infrastructure un
 
 1. **youandinotai.com** — the date app, FROZEN and FOR SALE. Keep-alive only until the sale closes. Sale state: `ops/sale/`.
 2. **ai-solutions.store** — the AI Solutions storefront (org `Ai-Solutions-Store`). Served through Cloudflare, not from a local port on this node today; the code and the crosslisting OS live in the org repo.
-3. **onlinerecycle.net** — recycling and crosslisting (OpenCode lane). Served off-node today; it appears on the Sentry wall so the node reports it, but nothing here starts it.
+3. **onlinerecycle.net** — recycling and crosslisting (OpenCode lane). Served off-node today; it appears in the Sentry target registry so the node reports it, but nothing here starts it.
 4. **JARVIS Mission Control** — the one operator surface, `http://192.168.0.8:9150/`.
 
 Everything else that used to run here is either parked, retired, or moved:
@@ -29,7 +29,7 @@ Everything else that used to run here is either parked, retired, or moved:
 
 | Feature | Came from | JARVIS panel |
 |---|---|---|
-| Service health wall with identity probes | Fable's Sentry (:9140) | God's Eye (Sentry stays as the probe engine) |
+| Service health wall with identity probes | Fable's Sentry (:9140) | God's Eye (the probe engine lives inside JARVIS at `/api/sentry`, folded in 2026-09-18 — no separate :9140 service) |
 | Node cards, LAN probe, topology | JARVIS gods-eye | God's Eye |
 | Agent fleet, token spend | MC5 (:3151), Paperclip board | Mission Control |
 | Proposal feed, Claude and Codex verdicts, founder approval | judge journals | Judge Lanes |
@@ -57,11 +57,13 @@ The House (`C:\ANTIGRAVITY\FABLES-HOUSE.cmd`, script `scripts/fables-house/FABLE
 | 8 | **JARVIS Mission Control** | 9150 | `/health` says `jarvis-dashboard`, LAN bind | **yes** |
 | 9 | VS Code tunnel (JARVIS remote) | — | `code tunnel status` reports a running tunnel | optional |
 | 10 | MC5 | 3151 | title `MISSION CONTROL` | optional |
-| 11 | Fable's Sentry | 9140 | `/health` says `fables-sentry` | optional |
+| 11 | Domains static sites | 9160 | `/health` says `domains-server` | optional |
 | 12 | Hermes | 9119 | TCP | optional (YouTube lane) |
 | 13 | Ollama | 11434 | `/api/tags` lists `joshlcoleman/Fable` | optional, fail-safe only |
 | 14 | OpenClaw | 18789 | TCP | optional |
 | 15 | Obsidian Local REST | 27123 | report-only | Joshua opens Obsidian |
+
+Fable's Sentry (:9140) is no longer a House stage — 2026-09-18, it was folded into JARVIS itself (row 8 above already carries it; the probe engine lives at `/api/sentry`).
 
 A port answering is never UP. Every stage is judged by its identity string. Report **UP**, **DOWN**, **WRONG SERVICE**, **AUTH MISSING**, **AUTH REJECTED**, or **NOT CONFIGURED**.
 
@@ -73,9 +75,9 @@ A port answering is never UP. Every stage is judged by its identity string. Repo
 | `drift bare` | Claude only, touches nothing (skill still loads) |
 | `drift house` | House one pass, no Claude |
 | `drift health` | runs the 30-minute health probe now, prints the table |
-| `drift audit` | Sentry-target audit via `npm run fable -- audit` |
+| `drift audit` | Sentry-target audit via `npm run fable -- audit` (probes `mission-control/config/sentry-targets.json`, diffs against JARVIS's own live `/api/sentry`) |
 | `drift mc` / `drift jarvis` / `drift avatar` | open JARVIS |
-| `drift wall` | open Sentry |
+| `drift wall` | open JARVIS's God's Eye (the Sentry probe engine lives inside JARVIS now, not a separate :9140 page) |
 | `drift ledger` / `drift dns` | ledger tail / DNS report |
 | `FABLES-HOUSE.cmd -Once` | one heal pass, elevated |
 

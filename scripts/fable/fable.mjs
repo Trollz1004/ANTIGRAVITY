@@ -58,7 +58,7 @@ function parseArgs(argv) {
   return out;
 }
 
-// ── probes (mirrors apps/fables-sentry/server.mjs — a port is not health) ─
+// ── probes (mirrors mission-control/lib/sentry.mjs — a port is not health) ─
 const portOpen = (port, ms = 1500) =>
   new Promise((res) => {
     const s = connect({ host: '127.0.0.1', port });
@@ -189,9 +189,11 @@ async function cmdHouse(argv) {
 
 // ══════════════════════════════════════════════════════════════ audit ════
 function helpAudit() {
-  console.log(`fable audit — probe every target in apps/fables-sentry/targets.json the same way
-Fable's Sentry does (port / http+identity / redis PING), then diff against
-Sentry's own live snapshot at http://127.0.0.1:9140/api/status.
+  console.log(`fable audit — probe every target in mission-control/config/sentry-targets.json the
+same way Fable's Sentry does (port / http+identity / redis PING), then diff
+against JARVIS's own live snapshot at http://127.0.0.1:9150/api/sentry.
+Fable's Sentry stopped being a separate :9140 service 2026-09-18 — the probe
+engine now lives inside JARVIS (mission-control/lib/sentry.mjs).
 
 Usage: fable audit [--no-sentry]
 
@@ -204,7 +206,7 @@ async function cmdAudit(argv) {
   const args = parseArgs(argv);
   if (args.help || args.h) { helpAudit(); process.exitCode = EXIT.OK; return; }
 
-  const targetsPath = join(REPO, 'apps', 'fables-sentry', 'targets.json');
+  const targetsPath = join(REPO, 'mission-control', 'config', 'sentry-targets.json');
   if (!existsSync(targetsPath)) fail(EXIT.TARGET_DOWN, 'fable: targets.json not found at ' + targetsPath);
   const registry = JSON.parse(readFileSync(targetsPath, 'utf8'));
 
@@ -223,13 +225,13 @@ async function cmdAudit(argv) {
   console.log(padTable(rows, ['Group', 'ID', 'Label', 'Verdict', 'Detail']));
 
   if (!args['no-sentry']) {
-    console.log('\n--- diff vs Sentry (http://127.0.0.1:9140/api/status) ---');
-    const sentry = await httpCheck('http://127.0.0.1:9140/api/status', null, 4000);
+    console.log('\n--- diff vs Sentry (http://127.0.0.1:9150/api/sentry) ---');
+    const sentry = await httpCheck('http://127.0.0.1:9150/api/sentry', null, 4000);
     if (!sentry.up) {
-      console.log('Sentry UNREACHABLE: ' + sentry.detail + ' (no diff possible)');
+      console.log('Sentry UNREACHABLE: ' + sentry.detail + ' (no diff possible — JARVIS not answering on :9150)');
     } else {
       try {
-        const snap = await (await fetch('http://127.0.0.1:9140/api/status')).json();
+        const snap = await (await fetch('http://127.0.0.1:9150/api/sentry')).json();
         const byId = new Map();
         for (const g of snap.groups) for (const t of g.targets) byId.set(t.id, t.up);
         let diffs = 0;
@@ -727,7 +729,7 @@ Usage: npm run fable -- <subcommand> [args]
 
 Subcommands:
   house               run FABLES-HOUSE.ps1 (single pass; --watch intentionally refused)
-  audit                probe apps/fables-sentry/targets.json + diff vs Sentry's live /api/status
+  audit                probe mission-control/config/sentry-targets.json + diff vs JARVIS's live /api/sentry
   omni <action>        thin client for OmniRoute (chat, image, transcribe, video, embed, models, ...)
   workflow <name>      run scripts/fable/workflows/<name>.json (data-driven omni pipelines)
   mcp                  list configured MCP servers + Paperclip broker's own view

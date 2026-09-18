@@ -270,7 +270,7 @@ $Stages = @(
     # process start) failed the Probe for freshness, but Heal's own re-check of
     # identity passed, so it skipped the kill, tried to bind a second server on
     # the busy port, and looped forever (267009/267014). Heal now runs Stop-PortOwner
-    # unconditionally, same as the MC5 and Sentry stages - Invoke-Stage only calls
+    # unconditionally, same as the MC5 stage - Invoke-Stage only calls
     # Heal after the Probe has already failed, for any reason (wrong identity,
     # stale, or otherwise unhealthy), so there is nothing left to gate on here.
     @{ Name = 'JARVIS (Mission Control) :9150'; Required = $true
@@ -387,18 +387,11 @@ $Stages = @(
        Probe = { Test-Http 'http://127.0.0.1:27123/' 6 'Obsidian Local REST API' }
        Heal  = { Log '  Obsidian REST not answering: open Obsidian (vault C:\ANTIGRAVITY\Antigravity) — plugin obsidian-local-rest-api must be enabled. Not auto-started on purpose.' 'DarkYellow' } }
 
-    @{ Name = "FABLE'S SENTRY :9140 (wall display)"; Required = $false
-       # Identity + freshness: a Sentry started before targets.json or server.mjs
-       # changed is showing a wall that no longer exists (2026-09-10: it kept
-       # listing Paperclip rows for an hour after they were retired).
-       Probe = { if (-not (Test-Http 'http://127.0.0.1:9140/health' 6 'fables-sentry')) { return $false }
-                 try { $hz = Invoke-RestMethod -Uri 'http://127.0.0.1:9140/health' -TimeoutSec 6 } catch { return $false }
-                 if ($hz.startedAt -and -not (Test-Fresh $hz.startedAt @('C:\ANTIGRAVITY\apps\fables-sentry\server.mjs','C:\ANTIGRAVITY\apps\fables-sentry\targets.json','C:\ANTIGRAVITY\apps\fables-sentry\index.html'))) { Log '  Sentry is stale - restarting on the current wall' 'Yellow'; return $false }
-                 if (-not $hz.startedAt) { Log '  Sentry predates the freshness check - restarting once' 'Yellow'; return $false }
-                 return $true }
-       Heal  = { $s = 'C:\ANTIGRAVITY\apps\fables-sentry\server.mjs'
-                 if (Test-Path $s) { Stop-PortOwner 9140; Start-Process 'node' -ArgumentList $s -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden }
-                 else { Log '  sentry server.mjs missing' 'DarkYellow' } } }
+    # FABLE'S SENTRY on :9140 was retired 2026-09-18 (Joshua's ruling): the
+    # separate wall-display service is gone, folded into JARVIS itself as the
+    # probe engine behind /api/sentry (mission-control/lib/sentry.mjs). The
+    # JARVIS stage above already carries this — there is nothing left here to
+    # bring up or heal on :9140.
 
     # Housekeeping. Not a service, so its Probe always reports OK and the work
     # happens in Heal -- that keeps it on the same bring-up and watchdog cadence

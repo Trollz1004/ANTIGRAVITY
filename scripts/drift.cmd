@@ -1,6 +1,6 @@
 @echo off
 rem ═══════════════════════════════════════════════════════════════════════
-rem  drift — Joshua's one way in.                      updated 2026-09-10
+rem  drift — Joshua's one way in.                      updated 2026-09-18
 rem
 rem  Brings the whole Sabretooth stack up AND opens Claude. The bring-up runs
 rem  in its own minimized window so it never blocks the conversation: Claude
@@ -15,10 +15,13 @@ rem    drift            bring the stack up, then open Claude        (default)
 rem    drift bare       open Claude only, touch nothing
 rem    drift house      bring the stack up only, no Claude
 rem    drift audit      probe every FABLE'S SENTRY target with identity checks
-rem                     (npm run fable -- audit) and print the table; no Claude
+rem                     (npm run fable -- audit, against JARVIS's /api/sentry)
+rem                     and print the table; no Claude
 rem    drift health     run the 30-min deterministic health probe now and print
 rem                     the table (ops/heartbeat/sabretooth-health.ps1 -Verbose)
-rem    drift wall       open FABLE'S SENTRY (http://192.168.0.8:9140/) in the browser
+rem    drift wall       open JARVIS's God's Eye (http://192.168.0.8:9150/, JARVIS
+rem                     tab) — FABLE'S SENTRY is the probe engine behind it now,
+rem                     not a separate :9140 page (folded in 2026-09-18)
 rem    drift ledger     last 30 lines of the cross-node ledger (ops/buzz)
 rem    drift dns        current nameservers for the 14 project domains
 rem    drift mc         open JARVIS / Mission Control (http://192.168.0.8:9150/)
@@ -37,8 +40,11 @@ rem    Mission Control v5 3151 (optional; embedded data source for JARVIS) ·
 rem    MC6 8787 (uptime) · Ollama 11434 (fail-safe;
 rem    identity = joshlcoleman/Fable present) · OmniRoute is 3.8.50 since 2026-09-06
 rem    Hermes dashboard 9119 · OpenClaw 18789 · Hermes API 8642
-rem    vote service 9134 · FABLE'S SENTRY 9140 (the wall) · Obsidian REST 27123 (report only)
-rem  Not started here, watched by the wall: Buzz relay, Open Collective, the
+rem    vote service 9134 · Domains static sites 9160 · Obsidian REST 27123
+rem    (report only). FABLE'S SENTRY is no longer a separate :9140 service
+rem    (folded into JARVIS 2026-09-18) — it is the probe engine behind
+rem    JARVIS's /api/sentry, /api/house and the God's Eye nodes panel.
+rem  Not started here, watched by Sentry: Buzz relay, Open Collective, the
 rem  public sites. Claude is the judge lane; it never routes through OmniRoute.
 rem ═══════════════════════════════════════════════════════════════════════
 title ANTIGRAVITY drift
@@ -90,7 +96,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "%HEALTH%" -Verbose
 exit /b %ERRORLEVEL%
 
 :wall
-start "" http://192.168.0.8:9140/
+rem FABLE'S SENTRY moved inside JARVIS 2026-09-18 — the wall is now the JARVIS
+rem tab (God's Eye) on the one dashboard, not a separate :9140 page.
+start "" http://192.168.0.8:9150/
 exit /b 0
 
 :ledger

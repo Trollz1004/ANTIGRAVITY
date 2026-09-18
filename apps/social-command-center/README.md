@@ -14,6 +14,7 @@ polled nothing; this directive is to make it **real** — one instance per Paper
 | DRE (`5782b1da`) | dream-online.net | dev-log, Open Collective backers, SEO blog |
 
 Tabs in the file: `kpis`, `feed`, `analytics`, `agents-tab`, `apimap`. Every number on it must come from a
-real endpoint (Paperclip `:3100`, Sentry `:9140`, OmniRoute `:20128`, Open Collective GraphQL) or show
+real endpoint (Paperclip `:3100`, Sentry — folded into JARVIS `/api/sentry` on `:9150` as of 2026-09-18,
+no longer a separate `:9140` service —, OmniRoute `:20128`, Open Collective GraphQL) or show
 NOT CONFIGURED — the file must never render a placeholder as if it were a figure. Tracked as one issue per
 company on the Paperclip board (2026-09-03).

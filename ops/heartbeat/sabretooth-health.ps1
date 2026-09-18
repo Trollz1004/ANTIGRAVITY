@@ -189,8 +189,9 @@ function Invoke-ProbePass {
     # ── optional targets ──
     # mc5_3151 probe removed 2026-09-17: MC5 is retired, per the One Mission
     # Control ruling (JARVIS on :9150 absorbed it).
-    $sentry = Test-HttpIdentity -Url 'http://127.0.0.1:9140/health' -MustContain 'fables-sentry'
-    $optional['sentry_9140'] = @{ status = $(if ($sentry.ok) { 'UP' } else { 'DOWN' }); detail = $sentry.detail }
+    # sentry_9140 probe removed 2026-09-18: Fable's Sentry is no longer a
+    # separate service — it is folded into JARVIS as /api/sentry, which the
+    # jarvis_9150 check above already covers by proving JARVIS itself is up.
 
     $hermesPort = Test-TcpPort -Port 9119
     $optional['hermes_9119'] = @{ status = $(if ($hermesPort) { 'UP' } else { 'DOWN' }); detail = 'TCP probe' }

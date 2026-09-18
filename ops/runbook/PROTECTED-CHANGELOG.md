@@ -12,6 +12,14 @@ changed, and the commit that landed it. `.github/CODEOWNERS` and the
 `.claude/hooks/guard-protected-paths.ps1` reminder enforce this
 mechanically; this file is the human-readable record. Newest entries first.
 
+2026-09-18 06:35 UTC | ops/skills/sabretooth-node/SKILL.md | Fable's Sentry consolidation: removed the ":9140" restart-set row and rewrote the "One Mission Control" bullet to say the probe engine is folded into JARVIS (mission-control/lib/sentry.mjs, /api/sentry, /api/sentry/summary) — no separate wall service. Tracked copy of the launch skill; the user copy at C:\Users\joshi\.claude\skills\sabretooth-node\SKILL.md was synced byte-identical. | pending
+
+2026-09-18 06:35 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | Fable's Sentry consolidation: removed the ":9140" row from the §3 restart-set table (renumbered the rest, folded in the Domains :9160 row that was missing), rewrote §2's "God's Eye" mapping line, and updated `drift audit`/`drift wall` in §4 to describe JARVIS's own /api/sentry instead of a separate service. | pending
+
+2026-09-18 06:35 UTC | scripts/drift.cmd | Fable's Sentry consolidation: `drift wall` now opens JARVIS (http://192.168.0.8:9150/, God's Eye) instead of the retired :9140 page; updated the usage/help comments and the stack-summary comment block to match. Tracked copy; C:\Users\joshi\.local\bin\drift.cmd was synced byte-identical. | pending
+
+2026-09-18 06:35 UTC | scripts/fables-house/FABLES-HOUSE.ps1 | Fable's Sentry consolidation (Joshua's ruling): removed the "FABLE'S SENTRY :9140 (wall display)" stage entirely — the probe engine is folded into JARVIS itself (mission-control/lib/sentry.mjs, already carried by the existing JARVIS stage), so there is nothing left on :9140 for the House to bring up or heal. Left an explanatory comment in its place; updated one stale comment ("MC5 and Sentry stages" -> "MC5 stage") elsewhere in the file. No other lines touched. | pending
+
 2026-09-18 04:42 UTC | scripts/fables-house/FABLES-HOUSE.ps1 | Cloudflared tunnel stage bugfix: heal now identifies the real sabretooth-main process by command line (Win32_Process filter), not by `Get-Process cloudflared` name-match alone — an unrelated OmniRoute quick-tunnel is also named cloudflared.exe and was making the House believe sabretooth-main was up when it was down. Public identity probe (youandinotai.com / assets/index-) stays the source of truth for UP; command-line match now also drives the stop-before-restart step so the quick-tunnel is never touched. Command lines are never logged, only PID + "sabretooth-main" | cc319de3
 2026-09-18 04:40 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | added "## 12. Domains" section — vhost static server on :9160, tunnel ingress + DNS for the three landing sites and dashboard.aidoesitall.website, Cloudflare Access sign-in, pending IONOS registrar click, new health probes | 4c92ef74
 
