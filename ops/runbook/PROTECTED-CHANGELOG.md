@@ -12,6 +12,7 @@ changed, and the commit that landed it. `.github/CODEOWNERS` and the
 `.claude/hooks/guard-protected-paths.ps1` reminder enforce this
 mechanically; this file is the human-readable record. Newest entries first.
 
+2026-09-18 02:50 EDT | ops/skills/sabretooth-node/SKILL.md | Alienware SSH access (key-only, 192.168.0.40), its layout, and the empty-OmniRoute note | 0d19ac94
 2026-09-18 06:35 UTC | ops/skills/sabretooth-node/SKILL.md | Fable's Sentry consolidation: removed the ":9140" restart-set row and rewrote the "One Mission Control" bullet to say the probe engine is folded into JARVIS (mission-control/lib/sentry.mjs, /api/sentry, /api/sentry/summary) — no separate wall service. Tracked copy of the launch skill; the user copy at C:\Users\joshi\.claude\skills\sabretooth-node\SKILL.md was synced byte-identical. | 21603fd3
 
 2026-09-18 06:35 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | Fable's Sentry consolidation: removed the ":9140" row from the §3 restart-set table (renumbered the rest, folded in the Domains :9160 row that was missing), rewrote §2's "God's Eye" mapping line, and updated `drift audit`/`drift wall` in §4 to describe JARVIS's own /api/sentry instead of a separate service. | 21603fd3

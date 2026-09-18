@@ -328,13 +328,13 @@
         },
         {
           "id": "aw-20128",
-          "label": "Alienware :20128 (identity unverified)",
+          "label": "Alienware OmniRoute (empty, not routed)",
           "host": "192.168.0.40",
           "port": 20128,
           "kind": "http",
           "url": "http://192.168.0.40:20128/api/health",
           "identity": "ok",
-          "note": "listens on the OmniRoute port; the Alienware Claude verifies what it is"
+          "note": "Joshua 2026-09-18: a separate OmniRoute install with no providers; every lane routes to Sabretooth's http://192.168.0.8:20128/v1 only"
         },
         {
           "id": "aw-ssh",
