@@ -379,3 +379,33 @@ canvas.galaxy-backdrop { position: absolute; inset: 0; width: 100%; height: 100%
 .ops-runbook-list button { display: block; width: 100%; text-align: left; margin-bottom: 4px; }
 .ops-runbook-list button.active { background: var(--accent, #58a6ff); color: #0d1117; }
 @media (max-width: 900px) { .ops-runbooks { grid-template-columns: 1fr; } }
+
+/* ── Phase C: Social command center, Approval inbox, bell + alerts strip ── */
+.sidebar-bell { position: relative; display: inline-flex; align-items: center; justify-content: center; margin-left: 8px; color: var(--text-secondary, #8b949e); cursor: pointer; }
+.sidebar-bell svg { display: block; }
+.sidebar-bell .bell-count { position: absolute; top: -6px; right: -8px; min-width: 16px; height: 16px; padding: 0 3px; border-radius: 999px; background: #f85149; color: #fff; font-size: 10px; line-height: 16px; text-align: center; font-family: 'IBM Plex Mono', monospace; }
+.sidebar-bell .bell-count[hidden] { display: none; }
+.alerts-strip { display: flex; align-items: center; gap: 8px; padding: 8px 14px; margin: 0 0 14px; border-radius: var(--radius-lg, 10px); background: rgba(248, 81, 73, .12); border: 1px solid rgba(248, 81, 73, .4); color: #f85149; font-size: 13px; }
+.alerts-strip[hidden] { display: none; }
+.social-layout, .inbox-layout { display: flex; flex-direction: column; gap: 16px; }
+.social-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.social-form label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--text-secondary, #8b949e); }
+.social-form .full { grid-column: 1 / -1; }
+.social-form input, .social-form select, .social-form textarea { background: var(--bg-tertiary, #21262d); border: 1px solid var(--border, #30363d); border-radius: 8px; color: inherit; padding: 8px 10px; font: inherit; }
+.social-form textarea { min-height: 110px; resize: vertical; }
+.check-result { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-size: 12px; }
+.check-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border, #30363d); }
+.check-pill.pass { color: #3fb950; border-color: rgba(63, 185, 80, .45); }
+.check-pill.fail { color: #f85149; border-color: rgba(248, 81, 73, .4); }
+.proposal-row, .inbox-row { border: 1px solid var(--border, #30363d); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; background: var(--bg-secondary, #161b22); }
+.proposal-row-head, .inbox-row-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+.proposal-row-head b, .inbox-row-head b { color: var(--accent, #58a6ff); }
+.state-badge { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--border, #30363d); }
+.state-badge.PROPOSED, .state-badge.PENDING { color: #d29922; border-color: rgba(210, 153, 34, .4); }
+.state-badge.APPROVED, .state-badge.EXECUTED { color: #3fb950; border-color: rgba(63, 185, 80, .45); }
+.state-badge.REJECTED, .state-badge.FAILED { color: #f85149; border-color: rgba(248, 81, 73, .4); }
+.state-badge.SNOOZED { color: var(--text-secondary, #8b949e); }
+.inbox-row-body { font-size: 12px; color: var(--text-secondary, #8b949e); margin-top: 6px; overflow-wrap: anywhere; }
+.inbox-row-actions { display: flex; gap: 8px; margin-top: 8px; }
+.token-prompt { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+.token-prompt input { background: var(--bg-tertiary, #21262d); border: 1px solid var(--border, #30363d); border-radius: 8px; color: inherit; padding: 6px 10px; font: inherit; }

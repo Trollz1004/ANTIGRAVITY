@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 const root = path.resolve(__dirname, '..')
+const clientMod = await import('../js/jarvis/social.js')
 
 describe('JARVIS wiring — server.mjs Social routes (Phase C, unit 4)', () => {
   const server = fs.readFileSync(path.join(root, 'server.mjs'), 'utf-8')
@@ -36,5 +37,58 @@ describe('JARVIS wiring — server.mjs Social routes (Phase C, unit 4)', () => {
 
   it('the proposal store is backed by data/proposals under this dashboard folder (gitignored)', () => {
     expect(server).toMatch(/createProposalStore\(\{ dir: join\(HERE, 'data', 'proposals'\) \}\)/)
+  })
+
+  it('index.html has the Social nav tab and panel', () => {
+    const html = fs.readFileSync(path.join(root, 'index.html'), 'utf-8')
+    expect(html).toContain('data-tab="social"')
+    expect(html).toContain('id="tab-social"')
+    expect(html).toContain('id="social-form"')
+  })
+})
+
+describe('js/jarvis/social.js — client render (pure functions, no DOM globals)', () => {
+  it('exports the expected surface', () => {
+    expect(typeof clientMod.renderPlatformOptions).toBe('function')
+    expect(typeof clientMod.renderCheckResult).toBe('function')
+    expect(typeof clientMod.renderProposals).toBe('function')
+  })
+
+  it('renderPlatformOptions marks unconfigured platforms honestly', () => {
+    const el = { innerHTML: '' }
+    clientMod.renderPlatformOptions(el, [
+      { id: 'devto', name: 'dev.to', configured: true },
+      { id: 'x', name: 'X (Grok lane, grok.com path)', configured: true },
+    ])
+    expect(el.innerHTML).toContain('dev.to')
+    expect(el.innerHTML).not.toContain('not configured')
+
+    clientMod.renderPlatformOptions(el, [{ id: 'wordpress', name: 'WordPress', configured: false }])
+    expect(el.innerHTML).toContain('not configured')
+  })
+
+  it('renderPlatformOptions is honest about an empty list', () => {
+    const el = { innerHTML: '' }
+    clientMod.renderPlatformOptions(el, [])
+    expect(el.innerHTML).toContain('no platforms configured')
+  })
+
+  it('renderCheckResult shows compliance pass/fail and the copy score, never the rule catalogue', () => {
+    const el = { innerHTML: '' }
+    clientMod.renderCheckResult(el, { compliance: { pass: false, ruleIndex: 3, matched: 'widget-alpha' }, copyScore: { score: 4, tripped: [{ category: 'vocab', rule: 'leverage' }] } })
+    expect(el.innerHTML).toContain('compliance: fail')
+    expect(el.innerHTML).toContain('widget-alpha')
+    expect(el.innerHTML).toContain('copy score: 4/5')
+  })
+
+  it('renderProposals shows brand/platform/state for each row, or an honest empty state', () => {
+    const el = { innerHTML: '' }
+    clientMod.renderProposals(el, [{ id: '1', brand: 'DREAM Online', platform: 'reddit', title: 'Launch', state: 'PROPOSED' }])
+    expect(el.innerHTML).toContain('DREAM Online')
+    expect(el.innerHTML).toContain('reddit')
+    expect(el.innerHTML).toContain('PROPOSED')
+
+    clientMod.renderProposals(el, [])
+    expect(el.innerHTML).toContain('No proposals yet')
   })
 })
