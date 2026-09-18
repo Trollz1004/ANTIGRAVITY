@@ -122,8 +122,8 @@ real-world mission/company language. Rating compliance rejected pre-render.
   append-only. Idempotent grant on webhook confirmation.
 - **World state:** authoritative server sim; client is a view. Inventory/durability/
   karma server-side. Anti-dupe: item instances have UUIDs.
-- **Compliance copy rules (FL §496.405):** never donate/donation/charity/solicitation/
-  tax-deductible/beneficiary/split-math on any customer surface. No mission hashtags.
+- **Compliance copy rules (FL §496.405):** no fundraising-adjacent or cause-marketing
+  language, and no revenue-split math, on any customer surface. No mission hashtags.
   Sell access, fun, convenience, safety, uptime — nothing else.
 
 ## 11. Prototype in this project

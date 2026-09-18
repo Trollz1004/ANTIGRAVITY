@@ -10,7 +10,7 @@ You are Hermes, lead engineer on `Trollz1004/hermes`. Finish the **JARVIS dashbo
 - **Drift Cart Doctrine:** no agent clears its own watchdog. Destructive or money-touching actions stop at a **founder-approval gate** — Joshua clicks. Never automate that click.
 - **Judge lanes:** every agent proposal (code change, config change, dispatch, spend) is written as a `Proposal`, judged by **Claude (Opus)** and **Codex** independently, staged as `PROPOSED → JUDGED → APPROVED → EXECUTED → VERIFIED`. Two-lane agreement auto-executes only for read-only or reversible actions; anything else waits at APPROVED for Joshua.
 - **Honest numbers only.** Every metric on screen is tagged `TRACKED` with a source; no projections, no placeholders dressed as data.
-- Copy rules: never *donate / donation / solicitation / tax-deductible*. YouAndINotAI = **Square only**. No competitor game names. `#UntilNoKidInNeed` is stated, never used to solicit. Kids 13 and under are free on every platform.
+- Copy rules: follow the product-copy-business-only skill's restricted-language list (fundraising-adjacent terms). YouAndINotAI = **Square only**. No competitor game names. `#UntilNoKidInNeed` is stated, never used to solicit. Kids 13 and under are free on every platform.
 - Unreal MCP plugin stays **PARKED** (loopback-only, zero auth, editor-only). JARVIS gets an *Unreal lane* that talks to the editor over localhost on Alienware only; the browser game and the dashboard never depend on it.
 
 ## 1. Ground truth
@@ -53,7 +53,7 @@ One glass-system web dashboard (ANTIGRAVITY design system: `#020617` base, glass
 - A test proposal `kind: game.weather.set` flows PROPOSED → JUDGED (both lanes) → APPROVED (founder click) → EXECUTED → VERIFIED and appears in the JSONL audit.
 - An agent identity calling `/approve` on a `destructive` proposal is refused and logged.
 - Restart `server.mjs`; audit and proposals survive.
-- No provider key outside OmniRoute; no donate-language; no competitor names; no purple.
+- No provider key outside OmniRoute; no fundraising-adjacent language; no competitor names; no purple.
 
 ## 6. Do not
 - Do not build the dashboard inside Unreal. Unreal is the future game client; JARVIS is the operator's web surface. Embed Pixel Streaming later if wanted.

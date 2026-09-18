@@ -26,4 +26,4 @@ Adopted from dream-online: **Sup@** naming (game HUD's "SupO" = screen-safe alia
 - Headroom reserved for a SpacetimeDB experiment — no Unreal on this node
 
 ## Investor video — 60s spec (next message)
-1080p, 12 beats/5s avg: cold open logo → "One world. No fast travel." world pull → action combat slice → durability/repair pressure → Nightfall shift → fishing + cosmetics → PvP Red Name stakes → Sup@ + live NPCs that remember (differentiator) → "Convenience, never power" honesty card → free-to-play + NEEDS model → traction/roadmap strip → CTA card (funding link slot). No competitor names, no charity language, recorded-numbers-only claims.
+1080p, 12 beats/5s avg: cold open logo → "One world. No fast travel." world pull → action combat slice → durability/repair pressure → Nightfall shift → fishing + cosmetics → PvP Red Name stakes → Sup@ + live NPCs that remember (differentiator) → "Convenience, never power" honesty card → free-to-play + NEEDS model → traction/roadmap strip → CTA card (funding link slot). No competitor names, no cause-marketing language, recorded-numbers-only claims.

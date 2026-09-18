@@ -304,4 +304,4 @@ caveman_skills: 7
 - Lesson: finisher lib resolves its target by CLASS `finisher-header` (getElementsByClassName) and throws if absent — config needs `className:'finisher-header'` and the container needs that class; a bare try/catch would have hidden it forever (browser QA caught it).
 - Lesson: `.env` AIRI_DASHBOARD_PORT=9150 overrides everything — start preview servers with the env var pinned (`$env:AIRI_DASHBOARD_PORT='9159'`), else EADDRINUSE.
 - 211/211 tests (20 files), hero live-verified: finisher-canvas mounted, 100% lit pixels animating, screenshot confirmed.
-- Carry-forward: drift-cart easter egg (Trollz drifts across the gods-eye with ANOTHER ONE when Fable one-shots), ice-cream charity ledger (only after Shriners), ClawX hub link check, joshlcoleman.io still NXDOMAIN.
+- Carry-forward: drift-cart easter egg (Trollz drifts across the gods-eye with ANOTHER ONE when Fable one-shots), ice-cream cause ledger (only after Shriners), ClawX hub link check, joshlcoleman.io still NXDOMAIN.

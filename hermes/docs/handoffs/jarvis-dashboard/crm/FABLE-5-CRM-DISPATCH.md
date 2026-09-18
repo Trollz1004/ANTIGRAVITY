@@ -226,7 +226,7 @@ GET    /api/notifications            # smart alerts
 - [ ] No Paperclip, no Base44, no external CRM dependencies
 
 ## UNTIL NO KID IN NEED
-Kids 13 and under = FREE on every platform. This CRM tracks volunteer leads for charity platforms. Revenue waterfall: ops → runway → treasury → #UntilNoKidInNeed.
+Kids 13 and under = FREE on every platform. This CRM tracks volunteer leads for cause platforms. Revenue waterfall: ops → runway → treasury → #UntilNoKidInNeed.
 
 ---
 *Generated from Emergent Lead Generation CRM build session — ready for Fable 5 orchestration*
@@ -1705,7 +1705,7 @@ async def seed_data():
                 </div>
                 <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 15px 0;">
                     <h3 style="margin: 0;">Food Bank Support</h3>
-                    <p style="color: #666; margin: 5px 0;">Weekdays - Sort and distribute food donations</p>
+                    <p style="color: #666; margin: 5px 0;">Weekdays - Sort and distribute food supplies</p>
                 </div>
                 <a href="https://youandinotai.com/events" style="display: inline-block; background: #D97757; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px;">See All Events</a>
             </div>
@@ -1724,7 +1724,7 @@ async def seed_data():
                 <ul>
                     <li>15 new volunteer opportunities this month</li>
                     <li>Over 500 hours of community service logged</li>
-                    <li>3 new charity partnerships</li>
+                    <li>3 new cause partnerships</li>
                 </ul>
                 <a href="https://youandinotai.com" style="display: inline-block; background: #4A7B59; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px;">Get Involved Again</a>
             </div>
@@ -1917,7 +1917,7 @@ async def ai_qualify_lead(lead_id: str):
         chat = LlmChat(
             api_key=EMERGENT_LLM_KEY,
             session_id=f"qualify-{lead_id}",
-            system_message="""You are a lead qualification expert for a volunteer/charity platform. 
+            system_message="""You are a lead qualification expert for a volunteer/cause platform. 
             Analyze leads and provide actionable recommendations. Be concise and specific."""
         ).with_model("openai", "gpt-5.2")
         
