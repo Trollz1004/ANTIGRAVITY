@@ -17,9 +17,10 @@ describe('JARVIS wiring — server.mjs Skills/Plugins/MCP route (Phase F, unit 3
     expect(server).toMatch(/redact\(r\)\)/)
   })
 
-  it('never shells out with args/env in cleartext beyond the documented CLI calls', () => {
-    expect(server).toContain("spawnSyncJson('claude', ['plugin', 'list', '--json'])")
-    expect(server).toContain("spawnSyncText('claude', ['mcp', 'list'])")
+  it('never shells out with args/env in cleartext beyond the documented CLI calls, and never blocks the event loop', () => {
+    expect(server).toContain("spawnAsyncJson('claude', ['plugin', 'list', '--json']")
+    expect(server).toContain("spawnAsyncText('claude', ['mcp', 'list']")
+    expect(server).not.toMatch(/execFileSync/)
   })
 
   it('index.html has a Skills + MCP tab', () => {

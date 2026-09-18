@@ -108,6 +108,36 @@ Dispatch: `ops/handoffs/JARVIS-CONSOLIDATION-DISPATCH-2026-09-17.md` and
   claude mcp add --transport http jarvis http://192.168.0.8:9150/mcp --header "Authorization: Bearer <JARVIS_MCP_TOKEN>"
   ```
 
+## Environment variables JARVIS reads (names only — never values, never in git)
+
+All read from `process.env` first, then the repo `.env` (`lib/config.mjs`'s
+`resolveConfig`/`envValue`). None of these were set in this repo's `.env` as
+of 2026-09-17 unless noted; every route gated on one answers `503` honestly
+until Joshua sets it — this repo never sets one on his behalf.
+
+- `JARVIS_FOUNDER_TOKEN` — gates `POST /api/inbox/:id/approve|reject|snooze`.
+- `JARVIS_JUDGE_TOKEN_CLAUDE`, `JARVIS_JUDGE_TOKEN_CODEX` — gate
+  `POST /api/judge/:id/verdict` per lane.
+- `JARVIS_MCP_TOKEN` — gates `POST /mcp` (bearer).
+- `OBSIDIAN_VAULT` (or legacy `OBSIDIAN_VAULT_ANTIGRAVITY`), `OBSIDIAN_VAULT_ID`,
+  `OBSIDIAN_REST_URL` — vault path/id and the Local REST API base.
+- `OMNI_ROUTE_API_KEY` — the OmniRoute key, already used by `/api/omni/*`,
+  `/api/ask` (bridge: `omniroute`), and the Bridges/Fleet OmniRoute probes.
+- `DASHBOARD_BRIDGE_TOKEN`, `CLAUDE_BRIDGE_PERMISSION_MODE`,
+  `CLAUDE_BRIDGE_MAX_TURNS`, `CLAUDE_BRIDGE_TIMEOUT_MS`, `CLAUDE_BIN` — the
+  Claude CLI bridge (`lib/claude-bridge.mjs`, `lib/bridge-routes.mjs`).
+- `HERMES_BIN`, `HERMES_BRIDGE_TIMEOUT_MS`, `HERMES_URL`, `OPENCLAW_URL` —
+  Hermes/OpenClaw bridge and Fleet/Bridges probe targets.
+- `CODEX_BIN` — overrides the Codex CLI path for the Bridges panel.
+- `JARVIS_OLLAMA_URL`, `JARVIS_OLLAMA_MODEL`, `OLLAMA_HOST` — the local
+  Ollama brain (fail-safe only, never primary).
+- `FREEBUFF_WAKES_DIR`, `FREEBUFF_BIN` — the FreeBuff wake-file bridge.
+- `NODE_LAN_IP`, `NODE_NAME`, `AIRI_DASHBOARD_PORT`, `ANTIGRAVITY_ROOT`,
+  `DASHBOARD_ENV_FILE`, `FABLES_SENTRY_URL`, `CROSSLISTING_URL`,
+  `TRENDS_FILE` — node/repo topology (`lib/config.mjs`).
+- `JARVIS_VOICES_DIR` — the legacy local voice-pack directory
+  (`/api/voices/local-pack`, `/api/voices/*`).
+
 ## Landing rule (ruled 2026-09-17)
 
 Nothing lands on `main` directly. The judge lane pushes finished work to a

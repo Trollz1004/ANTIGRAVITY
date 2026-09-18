@@ -46,7 +46,7 @@ import { createServer } from 'node:http';
 import { request as httpRequest } from 'node:http';
 import { request as httpsRequest } from 'node:https';
 import { readFileSync, existsSync, readdirSync, statSync, writeFileSync, unlinkSync } from 'node:fs';
-import { spawn, execFileSync } from 'node:child_process';
+import { spawn, execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
 import { resolveConfig, resolveVault, readEnvFile } from './lib/config.mjs';
@@ -402,14 +402,21 @@ async function getJsonInsecure(url, ms = 20000) {
   });
 }
 function readBody(req) { return new Promise((res) => { const b = []; req.on('data', (c) => b.push(c)); req.on('end', () => res(Buffer.concat(b))); }); }
-// Bounded, never-throwing shells for the Skills panel (Phase F, unit 3) — a
-// slow or missing `claude` CLI must never hang or crash this route.
-function spawnSyncText(bin, args, timeoutMs = 15000) {
-  try { return execFileSync(bin, args, { encoding: 'utf8', windowsHide: true, timeout: timeoutMs, stdio: ['ignore', 'pipe', 'pipe'] }); }
-  catch (e) { return (e && e.stdout) ? String(e.stdout) : ''; }
+// Bounded, never-throwing, non-blocking shells for the Skills panel (Phase F,
+// unit 3). `claude mcp list` checks every configured server's live health
+// (~180 servers, ~40s observed on this node 2026-09-17) — a *Sync exec would
+// freeze the whole event loop, so this uses async execFile with a generous
+// timeout instead. A slow or missing `claude` CLI must never hang the process
+// or crash this route.
+function spawnAsyncText(bin, args, timeoutMs = 60000) {
+  return new Promise((resolve) => {
+    execFile(bin, args, { encoding: 'utf8', windowsHide: true, timeout: timeoutMs, maxBuffer: 16 * 1024 * 1024 }, (err, stdout) => {
+      resolve(String(stdout || ''));
+    });
+  });
 }
-function spawnSyncJson(bin, args, timeoutMs = 15000) {
-  const text = spawnSyncText(bin, args, timeoutMs);
+async function spawnAsyncJson(bin, args, timeoutMs) {
+  const text = await spawnAsyncText(bin, args, timeoutMs);
   try { return JSON.parse(text); } catch { return []; }
 }
 function send(res, code, body, type = 'application/json') {
@@ -785,8 +792,8 @@ createServer(async (req, res) => {
   if (p === '/api/skills' && req.method === 'GET') {
     let settingsJson = null, pluginListJson = [], mcpListText = '', launchCmdText = '';
     try { settingsJson = JSON.parse(readFileSync(join(CLAUDE_HOME, 'settings.json'), 'utf8')); } catch {}
-    try { pluginListJson = spawnSyncJson('claude', ['plugin', 'list', '--json']); } catch {}
-    try { mcpListText = spawnSyncText('claude', ['mcp', 'list']); } catch {}
+    try { pluginListJson = await spawnAsyncJson('claude', ['plugin', 'list', '--json'], 15000); } catch {}
+    try { mcpListText = await spawnAsyncText('claude', ['mcp', 'list'], 60000); } catch {}
     try { launchCmdText = readFileSync(LAUNCH_CMD_PATH, 'utf8'); } catch {}
     const obsidianPlugin = (pluginListJson || []).find((pl) => String(pl.id || '').startsWith('obsidian-second-brain'));
     const r = buildSkillsPanel({

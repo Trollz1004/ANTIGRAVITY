@@ -46,8 +46,12 @@
       `obsidianSecondBrainCommands`, `launchPreloadSkillName` +
       `resolveLaunchCmdPath` + `loadOnRestart`, `buildSkillsPanel`.
 - [X] T021 `tests/skills-panel.test.js` — 17 tests.
-- [X] T022 `server.mjs`: `GET /api/skills`, bounded/never-throwing
-      `spawnSyncJson`/`spawnSyncText` helpers, redacted response.
+- [X] T022 `server.mjs`: `GET /api/skills`, bounded/never-throwing,
+      non-blocking `spawnAsyncJson`/`spawnAsyncText` helpers (async
+      `execFile`, not `execFileSync` — `claude mcp list` took ~43s live on
+      this node checking ~180 servers' health, which would have frozen the
+      whole event loop under a sync exec; found and fixed during Unit 5
+      live validation), redacted response.
 - [X] T023 `js/jarvis/skills.js` + Skills tab in `index.html` — merges into
       (never duplicates) the existing Agents/AIRI skills tree.
 - [X] T024 `tests/skills-client.test.js`, `tests/skills-routes.test.js`.
@@ -58,23 +62,49 @@
 
 ## Unit 4 — JARVIS MCP endpoint
 
-- [ ] T030 `npm i @modelcontextprotocol/sdk` in `mission-control/`; confirm
-      version via `npm view`.
-- [ ] T031 `lib/mcp-server.mjs`: Streamable HTTP transport at `POST /mcp`,
-      bearer-token gate on `JARVIS_MCP_TOKEN` (503 unset, 401 wrong), six
-      read-only tools (`node_health`, `triggers`, `proposals`, `bridges`,
-      `runbook`, `state_record`).
-- [ ] T032 `tests/mcp-server.test.js` — handshake + tool calls via the SDK's
-      own client, token gating.
-- [ ] T033 `server.mjs` wiring + `mission-control/README.md` connect line.
+- [X] T030 `npm i @modelcontextprotocol/sdk` in `mission-control/`; confirmed
+      version 1.30.0 via `npm view` before installing.
+- [X] T031 `lib/mcp-server.mjs`: Streamable HTTP transport at `POST /mcp`
+      (confirmed the SDK's Node transport is a thin wrapper taking plain
+      `IncomingMessage`/`ServerResponse` — no Express needed), bearer-token
+      gate on `JARVIS_MCP_TOKEN` (503 unset, 401 wrong), six read-only tools
+      (`node_health`, `triggers`, `proposals`, `bridges`, `runbook`,
+      `state_record`), every result redacted.
+- [X] T032 `tests/mcp-server.test.js` — 11 tests: a real handshake (SDK
+      `Client` + `StreamableHTTPClientTransport` against this server's own
+      handler on an ephemeral port), `tools/list`, all six tool calls, both
+      auth-gate cases.
+- [X] T033 `server.mjs` wiring (`POST /mcp`, `docs/NODE-STATE-*.md`
+      list/read helpers sandboxed like `vaultNote()`) + `tests/mcp-routes.
+      test.js` + `mission-control/README.md` connect line.
 
 ## Unit 5 — One-port validation and README
 
-- [ ] T040 Restart :9150 via the House (`FABLES-HOUSE.ps1 -Once`).
-- [ ] T041 curl every new route on `127.0.0.1:9150` and the LAN IP.
-- [ ] T042 `npx vitest run` — confirm only the 3 pre-existing crosslisting
-      failures + 1 flaky claudian test remain.
-- [ ] T043 Restricted-word grep on every changed file.
-- [ ] T044 `mission-control/README.md`: full panel/route list (Phases A–F) +
-      env var names.
-- [ ] T045 Judge journal line + this tasks.md fully ticked.
+- [X] T040 Restarted :9150 via the House twice (`FABLES-HOUSE.ps1 -Once`,
+      both HEALED on attempt 1) — once after Units 1-4 landed, once more
+      after the T022 async-exec fix.
+- [X] T041 Curled every new route on both `127.0.0.1:9150` and
+      `192.168.0.8:9150`: `/health` 200, `/api/bridges` 200 (all 10 bridges,
+      live honest statuses — see below), `/api/tts/voices` 200, `/api/skills`
+      200 (real counts after the async fix), `POST /mcp` 503 (token
+      genuinely unset). Also live-verified `POST /api/tts` (real edge-tts
+      mp3, `x-tts-engine: edge-tts`), `POST /api/ask` bridge `omniroute`
+      (real OmniRoute answer "PONG" via `xai-oauth/grok-4.5`), and
+      `POST /api/bridges/claude/run` (created a real `PROPOSED` bridge.run
+      proposal, visible in `/api/inbox`, left un-executed since
+      `JARVIS_FOUNDER_TOKEN` is genuinely unset — never approved on Joshua's
+      behalf).
+- [X] T042 `npx vitest run` — 599 passed / 4 failed, unchanged from before
+      this phase (3 pre-existing `tests/crosslisting.test.js` + 1 flaky
+      `tests/app.test.js` claudian test). 15 new test files, 138 new tests
+      this phase, all green.
+- [X] T043 Restricted-word (the repo's business-only compliance list, see
+      `.githooks/pre-commit-canonical`) grep clean on every changed file in
+      this phase; no protected path touched
+      (`scripts/fables-house/**`, `scripts/drift.cmd`, `ops/runbook/**`,
+      `ops/skills/sabretooth-node/**` — read only, e.g. to run the House).
+- [X] T044 `mission-control/README.md`: Phase F panel section (already
+      landed per-unit) + a new "Environment variables JARVIS reads" section
+      (names only).
+- [X] T045 Judge journal line (`.agents/journals/paperclip-judge/STATE.md`)
+      + this tasks.md fully ticked.
