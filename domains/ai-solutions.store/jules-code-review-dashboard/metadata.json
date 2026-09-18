@@ -1,0 +1,6 @@
+{
+  "name": "AI Solutions Store",
+  "description": "Storefront for AI Solutions Store and OpusPawClaw — the dual-agent AI workstation featuring Alpha/Beta Boss Mode, multi-provider orchestration, and Stripe checkout.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
