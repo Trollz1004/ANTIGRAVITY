@@ -1,0 +1,33 @@
+*.env
+
+# local MCP config with tokens, never commit
+mcpServers.jsonl
+# accidental root installs
+node_modules/
+package-lock.json
+package.json
+# per-machine Claude Code permissions
+.claude/settings.local.json
+
+# generated per-platform agent files written into this repo by the Agency Agents app (source: C:/DREAM/.agents/skills)
+.agents/
+.claude/agents/
+.codex/
+.github/agents/
+.opencode/
+
+# JARVIS HUD runtime state (never committed)
+dashboard/jarvis/data/
+dashboard/jarvis/tests/fixtures/test-jarvis-memory.json
+# JARVIS server stdout/stderr from `node server.mjs` runs
+dashboard/jarvis/.server-err.log
+dashboard/jarvis/.server-out.log
+# JARVIS test wake fixtures written by Hermes/agent wake tests
+dashboard/jarvis/tests/fixtures/test-wakes/
+dashboard/jarvis/tests/fixtures/test-wakes-create/
+
+# FreeBuff agent runtime state (never committed)
+.freebuff/
+
+# VS Code workspace + MCP config (per-machine, contains project refs/secrets)
+.vscode/

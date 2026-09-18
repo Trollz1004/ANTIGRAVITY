@@ -1,0 +1,88 @@
+/* ============================================================================
+   ANTIGRAVITY — Color tokens
+   "Sleek Cyberpunk Glassmorphism" (canonical, locked 2026-05-12)
+   Deep-space dark base · neon cyan primary · neon pink/rose secondary · gold trust
+   ============================================================================ */
+
+:root {
+  /* ---- Base surfaces (deep space dark) ---------------------------------- */
+  --ag-bg: #020617;            /* global app background — slate-950 */
+  --ag-bg-navy: #0a070f;       /* brand-mark backdrop (logo plate) */
+  --ag-surface-1: #0f172a;     /* slate-900 — raised panel */
+  --ag-surface-2: #1e293b;     /* slate-800 — hover / inset */
+  --ag-surface-3: #334155;     /* slate-700 — strong inset */
+
+  /* ---- Slate neutral ramp ----------------------------------------------- */
+  --ag-slate-950: #020617;
+  --ag-slate-900: #0f172a;
+  --ag-slate-800: #1e293b;
+  --ag-slate-700: #334155;
+  --ag-slate-600: #475569;
+  --ag-slate-500: #64748b;
+  --ag-slate-400: #94a3b8;
+  --ag-slate-300: #cbd5e1;
+  --ag-slate-200: #e2e8f0;
+  --ag-slate-50:  #f8fafc;
+
+  /* ---- Text ------------------------------------------------------------- */
+  --ag-text: #f8fafc;          /* base — slate-50 */
+  --ag-text-body: #cbd5e1;     /* readable body — slate-300 */
+  --ag-text-muted: #94a3b8;    /* muted UI — slate-400 */
+  --ag-text-muted-deep: #64748b; /* deep muted — slate-500 */
+
+  /* ---- Primary — Neon Cyan ---------------------------------------------- */
+  --ag-cyan: #22d3ee;          /* cyan-400 — primary action */
+  --ag-cyan-deep: #06b6d4;     /* cyan-500 */
+  --ag-cyan-bright: #00f3ff;   /* brand-gradient hot edge */
+
+  /* ---- Secondary — Neon Pink / Rose ------------------------------------- */
+  --ag-pink: #f472b6;          /* pink-400 — secondary action */
+  --ag-pink-deep: #ec4899;     /* pink-500 */
+  --ag-rose: #f43f5e;          /* rose-500 — icon accent */
+  --ag-magenta: #ff00ff;       /* neon glow source (pink drop-shadow) */
+
+  /* ---- Brand-mark spiral (logo) ----------------------------------------- */
+  --ag-spiral-pink: #e85b9e;
+  --ag-spiral-orange: #f0913e;
+
+  /* ---- Trust gold (verification badges, "Verified Human") --------------- */
+  --ag-gold: #e9b949;
+  --ag-gold-deep: #b8860b;
+
+  /* ---- Status / semantic ------------------------------------------------ */
+  --ag-success: #10b981;       /* emerald-500 */
+  --ag-warning: #f59e0b;       /* amber-500 */
+  --ag-danger:  #f43f5e;       /* rose-500 */
+  --ag-info:    #22d3ee;       /* cyan-400 */
+  --ag-paused:  #a855f7;       /* purple-500 — paused / legal-review */
+
+  /* ---- Borders / hairlines ---------------------------------------------- */
+  --ag-border: rgba(255, 255, 255, 0.10);   /* glass hairline */
+  --ag-border-strong: #1e293b;               /* slate-800 solid */
+  --ag-border-cyan: rgba(34, 211, 238, 0.40);
+  --ag-grid-line: #2563eb;                   /* faint backdrop grid (blue-600) */
+
+  /* ---- Brand gradient (logos, hero headings) ---------------------------- */
+  --ag-gradient-brand: linear-gradient(to right, #22d3ee, #ec4899); /* @kind color */
+
+  /* ======================================================================
+     SEMANTIC ALIASES — reach for these in components
+     ====================================================================== */
+  --surface-app: var(--ag-bg);
+  --surface-glass: rgba(15, 23, 42, 0.60);   /* slate-900/60 — THE glass fill */
+  --surface-card: var(--ag-surface-1);
+  --surface-inset: var(--ag-surface-2);
+
+  --text-base: var(--ag-text);
+  --text-body: var(--ag-text-body);
+  --text-muted: var(--ag-text-muted);
+  --text-label: var(--ag-text-muted);
+
+  --action-primary: var(--ag-cyan-deep);
+  --action-primary-glow: var(--ag-cyan);
+  --action-secondary: var(--ag-pink-deep);
+  --accent-icon: var(--ag-rose);
+
+  --border-glass: var(--ag-border);
+  --border-solid: var(--ag-border-strong);
+}
