@@ -46,10 +46,10 @@ Cannot be checked from here. Once `CLOUDFLARE_API_TOKEN` is minted (Zone:Edit) a
 
 ## Purpose per domain family
 
-- **dream-online.\* (net/info/org/store):** the game landing page at `apps/landing/dream-online` (README confirmed present). `.net` is primary; `.info/.org/.store` should redirect to `.net`.
-- **untilnokidinneed.\* (com/online/org/store):** `apps/landing/untilnokidinneed` (README confirmed present). `.com` is primary; the others redirect to `.com`.
+- **dream-online.\* (net/info/org/store):** the game landing page at `domains/dream-online.net` (README confirmed present). `.net` is primary; `.info/.org/.store` should redirect to `.net`.
+- **untilnokidinneed.\* (com/online/org/store):** `domains/untilnokidinneed.com` (README confirmed present). `.com` is primary; the others redirect to `.com`.
 - **ai-solutions.store:** the marketplace. Already live and correct on Cloudflare Pair B.
-- **aidoesitall.\* (info/online/store/website):** **UNVERIFIED purpose — ask Joshua.** No landing-page directory found for this name family in `apps/landing/`.
+- **aidoesitall.\* (info/online/store/website):** **UNVERIFIED purpose — ask Joshua.** No landing-page directory found for this name family in `domains/`.
 - **onlinerecycle.net:** the recycler app. Currently only the IONOS parking page resolves — **a 200 here is not a working page**, per the existing note; there is no evidence a recycler deployment is reachable at this domain today.
 
 ## IONOS API alternative (option, not a plan)
