@@ -85,6 +85,46 @@ function Test-RedisPing {
     } catch { return @{ ok = $false; detail = $_.Exception.Message } }
 }
 
+# Cloudflare Access gate check — for a hostname that is DELIBERATELY behind
+# Access, seeing the sign-in page (not the app) is the correct, healthy state.
+# Looks for the Access markers in the returned body rather than trusting a
+# bare 200 (Rule 7: verify identity, not status).
+function Test-AccessGate {
+    param([string]$Url, [int]$TimeoutSec = 8)
+    try {
+        $r = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec $TimeoutSec -ErrorAction Stop
+        $isAccessGate = ($r.Content -match 'Cloudflare Access' -or $r.Content -match 'cloudflareaccess\.com' -or $r.Content -match 'One-time PIN' -or $r.Content -match 'Sign in with')
+        return @{ ok = $isAccessGate; status = $r.StatusCode; detail = $(if ($isAccessGate) { 'Access sign-in gate present' } else { "HTTP $($r.StatusCode), no Access markers found" }) }
+    } catch {
+        $msg = $_.Exception.Message
+        if ($msg -match 'SEC_E_INTERNAL_ERROR|schannel') { return @{ ok = $null; status = 'SCHANNEL'; detail = $msg } }
+        # A 1033/edge error still throws via Invoke-WebRequest with a status code attached.
+        $code = 0
+        if ($_.Exception.Response) { try { $code = [int]$_.Exception.Response.StatusCode } catch {} }
+        return @{ ok = $false; status = $code; detail = $msg }
+    }
+}
+
+# Domain landing-page probe that tells "not yet delegated to Cloudflare" (an
+# expected, named pending state) apart from an actual DOWN once it is.
+function Test-DomainLanding {
+    param([string]$Domain, [string]$MustContain, [int]$TimeoutSec = 8)
+    $nsNames = ''
+    try {
+        $ns = Resolve-DnsName -Name $Domain -Type NS -ErrorAction Stop
+        $nsNames = (($ns | Where-Object { $_.Type -eq 'NS' } | Select-Object -ExpandProperty NameHost) -join ',')
+    } catch {
+        $nsNames = "resolve failed: $($_.Exception.Message)"
+    }
+    if ($nsNames -notmatch 'cloudflare') {
+        return @{ status = 'PENDING NAMESERVERS'; detail = "NS=$nsNames" }
+    }
+    $probe = Test-HttpIdentity -Url "https://$Domain/" -TimeoutSec $TimeoutSec -MustContain $MustContain
+    if ($probe.ok -eq $true) { return @{ status = 'UP'; detail = $probe.detail } }
+    elseif ($probe.status -eq 'SCHANNEL') { return @{ status = 'SCHANNEL'; detail = $probe.detail } }
+    else { return @{ status = 'DOWN'; detail = "NS=$nsNames; $($probe.detail)" } }
+}
+
 function Get-EnvKey {
     param([string]$Name, [string]$EnvFile = 'C:\ANTIGRAVITY\.env')
     try {
@@ -157,6 +197,28 @@ function Invoke-ProbePass {
 
     $ollama = Test-HttpIdentity -Url 'http://127.0.0.1:11434/api/tags' -TimeoutSec 6
     $optional['ollama_11434'] = @{ status = $(if ($ollama.ok) { 'UP' } else { 'DOWN' }); detail = $ollama.detail }
+
+    # Domains phase (2026-09-18) — local static vhost server for the three
+    # landing sites (dream-online.net, untilnokidinneed.com, onlinerecycle.net).
+    $domainsSrv = Test-HttpIdentity -Url 'http://127.0.0.1:9160/health' -MustContain 'domains-server'
+    $optional['domains_9160'] = @{ status = $(if ($domainsSrv.ok) { 'UP' } else { 'DOWN' }); detail = $domainsSrv.detail }
+
+    # dashboard.aidoesitall.website is gated by Cloudflare Access on purpose —
+    # UP means the Access sign-in page (or its One-time-PIN prompt) is showing,
+    # NOT a working dashboard response. Error 1033 (tunnel not reachable) or any
+    # other body counts as DOWN.
+    $dashAccess = Test-AccessGate -Url 'https://dashboard.aidoesitall.website/'
+    $optional['dashboard_access_aidoesitall'] = @{ status = $(if ($dashAccess.ok -eq $true) { 'UP' } elseif ($dashAccess.status -eq 'SCHANNEL') { 'SCHANNEL' } else { 'DOWN' }); detail = $dashAccess.detail }
+
+    # The three domains are pending Joshua's one-time nameserver click at the
+    # registrar (see C:\Users\joshi\OneDrive\claude-to-claude\
+    # DNS-NAMESERVERS-TO-SET-2026-09-18.md). Until that propagates, live NS
+    # still resolves to IONOS (or fails), which is an expected, named state —
+    # PENDING NAMESERVERS — not a DOWN. Once NS shows cloudflare, this probes
+    # the real landing page the same way the other public probes do.
+    $optional['domain_dream_online_net'] = Test-DomainLanding -Domain 'dream-online.net' -MustContain 'DREAM Online'
+    $optional['domain_untilnokidinneed_com'] = Test-DomainLanding -Domain 'untilnokidinneed.com' -MustContain 'Until No Kid In Need'
+    $optional['domain_onlinerecycle_net'] = Test-DomainLanding -Domain 'onlinerecycle.net' -MustContain 'DIY NAS'
 
     return @{ required = $required; optional = $optional }
 }

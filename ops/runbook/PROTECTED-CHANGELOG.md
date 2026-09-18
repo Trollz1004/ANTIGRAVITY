@@ -12,6 +12,8 @@ changed, and the commit that landed it. `.github/CODEOWNERS` and the
 `.claude/hooks/guard-protected-paths.ps1` reminder enforce this
 mechanically; this file is the human-readable record. Newest entries first.
 
+2026-09-18 (pending commit) | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | added "## 12. Domains" section — vhost static server on :9160, tunnel ingress + DNS for the three landing sites and dashboard.aidoesitall.website, Cloudflare Access sign-in, pending IONOS registrar click, new health probes | pending
+
 2026-09-18 04:35 UTC | scripts/fables-house/FABLES-HOUSE.ps1 | added ONE new optional stage "Domains static sites :9160" (probe /health for domains-server identity, heal starts ops/domains-server/server.mjs) — Domains phase Unit 2, no other lines in this file touched | 2f326da4
 
 Entries below cover 2026-09-17, backfilled from `git log` for
