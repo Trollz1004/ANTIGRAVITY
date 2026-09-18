@@ -36,9 +36,9 @@ export function loadTargets(targetsPath = DEFAULT_TARGETS_PATH) {
   return JSON.parse(readFileSync(targetsPath, 'utf8'));
 }
 
-const portOpen = (port, ms = 1500) =>
+const portOpen = (port, ms = 1500, host = '127.0.0.1') =>
   new Promise((res) => {
-    const s = connect({ host: '127.0.0.1', port });
+    const s = connect({ host, port });
     const done = (v) => { try { s.destroy(); } catch {} res(v); };
     s.setTimeout(ms);
     s.on('connect', () => done(true));
@@ -133,10 +133,10 @@ async function probeOne(t, { repo }) {
     const rr = await redisPing();
     r = { ...rr, detail: rr.detail || 'PONG' };
   } else if (t.kind === 'http') {
-    if (t.port && !(await portOpen(t.port))) r = { up: false, detail: 'port ' + t.port + ' closed' };
+    if (t.port && !(await portOpen(t.port, 1500, t.host || '127.0.0.1'))) r = { up: false, detail: 'port ' + t.port + ' closed' };
     else r = await httpCheck(t.url, t.identity, timeout, t.authEnv, repo);
   } else {
-    const open = await portOpen(t.port);
+    const open = await portOpen(t.port, 1500, t.host || '127.0.0.1');
     r = { up: open, detail: open ? 'port ' + t.port + ' open' : 'port ' + t.port + ' closed' };
   }
   const latencyMs = Date.now() - t0;

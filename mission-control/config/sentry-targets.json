@@ -1,5 +1,5 @@
 {
-  "_comment": "Fable's Sentry target registry. Moved 2026-09-18 from apps/fables-sentry/targets.json into mission-control/config/ when the separate :9140 wall service was folded into JARVIS (mission-control/lib/sentry.mjs now loads this file directly; no HTTP hop). Edit this file to add a watch target; the schema is unchanged. 'identity' is the string that MUST appear in the response body — a port being open is NOT health. That rule exists because on 2026-08-28 Redis was LISTENING on 6379 while answering MISCONF and refusing all writes, and every port-only check called it green for hours.",
+  "_comment": "Fable's Sentry target registry. Moved 2026-09-18 from apps/fables-sentry/targets.json into mission-control/config/ when the separate :9140 wall service was folded into JARVIS (mission-control/lib/sentry.mjs now loads this file directly; no HTTP hop). Edit this file to add a watch target; the schema is unchanged. 'identity' is the string that MUST appear in the response body \u2014 a port being open is NOT health. That rule exists because on 2026-08-28 Redis was LISTENING on 6379 while answering MISCONF and refusing all writes, and every port-only check called it green for hours.",
   "groups": [
     {
       "name": "Revenue stack",
@@ -133,13 +133,13 @@
           "url": "http://192.168.0.8:20128/v1/models",
           "identity": "auto/best-coding",
           "fix": "omniroute",
-          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models. Identity = the model catalog answering (the built-in combo id must appear). Changed from a port check 2026-09-03: the server child hit ~3 GB working set, /models went from 18 s to a 60 s timeout, completions died, and the port stayed open the whole time — an open port is not health. 2026-09-03 Joshua: the ONE OmniRoute URL for every client, doc, and probe is http://192.168.0.8:20128/v1 — verified from his tablet over Wi-Fi; loopback/localhost forms never worked off-box. The separate 'omnilan' row was merged into this one. 2026-09-06: upgraded 3.8.49 -> 3.8.50; this build answers /v1/models with 401 unless the API key is sent, so the probe carries OMNI_ROUTE_API_KEY from the repo .env (authEnv). AUTH MISSING / AUTH REJECTED are reported as such, never as a plain DOWN. Upgrade procedure lives in FABLES-HOUSE.ps1 at the OmniRoute stage.",
+          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models. Identity = the model catalog answering (the built-in combo id must appear). Changed from a port check 2026-09-03: the server child hit ~3 GB working set, /models went from 18 s to a 60 s timeout, completions died, and the port stayed open the whole time \u2014 an open port is not health. 2026-09-03 Joshua: the ONE OmniRoute URL for every client, doc, and probe is http://192.168.0.8:20128/v1 \u2014 verified from his tablet over Wi-Fi; loopback/localhost forms never worked off-box. The separate 'omnilan' row was merged into this one. 2026-09-06: upgraded 3.8.49 -> 3.8.50; this build answers /v1/models with 401 unless the API key is sent, so the probe carries OMNI_ROUTE_API_KEY from the repo .env (authEnv). AUTH MISSING / AUTH REJECTED are reported as such, never as a plain DOWN. Upgrade procedure lives in FABLES-HOUSE.ps1 at the OmniRoute stage.",
           "timeoutMs": 20000,
           "authEnv": "OMNI_ROUTE_API_KEY"
         },
         {
           "id": "ollama",
-          "label": "Ollama (fail-safe) · joshlcoleman/Fable",
+          "label": "Ollama (fail-safe) \u00b7 joshlcoleman/Fable",
           "port": 11434,
           "kind": "http",
           "url": "http://127.0.0.1:11434/api/tags",
@@ -202,7 +202,7 @@
           "note": "BLOCKED, not merely down. mongod 8.0.29 dies at 'Initializing durable catalog' with 0xC000001D STATUS_ILLEGAL_INSTRUCTION. This CPU is an i7-4960X (Ivy Bridge-E): it has AVX but NOT AVX2. The bundled MongoDB cannot run on this hardware at any config. Fix = install a MongoDB build that does not require AVX2, or move the CRM off Mongo. No FIX button, because no restart can help."
         }
       ],
-      "note": "crmui :3001 / crmapi :8001 retired from the wall 2026-09-03 — the CRM was folded into the monorepo 08-26 and the hosted instance is the live one; two permanent reds for services nobody starts is noise, not health. pcpg :54329 (Paperclip's embedded Postgres) retired with Paperclip 2026-09-10."
+      "note": "crmui :3001 / crmapi :8001 retired from the wall 2026-09-03 \u2014 the CRM was folded into the monorepo 08-26 and the hosted instance is the live one; two permanent reds for services nobody starts is noise, not health. pcpg :54329 (Paperclip's embedded Postgres) retired with Paperclip 2026-09-10."
     },
     {
       "name": "Public sites",
@@ -243,11 +243,11 @@
           "identity": "Cloudflare Access",
           "public": true,
           "fix": null,
-          "note": "Added 2026-09-18. Deliberately gated behind Cloudflare Access (ops/heartbeat/sabretooth-health.ps1's Test-AccessGate uses the same marker plus cloudflareaccess.com / One-time PIN / Sign in with). Seeing the Access sign-in page IS the healthy state here, not a broken one — a real dashboard response would mean the gate fell off."
+          "note": "Added 2026-09-18. Deliberately gated behind Cloudflare Access (ops/heartbeat/sabretooth-health.ps1's Test-AccessGate uses the same marker plus cloudflareaccess.com / One-time PIN / Sign in with). Seeing the Access sign-in page IS the healthy state here, not a broken one \u2014 a real dashboard response would mean the gate fell off."
         },
         {
           "id": "collective",
-          "label": "Open Collective · dream-online",
+          "label": "Open Collective \u00b7 dream-online",
           "kind": "http",
           "url": "https://opencollective.com/dream-online",
           "identity": "DREAM Online",
@@ -269,6 +269,80 @@
           "public": true,
           "fix": null,
           "note": "The cross-node record (ops/buzz/). Root answers NIP-11 JSON naming the relay; that is the identity."
+        }
+      ]
+    },
+    {
+      "name": "Alienware node (DREAM)",
+      "targets": [
+        {
+          "id": "aw-jarvis",
+          "label": "Alienware JARVIS HUD",
+          "host": "192.168.0.40",
+          "port": 9150,
+          "kind": "http",
+          "url": "http://192.168.0.40:9150/health",
+          "identity": "jarvis",
+          "note": "DREAM node view; hermes-repo copy until the mission-control codebase replaces it"
+        },
+        {
+          "id": "aw-hermes",
+          "label": "Alienware Hermes dashboard",
+          "host": "192.168.0.40",
+          "port": 9119,
+          "kind": "http",
+          "url": "http://192.168.0.40:9119/"
+        },
+        {
+          "id": "aw-npc-lab",
+          "label": "Dream Live NPC Lab",
+          "host": "192.168.0.40",
+          "port": 9127,
+          "kind": "http",
+          "url": "http://192.168.0.40:9127/"
+        },
+        {
+          "id": "aw-bridge",
+          "label": "DreamOps Bridge",
+          "host": "192.168.0.40",
+          "port": 9133,
+          "kind": "http",
+          "url": "http://192.168.0.40:9133/"
+        },
+        {
+          "id": "aw-crosslisting",
+          "label": "Alienware Crosslisting OS",
+          "host": "192.168.0.40",
+          "port": 3000,
+          "kind": "http",
+          "url": "http://192.168.0.40:3000/"
+        },
+        {
+          "id": "aw-ollama",
+          "label": "Alienware Ollama (Vulkan)",
+          "host": "192.168.0.40",
+          "port": 11434,
+          "kind": "http",
+          "url": "http://192.168.0.40:11434/api/tags",
+          "identity": "models"
+        },
+        {
+          "id": "aw-20128",
+          "label": "Alienware :20128 (identity unverified)",
+          "host": "192.168.0.40",
+          "port": 20128,
+          "kind": "http",
+          "url": "http://192.168.0.40:20128/api/health",
+          "identity": "ok",
+          "note": "listens on the OmniRoute port; the Alienware Claude verifies what it is"
+        },
+        {
+          "id": "aw-ssh",
+          "label": "Alienware SSH",
+          "host": "192.168.0.40",
+          "port": 22,
+          "kind": "port",
+          "note": "key-only, Sabretooth judge lane"
         }
       ]
     }
