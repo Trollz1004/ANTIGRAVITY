@@ -77,13 +77,17 @@ export function createProposalStore({ dir, now = () => new Date() } = {}) {
     appendFileSync(dayFile(dir, now()), JSON.stringify(dayLine) + '\n', 'utf8');
   }
 
-  function create({ source, kind, brand, platform, title, body, scheduledFor, checks }) {
+  // `...extra` carries kind-specific fields (Judge Lanes' `repo`/`range`/
+  // `diffStat`/`verdicts`) without every caller having to know about them.
+  // It is spread before `state`/`history` so an extra field can never
+  // clobber the ones this function itself controls.
+  function create({ source, kind, brand, platform, title, body, scheduledFor, checks, ...extra }) {
     if (!SOURCES.includes(source)) throw new Error('invalid source: ' + source);
     const at = now().toISOString();
     const rec = {
       id: newId(), ts: at, source, kind: kind || 'post', brand, platform,
       title: title || '', body: body || '', scheduledFor: scheduledFor || null,
-      checks: checks || {}, state: 'PROPOSED', history: [{ at, state: 'PROPOSED' }],
+      checks: checks || {}, ...extra, state: 'PROPOSED', history: [{ at, state: 'PROPOSED' }],
     };
     persist(rec);
     index.set(rec.id, rec);

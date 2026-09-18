@@ -97,19 +97,29 @@ export function performAction({ store, id, action, token, founderToken, adapters
   if (!proposal) return { status: 404, body: { error: 'not found' } };
 
   const stateMap = { approve: 'APPROVED', reject: 'REJECTED', snooze: 'SNOOZED' };
-  let updated = store.transition(id, { state: stateMap[action] });
+  let updated;
   let evidence = null;
 
-  if (action === 'approve' && proposal.source === 'social' && adapters) {
-    let result;
-    try { result = adapters.execute(proposal); }
-    catch (e) { result = { ok: false, error: String((e && e.message) || e) }; }
-    if (result && result.ok) {
-      evidence = result.path || result.url || null;
-      updated = store.transition(id, { state: 'EXECUTED', evidence });
-    } else {
-      evidence = (result && result.error) || 'adapter failed';
-      updated = store.transition(id, { state: 'FAILED', evidence });
+  // A judge proposal (Judge Lanes, Phase D unit 1) reaches `APPROVED` on its
+  // own once both lanes' verdicts agree (see lib/judge.mjs) — this inbox
+  // route is only ever hit for it as the founder's own EXECUTE click, so
+  // "approve" here means EXECUTE, not a second approval bounce.
+  if (action === 'approve' && proposal.source === 'judge' && proposal.state === 'APPROVED') {
+    evidence = 'founder execute';
+    updated = store.transition(id, { state: 'EXECUTED', evidence });
+  } else {
+    updated = store.transition(id, { state: stateMap[action] });
+    if (action === 'approve' && proposal.source === 'social' && adapters) {
+      let result;
+      try { result = adapters.execute(proposal); }
+      catch (e) { result = { ok: false, error: String((e && e.message) || e) }; }
+      if (result && result.ok) {
+        evidence = result.path || result.url || null;
+        updated = store.transition(id, { state: 'EXECUTED', evidence });
+      } else {
+        evidence = (result && result.error) || 'adapter failed';
+        updated = store.transition(id, { state: 'FAILED', evidence });
+      }
     }
   }
 
