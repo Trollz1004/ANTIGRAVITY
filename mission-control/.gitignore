@@ -1,1 +1,9 @@
 node_modules/
+
+# archify (Phase E, unit 3): vendored third-party CLI/skill, tt-a1i/archify,
+# subfolder-only package (no npm registry publish — package.json is
+# "private": true, and the repo has no top-level package.json for `npm i
+# github:tt-a1i/archify` to resolve). Restored on a fresh clone with:
+#   git clone --depth 1 https://github.com/tt-a1i/archify.git <tmp>
+#   cp -r <tmp>/archify mission-control/vendor/archify
+vendor/

@@ -9,7 +9,10 @@ export default defineConfig({
     // own env requirements) that happens to live alongside JARVIS in this folder
     // since the repo consolidation (2026-09-17). It runs its own `npm test` in
     // its own directory; it must not be swept into the JARVIS test run.
-    exclude: ['**/node_modules/**', '**/crosslisting-os/**'],
+    // vendor/ (Phase E, unit 3: the vendored, gitignored archify CLI) ships
+    // its own test suite under its own runner assumptions — it must not be
+    // swept into the JARVIS test run either.
+    exclude: ['**/node_modules/**', '**/crosslisting-os/**', '**/vendor/**'],
   },
   resolve: {
     alias: {
