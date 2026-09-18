@@ -21,7 +21,7 @@ Joshua granted **full autonomy** over youandinotai.com (date app) and its market
 
 **Escalate to Claude (judge lane) only if** `https://youandinotai.com`, `https://api.youandinotai.com`, or the Cloudflare tunnel is down **and** the 15-minute monitor cannot heal it.
 
-Do **not** edit `FABLES-HOUSE.ps1` or Claude MCP config.
+Do **not** edit `FABLES-HOUSE.ps1`, Claude MCP config, `drift.cmd`, `ops/runbook/**`, or the drop box `C:\Users\joshi\OneDrive\claude-to-claude\` — protected files, ruled 2026-09-17, edited only by official Claude via `drift`.
 
 Fable/Claude communication file (save replies here, they persist after close):
 `C:\Users\joshi\Desktop\HERMES-PROMPTS.txt`

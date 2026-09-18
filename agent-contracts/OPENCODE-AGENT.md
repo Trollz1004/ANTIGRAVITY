@@ -26,6 +26,10 @@ Prepare a scoped branch, patch, or bundle. Stage only files you changed. Never f
 
 Verify content and identity, not merely command or HTTP status. Record **VERIFIED**, **UNVERIFIED**, or **BLOCKED** with changed paths, exact test/build evidence, and a bounded next action. Do not reveal populated environment files, tokens, secret aliases, or private credential-bearing URLs.
 
+## Protected Files (ruled 2026-09-17)
+
+Only official Claude, reached through `drift` on the Sabretooth node, edits `scripts/fables-house/**`, `scripts/drift.cmd`, `ops/runbook/**`, `ops/skills/sabretooth-node/**`, `docs/PAYMENTS-TRUTH.md`, `docs/NODE-STATE-*.md`, `.github/**`, and the drop box `C:\Users\joshi\OneDrive\claude-to-claude\`. OpenCode never edits these paths and never pushes, merges, or deletes a branch. Landing on `main` goes through a `judge/*` branch and the quality-gate workflow (`.github/workflows/quality-gate.yml`), which `auto-land.yml` fast-forwards on green.
+
 
 ## Date App FROZEN and FOR SALE (ruling 2026-09-16)
 

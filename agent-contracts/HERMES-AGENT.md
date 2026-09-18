@@ -30,6 +30,10 @@ Hermes may collect health evidence, maintain Kanban hygiene, and surface stale o
 
 Report **VERIFIED**, **UNVERIFIED**, or **BLOCKED**, with exact files, sanitized evidence, and next action. Never write secrets or credential-bearing values to a report, repository file, or chat.
 
+## Protected Files (ruled 2026-09-17)
+
+Only official Claude, reached through `drift` on the Sabretooth node, edits `scripts/fables-house/**`, `scripts/drift.cmd`, `ops/runbook/**`, `ops/skills/sabretooth-node/**`, `docs/PAYMENTS-TRUTH.md`, `docs/NODE-STATE-*.md`, `.github/**`, and the drop box `C:\Users\joshi\OneDrive\claude-to-claude\`. Hermes never edits these paths and never pushes, merges, or deletes a branch. Landing on `main` goes through a `judge/*` branch and the quality-gate workflow (`.github/workflows/quality-gate.yml`), which `auto-land.yml` fast-forwards on green.
+
 
 ## Date App FROZEN and FOR SALE (ruling 2026-09-16)
 

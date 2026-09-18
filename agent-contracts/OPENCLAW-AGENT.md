@@ -26,6 +26,10 @@ Verify the product surface and the expected service identity. A reachable port o
 
 Use **VERIFIED**, **UNVERIFIED**, or **BLOCKED** with exact evidence. Do not print credentials, use historical path instructions, create duplicate services, or write scratch artifacts at the repository root.
 
+## Protected Files (ruled 2026-09-17)
+
+Only official Claude, reached through `drift` on the Sabretooth node, edits `scripts/fables-house/**`, `scripts/drift.cmd`, `ops/runbook/**`, `ops/skills/sabretooth-node/**`, `docs/PAYMENTS-TRUTH.md`, `docs/NODE-STATE-*.md`, `.github/**`, and the drop box `C:\Users\joshi\OneDrive\claude-to-claude\`. OpenClaw never edits these paths and never pushes, merges, or deletes a branch. Landing on `main` goes through a `judge/*` branch and the quality-gate workflow (`.github/workflows/quality-gate.yml`), which `auto-land.yml` fast-forwards on green.
+
 
 ## Date App FROZEN and FOR SALE (ruling 2026-09-16)
 
