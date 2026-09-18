@@ -12,6 +12,8 @@ changed, and the commit that landed it. `.github/CODEOWNERS` and the
 `.claude/hooks/guard-protected-paths.ps1` reminder enforce this
 mechanically; this file is the human-readable record. Newest entries first.
 
+2026-09-18 (pending commit) | scripts/fables-house/FABLES-HOUSE.ps1 | added ONE new optional stage "Domains static sites :9160" (probe /health for domains-server identity, heal starts ops/domains-server/server.mjs) — Domains phase Unit 2, no other lines in this file touched | pending
+
 Entries below cover 2026-09-17, backfilled from `git log` for
 `ops/runbook/SABRETOOTH-NODE-RUNBOOK.md` and `ops/skills/sabretooth-node/SKILL.md`,
 plus the House and drift.cmd commits Joshua named directly. Commit hashes

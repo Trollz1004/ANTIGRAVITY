@@ -256,6 +256,18 @@ $Stages = @(
        Heal  = { Stop-PortOwner 9150
                  Start-Process 'node' -ArgumentList 'C:\ANTIGRAVITY\mission-control\server.mjs' -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden } }
 
+    # 2026-09-18: serves the three landing sites (dream-online.net,
+    # untilnokidinneed.com, onlinerecycle.net) as one no-dependency vhost
+    # static server, local-only on 127.0.0.1:9160. The cloudflared tunnel
+    # ingress routes each domain's Host header at this origin (Unit 3,
+    # ops/domains-server/server.mjs). Optional: none of the revenue-stack
+    # stages above depend on it.
+    @{ Name = 'Domains static sites :9160'; Required = $false
+       Probe = { Test-Http 'http://127.0.0.1:9160/health' 6 'domains-server' }
+       Heal  = { $d = 'C:\ANTIGRAVITY\ops\domains-server\server.mjs'
+                 if (Test-Path $d) { Stop-PortOwner 9160; Start-Process 'node' -ArgumentList $d -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden }
+                 else { Log '  domains-server.mjs missing' 'DarkYellow' } } }
+
     # 2026-09-17: keeps JARVIS (:9150) reachable over vscode.dev after a reboot
     # or a lost LAN path, with no second cloudflared tunnel and no static IP.
     # First use needs Joshua's own one-time interactive sign-in (`code tunnel
