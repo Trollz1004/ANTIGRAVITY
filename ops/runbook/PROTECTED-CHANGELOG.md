@@ -18,6 +18,8 @@ plus the House and drift.cmd commits Joshua named directly. Commit hashes
 are the current `main` hashes — the repo's 2026-09-17 history purge rewrote
 the hashes these changes originally landed under.
 
+2026-09-17 21:40 EDT | docs/NODE-STATE-2026-09-17.md | signed node state record created, SHA-256 anchored (9ae2de3c), verify-and-countersign convention below the anchor | 388a4ef5
+2026-09-17 21:40 EDT | ops/skills/sabretooth-node/SKILL.md | protected-files ruling, signed-artifact verify/countersign rule, landing rule, one-repo statement, drop box, hardware, Obsidian second-brain commands | 388a4ef5
 2026-09-17 20:55 EDT | scripts/fables-house/tab-dateapp.cmd, scripts/fables-house/tab-dateapp-api.ps1 | date-app launch scripts moved to domains/youandinotai.com | 16e5e60f
 2026-09-17 20:40 EDT | scripts/fables-house/FABLES-HOUSE.ps1 | MC5 (:3151) and Stack Health (:8787) stages removed | 732f2b24
 2026-09-17 20:37 EDT | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md, ops/skills/sabretooth-node/SKILL.md, scripts/fables-house/FABLES-HOUSE.ps1 | folded ops/dashboard-jarvis into mission-control/, updated references | c2fe2b7b
