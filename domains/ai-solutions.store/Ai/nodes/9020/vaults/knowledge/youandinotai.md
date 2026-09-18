@@ -16,7 +16,7 @@ Marketing angle - product features only:
 - Community boards.
 - Local volunteer meetups.
 
-Scope rules from the 2026-08-21 directive apply: pure product marketing, no charity buzzwords, no solicitation language (FL §496.405). See [[marketing-pipeline]].
+Scope rules from the 2026-08-21 directive apply: pure product marketing, no cause buzzwords, no outreach language (FL §496.405). See [[marketing-pipeline]].
 
 ## Related
 

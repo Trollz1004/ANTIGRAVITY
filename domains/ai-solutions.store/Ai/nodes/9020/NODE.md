@@ -44,12 +44,12 @@ NOT marketing anything yet. Active work: the date app (YouAndINotAI, `apps/youan
 ## Content scope (hard rules)
 
 - Node 9020 is strictly a marketing and content engine. It does NOT handle payments, wallets, or treasury routing.
-- No internal tax, deduction, or revenue-split mechanics in any agent prompt, memory, or copy. It must never leak into marketing output.
+- No internal tax, deduction, or revenue allocation mechanics in any agent prompt, memory, or copy. It must never leak into marketing output.
 - All campaigns are 100% product marketing — features, value, user experience:
   - **YouAndINotAI**: human verification, anti-bot matching, community boards, local volunteer meetups.
   - **Dream Online**: persistent-memory AI NPCs, kid-safe environments, free-to-play with cosmetic/convenience options.
   - **Business Exchange & AI Solutions**: direct utility and software tools.
-- Zero charity buzzwords, zero solicitation language (FL §496.405 compliance).
+- Zero cause buzzwords, zero outreach language (FL §496.405 compliance).
 
 ## Hard rule: human approval for marketing content
 

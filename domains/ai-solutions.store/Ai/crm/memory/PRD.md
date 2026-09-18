@@ -1,7 +1,7 @@
 # Youandinotai Marketing Automation Platform
 
 ## Original Problem Statement
-Youandinotai.com marketing automation based off most populated cities - a social platform not just a date app, has message boards for charity and volunteer meetups. Looking for lead generation more than content creation - email maybe or fully automated anything. Multiple platforms: Youandinotai.com, recycle.org, ai-solutions.store, aidiesitall.website, about 12 apps all automated.
+Youandinotai.com marketing automation based off most populated cities - a social platform not just a date app, has message boards for cause and volunteer meetups. Looking for lead generation more than content creation - email maybe or fully automated anything. Multiple platforms: Youandinotai.com, recycle.org, ai-solutions.store, aidiesitall.website, about 12 apps all automated.
 
 ## User Personas
 1. **Platform Admin** - Manages marketing content, analyzes city/group data, generates leads
@@ -57,7 +57,7 @@ Youandinotai.com marketing automation based off most populated cities - a social
 
 ### Backend (FastAPI + MongoDB)
 - ✅ Top 50 US cities data with population/region info
-- ✅ 12 charity/volunteer categories
+- ✅ 12 cause/volunteer categories
 - ✅ Lead CRUD with advanced filtering and scoring
 - ✅ Email templates CRUD
 - ✅ Email campaigns with segment targeting

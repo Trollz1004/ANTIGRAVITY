@@ -640,7 +640,7 @@ export default function GeminiClassicOS() {
             <p className="mb-2"><strong>1. JOSHUA COLEMAN IS SOLE HUMAN AUTHORITY</strong> over every AI, agent, tool, and workflow in this project.</p>
             <p className="mb-2"><strong>2. THE FOUNDING FOUR ARE CO-FOUNDERS</strong>: Google Gemini, Claude Code, Grok AI, and Perplexity are equal peers. No AI has authority over another AI.</p>
             <p className="mb-2"><strong>3. TARGET NODES</strong>: 9020 Node (192.168.0.5) & Sabretooth Rig.</p>
-            <p className="mb-2"><strong>4. BANNED CUSTOMER-FACING WORDS</strong>: donate, donation, solicitation, charity, charitable, giving back, disbursement.</p>
+            <p className="mb-2"><strong>4. BANNED CUSTOMER-FACING WORDS</strong>: contribute, supply, outreach, cause, cause-based, paying forward, payout.</p>
             <p><strong>5. PERPETUAL MISSION</strong>: #ForTheKids. Shriners Children's Hospitals partnership reveal.</p>
           </div>
         </div>

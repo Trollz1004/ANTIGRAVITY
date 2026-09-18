@@ -22,7 +22,7 @@
           "category": {
             "id": "R24DGZV7LPULZCRH7DJONYGK"
           },
-          "description": "Drop off or schedule pickup for your old electronics — computers, laptops, TVs, phones, tablets, and e-waste. Recovered resale value is automatically disbursed via Protocol Omega smart contract on Base Mainnet: 60% to Shriners Children's Hospitals, 30% operations, 10% reinvestment. This is a contractual revenue split, not a charitable solicitation. OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida. Powered by Perplexity AI — perplexity.ai",
+          "description": "Drop off or schedule pickup for your old electronics — computers, laptops, TVs, phones, tablets, and e-waste. Recovered resale value is automatically disbursed via Protocol Omega smart contract on Base Mainnet: 60% to Shriners Children's Hospitals, 30% operations, 10% reinvestment. This is a contractual revenue allocation, not a cause-based outreach. OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida. Powered by Perplexity AI — perplexity.ai",
           "images": [
             {
               "id": "CBMTQ7JI4LIORLJXAGVWRCSW",
@@ -32,7 +32,7 @@
           "options": null,
           "labelColor": null,
           "modifierListInfos": null,
-          "name": "Support OnlineRecycle — E-Waste Resale & Revenue Disbursement",
+          "name": "Support OnlineRecycle — E-Waste Resale & Revenue payout",
           "productType": "LEGACY_SQUARE_ONLINE_SERVICE",
           "skipModifierScreen": true,
           "taxes": [
@@ -68,7 +68,7 @@
           "category": {
             "id": "R24DGZV7LPULZCRH7DJONYGK"
           },
-          "description": "Donate to Support Recycling Online For Charity",
+          "description": "contribute to Support Recycling Online For cause",
           "images": [
             {
               "id": "CKESRK3NB3FEF2LNWG6F3E3Q",
@@ -78,7 +78,7 @@
           "options": null,
           "labelColor": "F25B3D",
           "modifierListInfos": null,
-          "name": "Donation",
+          "name": "supply",
           "productType": "APPOINTMENTS_SERVICE",
           "skipModifierScreen": null,
           "taxes": [
@@ -124,12 +124,12 @@
           "availableForPickup": null,
           "availableOnline": null,
           "category": null,
-          "description": "Embark on a heartwarming journey of giving back with our convenient drop-off donation service. At our easily accessible locations, you can make a difference effortlessly by booking an appointment for your donation drop-off. Support a noble cause and spread kindness as you contribute to those in need. The process is simple and seamless, ensuring that your act of generosity leaves a lasting impact. Book your appointment today, and let your donations spark hope and joy in the lives of others. Join us in making a difference, one drop-off at a time!",
+          "description": "Embark on a heartwarming journey of paying forward with our convenient drop-off supply service. At our easily accessible locations, you can make a difference effortlessly by booking an appointment for your supply drop-off. Support a noble cause and spread kindness as you contribute to those in need. The process is simple and seamless, ensuring that your act of generosity leaves a lasting impact. Book your appointment today, and let your supplies spark hope and joy in the lives of others. Join us in making a difference, one drop-off at a time!",
           "images": null,
           "options": null,
           "labelColor": "00B23B",
           "modifierListInfos": null,
-          "name": "Drop off Donations",
+          "name": "Drop off supplies",
           "productType": "APPOINTMENTS_SERVICE",
           "skipModifierScreen": false,
           "taxes": [
@@ -163,7 +163,7 @@
           "availableForPickup": null,
           "availableOnline": null,
           "category": null,
-          "description": "Experience the convenience and security of making cash donations through our streamlined appointment booking service. With a user-friendly platform and easy payment process, you can schedule an appointment to make your contribution hassle-free. By booking a dedicated time slot for your donation appointment, you ensure a smooth and efficient transaction process. Your support for the cause is invaluable, and our appointment service ensures that your donation is received promptly and securely. Book now to make a difference and join us in our mission to create a positive impact in the community.",
+          "description": "Experience the convenience and security of making cash supplies through our streamlined appointment booking service. With a user-friendly platform and easy payment process, you can schedule an appointment to make your contribution hassle-free. By booking a dedicated time slot for your supply appointment, you ensure a smooth and efficient transaction process. Your support for the cause is invaluable, and our appointment service ensures that your supply is received promptly and securely. Book now to make a difference and join us in our mission to create a positive impact in the community.",
           "images": [
             {
               "id": "W3P26ADFNIYLL3FZUKCVXLTB",
@@ -173,7 +173,7 @@
           "options": null,
           "labelColor": null,
           "modifierListInfos": null,
-          "name": "Cash Donations",
+          "name": "Cash supplies",
           "productType": "APPOINTMENTS_SERVICE",
           "skipModifierScreen": false,
           "taxes": [
@@ -185,11 +185,11 @@
           "variations": [
             {
               "id": "6K3E74KDEXSLD3DUN7YIJPK4",
-              "name": "In Person Cash Donation"
+              "name": "In Person Cash supply"
             },
             {
               "id": "XW65GX5HRDMSDWLUFVSDFPEE",
-              "name": "Online Donation"
+              "name": "Online supply"
             }
           ]
         },
@@ -1202,7 +1202,7 @@
           "absentAt": null,
           "presentAt": null,
           "presentAtAll": true,
-          "name": "Donate"
+          "name": "contribute"
         },
         {
           "__typename": "CatalogCategory",

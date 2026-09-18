@@ -223,7 +223,7 @@ GET    /api/notifications            # smart alerts
 - [ ] No Paperclip, no Base44, no external CRM dependencies
 
 ## UNTIL NO KID IN NEED
-Kids 13 and under = FREE on every platform. This CRM tracks volunteer leads for charity platforms. Revenue waterfall: ops → runway → treasury → #UntilNoKidInNeed.
+Kids 13 and under = FREE on every platform. This CRM tracks volunteer leads for cause platforms. Revenue waterfall: ops → runway → treasury → #UntilNoKidInNeed.
 
 ---
 *Generated from Emergent Lead Generation CRM build session — ready for Fable 5 orchestration*

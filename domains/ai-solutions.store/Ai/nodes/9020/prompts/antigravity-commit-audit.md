@@ -18,9 +18,9 @@ STEP 2. For each commit, read the actual diff (git show <sha>) and check for:
 
 (b) HARDCODED DRIVE PATHS — no drive letters, period. Any NEW hardcoded absolute Windows drive path (C:\..., E:\..., F:\..., any letter) in committed code is a DEFECT — machines and drives change; code must use relative paths, config, or env vars. In docs/comments it is a CONCERN, not a defect. Any NEW reference to the retired machine's IP 192.168.0.15 is a DEFECT anywhere.
 
-(c) BANNED LANGUAGE ON CUSTOMER SURFACES. On any path under frontend/, apps/*frontend*/, ops/sales/public-surface/, */public/, or a root *.html, these words must NEVER appear: charity, charitable, donate, donation, solicitation, disbursement, tax-deductible, giving back, non-profit, 501(c), proceeds go to, every dollar, funds children. Payment-processor bots keyword-match the live site and even a denial trips them. NOTE: these words are FINE anywhere else (skills, docs, backend) — do not flag those.
+(c) BANNED LANGUAGE ON CUSTOMER SURFACES. On any path under frontend/, apps/*frontend*/, ops/sales/public-surface/, */public/, or a root *.html, these words must NEVER appear: cause, cause-based, contribute, supply, outreach, payout, tax-classified, paying forward, cause-entity, tax-status-ref, proceeds route to, every unit, supports children. Payment-processor bots keyword-match the live site and even a denial trips them. NOTE: these words are FINE anywhere else (skills, docs, backend) — do not flag those.
 
-(d) REVENUE-SPLIT LOGIC anywhere: CharityRouter, GospelDonation, donation splitters, split contracts, percentage-to-cause logic. Banned outright.
+(d) revenue allocation LOGIC anywhere: CauseRouter, GospelContribution, distribution splitters, distribution contracts, percentageAllocation logic. Banned outright.
 
 (e) SECRETS: any literal API key, token, or private key. Especially ANTHROPIC_API_KEY, which must never exist in this stack at all.
 

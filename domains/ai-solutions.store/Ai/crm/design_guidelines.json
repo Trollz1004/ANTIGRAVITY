@@ -92,7 +92,7 @@
     "Update `index.css` to inject the defined custom color variables into the `:root` pseudo-class. Map them exactly as provided.",
     "Implement the 'Control Room' grid strategy for the dashboard: grid-cols-1 md:grid-cols-3 lg:grid-cols-4. Minimize empty space but maintain 'p-6' internal padding on cards.",
     "For the City Analytics features, use the provided city_skyline images as subtle headers or background textures for city-specific cards.",
-    "For Volunteer/Charity threads, use the volunteer_group images as thumbnails or list avatars.",
+    "For Volunteer/cause threads, use the volunteer_group images as thumbnails or list avatars.",
     "Use Shadcn UI components extensively (Cards, Tables, Select, DatePicker, Charts) but override their default borders to be softer (border-black/5 or border-border) and remove heavy drop shadows (use flat surfaces).",
     "Ensure all interactive elements have `data-testid` attributes.",
     "Include a visible sidebar or top navigation bar that is not fully transparent. Avoid hiding links in hamburger menus on desktop.",

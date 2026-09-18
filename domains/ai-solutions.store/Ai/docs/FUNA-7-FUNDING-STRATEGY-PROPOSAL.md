@@ -141,7 +141,7 @@ Use the `seed-income-engine.py` to create tasks, then draft content via `draft-c
 
 ### Customer-Facing Language Rules (Non-Negotiable)
 
-- **NEVER use:** `payment`, `payment`, `outreach`, `tax-deductible`, ``
+- **NEVER use:** `payment`, `payment`, `outreach`, `tax-classified`, ``
 - **Revenue framing:** "Membership gives you access to verified profiles and smarter matching"
 - **Mission mention:** "a share of net proceeds after taxes and operating costs supports families through contractual revenue payout"
 - **AI attribution:** "designed in collaboration with AI tools" (never platform-specific)

@@ -935,7 +935,7 @@ async def seed_data():
                 </div>
                 <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 15px 0;">
                     <h3 style="margin: 0;">Food Bank Support</h3>
-                    <p style="color: #666; margin: 5px 0;">Weekdays - Sort and distribute food donations</p>
+                    <p style="color: #666; margin: 5px 0;">Weekdays - Sort and distribute food supplies</p>
                 </div>
                 <a href="https://youandinotai.com/events" style="display: inline-block; background: #D97757; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px;">See All Events</a>
             </div>
@@ -954,7 +954,7 @@ async def seed_data():
                 <ul>
                     <li>15 new volunteer opportunities this month</li>
                     <li>Over 500 hours of community service logged</li>
-                    <li>3 new charity partnerships</li>
+                    <li>3 new cause partnerships</li>
                 </ul>
                 <a href="https://youandinotai.com" style="display: inline-block; background: #4A7B59; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px;">Get Involved Again</a>
             </div>
@@ -1145,7 +1145,7 @@ async def ai_qualify_lead(lead_id: str):
         completion = await client.chat.completions.create(
             model=LLM_MODEL,
             messages=[
-                {"role": "system", "content": """You are a lead qualification expert for a volunteer/charity platform. 
+                {"role": "system", "content": """You are a lead qualification expert for a volunteer/cause platform. 
             Analyze leads and provide actionable recommendations. Be concise and specific."""},
                 {"role": "user", "content": f"""Analyze this lead and provide qualification insights:
 

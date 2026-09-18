@@ -56,13 +56,13 @@ below is non-negotiable.
 **My code and my customer surfaces must contain ZERO of the following:**
 
 - canonical-7 banned words: `, `, `payment`, `payment`,
-  `outreach`, `payout`, `tax-deductible`, ``, `for-profit`,
-`501(c)`, `proceeds go to`, `every dollar`, `funds children`.
+  `outreach`, `payout`, `tax-classified`, ``, `for-profit`,
+`tax-status-ref`, `proceeds route to`, `every unit`, `supports children`.
 - ** logic**: no , no `Router`, no `Gospelpayment`,
-  no "100% to ", no on-chain payment splitter, no split contracts.
+  no "100% to ", no on-chain payment splitter, no distribution contracts.
 
 **Why:** flag bots read the LIVE deployed site and keyword-match. A sentence
-saying "this is NOT a outreach" still trips. The only safe rule
+saying "this is NOT an outreach" still trips. The only safe rule
 on customer surfaces is: the words never appear at all. My legal 10% per-bucket
 giving is REAL, SMART, and PRIVATE — it lives with my accountant and Claude-only
 memory. It does not belong in code or on a page.

@@ -63,7 +63,7 @@ NOT CONFIGURED. A port answering is NOT identity. Check identity where given.
 STANDING RULES for this report:
 - Every packet goes to a judge. You never land work and never review in a
   judge's place. Only a judge pushes, merges, or deletes.
-- There is no revenue split. The ledger reports payments and gross only.
+- There is no revenue allocation. The ledger reports payments and gross only.
   Square is the only rail. Do not describe revenue as an allocation.
 - FCC is permanently banned. If you find any trace of it, report it.
 - Never expose a secret, token, or credential fragment in your report.

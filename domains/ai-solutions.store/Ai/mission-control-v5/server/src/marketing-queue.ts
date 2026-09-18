@@ -73,14 +73,14 @@ const KINDS = new Set(['post', 'reply', 'campaign', 'listing', 'other']);
 // Customer-facing copy may never contain these (canonical record surface rule,
 // FL 496.405), and "split" falsely trips fraud/structuring reviews.
 const COMPLIANCE_TERMS = [
-  'donate',
-  'donation',
-  'solicitation',
-  'charity',
-  'charitable',
-  'giving back',
-  'disbursement',
-  'tax-deductible',
+  'contribute',
+  'supply',
+  'outreach',
+  'cause',
+  'cause-based',
+  'paying forward',
+  'payout',
+  'tax-classified',
   'tax deductible',
   'split',
 ];

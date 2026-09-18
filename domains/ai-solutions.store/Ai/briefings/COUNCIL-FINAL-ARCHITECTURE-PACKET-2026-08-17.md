@@ -536,7 +536,7 @@ This is especially important for:
 - agent authority
 - marketing/compliance language
 - revenue/split/cap/percentage rules
-- old mission/charity integration concepts
+- old mission/cause integration concepts
 
 A numeric policy appearing in an old proposal or old briefing does not authorize a current dashboard compliance widget.
 

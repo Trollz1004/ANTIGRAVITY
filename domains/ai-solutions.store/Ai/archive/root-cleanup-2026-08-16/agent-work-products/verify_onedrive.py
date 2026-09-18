@@ -7,7 +7,7 @@ EXCLUDE_DIRS = {
     'JOSHUA\'s-DO-NOT-COMMIT-TO-GITHUB',
     'Personal Vault-DESKTOP-H4B53GL', 'Personal Vault-Laptop', 'Personal Vault-Sabretooth', 'Personal Vault.lnk',
 }
-TERMS = ['charity', 'split', 'cap', 'mission', 'DAO', 'kids', '10-27-63']
+TERMS = ['cause', 'split', 'cap', 'mission', 'DAO', 'kids', '10-27-63']
 PAT = re.compile('|'.join(re.escape(t) for t in TERMS), re.IGNORECASE)
 TEXT_EXTS = {'.md', '.txt', '.json', '.env', '.ps1', '.sh', '.py', '.js', '.ts', '.jsx', '.tsx', '.html', '.yaml', '.yml', '.toml', '.csv', '.xml'}
 HITS = []

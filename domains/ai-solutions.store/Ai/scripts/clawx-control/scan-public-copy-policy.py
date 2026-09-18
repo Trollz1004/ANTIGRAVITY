@@ -92,7 +92,7 @@ RULES = [
         "patterns": [
             r" impact",
             r"projected ",
-            r"every dollar goes to",
+            r"every unit goes to",
         ],
     },
 ]

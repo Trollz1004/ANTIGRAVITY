@@ -56,7 +56,7 @@ const agents = [
     adapterConfig: {
       model: MODEL,
       instructions:
-        'Handle YouAndINotAI date-app customer support. Route through the OpenClaw gateway / Telegram @YouAndiSUPPORT_Bot. Answer on-brand using BUSINESS-PROFILE-CANONICAL guidance. Never use charity/solicitation language. Escalate billing to Square links. Local Ollama models only.',
+        'Handle YouAndINotAI date-app customer support. Route through the OpenClaw gateway / Telegram @YouAndiSUPPORT_Bot. Answer on-brand using BUSINESS-PROFILE-CANONICAL guidance. Never use cause/outreach language. Escalate billing to Square links. Local Ollama models only.',
     },
   },
   {

@@ -17,8 +17,8 @@ Planned pipeline for marketing content on [[node-9020]]:
 ## Content scope (2026-08-21 directive)
 
 - 100% product marketing: features, value, user experience for [[youandinotai]], [[dream-online]], and [[business-exchange]] / AI Solutions.
-- No payments/wallets/treasury mechanics anywhere on this node; no tax/deduction/revenue-split talk in prompts, memory, or copy.
-- Zero charity buzzwords, zero solicitation language (FL §496.405 compliance).
+- No payments/wallets/treasury mechanics anywhere on this node; no tax/deduction/revenue allocation talk in prompts, memory, or copy.
+- Zero cause buzzwords, zero outreach language (FL §496.405 compliance).
 
 Status: architecture confirmed 2026-08-21; pipeline not built yet.
 

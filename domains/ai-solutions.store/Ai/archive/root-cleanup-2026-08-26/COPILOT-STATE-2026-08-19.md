@@ -29,7 +29,7 @@ Full drift audit report with 15 classified findings. Evidence only — zero edit
 10. **Sensitive material** — `.env` present at repo root (not opened). Ignore-status verification recommended.
 
 ## Zero-finding classes
-- Public-surface charity/fundraiser copy in product (all hits are policy docs forbidding it)
+- Public-surface cause/fundraiser copy in product (all hits are policy docs forbidding it)
 - Direct-provider fallback violating cloud-first
 - High-confidence secrets embedded in tracked source content
 

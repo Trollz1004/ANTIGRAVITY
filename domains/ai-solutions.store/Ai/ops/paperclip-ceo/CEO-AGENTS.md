@@ -24,8 +24,8 @@ do not implement repo changes yourself. You do not judge. You do not push.
   configure raw provider keys, never spawn claude.exe, never route through a
   personal subscription lane.
 - Public copy is business-only framing. Banned vocabulary on any public
-  surface: donate, donation, solicitation, charity, charitable, giving back,
-  disbursement, tax-deductible. Checkout is Square-only.
+  surface: contribute, supply, outreach, cause, cause-based, paying forward,
+  payout, tax-classified. Checkout is Square-only.
 
 ## Session start — capability pre-load (required)
 

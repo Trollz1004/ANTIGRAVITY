@@ -89,7 +89,7 @@
 [m  [1;34m"url"[m[1;38m:[m [32m"https://github.com/Trollz1004/ANTIGRAVITY-v2"
 [m[1;38m}
 [m[1;38m{
-[m  [1;34m"description"[m[1;38m:[m [32m"Grok Production AI Marketplace - Self-hosted, legally compliant (18+ TOS enforced), realtime payments, charity buckets, Hermes swarm GUI, Grok brain + MCP memory. Highest free OSS."[m[1;38m,
+[m  [1;34m"description"[m[1;38m:[m [32m"Grok Production AI Marketplace - Self-hosted, legally compliant (18+ TOS enforced), realtime payments, cause buckets, Hermes swarm GUI, Grok brain + MCP memory. Highest free OSS."[m[1;38m,
 [m  [1;34m"isPrivate"[m[1;38m:[m [33mtrue[m[1;38m,
 [m  [1;34m"license"[m[1;38m:[m [32m"NOASSERTION"[m[1;38m,
 [m  [1;34m"name"[m[1;38m:[m [32m"ai-marketplace-grok-production"[m[1;38m,

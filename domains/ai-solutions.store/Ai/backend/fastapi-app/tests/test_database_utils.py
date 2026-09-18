@@ -143,7 +143,7 @@ def test_health_allocations_summary_groups_by_payer(client, db_session_factory):
     assert data["founder_test"]["gross_cents"] == 1499
     assert data["with_test"]["payments"] == 2
     assert data["with_test"]["gross_cents"] == 1599
-    # There is no revenue split. The summary reports payments and gross only;
+    # There is no revenue allocation. The summary reports payments and gross only;
     # any reserve/operating field reappearing here is a regression.
     for bucket in ("customer_only", "founder_test", "with_test"):
         assert set(data[bucket]) == {

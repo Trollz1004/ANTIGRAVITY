@@ -130,7 +130,7 @@ Nodes (16): \_broadcast_status(), broadcast_telegram(), broadcast_whatsapp(), \_
 ### Community 12 - "Community 12"
 
 Cohesion: 0.16
-Nodes (14): contribute(), ContributionCreate, \_maybe_broadcast(), \_new_id(), \_now(), Mission Ledger — every dollar committed to the kids fund, tracked. Replaces the, Aggregate stats — drives the Mission ribbon., Permissive intake. Payment surface diversified per latest directive: Square (+6 more)
+Nodes (14): contribute(), ContributionCreate, \_maybe_broadcast(), \_new_id(), \_now(), Mission Ledger — every unit committed to the kids fund, tracked. Replaces the, Aggregate stats — drives the Mission ribbon., Permissive intake. Payment surface diversified per latest directive: Square (+6 more)
 
 ### Community 13 - "Community 13"
 

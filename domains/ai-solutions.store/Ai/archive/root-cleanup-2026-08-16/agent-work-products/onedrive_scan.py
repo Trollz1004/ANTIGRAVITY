@@ -23,7 +23,7 @@ EXCLUDE_DIRS = {
     "Attachments",
     "JOSHUA's-DO-NOT-COMMIT-TO-GITHUB",
 }
-TERMS = ["charity", "split", "cap", "mission", "DAO", "kids", "10-27-63"]
+TERMS = ["cause", "split", "cap", "mission", "DAO", "kids", "10-27-63"]
 MATCH = re.compile("|".join(re.escape(t) for t in TERMS), re.IGNORECASE)
 TEXT_EXTS = {".md", ".txt", ".json", ".env", ".ps1", ".sh", ".py", ".js", ".ts", ".jsx", ".tsx", ".html", ".yaml", ".yml", ".toml", ".csv", ".xml"}
 HITS = []

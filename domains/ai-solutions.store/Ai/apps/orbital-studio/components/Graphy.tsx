@@ -286,7 +286,7 @@ const KNOWLEDGE_NODES_DATA: Omit<SpaceNode, 'x' | 'y' | 'z' | 'vx' | 'vy' | 'vz'
     details: {
       description: '10% per-bucket mission reserve corporate tax deduction for medical support for children in need. FL §496.405 compliant.',
       role: 'Perpetual Mission Mandate',
-      metrics: 'No solicitation copy · 10% Corporate Reserve Rule',
+      metrics: 'No outreach copy · 10% Corporate Reserve Rule',
       status: 'IMMUTABLE LAW'
     }
   }
