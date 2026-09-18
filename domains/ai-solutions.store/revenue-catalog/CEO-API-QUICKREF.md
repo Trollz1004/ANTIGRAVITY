@@ -13,7 +13,7 @@ This card is for the clean revenue-first lane.
 - Backend wallet monitoring remains unchanged.
 - The 10% reserve/accounting logic remains backend/internal only.
 - Public surfaces sell products, software, setup, and support.
-- Do not put mission, charity GUI, volunteer hubs, message boards, impact dashboards, DAO dashboards, tax explanations, or split explanations into the clean product-sales storefront.
+- Do not put mission, cause GUI, volunteer hubs, message boards, impact dashboards, DAO dashboards, tax explanations, or split explanations into the clean product-sales storefront.
 - Do not import `c:\antigravity` doctrine files, old app prompts, old watchdogs, or old sentry/autostart configs into the clean revenue repo.
 
 ## Clean Repos And Roots
@@ -106,7 +106,7 @@ You are operating in the clean revenue-first product repo.
 Active root:
 C:\revenue-first-products
 
-Do not import c:\antigravity doctrine, charity GUI, volunteer hubs, message boards, mission dashboards, DAO dashboards, old sentries, old watchdogs, or old MCP configs.
+Do not import c:\antigravity doctrine, cause GUI, volunteer hubs, message boards, mission dashboards, DAO dashboards, old sentries, old watchdogs, or old MCP configs.
 
 Build and sell clean product code:
 - white-label dating app SKU
