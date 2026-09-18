@@ -51,7 +51,7 @@ Steps (all Joshua, in the browser, ~15 minutes):
    `DREAM Online`, slug `dream-online`, category *Open source* or *Gaming*,
    choose "I already have a fiscal host" → pick the LLC. Hosts self-approve.
 4. Add tiers (below), a goal, and the "About" copy from
-   `apps/landing/dream-online/index.html` (business-only, already written).
+   `domains/dream-online.net/index.html` (business-only, already written).
 5. Swap the `CROWDFUND_URL` constant in that landing page to
    `https://opencollective.com/dream-online` and redeploy.
 
