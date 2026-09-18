@@ -18,6 +18,7 @@ plus the House and drift.cmd commits Joshua named directly. Commit hashes
 are the current `main` hashes — the repo's 2026-09-17 history purge rewrote
 the hashes these changes originally landed under.
 
+2026-09-17 23:30 EDT | ops/skills/sabretooth-node/SKILL.md | game vault path corrected to C:DREAMdream-onlineDREAM-ONLINE (id 2289237e7c63ff36) | e2dd35f8
 2026-09-17 21:45 EDT | .github ruleset main-quality-gate (id 23633706) | created active, then set to disabled (evaluate mode is Enterprise-only) because GitHub Actions is billing-locked on the account and no quality-gate check can run; re-enable when Actions runs (gh api -X PUT repos/Trollz1004/ANTIGRAVITY/rulesets/23633706 -f enforcement=active) | see git log
 2026-09-17 21:40 EDT | docs/NODE-STATE-2026-09-17.md | signed node state record created, SHA-256 anchored (9ae2de3c), verify-and-countersign convention below the anchor | 388a4ef5
 2026-09-17 21:40 EDT | ops/skills/sabretooth-node/SKILL.md | protected-files ruling, signed-artifact verify/countersign rule, landing rule, one-repo statement, drop box, hardware, Obsidian second-brain commands | 388a4ef5
