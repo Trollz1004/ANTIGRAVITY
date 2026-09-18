@@ -221,32 +221,17 @@ $Stages = @(
                          }
                      }
                  }
-                 Start-Process cmd -ArgumentList '/c','C:\ANTIGRAVITY\mission-control-v5\scripts\tab-dateapp.cmd' -WindowStyle Hidden } }
+                 Start-Process cmd -ArgumentList '/c','C:\ANTIGRAVITY\scripts\fables-house\tab-dateapp.cmd' -WindowStyle Hidden } }
 
     @{ Name = 'Backend API :8000 (db connected)'; Required = $true
        Probe = { Test-Http 'http://127.0.0.1:8000/api/v1/health' 30 '"db_connected":true' }
-       Heal  = { Start-Process powershell -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-File','C:\ANTIGRAVITY\mission-control-v5\scripts\tab-dateapp-api.ps1' -WindowStyle Hidden } }
+       Heal  = { Start-Process powershell -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-File','C:\ANTIGRAVITY\scripts\fables-house\tab-dateapp-api.ps1' -WindowStyle Hidden } }
 
     @{ Name = 'Cloudflared tunnel (site PUBLIC)'; Required = $true
        Probe = { Test-Http 'https://youandinotai.com' 20 'assets/index-' }
        Heal  = { if (-not (Get-Process cloudflared -ErrorAction SilentlyContinue)) {
                      Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config','C:\Users\joshi\.cloudflared\config.yml','run','sabretooth-main' -WindowStyle Hidden
                  } else { Log '  cloudflared runs but public probe failed — check Cloudflare edge / DNS' 'Yellow' } } }
-
-    # Demoted 2026-09-17 (Sabretooth runbook, ops/runbook/SABRETOOTH-NODE-RUNBOOK.md):
-    # JARVIS is the one Mission Control now. MC5 stays up as an embedded data
-    # source for JARVIS's panels (agent fleet, token spend) but nobody opens it
-    # directly, so a stumble here no longer blocks bring-up.
-    @{ Name = 'Mission Control v5 :3151 (embedded data source for JARVIS; not opened by humans)'; Required = $false
-       # Identity (the dashboard title), LAN bind (the Alienware must reach it), and
-       # freshness (started after server/src + client/dist were last written).
-       Probe = { if (-not (Test-Http 'http://127.0.0.1:3151/' 10 'MISSION CONTROL')) { return $false }
-                 try { $id = Invoke-RestMethod -Uri 'http://127.0.0.1:3151/api/identity' -TimeoutSec 10 } catch { return $false }
-                 if ($id.bindHost -ne '0.0.0.0') { Log '  Mission Control is bound to loopback only - restarting for the LAN' 'Yellow'; return $false }
-                 if (-not (Test-Fresh $id.startedAt @('C:\ANTIGRAVITY\mission-control-v5\server\src','C:\ANTIGRAVITY\mission-control-v5\client\dist','C:\ANTIGRAVITY\mission-control-v5\server\.env'))) { Log '  Mission Control is running code older than what is on disk - restarting' 'Yellow'; return $false }
-                 return $true }
-       Heal  = { Stop-PortOwner 3151
-                 Start-Process cmd -ArgumentList '/c','npm','start' -WorkingDirectory 'C:\ANTIGRAVITY\mission-control-v5' -WindowStyle Hidden } }
 
     # JARVIS is the one Mission Control on :9150 (ruling 2026-09-17, ops/runbook/
     # SABRETOOTH-NODE-RUNBOOK.md). AIRI dashboard is retired: this stage heals by
@@ -304,15 +289,6 @@ $Stages = @(
                  } else {
                      Start-Process 'code' -ArgumentList 'tunnel','service','install','--accept-server-license-terms','--name','sabretooth' -WindowStyle Hidden -Wait
                      Log '  installed VS Code tunnel service (name: sabretooth)' 'DarkGray'
-                 } } }
-
-    @{ Name = 'Stack Health :8787'; Required = $false
-       Probe = { Test-Http 'http://127.0.0.1:8787/' 8 }
-       Heal  = { $py = 'C:\ANTIGRAVITY\mission-control-v6\.venv\Scripts\python.exe'
-                 if (Test-Path $py) {
-                     $env:MC_PORT = '8787'   # child inherits; works on PS 5.1 and 7
-                     Start-Process $py -ArgumentList '-m','mission_control','serve' -WorkingDirectory 'C:\ANTIGRAVITY\mission-control-v6' -WindowStyle Hidden
-                     Remove-Item Env:MC_PORT -ErrorAction SilentlyContinue
                  } } }
 
     @{ Name = 'Ollama :11434'; Required = $false
