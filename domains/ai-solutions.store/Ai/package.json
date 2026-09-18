@@ -1,0 +1,46 @@
+{
+  "private": true,
+  "name": "antigravity-monorepo",
+  "description": "ANTIGRAVITY monorepo — YouAndINotAI platform (1-repo policy)",
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev:web": "pnpm --filter ai-studio-applet dev",
+    "dev:dashboard": "pnpm --filter antigravity-mission-control dev",
+    "dev:mission-control": "pnpm --filter mission-control dev",
+    "dev:cockpit": "pnpm --filter @antigravity/cockpit dev",
+    "dev:openclaw": "pnpm --filter opuspawclaw dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "format": "prettier --write .",
+    "fable": "node scripts/fable/fable.mjs"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-react-app": "^7.0.1",
+    "prettier": "^3.8.3"
+  },
+  "dependencies": {
+    "agent-browser": "^0.35.0",
+    "fdir": "^6.5.0",
+    "paperclip-adapter-openrouter": "^5.0.1",
+    "typescript": "^6.0.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "brace-expansion@1": "^1.1.18",
+      "fast-uri@3": "^3.1.5",
+      "hono": "^4.12.34",
+      "ip-address": "^10.3.1",
+      "js-yaml@4": "^4.3.1",
+      "nanoid@3": "^3.3.18",
+      "postcss": "^8.5.23",
+      "undici@7": "^7.29.0",
+      "vite@<=6.4.2": "^6.4.3",
+      "vitest@<3.2.6": "^3.2.6"
+    }
+  }
+}

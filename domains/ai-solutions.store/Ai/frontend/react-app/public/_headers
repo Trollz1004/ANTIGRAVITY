@@ -1,0 +1,8 @@
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; connect-src 'self' https://youandinotai.com https://api.youandinotai.com https://youandinotai-backend-731395189513.us-east1.run.app https://accounts.google.com https://cloudflareinsights.com wss://youandinotai.com wss://api.youandinotai.com wss://youandinotai-backend-731395189513.us-east1.run.app; font-src 'self' data: https://fonts.gstatic.com; form-action 'self' https://square.link https://book.squareup.com https://*.square.site https://accounts.google.com; frame-ancestors 'none'; frame-src 'self' https://accounts.google.com; img-src 'self' data: blob: https:; manifest-src 'self'; object-src 'none'; script-src 'self' https://accounts.google.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; upgrade-insecure-requests
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
+  X-XSS-Protection: 1; mode=block

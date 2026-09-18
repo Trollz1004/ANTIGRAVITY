@@ -1,0 +1,29 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "packageManager": "npm",
+  "reporters": ["html", "clear-text", "progress", "json"],
+  "testRunner": "vitest",
+  "checker": "typescript",
+  "typescriptChecker": {
+    "tsconfigFile": "tsconfig.json"
+  },
+  "mutate": [
+    "src/app/pages/**/*.tsx",
+    "src/app/components/**/*.tsx",
+    "src/components/**/*.tsx"
+  ],
+  "ignorePatterns": [
+    "**/*.test.tsx",
+    "**/*.test.ts",
+    "**/*.spec.tsx",
+    "**/*.spec.ts",
+    "**/__tests__/**",
+    "**/node_modules/**"
+  ],
+  "thresholds": {
+    "high": 80,
+    "low": 70,
+    "break": 60
+  },
+  "concurrency": 2
+}

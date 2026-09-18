@@ -1,0 +1,53 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "opencode",
+  "autoshare": false,
+  "autoupdate": true,
+  "provider": {
+    "omniroute": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OmniRoute (local control, remote compute)",
+      "options": {
+        "baseURL": "{env:OMNIROUTE_API_BASE_URL}",
+        "apiKey": "{env:OMNIROUTE_API_KEY}"
+      },
+      "models": {
+        "auto/best-free": { "name": "OmniRoute best free" },
+        "auto/best-coding": { "name": "OmniRoute best coding" },
+        "auto/best-coding-fast": { "name": "OmniRoute best coding fast" },
+        "auto/best-fast": { "name": "OmniRoute best fast" }
+      }
+    }
+  },
+  "model": "omniroute/auto/best-free",
+  "agent": {
+    "orchestrator": {
+      "description": "Orchestrator using local-node compute through OmniRoute only.",
+      "model": "omniroute/auto/best-free"
+    },
+    "coder": {
+      "description": "Code writer. Runs through OmniRoute so compute stays off the laptop.",
+      "model": "omniroute/auto/best-coding"
+    },
+    "closer": {
+      "description": "Demo and proposal builder for paid work.",
+      "model": "omniroute/auto/best-free"
+    },
+    "hunter": {
+      "description": "Lead scoring and research. Cheap and fast.",
+      "model": "omniroute/auto/best-fast"
+    },
+    "finance": {
+      "description": "Financial gating and revenue tracking for normal business operations.",
+      "model": "omniroute/auto/best-free"
+    },
+    "reviewer": {
+      "description": "Adversarial review through OmniRoute.",
+      "model": "omniroute/auto/best-free"
+    },
+    "free-fast": {
+      "description": "Quick tasks through local-node compute only.",
+      "model": "omniroute/auto/best-fast"
+    }
+  }
+}

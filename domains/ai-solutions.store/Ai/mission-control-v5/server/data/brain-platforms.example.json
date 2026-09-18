@@ -1,0 +1,23 @@
+[
+  {
+    "id": "hermes",
+    "label": "Hermes",
+    "statePath": "C:/ANTIGRAVITY/.agents/journals/hermes/STATE.md",
+    "maxChars": 4000,
+    "enabled": true
+  },
+  {
+    "id": "openclaw",
+    "label": "OpenClaw",
+    "statePath": "C:/ANTIGRAVITY/.agents/journals/openclaw/STATE.md",
+    "maxChars": 4000,
+    "enabled": true
+  },
+  {
+    "id": "opencode",
+    "label": "OpenCode",
+    "statePath": "C:/ANTIGRAVITY/.agents/journals/opencode/STATE.md",
+    "maxChars": 4000,
+    "enabled": true
+  }
+]

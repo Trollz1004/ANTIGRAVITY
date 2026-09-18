@@ -1,0 +1,59 @@
+name: ci-action-drift-scan
+
+on:
+  push:
+    paths:
+      - '.github/workflows/**'
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      report_only:
+        description: 'Report only (do not post issues)'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  scan-action-refs:
+    name: scan workflow uses refs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Find mutable third-party action references
+        id: scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp)"
+          find .github/workflows \( -name '*.yml' -o -name '*.yaml' \) -print0 |
+            while IFS= read -r -d '' file; do
+              grep -nE 'uses:[[:space:]]+[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+@[^[:space:]]+' "$file" || true
+            done |
+            grep -vE '@[0-9a-f]{40}([[:space:]]|$)' |
+            grep -vE 'uses:[[:space:]]+actions/(checkout|setup-node|setup-python|setup-java|upload-artifact|download-artifact|cache|github-script|configure-pages)@' |
+            grep -vE 'uses:[[:space:]]+github/codeql-action/' > "$tmp" || true
+
+          if [ -s "$tmp" ]; then
+            echo "Mutable third-party action references found:"
+            cat "$tmp"
+            echo "drift=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "All third-party action references are SHA-pinned or allowlisted."
+            echo "drift=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Summary
+        if: always()
+        shell: bash
+        run: |
+          echo "### Action drift scan" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ steps.scan.outputs.drift }}" = "true" ]; then
+            echo "Mutable refs detected; see job log." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Clean; all third-party actions are SHA-pinned or allowlisted." >> "$GITHUB_STEP_SUMMARY"
+          fi

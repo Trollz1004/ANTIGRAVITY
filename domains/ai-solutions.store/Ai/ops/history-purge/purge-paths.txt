@@ -1,0 +1,29 @@
+.env
+memory/credentials-map.md
+scripts/deploy/mcp-config-template.json
+briefings/recycle/2026-07-27-4project-payments-rejected.md
+briefings/grok-ai-prompt-youandinotai.md
+briefings/archive/grok-ai-prompt-youandinotai.md
+briefings/gemini-antigravity-update-feb23.md
+briefings/archive/gemini-antigravity-update-feb23.md
+briefings/archive/gemini-paste-feb24-final.txt
+briefings/archive/opus-gemini-key-update-results.md
+briefings/opus-dispatch-from-gemini-feb23.md
+scripts/haiku-sentry.js
+fix_square_merchants.py
+fix_square_webhooks.py
+fix_square_webhooks2.py
+fix_square_webhooks_sdk.py
+scripts/create-square-links.js
+scripts/fix_square_checkout.py
+scripts/test_locations.py
+scripts/test_tokens.py
+scripts/verify_square_final.py
+scripts/verify_square_cli.py
+.env.example
+scripts/check_square.py
+briefings/gemini-paste-feb24-final.txt
+briefings/opus-gemini-key-update-results.md
+docs/scratch/create interactive webpage based of my business an.md
+antigravity/aicollabforthekids-admin (2).zip
+create interactive webpage based of my business an.md
