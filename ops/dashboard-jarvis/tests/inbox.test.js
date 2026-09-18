@@ -4,6 +4,7 @@ import path from 'path'
 import os from 'os'
 import { createProposalStore } from '../lib/proposals.mjs'
 import { readTriggers, healthRedItem, SALE_INBOUND_ITEM, buildInbox, performAction, appendAudit } from '../lib/inbox.mjs'
+import { redact } from '../lib/redact.mjs'
 
 let dir
 beforeEach(() => { dir = fs.mkdtempSync(path.join(os.tmpdir(), 'jarvis-inbox-')) })
@@ -129,6 +130,23 @@ describe('lib/inbox.mjs — performAction with the right token', () => {
     const lines = fs.readFileSync(path.join(auditDir, files[0]), 'utf8').trim().split('\n').map((l) => JSON.parse(l))
     expect(lines[0].id).toBe(p.id)
     expect(lines[0].action).toBe('snooze')
+  })
+})
+
+describe('lib/inbox.mjs — redaction applied to the route response (unit 7)', () => {
+  it('redact() masks a secret-shaped value embedded in a proposal body before it would leave GET /api/inbox', () => {
+    const store = createProposalStore({ dir })
+    // Kept under the repo secret scanner's own thresholds — see tests/redact.test.js.
+    const fakeToken = 'ghp' + '_1234567890abcdEFGHijklmn'
+    store.create({
+      source: 'social', brand: 'DREAM Online', platform: 'devto', title: 't',
+      body: 'draft copy with a leaked token Bearer ' + fakeToken + ' pasted by mistake',
+    })
+    const payload = buildInbox({ store, triggersPath: path.join(dir, 'nope.jsonl'), heartbeat: { jsonPath: 'x', logPath: 'y', readFile: () => '', exists: () => false } })
+    const out = redact(payload)
+    const json = JSON.stringify(out)
+    expect(json).not.toContain(fakeToken.slice(4))
+    expect(json).toContain('ghp_****')
   })
 })
 
