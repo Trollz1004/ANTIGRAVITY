@@ -25,6 +25,10 @@
       <div class="sidebar-header">
         <h1>ANTIGRAVITY</h1>
         <span class="subtitle">Agency × AIRI × OmniRoute × Mission Control</span>
+        <span id="jarvis-bell" class="sidebar-bell" title="Approval inbox" role="button" tabindex="0" aria-label="Approval inbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span id="jarvis-bell-count" class="bell-count" hidden>0</span>
+        </span>
       </div>
       <ul class="nav-tabs">
         <li class="nav-tab active" data-tab="dashboard"><span class="nav-icon">◈</span> Dashboard</li>
@@ -42,6 +46,8 @@
         <li class="nav-tab" data-tab="speckit"><span class="nav-icon lucide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span> Spec Kit</li>
         <li class="nav-tab" data-tab="board"><span class="nav-icon">⚖</span> ClawX Board</li>
         <li class="nav-tab" data-tab="ops"><span class="nav-icon">◫</span> Ops</li>
+        <li class="nav-tab" data-tab="social"><span class="nav-icon lucide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M4 4h16v12H8l-4 4z"/></svg></span> Social</li>
+        <li class="nav-tab" data-tab="inbox"><span class="nav-icon lucide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span> Inbox</li>
       </ul>
       <div class="sidebar-footer">
         <div class="omni-status">
@@ -53,6 +59,7 @@
 
     <!-- Main Content -->
     <main id="main">
+      <div id="jarvis-alerts-strip" class="alerts-strip" hidden></div>
       <!-- Dashboard Tab: every number here is read live or shown as unknown -->
       <section id="tab-dashboard" class="tab-content active">
         <div id="hero-youi" class="hero-youi" aria-label="You&i — watched over by AI"></div>
@@ -519,6 +526,65 @@
           </div>
         </div>
       </section>
+
+      <!-- Social Tab (Phase C): compose + check, nothing posts from here — it only creates a Proposal -->
+      <section id="tab-social" class="tab-content">
+        <header class="tab-header">
+          <h2>Social</h2>
+          <p class="tab-desc">Compose a post for "DREAM Online" or "AI Solutions" only — the date app is frozen and never postable here. Submitting runs the compliance and copy-score checks and creates a Proposal; nothing posts until it is approved in the Inbox.</p>
+        </header>
+        <div class="social-layout">
+          <div class="widget-card">
+            <form id="social-form" class="social-form">
+              <label>Brand
+                <select id="social-brand" name="brand">
+                  <option value="DREAM Online">DREAM Online</option>
+                  <option value="AI Solutions">AI Solutions</option>
+                </select>
+              </label>
+              <label>Platform
+                <select id="social-platform" name="platform"><option value="">Loading…</option></select>
+              </label>
+              <label class="full">Title
+                <input id="social-title" name="title" type="text" placeholder="Title" required />
+              </label>
+              <label class="full">Body
+                <textarea id="social-body" name="body" placeholder="Post copy…" required></textarea>
+              </label>
+              <label>Schedule (optional)
+                <input id="social-scheduled" name="scheduledFor" type="datetime-local" />
+              </label>
+              <div class="full" style="display:flex;align-items:center;gap:10px">
+                <button type="submit" class="btn">Check &amp; propose</button>
+                <span id="social-form-status" class="tab-desc" style="margin:0"></span>
+              </div>
+            </form>
+            <div id="social-check-result" class="check-result"></div>
+          </div>
+          <div class="widget-card">
+            <h3>Recent proposals</h3>
+            <div id="social-proposals" class="social-proposals"><p class="placeholder">Loading…</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Inbox Tab (Phase C): approve/reject/snooze every open item -->
+      <section id="tab-inbox" class="tab-content">
+        <header class="tab-header">
+          <h2>Approval Inbox</h2>
+          <p class="tab-desc">Every open item: social proposals, judge-lane items, health-loop triggers, and the sale-inbound row. Approve/reject/snooze require the founder token — it never leaves this browser tab.</p>
+        </header>
+        <div class="inbox-layout">
+          <div id="inbox-token-row" class="token-prompt">
+            <input id="inbox-token" type="password" placeholder="x-founder-token" autocomplete="off" />
+            <button id="inbox-token-save" class="btn">Save token for this tab</button>
+            <span id="inbox-token-status" class="tab-desc" style="margin:0"></span>
+          </div>
+          <div class="widget-card">
+            <div id="inbox-list" class="inbox-list"><p class="placeholder">Loading…</p></div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -530,5 +596,7 @@
   <script type="module" src="js/crosslisting.js"></script>
   <script type="module" src="js/jarvis/speckit.js"></script>
   <script type="module" src="js/jarvis/ops.js"></script>
+  <script type="module" src="js/jarvis/social.js"></script>
+  <script type="module" src="js/jarvis/inbox.js"></script>
 </body>
 </html>
