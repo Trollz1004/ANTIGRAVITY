@@ -235,6 +235,68 @@ def test_brand_mention_check_catches_actual_mention():
     assert body_only.count("youandinotai.com") == 1
 
 
+# --- X / Twitter tests ---
+
+def test_x_topics_constant_is_nonempty():
+    assert isinstance(mr.X_TOPICS, list)
+    assert len(mr.X_TOPICS) >= 20
+    for t in mr.X_TOPICS:
+        assert isinstance(t, str)
+        assert len(t) > 5
+
+
+def test_next_x_topic_returns_string():
+    t = mr.next_x_topic()
+    assert isinstance(t, str)
+    assert t in mr.X_TOPICS
+
+
+def test_x_topic_marker_isolated_from_other_topics():
+    # Mark one X topic as used; confirm we get a different one next.
+    first = mr.next_x_topic()
+    marker = mr.INBOX / "x_topics_filed.txt"
+    marker.parent.mkdir(parents=True, exist_ok=True)
+    with marker.open("a", encoding="utf-8") as f:
+        f.write(first.lower() + "\n")
+    try:
+        second = mr.next_x_topic()
+        assert second != first
+        assert second in mr.X_TOPICS
+    finally:
+        if marker.exists():
+            lines = marker.read_text(encoding="utf-8").splitlines()
+            kept = [l for l in lines if l.strip().lower() != first.lower()]
+            if kept:
+                marker.write_text("\n".join(kept) + "\n", encoding="utf-8")
+            else:
+                marker.unlink()
+
+
+def test_footer_strip_handles_inline_footer():
+    # When sanitize() collapses newlines, the footer ends up on the same
+    # line as the prose. The strip regex must NOT eat the prose.
+    body = "Real prose that we want to keep. " + mr.ADULT_FOOTER
+    out = re.sub(r"(?im)\s*\byouandinotai\.com is for adults 18 and over\.\s*$", "", body).strip()
+    assert "Real prose" in out, f"prose was eaten by regex: {out!r}"
+    assert "youandinotai" not in out.lower(), f"footer not stripped: {out!r}"
+
+
+def test_footer_strip_handles_standalone_footer():
+    # When the footer is on its own line, the strip regex should remove
+    # only the footer line.
+    body = "Real prose.\n\n" + mr.ADULT_FOOTER
+    out = re.sub(r"(?im)\s*\byouandinotai\.com is for adults 18 and over\.\s*$", "", body).strip()
+    assert "Real prose" in out
+    assert "youandinotai" not in out.lower()
+
+
+def test_footer_strip_handles_no_footer():
+    # No footer present: regex is a no-op.
+    body = "Just prose, no footer."
+    out = re.sub(r"(?im)\s*\byouandinotai\.com is for adults 18 and over\.\s*$", "", body).strip()
+    assert out == body
+
+
 if __name__ == "__main__":
     failed = 0
     passed = 0

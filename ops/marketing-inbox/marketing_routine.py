@@ -467,7 +467,7 @@ def draft_blog(topic: str, platform: str = "wordpress") -> str:
         f"Do NOT include the literal string 'youandinotai.com' anywhere in the body. "
         f"Plain text only, no markdown headers, no bullet lists with asterisks — short paragraphs separated by blank lines. "
         f"Do not invent statistics, dates, dollar amounts, or social proof numbers. "
-        f"Close the body with a single blank line, then the literal line: 'youandinotai.com is for adults 18 and over.'"
+        f"Close with a single blank line. Do NOT include any disclosure footer — the publisher appends one automatically."
     )
     out = http_json(f"{JARVIS}/api/social/draft",
                     {"brand": BRAND, "platform": platform, "brief": brief})
@@ -494,8 +494,7 @@ def draft_reddit(topic: str) -> str:
         f"Close with a genuine open question inviting replies. "
         f"Do NOT link to anything. Do NOT mention the brand, the product, or "
         f"any company. Do NOT promise outcomes. Do NOT invent user counts. "
-        f"End with the required adults-only footer on its own line: "
-        f"{ADULT_FOOTER}"
+        f"Do NOT include any disclosure footer — the publisher appends one automatically."
     )
     out = http_json(f"{JARVIS}/api/social/draft",
                     {"brand": BRAND, "platform": "reddit", "brief": brief})
@@ -517,6 +516,103 @@ def file_reddit_proposal(subreddit: str, topic: str, body: str) -> str:
             "brand": BRAND,
             "platform": "reddit",
             "subreddit": subreddit,
+            "title": topic[:1].upper() + topic[1:],
+            "body": body,
+            "scheduledFor": when,
+        },
+    )
+    proposal = out.get("proposal", out) if isinstance(out, dict) else {}
+    return proposal.get("id", "(no id)")
+
+
+# --- X / Twitter ---
+
+X_TOPICS = [
+    "dating app bio lines that get replies",
+    "first message on a dating app",
+    "why dating apps feel like a second job",
+    "the 6-month dating app slump",
+    "dating app photo advice",
+    "dating app opener that isn't 'hey'",
+    "dating app deal-breakers",
+    "matching with someone who has same name as ex",
+    "the dating app profile rewrite",
+    "dating app match energy",
+    "should dating apps show who liked you",
+    "dating app age gap preferences",
+    "online dating while traveling",
+    "the slow fade on dating apps",
+    "dating app red flag profile",
+    "dating app green flag profile",
+    "dating app question prompts",
+    "dating app conversation that goes nowhere",
+    "dating app match you never messaged",
+    "dating app voice notes",
+    "dating app video prompts",
+    "dating app subscription tier worth it",
+    "dating app photo verification",
+    "dating app for shy people",
+    "dating app for busy professionals",
+    "dating app profile that says less is more",
+    "what your dating app bio says about you",
+    "dating app first-date ideas",
+    "dating app weekend timing",
+    "dating app match rate myth",
+]
+
+
+def next_x_topic() -> str:
+    """Pick a fresh X topic by counting which have been filed."""
+    used: set[str] = set()
+    marker = INBOX / "x_topics_filed.txt"
+    if marker.exists():
+        used = {ln.strip().lower() for ln in marker.read_text(encoding="utf-8").splitlines() if ln.strip()}
+    fresh = [t for t in X_TOPICS if t.lower() not in used]
+    if not fresh:
+        return X_TOPICS[dt.datetime.now().hour % len(X_TOPICS)]
+    return fresh[0]
+
+
+def mark_x_topic_used(topic: str) -> None:
+    marker = INBOX / "x_topics_filed.txt"
+    marker.parent.mkdir(parents=True, exist_ok=True)
+    with marker.open("a", encoding="utf-8") as f:
+        f.write(topic.lower() + "\n")
+
+
+def draft_x(topic: str) -> str:
+    """Draft an X (Twitter) post via the Fable-voice route.
+
+    X has a hard 280-char limit (PLATFORM_LIMITS['x']=280). Voice: short
+    observation, opinion, or one-liner hook. NO link (the publisher can
+    append the brand URL), NO pitch, NO emoji storm. Brand lives only in
+    the footer which is appended automatically by the platform.
+    """
+    brief = (
+        f"X (Twitter) post on the topic: {topic}. "
+        f"Total length under 250 characters (the platform caps at 280). "
+        f"One observation, opinion, or one-line hook. No hashtags. No emoji. "
+        f"Plain spoken, no marketing language, no banned words. "
+        f"Do NOT name competing dating apps (no Tinder, Hinge, Bumble, Match, eHarmony, OKCupid, POF). "
+        f"Do NOT mention the brand, the product, or any company. "
+        f"Do NOT promise outcomes. Do NOT invent user counts. "
+        f"Do NOT include the literal string 'youandinotai.com' anywhere. "
+        f"Write the prose first, then a blank line, then the literal line: "
+        f"'youandinotai.com is for adults 18 and over.' as the final line."
+    )
+    out = http_json(f"{JARVIS}/api/social/draft",
+                    {"brand": BRAND, "platform": "x", "brief": brief})
+    return (out or {}).get("draft", "") or (out or {}).get("body", "")
+
+
+def file_x_proposal(topic: str, body: str) -> str:
+    """File an X post proposal into the JARVIS inbox for Fable to review."""
+    when = (dt.datetime.now(tz=EASTERN) + dt.timedelta(minutes=10)).replace(microsecond=0).isoformat()
+    out = http_json(
+        f"{JARVIS}/api/social/proposals",
+        {
+            "brand": BRAND,
+            "platform": "x",
             "title": topic[:1].upper() + topic[1:],
             "body": body,
             "scheduledFor": when,
@@ -555,10 +651,11 @@ def main() -> int:
     Each cycle:
       1. Drafts and files one blog proposal on a 5-platform round-robin.
       2. Drafts and files one Reddit proposal on a 3-subreddit round-robin.
-      3. Both drafts are pre-scored against JARVIS's copy-score rubric and
+      3. Drafts and files one X (Twitter) proposal (280-char hard cap).
+      4. All drafts are pre-scored against JARVIS's copy-score rubric and
          sanitized until score==5 or max_iters is hit.
-      4. Both proposals go to JARVIS for Fable to review.
-      5. Reports appended to HERMES-PROMPTS.txt.
+      5. All proposals go to JARVIS for Fable to review.
+      6. Reports appended to HERMES-PROMPTS.txt.
     """
     BLOG_DIR.mkdir(parents=True, exist_ok=True)
     ts = dt.datetime.now().isoformat(timespec="seconds")
@@ -578,6 +675,11 @@ def main() -> int:
         safe = "".join(c if c.isalnum() or c in "-_" else "-" for c in blog_topic)[:80]
         blog_path = BLOG_DIR / f"{dt.datetime.now().strftime('%H%M%S')}-{safe}.md"
         blog_path.write_text(blog_draft, encoding="utf-8")
+        # Defense in depth: JARVIS auto-appends the adults-only footer. Strip
+        # any footer the model added so we end up with exactly 1, not 2.
+        # Match either "..." footer on its own line OR "... footer." appended
+        # to a previous line (with optional trailing punctuation).
+        blog_draft = re.sub(r"(?im)\s*\byouandinotai\.com is for adults 18 and over\.\s*$", "", blog_draft).strip()
         try:
             blog_proposal_id = file_blog_proposal(blog_platform, blog_topic, blog_draft)
             blog_ok = "filed"
@@ -610,6 +712,9 @@ def main() -> int:
 
     if reddit_draft:
         reddit_draft, reddit_replacements, reddit_score = clean_to_score_5(reddit_draft)
+        # Defense in depth: JARVIS auto-appends the adults-only footer. Strip
+        # any footer the model added so we end up with exactly 1, not 2.
+        reddit_draft = re.sub(r"(?im)\s*\byouandinotai\.com is for adults 18 and over\.\s*$", "", reddit_draft).strip()
         # Strip any accidental product/brand mention — Reddit is discussion-only.
         # The brand only lives in the required adults-only footer.
         # Exclude the footer line from the brand-mention check: the literal
@@ -651,7 +756,53 @@ def main() -> int:
         f"{reddit_report_warn}"
     )
 
-    write_report(blog_report + "\n" + reddit_report)
+    # ----- Phase 3: X / Twitter proposal -----
+    x_topic = next_x_topic()
+    x_draft = draft_x(x_topic)
+    x_ok = "drafted-only"
+    x_proposal_id = "(no proposal — draft failed)"
+    x_score = 0
+    x_replacements = 0
+    x_warn = ""
+
+    if x_draft:
+        x_draft, x_replacements, x_score = clean_to_score_5(x_draft)
+        # Defense in depth: JARVIS auto-appends the adults-only footer. Strip
+        # any footer the model added so we end up with exactly 1, not 2.
+        x_draft = re.sub(r"(?im)\s*\byouandinotai\.com is for adults 18 and over\.\s*$", "", x_draft).strip()
+        # X hard cap: 280 chars total including the JARVIS-appended footer
+        # (~46 chars + blank line + newline = ~48 chars). Reserve 48 for the
+        # footer. If our prose exceeds 232 chars, truncate.
+        _X_FOOTER_RESERVE = 48
+        if len(x_draft) > 280 - _X_FOOTER_RESERVE:
+            prose = x_draft[: 280 - _X_FOOTER_RESERVE - 3].rsplit(" ", 1)[0] + "..."
+            x_draft = prose
+        body_only = re.sub(r"(?im)\s*\byouandinotai\.com is for adults 18 and over\.\s*$", "", x_draft, flags=re.IGNORECASE).lower()
+        brand_hits = body_only.count("youandinotai.com")
+        if brand_hits > 0:
+            x_warn = f" (warn: {brand_hits} brand-mention token(s) in body; Fable should reject)"
+        try:
+            x_proposal_id = file_x_proposal(x_topic, x_draft)
+            x_ok = "filed"
+        except urllib.error.HTTPError as exc:
+            body = ""
+            try:
+                body = exc.read().decode("utf-8", "ignore")[:200]
+            except Exception:
+                pass
+            x_proposal_id = f"FAILED: {exc.code} {body}"
+        except Exception as exc:
+            x_proposal_id = f"FAILED: {exc}"
+        mark_x_topic_used(x_topic)
+
+    x_report = (
+        f"[{ts}] marketing routine: {x_ok} x post "
+        f"'{x_topic}'. Proposal id: {x_proposal_id}. "
+        f"Sanitized: {x_replacements} replacements, final copyScore={x_score}/5, body_len={len(x_draft) if x_draft else 0}."
+        f"{x_warn}"
+    )
+
+    write_report(blog_report + "\n" + reddit_report + "\n" + x_report)
     return 0
 
 
