@@ -36,6 +36,39 @@ rem                     unit 4): prints the reddit.com/prefs/apps steps with
 rem                     no args; with --client-id/--client-secret runs the
 rem                     local OAuth2 consent flow and writes REDDIT_* into
 rem                     .env, printing no secret values
+rem    drift devto-setup   one-time dev.to API key registration: prints
+rem                     the dev.to/settings/extensions steps with no
+rem                     args; with --token validates against /api/users/me
+rem                     and writes SEO_ANT_DEVTO_TOKEN into .env, printing
+rem                     no secret values
+rem    drift hashnode-setup   one-time Hashnode personal access token +
+rem                     publication ID registration: prints the
+rem                     hashnode.com/settings/developer steps; with --token
+rem                     validates via { me { publications } } against
+rem                     gql.hashnode.com and writes SEO_ANT_HASHNODE_TOKEN
+rem                     + SEO_ANT_HASHNODE_PUBLICATION_ID into .env
+rem    drift wordpress-setup   one-time WordPress.com OAuth2 password-grant
+rem                     registration: prints the developer.wordpress.com/apps
+rem                     steps; with --client-id --client-secret --username
+rem                     --password [--site], exchanges via oauth2/token and
+rem                     writes SEO_ANT_WORDPRESS_TOKEN + SEO_ANT_WORDPRESS_SITE
+rem                     into .env
+rem    drift blogger-setup   one-time Blogger (Google API) OAuth2
+rem                     registration: prints the console.cloud.google.com
+rem                     steps; with --client-id --client-secret [--blog-id],
+rem                     opens the browser for one-time Google consent, catches
+rem                     the localhost:8766 callback, and writes
+rem                     SEO_ANT_BLOGGER_TOKEN + SEO_ANT_BLOGGER_REFRESH_TOKEN
+rem                     + SEO_ANT_BLOGGER_BLOG_ID into .env
+rem    drift tumblr-setup   one-time Tumblr OAuth1 1.0a three-legged
+rem                     registration: prints the tumblr.com/oauth/apps steps;
+rem                     with --consumer-key --consumer-secret [--blog-id]
+rem                     [--callback-port], performs the full request_token ->
+rem                     authorize -> access_token -> /v2/user/info flow and
+rem                     writes the 5 SEO_ANT_TUMBLR_* keys into .env
+rem
+rem  Every *-setup wizard prints no secret value, ever, and refuses to
+rem  write to .env if any of its validation steps fails.
 rem
 rem  What "the stack" means today (FABLES-HOUSE.ps1 stages, in order):
 rem    PostgreSQL 5432 · Redis 6379 · OmniRoute 20128 (identity+latency probe)
