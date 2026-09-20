@@ -71,6 +71,7 @@ if /I "%~1"=="fable"  goto :fable
 if /I "%~1"=="reddit-setup" goto :reddit-setup
 if /I "%~1"=="devto-setup" goto :devto-setup
 if /I "%~1"=="hashnode-setup" goto :hashnode-setup
+if /I "%~1"=="wordpress-setup" goto :wordpress-setup
 
 if not exist "%HOUSE%" (
   echo [drift] FABLE'S HOUSE script not found at %HOUSE%
@@ -156,4 +157,15 @@ rem SEO_ANT_HASHNODE_TOKEN + SEO_ANT_HASHNODE_PUBLICATION_ID into .env.
 rem Optional --publication-id <id> overrides auto-detection. No secret
 rem value is ever printed.
 node "%~dp0..\mission-control\scripts\hashnode-setup.mjs" %2 %3 %4 %5 %6 %7
+exit /b %ERRORLEVEL%
+
+:wordpress-setup
+rem One-time WordPress.com OAuth2 password-grant setup. No args: prints
+rem the developer.wordpress.com/apps steps. With --client-id,
+rem --client-secret, --username, --password (24-char app password), and
+rem optional --site: exchanges via oauth2/token (password grant),
+rem validates the token against /sites/<site>/me, and writes
+rem SEO_ANT_WORDPRESS_TOKEN + SEO_ANT_WORDPRESS_SITE into .env. No
+rem secret value is ever printed.
+node "%~dp0..\mission-control\scripts\wordpress-setup.mjs" %2 %3 %4 %5 %6 %7 %8 %9
 exit /b %ERRORLEVEL%
