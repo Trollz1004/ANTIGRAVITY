@@ -72,6 +72,7 @@ if /I "%~1"=="reddit-setup" goto :reddit-setup
 if /I "%~1"=="devto-setup" goto :devto-setup
 if /I "%~1"=="hashnode-setup" goto :hashnode-setup
 if /I "%~1"=="wordpress-setup" goto :wordpress-setup
+if /I "%~1"=="blogger-setup" goto :blogger-setup
 
 if not exist "%HOUSE%" (
   echo [drift] FABLE'S HOUSE script not found at %HOUSE%
@@ -168,4 +169,16 @@ rem validates the token against /sites/<site>/me, and writes
 rem SEO_ANT_WORDPRESS_TOKEN + SEO_ANT_WORDPRESS_SITE into .env. No
 rem secret value is ever printed.
 node "%~dp0..\mission-control\scripts\wordpress-setup.mjs" %2 %3 %4 %5 %6 %7 %8 %9
+exit /b %ERRORLEVEL%
+
+:blogger-setup
+rem One-time Blogger (Google API) OAuth2 setup. No args: prints the
+rem console.cloud.google.com + Blogger API v3 steps. With --client-id,
+rem --client-secret, optional --blog-id: opens the browser for one-time
+rem Google consent (scope = Blogger), catches the localhost:8766
+rem callback, exchanges the auth code at oauth2.googleapis.com/token,
+rem validates via /blogger/v3/users/me/blogs, and writes
+rem SEO_ANT_BLOGGER_TOKEN + SEO_ANT_BLOGGER_REFRESH_TOKEN +
+rem SEO_ANT_BLOGGER_BLOG_ID into .env. No secret value is ever printed.
+node "%~dp0..\mission-control\scripts\blogger-setup.mjs" %2 %3 %4 %5 %6 %7
 exit /b %ERRORLEVEL%
