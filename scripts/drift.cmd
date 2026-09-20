@@ -70,6 +70,7 @@ if /I "%~1"=="avatar" goto :avatar
 if /I "%~1"=="fable"  goto :fable
 if /I "%~1"=="reddit-setup" goto :reddit-setup
 if /I "%~1"=="devto-setup" goto :devto-setup
+if /I "%~1"=="hashnode-setup" goto :hashnode-setup
 
 if not exist "%HOUSE%" (
   echo [drift] FABLE'S HOUSE script not found at %HOUSE%
@@ -144,4 +145,15 @@ rem dev.to/settings/extensions steps. With --token: validates the key
 rem against /api/users/me and writes SEO_ANT_DEVTO_TOKEN into .env; no
 rem secret value is ever printed.
 node "%~dp0..\mission-control\scripts\devto-setup.mjs" %2 %3 %4 %5
+exit /b %ERRORLEVEL%
+
+:hashnode-setup
+rem One-time Hashnode personal access token + publication ID setup.
+rem No args: prints the hashnode.com/settings/developer steps. With
+rem --token: validates via { me { publications { edges { node { id title } } } } }
+rem against gql.hashnode.com, picks the first publication ID, and writes
+rem SEO_ANT_HASHNODE_TOKEN + SEO_ANT_HASHNODE_PUBLICATION_ID into .env.
+rem Optional --publication-id <id> overrides auto-detection. No secret
+rem value is ever printed.
+node "%~dp0..\mission-control\scripts\hashnode-setup.mjs" %2 %3 %4 %5 %6 %7
 exit /b %ERRORLEVEL%
