@@ -86,7 +86,10 @@ import { buildInbox, performAction, readTriggers, appendAudit } from './lib/inbo
 import { reviewAndMaybeExecute, autoReviewEnabled, passesMechanicalChecks } from './lib/social-review.mjs';
 import { executeRedditAdapter } from './lib/reddit-api.mjs';
 import { createAgentTools } from './lib/agent-tools.mjs';
-import { runAskAgent, refreshAskModels, DEFAULT_MODEL as ASK_DEFAULT_MODEL } from './lib/ask-agent.mjs';
+import {
+  runAskAgent, refreshAskModels, DEFAULT_MODEL as ASK_DEFAULT_MODEL,
+  readAgenticEvidence, recordAgenticEvidenceEntry, buildModelPicker,
+} from './lib/ask-agent.mjs';
 import { handleMcpRequest } from './lib/mcp-server.mjs';
 import { createReviewProposal, buildJudgeFeed, postVerdict } from './lib/judge.mjs';
 import { buildFleet } from './lib/fleet.mjs';
@@ -344,6 +347,11 @@ function readAskModelsCache() {
 function writeAskModelsCache(data) {
   try { mkdirSync(join(HERE, 'data'), { recursive: true }); writeFileSync(ASK_MODELS_CACHE_PATH, JSON.stringify(data), 'utf8'); } catch {}
 }
+// Model-picker fix (specs/010, unit 6): real-run evidence, not a synthetic
+// probe, is what "agentic" means now — data/ask-agentic-evidence.json,
+// {model: isoTimestamp}, written only when a real tool call actually
+// succeeds inside runAskAgent.
+const ASK_AGENTIC_EVIDENCE_PATH = join(HERE, 'data', 'ask-agentic-evidence.json');
 
 const STARTED_AT = new Date().toISOString(); // the House restarts this server when server.mjs is newer
 
@@ -884,6 +892,9 @@ createServer(async (req, res) => {
           question: body.question, model: body.model, tools: ASK_TOOLS,
           base: OMNI, key: envValue('OMNI_ROUTE_API_KEY'), auditDir: AUDIT_DIR,
           onEvent: (type, data) => { try { res.write(sse(type, redact(data))); } catch {} },
+          recordEvidence: (model, at) => recordAgenticEvidenceEntry(ASK_AGENTIC_EVIDENCE_PATH, model, at, {
+            readFile: readFileSync, writeFile: writeFileSync, exists: existsSync, mkdir: mkdirSync, dirname,
+          }),
         });
       } catch (e) {
         try { res.write(sse('error', { message: String((e && e.message) || e) })); } catch {}
@@ -898,13 +909,22 @@ createServer(async (req, res) => {
     return send(res, r.status, redact(r.body));
   }
   if (p === '/api/ask/models' && req.method === 'GET') {
+    // Model-picker fix (specs/010, unit 6): this response is built entirely
+    // from disk (real-run evidence + the last background probe's cache) —
+    // it NEVER waits on a network probe. The synthetic probe still runs,
+    // but only afterward, in the background, with its own 20s-per-model
+    // timeout, purely to refresh the cache for the NEXT request.
+    const evidence = readAgenticEvidence(ASK_AGENTIC_EVIDENCE_PATH, { readFile: readFileSync, exists: existsSync });
+    const probeCache = readAskModelsCache();
+    const picker = buildModelPicker({ evidence, probeCache });
     const force = url.searchParams.get('force') === '1';
-    const r = await refreshAskModels({
-      base: OMNI, key: envValue('OMNI_ROUTE_API_KEY'), force,
-      readCache: readAskModelsCache, writeCache: writeAskModelsCache,
-    });
+    const key = envValue('OMNI_ROUTE_API_KEY');
+    if (key) {
+      refreshAskModels({ base: OMNI, key, force, readCache: readAskModelsCache, writeCache: writeAskModelsCache })
+        .catch(() => {}); // best-effort background refresh; a failure here must never surface to this request
+    }
     const builtin = [{ id: 'claude-code', label: 'Claude Code (Claudian)', agentic: true, builtin: true }];
-    return send(res, 200, redact({ ...r, builtin }));
+    return send(res, 200, redact({ ...picker, builtin }));
   }
 
   // Voice out (Phase F, unit 2): edge-tts neural voices, cached 24h; a 204

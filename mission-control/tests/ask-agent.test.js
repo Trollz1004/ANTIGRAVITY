@@ -2,7 +2,9 @@ import { describe, it, expect, vi } from 'vitest'
 import { createAgentTools } from '../lib/agent-tools.mjs'
 import {
   runAskAgent, probeModelAgentic, pickCandidateModels, refreshAskModels,
-  DEFAULT_MODEL, SYSTEM_PROMPT,
+  DEFAULT_MODEL, SYSTEM_PROMPT, PROBE_TIMEOUT_MS, PICKER_DEFAULTS,
+  AGENTIC_EVIDENCE_WINDOW_MS, isRecentEvidence, readAgenticEvidence,
+  recordAgenticEvidenceEntry, agenticModelsFromEvidence, buildModelPicker,
 } from '../lib/ask-agent.mjs'
 
 function jsonResponse(body, ok = true, status = 200) {
@@ -155,5 +157,90 @@ describe('lib/ask-agent.mjs — model picker', () => {
 describe('lib/ask-agent.mjs — constants', () => {
   it('exposes the default model', () => {
     expect(DEFAULT_MODEL).toBe('auto/best-fast')
+  })
+
+  it('the synthetic probe defaults to a 20s timeout, background-only (specs/010, unit 6)', () => {
+    expect(PROBE_TIMEOUT_MS).toBe(20000)
+  })
+
+  it('picker defaults are auto/best-fast plus claude-code', () => {
+    expect(PICKER_DEFAULTS).toEqual(['auto/best-fast', 'claude-code'])
+  })
+})
+
+describe('lib/ask-agent.mjs — real-run evidence (specs/010, unit 6)', () => {
+  it('isRecentEvidence is true within the 24h window and false outside it', () => {
+    const now = () => new Date('2026-09-20T12:00:00Z').getTime()
+    expect(isRecentEvidence('2026-09-20T00:00:00Z', { now })).toBe(true)
+    expect(isRecentEvidence('2026-09-19T11:00:00Z', { now })).toBe(false)
+    expect(isRecentEvidence(null, { now })).toBe(false)
+    expect(AGENTIC_EVIDENCE_WINDOW_MS).toBe(24 * 60 * 60 * 1000)
+  })
+
+  it('readAgenticEvidence never throws on a missing or corrupt file', () => {
+    expect(readAgenticEvidence('/nope', { exists: () => false, readFile: () => { throw new Error('no') } })).toEqual({})
+    expect(readAgenticEvidence('/bad', { exists: () => true, readFile: () => 'not json' })).toEqual({})
+  })
+
+  it('recordAgenticEvidenceEntry merges one model into the map and writes it back', () => {
+    let written = null
+    const readFile = () => JSON.stringify({ 'vendor/old': '2026-09-01T00:00:00Z' })
+    const writeFile = (path, text) => { written = JSON.parse(text) }
+    const out = recordAgenticEvidenceEntry('/fake.json', 'auto/best-fast', new Date('2026-09-20T12:00:00Z'), {
+      readFile, writeFile, exists: () => true, mkdir: () => {}, dirname: () => '/',
+    })
+    expect(out['auto/best-fast']).toBe('2026-09-20T12:00:00.000Z')
+    expect(out['vendor/old']).toBe('2026-09-01T00:00:00Z')
+    expect(written['auto/best-fast']).toBe('2026-09-20T12:00:00.000Z')
+  })
+
+  it('agenticModelsFromEvidence keeps only models with a real tool call in the last 24h', () => {
+    const now = () => new Date('2026-09-20T12:00:00Z').getTime()
+    const evidence = { 'auto/best-fast': '2026-09-20T00:00:00Z', 'vendor/stale': '2026-09-10T00:00:00Z' }
+    expect(agenticModelsFromEvidence(evidence, { now })).toEqual(['auto/best-fast'])
+  })
+
+  it('runAskAgent records evidence only for a successful tool call, via the injected recordEvidence', async () => {
+    const calls = []
+    const fetchImpl = vi.fn(async (url, opts) => {
+      const body = JSON.parse(opts.body)
+      if (!body.messages.some((m) => m.role === 'tool')) {
+        return jsonResponse({ choices: [{ message: { tool_calls: [{ id: '1', function: { name: 'node_health', arguments: '{}' } }] } }] })
+      }
+      return jsonResponse({ choices: [{ message: { content: 'done' } }] })
+    })
+    const tools = createAgentTools({ repo: '.', getNodeHealth: () => ({ ok: true }) })
+    const recordEvidence = vi.fn()
+    await runAskAgent({ question: 'health?', model: 'auto/best-fast', tools, base: 'http://x/v1', key: 'k', fetchImpl, recordEvidence })
+    expect(recordEvidence).toHaveBeenCalledWith('auto/best-fast', expect.any(Date))
+  })
+})
+
+describe('lib/ask-agent.mjs — buildModelPicker (no network call)', () => {
+  it('always includes the picker defaults even with no evidence and no cache', () => {
+    const r = buildModelPicker({ evidence: {}, probeCache: null, now: () => Date.now() })
+    expect(r.kept).toEqual(['auto/best-fast', 'claude-code'])
+    expect(r.dropped).toEqual([])
+  })
+
+  it('adds models with recent real evidence to kept', () => {
+    const now = () => new Date('2026-09-20T12:00:00Z').getTime()
+    const evidence = { 'vendor/proven': '2026-09-20T10:00:00Z' }
+    const r = buildModelPicker({ evidence, probeCache: null, now })
+    expect(r.kept).toContain('vendor/proven')
+    expect(r.kept).toContain('auto/best-fast')
+  })
+
+  it('folds in the last background probe cache, never dropping something already kept', () => {
+    const probeCache = { kept: ['vendor/cached'], dropped: [{ model: 'vendor/bad', reason: 'no tool call' }, { model: 'auto/best-fast', reason: 'stale' }] }
+    const r = buildModelPicker({ evidence: {}, probeCache })
+    expect(r.kept).toContain('vendor/cached')
+    expect(r.dropped.find((d) => d.model === 'auto/best-fast')).toBeUndefined() // never contradicts a default
+    expect(r.dropped.find((d) => d.model === 'vendor/bad')).toBeTruthy()
+  })
+
+  it('never calls a network function — it is pure and synchronous', () => {
+    const r = buildModelPicker({ evidence: {}, probeCache: { kept: [], dropped: [] } })
+    expect(r.at).toBeTruthy()
   })
 })

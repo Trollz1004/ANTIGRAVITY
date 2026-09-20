@@ -21,6 +21,14 @@ export const MAX_ROUNDS = 8;
 export const TOTAL_BUDGET_MS = 60000;
 export const CANDIDATE_LIMIT = 12;
 export const MODEL_CACHE_TTL_MS = 60 * 60 * 1000; // one hour
+// Model-picker fix (specs/010, unit 6): "agentic" means a REAL run actually
+// completed a tool call recently — not just that a synthetic probe once
+// guessed it could. The synthetic probe (below) still exists, but only ever
+// runs in the background with its own short timeout; it never blocks a
+// picker request.
+export const AGENTIC_EVIDENCE_WINDOW_MS = 24 * 60 * 60 * 1000; // 24h
+export const PROBE_TIMEOUT_MS = 20000; // 20s, background-only
+export const PICKER_DEFAULTS = ['auto/best-fast', 'claude-code'];
 
 export const SYSTEM_PROMPT = [
   'You are JARVIS, Mission Control on the Sabretooth node (C:\\ANTIGRAVITY).',
@@ -44,7 +52,7 @@ function toolCallArgs(call) {
 export async function runAskAgent({
   question, model, tools, fetchImpl = globalThis.fetch, base, key,
   maxRounds = MAX_ROUNDS, budgetMs = TOTAL_BUDGET_MS, onEvent = () => {},
-  auditDir, now = () => new Date(),
+  auditDir, now = () => new Date(), recordEvidence,
 } = {}) {
   if (!key) { const body = { error: 'AUTH MISSING: OMNI_ROUTE_API_KEY not configured' }; onEvent('error', { message: body.error }); return { status: 503, body }; }
   const q = String(question || '').trim();
@@ -110,6 +118,11 @@ export async function runAskAgent({
       const entry = { tool: name, argsSummary, ms, ok };
       trace.push(entry);
       onEvent('tool', entry);
+      // Real-run evidence (specs/010, unit 6): any successfully completed
+      // tool call in a real run is what "agentic" means now — never a
+      // synthetic probe's guess. Only ever recorded when the caller
+      // injects a writer; tests that don't pass one see no FS activity.
+      if (ok && typeof recordEvidence === 'function') recordEvidence(usedModel, now());
       if (ok && (name === 'create_proposal' || name === 'request_bridge_run') && result && result.proposalId) {
         filedProposals.push(result.proposalId);
       }
@@ -130,7 +143,7 @@ export async function runAskAgent({
 // ── Model picker (GET /api/ask/models) ─────────────────────────────────────
 
 /** A tiny, cheap tool-call capability test: does this model call a tool when told `tool_choice: "required"`? */
-export async function probeModelAgentic({ model, base, key, fetchImpl = globalThis.fetch, timeoutMs = 15000 }) {
+export async function probeModelAgentic({ model, base, key, fetchImpl = globalThis.fetch, timeoutMs = PROBE_TIMEOUT_MS }) {
   const probeTool = { type: 'function', function: { name: 'ping', description: 'Call this to confirm you can use tools.', parameters: { type: 'object', properties: { echo: { type: 'string' } }, required: ['echo'] } } };
   const c = new AbortController();
   const t = setTimeout(() => c.abort(), timeoutMs);
@@ -204,4 +217,58 @@ export async function refreshAskModels({
   const result = { at: now(), listedCount: listed.length, candidateCount: candidates.length, kept, dropped };
   writeCache(result);
   return { ...result, cached: false };
+}
+
+// ── real-run evidence (specs/010, unit 6) ───────────────────────────────────
+
+/** Pure: is `at` (an ISO string or Date) within `windowMs` of `now`? */
+export function isRecentEvidence(at, { now = () => Date.now(), windowMs = AGENTIC_EVIDENCE_WINDOW_MS } = {}) {
+  if (!at) return false;
+  const t = new Date(at).getTime();
+  if (Number.isNaN(t)) return false;
+  return now() - t < windowMs;
+}
+
+/** Read the {model: isoTimestamp} evidence map. Never throws; missing/corrupt -> {}. */
+export function readAgenticEvidence(path, { readFile, exists } = {}) {
+  try {
+    if (exists && !exists(path)) return {};
+    return JSON.parse(readFile(path, 'utf8')) || {};
+  } catch { return {}; }
+}
+
+/** Merge one model's latest evidence timestamp into the map and write it back. */
+export function recordAgenticEvidenceEntry(path, model, at, { readFile, writeFile, exists, mkdir, dirname } = {}) {
+  const current = readAgenticEvidence(path, { readFile, exists });
+  current[model] = new Date(at).toISOString();
+  try {
+    if (mkdir && dirname) mkdir(dirname(path), { recursive: true });
+    writeFile(path, JSON.stringify(current), 'utf8');
+  } catch { /* evidence is a nice-to-have; never crash a live request over it */ }
+  return current;
+}
+
+/** Which models in `evidence` have a real tool call in the last 24h? Pure. */
+export function agenticModelsFromEvidence(evidence, { now = () => Date.now(), windowMs = AGENTIC_EVIDENCE_WINDOW_MS } = {}) {
+  return Object.entries(evidence || {})
+    .filter(([, at]) => isRecentEvidence(at, { now, windowMs }))
+    .map(([model]) => model);
+}
+
+/**
+ * Build the picker's {kept, dropped} WITHOUT any network call: PICKER_DEFAULTS
+ * always kept, plus every model with real evidence in the last 24h. `dropped`
+ * is whatever the last background synthetic-probe cache recorded (advisory
+ * only — it never gates a default). This is the function `GET /api/ask/models`
+ * calls on the request path; the synthetic probe (refreshAskModels) only ever
+ * runs afterward, in the background, to refresh that cache for next time.
+ */
+export function buildModelPicker({ evidence, probeCache, now = () => Date.now(), defaults = PICKER_DEFAULTS } = {}) {
+  const agentic = agenticModelsFromEvidence(evidence, { now });
+  const cachedKept = (probeCache && Array.isArray(probeCache.kept)) ? probeCache.kept : [];
+  const kept = [...new Set([...defaults, ...agentic, ...cachedKept])];
+  const dropped = (probeCache && Array.isArray(probeCache.dropped))
+    ? probeCache.dropped.filter((d) => !kept.includes(d.model))
+    : [];
+  return { kept, dropped, at: new Date(now()).toISOString() };
 }
