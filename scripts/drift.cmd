@@ -73,6 +73,7 @@ if /I "%~1"=="devto-setup" goto :devto-setup
 if /I "%~1"=="hashnode-setup" goto :hashnode-setup
 if /I "%~1"=="wordpress-setup" goto :wordpress-setup
 if /I "%~1"=="blogger-setup" goto :blogger-setup
+if /I "%~1"=="tumblr-setup" goto :tumblr-setup
 
 if not exist "%HOUSE%" (
   echo [drift] FABLE'S HOUSE script not found at %HOUSE%
@@ -181,4 +182,15 @@ rem validates via /blogger/v3/users/me/blogs, and writes
 rem SEO_ANT_BLOGGER_TOKEN + SEO_ANT_BLOGGER_REFRESH_TOKEN +
 rem SEO_ANT_BLOGGER_BLOG_ID into .env. No secret value is ever printed.
 node "%~dp0..\mission-control\scripts\blogger-setup.mjs" %2 %3 %4 %5 %6 %7
+exit /b %ERRORLEVEL%
+
+:tumblr-setup
+rem One-time Tumblr OAuth1 1.0a three-legged setup. No args: prints the
+rem tumblr.com/oauth/apps steps. With --consumer-key --consumer-secret,
+rem optional --blog-id / --callback-port: fetches a request_token from
+rem oauth/request_token, opens the browser for one-time Tumblr consent
+rem on the localhost callback, exchanges the oauth_verifier at
+rem oauth/access_token, validates via /v2/user/info, and writes the 5
+rem SEO_ANT_TUMBLR_* keys into .env. No secret value is ever printed.
+node "%~dp0..\mission-control\scripts\tumblr-setup.mjs" %2 %3 %4 %5 %6 %7 %8 %9
 exit /b %ERRORLEVEL%
