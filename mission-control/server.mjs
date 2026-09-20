@@ -12,6 +12,10 @@
  *   GET  /                      the dashboard (static files from this folder; lib/, tests/, server.mjs are never served)
  *   GET  /api/config            where things live, computed for the caller's host
  *   ANY  /api/omni/<path>       proxy -> OmniRoute /v1/<path> with OMNI_ROUTE_API_KEY from the repo .env
+ *   POST /api/ask               {bridge, question, model?} -> "omniroute" runs the Ask-JARVIS agentic tool-calling
+ *                                loop (lib/ask-agent.mjs) as text/event-stream (init/delta/tool/result/error);
+ *                                any other bridge id creates a bridge.run Proposal instead of executing
+ *   GET  /api/ask/models        OmniRoute model picker: probes tool-call capability once/hour, {kept, dropped, builtin}
  *   ANY  /api/proxy/crosslisting/<path>  same-origin reverse proxy -> the local Crosslisting app
  *                                (keeps its iframe/embed working through a single-port tunnel)
  *   GET  /api/agents            every loadable skill (SKILL.md frontmatter) — live directory read
@@ -48,17 +52,17 @@
 import { createServer } from 'node:http';
 import { request as httpRequest } from 'node:http';
 import { request as httpsRequest } from 'node:https';
-import { readFileSync, existsSync, readdirSync, statSync, writeFileSync, unlinkSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync, statSync, writeFileSync, unlinkSync, mkdirSync } from 'node:fs';
 import { spawn, execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
 import { resolveConfig, resolveVault, readEnvFile } from './lib/config.mjs';
 import { probeAll } from './lib/nodes.mjs';
 import { getSentrySnapshot, getSentrySummary } from './lib/sentry.mjs';
-import { resolveClaudeBinary, killTree, runClaude, PERMISSION_MODES, PERSONAS } from './lib/claude-bridge.mjs';
+import { resolveClaudeBinary, killTree, runClaude, PERMISSION_MODES, PERSONAS, sse } from './lib/claude-bridge.mjs';
 import { resolveHermesBinary } from './lib/bridge-routes.mjs';
 import { handleBridgeRoutes } from './lib/bridge-routes.mjs';
-import { buildBridges, findBridge, createBridgeRunProposal, executeBridgeRun, askOmniRoute, BRIDGE_IDS } from './lib/bridges.mjs';
+import { buildBridges, findBridge, createBridgeRunProposal, executeBridgeRun, BRIDGE_IDS } from './lib/bridges.mjs';
 import { synthesizeSpeech, EDGE_VOICES } from './lib/tts.mjs';
 import { buildSkillsPanel, resolveLaunchCmdPath } from './lib/skills-panel.mjs';
 import { streamOllamaChat } from './lib/ollama.mjs';
@@ -79,6 +83,8 @@ import { scoreCopy } from './lib/copy-score.mjs';
 import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff, checkAdultVenue, checkBusinessOnly, DATEAPP_BRAND, BRAND_RULING } from './lib/social-adapters.mjs';
 import { draftWithFable } from './lib/fable-draft.mjs';
 import { buildInbox, performAction, readTriggers } from './lib/inbox.mjs';
+import { createAgentTools } from './lib/agent-tools.mjs';
+import { runAskAgent, refreshAskModels, DEFAULT_MODEL as ASK_DEFAULT_MODEL } from './lib/ask-agent.mjs';
 import { handleMcpRequest } from './lib/mcp-server.mjs';
 import { createReviewProposal, buildJudgeFeed, postVerdict } from './lib/judge.mjs';
 import { buildFleet } from './lib/fleet.mjs';
@@ -295,6 +301,29 @@ const socialAdapters = {
     return { ok: false, error: `syndication auto-post not wired in this phase for "${proposal.platform}" — run scripts/seo/post.mjs manually with the approved copy` };
   },
 };
+// Ask-JARVIS agentic loop (specs/009-jarvis-agentic-ask): every tool reuses
+// the exact same live sources the rest of this file already serves — no
+// second copy of node health, God's Eye, the inbox, or the bridge registry.
+const ASK_TOOLS = createAgentTools({
+  repo: REPO,
+  getNodeHealth: () => readHeartbeat({ jsonPath: HEARTBEAT_JSON_PATH, logPath: HEARTBEAT_LOG_PATH }),
+  getGodsEye: () => getSentrySnapshot(),
+  getInbox: () => buildInbox({ store: proposalStore, triggersPath: TRIGGERS_PATH, heartbeat: { jsonPath: HEARTBEAT_JSON_PATH, logPath: HEARTBEAT_LOG_PATH } }),
+  getSpecs: () => ({ features: listFeatures(SPECS_DIR) }),
+  listRunbooksFn: () => listRunbooks(RUNBOOK_DIR),
+  readRunbookFn: (name) => resolveRunbook(RUNBOOK_DIR, name),
+  proposalStore,
+  getBridgeRow: async (id) => { const { bridges } = await buildBridges(BRIDGE_DEPS_LIVE); return findBridge(bridges, id); },
+  createBridgeRunProposalFn: createBridgeRunProposal,
+});
+const ASK_MODELS_CACHE_PATH = join(HERE, 'data', 'ask-models-cache.json');
+function readAskModelsCache() {
+  try { return JSON.parse(readFileSync(ASK_MODELS_CACHE_PATH, 'utf8')); } catch { return null; }
+}
+function writeAskModelsCache(data) {
+  try { mkdirSync(join(HERE, 'data'), { recursive: true }); writeFileSync(ASK_MODELS_CACHE_PATH, JSON.stringify(data), 'utf8'); } catch {}
+}
+
 const STARTED_AT = new Date().toISOString(); // the House restarts this server when server.mjs is newer
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.md': 'text/markdown; charset=utf-8' };
@@ -801,14 +830,37 @@ createServer(async (req, res) => {
     try { body = JSON.parse((await readBody(req)).toString('utf8') || '{}'); }
     catch { return send(res, 400, { error: 'invalid JSON body' }); }
     if (body.bridge === 'omniroute') {
-      const r = await askOmniRoute({ base: OMNI, key: envValue('OMNI_ROUTE_API_KEY'), question: body.question });
-      return send(res, r.status, redact(r.body));
+      // Ask-JARVIS agentic loop (specs/009-jarvis-agentic-ask): streamed as SSE
+      // (init/delta/tool/result/error), same vocabulary the Claude bridge already
+      // uses, so the dock's existing SSE reader handles both without a fork.
+      res.writeHead(200, { 'content-type': 'text/event-stream', 'cache-control': 'no-store', connection: 'keep-alive', 'x-accel-buffering': 'no' });
+      res.write(sse('init', { bridge: 'omniroute', model: body.model || ASK_DEFAULT_MODEL }));
+      try {
+        await runAskAgent({
+          question: body.question, model: body.model, tools: ASK_TOOLS,
+          base: OMNI, key: envValue('OMNI_ROUTE_API_KEY'), auditDir: AUDIT_DIR,
+          onEvent: (type, data) => { try { res.write(sse(type, redact(data))); } catch {} },
+        });
+      } catch (e) {
+        try { res.write(sse('error', { message: String((e && e.message) || e) })); } catch {}
+      }
+      try { res.end(); } catch {}
+      return;
     }
     if (!BRIDGE_IDS.includes(String(body.bridge || ''))) return send(res, 400, { error: 'unknown bridge: ' + body.bridge });
     const { bridges } = await buildBridges(BRIDGE_DEPS_LIVE);
     const bridgeRow = findBridge(bridges, body.bridge);
     const r = createBridgeRunProposal({ store: proposalStore, id: body.bridge, prompt: body.question, bridgeRow });
     return send(res, r.status, redact(r.body));
+  }
+  if (p === '/api/ask/models' && req.method === 'GET') {
+    const force = url.searchParams.get('force') === '1';
+    const r = await refreshAskModels({
+      base: OMNI, key: envValue('OMNI_ROUTE_API_KEY'), force,
+      readCache: readAskModelsCache, writeCache: writeAskModelsCache,
+    });
+    const builtin = [{ id: 'claude-code', label: 'Claude Code (Claudian)', agentic: true, builtin: true }];
+    return send(res, 200, redact({ ...r, builtin }));
   }
 
   // Voice out (Phase F, unit 2): edge-tts neural voices, cached 24h; a 204

@@ -26,9 +26,14 @@ describe('JARVIS wiring — server.mjs Bridges routes (Phase F, unit 1)', () => 
     expect(server).toContain('createBridgeRunProposal(')
   })
 
-  it('wires POST /api/ask, routing omniroute directly and everything else through a proposal', () => {
+  it('wires POST /api/ask, running the agentic loop for omniroute and everything else through a proposal', () => {
     expect(server).toContain("p === '/api/ask' && req.method === 'POST'")
-    expect(server).toContain('askOmniRoute(')
+    expect(server).toContain('runAskAgent(')
+  })
+
+  it('wires GET /api/ask/models, the agentic-only model picker (specs/009)', () => {
+    expect(server).toContain("p === '/api/ask/models' && req.method === 'GET'")
+    expect(server).toContain('refreshAskModels(')
   })
 
   it('a bridge.run proposal is only executed after founder approve, via executeBridgeRun', () => {
