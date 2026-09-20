@@ -69,10 +69,10 @@ Dispatch: `ops/handoffs/JARVIS-CONSOLIDATION-DISPATCH-2026-09-17.md` and
   one identity-checked row per outside agent (Hermes, OpenClaw, Claude Code,
   Codex, Ollama, OmniRoute, Obsidian, browser CDP, Buzz, Unreal — the last
   always `PARKED`); status is judged by a marker/JSON identity call, never a
-  bare port. `POST /api/bridges/:id/run` and `POST /api/ask` never execute a
-  bridge directly — they create a `bridge.run` Proposal (same store as
-  Judge Lanes) that only runs after the founder approves it through the
-  existing `POST /api/inbox/:id/approve` control. Client: the "Bridges" tab
+  bare port. `POST /api/bridges/:id/run` never executes a bridge directly —
+  it creates a `bridge.run` Proposal (same store as Judge Lanes) that only
+  runs after the founder approves it through the existing
+  `POST /api/inbox/:id/approve` control. Client: the "Bridges" tab
   (`js/jarvis/bridges.js`).
 - **Voice** (unit 2) — `POST /api/tts` `{text, voice}` renders a natural
   Microsoft neural voice via the `edge-tts` CLI (free, no key), cached 24h by
@@ -107,6 +107,40 @@ Dispatch: `ops/handoffs/JARVIS-CONSOLIDATION-DISPATCH-2026-09-17.md` and
   ```
   claude mcp add --transport http jarvis http://192.168.0.8:9150/mcp --header "Authorization: Bearer <JARVIS_MCP_TOKEN>"
   ```
+
+## Ask-JARVIS agentic loop (specs/009-jarvis-agentic-ask)
+
+Ruling 2026-09-19: a model in this dashboard's picker is useless unless it
+can act. `POST /api/ask {bridge:"omniroute", question, model?}` now runs a
+bounded tool-calling loop (`lib/ask-agent.mjs`) against OmniRoute chat
+completions (`tools` + `tool_choice:"auto"`, model defaults to
+`auto/best-fast`, capped at 8 tool rounds / 60s total), streamed as SSE with
+the same event vocabulary the Claude bridge already uses
+(`init`/`delta`/`tool`/`result`/`error`) so the dock's one SSE reader serves
+both engines. Any other `bridge` value is unchanged — it still only ever
+creates a `bridge.run` Proposal.
+
+The tool set (`lib/agent-tools.mjs`) is read-freely / propose-never-execute:
+`read_file`, `list_dir`, `search_repo` (ripgrep, JS-walk fallback) stay
+inside `C:\ANTIGRAVITY`, refuse `..`, refuse anything shaped like
+`.env*`/`*secret*`/`*credential*`/`*.pem`/`*.key`, and are capped (200 KB /
+200 hits); `node_health`, `gods_eye`, `inbox_list`, `specs_list`, `runbook`
+are thin redacted wrappers over data this server already serves elsewhere;
+`create_proposal` and `request_bridge_run` only ever file a `PROPOSED` item
+through the existing proposal store — they never write, post, or spawn
+anything themselves. Every tool call is appended to the JSONL audit log
+(`data/audit/`, gitignored) with its redacted argument summary.
+
+`GET /api/ask/models[?force=1]` probes the OmniRoute catalog at most once an
+hour (`data/ask-models-cache.json`, gitignored): up to 12 candidates
+(`auto/*` combos first) each get a one-shot `tool_choice:"required"` capability
+test, and the response is `{kept, dropped, builtin}` — only `kept` (plus the
+builtin Claude Code entry) is offered in the dock's model picker
+(`js/jarvis/dock.js`'s `#dock-model`, default `"claude-code"`, which keeps
+using the unchanged `/api/claude/chat` Claudian path). Selecting any other
+model routes through `/api/ask`; the dock renders the tool trace as a
+collapsible list under the answer and a "Proposals filed" chip linking to
+the Inbox when the loop actually filed one.
 
 ## Environment variables JARVIS reads (names only — never values, never in git)
 
