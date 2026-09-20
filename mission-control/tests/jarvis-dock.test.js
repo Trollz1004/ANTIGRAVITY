@@ -142,3 +142,43 @@ describe('JARVIS dock (global agentic drawer)', () => {
     expect(byId['dock-status'].textContent).toBe('ERROR')
   })
 })
+
+describe('JARVIS dock — model picker (specs/009-jarvis-agentic-ask)', () => {
+  it('loadDockModels only offers agentic models plus the Claude Code builtin', async () => {
+    byId['dock-model'] = new MockEl('select')
+    const fetchImpl = vi.fn(async () => ({ ok: true, json: async () => ({ kept: ['auto/best-fast'], dropped: [{ model: 'vendor/dumb', reason: 'no tool call' }], builtin: [{ id: 'claude-code', label: 'Claude Code (Claudian)' }] }) }))
+    const options = await dock.loadDockModels(fetchImpl)
+    expect(options.map((o) => o.id)).toEqual(['claude-code', 'auto/best-fast'])
+    expect(options.some((o) => o.id === 'vendor/dumb')).toBe(false)
+  })
+
+  it('sending with a non-Claude engine posts to /api/ask (bridge:omniroute) and renders the tool trace + proposals chip', async () => {
+    navTabs.children.length = 0
+    const t = new MockEl('li'); t.dataset = {}; t.textContent = '◈ Dashboard'
+    navTabs.appendChild(t)
+    dock.mountDock({ fetchImpl: global.fetch })
+    dock.openDock()
+    byId['dock-model'] = new MockEl('select')
+    byId['dock-model'].value = 'auto/best-fast'
+    let sentBody = null
+    const sseText = [
+      'event: tool\ndata: {"tool":"node_health","argsSummary":"{}","ms":12,"ok":true}\n\n',
+      'event: result\ndata: {"answer":"Node is GREEN. I filed proposal p1.","trace":[{"tool":"node_health","argsSummary":"{}","ms":12,"ok":true}],"proposals":["p1"]}\n\n',
+    ].join('')
+    global.fetch = vi.fn(async (path, opts) => {
+      if (path === '/api/ask') {
+        sentBody = JSON.parse(opts.body)
+        let sent = false
+        return { ok: true, body: { getReader: () => ({ read: async () => { if (sent) return { done: true, value: undefined }; sent = true; return { done: false, value: new TextEncoder().encode(sseText) } } }) } }
+      }
+      return { ok: false, status: 404 }
+    })
+    byId['dock-input'].value = 'is the node healthy?'
+    await dock.sendFromDock()
+    expect(sentBody).toEqual({ bridge: 'omniroute', question: 'is the node healthy?', model: 'auto/best-fast' })
+    const log = String(byId['dock-log'].textContentFull)
+    expect(log).toContain('Node is GREEN')
+    expect(log).toContain('Tool calls (1)')
+    expect(log).toContain('Proposals filed: p1')
+  })
+})

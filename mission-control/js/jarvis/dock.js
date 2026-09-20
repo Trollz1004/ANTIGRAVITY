@@ -1,9 +1,19 @@
 /**
  * Global JARVIS dock — the agentic layer of the whole dashboard: one always
- * visible ⬢ JARVIS entry in the sidebar opens a chat drawer on any tab. Replies
- * stream from the official Claude CLI bridge (persona: jarvis) with the HUD
- * context flag set, so the SERVER composes the preamble from live house data.
- * The client never forges context. No sample data, honest errors.
+ * visible ⬢ JARVIS entry in the sidebar opens a chat drawer on any tab.
+ *
+ * Two engines, one drawer (specs/009-jarvis-agentic-ask, ruling 2026-09-19 —
+ * a model in this picker is useless unless it can act):
+ *   - "Claude Code (Claudian)" (default, value "claude-code") — unchanged:
+ *     the official Claude CLI bridge (persona: jarvis) with the HUD context
+ *     flag set, so the SERVER composes the preamble from live house data.
+ *   - any other model in the picker — POST /api/ask {bridge:"omniroute"},
+ *     which runs the tool-calling agent loop (lib/ask-agent.mjs) over
+ *     OmniRoute. Only models GET /api/ask/models reports agentic:true ever
+ *     appear here; a model that cannot call a tool is never offered.
+ * Both stream the same SSE event vocabulary (init/delta/tool/result/error),
+ * so one reader (readSse/parseSseChunk below) serves both. The client never
+ * forges context or fabricates a tool trace. No sample data, honest errors.
  *
  * Phase F, unit 2 (voice): a push-to-talk mic button fills the input with a
  * transcript (never auto-sent — the operator still presses Send), and a
@@ -95,6 +105,31 @@ async function readSse(response, onEvent = () => {}) {
 
 const dock = { open: false, busy: false, sessionId: '' };
 
+const CLAUDE_ENGINE = 'claude-code';
+
+/**
+ * GET /api/ask/models — only agentic:true OmniRoute models plus the builtin
+ * Claude Code entry ever populate the picker (doctrine 2026-09-19: a model
+ * that cannot call a tool is removed, not just deprioritized).
+ */
+export async function loadDockModels(fetchImpl = fetch) {
+  const select = document.getElementById('dock-model');
+  if (!select) return [];
+  try {
+    const r = await fetchImpl('/api/ask/models');
+    const j = await r.json().catch(() => null);
+    const kept = (j && Array.isArray(j.kept) ? j.kept : []).map((id) => ({ id, label: id }));
+    const builtin = (j && Array.isArray(j.builtin) ? j.builtin : [{ id: CLAUDE_ENGINE, label: 'Claude Code (Claudian)' }]);
+    const options = [...builtin, ...kept];
+    select.innerHTML = options.map((m) => `<option value="${m.id}">${m.label}</option>`).join('');
+    select.value = CLAUDE_ENGINE;
+    return options;
+  } catch {
+    // Honest degrade: keep whatever the select already has (the builtin default).
+    return [];
+  }
+}
+
 function log(target, who, text) {
   if (!target) return;
   const row = document.createElement('div');
@@ -135,6 +170,20 @@ export function mountDock({ fetchImpl = fetch } = {}) {
   close.textContent = '×';
   close.addEventListener('click', () => closeDock());
   head.appendChild(title); head.appendChild(close);
+  const capability = document.createElement('p');
+  capability.id = 'dock-capability';
+  capability.className = 'tab-desc';
+  capability.textContent = 'JARVIS can read this repo, search it, see node health, God’s Eye, and the Inbox — and file a proposal for anything that would change the world. Approvals are Joshua’s alone.';
+  const modelRow = document.createElement('div');
+  modelRow.className = 'gen-row';
+  const modelLabel = document.createElement('span');
+  modelLabel.textContent = 'Engine: ';
+  const modelSelect = document.createElement('select');
+  modelSelect.id = 'dock-model';
+  modelSelect.className = 'select-input';
+  modelSelect.title = 'Only tool-calling ("agentic") models are offered — see GET /api/ask/models';
+  modelSelect.innerHTML = `<option value="${CLAUDE_ENGINE}">Claude Code (Claudian)</option>`;
+  modelRow.appendChild(modelLabel); modelRow.appendChild(modelSelect);
   const logEl = document.createElement('div');
   logEl.id = 'dock-log';
   logEl.className = 'dock-log';
@@ -188,8 +237,9 @@ export function mountDock({ fetchImpl = fetch } = {}) {
   });
   voiceRow.appendChild(mute); voiceRow.appendChild(voiceSelect); voiceRow.appendChild(testVoice);
 
-  panel.appendChild(head); panel.appendChild(logEl); panel.appendChild(status); panel.appendChild(row); panel.appendChild(voiceRow);
+  panel.appendChild(head); panel.appendChild(capability); panel.appendChild(modelRow); panel.appendChild(logEl); panel.appendChild(status); panel.appendChild(row); panel.appendChild(voiceRow);
   document.body.appendChild(panel);
+  void loadDockModels(fetchImpl);
   // Send paths use the current global fetch (tests swap it after mount).
   send.addEventListener('click', () => { void sendFromDock(); });
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { void sendFromDock(); } });
@@ -220,14 +270,48 @@ export function closeDock() {
 
 export function isDockOpen() { return dock.open; }
 
+/** Collapsible tool-call trace under a finished answer — never fabricated, built only from real 'tool' events. */
+function renderToolTrace(logEl, trace) {
+  if (!logEl || !trace || !trace.length) return;
+  const details = document.createElement('details');
+  details.className = 'dock-trace';
+  const summary = document.createElement('summary');
+  summary.textContent = `Tool calls (${trace.length})`;
+  details.appendChild(summary);
+  for (const t of trace) {
+    const line = document.createElement('div');
+    line.className = 'dock-trace-row';
+    line.textContent = `${t.ok ? '✓' : '✗'} ${t.tool} (${t.ms}ms)${t.argsSummary ? ' — ' + t.argsSummary : ''}`;
+    details.appendChild(line);
+  }
+  logEl.appendChild(details);
+}
+
+/** A "Proposals filed" chip linking to the Inbox tab — only rendered when a tool actually filed one. */
+function renderProposalsChip(logEl, proposals) {
+  if (!logEl || !proposals || !proposals.length) return;
+  const chip = document.createElement('a');
+  chip.className = 'dock-proposals-chip';
+  chip.href = '#tab-inbox';
+  chip.textContent = `Proposals filed: ${proposals.join(', ')} — see Inbox`;
+  chip.addEventListener('click', () => {
+    document.querySelectorAll?.('.nav-tab')?.forEach?.((t) => t.dataset?.tab === 'inbox' && t.click?.());
+  });
+  logEl.appendChild(chip);
+}
+
 /**
- * One turn: fetch the tab hint, POST to the bridge with hud:true (the server
- * composes the preamble), stream deltas into the drawer log, keep the session.
+ * One turn. "Claude Code (Claudian)" (default engine) posts to the Claude CLI
+ * bridge exactly as before. Any other selected engine posts to /api/ask
+ * (bridge:"omniroute"), which runs the tool-calling agent loop — its 'tool'
+ * events render as a collapsible trace, and a filed proposal shows as a chip.
  */
 export async function sendFromDock({ fetchImpl = fetch, tab } = {}) {
   const input = document.getElementById('dock-input');
   const logEl = document.getElementById('dock-log');
   const status = document.getElementById('dock-status');
+  const modelSelect = document.getElementById('dock-model');
+  const engine = (modelSelect && modelSelect.value) || CLAUDE_ENGINE;
   const prompt = String(input && input.value || '').trim();
   if (!prompt || dock.busy) return;
   dock.busy = true;
@@ -250,25 +334,33 @@ export async function sendFromDock({ fetchImpl = fetch, tab } = {}) {
   } catch {}
   try {
     const headers = { 'Content-Type': 'application/json' };
-    const body = { prompt, persona: 'jarvis', hud: true, tab: currentTab };
-    if (dock.sessionId) body.sessionId = dock.sessionId;
-    const response = await fetchImpl('/api/claude/chat', { method: 'POST', headers, body: JSON.stringify(body) });
+    const isOmni = engine !== CLAUDE_ENGINE;
+    const body = isOmni
+      ? { bridge: 'omniroute', question: prompt, model: engine }
+      : (() => { const b = { prompt, persona: 'jarvis', hud: true, tab: currentTab }; if (dock.sessionId) b.sessionId = dock.sessionId; return b; })();
+    const response = await fetchImpl(isOmni ? '/api/ask' : '/api/claude/chat', { method: 'POST', headers, body: JSON.stringify(body) });
     if (!response.ok) {
-      const text = `Claude bridge refused (${response.status})`;
+      const text = `${isOmni ? 'Ask-JARVIS' : 'Claude bridge'} refused (${response.status})`;
       if (live) live.textContent = text; else log(logEl, 'JARVIS', text);
       if (status) { status.textContent = 'ERROR'; status.className = 'voice-status voice-status-error'; }
       return;
     }
     let resultText = '';
+    let trace = [];
+    let proposals = [];
     await readSse(response, (event, data) => {
       if (event === 'delta' && live) live.textContent += data?.text || '';
+      if (event === 'tool') trace.push(data);
       if (event === 'result') {
-        resultText = data?.text || resultText;
+        resultText = data?.text || data?.answer || resultText;
         if (data?.sessionId) dock.sessionId = data.sessionId;
+        if (Array.isArray(data?.trace)) trace = data.trace;
+        if (Array.isArray(data?.proposals)) proposals = data.proposals;
       }
       if (event === 'error' && live) live.textContent += `\n[error] ${data?.message || 'unknown'}`;
     });
     if (live && resultText) live.textContent = resultText;
+    if (isOmni) { renderToolTrace(logEl, trace); renderProposalsChip(logEl, proposals); }
     if (status) { status.textContent = 'IDLE'; status.className = 'voice-status voice-status-idle'; }
     if (resultText) void ttsSpeak(resultText, { fetchImpl, fallbackSpeak: (t) => browserSpeak(t) });
   } catch (e) {
