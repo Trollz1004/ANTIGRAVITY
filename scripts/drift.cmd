@@ -69,6 +69,7 @@ if /I "%~1"=="jarvis" goto :mc
 if /I "%~1"=="avatar" goto :avatar
 if /I "%~1"=="fable"  goto :fable
 if /I "%~1"=="reddit-setup" goto :reddit-setup
+if /I "%~1"=="devto-setup" goto :devto-setup
 
 if not exist "%HOUSE%" (
   echo [drift] FABLE'S HOUSE script not found at %HOUSE%
@@ -135,4 +136,12 @@ rem registration. No args: prints the reddit.com/prefs/apps steps. With
 rem --client-id/--client-secret: runs the local OAuth2 consent flow and
 rem writes REDDIT_* into .env; no secret value is ever printed.
 node "%~dp0..\mission-control\scripts\reddit-setup.mjs" %2 %3 %4 %5
+exit /b %ERRORLEVEL%
+
+:devto-setup
+rem One-time dev.to API key registration. No args: prints the
+rem dev.to/settings/extensions steps. With --token: validates the key
+rem against /api/users/me and writes SEO_ANT_DEVTO_TOKEN into .env; no
+rem secret value is ever printed.
+node "%~dp0..\mission-control\scripts\devto-setup.mjs" %2 %3 %4 %5
 exit /b %ERRORLEVEL%
