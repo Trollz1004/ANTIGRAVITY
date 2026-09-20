@@ -80,8 +80,8 @@ import { redact } from './lib/redact.mjs';
 import { createProposalStore } from './lib/proposals.mjs';
 import { checkCompliance } from './lib/compliance.mjs';
 import { scoreCopy } from './lib/copy-score.mjs';
-import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff, checkAdultVenue, checkBusinessOnly, DATEAPP_BRAND, BRAND_RULING } from './lib/social-adapters.mjs';
-import { draftWithFable } from './lib/fable-draft.mjs';
+import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff, checkAdultVenue, checkBusinessOnly, applyRequiredFooter, DATEAPP_BRAND, BRAND_RULING } from './lib/social-adapters.mjs';
+import { draftWithFable, platformLimit } from './lib/fable-draft.mjs';
 import { buildInbox, performAction, readTriggers } from './lib/inbox.mjs';
 import { createAgentTools } from './lib/agent-tools.mjs';
 import { runAskAgent, refreshAskModels, DEFAULT_MODEL as ASK_DEFAULT_MODEL } from './lib/ask-agent.mjs';
@@ -679,7 +679,15 @@ createServer(async (req, res) => {
     const brandCheck = validateBrand(body.brand);
     if (!brandCheck.ok) return send(res, 400, { error: brandCheck.error });
     if (!PLATFORM_IDS.includes(body.platform)) return send(res, 400, { error: 'unknown platform: ' + body.platform });
-    const composite = `${body.title || ''}\n${body.body || ''}`;
+    // Required disclosure footer (2026-09-19 ruling, specs/010, unit 1):
+    // applied to the youandinotai body as a template rule BEFORE any check
+    // runs, on every platform, trimmed to that platform's length limit. Copy
+    // that still mentions a minor stays rejected below regardless.
+    let postBody = body.body;
+    if (brandCheck.brand === DATEAPP_BRAND) {
+      postBody = applyRequiredFooter(postBody, platformLimit(body.platform));
+    }
+    const composite = `${body.title || ''}\n${postBody || ''}`;
     const compliance = checkCompliance(composite, { hookPath: COMPLIANCE_HOOK_PATH });
     const copyScore = scoreCopy(composite);
     const checks = { compliance, copyScore };
@@ -698,7 +706,7 @@ createServer(async (req, res) => {
     }
     const rec = proposalStore.create({
       source: 'social', kind: 'post', brand: brandCheck.brand, platform: body.platform,
-      title: body.title, body: body.body, scheduledFor: body.scheduledFor || null,
+      title: body.title, body: postBody, scheduledFor: body.scheduledFor || null,
       checks, ...extra,
     });
     return send(res, 201, redact({ proposal: rec }));

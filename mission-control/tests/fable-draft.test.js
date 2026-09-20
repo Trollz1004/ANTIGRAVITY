@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import path from 'path'
 import { draftWithFable, buildSystemPrompt, platformLimit, fetchOllamaTags, FABLE_MODEL } from '../lib/fable-draft.mjs'
+import { ADULT_FOOTER } from '../lib/social-adapters.mjs'
 
 const HOOK = path.resolve(__dirname, '..', '..', '.githooks', 'pre-commit-canonical')
 
@@ -118,5 +119,15 @@ describe('lib/fable-draft.mjs — draftWithFable', () => {
     const fetchImpl = fakeFetch({ generateFail: true })
     const r = await draftWithFable({ brand: 'youandinotai', platform: 'x', brief: 'launch day', fetch: fetchImpl, hookPath: HOOK })
     expect(r.status).toBe(502)
+  })
+
+  it('applies the required disclosure footer to the draft before checks run (specs/010, unit 1)', async () => {
+    const fetchImpl = fakeFetch({ response: 'A short post with no explicit disclosure of its own.' })
+    const r = await draftWithFable({ brand: 'youandinotai', platform: 'x', brief: 'launch day', fetch: fetchImpl, hookPath: HOOK })
+    expect(r.status).toBe(200)
+    expect(r.body.draft).toContain(ADULT_FOOTER)
+    expect(r.body.draft.length).toBeLessThanOrEqual(platformLimit('x'))
+    // the footer alone satisfies the adult-venue check even though the model's own text didn't
+    expect(r.body.checks.adultVenue.pass).toBe(true)
   })
 })

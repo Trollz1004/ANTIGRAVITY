@@ -33,6 +33,35 @@ export const DATEAPP_ALIASES = [DATEAPP_BRAND, 'YouAndINotAI', 'date app'];
 
 export const BRAND_RULING = 'marketing unfrozen 2026-09-19; features frozen; listing stays';
 
+// ---- required disclosure footer (2026-09-19 ruling, specs/010) ------------
+// Applied to every youandinotai post BEFORE any check runs, on every
+// platform, trimmed to that platform's length limit. This is a template
+// rule, not a check the copy can pass around: copy that still mentions a
+// minor stays rejected by checkAdultVenue's MINOR_TERMS gate regardless of
+// whether the footer is present.
+export const ADULT_FOOTER = 'youandinotai.com is for adults 18 and over.';
+
+/**
+ * Append `ADULT_FOOTER` to `body` (idempotent — a body that already ends
+ * with it is untouched beyond the limit trim), trimming the body text so the
+ * footer always survives inside `limit` characters. `limit` is a plain
+ * number so this module never has to import fable-draft.mjs's platform
+ * table (callers pass `platformLimit(platform)`).
+ */
+export function applyRequiredFooter(body, limit) {
+  const b = String(body || '').trimEnd();
+  const cap = Number.isFinite(limit) && limit > 0 ? limit : Infinity;
+  if (b === ADULT_FOOTER || b.endsWith('\n' + ADULT_FOOTER) || b.endsWith('\n\n' + ADULT_FOOTER)) {
+    return b.length <= cap ? b : b.slice(0, cap);
+  }
+  const sep = b ? '\n\n' : '';
+  const suffix = sep + ADULT_FOOTER;
+  if (suffix.length >= cap) return ADULT_FOOTER.slice(0, cap); // pathological tiny limit — footer wins
+  const maxBodyLen = cap - suffix.length;
+  const trimmedBody = b.length > maxBodyLen ? b.slice(0, maxBodyLen).trimEnd() : b;
+  return trimmedBody + suffix;
+}
+
 /** Resolve aliases to the canonical brand name; otherwise require one of the allowed brands. */
 export function validateBrand(brand) {
   const b = String(brand || '').trim();

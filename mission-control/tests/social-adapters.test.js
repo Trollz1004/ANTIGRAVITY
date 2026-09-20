@@ -5,7 +5,8 @@ import os from 'os'
 import {
   validateBrand, listPlatforms, isManualPlatform, isSyndicationPlatform,
   executeManualHandoff, syndicationConfigured, ALLOWED_BRANDS, PLATFORM_IDS,
-  checkAdultVenue, checkBusinessOnly, BRAND_RULING, DATEAPP_BRAND,
+  checkAdultVenue, checkBusinessOnly, applyRequiredFooter, ADULT_FOOTER,
+  BRAND_RULING, DATEAPP_BRAND,
 } from '../lib/social-adapters.mjs'
 
 describe('lib/social-adapters.mjs — validateBrand', () => {
@@ -130,6 +131,38 @@ describe('lib/social-adapters.mjs — platform kind helpers', () => {
     expect(isManualPlatform('devto')).toBe(false)
     expect(isManualPlatform('x')).toBe(true)
     expect(isSyndicationPlatform('x')).toBe(false)
+  })
+})
+
+describe('lib/social-adapters.mjs — applyRequiredFooter (specs/010, unit 1)', () => {
+  it('appends the disclosure footer to a body that lacks it', () => {
+    const out = applyRequiredFooter('Some post copy about the app.', 280)
+    expect(out).toContain(ADULT_FOOTER)
+    expect(out.startsWith('Some post copy about the app.')).toBe(true)
+  })
+
+  it('is idempotent — a body that already ends with the footer is not doubled', () => {
+    const already = 'Some post copy.\n\n' + ADULT_FOOTER
+    const out = applyRequiredFooter(already, 280)
+    expect(out.match(new RegExp(ADULT_FOOTER.replace(/[.]/g, '\\.'), 'g')).length).toBe(1)
+  })
+
+  it('trims the body so the footer always survives inside the platform limit', () => {
+    const long = 'x'.repeat(400)
+    const out = applyRequiredFooter(long, 280)
+    expect(out.length).toBeLessThanOrEqual(280)
+    expect(out).toContain(ADULT_FOOTER)
+  })
+
+  it('copy that mentions a minor still fails checkAdultVenue even with the footer applied', () => {
+    const withMinor = applyRequiredFooter('Great app for teens and adults alike.', 2000)
+    expect(withMinor).toContain(ADULT_FOOTER)
+    expect(checkAdultVenue(withMinor)).toMatchObject({ pass: false })
+  })
+
+  it('an empty body still gets a valid footer-only post', () => {
+    const out = applyRequiredFooter('', 280)
+    expect(out).toBe(ADULT_FOOTER)
   })
 })
 

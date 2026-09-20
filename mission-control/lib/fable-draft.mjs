@@ -9,7 +9,7 @@
  */
 import { checkCompliance } from './compliance.mjs';
 import { scoreCopy } from './copy-score.mjs';
-import { checkAdultVenue, checkBusinessOnly, validateBrand, DATEAPP_BRAND, BRAND_RULING } from './social-adapters.mjs';
+import { checkAdultVenue, checkBusinessOnly, validateBrand, applyRequiredFooter, DATEAPP_BRAND, BRAND_RULING } from './social-adapters.mjs';
 
 export const FABLE_MODEL = 'joshlcoleman/Fable';
 export const DEFAULT_OLLAMA_BASE = 'http://127.0.0.1:11434';
@@ -105,6 +105,12 @@ export async function draftWithFable({
   } catch (e) {
     return { status: 502, body: { error: 'Fable generate failed: ' + String((e && e.message) || e) } };
   }
+
+  // Required disclosure footer (2026-09-19 ruling): applied as a template
+  // rule BEFORE any check runs — the footer never lets minors-adjacent copy
+  // through, since checkAdultVenue's MINOR_TERMS gate still runs against the
+  // footered text below.
+  draft = applyRequiredFooter(draft, limit);
 
   const compliance = checkCompliance(draft, { hookPath });
   const copyScore = scoreCopy(draft);
