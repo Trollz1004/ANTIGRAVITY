@@ -194,9 +194,9 @@ export async function reviewAndMaybeExecute({
     state: 'APPROVED', reviewActor: REVIEW_ACTOR, reviewReasons: verdict.reasons, reviewedAt: now().toISOString(),
   });
   let result;
-  try { result = execute(approvedRec); } catch (e) { result = { ok: false, error: String((e && e.message) || e) }; }
+  try { result = await Promise.resolve(execute(approvedRec)); } catch (e) { result = { ok: false, error: String((e && e.message) || e) }; }
   const finalRec = (result && result.ok)
-    ? store.transition(proposal.id, { state: 'EXECUTED', evidence: result.path || result.url || null })
+    ? store.transition(proposal.id, { state: 'EXECUTED', evidence: result.note || result.url || result.path || null })
     : store.transition(proposal.id, { state: 'FAILED', evidence: (result && result.error) || 'adapter failed' });
   return { proposal: finalRec, action: (result && result.ok) ? 'executed' : 'failed', reasons: verdict.reasons };
 }

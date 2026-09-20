@@ -84,6 +84,7 @@ import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeMa
 import { draftWithFable, platformLimit } from './lib/fable-draft.mjs';
 import { buildInbox, performAction, readTriggers, appendAudit } from './lib/inbox.mjs';
 import { reviewAndMaybeExecute, autoReviewEnabled, passesMechanicalChecks } from './lib/social-review.mjs';
+import { executeRedditAdapter } from './lib/reddit-api.mjs';
 import { createAgentTools } from './lib/agent-tools.mjs';
 import { runAskAgent, refreshAskModels, DEFAULT_MODEL as ASK_DEFAULT_MODEL } from './lib/ask-agent.mjs';
 import { handleMcpRequest } from './lib/mcp-server.mjs';
@@ -214,6 +215,8 @@ const TRIGGERS_PATH = join(REPO, 'ops', 'heartbeat', 'TRIGGERS.jsonl');
 const AUDIT_DIR = join(HERE, 'data', 'audit');
 // Model review before approval (specs/010, unit 2).
 const SOCIAL_REVIEW_RUBRIC_PATH = join(HERE, 'config', 'social-review-rubric.md');
+// Reddit official API (specs/010, unit 3): local rate-limit cooldown state, gitignored.
+const REDDIT_RATE_STATE_PATH = join(HERE, 'data', 'reddit-rate-state.json');
 // Judge Lanes (Phase D, unit 1): one repo in scope this phase, reusing the
 // same [{id, path}] shape as the git panel above.
 const JUDGE_REPOS = GIT_REPOS;
@@ -295,11 +298,26 @@ function readStateRecord(name) {
 // silently. It reports FAILED with that explanation rather than faking success.
 const socialAdapters = {
   execute(proposal) {
+    // Reddit (specs/010, unit 3): the one manual-handoff platform promoted to
+    // a real, official-API adapter. Its own NOT CONFIGURED path still falls
+    // back to the same inbox file every other manual platform uses.
+    if (proposal.platform === 'reddit') {
+      return executeRedditAdapter({
+        proposal, envValue, inboxDir: MARKETING_INBOX_DIR,
+        triggersPath: TRIGGERS_PATH, rateStatePath: REDDIT_RATE_STATE_PATH,
+      });
+    }
     if (isManualPlatform(proposal.platform)) {
-      return executeManualHandoff({
+      // X (specs/010, unit 5): stays a manual handoff to the Grok lane —
+      // write the approved copy and note in the inbox where it went.
+      const handoff = executeManualHandoff({
         inboxDir: MARKETING_INBOX_DIR, platform: proposal.platform, id: proposal.id,
         title: proposal.title, body: proposal.body, brand: proposal.brand,
       });
+      if (handoff.ok && proposal.platform === 'x') {
+        return { ...handoff, note: 'handed to the Grok lane: ' + handoff.path };
+      }
+      return handoff;
     }
     return { ok: false, error: `syndication auto-post not wired in this phase for "${proposal.platform}" — run scripts/seo/post.mjs manually with the approved copy` };
   },
@@ -706,6 +724,11 @@ createServer(async (req, res) => {
       if (!adultVenue.pass) return send(res, 400, { error: '18-and-over check failed: ' + adultVenue.reason, checks });
       if (!businessOnly.pass) return send(res, 400, { error: 'business-only check failed: ' + businessOnly.reason, checks });
       extra.brandRuling = BRAND_RULING;
+    }
+    // Reddit (specs/010, unit 3): carry the subreddit through so the adapter
+    // never has to guess it from free text.
+    if (body.platform === 'reddit' && body.subreddit) {
+      extra.subreddit = String(body.subreddit).trim().replace(/^\/?r\//, '');
     }
     const rec = proposalStore.create({
       source: 'social', kind: 'post', brand: brandCheck.brand, platform: body.platform,

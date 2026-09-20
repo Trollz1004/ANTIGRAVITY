@@ -116,8 +116,24 @@ export function performAction({ store, id, action, token, founderToken, adapters
       let result;
       try { result = adapters.execute(proposal); }
       catch (e) { result = { ok: false, error: String((e && e.message) || e) }; }
+      // Some social adapters (Reddit's official-API adapter) are async — an
+      // adapter that returns a thenable is awaited here exactly like a
+      // bridge.run result below, so this branch's return type still only
+      // ever varies on that one condition, never silently.
+      if (result && typeof result.then === 'function') {
+        return result.then(
+          (res) => finishSocialExecute(res),
+          (e) => finishSocialExecute({ ok: false, error: String((e && e.message) || e) }),
+        );
+        function finishSocialExecute(res) {
+          const ev = (res && res.ok) ? (res.note || res.url || res.path || null) : ((res && res.error) || 'adapter failed');
+          updated = store.transition(id, { state: (res && res.ok) ? 'EXECUTED' : 'FAILED', evidence: ev });
+          appendAudit({ dir: auditDir, record: { id, action, evidence: ev }, now });
+          return { status: 200, body: { proposal: updated } };
+        }
+      }
       if (result && result.ok) {
-        evidence = result.path || result.url || null;
+        evidence = result.note || result.url || result.path || null;
         updated = store.transition(id, { state: 'EXECUTED', evidence });
       } else {
         evidence = (result && result.error) || 'adapter failed';
