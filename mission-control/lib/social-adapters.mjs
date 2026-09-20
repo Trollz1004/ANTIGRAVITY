@@ -11,25 +11,79 @@
  *     one of these writes the approved copy to a file for the human/lane
  *     that actually posts it.
  *
- * Only two brands are postable: "DREAM Online" and "AI Solutions". A "date
- * app"/"youandinotai" brand is refused everywhere in this module, citing the
- * 2026-09-16 freeze ruling in CLAUDE.md.
+ * Three brands are postable: "DREAM Online", "AI Solutions", and, as of the
+ * 2026-09-19 ruling, "youandinotai" (aliases "YouAndINotAI" and "date app").
+ * Features, checkout, and the for-sale listing stay frozen (CLAUDE.md,
+ * "Date App FROZEN and FOR SALE") — only marketing copy was unfrozen, and
+ * only through this proposal pipeline. A youandinotai proposal must also
+ * clear checkAdultVenue and checkBusinessOnly below (server.mjs runs both,
+ * in addition to the compliance + copy-score checks every brand gets) before
+ * a proposal record is ever created, and every such proposal carries
+ * `brandRuling: BRAND_RULING` so the ruling travels with the record.
  */
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-export const ALLOWED_BRANDS = ['DREAM Online', 'AI Solutions'];
-export const BRAND_KEYS = { 'DREAM Online': 'DRE', 'AI Solutions': 'AIS' };
+export const DATEAPP_BRAND = 'youandinotai';
+export const ALLOWED_BRANDS = ['DREAM Online', 'AI Solutions', DATEAPP_BRAND];
+export const BRAND_KEYS = { 'DREAM Online': 'DRE', 'AI Solutions': 'AIS', [DATEAPP_BRAND]: 'YAI' };
 
-export const FREEZE_MESSAGE =
-  'brand "date app"/youandinotai is frozen and for sale as of 2026-09-16 (CLAUDE.md, "Date App FROZEN AND FOR SALE") — no new social posts for it.';
+// Accepted spellings that all resolve to the canonical DATEAPP_BRAND value.
+export const DATEAPP_ALIASES = [DATEAPP_BRAND, 'YouAndINotAI', 'date app'];
 
-/** Reject a date-app brand with the freeze citation; otherwise require one of the two allowed brands. */
+export const BRAND_RULING = 'marketing unfrozen 2026-09-19; features frozen; listing stays';
+
+/** Resolve aliases to the canonical brand name; otherwise require one of the allowed brands. */
 export function validateBrand(brand) {
   const b = String(brand || '').trim();
-  if (/date\s*app|youandinotai/i.test(b)) return { ok: false, error: FREEZE_MESSAGE };
-  if (!ALLOWED_BRANDS.includes(b)) return { ok: false, error: `brand must be one of: ${ALLOWED_BRANDS.join(', ')}` };
+  if (DATEAPP_ALIASES.some((a) => a.toLowerCase() === b.toLowerCase())) {
+    return { ok: true, brand: DATEAPP_BRAND, key: BRAND_KEYS[DATEAPP_BRAND] };
+  }
+  if (!ALLOWED_BRANDS.includes(b)) {
+    return { ok: false, error: `brand must be one of: DREAM Online, AI Solutions, ${DATEAPP_BRAND} (aliases: ${DATEAPP_ALIASES.join(', ')})` };
+  }
   return { ok: true, brand: b, key: BRAND_KEYS[b] };
+}
+
+// ---- extra gates for the date-app brand only (2026-09-19 ruling) ----------
+// Both must pass before server.mjs is allowed to create a youandinotai
+// proposal. Neither ever changes app features, checkout, or the listing —
+// they only ever gate marketing copy headed for the approval inbox.
+
+// Copy must never target or reference anyone who could be a minor.
+const MINOR_TERMS = /\b(teen|teens|teenager|teenagers|minor|minors|underage|under-age|kid|kids|child|children|schools?|students?)\b/i;
+
+// Copy must state or clearly imply an 18-and-over audience.
+const ADULT_HINTS = /\b(18\s*\+|18\s*and\s*(?:over|up|older)|18-and-over|adults?[\s-]?only|must\s+be\s+18|ages?\s+18\s*\+|21\s*\+)\b/i;
+
+/**
+ * 18-and-over venue check. Rejects any minors-adjacent term outright (even
+ * alongside an adult-audience statement — a single mention is enough to
+ * fail), and otherwise requires the copy to state or clearly imply an
+ * adults-only product.
+ */
+export function checkAdultVenue(text) {
+  const t = String(text || '');
+  const minorHit = MINOR_TERMS.exec(t);
+  if (minorHit) return { pass: false, reason: 'copy mentions a disallowed minors-adjacent term: ' + minorHit[0] };
+  if (!ADULT_HINTS.test(t)) return { pass: false, reason: 'copy does not state or clearly imply an adults-only (18+) product' };
+  return { pass: true, reason: null };
+}
+
+// Internal governance / doctrine language that must never reach customer copy.
+const GOVERNANCE_TERMS = /\b(judge\s+lane|paperclip|doctrine|mission\s+control|jarvis|founder\s+token|omniroute|s1\s+lift|hermes\s+lane|sabretooth)\b/i;
+
+// The sale/listing must never be mentioned in customer-facing copy either.
+const SALE_TERMS = /\b(for\s+sale|for-sale|sale\s+listing|listed\s+for\s+sale|listing\s+is\s+live|acquire\s+(?:this|the)\s+(?:app|brand|domain)|buy\s+(?:this|the)\s+(?:app|brand|domain)|frozen\s+for\s+(?:features|feature))\b/i;
+
+/** Business-only check: no internal governance words, no mention of the sale or the listing. */
+export function checkBusinessOnly(text) {
+  const t = String(text || '');
+  const gov = GOVERNANCE_TERMS.exec(t);
+  if (gov) return { pass: false, reason: 'copy mentions internal governance language: ' + gov[0] };
+  const sale = SALE_TERMS.exec(t);
+  if (sale) return { pass: false, reason: 'copy mentions the sale or the listing: ' + sale[0] };
+  return { pass: true, reason: null };
 }
 
 // Env-var names per syndication platform, exactly matching scripts/seo/post.mjs's PLATFORMS.

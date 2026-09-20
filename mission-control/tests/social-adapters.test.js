@@ -5,31 +5,84 @@ import os from 'os'
 import {
   validateBrand, listPlatforms, isManualPlatform, isSyndicationPlatform,
   executeManualHandoff, syndicationConfigured, ALLOWED_BRANDS, PLATFORM_IDS,
+  checkAdultVenue, checkBusinessOnly, BRAND_RULING, DATEAPP_BRAND,
 } from '../lib/social-adapters.mjs'
 
 describe('lib/social-adapters.mjs — validateBrand', () => {
-  it('accepts the two allowed brands', () => {
+  it('accepts the two legacy brands', () => {
     expect(validateBrand('DREAM Online').ok).toBe(true)
     expect(validateBrand('AI Solutions').ok).toBe(true)
   })
 
-  it('rejects a date-app brand citing the freeze ruling', () => {
-    const r = validateBrand('date app')
-    expect(r.ok).toBe(false)
-    expect(r.error).toMatch(/frozen/i)
-    expect(r.error).toMatch(/2026-09-16/)
-  })
-
-  it('rejects the youandinotai name the same way', () => {
+  it('accepts the date-app brand as of the 2026-09-19 marketing-unfreeze ruling', () => {
     const r = validateBrand('youandinotai')
-    expect(r.ok).toBe(false)
-    expect(r.error).toMatch(/frozen/i)
+    expect(r.ok).toBe(true)
+    expect(r.brand).toBe(DATEAPP_BRAND)
   })
 
-  it('rejects any other unrecognised brand without the freeze wording', () => {
+  it('resolves every documented alias to the canonical brand name', () => {
+    expect(validateBrand('YouAndINotAI')).toMatchObject({ ok: true, brand: DATEAPP_BRAND })
+    expect(validateBrand('date app')).toMatchObject({ ok: true, brand: DATEAPP_BRAND })
+    expect(validateBrand('Date App')).toMatchObject({ ok: true, brand: DATEAPP_BRAND })
+  })
+
+  it('rejects any other unrecognised brand', () => {
     const r = validateBrand('Some Other Brand')
     expect(r.ok).toBe(false)
-    expect(r.error).not.toMatch(/frozen/i)
+    expect(r.error).toMatch(/brand must be one of/i)
+  })
+})
+
+describe('lib/social-adapters.mjs — checkAdultVenue (date-app 18-and-over gate)', () => {
+  const ADULT_COPY = 'youandinotai is an adults-only (18+) dating app for people who want something real.'
+
+  it('passes copy that clearly states an adults-only audience', () => {
+    expect(checkAdultVenue(ADULT_COPY)).toMatchObject({ pass: true, reason: null })
+  })
+
+  it('rejects copy that never states or implies an 18+ audience', () => {
+    const r = checkAdultVenue('youandinotai is a dating app for people who want something real.')
+    expect(r.pass).toBe(false)
+    expect(r.reason).toMatch(/18/)
+  })
+
+  it('rejects copy mentioning teens, even alongside an adult-audience statement', () => {
+    const r = checkAdultVenue('An 18+ app, not for teens — youandinotai is for adults only.')
+    expect(r.pass).toBe(false)
+    expect(r.reason).toMatch(/teen/i)
+  })
+
+  it('rejects copy mentioning students or school', () => {
+    expect(checkAdultVenue('18+ adults only — great for students on a night off.').pass).toBe(false)
+    expect(checkAdultVenue('18+ adults only, back to school savings on us.').pass).toBe(false)
+  })
+})
+
+describe('lib/social-adapters.mjs — checkBusinessOnly (date-app governance/sale gate)', () => {
+  it('passes ordinary customer-facing copy', () => {
+    expect(checkBusinessOnly('youandinotai: real people, real dates, 18+.')).toMatchObject({ pass: true, reason: null })
+  })
+
+  it('rejects copy that leaks internal governance language', () => {
+    const r = checkBusinessOnly('Approved by the judge lane before it went out.')
+    expect(r.pass).toBe(false)
+    expect(r.reason).toMatch(/judge lane/i)
+  })
+
+  it('rejects copy mentioning Paperclip or Mission Control', () => {
+    expect(checkBusinessOnly('Paperclip drafted this for us.').pass).toBe(false)
+    expect(checkBusinessOnly('Straight from Mission Control.').pass).toBe(false)
+  })
+
+  it('rejects copy that mentions the sale or the listing', () => {
+    expect(checkBusinessOnly('This app is for sale, act fast!').pass).toBe(false)
+    expect(checkBusinessOnly('The listing is live, come see it.').pass).toBe(false)
+  })
+})
+
+describe('lib/social-adapters.mjs — BRAND_RULING', () => {
+  it('is the exact ruling text server.mjs records on a youandinotai proposal', () => {
+    expect(BRAND_RULING).toBe('marketing unfrozen 2026-09-19; features frozen; listing stays')
   })
 })
 
