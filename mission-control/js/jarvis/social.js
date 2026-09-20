@@ -85,6 +85,14 @@ async function submitProposal(payload, fetchImpl = fetch) {
   }, fetchImpl);
 }
 
+// Drafts one post in Joshua's Fable voice (youandinotai brand only). Never
+// creates a proposal — the caller still has to review + submit it.
+async function draftWithFable(payload, fetchImpl = fetch) {
+  return fetchJson('/api/social/draft', {
+    method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload),
+  }, fetchImpl);
+}
+
 function initSocial() {
   loadPlatforms();
   loadProposals();
@@ -112,10 +120,32 @@ function initSocial() {
       if (e.body && e.body.error) renderCheckResult(checkResult, null);
     }
   });
+
+  const draftBtn = document.getElementById('social-draft-fable');
+  if (draftBtn) {
+    draftBtn.addEventListener('click', async () => {
+      const bodyEl = document.getElementById('social-body');
+      const titleEl = document.getElementById('social-title');
+      const brief = (titleEl && titleEl.value) || (bodyEl && bodyEl.value) || '';
+      if (status) status.textContent = 'drafting with Fable…';
+      try {
+        const j = await draftWithFable({
+          brand: document.getElementById('social-brand').value,
+          platform: document.getElementById('social-platform').value,
+          brief,
+        });
+        if (bodyEl) bodyEl.value = j.draft || '';
+        renderCheckResult(checkResult, j.checks);
+        if (status) status.textContent = 'draft filled in — review before proposing';
+      } catch (e) {
+        if (status) status.textContent = 'draft error: ' + (e.message || e);
+      }
+    });
+  }
 }
 
 if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', initSocial);
 }
 
-export { escapeHtml, fetchJson, loadPlatforms, renderPlatformOptions, renderCheckResult, loadProposals, renderProposals, submitProposal, initSocial };
+export { escapeHtml, fetchJson, loadPlatforms, renderPlatformOptions, renderCheckResult, loadProposals, renderProposals, submitProposal, draftWithFable, initSocial };

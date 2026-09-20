@@ -30,6 +30,19 @@ describe('JARVIS wiring — server.mjs Social routes (Phase C, unit 4)', () => {
     expect(server).toContain('proposalStore.create(')
   })
 
+  it('runs the extra date-app checks and stamps brandRuling only for the youandinotai brand', () => {
+    expect(server).toContain('checkAdultVenue(')
+    expect(server).toContain('checkBusinessOnly(')
+    expect(server).toContain('DATEAPP_BRAND')
+    expect(server).toContain('BRAND_RULING')
+  })
+
+  it('wires POST /api/social/draft to lib/fable-draft.mjs', () => {
+    expect(server).toContain("from './lib/fable-draft.mjs'")
+    expect(server).toMatch(/p === '\/api\/social\/draft' && req\.method === 'POST'/)
+    expect(server).toContain('draftWithFable(')
+  })
+
   it('redacts the platforms and proposal-creation responses before sending', () => {
     expect(server).toMatch(/send\(res, 200, redact\(\{ platforms:/)
     expect(server).toMatch(/send\(res, 201, redact\(\{ proposal:/)
@@ -39,11 +52,13 @@ describe('JARVIS wiring — server.mjs Social routes (Phase C, unit 4)', () => {
     expect(server).toMatch(/createProposalStore\(\{ dir: join\(HERE, 'data', 'proposals'\) \}\)/)
   })
 
-  it('index.html has the Social nav tab and panel', () => {
+  it('index.html has the Social nav tab and panel, the youandinotai brand option, and the Fable draft button', () => {
     const html = fs.readFileSync(path.join(root, 'index.html'), 'utf-8')
     expect(html).toContain('data-tab="social"')
     expect(html).toContain('id="tab-social"')
     expect(html).toContain('id="social-form"')
+    expect(html).toContain('value="youandinotai"')
+    expect(html).toContain('id="social-draft-fable"')
   })
 })
 
@@ -52,6 +67,19 @@ describe('js/jarvis/social.js — client render (pure functions, no DOM globals)
     expect(typeof clientMod.renderPlatformOptions).toBe('function')
     expect(typeof clientMod.renderCheckResult).toBe('function')
     expect(typeof clientMod.renderProposals).toBe('function')
+    expect(typeof clientMod.draftWithFable).toBe('function')
+  })
+
+  it('draftWithFable POSTs to /api/social/draft', async () => {
+    const calls = []
+    const fetchImpl = async (url, opts) => {
+      calls.push({ url, opts })
+      return { ok: true, json: async () => ({ draft: 'a fine post', checks: {} }) }
+    }
+    const j = await clientMod.draftWithFable({ brand: 'youandinotai', platform: 'x', brief: 'launch day' }, fetchImpl)
+    expect(calls[0].url).toBe('/api/social/draft')
+    expect(JSON.parse(calls[0].opts.body)).toMatchObject({ brand: 'youandinotai', platform: 'x', brief: 'launch day' })
+    expect(j.draft).toBe('a fine post')
   })
 
   it('renderPlatformOptions marks unconfigured platforms honestly', () => {

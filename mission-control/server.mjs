@@ -33,6 +33,7 @@
  *   POST /api/launch/claude     open the official Claude CLI in a console on this host
  *   GET  /api/ollama/tags       local Ollama models
  *   POST /api/ollama/chat       local Ollama chat streamed as Server-Sent Events
+ *   POST /api/social/draft      draft one post in Joshua's Fable voice (youandinotai brand only); never creates a proposal
  *   POST /api/judge/reviews     Judge Lanes (Phase D): create a code.review proposal from a real `git diff --stat`
  *   GET  /api/judge/feed        Judge Lanes: proposal feed, claude/codex verdict columns, live disagreement flag
  *   POST /api/judge/:id/verdict Judge Lanes: post one lane's verdict (x-judge-token gated per lane)
@@ -75,7 +76,8 @@ import { redact } from './lib/redact.mjs';
 import { createProposalStore } from './lib/proposals.mjs';
 import { checkCompliance } from './lib/compliance.mjs';
 import { scoreCopy } from './lib/copy-score.mjs';
-import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff } from './lib/social-adapters.mjs';
+import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff, checkAdultVenue, checkBusinessOnly, DATEAPP_BRAND, BRAND_RULING } from './lib/social-adapters.mjs';
+import { draftWithFable } from './lib/fable-draft.mjs';
 import { buildInbox, performAction, readTriggers } from './lib/inbox.mjs';
 import { handleMcpRequest } from './lib/mcp-server.mjs';
 import { createReviewProposal, buildJudgeFeed, postVerdict } from './lib/judge.mjs';
@@ -651,12 +653,37 @@ createServer(async (req, res) => {
     const composite = `${body.title || ''}\n${body.body || ''}`;
     const compliance = checkCompliance(composite, { hookPath: COMPLIANCE_HOOK_PATH });
     const copyScore = scoreCopy(composite);
+    const checks = { compliance, copyScore };
+    const extra = {};
+    // The 2026-09-19 ruling (marketing unfrozen, features frozen, listing
+    // stays) only ever unblocks youandinotai proposals that also clear these
+    // two extra gates — every other brand is unaffected by them.
+    if (brandCheck.brand === DATEAPP_BRAND) {
+      const adultVenue = checkAdultVenue(composite);
+      const businessOnly = checkBusinessOnly(composite);
+      checks.adultVenue = adultVenue;
+      checks.businessOnly = businessOnly;
+      if (!adultVenue.pass) return send(res, 400, { error: '18-and-over check failed: ' + adultVenue.reason, checks });
+      if (!businessOnly.pass) return send(res, 400, { error: 'business-only check failed: ' + businessOnly.reason, checks });
+      extra.brandRuling = BRAND_RULING;
+    }
     const rec = proposalStore.create({
       source: 'social', kind: 'post', brand: brandCheck.brand, platform: body.platform,
       title: body.title, body: body.body, scheduledFor: body.scheduledFor || null,
-      checks: { compliance, copyScore },
+      checks, ...extra,
     });
     return send(res, 201, redact({ proposal: rec }));
+  }
+  if (p === '/api/social/draft' && req.method === 'POST') {
+    let body;
+    try { body = JSON.parse((await readBody(req)).toString('utf8') || '{}'); }
+    catch { return send(res, 400, { error: 'invalid JSON body' }); }
+    const r = await draftWithFable({
+      brand: body.brand, platform: body.platform, brief: body.brief,
+      fetch: globalThis.fetch, ollamaBase: envValue('JARVIS_OLLAMA_URL') || 'http://127.0.0.1:11434',
+      hookPath: COMPLIANCE_HOOK_PATH,
+    });
+    return send(res, r.status, redact(r.body));
   }
 
   // Approval inbox (Phase C): proposals + TRIGGERS.jsonl + a synthetic RED item
