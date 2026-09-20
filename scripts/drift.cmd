@@ -31,6 +31,11 @@ rem                     graph, avatar, OmniRoute widgets, Mission Control embedd
 rem    drift fable      talk to Joshua's house model joshlcoleman/Fable on the
 rem                     local Ollama (the mandatory Date App voice model,
 rem                     ruled 2026-09-06; Modelfile ops/fable-model/)
+rem    drift reddit-setup   one-time Reddit API app registration (specs/010,
+rem                     unit 4): prints the reddit.com/prefs/apps steps with
+rem                     no args; with --client-id/--client-secret runs the
+rem                     local OAuth2 consent flow and writes REDDIT_* into
+rem                     .env, printing no secret values
 rem
 rem  What "the stack" means today (FABLES-HOUSE.ps1 stages, in order):
 rem    PostgreSQL 5432 · Redis 6379 · OmniRoute 20128 (identity+latency probe)
@@ -63,6 +68,7 @@ if /I "%~1"=="mc"     goto :mc
 if /I "%~1"=="jarvis" goto :mc
 if /I "%~1"=="avatar" goto :avatar
 if /I "%~1"=="fable"  goto :fable
+if /I "%~1"=="reddit-setup" goto :reddit-setup
 
 if not exist "%HOUSE%" (
   echo [drift] FABLE'S HOUSE script not found at %HOUSE%
@@ -121,4 +127,12 @@ exit /b 0
 rem Joshua's own model, private on ollama.com, built from opsable-model\Modelfile.
 rem Ollama stays the fail-safe route for harnesses; this is the drafting voice.
 ollama run joshlcoleman/Fable %2 %3 %4 %5 %6 %7 %8 %9
+exit /b %ERRORLEVEL%
+
+:reddit-setup
+rem specs/010-social-publish-pipeline, unit 4 - one-time Reddit API app
+rem registration. No args: prints the reddit.com/prefs/apps steps. With
+rem --client-id/--client-secret: runs the local OAuth2 consent flow and
+rem writes REDDIT_* into .env; no secret value is ever printed.
+node "%~dp0..\mission-control\scripts\reddit-setup.mjs" %2 %3 %4 %5
 exit /b %ERRORLEVEL%
