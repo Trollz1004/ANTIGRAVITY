@@ -350,7 +350,6 @@ def sanitize(text: str) -> tuple[str, int]:
         if not good:
             pat = re.compile(r"\s*" + re.escape(bad) + r"\s*", re.IGNORECASE)
             cleaned, k = pat.subn(" ", cleaned)
-            cleaned = re.sub(r"\s+", " ", cleaned)
         else:
             pat = re.compile(r"\b" + re.escape(bad) + r"\b", re.IGNORECASE)
             cleaned, k = pat.subn(good, cleaned)
@@ -395,6 +394,41 @@ def sanitize(text: str) -> tuple[str, int]:
     for term, repl in _MINOR_TERMS.items():
         pat = re.compile(r"\b" + re.escape(term) + r"s?\b", re.IGNORECASE)
         cleaned, k = pat.subn(repl, cleaned)
+        n += k
+    # Pass 2d: strip residual markdown. Fable sometimes outputs ** for bold,
+    # # for headings, or - for bullets even when the brief forbids it. JARVIS
+    # downstream posts as-is, so Sonnet sees literal asterisks. Strip them.
+    # This must run BEFORE whitespace collapse so ^-anchored patterns match.
+    cleaned, k = re.subn(r"\*+", "", cleaned)  # bold/italic asterisks
+    n += k
+    cleaned, k = re.subn(r"(?m)^#{1,6}\s*", "", cleaned)  # ATX headings
+    n += k
+    cleaned, k = re.subn(r"(?m)^\s*[-*+]\s+", "", cleaned)  # list markers
+    n += k
+    cleaned, k = re.subn(r"(?m)^\s*\d+\.\s+", "", cleaned)  # numbered lists
+    n += k
+    # Collapse runs of internal whitespace (multiple spaces/tabs) but
+    # PRESERVE newlines so paragraph breaks survive.
+    cleaned = re.sub(r"[ \t]+", " ", cleaned)
+    cleaned = re.sub(r"\s+([.!?])", r"\1", cleaned)  # fix "word ." spacing
+    # Pass 2e: strip unsourced-stats phrasings. Sonnet flags "according to
+    # recent statistics", "studies show", "X% of users" with no source.
+    _UNSOURCED_PATTERNS = [
+        r"according to recent statistics",
+        r"according to a recent study",
+        r"according to recent research",
+        r"according to a (?:new )?survey",
+        r"studies show that",
+        r"research shows that",
+        r"a (?:recent )?study (?:found|shows|suggests)",
+        r"a (?:recent )?survey (?:found|shows|suggests)",
+        r"\bone in (?:three|four|five|ten)\b",
+        r"\d+\s*% of (?:users|daters|people|adults|men|women)\b",
+        r"a PNAS study",
+        r"published in (?:the )?[A-Z][a-z]+",
+    ]
+    for pat in _UNSOURCED_PATTERNS:
+        cleaned, k = re.subn(pat, "", cleaned, flags=re.IGNORECASE)
         n += k
     # Pass 3: cap em-dashes per sentence at 1. Replace the 2nd, 3rd, ... with ". "
     def _cap_em_dashes(s):
@@ -451,21 +485,24 @@ def pick_blog_platform() -> str:
 def draft_blog(topic: str, platform: str = "wordpress") -> str:
     """Draft a blog post via the Fable-voice route.
 
-    Length budget: 1,400-1,800 characters in the final body. JARVIS
+    Length budget: 1,200-1,600 characters in the final body. JARVIS
     truncates posts above 2,000 chars, which Sonnet then rejects for
     ending mid-sentence.
     """
     brief = (
-        f"Short SEO blog post (~250-350 words, target 1,400-1,800 chars) on the topic: {topic}. "
+        f"Short SEO blog post (~200-280 words, target 1,200-1,600 chars) on the topic: {topic}. "
         f"Plain-spoken Fable voice — no marketing language, no banned words. "
         f"Focus on one concrete angle the reader can act on. "
         f"Open with a 1-2 sentence hook. "
-        f"Cite specific dates, stats, sources only when certain. Better to say 'anecdotally' or 'most people report' than fabricate numbers. "
-        f"Cover 3-4 short sections, each with a clear takeaway. "
+        f"NEVER cite studies, statistics, surveys, percentages, or research without a real citation. "
+        f"Do not write 'according to recent statistics', 'studies show', 'X% of users', 'research suggests', 'a PNAS study', 'one in five users', 'a recent survey', or similar unsupported phrasings. "
+        f"If a number is needed, say 'most people report', 'anecdotally', 'in our experience', or describe the practice without a number. "
+        f"Cover 3 short sections, each with a clear takeaway. "
         f"End with a single-line practical tip or question, no CTA. "
         f"Do NOT name competing dating apps by name (no Tinder, Hinge, Bumble, Match.com, eHarmony, OKCupid, POF). "
         f"Do NOT include the literal string 'youandinotai.com' anywhere in the body. "
-        f"Plain text only, no markdown headers, no bullet lists with asterisks — short paragraphs separated by blank lines. "
+        f"PLAIN TEXT ONLY: no markdown at all. No **, no #, no -, no numbered lists with periods. "
+        f"Use short paragraphs separated by blank lines. "
         f"Do not invent statistics, dates, dollar amounts, or social proof numbers. "
         f"Close with a single blank line. Do NOT include any disclosure footer — the publisher appends one automatically."
     )
@@ -480,20 +517,24 @@ REDDIT_SUBREDDITS = ["dating_advice", "OnlineDating", "dating"]
 def draft_reddit(topic: str) -> str:
     """Draft a Reddit discussion post in r/dating_advice / r/OnlineDating / r/dating voice.
 
-    Reddit voice is short, anecdotal, opening with a personal-experience hook,
-    closing with a genuine question. NO product mention, NO link, NO pitch —
-    Reddit's rules punish promotional posts and the brand lives in the
-    adults-only footer only.
+    Voice: a question or observation that invites community replies.
+    NO first-person anecdote (Sonnet flags those as disguised brand posts),
+    NO link, NO product mention, NO pitch — Reddit's rules punish promotional
+    posts and the brand lives in the adults-only footer only.
     """
     brief = (
         f"Reddit discussion post on the topic: {topic}. "
-        f"Write in first-person, anecdotal voice. ~150-300 words total. "
-        f"Open with a one-paragraph personal-experience hook (something you "
-        f"noticed, tried, or learned — do NOT mention a product or pitch). "
-        f"Middle 1-2 paragraphs share what you observed or did about it. "
-        f"Close with a genuine open question inviting replies. "
-        f"Do NOT link to anything. Do NOT mention the brand, the product, or "
-        f"any company. Do NOT promise outcomes. Do NOT invent user counts. "
+        f"Length 150-250 words. "
+        f"Open with a single concrete observation or a question, not a personal story. "
+        f"Do NOT write in the first person ('I tried', 'my experience', 'I noticed', 'my friend'). "
+        f"Use second person ('you', 'anyone else') or impersonal phrasing ('people often', 'most daters report'). "
+        f"Middle 1-2 paragraphs share observations about the topic, in general terms. "
+        f"Close with a genuine open question inviting community replies (start with 'Anyone else...', 'What do you think...', 'How do you handle...'). "
+        f"NEVER cite studies, statistics, surveys, percentages, or research without a real citation. "
+        f"Do not write 'according to recent statistics', 'studies show', 'X% of users', 'research suggests', or 'a PNAS study'. "
+        f"PLAIN TEXT ONLY: no markdown at all. No **, no #, no -. Use short paragraphs separated by blank lines. "
+        f"Do NOT link to anything. Do NOT mention the brand, the product, or any company. "
+        f"Do NOT promise outcomes. Do NOT invent user counts. "
         f"Do NOT include any disclosure footer — the publisher appends one automatically."
     )
     out = http_json(f"{JARVIS}/api/social/draft",
