@@ -12,6 +12,8 @@ changed, and the commit that landed it. `.github/CODEOWNERS` and the
 `.claude/hooks/guard-protected-paths.ps1` reminder enforce this
 mechanically; this file is the human-readable record. Newest entries first.
 
+2026-09-19 21:56 EDT | scripts/drift.cmd | added ONE new subcommand "reddit-setup" (specs/010-social-publish-pipeline, unit 4), dispatching to `node mission-control/scripts/reddit-setup.mjs`; copied byte-identical to C:\Users\joshi\.local\bin\drift.cmd (diff-verified) — no other line in this file touched | db5865b9
+
 2026-09-18 02:50 EDT | ops/skills/sabretooth-node/SKILL.md | Alienware SSH access (key-only, 192.168.0.40), its layout, and the empty-OmniRoute note | 0d19ac94
 2026-09-18 06:35 UTC | ops/skills/sabretooth-node/SKILL.md | Fable's Sentry consolidation: removed the ":9140" restart-set row and rewrote the "One Mission Control" bullet to say the probe engine is folded into JARVIS (mission-control/lib/sentry.mjs, /api/sentry, /api/sentry/summary) — no separate wall service. Tracked copy of the launch skill; the user copy at C:\Users\joshi\.claude\skills\sabretooth-node\SKILL.md was synced byte-identical. | 21603fd3
 
