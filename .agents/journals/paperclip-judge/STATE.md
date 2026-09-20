@@ -2319,3 +2319,11 @@ use. None should be done on inference.
 - blocked: GitHub Actions billing lock (Joshua) keeps the quality-gate ruleset disabled; IONOS nameserver change x3 (Joshua); JARVIS tokens unset in .env (Joshua)
 - next: Joshua pastes the Alienware prompt; set JARVIS_FOUNDER_TOKEN / JUDGE tokens / MCP token; House tunnel-heal fix lands; new signed state record when the nameservers flip
 - state: GREEN; JUDGE-PUSH on Joshua's direct instruction
+
+## 2026-09-20 16:40 EDT claude-lane (covers 09-18 to 09-20)
+- did: Sentry folded into JARVIS (/api/sentry, :9140 gone); Alienware SSH read access + Gods Eye group; agentic Ask-JARVIS; date-app marketing pipeline specs/010 (four checks, Fable-voice draft route, Sonnet rubric review, Reddit official API, scheduler); vault 62 orphans to 0; drop box node update anchored 178e8349; Hermes marketing brief PROMPT-FOR-HERMES-MARKETING-2026-09-20.md; approval wording fixed in CLAUDE.md, Hermes date-app skill, launch skill.
+- verified: Joshua rebooted 16:20 EDT 09-20; all 7 required stages UP by 16:26 via boot task, second proof of the restart path. origin/main equal to local.
+- skills: sabretooth-node, judge-house.
+- blocked: drift reddit-setup (Joshua); IONOS nameservers x3; Actions billing then ruleset 23633706; JARVIS_JUDGE_TOKEN_CODEX unset; Hermes :9119 was DOWN at 16:26, optional, House owns it.
+- next: Hermes files posts from 09-24 on; commit handover draft to ops/sale when Joshua says; Fable cap at 88 percent until 09-24, Sonnet only.
+- state: GREEN on required, YELLOW overall (pending nameservers).

@@ -12,6 +12,8 @@ changed, and the commit that landed it. `.github/CODEOWNERS` and the
 `.claude/hooks/guard-protected-paths.ps1` reminder enforce this
 mechanically; this file is the human-readable record. Newest entries first.
 
+2026-09-20 16:35 EDT | ops/skills/sabretooth-node/SKILL.md (both copies), drop box PROMPT-FOR-HERMES-MARKETING-2026-09-20.md | date-app bullet now carries the 2026-09-19 marketing unfreeze and Joshua's approval delegation to the Fable lane; new Hermes marketing brief written to the drop box; same wording fix in CLAUDE.md and the Hermes date-app skill | this commit
+
 2026-09-19 21:56 EDT | scripts/drift.cmd | added ONE new subcommand "reddit-setup" (specs/010-social-publish-pipeline, unit 4), dispatching to `node mission-control/scripts/reddit-setup.mjs`; copied byte-identical to C:\Users\joshi\.local\bin\drift.cmd (diff-verified) — no other line in this file touched | db5865b9
 
 2026-09-18 02:50 EDT | ops/skills/sabretooth-node/SKILL.md | Alienware SSH access (key-only, 192.168.0.40), its layout, and the empty-OmniRoute note | 0d19ac94

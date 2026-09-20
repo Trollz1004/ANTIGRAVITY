@@ -70,7 +70,7 @@ Use **VERIFIED**, **UNVERIFIED**, or **BLOCKED**. Include the changed files, tes
 
 youandinotai.com is frozen and listed for sale as of 2026-09-16. The asset is the name pair (youandinotai.com + youandinotai.online, "You and I, not AI"); the app is a bonus in the lot. No new features, no growth engine runs, no digests, no campaigns, no experiments, no audits. Keep the site up and the checkout untouched until the sale closes. Listing copy and outreach note: `ops/sale/YOUANDINOTAI-SALE-LISTING.md`. Joshua's time goes to DREAM Online and the AI Solutions business; YouTube automation stays on the Hermes lane. Any lane that touches the date app beyond keeping it up must cite this section and a direct instruction from Joshua.
 
-Marketing unfrozen 2026-09-19 (Joshua): the app may be marketed while listed; every post is a JARVIS inbox proposal with compliance, copy-score, 18-and-over, and business-only checks, drafted in the Fable voice, approved only by Joshua; features, checkout, and the listing are unchanged; the Hermes growth crons stay paused because the inbox is the publishing path.
+Marketing unfrozen 2026-09-19 (Joshua): the app may be marketed while listed; every post is a JARVIS inbox proposal with compliance, copy-score, 18-and-over, and business-only checks, drafted in the Fable voice, approved by the Fable judge lane on Joshua's delegation of 2026-09-19 ("fable approves is fine"; a rubric review, two per brand per day, audited, reversible by Joshua in the inbox), never by a harness; features, checkout, and the listing are unchanged; the Hermes growth crons stay paused because the inbox is the publishing path.
 
 ## One Mission Control (ruling 2026-09-17)
 
