@@ -83,3 +83,5 @@ Campaign copy lives in `ops/marketing-inbox/FULL_CAMPAIGN_PACKAGE.md`. OpenCLI C
 4. Nothing else. The app is frozen (below). Marketing, growth, and digest crons are stopped; if one still fires, report it and do not act on it.
 
 > **FROZEN 2026-09-16:** the date app is listed for sale (`ops/sale/YOUANDINOTAI-SALE-LISTING.md`). Keep it up, touch nothing else. Growth, digests, campaigns, audits: off. Ruling in CLAUDE.md.
+>
+> **MARKETING UNFROZEN 2026-09-19:** the app may be marketed while listed. Hermes may draft proposals into the JARVIS inbox via `POST /api/social/proposals` (brand `youandinotai`) — it never posts directly. Every proposal still needs compliance, copy-score, 18-and-over, and business-only checks to pass, is drafted in the Fable voice, and is approved only by Joshua. Features, checkout, and the listing are unchanged, and the growth crons stay paused because the inbox is the publishing path.
