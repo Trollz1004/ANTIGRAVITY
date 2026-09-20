@@ -72,6 +72,15 @@ describe('lib/fable-draft.mjs — draftWithFable', () => {
     expect(r.body.error).toBe('Fable model not present')
   })
 
+  it('recognises the model when Ollama reports it with a ":latest" tag suffix, and calls generate with that exact tag', async () => {
+    const fetchImpl = fakeFetch({ tags: [FABLE_MODEL + ':latest'], response: 'youandinotai is adults-only, 18+.' })
+    const r = await draftWithFable({ brand: 'youandinotai', platform: 'x', brief: 'launch day', fetch: fetchImpl, hookPath: HOOK })
+    expect(r.status).toBe(200)
+    expect(r.body.model).toBe(FABLE_MODEL + ':latest')
+    const genCall = fetchImpl.calls.find((c) => String(c.url).endsWith('/api/generate'))
+    expect(JSON.parse(genCall.opts.body).model).toBe(FABLE_MODEL + ':latest')
+  })
+
   it('returns 503 "Fable model not present" when the tags call itself fails', async () => {
     const fetchImpl = fakeFetch({ tagsFail: true })
     const r = await draftWithFable({ brand: 'youandinotai', platform: 'reddit', brief: 'launch day', fetch: fetchImpl, hookPath: HOOK })

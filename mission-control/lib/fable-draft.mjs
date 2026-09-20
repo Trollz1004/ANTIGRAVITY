@@ -80,9 +80,15 @@ export async function draftWithFable({
   } catch (e) {
     return { status: 503, body: { error: 'Fable model not present', detail: String((e && e.message) || e) } };
   }
-  if (!tags.includes(model)) {
+  // Ollama tags carry a ":tag" suffix (":latest" by default) that a bare
+  // model name never includes — match the name with or without one.
+  const present = tags.some((t) => t === model || t.split(':')[0] === model);
+  if (!present) {
     return { status: 503, body: { error: 'Fable model not present', model } };
   }
+  // Use the exact installed tag (e.g. "joshlcoleman/Fable:latest") so the
+  // generate call names a model Ollama actually has, not a guess.
+  const resolvedModel = tags.find((t) => t === model || t.split(':')[0] === model) || model;
 
   const limit = platformLimit(platform);
   const system = buildSystemPrompt({ platform, limit });
@@ -91,7 +97,7 @@ export async function draftWithFable({
     const r = await fetchImpl(String(ollamaBase).replace(/\/$/, '') + '/api/generate', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ model, system, prompt: briefText, stream: false }),
+      body: JSON.stringify({ model: resolvedModel, system, prompt: briefText, stream: false }),
     });
     if (!r.ok) throw new Error('ollama /api/generate ' + r.status);
     const j = JSON.parse(await r.text());
@@ -108,7 +114,7 @@ export async function draftWithFable({
   return {
     status: 200,
     body: {
-      draft, model, platform, brand: DATEAPP_BRAND, brandRuling: BRAND_RULING,
+      draft, model: resolvedModel, platform, brand: DATEAPP_BRAND, brandRuling: BRAND_RULING,
       checks: { compliance, copyScore, adultVenue, businessOnly },
     },
   };
