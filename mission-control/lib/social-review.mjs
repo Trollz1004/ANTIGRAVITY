@@ -52,6 +52,28 @@ export function reviewedTodayCount(proposals, brand, { now = () => new Date() } 
   ).length;
 }
 
+/**
+ * Is a scheduled proposal due yet? A proposal with no `scheduledFor` is
+ * always due (specs/010, unit 7's scheduler gate). Pure.
+ */
+export function isDue(scheduledFor, now = () => new Date()) {
+  if (!scheduledFor) return true;
+  return new Date(scheduledFor).getTime() <= now().getTime();
+}
+
+/**
+ * Pick every social proposal ready for the auto-review lane right now: still
+ * PROPOSED, never reviewed by this lane before, passes the mechanical
+ * checks, and due per `isDue`. Pure — the caller (server.mjs's scheduler
+ * loop) owns tracking which ids are already mid-review this tick.
+ */
+export function selectDueProposals(proposals, { now = () => new Date(), excludeIds = new Set() } = {}) {
+  return (proposals || []).filter((p) => p
+    && p.source === 'social' && p.state === 'PROPOSED' && !p.reviewActor
+    && passesMechanicalChecks(p.checks) && isDue(p.scheduledFor, now)
+    && !excludeIds.has(p.id));
+}
+
 /** True when the mechanical checks server.mjs already computed all passed. */
 export function passesMechanicalChecks(checks) {
   const c = checks || {};

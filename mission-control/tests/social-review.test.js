@@ -3,7 +3,7 @@ import { EventEmitter } from 'node:events'
 import {
   autoReviewEnabled, nyDay, reviewedTodayCount, passesMechanicalChecks,
   buildReviewPrompt, parseVerdict, runClaudeReview, reviewAndMaybeExecute,
-  REVIEW_ACTOR, DAILY_CAP_PER_BRAND,
+  REVIEW_ACTOR, DAILY_CAP_PER_BRAND, isDue, selectDueProposals,
 } from '../lib/social-review.mjs'
 
 function fakeChild({ stdout = '', stderr = '', exitCode = 0, spawnError = null, neverClose = false } = {}) {
@@ -54,6 +54,40 @@ describe('lib/social-review.mjs — nyDay / reviewedTodayCount', () => {
       { source: 'social', brand: 'youandinotai', state: 'REJECTED', reviewActor: REVIEW_ACTOR, reviewedAt: '2026-09-20T13:00:00Z' },
     ]
     expect(reviewedTodayCount(proposals, 'youandinotai', { now })).toBe(2)
+  })
+})
+
+describe('lib/social-review.mjs — isDue / selectDueProposals (specs/010, unit 7 scheduler)', () => {
+  it('a proposal with no scheduledFor is always due', () => {
+    expect(isDue(null)).toBe(true)
+    expect(isDue(undefined)).toBe(true)
+  })
+
+  it('is due once scheduledFor has arrived, not before', () => {
+    const now = () => new Date('2026-09-20T14:00:00Z')
+    expect(isDue('2026-09-20T14:00:00Z', now)).toBe(true)
+    expect(isDue('2026-09-20T13:59:00Z', now)).toBe(true)
+    expect(isDue('2026-09-21T14:00:00Z', now)).toBe(false)
+  })
+
+  it('selectDueProposals only picks PROPOSED, unreviewed, mechanically-passing, due social proposals', () => {
+    const now = () => new Date('2026-09-20T15:00:00Z')
+    const proposals = [
+      { id: 'a', source: 'social', state: 'PROPOSED', checks: { compliance: { pass: true } }, scheduledFor: '2026-09-20T14:00:00Z' }, // due
+      { id: 'b', source: 'social', state: 'PROPOSED', checks: { compliance: { pass: true } }, scheduledFor: '2026-09-21T14:00:00Z' }, // future
+      { id: 'c', source: 'social', state: 'APPROVED', checks: { compliance: { pass: true } }, scheduledFor: '2026-09-20T14:00:00Z' }, // wrong state
+      { id: 'd', source: 'social', state: 'PROPOSED', checks: { compliance: { pass: false } }, scheduledFor: '2026-09-20T14:00:00Z' }, // fails mechanical
+      { id: 'e', source: 'social', state: 'PROPOSED', checks: { compliance: { pass: true } }, scheduledFor: '2026-09-20T14:00:00Z', reviewActor: REVIEW_ACTOR }, // already reviewed
+      { id: 'f', source: 'judge', state: 'PROPOSED', checks: { compliance: { pass: true } }, scheduledFor: '2026-09-20T14:00:00Z' }, // wrong source
+    ]
+    const due = selectDueProposals(proposals, { now })
+    expect(due.map((p) => p.id)).toEqual(['a'])
+  })
+
+  it('excludeIds keeps an in-flight review from being picked up again', () => {
+    const now = () => new Date('2026-09-20T15:00:00Z')
+    const proposals = [{ id: 'a', source: 'social', state: 'PROPOSED', checks: { compliance: { pass: true } }, scheduledFor: null }]
+    expect(selectDueProposals(proposals, { now, excludeIds: new Set(['a']) })).toEqual([])
   })
 })
 

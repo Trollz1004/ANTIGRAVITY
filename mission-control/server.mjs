@@ -83,7 +83,7 @@ import { scoreCopy } from './lib/copy-score.mjs';
 import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff, checkAdultVenue, checkBusinessOnly, applyRequiredFooter, DATEAPP_BRAND, BRAND_RULING } from './lib/social-adapters.mjs';
 import { draftWithFable, platformLimit } from './lib/fable-draft.mjs';
 import { buildInbox, performAction, readTriggers, appendAudit } from './lib/inbox.mjs';
-import { reviewAndMaybeExecute, autoReviewEnabled, passesMechanicalChecks } from './lib/social-review.mjs';
+import { reviewAndMaybeExecute, autoReviewEnabled, passesMechanicalChecks, isDue, selectDueProposals } from './lib/social-review.mjs';
 import { executeRedditAdapter } from './lib/reddit-api.mjs';
 import { createAgentTools } from './lib/agent-tools.mjs';
 import {
@@ -325,6 +325,29 @@ const socialAdapters = {
     return { ok: false, error: `syndication auto-post not wired in this phase for "${proposal.platform}" — run scripts/seo/post.mjs manually with the approved copy` };
   },
 };
+// Model review scheduler (specs/010, unit 7): a proposal filed for the
+// future is picked up here, not at creation time. `inFlight` stops the
+// 60s tick from starting a second review while one is already running for
+// the same id (a CLI review can take up to 90s).
+const socialReviewInFlight = new Set();
+function runSocialAutoReview(proposal) {
+  if (socialReviewInFlight.has(proposal.id)) return;
+  socialReviewInFlight.add(proposal.id);
+  reviewAndMaybeExecute({
+    store: proposalStore, proposal, rubricPath: SOCIAL_REVIEW_RUBRIC_PATH,
+    execute: (p) => socialAdapters.execute(p),
+    auditFn: (record) => appendAudit({ dir: AUDIT_DIR, record }),
+  })
+    .catch((e) => appendAudit({ dir: AUDIT_DIR, record: { kind: 'social-review', id: proposal.id, error: String((e && e.message) || e) } }))
+    .finally(() => socialReviewInFlight.delete(proposal.id));
+}
+setInterval(() => {
+  if (!autoReviewEnabled(envValue)) return;
+  for (const p of selectDueProposals(proposalStore.list(), { excludeIds: socialReviewInFlight })) {
+    runSocialAutoReview(p);
+  }
+}, 60000).unref();
+
 // Ask-JARVIS agentic loop (specs/009-jarvis-agentic-ask): every tool reuses
 // the exact same live sources the rest of this file already serves — no
 // second copy of node health, God's Eye, the inbox, or the bridge registry.
@@ -746,12 +769,10 @@ createServer(async (req, res) => {
     // Model review before approval (specs/010, unit 2): fires in the
     // background, never blocks this response — the inbox reflects the
     // outcome once the CLI answers (or leaves it PROPOSED for a human).
-    if (autoReviewEnabled(envValue) && passesMechanicalChecks(checks)) {
-      reviewAndMaybeExecute({
-        store: proposalStore, proposal: rec, rubricPath: SOCIAL_REVIEW_RUBRIC_PATH,
-        execute: (p) => socialAdapters.execute(p),
-        auditFn: (record) => appendAudit({ dir: AUDIT_DIR, record }),
-      }).catch((e) => appendAudit({ dir: AUDIT_DIR, record: { kind: 'social-review', id: rec.id, error: String((e && e.message) || e) } }));
+    // A proposal scheduled for the future is left for the scheduler loop
+    // below (specs/010, unit 7) rather than reviewed the instant it's filed.
+    if (autoReviewEnabled(envValue) && passesMechanicalChecks(checks) && isDue(rec.scheduledFor)) {
+      runSocialAutoReview(rec);
     }
     return send(res, 201, redact({ proposal: rec }));
   }
