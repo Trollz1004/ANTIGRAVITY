@@ -82,7 +82,8 @@ import { checkCompliance } from './lib/compliance.mjs';
 import { scoreCopy } from './lib/copy-score.mjs';
 import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff, checkAdultVenue, checkBusinessOnly, applyRequiredFooter, DATEAPP_BRAND, BRAND_RULING } from './lib/social-adapters.mjs';
 import { draftWithFable, platformLimit } from './lib/fable-draft.mjs';
-import { buildInbox, performAction, readTriggers } from './lib/inbox.mjs';
+import { buildInbox, performAction, readTriggers, appendAudit } from './lib/inbox.mjs';
+import { reviewAndMaybeExecute, autoReviewEnabled, passesMechanicalChecks } from './lib/social-review.mjs';
 import { createAgentTools } from './lib/agent-tools.mjs';
 import { runAskAgent, refreshAskModels, DEFAULT_MODEL as ASK_DEFAULT_MODEL } from './lib/ask-agent.mjs';
 import { handleMcpRequest } from './lib/mcp-server.mjs';
@@ -211,6 +212,8 @@ const MARKETING_INBOX_DIR = join(REPO, 'ops', 'marketing-inbox', 'approved');
 const proposalStore = createProposalStore({ dir: join(HERE, 'data', 'proposals') });
 const TRIGGERS_PATH = join(REPO, 'ops', 'heartbeat', 'TRIGGERS.jsonl');
 const AUDIT_DIR = join(HERE, 'data', 'audit');
+// Model review before approval (specs/010, unit 2).
+const SOCIAL_REVIEW_RUBRIC_PATH = join(HERE, 'config', 'social-review-rubric.md');
 // Judge Lanes (Phase D, unit 1): one repo in scope this phase, reusing the
 // same [{id, path}] shape as the git panel above.
 const JUDGE_REPOS = GIT_REPOS;
@@ -709,6 +712,16 @@ createServer(async (req, res) => {
       title: body.title, body: postBody, scheduledFor: body.scheduledFor || null,
       checks, ...extra,
     });
+    // Model review before approval (specs/010, unit 2): fires in the
+    // background, never blocks this response — the inbox reflects the
+    // outcome once the CLI answers (or leaves it PROPOSED for a human).
+    if (autoReviewEnabled(envValue) && passesMechanicalChecks(checks)) {
+      reviewAndMaybeExecute({
+        store: proposalStore, proposal: rec, rubricPath: SOCIAL_REVIEW_RUBRIC_PATH,
+        execute: (p) => socialAdapters.execute(p),
+        auditFn: (record) => appendAudit({ dir: AUDIT_DIR, record }),
+      }).catch((e) => appendAudit({ dir: AUDIT_DIR, record: { kind: 'social-review', id: rec.id, error: String((e && e.message) || e) } }));
+    }
     return send(res, 201, redact({ proposal: rec }));
   }
   if (p === '/api/social/draft' && req.method === 'POST') {
