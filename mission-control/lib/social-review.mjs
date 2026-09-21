@@ -8,7 +8,7 @@
  * never scores copy itself, it only shells out, parses a strict JSON
  * verdict, and applies it.
  *
- *   approve -> proposal -> APPROVED (actor "fable-lane (claude review)"),
+ *   approve -> proposal -> APPROVED (actor "hermes (claude review)"),
  *              then executed by its adapter — but only under the daily cap
  *              (2 per brand per America/New_York calendar day).
  *   reject  -> proposal -> REJECTED, reasons recorded.
@@ -21,15 +21,19 @@
 import { spawn as nodeSpawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
-export const REVIEW_ACTOR = 'fable-lane (claude review)';
+// Single-agent identity in the JARVIS layer: Hermes only.
+// Fable was a separate agent lane; per Joshua's 2026-09-21 ruling, JARVIS is
+// Hermes and no other agent identity surfaces here.
+export const REVIEW_ACTOR = 'hermes (claude review)';
 export const REVIEW_MODEL = 'sonnet';
 export const REVIEW_MAX_TURNS = 3;
 export const REVIEW_TIMEOUT_MS = 90000;
 export const DAILY_CAP_PER_BRAND = 2;
+// Env gate retained for compatibility but the lane name is Hermes now.
 export const AUTO_REVIEW_ENV = 'JARVIS_AUTO_REVIEW_SOCIAL';
-export const AUTO_REVIEW_VALUE = 'fable';
+export const AUTO_REVIEW_VALUE = 'hermes';
 
-/** True only when JARVIS_AUTO_REVIEW_SOCIAL is exactly "fable" (case-insensitive). */
+/** True only when JARVIS_AUTO_REVIEW_SOCIAL is exactly "hermes" (case-insensitive). */
 export function autoReviewEnabled(envValue) {
   return String((envValue && envValue(AUTO_REVIEW_ENV)) || '').trim().toLowerCase() === AUTO_REVIEW_VALUE;
 }

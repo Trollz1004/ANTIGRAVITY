@@ -45,7 +45,7 @@
  *   GET  /api/architecture.json Architecture panel (Phase E): typed JSON of the live Sabertooth stack (House stage table + health JSON)
  *   GET  /api/architecture      Architecture panel: archify-rendered HTML (same-origin), plain-text fallback on CLI failure
  *   GET  /api/architecture/diff?base=&head= before/after architecture diff for a commit range (archify compare)
- *   GET  /health                {service:"jarvis-dashboard"}  <- identity string for the wall
+ *   GET  /health                {service:"hermes-jarvis"}     <- identity string for the wall
  *
  * Zero dependencies. Secrets are read from .env at request time and never logged or returned.
  */
@@ -581,7 +581,7 @@ createServer(async (req, res) => {
   if (req.method === 'OPTIONS') { res.writeHead(204, { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET,POST,OPTIONS' }); return res.end(); }
 
   if (p === '/favicon.ico') { res.writeHead(200, { 'content-type': 'image/svg+xml', 'cache-control': 'max-age=86400' }); return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0d1117"/><circle cx="16" cy="16" r="9" fill="none" stroke="#58a6ff" stroke-width="3"/><circle cx="16" cy="16" r="3" fill="#3fb950"/></svg>'); }
-  if (p === '/health') return send(res, 200, { status: 'ok', service: 'jarvis-dashboard', port: PORT, startedAt: STARTED_AT });
+  if (p === '/health') return send(res, 200, { status: 'ok', service: 'hermes-jarvis', port: PORT, startedAt: STARTED_AT });
 
   if (p === '/api/config') {
     const host = (req.headers.host || '').replace(/:\d+$/, '') || LAN_IP;
