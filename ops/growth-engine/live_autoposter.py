@@ -42,6 +42,11 @@ logging.basicConfig(
 )
 log = logging.getLogger("live-marketing")
 
+# Assets
+QR_CODE_IMG = GROWTH_DIR / "assets" / "youandinotai_qr.png"
+AVATAR_QR_IMG = GROWTH_DIR / "assets" / "youandinotai_avatar_qr.png"
+POST_BANNER_QR_IMG = GROWTH_DIR / "assets" / "youandinotai_post_banner_qr.png"
+
 # High-converting campaign templates for YouAndINotAI
 MARKETING_CAMPAIGNS = [
     {
@@ -54,7 +59,7 @@ MARKETING_CAMPAIGNS = [
 The core difference:
 1. $1 Bot-Shield identity verification. Every profile is verified human. No fake accounts, no bot scripts.
 2. The $1 isn't a recurring subscription — it's a one-time verification fee that covers the cost of AI verification.
-3. Designed for real dates, not infinite swiping.
+3. Scan the QR code or visit https://youandinotai.com to verify your profile.
 
 If you're tired of swiping on fake profiles, check it out: https://youandinotai.com
 
