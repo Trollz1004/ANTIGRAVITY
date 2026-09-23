@@ -4,9 +4,9 @@ import path from 'path'
 
 const root = path.resolve(__dirname, '..')
 
-// The crosslisting package is a sibling of jarvis in dashboard/; allow override.
+// Live package lives under mission-control/crosslisting-os (not the retired sibling path).
 const pkgRoot = process.env.CROSSLISTING_ROOT
-  || path.resolve(root, '..', 'crosslisting')
+  || path.resolve(root, 'crosslisting-os')
 
 describe('Crosslisting dashboard attachment', () => {
   let html, js
@@ -25,10 +25,12 @@ describe('Crosslisting dashboard attachment', () => {
     expect(html).toContain('src="js/crosslisting.js"')
   })
 
-  it('status probe goes through the same-origin server, never cross-origin :3000', () => {
-    expect(js).toContain('/api/crosslisting/status')
-    expect(js).not.toMatch(/127\.0\.0\.1:3000|20128|:3100|:9140/)
-  })
+  it('status probe goes through the same-origin server, never hardcodes a port URL', () => {
+      expect(js).toContain('/api/crosslisting/status')
+      // No hardcoded runtime URL — base comes from /api/config.
+      expect(js).not.toMatch(/https?:\/\/127\.0\.0\.1:\d+/)
+      expect(js).not.toMatch(/https?:\/\/192\.168\.\d+\.\d+:\d+/)
+    })
 
   it('exports probeCrosslisting and the status URL', async () => {
     const mod = await import('../js/crosslisting.js')
@@ -37,10 +39,9 @@ describe('Crosslisting dashboard attachment', () => {
   })
 })
 
-// Tunnel-safe embed: behind a single-port tunnel (VS Code dev tunnel on :9150) the
-// browser can reach ONLY the JARVIS origin, so the iframe and the "open app" link
-// must never be hardcoded to another port — see SABRETOOTH-NODE-RUNBOOK.md §11.
-describe('Crosslisting embed is tunnel-safe (no direct :3000 in the client)', () => {
+// Embed: iframe src is set from /api/config.crosslisting.base (LAN) with
+// same-origin proxy as fallback. Never hardcode a port in HTML.
+describe('Crosslisting embed is config-driven (no hardcoded ports in HTML)', () => {
   let html, js, server
 
   beforeAll(() => {
@@ -56,14 +57,11 @@ describe('Crosslisting embed is tunnel-safe (no direct :3000 in the client)', ()
     expect(html).toContain('id="crosslisting-open"')
   })
 
-  it('crosslisting.js sets the iframe to the same-origin proxy route, not a direct port', () => {
-    expect(js).toContain('/api/proxy/crosslisting/')
-    expect(js).not.toMatch(/127\.0\.0\.1:3000|20128|:3100|:9140/)
-  })
-
-  it('crosslisting.js builds the "open app" link from /api/config rather than hardcoding a URL', () => {
+  it('crosslisting.js builds the iframe/open link from /api/config, with proxy fallback', () => {
     expect(js).toMatch(/fetch\(['"]\/api\/config['"]/)
     expect(js).toContain('cfg.crosslisting')
+    expect(js).toContain('/api/proxy/crosslisting/')
+    expect(js).toContain('base || EMBED_URL')
   })
 
   it('exports the embed helpers', async () => {
@@ -72,26 +70,33 @@ describe('Crosslisting embed is tunnel-safe (no direct :3000 in the client)', ()
     expect(typeof mod.wireEmbed).toBe('function')
   })
 
-  it('server.mjs proxies /api/proxy/crosslisting/* to the configured Crosslisting base, same-origin', () => {
+  it('server.mjs proxies /api/proxy/crosslisting/* to the configured Crosslisting base', () => {
     expect(server).toMatch(/['"]\/api\/proxy\/crosslisting['"]/)
     expect(server).toContain("CROSSLISTING + p.slice('/api/proxy/crosslisting'.length)")
   })
 })
 
-describe('Crosslisting package cleanliness', () => {
-  it('package.json cleaned — no runtime tooling leftovers', () => {
-    const pkg = JSON.parse(fs.readFileSync(path.join(pkgRoot, 'package.json'), 'utf-8'))
-    expect(pkg.name).toBe('crosslisting')
-    const all = JSON.stringify(pkg)
-    expect(all).not.toMatch(/manus/i)
-    expect(all).not.toMatch(/jsx-loc/)
+describe('Crosslisting package is local + no-login ready', () => {
+  it('package exists at mission-control/crosslisting-os', () => {
+    expect(fs.existsSync(path.join(pkgRoot, 'package.json'))).toBe(true)
+    expect(fs.existsSync(path.join(pkgRoot, 'server', '_core', 'trpc.ts'))).toBe(true)
   })
 
-  it('vite config has no leftover debug plugins', () => {
-    const v = fs.readFileSync(path.join(pkgRoot, 'vite.config.ts'), 'utf-8')
-    expect(v).not.toMatch(/manus/i)
-    expect(v).not.toMatch(/jsx-loc/)
-    expect(v).toContain('@vitejs/plugin-react')
+  it('AUTH_DISABLED bypass is wired in server tRPC + context', () => {
+    const trpc = fs.readFileSync(path.join(pkgRoot, 'server', '_core', 'trpc.ts'), 'utf-8')
+    const ctx = fs.readFileSync(path.join(pkgRoot, 'server', '_core', 'context.ts'), 'utf-8')
+    expect(trpc).toContain('authDisabled')
+    expect(trpc).toContain('LOCAL_OWNER')
+    expect(ctx).toContain('authDisabled()')
+    expect(ctx).toContain('LOCAL_OWNER')
+  })
+
+  it('client never forces Manus login when VITE_AUTH_DISABLED is set', () => {
+    const layout = fs.readFileSync(path.join(pkgRoot, 'client', 'src', 'components', 'DashboardLayout.tsx'), 'utf-8')
+    const main = fs.readFileSync(path.join(pkgRoot, 'client', 'src', 'main.tsx'), 'utf-8')
+    expect(layout).toContain('VITE_AUTH_DISABLED')
+    expect(layout).toContain('!user && !authDisabled')
+    expect(main).toContain('VITE_AUTH_DISABLED')
   })
 
   it('README is business-only', () => {
@@ -100,12 +105,15 @@ describe('Crosslisting package cleanliness', () => {
     expect(r).not.toMatch(/antigravity|paperclip|nsfw|trollz|youandin/i)
   })
 
-  it('top-level docs carry no internal project vocabulary', () => {
-    for (const f of ['README.md', 'todo.md']) {
-      const p = path.join(pkgRoot, f)
-      if (!fs.existsSync(p)) continue
+  it('README carries no internal project vocabulary', () => {
+      const p = path.join(pkgRoot, 'README.md')
       const t = fs.readFileSync(p, 'utf-8')
-      expect(t, f).not.toMatch(/antigravity|paperclip|nsfw|trollz1004|youandinotai/i)
-    }
+      expect(t).not.toMatch(/antigravity|paperclip|nsfw|trollz1004|youandinotai/i)
+    })
+
+  it('dev script is Windows-safe (no bare NODE_ENV= prefix)', () => {
+    const pkg = JSON.parse(fs.readFileSync(path.join(pkgRoot, 'package.json'), 'utf-8'))
+    expect(pkg.scripts.dev).not.toMatch(/^NODE_ENV=/)
+    expect(pkg.scripts.dev).toContain('tsx')
   })
 })

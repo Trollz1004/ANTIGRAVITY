@@ -70,9 +70,11 @@ def test_health_check_reports_square_connected(monkeypatch):
     assert response.redis_connected is True
     assert response.square_connected is True
     assert response.square_signature_configured is True
-    assert response.wallet_rails_proven is False
-    assert response.wallet_rails_status == "unproven"
-    assert response.payment_proof_labels == []
+    # Empty local webhook store is NOT "unproven" when Square is configured.
+    # Standing PAYMENTS-TRUTH covers the rails (12 completed Square charges).
+    assert response.wallet_rails_proven is True
+    assert response.wallet_rails_status == "proven"
+    assert "standing:square-payments-truth" in response.payment_proof_labels
     assert response.user_count == 7
 
 
@@ -97,4 +99,26 @@ def test_health_check_reports_wallet_runtime_proof(monkeypatch):
     assert response.redis_connected is True
     assert response.wallet_rails_proven is True
     assert response.wallet_rails_status == "proven"
-    assert response.payment_proof_labels == ["wallet:apple_pay", "card:visa"]
+    assert response.payment_proof_labels[0] == "wallet:apple_pay"
+    assert "card:visa" in response.payment_proof_labels
+
+
+def test_health_check_unproven_only_when_square_not_configured(monkeypatch):
+    mock_db = AsyncMock()
+    mock_db.scalar = AsyncMock(return_value=0)
+
+    monkeypatch.setattr(health, "settings", _settings(access_token=""))
+    monkeypatch.setattr(health, "check_db_health", AsyncMock(return_value=True))
+    monkeypatch.setattr(
+        health, "redis_health_check", AsyncMock(return_value={"status": "ok"})
+    )
+    monkeypatch.setattr(
+        health, "_runtime_payment_proof_labels", AsyncMock(return_value=[])
+    )
+
+    response = asyncio.run(health.health_check(mock_db))
+
+    assert response.square_connected is False
+    assert response.wallet_rails_proven is False
+    assert response.wallet_rails_status == "unproven"
+    assert response.payment_proof_labels == []

@@ -153,8 +153,6 @@ PILLAR_TOPICS = [
     "best dating app for serious relationships 2026",
     "fake profiles on dating apps",
     "how to spot a bot on a dating app",
-    "Tinder vs Hinge 2026",
-    "Bumble premium worth it",
     "dating app review reddit",
     "online dating conversation tips",
     "online dating first date ideas",
@@ -164,9 +162,6 @@ PILLAR_TOPICS = [
     "dating after divorce over 40",
     "dating app for professionals",
     "dating app profile tips",
-    "Hinge Face Check explained",
-    "Tinder photo verification how it works",
-    "Hinge vs Bumble for women",
     "dating app conversation starters that work",
     "online dating for introverts",
     "long distance dating app",
@@ -218,11 +213,22 @@ REDDIT_TOPICS = [
 ]
 
 
-def http_json(url: str, body: dict | None = None, method: str = "POST", timeout: int = 120) -> dict:
+def http_json(url: str, body: dict | None = None, method: str = "POST", timeout: int = 120, retries: int = 3) -> dict:
+    """POST/GET JSON with retry on transient connection resets."""
+    import time
     data = json.dumps(body).encode("utf-8") if body is not None else None
-    req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"}, method=method)
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return json.loads(r.read().decode("utf-8") or "{}")
+    last_exc = None
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"}, method=method)
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return json.loads(r.read().decode("utf-8") or "{}")
+        except (ConnectionResetError, ConnectionAbortedError, urllib.error.URLError) as exc:
+            last_exc = exc
+            if attempt < retries - 1:
+                time.sleep(2 * (attempt + 1))  # linear backoff: 2s, 4s
+            continue
+    raise last_exc  # type: ignore[misc]
 
 
 def next_topic() -> str:
@@ -231,9 +237,12 @@ def next_topic() -> str:
     marker = INBOX / "topics_filed.txt"
     if marker.exists():
         used = {line.strip().lower() for line in marker.read_text(encoding="utf-8").splitlines() if line.strip()}
-    for t in PILLAR_TOPICS:
-        if t.lower() not in used:
-            return t
+    # Only consider topics that still exist in PILLAR_TOPICS. Stale entries
+    # (topics that have been removed from PILLAR_TOPICS) should not block
+    # picking a fresh topic.
+    valid = [t for t in PILLAR_TOPICS if t.lower() not in used]
+    if valid:
+        return valid[0]
     return PILLAR_TOPICS[dt.datetime.now().day % len(PILLAR_TOPICS)]
 
 
@@ -243,9 +252,9 @@ def next_reddit_topic() -> str:
     marker = INBOX / "reddit_topics_filed.txt"
     if marker.exists():
         used = {line.strip().lower() for line in marker.read_text(encoding="utf-8").splitlines() if line.strip()}
-    for t in REDDIT_TOPICS:
-        if t.lower() not in used:
-            return t
+    valid = [t for t in REDDIT_TOPICS if t.lower() not in used]
+    if valid:
+        return valid[0]
     return REDDIT_TOPICS[dt.datetime.now().day % len(REDDIT_TOPICS)]
 
 
@@ -411,8 +420,8 @@ def sanitize(text: str) -> tuple[str, int]:
     # PRESERVE newlines so paragraph breaks survive.
     cleaned = re.sub(r"[ \t]+", " ", cleaned)
     cleaned = re.sub(r"\s+([.!?])", r"\1", cleaned)  # fix "word ." spacing
-    # Pass 2e: strip unsourced-stats phrasings. Sonnet flags "according to
-    # recent statistics", "studies show", "X% of users" with no source.
+    # Pass 2e: strip unsourced-stats phrasings. Sonnet flags these as
+    # fabricated statistics even when used as soft hedges.
     _UNSOURCED_PATTERNS = [
         r"according to recent statistics",
         r"according to a recent study",
@@ -426,6 +435,12 @@ def sanitize(text: str) -> tuple[str, int]:
         r"\d+\s*% of (?:users|daters|people|adults|men|women)\b",
         r"a PNAS study",
         r"published in (?:the )?[A-Z][a-z]+",
+        r"most people report",
+        r"most daters report",
+        r"experts agree",
+        r"experts say",
+        r"it is well known",
+        r"it'?s widely believed",
     ]
     for pat in _UNSOURCED_PATTERNS:
         cleaned, k = re.subn(pat, "", cleaned, flags=re.IGNORECASE)
@@ -496,7 +511,7 @@ def draft_blog(topic: str, platform: str = "wordpress") -> str:
         f"Open with a 1-2 sentence hook. "
         f"NEVER cite studies, statistics, surveys, percentages, or research without a real citation. "
         f"Do not write 'according to recent statistics', 'studies show', 'X% of users', 'research suggests', 'a PNAS study', 'one in five users', 'a recent survey', or similar unsupported phrasings. "
-        f"If a number is needed, say 'most people report', 'anecdotally', 'in our experience', or describe the practice without a number. "
+        f"If a number is needed, say 'anecdotally' or describe the practice without a number. Never use 'most people report', 'studies show', 'experts agree', or similar unsourced phrasings. "
         f"Cover 3 short sections, each with a clear takeaway. "
         f"End with a single-line practical tip or question, no CTA. "
         f"Do NOT name competing dating apps by name (no Tinder, Hinge, Bumble, Match.com, eHarmony, OKCupid, POF). "
@@ -635,13 +650,25 @@ def draft_x(topic: str) -> str:
     """
     brief = (
         f"X (Twitter) post on the topic: {topic}. "
-        f"Total length under 250 characters (the platform caps at 280). "
-        f"One observation, opinion, or one-line hook. No hashtags. No emoji. "
-        f"Plain spoken, no marketing language, no banned words. "
+        f"Total length 180-230 characters of prose plus the footer (the platform caps at 280). "
+        f"Write ONE concrete, specific, opinionated observation. "
+        f"\n\n"
+        f"GOOD EXAMPLES (this is the voice):\n"
+        f"- 'Profile photos matter more than bios. Most people decide in 2 seconds. Spend an hour on your main photo, not your self-summary.'\n"
+        f"- 'The most useful dating-app feature is the unmatch button. Use it the moment a conversation feels off. No explanation needed.'\n"
+        f"- 'Stop swiping for 30 minutes when matches dry up. The algorithm rewards people who log in less often, not more.'\n"
+        f"\n"
+        f"BAD EXAMPLES (do NOT write like this):\n"
+        f"- 'Some people find dating apps harder than others.' (too generic, no concrete takeaway)\n"
+        f"- 'There are many things to consider when choosing a dating app.' (filler)\n"
+        f"- A single sentence with no concrete recommendation or fact.\n"
+        f"\n"
+        f"NEVER write 'most people report', 'studies show', 'experts agree', or any unsourced generalization. "
+        f"NEVER cite percentages, surveys, or research. "
         f"Do NOT name competing dating apps (no Tinder, Hinge, Bumble, Match, eHarmony, OKCupid, POF). "
         f"Do NOT mention the brand, the product, or any company. "
-        f"Do NOT promise outcomes. Do NOT invent user counts. "
-        f"Do NOT include the literal string 'youandinotai.com' anywhere. "
+        f"Do NOT promise outcomes. "
+        f"Do NOT include the literal string 'youandinotai.com' in the prose. "
         f"Write the prose first, then a blank line, then the literal line: "
         f"'youandinotai.com is for adults 18 and over.' as the final line."
     )
@@ -708,14 +735,26 @@ def main() -> int:
     # ----- Phase 1: blog proposal -----
     blog_platform = pick_blog_platform()
     blog_topic = next_topic()
-    blog_draft = draft_blog(blog_topic, platform=blog_platform)
-    blog_ok = "drafted-only"
+    blog_draft = None
+    blog_ok = "draft-failed"
     blog_proposal_id = "(no proposal — draft failed)"
     blog_score = 0
     blog_replacements = 0
     blog_path = None
+    try:
+        blog_draft = draft_blog(blog_topic, platform=blog_platform)
+    except Exception as exc:
+        blog_proposal_id = f"DRAFT_FAILED: {exc}"
+        blog_report = (
+            f"[{ts}] marketing routine: draft-failed blog '{blog_topic}' "
+            f"on {blog_platform}. Draft: None. Proposal id: {blog_proposal_id}. "
+            f"Sanitized: 0 replacements, final copyScore=0/5."
+        )
+        write_report(blog_report)
+        print(blog_report)
 
     if blog_draft:
+        blog_ok = "drafted-only"
         blog_draft, blog_replacements, blog_score = clean_to_score_5(blog_draft)
         safe = "".join(c if c.isalnum() or c in "-_" else "-" for c in blog_topic)[:80]
         blog_path = BLOG_DIR / f"{dt.datetime.now().strftime('%H%M%S')}-{safe}.md"
@@ -748,14 +787,26 @@ def main() -> int:
 
     # ----- Phase 2: Reddit proposal -----
     reddit_topic = next_reddit_topic()
-    reddit_draft = draft_reddit(reddit_topic)
-    reddit_ok = "drafted-only"
+    reddit_draft = None
+    reddit_ok = "draft-failed"
     reddit_proposal_id = "(no proposal — draft failed)"
     reddit_score = 0
     reddit_replacements = 0
     subreddit = next_subreddit()
+    try:
+        reddit_draft = draft_reddit(reddit_topic)
+    except Exception as exc:
+        reddit_proposal_id = f"DRAFT_FAILED: {exc}"
+        reddit_report = (
+            f"[{ts}] marketing routine: draft-failed reddit post on r/{subreddit} "
+            f"'{reddit_topic}'. Proposal id: {reddit_proposal_id}. "
+            f"Sanitized: 0 replacements, final copyScore=0/5."
+        )
+        write_report(reddit_report)
+        print(reddit_report)
 
     if reddit_draft:
+        reddit_ok = "drafted-only"
         reddit_draft, reddit_replacements, reddit_score = clean_to_score_5(reddit_draft)
         # Defense in depth: JARVIS auto-appends the adults-only footer. Strip
         # any footer the model added so we end up with exactly 1, not 2.
@@ -803,14 +854,26 @@ def main() -> int:
 
     # ----- Phase 3: X / Twitter proposal -----
     x_topic = next_x_topic()
-    x_draft = draft_x(x_topic)
-    x_ok = "drafted-only"
+    x_draft = None
+    x_ok = "draft-failed"
     x_proposal_id = "(no proposal — draft failed)"
     x_score = 0
     x_replacements = 0
     x_warn = ""
+    try:
+        x_draft = draft_x(x_topic)
+    except Exception as exc:
+        x_proposal_id = f"DRAFT_FAILED: {exc}"
+        x_report = (
+            f"[{ts}] marketing routine: draft-failed x post '{x_topic}'. "
+            f"Proposal id: {x_proposal_id}. "
+            f"Sanitized: 0 replacements, final copyScore=0/5."
+        )
+        write_report(x_report)
+        print(x_report)
 
     if x_draft:
+        x_ok = "drafted-only"
         x_draft, x_replacements, x_score = clean_to_score_5(x_draft)
         # Defense in depth: JARVIS auto-appends the adults-only footer. Strip
         # any footer the model added so we end up with exactly 1, not 2.

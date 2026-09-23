@@ -54,16 +54,21 @@ export default function DashboardLayout({
     return saved ? parseInt(saved, 10) : DEFAULT_WIDTH;
   });
   const { loading, user } = useAuth();
+  // Local / Mission Control embed: AUTH_DISABLED on the server injects a local
+  // owner. The UI must never block on a login wall in that mode.
+  const authDisabled =
+    import.meta.env.VITE_AUTH_DISABLED === "1" ||
+    import.meta.env.VITE_AUTH_DISABLED === "true";
 
   useEffect(() => {
     localStorage.setItem(SIDEBAR_WIDTH_KEY, sidebarWidth.toString());
   }, [sidebarWidth]);
 
-  if (loading) {
+  if (loading && !authDisabled) {
     return <DashboardLayoutSkeleton />
   }
 
-  if (!user) {
+  if (!user && !authDisabled) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full">

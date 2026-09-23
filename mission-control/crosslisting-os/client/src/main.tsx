@@ -11,6 +11,13 @@ import "./index.css";
 const queryClient = new QueryClient();
 
 const redirectToLoginIfUnauthorized = (error: unknown) => {
+  // Local Mission Control mode: never bounce to Manus OAuth.
+  if (
+    import.meta.env.VITE_AUTH_DISABLED === "1" ||
+    import.meta.env.VITE_AUTH_DISABLED === "true"
+  ) {
+    return;
+  }
   if (!(error instanceof TRPCClientError)) return;
   if (typeof window === "undefined") return;
 

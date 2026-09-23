@@ -2,9 +2,9 @@
  * Crosslisting tab — status, embed, and the "open app" link all go through the
  * same-origin server. The browser cannot read the Crosslisting app cross-origin
  * (no CORS headers), and behind a single-port tunnel (VS Code dev tunnel on
- * :9150) it cannot reach :3000 at all — so the status probe, the iframe, and the
- * link all stay same-origin/relative or server-labelled. No keys, no hardcoded
- * LAN/loopback URLs in this file.
+ * :9150) it cannot reach the Crosslisting LAN port at all — so the status probe,
+ * the iframe, and the link all stay same-origin/relative or server-labelled.
+ * No keys, no hardcoded LAN/loopback URLs in this file.
  */
 const STATUS_URL = '/api/crosslisting/status';
 // Same-origin reverse proxy (server.mjs) to the Crosslisting app — keeps the
@@ -19,15 +19,22 @@ async function wireEmbed() {
   if (embedWired) return;
   embedWired = true;
   const frame = document.querySelector('#crosslisting-frame');
-  if (frame && !frame.getAttribute('src')) frame.src = EMBED_URL;
   const openLink = document.querySelector('#crosslisting-open');
-  if (openLink) {
-    try {
-      const r = await fetch('/api/config', { headers: { accept: 'application/json' } });
-      const cfg = await r.json();
-      const base = cfg && cfg.crosslisting && cfg.crosslisting.base;
-      if (base) { openLink.href = base; openLink.title = 'LAN-only: ' + base; }
-    } catch { /* leave the placeholder href — status badge already reports DOWN */ }
+  // Prefer the LAN base URL for the iframe. The same-origin proxy keeps tunnel
+  // reachability, but Vite SPA asset paths break under a path prefix — on the
+  // Sabretooth LAN the direct base is the reliable 100% path.
+  let base = null;
+  try {
+    const r = await fetch('/api/config', { headers: { accept: 'application/json' } });
+    const cfg = await r.json();
+    base = cfg && cfg.crosslisting && cfg.crosslisting.base ? cfg.crosslisting.base : null;
+  } catch { /* status badge already reports DOWN */ }
+  if (frame && !frame.getAttribute('src')) {
+    frame.src = base || EMBED_URL;
+  }
+  if (openLink && base) {
+    openLink.href = base;
+    openLink.title = 'LAN: ' + base;
   }
 }
 
@@ -52,17 +59,17 @@ async function probeCrosslisting() {
     badge.className = 'voice-status ' + (up ? 'voice-status-listening' : 'voice-status-error');
     if (detail) {
       detail.textContent = `${j.state || (up ? 'UP' : 'DOWN')} — ${j.detail || ''}${j.url ? ' (' + j.url + ')' : ''}`
-        + (up ? '' : ' Start with: cd dashboard/crosslisting && pnpm dev');
-    }
-  } catch (e) {
-    badge.textContent = 'DOWN';
-    badge.className = 'voice-status voice-status-error';
-    if (detail) {
-      const reason = e.name === 'AbortError' ? 'timeout' : e.message;
-      detail.textContent = 'Status unavailable: ' + reason + '. Start with: cd dashboard/crosslisting && pnpm dev';
-    }
-  }
-}
+              + (up ? '' : ' Start with: cd mission-control/crosslisting-os && npm run dev');
+          }
+        } catch (e) {
+          badge.textContent = 'DOWN';
+          badge.className = 'voice-status voice-status-error';
+          if (detail) {
+            const reason = e.name === 'AbortError' ? 'timeout' : e.message;
+            detail.textContent = 'Status unavailable: ' + reason + '. Start with: cd mission-control/crosslisting-os && npm run dev';
+          }
+        }
+      }
 
 function initCrosslisting() {
   document.querySelector('#crosslisting-refresh')?.addEventListener('click', probeCrosslisting);
