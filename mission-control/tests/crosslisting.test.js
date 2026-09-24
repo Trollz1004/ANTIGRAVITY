@@ -116,4 +116,19 @@ describe('Crosslisting package is local + no-login ready', () => {
     expect(pkg.scripts.dev).not.toMatch(/^NODE_ENV=/)
     expect(pkg.scripts.dev).toContain('tsx')
   })
+
+  it('AI Curb Scout router and page exist with hard rules (Price <= $10, Photo Required)', () => {
+    const curbRouter = fs.readFileSync(path.join(pkgRoot, 'server', 'routers', 'curbAlerts.ts'), 'utf-8')
+    const curbPage = fs.readFileSync(path.join(pkgRoot, 'client', 'src', 'pages', 'CurbAlerts.tsx'), 'utf-8')
+    const appRouter = fs.readFileSync(path.join(pkgRoot, 'server', 'routers.ts'), 'utf-8')
+
+    expect(curbRouter).toContain('maxPrice: z.number().max(10)')
+    expect(curbRouter).toContain('hasPhotoOnly: z.boolean()')
+    expect(curbRouter).toContain('importToCatalog')
+
+    expect(curbPage).toContain('AI Curb Scout & Free Finder')
+    expect(curbPage).toContain('Import & Crosslist')
+
+    expect(appRouter).toContain('curbAlerts: curbAlertsRouter')
+  })
 })

@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { startLogin } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { Activity, BookOpenCheck, Bot, Boxes, LayoutDashboard, ListChecks, LogOut, PanelLeft, ScrollText, Settings, Warehouse } from "lucide-react";
+import { Activity, BookOpenCheck, Bot, Boxes, LayoutDashboard, ListChecks, LogOut, PanelLeft, ScrollText, Settings, Sparkles, Warehouse } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -30,6 +30,7 @@ import { Button } from "./ui/button";
 const menuItems = [
   { icon: LayoutDashboard, label: "Control Room", path: "/" },
   { icon: Boxes, label: "Catalog", path: "/catalog" },
+  { icon: Sparkles, label: "AI Curb Scout", path: "/curb-alerts" },
   { icon: Warehouse, label: "Inventory", path: "/inventory" },
   { icon: ListChecks, label: "Listing Desk", path: "/listings" },
   { icon: ScrollText, label: "Activity", path: "/activity" },

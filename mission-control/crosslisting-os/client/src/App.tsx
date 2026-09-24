@@ -13,6 +13,7 @@ import Controls from "./pages/Controls";
 import Inventory from "./pages/Inventory";
 import Credits from "./pages/Credits";
 import ActivityLedger from "./pages/ActivityLedger";
+import CurbAlerts from "./pages/CurbAlerts";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -20,6 +21,7 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/catalog"} component={Catalog} />
+      <Route path={"/curb-alerts"} component={CurbAlerts} />
       <Route path={"/inventory"} component={Inventory} />
       <Route path={"/credits"} component={Credits} />
       <Route path={"/activity"} component={ActivityLedger} />
