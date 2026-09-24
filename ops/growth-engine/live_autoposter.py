@@ -119,14 +119,14 @@ def record_live_post(platform: str, title: str, url: str, status: str):
 
 
 def run_live_campaign():
-    """Execute a single live marketing pass."""
+    """Execute a single live marketing pass via port 9223."""
     log.info("=== STARTING LIVE MARKETING PASS FOR YOUANDINOTAI.COM ===")
 
-    chrome_proc = start_chrome_cdp(9223)
     try:
         from playwright.sync_api import sync_playwright
 
         with sync_playwright() as p:
+            log.info("Connecting to active Chrome CDP on port 9223...")
             browser = p.chromium.connect_over_cdp("http://127.0.0.1:9223")
             context = browser.contexts[0]
             page = context.new_page()
@@ -142,93 +142,48 @@ def run_live_campaign():
                 url="https://youandinotai.com",
                 status="VERIFIED_UP",
             )
+            page.close()
+
+            # 2. Check Facebook Groups
+            try:
+                log.info("Checking Facebook Groups tab...")
+                fb_page = context.new_page()
+                fb_page.goto("https://www.facebook.com/groups/search/groups/?q=singles%20dating", timeout=30000)
+                time.sleep(2)
+                record_live_post(
+                    platform="facebook_groups",
+                    title="Singles Dating Groups Search",
+                    url=fb_page.url,
+                    status="ACTIVE_TAB",
+                )
+                fb_page.close()
+            except Exception as e:
+                log.error(f"FB Groups check error: {e}")
 
             # Pick a campaign template
             campaign = MARKETING_CAMPAIGNS[0]
 
-            # 2. Hacker News Submission check/attempt
-            try:
-                log.info("Navigating to Hacker News submit page...")
-                page.goto("https://news.ycombinator.com/submit", timeout=30000)
-                time.sleep(2)
-                if "login" in page.url.lower():
-                    log.warning("Hacker News requires login to submit link.")
-                    record_live_post(
-                        platform="hacker_news",
-                        title=campaign["hn_title"],
-                        url="https://news.ycombinator.com/submit",
-                        status="LOGIN_REQUIRED",
-                    )
-                else:
-                    title_elem = page.locator('input[name="title"]')
-                    url_elem = page.locator('input[name="url"]')
-                    if title_elem.is_visible() and url_elem.is_visible():
-                        title_elem.fill(campaign["hn_title"])
-                        url_elem.fill("https://youandinotai.com")
-                        # Submit
-                        page.locator('input[type="submit"]').click()
-                        time.sleep(3)
-                        record_live_post(
-                            platform="hacker_news",
-                            title=campaign["hn_title"],
-                            url=page.url,
-                            status="SUBMITTED",
-                        )
-            except Exception as e:
-                log.error(f"HN submission attempt error: {e}")
-
-            # 3. Dev.to submission check/attempt
-            try:
-                log.info("Navigating to Dev.to new post page...")
-                page.goto("https://dev.to/new", timeout=30000)
-                time.sleep(2)
-                if "enter" in page.url.lower() or "login" in page.url.lower():
-                    log.warning("Dev.to requires login.")
-                    record_live_post(
-                        platform="devto",
-                        title=campaign["title"],
-                        url="https://dev.to/new",
-                        status="LOGIN_REQUIRED",
-                    )
-                else:
-                    # Fill Dev.to post
-                    record_live_post(
-                        platform="devto",
-                        title=campaign["title"],
-                        url=page.url,
-                        status="SUBMITTED",
-                    )
-            except Exception as e:
-                log.error(f"Dev.to attempt error: {e}")
-
-            # 4. Reddit submission check
+            # 3. Reddit submission check
             for sub in campaign["reddit_subreddits"][:2]:
                 try:
                     sub_url = f"https://www.reddit.com/r/{sub}/submit"
                     log.info(f"Checking Reddit submission at {sub_url}...")
-                    page.goto(sub_url, timeout=30000)
+                    red_page = context.new_page()
+                    red_page.goto(sub_url, timeout=30000)
                     time.sleep(2)
-                    if "login" in page.url.lower() or "register" in page.url.lower():
-                        log.warning(f"Reddit r/{sub} requires login.")
-                        record_live_post(
-                            platform=f"reddit_r_{sub}",
-                            title=campaign["title"],
-                            url=sub_url,
-                            status="LOGIN_REQUIRED",
-                        )
-                    else:
-                        record_live_post(
-                            platform=f"reddit_r_{sub}",
-                            title=campaign["title"],
-                            url=page.url,
-                            status="SUBMITTED",
-                        )
+                    record_live_post(
+                        platform=f"reddit_r_{sub}",
+                        title=campaign["title"],
+                        url=red_page.url,
+                        status="ACTIVE_TAB",
+                    )
+                    red_page.close()
                 except Exception as e:
                     log.error(f"Reddit r/{sub} attempt error: {e}")
 
             browser.close()
-    finally:
-        chrome_proc.terminate()
+    except Exception as e:
+        log.error(f"CDP pass error: {e}")
 
     log.info("=== LIVE MARKETING PASS COMPLETE ===")
 
