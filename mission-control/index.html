@@ -397,7 +397,7 @@
           <div id="jarvis-hud">
             <div class="jarvis-center">
               <div class="jarvis-title">JARVIS</div>
-              <div class="jarvis-identity">Claude Code on this node — repo-aware, house-context aware, plan-mode ceiling</div>
+              <div class="jarvis-identity">Hermes Agent on this node — JARVIS Mission Control</div>
               <div class="jarvis-state-badge"><span class="jarvis-dot jarvis-dot-idle"></span><span class="jarvis-state">IDLE</span></div>
             </div>
           </div>
@@ -409,11 +409,11 @@
             <button id="jarvis-mic" class="btn primary">🎙 Talk</button>
             <button id="jarvis-conv-stop" class="btn" type="button" aria-label="Stop conversation" hidden></button>
             <button id="jarvis-stop" class="btn">Stop</button>
-            <select id="jarvis-brain" class="select-input" title="Brain shortcuts: OmniRoute (1), Claude CLI (2), Ollama (3), Hermes (4)">
-              <option value="omni" data-key="1">OmniRoute (1)</option>
-              <option value="claude" data-key="2">Claude CLI (2)</option>
-              <option value="ollama" data-key="3">Ollama (local) (3)</option>
-              <option value="hermes" data-key="4">Hermes (4)</option>
+            <select id="jarvis-brain" class="select-input" title="Brain shortcuts: Hermes (1), OmniRoute (2), Claude CLI (3), Ollama (4)">
+              <option value="hermes" data-key="1" selected>Hermes (1)</option>
+              <option value="omni" data-key="2">OmniRoute (2)</option>
+              <option value="claude" data-key="3">Claude CLI (3)</option>
+              <option value="ollama" data-key="4">Ollama (local) (4)</option>
             </select>
             <span id="jarvis-brain-status" class="voice-status voice-status-idle">—</span>
             <input type="text" id="jarvis-input" placeholder="Or type to JARVIS..." class="chat-input" />

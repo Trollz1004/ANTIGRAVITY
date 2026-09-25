@@ -26,7 +26,7 @@ export const BRAINS = ['omni', 'claude', 'ollama', 'hermes'];
 
 const jarvis = {
   state: 'idle', // idle | listening | thinking | speaking
-  brain: 'omni',
+  brain: 'hermes',
   ownerName: '',
   claude: { sessionId: '' },
   history: [

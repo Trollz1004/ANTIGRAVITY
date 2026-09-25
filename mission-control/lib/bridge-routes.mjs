@@ -186,7 +186,7 @@ export async function handleBridgeRoutes(req, res, deps = {}) {
     let out = ''; let err = '';
     let child;
     try {
-      child = spawn(bin, ['chat', '--query-file', file, '-Q', '--oneshot', '-c', session, '--create-if-missing'], { cwd: cfg.repo, env: process.env, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
+      child = spawn(bin, ['chat', '--query-file', file, '-Q', '--oneshot', '-c', session, '--create-if-missing'], { cwd: cfg.repo, env: process.env, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true, shell: process.platform === 'win32' });
     } catch (e) {
       try { unlinkSync(file); } catch {}
       json(res, 500, { error: String(e.message || e) });
