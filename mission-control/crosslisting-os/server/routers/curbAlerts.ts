@@ -24,6 +24,42 @@ export interface CurbItem {
 // Simulated real-time local curb alert & under-$10 finder feeds
 const MOCK_CURB_ITEMS: CurbItem[] = [
   {
+    id: "curb-106",
+    title: "BULK WHOLESALE Resale Lot: 15 Vintage Video Games ($10)",
+    description: "Clearing out storage locker! Bulk wholesale liquidation lot of PS2/Xbox vintage games. Only $10 for the whole lot. Quick resale profit.",
+    price: 10,
+    imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
+    source: "Craigslist",
+    location: "Metro Area",
+    postedTime: "5 mins ago",
+    itemUrl: "https://craigslist.org/bar/curb-106",
+    aiFlipAnalysis: {
+      estimatedResalePrice: 150.0,
+      estimatedProfit: 140.0,
+      recommendation: "HIGH PROFIT FLIP",
+      suggestedPlatforms: ["eBay", "Mercari"],
+      conditionScore: "8.5/10",
+    },
+  },
+  {
+    id: "curb-107",
+    title: "FREE Bulk Resale Mystery Box - Designer Clothes",
+    description: "Box of 12 gently used brand name apparel items (Nike, Levi's, Gap). Free on curb for resale or personal use.",
+    price: 0,
+    imageUrl: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80",
+    source: "Freebie App",
+    location: "Oak Park",
+    postedTime: "15 mins ago",
+    itemUrl: "https://freebieapp.com/item/107",
+    aiFlipAnalysis: {
+      estimatedResalePrice: 180.0,
+      estimatedProfit: 180.0,
+      recommendation: "HIGH PROFIT FLIP",
+      suggestedPlatforms: ["Poshmark", "eBay", "Depop"],
+      conditionScore: "9/10",
+    },
+  },
+  {
     id: "curb-101",
     title: "FREE Vintage Solid Oak Nightstand - Curb Alert",
     description: "Solid oak nightstand left at curb on Elm Street. Minor surface scratch on top, easily refinished. Must pick up today.",
@@ -121,7 +157,7 @@ export const curbAlertsRouter = router({
       z.object({
         zipCode: z.string().optional(),
         maxPrice: z.number().max(10).default(10),
-        keywords: z.string().default("curb alert, free"),
+        keywords: z.string().default("curb alert, free, bulk, wholesale, resale, liquidation"),
         hasPhotoOnly: z.boolean().default(true),
         source: z.enum(["all", "craigslist", "facebook_marketplace", "freebie_apps"]).default("all"),
       })

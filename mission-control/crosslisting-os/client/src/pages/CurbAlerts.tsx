@@ -11,7 +11,7 @@ import { Sparkles, DollarSign, Image as ImageIcon, ExternalLink, ArrowRight, Che
 import { toast } from "sonner";
 
 export default function CurbAlerts() {
-  const [keywords, setKeywords] = useState("curb alert, free");
+  const [keywords, setKeywords] = useState("curb alert, free, bulk, wholesale, resale");
   const [maxPrice, setMaxPrice] = useState<number>(10);
   const [source, setSource] = useState<"all" | "craigslist" | "facebook_marketplace" | "freebie_apps">("all");
   const [importedIds, setImportedIds] = useState<Set<string>>(new Set());
