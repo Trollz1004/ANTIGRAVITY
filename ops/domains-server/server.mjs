@@ -19,7 +19,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
 const DOMAINS_ROOT = path.join(REPO_ROOT, "domains");
 
-const HOST = "127.0.0.1";
+// Ruled 2026-09-28 (Joshua: "use the endpoints always of 192, not localhost"):
+// bind the LAN so http://192.168.0.8:9160/ answers for the screenshot health
+// cron and for JARVIS. Override with DOMAINS_SERVER_HOST when needed.
+const HOST = process.env.DOMAINS_SERVER_HOST || "0.0.0.0";
 const PORT = Number(process.env.DOMAINS_SERVER_PORT || 9160);
 
 // Host header -> document root (relative to DOMAINS_ROOT).

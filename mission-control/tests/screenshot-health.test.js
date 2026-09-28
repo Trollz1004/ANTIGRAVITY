@@ -13,6 +13,8 @@ describe('lib/screenshot-health.mjs — targets', () => {
     for (const id of ['jarvis', 'domains-server', 'dashboard-aidoesitall', 'youandinotai', 'untilnokidinneed', 'untilnokidinneed-dao', 'dream-online-net', 'ai-solutions-store', 'onlinerecycle-net']) expect(ids).toContain(id)
     for (const x of t) { expect(x.id).toMatch(/^[a-z0-9-]+$/); expect(x.url).toMatch(/^https?:\/\//); expect(typeof x.identity).toBe('string') }
     expect(t.find((x) => x.id === 'dashboard-aidoesitall').access).toBe(true)
+    // Joshua, 2026-09-28: LAN endpoints (192.168.0.x) always, never localhost.
+    for (const x of t) expect(x.url).not.toMatch(/127\.0\.0\.1|localhost/)
   })
   it('rejects a target without an identity string (a port answering is not health)', () => {
     expect(() => loadTargets('x.json', { readFile: () => JSON.stringify({ targets: [{ id: 'a', url: 'http://x/' }] }) })).toThrow(/identity/)
