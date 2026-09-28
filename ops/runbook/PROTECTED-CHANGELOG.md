@@ -12,7 +12,11 @@ changed, and the commit that landed it. `.github/CODEOWNERS` and the
 `.claude/hooks/guard-protected-paths.ps1` reminder enforce this
 mechanically; this file is the human-readable record. Newest entries first.
 
-2026-09-28 16:20 UTC | .github/workflows/policy-guard.yml | new job `cockpit-local-only`: fails when the string "Autopilot Cockpit" appears under domains/ (the design handoff's rule that the operator cockpit never reaches a public deploy path; the cockpit lives at tools/cockpit). No other job touched. | this commit
+2026-09-28 16:20 UTC | .github/workflows/policy-guard.yml2026-09-28 17:40 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | §1 item 1 and §6: the date app is not for sale (Joshua, 2026-09-28, withdrawing the September listing); it is marketed by the Emergent lane, affiliate program first; sale bullets kept as history. | this commit
+
+2026-09-28 17:40 UTC | ops/skills/sabretooth-node/SKILL.md (tracked copy) | date-app bullet: not for sale, marketed by the Emergent lane; listings come down on Joshua's click. | this commit
+
+ | new job `cockpit-local-only`: fails when the string "Autopilot Cockpit" appears under domains/ (the design handoff's rule that the operator cockpit never reaches a public deploy path; the cockpit lives at tools/cockpit). No other job touched. | this commit
 
 2026-09-28 16:05 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | Joshua's 2026-09-28 rulings: §1 node allocation (192.168.0.40 Alienware = dev node, 192.168.0.8 Sabretooth = finished-product node, every other box OFF by ruling); §5 screenshot health cron (Hermes runs mission-control/scripts/screenshot-health.mjs every 30 min, JARVIS /api/screenshot-health, "a 200 is not a working page"); §6 date-app marketing lane moved from Hermes to Emergent; §10 Alienware line corrected to Godot 4.7.2 with Unreal parked; §12 domains server now bound to the LAN (192.168.0.8:9160) per Joshua's "endpoints always 192, not localhost" rule. Edited from the cloud judge session on branch claude/design-handoff-0928, landed through a pull request, not through drift on the node. | this commit
 

@@ -6,7 +6,7 @@
 
 Sabretooth runs exactly four things for the business, plus the infrastructure under them:
 
-1. **youandinotai.com** — the date app, FROZEN and FOR SALE. Keep-alive only until the sale closes. Sale state: `ops/sale/`.
+1. **youandinotai.com** — the date app. **Not for sale since 2026-09-28** (Joshua withdrew the September listing: it gets marketed instead, by the Emergent lane, affiliate program first). Features and checkout stay as they are until he rules on them; the sale record in `ops/sale/` is history.
 2. **ai-solutions.store** — the AI Solutions storefront (org `Ai-Solutions-Store`). Served through Cloudflare, not from a local port on this node today; the code and the crosslisting OS live in the org repo.
 3. **onlinerecycle.net** — recycling and crosslisting (OpenCode lane). Served off-node today; it appears in the Sentry target registry so the node reports it, but nothing here starts it.
 4. **JARVIS Mission Control** — the one operator surface, `http://192.168.0.8:9150/`.
@@ -101,7 +101,9 @@ That is the trigger path beyond any timer Claude sets for itself: the machine no
 
 The old `ANTIGRAVITY-Heartbeat-15min` task ran the social growth loop for the date app. It is disabled with the freeze.
 
-## 6. Date app sale, keep-alive rules
+## 6. Date app: not for sale, marketed (ruling 2026-09-28); keep-alive rules
+
+**Ruling 2026-09-28.** Joshua withdrew the sale: the app is marketed, not sold. The Emergent lane runs the marketing under the 2026-09-19 rails, starting with the affiliate program (`ops/handoffs/PROMPT-FOR-EMERGENT-AFFILIATE-2026-09-28.md`). The Afternic, Dan and Atom listings come down on Joshua's click; a buyer who writes gets "withdrawn". The bullets below are the September sale record, kept as history.
 
 - The site and API stay up (stages 5, 6, 7). Nothing else changes: no features, no growth, no digests, no audits, no experiments.
 - Listing is live on Afternic (buy-now $12,500, minimum $8,000) and on Atom (Standard tier, pending Joshua's ownership-verify click). Ownership TXT records are on the Cloudflare zone.

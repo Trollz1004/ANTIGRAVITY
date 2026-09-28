@@ -20,7 +20,7 @@ caught up. Treat this as the lane's first job.
 | Attribution | last-touch, by the affiliate's referral code, for the lifetime of the account it was entered on |
 | Payout | monthly, by Joshua by hand, from the recorded Square settlement; minimum payout $25, balances roll over |
 | Banned | self-referral, referring existing accounts, paid ads in the app's name, spam, any earnings claim ("make $X"), any claim about user counts or revenue that is not in the app's own records |
-| Disclosure to affiliates | the app is listed for sale (`ops/sale/`); the program transfers to a buyer or ends with 30 days notice and every earned balance paid. Say this in the agreement, first page |
+| Term of the program | open-ended. The app is **not for sale** (Joshua, 2026-09-28, withdrawing the September listing). If the program ever ends, it ends with 30 days notice and every earned balance paid. Say this in the agreement, first page |
 
 ## 2. What exists and what does not (real or zero)
 
@@ -39,7 +39,7 @@ caught up. Treat this as the lane's first job.
 
 ## 4. Your deliverables, in order
 
-1. **Affiliate agreement** (`ops/marketing/affiliate/AGREEMENT-DRAFT.md`): the table above in plain English, the sale disclosure on page one, the FTC clause, the ban list, the payout schedule. Proposal to the inbox; the judge lane reviews wording before any affiliate sees it.
+1. **Affiliate agreement** (`ops/marketing/affiliate/AGREEMENT-DRAFT.md`): the table above in plain English, the notice-and-full-payment clause on page one, the FTC clause, the ban list, the payout schedule. Proposal to the inbox; the judge lane reviews wording before any affiliate sees it.
 2. **Affiliate page copy** for `youandinotai.com/affiliates` (copy only, as a proposal; the page ships as a static page through the normal landing path when approved, not as an app feature).
 3. **Recruiting list** (`ops/marketing/affiliate/PROSPECTS.md`): 50 creators and communities in dating, relationships, and "human-verified" online-safety niches, with the official channel to reach each (creator email, platform partner form). No scraping, no DMs from personal accounts.
 4. **Outreach template** as a proposal; send only through the approved path.
@@ -50,6 +50,6 @@ caught up. Treat this as the lane's first job.
 
 - No feature work on the app, no checkout change, no new payment rail, no discount codes that change the price without Joshua's line.
 - No paid ads. No claims of partnership with any AI company. No numbers that are not in a record.
-- If a prospect asks about the sale: it is listed, it is public, the program survives a sale or ends with notice and full payment.
+- If a prospect asks whether the app is for sale: it is not. The September listing was withdrawn on 2026-09-28; the app is being marketed, and the program is open-ended.
 
 Sign your first journal entry with the date you read this brief.
