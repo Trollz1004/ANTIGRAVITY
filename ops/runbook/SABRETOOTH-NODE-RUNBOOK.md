@@ -11,6 +11,8 @@ Sabretooth runs exactly four things for the business, plus the infrastructure un
 3. **onlinerecycle.net** — recycling and crosslisting (OpenCode lane). Served off-node today; it appears in the Sentry target registry so the node reports it, but nothing here starts it.
 4. **JARVIS Mission Control** — the one operator surface, `http://192.168.0.8:9150/`.
 
+**Node allocation (ruled by Joshua 2026-09-28).** Two nodes run, nothing else. `192.168.0.40` Alienware is the **dev node**: DREAM Online is built and tested there, and only there. `192.168.0.8` Sabretooth (this box) is the **finished-product node**: what is done and public runs here (JARVIS, the domains, the frozen date app, OmniRoute) and the Hermes health cron watches it. Every other node in the old fleet — T5500, the OptiPlex 9020, the i7k worker, the Chromebook, the Mini ASUS — is **OFF by ruling**: not started, not probed as a fault, listed in JARVIS God's Eye as `NODES_OFF` so a missing box reads OFF BY RULING and never DOWN. A design or a runbook that still names those boxes as live is stale.
+
 Everything else that used to run here is either parked, retired, or moved:
 
 | Thing | State | Where it went |
@@ -95,6 +97,8 @@ On RED it does three things in order, and stops at the first that works:
 
 That is the trigger path beyond any timer Claude sets for itself: the machine notices, the machine tries the House, and the judge lane sees the trigger the moment Joshua types `drift`. The unattended model step is available, documented, and off until he turns it on.
 
+**Screenshot health (ruled 2026-09-28: "screen shot verified, not 200 ok").** The port probe above says a service answers; it cannot say a page is right. `mission-control/scripts/screenshot-health.mjs` opens every target in `mission-control/config/screenshot-targets.json` (JARVIS, the domains server, every public domain, the Cloudflare Access sign-in for the dashboard hostname, Hermes as optional) in headless Chromium, keeps one PNG per target under `evidence/health-shots/<date>/` (gitignored), reads the page's visible text, and records UP only when the target's identity string is on the page; a 200 with the wrong page is WRONG SERVICE, a DNS miss is PENDING NAMESERVERS, the Access gate is the expected state for the dashboard hostname. It writes `ops/heartbeat/screenshot-health.json` and one line in `ops/heartbeat/screenshot-health.log` (both gitignored). **Hermes runs it** from its gateway cron every 30 minutes (`node C:\ANTIGRAVITY\mission-control\scripts\screenshot-health.mjs`; the job and its id are recorded in `ops/skills/date-app-hermes-operations/SKILL.md` and Hermes's journal) — that is the lane Hermes keeps on this node now that the date-app marketing lane moved to Emergent. JARVIS reads the result at `/api/screenshot-health` and serves each frame at `/api/screenshot-health/shot/<id>`; until the cron's first run the route reports NOT CONFIGURED, never a sample row. When Playwright is not installed for Node on the node the result file says NOT CONFIGURED and the cron exits 0. This cron is not a healer: it records, and the House stays the only thing that starts or heals a service.
+
 The old `ANTIGRAVITY-Heartbeat-15min` task ran the social growth loop for the date app. It is disabled with the freeze.
 
 ## 6. Date app sale, keep-alive rules
@@ -104,6 +108,7 @@ The old `ANTIGRAVITY-Heartbeat-15min` task ran the social growth loop for the da
 - Eight outreach drafts sit in Joshua's Gmail; he sends them by hand.
 - Inbound goes to joshlcoleman@gmail.com. When a buyer writes, the Claude judge lane prepares the handover: repository export, environment template, deployment notes, registrar transfer. That is the only date-app work permitted.
 - Hermes crons still to stop (Joshua's click in the Hermes gateway): Social Media Auto-Poster, Daily Growth Digest, OmniRoute Social Sub-Agent. Date App Health Monitor stays as keep-alive.
+- **Marketing lane moved (Joshua, 2026-09-28).** No buyer wrote in the week after the unfreeze, so the date-app marketing lane leaves Hermes and goes to the Emergent lane (`.agents/journals/emergent/STATE.md`, a JARVIS Fleet row, NOT CONFIGURED until it has a runtime). The rules do not move: every post is still a JARVIS inbox proposal under the four checks, drafted in the Fable voice, approved by the Fable judge lane, two per brand per day; nothing posts directly. Hermes keeps YouTube and the screenshot health cron (§5). Joshua's standing preference is that the app is sold rather than marketed; marketing continues only because it costs nothing while the listing is up.
 
 ## 7. Model access and secrets
 
@@ -125,7 +130,7 @@ Validation is a House one-pass plus probes, not a reboot. Recorded in the judge 
 
 ## 10. Where DREAM Online goes from here
 
-Not this node. Alienware runs Unreal, Hermes with the game skills, and the world engine. This node contributes: the dispatch (`ops/handoffs/HERMES-DISPATCH-DREAM-WORLD-ENGINE.md`), the crowdfund package (`ops/marketing/dream-online-crowdfund/`), the Open Collective, and Claude's design sessions with Joshua. A separate Claude runbook for Alienware is the next document, written there.
+Not this node. Alienware (`192.168.0.40`, the dev node by the 2026-09-28 ruling) runs Godot 4.7.2 (the engine decision of 2026-09-20 in the game repo), Hermes with the game skills, and the world engine; Unreal stays parked there for cinematics and reference. This node contributes: the dispatch (`ops/handoffs/HERMES-DISPATCH-DREAM-WORLD-ENGINE.md`), the crowdfund package (`ops/marketing/dream-online-crowdfund/`), the Open Collective, and Claude's design sessions with Joshua. A separate Claude runbook for Alienware is the next document, written there.
 
 ## 11. Remote access (VS Code dev tunnel)
 

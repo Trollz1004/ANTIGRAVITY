@@ -12,6 +12,10 @@ changed, and the commit that landed it. `.github/CODEOWNERS` and the
 `.claude/hooks/guard-protected-paths.ps1` reminder enforce this
 mechanically; this file is the human-readable record. Newest entries first.
 
+2026-09-28 16:05 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | Joshua's 2026-09-28 rulings: §1 node allocation (192.168.0.40 Alienware = dev node, 192.168.0.8 Sabretooth = finished-product node, every other box OFF by ruling); §5 screenshot health cron (Hermes runs mission-control/scripts/screenshot-health.mjs every 30 min, JARVIS /api/screenshot-health, "a 200 is not a working page"); §6 date-app marketing lane moved from Hermes to Emergent; §10 Alienware line corrected to Godot 4.7.2 with Unreal parked. Edited from the cloud judge session on branch claude/design-handoff-0928, landed through a pull request, not through drift on the node. | this commit
+
+2026-09-28 16:05 UTC | ops/skills/sabretooth-node/SKILL.md (tracked copy only; the user copy at C:\Users\joshi\.claude\skills\sabretooth-node\SKILL.md is NOT synced from the cloud — the next drift session on the node copies it byte-identical) | three new bullets after Hardware: node allocation ruling, screenshot health rule, marketing lane moved to Emergent with Genspark as a helper lane | this commit
+
 2026-09-20 16:35 EDT | ops/skills/sabretooth-node/SKILL.md (both copies), drop box PROMPT-FOR-HERMES-MARKETING-2026-09-20.md | date-app bullet now carries the 2026-09-19 marketing unfreeze and Joshua's approval delegation to the Fable lane; new Hermes marketing brief written to the drop box; same wording fix in CLAUDE.md and the Hermes date-app skill | this commit
 
 2026-09-19 21:56 EDT | scripts/drift.cmd | added ONE new subcommand "reddit-setup" (specs/010-social-publish-pipeline, unit 4), dispatching to `node mission-control/scripts/reddit-setup.mjs`; copied byte-identical to C:\Users\joshi\.local\bin\drift.cmd (diff-verified) — no other line in this file touched | db5865b9

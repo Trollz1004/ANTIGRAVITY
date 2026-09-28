@@ -4,9 +4,22 @@
  * the caller injects fetch, so tests never touch the network.
  */
 export const NODES = [
-  { id: 'alienware', name: 'Alienware', ip: '192.168.0.40', role: 'JARVIS host · Dream Online MMO · Hermes · Ollama (RX 6800)' },
-  { id: 'sabertooth', name: 'Sabertooth', ip: '192.168.0.8', role: 'OmniRoute router · Sentry · Revenue stack (Date App, Directus, Ludus)' },
+  { id: 'alienware', name: 'Alienware', ip: '192.168.0.40', role: 'DEV node (ruled 2026-09-28) · DREAM Online build and test · Hermes game skills · Ollama (RX 6800)' },
+  { id: 'sabertooth', name: 'Sabertooth', ip: '192.168.0.8', role: 'FINISHED PRODUCT node (ruled 2026-09-28) · JARVIS :9150 · OmniRoute · date app keep-alive · domains :9160 · Hermes health cron' },
   { id: 'public-web', name: 'Public web', ip: 'internet', role: 'Landing pages · DNS should be Cloudflare' },
+];
+
+/**
+ * Nodes that are OFF by ruling (Joshua, 2026-09-28): only Alienware (dev) and
+ * Sabretooth (finished product) run. These are listed so God's Eye can say
+ * OFF BY RULING instead of DOWN, and so nobody re-adds a probe for them.
+ */
+export const NODES_OFF = [
+  { id: 't5500', name: 'T5500', reason: 'off by ruling 2026-09-28' },
+  { id: 'optiplex-9020', name: 'OptiPlex 9020', reason: 'off by ruling 2026-09-28' },
+  { id: 'i7k', name: 'i7k (1050 Ti worker)', reason: 'off by ruling 2026-09-28' },
+  { id: 'chromebook', name: 'Chromebook', reason: 'off by ruling 2026-09-28' },
+  { id: 'mini-asus', name: 'Mini ASUS', reason: 'off by ruling 2026-09-28' },
 ];
 
 import { request as httpRequest } from 'node:http';
@@ -101,7 +114,7 @@ export async function probeAll(opts = {}) {
     });
     return { ...n, services, up: services.filter((s) => s.up).length, total: services.length };
   });
-  return { nodes, services: results, dns, at: new Date().toISOString() };
+  return { nodes, nodesOff: NODES_OFF, services: results, dns, at: new Date().toISOString() };
 }
 
 /** Public domains whose DNS should live on Cloudflare. */
