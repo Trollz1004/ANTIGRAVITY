@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_TARGETS_PATH = join(HERE, '..', 'config', 'screenshot-targets.json');
 
-export const STATES = ['UP', 'DOWN', 'WRONG SERVICE', 'ACCESS SIGN-IN', 'PENDING NAMESERVERS', 'NOT CONFIGURED'];
+export const STATES = ['UP', 'DOWN', 'WRONG SERVICE', 'ACCESS SIGN-IN', 'PENDING NAMESERVERS', 'NO FRAME', 'NOT CONFIGURED'];
 
 export function loadTargets(targetsPath = DEFAULT_TARGETS_PATH, { readFile = readFileSync } = {}) {
   const j = JSON.parse(stripBom(readFile(targetsPath, 'utf8')));
@@ -35,17 +35,22 @@ export function stripBom(text) {
 
 /**
  * The verdict for one loaded page. `observed` is what the runner saw:
- *   { status, finalUrl, title, text, error }
+ *   { status, finalUrl, title, text, error, frame }
  * The rule, in order:
+ *   - frame === false (the PNG could not be taken) -> NO FRAME, never UP:
+ *     the whole point is a frame, so a target without one is not verified
  *   - navigation error naming DNS -> PENDING NAMESERVERS (a domain not yet cut over)
  *   - any other navigation error, or HTTP >= 500 -> DOWN
  *   - the final URL or title is a Cloudflare Access sign-in -> ACCESS SIGN-IN
  *     (UP for a target marked access:true, since the gate IS the expected page)
+ *   - HTTP 4xx (after the Access check) -> WRONG SERVICE, even when the
+ *     branded error page carries the identity string
  *   - identity string in the visible text or title -> UP
  *   - otherwise -> WRONG SERVICE (something answered, but not the page we meant)
  */
 export function verdictOf(target, observed) {
   const o = observed || {};
+  if (o.frame === false) return { state: 'NO FRAME', up: false, detail: 'the page answered but no screenshot could be taken; not verified' + (o.error ? ' (' + String(o.error).split('\n')[0] + ')' : '') };
   const err = String(o.error || '');
   if (err) {
     if (/ERR_NAME_NOT_RESOLVED|ENOTFOUND|getaddrinfo/i.test(err)) return { state: 'PENDING NAMESERVERS', up: false, detail: err };
@@ -57,6 +62,7 @@ export function verdictOf(target, observed) {
   if (/cloudflareaccess\.com/i.test(finalUrl) || /Cloudflare Access/i.test(title)) {
     return { state: 'ACCESS SIGN-IN', up: Boolean(target.access), detail: target.access ? 'Access sign-in page, the expected state' : 'unexpected Access gate' };
   }
+  if (typeof o.status === 'number' && o.status >= 400) return { state: 'WRONG SERVICE', up: false, detail: 'HTTP ' + o.status + ' for the requested route; a branded error page is not the page' };
   const hay = (title + '\n' + String(o.text || ''));
   if (hay.toLowerCase().includes(String(target.identity).toLowerCase())) return { state: 'UP', up: true, detail: 'identity "' + target.identity + '" visible' };
   return { state: 'WRONG SERVICE', up: false, detail: 'HTTP ' + (o.status ?? '?') + ' answered but "' + target.identity + '" is not on the page' };

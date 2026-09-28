@@ -20,6 +20,7 @@ import { mkdirSync, writeFileSync, appendFileSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { delimiter as PATH_DELIMITER } from 'node:path';
 import { loadTargets, verdictOf, summarize, DEFAULT_TARGETS_PATH } from '../lib/screenshot-health.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -40,7 +41,7 @@ const timeoutMs = Number(arg('timeout', '30000'));
 
 function resolvePlaywright() {
   const req = createRequire(import.meta.url);
-  const candidates = [null, ...(process.env.NODE_PATH ? process.env.NODE_PATH.split(/[;:]/) : [])];
+  const candidates = [null, ...(process.env.NODE_PATH ? process.env.NODE_PATH.split(PATH_DELIMITER) : [])];
   for (const base of candidates) {
     try {
       const spec = base ? join(base, 'playwright') : 'playwright';
@@ -76,7 +77,13 @@ async function main() {
   // such a target gets its own browser whose resolver maps that hostname to
   // the target's IP, and the page is opened as http://<host>:<port>/ — the
   // same request the tunnel makes.
-  const plain = await pw.chromium.launch({ headless: true });
+  let plain;
+  try {
+    plain = await pw.chromium.launch({ headless: true });
+  } catch (e) {
+    writeResult({ at, state: 'NOT CONFIGURED', detail: 'chromium could not launch: ' + String((e && e.message) || e).split('\n')[0] + ' (npx playwright install chromium)', targets: [], summary: summarize([]) });
+    return;
+  }
   const results = [];
   const extra = [];
   try {
@@ -85,7 +92,12 @@ async function main() {
       let openUrl = t.url;
       if (t.host) {
         const u = new URL(t.url);
-        browser = await pw.chromium.launch({ headless: true, args: ['--host-resolver-rules=MAP ' + t.host + ' ' + u.hostname] });
+        try {
+          browser = await pw.chromium.launch({ headless: true, args: ['--host-resolver-rules=MAP ' + t.host + ' ' + u.hostname] });
+        } catch (e) {
+          results.push({ id: t.id, label: t.label, url: t.url, group: t.group || null, optional: Boolean(t.optional), access: Boolean(t.access), state: 'DOWN', up: false, detail: 'chromium could not launch for the vhost target: ' + String((e && e.message) || e).split('\n')[0], status: null, title: null, textChars: 0, latencyMs: 0, shot: null });
+          continue;
+        }
         extra.push(browser);
         openUrl = u.protocol + '//' + t.host + (u.port ? ':' + u.port : '') + u.pathname + u.search;
       }
@@ -106,6 +118,7 @@ async function main() {
       }
       let shotOk = false;
       try { await page.screenshot({ path: shot, fullPage: false }); shotOk = true; } catch { /* no frame */ }
+      observed.frame = shotOk;
       const v = verdictOf(t, observed);
       results.push({ id: t.id, label: t.label, url: t.url, group: t.group || null, optional: Boolean(t.optional), access: Boolean(t.access), ...v, status: observed.status, title: observed.title, textChars: observed.text ? observed.text.length : 0, latencyMs: Date.now() - t0, shot: shotOk ? shot : null });
       await context.close();

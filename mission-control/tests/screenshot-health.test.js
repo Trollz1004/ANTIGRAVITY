@@ -27,11 +27,17 @@ describe('lib/screenshot-health.mjs — verdict rule', () => {
   it('UP only when the identity is in the visible text or title', () => {
     expect(verdictOf(t, { status: 200, text: 'welcome to Until No Kid In Need', title: 'x' }).state).toBe('UP')
     expect(verdictOf(t, { status: 200, text: 'parking page', title: 'IONOS' }).state).toBe('WRONG SERVICE')
+    // a branded 404/403 that still carries the identity is not the page
+    expect(verdictOf(t, { status: 404, text: 'Until No Kid In Need — page not found', title: 'x' })).toMatchObject({ state: 'WRONG SERVICE', up: false })
   })
   it('a 200 with the wrong page is WRONG SERVICE, a 5xx is DOWN, a DNS failure is PENDING NAMESERVERS', () => {
     expect(verdictOf(t, { status: 503, text: 'Until No Kid In Need' }).state).toBe('DOWN')
     expect(verdictOf(t, { error: 'page.goto: net::ERR_NAME_NOT_RESOLVED at https://a/' }).state).toBe('PENDING NAMESERVERS')
     expect(verdictOf(t, { error: 'page.goto: net::ERR_CONNECTION_REFUSED' }).state).toBe('DOWN')
+  })
+  it('a page with the identity but no frame is NO FRAME, never UP (the frame is the verification)', () => {
+    expect(verdictOf(t, { status: 200, text: 'Until No Kid In Need', title: 'x', frame: false })).toMatchObject({ state: 'NO FRAME', up: false })
+    expect(verdictOf(t, { status: 200, text: 'Until No Kid In Need', title: 'x', frame: true }).state).toBe('UP')
   })
   it('a Cloudflare Access sign-in page is the expected UP for an access target and not for others', () => {
     const o = { status: 200, finalUrl: 'https://team.cloudflareaccess.com/cdn-cgi/access/login/x', title: 'Sign in ・ Cloudflare Access', text: '' }
@@ -68,6 +74,10 @@ describe('lib/screenshot-health.mjs — summary and reader', () => {
     expect(src).toContain('screenshot-health.json')
     expect(src).toContain('page.screenshot(')
     expect(src).toContain('document.body.innerText')
+    expect(src).toContain('observed.frame = shotOk')
+    expect(src).toContain('chromium could not launch')
+    expect(src).toContain('split(PATH_DELIMITER)')
+    expect(src).not.toMatch(/split\(\/\[;:\]\/\)/)
   })
 })
 
@@ -82,5 +92,21 @@ describe('JARVIS wiring — /api/screenshot-health', () => {
     const gi = fs.readFileSync(path.join(root, '..', '.gitignore'), 'utf8')
     expect(gi).toContain('ops/heartbeat/screenshot-health.json')
     expect(gi).toContain('ops/heartbeat/screenshot-health.log')
+  })
+})
+
+describe('JARVIS wiring — /cockpit/ (tools/cockpit served same-origin, path-safe)', () => {
+  const server = fs.readFileSync(path.join(root, 'server.mjs'), 'utf8')
+  it('serves tools/cockpit under /cockpit/ with a containment check, and /api/nodes carries nodesOff', () => {
+    expect(server).toContain("p.startsWith('/cockpit/')")
+    expect(server).toContain("resolve(REPO, 'tools', 'cockpit')")
+    expect(server).toContain("if (!full.startsWith(root + sep)) return send(res, 403")
+    expect(fs.existsSync(path.join(root, '..', 'tools', 'cockpit', 'index.html'))).toBe(true)
+    const app = fs.readFileSync(path.join(root, 'js', 'app.js'), 'utf8')
+    const jarvis = fs.readFileSync(path.join(root, 'js', 'jarvis', 'jarvis.js'), 'utf8')
+    expect(app).toContain('data.nodesOff')
+    expect(jarvis).toContain('nodesOff')
+    expect(app).toContain('OFF BY RULING')
+    expect(jarvis).toContain('OFF BY RULING')
   })
 })

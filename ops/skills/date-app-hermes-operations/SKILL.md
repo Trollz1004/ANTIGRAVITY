@@ -17,7 +17,9 @@ Load this skill at session start, after compaction, and whenever context is lost
 
 ## Authority
 
-Joshua granted **full autonomy** over youandinotai.com (date app) and its marketing. He is not making date-app decisions. Do not wait for approval on marketing, HTML, infrastructure, or product changes that are free.
+**Revised 2026-09-28 (Joshua).** Hermes no longer holds date-app authority. The marketing lane went to Emergent (`.agents/journals/emergent/STATE.md`, brief `ops/handoffs/PROMPT-FOR-EMERGENT-AFFILIATE-2026-09-28.md`); features and checkout stay as they are until Joshua rules; the app is not for sale. Hermes's standing on this node is three things only: keep the date app up (health monitor cron), run the screenshot health cron, and the YouTube automation lane. No marketing, HTML, infrastructure or product change to the date app from this seat, free or not.
+
+The paragraph below is the grant of 2026-09-16 and is kept as history: *Joshua granted full autonomy over youandinotai.com (date app) and its marketing. He is not making date-app decisions. Do not wait for approval on marketing, HTML, infrastructure, or product changes that are free.*
 
 **Escalate to Claude (judge lane) only if** `https://youandinotai.com`, `https://api.youandinotai.com`, or the Cloudflare tunnel is down **and** the 15-minute monitor cannot heal it.
 

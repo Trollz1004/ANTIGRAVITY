@@ -44,6 +44,7 @@
  *   GET  /api/fleet             Fleet panel (Phase D): Hermes/OpenClaw/OpenCode status, current task, queue depth, token spend
  *   GET  /api/screenshot-health  Screenshot health (2026-09-28): per-target frame-verified verdict from the Hermes cron's result file; NOT CONFIGURED until it runs
  *   GET  /api/screenshot-health/shot/:id  the latest PNG for one target id (served only from evidence/health-shots)
+ *   GET  /cockpit/                 the local-only operator cockpit (tools/cockpit), same origin as /api/nodes
  *   GET  /api/architecture.json Architecture panel (Phase E): typed JSON of the live Sabertooth stack (House stage table + health JSON)
  *   GET  /api/architecture      Architecture panel: archify-rendered HTML (same-origin), plain-text fallback on CLI failure
  *   GET  /api/architecture/diff?base=&head= before/after architecture diff for a commit range (archify compare)
@@ -1019,6 +1020,19 @@ createServer(async (req, res) => {
     });
   }
 
+  // Operator cockpit (tools/cockpit, local only): served here so it shares this
+  // origin with /api/nodes and can read cockpit.local.json over HTTP. Never
+  // under domains/; the LAN and the Access-gated dashboard hostname only.
+  if (p === '/cockpit' ) { res.writeHead(302, { location: '/cockpit/' }); return res.end(); }
+  if (p.startsWith('/cockpit/')) {
+    const root = resolve(REPO, 'tools', 'cockpit');
+    const rel = p === '/cockpit/' ? 'index.html' : p.slice('/cockpit/'.length);
+    const full = resolve(root, rel);
+    if (!full.startsWith(root + sep)) return send(res, 403, { error: 'forbidden' });
+    if (!existsSync(full) || statSync(full).isDirectory()) return send(res, 404, { error: 'not found' });
+    res.writeHead(200, { 'content-type': MIME[extname(full).toLowerCase()] || 'application/octet-stream', 'cache-control': 'no-store' });
+    return res.end(readFileSync(full));
+  }
   if (p === '/' || p === '/index.html') return serveStatic(res, '/index.html');
   if (p === '/data/' || p.startsWith('/data/')) return send(res, 404, { error: 'not found' }); // JARVIS memory stays server-side
   if (p.startsWith('/api/')) return send(res, 404, { error: 'no such route' });

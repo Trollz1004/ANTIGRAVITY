@@ -46,9 +46,11 @@ dating app. Its code moved here in part 2 of the consolidation, 2026-09-17:
 `domains/youandinotai.com/backend` (was `backend/fastapi-app`) and
 `domains/youandinotai.com/frontend` (was `frontend/react-app`), reachable
 through a Cloudflare tunnel mapping the domain to `:3200` and `api.` to
-`:8000`. State: **live, not for sale** — Joshua withdrew the 2026-09-16 listing on
-2026-09-28; the app is marketed by the Emergent lane (affiliate program
-first). Features and checkout unchanged until he rules on them.
+`:8000`. State: **live, not for sale** — Joshua decided on 2026-09-28 not to sell; taking
+the Afternic, Dan and Atom listings down is still his click, so a buyer who
+writes in the meantime gets "withdrawn". The app is marketed by the Emergent
+lane (affiliate program first). Features and checkout unchanged until he rules
+on them.
 
 **aidoesitall.website** (`domains/aidoesitall.website/README.md`, pointer
 only) has no app code in this repo. Its apex and `www` are verified live on

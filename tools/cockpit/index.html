@@ -693,13 +693,13 @@
 
       <!-- ── Autopilot hero ── -->
       <div class="card autopilot span-12">
-        <div class="ap-eye"><span id="ap-eye-text">◆ AUTOPILOT STATE · BASED ON <span id="ep-count">–</span>-ENDPOINT FLEET POLL</span></div>
+        <div class="ap-eye"><span id="ap-eye-text">◆ AUTOPILOT STATE · BASED ON JARVIS MISSION CONTROL SERVICE POLL</span></div>
         <div class="ap-state" id="ap-state">
           <span class="blink-dot"></span>
           <span class="label" id="ap-label">CHECKING…</span>
         </div>
         <div class="ap-meta" id="ap-meta">
-          <strong id="reach-count">0</strong> / <strong id="ep-total">–</strong> ENDPOINTS REACHABLE · <strong id="nodes-up-hero">0</strong> / 2 NODES UP · LAST PATROL <strong id="last-patrol">—</strong>
+          <strong id="reach-count">0</strong> / <strong id="ep-total">–</strong> SERVICES UP · <strong id="nodes-up-hero">0</strong> / 2 NODES UP · LAST PATROL <strong id="last-patrol">—</strong>
         </div>
         <div class="ap-actions">
           <button class="btn primary" id="btn-patrol-now">⟳ Patrol now</button>
@@ -791,7 +791,7 @@
           <!-- rows injected by JS -->
         </div>
         <div class="footer-note" style="margin-top: 14px; padding: 12px; text-align: left;">
-          Watchdog polls each LAN endpoint every 5 seconds with a no-cors fetch; a blocked cross-origin read shows as REACHED (opaque), not as a green. Serve this page from JARVIS or a local static server on the same LAN to read real status codes.
+          The watchdog reads JARVIS Mission Control's identity-checked probe API (/api/nodes) every 5 seconds; this page never probes ports itself. If JARVIS is unreachable every row says so and the state is OFFLINE.
         </div>
       </div>
 
@@ -948,7 +948,12 @@
     open();
   });
 
-  if (pass === 'ok') initWatchdog();
+  // Deferred to DOMContentLoaded: this IIFE runs while the script is still
+  // being evaluated top-to-bottom, before later const/let bindings
+  // (pollTimer, previousServiceState, etc.) are initialized. Calling
+  // initWatchdog() directly here would hit those while still in their
+  // temporal dead zone and throw before the rest of the script runs.
+  if (pass === 'ok') document.addEventListener('DOMContentLoaded', initWatchdog, { once: true });
 })();
 
 // ─────────────────────────────────────────────────────────────
@@ -963,7 +968,7 @@
   // Classifies where the page itself was loaded from. Every endpoint this
   // cockpit polls is a 192.168.0.x address (ruled 2026-09-28); loopback is
   // named here only to label the origin of the page, never as a target.
-  const isLoopback  = ['localhost', '127.0.0.1', '::1'].includes(host);
+  const isLoopback  = host === '::1' || /^127\./.test(host);
   const isLan = /^192\.168\./.test(host) || /^10\./.test(host) || /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(host);
   let label = 'EXTERNAL ORIGIN'; let cls = 'bad';
   if (isLocalFile)      { label = 'LOCAL FILE (file://)';  cls = 'ok'; }
@@ -985,6 +990,8 @@
 (function loadCrdLinks() {
   const GENERIC_URL = 'https://remotedesktop.google.com/access';
   const GENERIC_LABEL = 'Open CRD console (no local session file)';
+  const FILE_PROTOCOL_LABEL = 'Open CRD console (serve over HTTP to load the session file)';
+  const CRD_URL_PREFIX = 'https://remotedesktop.google.com/';
   const nodes = {
     alienware: {
       btn: document.getElementById('crd-btn-alienware'),
@@ -996,6 +1003,23 @@
     },
   };
 
+  function resetToGeneric(label) {
+    for (const key of Object.keys(nodes)) {
+      const node = nodes[key];
+      if (!node.btn) continue;
+      node.btn.href = GENERIC_URL;
+      const lbl = node.btn.querySelector('.crd-label');
+      if (lbl) lbl.textContent = label;
+    }
+  }
+
+  // Under file:// there is no HTTP server to serve the gitignored session
+  // file from, so don't even try — say so honestly and stop.
+  if (!window.location.protocol.startsWith('http')) {
+    resetToGeneric(FILE_PROTOCOL_LABEL);
+    return;
+  }
+
   fetch('./cockpit.local.json', { cache: 'no-store' })
     .then((r) => { if (!r.ok) throw new Error('no local session file'); return r.json(); })
     .then((data) => {
@@ -1004,7 +1028,10 @@
       for (const key of Object.keys(nodes)) {
         const url = crd[key];
         const node = nodes[key];
-        if (!url || !node.btn) continue;
+        if (!node.btn) continue;
+        // Only ever accept a real CRD session URL — anything else (bad
+        // config, tampered file, wrong shape) is ignored, never followed.
+        if (typeof url !== 'string' || !url.startsWith(CRD_URL_PREFIX)) continue;
         node.btn.href = url;
         const label = node.btn.querySelector('.crd-label');
         if (label) label.textContent = node.liveLabel;
@@ -1013,87 +1040,103 @@
     .catch(() => {
       // No local session file (or it's unreadable): keep the generic CRD
       // buttons and honest "no local session file" label in place.
-      for (const key of Object.keys(nodes)) {
-        const node = nodes[key];
-        if (!node.btn) continue;
-        node.btn.href = GENERIC_URL;
-        const label = node.btn.querySelector('.crd-label');
-        if (label) label.textContent = GENERIC_LABEL;
-      }
+      resetToGeneric(GENERIC_LABEL);
     });
 })();
 
 // ─────────────────────────────────────────────────────────────
-// Watchdog · polls the real two-node LAN fleet, drives autopilot status
+// Watchdog · polls JARVIS Mission Control's own identity-checked probe
+// API (/api/nodes), which sends access-control-allow-origin: *. This page
+// never dials LAN ports itself — cross-origin fetches to arbitrary ports
+// return only opaque, unreadable responses, so a real read has to come
+// from JARVIS, which already knows its own fleet's true state.
 // ─────────────────────────────────────────────────────────────
-const ENDPOINTS = [
-  { id: 'jarvis',       name: 'JARVIS Mission Control',    url: 'http://192.168.0.8:9150/health',              node: 'sabretooth' },
-  { id: 'domains',      name: 'Domains static sites',      url: 'http://192.168.0.8:9160/health',              node: 'sabretooth' },
-  { id: 'omniroute',    name: 'OmniRoute models',          url: 'http://192.168.0.8:20128/api/v1/models',      node: 'sabretooth' },
-  { id: 'dateapp-api',  name: 'Date app API (keep-alive)', url: 'http://192.168.0.8:8000/api/v1/health',       node: 'sabretooth' },
-  { id: 'hermes',       name: 'Hermes dashboard',          url: 'http://192.168.0.8:9119/api/health',          node: 'sabretooth' },
-  { id: 'openclaw',     name: 'OpenClaw gateway',          url: 'http://192.168.0.8:18789/healthz',            node: 'sabretooth' },
-  { id: 'aw-jarvis',    name: 'Alienware JARVIS',          url: 'http://192.168.0.40:9150/health',             node: 'alienware'  },
-  { id: 'aw-npc-lab',   name: 'Alienware Live NPC Lab',    url: 'http://192.168.0.40:9127/health',             node: 'alienware'  },
-  { id: 'aw-bridge',    name: 'Alienware DreamOps Bridge', url: 'http://192.168.0.40:9133/health',             node: 'alienware'  },
-];
-const NODE_IDS = ['alienware', 'sabretooth'];
+const JARVIS_BASE = (location.protocol.startsWith('http') && location.port === '9150') ? '' : 'http://192.168.0.8:9150';
+// JARVIS spells the node id 'sabertooth' (lib/nodes.mjs); accept both spellings.
+const SABRETOOTH_IDS = ['sabertooth', 'sabretooth'];
+const NODE_IDS = ['alienware', ...SABRETOOTH_IDS];
+const FALLBACK_OFF_LIST = ['T5500', 'OptiPlex 9020', 'i7k', 'Chromebook', 'Mini ASUS'];
 
-// Reflect the real endpoint count immediately — never a hand-typed number.
-(function renderStaticCounts() {
-  const epCount = document.getElementById('ep-count');
-  const epTotal = document.getElementById('ep-total');
-  if (epCount) epCount.textContent = String(ENDPOINTS.length);
-  if (epTotal) epTotal.textContent = String(ENDPOINTS.length);
-})();
-
-// Machines that are OFF by ruling (2026-09-28): named so nobody re-adds a probe.
-(function renderOffByRulingList() {
+// Machines that are OFF by ruling (2026-09-28): named so nobody re-adds a
+// probe. Filled from the API's nodesOff when JARVIS answers; falls back to
+// the hard-coded ruling list when JARVIS cannot be reached at all.
+function renderOffByRuling(nodesOff) {
   const el = document.getElementById('off-by-ruling-list');
   if (!el) return;
-  el.textContent = ['T5500', 'OptiPlex 9020', 'i7k', 'Chromebook', 'Mini ASUS'].join(' · ');
-})();
+  if (Array.isArray(nodesOff) && nodesOff.length > 0) {
+    el.textContent = nodesOff.map((n) => (n && n.name) ? n.name : String(n)).join(' · ');
+  } else {
+    el.textContent = FALLBACK_OFF_LIST.join(' · ');
+  }
+}
+renderOffByRuling(null); // pre-poll fallback
 
 let pollTimer = null;
 let cycle = 0;
 let paused = false;
+let inFlight = false;
+let stopped = false; // set by stopWatchdog(); an in-flight patrol checks it before writing the DOM
 let alerts = [];
 const MAX_ALERTS = 60;
+const previousServiceState = {};
+let jarvisReachable = null; // null = no poll yet
 
-function renderWatchRows() {
+function renderWatchRows(services) {
   const list = document.getElementById('watch-list');
   list.innerHTML = '';
-  for (const e of ENDPOINTS) {
+  for (const s of services) {
     const row = document.createElement('div');
     row.className = 'watch-row';
-    row.id = 'wr-' + e.id;
+    row.id = 'wr-' + s.id;
     row.innerHTML =
       '<span class="dot"></span>' +
-      '<div><div class="name">' + e.name + '</div><div class="url">' + e.url + '</div></div>' +
+      '<div><div class="name">' + s.label + '</div><div class="url">' + s.url + '</div></div>' +
       '<span class="lat">—</span>' +
       '<span class="code">—</span>';
     list.appendChild(row);
   }
 }
 
-// Internal probe states: 'ok' (real 2xx-4xx read), 'warn' (opaque / reached
-// but unreadable), 'bad' (down or timed out). CSS only defines .live/.warn/.bad
-// dot classes, so 'ok' renders with the 'live' (green) class — but it is
-// never assigned unless we actually read a response.
-function cssState(state) { return state === 'ok' ? 'live' : state; }
+function renderUnreachableRows() {
+  const list = document.getElementById('watch-list');
+  const rows = list.querySelectorAll('.watch-row');
+  if (rows.length === 0) {
+    const row = document.createElement('div');
+    row.className = 'watch-row';
+    row.id = 'wr-jarvis-unreachable';
+    row.innerHTML =
+      '<span class="dot bad"></span>' +
+      '<div><div class="name">JARVIS Mission Control</div><div class="url">' + JARVIS_BASE + '/api/nodes</div></div>' +
+      '<span class="lat bad">—</span>' +
+      '<span class="code bad">JARVIS UNREACHABLE</span>';
+    list.appendChild(row);
+    return;
+  }
+  for (const row of rows) {
+    const dot = row.querySelector('.dot');
+    const lat = row.querySelector('.lat');
+    const cod = row.querySelector('.code');
+    if (dot) dot.className = 'dot bad';
+    if (lat) { lat.className = 'lat bad'; lat.textContent = '—'; }
+    if (cod) { cod.className = 'code bad'; cod.textContent = 'JARVIS UNREACHABLE'; }
+  }
+}
 
-function setRowState(id, state, latency, code) {
+// Dot/lat classes: CSS defines .live/.warn/.bad, so an UP service renders
+// with the 'live' (green) class, and DOWN / WRONG SERVICE with 'bad' — but
+// 'live' is never assigned unless JARVIS itself reported that service UP.
+function setRowState(id, up, state, latencyMs) {
   const row = document.getElementById('wr-' + id);
   if (!row) return;
-  const cls = cssState(state);
+  const cls = up ? 'live' : 'bad';
   const dot = row.querySelector('.dot');
   const lat = row.querySelector('.lat');
   const cod = row.querySelector('.code');
   dot.className = 'dot ' + cls;
   lat.className = 'lat ' + cls;
-  cod.className = 'code ' + (state === 'bad' ? 'bad' : '');
-  lat.textContent = latency != null ? latency + 'ms' : (state === 'bad' ? '—' : '…');
-  cod.textContent = code || '—';
+  cod.className = 'code ' + (up ? '' : 'bad');
+  lat.textContent = latencyMs != null ? latencyMs + 'ms' : '—';
+  cod.textContent = state || (up ? 'UP' : 'DOWN');
 }
 
 function pushAlert(level, label, message) {
@@ -1124,22 +1167,26 @@ function renderAlerts() {
   }
 }
 
-function setAutopilot(reachable, total, nodesUp) {
+// state is one of 'ACTIVE', 'DEGRADED', 'OFFLINE' — honest, derived from
+// the JARVIS response, never a fake green.
+function setAutopilot(state, servicesUp, servicesTotal, nodesUp) {
   const stateEl = document.getElementById('ap-state');
   const labelEl = document.getElementById('ap-label');
-  const reachEl = document.getElementById('reach-count');
+  const upEl = document.getElementById('reach-count');
+  const totalEl = document.getElementById('ep-total');
   const nodesHeroEl = document.getElementById('nodes-up-hero');
   const nodesMissionEl = document.getElementById('nodes-up-mission');
   const lastPatrolEl = document.getElementById('last-patrol');
   let cls, label;
-  if (nodesUp === NODE_IDS.length)      { cls = 'live'; label = 'AUTOPILOT · ACTIVE'; }
-  else if (nodesUp > 0)                 { cls = 'warn'; label = 'AUTOPILOT · DEGRADED'; }
-  else                                   { cls = 'bad';  label = 'MANUAL CONTROL REQUIRED'; }
+  if (state === 'ACTIVE')         { cls = 'live'; label = 'AUTOPILOT · ACTIVE'; }
+  else if (state === 'DEGRADED')  { cls = 'warn'; label = 'AUTOPILOT · DEGRADED'; }
+  else                             { cls = 'bad';  label = 'AUTOPILOT · OFFLINE'; }
   stateEl.classList.remove('live', 'warn', 'bad');
   stateEl.classList.add(cls);
   labelEl.className = 'label ' + cls;
   labelEl.textContent = label;
-  if (reachEl) reachEl.textContent = String(reachable);
+  if (upEl) upEl.textContent = String(servicesUp);
+  if (totalEl) totalEl.textContent = String(servicesTotal);
   if (nodesHeroEl) nodesHeroEl.textContent = String(nodesUp);
   if (nodesMissionEl) nodesMissionEl.textContent = String(nodesUp);
   if (lastPatrolEl) lastPatrolEl.textContent = new Date().toLocaleTimeString();
@@ -1153,79 +1200,106 @@ function setNodeStates(okByNode) {
   }
 }
 
-async function probe(endpoint) {
-  // Real, honest, two-step probe:
-  // 1) Try a normal CORS-mode fetch. If it succeeds and we can read the
-  //    response, that is a real OK/verdict — never invented.
-  // 2) If that throws (CORS block or network error), fall back to a
-  //    no-cors fetch just to see whether the host is reachable at all.
-  //    A no-cors success is opaque — we cannot read status — so it is
-  //    reported as "warn" (REACHED / opaque), never as a green "ok".
-  // 3) A timeout or a fetch that fails both ways is reported as "bad".
-  const t0 = performance.now();
+function serviceUp(s) {
+  return s.state === 'UP' || s.up === true;
+}
+
+function nodeHasUpService(node) {
+  return Array.isArray(node.services) && node.services.some(serviceUp);
+}
+
+async function fetchNodes() {
   const ctrl = new AbortController();
-  const tid = setTimeout(() => ctrl.abort(), 2000);
+  const tid = setTimeout(() => ctrl.abort(), 15000); // JARVIS probes every LAN service with a 4 s timeout each, in parallel
   try {
-    const r = await fetch(endpoint.url, { signal: ctrl.signal, mode: 'cors', cache: 'no-store' });
+    const r = await fetch(JARVIS_BASE + '/api/nodes', { signal: ctrl.signal, cache: 'no-store' });
     clearTimeout(tid);
-    const ms = Math.round(performance.now() - t0);
-    return { state: r.ok ? 'ok' : 'bad', latency: ms, code: String(r.status) };
+    if (!r.ok) return null;
+    return await r.json();
   } catch (err) {
     clearTimeout(tid);
-    if (err.name === 'AbortError') {
-      return { state: 'bad', latency: null, code: 'timeout' };
-    }
-    // CORS-blocked or otherwise unreadable — try no-cors to confirm reachability only.
-    const ctrl2 = new AbortController();
-    const tid2 = setTimeout(() => ctrl2.abort(), 2000);
-    const t1 = performance.now();
-    try {
-      await fetch(endpoint.url, { signal: ctrl2.signal, mode: 'no-cors', cache: 'no-store' });
-      clearTimeout(tid2);
-      const ms2 = Math.round(performance.now() - t1);
-      return { state: 'warn', latency: ms2, code: 'opaque' };
-    } catch (err2) {
-      clearTimeout(tid2);
-      return { state: 'bad', latency: null, code: err2.name === 'AbortError' ? 'timeout' : 'down' };
-    }
+    return null;
   }
 }
 
 async function patrol() {
+  if (inFlight) return; // never let a slow cycle overlap the next one
+  inFlight = true;
   cycle += 1;
   document.getElementById('watch-cycle').textContent = 'CYCLE ' + cycle;
-  let reachable = 0;
-  const okByNode = {};
-  for (const e of ENDPOINTS) {
-    setRowState(e.id, 'warn', null, '…');
-    const r = await probe(e);
-    setRowState(e.id, r.state, r.latency, r.code);
-    if (r.state === 'ok' && e.node) okByNode[e.node] = true;
-    if (r.state === 'ok' || r.state === 'warn') {
-      reachable += 1;
-      const prev = previousState[e.id];
-      if (prev === 'bad') {
-        pushAlert('ok', 'RECOVERED', e.name + ' · responded after downtime');
-      }
-    } else {
-      const prev = previousState[e.id];
-      if (prev !== 'bad') {
-        pushAlert('bad', 'OFFLINE', e.name + ' · ' + (r.code || 'unreachable'));
-      }
+
+  const data = await fetchNodes();
+
+  if (stopped) { inFlight = false; return; } // signed out mid-flight — never a late DOM write
+
+  if (!data || !Array.isArray(data.nodes)) {
+    // JARVIS itself is unreachable or answered with something unusable —
+    // every row says so, and the state is OFFLINE. Never a fake green.
+    renderUnreachableRows();
+    setNodeStates({});
+    setAutopilot('OFFLINE', 0, 0, 0);
+    renderOffByRuling(null);
+    if (jarvisReachable !== false) {
+      pushAlert('bad', 'JARVIS UNREACHABLE', 'Watchdog cannot reach ' + JARVIS_BASE + '/api/nodes');
     }
-    previousState[e.id] = r.state;
+    jarvisReachable = false;
+    inFlight = false;
+    return;
   }
-  const nodesUp = NODE_IDS.filter((n) => okByNode[n]).length;
+
+  if (jarvisReachable === false) {
+    pushAlert('ok', 'RECOVERED', 'JARVIS Mission Control reachable again');
+  }
+  jarvisReachable = true;
+
+  const watchNodes = data.nodes.filter((n) => NODE_IDS.includes(n.id));
+  const services = [];
+  for (const n of watchNodes) {
+    if (Array.isArray(n.services)) services.push(...n.services);
+  }
+  renderWatchRows(services);
+
+  let servicesUp = 0;
+  for (const s of services) {
+    const up = serviceUp(s);
+    setRowState(s.id, up, s.state, s.latencyMs);
+    if (up) servicesUp += 1;
+    const prev = previousServiceState[s.id];
+    if (up && prev === false) {
+      pushAlert('ok', 'RECOVERED', s.label + ' · responded after downtime');
+    } else if (!up && prev !== false) {
+      pushAlert('bad', 'OFFLINE', s.label + ' · ' + (s.state || 'unreachable'));
+    }
+    previousServiceState[s.id] = up;
+  }
+
+  const okByNode = {};
+  let nodesUp = 0;
+  for (const n of watchNodes) {
+    const up = nodeHasUpService(n);
+    okByNode[n.id] = up;
+    if (up) nodesUp += 1;
+  }
   setNodeStates(okByNode);
-  setAutopilot(reachable, ENDPOINTS.length, nodesUp);
+
+  const sabretooth = watchNodes.find((n) => SABRETOOTH_IDS.includes(n.id));
+  const alienware = watchNodes.find((n) => n.id === 'alienware');
+  const sabretoothAllUp = !!sabretooth && Array.isArray(sabretooth.services) && sabretooth.services.length > 0 && sabretooth.services.every(serviceUp);
+  const alienwareHasUp = !!alienware && nodeHasUpService(alienware);
+
+  const apState = (sabretoothAllUp && alienwareHasUp) ? 'ACTIVE' : 'DEGRADED';
+
+  renderOffByRuling(data.nodesOff);
+  setAutopilot(apState, servicesUp, services.length, nodesUp);
+
   if (cycle === 1) {
-    pushAlert('info', 'PATROL', 'Watchdog cycle 1 complete · ' + reachable + '/' + ENDPOINTS.length + ' reachable · ' + nodesUp + '/2 nodes up');
+    pushAlert('info', 'PATROL', 'Watchdog cycle 1 complete · ' + servicesUp + '/' + services.length + ' services up · ' + nodesUp + '/2 nodes up');
   }
+  inFlight = false;
 }
 
-const previousState = {};
 function initWatchdog() {
-  renderWatchRows();
+  stopped = false;
   renderAlerts();
   document.getElementById('build-ts').textContent = new Date().toISOString().replace('T', ' ').slice(0, 19) + ' LOCAL';
   patrol(); // immediate
@@ -1233,6 +1307,7 @@ function initWatchdog() {
   pollTimer = setInterval(() => { if (!paused) patrol(); }, 5000);
 }
 function stopWatchdog() {
+  stopped = true; // any patrol already in flight will bail before touching the DOM
   if (pollTimer) clearInterval(pollTimer);
   pollTimer = null;
 }
