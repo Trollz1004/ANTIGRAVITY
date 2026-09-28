@@ -12,6 +12,8 @@ changed, and the commit that landed it. `.github/CODEOWNERS` and the
 `.claude/hooks/guard-protected-paths.ps1` reminder enforce this
 mechanically; this file is the human-readable record. Newest entries first.
 
+2026-09-28 16:20 UTC | .github/workflows/policy-guard.yml | new job `cockpit-local-only`: fails when the string "Autopilot Cockpit" appears under domains/ (the design handoff's rule that the operator cockpit never reaches a public deploy path; the cockpit lives at tools/cockpit). No other job touched. | this commit
+
 2026-09-28 16:05 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | Joshua's 2026-09-28 rulings: §1 node allocation (192.168.0.40 Alienware = dev node, 192.168.0.8 Sabretooth = finished-product node, every other box OFF by ruling); §5 screenshot health cron (Hermes runs mission-control/scripts/screenshot-health.mjs every 30 min, JARVIS /api/screenshot-health, "a 200 is not a working page"); §6 date-app marketing lane moved from Hermes to Emergent; §10 Alienware line corrected to Godot 4.7.2 with Unreal parked; §12 domains server now bound to the LAN (192.168.0.8:9160) per Joshua's "endpoints always 192, not localhost" rule. Edited from the cloud judge session on branch claude/design-handoff-0928, landed through a pull request, not through drift on the node. | this commit
 
 2026-09-28 16:05 UTC | ops/skills/sabretooth-node/SKILL.md (tracked copy only; the user copy at C:\Users\joshi\.claude\skills\sabretooth-node\SKILL.md is NOT synced from the cloud — the next drift session on the node copies it byte-identical) | three new bullets after Hardware: node allocation ruling, screenshot health rule, marketing lane moved to Emergent with Genspark as a helper lane | this commit

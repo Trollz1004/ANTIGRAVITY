@@ -287,3 +287,6 @@ ops/youtube/.browser-profile/
 # approved social copy is operational output for the lanes, not source
 ops/marketing-inbox/approved/
 ops/marketing-inbox/evidence/
+
+# Cockpit local session file (CRD session URLs) — never committed
+tools/cockpit/cockpit.local.json
