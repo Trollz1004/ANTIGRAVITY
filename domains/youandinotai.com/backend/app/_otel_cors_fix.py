@@ -35,6 +35,7 @@ This shim is idempotent. Import it once, BEFORE
 is called. The natural place is `app/main.py` immediately before
 `setup_telemetry(app=app, engine=engine)`.
 """
+
 from __future__ import annotations
 
 import logging
