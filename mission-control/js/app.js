@@ -10,10 +10,23 @@
 // NOTE: innerHTML usage below is limited to markup this file builds itself or
 // to the user's own model responses; nothing third-party is rendered as HTML.
 
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { VRMLoaderPlugin } from '@pixiv/three-vrm';
+// three.js is loaded lazily (2026-09-29). It comes from a CDN through the import
+// map in index.html, and a static import here made the whole dashboard module
+// fail to evaluate wherever that CDN is unreachable (the cloud eye-in-the-sky
+// container, an offline LAN): no tiles, no quick links, no bridges. The avatar
+// tab is the only user, so it fetches three on first open and says so if it can't.
+let three = null;
+async function loadThree() {
+  if (three) return three;
+  const [THREE, { OrbitControls }, { GLTFLoader }, { VRMLoaderPlugin }] = await Promise.all([
+    import('three'),
+    import('three/addons/controls/OrbitControls.js'),
+    import('three/addons/loaders/GLTFLoader.js'),
+    import('@pixiv/three-vrm'),
+  ]);
+  three = { THREE, OrbitControls, GLTFLoader, VRMLoaderPlugin };
+  return three;
+}
 
 // ── Configuration ──────────────────────────────────────────────────────────
 // The browser never talks to OmniRoute directly and never holds a key: the
@@ -156,9 +169,30 @@ async function refreshServicesStat({ force = false } = {}) {
   }
 }
 
+// Sidebar quick links (2026-09-29): where this dashboard is reached from and the
+// two places Joshua goes next to it. Every href comes from /api/config; nothing
+// is hardcoded here, and a missing value renders nothing rather than a dead link.
+function renderQuickLinks(cfg) {
+  const el = document.getElementById('quick-links');
+  if (!el || !cfg) return;
+  const links = [
+    cfg.cloudDashboard ? { href: cfg.cloudDashboard, text: 'cloud (eye in the sky)' } : null,
+    cfg.emergentWing ? { href: cfg.emergentWing, text: 'Emergent wing' } : null,
+    cfg.cockpit ? { href: cfg.cockpit, text: 'cockpit' } : null,
+  ].filter(Boolean);
+  el.textContent = '';
+  links.forEach((l, i) => {
+    if (i) el.appendChild(document.createTextNode(' · '));
+    const a = document.createElement('a');
+    a.href = l.href; a.textContent = l.text; a.target = '_blank'; a.rel = 'noopener';
+    el.appendChild(a);
+  });
+}
+
 async function initDashboard() {
   try {
     state.config = await api('/api/config');
+    renderQuickLinks(state.config);
   } catch (e) {
     logActivity(`Dashboard server not answering: ${e.message}`);
   }
@@ -495,11 +529,25 @@ async function openNote(node) {
 // The rendered 2D avatars from ops/avatar/out are shown beside it because
 // those are the avatars that actually ship today.
 
-function initAvatar() {
+async function initAvatar() {
   const canvas = $('#avatar-canvas');
   const container = $('#avatar-canvas-container');
   if (!canvas || !container) return;
   const w = container.clientWidth || 640, h = container.clientHeight || 480;
+
+  let THREE, OrbitControls;
+  try { ({ THREE, OrbitControls } = await loadThree()); }
+  catch (e) {
+    logActivity(`3D viewer unavailable (three.js CDN unreachable): ${e.message}`);
+    const empty = $('#avatar-empty');
+    if (empty) {
+      empty.textContent = '3D viewer unavailable: three.js could not be fetched from its CDN on this network. The rendered avatars below still ship.';
+      empty.classList.remove('hidden');
+    }
+    loadAvatarGallery();
+    return;
+  }
+  if (state.avatar.scene) return;
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x161b22);
@@ -555,6 +603,8 @@ function loadVRMFile(file) {
   const reader = new FileReader();
   reader.onload = async (e) => {
     try {
+      const { GLTFLoader, VRMLoaderPlugin } = await loadThree();
+      if (!state.avatar.scene) throw new Error('3D viewer is not initialised on this network');
       const loader = new GLTFLoader();
       loader.register((parser) => new VRMLoaderPlugin(parser));
       const gltf = await loader.parseAsync(e.target.result, '');

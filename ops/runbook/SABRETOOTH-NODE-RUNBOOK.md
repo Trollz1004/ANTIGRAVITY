@@ -27,6 +27,8 @@ Everything else that used to run here is either parked, retired, or moved:
 
 ## 2. One Mission Control
 
+**Display name and cloud address (ruled 2026-09-29).** On screen the dashboard is **Driftus**; JARVIS stays the code name everywhere on disk. Its cloud address, the one Joshua opens from any Claude Code session, is `https://dashboard.aidoesitall.website/` (Cloudflare Access, one-time PIN) — the same JARVIS, no second dashboard. The Emergent wing chat (affiliate swarm) and Gemini in Chrome are bridge rows: Emergent as a link (LINKED, never "up"), Gemini browser-side with nothing to probe. The Claude judge lane merges its own green pull requests.
+
 **JARVIS** is the single dashboard. Reasoning, so nobody relitigates it: it is the newest, it is a superset of AIRI, and its dispatch already defines the panels that absorb every other surface on this box and on GitHub:
 
 | Feature | Came from | JARVIS panel |

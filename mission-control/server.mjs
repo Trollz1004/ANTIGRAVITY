@@ -259,6 +259,16 @@ function resolveCodexBinary(env = process.env) {
   if (env.CODEX_BIN && existsSync(env.CODEX_BIN)) return env.CODEX_BIN;
   return 'codex';
 }
+// Emergent wing chat (Joshua, 2026-09-29: "add that link to mission control"):
+// the affiliate-swarm workspace. A link only; nothing here probes or runs it.
+const EMERGENT_WING_URL = envValue('EMERGENT_WING_URL') || 'https://app.emergent.sh/wing?wm=38de0c26-2757-4d2a-bde2-a86da9663c97';
+// The cloud address of this dashboard (Cloudflare Access in front, one-time PIN
+// to Joshua's address): the "eye in the sky" he opens from any Claude Code
+// session, cloud or node. Same JARVIS, same origin rules, no second dashboard.
+const CLOUD_DASHBOARD_URL = envValue('CLOUD_DASHBOARD_URL') || 'https://dashboard.aidoesitall.website/';
+// Display name (Joshua, 2026-09-29): the product is called Driftus on screen;
+// JARVIS stays the code name in files, routes and identity strings.
+const DISPLAY_NAME = 'Driftus';
 const BRIDGE_DEPS_LIVE = {
   hermes: { dashboardUrl: HERMES_URL + '/', gatewayUrl: 'http://127.0.0.1:8642/health', resolveHermesBin: resolveHermesBinary },
   openclaw: { dashboardUrl: OPENCLAW_URL + '/' },
@@ -269,6 +279,7 @@ const BRIDGE_DEPS_LIVE = {
   obsidian: { vaultPath: VAULT, restUrl: OBSIDIAN_REST, restProbe: vaultStatusSummary },
   browserCdp: {},
   buzz: { readLedger },
+  emergent: { wingUrl: EMERGENT_WING_URL },
 };
 // Executes an approved bridge.run proposal (only ever called from the
 // founder's own /api/inbox/:id/approve click — see lib/inbox.mjs).
@@ -601,6 +612,7 @@ createServer(async (req, res) => {
       // behind a tunnel that host is the tunnel's own domain (not this LAN), so a link
       // built from it would be a silently broken URL instead of a clearly-labelled LAN one.
       missionControl: CFG.missionControl, hermesDashboard: `http://${LAN_IP}:9119/`, sentry: '/api/sentry',
+      displayName: DISPLAY_NAME, cloudDashboard: CLOUD_DASHBOARD_URL, emergentWing: EMERGENT_WING_URL, cockpit: '/cockpit/',
       vault: { path: VAULT, name: VAULT_NAME, id: VAULT_ID, rest: OBSIDIAN_REST },
       crosslisting: { base: CROSSLISTING, status: '/api/crosslisting/status', embed: '/api/proxy/crosslisting/' },
       claude: {
