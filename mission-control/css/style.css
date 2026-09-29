@@ -766,3 +766,9 @@ audio {
   transition: background 0.2s, color 0.2s;
 }
 .hero-youi .hero-link:hover { background: #f95d07; color: #011a18; }
+
+/* Sidebar quick links (2026-09-29): cloud eye in the sky, Emergent wing, cockpit. */
+.sidebar-header #quick-links { margin-top: 6px; line-height: 1.7; word-break: break-word; }
+.sidebar-header #quick-links a { color: var(--cyber-blue, #58a6ff); text-decoration: none; }
+.sidebar-header #quick-links a:hover { text-decoration: underline; }
+.sidebar-header .sidebar-bell { margin-top: 8px; margin-left: 0; }

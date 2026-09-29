@@ -42,6 +42,13 @@ describe('JARVIS wiring — server.mjs Architecture routes (Phase E, unit 3)', (
   it('archify is vendored (gitignored) rather than committed in bulk', () => {
     const gi = fs.readFileSync(path.join(root, '.gitignore'), 'utf-8')
     expect(gi).toMatch(/vendor\//)
-    expect(fs.existsSync(path.join(root, 'vendor', 'archify', 'bin', 'archify.mjs'))).toBe(true)
+    // The vendored CLI is restored by hand on the node (see .gitignore); a fresh
+    // clone or CI has no copy. Either it is present, or the server carries the
+    // plain-text fallback for a missing binary — never a fabricated render.
+    const vendored = fs.existsSync(path.join(root, 'vendor', 'archify', 'bin', 'archify.mjs'))
+    if (!vendored) {
+      const arch = fs.readFileSync(path.join(root, 'lib', 'architecture.mjs'), 'utf-8')
+      expect(arch).toMatch(/existsSync\(archifyBin\)|archify (CLI )?not (installed|vendored|found)/i)
+    }
   })
 })

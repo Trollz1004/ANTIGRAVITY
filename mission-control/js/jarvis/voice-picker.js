@@ -126,3 +126,57 @@ export function applyPickToUtterance(utt) {
   if (voice) utt.voice = voice
   return utt.voice
 }
+
+// ── compatibility surface for hermes-voice.js (added 2026-09-29) ──────────
+// hermes-voice.js imported four names this module never exported. In vitest
+// that import silently yields undefined; in a browser it is a SyntaxError at
+// module load, which took the whole dashboard bundle down with it (every tile
+// on the Dashboard tab read "—" and no panel loaded). These are the real
+// implementations over this module's own state.
+
+let localPack = null // { voices: [names...] } as served by /api/voices/local-pack.json
+
+export function getLocalPack() {
+  return localPack
+}
+
+// Registers a downloaded local pack and, when the browser already lists one of
+// its voices, makes that voice the local override for resolveSpeakVoice.
+export function setLocalPack(pack) {
+  localPack = pack && Array.isArray(pack.voices) ? pack : null
+  if (!localPack) { setLocalVoice(null); return false }
+  const names = new Set(localPack.voices.map((v) => (typeof v === 'string' ? v : v && v.name)).filter(Boolean))
+  const match = listVoices().find((v) => names.has(v.name))
+  setLocalVoice(match || null)
+  return true
+}
+
+// The select stores voice names (populateVoiceSelect writes them as values),
+// so the stored "URI" is the same name pickVoice persists.
+export function setStoredVoiceURI(value) {
+  return pickVoice(value || null)
+}
+
+// Fills a <select> with the browser's voices (filtered to the local pack when
+// preferLocal is set and a pack is loaded), keeping the stored pick selected.
+export function populateVoiceSelect(select, { preferLocal = false } = {}) {
+  if (!select) return 0
+  let voices = listVoices()
+  if (preferLocal && localPack) {
+    const names = new Set(localPack.voices.map((v) => (typeof v === 'string' ? v : v && v.name)).filter(Boolean))
+    const local = voices.filter((v) => names.has(v.name))
+    if (local.length) voices = local
+  }
+  const pick = readPick()
+  select.innerHTML = ''
+  const blank = document.createElement('option')
+  blank.value = ''; blank.textContent = voices.length ? '(default voice)' : '(no voices available)'
+  select.appendChild(blank)
+  for (const v of voices) {
+    const o = document.createElement('option')
+    o.value = v.name; o.textContent = `${v.name}${v.lang ? ' · ' + v.lang : ''}${v.localService ? ' · local' : ''}`
+    if (pick && v.name === pick) o.selected = true
+    select.appendChild(o)
+  }
+  return voices.length
+}

@@ -4,9 +4,11 @@ import path from 'path'
 
 const root = path.resolve(__dirname, '..')
 
-// The crosslisting package is a sibling of jarvis in dashboard/; allow override.
+// The crosslisting package moved into mission-control/crosslisting-os in the
+// 2026-09-17 repo consolidation (it was a sibling of jarvis in dashboard/ before);
+// allow override.
 const pkgRoot = process.env.CROSSLISTING_ROOT
-  || path.resolve(root, '..', 'crosslisting')
+  || (fs.existsSync(path.resolve(root, 'crosslisting-os')) ? path.resolve(root, 'crosslisting-os') : path.resolve(root, '..', 'crosslisting'))
 
 describe('Crosslisting dashboard attachment', () => {
   let html, js

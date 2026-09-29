@@ -42,6 +42,9 @@
  *   GET  /api/judge/feed        Judge Lanes: proposal feed, claude/codex verdict columns, live disagreement flag
  *   POST /api/judge/:id/verdict Judge Lanes: post one lane's verdict (x-judge-token gated per lane)
  *   GET  /api/fleet             Fleet panel (Phase D): Hermes/OpenClaw/OpenCode status, current task, queue depth, token spend
+ *   GET  /api/screenshot-health  Screenshot health (2026-09-28): per-target frame-verified verdict from the Hermes cron's result file; NOT CONFIGURED until it runs
+ *   GET  /api/screenshot-health/shot/:id  the latest PNG for one target id (served only from evidence/health-shots)
+ *   GET  /cockpit/                 the local-only operator cockpit (tools/cockpit), same origin as /api/nodes
  *   GET  /api/architecture.json Architecture panel (Phase E): typed JSON of the live Sabertooth stack (House stage table + health JSON)
  *   GET  /api/architecture      Architecture panel: archify-rendered HTML (same-origin), plain-text fallback on CLI failure
  *   GET  /api/architecture/diff?base=&head= before/after architecture diff for a commit range (archify compare)
@@ -74,6 +77,7 @@ import { listTaskCommander } from './lib/task-commander.mjs';
 import { gitPanel } from './lib/git-panel.mjs';
 import { sanitizeHeaders, probeService } from './lib/session-proxy.mjs';
 import { readHeartbeat } from './lib/heartbeat.mjs';
+import { readScreenshotHealth } from './lib/screenshot-health.mjs';
 import { listRunbooks, resolveRunbook } from './lib/runbooks.mjs';
 import { createLedgerReader } from './lib/ledger.mjs';
 import { redact } from './lib/redact.mjs';
@@ -204,6 +208,10 @@ const OPENCLAW_URL = (envValue('OPENCLAW_URL') || 'http://127.0.0.1:18789').repl
 // System status (Phase B, merged into the Mission Control tab): the 30-minute health probe's own files.
 const HEARTBEAT_JSON_PATH = join(REPO, 'ops', 'heartbeat', 'sabretooth-health.json');
 const HEARTBEAT_LOG_PATH = join(REPO, 'ops', 'heartbeat', 'health.log');
+// Screenshot health (ruled 2026-09-28): the Hermes cron's frame-verified result file
+// (scripts/screenshot-health.mjs). Missing -> NOT CONFIGURED, never a sample row.
+const SCREENSHOT_HEALTH_JSON_PATH = join(REPO, 'ops', 'heartbeat', 'screenshot-health.json');
+const SCREENSHOT_SHOTS_ROOT = join(REPO, 'evidence', 'health-shots');
 // Runbook viewer (Phase B).
 const RUNBOOK_DIR = join(REPO, 'ops', 'runbook');
 // Ledger panel (Phase B): 60s cache, 15s timeout, one reader instance for the process lifetime.
@@ -231,6 +239,8 @@ const FLEET_HARNESSES = [
   { lane: 'hermes', stateMdPath: join(REPO, '.agents', 'journals', 'hermes', 'STATE.md'), probe: { url: HERMES_URL + '/api/health', host: '127.0.0.1', port: 9119 } },
   { lane: 'openclaw', stateMdPath: join(REPO, '.agents', 'journals', 'openclaw', 'STATE.md'), probe: { url: OPENCLAW_URL + '/healthz', host: '127.0.0.1', port: 18789 } },
   { lane: 'opencode', stateMdPath: join(REPO, '.agents', 'journals', 'opencode', 'STATE.md'), probe: null },
+  { lane: 'emergent', stateMdPath: join(REPO, '.agents', 'journals', 'emergent', 'STATE.md'), probe: null },
+  { lane: 'genspark', stateMdPath: join(REPO, '.agents', 'journals', 'genspark', 'STATE.md'), probe: null },
 ];
 // Architecture panel (Phase E, unit 3): the House stage table + the health
 // JSON, both already used elsewhere in this file (Ops tab), plus the
@@ -249,6 +259,16 @@ function resolveCodexBinary(env = process.env) {
   if (env.CODEX_BIN && existsSync(env.CODEX_BIN)) return env.CODEX_BIN;
   return 'codex';
 }
+// Emergent wing chat (Joshua, 2026-09-29: "add that link to mission control"):
+// the affiliate-swarm workspace. A link only; nothing here probes or runs it.
+const EMERGENT_WING_URL = envValue('EMERGENT_WING_URL') || 'https://app.emergent.sh/wing?wm=38de0c26-2757-4d2a-bde2-a86da9663c97';
+// The cloud address of this dashboard (Cloudflare Access in front, one-time PIN
+// to Joshua's address): the "eye in the sky" he opens from any Claude Code
+// session, cloud or node. Same JARVIS, same origin rules, no second dashboard.
+const CLOUD_DASHBOARD_URL = envValue('CLOUD_DASHBOARD_URL') || 'https://dashboard.aidoesitall.website/';
+// Display name (Joshua, 2026-09-29): the product is called Driftus on screen;
+// JARVIS stays the code name in files, routes and identity strings.
+const DISPLAY_NAME = 'Driftus';
 const BRIDGE_DEPS_LIVE = {
   hermes: { dashboardUrl: HERMES_URL + '/', gatewayUrl: 'http://127.0.0.1:8642/health', resolveHermesBin: resolveHermesBinary },
   openclaw: { dashboardUrl: OPENCLAW_URL + '/' },
@@ -259,6 +279,7 @@ const BRIDGE_DEPS_LIVE = {
   obsidian: { vaultPath: VAULT, restUrl: OBSIDIAN_REST, restProbe: vaultStatusSummary },
   browserCdp: {},
   buzz: { readLedger },
+  emergent: { wingUrl: EMERGENT_WING_URL },
 };
 // Executes an approved bridge.run proposal (only ever called from the
 // founder's own /api/inbox/:id/approve click — see lib/inbox.mjs).
@@ -591,6 +612,7 @@ createServer(async (req, res) => {
       // behind a tunnel that host is the tunnel's own domain (not this LAN), so a link
       // built from it would be a silently broken URL instead of a clearly-labelled LAN one.
       missionControl: CFG.missionControl, hermesDashboard: `http://${LAN_IP}:9119/`, sentry: '/api/sentry',
+      displayName: DISPLAY_NAME, cloudDashboard: CLOUD_DASHBOARD_URL, emergentWing: EMERGENT_WING_URL, cockpit: '/cockpit/',
       vault: { path: VAULT, name: VAULT_NAME, id: VAULT_ID, rest: OBSIDIAN_REST },
       crosslisting: { base: CROSSLISTING, status: '/api/crosslisting/status', embed: '/api/proxy/crosslisting/' },
       claude: {
@@ -681,6 +703,17 @@ createServer(async (req, res) => {
   if (p === '/api/proxy/hermes' || p.startsWith('/api/proxy/hermes/')) return proxyStripped(req, res, url, HERMES_URL, '/api/proxy/hermes');
   if (p === '/api/proxy/openclaw' || p.startsWith('/api/proxy/openclaw/')) return proxyStripped(req, res, url, OPENCLAW_URL, '/api/proxy/openclaw');
   if (p === '/api/heartbeat') return send(res, 200, readHeartbeat({ jsonPath: HEARTBEAT_JSON_PATH, logPath: HEARTBEAT_LOG_PATH }));
+  // Screenshot health: the frame-verified verdict per domain and dashboard (God's Eye reads it beside the port probes).
+  if (p === '/api/screenshot-health') return send(res, 200, readScreenshotHealth({ jsonPath: SCREENSHOT_HEALTH_JSON_PATH }));
+  { const m = /^\/api\/screenshot-health\/shot\/([a-z0-9-]+)$/.exec(p);
+    if (m) {
+      const latest = readScreenshotHealth({ jsonPath: SCREENSHOT_HEALTH_JSON_PATH });
+      const row = latest.targets.find((t) => t.id === m[1]);
+      const shot = row && row.shot ? resolve(String(row.shot)) : null;
+      if (!shot || !shot.startsWith(resolve(SCREENSHOT_SHOTS_ROOT) + sep) || !existsSync(shot)) return send(res, 404, { error: 'no frame for ' + m[1] });
+      res.writeHead(200, { 'Content-Type': 'image/png', 'Cache-Control': 'no-store' });
+      return res.end(readFileSync(shot));
+    } }
   if (p === '/api/runbooks') return send(res, 200, { runbooks: listRunbooks(RUNBOOK_DIR), at: new Date().toISOString() });
   { const m = /^\/api\/runbooks\/([^/]+)$/.exec(p);
     if (m) { const r = resolveRunbook(RUNBOOK_DIR, decodeURIComponent(m[1])); return send(res, r.ok ? 200 : (r.error === 'not found' ? 404 : 400), r); } }
@@ -999,6 +1032,19 @@ createServer(async (req, res) => {
     });
   }
 
+  // Operator cockpit (tools/cockpit, local only): served here so it shares this
+  // origin with /api/nodes and can read cockpit.local.json over HTTP. Never
+  // under domains/; the LAN and the Access-gated dashboard hostname only.
+  if (p === '/cockpit' ) { res.writeHead(302, { location: '/cockpit/' }); return res.end(); }
+  if (p.startsWith('/cockpit/')) {
+    const root = resolve(REPO, 'tools', 'cockpit');
+    const rel = p === '/cockpit/' ? 'index.html' : p.slice('/cockpit/'.length);
+    const full = resolve(root, rel);
+    if (!full.startsWith(root + sep)) return send(res, 403, { error: 'forbidden' });
+    if (!existsSync(full) || statSync(full).isDirectory()) return send(res, 404, { error: 'not found' });
+    res.writeHead(200, { 'content-type': MIME[extname(full).toLowerCase()] || 'application/octet-stream', 'cache-control': 'no-store' });
+    return res.end(readFileSync(full));
+  }
   if (p === '/' || p === '/index.html') return serveStatic(res, '/index.html');
   if (p === '/data/' || p.startsWith('/data/')) return send(res, 404, { error: 'not found' }); // JARVIS memory stays server-side
   if (p.startsWith('/api/')) return send(res, 404, { error: 'no such route' });
