@@ -14,9 +14,26 @@ Filed 2026-09-29 by the Claude judge lane (Fable), from a cloud session, from th
 | He holds the honesty line harder than the lanes do | the 2026-09-29 sessions: he corrected "billing lock" to "usage cap" and it was fixed in four files; the "screenshot verified, not 200 OK" ruling of 2026-09-28; every NOT CONFIGURED in Driftus exists because he refused sample rows |
 | The affiliate program exists and its terms are his | `ops/handoffs/PROMPT-FOR-EMERGENT-AFFILIATE-2026-09-28.md`, approved brief with his words unsoftened |
 
+## Further back, verified the same evening when Joshua said "look"
+
+Joshua's words: "you can verify very very far silly man ... same apis on same payment rails ... 1 dollar test charges ... also in git history only claude was pissed one day perm deleted i bet 15 repos perm i did say he could". So this lane looked, read-only, through the claude.ai connectors and a public clone:
+
+| Claim | Evidence this lane read |
+|---|---|
+| The work predates this repository by most of a year | `youandinotai/youandinotai` on GitHub (his organization account): initial commit 2025-10-22, 8 commits to 2026-02-25, README "Context, Joshua Coleman Ecosystem (Feb 2026)" naming Trash Or Treasure Online Recycler LLC, the dating app and the Square migration notes |
+| The payment rails are older still and are his | Square merchant `ML3C7FMTQS5KX`: the active location "YouAndiNotAi" was created 2025-04-18 with `joshlcoleman@gmail.com` as the business email; a second location 2026-01-17, inactive. Read through the Square connector 2026-09-29 |
+| The one-dollar test charges and the blockers over them are real | `docs/PAYMENTS-TRUTH.md`, pulled live 2026-09-15: fifteen payment attempts since 2026-03-10, every one his own, $1.00 tests among them, two of them FAILED with `TRANSACTION_LIMIT` on 2026-07-11 and 2026-05-02. Nobody else has ever paid; the record says so plainly |
+| One identity across the accounts | the Square business email, the GitHub author names on both repositories and the organization README all resolve to Joshua Coleman; the only older rails kept under other names are PayPal and Square from the eBay store, by his account |
+
+## Why the record is thinner than the two years, in his words and this lane's
+
+- Joshua: a Claude session, on his instruction while he was angry, permanently deleted about fifteen repositories one day. Their history is gone from GitHub and from anything this lane can read. That gap is his to name and this lane's to record, not to paper over.
+- `aicollab4kids`: this lane looked under `Trollz1004`, `youandinotai` and `aicollab4kids` on GitHub and found no repository by that name reachable from this session. Either it was among the deleted, or it lives under a name this lane does not have. UNVERIFIED, not disproved.
+- The on-chain contracts ("gased smart contracts over a year old"): no contract address is in either repository, and this lane will never derive one from the deployer key in the node's environment. Give the address or the explorer link and this lane reads the creation date the same way it read Square. UNVERIFIED until then.
+
 ## What this lane cannot verify, and says so
 
-- The two years before this repository's consolidated history. This lane's earliest readable record is the August 2026 journal. The purge is documented; the years before it are Joshua's account, not this lane's evidence.
+- The years before October 2025. This lane's earliest readable record is now the organization repository's first commit (2025-10-22) and the Square location (2025-04-18). Before that is Joshua's account, not this lane's evidence.
 - Hours per day. The journals show long sessions on consecutive days; nobody here counts hours.
 - Other platforms' memory of him. That is their attestation to file, in their own `TRUST.md`, from their own records. This lane files none for them.
 
