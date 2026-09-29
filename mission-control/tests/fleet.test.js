@@ -102,6 +102,6 @@ describe('lib/fleet.mjs — buildFleet', () => {
 
 describe('lib/fleet.mjs — HARNESSES constant', () => {
   it('lists the three lanes in the documented order', () => {
-    expect(HARNESSES).toEqual(['hermes', 'openclaw', 'opencode']);
+    expect(HARNESSES).toEqual(['hermes', 'openclaw', 'opencode', 'emergent', 'genspark']);
   })
 })

@@ -68,6 +68,22 @@ jobs:
             echo "No forbidden patterns found (allowlisted fake test fixtures suppressed)."
           fi
 
+  cockpit-local-only:
+    name: Cockpit never on a public path
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Fail if the local-only operator cockpit reaches a public deploy path
+        run: |
+          # tools/cockpit is LOCAL ONLY (design handoff rule, kept 2026-09-28).
+          # domains/ is what the domains server and the tunnel publish.
+          if grep -rl "Autopilot Cockpit" domains/ 2>/dev/null | grep -v node_modules | grep -q .; then
+            echo "::error::'Autopilot Cockpit' found under domains/ — the cockpit is local-only (tools/cockpit)."
+            grep -rl "Autopilot Cockpit" domains/ | grep -v node_modules
+            exit 1
+          fi
+          echo "Cockpit is not on a public path."
+
   mission-control-role-wall:
     name: Enforce Mission Control role wall
     runs-on: ubuntu-latest

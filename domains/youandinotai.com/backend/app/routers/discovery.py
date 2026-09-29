@@ -6,14 +6,15 @@ Registered at /api/v1/discover — matches frontend's api.get('/discover?limit=2
 import uuid
 from datetime import datetime, timezone
 from typing import Optional
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
-from sqlalchemy import select, or_, and_, func, exists
+from sqlalchemy import and_, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user
 from app.database import get_db
-from app.models import Profile, User, Match, Swipe
+from app.models import Match, Profile, Swipe, User
 
 router = APIRouter(prefix="/discover", tags=["Discovery & Matching"])
 

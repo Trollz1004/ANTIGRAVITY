@@ -1,4 +1,6 @@
-# youandinotai.com + youandinotai.online — sale listing
+# youandinotai.com + youandinotai.online — sale listing (WITHDRAWN 2026-09-28)
+
+> **Withdrawn by the owner on 2026-09-28.** Joshua: the app is not for sale; it is marketed. The Afternic, Dan and Atom listings come down on his click. Everything below is the September record.
 
 Prepared 2026-09-16. Buy-it-now price set by owner on 2026-09-16: **$12,500** for the whole lot. Every number below is recorded, not projected.
 

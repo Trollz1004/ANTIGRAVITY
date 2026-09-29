@@ -23,6 +23,16 @@ describe('service table', () => {
       else expect(s.url).toMatch(/^https?:\/\/(127\.0\.0\.1|192\.168\.0\.\d+):\d+\//)
       expect(typeof s.identity).toBe('function')
     }
+    // 2026-09-28: every service is probed at the LAN address of the node it runs on
+    // (Alienware 192.168.0.40 = dev, Sabretooth 192.168.0.8 = finished product), never
+    // loopback — except the Obsidian Local REST plugin, which binds loopback only.
+    for (const s of nodes.SERVICES) {
+      if (s.node === 'alienware') expect(s.url).toMatch(/^https?:\/\/192\.168\.0\.40:/)
+      if (s.node === 'sabertooth' && s.id !== 'obsidian') expect(s.url).toMatch(/^https?:\/\/192\.168\.0\.8:/)
+    }
+    for (const id of ['live-npc-lab', 'dreamops', 'aw-ollama']) expect(nodes.SERVICES.find((s) => s.id === id).node).toBe('alienware')
+    for (const id of ['jarvis', 'hermes', 'omniroute', 'domains-server', 'crosslisting']) expect(nodes.SERVICES.find((s) => s.id === id).node).toBe('sabertooth')
+    expect(nodes.NODES_OFF.map((n) => n.id)).toEqual(['t5500', 'optiplex-9020', 'i7k', 'chromebook', 'mini-asus'])
   })
   it('knows both LAN nodes and the public web node with its domains', () => {
     expect(nodes.NODES.find((n) => n.id === 'alienware').ip).toBe('192.168.0.40')

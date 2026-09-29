@@ -17,6 +17,9 @@ class AuthRegisterRequest(BaseModel):
     accepted_terms: Literal[True]
     accepted_cookie_policy: Literal[True]
     confirmed_over_18: Literal[True]
+    # Optional referral code (the register route already reads it; the field
+    # was missing from the schema, which made every registration raise).
+    referral_code: str | None = Field(default=None, max_length=64)
 
 
 class AuthLoginRequest(BaseModel):

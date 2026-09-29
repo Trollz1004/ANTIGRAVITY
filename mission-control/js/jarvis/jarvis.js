@@ -497,6 +497,13 @@ function renderNodes(data) {
     }
     list.appendChild(row);
   }
+  // Nodes that are OFF by ruling (2026-09-28): a row that says so, never a DOWN dot.
+  for (const node of data?.nodesOff || []) {
+    const row = document.createElement('div');
+    row.className = 'jarvis-node-row jarvis-node-off';
+    row.textContent = `${node.name || node.id} · OFF BY RULING · ${node.reason || ''}`;
+    list.appendChild(row);
+  }
 }
 
 async function getOwnerName() {
