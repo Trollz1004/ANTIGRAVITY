@@ -19,7 +19,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
 const DOMAINS_ROOT = path.join(REPO_ROOT, "domains");
 
-const HOST = "127.0.0.1";
+// Ruled 2026-09-28 (Joshua: "use the endpoints always of 192, not localhost"):
+// listen on the Sabretooth LAN address so http://192.168.0.8:9160/ answers for
+// the screenshot health cron and JARVIS, and on loopback for the House's own
+// probe and the cloudflared tunnel. Never every interface. DOMAINS_SERVER_HOST
+// overrides with a comma-separated list.
+const HOSTS = (process.env.DOMAINS_SERVER_HOST || "127.0.0.1,192.168.0.8").split(",").map((h) => h.trim()).filter(Boolean);
 const PORT = Number(process.env.DOMAINS_SERVER_PORT || 9160);
 
 // Host header -> document root (relative to DOMAINS_ROOT).
@@ -135,9 +140,22 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, HOST, () => {
-  // eslint-disable-next-line no-console
-  console.log(`domains-server listening on http://${HOST}:${PORT} (sites: ${SITES.join(", ")})`);
+// One listener per address: the same request handler, the same port, on the
+// loopback and LAN addresses only. A bind failure on one address (for example
+// the LAN address on a box that is not Sabretooth) is reported and the others
+// keep serving, so the House probe on loopback never depends on the LAN NIC.
+import { createServer as createServerFor } from "node:http";
+const listeners = HOSTS.map((host) => {
+  const srv = host === HOSTS[0] ? server : createServerFor(server.listeners("request")[0]);
+  srv.on("error", (err) => {
+    // eslint-disable-next-line no-console
+    console.error(`domains-server cannot listen on http://${host}:${PORT}: ${err && err.code ? err.code : err}`);
+  });
+  srv.listen(PORT, host, () => {
+    // eslint-disable-next-line no-console
+    console.log(`domains-server listening on http://${host}:${PORT} (sites: ${SITES.join(", ")})`);
+  });
+  return srv;
 });
 
-export { VHOSTS, SITES, resolveFile, contentTypeFor, hostOnly };
+export { VHOSTS, SITES, HOSTS, listeners, resolveFile, contentTypeFor, hostOnly };

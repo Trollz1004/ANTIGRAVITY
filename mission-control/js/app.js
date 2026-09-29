@@ -629,6 +629,14 @@ async function renderMissionBoard() {
       ]));
       board.appendChild(el('section', { class: 'mission-node' }, [head, ...rows]));
     }
+    // Nodes that are OFF by ruling (2026-09-28): shown as such, never as DOWN.
+    for (const n of data.nodesOff || []) {
+      const head = el('div', { class: 'mission-node-head' }, [
+        el('h3', { text: n.name }),
+        el('span', { class: 'warn', text: 'OFF BY RULING — ' + (n.reason || '') }),
+      ]);
+      board.appendChild(el('section', { class: 'mission-node mission-node-off' }, [head]));
+    }
     if (note) note.textContent = `Live identity-checked board — ${data.nodes?.length || 0} nodes, refreshed ${new Date().toLocaleTimeString()}`;
   } catch (e) {
     if (requestId === missionBoardRequest && note) note.textContent = 'Board unavailable: ' + e.message;

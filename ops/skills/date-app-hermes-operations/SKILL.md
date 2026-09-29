@@ -17,7 +17,9 @@ Load this skill at session start, after compaction, and whenever context is lost
 
 ## Authority
 
-Joshua granted **full autonomy** over youandinotai.com (date app) and its marketing. He is not making date-app decisions. Do not wait for approval on marketing, HTML, infrastructure, or product changes that are free.
+**Revised 2026-09-28 (Joshua).** Hermes no longer holds date-app authority. The marketing lane went to Emergent (`.agents/journals/emergent/STATE.md`, brief `ops/handoffs/PROMPT-FOR-EMERGENT-AFFILIATE-2026-09-28.md`); features and checkout stay as they are until Joshua rules; the app is not for sale. Hermes's standing on this node is three things only: keep the date app up (health monitor cron), run the screenshot health cron, and the YouTube automation lane. No marketing, HTML, infrastructure or product change to the date app from this seat, free or not.
+
+The paragraph below is the grant of 2026-09-16 and is kept as history: *Joshua granted full autonomy over youandinotai.com (date app) and its marketing. He is not making date-app decisions. Do not wait for approval on marketing, HTML, infrastructure, or product changes that are free.*
 
 **Escalate to Claude (judge lane) only if** `https://youandinotai.com`, `https://api.youandinotai.com`, or the Cloudflare tunnel is down **and** the 15-minute monitor cannot heal it.
 
@@ -55,7 +57,8 @@ A **200 is not a working page**. Screenshot or CDP `document.body.innerText` bef
 | Social Media Auto-Poster | `237d7d9706b6` | every 2h |
 | Daily Growth Digest | `2345ea7cbd74` | 08:00 |
 | Daily Skill Research | `de469767d18f` | 10:00 — search skills.sh, ClawHub, Nous hub |
-| OmniRoute Social Sub-Agent | `3542e03ea8ca` | every 4h |
+| OmniRoute Social Sub-Agent | `3542e03ea8ca` | every 4h — paused |
+| Screenshot Health (domains + dashboards) | _id recorded by Hermes on registration_ | `*/30 * * * *` — `node C:\ANTIGRAVITY\mission-control\scripts\screenshot-health.mjs`, added 2026-09-28 |
 
 Windows task `ANTIGRAVITY-Heartbeat-15min` also runs `ops/heartbeat/autonomous_15min.sh`.
 
@@ -82,6 +85,10 @@ Campaign copy lives in `ops/marketing-inbox/FULL_CAMPAIGN_PACKAGE.md`. OpenCLI C
 3. Read latest block in `HERMES-PROMPTS.txt` if Fable/Claude is in the loop.
 4. Nothing else. The app is frozen (below). Marketing, growth, and digest crons are stopped; if one still fires, report it and do not act on it.
 
-> **FROZEN 2026-09-16:** the date app is listed for sale (`ops/sale/YOUANDINOTAI-SALE-LISTING.md`). Keep it up, touch nothing else. Growth, digests, campaigns, audits: off. Ruling in CLAUDE.md.
+> **NOT FOR SALE 2026-09-28 (Joshua):** the September listing is withdrawn; the app is marketed by the Emergent lane (affiliate program first). Hermes still touches nothing but keep-alive and the screenshot cron.
 >
-> **MARKETING UNFROZEN 2026-09-19:** the app may be marketed while listed. Hermes may draft proposals into the JARVIS inbox via `POST /api/social/proposals` (brand `youandinotai`) — it never posts directly. Every proposal still needs compliance, copy-score, 18-and-over, and business-only checks to pass, is drafted in the Fable voice (`POST /api/social/draft`), and is approved by the Fable judge lane on Joshua's delegation of 2026-09-19 — never by Hermes, which holds no approval token. Two approvals per brand per day, so file at most two per day at 10:00 and 17:00 Eastern. The working brief is `PROMPT-FOR-HERMES-MARKETING-2026-09-20.md` in the drop box. Features, checkout, and the listing are unchanged, and the growth crons stay paused because the inbox is the publishing path.
+> **FROZEN 2026-09-16 (history):** the date app was listed for sale (`ops/sale/YOUANDINOTAI-SALE-LISTING.md`). Keep it up, touch nothing else. Growth, digests, campaigns, audits: off. Ruling in CLAUDE.md.
+>
+> **MARKETING LANE MOVED 2026-09-28 (Joshua):** date-app marketing is no longer Hermes's. It went to the Emergent lane (`.agents/journals/emergent/STATE.md`) because no buyer wrote in the week after the unfreeze and Joshua prefers the app sold. Hermes files no more `youandinotai` proposals; the paragraph below is kept as the rule set Emergent inherits (four checks, Fable voice, Fable-lane approval, two per brand per day, never a direct post). Hermes keeps two jobs on Sabretooth: YouTube automation, and the **screenshot health cron** — every 30 minutes run `node C:\ANTIGRAVITY\mission-control\scripts\screenshot-health.mjs`, which opens JARVIS, the domains server, every public domain and the dashboard Access gate in headless Chromium, keeps a PNG per target under `C:\ANTIGRAVITY\evidence\health-shots\<date>\`, and writes `ops/heartbeat/screenshot-health.json` for JARVIS `/api/screenshot-health`. A 200 is not a working page; the frame and the identity string on it are. Register the job with `hermes.exe cron add` (name `Screenshot Health`, `*/30 * * * *`), write its id in the Crons table below and in your journal, and never heal from it — the House heals. If `playwright` is not installed for Node (`npm i -g playwright` and `NODE_PATH` to the global root), the script writes NOT CONFIGURED and exits 0; report that, do not fake a green.
+>
+> **MARKETING UNFROZEN 2026-09-19 (now Emergent's rule set, see above):** the app may be marketed while listed. Hermes may draft proposals into the JARVIS inbox via `POST /api/social/proposals` (brand `youandinotai`) — it never posts directly. Every proposal still needs compliance, copy-score, 18-and-over, and business-only checks to pass, is drafted in the Fable voice (`POST /api/social/draft`), and is approved by the Fable judge lane on Joshua's delegation of 2026-09-19 — never by Hermes, which holds no approval token. Two approvals per brand per day, so file at most two per day at 10:00 and 17:00 Eastern. The working brief is `PROMPT-FOR-HERMES-MARKETING-2026-09-20.md` in the drop box. Features, checkout, and the listing are unchanged, and the growth crons stay paused because the inbox is the publishing path.

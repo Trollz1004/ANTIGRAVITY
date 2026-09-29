@@ -270,6 +270,8 @@ nul
 # Sabretooth deterministic health probe (ops/heartbeat/sabretooth-health.ps1)
 # outputs, machine-generated every 30 min. Not doctrine; the .ps1 itself is tracked.
 ops/heartbeat/sabretooth-health.json
+ops/heartbeat/screenshot-health.json
+ops/heartbeat/screenshot-health.log
 ops/heartbeat/TRIGGERS.jsonl
 ops/heartbeat/.heal-lock
 ops/heartbeat/.auto-heal-enabled
@@ -285,3 +287,6 @@ ops/youtube/.browser-profile/
 # approved social copy is operational output for the lanes, not source
 ops/marketing-inbox/approved/
 ops/marketing-inbox/evidence/
+
+# Cockpit local session file (CRD session URLs) — never committed
+tools/cockpit/cockpit.local.json

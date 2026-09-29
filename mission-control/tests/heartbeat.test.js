@@ -66,14 +66,20 @@ describe('lib/heartbeat.mjs — isolated fixtures', () => {
 })
 
 describe('lib/heartbeat.mjs — the real ops/heartbeat files (worked example)', () => {
-  it('reads the real heartbeat json and log tail', () => {
-    const r = mod.readHeartbeat({
-      jsonPath: path.join(repoRoot, 'ops', 'heartbeat', 'sabretooth-health.json'),
-      logPath: path.join(repoRoot, 'ops', 'heartbeat', 'health.log'),
-    })
-    expect(r.ok).toBe(true)
-    expect(typeof r.health.overall).toBe('string')
-    expect(r.logTail.length).toBeGreaterThan(0)
+  it('reads the real heartbeat json and log tail when the node has written them, and says so honestly when it has not', () => {
+    const jsonPath = path.join(repoRoot, 'ops', 'heartbeat', 'sabretooth-health.json')
+    const logPath = path.join(repoRoot, 'ops', 'heartbeat', 'health.log')
+    const r = mod.readHeartbeat({ jsonPath, logPath })
+    if (fs.existsSync(jsonPath) && fs.existsSync(logPath)) {
+      // On Sabretooth the 30-minute probe writes both files (gitignored node state).
+      expect(r.ok).toBe(true)
+      expect(typeof r.health.overall).toBe('string')
+      expect(r.logTail.length).toBeGreaterThan(0)
+    } else {
+      // A fresh clone or CI has neither: the reader must report that, not a sample row.
+      expect(r.ok).toBe(false)
+      expect(r.errors.some((e) => /sabretooth-health\.json: not found/.test(e))).toBe(true)
+    }
   })
 })
 

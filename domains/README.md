@@ -27,7 +27,13 @@ landing page, moved here from `apps/landing/untilnokidinneed`. Per
 `docs/ops/DNS-NAMESERVER-PLAN.md`, the domain currently sits on IONOS default
 nameservers with a stray A-record causing a Cloudflare 1001 error; the
 Cloudflare cutover described in that plan has not happened yet. State:
-**code present / DNS not yet live**.
+**code present / DNS not yet live**. Since 2026-09-28 the folder also carries
+`dao/index.html`, the Perpetual Mission DAO transparency page from the May
+design handoff (served at `/dao/` by the domains server): real or zero, Square
+as the only rail, DREAM Online listed as a bucket, the founder's token
+parameters recorded as a proposal and not adopted, and the FL §496.405 word
+rule applied. The operator cockpit from the same handoff is local-only at
+`tools/cockpit/` and never enters this folder (CI guard `cockpit-local-only`).
 
 **dream-online.net** (`domains/dream-online.net/`) is the DREAM Online game's
 static landing page, moved here from `apps/landing/dream-online`. The domain
@@ -40,8 +46,11 @@ dating app. Its code moved here in part 2 of the consolidation, 2026-09-17:
 `domains/youandinotai.com/backend` (was `backend/fastapi-app`) and
 `domains/youandinotai.com/frontend` (was `frontend/react-app`), reachable
 through a Cloudflare tunnel mapping the domain to `:3200` and `api.` to
-`:8000`. State: **live and frozen** — for sale as of 2026-09-16 per
-`ops/sale/YOUANDINOTAI-SALE-LISTING.md`; keep it up, change nothing else.
+`:8000`. State: **live, not for sale** — Joshua decided on 2026-09-28 not to sell; taking
+the Afternic, Dan and Atom listings down is still his click, so a buyer who
+writes in the meantime gets "withdrawn". The app is marketed by the Emergent
+lane (affiliate program first). Features and checkout unchanged until he rules
+on them.
 
 **aidoesitall.website** (`domains/aidoesitall.website/README.md`, pointer
 only) has no app code in this repo. Its apex and `www` are verified live on
