@@ -144,12 +144,47 @@ describe('hermes-voice.js imports resolve (browser SyntaxError guard, 2026-09-29
     const mod = await import('../js/jarvis/voice-picker.js')
     for (const n of names) expect(typeof mod[n], n + ' is exported by voice-picker.js').toBe('function')
   })
-  it('the local pack surface round-trips and the select fills from the browser voices', async () => {
+  it('the local pack surface round-trips', async () => {
     const mod = await import('../js/jarvis/voice-picker.js')
     expect(mod.getLocalPack()).toBeNull()
     expect(mod.setLocalPack({ voices: ['Nova'] })).toBe(true)
     expect(mod.getLocalPack().voices).toEqual(['Nova'])
     expect(mod.setLocalPack(null)).toBe(false)
     expect(mod.getLocalPack()).toBeNull()
+  })
+
+  // A minimal DOM: enough for populateVoiceSelect to append <option>s.
+  function fakeSelect() {
+    const sel = { children: [], value: '', appendChild(o) { this.children.push(o); return o } }
+    Object.defineProperty(sel, 'innerHTML', { set(v) { if (v === '') sel.children = [] }, get() { return '' } })
+    return sel
+  }
+  it('populateVoiceSelect fills the select from the browser voices, filtered to the local pack on request', async () => {
+    const mod = await import('../js/jarvis/voice-picker.js')
+    const prevDoc = globalThis.document
+    globalThis.document = { createElement: () => ({ value: '', textContent: '', selected: false }) }
+    try {
+      const sel = fakeSelect()
+      expect(mod.populateVoiceSelect(sel)).toBe(VOICES.length)
+      expect(sel.children.map((o) => o.value)).toEqual(['', ...VOICES.map((v) => v.name)])
+      mod.setLocalPack({ voices: ['Samantha'] })
+      expect(mod.populateVoiceSelect(sel, { preferLocal: true })).toBe(1)
+      expect(sel.children.map((o) => o.value)).toEqual(['', 'Samantha'])
+      mod.setLocalPack(null)
+    } finally {
+      globalThis.document = prevDoc
+    }
+  })
+  it('every element id hermes-voice.js wires exists in index.html (Copilot, PR 260)', async () => {
+    const fs = await import('node:fs')
+    const path = await import('node:path')
+    const url = await import('node:url')
+    const here = path.dirname(url.fileURLToPath(import.meta.url))
+    const src = fs.readFileSync(path.join(here, '..', 'js', 'hermes-voice.js'), 'utf8')
+    const html = fs.readFileSync(path.join(here, '..', 'index.html'), 'utf8')
+    const ids = [...src.matchAll(/vEl\('([^']+)'\)/g)].map((m) => m[1])
+    expect(ids.length).toBeGreaterThan(5)
+    for (const id of ids) expect(html, `index.html has #${id}`).toContain(`id="${id}"`)
+    expect(src, 'speak() resolves the voice once').not.toMatch(/applyPickToUtterance\(/)
   })
 })

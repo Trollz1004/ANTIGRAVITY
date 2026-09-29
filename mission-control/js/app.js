@@ -540,7 +540,11 @@ async function initAvatar() {
   catch (e) {
     logActivity(`3D viewer unavailable (three.js CDN unreachable): ${e.message}`);
     const empty = $('#avatar-empty');
-    if (empty) empty.textContent = '3D viewer unavailable: three.js could not be fetched from its CDN on this network. The rendered avatars below still ship.';
+    if (empty) {
+      empty.textContent = '3D viewer unavailable: three.js could not be fetched from its CDN on this network. The rendered avatars below still ship.';
+      empty.classList.remove('hidden');
+    }
+    loadAvatarGallery();
     return;
   }
   if (state.avatar.scene) return;
