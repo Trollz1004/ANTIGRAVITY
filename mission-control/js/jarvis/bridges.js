@@ -18,16 +18,21 @@ async function fetchJson(url, opts, fetchImpl = fetch) {
 
 export function statusClass(status) {
   if (status === 'UP') return 'ok'
-  if (status === 'PARKED' || status === 'NOT CONFIGURED') return ''
+  if (status === 'PARKED' || status === 'NOT CONFIGURED' || status === 'LINKED') return ''
   return 'down'
 }
 
 export function renderBridgeCard(b) {
   const dot = statusClass(b.status)
   const runNote = b.canRun ? 'accepts a prompt (creates a Proposal)' : (b.reason || 'read-only')
+  // A LINKED bridge (Emergent) is a place to go, not a service that answered: the
+  // name becomes the link, the dot stays neutral, never green.
+  const name = b.url && /^https:\/\//.test(b.url)
+    ? `<a href="${escapeHtml(b.url)}" target="_blank" rel="noopener">${escapeHtml(b.name)} ↗</a>`
+    : escapeHtml(b.name)
   return `<div class="mission-row" style="grid-template-columns:14px 1fr 110px 1fr 1fr" data-bridge-id="${escapeHtml(b.id)}">
     <span class="dot ${dot}"></span>
-    <span>${escapeHtml(b.name)}</span>
+    <span>${name}</span>
     <span>${escapeHtml(b.status)}</span>
     <span class="mission-detail">${escapeHtml(b.identity || '')}</span>
     <span class="mission-detail">${escapeHtml(runNote)}</span>

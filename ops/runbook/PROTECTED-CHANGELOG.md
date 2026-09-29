@@ -12,6 +12,8 @@ changed, and the commit that landed it. `.github/CODEOWNERS` and the
 `.claude/hooks/guard-protected-paths.ps1` reminder enforce this
 mechanically; this file is the human-readable record. Newest entries first.
 
+2026-09-29 01:40 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | §2: display name Driftus (JARVIS stays the code name), cloud address dashboard.aidoesitall.website as the eye in the sky, Emergent and Gemini bridge rows, judge lane merges its own green pull requests (Joshua's rulings of 2026-09-29). Cloud judge session, landed through a pull request. | this commit
+
 2026-09-28 18:05 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | review fixes on PR 257: §12 domains server listens on loopback and 192.168.0.8 (never every interface, comma-separated DOMAINS_SERVER_HOST override); §5 gains the operator-cockpit paragraph (served by JARVIS at /cockpit/, reads only /api/nodes) and says LAN targets are 192.168.0.x while public targets keep their https URLs. | this commit
 
 2026-09-28 17:40 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | §1 item 1 and §6: the date app is not for sale (Joshua's decision of 2026-09-28; taking the Afternic, Dan and Atom listings down is still his click); it is marketed by the Emergent lane, affiliate program first; sale bullets kept as history. | this commit

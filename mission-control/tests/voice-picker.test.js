@@ -130,3 +130,26 @@ describe('voice picker — speak() integration', () => {
     expect(voicePicks).toEqual(['Samantha']);
   });
 });
+
+describe('hermes-voice.js imports resolve (browser SyntaxError guard, 2026-09-29)', () => {
+  it('every name hermes-voice.js imports from voice-picker.js is a real export', async () => {
+    const fs = await import('node:fs')
+    const path = await import('node:path')
+    const url = await import('node:url')
+    const here = path.dirname(url.fileURLToPath(import.meta.url))
+    const src = fs.readFileSync(path.join(here, '..', 'js', 'hermes-voice.js'), 'utf8')
+    const m = /import\s*\{([^}]*)\}\s*from\s*'\.\/jarvis\/voice-picker\.js'/.exec(src)
+    expect(m, 'hermes-voice.js imports from voice-picker.js').toBeTruthy()
+    const names = m[1].split(',').map((n) => n.trim()).filter(Boolean)
+    const mod = await import('../js/jarvis/voice-picker.js')
+    for (const n of names) expect(typeof mod[n], n + ' is exported by voice-picker.js').toBe('function')
+  })
+  it('the local pack surface round-trips and the select fills from the browser voices', async () => {
+    const mod = await import('../js/jarvis/voice-picker.js')
+    expect(mod.getLocalPack()).toBeNull()
+    expect(mod.setLocalPack({ voices: ['Nova'] })).toBe(true)
+    expect(mod.getLocalPack().voices).toEqual(['Nova'])
+    expect(mod.setLocalPack(null)).toBe(false)
+    expect(mod.getLocalPack()).toBeNull()
+  })
+})

@@ -51,7 +51,8 @@ function speak(text) {
     setStatus('speaking');
     const u = new SpeechSynthesisUtterance(text);
     const voices = speechSynthesis.getVoices();
-    u.voice = resolveSpeakVoice(voices, { preferLocal: !!getLocalPack() }) || null;
+    // resolveSpeakVoice reads the browser's own list; localOnly prefers the local pack when one is loaded.
+    u.voice = (voices.length ? resolveSpeakVoice({ localOnly: !!getLocalPack() }) : null) || null;
     applyPickToUtterance(u);
     u.rate = 1.05;
     u.onend = () => { setStatus('idle'); resolve(); };
