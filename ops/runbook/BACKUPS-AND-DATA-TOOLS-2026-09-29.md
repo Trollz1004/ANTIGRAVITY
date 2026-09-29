@@ -31,7 +31,9 @@ Two vaults, one per node, both gitignored, neither backed up until today.
 | Sabretooth 192.168.0.8 | `C:\ANTIGRAVITY\Antigravity` (`OBSIDIAN_VAULT_PATH`) | JARVIS Knowledge Graph, `/api/vault`, the House's `/obsidian-save` | `https://127.0.0.1:27124` (`OBSIDIAN_REST_URL`), probed by JARVIS as the Obsidian bridge |
 | Alienware 192.168.0.40 | `C:\DREAM\dream-online\DREAM-ONLINE` (vault id `2289237e7c63ff36`) | `drift`, the dream-brain MCP, the game journal | 27123 report-only (Alienware runbook) |
 
-**Backups.** The same `backup-node.mjs` copies the vault into the dated set (`.trash` and `.obsidian/workspace*` skipped, since they churn every session), then re-walks the copy and compares file count and bytes to the source; DONE only when they match. Retention keeps the newest `BACKUP_KEEP` sets (default 14) under `ops/backups/` (gitignored on both repositories). JARVIS shows the last run at `/api/backup-health`: NOT CONFIGURED until the first run, STALE after 26 hours, else the run's GREEN, YELLOW or RED.
+**Local snapshot, not disaster recovery.** Read this before trusting the word "backup": by default the sets live under `ops/backups/` on the same disk as the vault and the repository, so one disk failure, one ransomware event or one lost node takes the vault and its copies together. What this buys today is recovery from a bad edit, a bad sync or a deleted note. Joshua's move for real recovery: point `BACKUP_DIR` at a second volume (an external drive or the other node's share) in the node's `.env`; an off-node copy stage (object storage or a second machine) is a ruling and a spec, not something the script claims.
+
+**Backups.** The same `backup-node.mjs` copies the vault into the dated set (`.trash` and `.obsidian/workspace*` skipped, since they churn every session), then re-walks the copy and compares file count and bytes to the source; DONE only when they match. Retention keeps the newest `BACKUP_KEEP` usable sets (default 14; a set counts when its manifest is not RED and at least one item is DONE), always keeps the newest set holding each item's last DONE, deletes failed and interrupted sets, and never touches the set just written. Sets live under `ops/backups/` (gitignored on both repositories). From the command line the script reads the repository `.env` first (real environment variables win), so the Hermes cron and the scheduled task carry no configuration of their own. JARVIS shows the last run at `/api/backup-health`: NOT CONFIGURED until the first run, STALE after 26 hours, else the run's GREEN, YELLOW or RED.
 
 **Still Joshua's or the node's:** the obsidian-second-brain plugin install against the game vault (Alienware runbook §9, item 2) is unchanged by this page.
 
@@ -45,7 +47,7 @@ Checked through the claude.ai Vercel connector on 2026-09-29: the connected acco
 |---|---|---|---|
 | Nightly backup (Supabase dump + vault copy) | Sabretooth | Hermes cron `0 3 * * *` `node C:\ANTIGRAVITY\mission-control\scripts\backup-node.mjs` (row in `ops/skills/date-app-hermes-operations/SKILL.md`) | `ops/heartbeat/backup-node.json`, `.log`, `ops/backups/<stamp>/` |
 | Nightly backup (DREAM dump + game vault copy) | Alienware | scheduled task `DREAM-Alienware-Backup` at 03:30, `node C:\DREAM\dream-online\ops\node\backup-node.mjs` (register with `schtasks`, command in the Alienware runbook §4) | same shape under the game repo |
-| Backup health tile | Sabretooth | JARVIS `/api/backup-health` | read by the House and the screenshot loop |
+| Backup health endpoint | Sabretooth | JARVIS `/api/backup-health` | operator-reachable JSON (NOT CONFIGURED, RED on a corrupt file, STALE, or the run's verdict); no dashboard tile, House stage or screenshot-loop consumer yet, those are follow-ups |
 
 ## Verified from the cloud, and not
 

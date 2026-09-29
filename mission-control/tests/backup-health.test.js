@@ -18,11 +18,17 @@ function fixture(body) {
 
 describe('lib/backup-health.mjs', () => {
   const nc = { status: 'NOT CONFIGURED', detail: 'backup-node.json not written yet; run scripts/backup-node.mjs' }
-  it('missing or unparsable file is NOT CONFIGURED', () => {
+  it('a missing file is NOT CONFIGURED', () => {
     expect(readBackupHealth({ file: fixture() })).toEqual(nc)
-    expect(readBackupHealth({ file: fixture('{nope') })).toEqual(nc)
-    expect(readBackupHealth({ file: fixture('null') })).toEqual(nc)
     expect(readBackupHealth()).toEqual(nc)
+  })
+  it('a file that exists but is corrupt or unreadable is RED, never a setup state', () => {
+    expect(readBackupHealth({ file: fixture('{nope') })).toMatchObject({ status: 'RED' })
+    expect(readBackupHealth({ file: fixture('{nope') }).detail).toContain('not valid JSON')
+    expect(readBackupHealth({ file: fixture('null') })).toMatchObject({ status: 'RED', detail: 'backup-node.json holds no result object' })
+    const dir = path.dirname(fixture('{}'))
+    expect(readBackupHealth({ file: dir })).toMatchObject({ status: 'RED' })
+    expect(readBackupHealth({ file: dir }).detail).toContain('unreadable')
   })
   it('fresh result returns the overall status and the fields', () => {
     const items = [{ id: 'vault', status: 'DONE', detail: 'ok' }]
