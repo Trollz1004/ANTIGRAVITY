@@ -59,6 +59,7 @@ A **200 is not a working page**. Screenshot or CDP `document.body.innerText` bef
 | Daily Skill Research | `de469767d18f` | 10:00 — search skills.sh, ClawHub, Nous hub |
 | OmniRoute Social Sub-Agent | `3542e03ea8ca` | every 4h — paused |
 | Screenshot Health (domains + dashboards) | _id recorded by Hermes on registration_ | `*/30 * * * *` — `node C:\ANTIGRAVITY\mission-control\scripts\screenshot-health.mjs`, added 2026-09-28 |
+| Nightly Backup (Supabase dump + Obsidian vault copy) | _id recorded by Hermes on registration_ | `0 3 * * *` — `node C:\ANTIGRAVITY\mission-control\scripts\backup-node.mjs`, added 2026-09-29; result at `/api/backup-health` |
 
 Windows task `ANTIGRAVITY-Heartbeat-15min` also runs `ops/heartbeat/autonomous_15min.sh`.
 

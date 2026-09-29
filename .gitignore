@@ -290,3 +290,9 @@ ops/marketing-inbox/evidence/
 
 # Cockpit local session file (CRD session URLs) — never committed
 tools/cockpit/cockpit.local.json
+
+# Node backups (mission-control/scripts/backup-node.mjs): dated sets of the Supabase dump
+# and the Obsidian vault copy live here, never in git. Health outputs beside the others.
+ops/backups/
+ops/heartbeat/backup-node.json
+ops/heartbeat/backup-node.log
