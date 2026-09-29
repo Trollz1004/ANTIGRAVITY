@@ -44,6 +44,7 @@
  *   GET  /api/fleet             Fleet panel (Phase D): Hermes/OpenClaw/OpenCode status, current task, queue depth, token spend
  *   GET  /api/screenshot-health  Screenshot health (2026-09-28): per-target frame-verified verdict from the Hermes cron's result file; NOT CONFIGURED until it runs
  *   GET  /api/screenshot-health/shot/:id  the latest PNG for one target id (served only from evidence/health-shots)
+ *   GET  /api/backup-health      Backup health: last nightly backup verdict from scripts/backup-node.mjs; NOT CONFIGURED until it runs, STALE after 26 hours
  *   GET  /cockpit/                 the local-only operator cockpit (tools/cockpit), same origin as /api/nodes
  *   GET  /api/architecture.json Architecture panel (Phase E): typed JSON of the live Sabertooth stack (House stage table + health JSON)
  *   GET  /api/architecture      Architecture panel: archify-rendered HTML (same-origin), plain-text fallback on CLI failure
@@ -78,6 +79,7 @@ import { gitPanel } from './lib/git-panel.mjs';
 import { sanitizeHeaders, probeService } from './lib/session-proxy.mjs';
 import { readHeartbeat } from './lib/heartbeat.mjs';
 import { readScreenshotHealth } from './lib/screenshot-health.mjs';
+import { readBackupHealth } from './lib/backup-health.mjs';
 import { listRunbooks, resolveRunbook } from './lib/runbooks.mjs';
 import { createLedgerReader } from './lib/ledger.mjs';
 import { redact } from './lib/redact.mjs';
@@ -212,6 +214,8 @@ const HEARTBEAT_LOG_PATH = join(REPO, 'ops', 'heartbeat', 'health.log');
 // (scripts/screenshot-health.mjs). Missing -> NOT CONFIGURED, never a sample row.
 const SCREENSHOT_HEALTH_JSON_PATH = join(REPO, 'ops', 'heartbeat', 'screenshot-health.json');
 const SCREENSHOT_SHOTS_ROOT = join(REPO, 'evidence', 'health-shots');
+// Backup health: the nightly backup runner's result file (scripts/backup-node.mjs). Missing -> NOT CONFIGURED.
+const BACKUP_HEALTH_JSON_PATH = join(REPO, 'ops', 'heartbeat', 'backup-node.json');
 // Runbook viewer (Phase B).
 const RUNBOOK_DIR = join(REPO, 'ops', 'runbook');
 // Ledger panel (Phase B): 60s cache, 15s timeout, one reader instance for the process lifetime.
@@ -705,6 +709,8 @@ createServer(async (req, res) => {
   if (p === '/api/heartbeat') return send(res, 200, readHeartbeat({ jsonPath: HEARTBEAT_JSON_PATH, logPath: HEARTBEAT_LOG_PATH }));
   // Screenshot health: the frame-verified verdict per domain and dashboard (God's Eye reads it beside the port probes).
   if (p === '/api/screenshot-health') return send(res, 200, readScreenshotHealth({ jsonPath: SCREENSHOT_HEALTH_JSON_PATH }));
+  // Backup health: last nightly backup verdict (GREEN/YELLOW/RED), STALE after 26 hours.
+  if (p === '/api/backup-health') return send(res, 200, readBackupHealth({ file: BACKUP_HEALTH_JSON_PATH }));
   { const m = /^\/api\/screenshot-health\/shot\/([a-z0-9-]+)$/.exec(p);
     if (m) {
       const latest = readScreenshotHealth({ jsonPath: SCREENSHOT_HEALTH_JSON_PATH });
