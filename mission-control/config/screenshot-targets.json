@@ -1,0 +1,15 @@
+{
+  "_comment": "Screenshot health targets (ruled 2026-09-28: a 200 is not a working page; a frame is). mission-control/scripts/screenshot-health.mjs opens each URL in headless Chromium, saves a PNG under evidence/health-shots/<date>/, reads the page's visible text, and records UP only when 'identity' appears in the visible text or the title. Hermes runs the script from its gateway cron every 30 minutes; JARVIS reads the result at /api/screenshot-health (lib/screenshot-health.mjs). 'access' targets are behind Cloudflare Access, so the correct state is ACCESS SIGN-IN, not a dashboard render. Edit this file to add a watch target.",
+  "targets": [
+    { "id": "jarvis", "label": "JARVIS Mission Control", "url": "http://192.168.0.8:9150/", "identity": "JARVIS", "group": "dashboards" },
+    { "id": "domains-server", "label": "Domains static sites :9160 (untilnokidinneed host)", "url": "http://192.168.0.8:9160/", "host": "untilnokidinneed.com", "identity": "Until No Kid In Need", "group": "dashboards" },
+    { "id": "hermes", "label": "Hermes dashboard :9119", "url": "http://192.168.0.8:9119/", "identity": "Hermes", "group": "dashboards", "optional": true },
+    { "id": "dashboard-aidoesitall", "label": "dashboard.aidoesitall.website (Cloudflare Access)", "url": "https://dashboard.aidoesitall.website/", "identity": "JARVIS", "access": true, "group": "dashboards" },
+    { "id": "youandinotai", "label": "youandinotai.com (date app, keep-alive)", "url": "https://youandinotai.com/", "identity": "You and I", "group": "domains" },
+    { "id": "untilnokidinneed", "label": "untilnokidinneed.com", "url": "https://untilnokidinneed.com/", "identity": "Until No Kid In Need", "group": "domains" },
+    { "id": "untilnokidinneed-dao", "label": "untilnokidinneed.com/dao/", "url": "https://untilnokidinneed.com/dao/", "identity": "Perpetual Mission DAO", "group": "domains" },
+    { "id": "dream-online-net", "label": "dream-online.net", "url": "https://dream-online.net/", "identity": "DREAM Online", "group": "domains" },
+    { "id": "ai-solutions-store", "label": "ai-solutions.store", "url": "https://ai-solutions.store/", "identity": "AI Solutions", "group": "domains" },
+    { "id": "onlinerecycle-net", "label": "onlinerecycle.net", "url": "https://onlinerecycle.net/", "identity": "Recycle", "group": "domains" }
+  ]
+}

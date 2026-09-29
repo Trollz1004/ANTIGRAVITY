@@ -4,16 +4,35 @@
  * the caller injects fetch, so tests never touch the network.
  */
 export const NODES = [
-  { id: 'alienware', name: 'Alienware', ip: '192.168.0.40', role: 'JARVIS host · Dream Online MMO · Hermes · Ollama (RX 6800)' },
-  { id: 'sabertooth', name: 'Sabertooth', ip: '192.168.0.8', role: 'OmniRoute router · Sentry · Revenue stack (Date App, Directus, Ludus)' },
+  { id: 'alienware', name: 'Alienware', ip: '192.168.0.40', role: 'DEV node (ruled 2026-09-28) · DREAM Online build and test · Hermes game skills · Ollama (RX 6800)' },
+  { id: 'sabertooth', name: 'Sabertooth', ip: '192.168.0.8', role: 'FINISHED PRODUCT node (ruled 2026-09-28) · JARVIS :9150 · OmniRoute · date app keep-alive · domains :9160 · Hermes health cron' },
   { id: 'public-web', name: 'Public web', ip: 'internet', role: 'Landing pages · DNS should be Cloudflare' },
+];
+
+/**
+ * Nodes that are OFF by ruling (Joshua, 2026-09-28): only Alienware (dev) and
+ * Sabretooth (finished product) run. These are listed so God's Eye can say
+ * OFF BY RULING instead of DOWN, and so nobody re-adds a probe for them.
+ */
+export const NODES_OFF = [
+  { id: 't5500', name: 'T5500', reason: 'off by ruling 2026-09-28' },
+  { id: 'optiplex-9020', name: 'OptiPlex 9020', reason: 'off by ruling 2026-09-28' },
+  { id: 'i7k', name: 'i7k (1050 Ti worker)', reason: 'off by ruling 2026-09-28' },
+  { id: 'chromebook', name: 'Chromebook', reason: 'off by ruling 2026-09-28' },
+  { id: 'mini-asus', name: 'Mini ASUS', reason: 'off by ruling 2026-09-28' },
 ];
 
 import { request as httpRequest } from 'node:http';
 import { request as httpsRequest } from 'node:https';
 
-const A = '127.0.0.1';
+// LAN addresses (Joshua, 2026-09-28: endpoints are always 192.168.0.x). This
+// module runs on Sabretooth, so its own services are probed at the Sabretooth
+// LAN address too, never loopback; Alienware's dev services at 192.168.0.40.
+// The one exception is the Obsidian Local REST plugin, which binds loopback
+// only and cannot be reached any other way.
+const A = '192.168.0.40';
 const S = '192.168.0.8';
+const LOOPBACK = '127.0.0.1';
 const obj = (j) => j && typeof j === 'object' && !Array.isArray(j);
 
 /**
@@ -38,13 +57,15 @@ export function insecureTransport(url, { signal } = {}) {
 }
 
 export const SERVICES = [
-  { id: 'jarvis', label: 'JARVIS HUD', node: 'alienware', port: 9150, url: `http://${A}:9150/health`, identity: ({ json }) => obj(json) && json.service === 'jarvis-dashboard' },
-  { id: 'hermes', label: 'Hermes dashboard', node: 'alienware', port: 9119, url: `http://${A}:9119/api/health`, identity: ({ json }) => obj(json) && json.ok === true && 'version' in json },
-  { id: 'ollama', label: 'Ollama (Vulkan)', node: 'alienware', port: 11434, url: `http://${A}:11434/api/tags`, identity: ({ json }) => obj(json) && Array.isArray(json.models) },
+  { id: 'jarvis', label: 'JARVIS Mission Control', node: 'sabertooth', port: 9150, url: `http://${S}:9150/health`, identity: ({ json }) => obj(json) && json.service === 'jarvis-dashboard' },
+  { id: 'hermes', label: 'Hermes dashboard', node: 'sabertooth', port: 9119, url: `http://${S}:9119/api/health`, identity: ({ json }) => obj(json) && json.ok === true && 'version' in json },
+  { id: 'ollama', label: 'Ollama (fail-safe)', node: 'sabertooth', port: 11434, url: `http://${S}:11434/api/tags`, identity: ({ json }) => obj(json) && Array.isArray(json.models) },
   { id: 'live-npc-lab', label: 'Dream Live NPC Lab', node: 'alienware', port: 9127, url: `http://${A}:9127/health`, identity: ({ status, json }) => status === 200 && obj(json) && (json.ok === true || json.status === 'ok' || /npc/i.test(String(json.service || json.name || ''))) },
+  { id: 'aw-ollama', label: 'Ollama (RX 6800, T0 NPCs)', node: 'alienware', port: 11434, url: `http://${A}:11434/api/tags`, identity: ({ json }) => obj(json) && Array.isArray(json.models) },
+  { id: 'domains-server', label: 'Domains static sites', node: 'sabertooth', port: 9160, url: `http://${S}:9160/health`, identity: ({ json }) => obj(json) && json.service === 'domains-server' },
   { id: 'dreamops', label: 'DreamOps Bridge', node: 'alienware', port: 9133, url: `http://${A}:9133/health`, identity: ({ status, json }) => status === 200 && obj(json) && (json.ok === true || json.status === 'ok' || /dreamops/i.test(String(json.service || json.name || ''))) },
-  { id: 'crosslisting', label: 'Crosslisting OS', node: 'alienware', port: 3000, url: `http://${A}:3000/api/trpc/system.health?input=%7B%22json%22%3A%7B%22timestamp%22%3A0%7D%7D`, identity: ({ status, json }) => status === 200 && obj(json) && json.result?.data?.json?.ok === true },
-  { id: 'obsidian', label: 'Obsidian Local REST', node: 'alienware', port: 27124, url: `https://${A}:27124/`, insecure: true, identity: ({ text }) => /Obsidian Local REST API/.test(text) },
+  { id: 'crosslisting', label: 'Crosslisting OS', node: 'sabertooth', port: 3000, url: `http://${S}:3000/api/trpc/system.health?input=%7B%22json%22%3A%7B%22timestamp%22%3A0%7D%7D`, identity: ({ status, json }) => status === 200 && obj(json) && json.result?.data?.json?.ok === true },
+  { id: 'obsidian', label: 'Obsidian Local REST', node: 'sabertooth', port: 27124, url: `https://${LOOPBACK}:27124/`, insecure: true, identity: ({ text }) => /Obsidian Local REST API/.test(text) },
   { id: 'omniroute', label: 'OmniRoute', node: 'sabertooth', port: 20128, url: `http://${S}:20128/v1/models`, identity: ({ status, json }) => status === 401 || status === 403 || (status === 200 && obj(json) && Array.isArray(json.data)) },
   // Fable's Sentry stopped being a separate :9140 service 2026-09-18 (folded into
   // JARVIS, lib/sentry.mjs). This row now reads the SAME dashboard's own /api/sentry
@@ -101,7 +122,7 @@ export async function probeAll(opts = {}) {
     });
     return { ...n, services, up: services.filter((s) => s.up).length, total: services.length };
   });
-  return { nodes, services: results, dns, at: new Date().toISOString() };
+  return { nodes, nodesOff: NODES_OFF, services: results, dns, at: new Date().toISOString() };
 }
 
 /** Public domains whose DNS should live on Cloudflare. */

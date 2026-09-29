@@ -12,7 +12,11 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-export const HARNESSES = ['hermes', 'openclaw', 'opencode'];
+// emergent and genspark added 2026-09-28 (Joshua): Emergent owns the date-app
+// marketing lane Hermes gave up; Genspark is a helper lane (research, sheets).
+// Neither has a probe port anywhere in this repo, so both report NOT
+// CONFIGURED until one is named; their journals live under .agents/journals/.
+export const HARNESSES = ['hermes', 'openclaw', 'opencode', 'emergent', 'genspark'];
 
 /**
  * The last `## ` journal entry in a STATE.md text blob: its heading, the

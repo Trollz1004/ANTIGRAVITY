@@ -8,7 +8,6 @@
 import { streamHermes } from './jarvis/claude-bridge.js';
 import {
   resolveSpeakVoice,
-  applyPickToUtterance,
   populateVoiceSelect,
   setStoredVoiceURI,
   getLocalPack,
@@ -51,8 +50,10 @@ function speak(text) {
     setStatus('speaking');
     const u = new SpeechSynthesisUtterance(text);
     const voices = speechSynthesis.getVoices();
-    u.voice = resolveSpeakVoice(voices, { preferLocal: !!getLocalPack() }) || null;
-    applyPickToUtterance(u);
+    // One resolution only: localOnly prefers the local pack when one is loaded,
+    // else the stored pick, else the heuristic. (A second applyPickToUtterance
+    // call here used to overwrite the local-pack choice every time.)
+    u.voice = (voices.length ? resolveSpeakVoice({ localOnly: !!getLocalPack() }) : null) || null;
     u.rate = 1.05;
     u.onend = () => { setStatus('idle'); resolve(); };
     u.onerror = () => { setStatus('idle'); resolve(); };
@@ -114,9 +115,12 @@ function initHermesVoice() {
 
   // Voice picker wiring
   const select = vEl('hermes-voice-select');
+  // Element ids below must exist in index.html (tests/voice-picker.test.js checks every vEl id).
   const localToggle = vEl('hermes-voice-local');
-  const dlBtn = vEl('hermes-voice-download');
+  const dlBtn = vEl('hermes-voice-pack-download');
+  const refreshBtn = vEl('hermes-voice-refresh');
   const populate = () => populateVoiceSelect(select, { preferLocal: !!localToggle?.checked });
+  refreshBtn?.addEventListener('click', () => { populate(); voiceLog('hermes', 'Voices re-enumerated'); });
   if (select) {
     populate();
     select.addEventListener('change', () => {

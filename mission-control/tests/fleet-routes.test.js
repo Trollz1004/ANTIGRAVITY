@@ -36,3 +36,12 @@ describe('JARVIS wiring — server.mjs Fleet route (Phase D, unit 2)', () => {
     expect(fs.existsSync(path.join(root, 'js', 'jarvis', 'fleet.js'))).toBe(true)
   })
 })
+
+describe('fleet lanes added 2026-09-28 — Emergent and Genspark', () => {
+  const server = fs.readFileSync(path.join(root, 'server.mjs'), 'utf8')
+  it('both lanes are wired with probe: null (NOT CONFIGURED until a port is named) and have a journal', () => {
+    expect(server).toMatch(/lane: 'emergent'[^}]*probe: null/)
+    expect(server).toMatch(/lane: 'genspark'[^}]*probe: null/)
+    for (const lane of ['emergent', 'genspark']) expect(fs.existsSync(path.join(root, '..', '.agents', 'journals', lane, 'STATE.md'))).toBe(true)
+  })
+})

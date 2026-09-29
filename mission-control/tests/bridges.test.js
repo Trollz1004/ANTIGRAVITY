@@ -151,7 +151,7 @@ describe('bridges — identity probes', () => {
 });
 
 describe('buildBridges', () => {
-  it('returns all ten bridges, each with id/name/lastChecked, and never throws on a dead adapter', async () => {
+  it('returns every bridge (twelve since 2026-09-29), each with id/name/lastChecked, and never throws on a dead adapter', async () => {
     const deps = {
       hermes: { fetchImpl: async () => { throw new Error('down'); }, exec: () => { throw new Error('down'); } },
       openclaw: { fetchImpl: async () => { throw new Error('down'); } },
@@ -262,3 +262,18 @@ describe('askOmniRoute', () => {
     expect(r.status).toBe(400);
   });
 });
+
+describe('bridges added 2026-09-29 — Emergent (link) and Gemini in Chrome (browser-side)', () => {
+  it('emergent is NOT CONFIGURED without a wing link and LINKED (never UP, never runnable) with one', async () => {
+    const { probeEmergent } = await import('../lib/bridges.mjs')
+    expect(probeEmergent({})).toMatchObject({ status: 'NOT CONFIGURED', canRun: false })
+    const r = probeEmergent({ wingUrl: 'https://app.emergent.sh/wing?wm=x' })
+    expect(r.status).toBe('LINKED'); expect(r.canRun).toBe(false); expect(r.url).toBe('https://app.emergent.sh/wing?wm=x')
+  })
+  it('gemini is browser-side only: NOT CONFIGURED, no key, not runnable', async () => {
+    const { probeGemini, BRIDGE_IDS } = await import('../lib/bridges.mjs')
+    expect(probeGemini()).toMatchObject({ status: 'NOT CONFIGURED', canRun: false })
+    expect(probeGemini().identity).toMatch(/no API key/)
+    expect(BRIDGE_IDS).toContain('emergent'); expect(BRIDGE_IDS).toContain('gemini')
+  })
+})

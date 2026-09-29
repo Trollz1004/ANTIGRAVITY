@@ -25,7 +25,7 @@ import { writeFileSync, unlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
-export const BRIDGE_IDS = ['hermes', 'openclaw', 'claude', 'codex', 'ollama', 'omniroute', 'obsidian', 'browser-cdp', 'buzz', 'unreal'];
+export const BRIDGE_IDS = ['hermes', 'openclaw', 'claude', 'codex', 'ollama', 'omniroute', 'obsidian', 'browser-cdp', 'buzz', 'unreal', 'emergent', 'gemini'];
 export const RUNNABLE_BRIDGE_IDS = ['hermes', 'claude', 'codex', 'ollama'];
 
 const HERMES_MARKER = /Headless backend \(hermes serve\)|__HERMES_SESSION_TOKEN__/;
@@ -184,10 +184,30 @@ export function probeUnreal() {
   return { status: 'PARKED', identity: 'Parked per toolchain decision 2026-07-08', canRun: false, reason: 'Parked per toolchain decision 2026-07-08' };
 }
 
+// ── emergent (2026-09-29) ─────────────────────────────────────────────────
+// Emergent is a hosted agent workspace (its own chat, its own runtime); JARVIS
+// cannot probe it and holds no key for it. The row is a link to the wing chat
+// Joshua opened for the affiliate swarm, so Mission Control is where it is
+// reached from. LINKED means "a link is configured", never "up".
+export function probeEmergent({ wingUrl = '' } = {}) {
+  if (!wingUrl) return { status: 'NOT CONFIGURED', identity: 'no Emergent wing link configured (EMERGENT_WING_URL)', canRun: false };
+  return { status: 'LINKED', identity: 'Emergent wing chat (affiliate swarm) — opens in a new tab; hosted, no probe, no key here', url: wingUrl, canRun: false };
+}
+
+// ── gemini (2026-09-29) ───────────────────────────────────────────────────
+// Gemini comes back into the loop through Gemini in Chrome, browser-side, in
+// the operator's own signed-in Chrome — never on an API key (Code Assist for
+// individuals was dropped, and the no-API-key rule stands). There is nothing
+// for this node to probe, so the row says so and links the hub the operator
+// opens it beside.
+export function probeGemini() {
+  return { status: 'NOT CONFIGURED', identity: 'Gemini in Chrome: browser-side in the operator\'s Chrome, no API key; nothing on this node to probe', canRun: false };
+}
+
 const NAMES = {
   hermes: 'Hermes', openclaw: 'OpenClaw', claude: 'Claude Code', codex: 'Codex',
   ollama: 'Ollama', omniroute: 'OmniRoute', obsidian: 'Obsidian', 'browser-cdp': 'Browser (CDP)',
-  buzz: 'Buzz relay', unreal: 'Unreal Engine',
+  buzz: 'Buzz relay', unreal: 'Unreal Engine', emergent: 'Emergent (wing chat)', gemini: 'Gemini in Chrome',
 };
 
 /** Build every bridge row in parallel. Never throws — a dead adapter reports DOWN, not a 500. */
@@ -207,6 +227,8 @@ export async function buildBridges(deps = {}) {
         'browser-cdp': () => probeBrowserCdp(deps.browserCdp || {}),
         buzz: () => probeBuzz(deps.buzz || {}),
         unreal: () => probeUnreal(),
+        emergent: () => probeEmergent(deps.emergent || {}),
+        gemini: () => probeGemini(),
       })[id]();
     } catch (e) {
       partial = { status: 'DOWN', identity: String((e && e.message) || e), canRun: false };

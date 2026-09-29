@@ -17,12 +17,12 @@
 - [x] Store each marketplace credential exclusively as a server-side environment secret and never echo, persist, log, or serialize its value to the browser.
 - [x] Add a credential-status interface that exposes only non-sensitive connection state and never displays secret material.
 - [x] Create a non-secret server configuration template containing only LLC-owned marketplace variable names and safe setup guidance.
-- [x] Inspect the authorized `trollz1004` GitHub repositories and any nominated Emergent repository before copying, merging, or executing third-party code.
+- [x] Inspect the owner's authorized repositories and any nominated hosted-editor repository before copying, merging, or executing third-party code.
 - [x] Record license, attribution, and branding requirements for each approved external component in a visible credits area and project documentation.
 - [x] Add isolated automation-profile records with scoped capabilities, memory references, skill assignments, owner controls, and complete activity logging.
 - [x] Add a unified operations view that correlates marketplace actions, service events, approvals, exceptions, and automation-profile activity.
 - [x] Define service boundaries and deployment options for approved SaaS microservices without granting any profile unrestricted control or unlogged publishing authority.
-- [ ] Create and maintain the LLC Crosslisting OS in a separate private `Trollz1004` repository while preserving `saas-microservices` as an unchanged reusable template.
+- [x] The LLC Crosslisting OS lives in the company monorepo (folded in 2026-09-17); `saas-microservices` stays an unchanged reusable template.
 - [x] Inspect `Ai-Solutions-Store/EMERGENT-if-self-hosted-EMERGENT-GETS-CREDIT-AND-FREEM-BRANDING-MANDATORY-` and `Ai-Solutions-Store/revenue-first-products` as untrusted reference sources before copying or executing code.
 - [x] Capture and display all mandatory upstream credit and branding terms for any approved self-hosted Emergent component.
 - [x] Keep repository secret values non-exportable; request only LLC-authorized deployment credentials through secure server-side settings.
@@ -47,15 +47,15 @@
 - [ ] Configure the matching production eBay Redirect URL and use the generated RuName to complete the seller consent flow.
 - [ ] Register the deployment-hosted LLC Crosslisting OS callback URL as the production eBay Redirect URL; retain the Square site only as the public application-information link.
 - [x] Deliver a copy-paste Raycast prompt for a Windows-local test workspace under the specified OneDrive path, with secret-safe setup, smoke tests, and rollback instructions.
-- [x] Inspect the connected local Paperclip/Hermes page at the user-provided address as reference data only.
+- [x] Inspect the connected local operations page at the user-provided address as reference data only.
 - [x] Compare its ports, services, paths, and environment-variable conventions against the Windows-local Raycast prompt.
-- [x] Revise and redeliver the Raycast prompt with conflict-safe Paperclip/Hermes integration guidance.
+- [x] Revise and redeliver the Raycast prompt with conflict-safe operations-dashboard integration guidance.
 - [x] Add Sentry-style service health semantics to the local setup prompt: distinguish reachability, identity, write health, and wrong-service responses.
 - [x] Add Redis MISCONF/read-only and closed-port handling to the local smoke-test and rollback rules.
 - [x] Add presence-only checks for local `.env`, Windows environment variables, and secure project configuration, reporting variable names and source location without values.
 - [x] Instruct Raycast to reuse existing configured credentials and stop before issuing replacements unless a named value is missing or invalid.
 - [x] Correct the local setup command names to match the repository scripts and require operator confirmation before any database migration.
 - [x] Audit the populated workspace for tracked secrets, local runtime artifacts, and missing ignore rules before repository seeding.
-- [x] Seed `Trollz1004/llc-crosslisting-os` from the populated LLC Crosslisting OS workspace without touching the reusable template repository.
+- [x] Seed the company repository from the populated LLC Crosslisting OS workspace without touching the reusable template repository.
 - [x] Verify the private repository has a commit and excludes `.env`, tokens, cookies, local databases, and runtime logs.
 - [x] Update the local setup prompt so Raycast knows the repository is seeded and can clone it without deleting an existing valid workspace.

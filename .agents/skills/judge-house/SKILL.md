@@ -38,8 +38,10 @@ usually to route it to Codex and say why — not to judge it yourself. Judge it
 yourself when Joshua asks, when Codex has failed on it, or when it is the
 merge gate.
 
-Gemini is **off the roster** — Google dropped Code Assist for individuals. Do not
-route to it and do not revive it on an API key.
+Gemini is **off the judge roster** — Google dropped Code Assist for individuals. Do not
+route to it and do not revive it on an API key. (2026-09-29: Gemini is back in the
+loop as a participant through Gemini in Chrome, browser-side in Joshua's own Chrome;
+that is not an API key and not a judge seat.)
 
 **History:** 2026-08-25 ruling had four judges (Claude, Codex, Grok, GitHub
 Copilot). That is superseded — kept here only as history, not instruction.

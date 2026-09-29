@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Camera, Heart, ShieldCheck } from 'lucide-react';
 
 const STEPS = ['profile', 'verify', 'subscribe'] as const;
-type Step = typeof STEPS[number];
+type Step = (typeof STEPS)[number];
 
 const stepIcons = {
   profile: Camera,
@@ -19,7 +19,8 @@ const stepTitles = {
 
 const stepDescriptions = {
   profile: 'Add a bio, interests, and a prompt so people can find you.',
-  verify: 'Complete the $1 Bot-Shield verification to unlock discovery and matching.',
+  verify:
+    'Complete the $1 Bot-Shield verification to unlock discovery and matching.',
   subscribe: 'Founding Member at $14.99/mo. Cancel anytime.',
 };
 
@@ -56,7 +57,7 @@ export function OnboardingFunnel() {
 
         {/* Progress indicator */}
         <div className="mb-8 flex gap-2">
-          {STEPS.map((s) => (
+          {STEPS.map(s => (
             <div
               key={s}
               className={`h-2 flex-1 rounded-full border-2 border-[#111111] ${

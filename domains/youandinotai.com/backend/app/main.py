@@ -49,6 +49,7 @@ from app.routers import (
     billing,
     boards,
     clawx,
+    discovery,
     double_dates,
     events,
     feature_flags,
@@ -197,6 +198,7 @@ app = FastAPI(
 # MUST be called before setup_telemetry() which invokes
 # opentelemetry.instrumentation.fastapi.FastAPIInstrumentor.instrument_app(app).
 from app._otel_cors_fix import apply as _apply_otel_cors_fix  # noqa: E402
+
 _apply_otel_cors_fix()
 
 
@@ -477,6 +479,7 @@ app.include_router(lovebot.router, prefix="/api/v1", tags=["lovebot"])
 app.include_router(auth.router, prefix="/api/v1", tags=["auth"])
 app.include_router(profiles.router, prefix="/api/v1", tags=["profiles"])
 app.include_router(swipe.router, prefix="/api/v1", tags=["swipe"])
+app.include_router(discovery.router, prefix="/api/v1", tags=["discovery"])
 app.include_router(messages.router, prefix="/api/v1", tags=["messages"])
 app.include_router(boards.router, prefix="/api/v1", tags=["boards"])
 app.include_router(events.router, prefix="/api/v1", tags=["events"])
