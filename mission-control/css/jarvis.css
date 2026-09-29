@@ -411,3 +411,22 @@ canvas.galaxy-backdrop { position: absolute; inset: 0; width: 100%; height: 100%
 .judge-columns { display: flex; gap: 16px; margin-top: 6px; font-size: 12px; color: var(--text-secondary, #8b949e); }
 .token-prompt { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
 .token-prompt input { background: var(--bg-tertiary, #21262d); border: 1px solid var(--border, #30363d); border-radius: 8px; color: inherit; padding: 6px 10px; font: inherit; }
+
+/* ── Board Room (2026-09-29): lane table, drift badges ───────────────────── */
+#tab-boardroom .widget-card { margin-bottom: 16px; }
+#boardroom-lanes, #boardroom-tracks { overflow-x: auto; }
+#boardroom-lanes .mission-row { min-width: 1040px; }
+#boardroom-tracks .mission-row { min-width: 640px; }
+.mission-row.mission-head { color: var(--text-secondary, #8b949e); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; border-top: 0; }
+.boardroom-repo { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 14px 0 6px; font-size: 14px; }
+.boardroom-repo-block:first-child .boardroom-repo { margin-top: 0; }
+.boardroom-badges { margin: 0 0 8px; font-size: 12px; color: var(--text-secondary, #8b949e); }
+.boardroom-badges b { color: var(--accent, #58a6ff); margin-right: 6px; }
+.boardroom-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.boardroom-table th, .boardroom-table td { text-align: left; padding: 5px 8px; border-top: 1px solid var(--border, #21262d); overflow-wrap: anywhere; }
+.boardroom-table th { color: var(--text-secondary, #8b949e); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; border-top: 0; }
+.drift-badge { display: inline-block; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border, #30363d); }
+.drift-badge.drift-DEAD, .drift-badge.drift-DOWN { color: var(--error, #f85149); border-color: rgba(248, 81, 73, .4); }
+.drift-badge.drift-STALE { color: var(--warning, #d29922); border-color: rgba(210, 153, 34, .4); }
+.drift-badge.drift-LIVE { color: var(--success, #3fb950); border-color: rgba(63, 185, 80, .45); }
+.drift-badge.drift-WORKING { color: var(--accent, #58a6ff); border-color: rgba(88, 166, 255, .45); }

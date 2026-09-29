@@ -100,13 +100,33 @@ Dispatch: `ops/handoffs/JARVIS-CONSOLIDATION-DISPATCH-2026-09-17.md` and
   port (`@modelcontextprotocol/sdk`), so a remote Claude Code session (e.g.
   on the Alienware node) can read this node's real state over the LAN.
   Bearer-gated on `JARVIS_MCP_TOKEN` (`503` when unset, `401` when wrong).
-  Six read-only tools, no write tools in this phase:
-  `node_health`, `triggers`, `proposals`, `bridges`, `runbook`,
-  `state_record`. Connect a remote Claude Code session with:
+  Nine read-only tools, no write tools: `node_health`, `triggers`,
+  `proposals`, `bridges`, `runbook`, `state_record`, and since spec 011
+  (2026-09-29) `boardroom`, `backup_health`, `house_map`. Connect a remote
+  Claude Code session with:
 
   ```
   claude mcp add --transport http jarvis http://192.168.0.8:9150/mcp --header "Authorization: Bearer <JARVIS_MCP_TOKEN>"
   ```
+
+## Board Room (specs/011-ultracode-house)
+
+- `GET /api/boardroom` is the think tank view (Driftus tab "Board Room"):
+  `tracks` (five collab tracks, ON RECORD when the record file exists),
+  `lanes` (the registry in `lib/lanes.mjs` joined with the live bridge and
+  fleet rows), `attestations` (each lane's own `.agents/journals/<lane>/TRUST.md`,
+  FILED or NOT FILED), `drift` (`lib/drift.mjs`: GitHub branches and open pull
+  requests for both repositories, DEAD / STALE / LIVE / WORKING with per-lane
+  badges; NOT CONFIGURED without `GITHUB_TOKEN`, DOWN on a GitHub error,
+  cached 5 minutes, pages followed up to five per list), `affiliate` (the
+  Emergent wing from `EMERGENT_WING_URL`, the approved brief, the terms) and
+  `founderBoard` (the ClawX Board tab keeps the vote). Nothing executes and
+  nothing votes from this route.
+- Env names read server-side from `.env`: `GITHUB_TOKEN` (drift board),
+  `EMERGENT_WING_URL` (affiliate wing link), `CLOUD_DASHBOARD_URL`.
+- `GET /api/backup-health` reads `ops/heartbeat/backup-node.json` written by
+  `scripts/backup-node.mjs` (NOT CONFIGURED before the first run, RED on a
+  corrupt file, STALE after 26 hours).
 
 ## Ask-JARVIS agentic loop (specs/009-jarvis-agentic-ask)
 

@@ -12,6 +12,7 @@ changed, and the commit that landed it. `.github/CODEOWNERS` and the
 `.claude/hooks/guard-protected-paths.ps1` reminder enforce this
 mechanically; this file is the human-readable record. Newest entries first.
 
+2026-09-29 03:05 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | §14: the one map skill, the Board Room think tank (House, not ballot), the universal MCP (nine tools), spec 011. Joshua's Board Room rulings of the same evening in CLAUDE.md. Cloud judge session, landed through a pull request. | this commit
 2026-09-29 02:30 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md, ops/runbook/BACKUPS-AND-DATA-TOOLS-2026-09-29.md (new), ops/skills/date-app-hermes-operations/SKILL.md | §13 backups and data tools; the audit page; Hermes cron row for the nightly backup. Supabase hygiene migrations applied live and recorded under ops/supabase/. Cloud judge session, landed through a pull request. | this commit
 2026-09-29 01:05 UTC | ops/runbook/SABRETOOTH-NODE-RUNBOOK.md | §2: display name Driftus (JARVIS stays the code name), cloud address dashboard.aidoesitall.website as the eye in the sky, Emergent and Gemini bridge rows, judge lane merges its own green pull requests (Joshua's rulings of 2026-09-29). Cloud judge session, landed through a pull request. | this commit
 

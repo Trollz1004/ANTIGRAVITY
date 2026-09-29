@@ -110,6 +110,7 @@ See: https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/softwa
 | **research** | arxiv, blogwatcher, competitor-news-monitor |
 | **mlops** | huggingface-hub, weights-and-biases, llama-cpp |
 | **productivity** | airtable, notion, obsidian, xlsx, powerpoint, docx |
+| **house-map** | `ultracode-house` (`.agents/skills/ultracode-house/SKILL.md`): ALWAYS LOAD, the one map of nodes, tools, MCP servers, dashboards, brains, memory, journals, lanes and rulings |
 
 ## 🔧 Debugging Skill Issues
 
