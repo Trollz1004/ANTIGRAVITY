@@ -13,7 +13,7 @@ done. `[ ]` means the judge lane owns it, or only the node can do it.
       digest, token savers, Joshua's open clicks); caveman style; 220 lines or
       fewer; the repo file behind each fact named inline; the disk-wins rule
       stated.
-- [ ] T002 `mission-control/tests/ultracode-house-skill.test.js`: the coverage
+- [X] T002 `mission-control/tests/ultracode-house-skill.test.js`: the coverage
       test. It imports `NODES` and `SERVICES` (`lib/nodes.mjs`), `BRIDGE_IDS`
       (`lib/bridges.mjs`), `HARNESSES` (`lib/fleet.mjs`) and `MCP_TOOL_NAMES`
       (`lib/mcp-server.mjs`) and fails when the skill omits a node address, a

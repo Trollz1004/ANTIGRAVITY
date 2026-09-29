@@ -310,7 +310,13 @@ describe('boardroom client, affiliate and links', () => {
     renderLinks(el, { cloud: 'https://dashboard.aidoesitall.website/', founderBoard: { tab: 'board', note: "the founder's ClawX board is the Supreme Court; votes stay there, never here. This room is the House. Claude and Codex validate the code's security first, then the rabbit gets to debate (Joshua, 2026-09-29)" } })
     expect(el.innerHTML).toContain('href="https://dashboard.aidoesitall.website/" target="_blank" rel="noopener"')
     expect(el.innerHTML).toContain('href="/cockpit/"')
-    expect(el.innerHTML).not.toMatch(/<button|data-goto-tab|vote/i)
+    expect(el.innerHTML).toContain('Founder board: the founder&#39;s ClawX board is the Supreme Court')
+    expect(el.innerHTML).toContain('(the ClawX Board tab)')
+    expect(el.innerHTML).not.toMatch(/<button|data-goto-tab/i)
+    expect(el.innerHTML).not.toMatch(/<a[^>]*vote/i)
+    const bare = { innerHTML: '' }
+    renderLinks(bare, { cloud: 'https://dashboard.aidoesitall.website/' })
+    expect(bare.innerHTML).not.toContain('Founder board')
   })
 
   it('a cloud address that is not https is not linked', async () => {

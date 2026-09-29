@@ -1,6 +1,6 @@
 ---
 name: ultracode-house
-description: "ALWAYS LOAD. The one map of the house: nodes, tools, MCP servers, dashboards, brains, memory, journals, lanes, rulings. Use on every session start, after compaction, and whenever a lane asks where something lives. Caveman full, token saver, disk beats this file."
+description: "ALWAYS LOAD. The one map of the house: nodes, tools, MCP servers, dashboards, brains, memory, journals, lanes, rulings. Use on every session start, after compaction, and whenever a lane asks where something lives. Caveman full, token saver, 240 lines or fewer, disk beats this file."
 ---
 
 # ultracode-house: the one map
@@ -34,6 +34,7 @@ Status words only: UP, DOWN, WRONG SERVICE, AUTH MISSING, AUTH REJECTED, NOT CON
 | T5500, OptiPlex 9020, i7k (1050 Ti worker), Chromebook, Mini ASUS | none | `NODES_OFF` in `mission-control/lib/nodes.mjs` | OFF BY RULING 2026-09-28. Never start. Never probe as fault. Design naming them live is stale |
 | Pi | no address on record | Pi CLI (`pi`), Joshua's shell for API lanes. By his word 2026-09-29: Gemini and OpenClaw API lanes run here. Game repo `adapters/pi/manifest.yaml` lists cli `pi`, health `pi --version` | no host, port or config on record. NOT CONFIGURED as probe |
 | Cloud | claude.ai | Claude Code cloud sessions. Eye in the sky: `https://dashboard.aidoesitall.website/` | egress denied public hosts (claude-judge journal 2026-09-28). Node facts UNVERIFIED from here |
+| public-web | internet | `nodes.mjs` node for the landing pages, DNS should be Cloudflare | probed by identity on 443, never a fault of a LAN node |
 
 - No API key on any node for Gemini. API lanes live on the Pi only.
 - Model access: OmniRoute `http://192.168.0.8:20128/v1`, the only URL. Claude never routes through it. Ollama fail-safe only.
@@ -48,8 +49,10 @@ Status words only: UP, DOWN, WRONG SERVICE, AUTH MISSING, AUTH REJECTED, NOT CON
 | Cockpit | `http://192.168.0.8:9150/cockpit/` | operator view, reads only `/api/nodes`. Code `tools/cockpit/` | frame. CRD links need `tools/cockpit/cockpit.local.json` (gitignored, Joshua drops it) |
 | Domains server | `http://192.168.0.8:9160/` | vhost static sites by Host header. House stage 11, optional | `/health` says `domains-server`, then a frame |
 | Hermes dashboard | `http://192.168.0.8:9119/` | Hermes. House stage 12, optional. Gateway API :8642 (`mission-control/lib/bridges.mjs`) | `/api/health` ok true plus version. Its HTML embeds a session token: report masked, never copy |
-| Board Room | JARVIS tab `boardroom`, route `/api/boardroom` | the mission's think tank, not a ballot (Joshua 2026-09-29). Five tracks (mission, marketing, education, pet saving, Joshua is learning), every lane as a seat, each seat's own `TRUST.md`, the drift board, affiliate links. Vote stays on the founder's ClawX board. MCP tool `boardroom` reads it | frame; drift NOT CONFIGURED without `GITHUB_TOKEN`, DOWN on a GitHub error, never a fake row |
+| Board Room | JARVIS tab `boardroom`, route `/api/boardroom` | the mission's think tank, not a ballot (Joshua 2026-09-29). Five tracks (#UntilNoKidInNeed, Marketing collab, Education collab, Pet saving collab, Joshua is learning collab), every lane as a seat, each seat's own `TRUST.md`, the drift board, affiliate links. Vote stays on the founder's ClawX board. MCP tool `boardroom` reads it | frame; drift NOT CONFIGURED without `GITHUB_TOKEN`, DOWN on a GitHub error, never a fake row |
 | God's Eye | JARVIS `/api/sentry` | probe wall, folded into JARVIS 2026-09-18. No :9140 service | frame |
+
+`nodes.mjs` SERVICES, every row JARVIS probes by identity (id, port): Sabretooth 192.168.0.8: jarvis 9150, sentry 9150, hermes 9119, ollama 11434, domains-server 9160, crosslisting 3000, obsidian 27124 (loopback), omniroute 20128, date-app 8080, directus 8055, ludus 3010. Alienware 192.168.0.40: live-npc-lab 9127, aw-ollama 11434, dreamops 9133. public-web: dream-online-net 443, youandinotai-com 443, onlinerecycle-net 443, joshlcoleman-io 443. UP only with the identity string; port answering is nothing.
 
 Game ports on Alienware 192.168.0.40 (`docs/tech/local-prototype-ports.md`, game repo; JARVIS probes them at this address). Doc default bind is 127.0.0.1. Live bind UNVERIFIED.
 

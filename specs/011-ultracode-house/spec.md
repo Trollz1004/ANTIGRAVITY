@@ -279,7 +279,7 @@ cloud and what only the node can verify.
   data source returns an error result saying so, never an empty success.
 - **FR-015**: The skill MUST be one file,
   `.agents/skills/ultracode-house/SKILL.md`, with a `name` and a
-  `description` that make a session load it first. It is 220 lines or fewer,
+  `description` that make a session load it first. It is 240 lines or fewer (raised from 220 on 2026-09-29 to carry the full SERVICES registry),
   in caveman style (articles and filler dropped, technical terms, paths,
   numbers and exact strings kept, per `.agents/skills/caveman/SKILL.md` and
   `.agents/skills/i-have-adhd/SKILL.md`). It has the ten sections in order. It

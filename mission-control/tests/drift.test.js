@@ -22,9 +22,13 @@ function fakeGithub(repos) {
     for (const [pattern, status] of Object.entries(r.errors || {})) {
       if (new RegExp(pattern).test(url)) return { status, json: async () => ({ message: status === 403 ? 'API rate limit exceeded' : 'Not Found' }) }
     }
-    if (kind === 'branches') return { status: 200, json: async () => ['main', ...r.branches].map((name) => ({ name, commit: { sha: 'sha-' + name } })) }
+    const q = new URL(url).searchParams
+    const perPage = Number(q.get('per_page') || 30)
+    const page = Number(q.get('page') || 1)
+    const slice = (list) => list.slice((page - 1) * perPage, page * perPage)
+    if (kind === 'branches') return { status: 200, json: async () => slice(['main', ...r.branches].map((name) => ({ name, commit: { sha: 'sha-' + name } }))) }
     if (kind === 'pulls') {
-      return { status: 200, json: async () => (r.pulls || []).map((p) => ({ number: p.number, title: p.title, html_url: `https://github.com/${repo}/pull/${p.number}`, head: { ref: p.ref, repo: { full_name: p.repo || repo } } })) }
+      return { status: 200, json: async () => slice((r.pulls || []).map((p) => ({ number: p.number, title: p.title, html_url: `https://github.com/${repo}/pull/${p.number}`, head: { ref: p.ref, repo: { full_name: p.repo || repo } } }))) }
     }
     if (kind === 'compare') {
       const branch = decodeURIComponent(rest.replace(/^main\.\.\./, ''))
@@ -137,8 +141,8 @@ describe('lib/drift.mjs, classification through the API', () => {
     const gh = fakeGithub({ 'Trollz1004/dream-online': { branches: ['claude/x'], compare: { 'claude/x': { ahead_by: 1, behind_by: 0, commits: [commit(daysAgo(1))] } } } })
     const out = await buildDriftBoard({ repos: ['Trollz1004/dream-online'], token: 'ghp_fakeTEST123', fetchImpl: gh.fetchImpl, now })
     const urls = gh.calls.map((c) => c.url)
-    expect(urls).toContain('https://api.github.com/repos/Trollz1004/dream-online/branches?per_page=100')
-    expect(urls).toContain('https://api.github.com/repos/Trollz1004/dream-online/pulls?state=open&per_page=50')
+    expect(urls).toContain('https://api.github.com/repos/Trollz1004/dream-online/branches?per_page=100&page=1')
+    expect(urls).toContain('https://api.github.com/repos/Trollz1004/dream-online/pulls?state=open&per_page=100&page=1')
     expect(urls).toContain('https://api.github.com/repos/Trollz1004/dream-online/compare/main...claude/x')
     for (const c of gh.calls) {
       expect(c.headers).toMatchObject({ Authorization: 'Bearer ghp_fakeTEST123', Accept: 'application/vnd.github+json', 'User-Agent': 'jarvis-driftus' })
@@ -191,13 +195,17 @@ describe('lib/drift.mjs, classification through the API', () => {
     expect(board.skipped[0].detail).toMatch(/HTTP 404/)
   })
 
-  it('flags a full branch page as truncated', async () => {
-    const names = Array.from({ length: 99 }, (_, i) => 'codex/b' + i) // plus main = 100
+  it('a full first branch page is followed to the next page, not flagged truncated', async () => {
+    const names = Array.from({ length: 99 }, (_, i) => 'codex/b' + i) // plus main = 100, a full page
     const compare = Object.fromEntries(names.map((n) => [n, { ahead_by: 0, behind_by: 0, commits: [] }]))
     const gh = fakeGithub({ 'Trollz1004/dream-online': { branches: names, compare } })
     const [board] = await buildDriftBoard({ repos: ['Trollz1004/dream-online'], token: 't', fetchImpl: gh.fetchImpl, now })
-    expect(board.truncated).toBe(true)
+    expect(board.truncated).toBe(false)
     expect(board.branches).toHaveLength(99)
+    expect(gh.calls.filter((c) => c.url.includes('/branches?')).map((c) => c.url)).toEqual([
+      'https://api.github.com/repos/Trollz1004/dream-online/branches?per_page=100&page=1',
+      'https://api.github.com/repos/Trollz1004/dream-online/branches?per_page=100&page=2',
+    ])
   })
 })
 
@@ -297,5 +305,32 @@ describe('lib/drift.mjs, cache', () => {
     const gh = fakeGithub(repos)
     await run(gh, NOW, '')
     expect(gh.calls).toHaveLength(0)
+  })
+})
+
+describe('pagination', () => {
+  it('walks pull request pages so a branch whose pull request is on page 2 is LIVE, and a full fifth page marks truncated', async () => {
+    const now = () => Date.parse('2026-09-29T00:00:00Z')
+    const pulls = Array.from({ length: 101 }, (_, i) => ({ ref: `codex/pr-${i + 1}`, number: i + 1, title: `pr ${i + 1}` }))
+    const gh = fakeGithub({
+      'Trollz1004/dream-online': {
+        branches: ['codex/pr-101'],
+        pulls,
+        compare: { 'codex/pr-101': { ahead_by: 1, behind_by: 0, commits: [{ commit: { committer: { date: '2026-09-28T00:00:00Z' } } }] } },
+      },
+    })
+    const [board] = await buildDriftBoard({ repos: ['Trollz1004/dream-online'], token: 't', fetchImpl: gh.fetchImpl, now })
+    expect(board.branches.find((b) => b.name === 'codex/pr-101').status).toBe('LIVE')
+    const pullUrls = gh.calls.map((c) => c.url).filter((u) => u.includes('/pulls?'))
+    expect(pullUrls).toEqual([
+      'https://api.github.com/repos/Trollz1004/dream-online/pulls?state=open&per_page=100&page=1',
+      'https://api.github.com/repos/Trollz1004/dream-online/pulls?state=open&per_page=100&page=2',
+    ])
+    expect(board.truncated).toBe(false)
+    clearDriftCache()
+    const many = fakeGithub({ 'Trollz1004/dream-online': { branches: Array.from({ length: 600 }, (_, i) => `hermes/b${i}`), pulls: [], compare: {} } })
+    const [big] = await buildDriftBoard({ repos: ['Trollz1004/dream-online'], token: 't', fetchImpl: many.fetchImpl, now })
+    expect(many.calls.filter((c) => c.url.includes('/branches?')).length).toBe(5)
+    expect(big.truncated).toBe(true)
   })
 })

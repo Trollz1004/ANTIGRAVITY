@@ -192,8 +192,13 @@ export function renderAffiliate(el, a) {
 
 export function renderLinks(el, j) {
   const cloud = isHttps(j && j.cloud) ? externalLink(j.cloud, 'Cloud dashboard') : 'Cloud dashboard: NOT CONFIGURED'
+  const fb = j && j.founderBoard
+  // The founder-board note is text from the server, never a control: the vote lives on the ClawX Board tab and nothing here reaches it.
+  const founder = fb && fb.note
+    ? `<p class="tab-desc" style="margin:8px 0 0">Founder board: ${escapeHtml(fb.note)} (the ${escapeHtml(fb.tab === 'board' ? 'ClawX Board' : String(fb.tab || ''))} tab)</p>`
+    : ''
   el.innerHTML = `<p class="tab-desc" style="margin:0 0 8px">${cloud}</p>
-    <p class="tab-desc" style="margin:0"><a href="/cockpit/" target="_blank" rel="noopener">Operator cockpit ↗</a></p>`
+    <p class="tab-desc" style="margin:0"><a href="/cockpit/" target="_blank" rel="noopener">Operator cockpit ↗</a></p>${founder}`
 }
 
 /** Fill every card; `els` is { tracks, lanes, drift, affiliate, links }, each a real element or a fake with innerHTML. */

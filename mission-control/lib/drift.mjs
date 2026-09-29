@@ -116,12 +116,35 @@ function commitDate(commit) {
   return (c && ((c.committer && c.committer.date) || (c.author && c.author.date))) || null;
 }
 
+/**
+ * Follow GitHub's page numbers until a short page or MAX_PAGES. Returns
+ * { items, truncated }: truncated is true only when the last page read was
+ * full and the cap stopped the walk, so a board never claims completeness it
+ * did not fetch.
+ */
+export const MAX_PAGES = 5;
+async function githubGetAll(pathWithQuery, ctx, { perPage = BRANCH_PAGE, maxPages = MAX_PAGES } = {}) {
+  const items = [];
+  let truncated = false;
+  for (let page = 1; page <= maxPages; page += 1) {
+    const sep = pathWithQuery.includes('?') ? '&' : '?';
+    const chunk = await githubGet(`${pathWithQuery}${sep}per_page=${perPage}&page=${page}`, ctx);
+    const list = Array.isArray(chunk) ? chunk : [];
+    items.push(...list);
+    if (list.length < perPage) return { items, truncated: false };
+    if (page === maxPages) truncated = true;
+  }
+  return { items, truncated };
+}
+
 async function readRepo(repo, { token, fetchImpl, now, staleDays }) {
   const ctx = { token, fetchImpl };
-  const [branchList, pulls] = await Promise.all([
-    githubGet(`/repos/${repo}/branches?per_page=${BRANCH_PAGE}`, ctx),
-    githubGet(`/repos/${repo}/pulls?state=open&per_page=50`, ctx),
+  const [branchPages, pullPages] = await Promise.all([
+    githubGetAll(`/repos/${repo}/branches`, ctx),
+    githubGetAll(`/repos/${repo}/pulls?state=open`, ctx),
   ]);
+  const branchList = branchPages.items;
+  const pulls = pullPages.items;
   const prByHead = new Map();
   for (const pr of Array.isArray(pulls) ? pulls : []) {
     const head = pr && pr.head;
@@ -166,7 +189,7 @@ async function readRepo(repo, { token, fetchImpl, now, staleDays }) {
   }
   return {
     repo, default: DEFAULT_BRANCH, branches, badges, skipped,
-    truncated: (Array.isArray(branchList) ? branchList.length : 0) >= BRANCH_PAGE,
+    truncated: branchPages.truncated || pullPages.truncated,
     fetchedAt: new Date(now()).toISOString(),
   };
 }
