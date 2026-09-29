@@ -139,10 +139,25 @@ describe('MCP handshake — a real SDK client against the real transport', () =>
     expect(r.content[0].text).not.toContain('ops@example.com');
   });
 
-  it('house_map returns the skill text as-is, not JSON-wrapped', async () => {
+  it('house_map returns the skill text as plain text, not JSON-wrapped', async () => {
     const r = await client.callTool({ name: 'house_map', arguments: {} });
     expect(r.isError).toBeFalsy();
     expect(r.content[0].text).toBe('# ultracode-house\n\nnodes, tools, MCP servers, dashboards, brains, memory, journals, lanes, rulings');
+  });
+
+  it('a string result is masked at this layer too: a bearer pasted into the map never leaves the process', async () => {
+    const deps2 = { ...deps, getHouseMap: async () => 'attach: --header "Authorization: Bearer ghp_fakeTEST999PASTED"' };
+    const s2 = createServer((req, res) => { void handleMcpRequest(req, res, { token: TOKEN, deps: deps2, readBody }); });
+    await new Promise((r) => s2.listen(0, '127.0.0.1', r));
+    const transport = new StreamableHTTPClientTransport(new URL(`http://127.0.0.1:${s2.address().port}/mcp`), { requestInit: { headers: { authorization: `Bearer ${TOKEN}` } } });
+    const c2 = new Client({ name: 'test-client-2', version: '1.0.0' });
+    await c2.connect(transport);
+    try {
+      const r = await c2.callTool({ name: 'house_map', arguments: {} });
+      expect(r.isError).toBeFalsy();
+      expect(r.content[0].text).not.toContain('ghp_fakeTEST999PASTED');
+      expect(r.content[0].text).toContain('Authorization: Bearer ');
+    } finally { try { await c2.close(); } catch {} await new Promise((r) => s2.close(r)); }
   });
 });
 

@@ -10,7 +10,7 @@ done. `[ ]` means the judge lane owns it, or only the node can do it.
 - [X] T001 `.agents/skills/ultracode-house/SKILL.md`: frontmatter with `name`
       and an always-load `description`; ten sections in order (read first,
       nodes, dashboards, lanes, MCP, brains and memory, journals, rulings
-      digest, token savers, Joshua's open clicks); caveman style; 220 lines or
+      digest, token savers, Joshua's open clicks); caveman style; 240 lines or
       fewer; the repo file behind each fact named inline; the disk-wins rule
       stated.
 - [X] T002 `mission-control/tests/ultracode-house-skill.test.js`: the coverage
@@ -18,7 +18,7 @@ done. `[ ]` means the judge lane owns it, or only the node can do it.
       (`lib/bridges.mjs`), `HARNESSES` (`lib/fleet.mjs`) and `MCP_TOOL_NAMES`
       (`lib/mcp-server.mjs`) and fails when the skill omits a node address, a
       service port, a bridge id, a harness, a tool name or a lane journal path.
-      It also checks the 220-line cap, the ten sections in order, that every
+      It also checks the 240-line cap, the ten sections in order, that every
       backticked path starting with a top-level folder of this repository
       exists, and the banned-word, em dash and loopback-name scans. Not on disk
       when this list was written; the judge lane writes it if the skill worker
@@ -100,10 +100,15 @@ done. `[ ]` means the judge lane owns it, or only the node can do it.
 - [ ] T033 Re-run `npx vitest run tests/mcp-server.test.js
       tests/mcp-routes.test.js` on the branch and read the count. Confirm the
       three descriptions name their outputs and that no tool can change state.
-- [ ] T034 Record the per-lane attach lines (Claude by
+- [X] T034 Record the per-lane attach lines (Claude by
       `claude mcp add --transport http`, Hermes, OpenCode and OpenClaw over
       Streamable HTTP with the same bearer header) as UNVERIFIED in the
-      runbook. No lane has made a recorded live call.
+      runbook, stating the transport plainly: plain HTTP on the private LAN
+      only (the bearer is read-only and travels in the clear between two LAN
+      hosts), and the TLS path `https://dashboard.aidoesitall.website/mcp`
+      behind Cloudflare Access for anything off the LAN, which needs an
+      Access service token (Joshua's click). No lane has made a recorded live
+      call.
 
 ## Story 4 - Records (P4)
 
@@ -131,9 +136,13 @@ done. `[ ]` means the judge lane owns it, or only the node can do it.
       record both counts in the pull request.
 - [ ] T062 Scans on the added lines of `git diff origin/main...HEAD`: the
       business-only word list (the pattern in `.githooks/pre-commit-canonical`),
-      em dashes, loopback names and addresses, and the secret patterns in
-      `.githooks/secret-patterns.txt`. Expect 0 hits. Record the exact commands.
-- [ ] T063 `wc -l .agents/skills/ultracode-house/SKILL.md` reports 220 or fewer.
+      em dashes, loopback names and addresses (with explicit, path-scoped
+      exceptions for the documented endpoints the map must carry: the Obsidian
+      REST and MCP loopback ports, the `.acpxrc.json` note), and the secret
+      patterns in `.githooks/secret-patterns.txt`. Expect zero unapproved
+      loopback hits and zero hits for the other scans. Record the exact commands.
+- [X] T063 `wc -l .agents/skills/ultracode-house/SKILL.md` reports 240 or fewer
+      (raised from 220 to hold the whole service registry; 222 after the follow-up).
 - [ ] T064 `package.json` and the lockfile show no new dependency (FR-003).
 - [ ] T065 Run the code-review skill on the diff. Fix findings.
 - [ ] T066 Open the pull request from `claude/ultracode-house-0929` with the
@@ -148,4 +157,6 @@ done. `[ ]` means the judge lane owns it, or only the node can do it.
       records the result in the journal.
 - [ ] T069 Joshua's clicks: add a read-only `GITHUB_TOKEN` for the two
       repositories to the node `.env`; set `JARVIS_MCP_TOKEN` there (already
-      open); point each lane's own MCP client at `http://192.168.0.8:9150/mcp`.
+      open); point each lane's own MCP client at `http://192.168.0.8:9150/mcp`
+      from a LAN node, or issue a Cloudflare Access service token and point an
+      off-LAN client at `https://dashboard.aidoesitall.website/mcp`.

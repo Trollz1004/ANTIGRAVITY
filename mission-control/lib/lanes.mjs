@@ -68,8 +68,8 @@ export const LANES = [
     note: 'Joshua: "have to use apis and i use them on pi". The probe reads OPENCLAW_URL from this node, so DOWN here does not by itself mean the Pi copy is down.',
   },
   {
-    id: 'gemini', name: 'Gemini', role: 'browser lane, plus an API lane on the Pi', connects: 'browser',
-    node: ['browser', 'pi'], bridgeId: 'gemini',
+    id: 'gemini', name: 'Gemini', role: 'browser lane', connects: 'browser',
+    node: ['browser'], bridgeId: 'gemini',
     note: 'Gemini in Chrome, in Joshua\'s own signed-in browser. The Pi API lane is his by his word. No API key is held on Sabretooth or Alienware.',
   },
   {
@@ -102,6 +102,7 @@ function pickBridge(row) {
   if (!row) return null;
   const out = { id: row.id, status: row.status, identity: row.identity };
   if (row.url) out.url = row.url;
+  if (row.lastChecked) out.lastChecked = row.lastChecked;
   return out;
 }
 
@@ -185,9 +186,21 @@ export function trustPathOf(lane) {
 /**
  * One attestation per lane: { lane, status: 'FILED', at, lines } when the lane's
  * TRUST.md exists and holds something, else { lane, status: 'NOT FILED' } (with a
- * detail when the file is empty or unreadable). `at` is the file's modified time.
+ * detail when the file is empty or unreadable). `filedAt` is the date on the file's own
+ * "Filed <date>" line when it has one; `modifiedAt` is the checkout's file time and is
+ * never presented as the filing date.
  * Nothing is ever written here: each seat files its own; nobody files for another.
  */
+/**
+ * The date the lane itself wrote into its TRUST.md ("Filed 2026-09-29"), or null.
+ * Git does not keep file times, so a checkout's mtime is the checkout time, never
+ * the filing date; only the file's own line says when the seat filed.
+ */
+export function filedDateOf(text) {
+  const m = /^\s*(?:[-*]\s*)?Filed\s+(\d{4}-\d{2}-\d{2})\b/im.exec(String(text || ''));
+  return m ? m[1] : null;
+}
+
 export function readAttestations(lanes, { repoRoot, exists = existsSync, stat = statSync, readFile = readFileSync } = {}) {
   return (lanes || []).map((lane) => {
     const file = repoPath(repoRoot, trustPathOf(lane));
@@ -196,7 +209,10 @@ export function readAttestations(lanes, { repoRoot, exists = existsSync, stat = 
       const text = String(readFile(file, 'utf8'));
       if (!text.trim()) return { lane: lane.id, status: 'NOT FILED', detail: 'TRUST.md is empty' };
       const lines = text.replace(/\r?\n$/, '').split(/\r?\n/).length;
-      return { lane: lane.id, status: 'FILED', at: new Date(stat(file).mtimeMs).toISOString(), lines };
+      const out = { lane: lane.id, status: 'FILED', lines, modifiedAt: new Date(stat(file).mtimeMs).toISOString() };
+      const filed = filedDateOf(text);
+      if (filed) out.filedAt = filed;
+      return out;
     } catch (e) {
       return { lane: lane.id, status: 'NOT FILED', detail: 'TRUST.md could not be read (' + ((e && e.code) || 'error') + ')' };
     }

@@ -24,6 +24,7 @@
  *
  * Pure-ish: fetch and the clock are injected so tests never touch the network.
  */
+import { redactString } from './redact.mjs';
 import { createHash } from 'node:crypto';
 
 export const DRIFT_REPOS = ['Trollz1004/ANTIGRAVITY', 'Trollz1004/dream-online'];
@@ -78,15 +79,26 @@ async function githubGet(path, { token, fetchImpl }) {
       headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json', 'User-Agent': 'jarvis-driftus' },
     });
   } catch (e) {
-    throw new GithubError('GitHub unreachable: ' + String((e && e.message) || e), 0);
+    // The message is masked here so the module keeps its own promise (no token in
+    // any result) whatever the caller does with it; Node's header validation error
+    // quotes the whole Authorization value.
+    throw new GithubError('GitHub unreachable: ' + redactString(String((e && e.message) || e)), 0);
   } finally { clearTimeout(t); }
-  const body = await r.json().catch(() => null);
+  const body = await r.json().catch(() => undefined);
   if (!(r.status >= 200 && r.status < 300)) {
     const why = body && body.message ? ': ' + String(body.message).slice(0, 200) : '';
     throw new GithubError('GitHub HTTP ' + r.status + ' for ' + path.split('?')[0] + why, r.status);
   }
+  // A 2xx whose body is not JSON (a captive portal or proxy answering 200 text/html)
+  // is not a GitHub answer; treating it as an empty list would print a clean board.
+  if (body === undefined) throw new GithubError('GitHub answered ' + r.status + ' for ' + path.split('?')[0] + ' with a body that is not JSON', r.status);
   return body;
 }
+
+// Only printable ASCII can travel in a header; anything else would make Node
+// throw a message that quotes the value, so it is refused before any request.
+const HEADER_SAFE = /^[\x21-\x7e]+$/;
+export function tokenIsHeaderSafe(token) { return HEADER_SAFE.test(String(token || '')); }
 
 // Slashes in a branch name stay literal (compare/main...claude/x); everything else is escaped.
 function encodeRef(name) { return String(name).split('/').map(encodeURIComponent).join('/'); }
@@ -129,7 +141,8 @@ async function githubGetAll(pathWithQuery, ctx, { perPage = BRANCH_PAGE, maxPage
   for (let page = 1; page <= maxPages; page += 1) {
     const sep = pathWithQuery.includes('?') ? '&' : '?';
     const chunk = await githubGet(`${pathWithQuery}${sep}per_page=${perPage}&page=${page}`, ctx);
-    const list = Array.isArray(chunk) ? chunk : [];
+    if (!Array.isArray(chunk)) throw new GithubError('GitHub answered ' + pathWithQuery.split('?')[0] + ' with something other than a list', 0);
+    const list = chunk;
     items.push(...list);
     if (list.length < perPage) return { items, truncated: false };
     if (page === maxPages) truncated = true;
@@ -145,11 +158,17 @@ async function readRepo(repo, { token, fetchImpl, now, staleDays }) {
   ]);
   const branchList = branchPages.items;
   const pulls = pullPages.items;
+  // A branch is LIVE when an open pull request has it as its head, or as its base
+  // (a stacked pull request cannot land without it, so it is not drift to delete).
   const prByHead = new Map();
+  const prByBase = new Map();
+  const sameRepo = (r) => r && String(r.full_name).toLowerCase() === repo.toLowerCase();
   for (const pr of Array.isArray(pulls) ? pulls : []) {
     const head = pr && pr.head;
-    if (!head || !head.ref || !head.repo || String(head.repo.full_name).toLowerCase() !== repo.toLowerCase()) continue;
-    if (!prByHead.has(head.ref)) prByHead.set(head.ref, { number: pr.number, title: pr.title, url: pr.html_url });
+    const base = pr && pr.base;
+    const ref = { number: pr && pr.number, title: pr && pr.title, url: pr && pr.html_url };
+    if (head && head.ref && sameRepo(head.repo) && !prByHead.has(head.ref)) prByHead.set(head.ref, ref);
+    if (base && base.ref && base.ref !== DEFAULT_BRANCH && sameRepo(base.repo) && !prByBase.has(base.ref)) prByBase.set(base.ref, { ...ref, role: 'base' });
   }
   const others = (Array.isArray(branchList) ? branchList : []).filter((b) => b && b.name && b.name !== DEFAULT_BRANCH);
   const skipped = [];
@@ -162,8 +181,9 @@ async function readRepo(repo, { token, fetchImpl, now, staleDays }) {
       skipped.push({ name: b.name, detail: e.message });
       return null;
     }
-    const aheadBy = Number(cmp && cmp.ahead_by) || 0;
-    const behindBy = Number(cmp && cmp.behind_by) || 0;
+    if (!cmp || typeof cmp.ahead_by !== 'number') throw new GithubError('GitHub compare for ' + b.name + ' carried no ahead_by count', 0);
+    const aheadBy = cmp.ahead_by;
+    const behindBy = Number(cmp.behind_by) || 0;
     const commits = Array.isArray(cmp && cmp.commits) ? cmp.commits : [];
     let lastCommitAt = null;
     if (aheadBy > 0) {
@@ -180,7 +200,7 @@ async function readRepo(repo, { token, fetchImpl, now, staleDays }) {
   const badges = {};
   for (const c of compared) {
     if (!c) continue;
-    const pr = prByHead.get(c.name) || null;
+    const pr = prByHead.get(c.name) || prByBase.get(c.name) || null;
     const lane = laneOfBranch(c.name);
     const status = classifyBranch({ aheadBy: c.aheadBy, pr, lastCommitAt: c.lastCommitAt, now: now(), staleDays });
     branches.push({ name: c.name, lane, status, aheadBy: c.aheadBy, behindBy: c.behindBy, lastCommitAt: c.lastCommitAt, pr });
@@ -201,6 +221,7 @@ async function readRepo(repo, { token, fetchImpl, now, staleDays }) {
  */
 export async function buildDriftBoard({ repos = DRIFT_REPOS, token, fetchImpl = globalThis.fetch, now = () => Date.now(), staleDays = 7 } = {}) {
   if (!token || !String(token).trim()) return { status: 'NOT CONFIGURED', detail: NO_TOKEN_DETAIL };
+  if (!tokenIsHeaderSafe(String(token).trim())) return { status: 'NOT CONFIGURED', detail: 'GITHUB_TOKEN holds a character that cannot be sent in a header; fix the node .env line' };
   const tokenKey = createHash('sha256').update(String(token)).digest('hex').slice(0, 12);
   return Promise.all(repos.map(async (repo) => {
     const key = [repo, staleDays, tokenKey].join('|');

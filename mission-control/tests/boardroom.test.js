@@ -85,12 +85,14 @@ describe('boardroom client, trust column', () => {
     const { renderLanes } = await load()
     const el = { innerHTML: '' }
     renderLanes(el, [lane({}), lane({ id: 'codex', name: 'Codex' })], [
-      { lane: 'claude', status: 'FILED', at: '2026-09-30T08:15:00.000Z', lines: 42 },
+      { lane: 'claude', status: 'FILED', filedAt: '2026-09-29', modifiedAt: '2026-09-30T08:15:00.000Z', lines: 42 },
       { lane: 'codex', status: 'NOT FILED' },
     ])
     expect(el.innerHTML).toContain('<span>Trust</span>')
-    expect(el.innerHTML).toContain('>FILED 2026-09-30<')
-    expect(el.innerHTML).toContain('42 line(s), file modified 2026-09-30T08:15:00.000Z')
+    // The date is the one the seat wrote on its file, not the checkout's file time.
+    expect(el.innerHTML).toContain('>FILED 2026-09-29<')
+    expect(el.innerHTML).not.toContain('FILED 2026-09-30')
+    expect(el.innerHTML).toContain('42 line(s), Filed 2026-09-29 on the file, checkout file time 2026-09-30T08:15:00.000Z')
     expect(el.innerHTML).toContain('>NOT FILED<')
   })
 
@@ -105,7 +107,11 @@ describe('boardroom client, trust column', () => {
     const { trustCell } = await load()
     expect(trustCell(undefined).text).toBe('unknown')
     expect(trustCell({ lane: 'x', status: 'NOT FILED', detail: 'TRUST.md is empty' })).toMatchObject({ text: 'NOT FILED', title: 'TRUST.md is empty' })
-    expect(trustCell({ lane: 'x', status: 'FILED', at: '2026-09-30T00:00:00Z', lines: 3 }).cls).toBe('ok')
+    expect(trustCell({ lane: 'x', status: 'FILED', filedAt: '2026-09-30', modifiedAt: '2026-09-30T00:00:00Z', lines: 3 }).cls).toBe('ok')
+    // No Filed line on the file: the cell says so rather than passing the file time off as the filing date.
+    const noLine = trustCell({ lane: 'x', status: 'FILED', modifiedAt: '2026-10-14T00:00:00Z', lines: 3 })
+    expect(noLine.text).toBe('FILED (file modified 2026-10-14, no Filed line)')
+    expect(noLine.cls).toBe('ok')
   })
 })
 
@@ -228,6 +234,8 @@ describe('boardroom client, drift', () => {
     expect(el.innerHTML).toContain('claude: 1 dead, 0 stale, 0 live, 0 working')
     expect(el.innerHTML).toContain('codex: 0 dead, 0 stale, 1 live, 0 working')
     expect(driftBadgeLine({})).toContain('No branches other than main')
+    expect(driftBadgeLine({}, 2)).toContain('No compared branches; 2 not compared')
+    expect(driftBadgeLine({}, 2)).not.toContain('No branches other than main')
   })
 
   it('with no GitHub token it shows that sentence and nothing else', async () => {
@@ -332,7 +340,7 @@ describe('boardroom client, loading', () => {
   const payload = {
     tracks: [{ id: 'mission', name: '#UntilNoKidInNeed', kind: 'mission', lead: 'joshua', record: 'domains/untilnokidinneed.com/dao/index.html', recordExists: true, status: 'ON RECORD' }],
     lanes: [lane({})],
-    attestations: [{ lane: 'claude', status: 'FILED', at: '2026-09-30T08:15:00.000Z', lines: 42 }],
+    attestations: [{ lane: 'claude', status: 'FILED', filedAt: '2026-09-30', modifiedAt: '2026-10-01T08:15:00.000Z', lines: 42 }],
     drift: { status: 'NOT CONFIGURED', detail: 'GITHUB_TOKEN not set; the drift board reads GitHub through the server and never from the page' },
     affiliate: { wing: 'https://app.emergent.sh/wing?wm=x', brief: 'ops/handoffs/x.md', briefExists: false, terms: 't' },
     founderBoard: { tab: 'board', note: "the founder's ClawX board is the Supreme Court; votes stay there, never here. This room is the House. Claude and Codex validate the code's security first, then the rabbit gets to debate (Joshua, 2026-09-29)" }, cloud: 'https://dashboard.aidoesitall.website/', at: '2026-09-29T12:00:00.000Z',
@@ -358,18 +366,20 @@ describe('boardroom client, loading', () => {
     for (const id of Object.keys(byId)) expect(byId[id].innerHTML).toContain('Board Room unavailable: boom')
   })
 
-  it('loads lazily: only the first click of the Board Room tab fetches, other tabs never do', async () => {
+  it('loads on the Board Room tab only, once per click while a read is in flight, and re-reads on the next click', async () => {
     const { initBoardroom } = await load()
     global.fetch = vi.fn(async () => ({ ok: true, json: async () => payload }))
     initBoardroom()
     tabHandlers.bridges()
     expect(global.fetch).not.toHaveBeenCalled()
     tabHandlers.boardroom()
-    tabHandlers.boardroom()
+    tabHandlers.boardroom() // still loading: no second request
     await new Promise((r) => setTimeout(r, 0))
-    tabHandlers.boardroom()
     expect(global.fetch).toHaveBeenCalledTimes(1)
     expect(global.fetch.mock.calls[0][0]).toBe('/api/boardroom')
+    // A status shown must never be older than the last click: the next click re-reads.
+    tabHandlers.boardroom()
+    expect(global.fetch).toHaveBeenCalledTimes(2)
   })
 
   it('a failed first load can be retried by clicking the tab again', async () => {

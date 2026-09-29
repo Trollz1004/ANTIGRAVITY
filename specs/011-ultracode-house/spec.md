@@ -26,7 +26,7 @@ session has to rediscover the house. It folds tools, structure, MCP servers,
 dashboards, brains, memory and journals into one map. It is written caveman
 style so it costs few tokens. Every fact in it names the repo file behind it.
 
-The skill is `.agents/skills/ultracode-house/SKILL.md`. It is under 220 lines.
+The skill is `.agents/skills/ultracode-house/SKILL.md`. It is 240 lines or fewer.
 Its sections, in order: read first, nodes, dashboards, lanes, MCP, brains and
 memory, journals, rulings digest, token savers, Joshua's open clicks.
 
