@@ -743,7 +743,7 @@ createServer(async (req, res) => {
   // Screenshot health: the frame-verified verdict per domain and dashboard (God's Eye reads it beside the port probes).
   if (p === '/api/screenshot-health') return send(res, 200, readScreenshotHealth({ jsonPath: SCREENSHOT_HEALTH_JSON_PATH }));
   // Backup health: last nightly backup verdict (GREEN/YELLOW/RED), STALE after 26 hours.
-  if (p === '/api/backup-health') return send(res, 200, readBackupHealth({ file: BACKUP_HEALTH_JSON_PATH }));
+  if (p === '/api/backup-health') return send(res, 200, redact(readBackupHealth({ file: BACKUP_HEALTH_JSON_PATH })));
   { const m = /^\/api\/screenshot-health\/shot\/([a-z0-9-]+)$/.exec(p);
     if (m) {
       const latest = readScreenshotHealth({ jsonPath: SCREENSHOT_HEALTH_JSON_PATH });

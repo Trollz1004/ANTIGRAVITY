@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { LANES, TRACKS, FOUNDER_BOARD, joinLaneStatus, resolveTracks, trustPathOf, readAttestations, composeBoardRoom, AFFILIATE_BRIEF, AFFILIATE_TERMS } from '../lib/lanes.mjs'
+import { LANES, TRACKS, FOUNDER_BOARD, joinLaneStatus, resolveTracks, trustPathOf, readAttestations, filedDateOf, composeBoardRoom, AFFILIATE_BRIEF, AFFILIATE_TERMS } from '../lib/lanes.mjs'
 import { clearDriftCache } from '../lib/drift.mjs'
 import { BRIDGE_IDS } from '../lib/bridges.mjs'
 import { HARNESSES } from '../lib/fleet.mjs'
@@ -42,7 +42,9 @@ describe('lib/lanes.mjs registry', () => {
     expect(byId('hermes').role).toMatch(/is JARVIS/)
     expect(byId('opencode')).toMatchObject({ connects: 'ACP', fleetId: 'opencode', node: ['sabretooth'] })
     expect(byId('openclaw')).toMatchObject({ connects: 'API', node: ['pi'], bridgeId: 'openclaw', fleetId: 'openclaw' })
-    expect(byId('gemini')).toMatchObject({ connects: 'browser', node: ['browser', 'pi'], bridgeId: 'gemini' })
+    // Gemini is browser-side; the Pi is a note, never a node the row claims (no Pi row exists yet).
+    expect(byId('gemini')).toMatchObject({ connects: 'browser', node: ['browser'], role: 'browser lane', bridgeId: 'gemini' })
+    expect(byId('gemini').note).toMatch(/Pi/)
     expect(byId('gemini').note).toMatch(/No API key is held on Sabretooth or Alienware/)
     expect(byId('emergent')).toMatchObject({ connects: 'hosted link', node: ['cloud'], bridgeId: 'emergent', fleetId: 'emergent' })
     expect(byId('genspark')).toMatchObject({ connects: 'hosted link', fleetId: 'genspark' })
@@ -133,7 +135,8 @@ describe('joinLaneStatus', () => {
 
   it('does not copy secret-shaped or extra bridge fields onto the lane', () => {
     const r = joinLaneStatus([{ id: 'claude', bridgeId: 'claude' }], { bridges: { bridges: [{ id: 'claude', status: 'UP', identity: 'ok', canRun: true, lastChecked: 'x', key: 'k' }] } })[0]
-    expect(r.bridge).toEqual({ id: 'claude', status: 'UP', identity: 'ok' })
+    // lastChecked is kept on purpose: an UP or DOWN without a time is a claim with no evidence.
+    expect(r.bridge).toEqual({ id: 'claude', status: 'UP', identity: 'ok', lastChecked: 'x' })
   })
 })
 
@@ -202,10 +205,22 @@ describe('readAttestations', () => {
     expect(trustPathOf({ id: 'gemini' })).toBe('.agents/journals/gemini/TRUST.md')
   })
 
-  it('FILED with the file modified time and line count when the lane filed its own', () => {
-    const r = readAttestations(LANES, fsWith({ [trust('.agents/journals/claude-judge/TRUST.md')]: 'one\ntwo\nthree\n', [trust('.agents/journals/codex/TRUST.md')]: 'a\r\nb' }))
-    expect(r.find((a) => a.lane === 'claude')).toEqual({ lane: 'claude', status: 'FILED', at: '2026-09-30T08:15:00.000Z', lines: 3 })
-    expect(r.find((a) => a.lane === 'codex')).toEqual({ lane: 'codex', status: 'FILED', at: '2026-09-30T08:15:00.000Z', lines: 2 })
+  it('FILED with the date from the file\'s own Filed line, the line count, and the checkout time kept apart as modifiedAt', () => {
+    const r = readAttestations(LANES, fsWith({ [trust('.agents/journals/claude-judge/TRUST.md')]: '# Claude\n\nFiled 2026-09-29 by the Claude judge lane.\n', [trust('.agents/journals/codex/TRUST.md')]: 'a\r\nb' }))
+    // Git keeps no file times: a clone on 09-30 must not turn a record filed on 09-29 into "FILED 2026-09-30".
+    expect(r.find((a) => a.lane === 'claude')).toEqual({ lane: 'claude', status: 'FILED', lines: 3, filedAt: '2026-09-29', modifiedAt: '2026-09-30T08:15:00.000Z' })
+    expect(r.find((a) => a.lane === 'codex')).toEqual({ lane: 'codex', status: 'FILED', lines: 2, modifiedAt: '2026-09-30T08:15:00.000Z' })
+    expect(r.find((a) => a.lane === 'codex')).not.toHaveProperty('filedAt')
+    expect(r.find((a) => a.lane === 'codex')).not.toHaveProperty('at')
+  })
+
+  it('filedDateOf reads "Filed <date>" at a line start, in a bullet, in any case, and nothing else', () => {
+    expect(filedDateOf('Filed 2026-09-29')).toBe('2026-09-29')
+    expect(filedDateOf('- filed 2026-01-02 by codex')).toBe('2026-01-02')
+    expect(filedDateOf('* FILED 2025-12-31')).toBe('2025-12-31')
+    expect(filedDateOf('This was filed 2026-09-29 later in a sentence')).toBeNull()
+    expect(filedDateOf('Filed yesterday')).toBeNull()
+    expect(filedDateOf('')).toBeNull()
   })
 
   it('NOT FILED for every lane with no TRUST.md, one entry per lane in registry order', () => {
@@ -280,7 +295,7 @@ describe('composeBoardRoom', () => {
   it('gives every lane an attestation: FILED where TRUST.md exists, NOT FILED elsewhere', async () => {
     const r = await composeBoardRoom(base(onDisk('.agents/journals/claude-judge/TRUST.md')))
     expect(r.attestations).toHaveLength(LANES.length)
-    expect(r.attestations.find((a) => a.lane === 'claude')).toEqual({ lane: 'claude', status: 'FILED', at: new Date(NOW).toISOString(), lines: 2 })
+    expect(r.attestations.find((a) => a.lane === 'claude')).toEqual({ lane: 'claude', status: 'FILED', modifiedAt: new Date(NOW).toISOString(), lines: 2 })
     expect(r.attestations.filter((a) => a.status === 'NOT FILED')).toHaveLength(LANES.length - 1)
   })
 
@@ -325,7 +340,7 @@ describe('composeBoardRoom', () => {
     expect(r.drift).toHaveLength(2)
     expect(r.drift[0].branches[0]).toMatchObject({ name: 'claude/x', lane: 'claude', status: 'DEAD' })
     expect(new Set(seen)).toEqual(new Set(['Bearer ghp_fakeTEST456']))
-    expect(JSON.stringify(r)).not.toContain('thisisnotarealtoken')
+    expect(JSON.stringify(r)).not.toContain('ghp_fakeTEST456')
   })
 
   it('a reader that throws is not hidden as "no probe on this node"', async () => {

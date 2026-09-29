@@ -15,12 +15,14 @@
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { redact } from './redact.mjs';
+import { redact, redactString } from './redact.mjs';
 
 export const MCP_TOOL_NAMES = ['node_health', 'triggers', 'proposals', 'bridges', 'runbook', 'state_record', 'boardroom', 'backup_health', 'house_map'];
 
 function textResult(value) {
-  const text = typeof value === 'string' ? value : JSON.stringify(redact(value), null, 2);
+  // A string result is masked too, so the promise above holds at this layer and
+  // not only where server.mjs wires a reader.
+  const text = typeof value === 'string' ? redactString(value) : JSON.stringify(redact(value), null, 2);
   return { content: [{ type: 'text', text }] };
 }
 function errorResult(message) {

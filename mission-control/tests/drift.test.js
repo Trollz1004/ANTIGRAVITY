@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { buildDriftBoard, clearDriftCache, classifyBranch, laneOfBranch, DRIFT_REPOS, DRIFT_CACHE_MS, NO_TOKEN_DETAIL } from '../lib/drift.mjs'
+import { tokenIsHeaderSafe, buildDriftBoard, clearDriftCache, classifyBranch, laneOfBranch, DRIFT_REPOS, DRIFT_CACHE_MS, NO_TOKEN_DETAIL } from '../lib/drift.mjs'
 
 const NOW = Date.parse('2026-09-29T12:00:00Z')
 const now = () => NOW
@@ -28,7 +28,7 @@ function fakeGithub(repos) {
     const slice = (list) => list.slice((page - 1) * perPage, page * perPage)
     if (kind === 'branches') return { status: 200, json: async () => slice(['main', ...r.branches].map((name) => ({ name, commit: { sha: 'sha-' + name } }))) }
     if (kind === 'pulls') {
-      return { status: 200, json: async () => slice((r.pulls || []).map((p) => ({ number: p.number, title: p.title, html_url: `https://github.com/${repo}/pull/${p.number}`, head: { ref: p.ref, repo: { full_name: p.repo || repo } } }))) }
+      return { status: 200, json: async () => slice((r.pulls || []).map((p) => ({ number: p.number, title: p.title, html_url: `https://github.com/${repo}/pull/${p.number}`, head: { ref: p.ref, repo: { full_name: p.repo || repo } }, base: { ref: p.base || 'main', repo: { full_name: p.baseRepo || repo } } }))) }
     }
     if (kind === 'compare') {
       const branch = decodeURIComponent(rest.replace(/^main\.\.\./, ''))
@@ -147,7 +147,7 @@ describe('lib/drift.mjs, classification through the API', () => {
     for (const c of gh.calls) {
       expect(c.headers).toMatchObject({ Authorization: 'Bearer ghp_fakeTEST123', Accept: 'application/vnd.github+json', 'User-Agent': 'jarvis-driftus' })
     }
-    expect(JSON.stringify(out)).not.toContain('ghp_secret')
+    expect(JSON.stringify(out)).not.toContain('ghp_fakeTEST123')
   })
 
   it('escapes odd characters in a branch name but keeps its slashes', async () => {
@@ -333,4 +333,54 @@ describe('pagination', () => {
     expect(many.calls.filter((c) => c.url.includes('/branches?')).length).toBe(5)
     expect(big.truncated).toBe(true)
   })
+
+  it('a 2xx with a body that is not JSON is DOWN, never a clean board', async () => {
+    const fetchImpl = async () => ({ status: 200, json: async () => { throw new SyntaxError('Unexpected token <') } })
+    const [board] = await buildDriftBoard({ repos: ['Trollz1004/ANTIGRAVITY'], token: 'tok-html', fetchImpl, now })
+    expect(board).toMatchObject({ repo: 'Trollz1004/ANTIGRAVITY', status: 'DOWN' })
+    expect(board.detail).toMatch(/answered 200 .* not JSON/)
+    expect(board.branches).toBeUndefined()
+  })
+
+  it('a compare answer with no ahead_by count is DOWN, not a DEAD branch', async () => {
+    const fetchImpl = async (url) => {
+      if (/\/branches/.test(url)) return { status: 200, json: async () => [{ name: 'main' }, { name: 'codex/active', commit: { sha: 's' } }] }
+      if (/\/pulls/.test(url)) return { status: 200, json: async () => [] }
+      return { status: 200, json: async () => { throw new SyntaxError('html') } }
+    }
+    const [board] = await buildDriftBoard({ repos: ['Trollz1004/ANTIGRAVITY'], token: 'tok-cmp', fetchImpl, now })
+    expect(board.status).toBe('DOWN')
+    expect(JSON.stringify(board)).not.toContain('DEAD')
+  })
+
+  it('a branch that is the base of an open pull request is LIVE, with the dependent pull request named', async () => {
+    const gh = fakeGithub({ 'Trollz1004/ANTIGRAVITY': {
+      branches: ['claude/parent', 'codex/child'],
+      compare: { 'claude/parent': { ahead_by: 2, behind_by: 0, commits: [commit(daysAgo(30)), commit(daysAgo(30))] }, 'codex/child': { ahead_by: 1, behind_by: 0, commits: [commit(daysAgo(1))] } },
+      pulls: [{ ref: 'codex/child', number: 9, title: 'child', base: 'claude/parent' }],
+    } })
+    const [board] = await buildDriftBoard({ repos: ['Trollz1004/ANTIGRAVITY'], token: 'tok-base', fetchImpl: gh.fetchImpl, now })
+    const by = Object.fromEntries(board.branches.map((b) => [b.name, b]))
+    expect(by['codex/child']).toMatchObject({ status: 'LIVE', pr: { number: 9 } })
+    expect(by['claude/parent']).toMatchObject({ status: 'LIVE', pr: { number: 9, role: 'base' } })
+    expect(board.badges.claude).toMatchObject({ live: 1, stale: 0 })
+  })
+
+  it('a token that cannot travel in a header is NOT CONFIGURED before any request, and a masked rejection never carries it', async () => {
+    const calls = []
+    const fetchImpl = async (url) => { calls.push(url); throw new TypeError('never') }
+    const out = await buildDriftBoard({ repos: ['Trollz1004/ANTIGRAVITY'], token: 'ghp_fakeTEST123\u0000tail', fetchImpl, now })
+    expect(out).toMatchObject({ status: 'NOT CONFIGURED' })
+    expect(out.detail).toMatch(/cannot be sent in a header/)
+    expect(calls).toEqual([])
+    expect(tokenIsHeaderSafe('ghp_fakeTEST123')).toBe(true)
+    expect(tokenIsHeaderSafe('ghp fake')).toBe(false)
+    // A rejection whose message quotes the Authorization value is masked inside the module.
+    const quoting = async () => { throw new TypeError('Headers.append: "Bearer ghp_fakeTEST123quoted" is an invalid header value.') }
+    const [board] = await buildDriftBoard({ repos: ['Trollz1004/dream-online'], token: 'ghp_fakeTEST123quoted', fetchImpl: quoting, now })
+    expect(board.status).toBe('DOWN')
+    expect(board.detail).not.toContain('ghp_fakeTEST123quoted')
+    expect(board.detail).toMatch(/GitHub unreachable/)
+  })
+
 })

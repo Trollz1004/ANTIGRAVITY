@@ -47,8 +47,12 @@ function journalText(lane) {
 export function trustCell(att) {
   if (!att) return { text: 'unknown', cls: '', title: 'this response held no attestation entry' }
   if (att.status === 'FILED') {
-    const day = /^\d{4}-\d{2}-\d{2}/.exec(String(att.at || ''))
-    return { text: 'FILED' + (day ? ' ' + day[0] : ''), cls: 'ok', title: `${att.lines} line(s), file modified ${att.at}` }
+    // The date shown is the one the seat wrote on its own file; a checkout's file
+    // time is not a filing date, so without a Filed line the cell says so.
+    const filed = /^\d{4}-\d{2}-\d{2}$/.test(String(att.filedAt || '')) ? att.filedAt : null
+    const modified = /^\d{4}-\d{2}-\d{2}/.exec(String(att.modifiedAt || att.at || ''))
+    const text = filed ? 'FILED ' + filed : 'FILED' + (modified ? ' (file modified ' + modified[0] + ', no Filed line)' : '')
+    return { text, cls: 'ok', title: `${att.lines} line(s)` + (filed ? `, Filed ${filed} on the file` : '') + (modified ? `, checkout file time ${att.modifiedAt || att.at}` : '') }
   }
   return { text: 'NOT FILED', cls: '', title: att.detail || 'no TRUST.md on disk' }
 }
@@ -59,7 +63,8 @@ export function renderLaneRow(lane, att) {
   // A hosted link (Emergent) is a place to go, not a service that answered: the name
   // becomes the link and the dot stays neutral.
   const name = isHttps(url) ? externalLink(url, lane.name) : escapeHtml(lane.name)
-  const detail = lane.detail || ''
+  const checked = lane.bridge && lane.bridge.lastChecked ? ` (checked ${lane.bridge.lastChecked})` : ''
+  const detail = (lane.detail || '') + checked
   const journal = journalText(lane)
   const nodes = Array.isArray(lane.node) ? lane.node.join(' + ') : lane.node
   const trust = trustCell(att)
@@ -76,10 +81,12 @@ export function renderLaneRow(lane, att) {
   </div>`
 }
 
-export function renderLanes(el, lanes, attestations) {
+export function renderLanes(el, lanes, attestations, at) {
   const rows = Array.isArray(lanes) ? lanes : []
   const byLane = new Map((Array.isArray(attestations) ? attestations : []).map((a) => [a.lane, a]))
-  const note = '<p class="tab-desc" style="margin:0 0 8px">Each seat files its own TRUST.md; nobody files for another.</p>'
+  // The read time is printed so an UP or DOWN always carries when it was true.
+  const read = at ? ` <span class="mission-detail">read ${escapeHtml(at)}; click the tab again to re-read</span>` : ''
+  const note = `<p class="tab-desc" style="margin:0 0 8px">Each seat files its own TRUST.md; nobody files for another.${read}</p>`
   const head = `<div class="mission-row mission-head" style="${LANE_GRID}"><span></span><span>Lane</span><span>Role</span><span>Connects</span><span>Node</span><span>Status</span><span>Identity / detail</span><span>Journal</span><span>Trust</span></div>`
   el.innerHTML = rows.length ? note + head + rows.map((l) => renderLaneRow(l, byLane.get(l.id))).join('') : '<p class="placeholder">No lanes.</p>'
 }
@@ -143,9 +150,11 @@ export function renderBranchRow(b, nowMs) {
 }
 
 /** "claude: 0 dead, 0 stale, 1 live, 0 working" for each lane that has branches. */
-export function driftBadgeLine(badges) {
+export function driftBadgeLine(badges, skippedCount = 0) {
   const parts = Object.entries(badges || {}).map(([lane, t]) => `${escapeHtml(lane)}: ${escapeHtml(t.dead)} dead, ${escapeHtml(t.stale)} stale, ${escapeHtml(t.live)} live, ${escapeHtml(t.working)} working`)
-  return parts.length ? `<p class="boardroom-badges"><b>Drift badges</b> ${parts.join(' &middot; ')}</p>` : '<p class="boardroom-badges">No branches other than main.</p>'
+  if (parts.length) return `<p class="boardroom-badges"><b>Drift badges</b> ${parts.join(' &middot; ')}</p>`
+  if (skippedCount > 0) return `<p class="boardroom-badges">No compared branches; ${escapeHtml(skippedCount)} not compared.</p>`
+  return '<p class="boardroom-badges">No branches other than main.</p>'
 }
 
 export function renderDriftRepo(entry, nowMs = Date.now()) {
@@ -162,7 +171,7 @@ export function renderDriftRepo(entry, nowMs = Date.now()) {
     : ''
   const truncated = entry.truncated ? '<p class="tab-desc">GitHub returned a full page of branches; there may be more than are shown.</p>' : ''
   const fetched = entry.fetchedAt ? `<span class="mission-detail">read ${escapeHtml(entry.fetchedAt)}</span>` : ''
-  return `<div class="boardroom-repo-block" data-repo="${repo}"><h4 class="boardroom-repo">${repo} <span class="mission-detail">against ${escapeHtml(entry.default || 'main')}</span> ${fetched}</h4>${driftBadgeLine(entry.badges)}${table}${skipped}${truncated}</div>`
+  return `<div class="boardroom-repo-block" data-repo="${repo}"><h4 class="boardroom-repo">${repo} <span class="mission-detail">against ${escapeHtml(entry.default || 'main')}</span> ${fetched}</h4>${driftBadgeLine(entry.badges, Array.isArray(entry.skipped) ? entry.skipped.length : 0)}${table}${skipped}${truncated}</div>`
 }
 
 /**
@@ -204,7 +213,7 @@ export function renderLinks(el, j) {
 /** Fill every card; `els` is { tracks, lanes, drift, affiliate, links }, each a real element or a fake with innerHTML. */
 export function renderBoardRoom(els, j, nowMs = Date.now()) {
   if (els.tracks) renderTracks(els.tracks, j && j.tracks)
-  if (els.lanes) renderLanes(els.lanes, j && j.lanes, j && j.attestations)
+  if (els.lanes) renderLanes(els.lanes, j && j.lanes, j && j.attestations, j && j.at)
   if (els.drift) renderDrift(els.drift, j && j.drift, nowMs)
   if (els.affiliate) renderAffiliate(els.affiliate, j && j.affiliate)
   if (els.links) renderLinks(els.links, j)
@@ -231,13 +240,14 @@ export async function loadBoardRoom(fetchImpl = fetch) {
 }
 
 function initBoardroom() {
-  let loaded = false
+  // Every click on the tab re-reads the board (the drift read is cached server-side
+  // for five minutes), so a status shown is never older than the last click.
   let loading = false
   document.querySelectorAll('.nav-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
-      if (tab.dataset && tab.dataset.tab === 'boardroom' && !loaded && !loading) {
+      if (tab.dataset && tab.dataset.tab === 'boardroom' && !loading) {
         loading = true
-        loadBoardRoom().then((ok) => { loaded = ok; loading = false })
+        loadBoardRoom().then(() => { loading = false })
       }
     })
   })

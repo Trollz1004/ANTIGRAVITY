@@ -80,7 +80,7 @@ Every lane is a seat in the Board Room think tank. Each seat files its own `.age
 | hermes | IS JARVIS (the brain behind Driftus). Drives official Claude CLI and official Codex CLI. Nothing else added. Keeps YouTube, health, screenshot and backup crons | Sabretooth :9119, gateway :8642 | `.agents/journals/hermes/STATE.md` (stale, August) |
 | opencode | ACP lane by Joshua's word. eBay and onlinerecycle.net automation. No port on record, Fleet probe null | NOT CONFIGURED as probe. Config `opencode.json` at repo root | `.agents/journals/opencode/STATE.md` |
 | openclaw | API lane on the Pi by Joshua's word. Sabretooth also has gateway :18789, House stage 14, optional. `.acpxrc.json` agent `openclaw` names `ws://127.0.0.1:9119`, which is Hermes's port. UNVERIFIED, check before trust | Pi, and Sabretooth :18789 | `.agents/journals/openclaw/STATE.md` (UNVERIFIED, last 2026-08-24) |
-| gemini | Participant, never a judge. Browser side: Gemini in Chrome, Joshua's own signed-in Chrome. API only on the Pi, by his word. Never a key on the nodes. Bridge row `gemini` NOT CONFIGURED | Chrome, Pi | no own journal on disk |
+| gemini | Participant, never a judge. Browser side: Gemini in Chrome, Joshua's own signed-in Chrome. A Pi API lane is his word, no Pi row exists, so the registry says browser only. Never a key on the nodes. Bridge row `gemini` NOT CONFIGURED | Chrome | no own journal on disk |
 | emergent | Hosted. Date-app marketing and affiliate swarm. Brief `ops/handoffs/PROMPT-FOR-EMERGENT-AFFILIATE-2026-09-28.md`. Bridge row `emergent` LINKED (a link, never UP). URL from `EMERGENT_WING_URL`. Fleet row NOT CONFIGURED | hosted link | `.agents/journals/emergent/STATE.md` |
 | genspark | Helper. Research, sheets. Never judge. No push, merge, approval. Fleet row NOT CONFIGURED | hosted | `.agents/journals/genspark/STATE.md` |
 | buzz | NOT a runtime by ruling 2026-09-29. Old ledger scripts stay in `ops/buzz/`. Bridge row `buzz` is a read-only ledger tap | none | none |
@@ -95,13 +95,14 @@ JARVIS `/mcp`. Read-only. No write tools.
 
 | Fact | Value |
 |---|---|
-| URL | `http://192.168.0.8:9150/mcp`, POST, Streamable HTTP, stateless |
+| URL | `http://192.168.0.8:9150/mcp`, POST, Streamable HTTP, stateless. Plain HTTP on the private LAN by design (Phase F); the bearer travels in the clear there, so LAN only, never over the internet |
+| TLS path | `https://dashboard.aidoesitall.website/mcp` through the cloudflared tunnel behind Cloudflare Access (one-time PIN today). A machine lane needs an Access service token there: Joshua's click, UNVERIFIED |
 | Gate | `JARVIS_MCP_TOKEN` in node repo `.env`. Unset = 503. Wrong or missing bearer = 401. Output redacted |
 | Tools | `node_health`, `triggers`, `proposals`, `bridges`, `runbook`, `state_record`, `boardroom`, `backup_health`, `house_map` (nine; the last three added 2026-09-29, spec 011). Dep not wired = "<dep> is not wired on this node" |
 
 | Lane | Attach |
 |---|---|
-| Claude | `claude mcp add --transport http jarvis http://192.168.0.8:9150/mcp --header "Authorization: Bearer <JARVIS_MCP_TOKEN>"`. Placeholder only. Never paste the real token |
+| Claude | `claude mcp add --transport http jarvis http://192.168.0.8:9150/mcp --header "Authorization: Bearer <JARVIS_MCP_TOKEN>"` from a LAN node only. Off the LAN use the TLS path above. Placeholder only. Never paste the real token |
 | Hermes | POST same URL with same bearer header. Config `.agents/harness-config/hermes.yaml`, key `mcp_servers`. JARVIS not listed there today |
 | OpenCode, OpenClaw | POST same URL with same bearer header, in that agent's own MCP config |
 | Alienware Claude | not connected yet (runbook section 10, 2026-09-19). Joshua holds the token |
