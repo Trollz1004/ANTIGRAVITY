@@ -42,6 +42,7 @@
  *   GET  /api/judge/feed        Judge Lanes: proposal feed, claude/codex verdict columns, live disagreement flag
  *   POST /api/judge/:id/verdict Judge Lanes: post one lane's verdict (x-judge-token gated per lane)
  *   GET  /api/fleet             Fleet panel (Phase D): Hermes/OpenClaw/OpenCode status, current task, queue depth, token spend
+ *   GET  /api/boardroom         Board Room (2026-09-29), the mission's think tank: collab tracks, every AI lane joined to its bridge and fleet rows, each lane's TRUST.md attestation, the branches each lane left behind (GitHub, GITHUB_TOKEN server-side), the affiliate links; no vote here, the founder's ClawX board holds it
  *   GET  /api/screenshot-health  Screenshot health (2026-09-28): per-target frame-verified verdict from the Hermes cron's result file; NOT CONFIGURED until it runs
  *   GET  /api/screenshot-health/shot/:id  the latest PNG for one target id (served only from evidence/health-shots)
  *   GET  /api/backup-health      Backup health: last nightly backup verdict from scripts/backup-node.mjs; NOT CONFIGURED until it runs, STALE after 26 hours
@@ -99,6 +100,7 @@ import {
 import { handleMcpRequest } from './lib/mcp-server.mjs';
 import { createReviewProposal, buildJudgeFeed, postVerdict } from './lib/judge.mjs';
 import { buildFleet } from './lib/fleet.mjs';
+import { composeBoardRoom } from './lib/lanes.mjs';
 import { buildArchitecture, renderArchitectureHtml, renderArchitectureDiff } from './lib/architecture.mjs';
 import { defaultExec as gitExec } from './lib/git-panel.mjs';
 import { hostname, tmpdir } from 'node:os';
@@ -285,6 +287,37 @@ const BRIDGE_DEPS_LIVE = {
   buzz: { readLedger },
   emergent: { wingUrl: EMERGENT_WING_URL },
 };
+// The one place the fleet builder is called, so /api/fleet and the Board Room
+// read the same rows through the same probes.
+function buildFleetLive() {
+  return buildFleet({ harnesses: FLEET_HARNESSES, probeService, omni: { base: OMNI, key: envValue('OMNI_ROUTE_API_KEY') } });
+}
+// Board Room (2026-09-29): the mission's think tank, every AI lane in one room. The lane
+// rows join the SAME bridge and fleet builders the /api/bridges and /api/fleet routes call
+// (no second set of probes); the branch board reads GitHub with GITHUB_TOKEN from the .env,
+// server-side only; track records and each lane's TRUST.md are checked on disk under REPO.
+// Nothing here executes and nothing here votes (the founder's ClawX board is the vote).
+// The payload is assembled by lib/lanes.mjs (composeBoardRoom), with every read injected.
+function buildBoardRoom() {
+  return composeBoardRoom({
+    getBridges: () => buildBridges(BRIDGE_DEPS_LIVE),
+    getFleet: buildFleetLive,
+    token: envValue('GITHUB_TOKEN'),
+    wingUrl: EMERGENT_WING_URL,
+    cloudUrl: CLOUD_DASHBOARD_URL,
+    repoRoot: REPO,
+  });
+}
+// The ultracode-house skill is the one map of nodes, tools, dashboards and lanes;
+// the MCP house_map tool serves its text, or says plainly that it is not here.
+const HOUSE_MAP_PATH = join(REPO, '.agents', 'skills', 'ultracode-house', 'SKILL.md');
+function readHouseMap() {
+  try { return readFileSync(HOUSE_MAP_PATH, 'utf8'); }
+  catch (e) {
+    if (e && e.code === 'ENOENT') return 'NOT CONFIGURED: .agents/skills/ultracode-house/SKILL.md is not on this node';
+    return 'NOT CONFIGURED: .agents/skills/ultracode-house/SKILL.md could not be read (' + ((e && e.code) || 'error') + ')';
+  }
+}
 // Executes an approved bridge.run proposal (only ever called from the
 // founder's own /api/inbox/:id/approve click — see lib/inbox.mjs).
 const bridgeExecutorAdapters = {
@@ -874,10 +907,15 @@ createServer(async (req, res) => {
   // Fleet panel (Phase D, unit 2): identity-probed status + journal tail per
   // lane + OmniRoute usage (honestly null when no usage route answers).
   if (p === '/api/fleet') {
-    const r = await buildFleet({
-      harnesses: FLEET_HARNESSES, probeService, omni: { base: OMNI, key: envValue('OMNI_ROUTE_API_KEY') },
-    });
+    const r = await buildFleetLive();
     return send(res, 200, redact(r));
+  }
+
+  // Board Room (2026-09-29): the AI lanes, their branches and the affiliate links in
+  // one read. Redacted like every other route; the GitHub token never leaves this file.
+  if (p === '/api/boardroom' && req.method === 'GET') {
+    try { return send(res, 200, redact(await buildBoardRoom())); }
+    catch (e) { return send(res, 502, { error: 'Board Room unavailable: ' + String((e && e.message) || e) }); }
   }
 
   // Architecture panel (Phase E, unit 3): typed JSON from the House stage
@@ -1034,6 +1072,9 @@ createServer(async (req, res) => {
         listRunbooks: () => listRunbooks(RUNBOOK_DIR),
         readRunbook: (name) => resolveRunbook(RUNBOOK_DIR, name),
         listStateRecords, readStateRecord,
+        getBoardRoom: () => buildBoardRoom(),
+        getBackupHealth: () => readBackupHealth({ file: BACKUP_HEALTH_JSON_PATH }),
+        getHouseMap: () => redact(readHouseMap()), // a plain string skips the MCP layer's own redact, so mask it here
       },
     });
   }

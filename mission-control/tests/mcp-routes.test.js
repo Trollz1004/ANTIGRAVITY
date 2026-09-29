@@ -26,6 +26,12 @@ describe('JARVIS wiring — server.mjs MCP endpoint (Phase F, unit 4)', () => {
     expect(server).toContain('listStateRecords, readStateRecord')
   })
 
+  it('exposes the three Board Room deps: boardroom, backup health, house map', () => {
+    expect(server).toMatch(/getBoardRoom\b/)
+    expect(server).toMatch(/getBackupHealth\b/)
+    expect(server).toMatch(/getHouseMap\b/)
+  })
+
   it('README documents the remote-Claude connect line', () => {
     const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf-8')
     expect(readme).toMatch(/claude mcp add --transport http jarvis/)

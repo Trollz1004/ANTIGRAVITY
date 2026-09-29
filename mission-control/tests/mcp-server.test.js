@@ -18,6 +18,13 @@ const deps = {
   readRunbook: async (name) => (name === 'SABRETOOTH-NODE-RUNBOOK' ? { ok: true, markdown: '# Runbook' } : { ok: false, error: 'not found' }),
   listStateRecords: async () => [{ id: 'NODE-STATE-2026-09-17' }],
   readStateRecord: async (name) => (name === 'NODE-STATE-2026-09-17' ? { ok: true, text: 'signed state text' } : { ok: false, error: 'not found' }),
+  getBoardRoom: async () => ({
+    lanes: [{ id: 'codex', status: 'UP', apiKey: 'sk-ant-fake1234' }],
+    driftBoard: [{ repo: 'antigravity', branches: [{ name: 'main', class: 'LIVE' }], openPullRequests: 1 }],
+    vote: { where: 'docs/VOTE.md' },
+  }),
+  getBackupHealth: async () => ({ overall: 'GREEN', ranAt: '2026-09-28T03:00:00Z', items: [{ id: 'state', status: 'GREEN', note: 'ok, mailed to ops@example.com' }] }),
+  getHouseMap: async () => '# ultracode-house\n\nnodes, tools, MCP servers, dashboards, brains, memory, journals, lanes, rulings',
 };
 
 describe('checkMcpAuth', () => {
@@ -72,9 +79,11 @@ describe('MCP handshake — a real SDK client against the real transport', () =>
   });
   afterAll(async () => { try { await client.close(); } catch {} await new Promise((r) => server.close(r)); });
 
-  it('lists exactly the six read-only tools', async () => {
+  it('lists exactly the nine read-only tools, including boardroom, backup_health and house_map', async () => {
     const { tools } = await client.listTools();
     expect(tools.map((t) => t.name).sort()).toEqual([...MCP_TOOL_NAMES].sort());
+    expect(MCP_TOOL_NAMES).toHaveLength(9);
+    for (const name of ['boardroom', 'backup_health', 'house_map']) expect(MCP_TOOL_NAMES).toContain(name);
   });
 
   it('node_health returns the live health JSON', async () => {
@@ -107,5 +116,71 @@ describe('MCP handshake — a real SDK client against the real transport', () =>
     expect(JSON.parse(triggers.content[0].text)[0].id).toBe('t1');
     const proposals = await client.callTool({ name: 'proposals', arguments: {} });
     expect(JSON.parse(proposals.content[0].text)[0].id).toBe('p1');
+  });
+
+  it('boardroom returns the injected Board Room JSON with redaction applied', async () => {
+    const r = await client.callTool({ name: 'boardroom', arguments: {} });
+    expect(r.isError).toBeFalsy();
+    const body = JSON.parse(r.content[0].text);
+    expect(body.lanes[0].id).toBe('codex');
+    expect(body.driftBoard[0].branches[0].class).toBe('LIVE');
+    expect(body.vote.where).toBe('docs/VOTE.md');
+    expect(body.lanes[0].apiKey).toBe('sk-a****');
+    expect(r.content[0].text).not.toContain('boardroomsecret');
+  });
+
+  it('backup_health returns the injected backup JSON with redaction applied', async () => {
+    const r = await client.callTool({ name: 'backup_health', arguments: {} });
+    expect(r.isError).toBeFalsy();
+    const body = JSON.parse(r.content[0].text);
+    expect(body.overall).toBe('GREEN');
+    expect(body.items[0].status).toBe('GREEN');
+    expect(body.items[0].note).toContain('ops@****');
+    expect(r.content[0].text).not.toContain('ops@example.com');
+  });
+
+  it('house_map returns the skill text as-is, not JSON-wrapped', async () => {
+    const r = await client.callTool({ name: 'house_map', arguments: {} });
+    expect(r.isError).toBeFalsy();
+    expect(r.content[0].text).toBe('# ultracode-house\n\nnodes, tools, MCP servers, dashboards, brains, memory, journals, lanes, rulings');
+  });
+});
+
+describe('the three Board Room tools answer honestly when a dep is not wired', () => {
+  let server, port, client;
+  beforeAll(async () => {
+    const bare = { getHealth: deps.getHealth };
+    server = createServer((req, res) => { void handleMcpRequest(req, res, { token: TOKEN, deps: bare, readBody }); });
+    await new Promise((r) => server.listen(0, '127.0.0.1', r));
+    port = server.address().port;
+    const transport = new StreamableHTTPClientTransport(new URL(`http://127.0.0.1:${port}/mcp`), {
+      requestInit: { headers: { authorization: `Bearer ${TOKEN}` } },
+    });
+    client = new Client({ name: 'test-client', version: '1.0.0' });
+    await client.connect(transport);
+  });
+  afterAll(async () => { try { await client.close(); } catch {} await new Promise((r) => server.close(r)); });
+
+  it.each([
+    ['boardroom', 'getBoardRoom'],
+    ['backup_health', 'getBackupHealth'],
+    ['house_map', 'getHouseMap'],
+  ])('%s is an error naming the missing dep, never a throw', async (name, dep) => {
+    const r = await client.callTool({ name, arguments: {} });
+    expect(r.isError).toBe(true);
+    expect(r.content[0].text).toContain(dep);
+    expect(r.content[0].text).toContain('not wired');
+  });
+
+  it('a dep that throws is an error result too', async () => {
+    const s2 = createServer((req, res) => { void handleMcpRequest(req, res, { token: TOKEN, deps: { getBoardRoom: async () => { throw new Error('board read failed'); } }, readBody }); });
+    await new Promise((r) => s2.listen(0, '127.0.0.1', r));
+    const c2 = new Client({ name: 'test-client', version: '1.0.0' });
+    await c2.connect(new StreamableHTTPClientTransport(new URL(`http://127.0.0.1:${s2.address().port}/mcp`), { requestInit: { headers: { authorization: `Bearer ${TOKEN}` } } }));
+    const r = await c2.callTool({ name: 'boardroom', arguments: {} });
+    expect(r.isError).toBe(true);
+    expect(r.content[0].text).toContain('board read failed');
+    try { await c2.close(); } catch {}
+    await new Promise((res2) => s2.close(res2));
   });
 });

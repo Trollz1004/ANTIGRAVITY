@@ -17,7 +17,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { redact } from './redact.mjs';
 
-export const MCP_TOOL_NAMES = ['node_health', 'triggers', 'proposals', 'bridges', 'runbook', 'state_record'];
+export const MCP_TOOL_NAMES = ['node_health', 'triggers', 'proposals', 'bridges', 'runbook', 'state_record', 'boardroom', 'backup_health', 'house_map'];
 
 function textResult(value) {
   const text = typeof value === 'string' ? value : JSON.stringify(redact(value), null, 2);
@@ -25,6 +25,10 @@ function textResult(value) {
 }
 function errorResult(message) {
   return { content: [{ type: 'text', text: String(message || 'error') }], isError: true };
+}
+/** A tool whose dep was never injected answers honestly instead of throwing. */
+function notWired(dep) {
+  return errorResult(`${dep} is not wired on this node`);
 }
 
 /** Build the read-only MCP server bound to `deps` (every live read injected, see server.mjs's wiring). */
@@ -66,6 +70,27 @@ export function createMcpServer(deps = {}) {
       if (!name) return textResult(await deps.listStateRecords());
       const r = await deps.readStateRecord(name);
       return r && r.ok ? textResult(r.text) : errorResult((r && r.error) || 'not found');
+    } catch (e) { return errorResult(String(e?.message || e)); }
+  });
+
+  server.registerTool('boardroom', { description: 'The Board Room, the think tank of the mission (the House; the founder ClawX board is the Supreme Court): the five collab tracks (ON RECORD or NOT CONFIGURED), every AI platform lane with how it connects and its live status, the TRUST.md attestation of each seat (FILED or NOT FILED), the drift board (branches and open pull requests per repository, classified DEAD, STALE, LIVE or WORKING with per-lane drift badges), the affiliate links, and the founderBoard note naming the ClawX board as the only place a vote happens. Read-only.' }, async () => {
+    try {
+      if (typeof deps.getBoardRoom !== 'function') return notWired('getBoardRoom');
+      return textResult(await deps.getBoardRoom());
+    } catch (e) { return errorResult(String(e?.message || e)); }
+  });
+
+  server.registerTool('backup_health', { description: 'The last nightly backup run on this node from ops/heartbeat/backup-node.json: NOT CONFIGURED before the first run, RED on a corrupt file, STALE after 26 hours, else GREEN, YELLOW or RED with the per-item detail.' }, async () => {
+    try {
+      if (typeof deps.getBackupHealth !== 'function') return notWired('getBackupHealth');
+      return textResult(await deps.getBackupHealth());
+    } catch (e) { return errorResult(String(e?.message || e)); }
+  });
+
+  server.registerTool('house_map', { description: 'The ultracode-house skill text: the one map of nodes, tools, MCP servers, dashboards, brains, memory, journals, lanes and rulings. Read-only.' }, async () => {
+    try {
+      if (typeof deps.getHouseMap !== 'function') return notWired('getHouseMap');
+      return textResult(await deps.getHouseMap());
     } catch (e) { return errorResult(String(e?.message || e)); }
   });
 
