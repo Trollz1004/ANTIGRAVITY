@@ -144,13 +144,19 @@ def fitted_font(draw, text: str, path: str, size: int, max_w: int, floor: int = 
         return _font(path, size)
 
     # floor <= size, so this range is never empty: `size` is always measured.
-    smallest_measured = _font(path, floor)
+    # `smallest_measured` must start as None rather than being pre-filled from
+    # _font(path, floor). That read was dead — the loop's first iteration always
+    # overwrote it — and it constructed a font from the floor before any valid
+    # size was tested, so a floor _font() rejects would raise for nothing. The
+    # loop below is the only place a returned font is built.
+    smallest_measured = None
     for candidate in range(size, floor - 1, -4):
         font = _font(path, candidate)
         smallest_measured = font
         if all(draw.textlength(w, font=font) <= max_w for w in words):
             return font
 
+    # floor <= size guarantees at least one iteration, so this is never None.
     return smallest_measured
 
 

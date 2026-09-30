@@ -166,19 +166,23 @@ for floor in (56, 57, 200, 400):
             f"floor={floor}: returned {size}px, which the function never measured "
             f"(measured: {sorted(measured_sizes(104, floor), reverse=True)})"
         )
-    # Re-measure the returned size here. If it fits, it must be the LARGEST
-    # that fits, so one step larger must not fit (unless already at the request).
+    # Re-measure the returned size. If it fits, it must be the LARGEST that fits.
+    # Checking only size+4 assumes monotonicity; check EVERY larger candidate the
+    # search would have tried instead, so no monotonicity assumption is needed.
     if size is not None:
         measured = all(
             d.textlength(w, font=ImageFont.truetype(os.path.join(FONTS, "ariblk.ttf"), size)) <= MAX_W
             for w in probe.upper().split()
         )
-        if measured and size < 104:
-            bigger = ImageFont.truetype(os.path.join(FONTS, "ariblk.ttf"), min(size + 4, 104))
-            if all(d.textlength(w, font=bigger) <= MAX_W for w in probe.upper().split()):
-                failures.append(
-                    f"fitted_font returned {size}px though {min(size + 4, 104)}px also fits"
-                )
+        if measured:
+            for larger in range(size + 4, 105, 4):
+                bigger = ImageFont.truetype(os.path.join(FONTS, "ariblk.ttf"), larger)
+                if all(d.textlength(w, font=bigger) <= MAX_W for w in probe.upper().split()):
+                    failures.append(
+                        f"fitted_font returned {size}px though {larger}px also fits — "
+                        f"not the largest fitting size"
+                    )
+                    break
 
 # Force the FALLBACK path with a MISALIGNED floor — the only way to reach it.
 # floor=57 makes the measured set range(104,56,-4) = 104..60, so 57 is never a
