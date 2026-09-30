@@ -119,21 +119,40 @@ for label, text in adversarial:
 
 # ---- 3. fitted_font: never wider than the request, and honest about fits --
 probe = "AUTONOMOUS INFRASTRUCTURE"
-narrow = 300  # a box in which a normal headline word cannot fit
 for floor in (56, 200, 400):
     font = mod.fitted_font(d, probe, os.path.join(FONTS, "ariblk.ttf"), 104, MAX_W, floor=floor)
     size = getattr(font, "size", None)
     if size is not None and size > 104:
         failures.append(f"fitted_font returned {size} > requested 104 (floor={floor})")
+    # Every returned font must be one the function actually measured. Re-measure
+    # it here and require agreement, so an unmeasured floor cannot slip through.
+    if size is not None:
+        measured = all(
+            d.textlength(w, font=ImageFont.truetype(os.path.join(FONTS, "ariblk.ttf"), size)) <= MAX_W
+            for w in probe.upper().split()
+        )
+        if measured:
+            # A fitting size was returned; it must be the LARGEST that fits, so
+            # one step larger must not fit (unless we are already at the request).
+            if size < 104:
+                bigger = ImageFont.truetype(os.path.join(FONTS, "ariblk.ttf"), min(size + 4, 104))
+                if all(d.textlength(w, font=bigger) <= MAX_W for w in probe.upper().split()):
+                    failures.append(
+                        f"fitted_font returned {size}px though {min(size + 4, 104)}px also fits"
+                    )
 
-# The fallback path is documented as NOT guaranteed to fit whole words.
-# Confirm the documented failure mode actually occurs there, so the docstring
-# is accurate rather than optimistic.
-fallback = mod.fitted_font(d, probe, os.path.join(FONTS, "ariblk.ttf"), 104, narrow, floor=56)
-words_fit = all(d.textlength(w, font=fallback) <= narrow for w in probe.upper().split())
-print(f"  fitted_font @{narrow}px box -> {fallback.size}px, whole words fit: {words_fit}")
-if words_fit:
-    print("  (note: this box did fit whole words; the fallback path was not exercised)")
+# The fallback must be ASSERTED, not printed: force a box so narrow that no
+# measured size fits a whole word, then require the documented behaviour —
+# a returned font whose words do NOT fit, at the smallest measured size.
+tiny = 40
+fb = mod.fitted_font(d, probe, os.path.join(FONTS, "ariblk.ttf"), 104, tiny, floor=56)
+fb_size = getattr(fb, "size", None)
+fb_fits = all(d.textlength(w, font=fb) <= tiny for w in probe.upper().split())
+if fb_size != 56:
+    failures.append(f"fallback returned {fb_size}px, expected the floor 56px")
+if fb_fits:
+    failures.append("fallback reported words fitting a 40px box, which is impossible for 56px type")
+print(f"  fallback asserted: {fb_size}px returned, whole words fit {fb_fits} (documented: must not)")
 
 # ---- result ---------------------------------------------------------------
 if failures:

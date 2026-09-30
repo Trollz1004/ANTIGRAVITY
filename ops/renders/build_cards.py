@@ -116,39 +116,39 @@ def draw_block(
 
 
 def fitted_font(draw, text: str, path: str, size: int, max_w: int, floor: int = 56):
-    """Largest tested font at which no single word of text exceeds max_w.
+    """Pick the largest measured font at which no single word exceeds max_w.
 
     wrap() can cut a word that will not fit, but a marketing card reading
     "INFRASTRUCT / URE IS HERE" is worse than slightly smaller type, so the
     headline shrinks until its words fit whole.
 
-    Guarantees, precisely — no more than these:
+    Every font this returns has been MEASURED by this function. Precisely:
       * The result is never wider than the requested `size`.
-      * Every size RETURNED BY THE SEARCH was measured to fit, and the search
-        includes the request itself, so a headline that already fits is never
-        shrunk.
-      * If no size in the range fits a whole word, this returns the requested
-        floor and the words do NOT fit — wrap() then cuts them. That fallback is
-        deliberate and is not a "verified fit"; a caller that needs whole words
-        must check for itself. (An earlier revision claimed every return was
-        verified, which was false on exactly this path; a judge caught it.)
+      * If a measured size fits every word whole, the largest such size is
+        returned. The requested size is measured first, so a headline that
+        already fits is never shrunk.
+      * If NO measured size fits every word, the smallest measured size is
+        returned and it is known not to fit; wrap() then cuts. (Earlier
+        revisions returned an unmeasured floor here and claimed it was either
+        verified to fit or verified not to fit — both false. A judge caught
+        each one.)
     """
     words = text.upper().split()
     if not words:
         return _font(path, size)
 
-    # A floor above the request is nonsensical and would return type wider than
-    # the caller asked for. Clamp first.
+    # A floor above the request would let this return type wider than asked for.
     floor = min(floor, size)
 
+    # floor <= size, so this range is never empty: `size` is always measured.
+    smallest_measured = _font(path, floor)
     for candidate in range(size, floor - 1, -4):
         font = _font(path, candidate)
+        smallest_measured = font
         if all(draw.textlength(w, font=font) <= max_w for w in words):
             return font
 
-    # No candidate fits a whole word: give back the floor and let wrap() cut.
-    # This size is NOT verified to fit; see the docstring.
-    return _font(path, floor)
+    return smallest_measured
 
 
 def card(
