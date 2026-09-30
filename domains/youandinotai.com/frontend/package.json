@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "tsx server.ts",
     "start": "tsx server.ts",
-    "build": "vite build",
+    "build": "python build_blog_static.py && vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "blog:check": "python build_blog_static.py --check"
   },
   "dependencies": {
     "@daily-co/daily-js": "^0.89.1",
