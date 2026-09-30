@@ -88,7 +88,7 @@ for kind, text in drawn:
 hfont = FONT_FOR["headline"]
 huge = "X" * 400                      # far wider than the box, no spaces
 giant_word = "SUPERCALIFRAGILISTICEXPIALIDOCIOUS" * 3
-one_char = "W"                        # a single glyph wider than a tiny box
+one_char = "W"                        # a single glyph
 adversarial = [
     ("huge no-space word", huge),
     ("repeated giant word", giant_word),
@@ -96,26 +96,44 @@ adversarial = [
     ("mixed", f"SHORT {huge} TAIL"),
 ]
 for label, text in adversarial:
-    # A deliberately narrow box exercises the hard-cut path.
     for box in (MAX_W, 260, 12):
         try:
             lines = mod.wrap(d, text.upper(), hfont, box)
         except ValueError as e:
-            # Raising is acceptable: it is loud, not a silent clip.
-            print(f"  {label} @{box}px -> raised ({str(e)[:52]}...)")
+            # Raising is the documented behaviour when even one glyph cannot fit,
+            # so only accept it if that is genuinely the case. A ValueError for
+            # text that COULD have been wrapped would be a defect.
+            smallest_char = d.textlength(text.upper().split()[0][0], font=hfont) if text.split() else 0
+            if smallest_char <= box:
+                failures.append(
+                    f"{label}@{box}: raised despite a fitting first glyph "
+                    f"({smallest_char:.0f}px <= {box}px) — {e}"
+                )
+            else:
+                print(f"  {label} @{box}px -> raised as designed ({smallest_char:.0f}px glyph > box)")
             continue
         for ln in lines:
             width = d.textlength(ln, font=hfont)
             if width > box:
                 failures.append(f"{label}@{box}: {ln[:24]!r} = {width:.0f}px > {box}px")
 
-# ---- 3. fitted_font must only return a size it verified ------------------
+# ---- 3. fitted_font: never wider than the request, and honest about fits --
 probe = "AUTONOMOUS INFRASTRUCTURE"
+narrow = 300  # a box in which a normal headline word cannot fit
 for floor in (56, 200, 400):
     font = mod.fitted_font(d, probe, os.path.join(FONTS, "ariblk.ttf"), 104, MAX_W, floor=floor)
     size = getattr(font, "size", None)
     if size is not None and size > 104:
         failures.append(f"fitted_font returned {size} > requested 104 (floor={floor})")
+
+# The fallback path is documented as NOT guaranteed to fit whole words.
+# Confirm the documented failure mode actually occurs there, so the docstring
+# is accurate rather than optimistic.
+fallback = mod.fitted_font(d, probe, os.path.join(FONTS, "ariblk.ttf"), 104, narrow, floor=56)
+words_fit = all(d.textlength(w, font=fallback) <= narrow for w in probe.upper().split())
+print(f"  fitted_font @{narrow}px box -> {fallback.size}px, whole words fit: {words_fit}")
+if words_fit:
+    print("  (note: this box did fit whole words; the fallback path was not exercised)")
 
 # ---- result ---------------------------------------------------------------
 if failures:

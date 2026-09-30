@@ -39,9 +39,9 @@ def wrap(draw: ImageDraw.ImageDraw, text: str, font, max_w: int) -> list[str]:
     still did not hold; an independent judge caught it.
 
     This version cannot emit an over-wide line. A word too wide to fit is split
-    at the widest fitting prefix; if not even one character fits, a hard cut is
-    taken instead of an escape. The invariant is the guarantee, so a path that
-    would violate it must still cut rather than give up.
+    at the widest fitting prefix. If even one character of a word cannot fit the
+    box, emit() raises instead of cutting: silently clipping and silently
+    dropping are both worse than stopping loudly.
     """
     words = text.split()
     lines: list[str] = []
@@ -116,27 +116,29 @@ def draw_block(
 
 
 def fitted_font(draw, text: str, path: str, size: int, max_w: int, floor: int = 56):
-    """Largest tested font <= size at which no single word exceeds max_w.
+    """Largest tested font at which no single word of text exceeds max_w.
 
     wrap() can cut a word that will not fit, but a marketing card reading
     "INFRASTRUCT / URE IS HERE" is worse than slightly smaller type, so the
     headline shrinks until its words fit whole.
 
-    Two details that matter:
-      * every candidate size is TESTED before it is returned, so the result is
-        always a size that was verified to fit — the earlier version returned
-        _font(floor) untested, which could hand back type WIDER than the last
-        size that was tried and failed.
-      * the search starts at the requested size, which is itself verified, so a
-        headline that already fits is never shrunk.
+    Guarantees, precisely — no more than these:
+      * The result is never wider than the requested `size`.
+      * Every size RETURNED BY THE SEARCH was measured to fit, and the search
+        includes the request itself, so a headline that already fits is never
+        shrunk.
+      * If no size in the range fits a whole word, this returns the requested
+        floor and the words do NOT fit — wrap() then cuts them. That fallback is
+        deliberate and is not a "verified fit"; a caller that needs whole words
+        must check for itself. (An earlier revision claimed every return was
+        verified, which was false on exactly this path; a judge caught it.)
     """
     words = text.upper().split()
     if not words:
         return _font(path, size)
 
-    # A floor above the requested size is nonsensical and would let this return
-    # type WIDER than the caller asked for. Clamp so the result is never larger
-    # than the requested size.
+    # A floor above the request is nonsensical and would return type wider than
+    # the caller asked for. Clamp first.
     floor = min(floor, size)
 
     for candidate in range(size, floor - 1, -4):
@@ -144,8 +146,8 @@ def fitted_font(draw, text: str, path: str, size: int, max_w: int, floor: int = 
         if all(draw.textlength(w, font=font) <= max_w for w in words):
             return font
 
-    # Nothing in range fits a whole word. Return the smallest verified size and
-    # let wrap() cut, rather than returning something wider than was tested.
+    # No candidate fits a whole word: give back the floor and let wrap() cut.
+    # This size is NOT verified to fit; see the docstring.
     return _font(path, floor)
 
 
@@ -188,48 +190,54 @@ def card(
     print("wrote", filename)
 
 
-# Card 1 - HOOK (orange, matches the site's hero)
-card(
-    "01_hook.png",
-    "YouAndINotAI",
-    "3 years of bots. now we found the bot-slayer.",
-    "300k role at FluidStack. they are not hiring humans to type.",
-    bg=ORANGE,
-    fg=CREAM,
-    kicker_color=CREAM,
-)
+def main() -> int:
+    # Card 1 - HOOK (orange, matches the site's hero)
+    card(
+        "01_hook.png",
+        "YouAndINotAI",
+        "3 years of bots. now we found the bot-slayer.",
+        "300k role at FluidStack. they are not hiring humans to type.",
+        bg=ORANGE,
+        fg=CREAM,
+        kicker_color=CREAM,
+    )
 
-# Card 2 - PROBLEM
-card(
-    "02_problem.png",
-    "The problem",
-    "Dating apps are 10% humans and 90% bot slop.",
-    "Corporate ops: 10% efficiency, 90% busywork.",
-    bg=BLACK,
-    fg=CREAM,
-    kicker_color=ORANGE,
-    accent_bar=True,
-)
+    # Card 2 - PROBLEM
+    card(
+        "02_problem.png",
+        "The problem",
+        "Dating apps are 10% humans and 90% bot slop.",
+        "Corporate ops: 10% efficiency, 90% busywork.",
+        bg=BLACK,
+        fg=CREAM,
+        kicker_color=ORANGE,
+        accent_bar=True,
+    )
 
-# Card 3 - SOLUTION
-card(
-    "03_solution.png",
-    "The shift",
-    "Vibe coding is dead. autonomous infrastructure is here.",
-    "Real humans. Bot-Shield verification. No bots, ever.",
-    bg=CREAM,
-    fg=BLACK,
-)
+    # Card 3 - SOLUTION
+    card(
+        "03_solution.png",
+        "The shift",
+        "Vibe coding is dead. autonomous infrastructure is here.",
+        "Real humans. Bot-Shield verification. No bots, ever.",
+        bg=CREAM,
+        fg=BLACK,
+    )
 
-# Card 4 - CTA (orange, matches site CTA)
-card(
-    "04_cta.png",
-    "youandinotai.com",
-    "Get verified. get real.",
-    "Adults 18 and over.",
-    bg=ORANGE,
-    fg=CREAM,
-    kicker_color=CREAM,
-)
+    # Card 4 - CTA (orange, matches site CTA)
+    card(
+        "04_cta.png",
+        "youandinotai.com",
+        "Get verified. get real.",
+        "Adults 18 and over.",
+        bg=ORANGE,
+        fg=CREAM,
+        kicker_color=CREAM,
+    )
 
-print("cards built in", OUT)
+    print("cards built in", OUT)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
