@@ -1,0 +1,40 @@
+{
+  "portals": [
+    {
+      "id": "tech-unfiltered",
+      "name": "Tech Unfiltered",
+      "niche": "Dating App Skeptic",
+      "hook": "50% lifetime recurring",
+      "link": "youandinotai.com/tech-unfiltered"
+    },
+    {
+      "id": "dating-exposed",
+      "name": "Dating Exposed",
+      "niche": "Dating App Skeptic",
+      "hook": "bot-slayer-logic",
+      "link": "youandinotai.com/dating-exposed"
+    },
+    {
+      "id": "bot-slayer",
+      "name": "Bot Slayer",
+      "niche": "Dating App Skeptic",
+      "hook": "no-slop-humans-only",
+      "link": "youandinotai.com/bot-slayer"
+    },
+    {
+      "id": "human-only-hub",
+      "name": "Human Only Hub",
+      "niche": "Dating App Skeptic",
+      "hook": "50-percent-partnership",
+      "link": "youandinotai.com/human-only-hub"
+    },
+    {
+      "id": "skeptic-squad",
+      "name": "Skeptic Squad",
+      "niche": "Dating App Skeptic",
+      "hook": "math-sells-itself",
+      "link": "youandinotai.com/skeptic-squad"
+    }
+  ],
+  "doctrine": "Josh-style outreach - no punctuation - fast - informal"
+}
