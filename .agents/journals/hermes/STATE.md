@@ -88,5 +88,27 @@
 - **next**: land the six commits once Joshua decides the divergence strategy; set the
   influencer payout rate; the two pre-existing judge findings on Wingman's copy (unsupported
   statistics, an absolute product promise) are still outstanding and are an architect call.
-- **state**: GREEN on work quality; **BLOCKED on landing** (needs Joshua's decision).
-  HEAD `76082438`. Working tree clean. Worktrees cleaned.
+- **2026-09-30 late — REGISTRATION IS STILL BROKEN IN PRODUCTION.** Chasing a judge remark
+  that "deployment ordering remains unverified" produced a critical finding. Live evidence:
+  `POST https://api.youandinotai.com/api/v1/auth/register` returns **HTTP 500 with AND
+  without** `referral_code`; the live OpenAPI `AuthRegisterRequest` has **no**
+  `referral_code` field; health is fine (`db_connected: true`, `user_count: 9`). So the
+  deployed build predates the fix while `origin/main` has carried it since `4e2863ab`
+  (2026-09-28). **`deploy-gcr.yml` is `workflow_dispatch` — a manual trigger — so pushing
+  to main deploys NOTHING.** Unblock needs a deploy dispatch: Joshua's call.
+- **corrected (mine, twice)**: (1) My standing note said "Cloud Run does NOT run Alembic."
+  Wrong. `backend/Dockerfile` CMD is `alembic upgrade head && uvicorn ...` and
+  `docs/DATABASE_MIGRATION_STRATEGY.md` confirms it. Both alembic and
+  `reconcile_legacy_schema()` exist; reconcile is idempotent on all three paths, so neither
+  breaks the other. Memory and the skill were both updated. (2) A test of mine "found" that
+  the engine ignored a runtime `DATABASE_URL` override. It did not — `SUPABASE_DB_URL` wins
+  over `DATABASE_URL` by design, and it was already set. My expectation was wrong, not the
+  code. Verified by setting the right variable and watching the engine follow it.
+- **migration guard**: `a1b2c3d4e5f6` had an unguarded `op.add_column`, so applying it
+  after startup reconciliation died with `duplicate column name: referral_code` (reproduced).
+  Deploy order is alembic-first so the normal path was safe, but a manual run would fail.
+  Now inspects first; both orders verified to pass. Commit `0217b804`.
+- **next**: dispatch the deploy (Joshua); land the local commits once the divergence
+  strategy is decided; set the influencer payout rate.
+- **state**: GREEN on work quality; **BLOCKED on landing** (needs Joshua's decision) and on a deploy dispatch.
+  HEAD `0217b804`. Working tree clean. Worktrees cleaned.
