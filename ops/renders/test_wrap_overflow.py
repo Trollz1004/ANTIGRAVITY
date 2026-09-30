@@ -124,8 +124,8 @@ for floor in (56, 200, 400):
     size = getattr(font, "size", None)
     if size is not None and size > 104:
         failures.append(f"fitted_font returned {size} > requested 104 (floor={floor})")
-    # Every returned font must be one the function actually measured. Re-measure
-    # it here and require agreement, so an unmeasured floor cannot slip through.
+    # Re-measure the returned size here. If it fits, it must be the LARGEST
+    # that fits, so one step larger must not fit (unless already at the request).
     if size is not None:
         measured = all(
             d.textlength(w, font=ImageFont.truetype(os.path.join(FONTS, "ariblk.ttf"), size)) <= MAX_W
@@ -153,6 +153,16 @@ if fb_size != 56:
 if fb_fits:
     failures.append("fallback reported words fitting a 40px box, which is impossible for 56px type")
 print(f"  fallback asserted: {fb_size}px returned, whole words fit {fb_fits} (documented: must not)")
+
+# Empty and whitespace-only text: documented to return the requested size.
+# Assert it, and assert the safety rationale the docstring gives for it.
+for empty in ("", "   ", "\t\n "):
+    ef = mod.fitted_font(d, empty, os.path.join(FONTS, "ariblk.ttf"), 104, MAX_W)
+    if getattr(ef, "size", None) != 104:
+        failures.append(f"empty text {empty!r} returned {getattr(ef, 'size', None)}px, expected 104px")
+    if mod.wrap(d, empty, ef, MAX_W) != []:
+        failures.append(f"wrap({empty!r}) emitted lines for empty text")
+print("  empty-text asserted: returns the requested 104px and wrap() emits no lines")
 
 # ---- result ---------------------------------------------------------------
 if failures:

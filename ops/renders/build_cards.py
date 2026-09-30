@@ -122,23 +122,26 @@ def fitted_font(draw, text: str, path: str, size: int, max_w: int, floor: int = 
     "INFRASTRUCT / URE IS HERE" is worse than slightly smaller type, so the
     headline shrinks until its words fit whole.
 
-    Every font this returns has been MEASURED by this function. Precisely:
+    Every font this returns has been MEASURED, with one honest exception noted
+    below. Precisely:
       * The result is never wider than the requested `size`.
       * If a measured size fits every word whole, the largest such size is
         returned. The requested size is measured first, so a headline that
         already fits is never shrunk.
       * If NO measured size fits every word, the smallest measured size is
-        returned and it is known not to fit; wrap() then cuts. (Earlier
-        revisions returned an unmeasured floor here and claimed it was either
-        verified to fit or verified not to fit — both false. A judge caught
-        each one.)
+        returned and it is known not to fit; wrap() then cuts.
+      * EMPTY or whitespace-only text returns the requested size. There are no
+        words, so there is nothing to measure against max_w — this is the one
+        return that is not a fit measurement. It is safe because wrap() on
+        empty text emits no lines at all.
     """
     words = text.upper().split()
-    if not words:
-        return _font(path, size)
 
     # A floor above the request would let this return type wider than asked for.
     floor = min(floor, size)
+
+    if not words:
+        return _font(path, size)
 
     # floor <= size, so this range is never empty: `size` is always measured.
     smallest_measured = _font(path, floor)
