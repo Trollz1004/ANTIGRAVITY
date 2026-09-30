@@ -16,6 +16,15 @@ card text: words far wider than the box, words with no split point, text at and
 below the font floor. It also checks fitted_font never returns a size it did not
 verify.
 
+MUTATION-PROVED (run against the real module, then restored):
+  * fallback mutated to return the requested size -> guard FAILS
+    ("fallback returned 104px, expected the floor 56px")
+  * split_at = max(1, split_at) clamp removed       -> guard HANGS (caught by
+    an external timeout)
+Both mutations were detected, so these are assertions, not decorations. The
+clamp mutation being caught only by a hang is why any runner for this file
+should be invoked under a timeout.
+
 Failure modes this must catch — all of them bit the author:
   * parsing card() by keyword only (it takes positional args) and printing a
     vacuous pass after extracting zero strings
