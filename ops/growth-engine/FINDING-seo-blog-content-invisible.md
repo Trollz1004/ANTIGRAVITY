@@ -67,6 +67,18 @@ a 404 is honest, and a monitor catches it. This returns 200 and renders a blank 
 There is no `sitemap.xml` either — that path also falls through to the SPA shell — so there
 is no channel by which any crawler could discover these URLs.
 
+Worse, the site **advertises** the missing sitemap. `https://youandinotai.com/robots.txt`
+serves real content (it is a real file) and its last line is:
+
+```
+Sitemap: https://youandinotai.com/sitemap.xml
+```
+
+That URL returns `200` with a `0`-byte body and a `<!doctype html>` payload — the SPA shell,
+not a sitemap. So every crawler that obeys robots.txt is being directed to a resource that
+does not exist and cannot be parsed. `robots.txt` works, `sitemap.xml` is a phantom, and
+nothing in the system reports an error for either.
+
 ## What fixes it (not done; Joshua's call on priority)
 
 The narrowest fix is a prerender/SSG step at build time: render each `public/blog/*.md`
