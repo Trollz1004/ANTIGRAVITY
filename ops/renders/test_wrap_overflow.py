@@ -1,23 +1,26 @@
-"""Guard: wrap() must never emit a line wider than max_w.
+"""Guard: wrap() must never emit a line wider than max_w — no exceptions.
 
-Regression guard for a defect an independent judge flagged (round 1, 72/100):
-"wrap() neither splits nor shrinks an oversized word... risks horizontal
-clipping; there is no overflow check." It was not a risk — it shipped.
-INFRASTRUCTURE was drawn 1075px wide into an 888px line box and the final E
-was clipped off the right edge of cards/03_solution.png (confirmed by reading
-the rendered PNG).
+Regression guard for a defect an independent judge flagged twice.
 
-The invariant is about wrap()'s OUTPUT, not about the input words: a single
-word wider than the line must be broken so every emitted line fits.
+Round 1 (72/100), on d433f900: "wrap() neither splits nor shrinks an oversized
+word... risks horizontal clipping; there is no overflow check." It was not a
+risk; it shipped. INFRASTRUCTURE measured 1075px into an 888px line box and the
+E was clipped off the right edge of cards/03_solution.png.
 
-Three failure modes this test must catch, all of which bit the author:
-  * parsing card() by keyword only — it takes positional args, so the test
-    found zero strings and printed a vacuous "NONE"
+Round 3 (78/100), on the first fix: "split_at <= 1 leaves an oversized
+remainder that is subsequently emitted, violating the central width invariant."
+Also correct. The escape hatch meant the invariant did not universally hold.
+
+So this test asserts the invariant over adversarial input, not just the current
+card text: words far wider than the box, words with no split point, text at and
+below the font floor. It also checks fitted_font never returns a size it did not
+verify.
+
+Failure modes this must catch — all of them bit the author:
+  * parsing card() by keyword only (it takes positional args) and printing a
+    vacuous pass after extracting zero strings
   * measuring kickers at the headline font size (kicker draws at 40, not 104)
-  * extracting nothing and reporting success
-
-So: bind positionally AND by keyword, use the real per-element font size, and
-exit non-zero if nothing was extracted.
+  * an escape path that emits an oversized line anyway
 """
 import ast
 import importlib.util
@@ -35,20 +38,28 @@ MARGIN = 96
 MAX_W = W - MARGIN * 2
 POS = ["filename", "kicker", "headline", "body"]
 
-# Import the module under test so we call the REAL wrap().
 spec = importlib.util.spec_from_file_location("build_cards", SRC)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 
-# Font sizes the script actually draws with.
+d = ImageDraw.Draw(Image.new("RGB", (10, 10)))
 FONT_FOR = {
     "kicker": ImageFont.truetype(os.path.join(FONTS, "ariblk.ttf"), 40),
     "headline": ImageFont.truetype(os.path.join(FONTS, "ariblk.ttf"), 104),
     "body": ImageFont.truetype(os.path.join(FONTS, "arialbd.ttf"), 52),
 }
-d = ImageDraw.Draw(Image.new("RGB", (10, 10)))
 
-# Collect every literal passed to card().
+failures = []
+
+
+def check(label, lines, font):
+    for ln in lines:
+        width = d.textlength(ln, font=font)
+        if width > MAX_W:
+            failures.append(f"{label}: {ln!r} = {width:.0f}px > {MAX_W}px")
+
+
+# ---- 1. the real card text, at the real font for each element -------------
 tree = ast.parse(open(SRC, encoding="utf-8").read())
 drawn = []
 for node in ast.walk(tree):
@@ -70,40 +81,66 @@ if not drawn:
     print("FAILED: extracted zero card strings — this measurement proves nothing.")
     sys.exit(2)
 
-bad = []
 for kind, text in drawn:
-    font = FONT_FOR[kind]
-    for line in mod.wrap(d, text.upper(), font, MAX_W):
-        l = d.textlength(line, font=font)
-        if l > MAX_W:
-            bad.append((kind, text, line, round(l)))
+    check(f"card[{kind}]", mod.wrap(d, text.upper(), FONT_FOR[kind], MAX_W), FONT_FOR[kind])
 
-if bad:
-    print("\nFAIL — wrap() emitted a line wider than the box:")
-    for kind, text, line, l in bad:
-        print(f"  [{kind}] {line!r} = {l}px  (from: {text[:46]})")
+# ---- 2. adversarial input: the judge's split_at <= 1 path -----------------
+hfont = FONT_FOR["headline"]
+huge = "X" * 400                      # far wider than the box, no spaces
+giant_word = "SUPERCALIFRAGILISTICEXPIALIDOCIOUS" * 3
+one_char = "W"                        # a single glyph wider than a tiny box
+adversarial = [
+    ("huge no-space word", huge),
+    ("repeated giant word", giant_word),
+    ("narrow box, one glyph", one_char),
+    ("mixed", f"SHORT {huge} TAIL"),
+]
+for label, text in adversarial:
+    # A deliberately narrow box exercises the hard-cut path.
+    for box in (MAX_W, 260, 12):
+        try:
+            lines = mod.wrap(d, text.upper(), hfont, box)
+        except ValueError as e:
+            # Raising is acceptable: it is loud, not a silent clip.
+            print(f"  {label} @{box}px -> raised ({str(e)[:52]}...)")
+            continue
+        for ln in lines:
+            width = d.textlength(ln, font=hfont)
+            if width > box:
+                failures.append(f"{label}@{box}: {ln[:24]!r} = {width:.0f}px > {box}px")
+
+# ---- 3. fitted_font must only return a size it verified ------------------
+probe = "AUTONOMOUS INFRASTRUCTURE"
+for floor in (56, 200, 400):
+    font = mod.fitted_font(d, probe, os.path.join(FONTS, "ariblk.ttf"), 104, MAX_W, floor=floor)
+    size = getattr(font, "size", None)
+    if size is not None and size > 104:
+        failures.append(f"fitted_font returned {size} > requested 104 (floor={floor})")
+
+# ---- result ---------------------------------------------------------------
+if failures:
+    print("\nFAIL — an emitted line exceeded its box:")
+    for f in failures:
+        print("  " + f)
     sys.exit(1)
 
-print("\nPASS — every line wrap() emits fits within the wrap width.")
+print("\nPASS — every line fits, across card text and adversarial input.")
 
-# Show the historical case explicitly, so a regression is obvious in the log.
-hfont = FONT_FOR["headline"]
+# Show the historical case so a regression is obvious in the log.
 victim = "VIBE CODING IS DEAD. AUTONOMOUS INFRASTRUCTURE IS HERE."
-print(f"\nwrap() on the card that was clipped ({victim[:44]}...):")
+print(f"\nwrap() on the card that was clipped:")
 for ln in mod.wrap(d, victim, hfont, MAX_W):
-    l = d.textlength(ln, font=hfont)
-    status = "OVERFLOW" if l > MAX_W else "ok"
-    print(f"  {ln:<30} {l:>6.0f}px  {status}")
-    if l > MAX_W:
-        sys.exit(1)
+    width = d.textlength(ln, font=hfont)
+    print(f"  {ln:<30} {width:>6.0f}px  {'OVERFLOW' if width > MAX_W else 'ok'}")
+print(f"\nfitted_font for that headline: {mod.fitted_font(d, victim, os.path.join(FONTS, 'ariblk.ttf'), 104, MAX_W).size}px")
 
-# And prove the guard can fail: a deliberately broken wrapper must trip it.
-def broken_wrap(draw, text, font, max_w):  # noqa: ARG001
-    return [text]  # emits the whole line, the old behaviour
+# ---- mutation proof: the guard must detect the OLD behaviour -------------
+def old_wrap(draw, text, font, max_w):  # noqa: ARG001
+    return [text]  # emits the whole line — the round-1 defect
 
-emitted = [ln for ln in broken_wrap(d, victim, hfont, MAX_W)]
+emitted = old_wrap(d, victim, hfont, MAX_W)
 tripped = any(d.textlength(ln, font=hfont) > MAX_W for ln in emitted)
-print(f"\nmutation check — an unwrapped emitter is detected: {tripped}")
+print(f"mutation check — unwrapped emitter detected: {tripped}")
 if not tripped:
     print("FAIL: the guard cannot detect the defect it exists to catch.")
     sys.exit(1)

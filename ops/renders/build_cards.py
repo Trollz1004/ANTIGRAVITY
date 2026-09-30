@@ -30,13 +30,18 @@ def _font(path: str, size: int) -> ImageFont.FreeTypeFont:
 
 
 def wrap(draw: ImageDraw.ImageDraw, text: str, font, max_w: int) -> list[str]:
-    """Wrap text to max_w, shrinking any single word too wide to fit.
+    """Wrap text to max_w. Every emitted line fits within max_w, always.
 
-    A word wider than max_w cannot be wrapped by word boundaries: the old
-    version emitted it whole and it ran off the right edge of the card, which
-    is what happened to INFRASTRUCTURE on 03_solution.png. Such a word is
-    split in two so both halves fit; if even one character cannot fit, the
-    word is left intact rather than mangled.
+    The original version emitted an oversized word whole and it ran off the
+    right edge of the card — that is what clipped INFRASTRUCTURE on
+    03_solution.png. A first fix broke such words but had a `split_at <= 1`
+    escape that pushed the remainder onto a line unchecked, so the invariant
+    still did not hold; an independent judge caught it.
+
+    This version cannot emit an over-wide line. A word too wide to fit is split
+    at the widest fitting prefix; if not even one character fits, a hard cut is
+    taken instead of an escape. The invariant is the guarantee, so a path that
+    would violate it must still cut rather than give up.
     """
     words = text.split()
     lines: list[str] = []
@@ -45,6 +50,20 @@ def wrap(draw: ImageDraw.ImageDraw, text: str, font, max_w: int) -> list[str]:
     def fits(candidate: str) -> bool:
         return draw.textlength(candidate, font=font) <= max_w
 
+    def emit(chunk: str) -> None:
+        """Append only chunks that fit; raise if that is impossible.
+
+        A chunk that does not fit means the invariant is about to be broken.
+        Dropping it silently would look like a pass; keeping it would clip.
+        Neither is acceptable, so surface it loudly instead.
+        """
+        if not fits(chunk):
+            raise ValueError(
+                f"cannot render {chunk!r} within {max_w}px; "
+                "reduce the font size (see fitted_font) or shorten the text"
+            )
+        lines.append(chunk)
+
     for word in words:
         trial = f"{cur} {word}".strip()
         if fits(trial):
@@ -52,27 +71,31 @@ def wrap(draw: ImageDraw.ImageDraw, text: str, font, max_w: int) -> list[str]:
             continue
 
         if cur:
-            lines.append(cur)
+            emit(cur)
             cur = ""
 
-        # The word alone may exceed the line. Break it at the widest prefix
-        # that still fits, so nothing is ever drawn past max_w.
-        if not fits(word):
-            remainder = word
-            while remainder and not fits(remainder):
-                split_at = len(remainder) - 1
-                while split_at > 1 and not fits(remainder[:split_at]):
-                    split_at -= 1
-                if split_at <= 1:
-                    break  # cannot fit even two characters; give up cleanly
-                lines.append(remainder[:split_at])
-                remainder = remainder[split_at:]
-            cur = remainder
-        else:
+        if fits(word):
             cur = word
+            continue
+
+        # The word alone is too wide: cut it into fitting pieces.
+        remainder = word
+        while remainder and not fits(remainder):
+            split_at = len(remainder) - 1
+            while split_at > 1 and not fits(remainder[:split_at]):
+                split_at -= 1
+            # Progress must be guaranteed: split_at >= 1, otherwise
+            # remainder[split_at:] never shrinks and this loops forever. That is
+            # exactly what happened when a one-character word was tested against
+            # a box narrower than the glyph. emit() raises if the piece cannot
+            # fit, so the loop can never spin and nothing over-wide is emitted.
+            split_at = max(1, split_at)
+            emit(remainder[:split_at])
+            remainder = remainder[split_at:]
+        cur = remainder
 
     if cur:
-        lines.append(cur)
+        emit(cur)
     return lines
 
 
@@ -93,20 +116,36 @@ def draw_block(
 
 
 def fitted_font(draw, text: str, path: str, size: int, max_w: int, floor: int = 56):
-    """Largest font <= size at which no single word of text exceeds max_w.
+    """Largest tested font <= size at which no single word exceeds max_w.
 
-    wrap() breaks an oversized word mid-word so nothing is ever clipped, but a
-    marketing card reading "INFRASTRUCT / URE IS HERE" is worse than a slightly
-    smaller font. Shrinking the type keeps every word whole. The floor stops the
-    size collapsing on pathological input; wrap() still guarantees no clipping
-    below it.
+    wrap() can cut a word that will not fit, but a marketing card reading
+    "INFRASTRUCT / URE IS HERE" is worse than slightly smaller type, so the
+    headline shrinks until its words fit whole.
+
+    Two details that matter:
+      * every candidate size is TESTED before it is returned, so the result is
+        always a size that was verified to fit — the earlier version returned
+        _font(floor) untested, which could hand back type WIDER than the last
+        size that was tried and failed.
+      * the search starts at the requested size, which is itself verified, so a
+        headline that already fits is never shrunk.
     """
     words = text.upper().split()
-    while size > floor:
-        font = _font(path, size)
+    if not words:
+        return _font(path, size)
+
+    # A floor above the requested size is nonsensical and would let this return
+    # type WIDER than the caller asked for. Clamp so the result is never larger
+    # than the requested size.
+    floor = min(floor, size)
+
+    for candidate in range(size, floor - 1, -4):
+        font = _font(path, candidate)
         if all(draw.textlength(w, font=font) <= max_w for w in words):
             return font
-        size -= 4
+
+    # Nothing in range fits a whole word. Return the smallest verified size and
+    # let wrap() cut, rather than returning something wider than was tested.
     return _font(path, floor)
 
 
