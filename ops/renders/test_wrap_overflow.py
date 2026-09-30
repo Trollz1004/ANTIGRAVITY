@@ -109,17 +109,21 @@ for label, text in adversarial:
         try:
             lines = mod.wrap(d, text.upper(), hfont, box)
         except ValueError as e:
-            # Raising is the documented behaviour when even one glyph cannot fit,
-            # so only accept it if that is genuinely the case. A ValueError for
-            # text that COULD have been wrapped would be a defect.
-            smallest_char = d.textlength(text.upper().split()[0][0], font=hfont) if text.split() else 0
-            if smallest_char <= box:
+            # Raising is the documented behaviour ONLY when not even one glyph of
+            # the text fits the box. Anything else raising is a defect, so check
+            # EVERY word, not just the first: if any word's narrowest glyph fits,
+            # the text was wrappable and wrap() should not have raised.
+            words = text.upper().split()
+            fittable = [w[0] for w in words if d.textlength(w[0], font=hfont) <= box]
+            if fittable:
                 failures.append(
-                    f"{label}@{box}: raised despite a fitting first glyph "
-                    f"({smallest_char:.0f}px <= {box}px) — {e}"
+                    f"{label}@{box}: raised though {fittable[0]!r} fits "
+                    f"({d.textlength(fittable[0], font=hfont):.0f}px <= {box}px) — {e}"
                 )
             else:
-                print(f"  {label} @{box}px -> raised as designed ({smallest_char:.0f}px glyph > box)")
+                narrowest = min(words, key=lambda w: d.textlength(w[0], font=hfont))
+                glyph = d.textlength(narrowest[0], font=hfont)
+                print(f"  {label} @{box}px -> raised as designed (narrowest glyph {glyph:.0f}px > box)")
             continue
         for ln in lines:
             width = d.textlength(ln, font=hfont)
@@ -128,11 +132,28 @@ for label, text in adversarial:
 
 # ---- 3. fitted_font: never wider than the request, and honest about fits --
 probe = "AUTONOMOUS INFRASTRUCTURE"
-for floor in (56, 200, 400):
+
+
+def measured_sizes(size, floor):
+    """The sizes the implementation actually iterates, after its clamp."""
+    floor = min(floor, size)
+    return set(range(size, floor - 1, -4))
+
+
+for floor in (56, 57, 200, 400):
     font = mod.fitted_font(d, probe, os.path.join(FONTS, "ariblk.ttf"), 104, MAX_W, floor=floor)
     size = getattr(font, "size", None)
     if size is not None and size > 104:
         failures.append(f"fitted_font returned {size} > requested 104 (floor={floor})")
+    # The docstring claims every returned size was MEASURED. Verify membership
+    # in the exact set the loop iterates, so an unmeasured floor cannot pass.
+    # floor=57 is the judge's misaligned-floor counterexample; floor=200 is their
+    # floor-above-size case. Both must return a measured size.
+    if size is not None and size not in measured_sizes(104, floor):
+        failures.append(
+            f"floor={floor}: returned {size}px, which the function never measured "
+            f"(measured: {sorted(measured_sizes(104, floor), reverse=True)})"
+        )
     # Re-measure the returned size here. If it fits, it must be the LARGEST
     # that fits, so one step larger must not fit (unless already at the request).
     if size is not None:
@@ -140,15 +161,31 @@ for floor in (56, 200, 400):
             d.textlength(w, font=ImageFont.truetype(os.path.join(FONTS, "ariblk.ttf"), size)) <= MAX_W
             for w in probe.upper().split()
         )
-        if measured:
-            # A fitting size was returned; it must be the LARGEST that fits, so
-            # one step larger must not fit (unless we are already at the request).
-            if size < 104:
-                bigger = ImageFont.truetype(os.path.join(FONTS, "ariblk.ttf"), min(size + 4, 104))
-                if all(d.textlength(w, font=bigger) <= MAX_W for w in probe.upper().split()):
-                    failures.append(
-                        f"fitted_font returned {size}px though {min(size + 4, 104)}px also fits"
-                    )
+        if measured and size < 104:
+            bigger = ImageFont.truetype(os.path.join(FONTS, "ariblk.ttf"), min(size + 4, 104))
+            if all(d.textlength(w, font=bigger) <= MAX_W for w in probe.upper().split()):
+                failures.append(
+                    f"fitted_font returned {size}px though {min(size + 4, 104)}px also fits"
+                )
+
+# Force the FALLBACK path with a MISALIGNED floor — the only way to reach it.
+# floor=57 makes the measured set range(104,56,-4) = 104..60, so 57 is never a
+# candidate. At a 610px box even the smallest measured size (60) fails to fit,
+# so the fallback runs. It must still return a MEASURED size (60), never 57.
+# Without this case the membership check above cannot fire, because the normal
+# path returns a fitting candidate long before the fallback is reached. Verified:
+# mutating the fallback to `_font(path, floor)` was NOT caught until this case
+# existed.
+fb2 = mod.fitted_font(d, probe, os.path.join(FONTS, "ariblk.ttf"), 104, 610, floor=57)
+fb2_size = getattr(fb2, "size", None)
+if fb2_size not in measured_sizes(104, 57):
+    failures.append(
+        f"fallback @610px floor=57 returned {fb2_size}px, an unmeasured size "
+        f"(expected a member of {sorted(measured_sizes(104, 57), reverse=True)})"
+    )
+if fb2_size == 57:
+    failures.append("fallback @610px floor=57 returned the raw floor 57 — the old defect is back")
+print(f"  fallback-with-misaligned-floor asserted: returned {fb2_size}px (57 is deliberately not a candidate)")
 
 # The fallback must be ASSERTED, not printed: force a box so narrow that no
 # measured size fits a whole word, then require the documented behaviour —
