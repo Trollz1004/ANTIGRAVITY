@@ -43,6 +43,7 @@ Skip any step = lying, not verifying
 | Linter clean | Linter output: 0 errors | Partial check, extrapolation |
 | Build succeeds | Build command: exit 0 | Linter passing, logs look good |
 | Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
+| Bug reproduced | Failure has the SAME cause as production | Failure for a different cause (DB down, missing table, wrong config) |
 | Regression test works | Red-green cycle verified | Test passes once |
 | Agent completed | VCS diff shows changes | Agent reports "success" |
 | Requirements met | Line-by-line checklist | Tests passing |
@@ -84,6 +85,30 @@ Skip any step = lying, not verifying
 ✅ Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)
 ❌ "I've written a regression test" (without red-green verification)
 ```
+
+**A regression test must be able to fail.** A test that passes whether or not the
+fix is present is not a regression guard — it is decoration. Prove the guard by
+mutation: delete the fix, watch it fail, restore it, watch it pass. Report all
+three runs. "Tests pass" alone never proves a regression test works.
+
+**Reproducing a bug (confounded failure):**
+```
+✅ Cause the failure in ISOLATION → confirm the error message names the defect
+✅ Same command, same environment, ONE variable changed (the commit)
+❌ "I got a 500 before the fix and a 201 after" (the 500 may have another cause)
+```
+A failing reproduction is worthless if it failed for a DIFFERENT reason than the
+one you are claiming to fix. Before/after is only evidence when the environment
+is held constant and the failure is the SAME failure. Check the actual exception,
+not just the status code:
+
+- A 500 from a down database, a missing table, or bad credentials looks exactly
+  like a 500 from the bug under test. Confirm the exception names the defect.
+- If the before-side ran with different config (a copied `.env`, a different DB,
+  a fresh database with no schema), you have proven nothing. Reproduce with the
+  SAME harness on both sides — ideally the repo's own test fixture.
+- Ask of every reproduction: "what else could cause this exact output?" If there
+  is a second plausible cause, rule it out or the evidence is void.
 
 **Build:**
 ```
