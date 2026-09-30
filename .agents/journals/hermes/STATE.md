@@ -57,6 +57,19 @@
   `test_main_app_root_health`) proven pre-existing at the parent commit. Frontend 37 passed.
   Render verified by ffprobe (1080×1920, ratio 0.5625 = exact 9:16, h264+aac) and by reading
   four distinct frames.
+- **judge scope (do not overclaim)**: the Codex verdict was an **inline diff review only.**
+  Its own words: "Local execution was blocked by a Windows sandbox launch error; suite counts
+  and typecheck results remain author-reported." So the judge judged the CODE and the
+  regression-guard design; it did **not** independently run the suite. The test counts above
+  are mine, produced in this lane, and the judge did not corroborate them. Two attempts to
+  give it a shell failed — `codex exec` running git itself hits OS error 206 ("filename or
+  extension is too long") from the Windows sandbox helper. The working pattern is to inline
+  the full diffs in the prompt (`git show <sha>` into a file, then pass `$(cat file)`), and
+  accept that the verdict is a reading, not a rerun.
+- **judge's outstanding findings on copy** (passed through, not mine to fix): `5e7ecb31` still
+  carries unsupported "10% humans and 90% bot slop" statistics and the absolute promise
+  "No bots, ever." Removing one unsupported number did not substantiate the rest. This is an
+  architect call for Wingman, not a code defect.
 - **skills**: `date-app-hermes-operations`, `verification-before-completion` (patched this
   session), `judge-house`, `i-have-adhd`, `caveman`.
 - **blocked**: (1) **Landing needs Joshua's call** — local `main` has diverged from
