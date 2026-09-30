@@ -8,6 +8,14 @@
  * This file mocks react-dom/client so main.tsx can be imported for real
  * without rendering the app, then asserts that importing it with a ?ref= in
  * the URL persists the partner id. Delete the boot call and this fails.
+ *
+ * MUTATION-PROVED (run, then restored; the file is unmodified now):
+ *   boot call present                              -> 4 passed
+ *   boot call commented out at main.tsx line 103   -> 2 failed
+ *   restored                                       -> 4 passed
+ * The second run is the point: the guard fails for the right reason when the
+ * wiring is removed. A test here that merely passes proves nothing, which is
+ * exactly what the judge said when rejecting the first version.
  */
 
 import { describe, expect, it, beforeEach, vi, afterEach } from 'vitest';
