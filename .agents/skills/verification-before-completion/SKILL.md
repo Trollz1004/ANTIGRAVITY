@@ -119,6 +119,27 @@ Deterministic regeneration produces byte-identical files, so equal hashes cannot
 distinguish "did not write" from "wrote the same bytes". Use timestamps when the
 claim is about whether a write happened.
 
+**But timestamps have resolution limits — observe the effect directly instead.**
+```
+✅ Spy on the write path (open/os.replace/Image.save) and count the attempts
+❌ Relying on mtime when two back-to-back writes can share one st_mtime_ns
+```
+Two consecutive writes on NTFS returned the SAME `st_mtime_ns`, so mtime could
+not distinguish them either. Content hashes and timestamps are both PROXIES for
+a write; when the claim matters, intercept the write itself and report the count.
+Rank your evidence by distance from the claim: direct observation of the effect
+beats a proxy, and a proxy that can coincide beats nothing at all.
+
+**A check that cannot be triggered by any input is decoration.**
+```
+✅ Mutation-test each assertion: does it FAIL when the defect is present?
+❌ Adding an assertion and seeing it pass on already-correct code
+```
+Adding an assertion proves nothing on its own — it must be shown to fail. And the
+input must actually reach the code path being asserted: a membership check on a
+fallback never passed a case that reaches that fallback, so mutating the fallback
+still passed the suite. Construct the input that reaches the branch, then mutate.
+
 **Reproducing a bug (confounded failure):**
 ```
 ✅ Cause the failure in ISOLATION → confirm the error message names the defect
