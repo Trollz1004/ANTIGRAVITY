@@ -1,11 +1,27 @@
 # FINDING — the SEO blog engine writes content that no visitor and no crawler can ever see
 
-**Status:** UNVERIFIED-to-fix / VERIFIED-as-defect
+**Status:** FIXED — commit `bf936c08` (prerender + sitemap + hub, mutation-proved)
 **Date:** 2026-09-30
 **Discovered by:** Hermes (Sabretooth), while checking whose untracked files were in the tree
-**Severity:** High — 34 cycles of organic-acquisition content have produced zero measurable SEO value
+**Severity:** High — 34 cycles of organic-acquisition content had produced zero measurable SEO value
 
-## What is true
+## Resolution
+
+`domains/youandinotai.com/frontend/build_blog_static.py` prerenders each markdown post
+into a self-contained `public/blog/<slug>/index.html`, plus a `public/blog/index.html`
+hub for `/blog/` and a real `public/sitemap.xml`. It runs as part of `npm run build`
+ahead of `vite build`, so any deploy regenerates the lot; `npm run blog:check` verifies
+it and exits 1 on regressions.
+
+Verified after the fix by serving `public/` over HTTP and reading the response:
+`/blog/safe-online-dating/` returned **1660 characters of visible text, exactly one
+`<h1>`, no `<div id="root">`, canonical present** — against 0 characters before.
+Screenshots: `blog-prerender-proof.png`, `blog-hub-proof.png`.
+
+The checker was mutation-proved three ways (post swapped for the SPA shell, sitemap
+deleted, article body stripped); each is caught and exits 1, while a clean tree exits 0.
+
+## What was true (the original defect)
 
 `ops/growth-engine/seo_blog_engine.py` runs on a cron every 240 minutes ("24/7 SEO Blog
 Engine", job `52a517af3e35`, 34 completed cycles, last run 2026-09-30 09:33 local, status

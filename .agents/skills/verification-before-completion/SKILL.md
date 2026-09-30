@@ -130,6 +130,17 @@ a write; when the claim matters, intercept the write itself and report the count
 Rank your evidence by distance from the claim: direct observation of the effect
 beats a proxy, and a proxy that can coincide beats nothing at all.
 
+**`$?` after a pipe is the exit code of the LAST command, not yours.**
+```
+✅ python build_blog_static.py --check; echo "exit: $?"     # 1 — correct
+❌ python build_blog_static.py --check | tail -4; echo "exit: $?"   # 0 — tail's
+```
+A checker that correctly exits 1 on a defect read as `EXIT: 0` in three separate
+mutation tests, because `tail` was the last process in the pipeline and it
+succeeded. This inverts the entire meaning of the evidence: a passing suite and a
+failing one both report 0. When the exit code IS the claim, never pipe the
+command — run it bare, or capture `PIPESTATUS[0]`.
+
 **A check that cannot be triggered by any input is decoration.**
 ```
 ✅ Mutation-test each assertion: does it FAIL when the defect is present?
