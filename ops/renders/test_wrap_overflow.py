@@ -19,11 +19,23 @@ verify.
 MUTATION-PROVED (run against the real module, then restored):
   * fallback mutated to return the requested size -> guard FAILS
     ("fallback returned 104px, expected the floor 56px")
+  * fallback mutated to return the raw unmeasured floor -> guard FAILS, but ONLY
+    after the 610px/floor=57 case was added. Without it the mutation PASSED,
+    because the normal path returns a fitting candidate and never reaches the
+    fallback. A check that cannot be triggered by any input is decoration.
   * split_at = max(1, split_at) clamp removed       -> guard HANGS (caught by
     an external timeout)
-Both mutations were detected, so these are assertions, not decorations. The
+All three mutations were detected, so these are assertions, not decorations. The
 clamp mutation being caught only by a hang is why any runner for this file
 should be invoked under a timeout.
+
+IMPORT-SAFETY is proved by DIRECT OBSERVATION, not by timestamps. An earlier
+version of these notes offered identical md5s, which prove unchanged content and
+NOT absence of writes (deterministic regeneration writes the same bytes). mtime
+was then offered and is also weak: two writes back-to-back on this filesystem
+returned the SAME st_mtime_ns, so resolution cannot distinguish them. The test
+therefore spies on open()/os.replace()/Image.save() during the import and
+reports the number of write attempts, which is 0.
 
 Failure modes this must catch — all of them bit the author:
   * parsing card() by keyword only (it takes positional args) and printing a
@@ -209,6 +221,55 @@ for empty in ("", "   ", "\t\n "):
     if mod.wrap(d, empty, ef, MAX_W) != []:
         failures.append(f"wrap({empty!r}) emitted lines for empty text")
 print("  empty-text asserted: returns the requested 104px and wrap() emits no lines")
+
+# ---- 4. importing build_cards must not write anything ---------------------
+# Proved by DIRECT OBSERVATION rather than by comparing content hashes or
+# timestamps. Identical md5s cannot distinguish "did not write" from "wrote the
+# same bytes" (the build is deterministic), and mtime resolution on this
+# filesystem returned the SAME st_mtime_ns for two back-to-back writes. So spy
+# on the actual write paths during a fresh import and require zero attempts.
+import builtins
+import importlib.util as _ilu
+
+_writes = []
+_real_open = builtins.open
+_real_replace = os.replace
+from PIL import Image as _Image
+
+_real_save = _Image.Image.save
+
+
+def _spy_open(file, mode="r", *a, **k):
+    if any(ch in str(mode) for ch in "wax+"):
+        _writes.append(f"open({file!r}, {mode!r})")
+    return _real_open(file, mode, *a, **k)
+
+
+def _spy_replace(src, dst):
+    _writes.append(f"os.replace({src!r}, {dst!r})")
+    return _real_replace(src, dst)
+
+
+def _spy_save(self, fp, *a, **k):
+    _writes.append(f"Image.save({fp!r})")
+    return _real_save(self, fp, *a, **k)
+
+
+builtins.open = _spy_open
+os.replace = _spy_replace
+_Image.Image.save = _spy_save
+try:
+    _spec = _ilu.spec_from_file_location("bc_reimport", SRC)
+    _m = _ilu.module_from_spec(_spec)
+    _spec.loader.exec_module(_m)
+finally:
+    builtins.open = _real_open
+    os.replace = _real_replace
+    _Image.Image.save = _real_save
+
+if _writes:
+    failures.append(f"importing build_cards performed {len(_writes)} write(s): {_writes[:3]}")
+print(f"  import-safety asserted: {len(_writes)} write attempts during import (direct observation)")
 
 # ---- result ---------------------------------------------------------------
 if failures:
