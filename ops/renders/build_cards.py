@@ -30,17 +30,47 @@ def _font(path: str, size: int) -> ImageFont.FreeTypeFont:
 
 
 def wrap(draw: ImageDraw.ImageDraw, text: str, font, max_w: int) -> list[str]:
+    """Wrap text to max_w, shrinking any single word too wide to fit.
+
+    A word wider than max_w cannot be wrapped by word boundaries: the old
+    version emitted it whole and it ran off the right edge of the card, which
+    is what happened to INFRASTRUCTURE on 03_solution.png. Such a word is
+    split in two so both halves fit; if even one character cannot fit, the
+    word is left intact rather than mangled.
+    """
     words = text.split()
     lines: list[str] = []
     cur = ""
+
+    def fits(candidate: str) -> bool:
+        return draw.textlength(candidate, font=font) <= max_w
+
     for word in words:
         trial = f"{cur} {word}".strip()
-        if draw.textlength(trial, font=font) <= max_w:
+        if fits(trial):
             cur = trial
+            continue
+
+        if cur:
+            lines.append(cur)
+            cur = ""
+
+        # The word alone may exceed the line. Break it at the widest prefix
+        # that still fits, so nothing is ever drawn past max_w.
+        if not fits(word):
+            remainder = word
+            while remainder and not fits(remainder):
+                split_at = len(remainder) - 1
+                while split_at > 1 and not fits(remainder[:split_at]):
+                    split_at -= 1
+                if split_at <= 1:
+                    break  # cannot fit even two characters; give up cleanly
+                lines.append(remainder[:split_at])
+                remainder = remainder[split_at:]
+            cur = remainder
         else:
-            if cur:
-                lines.append(cur)
             cur = word
+
     if cur:
         lines.append(cur)
     return lines
@@ -60,6 +90,24 @@ def draw_block(
         bbox = draw.textbbox((x, y), line, font=font)
         y = bbox[3] + line_gap
     return y
+
+
+def fitted_font(draw, text: str, path: str, size: int, max_w: int, floor: int = 56):
+    """Largest font <= size at which no single word of text exceeds max_w.
+
+    wrap() breaks an oversized word mid-word so nothing is ever clipped, but a
+    marketing card reading "INFRASTRUCT / URE IS HERE" is worse than a slightly
+    smaller font. Shrinking the type keeps every word whole. The floor stops the
+    size collapsing on pathological input; wrap() still guarantees no clipping
+    below it.
+    """
+    words = text.upper().split()
+    while size > floor:
+        font = _font(path, size)
+        if all(draw.textlength(w, font=font) <= max_w for w in words):
+            return font
+        size -= 4
+    return _font(path, floor)
 
 
 def card(
@@ -87,7 +135,7 @@ def card(
         d.text((margin, y), kicker.upper(), font=kf, fill=kicker_color)
         y += 96
 
-    hf = _font(BLACK_FONT, 104)
+    hf = fitted_font(d, headline, BLACK_FONT, 104, W - margin * 2)
     hl = wrap(d, headline.upper(), hf, W - margin * 2)
     y = draw_block(d, hl, hf, margin, y, fg, line_gap=16)
 
