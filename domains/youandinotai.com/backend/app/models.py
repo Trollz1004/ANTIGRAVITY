@@ -60,6 +60,11 @@ class User(Base):
     adult_verified_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
+    # Influencer attribution: the portal ref the user signed up through
+    # (e.g. "bot-slayer"). NULL when no referral was supplied.
+    referral_code: Mapped[str | None] = mapped_column(
+        String(64), nullable=True, index=True
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

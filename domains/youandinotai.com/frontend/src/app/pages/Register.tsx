@@ -13,6 +13,10 @@ import {
 import { useAuth } from '../../lib/auth';
 import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
 import { getSafeNextPath } from '../../lib/navigation';
+import {
+  capturePartnerId,
+  clearPartnerId,
+} from '../../lib/partnerAttribution';
 
 export function Register() {
   const [email, setEmail] = useState('');
@@ -28,6 +32,7 @@ export function Register() {
   const navigate = useNavigate();
   const location = useLocation();
   const nextPath = getSafeNextPath(location.search, '/app/profile');
+  const [partnerId] = useState(() => capturePartnerId(location.search));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +70,9 @@ export function Register() {
         acceptedCookiePolicy,
         acceptedTerms,
         confirmedOver18,
+        referralCode: partnerId,
       });
+      clearPartnerId();
       navigate(nextPath);
     } catch (err: any) {
       setError(err.message || 'Registration failed');

@@ -118,6 +118,7 @@ async def reconcile_legacy_schema() -> None:
             f"ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS {ENGAGEMENT_SCORE_COLUMN} FLOAT DEFAULT 0 NOT NULL",
             f"ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS {MEMBER_BADGE_COLUMN} VARCHAR(50)",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255) UNIQUE",
+            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS referral_code VARCHAR(64)",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS bio TEXT",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS age INTEGER",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS gender VARCHAR(50)",
@@ -150,6 +151,7 @@ async def reconcile_legacy_schema() -> None:
             "CREATE INDEX IF NOT EXISTS ix_matches_user_a ON matches(user_a)",
             "CREATE INDEX IF NOT EXISTS ix_matches_user_b ON matches(user_b)",
             "CREATE INDEX IF NOT EXISTS ix_users_square_customer_id ON users(square_customer_id)",
+            "CREATE INDEX IF NOT EXISTS ix_users_referral_code ON users(referral_code)",
         )
 
         for statement in statements:
@@ -246,6 +248,9 @@ async def _reconcile_sqlite_schema(connection) -> None:
     await add_column("users", user_columns, "updated_at", "updated_at DATETIME")
     await add_column(
         "users", user_columns, "adult_verified_at", "adult_verified_at DATETIME"
+    )
+    await add_column(
+        "users", user_columns, "referral_code", "referral_code VARCHAR(64)"
     )
     await add_column(
         "users", user_columns, "is_active", "is_active BOOLEAN DEFAULT 1 NOT NULL"

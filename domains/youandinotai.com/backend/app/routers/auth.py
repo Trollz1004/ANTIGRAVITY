@@ -141,6 +141,7 @@ async def register(
         display_name=payload.display_name.strip(),
         date_of_birth=payload.date_of_birth,
         adult_verified_at=datetime.now(timezone.utc),
+        referral_code=payload.referral_code,
     )
     ensure_adult(payload.date_of_birth)
     db.add(user)
@@ -151,15 +152,20 @@ async def register(
     if payload.referral_code:
         try:
             import sys
+
             growth_dir = "C:/ANTIGRAVITY/ops/growth-engine"
             if growth_dir not in sys.path:
                 sys.path.insert(0, growth_dir)
             from growth_engine import create_user as create_growth_user
+
             create_growth_user(payload.email.lower(), referred_by=payload.referral_code)
         except Exception as exc:
             import logging
+
             logger = logging.getLogger(__name__)
-            logger.warning("Growth engine tracking failed for %s: %s", payload.email, exc)
+            logger.warning(
+                "Growth engine tracking failed for %s: %s", payload.email, exc
+            )
 
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
