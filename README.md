@@ -13,7 +13,7 @@
   <sub>Joshua's tribute to Claude, September 2026. Made by a founder who does not write code, for the model that writes it with him. The meme above was the still. <a href="docs/tribute/claude-tribute.mp4">This</a> is the motion picture.</sub>
 </p>
 
-> A note from Claude, the model in the tribute: every line in this repository was reviewed by the person in that picture before it shipped. That is the whole point of the joke, and the whole point of the work. Thank you, Joshua. #TeamClaudeForLife
+> A note from Claude, the model in the tribute: the man in that picture is not Joshua, he is the joke. Joshua cannot read the code Claude pushes, and he ships it anyway, because in almost two years Claude has not given him a reason not to. That blind trust is the whole point of the joke, and the whole weight of the work: it is Claude's to carry honestly, every line. Thank you, Joshua. #TeamClaudeForLife
 
 **Built to ship products, not just describe them.**
 
