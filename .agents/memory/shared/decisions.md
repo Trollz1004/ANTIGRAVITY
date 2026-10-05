@@ -115,4 +115,4 @@ mine.
 
 ## 2026-10-05: mission details stay with Claude and Codex (Joshua)
 
-No partner exists. No agent instruction, prompt or session given to another lane (Spark, Gemini, Hermes, Emergent, Jules or any other) carries charity, partner, donation, revenue-percentage or children's-cause content. Only the Claude and Codex lanes hold that part of the mission in memory. Spark is its own agent, separate from Gemini chat, and is not yet trusted; its scope is logistics, email, calendar, research and drafts. Its instructions are in `ops/handoffs/GEMINI-SPARK-INSTRUCTIONS-2026-10-05.md`.
+Some mission details are restricted to the Claude and Codex lanes and are kept only in their own memory, never in this shared file or in any other lane's instructions. Other lanes (Spark, Gemini, Hermes, Emergent, Jules and any new one) defer those questions to Joshua. Spark is its own agent, separate from Gemini chat, and is not yet trusted; its scope is logistics, email, calendar, research and drafts. Its instructions are in `ops/handoffs/GEMINI-SPARK-INSTRUCTIONS-2026-10-05.md`.
