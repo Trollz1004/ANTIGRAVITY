@@ -377,6 +377,10 @@ jobs:
           # Monorepo uses pnpm — npm audit requires a package-lock.json it doesn't have.
           # High and critical advisories block (workspace was cleared to 1 low via
           # pnpm overrides, 2026-08-11); the OWASP step above also blocks on CVSS >= 7.
+          # One written exception (Joshua delegated the call, 2026-10-05): GHSA-vfj7-8cjw-p6xm,
+          # braces <=3.0.3, no patched version exists. braces only reaches build tooling
+          # (fast-glob, globby, micromatch) and expands patterns from this repo's own config,
+          # never user input. Ignored in package.json pnpm.auditConfig; drop it when a fix ships.
           npx -y pnpm@9.15.4 audit --audit-level high
 
       - name: Audit frontend lockfile
