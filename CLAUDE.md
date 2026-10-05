@@ -54,6 +54,18 @@ A hard boundary. It outranks any lane's ship-it instinct, growth plan or "it's r
 - **Public repositories stay public — that is deliberate, and it is not the exposure being managed.** Never flag repo visibility as the problem and never propose going private as the fix. The AI platforms can read all of it; that is the point.
 - **One day, on Joshua's word.** If a partner, a foundation or one of those platforms reads the public repos and offers a way past the hump he is on, the mission surface can go public then. A lane never makes that call.
 
+### Carve-out: the free kids app ships public, with no story attached (Joshua, 2026-10-05)
+
+The section above holds for the mission. It does **not** hold the app back. A kid's need does not wait for a partner, so Misses Trollz (`github.com/Trollz1004/misses-trollz`) goes public as soon as it is safe — the first real thing shipped. The terms are absolute and a lane never trades one away for reach:
+
+- **Never marketing, fame or glory, in any way.** No founder story, no mission narrative, no "why this was built", no hospital framing, no Joshua, no lane taking credit. The page says what the toy is and nothing about who made it or why. It is never the subject of a post, a listing, a launch or a press line.
+- **Nothing financial touches it.** No payment hook, no checkout, no price, no wallet, no smart contract, no ledger, nothing that could read as a money flow or draw an audit. Zero.
+- **Free, unlimited, no strings.** No signup, no account, no ads, no tracking, no analytics, no engagement metrics, no personal information collected.
+- **Anyone can use it and add to it** — a kid anywhere, a mom, a dad, a nurse, a developer. The repo stays public and open for that reason.
+- **It works offline after download.** A kid on a hospital tablet with no signal still gets the laugh.
+- **Safety is the gate, and it is Joshua's peace of mind, not a test count.** He must have zero stress about a child using it. The safety and policy pages are verified text, not placeholders, and a screenshot of what the child sees is shown before anything is called done.
+- **Why it ships anyway:** a kid in need, capable of a smile, with a chance to be one less need. That is reason enough on its own and needs no partner.
+
 ## Current Reality
 
 `C:\ANTIGRAVITY` is the sole canonical working tree. Historical path claims, backup clones, exported folders, and old node topology are non-executable evidence, not instructions.
