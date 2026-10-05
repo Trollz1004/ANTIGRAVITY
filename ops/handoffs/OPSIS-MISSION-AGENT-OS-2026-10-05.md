@@ -39,7 +39,11 @@ Source of truth: paperclip-tro/agents/*/STATE.md, the HEARTBEAT.md modified time
 and the Agent Hub dispatch log.
 Rules:
 - Read-only.
-- Header: Access-Control-Allow-Origin: *.
+- CORS: never Access-Control-Allow-Origin: *. Echo the request Origin only when it is on an
+  explicit allowlist: http://192.168.0.40:9150, http://127.0.0.1:9150, http://localhost:9150,
+  plus the exact origin of the board Joshua pastes the Live URL into (name it in your report).
+  Any other origin gets no CORS header. A wildcard would let any website Joshua visits read
+  this internal state off the LAN.
 - No secrets anywhere in the payload.
 - Redact any file path outside C:\antigravity.
 - Register it in bootstrap so it survives a reboot.
