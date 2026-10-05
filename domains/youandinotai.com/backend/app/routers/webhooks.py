@@ -411,20 +411,23 @@ async def square_payment_webhook(
                 }
             event_id = f"sigfail-{hashlib.sha256(payload).hexdigest()[:15]}"
 
-            await create_webhook_event(
-                db,
-                event_id=event_id,
-                event_type="verification_failed",
-                payload={
-                    "error": str(exc.detail),
-                    "url": str(request.url),
-                    "headers": dict(request.headers),
-                    "payload": payload_json,
-                },
-                processed=True,
-                event_source="square",
-            )
-            await db.commit()
+            try:
+                await create_webhook_event(
+                    db,
+                    event_id=event_id,
+                    event_type="verification_failed",
+                    payload={
+                        "error": str(exc.detail),
+                        "url": str(request.url),
+                        "headers": dict(request.headers),
+                        "payload": payload_json,
+                    },
+                    processed=True,
+                    event_source="square",
+                )
+                await db.commit()
+            except IntegrityError:
+                await db.rollback()
             raise exc
 
     try:
