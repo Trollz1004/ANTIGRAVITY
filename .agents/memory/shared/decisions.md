@@ -113,3 +113,6 @@ mine.
 - **Editors and lanes:** each node gets the Antigravity editor (VS Code-based) with Claude as a signed-in extension (never an API key), Codex for code changes and Gemini for chat. Hermes runs in the terminal as JARVIS/OPSIS. The build prompt for OPSIS and Gemini's updated instructions are in `ops/handoffs/OPSIS-MISSION-AGENT-OS-2026-10-05.md` and `ops/handoffs/GEMINI-SPARK-INSTRUCTIONS-2026-10-05.md`.
 - **Never** introduce an `ANTHROPIC_API_KEY`. Official Claude is login/OAuth only.
 
+## 2026-10-05: mission details stay with Claude and Codex (Joshua)
+
+No partner exists. No agent instruction, prompt or session given to another lane (Spark, Gemini, Hermes, Emergent, Jules or any other) carries charity, partner, donation, revenue-percentage or children's-cause content. Only the Claude and Codex lanes hold that part of the mission in memory. Spark is its own agent, separate from Gemini chat, and is not yet trusted; its scope is logistics, email, calendar, research and drafts. Its instructions are in `ops/handoffs/GEMINI-SPARK-INSTRUCTIONS-2026-10-05.md`.
