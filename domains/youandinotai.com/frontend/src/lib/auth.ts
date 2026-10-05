@@ -25,6 +25,7 @@ interface RegisterPayload {
   acceptedTerms: boolean;
   acceptedCookiePolicy: boolean;
   confirmedOver18: boolean;
+  referralCode?: string | null;
 }
 
 interface AuthState {
@@ -87,6 +88,7 @@ export const useAuth = create<AuthState>(set => ({
     acceptedTerms,
     acceptedCookiePolicy,
     confirmedOver18,
+    referralCode,
   }) => {
     const data = await api.post<{
       access_token: string;
@@ -100,6 +102,9 @@ export const useAuth = create<AuthState>(set => ({
       accepted_terms: acceptedTerms,
       accepted_cookie_policy: acceptedCookiePolicy,
       confirmed_over_18: confirmedOver18,
+      // Influencer attribution. Omitted entirely when absent so the
+      // backend default (NULL) applies rather than an empty string.
+      ...(referralCode ? { referral_code: referralCode } : {}),
     });
     localStorage.setItem('access_token', data.access_token);
     localStorage.setItem('refresh_token', data.refresh_token);

@@ -85,8 +85,8 @@ async function submitProposal(payload, fetchImpl = fetch) {
   }, fetchImpl);
 }
 
-// Drafts one post in Joshua's Fable voice (youandinotai brand only). Never
-// creates a proposal — the caller still has to review + submit it.
+// Drafts one post in Hermes voice (youandinotai brand only). Never
+// creates a proposal; the caller decides what to do with the draft.
 async function draftWithFable(payload, fetchImpl = fetch) {
   return fetchJson('/api/social/draft', {
     method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload),
@@ -127,7 +127,7 @@ function initSocial() {
       const bodyEl = document.getElementById('social-body');
       const titleEl = document.getElementById('social-title');
       const brief = (titleEl && titleEl.value) || (bodyEl && bodyEl.value) || '';
-      if (status) status.textContent = 'drafting with Fable…';
+      if (status) status.textContent = 'drafting with Hermes…';
       try {
         const j = await draftWithFable({
           brand: document.getElementById('social-brand').value,

@@ -66,7 +66,7 @@ globalThis.requestAnimationFrame = () => 1
 globalThis.cancelAnimationFrame = () => {}
 globalThis.URL.createObjectURL = () => 'blob:x'
 
-for (const id of ['activity-log', 'omni-model-count', 'stat-services', 'stat-services-detail', 'sentry-audit-btn', 'stat-agents', 'stat-agents-detail', 'stat-nodes', 'stat-nodes-detail', 'stat-vault', 'stat-vault-detail', 'stat-avatars', 'stat-avatars-detail', 'agent-categories', 'agent-list', 'agent-detail-panel', 'graph-meta', 'graph-note', 'hermes-link', 'claude-command', 'claude-bridge-status', 'claude-note', 'claude-result', 'freebuff-result', 'mission-board', 'mission-board-note', 'widget-search-results', 'avatar-gallery', 'crosslisting-status', 'crosslisting-detail', 'board-question', 'board-result', 'board-seats']) reg(id)
+for (const id of ['activity-log', 'omni-model-count', 'stat-services', 'stat-services-detail', 'sentry-audit-btn', 'stat-agents', 'stat-agents-detail', 'stat-nodes', 'stat-nodes-detail', 'stat-vault', 'stat-vault-detail', 'stat-avatars', 'stat-avatars-detail', 'agent-categories', 'agent-list', 'agent-detail-panel', 'graph-meta', 'graph-note', 'hermes-link', 'claude-command', 'claude-bridge-status', 'claude-note', 'claude-result', 'freebuff-result', 'mission-board', 'mission-board-note', 'widget-search-results', 'avatar-gallery', 'crosslisting-status', 'crosslisting-detail', 'board-question', 'board-result', 'board-seats', 'claudian-input', 'claudian-send', 'claudian-log', 'claudian-model', 'claudian-effort', 'claudian-session']) reg(id)
 reg('agent-search', 'input'); reg('graph-search', 'input'); reg('widget-search-input', 'input')
 const svg = reg('graph-svg', 'svg'); svg.querySelectorAll = () => []
 const gc = reg('graph-canvas-container'); gc.clientWidth = 800; gc.clientHeight = 600
@@ -213,19 +213,20 @@ describe('tab navigation (the bug that killed every click)', () => {
   })
 
   it('claudian panel sends the typed prompt with model/effort, streams the reply, and keeps the session badge', async () => {
-    const input = reg('claudian-input', 'input')
-    const send = reg('claudian-send', 'button')
-    const log = reg('claudian-log', 'div')
-    const model = reg('claudian-model', 'select'); model.value = 'opusplan'
-    const effort = reg('claudian-effort', 'select'); effort.value = 'acceptEdits'
-    const badge = reg('claudian-session', 'span')
-    send.listeners.click = []
+    const input = globalThis.document.querySelector('#claudian-input') || reg('claudian-input', 'input')
+    const send = globalThis.document.querySelector('#claudian-send') || reg('claudian-send', 'button')
+    const log = globalThis.document.querySelector('#claudian-log') || reg('claudian-log', 'div')
+    const model = globalThis.document.querySelector('#claudian-model') || reg('claudian-model', 'select')
+    delete model.dataset.ready
+    model.value = 'opusplan'
+    const effort = globalThis.document.querySelector('#claudian-effort') || reg('claudian-effort', 'select'); effort.value = 'acceptEdits'
+    const badge = globalThis.document.querySelector('#claudian-session') || reg('claudian-session', 'span')
     app.initClaudian()
     input.value = 'refactor the vault walker'
     let sentBody = null
     const realFetch = globalThis.fetch
     globalThis.fetch = async (url, options = {}) => {
-      if (String(url).includes('/api/claude/chat')) {
+      if (String(url).includes('/api/claude/chat') || String(url).includes('/api/hermes/chat')) {
         sentBody = JSON.parse(options.body)
         return { ok: true, body: { getReader: () => ({ read: async () => ({ done: true, value: undefined }) }) } }
       }
@@ -233,7 +234,7 @@ describe('tab navigation (the bug that killed every click)', () => {
     }
     try {
       send.click()
-      await new Promise((r) => setTimeout(r, 10))
+      await new Promise((r) => setTimeout(r, 200))
     } finally { globalThis.fetch = realFetch }
     expect(sentBody.prompt).toBe('refactor the vault walker')
     expect(sentBody.model).toBe('opusplan')

@@ -50,7 +50,7 @@
  *   GET  /api/architecture.json Architecture panel (Phase E): typed JSON of the live Sabertooth stack (House stage table + health JSON)
  *   GET  /api/architecture      Architecture panel: archify-rendered HTML (same-origin), plain-text fallback on CLI failure
  *   GET  /api/architecture/diff?base=&head= before/after architecture diff for a commit range (archify compare)
- *   GET  /health                {service:"jarvis-dashboard"}  <- identity string for the wall
+ *   GET  /health                {service:"hermes-jarvis"}     <- identity string for the wall
  *
  * Zero dependencies. Secrets are read from .env at request time and never logged or returned.
  */
@@ -89,8 +89,9 @@ import { checkCompliance } from './lib/compliance.mjs';
 import { scoreCopy } from './lib/copy-score.mjs';
 import { listPlatforms, validateBrand, PLATFORM_IDS, isManualPlatform, executeManualHandoff, checkAdultVenue, checkBusinessOnly, applyRequiredFooter, DATEAPP_BRAND, BRAND_RULING } from './lib/social-adapters.mjs';
 import { draftWithFable, platformLimit } from './lib/fable-draft.mjs';
+import { selectDueProposals, passesMechanicalChecks, isDue, reviewedTodayCount, nyDay, DAILY_CAP_PER_BRAND } from './lib/social-review.mjs';
+import { hermesLocalReview } from './lib/hermes-review.mjs';
 import { buildInbox, performAction, readTriggers, appendAudit } from './lib/inbox.mjs';
-import { reviewAndMaybeExecute, autoReviewEnabled, passesMechanicalChecks, isDue, selectDueProposals } from './lib/social-review.mjs';
 import { executeRedditAdapter } from './lib/reddit-api.mjs';
 import { createAgentTools } from './lib/agent-tools.mjs';
 import {
@@ -383,28 +384,94 @@ const socialAdapters = {
     return { ok: false, error: `syndication auto-post not wired in this phase for "${proposal.platform}" — run scripts/seo/post.mjs manually with the approved copy` };
   },
 };
-// Model review scheduler (specs/010, unit 7): a proposal filed for the
-// future is picked up here, not at creation time. `inFlight` stops the
-// 60s tick from starting a second review while one is already running for
-// the same id (a CLI review can take up to 90s).
+// Hermes-local auto-reviewer (replaces the Claude CLI reviewer lane).
+// Joshua's 2026-09-21 ruling: "i dont want claude in jarvis because always
+// usage capped just hermes". The Sonnet lane that previously shelled out
+// to `claude -p --model sonnet --max-turns 3` is retired. JARVIS now uses
+// a Hermes-local rubric to approve social proposals (lib/hermes-review.mjs).
 const socialReviewInFlight = new Set();
-function runSocialAutoReview(proposal) {
+function runHermesLocalReview(proposal) {
   if (socialReviewInFlight.has(proposal.id)) return;
   socialReviewInFlight.add(proposal.id);
-  reviewAndMaybeExecute({
-    store: proposalStore, proposal, rubricPath: SOCIAL_REVIEW_RUBRIC_PATH,
-    execute: (p) => socialAdapters.execute(p),
-    auditFn: (record) => appendAudit({ dir: AUDIT_DIR, record }),
-  })
-    .catch((e) => appendAudit({ dir: AUDIT_DIR, record: { kind: 'social-review', id: proposal.id, error: String((e && e.message) || e) } }))
-    .finally(() => socialReviewInFlight.delete(proposal.id));
+  (async () => {
+    try {
+      const verdict = hermesLocalReview(proposal);
+      appendAudit({
+        dir: AUDIT_DIR,
+        record: {
+          kind: 'social-review', id: proposal.id, brand: proposal.brand, platform: proposal.platform,
+          status: verdict.status, reasons: verdict.reasons, reviewer: 'hermes-local',
+        },
+      });
+      const actor = 'hermes (local rubric)';
+      if (verdict.status === 'rejected') {
+        proposalStore.transition(proposal.id, {
+          state: 'REJECTED', reviewActor: actor, reviewReasons: verdict.reasons, reviewedAt: new Date().toISOString(),
+        });
+        return;
+      }
+      const todayCount = reviewedTodayCount(proposalStore.list(), proposal.brand, { now: () => new Date() });
+      if (todayCount > DAILY_CAP_PER_BRAND) {
+        appendAudit({
+          dir: AUDIT_DIR,
+          record: {
+            kind: 'social-review-cap', id: proposal.id, brand: proposal.brand,
+            reason: `daily cap of ${DAILY_CAP_PER_BRAND} per brand reached for ${nyDay(new Date())}`,
+          },
+        });
+        proposalStore.transition(proposal.id, {
+          state: 'APPROVED', reviewActor: actor, reviewReasons: ['daily cap reached; left for a human — not executed'],
+          reviewedAt: new Date().toISOString(),
+        });
+        return;
+      }
+      const approvedRec = proposalStore.transition(proposal.id, {
+        state: 'APPROVED', reviewActor: actor, reviewReasons: verdict.reasons, reviewedAt: new Date().toISOString(),
+      });
+      let result;
+      try { result = await Promise.resolve(socialAdapters.execute(approvedRec)); }
+      catch (e) { result = { ok: false, error: String((e && e.message) || e) }; }
+      if (result && result.ok) {
+        proposalStore.transition(proposal.id, {
+          state: 'EXECUTED', evidence: result.note || result.url || result.path || null,
+        });
+      } else {
+        proposalStore.transition(proposal.id, {
+          state: 'FAILED', evidence: (result && result.error) || 'adapter failed',
+        });
+      }
+    } catch (e) {
+      appendAudit({
+        dir: AUDIT_DIR,
+        record: { kind: 'social-review-error', id: proposal.id, error: String((e && e.message) || e) },
+      });
+    } finally {
+      socialReviewInFlight.delete(proposal.id);
+    }
+  })();
 }
 setInterval(() => {
-  if (!autoReviewEnabled(envValue)) return;
-  for (const p of selectDueProposals(proposalStore.list(), { excludeIds: socialReviewInFlight })) {
-    runSocialAutoReview(p);
+  process.stderr.write('[jarvis] social-review tick fired at ' + new Date().toISOString() + '\n');
+  try {
+    const all = proposalStore.list();
+    const due = selectDueProposals(all, { excludeIds: socialReviewInFlight });
+    process.stderr.write('[jarvis] tick: total=' + all.length + ' due=' + due.length + '\n');
+    if (due.length > 0) {
+      appendAudit({
+        dir: AUDIT_DIR,
+        record: { kind: 'social-review-tick', total: all.length, due: due.length },
+      });
+    }
+    for (const p of due) {
+      runHermesLocalReview(p);
+    }
+  } catch (e) {
+    appendAudit({
+      dir: AUDIT_DIR,
+      record: { kind: 'social-review-tick-error', error: String((e && e.message) || e) },
+    });
   }
-}, 60000).unref();
+}, 60000);
 
 // Ask-JARVIS agentic loop (specs/009-jarvis-agentic-ask): every tool reuses
 // the exact same live sources the rest of this file already serves — no
@@ -639,7 +706,7 @@ createServer(async (req, res) => {
   if (req.method === 'OPTIONS') { res.writeHead(204, { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET,POST,OPTIONS' }); return res.end(); }
 
   if (p === '/favicon.ico') { res.writeHead(200, { 'content-type': 'image/svg+xml', 'cache-control': 'max-age=86400' }); return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0d1117"/><circle cx="16" cy="16" r="9" fill="none" stroke="#58a6ff" stroke-width="3"/><circle cx="16" cy="16" r="3" fill="#3fb950"/></svg>'); }
-  if (p === '/health') return send(res, 200, { status: 'ok', service: 'jarvis-dashboard', port: PORT, startedAt: STARTED_AT });
+  if (p === '/health') return send(res, 200, { status: 'ok', service: 'hermes-jarvis', port: PORT, startedAt: STARTED_AT });
 
   if (p === '/api/config') {
     const host = (req.headers.host || '').replace(/:\d+$/, '') || LAN_IP;

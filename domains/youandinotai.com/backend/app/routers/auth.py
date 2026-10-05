@@ -141,6 +141,7 @@ async def register(
         display_name=payload.display_name.strip(),
         date_of_birth=payload.date_of_birth,
         adult_verified_at=datetime.now(timezone.utc),
+        referral_code=payload.referral_code,
     )
     ensure_adult(payload.date_of_birth)
     db.add(user)

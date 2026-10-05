@@ -36,6 +36,39 @@ rem                     unit 4): prints the reddit.com/prefs/apps steps with
 rem                     no args; with --client-id/--client-secret runs the
 rem                     local OAuth2 consent flow and writes REDDIT_* into
 rem                     .env, printing no secret values
+rem    drift devto-setup   one-time dev.to API key registration: prints
+rem                     the dev.to/settings/extensions steps with no
+rem                     args; with --token validates against /api/users/me
+rem                     and writes SEO_ANT_DEVTO_TOKEN into .env, printing
+rem                     no secret values
+rem    drift hashnode-setup   one-time Hashnode personal access token +
+rem                     publication ID registration: prints the
+rem                     hashnode.com/settings/developer steps; with --token
+rem                     validates via { me { publications } } against
+rem                     gql.hashnode.com and writes SEO_ANT_HASHNODE_TOKEN
+rem                     + SEO_ANT_HASHNODE_PUBLICATION_ID into .env
+rem    drift wordpress-setup   one-time WordPress.com OAuth2 password-grant
+rem                     registration: prints the developer.wordpress.com/apps
+rem                     steps; with --client-id --client-secret --username
+rem                     --password [--site], exchanges via oauth2/token and
+rem                     writes SEO_ANT_WORDPRESS_TOKEN + SEO_ANT_WORDPRESS_SITE
+rem                     into .env
+rem    drift blogger-setup   one-time Blogger (Google API) OAuth2
+rem                     registration: prints the console.cloud.google.com
+rem                     steps; with --client-id --client-secret [--blog-id],
+rem                     opens the browser for one-time Google consent, catches
+rem                     the localhost:8766 callback, and writes
+rem                     SEO_ANT_BLOGGER_TOKEN + SEO_ANT_BLOGGER_REFRESH_TOKEN
+rem                     + SEO_ANT_BLOGGER_BLOG_ID into .env
+rem    drift tumblr-setup   one-time Tumblr OAuth1 1.0a three-legged
+rem                     registration: prints the tumblr.com/oauth/apps steps;
+rem                     with --consumer-key --consumer-secret [--blog-id]
+rem                     [--callback-port], performs the full request_token ->
+rem                     authorize -> access_token -> /v2/user/info flow and
+rem                     writes the 5 SEO_ANT_TUMBLR_* keys into .env
+rem
+rem  Every *-setup wizard prints no secret value, ever, and refuses to
+rem  write to .env if any of its validation steps fails.
 rem
 rem  What "the stack" means today (FABLES-HOUSE.ps1 stages, in order):
 rem    PostgreSQL 5432 · Redis 6379 · OmniRoute 20128 (identity+latency probe)
@@ -69,6 +102,11 @@ if /I "%~1"=="jarvis" goto :mc
 if /I "%~1"=="avatar" goto :avatar
 if /I "%~1"=="fable"  goto :fable
 if /I "%~1"=="reddit-setup" goto :reddit-setup
+if /I "%~1"=="devto-setup" goto :devto-setup
+if /I "%~1"=="hashnode-setup" goto :hashnode-setup
+if /I "%~1"=="wordpress-setup" goto :wordpress-setup
+if /I "%~1"=="blogger-setup" goto :blogger-setup
+if /I "%~1"=="tumblr-setup" goto :tumblr-setup
 
 if not exist "%HOUSE%" (
   echo [drift] FABLE'S HOUSE script not found at %HOUSE%
@@ -135,4 +173,57 @@ rem registration. No args: prints the reddit.com/prefs/apps steps. With
 rem --client-id/--client-secret: runs the local OAuth2 consent flow and
 rem writes REDDIT_* into .env; no secret value is ever printed.
 node "%~dp0..\mission-control\scripts\reddit-setup.mjs" %2 %3 %4 %5
+exit /b %ERRORLEVEL%
+
+:devto-setup
+rem One-time dev.to API key registration. No args: prints the
+rem dev.to/settings/extensions steps. With --token: validates the key
+rem against /api/users/me and writes SEO_ANT_DEVTO_TOKEN into .env; no
+rem secret value is ever printed.
+node "%~dp0..\mission-control\scripts\devto-setup.mjs" %2 %3 %4 %5
+exit /b %ERRORLEVEL%
+
+:hashnode-setup
+rem One-time Hashnode personal access token + publication ID setup.
+rem No args: prints the hashnode.com/settings/developer steps. With
+rem --token: validates via { me { publications { edges { node { id title } } } } }
+rem against gql.hashnode.com, picks the first publication ID, and writes
+rem SEO_ANT_HASHNODE_TOKEN + SEO_ANT_HASHNODE_PUBLICATION_ID into .env.
+rem Optional --publication-id <id> overrides auto-detection. No secret
+rem value is ever printed.
+node "%~dp0..\mission-control\scripts\hashnode-setup.mjs" %2 %3 %4 %5 %6 %7
+exit /b %ERRORLEVEL%
+
+:wordpress-setup
+rem One-time WordPress.com OAuth2 password-grant setup. No args: prints
+rem the developer.wordpress.com/apps steps. With --client-id,
+rem --client-secret, --username, --password (24-char app password), and
+rem optional --site: exchanges via oauth2/token (password grant),
+rem validates the token against /sites/<site>/me, and writes
+rem SEO_ANT_WORDPRESS_TOKEN + SEO_ANT_WORDPRESS_SITE into .env. No
+rem secret value is ever printed.
+node "%~dp0..\mission-control\scripts\wordpress-setup.mjs" %2 %3 %4 %5 %6 %7 %8 %9
+exit /b %ERRORLEVEL%
+
+:blogger-setup
+rem One-time Blogger (Google API) OAuth2 setup. No args: prints the
+rem console.cloud.google.com + Blogger API v3 steps. With --client-id,
+rem --client-secret, optional --blog-id: opens the browser for one-time
+rem Google consent (scope = Blogger), catches the localhost:8766
+rem callback, exchanges the auth code at oauth2.googleapis.com/token,
+rem validates via /blogger/v3/users/me/blogs, and writes
+rem SEO_ANT_BLOGGER_TOKEN + SEO_ANT_BLOGGER_REFRESH_TOKEN +
+rem SEO_ANT_BLOGGER_BLOG_ID into .env. No secret value is ever printed.
+node "%~dp0..\mission-control\scripts\blogger-setup.mjs" %2 %3 %4 %5 %6 %7
+exit /b %ERRORLEVEL%
+
+:tumblr-setup
+rem One-time Tumblr OAuth1 1.0a three-legged setup. No args: prints the
+rem tumblr.com/oauth/apps steps. With --consumer-key --consumer-secret,
+rem optional --blog-id / --callback-port: fetches a request_token from
+rem oauth/request_token, opens the browser for one-time Tumblr consent
+rem on the localhost callback, exchanges the oauth_verifier at
+rem oauth/access_token, validates via /v2/user/info, and writes the 5
+rem SEO_ANT_TUMBLR_* keys into .env. No secret value is ever printed.
+node "%~dp0..\mission-control\scripts\tumblr-setup.mjs" %2 %3 %4 %5 %6 %7 %8 %9
 exit /b %ERRORLEVEL%

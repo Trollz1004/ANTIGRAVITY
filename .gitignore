@@ -296,3 +296,5 @@ tools/cockpit/cockpit.local.json
 ops/backups/
 ops/heartbeat/backup-node.json
 ops/heartbeat/backup-node.log
+ops/t5500/status.json
+ops/t5500/TRIGGERS.jsonl

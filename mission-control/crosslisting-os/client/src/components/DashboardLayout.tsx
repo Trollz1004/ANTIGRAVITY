@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { startLogin } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { Activity, BookOpenCheck, Bot, Boxes, LayoutDashboard, ListChecks, LogOut, PanelLeft, ScrollText, Settings, Warehouse } from "lucide-react";
+import { Activity, BookOpenCheck, Bot, Boxes, LayoutDashboard, ListChecks, LogOut, PanelLeft, ScrollText, Settings, Sparkles, Warehouse } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -30,6 +30,7 @@ import { Button } from "./ui/button";
 const menuItems = [
   { icon: LayoutDashboard, label: "Control Room", path: "/" },
   { icon: Boxes, label: "Catalog", path: "/catalog" },
+  { icon: Sparkles, label: "AI Curb Scout", path: "/curb-alerts" },
   { icon: Warehouse, label: "Inventory", path: "/inventory" },
   { icon: ListChecks, label: "Listing Desk", path: "/listings" },
   { icon: ScrollText, label: "Activity", path: "/activity" },
@@ -54,16 +55,21 @@ export default function DashboardLayout({
     return saved ? parseInt(saved, 10) : DEFAULT_WIDTH;
   });
   const { loading, user } = useAuth();
+  // Local / Mission Control embed: AUTH_DISABLED on the server injects a local
+  // owner. The UI must never block on a login wall in that mode.
+  const authDisabled =
+    import.meta.env.VITE_AUTH_DISABLED === "1" ||
+    import.meta.env.VITE_AUTH_DISABLED === "true";
 
   useEffect(() => {
     localStorage.setItem(SIDEBAR_WIDTH_KEY, sidebarWidth.toString());
   }, [sidebarWidth]);
 
-  if (loading) {
+  if (loading && !authDisabled) {
     return <DashboardLayoutSkeleton />
   }
 
-  if (!user) {
+  if (!user && !authDisabled) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full">

@@ -23,9 +23,9 @@ function fakeChild({ stdout = '', stderr = '', exitCode = 0, spawnError = null, 
 }
 
 describe('lib/social-review.mjs — autoReviewEnabled', () => {
-  it('is only true for the exact value "fable"', () => {
-    expect(autoReviewEnabled((n) => (n === 'JARVIS_AUTO_REVIEW_SOCIAL' ? 'fable' : ''))).toBe(true)
-    expect(autoReviewEnabled((n) => (n === 'JARVIS_AUTO_REVIEW_SOCIAL' ? 'Fable' : ''))).toBe(true)
+  it('is only true for the exact value "hermes"', () => {
+    expect(autoReviewEnabled((n) => (n === 'JARVIS_AUTO_REVIEW_SOCIAL' ? 'hermes' : ''))).toBe(true)
+    expect(autoReviewEnabled((n) => (n === 'JARVIS_AUTO_REVIEW_SOCIAL' ? 'Hermes' : ''))).toBe(true)
     expect(autoReviewEnabled((n) => '')).not.toBe(true)
   })
 })

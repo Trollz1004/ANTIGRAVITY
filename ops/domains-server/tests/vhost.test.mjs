@@ -21,8 +21,8 @@ const CASES = [
   { host: "www.dream-online.net", expectTitle: "DREAM Online" },
   { host: "untilnokidinneed.com", expectTitle: "Until No Kid In Need" },
   { host: "www.untilnokidinneed.com", expectTitle: "Until No Kid In Need" },
-  { host: "onlinerecycle.net", expectTitle: "DIY NAS & Web Host Setup Guide" },
-  { host: "www.onlinerecycle.net", expectTitle: "DIY NAS & Web Host Setup Guide" },
+  { host: "onlinerecycle.net", expectTitle: "Florida Electronics Recycling | Free Drop-Off & Pickup | OnlineRecycle.net" },
+  { host: "www.onlinerecycle.net", expectTitle: "Florida Electronics Recycling | Free Drop-Off & Pickup | OnlineRecycle.net" },
 ];
 
 function get(host, port, hostHeader) {

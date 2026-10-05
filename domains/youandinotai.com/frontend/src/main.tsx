@@ -19,6 +19,7 @@ import { Chat } from './app/pages/Chat';
 import { VideoCallPage } from './app/pages/VideoCall';
 import { Events } from './app/pages/Events';
 
+import { capturePartnerId } from './lib/partnerAttribution';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { SkeletonLoader } from './components/SkeletonLoader';
@@ -94,6 +95,12 @@ function PageErrorFallback({
     </div>
   );
 }
+
+// Influencer attribution runs at boot so a ?ref= on ANY landing page is
+// captured before the visitor navigates. Without this, arriving on "/" or
+// "/pricing" with a ref and then routing to /register client-side would
+// lose the value, because that navigation carries no query string.
+capturePartnerId(window.location.search);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

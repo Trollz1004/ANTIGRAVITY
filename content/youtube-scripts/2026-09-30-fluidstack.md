@@ -9,7 +9,7 @@ PROBLEM:
 Dating apps are 10% humans and 90% bot slop. Corporate ops are 10% efficiency and 90% busywork. The world is choking on manual ops.
 
 SOLUTION:
-Vibe coding is dead. Autonomous Infrastructure is here. We're taking the FluidStack model--continuous close finance, 0 flicker--and dropping it into youandinotai.com. Real humans. V8 verification. No bots, ever.
+Vibe coding is dead. Autonomous Infrastructure is here. We're taking the FluidStack model--continuous close finance, 0 flicker--and dropping it into youandinotai.com. Real humans. Bot-Shield verification. No bots, ever.
 
 CTA:
-Look link below. youandinotai.com. Get verified, get real. 3/1000 projects going. #UntilNoKidInNEED.
+Look link below. youandinotai.com. Get verified, get real. Adults 18 and over.

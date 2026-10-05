@@ -71,13 +71,13 @@
         <div id="hero-youi" class="hero-youi" aria-label="You&i — watched over by AI"></div>
         <header class="tab-header">
           <h2>House at a glance</h2>
-          <p class="tab-desc">Live readings from FABLE'S SENTRY, the skills tree, the Obsidian vault, and the avatar renders. No sample data.</p>
+          <p class="tab-desc">Live readings from HERMES SENTRY, the skills tree, the Obsidian vault, and the avatar renders. No sample data.</p>
         </header>
         <div class="dashboard-grid">
           <div class="dash-card">
             <h3>◆ Services</h3>
             <div class="dash-stat" id="stat-services">—</div>
-            <p id="stat-services-detail">FABLE'S SENTRY identity-checked targets</p>
+            <p id="stat-services-detail">HERMES SENTRY identity-checked targets</p>
             <button id="sentry-audit-btn" class="btn" type="button">Audit</button>
           </div>
           <div class="dash-card">
@@ -400,7 +400,7 @@
           <div id="jarvis-hud">
             <div class="jarvis-center">
               <div class="jarvis-title">JARVIS</div>
-              <div class="jarvis-identity">Claude Code on this node — repo-aware, house-context aware, plan-mode ceiling</div>
+              <div class="jarvis-identity">Hermes Agent on this node — JARVIS Mission Control</div>
               <div class="jarvis-state-badge"><span class="jarvis-dot jarvis-dot-idle"></span><span class="jarvis-state">IDLE</span></div>
             </div>
           </div>
@@ -412,11 +412,11 @@
             <button id="jarvis-mic" class="btn primary">🎙 Talk</button>
             <button id="jarvis-conv-stop" class="btn" type="button" aria-label="Stop conversation" hidden></button>
             <button id="jarvis-stop" class="btn">Stop</button>
-            <select id="jarvis-brain" class="select-input" title="Brain shortcuts: OmniRoute (1), Claude CLI (2), Ollama (3), Hermes (4)">
-              <option value="omni" data-key="1">OmniRoute (1)</option>
-              <option value="claude" data-key="2">Claude CLI (2)</option>
-              <option value="ollama" data-key="3">Ollama (local) (3)</option>
-              <option value="hermes" data-key="4">Hermes (4)</option>
+            <select id="jarvis-brain" class="select-input" title="Brain shortcuts: Hermes (1), OmniRoute (2), Claude CLI (3), Ollama (4)">
+              <option value="hermes" data-key="1" selected>Hermes (1)</option>
+              <option value="omni" data-key="2">OmniRoute (2)</option>
+              <option value="claude" data-key="3">Claude CLI (3)</option>
+              <option value="ollama" data-key="4">Ollama (local) (4)</option>
             </select>
             <span id="jarvis-brain-status" class="voice-status voice-status-idle">—</span>
             <input type="text" id="jarvis-input" placeholder="Or type to JARVIS..." class="chat-input" />
@@ -571,7 +571,7 @@
               </label>
               <div class="full" style="display:flex;align-items:center;gap:10px">
                 <button type="submit" class="btn">Check &amp; propose</button>
-                <button type="button" id="social-draft-fable" class="btn">Draft with Fable</button>
+                <button type="button" id="social-draft-fable" class="btn">Draft with Hermes</button>
                 <span id="social-form-status" class="tab-desc" style="margin:0"></span>
               </div>
             </form>
