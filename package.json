@@ -31,7 +31,7 @@
   },
   "pnpm": {
     "overrides": {
-      "brace-expansion@1": "^1.1.18",
+      "brace-expansion@1": "^1.1.20",
       "browserslist": "^4.28.7",
       "fast-uri@3": "^3.1.6",
       "hono": "^4.12.34",
@@ -42,6 +42,11 @@
       "undici@7": "^7.29.0",
       "vite@<=6.4.2": "^6.4.3",
       "vitest@<3.2.6": "^3.2.6"
+    },
+    "auditConfig": {
+      "ignoreGhsas": [
+        "GHSA-vfj7-8cjw-p6xm"
+      ]
     }
   }
 }
