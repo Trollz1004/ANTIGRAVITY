@@ -50,7 +50,9 @@ describe('main.tsx actually captures the ref at boot (wiring guard)', () => {
 
     await import('./main');
 
-    expect(localStorage.getItem('antigravity_partner_id')).toBe('skeptic-squad');
+    expect(localStorage.getItem('antigravity_partner_id')).toBe(
+      'skeptic-squad'
+    );
   });
 
   it('stores nothing when booting without a ref', async () => {

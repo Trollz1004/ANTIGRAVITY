@@ -13,10 +13,7 @@ import {
 import { useAuth } from '../../lib/auth';
 import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
 import { getSafeNextPath } from '../../lib/navigation';
-import {
-  capturePartnerId,
-  clearPartnerId,
-} from '../../lib/partnerAttribution';
+import { capturePartnerId, clearPartnerId } from '../../lib/partnerAttribution';
 
 export function Register() {
   const [email, setEmail] = useState('');
