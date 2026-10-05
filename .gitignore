@@ -285,3 +285,6 @@ ops/youtube/.browser-profile/
 # approved social copy is operational output for the lanes, not source
 ops/marketing-inbox/approved/
 ops/marketing-inbox/evidence/
+
+ops/t5500/status.json
+ops/t5500/TRIGGERS.jsonl
