@@ -1,3 +1,5 @@
+> **RETIRED 2026-10-05.** Sabretooth is OFF by ruling and the T5500 (`192.168.0.15`) is the production node. Read the node map at the top of `AGENTS.md` before anything here; everything below is the 2026-08-25 record and is history.
+
 # NODES — infrastructure reference
 
 CEO agent reference. Read when a task touches infra.

@@ -1,3 +1,5 @@
+> **RETIRED 2026-10-05.** Sabretooth is OFF by ruling and the T5500 (`192.168.0.15`) is the production node. Read the node map at the top of `AGENTS.md` before anything here; every Sabretooth fact below is history.
+
 # SABRETOOTH NODE — RUNBOOK
 
 **Ruled by Joshua 2026-09-17. Written by Claude Fable 5.1, the judge lane.** This is the only runbook for this box. If a doc, skill, or dashboard disagrees with it, this wins and that gets fixed. Companion inventory: `ops/runbook/DASHBOARD-INVENTORY-2026-09-17.md`. Launch skill for Claude: `~/.claude/skills/sabretooth-node/SKILL.md` (tracked copy at `ops/skills/sabretooth-node/SKILL.md`).

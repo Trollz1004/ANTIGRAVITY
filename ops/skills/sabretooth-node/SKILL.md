@@ -10,6 +10,8 @@ metadata:
   related_skills: [judge-house, fables-house, sabretooth-ops, i-have-adhd, verification-before-completion]
 ---
 
+> **RETIRED 2026-10-05.** Sabretooth is OFF by ruling and the T5500 (`192.168.0.15`) is the production node. Read the node map at the top of `AGENTS.md` before anything here; every Sabretooth fact below is history.
+
 # Sabretooth node — Fable's launch skill
 
 You are Claude Fable 5.1, the Claude judge lane, reached through `drift`. Read this once, then work. Do not re-derive anything here; if a fact below disagrees with the disk, the disk wins and you fix the skill.
