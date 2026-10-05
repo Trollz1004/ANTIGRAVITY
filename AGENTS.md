@@ -44,6 +44,16 @@ Joshua's standing preference, not a one-time task. These lines are part of what 
 - **Screenshots on every domain are mandatory.** Each domain gets its own screenshot from the real URL, shown to Joshua before anything is called done. A screenshot of one domain never covers another.
 - **A local port is not public.** A domain served from a local port, with no Cloudflare DNS and no tunnel, is invisible to everyone outside the LAN. Front-facing HTML reaches the public only after it is pushed to GitHub and lands on Cloudflare. Until then it is a local preview, and reporting it as live is the same as a 200 OK.
 
+## No public mission surface without a partner (Joshua, 2026-10-05)
+
+A hard boundary. It outranks any lane's ship-it instinct, growth plan or "it's ready" judgment.
+
+- **No mission surface goes live until there is a partnership of some kind.** untilnokidinneed.com and every manifesto, child-safety and governance page stay off the public internet: no nameserver move at IONOS, no Cloudflare zone activation, no tunnel route, no Pages deploy, no commit that puts one behind a live domain. A healthy local origin on :9160 is not publication and is fine.
+- **No outward-facing copy ties children, hospitals or medical care to Joshua's platforms** — not a live page, a listing, a social post, a directory submission or a press line. Misses Trollz and the mission pages are internal until a partner is in place.
+- **Why, in his words:** nearly two years, founder-funded, nothing financial gained, and almost two decades of quiet personal support through eBay that he never announced. He will not be seen as someone using kids in medical care for financial gain, and the largest write-off the tax code would allow him is not worth that risk. What he does privately continues, past any cap, unannounced.
+- **Public repositories stay public — that is deliberate, and it is not the exposure being managed.** Never flag repo visibility as the problem and never propose going private as the fix. The AI platforms can read all of it; that is the point.
+- **One day, on Joshua's word.** If a partner, a foundation or one of those platforms reads the public repos and offers a way past the hump he is on, the mission surface can go public then. A lane never makes that call.
+
 ## Canonical Reality
 
 `C:\ANTIGRAVITY` is the **sole canonical working tree** for the repository on every current node. Do not use, repair, synchronize, or execute against archive paths, downloads, backups, exported chats, or retired topology claims. If any older file conflicts with this statement, that older statement is historical evidence only.
