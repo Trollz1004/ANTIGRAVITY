@@ -13,6 +13,7 @@ pydantic-settings==2.6.1
 python-dotenv==1.2.2
 google-genai==1.63.0
 strawberry-graphql[fastapi]==0.316.0
+graphql-core==3.2.11
 httpx==0.28.1
 python-multipart==0.0.32
 email-validator==2.2.0

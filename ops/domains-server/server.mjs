@@ -23,14 +23,14 @@ const HOST = "127.0.0.1";
 const PORT = Number(process.env.DOMAINS_SERVER_PORT || 9160);
 
 // Host header -> document root (relative to DOMAINS_ROOT).
-// onlinerecycle.net is a Vite build; served from its dist/ output.
+// onlinerecycle.net serves the restored static recycling site from site/ (the Vite DIY-NAS app in this folder is not the business site).
 const VHOSTS = {
   "dream-online.net": "dream-online.net",
   "www.dream-online.net": "dream-online.net",
   "untilnokidinneed.com": "untilnokidinneed.com",
   "www.untilnokidinneed.com": "untilnokidinneed.com",
-  "onlinerecycle.net": path.join("onlinerecycle.net", "dist"),
-  "www.onlinerecycle.net": path.join("onlinerecycle.net", "dist"),
+  "onlinerecycle.net": path.join("onlinerecycle.net", "site"),
+  "www.onlinerecycle.net": path.join("onlinerecycle.net", "site"),
 };
 
 const SITES = ["dream-online.net", "untilnokidinneed.com", "onlinerecycle.net"];
