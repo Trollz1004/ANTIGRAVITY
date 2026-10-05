@@ -204,6 +204,9 @@ $Stages = @(
        Probe = { Test-Http 'http://127.0.0.1:9160/health' 6 'domains-server' }
        Heal  = {
            if (Test-Port 9160) { Stop-PortOwner 9160 }
+           # Loopback (this probe) plus THIS node's LAN address, per the "use the 192 endpoints" ruling;
+           # never every interface. server.mjs defaults to the dead Sabretooth address, so set it here.
+           $env:DOMAINS_SERVER_HOST = '127.0.0.1,192.168.0.15'
            Start-Process -FilePath $Node -ArgumentList @('ops\domains-server\server.mjs') -WorkingDirectory $Repo -WindowStyle Hidden
        } },
 
