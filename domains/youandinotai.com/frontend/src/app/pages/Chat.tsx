@@ -246,7 +246,7 @@ export function Chat() {
           <button
             onClick={handleIcebreaker}
             disabled={icebreakerLoading}
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] border-[3px] border-[#111111] bg-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-30"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] border-[3px] border-[#111111] bg-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-all duration-200 hover:-tranzinc-y-0.5 disabled:opacity-30"
             title="Generate icebreaker"
           >
             {icebreakerLoading ? (
@@ -266,7 +266,7 @@ export function Chat() {
           <button
             onClick={handleSend}
             disabled={!input.trim()}
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] border-[3px] border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-30 disabled:shadow-none"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] border-[3px] border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-all duration-200 hover:-tranzinc-y-0.5 disabled:opacity-30 disabled:shadow-none"
           >
             <Send size={18} className="text-[#ff4f00]" />
           </button>
@@ -288,3 +288,4 @@ export function Chat() {
     </div>
   );
 }
+

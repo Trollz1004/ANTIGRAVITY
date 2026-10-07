@@ -56,7 +56,7 @@ export function CookieConsentBanner() {
                   type="checkbox"
                   checked={essential}
                   onChange={e => setEssential(e.target.checked)}
-                  className="mt-1 h-4 w-4 accent-pink-500"
+                  className="mt-1 h-4 w-4 accent-amber-500"
                 />
                 <span>
                   <span className="block text-sm font-semibold text-white">
@@ -74,7 +74,7 @@ export function CookieConsentBanner() {
                   type="checkbox"
                   checked={preferences}
                   onChange={e => setPreferences(e.target.checked)}
-                  className="mt-1 h-4 w-4 accent-pink-500"
+                  className="mt-1 h-4 w-4 accent-amber-500"
                 />
                 <span>
                   <span className="block text-sm font-semibold text-white">
@@ -91,7 +91,7 @@ export function CookieConsentBanner() {
                   type="checkbox"
                   checked={performance}
                   onChange={e => setPerformance(e.target.checked)}
-                  className="mt-1 h-4 w-4 accent-pink-500"
+                  className="mt-1 h-4 w-4 accent-amber-500"
                 />
                 <span>
                   <span className="block text-sm font-semibold text-white">
@@ -110,7 +110,7 @@ export function CookieConsentBanner() {
                 type="button"
                 onClick={() => persist(essential, preferences, performance)}
                 disabled={!essential}
-                className="rounded-full bg-gradient-to-r from-pink-500 to-purple-600 px-4 py-2 text-sm font-bold text-white transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
+                className="rounded-full bg-gradient-to-r from-amber-500 to-yellow-600 px-4 py-2 text-sm font-bold text-white transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
               >
                 Save cookie choices
               </button>
@@ -121,3 +121,4 @@ export function CookieConsentBanner() {
     </div>
   );
 }
+

@@ -102,7 +102,7 @@ export function Inbox() {
               <Link
                 key={match.match_id}
                 to={`/app/chat/${match.match_id}`}
-                className="glass-strong glass-highlight group flex items-center gap-4 rounded-[1.8rem] p-4 no-underline transition-all duration-200 hover:-translate-y-1"
+                className="glass-strong glass-highlight group flex items-center gap-4 rounded-[1.8rem] p-4 no-underline transition-all duration-200 hover:-tranzinc-y-1"
               >
                 <div className="relative shrink-0">
                   <div
@@ -132,7 +132,7 @@ export function Inbox() {
                   </p>
                 </div>
 
-                <div className="flex h-12 w-12 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-transform group-hover:-translate-y-0.5">
+                <div className="flex h-12 w-12 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-transform group-hover:-tranzinc-y-0.5">
                   <ChevronRight size={18} />
                 </div>
               </Link>
@@ -143,3 +143,4 @@ export function Inbox() {
     </div>
   );
 }
+

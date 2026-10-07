@@ -228,7 +228,7 @@ export default function MeetupsDiscovery() {
         <button
           id="meetups-create-btn"
           onClick={() => setShowCreate(true)}
-          className="bg-purple-600 hover:bg-purple-500 text-white text-sm px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-purple-600/20"
+          className="bg-yellow-600 hover:bg-yellow-500 text-white text-sm px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-yellow-600/20"
         >
           + Create
         </button>
@@ -286,7 +286,7 @@ export default function MeetupsDiscovery() {
                     onClick={() => setRadius(r)}
                     className={`text-xs px-3 py-1.5 rounded-md transition-all duration-200 ${
                       radius === r
-                        ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
+                        ? 'bg-yellow-600 text-white shadow-md shadow-yellow-600/30'
                         : 'text-gray-400 hover:text-white'
                     }`}
                   >
@@ -347,11 +347,11 @@ export default function MeetupsDiscovery() {
             return (
               <div
                 key={ev.id}
-                className="glass glass-highlight rounded-xl p-5 hover:border-purple-600/30 transition-all duration-300 group"
+                className="glass glass-highlight rounded-xl p-5 hover:border-yellow-600/30 transition-all duration-300 group"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-white truncate group-hover:text-purple-300 transition-colors">
+                    <h3 className="font-semibold text-white truncate group-hover:text-yellow-300 transition-colors">
                       {ev.title}
                     </h3>
                     <p className="text-sm text-gray-400 mt-1 line-clamp-2">
@@ -386,7 +386,7 @@ export default function MeetupsDiscovery() {
                         ? 'bg-green-600/20 text-green-400 border border-green-600/30 cursor-default'
                         : isFull || isPast
                           ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
-                          : 'bg-purple-600 hover:bg-purple-500 text-white hover:shadow-lg hover:shadow-purple-600/20'
+                          : 'bg-yellow-600 hover:bg-yellow-500 text-white hover:shadow-lg hover:shadow-yellow-600/20'
                     }`}
                   >
                     {rsvpLoading === ev.id ? (
@@ -460,7 +460,7 @@ export default function MeetupsDiscovery() {
                 onChange={e => updateForm('title', e.target.value)}
                 placeholder="Saturday morning park cleanup"
                 maxLength={200}
-                className="w-full bg-gray-900 text-white placeholder-gray-600 rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-purple-500 transition-colors"
+                className="w-full bg-gray-900 text-white placeholder-gray-600 rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-yellow-500 transition-colors"
               />
             </div>
 
@@ -475,7 +475,7 @@ export default function MeetupsDiscovery() {
                 placeholder="What's the plan?"
                 rows={3}
                 maxLength={5000}
-                className="w-full bg-gray-900 text-white placeholder-gray-600 rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-purple-500 transition-colors resize-none"
+                className="w-full bg-gray-900 text-white placeholder-gray-600 rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-yellow-500 transition-colors resize-none"
               />
             </div>
 
@@ -489,7 +489,7 @@ export default function MeetupsDiscovery() {
                 onChange={e => updateForm('location', e.target.value)}
                 placeholder="Lake Eola Park, Orlando FL"
                 maxLength={300}
-                className="w-full bg-gray-900 text-white placeholder-gray-600 rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-purple-500 transition-colors"
+                className="w-full bg-gray-900 text-white placeholder-gray-600 rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-yellow-500 transition-colors"
               />
             </div>
 
@@ -503,7 +503,7 @@ export default function MeetupsDiscovery() {
                   type="datetime-local"
                   value={form.event_date}
                   onChange={e => updateForm('event_date', e.target.value)}
-                  className="w-full bg-gray-900 text-white rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-purple-500 transition-colors [color-scheme:dark]"
+                  className="w-full bg-gray-900 text-white rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-yellow-500 transition-colors [color-scheme:dark]"
                 />
               </div>
               <div>
@@ -519,7 +519,7 @@ export default function MeetupsDiscovery() {
                   onChange={e =>
                     updateForm('max_attendees', Number(e.target.value))
                   }
-                  className="w-full bg-gray-900 text-white rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-purple-500 transition-colors"
+                  className="w-full bg-gray-900 text-white rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-yellow-500 transition-colors"
                 />
               </div>
             </div>
@@ -537,7 +537,7 @@ export default function MeetupsDiscovery() {
                 disabled={
                   !form.title.trim() || !form.description.trim() || creating
                 }
-                className="bg-purple-600 hover:bg-purple-500 disabled:opacity-40 disabled:hover:bg-purple-600 text-white text-sm px-5 py-2 rounded-lg font-medium transition-all duration-200 hover:shadow-lg hover:shadow-purple-600/20 flex items-center gap-2"
+                className="bg-yellow-600 hover:bg-yellow-500 disabled:opacity-40 disabled:hover:bg-yellow-600 text-white text-sm px-5 py-2 rounded-lg font-medium transition-all duration-200 hover:shadow-lg hover:shadow-yellow-600/20 flex items-center gap-2"
               >
                 {creating && (
                   <span className="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -551,3 +551,4 @@ export default function MeetupsDiscovery() {
     </div>
   );
 }
+

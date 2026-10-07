@@ -116,8 +116,8 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
 
   if (!isPremium) {
     return (
-      <div className="rounded-2xl border border-pink-500/20 bg-gray-900/50 p-8 text-center backdrop-blur-sm">
-        <Heart className="mx-auto mb-4 h-16 w-16 animate-pulse text-pink-500" />
+      <div className="rounded-2xl border border-amber-500/20 bg-gray-900/50 p-8 text-center backdrop-blur-sm">
+        <Heart className="mx-auto mb-4 h-16 w-16 animate-pulse text-amber-500" />
         <h2 className="mb-2 text-2xl font-bold text-white">Unlock Concierge</h2>
         <p className="mx-auto mb-6 max-w-md text-gray-400">
           Concierge is reserved for Founding Member accounts with active premium
@@ -126,7 +126,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
         </p>
         <a
           href={FOUNDING_MEMBER_LINK}
-          className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-pink-600 to-purple-600 px-8 py-3 font-bold text-white no-underline transition-transform hover:scale-105"
+          className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-600 to-yellow-600 px-8 py-3 font-bold text-white no-underline transition-transform hover:scale-105"
         >
           Upgrade to Founding Member
         </a>
@@ -135,17 +135,17 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
   }
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-pink-500/30 bg-black/40 backdrop-blur-md">
-      <div className="flex items-center justify-between border-b border-pink-500/20 bg-gradient-to-r from-pink-900/40 to-purple-900/40 p-6">
+    <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-amber-500/30 bg-black/40 backdrop-blur-md">
+      <div className="flex items-center justify-between border-b border-amber-500/20 bg-gradient-to-r from-amber-900/40 to-yellow-900/40 p-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-500 shadow-lg shadow-pink-500/50">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-500 shadow-lg shadow-amber-500/50">
             <Heart className="h-6 w-6 text-white" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-white tracking-widest uppercase">
               Concierge
             </h2>
-            <p className="text-xs text-pink-300/80 font-medium">
+            <p className="text-xs text-amber-300/80 font-medium">
               Because love is blind to gender.
             </p>
           </div>
@@ -155,7 +155,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
             onClick={() => switchTab('compatibility')}
             className={`rounded-lg p-2 transition-colors ${
               activeTab === 'compatibility'
-                ? 'bg-pink-500 text-white'
+                ? 'bg-amber-500 text-white'
                 : 'text-gray-400 hover:bg-gray-800'
             }`}
             aria-label="Compatibility"
@@ -166,7 +166,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
             onClick={() => switchTab('quotes')}
             className={`rounded-lg p-2 transition-colors ${
               activeTab === 'quotes'
-                ? 'bg-pink-500 text-white'
+                ? 'bg-amber-500 text-white'
                 : 'text-gray-400 hover:bg-gray-800'
             }`}
             aria-label="Quotes"
@@ -177,7 +177,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
             onClick={() => switchTab('tips')}
             className={`rounded-lg p-2 transition-colors ${
               activeTab === 'tips'
-                ? 'bg-pink-500 text-white'
+                ? 'bg-amber-500 text-white'
                 : 'text-gray-400 hover:bg-gray-800'
             }`}
             aria-label="Tips"
@@ -188,7 +188,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
             onClick={() => switchTab('gifts')}
             className={`rounded-lg p-2 transition-colors ${
               activeTab === 'gifts'
-                ? 'bg-pink-500 text-white'
+                ? 'bg-amber-500 text-white'
                 : 'text-gray-400 hover:bg-gray-800'
             }`}
             aria-label="Gift ideas"
@@ -209,7 +209,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
                 <input
                   value={names.name1}
                   onChange={e => setNames({ ...names, name1: e.target.value })}
-                  className="w-full rounded-xl border border-gray-800 bg-gray-900 p-3 text-white outline-none transition-colors focus:border-pink-500"
+                  className="w-full rounded-xl border border-gray-800 bg-gray-900 p-3 text-white outline-none transition-colors focus:border-amber-500"
                   placeholder="Your name"
                 />
               </div>
@@ -220,7 +220,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
                 <input
                   value={names.name2}
                   onChange={e => setNames({ ...names, name2: e.target.value })}
-                  className="w-full rounded-xl border border-gray-800 bg-gray-900 p-3 text-white outline-none transition-colors focus:border-pink-500"
+                  className="w-full rounded-xl border border-gray-800 bg-gray-900 p-3 text-white outline-none transition-colors focus:border-amber-500"
                   placeholder="Their name"
                 />
               </div>
@@ -236,7 +236,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
                 )
               }
               disabled={loading || !names.name1.trim() || !names.name2.trim()}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-pink-600 py-4 text-lg font-bold text-white transition-all hover:bg-pink-500 disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-amber-600 py-4 text-lg font-bold text-white transition-all hover:bg-amber-500 disabled:opacity-50"
             >
               {loading ? (
                 <RefreshCw className="h-6 w-6 animate-spin" />
@@ -247,8 +247,8 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
             </button>
 
             {isCompatibilityResult(result) && (
-              <div className="mt-8 rounded-3xl border border-pink-500/20 bg-gradient-to-b from-gray-900/80 to-pink-900/20 p-8 text-center">
-                <div className="mb-2 text-6xl font-black text-pink-500">
+              <div className="mt-8 rounded-3xl border border-amber-500/20 bg-gradient-to-b from-gray-900/80 to-amber-900/20 p-8 text-center">
+                <div className="mb-2 text-6xl font-black text-amber-500">
                   {result.score}%
                 </div>
                 <div className="mb-4 text-xl font-semibold text-white">
@@ -272,7 +272,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
                 runRequest(() => api.get<QuoteResponse>('/lovebot/quotes'))
               }
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-purple-600 py-4 font-bold text-white transition-colors hover:bg-purple-500 disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-yellow-600 py-4 font-bold text-white transition-colors hover:bg-yellow-500 disabled:opacity-50"
             >
               <RefreshCw
                 className={`h-5 w-5 ${loading ? 'animate-spin' : ''}`}
@@ -281,18 +281,18 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
             </button>
 
             {isQuoteResult(result) && (
-              <div className="relative mt-8 rounded-3xl border border-purple-500/20 bg-gray-900/80 p-8">
-                <div className="absolute -left-4 -top-4 flex h-12 w-12 items-center justify-center rounded-full bg-purple-600">
+              <div className="relative mt-8 rounded-3xl border border-yellow-500/20 bg-gray-900/80 p-8">
+                <div className="absolute -left-4 -top-4 flex h-12 w-12 items-center justify-center rounded-full bg-yellow-600">
                   <Stars className="h-6 w-6 text-white" />
                 </div>
                 <p className="mb-4 text-2xl italic leading-relaxed text-white">
                   "{result.text}"
                 </p>
                 <div className="flex items-center justify-between gap-3">
-                  <span className="font-bold text-purple-400">
+                  <span className="font-bold text-yellow-400">
                     — {result.author}
                   </span>
-                  <span className="rounded-full border border-purple-500/20 bg-purple-500/10 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-purple-300">
+                  <span className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-yellow-300">
                     {result.category}
                   </span>
                 </div>
@@ -310,8 +310,8 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
                   onClick={() => setTipCategory(option.value)}
                   className={`rounded-xl border px-4 py-3 text-sm font-semibold transition-colors ${
                     tipCategory === option.value
-                      ? 'border-pink-500/40 bg-pink-500/10 text-white'
-                      : 'border-white/5 bg-gray-900/60 text-gray-400 hover:border-pink-500/20 hover:text-white'
+                      ? 'border-amber-500/40 bg-amber-500/10 text-white'
+                      : 'border-white/5 bg-gray-900/60 text-gray-400 hover:border-amber-500/20 hover:text-white'
                   }`}
                 >
                   {option.label}
@@ -368,7 +368,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
                     api.get<GiftResponse>('/lovebot/gifts?recipient=neutral')
                   )
                 }
-                className="flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl border border-purple-500/30 bg-purple-900/20 py-4 shadow-[0_0_15px_rgba(168,85,247,0.15)] text-purple-300 transition-all hover:bg-purple-900/40 hover:scale-[1.02]"
+                className="flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl border border-yellow-500/30 bg-yellow-900/20 py-4 shadow-[0_0_15px_rgba(234,179,8,0.15)] text-yellow-300 transition-all hover:bg-yellow-900/40 hover:scale-[1.02]"
               >
                 <span className="text-[10px] uppercase tracking-widest opacity-80">
                   Ideas for
@@ -383,7 +383,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
                     api.get<GiftResponse>('/lovebot/gifts?recipient=feminine')
                   )
                 }
-                className="flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl border border-pink-500/30 bg-pink-900/20 py-4 shadow-[0_0_15px_rgba(236,72,153,0.15)] text-pink-300 transition-all hover:bg-pink-900/40 hover:scale-[1.02]"
+                className="flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl border border-amber-500/30 bg-amber-900/20 py-4 shadow-[0_0_15px_rgba(236,72,153,0.15)] text-amber-300 transition-all hover:bg-amber-900/40 hover:scale-[1.02]"
               >
                 <span className="text-[10px] uppercase tracking-widest opacity-80">
                   Ideas for
@@ -398,7 +398,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
                     api.get<GiftResponse>('/lovebot/gifts?recipient=masculine')
                   )
                 }
-                className="flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl border border-blue-500/30 bg-blue-900/20 py-4 shadow-[0_0_15px_rgba(59,130,246,0.15)] text-blue-300 transition-all hover:bg-blue-900/40 hover:scale-[1.02]"
+                className="flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl border border-stone-500/30 bg-stone-900/20 py-4 shadow-[0_0_15px_rgba(59,130,246,0.15)] text-stone-300 transition-all hover:bg-stone-900/40 hover:scale-[1.02]"
               >
                 <span className="text-[10px] uppercase tracking-widest opacity-80">
                   Ideas for
@@ -417,9 +417,9 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
                 {result.ideas.map((idea, index) => (
                   <div
                     key={index}
-                    className="group flex items-start gap-4 rounded-2xl border border-white/5 bg-gray-900/60 p-4 transition-colors hover:border-pink-500/30"
+                    className="group flex items-start gap-4 rounded-2xl border border-white/5 bg-gray-900/60 p-4 transition-colors hover:border-amber-500/30"
                   >
-                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-pink-900/40 text-sm font-bold text-pink-500">
+                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-amber-900/40 text-sm font-bold text-amber-500">
                       {index + 1}
                     </div>
                     <p className="pt-1 text-sm leading-relaxed text-white">
@@ -443,3 +443,4 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
 };
 
 export default LoveBot;
+

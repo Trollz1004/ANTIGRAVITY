@@ -163,7 +163,7 @@ export function FormField({
 
       <div className="relative">
         {icon && (
-          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5c594f]">
+          <span className="pointer-events-none absolute left-4 top-1/2 -tranzinc-y-1/2 text-[#5c594f]">
             {icon}
           </span>
         )}
@@ -190,3 +190,4 @@ export function FormField({
     </div>
   );
 }
+

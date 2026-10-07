@@ -74,7 +74,7 @@ const SUPPORT_LANES: SupportLane[] = [
     guidance: 'Use this lane when the payment went through but you need the receipt or payment record checked.',
     defaultMessage: 'I need help finding my Square receipt or payment confirmation.',
     icon: ReceiptText,
-    accentClass: 'from-cyan-400/20 via-blue-500/15 to-transparent border-cyan-400/30 text-cyan-400',
+    accentClass: 'from-stone-400/20 via-stone-500/15 to-transparent border-stone-400/30 text-stone-400',
     actions: [
       { label: 'Receipt still missing', hint: 'Escalate a billing review ticket.', kind: 'ticket', value: 'I still cannot find my Square receipt. Please open a billing review ticket.' },
       { label: 'Founder billing question', hint: 'Ask about a subscription or founder charge.', kind: 'message', value: 'I need help with a Founding Member or other founder-plan charge.' },
@@ -87,7 +87,7 @@ const SUPPORT_LANES: SupportLane[] = [
     guidance: 'Use this lane if you finished verification but the badge or access state looks wrong.',
     defaultMessage: 'I completed Bot-Shield but my verified badge did not update.',
     icon: BadgeCheck,
-    accentClass: 'from-emerald-400/20 via-cyan-500/15 to-transparent border-emerald-400/30 text-emerald-400',
+    accentClass: 'from-emerald-400/20 via-stone-500/15 to-transparent border-emerald-400/30 text-emerald-400',
     actions: [
       { label: 'Badge still missing', hint: 'Open a verification review ticket.', kind: 'ticket', value: 'I completed the liveness check and payment, but my verified badge still has not updated.' },
       { label: 'Retry help', hint: 'Ask for the next step before escalating.', kind: 'message', value: 'The verification flow failed and I need help understanding the next step.' },
@@ -100,7 +100,7 @@ const SUPPORT_LANES: SupportLane[] = [
     guidance: 'Use this lane for privacy settings or when a privacy request did not process correctly.',
     defaultMessage: 'I need help with privacy controls, data export, or account deletion.',
     icon: Lock,
-    accentClass: 'from-fuchsia-400/20 via-violet-500/15 to-transparent border-fuchsia-400/30 text-fuchsia-400',
+    accentClass: 'from-amber-400/20 via-violet-500/15 to-transparent border-amber-400/30 text-amber-400',
     actions: [
       { label: 'Open Data & Privacy', hint: 'Go to the control panel directly.', kind: 'link', href: '/app/privacy' },
       { label: 'Privacy request failed', hint: 'Escalate to a human review ticket.', kind: 'ticket', value: 'My privacy or data request did not process correctly and I need human review.' },
@@ -126,7 +126,7 @@ const SUPPORT_LANES: SupportLane[] = [
     guidance: 'Use this lane when a feature is failing and you want the transcript attached to the ticket.',
     defaultMessage: 'The app is not working correctly and I need technical help.',
     icon: Bug,
-    accentClass: 'from-rose-400/20 via-pink-500/15 to-transparent border-rose-400/30 text-rose-400',
+    accentClass: 'from-rose-400/20 via-amber-500/15 to-transparent border-rose-400/30 text-rose-400',
     actions: [
       { label: 'Open technical ticket', hint: 'Escalate with the current transcript.', kind: 'ticket', value: 'The app has a bug and I need technical support with a human review.' },
       { label: 'Describe the failure', hint: 'Start a guided bug report in chat.', kind: 'message', value: 'Messages, video, or another feature is not working correctly and I want to report the exact failure.' },
@@ -297,21 +297,21 @@ export function Support() {
 
   return (
     <section className="min-h-screen bg-[#050505] text-white p-6 md:p-10 relative overflow-hidden">
-      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-fuchsia-600/10 blur-[150px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-cyan-600/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-amber-600/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-stone-600/10 blur-[150px] rounded-full pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col gap-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-2xl">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-fuchsia-400 mb-3 drop-shadow-[0_0_10px_rgba(217,70,239,0.5)] block">Support Center</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-3 drop-shadow-[0_0_10px_rgba(217,70,239,0.5)] block">Support Center</span>
               <h2 className="text-4xl font-black tracking-tight mb-4">Guided support first. Human review when it actually matters.</h2>
               <p className="max-w-3xl text-lg text-white/60 leading-relaxed">
                 Pick a lane like receipts, verification, privacy, or app issues. The support assistant stays narrow, gives preset answers, and escalates only when the request needs billing, safety, access, or human judgment.
               </p>
             </div>
             <div className="bg-black/30 border border-white/10 rounded-2xl px-6 py-4 text-sm text-white/50 backdrop-blur-md">
-              <div className="flex items-center gap-2 font-bold text-cyan-400 mb-2 uppercase tracking-widest text-xs">
+              <div className="flex items-center gap-2 font-bold text-stone-400 mb-2 uppercase tracking-widest text-xs">
                 <Headset size={16} /> Live support workflow
               </div>
               <div className="flex items-center gap-2 font-medium">
@@ -368,7 +368,7 @@ export function Support() {
                       </div>
                       <div className={`text-base font-black tracking-wide ${isSelected ? 'text-white' : 'text-white/80'}`}>{lane.title}</div>
                       <p className={`mt-2 text-xs leading-relaxed ${isSelected ? 'text-white/70' : 'text-white/40'}`}>{lane.description}</p>
-                      <div className={`mt-auto pt-4 text-[10px] font-bold uppercase tracking-widest ${isSelected ? 'text-fuchsia-400' : 'text-cyan-400/50'}`}>
+                      <div className={`mt-auto pt-4 text-[10px] font-bold uppercase tracking-widest ${isSelected ? 'text-amber-400' : 'text-stone-400/50'}`}>
                         {isSelected ? 'Selected lane' : 'Ask support'}
                       </div>
                     </motion.button>
@@ -384,7 +384,7 @@ export function Support() {
                     <SelectedLaneIcon size={24} />
                   </div>
                   <div>
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-fuchsia-400 mb-1">Selected lane</div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-amber-400 mb-1">Selected lane</div>
                     <h4 className="text-xl font-black text-white tracking-wide">{selectedLane.title}</h4>
                     <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">{selectedLane.guidance}</p>
                   </div>
@@ -424,7 +424,7 @@ export function Support() {
                     className={`max-w-[85%] rounded-3xl border px-6 py-4 text-sm leading-relaxed backdrop-blur-md ${
                       message.role === 'assistant'
                         ? 'self-start bg-white/10 border-white/20 text-white shadow-[0_4px_20px_rgba(255,255,255,0.05)] rounded-tl-sm'
-                        : 'self-end bg-gradient-to-br from-fuchsia-600/80 to-cyan-600/80 border-white/20 text-white shadow-[0_4px_20px_rgba(217,70,239,0.2)] rounded-tr-sm'
+                        : 'self-end bg-gradient-to-br from-amber-600/80 to-stone-600/80 border-white/20 text-white shadow-[0_4px_20px_rgba(217,70,239,0.2)] rounded-tr-sm'
                     }`}
                   >
                     {message.content}
@@ -446,13 +446,13 @@ export function Support() {
                 onChange={event => setDraft(event.target.value)}
                 rows={3}
                 placeholder="Need something outside the guided lanes? Type it here."
-                className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all backdrop-blur-sm resize-none"
+                className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white placeholder-white/30 focus:outline-none focus:border-stone-500/50 focus:ring-1 focus:ring-stone-500/50 transition-all backdrop-blur-sm resize-none"
               />
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="text-[10px] font-bold uppercase tracking-widest text-white/40">
                   Safety, billing disputes, and access issues auto-escalate.
                 </div>
-                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" disabled={loading || draft.trim().length === 0} className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-600 to-cyan-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-[0_0_20px_rgba(34,211,238,0.3)] disabled:opacity-50 transition-opacity">
+                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" disabled={loading || draft.trim().length === 0} className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-600 to-stone-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-[0_0_20px_rgba(34,211,238,0.3)] disabled:opacity-50 transition-opacity">
                   <Send size={16} /> Send message
                 </motion.button>
               </div>
@@ -462,7 +462,7 @@ export function Support() {
           <div className="grid gap-8 content-start">
             <motion.aside initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-2xl">
               <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-6">
-                <Ticket size={20} className="text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
+                <Ticket size={20} className="text-stone-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
                 <h3 className="text-lg font-black text-white uppercase tracking-widest">My tickets</h3>
               </div>
               <p className="text-xs text-white/50 leading-relaxed mb-6">Every escalation keeps the customer message and bot reply together.</p>
@@ -478,9 +478,9 @@ export function Support() {
                       <div className="flex items-start justify-between gap-3 mb-4">
                         <div>
                           <div className="text-sm font-bold text-white tracking-wide">{ticket.subject}</div>
-                          <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-fuchsia-400 drop-shadow-[0_0_5px_rgba(217,70,239,0.3)]">{ticket.category.replace('_', ' ')}</div>
+                          <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-amber-400 drop-shadow-[0_0_5px_rgba(217,70,239,0.3)]">{ticket.category.replace('_', ' ')}</div>
                         </div>
-                        <span className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-cyan-400 shrink-0">
+                        <span className="rounded-full border border-stone-500/30 bg-stone-500/10 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-stone-400 shrink-0">
                           {ticket.status}
                         </span>
                       </div>
@@ -537,3 +537,4 @@ export function Support() {
 }
 
 export default Support;
+

@@ -542,17 +542,17 @@ section[id] {
 .glass .text-gray-400,
 .glass .text-gray-500,
 .glass .text-gray-600,
-.glass .text-slate-400,
-.glass .text-slate-500,
-.glass .text-slate-600,
+.glass .text-zinc-400,
+.glass .text-zinc-500,
+.glass .text-zinc-600,
 .glass-strong .text-gray-200,
 .glass-strong .text-gray-300,
 .glass-strong .text-gray-400,
 .glass-strong .text-gray-500,
 .glass-strong .text-gray-600,
-.glass-strong .text-slate-400,
-.glass-strong .text-slate-500,
-.glass-strong .text-slate-600 {
+.glass-strong .text-zinc-400,
+.glass-strong .text-zinc-500,
+.glass-strong .text-zinc-600 {
   color: var(--app-muted);
 }
 
@@ -571,7 +571,7 @@ section[id] {
   --km-accent: #c4b5fd;
   --km-accent-2: #67e8f9;
   --km-pink: #f0abfc;
-  --km-gradient: linear-gradient(90deg, #67e8f9 0%, #a78bfa 45%, #f0abfc 100%);
+  --km-gradient: linear-gradient(90deg, #67e8f9 0%, #facc15 45%, #f0abfc 100%);
 }
 
 .km-shell {
@@ -603,7 +603,7 @@ section[id] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #a78bfa, #f0abfc);
+  background: linear-gradient(135deg, #facc15, #f0abfc);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -827,3 +827,4 @@ section[id] {
 .km-shell .app-kicker {
   color: var(--km-muted);
 }
+

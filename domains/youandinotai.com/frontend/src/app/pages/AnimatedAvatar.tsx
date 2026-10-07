@@ -169,7 +169,7 @@ export function AnimatedAvatar() {
                 step={0.05}
                 value={intensity}
                 onChange={e => setIntensity(Number(e.target.value))}
-                className="mt-2 w-full accent-[#a78bfa]"
+                className="mt-2 w-full accent-[#facc15]"
               />
             </label>
             <div className="flex flex-wrap gap-2">
@@ -224,3 +224,4 @@ export function AnimatedAvatar() {
 }
 
 export default AnimatedAvatar;
+

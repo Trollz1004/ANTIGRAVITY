@@ -17,7 +17,7 @@ export function VideoLobby() {
       </p>
 
       <section className="km-card km-card-glow mt-6 p-5">
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#a78bfa] to-[#67e8f9] text-black">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#facc15] to-[#67e8f9] text-black">
           <Video size={28} />
         </div>
         <h2 className="mt-4 text-lg font-semibold">How video works</h2>
@@ -53,3 +53,4 @@ export function VideoLobby() {
 }
 
 export default VideoLobby;
+

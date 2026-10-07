@@ -191,9 +191,9 @@ export default function DataPrivacyDashboard() {
   const locationDisabled = data?.profile?.location_enabled === false;
 
   return (
-    <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[28px] border border-slate-800 bg-slate-950 px-5 py-6 text-slate-100 shadow-[0_30px_120px_rgba(2,6,23,0.55)] sm:px-8">
-      <div className="flex flex-col gap-3 rounded-[24px] border border-cyan-900/50 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.18),_transparent_42%),linear-gradient(180deg,rgba(15,23,42,0.98),rgba(2,6,23,0.98))] p-6">
-        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300">
+    <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[28px] border border-zinc-800 bg-zinc-950 px-5 py-6 text-zinc-100 shadow-[0_30px_120px_rgba(2,6,23,0.55)] sm:px-8">
+      <div className="flex flex-col gap-3 rounded-[24px] border border-stone-900/50 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.18),_transparent_42%),linear-gradient(180deg,rgba(15,23,42,0.98),rgba(2,6,23,0.98))] p-6">
+        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-stone-300">
           Privacy Center
         </span>
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
@@ -201,15 +201,15 @@ export default function DataPrivacyDashboard() {
             <h2 className="font-serif text-3xl text-white">
               Control what stays, what moves, and what stops.
             </h2>
-            <p className="mt-2 max-w-2xl text-sm text-slate-400">
+            <p className="mt-2 max-w-2xl text-sm text-zinc-400">
               Review your stored profile data, request an export, schedule
               deletion, or disable location tracking from one place.
             </p>
           </div>
           {data && (
-            <div className="rounded-2xl border border-slate-800 bg-black/30 px-4 py-3 text-sm text-slate-300">
+            <div className="rounded-2xl border border-zinc-800 bg-black/30 px-4 py-3 text-sm text-zinc-300">
               <div>{data.display_name}</div>
-              <div className="text-slate-500">{data.email}</div>
+              <div className="text-zinc-500">{data.email}</div>
             </div>
           )}
         </div>
@@ -229,19 +229,19 @@ export default function DataPrivacyDashboard() {
 
       {loading || !data ? (
         <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-          <div className="min-h-[220px] animate-pulse rounded-[24px] border border-slate-800 bg-slate-900/70" />
-          <div className="min-h-[220px] animate-pulse rounded-[24px] border border-slate-800 bg-slate-900/70" />
+          <div className="min-h-[220px] animate-pulse rounded-[24px] border border-zinc-800 bg-zinc-900/70" />
+          <div className="min-h-[220px] animate-pulse rounded-[24px] border border-zinc-800 bg-zinc-900/70" />
         </div>
       ) : (
         <>
           <div className="grid gap-4 lg:grid-cols-[1.3fr_0.7fr]">
-            <article className="rounded-[24px] border border-slate-800 bg-slate-900/70 p-6">
+            <article className="rounded-[24px] border border-zinc-800 bg-zinc-900/70 p-6">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <h3 className="text-lg font-semibold text-white">
                     Stored Account Snapshot
                   </h3>
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-zinc-500">
                     {data.created_at
                       ? `Account created ${new Date(
                           data.created_at
@@ -249,65 +249,65 @@ export default function DataPrivacyDashboard() {
                       : 'Core account details available. Full privacy export summary is temporarily offline.'}
                   </p>
                 </div>
-                <span className="rounded-full border border-cyan-900/80 bg-cyan-950/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
+                <span className="rounded-full border border-stone-900/80 bg-stone-950/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-stone-300">
                   User ID {data.user_id.slice(0, 8)}
                 </span>
               </div>
 
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
+                <div className="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4">
                   <div className="text-3xl font-semibold text-white">
                     {formatMetric(data.message_count)}
                   </div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">
+                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-zinc-500">
                     Messages
                   </div>
                 </div>
-                <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
+                <div className="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4">
                   <div className="text-3xl font-semibold text-white">
                     {formatMetric(data.match_count)}
                   </div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">
+                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-zinc-500">
                     Matches
                   </div>
                 </div>
-                <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
+                <div className="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4">
                   <div className="text-3xl font-semibold text-white">
                     {formatMetric(data.photos_count)}
                   </div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">
+                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-zinc-500">
                     Photos
                   </div>
                 </div>
               </div>
 
-              <dl className="mt-6 grid gap-3 text-sm text-slate-300 sm:grid-cols-2">
-                <div className="rounded-2xl border border-slate-800 bg-black/20 p-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">
+              <dl className="mt-6 grid gap-3 text-sm text-zinc-300 sm:grid-cols-2">
+                <div className="rounded-2xl border border-zinc-800 bg-black/20 p-4">
+                  <dt className="text-xs uppercase tracking-[0.18em] text-zinc-500">
                     Bio
                   </dt>
                   <dd className="mt-2">
                     {data.profile?.bio || 'No bio saved.'}
                   </dd>
                 </div>
-                <div className="rounded-2xl border border-slate-800 bg-black/20 p-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                <div className="rounded-2xl border border-zinc-800 bg-black/20 p-4">
+                  <dt className="text-xs uppercase tracking-[0.18em] text-zinc-500">
                     Looking For
                   </dt>
                   <dd className="mt-2">
                     {data.profile?.looking_for || 'Not specified.'}
                   </dd>
                 </div>
-                <div className="rounded-2xl border border-slate-800 bg-black/20 p-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                <div className="rounded-2xl border border-zinc-800 bg-black/20 p-4">
+                  <dt className="text-xs uppercase tracking-[0.18em] text-zinc-500">
                     Location
                   </dt>
                   <dd className="mt-2">
                     {data.profile?.location || 'Not shared.'}
                   </dd>
                 </div>
-                <div className="rounded-2xl border border-slate-800 bg-black/20 p-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                <div className="rounded-2xl border border-zinc-800 bg-black/20 p-4">
+                  <dt className="text-xs uppercase tracking-[0.18em] text-zinc-500">
                     Interests
                   </dt>
                   <dd className="mt-2">
@@ -317,11 +317,11 @@ export default function DataPrivacyDashboard() {
               </dl>
             </article>
 
-            <aside className="rounded-[24px] border border-slate-800 bg-[linear-gradient(180deg,rgba(15,23,42,0.92),rgba(15,23,42,0.72))] p-6">
+            <aside className="rounded-[24px] border border-zinc-800 bg-[linear-gradient(180deg,rgba(15,23,42,0.92),rgba(15,23,42,0.72))] p-6">
               <h3 className="text-lg font-semibold text-white">
                 Pending Requests
               </h3>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-zinc-500">
                 {degradedMode
                   ? 'Advanced privacy request status is temporarily unavailable.'
                   : 'Any export or deletion request will appear here until processed.'}
@@ -329,7 +329,7 @@ export default function DataPrivacyDashboard() {
 
               <div className="mt-5 space-y-3">
                 {data.pending_requests.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-slate-800 px-4 py-5 text-sm text-slate-500">
+                  <div className="rounded-2xl border border-dashed border-zinc-800 px-4 py-5 text-sm text-zinc-500">
                     {degradedMode
                       ? 'Pending request history is temporarily unavailable.'
                       : 'No pending privacy actions.'}
@@ -338,7 +338,7 @@ export default function DataPrivacyDashboard() {
                   data.pending_requests.map(request => (
                     <div
                       key={request.id}
-                      className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4"
+                      className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-4"
                     >
                       <div className="flex items-center justify-between gap-3">
                         <span className="text-sm font-medium text-white">
@@ -348,11 +348,11 @@ export default function DataPrivacyDashboard() {
                           {request.status}
                         </span>
                       </div>
-                      <div className="mt-2 text-xs text-slate-500">
+                      <div className="mt-2 text-xs text-zinc-500">
                         Requested {formatDateTime(request.created_at)}
                       </div>
                       {request.scheduled_for && (
-                        <div className="mt-1 text-xs text-slate-500">
+                        <div className="mt-1 text-xs text-zinc-500">
                           Scheduled for {formatDateTime(request.scheduled_for)}
                         </div>
                       )}
@@ -377,15 +377,15 @@ export default function DataPrivacyDashboard() {
                     'Data export requested. We will keep it queued until it is ready.'
                 )
               }
-              className="rounded-[24px] border border-cyan-900/80 bg-cyan-950/30 p-5 text-left transition hover:border-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-[24px] border border-stone-900/80 bg-stone-950/30 p-5 text-left transition hover:border-stone-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <div className="text-xs uppercase tracking-[0.2em] text-cyan-300">
+              <div className="text-xs uppercase tracking-[0.2em] text-stone-300">
                 Download My Data
               </div>
               <div className="mt-2 text-lg font-semibold text-white">
                 Queue a full export
               </div>
-              <p className="mt-2 text-sm text-slate-400">
+              <p className="mt-2 text-sm text-zinc-400">
                 {degradedMode
                   ? 'Temporarily unavailable until the privacy service is restored.'
                   : hasPendingExport
@@ -406,15 +406,15 @@ export default function DataPrivacyDashboard() {
                   () => 'Location tracking has been disabled for your profile.'
                 )
               }
-              className="rounded-[24px] border border-slate-800 bg-slate-900/70 p-5 text-left transition hover:border-slate-600 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-[24px] border border-zinc-800 bg-zinc-900/70 p-5 text-left transition hover:border-zinc-600 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-400">
+              <div className="text-xs uppercase tracking-[0.2em] text-zinc-400">
                 Disable Location Tracking
               </div>
               <div className="mt-2 text-lg font-semibold text-white">
                 Stop future location sharing
               </div>
-              <p className="mt-2 text-sm text-slate-400">
+              <p className="mt-2 text-sm text-zinc-400">
                 {degradedMode
                   ? 'Temporarily unavailable until the privacy service is restored.'
                   : locationDisabled
@@ -437,7 +437,7 @@ export default function DataPrivacyDashboard() {
               <div className="mt-2 text-lg font-semibold text-white">
                 Start the 30-day deletion clock
               </div>
-              <p className="mt-2 text-sm text-slate-400">
+              <p className="mt-2 text-sm text-zinc-400">
                 {degradedMode
                   ? 'Temporarily unavailable until the privacy service is restored.'
                   : hasPendingDelete
@@ -450,15 +450,15 @@ export default function DataPrivacyDashboard() {
       )}
 
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 px-4">
-          <div className="w-full max-w-lg rounded-[28px] border border-rose-900 bg-slate-950 p-6 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/85 px-4">
+          <div className="w-full max-w-lg rounded-[28px] border border-rose-900 bg-zinc-950 p-6 shadow-2xl">
             <div className="text-xs uppercase tracking-[0.24em] text-rose-300">
               Delete Account
             </div>
             <h3 className="mt-3 text-2xl font-semibold text-white">
               This starts a 30-day waiting period.
             </h3>
-            <p className="mt-3 text-sm leading-6 text-slate-400">
+            <p className="mt-3 text-sm leading-6 text-zinc-400">
               Your account will be scheduled for deletion 30 days from
               confirmation. During that window, the request remains pending and
               can be reviewed before the final purge job runs.
@@ -467,7 +467,7 @@ export default function DataPrivacyDashboard() {
               <button
                 type="button"
                 onClick={() => setShowDeleteModal(false)}
-                className="rounded-2xl border border-slate-700 px-4 py-3 text-sm text-slate-300 transition hover:border-slate-500"
+                className="rounded-2xl border border-zinc-700 px-4 py-3 text-sm text-zinc-300 transition hover:border-zinc-500"
               >
                 Cancel
               </button>
@@ -496,3 +496,4 @@ export default function DataPrivacyDashboard() {
     </section>
   );
 }
+

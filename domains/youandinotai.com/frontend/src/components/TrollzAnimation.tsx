@@ -48,7 +48,7 @@ export function TrollzAnimation({ onComplete }: { onComplete: () => void }) {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="absolute -top-12 left-1/2 -translate-x-1/2 bg-white text-black px-3 py-1 rounded-full text-[10px] font-black uppercase whitespace-nowrap"
+              className="absolute -top-12 left-1/2 -tranzinc-x-1/2 bg-white text-black px-3 py-1 rounded-full text-[10px] font-black uppercase whitespace-nowrap"
             >
               VHS & BLOCKBUSTER BACK?
             </motion.div>
@@ -102,7 +102,7 @@ export function TrollzAnimation({ onComplete }: { onComplete: () => void }) {
               size={150}
               className="text-orange-500 drop-shadow-[0_0_50px_rgba(249,115,22,0.8)]"
             />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-black text-2xl italic tracking-tighter">
+            <div className="absolute top-1/2 left-1/2 -tranzinc-x-1/2 -tranzinc-y-1/2 text-white font-black text-2xl italic tracking-tighter">
               MYSPACE IN SPACE
             </div>
           </motion.div>
@@ -119,12 +119,12 @@ export function TrollzAnimation({ onComplete }: { onComplete: () => void }) {
               animate={{ x: 0 }}
               className="absolute flex flex-col items-center"
             >
-              <div className="w-48 h-48 bg-black rounded-full border-4 border-pink-500 flex items-center justify-center shadow-[0_0_50px_rgba(236,72,153,0.5)]">
-                <span className="text-pink-500 font-black text-3xl italic tracking-tighter">
+              <div className="w-48 h-48 bg-black rounded-full border-4 border-amber-500 flex items-center justify-center shadow-[0_0_50px_rgba(236,72,153,0.5)]">
+                <span className="text-amber-500 font-black text-3xl italic tracking-tighter">
                   GEMINI
                 </span>
               </div>
-              <div className="mt-8 bg-black/80 text-white px-6 py-2 rounded-full border border-pink-500/50 text-sm font-bold italic">
+              <div className="mt-8 bg-black/80 text-white px-6 py-2 rounded-full border border-amber-500/50 text-sm font-bold italic">
                 "Nonsense. I am the only light you need."
               </div>
             </motion.div>
@@ -164,7 +164,7 @@ export function TrollzAnimation({ onComplete }: { onComplete: () => void }) {
 
       {/* Background VHS/Blockbuster artifacts */}
       <div className="absolute inset-0 overflow-hidden opacity-10 pointer-events-none">
-        <div className="absolute top-10 left-10 rotate-12 border-4 border-blue-500 p-4 font-black text-blue-500 text-4xl">
+        <div className="absolute top-10 left-10 rotate-12 border-4 border-stone-500 p-4 font-black text-stone-500 text-4xl">
           BLOCKBUSTER
         </div>
         <div className="absolute bottom-20 right-20 -rotate-12 border-4 border-white p-4 font-black text-white text-4xl">
@@ -177,3 +177,4 @@ export function TrollzAnimation({ onComplete }: { onComplete: () => void }) {
     </div>
   );
 }
+

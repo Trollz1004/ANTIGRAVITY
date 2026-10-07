@@ -51,12 +51,12 @@ interface EventDiscoveryCardProps {
 
 const CATEGORY_COLORS: Record<string, string> = {
   general: 'bg-gray-500',
-  tech: 'bg-blue-500',
+  tech: 'bg-stone-500',
   volunteer: 'bg-green-500',
-  social: 'bg-purple-500',
+  social: 'bg-yellow-500',
   education: 'bg-indigo-500',
   outdoors: 'bg-emerald-500',
-  arts: 'bg-pink-500',
+  arts: 'bg-amber-500',
   food: 'bg-amber-500',
   fitness: 'bg-red-500',
   default: 'bg-gray-500',
@@ -114,7 +114,7 @@ export function EventDiscoveryCard({
   }, [event.image_url]);
 
   return (
-    <div className="glass glass-highlight rounded-xl overflow-hidden hover:border-purple-600/30 transition-all duration-300 group">
+    <div className="glass glass-highlight rounded-xl overflow-hidden hover:border-yellow-600/30 transition-all duration-300 group">
       {/* Event Image */}
       {imageUrl && !imageError ? (
         <div className="relative h-48 w-full overflow-hidden">
@@ -140,7 +140,7 @@ export function EventDiscoveryCard({
           </div>
         </div>
       ) : (
-        <div className="relative h-32 w-full bg-gradient-to-r from-purple-900/30 to-indigo-900/30 flex items-center justify-center">
+        <div className="relative h-32 w-full bg-gradient-to-r from-yellow-900/30 to-indigo-900/30 flex items-center justify-center">
           {isNearby && (
             <div className="absolute top-3 left-3 flex items-center gap-1 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-medium">
               <MapPin size={12} />
@@ -174,7 +174,7 @@ export function EventDiscoveryCard({
       <div className="p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <h3 className="font-semibold text-white truncate group-hover:text-purple-300 transition-colors">
+            <h3 className="font-semibold text-white truncate group-hover:text-yellow-300 transition-colors">
               {event.title}
             </h3>
             <p className="text-sm text-gray-400 mt-1 line-clamp-2">
@@ -270,7 +270,7 @@ export function EventDiscoveryCard({
                 ? 'bg-green-600/20 text-green-400 border border-green-600/30 cursor-default'
                 : isFull || isPast
                   ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
-                  : 'bg-purple-600 hover:bg-purple-500 text-white hover:shadow-lg hover:shadow-purple-600/20'
+                  : 'bg-yellow-600 hover:bg-yellow-500 text-white hover:shadow-lg hover:shadow-yellow-600/20'
             }`}
           >
             {isRSVPLoading ? (
@@ -310,3 +310,4 @@ export function EventDiscoveryCard({
     </div>
   );
 }
+

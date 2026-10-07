@@ -76,7 +76,7 @@ export default function ChatWindow({
           <img
             src={avatar}
             alt={matchedUser.display_name}
-            className="w-10 h-10 rounded-full object-cover ring-2 ring-purple-500"
+            className="w-10 h-10 rounded-full object-cover ring-2 ring-yellow-500"
           />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
@@ -84,7 +84,7 @@ export default function ChatWindow({
                 {matchedUser.display_name}
               </span>
               {matchedUser.verified && (
-                <span className="text-blue-400 text-xs" title="Human-verified">
+                <span className="text-stone-400 text-xs" title="Human-verified">
                   ✓
                 </span>
               )}
@@ -128,7 +128,7 @@ export default function ChatWindow({
                 <div
                   className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed break-words ${
                     isMe
-                      ? 'bg-purple-600 text-white rounded-br-sm'
+                      ? 'bg-yellow-600 text-white rounded-br-sm'
                       : 'bg-gray-800 text-gray-100 rounded-bl-sm'
                   }`}
                 >
@@ -183,7 +183,7 @@ export default function ChatWindow({
               disabled={connectionState === 'disconnected'}
               rows={1}
               maxLength={2000}
-              className="flex-1 resize-none bg-gray-800 text-white placeholder-gray-500 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 max-h-32 overflow-y-auto"
+              className="flex-1 resize-none bg-gray-800 text-white placeholder-gray-500 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-50 max-h-32 overflow-y-auto"
               style={{ lineHeight: '1.5' }}
             />
             <button
@@ -191,7 +191,7 @@ export default function ChatWindow({
               disabled={
                 !input.trim() || sending || connectionState === 'disconnected'
               }
-              className="shrink-0 bg-purple-600 hover:bg-purple-500 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl px-4 py-2.5 text-sm font-medium transition-colors"
+              className="shrink-0 bg-yellow-600 hover:bg-yellow-500 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl px-4 py-2.5 text-sm font-medium transition-colors"
             >
               {sending ? '…' : 'Send'}
             </button>
@@ -213,3 +213,4 @@ export default function ChatWindow({
     </ErrorBoundary>
   );
 }
+

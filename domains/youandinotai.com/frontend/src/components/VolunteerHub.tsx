@@ -230,7 +230,7 @@ export default function VolunteerHub() {
                 </div>
               </div>
               <div className="glass rounded-lg p-3 text-center">
-                <div className="text-xl font-black text-purple-400">
+                <div className="text-xl font-black text-yellow-400">
                   {impact.unique_organizations}
                 </div>
                 <div className="text-[10px] text-gray-400 mt-0.5">
@@ -260,7 +260,7 @@ export default function VolunteerHub() {
                       className="flex items-center justify-between glass rounded-lg px-3 py-2"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="w-5 h-5 rounded bg-purple-600/20 text-purple-400 flex items-center justify-center text-[10px] font-bold">
+                        <span className="w-5 h-5 rounded bg-yellow-600/20 text-yellow-400 flex items-center justify-center text-[10px] font-bold">
                           {i + 1}
                         </span>
                         <span className="text-sm text-white font-medium">
@@ -301,7 +301,7 @@ export default function VolunteerHub() {
           onClick={() => setActiveTab('discover')}
           className={`flex-1 text-sm py-2 rounded-md font-medium transition-all duration-200 ${
             activeTab === 'discover'
-              ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
+              ? 'bg-yellow-600 text-white shadow-md shadow-yellow-600/30'
               : 'text-gray-400 hover:text-white'
           }`}
         >
@@ -312,7 +312,7 @@ export default function VolunteerHub() {
           onClick={() => setActiveTab('my-signups')}
           className={`flex-1 text-sm py-2 rounded-md font-medium transition-all duration-200 ${
             activeTab === 'my-signups'
-              ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
+              ? 'bg-yellow-600 text-white shadow-md shadow-yellow-600/30'
               : 'text-gray-400 hover:text-white'
           }`}
         >
@@ -373,21 +373,21 @@ export default function VolunteerHub() {
                 return (
                   <div
                     key={opp.id}
-                    className="glass glass-highlight rounded-xl p-5 hover:border-purple-600/30 transition-all duration-300 group"
+                    className="glass glass-highlight rounded-xl p-5 hover:border-yellow-600/30 transition-all duration-300 group"
                   >
                     {/* Top row — org + category */}
                     <div className="flex items-center gap-2 mb-2">
                       <p className="text-[10px] uppercase tracking-wider text-emerald-400 font-semibold">
                         {opp.organization}
                       </p>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-600/15 text-purple-300 border border-purple-600/20">
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-yellow-600/15 text-yellow-300 border border-yellow-600/20">
                         {CATEGORY_LABELS[opp.category] || opp.category}
                       </span>
                     </div>
 
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-semibold text-white group-hover:text-purple-300 transition-colors">
+                        <h3 className="font-semibold text-white group-hover:text-yellow-300 transition-colors">
                           {opp.title}
                         </h3>
                         <p className="text-sm text-gray-400 mt-1 line-clamp-2">
@@ -438,7 +438,7 @@ export default function VolunteerHub() {
                             ? 'bg-green-600/20 text-green-400 border border-green-600/30 cursor-default'
                             : isFull || isPast
                               ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
-                              : 'bg-purple-600 hover:bg-purple-500 text-white hover:shadow-lg hover:shadow-purple-600/20'
+                              : 'bg-yellow-600 hover:bg-yellow-500 text-white hover:shadow-lg hover:shadow-yellow-600/20'
                         }`}
                       >
                         {signingUp === opp.id ? (
@@ -502,7 +502,7 @@ export default function VolunteerHub() {
               </p>
               <button
                 onClick={() => setActiveTab('discover')}
-                className="text-purple-400 hover:text-purple-300 text-sm transition-colors"
+                className="text-yellow-400 hover:text-yellow-300 text-sm transition-colors"
               >
                 Browse opportunities →
               </button>
@@ -527,7 +527,7 @@ export default function VolunteerHub() {
                           <h3 className="font-semibold text-white">
                             {signup.title}
                           </h3>
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-600/15 text-purple-300 border border-purple-600/20">
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-yellow-600/15 text-yellow-300 border border-yellow-600/20">
                             {CATEGORY_LABELS[signup.category] ||
                               signup.category}
                           </span>
@@ -579,3 +579,4 @@ export default function VolunteerHub() {
     </div>
   );
 }
+

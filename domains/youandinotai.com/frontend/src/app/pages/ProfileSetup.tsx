@@ -93,8 +93,8 @@ export function ProfileSetup() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white p-6 md:p-12 relative overflow-hidden">
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-fuchsia-600/20 blur-[150px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-cyan-600/20 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-amber-600/20 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-stone-600/20 blur-[150px] rounded-full pointer-events-none" />
       
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -103,14 +103,14 @@ export function ProfileSetup() {
       >
         <div className="mb-10 grid gap-6 md:grid-cols-[1.15fr_0.85fr] md:items-end">
           <div>
-            <div className="text-xs font-bold uppercase tracking-widest text-fuchsia-400 mb-3 drop-shadow-[0_0_10px_rgba(217,70,239,0.5)]">Profile Setup</div>
+            <div className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-3 drop-shadow-[0_0_10px_rgba(217,70,239,0.5)]">Profile Setup</div>
             <h1 className="text-5xl font-black tracking-tight mb-4">tell people who you are.</h1>
             <p className="text-white/60 text-lg max-w-2xl">
               Build the real profile before you start matching. Keep it specific, human, and useful to someone deciding whether to say hi.
             </p>
           </div>
           <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-3xl p-6 shadow-2xl">
-            <div className="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-2">Current account</div>
+            <div className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-2">Current account</div>
             <p className="text-xl font-black uppercase tracking-tight text-white">
               {user?.display_name}
             </p>
@@ -131,8 +131,8 @@ export function ProfileSetup() {
             <div className="grid gap-8">
               <div className="grid gap-4 rounded-3xl border border-white/5 bg-white/5 p-6 md:grid-cols-3">
                 {[
-                  { icon: ShieldCheck, title: 'Verify first', desc: 'The best feed starts with a visible verification state.', color: 'text-cyan-400' },
-                  { icon: Sparkles, title: 'Prompt first', desc: 'Make it easy for someone to comment on something specific.', color: 'text-fuchsia-400' },
+                  { icon: ShieldCheck, title: 'Verify first', desc: 'The best feed starts with a visible verification state.', color: 'text-stone-400' },
+                  { icon: Sparkles, title: 'Prompt first', desc: 'Make it easy for someone to comment on something specific.', color: 'text-amber-400' },
                   { icon: CalendarCheck, title: 'Plan safely', desc: 'Share a first-date comfort level before chat turns into a plan.', color: 'text-violet-400' }
                 ].map((item, i) => (
                   <div key={i} className="group">
@@ -146,14 +146,14 @@ export function ProfileSetup() {
               </div>
 
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3 block">About You</label>
+                <label className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3 block">About You</label>
                 <textarea
                   value={bio}
                   onChange={e => setBio(e.target.value)}
                   placeholder="What makes you you?"
                   maxLength={500}
                   rows={4}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-white/30 focus:outline-none focus:border-fuchsia-500/50 focus:ring-1 focus:ring-fuchsia-500/50 transition-all backdrop-blur-sm"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-white/30 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-all backdrop-blur-sm"
                 />
                 <div className="mt-2 text-right text-xs font-bold uppercase tracking-widest text-white/30">
                   {bio.length}/500
@@ -161,14 +161,14 @@ export function ProfileSetup() {
               </div>
 
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3 block">Profile Prompt</label>
+                <label className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3 block">Profile Prompt</label>
                 <textarea
                   value={promptAnswer}
                   onChange={e => setPromptAnswer(e.target.value)}
                   placeholder="Example: My ideal first date is coffee, a bookstore, and no pressure to perform."
                   maxLength={220}
                   rows={3}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-white/30 focus:outline-none focus:border-fuchsia-500/50 focus:ring-1 focus:ring-fuchsia-500/50 transition-all backdrop-blur-sm"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-white/30 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-all backdrop-blur-sm"
                 />
                 <div className="mt-2 text-right text-xs font-bold uppercase tracking-widest text-white/30">
                   {promptAnswer.length}/220
@@ -177,7 +177,7 @@ export function ProfileSetup() {
 
               <div className="grid gap-6 md:grid-cols-3">
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3 block">Date of Birth</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3 block">Date of Birth</label>
                   <input
                     type="text"
                     value={dateOfBirth}
@@ -185,11 +185,11 @@ export function ProfileSetup() {
                     inputMode="numeric"
                     maxLength={14}
                     placeholder="MM / DD / YYYY"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-white/30 focus:outline-none focus:border-fuchsia-500/50 focus:ring-1 focus:ring-fuchsia-500/50 transition-all backdrop-blur-sm"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-white/30 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-all backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3 block">Age</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3 block">Age</label>
                   <input
                     type="number"
                     min={18}
@@ -197,15 +197,15 @@ export function ProfileSetup() {
                     value={age}
                     onChange={e => setAge(e.target.value)}
                     placeholder="18+"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-white/30 focus:outline-none focus:border-fuchsia-500/50 focus:ring-1 focus:ring-fuchsia-500/50 transition-all backdrop-blur-sm"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-white/30 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-all backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3 block">Gender</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3 block">Gender</label>
                   <select
                     value={gender}
                     onChange={e => setGender(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-fuchsia-500/50 focus:ring-1 focus:ring-fuchsia-500/50 transition-all backdrop-blur-sm appearance-none"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-all backdrop-blur-sm appearance-none"
                   >
                     <option value="" className="bg-gray-900">Select...</option>
                     <option value="male" className="bg-gray-900">Male</option>
@@ -218,11 +218,11 @@ export function ProfileSetup() {
 
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3 block">Looking For</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3 block">Looking For</label>
                   <select
                     value={lookingFor}
                     onChange={e => setLookingFor(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-fuchsia-500/50 focus:ring-1 focus:ring-fuchsia-500/50 transition-all backdrop-blur-sm appearance-none"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-all backdrop-blur-sm appearance-none"
                   >
                     <option value="" className="bg-gray-900">Select...</option>
                     <option value="relationship" className="bg-gray-900">Relationship</option>
@@ -232,11 +232,11 @@ export function ProfileSetup() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3 block">Date Comfort</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3 block">Date Comfort</label>
                   <select
                     value={dateComfort}
                     onChange={e => setDateComfort(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-fuchsia-500/50 focus:ring-1 focus:ring-fuchsia-500/50 transition-all backdrop-blur-sm appearance-none"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-all backdrop-blur-sm appearance-none"
                   >
                     <option value="" className="bg-gray-900">Select...</option>
                     <option value="Public coffee or daytime walk first" className="bg-gray-900">Public coffee or daytime walk first</option>
@@ -249,7 +249,7 @@ export function ProfileSetup() {
 
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
-                  <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3">
+                  <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-stone-400 mb-3">
                     <MapPin size={16} />
                     Location
                   </label>
@@ -259,18 +259,18 @@ export function ProfileSetup() {
                     onChange={e => setLocation(e.target.value)}
                     placeholder="City, State"
                     maxLength={200}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-white/30 focus:outline-none focus:border-fuchsia-500/50 focus:ring-1 focus:ring-fuchsia-500/50 transition-all backdrop-blur-sm"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-white/30 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-all backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3">
+                  <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-stone-400 mb-3">
                     <ShieldCheck size={16} />
                     Safety Preference
                   </label>
                   <select
                     value={safetyPreference}
                     onChange={e => setSafetyPreference(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-fuchsia-500/50 focus:ring-1 focus:ring-fuchsia-500/50 transition-all backdrop-blur-sm appearance-none"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-all backdrop-blur-sm appearance-none"
                   >
                     <option value="" className="bg-gray-900">Select...</option>
                     <option value="Share date details before meeting" className="bg-gray-900">Share date details before meeting</option>
@@ -285,7 +285,7 @@ export function ProfileSetup() {
 
           <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-2xl">
             <div className="mb-6 flex items-center justify-between gap-3">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-cyan-400">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-stone-400">
                 <Sparkles size={16} />
                 Interests
               </label>
@@ -305,7 +305,7 @@ export function ProfileSetup() {
                     onClick={() => toggleInterest(interest)}
                     className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-bold transition-colors ${
                       active
-                        ? 'border-fuchsia-500 bg-fuchsia-500/20 text-fuchsia-100 shadow-[0_0_15px_rgba(217,70,239,0.3)]'
+                        ? 'border-amber-500 bg-amber-500/20 text-amber-100 shadow-[0_0_15px_rgba(217,70,239,0.3)]'
                         : 'border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:border-white/20'
                     }`}
                   >
@@ -326,7 +326,7 @@ export function ProfileSetup() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-fuchsia-600 to-cyan-600 px-8 py-4 text-sm font-bold uppercase tracking-widest text-white shadow-[0_0_30px_rgba(217,70,239,0.4)] disabled:opacity-50 transition-opacity"
+              className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-amber-600 to-stone-600 px-8 py-4 text-sm font-bold uppercase tracking-widest text-white shadow-[0_0_30px_rgba(217,70,239,0.4)] disabled:opacity-50 transition-opacity"
             >
               {loading ? (
                 'Saving...'
@@ -342,3 +342,4 @@ export function ProfileSetup() {
     </div>
   );
 }
+

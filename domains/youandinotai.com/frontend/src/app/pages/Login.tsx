@@ -116,28 +116,28 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-slate-200 relative overflow-hidden flex items-center justify-center px-4 py-6 md:px-8">
+    <div className="min-h-screen bg-[#0a0a0f] text-zinc-200 relative overflow-hidden flex items-center justify-center px-4 py-6 md:px-8">
       {/* Neon glowing orbs in background */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-fuchsia-600/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-600/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-amber-600/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-stone-600/20 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-2 relative z-10">
         <motion.section 
           initial={{ opacity: 0, x: -30 }} 
           animate={{ opacity: 1, x: 0 }} 
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="hidden md:flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-10 shadow-2xl shadow-fuchsia-500/5 relative overflow-hidden"
+          className="hidden md:flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-10 shadow-2xl shadow-amber-500/5 relative overflow-hidden"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 to-cyan-500/5 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-stone-500/5 pointer-events-none" />
           <div className="relative z-10">
-            <div className="inline-block px-3 py-1 mb-6 rounded-full border border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-300 text-xs font-semibold uppercase tracking-widest">
+            <div className="inline-block px-3 py-1 mb-6 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs font-semibold uppercase tracking-widest">
               YouAndINotAI
             </div>
             <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
               Real people.<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-cyan-400">Zero noise.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-stone-400">Zero noise.</span>
             </h1>
-            <p className="text-lg text-slate-400 max-w-md leading-relaxed">
+            <p className="text-lg text-zinc-400 max-w-md leading-relaxed">
               Sign in to the verified side of the platform. Matching, meetups,
               boards, and support all stay tied to a real account.
             </p>
@@ -145,21 +145,21 @@ export function Login() {
 
           <div className="space-y-4 relative z-10 mt-12">
             <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-6 shadow-lg">
-              <div className="text-sm font-semibold text-slate-300 uppercase tracking-widest mb-4">Inside the account</div>
-              <div className="space-y-4 text-sm font-medium text-slate-400">
+              <div className="text-sm font-semibold text-zinc-300 uppercase tracking-widest mb-4">Inside the account</div>
+              <div className="space-y-4 text-sm font-medium text-zinc-400">
                 <div className="flex items-start gap-3">
-                  <ShieldCheck size={20} className="mt-0.5 text-cyan-400" />
+                  <ShieldCheck size={20} className="mt-0.5 text-stone-400" />
                   <span>Account-bound verification and support handling.</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Sparkles size={20} className="mt-0.5 text-fuchsia-400" />
+                  <Sparkles size={20} className="mt-0.5 text-amber-400" />
                   <span>
                     Dating, social boards, meetups, and volunteer surfaces in
                     one shell.
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Heart size={20} className="mt-0.5 text-pink-400" />
+                  <Heart size={20} className="mt-0.5 text-amber-400" />
                   <span>
                     No fake platform framing. Just a real product with verified
                     users.
@@ -177,14 +177,14 @@ export function Login() {
           className="flex items-center justify-center w-full"
         >
           <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl p-8 shadow-2xl relative">
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/5 to-fuchsia-500/5 rounded-3xl pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-stone-500/5 to-amber-500/5 rounded-3xl pointer-events-none" />
             
             <div className="relative z-10 mb-8">
-              <div className="md:hidden inline-block px-3 py-1 mb-4 rounded-full border border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-300 text-xs font-semibold uppercase tracking-widest">
+              <div className="md:hidden inline-block px-3 py-1 mb-4 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs font-semibold uppercase tracking-widest">
                 YouAndINotAI
               </div>
               <h2 className="text-3xl font-bold text-white mb-2">Welcome back.</h2>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-zinc-400">
                 Verified humans only. Sign in to pick up where you left off.
               </p>
             </div>
@@ -216,7 +216,7 @@ export function Login() {
                   touched={touched.email}
                   placeholder="name@example.com"
                   autoComplete="email"
-                  icon={<Mail size={18} className="text-slate-400" />}
+                  icon={<Mail size={18} className="text-zinc-400" />}
                 />
 
                 <FormField
@@ -231,7 +231,7 @@ export function Login() {
                   touched={touched.password}
                   placeholder="••••••••"
                   autoComplete="current-password"
-                  icon={<Lock size={18} className="text-slate-400" />}
+                  icon={<Lock size={18} className="text-zinc-400" />}
                 />
               </div>
 
@@ -240,7 +240,7 @@ export function Login() {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-600 to-cyan-600 px-5 py-3.5 text-sm font-bold text-white shadow-[0_0_20px_rgba(217,70,239,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_30px_rgba(217,70,239,0.5)]"
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-600 to-stone-600 px-5 py-3.5 text-sm font-bold text-white shadow-[0_0_20px_rgba(217,70,239,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_30px_rgba(217,70,239,0.5)]"
               >
                 {loading ? (
                   <span className="animate-pulse">Signing in...</span>
@@ -254,7 +254,7 @@ export function Login() {
 
             <div className="relative z-10 my-8 flex items-center gap-4">
               <div className="h-px flex-1 bg-white/10" />
-              <span className="text-xs font-semibold uppercase tracking-widest text-slate-500">
+              <span className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
                 Or continue with
               </span>
               <div className="h-px flex-1 bg-white/10" />
@@ -268,13 +268,13 @@ export function Login() {
               <button
                 type="button"
                 onClick={() => setShowBeta(!showBeta)}
-                className="flex w-full items-center justify-between text-sm font-semibold text-slate-300 hover:text-white transition-colors"
+                className="flex w-full items-center justify-between text-sm font-semibold text-zinc-300 hover:text-white transition-colors"
               >
                 <span className="flex items-center gap-2">
-                  <KeyRound size={16} className="text-fuchsia-400" />
+                  <KeyRound size={16} className="text-amber-400" />
                   Have a beta access code?
                 </span>
-                <Sparkles size={14} className="text-cyan-400" />
+                <Sparkles size={14} className="text-stone-400" />
               </button>
 
               <AnimatePresence>
@@ -299,7 +299,7 @@ export function Login() {
                         onChange={e => setBetaCode(e.target.value)}
                         autoComplete="one-time-code"
                         placeholder="ENTER CODE"
-                        className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold uppercase tracking-widest text-white placeholder-slate-500 outline-none transition-all focus:border-fuchsia-500/50 focus:bg-white/10 focus:ring-2 focus:ring-fuchsia-500/20"
+                        className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold uppercase tracking-widest text-white placeholder-zinc-500 outline-none transition-all focus:border-amber-500/50 focus:bg-white/10 focus:ring-2 focus:ring-amber-500/20"
                       />
                       <motion.button
                         whileHover={{ scale: 1.02 }}
@@ -316,11 +316,11 @@ export function Login() {
               </AnimatePresence>
             </div>
 
-            <p className="relative z-10 mt-8 text-center text-sm text-slate-400">
+            <p className="relative z-10 mt-8 text-center text-sm text-zinc-400">
               Need an account?{' '}
               <Link
                 to={registerHref}
-                className="font-bold text-white transition-colors hover:text-fuchsia-400"
+                className="font-bold text-white transition-colors hover:text-amber-400"
               >
                 Create one
               </Link>
@@ -329,9 +329,9 @@ export function Login() {
             <div className="relative z-10 mt-6 text-center">
               <Link 
                 to="/" 
-                className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 transition-colors hover:text-white"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-500 transition-colors hover:text-white"
               >
-                <Heart size={14} className="text-pink-500" /> 
+                <Heart size={14} className="text-amber-500" /> 
                 Back to YouAndINotAI
               </Link>
             </div>
@@ -341,3 +341,4 @@ export function Login() {
     </div>
   );
 }
+

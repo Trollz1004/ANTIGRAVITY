@@ -171,17 +171,17 @@ export function VoiceSOS({ onClose }: { onClose: () => void }) {
         exit={{ scale: 0.9, y: 20 }}
         className="w-full max-w-md bg-zinc-900 border border-white/10 rounded-[3rem] overflow-hidden shadow-2xl flex flex-col"
       >
-        <div className="p-8 border-b border-white/5 bg-gradient-to-r from-blue-500/10 to-purple-500/10 flex justify-between items-center">
+        <div className="p-8 border-b border-white/5 bg-gradient-to-r from-stone-500/10 to-yellow-500/10 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <div
               className={`p-3 rounded-2xl ${
-                isRecording ? 'bg-red-500/20 animate-pulse' : 'bg-blue-500/20'
+                isRecording ? 'bg-red-500/20 animate-pulse' : 'bg-stone-500/20'
               }`}
             >
               {isRecording ? (
                 <Mic className="text-red-400" size={24} />
               ) : (
-                <MicOff className="text-blue-400" size={24} />
+                <MicOff className="text-stone-400" size={24} />
               )}
             </div>
             <div>
@@ -208,25 +208,25 @@ export function VoiceSOS({ onClose }: { onClose: () => void }) {
         <div className="p-8 space-y-8 flex flex-col items-center">
           <div className="relative w-48 h-48 flex items-center justify-center">
             <div
-              className={`absolute inset-0 rounded-full border-4 border-blue-500/20 ${
+              className={`absolute inset-0 rounded-full border-4 border-stone-500/20 ${
                 isRecording ? 'animate-ping' : ''
               }`}
             />
             <div
-              className={`absolute inset-4 rounded-full border-2 border-blue-500/40 ${
+              className={`absolute inset-4 rounded-full border-2 border-stone-500/40 ${
                 isRecording ? 'animate-pulse' : ''
               }`}
             />
             <div className="w-32 h-32 rounded-full bg-zinc-800 border-2 border-white/10 flex items-center justify-center shadow-2xl">
               <Ghost
                 size={64}
-                className={`${isRecording ? 'text-blue-400' : 'text-gray-600'}`}
+                className={`${isRecording ? 'text-stone-400' : 'text-gray-600'}`}
               />
             </div>
           </div>
 
           <div className="w-full space-y-4 text-center">
-            <div className="text-xs font-bold uppercase tracking-[0.3em] text-blue-400">
+            <div className="text-xs font-bold uppercase tracking-[0.3em] text-stone-400">
               {status === 'connected'
                 ? 'Connected to Orbit'
                 : status === 'connecting'
@@ -253,13 +253,13 @@ export function VoiceSOS({ onClose }: { onClose: () => void }) {
             {status === 'idle' || status === 'error' ? (
               <button
                 onClick={startSession}
-                className="flex-1 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+                className="flex-1 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 bg-stone-500 text-white hover:bg-stone-600 transition-colors"
               >
                 <Volume2 size={16} />
                 Connect to Voice Channel
               </button>
             ) : status === 'connecting' ? (
-              <div className="flex-1 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 bg-blue-500/50 text-white/70">
+              <div className="flex-1 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 bg-stone-500/50 text-white/70">
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 Connecting...
               </div>
@@ -269,7 +269,7 @@ export function VoiceSOS({ onClose }: { onClose: () => void }) {
                 className={`flex-1 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 transition-all ${
                   isRecording
                     ? 'bg-red-500 text-white'
-                    : 'bg-blue-500 text-white'
+                    : 'bg-stone-500 text-white'
                 }`}
               >
                 {isRecording ? <VolumeX size={16} /> : <Volume2 size={16} />}
@@ -286,3 +286,4 @@ export function VoiceSOS({ onClose }: { onClose: () => void }) {
     </motion.div>
   );
 }
+

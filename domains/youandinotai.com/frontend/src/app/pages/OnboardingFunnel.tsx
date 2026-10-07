@@ -74,7 +74,7 @@ export function OnboardingFunnel() {
             <Icon size={28} />
           </div>
 
-          <div className="mb-2 text-sm font-black uppercase tracking-[0.2em] text-[#a78bfa]">
+          <div className="mb-2 text-sm font-black uppercase tracking-[0.2em] text-[#facc15]">
             Step {STEPS.indexOf(step) + 1} of 3
           </div>
           <h2 className="text-2xl font-black uppercase tracking-[-0.04em] text-[#111111]">
@@ -95,3 +95,4 @@ export function OnboardingFunnel() {
     </div>
   );
 }
+

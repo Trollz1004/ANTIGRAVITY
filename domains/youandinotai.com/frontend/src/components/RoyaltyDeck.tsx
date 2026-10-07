@@ -336,7 +336,7 @@ export default function RoyaltyDeck() {
     <section className="relative z-10 py-16 md:py-24 px-4 overflow-hidden">
       {/* Ambient glow behind everything */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -tranzinc-x-1/2 -tranzinc-y-1/2 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-[120px]" />
       </div>
 
       <FloatingHearts />
@@ -392,3 +392,4 @@ export default function RoyaltyDeck() {
     </section>
   );
 }
+

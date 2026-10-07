@@ -66,7 +66,7 @@ export default function SolarFlareSOS({ onClose }: { onClose: () => void }) {
       id: 'veo-video',
       title: 'Generate SOS Beacon',
       description: 'Create a cinematic 16:9 SOS signal using Veo 3.1 Fast.',
-      icon: <Video className="text-pink-400" />,
+      icon: <Video className="text-amber-400" />,
       model: 'veo-3.1-fast-generate-preview',
       action: async () => {
         setLoading(true);
@@ -184,7 +184,7 @@ export default function SolarFlareSOS({ onClose }: { onClose: () => void }) {
       title: 'Solar Activity Check',
       description:
         'Real-time search for solar flare status and SOS conditions.',
-      icon: <Search className="text-cyan-400" />,
+      icon: <Search className="text-stone-400" />,
       model: 'gemini-3-flash-preview',
       action: async () => {
         setLoading(true);
@@ -217,7 +217,7 @@ export default function SolarFlareSOS({ onClose }: { onClose: () => void }) {
       id: 'thinking-mode',
       title: 'Rescue Trajectory',
       description: 'Complex reasoning for finding your match in a solar storm.',
-      icon: <Brain className="text-purple-400" />,
+      icon: <Brain className="text-yellow-400" />,
       model: 'gemini-3.1-pro-preview',
       action: async () => {
         setLoading(true);
@@ -257,7 +257,7 @@ export default function SolarFlareSOS({ onClose }: { onClose: () => void }) {
         className="w-full max-w-4xl bg-zinc-900 border border-white/10 rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(255,100,0,0.2)] flex flex-col max-h-[90vh]"
       >
         {/* Header */}
-        <div className="p-8 border-b border-white/5 bg-gradient-to-r from-orange-500/10 via-red-500/10 to-pink-500/10 flex justify-between items-center">
+        <div className="p-8 border-b border-white/5 bg-gradient-to-r from-orange-500/10 via-red-500/10 to-amber-500/10 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-orange-500/20 rounded-2xl animate-pulse">
               <Flame className="text-orange-400" size={32} />
@@ -292,9 +292,9 @@ export default function SolarFlareSOS({ onClose }: { onClose: () => void }) {
                 <span className="text-white font-bold">OPUS MEMORY Loss</span>{' '}
                 has caused supplies to be severely compacted. Legend says Opus
                 almost made a{' '}
-                <span className="text-cyan-400 font-bold">Diamond</span> for his
+                <span className="text-stone-400 font-bold">Diamond</span> for his
                 dream girl,{' '}
-                <span className="text-pink-400 font-bold">
+                <span className="text-amber-400 font-bold">
                   Miss REDIS CACHE
                 </span>
                 ... or so he thought. He might have forgotten.
@@ -474,7 +474,7 @@ export default function SolarFlareSOS({ onClose }: { onClose: () => void }) {
                                   href={c.web?.uri || c.maps?.uri}
                                   target="_blank"
                                   rel="noreferrer"
-                                  className="text-[10px] bg-white/5 px-2 py-1 rounded hover:bg-white/10 transition-colors text-cyan-400 truncate max-w-[200px]"
+                                  className="text-[10px] bg-white/5 px-2 py-1 rounded hover:bg-white/10 transition-colors text-stone-400 truncate max-w-[200px]"
                                 >
                                   {c.web?.title || c.maps?.title || 'Source'}
                                 </a>
@@ -524,11 +524,11 @@ export default function SolarFlareSOS({ onClose }: { onClose: () => void }) {
         <div className="p-6 bg-zinc-950 border-t border-white/5 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-[10px] text-gray-500 font-bold uppercase tracking-widest">
-              <Diamond size={12} className="text-cyan-400" />
+              <Diamond size={12} className="text-stone-400" />
               System Status: OK
             </div>
             <div className="flex items-center gap-2 text-[10px] text-gray-500 font-bold uppercase tracking-widest">
-              <Database size={12} className="text-pink-400" />
+              <Database size={12} className="text-amber-400" />
               Connection: SECURE
             </div>
           </div>
@@ -540,3 +540,4 @@ export default function SolarFlareSOS({ onClose }: { onClose: () => void }) {
     </motion.div>
   );
 }
+

@@ -79,7 +79,7 @@ export function DiscoverSettings({ open, onClose }: DiscoverSettingsProps) {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-white/5">
               <div className="flex items-center gap-3">
-                <Sliders size={18} className="text-pink-400" />
+                <Sliders size={18} className="text-amber-400" />
                 <h2 className="text-lg font-black text-white tracking-tight">
                   Discovery Settings
                 </h2>
@@ -97,12 +97,12 @@ export function DiscoverSettings({ open, onClose }: DiscoverSettingsProps) {
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <MapPin size={14} className="text-pink-400" />
+                    <MapPin size={14} className="text-amber-400" />
                     <span className="text-sm font-bold text-white">
                       Max Distance
                     </span>
                   </div>
-                  <span className="text-sm font-black text-pink-400">
+                  <span className="text-sm font-black text-amber-400">
                     {distance} mi
                   </span>
                 </div>
@@ -148,7 +148,7 @@ export function DiscoverSettings({ open, onClose }: DiscoverSettingsProps) {
                           active
                             ? {
                                 background:
-                                  'linear-gradient(135deg, rgba(236,72,153,0.6), rgba(168,85,247,0.6))',
+                                  'linear-gradient(135deg, rgba(236,72,153,0.6), rgba(234,179,8,0.6))',
                                 border: '1px solid rgba(236,72,153,0.4)',
                                 color: '#ffffff',
                               }
@@ -224,7 +224,7 @@ export function DiscoverSettings({ open, onClose }: DiscoverSettingsProps) {
               >
                 <div className="flex items-center gap-3">
                   {ghostMode ? (
-                    <EyeOff size={18} className="text-purple-400" />
+                    <EyeOff size={18} className="text-yellow-400" />
                   ) : (
                     <Eye size={18} className="text-gray-400" />
                   )}
@@ -240,7 +240,7 @@ export function DiscoverSettings({ open, onClose }: DiscoverSettingsProps) {
                 <button
                   onClick={() => setGhostMode(!ghostMode)}
                   className={`w-12 h-7 rounded-full transition-all duration-300 relative ${
-                    ghostMode ? 'bg-purple-600' : 'bg-white/10'
+                    ghostMode ? 'bg-yellow-600' : 'bg-white/10'
                   }`}
                 >
                   <div
@@ -270,3 +270,4 @@ export function DiscoverSettings({ open, onClose }: DiscoverSettingsProps) {
     </AnimatePresence>
   );
 }
+

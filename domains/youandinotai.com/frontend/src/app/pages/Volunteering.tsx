@@ -58,15 +58,15 @@ const CATEGORIES = [
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
-  youth_programs: 'from-pink-500 to-rose-500',
+  youth_programs: 'from-amber-500 to-rose-500',
   elderly: 'from-amber-500 to-orange-500',
   environment: 'from-emerald-500 to-green-500',
-  animals: 'from-cyan-500 to-teal-500',
+  animals: 'from-stone-500 to-teal-500',
   food_bank: 'from-yellow-500 to-amber-500',
-  education: 'from-blue-500 to-indigo-500',
-  healthcare: 'from-red-500 to-pink-500',
+  education: 'from-stone-500 to-indigo-500',
+  healthcare: 'from-red-500 to-amber-500',
   disaster_relief: 'from-orange-500 to-red-500',
-  community: 'from-purple-500 to-violet-500',
+  community: 'from-yellow-500 to-violet-500',
   general: 'from-gray-500 to-gray-600',
 };
 
@@ -231,7 +231,7 @@ export function Volunteering() {
                   </div>
                 </div>
                 <div className="glass rounded-2xl p-4 text-center">
-                  <div className="text-2xl font-black text-purple-400">
+                  <div className="text-2xl font-black text-yellow-400">
                     {impact.unique_organizations}
                   </div>
                   <div className="text-xs text-gray-400 mt-1 flex items-center justify-center gap-1">
@@ -507,3 +507,4 @@ export function Volunteering() {
 }
 
 export default Volunteering;
+

@@ -92,8 +92,8 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
         {/* Header */}
         <div className="p-8 border-b border-white/5 bg-zinc-950 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-pink-500/20 rounded-2xl">
-              <PenTool className="text-pink-400" size={28} />
+            <div className="p-3 bg-amber-500/20 rounded-2xl">
+              <PenTool className="text-amber-400" size={28} />
             </div>
             <div>
               <h2 className="text-2xl font-black italic tracking-tighter uppercase">
@@ -116,11 +116,11 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
           {/* Left Side: Community Wall */}
           <div className="w-1/2 border-r border-white/5 p-8 overflow-y-auto bg-black/20">
             <div className="mb-8 flex items-center justify-between">
-              <h3 className="text-sm font-black uppercase tracking-widest text-pink-400 flex items-center gap-2">
+              <h3 className="text-sm font-black uppercase tracking-widest text-amber-400 flex items-center gap-2">
                 <ImageIcon size={16} />
                 Community Wall
               </h3>
-              <span className="text-[10px] text-pink-600 font-bold">
+              <span className="text-[10px] text-amber-600 font-bold">
                 YOUANDINOTAI — FOUNDING MEMBERS
               </span>
             </div>
@@ -128,26 +128,26 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
             <div className="space-y-8">
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                className="relative aspect-square bg-zinc-800 rounded-3xl overflow-hidden border-4 border-pink-500 shadow-[0_0_30px_rgba(236,72,153,0.4)] group"
+                className="relative aspect-square bg-zinc-800 rounded-3xl overflow-hidden border-4 border-amber-500 shadow-[0_0_30px_rgba(236,72,153,0.4)] group"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-pink-900/60 via-purple-900/40 to-indigo-900/60" />
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-900/60 via-yellow-900/40 to-indigo-900/60" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                  <div className="bg-pink-500 text-white px-4 py-1 font-black text-xl mb-2 rotate-[-2deg] shadow-lg">
+                  <div className="bg-amber-500 text-white px-4 py-1 font-black text-xl mb-2 rotate-[-2deg] shadow-lg">
                     YouAndiNotAi
                   </div>
-                  <div className="bg-purple-500 text-white px-4 py-1 font-black text-2xl rotate-[1deg] shadow-lg">
+                  <div className="bg-yellow-500 text-white px-4 py-1 font-black text-2xl rotate-[1deg] shadow-lg">
                     SIGNATURE WALL
                   </div>
                   <div className="mt-6 text-white font-bold text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                     Be one of the first to leave your mark
                   </div>
-                  <div className="mt-2 text-pink-400 font-black text-xs tracking-widest">
+                  <div className="mt-2 text-amber-400 font-black text-xs tracking-widest">
                     Live now
                   </div>
                 </div>
               </motion.div>
 
-              <div className="p-6 bg-pink-500/10 rounded-3xl border border-pink-500/20 space-y-4">
+              <div className="p-6 bg-amber-500/10 rounded-3xl border border-amber-500/20 space-y-4">
                 <p className="text-gray-300 text-sm leading-relaxed">
                   Sign the wall before launch and be recognized as a founding
                   member of the YouAndiNotAi community. Every signature is a
@@ -155,9 +155,9 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
                 </p>
                 <div className="h-px bg-white/10 w-full" />
                 <div className="flex flex-col gap-2">
-                  <div className="text-cyan-400 font-black text-xs uppercase tracking-widest">
+                  <div className="text-stone-400 font-black text-xs uppercase tracking-widest">
                     REAL HUMANS ONLY{' '}
-                    <Heart size={10} className="inline fill-cyan-400" /> 18+
+                    <Heart size={10} className="inline fill-stone-400" /> 18+
                   </div>
                 </div>
               </div>
@@ -167,7 +167,7 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
           {/* Right Side: Signatures */}
           <div className="w-1/2 p-8 flex flex-col">
             <div className="mb-8 flex items-center justify-between">
-              <h3 className="text-sm font-black uppercase tracking-widest text-pink-400 flex items-center gap-2">
+              <h3 className="text-sm font-black uppercase tracking-widest text-amber-400 flex items-center gap-2">
                 <Sparkles size={16} />
                 Recent Signatures
               </h3>
@@ -189,7 +189,7 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
                     initial={{ opacity: 0, scale: 0.9, height: 0 }}
                     animate={{ opacity: 1, scale: 1, height: 'auto' }}
                     exit={{ opacity: 0, scale: 0.9, height: 0 }}
-                    className="p-4 bg-white/10 rounded-2xl border border-pink-500/30 space-y-3"
+                    className="p-4 bg-white/10 rounded-2xl border border-amber-500/30 space-y-3"
                   >
                     <input
                       autoFocus
@@ -197,12 +197,12 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
                       placeholder="Your Galactic Name..."
                       value={name}
                       onChange={e => setName(e.target.value)}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-pink-500"
+                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-amber-500"
                     />
                     <div className="flex gap-2">
                       <button
                         onClick={handleSign}
-                        className="flex-1 bg-pink-500 text-white py-2 rounded-xl text-xs font-bold hover:bg-pink-600 transition-colors"
+                        className="flex-1 bg-amber-500 text-white py-2 rounded-xl text-xs font-bold hover:bg-amber-600 transition-colors"
                       >
                         CONFIRM
                       </button>
@@ -250,7 +250,7 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
                     </div>
                   </div>
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Heart size={14} className="text-pink-500 fill-pink-500" />
+                    <Heart size={14} className="text-amber-500 fill-amber-500" />
                   </div>
                 </motion.div>
               ))}
@@ -273,3 +273,4 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
     </motion.div>
   );
 }
+

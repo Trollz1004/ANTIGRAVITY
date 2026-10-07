@@ -97,7 +97,7 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 via-purple-900/20 to-black backdrop-blur-sm pointer-events-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-zinc-900 via-yellow-900/20 to-black backdrop-blur-sm pointer-events-auto"
     >
       <motion.div
         initial={{ scale: 0.9, y: 20 }}
@@ -106,10 +106,10 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
         className="w-full max-w-lg bg-white/5 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden shadow-2xl flex flex-col h-[600px]"
       >
         {/* Header */}
-        <div className="p-6 border-bottom border-white/5 bg-gradient-to-r from-pink-500/10 to-indigo-500/10 flex justify-between items-center">
+        <div className="p-6 border-bottom border-white/5 bg-gradient-to-r from-amber-500/10 to-indigo-500/10 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-white/5 rounded-xl">
-              <Sparkles className="text-pink-400" size={20} />
+              <Sparkles className="text-amber-400" size={20} />
             </div>
             <div>
               <h2 className="font-bold text-lg leading-none">
@@ -127,7 +127,7 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex flex-col items-end"
               >
-                <div className="text-[10px] text-pink-400 font-bold uppercase tracking-tighter">
+                <div className="text-[10px] text-amber-400 font-bold uppercase tracking-tighter">
                   Compatibility
                 </div>
                 <div className="text-xl font-black text-white leading-none">
@@ -174,7 +174,7 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
           {isLoading && (
             <div className="flex justify-start">
               <div className="bg-white/5 p-4 rounded-2xl rounded-tl-none border border-white/5">
-                <Loader2 className="animate-spin text-pink-400" size={18} />
+                <Loader2 className="animate-spin text-amber-400" size={18} />
               </div>
             </div>
           )}
@@ -189,12 +189,12 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSend()}
               placeholder="Ask the stars..."
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-pink-500/50 transition-colors pr-12"
+              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500/50 transition-colors pr-12"
             />
             <button
               onClick={handleSend}
               disabled={isLoading || !input.trim()}
-              className="absolute right-2 p-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white rounded-xl shadow-[0_0_10px_rgba(219,39,119,0.5)] disabled:opacity-50 transition-all active:scale-90"
+              className="absolute right-2 p-2 bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white rounded-xl shadow-[0_0_10px_rgba(219,39,119,0.5)] disabled:opacity-50 transition-all active:scale-90"
             >
               <Send size={18} />
             </button>
@@ -210,3 +210,4 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
     </motion.div>
   );
 }
+

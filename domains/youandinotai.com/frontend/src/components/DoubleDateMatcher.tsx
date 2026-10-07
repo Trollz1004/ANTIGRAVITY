@@ -48,8 +48,8 @@ function CoupleCard({
   couple: DoubleDateCouple | null;
 }) {
   return (
-    <div className="rounded-[24px] border border-slate-800 bg-slate-950/70 p-4">
-      <div className="text-xs uppercase tracking-[0.2em] text-slate-500">
+    <div className="rounded-[24px] border border-zinc-800 bg-zinc-950/70 p-4">
+      <div className="text-xs uppercase tracking-[0.2em] text-zinc-500">
         {label}
       </div>
       <div className="mt-3 space-y-3">
@@ -59,18 +59,18 @@ function CoupleCard({
               <img
                 src={member.photo_url || fallbackAvatar(member.display_name)}
                 alt={member.display_name}
-                className="h-12 w-12 rounded-2xl border border-slate-700 object-cover"
+                className="h-12 w-12 rounded-2xl border border-zinc-700 object-cover"
               />
               <div>
                 <div className="text-sm font-medium text-white">
                   {member.display_name}
                 </div>
-                <div className="text-xs text-slate-500">{couple.match_id}</div>
+                <div className="text-xs text-zinc-500">{couple.match_id}</div>
               </div>
             </div>
           ))
         ) : (
-          <div className="text-sm text-slate-500">
+          <div className="text-sm text-zinc-500">
             No couple data returned yet.
           </div>
         )}
@@ -180,9 +180,9 @@ export default function DoubleDateMatcher({
   );
 
   return (
-    <section className="mx-auto flex w-full max-w-6xl flex-col gap-6 rounded-[32px] border border-slate-800 bg-slate-950 p-5 text-slate-100 shadow-[0_35px_120px_rgba(2,6,23,0.55)] md:p-7">
-      <div className="flex flex-col gap-3 rounded-[26px] border border-fuchsia-900/50 bg-[radial-gradient(circle_at_top_right,_rgba(236,72,153,0.14),_transparent_36%),linear-gradient(180deg,rgba(15,23,42,0.96),rgba(2,6,23,0.96))] p-6">
-        <div className="text-xs font-semibold uppercase tracking-[0.3em] text-fuchsia-300">
+    <section className="mx-auto flex w-full max-w-6xl flex-col gap-6 rounded-[32px] border border-zinc-800 bg-zinc-950 p-5 text-zinc-100 shadow-[0_35px_120px_rgba(2,6,23,0.55)] md:p-7">
+      <div className="flex flex-col gap-3 rounded-[26px] border border-amber-900/50 bg-[radial-gradient(circle_at_top_right,_rgba(236,72,153,0.14),_transparent_36%),linear-gradient(180deg,rgba(15,23,42,0.96),rgba(2,6,23,0.96))] p-6">
+        <div className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-300">
           Double Dates
         </div>
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
@@ -190,12 +190,12 @@ export default function DoubleDateMatcher({
             <h2 className="text-3xl font-semibold text-white">
               Pair two couples before the meetup happens.
             </h2>
-            <p className="mt-2 max-w-3xl text-sm text-slate-400">
+            <p className="mt-2 max-w-3xl text-sm text-zinc-400">
               Propose a double date using two match IDs, review live proposals,
               and jump into a group-call handoff when both couples accept.
             </p>
           </div>
-          <div className="rounded-2xl border border-slate-800 bg-black/25 px-4 py-3 text-sm text-slate-400">
+          <div className="rounded-2xl border border-zinc-800 bg-black/25 px-4 py-3 text-sm text-zinc-400">
             Active sessions:{' '}
             <span className="font-semibold text-white">
               {activeSessions.length}
@@ -212,10 +212,10 @@ export default function DoubleDateMatcher({
 
       <form
         onSubmit={submitProposal}
-        className="grid gap-4 rounded-[28px] border border-slate-800 bg-slate-900/65 p-5 md:grid-cols-[1fr_1fr_auto]"
+        className="grid gap-4 rounded-[28px] border border-zinc-800 bg-zinc-900/65 p-5 md:grid-cols-[1fr_1fr_auto]"
       >
         <label className="flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-[0.2em] text-slate-500">
+          <span className="text-xs uppercase tracking-[0.2em] text-zinc-500">
             Your couple match ID
           </span>
           <input
@@ -227,12 +227,12 @@ export default function DoubleDateMatcher({
                 matchAId: event.target.value,
               }))
             }
-            className="rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-fuchsia-500"
+            className="rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-white outline-none transition focus:border-amber-500"
             placeholder="11111111-1111-1111-1111-111111111111"
           />
         </label>
         <label className="flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-[0.2em] text-slate-500">
+          <span className="text-xs uppercase tracking-[0.2em] text-zinc-500">
             Other couple match ID
           </span>
           <input
@@ -244,14 +244,14 @@ export default function DoubleDateMatcher({
                 matchBId: event.target.value,
               }))
             }
-            className="rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-fuchsia-500"
+            className="rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-white outline-none transition focus:border-amber-500"
             placeholder="22222222-2222-2222-2222-222222222222"
           />
         </label>
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-2xl bg-fuchsia-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-fuchsia-500 disabled:opacity-60"
+          className="rounded-2xl bg-amber-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-500 disabled:opacity-60"
         >
           {submitting ? 'Sending...' : 'Propose double date'}
         </button>
@@ -259,15 +259,15 @@ export default function DoubleDateMatcher({
 
       {loading ? (
         <div className="grid gap-4">
-          <div className="h-56 animate-pulse rounded-[28px] border border-slate-800 bg-slate-900/60" />
-          <div className="h-56 animate-pulse rounded-[28px] border border-slate-800 bg-slate-900/60" />
+          <div className="h-56 animate-pulse rounded-[28px] border border-zinc-800 bg-zinc-900/60" />
+          <div className="h-56 animate-pulse rounded-[28px] border border-zinc-800 bg-zinc-900/60" />
         </div>
       ) : sessions.length === 0 ? (
-        <div className="rounded-[28px] border border-dashed border-slate-800 px-5 py-12 text-center">
+        <div className="rounded-[28px] border border-dashed border-zinc-800 px-5 py-12 text-center">
           <div className="text-lg font-medium text-white">
             No proposals yet.
           </div>
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="mt-2 text-sm text-zinc-500">
             Once a couple proposes a double date, it will show up here with
             acceptance controls.
           </p>
@@ -282,18 +282,18 @@ export default function DoubleDateMatcher({
             return (
               <article
                 key={session.id}
-                className="rounded-[30px] border border-slate-800 bg-[linear-gradient(180deg,rgba(15,23,42,0.96),rgba(15,23,42,0.78))] p-5"
+                className="rounded-[30px] border border-zinc-800 bg-[linear-gradient(180deg,rgba(15,23,42,0.96),rgba(15,23,42,0.78))] p-5"
               >
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <div>
-                      <div className="text-xs uppercase tracking-[0.2em] text-slate-500">
+                      <div className="text-xs uppercase tracking-[0.2em] text-zinc-500">
                         Proposal {session.id.slice(0, 8)}
                       </div>
                       <h3 className="mt-1 text-xl font-semibold text-white">
                         Two-couple meetup coordination
                       </h3>
-                      <p className="mt-2 text-sm text-slate-500">
+                      <p className="mt-2 text-sm text-zinc-500">
                         Created {new Date(session.created_at).toLocaleString()}
                       </p>
                     </div>
@@ -309,7 +309,7 @@ export default function DoubleDateMatcher({
                         <button
                           type="button"
                           onClick={() => launchGroupVideo(session)}
-                          className="rounded-2xl bg-cyan-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-cyan-500"
+                          className="rounded-2xl bg-stone-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-stone-500"
                         >
                           Launch group video call
                         </button>
@@ -322,8 +322,8 @@ export default function DoubleDateMatcher({
                     <CoupleCard label="Couple B" couple={session.couple_b} />
                   </div>
 
-                  <div className="flex flex-col gap-3 border-t border-slate-800 pt-4 md:flex-row md:items-center md:justify-between">
-                    <div className="text-sm text-slate-400">
+                  <div className="flex flex-col gap-3 border-t border-zinc-800 pt-4 md:flex-row md:items-center md:justify-between">
+                    <div className="text-sm text-zinc-400">
                       Accepted match IDs:{' '}
                       {session.accepted_match_ids.length
                         ? session.accepted_match_ids.join(', ')
@@ -343,7 +343,7 @@ export default function DoubleDateMatcher({
                           type="button"
                           disabled={busy}
                           onClick={() => updateSession(session.id, 'decline')}
-                          className="rounded-2xl border border-slate-700 px-4 py-2.5 text-sm font-semibold text-slate-200 transition hover:border-slate-500 disabled:opacity-60"
+                          className="rounded-2xl border border-zinc-700 px-4 py-2.5 text-sm font-semibold text-zinc-200 transition hover:border-zinc-500 disabled:opacity-60"
                         >
                           Decline
                         </button>
@@ -359,3 +359,4 @@ export default function DoubleDateMatcher({
     </section>
   );
 }
+

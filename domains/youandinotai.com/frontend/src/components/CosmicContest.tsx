@@ -26,7 +26,7 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
         className="w-full max-w-4xl bg-zinc-900 border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
       >
         {/* Header */}
-        <div className="p-8 border-b border-white/5 bg-gradient-to-r from-yellow-500/10 via-pink-500/10 to-purple-500/10 flex justify-between items-center">
+        <div className="p-8 border-b border-white/5 bg-gradient-to-r from-yellow-500/10 via-amber-500/10 to-yellow-500/10 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-yellow-500/20 rounded-2xl">
               <Trophy className="text-yellow-400" size={32} />
@@ -65,11 +65,11 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
               </p>
             </div>
 
-            <div className="p-6 bg-gradient-to-b from-pink-500/20 to-transparent border border-pink-500/20 rounded-3xl relative overflow-hidden group">
+            <div className="p-6 bg-gradient-to-b from-amber-500/20 to-transparent border border-amber-500/20 rounded-3xl relative overflow-hidden group">
               <div className="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform">
                 <Heart size={120} />
               </div>
-              <div className="text-pink-400 font-black text-4xl mb-2">2ND</div>
+              <div className="text-amber-400 font-black text-4xl mb-2">2ND</div>
               <h3 className="font-bold text-lg mb-2">The Royal Deck</h3>
               <p className="text-xs text-gray-400 leading-relaxed">
                 Your design featured as the back of our exclusive "King & Queen
@@ -77,11 +77,11 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
               </p>
             </div>
 
-            <div className="p-6 bg-gradient-to-b from-cyan-500/20 to-transparent border border-cyan-500/20 rounded-3xl relative overflow-hidden group">
+            <div className="p-6 bg-gradient-to-b from-stone-500/20 to-transparent border border-stone-500/20 rounded-3xl relative overflow-hidden group">
               <div className="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform">
                 <ShieldAlert size={120} />
               </div>
-              <div className="text-cyan-400 font-black text-4xl mb-2">3RD</div>
+              <div className="text-stone-400 font-black text-4xl mb-2">3RD</div>
               <h3 className="font-bold text-lg mb-2">The Jules Blessing</h3>
               <p className="text-xs text-gray-400 leading-relaxed">
                 An "Air High Five" & "Air Hug" from Judge Jury Jules. Plus,
@@ -93,7 +93,7 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
           {/* Coming Soon Section */}
           <div className="space-y-6 text-center">
             <h3 className="text-xl font-bold flex items-center justify-center gap-2">
-              <Vote className="text-pink-500" />
+              <Vote className="text-amber-500" />
               The Contest is Coming Soon!
             </h3>
             <div className="p-8 bg-white/5 rounded-3xl border border-white/10">
@@ -132,7 +132,7 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
                     Air High Five
                   </div>
                   <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10 text-xs font-bold uppercase tracking-widest">
-                    <Ghost size={14} className="text-pink-400" />
+                    <Ghost size={14} className="text-amber-400" />
                     Air Hug
                   </div>
                 </div>
@@ -150,3 +150,4 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
     </motion.div>
   );
 }
+

@@ -18,13 +18,13 @@ interface EnhancedSafetyTipBannerProps {
 
 const VARIANT_STYLES = {
   preventive: {
-    bg: 'bg-blue-50',
-    border: 'border-blue-200',
-    text: 'text-blue-800',
+    bg: 'bg-stone-50',
+    border: 'border-stone-200',
+    text: 'text-stone-800',
     icon: Shield,
-    iconBg: 'bg-blue-100',
-    iconColor: 'text-blue-600',
-    borderColor: 'border-blue-500',
+    iconBg: 'bg-stone-100',
+    iconColor: 'text-stone-600',
+    borderColor: 'border-stone-500',
   },
   warning: {
     bg: 'bg-orange-50',
@@ -45,13 +45,13 @@ const VARIANT_STYLES = {
     borderColor: 'border-red-500',
   },
   educational: {
-    bg: 'bg-purple-50',
-    border: 'border-purple-200',
-    text: 'text-purple-800',
+    bg: 'bg-yellow-50',
+    border: 'border-yellow-200',
+    text: 'text-yellow-800',
     icon: Lightbulb,
-    iconBg: 'bg-purple-100',
-    iconColor: 'text-purple-600',
-    borderColor: 'border-purple-500',
+    iconBg: 'bg-yellow-100',
+    iconColor: 'text-yellow-600',
+    borderColor: 'border-yellow-500',
   },
 };
 
@@ -113,3 +113,4 @@ export function EnhancedSafetyTipBanner({
     </div>
   );
 }
+

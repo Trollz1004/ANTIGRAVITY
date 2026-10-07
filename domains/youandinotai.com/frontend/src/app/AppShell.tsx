@@ -55,7 +55,7 @@ export function AppShell() {
             <span className="km-heart-mark" aria-hidden>
               ♥
             </span>
-            <div className="text-xl font-semibold tracking-tight bg-gradient-to-r from-[#a78bfa] via-[#f0abfc] to-[#67e8f9] bg-clip-text text-transparent">
+            <div className="text-xl font-semibold tracking-tight bg-gradient-to-r from-[#facc15] via-[#f0abfc] to-[#67e8f9] bg-clip-text text-transparent">
               YouAndINotAI
             </div>
           </div>
@@ -107,7 +107,7 @@ export function AppShell() {
                 ♥
               </span>
               <div>
-                <div className="text-base font-semibold tracking-tight bg-gradient-to-r from-[#a78bfa] via-[#f0abfc] to-[#67e8f9] bg-clip-text text-transparent">
+                <div className="text-base font-semibold tracking-tight bg-gradient-to-r from-[#facc15] via-[#f0abfc] to-[#67e8f9] bg-clip-text text-transparent">
                   YouAndINotAI
                 </div>
               </div>
@@ -157,3 +157,4 @@ export function AppShell() {
     </div>
   );
 }
+

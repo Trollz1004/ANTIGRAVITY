@@ -167,7 +167,7 @@ export function ReportForm({
             onChange={e => setIncidentDate(e.target.value)}
             className="app-input w-full pl-10"
           />
-          <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Calendar className="absolute left-3 top-1/2 h-4 w-4 -tranzinc-y-1/2 text-gray-400" />
         </div>
       </div>
 
@@ -290,3 +290,4 @@ export function ReportForm({
     </form>
   );
 }
+

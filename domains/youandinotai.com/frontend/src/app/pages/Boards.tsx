@@ -41,11 +41,11 @@ interface CommentData {
 }
 
 const BOARD_COLORS: Record<string, string> = {
-  general: 'from-blue-500 to-cyan-500',
-  'dating-tips': 'from-pink-500 to-rose-500',
+  general: 'from-stone-500 to-stone-500',
+  'dating-tips': 'from-amber-500 to-rose-500',
   'success-stories': 'from-emerald-500 to-teal-500',
   events: 'from-orange-500 to-amber-500',
-  volunteering: 'from-purple-500 to-violet-500',
+  volunteering: 'from-yellow-500 to-violet-500',
 };
 
 export function Boards() {
@@ -152,7 +152,7 @@ export function Boards() {
         >
           <ArrowLeft
             size={18}
-            className="group-hover:-translate-x-0.5 transition-transform"
+            className="group-hover:-tranzinc-x-0.5 transition-transform"
           />{' '}
           Back to posts
         </button>
@@ -244,7 +244,7 @@ export function Boards() {
           />
           <button
             onClick={submitComment}
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] border-[3px] border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-all duration-200 hover:-translate-y-0.5"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] border-[3px] border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-all duration-200 hover:-tranzinc-y-0.5"
           >
             <Send size={18} className="text-[#ff4f00]" />
           </button>
@@ -285,7 +285,7 @@ export function Boards() {
         >
           <ArrowLeft
             size={18}
-            className="group-hover:-translate-x-0.5 transition-transform"
+            className="group-hover:-tranzinc-x-0.5 transition-transform"
           />{' '}
           All Boards
         </button>
@@ -344,9 +344,9 @@ export function Boards() {
               <button
                 key={post.id}
                 onClick={() => loadComments(post)}
-                className="w-full text-left glass rounded-2xl p-5 hover:bg-white/[0.04] hover:border-pink-500/10 transition-all duration-200 group"
+                className="w-full text-left glass rounded-2xl p-5 hover:bg-white/[0.04] hover:border-amber-500/10 transition-all duration-200 group"
               >
-                <h3 className="text-white font-bold group-hover:text-pink-300 transition-colors">
+                <h3 className="text-white font-bold group-hover:text-amber-300 transition-colors">
                   {post.title}
                 </h3>
                 <p className="text-gray-400 text-sm mt-1.5 line-clamp-2 leading-relaxed">
@@ -398,7 +398,7 @@ export function Boards() {
                   >
                     <Users size={20} className="text-white" />
                   </div>
-                  <h3 className="text-white font-bold text-lg group-hover:text-pink-300 transition-colors">
+                  <h3 className="text-white font-bold text-lg group-hover:text-amber-300 transition-colors">
                     {board.name}
                   </h3>
                 </div>
@@ -415,3 +415,4 @@ export function Boards() {
 }
 
 export default Boards;
+

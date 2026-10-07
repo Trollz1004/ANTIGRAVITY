@@ -48,7 +48,7 @@ export default function SafetyBadge({
 
       {botShieldVerified && (
         <div
-          className={`flex items-center bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-full font-bold ${sizeClasses[size]}`}
+          className={`flex items-center bg-stone-500/10 border border-stone-500/20 text-stone-400 rounded-full font-bold ${sizeClasses[size]}`}
         >
           <svg
             className={iconSizes[size]}
@@ -63,3 +63,4 @@ export default function SafetyBadge({
     </div>
   );
 }
+

@@ -26,13 +26,13 @@ const stats = [
     label: 'Waitlist',
     value: 'Live',
     growth: 'Email capture ready',
-    color: 'text-blue-500',
+    color: 'text-stone-500',
   },
   {
     label: 'Checkout',
     value: 'Square',
     growth: '4 launch links live',
-    color: 'text-pink-500',
+    color: 'text-amber-500',
   },
   {
     label: 'Verification',
@@ -85,11 +85,11 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
       <motion.div
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
-        className="relative flex max-h-full w-full max-w-5xl flex-col overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-900 shadow-2xl"
+        className="relative flex max-h-full w-full max-w-5xl flex-col overflow-hidden rounded-[2.5rem] border border-white/10 bg-zinc-900 shadow-2xl"
       >
-        <div className="flex items-center justify-between border-b border-white/5 bg-gradient-to-r from-blue-600/10 to-emerald-600/10 p-6 md:p-10">
+        <div className="flex items-center justify-between border-b border-white/5 bg-gradient-to-r from-stone-600/10 to-emerald-600/10 p-6 md:p-10">
           <div>
-            <div className="mb-1 flex items-center gap-2 text-blue-400">
+            <div className="mb-1 flex items-center gap-2 text-stone-400">
               <Zap size={20} className="animate-pulse" />
               <span className="text-[10px] font-black uppercase tracking-widest">
                 YouAndiNotAi Launch Board
@@ -115,7 +115,7 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
                 className="group relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 p-6"
               >
                 <div
-                  className={`absolute right-0 top-0 translate-x-2 -translate-y-2 p-4 opacity-10 transition-transform group-hover:translate-x-0 group-hover:translate-y-0 ${stat.color}`}
+                  className={`absolute right-0 top-0 tranzinc-x-2 -tranzinc-y-2 p-4 opacity-10 transition-transform group-hover:tranzinc-x-0 group-hover:tranzinc-y-0 ${stat.color}`}
                 >
                   <Rocket size={48} />
                 </div>
@@ -138,17 +138,17 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div className="space-y-4 lg:col-span-2">
               <h3 className="flex items-center gap-2 text-xl font-bold text-white">
-                <CalendarDays size={20} className="text-blue-400" />
+                <CalendarDays size={20} className="text-stone-400" />
                 Launch Systems
               </h3>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {systems.map(system => (
                   <div
                     key={system.title}
-                    className="rounded-3xl border border-white/5 bg-white/5 p-6 transition-all hover:border-blue-500/30"
+                    className="rounded-3xl border border-white/5 bg-white/5 p-6 transition-all hover:border-stone-500/30"
                   >
                     <div className="mb-4 flex items-start justify-between">
-                      <div className="rounded-xl bg-blue-500/10 p-2 text-blue-400">
+                      <div className="rounded-xl bg-stone-500/10 p-2 text-stone-400">
                         <system.icon size={20} />
                       </div>
                     </div>
@@ -163,7 +163,7 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
               </div>
             </div>
 
-            <div className="space-y-6 rounded-[2rem] border border-emerald-500/20 bg-gradient-to-br from-emerald-900/20 to-blue-900/20 p-8">
+            <div className="space-y-6 rounded-[2rem] border border-emerald-500/20 bg-gradient-to-br from-emerald-900/20 to-stone-900/20 p-8">
               <div className="flex items-center gap-3">
                 <Heart size={24} className="text-emerald-400" />
                 <h3 className="text-xl font-bold text-white">Launch Promise</h3>
@@ -210,3 +210,4 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
     </motion.div>
   );
 }
+

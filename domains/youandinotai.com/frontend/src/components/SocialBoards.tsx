@@ -146,7 +146,7 @@ export default function SocialBoards({
         <h2 className="text-xl font-bold text-white">Community Boards</h2>
         <button
           onClick={() => setComposing(v => !v)}
-          className="bg-purple-600 hover:bg-purple-500 text-white text-sm px-4 py-1.5 rounded-lg transition-colors"
+          className="bg-yellow-600 hover:bg-yellow-500 text-white text-sm px-4 py-1.5 rounded-lg transition-colors"
         >
           {composing ? 'Cancel' : '+ New Post'}
         </button>
@@ -169,7 +169,7 @@ export default function SocialBoards({
             onClick={() => setActiveSlug(b.slug)}
             className={`shrink-0 text-sm px-4 py-1.5 rounded-full border transition-colors ${
               activeSlug === b.slug
-                ? 'bg-purple-600 border-purple-500 text-white'
+                ? 'bg-yellow-600 border-yellow-500 text-white'
                 : 'border-gray-700 text-gray-400 hover:text-white hover:border-gray-500'
             }`}
           >
@@ -186,7 +186,7 @@ export default function SocialBoards({
             onChange={e => setNewPostTitle(e.target.value)}
             placeholder="Post title…"
             maxLength={200}
-            className="w-full bg-gray-800 text-white placeholder-gray-500 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full bg-gray-800 text-white placeholder-gray-500 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-yellow-500"
           />
           <textarea
             value={newPostBody}
@@ -194,7 +194,7 @@ export default function SocialBoards({
             placeholder="What's on your mind?"
             rows={4}
             maxLength={5000}
-            className="w-full bg-gray-800 text-white placeholder-gray-500 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+            className="w-full bg-gray-800 text-white placeholder-gray-500 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-yellow-500 resize-none"
           />
           <div className="flex justify-end gap-2">
             <button
@@ -206,7 +206,7 @@ export default function SocialBoards({
             <button
               onClick={submitPost}
               disabled={!newPostTitle.trim() || !newPostBody.trim()}
-              className="bg-purple-600 hover:bg-purple-500 disabled:opacity-40 text-white text-sm px-4 py-1.5 rounded-lg"
+              className="bg-yellow-600 hover:bg-yellow-500 disabled:opacity-40 text-white text-sm px-4 py-1.5 rounded-lg"
             >
               Post
             </button>
@@ -262,7 +262,7 @@ export default function SocialBoards({
                         key={c.id}
                         className="bg-gray-800 rounded-lg px-3 py-2"
                       >
-                        <span className="text-xs font-medium text-purple-400">
+                        <span className="text-xs font-medium text-yellow-400">
                           {c.author_name}
                         </span>
                         <p className="text-sm text-gray-300 mt-0.5">{c.body}</p>
@@ -282,7 +282,7 @@ export default function SocialBoards({
                       }
                       placeholder="Add a comment…"
                       maxLength={1000}
-                      className="flex-1 bg-gray-800 text-white placeholder-gray-500 rounded-lg px-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-purple-500"
+                      className="flex-1 bg-gray-800 text-white placeholder-gray-500 rounded-lg px-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-yellow-500"
                       onKeyDown={e => {
                         if (e.key === 'Enter')
                           submitComment(post.board_slug, post.id);
@@ -290,7 +290,7 @@ export default function SocialBoards({
                     />
                     <button
                       onClick={() => submitComment(post.board_slug, post.id)}
-                      className="bg-purple-600 hover:bg-purple-500 text-white text-sm px-3 py-1.5 rounded-lg"
+                      className="bg-yellow-600 hover:bg-yellow-500 text-white text-sm px-3 py-1.5 rounded-lg"
                     >
                       Reply
                     </button>
@@ -304,3 +304,4 @@ export default function SocialBoards({
     </div>
   );
 }
+

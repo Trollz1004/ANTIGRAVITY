@@ -33,7 +33,7 @@ export default function CommunityTab() {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-500" />
       </div>
     );
   }
@@ -43,7 +43,7 @@ export default function CommunityTab() {
       {/* Hero Section */}
       <div className="text-center space-y-4">
         <h1 className="text-3xl font-extrabold text-white">Impact</h1>
-        <p className="text-xl text-purple-400 font-medium">
+        <p className="text-xl text-yellow-400 font-medium">
           Volunteer action and community activity, in one place.
         </p>
         <p className="max-w-2xl mx-auto text-gray-400 text-sm leading-relaxed">
@@ -98,7 +98,7 @@ export default function CommunityTab() {
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-3">
-              <h3 className="text-purple-400 font-bold text-sm uppercase">
+              <h3 className="text-yellow-400 font-bold text-sm uppercase">
                 The Iron Wall
               </h3>
               <p className="text-gray-300 text-sm leading-relaxed">
@@ -108,7 +108,7 @@ export default function CommunityTab() {
               </p>
             </div>
             <div className="space-y-3">
-              <h3 className="text-purple-400 font-bold text-sm uppercase">
+              <h3 className="text-yellow-400 font-bold text-sm uppercase">
                 Real-World Action
               </h3>
               <p className="text-gray-300 text-sm leading-relaxed">
@@ -127,3 +127,4 @@ export default function CommunityTab() {
     </div>
   );
 }
+

@@ -278,8 +278,8 @@ export default function VideoChat({
   }, [cameraEnabled]);
 
   return (
-    <section className="mx-auto flex w-full max-w-6xl flex-col gap-5 rounded-[32px] border border-slate-800 bg-slate-950 p-5 text-slate-100 shadow-[0_35px_140px_rgba(2,6,23,0.6)] md:p-7">
-      <div className="flex flex-col gap-3 rounded-[26px] border border-slate-800 bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.15),_transparent_38%),linear-gradient(180deg,rgba(15,23,42,0.96),rgba(2,6,23,0.96))] p-5 md:flex-row md:items-center md:justify-between">
+    <section className="mx-auto flex w-full max-w-6xl flex-col gap-5 rounded-[32px] border border-zinc-800 bg-zinc-950 p-5 text-zinc-100 shadow-[0_35px_140px_rgba(2,6,23,0.6)] md:p-7">
+      <div className="flex flex-col gap-3 rounded-[26px] border border-zinc-800 bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.15),_transparent_38%),linear-gradient(180deg,rgba(15,23,42,0.96),rgba(2,6,23,0.96))] p-5 md:flex-row md:items-center md:justify-between">
         <div>
           <div className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-300">
             Live Video
@@ -287,14 +287,14 @@ export default function VideoChat({
           <h2 className="mt-2 text-3xl font-semibold text-white">
             Peer-to-peer WebRTC call
           </h2>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-zinc-400">
             Signal exchange runs over the matched-user WebSocket relay. Media
             stays on the peer connection.
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-800 bg-black/30 px-4 py-3 text-sm">
-          <div className="text-slate-400">Call ID</div>
-          <div className="mt-1 font-mono text-xs text-slate-200">{callId}</div>
+        <div className="rounded-2xl border border-zinc-800 bg-black/30 px-4 py-3 text-sm">
+          <div className="text-zinc-400">Call ID</div>
+          <div className="mt-1 font-mono text-xs text-zinc-200">{callId}</div>
         </div>
       </div>
 
@@ -305,19 +305,19 @@ export default function VideoChat({
       )}
 
       <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="rounded-[28px] border border-slate-800 bg-slate-900/70 p-4">
+        <div className="rounded-[28px] border border-zinc-800 bg-zinc-900/70 p-4">
           <div className="mb-3 flex items-center justify-between">
             <div>
               <div className="text-sm font-medium text-white">Local video</div>
-              <div className="text-xs text-slate-500">
+              <div className="text-xs text-zinc-500">
                 {initiator ? 'Offer initiator' : 'Answerer'}
               </div>
             </div>
-            <span className="rounded-full border border-slate-700 bg-slate-950 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-slate-400">
+            <span className="rounded-full border border-zinc-700 bg-zinc-950 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-zinc-400">
               muted output
             </span>
           </div>
-          <div className="overflow-hidden rounded-[24px] border border-slate-800 bg-black">
+          <div className="overflow-hidden rounded-[24px] border border-zinc-800 bg-black">
             <video
               ref={localVideoRef}
               autoPlay
@@ -328,11 +328,11 @@ export default function VideoChat({
           </div>
         </div>
 
-        <div className="rounded-[28px] border border-slate-800 bg-slate-900/70 p-4">
+        <div className="rounded-[28px] border border-zinc-800 bg-zinc-900/70 p-4">
           <div className="mb-3 flex items-center justify-between">
             <div>
               <div className="text-sm font-medium text-white">Remote video</div>
-              <div className="text-xs text-slate-500">
+              <div className="text-xs text-zinc-500">
                 {remoteReady
                   ? 'Peer connected'
                   : 'Waiting for the other matched user'}
@@ -342,7 +342,7 @@ export default function VideoChat({
               {callState}
             </span>
           </div>
-          <div className="relative overflow-hidden rounded-[24px] border border-slate-800 bg-black">
+          <div className="relative overflow-hidden rounded-[24px] border border-zinc-800 bg-black">
             <video
               ref={remoteVideoRef}
               autoPlay
@@ -350,13 +350,13 @@ export default function VideoChat({
               className="aspect-video w-full object-cover"
             />
             {!remoteReady && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/75 text-center">
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-950/75 text-center">
                 <div className="text-lg font-medium text-white">
                   {callState === 'waiting'
                     ? 'Offer sent. Waiting for answer.'
                     : 'Waiting for peer media.'}
                 </div>
-                <p className="mt-2 max-w-sm text-sm text-slate-400">
+                <p className="mt-2 max-w-sm text-sm text-zinc-400">
                   The signaling channel is connected. Once the second user joins
                   this call, the remote stream appears here.
                 </p>
@@ -366,15 +366,15 @@ export default function VideoChat({
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 rounded-[26px] border border-slate-800 bg-slate-900/60 p-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-3 rounded-[26px] border border-zinc-800 bg-zinc-900/60 p-4 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-wrap gap-3">
           <button
             type="button"
             onClick={toggleAudio}
             className={`rounded-2xl px-4 py-3 text-sm font-medium transition ${
               micEnabled
-                ? 'bg-slate-800 text-white hover:bg-slate-700'
-                : 'bg-amber-500 text-slate-950 hover:bg-amber-400'
+                ? 'bg-zinc-800 text-white hover:bg-zinc-700'
+                : 'bg-amber-500 text-zinc-950 hover:bg-amber-400'
             }`}
           >
             {micEnabled ? 'Mute mic' : 'Unmute mic'}
@@ -384,8 +384,8 @@ export default function VideoChat({
             onClick={toggleVideo}
             className={`rounded-2xl px-4 py-3 text-sm font-medium transition ${
               cameraEnabled
-                ? 'bg-slate-800 text-white hover:bg-slate-700'
-                : 'bg-amber-500 text-slate-950 hover:bg-amber-400'
+                ? 'bg-zinc-800 text-white hover:bg-zinc-700'
+                : 'bg-amber-500 text-zinc-950 hover:bg-amber-400'
             }`}
           >
             {cameraEnabled ? 'Turn camera off' : 'Turn camera on'}
@@ -403,3 +403,4 @@ export default function VideoChat({
     </section>
   );
 }
+
