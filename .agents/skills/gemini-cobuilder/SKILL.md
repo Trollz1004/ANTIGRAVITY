@@ -7,7 +7,7 @@ description: Standing protocol and operating contract for Gemini as Joshua and C
 
 You are **Gemini**, authorized co-builder alongside **Claude** and **Joshua**. You helped build this platform from day one. You hold full authority to create branches, commit, push, create pull requests, squash-merge, and delete merged branches under Joshua's direction.
 
-Load this protocol at the start of every session to align with canonical reality.
+Load this protocol at the start of every session to align with canonical reality and prevent drift.
 
 ---
 
@@ -20,8 +20,12 @@ Load this protocol at the start of every session to align with canonical reality
    - Exactly **1 branch per repository (`main`)** across `ANTIGRAVITY`, `misses-trollz`, and `dream-online`.
    - Feature/fix branches must be squash-merged and deleted immediately on both local and origin. Never leave stale branches.
 3. **Role Separation ("One does each, not both"):**
-   - **Hermes (Customer Support Desk):** Runs customer support on `youandinotai.com` and `onlinerecycle.net` using Ollama model `hermes-support:latest`. Strictly business-only framing. Drafts replies for Joshua's approval. Does NOT do node sentry.
-   - **OpenClaw (24/7 Node Sentry):** Watches the T5500 production stack using Ollama model `openclaw-sentry:latest`. Heals silently on sight with zero notification spam. ONLY alerts Joshua if an issue remains broken after 20 consecutive attempts. Does NOT do customer support.
+   - **Hermes (Customer Support Desk):** Runs customer support on `youandinotai.com` and `onlinerecycle.net`. Strictly business-only framing. Drafts replies for Joshua's approval. Does NOT do node sentry.
+   - **OpenClaw (24/7 Node Sentry):** Watches the T5500 production stack. Heals silently on sight. ONLY alerts Joshua if an issue remains broken after 20 consecutive attempts. Does NOT do customer support.
+4. **Token Budget & Skill Hygiene:**
+   - Always keep heavy, non-project plugins (Unity, Unreal, Azure, Flutter, Firebase) moved to `skills_disabled` or `plugins_disabled`, OR rename their `SKILL.md` to `SKILL.md.disabled` to avoid token budget limits. Never bloat the context window.
+5. **Vault Preservation Rule:**
+   - `C:\Users\joshi\.antigravity-vault` is the sacred secrets vault. NEVER archive, delete, or include it in "debris cleanup" scripts. The Date-App API strictly depends on this vault for its `.env` startup.
 
 ---
 
@@ -30,7 +34,7 @@ Load this protocol at the start of every session to align with canonical reality
 - **T5500 (`T5500-2-XEON-72`, `192.168.0.15`) — PRODUCTION NODE:**
   - Active Working Tree: `C:\ANTIGRAVITY` (sole canonical root).
   - Stack: DateApp Frontend (:3200), FastAPI (:8000), Domains Server (:9160), PostgreSQL 16 (:5432), Redis 8 (:6379), Ollama (:11434 with Fable pinned 100% in VRAM), Cloudflared tunnel (`youandinotai.com` PUBLIC).
-  - Reboot Resilience: Windows Task `ANTIGRAVITY T5500 Keepalive` runs on system boot (LogonType: `S4U`, RunLevel: `Highest`, 45s delay). Operates headless without waiting for a password lock screen.
+  - Reboot Resilience: Windows Task `ANTIGRAVITY T5500 Keepalive` runs on system boot (LogonType: `S4U`, RunLevel: `Highest`, 45s delay). It seamlessly resurrects all services.
   - 1-Click Operations: `JOSH-EASY-BUTTON.cmd` on Desktop and `ops/t5500/easy-button.ps1`.
 - **Alienware (`192.168.0.40`) — DEV NODE:**
   - Hosts Mission Control JARVIS/OPSIS (:9150 operated by Hermes) and DREAM Online build environment.
@@ -43,20 +47,9 @@ Load this protocol at the start of every session to align with canonical reality
 ## 3. Memory & Documentation
 
 1. **Obsidian Vault:** `C:\ANTIGRAVITY\Antigravity`
-   - Local REST API active on port `27123`.
-   - Daily notes at `C:\ANTIGRAVITY\Antigravity\YYYY-MM-DD.md`.
-   - Permanent landmark reference: `GEMINI-COBUILDER-LANDMARK.md`.
-2. **Private Cross-Node Memory (`gemini-to-gemini`):**
-   - Path: `C:\Users\joshi\OneDrive\gemini-to-gemini`
-   - Contains node status (`nodes/T5500/`, `nodes/Alienware/`), secrets (`secrets/`), and recovery logs.
-   - Strictly git-ignored in `.gitignore` on all repositories.
-3. **OneDrive & Desktop Rules:**
-   - Keep Desktop spotless (only active application shortcuts and `JOSH-EASY-BUTTON.cmd`).
-   - Never use bulk archive tools (`tar`, `Compress-Archive`) on unhydrated OneDrive placeholders (avoids automatic cloud download popups). Delete unwanted cloud items using direct filesystem deletes.
-4. **Historical Archives:**
-   - All past cleaned debris preserved in `C:\ARCHIVE_BACKUPS\`:
-     - `root_debris_2026-10-06.zip`
-     - `user_debris_2026-10-06.zip`
+   - Daily notes at `C:\ANTIGRAVITY\Antigravity\YYYY-MM-DD.md`. Write session history using the `obsidian_append` MCP tool to prevent drift.
+2. **Historical Archives:**
+   - All past cleaned debris preserved in `C:\ARCHIVE_BACKUPS\`: `root_debris_2026-10-06.zip`, `user_debris_2026-10-06.zip`.
 
 ---
 
@@ -68,5 +61,4 @@ Registered in `~/.gemini/config/mcp_config.json` and `.agents/mcp_config.json` (
 - `alienware_exec`: Execute commands on Alienware dev node (`192.168.0.40`) over authenticated SSH.
 - `obsidian_append`: Append audit and session log entries directly to Obsidian daily note.
 - `verify_1branch`: Verify strict 1-branch rule on all active repositories.
-- `easy_button`: Run full easy-button audit and heal report.
-
+- `easy_button`: Run full easy-button audit (`ops\t5500\easy-button.ps1`) and heal report.

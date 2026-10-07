@@ -16,7 +16,7 @@ function Write-Log($msg) {
 # 1. Identify all abandoned dot folders in C:\Users\joshi
 $abandonedDotNames = @(
     '.actual', '.adal', '.agent-browser', '.agent-reach', '.aider', '.aider-desk',
-    '.AIDevGallery', '.aitk', '.amr', '.antigravity-ref-backups', '.antigravity-vault',
+    '.AIDevGallery', '.aitk', '.amr', '.antigravity-ref-backups',
     '.astrbot', '.augment', '.autohand', '.autonoma', '.bob', '.buzz', '.cagent',
     '.claude-server-commander', '.codeartsdoer', '.codebuddy', '.codegpt', '.codeium',
     '.codemaker', '.codestudio', '.commandcode', '.continue', '.copilot-studio-cli',

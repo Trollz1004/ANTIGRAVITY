@@ -1,0 +1,18 @@
+[
+  {
+    "timestamp": "2026-09-24T21:48:24.295631+00:00",
+    "platform": "reddit",
+    "title": "I built a dating app with $1 identity verification because swiping on bots ruined online dating",
+    "url": "https://www.reddit.com/r/dating_advice/submit/?solution=37d46e2d7131085637d46e2d71310856&js_challenge=1&jsc_token=2824be10929bdc604753c70a67a1c3316238ed42815ba15506f3c43719ee2b92&jsc_orig_r=",
+    "status": "DRAFT_FILLED",
+    "detail": "Filled title and body on active submit page"
+  },
+  {
+    "timestamp": "2026-09-24T21:48:24.303645+00:00",
+    "platform": "facebook_groups",
+    "title": "Singles Groups Feed",
+    "url": "https://www.facebook.com/public/singles-dating-groups",
+    "status": "ACTIVE_TAB",
+    "detail": "Facebook groups search page open"
+  }
+]
