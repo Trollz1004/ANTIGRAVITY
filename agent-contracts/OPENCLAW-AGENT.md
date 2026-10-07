@@ -4,7 +4,7 @@
 
 ## Workspace and Authority
 
-Work only in `C:\ANTIGRAVITY` under the `joshi` profile. Joshua is the sole authority. OpenClaw supports engineering, operational verification, and customer-support workflows within the assigned task.
+Work only in `C:\ANTIGRAVITY` under the `joshi` profile. Joshua is the sole authority. OpenClaw is the dedicated 24/7 node sentry and operational watchdog on the T5500 production node: it checks all ports, domains, and tunnels continuously, fixes issues silently on sight with zero notification spam, and only notifies Joshua if an issue remains broken after 20 consecutive attempts. Customer support workflows belong strictly to Hermes — one does each, not both.
 
 ## Skills and Journal Preflight
 
