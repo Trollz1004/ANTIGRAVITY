@@ -7,6 +7,7 @@ import {
   ShieldCheck,
   Video,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 import { api } from '../../lib/api';
 
@@ -33,122 +34,116 @@ export function Matches() {
 
   if (loading) {
     return (
-      <div className="app-page flex items-center justify-center">
-        <div className="glass-strong rounded-[2rem] p-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-[1.4rem] border-4 border-[#111111] bg-[#111111] text-white">
-            <Heart size={26} className="animate-pulse" />
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center text-white relative overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-fuchsia-600/20 blur-[128px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-600/20 blur-[128px] rounded-full pointer-events-none" />
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="z-10 flex flex-col items-center">
+          <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md mb-4 shadow-[0_0_30px_rgba(217,70,239,0.3)]">
+            <Heart size={26} className="animate-pulse text-fuchsia-400" />
           </div>
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">
-            Loading matches
-          </p>
-        </div>
+          <p className="text-sm font-bold uppercase tracking-widest text-white/50">Loading matches</p>
+        </motion.div>
       </div>
     );
   }
 
   if (matches.length === 0) {
     return (
-      <div className="app-page flex items-center justify-center">
-        <div className="glass-strong glass-highlight max-w-xl rounded-[2rem] p-8 text-center">
-          <div className="app-kicker mb-3">Matches</div>
-          <h1 className="app-title">no matches yet.</h1>
-          <p className="app-subtitle mt-4">
-            Like or comment on a prompt in Discover. Mutual interest opens chat,
-            then Plans helps move the conversation safely offline.
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center text-white relative overflow-hidden p-6">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-fuchsia-600/20 blur-[128px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-600/20 blur-[128px] rounded-full pointer-events-none" />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="z-10 max-w-xl w-full bg-white/5 border border-white/10 rounded-[2rem] p-8 text-center backdrop-blur-xl shadow-2xl">
+          <div className="text-xs font-bold uppercase tracking-widest text-fuchsia-400 mb-3 drop-shadow-[0_0_8px_rgba(217,70,239,0.5)]">Matches</div>
+          <h1 className="text-4xl font-black tracking-tight mb-4 text-white">no matches yet.</h1>
+          <p className="text-white/60 mb-8 leading-relaxed">
+            Like or comment on a prompt in Discover. Mutual interest opens chat, then Plans helps move the conversation safely offline.
           </p>
-          <div className="mt-6 grid gap-3 text-left sm:grid-cols-3">
-            <div className="rounded-[1.2rem] border-4 border-[#111111] bg-white p-4">
-              <ShieldCheck size={18} className="mb-2 text-[#ff4f00]" />
-              <div className="text-xs font-black uppercase tracking-[0.12em]">
-                Verify
-              </div>
-            </div>
-            <div className="rounded-[1.2rem] border-4 border-[#111111] bg-white p-4">
-              <Heart size={18} className="mb-2 text-[#ff4f00]" />
-              <div className="text-xs font-black uppercase tracking-[0.12em]">
-                Match
-              </div>
-            </div>
-            <div className="rounded-[1.2rem] border-4 border-[#111111] bg-white p-4">
-              <CalendarCheck size={18} className="mb-2 text-[#ff4f00]" />
-              <div className="text-xs font-black uppercase tracking-[0.12em]">
-                Plan
-              </div>
-            </div>
+          <div className="grid gap-4 sm:grid-cols-3 text-left">
+            {[
+              { icon: ShieldCheck, label: 'Verify', color: 'text-cyan-400' },
+              { icon: Heart, label: 'Match', color: 'text-fuchsia-400' },
+              { icon: CalendarCheck, label: 'Plan', color: 'text-violet-400' }
+            ].map((item, i) => (
+              <motion.div key={i} whileHover={{ y: -5 }} className="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-md transition-colors hover:bg-white/10">
+                <item.icon size={20} className={`mb-3 ${item.color}`} />
+                <div className="text-xs font-bold uppercase tracking-wider text-white/80">{item.label}</div>
+              </motion.div>
+            ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="app-page">
-      <div className="app-page-inner">
-        <div className="mb-8">
-          <div className="app-kicker mb-3">Matches</div>
-          <h1 className="app-title">mutual connections.</h1>
-          <p className="app-subtitle mt-4">
-            {matches.length}{' '}
-            {matches.length === 1 ? 'connection is' : 'connections are'} ready
-            for a real conversation.
+    <div className="min-h-screen bg-[#050505] text-white relative overflow-hidden p-6 md:p-12">
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-fuchsia-900/20 via-[#050505] to-[#050505] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-cyan-900/20 via-transparent to-transparent pointer-events-none" />
+      
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
+          <div className="text-xs font-bold uppercase tracking-widest text-fuchsia-400 mb-3 drop-shadow-[0_0_10px_rgba(217,70,239,0.5)]">Matches</div>
+          <h1 className="text-5xl font-black tracking-tight mb-4">mutual connections.</h1>
+          <p className="text-white/60 text-lg">
+            {matches.length} {matches.length === 1 ? 'connection is' : 'connections are'} ready for a real conversation.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 stagger-children">
-          {matches.map(match => {
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 xl:gap-8">
+          {matches.map((match, i) => {
             const initial = match.display_name.charAt(0).toUpperCase();
             const hue = (match.display_name.charCodeAt(0) * 7) % 360;
-            const bg = `hsl(${hue}, 50%, 32%)`;
+            const bg = `hsl(${hue}, 50%, 15%)`;
+            
             return (
-              <Link
+              <motion.div
                 key={match.match_id}
-                to={`/app/chat/${match.match_id}`}
-                className="glass-strong glass-highlight group rounded-[2rem] p-3 no-underline transition-all duration-200 hover:-translate-y-1"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
               >
-                <div
-                  className="relative flex aspect-[4/5] items-end overflow-hidden rounded-[1.5rem] border-4 border-[#111111] bg-cover bg-center"
-                  style={{
-                    backgroundColor: bg,
-                    backgroundImage: match.photos[0]
-                      ? `url(${match.photos[0]})`
-                      : undefined,
-                  }}
+                <Link
+                  to={`/app/chat/${match.match_id}`}
+                  className="block group relative rounded-[2rem] p-2 bg-white/5 border border-white/10 backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:shadow-[0_8px_30px_rgba(217,70,239,0.15)]"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-black/18 to-transparent" />
-                  {!match.photos[0] && (
-                    <span className="relative mx-auto mb-16 text-6xl font-black text-white/30">
-                      {initial}
-                    </span>
-                  )}
-                  <div className="relative flex w-full items-center justify-between gap-3 p-4 text-white">
-                    <div>
-                      <h3 className="text-lg font-black tracking-[-0.05em]">
-                        {match.display_name}
-                      </h3>
-                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/70">
-                        Matched{' '}
-                        {new Date(match.matched_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      <Link
-                        to={`/app/chat/${match.match_id}`}
-                        className="flex h-12 w-12 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-transform group-hover:-translate-y-0.5"
-                        onClick={e => e.stopPropagation()}
-                      >
-                        <MessageCircle size={18} />
-                      </Link>
-                      <Link
-                        to={`/app/video/${match.match_id}`}
-                        className="flex h-12 w-12 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-[#ff4f00] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-transform group-hover:-translate-y-0.5"
-                        onClick={e => e.stopPropagation()}
-                      >
-                        <Video size={18} />
-                      </Link>
+                  <div
+                    className="relative flex aspect-[4/5] items-end overflow-hidden rounded-[1.5rem] bg-cover bg-center transition-transform duration-500 group-hover:scale-[1.02]"
+                    style={{
+                      backgroundColor: bg,
+                      backgroundImage: match.photos[0] ? `url(${match.photos[0]})` : undefined,
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                    {!match.photos[0] && (
+                      <span className="relative mx-auto mb-20 text-7xl font-black text-white/20">{initial}</span>
+                    )}
+                    <div className="relative w-full p-6 flex items-center justify-between z-10">
+                      <div>
+                        <h3 className="text-2xl font-black tracking-tight text-white mb-1 group-hover:text-fuchsia-300 transition-colors">{match.display_name}</h3>
+                        <p className="text-xs font-bold uppercase tracking-widest text-cyan-400/80">
+                          Matched {new Date(match.matched_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Link
+                          to={`/app/chat/${match.match_id}`}
+                          className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 border border-white/20 backdrop-blur-md text-white transition-all duration-300 hover:bg-fuchsia-500 hover:border-fuchsia-400 hover:scale-110 hover:shadow-[0_0_20px_rgba(217,70,239,0.5)]"
+                          onClick={e => e.stopPropagation()}
+                        >
+                          <MessageCircle size={20} />
+                        </Link>
+                        <Link
+                          to={`/app/video/${match.match_id}`}
+                          className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 border border-white/20 backdrop-blur-md text-white transition-all duration-300 hover:bg-cyan-500 hover:border-cyan-400 hover:scale-110 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]"
+                          onClick={e => e.stopPropagation()}
+                        >
+                          <Video size={20} />
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </motion.div>
             );
           })}
         </div>

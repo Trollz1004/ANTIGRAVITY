@@ -9,6 +9,8 @@ import {
   ShieldCheck,
   Users,
   X,
+  ChevronRight,
+  Sparkles
 } from 'lucide-react';
 import { useAuth } from './lib/auth';
 import { ThemeProvider } from './lib/ThemeContext';
@@ -37,22 +39,16 @@ const PLATFORM_CARDS = [
     icon: ShieldCheck,
     title: 'Identity First',
     body: 'Bot-Shield verification and account-bound checkout are built into launch. The platform is designed to make human validation the default.',
-    tone: 'bg-white',
-    iconTone: 'bg-[#111111] text-white',
   },
   {
     icon: Heart,
     title: 'AI as a Shield',
     body: 'AI stays behind the scenes for fraud pressure, safety signals, and launch operations. It does not fake your personality or your connection.',
-    tone: 'bg-[#111111] text-white',
-    iconTone: 'bg-[#a78bfa] text-white',
   },
   {
     icon: Users,
     title: 'Built for Real Life',
     body: 'Dating, meetups, and real-world follow-through live in one product flow. The goal is less swiping theater and more actual conversation off-screen.',
-    tone: 'bg-[#a78bfa] text-[#111111]',
-    iconTone: 'bg-white text-[#111111]',
   },
 ] as const;
 
@@ -62,83 +58,134 @@ const PRICING_PLANS = [
     price: '$1',
     desc: 'Human checkpoint before the badge is awarded.',
     link: SECURE_PLAN_LINKS.bot_shield,
-    tone: 'bg-[#111111] text-white',
+    popular: false,
   },
   {
     name: 'Founding Member',
     price: '$14.99/mo',
     desc: 'Locked founder rate with account-bound checkout.',
     link: SECURE_PLAN_LINKS.founding_member,
-    tone: 'bg-white',
+    popular: true,
   },
   {
     name: '3-Month Founder',
     price: '$39.99',
     desc: 'Short-term founder access with one upfront payment.',
     link: SECURE_PLAN_LINKS['3_month'],
-    tone: 'bg-[#efe8da]',
+    popular: false,
   },
   {
     name: '12-Month Founder',
     price: '$99.99',
     desc: 'Best value for launch-year access.',
     link: SECURE_PLAN_LINKS['12_month'],
-    tone: 'bg-[#efe8da]',
+    popular: false,
   },
   {
     name: 'Royalty Card',
     price: '$2,500',
     desc: 'Premium founder product. Current terms are provided privately at checkout.',
     link: SECURE_PLAN_LINKS.royalty,
-    tone: 'bg-[#a78bfa] text-white',
+    popular: false,
   },
 ] as const;
 
 function HeroBackground() {
   return (
-    <>
-      <div className="fixed inset-0 z-0 hero-bg" />
-      <div className="fixed inset-0 z-0 hero-bg-overlay" />
-    </>
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-slate-950">
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-600/20 blur-[120px]" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px]" />
+      <div className="absolute top-[40%] left-[60%] w-[30%] h-[30%] rounded-full bg-pink-600/10 blur-[100px]" />
+      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 mix-blend-overlay" />
+    </div>
   );
 }
 
-function BrutalButton({
+function GlassButton({
   href,
   children,
-  dark = false,
+  primary = false,
+  className = '',
+  onClick,
+  type = 'button',
+  disabled = false,
 }: {
-  href: string;
+  href?: string;
   children: React.ReactNode;
-  dark?: boolean;
+  primary?: boolean;
+  className?: string;
+  onClick?: () => void;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
 }) {
+  const baseClasses = `relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 backdrop-blur-md overflow-hidden ${className}`;
+  
+  const variantClasses = primary
+    ? 'bg-gradient-to-r from-purple-500/80 to-pink-500/80 text-white border border-white/20 shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:border-white/40'
+    : 'bg-white/5 text-white border border-white/10 hover:bg-white/10 hover:border-white/20 shadow-lg';
+
+  const inner = (
+    <>
+      <span className="relative z-10 flex items-center gap-2">{children}</span>
+      {primary && (
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-pink-500/0 via-white/20 to-purple-500/0 z-0"
+          initial={{ x: '-100%' }}
+          whileHover={{ x: '100%' }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
+        />
+      )}
+    </>
+  );
+
+  if (href) {
+    return (
+      <motion.a
+        href={href}
+        className={`${baseClasses} ${variantClasses}`}
+        whileHover={{ scale: 1.02, y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={onClick}
+      >
+        {inner}
+      </motion.a>
+    );
+  }
+
   return (
-    <a
-      href={href}
-      className={`inline-flex items-center justify-center border-4 border-[#111111] px-6 py-3 text-sm font-black uppercase tracking-[0.18em] no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 ${
-        dark ? 'bg-[#111111] text-white' : 'bg-[#a78bfa] text-white'
-      } shadow-[6px_6px_0_0_#111111]`}
+    <motion.button
+      type={type}
+      disabled={disabled}
+      className={`${baseClasses} ${variantClasses} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+      whileHover={disabled ? {} : { scale: 1.02, y: -2 }}
+      whileTap={disabled ? {} : { scale: 0.98 }}
+      onClick={onClick}
     >
-      {children}
-    </a>
+      {inner}
+    </motion.button>
   );
 }
 
 function SignupCTA() {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t-4 border-[#111111] bg-[#111111] px-3 py-2 text-white md:px-4 md:py-3">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 md:gap-3">
-        <span className="text-[10px] font-black uppercase tracking-[0.12em] text-[#f4efe7] md:text-sm md:tracking-[0.18em]">
-          Bot-Shield verification is live now.
-        </span>
-        <a
-          href={SECURE_PLAN_LINKS.bot_shield}
-          className="inline-flex items-center justify-center border-4 border-white bg-[#a78bfa] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-white no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[3px_3px_0_0_#ffffff] md:px-5 md:py-2 md:text-xs md:tracking-[0.18em] md:shadow-[4px_4px_0_0_#ffffff]"
-        >
+    <motion.div 
+      initial={{ y: 100 }}
+      animate={{ y: 0 }}
+      transition={{ type: 'spring', damping: 20 }}
+      className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-white/10 bg-slate-950/80 backdrop-blur-xl px-3 py-3 text-white md:px-4"
+    >
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="flex h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+          <span className="text-xs font-semibold tracking-wide text-slate-200 md:text-sm">
+            Bot-Shield verification is live now.
+          </span>
+        </div>
+        <GlassButton href={SECURE_PLAN_LINKS.bot_shield} primary className="!py-2 !px-4 !text-xs">
           Get Verified
-        </a>
+        </GlassButton>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -169,27 +216,28 @@ function BetaCodeEntry() {
 
   if (success) {
     return (
-      <div className="mt-4 inline-flex items-center gap-2 border-4 border-[#111111] bg-[#dff6e6] px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-[#111111] shadow-[4px_4px_0_0_#111111]">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="mt-6 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-5 py-3 text-sm font-semibold tracking-wide text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.1)]"
+      >
         <Check size={16} />
         Access granted
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="mt-6">
+    <div className="mt-8">
       {!showInput ? (
-        <button
-          onClick={() => setShowInput(true)}
-          className="border-4 border-[#111111] bg-white px-4 py-3 text-xs font-black uppercase tracking-[0.18em] text-[#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111]"
-        >
-          <span className="inline-flex items-center gap-2">
-            <KeyRound size={12} />
-            Beta Tester? Enter Access Code
-          </span>
-        </button>
+        <GlassButton onClick={() => setShowInput(true)}>
+          <KeyRound size={16} />
+          Beta Tester? Enter Access Code
+        </GlassButton>
       ) : (
-        <form
+        <motion.form
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
           onSubmit={handleSubmit}
           className="mx-auto flex max-w-lg flex-col gap-3 sm:flex-row"
         >
@@ -198,22 +246,22 @@ function BetaCodeEntry() {
             value={code}
             onChange={e => setCode(e.target.value)}
             placeholder="Access code"
-            className="min-w-0 flex-1 border-4 border-[#111111] bg-white px-4 py-3 text-sm font-bold uppercase tracking-[0.16em] text-[#111111] outline-none placeholder:text-[#7a746d]"
+            className="min-w-0 flex-1 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold tracking-wide text-white outline-none backdrop-blur-md transition-all focus:border-purple-500/50 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(168,85,247,0.2)] placeholder:text-slate-400"
             autoFocus
           />
-          <button
-            type="submit"
-            disabled={loading}
-            className="border-4 border-[#111111] bg-[#111111] px-5 py-3 text-sm font-black uppercase tracking-[0.18em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 disabled:opacity-60 shadow-[4px_4px_0_0_#111111]"
-          >
+          <GlassButton type="submit" disabled={loading} primary>
             {loading ? '...' : 'Enter'}
-          </button>
-        </form>
+          </GlassButton>
+        </motion.form>
       )}
       {error && (
-        <p className="mt-3 text-sm font-bold uppercase tracking-[0.16em] text-[#b42318]">
+        <motion.p 
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 1 }} 
+          className="mt-3 text-sm font-semibold tracking-wide text-red-400"
+        >
           {error}
-        </p>
+        </motion.p>
       )}
     </div>
   );
@@ -239,30 +287,44 @@ function VerificationSteps() {
   ];
 
   return (
-    <section
-      id="verification"
-      className="border-b-4 border-[#111111] bg-[#111111] px-4 py-10 text-white md:px-12 md:py-16"
-    >
+    <section id="verification" className="relative z-10 py-20 px-4 md:px-12 md:py-32">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff8b61] md:mb-8 md:text-xs md:tracking-[0.24em]">
-          Section 02 // Verification
-        </div>
-        <div className="grid gap-4 md:gap-6 md:grid-cols-3">
-          {steps.map(step => (
-            <div
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-12 md:mb-20 text-center"
+        >
+          <span className="inline-block rounded-full bg-purple-500/10 border border-purple-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-purple-400 mb-4">
+            Section 02 // Verification
+          </span>
+          <h2 className="text-4xl font-bold tracking-tight text-white md:text-6xl">
+            Prove you're human.
+          </h2>
+        </motion.div>
+        <div className="grid gap-6 md:gap-8 md:grid-cols-3">
+          {steps.map((step, i) => (
+            <motion.div
               key={step.num}
-              className="border-4 border-white bg-[#1a1a1a] p-4 shadow-[6px_6px_0_0_#a78bfa] md:p-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-md transition-colors hover:bg-white/10"
             >
-              <div className="mb-2 text-3xl font-black tracking-tighter text-[#ff8b61] md:mb-4 md:text-5xl">
+              <div className="absolute -right-4 -top-4 text-[100px] font-black leading-none text-white/[0.03] select-none">
                 {step.num}
               </div>
-              <h3 className="mb-2 text-xl font-black uppercase tracking-tight md:mb-3 md:text-2xl">
+              <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 text-purple-400 ring-1 ring-purple-500/30">
+                <ShieldCheck size={24} />
+              </div>
+              <h3 className="mb-3 text-2xl font-bold tracking-tight text-white">
                 {step.title}
               </h3>
-              <p className="text-xs font-medium leading-6 text-[#d7d3cc] md:text-sm md:leading-7">
+              <p className="text-sm leading-relaxed text-slate-300">
                 {step.desc}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -272,47 +334,87 @@ function VerificationSteps() {
 
 function PricingSection() {
   return (
-    <section
-      id="pricing"
-      className="border-b-4 border-[#111111] bg-[#f4efe7] px-4 py-10 md:px-12 md:py-16"
-    >
+    <section id="pricing" className="relative z-10 py-20 px-4 md:px-12 md:py-32">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#a78bfa] md:mb-4 md:text-xs md:tracking-[0.24em]">
-          Section 03 // Founder Pricing
-        </div>
-        <h2 className="mb-3 text-3xl font-black tracking-tighter text-[#111111] md:mb-4 md:text-7xl">
-          pick your lane.
-        </h2>
-        <p className="mb-6 max-w-3xl text-sm font-medium leading-7 text-[#38322b] md:mb-10 md:text-lg md:leading-8">
-          Every checkout route is account-bound. Public pricing is live, plain,
-          and tied to the actual launch flow.
-        </p>
-        <div className="grid gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-5">
-          {PRICING_PLANS.map(plan => (
-            <a
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-12 md:mb-20 text-center"
+        >
+          <span className="inline-block rounded-full bg-pink-500/10 border border-pink-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-pink-400 mb-4">
+            Section 03 // Founder Pricing
+          </span>
+          <h2 className="text-4xl font-bold tracking-tight text-white md:text-6xl mb-6">
+            Pick your lane.
+          </h2>
+          <p className="mx-auto max-w-2xl text-lg text-slate-300">
+            Every checkout route is account-bound. Public pricing is live, plain,
+            and tied to the actual launch flow.
+          </p>
+        </motion.div>
+        
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+          {PRICING_PLANS.map((plan, i) => (
+            <motion.a
               key={plan.name}
               href={plan.link}
-              className={`block border-4 border-[#111111] p-4 no-underline shadow-[6px_6px_0_0_#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 md:p-6 ${plan.tone}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              whileHover={{ y: -5 }}
+              className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-300 ${
+                plan.popular 
+                  ? 'border-purple-500/50 bg-purple-500/10 shadow-[0_0_30px_rgba(168,85,247,0.15)] hover:shadow-[0_0_40px_rgba(168,85,247,0.25)]' 
+                  : 'border-white/10 bg-white/5 hover:bg-white/10'
+              } backdrop-blur-md`}
             >
-              <div className="text-[10px] font-black uppercase tracking-[0.14em] opacity-70 md:text-xs md:tracking-[0.18em]">
-                Live
+              {plan.popular && (
+                <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 to-transparent pointer-events-none" />
+              )}
+              
+              <div className="relative z-10">
+                {plan.popular && (
+                  <span className="mb-4 inline-block rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-3 py-1 text-xs font-bold text-white shadow-[0_0_10px_rgba(168,85,247,0.4)]">
+                    Most Popular
+                  </span>
+                )}
+                {!plan.popular && (
+                  <span className="mb-4 inline-block rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-slate-300">
+                    Live
+                  </span>
+                )}
+                
+                <div className="mb-2 text-3xl font-bold text-white md:text-4xl">
+                  {plan.price}
+                </div>
+                <h3 className="mb-4 text-lg font-semibold text-slate-200">
+                  {plan.name}
+                </h3>
+                <p className="text-sm leading-relaxed text-slate-400">
+                  {plan.desc}
+                </p>
               </div>
-              <div className="mt-2 text-2xl font-black tracking-tighter md:mt-4 md:text-3xl">
-                {plan.price}
+              
+              <div className="relative z-10 mt-8">
+                <div className={`inline-flex items-center gap-2 text-sm font-semibold ${plan.popular ? 'text-purple-400' : 'text-slate-300'} group-hover:text-white transition-colors`}>
+                  Select Plan <ChevronRight size={16} className="transition-transform group-hover:translate-x-1" />
+                </div>
               </div>
-              <h3 className="mt-2 text-lg font-black uppercase tracking-tight md:mt-4 md:text-2xl">
-                {plan.name}
-              </h3>
-              <p className="mt-2 text-xs font-medium leading-6 opacity-80 md:mt-3 md:text-sm md:leading-7">
-                {plan.desc}
-              </p>
-            </a>
+            </motion.a>
           ))}
         </div>
-        <p className="mt-5 max-w-4xl text-xs font-bold uppercase tracking-[0.12em] text-[#5c554d] md:mt-8 md:text-sm md:tracking-[0.16em]">
+        
+        <motion.p 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-12 text-center text-xs font-medium tracking-wide text-slate-500"
+        >
           Securely processed by Square. Customer purchases buy platform access
           and founder products. They are commercial transactions, not gifts.
-        </p>
+        </motion.p>
       </div>
     </section>
   );
@@ -350,79 +452,91 @@ function WaitlistForm() {
   };
 
   return (
-    <section
-      id="join"
-      className="border-b-4 border-[#111111] bg-[#111111] px-4 py-10 text-white md:px-12 md:py-16"
-    >
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff8b61] md:mb-4 md:text-xs md:tracking-[0.24em]">
-          Section 05 // Join
-        </div>
-        <h2 className="text-3xl font-black tracking-tighter md:text-7xl">
-          join the list.
-        </h2>
-        <p className="mt-3 max-w-2xl text-sm font-medium leading-7 text-[#d7d3cc] md:mt-4 md:text-lg md:leading-8">
-          Get early access updates without the noise. The waitlist is simple by
-          design.
-        </p>
-        <div className="mt-5 border-4 border-white bg-[#f4efe7] p-4 text-[#111111] shadow-[8px_8px_0_0_#a78bfa] md:mt-8 md:p-6">
-          {submitted ? (
-            <div className="space-y-2 text-center md:space-y-3">
-              <div className="flex items-center justify-center gap-2 text-xs font-black uppercase tracking-[0.14em] md:gap-3 md:text-sm md:tracking-[0.18em]">
-                <Check size={16} />
-                You&apos;re on the list.
-              </div>
-              <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#5c554d] md:text-xs md:tracking-[0.16em]">
-                Launch updates will go to this address. Need help? Email
-                support.
-              </p>
-            </div>
-          ) : (
-            <form
-              action={WAITLIST_FORM_ACTION}
-              method="POST"
-              onSubmit={handleSubmit}
-              className="flex flex-col gap-3 md:flex-row md:gap-4"
-            >
-              <input
-                type="hidden"
-                name="_subject"
-                value="New YouAndINotAI waitlist signup"
-              />
-              <input type="hidden" name="_next" value={waitlistReturnUrl} />
-              <input type="hidden" name="_captcha" value="false" />
-              <input
-                type="hidden"
-                name="_autoresponse"
-                value="You're on the YouAndINotAI waitlist. No charge was made, and no account was created yet. We will send launch updates to this address."
-              />
-              <div className="relative min-w-0 flex-1">
-                <Mail
-                  size={16}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7a746d] md:left-4"
-                />
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="[EMAIL]"
-                  className="w-full border-4 border-[#111111] bg-white py-3 pl-10 pr-3 text-sm font-bold text-[#111111] outline-none placeholder:text-[#7a746d] md:py-4 md:pl-12 md:pr-4 md:text-base"
-                />
-              </div>
-              <button
-                type="submit"
-                className="border-4 border-[#111111] bg-[#a78bfa] px-6 py-3 text-xs font-black uppercase tracking-[0.14em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 disabled:opacity-60 shadow-[6px_6px_0_0_#111111] md:px-8 md:text-sm md:tracking-[0.18em]"
-              >
-                Join Now
-              </button>
-            </form>
-          )}
-          <p className="mt-3 text-[10px] font-black uppercase tracking-[0.14em] text-[#5c554d] md:mt-4 md:text-xs md:tracking-[0.18em]">
-            No spam. No bots. Just launch updates.
+    <section id="join" className="relative z-10 py-20 px-4 md:px-12 md:py-32">
+      <div className="mx-auto max-w-3xl text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <span className="inline-block rounded-full bg-blue-500/10 border border-blue-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-blue-400 mb-4">
+            Section 05 // Join
+          </span>
+          <h2 className="text-4xl font-bold tracking-tight text-white md:text-6xl mb-6">
+            Join the list.
+          </h2>
+          <p className="mx-auto max-w-2xl text-lg text-slate-300 mb-10">
+            Get early access updates without the noise. The waitlist is simple by design.
           </p>
-        </div>
+        </motion.div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 md:p-10 backdrop-blur-xl shadow-2xl"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-blue-500/5 pointer-events-none" />
+          
+          <div className="relative z-10">
+            {submitted ? (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="space-y-4"
+              >
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20 text-green-400">
+                  <Check size={32} />
+                </div>
+                <h3 className="text-2xl font-bold text-white">You're on the list.</h3>
+                <p className="text-slate-400">
+                  Launch updates will go to your address. Need help? Email support.
+                </p>
+              </motion.div>
+            ) : (
+              <form
+                action={WAITLIST_FORM_ACTION}
+                method="POST"
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-4 sm:flex-row"
+              >
+                <input
+                  type="hidden"
+                  name="_subject"
+                  value="New YouAndINotAI waitlist signup"
+                />
+                <input type="hidden" name="_next" value={waitlistReturnUrl} />
+                <input type="hidden" name="_captcha" value="false" />
+                <input
+                  type="hidden"
+                  name="_autoresponse"
+                  value="You're on the YouAndINotAI waitlist. No charge was made, and no account was created yet. We will send launch updates to this address."
+                />
+                <div className="relative min-w-0 flex-1">
+                  <Mail
+                    size={20}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="w-full rounded-full border border-white/20 bg-white/5 py-4 pl-12 pr-6 text-base font-medium text-white outline-none backdrop-blur-md transition-all focus:border-purple-500/50 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(168,85,247,0.2)] placeholder:text-slate-400"
+                  />
+                </div>
+                <GlassButton type="submit" primary className="!py-4 sm:w-auto w-full">
+                  Join Now
+                </GlassButton>
+              </form>
+            )}
+            <p className="mt-6 text-xs font-medium tracking-wide text-slate-500">
+              No spam. No bots. Just launch updates.
+            </p>
+          </div>
+        </motion.div>
         <BetaCodeEntry />
       </div>
     </section>
@@ -457,28 +571,28 @@ function LegalModal({ type, onClose }: { type: string; onClose: () => void }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 p-4"
+      className="fixed inset-0 z-[10000] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4"
       onClick={onClose}
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="max-h-[85vh] w-full max-w-3xl overflow-y-auto border-4 border-[#111111] bg-[#f4efe7] p-6 shadow-[10px_10px_0_0_#111111]"
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        className="max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-white/10 bg-slate-900/90 p-6 shadow-2xl backdrop-blur-xl md:p-10"
         onClick={e => e.stopPropagation()}
       >
-        <div className="mb-4 flex items-center justify-between gap-4">
-          <h3 className="text-2xl font-black uppercase tracking-tight text-[#111111]">
+        <div className="mb-6 flex items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <h3 className="text-2xl font-bold text-white">
             {content.title}
           </h3>
           <button
             onClick={onClose}
-            className="border-4 border-[#111111] bg-white p-2 text-[#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111]"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-slate-400 transition-colors hover:bg-white/10 hover:text-white"
           >
-            <X size={18} />
+            <X size={20} />
           </button>
         </div>
-        <div className="whitespace-pre-line text-sm font-medium leading-7 text-[#2c2924]">
+        <div className="whitespace-pre-line text-sm leading-relaxed text-slate-300">
           {content.body}
         </div>
       </motion.div>
@@ -492,36 +606,34 @@ function SuccessModal({ onClose }: { onClose: () => void }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/75 p-4"
+      className="fixed inset-0 z-[10001] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4"
       onClick={onClose}
     >
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.95 }}
-        className="w-full max-w-md border-4 border-[#111111] bg-[#dff6e6] p-8 text-center text-[#111111] shadow-[10px_10px_0_0_#111111]"
+        className="w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-slate-900/90 p-8 text-center shadow-2xl backdrop-blur-xl"
         onClick={e => e.stopPropagation()}
       >
-        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border-4 border-[#111111] bg-white">
-          <img
-            src="/bot-shield-logo.png"
-            alt="Bot-Shield Verified"
-            className="h-10 w-10 object-contain"
-          />
+        <div className="absolute inset-0 bg-gradient-to-b from-green-500/10 to-transparent pointer-events-none" />
+        <div className="relative z-10">
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-500/20 text-green-400 ring-4 ring-green-500/10 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
+            <ShieldCheck size={40} />
+          </div>
+          <h3 className="text-3xl font-bold text-white">
+            Verified.
+          </h3>
+          <p className="mt-4 text-slate-300 leading-relaxed">
+            Your verification is complete. Square handles receipt delivery for the
+            payment email used at checkout.
+          </p>
+          <div className="mt-8">
+            <GlassButton onClick={onClose} primary className="w-full">
+              Let's Go
+            </GlassButton>
+          </div>
         </div>
-        <h3 className="text-3xl font-black uppercase tracking-tight">
-          Bot-Shield Verified
-        </h3>
-        <p className="mt-3 text-sm font-medium leading-7">
-          Your verification is complete. Square handles receipt delivery for the
-          payment email used at checkout.
-        </p>
-        <button
-          onClick={onClose}
-          className="mt-6 border-4 border-[#111111] bg-[#111111] px-6 py-3 text-sm font-black uppercase tracking-[0.18em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[6px_6px_0_0_#111111]"
-        >
-          Let&apos;s Go
-        </button>
       </motion.div>
     </motion.div>
   );
@@ -531,62 +643,59 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
   const legalKeys = ['terms', 'privacy', 'age', 'refund'] as const;
 
   return (
-    <footer className="border-t-4 border-[#111111] bg-[#efe8da] px-4 py-6 text-[#111111] md:px-12 md:py-10">
-      <div className="mx-auto grid max-w-7xl gap-6 md:gap-8 md:grid-cols-[1.2fr_0.8fr_1fr]">
+    <footer className="relative z-10 border-t border-white/10 bg-slate-950/50 backdrop-blur-md px-4 py-12 md:px-12 md:py-20">
+      <div className="mx-auto grid max-w-7xl gap-10 md:gap-16 md:grid-cols-[1.5fr_1fr_1fr]">
         <div>
-          <div className="text-2xl font-black uppercase tracking-tighter md:text-3xl">
-            YOUANDINOTAI<span className="text-[#a78bfa]">.</span>
+          <div className="text-2xl font-black tracking-tight text-white md:text-3xl">
+            YouAndINotAI<span className="text-purple-500">.</span>
           </div>
-          <p className="mt-3 max-w-lg text-xs font-medium leading-6 text-[#3f3a34] md:mt-4 md:text-sm md:leading-7">
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">
             Human-first social platform for dating, meetups, and real-world
             connection. Bot-Shield and account-bound checkout are live now.
           </p>
         </div>
         <div>
-          <h4 className="text-xs font-black uppercase tracking-[0.14em] md:text-sm md:tracking-[0.18em]">
+          <h4 className="text-sm font-semibold tracking-wide text-white">
             Launch Links
           </h4>
-          <div className="mt-3 flex flex-col gap-2 text-xs font-bold uppercase tracking-[0.1em] md:mt-4 md:gap-3 md:text-sm md:tracking-[0.12em]">
-            <a href="#pricing" className="no-underline hover:text-[#a78bfa]">
+          <div className="mt-6 flex flex-col gap-4 text-sm font-medium text-slate-400">
+            <a href="#pricing" className="transition-colors hover:text-purple-400">
               Pricing
             </a>
-            <a href="#join" className="no-underline hover:text-[#a78bfa]">
+            <a href="#join" className="transition-colors hover:text-purple-400">
               Waitlist
             </a>
-            <a href="/support" className="no-underline hover:text-[#a78bfa]">
+            <a href="/support" className="transition-colors hover:text-purple-400">
               Support
             </a>
-            <a
-              href="mailto:[EMAIL]"
-              className="no-underline hover:text-[#a78bfa]"
-            >
+            <a href="mailto:contact@youandinotai.com" className="transition-colors hover:text-purple-400">
               Contact
             </a>
           </div>
         </div>
         <div>
-          <h4 className="text-xs font-black uppercase tracking-[0.14em] md:text-sm md:tracking-[0.18em]">
+          <h4 className="text-sm font-semibold tracking-wide text-white">
             Policy
           </h4>
-          <div className="mt-3 flex flex-wrap gap-2 md:mt-4 md:gap-3">
+          <div className="mt-6 flex flex-col gap-4 text-sm font-medium text-slate-400">
             {legalKeys.map(key => (
               <button
                 key={key}
                 onClick={() => onLegal(key)}
-                className="border-4 border-[#111111] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111] md:px-4 md:py-2 md:text-xs md:tracking-[0.16em]"
+                className="text-left transition-colors hover:text-purple-400"
               >
-                {LEGAL_CONTENT[key].title
-                  .replace(' Policy', '')
-                  .replace(' of Service', '')}
+                {LEGAL_CONTENT[key].title}
               </button>
             ))}
           </div>
         </div>
       </div>
-      <div className="mx-auto mt-5 max-w-7xl border-t-4 border-[#111111] pt-4 md:mt-8 md:pt-6">
-        <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#5c554d] md:text-xs md:tracking-[0.16em]">
-          © 2026 Trash Or Treasure Online Recycler LLC. YouAndiNotAi.com is a
-          for-profit platform.
+      <div className="mx-auto mt-16 max-w-7xl border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-xs text-slate-500">
+          © 2026 Trash Or Treasure Online Recycler LLC.
+        </p>
+        <p className="text-xs text-slate-500">
+          YouAndiNotAi.com is a for-profit platform.
         </p>
       </div>
     </footer>
@@ -597,70 +706,78 @@ export function PublicSupportPage() {
   const [legalModal, setLegalModal] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#111111] text-white">
+    <div className="min-h-screen bg-slate-950 text-slate-300 font-sans selection:bg-purple-500/30 selection:text-white">
       <HeroBackground />
       <div className="relative z-10 flex min-h-screen flex-col">
-        <main className="flex-1 px-6 py-12 md:px-12">
-          <div className="mx-auto max-w-5xl">
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-              <a
-                href="/"
-                className="border-4 border-white bg-[#111111] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#ffffff]"
-              >
+        <main className="flex-1 px-6 py-12 md:px-12 md:py-24">
+          <div className="mx-auto max-w-4xl">
+            <div className="mb-10 flex items-center justify-between">
+              <GlassButton href="/">
                 Back Home
-              </a>
-              <div className="border-4 border-white bg-[#a78bfa] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_0_#ffffff]">
-                Support
-              </div>
+              </GlassButton>
             </div>
 
-            <section className="border-4 border-white bg-[#f4efe7] p-8 text-[#111111] shadow-[10px_10px_0_0_#a78bfa]">
-              <p className="text-xs font-black uppercase tracking-[0.24em] text-[#a78bfa]">
-                YouAndiNotAi Support
-              </p>
-              <h1 className="mt-4 text-4xl font-black tracking-tighter md:text-6xl">
-                help for receipts, verification, privacy, and account issues.
+            <motion.section 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl md:p-12 shadow-2xl"
+            >
+              <div className="inline-block rounded-full bg-purple-500/10 border border-purple-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-purple-400 mb-6">
+                Support Center
+              </div>
+              <h1 className="text-4xl font-bold tracking-tight text-white md:text-6xl mb-6">
+                How can we help?
               </h1>
-              <p className="mt-4 max-w-3xl text-base font-medium leading-8 text-[#3f3a34]">
+              <p className="max-w-2xl text-lg leading-relaxed text-slate-300 mb-12">
                 Signed-in members can use the in-app support center to chat with
                 support, escalate a ticket, and review prior requests. If you
                 are not signed in yet, use the email contact below or create an
                 account first.
               </p>
 
-              <div className="mt-8 grid gap-4 md:grid-cols-2">
-                <div className="border-4 border-[#111111] bg-white p-5 shadow-[6px_6px_0_0_#111111]">
-                  <h2 className="text-xl font-black uppercase tracking-tight">
+              <div className="grid gap-6 md:grid-cols-2 mb-12">
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-6 transition-colors hover:bg-white/10">
+                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/20 text-purple-400">
+                    <ShieldCheck size={20} />
+                  </div>
+                  <h2 className="text-xl font-bold text-white mb-3">
                     Account Support
                   </h2>
-                  <p className="mt-3 text-sm font-medium leading-7 text-[#3f3a34]">
+                  <p className="text-sm leading-relaxed text-slate-400">
                     Use the support center after sign-in for payment receipts,
                     Bot-Shield verification, privacy requests, and account
                     troubleshooting.
                   </p>
                 </div>
-                <div className="border-4 border-[#111111] bg-white p-5 shadow-[6px_6px_0_0_#111111]">
-                  <h2 className="text-xl font-black uppercase tracking-tight">
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-6 transition-colors hover:bg-white/10">
+                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/20 text-blue-400">
+                    <Mail size={20} />
+                  </div>
+                  <h2 className="text-xl font-bold text-white mb-3">
                     Direct Contact
                   </h2>
-                  <p className="mt-3 text-sm font-medium leading-7 text-[#3f3a34]">
+                  <p className="text-sm leading-relaxed text-slate-400">
                     For general support or login issues, email the support inbox
                     and include the address tied to your account when possible.
                   </p>
                 </div>
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-3">
-                <BrutalButton href="/login" dark>
+              <div className="flex flex-wrap gap-4">
+                <GlassButton href="/login" primary>
                   Sign In
-                </BrutalButton>
-                <BrutalButton href="/register">Create Account</BrutalButton>
-                <BrutalButton href="mailto:contact@youandinotai.com?subject=YouAndiNotAi%20Support">
+                </GlassButton>
+                <GlassButton href="/register">
+                  Create Account
+                </GlassButton>
+                <GlassButton href="mailto:contact@youandinotai.com?subject=YouAndiNotAi%20Support">
                   Email Support
-                </BrutalButton>
-                <BrutalButton href="/app/support">Member Support</BrutalButton>
+                </GlassButton>
+                <GlassButton href="/app/support">
+                  Member Support
+                </GlassButton>
               </div>
-            </section>
+            </motion.section>
           </div>
         </main>
         <Footer onLegal={type => setLegalModal(type)} />
@@ -690,11 +807,13 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <div className="mx-auto min-h-screen max-w-[1600px] border-x-4 border-[#111111] bg-[#f4efe7] text-[#111111] pb-cta">
-        <nav className="sticky top-0 z-50 border-b-4 border-[#111111] bg-white px-4 py-3 md:px-12 md:py-5">
-          <div className="flex items-center justify-between gap-2 md:gap-4">
-            <div className="text-xl font-black uppercase tracking-tighter md:text-3xl">
-              YOUANDINOTAI<span className="text-[#a78bfa]">.</span>
+      <div className="relative min-h-screen bg-slate-950 text-slate-300 font-sans selection:bg-purple-500/30 selection:text-white pb-cta">
+        <HeroBackground />
+        
+        <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-slate-950/50 backdrop-blur-xl">
+          <div className="mx-auto max-w-7xl px-4 py-4 md:px-12 flex items-center justify-between">
+            <div className="text-xl font-black tracking-tight text-white md:text-2xl">
+              YouAndINotAI<span className="text-purple-500">.</span>
             </div>
 
             <div className="hidden items-center gap-8 md:flex">
@@ -702,234 +821,166 @@ export default function App() {
                 <a
                   key={item.label}
                   href={item.href}
-                  className="text-sm font-black uppercase tracking-[0.16em] no-underline hover:text-[#a78bfa]"
+                  className="text-sm font-semibold text-slate-300 transition-colors hover:text-white"
                 >
                   {item.label}
                 </a>
               ))}
             </div>
 
-            <div className="hidden md:flex items-center gap-3">
-              <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
-                Get Verified
-              </BrutalButton>
+            <div className="hidden md:flex items-center gap-4">
               <ThemeToggle />
+              <GlassButton href={SECURE_PLAN_LINKS.bot_shield} primary className="!py-2 !px-5">
+                Get Verified
+              </GlassButton>
             </div>
 
             <button
               onClick={() => setMenuOpen(value => !value)}
-              className="inline-flex items-center justify-center border-4 border-[#111111] bg-white p-2 md:hidden shadow-[4px_4px_0_0_#111111]"
+              className="inline-flex items-center justify-center rounded-full bg-white/5 p-2 text-white md:hidden hover:bg-white/10 transition-colors"
             >
               {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
 
-          {menuOpen && (
-            <div className="mt-5 flex flex-col gap-3 border-t-4 border-[#111111] pt-5 md:hidden">
-              {NAV_ITEMS.map(item => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="border-4 border-[#111111] bg-[#f4efe7] px-4 py-3 text-sm font-black uppercase tracking-[0.16em] no-underline shadow-[4px_4px_0_0_#111111]"
-                >
-                  {item.label}
-                </a>
-              ))}
-              <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
-                Get Verified
-              </BrutalButton>
-            </div>
-          )}
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden border-t border-white/10 bg-slate-900/95 backdrop-blur-xl md:hidden"
+              >
+                <div className="flex flex-col gap-2 p-4">
+                  {NAV_ITEMS.map(item => (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => setMenuOpen(false)}
+                      className="rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                  <div className="mt-4 pt-4 border-t border-white/10 flex justify-center">
+                    <GlassButton href={SECURE_PLAN_LINKS.bot_shield} primary className="w-full">
+                      Get Verified
+                    </GlassButton>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </nav>
 
-        <div className="border-b-4 border-[#111111] bg-[#111111] px-3 py-2 text-center text-[10px] font-black uppercase tracking-[0.16em] text-[#f4efe7] md:px-12 md:py-3 md:text-xs md:tracking-[0.2em]">
-          Founder pricing is live. Bot-Shield verification is live.
-        </div>
-
-        <section
-          id="about"
-          className="grid border-b-4 border-[#111111] md:min-h-[78vh] md:grid-cols-12"
-        >
-          <div className="border-b-4 border-[#111111] bg-white px-4 py-8 md:col-span-8 md:border-b-0 md:border-r-4 md:px-12 md:py-20">
-            <div className="max-w-4xl">
-              <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#a78bfa] md:mb-4 md:text-xs md:tracking-[0.24em]">
-                Section 01 // Human Only
-              </div>
-              <h1 className="text-4xl font-black lowercase leading-[0.9] tracking-tighter md:text-8xl xl:text-9xl">
-                real people.
-                <br />
-                zero bot noise.
-              </h1>
-              <p className="mt-5 max-w-3xl text-lg font-medium leading-snug text-[#2f2a24] md:mt-8 md:text-3xl md:leading-tight">
-                A human-first social platform for dating, meetups, and
-                real-world connection. AI is used to protect the experience, not
-                perform it.
-              </p>
-              <div className="mt-5 inline-block border-l-4 border-[#a78bfa] bg-[#fff6f1] px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#111111] md:mt-8 md:px-4 md:py-3 md:text-sm md:tracking-[0.16em]">
-                Bot-Shield verification and account-bound checkout are live now.
-              </div>
-
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:gap-4 md:mt-10">
-                <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
-                  Get Verified
-                </BrutalButton>
-                <BrutalButton href="#pricing">See Pricing</BrutalButton>
-              </div>
-            </div>
+        <div className="relative z-10 pt-20">
+          <div className="bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 border-b border-white/10 px-4 py-2 text-center">
+            <span className="text-xs font-semibold tracking-wide text-white md:text-sm">
+              Founder pricing is live. Bot-Shield verification is live.
+            </span>
           </div>
 
-          <div className="bg-[#a78bfa] px-4 py-8 text-[#111111] md:col-span-4 md:px-10 md:py-16">
-            <div className="space-y-4 md:space-y-6">
-              <div className="border-t-4 border-[#111111] pt-4 md:pt-6">
-                <h2 className="text-2xl font-black uppercase tracking-tighter md:text-4xl">
-                  Launch Status
-                </h2>
-                <p className="mt-2 text-base font-bold leading-7 md:mt-4 md:text-lg md:leading-8">
-                  The public surface is product-first: verification, pricing,
-                  support, and profile flow.
+          <section id="about" className="relative flex min-h-[85vh] items-center px-4 py-20 md:px-12">
+            <div className="mx-auto grid max-w-7xl gap-16 md:grid-cols-2 items-center">
+              <motion.div 
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, ease: 'easeOut' }}
+              >
+                <div className="inline-flex items-center gap-2 rounded-full bg-purple-500/10 border border-purple-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-purple-400 mb-6">
+                  <Sparkles size={14} /> Section 01 // Human Only
+                </div>
+                <h1 className="text-5xl font-bold leading-[1.1] tracking-tight text-white md:text-7xl lg:text-8xl">
+                  Real people.<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
+                    Zero bot noise.
+                  </span>
+                </h1>
+                <p className="mt-6 text-lg leading-relaxed text-slate-300 md:text-xl max-w-lg">
+                  A human-first social platform for dating, meetups, and
+                  real-world connection. AI is used to protect the experience, not
+                  perform it.
                 </p>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-2 md:gap-4">
-                <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
-                  <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#a78bfa] md:text-xs md:tracking-[0.18em]">
-                    Live
-                  </div>
-                  <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
-                    Bot-Shield Flow
-                  </div>
-                  <p className="mt-1 text-xs font-medium leading-6 text-[#38322b] md:mt-2 md:text-sm md:leading-7">
-                    Verification stays tied to the real checkout path instead of
-                    anonymous payment links.
-                  </p>
+                
+                <div className="mt-10 flex flex-col sm:flex-row gap-4">
+                  <GlassButton href={SECURE_PLAN_LINKS.bot_shield} primary className="!py-4 !px-8 text-base">
+                    Get Verified
+                  </GlassButton>
+                  <GlassButton href="#pricing" className="!py-4 !px-8 text-base">
+                    See Pricing
+                  </GlassButton>
                 </div>
-                <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
-                  <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#a78bfa] md:text-xs md:tracking-[0.18em]">
-                    Status
-                  </div>
-                  <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
-                    Live now
-                  </div>
-                  <p className="mt-1 text-xs font-medium leading-6 text-[#38322b] md:mt-2 md:text-sm md:leading-7">
-                    Founder pricing, support, and early-access capture are all
-                    wired into the same surface.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+              </motion.div>
 
-        <section
-          id="platform"
-          className="border-b-4 border-[#111111] bg-[#f4efe7] px-4 py-10 md:px-12 md:py-16"
-        >
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#a78bfa] md:mb-4 md:text-xs md:tracking-[0.24em]">
-              The Social
+              <motion.div 
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+                className="relative"
+              >
+                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-purple-500/30 to-pink-500/30 blur-2xl" />
+                <div className="relative rounded-3xl border border-white/10 bg-slate-900/50 p-8 backdrop-blur-xl shadow-2xl md:p-10">
+                  <h2 className="text-2xl font-bold text-white mb-4">Launch Status</h2>
+                  <p className="text-slate-300 mb-8">
+                    The public surface is product-first: verification, pricing,
+                    support, and profile flow.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    {[
+                      { title: 'Bot-Shield Flow', status: 'Live', color: 'from-green-500/20 to-emerald-500/20', text: 'text-green-400' },
+                      { title: 'Founder Checkouts', status: 'Live', color: 'from-purple-500/20 to-pink-500/20', text: 'text-purple-400' },
+                      { title: 'Profiles & Social', status: 'Waitlist', color: 'from-slate-500/20 to-slate-400/20', text: 'text-slate-400' },
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 p-4">
+                        <span className="font-semibold text-white">{item.title}</span>
+                        <span className={`rounded-full bg-gradient-to-r ${item.color} px-3 py-1 text-xs font-bold ${item.text}`}>
+                          {item.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
             </div>
-            <h2 className="mb-6 text-3xl font-black tracking-tighter md:mb-10 md:text-7xl">
-              how we connect.
-            </h2>
-            <div className="grid gap-4 md:gap-6 md:grid-cols-3">
-              {PLATFORM_CARDS.map(card => (
-                <div
-                  key={card.title}
-                  className={`border-4 border-[#111111] p-5 shadow-[6px_6px_0_0_#111111] md:p-8 ${card.tone}`}
-                >
-                  <div
-                    className={`mb-4 inline-flex h-10 w-10 items-center justify-center border-4 border-[#111111] md:mb-6 md:h-14 md:w-14 ${card.iconTone}`}
+          </section>
+
+          <section id="platform" className="relative z-10 py-20 px-4 md:px-12 md:py-32 bg-slate-950/50">
+            <div className="mx-auto max-w-7xl">
+               <div className="grid gap-8 md:grid-cols-3">
+                {PLATFORM_CARDS.map((card, i) => (
+                  <motion.div
+                    key={card.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-md transition-colors hover:bg-white/10"
                   >
-                    <card.icon size={20} />
-                  </div>
-                  <h3 className="text-xl font-black uppercase tracking-tight md:text-2xl">
-                    {card.title}
-                  </h3>
-                  <p className="mt-3 text-xs font-medium leading-6 opacity-85 md:mt-4 md:text-sm md:leading-7">
-                    {card.body}
-                  </p>
-                </div>
-              ))}
+                    <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-white shadow-inner">
+                      <card.icon size={28} />
+                    </div>
+                    <h3 className="mb-4 text-2xl font-bold text-white">{card.title}</h3>
+                    <p className="text-slate-400 leading-relaxed">{card.body}</p>
+                  </motion.div>
+                ))}
+               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <VerificationSteps />
-        <PricingSection />
-
-        <section
-          id="trust"
-          className="border-b-4 border-[#111111] bg-white px-4 py-10 md:px-12 md:py-16"
-        >
-          <div className="mx-auto max-w-5xl">
-            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#a78bfa] md:mb-4 md:text-xs md:tracking-[0.24em]">
-              Section 04 // Trust
-            </div>
-            <h2 className="text-3xl font-black tracking-tighter md:text-7xl">
-              clean business.
-            </h2>
-            <div className="mt-6 grid gap-4 md:mt-10 md:gap-8 md:grid-cols-2">
-              <div className="border-4 border-[#111111] bg-[#f4efe7] p-4 shadow-[6px_6px_0_0_#111111] md:p-6">
-                <p className="text-sm font-medium leading-7 text-[#2f2a24] md:text-lg md:leading-8">
-                  This is a product. It has to stand on quality, trust, and real
-                  human value. Checkout buys platform access, verification, and
-                  support.
-                </p>
-              </div>
-              <div className="border-4 border-[#111111] bg-[#111111] p-4 text-white shadow-[6px_6px_0_0_#a78bfa] md:p-6">
-                <p className="text-sm font-medium leading-7 text-[#d7d3cc] md:text-lg md:leading-8">
-                  Customer purchases are commercial transactions for platform
-                  value delivered. No non-product sales claim is attached to
-                  membership or verification checkout.
-                </p>
-              </div>
-            </div>
-            <div className="mt-6 border-4 border-[#111111] bg-[#a78bfa] px-4 py-5 text-center text-lg font-black italic tracking-tight text-white shadow-[8px_8px_0_0_#111111] md:mt-10 md:px-6 md:py-8 md:text-2xl">
-              &quot;The Silent Founder would thank you, but he stays
-              silent.&quot;
-            </div>
-          </div>
-        </section>
-
-        <WaitlistForm />
-
-        <section className="border-b-4 border-[#111111] bg-white px-4 py-10 text-center md:px-12 md:py-16">
-          <div className="mx-auto max-w-xl">
-            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#a78bfa] md:mb-4 md:text-xs md:tracking-[0.24em]">
-              Section 06 // Share
-            </div>
-            <h2 className="text-3xl font-black tracking-tighter md:text-6xl">
-              share the platform.
-            </h2>
-            <p className="mt-3 text-sm font-medium leading-7 text-[#3f3a34] md:mt-4 md:text-lg md:leading-8">
-              Scan to visit or pass it to someone who is tired of fake profiles
-              and low-trust noise.
-            </p>
-            <div className="mx-auto mt-5 inline-block border-4 border-[#111111] bg-[#f4efe7] p-3 shadow-[8px_8px_0_0_#111111] md:mt-8 md:p-4">
-              <img
-                src="/qrcode.png"
-                alt="Scan to visit youandinotai.com"
-                width={160}
-                height={160}
-                className="mx-auto h-auto max-w-[160px] bg-white md:max-w-[220px]"
-              />
-            </div>
-          </div>
-        </section>
+          <VerificationSteps />
+          <PricingSection />
+          <WaitlistForm />
+        </div>
 
         <Footer onLegal={type => setLegalModal(type)} />
         <SignupCTA />
-
-        <AnimatePresence>
-          {legalModal && (
-            <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />
-          )}
-          {showSuccess && (
-            <SuccessModal onClose={() => setShowSuccess(false)} />
-          )}
-        </AnimatePresence>
       </div>
+
+      <AnimatePresence>
+        {showSuccess && <SuccessModal onClose={() => setShowSuccess(false)} />}
+        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
+      </AnimatePresence>
     </ThemeProvider>
   );
 }
