@@ -798,7 +798,21 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
+    // Affiliate Tracking Capture
     const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+    if (ref) {
+      localStorage.setItem('antigravity_partner_id', ref.toLowerCase());
+    } else {
+      // Fallback for vanity paths (e.g. youandinotai.com/mkbhd)
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      const reservedRoutes = ['login', 'register', 'app', 'pricing', 'about', 'platform'];
+      if (pathParts.length === 1 && !reservedRoutes.includes(pathParts[0].toLowerCase())) {
+        localStorage.setItem('antigravity_partner_id', pathParts[0].toLowerCase());
+      }
+    }
+
+    // Success Status Check
     if (params.get('status') === 'success' || params.get('transactionId')) {
       setShowSuccess(true);
       window.history.replaceState({}, document.title, window.location.pathname);
