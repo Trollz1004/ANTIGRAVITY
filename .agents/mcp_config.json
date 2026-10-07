@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "gemini-node-mcp": {
+      "command": "node",
+      "args": [
+        "C:\\ANTIGRAVITY\\ops\\mcp\\gemini-node-mcp\\index.js"
+      ],
+      "env": {}
+    }
+  }
+}

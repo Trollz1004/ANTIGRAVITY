@@ -1,0 +1,18 @@
+{
+  "name": "gemini-node-mcp",
+  "version": "1.0.0",
+  "description": "Standing Gemini Co-Builder MCP server for node status, self-healing, cross-node execution, and Obsidian memory logging.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "mcp",
+    "gemini",
+    "antigravity",
+    "t5500",
+    "alienware"
+  ],
+  "author": "Joshua & Gemini Co-Builders",
+  "license": "ISC"
+}
