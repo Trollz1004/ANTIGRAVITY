@@ -133,7 +133,7 @@ async function handleToolCall(name, args) {
 
     case 'easy_button': {
       try {
-        const cmd = `powershell.exe -NoProfile -ExecutionPolicy Bypass -File "${EASY_BUTTON_SCRIPT}"`;
+        const cmd = `powershell.exe -NoProfile -ExecutionPolicy Bypass -File "${EASY_BUTTON_SCRIPT}" -NoPause`;
         const output = execSync(cmd, { encoding: 'utf8', timeout: 60000 });
         return output.trim();
       } catch (err) {

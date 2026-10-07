@@ -1,4 +1,7 @@
 # JOSH'S EASY BUTTON - 1-Click Verification & Healing for T5500 Production Node
+param(
+    [switch]$NoPause
+)
 
 try {
     $Host.UI.RawUI.WindowTitle = "JOSH'S EASY BUTTON -- T5500 PRODUCTION"
@@ -88,7 +91,7 @@ Write-Host "  - http://127.0.0.1:3200             [LOCAL FRONTEND]" -ForegroundC
 Write-Host "  - http://127.0.0.1:8000/docs        [FASTAPI SWAGGER DOCS]" -ForegroundColor Gray
 Write-Host "  - http://127.0.0.1:9160             [ORIGIN STATIC DOMAINS]" -ForegroundColor Gray
 
-Write-Host "`nAll good! Window will stay open so you can see status." -ForegroundColor Gray
-if ($Host.Name -notmatch "ServerRemoteHost") {
+if (-not $NoPause -and $Host.Name -notmatch "ServerRemoteHost") {
+    Write-Host "`nAll good! Window will stay open so you can see status." -ForegroundColor Gray
     pause
 }
