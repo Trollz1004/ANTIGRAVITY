@@ -247,6 +247,16 @@ $Stages = @(
            }
            Start-Process -FilePath $Cloudflared -ArgumentList @('tunnel', '--config', $CfConfig, '--no-autoupdate', '--logfile', (Join-Path $Repo 'logs\cloudflared-t5500.log'), '--loglevel', 'info', 'run') -WindowStyle Hidden
            Log '  started cloudflared tunnel'
+       } },
+
+    @{ Key = 'hermes'; Name = 'Hermes customer support desk'; Settle = 30; Needs = @('ollama', 'api')
+       Probe = {
+           $p = Get-CimInstance Win32_Process -Filter "CommandLine LIKE '%hermes-support.ps1%'" -ErrorAction SilentlyContinue
+           return ($p -ne $null -and @($p).Count -ge 1)
+       }
+       Heal  = {
+           Start-Process -FilePath powershell -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-File', (Join-Path $Dir 'hermes-support.ps1')) -WindowStyle Hidden
+           Log '  started Hermes customer support harness'
        } }
 )
 
