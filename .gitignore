@@ -303,3 +303,9 @@ ops/t5500/TRIGGERS.jsonl
 
 # Private Claude<->Joshua drop box (lives in OneDrive); never copy it in
 claude-to-claude/
+*claude-to-claude*
+
+# Private Gemini Co-Builder memory lane (lives in OneDrive); never copy it in
+gemini-to-gemini/
+*gemini-to-gemini*
+gemini-to-gemini.md
