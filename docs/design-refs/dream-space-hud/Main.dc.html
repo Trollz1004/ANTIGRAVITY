@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DREAM Space design system sheet</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#0A0B0D;font-family:"IBM Plex Sans",system-ui,sans-serif;color:#F4F1EA}
+a{color:#FFD21E}a:hover{color:#E6B800}
+@keyframes drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-60px,-30px,0)}}
+@keyframes glint{0%,100%{opacity:.35}50%{opacity:1}}
+.sky{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.stars{position:absolute;inset:-80px;background-image:radial-gradient(1px 1px at 12% 18%,#F4F1EA 60%,transparent 61%),radial-gradient(1px 1px at 33% 72%,#F4F1EA 60%,transparent 61%),radial-gradient(1.5px 1.5px at 57% 31%,#F4F1EA 60%,transparent 61%),radial-gradient(1px 1px at 78% 64%,#F4F1EA 60%,transparent 61%),radial-gradient(1px 1px at 88% 12%,#F4F1EA 60%,transparent 61%),radial-gradient(1px 1px at 45% 88%,#F4F1EA 60%,transparent 61%),radial-gradient(1.5px 1.5px at 21% 48%,#F4F1EA 60%,transparent 61%),radial-gradient(1px 1px at 66% 9%,#F4F1EA 60%,transparent 61%);opacity:.5;animation:drift 90s linear infinite alternate}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(244,241,234,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(244,241,234,.045) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at 50% 20%,#000 30%,transparent 75%)}
+.glint{position:absolute;width:6px;height:6px;border-radius:50%;background:#FFD21E;box-shadow:0 0 18px 4px rgba(255,210,30,.55);animation:glint 4.5s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.stars,.glint{animation:none}}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 2080px; box-sizing: border-box; overflow: hidden; background: #0A0B0D">
+<div class="sky"><div class="stars"></div><div class="grid"></div><div class="glint" style="left: 1180px; top: 150px"></div><div class="glint" style="left: 310px; top: 980px; animation-delay: 2s"></div></div>
+<div style="position: relative; display: flex; flex-direction: column; gap: 56px; padding: 72px 96px; box-sizing: border-box; width: 1440px">
+
+<header style="display: flex; align-items: center; justify-content: space-between; padding: 18px 28px; border: 1px solid #3A3F45; border-radius: 14px; background: rgba(10,11,13,.72); backdrop-filter: blur(12px)">
+<div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.08em">DREAM</div>
+<nav style="display: flex; gap: 32px; font-size: 16px">
+<a href="#palette" style="color: #F4F1EA; text-decoration: none; padding-bottom: 6px; border-bottom: 2px solid #FFD21E">Palette</a>
+<a href="#type" style="color: #9DA3AA; text-decoration: none">Type</a>
+<a href="#motion" style="color: #9DA3AA; text-decoration: none">Motion</a>
+<a href="#parts" style="color: #9DA3AA; text-decoration: none">Parts</a>
+</nav>
+<a href="#parts" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; background: #FFD21E; color: #0A0B0D; font-weight: 600; border-radius: 10px; text-decoration: none">Needs you</a>
+</header>
+
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 72px; line-height: 1.02; letter-spacing: -0.02em">DREAM Space</h1>
+<p style="margin: 0; max-width: 820px; font-size: 20px; line-height: 1.5; color: #C9CBCE">The one system for the engine's HUD, Mission Control and the screen savers. Black does the work, white speaks, grey supports, and one vibrant yellow marks the thing you can act on or must look at now. Everything reacts; nothing flashes.</p>
+</section>
+
+<section id="palette" style="display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 32px">Palette</h2>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 12px; background: #0A0B0D; border: 1px solid #3A3F45"></div><div style="font-weight: 600">Ink</div><div style="font-size: 14px; color: #9DA3AA">#0A0B0D, the ground</div></div>
+<div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 12px; background: #F4F1EA"></div><div style="font-weight: 600">Porcelain</div><div style="font-size: 14px; color: #9DA3AA">#F4F1EA, text and light, 18:1</div></div>
+<div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 12px; background: #C9CBCE"></div><div style="font-weight: 600">Fog</div><div style="font-size: 14px; color: #9DA3AA">#C9CBCE, body text, 12:1</div></div>
+<div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 12px; background: #9DA3AA"></div><div style="font-weight: 600">Slate</div><div style="font-size: 14px; color: #9DA3AA">#9DA3AA, captions, 7:1</div></div>
+<div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 12px; background: #3A3F45"></div><div style="font-weight: 600">Hull</div><div style="font-size: 14px; color: #9DA3AA">#3A3F45, borders and panels, never text</div></div>
+<div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 12px; background: #FFD21E; box-shadow: 0 0 32px rgba(255,210,30,.35)"></div><div style="font-weight: 600">Signal yellow</div><div style="font-size: 14px; color: #9DA3AA">#FFD21E, the one accent, 14:1 on ink; hover #E6B800; dim #7A6A1E</div></div>
+</div>
+<p style="margin: 0; font-size: 16px; color: #C9CBCE">No purple. No brown-red. No gradient washes. Status colours stay small: green #58D68D, amber #F5B041, red #FF6B6B, grey #6E757C, and yellow is never a status; yellow is "needs you".</p>
+</section>
+
+<section id="type" style="display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 32px">Type</h2>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 28px; border: 1px solid #3A3F45; border-radius: 14px; background: rgba(10,11,13,.6)">
+<div style="font-size: 14px; color: #9DA3AA">Display, Space Grotesk 700</div>
+<div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 56px; line-height: 1.05; letter-spacing: -0.02em">Nightfall comes</div>
+<div style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 32px; line-height: 1.15">Storage Runner, Market Runner</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 28px; border: 1px solid #3A3F45; border-radius: 14px; background: rgba(10,11,13,.6)">
+<div style="font-size: 14px; color: #9DA3AA">Text, IBM Plex Sans 400 to 600</div>
+<div style="font-size: 20px; line-height: 1.5">Body at 20 px for Joshua's eyes, never under 16 px on a screen he reads.</div>
+<div style="font-size: 16px; line-height: 1.5; color: #C9CBCE">Secondary at 16 px in Fog. Captions at 14 px in Slate, used sparingly.</div>
+<div style="font-size: 14px; color: #9DA3AA">Scale: 14, 16, 20, 24, 32, 40, 56, 72. Line height 1.5 for text, 1.05 for display.</div>
+</div>
+</div>
+</section>
+
+<section id="motion" style="display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 32px">Motion and the background</h2>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<div style="padding: 24px; border: 1px solid #3A3F45; border-radius: 14px; background: rgba(10,11,13,.6); display: flex; flex-direction: column; gap: 8px"><div style="font-weight: 600">Durations</div><div style="color: #C9CBCE; font-size: 16px; line-height: 1.5">120 ms for a press, 240 ms for a reveal, 480 ms for a scene change. Easing out for arrivals, in-out for moves.</div></div>
+<div style="padding: 24px; border: 1px solid #3A3F45; border-radius: 14px; background: rgba(10,11,13,.6); display: flex; flex-direction: column; gap: 8px"><div style="font-weight: 600">The background</div><div style="color: #C9CBCE; font-size: 16px; line-height: 1.5">A slow starfield with parallax on mouse and scroll, a faint grid that breathes, a rare yellow glint. Under 2 percent CPU, paused when the tab is hidden.</div></div>
+<div style="padding: 24px; border: 1px solid #3A3F45; border-radius: 14px; background: rgba(10,11,13,.6); display: flex; flex-direction: column; gap: 8px"><div style="font-weight: 600">Reactive, not restless</div><div style="color: #C9CBCE; font-size: 16px; line-height: 1.5">Cards lift on hover, headers underline the active section, hero lines rise in a stagger. Reduced motion turns every animation into a fade. No motion blur, ever.</div></div>
+</div>
+</section>
+
+<section id="parts" style="display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 32px">Parts</h2>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<div style="padding: 24px; border: 1px solid #3A3F45; border-radius: 14px; background: rgba(10,11,13,.6); display: flex; flex-direction: column; gap: 14px">
+<div style="font-weight: 600">Buttons</div>
+<a href="#parts" style="display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 22px; background: #FFD21E; color: #0A0B0D; font-weight: 600; border-radius: 10px; text-decoration: none">Primary, needs you</a>
+<a href="#parts" style="display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 22px; border: 1px solid #9DA3AA; color: #F4F1EA; font-weight: 600; border-radius: 10px; text-decoration: none">Secondary</a>
+<a href="#parts" style="display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 22px; color: #9DA3AA; text-decoration: none">Quiet</a>
+</div>
+<div style="padding: 24px; border: 1px solid #3A3F45; border-radius: 14px; background: rgba(10,11,13,.6); display: flex; flex-direction: column; gap: 14px">
+<div style="font-weight: 600">Status pills</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<span style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; border: 1px solid #3A3F45; font-size: 14px"><span style="width: 10px; height: 10px; border-radius: 50%; background: #58D68D"></span>Green, 02:40</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; border: 1px solid #3A3F45; font-size: 14px"><span style="width: 10px; height: 10px; border-radius: 50%; background: #F5B041"></span>Amber, 7 days</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; border: 1px solid #3A3F45; font-size: 14px"><span style="width: 10px; height: 10px; border-radius: 50%; background: #FF6B6B"></span>Red, healed</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; border: 1px solid #FFD21E; color: #FFD21E; font-size: 14px"><span style="width: 10px; height: 10px; border-radius: 50%; background: #FFD21E"></span>Needs you</span>
+</div>
+<div style="font-size: 14px; color: #9DA3AA">Every light carries its time. A stale green is a bug.</div>
+</div>
+<div style="padding: 24px; border: 1px solid #3A3F45; border-radius: 14px; background: rgba(10,11,13,.6); display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 0 0 1px rgba(255,210,30,.0)">
+<div style="font-weight: 600">Card and prompt band</div>
+<div style="padding: 18px; border: 1px solid #3A3F45; border-left: 3px solid #FFD21E; border-radius: 10px; background: #0A0B0D; display: flex; flex-direction: column; gap: 6px">
+<div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px">Stage 1, combat parity</div>
+<div style="font-size: 16px; color: #C9CBCE">On screen, not accepted. Waits on Gemini.</div>
+</div>
+<div style="padding: 12px 16px; border-radius: 10px; background: rgba(244,241,234,.06); font-size: 16px; line-height: 1.5; text-align: center">READY<br>Stamina 100/100, HP 100/100</div>
+</div>
+</div>
+</section>
+
+<section style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px">Rules</h2>
+<ul style="margin: 0; padding-left: 20px; font-size: 16px; line-height: 1.6; color: #C9CBCE">
+<li>Yellow means one thing: the thing you can act on or must look at now.</li>
+<li>Text meets 4.5 to 1 on the ground; 3 to 1 at 24 px and up.</li>
+<li>Hit areas are 44 px or larger. Focus is visible. Real buttons and links.</li>
+<li>Icons are inline stroke drawings, never emoji.</li>
+<li>Our own styles only. Nothing copied, traced or named from anyone else's work.</li>
+</ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px">Where it goes</h2>
+<ul style="margin: 0; padding-left: 20px; font-size: 16px; line-height: 1.6; color: #C9CBCE">
+<li>DREAM Engine's HUD, settings and the combo registry.</li>
+<li>Mission Control's tabs, lights and the voice log.</li>
+<li>The DREAM Space screen saver for streams.</li>
+<li>Built as code by OpenCode under docs/design-system in the game repo.</li>
+</ul>
+</div>
+</section>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
