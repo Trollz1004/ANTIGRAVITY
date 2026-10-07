@@ -30,7 +30,7 @@ Why this rule exists: on 2026-10-04 Misses Trollz passed every score while what 
 - Other old boxes (OptiPlex 9020, i7k, Chromebook, Mini ASUS) stay OFF by ruling.
 - **Domains:** youandinotai.com is live behind the Cloudflare tunnel. onlinerecycle.net, dream-online.net and untilnokidinneed.com have a healthy origin and wait on nameservers. The AI store domain is undecided: do not renew it and do not build on it.
 - **Business Hermes:** a separate Hermes profile (not OPSIS) runs onlinerecycle.net, the date app and customer support on the Ollama models `joshlcoleman/fable` and `joshlcoleman/cfo` only, with health checks that fix on sight.
-- **Editors and lanes:** each node gets the Antigravity editor (VS Code-based) with Claude as a signed-in extension (never an API key), Codex for code changes and Gemini for chat. Hermes runs in the terminal as JARVIS/OPSIS. The build prompt for OPSIS and Gemini's updated instructions are in `ops/handoffs/OPSIS-MISSION-AGENT-OS-2026-10-05.md` and `ops/handoffs/GEMINI-SPARK-INSTRUCTIONS-2026-10-05.md`.
+- **Editors and lanes:** each node gets the Antigravity editor (VS Code-based) with Claude as a signed-in extension (never an API key), with Gemini and Claude as co-builders and pair-programmers with full code, create, push, merge, and delete authority alongside Joshua. Hermes runs in the terminal as JARVIS/OPSIS. The build prompt for OPSIS and Gemini's updated instructions are in `ops/handoffs/OPSIS-MISSION-AGENT-OS-2026-10-05.md` and `ops/handoffs/GEMINI-SPARK-INSTRUCTIONS-2026-10-05.md`.
 - **Never** introduce an `ANTHROPIC_API_KEY`. Official Claude is login/OAuth only.
 
 ## T5500 deployed, self-healing, and public only once it is pushed (Joshua, 2026-10-05)
@@ -39,7 +39,7 @@ Joshua's standing preference, not a one-time task. These lines are part of what 
 
 - **100 percent deployed on the T5500.** The full stack runs in production on the T5500 — every domain, its DNS, and every port it serves. Nobody calls the stack up while a piece of it runs only on the dev node or only in a terminal someone left open.
 - **It survives power loss and restarts.** Every service, port and DNS binding comes back by itself after a reboot or a power cut, with no hand-start. If it needs a human to come back, it is not deployed.
-- **Hermes watches and fixes, silently.** The health-check cron on Hermes checks the T5500, fixes what it finds, and logs the heal. It does **not** notify Joshua. A notification means Hermes could not fix it.
+- **Hermes watches and fixes, silently.** The health-check cron on Hermes (using Ollama model `joshlcoleman/Fable`) checks the T5500 24/7, fixes what it finds, and logs the heal. It does **not** notify Joshua for routine power surges, tunnel drops, or restarts. A notification is sent ONLY if 20 consecutive attempts fail to clear an issue.
 - **Written here means it was working.** Anything this repo records as live on the T5500 was deployed and validated before it was written down. Do not record intent as state.
 - **Screenshots on every domain are mandatory.** Each domain gets its own screenshot from the real URL, shown to Joshua before anything is called done. A screenshot of one domain never covers another.
 - **A local port is not public.** A domain served from a local port, with no Cloudflare DNS and no tunnel, is invisible to everyone outside the LAN. Front-facing HTML reaches the public only after it is pushed to GitHub and lands on Cloudflare. Until then it is a local preview, and reporting it as live is the same as a 200 OK.
@@ -82,7 +82,9 @@ Do not treat a historical document as current merely because it has a confident 
 
 Work only from `C:\ANTIGRAVITY`. Every change must be scoped, tested, and evidenced. Never sweep-stage concurrent work. Never force-push.
 
-Workers may prepare a branch, patch, bundle, or review artifact. **Only the judge lane may push, merge, or delete branches**, unless Joshua directly performs or explicitly authorizes that action. If the judge is unavailable, mark the lane **BLOCKED**; do not self-promote a draft into a landed change.
+Workers may prepare a branch, patch, bundle, or review artifact. **Gemini and Claude are authorized co-builders with Joshua**: they have full authority to create branches, push, open/merge pull requests, and delete merged branches under Joshua's direction. If an autonomous worker or external lane without direct co-builder standing is operating, it remains gated by the judge lane.
+
+**Standing Rule: 1 branch per repository (`main`)**. Every repository (`ANTIGRAVITY`, `dream-online`, `misses-trollz`) maintains exactly one branch: `main`. Feature and judge branches merge to `main` and are deleted immediately on local and origin. Never leave stale branches.
 
 ## Execution Boundary
 

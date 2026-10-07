@@ -289,7 +289,7 @@ function Invoke-Stage($s) {
         $n = 1 + [int]$script:Fails[$key]; $script:Fails[$key] = $n
         $script:Up[$key] = $false; $script:Result[$key] = 'DOWN'
         Log ('[' + $name + '] still DOWN after heal (consecutive pass ' + $n + ')')
-        if ($n -eq 3 -or ($n -gt 3 -and $n % 30 -eq 0)) { Add-Trigger $key $n }
+        if ($n -ge 20 -and $n % 20 -eq 0) { Add-Trigger $key $n }
     }
 }
 

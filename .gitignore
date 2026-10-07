@@ -127,6 +127,8 @@ ANTIGRAVITY/
 hermes-workspace/
 .paperclip-laptop/
 .paperclip-local/
+misses-trollz/
+claude-obsidian/
 
 # llama.cpp prebuilt binaries (240MB+ CUDA runtime) — downloaded, not source
 tools/llama.cpp/
@@ -298,3 +300,6 @@ ops/heartbeat/backup-node.json
 ops/heartbeat/backup-node.log
 ops/t5500/status.json
 ops/t5500/TRIGGERS.jsonl
+
+# Private Claude<->Joshua drop box (lives in OneDrive); never copy it in
+claude-to-claude/
