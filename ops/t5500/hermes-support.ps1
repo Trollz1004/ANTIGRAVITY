@@ -18,9 +18,14 @@ $ModelName  = 'joshlcoleman/Fable:latest'
 New-Item -ItemType Directory -Force -Path ([IO.Path]::GetDirectoryName($LogFile)) | Out-Null
 New-Item -ItemType Directory -Force -Path $InboxDir | Out-Null
 
-$created = $false
-$mutex = New-Object System.Threading.Mutex($true, 'Global\ANTIGRAVITY-Hermes-Support', [ref]$created)
-if (-not $created) { exit 0 }
+$created = $true
+try {
+    $mutex = New-Object System.Threading.Mutex($true, 'Local\ANTIGRAVITY-Hermes-Support', [ref]$created)
+    if (-not $created) { exit 0 }
+} catch {
+    $running = Get-CimInstance Win32_Process -Filter "CommandLine LIKE '%hermes-support.ps1%'" -ErrorAction SilentlyContinue | Where-Object { $_.ProcessId -ne $PID }
+    if ($running) { exit 0 }
+}
 
 function Log([string]$msg) {
     $line = '[{0}] {1}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $msg

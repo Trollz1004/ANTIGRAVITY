@@ -37,9 +37,14 @@ New-Item -ItemType Directory -Force -Path ([IO.Path]::GetDirectoryName($LogFile)
 New-Item -ItemType Directory -Force -Path $Dir | Out-Null
 
 # One keep-alive at a time; a second copy (task relaunch, manual run) exits quietly.
-$created = $false
-$mutex = New-Object System.Threading.Mutex($true, 'Global\ANTIGRAVITY-T5500-Keepalive', [ref]$created)
-if (-not $created) { exit 0 }
+$created = $true
+try {
+    $mutex = New-Object System.Threading.Mutex($true, 'Local\ANTIGRAVITY-T5500-Keepalive', [ref]$created)
+    if (-not $created) { exit 0 }
+} catch {
+    $running = Get-CimInstance Win32_Process -Filter "CommandLine LIKE '%keepalive.ps1%'" -ErrorAction SilentlyContinue | Where-Object { $_.ProcessId -ne $PID }
+    if ($running) { exit 0 }
+}
 
 function Log([string]$msg) {
     $line = '[{0}] {1}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $msg
