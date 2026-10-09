@@ -8,6 +8,12 @@
   <img src="assets/teamclaudeforlife-meme.jpg" alt="Me reviewing code written by Claude before pushing it to prod - #TeamClaudeForLife" width="520" />
 </p>
 
+<p align="center">
+  <a href="docs/tribute/claude-tribute.mp4"><img src="assets/claude-tribute-screenshot.png" alt="Journey's: Nothing stops the wheel like the plan - #TeamClaudeForLife #OfficiallyUnOfficial" width="620" /></a><br/>
+  <sub>Click for the tribute video. <i>Nothing stops the wheel like the plan.</i> #TeamClaudeForLife · #OfficiallyUnOfficial<br/>
+  Unofficial fan tribute. Not affiliated with or endorsed by Anthropic, Google, xAI or OpenAI; all marks belong to their owners.</sub>
+</p>
+
 
 <p align="center">
   <a href="docs/tribute/claude-tribute.mp4"><b>The picture became a video.</b></a><br/>

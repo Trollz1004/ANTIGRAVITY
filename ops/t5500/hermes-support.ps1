@@ -3,10 +3,18 @@
 # Uses Ollama model joshlcoleman/Fable:latest.
 # Does NOT do node sentry or health checking (that is OpenClaw's role).
 
-param([switch]$Once)
+# -Console: visible HERMES window (opened at logon by agent-windows.ps1); echoes the log.
+param([switch]$Once, [switch]$Console)
+if ($Console) { try { $Host.UI.RawUI.WindowTitle = 'HERMES - customer support'; Clear-Host } catch {} }
 
 $ErrorActionPreference = 'Continue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+# Headless + UTF-8 (Opus in Antigravity IDE, 2026-10-09): no audio/video device, no CP437 mojibake, edge TTS only.
+$env:SDL_AUDIODRIVER = 'dummy'; $env:SDL_VIDEODRIVER = 'dummy'
+$env:PYTHONIOENCODING = 'utf-8'; $env:PYTHONUTF8 = '1'; $env:HERMES_TTS_BACKEND = 'edge'
+try { [Console]::OutputEncoding = [Text.Encoding]::UTF8; $OutputEncoding = [Text.Encoding]::UTF8 } catch {}
+$HostTag = 't5500-2-xeon-72-ram-3070-8gb-gpu-ram/192.168.0.15'
 
 $Repo       = 'C:\ANTIGRAVITY'
 $LogFile    = Join-Path $Repo 'logs\hermes-support.log'
@@ -17,6 +25,8 @@ $ModelName  = 'joshlcoleman/Fable:latest'
 
 New-Item -ItemType Directory -Force -Path ([IO.Path]::GetDirectoryName($LogFile)) | Out-Null
 New-Item -ItemType Directory -Force -Path $InboxDir | Out-Null
+New-Item -ItemType Directory -Force -Path (Join-Path $InboxDir 'support-in') | Out-Null
+New-Item -ItemType Directory -Force -Path (Join-Path $InboxDir 'processed') | Out-Null
 
 $created = $true
 try {
@@ -28,7 +38,11 @@ try {
 }
 
 function Log([string]$msg) {
-    $line = '[{0}] {1}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $msg
+    $line = '[{0}] [{1}] {2}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $HostTag, $msg
+    if ($Console) {
+        $c = if ($msg -match 'Error|not ready|not responding') { 'Yellow' } elseif ($msg -match 'Drafted') { 'Green' } else { 'Gray' }
+        Write-Host $line -ForegroundColor $c
+    }
     try {
         if ((Test-Path $LogFile) -and ((Get-Item $LogFile).Length -gt 4MB)) { Move-Item $LogFile ($LogFile + '.1') -Force }
         Add-Content -Path $LogFile -Value $line -ErrorAction SilentlyContinue
@@ -107,11 +121,19 @@ Instructions:
     }
 }
 
-Log "Hermes customer support harness started (pid=$PID, once=$Once)"
+Log "Hermes customer support harness started (pid=$PID, once=$Once, console=$Console)"
+if ($Console) { Write-Host "  Watching $InboxDir\support-in for tickets. Drafts wait for approval in $InboxDir." -ForegroundColor Cyan }
+$lastBeat = Get-Date '2000-01-01'
 
 do {
     try {
         Process-SupportQueue
+        if ($Console -and ((Get-Date) - $lastBeat).TotalMinutes -ge 10) {
+            $waiting = @(Get-ChildItem (Join-Path $InboxDir 'support-in') -Filter *.json -File -ErrorAction SilentlyContinue).Count
+            $drafts  = @(Get-ChildItem $InboxDir -Filter 'TICKET-*-draft.json' -File -ErrorAction SilentlyContinue).Count
+            Write-Host ('[{0}] ready - {1} ticket(s) waiting, {2} draft(s) awaiting approval' -f (Get-Date -Format 'HH:mm:ss'), $waiting, $drafts) -ForegroundColor DarkCyan
+            $lastBeat = Get-Date
+        }
     } catch {
         Log "Loop error: $($_.Exception.Message)"
     }

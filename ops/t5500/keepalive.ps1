@@ -127,6 +127,26 @@ function Remove-DuplicateTunnels {
     }
 }
 
+# Reads one value from the runtime env file. Never logged.
+function Get-EnvVal([string]$key) {
+    try {
+        $line = Select-String -Path (Join-Path $Repo '.env') -Pattern ('^\s*' + $key + '\s*=') -ErrorAction Stop | Select-Object -Last 1
+        if ($line) { return ($line.Line -split '=', 2)[1].Trim().Trim('"', "'") }
+    } catch {}
+    return ''
+}
+
+# Cloud backends cannot be healed from here; probe at most every 10 min and report.
+$script:CloudCache = @{}
+function Test-Cloud([string]$name, [string]$url, [hashtable]$headers) {
+    $hit = $script:CloudCache[$name]
+    if ($hit -and ((Get-Date) - $hit.At).TotalMinutes -lt 10) { return $hit.Ok }
+    $ok = $false
+    try { $r = Invoke-WebRequest -Uri $url -Headers $headers -UserAgent 'antigravity-keepalive/1.0' -UseBasicParsing -TimeoutSec 15; $ok = ($r.StatusCode -eq 200) } catch { $ok = $false }
+    $script:CloudCache[$name] = @{ At = Get-Date; Ok = $ok }
+    return $ok
+}
+
 # ── Domains ────────────────────────────────────────────────────────────────
 # Origin = local port that serves the Host header (checked directly, bypassing DNS).
 $Domains = @(
@@ -210,7 +230,7 @@ $Stages = @(
        Heal  = {
            if (Test-Port 9160) { Stop-PortOwner 9160 }
            # Loopback (this probe) plus THIS node's LAN address, per the "use the 192 endpoints" ruling;
-           # never every interface. server.mjs defaults to the dead Sabretooth address, so set it here.
+           # never every interface. server.mjs defaults to the dead T5500 address, so set it here.
            $env:DOMAINS_SERVER_HOST = '127.0.0.1,192.168.0.15'
            Start-Process -FilePath $Node -ArgumentList @('ops\domains-server\server.mjs') -WorkingDirectory $Repo -WindowStyle Hidden
        } },
@@ -254,14 +274,75 @@ $Stages = @(
            Log '  started cloudflared tunnel'
        } },
 
-    @{ Key = 'hermes'; Name = 'Hermes customer support desk'; Settle = 30; Needs = @('ollama', 'api')
+    @{ Key = 'paperclip'; Name = 'Paperclip Mission Control :3917'; Settle = 170
+       # Fixed port. Runs under its own NON-elevated task "ANTIGRAVITY Paperclip" (embedded
+       # Postgres refuses to run as admin, and this keepalive is elevated). The task's launcher
+       # clears squatters and drifted copies so Paperclip is only ever on :3917.
+       Probe = { Test-Http 'http://127.0.0.1:3917/api/health' 6 '"status":"ok"' }
+       Heal  = {
+           $t = Get-ScheduledTask -TaskName 'ANTIGRAVITY Paperclip' -ErrorAction SilentlyContinue
+           if (-not $t) { Log '  task "ANTIGRAVITY Paperclip" missing - cannot start Paperclip'; return }
+           if ($t.State -eq 'Running') {
+               $age = ((Get-Date) - (Get-ScheduledTaskInfo -TaskName 'ANTIGRAVITY Paperclip').LastRunTime).TotalMinutes
+               if ($age -lt 5) { Log ('  Paperclip task still booting ({0:N1} min) - waiting' -f $age); return }
+               Stop-ScheduledTask -TaskName 'ANTIGRAVITY Paperclip'; Start-Sleep -Seconds 3
+           }
+           Start-ScheduledTask -TaskName 'ANTIGRAVITY Paperclip'
+           Log '  started task "ANTIGRAVITY Paperclip"'
+       } },
+
+    @{ Key = 'omniroute'; Name = 'OmniRoute gateway :20128'; Settle = 90
+       # Non-elevated task "ANTIGRAVITY OmniRoute". 401 without a key = alive and enforcing auth.
+       Probe = { try { Invoke-WebRequest 'http://127.0.0.1:20128/v1/models' -UseBasicParsing -TimeoutSec 8 | Out-Null; $true } catch { $_.Exception.Response.StatusCode.value__ -in 401, 403 } }
+       Heal  = {
+           $t = Get-ScheduledTask -TaskName 'ANTIGRAVITY OmniRoute' -ErrorAction SilentlyContinue
+           if (-not $t) { Log '  task "ANTIGRAVITY OmniRoute" missing'; return }
+           if ($t.State -eq 'Running') { Stop-ScheduledTask -TaskName 'ANTIGRAVITY OmniRoute'; Start-Sleep -Seconds 3 }
+           Start-ScheduledTask -TaskName 'ANTIGRAVITY OmniRoute'
+           Log '  started task "ANTIGRAVITY OmniRoute"'
+       } },
+
+    @{ Key = 'obsidian'; Name = 'Obsidian vault REST :27123 (memory)'; Settle = 40
+       # Desktop app: agent-windows.ps1 (interactive, at logon) opens it. Before logon this is DOWN by design.
+       Probe = { Test-Cloud 'obsidian' 'http://127.0.0.1:27123/' @{ Authorization = ('Bearer ' + (Get-EnvVal 'OBSIDIAN_REST_API_KEY')) } }
+       Heal  = { $script:CloudCache.Remove('obsidian'); Log '  Obsidian is opened by the agent-windows supervisor after logon' } },
+
+    @{ Key = 'supabase'; Name = 'Supabase (memory backup)'; Settle = 0
+       Probe = { $k = Get-EnvVal 'SUPABASE_SECRET_KEY'; Test-Cloud 'supabase' ((Get-EnvVal 'SUPABASE_URL') + '/rest/v1/') @{ apikey = $k; Authorization = ('Bearer ' + $k) } }
+       Heal  = { $script:CloudCache.Remove('supabase'); Log '  Supabase unreachable or key rejected (cloud - check key in .env)' } },
+
+    @{ Key = 'supermemory'; Name = 'Supermemory (memory backup)'; Settle = 0
+       Probe = { Test-Cloud 'supermemory' 'https://api.supermemory.ai/v3/settings' @{ Authorization = ('Bearer ' + (Get-EnvVal 'SUPER_MEMORY_API_KEY')) } }
+       Heal  = { $script:CloudCache.Remove('supermemory'); Log '  Supermemory unreachable or key rejected (cloud)' } },
+
+    @{ Key = 'vercel'; Name = 'Vercel API'; Settle = 0
+       Probe = { Test-Cloud 'vercel' 'https://api.vercel.com/v2/user' @{ Authorization = ('Bearer ' + (Get-EnvVal 'VERCEL_API_KEY')) } }
+       Heal  = { $script:CloudCache.Remove('vercel'); Log '  Vercel unreachable or token rejected (cloud)' } },
+
+    @{ Key = 'hermes'; Name = 'Hermes customer support desk'; Settle = 45; Needs = @('ollama', 'api')
+       # After logon, ops\t5500\agent-windows.ps1 runs Hermes in a visible HERMES window and
+       # reopens it if closed. While that supervisor is up the keepalive defers to it and
+       # retires the hidden pre-logon copy (separate sessions, so the mutex cannot see both).
        Probe = {
-           $p = Get-CimInstance Win32_Process -Filter "CommandLine LIKE '%hermes-support.ps1%'" -ErrorAction SilentlyContinue
-           return ($p -ne $null -and @($p).Count -ge 1)
+           $all = @(Get-CimInstance Win32_Process -Filter "CommandLine LIKE '%hermes-support.ps1%'" -ErrorAction SilentlyContinue)
+           $sup = @(Get-CimInstance Win32_Process -Filter "CommandLine LIKE '%agent-windows.ps1%'" -ErrorAction SilentlyContinue)
+           if ($sup.Count -ge 1) {
+               $hidden  = @($all | Where-Object { $_.CommandLine -notmatch '-Console' })
+               $visible = @($all | Where-Object { $_.CommandLine -match '-Console' })
+               if ($visible.Count -ge 1) {
+                   foreach ($p in $hidden) { Stop-Process -Id $p.ProcessId -Force -ErrorAction SilentlyContinue; Log ('  retired hidden Hermes PID ' + $p.ProcessId + ' (visible window owns support)') }
+               }
+               return ($visible.Count -ge 1)
+           }
+           return ($all.Count -ge 1)
        }
        Heal  = {
+           if (@(Get-CimInstance Win32_Process -Filter "CommandLine LIKE '%agent-windows.ps1%'" -ErrorAction SilentlyContinue).Count -ge 1) {
+               Log '  agent-windows supervisor owns Hermes - it reopens the window'
+               return
+           }
            Start-Process -FilePath powershell -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-File', (Join-Path $Dir 'hermes-support.ps1')) -WindowStyle Hidden
-           Log '  started Hermes customer support harness'
+           Log '  started Hermes customer support harness (hidden, pre-logon)'
        } }
 )
 

@@ -22,10 +22,22 @@ Why this rule exists: on 2026-10-04 Misses Trollz passed every score while what 
 
 > **Status:** LANDED by the judge lane under Joshua’s authority on 2026-08-19. This doctrine is ACTIVE. Runtime service launch remains a separate, deliberate, Joshua-authorized action.
 
+## T5500 is the only node (Joshua, 2026-10-09): wins over the node map below
+
+> Written by **Opus (Claude) running in the Antigravity IDE** on 2026-10-09, on Joshua's instruction. Joshua does not edit AI instruction or memory files himself; this edit is the model's, recorded as such.
+
+- **Until funding, the T5500 (`T5500-2-XEON-72`, `192.168.0.15`) is the only node, and the Antigravity IDE the only platform, for every domain and for Mission Control.** Alienware is now OFF by ruling with Sabretooth and the old boxes. Never probe, start, heal or route to them.
+- **Paperclip is marketing only** (`http://127.0.0.1:3917`, non-elevated task `ANTIGRAVITY Paperclip`; embedded Postgres refuses to run as admin, so it is never started elevated). It is not Mission Control.
+- **Mission Control = JARVIS/OPSIS on the Mission Agent OS board**, being rebuilt on the T5500 (`mission-os/`, Agent Hub `:3130`, read-only `/api/mos-state.json`). It reads Paperclip, OmniRoute, the keep-alive status and agent journals. Until it answers its identity probe it is **NOT RUNNING**, not UP.
+- **Services that come back on boot / power loss** (all on the T5500): Ollama :11434, Postgres :5432, Redis :6379, domains server :9160, date-app frontend :3200 and API :8000, cloudflared tunnel, Paperclip :3917, OmniRoute :20128 (non-elevated task `ANTIGRAVITY OmniRoute`, dashboard password-protected), Hermes support window, OpenClaw sentry window, Obsidian (vault `C:\ANTIGRAVITY\Antigravity`, REST :27123). The keep-alive also probes Supabase, Supermemory and Vercel every 10 minutes and writes them to `ops/t5500/status.json`.
+- **AI-team memory backups:** Obsidian vault `C:\ANTIGRAVITY\Antigravity` (the only vault), Supabase, Supermemory, plus each agent's own memory files.
+- **CLI lanes are login/OAuth only:** claude, codex, gemini/agy (Paperclip gemini lanes call `agy` through `ops/paperclip/agy-gemini.cmd` so the Ultra plan is used), grok, kimi, opencode (local Ollama models), pi. No API-key environment variables.
+- **Env files:** master `OneDrive\claude-to-claude\.env` (gitignored, with its `.env.lowercase` twin), runtime `C:\ANTIGRAVITY\.env`, gateway `~\.omniroute\.env`. All synced to T5500 values on 2026-10-09.
+
 ## Node map (Joshua, 2026-10-05): wins over every older node claim
 
 - **T5500 (`T5500-2-XEON-72`, `192.168.0.15`) is the production node.** It runs every live domain, the date app (frontend :3200, API :8000), Postgres :5432, Redis :6379, Ollama, the domains server :9160 and the cloudflared tunnel. Its keep-alive writes `C:\ANTIGRAVITY\ops\t5500\status.json` and `C:\ANTIGRAVITY\logs\t5500-keepalive.log`; it heals on its own and logs every heal.
-- **Alienware (`192.168.0.40`) is the dev node** and hosts Mission Control: JARVIS/OPSIS on :9150, operated by Hermes in the terminal. DREAM Online is built and tested there.
+- ~~**Alienware (`192.168.0.40`) is the dev node** and hosts Mission Control: JARVIS/OPSIS on :9150, operated by Hermes in the terminal. DREAM Online is built and tested there.~~ **Superseded 2026-10-09:** Alienware is OFF by ruling; JARVIS/OPSIS and DREAM Online work move to the T5500.
 - **Sabretooth (`192.168.0.8`) is retired and OFF by ruling.** Its work moved to the T5500 from the same SSD. Never probe, start, heal or route to it; show it as OFF BY RULING, never DOWN. Every `192.168.0.8` address and every "Sabretooth runs X" line in this repo is history.
 - Other old boxes (OptiPlex 9020, i7k, Chromebook, Mini ASUS) stay OFF by ruling.
 - **Domains:** youandinotai.com is live behind the Cloudflare tunnel. onlinerecycle.net, dream-online.net and untilnokidinneed.com have a healthy origin and wait on nameservers. The AI store domain is undecided: do not renew it and do not build on it.
@@ -93,15 +105,21 @@ Normal harness model access is through the authenticated OmniRoute OpenAI-compat
 
 Never route automation through a personal subscription lane. Never expose keys, token aliases, masked credential fragments, or populated environment files in source, commits, logs, artifacts, or chat.
 
-## Runtime and Dashboard Boundary
+## Runtime, Dashboard, and Swarm Boundaries
 
-Mission Control is the operational dashboard, and Mission Control is Paperclip: `paperclipai` on the Sabretooth node at `http://127.0.0.1:3100`, company `ANTIGRAVITY Marketing Co` (`ANT`). A running process, port, or HTTP status alone is not proof of the intended service: verify the expected identity response and report **UP**, **DOWN**, **WRONG SERVICE**, **AUTH MISSING**, **AUTH REJECTED**, or **NOT CONFIGURED**.
+Mission Control is the operational dashboard. **As of 2026-10-09 it is JARVIS/OPSIS on the Mission Agent OS board on the T5500 (see the T5500-only section above); Paperclip is marketing only.** Paperclip: `paperclipai` running on the **T5500 node** at `http://127.0.0.1:3917` (Company: `ANTIGRAVITY Marketing Co`). All legacy references to Sabretooth hosting Paperclip are dead.
 
-Paperclip is an active runtime and is the agent command layer: agents are hired, waked, heartbeated, and given their tool profiles there, and the judge lanes run inside it as CLI adapters. It does not hold Git delivery. The source-control wall above is unchanged — the judge lane is still the only lane that lands work — and Paperclip is only where a judge records that authorization: the documented path is a `JUDGE-PUSH <full-sha>` sentinel comment that the bridge relay executes as exactly that push (`ops/paperclip-ceo/JUDGE-AGENTS.md`). It is never a path for a worker to push.
+Paperclip is strictly the business and marketing command layer. The Git repository and marketing lanes are air-gapped by role to prevent cross-contamination:
 
-The 2026-08-19 ruling — that there is no active Paperclip runtime, and that any revived one would be confined to marketing and business operations with no repository, agent-command, or Git authority — was **superseded by Joshua on 2026-08-25**. It is kept here as history, not as instruction.
+- **Gemini Ultra (CEO):** Architect and Commander of the Paperclip marketing bridge. Translates repo-level code features into strategic marketing playbooks.
+- **Claude (General Counsel & Code Judge):** Enforces compliance, safety rules, and code verification before any code hits `main`.
+- **Grok (X/Twitter Lane):** The edgy, math-obsessed disruptor. Calls out affiliate grifts and pitches the 50% revenue share to massive tech accounts. Operates in Paperclip. Zero Git access.
+- **Emergent (Reddit Lane):** The organic, anti-bot undercover agent. Infiltrates algorithm frustration threads. Operates in Paperclip. Zero Git access.
+- **Muse (Meta Lane):** The highly visual hook-generator for Instagram Reels and Facebook Groups. Operates in Paperclip. Zero Git access.
 
-Lane assignments and their time gates live in Paperclip. A run refused outside its permitted window is policy, not a fault; do not chase it as a red. Runtime state observed on 2026-08-25 — judge lanes, adapters, connectors, and which of them are genuinely broken — is recorded in `agent-contracts/PAPERCLIP-MCP-CONNECTOR-EVIDENCE.md`.
+A running process, port, or HTTP status alone is not proof of the intended service: verify the expected identity response and report **UP**, **DOWN**, **WRONG SERVICE**, **AUTH MISSING**, **AUTH REJECTED**, or **NOT CONFIGURED**.
+
+Paperclip is an active runtime and is the agent command layer. It does not hold Git delivery. The source-control wall is absolute. Lane assignments and their time gates live in Paperclip. A run refused outside its permitted window is policy, not a fault; do not chase it as a red.
 
 ## Public Product Boundary
 

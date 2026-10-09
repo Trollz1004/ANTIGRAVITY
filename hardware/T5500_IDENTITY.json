@@ -1,0 +1,21 @@
+{
+  "written_by": "Opus (Claude) in the Antigravity IDE, 2026-10-09, from Joshua's typed specs",
+  "hostname": "t5500-2-xeon-72-ram-3070-8gb-gpu-ram",
+  "node_alias": "T5500-2-XEON-72",
+  "role": "only node until funding: every domain, Mission Control (JARVIS/OPSIS :3130), headless Hermes support, deploy edge",
+  "cpu": "2x Intel Xeon E5506 @ 2.13GHz",
+  "ram_gb": 72,
+  "gpu": "NVIDIA GeForce RTX 3070",
+  "vram_gb": 8,
+  "storage": "Fanxiang S101 512GB SSD (~477 GB usable)",
+  "os_arch": "64-bit x64",
+  "nic": "Broadcom NetXtreme 57xx GbE, driver 214.0.0.0, 1000/1000 Mbps",
+  "mac": "18-03-73-18-E5-86",
+  "ipv4": "192.168.0.15",
+  "dns": ["192.168.0.1", "205.171.2.26"],
+  "device_id": "15089836-E455-4E9B-AFA1-5F2CD61B269B",
+  "product_id": "00330-54390-05713-AAOEM",
+  "vram_policy": "8 GB budget: queue model loads, one large model at a time, no thrash",
+  "grindroid": "not on this node; not created yet; not touched",
+  "secrets": "none in this file and none in git"
+}

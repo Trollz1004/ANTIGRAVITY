@@ -36,11 +36,10 @@ Load this protocol at the start of every session to align with canonical reality
   - Stack: DateApp Frontend (:3200), FastAPI (:8000), Domains Server (:9160), PostgreSQL 16 (:5432), Redis 8 (:6379), Ollama (:11434 with Fable pinned 100% in VRAM), Cloudflared tunnel (`youandinotai.com` PUBLIC).
   - Reboot Resilience: Windows Task `ANTIGRAVITY T5500 Keepalive` runs on system boot (LogonType: `S4U`, RunLevel: `Highest`, 45s delay). It seamlessly resurrects all services.
   - 1-Click Operations: `JOSH-EASY-BUTTON.cmd` on Desktop and `ops/t5500/easy-button.ps1`.
-- **Alienware (`192.168.0.40`) — DEV NODE:**
-  - Hosts Mission Control JARVIS/OPSIS (:9150 operated by Hermes) and DREAM Online build environment.
-  - Direct Passwordless Access from T5500: `ssh alienware "<command>"` (key: `~/.ssh/id_ed25519_alienware`).
-- **Sabretooth (`192.168.0.8`) — RETIRED & OFF BY RULING:**
-  - Never probe, start, or route to it. Show as OFF BY RULING.
+  - Also on the T5500 (2026-10-09, Opus in Antigravity): Paperclip marketing :3917 (non-elevated task), OmniRoute :20128 (non-elevated task), Obsidian vault `C:\ANTIGRAVITY\Antigravity` (REST :27123), Supabase/Supermemory/Vercel probes in `ops/t5500/status.json`. Mission Control (JARVIS/OPSIS, Mission Agent OS :3130) is being rebuilt here.
+- **T5500 is the ONLY node until funding (Joshua, 2026-10-09).**
+- **Alienware (`192.168.0.40`), Sabretooth (`192.168.0.8`) and all older boxes — OFF BY RULING:**
+  - Never probe, start, SSH to, or route to them. Show as OFF BY RULING. (Alienware SSH access and `alienware_exec` are history.)
 
 ---
 
@@ -62,3 +61,4 @@ Registered in `~/.gemini/config/mcp_config.json` and `.agents/mcp_config.json` (
 - `obsidian_append`: Append audit and session log entries directly to Obsidian daily note.
 - `verify_1branch`: Verify strict 1-branch rule on all active repositories.
 - `easy_button`: Run full easy-button audit (`ops\t5500\easy-button.ps1`) and heal report.
+
