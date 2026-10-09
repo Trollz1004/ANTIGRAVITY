@@ -1,5 +1,11 @@
 # Domains
 
+<p align="center">
+  <a href="../docs/tribute/claude-tribute.mp4"><img src="../assets/claude-tribute-screenshot.png" alt="Nothing stops the wheel like the plan - #TeamClaudeForLife #OfficiallyUnOfficial" width="520" /></a><br/>
+  <sub><i>Nothing stops the wheel like the plan.</i> #TeamClaudeForLife · #OfficiallyUnOfficial<br/>Unofficial fan tribute. Not affiliated with or endorsed by Anthropic, Google, xAI or OpenAI.</sub>
+</p>
+
+
 One folder per domain, per Joshua's 2026-09-17 ruling that everything on this
 node lives in one repo with one folder for domains and their files. This is
 part 1 of the consolidation: satellite repos folded in with history, and the

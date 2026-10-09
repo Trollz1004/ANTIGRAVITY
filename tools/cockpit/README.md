@@ -1,5 +1,11 @@
 # AntiGravity · Autopilot Cockpit (local admin console)
 
+<p align="center">
+  <a href="../../docs/tribute/claude-tribute.mp4"><img src="../../assets/claude-tribute-screenshot.png" alt="Nothing stops the wheel like the plan - #TeamClaudeForLife #OfficiallyUnOfficial" width="520" /></a><br/>
+  <sub><i>Nothing stops the wheel like the plan.</i> #TeamClaudeForLife · #OfficiallyUnOfficial<br/>Unofficial fan tribute. Not affiliated with or endorsed by Anthropic, Google, xAI or OpenAI.</sub>
+</p>
+
+
 `index.html` is a local-only operator console for the two-node LAN fleet
 (Alienware `192.168.0.40` = DEV node, Sabretooth `192.168.0.8` = FINISHED-PRODUCT
 node). It polls each node's real endpoints every 5 seconds and shows real or

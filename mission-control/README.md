@@ -1,5 +1,11 @@
 # JARVIS Dashboard (Mission Control)
 
+<p align="center">
+  <a href="../docs/tribute/claude-tribute.mp4"><img src="../assets/claude-tribute-screenshot.png" alt="Nothing stops the wheel like the plan - #TeamClaudeForLife #OfficiallyUnOfficial" width="520" /></a><br/>
+  <sub><i>Nothing stops the wheel like the plan.</i> #TeamClaudeForLife · #OfficiallyUnOfficial<br/>Unofficial fan tribute. Not affiliated with or endorsed by Anthropic, Google, xAI or OpenAI.</sub>
+</p>
+
+
 Originally moved from `Trollz1004/hermes` `dashboard/jarvis` on 2026-09-17 by
 Joshua's direction, then folded from `ops/dashboard-jarvis` into this folder,
 `mission-control/`, by the repo consolidation (part 2) later the same day.

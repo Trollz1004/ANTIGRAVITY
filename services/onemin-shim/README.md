@@ -1,5 +1,11 @@
 # onemin-shim
 
+<p align="center">
+  <a href="../../docs/tribute/claude-tribute.mp4"><img src="../../assets/claude-tribute-screenshot.png" alt="Nothing stops the wheel like the plan - #TeamClaudeForLife #OfficiallyUnOfficial" width="520" /></a><br/>
+  <sub><i>Nothing stops the wheel like the plan.</i> #TeamClaudeForLife · #OfficiallyUnOfficial<br/>Unofficial fan tribute. Not affiliated with or endorsed by Anthropic, Google, xAI or OpenAI.</sub>
+</p>
+
+
 OpenAI-compatible loopback front for the **1min.ai** proprietary API, so OmniRoute
 can route to the lifetime-prepaid 1min.ai account like any other provider.
 

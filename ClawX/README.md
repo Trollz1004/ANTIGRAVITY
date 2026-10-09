@@ -1,5 +1,11 @@
 # ClawX — Unified AI Deliberation Dashboard
 
+<p align="center">
+  <a href="../docs/tribute/claude-tribute.mp4"><img src="../assets/claude-tribute-screenshot.png" alt="Nothing stops the wheel like the plan - #TeamClaudeForLife #OfficiallyUnOfficial" width="520" /></a><br/>
+  <sub><i>Nothing stops the wheel like the plan.</i> #TeamClaudeForLife · #OfficiallyUnOfficial<br/>Unofficial fan tribute. Not affiliated with or endorsed by Anthropic, Google, xAI or OpenAI.</sub>
+</p>
+
+
 ClawX is the external multi-AI discussion and voting surface for ANTIGRAVITY. It is a governance and coordination dashboard, not stand-alone proof of legal control, on-chain control, or current LLC revenue doctrine.
 
 ## Current Truth

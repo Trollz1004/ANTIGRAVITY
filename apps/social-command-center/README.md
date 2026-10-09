@@ -1,5 +1,11 @@
 # Social Command Center — the real version of `index.html`
 
+<p align="center">
+  <a href="../../docs/tribute/claude-tribute.mp4"><img src="../../assets/claude-tribute-screenshot.png" alt="Nothing stops the wheel like the plan - #TeamClaudeForLife #OfficiallyUnOfficial" width="520" /></a><br/>
+  <sub><i>Nothing stops the wheel like the plan.</i> #TeamClaudeForLife · #OfficiallyUnOfficial<br/>Unofficial fan tribute. Not affiliated with or endorsed by Anthropic, Google, xAI or OpenAI.</sub>
+</p>
+
+
 Source: `C:\HTML Files\index.html` ("ANTIGRAVITY · PAPERWEIGHT Command Center", 2026-08-12), copied here
 verbatim on **2026-09-03 on Joshua's direction**: *"needs to be used in all 3 paperclips as a real version to
 the social platforms plus creating no less than 5 seo blog … for each paperclip platform."*
