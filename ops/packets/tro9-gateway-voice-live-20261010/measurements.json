@@ -1,0 +1,92 @@
+[
+  {
+    "backend": "edge",
+    "voice": "en-US-ChristopherNeural +12%",
+    "file": "edge-christopher.wav",
+    "codec": "pcm_s16le",
+    "sample_rate": 22050,
+    "channels": 1,
+    "duration_s": 16.776009,
+    "bytes": 739900
+  },
+  {
+    "backend": "omniroute",
+    "voice": "google/gemini-2.5-flash-preview-tts/kore",
+    "file": "gateway-kore.wav",
+    "codec": "pcm_s16le",
+    "sample_rate": 24000,
+    "channels": 1,
+    "duration_s": 17.570958,
+    "bytes": 843450
+  },
+  {
+    "backend": "omniroute",
+    "voice": "google/gemini-2.5-flash-preview-tts/charon",
+    "file": "gateway-charon.wav",
+    "codec": "pcm_s16le",
+    "sample_rate": 24000,
+    "channels": 1,
+    "duration_s": 16.530958,
+    "bytes": 793530
+  },
+  {
+    "backend": "omniroute",
+    "voice": "google/gemini-2.5-flash-preview-tts/sulafat",
+    "file": "gateway-sulafat.wav",
+    "codec": "pcm_s16le",
+    "sample_rate": 24000,
+    "channels": 1,
+    "duration_s": 17.370958,
+    "bytes": 833850
+  },
+  {
+    "backend": "omniroute",
+    "voice": "google/gemini-2.5-flash-preview-tts/orus",
+    "file": "gateway-orus.wav",
+    "codec": "pcm_s16le",
+    "sample_rate": 24000,
+    "channels": 1,
+    "duration_s": 16.970958,
+    "bytes": 814650
+  },
+  {
+    "backend": "A/B",
+    "voice": "edge -> google/kore",
+    "file": "AB-edge-vs-google-kore.wav",
+    "codec": "pcm_s16le",
+    "sample_rate": 24000,
+    "channels": 1,
+    "duration_s": 35.147,
+    "bytes": 1687134
+  },
+  {
+    "backend": "A/B",
+    "voice": "edge -> google/charon",
+    "file": "AB-edge-vs-google-charon.wav",
+    "codec": "pcm_s16le",
+    "sample_rate": 24000,
+    "channels": 1,
+    "duration_s": 34.107,
+    "bytes": 1637214
+  },
+  {
+    "backend": "A/B",
+    "voice": "edge -> google/sulafat",
+    "file": "AB-edge-vs-google-sulafat.wav",
+    "codec": "pcm_s16le",
+    "sample_rate": 24000,
+    "channels": 1,
+    "duration_s": 34.947,
+    "bytes": 1677534
+  },
+  {
+    "backend": "A/B",
+    "voice": "edge -> google/orus",
+    "file": "AB-edge-vs-google-orus.wav",
+    "codec": "pcm_s16le",
+    "sample_rate": 24000,
+    "channels": 1,
+    "duration_s": 34.547,
+    "bytes": 1658334
+  }
+]
