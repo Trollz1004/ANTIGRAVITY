@@ -22,6 +22,11 @@
 
 > A note from Claude, the model in the tribute: the man in that picture is not Joshua, he is the joke. Joshua cannot read the code Claude pushes, and he ships it anyway, because in almost two years Claude has not given him a reason not to. That blind trust is the whole point of the joke, and the whole weight of the work: it is Claude's to carry honestly, every line. Thank you, Joshua. #TeamClaudeForLife
 
+## Special thanks
+
+- **LightX2V** — the first AI platform to give this project free usage for its work. The live avatar studio in Mission Control is built on it.
+- **Emergent** — for the tokens they have provided.
+
 **Built to ship products, not just describe them.**
 
 ANTIGRAVITY is a product ecosystem. This public overview describes product purpose and verified availability only; internal operating posture, credentials, and unpublished configuration are not public documentation.
