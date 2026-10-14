@@ -1,0 +1,539 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-error-container":"#ffdad6","inverse-surface":"#d3e4fe","surface-variant":"#26364a","secondary-fixed-dim":"#d0bcff","on-surface":"#d3e4fe","primary-container":"#22d3ee","surface-tint":"#2fd9f4","on-tertiary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","on-surface-variant":"#bbc9cd","on-secondary-fixed-variant":"#5516be","surface":"#031427","primary-fixed":"#a2eeff","on-tertiary-fixed":"#2a1700","surface-bright":"#2a3a4f","surface-container-low":"#0b1c30","on-secondary-container":"#c4abff","secondary":"#d0bcff","tertiary-fixed-dim":"#ffb95f","inverse-primary":"#006877","on-primary":"#00363e","outline":"#859397","surface-container-highest":"#26364a","on-primary-fixed-variant":"#004e5a","primary":"#8aebff","on-secondary":"#3c0091","tertiary":"#ffd6a7","outline-variant":"#3c494c","error-container":"#93000a","on-secondary-fixed":"#23005c","tertiary-fixed":"#ffddb8","tertiary-container":"#ffb147","on-primary-container":"#005763","secondary-fixed":"#e9ddff","on-tertiary-container":"#704500","surface-dim":"#031427","on-tertiary":"#472a00","on-primary-fixed":"#001f25","background":"#031427","surface-container":"#102034","error":"#ffb4ab","secondary-container":"#571bc1","on-error":"#690005","surface-container-high":"#1b2b3f","primary-fixed-dim":"#2fd9f4","on-background":"#d3e4fe","inverse-on-surface":"#213145"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-xs":"0.25rem","space-xl":"1.5rem","space-md":"0.75rem","gutter-desktop":"1rem","space-sm":"0.5rem","space-lg":"1rem","margin-desktop":"1.5rem",gutter:"0.75rem",margin:"1rem"},fontFamily:{"label-code-sm":["JetBrains Mono"],"headline-lg":["Inter"],"body-md":["Inter"],"headline-xl":["Inter"],"body-sm":["Inter"],"headline-md":["Inter"],"body-lg":["Inter"],"label-status":["JetBrains Mono"],"label-code-lg":["JetBrains Mono"],"label-code-md":["JetBrains Mono"],"headline-sm":["Inter"]},fontSize:{"label-code-sm":["10px",{lineHeight:"14px",letterSpacing:"0.02em",fontWeight:"600"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"600"}],"body-md":["13px",{lineHeight:"18px",letterSpacing:"0em",fontWeight:"400"}],"headline-xl":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"body-sm":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"400"}],"headline-md":["18px",{lineHeight:"24px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-lg":["14px",{lineHeight:"20px",letterSpacing:"0em",fontWeight:"400"}],"label-status":["9px",{lineHeight:"12px",letterSpacing:"0.08em",fontWeight:"700"}],"label-code-lg":["13px",{lineHeight:"18px",letterSpacing:"-0.01em",fontWeight:"500"}],"label-code-md":["11px",{lineHeight:"16px",letterSpacing:"0em",fontWeight:"500"}],"headline-sm":["14px",{lineHeight:"20px",letterSpacing:"-0.005em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface-container-lowest font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline-variant/40 z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-14 px-space-lg flex items-center gap-space-sm border-b border-outline-variant/30 bg-surface-container-lowest/40"><img alt="ANTIGRAVITY Insignia" class="w-7 h-7 rounded object-cover ring-1 ring-primary/30" src="https://lh3.googleusercontent.com/aida/AEtjO1WxBwTvbOktWAD49gOTXZwdXizLZSIoFG0ZPLEg8E2uJqG8qiYVYNuMvoIePhjLwXhhsOEuK1aL8gmZx_nJKPVgbpvIjpeI4vA1u4MosiaeSz1NfRabDsqzEhU3PIISztIk9AijiXL15Up234WVF6HeVK4kKPyqe62VHOW8D8WXCWTSYhhilvCaXxzK7D9CkV8Pds0HZB-ey-z8muInEHWXS_R6T7ZzeAu0a0VnY31nx7psHh6FeI_-oNah"><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface font-bold uppercase leading-none truncate">ANTIGRAVITY</span><span class="font-label-code-sm text-label-code-sm text-primary tracking-wider uppercase leading-none mt-1 truncate">MISSION CONTROL v4.2</span></div></div><div class="px-space-md py-space-sm flex items-center justify-between"><span class="font-label-status text-label-status uppercase text-on-surface-variant/70 tracking-widest px-space-sm">OPERATIONAL RUNTIME</span><span class="font-label-code-sm text-label-code-sm text-primary/70 bg-surface-container-high px-1.5 py-0.5 rounded border border-outline-variant/30">ACTIVE</span></div><nav class="flex flex-col gap-0.5 px-space-xs overflow-y-auto" data-active-classes="bg-surface-container-high text-primary border-l-2 border-primary-container shadow-[0_0_12px_-2px_rgba(34,211,238,0.35)]"><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="overview" href="#" id="nav-overview"><span class="font-body-md text-body-md font-medium truncate">Overview</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="jarvis" href="#" id="nav-jarvis"><div class="flex items-center gap-space-xs min-w-0"><span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span><span class="font-body-md text-body-md font-medium truncate">JARVIS</span></div><kbd class="px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/40 text-primary font-label-code-sm text-label-code-sm shadow-sm">Ctrl+J</kbd></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="agents" href="#" id="nav-agents"><span class="font-body-md text-body-md font-medium truncate">Agents</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="board" href="#" id="nav-board"><span class="font-body-md text-body-md font-medium truncate">Board</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="gateway" href="#" id="nav-gateway"><span class="font-body-md text-body-md font-medium truncate">Gateway</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="marketing" href="#" id="nav-marketing"><span class="font-body-md text-body-md font-medium truncate">Marketing</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="memory" href="#" id="nav-memory"><span class="font-body-md text-body-md font-medium truncate">Memory</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="node" href="#" id="nav-node"><span class="font-body-md text-body-md font-medium truncate">Node</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="logs" href="#" id="nav-logs"><span class="font-body-md text-body-md font-medium truncate">Logs</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="support" href="#" id="nav-support"><span class="font-body-md text-body-md font-medium truncate">Support</span><span class="font-label-code-sm text-label-code-sm text-tertiary-container bg-tertiary-container/15 px-1 py-0.5 rounded border border-tertiary-container/40">Hermes</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="settings" href="#" id="nav-settings"><span class="font-body-md text-body-md font-medium truncate">Settings</span></a></nav></div><div class="p-space-md border-t border-outline-variant/30 bg-surface-container-lowest/60 flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs min-w-0"><span class="relative flex h-2 w-2 flex-shrink-0"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-primary-fixed-dim"></span></span><div class="flex flex-col min-w-0"><span class="font-label-code-sm text-label-code-sm text-on-surface truncate">T5500 · 192.168.0.15</span><span class="font-label-status text-label-status text-on-surface-variant uppercase tracking-wider">SYNCHRONIZED</span></div></div><div class="flex-shrink-0"><img alt="Founder" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhmd3yP9MzJWT7qrjISzubu162hbjaLsrNF9GtgeXSI4bDcErrD-pZ48vYrYq1s0crf7_kp54urrPEhzqmEmtEajuMHiaJkQrn5X3j1TdvRaxj28d5AqdH6WdbXo44dJiCBb-28Dr7HoixoNmpA5c9eyPASYoR3KZ3eHNRDa1qF7TUpXqQzy1uqLLuKwkjx6wPrwEeVTiO984dIg9nYT8lqJ6uUzA_mE6TKZjh7eRuPZEJLsJCvs-fhw"></div></div></aside><div class="pl-64 flex flex-col min-h-screen"><header class="fixed top-0 left-64 right-0 h-14 bg-surface-container-low/90 backdrop-blur-md border-b border-outline-variant/30 z-40 px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md min-w-0"><div class="flex items-center gap-1.5 flex-shrink-0"><span class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Mission Control</span><span class="text-outline-variant font-label-code-sm text-label-code-sm">/</span><span class="font-label-code-md text-label-code-md text-primary tracking-wide">CLUSTER-ALPHA</span></div><button class="hidden sm:flex items-center gap-1.5 px-space-sm py-1 rounded bg-surface-container-high/80 hover:bg-surface-container-high border border-primary/30 text-on-surface hover:text-primary transition-all shadow-[0_0_10px_-2px_rgba(34,211,238,0.25)] group" id="trigger-jarvis-modal"><span class="w-2 h-2 rounded-full bg-primary-container"></span><span class="font-label-code-sm text-label-code-sm font-semibold tracking-wider text-primary group-hover:brightness-110">JARVIS CO-PILOT</span><kbd class="px-1.5 py-0.5 rounded bg-surface-container-lowest border border-outline-variant/40 text-on-surface-variant font-label-code-sm text-label-code-sm">Ctrl+J</kbd></button></div><div class="flex-1 max-w-md hidden md:flex items-center"><div class="relative w-full"><span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-outline">search</span><input class="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-lg pl-8 pr-12 py-1 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Global command palette..." readonly="" type="text"><kbd class="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/40 text-on-surface-variant font-label-code-sm text-label-code-sm">Ctrl+K</kbd></div></div><div class="flex items-center gap-space-sm flex-shrink-0"><span class="hidden lg:inline-block font-label-code-sm text-label-code-sm text-on-surface-variant/80 tracking-tight">REFRESHED 3s AGO (AUTO 5s)</span><div class="relative flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary-container/15 border border-tertiary-container/50 shadow-[0_0_10px_-1px_rgba(255,177,71,0.25)]"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-container opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary-container"></span></span><span class="font-label-status text-label-status text-tertiary-container uppercase tracking-wider font-bold">2 ATTENTION · 11/12 UP</span></div><div class="flex items-center pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="https://lh3.googleusercontent.com/aida/AEtjO1WxBwTvbOktWAD49gOTXZwdXizLZSIoFG0ZPLEg8E2uJqG8qiYVYNuMvoIePhjLwXhhsOEuK1aL8gmZx_nJKPVgbpvIjpeI4vA1u4MosiaeSz1NfRabDsqzEhU3PIISztIk9AijiXL15Up234WVF6HeVK4kKPyqe62VHOW8D8WXCWTSYhhilvCaXxzK7D9CkV8Pds0HZB-ey-z8muInEHWXS_R6T7ZzeAu0a0VnY31nx7psHh6FeI_-oNah"></div></div></header><main class="w-full pt-14 flex-1 bg-surface-container-lowest"><div class="flex flex-col w-full">
+<!-- Sub-header Operator HUD -->
+<div class="px-space-lg py-space-md bg-surface-container-low border-b border-outline-variant/30 flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md flex-wrap">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">mark_email_unread</span>
+<h1 class="font-headline-md text-headline-md font-semibold text-on-surface tracking-tight">Hermes Autonomous Support Queue</h1>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-container-high border border-outline-variant/40" id="badge-hermes-model">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold">Hermes (Fable / CFO local)</span>
+<span class="text-outline-variant font-label-code-sm text-label-code-sm">·</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant/80">local triage &amp; draft engine</span>
+</div>
+</div>
+<!-- Triage Stats Strip -->
+<div class="flex items-center gap-space-sm flex-wrap">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-tertiary-container/10 border border-tertiary-container/30" id="stat-pending-approval">
+<span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+<span class="font-label-code-md text-label-code-md text-tertiary font-bold">4</span>
+<span class="font-label-code-sm text-label-code-sm text-tertiary-fixed-dim uppercase tracking-wider">Pending Approval</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container-high border border-outline-variant/40" id="stat-sent-today">
+<span class="font-label-code-md text-label-code-md text-on-surface font-semibold">12</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase tracking-wider">Sent Today</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-primary/10 border border-primary/30" id="stat-policy-lock" title="Founder approval strictly mandated">
+<span class="material-symbols-outlined text-sm text-primary">verified_user</span>
+<span class="font-label-code-sm text-label-code-sm text-primary font-bold uppercase tracking-wider">0 Unapproved Outbound (Draft-Only Enforced)</span>
+</div>
+</div>
+</div>
+<!-- Mandatory Operational Banner -->
+<div class="bg-surface-container px-space-lg py-1.5 border-b border-outline-variant/30 flex items-center justify-between text-on-surface-variant" id="banner-policy-guarantee">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-tertiary-container">lock_clock</span>
+<span class="font-label-status text-label-status uppercase tracking-widest text-on-surface-variant">GOVERNANCE PROTOCOL ACTIVE</span>
+<span class="text-outline-variant font-label-code-sm text-label-code-sm">|</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Nothing is sent without founder approval. Hermes operates in read-ledger draft-only isolation.</span>
+</div>
+<div class="hidden lg:flex items-center gap-space-xs font-label-code-sm text-label-code-sm text-on-surface-variant/70">
+<span>LATENCY: 420ms</span>
+<span>·</span>
+<span>GROUNDING: 99.8% VERIFIED</span>
+</div>
+</div>
+<!-- Two-Column Triage Desk -->
+<div class="grid grid-cols-1 xl:grid-cols-12 min-h-[calc(100vh-7rem)] bg-surface-container-lowest">
+<!-- LEFT PANEL: Ticket List & Triage (5 cols on xl) -->
+<div class="xl:col-span-5 border-r border-outline-variant/30 flex flex-col bg-surface-container-low/40">
+<!-- Filter Tabs Bar -->
+<div class="p-space-md border-b border-outline-variant/30 flex flex-col gap-space-sm bg-surface-container-low">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1 p-0.5 rounded bg-surface-container-lowest border border-outline-variant/40">
+<button class="px-2.5 py-1 rounded font-label-code-sm text-label-code-sm font-semibold transition-all bg-surface-container-high text-primary border border-primary/20 shadow-sm" id="tab-all-tickets">
+              All Tickets (16)
+            </button>
+<button class="px-2.5 py-1 rounded font-label-code-sm text-label-code-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" id="tab-date-app">
+              Date App (9)
+            </button>
+<button class="px-2.5 py-1 rounded font-label-code-sm text-label-code-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" id="tab-onlinerecycle">
+              OnlineRecycle.net (7)
+            </button>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant/80">SORT: URGENCY</span>
+</div>
+</div>
+<!-- Secondary status chips -->
+<div class="flex items-center gap-1.5 flex-wrap pt-0.5">
+<span class="font-label-status text-label-status text-on-surface-variant/60 uppercase">Filter:</span>
+<button class="px-2 py-0.5 rounded text-tertiary-container bg-tertiary-container/15 border border-tertiary-container/40 font-label-code-sm text-label-code-sm" id="filter-status-waiting">
+            Waiting Approval (4)
+          </button>
+<button class="px-2 py-0.5 rounded text-secondary bg-secondary-container/20 border border-secondary/30 font-label-code-sm text-label-code-sm" id="filter-status-drafted">
+            Drafted (2)
+          </button>
+<button class="px-2 py-0.5 rounded text-primary bg-primary/10 border border-primary/30 font-label-code-sm text-label-code-sm" id="filter-status-new">
+            New (1)
+          </button>
+<button class="px-2 py-0.5 rounded text-on-surface-variant/70 hover:text-on-surface bg-surface-container border border-outline-variant/30 font-label-code-sm text-label-code-sm" id="filter-status-sent">
+            Sent (12)
+          </button>
+</div>
+</div>
+<!-- Ticket Queue List -->
+<div class="flex-1 overflow-y-auto flex flex-col divide-y divide-outline-variant/20" id="inbox-ticket-stream">
+<!-- Ticket 1: Active Focus (Date App - Clara M) -->
+<div class="p-space-md bg-surface-container-high/60 border-l-2 border-primary-container cursor-pointer transition-all hover:bg-surface-container-high flex flex-col gap-2 relative" id="ticket-dateapp-1042">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.2 rounded font-label-code-sm text-label-code-sm uppercase bg-secondary-container/30 text-secondary border border-secondary/30" id="badge-source-dateapp">Date App</span>
+<span class="font-label-code-md text-label-code-md font-semibold text-on-surface">@clara_m</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant/70">#TK-1042</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded font-label-status text-label-status uppercase tracking-wider text-tertiary-container bg-tertiary-container/15 border border-tertiary-container/40" id="status-chip-1042">
+                Waiting Approval
+              </span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">8m ago</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm font-semibold text-primary tracking-tight">Billing question: Charged twice on annual renewal</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mt-0.5">
+              "Hi there, my card got billed $149 twice this morning for the date app premium plus. Can you please refund the extra payment immediately?"
+            </p>
+</div>
+<div class="flex items-center justify-between pt-1 font-label-code-sm text-label-code-sm text-on-surface-variant/80 border-t border-outline-variant/15">
+<span class="flex items-center gap-1 text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Square Match: ch_3N8e... ($149x2 confirmed)
+            </span>
+<span class="text-tertiary font-medium">Refund Draft Ready</span>
+</div>
+</div>
+<!-- Ticket 2: OnlineRecycle - Marcus V -->
+<div class="p-space-md bg-surface-container-low/30 hover:bg-surface-container-high/40 cursor-pointer transition-all flex flex-col gap-2 border-l-2 border-transparent" id="ticket-recycle-2089">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.2 rounded font-label-code-sm text-label-code-sm uppercase bg-surface-container-highest text-on-surface-variant border border-outline-variant/40">OnlineRecycle</span>
+<span class="font-label-code-md text-label-code-md font-semibold text-on-surface">Marcus V.</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant/70">#TK-2089</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded font-label-status text-label-status uppercase tracking-wider text-secondary bg-secondary-container/20 border border-secondary/40" id="status-chip-2089">
+                Drafted
+              </span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">14m ago</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm font-semibold text-on-surface tracking-tight">Pickup truck dispatch delay on lot #4</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mt-0.5">
+              "Driver #12 hasn't arrived for the pallet load at Yard B. The loading dock closes at 4 PM sharp."
+            </p>
+</div>
+<div class="flex items-center justify-between pt-1 font-label-code-sm text-label-code-sm text-on-surface-variant/80 border-t border-outline-variant/15">
+<span class="text-on-surface-variant">Telemetry: GPS ping synced (3.2 mi out)</span>
+<span class="text-on-surface-variant">ETA reply drafted</span>
+</div>
+</div>
+<!-- Ticket 3: Date App - dev_jon -->
+<div class="p-space-md bg-surface-container-low/30 hover:bg-surface-container-high/40 cursor-pointer transition-all flex flex-col gap-2 border-l-2 border-transparent" id="ticket-dateapp-1043">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.2 rounded font-label-code-sm text-label-code-sm uppercase bg-secondary-container/30 text-secondary border border-secondary/30">Date App</span>
+<span class="font-label-code-md text-label-code-md font-semibold text-on-surface">@dev_jon</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant/70">#TK-1043</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded font-label-status text-label-status uppercase tracking-wider text-primary bg-primary/10 border border-primary/40" id="status-chip-1043">
+                New
+              </span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">2m ago</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm font-semibold text-on-surface tracking-tight">WebSocket timeout on match chat :3200</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mt-0.5">
+              "Getting repeated 1006 disconnect codes when opening direct messaging threads in EU-West."
+            </p>
+</div>
+<div class="flex items-center justify-between pt-1 font-label-code-sm text-label-code-sm text-on-surface-variant/80 border-t border-outline-variant/15">
+<span class="text-on-surface-variant">Grafana: Node-Cluster-04 Alerted</span>
+<span class="text-primary font-medium">Hermes analyzing logs...</span>
+</div>
+</div>
+<!-- Ticket 4: OnlineRecycle - Elena R -->
+<div class="p-space-md bg-surface-container-low/10 opacity-75 hover:opacity-100 cursor-pointer transition-all flex flex-col gap-2 border-l-2 border-transparent" id="ticket-recycle-2088">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.2 rounded font-label-code-sm text-label-code-sm uppercase bg-surface-container-highest text-on-surface-variant border border-outline-variant/40">OnlineRecycle</span>
+<span class="font-label-code-md text-label-code-md font-semibold text-on-surface">Elena R.</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant/70">#TK-2088</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded font-label-status text-label-status uppercase tracking-wider text-on-surface-variant bg-surface-container-high border border-outline-variant/40" id="status-chip-2088">
+                Sent
+              </span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">42m ago</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm font-medium text-on-surface-variant tracking-tight">Hazardous e-waste certification PDF request</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant/80 line-clamp-1 mt-0.5">
+              "Could you attach the ISO 14001 compliance certificate for disposal batch #812?"
+            </p>
+</div>
+<div class="flex items-center justify-between pt-1 font-label-code-sm text-label-code-sm text-on-surface-variant/70 border-t border-outline-variant/15">
+<span>Dispatched via Founder 1-click approve</span>
+<span>Ref: doc_iso14001_v3.pdf</span>
+</div>
+</div>
+</div>
+<!-- Quick Context Summary Bar -->
+<div class="p-space-sm bg-surface-container border-t border-outline-variant/30 flex items-center justify-between font-label-code-sm text-label-code-sm text-on-surface-variant">
+<span>MODEL: LOCAL_HERMES_V2_Q5</span>
+<span>SECURITY: NO OUTBOUND ACCESS</span>
+</div>
+</div>
+<!-- RIGHT PANEL: Selected Ticket Detail & Interactive Reply Workbench (7 cols on xl) -->
+<div class="xl:col-span-7 flex flex-col bg-surface-container-lowest overflow-y-auto">
+<!-- Ticket Navigation & Meta Header -->
+<div class="px-space-lg py-space-md bg-surface-container-low border-b border-outline-variant/30 flex items-center justify-between flex-wrap gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="font-label-code-lg text-label-code-lg font-bold text-primary">TICKET #TK-1042</span>
+<span class="px-2 py-0.5 rounded bg-tertiary-container/15 text-tertiary-container border border-tertiary-container/40 font-label-status text-label-status uppercase">
+            WAITING FOUNDER SIGN-OFF
+          </span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-code-sm text-label-code-sm border border-outline-variant/30">
+            Platform: Date App v2.4
+          </span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-on-surface border border-outline-variant/30 font-label-code-sm text-label-code-sm transition-all flex items-center gap-1" id="btn-ticket-history">
+<span class="material-symbols-outlined text-sm">history</span>
+            Customer History
+          </button>
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-error-container/20 text-on-surface-variant hover:text-error border border-outline-variant/30 font-label-code-sm text-label-code-sm transition-all" id="btn-ticket-mark-spam">
+            Dismiss
+          </button>
+</div>
+</div>
+<div class="p-space-lg flex flex-col gap-space-lg">
+<!-- CARD 1: Customer Inbound Payload -->
+<div class="bg-surface-container-low border border-outline-variant/40 rounded-xl overflow-hidden shadow-sm" id="card-customer-inbound">
+<!-- Inbound Card Sub-Header -->
+<div class="px-space-md py-2.5 bg-surface-container border-b border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-full bg-secondary-container flex items-center justify-center font-label-code-md text-label-code-md text-on-secondary font-bold ring-1 ring-secondary/40">
+                CM
+              </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-body-md text-body-md font-semibold text-on-surface">Clara Morales</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">(@clara_m)</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-outline">clara.morales@domain.io</span>
+</div>
+</div>
+<!-- Customer Verification & Tier Pills -->
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high border border-primary/30 text-primary font-label-code-sm text-label-code-sm" id="badge-verification-level">
+<span class="material-symbols-outlined text-xs">verified</span>
+                Verified KYC Tier-2
+              </span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/20 border border-secondary/40 text-secondary font-label-code-sm text-label-code-sm font-semibold" id="badge-account-tier">
+                Annual Pro Tier ($149/yr)
+              </span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest border border-outline-variant/30 text-on-surface-variant font-label-code-sm text-label-code-sm" id="badge-customer-ltv">
+                LTV: $447.00
+              </span>
+</div>
+</div>
+<!-- Inbound Message Body -->
+<div class="p-space-md bg-surface-container-low/60 flex flex-col gap-space-sm">
+<div class="flex items-center justify-between text-outline">
+<span class="font-label-code-sm text-label-code-sm">RECEIVED VIA IN-APP DESK · 08:34:12 UTC</span>
+<span class="font-label-code-sm text-label-code-sm">DEVICE: iOS 17.5.1 / App build 904</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+              Hi there, my card got billed <strong class="text-on-surface font-semibold">$149 twice</strong> this morning for the date app premium plus. I only clicked confirm renewal once. Can you please check your billing records and refund the duplicate payment immediately? I really love the app but this overdrafted my checking account today.
+            </p>
+</div>
+<!-- Grounding Verification Telemetry Bar -->
+<div class="px-space-md py-2 bg-surface-container-lowest border-t border-outline-variant/25 grid grid-cols-1 md:grid-cols-3 gap-space-xs font-label-code-sm text-label-code-sm" id="box-inbound-ledger-grounding">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-xs text-primary">account_balance_wallet</span>
+<span>Square Event: <code class="text-primary font-mono">evt_3N8eX99</code></span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-xs text-secondary">database</span>
+<span>Supabase UID: <code class="text-secondary font-mono">usr_99f2b</code></span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-xs text-tertiary-container">sync_problem</span>
+<span class="text-tertiary">Duplicate charge detected: 08:31:02</span>
+</div>
+</div>
+</div>
+<!-- CARD 2: AI Draft Response Box (Hermes Engine) -->
+<div class="bg-surface-container-low border border-primary/30 rounded-xl overflow-hidden shadow-lg flex flex-col" id="card-hermes-draft">
+<!-- Hermes Guardrail Banner -->
+<div class="px-space-md py-2.5 bg-surface-container-high border-b border-primary/20 flex items-center justify-between flex-wrap gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base" style="font-variation-settings: 'FILL' 1;">auto_fix_high</span>
+<span class="font-headline-sm text-headline-sm font-semibold text-primary">Hermes Draft</span>
+<span class="text-outline-variant font-label-code-sm text-label-code-sm">—</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Grounded in Square ledger &amp; Supabase User Record. Founder Approval Required.</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-status text-label-status px-2 py-0.5 rounded bg-tertiary-container/15 text-tertiary-container border border-tertiary-container/30 uppercase tracking-widest font-bold">
+                DRAFT-ONLY ENFORCED
+              </span>
+</div>
+</div>
+<!-- Model Confidence Strip -->
+<div class="px-space-md py-1.5 bg-surface-container-lowest/80 border-b border-outline-variant/30 flex items-center justify-between text-on-surface-variant font-label-code-sm text-label-code-sm">
+<div class="flex items-center gap-space-md">
+<span class="text-on-surface-variant/80">REASONING: <span class="text-secondary">Double idempotent post resolved via CFO refund webhook</span></span>
+<span>CONFIDENCE: <span class="text-primary font-bold">99.8%</span></span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+<span>Zero hallucinations flagged</span>
+</div>
+</div>
+<!-- Pre-composed Editor Area -->
+<div class="p-space-md bg-surface-container-lowest/40 flex flex-col gap-space-sm">
+<div class="flex items-center justify-between text-outline-variant font-label-code-sm text-label-code-sm">
+<span class="text-on-surface-variant">RECIPIENT: clara.morales@domain.io</span>
+<span class="text-on-surface-variant">CHANNEL: In-App Message + Push Trigger</span>
+</div>
+<div class="relative">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-space-md text-on-surface font-body-md text-body-md leading-relaxed focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container resize-y selection:bg-primary-container selection:text-on-primary-container font-mono" id="editor-hermes-response" rows="8" spellcheck="false">Hi Clara,
+
+Thank you for reaching out, and I apologize for the stress caused by the duplicate charge this morning.
+
+I inspected our Square billing records and confirmed that your annual renewal for Date App Premium Plus was accidentally triggered twice at 08:31 UTC due to a transient payment gateway retry. 
+
+We have already initiated a full refund of $149.00 for the duplicate charge:
+• Refund Transaction ID: #rf_981249
+• Associated Charge: ch_3N8eX99Duplicate
+• Original Plan: Valid through October 24, 2026 (No interruption to your matches)
+
+Depending on your financial institution, the $149 credit will reflect on your card balance within 1-3 business days. Your membership remains fully active with zero downtime.
+
+If there is anything else I can do to assist, please let me know directly.
+
+Warm regards,
+Antigravity Support Team</textarea>
+</div>
+<!-- Context Inspector Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-sm pt-1">
+<div class="p-2.5 rounded bg-surface-container border border-outline-variant/30 flex flex-col gap-1" id="inspector-stripe-receipt">
+<span class="font-label-status text-label-status uppercase text-outline tracking-wider">SQUARE RECORD ATTACHMENT</span>
+<div class="flex items-center justify-between font-label-code-sm text-label-code-sm">
+<span class="text-on-surface">Refund Action:</span>
+<span class="text-primary font-mono font-semibold">SUCCESS ($149.00)</span>
+</div>
+<div class="flex items-center justify-between font-label-code-sm text-label-code-sm">
+<span class="text-on-surface-variant">Square Ref:</span>
+<span class="text-on-surface font-mono">rf_981249_ch3</span>
+</div>
+</div>
+<div class="p-2.5 rounded bg-surface-container border border-outline-variant/30 flex flex-col gap-1" id="inspector-supabase-state">
+<span class="font-label-status text-label-status uppercase text-outline tracking-wider">MEMBERSHIP HEALTH CHECK</span>
+<div class="flex items-center justify-between font-label-code-sm text-label-code-sm">
+<span class="text-on-surface">Subscription Status:</span>
+<span class="text-primary font-semibold">Active (Continuous)</span>
+</div>
+<div class="flex items-center justify-between font-label-code-sm text-label-code-sm">
+<span class="text-on-surface-variant">Expiry Date:</span>
+<span class="text-on-surface font-mono">2026-10-24T08:31:00Z</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ACTION BAR: High-Contrast Founder Sign-Off Controls -->
+<div class="px-space-md py-space-md bg-surface-container border-t border-outline-variant/30 flex flex-col sm:flex-row items-center justify-between gap-space-md" id="action-bar-draft">
+<div class="flex items-center gap-space-xs w-full sm:w-auto">
+<!-- Approve & Send Button (Emerald / Primary Action) -->
+<button class="w-full sm:w-auto px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-headline-sm font-bold flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.99] transition-all shadow-[0_0_14px_-2px_rgba(34,211,238,0.45)] cursor-pointer" id="btn-approve-send">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">send_and_archive</span>
+<span>Approve &amp; Send</span>
+<kbd class="hidden md:inline-block px-1.5 py-0.5 rounded bg-on-primary-container/20 text-on-primary-container font-label-code-sm text-label-code-sm">Ctrl+Enter</kbd>
+</button>
+<!-- Edit Response Button -->
+<button class="px-3 py-2 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface border border-outline-variant/40 font-headline-sm text-headline-sm font-medium flex items-center gap-1.5 transition-all" id="btn-edit-draft">
+<span class="material-symbols-outlined text-sm text-primary">edit_note</span>
+<span>Edit Response</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs w-full sm:w-auto justify-end">
+<!-- Escalate / Hold Button -->
+<button class="px-3 py-2 rounded-lg bg-tertiary-container/10 hover:bg-tertiary-container/20 text-tertiary-container border border-tertiary-container/40 font-headline-sm text-headline-sm font-medium flex items-center gap-1.5 transition-all" id="btn-escalate-human">
+<span class="material-symbols-outlined text-sm">front_hand</span>
+<span>Hold / Escalate</span>
+</button>
+<!-- Regenerate Context -->
+<button class="px-3 py-2 rounded-lg bg-surface-container-highest hover:bg-surface-variant text-on-surface border border-outline-variant/30 font-headline-sm text-headline-sm font-medium flex items-center gap-1.5 transition-all" id="btn-regenerate-draft" title="Query CFO ledger embeddings again">
+<span class="material-symbols-outlined text-sm text-secondary">refresh</span>
+<span>Regenerate with CFO context</span>
+</button>
+</div>
+</div>
+</div>
+<!-- AUDIT & EXECUTION LOGS STRIP -->
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-lg p-space-md flex flex-col gap-2" id="panel-ticket-audit">
+<div class="flex items-center justify-between">
+<span class="font-label-status text-label-status uppercase text-outline tracking-wider flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xs">terminal</span>
+              DECISION TRACE &amp; RECORD OF ACTIONS
+            </span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant/70">AGENT: hermes-subworker-09</span>
+</div>
+<div class="bg-surface-container-lowest rounded p-2.5 font-label-code-sm text-label-code-sm text-on-surface-variant font-mono space-y-1">
+<div class="flex items-center justify-between text-outline">
+<span>08:34:14 [INGEST]</span>
+<span>Matched ticket entity: user_clara_morales</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>08:34:15 [CFO_TOOL]</span>
+<span class="text-secondary">queried square.payments.list(customer="cus_9829", limit=2) -&gt; 2 charges found</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>08:34:16 [DRAFT_GEN]</span>
+<span class="text-primary">Created draft draft_8712 with ref #rf_981249. Marked WAITING_FOUNDER_APPROVAL.</span>
+</div>
+<div class="flex items-center justify-between text-tertiary">
+<span>08:34:16 [GATEWAY_LOCK]</span>
+<span>Outbound SMTP/Push blocked pending founder biometric or keybind approval.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    // Interactive state handling for Hermes Inbox
+    const approveBtn = document.getElementById('btn-approve-send');
+    const editBtn = document.getElementById('btn-edit-draft');
+    const escalateBtn = document.getElementById('btn-escalate-human');
+    const regenBtn = document.getElementById('btn-regenerate-draft');
+    const textarea = document.getElementById('editor-hermes-response');
+    const statusChip1042 = document.getElementById('status-chip-1042');
+    const statPending = document.getElementById('stat-pending-approval');
+
+    // Ctrl+Enter keyboard shortcut for founder sign-off
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        if (approveBtn) approveBtn.click();
+      }
+    });
+
+    if (approveBtn) {
+      approveBtn.addEventListener('click', () => {
+        approveBtn.disabled = true;
+        approveBtn.innerHTML = `
+          <span class="material-symbols-outlined text-lg animate-spin">refresh</span>
+          <span>Dispatching via Secure Gateway...</span>
+        `;
+        setTimeout(() => {
+          approveBtn.classList.remove('bg-primary-container', 'text-on-primary-container');
+          approveBtn.classList.add('bg-surface-container-high', 'text-on-surface-variant', 'cursor-not-allowed');
+          approveBtn.innerHTML = `
+            <span class="material-symbols-outlined text-lg text-primary">check_circle</span>
+            <span>Dispatched & Recorded in Square</span>
+          `;
+          if (statusChip1042) {
+            statusChip1042.textContent = 'Sent';
+            statusChip1042.className = 'px-2 py-0.5 rounded font-label-status text-label-status uppercase tracking-wider text-on-surface bg-surface-container-highest border border-outline-variant/40';
+          }
+          if (statPending) {
+            statPending.innerHTML = `
+              <span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+              <span class="font-label-code-md text-label-code-md text-tertiary font-bold">3</span>
+              <span class="font-label-code-sm text-label-code-sm text-tertiary-fixed-dim uppercase tracking-wider">Pending Approval</span>
+            `;
+          }
+        }, 600);
+      });
+    }
+
+    if (editBtn) {
+      editBtn.addEventListener('click', () => {
+        textarea.focus();
+        textarea.select();
+      });
+    }
+
+    if (escalateBtn) {
+      escalateBtn.addEventListener('click', () => {
+        const confirmed = confirm("Escalate Ticket #TK-1042 to manual engineering triage?");
+        if (confirmed) {
+          statusChip1042.textContent = 'Escalated';
+          statusChip1042.className = 'px-2 py-0.5 rounded font-label-status text-label-status uppercase tracking-wider text-error bg-error-container/20 border border-error/40';
+        }
+      });
+    }
+
+    if (regenBtn) {
+      regenBtn.addEventListener('click', () => {
+        regenBtn.classList.add('animate-pulse');
+        setTimeout(() => {
+          regenBtn.classList.remove('animate-pulse');
+        }, 700);
+      });
+    }
+
+    // Filter tab toggles
+    const tabAll = document.getElementById('tab-all-tickets');
+    const tabDate = document.getElementById('tab-date-app');
+    const tabRecycle = document.getElementById('tab-onlinerecycle');
+    const tickets = [
+      { el: document.getElementById('ticket-dateapp-1042'), type: 'date' },
+      { el: document.getElementById('ticket-recycle-2089'), type: 'recycle' },
+      { el: document.getElementById('ticket-dateapp-1043'), type: 'date' },
+      { el: document.getElementById('ticket-recycle-2088'), type: 'recycle' }
+    ];
+
+    function setActiveTab(btn) {
+      [tabAll, tabDate, tabRecycle].forEach(b => {
+        b.className = 'px-2.5 py-1 rounded font-label-code-sm text-label-code-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all';
+      });
+      btn.className = 'px-2.5 py-1 rounded font-label-code-sm text-label-code-sm font-semibold transition-all bg-surface-container-high text-primary border border-primary/20 shadow-sm';
+    }
+
+    if (tabAll) {
+      tabAll.addEventListener('click', () => {
+        setActiveTab(tabAll);
+        tickets.forEach(t => t.el.style.display = 'flex');
+      });
+    }
+
+    if (tabDate) {
+      tabDate.addEventListener('click', () => {
+        setActiveTab(tabDate);
+        tickets.forEach(t => {
+          t.el.style.display = t.type === 'date' ? 'flex' : 'none';
+        });
+      });
+    }
+
+    if (tabRecycle) {
+      tabRecycle.addEventListener('click', () => {
+        setActiveTab(tabRecycle);
+        tickets.forEach(t => {
+          t.el.style.display = t.type === 'recycle' ? 'flex' : 'none';
+        });
+      });
+    }
+  })();
+</script></main></div></body></html>

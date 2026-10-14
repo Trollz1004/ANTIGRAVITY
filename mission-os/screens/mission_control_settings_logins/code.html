@@ -1,0 +1,510 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-error-container":"#ffdad6","inverse-surface":"#d3e4fe","surface-variant":"#26364a","secondary-fixed-dim":"#d0bcff","on-surface":"#d3e4fe","primary-container":"#22d3ee","surface-tint":"#2fd9f4","on-tertiary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","on-surface-variant":"#bbc9cd","on-secondary-fixed-variant":"#5516be","surface":"#031427","primary-fixed":"#a2eeff","on-tertiary-fixed":"#2a1700","surface-bright":"#2a3a4f","surface-container-low":"#0b1c30","on-secondary-container":"#c4abff","secondary":"#d0bcff","tertiary-fixed-dim":"#ffb95f","inverse-primary":"#006877","on-primary":"#00363e","outline":"#859397","surface-container-highest":"#26364a","on-primary-fixed-variant":"#004e5a","primary":"#8aebff","on-secondary":"#3c0091","tertiary":"#ffd6a7","outline-variant":"#3c494c","error-container":"#93000a","on-secondary-fixed":"#23005c","tertiary-fixed":"#ffddb8","tertiary-container":"#ffb147","on-primary-container":"#005763","secondary-fixed":"#e9ddff","on-tertiary-container":"#704500","surface-dim":"#031427","on-tertiary":"#472a00","on-primary-fixed":"#001f25","background":"#031427","surface-container":"#102034","error":"#ffb4ab","secondary-container":"#571bc1","on-error":"#690005","surface-container-high":"#1b2b3f","primary-fixed-dim":"#2fd9f4","on-background":"#d3e4fe","inverse-on-surface":"#213145"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-xs":"0.25rem","space-xl":"1.5rem","space-md":"0.75rem","gutter-desktop":"1rem","space-sm":"0.5rem","space-lg":"1rem","margin-desktop":"1.5rem",gutter:"0.75rem",margin:"1rem"},fontFamily:{"label-code-sm":["JetBrains Mono"],"headline-lg":["Inter"],"body-md":["Inter"],"headline-xl":["Inter"],"body-sm":["Inter"],"headline-md":["Inter"],"body-lg":["Inter"],"label-status":["JetBrains Mono"],"label-code-lg":["JetBrains Mono"],"label-code-md":["JetBrains Mono"],"headline-sm":["Inter"]},fontSize:{"label-code-sm":["10px",{lineHeight:"14px",letterSpacing:"0.02em",fontWeight:"600"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"600"}],"body-md":["13px",{lineHeight:"18px",letterSpacing:"0em",fontWeight:"400"}],"headline-xl":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"body-sm":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"400"}],"headline-md":["18px",{lineHeight:"24px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-lg":["14px",{lineHeight:"20px",letterSpacing:"0em",fontWeight:"400"}],"label-status":["9px",{lineHeight:"12px",letterSpacing:"0.08em",fontWeight:"700"}],"label-code-lg":["13px",{lineHeight:"18px",letterSpacing:"-0.01em",fontWeight:"500"}],"label-code-md":["11px",{lineHeight:"16px",letterSpacing:"0em",fontWeight:"500"}],"headline-sm":["14px",{lineHeight:"20px",letterSpacing:"-0.005em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface-container-lowest font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline-variant/40 z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-14 px-space-lg flex items-center gap-space-sm border-b border-outline-variant/30 bg-surface-container-lowest/40"><img alt="ANTIGRAVITY Insignia" class="w-7 h-7 rounded object-cover ring-1 ring-primary/30" src="https://lh3.googleusercontent.com/aida/AEtjO1WxBwTvbOktWAD49gOTXZwdXizLZSIoFG0ZPLEg8E2uJqG8qiYVYNuMvoIePhjLwXhhsOEuK1aL8gmZx_nJKPVgbpvIjpeI4vA1u4MosiaeSz1NfRabDsqzEhU3PIISztIk9AijiXL15Up234WVF6HeVK4kKPyqe62VHOW8D8WXCWTSYhhilvCaXxzK7D9CkV8Pds0HZB-ey-z8muInEHWXS_R6T7ZzeAu0a0VnY31nx7psHh6FeI_-oNah"><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface font-bold uppercase leading-none truncate">ANTIGRAVITY</span><span class="font-label-code-sm text-label-code-sm text-primary tracking-wider uppercase leading-none mt-1 truncate">MISSION CONTROL v4.2</span></div></div><div class="px-space-md py-space-sm flex items-center justify-between"><span class="font-label-status text-label-status uppercase text-on-surface-variant/70 tracking-widest px-space-sm">OPERATIONAL RUNTIME</span><span class="font-label-code-sm text-label-code-sm text-primary/70 bg-surface-container-high px-1.5 py-0.5 rounded border border-outline-variant/30">ACTIVE</span></div><nav class="flex flex-col gap-0.5 px-space-xs overflow-y-auto" data-active-classes="bg-surface-container-high text-primary border-l-2 border-primary-container shadow-[0_0_12px_-2px_rgba(34,211,238,0.35)]"><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="overview" href="#" id="nav-overview"><span class="font-body-md text-body-md font-medium truncate">Overview</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="jarvis" href="#" id="nav-jarvis"><div class="flex items-center gap-space-xs min-w-0"><span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span><span class="font-body-md text-body-md font-medium truncate">JARVIS</span></div><kbd class="px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/40 text-primary font-label-code-sm text-label-code-sm shadow-sm">Ctrl+J</kbd></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="agents" href="#" id="nav-agents"><span class="font-body-md text-body-md font-medium truncate">Agents</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="board" href="#" id="nav-board"><span class="font-body-md text-body-md font-medium truncate">Board</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="gateway" href="#" id="nav-gateway"><span class="font-body-md text-body-md font-medium truncate">Gateway</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="marketing" href="#" id="nav-marketing"><span class="font-body-md text-body-md font-medium truncate">Marketing</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="memory" href="#" id="nav-memory"><span class="font-body-md text-body-md font-medium truncate">Memory</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="node" href="#" id="nav-node"><span class="font-body-md text-body-md font-medium truncate">Node</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="logs" href="#" id="nav-logs"><span class="font-body-md text-body-md font-medium truncate">Logs</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="support" href="#" id="nav-support"><span class="font-body-md text-body-md font-medium truncate">Support</span><span class="font-label-code-sm text-label-code-sm text-tertiary-container bg-tertiary-container/15 px-1 py-0.5 rounded border border-tertiary-container/40">Hermes</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="settings" href="#" id="nav-settings"><span class="font-body-md text-body-md font-medium truncate">Settings</span></a></nav></div><div class="p-space-md border-t border-outline-variant/30 bg-surface-container-lowest/60 flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs min-w-0"><span class="relative flex h-2 w-2 flex-shrink-0"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-primary-fixed-dim"></span></span><div class="flex flex-col min-w-0"><span class="font-label-code-sm text-label-code-sm text-on-surface truncate">T5500 · 192.168.0.15</span><span class="font-label-status text-label-status text-on-surface-variant uppercase tracking-wider">SYNCHRONIZED</span></div></div><div class="flex-shrink-0"><img alt="Founder" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhmd3yP9MzJWT7qrjISzubu162hbjaLsrNF9GtgeXSI4bDcErrD-pZ48vYrYq1s0crf7_kp54urrPEhzqmEmtEajuMHiaJkQrn5X3j1TdvRaxj28d5AqdH6WdbXo44dJiCBb-28Dr7HoixoNmpA5c9eyPASYoR3KZ3eHNRDa1qF7TUpXqQzy1uqLLuKwkjx6wPrwEeVTiO984dIg9nYT8lqJ6uUzA_mE6TKZjh7eRuPZEJLsJCvs-fhw"></div></div></aside><div class="pl-64 flex flex-col min-h-screen"><header class="fixed top-0 left-64 right-0 h-14 bg-surface-container-low/90 backdrop-blur-md border-b border-outline-variant/30 z-40 px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md min-w-0"><div class="flex items-center gap-1.5 flex-shrink-0"><span class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Mission Control</span><span class="text-outline-variant font-label-code-sm text-label-code-sm">/</span><span class="font-label-code-md text-label-code-md text-primary tracking-wide">CLUSTER-ALPHA</span></div><button class="hidden sm:flex items-center gap-1.5 px-space-sm py-1 rounded bg-surface-container-high/80 hover:bg-surface-container-high border border-primary/30 text-on-surface hover:text-primary transition-all shadow-[0_0_10px_-2px_rgba(34,211,238,0.25)] group" id="trigger-jarvis-modal"><span class="w-2 h-2 rounded-full bg-primary-container"></span><span class="font-label-code-sm text-label-code-sm font-semibold tracking-wider text-primary group-hover:brightness-110">JARVIS CO-PILOT</span><kbd class="px-1.5 py-0.5 rounded bg-surface-container-lowest border border-outline-variant/40 text-on-surface-variant font-label-code-sm text-label-code-sm">Ctrl+J</kbd></button></div><div class="flex-1 max-w-md hidden md:flex items-center"><div class="relative w-full"><span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-outline">search</span><input class="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-lg pl-8 pr-12 py-1 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Global command palette..." readonly="" type="text"><kbd class="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/40 text-on-surface-variant font-label-code-sm text-label-code-sm">Ctrl+K</kbd></div></div><div class="flex items-center gap-space-sm flex-shrink-0"><span class="hidden lg:inline-block font-label-code-sm text-label-code-sm text-on-surface-variant/80 tracking-tight">REFRESHED 3s AGO (AUTO 5s)</span><div class="relative flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary-container/15 border border-tertiary-container/50 shadow-[0_0_10px_-1px_rgba(255,177,71,0.25)]"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-container opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary-container"></span></span><span class="font-label-status text-label-status text-tertiary-container uppercase tracking-wider font-bold">2 ATTENTION · 11/12 UP</span></div><div class="flex items-center pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="https://lh3.googleusercontent.com/aida/AEtjO1WxBwTvbOktWAD49gOTXZwdXizLZSIoFG0ZPLEg8E2uJqG8qiYVYNuMvoIePhjLwXhhsOEuK1aL8gmZx_nJKPVgbpvIjpeI4vA1u4MosiaeSz1NfRabDsqzEhU3PIISztIk9AijiXL15Up234WVF6HeVK4kKPyqe62VHOW8D8WXCWTSYhhilvCaXxzK7D9CkV8Pds0HZB-ey-z8muInEHWXS_R6T7ZzeAu0a0VnY31nx7psHh6FeI_-oNah"></div></div></header><main class="w-full pt-14 flex-1 bg-surface-container-lowest"><div class="flex flex-col w-full">
+<div class="px-space-md sm:px-space-xl py-space-lg flex flex-col gap-space-lg max-w-[1540px] mx-auto w-full">
+<!-- Top Cockpit Sub-Bar / Header Info -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md pb-space-xs">
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="font-label-status text-label-status uppercase px-2 py-0.5 rounded-full bg-primary-container/15 text-primary tracking-widest font-bold">NODE: T5500-STATION</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant flex items-center gap-1">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
+            LUKS-KEYSTORE LOCKED
+          </span>
+<span class="font-label-code-sm text-label-code-sm text-outline">SEC_ENV_v4.2</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">Mission Control Settings &amp; Agent Credentials</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">Orchestrate headless OAuth device-flow token rings for core CLI agent rigs alongside encrypted gateway API keys and direct model daemon socket endpoints.</p>
+</div>
+<div class="flex items-center gap-space-sm flex-shrink-0">
+<button class="flex items-center gap-2 px-space-md py-2 rounded bg-surface-container-high hover:bg-surface-variant text-primary font-headline-sm text-headline-sm transition-all shadow-sm" id="btn-sync-all-tokens">
+<span class="material-symbols-outlined text-base">sync</span>
+<span class="">Refresh All Leases</span>
+</button>
+<button class="flex items-center gap-2 px-space-md py-2 rounded bg-error-container/20 text-error hover:bg-error-container hover:text-on-error-container font-headline-sm text-headline-sm transition-all" id="btn-emergency-seal-keystore">
+<span class="material-symbols-outlined text-base">lock_reset</span>
+<span class="">Seal Keystore</span>
+</button>
+</div>
+</div>
+<!-- Layout Grid: Main Registry vs Diagnostics / Controls -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- Central Registry Column (8 cols) -->
+<div class="xl:col-span-8 flex flex-col gap-space-lg">
+<!-- Central Card: CLI Agent Login Registry -->
+<div class="bg-surface-container-low rounded-xl shadow-md overflow-hidden flex flex-col" id="card-agent-logins">
+<!-- Card Header -->
+<div class="p-space-lg bg-surface-container flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm"><div class="flex flex-col gap-1"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-xl">terminal</span><h2 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight">CLI Agent Login Registry</h2><span class="px-2 py-0.5 rounded-full bg-primary-container/15 text-primary font-label-status text-label-status uppercase font-bold">CORE PROVIDERS · OAUTH ONLY</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">Managed local CLI agent authentication tokens on host T5500. Ephemeral PKCE sessions via headless browser tunnel — strictly zero static API keys stored for core daemons.</p><div class="flex flex-wrap items-center gap-2 pt-1"><span class="font-label-code-sm text-label-code-sm text-primary/80 bg-surface-container-high px-2 py-0.5 rounded border border-outline-variant/30">CORE PROVIDERS: Ephemeral Headless OAuth (Claude, Gemini, Codex, Grok, Kimi, Pi)</span><span class="font-label-code-sm text-label-code-sm text-tertiary-container bg-tertiary-container/15 px-2 py-0.5 rounded border border-tertiary-container/30">GATEWAYS &amp; LOCAL ENDPOINTS: See External Gateways Section below</span></div></div><div class="flex items-center gap-2 flex-shrink-0"><span class="font-label-status text-label-status uppercase text-on-surface-variant/80 tracking-widest">REGISTRY:</span><span class="font-label-code-sm text-label-code-sm bg-surface-container-high text-primary px-2 py-0.5 rounded font-bold">6 ONLINE / 1 EXPIRED</span></div></div>
+<!-- Quick Metrics Bar inside card -->
+<div class="grid grid-cols-2 sm:grid-cols-4 bg-surface-container-lowest/80 p-space-md gap-space-md text-center">
+<div class="flex flex-col items-center">
+<span class="font-label-status text-label-status text-outline tracking-wider uppercase">Active Daemons</span>
+<span class="font-label-code-lg text-label-code-lg text-primary font-bold">7 Rigs</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label-status text-label-status text-outline tracking-wider uppercase">Mean Lease TTL</span>
+<span class="font-label-code-lg text-label-code-lg text-on-surface font-bold">9.4 Days</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label-status text-label-status text-outline tracking-wider uppercase">Static Secrets</span>
+<span class="font-label-code-lg text-label-code-lg text-primary-fixed-dim font-bold">0 Keys</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label-status text-label-status text-outline tracking-wider uppercase">Security Tier</span>
+<span class="font-label-code-lg text-label-code-lg text-tertiary-container font-bold">LUKS-P3</span>
+</div>
+</div>
+<!-- Agent Registry Table / List -->
+<div class="flex flex-col divide-y-0 overflow-x-auto">
+<!-- 1. Claude (Opus) -->
+<div class="p-space-md sm:p-space-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md hover:bg-surface-container/50 transition-colors bg-surface-container-low" id="login-row-claude">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-secondary-container/30 text-secondary flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-xl">psychology</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Claude (Opus)</span>
+<span class="font-label-code-sm text-label-code-sm text-outline-variant">·</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Code Judge &amp; Architecture</span>
+</div>
+<div class="flex items-center gap-space-sm mt-1 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm text-primary/80 bg-surface-container-high px-1.5 py-0.5 rounded">anthropic-cli v1.4</span>
+<span class="font-label-code-sm text-label-code-sm text-outline">TTL: Expires in 14d</span>
+<span class="font-label-code-sm text-label-code-sm text-outline">dev-flow/headless</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end gap-space-md flex-shrink-0">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-status text-label-status tracking-wide" id="badge-claude-auth">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+                  Signed in (OAuth)
+                </span>
+<button class="px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all" id="btn-reauth-claude">
+<span class="material-symbols-outlined text-sm text-primary">terminal</span>
+<span class="">Open Terminal</span>
+</button>
+</div>
+</div>
+<!-- 2. Codex (Needs attention) -->
+<div class="p-space-md sm:p-space-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md hover:bg-surface-container/60 transition-colors bg-surface-container-high/40" id="login-row-codex">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-error-container/30 text-error flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-xl">token</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Codex</span>
+<span class="font-label-code-sm text-label-code-sm text-outline-variant">·</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Autonomous Refactoring Rig</span>
+<span class="px-1.5 py-0.2 rounded bg-error-container/40 text-error font-label-status text-label-status uppercase">BLOCKED</span>
+</div>
+<div class="flex items-center gap-space-sm mt-1 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm text-outline bg-surface-container px-1.5 py-0.5 rounded">github-copilot-cli</span>
+<span class="font-label-code-sm text-label-code-sm text-error">Token expired 18m ago</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant/70">ERR_TOKEN_STALE</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end gap-space-md flex-shrink-0">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container/20 text-error font-label-status text-label-status tracking-wide" id="badge-codex-auth">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
+                  Not signed in
+                </span>
+<button class="px-space-md py-1.5 rounded bg-primary-container text-on-primary-container hover:brightness-110 font-headline-sm text-headline-sm font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(34,211,238,0.4)]" id="btn-signin-codex">
+<span class="material-symbols-outlined text-sm font-bold">login</span>
+<span class="">Sign in</span>
+</button>
+</div>
+</div>
+<!-- 3. Gemini via agy -->
+<div class="p-space-md sm:p-space-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md hover:bg-surface-container/50 transition-colors bg-surface-container-low" id="login-row-gemini">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high text-primary flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-xl">smart_toy</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Gemini via agy</span>
+<span class="font-label-code-sm text-label-code-sm text-outline-variant">·</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Co-Builder &amp; Frontend Lead</span>
+</div>
+<div class="flex items-center gap-space-sm mt-1 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm text-primary/80 bg-surface-container-high px-1.5 py-0.5 rounded">agy-toolset v2.1</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Auto-refresh active via Google SSO</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end gap-space-md flex-shrink-0">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-status text-label-status tracking-wide" id="badge-gemini-auth">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+                  Signed in (OAuth)
+                </span>
+<button class="px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all" id="btn-reauth-gemini">
+<span class="material-symbols-outlined text-sm text-primary">terminal</span>
+<span class="">Terminal</span>
+</button>
+</div>
+</div>
+<!-- 4. Grok -->
+<div class="p-space-md sm:p-space-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md hover:bg-surface-container/50 transition-colors bg-surface-container-low" id="login-row-grok">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high text-tertiary-container flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-xl">hub</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Grok</span>
+<span class="font-label-code-sm text-label-code-sm text-outline-variant">·</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">X &amp; Social Marketing</span>
+</div>
+<div class="flex items-center gap-space-sm mt-1 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm text-primary/80 bg-surface-container-high px-1.5 py-0.5 rounded">x-dev-v2-cli</span>
+<span class="font-label-code-sm text-label-code-sm text-outline">TTL: Expires in 6d</span>
+<span class="font-label-code-sm text-label-code-sm text-outline">pkce-flow</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end gap-space-md flex-shrink-0">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-status text-label-status tracking-wide" id="badge-grok-auth">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+                  Signed in (OAuth)
+                </span>
+<button class="px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all" id="btn-reauth-grok">
+<span class="material-symbols-outlined text-sm text-primary">terminal</span>
+<span class="">Terminal</span>
+</button>
+</div>
+</div>
+<!-- 5. Kimi -->
+<div class="p-space-md sm:p-space-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md hover:bg-surface-container/50 transition-colors bg-surface-container-low" id="login-row-kimi">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high text-primary flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-xl">find_in_page</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Kimi</span>
+<span class="font-label-code-sm text-label-code-sm text-outline-variant">·</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Long-Context Doc Mining</span>
+</div>
+<div class="flex items-center gap-space-sm mt-1 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm text-primary/80 bg-surface-container-high px-1.5 py-0.5 rounded">kimi-extract-cli</span>
+<span class="font-label-code-sm text-label-code-sm text-outline">TTL: Expires in 22d</span>
+<span class="font-label-code-sm text-label-code-sm text-outline">2M Context Buffer</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end gap-space-md flex-shrink-0">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-status text-label-status tracking-wide" id="badge-kimi-auth">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+                  Signed in (OAuth)
+                </span>
+<button class="px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all" id="btn-reauth-kimi">
+<span class="material-symbols-outlined text-sm text-primary">terminal</span>
+<span class="">Terminal</span>
+</button>
+</div>
+</div>
+<!-- 6. OpenCode + Ollama -->
+<div class="p-space-md sm:p-space-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md hover:bg-surface-container/50 transition-colors bg-surface-container-low" id="login-row-opencode">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high text-secondary flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-xl">memory</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">OpenCode + Ollama</span>
+<span class="font-label-code-sm text-label-code-sm text-outline-variant">·</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Local CFO Models</span>
+</div>
+<div class="flex items-center gap-space-sm mt-1 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm text-primary/80 bg-surface-container-high px-1.5 py-0.5 rounded">ollama-local-runner</span>
+<span class="font-label-code-sm text-label-code-sm text-outline">Socket: /var/run/ollama.sock</span>
+<span class="font-label-code-sm text-label-code-sm text-primary-fixed-dim">Zero WAN Traffic</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end gap-space-md flex-shrink-0">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-status text-label-status tracking-wide" id="badge-opencode-auth">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+                  Signed in (Local Socket)
+                </span>
+<button class="px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all" id="btn-reauth-opencode">
+<span class="material-symbols-outlined text-sm text-primary">terminal</span>
+<span class="">Terminal</span>
+</button>
+</div>
+</div>
+<!-- 7. Pi -->
+<div class="p-space-md sm:p-space-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md hover:bg-surface-container/50 transition-colors bg-surface-container-low" id="login-row-pi">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high text-tertiary-container flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-xl">record_voice_over</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Pi</span>
+<span class="font-label-code-sm text-label-code-sm text-outline-variant">·</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Adaptive Dialog Sentinel</span>
+</div>
+<div class="flex items-center gap-space-sm mt-1 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm text-primary/80 bg-surface-container-high px-1.5 py-0.5 rounded">pi-dialog-cli</span>
+<span class="font-label-code-sm text-label-code-sm text-outline">TTL: Expires in 11d</span>
+<span class="font-label-code-sm text-label-code-sm text-outline">session-bound</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end gap-space-md flex-shrink-0">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-status text-label-status tracking-wide" id="badge-pi-auth">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+                  Signed in (OAuth)
+                </span>
+<button class="px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all" id="btn-reauth-pi">
+<span class="material-symbols-outlined text-sm text-primary">terminal</span>
+<span class="">Terminal</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Lock Note Card -->
+<div class="p-space-lg rounded-xl bg-surface-container-low shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-space-md" id="card-oauth-policy-notice"><div class="w-12 h-12 rounded-lg bg-surface-container text-primary flex items-center justify-center flex-shrink-0 shadow-sm"><span class="material-symbols-outlined text-2xl text-primary-container">lock</span></div><div class="flex flex-col gap-1 min-w-0"><div class="flex items-center gap-2 flex-wrap"><span class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">No API keys for Core CLI Daemons. OAuth Only.</span><span class="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary font-label-status text-label-status tracking-widest uppercase">ENFORCED BY HARDWARE POLICY</span></div><p class="font-body-md text-body-md text-on-surface-variant">Core autonomous CLI agent rigs enforce OAuth device-flow grants stored in LUKS-encrypted keystore on <span class="font-label-code-sm text-label-code-sm text-primary bg-surface-container px-1 py-0.5 rounded">/dev/nvme0n1p3</span>. External gateways (OpenRouter, DeepSeek) and local socket runners (Ollama) use dedicated vault-managed endpoints with automated rotation.</p></div></div><div class="bg-surface-container-low rounded-xl shadow-md overflow-hidden flex flex-col" id="card-gateways-key-rotation"><div class="p-space-lg bg-surface-container flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm border-b border-outline-variant/30"><div class="flex flex-col gap-0.5"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-tertiary-container text-xl">key</span><h2 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight">External Gateways &amp; Key Rotation</h2><span class="px-2 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary-container font-label-status text-label-status uppercase font-bold">API KEYS &amp; LOCAL ENDPOINTS</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">Managed API keys, auto-failover gateways, and direct daemon socket overrides for third-party model providers and local runners.</p></div><div class="flex items-center gap-2 flex-shrink-0"><span class="font-label-status text-label-status uppercase text-on-surface-variant/80 tracking-widest">STATUS:</span><span class="font-label-code-sm text-label-code-sm bg-surface-container-high text-primary px-2 py-0.5 rounded font-bold">3 ACTIVE / 0 DEGRADED</span></div></div><div class="flex flex-col divide-y-0"><div class="p-space-md sm:p-space-lg flex flex-col lg:flex-row lg:items-center justify-between gap-space-md hover:bg-surface-container/50 transition-colors border-b border-outline-variant/30"><div class="flex items-start gap-space-md min-w-0"><div class="w-10 h-10 rounded-lg bg-surface-container-high text-primary flex items-center justify-center flex-shrink-0 shadow-sm"><span class="material-symbols-outlined text-xl">route</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-2 flex-wrap"><span class="font-headline-sm text-headline-sm text-on-surface font-semibold">OpenRouter Aggregator</span><span class="font-label-code-sm text-label-code-sm text-outline-variant">·</span><span class="font-body-sm text-body-sm text-on-surface-variant">Multi-Model Fallback Gateway</span><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-label-status text-label-status uppercase">AUTO-FAILOVER ACTIVE</span></div><div class="flex items-center gap-space-sm mt-1.5 flex-wrap"><span class="font-label-code-sm text-label-code-sm text-primary font-bold bg-surface-container-high px-2 py-0.5 rounded font-mono">sk-or-v1-98a2••••••••••••b49f</span><span class="font-label-code-sm text-label-code-sm text-outline">Target: openrouter.ai/api/v1</span><span class="font-label-code-sm text-label-code-sm text-primary-fixed-dim">Fallbacks: claude-3-5-sonnet &gt; gpt-4o</span></div></div></div><div class="flex items-center justify-between lg:justify-end gap-space-sm flex-shrink-0"><button class="px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-primary font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all shadow-sm" id="btn-rotate-openrouter"><span class="material-symbols-outlined text-sm">sync</span><span class="">Rotate Key</span></button><button class="px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all" id="btn-test-openrouter"><span class="material-symbols-outlined text-sm text-primary">network_ping</span><span class="">Test Ping</span></button></div></div><div class="p-space-md sm:p-space-lg flex flex-col lg:flex-row lg:items-center justify-between gap-space-md hover:bg-surface-container/50 transition-colors border-b border-outline-variant/30"><div class="flex items-start gap-space-md min-w-0"><div class="w-10 h-10 rounded-lg bg-surface-container-high text-secondary flex items-center justify-center flex-shrink-0 shadow-sm"><span class="material-symbols-outlined text-xl">dns</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-2 flex-wrap"><span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Ollama Daemon Endpoint</span><span class="font-label-code-sm text-label-code-sm text-outline-variant">·</span><span class="font-body-sm text-body-sm text-on-surface-variant">Local Machine Runner</span><span class="px-1.5 py-0.5 rounded bg-secondary-container/30 text-secondary font-label-status text-label-status uppercase">SOCKET / NO-AUTH</span></div><div class="flex items-center gap-space-sm mt-1.5 flex-wrap"><span class="font-label-code-sm text-label-code-sm text-on-surface bg-surface-container-high px-2 py-0.5 rounded font-mono">http://127.0.0.1:11434</span><span class="font-label-code-sm text-label-code-sm text-outline">Socket: /var/run/ollama.sock</span><span class="font-label-code-sm text-label-code-sm text-primary">Direct Host Bind (Zero WAN)</span></div></div></div><div class="flex items-center justify-between lg:justify-end gap-space-sm flex-shrink-0"><button class="px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all" id="btn-override-ollama-host"><span class="material-symbols-outlined text-sm text-primary">tune</span><span class="">Override Host</span></button><button class="px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all" id="btn-ping-ollama"><span class="material-symbols-outlined text-sm text-primary">bolt</span><span class="">Healthcheck</span></button></div></div><div class="p-space-md sm:p-space-lg flex flex-col lg:flex-row lg:items-center justify-between gap-space-md hover:bg-surface-container/50 transition-colors"><div class="flex items-start gap-space-md min-w-0"><div class="w-10 h-10 rounded-lg bg-surface-container-high text-tertiary-container flex items-center justify-center flex-shrink-0 shadow-sm"><span class="material-symbols-outlined text-xl">vpn_key</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-2 flex-wrap"><span class="font-headline-sm text-headline-sm text-on-surface font-semibold">DeepSeek &amp; Together AI Direct Keys</span><span class="font-label-code-sm text-label-code-sm text-outline-variant">·</span><span class="font-body-sm text-body-sm text-on-surface-variant">Direct Raw Provider Endpoints</span></div><div class="flex items-center gap-space-sm mt-1.5 flex-wrap"><span class="font-label-code-sm text-label-code-sm text-tertiary-container font-mono bg-surface-container-high px-2 py-0.5 rounded">sk-deepseek-••••••••4c12</span><span class="font-label-code-sm text-label-code-sm text-outline">together-ai: tog_••••••••e33d</span><span class="font-label-code-sm text-label-code-sm text-primary/80">Instant hot-swap ready</span></div></div></div><div class="flex items-center justify-between lg:justify-end gap-space-sm flex-shrink-0"><button class="px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all" id="btn-swap-deepseek"><span class="material-symbols-outlined text-sm text-tertiary-container">edit</span><span class="">Hot-Swap Key</span></button><button class="px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all" id="btn-ping-deepseek"><span class="material-symbols-outlined text-sm text-primary">network_ping</span><span class="">Test Ping</span></button></div></div></div></div>
+</div>
+<!-- Secondary Settings Panels Column (4 cols) -->
+<div class="xl:col-span-4 flex flex-col gap-space-lg">
+<!-- Card: Network Tunnels & Tailscale Gateway -->
+<div class="bg-surface-container-low rounded-xl shadow-md p-space-lg flex flex-col gap-space-md" id="card-settings-network">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">vpn_lock</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Network &amp; Tailscale Gateway</h3>
+</div>
+<span class="font-label-status text-label-status uppercase px-2 py-0.5 rounded-full bg-primary-container/15 text-primary" id="badge-tailscale-status">ENCRYPTED MESH</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Host T5500 routing tunnel through wireguard overlay for secure co-pilot handshakes without public IP binds.</p>
+<div class="flex flex-col gap-space-sm bg-surface-container-lowest/70 p-space-md rounded-lg">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tailscale Subnet IP</span>
+<span class="font-label-code-md text-label-code-md text-primary font-semibold">100.84.12.91</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Headless OAuth Relay</span>
+<span class="font-label-code-md text-label-code-md text-on-surface">127.0.0.1:48291</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">DNS Egress Policy</span>
+<span class="font-label-code-md text-label-code-md text-tertiary-container">Strict DoH (NextDNS)</span>
+</div>
+</div>
+<!-- Network Toggle Controls -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<label class="flex items-center justify-between cursor-pointer p-2 rounded bg-surface-container/60 hover:bg-surface-container transition-colors">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Ephemeral Taildrop</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Auto-accept agent memory sync bursts</span>
+</div>
+<input checked="" class="w-4 h-4 rounded bg-surface-container-lowest text-primary-container focus:ring-0 accent-primary-container cursor-pointer" id="toggle-taildrop" type="checkbox">
+</label>
+<label class="flex items-center justify-between cursor-pointer p-2 rounded bg-surface-container/60 hover:bg-surface-container transition-colors">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Egress Block on Auth Drop</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Kill sockets if OAuth lease invalidates</span>
+</div>
+<input checked="" class="w-4 h-4 rounded bg-surface-container-lowest text-primary-container focus:ring-0 accent-primary-container cursor-pointer" id="toggle-kill-egress" type="checkbox">
+</label>
+</div>
+<button class="w-full py-2 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center justify-center gap-2 transition-all" id="btn-test-tailscale-ping">
+<span class="material-symbols-outlined text-base text-primary">network_ping</span>
+<span class="">Verify Wireguard Mesh Health</span>
+</button>
+</div>
+<!-- Card: Notification & Founder Alert Thresholds -->
+<div class="bg-surface-container-low rounded-xl shadow-md p-space-lg flex flex-col gap-space-md" id="card-settings-alerts">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container text-xl">notifications_active</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Founder Alert Thresholds</h3>
+</div>
+<span class="font-label-status text-label-status uppercase px-2 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary-container" id="badge-alerts-mode">PRIORITY-P0</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Dispatch direct push notifications via Telegram &amp; Hermes bot when autonomous rigs drop tokens or breach runtime bounds.</p>
+<!-- Notification Channel Rows -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between p-2 rounded bg-surface-container/70">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">send</span>
+<span class="font-body-sm text-body-sm text-on-surface">Hermes Telegram Hook</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-primary bg-surface-container-high px-2 py-0.5 rounded">CONNECTED</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container/70">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-sm">schedule</span>
+<span class="font-body-sm text-body-sm text-on-surface">Token Expiry Pre-Warning</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface bg-surface-container-high px-2 py-0.5 rounded">T-minus 6h</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container/70">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-sm">emergency_home</span>
+<span class="font-body-sm text-body-sm text-on-surface">Autonomous Block Alerts</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-error bg-error-container/20 px-2 py-0.5 rounded">INSTANT DING</span>
+</div>
+</div>
+<!-- Alert Audio Frequency -->
+<div class="flex flex-col gap-1 pt-space-xs">
+<div class="flex justify-between items-center text-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Cognitive Alert Intensity</span>
+<span class="font-label-code-sm text-label-code-sm text-primary font-bold">Low Ambient (ADHD Safe)</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary-container h-full rounded-full w-1/3"></div>
+</div>
+</div>
+<div class="flex gap-2 pt-space-xs">
+<button class="flex-1 py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm transition-all text-center" id="btn-test-alert-ping">
+              Send Test Ping
+            </button>
+<button class="px-space-md py-1.5 rounded bg-primary-container text-on-primary-container font-headline-sm text-headline-sm font-semibold hover:brightness-110 transition-all" id="btn-save-alert-config">
+              Save
+            </button>
+</div>
+</div>
+<!-- Telemetry Key-Vault Diagnostic -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex items-center justify-between" id="card-keystore-telemetry">
+<div class="flex items-center gap-3">
+<div class="p-2 rounded bg-surface-container text-primary">
+<span class="material-symbols-outlined text-lg">shield</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-medium">LUKS Entropy Level</span>
+<span class="font-label-code-sm text-label-code-sm text-outline">/dev/random: 3,982 bits (Optimal)</span>
+</div>
+</div>
+<span class="font-label-code-md text-label-code-md text-primary font-bold">100% SECURE</span>
+</div>
+</div>
+</div>
+<!-- Active Terminal Drawer / Micro-Interaction Modal Simulator (Hidden by default, triggered by action buttons) -->
+<div class="fixed inset-0 bg-surface-container-lowest/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4" id="terminal-oauth-modal">
+<div class="bg-surface-container-low w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden flex flex-col">
+<div class="bg-surface-container px-space-lg py-3 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-bold uppercase tracking-wider" id="modal-terminal-title">OAUTH DEVICE TUNNEL // CODEX</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1" id="btn-close-terminal-modal">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+</div>
+<div class="p-space-lg bg-surface-container-lowest font-label-code-md text-label-code-md text-on-surface-variant flex flex-col gap-2 min-h-[220px]">
+<p class="text-outline">&gt; Initializing headless PKCE grant loop on 127.0.0.1:48291...</p>
+<p class="text-primary">&gt; Target binary: <span id="modal-binary-name" class="">github-copilot-cli</span></p>
+<p class="text-on-surface">&gt; To authenticate, use your browser to visit: <span class="text-primary-fixed-dim underline">https://github.com/login/device</span></p>
+<div class="p-3 my-2 bg-surface-container rounded font-label-code-lg text-label-code-lg text-primary text-center font-bold tracking-widest selection:bg-primary-container selection:text-surface-container-lowest">
+            WD74 - 99AB - TK12
+          </div>
+<p class="text-outline">&gt; Polling authorization token from token endpoint (interval: 5s)...</p>
+<p class="text-primary-container animate-pulse">&gt; Waiting for founder approval on device...</p>
+</div>
+<div class="bg-surface-container p-space-md flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Press Esc or Close to background process</span>
+<button class="px-space-md py-1.5 rounded bg-primary-container text-on-primary-container font-headline-sm text-headline-sm font-semibold hover:brightness-110" id="btn-simulate-complete">
+            Simulate Auth Success
+          </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+    // Micro-interactions & State Simulators
+    (function() {
+      const modal = document.getElementById('terminal-oauth-modal');
+      const closeBtn = document.getElementById('btn-close-terminal-modal');
+      const titleSpan = document.getElementById('modal-terminal-title');
+      const binarySpan = document.getElementById('modal-binary-name');
+      const codexBtn = document.getElementById('btn-signin-codex');
+      const codexBadge = document.getElementById('badge-codex-auth');
+      const simulateCompleteBtn = document.getElementById('btn-simulate-complete');
+      
+      const openModal = (agentName, binaryName) => {
+        if (!modal) return;
+        if (titleSpan) titleSpan.textContent = `OAUTH DEVICE TUNNEL // ${agentName.toUpperCase()}`;
+        if (binarySpan) binarySpan.textContent = binaryName;
+        modal.classList.remove('hidden');
+      };
+
+      const closeModal = () => {
+        if (!modal) return;
+        modal.classList.add('hidden');
+      };
+
+      if (codexBtn) {
+        codexBtn.addEventListener('click', () => {
+          openModal('Codex', 'github-copilot-cli');
+        });
+      }
+
+      // Re-auth generic listeners
+      const reauthBtns = [
+        { id: 'btn-reauth-claude', agent: 'Claude', bin: 'anthropic-cli v1.4' },
+        { id: 'btn-reauth-gemini', agent: 'Gemini', bin: 'agy-toolset v2.1' },
+        { id: 'btn-reauth-grok', agent: 'Grok', bin: 'x-dev-v2-cli' },
+        { id: 'btn-reauth-kimi', agent: 'Kimi', bin: 'kimi-extract-cli' },
+        { id: 'btn-reauth-opencode', agent: 'OpenCode', bin: 'ollama-local-runner' },
+        { id: 'btn-reauth-pi', agent: 'Pi', bin: 'pi-dialog-cli' }
+      ];
+
+      reauthBtns.forEach(item => {
+        const btn = document.getElementById(item.id);
+        if (btn) {
+          btn.addEventListener('click', () => {
+            openModal(item.agent, item.bin);
+          });
+        }
+      });
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+      }
+
+      if (simulateCompleteBtn) {
+        simulateCompleteBtn.addEventListener('click', () => {
+          closeModal();
+          if (codexBadge) {
+            codexBadge.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-status text-label-status tracking-wide';
+            codexBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Signed in (OAuth)';
+          }
+          if (codexBtn) {
+            codexBtn.className = 'px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-headline-sm text-headline-sm flex items-center gap-1.5 transition-all';
+            codexBtn.innerHTML = '<span class="material-symbols-outlined text-sm text-primary">terminal</span><span>Terminal</span>';
+          }
+        });
+      }
+
+      // Escape key to close modal
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+          closeModal();
+        }
+      });
+
+      // Quick feedback on Alert ping
+      const alertTestBtn = document.getElementById('btn-test-alert-ping');
+      if (alertTestBtn) {
+        alertTestBtn.addEventListener('click', () => {
+          const orig = alertTestBtn.textContent;
+          alertTestBtn.textContent = 'Sent via Hermes!';
+          alertTestBtn.classList.add('text-primary');
+          setTimeout(() => {
+            alertTestBtn.textContent = orig;
+            alertTestBtn.classList.remove('text-primary');
+          }, 1800);
+        });
+      }
+    })();
+  </script>
+</div></main></div>
+
+</body></html>

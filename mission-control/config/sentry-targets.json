@@ -70,10 +70,10 @@
         },
         {
           "id": "airi",
-          "label": "JARVIS (Mission Control) (:9150)",
+          "label": "JARVIS (Mission Control) (:3130)",
           "port": 9150,
           "kind": "http",
-          "url": "http://127.0.0.1:9150/health",
+          "url": "http://127.0.0.1:3130/health",
           "identity": "jarvis-dashboard",
           "fix": "airi",
           "note": "JARVIS is the one Mission Control (ruled 2026-09-17, ops/runbook/SABRETOOTH-NODE-RUNBOOK.md; AIRI dashboard retired). Served on the LAN by mission-control/server.mjs (moved from ops/dashboard-jarvis in the repo consolidation, 2026-09-17): live skills-tree agents, the Obsidian vault as the knowledge graph, Sentry state, avatar renders, OmniRoute proxied with the key server-side, Mission Control v5 embedded (now optional), and the official Claude CLI launcher. Identity = /health service name. id/fix key kept as 'airi' to avoid touching every caller of this target id."
@@ -127,13 +127,13 @@
       "targets": [
         {
           "id": "omniroute",
-          "label": "OmniRoute gateway 3.8.50 (192.168.0.8:20128/v1)",
+          "label": "OmniRoute gateway 3.8.50 (192.168.0.15:20128/v1)",
           "port": 20128,
           "kind": "http",
-          "url": "http://192.168.0.8:20128/v1/models",
+          "url": "http://192.168.0.15:20128/v1/models",
           "identity": "auto/best-coding",
           "fix": "omniroute",
-          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models. Identity = the model catalog answering (the built-in combo id must appear). Changed from a port check 2026-09-03: the server child hit ~3 GB working set, /models went from 18 s to a 60 s timeout, completions died, and the port stayed open the whole time \u2014 an open port is not health. 2026-09-03 Joshua: the ONE OmniRoute URL for every client, doc, and probe is http://192.168.0.8:20128/v1 \u2014 verified from his tablet over Wi-Fi; loopback/localhost forms never worked off-box. The separate 'omnilan' row was merged into this one. 2026-09-06: upgraded 3.8.49 -> 3.8.50; this build answers /v1/models with 401 unless the API key is sent, so the probe carries OMNI_ROUTE_API_KEY from the repo .env (authEnv). AUTH MISSING / AUTH REJECTED are reported as such, never as a plain DOWN. Upgrade procedure lives in FABLES-HOUSE.ps1 at the OmniRoute stage.",
+          "note": "Bots route here. Hermes default stays on Nous / auth sign-in models. Identity = the model catalog answering (the built-in combo id must appear). Changed from a port check 2026-09-03: the server child hit ~3 GB working set, /models went from 18 s to a 60 s timeout, completions died, and the port stayed open the whole time \u2014 an open port is not health. 2026-09-03 Joshua: the ONE OmniRoute URL for every client, doc, and probe is http://192.168.0.15:20128/v1 \u2014 verified from his tablet over Wi-Fi; loopback/localhost forms never worked off-box. The separate 'omnilan' row was merged into this one. 2026-09-06: upgraded 3.8.49 -> 3.8.50; this build answers /v1/models with 401 unless the API key is sent, so the probe carries OMNI_ROUTE_API_KEY from the repo .env (authEnv). AUTH MISSING / AUTH REJECTED are reported as such, never as a plain DOWN. Upgrade procedure lives in FABLES-HOUSE.ps1 at the OmniRoute stage.",
           "timeoutMs": 20000,
           "authEnv": "OMNI_ROUTE_API_KEY"
         },
@@ -334,7 +334,7 @@
           "kind": "http",
           "url": "http://192.168.0.40:20128/api/health",
           "identity": "ok",
-          "note": "Joshua 2026-09-18: a separate OmniRoute install with no providers; every lane routes to Sabretooth's http://192.168.0.8:20128/v1 only"
+          "note": "Joshua 2026-09-18: a separate OmniRoute install with no providers; every lane routes to Sabretooth's http://192.168.0.15:20128/v1 only"
         },
         {
           "id": "aw-ssh",

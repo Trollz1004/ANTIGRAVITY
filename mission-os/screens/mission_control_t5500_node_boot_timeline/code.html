@@ -1,0 +1,490 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-error-container":"#ffdad6","inverse-surface":"#d3e4fe","surface-variant":"#26364a","secondary-fixed-dim":"#d0bcff","on-surface":"#d3e4fe","primary-container":"#22d3ee","surface-tint":"#2fd9f4","on-tertiary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","on-surface-variant":"#bbc9cd","on-secondary-fixed-variant":"#5516be","surface":"#031427","primary-fixed":"#a2eeff","on-tertiary-fixed":"#2a1700","surface-bright":"#2a3a4f","surface-container-low":"#0b1c30","on-secondary-container":"#c4abff","secondary":"#d0bcff","tertiary-fixed-dim":"#ffb95f","inverse-primary":"#006877","on-primary":"#00363e","outline":"#859397","surface-container-highest":"#26364a","on-primary-fixed-variant":"#004e5a","primary":"#8aebff","on-secondary":"#3c0091","tertiary":"#ffd6a7","outline-variant":"#3c494c","error-container":"#93000a","on-secondary-fixed":"#23005c","tertiary-fixed":"#ffddb8","tertiary-container":"#ffb147","on-primary-container":"#005763","secondary-fixed":"#e9ddff","on-tertiary-container":"#704500","surface-dim":"#031427","on-tertiary":"#472a00","on-primary-fixed":"#001f25","background":"#031427","surface-container":"#102034","error":"#ffb4ab","secondary-container":"#571bc1","on-error":"#690005","surface-container-high":"#1b2b3f","primary-fixed-dim":"#2fd9f4","on-background":"#d3e4fe","inverse-on-surface":"#213145"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-xs":"0.25rem","space-xl":"1.5rem","space-md":"0.75rem","gutter-desktop":"1rem","space-sm":"0.5rem","space-lg":"1rem","margin-desktop":"1.5rem",gutter:"0.75rem",margin:"1rem"},fontFamily:{"label-code-sm":["JetBrains Mono"],"headline-lg":["Inter"],"body-md":["Inter"],"headline-xl":["Inter"],"body-sm":["Inter"],"headline-md":["Inter"],"body-lg":["Inter"],"label-status":["JetBrains Mono"],"label-code-lg":["JetBrains Mono"],"label-code-md":["JetBrains Mono"],"headline-sm":["Inter"]},fontSize:{"label-code-sm":["10px",{lineHeight:"14px",letterSpacing:"0.02em",fontWeight:"600"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"600"}],"body-md":["13px",{lineHeight:"18px",letterSpacing:"0em",fontWeight:"400"}],"headline-xl":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"body-sm":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"400"}],"headline-md":["18px",{lineHeight:"24px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-lg":["14px",{lineHeight:"20px",letterSpacing:"0em",fontWeight:"400"}],"label-status":["9px",{lineHeight:"12px",letterSpacing:"0.08em",fontWeight:"700"}],"label-code-lg":["13px",{lineHeight:"18px",letterSpacing:"-0.01em",fontWeight:"500"}],"label-code-md":["11px",{lineHeight:"16px",letterSpacing:"0em",fontWeight:"500"}],"headline-sm":["14px",{lineHeight:"20px",letterSpacing:"-0.005em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface-container-lowest font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline-variant/40 z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-14 px-space-lg flex items-center gap-space-sm border-b border-outline-variant/30 bg-surface-container-lowest/40"><img alt="ANTIGRAVITY Insignia" class="w-7 h-7 rounded object-cover ring-1 ring-primary/30" src="https://lh3.googleusercontent.com/aida/AEtjO1WxBwTvbOktWAD49gOTXZwdXizLZSIoFG0ZPLEg8E2uJqG8qiYVYNuMvoIePhjLwXhhsOEuK1aL8gmZx_nJKPVgbpvIjpeI4vA1u4MosiaeSz1NfRabDsqzEhU3PIISztIk9AijiXL15Up234WVF6HeVK4kKPyqe62VHOW8D8WXCWTSYhhilvCaXxzK7D9CkV8Pds0HZB-ey-z8muInEHWXS_R6T7ZzeAu0a0VnY31nx7psHh6FeI_-oNah"><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface font-bold uppercase leading-none truncate">ANTIGRAVITY</span><span class="font-label-code-sm text-label-code-sm text-primary tracking-wider uppercase leading-none mt-1 truncate">MISSION CONTROL v4.2</span></div></div><div class="px-space-md py-space-sm flex items-center justify-between"><span class="font-label-status text-label-status uppercase text-on-surface-variant/70 tracking-widest px-space-sm">OPERATIONAL RUNTIME</span><span class="font-label-code-sm text-label-code-sm text-primary/70 bg-surface-container-high px-1.5 py-0.5 rounded border border-outline-variant/30">ACTIVE</span></div><nav class="flex flex-col gap-0.5 px-space-xs overflow-y-auto" data-active-classes="bg-surface-container-high text-primary border-l-2 border-primary-container shadow-[0_0_12px_-2px_rgba(34,211,238,0.35)]"><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="overview" href="#" id="nav-overview"><span class="font-body-md text-body-md font-medium truncate">Overview</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="jarvis" href="#" id="nav-jarvis"><div class="flex items-center gap-space-xs min-w-0"><span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span><span class="font-body-md text-body-md font-medium truncate">JARVIS</span></div><kbd class="px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/40 text-primary font-label-code-sm text-label-code-sm shadow-sm">Ctrl+J</kbd></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="agents" href="#" id="nav-agents"><span class="font-body-md text-body-md font-medium truncate">Agents</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="board" href="#" id="nav-board"><span class="font-body-md text-body-md font-medium truncate">Board</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="gateway" href="#" id="nav-gateway"><span class="font-body-md text-body-md font-medium truncate">Gateway</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="marketing" href="#" id="nav-marketing"><span class="font-body-md text-body-md font-medium truncate">Marketing</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="memory" href="#" id="nav-memory"><span class="font-body-md text-body-md font-medium truncate">Memory</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="node" href="#" id="nav-node"><span class="font-body-md text-body-md font-medium truncate">Node</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="logs" href="#" id="nav-logs"><span class="font-body-md text-body-md font-medium truncate">Logs</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="support" href="#" id="nav-support"><span class="font-body-md text-body-md font-medium truncate">Support</span><span class="font-label-code-sm text-label-code-sm text-tertiary-container bg-tertiary-container/15 px-1 py-0.5 rounded border border-tertiary-container/40">Hermes</span></a><a class="flex items-center justify-between px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="settings" href="#" id="nav-settings"><span class="font-body-md text-body-md font-medium truncate">Settings</span></a></nav></div><div class="p-space-md border-t border-outline-variant/30 bg-surface-container-lowest/60 flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs min-w-0"><span class="relative flex h-2 w-2 flex-shrink-0"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-primary-fixed-dim"></span></span><div class="flex flex-col min-w-0"><span class="font-label-code-sm text-label-code-sm text-on-surface truncate">T5500 · 192.168.0.15</span><span class="font-label-status text-label-status text-on-surface-variant uppercase tracking-wider">SYNCHRONIZED</span></div></div><div class="flex-shrink-0"><img alt="Founder" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhmd3yP9MzJWT7qrjISzubu162hbjaLsrNF9GtgeXSI4bDcErrD-pZ48vYrYq1s0crf7_kp54urrPEhzqmEmtEajuMHiaJkQrn5X3j1TdvRaxj28d5AqdH6WdbXo44dJiCBb-28Dr7HoixoNmpA5c9eyPASYoR3KZ3eHNRDa1qF7TUpXqQzy1uqLLuKwkjx6wPrwEeVTiO984dIg9nYT8lqJ6uUzA_mE6TKZjh7eRuPZEJLsJCvs-fhw"></div></div></aside><div class="pl-64 flex flex-col min-h-screen"><header class="fixed top-0 left-64 right-0 h-14 bg-surface-container-low/90 backdrop-blur-md border-b border-outline-variant/30 z-40 px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md min-w-0"><div class="flex items-center gap-1.5 flex-shrink-0"><span class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Mission Control</span><span class="text-outline-variant font-label-code-sm text-label-code-sm">/</span><span class="font-label-code-md text-label-code-md text-primary tracking-wide">CLUSTER-ALPHA</span></div><button class="hidden sm:flex items-center gap-1.5 px-space-sm py-1 rounded bg-surface-container-high/80 hover:bg-surface-container-high border border-primary/30 text-on-surface hover:text-primary transition-all shadow-[0_0_10px_-2px_rgba(34,211,238,0.25)] group" id="trigger-jarvis-modal"><span class="w-2 h-2 rounded-full bg-primary-container"></span><span class="font-label-code-sm text-label-code-sm font-semibold tracking-wider text-primary group-hover:brightness-110">JARVIS CO-PILOT</span><kbd class="px-1.5 py-0.5 rounded bg-surface-container-lowest border border-outline-variant/40 text-on-surface-variant font-label-code-sm text-label-code-sm">Ctrl+J</kbd></button></div><div class="flex-1 max-w-md hidden md:flex items-center"><div class="relative w-full"><span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-outline">search</span><input class="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-lg pl-8 pr-12 py-1 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Global command palette..." readonly="" type="text"><kbd class="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/40 text-on-surface-variant font-label-code-sm text-label-code-sm">Ctrl+K</kbd></div></div><div class="flex items-center gap-space-sm flex-shrink-0"><span class="hidden lg:inline-block font-label-code-sm text-label-code-sm text-on-surface-variant/80 tracking-tight">REFRESHED 3s AGO (AUTO 5s)</span><div class="relative flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary-container/15 border border-tertiary-container/50 shadow-[0_0_10px_-1px_rgba(255,177,71,0.25)]"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-container opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary-container"></span></span><span class="font-label-status text-label-status text-tertiary-container uppercase tracking-wider font-bold">2 ATTENTION · 11/12 UP</span></div><div class="flex items-center pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="https://lh3.googleusercontent.com/aida/AEtjO1WxBwTvbOktWAD49gOTXZwdXizLZSIoFG0ZPLEg8E2uJqG8qiYVYNuMvoIePhjLwXhhsOEuK1aL8gmZx_nJKPVgbpvIjpeI4vA1u4MosiaeSz1NfRabDsqzEhU3PIISztIk9AijiXL15Up234WVF6HeVK4kKPyqe62VHOW8D8WXCWTSYhhilvCaXxzK7D9CkV8Pds0HZB-ey-z8muInEHWXS_R6T7ZzeAu0a0VnY31nx7psHh6FeI_-oNah"></div></div></header><main class="w-full pt-14 flex-1 bg-surface-container-lowest"><div class="flex flex-col w-full p-space-lg space-y-space-lg text-on-surface">
+<!-- TOP STATUS DECK & RAPID ACTIONS -->
+<header class="flex flex-col xl:flex-row xl:items-center justify-between gap-space-md bg-surface-container-low p-space-lg rounded-xl shadow-md" id="node-command-deck">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-container shadow-sm flex-shrink-0">
+<span class="material-symbols-outlined text-2xl">dns</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight truncate">DELL PRECISION T5500 · ORBITAL HOST</h1>
+<span class="px-2 py-0.5 rounded-full bg-primary-container/15 text-primary-fixed text-label-status font-label-status uppercase">MISSION CRITICAL</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant text-label-status font-label-status uppercase">REV 4.2 ARCH-LINUX</span>
+</div>
+<p class="font-label-code-sm text-label-code-sm text-on-surface-variant flex items-center gap-space-xs mt-0.5"><span class="">MAC: 18-03-73-18-E5-86</span><span class="">·</span><span class="">IP: 192.168.0.15 (STATIC)</span><span class="">·</span><span class="text-primary">NODE ID: 15089836-E455-4E9B-AFA1-5F2CD61B269B</span></p>
+</div>
+</div>
+<!-- QUICK TELEMETRY PULSE -->
+<div class="flex items-center gap-space-sm flex-wrap">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface hover:text-primary transition-all font-label-code-md text-label-code-md shadow-sm" id="btn-sync-telemetry">
+<span class="material-symbols-outlined text-base text-primary">sync</span>
+<span class="">Sync Telemetry</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-all font-label-code-md text-label-code-md shadow-sm" id="btn-prune-cache">
+<span class="material-symbols-outlined text-base">cleaning_services</span>
+<span class="">Prune Shm/Cache</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-error-container/20 hover:bg-error-container/40 text-error transition-all font-label-code-md text-label-code-md shadow-sm" id="btn-reboot-node-manual">
+<span class="material-symbols-outlined text-base">power_settings_new</span>
+<span class="">Emergency Reboot</span>
+</button>
+</div>
+</header>
+<!-- GRID: HARDWARE TELEMETRY TILES -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-space-md" id="telemetry-hardware-overview">
+<!-- CPU Tile -->
+<div class="bg-surface-container rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden group" id="tile-cpu-metric">
+<div class="flex justify-between items-start">
+<span class="font-label-status text-label-status uppercase text-on-surface-variant tracking-wider">PROC CLUSTER</span>
+<span class="material-symbols-outlined text-primary text-base">memory</span>
+</div>
+<div class="my-space-sm"><div class="flex items-baseline gap-1"><span class="font-headline-lg text-headline-lg font-bold text-on-surface">38.4</span><span class="font-label-code-sm text-label-code-sm text-primary">% LOAD</span></div><p class="font-label-code-md text-label-code-md text-on-surface-variant truncate mt-1">Dual Intel Xeon E5506</p><span class="font-label-code-sm text-label-code-sm text-outline">8 Cores / 8 Threads @ 2.13GHz</span></div>
+<!-- Mini Sparkline inline SVG -->
+<div class="w-full h-7 mt-1 text-primary">
+<svg class="w-full h-full" fill="none" viewBox="0 0 100 24">
+<path d="M0 18 L15 14 L30 19 L45 8 L60 15 L75 11 L90 14 L100 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"></path>
+<path d="M0 18 L15 14 L30 19 L45 8 L60 15 L75 11 L90 14 L100 9 V24 H0 Z" fill="currentColor" fill-opacity="0.12"></path>
+</svg>
+</div>
+</div>
+<!-- RAM Tile -->
+<div class="bg-surface-container rounded-xl p-space-md flex flex-col justify-between shadow-sm" id="tile-ram-metric">
+<div class="flex justify-between items-start">
+<span class="font-label-status text-label-status uppercase text-on-surface-variant tracking-wider">ECC MEMORY</span>
+<span class="material-symbols-outlined text-secondary text-base">storage</span>
+</div>
+<div class="my-space-sm">
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface">41.8</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">/ 72 GB</span>
+</div>
+<p class="font-label-code-md text-label-code-md text-on-surface-variant mt-1">DDR3 Reg ECC</p>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 58%"></div>
+</div>
+</div>
+<div class="flex justify-between items-center font-label-code-sm text-label-code-sm text-outline pt-1">
+<span class="">58% ALLOCATED</span>
+<span class="text-secondary font-bold">1333 MHz</span>
+</div>
+</div>
+<!-- GPU Tile -->
+<div class="bg-surface-container rounded-xl p-space-md flex flex-col justify-between shadow-sm relative group cursor-pointer hover:bg-surface-container-high transition-all" id="tile-gpu-metric"><div class="flex justify-between items-start"><div class="flex items-center gap-1.5 flex-wrap"><span class="font-label-status text-label-status uppercase text-on-surface-variant tracking-wider">NEURAL ACCEL</span><span class="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary font-label-status text-label-status uppercase">RTX 3070</span><span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-primary-fixed-dim font-label-status text-label-status uppercase flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-primary animate-pulse"></span>HOT SWAP SYNCED</span></div><span class="material-symbols-outlined text-primary-fixed-dim text-base group-hover:text-primary transition-all">developer_board</span></div><div class="my-space-sm"><div class="flex items-baseline gap-1"><span class="font-headline-lg text-headline-lg font-bold text-on-surface">6.4</span><span class="font-label-code-sm text-label-code-sm text-primary-fixed-dim">/ 8.0 GB VRAM</span><span class="ml-auto font-label-code-sm text-label-code-sm text-primary font-semibold">80%</span></div><div class="flex items-center justify-between mt-1"><p class="font-label-code-md text-label-code-md text-on-surface-variant truncate">NVIDIA GeForce RTX 3070</p><span class="font-label-status text-label-status text-outline uppercase">ZERO DOWNTIME</span></div><div class="w-full bg-surface-container-high h-1.5 rounded-full mt-2 overflow-hidden flex"><div class="bg-primary h-full" style="width: 63.8%"></div><div class="bg-primary-container h-full" style="width: 16.2%"></div><div class="bg-secondary h-full" style="width: 5%"></div><div class="bg-surface-container-highest h-full flex-1"></div></div><div class="mt-2 pt-1.5 border-t border-outline-variant/30 flex flex-col gap-1"><div class="flex items-center justify-between font-label-code-sm text-label-code-sm"><div class="flex items-center gap-1 min-w-0 text-primary"><span class="material-symbols-outlined text-xs">swap_horiz</span><span class="font-semibold truncate">qwen2.5-coder:7b</span></div><span class="text-primary-fixed-dim font-label-status text-label-status uppercase px-1 rounded bg-primary/10">ACTIVE · 5.1 GB</span></div><div class="flex items-center gap-1 font-label-code-sm text-label-code-sm text-outline"><span class="text-on-surface-variant/70">Switch:</span><span class="hover:text-primary transition-all underline cursor-pointer">deepseek-r1:8b</span><span class="text-outline-variant">/</span><span class="hover:text-primary transition-all underline cursor-pointer">llama3.2:3b</span></div></div></div><div class="flex justify-between items-center font-label-code-sm text-label-code-sm text-outline pt-1"><span class="">TEMP: 58°C · 185W</span><span class="text-primary-fixed-dim font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>CUDA 12.4</span></div><div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-72 p-space-md bg-surface-container-low/95 backdrop-blur-md rounded-xl border border-primary/30 shadow-[0_0_20px_-3px_rgba(34,211,238,0.35)] opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 z-50 flex flex-col gap-2.5"><div class="flex items-center justify-between border-b border-outline-variant/30 pb-1.5"><div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-primary">memory</span><span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">vRAM &amp; Model Swap Sync</span></div><span class="font-label-code-sm text-label-code-sm text-primary font-bold">80% (6.4 / 8.0 GB)</span></div><div class="w-full h-2 rounded-full overflow-hidden flex bg-surface-container-highest shadow-inner"><div class="bg-primary h-full" style="width: 63.8%" title="Model: 63.8%"></div><div class="bg-primary-container h-full" style="width: 16.2%" title="KV Cache: 16.2%"></div><div class="bg-secondary h-full" style="width: 5.0%" title="PyTorch/CUDA: 5.0%"></div><div class="bg-surface-container-highest h-full flex-1" title="Free: 15.0%"></div></div><div class="space-y-1.5 font-label-code-sm text-label-code-sm"><div class="flex items-center justify-between"><div class="flex items-center gap-1.5 min-w-0"><span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span><span class="text-on-surface-variant truncate">Active Model (Qwen2.5-Coder Q4_K_M)</span></div><span class="text-on-surface font-medium ml-1 flex-shrink-0">5.1 GB</span></div><div class="flex items-center justify-between"><div class="flex items-center gap-1.5 min-w-0"><span class="w-2 h-2 rounded-full bg-primary-container flex-shrink-0"></span><span class="text-on-surface-variant truncate">KV Cache &amp; Context (8k buffer)</span></div><span class="text-on-surface font-medium ml-1 flex-shrink-0">1.3 GB</span></div><div class="flex items-center justify-between"><div class="flex items-center gap-1.5 min-w-0"><span class="w-2 h-2 rounded-full bg-secondary flex-shrink-0"></span><span class="text-on-surface-variant truncate">PyTorch / CUDA Scratchpad</span></div><span class="text-on-surface font-medium ml-1 flex-shrink-0">0.4 GB</span></div><div class="flex items-center justify-between"><div class="flex items-center gap-1.5 min-w-0"><span class="w-2 h-2 rounded-full bg-outline-variant flex-shrink-0"></span><span class="text-outline truncate">Free Headroom (Hot Swap Buffer)</span></div><span class="text-outline font-medium ml-1 flex-shrink-0">1.2 GB</span></div></div><div class="border-t border-outline-variant/30 pt-1.5 text-outline font-label-status text-label-status tracking-tight flex flex-wrap justify-between gap-1"><span class="">Clock: 1725 MHz</span><span class="">TDP: 185W / 220W</span><span class="">Fan: 62%</span><span class="">Temp: 58°C</span><span class="text-primary">CUDA v12.4</span></div></div></div>
+<!-- NVMe Root C Drive (WARN) -->
+<div class="bg-surface-container rounded-xl p-space-md flex flex-col justify-between shadow-sm relative" id="tile-disk-c-metric">
+<div class="flex justify-between items-start">
+<span class="font-label-status text-label-status uppercase text-tertiary-container tracking-wider font-bold">ROOT DISK (C:)</span>
+<span class="material-symbols-outlined text-tertiary-container text-base">warning</span>
+</div>
+<div class="my-space-sm"><div class="flex items-baseline gap-1"><span class="font-headline-lg text-headline-lg font-bold text-tertiary-container">82.1</span><span class="font-label-code-sm text-label-code-sm text-tertiary-container">% CAP</span></div><p class="font-label-code-md text-label-code-md text-on-surface-variant mt-1">Fanxiang S101 512GB SSD</p><div class="w-full bg-surface-container-high h-1.5 rounded-full mt-2 overflow-hidden"><div class="bg-tertiary-container h-full rounded-full" style="width: 82.1%"></div></div></div>
+<div class="flex justify-between items-center font-label-code-sm text-label-code-sm text-tertiary-container pt-1"><span class="font-bold">477 GB USABLE</span><span class="">85.4 GB FREE</span></div>
+</div>
+<!-- RAID 10 D Drive -->
+<div class="bg-surface-container rounded-xl p-space-md flex flex-col justify-between shadow-sm" id="tile-disk-d-metric">
+<div class="flex justify-between items-start">
+<span class="font-label-status text-label-status uppercase text-on-surface-variant tracking-wider">RAID 10 (D:)</span>
+<span class="material-symbols-outlined text-primary text-base">grid_view</span>
+</div>
+<div class="my-space-sm">
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface">3.8</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">/ 8.0 TB</span>
+</div>
+<p class="font-label-code-md text-label-code-md text-on-surface-variant mt-1">PERC H700 SAS</p>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 47.5%"></div>
+</div>
+</div>
+<div class="flex justify-between items-center font-label-code-sm text-label-code-sm text-outline pt-1">
+<span class="text-primary-fixed-dim">OPTIMAL</span>
+<span class="">ARRAY 4x 4TB</span>
+</div>
+</div>
+<!-- NIC Tile -->
+<div class="bg-surface-container rounded-xl p-space-md flex flex-col justify-between shadow-sm" id="tile-network-metric"><div class="flex justify-between items-start"><span class="font-label-status text-label-status uppercase text-on-surface-variant tracking-wider">NIC ADAPTER</span><span class="material-symbols-outlined text-on-surface-variant text-base">lan</span></div><div class="my-space-sm"><div class="flex items-baseline gap-1"><span class="font-headline-lg text-headline-lg font-bold text-on-surface">1.0</span><span class="font-label-code-sm text-label-code-sm text-primary">Gbps</span></div><p class="font-label-code-md text-label-code-md text-on-surface-variant mt-1 truncate">Broadcom NetXtreme 57xx</p><div class="flex items-center gap-2 mt-2"><span class="font-label-code-sm text-label-code-sm text-primary">RX: 42.1 MB/s</span><span class="text-outline">·</span><span class="font-label-code-sm text-label-code-sm text-secondary">TX: 18.6 MB/s</span></div></div><div class="flex justify-between items-center font-label-code-sm text-label-code-sm text-outline pt-1"><span class="">DUPLEX 1000/1000</span><span class="text-primary-container font-semibold">18-03-73-18-E5-86</span></div></div>
+</section>
+<!-- DUAL FEATURE LAYOUT: OPENCLAW SENTRY CARD & BOOT SEQUENCE TIMELINE -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- FEATURE 2: OPENCLAW AUTONOMOUS SENTRY COUNTER CARD -->
+<section class="lg:col-span-5 bg-surface-container rounded-xl p-space-lg flex flex-col justify-between shadow-md relative overflow-hidden" id="card-openclaw-sentry">
+<!-- Glow ambient accent -->
+<div class="absolute -right-16 -top-16 w-48 h-48 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
+<div>
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
+<span class="font-headline-md text-headline-md font-bold text-on-surface">OpenClaw Autonomous Sentry</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-primary-container/20 text-primary font-label-status text-label-status uppercase">DAEMON ACTIVE</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Persistent neural supervisor guarding system stability, orphan PID termination, and runaway Docker threads across all orbital containers.
+        </p>
+<!-- SENTRY FAILURE COUNTER DISPLAY -->
+<div class="mt-space-lg p-space-md rounded-xl bg-surface-container-low shadow-inner">
+<div class="flex items-center justify-between">
+<span class="font-label-status text-label-status uppercase text-on-surface-variant">ESCALATION GUARD STATUS</span>
+<span class="font-label-code-sm text-label-code-sm text-primary">POLICY: RESTART &gt; DRAIN &gt; ALERT</span>
+</div>
+<!-- Counter Metric Badge -->
+<div class="flex items-baseline justify-between mt-space-sm">
+<div>
+<span class="font-label-code-sm text-label-code-sm text-outline uppercase block">Current Execution State</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-xl text-headline-xl font-bold text-primary" id="counter-failed-attempts">0</span>
+<span class="font-headline-md text-headline-md text-on-surface-variant">/ 20</span>
+<span class="ml-2 font-label-code-md text-label-code-md text-primary font-semibold">ATTEMPTS</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-code-sm text-label-code-sm text-outline uppercase block">Safety Limit</span>
+<span class="font-label-code-md text-label-code-md text-tertiary font-medium">95.0% HEADROOM</span>
+</div>
+</div>
+<!-- Visual Threshold Bar -->
+<div class="w-full bg-surface-container-high h-2.5 rounded-full mt-3 overflow-hidden flex">
+<!-- Healthy segment (0-15) -->
+<div class="bg-primary h-full transition-all duration-300" style="width: 5%"></div>
+<!-- Empty reserve space -->
+<div class="bg-transparent h-full flex-1"></div>
+</div>
+<div class="flex items-center gap-1.5 mt-space-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-xs text-primary">info</span>
+<p class="font-body-sm text-body-sm text-outline">
+              Turns critical <span class="text-error font-semibold">RED</span> at 20 consecutive failed self-heals before triggering outbound GSM &amp; PagerDuty escalation to founder.
+            </p>
+</div>
+</div>
+<!-- LIFETIME HEAL STATS -->
+<div class="grid grid-cols-2 gap-space-sm mt-space-md">
+<div class="p-space-sm rounded-lg bg-surface-container-low">
+<span class="font-label-status text-label-status text-on-surface-variant uppercase">LIFETIME AUTONOMOUS HEALS</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-secondary" id="metric-lifetime-recoveries">4 Recoveries</span>
+<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-outline mt-0.5 block">Zero human touchpoints required</span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container-low">
+<span class="font-label-status text-label-status text-on-surface-variant uppercase">AUTONOMOUS RESOLUTION RATE</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-primary" id="metric-self-heal-rate">100.0%</span>
+<span class="material-symbols-outlined text-primary text-sm">verified</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-outline mt-0.5 block">MTTR: 1,420ms avg cycle</span>
+</div>
+</div>
+<!-- RECENT AUTO-HEAL ACTION LOG ENTRY -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-lowest font-label-code-sm text-label-code-sm text-on-surface-variant space-y-1">
+<div class="flex justify-between text-outline">
+<span class="">LAST SENTRY EVENT: 2025-01-28 14:12:04 UTC</span>
+<span class="text-primary font-bold">HEALED</span>
+</div>
+<p class="text-on-surface truncate">
+            &gt; [KILL_ZOMBIE] Terminated defunct Ollama runner PID 31924 (vram leak &gt; 3.2GB). Warm respawn completed in 890ms.
+          </p>
+</div>
+</div>
+<!-- SENTRY CONTROL BUTTONS -->
+<div class="pt-space-md mt-space-md flex flex-wrap gap-space-sm">
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary font-body-sm text-body-sm font-semibold hover:brightness-110 transition-all shadow-sm flex items-center gap-1.5" id="btn-reset-sentry-counter">
+<span class="material-symbols-outlined text-sm font-bold">restart_alt</span>
+<span class="">Reset Counter</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface transition-all font-body-sm text-body-sm flex items-center gap-1.5" id="btn-force-openclaw-audit">
+<span class="material-symbols-outlined text-sm">policy</span>
+<span class="">Force Audit</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-all font-body-sm text-body-sm flex items-center gap-1.5" id="btn-view-sentry-logs">
+<span class="material-symbols-outlined text-sm">terminal</span>
+<span class="">View Audit Log</span>
+</button>
+</div>
+</section>
+<!-- FEATURE 1: "SINCE LAST BOOT" SERVICE STARTUP TIMELINE -->
+<section class="lg:col-span-7 bg-surface-container rounded-xl p-space-lg flex flex-col justify-between shadow-md" id="timeline-boot-sequence">
+<div>
+<!-- Node boot timestamp & Uptime header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-space-md gap-space-sm">
+<div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">history_toggle_off</span>
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface">Since Last Boot: Service Sequence</h2>
+</div>
+<p class="font-label-code-sm text-label-code-sm text-outline mt-0.5" id="label-cold-boot-timestamp">
+              Last Cold Boot: 2025-01-06 05:22:10 UTC
+            </p>
+</div>
+<div class="flex items-center gap-2 self-start sm:self-auto">
+<div class="px-3 py-1 rounded-full bg-primary-container/20 text-primary font-label-code-md text-label-code-md font-semibold flex items-center gap-1.5" id="chip-uptime-duration">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="">Uptime: 42d 18h 33m</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-status text-label-status uppercase">REBOOT SURVIVED</span>
+</div>
+</div>
+<!-- Ordered Startup Trace -->
+<div class="mt-space-md space-y-2">
+<!-- Item 1: Ollama Engine -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-all text-body-sm" id="svc-ollama"><div class="flex items-center gap-space-md min-w-0"><span class="font-label-code-sm text-label-code-sm text-outline flex-shrink-0 w-20">05:22:11 UTC</span><div class="w-5 h-5 rounded-full bg-primary-container/20 text-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-xs font-bold">check</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-2"><span class="font-body-md text-body-md font-semibold text-on-surface truncate">Ollama Neural Engine</span><span class="px-1.5 py-0.5 rounded bg-primary-container/15 text-primary font-label-status text-label-status uppercase">HOT SWAP SYNC</span></div><span class="font-label-code-sm text-label-code-sm text-primary-fixed-dim truncate">Port :11434 · Real-Time Model Switching Active (Qwen / DeepSeek-R1 / Llama 3.2)</span></div></div><div class="flex items-center gap-2 flex-shrink-0 ml-2"><span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-code-sm text-label-code-sm font-semibold">T+1s</span><span class="px-1.5 py-0.5 rounded bg-primary-container/10 text-primary font-label-status text-label-status uppercase">OK</span></div></div>
+<!-- Item 2: Postgres Database -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-all text-body-sm" id="svc-postgres">
+<div class="flex items-center gap-space-md min-w-0">
+<span class="font-label-code-sm text-label-code-sm text-outline flex-shrink-0 w-20">05:22:12 UTC</span>
+<div class="w-5 h-5 rounded-full bg-primary-container/20 text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-xs font-bold">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Postgres Database</span>
+<span class="font-label-code-sm text-label-code-sm text-outline truncate">Port :5432 · Shared memory attached &amp; WAL clean</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0 ml-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-code-sm text-label-code-sm font-semibold">T+2s</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/10 text-primary font-label-status text-label-status uppercase">OK</span>
+</div>
+</div>
+<!-- Item 3: Redis Cache -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-all text-body-sm" id="svc-redis">
+<div class="flex items-center gap-space-md min-w-0">
+<span class="font-label-code-sm text-label-code-sm text-outline flex-shrink-0 w-20">05:22:13 UTC</span>
+<div class="w-5 h-5 rounded-full bg-primary-container/20 text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-xs font-bold">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Redis Cache Instance</span>
+<span class="font-label-code-sm text-label-code-sm text-outline truncate">Port :6379 · Socket ready &amp; AOF snapshot sync</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0 ml-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-code-sm text-label-code-sm font-semibold">T+3s</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/10 text-primary font-label-status text-label-status uppercase">OK</span>
+</div>
+</div>
+<!-- Item 4: Backend API -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-all text-body-sm" id="svc-api">
+<div class="flex items-center gap-space-md min-w-0">
+<span class="font-label-code-sm text-label-code-sm text-outline flex-shrink-0 w-20">05:22:14 UTC</span>
+<div class="w-5 h-5 rounded-full bg-primary-container/20 text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-xs font-bold">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Backend Core API</span>
+<span class="font-label-code-sm text-label-code-sm text-outline truncate">Port :8000 · FastRoute active &amp; workers pool [x8]</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0 ml-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-code-sm text-label-code-sm font-semibold">T+4s</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/10 text-primary font-label-status text-label-status uppercase">OK</span>
+</div>
+</div>
+<!-- Item 5: Frontend Web -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-all text-body-sm" id="svc-frontend">
+<div class="flex items-center gap-space-md min-w-0">
+<span class="font-label-code-sm text-label-code-sm text-outline flex-shrink-0 w-20">05:22:15 UTC</span>
+<div class="w-5 h-5 rounded-full bg-primary-container/20 text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-xs font-bold">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Frontend Web Service</span>
+<span class="font-label-code-sm text-label-code-sm text-outline truncate">Port :3200 · Next.js runtime listening</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0 ml-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-code-sm text-label-code-sm font-semibold">T+5s</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/10 text-primary font-label-status text-label-status uppercase">OK</span>
+</div>
+</div>
+<!-- Item 6: Cloudflare Tunnel -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-all text-body-sm" id="svc-cloudflare-tunnel">
+<div class="flex items-center gap-space-md min-w-0">
+<span class="font-label-code-sm text-label-code-sm text-outline flex-shrink-0 w-20">05:22:16 UTC</span>
+<div class="w-5 h-5 rounded-full bg-primary-container/20 text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-xs font-bold">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Cloudflare Tunnel Edge</span>
+<span class="font-label-code-sm text-label-code-sm text-outline truncate">Daemon cloudflared · Edge handshake established</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0 ml-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-code-sm text-label-code-sm font-semibold">T+6s</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/10 text-primary font-label-status text-label-status uppercase">OK</span>
+</div>
+</div>
+<!-- Item 7: Paperclip Marketing -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-all text-body-sm" id="svc-paperclip">
+<div class="flex items-center gap-space-md min-w-0">
+<span class="font-label-code-sm text-label-code-sm text-outline flex-shrink-0 w-20">05:22:18 UTC</span>
+<div class="w-5 h-5 rounded-full bg-primary-container/20 text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-xs font-bold">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Paperclip Marketing Engine</span>
+<span class="font-label-code-sm text-label-code-sm text-outline truncate">Port :3917 · Social queue mounted &amp; CRON bind</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0 ml-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-code-sm text-label-code-sm font-semibold">T+8s</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/10 text-primary font-label-status text-label-status uppercase">OK</span>
+</div>
+</div>
+<!-- Item 8: OmniRoute Gateway -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-all text-body-sm" id="svc-omniroute">
+<div class="flex items-center gap-space-md min-w-0">
+<span class="font-label-code-sm text-label-code-sm text-outline flex-shrink-0 w-20">05:22:20 UTC</span>
+<div class="w-5 h-5 rounded-full bg-primary-container/20 text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-xs font-bold">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">OmniRoute Gateway Hub</span>
+<span class="font-label-code-sm text-label-code-sm text-outline truncate">Port :20128 · Fallback circuits &amp; neural router ready</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0 ml-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-code-sm text-label-code-sm font-semibold">T+10s</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/10 text-primary font-label-status text-label-status uppercase">OK</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Info -->
+<div class="mt-space-md pt-space-sm flex items-center justify-between text-outline font-label-code-sm text-label-code-sm">
+<span class="">COLD BOOT COMPLETION TIME: 9.84 SECONDS</span>
+<span class="text-primary">ALL 8 SUBSYSTEMS NOMINAL</span>
+</div>
+</section>
+</div>
+<!-- PERSISTENT TIMERS & SYSTEMD REBOOT SURVIVAL TILES -->
+<section class="bg-surface-container rounded-xl p-space-lg shadow-md" id="panel-crontab-systemd-timers">
+<div class="flex flex-col md:flex-row md:items-center justify-between pb-space-md gap-space-sm">
+<div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">schedule</span>
+<h3 class="font-headline-md text-headline-md font-semibold text-on-surface">Scheduled Keepalive &amp; Systemd Timers</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+          Crontabs and daemon timers with reboot persistence guarantees and telemetry heartbeat verification.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-code-md text-label-code-md transition-all" id="btn-reload-systemd-daemon">
+          systemctl daemon-reload
+        </button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-space-md mt-space-sm">
+<!-- Timer 1 -->
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col justify-between" id="timer-watchdog-heartbeat">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-primary font-semibold">antigravity-watchdog.timer</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/15 text-primary font-label-status text-label-status">PERSISTENT</span>
+</div>
+<p class="font-body-md text-body-md font-medium text-on-surface mt-2 truncate">Heartbeat Telemetry Pulse</p>
+<span class="font-label-code-sm text-label-code-sm text-outline">Frequency: Every 5 seconds</span>
+</div>
+<div class="mt-space-md pt-space-xs flex justify-between items-center font-label-code-sm text-label-code-sm">
+<span class="text-on-surface-variant">Next: 2s</span>
+<span class="text-primary font-semibold">Survived 12 Reboots</span>
+</div>
+</div>
+<!-- Timer 2 -->
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col justify-between" id="timer-vram-sanitizer">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold">cuda-vram-cleaner.timer</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/15 text-primary font-label-status text-label-status">PERSISTENT</span>
+</div>
+<p class="font-body-md text-body-md font-medium text-on-surface mt-2 truncate">PyTorch Shm Defrag &amp; Flush</p>
+<span class="font-label-code-sm text-label-code-sm text-outline">Frequency: Every 30 minutes</span>
+</div>
+<div class="mt-space-md pt-space-xs flex justify-between items-center font-label-code-sm text-label-code-sm">
+<span class="text-on-surface-variant">Next: 14m 20s</span>
+<span class="text-secondary font-semibold">Survived 12 Reboots</span>
+</div>
+</div>
+<!-- Timer 3 -->
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col justify-between" id="timer-pg-backup">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant font-semibold">pg-wal-snapshot.timer</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/15 text-primary font-label-status text-label-status">PERSISTENT</span>
+</div>
+<p class="font-body-md text-body-md font-medium text-on-surface mt-2 truncate">Database Snapshot &amp; Prune</p>
+<span class="font-label-code-sm text-label-code-sm text-outline">Frequency: Daily @ 04:00 UTC</span>
+</div>
+<div class="mt-space-md pt-space-xs flex justify-between items-center font-label-code-sm text-label-code-sm">
+<span class="text-on-surface-variant">Next: 13h 48m</span>
+<span class="text-primary font-semibold">Survived 12 Reboots</span>
+</div>
+</div>
+<!-- Timer 4 -->
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col justify-between" id="timer-openclaw-probe">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-tertiary font-semibold">openclaw-deep-probe.timer</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/15 text-primary font-label-status text-label-status">PERSISTENT</span>
+</div>
+<p class="font-body-md text-body-md font-medium text-on-surface mt-2 truncate">Sentry Host Inspection</p>
+<span class="font-label-code-sm text-label-code-sm text-outline">Frequency: Every 60 seconds</span>
+</div>
+<div class="mt-space-md pt-space-xs flex justify-between items-center font-label-code-sm text-label-code-sm">
+<span class="text-on-surface-variant">Next: 41s</span>
+<span class="text-tertiary font-semibold">Survived 12 Reboots</span>
+</div>
+</div>
+</div>
+</section>
+<!-- INTERACTION SCRIPT FOR COUNTER RESET AND TELEMETRY PULSE -->
+<script>
+    (function initNodeScreenInteractive() {
+      const resetBtn = document.getElementById('btn-reset-sentry-counter');
+      const counterEl = document.getElementById('counter-failed-attempts');
+      const forceAuditBtn = document.getElementById('btn-force-openclaw-audit');
+      const syncBtn = document.getElementById('btn-sync-telemetry');
+
+      if (resetBtn && counterEl) {
+        resetBtn.addEventListener('click', () => {
+          counterEl.textContent = '0';
+          counterEl.classList.remove('text-error');
+          counterEl.classList.add('text-primary');
+          
+          const origText = resetBtn.innerHTML;
+          resetBtn.innerHTML = '<span class="material-symbols-outlined text-sm font-bold animate-spin">refresh</span><span>Resetting...</span>';
+          setTimeout(() => {
+            resetBtn.innerHTML = origText;
+          }, 600);
+        });
+      }
+
+      if (forceAuditBtn) {
+        forceAuditBtn.addEventListener('click', () => {
+          const orig = forceAuditBtn.innerHTML;
+          forceAuditBtn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">refresh</span><span>Auditing Sentry...</span>';
+          setTimeout(() => {
+            forceAuditBtn.innerHTML = '<span class="material-symbols-outlined text-sm text-primary">verified</span><span>Audit Passed (0/20)</span>';
+            setTimeout(() => {
+              forceAuditBtn.innerHTML = orig;
+            }, 2500);
+          }, 1200);
+        });
+      }
+
+      if (syncBtn) {
+        syncBtn.addEventListener('click', () => {
+          syncBtn.classList.add('opacity-75');
+          const syncIcon = syncBtn.querySelector('.material-symbols-outlined');
+          if (syncIcon) syncIcon.classList.add('animate-spin');
+          setTimeout(() => {
+            syncBtn.classList.remove('opacity-75');
+            if (syncIcon) syncIcon.classList.remove('animate-spin');
+          }, 900);
+        });
+      }
+    })();
+  </script>
+</div></main></div>
+
+</body></html>

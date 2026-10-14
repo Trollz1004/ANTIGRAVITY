@@ -1,0 +1,883 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-error-container":"#ffdad6","inverse-surface":"#d3e4fe","surface-variant":"#26364a","secondary-fixed-dim":"#d0bcff","on-surface":"#d3e4fe","primary-container":"#22d3ee","surface-tint":"#2fd9f4","on-tertiary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","on-surface-variant":"#bbc9cd","on-secondary-fixed-variant":"#5516be","surface":"#031427","primary-fixed":"#a2eeff","on-tertiary-fixed":"#2a1700","surface-bright":"#2a3a4f","surface-container-low":"#0b1c30","on-secondary-container":"#c4abff","secondary":"#d0bcff","tertiary-fixed-dim":"#ffb95f","inverse-primary":"#006877","on-primary":"#00363e","outline":"#859397","surface-container-highest":"#26364a","on-primary-fixed-variant":"#004e5a","primary":"#8aebff","on-secondary":"#3c0091","tertiary":"#ffd6a7","outline-variant":"#3c494c","error-container":"#93000a","on-secondary-fixed":"#23005c","tertiary-fixed":"#ffddb8","tertiary-container":"#ffb147","on-primary-container":"#005763","secondary-fixed":"#e9ddff","on-tertiary-container":"#704500","surface-dim":"#031427","on-tertiary":"#472a00","on-primary-fixed":"#001f25","background":"#031427","surface-container":"#102034","error":"#ffb4ab","secondary-container":"#571bc1","on-error":"#690005","surface-container-high":"#1b2b3f","primary-fixed-dim":"#2fd9f4","on-background":"#d3e4fe","inverse-on-surface":"#213145"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-xs":"0.25rem","space-xl":"1.5rem","space-md":"0.75rem","gutter-desktop":"1rem","space-sm":"0.5rem","space-lg":"1rem","margin-desktop":"1.5rem",gutter:"0.75rem",margin:"1rem"},fontFamily:{"label-code-sm":["JetBrains Mono"],"headline-lg":["Inter"],"body-md":["Inter"],"headline-xl":["Inter"],"body-sm":["Inter"],"headline-md":["Inter"],"body-lg":["Inter"],"label-status":["JetBrains Mono"],"label-code-lg":["JetBrains Mono"],"label-code-md":["JetBrains Mono"],"headline-sm":["Inter"]},fontSize:{"label-code-sm":["10px",{lineHeight:"14px",letterSpacing:"0.02em",fontWeight:"600"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"600"}],"body-md":["13px",{lineHeight:"18px",letterSpacing:"0em",fontWeight:"400"}],"headline-xl":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"body-sm":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"400"}],"headline-md":["18px",{lineHeight:"24px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-lg":["14px",{lineHeight:"20px",letterSpacing:"0em",fontWeight:"400"}],"label-status":["9px",{lineHeight:"12px",letterSpacing:"0.08em",fontWeight:"700"}],"label-code-lg":["13px",{lineHeight:"18px",letterSpacing:"-0.01em",fontWeight:"500"}],"label-code-md":["11px",{lineHeight:"16px",letterSpacing:"0em",fontWeight:"500"}],"headline-sm":["14px",{lineHeight:"20px",letterSpacing:"-0.005em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface-container-lowest font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline-variant/40 z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-14 px-space-lg flex items-center gap-space-sm border-b border-outline-variant/30 bg-surface-container-lowest/40"><img alt="ANTIGRAVITY Insignia" class="w-7 h-7 rounded object-cover ring-1 ring-primary/30" src="https://lh3.googleusercontent.com/aida/AEtjO1WxBwTvbOktWAD49gOTXZwdXizLZSIoFG0ZPLEg8E2uJqG8qiYVYNuMvoIePhjLwXhhsOEuK1aL8gmZx_nJKPVgbpvIjpeI4vA1u4MosiaeSz1NfRabDsqzEhU3PIISztIk9AijiXL15Up234WVF6HeVK4kKPyqe62VHOW8D8WXCWTSYhhilvCaXxzK7D9CkV8Pds0HZB-ey-z8muInEHWXS_R6T7ZzeAu0a0VnY31nx7psHh6FeI_-oNah"><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface font-bold uppercase leading-none truncate">ANTIGRAVITY</span><span class="font-label-code-sm text-label-code-sm text-primary tracking-wider uppercase leading-none mt-1 truncate">MISSION CONTROL v4.2</span></div></div><div class="px-space-md py-space-sm"><span class="font-label-status text-label-status uppercase text-on-surface-variant/70 tracking-widest px-space-sm">OPERATIONAL RUNTIME</span></div><nav class="flex flex-col gap-0.5 px-space-xs" data-active-classes="bg-surface-container-high text-primary border-l-2 border-primary-container shadow-[0_0_12px_-2px_rgba(34,211,238,0.35)]"><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="overview" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">grid_view</span><span class="font-body-md text-body-md font-medium truncate">Overview</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="agents" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">smart_toy</span><span class="font-body-md text-body-md font-medium truncate">Agents</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="board" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">dashboard_customize</span><span class="font-body-md text-body-md font-medium truncate">Board</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="gateway" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">router</span><span class="font-body-md text-body-md font-medium truncate">Gateway</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="marketing" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">campaign</span><span class="font-body-md text-body-md font-medium truncate">Marketing</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="memory" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">memory</span><span class="font-body-md text-body-md font-medium truncate">Memory</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="node" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">hub</span><span class="font-body-md text-body-md font-medium truncate">Node</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="logs" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">terminal</span><span class="font-body-md text-body-md font-medium truncate">Logs</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="settings" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">settings</span><span class="font-body-md text-body-md font-medium truncate">Settings</span></a><div class="my-2 px-space-sm pt-2 border-t border-outline-variant/30 flex items-center justify-between"><span class="font-label-status text-label-status uppercase text-on-surface-variant/70 tracking-widest">COMMUNICATION &amp; BROWSER</span><span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span></div><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="#"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-primary-container group-hover:text-primary transition-colors">send</span><span class="font-body-md text-body-md font-medium truncate">Telegram</span></div><span class="px-1.5 py-0.5 rounded-full bg-primary-container/20 text-primary font-label-code-sm text-label-code-sm border border-primary-container/40">3</span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="#"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-[#27c93f] group-hover:text-primary transition-colors">chat</span><span class="font-body-md text-body-md font-medium truncate">WhatsApp</span></div><span class="px-1.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-code-sm text-label-code-sm">1</span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="#"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-secondary group-hover:text-primary transition-colors">forum</span><span class="font-body-md text-body-md font-medium truncate">Discord</span></div><span class="w-2 h-2 rounded-full bg-[#27c93f]"></span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="#"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-tertiary group-hover:text-primary transition-colors">language</span><span class="font-body-md text-body-md font-medium truncate">Chrome Web</span></div><span class="px-1.5 py-0.5 rounded bg-surface-container-high text-primary font-label-status text-label-status">ACTIVE</span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="#"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-error group-hover:text-primary transition-colors">smart_display</span><span class="font-body-md text-body-md font-medium truncate">YouTube Studio</span></div><span class="px-1.5 py-0.5 rounded bg-error-container/40 text-error font-label-status text-label-status">ANALYTICS</span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="#"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-primary-container group-hover:text-primary transition-colors">auto_awesome</span><span class="font-body-md text-body-md font-medium truncate">AI Studio</span></div><span class="px-1.5 py-0.5 rounded bg-secondary-container/30 text-secondary font-label-status text-label-status">GEMINI 3.1</span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="#"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-error group-hover:text-primary transition-colors">mail</span><span class="font-body-md text-body-md font-medium truncate">Gmail Workspace</span></div><span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-status text-label-status">INBOX 2</span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="https://github.com/Trollz1004" target="_blank"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-primary-container group-hover:text-primary transition-colors">code</span><span class="font-body-md text-body-md font-medium truncate">GitHub (Trollz1004)</span></div><span class="px-1.5 py-0.5 rounded bg-surface-container-high text-primary font-label-status text-label-status">REPO</span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="https://dash.cloudflare.com/516a3a855f44f5ad8453636d163ae25d/home" target="_blank"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-tertiary group-hover:text-primary transition-colors">cloud</span><span class="font-body-md text-body-md font-medium truncate">Cloudflare Dash</span></div><span class="px-1.5 py-0.5 rounded bg-surface-container-high text-primary font-label-status text-label-status">PROXY</span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="#obsidian-cli"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-primary-container group-hover:text-primary transition-colors">edit_note</span><span class="font-body-md text-body-md font-medium truncate">Obsidian CLI</span></div><span class="px-1.5 py-0.5 rounded bg-surface-container-high text-primary font-label-status text-label-status">COPILOT v2</span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="https://github.com/msitarzewski/agency-agents-app" target="_blank"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-primary-container group-hover:text-primary transition-colors">diversity_3</span><div class="flex flex-col min-w-0 leading-tight"><span class="font-body-md text-body-md font-medium truncate">Agency Agents</span><span class="text-[10px] text-on-surface-variant/70 font-mono">App Suite</span></div></div><span class="px-1.5 py-0.5 rounded bg-surface-container-high text-primary font-label-status text-label-status">MULTI-ROLE</span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="#stitch-mcp"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-primary group-hover:text-primary transition-colors">auto_awesome</span><div class="flex flex-col min-w-0 leading-tight"><span class="font-body-md text-body-md font-medium truncate">Stitch MCP</span><span class="text-[10px] text-on-surface-variant/70 font-mono">:8999 UI Protocol</span></div></div><span class="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary font-label-status text-label-status border border-primary-container/40">MCP :8999</span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="#notebooklm"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-secondary group-hover:text-primary transition-colors">menu_book</span><div class="flex flex-col min-w-0 leading-tight"><span class="font-body-md text-body-md font-medium truncate">NotebookLM</span><span class="text-[10px] text-on-surface-variant/70 font-mono">Grounded AI</span></div></div><span class="px-1.5 py-0.5 rounded bg-secondary-container/20 text-secondary-fixed-dim font-label-status text-label-status">RESEARCH</span></a><a class="flex items-center justify-between px-space-md py-1.5 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" href="#social-publisher-card"><div class="flex items-center gap-space-sm min-w-0"><span class="material-symbols-outlined text-lg text-tertiary group-hover:text-primary transition-colors">share</span><div class="flex flex-col min-w-0 leading-tight"><span class="font-body-md text-body-md font-medium truncate">Social Hub</span><span class="text-[10px] text-on-surface-variant/70 font-mono">X · Grok · FB · IG</span></div></div><span class="px-1.5 py-0.5 rounded bg-surface-container-high text-primary font-label-status text-label-status">4 CHANNELS</span></a></nav></div><div class="p-space-md border-t border-outline-variant/30 bg-surface-container-lowest/60 flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs min-w-0"><span class="relative flex h-2 w-2 flex-shrink-0"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" style="opacity: 0.663027;"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-primary-fixed-dim"></span></span><div class="flex flex-col min-w-0"><span class="font-label-code-sm text-label-code-sm text-on-surface truncate">T5500 · 192.168.0.15</span><span class="font-label-status text-label-status text-on-surface-variant uppercase tracking-wider">SYNCHRONIZED</span></div></div><div class="flex-shrink-0"><img alt="Founder" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhmd3yP9MzJWT7qrjISzubu162hbjaLsrNF9GtgeXSI4bDcErrD-pZ48vYrYq1s0crf7_kp54urrPEhzqmEmtEajuMHiaJkQrn5X3j1TdvRaxj28d5AqdH6WdbXo44dJiCBb-28Dr7HoixoNmpA5c9eyPASYoR3KZ3eHNRDa1qF7TUpXqQzy1uqLLuKwkjx6wPrwEeVTiO984dIg9nYT8lqJ6uUzA_mE6TKZjh7eRuPZEJLsJCvs-fhw"></div></div></aside><div class="pl-64 flex flex-col min-h-screen"><header class="fixed top-0 left-64 right-0 h-14 bg-surface-container-low/90 backdrop-blur-md border-b border-outline-variant/30 z-40 px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md min-w-0"><div class="flex items-center gap-1.5 flex-shrink-0"><span class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Mission Control</span><span class="text-outline-variant font-label-code-sm text-label-code-sm">/</span><span class="font-label-code-md text-label-code-md text-primary tracking-wide">CLUSTER-ALPHA</span></div><div class="hidden xl:flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-surface-container-high border border-outline-variant/50 text-on-surface-variant"><span class="material-symbols-outlined text-xs text-primary-fixed">dns</span><span class="font-label-code-sm text-label-code-sm text-on-surface">T5500 · 192.168.0.15 · Uptime 42d 18h</span></div></div><div class="flex-1 flex items-center justify-center gap-1.5 overflow-x-auto px-2"><div class="flex items-center gap-1 bg-surface-container-lowest/90 border border-outline-variant/40 rounded-lg p-0.5 shadow-inner"><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-primary-container/40 text-on-surface transition-all group" title="Telegram Bot &amp; Channels"><span class="material-symbols-outlined text-sm text-primary-container group-hover:text-primary">send</span><span class="font-label-code-sm text-label-code-sm font-semibold">Telegram</span><span class="px-1 py-0.2 rounded-full bg-primary-container/20 text-primary text-[10px] font-bold border border-primary-container/40">3</span></button><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-primary-container/40 text-on-surface transition-all group" title="WhatsApp Bridge"><span class="material-symbols-outlined text-sm text-[#27c93f]">chat</span><span class="font-label-code-sm text-label-code-sm font-semibold">WhatsApp</span><span class="flex items-center gap-1 text-[10px] text-on-surface-variant font-mono"><span class="w-1.5 h-1.5 rounded-full bg-[#27c93f]"></span>Connected</span><span class="px-1 py-0.2 rounded-full bg-surface-container-highest text-on-surface-variant text-[10px]">1</span></button><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-secondary/40 text-on-surface transition-all group" title="Discord Community &amp; Voice Gateway"><span class="material-symbols-outlined text-sm text-secondary">forum</span><span class="font-label-code-sm text-label-code-sm font-semibold">Discord</span><span class="px-1.5 py-0.5 rounded bg-secondary-container/20 border border-secondary-container/40 text-secondary-fixed-dim text-[10px] font-mono flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>Voice 4</span></button><div class="h-4 w-[1px] bg-outline-variant/40 mx-0.5"></div><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container-high border border-primary/40 text-primary shadow-[0_0_10px_-2px_rgba(34,211,238,0.25)] hover:brightness-110 transition-all" title="Chrome Web Browser Workspace"><span class="material-symbols-outlined text-sm text-primary">globe</span><span class="font-label-code-sm text-label-code-sm font-bold">Chrome</span><span class="px-1.5 py-0.2 rounded bg-surface-container-lowest border border-outline-variant/40 text-[10px] text-on-surface-variant font-mono max-w-[130px] truncate">localhost:8000</span><span class="material-symbols-outlined text-xs text-primary-container">open_in_new</span></button><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-error/40 text-on-surface transition-all group" title="YouTube Studio &amp; Analytics"><span class="material-symbols-outlined text-sm text-error">smart_display</span><span class="font-label-code-sm text-label-code-sm font-semibold">YouTube</span><span class="px-1.5 py-0.2 rounded bg-error-container/40 text-error text-[10px] font-mono border border-outline-variant/30">Live / Stats</span></button><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-primary-container/40 text-on-surface transition-all group" title="Google AI Studio &amp; Gemini 3.1 Pro"><span class="material-symbols-outlined text-sm text-primary-container animate-pulse">auto_awesome</span><span class="font-label-code-sm text-label-code-sm font-semibold">AI Studio</span><span class="px-1.5 py-0.2 rounded bg-secondary-container/20 text-secondary-fixed-dim text-[10px] font-mono border border-secondary-container/40">Gemini 3.1</span></button><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-error/40 text-on-surface transition-all group" title="Gmail Workspace &amp; Alerts"><span class="material-symbols-outlined text-sm text-error">mail</span><span class="font-label-code-sm text-label-code-sm font-semibold">Gmail</span><span class="px-1.5 py-0.2 rounded bg-error-container/40 text-error text-[10px] font-mono border border-outline-variant/30">2 Unread</span></button><a class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-primary-container/40 text-on-surface transition-all group" href="https://github.com/Trollz1004" target="_blank" title="GitHub (Trollz1004)"><span class="material-symbols-outlined text-sm text-primary-container group-hover:text-primary">code</span><span class="font-label-code-sm text-label-code-sm font-semibold">GitHub</span><span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-primary text-[10px] font-mono border border-outline-variant/30">Trollz1004</span></a><a class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-tertiary-container/50 text-on-surface transition-all group" href="https://dash.cloudflare.com/516a3a855f44f5ad8453636d163ae25d/home" target="_blank" title="Cloudflare Dashboard"><span class="material-symbols-outlined text-sm text-tertiary">cloud</span><span class="font-label-code-sm text-label-code-sm font-semibold">Cloudflare</span><span class="px-1.5 py-0.2 rounded bg-tertiary-container/20 text-tertiary-container text-[10px] font-mono border border-tertiary-container/40">Dash</span></a><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-primary-container/40 text-on-surface transition-all group" title="Obsidian CLI (COPILOT_OBSIDIAN_CLI) · Vault: C:\ANTIGRAVITY\Antigravity"><span class="material-symbols-outlined text-sm text-primary-container group-hover:text-primary">edit_note</span><span class="font-label-code-sm text-label-code-sm font-semibold">Obsidian CLI</span><span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-primary text-[10px] font-mono border border-outline-variant/30">COPILOT</span></button><a class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-primary-container/40 text-on-surface transition-all group" href="https://github.com/msitarzewski/agency-agents-app" target="_blank" title="Agency Agents App Suite · https://github.com/msitarzewski/agency-agents-app"><span class="material-symbols-outlined text-sm text-primary-container group-hover:text-primary">diversity_3</span><span class="font-label-code-sm text-label-code-sm font-semibold">Agency Agents</span><span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-primary text-[10px] font-mono border border-outline-variant/30">MULTI-ROLE</span><span class="w-1.5 h-1.5 rounded-full bg-[#27c93f]" title="Active / Synchronized"></span></a><div class="h-4 w-[1px] bg-outline-variant/40 mx-0.5"></div><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-primary-container/40 text-on-surface transition-all group" title="Stitch UI &amp; Component Design Engine"><span class="material-symbols-outlined text-sm text-primary-container group-hover:text-primary animate-pulse">auto_awesome</span><span class="font-label-code-sm text-label-code-sm font-semibold">Stitch AI</span><span class="px-1.5 py-0.2 rounded bg-primary-container/20 text-primary text-[10px] font-mono border border-primary-container/40">DESIGN</span></button><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-secondary/40 text-on-surface transition-all group" title="Gemini Notebook &amp; Grounded Research"><span class="material-symbols-outlined text-sm text-secondary">menu_book</span><span class="font-label-code-sm text-label-code-sm font-semibold">NotebookLM</span><span class="px-1.5 py-0.2 rounded bg-secondary-container/20 text-secondary-fixed-dim text-[10px] font-mono border border-secondary-container/40">GOOGLE</span></button><div class="h-4 w-[1px] bg-outline-variant/40 mx-0.5"></div><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-primary-container/40 text-on-surface transition-all group" title="X.com Team Feed &amp; Publisher"><span class="material-symbols-outlined text-sm text-primary">share</span><span class="font-label-code-sm text-label-code-sm font-semibold">X.com</span><span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-primary text-[10px] font-mono border border-outline-variant/30">SOCIAL</span></button><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-primary-container/40 text-on-surface transition-all group" title="Grok Assistant &amp; Fast Inference"><span class="material-symbols-outlined text-sm text-primary-fixed">bolt</span><span class="font-label-code-sm text-label-code-sm font-semibold">Grok</span><span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-primary text-[10px] font-mono border border-outline-variant/30">xAI</span></button><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-primary-container/40 text-on-surface transition-all group" title="Meta / Facebook Team Pages &amp; Posting"><span class="material-symbols-outlined text-sm text-primary-container">groups</span><span class="font-label-code-sm text-label-code-sm font-semibold">Facebook</span><span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-on-surface-variant text-[10px] font-mono border border-outline-variant/30">TEAM</span></button><button class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 hover:border-tertiary-container/50 text-on-surface transition-all group" title="Instagram Media &amp; Reel Publisher"><span class="material-symbols-outlined text-sm text-tertiary">photo_camera</span><span class="font-label-code-sm text-label-code-sm font-semibold">Instagram</span><span class="px-1.5 py-0.2 rounded bg-tertiary-container/20 text-tertiary-container text-[10px] font-mono border border-tertiary-container/40">MEDIA</span></button></div></div><div class="flex items-center gap-space-sm flex-shrink-0"><span class="hidden lg:inline-block font-label-code-sm text-label-code-sm text-on-surface-variant/80 tracking-tight">REFRESHED 3s AGO (AUTO 5s)</span><div class="relative flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary-container/15 border border-tertiary-container/50 shadow-[0_0_10px_-1px_rgba(255,177,71,0.25)]"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-container opacity-75" style="opacity: 0.54226;"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary-container"></span></span><span class="font-label-status text-label-status text-tertiary-container uppercase tracking-wider font-bold">2 ATTENTION · 11/12 UP</span></div><div class="hidden 2xl:flex items-center gap-1.5 px-space-sm py-1 rounded-md bg-secondary-container/20 border border-secondary-container/40 text-secondary-fixed-dim"><span class="material-symbols-outlined text-xs text-secondary">healing</span><span class="font-label-code-sm text-label-code-sm font-medium">OpenClaw healed redis in 4s</span></div><div class="flex items-center pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="https://lh3.googleusercontent.com/aida/AEtjO1WxBwTvbOktWAD49gOTXZwdXizLZSIoFG0ZPLEg8E2uJqG8qiYVYNuMvoIePhjLwXhhsOEuK1aL8gmZx_nJKPVgbpvIjpeI4vA1u4MosiaeSz1NfRabDsqzEhU3PIISztIk9AijiXL15Up234WVF6HeVK4kKPyqe62VHOW8D8WXCWTSYhhilvCaXxzK7D9CkV8Pds0HZB-ey-z8muInEHWXS_R6T7ZzeAu0a0VnY31nx7psHh6FeI_-oNah"></div></div></header><main class="w-full pt-14 flex-1 bg-surface-container-lowest"><div class="flex flex-col w-full text-on-surface">
+<!-- TOP HERO COCKPIT HEADER BAR -->
+<div class="w-full bg-surface-container-lowest px-space-lg py-space-md flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md shadow-2xl relative overflow-hidden">
+<!-- Ambient Cyber Glow Backdrop -->
+<div class="absolute -top-16 left-1/4 w-96 h-32 bg-tertiary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-10 right-10 w-80 h-24 bg-tertiary-container/5 rounded-full blur-2xl pointer-events-none"></div>
+<!-- Left: Identity & Core Monospace Protocol -->
+<div class="flex items-center gap-space-md z-10">
+<img alt="YouAndINotAI Official Logo" class="h-10 object-contain rounded-lg shadow-[0_0_15px_-3px_rgba(255,177,71,0.35)] bg-surface-container-low p-1" src="https://lh3.googleusercontent.com/aida/AEtjO1XhkTjmj-PZSbC5pausEuDVNDJ2_DvwRuO2gS0Mx5xRXMAD0R1jon_Ss0-IAwUd0kpV-dY3Fnph6dOPQiT9BobXOKgycmbt1bnUbDgYStNQvDvS8Tofuj8qF2UijILl6yhGr678H6n_O7yM_hcLWOE7YEGMrwaOX7gy-tIjmp8UOVUSUZ0VStIT2FsvUGgVOWB1fxjkyazobSB7xVomkB16X13Vw2hZkT7w1exsGWqX9rwaZDbzJW6TqLAK">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md font-bold tracking-tight text-tertiary">YOU &amp; I</span>
+<span class="px-2 py-0.5 rounded bg-tertiary-container/20 text-tertiary-container font-label-code-sm text-label-code-sm font-black tracking-widest uppercase">NOT AI</span>
+<span class="w-2 h-2 rounded-full bg-tertiary-container animate-ping" style="opacity: 0.75;"></span>
+<span class="font-label-status text-label-status text-on-surface-variant uppercase tracking-wider hidden sm:inline">PROTOCOL: v2.8.4_AMBER</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant/90 tracking-wide mt-0.5">
+          ANTI-SYNTHETIC SOCIAL ENGINE · COMMUNITY RECYCLING · DECENTRALIZED MMORPG NODE MESH
+        </span>
+</div>
+</div>
+<!-- Right: High-Priority Operational Mode Toggles -->
+<div class="flex flex-wrap items-center gap-space-sm z-10 w-full xl:w-auto justify-start xl:justify-end">
+<!-- 1. Stream Mode Safe / Redacted Toggle -->
+<div class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-surface-container-high transition-all cursor-pointer shadow-md select-none group" id="stream-toggle-box" onclick="toggleStreamMode()">
+<div class="flex flex-col text-left">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-tertiary-container group-hover:scale-110 transition-transform">visibility_off</span>
+<span class="font-label-code-sm text-label-code-sm font-bold text-on-surface">STREAM SAFE MODE</span>
+</div>
+<span class="font-label-status text-label-status text-tertiary-container tracking-wider" id="stream-badge-sub">SECRETS MASKED (OBS READY)</span>
+</div>
+<!-- Custom Switch -->
+<div class="w-8 h-4 rounded-full bg-tertiary-container/30 p-0.5 flex items-center transition-colors" id="stream-switch-track">
+<div class="w-3 h-3 rounded-full bg-tertiary-container shadow-[0_0_8px_rgba(255,177,71,0.8)] translate-x-4 transition-transform" id="stream-switch-nub"></div>
+</div>
+</div>
+<!-- 2. Screensaver HUD / Power-Save Toggle -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-all cursor-pointer shadow-md select-none group" id="screensaver-btn" onclick="toggleScreensaver()">
+<span class="material-symbols-outlined text-sm text-tertiary group-hover:rotate-45 transition-transform">terminal</span>
+<div class="flex flex-col text-left">
+<span class="font-label-code-sm text-label-code-sm font-semibold text-on-surface">SCREENSAVER HUD</span>
+<span class="font-label-status text-label-status text-on-surface-variant">OLED POWER-SAVE</span>
+</div>
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+</div>
+<!-- Quick Emergency Filter Button -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-tertiary-container hover:brightness-110 text-on-tertiary-container font-headline-sm text-headline-sm font-bold shadow-[0_0_12px_rgba(255,177,71,0.35)] transition-all cursor-pointer" onclick="openDispatchModal()">
+<span class="material-symbols-outlined text-sm font-bold">radar</span>
+<span class="font-label-code-sm text-label-code-sm uppercase">Anti-Bot Pulse</span>
+</button>
+</div>
+</div>
+<!-- REAL-TIME TELEMETRY METRIC STRIP -->
+<div class="w-full bg-surface-container-low px-space-lg py-space-sm grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-space-sm shadow-inner">
+<div class="flex flex-col p-2 rounded bg-surface-container">
+<span class="font-label-status text-label-status text-on-surface-variant uppercase tracking-widest">PROOF OF HUMAN</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md font-bold text-tertiary">1,420</span>
+<span class="font-label-status text-label-status text-tertiary-container">VERIFIED</span>
+</div>
+</div>
+<div class="flex flex-col p-2 rounded bg-surface-container">
+<span class="font-label-status text-label-status text-on-surface-variant uppercase tracking-widest">BOTS REJECTED</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md font-bold text-error">348</span>
+<span class="font-label-status text-label-status text-error-container">BLOCKED</span>
+</div>
+</div>
+<div class="flex flex-col p-2 rounded bg-surface-container">
+<span class="font-label-status text-label-status text-on-surface-variant uppercase tracking-widest">E-WASTE SALVAGED</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md font-bold text-tertiary">2,180</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">LBS</span>
+</div>
+</div>
+<div class="flex flex-col p-2 rounded bg-surface-container">
+<span class="font-label-status text-label-status text-on-surface-variant uppercase tracking-widest">GPU MESH NODES</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md font-bold text-tertiary-container">42</span>
+<span class="font-label-status text-label-status text-tertiary font-bold">ONLINE</span>
+</div>
+</div>
+<div class="flex flex-col p-2 rounded bg-surface-container">
+<span class="font-label-status text-label-status text-on-surface-variant uppercase tracking-widest">MMORPG BACKING</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md font-bold text-tertiary">$18,450</span>
+<span class="font-label-status text-label-status text-on-surface-variant">/ 50K</span>
+</div>
+</div>
+<div class="flex flex-col p-2 rounded bg-surface-container">
+<span class="font-label-status text-label-status text-on-surface-variant uppercase tracking-widest">PRIMARY HOST</span>
+<div class="flex items-baseline gap-1 mt-0.5 truncate">
+<span class="font-label-code-md text-label-code-md font-bold text-tertiary secret-data">192.168.0.15</span>
+<span class="secret-chip hidden px-1.5 py-0.2 rounded bg-tertiary-container/30 text-tertiary font-label-status text-[8px] font-bold">[MASKED]</span>
+</div>
+</div>
+</div>
+<!-- MAIN DASHBOARD CONTENT GRID (3 PILLARS + TOOL ECOSYSTEM) -->
+<div class="w-full p-space-lg grid grid-cols-1 xl:grid-cols-12 gap-space-lg">
+<!-- ============================================================== -->
+<!-- PILLAR 1: REAL HUMAN DATING & PROOF-OF-HUMAN VERIFICATION (COL 1-4) -->
+<!-- ============================================================== -->
+<div class="xl:col-span-4 flex flex-col gap-space-md">
+<div class="rounded-xl bg-surface-container-low p-space-lg flex flex-col gap-space-md shadow-xl relative overflow-hidden">
+<!-- Panel Header -->
+<div class="flex items-center justify-between pb-space-sm bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container text-lg" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface uppercase tracking-tight">PILLAR 1: YOU &amp; I DATING</span>
+<span class="font-label-code-sm text-label-code-sm text-tertiary-container font-semibold">100% NOT AI · REAL HUMAN SOULS</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-status text-label-status font-bold">ZERO SYNTHETIC</span>
+</div>
+<!-- Visual Verification Telemetry Graph / Gauge -->
+<div class="p-space-md rounded-lg bg-surface-container flex flex-col gap-space-sm">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-code-sm text-label-code-sm font-medium">Sybil &amp; Bot Defense Rate</span>
+<span class="font-label-code-sm text-label-code-sm text-tertiary font-bold">99.84% Pure Human</span>
+</div>
+<!-- Inline Sparkline / Progress SVG -->
+<div class="w-full h-8 flex items-end gap-1 pt-1">
+<div class="h-6 flex-1 bg-tertiary-container/20 rounded-t hover:bg-tertiary-container/40 transition-colors" title="Cohort Mon: 99.2%"></div>
+<div class="h-7 flex-1 bg-tertiary-container/30 rounded-t hover:bg-tertiary-container/50 transition-colors" title="Cohort Tue: 99.5%"></div>
+<div class="h-5 flex-1 bg-tertiary-container/20 rounded-t hover:bg-tertiary-container/40 transition-colors" title="Cohort Wed: 98.9%"></div>
+<div class="h-8 flex-1 bg-tertiary-container rounded-t shadow-[0_0_8px_rgba(255,177,71,0.5)]" title="Cohort Today: 99.8%"></div>
+<div class="h-6 flex-1 bg-tertiary-container/30 rounded-t" title="Projected: 99.4%"></div>
+<div class="h-7 flex-1 bg-tertiary-container/40 rounded-t" title="Projected: 99.7%"></div>
+</div>
+<div class="flex items-center justify-between font-label-status text-label-status text-on-surface-variant/80">
+<span>LIVE HUMAN INTAKE: 48 QUEUED</span>
+<span class="text-tertiary font-mono">TURNSTILE ACTIVE</span>
+</div>
+</div>
+<!-- Live Human Verification Candidate Stream -->
+<div class="flex flex-col gap-2">
+<span class="font-label-status text-label-status uppercase tracking-wider text-on-surface-variant font-bold">Verification Queue &amp; Turing Audit</span>
+<!-- Candidate 1 -->
+<div class="p-space-sm rounded-lg bg-surface-container flex items-center justify-between gap-space-sm hover:bg-surface-bright transition-all">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-tertiary flex-shrink-0">
+<span class="material-symbols-outlined text-base">face</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface truncate">elena_w (29)</span>
+<span class="font-label-status text-label-status px-1.5 py-0.2 rounded bg-tertiary-container/20 text-tertiary">VOICE PASSED</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant truncate">Biometric entropy: 0.941 · Anti-Deepfake Clear</span>
+</div>
+</div>
+<button class="px-2 py-1 rounded bg-tertiary-container text-on-tertiary-container font-label-code-sm text-label-code-sm font-bold hover:brightness-110 cursor-pointer shadow-sm">
+              Approve
+            </button>
+</div>
+<!-- Candidate 2 (Flagged AI Bot) -->
+<div class="p-space-sm rounded-lg bg-surface-container flex items-center justify-between gap-space-sm hover:bg-surface-bright transition-all">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-error-container/30 flex items-center justify-center text-error flex-shrink-0">
+<span class="material-symbols-outlined text-base">smart_toy</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-body-sm text-body-sm font-semibold text-error truncate">ai_synth_772</span>
+<span class="font-label-status text-label-status px-1.5 py-0.2 rounded bg-error-container/30 text-error">SYNTHETIC DETECTED</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant truncate">Pattern: LLM generated bio &amp; Flux portrait</span>
+</div>
+</div>
+<button class="px-2 py-1 rounded bg-error text-on-error font-label-code-sm text-label-code-sm font-bold hover:brightness-110 cursor-pointer shadow-sm">
+              Permaban
+            </button>
+</div>
+<!-- Candidate 3 -->
+<div class="p-space-sm rounded-lg bg-surface-container flex items-center justify-between gap-space-sm hover:bg-surface-bright transition-all">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-tertiary flex-shrink-0">
+<span class="material-symbols-outlined text-base">person</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface truncate">marcus_dev (34)</span>
+<span class="font-label-status text-label-status px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface-variant">IN REVIEW</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant truncate">E-Waste hardware contributor (+50 karma)</span>
+</div>
+</div>
+<button class="px-2 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-tertiary font-label-code-sm text-label-code-sm font-bold cursor-pointer">
+              Audit
+            </button>
+</div>
+</div>
+<!-- Pillar Actions -->
+<div class="flex items-center gap-2 pt-2">
+<button class="flex-1 py-2 px-3 rounded-lg bg-tertiary-container hover:brightness-110 text-on-tertiary-container font-headline-sm text-headline-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+<span class="material-symbols-outlined text-sm font-bold">verified</span>
+<span>Batch Verify Queue</span>
+</button>
+<button class="py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-bright text-tertiary font-label-code-sm text-label-code-sm font-semibold transition-all flex items-center gap-1 cursor-pointer">
+<span class="material-symbols-outlined text-sm">flag</span>
+<span>Sybil Rules</span>
+</button>
+</div>
+</div>
+<!-- Live Dates & Match Telemetry Card -->
+<div class="rounded-xl bg-surface-container-low p-space-md flex flex-col gap-2 shadow-lg">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm font-bold text-on-surface">ORGANIC CONNECTION PULSE</span>
+<span class="font-label-status text-label-status text-tertiary font-mono">187 ACTIVE DATES</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+          Zero algorithms optimizing for addictive doom-swiping. Direct peer-to-peer verifiable meeting protocols with cryptographic proof-of-human presence.
+        </p>
+</div>
+</div>
+<!-- ============================================================== -->
+<!-- PILLAR 2: ONLINE E-WASTE RECYCLE INTAKE SYSTEM (COL 5-8) -->
+<!-- ============================================================== -->
+<div class="xl:col-span-4 flex flex-col gap-space-md">
+<div class="rounded-xl bg-surface-container-low p-space-lg flex flex-col gap-space-md shadow-xl relative overflow-hidden">
+<!-- Header -->
+<div class="flex items-center justify-between pb-space-sm bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings: 'FILL' 1;">recycling</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface uppercase tracking-tight">PILLAR 2: E-WASTE INTAKE</span>
+<span class="font-label-code-sm text-label-code-sm text-tertiary-container font-semibold">HARDWARE SALVAGE &amp; COMMUNITY NODES</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-tertiary font-label-status text-label-status font-bold">DEPOT v4.2</span>
+</div>
+<!-- Inventory Metrics -->
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="p-space-sm rounded-lg bg-surface-container flex flex-col">
+<span class="font-label-status text-label-status text-on-surface-variant uppercase">SALVAGED GPUS</span>
+<span class="font-headline-md text-headline-md font-bold text-tertiary mt-0.5">84 UNITS</span>
+<span class="font-label-code-sm text-label-code-sm text-tertiary-container">RTX 3070s · Quadros</span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container flex flex-col">
+<span class="font-label-status text-label-status text-on-surface-variant uppercase">PRECIOUS SCRAP VAL</span>
+<span class="font-headline-md text-headline-md font-bold text-tertiary mt-0.5">$3,420</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Gold &amp; Copper recovery</span>
+</div>
+</div>
+<!-- Live Intake Ledger -->
+<div class="flex flex-col gap-2">
+<span class="font-label-status text-label-status uppercase tracking-wider text-on-surface-variant font-bold">Live Intake Log &amp; Transit</span>
+<!-- Item 1 -->
+<div class="p-space-sm rounded-lg bg-surface-container flex items-center justify-between gap-space-sm hover:bg-surface-bright transition-all">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="material-symbols-outlined text-tertiary text-base flex-shrink-0">memory</span>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Batch #9042: 12x Dell Xeon Workstations</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant truncate">Destined for: MMORPG Shard Host T5500</span>
+</div>
+</div>
+<span class="font-label-status text-label-status px-2 py-0.5 rounded bg-tertiary-container/20 text-tertiary font-bold flex-shrink-0">BENCHED</span>
+</div>
+<!-- Item 2 -->
+<div class="p-space-sm rounded-lg bg-surface-container flex items-center justify-between gap-space-sm hover:bg-surface-bright transition-all">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="material-symbols-outlined text-tertiary-container text-base flex-shrink-0">local_shipping</span>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Drop-off: 4x RTX 3080 &amp; 800W PSUs</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant truncate">Label: <span class="secret-data">USPS-9400-1112-EW</span><span class="secret-chip hidden text-tertiary font-bold">[TRACKING MASKED]</span></span>
+</div>
+</div>
+<span class="font-label-status text-label-status px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-bold flex-shrink-0">IN TRANSIT</span>
+</div>
+<!-- Item 3 -->
+<div class="p-space-sm rounded-lg bg-surface-container flex items-center justify-between gap-space-sm hover:bg-surface-bright transition-all">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="material-symbols-outlined text-tertiary text-base flex-shrink-0">battery_charging_full</span>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Li-Ion Pack Refurbishing (18650 Cells)</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant truncate">Decentralized Power Backup Cluster</span>
+</div>
+</div>
+<span class="font-label-status text-label-status px-2 py-0.5 rounded bg-tertiary-container/20 text-tertiary font-bold flex-shrink-0">94% HEALTH</span>
+</div>
+</div>
+<!-- E-Waste Quick Actions -->
+<div class="flex flex-col gap-2 pt-2">
+<div class="flex items-center gap-2">
+<button class="flex-1 py-2 px-3 rounded-lg bg-tertiary-container hover:brightness-110 text-on-tertiary-container font-headline-sm text-headline-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+<span class="material-symbols-outlined text-sm font-bold">local_shipping</span>
+<span>Generate Shipping Label</span>
+</button>
+<button class="py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-bright text-tertiary font-label-code-sm text-label-code-sm font-semibold transition-all flex items-center gap-1 cursor-pointer">
+<span class="material-symbols-outlined text-sm">add_box</span>
+<span>Log Batch</span>
+</button>
+</div>
+<button class="w-full py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface-variant font-label-code-sm text-label-code-sm flex items-center justify-center gap-1 transition-all">
+<span class="material-symbols-outlined text-sm text-tertiary">map</span>
+<span>View 18 Community Drop-Off Hub Locations</span>
+</button>
+</div>
+</div>
+<!-- Node Hardware Repurposing Schematic -->
+<div class="rounded-xl bg-surface-container-low p-space-md flex items-center justify-between shadow-lg">
+<div class="flex items-center gap-space-sm">
+<div class="p-2 rounded bg-tertiary-container/20 text-tertiary">
+<span class="material-symbols-outlined text-xl">dns</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-semibold text-on-surface">T5500 Hardware Mesh</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Hosting game servers &amp; human audit databases</span>
+</div>
+</div>
+<span class="font-label-status text-label-status text-tertiary-container font-bold px-2 py-1 rounded bg-surface-container">0% E-WASTE TO LANDFILL</span>
+</div>
+</div>
+<!-- ============================================================== -->
+<!-- PILLAR 3: DREAM ONLINE MMORPG CROWDFUNDING & DEV TRACKER (COL 9-12) -->
+<!-- ============================================================== -->
+<div class="xl:col-span-4 flex flex-col gap-space-md">
+<div class="rounded-xl bg-surface-container-low p-space-lg flex flex-col gap-space-md shadow-xl relative overflow-hidden">
+<!-- Header -->
+<div class="flex items-center justify-between pb-space-sm bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface uppercase tracking-tight">PILLAR 3: DREAM MMORPG</span>
+<span class="font-label-code-sm text-label-code-sm text-tertiary-container font-semibold">UNREAL ENGINE &amp; WEBGL CLIENT</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary font-label-status text-label-status font-bold">PRE-ALPHA</span>
+</div>
+<!-- Crowdfunding Progress Block -->
+<div class="p-space-md rounded-lg bg-surface-container flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-status text-label-status uppercase tracking-wider text-on-surface-variant font-bold">OpenCollective Crowdfund</span>
+<span class="font-label-code-sm text-label-code-sm text-tertiary font-bold">36.9% Funded</span>
+</div>
+<div class="flex items-baseline justify-between">
+<span class="font-headline-lg text-headline-lg font-bold text-tertiary">$18,450.00</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Goal: $50,000.00</span>
+</div>
+<!-- Amber Progress Bar -->
+<div class="w-full h-2.5 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-tertiary-container rounded-full shadow-[0_0_10px_rgba(255,177,71,0.6)]" style="width: 36.9%;"></div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-code-sm text-label-code-sm pt-1">
+<span>Supporters: 214 Backers</span>
+<span class="text-tertiary font-semibold">Sprint Velocity: 74%</span>
+</div>
+</div>
+<!-- Game Development Sprint Status -->
+<div class="flex flex-col gap-2">
+<span class="font-label-status text-label-status uppercase tracking-wider text-on-surface-variant font-bold">Development Milestones &amp; Mesh Architecture</span>
+<div class="p-space-sm rounded-lg bg-surface-container flex flex-col gap-1 hover:bg-surface-bright transition-all">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">Spatial Audio &amp; Human Proximity Chat</span>
+<span class="font-label-status text-label-status px-1.5 py-0.2 rounded bg-tertiary-container/20 text-tertiary">COMPLETE</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Decentralized WebRTC audio peer mesh running without central servers</span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container flex flex-col gap-1 hover:bg-surface-bright transition-all">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">E-Waste Server Shard Cluster Deployment</span>
+<span class="font-label-status text-label-status px-1.5 py-0.2 rounded bg-surface-container-high text-tertiary">IN PROGRESS (68%)</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Recycled T5500 nodes handling zone instances and zero-latency physics</span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container flex flex-col gap-1 hover:bg-surface-bright transition-all">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">Dream World Lore Bible &amp; Economy</span>
+<span class="font-label-status text-label-status px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface-variant">REVIEW</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Anti-pay-to-win, player-owned crafting fueled by physical recycled hardware items</span>
+</div>
+</div>
+<!-- MMORPG Actions -->
+<div class="flex flex-col gap-2 pt-2">
+<div class="flex items-center gap-2">
+<button class="flex-1 py-2 px-3 rounded-lg bg-tertiary-container hover:brightness-110 text-on-tertiary-container font-headline-sm text-headline-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+<span class="material-symbols-outlined text-sm font-bold">play_arrow</span>
+<span>Launch Tech Demo</span>
+</button>
+<a class="py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-bright text-tertiary font-label-code-sm text-label-code-sm font-semibold transition-all flex items-center gap-1" href="https://opencollective.com" target="_blank">
+<span class="material-symbols-outlined text-sm">volunteer_activism</span>
+<span>Back Project</span>
+</a>
+</div>
+<div class="flex items-center justify-between px-2 text-on-surface-variant font-label-status text-label-status">
+<span>ETHIC: 'BUSINESS-ONLY, HUMAN-APPROVED'</span>
+<span class="text-tertiary font-mono">100% TRANSPARENT CODE</span>
+</div>
+</div>
+</div>
+<!-- Quick Backing Banner -->
+<div class="rounded-xl bg-surface-container-low p-space-md flex items-center justify-between shadow-lg">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-tertiary-container text-lg flex-shrink-0">auto_stories</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">Community Lore Vault: Chapter VII Unlocked</span>
+</div>
+<button class="font-label-code-sm text-label-code-sm text-tertiary hover:underline flex-shrink-0">Read Wiki ↗</button>
+</div>
+</div>
+<!-- ============================================================== -->
+<!-- BOTTOM SECTION: CURATED TOOL & AGENT ECOSYSTEM SUITE (COL 1-12) -->
+<!-- ============================================================== -->
+<div class="xl:col-span-12 flex flex-col gap-space-md">
+<div class="rounded-xl bg-surface-container-low p-space-lg flex flex-col gap-space-md shadow-xl">
+<!-- Header -->
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-space-sm bg-surface-container-low">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-tertiary-container/20 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-lg">apps</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">YOUANDINOTAI TOOL &amp; AGENT ECOSYSTEM SUITE</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">HIGH-VELOCITY INTEGRATIONS · LIVE CHANNELS · ANTI-BOT SECURITY INFERENCE</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-status text-label-status px-2.5 py-1 rounded-full bg-surface-container-high text-tertiary-container font-mono">
+              6/6 ACTIVE INTEGRATIONS
+            </span>
+</div>
+</div>
+<!-- 6 Tool Cards Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-md">
+<!-- Tool 1: OpenCollective Transparency -->
+<div class="p-space-md rounded-xl bg-surface-container hover:bg-surface-bright transition-all flex flex-col justify-between gap-space-md shadow-md group">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-lg">savings</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">OpenCollective API</span>
+</div>
+<span class="font-label-status text-label-status px-2 py-0.5 rounded bg-tertiary-container/20 text-tertiary font-bold">FINANCES</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                Real-time hardware intake and node inventory for the T5500.
+              </p>
+<div class="p-2 rounded bg-surface-container-lowest font-label-code-sm text-label-code-sm flex items-center justify-between text-on-surface-variant">
+<span>Webhook Status:</span>
+<span class="text-tertiary font-mono">200 OK · SYNCED</span>
+</div>
+</div>
+<button class="w-full py-1.5 rounded-lg bg-surface-container-high hover:bg-tertiary-container hover:text-on-tertiary-container text-tertiary font-label-code-sm text-label-code-sm font-semibold transition-all flex items-center justify-center gap-1 cursor-pointer">
+<span>View Hardware Ledger</span>
+<span class="material-symbols-outlined text-xs">arrow_forward</span>
+</button>
+</div>
+<!-- Tool 2: Galaxy AI Studio Sandbox -->
+<div class="p-space-md rounded-xl bg-surface-container hover:bg-surface-bright transition-all flex flex-col justify-between gap-space-md shadow-md group">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container text-lg">science</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">Galaxy AI Studio</span>
+</div>
+<span class="font-label-status text-label-status px-2 py-0.5 rounded bg-tertiary-container/20 text-tertiary-container font-bold">SANDBOX</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                Direct neural lab testing adversarial models against the proof-of-human classifier. Benchmarks synthetic mimicry attempts.
+              </p>
+<div class="p-2 rounded bg-surface-container-lowest font-label-code-sm text-label-code-sm flex items-center justify-between text-on-surface-variant truncate">
+<span class="truncate">Host:</span>
+<span class="text-tertiary font-mono truncate secret-data">youandinotai-galaxy.ai.studio</span>
+<span class="secret-chip hidden text-tertiary font-bold">[MASKED]</span>
+</div>
+</div>
+<button class="w-full py-1.5 rounded-lg bg-surface-container-high hover:bg-tertiary-container hover:text-on-tertiary-container text-tertiary font-label-code-sm text-label-code-sm font-semibold transition-all flex items-center justify-center gap-1 cursor-pointer">
+<span>Launch Studio Environment</span>
+<span class="material-symbols-outlined text-xs">open_in_new</span>
+</button>
+</div>
+<!-- Tool 3: X.com Team Broadcaster -->
+<div class="p-space-md rounded-xl bg-surface-container hover:bg-surface-bright transition-all flex flex-col justify-between gap-space-md shadow-md group">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-lg">share</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">X.com Broadcaster</span>
+</div>
+<span class="font-label-status text-label-status px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-bold">SOCIAL FEED</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                Direct dispatch channel syncing development sprints, e-waste drop milestones, and anti-bot transparency reports to @Trollz1004.
+              </p>
+<div class="p-2 rounded bg-surface-container-lowest font-label-code-sm text-label-code-sm flex items-center justify-between text-on-surface-variant">
+<span>Feed Queue:</span>
+<span class="text-tertiary font-mono">3 Drafts Ready</span>
+</div>
+</div>
+<button class="w-full py-1.5 rounded-lg bg-surface-container-high hover:bg-tertiary-container hover:text-on-tertiary-container text-tertiary font-label-code-sm text-label-code-sm font-semibold transition-all flex items-center justify-center gap-1 cursor-pointer">
+<span>Open Social Queue</span>
+<span class="material-symbols-outlined text-xs">campaign</span>
+</button>
+</div>
+<!-- Tool 4: Claude / Gemini / DeepSeek Bot Classifier -->
+<div class="p-space-md rounded-xl bg-surface-container hover:bg-surface-bright transition-all flex flex-col justify-between gap-space-md shadow-md group">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container text-lg">security</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">Anti-Bot Classifier</span>
+</div>
+<span class="font-label-status text-label-status px-2 py-0.5 rounded bg-tertiary-container/20 text-tertiary font-bold">MULTI-LLM</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                Consensus arbitration running Claude 3.5 Sonnet, Gemini 1.5 Pro, and DeepSeek-V3 to detect synthetic linguistics in dating profiles.
+              </p>
+<div class="p-2 rounded bg-surface-container-lowest font-label-code-sm text-label-code-sm flex items-center justify-between text-on-surface-variant">
+<span>Inference Latency:</span>
+<span class="text-tertiary font-mono">240ms consensus</span>
+</div>
+</div>
+<button class="w-full py-1.5 rounded-lg bg-surface-container-high hover:bg-tertiary-container hover:text-on-tertiary-container text-tertiary font-label-code-sm text-label-code-sm font-semibold transition-all flex items-center justify-center gap-1 cursor-pointer" onclick="testClassifier()">
+<span>Test Sample Payload</span>
+<span class="material-symbols-outlined text-xs">psychology</span>
+</button>
+</div>
+<!-- Tool 5: Cloudflare Turnstile & Proof-of-Humanity -->
+<div class="p-space-md rounded-xl bg-surface-container hover:bg-surface-bright transition-all flex flex-col justify-between gap-space-md shadow-md group">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-lg">shield</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">Cloudflare Turnstile</span>
+</div>
+<span class="font-label-status text-label-status px-2 py-0.5 rounded bg-surface-container-high text-tertiary-container font-bold">EDGE SHIELD</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                Zero-friction, non-interactive human verification tokens at edge locations. Intercepts headless scrapers before touching the app socket.
+              </p>
+<div class="p-2 rounded bg-surface-container-lowest font-label-code-sm text-label-code-sm flex items-center justify-between text-on-surface-variant truncate">
+<span>Proxy Zone:</span>
+<span class="text-tertiary font-mono truncate secret-data">dash.cloudflare.com/516a...</span>
+<span class="secret-chip hidden text-tertiary font-bold">[ZONE REDACTED]</span>
+</div>
+</div>
+<button class="w-full py-1.5 rounded-lg bg-surface-container-high hover:bg-tertiary-container hover:text-on-tertiary-container text-tertiary font-label-code-sm text-label-code-sm font-semibold transition-all flex items-center justify-center gap-1 cursor-pointer">
+<span>Inspect Edge Gateway</span>
+<span class="material-symbols-outlined text-xs">cloud_done</span>
+</button>
+</div>
+<!-- Tool 6: T5500 Node Hardware Mesh Database -->
+<div class="p-space-md rounded-xl bg-surface-container hover:bg-surface-bright transition-all flex flex-col justify-between gap-space-md shadow-md group">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container text-lg">hub</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">T5500 Hardware Mesh</span>
+</div>
+<span class="font-label-status text-label-status px-2 py-0.5 rounded bg-tertiary-container/20 text-tertiary font-bold">BARE METAL</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                Self-hosted bare-metal clusters powered by salvaged Xeons and repurposed GPUs. Running game instances, media ingestion, and local SQLite stores.
+              </p>
+<div class="p-2 rounded bg-surface-container-lowest font-label-code-sm text-label-code-sm flex items-center justify-between text-on-surface-variant">
+<span>Cluster Uptime:</span>
+<span class="text-tertiary font-mono">42d 18h · 100% HEALTH</span>
+</div>
+</div>
+<button class="w-full py-1.5 rounded-lg bg-surface-container-high hover:bg-tertiary-container hover:text-on-tertiary-container text-tertiary font-label-code-sm text-label-code-sm font-semibold transition-all flex items-center justify-center gap-1 cursor-pointer">
+<span>View Hardware Telemetry</span>
+<span class="material-symbols-outlined text-xs">memory</span>
+</button>
+</div>
+</div>
+<!-- Interactive Terminal Console / Anti-Bot Inspection Log -->
+<div class="w-full rounded-xl bg-surface-container-lowest p-space-md flex flex-col gap-2 font-mono text-xs shadow-inner">
+<div class="flex items-center justify-between pb-2 bg-surface-container-lowest">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary-container"></span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-bold">antigravity@youandinotai-core:~/defense-mesh</span>
+</div>
+<div class="flex items-center gap-3 font-label-status text-label-status text-on-surface-variant">
+<span>FEED: /dev/stdout</span>
+<span class="text-tertiary font-bold">STATUS: LISTENING</span>
+</div>
+</div>
+<div class="space-y-1 text-on-surface-variant font-label-code-sm text-label-code-sm" id="terminal-feed-lines">
+<div class="flex items-center gap-2">
+<span class="text-outline">[02:51:04 UTC]</span>
+<span class="text-tertiary font-bold">[TURING-FILTER]</span>
+<span>Candidate IP <span class="secret-data text-on-surface">198.51.100.44</span><span class="secret-chip hidden text-tertiary font-bold">[IP-REDACTED]</span> completed Proof-of-Human puzzle in 4.2s (Zero AI fingerprint).</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-outline">[02:51:19 UTC]</span>
+<span class="text-error font-bold">[INTERCEPT]</span>
+<span>Automated Sybil bot account flagged. Token: <span class="secret-data text-on-surface">ghp_8849bca...</span><span class="secret-chip hidden text-tertiary font-bold">[REDACTED TOKEN]</span>. Reason: Synthetic vocabulary repetition &gt; 98%.</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-outline">[02:51:32 UTC]</span>
+<span class="text-tertiary-container font-bold">[E-WASTE]</span>
+<span>Hardware intake logged: 1x RTX 3070 8 GB on T5500-2-XEON-72.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SCREENSAVER HUD OVERLAY (HIDDEN BY DEFAULT) -->
+<div class="fixed inset-0 z-50 bg-[#000000]/95 backdrop-blur-md hidden flex-col justify-between p-12 font-mono transition-opacity select-none cursor-pointer" id="screensaver-overlay" onclick="toggleScreensaver()">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 rounded-full bg-tertiary-container animate-pulse"></span>
+<span class="text-tertiary font-bold text-sm tracking-widest">YOU &amp; I [NOT AI] · SCREENSAVER TELEMETRY</span>
+</div>
+<div class="text-right">
+<span class="text-2xl font-bold text-tertiary font-mono" id="screensaver-clock">00:00:00 UTC</span>
+<div class="text-xs text-on-surface-variant">POWER-SAVE ACTIVE · CLICK ANYWHERE TO WAKE</div>
+</div>
+</div>
+<!-- Center Floating Visual -->
+<div class="flex flex-col items-center justify-center gap-4 text-center">
+<div class="w-32 h-32 rounded-full border border-tertiary-container/30 flex items-center justify-center shadow-[0_0_50px_rgba(255,177,71,0.2)] animate-pulse">
+<span class="material-symbols-outlined text-6xl text-tertiary">favorite</span>
+</div>
+<div class="text-xl font-bold tracking-widest text-on-surface">REAL CONNECTIONS · E-WASTE INTAKE · MMORPG</div>
+<div class="text-xs text-tertiary-container font-mono tracking-widest">1,420 VERIFIED HUMANS · 0 SYNTHETIC SOULS · T5500 RUNNING</div>
+</div>
+<div class="flex items-center justify-between text-xs text-on-surface-variant">
+<span>NODE: T5500 CLUSTER · 192.168.0.15</span>
+<span>ORGANIC HUMAN CONSENSUS PROTOCOL</span>
+</div>
+</div>
+<!-- INTERACTIVE MODAL FOR ANTI-BOT CLASSIFIER / DISPATCH -->
+<div class="fixed inset-0 z-50 bg-[#000000]/80 backdrop-blur-sm hidden items-center justify-center p-4" id="dispatch-modal">
+<div class="max-w-xl w-full bg-surface-container-low rounded-xl p-space-lg flex flex-col gap-space-md shadow-2xl">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-xl">radar</span>
+<span class="font-headline-md text-headline-md font-bold text-on-surface">Adversarial Bot Classifier Audit</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface cursor-pointer" onclick="closeDispatchModal()">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant font-semibold">Test Bio / Profile Submission:</span>
+<textarea class="w-full h-24 p-2 rounded bg-surface-container text-on-surface font-mono text-xs focus:outline-none resize-none" id="sample-payload-input" placeholder="Enter text payload to inspect for LLM tokens..."></textarea>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="font-label-code-sm text-label-code-sm text-tertiary-container font-bold" id="classifier-result">
+          Ready for evaluation
+        </div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded bg-surface-container hover:bg-surface-bright text-on-surface-variant font-label-code-sm text-label-code-sm cursor-pointer" onclick="closeDispatchModal()">
+            Cancel
+          </button>
+<button class="px-3.5 py-1.5 rounded bg-tertiary-container hover:brightness-110 text-on-tertiary-container font-label-code-sm text-label-code-sm font-bold cursor-pointer" onclick="runAuditEvaluation()">
+            Run Bot Filter
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- SCRIPT FOR STREAM REDACTION & SCREENSAVER HUD -->
+<script>
+    let isStreamSafe = true;
+    let isScreensaverActive = false;
+
+    // Toggle Stream-Safe Mode (Redacting Keys / Credentials / Private IP)
+    function toggleStreamMode() {
+      isStreamSafe = !isStreamSafe;
+      const nub = document.getElementById('stream-switch-nub');
+      const track = document.getElementById('stream-switch-track');
+      const badgeSub = document.getElementById('stream-badge-sub');
+      const secrets = document.querySelectorAll('.secret-data');
+      const chips = document.querySelectorAll('.secret-chip');
+
+      if (isStreamSafe) {
+        nub.classList.add('translate-x-4');
+        track.classList.add('bg-tertiary-container/30');
+        badgeSub.textContent = 'SECRETS MASKED (OBS READY)';
+        badgeSub.classList.add('text-tertiary-container');
+        badgeSub.classList.remove('text-on-surface-variant');
+
+        secrets.forEach(s => s.classList.add('hidden'));
+        chips.forEach(c => c.classList.remove('hidden'));
+      } else {
+        nub.classList.remove('translate-x-4');
+        track.classList.remove('bg-tertiary-container/30');
+        badgeSub.textContent = 'RAW VALUES EXPOSED';
+        badgeSub.classList.remove('text-tertiary-container');
+        badgeSub.classList.add('text-on-surface-variant');
+
+        secrets.forEach(s => s.classList.remove('hidden'));
+        chips.forEach(c => c.classList.add('hidden'));
+      }
+    }
+
+    // Initialize Stream-Safe Mode on load
+    window.addEventListener('DOMContentLoaded', () => {
+      const secrets = document.querySelectorAll('.secret-data');
+      const chips = document.querySelectorAll('.secret-chip');
+      secrets.forEach(s => s.classList.add('hidden'));
+      chips.forEach(c => c.classList.remove('hidden'));
+    });
+
+    // Toggle Screensaver Mode
+    function toggleScreensaver() {
+      isScreensaverActive = !isScreensaverActive;
+      const overlay = document.getElementById('screensaver-overlay');
+      if (isScreensaverActive) {
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        updateClock();
+      } else {
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+      }
+    }
+
+    function updateClock() {
+      const clock = document.getElementById('screensaver-clock');
+      if (clock && isScreensaverActive) {
+        const now = new Date();
+        clock.textContent = now.toUTCString().split(' ')[4] + ' UTC';
+        setTimeout(updateClock, 1000);
+      }
+    }
+
+    // Modal Handlers
+    function openDispatchModal() {
+      const modal = document.getElementById('dispatch-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeDispatchModal() {
+      const modal = document.getElementById('dispatch-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function testClassifier() {
+      openDispatchModal();
+      document.getElementById('sample-payload-input').value = "Hey! I am a passionate landscape artist looking for real authentic connections. Love hiking, retro game dev, and salvage computing.";
+    }
+
+    function runAuditEvaluation() {
+      const input = document.getElementById('sample-payload-input').value;
+      const result = document.getElementById('classifier-result');
+      result.textContent = "Running Claude + Gemini + DeepSeek arbitration...";
+
+      setTimeout(() => {
+        if (input.toLowerCase().includes('landscape') || input.toLowerCase().includes('hiking')) {
+          result.innerHTML = "<span class='text-tertiary font-bold'>VERIFIED: 100% ORGANIC HUMAN (0.02% SYNTHETIC ENTROPY)</span>";
+        } else {
+          result.innerHTML = "<span class='text-error font-bold'>FLAGGED: LIKELY BOT PATTERN (91% SYNTHETIC SCORE)</span>";
+        }
+      }, 700);
+    }
+  </script>
+</div></main></div>
+<div class="fixed inset-0 z-50 bg-[#000f21]/80 backdrop-blur-sm flex items-center justify-center p-4" id="terminal-modal-overlay"><div class="max-w-3xl w-full bg-[#0b1c30] border border-primary/40 rounded-xl shadow-[0_20px_50px_rgba(0,15,33,0.95),0_0_35px_rgba(34,211,238,0.2)] overflow-hidden flex flex-col font-['JetBrains_Mono',monospace]">
+<!-- Window Titlebar -->
+<div class="h-10 px-4 bg-[#102034] border-b border-[#26364a] flex items-center justify-between select-none">
+<div class="flex items-center gap-2 min-w-0">
+<div class="flex items-center gap-1.5 flex-shrink-0">
+<button class="w-3 h-3 rounded-full bg-[#ff5f56] hover:brightness-125 border border-[#e0443e] cursor-pointer transition-all flex items-center justify-center group" onclick="document.getElementById('terminal-modal-overlay').remove()" title="Close"></button>
+<div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]" title="Minimize"></div>
+<div class="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]" title="Expand"></div>
+</div>
+<div class="h-3.5 w-[1px] bg-outline-variant/40 mx-1"></div>
+<div class="flex items-center gap-1.5 truncate">
+<span class="material-symbols-outlined text-primary text-sm flex-shrink-0">terminal</span>
+<span class="text-xs text-on-surface font-medium truncate">antigravity@t5500: ~/agents/codex — OAuth Session Tunnel <span class="text-primary font-bold">[ttys004]</span></span>
+</div>
+</div>
+<div class="flex items-center gap-3 flex-shrink-0">
+<div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-lowest/80 border border-primary/40 text-[10px] text-primary shadow-[0_0_10px_-2px_rgba(34,211,238,0.3)]">
+<span class="relative flex h-1.5 w-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" style="opacity: 0.471103;"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
+<span class="font-bold tracking-wider">LIVE STREAM</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="hover:text-on-surface p-1 rounded hover:bg-surface-container transition-colors" title="Minimize"><span class="material-symbols-outlined text-sm">minimize</span></button>
+<button class="hover:text-on-surface p-1 rounded hover:bg-surface-container transition-colors" title="Maximize"><span class="material-symbols-outlined text-sm">check_box_outline_blank</span></button>
+<button class="hover:text-error hover:bg-error-container/40 rounded p-1 transition-colors cursor-pointer" onclick="document.getElementById('terminal-modal-overlay').remove()" title="Close modal"><span class="material-symbols-outlined text-sm">close</span></button>
+</div>
+</div>
+</div>
+<!-- Terminal Body -->
+<div class="p-5 bg-[#000f21]/95 text-xs text-on-surface leading-relaxed flex flex-col gap-3.5 font-mono border-b border-[#26364a]">
+<!-- Prompt & Execution -->
+<div class="flex items-center gap-2 p-2 rounded bg-surface-container-lowest/60 border border-outline-variant/30 text-on-surface-variant text-[11px]">
+<span class="text-primary font-bold">codex-supervisor</span><span class="text-outline-variant">on</span><span class="text-secondary font-semibold">cluster-alpha</span><span class="text-primary font-bold">$</span>
+<span class="text-on-surface font-semibold truncate">antigravity-auth login --agent codex --provider github-app --tunnel-port 8000</span>
+</div>
+<!-- Timestamps & Logs -->
+<div class="space-y-1.5 text-on-surface-variant text-[11px] px-1">
+<div class="flex items-start gap-2">
+<span class="text-outline-variant flex-shrink-0">[2025-02-17 02:44:12 UTC]</span>
+<span class="text-primary font-bold flex-shrink-0">[INFO]</span>
+<span class="text-on-surface-variant/90">Initiating headless device-flow handshake with upstream auth proxy...</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="text-outline-variant flex-shrink-0">[2025-02-17 02:44:13 UTC]</span>
+<span class="text-primary-fixed-dim font-bold flex-shrink-0">[NET]</span>
+<span class="text-on-surface-variant/90">Bound temporary localhost redirect listener on <span class="text-primary font-semibold underline">127.0.0.1:8000</span> (ephemeral PID 61928)</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="text-outline-variant flex-shrink-0">[2025-02-17 02:44:14 UTC]</span>
+<span class="text-tertiary-container font-bold flex-shrink-0">[WARN]</span>
+<span class="text-on-surface-variant/90">Found stale refresh token (<span class="text-error font-semibold">expired 18m ago</span>). Purging orphaned session cookies and rotating nonce.</span>
+</div>
+</div>
+<!-- Highlighted OAuth Auth Box -->
+<div class="my-1 p-4 rounded-xl bg-surface-container-low border border-primary-container/40 bg-gradient-to-r from-surface-container-low via-[#09223a] to-surface-container-low shadow-[0_0_20px_-3px_rgba(34,211,238,0.25)] ring-1 ring-primary/30">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-base animate-pulse">verified_user</span>
+<span class="text-xs font-bold uppercase tracking-wider text-primary">GITHUB DEVICE AUTHORIZATION REQUIRED</span>
+</div>
+<span class="text-[10px] text-tertiary-container font-semibold uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-tertiary-container/15 border border-tertiary-container/50 shadow-[0_0_10px_-1px_rgba(255,177,71,0.25)]">EXPIRES IN 14:48</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 items-center bg-surface-container-lowest/90 p-3.5 rounded-lg border border-outline-variant/40">
+<div class="space-y-1.5">
+<div class="text-[10px] uppercase font-bold tracking-widest text-outline">1. OPEN VERIFICATION PAGE</div>
+<a class="inline-flex items-center gap-1.5 text-primary hover:text-primary-fixed hover:underline font-semibold text-xs transition-colors" href="https://github.com/login/device" target="_blank">
+<span class="">https://github.com/login/device</span>
+<span class="material-symbols-outlined text-xs">open_in_new</span>
+</a>
+</div>
+<div class="space-y-1.5">
+<div class="text-[10px] uppercase font-bold tracking-widest text-outline">2. ENTER ONE-TIME CODE</div>
+<div class="flex items-center gap-2">
+<div class="px-3.5 py-1 bg-surface-container-high rounded-md border border-primary-container text-primary-container font-extrabold tracking-widest text-base shadow-[0_0_12px_-2px_rgba(34,211,238,0.35)] select-all">
+                ABCD-8924
+              </div>
+<button class="px-3 py-1.5 rounded-md bg-surface-container-highest hover:bg-surface-bright text-on-surface text-[11px] font-medium flex items-center gap-1 border border-outline-variant/40 hover:border-primary/50 transition-all cursor-pointer shadow-sm" onclick="navigator.clipboard.writeText('ABCD-8924')">
+<span class="material-symbols-outlined text-xs text-primary">content_copy</span>
+<span class="">Copy</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Quick action buttons -->
+<div class="mt-3.5 pt-3 border-t border-outline-variant/40 flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<button class="px-3.5 py-1.5 rounded-md bg-primary-container hover:brightness-110 text-on-primary-container font-bold text-xs shadow-[0_0_12px_-2px_rgba(34,211,238,0.35)] flex items-center gap-1.5 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-sm font-bold">rocket_launch</span>
+<span class="">Launch Browser &amp; Auto-Paste</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-md bg-surface-container-highest hover:bg-surface-bright text-on-surface text-xs font-semibold border border-outline-variant/40 hover:border-primary/40 flex items-center gap-1.5 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-sm text-secondary">play_circle</span>
+<span class="">Simulate Callback</span>
+</button>
+</div>
+<div class="flex items-center gap-1.5 text-[11px] text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+<span class="">Auto-approval listener active on <span class="text-primary font-mono">:8000</span></span>
+</div>
+</div>
+</div>
+<!-- Polling Status Line -->
+<div class="flex items-center gap-2 text-[11px] text-on-surface-variant py-0.5 px-1">
+<span class="text-primary font-bold">❯</span>
+<span class="">Polling <span class="text-primary-fixed underline">https://api.github.com/device/token</span> (interval 5s)...</span>
+<span class="text-tertiary-container font-bold">[Awaiting user approval]</span>
+<span class="inline-block w-2 h-3.5 bg-primary animate-pulse ml-0.5"></span>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="h-12 px-4 bg-[#102034] border-t border-[#26364a] flex items-center justify-between text-xs">
+<div class="flex items-center gap-2 text-on-surface-variant text-[11px]">
+<span class="material-symbols-outlined text-xs text-primary">lock</span>
+<span class="">Security: Ephemeral TLS v1.3 Tunnel · Node <span class="text-primary font-semibold">T5500</span> (192.168.0.15)</span>
+</div>
+<div class="flex items-center gap-2.5">
+<button class="px-3 py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface text-xs font-medium border border-outline-variant/30 transition-all cursor-pointer" onclick="document.getElementById('terminal-modal-overlay').remove()">
+          Cancel Session
+        </button>
+<button class="px-3.5 py-1.5 rounded border border-primary/50 text-primary hover:bg-primary/10 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-[0_0_10px_-2px_rgba(34,211,238,0.25)]">
+<span class="material-symbols-outlined text-xs">refresh</span>
+<span class="">Force Bypass Cache &amp; Re-issue</span>
+</button>
+</div>
+</div>
+</div></div>
+</body></html>

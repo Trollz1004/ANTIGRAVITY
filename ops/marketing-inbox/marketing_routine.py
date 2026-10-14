@@ -28,7 +28,7 @@ TODAY = dt.datetime.now().strftime("%Y-%m-%d")
 BLOG_DIR = INBOX / f"blogs-{TODAY}"
 PROMPTS_TXT = Path(r"C:/Users/joshi/Desktop/HERMES-PROMPTS.txt")
 
-JARVIS = "http://192.168.0.8:9150"
+JARVIS = "http://127.0.0.1:3130"
 BRAND = "youandinotai"
 ADULT_FOOTER = "youandinotai.com is for adults 18 and over."
 EASTERN = dt.timezone(dt.timedelta(hours=-4))
