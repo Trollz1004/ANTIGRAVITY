@@ -1,7 +1,40 @@
 {
   "description": "Agent Workflow Graphy - Shows agents what skills to load, tools available, and daily research targets",
-  "version": "1.2.0",
-  "lastUpdated": "2026-09-03",
+  "version": "1.3.0",
+  "lastUpdated": "2026-10-17",
+  "usedBy": "ALL agents and AI lanes on every platform (Claude, Codex, Gemini, Copilot, Hermes, OpenClaw, OpenCode, Grok, Emergent, Paperclip lanes). Read at session start.",
+  "topology": {
+    "updated": "2026-10-17 (Joshua) \u2014 wins over any older node or role claim in this file",
+    "nodes": {
+      "T5500": {
+        "host": "T5500-2-XEON-72",
+        "ip": "192.168.0.15",
+        "status": "THE ONLY NODE \u2014 production for every domain, Mission Control, and every service"
+      },
+      "Alienware": {
+        "ip": "192.168.0.40",
+        "status": "DEV ONLY \u2014 never production, never hosts or routes anything live"
+      },
+      "Sabretooth": {
+        "status": "NO SUCH NODE \u2014 retired, OFF BY RULING. Never probe, start, heal, or route to it"
+      }
+    },
+    "missionControl": {
+      "what": "JARVIS/OPSIS on the Mission Agent OS board",
+      "where": "T5500, mission-os/, Agent Hub :3130",
+      "jarvis": "Hermes is JARVIS on port :9119, serving Mission Control on :3130. Hermes is fixing this now (in progress)",
+      "builders": "OPSIS/JARVIS and Hermes",
+      "rule": "Dashboard work is in progress \u2014 do NOT modify mission-os/ or the dashboard unless Joshua assigns it"
+    },
+    "paperclip": {
+      "where": "T5500, http://127.0.0.1:3917",
+      "role": "MARKETING ONLY \u2014 Paperclip is NOT Mission Control"
+    },
+    "roles": {
+      "openclaw": "Watchdog / node sentry only (T5500) \u2014 no marketing",
+      "hermes": "JARVIS (:9119 for Mission Control :3130, fix in progress) + ALL support is routed to Hermes + YouTube automation \u2014 no sentry duties"
+    }
+  },
   "universalSkills": {
     "mandatory": [
       "verification-before-completion",
@@ -28,12 +61,39 @@
     "dailyResearch": "Each agent must research and load ONE new skill per day based on their role",
     "memoryLayer": {
       "rule": "Every bot writes what it learns. A bot that only consumes memory is a bot whose work dies with its session.",
-      "updated": "2026-09-03 \u2014 replaces the stale nodes/9020/ vault paths below (that node does not exist)",
+      "updated": "2026-10-17 (Joshua) \u2014 Obsidian is MANDATORY for every agent; the other layers are backups",
+      "sessionProtocol": {
+        "appliesTo": "EVERY agent, every node, every session \u2014 no exceptions",
+        "sessionStart": "READ your own Obsidian file (below) before any task work",
+        "sessionEnd": "WRITE (append) a timestamped entry to your own Obsidian file, then mirror to the backups",
+        "perAgentFile": "C:\\ANTIGRAVITY\\Antigravity\\<NODE>\\<agent>-to-<agent>.md",
+        "examples": [
+          "C:\\ANTIGRAVITY\\Antigravity\\T5500\\claude-to-claude.md",
+          "C:\\ANTIGRAVITY\\Antigravity\\T5500\\hermes-to-hermes.md",
+          "C:\\ANTIGRAVITY\\Antigravity\\T5500\\gemini-to-gemini.md"
+        ],
+        "entryHeader": "## <YYYY-MM-DD HH:MM TZ> | node: <NODE> | use case: <what this session was for>",
+        "entryBody": "what was done, what was proven (evidence path), what is open, next step for your next session",
+        "rules": [
+          "one file per agent per node; each agent writes ONLY its own file",
+          "every session gets its own timestamped entry \u2014 always, even short sessions",
+          "append, never overwrite earlier entries",
+          "never write secrets, keys, or tokens"
+        ]
+      },
+      "backups": {
+        "why": "The memory MCPs exist for exactly this reason: backups of the Obsidian record. Obsidian stays primary.",
+        "supabase": "REQUIRED backup \u2014 mirror each session entry",
+        "supermemory": "backup + fast recall (see recall below)",
+        "openviking": "backup + L0/L1/L2 context (viking://, http://127.0.0.1:1933)",
+        "vercel": "backup"
+      },
       "git": {
         "where": "the ANTIGRAVITY, ai-solutions, and dream-online git repos themselves",
         "why": "Git is authoritative over every other layer. Markdown in git is diffable and `git log -S` can trace a false claim to the commit that invented it. When any layer below disagrees with git, git wins."
       },
       "obsidianVaults": {
+        "mandatory": "YES \u2014 Joshua's personal, paid Obsidian. Every agent MUST use it (read on session start, write on session end)",
         "restApi": "Obsidian Local REST API, http://127.0.0.1:27123",
         "vaults": [
           {
@@ -118,7 +178,9 @@
       "dailyResearchArea": "code review, testing, release management"
     },
     "hermes": {
-      "role": "orchestrator",
+      "role": "JARVIS + support + YouTube automation",
+      "jarvisPort": 9119,
+      "missionControlPort": 3130,
       "skills": [
         "caveman",
         "i-have-adhd",
@@ -133,22 +195,25 @@
         "mission-control",
         "orchestrator-preflight",
         "subagent-driven-development",
-        "systematic-debugging"
+        "systematic-debugging",
+        "dateapp-support-desk",
+        "hermes-youtube-faceless-news",
+        "hermes-youtube-avatar-head"
       ],
-      "description": "Default orchestrator, non-judge agent"
+      "description": "Hermes is JARVIS on :9119 for Mission Control on :3130 (he is fixing that now \u2014 do not touch). ALL customer support is routed to Hermes. Hermes also runs YouTube automation. Not a sentry."
     },
     "openclaw": {
-      "role": "Marketing",
+      "role": "Watchdog / Node Sentry (T5500 only)",
       "heartbeatLocation": ".agents/journals/openclaw/STATE.md",
       "claudeFile": "CLAUDE.md",
       "skillsToLoad": [
-        "growth-marketer",
-        "social-growth-engineer",
-        "devrel-content",
-        "revenue-model"
+        "t5500-node",
+        "t5500-ops",
+        "fables-house",
+        "systematic-debugging"
       ],
       "tools": "ALL (unlimited access)",
-      "dailyResearchArea": "marketing analytics, A/B testing, conversion"
+      "dailyResearchArea": "service health, self-healing, uptime monitoring"
     },
     "opencode": {
       "role": "eBay & Recycling Automation",
@@ -165,7 +230,7 @@
       "dailyResearchArea": "eBay API, recycling automation, testing patterns"
     },
     "paperclip-mc": {
-      "role": "orchestrator",
+      "role": "marketing-orchestrator",
       "skills": [
         "caveman",
         "i-have-adhd",
@@ -180,9 +245,9 @@
         "mission-control",
         "orchestrator-to-hermes-openclaw-opencode",
         "systematic-debugging",
-        "sabretooth-ops"
+        "t5500-ops"
       ],
-      "description": "Paperclip mission control agent"
+      "description": "Paperclip marketing agent (T5500 :3917). Paperclip is marketing only, NOT Mission Control."
     },
     "youtube": {
       "role": "content-creator",
@@ -203,7 +268,7 @@
         "humanizer",
         "motion-design"
       ],
-      "description": "YouTube content creation bot"
+      "description": "YouTube content creation profile \u2014 run by Hermes (YouTube automation)"
     },
     "coder": {
       "role": "engineer",
@@ -266,7 +331,7 @@
         "requesting-code-review",
         "agent-reach"
       ],
-      "description": "Customer support bot"
+      "description": "Customer support profile \u2014 ALL support is routed to Hermes"
     },
     "claude-haiku-orchestrator": {
       "role": "orchestrator",
@@ -363,7 +428,7 @@
       {
         "id": "daily-04-funnel-experiment",
         "name": "AARRR funnel metric + ICE experiment",
-        "owner": "openclaw/xmarketing",
+        "owner": "xmarketing (Grok)",
         "skills": [
           "growth-marketer",
           "supabase"
@@ -395,7 +460,7 @@
       {
         "id": "daily-06-crm-leadgen",
         "name": "CRM lead-gen wheel (self-hosted)",
-        "who": "OpenClaw + X Marketing (Grok)",
+        "who": "X Marketing (Grok)",
         "when": "daily, rotates with the SEO/social wheel",
         "how": "bash crm/ops/start-crm.sh then exercise the CRM: qualify top un-qualified leads via POST /api/leads/{id}/ai-qualify, create one landing page or drip sequence, log funnel movement from /api/leads/stats/overview toward the $5k goal",
         "evidence": "ai-qualify response + funnel stats JSON saved to ops/marketing-inbox/"
@@ -496,7 +561,7 @@
     "systems-ops": [
       "dateapp-ops-agent",
       "dateapp-payments-agent",
-      "sabretooth-ops",
+      "t5500-ops",
       "system-connector",
       "systematic-debugging"
     ]
