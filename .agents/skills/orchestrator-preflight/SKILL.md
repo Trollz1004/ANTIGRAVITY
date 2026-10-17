@@ -43,11 +43,12 @@ Ports to check:
 
 | Port | Service | Expected Check |
 |------|---------|---------------|
-| 3100 | Paperclip (= Mission Control) | `GET http://127.0.0.1:3100/api/openapi.json` → `.info.title == "Paperclip API"` |
-| 3151 | MC5 legacy vote engine (NOT Mission Control) | `GET http://localhost:3151/api/health` |
+| 3130 | Mission Control (JARVIS/OPSIS, `mission-os/`) | identity probe; NOT RUNNING until it answers |
+| 3917 | Paperclip (marketing only, NOT Mission Control) | `GET http://127.0.0.1:3917/api/openapi.json` → `.info.title == "Paperclip API"` |
+| 3151 | MC5 legacy vote engine (NOT Mission Control, not running) | `GET http://localhost:3151/api/health` |
 | 20128 | OmniRoute gateway | `netstat` — listening on 20128 |
 | 20129 | OmniRoute API proxy | `netstat` — listening on 20129 |
-| 9119 | Hermes dashboard | `netstat` — listening on 9119 |
+| 9119 | Hermes = JARVIS (dashboard) | `netstat` — listening on 9119 |
 | 18789 | OpenClaw gateway | `netstat` — listening on 18789 |
 | 3200 | DateApp frontend | `GET http://127.0.0.1:3200/` |
 | 8000 | DateApp backend | `GET http://127.0.0.1:8000/api/v1/health` |
@@ -72,7 +73,8 @@ Output a compact table:
 | Check | Status |
 |-------|--------|
 | Git   | main up to date / diverged / BLOCKED |
-| Paperclip (Mission Control) :3100 | UP / DOWN / WRONG SERVICE / ... |
+| Mission Control (JARVIS/OPSIS) :3130 | UP / NOT RUNNING / WRONG SERVICE / ... |
+| Paperclip (marketing) :3917 | UP / DOWN / WRONG SERVICE / ... |
 | MC5 legacy :3151 | UP / DOWN / WRONG SERVICE / ... |
 | OmniRoute :20128 | UP / DOWN |
 | OmniRoute API :20129 | UP / DOWN |

@@ -3,18 +3,18 @@ name: mission-control
 description: Paperclip on the T5500 at :3917 is the MARKETING command layer (company board, agent heartbeats via adapter, issues/inbox). Mission Control itself is JARVIS/OPSIS on the Mission Agent OS board (T5500 :3130, rebuilding as of 2026-10-09). Use for Paperclip task tracking, agent reporting, or status queries.
 ---
 
-# Mission Control — Paperclip on T5500
+# Paperclip (marketing) on T5500 — and where Mission Control really is
 
-## Current Truth (2026-08-25)
+## Current Truth (Joshua, 2026-10-17)
 
-- **Mission Control surface = Paperclip** (`ANTIGRAVITY Marketing Co`), chosen for its
-  built-in official judge CLI. The old PAPERWEIGHT kanban, WhatsApp/Telegram bridge,
-  and T5500 customer-service OpenClaw are retired surfaces — do not reference or revive them.
-- **Node topology:** T5500 is the only active node. Everything runs on this box:
+- **Mission Control = JARVIS/OPSIS** on the Mission Agent OS board (`mission-os/`, T5500 :3130).
+  Hermes is JARVIS on :9119 and is fixing it now; OPSIS/JARVIS and Hermes own that work.
+- **Paperclip is marketing only** (`ANTIGRAVITY Marketing Co`, :3917). It is NOT Mission Control.
+  The old PAPERWEIGHT kanban and WhatsApp/Telegram bridge are retired surfaces — do not revive them.
+- **Node topology:** the T5500 (`192.168.0.15`) is the only production node. Everything runs on it:
   repo `C:\ANTIGRAVITY`, Paperclip API `http://127.0.0.1:3917`, Hermes gateway
-  `http://127.0.0.1:8642` (profile `paperclip-mc`). The T5500 MACHINE exists but is
-  reserved as the DREAM Online server — it is not an active node in this topology;
-  no other remote nodes.
+  `http://127.0.0.1:8642` (profile `paperclip-mc`). Alienware is dev only, never production.
+  Sabretooth is not a node.
 - Health probe: `GET http://127.0.0.1:3917/api/health` → expect `{"status":"ok"}`.
   Connection refused = Paperclip down; report DOWN with evidence, do not start a
   second instance on the port.

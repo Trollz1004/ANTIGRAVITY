@@ -20,9 +20,9 @@ and which catalog skill governs each phase. Everything else is task-specific.
    `.agents/memory/YYYY-MM-DD.md`. Past-you wrote it so present-you doesn't guess.
 2. **Identity probes** — a listening port is NOT identity. Probe and classify each
    service UP / DOWN / WRONG SERVICE / AUTH MISSING / NOT CONFIGURED:
-   - Paperclip (= Mission Control) `:3100` → `/api/health` (expect status ok, local_trusted)
+   - Paperclip (marketing only, NOT Mission Control) `:3917` → `/api/health` (expect status ok, local_trusted)
    - CEO bridge `:3140` → `/health`
-   - OmniRoute `:20128`, MC5 legacy vote engine `:3151` (not Mission Control), OpenClaw gateway `:18789`
+   - OmniRoute `:20128`, Mission Control = JARVIS/OPSIS `:3130` (Hermes JARVIS `:9119`), MC5 legacy `:3151` (not running), OpenClaw gateway `:18789`
    - If DOWN: restart from the runbook (`ops/paperclip-ceo/`, `.freebuff/run.md`).
      Bridge must start via `node start.js` (loads `.env`) — never bare `bridge.js`.
    - After an npx-cache refresh, restart npx-spawned services — they hold stale code.
@@ -44,7 +44,7 @@ and which catalog skill governs each phase. Everything else is task-specific.
 | supabase | Date App DB reads, docs (`search_docs` first) | schema changes w/o judge |
 | omniroute | model routing, provider health | raw provider keys |
 
-brain-mcp rules: platform ids are sabretooth-node ids (e.g. `codex-sabretooth`);
+brain-mcp rules: platform ids are t5500-node ids (e.g. `codex-t5500`);
 node_id must match the platform; target_paths absolute under `C:\ANTIGRAVITY`;
 close every session with `brain.exitWorkspace`.
 
@@ -64,7 +64,7 @@ close every session with `brain.exitWorkspace`.
 | Money | payments (Square-only rail), revenue-model |
 | Paperclip mechanics | paperclip, paperclip-ceo, paperclip-create-agent, paperclip-create-plugin, mission-control, omniroute |
 | Memory | para-memory-files, self-improving-system |
-| Ops/infra | sabretooth-ops, fables-house, preview, system-connector |
+| Ops/infra | t5500-ops, fables-house, preview, system-connector |
 | Ideation | brainstorming, brainstorm |
 | Hermes lanes | hermes-youtube-faceless-news, hermes-youtube-avatar-head, hermes-agent-skill-authoring |
 | Azure (rare) | azure-* family — load only the one needed |
@@ -94,5 +94,6 @@ Context is scarce: load ONLY the phase skill, skim, act. Never preload more than
 2. `mission-mcp store_memory` for any durable finding.
 3. Vault update (`C:\ANTIGRAVITY\Antigravity\00 HOME.md` for ANT/AIS/YOU, or
    `D:\DREAM ONLINE\00 HOME.md` for DRE) if a durable fact changed — there is no
-   `nodes/9020/` vault; node 9020 is dead and there are no `nodes/<name>/` vaults.
+   `nodes/retired 9020/` vault; node retired 9020 is dead and there are no `nodes/<name>/` vaults.
 4. Leave services UP and log locations recorded.
+

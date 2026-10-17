@@ -63,7 +63,7 @@ Then, in order:
 - `agent-contracts/PAPERCLIP-MCP-CONNECTOR-EVIDENCE.md` — what is actually wired
   on the Paperclip board and what is genuinely broken.
 - The Paperclip board itself for live state, never a doc's cached numbers:
-  `GET http://127.0.0.1:3100/api/companies/<companyId>/agents`
+  `GET http://127.0.0.1:3917/api/companies/<companyId>/agents`
 
 Check identity, not the port. `/api/health` returns `status: ok` and a version
 but never names the product; `GET /api/openapi.json` → `info.title` must read
@@ -77,11 +77,12 @@ down — check identity first.
 
 | What | Where | How to know it is really it |
 | --- | --- | --- |
-| Paperclip = Mission Control | `127.0.0.1:3100` | `GET /api/openapi.json` → `.info.title` == `Paperclip API` |
+| Mission Control = JARVIS/OPSIS | `:3130` (Hermes is JARVIS on `:9119`) | identity probe; NOT RUNNING until it answers. Hermes/OPSIS are fixing it |
+| Paperclip (marketing only, NOT Mission Control) | `127.0.0.1:3917` | `GET /api/openapi.json` → `.info.title` == `Paperclip API` |
 | Date App frontend / backend | `:3200` / `:8000` | backend `/health` → `db_connected`, `square_connected` |
 | OmniRoute (harness route) | `:20128` / `:20129` | `/api/v1/models`. Judges never use it |
-| Hermes | `:9119` | owns this port; DreamOps Bridge is 9133 |
-| Mission Control v5 | `:3151` | legacy, not the hub; serves the static `/paperweight/` demo |
+| Hermes | `:9119` | JARVIS for Mission Control; owns this port; DreamOps Bridge is 9133 |
+| Mission Control v5 (legacy MC5) | `:3151` | legacy, not running, NOT Mission Control |
 
 Public surface is one cloudflared tunnel: apex and `www` → `:3200`,
 `api.youandinotai.com` → `:8000`. Nothing else. There is no `paperclip.*`
@@ -181,3 +182,4 @@ anchor and editing its text destroys the thing it exists to prove. Never put a
 secret, token, or masked credential fragment in a repo file, a Paperclip config
 row, or a stdio template argument. FCC is permanently banned; if you find one,
 remove it and report it.
+

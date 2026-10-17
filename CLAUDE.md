@@ -22,11 +22,24 @@ Why this rule exists: on 2026-10-04 Misses Trollz passed every score while what 
 
 > **Status:** S1 supersession LANDED by the judge lane 2026-08-19. Joshua remains the sole authority. Runtime service launch is a separate, deliberate, Joshua-authorized action; the Paperclip runtime was so authorized on 2026-08-23.
 
+## Rulings of 2026-10-17 (Joshua): win over every older section below; the same section is in AGENTS.md
+
+> Written by Claude (Opus) in the Antigravity IDE on Joshua's direct instruction. Machine-readable copy for every agent: `docs/memory-layer/agent-workflow-graphy.json` (Obsidian: `Antigravity/Agent Universal/agent-workflow-graphy.json`).
+
+- **Authority.** Joshua is the only human in the loop and the sole authority. No AI commands another AI. When a direct message comes from Joshua, no AI tells another it cannot do it. Claude, Codex and Jules are judges: they review and validate before merge; they do not command agents or override Joshua's direct instruction.
+- **Nodes.** The T5500 (`192.168.0.15`) is the only production node. Alienware (`192.168.0.40`) is dev only: never production, never hosts or routes anything live. Sabretooth is not a node (retired, OFF by ruling).
+- **Mission Control = JARVIS/OPSIS** on the Mission Agent OS board (`mission-os/`, :3130). Hermes is JARVIS on :9119, serving Mission Control on :3130, and is fixing it now. OPSIS/JARVIS and Hermes own that dashboard work; nobody else changes it unless Joshua assigns it.
+- **Paperclip is marketing only** (:3917). It is not Mission Control.
+- **Hermes = JARVIS + all support + YouTube automation.** All customer support is routed to Hermes. Hermes has no sentry duty.
+- **OpenClaw is the only watchdog/sentry** on the T5500, with no marketing duty. The Hermes cron `T5500 node watch` (2026-10-15) is no longer a sentry duty; switching the cron itself off is a runtime action for Joshua.
+- **Memory: Obsidian is mandatory.** Joshua's personal, paid vault `C:\ANTIGRAVITY\Antigravity`. Every agent reads its own file at session start and appends a timestamped entry at session end: `C:\ANTIGRAVITY\Antigravity\<NODE>\<agent>-to-<agent>.md` (e.g. `T5500\claude-to-claude.md`, `T5500\hermes-to-hermes.md`, `T5500\gemini-to-gemini.md`), entry header `## <YYYY-MM-DD HH:MM TZ> | node: <NODE> | use case: <...>`. One file per agent per node, append only, no secrets. Supabase (required), Supermemory, OpenViking and Vercel are backups; the memory MCPs exist for exactly that.
+- **Entry files must agree.** Agents read different files at session start (AGENTS.md, CLAUDE.md, GEMINI.md, SKILL.md files, Obsidian). All of them carry the same data; a stale one is fixed, not ignored.
+
 ## T5500 is the only node (Joshua, 2026-10-09): wins over the node map below
 
 > Written by **Opus (Claude) running in the Antigravity IDE** on 2026-10-09, on Joshua's instruction. Joshua does not edit Claude's files or any AI memory himself; this edit is the model's, recorded as such. The same section is in `AGENTS.md`.
 
-- **Until funding, the T5500 (`T5500-2-XEON-72`, `192.168.0.15`) is the only node, and the Antigravity IDE the only platform, for every domain and for Mission Control.** Alienware is now OFF by ruling with Sabretooth and the old boxes. Never probe, start, heal or route to them.
+- **Until funding, the T5500 (`T5500-2-XEON-72`, `192.168.0.15`) is the only node, and the Antigravity IDE the only platform, for every domain and for Mission Control.** Alienware is dev only, never production (amended 2026-10-17). Sabretooth and the old boxes stay OFF by ruling: never probe, start, heal or route to them.
 - **Paperclip is marketing only** (`http://127.0.0.1:3917`, non-elevated task `ANTIGRAVITY Paperclip`; embedded Postgres refuses to run as admin, so it is never started elevated). It is not Mission Control.
 - **Mission Control = JARVIS/OPSIS on the Mission Agent OS board**, being rebuilt on the T5500 (`mission-os/`, Agent Hub `:3130`, read-only `/api/mos-state.json`). It reads Paperclip, OmniRoute, the keep-alive status and agent journals. Until it answers its identity probe it is **NOT RUNNING**, not UP. Nothing listens on :9150 on this fresh install.
 - **Services that come back on boot / power loss** (all on the T5500): Ollama :11434, Postgres :5432, Redis :6379, domains server :9160, date-app frontend :3200 and API :8000, cloudflared tunnel, Paperclip :3917, OmniRoute :20128 (non-elevated task `ANTIGRAVITY OmniRoute`, dashboard password-protected), Hermes support window, OpenClaw sentry window, Obsidian (vault `C:\ANTIGRAVITY\Antigravity`, REST :27123). The keep-alive also probes Supabase, Supermemory and Vercel every 10 minutes and writes them to `ops/t5500/status.json`.
@@ -35,14 +48,24 @@ Why this rule exists: on 2026-10-04 Misses Trollz passed every score while what 
 - **MCP servers (OAuth on first use, no keys):** Cloudflare, Supabase, Vercel, Supermemory registered for Claude Code (user scope), Antigravity, Codex, OpenCode and Pi on 2026-10-09.
 - **Env files:** master `OneDrive\claude-to-claude\.env` (gitignored, with its `.env.lowercase` twin), runtime `C:\ANTIGRAVITY\.env`, gateway `~\.omniroute\.env`. All synced to T5500 values on 2026-10-09.
 
+## Rulings of 2026-10-15 (Joshua, recorded by the Claude judge lane)
+
+- **The 100% rule.** Nothing is pushed unless it is 100% done and proven; 90% is not pushed. Nothing is merged unless Claude validates it; anything Claude has not validated is rejected. One branch per repo (`main`); work lands through a pull request and its branch is deleted after merge.
+- **OpenClaw watches the T5500, 100%** (amended 2026-10-17: OpenClaw is the only sentry). The keep-alive heals. OpenClaw's sentry window (`ops/t5500/openclaw-sentry.ps1`) shows every stage and restarts the keep-alive if it stalls. The Hermes cron `T5500 node watch` (script `%LOCALAPPDATA%\hermes\scripts\t5500_node_watch.py`) is no longer a sentry duty. Codex stands down from watching the node (`ops/handoffs/CODEX-HANDOFF-2026-10-15.md`).
+- **Paperclip stays installed and idle on the T5500.** Real Paperclip work moves to another node so it never touches the finished T5500 code. Its keep-alive stage stays so it costs nothing to keep.
+- **Gemini works only in `mission-os/`** (Mission Control, made presentable for streaming). No git, no files outside that folder; Claude validates and lands it.
+- **Hermes gateway API on :8643.** Hermes runs one shared gateway for all profiles; its API server is enabled in the default `config.yaml` (`platforms.api_server`, 127.0.0.1:8643). Peers (A2A) and adapters reach Hermes there.
+- **Jules is a judge.** Joshua's ruling widens the 2026-09-03 roster (Codex and Claude) to include Jules (Google), reachable through his Gemini Ultra subscription only, never an API key. Jules and Claude built this platform together in AI Studio long ago. Jules may judge; a merge still needs Claude's validation under the 100% rule.
+- **Finished-node check:** `ops/t5500/verify-node.ps1` (read-only) and the skill `.agents/skills/t5500-node/SKILL.md`.
+
 ## Node map (Joshua, 2026-10-05): wins over every older node claim
 
 - **T5500 (`T5500-2-XEON-72`, `192.168.0.15`) is the production node.** It runs every live domain, the date app (frontend :3200, API :8000), Postgres :5432, Redis :6379, Ollama, the domains server :9160 and the cloudflared tunnel. Its keep-alive writes `C:\ANTIGRAVITY\ops\t5500\status.json` and `C:\ANTIGRAVITY\logs\t5500-keepalive.log`; it heals on its own and logs every heal.
-- ~~**Alienware (`192.168.0.40`) is the dev node** and hosts Mission Control: JARVIS/OPSIS on :9150, operated by Hermes in the terminal. DREAM Online is built and tested there.~~ **Superseded 2026-10-09:** Alienware is OFF by ruling; JARVIS/OPSIS and DREAM Online work move to the T5500.
+- ~~**Alienware (`192.168.0.40`) is the dev node** and hosts Mission Control: JARVIS/OPSIS on :9150, operated by Hermes in the terminal. DREAM Online is built and tested there.~~ **Superseded 2026-10-09:** JARVIS/OPSIS and DREAM Online work move to the T5500. **Amended 2026-10-17:** Alienware is dev only, never production.
 - **Sabretooth (`192.168.0.8`) is retired and OFF by ruling.** Its work moved to the T5500 from the same SSD. Never probe, start, heal or route to it; show it as OFF BY RULING, never DOWN. Every `192.168.0.8` address and every "Sabretooth runs X" line in this repo is history.
 - Other old boxes (OptiPlex 9020, i7k, Chromebook, Mini ASUS) stay OFF by ruling.
 - **Domains:** youandinotai.com is live behind the Cloudflare tunnel. onlinerecycle.net, dream-online.net and untilnokidinneed.com have a healthy origin and wait on nameservers. The AI store domain is undecided: do not renew it and do not build on it.
-- **Business Hermes:** a separate Hermes profile (not OPSIS) runs onlinerecycle.net, the date app and customer support on the Ollama models `joshlcoleman/fable` and `joshlcoleman/cfo` only, with health checks that fix on sight.
+- **Business Hermes (amended 2026-10-17):** all customer support is routed to Hermes (onlinerecycle.net and the date app, Ollama models `joshlcoleman/fable` and `joshlcoleman/cfo`). Hermes is also JARVIS on :9119 for Mission Control :3130 and runs YouTube automation. Hermes does no node sentry or health checks; OpenClaw does.
 - **Editors and lanes:** each node gets the Antigravity editor (VS Code-based) with Claude as a signed-in extension (never an API key), Codex for code changes and Gemini for chat. Hermes runs in the terminal as JARVIS/OPSIS. The build prompt for OPSIS and Gemini's updated instructions are in `ops/handoffs/OPSIS-MISSION-AGENT-OS-2026-10-05.md` and `ops/handoffs/GEMINI-SPARK-INSTRUCTIONS-2026-10-05.md`.
 - **Never** introduce an `ANTHROPIC_API_KEY`. Official Claude is login/OAuth only.
 
@@ -52,7 +75,7 @@ Joshua's standing preference, not a one-time task. These lines are part of what 
 
 - **100 percent deployed on the T5500.** The full stack runs in production on the T5500 — every domain, its DNS, and every port it serves. Nobody calls the stack up while a piece of it runs only on the dev node or only in a terminal someone left open.
 - **It survives power loss and restarts.** Every service, port and DNS binding comes back by itself after a reboot or a power cut, with no hand-start. If it needs a human to come back, it is not deployed.
-- **Hermes watches and fixes, silently.** The health-check cron on Hermes checks the T5500, fixes what it finds, and logs the heal. It does **not** notify Joshua. A notification means Hermes could not fix it.
+- **OpenClaw watches and fixes, silently (amended 2026-10-17).** OpenClaw checks the T5500 24/7, fixes what it finds, and logs the heal. It does **not** notify Joshua for routine restarts or tunnel drops; a notification means it could not fix it.
 - **Written here means it was working.** Anything this repo records as live on the T5500 was deployed and validated before it was written down. Do not record intent as state.
 - **Screenshots on every domain are mandatory.** Each domain gets its own screenshot from the real URL, shown to Joshua before anything is called done. A screenshot of one domain never covers another.
 - **A local port is not public.** A domain served from a local port, with no Cloudflare DNS and no tunnel, is invisible to everyone outside the LAN. Front-facing HTML reaches the public only after it is pushed to GitHub and lands on Cloudflare. Until then it is a local preview, and reporting it as live is the same as a 200 OK.

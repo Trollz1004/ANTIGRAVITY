@@ -16,23 +16,28 @@ Status words only: UP, DOWN, WRONG SERVICE, AUTH MISSING, AUTH REJECTED, NOT CON
 | 1 | this skill | `.agents/skills/ultracode-house/SKILL.md` |
 | 2 | `judge-house` | `.agents/skills/judge-house/SKILL.md`, then `mcp__mission-mcp__search_memory` query `JUDGE-HOUSE` (node only; cloud cannot reach it) |
 | 3 | newest journal entry, one only | section 7 |
-| 4 | on T5500: `t5500-node` | `ops/skills/t5500-node/SKILL.md`, runbook `ops/runbook/T5500-NODE-RUNBOOK.md` |
+| 4 | on T5500: `t5500-node` | `.agents/skills/t5500-node/SKILL.md`; prove the node with `ops/t5500/verify-node.ps1` (read-only) |
 | 4 | on Alienware: `alienware-node` | game repo `ops/node/skills/alienware-node/SKILL.md`, runbook `ops/node/runbook/ALIENWARE-NODE-RUNBOOK.md` |
 | 5 | triggers, then health | T5500 `ops/heartbeat/TRIGGERS.jsonl`, `ops/heartbeat/t5500-health.json`. Alienware `ops/node/heartbeat/TRIGGERS.jsonl`, `alienware-health.json` |
 
 - GREEN work. YELLOW note it. RED heal first.
-- Heal T5500 only through the House: `C:\ANTIGRAVITY\FABLES-HOUSE.cmd -Once`. Never hand-start a service.
+- Heal T5500 only through the keep-alive (task `ANTIGRAVITY T5500 Keepalive`, `ops/t5500/keepalive.ps1`). OpenClaw's sentry window watches it; OpenClaw is the only sentry (2026-10-17). Never hand-start a service. (FABLES-HOUSE is Sabretooth history.)
+- 100% rule (2026-10-15): not 100% proven, not pushed. Not validated by Claude, not merged.
 - Alienware: `drift health`. Stack script `C:\DREAM\hermes\scripts\dream-stack.ps1` never runs from a Claude terminal.
 - Cloud session: no node files. Node-side facts stay UNVERIFIED until a node run.
 
 ## 2. Nodes
 
+> 2026-10-17 (Joshua): Mission Control = JARVIS/OPSIS on :3130; Hermes is JARVIS on :9119 and is fixing it. Hermes = JARVIS + all support + YouTube automation. OpenClaw = only sentry. Paperclip :3917 = marketing only. Alienware = dev only, never production. Obsidian per-agent memory is mandatory (`Antigravity\<NODE>\<agent>-to-<agent>.md`, read at start, timestamped entry at end; Supabase/Supermemory/OpenViking/Vercel are backups). Joshua is the only human; no AI commands another. Full text: AGENTS.md "Rulings of 2026-10-17".
+>
+> 2026-10-15: Mission Control = Mission Agent OS `mission-os/` on 127.0.0.1:3130 (Gemini's lane only). Hermes gateway API = 127.0.0.1:8643 (one shared gateway, all profiles). Paperclip :3917 installed and idle; real Paperclip work is on another node. Services bind 127.0.0.1, so LAN probes of 192.168.0.15 are refused by design. The :9150 rows below are history.
+>
 > 2026-10-09 (Opus in Antigravity, Joshua's ruling): **T5500 is the ONLY node until funding.** Alienware joins the OFF list. Fresh Windows on the T5500: JARVIS :9150 is NOT RUNNING; Mission Control is being rebuilt as Mission Agent OS on :3130. Paperclip :3917 = marketing only. Memory = Obsidian vault `C:\ANTIGRAVITY\Antigravity` + Supabase + Supermemory. Any Alienware row below is history.
 
 | Node | Address | Job | State |
 |---|---|---|---|
 | T5500 | 192.168.0.15 | THE node. Domains :9160, date app :3200/:8000, Postgres :5432, Redis :6379, Ollama :11434, tunnel, Paperclip :3917 (marketing), OmniRoute :20128, Obsidian REST :27123, Hermes support + OpenClaw sentry windows. Keep-alive heals all; `ops/t5500/status.json` | runs by ruling |
-| Alienware | 192.168.0.40 | was DEV node (DREAM Online) | OFF BY RULING 2026-10-09 |
+| Alienware | 192.168.0.40 | DEV ONLY (DREAM Online dev), never production | dev only by ruling 2026-10-17 |
 | Sabretooth, OptiPlex 9020, i7k (1050 Ti worker), Chromebook, Mini ASUS | none | `NODES_OFF` in `mission-control/lib/nodes.mjs` | OFF BY RULING 2026-09-28. Never start. Never probe as fault. Design naming them live is stale |
 | Pi | no address on record | Pi CLI (`pi`), Joshua's shell for API lanes. By his word 2026-09-29: Gemini and OpenClaw API lanes run here. Game repo `adapters/pi/manifest.yaml` lists cli `pi`, health `pi --version` | no host, port or config on record. NOT CONFIGURED as probe |
 | Cloud | claude.ai | Claude Code cloud sessions. Eye in the sky: `https://dashboard.aidoesitall.website/` | egress denied public hosts (claude-judge journal 2026-09-28). Node facts UNVERIFIED from here |
@@ -67,7 +72,7 @@ Game ports on Alienware 192.168.0.40 (`docs/tech/local-prototype-ports.md`, game
 | 27123 | Obsidian Local REST, game vault | answers `initialize` as `obsidian-local-rest-api` |
 | 9150 | old JARVIS HUD copy from hermes repo. Not Mission Control | `/health` contains `airi-dashboard` |
 
-- PARKED or retired, do not open: Paperclip :3100 (PARKED 2026-09-10), AIRI (retired), MC5 :3100 (optional data source), Emergent :3210 (off restart path). Nobody builds another dashboard. New view = JARVIS panel.
+- PARKED or retired, do not open: AIRI (retired), MC5 :3151 (legacy, optional data source), Emergent :3210 (off restart path). Paperclip :3917 is marketing only. Nobody builds another dashboard. New view = JARVIS panel.
 - Verify by frame, never by 200 (ruled 2026-09-28). `mission-control/scripts/screenshot-health.mjs` reads `mission-control/config/screenshot-targets.json`, keeps PNGs under `evidence/health-shots/<date>/`, UP only when identity text is on the page. Wrong page = WRONG SERVICE. DNS miss = PENDING NAMESERVERS. Result at `/api/screenshot-health`, NOT CONFIGURED until the Hermes cron first runs.
 
 ## 4. Lanes

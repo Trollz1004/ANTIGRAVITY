@@ -1,9 +1,9 @@
 ---
-name: sabretooth-ops
-description: Operate the SABRETOOTH-NODE stack end to end — start/verify OmniRoute (:20128) and MC5, the legacy vote-engine board (:3151; current Mission Control is Paperclip at :3100 — see the `mission-control` skill), run the judge-gated swarm, search the repo knowledge graph, build/deploy the date app, and follow the session + git governance protocol. Use for any infra, swarm, gateway, build, or repo-ops task on this box.
+name: t5500-ops
+description: Operate the T5500-NODE stack end to end — start/verify OmniRoute (:20128) and MC5, the legacy vote-engine board (:3151, not running; Mission Control is JARVIS/OPSIS on :3130, Paperclip :3917 is marketing only — see the `mission-control` skill), run the judge-gated swarm, search the repo knowledge graph, build/deploy the date app, and follow the session + git governance protocol. Use for any infra, swarm, gateway, build, or repo-ops task on this box.
 ---
 
-# Sabretooth Ops — the whole stack, one skill
+# T5500 Ops — the whole stack, one skill
 
 Written 2026-08-16 from a full live rebuild (post-Windows-reinstall). Every
 command here was executed and verified on this machine that day.
@@ -25,23 +25,23 @@ command here was executed and verified on this machine that day.
 
 ## Session protocol (mandatory)
 
-1. **Start:** read `MEMORY.md` / journal, then search the repo by meaning
-   instead of guessing paths:
-   `GET http://127.0.0.1:3151/api/knowledge/search?q=<term>`
-   (full map: `/api/knowledge/graph`; preview: `/api/knowledge/file?path=`;
-   3D view: board → GRAPHY → 🧠 KNOWLEDGE).
-2. **End:** write state back — journal (`POST :3151/api/brain/journal/<id>`)
-   or memory files. Uncommitted work and unwritten state are how work dies here.
+1. **Start:** read your own Obsidian file `C:\ANTIGRAVITY\Antigravity\<NODE>\<agent>-to-<agent>.md`
+   (mandatory, 2026-10-17), then `MEMORY.md` / journal. Legacy MC5 knowledge
+   search (only if MC5 is running): `GET http://127.0.0.1:3151/api/knowledge/search?q=<term>`
+   (full map: `/api/knowledge/graph`; preview: `/api/knowledge/file?path=`).
+2. **End:** append a timestamped entry to your own Obsidian file, then mirror to
+   the backups (Supabase, Supermemory, OpenViking, Vercel).
+   Uncommitted work and unwritten state are how work dies here.
 
 ## OmniRoute gateway (:20128 dashboard+/v1, :20129 API)
 
 One endpoint for ALL model traffic. No agent holds a provider key — providers,
 auto-swap, and compression live inside the gateway. Clients need only
-`OPENAI_COMPAT_BASE_URL=http://192.168.0.8:20128` (+ optional key).
+`OPENAI_COMPAT_BASE_URL=http://192.168.0.15:20128` (+ optional key).
 
 ```powershell
 # Health (also what the keepalive probes):
-Invoke-WebRequest http://192.168.0.8:20128/v1/models -UseBasicParsing -TimeoutSec 5
+Invoke-WebRequest http://192.168.0.15:20128/v1/models -UseBasicParsing -TimeoutSec 5
 # Real end-to-end test (free pool, no keys needed):
 #   POST :20129/v1/chat/completions {"model":"auto/best-free", ...} → expect a completion.
 ```
@@ -59,9 +59,9 @@ Invoke-WebRequest http://192.168.0.8:20128/v1/models -UseBasicParsing -TimeoutSe
 
 ## MC5 legacy vote engine (:3151) — NOT Mission Control
 
-> **Current truth (2026-09-03):** Mission Control is Paperclip at `:3100`
-> (`GET /api/openapi.json` → `.info.title == "Paperclip API"`). MC5 below is
-> the legacy vote-engine board — historical section, kept as written.
+> **Current truth (2026-10-17):** Mission Control is JARVIS/OPSIS on `:3130`
+> (Hermes is JARVIS on `:9119`). Paperclip `:3917` is marketing only. MC5 below is
+> the legacy vote-engine board (not running) — historical section, kept as written.
 
 ```powershell
 # Start (background) — NEVER pipe a server through Select-Object -First: the
@@ -159,3 +159,4 @@ npm install -g omniroute                                       # the gateway
 ```
 
 The path is `C:\ANTIGRAVITY` on EVERY node — that is doctrine, not preference.
+
