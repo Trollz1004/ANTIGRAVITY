@@ -19,7 +19,7 @@
       "docs/payment-flow-verification-2026-06-01.md"
     ],
     "processor": "Square only on youandinotai.com",
-    "history": "15 Square attempts 2025-04 to 2026-08 (incl. one  refund), every one Joshua's own test charge; pipeline proven in production",
+    "history": "15 Square attempts 2025-04 to 2026-08 (incl. one $10 refund), every one Joshua's own test charge; pipeline proven in production",
     "notABlocker": "Past test charges are not a blocker and their count is irrelevant; 100% of revenue stays with the business",
     "never": "Do not re-verify, re-audit, re-test or ask Joshua about past test charges",
     "reopenOnlyIf": [
