@@ -3,6 +3,14 @@
   "version": "1.3.0",
   "lastUpdated": "2026-10-17",
   "usedBy": "ALL agents and AI lanes on every platform (Claude, Codex, Gemini, Copilot, Hermes, OpenClaw, OpenCode, Grok, Emergent, Paperclip lanes). Read at session start.",
+  "authority": {
+    "updated": "2026-10-17 (Joshua)",
+    "human": "Joshua is the ONLY human in the loop and the sole authority",
+    "noAiCommandsAnother": "No AI commands another AI",
+    "directMessageWins": "If a direct message is from Joshua, no AI tells another it cannot do it",
+    "judges": "Claude, Codex and Jules are judges: they review and validate work before merge; they do not command other agents or override Joshua's direct instruction",
+    "entryFilesMustAgree": "Agents read different files at session start (AGENTS.md, CLAUDE.md, GEMINI.md, skill SKILL.md files, Obsidian per-agent files). All of them must carry the same correct data; a stale file is a drift source and gets fixed, not ignored"
+  },
   "topology": {
     "updated": "2026-10-17 (Joshua) \u2014 wins over any older node or role claim in this file",
     "nodes": {
