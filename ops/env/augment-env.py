@@ -31,7 +31,7 @@ CONFIG = [
     ("ANTIGRAVITY_ENV", "C:/ANTIGRAVITY/.env", "where ops/buzz/buzz-env.sh looks"),
     ("NODE_NAME", "SABRETOOTH", "hostname; 192.168.0.8 on the LAN — there is no T5500 node"),
     ("NODE_LAN_IP", "192.168.0.8", ""),
-    ("PAPERCLIP_URL", "http://127.0.0.1:3100", "Mission Control; identity = GET /api/openapi.json info.title == 'Paperclip API'"),
+    ("PAPERCLIP_URL", "http://127.0.0.1:4747", "Mission Control; identity = GET /api/openapi.json info.title == 'Paperclip API'"),
     ("PAPERCLIP_COMPANY_ANT", "92223de0-b36b-4d63-93ca-50ebe5007e68", "ANTIGRAVITY Marketing Co"),
     ("PAPERCLIP_COMPANY_AIS", "74bbc177-bc32-4457-806e-fa6bbe6314fd", "Ai-Solutions.Store"),
     ("PAPERCLIP_COMPANY_YOU", "ffb4f83d-77ed-4446-a05a-d503c2714e9f", "YouAndiNotAi.com"),

@@ -151,7 +151,7 @@ function Test-Cloud([string]$name, [string]$url, [hashtable]$headers) {
 # Origin = local port that serves the Host header (checked directly, bypassing DNS).
 $Domains = @(
     @{ Host = 'youandinotai.com';     Mark = 'assets/index-';        Origin = 3200 },
-    @{ Host = 'mcp.youandinotai.com'; Mark = 'Paperclip|assets';     Origin = 3917 },
+    @{ Host = 'mcp.youandinotai.com'; Mark = '<title>Paperclip</title>'; Origin = 4747 },
     @{ Host = 'onlinerecycle.net';    Mark = 'OnlineRecycle';        Origin = 9160 },
     @{ Host = 'dream-online.net';     Mark = 'DREAM Online';         Origin = 9160 },
     @{ Host = 'untilnokidinneed.com'; Mark = 'Until No Kid In Need'; Origin = 9160 }
@@ -210,6 +210,15 @@ $Stages = @(
     @{ Key = 'postgres'; Name = 'PostgreSQL :5432'; Settle = 100
        Probe = { Test-PgReady }
        Heal  = {
+           # Preferred path: the dedicated boot task (2026-10-17) so the manual portable
+           # install stops depending on this elevated loop to exist at all.
+           $t = Get-ScheduledTask -TaskName 'ANTIGRAVITY Postgres' -ErrorAction SilentlyContinue
+           if ($t) {
+               if ($t.State -eq 'Running') { Stop-ScheduledTask -TaskName 'ANTIGRAVITY Postgres'; Start-Sleep -Seconds 2 }
+               Start-ScheduledTask -TaskName 'ANTIGRAVITY Postgres'
+               Log '  started task "ANTIGRAVITY Postgres"'
+               return
+           }
            $pidFile = Join-Path $PgData 'postmaster.pid'
            if ((Test-Path $pidFile) -and -not (Get-Process postgres -ErrorAction SilentlyContinue)) {
                Move-Item $pidFile ($pidFile + '.stale-' + (Get-Date -Format 'yyyyMMddHHmmss')) -Force
@@ -290,11 +299,15 @@ $Stages = @(
            }
        } },
 
-    @{ Key = 'paperclip'; Name = 'Paperclip (Marketing & Hermes YouTube) :3917'; Settle = 170
-       # Fixed port. Runs under its own NON-elevated task "ANTIGRAVITY Paperclip" (embedded
-       # Postgres refuses to run as admin, and this keepalive is elevated). The task's launcher
-       # clears squatters and drifted copies so Paperclip is only ever on :3917.
-       Probe = { Test-Http 'http://127.0.0.1:3917/api/health' 6 '"status":"ok"' }
+    @{ Key = 'paperclip'; Name = 'Paperclip HQ (single instance) :4747'; Settle = 170; Needs = @('postgres')
+       # 2026-10-17: this node runs exactly ONE Paperclip. Port 4747, upstream
+       # paperclipai, Postgres :5432/paperclip_hq, public via mcp.youandinotai.com.
+       # The :3917 embedded-Postgres instance is retired (its task, launcher and data
+       # dir are gone) - do not resurrect it.
+       # Runs under the NON-elevated task "ANTIGRAVITY Paperclip"; that launcher waits for
+       # :5432 and retries the startup doctor, so this stage only re-launches the task
+       # when :4747 stops answering.
+       Probe = { Test-Http 'http://127.0.0.1:4747/api/health' 8 '"deploymentMode":"authenticated"' }
        Heal  = {
            $t = Get-ScheduledTask -TaskName 'ANTIGRAVITY Paperclip' -ErrorAction SilentlyContinue
            if (-not $t) { Log '  task "ANTIGRAVITY Paperclip" missing - cannot start Paperclip'; return }

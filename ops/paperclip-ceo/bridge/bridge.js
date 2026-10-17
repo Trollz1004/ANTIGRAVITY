@@ -2,7 +2,7 @@
 /**
  * Freebuff CEO bridge — the custom adapter between Paperclip and Freebuff.
  *
- * Paperclip (control plane, loopback :3100) invokes this service via its HTTP
+ * Paperclip (control plane, loopback :4747) invokes this service via its HTTP
  * adapter when the CEO agent's heartbeat fires. This bridge turns that
  * invocation into a wake file that a Freebuff agent session picks up, then
  * relays the session's completion back to Paperclip's callback endpoint.
@@ -33,7 +33,7 @@ const { execFileSync } = require("child_process");
 
 const PORT = Number(process.env.PAPERCLIP_CEO_BRIDGE_PORT || 3140);
 const HOST = "127.0.0.1";
-const PAPERCLIP_API_BASE = process.env.PAPERCLIP_API_BASE || "http://127.0.0.1:3100";
+const PAPERCLIP_API_BASE = process.env.PAPERCLIP_API_BASE || "http://127.0.0.1:4747";
 const BRIDGE_TOKEN = process.env.PAPERCLIP_CEO_BRIDGE_TOKEN || "";
 const AGENT_KEY = process.env.PAPERCLIP_CEO_AGENT_KEY || "";
 const COMPANY_ID = process.env.PAPERCLIP_CEO_COMPANY_ID || "";

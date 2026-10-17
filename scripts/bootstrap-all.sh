@@ -3,7 +3,7 @@ set -euo pipefail
 
 # ════════════════════════════════════════════════════════════════════
 # ANTIGRAVITY BOOTSTRAP — ALL SERVICES (WSL/Linux side)
-# Sabretooth node | Paperclip + OpenCode + GPU Ollama + Hermes
+# T5500 node | Paperclip + OpenCode + GPU Ollama + Hermes
 # Auto-starts everything in dependency order, idempotent, safe to rerun.
 # ════════════════════════════════════════════════════════════════════
 
@@ -35,7 +35,7 @@ log "═════════════════════════
 log " ANTIGRAVITY BOOTSTRAP — $(date)"
 log "══════════════════════════════════════════"
 
-# ── 1. PAPERCLIP AI OS (port 3100) ───────────────────────────
+# ── 1. PAPERCLIP AI OS (port 4747) ───────────────────────────
 log "[1/6] Paperclip AI OS — primary board/runtime"
 if systemctl --user is-active --quiet paperclip.service 2>/dev/null; then
     log "  Already running (systemd)"
@@ -44,7 +44,7 @@ elif port_listening 3100; then
 else
     log "  Starting via systemd..."
     systemctl --user start paperclip.service 2>&1 | tee -a "$LOG_FILE" || true
-    wait_for_port 3100 "Paperclip" 60
+    wait_for_port 4747 "Paperclip" 60
 fi
 
 # ── 2. OLLAMA (port 11434) ───────────────────────────────────
@@ -108,7 +108,7 @@ log "═════════════════════════
 log ""
 log " Port   Service           URL"
 log " ─────  ───────────────  ─────────────────────────────"
-if port_listening 3100;  then log " 3100   Paperclip         http://localhost:3100"; fi
+if port_listening 4747;  then log " 3100   Paperclip         http://localhost:4747"; fi
 if port_listening 4096;  then log " 4096   OpenCode Server   http://localhost:4096"; fi
 if port_listening 11434; then log " 11434  Ollama            http://localhost:11434"; fi
 if port_listening 11435; then log " 11435  Hermes Router     http://localhost:11435/healthz"; fi

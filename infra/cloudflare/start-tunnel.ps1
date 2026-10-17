@@ -1,46 +1,59 @@
-# Start Cloudflare Tunnel for remote access to Paperclip HQ
-# Run on SABRETOOTH to expose localhost:3100 as paperclip-hq.youandinotai.com
-# Access from Chromebook, phone, or any browser — anywhere.
+# Manual Cloudflare Tunnel launcher (2026-10-17).
 #
-# PREREQUISITES:
-#   1. cloudflared installed: winget install Cloudflare.cloudflared
-#   2. Tunnel created (already done — ID: c7bc9665-3923-4977-acd7-2033838cd56e)
-#   3. DNS CNAME configured in Cloudflare dashboard (see below)
-#   4. Paperclip HQ running on localhost:3100
+# Normal operation: the T5500 keepalive owns cloudflared (stage "tunnel"). It starts it
+# at boot/logon and re-creates it if it dies, so you rarely need this file. Use it only to
+# bring the connector up by hand.
+#
+# Live topology (matches C:\Users\joshi\.cloudflared\config.yml):
+#   tunnel   : 515b70b2-9730-45af-9691-6e14fd73eff3
+#   ingress  : mcp.youandinotai.com -> 127.0.0.1:4747  (the only Paperclip instance)
+#   plus the date app (:3200), API (:8000), domains (:9160), dashboard (:9150)
+#
+# The old values in this file (tunnel c7bc9665-…, config infra\cloudflare\paperclip-hq.yml,
+# port 3917) were stale and pointed at a retired instance — do not restore them.
 
-$TunnelId = "c7bc9665-3923-4977-acd7-2033838cd56e"
-$ConfigPath = "C:\ANTIGRAVITY\infra\cloudflare\paperclip-hq.yml"
+$TunnelId = "515b70b2-9730-45af-9691-6e14fd73eff3"
+$ConfigPath = "C:\Users\joshi\.cloudflared\config.yml"
+$Cloudflared = "C:\Program Files (x86)\cloudflared\cloudflared.exe"
+$Repo = "C:\ANTIGRAVITY"
 
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  ANTIGRAVITY Cloudflare Tunnel" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Check if cloudflared exists
-if (-not (Get-Command cloudflared -ErrorAction SilentlyContinue)) {
-    Write-Host "cloudflared not found. Installing..." -ForegroundColor Yellow
-    winget install Cloudflare.cloudflared
-    Write-Host "Restart this script after install." -ForegroundColor Yellow
+if (-not (Test-Path $Cloudflared)) {
+    Write-Host "cloudflared not found at $Cloudflared" -ForegroundColor Red
+    Write-Host "Install: winget install Cloudflare.cloudflared" -ForegroundColor Yellow
+    exit 1
+}
+if (-not (Test-Path $ConfigPath)) {
+    Write-Host "config not found: $ConfigPath" -ForegroundColor Red
     exit 1
 }
 
-# Check if Paperclip is running
 try {
-    $response = Invoke-WebRequest -Uri "http://127.0.0.1:3100" -TimeoutSec 3 -ErrorAction Stop
-    Write-Host "[OK] Paperclip HQ is running on :3100" -ForegroundColor Green
+    $null = Invoke-WebRequest -Uri "http://127.0.0.1:4747/api/health" -UseBasicParsing -TimeoutSec 5
+    Write-Host "[OK] Paperclip is running on :4747" -ForegroundColor Green
 } catch {
-    Write-Host "[WARN] Paperclip HQ not detected on :3100" -ForegroundColor Yellow
-    Write-Host "       Start it first: .\scripts\start-paperclip.ps1" -ForegroundColor Yellow
-    Write-Host "       Continuing anyway (tunnel will retry)..." -ForegroundColor Yellow
+    Write-Host "[WARN] Paperclip not answering on :4747 (tunnel will serve 502 for mcp)" -ForegroundColor Yellow
+    Write-Host "       Start it: Start-ScheduledTask -TaskName 'ANTIGRAVITY Paperclip'" -ForegroundColor Yellow
 }
 
-Write-Host ""
-Write-Host "Tunnel routes:" -ForegroundColor Gray
-Write-Host "  paperclip-hq.youandinotai.com -> localhost:3100 (Paperclip HQ)" -ForegroundColor White
-Write-Host ""
-Write-Host "Access from ANY device:" -ForegroundColor Green
-Write-Host "  https://paperclip-hq.youandinotai.com" -ForegroundColor White
-Write-Host ""
-Write-Host "Starting tunnel..." -ForegroundColor Cyan
+$existing = @(Get-CimInstance Win32_Process -Filter "Name='cloudflared.exe'" -ErrorAction SilentlyContinue)
+if ($existing.Count -gt 0) {
+    Write-Host "[OK] cloudflared already running (PID $($existing[0].ProcessId))" -ForegroundColor Green
+    exit 0
+}
 
-cloudflared tunnel --config $ConfigPath run $TunnelId
+Write-Host "Starting tunnel $TunnelId ..." -ForegroundColor Cyan
+Start-Process -FilePath $Cloudflared `
+    -ArgumentList @('tunnel', '--config', $ConfigPath, '--no-autoupdate', '--logfile', (Join-Path $Repo 'logs\cloudflared-t5500.log'), '--loglevel', 'info', 'run') `
+    -WindowStyle Hidden
+Start-Sleep -Seconds 8
+if (@(Get-CimInstance Win32_Process -Filter "Name='cloudflared.exe'" -ErrorAction SilentlyContinue).Count -ge 1) {
+    Write-Host "[OK] tunnel connector up" -ForegroundColor Green
+} else {
+    Write-Host "[FAIL] connector did not start - see logs\cloudflared-t5500.log" -ForegroundColor Red
+    exit 1
+}

@@ -29,7 +29,7 @@ $services = @(
   @{ n = 'Domains server :9160';         u = 'http://127.0.0.1:9160/';            m = '<html'; h = 'onlinerecycle.net' },
   @{ n = 'Date-app frontend :3200';      u = 'http://127.0.0.1:3200/';            m = '<html' },
   @{ n = 'Date-app API :8000';           u = 'http://127.0.0.1:8000/health';      m = 'ok|healthy' },
-  @{ n = 'Paperclip :3917';              u = 'http://127.0.0.1:3917/api/health';  m = '"status":"ok"' },
+  @{ n = 'Paperclip :4747';              u = 'http://127.0.0.1:4747/api/health';  m = '"deploymentMode":"authenticated"' },
   @{ n = 'Mission Control :3130';        u = 'http://127.0.0.1:3130/live';        m = '.' },
   @{ n = 'Hermes dashboard :9119';       u = 'http://127.0.0.1:9119/';            m = '(?i)hermes' },
   @{ n = 'OmniRoute :20128';             u = 'http://127.0.0.1:20128/';           m = '.' },

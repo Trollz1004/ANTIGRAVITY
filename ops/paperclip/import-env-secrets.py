@@ -22,7 +22,7 @@ import sys
 import urllib.error
 import urllib.request
 
-BASE = "http://127.0.0.1:3917"
+BASE = "http://127.0.0.1:4747"
 KEY_RE = re.compile(r"^[a-zA-Z0-9_.-]+$")
 
 
