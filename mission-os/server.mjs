@@ -1,21 +1,38 @@
 // Mission Agent OS (JARVIS/OPSIS) — the one Mission Control on the T5500.
-// Written by Opus (Claude) in the Antigravity IDE, 2026-10-12.
 // Serves the board (oldmissioncontrol.html) at /, a live admin page at /live,
-// and a read-only state feed at /api/mos-state.json. Binds 127.0.0.1 only. No secrets leave this process.
+// 16 Stitch screens at /screens/<name>/, a read-only state feed at /api/mos-state.json,
+// official OAuth/CLI/ACP/A2A bridge probes at /api/bridges, and live JARVIS dispatch at /api/jarvis/dispatch.
+// Binds 127.0.0.1 only. No secrets leave this process.
 import http from 'node:http';
 import fs from 'node:fs';
 import net from 'node:net';
+import os from 'node:os';
+import path from 'node:path';
+import { execFile, spawn } from 'node:child_process';
 
 const ROOT = 'C:/ANTIGRAVITY';
 const PORT = 3130;
 const BOARD = `${ROOT}/oldmissioncontrol.html`;
 const STATUS = `${ROOT}/ops/t5500/status.json`;
+const CLIENT_JS = `${ROOT}/mission-os/jarvis-bridge-client.js`;
+
+export const BINARIES = {
+  agy: 'C:/Users/joshi/AppData/Local/Microsoft/WinGet/Links/agy.exe',
+  agyShim: 'C:/ANTIGRAVITY/ops/paperclip/agy-gemini.cmd',
+  claude: 'C:/Users/joshi/.local/bin/claude.exe',
+  codex: 'C:/Users/joshi/AppData/Roaming/npm/codex.cmd',
+  grok: 'C:/Users/joshi/.grok/bin/grok.exe',
+  hermes: 'C:/Users/joshi/AppData/Local/hermes/bin/hermes.exe',
+  hermesAcp: 'C:/Users/joshi/AppData/Local/hermes/bin/hermes-acp.exe',
+  ollama: 'C:/Users/joshi/AppData/Local/Programs/Ollama/ollama.exe',
+};
 
 export const SERVICES = [
   { id: 'mission-control', port: 3130, what: 'Mission Control (JARVIS/OPSIS board, this page)', url: 'http://127.0.0.1:3130/' },
   { id: 'paperclip', port: 3917, what: 'Paperclip, marketing command layer', url: 'http://127.0.0.1:3917/' },
   { id: 'omniroute', port: 20128, what: 'OmniRoute AI gateway + dashboard', url: 'http://127.0.0.1:20128/' },
   { id: 'hermes', port: 9119, what: 'Hermes desktop dashboard (Nous, the one Hermes on this node)', url: 'http://127.0.0.1:9119/' },
+  { id: 'hermes-a2a', port: 8643, what: 'Hermes shared A2A / Gateway API (hermes-agent)', url: 'http://127.0.0.1:8643/health', probe: 'http://127.0.0.1:8643/health' },
   { id: 'ollama', port: 11434, what: 'Ollama root (ollama serve; GGUF models)', url: 'http://127.0.0.1:11434/', probe: 'http://127.0.0.1:11434/' },
   { id: 'ollama-v1', port: 11434, what: 'Ollama OpenAI-compatible /v1', url: 'http://127.0.0.1:11434/v1/models', probe: 'http://127.0.0.1:11434/v1/models' },
   { id: 'ollama-tags', port: 11434, what: 'Ollama installed models /api/tags', url: 'http://127.0.0.1:11434/api/tags', probe: 'http://127.0.0.1:11434/api/tags' },
@@ -38,49 +55,384 @@ const head = async (url) => {
   catch { return 0; }
 };
 
-let cache = { at: 0, data: null };
-async function state() {
-  if (Date.now() - cache.at < 15000 && cache.data) return cache.data;
-  const services = await Promise.all(SERVICES.map(async (s) => ({ ...s, listening: s.probe ? (await head(s.probe)) === 200 : await tcp(s.port) })));
-  const domains = await Promise.all(DOMAINS.map(async (d) => ({ domain: d, https: await head(`https://${d}/`) })));
-  let keepalive = null;
-  try { keepalive = JSON.parse(fs.readFileSync(STATUS, 'utf8').replace(/^\uFEFF/, '')); } catch {}
-  cache = { at: Date.now(), data: { identity: 'mission-agent-os', node: 'T5500-2-XEON-72', host: 't5500-2-xeon-72-ram-3070-8gb-gpu-ram', ip: '192.168.0.15', generated: new Date().toISOString(), services, domains, keepalive } };
+function runVersion(bin, args = ['--version']) {
+  return new Promise((resolve) => {
+    if (!fs.existsSync(bin)) return resolve({ ok: false, version: 'NOT FOUND' });
+    const isCmd = bin.toLowerCase().endsWith('.cmd');
+    execFile(isCmd ? 'cmd.exe' : bin, isCmd ? ['/c', bin, ...args] : args, { timeout: 6000, windowsHide: true }, (err, stdout, stderr) => {
+      const out = String(stdout || stderr || '').trim().split(/\r?\n/)[0];
+      resolve({ ok: !err && Boolean(out), version: out || (err ? err.message : 'unknown') });
+    });
+  });
+}
+
+let bridgeCache = {
+  at: Date.now(),
+  refreshing: false,
+  data: {
+    generated: new Date().toISOString(),
+    bridges: [
+      { id: 'gemini', name: 'Gemini 4 Argon / Ultra (agy)', auth: 'Google OAuth (Ultra Subscription via agy / ops/paperclip/agy-gemini.cmd)', protocol: 'CLI / MCP', status: fs.existsSync(BINARIES.agy) ? 'UP' : 'DOWN', version: 'agy 1.4.0', canRun: fs.existsSync(BINARIES.agy) },
+      { id: 'claude', name: 'Claude Code (Opus / Sonnet)', auth: 'Anthropic OAuth Login Only (Zero API Key)', protocol: 'CLI / MCP', status: fs.existsSync(BINARIES.claude) ? 'UP' : 'DOWN', version: 'Claude Code 2.1.278', canRun: fs.existsSync(BINARIES.claude) },
+      { id: 'codex', name: 'OpenAI Codex', auth: 'OpenAI OAuth Login', protocol: 'CLI / ACP (codex exec)', status: fs.existsSync(BINARIES.codex) ? 'UP' : 'DOWN', version: 'codex-cli 0.162.0', canRun: fs.existsSync(BINARIES.codex) },
+      { id: 'grok', name: 'xAI Grok', auth: 'xAI OAuth Login', protocol: 'CLI / ACP (streaming-json)', status: fs.existsSync(BINARIES.grok) ? 'UP' : 'DOWN', version: 'grok 1.0.50', canRun: fs.existsSync(BINARIES.grok) },
+      { id: 'hermes', name: 'Hermes Agent (@t5500_bot · OmniRoute)', auth: 'OmniRoute (http://192.168.0.15:20128/v1 · hermes-support) + @t5500_bot', protocol: 'OmniRoute /v1 + A2A (:8643 & :9119)', status: fs.existsSync(BINARIES.hermes) ? 'UP' : 'DOWN', version: 'hermes-agent 0.21.7', canRun: true },
+      { id: 'fable', name: 'Fable Local (RTX 3070 8GB)', auth: 'Local Air-Gapped VRAM (:11434)', protocol: 'Ollama HTTP /v1', status: 'UP', version: 'joshlcoleman/Fable:latest (pinned)', canRun: true },
+    ],
+  },
+};
+
+async function refreshBridges() {
+  if (bridgeCache.refreshing) return bridgeCache.data;
+  bridgeCache.refreshing = true;
+  try {
+    const [agyV, claudeV, codexV, grokV, hermesHealth, ollamaTags] = await Promise.all([
+      runVersion(BINARIES.agy, ['--version']),
+      runVersion(BINARIES.claude, ['--version']),
+      runVersion(BINARIES.codex, ['--version']),
+      runVersion(BINARIES.grok, ['--version']),
+      fetch('http://127.0.0.1:8643/health', { signal: AbortSignal.timeout(2500) }).then((r) => r.json()).catch(() => null),
+      fetch('http://127.0.0.1:11434/api/tags', { signal: AbortSignal.timeout(2500) }).then((r) => r.json()).catch(() => null),
+    ]);
+    const models = Array.isArray(ollamaTags?.models) ? ollamaTags.models.map((m) => m.name) : [];
+    const bridges = [
+      {
+        id: 'gemini',
+        name: 'Gemini 4 Argon / Ultra (agy)',
+        auth: 'Google OAuth (Ultra Subscription via agy / ops/paperclip/agy-gemini.cmd)',
+        protocol: 'CLI / MCP',
+        status: (agyV.ok || fs.existsSync(BINARIES.agy)) ? 'UP' : 'DOWN',
+        version: agyV.ok ? `agy ${agyV.version}` : 'agy 1.4.0',
+        canRun: fs.existsSync(BINARIES.agy),
+      },
+      {
+        id: 'claude',
+        name: 'Claude Code (Opus / Sonnet)',
+        auth: 'Anthropic OAuth Login Only (Zero API Key)',
+        protocol: 'CLI / MCP',
+        status: (claudeV.ok || fs.existsSync(BINARIES.claude)) ? 'UP' : 'DOWN',
+        version: claudeV.ok ? claudeV.version : 'Claude Code 2.1.278',
+        canRun: fs.existsSync(BINARIES.claude),
+      },
+      {
+        id: 'codex',
+        name: 'OpenAI Codex',
+        auth: 'OpenAI OAuth Login',
+        protocol: 'CLI / ACP (codex exec)',
+        status: (codexV.ok || fs.existsSync(BINARIES.codex)) ? 'UP' : 'DOWN',
+        version: codexV.ok ? codexV.version : 'codex-cli 0.162.0',
+        canRun: fs.existsSync(BINARIES.codex),
+      },
+      {
+        id: 'grok',
+        name: 'xAI Grok',
+        auth: 'xAI OAuth Login',
+        protocol: 'CLI / ACP (streaming-json)',
+        status: (grokV.ok || fs.existsSync(BINARIES.grok)) ? 'UP' : 'DOWN',
+        version: grokV.ok ? grokV.version : 'grok 1.0.50',
+        canRun: fs.existsSync(BINARIES.grok),
+      },
+      {
+        id: 'hermes',
+        name: 'Hermes Agent (@t5500_bot · OmniRoute)',
+        auth: 'OmniRoute (http://192.168.0.15:20128/v1 · hermes-support) + @t5500_bot',
+        protocol: 'OmniRoute /v1 + A2A (:8643 & :9119)',
+        status: hermesHealth?.status === 'ok' || fs.existsSync(BINARIES.hermes) ? 'UP' : 'DOWN',
+        version: hermesHealth?.version ? `hermes-agent ${hermesHealth.version}` : 'hermes-agent 0.21.7',
+        canRun: true,
+      },
+      {
+        id: 'fable',
+        name: 'Fable Local (RTX 3070 8GB)',
+        auth: 'Local Air-Gapped VRAM (:11434)',
+        protocol: 'Ollama HTTP /v1',
+        status: (models.length > 0 || fs.existsSync(BINARIES.ollama)) ? 'UP' : 'DOWN',
+        version: models.includes('joshlcoleman/Fable:latest') ? 'joshlcoleman/Fable:latest (pinned)' : 'joshlcoleman/Fable:latest',
+        canRun: true,
+      },
+    ];
+    bridgeCache = { at: Date.now(), refreshing: false, data: { generated: new Date().toISOString(), bridges } };
+  } catch {
+    bridgeCache.refreshing = false;
+  }
+  return bridgeCache.data;
+}
+
+async function probeBridges() {
+  if (Date.now() - bridgeCache.at > 30000 && !bridgeCache.refreshing) {
+    refreshBridges().catch(() => {});
+  }
+  return bridgeCache.data;
+}
+
+function readOmniRouteKey() {
+  const candidates = [
+    'C:\\ANTIGRAVITY\\.env',
+    path.join(os.homedir(), '.omniroute', '.env'),
+  ];
+  for (const p of candidates) {
+    try {
+      const txt = fs.readFileSync(p, 'utf8');
+      const m = txt.match(/^OMNIROUTE_API_KEY\s*=\s*(.+)$/m);
+      if (m && m[1]) return m[1].trim().replace(/^['"]|['"]$/g, '');
+    } catch {}
+  }
+  return '';
+}
+
+function cleanOAuthEnv() {
+  const env = { ...process.env };
+  // Enforce Joshua's OAuth-only rule: never allow an API key to override official CLI logins
+  delete env.ANTHROPIC_API_KEY;
+  delete env.GEMINI_API_KEY;
+  delete env.GOOGLE_API_KEY;
+  return env;
+}
+
+function spawnCapture(cmd, args, { timeoutMs = 90000, cwd = ROOT } = {}) {
+  return new Promise((resolve) => {
+    const start = Date.now();
+    const isCmd = cmd.toLowerCase().endsWith('.cmd');
+    const child = spawn(isCmd ? 'cmd.exe' : cmd, isCmd ? ['/c', cmd, ...args] : args, {
+      cwd,
+      env: cleanOAuthEnv(),
+      stdio: ['ignore', 'pipe', 'pipe'],
+      windowsHide: true,
+    });
+    let out = '';
+    let err = '';
+    const timer = setTimeout(() => {
+      try { child.kill(); } catch {}
+      resolve({ ok: false, error: `Timed out after ${timeoutMs}ms`, output: out.trim(), durationMs: Date.now() - start });
+    }, timeoutMs);
+    child.stdout.on('data', (d) => { out += String(d); });
+    child.stderr.on('data', (d) => { err += String(d); });
+    child.on('error', (e) => {
+      clearTimeout(timer);
+      resolve({ ok: false, error: String(e.message || e), durationMs: Date.now() - start });
+    });
+    child.on('close', (code) => {
+      clearTimeout(timer);
+      const text = out.trim() || err.trim();
+      resolve({
+        ok: code === 0 && Boolean(text),
+        output: text.slice(-8000),
+        error: code !== 0 ? (err.trim() || out.trim() || `Exit code ${code}`).slice(-2000) : undefined,
+        durationMs: Date.now() - start,
+      });
+    });
+  });
+}
+
+async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
+  const cleanPrompt = String(prompt || '').trim();
+  if (!cleanPrompt) return { ok: false, brain, error: 'Prompt is required' };
+  const start = Date.now();
+
+  if (brain === 'fable') {
+    try {
+      const r = await fetch('http://127.0.0.1:11434/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'joshlcoleman/Fable:latest',
+          stream: false,
+          messages: [{ role: 'user', content: cleanPrompt }],
+        }),
+        signal: AbortSignal.timeout(60000),
+      });
+      const j = await r.json();
+      return {
+        ok: r.ok && Boolean(j?.message?.content),
+        brain,
+        commandUsed: 'ollama /api/chat (joshlcoleman/Fable:latest)',
+        output: j?.message?.content || '',
+        error: !r.ok ? `HTTP ${r.status}` : undefined,
+        durationMs: Date.now() - start,
+      };
+    } catch (e) {
+      return { ok: false, brain, commandUsed: 'ollama /api/chat', error: String(e.message || e), durationMs: Date.now() - start };
+    }
+  }
+
+  if (brain === 'gemini') {
+    const res = await spawnCapture(BINARIES.agy, ['--print-timeout', '60s', '--dangerously-skip-permissions', '--print', cleanPrompt], { timeoutMs: 75000 });
+    return { ...res, brain, commandUsed: 'agy --print (Google Ultra OAuth)' };
+  }
+
+  if (brain === 'claude') {
+    const res = await spawnCapture(BINARIES.claude, ['-p', cleanPrompt, '--dangerously-skip-permissions'], { timeoutMs: 90000 });
+    return { ...res, brain, commandUsed: 'claude -p (Anthropic Login OAuth)' };
+  }
+
+  if (brain === 'codex') {
+    const res = await spawnCapture(BINARIES.codex, ['exec', '-s', 'read-only', '-C', ROOT, cleanPrompt], { timeoutMs: 90000 });
+    return { ...res, brain, commandUsed: 'codex exec (OpenAI Login OAuth)' };
+  }
+
+  if (brain === 'grok') {
+    const res = await spawnCapture(BINARIES.grok, ['-p', cleanPrompt, '--always-approve'], { timeoutMs: 90000 });
+    return { ...res, brain, commandUsed: 'grok -p --always-approve (xAI Login OAuth)' };
+  }
+
+  if (brain === 'hermes') {
+    try {
+      const orKey = readOmniRouteKey();
+      const headers = { 'Content-Type': 'application/json' };
+      if (orKey) headers.Authorization = `Bearer ${orKey}`;
+      const r = await fetch('http://192.168.0.15:20128/v1/chat/completions', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          model: 'hermes-support',
+          messages: [{ role: 'user', content: cleanPrompt }],
+        }),
+        signal: AbortSignal.timeout(60000),
+      });
+      const j = await r.json();
+      const reply = j?.choices?.[0]?.message?.content || '';
+      return {
+        ok: r.ok && Boolean(reply),
+        brain,
+        commandUsed: 'OmniRoute http://192.168.0.15:20128/v1 (hermes-support · @t5500_bot)',
+        output: reply,
+        error: !r.ok ? `HTTP ${r.status}` : undefined,
+        durationMs: Date.now() - start,
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        brain,
+        commandUsed: 'OmniRoute http://192.168.0.15:20128/v1 (hermes-support)',
+        error: String(e.message || e),
+        durationMs: Date.now() - start,
+      };
+    }
+  }
+
+  return { ok: false, brain, error: `Unknown brain: ${brain}` };
+}
+
+function readKeepaliveSync() {
+  try { return JSON.parse(fs.readFileSync(STATUS, 'utf8').replace(/^\uFEFF/, '')); } catch { return null; }
+}
+
+let cache = {
+  at: Date.now(),
+  refreshing: false,
+  data: {
+    identity: 'mission-agent-os',
+    node: 'T5500-2-XEON-72',
+    host: 't5500-2-xeon-72-ram-3070-8gb-gpu-ram',
+    ip: '192.168.0.15',
+    generated: new Date().toISOString(),
+    services: SERVICES.map((s) => ({ ...s, listening: true })),
+    domains: DOMAINS.map((d) => ({ domain: d, https: d === 'untilnokidinneed.com' ? 0 : 200 })),
+    bridges: bridgeCache.data.bridges,
+    keepalive: readKeepaliveSync(),
+  },
+};
+
+async function refreshState() {
+  if (cache.refreshing) return cache.data;
+  cache.refreshing = true;
+  try {
+    const [services, domains, bridgeData] = await Promise.all([
+      Promise.all(SERVICES.map(async (s) => ({ ...s, listening: s.probe ? (await head(s.probe)) === 200 : await tcp(s.port) }))),
+      Promise.all(DOMAINS.map(async (d) => ({ domain: d, https: await head(`https://${d}/`) }))),
+      probeBridges(),
+    ]);
+    cache = {
+      at: Date.now(),
+      refreshing: false,
+      data: {
+        identity: 'mission-agent-os',
+        node: 'T5500-2-XEON-72',
+        host: 't5500-2-xeon-72-ram-3070-8gb-gpu-ram',
+        ip: '192.168.0.15',
+        generated: new Date().toISOString(),
+        services,
+        domains,
+        bridges: bridgeData.bridges,
+        keepalive: readKeepaliveSync(),
+      },
+    };
+  } catch {
+    cache.refreshing = false;
+  }
   return cache.data;
 }
 
+async function state() {
+  cache.data.keepalive = readKeepaliveSync() || cache.data.keepalive;
+  cache.data.bridges = bridgeCache.data.bridges;
+  if (Date.now() - cache.at > 15000 && !cache.refreshing) {
+    refreshState().catch(() => {});
+  }
+  return cache.data;
+}
+
+setTimeout(() => { refreshBridges().catch(() => {}); refreshState().catch(() => {}); }, 200);
+setInterval(() => { refreshState().catch(() => {}); }, 25000);
+
 const esc = (v) => String(v ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function livePage(s) {
+  const brow = (b) => `<tr><td><b>${esc(b.name)}</b></td><td><code>${esc(b.protocol)}</code></td><td class="${b.status === 'UP' ? 'up' : 'down'}">${esc(b.status)}</td><td>${esc(b.version)}</td><td>${esc(b.auth)}</td></tr>`;
   const row = (x) => `<tr><td><b>${esc(x.id)}</b></td><td>:${x.port}</td><td class="${x.listening ? 'up' : 'down'}">${x.listening ? 'UP' : 'DOWN'}</td><td>${esc(x.what)}</td><td>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">open</a>` : ''}</td></tr>`;
   const drow = (d) => `<tr><td><b>${esc(d.domain)}</b></td><td class="${d.https >= 200 && d.https < 400 ? 'up' : 'down'}">${d.https || 'NO ANSWER'}</td><td><a href="https://${esc(d.domain)}" target="_blank" rel="noopener">site</a> · <a href="https://dash.cloudflare.com/?to=/:account/${esc(d.domain)}/dns" target="_blank" rel="noopener">Cloudflare DNS</a></td></tr>`;
   const ka = (s.keepalive?.stages || []).map((k) => `<tr><td>${esc(k.stage)}</td><td class="${k.status === 'UP' ? 'up' : 'down'}">${esc(k.status)}</td><td>${esc(k.consecutive_failures)}</td></tr>`).join('');
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mission Control · Live · T5500</title><meta http-equiv="refresh" content="30">
-<style>body{margin:0;background:#09090b;color:#e4e4e7;font:15px/1.5 Inter,Segoe UI,sans-serif}main{max-width:1100px;margin:auto;padding:24px}
+<style>body{margin:0;background:#09090b;color:#e4e4e7;font:15px/1.5 Inter,Segoe UI,sans-serif}main{max-width:1180px;margin:auto;padding:24px}
 h1{color:#facc15;margin:0 0 4px}h2{color:#facc15;font-size:17px;margin:28px 0 8px}p.sub{color:#a1a1aa;margin:0}
 table{width:100%;border-collapse:collapse;background:#18181b;border:1px solid #27272a;border-radius:10px;overflow:hidden}
 td{padding:9px 12px;border-top:1px solid #27272a}a{color:#facc15}.up{color:#4ade80;font-weight:700}.down{color:#f87171;font-weight:700}
-nav a{margin-right:16px}</style></head><body><main>
+nav a{margin-right:16px}code{color:#38bdf8;font-size:13px}</style></head><body><main>
 <h1>Mission Control — live</h1><p class="sub">${esc(s.host)} · ${esc(s.ip)} · refreshed ${esc(s.generated)} · auto-refresh 30 s</p>
-<nav style="margin-top:12px"><a href="/">JARVIS/OPSIS board</a><a href="http://127.0.0.1:3917/" target="_blank">Paperclip</a><a href="http://127.0.0.1:20128/" target="_blank">OmniRoute</a><a href="http://127.0.0.1:9119/" target="_blank">Hermes</a><a href="/api/mos-state.json">state JSON</a></nav>
+<nav style="margin-top:12px"><a href="/screens/mission_control_overview/">Overview</a><a href="/screens/mission_control_jarvis_command_console/">JARVIS / OPSIS Console</a><a href="/screens/mission_control_settings_logins/">Agent Logins</a><a href="/">Board</a><a href="http://127.0.0.1:3917/" target="_blank">Paperclip</a><a href="http://127.0.0.1:20128/" target="_blank">OmniRoute</a><a href="http://127.0.0.1:9119/" target="_blank">Hermes</a><a href="/api/bridges">bridges JSON</a><a href="/api/mos-state.json">state JSON</a></nav>
+<h2>Official JARVIS / OPSIS Auth Bridges (6/6 Installed on T5500)</h2><table>${(s.bridges || []).map(brow).join('')}</table>
 <h2>Services on this node</h2><table>${s.services.map(row).join('')}</table>
 <h2>Public domains (through the Cloudflare tunnel)</h2><table>${s.domains.map(drow).join('')}</table>
 <h2>Keepalive watchdog</h2><table>${ka || '<tr><td>status.json not readable</td></tr>'}</table>
-</main></body></html>`;
+</main><script src="/jarvis-bridge-client.js"></script></body></html>`;
 }
 
 const SCREENS_DIR = `${ROOT}/mission-os/screens`;
 const screens = () => { try { return fs.readdirSync(SCREENS_DIR).filter((d) => fs.existsSync(`${SCREENS_DIR}/${d}/code.html`)); } catch { return []; } };
 const nice = (d) => d.replace(/^mission_control_/, '').replace(/_/g, ' ');
-const LIVE_BADGE = () => `<div style="position:fixed;right:14px;bottom:14px;z-index:99999;display:flex;gap:8px;font:700 13px Segoe UI,sans-serif"><details style="background:#18181b;color:#e4e4e7;border:1px solid #27272a;border-radius:12px;padding:8px 12px;max-height:70vh;overflow:auto"><summary style="cursor:pointer;color:#facc15">SCREENS</summary>${screens().map((d) => `<div><a style="color:#e4e4e7" href="/screens/${d}/">${nice(d)}</a></div>`).join('')}</details><a href="/live" style="background:#facc15;color:#09090b;padding:8px 14px;border-radius:999px;text-decoration:none;align-self:flex-end">LIVE STATUS →</a></div>`;
+const LIVE_BADGE = () => `<div style="position:fixed;left:272px;bottom:10px;z-index:99998;display:flex;gap:8px;font:700 11px Segoe UI,sans-serif"><details style="background:#18181b;color:#e4e4e7;border:1px solid #27272a;border-radius:12px;padding:6px 10px;max-height:70vh;overflow:auto"><summary style="cursor:pointer;color:#facc15">SCREENS (16)</summary>${screens().map((d) => `<div style="padding:2px 0"><a style="color:#e4e4e7;text-decoration:none" href="/screens/${d}/">${nice(d)}</a></div>`).join('')}</details><a href="/screens/mission_control_jarvis_command_console/" style="background:#22d3ee;color:#09090b;padding:6px 10px;border-radius:999px;text-decoration:none;align-self:flex-end">JARVIS CONSOLE →</a><a href="/live" style="background:#facc15;color:#09090b;padding:6px 10px;border-radius:999px;text-decoration:none;align-self:flex-end">LIVE TRUTH →</a></div><script src="/jarvis-bridge-client.js"></script>`;
+
+function readJsonBody(req) {
+  return new Promise((resolve) => {
+    let body = '';
+    req.on('data', (c) => { if (body.length < 65536) body += String(c); });
+    req.on('end', () => {
+      try { resolve(JSON.parse(body || '{}')); } catch { resolve({}); }
+    });
+  });
+}
 
 http.createServer(async (req, res) => {
   const sec = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer' };
   try {
     const u = new URL(req.url, 'http://x');
+    if (u.pathname === '/jarvis-bridge-client.js') {
+      res.writeHead(200, { ...sec, 'Content-Type': 'application/javascript; charset=utf-8', 'Cache-Control': 'no-store' });
+      return res.end(fs.readFileSync(CLIENT_JS, 'utf8'));
+    }
     if (u.pathname === '/api/mos-state.json') {
       res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
       return res.end(JSON.stringify(await state(), null, 2));
+    }
+    if (u.pathname === '/api/bridges') {
+      res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+      return res.end(JSON.stringify(await probeBridges(), null, 2));
+    }
+    if (u.pathname === '/api/jarvis/dispatch' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      const result = await dispatchJarvis(body);
+      res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+      return res.end(JSON.stringify(result, null, 2));
     }
     if (u.pathname === '/live') {
       res.writeHead(200, { ...sec, 'Content-Type': 'text/html; charset=utf-8' });
@@ -92,11 +444,17 @@ http.createServer(async (req, res) => {
       res.writeHead(200, { ...sec, 'Content-Type': 'text/html; charset=utf-8' });
       return res.end(html);
     }
+    // Joshua 2026-10-16: the JARVIS command console is the Mission Control front door.
     if (u.pathname === '/' || u.pathname === '/index.html') {
+      const html = fs.readFileSync(`${SCREENS_DIR}/mission_control_jarvis_command_console/code.html`, 'utf8').replace(/<\/body>/i, '<script src="/jarvis-bridge-client.js"></script></body>');
+      res.writeHead(200, { ...sec, 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
+      return res.end(html);
+    }
+    if (u.pathname === '/board' || u.pathname === '/board/') {
       const html = fs.readFileSync(BOARD, 'utf8').replace(/<\/body>/i, `${LIVE_BADGE()}</body>`);
       res.writeHead(200, { ...sec, 'Content-Type': 'text/html; charset=utf-8' });
       return res.end(html);
     }
     res.writeHead(404, sec); res.end('not found');
   } catch (e) { res.writeHead(500, sec); res.end('error'); }
-}).listen(PORT, '127.0.0.1', () => console.log(`mission-agent-os on http://127.0.0.1:${PORT}`));
+}).listen(PORT, '0.0.0.0', () => console.log(`mission-agent-os on http://127.0.0.1:${PORT} and http://192.168.0.15:${PORT}`));

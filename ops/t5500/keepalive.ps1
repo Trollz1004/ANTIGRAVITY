@@ -274,7 +274,22 @@ $Stages = @(
            Log '  started cloudflared tunnel'
        } },
 
-    @{ Key = 'paperclip'; Name = 'Paperclip Mission Control :3917'; Settle = 170
+    @{ Key = 'mission-control'; Name = 'Mission Control (JARVIS/OPSIS) :3130'; Settle = 30
+       Probe = { Test-Http 'http://127.0.0.1:3130/api/mos-state.json' 8 'mission-agent-os' }
+       Heal  = {
+           $t = Get-ScheduledTask -TaskName 'ANTIGRAVITY Mission Control' -ErrorAction SilentlyContinue
+           if ($t) {
+               if ($t.State -eq 'Running') { Stop-ScheduledTask -TaskName 'ANTIGRAVITY Mission Control' -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2 }
+               Start-ScheduledTask -TaskName 'ANTIGRAVITY Mission Control'
+               Log '  started task "ANTIGRAVITY Mission Control" (:3130)'
+           } else {
+               if (Test-Port 3130) { Stop-PortOwner 3130 }
+               Start-Process -FilePath $Node -ArgumentList @('mission-os\server.mjs') -WorkingDirectory $Repo -WindowStyle Hidden
+               Log '  started mission-os\server.mjs (:3130)'
+           }
+       } },
+
+    @{ Key = 'paperclip'; Name = 'Paperclip (Marketing & Hermes YouTube) :3917'; Settle = 170
        # Fixed port. Runs under its own NON-elevated task "ANTIGRAVITY Paperclip" (embedded
        # Postgres refuses to run as admin, and this keepalive is elevated). The task's launcher
        # clears squatters and drifted copies so Paperclip is only ever on :3917.
