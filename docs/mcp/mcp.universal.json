@@ -1,0 +1,412 @@
+{
+  "mcpServers": {
+    "fetch": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ]
+    },
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:/ANTIGRAVITY"
+      ]
+    },
+    "memory": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@4.4.2"
+      ],
+      "env": {
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
+      }
+    },
+    "hermes": {
+      "type": "stdio",
+      "command": "C:\\Users\\joshi\\AppData\\Local\\hermes\\bin\\hermes.exe",
+      "args": [
+        "mcp",
+        "serve"
+      ],
+      "env": {
+        "HOME": "C:\\Users\\joshi",
+        "USERPROFILE": "C:\\Users\\joshi",
+        "HERMES_HOME": "C:\\Users\\joshi\\AppData\\Local\\hermes"
+      }
+    },
+    "desktop-commander": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@wonderwhy-er/desktop-commander@0.3.0"
+      ]
+    },
+    "deepwiki": {
+      "type": "http",
+      "url": "https://mcp.deepwiki.com/mcp"
+    },
+    "scrapegraph": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "scrapegraph-mcp@1.0.1"
+      ],
+      "env": {
+        "SGAI_API_KEY": "${SGAI_API_KEY}"
+      }
+    },
+    "markitdown": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "markitdown-mcp@0.0.1a7"
+      ]
+    },
+    "chrome-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@1.11.0"
+      ]
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ]
+    },
+    "netdata": {
+      "type": "http",
+      "url": "https://app.netdata.cloud/api/v1/mcp",
+      "headers": {
+        "Authorization": "Bearer ${NETDATA_CLOUD_API_TOKEN}"
+      }
+    },
+    "unity": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "--directory",
+        "${UNITY_MCP_SERVER_SRC}",
+        "run",
+        "server.py"
+      ]
+    },
+    "firecrawl": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "firecrawl-mcp@latest"
+      ],
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      }
+    },
+    "notion": {
+      "type": "http",
+      "url": "https://mcp.notion.com/mcp"
+    },
+    "dbhub": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@bytebase/dbhub@1.5.0",
+        "--transport",
+        "stdio"
+      ],
+      "env": {
+        "DSN": "${DSN}"
+      }
+    },
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=jmvgdqomvnkfgknmgwxp&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching%2Cstorage"
+    },
+    "azure-devops": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@azure-devops/mcp@latest",
+        "${AZURE_DEVOPS_ORG}",
+        "-d",
+        "${AZURE_DEVOPS_DOMAIN}"
+      ]
+    },
+    "nuget": {
+      "type": "stdio",
+      "command": "dnx",
+      "args": [
+        "NuGet.Mcp.Server@1.4.16",
+        "--yes",
+        "--source",
+        "https://api.nuget.org/v3/index.json"
+      ]
+    },
+    "figma": {
+      "type": "http",
+      "url": "https://mcp.figma.com/mcp"
+    },
+    "apify": {
+      "type": "http",
+      "url": "https://mcp.apify.com/",
+      "headers": {
+        "Authorization": "Bearer ${APIFY_TOKEN}"
+      }
+    },
+    "mongodb": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mongodb-mcp-server@3.1.0"
+      ],
+      "env": {
+        "MDB_MCP_CONNECTION_STRING": "${MDB_MCP_CONNECTION_STRING}",
+        "MDB_MCP_API_CLIENT_ID": "${MDB_MCP_API_CLIENT_ID}",
+        "MDB_MCP_API_CLIENT_SECRET": "${MDB_MCP_API_CLIENT_SECRET}",
+        "MDB_MCP_READ_ONLY": "true"
+      }
+    },
+    "next-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "next-devtools-mcp@0.4.0"
+      ]
+    },
+    "atlassian": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/mcp"
+    },
+    "chroma": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "chroma-mcp@0.2.6"
+      ],
+      "env": {
+        "CHROMA_CLIENT_TYPE": "${CHROMA_CLIENT_TYPE}",
+        "CHROMA_DATA_DIR": "${CHROMA_DATA_DIR}",
+        "CHROMA_TENANT": "${CHROMA_TENANT}",
+        "CHROMA_DATABASE": "${CHROMA_DATABASE}",
+        "CHROMA_API_KEY": "${CHROMA_API_KEY}"
+      }
+    },
+    "todoist": {
+      "type": "http",
+      "url": "https://ai.todoist.net/mcp"
+    },
+    "azure-ai-foundry": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--prerelease=allow",
+        "--from",
+        "git+https://github.com/azure-ai-foundry/mcp-foundry.git",
+        "run-azure-ai-foundry-mcp",
+        "--envFile",
+        "${AZURE_AI_FOUNDRY_ENV_FILE}"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}",
+        "AZURE_AI_SEARCH_ENDPOINT": "${AZURE_AI_SEARCH_ENDPOINT}",
+        "AZURE_AI_SEARCH_API_VERSION": "${AZURE_AI_SEARCH_API_VERSION}",
+        "SEARCH_AUTHENTICATION_METHOD": "${SEARCH_AUTHENTICATION_METHOD}",
+        "AZURE_TENANT_ID": "${AZURE_TENANT_ID}",
+        "AZURE_CLIENT_ID": "${AZURE_CLIENT_ID}",
+        "AZURE_CLIENT_SECRET": "${AZURE_CLIENT_SECRET}",
+        "AZURE_AI_SEARCH_API_KEY": "${AZURE_AI_SEARCH_API_KEY}",
+        "EVAL_DATA_DIR": "${EVAL_DATA_DIR}",
+        "AZURE_OPENAI_ENDPOINT": "${AZURE_OPENAI_ENDPOINT}",
+        "AZURE_OPENAI_API_KEY": "${AZURE_OPENAI_API_KEY}",
+        "AZURE_OPENAI_DEPLOYMENT": "${AZURE_OPENAI_DEPLOYMENT}",
+        "AZURE_OPENAI_API_VERSION": "${AZURE_OPENAI_API_VERSION}",
+        "AZURE_AI_PROJECT_ENDPOINT": "${AZURE_AI_PROJECT_ENDPOINT}"
+      }
+    },
+    "postman": {
+      "type": "http",
+      "url": "https://mcp.postman.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${POSTMAN_API_KEY}"
+      }
+    },
+    "huggingface": {
+      "type": "http",
+      "url": "https://huggingface.co/mcp?login"
+    },
+    "awesome-copilot": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "ghcr.io/microsoft/mcp-dotnet-samples/awesome-copilot:1.0.2026052001"
+      ]
+    },
+    "postgres-pgedge": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "ghcr.io/pgedge/postgres-mcp:latest"
+      ]
+    },
+    "zapier": {
+      "type": "http",
+      "url": "${ZAPIER_MCP_URL}"
+    },
+    "serpapi": {
+      "type": "http",
+      "url": "https://mcp.serpapi.com/mcp"
+    },
+    "aks": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "AZURE_TENANT_ID",
+        "-e",
+        "AZURE_CLIENT_ID",
+        "-e",
+        "AZURE_CLIENT_SECRET",
+        "-e",
+        "AZURE_FEDERATED_TOKEN_FILE",
+        "-e",
+        "AZURE_SUBSCRIPTION_ID",
+        "-e",
+        "AZURE_MANAGED_IDENTITY",
+        "ghcr.io/azure/aks-mcp:latest",
+        "--transport",
+        "stdio"
+      ],
+      "env": {
+        "AZURE_TENANT_ID": "${AZURE_TENANT_ID}",
+        "AZURE_CLIENT_ID": "${AZURE_CLIENT_ID}",
+        "AZURE_CLIENT_SECRET": "${AZURE_CLIENT_SECRET}",
+        "AZURE_FEDERATED_TOKEN_FILE": "${AZURE_FEDERATED_TOKEN_FILE}",
+        "AZURE_SUBSCRIPTION_ID": "${AZURE_SUBSCRIPTION_ID}",
+        "AZURE_MANAGED_IDENTITY": "${AZURE_MANAGED_IDENTITY}"
+      }
+    },
+    "webflow": {
+      "type": "http",
+      "url": "https://mcp.webflow.com/mcp"
+    },
+    "neon": {
+      "type": "http",
+      "url": "https://mcp.neon.tech/mcp"
+    },
+    "google-knowledge-catalog": {
+      "type": "http",
+      "url": "https://dataplex.googleapis.com/mcp",
+      "headers": {
+        "User-Agent": "datacloud.vscode"
+      }
+    },
+    "google-bigquery": {
+      "type": "http",
+      "url": "https://bigquery.googleapis.com/mcp",
+      "headers": {
+        "User-Agent": "datacloud.vscode"
+      }
+    },
+    "google-spanner": {
+      "type": "http",
+      "url": "https://spanner.googleapis.com/mcp",
+      "headers": {
+        "User-Agent": "datacloud.vscode"
+      }
+    },
+    "google-alloydb": {
+      "type": "http",
+      "url": "https://alloydb.googleapis.com/mcp",
+      "headers": {
+        "User-Agent": "datacloud.vscode"
+      }
+    },
+    "google-cloud-sql": {
+      "type": "http",
+      "url": "https://sqladmin.googleapis.com/mcp",
+      "headers": {
+        "User-Agent": "datacloud.vscode"
+      }
+    },
+    "google-dataproc": {
+      "type": "http",
+      "url": "https://dataproc-${GOOGLE_CLOUD_REGION}.googleapis.com/mcp",
+      "headers": {
+        "User-Agent": "datacloud.visual studio code"
+      }
+    },
+    "docker-gateway": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "mcp",
+        "gateway",
+        "run",
+        "--profile",
+        "default"
+      ]
+    },
+    "sonarqube": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "--init",
+        "--pull=always",
+        "-i",
+        "--rm",
+        "-e",
+        "SONARQUBE_TOKEN",
+        "-e",
+        "SONARQUBE_ORG",
+        "-e",
+        "SONARQUBE_URL",
+        "sonarsource/sonarqube-mcp"
+      ],
+      "env": {
+        "SONARQUBE_TOKEN": "${SONARQUBE_TOKEN}",
+        "SONARQUBE_ORG": "${SONARQUBE_ORG}",
+        "SONARQUBE_URL": "https://sonarcloud.io"
+      }
+    }
+  }
+}
