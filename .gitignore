@@ -24,6 +24,16 @@ dev.env
 !.env.example
 *.env.bak
 .secrets/
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*service-account*.json
+*.env.bak-*
+.env.bak-*
 
 # IDE / editor
 .vscode/
