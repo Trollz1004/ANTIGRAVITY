@@ -28,3 +28,4 @@ Gemini (CLI, agy or the Antigravity IDE) reads this first, then `AGENTS.md`, whi
 - No children, hospital or charity wording on any public surface.
 - No API keys in files. Gemini runs on Joshua's subscription (agy), never a Gemini API key.
 - The T5500 is the only production node. Alienware is dev only, never production. Never probe or start the Sabretooth or the old boxes.
+- Payments are settled. `docs/PAYMENTS-TRUTH.md` is the record: Square only, and all 15 past charges are Joshua's own tests. They are not a blocker. Never re-test them, re-audit them or ask Joshua about them. Only a real webhook failure or a new non-Joshua payment reopens payments. Never copy the private bank statements in OneDrive `payments-private-2026-09-17`.

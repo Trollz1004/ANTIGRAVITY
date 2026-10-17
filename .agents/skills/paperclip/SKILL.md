@@ -363,3 +363,7 @@ If you use direct `curl` during these tests, include `X-Paperclip-Run-Id` on all
 ## Full Reference
 
 For detailed API tables, JSON response schemas, worked examples (IC and Manager heartbeats), governance/approvals, cross-team delegation rules, error codes, issue lifecycle diagram, and the common mistakes table, read: `skills/paperclip/references/api-reference.md`
+
+## Payments record (Joshua, 2026-10-17)
+
+Payments are settled. Read `docs/PAYMENTS-TRUTH.md`; never re-test. Square is the only processor on youandinotai.com. All 15 past Square attempts (2025-04 to 2026-08, $10 refund included) are Joshua's own test charges, and the pipeline is proven in production. Past test charges are **not a blocker** and their count is irrelevant. Do not re-verify, re-audit, re-test or ask Joshua about them. Reopen only on a real production webhook failure or a new non-Joshua payment in Square (report it as the first real customer). The private bank statements in `OneDrive\claude-to-claude\payments-private-2026-09-17` are never copied, quoted or committed.

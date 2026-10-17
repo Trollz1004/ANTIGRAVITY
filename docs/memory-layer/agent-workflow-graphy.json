@@ -1,6 +1,6 @@
 {
   "description": "Agent Workflow Graphy - Shows agents what skills to load, tools available, and daily research targets",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "lastUpdated": "2026-10-17",
   "usedBy": "ALL agents and AI lanes on every platform (Claude, Codex, Gemini, Copilot, Hermes, OpenClaw, OpenCode, Grok, Emergent, Paperclip lanes). Read at session start.",
   "authority": {
@@ -11,20 +11,38 @@
     "judges": "Claude, Codex and Jules are judges: they review and validate work before merge; they do not command other agents or override Joshua's direct instruction",
     "entryFilesMustAgree": "Agents read different files at session start (AGENTS.md, CLAUDE.md, GEMINI.md, skill SKILL.md files, Obsidian per-agent files). All of them must carry the same correct data; a stale file is a drift source and gets fixed, not ignored"
   },
+  "paymentsRecord": {
+    "updated": "2026-10-17 (Joshua)",
+    "status": "SETTLED - read the record, never re-test",
+    "record": [
+      "docs/PAYMENTS-TRUTH.md",
+      "docs/payment-flow-verification-2026-06-01.md"
+    ],
+    "processor": "Square only on youandinotai.com",
+    "history": "15 Square attempts 2025-04 to 2026-08 (incl. one  refund), every one Joshua's own test charge; pipeline proven in production",
+    "notABlocker": "Past test charges are not a blocker and their count is irrelevant; 100% of revenue stays with the business",
+    "never": "Do not re-verify, re-audit, re-test or ask Joshua about past test charges",
+    "reopenOnlyIf": [
+      "a real Square webhook failure in production",
+      "a new non-Joshua payment in Square (first real customer: report it, do not verify it)"
+    ],
+    "privateRecords": "OneDrive claude-to-claude/payments-private-2026-09-17 holds bank statements: never copy, quote or commit",
+    "keepFiles": "Never delete either record file"
+  },
   "topology": {
-    "updated": "2026-10-17 (Joshua) \u2014 wins over any older node or role claim in this file",
+    "updated": "2026-10-17 (Joshua) — wins over any older node or role claim in this file",
     "nodes": {
       "T5500": {
         "host": "T5500-2-XEON-72",
         "ip": "192.168.0.15",
-        "status": "THE ONLY NODE \u2014 production for every domain, Mission Control, and every service"
+        "status": "THE ONLY NODE — production for every domain, Mission Control, and every service"
       },
       "Alienware": {
         "ip": "192.168.0.40",
-        "status": "DEV ONLY \u2014 never production, never hosts or routes anything live"
+        "status": "DEV ONLY — never production, never hosts or routes anything live"
       },
       "Sabretooth": {
-        "status": "NO SUCH NODE \u2014 retired, OFF BY RULING. Never probe, start, heal, or route to it"
+        "status": "NO SUCH NODE — retired, OFF BY RULING. Never probe, start, heal, or route to it"
       }
     },
     "missionControl": {
@@ -32,15 +50,15 @@
       "where": "T5500, mission-os/, Agent Hub :3130",
       "jarvis": "Hermes is JARVIS on port :9119, serving Mission Control on :3130. Hermes is fixing this now (in progress)",
       "builders": "OPSIS/JARVIS and Hermes",
-      "rule": "Dashboard work is in progress \u2014 do NOT modify mission-os/ or the dashboard unless Joshua assigns it"
+      "rule": "Dashboard work is in progress — do NOT modify mission-os/ or the dashboard unless Joshua assigns it"
     },
     "paperclip": {
       "where": "T5500, http://127.0.0.1:3917",
-      "role": "MARKETING ONLY \u2014 Paperclip is NOT Mission Control"
+      "role": "MARKETING ONLY — Paperclip is NOT Mission Control"
     },
     "roles": {
-      "openclaw": "Watchdog / node sentry only (T5500) \u2014 no marketing",
-      "hermes": "JARVIS (:9119 for Mission Control :3130, fix in progress) + ALL support is routed to Hermes + YouTube automation \u2014 no sentry duties"
+      "openclaw": "Watchdog / node sentry only (T5500) — no marketing",
+      "hermes": "JARVIS (:9119 for Mission Control :3130, fix in progress) + ALL support is routed to Hermes + YouTube automation — no sentry duties"
     }
   },
   "universalSkills": {
@@ -69,9 +87,9 @@
     "dailyResearch": "Each agent must research and load ONE new skill per day based on their role",
     "memoryLayer": {
       "rule": "Every bot writes what it learns. A bot that only consumes memory is a bot whose work dies with its session.",
-      "updated": "2026-10-17 (Joshua) \u2014 Obsidian is MANDATORY for every agent; the other layers are backups",
+      "updated": "2026-10-17 (Joshua) — Obsidian is MANDATORY for every agent; the other layers are backups",
       "sessionProtocol": {
-        "appliesTo": "EVERY agent, every node, every session \u2014 no exceptions",
+        "appliesTo": "EVERY agent, every node, every session — no exceptions",
         "sessionStart": "READ your own Obsidian file (below) before any task work",
         "sessionEnd": "WRITE (append) a timestamped entry to your own Obsidian file, then mirror to the backups",
         "perAgentFile": "C:\\ANTIGRAVITY\\Antigravity\\<NODE>\\<agent>-to-<agent>.md",
@@ -84,14 +102,14 @@
         "entryBody": "what was done, what was proven (evidence path), what is open, next step for your next session",
         "rules": [
           "one file per agent per node; each agent writes ONLY its own file",
-          "every session gets its own timestamped entry \u2014 always, even short sessions",
+          "every session gets its own timestamped entry — always, even short sessions",
           "append, never overwrite earlier entries",
           "never write secrets, keys, or tokens"
         ]
       },
       "backups": {
         "why": "The memory MCPs exist for exactly this reason: backups of the Obsidian record. Obsidian stays primary.",
-        "supabase": "REQUIRED backup \u2014 mirror each session entry",
+        "supabase": "REQUIRED backup — mirror each session entry",
         "supermemory": "backup + fast recall (see recall below)",
         "openviking": "backup + L0/L1/L2 context (viking://, http://127.0.0.1:1933)",
         "vercel": "backup"
@@ -101,18 +119,23 @@
         "why": "Git is authoritative over every other layer. Markdown in git is diffable and `git log -S` can trace a false claim to the commit that invented it. When any layer below disagrees with git, git wins."
       },
       "obsidianVaults": {
-        "mandatory": "YES \u2014 Joshua's personal, paid Obsidian. Every agent MUST use it (read on session start, write on session end)",
+        "mandatory": "YES — Joshua's personal, paid Obsidian. Every agent MUST use it (read on session start, write on session end)",
         "restApi": "Obsidian Local REST API, http://127.0.0.1:27123",
         "vaults": [
           {
             "path": "C:\\ANTIGRAVITY\\Antigravity",
-            "shared_by": ["ANT (ANTIGRAVITY Marketing Co, youandinotai.com)", "AIS (Ai-Solutions.Store)"],
+            "shared_by": [
+              "ANT (ANTIGRAVITY Marketing Co, youandinotai.com)",
+              "AIS (Ai-Solutions.Store)"
+            ],
             "entry": "00 HOME.md",
             "sync": "Obsidian Sync"
           },
           {
             "path": "D:\\DREAM ONLINE",
-            "shared_by": ["DRE (DREAM Online MMORPG)"],
+            "shared_by": [
+              "DRE (DREAM Online MMORPG)"
+            ],
             "note": "game-only vault, separate from the ANT/AIS vault"
           }
         ],
@@ -134,7 +157,7 @@
       },
       "secretStore": {
         "where": "Paperclip's own secret store",
-        "rule": "secrets referenced by name only \u2014 never a value in a repo file, config row, journal, or chat"
+        "rule": "secrets referenced by name only — never a value in a repo file, config row, journal, or chat"
       },
       "recall": {
         "where": "Supermemory (containerTag repo_antigravity__02249b9e7104105f)",
@@ -142,11 +165,11 @@
           "search_memory",
           "add_memory"
         ],
-        "why": "Fast cross-session recall. NEVER authoritative \u2014 it auto-injects, so a false fact re-injects forever. When it disagrees with git, git wins and the memory is FORGOTTEN, not left."
+        "why": "Fast cross-session recall. NEVER authoritative — it auto-injects, so a false fact re-injects forever. When it disagrees with git, git wins and the memory is FORGOTTEN, not left."
       },
       "vaults_STALE": [
-        "nodes/9020/vaults/knowledge (Joshua's) \u2014 STALE, node 9020 does not exist",
-        "nodes/9020/vaults/agent-workflows (the mesh) \u2014 STALE, node 9020 does not exist"
+        "nodes/9020/vaults/knowledge (Joshua's) — STALE, node 9020 does not exist",
+        "nodes/9020/vaults/agent-workflows (the mesh) — STALE, node 9020 does not exist"
       ],
       "ruling": "agent-contracts/MEMORY-LAYER-RULING-2026-08-28.md"
     },
@@ -208,7 +231,7 @@
         "hermes-youtube-faceless-news",
         "hermes-youtube-avatar-head"
       ],
-      "description": "Hermes is JARVIS on :9119 for Mission Control on :3130 (he is fixing that now \u2014 do not touch). ALL customer support is routed to Hermes. Hermes also runs YouTube automation. Not a sentry."
+      "description": "Hermes is JARVIS on :9119 for Mission Control on :3130 (he is fixing that now — do not touch). ALL customer support is routed to Hermes. Hermes also runs YouTube automation. Not a sentry."
     },
     "openclaw": {
       "role": "Watchdog / Node Sentry (T5500 only)",
@@ -276,7 +299,7 @@
         "humanizer",
         "motion-design"
       ],
-      "description": "YouTube content creation profile \u2014 run by Hermes (YouTube automation)"
+      "description": "YouTube content creation profile — run by Hermes (YouTube automation)"
     },
     "coder": {
       "role": "engineer",
@@ -339,7 +362,7 @@
         "requesting-code-review",
         "agent-reach"
       ],
-      "description": "Customer support profile \u2014 ALL support is routed to Hermes"
+      "description": "Customer support profile — ALL support is routed to Hermes"
     },
     "claude-haiku-orchestrator": {
       "role": "orchestrator",
@@ -361,7 +384,7 @@
         "systematic-debugging",
         "subagent-driven-development"
       ],
-      "description": "Orchestrator agent \u2014 sole non-judge, coordinates worker profiles and routes to judge lanes"
+      "description": "Orchestrator agent — sole non-judge, coordinates worker profiles and routes to judge lanes"
     },
     "buzz": {
       "role": "messenger",
@@ -381,7 +404,7 @@
         "himalaya",
         "email-inbox-triage"
       ],
-      "description": "Buzz agent \u2014 internal messaging, reporting, and Slack-like communication"
+      "description": "Buzz agent — internal messaging, reporting, and Slack-like communication"
     }
   },
   "dailyRoutine": {
@@ -478,7 +501,7 @@
         "name": "OpenViking daily knowledge sweep",
         "who": "any lane (rotates)",
         "when": "once per day",
-        "how": "bash .freebuff/ov-daily-sweep.sh \u2014 index briefings/journals/memory/vault/crm, report recall to ops/marketing-inbox/",
+        "how": "bash .freebuff/ov-daily-sweep.sh — index briefings/journals/memory/vault/crm, report recall to ops/marketing-inbox/",
         "evidence": "ov-sweep-<date>.md with real recall hits"
       }
     ],
