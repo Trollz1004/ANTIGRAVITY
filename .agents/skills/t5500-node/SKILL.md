@@ -26,7 +26,7 @@ Wait about 5 minutes after logon first (the keepalive stages settle in order). T
 | Date app frontend / API | 3200 / 8000 | keepalive |
 | Cloudflare tunnel | — | keepalive (`~\.cloudflared\config.yml`) |
 | Hermes support desk | — | keepalive |
-| Paperclip (installed, idle; real work on another node) + its DB | 3917 / 54329 | `ANTIGRAVITY Paperclip` (never elevated) + keepalive |
+| Paperclip (marketing layer) / mcp.youandinotai.com | 3917 | `ANTIGRAVITY Paperclip` (never elevated) + cloudflared tunnel |
 | OmniRoute | 20128 | `ANTIGRAVITY OmniRoute` |
 | Mission Control (JARVIS/OPSIS) | 3130 | `ANTIGRAVITY Mission Control` |
 | Hermes = JARVIS (dashboard for Mission Control :3130; Hermes is fixing it) | 9119 | `ANTIGRAVITY Hermes Dashboard` |
@@ -41,7 +41,7 @@ The keepalive also probes Supabase, Supermemory and Vercel and writes everything
 
 ## Who may touch the node
 
-- **The keep-alive heals; OpenClaw and Hermes watch, 100%** (Joshua, 2026-10-15). OpenClaw's sentry window restarts the keep-alive if it stalls. Hermes's cron messages Joshua only when something stays broken. Codex no longer watches the node.
+- **The keep-alive heals; OpenClaw is the dedicated 24/7 watchdog/sentry on the T5500** (Joshua, 2026-10-17). OpenClaw's sentry window monitors all ports, domains, and tunnels continuously and heals issues silently (zero notification spam). Hermes handles customer support, YouTube automation, and Mission Control. Codex no longer watches the node.
 - **Hermes (OPSIS)** runs support, the YouTube cron and Mission Control's brain. It does not rebuild the node.
 - **Gemini** works only in `mission-os/`; Claude validates and lands it.
 - **The 100% rule:** not 100% proven, not pushed; not validated by Claude, not merged.

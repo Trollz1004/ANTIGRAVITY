@@ -151,6 +151,7 @@ function Test-Cloud([string]$name, [string]$url, [hashtable]$headers) {
 # Origin = local port that serves the Host header (checked directly, bypassing DNS).
 $Domains = @(
     @{ Host = 'youandinotai.com';     Mark = 'assets/index-';        Origin = 3200 },
+    @{ Host = 'mcp.youandinotai.com'; Mark = 'Paperclip|assets';     Origin = 3917 },
     @{ Host = 'onlinerecycle.net';    Mark = 'OnlineRecycle';        Origin = 9160 },
     @{ Host = 'dream-online.net';     Mark = 'DREAM Online';         Origin = 9160 },
     @{ Host = 'untilnokidinneed.com'; Mark = 'Until No Kid In Need'; Origin = 9160 }
