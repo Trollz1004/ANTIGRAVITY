@@ -296,6 +296,9 @@ ops/growth-engine/screenshots/
 payments/
 # a browser profile is cookies and logins; never tracked (purged from history 2026-09-17)
 ops/youtube/.browser-profile/
+ops/youtube/work/
+ops/youtube/out/
+ops/youtube/.credentials/
 # approved social copy is operational output for the lanes, not source
 ops/marketing-inbox/approved/
 ops/marketing-inbox/evidence/
