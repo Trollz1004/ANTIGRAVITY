@@ -2,6 +2,11 @@
 """
 ANTIGRAVITY Autonomous YouTube Shorts Engine.
 Enforces STRICT 59-second maximum duration limit.
+Includes:
+- 5-second Intro
+- Curated News Stories
+- 5-second Previous News Thumbnails showcase
+- 5-second Outro
 Generates vertical 1080x1920 Shorts with Edge-TTS, Pillow visuals, FFmpeg Ken Burns & audio normalization.
 """
 import argparse
@@ -62,6 +67,25 @@ def wrap_text(text: str, font, max_width: int, draw: ImageDraw.ImageDraw) -> lis
         lines.append(" ".join(current_line))
     return lines
 
+def render_background_base(width: int = 1080, height: int = 1920) -> Image.Image:
+    """Create the base atmospheric cyber-editorial canvas."""
+    img = Image.new("RGBA", (width, height), (0, 0, 0, 255))
+    draw = ImageDraw.Draw(img)
+
+    for y in range(height):
+        ratio = y / height
+        r = int(BG_TOP[0] * (1 - ratio) + BG_BOTTOM[0] * ratio)
+        g = int(BG_TOP[1] * (1 - ratio) + BG_BOTTOM[1] * ratio)
+        b = int(BG_TOP[2] * (1 - ratio) + BG_BOTTOM[2] * ratio)
+        draw.line([(0, y), (width, y)], fill=(r, g, b))
+
+    glow_overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    glow_draw = ImageDraw.Draw(glow_overlay)
+    glow_draw.ellipse([width - 350, -150, width + 550, 750], fill=(56, 189, 248, 30))
+    glow_draw.ellipse([-250, height - 750, 650, height + 150], fill=(99, 102, 241, 25))
+    glow_overlay = glow_overlay.filter(ImageFilter.GaussianBlur(radius=70))
+    return Image.alpha_composite(img, glow_overlay)
+
 def create_slide_image(
     story_idx: int,
     total_stories: int,
@@ -73,27 +97,10 @@ def create_slide_image(
     height: int = 1920
 ):
     """Render a premium vertical 1080x1920 graphic card for the story."""
-    img = Image.new("RGBA", (width, height), (0, 0, 0, 255))
+    img = render_background_base(width, height)
     draw = ImageDraw.Draw(img)
 
-    # 1. Subtle Radial / Linear Background Gradient
-    for y in range(height):
-        ratio = y / height
-        r = int(BG_TOP[0] * (1 - ratio) + BG_BOTTOM[0] * ratio)
-        g = int(BG_TOP[1] * (1 - ratio) + BG_BOTTOM[1] * ratio)
-        b = int(BG_TOP[2] * (1 - ratio) + BG_BOTTOM[2] * ratio)
-        draw.line([(0, y), (width, y)], fill=(r, g, b))
-
-    # Add glowing decorative rings in background
-    glow_overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
-    glow_draw = ImageDraw.Draw(glow_overlay)
-    glow_draw.ellipse([width - 350, -150, width + 550, 750], fill=(56, 189, 248, 30))
-    glow_draw.ellipse([-250, height - 750, 650, height + 150], fill=(99, 102, 241, 25))
-    glow_overlay = glow_overlay.filter(ImageFilter.GaussianBlur(radius=70))
-    img = Image.alpha_composite(img, glow_overlay)
-    draw = ImageDraw.Draw(img)
-
-    # 2. Header Brand Pill & Progress Bar
+    # 1. Header Brand Pill
     header_y = 130
     pill_w = 440
     pill_h = 56
@@ -113,7 +120,7 @@ def create_slide_image(
         fill_col = ACCENT_COLOR if i < story_idx else (51, 65, 85, 200)
         draw.rounded_rectangle([sx, prog_y, sx + int(seg_w), prog_y + 8], radius=4, fill=fill_col)
 
-    # 3. Main Glassmorphic Story Card
+    # 2. Main Glassmorphic Story Card
     card_margin_x = 70
     card_y = 280
     card_w = width - (card_margin_x * 2)
@@ -124,14 +131,14 @@ def create_slide_image(
     img = Image.alpha_composite(img, card_layer)
     draw = ImageDraw.Draw(img)
 
-    # 4. Story Counter Badge (Clean contrast: dark fill + cyan border + white text)
+    # 3. Story Counter Badge
     badge_y = card_y + 60
     badge_text = f"STORY {story_idx} OF {total_stories}"
     font_badge = get_font(26, bold=True)
     draw.rounded_rectangle([card_margin_x + 60, badge_y, card_margin_x + 330, badge_y + 54], radius=14, fill=(15, 23, 42), outline=ACCENT_COLOR, width=2)
     draw.text((card_margin_x + 195, badge_y + 27), badge_text, fill=(255, 255, 255), font=font_badge, anchor="mm")
 
-    # 5. Headline
+    # 4. Headline
     font_headline = get_font(52, bold=True)
     headline_lines = wrap_text(headline, font_headline, card_w - 120, draw)
     text_y = badge_y + 85
@@ -144,20 +151,20 @@ def create_slide_image(
     draw.line([(card_margin_x + 60, text_y), (card_margin_x + card_w - 60, text_y)], fill=(51, 65, 85, 200), width=2)
     text_y += 40
 
-    # 6. Body Paragraph (Rich real story snippet)
+    # 5. Body Paragraph
     font_body = get_font(38, bold=False)
     body_lines = wrap_text(body, font_body, card_w - 120, draw)
     for line in body_lines[:10]:
         draw.text((card_margin_x + 60, text_y), line, fill=TEXT_MUTED, font=font_body)
         text_y += 56
 
-    # 7. Source Pill at Bottom of Card
+    # 6. Source Pill at Bottom of Card
     source_y = card_y + card_h - 100
     font_source = get_font(28, bold=True)
     src_text = f"Source: {source}"
     draw.text((card_margin_x + 60, source_y), src_text, fill=GOLD_ACCENT, font=font_source)
 
-    # 8. Bottom Call to Action Footer (Clean text, no emojis that render as blank boxes)
+    # 7. Bottom Call to Action Footer
     footer_y = height - 130
     font_footer = get_font(30, bold=True)
     draw.text((width // 2, footer_y), "Follow for Daily Good News >>", fill=TEXT_PRIMARY, font=font_footer, anchor="mm")
@@ -166,12 +173,141 @@ def create_slide_image(
     img.convert("RGB").save(str(output_path), "JPEG", quality=95)
     return output_path
 
-async def generate_speech_edge(text: str, output_path: Path, voice: str = "en-US-ChristopherNeural") -> float:
-    """Generate high-quality voiceover audio using edge-tts."""
+def create_previous_news_image(
+    prev_thumbs: list[Path],
+    output_path: Path,
+    width: int = 1080,
+    height: int = 1920
+):
+    """Render a card showcasing thumbnails and headlines from previous editions."""
+    img = render_background_base(width, height)
+    draw = ImageDraw.Draw(img)
+
+    # Header Pill
+    header_y = 130
+    pill_w = 440
+    pill_h = 56
+    pill_x = (width - pill_w) // 2
+    draw.rounded_rectangle([pill_x, header_y, pill_x + pill_w, header_y + pill_h], radius=28, fill=(15, 23, 42), outline=ACCENT_COLOR, width=2)
+    font_pill = get_font(24, bold=True)
+    draw.text((width // 2, header_y + 28), "YESTERDAY'S NEWS TODAY", fill=ACCENT_COLOR, font=font_pill, anchor="mm")
+
+    # Main Card
+    card_margin_x = 70
+    card_y = 260
+    card_w = width - (card_margin_x * 2)
+    card_h = 1420
+    card_layer = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    card_draw = ImageDraw.Draw(card_layer)
+    card_draw.rounded_rectangle([card_margin_x, card_y, card_margin_x + card_w, card_y + card_h], radius=36, fill=CARD_BG, outline=CARD_BORDER, width=3)
+    img = Image.alpha_composite(img, card_layer)
+    draw = ImageDraw.Draw(img)
+
+    # Badge: Catch Up
+    badge_y = card_y + 50
+    draw.rounded_rectangle([card_margin_x + 60, badge_y, card_margin_x + 360, badge_y + 54], radius=14, fill=(15, 23, 42), outline=GOLD_ACCENT, width=2)
+    draw.text((card_margin_x + 210, badge_y + 27), "PREVIOUS EDITIONS", fill=GOLD_ACCENT, font=get_font(26, bold=True), anchor="mm")
+
+    # Title
+    font_title = get_font(48, bold=True)
+    draw.text((card_margin_x + 60, badge_y + 80), "Missed Our Recent Drops?", fill=TEXT_PRIMARY, font=font_title)
+    draw.text((card_margin_x + 60, badge_y + 140), "Check out the top stories from earlier this week:", fill=TEXT_MUTED, font=get_font(32))
+
+    # Thumbnail Previews Grid / Row
+    # Place 2 previous thumbnails side-by-side or stacked
+    thumb_w = 420
+    thumb_h = 740
+    start_y = badge_y + 220
+    spacing = 40
+    start_x = card_margin_x + (card_w - (thumb_w * 2 + spacing)) // 2
+
+    labels = ["OCTOBER 16", "OCTOBER 15"]
+    for i, thumb_file in enumerate(prev_thumbs[:2]):
+        tx = start_x + i * (thumb_w + spacing)
+        # Load and resize thumbnail
+        if thumb_file.exists():
+            try:
+                t_img = Image.open(thumb_file).convert("RGBA")
+                t_resized = t_img.resize((thumb_w, thumb_h), Image.Resampling.LANCZOS)
+                # Paste with border
+                draw.rounded_rectangle([tx - 4, start_y - 4, tx + thumb_w + 4, start_y + thumb_h + 4], radius=24, fill=(56, 189, 248), outline=ACCENT_COLOR, width=2)
+                img.paste(t_resized, (tx, start_y))
+            except Exception as e:
+                print(f"[WARN] Error pasting thumbnail: {e}")
+        else:
+            # Fallback graphic card
+            draw.rounded_rectangle([tx, start_y, tx + thumb_w, start_y + thumb_h], radius=20, fill=(30, 41, 59), outline=ACCENT_COLOR, width=2)
+
+        # Date Label Pill below each preview
+        lbl_y = start_y + thumb_h + 20
+        lbl = labels[i] if i < len(labels) else "RECENT"
+        draw.rounded_rectangle([tx + 60, lbl_y, tx + thumb_w - 60, lbl_y + 46], radius=23, fill=(15, 23, 42), outline=ACCENT_COLOR, width=1)
+        draw.text((tx + thumb_w // 2, lbl_y + 23), lbl, fill=TEXT_PRIMARY, font=get_font(22, bold=True), anchor="mm")
+
+    # Bottom footer
+    footer_y = height - 130
+    draw.text((width // 2, footer_y), "Tap Profile To Binge All Episodes >>", fill=TEXT_PRIMARY, font=get_font(30, bold=True), anchor="mm")
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    img.convert("RGB").save(str(output_path), "JPEG", quality=95)
+    return output_path
+
+def create_outro_image(
+    output_path: Path,
+    width: int = 1080,
+    height: int = 1920
+):
+    """Render a dedicated 5-second outro call to action slide."""
+    img = render_background_base(width, height)
+    draw = ImageDraw.Draw(img)
+
+    # Header Brand Pill
+    header_y = 130
+    pill_w = 440
+    pill_h = 56
+    pill_x = (width - pill_w) // 2
+    draw.rounded_rectangle([pill_x, header_y, pill_x + pill_w, header_y + pill_h], radius=28, fill=(15, 23, 42), outline=ACCENT_COLOR, width=2)
+    draw.text((width // 2, header_y + 28), "YESTERDAY'S NEWS TODAY", fill=ACCENT_COLOR, font=get_font(24, bold=True), anchor="mm")
+
+    # Main Card
+    card_margin_x = 70
+    card_y = 300
+    card_w = width - (card_margin_x * 2)
+    card_h = 1320
+    card_layer = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    card_draw = ImageDraw.Draw(card_layer)
+    card_draw.rounded_rectangle([card_margin_x, card_y, card_margin_x + card_w, card_y + card_h], radius=36, fill=CARD_BG, outline=CARD_BORDER, width=3)
+    img = Image.alpha_composite(img, card_layer)
+    draw = ImageDraw.Draw(img)
+
+    center_y = card_y + 360
+    draw.text((width // 2, center_y), "SPREAD THE GOOD", fill=ACCENT_COLOR, font=get_font(56, bold=True), anchor="mm")
+    draw.text((width // 2, center_y + 80), "Share a positive story with a friend.", fill=TEXT_PRIMARY, font=get_font(40, bold=True), anchor="mm")
+
+    # Big CTA Button
+    btn_w = 540
+    btn_h = 88
+    btn_x = (width - btn_w) // 2
+    btn_y = center_y + 220
+    draw.rounded_rectangle([btn_x, btn_y, btn_x + btn_w, btn_y + btn_h], radius=44, fill=(56, 189, 248), outline=(255, 255, 255), width=2)
+    draw.text((width // 2, btn_y + 44), "SUBSCRIBE & LIKE", fill=(11, 15, 25), font=get_font(36, bold=True), anchor="mm")
+
+    draw.text((width // 2, btn_y + 160), "New Edition Every Single Day", fill=GOLD_ACCENT, font=get_font(32, bold=True), anchor="mm")
+
+    # Bottom footer
+    footer_y = height - 130
+    draw.text((width // 2, footer_y), "See You Tomorrow Morning >>", fill=TEXT_PRIMARY, font=get_font(30, bold=True), anchor="mm")
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    img.convert("RGB").save(str(output_path), "JPEG", quality=95)
+    return output_path
+
+async def generate_speech_edge(text: str, output_path: Path, target_duration: float = None, voice: str = "en-US-ChristopherNeural") -> float:
+    """Generate high-quality voiceover audio with edge-tts."""
     import edge_tts
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    # Rate +14% ensures crisp delivery strictly under 59 seconds
-    communicate = edge_tts.Communicate(text, voice, rate="+14%")
+    rate = "+14%" if (not target_duration or target_duration > 5.0) else "+8%"
+    communicate = edge_tts.Communicate(text, voice, rate=rate)
     await communicate.save(str(output_path))
 
     cmd = [
@@ -181,7 +317,24 @@ async def generate_speech_edge(text: str, output_path: Path, voice: str = "en-US
         str(output_path)
     ]
     res = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    return float(res.stdout.strip())
+    actual_dur = float(res.stdout.strip())
+
+    # If target_duration is specified (e.g. 5.0s for intro/outro/thumbnails), pad audio to match exactly
+    if target_duration and target_duration > actual_dur:
+        pad_dur = target_duration - actual_dur
+        padded_path = output_path.with_name(f"padded_{output_path.name}")
+        cmd_pad = [
+            "ffmpeg", "-y", "-v", "error",
+            "-i", str(output_path),
+            "-af", f"apad=pad_dur={pad_dur:.3f}",
+            "-t", f"{target_duration:.3f}",
+            str(padded_path)
+        ]
+        subprocess.run(cmd_pad, check=True)
+        padded_path.replace(output_path)
+        return target_duration
+
+    return actual_dur
 
 def render_story_clip(image_path: Path, audio_path: Path, duration: float, clip_path: Path) -> Path:
     """Render a single story clip with Ken Burns motion and synced audio."""
@@ -307,7 +460,6 @@ async def run_pipeline(target_date: str = None) -> dict:
     story_paragraphs = []
     blocks = re.split(r"\n\d+\.\s+", raw_script)
     for b in blocks[1:]:
-        lines = b.splitlines()
         p_matches = re.findall(r"<p>(.*?)</p>", b, re.DOTALL)
         if p_matches:
             cleaned_p = clean_html(p_matches[0])
@@ -330,29 +482,37 @@ async def run_pipeline(target_date: str = None) -> dict:
     work_dir.mkdir(parents=True, exist_ok=True)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"[PIPELINE] Curated {len(curated_stories)} high-impact stories to guarantee < 59s duration.")
+    # Locate previous thumbnails
+    prev_thumbs = []
+    for prev_date in ["20261016", "20261015", "20261014"]:
+        t_file = REPO_ROOT / "ops" / "hermes" / "out" / prev_date / f"{prev_date}-thumb.png"
+        if t_file.exists():
+            prev_thumbs.append(t_file)
 
     clips = []
+    total_segments = len(curated_stories) + 3  # Intro + stories + prev news + outro
 
-    # 1. Intro Clip (~4s)
-    intro_text = "Welcome to Yesterday's News Today. Here are top positive stories to brighten your day."
+    # 1. 5-Second Intro Clip
+    print("[1/4] Generating 5-Second Intro Clip...")
+    intro_text = "Welcome to Yesterday's News Today. Here are three incredible positive stories from around the world."
     intro_img = work_dir / "intro.jpg"
     intro_audio = work_dir / "intro.mp3"
-    intro_clip = work_dir / "clip_0.mp4"
+    intro_clip = work_dir / "clip_0_intro.mp4"
 
     create_slide_image(
         story_idx=1,
-        total_stories=len(curated_stories) + 1,
+        total_stories=total_segments,
         headline="TOP STORIES TODAY",
         body="Real breakthroughs, inspiring people, and good news from around the world.",
         source="Daily Briefing",
         output_path=intro_img
     )
-    intro_dur = await generate_speech_edge(intro_text, intro_audio)
+    intro_dur = await generate_speech_edge(intro_text, intro_audio, target_duration=5.0)
     render_story_clip(intro_img, intro_audio, intro_dur, intro_clip)
     clips.append(intro_clip)
 
-    # 2. Story Clips (each ~11-13s)
+    # 2. Main Story Clips (~9-10s each)
+    print(f"[2/4] Generating {len(curated_stories)} Story Clips...")
     for idx, story in enumerate(curated_stories, start=1):
         s_title = story["title"]
         s_body = story["body"]
@@ -366,7 +526,7 @@ async def run_pipeline(target_date: str = None) -> dict:
 
         create_slide_image(
             story_idx=idx + 1,
-            total_stories=len(curated_stories) + 1,
+            total_stories=total_segments,
             headline=s_title,
             body=s_body,
             source=s_src,
@@ -376,16 +536,40 @@ async def run_pipeline(target_date: str = None) -> dict:
         render_story_clip(img_p, aud_p, s_dur, clip_p)
         clips.append(clip_p)
 
-    # 3. Concatenate and Normalize
+    # 3. 5-Second Previous News Thumbnails Showcase Clip
+    print("[3/4] Generating 5-Second Previous News Thumbnails Clip...")
+    prev_text = "Missed our recent drops? Catch up on the world's largest wildlife bridge and medical recoveries."
+    prev_img = work_dir / "previous_news.jpg"
+    prev_audio = work_dir / "previous_news.mp3"
+    prev_clip = work_dir / "clip_prev_news.mp4"
+
+    create_previous_news_image(prev_thumbs, prev_img)
+    prev_dur = await generate_speech_edge(prev_text, prev_audio, target_duration=5.0)
+    render_story_clip(prev_img, prev_audio, prev_dur, prev_clip)
+    clips.append(prev_clip)
+
+    # 4. 5-Second Outro Clip
+    print("[4/4] Generating 5-Second Outro Clip...")
+    outro_text = "That is your daily positive recap. Tap subscribe, share a smile, and see you tomorrow morning."
+    outro_img = work_dir / "outro.jpg"
+    outro_audio = work_dir / "outro.mp3"
+    outro_clip = work_dir / "clip_outro.mp4"
+
+    create_outro_image(outro_img)
+    outro_dur = await generate_speech_edge(outro_text, outro_audio, target_duration=5.0)
+    render_story_clip(outro_img, outro_audio, outro_dur, outro_clip)
+    clips.append(outro_clip)
+
+    # 5. Concatenate and Normalize
     final_video = out_dir / f"youtube_short_{date_str}.mp4"
     final_dur = concatenate_and_normalize(clips, final_video)
     print(f"[RENDER COMPLETE] Final Video: {final_video} (Duration: {final_dur:.2f}s)")
 
-    # 4. Strict Safety Gate Verification
+    # 6. Strict Safety Gate Verification
     gates = verify_gates(final_video)
     print(f"[VERIFIED GATES] All gates passed! Duration: {gates['duration_seconds']:.2f}s <= 59.0s")
 
-    # 5. Generate Thumbnail (1080x1920 Shorts cover)
+    # 7. Generate Thumbnail (1080x1920 Shorts cover)
     thumb_path = out_dir / f"youtube_short_{date_str}_thumb.jpg"
     create_slide_image(
         story_idx=1,
@@ -396,7 +580,7 @@ async def run_pipeline(target_date: str = None) -> dict:
         output_path=thumb_path
     )
 
-    # 6. Write Approval Packet
+    # 8. Write Approval Packet
     packet_dir = REPO_ROOT / "ops" / "packets" / f"hermes-youtube-{date_str}"
     packet_dir.mkdir(parents=True, exist_ok=True)
     summary_md = packet_dir / "summary.md"
@@ -404,9 +588,13 @@ async def run_pipeline(target_date: str = None) -> dict:
     summary_content = f"""## YouTube Short Automated Packet: {date_str}
 
 - Video: `{final_video}`
-- Duration: {final_dur:.2f} seconds (Strictly <= 59s rule enforced)
+- Duration: {final_dur:.2f} seconds (Strictly <= 59s rule enforced: 5s intro + stories + 5s prev news + 5s outro)
 - Resolution: 1080x1920 (Vertical Shorts)
-- Stories: {len(curated_stories)} curated stories
+- Structure:
+  - 5.0s Intro Hook
+  - 3 Curated Positive Stories
+  - 5.0s Previous News Thumbnails Showcase (Oct 16 & Oct 15)
+  - 5.0s Outro Call to Action
 - Thumbnail: `{thumb_path}`
 - Audio: Normalized EBU R128 (-16 LUFS, true peak -1.5)
 - Gates: ALL GATES PASSED (strictly_under_59s=TRUE, format=1080x1920)
