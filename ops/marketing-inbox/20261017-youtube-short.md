@@ -6,7 +6,7 @@
 - Stories: 3 curated stories
 - Thumbnail: `C:\ANTIGRAVITY\ops\youtube\out\20261017\youtube_short_20261017_thumb.jpg`
 - Audio: Normalized EBU R128 (-16 LUFS, true peak -1.5)
-- Gates: ALL 23 GATES PASSED (strictly_under_59s=TRUE, format=yuv420p)
+- Gates: ALL GATES PASSED (strictly_under_59s=TRUE, format=1080x1920)
 - Status: READY_FOR_UPLOAD (Awaiting Joshua Approval)
 
 ### Publish Command

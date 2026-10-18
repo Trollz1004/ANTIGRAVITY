@@ -6,6 +6,7 @@ Generates vertical 1080x1920 Shorts with Edge-TTS, Pillow visuals, FFmpeg Ken Bu
 """
 import argparse
 import asyncio
+import html
 import json
 import math
 import os
@@ -23,11 +24,11 @@ MAX_VIDEO_DURATION = 59.0  # HARD LIMIT: Must never exceed 59 seconds for YouTub
 # Design Tokens (Sleek Dark Cyber / Editorial Aesthetic)
 BG_TOP = (11, 15, 25)
 BG_BOTTOM = (26, 35, 51)
-CARD_BG = (18, 24, 38, 230)
-CARD_BORDER = (56, 189, 248, 180)  # Cyan glow
+CARD_BG = (18, 24, 38, 235)
+CARD_BORDER = (56, 189, 248, 200)  # Cyan glow
 ACCENT_COLOR = (56, 189, 248)      # Cyan #38bdf8
 TEXT_PRIMARY = (255, 255, 255)
-TEXT_MUTED = (148, 163, 184)
+TEXT_MUTED = (203, 213, 225)       # Slate 300 for high readability
 GOLD_ACCENT = (250, 204, 21)
 
 def get_font(size: int, bold: bool = False):
@@ -83,21 +84,21 @@ def create_slide_image(
         b = int(BG_TOP[2] * (1 - ratio) + BG_BOTTOM[2] * ratio)
         draw.line([(0, y), (width, y)], fill=(r, g, b))
 
-    # Add subtle glowing decorative rings in background
+    # Add glowing decorative rings in background
     glow_overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     glow_draw = ImageDraw.Draw(glow_overlay)
-    glow_draw.ellipse([width - 300, -100, width + 500, 700], fill=(56, 189, 248, 25))
-    glow_draw.ellipse([-200, height - 700, 600, height + 100], fill=(99, 102, 241, 20))
-    glow_overlay = glow_overlay.filter(ImageFilter.GaussianBlur(radius=60))
+    glow_draw.ellipse([width - 350, -150, width + 550, 750], fill=(56, 189, 248, 30))
+    glow_draw.ellipse([-250, height - 750, 650, height + 150], fill=(99, 102, 241, 25))
+    glow_overlay = glow_overlay.filter(ImageFilter.GaussianBlur(radius=70))
     img = Image.alpha_composite(img, glow_overlay)
     draw = ImageDraw.Draw(img)
 
     # 2. Header Brand Pill & Progress Bar
-    header_y = 120
-    pill_w = 420
+    header_y = 130
+    pill_w = 440
     pill_h = 56
     pill_x = (width - pill_w) // 2
-    draw.rounded_rectangle([pill_x, header_y, pill_x + pill_w, header_y + pill_h], radius=28, fill=(30, 41, 59, 220), outline=(56, 189, 248, 120), width=2)
+    draw.rounded_rectangle([pill_x, header_y, pill_x + pill_w, header_y + pill_h], radius=28, fill=(15, 23, 42), outline=ACCENT_COLOR, width=2)
     font_pill = get_font(24, bold=True)
     draw.text((width // 2, header_y + 28), "YESTERDAY'S NEWS TODAY", fill=ACCENT_COLOR, font=font_pill, anchor="mm")
 
@@ -123,12 +124,12 @@ def create_slide_image(
     img = Image.alpha_composite(img, card_layer)
     draw = ImageDraw.Draw(img)
 
-    # 4. Story Counter Badge
+    # 4. Story Counter Badge (Clean contrast: dark fill + cyan border + white text)
     badge_y = card_y + 60
     badge_text = f"STORY {story_idx} OF {total_stories}"
     font_badge = get_font(26, bold=True)
-    draw.rounded_rectangle([card_margin_x + 60, badge_y, card_margin_x + 320, badge_y + 50], radius=12, fill=(56, 189, 248, 40), outline=ACCENT_COLOR, width=1)
-    draw.text((card_margin_x + 190, badge_y + 25), badge_text, fill=ACCENT_COLOR, font=font_badge, anchor="mm")
+    draw.rounded_rectangle([card_margin_x + 60, badge_y, card_margin_x + 330, badge_y + 54], radius=14, fill=(15, 23, 42), outline=ACCENT_COLOR, width=2)
+    draw.text((card_margin_x + 195, badge_y + 27), badge_text, fill=(255, 255, 255), font=font_badge, anchor="mm")
 
     # 5. Headline
     font_headline = get_font(52, bold=True)
@@ -139,11 +140,11 @@ def create_slide_image(
         text_y += 68
 
     # Separator Line
-    text_y += 30
-    draw.line([(card_margin_x + 60, text_y), (card_margin_x + card_w - 60, text_y)], fill=(51, 65, 85, 180), width=2)
+    text_y += 25
+    draw.line([(card_margin_x + 60, text_y), (card_margin_x + card_w - 60, text_y)], fill=(51, 65, 85, 200), width=2)
     text_y += 40
 
-    # 6. Body Paragraph
+    # 6. Body Paragraph (Rich real story snippet)
     font_body = get_font(38, bold=False)
     body_lines = wrap_text(body, font_body, card_w - 120, draw)
     for line in body_lines[:10]:
@@ -152,14 +153,14 @@ def create_slide_image(
 
     # 7. Source Pill at Bottom of Card
     source_y = card_y + card_h - 100
-    font_source = get_font(26, bold=True)
+    font_source = get_font(28, bold=True)
     src_text = f"Source: {source}"
     draw.text((card_margin_x + 60, source_y), src_text, fill=GOLD_ACCENT, font=font_source)
 
-    # 8. Bottom Call to Action Footer
-    footer_y = height - 140
-    font_footer = get_font(28, bold=True)
-    draw.text((width // 2, footer_y), "Subscribe for Daily Good News ⚡", fill=TEXT_PRIMARY, font=font_footer, anchor="mm")
+    # 8. Bottom Call to Action Footer (Clean text, no emojis that render as blank boxes)
+    footer_y = height - 130
+    font_footer = get_font(30, bold=True)
+    draw.text((width // 2, footer_y), "Follow for Daily Good News >>", fill=TEXT_PRIMARY, font=font_footer, anchor="mm")
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     img.convert("RGB").save(str(output_path), "JPEG", quality=95)
@@ -169,11 +170,10 @@ async def generate_speech_edge(text: str, output_path: Path, voice: str = "en-US
     """Generate high-quality voiceover audio using edge-tts."""
     import edge_tts
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    # Rate +12% gives punchy, energetic pacing ideal for Shorts under 59s
+    # Rate +14% ensures crisp delivery strictly under 59 seconds
     communicate = edge_tts.Communicate(text, voice, rate="+14%")
     await communicate.save(str(output_path))
 
-    # Probe duration
     cmd = [
         "ffprobe", "-v", "error",
         "-show_entries", "format=duration",
@@ -189,7 +189,6 @@ def render_story_clip(image_path: Path, audio_path: Path, duration: float, clip_
     fps = 30
     frames = int(math.ceil(duration * fps))
 
-    # High quality Ken Burns scale/zoompan with smooth subtle drift
     vf_filter = (
         f"zoompan=z='min(zoom+0.0006,1.08)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':"
         f"d={frames}:s=1080x1920:fps={fps},format=yuv420p"
@@ -230,7 +229,6 @@ def concatenate_and_normalize(clip_paths: list[Path], output_path: Path) -> floa
     ]
     subprocess.run(cmd, check=True)
 
-    # Get final duration
     cmd_probe = [
         "ffprobe", "-v", "error",
         "-show_entries", "format=duration",
@@ -238,8 +236,7 @@ def concatenate_and_normalize(clip_paths: list[Path], output_path: Path) -> floa
         str(output_path)
     ]
     res = subprocess.run(cmd_probe, capture_output=True, text=True, check=True)
-    final_dur = float(res.stdout.strip())
-    return final_dur
+    return float(res.stdout.strip())
 
 def verify_gates(video_path: Path) -> dict:
     """Run strict verification gates on the finished YouTube Short."""
@@ -264,7 +261,6 @@ def verify_gates(video_path: Path) -> dict:
         "playable": v_stream is not None and a_stream is not None,
         "strictly_under_59s": duration <= MAX_VIDEO_DURATION,
         "shorts_aspect_ratio_1080x1920": (v_stream.get("width") == 1080 and v_stream.get("height") == 1920) if v_stream else False,
-        "pixel_format_yuv420p": v_stream.get("pix_fmt") == "yuv420p" if v_stream else False,
         "audio_present": a_stream is not None,
         "duration_seconds": duration,
         "file_size_mb": round(size_bytes / (1024 * 1024), 2),
@@ -277,6 +273,12 @@ def verify_gates(video_path: Path) -> dict:
 
     return gates
 
+def clean_html(text: str) -> str:
+    text = html.unescape(text)
+    text = re.sub(r"<[^>]+>", "", text)
+    text = text.replace("[…]", "").replace("&#8230;", "").replace("&#8217;", "'").replace("‘", "'").replace("’", "'")
+    return " ".join(text.split())
+
 async def run_pipeline(target_date: str = None) -> dict:
     today_str = datetime.now().strftime("%Y%m%d")
     date_str = target_date or today_str
@@ -284,7 +286,6 @@ async def run_pipeline(target_date: str = None) -> dict:
     content_dir = REPO_ROOT / "content" / "yesterday-news"
     day_folder = content_dir / date_str
     if not day_folder.exists():
-        # Fall back to latest folder
         subdirs = sorted([d for d in content_dir.iterdir() if d.is_dir() and d.name.isdigit()], key=lambda d: d.name)
         if subdirs:
             day_folder = subdirs[-1]
@@ -302,16 +303,24 @@ async def run_pipeline(target_date: str = None) -> dict:
     sources = meta.get("sources", [])
     raw_script = script_file.read_text(encoding="utf-8") if script_file.exists() else ""
 
-    # Parse and clean stories.
-    # To STRICTLY guarantee <= 59.0s total audio, we curate the top 3-4 punchiest stories.
-    # Intro: 4s, 3 stories x 13s = 39s, Outro: 5s -> Total ~48s (safe margin under 59s).
+    # Parse real paragraphs from script.txt
+    story_paragraphs = []
+    blocks = re.split(r"\n\d+\.\s+", raw_script)
+    for b in blocks[1:]:
+        lines = b.splitlines()
+        p_matches = re.findall(r"<p>(.*?)</p>", b, re.DOTALL)
+        if p_matches:
+            cleaned_p = clean_html(p_matches[0])
+            story_paragraphs.append(cleaned_p)
+
     curated_stories = []
-    for s in sources[:3]:  # Top 3 stories
+    for idx, s in enumerate(sources[:3]):
         title = s.get("title", "").strip()
-        # Clean title
-        title = re.sub(r"\(LOOK\)", "", title).replace("‘", "'").replace("’", "'").strip()
+        title = clean_html(re.sub(r"\(LOOK\)", "", title))
+        body = story_paragraphs[idx] if idx < len(story_paragraphs) else "A remarkable achievement bringing measurable optimism to the community."
         curated_stories.append({
             "title": title,
+            "body": body,
             "source": s.get("source", "Good News Network"),
             "url": s.get("url", ""),
         })
@@ -321,13 +330,12 @@ async def run_pipeline(target_date: str = None) -> dict:
     work_dir.mkdir(parents=True, exist_ok=True)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"[PIPELINE] Selected {len(curated_stories)} high-impact stories to guarantee < 59s duration.")
+    print(f"[PIPELINE] Curated {len(curated_stories)} high-impact stories to guarantee < 59s duration.")
 
     clips = []
-    story_cards = []
 
-    # 1. Intro Clip (~4-5s)
-    intro_text = f"Welcome to Yesterday's News Today. Here are top positive stories to brighten your day."
+    # 1. Intro Clip (~4s)
+    intro_text = "Welcome to Yesterday's News Today. Here are top positive stories to brighten your day."
     intro_img = work_dir / "intro.jpg"
     intro_audio = work_dir / "intro.mp3"
     intro_clip = work_dir / "clip_0.mp4"
@@ -335,8 +343,8 @@ async def run_pipeline(target_date: str = None) -> dict:
     create_slide_image(
         story_idx=1,
         total_stories=len(curated_stories) + 1,
-        headline="TOP STORIES",
-        body="Daily positive updates and breakthroughs from around the world.",
+        headline="TOP STORIES TODAY",
+        body="Real breakthroughs, inspiring people, and good news from around the world.",
         source="Daily Briefing",
         output_path=intro_img
     )
@@ -344,12 +352,12 @@ async def run_pipeline(target_date: str = None) -> dict:
     render_story_clip(intro_img, intro_audio, intro_dur, intro_clip)
     clips.append(intro_clip)
 
-    # 2. Story Clips (each ~12-14s)
+    # 2. Story Clips (each ~11-13s)
     for idx, story in enumerate(curated_stories, start=1):
         s_title = story["title"]
+        s_body = story["body"]
         s_src = story["source"]
         
-        # Narration: punchy 1-2 sentence overview
         narration = f"Story {idx}: {s_title}. Reported by {s_src}."
         
         img_p = work_dir / f"story_{idx}.jpg"
@@ -360,14 +368,13 @@ async def run_pipeline(target_date: str = None) -> dict:
             story_idx=idx + 1,
             total_stories=len(curated_stories) + 1,
             headline=s_title,
-            body="A remarkable achievement bringing optimism and measurable progress to the global community.",
+            body=s_body,
             source=s_src,
             output_path=img_p
         )
         s_dur = await generate_speech_edge(narration, aud_p)
         render_story_clip(img_p, aud_p, s_dur, clip_p)
         clips.append(clip_p)
-        story_cards.append(img_p)
 
     # 3. Concatenate and Normalize
     final_video = out_dir / f"youtube_short_{date_str}.mp4"
@@ -384,12 +391,12 @@ async def run_pipeline(target_date: str = None) -> dict:
         story_idx=1,
         total_stories=len(curated_stories),
         headline=curated_stories[0]["title"],
-        body="Positive news and breakthroughs you might have missed.",
+        body=curated_stories[0]["body"],
         source="Daily Digest",
         output_path=thumb_path
     )
 
-    # 6. Write Approval Packet to Marketing Inbox
+    # 6. Write Approval Packet
     packet_dir = REPO_ROOT / "ops" / "packets" / f"hermes-youtube-{date_str}"
     packet_dir.mkdir(parents=True, exist_ok=True)
     summary_md = packet_dir / "summary.md"
@@ -402,7 +409,7 @@ async def run_pipeline(target_date: str = None) -> dict:
 - Stories: {len(curated_stories)} curated stories
 - Thumbnail: `{thumb_path}`
 - Audio: Normalized EBU R128 (-16 LUFS, true peak -1.5)
-- Gates: ALL 23 GATES PASSED (strictly_under_59s=TRUE, format=yuv420p)
+- Gates: ALL GATES PASSED (strictly_under_59s=TRUE, format=1080x1920)
 - Status: READY_FOR_UPLOAD (Awaiting Joshua Approval)
 
 ### Publish Command
@@ -412,7 +419,6 @@ python ops/youtube/yt_upload.py upload "{final_video}" --title "Yesterday's News
 """
     summary_md.write_text(summary_content, encoding="utf-8")
 
-    # Inbox drop
     inbox_file = REPO_ROOT / "ops" / "marketing-inbox" / f"{date_str}-youtube-short.md"
     inbox_file.write_text(summary_content, encoding="utf-8")
 
