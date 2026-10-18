@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
-    [ValidateSet("9020-content", "t5500-audit", "t5500-revenue-pack", "sabretooth-control")]
-    [string]$Profile = "9020-content",
+    [ValidateSet("T5500-content", "t5500-audit", "t5500-revenue-pack", "t5500-control")]
+    [string]$Profile = "T5500-content",
     [string]$RepoRoot
 )
 
@@ -73,8 +73,8 @@ $localWorker = Join-Path $RepoRoot "scripts\Run-OnlineRecycle-LocalWorker.ps1"
 $revenueWorker = Join-Path $RepoRoot "scripts\run-onlinerecycle-revenue-worker.ps1"
 
 switch ($Profile) {
-    "9020-content" {
-        Invoke-PythonScript -ScriptPath $draftScript -Arguments @("--profile", "9020-content")
+    "T5500-content" {
+        Invoke-PythonScript -ScriptPath $draftScript -Arguments @("--profile", "T5500-content")
     }
     "t5500-audit" {
         Invoke-PythonScript -ScriptPath $draftScript -Arguments @("--profile", "t5500-audit")
@@ -100,8 +100,8 @@ switch ($Profile) {
             throw "Missing revenue worker scripts."
         }
     }
-    "sabretooth-control" {
-        Invoke-PythonScript -ScriptPath $draftScript -Arguments @("--profile", "sabretooth-control")
+    "t5500-control" {
+        Invoke-PythonScript -ScriptPath $draftScript -Arguments @("--profile", "t5500-control")
         if (Test-Path $copyAuditScript) {
             Invoke-PythonScript -ScriptPath $copyAuditScript
         }

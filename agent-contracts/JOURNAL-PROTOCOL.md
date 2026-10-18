@@ -30,9 +30,10 @@ Before delegation, load the applicable skills: `brainstorming` for feature or be
 ## Node ledger (added 2026-09-03, Joshua's direction)
 
 The journal is per-harness and per-box. The **Buzz node ledger** is the one
-record every agent on every node shares — Sabretooth today, the DREAM Online
+record every agent on every node shares — T5500 today, the DREAM Online
 server and the AI-Solutions node as they come on. At session start, after your
 `STATE.md`, run `ops/buzz/ledger-tail.sh 30`. At session end, after your
 `STATE.md` write, run `BUZZ_AGENT_NAME=<lane> ops/buzz/ledger.sh "<what landed> · <path> · <evidence>"`.
 The line is auto-prefixed with UTC time, hostname, lane, and repo@sha. Doctrine,
 channel, and new-node bring-up: `ops/buzz/BUZZ-NODE-LEDGER.md`. Never a secret.
+

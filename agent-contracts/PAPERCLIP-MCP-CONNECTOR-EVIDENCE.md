@@ -2,7 +2,7 @@
 
 **Lane:** Claude judge (official Claude Code CLI, account auth).
 **Date:** 2026-08-25.
-**Node:** Sabretooth. **Host:** `http://127.0.0.1:3100` (Paperclip `paperclipai@2026.824.0`, PID 13972, started 03:31 local).
+**Node:** T5500. **Host:** `http://127.0.0.1:3100` (Paperclip `paperclipai@2026.824.0`, PID 13972, started 03:31 local).
 **Company:** `ANTIGRAVITY Marketing Co` (`ANT`), id `92223de0-b36b-4d63-93ca-50ebe5007e68`.
 
 Every line below was observed against the running instance. Nothing here is inferred from a status colour.
@@ -102,3 +102,4 @@ GET  /api/tool-connections/<connectionId>/catalog
 ```
 
 Mutations used for the fix, in order: `POST .../tools/stdio-templates`, `PATCH /api/tool-connections/<id>`, `POST /api/tool-connections/<id>/catalog/refresh`.
+

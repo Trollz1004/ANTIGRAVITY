@@ -1,0 +1,596 @@
+# omniroute.pyc
+
+bytes: 4716
+magic: f30d0d0a (this interpreter: f30d0d0a)
+magic matches: True
+
+## docstrings
+
+<module>:
+OmniRoute client helpers for the Hermes faceless-news pipeline.
+
+Reads OMNI_ROUTE_API_KEY from C:\ANTIGRAVITY\.env. Never prints the key.
+Primary base http://127.0.0.1:20128/v1, fallback http://192.168.0.8:20128/v1.
+
+
+  post:
+POST JSON. Returns (status, content_type, body_bytes, base_used).
+
+  get:
+GET a gateway path. Returns (status, content_type, body_bytes, base_used).
+
+## string constants
+
+'OmniRoute client helpers for the Hermes faceless-news pipeline.\n\nReads OMNI_ROUTE_API_KEY from C:\\ANTIGRAVITY\\.env. Never prints the key.\nPrimary base http://127.0.0.1:20128/v1, fallback http://192.168.0.8:20128/v1.\n'
+'C:\\ANTIGRAVITY\\.env'
+'http://127.0.0.1:20128/v1'
+'http://192.168.0.8:20128/v1'
+'utf-8'
+'replace'
+'#'
+'='
+'"'
+"'"
+'OMNI_ROUTE_API_KEY'
+'OMNI_ROUTE_API_KEY not found in environment or .env'
+'POST JSON. Returns (status, content_type, body_bytes, base_used).'
+'application/json'
+'Bearer '
+'Content-Type'
+''
+'ERR'
+'GET a gateway path. Returns (status, content_type, body_bytes, base_used).'
+'Authorization'
+
+## disassembly
+
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('OmniRoute client helpers for the Hermes faceless-news pipeline.\n\nReads OMNI_ROUTE_API_KEY from C:\\ANTIGRAVITY\\.env. Never prints the key.\nPrimary base http://127.0.0.1:20128/v1, fallback http://192.168.0.8:20128/v1.\n')
+              STORE_NAME               0 (__doc__)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (json)
+              STORE_NAME               1 (json)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              2 (os)
+              STORE_NAME               2 (os)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              3 (urllib.error)
+              STORE_NAME               4 (urllib)
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              5 (urllib.request)
+              STORE_NAME               4 (urllib)
+
+ 11           LOAD_CONST               3 ('C:\\ANTIGRAVITY\\.env')
+              STORE_NAME               6 (ENV_PATH)
+
+ 12           LOAD_CONST               4 ('http://127.0.0.1:20128/v1')
+              LOAD_CONST               5 ('http://192.168.0.8:20128/v1')
+              BUILD_LIST               2
+              STORE_NAME               7 (BASES)
+
+ 15           LOAD_NAME                6 (ENV_PATH)
+              BUILD_TUPLE              1
+              LOAD_CONST               6 (<code object load_env at 0x000001D515BE8510, file "omniroute.py", line 15>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME               8 (load_env)
+
+ 27           LOAD_CONST               7 (<code object api_key at 0x000001D515CFDCF0, file "omniroute.py", line 27>)
+              MAKE_FUNCTION
+              STORE_NAME               9 (api_key)
+
+ 34           LOAD_CONST              10 ((180, None))
+              LOAD_CONST               8 (<code object post at 0x000001D515BEA6E0, file "omniroute.py", line 34>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              10 (post)
+
+ 60           LOAD_CONST              11 ((60, None))
+              LOAD_CONST               9 (<code object get at 0x000001D515BE3BF0, file "omniroute.py", line 60>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              11 (get)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object load_env at 0x000001D515BE8510, file "omniroute.py", line 15>:
+  15            RESUME                   0
+
+  16            BUILD_MAP                0
+                STORE_FAST               1 (out)
+
+  17            LOAD_GLOBAL              1 (open + NULL)
+                LOAD_FAST                0 (path)
+                LOAD_CONST               1 ('utf-8')
+                LOAD_CONST               2 ('replace')
+                LOAD_CONST               3 (('encoding', 'errors'))
+                CALL_KW                  3
+                BEFORE_WITH
+        L1:     STORE_FAST               2 (fh)
+
+  18            LOAD_FAST                2 (fh)
+                GET_ITER
+        L2:     FOR_ITER               138 (to L5)
+                STORE_FAST               3 (line)
+
+  19            LOAD_FAST                3 (line)
+                LOAD_ATTR                3 (strip + NULL|self)
+                CALL                     0
+                STORE_FAST               3 (line)
+
+  20            LOAD_FAST                3 (line)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       28 (to L3)
+                LOAD_FAST                3 (line)
+                LOAD_ATTR                5 (startswith + NULL|self)
+                LOAD_CONST               4 ('#')
+                CALL                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         6 (to L3)
+                LOAD_CONST               5 ('=')
+                LOAD_FAST                3 (line)
+                CONTAINS_OP              1
+                POP_JUMP_IF_FALSE        2 (to L4)
+
+  21    L3:     JUMP_BACKWARD           56 (to L2)
+
+  22    L4:     LOAD_FAST                3 (line)
+                LOAD_ATTR                7 (split + NULL|self)
+                LOAD_CONST               5 ('=')
+                LOAD_CONST               6 (1)
+                CALL                     2
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   69 (k, v)
+
+  23            LOAD_FAST                5 (v)
+                LOAD_ATTR                3 (strip + NULL|self)
+                CALL                     0
+                LOAD_ATTR                3 (strip + NULL|self)
+                LOAD_CONST               7 ('"')
+                CALL                     1
+                LOAD_ATTR                3 (strip + NULL|self)
+                LOAD_CONST               8 ("'")
+                CALL                     1
+                LOAD_FAST_LOAD_FAST     20 (out, k)
+                LOAD_ATTR                3 (strip + NULL|self)
+                CALL                     0
+                STORE_SUBSCR
+                JUMP_BACKWARD          140 (to L2)
+
+  18    L5:     END_FOR
+                POP_TOP
+
+  17    L6:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                POP_TOP
+
+  24            LOAD_FAST                1 (out)
+                RETURN_VALUE
+
+  17    L7:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L8)
+                RERAISE                  2
+        L8:     POP_TOP
+        L9:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+
+  24            LOAD_FAST                1 (out)
+                RETURN_VALUE
+
+  --   L10:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L1 to L6 -> L7 [1] lasti
+  L7 to L9 -> L10 [3] lasti
+
+Disassembly of <code object api_key at 0x000001D515CFDCF0, file "omniroute.py", line 27>:
+ 27           RESUME                   0
+
+ 28           LOAD_GLOBAL              0 (os)
+              LOAD_ATTR                2 (environ)
+              LOAD_ATTR                5 (get + NULL|self)
+              LOAD_CONST               1 ('OMNI_ROUTE_API_KEY')
+              CALL                     1
+              COPY                     1
+              TO_BOOL
+              POP_JUMP_IF_TRUE        25 (to L1)
+              POP_TOP
+              LOAD_GLOBAL              7 (load_env + NULL)
+              CALL                     0
+              LOAD_ATTR                5 (get + NULL|self)
+              LOAD_CONST               1 ('OMNI_ROUTE_API_KEY')
+              CALL                     1
+      L1:     STORE_FAST               0 (key)
+
+ 29           LOAD_FAST                0 (key)
+              TO_BOOL
+              POP_JUMP_IF_TRUE        11 (to L2)
+
+ 30           LOAD_GLOBAL              9 (SystemExit + NULL)
+              LOAD_CONST               2 ('OMNI_ROUTE_API_KEY not found in environment or .env')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 31   L2:     LOAD_FAST                0 (key)
+              RETURN_VALUE
+
+Disassembly of <code object post at 0x000001D515BEA6E0, file "omniroute.py", line 34>:
+  34            RESUME                   0
+
+  36            LOAD_GLOBAL              1 (api_key + NULL)
+                CALL                     0
+                STORE_FAST               4 (key)
+
+  37            LOAD_FAST                3 (base)
+                TO_BOOL
+                POP_JUMP_IF_FALSE        3 (to L1)
+                LOAD_FAST                3 (base)
+                BUILD_LIST               1
+                JUMP_FORWARD             5 (to L2)
+        L1:     LOAD_GLOBAL              2 (BASES)
+        L2:     STORE_FAST               5 (bases)
+
+  38            LOAD_CONST               1 (None)
+                STORE_FAST               6 (last)
+
+  39            LOAD_FAST                5 (bases)
+                GET_ITER
+        L3:     FOR_ITER               173 (to L8)
+                STORE_FAST               7 (b)
+
+  40            LOAD_GLOBAL              4 (urllib)
+                LOAD_ATTR                6 (request)
+                LOAD_ATTR                9 (Request + NULL|self)
+
+  41            LOAD_FAST_LOAD_FAST    112 (b, path)
+                BINARY_OP                0 (+)
+
+  42            LOAD_GLOBAL             10 (json)
+                LOAD_ATTR               12 (dumps)
+                PUSH_NULL
+                LOAD_FAST                1 (payload)
+                CALL                     1
+                LOAD_ATTR               15 (encode + NULL|self)
+                LOAD_CONST               2 ('utf-8')
+                CALL                     1
+
+  44            LOAD_CONST               3 ('application/json')
+
+  45            LOAD_CONST               4 ('Bearer ')
+                LOAD_FAST                4 (key)
+                BINARY_OP                0 (+)
+
+  43            LOAD_CONST               5 (('Content-Type', 'Authorization'))
+                BUILD_CONST_KEY_MAP      2
+
+  40            LOAD_CONST               6 (('data', 'headers'))
+                CALL_KW                  3
+                STORE_FAST               8 (req)
+
+  48            NOP
+
+  49    L4:     LOAD_GLOBAL              4 (urllib)
+                LOAD_ATTR                6 (request)
+                LOAD_ATTR               17 (urlopen + NULL|self)
+                LOAD_FAST_LOAD_FAST    130 (req, timeout)
+                LOAD_CONST               7 (('timeout',))
+                CALL_KW                  2
+                BEFORE_WITH
+        L5:     STORE_FAST               9 (resp)
+
+  50            LOAD_FAST                9 (resp)
+                LOAD_ATTR               18 (status)
+                LOAD_FAST                9 (resp)
+                LOAD_ATTR               20 (headers)
+                LOAD_ATTR               23 (get + NULL|self)
+                LOAD_CONST               8 ('Content-Type')
+                LOAD_CONST               9 ('')
+                CALL                     2
+                LOAD_FAST                9 (resp)
+                LOAD_ATTR               25 (read + NULL|self)
+                CALL                     0
+                LOAD_FAST                7 (b)
+                BUILD_TUPLE              4
+
+  49    L6:     SWAP                     2
+                LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                CALL                     2
+                POP_TOP
+        L7:     SWAP                     2
+                POP_TOP
+                RETURN_VALUE
+
+  39    L8:     END_FOR
+                POP_TOP
+
+  57            LOAD_FAST                6 (last)
+                RETURN_VALUE
+
+  49    L9:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L10)
+                RERAISE                  2
+       L10:     POP_TOP
+       L11:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+       L12:     JUMP_BACKWARD          194 (to L3)
+
+  --   L13:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L14:     PUSH_EXC_INFO
+
+  51            LOAD_GLOBAL              4 (urllib)
+                LOAD_ATTR               26 (error)
+                LOAD_ATTR               28 (HTTPError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       68 (to L19)
+                STORE_FAST              10 (exc)
+
+  54   L15:     LOAD_FAST               10 (exc)
+                LOAD_ATTR               30 (code)
+                LOAD_FAST               10 (exc)
+                LOAD_ATTR               20 (headers)
+                LOAD_ATTR               23 (get + NULL|self)
+                LOAD_CONST               8 ('Content-Type')
+                LOAD_CONST               9 ('')
+                CALL                     2
+                LOAD_FAST               10 (exc)
+                LOAD_ATTR               25 (read + NULL|self)
+                CALL                     0
+                LOAD_FAST                7 (b)
+                BUILD_TUPLE              4
+       L16:     SWAP                     2
+       L17:     POP_EXCEPT
+                LOAD_CONST               1 (None)
+                STORE_FAST              10 (exc)
+                DELETE_FAST             10 (exc)
+                SWAP                     2
+                POP_TOP
+                RETURN_VALUE
+
+  --   L18:     LOAD_CONST               1 (None)
+                STORE_FAST              10 (exc)
+                DELETE_FAST             10 (exc)
+                RERAISE                  1
+
+  55   L19:     LOAD_GLOBAL             32 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       42 (to L23)
+                STORE_FAST              10 (exc)
+
+  56   L20:     LOAD_CONST              10 ('ERR')
+                LOAD_CONST               9 ('')
+                LOAD_GLOBAL             35 (str + NULL)
+                LOAD_FAST               10 (exc)
+                CALL                     1
+                LOAD_ATTR               15 (encode + NULL|self)
+                LOAD_CONST               2 ('utf-8')
+                CALL                     1
+                LOAD_FAST                7 (b)
+                BUILD_TUPLE              4
+                STORE_FAST               6 (last)
+       L21:     POP_EXCEPT
+                LOAD_CONST               1 (None)
+                STORE_FAST              10 (exc)
+                DELETE_FAST             10 (exc)
+                EXTENDED_ARG             1
+                JUMP_BACKWARD          340 (to L3)
+
+  --   L22:     LOAD_CONST               1 (None)
+                STORE_FAST              10 (exc)
+                DELETE_FAST             10 (exc)
+                RERAISE                  1
+
+  55   L23:     RERAISE                  0
+
+  --   L24:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L4 to L5 -> L14 [1]
+  L5 to L6 -> L9 [2] lasti
+  L6 to L7 -> L14 [1]
+  L9 to L11 -> L13 [4] lasti
+  L11 to L12 -> L14 [1]
+  L13 to L14 -> L14 [1]
+  L14 to L15 -> L24 [2] lasti
+  L15 to L16 -> L18 [2] lasti
+  L16 to L17 -> L24 [2] lasti
+  L18 to L20 -> L24 [2] lasti
+  L20 to L21 -> L22 [2] lasti
+  L22 to L24 -> L24 [2] lasti
+
+Disassembly of <code object get at 0x000001D515BE3BF0, file "omniroute.py", line 60>:
+  60            RESUME                   0
+
+  62            LOAD_GLOBAL              1 (api_key + NULL)
+                CALL                     0
+                STORE_FAST               3 (key)
+
+  63            LOAD_FAST                2 (base)
+                TO_BOOL
+                POP_JUMP_IF_FALSE        3 (to L1)
+                LOAD_FAST                2 (base)
+                BUILD_LIST               1
+                JUMP_FORWARD             5 (to L2)
+        L1:     LOAD_GLOBAL              2 (BASES)
+        L2:     STORE_FAST               4 (bases)
+
+  64            LOAD_CONST               1 (None)
+                STORE_FAST               5 (last)
+
+  65            LOAD_FAST                4 (bases)
+                GET_ITER
+        L3:     FOR_ITER               136 (to L8)
+                STORE_FAST               6 (b)
+
+  66            LOAD_GLOBAL              4 (urllib)
+                LOAD_ATTR                6 (request)
+                LOAD_ATTR                9 (Request + NULL|self)
+                LOAD_FAST_LOAD_FAST     96 (b, path)
+                BINARY_OP                0 (+)
+                LOAD_CONST               2 ('Authorization')
+                LOAD_CONST               3 ('Bearer ')
+                LOAD_FAST                3 (key)
+                BINARY_OP                0 (+)
+                BUILD_MAP                1
+                LOAD_CONST               4 (('headers',))
+                CALL_KW                  2
+                STORE_FAST               7 (req)
+
+  67            NOP
+
+  68    L4:     LOAD_GLOBAL              4 (urllib)
+                LOAD_ATTR                6 (request)
+                LOAD_ATTR               11 (urlopen + NULL|self)
+                LOAD_FAST_LOAD_FAST    113 (req, timeout)
+                LOAD_CONST               5 (('timeout',))
+                CALL_KW                  2
+                BEFORE_WITH
+        L5:     STORE_FAST               8 (resp)
+
+  69            LOAD_FAST                8 (resp)
+                LOAD_ATTR               12 (status)
+                LOAD_FAST                8 (resp)
+                LOAD_ATTR               14 (headers)
+                LOAD_ATTR               17 (get + NULL|self)
+                LOAD_CONST               6 ('Content-Type')
+                LOAD_CONST               7 ('')
+                CALL                     2
+                LOAD_FAST                8 (resp)
+                LOAD_ATTR               19 (read + NULL|self)
+                CALL                     0
+                LOAD_FAST                6 (b)
+                BUILD_TUPLE              4
+
+  68    L6:     SWAP                     2
+                LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                CALL                     2
+                POP_TOP
+        L7:     SWAP                     2
+                POP_TOP
+                RETURN_VALUE
+
+  65    L8:     END_FOR
+                POP_TOP
+
+  74            LOAD_FAST                5 (last)
+                RETURN_VALUE
+
+  68    L9:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L10)
+                RERAISE                  2
+       L10:     POP_TOP
+       L11:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+       L12:     JUMP_BACKWARD          157 (to L3)
+
+  --   L13:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L14:     PUSH_EXC_INFO
+
+  70            LOAD_GLOBAL              4 (urllib)
+                LOAD_ATTR               20 (error)
+                LOAD_ATTR               22 (HTTPError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       68 (to L19)
+                STORE_FAST               9 (exc)
+
+  71   L15:     LOAD_FAST                9 (exc)
+                LOAD_ATTR               24 (code)
+                LOAD_FAST                9 (exc)
+                LOAD_ATTR               14 (headers)
+                LOAD_ATTR               17 (get + NULL|self)
+                LOAD_CONST               6 ('Content-Type')
+                LOAD_CONST               7 ('')
+                CALL                     2
+                LOAD_FAST                9 (exc)
+                LOAD_ATTR               19 (read + NULL|self)
+                CALL                     0
+                LOAD_FAST                6 (b)
+                BUILD_TUPLE              4
+       L16:     SWAP                     2
+       L17:     POP_EXCEPT
+                LOAD_CONST               1 (None)
+                STORE_FAST               9 (exc)
+                DELETE_FAST              9 (exc)
+                SWAP                     2
+                POP_TOP
+                RETURN_VALUE
+
+  --   L18:     LOAD_CONST               1 (None)
+                STORE_FAST               9 (exc)
+                DELETE_FAST              9 (exc)
+                RERAISE                  1
+
+  72   L19:     LOAD_GLOBAL             26 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       42 (to L23)
+                STORE_FAST               9 (exc)
+
+  73   L20:     LOAD_CONST               8 ('ERR')
+                LOAD_CONST               7 ('')
+                LOAD_GLOBAL             29 (str + NULL)
+                LOAD_FAST                9 (exc)
+                CALL                     1
+                LOAD_ATTR               31 (encode + NULL|self)
+                LOAD_CONST               9 ('utf-8')
+                CALL                     1
+                LOAD_FAST                6 (b)
+                BUILD_TUPLE              4
+                STORE_FAST               5 (last)
+       L21:     POP_EXCEPT
+                LOAD_CONST               1 (None)
+                STORE_FAST               9 (exc)
+                DELETE_FAST              9 (exc)
+                EXTENDED_ARG             1
+                JUMP_BACKWARD          303 (to L3)
+
+  --   L22:     LOAD_CONST               1 (None)
+                STORE_FAST               9 (exc)
+                DELETE_FAST              9 (exc)
+                RERAISE                  1
+
+  72   L23:     RERAISE                  0
+
+  --   L24:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L4 to L5 -> L14 [1]
+  L5 to L6 -> L9 [2] lasti
+  L6 to L7 -> L14 [1]
+  L9 to L11 -> L13 [4] lasti
+  L11 to L12 -> L14 [1]
+  L13 to L14 -> L14 [1]
+  L14 to L15 -> L24 [2] lasti
+  L15 to L16 -> L18 [2] lasti
+  L16 to L17 -> L24 [2] lasti
+  L18 to L20 -> L24 [2] lasti
+  L20 to L21 -> L22 [2] lasti
+  L22 to L24 -> L24 [2] lasti

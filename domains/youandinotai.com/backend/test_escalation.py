@@ -38,13 +38,13 @@ async def test_escalation():
         status="open"
     )
     
-    print(f"Triggering escalation notification to Telegram for {user.display_name}...")
+    print(f"Triggering escalation notification to WhatsApp/Telegram for {user.display_name}...")
     success = await notify_support_ticket(ticket=ticket, user=user, settings=settings)
     
     if success:
-        print("SUCCESS! Notification sent to Telegram/Joshua.")
+        print("SUCCESS! Notification sent to WhatsApp/Telegram.")
     else:
-        print("FAILED to send notification.")
+        print("FAILED to send notification. Please check your API keys.")
 
 if __name__ == "__main__":
     asyncio.run(test_escalation())

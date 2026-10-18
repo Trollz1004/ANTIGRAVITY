@@ -66,7 +66,7 @@ Register-ScheduledTask `
     -Trigger @($triggerBoot, $triggerLogon, $triggerWatchdog) `
     -Settings $settings `
     -Principal $principal `
-    -Description "CodeX mission guardian for desktop-app-first operation. Off by default on Sabretooth unless host/docker relaunch is intentionally re-enabled." `
+    -Description "CodeX mission guardian for desktop-app-first operation. Off by default on T5500 unless host/docker relaunch is intentionally re-enabled." `
     -Force | Out-Null
 
 Write-Host "$taskName installed for user '$UserName' (mode=$MissionMode, every $IntervalMinutes minutes)." -ForegroundColor Green

@@ -40,7 +40,7 @@ if ($graphify -ge 2) { Write-Host "[OK] Graphify endpoints wired" } else { Write
 
 # 5. Watchdog Script
 Write-Host "`n5. Watchdog Script" -ForegroundColor Green
-$ports = Select-String -Path scripts/silent-watchdog-t5500.ps1 -Pattern "20128|3151|3200" | Measure-Object | Select-Object -ExpandProperty Count
+$ports = Select-String -Path scripts/silent-watchdog-t5500.ps1 -Pattern "20128|3100|3200" | Measure-Object | Select-Object -ExpandProperty Count
 if ($ports -ge 3) { Write-Host "[OK] Critical ports monitored" } else { Write-Host "[FAIL] Port config"; exit 1 }
 
 # 6. Scheduled Task Script

@@ -2,9 +2,9 @@
 #
 #   process : upstream npm paperclipai (`%APPDATA%\npm\paperclipai.cmd run`)
 #   port    : 4747   (cloudflared proxies mcp.youandinotai.com -> 127.0.0.1:4747)
-#   home    : C:\Users\joshi\.paperclip-hq
-#   database: PostgreSQL 18 @ 127.0.0.1:5432, database paperclip_hq (NOT embedded)
-#   mode    : authenticated / public, publicBaseUrl https://mcp.youandinotai.com
+#   home    : C:\Users\joshi\.paperclip-hermes
+#   database: embedded Postgres in that home (fresh; old paperclip_hq is not used)
+#   mode    : local_trusted / private, port 4747, hostname mcp.youandinotai.com allowed
 #
 # Two restart defects this file exists to fix:
 #   1. The startup doctor aborts ("Cannot connect to PostgreSQL") if it runs before the
@@ -25,7 +25,7 @@ param(
 
 $ErrorActionPreference = 'Continue'
 $Repo    = 'C:\ANTIGRAVITY'
-$Home2   = Join-Path $env:USERPROFILE '.paperclip-hq'
+$Home2   = Join-Path $env:USERPROFILE '.paperclip-hermes'
 $LogFile = Join-Path $Repo 'logs\paperclip-hq.log'
 $Exe     = Join-Path $env:APPDATA 'npm\paperclipai.cmd'
 $PgBin   = 'C:\Users\joshi\pgsql16\bin'
@@ -39,7 +39,7 @@ function Log([string]$m) {
 function Test-Hq {
     try {
         $r = Invoke-WebRequest -Uri "http://127.0.0.1:$Port/api/health" -UseBasicParsing -TimeoutSec 6
-        return ($r.StatusCode -eq 200 -and $r.Content -match '"deploymentMode"\s*:\s*"authenticated"')
+        return ($r.StatusCode -eq 200 -and $r.Content -match '"deploymentMode"\s*:\s*"local_trusted"')
     } catch { return $false }
 }
 
@@ -75,6 +75,9 @@ for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
             exit 4
         }
         Log "starting Paperclip HQ on :$Port (attempt $attempt/$MaxAttempts)"
+        Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue |
+            ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }
+        Start-Sleep -Seconds 2
         & $Exe run -d $Home2 *>> $LogFile
         Log "Paperclip HQ exited with code $LASTEXITCODE"
         if ($attempt -lt $MaxAttempts) { Start-Sleep -Seconds (10 * $attempt); continue }

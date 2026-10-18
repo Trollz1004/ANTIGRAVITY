@@ -97,7 +97,7 @@ cat <<'BLOCKED'
 BLOCKED — rotate first, purge second, in this order:
 ------------------------------------------------------------------------------
 
-1) Trollz1004/sabretooth-hermes-backup
+1) Trollz1004/t5500-hermes-backup
    143 secret-pattern hits: stripe_live (3), github_pat_classic (35),
    xai_key (3), square_token (5), jwt (5), postgres_uri_creds (26),
    openai_env_assign (58), anthropic_key (8). Private repo, 97 MB, 27 commits
@@ -105,8 +105,8 @@ BLOCKED — rotate first, purge second, in this order:
    AFTER Joshua rotates the Stripe live key, the GitHub PAT, the xAI key, the
    Square token(s), and the OpenAI/Anthropic keys implicated:
 
-     git clone --mirror https://github.com/Trollz1004/sabretooth-hermes-backup sabretooth-scrub.git
-     cd sabretooth-scrub.git
+     git clone --mirror https://github.com/Trollz1004/t5500-hermes-backup t5500-scrub.git
+     cd t5500-scrub.git
      git filter-repo --invert-paths \
        --path-glob '*/hermes-workspace/electron/server-bundle.cjs' \
        --path-glob '*/skills/mcp/native-mcp/SKILL.md' \
@@ -184,7 +184,7 @@ gh repo archive Ai-Solutions-Store/Antigravity-Ai-HAVE-a-HEART-BEATS-SOL-MUSIC-2
 # already archived on GitHub and confirmed zero-drift:
 #   Trollz1004/saas-microservices        (already archived; DROP, no unique content)
 #   Trollz1004/SIDE-WORK                 (already archived; documented stale twin of EMERGENT)
-#   Trollz1004/9020-hermes-backup        (already archived; 0 commits)
+#   Trollz1004/T5500-hermes-backup        (already archived; 0 commits)
 #   Trollz1004/t5500-hermes-backup       (already archived; 0 commits)
 #   Trollz1004/ai-marketplace-grok-production  (already archived; already folded)
 #   Ai-Solutions-Store/revenue-first-products  (already archived; already folded)

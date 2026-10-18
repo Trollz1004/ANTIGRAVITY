@@ -5,7 +5,7 @@
 **Target keyword:** "dating app without bots" / "real people dating app"
 **Audience:** Adults 25-55 in the U.S. who have burned out on Tinder, Bumble, Hinge, Match, or PoF and want real human connection.
 **Word count target:** ~1,500
-**Author:** Hermes on Sabretooth, for youandinotai.com
+**Author:** Hermes on T5500, for youandinotai.com
 **Adults-only footer (required by rule):** youandinotai.com is for adults 18 and over.
 
 ---

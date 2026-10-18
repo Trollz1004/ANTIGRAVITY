@@ -1,0 +1,58 @@
+{
+  "generated": "2026-10-10",
+  "text": "Welcome to Yesterday's News Today for October 9th, 2026. Here are the top stories you might have missed. From Seattle's chapter of National Public Radio comes the remarkable story of the kindness of strangers, immortalized in an origami crane. The story begins with a seven-year-old in Japan who had just gotten a new bike.",
+  "wav_format": "mono 22050 Hz pcm_s16le (same as the pipeline)",
+  "pipeline_default": "en-US-ChristopherNeural",
+  "samples": [
+    {
+      "label": "sapi-BASELINE",
+      "file": "sapi-BASELINE.wav",
+      "seconds": 22.356
+    },
+    {
+      "label": "edge-christopher-DEFAULT",
+      "file": "edge-christopher-DEFAULT.wav",
+      "seconds": 21.648
+    },
+    {
+      "label": "edge-guy",
+      "file": "edge-guy.wav",
+      "seconds": 20.856
+    },
+    {
+      "label": "edge-eric",
+      "file": "edge-eric.wav",
+      "seconds": 21.984
+    },
+    {
+      "label": "edge-steffan",
+      "file": "edge-steffan.wav",
+      "seconds": 22.056
+    },
+    {
+      "label": "edge-roger",
+      "file": "edge-roger.wav",
+      "seconds": 23.184
+    },
+    {
+      "label": "edge-aria",
+      "file": "edge-aria.wav",
+      "seconds": 22.056
+    },
+    {
+      "label": "edge-michelle",
+      "file": "edge-michelle.wav",
+      "seconds": 20.784
+    },
+    {
+      "label": "edge-andrew-NEW",
+      "file": "edge-andrew-NEW.wav",
+      "seconds": 19.512
+    },
+    {
+      "label": "edge-brian-NEW",
+      "file": "edge-brian-NEW.wav",
+      "seconds": 20.616
+    }
+  ]
+}

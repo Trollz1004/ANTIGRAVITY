@@ -5,7 +5,7 @@
 #
 # Modes:
 #   (no flag)  Full - agent CLIs + cloud models + heavy local + custom models
-#              (default for Sabretooth and other workstation-class nodes)
+#              (default for T5500 and other workstation-class nodes)
 #   -Light     Skip heavy local pulls and custom models - keep agent CLIs +
 #              cloud models + the small nomic-embed-text. For service-loaded
 #              nodes like T5500 that run Docker / brain-mcp / DBs.

@@ -35,6 +35,32 @@ const inArgs = process.argv.slice(2);
 const out = [];
 let streamJson = false;
 let printMode = false;
+function mapAgyModel(raw) {
+  let m = String(raw || "").trim().toLowerCase().replace(/^agy\//, "");
+  if (m.includes("opus-5") || m.includes("opus5")) {
+    if (m.includes("low")) return "claude-opus-5-5-low";
+    if (m.includes("medium")) return "claude-opus-5-5-medium";
+    return "claude-opus-5-5-high";
+  }
+  if (m.includes("sonnet-5") || m.includes("sonnet5")) {
+    if (m.includes("low")) return "claude-sonnet-5-5-low";
+    if (m.includes("medium")) return "claude-sonnet-5-5-medium";
+    return "claude-sonnet-5-5-high";
+  }
+  if (m.includes("gemini-4") || m.includes("argon") || m.includes("ultra")) {
+    if (m.includes("low")) return "gemini-4-argon-low";
+    if (m.includes("medium")) return "gemini-4-argon-medium";
+    return "gemini-4-argon-high";
+  }
+  if (m.includes("flash") || m.includes("gemini-3") || m.includes("gemini")) {
+    if (m.includes("low")) return "gemini-3.8-flash-low";
+    if (m.includes("medium")) return "gemini-3.8-flash-medium";
+    return "gemini-3.8-flash-high";
+  }
+  if (m.includes("gpt-oss")) return "gpt-oss-120b-medium";
+  return m;
+}
+
 for (let i = 0; i < inArgs.length; i++) {
   const a = inArgs[i];
   const next = () => inArgs[++i];
@@ -49,6 +75,9 @@ for (let i = 0; i < inArgs.length; i++) {
   if (a.startsWith("--output-format=")) { streamJson = a.endsWith("=stream-json"); out.push(a); continue; }
   if (a === "--prompt" || a === "-p" || a === "--print") { printMode = true; out.push("--print", next()); continue; }
   if (a === "--version" || a === "-v") { out.push("--version"); continue; }
+  // Model translation for OmniRoute / Paperclip agy models
+  if (a === "--model" || a === "-m") { out.push("--model", mapAgyModel(next())); continue; }
+  if (a.startsWith("--model=")) { out.push("--model", mapAgyModel(a.slice(8))); continue; }
   // gemini-cli-only flags agy does not know: drop with their values
   if (a === "--checkpointing" || a === "--debug" || a === "-d") continue;
   if (a === "--include-directories") { for (const d of String(next()).split(",")) out.push("--add-dir", d); continue; }

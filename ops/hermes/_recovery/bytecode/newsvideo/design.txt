@@ -1,0 +1,1673 @@
+# design.pyc
+
+bytes: 14427
+magic: f30d0d0a (this interpreter: f30d0d0a)
+magic matches: True
+
+## docstrings
+
+<module>:
+The channel's visual system: one layout, one type treatment, applied to every frame.
+
+This is the template layer for the batch -- imagery varies per story, the grid and the
+type treatment never do, so the videos read as one channel. Frames are drawn at a
+supersample factor and downscaled by ffmpeg, which keeps type crisp under the slow
+zoom applied at assembly.
+
+No stock library ships with the repo and no image provider is reachable, so the
+backgrounds are deterministic generated gradients keyed to the story index -- the
+placeholder path the faceless-news skill spec calls for, not a stand-in for a
+missing asset.
+
+
+  Frame:
+Frame
+
+  _hue_for:
+Stable hue per story so a day's five backgrounds differ but never drift off-brand.
+
+  _fit:
+Largest size in [lo, hi] whose wrapped block fits the box.
+
+  render_thumbnail:
+16:9 thumbnail on the same system -- same wordmark, chip and type treatment.
+
+## string constants
+
+"The channel's visual system: one layout, one type treatment, applied to every frame.\n\nThis is the template layer for the batch -- imagery varies per story, the grid and the\ntype treatment never do, so the videos read as one channel. Frames are drawn at a\nsupersample factor and downscaled by ffmpeg, which keeps type crisp under the slow\nzoom applied at assembly.\n\nNo stock library ships with the repo and no image provider is reachable, so the\nbackgrounds are deterministic generated gradients keyed to the story index -- the\nplaceholder path the faceless-news skill spec calls for, not a stand-in for a\nmissing asset.\n"
+'C:\\Windows\\Fonts'
+'seguibl.ttf'
+'segoeuib.ttf'
+'arialbd.ttf'
+"YESTERDAY'S NEWS TODAY"
+'Frame'
+'str'
+'kind'
+'headline'
+''
+'kicker'
+'footer'
+'int'
+'index'
+'total'
+"Stable hue per story so a day's five backgrounds differ but never drift off-brand."
+'utf-8'
+'RGB'
+'L'
+'\n'
+' '
+'Largest size in [lo, hi] whose wrapped block fits the box.'
+':'
+'story'
+'OF '
+'PNG'
+'16:9 thumbnail on the same system -- same wordmark, chip and type treatment.'
+'thumb:'
+
+## disassembly
+
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ("The channel's visual system: one layout, one type treatment, applied to every frame.\n\nThis is the template layer for the batch -- imagery varies per story, the grid and the\ntype treatment never do, so the videos read as one channel. Frames are drawn at a\nsupersample factor and downscaled by ffmpeg, which keeps type crisp under the slow\nzoom applied at assembly.\n\nNo stock library ships with the repo and no image provider is reachable, so the\nbackgrounds are deterministic generated gradients keyed to the story index -- the\nplaceholder path the faceless-news skill spec calls for, not a stand-in for a\nmissing asset.\n")
+              STORE_NAME               0 (__doc__)
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (colorsys)
+              STORE_NAME               3 (colorsys)
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              4 (hashlib)
+              STORE_NAME               4 (hashlib)
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('dataclass',))
+              IMPORT_NAME              5 (dataclasses)
+              IMPORT_FROM              6 (dataclass)
+              STORE_NAME               6 (dataclass)
+              POP_TOP
+
+ 19           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('Path',))
+              IMPORT_NAME              7 (pathlib)
+              IMPORT_FROM              8 (Path)
+              STORE_NAME               8 (Path)
+              POP_TOP
+
+ 21           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('Image', 'ImageDraw', 'ImageFilter', 'ImageFont'))
+              IMPORT_NAME              9 (PIL)
+              IMPORT_FROM             10 (Image)
+              STORE_NAME              10 (Image)
+              IMPORT_FROM             11 (ImageDraw)
+              STORE_NAME              11 (ImageDraw)
+              IMPORT_FROM             12 (ImageFilter)
+              STORE_NAME              12 (ImageFilter)
+              IMPORT_FROM             13 (ImageFont)
+              STORE_NAME              13 (ImageFont)
+              POP_TOP
+
+ 23           LOAD_CONST               7 ((1080, 1920))
+              UNPACK_SEQUENCE          2
+              STORE_NAME              14 (W)
+              STORE_NAME              15 (H)
+
+ 24           LOAD_CONST               8 (2)
+              STORE_NAME              16 (SS)
+
+ 26           LOAD_NAME                8 (Path)
+              PUSH_NULL
+              LOAD_CONST               9 ('C:\\Windows\\Fonts')
+              CALL                     1
+              STORE_NAME              17 (FONTS)
+
+ 27           LOAD_NAME               17 (FONTS)
+              LOAD_CONST              10 ('seguibl.ttf')
+              BINARY_OP               11 (/)
+              STORE_NAME              18 (F_BLACK)
+
+ 28           LOAD_NAME               17 (FONTS)
+              LOAD_CONST              11 ('segoeuib.ttf')
+              BINARY_OP               11 (/)
+              STORE_NAME              19 (F_BOLD)
+
+ 29           LOAD_NAME               17 (FONTS)
+              LOAD_CONST              12 ('arialbd.ttf')
+              BINARY_OP               11 (/)
+              STORE_NAME              20 (F_ARIAL)
+
+ 31           LOAD_CONST              13 ((242, 246, 255))
+              STORE_NAME              21 (INK)
+
+ 32           LOAD_CONST              14 ((147, 164, 192))
+              STORE_NAME              22 (MUTED)
+
+ 33           LOAD_CONST              15 ((255, 194, 75))
+              STORE_NAME              23 (ACCENT)
+
+ 34           LOAD_CONST              16 ((11, 20, 36))
+              STORE_NAME              24 (BG_TOP)
+
+ 35           LOAD_CONST              17 ((19, 31, 53))
+              STORE_NAME              25 (BG_BOT)
+
+ 37           LOAD_CONST              18 ("YESTERDAY'S NEWS TODAY")
+              STORE_NAME              26 (CHANNEL)
+
+ 40           LOAD_NAME                6 (dataclass)
+
+ 41           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              19 (<code object Frame at 0x000001D515B7BA60, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 40>)
+              MAKE_FUNCTION
+              LOAD_CONST              20 ('Frame')
+              CALL                     2
+
+ 40           CALL                     0
+
+ 41           STORE_NAME              27 (Frame)
+
+ 50           LOAD_CONST              28 (('path', 'Path', 'size', 'int', 'return', 'ImageFont.FreeTypeFont'))
+              LOAD_CONST              21 (<code object _font at 0x000001D515CC3660, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 50>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              28 (_font)
+
+ 54           LOAD_CONST              29 (('seed', 'str', 'return', 'float'))
+              LOAD_CONST              22 (<code object _hue_for at 0x000001D515D84180, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 54>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              29 (_hue_for)
+
+ 61           LOAD_CONST              30 (('size', 'tuple[int, int]', 'seed', 'str', 'return', 'Image.Image'))
+              LOAD_CONST              23 (<code object _background at 0x000001D515BE93A0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 61>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              30 (_background)
+
+ 97           NOP
+
+ 98           NOP
+
+ 97           NOP
+
+ 98           NOP
+
+ 97           LOAD_CONST              31 (('draw', 'ImageDraw.ImageDraw', 'text', 'str', 'font', 'ImageFont.FreeTypeFont', 'max_w', 'int', 'return', 'list[str]'))
+              LOAD_CONST              24 (<code object _wrap at 0x000001D515D25430, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 97>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              31 (_wrap)
+
+115           NOP
+
+114           LOAD_CONST              32 ((1.14,))
+
+115           NOP
+
+114           NOP
+
+115           NOP
+
+114           NOP
+
+115           NOP
+
+114           NOP
+
+115           NOP
+
+114           LOAD_CONST              33 (('draw', 'ImageDraw.ImageDraw', 'text', 'str', 'path', 'Path', 'max_w', 'int', 'max_h', 'int', 'hi', 'int', 'lo', 'int', 'leading', 'float', 'return', 'tuple[ImageFont.FreeTypeFont, list[str]]'))
+              LOAD_CONST              25 (<code object _fit at 0x000001D515CFD8A0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 114>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              32 (_fit)
+
+127           LOAD_CONST              34 (('frame', 'Frame', 'out', 'Path', 'return', 'Path'))
+              LOAD_CONST              26 (<code object render_frame at 0x000001D515BE1490, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 127>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              33 (render_frame)
+
+207           LOAD_CONST              35 (('headline', 'str', 'date_label', 'str', 'out', 'Path', 'return', 'Path'))
+              LOAD_CONST              27 (<code object render_thumbnail at 0x000001D515BE2090, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 207>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              34 (render_thumbnail)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object Frame at 0x000001D515B7BA60, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 40>:
+ 40           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('Frame')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (40)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 42           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('kind')
+              STORE_SUBSCR
+
+ 43           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('headline')
+              STORE_SUBSCR
+
+ 44           LOAD_CONST               5 ('')
+              STORE_NAME               5 (kicker)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('kicker')
+              STORE_SUBSCR
+
+ 45           LOAD_CONST               5 ('')
+              STORE_NAME               6 (footer)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('footer')
+              STORE_SUBSCR
+
+ 46           LOAD_CONST               8 (0)
+              STORE_NAME               7 (index)
+              LOAD_CONST               9 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('index')
+              STORE_SUBSCR
+
+ 47           LOAD_CONST               8 (0)
+              STORE_NAME               8 (total)
+              LOAD_CONST               9 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('total')
+              STORE_SUBSCR
+              LOAD_CONST              12 (())
+              STORE_NAME               9 (__static_attributes__)
+              RETURN_CONST            13 (None)
+
+Disassembly of <code object _font at 0x000001D515CC3660, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 50>:
+ 50           RESUME                   0
+
+ 51           LOAD_GLOBAL              0 (ImageFont)
+              LOAD_ATTR                2 (truetype)
+              PUSH_NULL
+              LOAD_GLOBAL              5 (str + NULL)
+              LOAD_FAST                0 (path)
+              CALL                     1
+              LOAD_FAST                1 (size)
+              CALL                     2
+              RETURN_VALUE
+
+Disassembly of <code object _hue_for at 0x000001D515D84180, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 54>:
+ 54           RESUME                   0
+
+ 56           LOAD_GLOBAL              0 (hashlib)
+              LOAD_ATTR                2 (sha256)
+              PUSH_NULL
+              LOAD_FAST                0 (seed)
+              LOAD_ATTR                5 (encode + NULL|self)
+              LOAD_CONST               1 ('utf-8')
+              CALL                     1
+              CALL                     1
+              LOAD_ATTR                7 (digest + NULL|self)
+              CALL                     0
+              LOAD_CONST               2 (0)
+              BINARY_SUBSCR
+              LOAD_CONST               3 (255.0)
+              BINARY_OP               11 (/)
+              STORE_FAST               1 (h)
+
+ 58           LOAD_CONST               4 (0.5)
+              LOAD_FAST                1 (h)
+              LOAD_CONST               5 (0.28)
+              BINARY_OP                5 (*)
+              BINARY_OP                0 (+)
+              RETURN_VALUE
+
+Disassembly of <code object _background at 0x000001D515BE93A0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 61>:
+  --           MAKE_CELL               22 (t)
+
+  61           RESUME                   0
+
+  62           LOAD_FAST                0 (size)
+               UNPACK_SEQUENCE          2
+               STORE_FAST_STORE_FAST   35 (w, h)
+
+  63           LOAD_GLOBAL              0 (Image)
+               LOAD_ATTR                2 (new)
+               PUSH_NULL
+               LOAD_CONST               1 ('RGB')
+               LOAD_FAST_LOAD_FAST     35 (w, h)
+               BUILD_TUPLE              2
+               LOAD_GLOBAL              4 (BG_TOP)
+               CALL                     3
+               STORE_FAST               4 (base)
+
+  64           LOAD_GLOBAL              6 (ImageDraw)
+               LOAD_ATTR                8 (Draw)
+               PUSH_NULL
+               LOAD_FAST                4 (base)
+               CALL                     1
+               STORE_FAST               5 (draw)
+
+  67           LOAD_GLOBAL             11 (range + NULL)
+               LOAD_CONST               2 (0)
+               LOAD_FAST                3 (h)
+               LOAD_CONST               3 (8)
+               CALL                     3
+               GET_ITER
+       L1:     FOR_ITER                59 (to L2)
+               STORE_FAST               6 (y)
+
+  68           LOAD_FAST_LOAD_FAST     99 (y, h)
+               BINARY_OP               11 (/)
+               STORE_DEREF             22 (t)
+
+  69           LOAD_GLOBAL             13 (tuple + NULL)
+               LOAD_FAST               22 (t)
+               BUILD_TUPLE              1
+               LOAD_CONST               4 (<code object <genexpr> at 0x000001D515D20F30, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 69>)
+               MAKE_FUNCTION
+               SET_FUNCTION_ATTRIBUTE   8 (closure)
+               LOAD_GLOBAL             11 (range + NULL)
+               LOAD_CONST               5 (3)
+               CALL                     1
+               GET_ITER
+               CALL                     0
+               CALL                     1
+               STORE_FAST               7 (col)
+
+  70           LOAD_FAST                5 (draw)
+               LOAD_ATTR               15 (rectangle + NULL|self)
+               LOAD_CONST               2 (0)
+               LOAD_FAST_LOAD_FAST     98 (y, w)
+               LOAD_FAST                6 (y)
+               LOAD_CONST               3 (8)
+               BINARY_OP                0 (+)
+               BUILD_LIST               4
+               LOAD_FAST                7 (col)
+               LOAD_CONST               6 (('fill',))
+               CALL_KW                  2
+               POP_TOP
+               JUMP_BACKWARD           61 (to L1)
+
+  67   L2:     END_FOR
+               POP_TOP
+
+  73           LOAD_GLOBAL             17 (_hue_for + NULL)
+               LOAD_FAST                1 (seed)
+               CALL                     1
+               STORE_FAST               8 (hue)
+
+  74           LOAD_GLOBAL              0 (Image)
+               LOAD_ATTR                2 (new)
+               PUSH_NULL
+               LOAD_CONST               1 ('RGB')
+               LOAD_FAST_LOAD_FAST     35 (w, h)
+               BUILD_TUPLE              2
+               LOAD_CONST               7 ((0, 0, 0))
+               CALL                     3
+               STORE_FAST               9 (glow)
+
+  75           LOAD_GLOBAL              6 (ImageDraw)
+               LOAD_ATTR                8 (Draw)
+               PUSH_NULL
+               LOAD_FAST                9 (glow)
+               CALL                     1
+               STORE_FAST              10 (gdraw)
+
+  76           LOAD_GLOBAL             19 (enumerate + NULL)
+
+  77           LOAD_CONST               8 ((0.26, 0.24, 0.52, 0.55, 0.42))
+
+  78           LOAD_CONST               9 ((0.78, 0.72, 0.6, 0.48, 0.3))
+
+  76           BUILD_LIST               2
+               CALL                     1
+               GET_ITER
+       L3:     FOR_ITER               133 (to L4)
+               UNPACK_SEQUENCE          2
+               STORE_FAST              11 (i)
+               UNPACK_SEQUENCE          5
+               STORE_FAST_STORE_FAST  205 (cx, cy)
+               STORE_FAST_STORE_FAST  239 (rad, sat)
+               STORE_FAST              16 (val)
+
+  80           LOAD_GLOBAL             20 (colorsys)
+               LOAD_ATTR               22 (hsv_to_rgb)
+               PUSH_NULL
+               LOAD_FAST_LOAD_FAST    139 (hue, i)
+               LOAD_CONST              10 (0.08)
+               BINARY_OP                5 (*)
+               BINARY_OP                0 (+)
+               LOAD_CONST              11 (1.0)
+               BINARY_OP                6 (%)
+               LOAD_FAST               15 (sat)
+               LOAD_FAST               16 (val)
+               CALL                     3
+               UNPACK_SEQUENCE          3
+               STORE_FAST              17 (r)
+               STORE_FAST              18 (g)
+               STORE_FAST              19 (b)
+
+  81           LOAD_FAST               10 (gdraw)
+               LOAD_ATTR               25 (ellipse + NULL|self)
+
+  82           LOAD_FAST_LOAD_FAST    194 (cx, w)
+               BINARY_OP                5 (*)
+               LOAD_FAST_LOAD_FAST    226 (rad, w)
+               BINARY_OP                5 (*)
+               BINARY_OP               10 (-)
+               LOAD_FAST_LOAD_FAST    211 (cy, h)
+               BINARY_OP                5 (*)
+               LOAD_FAST_LOAD_FAST    226 (rad, w)
+               BINARY_OP                5 (*)
+               BINARY_OP               10 (-)
+               LOAD_FAST_LOAD_FAST    194 (cx, w)
+               BINARY_OP                5 (*)
+               LOAD_FAST_LOAD_FAST    226 (rad, w)
+               BINARY_OP                5 (*)
+               BINARY_OP                0 (+)
+               LOAD_FAST_LOAD_FAST    211 (cy, h)
+               BINARY_OP                5 (*)
+               LOAD_FAST_LOAD_FAST    226 (rad, w)
+               BINARY_OP                5 (*)
+               BINARY_OP                0 (+)
+               BUILD_LIST               4
+
+  83           LOAD_GLOBAL             27 (int + NULL)
+               LOAD_FAST               17 (r)
+               LOAD_CONST              12 (255)
+               BINARY_OP                5 (*)
+               CALL                     1
+               LOAD_GLOBAL             27 (int + NULL)
+               LOAD_FAST               18 (g)
+               LOAD_CONST              12 (255)
+               BINARY_OP                5 (*)
+               CALL                     1
+               LOAD_GLOBAL             27 (int + NULL)
+               LOAD_FAST               19 (b)
+               LOAD_CONST              12 (255)
+               BINARY_OP                5 (*)
+               CALL                     1
+               BUILD_TUPLE              3
+
+  81           LOAD_CONST               6 (('fill',))
+               CALL_KW                  2
+               POP_TOP
+               JUMP_BACKWARD          135 (to L3)
+
+  76   L4:     END_FOR
+               POP_TOP
+
+  85           LOAD_FAST                9 (glow)
+               LOAD_ATTR               29 (filter + NULL|self)
+               LOAD_GLOBAL             30 (ImageFilter)
+               LOAD_ATTR               32 (GaussianBlur)
+               PUSH_NULL
+               LOAD_GLOBAL             27 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              13 (0.16)
+               BINARY_OP                5 (*)
+               CALL                     1
+               LOAD_CONST              14 (('radius',))
+               CALL_KW                  1
+               CALL                     1
+               STORE_FAST               9 (glow)
+
+  86           LOAD_GLOBAL              0 (Image)
+               LOAD_ATTR               34 (blend)
+               PUSH_NULL
+               LOAD_FAST                4 (base)
+               LOAD_GLOBAL              0 (Image)
+               LOAD_ATTR               34 (blend)
+               PUSH_NULL
+               LOAD_FAST_LOAD_FAST     73 (base, glow)
+               LOAD_CONST              15 (0.55)
+               CALL                     3
+               LOAD_CONST              16 (0.9)
+               CALL                     3
+               STORE_FAST               4 (base)
+
+  89           LOAD_GLOBAL              0 (Image)
+               LOAD_ATTR                2 (new)
+               PUSH_NULL
+               LOAD_CONST              17 ('L')
+               LOAD_FAST_LOAD_FAST     35 (w, h)
+               BUILD_TUPLE              2
+               LOAD_CONST               2 (0)
+               CALL                     3
+               STORE_FAST              20 (vign)
+
+  90           LOAD_GLOBAL              6 (ImageDraw)
+               LOAD_ATTR                8 (Draw)
+               PUSH_NULL
+               LOAD_FAST               20 (vign)
+               CALL                     1
+               LOAD_ATTR               25 (ellipse + NULL|self)
+
+  91           LOAD_FAST                2 (w)
+               UNARY_NEGATIVE
+               LOAD_CONST              18 (0.3)
+               BINARY_OP                5 (*)
+               LOAD_FAST                3 (h)
+               UNARY_NEGATIVE
+               LOAD_CONST              19 (0.14)
+               BINARY_OP                5 (*)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              20 (1.3)
+               BINARY_OP                5 (*)
+               LOAD_FAST                3 (h)
+               LOAD_CONST              21 (1.14)
+               BINARY_OP                5 (*)
+               BUILD_LIST               4
+               LOAD_CONST              12 (255)
+
+  90           LOAD_CONST               6 (('fill',))
+               CALL_KW                  2
+               POP_TOP
+
+  92           LOAD_FAST               20 (vign)
+               LOAD_ATTR               29 (filter + NULL|self)
+               LOAD_GLOBAL             30 (ImageFilter)
+               LOAD_ATTR               32 (GaussianBlur)
+               PUSH_NULL
+               LOAD_GLOBAL             27 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              22 (0.12)
+               BINARY_OP                5 (*)
+               CALL                     1
+               LOAD_CONST              14 (('radius',))
+               CALL_KW                  1
+               CALL                     1
+               STORE_FAST              20 (vign)
+
+  93           LOAD_GLOBAL              0 (Image)
+               LOAD_ATTR                2 (new)
+               PUSH_NULL
+               LOAD_CONST               1 ('RGB')
+               LOAD_FAST_LOAD_FAST     35 (w, h)
+               BUILD_TUPLE              2
+               LOAD_CONST              23 ((4, 8, 16))
+               CALL                     3
+               STORE_FAST              21 (dark)
+
+  94           LOAD_GLOBAL              0 (Image)
+               LOAD_ATTR               36 (composite)
+               PUSH_NULL
+               LOAD_FAST                4 (base)
+               LOAD_FAST               21 (dark)
+               LOAD_FAST               20 (vign)
+               CALL                     3
+               RETURN_VALUE
+
+Disassembly of <code object <genexpr> at 0x000001D515D20F30, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 69>:
+  --           COPY_FREE_VARS           1
+
+  69           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+               GET_ITER
+       L2:     FOR_ITER                46 (to L3)
+               STORE_FAST               1 (i)
+               LOAD_GLOBAL              1 (int + NULL)
+               LOAD_GLOBAL              2 (BG_TOP)
+               LOAD_FAST                1 (i)
+               BINARY_SUBSCR
+               LOAD_GLOBAL              4 (BG_BOT)
+               LOAD_FAST                1 (i)
+               BINARY_SUBSCR
+               LOAD_GLOBAL              2 (BG_TOP)
+               LOAD_FAST                1 (i)
+               BINARY_SUBSCR
+               BINARY_OP               10 (-)
+               LOAD_DEREF               2 (t)
+               BINARY_OP                5 (*)
+               BINARY_OP                0 (+)
+               CALL                     1
+               YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD           48 (to L2)
+       L3:     END_FOR
+               POP_TOP
+               RETURN_CONST             0 (None)
+
+  --   L4:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L4 -> L4 [0] lasti
+
+Disassembly of <code object _wrap at 0x000001D515D25430, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 97>:
+ 97           RESUME                   0
+
+ 99           BUILD_LIST               0
+              STORE_FAST               4 (lines)
+
+100           LOAD_FAST                1 (text)
+              LOAD_ATTR                1 (split + NULL|self)
+              LOAD_CONST               1 ('\n')
+              CALL                     1
+              GET_ITER
+      L1:     FOR_ITER               125 (to L7)
+              STORE_FAST               5 (para)
+
+101           LOAD_FAST                5 (para)
+              LOAD_ATTR                1 (split + NULL|self)
+              CALL                     0
+              LOAD_CONST               2 ('')
+              STORE_FAST_STORE_FAST  118 (line, words)
+
+102           LOAD_FAST                6 (words)
+              GET_ITER
+      L2:     FOR_ITER                73 (to L5)
+              STORE_FAST               8 (word)
+
+103           LOAD_FAST                7 (line)
+              FORMAT_SIMPLE
+              LOAD_CONST               3 (' ')
+              LOAD_FAST                8 (word)
+              FORMAT_SIMPLE
+              BUILD_STRING             3
+              LOAD_ATTR                3 (strip + NULL|self)
+              CALL                     0
+              STORE_FAST               9 (trial)
+
+104           LOAD_FAST                0 (draw)
+              LOAD_ATTR                5 (textlength + NULL|self)
+              LOAD_FAST_LOAD_FAST    146 (trial, font)
+              LOAD_CONST               4 (('font',))
+              CALL_KW                  2
+              LOAD_FAST                3 (max_w)
+              COMPARE_OP              58 (bool(<=))
+              POP_JUMP_IF_TRUE         7 (to L3)
+              LOAD_FAST                7 (line)
+              TO_BOOL
+              POP_JUMP_IF_TRUE         4 (to L4)
+
+105   L3:     LOAD_FAST                9 (trial)
+              STORE_FAST               7 (line)
+              JUMP_BACKWARD           54 (to L2)
+
+107   L4:     LOAD_FAST                4 (lines)
+              LOAD_ATTR                7 (append + NULL|self)
+              LOAD_FAST                7 (line)
+              CALL                     1
+              POP_TOP
+
+108           LOAD_FAST                8 (word)
+              STORE_FAST               7 (line)
+              JUMP_BACKWARD           75 (to L2)
+
+102   L5:     END_FOR
+              POP_TOP
+
+109           LOAD_FAST                7 (line)
+              TO_BOOL
+              POP_JUMP_IF_TRUE         2 (to L6)
+              JUMP_BACKWARD          108 (to L1)
+
+110   L6:     LOAD_FAST                4 (lines)
+              LOAD_ATTR                7 (append + NULL|self)
+              LOAD_FAST                7 (line)
+              CALL                     1
+              POP_TOP
+              JUMP_BACKWARD          127 (to L1)
+
+100   L7:     END_FOR
+              POP_TOP
+
+111           LOAD_FAST                4 (lines)
+              RETURN_VALUE
+
+Disassembly of <code object _fit at 0x000001D515CFD8A0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 114>:
+114           RESUME                   0
+
+117           LOAD_CONST               1 (None)
+              STORE_FAST               8 (best)
+
+118           LOAD_GLOBAL              1 (range + NULL)
+              LOAD_FAST_LOAD_FAST     86 (hi, lo)
+              LOAD_CONST               2 (1)
+              BINARY_OP               10 (-)
+              LOAD_CONST               3 (-2)
+              CALL                     3
+              GET_ITER
+      L1:     FOR_ITER                55 (to L3)
+              STORE_FAST               9 (size)
+
+119           LOAD_GLOBAL              3 (_font + NULL)
+              LOAD_FAST_LOAD_FAST     41 (path, size)
+              CALL                     2
+              STORE_FAST              10 (font)
+
+120           LOAD_GLOBAL              5 (_wrap + NULL)
+              LOAD_FAST_LOAD_FAST      1 (draw, text)
+              LOAD_FAST_LOAD_FAST    163 (font, max_w)
+              CALL                     4
+              STORE_FAST              11 (lines)
+
+121           LOAD_GLOBAL              7 (len + NULL)
+              LOAD_FAST               11 (lines)
+              CALL                     1
+              LOAD_FAST                9 (size)
+              BINARY_OP                5 (*)
+              LOAD_FAST                7 (leading)
+              BINARY_OP                5 (*)
+              LOAD_FAST                4 (max_h)
+              COMPARE_OP              58 (bool(<=))
+              POP_JUMP_IF_FALSE        5 (to L2)
+
+122           LOAD_FAST_LOAD_FAST    171 (font, lines)
+              BUILD_TUPLE              2
+              SWAP                     2
+              POP_TOP
+              RETURN_VALUE
+
+123   L2:     LOAD_FAST_LOAD_FAST    171 (font, lines)
+              BUILD_TUPLE              2
+              STORE_FAST               8 (best)
+              JUMP_BACKWARD           57 (to L1)
+
+118   L3:     END_FOR
+              POP_TOP
+
+124           LOAD_FAST                8 (best)
+              RETURN_VALUE
+
+Disassembly of <code object render_frame at 0x000001D515BE1490, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 127>:
+127            RESUME                   0
+
+128            LOAD_GLOBAL              0 (W)
+               LOAD_GLOBAL              2 (SS)
+               BINARY_OP                5 (*)
+               LOAD_GLOBAL              4 (H)
+               LOAD_GLOBAL              2 (SS)
+               BINARY_OP                5 (*)
+               STORE_FAST_STORE_FAST   50 (h, w)
+
+129            LOAD_GLOBAL              7 (_background + NULL)
+               LOAD_FAST_LOAD_FAST     35 (w, h)
+               BUILD_TUPLE              2
+               LOAD_FAST                0 (frame)
+               LOAD_ATTR                8 (kind)
+               FORMAT_SIMPLE
+               LOAD_CONST               1 (':')
+               LOAD_FAST                0 (frame)
+               LOAD_ATTR               10 (index)
+               FORMAT_SIMPLE
+               LOAD_CONST               1 (':')
+               LOAD_FAST                0 (frame)
+               LOAD_ATTR               12 (headline)
+               LOAD_CONST               0 (None)
+               LOAD_CONST               2 (40)
+               BINARY_SLICE
+               FORMAT_SIMPLE
+               BUILD_STRING             5
+               CALL                     2
+               STORE_FAST               4 (img)
+
+130            LOAD_GLOBAL             14 (ImageDraw)
+               LOAD_ATTR               16 (Draw)
+               PUSH_NULL
+               LOAD_FAST                4 (img)
+               CALL                     1
+               STORE_FAST               5 (draw)
+
+132            LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST               3 (0.085)
+               BINARY_OP                5 (*)
+               CALL                     1
+               STORE_FAST               6 (margin)
+
+133            LOAD_FAST_LOAD_FAST     38 (w, margin)
+               LOAD_CONST               4 (2)
+               BINARY_OP                5 (*)
+               BINARY_OP               10 (-)
+               STORE_FAST               7 (box_w)
+
+136            LOAD_GLOBAL             21 (_font + NULL)
+               LOAD_GLOBAL             22 (F_BOLD)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST               5 (0.03)
+               BINARY_OP                5 (*)
+               CALL                     1
+               CALL                     2
+               STORE_FAST               8 (wordmark)
+
+137            LOAD_CONST               6 (' ')
+               LOAD_ATTR               25 (join + NULL|self)
+               LOAD_GLOBAL             26 (CHANNEL)
+               CALL                     1
+               STORE_FAST               9 (spaced)
+
+138            LOAD_FAST                5 (draw)
+               LOAD_ATTR               29 (text + NULL|self)
+               LOAD_FAST                6 (margin)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                3 (h)
+               LOAD_CONST               7 (0.062)
+               BINARY_OP                5 (*)
+               CALL                     1
+               BUILD_TUPLE              2
+               LOAD_FAST_LOAD_FAST    152 (spaced, wordmark)
+               LOAD_GLOBAL             30 (ACCENT)
+               LOAD_CONST               8 (('font', 'fill'))
+               CALL_KW                  4
+               POP_TOP
+
+139            LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                3 (h)
+               LOAD_CONST               7 (0.062)
+               BINARY_OP                5 (*)
+               CALL                     1
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST               9 (0.05)
+               BINARY_OP                5 (*)
+               CALL                     1
+               BINARY_OP                0 (+)
+               STORE_FAST              10 (rule_y)
+
+140            LOAD_FAST                5 (draw)
+               LOAD_ATTR               33 (rectangle + NULL|self)
+               LOAD_FAST_LOAD_FAST    106 (margin, rule_y)
+               LOAD_FAST                6 (margin)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              10 (0.1)
+               BINARY_OP                5 (*)
+               CALL                     1
+               BINARY_OP                0 (+)
+               LOAD_FAST               10 (rule_y)
+               LOAD_GLOBAL             35 (max + NULL)
+               LOAD_CONST               4 (2)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              11 (0.005)
+               BINARY_OP                5 (*)
+               CALL                     1
+               CALL                     2
+               BINARY_OP                0 (+)
+               BUILD_LIST               4
+
+141            LOAD_GLOBAL             30 (ACCENT)
+
+140            LOAD_CONST              12 (('fill',))
+               CALL_KW                  2
+               POP_TOP
+
+143            LOAD_FAST                0 (frame)
+               LOAD_ATTR               36 (kicker)
+               TO_BOOL
+               POP_JUMP_IF_FALSE       74 (to L1)
+
+144            LOAD_GLOBAL             21 (_font + NULL)
+               LOAD_GLOBAL             22 (F_BOLD)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              13 (0.034)
+               BINARY_OP                5 (*)
+               CALL                     1
+               CALL                     2
+               STORE_FAST              11 (kf)
+
+145            LOAD_FAST                5 (draw)
+               LOAD_ATTR               29 (text + NULL|self)
+               LOAD_FAST                6 (margin)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                3 (h)
+               LOAD_CONST              14 (0.108)
+               BINARY_OP                5 (*)
+               CALL                     1
+               BUILD_TUPLE              2
+               LOAD_FAST                0 (frame)
+               LOAD_ATTR               36 (kicker)
+               LOAD_FAST               11 (kf)
+               LOAD_GLOBAL             38 (MUTED)
+               LOAD_CONST               8 (('font', 'fill'))
+               CALL_KW                  4
+               POP_TOP
+
+148    L1:     LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                3 (h)
+               LOAD_CONST              15 (0.175)
+               BINARY_OP                5 (*)
+               CALL                     1
+               STORE_FAST              12 (top)
+
+149            LOAD_FAST                0 (frame)
+               LOAD_ATTR                8 (kind)
+               LOAD_CONST              16 ('story')
+               COMPARE_OP              88 (bool(==))
+               EXTENDED_ARG             1
+               POP_JUMP_IF_FALSE      300 (to L2)
+
+150            LOAD_GLOBAL             21 (_font + NULL)
+               LOAD_GLOBAL             40 (F_BLACK)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST               7 (0.062)
+               BINARY_OP                5 (*)
+               CALL                     1
+               CALL                     2
+               STORE_FAST              13 (chip_f)
+
+151            LOAD_GLOBAL             43 (str + NULL)
+               LOAD_FAST                0 (frame)
+               LOAD_ATTR               10 (index)
+               CALL                     1
+               STORE_FAST              14 (label)
+
+152            LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              17 (0.028)
+               BINARY_OP                5 (*)
+               CALL                     1
+               STORE_FAST              15 (pad)
+
+153            LOAD_FAST                5 (draw)
+               LOAD_ATTR               45 (textlength + NULL|self)
+               LOAD_FAST_LOAD_FAST    237 (label, chip_f)
+               LOAD_CONST              18 (('font',))
+               CALL_KW                  2
+               STORE_FAST              16 (tw)
+
+154            LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              19 (0.105)
+               BINARY_OP                5 (*)
+               CALL                     1
+               STORE_FAST              17 (chip_h)
+
+155            LOAD_FAST                5 (draw)
+               LOAD_ATTR               47 (rounded_rectangle + NULL|self)
+
+156            LOAD_FAST_LOAD_FAST    108 (margin, top)
+               LOAD_FAST                6 (margin)
+               LOAD_FAST               16 (tw)
+               BINARY_OP                0 (+)
+               LOAD_FAST               15 (pad)
+               LOAD_CONST               4 (2)
+               BINARY_OP                5 (*)
+               BINARY_OP                0 (+)
+               LOAD_FAST               12 (top)
+               LOAD_FAST               17 (chip_h)
+               BINARY_OP                0 (+)
+               BUILD_LIST               4
+
+157            LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              20 (0.018)
+               BINARY_OP                5 (*)
+               CALL                     1
+               LOAD_GLOBAL             30 (ACCENT)
+
+155            LOAD_CONST              21 (('radius', 'fill'))
+               CALL_KW                  3
+               POP_TOP
+
+158            LOAD_FAST                5 (draw)
+               LOAD_ATTR               29 (text + NULL|self)
+               LOAD_FAST_LOAD_FAST    111 (margin, pad)
+               BINARY_OP                0 (+)
+               LOAD_FAST               12 (top)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST               17 (chip_h)
+               LOAD_CONST              22 (0.18)
+               BINARY_OP                5 (*)
+               CALL                     1
+               BINARY_OP                0 (+)
+               BUILD_TUPLE              2
+               LOAD_FAST_LOAD_FAST    237 (label, chip_f)
+
+159            LOAD_CONST              23 ((12, 18, 30))
+
+158            LOAD_CONST               8 (('font', 'fill'))
+               CALL_KW                  4
+               POP_TOP
+
+160            LOAD_GLOBAL             21 (_font + NULL)
+               LOAD_GLOBAL             22 (F_BOLD)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST               5 (0.03)
+               BINARY_OP                5 (*)
+               CALL                     1
+               CALL                     2
+               STORE_FAST              18 (of)
+
+161            LOAD_FAST                5 (draw)
+               LOAD_ATTR               29 (text + NULL|self)
+               LOAD_FAST                6 (margin)
+               LOAD_FAST               16 (tw)
+               BINARY_OP                0 (+)
+               LOAD_FAST               15 (pad)
+               LOAD_CONST               4 (2)
+               BINARY_OP                5 (*)
+               BINARY_OP                0 (+)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              24 (0.026)
+               BINARY_OP                5 (*)
+               CALL                     1
+               BINARY_OP                0 (+)
+               LOAD_FAST               12 (top)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST               17 (chip_h)
+               LOAD_CONST              25 (0.34)
+               BINARY_OP                5 (*)
+               CALL                     1
+               BINARY_OP                0 (+)
+               BUILD_TUPLE              2
+
+162            LOAD_CONST              26 ('OF ')
+               LOAD_FAST                0 (frame)
+               LOAD_ATTR               48 (total)
+               FORMAT_SIMPLE
+               BUILD_STRING             2
+               LOAD_FAST               18 (of)
+               LOAD_GLOBAL             38 (MUTED)
+
+161            LOAD_CONST               8 (('font', 'fill'))
+               CALL_KW                  4
+               POP_TOP
+
+163            LOAD_FAST               12 (top)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST               17 (chip_h)
+               LOAD_FAST                3 (h)
+               LOAD_CONST               5 (0.03)
+               BINARY_OP                5 (*)
+               BINARY_OP                0 (+)
+               CALL                     1
+               BINARY_OP               13 (+=)
+               STORE_FAST              12 (top)
+
+168    L2:     LOAD_FAST               12 (top)
+               STORE_FAST              19 (region_top)
+
+169            LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                3 (h)
+               LOAD_CONST              27 (0.815)
+               BINARY_OP                5 (*)
+               CALL                     1
+               STORE_FAST              20 (region_bot)
+
+170            LOAD_FAST               20 (region_bot)
+               LOAD_FAST               19 (region_top)
+               BINARY_OP               10 (-)
+               STORE_FAST              21 (head_max_h)
+
+171            LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST_LOAD_FAST     32 (w, frame)
+               LOAD_ATTR                8 (kind)
+               LOAD_CONST              16 ('story')
+               COMPARE_OP              88 (bool(==))
+               POP_JUMP_IF_FALSE        2 (to L3)
+               LOAD_CONST              28 (0.088)
+               JUMP_FORWARD             1 (to L4)
+       L3:     LOAD_CONST              19 (0.105)
+       L4:     BINARY_OP                5 (*)
+               CALL                     1
+               STORE_FAST              22 (hi)
+
+172            LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              29 (0.044)
+               BINARY_OP                5 (*)
+               CALL                     1
+               STORE_FAST              23 (lo)
+
+173            LOAD_GLOBAL             51 (_fit + NULL)
+               LOAD_FAST_LOAD_FAST     80 (draw, frame)
+               LOAD_ATTR               12 (headline)
+               LOAD_GLOBAL             40 (F_BLACK)
+               LOAD_FAST                7 (box_w)
+               LOAD_FAST               21 (head_max_h)
+               LOAD_FAST               22 (hi)
+               LOAD_FAST               23 (lo)
+               CALL                     7
+               UNPACK_SEQUENCE          2
+               STORE_FAST              24 (font)
+               STORE_FAST              25 (lines)
+
+174            LOAD_FAST               24 (font)
+               LOAD_ATTR               52 (size)
+               LOAD_CONST              30 (1.14)
+               BINARY_OP                5 (*)
+               STORE_FAST              26 (leading)
+
+175            LOAD_GLOBAL             55 (len + NULL)
+               LOAD_FAST               25 (lines)
+               CALL                     1
+               LOAD_FAST               26 (leading)
+               BINARY_OP                5 (*)
+               STORE_FAST              27 (block_h)
+
+176            LOAD_FAST               19 (region_top)
+               LOAD_GLOBAL             35 (max + NULL)
+               LOAD_CONST              31 (0)
+               LOAD_FAST               21 (head_max_h)
+               LOAD_FAST               27 (block_h)
+               BINARY_OP               10 (-)
+               LOAD_CONST               4 (2)
+               BINARY_OP               11 (/)
+               CALL                     2
+               BINARY_OP                0 (+)
+               STORE_FAST              28 (y)
+
+177            LOAD_FAST               25 (lines)
+               GET_ITER
+       L5:     FOR_ITER                32 (to L6)
+               STORE_FAST              29 (line)
+
+178            LOAD_FAST                5 (draw)
+               LOAD_ATTR               29 (text + NULL|self)
+               LOAD_FAST                6 (margin)
+               LOAD_FAST               28 (y)
+               BUILD_TUPLE              2
+               LOAD_FAST               29 (line)
+               LOAD_FAST               24 (font)
+               LOAD_GLOBAL             56 (INK)
+               LOAD_CONST               8 (('font', 'fill'))
+               CALL_KW                  4
+               POP_TOP
+
+179            LOAD_FAST               28 (y)
+               LOAD_FAST               26 (leading)
+               BINARY_OP               13 (+=)
+               STORE_FAST              28 (y)
+               JUMP_BACKWARD           34 (to L5)
+
+177    L6:     END_FOR
+               POP_TOP
+
+182            LOAD_FAST                0 (frame)
+               LOAD_ATTR               58 (footer)
+               TO_BOOL
+               POP_JUMP_IF_FALSE      224 (to L9)
+
+183            LOAD_GLOBAL             21 (_font + NULL)
+               LOAD_GLOBAL             22 (F_BOLD)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              17 (0.028)
+               BINARY_OP                5 (*)
+               CALL                     1
+               CALL                     2
+               STORE_FAST              30 (ff)
+
+184            LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                3 (h)
+               LOAD_CONST              32 (0.905)
+               BINARY_OP                5 (*)
+               CALL                     1
+               STORE_FAST              31 (fy)
+
+185            LOAD_FAST                5 (draw)
+               LOAD_ATTR               33 (rectangle + NULL|self)
+               LOAD_FAST                6 (margin)
+               LOAD_FAST               31 (fy)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              33 (0.016)
+               BINARY_OP                5 (*)
+               CALL                     1
+               BINARY_OP               10 (-)
+               LOAD_FAST                6 (margin)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              34 (0.055)
+               BINARY_OP                5 (*)
+               CALL                     1
+               BINARY_OP                0 (+)
+
+186            LOAD_FAST               31 (fy)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              33 (0.016)
+               BINARY_OP                5 (*)
+               CALL                     1
+               BINARY_OP               10 (-)
+               LOAD_GLOBAL             35 (max + NULL)
+               LOAD_CONST               4 (2)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              35 (0.004)
+               BINARY_OP                5 (*)
+               CALL                     1
+               CALL                     2
+               BINARY_OP                0 (+)
+
+185            BUILD_LIST               4
+
+186            LOAD_GLOBAL             30 (ACCENT)
+
+185            LOAD_CONST              12 (('fill',))
+               CALL_KW                  2
+               POP_TOP
+
+187            LOAD_GLOBAL             61 (enumerate + NULL)
+               LOAD_GLOBAL             63 (_wrap + NULL)
+               LOAD_FAST_LOAD_FAST     80 (draw, frame)
+               LOAD_ATTR               58 (footer)
+               LOAD_FAST               30 (ff)
+               LOAD_FAST                7 (box_w)
+               CALL                     4
+               LOAD_CONST               0 (None)
+               LOAD_CONST               4 (2)
+               BINARY_SLICE
+               CALL                     1
+               GET_ITER
+       L7:     FOR_ITER                49 (to L8)
+               UNPACK_SEQUENCE          2
+               STORE_FAST              32 (i)
+               STORE_FAST              29 (line)
+
+188            LOAD_FAST                5 (draw)
+               LOAD_ATTR               29 (text + NULL|self)
+               LOAD_FAST                6 (margin)
+               LOAD_FAST               31 (fy)
+               LOAD_FAST               32 (i)
+               LOAD_FAST               30 (ff)
+               LOAD_ATTR               52 (size)
+               BINARY_OP                5 (*)
+               LOAD_CONST              36 (1.25)
+               BINARY_OP                5 (*)
+               BINARY_OP                0 (+)
+               BUILD_TUPLE              2
+               LOAD_FAST               29 (line)
+               LOAD_FAST               30 (ff)
+               LOAD_GLOBAL             38 (MUTED)
+               LOAD_CONST               8 (('font', 'fill'))
+               CALL_KW                  4
+               POP_TOP
+               JUMP_BACKWARD           51 (to L7)
+
+187    L8:     END_FOR
+               POP_TOP
+
+191    L9:     LOAD_FAST                0 (frame)
+               LOAD_ATTR                8 (kind)
+               LOAD_CONST              16 ('story')
+               COMPARE_OP              88 (bool(==))
+               POP_JUMP_IF_FALSE      176 (to L14)
+               LOAD_FAST                0 (frame)
+               LOAD_ATTR               48 (total)
+               TO_BOOL
+               POP_JUMP_IF_FALSE      159 (to L14)
+
+192            LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              37 (0.052)
+               BINARY_OP                5 (*)
+               CALL                     1
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              38 (0.014)
+               BINARY_OP                5 (*)
+               CALL                     1
+               STORE_FAST              34 (gap)
+               STORE_FAST              33 (pw)
+
+193            LOAD_FAST                6 (margin)
+               STORE_FAST              35 (px)
+
+194            LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                3 (h)
+               LOAD_CONST              39 (0.845)
+               BINARY_OP                5 (*)
+               CALL                     1
+               STORE_FAST              36 (py)
+
+195            LOAD_GLOBAL             65 (range + NULL)
+               LOAD_FAST                0 (frame)
+               LOAD_ATTR               48 (total)
+               CALL                     1
+               GET_ITER
+      L10:     FOR_ITER                90 (to L13)
+               STORE_FAST              32 (i)
+
+196            LOAD_FAST               32 (i)
+               LOAD_FAST                0 (frame)
+               LOAD_ATTR               10 (index)
+               COMPARE_OP               2 (<)
+               STORE_FAST              37 (on)
+
+197            LOAD_FAST                5 (draw)
+               LOAD_ATTR               47 (rounded_rectangle + NULL|self)
+               LOAD_FAST               35 (px)
+               LOAD_FAST               36 (py)
+               LOAD_FAST               35 (px)
+               LOAD_FAST               33 (pw)
+               BINARY_OP                0 (+)
+               LOAD_FAST               36 (py)
+               LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              40 (0.008)
+               BINARY_OP                5 (*)
+               CALL                     1
+               BINARY_OP                0 (+)
+               BUILD_LIST               4
+
+198            LOAD_GLOBAL             19 (int + NULL)
+               LOAD_FAST                2 (w)
+               LOAD_CONST              35 (0.004)
+               BINARY_OP                5 (*)
+               CALL                     1
+
+199            LOAD_FAST               37 (on)
+               TO_BOOL
+               POP_JUMP_IF_FALSE        6 (to L11)
+               LOAD_GLOBAL             30 (ACCENT)
+               JUMP_FORWARD             1 (to L12)
+      L11:     LOAD_CONST              41 ((58, 74, 100))
+
+197   L12:     LOAD_CONST              21 (('radius', 'fill'))
+               CALL_KW                  3
+               POP_TOP
+
+200            LOAD_FAST               35 (px)
+               LOAD_FAST               33 (pw)
+               LOAD_FAST               34 (gap)
+               BINARY_OP                0 (+)
+               BINARY_OP               13 (+=)
+               STORE_FAST              35 (px)
+               JUMP_BACKWARD           92 (to L10)
+
+195   L13:     END_FOR
+               POP_TOP
+
+202   L14:     LOAD_FAST                1 (out)
+               LOAD_ATTR               66 (parent)
+               LOAD_ATTR               69 (mkdir + NULL|self)
+               LOAD_CONST              42 (True)
+               LOAD_CONST              42 (True)
+               LOAD_CONST              43 (('parents', 'exist_ok'))
+               CALL_KW                  2
+               POP_TOP
+
+203            LOAD_FAST                4 (img)
+               LOAD_ATTR               71 (resize + NULL|self)
+               LOAD_GLOBAL              0 (W)
+               LOAD_GLOBAL              4 (H)
+               BUILD_TUPLE              2
+               LOAD_GLOBAL             72 (Image)
+               LOAD_ATTR               74 (LANCZOS)
+               CALL                     2
+               LOAD_ATTR               77 (save + NULL|self)
+               LOAD_FAST                1 (out)
+               LOAD_CONST              44 ('PNG')
+               LOAD_CONST              42 (True)
+               LOAD_CONST              45 (('optimize',))
+               CALL_KW                  3
+               POP_TOP
+
+204            LOAD_FAST                1 (out)
+               RETURN_VALUE
+
+Disassembly of <code object render_thumbnail at 0x000001D515BE2090, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\design.py", line 207>:
+207           RESUME                   0
+
+209           LOAD_CONST               1 ((2560, 1440))
+              UNPACK_SEQUENCE          2
+              STORE_FAST_STORE_FAST   52 (tw, th)
+
+210           LOAD_GLOBAL              1 (_background + NULL)
+              LOAD_FAST_LOAD_FAST     52 (tw, th)
+              BUILD_TUPLE              2
+              LOAD_CONST               2 ('thumb:')
+              LOAD_FAST                0 (headline)
+              LOAD_CONST               3 (None)
+              LOAD_CONST               4 (40)
+              BINARY_SLICE
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     2
+              STORE_FAST               5 (img)
+
+211           LOAD_GLOBAL              2 (ImageDraw)
+              LOAD_ATTR                4 (Draw)
+              PUSH_NULL
+              LOAD_FAST                5 (img)
+              CALL                     1
+              STORE_FAST               6 (draw)
+
+212           LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                3 (tw)
+              LOAD_CONST               5 (0.062)
+              BINARY_OP                5 (*)
+              CALL                     1
+              STORE_FAST               7 (margin)
+
+213           LOAD_FAST_LOAD_FAST     55 (tw, margin)
+              LOAD_CONST               6 (2)
+              BINARY_OP                5 (*)
+              BINARY_OP               10 (-)
+              STORE_FAST               8 (box_w)
+
+215           LOAD_GLOBAL              9 (_font + NULL)
+              LOAD_GLOBAL             10 (F_BOLD)
+              LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                3 (tw)
+              LOAD_CONST               7 (0.024)
+              BINARY_OP                5 (*)
+              CALL                     1
+              CALL                     2
+              STORE_FAST               9 (wm)
+
+216           LOAD_FAST                6 (draw)
+              LOAD_ATTR               13 (text + NULL|self)
+              LOAD_FAST                7 (margin)
+              LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                4 (th)
+              LOAD_CONST               8 (0.085)
+              BINARY_OP                5 (*)
+              CALL                     1
+              BUILD_TUPLE              2
+              LOAD_CONST               9 (' ')
+              LOAD_ATTR               15 (join + NULL|self)
+              LOAD_GLOBAL             16 (CHANNEL)
+              CALL                     1
+              LOAD_FAST                9 (wm)
+              LOAD_GLOBAL             18 (ACCENT)
+              LOAD_CONST              10 (('font', 'fill'))
+              CALL_KW                  4
+              POP_TOP
+
+217           LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                4 (th)
+              LOAD_CONST               8 (0.085)
+              BINARY_OP                5 (*)
+              CALL                     1
+              LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                3 (tw)
+              LOAD_CONST              11 (0.04)
+              BINARY_OP                5 (*)
+              CALL                     1
+              BINARY_OP                0 (+)
+              STORE_FAST              10 (ry)
+
+218           LOAD_FAST                6 (draw)
+              LOAD_ATTR               21 (rectangle + NULL|self)
+              LOAD_FAST_LOAD_FAST    122 (margin, ry)
+              LOAD_FAST                7 (margin)
+              LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                3 (tw)
+              LOAD_CONST              12 (0.075)
+              BINARY_OP                5 (*)
+              CALL                     1
+              BINARY_OP                0 (+)
+              LOAD_FAST               10 (ry)
+              LOAD_GLOBAL             23 (max + NULL)
+              LOAD_CONST               6 (2)
+              LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                3 (tw)
+              LOAD_CONST              13 (0.004)
+              BINARY_OP                5 (*)
+              CALL                     1
+              CALL                     2
+              BINARY_OP                0 (+)
+              BUILD_LIST               4
+
+219           LOAD_GLOBAL             18 (ACCENT)
+
+218           LOAD_CONST              14 (('fill',))
+              CALL_KW                  2
+              POP_TOP
+
+223           LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                4 (th)
+              LOAD_CONST              15 (0.195)
+              BINARY_OP                5 (*)
+              CALL                     1
+              LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                4 (th)
+              LOAD_CONST              16 (0.815)
+              BINARY_OP                5 (*)
+              CALL                     1
+              STORE_FAST_STORE_FAST  203 (region_bot, region_top)
+
+224           LOAD_GLOBAL             25 (_fit + NULL)
+              LOAD_FAST_LOAD_FAST     96 (draw, headline)
+              LOAD_GLOBAL             26 (F_BLACK)
+              LOAD_FAST_LOAD_FAST    140 (box_w, region_bot)
+              LOAD_FAST               11 (region_top)
+              BINARY_OP               10 (-)
+
+225           LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                3 (tw)
+              LOAD_CONST              17 (0.088)
+              BINARY_OP                5 (*)
+              CALL                     1
+              LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                3 (tw)
+              LOAD_CONST              18 (0.05)
+              BINARY_OP                5 (*)
+              CALL                     1
+
+224           CALL                     7
+              UNPACK_SEQUENCE          2
+              STORE_FAST_STORE_FAST  222 (font, lines)
+
+226           LOAD_FAST               14 (lines)
+              LOAD_CONST               3 (None)
+              LOAD_CONST              19 (4)
+              BINARY_SLICE
+              STORE_FAST              14 (lines)
+
+227           LOAD_FAST               11 (region_top)
+              LOAD_GLOBAL             23 (max + NULL)
+              LOAD_CONST              20 (0)
+              LOAD_FAST_LOAD_FAST    203 (region_bot, region_top)
+              BINARY_OP               10 (-)
+              LOAD_GLOBAL             29 (len + NULL)
+              LOAD_FAST               14 (lines)
+              CALL                     1
+              LOAD_FAST               13 (font)
+              LOAD_ATTR               30 (size)
+              BINARY_OP                5 (*)
+              LOAD_CONST              21 (1.12)
+              BINARY_OP                5 (*)
+              BINARY_OP               10 (-)
+              LOAD_CONST               6 (2)
+              BINARY_OP               11 (/)
+              CALL                     2
+              BINARY_OP                0 (+)
+              STORE_FAST              15 (y)
+
+228           LOAD_FAST               14 (lines)
+              GET_ITER
+      L1:     FOR_ITER                43 (to L2)
+              STORE_FAST              16 (line)
+
+229           LOAD_FAST                6 (draw)
+              LOAD_ATTR               13 (text + NULL|self)
+              LOAD_FAST_LOAD_FAST    127 (margin, y)
+              BUILD_TUPLE              2
+              LOAD_FAST               16 (line)
+              LOAD_FAST               13 (font)
+              LOAD_GLOBAL             32 (INK)
+              LOAD_CONST              10 (('font', 'fill'))
+              CALL_KW                  4
+              POP_TOP
+
+230           LOAD_FAST_LOAD_FAST    253 (y, font)
+              LOAD_ATTR               30 (size)
+              LOAD_CONST              21 (1.12)
+              BINARY_OP                5 (*)
+              BINARY_OP               13 (+=)
+              STORE_FAST              15 (y)
+              JUMP_BACKWARD           45 (to L1)
+
+228   L2:     END_FOR
+              POP_TOP
+
+232           LOAD_GLOBAL              9 (_font + NULL)
+              LOAD_GLOBAL             10 (F_BOLD)
+              LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                3 (tw)
+              LOAD_CONST              22 (0.03)
+              BINARY_OP                5 (*)
+              CALL                     1
+              CALL                     2
+              STORE_FAST              17 (df)
+
+233           LOAD_FAST                6 (draw)
+              LOAD_ATTR               13 (text + NULL|self)
+              LOAD_FAST                7 (margin)
+              LOAD_GLOBAL              7 (int + NULL)
+              LOAD_FAST                4 (th)
+              LOAD_CONST              23 (0.865)
+              BINARY_OP                5 (*)
+              CALL                     1
+              BUILD_TUPLE              2
+              LOAD_FAST                1 (date_label)
+              LOAD_ATTR               35 (upper + NULL|self)
+              CALL                     0
+              LOAD_FAST               17 (df)
+              LOAD_GLOBAL             36 (MUTED)
+              LOAD_CONST              10 (('font', 'fill'))
+              CALL_KW                  4
+              POP_TOP
+
+235           LOAD_FAST                2 (out)
+              LOAD_ATTR               38 (parent)
+              LOAD_ATTR               41 (mkdir + NULL|self)
+              LOAD_CONST              24 (True)
+              LOAD_CONST              24 (True)
+              LOAD_CONST              25 (('parents', 'exist_ok'))
+              CALL_KW                  2
+              POP_TOP
+
+236           LOAD_FAST                5 (img)
+              LOAD_ATTR               43 (resize + NULL|self)
+              LOAD_CONST              26 ((1280, 720))
+              LOAD_GLOBAL             44 (Image)
+              LOAD_ATTR               46 (LANCZOS)
+              CALL                     2
+              LOAD_ATTR               49 (save + NULL|self)
+              LOAD_FAST                2 (out)
+              LOAD_CONST              27 ('PNG')
+              LOAD_CONST              24 (True)
+              LOAD_CONST              28 (('optimize',))
+              CALL_KW                  3
+              POP_TOP
+
+237           LOAD_FAST                2 (out)
+              RETURN_VALUE

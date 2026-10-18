@@ -5,7 +5,7 @@
 > longer exists: a T5500 business node, Sabretooth as a DREAM-only node, an
 > Agent Hub, an OmniRouter on :11436, and FCC agents on :8082. None of that is
 > true now. Sabretooth is the only node, `C:\ANTIGRAVITY` is the sole working
-> tree, Mission Control is Paperclip at `http://127.0.0.1:3100`, and **FCC is
+> tree, Mission Control is Paperclip at `http://127.0.0.1:3917`, and **FCC is
 > permanently banned** (`agent-contracts/FCC-STATUS.md`). Any `fcc-claude`
 > provider entry in the table below is a dead record, not a configured agent.
 > For real current state read `AGENTS.md`, `CLAUDE.md`, and

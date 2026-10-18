@@ -6,6 +6,21 @@
         "C:\\ANTIGRAVITY\\ops\\mcp\\gemini-node-mcp\\index.js"
       ],
       "env": {}
+    },
+    "omniroute": {
+      "type": "http",
+      "url": "http://192.168.0.15:20128/api/mcp/stream",
+      "headers": {
+        "Authorization": "Bearer ${OMNIROUTE_API_KEY}"
+      }
+    },
+    "omniroute-cli": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "omniroute",
+        "mcp"
+      ]
     }
   }
 }

@@ -1,4 +1,4 @@
-# push-cert.ps1 — runs on T5500 to receive the cert.pem from Sabretooth via base64 stdin
+# push-cert.ps1 — runs on T5500 to receive the cert.pem from T5500 via base64 stdin
 $ErrorActionPreference = 'Stop'
 
 # Read base64 from stdin

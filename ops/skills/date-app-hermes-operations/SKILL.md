@@ -7,13 +7,13 @@ license: MIT
 platforms: [linux, macos, windows]
 metadata:
   hermes:
-    tags: [date-app, youandinotai, marketing, autonomy, sabretooth, always-on]
+    tags: [date-app, youandinotai, marketing, autonomy, t5500, always-on]
     related_skills: [youtube-automation, agent-workflow, agent-reach, find-skills]
 ---
 
 # Date App Hermes Operations (always-on)
 
-Load this skill at session start, after compaction, and whenever context is lost. This is the standing operating picture for Hermes on Sabretooth.
+Load this skill at session start, after compaction, and whenever context is lost. This is the standing operating picture for Hermes on T5500.
 
 ## Authority
 
@@ -28,12 +28,12 @@ Do **not** edit `FABLES-HOUSE.ps1`, Claude MCP config, `drift.cmd`, `ops/runbook
 Fable/Claude communication file (save replies here, they persist after close):
 `C:\Users\joshi\Desktop\HERMES-PROMPTS.txt`
 
-## Ports ( Sabretooth )
+## Ports ( T5500 )
 
 | Port | What | How it stays up |
 |------|------|-----------------|
 | `:3200` | Date app production frontend (`domains/youandinotai.com/frontend`, moved from `frontend/react-app` by the repo consolidation, 2026-09-17). Body must contain `assets/index-<hash>.js`, never `/@vite/client`. | Fable's House (`scripts/fables-house/tab-dateapp.cmd`) |
-| `:3210` | Emergent CRACO dashboard — **retired 2026-09-17**; its views live as JARVIS panels at `http://192.168.0.8:9150/`. `C:\ANTIGRAVITY\frontend\launch-emergent-dashboard.cmd` is now a 3-line stub the Health Monitor still calls every 15 minutes; it prints the JARVIS pointer and exits 0. Nothing should be listening on :3210 anymore. |
+| `:3210` | Emergent CRACO dashboard — **retired 2026-09-17**; its views live as JARVIS panels at `http://192.168.0.15:9150/`. `C:\ANTIGRAVITY\frontend\launch-emergent-dashboard.cmd` is now a 3-line stub the Health Monitor still calls every 15 minutes; it prints the JARVIS pointer and exits 0. Nothing should be listening on :3210 anymore. |
 | `:8000` | FastAPI date-app API | Health Monitor restarts uvicorn if down |
 | `:6379` | Redis | Health Monitor |
 
@@ -90,6 +90,6 @@ Campaign copy lives in `ops/marketing-inbox/FULL_CAMPAIGN_PACKAGE.md`. OpenCLI C
 >
 > **FROZEN 2026-09-16 (history):** the date app was listed for sale (`ops/sale/YOUANDINOTAI-SALE-LISTING.md`). Keep it up, touch nothing else. Growth, digests, campaigns, audits: off. Ruling in CLAUDE.md.
 >
-> **MARKETING LANE MOVED 2026-09-28 (Joshua):** date-app marketing is no longer Hermes's. It went to the Emergent lane (`.agents/journals/emergent/STATE.md`) because no buyer wrote in the week after the unfreeze and Joshua prefers the app sold. Hermes files no more `youandinotai` proposals; the paragraph below is kept as the rule set Emergent inherits (four checks, Fable voice, Fable-lane approval, two per brand per day, never a direct post). Hermes keeps two jobs on Sabretooth: YouTube automation, and the **screenshot health cron** — every 30 minutes run `node C:\ANTIGRAVITY\mission-control\scripts\screenshot-health.mjs`, which opens JARVIS, the domains server, every public domain and the dashboard Access gate in headless Chromium, keeps a PNG per target under `C:\ANTIGRAVITY\evidence\health-shots\<date>\`, and writes `ops/heartbeat/screenshot-health.json` for JARVIS `/api/screenshot-health`. A 200 is not a working page; the frame and the identity string on it are. Register the job with `hermes.exe cron add` (name `Screenshot Health`, `*/30 * * * *`), write its id in the Crons table below and in your journal, and never heal from it — the House heals. If `playwright` is not installed for Node (`npm i -g playwright` and `NODE_PATH` to the global root), the script writes NOT CONFIGURED and exits 0; report that, do not fake a green.
+> **MARKETING LANE MOVED 2026-09-28 (Joshua):** date-app marketing is no longer Hermes's. It went to the Emergent lane (`.agents/journals/emergent/STATE.md`) because no buyer wrote in the week after the unfreeze and Joshua prefers the app sold. Hermes files no more `youandinotai` proposals; the paragraph below is kept as the rule set Emergent inherits (four checks, Fable voice, Fable-lane approval, two per brand per day, never a direct post). Hermes keeps two jobs on T5500: YouTube automation, and the **screenshot health cron** — every 30 minutes run `node C:\ANTIGRAVITY\mission-control\scripts\screenshot-health.mjs`, which opens JARVIS, the domains server, every public domain and the dashboard Access gate in headless Chromium, keeps a PNG per target under `C:\ANTIGRAVITY\evidence\health-shots\<date>\`, and writes `ops/heartbeat/screenshot-health.json` for JARVIS `/api/screenshot-health`. A 200 is not a working page; the frame and the identity string on it are. Register the job with `hermes.exe cron add` (name `Screenshot Health`, `*/30 * * * *`), write its id in the Crons table below and in your journal, and never heal from it — the House heals. If `playwright` is not installed for Node (`npm i -g playwright` and `NODE_PATH` to the global root), the script writes NOT CONFIGURED and exits 0; report that, do not fake a green.
 >
 > **MARKETING UNFROZEN 2026-09-19 (now Emergent's rule set, see above):** the app may be marketed while listed. Hermes may draft proposals into the JARVIS inbox via `POST /api/social/proposals` (brand `youandinotai`) — it never posts directly. Every proposal still needs compliance, copy-score, 18-and-over, and business-only checks to pass, is drafted in the Fable voice (`POST /api/social/draft`), and is approved by the Fable judge lane on Joshua's delegation of 2026-09-19 — never by Hermes, which holds no approval token. Two approvals per brand per day, so file at most two per day at 10:00 and 17:00 Eastern. The working brief is `PROMPT-FOR-HERMES-MARKETING-2026-09-20.md` in the drop box. Features, checkout, and the listing are unchanged, and the growth crons stay paused because the inbox is the publishing path.

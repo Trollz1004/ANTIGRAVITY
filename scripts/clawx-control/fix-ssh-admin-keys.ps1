@@ -7,8 +7,8 @@
     ~/.ssh/authorized_keys and only reads C:\ProgramData\ssh\administrators_authorized_keys.
     This script creates/updates that file with the correct keys and permissions.
 .NOTES
-    Run this ON EACH REMOTE NODE (T5500, 9020) as Administrator.
-    Do NOT run this on SABRETOOTH (the SSH client).
+    Run this ON EACH REMOTE NODE (T5500, T5500) as Administrator.
+    Do NOT run this on T5500 (the SSH client).
 #>
 
 $ErrorActionPreference = 'Stop'
@@ -18,7 +18,7 @@ $sshDir  = "C:\ProgramData\ssh"
 
 # Keys to authorize
 $keys = @(
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAA0qiTYQ/l+LXub9RviriX00NwQGVsqO4HV42FSo1UB KRAKKEN@SABRETOOTH"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAA0qiTYQ/l+LXub9RviriX00NwQGVsqO4HV42FSo1UB KRAKKEN@T5500"
 )
 
 # Also pull in any keys from joshl's personal authorized_keys (e.g. opus keys)
@@ -83,5 +83,5 @@ Write-Host "[+] sshd restarted"
 
 Write-Host ""
 Write-Host "=== DONE ==="
-Write-Host "Test from SABRETOOTH with:"
+Write-Host "Test from T5500 with:"
 Write-Host "  ssh -i ~/.ssh/krakken_ed25519 joshl@<this-machine-ip>"

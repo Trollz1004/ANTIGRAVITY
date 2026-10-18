@@ -1,8 +1,8 @@
 # setup-vault-and-baseline.ps1
-# Purpose: Purge OneDrive Personal Vault-Sabretooth of redundant env files, mirror the
-# master env to T5500 and 9020, and generate a baseline manifest of files Claude places
-# on Sabretooth (drift detection). Josh runs this on each node.
-# Generated: 2026-06-01 by Claude (Opus) per Josh's "1 master env" + "Sabretooth = only Claude-placed files" rule.
+# Purpose: Purge OneDrive Personal Vault-T5500 of redundant env files, mirror the
+# master env to T5500 and T5500, and generate a baseline manifest of files Claude places
+# on T5500 (drift detection). Josh runs this on each node.
+# Generated: 2026-06-01 by Claude (Opus) per Josh's "1 master env" + "T5500 = only Claude-placed files" rule.
 
 [CmdletBinding()]
 param(
@@ -14,12 +14,12 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$Vault      = 'C:\Users\joshl\OneDrive\Personal Vault-Sabretooth'
+$Vault      = 'C:\Users\joshl\OneDrive\Personal Vault-T5500'
 $MasterEnv  = 'MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
 $MasterPath = Join-Path $Vault $MasterEnv
-$T5500      = '\\192.168.0.8\C$\OPUS\env'
-$N9020      = '\\192.168.0.5\D$\OPUSONLY\env'
-$Local      = 'C:\OPUS\baseline\sabretooth-manifest.txt'
+$T5500      = '\\192.168.0.15\C$\OPUS\env'
+$NT5500      = '\\192.168.0.5\D$\OPUSONLY\env'
+$Local      = 'C:\OPUS\baseline\t5500-manifest.txt'
 
 if ($All) { $Mirror = $true; $Baseline = $true; $Purge = $true }
 
@@ -43,14 +43,14 @@ if ($Purge) {
 }
 
 # ----------------------------------------------------------------------
-# MIRROR — Copy master env to T5500, 9020, and local OPUS\env\.
+# MIRROR — Copy master env to T5500, T5500, and local OPUS\env\.
 # ----------------------------------------------------------------------
 if ($Mirror) {
-    Write-Host "==> MIRROR: copying $MasterEnv to T5500, 9020, local" -ForegroundColor Cyan
+    Write-Host "==> MIRROR: copying $MasterEnv to T5500, T5500, local" -ForegroundColor Cyan
     if (-not (Test-Path $MasterPath)) {
         Write-Error "Master env not found: $MasterPath. Create it before mirroring."
     }
-    $targets = @($T5500, $N9020, 'C:\OPUS\env')
+    $targets = @($T5500, $NT5500, 'C:\OPUS\env')
     foreach ($t in $targets) {
         $dir = Split-Path $t -Parent
         if (-not (Test-Path $dir)) {
@@ -64,7 +64,7 @@ if ($Mirror) {
 }
 
 # ----------------------------------------------------------------------
-# BASELINE — Generate the Sabretooth filesystem manifest.
+# BASELINE — Generate the T5500 filesystem manifest.
 # Allowed roots only. Anything else is drift.
 # ----------------------------------------------------------------------
 if ($Baseline) {
@@ -78,7 +78,7 @@ if ($Baseline) {
     )
     $exclude = @('node_modules', '\.git\', '\dist\', '\build\', '\.venv\', '__pycache__', '\.next\')
     $out = @()
-    $out += "# sabretooth-manifest.txt"
+    $out += "# t5500-manifest.txt"
     $out += "# Generated: $(Get-Date -Format o)"
     $out += "# Allowed roots: $($allowed -join ', ')"
     $out += "# Drift = any file outside these roots. Hermes posts drift to PAPERWEIGHT BLOCKED."

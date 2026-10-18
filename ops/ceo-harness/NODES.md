@@ -1,4 +1,4 @@
-> **RETIRED 2026-10-05.** Sabretooth is OFF by ruling and the T5500 (`192.168.0.15`) is the production node. Read the node map at the top of `AGENTS.md` before anything here; everything below is the 2026-08-25 record and is history.
+> **RETIRED 2026-10-05.** T5500 is OFF by ruling and the T5500 (`192.168.0.15`) is the production node. Read the node map at the top of `AGENTS.md` before anything here; everything below is the 2026-08-25 record and is history.
 
 # NODES — infrastructure reference
 
@@ -13,9 +13,9 @@ that does not exist and a drive letter that exists on no node. If you find a
 claim here you cannot reproduce, report it **UNVERIFIED** rather than working
 around it.
 
-## Sabretooth is the only node
+## T5500 is the only node
 
-`C:\ANTIGRAVITY` is the sole canonical working tree. There is no T5500, no 9020,
+`C:\ANTIGRAVITY` is the sole canonical working tree. There is no T5500, no T5500,
 no laptop node, and **no E: drive anywhere in this topology**. Text asserting
 otherwise is stale evidence, not instruction.
 
@@ -35,7 +35,7 @@ still the only repo root.
 
 | Disk | Size | Letter | Label | Holds |
 | --- | --- | --- | --- | --- |
-| 0 (Fanxiang S101, MBR, boot) | 476 GB | `C:` | SABRETOOTHNODE | OS, `C:\ANTIGRAVITY` — the live tree |
+| 0 (Fanxiang S101, MBR, boot) | 476 GB | `C:` | T5500NODE | OS, `C:\ANTIGRAVITY` — the live tree |
 | 1 (SSD 1TB, GPT) | 931 GB | `F:` → `D:` pending | DREAM ONLINE MMORPG | DREAM Online, `hermes-workspace`, an ANTIGRAVITY **archive clone** |
 
 Disk 1 is being returned to its original letter `D:`. That needs an elevated
@@ -61,7 +61,7 @@ identity column before reporting anything **UP**.
 | Paperclip (Mission Control) | 3100 | LISTENING | `GET /api/openapi.json` → `.info.title` must be `"Paperclip API"`. `/api/health` returns `status` and a version but never names the product. |
 | Date App frontend | 3200 | LISTENING | page title `YouAndiNotAi` |
 | Date App backend | 8000 | LISTENING | `GET /health` → `status`, `db_connected`, `square_connected` |
-| Mission Control v5 | 3151 | LISTENING | `GET /api/health`. **No longer the hub** — Paperclip is. Still serves the static `/paperweight/` demo page. |
+| Mission Control v5 | 3100 | LISTENING | `GET /api/health`. **No longer the hub** — Paperclip is. Still serves the static `/paperweight/` demo page. |
 | OmniRoute gateway | 20128 / 20129 | LISTENING | `GET /api/v1/models`. Harness route only; judges never use it. |
 | Hermes | 9119 | LISTENING | owns this port — see the collision note below |
 | Ollama | 11434 | LISTENING | `GET /api/tags` → 200 |

@@ -4,9 +4,9 @@ Authority: Joshua Coleman, sole owner. This document is the engineering contract
 
 ## Status: Mission Control is live
 
-Mission Control is stood up, and Paperclip is it. Paperclip runs on the Sabretooth node - `paperclipai@2026.824.0` at `http://127.0.0.1:3100`, company `ANTIGRAVITY Marketing Co` (`ANT`). Joshua made that designation. It supersedes the "this is target state, not current state" framing this section carried through 2026-08-23, and it supersedes every earlier statement that Paperclip is a producer feeding Mission Control rather than being Mission Control. The push rules below are enforceable now, not aspirational.
+Mission Control is stood up, and Paperclip is it. Paperclip runs on the T5500 node - `paperclipai@2026.824.0` at `http://127.0.0.1:3917`, company `ANTIGRAVITY Marketing Co` (`ANT`). Joshua made that designation. It supersedes the "this is target state, not current state" framing this section carried through 2026-08-23, and it supersedes every earlier statement that Paperclip is a producer feeding Mission Control rather than being Mission Control. The push rules below are enforceable now, not aspirational.
 
-Sabretooth is the only node. `C:\ANTIGRAVITY` is the sole canonical working tree. There is no 9020 node, no T5500, no remote node, and no E: drive anywhere in this topology; text asserting otherwise is stale evidence, not instruction.
+T5500 is the only node. `C:\ANTIGRAVITY` is the sole canonical working tree. The Sabretooth and 9020 nodes are retired, there is no remote node, and no E: drive anywhere in this topology; text asserting otherwise is stale evidence, not instruction.
 
 What is actually wired, what was repaired, and which two connectors remain blocked were observed against the running instance on 2026-08-25 by the Claude judge lane and are recorded in `agent-contracts/PAPERCLIP-MCP-CONNECTOR-EVIDENCE.md`. Read that packet before making any claim about the state of a connector or a judge lane. Do not restate its numbers here; they go stale and it does not.
 
@@ -60,11 +60,11 @@ Packets, journals, evidence standards, and judge-only Git remain exactly as writ
 
 ## Marketing architecture ruling (judge decision under Joshua's delegation, 2026-08-22 — amended 2026-08-25)
 
-Mission Control on Sabretooth natively owns support, Date App uptime monitoring, legal-compliance scanning, and marketing approvals. Paperclip is that Mission Control, so it owns those surfaces directly rather than feeding them.
+Mission Control on T5500 natively owns support, Date App uptime monitoring, legal-compliance scanning, and marketing approvals. Paperclip is that Mission Control, so it owns those surfaces directly rather than feeding them.
 
-**Superseded 2026-08-22 clause, kept for history:** Paperclip ran only on the 9020 node, as a marketing producer and nothing else, writing drops into `ops/marketing-inbox/` and holding no repository, governance, or publishing authority. Joshua reversed the node limit and the marketing-only limit outright on 2026-08-25, and reversed the authority limit only in part. There is no 9020 node. Paperclip's scope is not marketing-only. Paperclip does hold governance and task authority as Mission Control — with two exceptions that did not move. It holds no push, merge, or branch-deletion right, which belongs to judges alone and to no orchestrator at any tier. And it does not publish on its own authority; publishing stays gated on the approval queue below.
+**Superseded 2026-08-22 clause, kept for history:** Paperclip ran only on the retired 9020 node, as a marketing producer and nothing else, writing drops into `ops/marketing-inbox/` and holding no repository, governance, or publishing authority. Joshua reversed the node limit and the marketing-only limit outright on 2026-08-25, and reversed the authority limit only in part. There is no retired 9020 node. Paperclip's scope is not marketing-only. Paperclip does hold governance and task authority as Mission Control — with two exceptions that did not move. It holds no push, merge, or branch-deletion right, which belongs to judges alone and to no orchestrator at any tier. And it does not publish on its own authority; publishing stays gated on the approval queue below.
 
-Mission Control is never exposed on the LAN or tunneled: it binds loopback at `127.0.0.1:3100` and stays there. `ops/marketing-inbox/` remains the local drop path for producer output on this one tree; it is not a cross-node sync point, because there is no second node. Cloud routines read repo state, never live ports.
+Mission Control is never exposed on the LAN or tunneled: it binds loopback at `127.0.0.1:3917` and stays there. `ops/marketing-inbox/` remains the local drop path for producer output on this one tree; it is not a cross-node sync point, because there is no second node. Cloud routines read repo state, never live ports.
 
 Compliance scanning runs at queue intake (the FL 496.405 vocabulary plus the "split" wording trap) and informs Joshua's decision; it never auto-denies. Nothing publishes without a decision recorded in the approval queue. Public product surfaces stay business-only: internal governance, owner decisions, and non-product framing never appear in customer copy.
 
@@ -128,4 +128,6 @@ Open item requiring Josh's ruling: the council roster changes when the vote migr
 
 Pushes to the repository trigger automated review and failure notification from Claude, Codex, CodeRabbit, and GitHub. A bad push is not a private mistake; it lands in Josh's inbox as a visible failure. Mission Control exists to make that outcome structurally unlikely: two independent validation passes, a hard test gate, and a push right held by exactly one role. The dashboard is intended to be presented as evidence that the pipeline works, so the pipeline has to actually work.
 
-The dashboard that carries that burden is the Paperclip board itself, which reads live state. `apps/paperweight/index.html`, served at `:3151/paperweight/`, is not it: it is a static demo that makes no requests and labels its own figures as sample data. It must never be shown as evidence that anything is running, and no number from it may be repeated as a measurement.
+The dashboard that carries that burden is the Paperclip board itself, which reads live state. `apps/paperweight/index.html`, served at `:3100/paperweight/`, is not it: it is a static demo that makes no requests and labels its own figures as sample data. It must never be shown as evidence that anything is running, and no number from it may be repeated as a measurement.
+
+

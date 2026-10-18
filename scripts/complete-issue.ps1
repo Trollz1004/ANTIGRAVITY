@@ -1,6 +1,6 @@
 $json = @{status="done"} | ConvertTo-Json
 $bytes = [System.Text.Encoding]::UTF8.GetBytes($json)
-$webRequest = [System.Net.WebRequest]::Create("http://127.0.0.1:3100/api/issues/YOU-19")
+$webRequest = [System.Net.WebRequest]::Create("http://127.0.0.1:3917/api/issues/YOU-19")
 $webRequest.Method = "PATCH"
 $webRequest.ContentType = "application/json"
 $webRequest.ContentLength = $bytes.Length

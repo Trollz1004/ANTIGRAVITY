@@ -1,0 +1,90 @@
+# __init__.pyc
+
+bytes: 858
+magic: f30d0d0a (this interpreter: f30d0d0a)
+magic matches: True
+
+## docstrings
+
+<module>:
+Hermes faceless-news video pipeline (script -> voice -> frames -> mp4).
+
+  backlog_days:
+Parse exactly the backlog folders, in date order.
+
+## string constants
+
+'Hermes faceless-news video pipeline (script -> voice -> frames -> mp4).'
+'news_root'
+'Parse exactly the backlog folders, in date order.'
+
+## disassembly
+
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Hermes faceless-news video pipeline (script -> voice -> frames -> mp4).')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Path',))
+              IMPORT_NAME              1 (pathlib)
+              IMPORT_FROM              2 (Path)
+              STORE_NAME               2 (Path)
+              POP_TOP
+
+  8           BUILD_LIST               0
+              LOAD_CONST               3 (('20260810', '20260811', '20260812', '20260813', '20260814', '20260815', '20260816', '20260817', '20260818', '20260820', '20260821', '20260824', '20260825', '20260826', '20260827', '20260828', '20260829', '20260901'))
+              LIST_EXTEND              1
+              STORE_NAME               3 (BACKLOG)
+
+ 15           LOAD_CONST               4 ('news_root')
+              LOAD_NAME                2 (Path)
+              BUILD_TUPLE              2
+              LOAD_CONST               5 (<code object backlog_days at 0x000001D515B7BA60, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\__init__.py", line 15>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               4 (backlog_days)
+              RETURN_CONST             6 (None)
+
+Disassembly of <code object backlog_days at 0x000001D515B7BA60, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\__init__.py", line 15>:
+  15           RESUME                   0
+
+  17           LOAD_CONST               1 (1)
+               LOAD_CONST               2 (('parse_day',))
+               IMPORT_NAME              0 (parse)
+               IMPORT_FROM              1 (parse_day)
+               STORE_FAST               1 (parse_day)
+               POP_TOP
+
+  18           LOAD_GLOBAL              4 (BACKLOG)
+               GET_ITER
+               LOAD_FAST_AND_CLEAR      2 (slug)
+               SWAP                     2
+       L1:     BUILD_LIST               0
+               SWAP                     2
+               GET_ITER
+       L2:     FOR_ITER                22 (to L3)
+               STORE_FAST_LOAD_FAST    33 (slug, parse_day)
+               PUSH_NULL
+               LOAD_GLOBAL              7 (Path + NULL)
+               LOAD_FAST                0 (news_root)
+               CALL                     1
+               LOAD_FAST                2 (slug)
+               BINARY_OP               11 (/)
+               CALL                     1
+               LIST_APPEND              2
+               JUMP_BACKWARD           24 (to L2)
+       L3:     END_FOR
+               POP_TOP
+       L4:     SWAP                     2
+               STORE_FAST               2 (slug)
+               RETURN_VALUE
+
+  --   L5:     SWAP                     2
+               POP_TOP
+
+  18           SWAP                     2
+               STORE_FAST               2 (slug)
+               RERAISE                  0
+ExceptionTable:
+  L1 to L4 -> L5 [2]

@@ -18,7 +18,7 @@ Read the second column plainly: the date app's Supabase tables hold no users, no
 - DREAM project, migration `rls_hygiene_2026_09_29`: `rls_auto_enable()` (a SECURITY DEFINER event-trigger helper) is no longer executable by `anon` or `authenticated` through the REST RPC surface; `update_updated_at_column()` has a pinned `search_path`; `paperclip_agent_state` gained the same service-role-only policy the ANTIGRAVITY project already had. Security advisors after: none. SQL kept at `ops/supabase/dream-online-rls_hygiene_2026_09_29.sql`.
 - ANTIGRAVITY project, migration `perf_hygiene_2026_09_29`: the 26 `*_service_role_all` policies now evaluate `(select auth.role())` once per statement instead of once per row (advisor 0003); the 19 single-column foreign keys without a covering index got one (advisor 0001). Security advisors after: none. Performance advisors after: "unused index" only, which is what empty tables look like. SQL kept at `ops/supabase/antigravity-perf_hygiene_2026_09_29.sql`.
 
-**Backups.** The account's plan does not show scheduled backups or point-in-time recovery in the connector, so the repository backs itself up: `mission-control/scripts/backup-node.mjs` runs `pg_dump` (custom format) against `SUPABASE_DB_URL` nightly on Sabretooth and verifies the file by its `PGDMP` header, never by its existence. Needs Postgres client tools on the node (`winget install PostgreSQL.PostgreSQL` installs `pg_dump`; the script says NOT CONFIGURED, not DONE, until it is there). The game node does the same for the DREAM project with `ops/node/backup-node.mjs` in `Trollz1004/dream-online`.
+**Backups.** The account's plan does not show scheduled backups or point-in-time recovery in the connector, so the repository backs itself up: `mission-control/scripts/backup-node.mjs` runs `pg_dump` (custom format) against `SUPABASE_DB_URL` nightly on T5500 and verifies the file by its `PGDMP` header, never by its existence. Needs Postgres client tools on the node (`winget install PostgreSQL.PostgreSQL` installs `pg_dump`; the script says NOT CONFIGURED, not DONE, until it is there). The game node does the same for the DREAM project with `ops/node/backup-node.mjs` in `Trollz1004/dream-online`.
 
 **Access from the cloud.** The claude.ai Supabase connector reaches both projects (read and, since today, migrations). The game node's `supabase-dream` MCP server is read-only and DREAM-scoped, in Joshua's private `~/.claude.json`, unchanged.
 
@@ -28,7 +28,7 @@ Two vaults, one per node, both gitignored, neither backed up until today.
 
 | Node | Vault | Read by | Local REST |
 |---|---|---|---|
-| Sabretooth 192.168.0.8 | `C:\ANTIGRAVITY\Antigravity` (`OBSIDIAN_VAULT_PATH`) | JARVIS Knowledge Graph, `/api/vault`, the House's `/obsidian-save` | `https://127.0.0.1:27124` (`OBSIDIAN_REST_URL`), probed by JARVIS as the Obsidian bridge |
+| T5500 192.168.0.15 | `C:\ANTIGRAVITY\Antigravity` (`OBSIDIAN_VAULT_PATH`) | JARVIS Knowledge Graph, `/api/vault`, the House's `/obsidian-save` | `https://127.0.0.1:27124` (`OBSIDIAN_REST_URL`), probed by JARVIS as the Obsidian bridge |
 | Alienware 192.168.0.40 | `C:\DREAM\dream-online\DREAM-ONLINE` (vault id `2289237e7c63ff36`) | `drift`, the dream-brain MCP, the game journal | 27123 report-only (Alienware runbook) |
 
 **Local snapshot, not disaster recovery.** Read this before trusting the word "backup": by default the sets live under `ops/backups/` on the same disk as the vault and the repository, so one disk failure, one ransomware event or one lost node takes the vault and its copies together. What this buys today is recovery from a bad edit, a bad sync or a deleted note. Joshua's move for real recovery: point `BACKUP_DIR` at a second volume (an external drive or the other node's share) in the node's `.env`; an off-node copy stage (object storage or a second machine) is a ruling and a spec, not something the script claims.
@@ -45,9 +45,9 @@ Checked through the claude.ai Vercel connector on 2026-09-29: the connected acco
 
 | Job | Node | How | Output |
 |---|---|---|---|
-| Nightly backup (Supabase dump + vault copy) | Sabretooth | Hermes cron `0 3 * * *` `node C:\ANTIGRAVITY\mission-control\scripts\backup-node.mjs` (row in `ops/skills/date-app-hermes-operations/SKILL.md`) | `ops/heartbeat/backup-node.json`, `.log`, `ops/backups/<stamp>/` |
+| Nightly backup (Supabase dump + vault copy) | T5500 | Hermes cron `0 3 * * *` `node C:\ANTIGRAVITY\mission-control\scripts\backup-node.mjs` (row in `ops/skills/date-app-hermes-operations/SKILL.md`) | `ops/heartbeat/backup-node.json`, `.log`, `ops/backups/<stamp>/` |
 | Nightly backup (DREAM dump + game vault copy) | Alienware | scheduled task `DREAM-Alienware-Backup` at 03:30, `node C:\DREAM\dream-online\ops\node\backup-node.mjs` (register with `schtasks`, command in the Alienware runbook §4) | same shape under the game repo |
-| Backup health endpoint | Sabretooth | JARVIS `/api/backup-health` | operator-reachable JSON (NOT CONFIGURED, RED on a corrupt file, STALE, or the run's verdict); no dashboard tile, House stage or screenshot-loop consumer yet, those are follow-ups |
+| Backup health endpoint | T5500 | JARVIS `/api/backup-health` | operator-reachable JSON (NOT CONFIGURED, RED on a corrupt file, STALE, or the run's verdict); no dashboard tile, House stage or screenshot-loop consumer yet, those are follow-ups |
 
 ## Verified from the cloud, and not
 

@@ -1,0 +1,12 @@
+# Recovered 2026-10-09 by walking IMPORT_NAME opcodes in the surviving
+# newsvideo/*.pyc and scripts/hermes-youtube/*.pyc bytecode, after the
+# 2026-09-13 wipe took the source tree and site-packages with it.
+# See RECOVERY-STATE.md. Versions below are what was installed to get
+# `python -m newsvideo.daily --status` running again, not the pinned set the
+# pipeline originally shipped against (that pin file was deleted).
+Pillow==12.3.0
+edge-tts==7.2.8
+requests==2.34.2
+
+# Also required, not pip-installable, and currently MISSING from this machine:
+#   ffmpeg, ffprobe  (preflight hard-fails without them)

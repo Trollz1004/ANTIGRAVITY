@@ -5,7 +5,7 @@
 # Location: E:\ANTIGRAVITY\scripts\Start-OpenClaw-Social.ps1
 #
 # Purpose: Initialize OpenClaw for API-first local social publishing
-# Usage: Run from Sabretooth as primary orchestrator
+# Usage: Run from T5500 as primary orchestrator
 
 param(
     [switch]$DryRun = $true,
@@ -63,7 +63,7 @@ Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  OpenClaw Social Publishing Bootstrap" -ForegroundColor Cyan
 Write-Host "  Date: $(Get-Date -Format 'yyyy-MM-dd HH:mm')" -ForegroundColor Cyan
 Write-Host "  Authority: Josh Coleman" -ForegroundColor Cyan
-Write-Host "  Control Plane: Sabretooth" -ForegroundColor Cyan
+Write-Host "  Control Plane: T5500" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -72,11 +72,11 @@ Write-Host ""
 # ============================================
 Write-Status "Checking prerequisites..." "info"
 
-# Check if running on Sabretooth
+# Check if running on T5500
 $hostname = $env:COMPUTERNAME
-if ($hostname -ne "SABRETOOTH" -and $hostname -ne "DESKTOP-2DCAEVN") {
-    Write-Status "Warning: Not running on Sabretooth (hostname: $hostname)" "warning"
-    Write-Status "This script should be run from Sabretooth as primary orchestrator" "warning"
+if ($hostname -ne "T5500" -and $hostname -ne "DESKTOP-2DCAEVN") {
+    Write-Status "Warning: Not running on T5500 (hostname: $hostname)" "warning"
+    Write-Status "This script should be run from T5500 as primary orchestrator" "warning"
 }
 
 # Check OpenClaw
@@ -107,7 +107,7 @@ Write-Status "SSH found" "success"
 # CHECK LOCAL SERVICES
 # ============================================
 Write-Host ""
-Write-Status "Checking Sabretooth local services..." "info"
+Write-Status "Checking T5500 local services..." "info"
 
 $openclawOk = Test-LocalService -Url "http://127.0.0.1:18789" -Name "OpenClaw Gateway"
 $ollamaOk = Test-LocalService -Url "http://127.0.0.1:11434/api/tags" -Name "Ollama"
@@ -118,7 +118,7 @@ $ollamaOk = Test-LocalService -Url "http://127.0.0.1:11434/api/tags" -Name "Olla
 Write-Host ""
 Write-Status "Checking node reachability..." "info"
 
-$node9020Ok = Test-SSHNode -Alias "9020" -Name "9020 Marketing Node"
+$nodeT5500Ok = Test-SSHNode -Alias "T5500" -Name "T5500 Marketing Node"
 $nodeT5500Ok = Test-SSHNode -Alias "t5500" -Name "T5500 Build Node"
 
 # ============================================
@@ -155,7 +155,7 @@ if ($TestConnections) {
     Write-Host "Summary:" -ForegroundColor Cyan
     Write-Host "  OpenClaw Gateway: $(if ($openclawOk) { 'OK' } else { 'Not Running' })"
     Write-Host "  Ollama: $(if ($ollamaOk) { 'OK' } else { 'Not Running' })"
-    Write-Host "  9020 Node: $(if ($node9020Ok) { 'Reachable' } else { 'Unreachable' })"
+    Write-Host "  T5500 Node: $(if ($nodeT5500Ok) { 'Reachable' } else { 'Unreachable' })"
     Write-Host "  T5500 Node: $(if ($nodeT5500Ok) { 'Reachable' } else { 'Unreachable' })"
     Write-Host ""
     exit 0
@@ -226,7 +226,7 @@ Write-Host ""
     Success = $true
     OpenClaw = $openclawOk
     Ollama = $ollamaOk
-    Node9020 = $node9020Ok
+    NodeT5500 = $nodeT5500Ok
     NodeT5500 = $nodeT5500Ok
     DryRun = $DryRun
     Timestamp = Get-Date -Format "o"

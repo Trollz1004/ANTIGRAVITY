@@ -25,8 +25,8 @@ OPTIONAL legacy local mirror (Windows Task Scheduler "YesterdayNewsToday", daily
 ```
 
 The GitHub Actions path is PRIMARY and runs even when every node is off. The
-local mirror is the bot's original 9020 deployment (its own header carries that
-founder assignment) — but current doctrine leaves 9020's role undecided, so do
+local mirror is the bot's original T5500 deployment (its own header carries that
+founder assignment) — but current doctrine leaves T5500's role undecided, so do
 NOT register the scheduled task on any node until Joshua explicitly assigns the
 node role. The scripts are kept working for whichever node he picks.
 
@@ -56,7 +56,7 @@ node role. The scripts are kept working for whichever node he picks.
 
 ## Mission Control ROUTINES entry (paste onto the board)
 
-The board is **Mission Control v5 on `:3151`** (kanban, agents, Graphy, MCP).
+The board is **Mission Control v5 on `:3100`** (kanban, agents, Graphy, MCP).
 Mission Control v6 on `:8787` is a health monitor only — a different program;
 do not paste routines there. The ROUTINES column (cron, owner, last/next
 fire) is part of the board's operating contract in

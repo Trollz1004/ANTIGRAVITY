@@ -36,6 +36,21 @@
       "args": [
         "C:/ANTIGRAVITY/services/dateapp-desk-mcp/server.mjs"
       ]
+    },
+    "omniroute": {
+      "type": "http",
+      "url": "http://192.168.0.15:20128/api/mcp/stream",
+      "headers": {
+        "Authorization": "Bearer ${OMNIROUTE_API_KEY}"
+      }
+    },
+    "omniroute-cli": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "omniroute",
+        "mcp"
+      ]
     }
   }
 }

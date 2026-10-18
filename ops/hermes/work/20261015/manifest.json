@@ -1,0 +1,128 @@
+{
+  "day": "20261015",
+  "date": "2026-10-15",
+  "date_label": "October 15, 2026",
+  "title": "Yesterday's News Today - October 15, 2026 | Extinct Crocodilian’s Skull & More",
+  "story_count": 5,
+  "video": {
+    "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261015\\20261015.mp4",
+    "duration_s": 102.77,
+    "size_bytes": 13888370,
+    "video": {
+      "codec": "h264",
+      "pix_fmt": "yuv420p",
+      "width": 1080,
+      "height": 1920,
+      "fps": "30/1"
+    },
+    "audio": {
+      "codec": "aac",
+      "sample_rate": "48000",
+      "channels": 2
+    }
+  },
+  "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261015\\20261015-thumb.png",
+  "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261015\\upload.json",
+  "tts_backends": [
+    "edge"
+  ],
+  "voiceover_verified": false,
+  "segments": [
+    {
+      "segment": "intro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\frames\\intro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\audio\\intro.wav",
+      "audio_seconds": 4.776,
+      "video_seconds": 5.433,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story1",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\frames\\story1.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\audio\\story1.wav",
+      "audio_seconds": 18.84,
+      "video_seconds": 19.5,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story2",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\frames\\story2.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\audio\\story2.wav",
+      "audio_seconds": 18.576,
+      "video_seconds": 19.233,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story3",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\frames\\story3.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\audio\\story3.wav",
+      "audio_seconds": 14.568,
+      "video_seconds": 15.233,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story4",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\frames\\story4.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\audio\\story4.wav",
+      "audio_seconds": 16.632,
+      "video_seconds": 17.282,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story5",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\frames\\story5.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\audio\\story5.wav",
+      "audio_seconds": 20.472,
+      "video_seconds": 21.133,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "outro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\frames\\outro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261015\\audio\\outro.wav",
+      "audio_seconds": 4.272,
+      "video_seconds": 4.933,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    }
+  ],
+  "parse_warnings": [],
+  "sources": [
+    {
+      "story": 1,
+      "headline": "An Extinct Crocodilian’s Skull Was Found in the Rocks That Built the Sphinx, and it’s Also Missing its Nose",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/an-extinct-crocodilians-skull-was-found-in-the-rocks-that-built-the-sphinx-and-its-also-missing-its-nose/"
+    },
+    {
+      "story": 2,
+      "headline": "Tribe Just a Signature Away from Recovering 1,100 Ancestral Acres Along Undammed Elwha River",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/tribe-just-a-signature-away-from-recovering-1100-ancestral-acres-along-undammed-elwha-river/"
+    },
+    {
+      "story": 3,
+      "headline": "ESA’s New Sentinel 3C Satellite Makes its Debut with Sumptuous Images of Italy and the Arctic",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/esas-new-sentinel-3c-satellite-makes-its-debut-with-sumptuous-images-of-italy-and-the-arctic/"
+    },
+    {
+      "story": 4,
+      "headline": "Woman Who Lost Her Sister Invents a Child’s Car Seat Sticker That Doubles as Hospital Bracelet",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/woman-who-lost-her-sister-invents-a-childs-car-seat-sticker-that-doubles-as-hospital-bracelet/"
+    },
+    {
+      "story": 5,
+      "headline": "Good News in History, October 15",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/events061015/"
+    }
+  ]
+}

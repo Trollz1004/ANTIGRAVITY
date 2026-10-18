@@ -49,7 +49,7 @@
       "args": ["E:/ANTIGRAVITY\\apps\\mcp\\paperweight-mcp\\dist\\index.js"],
       "env": {
         "HOME": "C:\\Users\\joshl",
-        "PAPERWEIGHT_API": "http://localhost:3100/api/paperweight"
+        "PAPERWEIGHT_API": "http://localhost:3917/api/paperweight"
       }
     },
     "dao-mcp": {

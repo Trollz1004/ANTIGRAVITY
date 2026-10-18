@@ -28,9 +28,10 @@ Use **VERIFIED**, **UNVERIFIED**, or **BLOCKED** with exact evidence. Do not pri
 
 ## Protected Files (ruled 2026-09-17)
 
-Only official Claude, reached through `drift` on the Sabretooth node, edits `scripts/fables-house/**`, `scripts/drift.cmd`, `ops/runbook/**`, `ops/skills/sabretooth-node/**`, `docs/PAYMENTS-TRUTH.md`, `docs/NODE-STATE-*.md`, `.github/**`, and the drop box `C:\Users\joshi\OneDrive\claude-to-claude\`. OpenClaw never edits these paths and never pushes, merges, or deletes a branch. Landing on `main` goes through a `judge/*` branch and the quality-gate workflow (`.github/workflows/quality-gate.yml`), which `auto-land.yml` fast-forwards on green.
+Only official Claude, reached through `drift` on the T5500 node, edits `scripts/fables-house/**`, `scripts/drift.cmd`, `ops/runbook/**`, `ops/skills/t5500-node/**`, `docs/PAYMENTS-TRUTH.md`, `docs/NODE-STATE-*.md`, `.github/**`, and the drop box `C:\Users\joshi\OneDrive\claude-to-claude\`. OpenClaw never edits these paths and never pushes, merges, or deletes a branch. Landing on `main` goes through a `judge/*` branch and the quality-gate workflow (`.github/workflows/quality-gate.yml`), which `auto-land.yml` fast-forwards on green.
 
 
 ## Date App FROZEN and FOR SALE (ruling 2026-09-16)
 
 youandinotai.com is frozen and listed for sale as of 2026-09-16. The asset is the name pair (youandinotai.com + youandinotai.online, "You and I, not AI"); the app is a bonus in the lot. No new features, no growth engine runs, no digests, no campaigns, no experiments, no audits. Keep the site up and the checkout untouched until the sale closes. Listing copy and outreach note: `ops/sale/YOUANDINOTAI-SALE-LISTING.md`. Joshua's time goes to DREAM Online and the AI Solutions business; YouTube automation stays on the Hermes lane. Any lane that touches the date app beyond keeping it up must cite this section and a direct instruction from Joshua.
+

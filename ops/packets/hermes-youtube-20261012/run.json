@@ -1,0 +1,109 @@
+{
+  "day": "20261012",
+  "started": "2026-10-13T06:30:04.294849-04:00",
+  "finished": "2026-10-13T06:30:11.462938-04:00",
+  "host": "T5500-2-XEON-72",
+  "unattended": true,
+  "shipped": false,
+  "exit_code": 2,
+  "stages": [
+    {
+      "stage": "preflight",
+      "status": "OK",
+      "detail": "ffmpeg+ffprobe on PATH, repo at C:\\ANTIGRAVITY"
+    },
+    {
+      "stage": "source",
+      "status": "OK",
+      "detail": "wrote C:\\ANTIGRAVITY\\content\\yesterday-news\\20261012 from C:\\Users\\joshi\\Documents\\ANTIGRAVITY-RUNTIME\\yesterday-news\\content\\20261012",
+      "bytes": 3981,
+      "sources": 5
+    },
+    {
+      "stage": "parse",
+      "status": "OK",
+      "detail": "5 stories, title \"Yesterday's News Today — October 12, 2026\"",
+      "warnings": []
+    },
+    {
+      "stage": "voice",
+      "status": "OK",
+      "detail": "backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok)",
+      "backend": "edge"
+    },
+    {
+      "stage": "run",
+      "status": "FAILED",
+      "detail": "unhandled TTSError: edge synthesis failed: WSServerHandshakeError: 403, message='Invalid response status', url='wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4&ConnectionId=b50eb612b13f4d05a2aec69b32b0eae4&Sec-MS-GEC=C6B5374B5E25E8E1FEC62CEEC7AB7B1841118F8107C2B7259435D4056104A25C&Sec-MS-GEC-Version=1-143.0.3650.75'"
+    }
+  ],
+  "gates": {
+    "passed": 11,
+    "checks": [
+      {
+        "check": "source_script:size",
+        "ok": true,
+        "detail": "script.txt is 3981 bytes (need >= 400)",
+        "path": "C:\\ANTIGRAVITY\\content\\yesterday-news\\20261012\\script.txt",
+        "bytes": 3981,
+        "min_bytes": 400
+      },
+      {
+        "check": "source_script:contains",
+        "ok": true,
+        "detail": "expected \"Yesterday's News Today\" in script.txt"
+      },
+      {
+        "check": "source_metadata:size",
+        "ok": true,
+        "detail": "metadata.json is 1686 bytes (need >= 2)",
+        "path": "C:\\ANTIGRAVITY\\content\\yesterday-news\\20261012\\metadata.json",
+        "bytes": 1686,
+        "min_bytes": 2
+      },
+      {
+        "check": "source_metadata:keys",
+        "ok": true,
+        "detail": "has ['title', 'date', 'sources']"
+      },
+      {
+        "check": "source:story_count",
+        "ok": true,
+        "detail": "5 sources (need >= 3)"
+      },
+      {
+        "check": "parse:stories",
+        "ok": true,
+        "detail": "parsed 5 stories (need >= 3)"
+      },
+      {
+        "check": "parse:story1_narration",
+        "ok": true,
+        "detail": "story 1 narration is 56 words"
+      },
+      {
+        "check": "parse:story2_narration",
+        "ok": true,
+        "detail": "story 2 narration is 45 words"
+      },
+      {
+        "check": "parse:story3_narration",
+        "ok": true,
+        "detail": "story 3 narration is 54 words"
+      },
+      {
+        "check": "parse:story4_narration",
+        "ok": true,
+        "detail": "story 4 narration is 40 words"
+      },
+      {
+        "check": "parse:story5_narration",
+        "ok": true,
+        "detail": "story 5 narration is 42 words"
+      }
+    ]
+  },
+  "video": null,
+  "manifest": null,
+  "published": null
+}

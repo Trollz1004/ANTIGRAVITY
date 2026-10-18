@@ -26,7 +26,7 @@ Code corrected rather than deleted, because the file had other reasons to exist:
 |---|---|
 | `scripts/opencode-wsl.sh` | Sourced `~/.fcc/.env` for provider keys and set `ANTHROPIC_API_KEY=fcc-no-auth`. Rewritten to use the OmniRoute gateway. The Anthropic key is gone entirely — doctrine is that one is never needed and may never exist. |
 | `apps/orbital-studio/components/BridgePanel.tsx`, `types.ts` | Presented `FCC-Claude` as a bridge target that "validated" work. Replaced with `Hermes`, and the copy now says a harness prepares a packet while only a judge validates and lands it. |
-| `.agents/skills/sabretooth-ops/SKILL.md` | Advertised a `/api/bridge/fcc` route. Removed; no such route exists in Mission Control code. |
+| `.agents/skills/t5500-ops/SKILL.md` | Advertised a `/api/bridge/fcc` route. Removed; no such route exists in Mission Control code. |
 | `scripts/cli-opus-real.sh` | Comment reference cleaned. |
 
 ## Deliberately left in place
@@ -40,3 +40,4 @@ Code corrected rather than deleted, because the file had other reasons to exist:
 ## If you find another one
 
 Remove it and say so in your report. Do not restore it, do not route around it, and do not treat it as a fallback when something else is down. A stack that is degraded is a stack that reports **BLOCKED**, not one that quietly falls back to a banned actor.
+

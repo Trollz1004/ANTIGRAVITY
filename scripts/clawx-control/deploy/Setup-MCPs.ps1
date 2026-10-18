@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Setup MCP servers on any node (T5500, Sabretooth, or 9020).
+    Setup MCP servers on any node (T5500, T5500, or T5500).
     Run this ONCE per node after git pull.
 
 .USAGE

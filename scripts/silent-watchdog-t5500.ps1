@@ -1,6 +1,6 @@
 # Silent Watchdog for T5500 - ZERO popups, ZERO terminal windows
 # Runs as scheduled task with -WindowStyle Hidden
-# Pure background monitoring of Mission Control :3151, OmniRoute :20128, Date App :3200
+# Pure background monitoring of Mission Control :3100, OmniRoute :20128, Date App :3200
 
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
@@ -42,10 +42,10 @@ function Test-Port {
 }
 
 function Start-MissionControl {
-    Log "Attempting to start Mission Control on :3151..."
+    Log "Attempting to start Mission Control on :3100..."
     try {
-        # Kill any existing process on :3151
-        $proc = Get-NetTCPConnection -LocalPort 3151 -ErrorAction SilentlyContinue
+        # Kill any existing process on :3100
+        $proc = Get-NetTCPConnection -LocalPort 3100 -ErrorAction SilentlyContinue
         if ($proc) {
             Get-Process -Id $proc.OwningProcess -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
             Start-Sleep -Seconds 2
@@ -56,7 +56,7 @@ function Start-MissionControl {
         if (-not $pythonPath) { Log "ERROR: Python not found"; return }
         
         $backendPath = "$RepoRoot\backend"
-        $proc = Start-Process -FilePath $pythonPath -ArgumentList "-m uvicorn server:app --host 127.0.0.1 --port 3151 --log-level error" `
+        $proc = Start-Process -FilePath $pythonPath -ArgumentList "-m uvicorn server:app --host 127.0.0.1 --port 3100 --log-level error" `
             -WorkingDirectory $backendPath `
             -WindowStyle Hidden `
             -PassThru `
@@ -65,8 +65,8 @@ function Start-MissionControl {
         if ($proc) {
             Log "Mission Control started (PID: $($proc.Id))"
             Start-Sleep -Seconds 3
-            if (Test-Port 3151 "Mission Control") {
-                Log "✓ Mission Control ONLINE on :3151"
+            if (Test-Port 3100 "Mission Control") {
+                Log "✓ Mission Control ONLINE on :3100"
                 return $true
             }
         }
@@ -116,7 +116,7 @@ Log "=== T5500 Silent Watchdog Started ==="
 
 $serviceStates = @{
     "OmniRoute"       = @{Port=20128; Failures=0; LastCheck=$null; Restart=$true; Service="omni-router"}
-    "Mission Control" = @{Port=3151;  Failures=0; LastCheck=$null; Restart=$true; Service="mission-control"}
+    "Mission Control" = @{Port=3100;  Failures=0; LastCheck=$null; Restart=$true; Service="mission-control"}
     "DateApp"         = @{Port=3200;  Failures=0; LastCheck=$null; Restart=$true; Service="dateapp-frontend"}
     "DateApp Backend" = @{Port=8000;  Failures=0; LastCheck=$null; Restart=$false; Service="dateapp-backend"}
     "Paperclip"       = @{Port=3120;  Failures=0; LastCheck=$null; Restart=$false; Service="paperclip"}

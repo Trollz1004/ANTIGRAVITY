@@ -114,7 +114,7 @@ Caption-ready (mellow, non-hype):
 "Bots and fake profiles wreck dating apps. YouAndINotAI is verified-human only. $1 Bot-Shield to prove you’re real, then Founding at $14.99/mo.
 https://trollz1004.github.io/youandinotai-links/?ref=clean-repo"
 
-Post from real Chrome session (9020 for X; Meta cookie-sync). No headless.
+Post from real Chrome session (T5500 for X; Meta cookie-sync). No headless.
 
 ---
 

@@ -24,7 +24,7 @@ Read-only research via `gh api`. No repos cloned. Goal: which features are worth
 **Data model:** reads a typed JSON IR file the calling agent authors; writes a single HTML file (plus optional binary exports) to disk. No persistent state of its own.
 
 **Absorbable into JARVIS as:**
-- (a) **panel** — a "Diagrams" panel that shells out to the archify CLI against JARVIS's own service/topology data (e.g., render the God's Eye node graph or the runbook's restart-set dependency chain as an interactive architecture diagram) and embeds the resulting static HTML in an iframe served from JARVIS's own origin. This is the standout absorb candidate: no server, no keys, MIT-licensed, and directly useful for visualizing the Sabretooth stack.
+- (a) **panel** — a "Diagrams" panel that shells out to the archify CLI against JARVIS's own service/topology data (e.g., render the God's Eye node graph or the runbook's restart-set dependency chain as an interactive architecture diagram) and embeds the resulting static HTML in an iframe served from JARVIS's own origin. This is the standout absorb candidate: no server, no keys, MIT-licensed, and directly useful for visualizing the T5500 stack.
 - (b) diff view — reuse the Before/Delta/After renderer as a "what changed" view on top of git panel diffs. **Panel.**
 - Brand-mark/export tooling — **skip**, cosmetic, not needed for an internal ops dashboard.
 
@@ -71,7 +71,7 @@ No direct overlap with existing JARVIS panels (nothing today renders topology di
 4. Stripe checkout modal (`StripeCheckoutModal.tsx`, `processStripeSubscription`) — also fully simulated: `await sleep(1400ms)`, no Stripe SDK call, accepts any 15+ digit numeric string as a "valid" card, generates a random license key, and stores the "subscription" only in `localStorage`. **No real payment processing.** This is a hard mismatch with the CLAUDE.md rule that Square is the actual checkout integration and this doctrine's payments are otherwise closed/frozen.
 5. License key verification (`verifyLicenseKey`) — also client-only: any string prefixed `OPUS-PRO-`/`OPUS-ENT-`, or the literal `OPUS-FOUNDER-PASS`, is accepted as valid. No server-side license database.
 6. Task Commander (broadcast one prompt to both panes) — directly **overlaps** with JARVIS's own already-shipped "task commander" panel (commit `25fff06c`, "feat(jarvis): task commander panel"). **Skip**, redundant.
-7. Compare/diff modal, terminal panel, code editor pane — **skip** for JARVIS; these are workstation-product UI, not ops-dashboard panels, and none read live Sabretooth data.
+7. Compare/diff modal, terminal panel, code editor pane — **skip** for JARVIS; these are workstation-product UI, not ops-dashboard panels, and none read live T5500 data.
 
 **Product/deployed angle:** `metadata.json` names it "AI Solutions Store" storefront for "AI Solutions Store and OpusPawClaw," implying a live product tied to ai-solutions.store, but nothing in the repo calls a real backend — no server file, no API routes, only `@google/genai` wired for a chat call and everything else (Stripe, Jules, licensing) faked client-side. **Any pricing, "Jules Verified," or checkout claim in this README/app should be treated as unverified** until a real Stripe integration and a real Jules (or equivalent) scanning backend are built — currently it would be selling a product whose two headline features (security scan, payment) do not exist server-side.
 

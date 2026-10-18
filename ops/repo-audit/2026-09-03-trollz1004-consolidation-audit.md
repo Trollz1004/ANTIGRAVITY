@@ -29,11 +29,11 @@ sha only.**
 | ai-marketplace-grok-production | Trollz1004 | yes | 9 | 3 | 2026-06-29 | 0 | Yes — `archive/folded-repos/` | **ALREADY-FOLDED** |
 | DREAM-ONLINE-MMORPG-PvP-... | Trollz1004 | yes | 4 | 1 | 2026-06-29 | 0 | No (belongs conceptually to `dream-online`) | **DROP** (stub: README+LICENSE+.gitignore only, zero game content) |
 | MANUS-Has-Hands | Trollz1004 | yes | 591 | 4 | 2026-06-21 | 1 (postgres_uri_creds) + confirmed broader dump | No | **BLOCKED-SECRETS** (also banned language, 176 guard hits — documented) |
-| sabretooth-hermes-backup | Trollz1004 | yes | 97,514 | 27 | 2026-06-16 | **143** (stripe_live, github_pat_classic, xai_key, square_token, jwt, postgres_uri_creds, openai_env_assign, anthropic_key) | Overlaps (Hermes skills/workspace snapshots) | **BLOCKED-SECRETS** (highest-severity finding of this audit) |
+| t5500-hermes-backup | Trollz1004 | yes | 97,514 | 27 | 2026-06-16 | **143** (stripe_live, github_pat_classic, xai_key, square_token, jwt, postgres_uri_creds, openai_env_assign, anthropic_key) | Overlaps (Hermes skills/workspace snapshots) | **BLOCKED-SECRETS** (highest-severity finding of this audit) |
 | OpenclawDash | Trollz1004 | yes | 301 | 27 | 2026-06-07 | 0 | No | **KEEP-SEPARATE** (banned language, 19 hits — documented) |
 | ANTIGRAVITYclip | Trollz1004 | yes | 352 | 22 | 2026-06-05 | 0 | Coincidental filename overlap only (shared origin with ANTIGRAVITY `backend/`) | **KEEP-SEPARATE** (banned language, 38 files — documented) |
 | antigravity-dashboard | Trollz1004 | yes | 27 | 1 | 2026-05-30 | 0 | Yes — `archive/absorbed-repos-2026-08-26/` | **ALREADY-FOLDED** |
-| 9020-hermes-backup | Trollz1004 | yes | 0 | 0 | 2026-05-17 | 0 | No | **DROP** (empty repo) |
+| T5500-hermes-backup | Trollz1004 | yes | 0 | 0 | 2026-05-17 | 0 | No | **DROP** (empty repo) |
 | t5500-hermes-backup | Trollz1004 | yes | 0 | 0 | 2026-05-17 | 0 | No | **DROP** (empty repo) |
 | Trollz1004 | Trollz1004 | yes | 45 | 16 | 2026-05-17 | 0 | No | **KEEP-SEPARATE** (GitHub profile README — must keep this exact name) |
 | income-engine | Trollz1004 | yes | 11,213 | 4 | 2026-05-11 | **3** (github_oauth, postgres_uri_creds) | No | **BLOCKED-SECRETS** (also contains a committed raw Postgres data directory — binary DB files in git history) |
@@ -46,13 +46,13 @@ sha only.**
 
 Totals: **27 repos scanned** (ANTIGRAVITY skipped per instructions). **Automated
 regex secret hits: 155** across 4 repos (`ANTIGRAVITY-v2` 8, `MANUS-Has-Hands` 1,
-`income-engine` 3, `sabretooth-hermes-backup` 143). A 5th repo,
+`income-engine` 3, `t5500-hermes-backup` 143). A 5th repo,
 `EMERGENT-if-self-hosted-...`, carries a **documented** (not re-derived here) live
 key outside this scan's pattern set.
 
 ## BLOCKED-SECRETS repos (must not fold until remediated)
 
-1. **`sabretooth-hermes-backup`** (Trollz1004) — 143 hits, including 3×
+1. **`t5500-hermes-backup`** (Trollz1004) — 143 hits, including 3×
    `stripe_live` and 35× `github_pat_classic`, spread across dozens of daily
    snapshot commits (2026-05-17 through 2026-06-16). Private repo, but this
    **contradicts** the framing in `archive/absorbed-repos-2026-08-26/README.md`
@@ -110,7 +110,7 @@ rotation before any subtree add. Exact invocations are in
   `game/` directory tree. `DREAM-ONLINE-MMORPG-...` has exactly 1 commit
   ("Initial commit") and 3 files: `.gitignore`, `LICENSE`, `README.md`. Zero
   game content. Confirms DROP.
-- **New finding not in the journal**: `sabretooth-hermes-backup`'s framing as
+- **New finding not in the journal**: `t5500-hermes-backup`'s framing as
   "art assets only, code superseded" in the absorbed-repos README does not
   match what this scan found — see BLOCKED-SECRETS §1 above. This should be
   corrected in doctrine, not carried forward.
@@ -142,7 +142,7 @@ rotation before any subtree add. Exact invocations are in
   path itself is ~140 characters deep. Recovered by cloning to `C:\gitaudit\r1`
   .. `r4` with `git -c core.longpaths=true clone`, then scanning those. Their
   result JSON still lives under the designated scratch results directory.
-- `sabretooth-hermes-backup` and `income-engine` also hit long-path failures on
+- `t5500-hermes-backup` and `income-engine` also hit long-path failures on
   working-tree checkout (nested `.hermes/skills/...` and ISO/ECMA schema paths
   exceed 260 chars); the object database was intact via a `--mirror` fallback,
   so `git log`-based scanning worked, but `git ls-files` (index-based) reported
@@ -167,7 +167,7 @@ Direct FOLD candidates into it (clean of secrets and banned language):
   `ANTIGRAVITY/archive/folded-repos/` too, so this is folding the same source
   into a second, org-scoped home; not a conflict, just two audiences).
 
-Everything else evaluated either carries real secrets (`sabretooth-hermes-backup`,
+Everything else evaluated either carries real secrets (`t5500-hermes-backup`,
 `income-engine`, `MANUS-Has-Hands`, `EMERGENT-if-self-hosted-...`), carries
 banned §1 language (`command-center`, `OpenclawDash`, `ANTIGRAVITYclip`,
 `EMERGENT`, `MANUS-Has-Hands`), is an exact duplicate (`llc_crosslisting_os`

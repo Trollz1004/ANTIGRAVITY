@@ -319,3 +319,7 @@ claude-to-claude/
 gemini-to-gemini/
 *gemini-to-gemini*
 gemini-to-gemini.md
+\
+
+*.exe
+*.wav

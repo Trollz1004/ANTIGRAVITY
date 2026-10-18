@@ -9,10 +9,10 @@
 # Run as Administrator (right-click PowerShell -> Run as Administrator), then paste
 # this whole file in. Idempotent: safe to paste again any time.
 #
-# Verify from Sabretooth after running:
-#   Test-NetConnection 192.168.0.8 -Port 5432  ->  TcpTestSucceeded : True
+# Verify from T5500 after running:
+#   Test-NetConnection 192.168.0.15 -Port 5432  ->  TcpTestSucceeded : True
 #   Invoke-WebRequest http://localhost:8787/health/t5500 (Mission Control API
-#   on Sabretooth)  ->  status:"ok", every sub-service status:"ok"
+#   on T5500)  ->  status:"ok", every sub-service status:"ok"
 
 # ---- guardrail: must be elevated ----
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
@@ -90,8 +90,8 @@ Get-NetTCPConnection -State Listen |
 Write-Host ''
 Write-Host '=== done ===' -ForegroundColor Green
 Write-Host ''
-Write-Host 'From Sabretooth (192.168.0.8), Mission Control should now go green:' -ForegroundColor White
-Write-Host '  Test-NetConnection 192.168.0.8 -Port 5432' -ForegroundColor Gray
+Write-Host 'From T5500 (192.168.0.15), Mission Control should now go green:' -ForegroundColor White
+Write-Host '  Test-NetConnection 192.168.0.15 -Port 5432' -ForegroundColor Gray
 Write-Host '  Invoke-WebRequest http://localhost:8787/health/t5500 -UseBasicParsing | Select Content' -ForegroundColor Gray
 Write-Host ''
 Write-Host 'UNDO (paste this into elevated PS to reverse):' -ForegroundColor White

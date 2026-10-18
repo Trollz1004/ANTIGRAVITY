@@ -19,7 +19,7 @@ $desktopFiles = @(
     (Join-Path $UserHome 'Desktop\HERMES_TELEGRAM_MSG.txt'),
     (Join-Path $UserHome 'Desktop\PROMPT-CLAUDE-ALIENWARE.txt'),
     (Join-Path $UserHome 'Desktop\PROMPT-HERMES-ALIENWARE.txt'),
-    (Join-Path $UserHome 'Desktop\PROMPT-HERMES-SABRETOOTH.txt'),
+    (Join-Path $UserHome 'Desktop\PROMPT-HERMES-T5500.txt'),
     (Join-Path $UserHome 'Desktop\Removed Apps.html'),
     (Join-Path $UserHome 'Desktop\test_write.txt')
 )

@@ -1,0 +1,128 @@
+{
+  "day": "20261009",
+  "date": "2026-10-09",
+  "date_label": "October 09, 2026",
+  "title": "Yesterday's News Today - October 09, 2026 | NPR-Inspired Homework Leads Teen & More",
+  "story_count": 5,
+  "video": {
+    "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261009\\20261009.mp4",
+    "duration_s": 86.176,
+    "size_bytes": 12186487,
+    "video": {
+      "codec": "h264",
+      "pix_fmt": "yuv420p",
+      "width": 1080,
+      "height": 1920,
+      "fps": "30/1"
+    },
+    "audio": {
+      "codec": "aac",
+      "sample_rate": "48000",
+      "channels": 2
+    }
+  },
+  "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261009\\20261009-thumb.png",
+  "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261009\\upload.json",
+  "tts_backends": [
+    "edge"
+  ],
+  "voiceover_verified": false,
+  "segments": [
+    {
+      "segment": "intro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\frames\\intro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\audio\\intro.wav",
+      "audio_seconds": 4.584,
+      "video_seconds": 5.234,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story1",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\frames\\story1.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\audio\\story1.wav",
+      "audio_seconds": 20.352,
+      "video_seconds": 21.002,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story2",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\frames\\story2.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\audio\\story2.wav",
+      "audio_seconds": 13.104,
+      "video_seconds": 13.767,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story3",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\frames\\story3.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\audio\\story3.wav",
+      "audio_seconds": 12.912,
+      "video_seconds": 13.567,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story4",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\frames\\story4.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\audio\\story4.wav",
+      "audio_seconds": 13.56,
+      "video_seconds": 14.21,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story5",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\frames\\story5.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\audio\\story5.wav",
+      "audio_seconds": 12.792,
+      "video_seconds": 13.442,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "outro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\frames\\outro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261009\\audio\\outro.wav",
+      "audio_seconds": 4.272,
+      "video_seconds": 4.933,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    }
+  ],
+  "parse_warnings": [],
+  "sources": [
+    {
+      "story": 1,
+      "headline": "NPR-Inspired Homework Leads Teen to Find Hidden Message a Decade After a Stranger’s Kindness",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/npr-inspired-homework-leads-teen-to-find-hidden-message-a-decade-after-a-strangers-kindness/"
+    },
+    {
+      "story": 2,
+      "headline": "Australia Announces 3 New National Parks to Protect Gliders, Owls, and Other Victoria Wildlife",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/australia-announces-3-new-national-parks-to-protect-gliders-owls-and-other-victoria-wildlife/"
+    },
+    {
+      "story": 3,
+      "headline": "Local Opinion and Involvement Found as Key Determinant in World’s Conservation Success Stories",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/local-opinion-and-involvement-found-as-key-determinant-in-worlds-conservation-success-stories/"
+    },
+    {
+      "story": 4,
+      "headline": "World’s Largest ‘Glacial Archeology’ Expedition Recovers 48 Stone Age Arrowheads and Shafts",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/worlds-largest-glacial-archeology-expedition-recovers-48-stone-age-arrowheads-and-shafts/"
+    },
+    {
+      "story": 5,
+      "headline": "Good News in History, October 9",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/events061009/"
+    }
+  ]
+}

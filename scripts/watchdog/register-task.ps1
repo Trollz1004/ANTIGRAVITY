@@ -7,7 +7,7 @@
       pwsh E:\ANTIGRAVITY\scripts\watchdog\register-task.ps1 -Role display
 
   Roles:
-    node    — T5500 / Sabretooth / 9020 → run bootstrap-claude-node.cmd
+    node    — T5500 / T5500 / T5500 → run bootstrap-claude-node.cmd
     display — mini-ASUS PC → run serve-dashboard.cmd (HTTP server for the
               browser tab pinned to the always-on display)
 

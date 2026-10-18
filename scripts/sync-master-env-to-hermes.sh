@@ -5,7 +5,7 @@
 
 set -u
 
-MASTER="/mnt/c/Users/joshl/OneDrive/Personal Vault-Sabretooth/MASTER-UNIVERSAL-ENV-TROLLZ1004.env"
+MASTER="/mnt/c/Users/joshl/OneDrive/Personal Vault-T5500/MASTER-UNIVERSAL-ENV-TROLLZ1004.env"
 HERMES_ENV="$HOME/.hermes/.env"
 
 if [ ! -f "$MASTER" ]; then

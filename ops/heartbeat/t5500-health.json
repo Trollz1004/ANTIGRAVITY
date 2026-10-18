@@ -1,0 +1,79 @@
+﻿{
+    "ts":  "2026-09-21T23:04:18Z",
+    "node":  "sabretooth",
+    "required":  {
+                     "postgres_5432":  {
+                                           "detail":  "pg_isready",
+                                           "status":  "UP"
+                                       },
+                     "redis_6379":  {
+                                        "detail":  "+PONG",
+                                        "status":  "UP"
+                                    },
+                     "omniroute_20128":  {
+                                             "detail":  "health=identity ok; models=HTTP 200",
+                                             "status":  "UP"
+                                         },
+                     "backend_8000":  {
+                                          "detail":  "identity ok",
+                                          "status":  "UP"
+                                      },
+                     "frontend_3200":  {
+                                           "detail":  "identity ok",
+                                           "status":  "UP"
+                                       },
+                     "public_youandinotai":  {
+                                                 "detail":  "identity ok",
+                                                 "status":  "UP"
+                                             },
+                     "jarvis_9150":  {
+                                         "detail":  "identity ok",
+                                         "status":  "UP"
+                                     }
+                 },
+    "optional":  {
+                     "hermes_9119":  {
+                                         "detail":  "TCP probe",
+                                         "status":  "UP"
+                                     },
+                     "ollama_11434":  {
+                                          "detail":  "identity ok",
+                                          "status":  "UP"
+                                      },
+                     "domains_9160":  {
+                                          "detail":  "identity ok",
+                                          "status":  "UP"
+                                      },
+                     "dashboard_access_aidoesitall":  {
+                                                          "detail":  "Access sign-in gate present",
+                                                          "status":  "UP"
+                                                      },
+                     "domain_dream_online_net":  {
+                                                     "detail":  "NS=ns1081.ui-dns.de,ns1119.ui-dns.org,ns1075.ui-dns.com,ns1109.ui-dns.biz",
+                                                     "status":  "PENDING NAMESERVERS"
+                                                 },
+                     "domain_untilnokidinneed_com":  {
+                                                         "detail":  "NS=ns1090.ui-dns.org,ns1053.ui-dns.de,ns1020.ui-dns.com,ns1081.ui-dns.biz",
+                                                         "status":  "PENDING NAMESERVERS"
+                                                     },
+                     "domain_onlinerecycle_net":  {
+                                                      "detail":  "NS=ns1109.ui-dns.biz,ns1119.ui-dns.org,ns1075.ui-dns.com,ns1081.ui-dns.de",
+                                                      "status":  "PENDING NAMESERVERS"
+                                                  }
+                 },
+    "git":  {
+                "antigravity":  {
+                                    "dirty_lines":  28,
+                                    "path":  "C:\\ANTIGRAVITY",
+                                    "origin":  "26ec3e8c0d2af34deceb5313f059767382c2afae",
+                                    "dirty":  null,
+                                    "ahead_behind_origin":  "unknown",
+                                    "head":  "8567773a5137424aec9423e886ed7d52afea174d",
+                                    "equal_to_origin":  false
+                                }
+            },
+    "sale":  {
+                 "status_line":  "- 2026-09-16: Afternic listing submitted by Joshua, buy-now $12,500, minimum offer $8,000. Dan.com is the same platform. Ownership TXT records for Afternic and Atom (both codes) live at the root of youandinotai.com on Cloudflare, TTL 60. Nameservers stay on Cloudflare; the Afternic lander offer was declined because the live site runs through the Cloudflare tunnel. Atom listing created on the Standard tier, awaiting Joshua\u0027s click on the bulk-verify check."
+             },
+    "overall":  "YELLOW"
+}

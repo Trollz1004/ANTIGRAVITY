@@ -259,11 +259,11 @@ function Invoke-DateAppLocalAgent {
 }
 
 function Invoke-PaperclipAgent {
-    $paperclip = Test-HttpHealth -Agent "paperclip-agent" -Name "paperclip local api" -Url "http://127.0.0.1:3100/api/health"
+    $paperclip = Test-HttpHealth -Agent "paperclip-agent" -Name "paperclip local api" -Url "http://127.0.0.1:3917/api/health"
     if (-not $paperclip) {
         Start-RepairTask -Agent "paperclip-agent" -TaskName "PaperclipDateAppLoopback" -Restart | Out-Null
         Start-Sleep -Seconds 25
-        Test-HttpHealth -Agent "paperclip-agent" -Name "paperclip local api after repair" -Url "http://127.0.0.1:3100/api/health" | Out-Null
+        Test-HttpHealth -Agent "paperclip-agent" -Name "paperclip local api after repair" -Url "http://127.0.0.1:3917/api/health" | Out-Null
     }
 
     $proxy = Test-HttpHealth -Agent "paperclip-agent" -Name "paperclip private proxy" -Url "http://127.0.0.1:3110/healthz"

@@ -1,0 +1,1423 @@
+# parse.pyc
+
+bytes: 12775
+magic: f30d0d0a (this interpreter: f30d0d0a)
+magic matches: True
+
+## docstrings
+
+<module>:
+Parse a content/yesterday-news/<YYYYMMDD>/ day folder into structured stories.
+
+Source of truth is the day folder itself: script.txt carries the narration and the
+per-story article links, metadata.json carries the title/tags/sources. Nothing here
+invents content -- every field is derived from those two files.
+
+
+  _strip_html:
+Tags out, entities decoded, whitespace collapsed.
+
+  Story:
+Story
+
+    narration:
+Tightened spoken copy: headline as the hook, then a capped summary.
+
+The feed summaries run long and are usually cut off mid-sentence by the RSS
+"[...]" truncation. Only complete sentences survive, so the voiceover never
+trails off into a fragment.
+
+
+  Day:
+Day
+
+    narration_segments:
+(segment_id, spoken text) in render order.
+
+    <genexpr>:
+\d{8}
+
+## string constants
+
+'Parse a content/yesterday-news/<YYYYMMDD>/ day folder into structured stories.\n\nSource of truth is the day folder itself: script.txt carries the narration and the\nper-story article links, metadata.json carries the title/tags/sources. Nothing here\ninvents content -- every field is derived from those two files.\n'
+'<p>\\s*The post\\s*<a[^>]*href=\\"(?P<url>[^\\"]+)\\"[^>]*>(?P<title>.*?)</a>\\s*appeared first on\\s*<a[^>]*href=\\"(?P<home>[^\\"]+)\\"[^>]*>(?P<site>.*?)</a>\\s*\\.?\\s*</p>'
+'<[^>]+>'
+'^(?P<num>\\d+)\\.\\s+(?P<headline>.+?)\\s*$'
+"^Welcome to Yesterday's News Today for (?P<date>.+?)\\.\\s*$"
+'\\s*\\[\\s*(?:…|\\.\\.\\.)\\s*\\]\\s*$'
+"(?:That's your news recap|Subscribe for daily updates|^\\s*#\\w)"
+'\\s+'
+'(?<=[.!?])\\s+(?=[\\"“(\\[]?[A-Z0-9])'
+'\\s*[\\(\\[]\\s*(?:watch|look|listen|video|photos?|pics?|watch this)\\s*[\\)\\]]\\s*$|^\\s*(?:watch|look|listen)\\s*:\\s*'
+"'"
+'"'
+', '
+'-'
+'...'
+' '
+'Story'
+'Day'
+''
+' -–—:'
+'Tags out, entities decoded, whitespace collapsed.'
+'\xa0'
+'int'
+'number'
+'str'
+'headline'
+'summary'
+'url'
+'site'
+'bool'
+'truncated'
+'Tightened spoken copy: headline as the hook, then a capped summary.\n\nThe feed summaries run long and are usually cut off mid-sentence by the RSS\n"[...]" truncation. Only complete sentences survive, so the voiceover never\ntrails off into a fragment.\n'
+'.'
+'. '
+'Path'
+'folder'
+'date'
+'date_label'
+'title'
+'list[str]'
+'tags'
+'list[Story]'
+'stories'
+'dict'
+'metadata'
+'warnings'
+"Welcome to Yesterday's News Today for "
+"That's your recap. Subscribe for daily updates."
+'(segment_id, spoken text) in render order.'
+'intro'
+'story'
+'outro'
+'script.txt'
+'utf-8'
+'metadata.json'
+'intro line missing; date label taken from metadata'
+'sources'
+'source'
+'story '
+': no article URL in script.txt or metadata.json'
+'no numbered stories found in script.txt'
+'story_count'
+'metadata story_count='
+' but parsed '
+"Yesterday's News Today — "
+'\\d{8}'
+
+## disassembly
+
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Parse a content/yesterday-news/<YYYYMMDD>/ day folder into structured stories.\n\nSource of truth is the day folder itself: script.txt carries the narration and the\nper-story article links, metadata.json carries the title/tags/sources. Nothing here\ninvents content -- every field is derived from those two files.\n')
+              STORE_NAME               0 (__doc__)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (html)
+              STORE_NAME               3 (html)
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              4 (json)
+              STORE_NAME               4 (json)
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              5 (re)
+              STORE_NAME               5 (re)
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('dataclass', 'field'))
+              IMPORT_NAME              6 (dataclasses)
+              IMPORT_FROM              7 (dataclass)
+              STORE_NAME               7 (dataclass)
+              IMPORT_FROM              8 (field)
+              STORE_NAME               8 (field)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('date',))
+              IMPORT_NAME              9 (datetime)
+              IMPORT_FROM             10 (date)
+              STORE_NAME              10 (date)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('Path',))
+              IMPORT_NAME             11 (pathlib)
+              IMPORT_FROM             12 (Path)
+              STORE_NAME              12 (Path)
+              POP_TOP
+
+ 19           LOAD_NAME                5 (re)
+              LOAD_ATTR               26 (compile)
+              PUSH_NULL
+
+ 20           LOAD_CONST               7 ('<p>\\s*The post\\s*<a[^>]*href=\\"(?P<url>[^\\"]+)\\"[^>]*>(?P<title>.*?)</a>\\s*appeared first on\\s*<a[^>]*href=\\"(?P<home>[^\\"]+)\\"[^>]*>(?P<site>.*?)</a>\\s*\\.?\\s*</p>')
+
+ 22           LOAD_NAME                5 (re)
+              LOAD_ATTR               28 (IGNORECASE)
+              LOAD_NAME                5 (re)
+              LOAD_ATTR               30 (DOTALL)
+              BINARY_OP                7 (|)
+
+ 19           CALL                     2
+              STORE_NAME              16 (_POST_ATTRIB)
+
+ 24           LOAD_NAME                5 (re)
+              LOAD_ATTR               26 (compile)
+              PUSH_NULL
+              LOAD_CONST               8 ('<[^>]+>')
+              CALL                     1
+              STORE_NAME              17 (_TAG)
+
+ 25           LOAD_NAME                5 (re)
+              LOAD_ATTR               26 (compile)
+              PUSH_NULL
+              LOAD_CONST               9 ('^(?P<num>\\d+)\\.\\s+(?P<headline>.+?)\\s*$')
+              LOAD_NAME                5 (re)
+              LOAD_ATTR               36 (MULTILINE)
+              CALL                     2
+              STORE_NAME              19 (_STORY_HEAD)
+
+ 26           LOAD_NAME                5 (re)
+              LOAD_ATTR               26 (compile)
+              PUSH_NULL
+              LOAD_CONST              10 ("^Welcome to Yesterday's News Today for (?P<date>.+?)\\.\\s*$")
+              LOAD_NAME                5 (re)
+              LOAD_ATTR               36 (MULTILINE)
+              CALL                     2
+              STORE_NAME              20 (_INTRO)
+
+ 27           LOAD_NAME                5 (re)
+              LOAD_ATTR               26 (compile)
+              PUSH_NULL
+              LOAD_CONST              11 ('\\s*\\[\\s*(?:…|\\.\\.\\.)\\s*\\]\\s*$')
+              CALL                     1
+              STORE_NAME              21 (_TRUNC)
+
+ 30           LOAD_NAME                5 (re)
+              LOAD_ATTR               26 (compile)
+              PUSH_NULL
+
+ 31           LOAD_CONST              12 ("(?:That's your news recap|Subscribe for daily updates|^\\s*#\\w)")
+
+ 32           LOAD_NAME                5 (re)
+              LOAD_ATTR               28 (IGNORECASE)
+              LOAD_NAME                5 (re)
+              LOAD_ATTR               36 (MULTILINE)
+              BINARY_OP                7 (|)
+
+ 30           CALL                     2
+              STORE_NAME              22 (_TRAILER)
+
+ 34           LOAD_NAME                5 (re)
+              LOAD_ATTR               26 (compile)
+              PUSH_NULL
+              LOAD_CONST              13 ('\\s+')
+              CALL                     1
+              STORE_NAME              23 (_WS)
+
+ 36           LOAD_NAME                5 (re)
+              LOAD_ATTR               26 (compile)
+              PUSH_NULL
+              LOAD_CONST              14 ('(?<=[.!?])\\s+(?=[\\"“(\\[]?[A-Z0-9])')
+              CALL                     1
+              STORE_NAME              24 (_SENT)
+
+ 41           LOAD_NAME                5 (re)
+              LOAD_ATTR               26 (compile)
+              PUSH_NULL
+
+ 42           LOAD_CONST              15 ('\\s*[\\(\\[]\\s*(?:watch|look|listen|video|photos?|pics?|watch this)\\s*[\\)\\]]\\s*$|^\\s*(?:watch|look|listen)\\s*:\\s*')
+
+ 44           LOAD_NAME                5 (re)
+              LOAD_ATTR               28 (IGNORECASE)
+
+ 41           CALL                     2
+              STORE_NAME              25 (_CRUFT)
+
+ 48           LOAD_CONST              34 (('text', 'str', 'return', 'str'))
+              LOAD_CONST              16 (<code object clean_headline at 0x000001D515B72D90, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 48>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              26 (clean_headline)
+
+ 56           LOAD_CONST              35 (('fragment', 'str', 'return', 'str'))
+              LOAD_CONST              17 (<code object _strip_html at 0x000001D51586FBB0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 56>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              27 (_strip_html)
+
+ 66           LOAD_CONST              36 (('text', 'str', 'return', 'list[str]'))
+              LOAD_CONST              18 (<code object split_sentences at 0x000001D515CFD8A0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 66>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              28 (split_sentences)
+
+ 73           LOAD_CONST              19 ("'")
+              LOAD_CONST              19 ("'")
+              LOAD_CONST              20 ('"')
+              LOAD_CONST              20 ('"')
+
+ 74           LOAD_CONST              21 (', ')
+              LOAD_CONST              22 ('-')
+              LOAD_CONST              23 ('...')
+              LOAD_CONST              24 (' ')
+
+ 72           LOAD_CONST              25 (('‘', '’', '“', '”', '—', '–', '…', '\xa0'))
+              BUILD_CONST_KEY_MAP      8
+              STORE_NAME              29 (_SPEECH_MAP)
+
+ 78           LOAD_CONST              34 (('text', 'str', 'return', 'str'))
+              LOAD_CONST              26 (<code object normalize_speech at 0x000001D515CFDA10, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 78>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              30 (normalize_speech)
+
+ 84           LOAD_NAME                7 (dataclass)
+
+ 85           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              27 (<code object Story at 0x000001D515D78290, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 84>)
+              MAKE_FUNCTION
+              LOAD_CONST              28 ('Story')
+              CALL                     2
+
+ 84           CALL                     0
+
+ 85           STORE_NAME              31 (Story)
+
+114           LOAD_NAME                7 (dataclass)
+
+115           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              29 (<code object Day at 0x000001D515D01FB0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 114>)
+              MAKE_FUNCTION
+              LOAD_CONST              30 ('Day')
+              CALL                     2
+
+114           CALL                     0
+
+115           STORE_NAME              32 (Day)
+
+144           LOAD_CONST              37 (('folder', 'Path', 'return', 'Day'))
+              LOAD_CONST              31 (<code object parse_day at 0x000001D515E16160, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 144>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              33 (parse_day)
+
+225           LOAD_CONST              38 (('metadata', 'dict', 'return', 'str'))
+              LOAD_CONST              32 (<code object _fallback_site at 0x000001D5158B3CF0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 225>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              34 (_fallback_site)
+
+234           LOAD_CONST              39 (('root', 'Path', 'return', 'list[Day]'))
+              LOAD_CONST              33 (<code object all_days at 0x000001D515CFDE60, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 234>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              35 (all_days)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object clean_headline at 0x000001D515B72D90, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 48>:
+ 48           RESUME                   0
+
+ 49           LOAD_CONST               0 (None)
+              STORE_FAST               1 (prev)
+
+ 50           LOAD_FAST_LOAD_FAST     16 (prev, text)
+              COMPARE_OP             119 (bool(!=))
+              POP_JUMP_IF_FALSE       45 (to L2)
+
+ 51   L1:     LOAD_FAST                0 (text)
+              STORE_FAST               1 (prev)
+
+ 52           LOAD_GLOBAL              0 (_CRUFT)
+              LOAD_ATTR                3 (sub + NULL|self)
+              LOAD_CONST               1 ('')
+              LOAD_FAST                0 (text)
+              CALL                     2
+              LOAD_ATTR                5 (strip + NULL|self)
+              CALL                     0
+              STORE_FAST               0 (text)
+
+ 50           LOAD_FAST_LOAD_FAST     16 (prev, text)
+              COMPARE_OP             119 (bool(!=))
+              POP_JUMP_IF_FALSE        2 (to L2)
+              JUMP_BACKWARD           45 (to L1)
+
+ 53   L2:     LOAD_FAST                0 (text)
+              LOAD_ATTR                5 (strip + NULL|self)
+              LOAD_CONST               2 (' -–—:')
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object _strip_html at 0x000001D51586FBB0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 56>:
+ 56           RESUME                   0
+
+ 58           LOAD_GLOBAL              0 (_TAG)
+              LOAD_ATTR                3 (sub + NULL|self)
+              LOAD_CONST               1 (' ')
+              LOAD_FAST                0 (fragment)
+              CALL                     2
+              STORE_FAST               1 (text)
+
+ 59           LOAD_GLOBAL              4 (html)
+              LOAD_ATTR                6 (unescape)
+              PUSH_NULL
+              LOAD_FAST                1 (text)
+              CALL                     1
+              STORE_FAST               1 (text)
+
+ 61           LOAD_GLOBAL              4 (html)
+              LOAD_ATTR                6 (unescape)
+              PUSH_NULL
+              LOAD_FAST                1 (text)
+              CALL                     1
+              STORE_FAST               1 (text)
+
+ 62           LOAD_FAST                1 (text)
+              LOAD_ATTR                9 (replace + NULL|self)
+              LOAD_CONST               2 ('\xa0')
+              LOAD_CONST               1 (' ')
+              CALL                     2
+              STORE_FAST               1 (text)
+
+ 63           LOAD_GLOBAL             10 (_WS)
+              LOAD_ATTR                3 (sub + NULL|self)
+              LOAD_CONST               1 (' ')
+              LOAD_FAST                1 (text)
+              CALL                     2
+              LOAD_ATTR               13 (strip + NULL|self)
+              CALL                     0
+              RETURN_VALUE
+
+Disassembly of <code object split_sentences at 0x000001D515CFD8A0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 66>:
+  66           RESUME                   0
+
+  67           LOAD_GLOBAL              0 (_SENT)
+               LOAD_ATTR                3 (split + NULL|self)
+               LOAD_FAST                0 (text)
+               CALL                     1
+               GET_ITER
+               LOAD_FAST_AND_CLEAR      1 (s)
+               SWAP                     2
+       L1:     BUILD_LIST               0
+               SWAP                     2
+               GET_ITER
+       L2:     FOR_ITER                41 (to L5)
+               STORE_FAST_LOAD_FAST    17 (s, s)
+               LOAD_ATTR                5 (strip + NULL|self)
+               CALL                     0
+               TO_BOOL
+       L3:     POP_JUMP_IF_TRUE         2 (to L4)
+               JUMP_BACKWARD           25 (to L2)
+       L4:     LOAD_FAST                1 (s)
+               LOAD_ATTR                5 (strip + NULL|self)
+               CALL                     0
+               LIST_APPEND              2
+               JUMP_BACKWARD           43 (to L2)
+       L5:     END_FOR
+               POP_TOP
+       L6:     SWAP                     2
+               STORE_FAST               1 (s)
+               RETURN_VALUE
+
+  --   L7:     SWAP                     2
+               POP_TOP
+
+  67           SWAP                     2
+               STORE_FAST               1 (s)
+               RERAISE                  0
+ExceptionTable:
+  L1 to L3 -> L7 [2]
+  L4 to L6 -> L7 [2]
+
+Disassembly of <code object normalize_speech at 0x000001D515CFDA10, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 78>:
+ 78           RESUME                   0
+
+ 79           LOAD_GLOBAL              0 (_SPEECH_MAP)
+              LOAD_ATTR                3 (items + NULL|self)
+              CALL                     0
+              GET_ITER
+      L1:     FOR_ITER                22 (to L2)
+              UNPACK_SEQUENCE          2
+              STORE_FAST_STORE_FAST   18 (src, dst)
+
+ 80           LOAD_FAST                0 (text)
+              LOAD_ATTR                5 (replace + NULL|self)
+              LOAD_FAST_LOAD_FAST     18 (src, dst)
+              CALL                     2
+              STORE_FAST               0 (text)
+              JUMP_BACKWARD           24 (to L1)
+
+ 79   L2:     END_FOR
+              POP_TOP
+
+ 81           LOAD_GLOBAL              6 (_WS)
+              LOAD_ATTR                9 (sub + NULL|self)
+              LOAD_CONST               1 (' ')
+              LOAD_FAST                0 (text)
+              CALL                     2
+              LOAD_ATTR               11 (strip + NULL|self)
+              CALL                     0
+              RETURN_VALUE
+
+Disassembly of <code object Story at 0x000001D515D78290, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 84>:
+ 84           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('Story')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (84)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 86           LOAD_CONST               2 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('number')
+              STORE_SUBSCR
+
+ 87           LOAD_CONST               4 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('headline')
+              STORE_SUBSCR
+
+ 88           LOAD_CONST               4 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('summary')
+              STORE_SUBSCR
+
+ 89           LOAD_CONST               4 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('url')
+              STORE_SUBSCR
+
+ 90           LOAD_CONST               4 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('site')
+              STORE_SUBSCR
+
+ 91           LOAD_CONST               9 (False)
+              STORE_NAME               5 (truncated)
+              LOAD_CONST              10 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('truncated')
+              STORE_SUBSCR
+
+ 93           LOAD_CONST              15 ((2, 45))
+              LOAD_CONST              16 (('max_sentences', 'int', 'max_words', 'int', 'return', 'str'))
+              LOAD_CONST              12 (<code object narration at 0x000001D515BDE9D0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 93>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME               6 (narration)
+              LOAD_CONST              13 (())
+              STORE_NAME               7 (__static_attributes__)
+              RETURN_CONST            14 (None)
+
+Disassembly of <code object narration at 0x000001D515BDE9D0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 93>:
+  93            RESUME                   0
+
+ 100            LOAD_GLOBAL              1 (split_sentences + NULL)
+                LOAD_FAST                0 (self)
+                LOAD_ATTR                2 (summary)
+                CALL                     1
+                GET_ITER
+                LOAD_FAST_AND_CLEAR      3 (s)
+                SWAP                     2
+        L1:     BUILD_LIST               0
+                SWAP                     2
+                GET_ITER
+        L2:     FOR_ITER                42 (to L5)
+                STORE_FAST_LOAD_FAST    51 (s, s)
+                LOAD_ATTR                5 (rstrip + NULL|self)
+                CALL                     0
+                LOAD_ATTR                7 (endswith + NULL|self)
+                LOAD_CONST               1 (('.', '!', '?'))
+                CALL                     1
+                TO_BOOL
+        L3:     POP_JUMP_IF_TRUE         2 (to L4)
+                JUMP_BACKWARD           40 (to L2)
+        L4:     LOAD_FAST                3 (s)
+                LIST_APPEND              2
+                JUMP_BACKWARD           44 (to L2)
+        L5:     END_FOR
+                POP_TOP
+        L6:     STORE_FAST               4 (sentences)
+                STORE_FAST               3 (s)
+
+ 101            BUILD_LIST               0
+                STORE_FAST               5 (kept)
+
+ 102            LOAD_CONST               2 (0)
+                STORE_FAST               6 (words)
+
+ 103            LOAD_FAST                4 (sentences)
+                LOAD_CONST               3 (None)
+                LOAD_FAST                1 (max_sentences)
+                BINARY_SLICE
+                GET_ITER
+        L7:     FOR_ITER                66 (to L9)
+                STORE_FAST               7 (sentence)
+
+ 104            LOAD_GLOBAL              9 (len + NULL)
+                LOAD_FAST                7 (sentence)
+                LOAD_ATTR               11 (split + NULL|self)
+                CALL                     0
+                CALL                     1
+                STORE_FAST               8 (n)
+
+ 105            LOAD_FAST                5 (kept)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       10 (to L8)
+                LOAD_FAST_LOAD_FAST    104 (words, n)
+                BINARY_OP                0 (+)
+                LOAD_FAST                2 (max_words)
+                COMPARE_OP             148 (bool(>))
+                POP_JUMP_IF_FALSE        2 (to L8)
+
+ 106            POP_TOP
+                JUMP_FORWARD            25 (to L10)
+
+ 107    L8:     LOAD_FAST                5 (kept)
+                LOAD_ATTR               13 (append + NULL|self)
+                LOAD_FAST                7 (sentence)
+                CALL                     1
+                POP_TOP
+
+ 108            LOAD_FAST_LOAD_FAST    104 (words, n)
+                BINARY_OP               13 (+=)
+                STORE_FAST               6 (words)
+                JUMP_BACKWARD           68 (to L7)
+
+ 103    L9:     END_FOR
+                POP_TOP
+
+ 109   L10:     LOAD_CONST               4 (' ')
+                LOAD_ATTR               15 (join + NULL|self)
+                LOAD_FAST                5 (kept)
+                CALL                     1
+                STORE_FAST               9 (body)
+
+ 110            LOAD_FAST                0 (self)
+                LOAD_ATTR               16 (headline)
+                LOAD_ATTR                5 (rstrip + NULL|self)
+                LOAD_CONST               5 ('.')
+                CALL                     1
+                STORE_FAST              10 (headline)
+
+ 111            LOAD_GLOBAL             19 (normalize_speech + NULL)
+                LOAD_FAST               10 (headline)
+                FORMAT_SIMPLE
+                LOAD_CONST               6 ('. ')
+                LOAD_FAST                9 (body)
+                FORMAT_SIMPLE
+                BUILD_STRING             3
+                LOAD_ATTR               21 (strip + NULL|self)
+                CALL                     0
+                CALL                     1
+                RETURN_VALUE
+
+  --   L11:     SWAP                     2
+                POP_TOP
+
+ 100            SWAP                     2
+                STORE_FAST               3 (s)
+                RERAISE                  0
+ExceptionTable:
+  L1 to L3 -> L11 [2]
+  L4 to L6 -> L11 [2]
+
+Disassembly of <code object Day at 0x000001D515D01FB0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 114>:
+114           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('Day')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (114)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+116           LOAD_CONST               2 ('Path')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('folder')
+              STORE_SUBSCR
+
+117           LOAD_CONST               4 ('date')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('date')
+              STORE_SUBSCR
+
+118           LOAD_CONST               5 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('date_label')
+              STORE_SUBSCR
+
+119           LOAD_CONST               5 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('title')
+              STORE_SUBSCR
+
+120           LOAD_CONST               8 ('list[str]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('tags')
+              STORE_SUBSCR
+
+121           LOAD_CONST              10 ('list[Story]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('stories')
+              STORE_SUBSCR
+
+122           LOAD_NAME                5 (field)
+              PUSH_NULL
+              LOAD_CONST              12 (False)
+              LOAD_NAME                6 (dict)
+              LOAD_CONST              13 (('repr', 'default_factory'))
+              CALL_KW                  2
+              STORE_NAME               7 (metadata)
+              LOAD_CONST              14 ('dict')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              15 ('metadata')
+              STORE_SUBSCR
+
+123           LOAD_NAME                5 (field)
+              PUSH_NULL
+              LOAD_NAME                8 (list)
+              LOAD_CONST              16 (('default_factory',))
+              CALL_KW                  1
+              STORE_NAME               9 (warnings)
+              LOAD_CONST               8 ('list[str]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              17 ('warnings')
+              STORE_SUBSCR
+
+125           LOAD_NAME               10 (property)
+
+126           LOAD_CONST              24 (('return', 'str'))
+              LOAD_CONST              18 (<code object slug at 0x000001D515D1D830, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 125>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+125           CALL                     0
+
+126           STORE_NAME              11 (slug)
+
+129           LOAD_CONST              24 (('return', 'str'))
+              LOAD_CONST              19 (<code object intro at 0x000001D515CEE970, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 129>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              12 (intro)
+
+132           LOAD_CONST              24 (('return', 'str'))
+              LOAD_CONST              20 (<code object outro at 0x000001D515CEB840, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 132>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              13 (outro)
+
+135           LOAD_CONST              25 (('return', 'list[tuple[str, str]]'))
+              LOAD_CONST              21 (<code object narration_segments at 0x000001D51586FD70, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 135>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              14 (narration_segments)
+              LOAD_CONST              22 (())
+              STORE_NAME              15 (__static_attributes__)
+              RETURN_CONST            23 (None)
+
+Disassembly of <code object slug at 0x000001D515D1D830, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 125>:
+125           RESUME                   0
+
+127           LOAD_FAST                0 (self)
+              LOAD_ATTR                0 (folder)
+              LOAD_ATTR                2 (name)
+              RETURN_VALUE
+
+Disassembly of <code object intro at 0x000001D515CEE970, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 129>:
+129           RESUME                   0
+
+130           LOAD_CONST               1 ("Welcome to Yesterday's News Today for ")
+              LOAD_FAST                0 (self)
+              LOAD_ATTR                0 (date_label)
+              FORMAT_SIMPLE
+              LOAD_CONST               2 ('.')
+              BUILD_STRING             3
+              RETURN_VALUE
+
+Disassembly of <code object outro at 0x000001D515CEB840, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 132>:
+132           RESUME                   0
+
+133           RETURN_CONST             1 ("That's your recap. Subscribe for daily updates.")
+
+Disassembly of <code object narration_segments at 0x000001D51586FD70, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 135>:
+135           RESUME                   0
+
+137           LOAD_CONST               1 ('intro')
+              LOAD_FAST                0 (self)
+              LOAD_ATTR                1 (intro + NULL|self)
+              CALL                     0
+              BUILD_TUPLE              2
+              BUILD_LIST               1
+              STORE_FAST               1 (segs)
+
+138           LOAD_FAST                0 (self)
+              LOAD_ATTR                2 (stories)
+              GET_ITER
+      L1:     FOR_ITER                49 (to L2)
+              STORE_FAST               2 (story)
+
+139           LOAD_FAST                1 (segs)
+              LOAD_ATTR                5 (append + NULL|self)
+              LOAD_CONST               2 ('story')
+              LOAD_FAST                2 (story)
+              LOAD_ATTR                6 (number)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              LOAD_FAST                2 (story)
+              LOAD_ATTR                9 (narration + NULL|self)
+              CALL                     0
+              BUILD_TUPLE              2
+              CALL                     1
+              POP_TOP
+              JUMP_BACKWARD           51 (to L1)
+
+138   L2:     END_FOR
+              POP_TOP
+
+140           LOAD_FAST                1 (segs)
+              LOAD_ATTR                5 (append + NULL|self)
+              LOAD_CONST               3 ('outro')
+              LOAD_FAST                0 (self)
+              LOAD_ATTR               11 (outro + NULL|self)
+              CALL                     0
+              BUILD_TUPLE              2
+              CALL                     1
+              POP_TOP
+
+141           LOAD_FAST                1 (segs)
+              RETURN_VALUE
+
+Disassembly of <code object parse_day at 0x000001D515E16160, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 144>:
+ 144            RESUME                   0
+
+ 145            LOAD_GLOBAL              1 (Path + NULL)
+                LOAD_FAST                0 (folder)
+                CALL                     1
+                STORE_FAST               0 (folder)
+
+ 146            LOAD_FAST                0 (folder)
+                LOAD_CONST               1 ('script.txt')
+                BINARY_OP               11 (/)
+                LOAD_ATTR                3 (read_text + NULL|self)
+                LOAD_CONST               2 ('utf-8')
+                LOAD_CONST               3 (('encoding',))
+                CALL_KW                  1
+                STORE_FAST               1 (script)
+
+ 147            LOAD_GLOBAL              4 (json)
+                LOAD_ATTR                6 (loads)
+                PUSH_NULL
+                LOAD_FAST                0 (folder)
+                LOAD_CONST               4 ('metadata.json')
+                BINARY_OP               11 (/)
+                LOAD_ATTR                3 (read_text + NULL|self)
+                LOAD_CONST               2 ('utf-8')
+                LOAD_CONST               3 (('encoding',))
+                CALL_KW                  1
+                CALL                     1
+                STORE_FAST               2 (metadata)
+
+ 148            BUILD_LIST               0
+                STORE_FAST               3 (warnings)
+
+ 150            LOAD_GLOBAL              8 (_INTRO)
+                LOAD_ATTR               11 (search + NULL|self)
+                LOAD_FAST                1 (script)
+                CALL                     1
+                STORE_FAST               4 (intro_match)
+
+ 151            LOAD_FAST                4 (intro_match)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       32 (to L1)
+
+ 152            LOAD_FAST                4 (intro_match)
+                LOAD_ATTR               13 (group + NULL|self)
+                LOAD_CONST               5 ('date')
+                CALL                     1
+                LOAD_ATTR               15 (strip + NULL|self)
+                CALL                     0
+                STORE_FAST               5 (date_label)
+                JUMP_FORWARD            45 (to L2)
+
+ 154    L1:     LOAD_FAST                2 (metadata)
+                LOAD_ATTR               17 (get + NULL|self)
+                LOAD_CONST               5 ('date')
+                LOAD_FAST                0 (folder)
+                LOAD_ATTR               18 (name)
+                CALL                     2
+                STORE_FAST               5 (date_label)
+
+ 155            LOAD_FAST                3 (warnings)
+                LOAD_ATTR               21 (append + NULL|self)
+                LOAD_CONST               6 ('intro line missing; date label taken from metadata')
+                CALL                     1
+                POP_TOP
+
+ 157    L2:     LOAD_FAST                2 (metadata)
+                LOAD_ATTR               17 (get + NULL|self)
+                LOAD_CONST               5 ('date')
+                CALL                     1
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE        49 (to L3)
+                POP_TOP
+                LOAD_FAST                0 (folder)
+                LOAD_ATTR               18 (name)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               7 (4)
+                BINARY_SLICE
+                FORMAT_SIMPLE
+                LOAD_CONST               8 ('-')
+                LOAD_FAST                0 (folder)
+                LOAD_ATTR               18 (name)
+                LOAD_CONST               7 (4)
+                LOAD_CONST               9 (6)
+                BINARY_SLICE
+                FORMAT_SIMPLE
+                LOAD_CONST               8 ('-')
+                LOAD_FAST                0 (folder)
+                LOAD_ATTR               18 (name)
+                LOAD_CONST               9 (6)
+                LOAD_CONST              10 (8)
+                BINARY_SLICE
+                FORMAT_SIMPLE
+                BUILD_STRING             5
+        L3:     STORE_FAST               6 (iso)
+
+ 158            LOAD_GLOBAL             22 (date)
+                LOAD_ATTR               24 (fromisoformat)
+                PUSH_NULL
+                LOAD_FAST                6 (iso)
+                CALL                     1
+                STORE_FAST               7 (day_date)
+
+ 162            LOAD_FAST                2 (metadata)
+                LOAD_ATTR               17 (get + NULL|self)
+                LOAD_CONST              11 ('sources')
+                CALL                     1
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L4)
+                POP_TOP
+                BUILD_LIST               0
+        L4:     STORE_FAST               8 (meta_sources)
+
+ 163            BUILD_MAP                0
+                STORE_FAST               9 (meta_by_index)
+
+ 164            LOAD_FAST                8 (meta_sources)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       55 (to L9)
+                LOAD_GLOBAL             27 (isinstance + NULL)
+                LOAD_FAST                8 (meta_sources)
+                LOAD_CONST              12 (0)
+                BINARY_SUBSCR
+                LOAD_GLOBAL             28 (dict)
+                CALL                     2
+                TO_BOOL
+                POP_JUMP_IF_FALSE       31 (to L9)
+
+ 165            LOAD_GLOBAL             31 (enumerate + NULL)
+                LOAD_FAST                8 (meta_sources)
+                CALL                     1
+                GET_ITER
+                LOAD_FAST_AND_CLEAR     10 (i)
+                LOAD_FAST_AND_CLEAR     11 (s)
+                SWAP                     3
+        L5:     BUILD_MAP                0
+                SWAP                     2
+                GET_ITER
+        L6:     FOR_ITER                 7 (to L7)
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST  171 (i, s)
+                LOAD_FAST_LOAD_FAST    171 (i, s)
+                MAP_ADD                  2
+                JUMP_BACKWARD            9 (to L6)
+        L7:     END_FOR
+                POP_TOP
+        L8:     STORE_FAST               9 (meta_by_index)
+                STORE_FAST              10 (i)
+                STORE_FAST              11 (s)
+
+ 167    L9:     LOAD_GLOBAL             33 (list + NULL)
+                LOAD_GLOBAL             34 (_STORY_HEAD)
+                LOAD_ATTR               37 (finditer + NULL|self)
+                LOAD_FAST                1 (script)
+                CALL                     1
+                CALL                     1
+                STORE_FAST              12 (heads)
+
+ 168            BUILD_LIST               0
+                STORE_FAST              13 (stories)
+
+ 169            LOAD_GLOBAL             31 (enumerate + NULL)
+                LOAD_FAST               12 (heads)
+                CALL                     1
+                GET_ITER
+       L10:     EXTENDED_ARG             2
+                FOR_ITER               545 (to L24)
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST  239 (idx, match)
+
+ 170            LOAD_FAST               15 (match)
+                LOAD_ATTR               39 (end + NULL|self)
+                CALL                     0
+                STORE_FAST              16 (start)
+
+ 171            LOAD_FAST               14 (idx)
+                LOAD_CONST              13 (1)
+                BINARY_OP                0 (+)
+                LOAD_GLOBAL             41 (len + NULL)
+                LOAD_FAST               12 (heads)
+                CALL                     1
+                COMPARE_OP              18 (bool(<))
+                POP_JUMP_IF_FALSE       21 (to L11)
+                LOAD_FAST_LOAD_FAST    206 (heads, idx)
+                LOAD_CONST              13 (1)
+                BINARY_OP                0 (+)
+                BINARY_SUBSCR
+                LOAD_ATTR               43 (start + NULL|self)
+                CALL                     0
+                JUMP_FORWARD            10 (to L12)
+       L11:     LOAD_GLOBAL             41 (len + NULL)
+                LOAD_FAST                1 (script)
+                CALL                     1
+       L12:     STORE_FAST              17 (end)
+
+ 172            LOAD_FAST                1 (script)
+                LOAD_FAST               16 (start)
+                LOAD_FAST               17 (end)
+                BINARY_SLICE
+                STORE_FAST              18 (block)
+
+ 173            LOAD_GLOBAL             44 (_TRAILER)
+                LOAD_ATTR               11 (search + NULL|self)
+                LOAD_FAST               18 (block)
+                CALL                     1
+                STORE_FAST              19 (trailer)
+
+ 174            LOAD_FAST               19 (trailer)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       19 (to L13)
+
+ 175            LOAD_FAST               18 (block)
+                LOAD_CONST               0 (None)
+                LOAD_FAST               19 (trailer)
+                LOAD_ATTR               43 (start + NULL|self)
+                CALL                     0
+                BINARY_SLICE
+                STORE_FAST              18 (block)
+
+ 177   L13:     LOAD_GLOBAL             46 (_POST_ATTRIB)
+                LOAD_ATTR               11 (search + NULL|self)
+                LOAD_FAST               18 (block)
+                CALL                     1
+                STORE_FAST              20 (attrib)
+
+ 178            LOAD_FAST               20 (attrib)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       31 (to L14)
+                LOAD_FAST               20 (attrib)
+                LOAD_ATTR               13 (group + NULL|self)
+                LOAD_CONST              14 ('url')
+                CALL                     1
+                LOAD_ATTR               15 (strip + NULL|self)
+                CALL                     0
+                JUMP_FORWARD             1 (to L15)
+       L14:     LOAD_CONST              15 ('')
+       L15:     STORE_FAST              21 (url)
+
+ 179            LOAD_FAST               20 (attrib)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       26 (to L16)
+                LOAD_GLOBAL             49 (_strip_html + NULL)
+                LOAD_FAST               20 (attrib)
+                LOAD_ATTR               13 (group + NULL|self)
+                LOAD_CONST              16 ('site')
+                CALL                     1
+                CALL                     1
+                JUMP_FORWARD             1 (to L17)
+       L16:     LOAD_CONST              15 ('')
+       L17:     STORE_FAST              22 (site)
+
+ 181            LOAD_GLOBAL             46 (_POST_ATTRIB)
+                LOAD_ATTR               51 (sub + NULL|self)
+                LOAD_CONST              17 (' ')
+                LOAD_FAST               18 (block)
+                CALL                     2
+                STORE_FAST              23 (body)
+
+ 183            LOAD_GLOBAL             49 (_strip_html + NULL)
+                LOAD_FAST               23 (body)
+                CALL                     1
+                STORE_FAST              24 (summary)
+
+ 184            LOAD_GLOBAL             53 (bool + NULL)
+                LOAD_GLOBAL             54 (_TRUNC)
+                LOAD_ATTR               11 (search + NULL|self)
+                LOAD_FAST               24 (summary)
+                CALL                     1
+                CALL                     1
+                STORE_FAST              25 (truncated)
+
+ 185            LOAD_GLOBAL             54 (_TRUNC)
+                LOAD_ATTR               51 (sub + NULL|self)
+                LOAD_CONST              15 ('')
+                LOAD_FAST               24 (summary)
+                CALL                     2
+                LOAD_ATTR               15 (strip + NULL|self)
+                CALL                     0
+                STORE_FAST              24 (summary)
+
+ 187            LOAD_FAST                9 (meta_by_index)
+                LOAD_ATTR               17 (get + NULL|self)
+                LOAD_FAST               14 (idx)
+                BUILD_MAP                0
+                CALL                     2
+                STORE_FAST              26 (meta)
+
+ 188            LOAD_FAST               21 (url)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        40 (to L19)
+
+ 189            LOAD_FAST               26 (meta)
+                LOAD_ATTR               17 (get + NULL|self)
+                LOAD_CONST              14 ('url')
+                CALL                     1
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L18)
+                POP_TOP
+                LOAD_CONST              15 ('')
+       L18:     LOAD_ATTR               15 (strip + NULL|self)
+                CALL                     0
+                STORE_FAST              21 (url)
+
+ 190   L19:     LOAD_FAST               22 (site)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        40 (to L21)
+
+ 191            LOAD_FAST               26 (meta)
+                LOAD_ATTR               17 (get + NULL|self)
+                LOAD_CONST              18 ('source')
+                CALL                     1
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L20)
+                POP_TOP
+                LOAD_CONST              15 ('')
+       L20:     LOAD_ATTR               15 (strip + NULL|self)
+                CALL                     0
+                STORE_FAST              22 (site)
+
+ 192   L21:     LOAD_FAST               21 (url)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        24 (to L22)
+
+ 193            LOAD_FAST                3 (warnings)
+                LOAD_ATTR               21 (append + NULL|self)
+                LOAD_CONST              19 ('story ')
+                LOAD_FAST               14 (idx)
+                LOAD_CONST              13 (1)
+                BINARY_OP                0 (+)
+                FORMAT_SIMPLE
+                LOAD_CONST              20 (': no article URL in script.txt or metadata.json')
+                BUILD_STRING             3
+                CALL                     1
+                POP_TOP
+
+ 195   L22:     LOAD_FAST               13 (stories)
+                LOAD_ATTR               21 (append + NULL|self)
+
+ 196            LOAD_GLOBAL             57 (Story + NULL)
+
+ 197            LOAD_FAST               14 (idx)
+                LOAD_CONST              13 (1)
+                BINARY_OP                0 (+)
+
+ 198            LOAD_GLOBAL             59 (clean_headline + NULL)
+                LOAD_GLOBAL             49 (_strip_html + NULL)
+                LOAD_FAST               15 (match)
+                LOAD_ATTR               13 (group + NULL|self)
+                LOAD_CONST              21 ('headline')
+                CALL                     1
+                CALL                     1
+                CALL                     1
+
+ 199            LOAD_FAST               24 (summary)
+
+ 200            LOAD_FAST               21 (url)
+
+ 201            LOAD_FAST               22 (site)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L23)
+                POP_TOP
+                LOAD_GLOBAL             61 (_fallback_site + NULL)
+                LOAD_FAST                2 (metadata)
+                CALL                     1
+
+ 202   L23:     LOAD_FAST               25 (truncated)
+
+ 196            LOAD_CONST              22 (('number', 'headline', 'summary', 'url', 'site', 'truncated'))
+                CALL_KW                  6
+
+ 195            CALL                     1
+                POP_TOP
+                EXTENDED_ARG             2
+                JUMP_BACKWARD          548 (to L10)
+
+ 169   L24:     END_FOR
+                POP_TOP
+
+ 206            LOAD_FAST               13 (stories)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        17 (to L25)
+
+ 207            LOAD_FAST                3 (warnings)
+                LOAD_ATTR               21 (append + NULL|self)
+                LOAD_CONST              23 ('no numbered stories found in script.txt')
+                CALL                     1
+                POP_TOP
+
+ 209   L25:     LOAD_FAST                2 (metadata)
+                LOAD_ATTR               17 (get + NULL|self)
+                LOAD_CONST              24 ('story_count')
+                CALL                     1
+                STORE_FAST              27 (declared)
+
+ 210            LOAD_FAST               27 (declared)
+                POP_JUMP_IF_NONE        47 (to L26)
+                LOAD_FAST               27 (declared)
+                LOAD_GLOBAL             41 (len + NULL)
+                LOAD_FAST               13 (stories)
+                CALL                     1
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE       32 (to L26)
+
+ 211            LOAD_FAST                3 (warnings)
+                LOAD_ATTR               21 (append + NULL|self)
+                LOAD_CONST              25 ('metadata story_count=')
+                LOAD_FAST               27 (declared)
+                FORMAT_SIMPLE
+                LOAD_CONST              26 (' but parsed ')
+                LOAD_GLOBAL             41 (len + NULL)
+                LOAD_FAST               13 (stories)
+                CALL                     1
+                FORMAT_SIMPLE
+                BUILD_STRING             4
+                CALL                     1
+                POP_TOP
+
+ 213   L26:     LOAD_GLOBAL             63 (Day + NULL)
+
+ 214            LOAD_FAST                0 (folder)
+
+ 215            LOAD_FAST                7 (day_date)
+
+ 216            LOAD_FAST                5 (date_label)
+
+ 217            LOAD_FAST                2 (metadata)
+                LOAD_ATTR               17 (get + NULL|self)
+                LOAD_CONST              27 ('title')
+                CALL                     1
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         5 (to L27)
+                POP_TOP
+                LOAD_CONST              28 ("Yesterday's News Today — ")
+                LOAD_FAST                5 (date_label)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 218   L27:     LOAD_GLOBAL             33 (list + NULL)
+                LOAD_FAST                2 (metadata)
+                LOAD_ATTR               17 (get + NULL|self)
+                LOAD_CONST              29 ('tags')
+                CALL                     1
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L28)
+                POP_TOP
+                BUILD_LIST               0
+       L28:     CALL                     1
+
+ 219            LOAD_FAST               13 (stories)
+
+ 220            LOAD_FAST                2 (metadata)
+
+ 221            LOAD_FAST                3 (warnings)
+
+ 213            LOAD_CONST              30 (('folder', 'date', 'date_label', 'title', 'tags', 'stories', 'metadata', 'warnings'))
+                CALL_KW                  8
+                RETURN_VALUE
+
+  --   L29:     SWAP                     2
+                POP_TOP
+
+ 165            SWAP                     3
+                STORE_FAST              11 (s)
+                STORE_FAST              10 (i)
+                RERAISE                  0
+ExceptionTable:
+  L5 to L8 -> L29 [3]
+
+Disassembly of <code object _fallback_site at 0x000001D5158B3CF0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 225>:
+225           RESUME                   0
+
+226           LOAD_FAST                0 (metadata)
+              LOAD_ATTR                1 (get + NULL|self)
+              LOAD_CONST               1 ('sources')
+              CALL                     1
+              COPY                     1
+              TO_BOOL
+              POP_JUMP_IF_TRUE         2 (to L1)
+              POP_TOP
+              BUILD_LIST               0
+      L1:     STORE_FAST               1 (sources)
+
+227           LOAD_FAST                1 (sources)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       29 (to L2)
+              LOAD_GLOBAL              3 (isinstance + NULL)
+              LOAD_FAST                1 (sources)
+              LOAD_CONST               2 (0)
+              BINARY_SUBSCR
+              LOAD_GLOBAL              4 (str)
+              CALL                     2
+              TO_BOOL
+              POP_JUMP_IF_FALSE        5 (to L2)
+
+228           LOAD_FAST                1 (sources)
+              LOAD_CONST               2 (0)
+              BINARY_SUBSCR
+              RETURN_VALUE
+
+229   L2:     LOAD_FAST                1 (sources)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       45 (to L3)
+              LOAD_GLOBAL              3 (isinstance + NULL)
+              LOAD_FAST                1 (sources)
+              LOAD_CONST               2 (0)
+              BINARY_SUBSCR
+              LOAD_GLOBAL              6 (dict)
+              CALL                     2
+              TO_BOOL
+              POP_JUMP_IF_FALSE       21 (to L3)
+
+230           LOAD_FAST                1 (sources)
+              LOAD_CONST               2 (0)
+              BINARY_SUBSCR
+              LOAD_ATTR                1 (get + NULL|self)
+              LOAD_CONST               3 ('source')
+              LOAD_CONST               4 ('')
+              CALL                     2
+              RETURN_VALUE
+
+231   L3:     RETURN_CONST             4 ('')
+
+Disassembly of <code object all_days at 0x000001D515CFDE60, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 234>:
+ 234           RESUME                   0
+
+ 235           LOAD_GLOBAL              1 (Path + NULL)
+               LOAD_FAST                0 (root)
+               CALL                     1
+               STORE_FAST               0 (root)
+
+ 236           LOAD_GLOBAL              3 (sorted + NULL)
+               LOAD_CONST               1 (<code object <genexpr> at 0x000001D515CFDCF0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 236>)
+               MAKE_FUNCTION
+               LOAD_FAST                0 (root)
+               LOAD_ATTR                5 (iterdir + NULL|self)
+               CALL                     0
+               GET_ITER
+               CALL                     0
+               CALL                     1
+               STORE_FAST               1 (folders)
+
+ 237           LOAD_FAST                1 (folders)
+               GET_ITER
+               LOAD_FAST_AND_CLEAR      2 (f)
+               SWAP                     2
+       L1:     BUILD_LIST               0
+               SWAP                     2
+               GET_ITER
+       L2:     FOR_ITER                14 (to L3)
+               STORE_FAST               2 (f)
+               LOAD_GLOBAL              7 (parse_day + NULL)
+               LOAD_FAST                2 (f)
+               CALL                     1
+               LIST_APPEND              2
+               JUMP_BACKWARD           16 (to L2)
+       L3:     END_FOR
+               POP_TOP
+       L4:     SWAP                     2
+               STORE_FAST               2 (f)
+               RETURN_VALUE
+
+  --   L5:     SWAP                     2
+               POP_TOP
+
+ 237           SWAP                     2
+               STORE_FAST               2 (f)
+               RERAISE                  0
+ExceptionTable:
+  L1 to L4 -> L5 [2]
+
+Disassembly of <code object <genexpr> at 0x000001D515CFDCF0, file "C:\ANTIGRAVITY\ops\hermes\newsvideo\parse.py", line 236>:
+ 236           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+               GET_ITER
+       L2:     FOR_ITER                69 (to L7)
+               STORE_FAST_LOAD_FAST    17 (p, p)
+               LOAD_ATTR                1 (is_dir + NULL|self)
+               CALL                     0
+               TO_BOOL
+       L3:     POP_JUMP_IF_TRUE         2 (to L4)
+               JUMP_BACKWARD           25 (to L2)
+       L4:     LOAD_GLOBAL              2 (re)
+               LOAD_ATTR                4 (fullmatch)
+               PUSH_NULL
+               LOAD_CONST               0 ('\\d{8}')
+               LOAD_FAST                1 (p)
+               LOAD_ATTR                6 (name)
+               CALL                     2
+               TO_BOOL
+       L5:     POP_JUMP_IF_TRUE         2 (to L6)
+               JUMP_BACKWARD           65 (to L2)
+       L6:     LOAD_FAST                1 (p)
+               YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD           71 (to L2)
+       L7:     END_FOR
+               POP_TOP
+               RETURN_CONST             1 (None)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L4 to L5 -> L8 [0] lasti
+  L6 to L8 -> L8 [0] lasti

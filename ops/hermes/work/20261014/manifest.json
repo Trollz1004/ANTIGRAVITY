@@ -1,0 +1,128 @@
+{
+  "day": "20261014",
+  "date": "2026-10-14",
+  "date_label": "October 14, 2026",
+  "title": "Yesterday's News Today - October 14, 2026 | Teen Triathlete Raises & More",
+  "story_count": 5,
+  "video": {
+    "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261014\\20261014.mp4",
+    "duration_s": 83.955,
+    "size_bytes": 11753009,
+    "video": {
+      "codec": "h264",
+      "pix_fmt": "yuv420p",
+      "width": 1080,
+      "height": 1920,
+      "fps": "30/1"
+    },
+    "audio": {
+      "codec": "aac",
+      "sample_rate": "48000",
+      "channels": 2
+    }
+  },
+  "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261014\\20261014-thumb.png",
+  "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261014\\upload.json",
+  "tts_backends": [
+    "edge"
+  ],
+  "voiceover_verified": false,
+  "segments": [
+    {
+      "segment": "intro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\frames\\intro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\audio\\intro.wav",
+      "audio_seconds": 4.8,
+      "video_seconds": 5.467,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story1",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\frames\\story1.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\audio\\story1.wav",
+      "audio_seconds": 17.136,
+      "video_seconds": 17.8,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story2",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\frames\\story2.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\audio\\story2.wav",
+      "audio_seconds": 11.448,
+      "video_seconds": 12.1,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story3",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\frames\\story3.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\audio\\story3.wav",
+      "audio_seconds": 16.968,
+      "video_seconds": 17.633,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story4",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\frames\\story4.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\audio\\story4.wav",
+      "audio_seconds": 11.472,
+      "video_seconds": 12.133,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story5",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\frames\\story5.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\audio\\story5.wav",
+      "audio_seconds": 13.2,
+      "video_seconds": 13.867,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "outro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\frames\\outro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261014\\audio\\outro.wav",
+      "audio_seconds": 4.272,
+      "video_seconds": 4.933,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    }
+  ],
+  "parse_warnings": [],
+  "sources": [
+    {
+      "story": 1,
+      "headline": "Teen Triathlete Raises More Than $30,000 to Donate Bikes and Riding Lessons to Low-Income Families",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/teen-triathlete-raises-more-than-30000-to-donate-bikes-and-riding-lessons-to-low-income-families/"
+    },
+    {
+      "story": 2,
+      "headline": "Pittsburgh Water Launches Debt Forgiveness Program to Help Families with Rising Costs",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/pittsburgh-water-launches-debt-forgiveness-program-to-help-families-with-rising-costs/"
+    },
+    {
+      "story": 3,
+      "headline": "Inches Below the Forest Floor, Archeologists in Germany Unearthed a Roman Temple to the War God",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/inches-below-the-forest-floor-archeologists-in-germany-unearthed-a-roman-temple-to-the-war-god/"
+    },
+    {
+      "story": 4,
+      "headline": "World’s Heaviest Pumpkin Sets Incredible New Record at 2,856 lbs.",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/worlds-heaviest-pumpkin-sets-incredible-new-record-at-2856-lbs/"
+    },
+    {
+      "story": 5,
+      "headline": "Good News in History, October 14",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/events061014/"
+    }
+  ]
+}

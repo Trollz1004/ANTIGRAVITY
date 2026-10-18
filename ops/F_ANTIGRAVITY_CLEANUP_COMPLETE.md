@@ -13,7 +13,7 @@
 - `tools/` (1.1 GB) - agent-reach, cockpit, watchdog-sentry, etc. — obsolete
 - `income-engine/` (73 MB) — not in active mission
 - `.paperclip-local/` (69 MB) — temp paperclip data
-- `_9020-preserve/`, `_design-system/`, `_handoff-staging-*` — historical
+- `_T5500-preserve/`, `_design-system/`, `_handoff-staging-*` — historical
 - `marketing-assets/`, `marketing/` — not needed
 - `youandinotai/`, `youandinotai-api/`, `revenue-core/` — not mission
 - `apps/` — redundant (mission-control in root)
@@ -33,7 +33,7 @@ Removed superseded/historical docs:
 
 ### Core Mission
 
-- `backend/` — Mission Control Python uvicorn server (:3151)
+- `backend/` — Mission Control Python uvicorn server (:3100)
 - `mission-control-v5/`, `mission-control-v6/` — TUI/Electron apps
 - `omniroute/` — Router/gateway at :20128
 - `paperclip/` — Paperclip core (status: healthy on :3120)
@@ -58,7 +58,7 @@ Removed superseded/historical docs:
 | OmniRoute       | :20128 | 🟢 OPEN         | Requires `OMNIROUTE_API_KEY` env var for auth |
 | Paperclip       | :3120  | 🟢 HEALTHY      | Version 2026.428.0, bootstrapped, auth ready  |
 | Date App        | :3200  | 🟢 OPEN         | Working                                       |
-| Mission Control | :3151  | ⏳ Not deployed | Ready via watchdog startup.py                 |
+| Mission Control | :3100  | ⏳ Not deployed | Ready via watchdog startup.py                 |
 | Ollama          | :11434 | 🟢 OPEN         | -                                             |
 | Hermes          | :9119  | 🟢 OPEN         | -                                             |
 | Redis           | :6379  | 🟢 OPEN         | -                                             |
@@ -81,7 +81,7 @@ Removed superseded/historical docs:
 3. If needed:
    - Check `E:\ANTIGRAVITY\.openclaw/` for config
    - Restore startup command to `scripts/port-watchdog.ps1`
-   - Add to Mission Control :3151 tab
+   - Add to Mission Control :3100 tab
 
 **For now:** Treat as non-critical; OmniRoute :20128 is the canonical router.
 
@@ -97,14 +97,14 @@ Removed superseded/historical docs:
 
 **Recommendations:**
 
-1. **Option A (Recommended):** Add Graphify to Mission Control :3151
+1. **Option A (Recommended):** Add Graphify to Mission Control :3100
    - Include `html/stack-monitor.html` as dashboard tab
    - Link to `graphify-out/graph.html` from status page
    - Regenerate graph.html on each deployment
 
 2. **Option B:** Serve via OmniRoute
    - Add static route in omniroute config
-   - Serve at `http://192.168.0.8:20128/graphify`
+   - Serve at `http://192.168.0.15:20128/graphify`
 
 3. **Option C:** CLI only
    - Keep current setup (manual file:// access)
@@ -139,7 +139,7 @@ cca4de3e cleanup: remove 1.2GB of obsolete tools, legacy docs, and bloat.
 
 ## Manual Actions Required (Josh)
 
-### On Laptop (http://192.168.0.8:...)
+### On Laptop (http://192.168.0.15:...)
 
 ```powershell
 # Optional: Verify F: changes reached origin

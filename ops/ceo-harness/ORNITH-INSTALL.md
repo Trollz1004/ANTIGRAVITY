@@ -5,7 +5,7 @@ Ornith 9B = confirmed real public Ollama model (verified 2026-07-22, not from Jo
 
 This is the "Ollama Ornith 9B (self-hosted floor)" model in the cascade doctrine — the last-resort local fallback below the paid cloud tiers.
 
-Run each block **locally on that node** — no remote-exec path exists from this session to Sabretooth/T5500/9020. Laptop can be done directly if Josh runs it here.
+Run each block **locally on that node** — no remote-exec path exists from this session to T5500/T5500/T5500. Laptop can be done directly if Josh runs it here.
 
 ## 1. Confirm Ollama is installed
 
@@ -21,7 +21,7 @@ If missing, install first (https://ollama.com/download) — do not skip this to 
 ollama pull ornith:9b
 ```
 
-~5.6GB download. On Sabretooth, GPU is currently dead (forced `OLLAMA_LLM_LIBRARY=cpu` — see `NODES.md`) — pull still works, inference will just be CPU-bound until driver 580+ lands.
+~5.6GB download. On T5500, GPU is currently dead (forced `OLLAMA_LLM_LIBRARY=cpu` — see `NODES.md`) — pull still works, inference will just be CPU-bound until driver 580+ lands.
 
 ## 3. Verify
 

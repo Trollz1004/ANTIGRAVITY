@@ -5,48 +5,75 @@
   "provider": {
     "omniroute": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "OmniRoute (local control, remote compute)",
+      "name": "OmniRoute T5500 Gateway (192.168.0.15:20128/v1)",
       "options": {
-        "baseURL": "http://127.0.0.1:20128/v1",
-        "apiKey": "{env:OMNIROUTE_API_KEY}"
+        "baseURL": "http://192.168.0.15:20128/v1",
+        "apiKey": "{env:OMNI_ROUTE_API_KEY}"
       },
       "models": {
         "auto/best-free": { "name": "OmniRoute best free" },
         "auto/best-coding": { "name": "OmniRoute best coding" },
         "auto/best-coding-fast": { "name": "OmniRoute best coding fast" },
-        "auto/best-fast": { "name": "OmniRoute best fast" }
+        "auto/best-fast": { "name": "OmniRoute best fast" },
+        "joshlcoleman/Fable:latest": { "name": "Fable (via OmniRoute)" }
+      }
+    },
+    "ollama_local": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama Local T5500 (Direct Fail-Safe :11434/v1)",
+      "options": {
+        "baseURL": "http://127.0.0.1:11434/v1",
+        "apiKey": "ollama"
+      },
+      "models": {
+        "joshlcoleman/Fable:latest": { "name": "Fable (Pinned Local GGUF)" },
+        "joshlcoleman/dateapp-marketing:latest": { "name": "DateApp Marketing (Local GGUF)" },
+        "hermes-support:latest": { "name": "Hermes Customer Support (Local GGUF)" },
+        "openclaw-sentry:latest": { "name": "OpenClaw Node Sentry (Local GGUF)" }
       }
     }
   },
-  "model": "omniroute/auto/best-free",
+  "model": "ollama_local/joshlcoleman/Fable:latest",
   "agent": {
     "orchestrator": {
-      "description": "Orchestrator using local-node compute through OmniRoute only.",
+      "description": "Orchestrator using T5500 OmniRoute with local Fable failover.",
       "model": "omniroute/auto/best-free"
     },
+    "fable": {
+      "description": "Joshua's Fable voice model running 100% locally on T5500 Ollama.",
+      "model": "ollama_local/joshlcoleman/Fable:latest"
+    },
     "coder": {
-      "description": "Code writer. Runs through OmniRoute so compute stays off the laptop.",
+      "description": "Code writer via T5500 OmniRoute.",
       "model": "omniroute/auto/best-coding"
     },
     "closer": {
-      "description": "Demo and proposal builder for paid work.",
-      "model": "omniroute/auto/best-free"
+      "description": "Link Forge 50% affiliate & conversion builder using Fable voice.",
+      "model": "ollama_local/joshlcoleman/Fable:latest"
     },
     "hunter": {
-      "description": "Lead scoring and research. Cheap and fast.",
-      "model": "omniroute/auto/best-fast"
+      "description": "Lead scoring, eBay recycling & creator outreach.",
+      "model": "ollama_local/joshlcoleman/Fable:latest"
+    },
+    "support": {
+      "description": "Hermes business-only customer support desk.",
+      "model": "ollama_local/hermes-support:latest"
+    },
+    "sentry": {
+      "description": "OpenClaw 24/7 T5500 node sentry.",
+      "model": "ollama_local/openclaw-sentry:latest"
     },
     "finance": {
-      "description": "Financial gating and revenue tracking for normal business operations.",
+      "description": "Financial gating and $10k revenue tracking for Trash Or Treasure Online Recycler LLC.",
       "model": "omniroute/auto/best-free"
     },
     "reviewer": {
-      "description": "Adversarial review through OmniRoute.",
+      "description": "Adversarial review and anti-slop humanizer.",
       "model": "omniroute/auto/best-free"
     },
     "free-fast": {
-      "description": "Quick tasks through local-node compute only.",
-      "model": "omniroute/auto/best-fast"
+      "description": "Quick local-node tasks via Fable.",
+      "model": "ollama_local/joshlcoleman/Fable:latest"
     }
   }
 }

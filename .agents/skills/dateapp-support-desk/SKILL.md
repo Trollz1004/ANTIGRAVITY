@@ -73,15 +73,15 @@ Two equivalent routes. Both are draft-only.
 `body` ≤ 20,000 — both required. Unparseable files get a `.rejected` suffix; fix
 and re-drop.
 
-**Loopback API** — same JSON to `POST http://127.0.0.1:3151/api/marketing/queue`.
+**Loopback API** — same JSON to `POST http://127.0.0.1:3917/api/marketing/queue`.
 
 Verdicts land in `mission-control-v5/server/data/marketing-queue.json`, readable
-via `GET http://127.0.0.1:3151/api/marketing/queue`.
+via `GET http://127.0.0.1:3917/api/marketing/queue`.
 
 > **Stale route warning.** Older docs send you to the PAPERWEIGHT approvals UI at
-> `:3151/paperweight/`. That surface was **retired and deleted**. The API route
+> `:3100/paperweight/`. That surface was **retired and deleted**. The API route
 > above is live and is the one to use. Likewise ignore any instruction to produce
-> from "the 9020 node" — there is one node, Sabretooth.
+> from "the retired 9020 node" — there is one node, T5500.
 
 ## Conversation recall
 
@@ -122,3 +122,4 @@ load the Twilio kit rather than improvising:
 Use **VERIFIED** / **UNVERIFIED** / **BLOCKED**. Cite the endpoint and status you
 actually observed. An exit code or a 200 is not proof the intended system
 answered — check the identity.
+

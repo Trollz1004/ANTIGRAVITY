@@ -1,7 +1,7 @@
 # CLAUDE.md — Ai-Solutions-Store/ai-solutions
 
 This is the org repo behind the **Ai-Solutions.Store** Paperclip company (`AIS`,
-`74bbc177-bc32-4457-806e-fa6bbe6314fd`, Mission Control `http://127.0.0.1:3100`).
+`74bbc177-bc32-4457-806e-fa6bbe6314fd`, Mission Control `http://127.0.0.1:3917`).
 Local clone on Sabretooth: `C:\Ai-Solutions.store`. Only branch: `main`.
 
 Doctrine lives in the monorepo and is not duplicated here: read

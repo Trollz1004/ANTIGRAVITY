@@ -9,7 +9,7 @@ whether it beats Obsidian. Measured before answering.
 |---|---|---|
 | **Paperclip** | **1** memory-ish route in 526: `/api/issues/{id}/heartbeat-context` — per-issue heartbeat context, not memory | **No memory layer at all.** A real gap. |
 | **Agent journals** (`.agents/journals/*/STATE.md`) | **3,442 lines / 368 KB** across 8 files. `paperclip-judge` alone is **2,177 lines / 184 KB** | Authoritative, and past what any agent should read at session start |
-| **Obsidian** (`nodes/9020/vaults/knowledge/`) | **11 notes / 49 KB** | Barely used. One note is `node-9020.md` — documenting a node that does not exist |
+| **Obsidian** (`nodes/retired 9020/vaults/knowledge/`) | **11 notes / 49 KB** | Barely used. One note is `node-retired 9020.md` — documenting a node that does not exist |
 | **Supermemory** | Live, authenticated, MCP tools loaded, SessionStart hook active | Fills the Paperclip gap |
 
 ## The answer
@@ -49,7 +49,7 @@ than session-specific, and (c) expensive to rediscover. Highest value are
 re-derived incorrectly.
 
 Seeded 2026-08-28 in space `repo_antigravity__02249b9e7104105f`:
-1. Node topology — one node, `192.168.0.8` IS Sabretooth, no T5500/9020/Aurora, no `E:`.
+1. Node topology — one node, `192.168.0.15` IS T5500, no Sabretooth/9020/Aurora, no `E:`.
 2. Hermes bot traps — `--clone-from` silently drops `auth.json`; `stealth/ox-alpha` is a dead model; bots route via OmniRoute while Hermes default stays on Nous; gateway serves `/health` not `/api/health`.
 3. Four corrections to confidently-wrong claims — the agency skills DO exist (in the laptop vault); archiving a repo does NOT take its content offline; the OmniRoute schedule WAS real (wrong db file + wrong column name produced a false all-clear); Unreal MCP is not the backend API.
 
@@ -64,3 +64,5 @@ None of this fixes `paperclip-judge/STATE.md` at 2,177 lines. Retrieval makes it
 cheaper to *query*; it does not stop the file growing. That journal needs
 compaction on its own merits — the `self-improving-system` skill exists for
 exactly this and is not being applied to it.
+
+

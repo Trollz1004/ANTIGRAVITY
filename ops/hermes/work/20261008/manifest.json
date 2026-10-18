@@ -1,0 +1,128 @@
+{
+  "day": "20261008",
+  "date": "2026-10-08",
+  "date_label": "October 08, 2026",
+  "title": "Yesterday's News Today - October 08, 2026 | Nearly 200-year-old Tortoise & More",
+  "story_count": 5,
+  "video": {
+    "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261008\\20261008.mp4",
+    "duration_s": 83.619,
+    "size_bytes": 11516081,
+    "video": {
+      "codec": "h264",
+      "pix_fmt": "yuv420p",
+      "width": 1080,
+      "height": 1920,
+      "fps": "30/1"
+    },
+    "audio": {
+      "codec": "aac",
+      "sample_rate": "48000",
+      "channels": 2
+    }
+  },
+  "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261008\\20261008-thumb.png",
+  "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261008\\upload.json",
+  "tts_backends": [
+    "edge"
+  ],
+  "voiceover_verified": false,
+  "segments": [
+    {
+      "segment": "intro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\frames\\intro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\audio\\intro.wav",
+      "audio_seconds": 4.536,
+      "video_seconds": 5.2,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story1",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\frames\\story1.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\audio\\story1.wav",
+      "audio_seconds": 14.472,
+      "video_seconds": 15.133,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story2",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\frames\\story2.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\audio\\story2.wav",
+      "audio_seconds": 15.36,
+      "video_seconds": 16.01,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story3",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\frames\\story3.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\audio\\story3.wav",
+      "audio_seconds": 11.28,
+      "video_seconds": 11.933,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story4",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\frames\\story4.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\audio\\story4.wav",
+      "audio_seconds": 12.456,
+      "video_seconds": 13.106,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story5",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\frames\\story5.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\audio\\story5.wav",
+      "audio_seconds": 16.632,
+      "video_seconds": 17.282,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "outro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\frames\\outro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261008\\audio\\outro.wav",
+      "audio_seconds": 4.272,
+      "video_seconds": 4.933,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    }
+  ],
+  "parse_warnings": [],
+  "sources": [
+    {
+      "story": 1,
+      "headline": "Nearly 200-year-old Tortoise Becomes First to Contribute Extraordinary Epigenome to Aging Research",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/nearly-200-year-old-tortoise-becomes-first-to-contribute-extraordinary-epigenome-to-aging-research/"
+    },
+    {
+      "story": 2,
+      "headline": "NYC Parks Extends Late Night Soccer at 5 Fields for Night Workers–And Their Reactions Are Awesome",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/nyc-parks-extends-late-night-soccer-at-5-fields-for-night-workers-and-their-reactions-are-awesome-watch/"
+    },
+    {
+      "story": 3,
+      "headline": "Neighbors Flock to Rescue a Wounded Owl Tangled Up in Barbed Wire",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/neighbors-flock-to-rescue-a-wounded-owl-tangled-up-in-barbed-wire/"
+    },
+    {
+      "story": 4,
+      "headline": "More Than 14,000 Derelict Explosives Cleared from Libyan City and Nearby Farmland",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/more-than-14000-derelict-explosives-cleared-from-libyan-city-and-nearby-farmland/"
+    },
+    {
+      "story": 5,
+      "headline": "Good News in History, October 8",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/events061008/"
+    }
+  ]
+}

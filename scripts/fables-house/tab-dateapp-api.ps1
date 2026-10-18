@@ -38,7 +38,7 @@ if (Test-Path $SupaEnv) {
 }
 
 # The stash's REDIS_URL points at the retired stack's Redis; this node runs a
-# local portable Redis (see scripts\sabretooth-stack-up.cmd).
+# local portable Redis (see scripts\t5500-stack-up.cmd).
 $env:REDIS_URL = 'redis://localhost:6379/0'
 Remove-Item Env:REDIS_PASSWORD -ErrorAction SilentlyContinue
 

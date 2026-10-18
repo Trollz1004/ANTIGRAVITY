@@ -24,7 +24,7 @@ if (-not $Hostname) {
     Write-Host "For a permanent URL, re-run with -Hostname mcp.yourdomain.com`n"
 
     Start-Process -FilePath "cloudflared" `
-        -ArgumentList "tunnel --url http://127.0.0.1:3100" `
+        -ArgumentList "tunnel --url http://127.0.0.1:3917" `
         -WindowStyle Normal
     Start-Sleep 3
     Write-Host "MCP server tunnel started. Check the new window for the https:// URL."
@@ -55,7 +55,7 @@ credentials-file: $cfDir\$tunnelId.json
 ingress:
   # MCP server for claude.ai connector
   - hostname: $Hostname
-    service: http://127.0.0.1:3100
+    service: http://127.0.0.1:3917
   # OpenClaw gateway (optional, add subdomain if needed)
   - service: http_status:404
 "@

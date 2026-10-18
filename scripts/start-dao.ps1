@@ -109,8 +109,8 @@ try {
 
   $Endpoints = @(
     @{ Name = 'Hermes router';       Url = 'http://localhost:11435/'           },
-    @{ Name = 'Hermes (9020)';       Url = 'http://localhost:8000/'            },
-    @{ Name = 'Paperclip / MCP';     Url = 'http://localhost:3100/'            },
+    @{ Name = 'Hermes (T5500)';       Url = 'http://localhost:8000/'            },
+    @{ Name = 'Paperclip / MCP';     Url = 'http://localhost:3917/'            },
     @{ Name = 'OpenClaw GW';         Url = 'http://localhost:18789/'           },
     @{ Name = 'Ollama';              Url = 'http://localhost:11434/api/tags'   }
   )

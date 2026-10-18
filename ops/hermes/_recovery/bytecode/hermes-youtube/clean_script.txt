@@ -1,0 +1,1009 @@
+# clean_script.pyc
+
+bytes: 8173
+magic: f30d0d0a (this interpreter: f30d0d0a)
+magic matches: True
+
+## docstrings
+
+<module>:
+Clean a day folder's script.txt into narration lines per the faceless-news spec.
+
+Spec: .agents/skills/hermes-youtube-faceless-news/SKILL.md step 2 --
+strip HTML tags, entities and "The post ... appeared first on ..." boilerplate,
+keep only narration, cap at 8 stories, preserve the intro line.
+
+Usage: python clean_script.py <YYYYMMDD>
+Writes: ops/marketing-inbox/youtube-<date>-script.md  (spec step 3)
+        <day folder>/script.clean.json  (machine-readable segments for render)
+
+
+  clean_text:
+HTML fragment -> speakable plain text.
+
+    <genexpr>:
+text
+
+## string constants
+
+'Clean a day folder\'s script.txt into narration lines per the faceless-news spec.\n\nSpec: .agents/skills/hermes-youtube-faceless-news/SKILL.md step 2 --\nstrip HTML tags, entities and "The post ... appeared first on ..." boilerplate,\nkeep only narration, cap at 8 stories, preserve the intro line.\n\nUsage: python clean_script.py <YYYYMMDD>\nWrites: ops/marketing-inbox/youtube-<date>-script.md  (spec step 3)\n        <day folder>/script.clean.json  (machine-readable segments for render)\n'
+'C:\\ANTIGRAVITY'
+'The post\\b.*?appeared first on\\b.*?$'
+'<[^>]+>'
+'\\[\\s*(?:&#8230;|\\u2026|\\.\\.\\.)\\s*\\]'
+'\\s+'
+'__main__'
+'HTML fragment -> speakable plain text.'
+' '
+'“'
+'"'
+'”'
+'‘'
+"'"
+'’'
+'—'
+' - '
+'–'
+'utf-8'
+''
+'welcome to'
+'^(\\d+)\\.\\s+(.*)$'
+'\n'
+'#'
+'recap'
+'subscribe'
+'content'
+'yesterday-news'
+'metadata.json'
+'script.txt'
+'intro'
+'story'
+'n'
+'title'
+'. '
+'summary'
+'outro'
+'\n\n'
+'date'
+'script.clean.json'
+'w'
+'ops'
+'marketing-inbox'
+'youtube-'
+'-script.md'
+'# '
+'- Date: '
+'\n- Stories: '
+'- Source: `content/yesterday-news/'
+'/script.txt`\n'
+'- Narration characters: '
+'- Publish status: PENDING (no approval recorded)\n\n'
+'## Narration\n\n'
+'text'
+'**['
+'id'
+']** '
+'## Sources\n\n'
+'sources'
+'- ['
+']('
+'url'
+') - '
+'source'
+'stories='
+' narration_chars='
+'wrote '
+
+## disassembly
+
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Clean a day folder\'s script.txt into narration lines per the faceless-news spec.\n\nSpec: .agents/skills/hermes-youtube-faceless-news/SKILL.md step 2 --\nstrip HTML tags, entities and "The post ... appeared first on ..." boilerplate,\nkeep only narration, cap at 8 stories, preserve the intro line.\n\nUsage: python clean_script.py <YYYYMMDD>\nWrites: ops/marketing-inbox/youtube-<date>-script.md  (spec step 3)\n        <day folder>/script.clean.json  (machine-readable segments for render)\n')
+              STORE_NAME               0 (__doc__)
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (html)
+              STORE_NAME               1 (html)
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              2 (json)
+              STORE_NAME               2 (json)
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              3 (os)
+              STORE_NAME               3 (os)
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              4 (re)
+              STORE_NAME               4 (re)
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              5 (sys)
+              STORE_NAME               5 (sys)
+
+ 17           LOAD_CONST               3 ('C:\\ANTIGRAVITY')
+              STORE_NAME               6 (REPO)
+
+ 18           LOAD_CONST               4 (8)
+              STORE_NAME               7 (MAX_STORIES)
+
+ 22           LOAD_NAME                4 (re)
+              LOAD_ATTR               16 (compile)
+              PUSH_NULL
+              LOAD_CONST               5 ('The post\\b.*?appeared first on\\b.*?$')
+
+ 23           LOAD_NAME                4 (re)
+              LOAD_ATTR               18 (IGNORECASE)
+              LOAD_NAME                4 (re)
+              LOAD_ATTR               20 (DOTALL)
+              BINARY_OP                7 (|)
+
+ 22           CALL                     2
+              STORE_NAME              11 (POST_BOILERPLATE)
+
+ 24           LOAD_NAME                4 (re)
+              LOAD_ATTR               16 (compile)
+              PUSH_NULL
+              LOAD_CONST               6 ('<[^>]+>')
+              CALL                     1
+              STORE_NAME              12 (TAG)
+
+ 25           LOAD_NAME                4 (re)
+              LOAD_ATTR               16 (compile)
+              PUSH_NULL
+              LOAD_CONST               7 ('\\[\\s*(?:&#8230;|\\u2026|\\.\\.\\.)\\s*\\]')
+              CALL                     1
+              STORE_NAME              13 (TRUNCATION)
+
+ 26           LOAD_NAME                4 (re)
+              LOAD_ATTR               16 (compile)
+              PUSH_NULL
+              LOAD_CONST               8 ('\\s+')
+              CALL                     1
+              STORE_NAME              14 (WS)
+
+ 29           LOAD_CONST               9 (<code object clean_text at 0x000001D515BE8510, file "clean_script.py", line 29>)
+              MAKE_FUNCTION
+              STORE_NAME              15 (clean_text)
+
+ 43           LOAD_CONST              10 (<code object parse at 0x000001D515E16F70, file "clean_script.py", line 43>)
+              MAKE_FUNCTION
+              STORE_NAME              16 (parse)
+
+ 76           LOAD_CONST              11 (<code object main at 0x000001D515BE0940, file "clean_script.py", line 76>)
+              MAKE_FUNCTION
+              STORE_NAME              17 (main)
+
+127           LOAD_NAME               18 (__name__)
+              LOAD_CONST              12 ('__main__')
+              COMPARE_OP              88 (bool(==))
+              POP_JUMP_IF_FALSE        8 (to L1)
+
+128           LOAD_NAME               17 (main)
+              PUSH_NULL
+              CALL                     0
+              POP_TOP
+              RETURN_CONST             2 (None)
+
+127   L1:     RETURN_CONST             2 (None)
+
+Disassembly of <code object clean_text at 0x000001D515BE8510, file "clean_script.py", line 29>:
+ 29           RESUME                   0
+
+ 31           LOAD_GLOBAL              0 (POST_BOILERPLATE)
+              LOAD_ATTR                3 (sub + NULL|self)
+              LOAD_CONST               1 (' ')
+              LOAD_FAST                0 (raw)
+              CALL                     2
+              STORE_FAST               1 (text)
+
+ 32           LOAD_GLOBAL              4 (TAG)
+              LOAD_ATTR                3 (sub + NULL|self)
+              LOAD_CONST               1 (' ')
+              LOAD_FAST                1 (text)
+              CALL                     2
+              STORE_FAST               1 (text)
+
+ 33           LOAD_GLOBAL              6 (html)
+              LOAD_ATTR                8 (unescape)
+              PUSH_NULL
+              LOAD_FAST                1 (text)
+              CALL                     1
+              STORE_FAST               1 (text)
+
+ 35           LOAD_GLOBAL              6 (html)
+              LOAD_ATTR                8 (unescape)
+              PUSH_NULL
+              LOAD_FAST                1 (text)
+              CALL                     1
+              STORE_FAST               1 (text)
+
+ 36           LOAD_GLOBAL             10 (TRUNCATION)
+              LOAD_ATTR                3 (sub + NULL|self)
+              LOAD_CONST               1 (' ')
+              LOAD_FAST                1 (text)
+              CALL                     2
+              STORE_FAST               1 (text)
+
+ 37           LOAD_FAST                1 (text)
+              LOAD_ATTR               13 (replace + NULL|self)
+              LOAD_CONST               2 ('“')
+              LOAD_CONST               3 ('"')
+              CALL                     2
+              LOAD_ATTR               13 (replace + NULL|self)
+              LOAD_CONST               4 ('”')
+              LOAD_CONST               3 ('"')
+              CALL                     2
+              STORE_FAST               1 (text)
+
+ 38           LOAD_FAST                1 (text)
+              LOAD_ATTR               13 (replace + NULL|self)
+              LOAD_CONST               5 ('‘')
+              LOAD_CONST               6 ("'")
+              CALL                     2
+              LOAD_ATTR               13 (replace + NULL|self)
+              LOAD_CONST               7 ('’')
+              LOAD_CONST               6 ("'")
+              CALL                     2
+              STORE_FAST               1 (text)
+
+ 39           LOAD_FAST                1 (text)
+              LOAD_ATTR               13 (replace + NULL|self)
+              LOAD_CONST               8 ('—')
+              LOAD_CONST               9 (' - ')
+              CALL                     2
+              LOAD_ATTR               13 (replace + NULL|self)
+              LOAD_CONST              10 ('–')
+              LOAD_CONST               9 (' - ')
+              CALL                     2
+              STORE_FAST               1 (text)
+
+ 40           LOAD_GLOBAL             14 (WS)
+              LOAD_ATTR                3 (sub + NULL|self)
+              LOAD_CONST               1 (' ')
+              LOAD_FAST                1 (text)
+              CALL                     2
+              LOAD_ATTR               17 (strip + NULL|self)
+              CALL                     0
+              RETURN_VALUE
+
+Disassembly of <code object parse at 0x000001D515E16F70, file "clean_script.py", line 43>:
+  43            RESUME                   0
+
+  44            LOAD_GLOBAL              1 (open + NULL)
+                LOAD_FAST                0 (script_path)
+                LOAD_CONST               1 ('utf-8')
+                LOAD_CONST               2 (('encoding',))
+                CALL_KW                  2
+                LOAD_ATTR                3 (read + NULL|self)
+                CALL                     0
+                STORE_FAST               1 (raw)
+
+  45            LOAD_FAST                1 (raw)
+                LOAD_ATTR                5 (splitlines + NULL|self)
+                CALL                     0
+                STORE_FAST               2 (lines)
+
+  47            LOAD_CONST               3 ('')
+                STORE_FAST               3 (intro)
+
+  48            LOAD_FAST                2 (lines)
+                GET_ITER
+        L1:     FOR_ITER                66 (to L3)
+                STORE_FAST               4 (line)
+
+  49            LOAD_FAST                4 (line)
+                LOAD_ATTR                7 (strip + NULL|self)
+                CALL                     0
+                LOAD_ATTR                9 (lower + NULL|self)
+                CALL                     0
+                LOAD_ATTR               11 (startswith + NULL|self)
+                LOAD_CONST               4 ('welcome to')
+                CALL                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L2)
+                JUMP_BACKWARD           55 (to L1)
+
+  50    L2:     LOAD_GLOBAL             13 (clean_text + NULL)
+                LOAD_FAST                4 (line)
+                CALL                     1
+                STORE_FAST               3 (intro)
+
+  51            POP_TOP
+                JUMP_FORWARD             2 (to L4)
+
+  48    L3:     END_FOR
+                POP_TOP
+
+  55    L4:     LOAD_GLOBAL             15 (enumerate + NULL)
+                LOAD_FAST                2 (lines)
+                CALL                     1
+                GET_ITER
+                LOAD_FAST_AND_CLEAR      5 (i)
+                LOAD_FAST_AND_CLEAR      4 (line)
+                SWAP                     3
+        L5:     BUILD_LIST               0
+                SWAP                     2
+                GET_ITER
+        L6:     FOR_ITER                40 (to L9)
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   84 (i, line)
+
+  56            LOAD_GLOBAL             16 (re)
+                LOAD_ATTR               18 (match)
+                PUSH_NULL
+                LOAD_CONST               5 ('^(\\d+)\\.\\s+(.*)$')
+                LOAD_FAST                4 (line)
+                CALL                     2
+                COPY                     1
+                STORE_FAST               6 (m)
+                TO_BOOL
+
+  55    L7:     POP_JUMP_IF_TRUE         2 (to L8)
+                JUMP_BACKWARD           37 (to L6)
+        L8:     LOAD_FAST_LOAD_FAST     86 (i, m)
+                BUILD_TUPLE              2
+                LIST_APPEND              2
+                JUMP_BACKWARD           42 (to L6)
+        L9:     END_FOR
+                POP_TOP
+       L10:     STORE_FAST               7 (heads)
+                STORE_FAST               5 (i)
+                STORE_FAST               4 (line)
+
+  57            BUILD_LIST               0
+                STORE_FAST               8 (stories)
+
+  58            LOAD_GLOBAL             15 (enumerate + NULL)
+                LOAD_FAST                7 (heads)
+                CALL                     1
+                GET_ITER
+       L11:     FOR_ITER               159 (to L15)
+                UNPACK_SEQUENCE          2
+                STORE_FAST               9 (idx)
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   86 (i, m)
+
+  59            LOAD_FAST                9 (idx)
+                LOAD_CONST               6 (1)
+                BINARY_OP                0 (+)
+                LOAD_GLOBAL             21 (len + NULL)
+                LOAD_FAST                7 (heads)
+                CALL                     1
+                COMPARE_OP              18 (bool(<))
+                POP_JUMP_IF_FALSE       10 (to L12)
+                LOAD_FAST_LOAD_FAST    121 (heads, idx)
+                LOAD_CONST               6 (1)
+                BINARY_OP                0 (+)
+                BINARY_SUBSCR
+                LOAD_CONST               7 (0)
+                BINARY_SUBSCR
+                JUMP_FORWARD            10 (to L13)
+       L12:     LOAD_GLOBAL             21 (len + NULL)
+                LOAD_FAST                2 (lines)
+                CALL                     1
+       L13:     STORE_FAST              10 (end)
+
+  60            LOAD_CONST               8 ('\n')
+                LOAD_ATTR               23 (join + NULL|self)
+                LOAD_FAST_LOAD_FAST     37 (lines, i)
+                LOAD_CONST               6 (1)
+                BINARY_OP                0 (+)
+                LOAD_FAST               10 (end)
+                BINARY_SLICE
+                CALL                     1
+                STORE_FAST              11 (body)
+
+  61            LOAD_GLOBAL             13 (clean_text + NULL)
+                LOAD_FAST                6 (m)
+                LOAD_ATTR               25 (group + NULL|self)
+                LOAD_CONST               9 (2)
+                CALL                     1
+                CALL                     1
+                STORE_FAST              12 (title)
+
+  62            LOAD_GLOBAL             13 (clean_text + NULL)
+                LOAD_FAST               11 (body)
+                CALL                     1
+                STORE_FAST              13 (summary)
+
+  63            LOAD_FAST               13 (summary)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L14)
+
+  64            JUMP_BACKWARD          115 (to L11)
+
+  65   L14:     LOAD_FAST                8 (stories)
+                LOAD_ATTR               27 (append + NULL|self)
+                LOAD_GLOBAL             29 (int + NULL)
+                LOAD_FAST                6 (m)
+                LOAD_ATTR               25 (group + NULL|self)
+                LOAD_CONST               6 (1)
+                CALL                     1
+                CALL                     1
+                LOAD_FAST_LOAD_FAST    205 (title, summary)
+                LOAD_CONST              10 (('n', 'title', 'summary'))
+                BUILD_CONST_KEY_MAP      3
+                CALL                     1
+                POP_TOP
+                JUMP_BACKWARD          161 (to L11)
+
+  58   L15:     END_FOR
+                POP_TOP
+
+  67            LOAD_FAST                7 (heads)
+                TO_BOOL
+                POP_JUMP_IF_FALSE        8 (to L16)
+                LOAD_FAST                7 (heads)
+                LOAD_CONST              11 (-1)
+                BINARY_SUBSCR
+                LOAD_CONST               7 (0)
+                BINARY_SUBSCR
+                JUMP_FORWARD             1 (to L17)
+       L16:     LOAD_CONST               7 (0)
+       L17:     STORE_FAST              14 (outro_start)
+
+  68            LOAD_CONST               8 ('\n')
+                LOAD_ATTR               23 (join + NULL|self)
+                LOAD_FAST_LOAD_FAST     46 (lines, outro_start)
+                LOAD_CONST               0 (None)
+                BINARY_SLICE
+                CALL                     1
+                STORE_FAST              15 (tail)
+
+  69            LOAD_FAST               15 (tail)
+                LOAD_ATTR                5 (splitlines + NULL|self)
+                CALL                     0
+                GET_ITER
+                LOAD_FAST_AND_CLEAR     16 (l)
+                SWAP                     2
+       L18:     BUILD_LIST               0
+                SWAP                     2
+                GET_ITER
+       L19:     FOR_ITER               117 (to L26)
+                STORE_FAST              16 (l)
+
+  70            LOAD_FAST               16 (l)
+                LOAD_ATTR                7 (strip + NULL|self)
+                CALL                     0
+                TO_BOOL
+
+  69   L20:     POP_JUMP_IF_TRUE         2 (to L21)
+                JUMP_BACKWARD           26 (to L19)
+
+  70   L21:     LOAD_FAST               16 (l)
+                LOAD_ATTR                7 (strip + NULL|self)
+                CALL                     0
+                LOAD_ATTR               11 (startswith + NULL|self)
+                LOAD_CONST              12 ('#')
+                CALL                     1
+                TO_BOOL
+
+  69   L22:     POP_JUMP_IF_FALSE        2 (to L23)
+                JUMP_BACKWARD           64 (to L19)
+
+  71   L23:     LOAD_CONST              13 ('recap')
+                LOAD_FAST               16 (l)
+                LOAD_ATTR                9 (lower + NULL|self)
+                CALL                     0
+                CONTAINS_OP              0
+                POP_JUMP_IF_TRUE        22 (to L25)
+                LOAD_CONST              14 ('subscribe')
+                LOAD_FAST               16 (l)
+                LOAD_ATTR                9 (lower + NULL|self)
+                CALL                     0
+                CONTAINS_OP              0
+
+  69   L24:     POP_JUMP_IF_TRUE         2 (to L25)
+                JUMP_BACKWARD          106 (to L19)
+       L25:     LOAD_GLOBAL             13 (clean_text + NULL)
+                LOAD_FAST               16 (l)
+                CALL                     1
+                LIST_APPEND              2
+                JUMP_BACKWARD          119 (to L19)
+       L26:     END_FOR
+                POP_TOP
+       L27:     STORE_FAST              17 (outro_lines)
+                STORE_FAST              16 (l)
+
+  72            LOAD_CONST              15 (' ')
+                LOAD_ATTR               23 (join + NULL|self)
+                LOAD_CONST              16 (<code object <genexpr> at 0x000001D515D1E430, file "clean_script.py", line 72>)
+                MAKE_FUNCTION
+                LOAD_FAST               17 (outro_lines)
+                GET_ITER
+                CALL                     0
+                CALL                     1
+                STORE_FAST              18 (outro)
+
+  73            LOAD_FAST_LOAD_FAST     56 (intro, stories)
+                LOAD_CONST               0 (None)
+                LOAD_GLOBAL             30 (MAX_STORIES)
+                BINARY_SLICE
+                LOAD_FAST               18 (outro)
+                BUILD_TUPLE              3
+                RETURN_VALUE
+
+  --   L28:     SWAP                     2
+                POP_TOP
+
+  55            SWAP                     3
+                STORE_FAST               4 (line)
+                STORE_FAST               5 (i)
+                RERAISE                  0
+
+  --   L29:     SWAP                     2
+                POP_TOP
+
+  69            SWAP                     2
+                STORE_FAST              16 (l)
+                RERAISE                  0
+ExceptionTable:
+  L5 to L7 -> L28 [3]
+  L8 to L10 -> L28 [3]
+  L18 to L20 -> L29 [2]
+  L21 to L22 -> L29 [2]
+  L23 to L24 -> L29 [2]
+  L25 to L27 -> L29 [2]
+
+Disassembly of <code object <genexpr> at 0x000001D515D1E430, file "clean_script.py", line 72>:
+  72           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+               GET_ITER
+       L2:     FOR_ITER                15 (to L5)
+               STORE_FAST_LOAD_FAST    17 (x, x)
+               TO_BOOL
+       L3:     POP_JUMP_IF_TRUE         2 (to L4)
+               JUMP_BACKWARD           11 (to L2)
+       L4:     LOAD_FAST                1 (x)
+               YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD           17 (to L2)
+       L5:     END_FOR
+               POP_TOP
+               RETURN_CONST             0 (None)
+
+  --   L6:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L6 [0] lasti
+  L4 to L6 -> L6 [0] lasti
+
+Disassembly of <code object main at 0x000001D515BE0940, file "clean_script.py", line 76>:
+  76            RESUME                   0
+
+  77            LOAD_GLOBAL              0 (sys)
+                LOAD_ATTR                2 (argv)
+                LOAD_CONST               1 (1)
+                BINARY_SUBSCR
+                STORE_FAST               0 (date)
+
+  78            LOAD_GLOBAL              4 (os)
+                LOAD_ATTR                6 (path)
+                LOAD_ATTR                9 (join + NULL|self)
+                LOAD_GLOBAL             10 (REPO)
+                LOAD_CONST               2 ('content')
+                LOAD_CONST               3 ('yesterday-news')
+                LOAD_FAST                0 (date)
+                CALL                     4
+                STORE_FAST               1 (day)
+
+  79            LOAD_GLOBAL             12 (json)
+                LOAD_ATTR               14 (load)
+                PUSH_NULL
+                LOAD_GLOBAL             17 (open + NULL)
+                LOAD_GLOBAL              4 (os)
+                LOAD_ATTR                6 (path)
+                LOAD_ATTR                9 (join + NULL|self)
+                LOAD_FAST                1 (day)
+                LOAD_CONST               4 ('metadata.json')
+                CALL                     2
+                LOAD_CONST               5 ('utf-8')
+                LOAD_CONST               6 (('encoding',))
+                CALL_KW                  2
+                CALL                     1
+                STORE_FAST               2 (meta)
+
+  80            LOAD_GLOBAL             19 (parse + NULL)
+                LOAD_GLOBAL              4 (os)
+                LOAD_ATTR                6 (path)
+                LOAD_ATTR                9 (join + NULL|self)
+                LOAD_FAST                1 (day)
+                LOAD_CONST               7 ('script.txt')
+                CALL                     2
+                CALL                     1
+                UNPACK_SEQUENCE          3
+                STORE_FAST_STORE_FAST   52 (intro, stories)
+                STORE_FAST               5 (outro)
+
+  82            LOAD_CONST               8 ('intro')
+                LOAD_FAST                3 (intro)
+                LOAD_CONST               9 (('id', 'text'))
+                BUILD_CONST_KEY_MAP      2
+                BUILD_LIST               1
+                STORE_FAST               6 (segments)
+
+  83            LOAD_FAST                4 (stories)
+                GET_ITER
+        L1:     FOR_ITER                44 (to L2)
+                STORE_FAST               7 (s)
+
+  84            LOAD_FAST                6 (segments)
+                LOAD_ATTR               21 (append + NULL|self)
+
+  85            LOAD_CONST              10 ('story')
+                LOAD_FAST                7 (s)
+                LOAD_CONST              11 ('n')
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+  86            LOAD_FAST                7 (s)
+                LOAD_CONST              12 ('title')
+                BINARY_SUBSCR
+
+  87            LOAD_FAST                7 (s)
+                LOAD_CONST              12 ('title')
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                LOAD_CONST              13 ('. ')
+                LOAD_FAST                7 (s)
+                LOAD_CONST              14 ('summary')
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                BUILD_STRING             3
+
+  84            LOAD_CONST              15 (('id', 'title', 'text'))
+                BUILD_CONST_KEY_MAP      3
+                CALL                     1
+                POP_TOP
+                JUMP_BACKWARD           46 (to L1)
+
+  83    L2:     END_FOR
+                POP_TOP
+
+  89            LOAD_FAST                6 (segments)
+                LOAD_ATTR               21 (append + NULL|self)
+                LOAD_CONST              16 ('outro')
+                LOAD_FAST                5 (outro)
+                LOAD_CONST               9 (('id', 'text'))
+                BUILD_CONST_KEY_MAP      2
+                CALL                     1
+                POP_TOP
+
+  91            LOAD_CONST              17 ('\n\n')
+                LOAD_ATTR                9 (join + NULL|self)
+                LOAD_CONST              18 (<code object <genexpr> at 0x000001D515CC3550, file "clean_script.py", line 91>)
+                MAKE_FUNCTION
+                LOAD_FAST                6 (segments)
+                GET_ITER
+                CALL                     0
+                CALL                     1
+                STORE_FAST               8 (narration)
+
+  94            LOAD_FAST                2 (meta)
+                LOAD_CONST              19 ('date')
+                BINARY_SUBSCR
+
+  95            LOAD_FAST                2 (meta)
+                LOAD_CONST              12 ('title')
+                BINARY_SUBSCR
+
+  96            LOAD_FAST                1 (day)
+
+  97            LOAD_GLOBAL             23 (len + NULL)
+                LOAD_FAST                4 (stories)
+                CALL                     1
+
+  98            LOAD_FAST                6 (segments)
+
+  99            LOAD_FAST                8 (narration)
+
+ 100            LOAD_GLOBAL             23 (len + NULL)
+                LOAD_FAST                8 (narration)
+                CALL                     1
+
+  93            LOAD_CONST              20 (('date', 'title', 'source_folder', 'story_count', 'segments', 'narration', 'narration_chars'))
+                BUILD_CONST_KEY_MAP      7
+                STORE_FAST               9 (out)
+
+ 102            LOAD_GLOBAL             12 (json)
+                LOAD_ATTR               24 (dump)
+                PUSH_NULL
+                LOAD_FAST                9 (out)
+                LOAD_GLOBAL             17 (open + NULL)
+                LOAD_GLOBAL              4 (os)
+                LOAD_ATTR                6 (path)
+                LOAD_ATTR                9 (join + NULL|self)
+                LOAD_FAST                1 (day)
+                LOAD_CONST              21 ('script.clean.json')
+                CALL                     2
+                LOAD_CONST              22 ('w')
+                LOAD_CONST               5 ('utf-8')
+                LOAD_CONST               6 (('encoding',))
+                CALL_KW                  3
+
+ 103            LOAD_CONST              23 (2)
+                LOAD_CONST              24 (False)
+
+ 102            LOAD_CONST              25 (('indent', 'ensure_ascii'))
+                CALL_KW                  4
+                POP_TOP
+
+ 105            LOAD_GLOBAL              4 (os)
+                LOAD_ATTR                6 (path)
+                LOAD_ATTR                9 (join + NULL|self)
+                LOAD_GLOBAL             10 (REPO)
+                LOAD_CONST              26 ('ops')
+                LOAD_CONST              27 ('marketing-inbox')
+                CALL                     3
+                STORE_FAST              10 (inbox)
+
+ 106            LOAD_GLOBAL              4 (os)
+                LOAD_ATTR               26 (makedirs)
+                PUSH_NULL
+                LOAD_FAST               10 (inbox)
+                LOAD_CONST              28 (True)
+                LOAD_CONST              29 (('exist_ok',))
+                CALL_KW                  2
+                POP_TOP
+
+ 107            LOAD_GLOBAL              4 (os)
+                LOAD_ATTR                6 (path)
+                LOAD_ATTR                9 (join + NULL|self)
+                LOAD_FAST               10 (inbox)
+                LOAD_CONST              30 ('youtube-')
+                LOAD_FAST                2 (meta)
+                LOAD_CONST              19 ('date')
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                LOAD_CONST              31 ('-script.md')
+                BUILD_STRING             3
+                CALL                     2
+                STORE_FAST              11 (md_path)
+
+ 108            LOAD_GLOBAL             17 (open + NULL)
+                LOAD_FAST               11 (md_path)
+                LOAD_CONST              22 ('w')
+                LOAD_CONST               5 ('utf-8')
+                LOAD_CONST               6 (('encoding',))
+                CALL_KW                  3
+                BEFORE_WITH
+        L3:     STORE_FAST              12 (fh)
+
+ 109            LOAD_FAST               12 (fh)
+                LOAD_ATTR               29 (write + NULL|self)
+                LOAD_CONST              32 ('# ')
+                LOAD_FAST                2 (meta)
+                LOAD_CONST              12 ('title')
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                LOAD_CONST              17 ('\n\n')
+                BUILD_STRING             3
+                CALL                     1
+                POP_TOP
+
+ 110            LOAD_FAST               12 (fh)
+                LOAD_ATTR               29 (write + NULL|self)
+                LOAD_CONST              33 ('- Date: ')
+                LOAD_FAST                2 (meta)
+                LOAD_CONST              19 ('date')
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                LOAD_CONST              34 ('\n- Stories: ')
+                LOAD_GLOBAL             23 (len + NULL)
+                LOAD_FAST                4 (stories)
+                CALL                     1
+                FORMAT_SIMPLE
+                LOAD_CONST              35 ('\n')
+                BUILD_STRING             5
+                CALL                     1
+                POP_TOP
+
+ 111            LOAD_FAST               12 (fh)
+                LOAD_ATTR               29 (write + NULL|self)
+                LOAD_CONST              36 ('- Source: `content/yesterday-news/')
+                LOAD_FAST                0 (date)
+                FORMAT_SIMPLE
+                LOAD_CONST              37 ('/script.txt`\n')
+                BUILD_STRING             3
+                CALL                     1
+                POP_TOP
+
+ 112            LOAD_FAST               12 (fh)
+                LOAD_ATTR               29 (write + NULL|self)
+                LOAD_CONST              38 ('- Narration characters: ')
+                LOAD_GLOBAL             23 (len + NULL)
+                LOAD_FAST                8 (narration)
+                CALL                     1
+                FORMAT_SIMPLE
+                LOAD_CONST              35 ('\n')
+                BUILD_STRING             3
+                CALL                     1
+                POP_TOP
+
+ 113            LOAD_FAST               12 (fh)
+                LOAD_ATTR               29 (write + NULL|self)
+                LOAD_CONST              39 ('- Publish status: PENDING (no approval recorded)\n\n')
+                CALL                     1
+                POP_TOP
+
+ 114            LOAD_FAST               12 (fh)
+                LOAD_ATTR               29 (write + NULL|self)
+                LOAD_CONST              40 ('## Narration\n\n')
+                CALL                     1
+                POP_TOP
+
+ 115            LOAD_FAST                6 (segments)
+                GET_ITER
+        L4:     FOR_ITER                45 (to L7)
+                STORE_FAST              13 (seg)
+
+ 116            LOAD_FAST               13 (seg)
+                LOAD_CONST              41 ('text')
+                BINARY_SUBSCR
+                TO_BOOL
+        L5:     POP_JUMP_IF_TRUE         2 (to L6)
+                JUMP_BACKWARD           15 (to L4)
+
+ 117    L6:     LOAD_FAST               12 (fh)
+                LOAD_ATTR               29 (write + NULL|self)
+                LOAD_CONST              42 ('**[')
+                LOAD_FAST               13 (seg)
+                LOAD_CONST              43 ('id')
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                LOAD_CONST              44 (']** ')
+                LOAD_FAST               13 (seg)
+                LOAD_CONST              41 ('text')
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                LOAD_CONST              17 ('\n\n')
+                BUILD_STRING             5
+                CALL                     1
+                POP_TOP
+                JUMP_BACKWARD           47 (to L4)
+
+ 115    L7:     END_FOR
+                POP_TOP
+
+ 118            LOAD_FAST               12 (fh)
+                LOAD_ATTR               29 (write + NULL|self)
+                LOAD_CONST              45 ('## Sources\n\n')
+                CALL                     1
+                POP_TOP
+
+ 119            LOAD_FAST                2 (meta)
+                LOAD_ATTR               31 (get + NULL|self)
+                LOAD_CONST              46 ('sources')
+                BUILD_LIST               0
+                CALL                     2
+                GET_ITER
+        L8:     FOR_ITER                39 (to L9)
+                STORE_FAST               7 (s)
+
+ 120            LOAD_FAST               12 (fh)
+                LOAD_ATTR               29 (write + NULL|self)
+                LOAD_CONST              47 ('- [')
+                LOAD_FAST                7 (s)
+                LOAD_CONST              12 ('title')
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                LOAD_CONST              48 ('](')
+                LOAD_FAST                7 (s)
+                LOAD_CONST              49 ('url')
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                LOAD_CONST              50 (') - ')
+                LOAD_FAST                7 (s)
+                LOAD_CONST              51 ('source')
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                LOAD_CONST              35 ('\n')
+                BUILD_STRING             7
+                CALL                     1
+                POP_TOP
+                JUMP_BACKWARD           41 (to L8)
+
+ 119    L9:     END_FOR
+                POP_TOP
+
+ 108   L10:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                POP_TOP
+
+ 122   L11:     LOAD_GLOBAL             33 (print + NULL)
+                LOAD_CONST              52 ('stories=')
+                LOAD_GLOBAL             23 (len + NULL)
+                LOAD_FAST                4 (stories)
+                CALL                     1
+                FORMAT_SIMPLE
+                LOAD_CONST              53 (' narration_chars=')
+                LOAD_GLOBAL             23 (len + NULL)
+                LOAD_FAST                8 (narration)
+                CALL                     1
+                FORMAT_SIMPLE
+                BUILD_STRING             4
+                CALL                     1
+                POP_TOP
+
+ 123            LOAD_GLOBAL             33 (print + NULL)
+                LOAD_CONST              54 ('wrote ')
+                LOAD_FAST               11 (md_path)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                POP_TOP
+
+ 124            LOAD_GLOBAL             33 (print + NULL)
+                LOAD_CONST              54 ('wrote ')
+                LOAD_GLOBAL              4 (os)
+                LOAD_ATTR                6 (path)
+                LOAD_ATTR                9 (join + NULL|self)
+                LOAD_FAST                1 (day)
+                LOAD_CONST              21 ('script.clean.json')
+                CALL                     2
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                POP_TOP
+                RETURN_CONST             0 (None)
+
+ 108   L12:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L13)
+                RERAISE                  2
+       L13:     POP_TOP
+       L14:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 108 (to L11)
+
+  --   L15:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L3 to L5 -> L12 [1] lasti
+  L6 to L10 -> L12 [1] lasti
+  L12 to L14 -> L15 [3] lasti
+
+Disassembly of <code object <genexpr> at 0x000001D515CC3550, file "clean_script.py", line 91>:
+  91           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+               GET_ITER
+       L2:     FOR_ITER                21 (to L5)
+               STORE_FAST_LOAD_FAST    17 (s, s)
+               LOAD_CONST               0 ('text')
+               BINARY_SUBSCR
+               TO_BOOL
+       L3:     POP_JUMP_IF_TRUE         2 (to L4)
+               JUMP_BACKWARD           14 (to L2)
+       L4:     LOAD_FAST                1 (s)
+               LOAD_CONST               0 ('text')
+               BINARY_SUBSCR
+               YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD           23 (to L2)
+       L5:     END_FOR
+               POP_TOP
+               RETURN_CONST             1 (None)
+
+  --   L6:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L6 [0] lasti
+  L4 to L6 -> L6 [0] lasti

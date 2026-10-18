@@ -8,10 +8,11 @@ import fs from 'node:fs';
 import net from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
-import { execFile, spawn } from 'node:child_process';
+import { execFile } from 'node:child_process';
+import { guardRequest, readOps, openBrowser, envelope } from './ops-backend.mjs';
 
 const ROOT = 'C:/ANTIGRAVITY';
-const PORT = 3130;
+const PORT = Number(process.env.MISSION_OS_PORT || 3130);
 const BOARD = `${ROOT}/oldmissioncontrol.html`;
 const STATUS = `${ROOT}/ops/t5500/status.json`;
 const CLIENT_JS = `${ROOT}/mission-os/jarvis-bridge-client.js`;
@@ -66,102 +67,39 @@ function runVersion(bin, args = ['--version']) {
   });
 }
 
-let bridgeCache = {
-  at: Date.now(),
-  refreshing: false,
-  data: {
-    generated: new Date().toISOString(),
-    bridges: [
-      { id: 'gemini', name: 'Gemini 4 Argon / Ultra (agy)', auth: 'Google OAuth (Ultra Subscription via agy / ops/paperclip/agy-gemini.cmd)', protocol: 'CLI / MCP', status: fs.existsSync(BINARIES.agy) ? 'UP' : 'DOWN', version: 'agy 1.4.0', canRun: fs.existsSync(BINARIES.agy) },
-      { id: 'claude', name: 'Claude Code (Opus / Sonnet)', auth: 'Anthropic OAuth Login Only (Zero API Key)', protocol: 'CLI / MCP', status: fs.existsSync(BINARIES.claude) ? 'UP' : 'DOWN', version: 'Claude Code 2.1.278', canRun: fs.existsSync(BINARIES.claude) },
-      { id: 'codex', name: 'OpenAI Codex', auth: 'OpenAI OAuth Login', protocol: 'CLI / ACP (codex exec)', status: fs.existsSync(BINARIES.codex) ? 'UP' : 'DOWN', version: 'codex-cli 0.162.0', canRun: fs.existsSync(BINARIES.codex) },
-      { id: 'grok', name: 'xAI Grok', auth: 'xAI OAuth Login', protocol: 'CLI / ACP (streaming-json)', status: fs.existsSync(BINARIES.grok) ? 'UP' : 'DOWN', version: 'grok 1.0.50', canRun: fs.existsSync(BINARIES.grok) },
-      { id: 'hermes', name: 'Hermes Agent (@t5500_bot · OmniRoute)', auth: 'OmniRoute (http://192.168.0.15:20128/v1 · hermes-support) + @t5500_bot', protocol: 'OmniRoute /v1 + A2A (:8643 & :9119)', status: fs.existsSync(BINARIES.hermes) ? 'UP' : 'DOWN', version: 'hermes-agent 0.21.7', canRun: true },
-      { id: 'fable', name: 'Fable Local (RTX 3070 8GB)', auth: 'Local Air-Gapped VRAM (:11434)', protocol: 'Ollama HTTP /v1', status: 'UP', version: 'joshlcoleman/Fable:latest (pinned)', canRun: true },
-    ],
-  },
-};
-
+const bridgeSpecs = [
+  ['gemini', 'Gemini (agy CLI)', 'agy'], ['claude', 'Claude Code', 'claude'],
+  ['codex', 'OpenAI Codex', 'codex'], ['grok', 'Grok CLI', 'grok'],
+  ['hermes', 'OmniRoute model proxy (not Hermes tools)', 'hermes'],
+  ['fable', 'Fable local model', 'ollama'],
+];
+let bridgeCache = { at: 0, refreshing: false, data: {
+  generated: null, bridges: bridgeSpecs.map(([id, name, bin]) => ({
+    id, name, installed: fs.existsSync(BINARIES[bin]), status: 'UNVERIFIED',
+    authenticated: null, inferenceVerified: false, version: null, canRun: false,
+    auth: 'Not verified', protocol: id === 'hermes' ? 'Model proxy only; no agent tools' : 'CLI / HTTP',
+  })),
+}};
 async function refreshBridges() {
   if (bridgeCache.refreshing) return bridgeCache.data;
   bridgeCache.refreshing = true;
   try {
-    const [agyV, claudeV, codexV, grokV, hermesHealth, ollamaTags] = await Promise.all([
-      runVersion(BINARIES.agy, ['--version']),
-      runVersion(BINARIES.claude, ['--version']),
-      runVersion(BINARIES.codex, ['--version']),
-      runVersion(BINARIES.grok, ['--version']),
-      fetch('http://127.0.0.1:8643/health', { signal: AbortSignal.timeout(2500) }).then((r) => r.json()).catch(() => null),
-      fetch('http://127.0.0.1:11434/api/tags', { signal: AbortSignal.timeout(2500) }).then((r) => r.json()).catch(() => null),
-    ]);
-    const models = Array.isArray(ollamaTags?.models) ? ollamaTags.models.map((m) => m.name) : [];
-    const bridges = [
-      {
-        id: 'gemini',
-        name: 'Gemini 4 Argon / Ultra (agy)',
-        auth: 'Google OAuth (Ultra Subscription via agy / ops/paperclip/agy-gemini.cmd)',
-        protocol: 'CLI / MCP',
-        status: (agyV.ok || fs.existsSync(BINARIES.agy)) ? 'UP' : 'DOWN',
-        version: agyV.ok ? `agy ${agyV.version}` : 'agy 1.4.0',
-        canRun: fs.existsSync(BINARIES.agy),
-      },
-      {
-        id: 'claude',
-        name: 'Claude Code (Opus / Sonnet)',
-        auth: 'Anthropic OAuth Login Only (Zero API Key)',
-        protocol: 'CLI / MCP',
-        status: (claudeV.ok || fs.existsSync(BINARIES.claude)) ? 'UP' : 'DOWN',
-        version: claudeV.ok ? claudeV.version : 'Claude Code 2.1.278',
-        canRun: fs.existsSync(BINARIES.claude),
-      },
-      {
-        id: 'codex',
-        name: 'OpenAI Codex',
-        auth: 'OpenAI OAuth Login',
-        protocol: 'CLI / ACP (codex exec)',
-        status: (codexV.ok || fs.existsSync(BINARIES.codex)) ? 'UP' : 'DOWN',
-        version: codexV.ok ? codexV.version : 'codex-cli 0.162.0',
-        canRun: fs.existsSync(BINARIES.codex),
-      },
-      {
-        id: 'grok',
-        name: 'xAI Grok',
-        auth: 'xAI OAuth Login',
-        protocol: 'CLI / ACP (streaming-json)',
-        status: (grokV.ok || fs.existsSync(BINARIES.grok)) ? 'UP' : 'DOWN',
-        version: grokV.ok ? grokV.version : 'grok 1.0.50',
-        canRun: fs.existsSync(BINARIES.grok),
-      },
-      {
-        id: 'hermes',
-        name: 'Hermes Agent (@t5500_bot · OmniRoute)',
-        auth: 'OmniRoute (http://192.168.0.15:20128/v1 · hermes-support) + @t5500_bot',
-        protocol: 'OmniRoute /v1 + A2A (:8643 & :9119)',
-        status: hermesHealth?.status === 'ok' || fs.existsSync(BINARIES.hermes) ? 'UP' : 'DOWN',
-        version: hermesHealth?.version ? `hermes-agent ${hermesHealth.version}` : 'hermes-agent 0.21.7',
-        canRun: true,
-      },
-      {
-        id: 'fable',
-        name: 'Fable Local (RTX 3070 8GB)',
-        auth: 'Local Air-Gapped VRAM (:11434)',
-        protocol: 'Ollama HTTP /v1',
-        status: (models.length > 0 || fs.existsSync(BINARIES.ollama)) ? 'UP' : 'DOWN',
-        version: models.includes('joshlcoleman/Fable:latest') ? 'joshlcoleman/Fable:latest (pinned)' : 'joshlcoleman/Fable:latest',
-        canRun: true,
-      },
-    ];
+    const bridges = await Promise.all(bridgeSpecs.map(async ([id, name, bin]) => {
+      const installed = fs.existsSync(BINARIES[bin]);
+      const v = await runVersion(BINARIES[bin]);
+      return { id, name, installed, status: installed ? 'INSTALLED / UNVERIFIED' : 'NOT INSTALLED',
+        version: v.ok ? v.version : null, authenticated: null, inferenceVerified: false,
+        canRun: ['hermes', 'fable'].includes(id),
+        auth: 'Not verified', protocol: id === 'hermes' ? 'OmniRoute model proxy only; no Hermes tools' : 'CLI / HTTP',
+        detail: ['hermes', 'fable'].includes(id) ? 'Explicit model request available; inference not yet verified' : 'Use authenticated local CLI; unattended web dispatch disabled',
+      };
+    }));
     bridgeCache = { at: Date.now(), refreshing: false, data: { generated: new Date().toISOString(), bridges } };
-  } catch {
-    bridgeCache.refreshing = false;
-  }
+  } finally { bridgeCache.refreshing = false; }
   return bridgeCache.data;
 }
-
 async function probeBridges() {
-  if (Date.now() - bridgeCache.at > 30000 && !bridgeCache.refreshing) {
-    refreshBridges().catch(() => {});
-  }
+  if (Date.now() - bridgeCache.at > 30000) return refreshBridges();
   return bridgeCache.data;
 }
 
@@ -178,50 +116,6 @@ function readOmniRouteKey() {
     } catch {}
   }
   return '';
-}
-
-function cleanOAuthEnv() {
-  const env = { ...process.env };
-  // Enforce Joshua's OAuth-only rule: never allow an API key to override official CLI logins
-  delete env.ANTHROPIC_API_KEY;
-  delete env.GEMINI_API_KEY;
-  delete env.GOOGLE_API_KEY;
-  return env;
-}
-
-function spawnCapture(cmd, args, { timeoutMs = 90000, cwd = ROOT } = {}) {
-  return new Promise((resolve) => {
-    const start = Date.now();
-    const isCmd = cmd.toLowerCase().endsWith('.cmd');
-    const child = spawn(isCmd ? 'cmd.exe' : cmd, isCmd ? ['/c', cmd, ...args] : args, {
-      cwd,
-      env: cleanOAuthEnv(),
-      stdio: ['ignore', 'pipe', 'pipe'],
-      windowsHide: true,
-    });
-    let out = '';
-    let err = '';
-    const timer = setTimeout(() => {
-      try { child.kill(); } catch {}
-      resolve({ ok: false, error: `Timed out after ${timeoutMs}ms`, output: out.trim(), durationMs: Date.now() - start });
-    }, timeoutMs);
-    child.stdout.on('data', (d) => { out += String(d); });
-    child.stderr.on('data', (d) => { err += String(d); });
-    child.on('error', (e) => {
-      clearTimeout(timer);
-      resolve({ ok: false, error: String(e.message || e), durationMs: Date.now() - start });
-    });
-    child.on('close', (code) => {
-      clearTimeout(timer);
-      const text = out.trim() || err.trim();
-      resolve({
-        ok: code === 0 && Boolean(text),
-        output: text.slice(-8000),
-        error: code !== 0 ? (err.trim() || out.trim() || `Exit code ${code}`).slice(-2000) : undefined,
-        durationMs: Date.now() - start,
-      });
-    });
-  });
 }
 
 async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
@@ -255,24 +149,8 @@ async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
     }
   }
 
-  if (brain === 'gemini') {
-    const res = await spawnCapture(BINARIES.agy, ['--print-timeout', '60s', '--dangerously-skip-permissions', '--print', cleanPrompt], { timeoutMs: 75000 });
-    return { ...res, brain, commandUsed: 'agy --print (Google Ultra OAuth)' };
-  }
-
-  if (brain === 'claude') {
-    const res = await spawnCapture(BINARIES.claude, ['-p', cleanPrompt, '--dangerously-skip-permissions'], { timeoutMs: 90000 });
-    return { ...res, brain, commandUsed: 'claude -p (Anthropic Login OAuth)' };
-  }
-
-  if (brain === 'codex') {
-    const res = await spawnCapture(BINARIES.codex, ['exec', '-s', 'read-only', '-C', ROOT, cleanPrompt], { timeoutMs: 90000 });
-    return { ...res, brain, commandUsed: 'codex exec (OpenAI Login OAuth)' };
-  }
-
-  if (brain === 'grok') {
-    const res = await spawnCapture(BINARIES.grok, ['-p', cleanPrompt, '--always-approve'], { timeoutMs: 90000 });
-    return { ...res, brain, commandUsed: 'grok -p --always-approve (xAI Login OAuth)' };
+  if (['gemini', 'claude', 'codex', 'grok'].includes(brain)) {
+    return { ok: false, brain, error: 'Web CLI dispatch disabled: use the authenticated local CLI with interactive permissions. No shell commands are accepted.' };
   }
 
   if (brain === 'hermes') {
@@ -280,7 +158,7 @@ async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
       const orKey = readOmniRouteKey();
       const headers = { 'Content-Type': 'application/json' };
       if (orKey) headers.Authorization = `Bearer ${orKey}`;
-      const r = await fetch('http://192.168.0.15:20128/v1/chat/completions', {
+      const r = await fetch('http://127.0.0.1:20128/v1/chat/completions', {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -294,7 +172,7 @@ async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
       return {
         ok: r.ok && Boolean(reply),
         brain,
-        commandUsed: 'OmniRoute http://192.168.0.15:20128/v1 (hermes-support · @t5500_bot)',
+        commandUsed: 'OmniRoute http://127.0.0.1:20128/v1 (hermes-support model proxy; no Hermes tools)',
         output: reply,
         error: !r.ok ? `HTTP ${r.status}` : undefined,
         durationMs: Date.now() - start,
@@ -303,7 +181,7 @@ async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
       return {
         ok: false,
         brain,
-        commandUsed: 'OmniRoute http://192.168.0.15:20128/v1 (hermes-support)',
+        commandUsed: 'OmniRoute http://127.0.0.1:20128/v1 (hermes-support)',
         error: String(e.message || e),
         durationMs: Date.now() - start,
       };
@@ -322,12 +200,12 @@ let cache = {
   refreshing: false,
   data: {
     identity: 'mission-agent-os',
-    node: 'T5500-2-XEON-72',
-    host: 't5500-2-xeon-72-ram-3070-8gb-gpu-ram',
+    node: os.hostname(),
+    host: os.hostname(),
     ip: '192.168.0.15',
     generated: new Date().toISOString(),
-    services: SERVICES.map((s) => ({ ...s, listening: true })),
-    domains: DOMAINS.map((d) => ({ domain: d, https: d === 'untilnokidinneed.com' ? 0 : 200 })),
+    services: SERVICES.map((s) => ({ ...s, listening: null, status: 'UNVERIFIED', identityVerified: false })),
+    domains: DOMAINS.map((d) => ({ domain: d, https: null })),
     bridges: bridgeCache.data.bridges,
     keepalive: readKeepaliveSync(),
   },
@@ -338,7 +216,7 @@ async function refreshState() {
   cache.refreshing = true;
   try {
     const [services, domains, bridgeData] = await Promise.all([
-      Promise.all(SERVICES.map(async (s) => ({ ...s, listening: s.probe ? (await head(s.probe)) === 200 : await tcp(s.port) }))),
+      Promise.all(SERVICES.map(async (s) => { const listening = await tcp(s.port); return {...s, listening, status: listening ? 'LISTENING / IDENTITY UNVERIFIED' : 'DOWN', identityVerified: false, checkedAt: new Date().toISOString()}; })),
       Promise.all(DOMAINS.map(async (d) => ({ domain: d, https: await head(`https://${d}/`) }))),
       probeBridges(),
     ]);
@@ -347,8 +225,8 @@ async function refreshState() {
       refreshing: false,
       data: {
         identity: 'mission-agent-os',
-        node: 'T5500-2-XEON-72',
-        host: 't5500-2-xeon-72-ram-3070-8gb-gpu-ram',
+        node: os.hostname(),
+        host: os.hostname(),
         ip: '192.168.0.15',
         generated: new Date().toISOString(),
         services,
@@ -372,13 +250,15 @@ async function state() {
   return cache.data;
 }
 
-setTimeout(() => { refreshBridges().catch(() => {}); refreshState().catch(() => {}); }, 200);
-setInterval(() => { refreshState().catch(() => {}); }, 25000);
+if (process.env.MISSION_OS_NO_BACKGROUND !== '1') {
+  setTimeout(() => { refreshBridges().catch(() => {}); refreshState().catch(() => {}); }, 200);
+  setInterval(() => { refreshState().catch(() => {}); }, 25000);
+}
 
 const esc = (v) => String(v ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function livePage(s) {
   const brow = (b) => `<tr><td><b>${esc(b.name)}</b></td><td><code>${esc(b.protocol)}</code></td><td class="${b.status === 'UP' ? 'up' : 'down'}">${esc(b.status)}</td><td>${esc(b.version)}</td><td>${esc(b.auth)}</td></tr>`;
-  const row = (x) => `<tr><td><b>${esc(x.id)}</b></td><td>:${x.port}</td><td class="${x.listening ? 'up' : 'down'}">${x.listening ? 'UP' : 'DOWN'}</td><td>${esc(x.what)}</td><td>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">open</a>` : ''}</td></tr>`;
+  const row = (x) => `<tr><td><b>${esc(x.id)}</b></td><td>:${x.port}</td><td class="${x.listening ? 'up' : 'down'}">${esc(x.status || 'UNVERIFIED')}</td><td>${esc(x.what)}</td><td>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">open</a>` : ''}</td></tr>`;
   const drow = (d) => `<tr><td><b>${esc(d.domain)}</b></td><td class="${d.https >= 200 && d.https < 400 ? 'up' : 'down'}">${d.https || 'NO ANSWER'}</td><td><a href="https://${esc(d.domain)}" target="_blank" rel="noopener">site</a> · <a href="https://dash.cloudflare.com/?to=/:account/${esc(d.domain)}/dns" target="_blank" rel="noopener">Cloudflare DNS</a></td></tr>`;
   const ka = (s.keepalive?.stages || []).map((k) => `<tr><td>${esc(k.stage)}</td><td class="${k.status === 'UP' ? 'up' : 'down'}">${esc(k.status)}</td><td>${esc(k.consecutive_failures)}</td></tr>`).join('');
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -390,7 +270,7 @@ td{padding:9px 12px;border-top:1px solid #27272a}a{color:#facc15}.up{color:#4ade
 nav a{margin-right:16px}code{color:#38bdf8;font-size:13px}</style></head><body><main>
 <h1>Mission Control — live</h1><p class="sub">${esc(s.host)} · ${esc(s.ip)} · refreshed ${esc(s.generated)} · auto-refresh 30 s</p>
 <nav style="margin-top:12px"><a href="/screens/mission_control_overview/">Overview</a><a href="/screens/mission_control_jarvis_command_console/">JARVIS / OPSIS Console</a><a href="/screens/mission_control_settings_logins/">Agent Logins</a><a href="/">Board</a><a href="http://127.0.0.1:3917/" target="_blank">Paperclip</a><a href="http://127.0.0.1:20128/" target="_blank">OmniRoute</a><a href="http://127.0.0.1:9119/" target="_blank">Hermes</a><a href="/api/bridges">bridges JSON</a><a href="/api/mos-state.json">state JSON</a></nav>
-<h2>Official JARVIS / OPSIS Auth Bridges (6/6 Installed on T5500)</h2><table>${(s.bridges || []).map(brow).join('')}</table>
+<h2>Bridge installation and verification status</h2><table>${(s.bridges || []).map(brow).join('')}</table>
 <h2>Services on this node</h2><table>${s.services.map(row).join('')}</table>
 <h2>Public domains (through the Cloudflare tunnel)</h2><table>${s.domains.map(drow).join('')}</table>
 <h2>Keepalive watchdog</h2><table>${ka || '<tr><td>status.json not readable</td></tr>'}</table>
@@ -402,20 +282,38 @@ const screens = () => { try { return fs.readdirSync(SCREENS_DIR).filter((d) => f
 const nice = (d) => d.replace(/^mission_control_/, '').replace(/_/g, ' ');
 const LIVE_BADGE = () => `<div style="position:fixed;left:272px;bottom:10px;z-index:99998;display:flex;gap:8px;font:700 11px Segoe UI,sans-serif"><details style="background:#18181b;color:#e4e4e7;border:1px solid #27272a;border-radius:12px;padding:6px 10px;max-height:70vh;overflow:auto"><summary style="cursor:pointer;color:#facc15">SCREENS (16)</summary>${screens().map((d) => `<div style="padding:2px 0"><a style="color:#e4e4e7;text-decoration:none" href="/screens/${d}/">${nice(d)}</a></div>`).join('')}</details><a href="/screens/mission_control_jarvis_command_console/" style="background:#22d3ee;color:#09090b;padding:6px 10px;border-radius:999px;text-decoration:none;align-self:flex-end">JARVIS CONSOLE →</a><a href="/live" style="background:#facc15;color:#09090b;padding:6px 10px;border-radius:999px;text-decoration:none;align-self:flex-end">LIVE TRUTH →</a></div><script src="/jarvis-bridge-client.js"></script>`;
 
-function readJsonBody(req) {
-  return new Promise((resolve) => {
-    let body = '';
-    req.on('data', (c) => { if (body.length < 65536) body += String(c); });
-    req.on('end', () => {
-      try { resolve(JSON.parse(body || '{}')); } catch { resolve({}); }
-    });
-  });
+async function readJsonBody(req) {
+  let bytes = 0; const chunks = [];
+  for await (const chunk of req) {
+    bytes += chunk.length;
+    if (bytes > 65536) { const error = new Error('Request body too large'); error.status = 413; throw error; }
+    chunks.push(chunk);
+  }
+  try {
+    const value = JSON.parse(Buffer.concat(chunks).toString('utf8'));
+    if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error();
+    return value;
+  } catch { const error = new Error('Invalid JSON object'); error.status = 400; throw error; }
 }
 
 http.createServer(async (req, res) => {
   const sec = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer' };
   try {
+    const denied = guardRequest(req, PORT);
+    if (denied) { res.writeHead(denied, {...sec, 'Content-Type':'application/json'}); return res.end(JSON.stringify({ok:false,error:'Local same-origin JSON requests only'})); }
     const u = new URL(req.url, 'http://x');
+    if (u.pathname.startsWith('/api/ops/')) {
+      const view = u.pathname.slice('/api/ops/'.length);
+      let result;
+      if (view === 'browser/open' && req.method === 'POST') {
+        const body = await readJsonBody(req);
+        result = await openBrowser(body.url);
+      } else if (req.method === 'GET' && ['board','memory','node','logs','support','hermes','settings','browser','video','youtube','marketing','ecosystem'].includes(view)) {
+        result = await readOps(view, {root:ROOT,state,bridges:probeBridges});
+      } else { res.writeHead(404, sec); return res.end('not found'); }
+      res.writeHead(200, {...sec, 'Content-Type':'application/json', 'Cache-Control':'no-store'});
+      return res.end(JSON.stringify(result));
+    }
     if (u.pathname === '/jarvis-bridge-client.js') {
       res.writeHead(200, { ...sec, 'Content-Type': 'application/javascript; charset=utf-8', 'Cache-Control': 'no-store' });
       return res.end(fs.readFileSync(CLIENT_JS, 'utf8'));
@@ -456,5 +354,5 @@ http.createServer(async (req, res) => {
       return res.end(html);
     }
     res.writeHead(404, sec); res.end('not found');
-  } catch (e) { res.writeHead(500, sec); res.end('error'); }
-}).listen(PORT, '0.0.0.0', () => console.log(`mission-agent-os on http://127.0.0.1:${PORT} and http://192.168.0.15:${PORT}`));
+  } catch (e) { res.writeHead(e.status || 500, {...sec, 'Content-Type':'application/json'}); res.end(JSON.stringify({ok:false,error:e.status ? e.message : 'Internal error'})); }
+}).listen(PORT, '127.0.0.1', () => console.log(`mission-agent-os on http://127.0.0.1:${PORT}`));

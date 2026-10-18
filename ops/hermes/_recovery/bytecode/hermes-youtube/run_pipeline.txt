@@ -1,0 +1,379 @@
+# run_pipeline.pyc
+
+bytes: 4044
+magic: f30d0d0a (this interpreter: f30d0d0a)
+magic matches: True
+
+## docstrings
+
+<module>:
+Run the whole faceless-news pipeline for one day folder.
+
+    python run_pipeline.py                 # newest eligible day folder
+    python run_pipeline.py 20260901        # a specific day folder
+
+Stages: clean -> narrate -> visuals -> assemble -> packet. Each stage is the
+same script that can be run on its own, so a failure can be retried in place
+without redoing the stages before it.
+
+Nothing here publishes. Upload stays manual until Joshua records approval.
+
+
+  pick_day:
+Newest dated folder. Per SKILL.md, if that is today, use the one before.
+
+    <genexpr>:
+\d{8}
+
+## string constants
+
+'Run the whole faceless-news pipeline for one day folder.\n\n    python run_pipeline.py                 # newest eligible day folder\n    python run_pipeline.py 20260901        # a specific day folder\n\nStages: clean -> narrate -> visuals -> assemble -> packet. Each stage is the\nsame script that can be run on its own, so a failure can be retried in place\nwithout redoing the stages before it.\n\nNothing here publishes. Upload stays manual until Joshua records approval.\n'
+'C:\\ANTIGRAVITY'
+'content'
+'yesterday-news'
+'__main__'
+'Newest dated folder. Per SKILL.md, if that is today, use the one before.'
+'no dated folders in '
+'%Y%m%d'
+'\\d{8}'
+'no such day folder: '
+'=== day folder: '
+' ===\n'
+'utf-8'
+'--- '
+' ---'
+"stage '"
+"' failed (rc="
+'); fix it and re-run: python '
+' '
+'Pipeline complete. Publish status is PENDING - nothing was uploaded.'
+
+## disassembly
+
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Run the whole faceless-news pipeline for one day folder.\n\n    python run_pipeline.py                 # newest eligible day folder\n    python run_pipeline.py 20260901        # a specific day folder\n\nStages: clean -> narrate -> visuals -> assemble -> packet. Each stage is the\nsame script that can be run on its own, so a failure can be retried in place\nwithout redoing the stages before it.\n\nNothing here publishes. Upload stays manual until Joshua records approval.\n')
+              STORE_NAME               0 (__doc__)
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (os)
+              STORE_NAME               1 (os)
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              2 (re)
+              STORE_NAME               2 (re)
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              3 (subprocess)
+              STORE_NAME               3 (subprocess)
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              4 (sys)
+              STORE_NAME               4 (sys)
+
+ 17           LOAD_NAME                1 (os)
+              LOAD_ATTR               10 (path)
+              LOAD_ATTR               13 (dirname + NULL|self)
+              LOAD_NAME                1 (os)
+              LOAD_ATTR               10 (path)
+              LOAD_ATTR               15 (abspath + NULL|self)
+              LOAD_NAME                8 (__file__)
+              CALL                     1
+              CALL                     1
+              STORE_NAME               9 (HERE)
+
+ 18           LOAD_NAME                1 (os)
+              LOAD_ATTR               10 (path)
+              LOAD_ATTR               21 (join + NULL|self)
+              LOAD_CONST               3 ('C:\\ANTIGRAVITY')
+              LOAD_CONST               4 ('content')
+              LOAD_CONST               5 ('yesterday-news')
+              CALL                     3
+              STORE_NAME              11 (NEWS)
+
+ 19           BUILD_LIST               0
+              LOAD_CONST               6 ((('clean', 'clean_script.py'), ('narrate', 'narrate.py'), ('visuals', 'visuals.py'), ('assemble', 'assemble.py'), ('packet', 'write_packet.py')))
+              LIST_EXTEND              1
+              STORE_NAME              12 (STAGES)
+
+ 28           LOAD_CONST               7 (<code object pick_day at 0x000001D51588B870, file "run_pipeline.py", line 28>)
+              MAKE_FUNCTION
+              STORE_NAME              13 (pick_day)
+
+ 41           LOAD_CONST               8 (<code object main at 0x000001D515BE0940, file "run_pipeline.py", line 41>)
+              MAKE_FUNCTION
+              STORE_NAME              14 (main)
+
+ 60           LOAD_NAME               15 (__name__)
+              LOAD_CONST               9 ('__main__')
+              COMPARE_OP              88 (bool(==))
+              POP_JUMP_IF_FALSE        8 (to L1)
+
+ 61           LOAD_NAME               14 (main)
+              PUSH_NULL
+              CALL                     0
+              POP_TOP
+              RETURN_CONST             2 (None)
+
+ 60   L1:     RETURN_CONST             2 (None)
+
+Disassembly of <code object pick_day at 0x000001D51588B870, file "run_pipeline.py", line 28>:
+ 28           RESUME                   0
+
+ 30           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('date',))
+              IMPORT_NAME              0 (datetime)
+              IMPORT_FROM              1 (date)
+              STORE_FAST               0 (date)
+              POP_TOP
+
+ 31           LOAD_GLOBAL              5 (sorted + NULL)
+              LOAD_CONST               3 (<code object <genexpr> at 0x000001D51586FBB0, file "run_pipeline.py", line 31>)
+              MAKE_FUNCTION
+              LOAD_GLOBAL              6 (os)
+              LOAD_ATTR                8 (listdir)
+              PUSH_NULL
+              LOAD_GLOBAL             10 (NEWS)
+              CALL                     1
+              GET_ITER
+              CALL                     0
+              CALL                     1
+              STORE_FAST               1 (folders)
+
+ 34           LOAD_FAST                1 (folders)
+              TO_BOOL
+              POP_JUMP_IF_TRUE        18 (to L1)
+
+ 35           LOAD_GLOBAL             13 (SystemExit + NULL)
+              LOAD_CONST               4 ('no dated folders in ')
+              LOAD_GLOBAL             10 (NEWS)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 36   L1:     LOAD_FAST                1 (folders)
+              LOAD_CONST               5 (-1)
+              BINARY_SUBSCR
+              LOAD_FAST                0 (date)
+              LOAD_ATTR               15 (today + NULL|self)
+              CALL                     0
+              LOAD_ATTR               17 (strftime + NULL|self)
+              LOAD_CONST               6 ('%Y%m%d')
+              CALL                     1
+              COMPARE_OP              88 (bool(==))
+              POP_JUMP_IF_FALSE       20 (to L2)
+              LOAD_GLOBAL             19 (len + NULL)
+              LOAD_FAST                1 (folders)
+              CALL                     1
+              LOAD_CONST               7 (1)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE        5 (to L2)
+
+ 37           LOAD_FAST                1 (folders)
+              LOAD_CONST               8 (-2)
+              BINARY_SUBSCR
+              RETURN_VALUE
+
+ 38   L2:     LOAD_FAST                1 (folders)
+              LOAD_CONST               5 (-1)
+              BINARY_SUBSCR
+              RETURN_VALUE
+
+Disassembly of <code object <genexpr> at 0x000001D51586FBB0, file "run_pipeline.py", line 31>:
+  31           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+               GET_ITER
+       L2:     FOR_ITER               109 (to L7)
+               STORE_FAST               1 (f)
+
+  32           LOAD_GLOBAL              0 (re)
+               LOAD_ATTR                2 (fullmatch)
+               PUSH_NULL
+               LOAD_CONST               0 ('\\d{8}')
+               LOAD_FAST                1 (f)
+               CALL                     2
+               TO_BOOL
+
+  31   L3:     POP_JUMP_IF_TRUE         2 (to L4)
+               JUMP_BACKWARD           33 (to L2)
+
+  33   L4:     LOAD_GLOBAL              4 (os)
+               LOAD_ATTR                6 (path)
+               LOAD_ATTR                9 (isdir + NULL|self)
+               LOAD_GLOBAL              4 (os)
+               LOAD_ATTR                6 (path)
+               LOAD_ATTR               11 (join + NULL|self)
+               LOAD_GLOBAL             12 (NEWS)
+               LOAD_FAST                1 (f)
+               CALL                     2
+               CALL                     1
+               TO_BOOL
+
+  31   L5:     POP_JUMP_IF_TRUE         2 (to L6)
+               JUMP_BACKWARD          105 (to L2)
+       L6:     LOAD_FAST                1 (f)
+               YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD          111 (to L2)
+       L7:     END_FOR
+               POP_TOP
+               RETURN_CONST             1 (None)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L4 to L5 -> L8 [0] lasti
+  L6 to L8 -> L8 [0] lasti
+
+Disassembly of <code object main at 0x000001D515BE0940, file "run_pipeline.py", line 41>:
+ 41           RESUME                   0
+
+ 42           LOAD_GLOBAL              1 (len + NULL)
+              LOAD_GLOBAL              2 (sys)
+              LOAD_ATTR                4 (argv)
+              CALL                     1
+              LOAD_CONST               1 (1)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       19 (to L1)
+              LOAD_GLOBAL              2 (sys)
+              LOAD_ATTR                4 (argv)
+              LOAD_CONST               1 (1)
+              BINARY_SUBSCR
+              JUMP_FORWARD             9 (to L2)
+      L1:     LOAD_GLOBAL              7 (pick_day + NULL)
+              CALL                     0
+      L2:     STORE_FAST               0 (day)
+
+ 43           LOAD_GLOBAL              8 (os)
+              LOAD_ATTR               10 (path)
+              LOAD_ATTR               13 (isdir + NULL|self)
+              LOAD_GLOBAL              8 (os)
+              LOAD_ATTR               10 (path)
+              LOAD_ATTR               15 (join + NULL|self)
+              LOAD_GLOBAL             16 (NEWS)
+              LOAD_FAST                0 (day)
+              CALL                     2
+              CALL                     1
+              TO_BOOL
+              POP_JUMP_IF_TRUE        48 (to L3)
+
+ 44           LOAD_GLOBAL             19 (SystemExit + NULL)
+              LOAD_CONST               2 ('no such day folder: ')
+              LOAD_GLOBAL              8 (os)
+              LOAD_ATTR               10 (path)
+              LOAD_ATTR               15 (join + NULL|self)
+              LOAD_GLOBAL             16 (NEWS)
+              LOAD_FAST                0 (day)
+              CALL                     2
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 45   L3:     LOAD_GLOBAL             21 (print + NULL)
+              LOAD_CONST               3 ('=== day folder: ')
+              LOAD_FAST                0 (day)
+              FORMAT_SIMPLE
+              LOAD_CONST               4 (' ===\n')
+              BUILD_STRING             3
+              CALL                     1
+              POP_TOP
+
+ 47           LOAD_GLOBAL             23 (dict + NULL)
+              LOAD_GLOBAL              8 (os)
+              LOAD_ATTR               24 (environ)
+              LOAD_CONST               5 ('utf-8')
+              LOAD_CONST               6 (('PYTHONIOENCODING',))
+              CALL_KW                  2
+              STORE_FAST               1 (env)
+
+ 48           LOAD_GLOBAL             26 (STAGES)
+              GET_ITER
+      L4:     FOR_ITER               186 (to L6)
+              UNPACK_SEQUENCE          2
+              STORE_FAST_STORE_FAST   35 (name, script)
+
+ 49           LOAD_GLOBAL             21 (print + NULL)
+              LOAD_CONST               7 ('--- ')
+              LOAD_FAST                2 (name)
+              FORMAT_SIMPLE
+              LOAD_CONST               8 (' ---')
+              BUILD_STRING             3
+              CALL                     1
+              POP_TOP
+
+ 50           LOAD_GLOBAL              2 (sys)
+              LOAD_ATTR               28 (stdout)
+              LOAD_ATTR               31 (flush + NULL|self)
+              CALL                     0
+              POP_TOP
+
+ 51           LOAD_GLOBAL             32 (subprocess)
+              LOAD_ATTR               34 (run)
+              PUSH_NULL
+              LOAD_GLOBAL              2 (sys)
+              LOAD_ATTR               36 (executable)
+              LOAD_GLOBAL              8 (os)
+              LOAD_ATTR               10 (path)
+              LOAD_ATTR               15 (join + NULL|self)
+              LOAD_GLOBAL             38 (HERE)
+              LOAD_FAST                3 (script)
+              CALL                     2
+              LOAD_FAST                0 (day)
+              BUILD_LIST               3
+
+ 52           LOAD_GLOBAL             38 (HERE)
+              LOAD_FAST                1 (env)
+
+ 51           LOAD_CONST               9 (('cwd', 'env'))
+              CALL_KW                  3
+              STORE_FAST               4 (proc)
+
+ 53           LOAD_FAST                4 (proc)
+              LOAD_ATTR               40 (returncode)
+              LOAD_CONST              10 (0)
+              COMPARE_OP             119 (bool(!=))
+              POP_JUMP_IF_FALSE       33 (to L5)
+
+ 54           LOAD_GLOBAL             19 (SystemExit + NULL)
+              LOAD_CONST              11 ("stage '")
+              LOAD_FAST                2 (name)
+              FORMAT_SIMPLE
+              LOAD_CONST              12 ("' failed (rc=")
+              LOAD_FAST                4 (proc)
+              LOAD_ATTR               40 (returncode)
+              FORMAT_SIMPLE
+              LOAD_CONST              13 ('); fix it and re-run: python ')
+
+ 55           LOAD_FAST                3 (script)
+              FORMAT_SIMPLE
+              LOAD_CONST              14 (' ')
+              LOAD_FAST                0 (day)
+              FORMAT_SIMPLE
+
+ 54           BUILD_STRING             8
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 56   L5:     LOAD_GLOBAL             21 (print + NULL)
+              CALL                     0
+              POP_TOP
+              JUMP_BACKWARD          188 (to L4)
+
+ 48   L6:     END_FOR
+              POP_TOP
+
+ 57           LOAD_GLOBAL             21 (print + NULL)
+              LOAD_CONST              15 ('Pipeline complete. Publish status is PENDING - nothing was uploaded.')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)

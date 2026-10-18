@@ -19,7 +19,7 @@ if (-not (Test-Path $safeScript)) {
     exit 1
 }
 
-pwsh -NoProfile -ExecutionPolicy Bypass -File $safeScript -Profile 9020-content -RepoRoot $repoRoot 2>&1 |
+pwsh -NoProfile -ExecutionPolicy Bypass -File $safeScript -Profile T5500-content -RepoRoot $repoRoot 2>&1 |
     Out-File -Append -FilePath $logFile
 
 Write-Log "SAFE WATCHDOG COMPLETE"

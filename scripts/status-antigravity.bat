@@ -18,7 +18,7 @@ echo.
 :: --- Core AI / Compute ------------------------------------------
 echo  [CORE SERVICES]
 call :check_url  "Ollama"           "http://127.0.0.1:11434/api/tags"
-call :check_url  "Paperclip HQ"     "http://127.0.0.1:3100/api/health"
+call :check_url  "Paperclip HQ"     "http://127.0.0.1:3917/api/health"
 call :check_port "Embedded PG"      "54329"
 echo.
 

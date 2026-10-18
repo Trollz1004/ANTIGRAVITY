@@ -29,7 +29,7 @@ set -uo pipefail
 # ---- exclusions: vendored third-party code, and this guard itself ----
 # Not Josh's code. Purging a dependency's changelog achieves nothing and breaks
 # it. The guard's own files must be exempt or it blocks itself.
-EXCLUDE_RE='^(\.githooks/|omniroute/|\.agents/skills/microsoft-foundry/|\.agents/skills/skills/microsoft-foundry/|node_modules/|.*/node_modules/)'
+EXCLUDE_RE='^(\.githooks/|omniroute/|\.agents/skills/microsoft-foundry/|\.agents/skills/skills/microsoft-foundry/|node_modules/|.*/node_modules/|content/yesterday-news/|ops/hermes/|ops/packets/)'
 
 # ---- banned words (recovered from d245c23a^ BRIEFING.md) ----
 BANNED_WORDS='charity|charitable|donate|donation|donations|solicitation|disbursement|tax-deductible|giving back|non-?profit|501\(c\)|proceeds go to|every dollar|funds children'

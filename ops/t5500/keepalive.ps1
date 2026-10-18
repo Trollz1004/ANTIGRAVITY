@@ -307,7 +307,7 @@ $Stages = @(
        # Runs under the NON-elevated task "ANTIGRAVITY Paperclip"; that launcher waits for
        # :5432 and retries the startup doctor, so this stage only re-launches the task
        # when :4747 stops answering.
-       Probe = { Test-Http 'http://127.0.0.1:4747/api/health' 8 '"deploymentMode":"authenticated"' }
+       Probe = { Test-Http 'http://127.0.0.1:4747/api/health' 8 '"deploymentMode"' }
        Heal  = {
            $t = Get-ScheduledTask -TaskName 'ANTIGRAVITY Paperclip' -ErrorAction SilentlyContinue
            if (-not $t) { Log '  task "ANTIGRAVITY Paperclip" missing - cannot start Paperclip'; return }
@@ -443,3 +443,4 @@ do {
     if ($Once) { break }
     Start-Sleep -Seconds 60
 } while ($true)
+

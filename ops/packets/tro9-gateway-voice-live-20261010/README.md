@@ -1,5 +1,12 @@
 # TRO-9 — the OmniRoute speech route is live, as of 2026-10-10
 
+> **DECIDED 2026-10-10 by the board: keep edge-tts `en-US-ChristopherNeural`.**
+> The recommendation in section 5 was accepted after listening to the A/B files. No
+> pipeline change is needed — edge is already what `--backend auto` resolves to, so this
+> decision is the status quo, not a migration. The gateway stays a documented upgrade for
+> the source rebuild; the three `tts.py` defects are filed on *"Commit the pipeline to git
+> and rebuild the lost source"*.
+
 Two separate findings in this packet. They point opposite directions, so read both.
 
 1. The attached legacy backup contains **no speech credential of any kind**, and the

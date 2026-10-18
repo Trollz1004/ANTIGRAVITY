@@ -78,7 +78,7 @@ path above.
 13.9 KB `SKILL.md` plus five reference documents. Not a stub.
 
 Note what it is and is not: the **client** half. Epic's Unreal MCP server runs
-inside the Unreal Editor process. Unreal is not installed on Sabretooth, no
+inside the Unreal Editor process. Unreal is not installed on T5500, no
 `.uproject` exists, and Hermes' `mcp_servers.unreal-engine` entry is
 `enabled: false` pointed at `http://127.0.0.1:8000/mcp` — a port the dating-app
 backend already owns. See `docs/ops/NODE-AND-PORT-MAP.md`.
@@ -96,3 +96,4 @@ Directories with a `--<hash>` suffix are Paperclip *materialized* copies — clo
 of a skill that already exists here, carrying an extra
 `.paperclip-materialized-skill.json` marker. They are gitignored: Paperclip
 re-creates them on demand, and committing them double-counts the skill inventory.
+

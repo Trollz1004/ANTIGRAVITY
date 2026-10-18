@@ -1,7 +1,7 @@
 # ======================================================================
 # ANTIGRAVITY UNIFIED BRIDGE SETUP
 # AnythingLLM + BRAIN MCP + Ollama + Claude Code + Gemini CLI
-# Sabretooth Node | GTX 1070 8GB | E: Drive Sandbox
+# T5500 Node | GTX 1070 8GB | E: Drive Sandbox
 # One Repo: E:\ANTIGRAVITY | One Account: joshlcoleman@gmail.com
 # ======================================================================
 
@@ -214,7 +214,7 @@ echo.
 echo  ============================================================
 echo   ANTIGRAVITY UNIFIED BRIDGE
 echo   AnythingLLM + BRAIN MCP + Ollama + Claude Code + Gemini
-echo   Sabretooth Node ^| %DATE% %TIME%
+echo   T5500 Node ^| %DATE% %TIME%
 echo  ============================================================
 echo.
 

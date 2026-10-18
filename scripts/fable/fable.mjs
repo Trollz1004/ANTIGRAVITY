@@ -529,7 +529,7 @@ async function cmdWorkflow(argv) {
 // ══════════════════════════════════════════════════════════════ mcp ══════
 function helpMcp() {
   console.log(`fable mcp — list MCP servers from C:\\ANTIGRAVITY\\.mcp.json and %USERPROFILE%\\.claude.json,
-plus the Paperclip broker's own view if http://127.0.0.1:3100/api/openapi.json answers
+plus the Paperclip broker's own view if http://127.0.0.1:3917/api/openapi.json answers
 with info.title == "Paperclip API".
 
 Usage: fable mcp`);
@@ -569,14 +569,14 @@ async function cmdMcp(argv) {
   console.log(padTable(rows, ['Source', 'Name', 'Transport', 'Script present?']));
 
   console.log('\n--- Paperclip broker view ---');
-  const check = await httpCheck('http://127.0.0.1:3100/api/openapi.json', 'Paperclip API', 5000);
+  const check = await httpCheck('http://127.0.0.1:3917/api/openapi.json', 'Paperclip API', 5000);
   if (!check.up) {
     console.log('Paperclip: ' + verdictOf({ fix: 'paperclip' }, check) + ' — ' + check.detail);
     process.exitCode = EXIT.TARGET_DOWN;
     return;
   }
   try {
-    const spec = await (await fetch('http://127.0.0.1:3100/api/openapi.json')).json();
+    const spec = await (await fetch('http://127.0.0.1:3917/api/openapi.json')).json();
     const mcpPaths = Object.keys(spec.paths || {}).filter((p) => /mcp/i.test(p));
     if (mcpPaths.length === 0) {
       console.log('Paperclip is UP but no MCP-related routes found in its OpenAPI spec.');
@@ -590,7 +590,7 @@ async function cmdMcp(argv) {
       process.exitCode = EXIT.OK;
       return;
     }
-    const r = await fetch('http://127.0.0.1:3100' + listPath);
+    const r = await fetch('http://127.0.0.1:3917' + listPath);
     if (r.status === 401 || r.status === 403) {
       console.log(`GET ${listPath} -> HTTP ${r.status}: AUTH MISSING (no token guessed).`);
       process.exitCode = EXIT.AUTH;

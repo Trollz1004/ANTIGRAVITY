@@ -61,13 +61,13 @@ if %ERRORLEVEL% NEQ 0 (
 echo.
 
 :: --- 3. PAPERCLIP HQ -------------------------------------------
-echo [3/4] Checking Paperclip HQ (port 3100)...
-powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:3100/api/health' -TimeoutSec 3 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
+echo [3/4] Checking Paperclip HQ (port 3917)...
+powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:3917/api/health' -TimeoutSec 3 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
     echo        Starting Paperclip HQ...
     echo        Dir:  E:\ANTIGRAVITY
     echo        Data: C:\Users\joshl\.paperclip\instances\default
-    start "Paperclip HQ :3100" cmd /k "cd /d E:\ANTIGRAVITY && call C:\Users\joshl\AppData\Roaming\npm\paperclipai.cmd run"
+    start "Paperclip HQ :3917" cmd /k "cd /d E:\ANTIGRAVITY && call C:\Users\joshl\AppData\Roaming\npm\paperclipai.cmd run"
     timeout /t 8 /nobreak >nul
 ) else (
     echo        [OK] Paperclip HQ already running
@@ -137,7 +137,7 @@ if %ERRORLEVEL% NEQ 0 (
 
 :: --- OPEN BROWSER TABS -----------------------------------------
 echo [BROWSER] Opening Paperclip HQ...
-start "" "http://127.0.0.1:3100"
+start "" "http://127.0.0.1:3917"
 echo.
 
 :: -- 6. HERMES DASHBOARD (Web UI :9119) --------------------------
@@ -158,7 +158,7 @@ echo   STATUS SUMMARY
 echo  ============================================================
 
 call :check_svc "Ollama"      "http://127.0.0.1:11434/api/tags"
-call :check_svc "Paperclip"   "http://127.0.0.1:3100/api/health"
+call :check_svc "Paperclip"   "http://127.0.0.1:3917/api/health"
 call :check_svc "Dashboard"   "http://127.0.0.1:9119"
 
 call hermes --version >nul 2>&1

@@ -1,0 +1,285 @@
+﻿{
+    "checked":  "2026-10-17T13:03:41",
+    "node":  "T5500-2-XEON-72",
+    "total":  46,
+    "up":  42,
+    "notUp":  4,
+    "results":  [
+                    {
+                        "group":  "service",
+                        "name":  "Fable answers (Ollama runs models)",
+                        "status":  "DOWN",
+                        "detail":  ""
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "Ollama :11434 (Fable)",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "Domains server :9160",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "Date-app frontend :3200",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "Date-app API :8000",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "Paperclip :3917",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "Mission Control :3130",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "Hermes dashboard :9119",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "OmniRoute :20128",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "Obsidian REST :27123",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "Hermes gateway API :8643",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "PostgreSQL :5432",
+                        "status":  "UP",
+                        "detail":  "postgres"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "Redis :6379",
+                        "status":  "UP",
+                        "detail":  "redis-server"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "Paperclip DB :54329",
+                        "status":  "UP",
+                        "detail":  "postgres"
+                    },
+                    {
+                        "group":  "service",
+                        "name":  "Cloudflare tunnel (cloudflared)",
+                        "status":  "UP",
+                        "detail":  "1 process(es)"
+                    },
+                    {
+                        "group":  "domain",
+                        "name":  "https://youandinotai.com/",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "domain",
+                        "name":  "https://www.youandinotai.com/",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "domain",
+                        "name":  "https://api.youandinotai.com/health",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "domain",
+                        "name":  "https://onlinerecycle.net/",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "domain",
+                        "name":  "https://dream-online.net/",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
+                        "group":  "watchdog",
+                        "name":  "openclaw-sentry.ps1",
+                        "status":  "UP",
+                        "detail":  "window pid "
+                    },
+                    {
+                        "group":  "watchdog",
+                        "name":  "hermes-support.ps1",
+                        "status":  "UP",
+                        "detail":  "window pid "
+                    },
+                    {
+                        "group":  "watchdog",
+                        "name":  "Hermes cron: T5500 node watch",
+                        "status":  "UP",
+                        "detail":  "every 10 min, Telegram only when stuck"
+                    },
+                    {
+                        "group":  "task",
+                        "name":  "ANTIGRAVITY T5500 Keepalive",
+                        "status":  "UP",
+                        "detail":  "Ready, last run 2026-10-17 13:00 rc 0"
+                    },
+                    {
+                        "group":  "task",
+                        "name":  "ANTIGRAVITY Paperclip",
+                        "status":  "UP",
+                        "detail":  "Running, last run 2026-10-17 11:13 rc 267009"
+                    },
+                    {
+                        "group":  "task",
+                        "name":  "ANTIGRAVITY OmniRoute",
+                        "status":  "UP",
+                        "detail":  "Ready, last run 2026-10-17 08:18 rc 0"
+                    },
+                    {
+                        "group":  "task",
+                        "name":  "ANTIGRAVITY Mission Control",
+                        "status":  "UP",
+                        "detail":  "Running, last run 2026-10-17 08:17 rc 267009"
+                    },
+                    {
+                        "group":  "task",
+                        "name":  "ANTIGRAVITY Hermes Dashboard",
+                        "status":  "UP",
+                        "detail":  "Running, last run 2026-10-17 08:17 rc 267009"
+                    },
+                    {
+                        "group":  "task",
+                        "name":  "Hermes_Gateway",
+                        "status":  "UP",
+                        "detail":  "Ready, last run 2026-10-17 08:17 rc 0"
+                    },
+                    {
+                        "group":  "task",
+                        "name":  "HermesDailyVideo",
+                        "status":  "DOWN",
+                        "detail":  "Ready, last run 2026-10-17 06:30 rc 3"
+                    },
+                    {
+                        "group":  "task",
+                        "name":  "ANTIGRAVITY Agent Windows",
+                        "status":  "UP",
+                        "detail":  "Running, last run 2026-10-17 08:17 rc 267009"
+                    },
+                    {
+                        "group":  "watchdog",
+                        "name":  "Keepalive status.json",
+                        "status":  "UP",
+                        "detail":  "0 min old"
+                    },
+                    {
+                        "group":  "rule",
+                        "name":  "No tunnel route for untilnokidinneed.com",
+                        "status":  "UP",
+                        "detail":  "none"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "hermes",
+                        "status":  "UP",
+                        "detail":  "installed"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "claude",
+                        "status":  "UP",
+                        "detail":  "installed"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "codex",
+                        "status":  "UP",
+                        "detail":  "installed"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "gemini",
+                        "status":  "UP",
+                        "detail":  "installed"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "agy",
+                        "status":  "UP",
+                        "detail":  "installed"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "grok",
+                        "status":  "UP",
+                        "detail":  "installed"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "opencode",
+                        "status":  "UP",
+                        "detail":  "installed"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "pi",
+                        "status":  "NOT CONFIGURED",
+                        "detail":  "not installed"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "wrangler",
+                        "status":  "NOT CONFIGURED",
+                        "detail":  "not installed"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "cloudflared",
+                        "status":  "UP",
+                        "detail":  "installed"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "supabase",
+                        "status":  "UP",
+                        "detail":  "installed"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "vercel",
+                        "status":  "UP",
+                        "detail":  "installed"
+                    },
+                    {
+                        "group":  "tool",
+                        "name":  "paperclipai",
+                        "status":  "UP",
+                        "detail":  "installed"
+                    }
+                ]
+}

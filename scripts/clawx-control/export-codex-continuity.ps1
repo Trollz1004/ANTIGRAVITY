@@ -235,8 +235,8 @@ $publicEntries = @(
     @{ Source = (Join-Path $RepoRoot "memory\KRAKKEN-SYNC.ps1"); Relative = "memory\KRAKKEN-SYNC.ps1" },
     @{ Source = (Join-Path $RepoRoot "memory\sync-memory.ps1"); Relative = "memory\sync-memory.ps1" },
     @{ Source = (Join-Path $RepoRoot "scripts\codex-doctor.ps1"); Relative = "scripts\codex-doctor.ps1" },
-    @{ Source = (Join-Path $RepoRoot "scripts\cleanup-sabretooth-admin.ps1"); Relative = "scripts\cleanup-sabretooth-admin.ps1" },
-    @{ Source = (Join-Path $RepoRoot "scripts\cleanup-sabretooth-user-space.ps1"); Relative = "scripts\cleanup-sabretooth-user-space.ps1" },
+    @{ Source = (Join-Path $RepoRoot "scripts\cleanup-t5500-admin.ps1"); Relative = "scripts\cleanup-t5500-admin.ps1" },
+    @{ Source = (Join-Path $RepoRoot "scripts\cleanup-t5500-user-space.ps1"); Relative = "scripts\cleanup-t5500-user-space.ps1" },
     @{ Source = (Join-Path $RepoRoot "scripts\deploy\Setup-MCPs.ps1"); Relative = "scripts\deploy\Setup-MCPs.ps1" },
     @{ Source = (Join-Path $RepoRoot "scripts\deploy\mcp-config-template.json"); Relative = "scripts\deploy\mcp-config-template.json" },
     @{ Source = (Join-Path $RepoRoot "scripts\export-codex-continuity.ps1"); Relative = "scripts\export-codex-continuity.ps1" },
@@ -249,7 +249,7 @@ $publicEntries = @(
     @{ Source = (Join-Path $RepoRoot "scripts\onlinerecycle-local-worker.js"); Relative = "scripts\onlinerecycle-local-worker.js" },
     @{ Source = (Join-Path $RepoRoot "briefings\CODEX-CONTINUITY-RUNBOOK.md"); Relative = "briefings\CODEX-CONTINUITY-RUNBOOK.md" },
     @{ Source = (Join-Path $WorkspaceRoot "README.txt"); Relative = "workspace\README.txt" },
-    @{ Source = (Join-Path $WorkspaceRoot "CodeXSabretoothStatus.MD"); Relative = "workspace\CodeXSabretoothStatus.MD" }
+    @{ Source = (Join-Path $WorkspaceRoot "CodeXT5500Status.MD"); Relative = "workspace\CodeXT5500Status.MD" }
 )
 
 $secretEntries = @(

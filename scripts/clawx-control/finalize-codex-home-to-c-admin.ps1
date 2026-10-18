@@ -51,7 +51,7 @@ try {
     Write-Warning ("Clawdbot Gateway disable failed: {0}" -f $_.Exception.Message)
 }
 
-& pwsh -NoProfile -ExecutionPolicy Bypass -File "$RepoRoot\scripts\cleanup-sabretooth-admin.ps1" @(
+& pwsh -NoProfile -ExecutionPolicy Bypass -File "$RepoRoot\scripts\cleanup-t5500-admin.ps1" @(
     if ($KeepOBS) { "-KeepOBS" }
 )
 

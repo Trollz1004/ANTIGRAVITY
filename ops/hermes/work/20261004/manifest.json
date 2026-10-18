@@ -1,0 +1,128 @@
+{
+  "day": "20261004",
+  "date": "2026-10-04",
+  "date_label": "October 04, 2026",
+  "title": "Yesterday's News Today - October 04, 2026 | Pomegranates, Walnuts, Finalists Win Big Laughs & More",
+  "story_count": 5,
+  "video": {
+    "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261004\\20261004.mp4",
+    "duration_s": 87.704,
+    "size_bytes": 11920554,
+    "video": {
+      "codec": "h264",
+      "pix_fmt": "yuv420p",
+      "width": 1080,
+      "height": 1920,
+      "fps": "30/1"
+    },
+    "audio": {
+      "codec": "aac",
+      "sample_rate": "48000",
+      "channels": 2
+    }
+  },
+  "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261004\\20261004-thumb.png",
+  "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261004\\upload.json",
+  "tts_backends": [
+    "edge"
+  ],
+  "voiceover_verified": false,
+  "segments": [
+    {
+      "segment": "intro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\intro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\intro.wav",
+      "audio_seconds": 4.608,
+      "video_seconds": 5.267,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story1",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\story1.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\story1.wav",
+      "audio_seconds": 14.736,
+      "video_seconds": 15.4,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story2",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\story2.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\story2.wav",
+      "audio_seconds": 14.928,
+      "video_seconds": 15.578,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story3",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\story3.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\story3.wav",
+      "audio_seconds": 17.04,
+      "video_seconds": 17.7,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story4",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\story4.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\story4.wav",
+      "audio_seconds": 10.416,
+      "video_seconds": 11.067,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story5",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\story5.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\story5.wav",
+      "audio_seconds": 17.088,
+      "video_seconds": 17.738,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "outro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\outro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\outro.wav",
+      "audio_seconds": 4.272,
+      "video_seconds": 4.933,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    }
+  ],
+  "parse_warnings": [],
+  "sources": [
+    {
+      "story": 1,
+      "headline": "Pomegranates, Walnuts and Berries Could Unlock Heart Failure Treatment By Producing Urolithin A",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/pomegranates-walnuts-and-berries-could-unlock-heart-failure-treatment-with-urolithin-a/"
+    },
+    {
+      "story": 2,
+      "headline": "Finalists Win Big Laughs in The Comedy Wildlife Photography Awards – LOOK",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/finalists-win-big-laughs-in-the-comedy-wildlife-photography-awards-look/"
+    },
+    {
+      "story": 3,
+      "headline": "Rare 1-in-100M ‘Ghost Lobster’ Goes to School to Help Scientists Crack Genetic Mystery–in Time for Halloween",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/100m-ghost-lobster-goes-to-college/"
+    },
+    {
+      "story": 4,
+      "headline": "AI Chatbots Will Never Replace Advice From Elders, Say Seven of 10 in New Poll",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/ai-chatbots-will-never-replace-advice-from-elders-say-seven-of-10-in-new-poll/"
+    },
+    {
+      "story": 5,
+      "headline": "Good News in History, October 4",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/events061004/"
+    }
+  ]
+}

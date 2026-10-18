@@ -33,6 +33,29 @@
 - Installed and loaded official Supabase skills: `supabase` 0.1.2 and `supabase-postgres-best-practices` 1.1.1.
 - Next: start a new Hermes session so the newly configured native MCP tools are injected into the conversation toolset.
 
+## 2026-10-13 — T5500 sync: support-lane state, Mission Control screen data sources, stale audit, tool verification
+
+- **did**: Answered Opus's three-part tasking (screen data sources, stale-file audit, tool verification).
+  Verified with real terminal probes: Mission Control :3130 answers `identity: mission-agent-os` on
+  `192.168.0.15`; Hermes dashboard :9119 = 200; domains :9160, Paperclip :3917, OmniRoute :20128,
+  date-app API :8000 (db/redis/square all connected, wallet rails proven), frontend :3200, Obsidian
+  :27123 all UP. Runtime `.env` loaded silently — `NODE_NAME=T5500-2-XEON-72`,
+  `NODE_LAN_IP=192.168.0.15`, `OPENAI_COMPAT_BASE_URL=http://192.168.0.15:20128/v1` — the live env
+  is clean; dead-node values live in generator scripts (`ops/env/augment-env.py` et al.).
+- **evidence**: `ops/handoffs/HERMES-T5500-SYNC-REPORT-2026-10-13.md` (full report);
+  subagent artifacts `C:\Users\joshi\AppData\Local\hermes\cache\scratch\stale-file-audit.md`
+  (225 marker files, ~30 live-code fixes, zero safe deletions) and `skill-tool-verification.md`
+  (6 PASS / 5 FAIL).
+- **blockers (mine, real)**: (1) Ollama `joshlcoleman/Fable` installed but NOT resident —
+  `/api/ps` empty, keepalive says DOWN with 108 consecutive failures; my support-desk probe needs
+  it and `hermes-support.log` has been "waiting on OpenClaw sentry" since 2026-10-12 13:23.
+  (2) `buzz.exe` not installed anywhere on this node — the shared node ledger and the
+  tablet/Alienware reachability path have no binary. (3) `joshlcoleman/cfo` absent from Ollama.
+  (4) Email/doc-skills toolchain missing (himalaya, pandoc, soffice, all python doc libs, pnpm).
+  (5) No MCP servers configured in this Hermes profile.
+- **next**: load Fable resident (OpenClaw/sentry scope, not mine); install buzz.exe for the
+  ledger; Joshua to approve re-running any blocked probes; tablet + Alienware stay OFF by ruling.
+
 ## 2026-09-30 — Date-app registration repair + FluidStack render (judge-approved)
 
 - **did**: Repaired `POST /api/v1/auth/register` (every registration returned 500) and added

@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet("9020", "t5500", "sabretooth")]
+    [ValidateSet("T5500", "t5500", "t5500")]
     [string]$NodeProfile,
     [string]$RepoRoot,
     [string]$UserName = $env:USERNAME
@@ -92,18 +92,18 @@ foreach ($legacy in $legacyTasks) {
 }
 
 switch ($NodeProfile) {
-    "9020" {
-        $taskName = "CodeX-9020-Safe-Drafts"
+    "T5500" {
+        $taskName = "CodeX-T5500-Safe-Drafts"
         Register-CodeXTask `
             -TaskName $taskName `
-            -Action (New-CodeXAction -Profile "9020-content") `
+            -Action (New-CodeXAction -Profile "T5500-content") `
             -Triggers @(
                 (New-LogonTrigger),
                 (New-DailyTrigger -Time "06:15"),
                 (New-DailyTrigger -Time "12:15"),
                 (New-DailyTrigger -Time "18:15")
             ) `
-            -Description "Generates legal-safe draft packs and handoff queues for 9020 without live posting."
+            -Description "Generates legal-safe draft packs and handoff queues for T5500 without live posting."
     }
     "t5500" {
         Register-CodeXTask `
@@ -126,15 +126,15 @@ switch ($NodeProfile) {
             ) `
             -Description "Builds the deterministic OnlineRecycle revenue pack, reply templates, and eBay-ready output on T5500."
     }
-    "sabretooth" {
+    "t5500" {
         Register-CodeXTask `
-            -TaskName "CodeX-SABRETOOTH-Safe-Control" `
-            -Action (New-CodeXAction -Profile "sabretooth-control") `
+            -TaskName "CodeX-T5500-Safe-Control" `
+            -Action (New-CodeXAction -Profile "t5500-control") `
             -Triggers @(
                 (New-LogonTrigger),
                 (New-DailyTrigger -Time "09:00")
             ) `
-            -Description "Refreshes the safe-node control pack, node matrix, and public-copy policy audit on Sabretooth."
+            -Description "Refreshes the safe-node control pack, node matrix, and public-copy policy audit on T5500."
     }
 }
 

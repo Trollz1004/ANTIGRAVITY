@@ -51,7 +51,7 @@ echo "Antigravity Frontend:    http://localhost:5174"
 echo "Qdrant UI:               http://localhost:6336"
 echo "Redis CLI (connect):     redis-cli -p 6380"
 echo "OpenClaw:                http://localhost:3201"
-echo "Paperclip (assumed):     http://localhost:3100"
+echo "Paperclip (assumed):     http://localhost:3917"
 echo "Logs:                    ./logs-staging"
 
 echo "To stop the staging environment, run: docker-compose -f $COMPOSE_FILE down"

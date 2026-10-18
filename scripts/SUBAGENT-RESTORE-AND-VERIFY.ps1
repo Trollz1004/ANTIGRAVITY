@@ -24,7 +24,7 @@ L ('mode: ' + $(if($Push){'PUSH'}else{'PREPARE'}))
 
 # ---------- PHASE 0: safety checks ----------
 $obj = git cat-file -t $oldTip 2>$null
-if ($obj -ne 'commit') { L "FATAL: old tip $oldTip not in local object store. STOP. (Recovery source: 9020 clone.)"; exit 1 }
+if ($obj -ne 'commit') { L "FATAL: old tip $oldTip not in local object store. STOP. (Recovery source: T5500 clone.)"; exit 1 }
 L 'old tip object present locally: YES'
 git fetch origin --prune 2>&1 | Out-Null
 L ('remote main now: ' + (git log origin/main -1 --format='%h %s'))

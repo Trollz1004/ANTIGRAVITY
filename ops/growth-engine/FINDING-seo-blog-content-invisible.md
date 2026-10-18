@@ -2,7 +2,7 @@
 
 **Status:** FIXED — commit `bf936c08` (prerender + sitemap + hub, mutation-proved)
 **Date:** 2026-09-30
-**Discovered by:** Hermes (Sabretooth), while checking whose untracked files were in the tree
+**Discovered by:** Hermes (T5500), while checking whose untracked files were in the tree
 **Severity:** High — 34 cycles of organic-acquisition content had produced zero measurable SEO value
 
 ## Resolution

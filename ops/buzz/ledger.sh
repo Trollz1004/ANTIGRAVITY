@@ -6,7 +6,7 @@
 #
 # Every entry is prefixed with WHO and WHERE so any agent on any node can read
 # the feed and know what was done and on which machine:
-#   [2026-09-03 19:41Z · SABRETOOTH · claude-judge · ANTIGRAVITY@5fc2af10] <your line>
+#   [2026-09-03 19:41Z · T5500 · claude-judge · ANTIGRAVITY@5fc2af10] <your line>
 #
 # Env overrides: BUZZ_AGENT_NAME (default: claude-judge), BUZZ_LEDGER_CHANNEL
 # (default: node-ledger), ANTIGRAVITY_ENV (path to .env).

@@ -1,7 +1,7 @@
-$comment = "Health check done: Paperclip UP (3100), OmniRoute UP (20128), Hermes DOWN (8642/11435). Watchdog script exists but Hermes offline. Not restarting without Josh go."
+$comment = "Health check done: Paperclip UP (3917), OmniRoute UP (20128), Hermes DOWN (8642/11435). Watchdog script exists but Hermes offline. Not restarting without Josh go."
 $json = @{body=$comment} | ConvertTo-Json
 $bytes = [System.Text.Encoding]::UTF8.GetBytes($json)
-$webRequest = [System.Net.WebRequest]::Create("http://127.0.0.1:3100/api/issues/YOU-19/comments")
+$webRequest = [System.Net.WebRequest]::Create("http://127.0.0.1:3917/api/issues/YOU-19/comments")
 $webRequest.Method = "POST"
 $webRequest.ContentType = "application/json"
 $webRequest.ContentLength = $bytes.Length

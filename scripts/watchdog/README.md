@@ -20,13 +20,13 @@
 | `sentry.py`                 | Health watchdog. Every 60s, writes `~/OneDrive/Personal Vault/sentry-<HOSTNAME>.json` with ports + Docker container + URL liveness checks.                             |
 | `dashboard.html`            | Static dashboard. Reads all `sentry-*.json` files from the same directory. Auto-refreshes every 30s. No build step.                                                    |
 | `serve-dashboard.cmd`       | Mini-ASUS-only: starts a localhost HTTP server on `:7321` serving the Vault folder so the dashboard can fetch JSONs. Pin a browser tab to it on the always-on display. |
-| `register-task.ps1`         | One-shot installer. Registers either `ANTIGRAVITY-Bootstrap` (T5500 / Sabretooth / 9020) or `ANTIGRAVITY-Dashboard` (mini-ASUS) as a Windows Scheduled Task at logon.  |
+| `register-task.ps1`         | One-shot installer. Registers either `ANTIGRAVITY-Bootstrap` (T5500 / T5500 / T5500) or `ANTIGRAVITY-Dashboard` (mini-ASUS) as a Windows Scheduled Task at logon.  |
 | `lock-memory.ps1`           | Filesystem-level lock on protected memory files (Windows `attrib +R`). Survives non-Claude runtimes.                                                                   |
 | `memory-protection-hook.sh` | Claude-runtime hook that blocks Edit/Write on protected memory files unless `CLAUDE_AUTHORITY=first-party` is set.                                                     |
 
 ## Install — one node at a time
 
-### On every regular node (T5500, Sabretooth, 9020):
+### On every regular node (T5500, T5500, T5500):
 
 ```powershell
 # 1. Ensure repo + Python + Docker Desktop installed

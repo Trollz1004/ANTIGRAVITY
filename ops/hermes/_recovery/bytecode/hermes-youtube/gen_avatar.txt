@@ -1,0 +1,531 @@
+# gen_avatar.pyc
+
+bytes: 6048
+magic: f30d0d0a (this interpreter: f30d0d0a)
+magic matches: True
+
+## docstrings
+
+<module>:
+Render channel-avatar candidate stills through OmniRoute /images/generations.
+
+VERIFIED path (2026-09-08, ops/avatar/comfyui/README.md): model
+`antigravity/gemini-3.1-flash-image` answers 200 with data[0].b64_json.
+Business-only, original illustrated character, no real face, no likeness.
+
+Usage:
+    python gen_avatar.py --prompt "..." --out ops/avatar/out/x.png
+    python gen_avatar.py --candidates      # render the TRO-8 candidate set
+
+
+  render:
+One still. The gateway rate-limits this model, so 429 gets a backoff retry.
+
+## string constants
+
+'Render channel-avatar candidate stills through OmniRoute /images/generations.\n\nVERIFIED path (2026-09-08, ops/avatar/comfyui/README.md): model\n`antigravity/gemini-3.1-flash-image` answers 200 with data[0].b64_json.\nBusiness-only, original illustrated character, no real face, no likeness.\n\nUsage:\n    python gen_avatar.py --prompt "..." --out ops/avatar/out/x.png\n    python gen_avatar.py --candidates      # render the TRO-8 candidate set\n'
+'C:\\ANTIGRAVITY'
+'antigravity/gemini-3.1-flash-image'
+' Original illustrated character, not a real person, not a celebrity, not photorealistic. No text, no watermark, no logo.'
+'Front-facing bust portrait of an original cartoon owl news anchor at a broadcast desk: flat editorial vector illustration, bold clean outlines, warm amber and cream palette, round friendly eyes, small dark headset over the ear-tufts, tidy slate-grey blazer collar, feathers with a subtle newsprint texture, plain warm gradient studio backdrop, soft key light, centered, head and shoulders, sharp focus.'
+'Front-facing bust portrait of an original illustrated human news anchor character: warm brown skin, short cropped black hair with grey at the temples, trimmed beard, friendly confident half-smile looking at the camera, mustard-yellow tie and charcoal jacket, flat editorial vector style with bold outlines and limited warm palette of amber, cream and charcoal, plain warm gradient studio backdrop, soft key light, head and shoulders, sharp focus.'
+'Front-facing bust portrait of an original mascot character made of folded newspaper and origami paper: a friendly abstract head folded from newsprint with simple round ink eyes and a small paper-hat, crisp paper creases, flat editorial vector illustration with bold outlines, warm amber cream and ink black palette, plain warm gradient backdrop, soft key light, centered, head and shoulders, sharp focus.'
+'__main__'
+'One still. The gateway rate-limits this model, so 429 gets a backoff retry.'
+'/images/generations'
+'    429 on attempt '
+', waiting '
+'s'
+'FAIL '
+': status='
+' '
+'utf-8'
+'replace'
+'data'
+'b64_json'
+': no b64_json in response keys='
+'wb'
+'OK  '
+'  '
+' bytes  model='
+'  via '
+'--prompt'
+'--out'
+'--size'
+'1024x1024'
+'--candidates'
+'store_true'
+'ops'
+'avatar'
+'out'
+'.png'
+'--prompt and --out required (or --candidates)'
+
+## disassembly
+
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Render channel-avatar candidate stills through OmniRoute /images/generations.\n\nVERIFIED path (2026-09-08, ops/avatar/comfyui/README.md): model\n`antigravity/gemini-3.1-flash-image` answers 200 with data[0].b64_json.\nBusiness-only, original illustrated character, no real face, no likeness.\n\nUsage:\n    python gen_avatar.py --prompt "..." --out ops/avatar/out/x.png\n    python gen_avatar.py --candidates      # render the TRO-8 candidate set\n')
+              STORE_NAME               0 (__doc__)
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (argparse)
+              STORE_NAME               1 (argparse)
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              2 (base64)
+              STORE_NAME               2 (base64)
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              3 (json)
+              STORE_NAME               3 (json)
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              4 (os)
+              STORE_NAME               4 (os)
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              5 (sys)
+              STORE_NAME               5 (sys)
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              6 (time)
+              STORE_NAME               6 (time)
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('post',))
+              IMPORT_NAME              7 (omniroute)
+              IMPORT_FROM              8 (post)
+              STORE_NAME               8 (post)
+              POP_TOP
+
+ 20           LOAD_CONST               4 ('C:\\ANTIGRAVITY')
+              STORE_NAME               9 (REPO)
+
+ 21           LOAD_CONST               5 ('antigravity/gemini-3.1-flash-image')
+              STORE_NAME              10 (MODEL)
+
+ 24           LOAD_CONST               6 (' Original illustrated character, not a real person, not a celebrity, not photorealistic. No text, no watermark, no logo.')
+
+ 23           STORE_NAME              11 (NO_LIKENESS)
+
+ 30           LOAD_CONST               7 ('Front-facing bust portrait of an original cartoon owl news anchor at a broadcast desk: flat editorial vector illustration, bold clean outlines, warm amber and cream palette, round friendly eyes, small dark headset over the ear-tufts, tidy slate-grey blazer collar, feathers with a subtle newsprint texture, plain warm gradient studio backdrop, soft key light, centered, head and shoulders, sharp focus.')
+
+ 35           LOAD_NAME               11 (NO_LIKENESS)
+
+ 30           BINARY_OP                0 (+)
+
+ 38           LOAD_CONST               8 ('Front-facing bust portrait of an original illustrated human news anchor character: warm brown skin, short cropped black hair with grey at the temples, trimmed beard, friendly confident half-smile looking at the camera, mustard-yellow tie and charcoal jacket, flat editorial vector style with bold outlines and limited warm palette of amber, cream and charcoal, plain warm gradient studio backdrop, soft key light, head and shoulders, sharp focus.')
+
+ 44           LOAD_NAME               11 (NO_LIKENESS)
+
+ 38           BINARY_OP                0 (+)
+
+ 47           LOAD_CONST               9 ('Front-facing bust portrait of an original mascot character made of folded newspaper and origami paper: a friendly abstract head folded from newsprint with simple round ink eyes and a small paper-hat, crisp paper creases, flat editorial vector illustration with bold outlines, warm amber cream and ink black palette, plain warm gradient backdrop, soft key light, centered, head and shoulders, sharp focus.')
+
+ 52           LOAD_NAME               11 (NO_LIKENESS)
+
+ 47           BINARY_OP                0 (+)
+
+ 28           LOAD_CONST              10 (('candidate-a-marlo-owl', 'candidate-b-otto-anchor', 'candidate-c-quill-paper'))
+              BUILD_CONST_KEY_MAP      3
+              STORE_NAME              12 (CANDIDATES)
+
+ 57           LOAD_CONST              14 (('1024x1024', 5))
+              LOAD_CONST              11 (<code object render at 0x000001D515BEA6E0, file "C:\ANTIGRAVITY\scripts\hermes-youtube\gen_avatar.py", line 57>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              13 (render)
+
+ 85           LOAD_CONST              12 (<code object main at 0x000001D515BE9790, file "C:\ANTIGRAVITY\scripts\hermes-youtube\gen_avatar.py", line 85>)
+              MAKE_FUNCTION
+              STORE_NAME              14 (main)
+
+106           LOAD_NAME               15 (__name__)
+              LOAD_CONST              13 ('__main__')
+              COMPARE_OP              88 (bool(==))
+              POP_JUMP_IF_FALSE        8 (to L1)
+
+107           LOAD_NAME               14 (main)
+              PUSH_NULL
+              CALL                     0
+              POP_TOP
+              RETURN_CONST             2 (None)
+
+106   L1:     RETURN_CONST             2 (None)
+
+Disassembly of <code object render at 0x000001D515BEA6E0, file "C:\ANTIGRAVITY\scripts\hermes-youtube\gen_avatar.py", line 57>:
+  57            RESUME                   0
+
+  59            LOAD_GLOBAL              0 (MODEL)
+                LOAD_FAST                0 (prompt)
+                LOAD_CONST               1 (1)
+                LOAD_FAST                2 (size)
+                LOAD_CONST               2 (('model', 'prompt', 'n', 'size'))
+                BUILD_CONST_KEY_MAP      4
+                STORE_FAST               4 (payload)
+
+  60            LOAD_GLOBAL              3 (range + NULL)
+                LOAD_CONST               1 (1)
+                LOAD_FAST                3 (attempts)
+                LOAD_CONST               1 (1)
+                BINARY_OP                0 (+)
+                CALL                     2
+                GET_ITER
+        L1:     FOR_ITER                75 (to L3)
+                STORE_FAST               5 (attempt)
+
+  61            LOAD_GLOBAL              5 (post + NULL)
+                LOAD_CONST               3 ('/images/generations')
+                LOAD_FAST                4 (payload)
+                LOAD_CONST               4 (300)
+                LOAD_CONST               5 (('timeout',))
+                CALL_KW                  3
+                UNPACK_SEQUENCE          4
+                STORE_FAST_STORE_FAST  103 (status, ctype)
+                STORE_FAST_STORE_FAST  137 (body, base)
+
+  62            LOAD_FAST                6 (status)
+                LOAD_CONST               6 (429)
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_FALSE       52 (to L2)
+                LOAD_FAST_LOAD_FAST     83 (attempt, attempts)
+                COMPARE_OP              18 (bool(<))
+                POP_JUMP_IF_FALSE       47 (to L2)
+
+  63            LOAD_CONST               7 (8)
+                LOAD_FAST                5 (attempt)
+                BINARY_OP                5 (*)
+                STORE_FAST              10 (wait)
+
+  64            LOAD_GLOBAL              7 (print + NULL)
+                LOAD_CONST               8 ('    429 on attempt ')
+                LOAD_FAST                5 (attempt)
+                FORMAT_SIMPLE
+                LOAD_CONST               9 (', waiting ')
+                LOAD_FAST               10 (wait)
+                FORMAT_SIMPLE
+                LOAD_CONST              10 ('s')
+                BUILD_STRING             5
+                CALL                     1
+                POP_TOP
+
+  65            LOAD_GLOBAL              8 (time)
+                LOAD_ATTR               10 (sleep)
+                PUSH_NULL
+                LOAD_FAST               10 (wait)
+                CALL                     1
+                POP_TOP
+
+  66            JUMP_BACKWARD           75 (to L1)
+
+  67    L2:     POP_TOP
+                JUMP_FORWARD             2 (to L4)
+
+  60    L3:     END_FOR
+                POP_TOP
+
+  68    L4:     LOAD_FAST_CHECK          6 (status)
+                LOAD_CONST              11 (200)
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE       40 (to L5)
+
+  69            LOAD_GLOBAL              7 (print + NULL)
+                LOAD_CONST              12 ('FAIL ')
+                LOAD_FAST                1 (out_path)
+                FORMAT_SIMPLE
+                LOAD_CONST              13 (': status=')
+                LOAD_FAST                6 (status)
+                FORMAT_SIMPLE
+                LOAD_CONST              14 (' ')
+                LOAD_FAST_CHECK          8 (body)
+                LOAD_CONST              15 (None)
+                LOAD_CONST               4 (300)
+                BINARY_SLICE
+                LOAD_ATTR               13 (decode + NULL|self)
+                LOAD_CONST              16 ('utf-8')
+                LOAD_CONST              17 ('replace')
+                CALL                     2
+                FORMAT_SIMPLE
+                BUILD_STRING             6
+                CALL                     1
+                POP_TOP
+
+  70            RETURN_CONST            18 (False)
+
+  71    L5:     LOAD_GLOBAL             14 (json)
+                LOAD_ATTR               16 (loads)
+                PUSH_NULL
+                LOAD_FAST_CHECK          8 (body)
+                CALL                     1
+                STORE_FAST              11 (data)
+
+  72            LOAD_FAST               11 (data)
+                LOAD_CONST              19 ('data')
+                BINARY_SUBSCR
+                LOAD_CONST              20 (0)
+                BINARY_SUBSCR
+                STORE_FAST              12 (item)
+
+  73            LOAD_FAST               12 (item)
+                LOAD_ATTR               19 (get + NULL|self)
+                LOAD_CONST              21 ('b64_json')
+                CALL                     1
+                STORE_FAST              13 (b64)
+
+  74            LOAD_FAST               13 (b64)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        27 (to L6)
+
+  75            LOAD_GLOBAL              7 (print + NULL)
+                LOAD_CONST              12 ('FAIL ')
+                LOAD_FAST                1 (out_path)
+                FORMAT_SIMPLE
+                LOAD_CONST              22 (': no b64_json in response keys=')
+                LOAD_GLOBAL             21 (list + NULL)
+                LOAD_FAST               12 (item)
+                CALL                     1
+                FORMAT_SIMPLE
+                BUILD_STRING             4
+                CALL                     1
+                POP_TOP
+
+  76            RETURN_CONST            18 (False)
+
+  77    L6:     LOAD_GLOBAL             22 (base64)
+                LOAD_ATTR               24 (b64decode)
+                PUSH_NULL
+                LOAD_FAST               13 (b64)
+                CALL                     1
+                STORE_FAST              14 (raw)
+
+  78            LOAD_GLOBAL             26 (os)
+                LOAD_ATTR               28 (makedirs)
+                PUSH_NULL
+                LOAD_GLOBAL             26 (os)
+                LOAD_ATTR               30 (path)
+                LOAD_ATTR               33 (dirname + NULL|self)
+                LOAD_FAST                1 (out_path)
+                CALL                     1
+                LOAD_CONST              23 (True)
+                LOAD_CONST              24 (('exist_ok',))
+                CALL_KW                  2
+                POP_TOP
+
+  79            LOAD_GLOBAL             35 (open + NULL)
+                LOAD_FAST                1 (out_path)
+                LOAD_CONST              25 ('wb')
+                CALL                     2
+                BEFORE_WITH
+        L7:     STORE_FAST              15 (fh)
+
+  80            LOAD_FAST               15 (fh)
+                LOAD_ATTR               37 (write + NULL|self)
+                LOAD_FAST               14 (raw)
+                CALL                     1
+                POP_TOP
+
+  79    L8:     LOAD_CONST              15 (None)
+                LOAD_CONST              15 (None)
+                LOAD_CONST              15 (None)
+                CALL                     2
+                POP_TOP
+
+  81    L9:     LOAD_GLOBAL              7 (print + NULL)
+                LOAD_CONST              26 ('OK  ')
+                LOAD_FAST                1 (out_path)
+                FORMAT_SIMPLE
+                LOAD_CONST              27 ('  ')
+                LOAD_GLOBAL             39 (len + NULL)
+                LOAD_FAST               14 (raw)
+                CALL                     1
+                FORMAT_SIMPLE
+                LOAD_CONST              28 (' bytes  model=')
+                LOAD_GLOBAL              0 (MODEL)
+                FORMAT_SIMPLE
+                LOAD_CONST              29 ('  via ')
+                LOAD_FAST_CHECK          9 (base)
+                FORMAT_SIMPLE
+                BUILD_STRING             8
+                CALL                     1
+                POP_TOP
+
+  82            RETURN_CONST            23 (True)
+
+  79   L10:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L11)
+                RERAISE                  2
+       L11:     POP_TOP
+       L12:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 51 (to L9)
+
+  --   L13:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L7 to L8 -> L10 [1] lasti
+  L10 to L12 -> L13 [3] lasti
+
+Disassembly of <code object main at 0x000001D515BE9790, file "C:\ANTIGRAVITY\scripts\hermes-youtube\gen_avatar.py", line 85>:
+ 85            RESUME                   0
+
+ 86            LOAD_GLOBAL              0 (argparse)
+               LOAD_ATTR                2 (ArgumentParser)
+               PUSH_NULL
+               CALL                     0
+               STORE_FAST               0 (ap)
+
+ 87            LOAD_FAST                0 (ap)
+               LOAD_ATTR                5 (add_argument + NULL|self)
+               LOAD_CONST               1 ('--prompt')
+               CALL                     1
+               POP_TOP
+
+ 88            LOAD_FAST                0 (ap)
+               LOAD_ATTR                5 (add_argument + NULL|self)
+               LOAD_CONST               2 ('--out')
+               CALL                     1
+               POP_TOP
+
+ 89            LOAD_FAST                0 (ap)
+               LOAD_ATTR                5 (add_argument + NULL|self)
+               LOAD_CONST               3 ('--size')
+               LOAD_CONST               4 ('1024x1024')
+               LOAD_CONST               5 (('default',))
+               CALL_KW                  2
+               POP_TOP
+
+ 90            LOAD_FAST                0 (ap)
+               LOAD_ATTR                5 (add_argument + NULL|self)
+               LOAD_CONST               6 ('--candidates')
+               LOAD_CONST               7 ('store_true')
+               LOAD_CONST               8 (('action',))
+               CALL_KW                  2
+               POP_TOP
+
+ 91            LOAD_FAST                0 (ap)
+               LOAD_ATTR                7 (parse_args + NULL|self)
+               CALL                     0
+               STORE_FAST               1 (args)
+
+ 93            LOAD_FAST                1 (args)
+               LOAD_ATTR                8 (candidates)
+               TO_BOOL
+               POP_JUMP_IF_FALSE      135 (to L6)
+
+ 94            LOAD_CONST               9 (True)
+               STORE_FAST               2 (ok)
+
+ 95            LOAD_GLOBAL             10 (CANDIDATES)
+               LOAD_ATTR               13 (items + NULL|self)
+               CALL                     0
+               GET_ITER
+       L1:     FOR_ITER                78 (to L3)
+               UNPACK_SEQUENCE          2
+               STORE_FAST_STORE_FAST   52 (name, prompt)
+
+ 96            LOAD_GLOBAL             14 (os)
+               LOAD_ATTR               16 (path)
+               LOAD_ATTR               19 (join + NULL|self)
+               LOAD_GLOBAL             20 (REPO)
+               LOAD_CONST              10 ('ops')
+               LOAD_CONST              11 ('avatar')
+               LOAD_CONST              12 ('out')
+               LOAD_FAST                3 (name)
+               LOAD_CONST              13 ('.png')
+               BINARY_OP                0 (+)
+               CALL                     5
+               STORE_FAST               5 (out)
+
+ 97            LOAD_GLOBAL             23 (render + NULL)
+               LOAD_FAST_LOAD_FAST     69 (prompt, out)
+               LOAD_FAST                1 (args)
+               LOAD_ATTR               24 (size)
+               CALL                     3
+               COPY                     1
+               TO_BOOL
+               POP_JUMP_IF_FALSE        2 (to L2)
+               POP_TOP
+               LOAD_FAST                2 (ok)
+       L2:     STORE_FAST               2 (ok)
+               JUMP_BACKWARD           80 (to L1)
+
+ 95    L3:     END_FOR
+               POP_TOP
+
+ 98            LOAD_GLOBAL             26 (sys)
+               LOAD_ATTR               28 (exit)
+               PUSH_NULL
+               LOAD_FAST                2 (ok)
+               TO_BOOL
+               POP_JUMP_IF_FALSE        2 (to L4)
+               LOAD_CONST              14 (0)
+               JUMP_FORWARD             1 (to L5)
+       L4:     LOAD_CONST              15 (1)
+       L5:     CALL                     1
+               POP_TOP
+
+100    L6:     LOAD_FAST                1 (args)
+               LOAD_ATTR               30 (prompt)
+               TO_BOOL
+               POP_JUMP_IF_FALSE       17 (to L7)
+               LOAD_FAST                1 (args)
+               LOAD_ATTR               32 (out)
+               TO_BOOL
+               POP_JUMP_IF_TRUE        17 (to L8)
+
+101    L7:     LOAD_FAST                0 (ap)
+               LOAD_ATTR               35 (error + NULL|self)
+               LOAD_CONST              16 ('--prompt and --out required (or --candidates)')
+               CALL                     1
+               POP_TOP
+
+102    L8:     LOAD_GLOBAL             14 (os)
+               LOAD_ATTR               16 (path)
+               LOAD_ATTR               37 (isabs + NULL|self)
+               LOAD_FAST                1 (args)
+               LOAD_ATTR               32 (out)
+               CALL                     1
+               TO_BOOL
+               POP_JUMP_IF_FALSE       12 (to L9)
+               LOAD_FAST                1 (args)
+               LOAD_ATTR               32 (out)
+               JUMP_FORWARD            45 (to L10)
+       L9:     LOAD_GLOBAL             14 (os)
+               LOAD_ATTR               16 (path)
+               LOAD_ATTR               19 (join + NULL|self)
+               LOAD_GLOBAL             20 (REPO)
+               LOAD_FAST                1 (args)
+               LOAD_ATTR               32 (out)
+               CALL                     2
+      L10:     STORE_FAST               5 (out)
+
+103            LOAD_GLOBAL             26 (sys)
+               LOAD_ATTR               28 (exit)
+               PUSH_NULL
+               LOAD_GLOBAL             23 (render + NULL)
+               LOAD_FAST                1 (args)
+               LOAD_ATTR               30 (prompt)
+               LOAD_FAST_LOAD_FAST     81 (out, args)
+               LOAD_ATTR               24 (size)
+               CALL                     3
+               TO_BOOL
+               POP_JUMP_IF_FALSE        7 (to L11)
+               LOAD_CONST              14 (0)
+               CALL                     1
+               POP_TOP
+               RETURN_CONST             0 (None)
+      L11:     LOAD_CONST              15 (1)
+               CALL                     1
+               POP_TOP
+               RETURN_CONST             0 (None)

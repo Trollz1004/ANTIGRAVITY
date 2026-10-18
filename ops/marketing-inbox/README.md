@@ -2,16 +2,16 @@
 
 Producers (marketing agents, the support desk, scripts) never publish
 directly. **Stale reference corrected 2026-08-28:** this line used to say
-"Paperclip on the 9020 node." There is one node, Sabretooth — see
+"Paperclip on the T5500 node." There is one node, T5500 — see
 `docs/ops/NODE-AND-PORT-MAP.md`. They drop one JSON file per batch into this folder at the repo root —
 `C:\ANTIGRAVITY\ops\marketing-inbox\` — on any node. Mission Control ingests it,
 the item appears as PENDING and Joshua approves or denies it with an optional
 response.
 
 **Stale route corrected 2026-08-28:** this used to send you to the PAPERWEIGHT
-approvals UI at `http://localhost:3151/paperweight/`. That surface was retired by
+approvals UI at `http://localhost:3917/paperweight/`. That surface was retired by
 doctrine and has since been deleted from the tree. The live surface is the API
-below — `GET http://127.0.0.1:3151/api/marketing/queue` (verified 200). Ingested files move to `processed/`
+below — `GET http://127.0.0.1:3917/api/marketing/queue` (verified 200). Ingested files move to `processed/`
 (unparseable ones get a `.rejected` suffix — fix and re-drop).
 
 ## Drop format
@@ -20,7 +20,7 @@ One object or an array of objects:
 
 ```json
 {
-  "source": "paperclip-9020",
+  "source": "paperclip-T5500",
   "platform": "instagram",
   "kind": "post",
   "title": "Heart Fingerprint launch reel — caption v2",
@@ -35,7 +35,7 @@ One object or an array of objects:
   else, because markdown gets swept and a shell script does not. See the
   Canonical Record at `/canonical/`.
 
-Loopback alternative on Sabretooth: `POST http://127.0.0.1:3151/api/marketing/queue`
+Loopback alternative on T5500: `POST http://127.0.0.1:3917/api/marketing/queue`
 with the same JSON. Decisions land in
 `mission-control-v5/server/data/marketing-queue.json`; producers read their
 verdicts there or via `GET /api/marketing/queue`.

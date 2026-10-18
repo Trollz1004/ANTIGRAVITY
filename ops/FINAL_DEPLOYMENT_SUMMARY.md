@@ -19,7 +19,7 @@
 
 ### 2. **Graphify Integration** ✓
 
-**Mission Control (:3151):**
+**Mission Control (:3100):**
 
 - Endpoint: `/api/graphify/html` → serves graphify-out/graph.html
 - Info: `/api/graphify/info` → health + usage
@@ -36,8 +36,8 @@
 
 - Zero terminal windows, zero cursor movement
 - Pure background task (SYSTEM user, highest privileges)
-- Monitors **9 critical ports:** 20128, 3151, 3200, 8000, 3120, 9119, 18789, 11434, 8082
-- **Auto-restart only:** OmniRoute (:20128), Mission Control (:3151), DateApp (:3200)
+- Monitors **9 critical ports:** 20128, 3100, 3200, 8000, 3120, 9119, 18789, 11434, 8082
+- **Auto-restart only:** OmniRoute (:20128), Mission Control (:3100), DateApp (:3200)
 - **Log-only (monitor):** DateApp Backend, Paperclip, Hermes, OpenClaw, Ollama, FCC
 - Every 30 seconds, runs for 8 hours, then exits (auto-restarts next session)
 - Logs to disk: `F:\ANTIGRAVITY\logs\watchdog-silent-YYYYMMDD.log`
@@ -53,7 +53,7 @@ powershell -ExecutionPolicy Bypass -File F:\ANTIGRAVITY\scripts\register-silent-
 | Component                | Path                      | Status     |
 | ------------------------ | ------------------------- | ---------- |
 | OmniRoute (:20128)       | `omniroute/`              | Ready      |
-| Mission Control (:3151)  | `mission-control-v5/`     | Ready      |
+| Mission Control (:3100)  | `mission-control-v5/`     | Ready      |
 | DateApp Frontend (:3200) | `frontend/react-app/`     | Ready      |
 | DateApp Backend (:8000)  | `backend/`                | Ready      |
 | Graphify                 | `graphify-out/graph.html` | Ready      |
@@ -94,7 +94,7 @@ Verify all respond:
 ```powershell
 # Open in browser or test:
 curl http://localhost:20128/health
-curl http://localhost:3151/api/
+curl http://localhost:3100/api/
 curl http://localhost:3200/
 curl http://localhost:8000/docs
 ```
@@ -129,7 +129,7 @@ Get-Content "F:\ANTIGRAVITY\logs\watchdog-silent-$(Get-Date -Format 'yyyyMMdd').
 # Health check
 $ports = @{
     "OmniRoute"       = 20128
-    "Mission Control" = 3151
+    "Mission Control" = 3100
     "DateApp"         = 3200
     "DateApp API"     = 8000
     "Paperclip"       = 3120
@@ -148,7 +148,7 @@ foreach ($service in $ports.Keys) {
 ### Step 5: Verify Graphify
 
 ```
-http://localhost:3151/graphify
+http://localhost:3100/graphify
 http://localhost:20128/graphify
 ```
 
@@ -158,7 +158,7 @@ http://localhost:20128/graphify
 
 ```
 OmniRoute       :20128   (gateway + load balancer + dashboard)
-Mission Control :3151    (orchestrator + agent brain)
+Mission Control :3100    (orchestrator + agent brain)
 DateApp UI      :3200    (production youandinotai.com frontend)
 DateApp API     :8000    (FastAPI backend + data layer)
 Paperclip       :3120    (agent runtime + adapters)
@@ -212,7 +212,7 @@ Unregister-ScheduledTask -TaskName "ANTIGRAVITY-Silent-Watchdog-T5500" -Confirm:
 
 ```powershell
 cd F:\ANTIGRAVITY\backend
-python -m uvicorn server:app --port 3151  # or 8000, etc.
+python -m uvicorn server:app --port 3100  # or 8000, etc.
 ```
 
 ---

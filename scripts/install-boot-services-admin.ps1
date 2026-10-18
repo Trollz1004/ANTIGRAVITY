@@ -1,7 +1,7 @@
 # scripts/install-boot-services-admin.ps1
-# Run ONCE from an ADMIN PowerShell on Sabretooth. Idempotent.
+# Run ONCE from an ADMIN PowerShell on T5500. Idempotent.
 #
-# Goal: paperclip-hq.youandinotai.com survives Sabretooth power loss without
+# Goal: paperclip-hq.youandinotai.com survives T5500 power loss without
 # any human PIN-in. Two pieces:
 #
 #   1. cloudflared as a Windows Service (runs as SYSTEM, starts at BOOT,
@@ -99,5 +99,5 @@ Get-Service cloudflared | Format-Table Name, Status, StartType -AutoSize
 Get-ScheduledTask -TaskName 'Antigravity-*-Boot' | Format-Table TaskName, State -AutoSize
 
 Write-Host ""
-Write-Host "DONE. Reboot to verify: Sabretooth boots -> tunnel + paperclip alive before login." -ForegroundColor Green
+Write-Host "DONE. Reboot to verify: T5500 boots -> tunnel + paperclip alive before login." -ForegroundColor Green
 Write-Host "If anything fails after reboot, logs are at E:\ANTIGRAVITY\logs\."

@@ -61,7 +61,7 @@ as two, for seven weeks.
   this LAN. Other ARP neighbours exist but none answers, and none is identified
   as a project node.
 - **One working tree: `C:\ANTIGRAVITY`.** There is no `E:` drive and never was.
-- **Mission Control is Paperclip** at `http://127.0.0.1:3100` — identity verified
+- **Mission Control is Paperclip** at `http://127.0.0.1:3917` — identity verified
   via `GET /api/openapi.json` → `.info.title == "Paperclip API"`. Not an Agent Hub,
   not `:3130`, not PAPERWEIGHT.
 - **Sabretooth runs everything**, business and DREAM both: 15 services bound

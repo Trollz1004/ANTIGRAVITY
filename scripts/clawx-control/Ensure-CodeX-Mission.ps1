@@ -6,7 +6,7 @@ param(
     [string]$LogPath,
     [ValidateSet("docker", "host", "off")]
     [string]$Mode = $(if ($env:CODEX_MISSION_MODE) { $env:CODEX_MISSION_MODE } else { "off" }),
-    [string]$DockerContainer = $(if ($env:CODEX_DOCKER_CONTAINER) { $env:CODEX_DOCKER_CONTAINER } else { "codex-sabretooth" }),
+    [string]$DockerContainer = $(if ($env:CODEX_DOCKER_CONTAINER) { $env:CODEX_DOCKER_CONTAINER } else { "codex-t5500" }),
     [switch]$AllowHostLaunch
 )
 
@@ -62,7 +62,7 @@ if ($Mode -eq "docker") {
 
     $containerName = (& docker ps --filter "name=^/$DockerContainer$" --filter "status=running" --format "{{.Names}}" 2>$null | Select-Object -First 1)
     if ([string]::IsNullOrWhiteSpace($containerName)) {
-        # Desktop-app-first operation on Sabretooth no longer relies on a dedicated Codex shell container.
+        # Desktop-app-first operation on T5500 no longer relies on a dedicated Codex shell container.
         # If the old mission container is absent, treat that as a normal state and stay quiet.
         exit 0
     }

@@ -18,7 +18,7 @@ Nodes: unchanged (cloud session; no node access).
 TODO: (1) Joshua merge #219 (ANTIGRAVITY) + #2 (mission-control-v5); (2)
   after #219 merges, confirm verification gate deployed, then delete the
   BLOCKER notices in the two draft files and drafts can go live; (3) Square
-  Path B on Sabretooth; (4) YouTube login; (5) frontend TS errors then tsc
+  Path B on T5500; (4) YouTube login; (5) frontend TS errors then tsc
   gate; (6) briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md missing.
 Quota: ok
 ```

@@ -1,5 +1,5 @@
 # Yesterday's News Today - Task Scheduler Setup
-# Run this on 9020 to create scheduled tasks
+# Run this on T5500 to create scheduled tasks
 # Authority: Josh Coleman
 # Date: 2026-03-19
 

@@ -1,7 +1,7 @@
 # =============================================================================
 # post-wipe-bootstrap-helper-node.ps1
 # =============================================================================
-# Role  : Helper node (Sabretooth / 9020 / any future compute worker)
+# Role  : Helper node (T5500 / T5500 / any future compute worker)
 # Run on: Clean Windows install — Run as Administrator
 # Goal  : Windows clean-install → Hermes Ollama compute worker → reporting
 #         to T5500 → ready for delegated LLM work. Zero manual config after

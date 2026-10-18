@@ -10,7 +10,7 @@
 #     JSONL, takes the LAST assistant text block, strips code fences, keeps
 #     the first 500 characters, masks anything that looks like a secret, and
 #     appends "- HH:MM [[<repo folder name>]] - <text>" to today's daily note.
-#   - SessionEnd: appends "- HH:MM session ended ([[Sabretooth Node]])".
+#   - SessionEnd: appends "- HH:MM session ended ([[T5500 Node]])".
 #
 # Must never block Claude Code and must always exit 0. Every risky operation
 # is wrapped in try/catch; unexpected failures are logged to
@@ -65,7 +65,7 @@ function Confirm-DailyNote {
     if (Test-Path $Path) { return }
     $dir = Split-Path $Path -Parent
     if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
-    $fm = "---`r`ndate: $DateStr`r`ntype: daily`r`ntags:`r`n  - daily`r`nai-first: true`r`n---`r`n`r`n## For future agent`r`nThis is the automated Sabretooth session log for $DateStr, appended by scripts/obsidian/session-note.ps1 via Claude Code Stop and SessionEnd hooks. Each line is a brief per-session pointer, not a full transcript; verify details in the linked repo/session before relying on them.`r`n"
+    $fm = "---`r`ndate: $DateStr`r`ntype: daily`r`ntags:`r`n  - daily`r`nai-first: true`r`n---`r`n`r`n## For future agent`r`nThis is the automated T5500 session log for $DateStr, appended by scripts/obsidian/session-note.ps1 via Claude Code Stop and SessionEnd hooks. Each line is a brief per-session pointer, not a full transcript; verify details in the linked repo/session before relying on them.`r`n"
     Set-Content -Path $Path -Value $fm -Encoding UTF8 -NoNewline
 }
 
@@ -153,7 +153,7 @@ try {
 
     if ($hookEvent -eq "SessionEnd") {
         Confirm-DailyNote -Path $dailyPath -DateStr $dateStr
-        $line = "- $nowStr session ended ([[Sabretooth Node]])"
+        $line = "- $nowStr session ended ([[T5500 Node]])"
         Add-DailyLine -Path $dailyPath -Line $line
     }
     elseif ($hookEvent -eq "Stop") {

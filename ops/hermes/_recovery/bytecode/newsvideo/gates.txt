@@ -1,0 +1,1755 @@
+# gates.pyc
+
+bytes: 14605
+magic: f30d0d0a (this interpreter: f30d0d0a)
+magic matches: True
+
+## docstrings
+
+<module>:
+Verification gates for the unattended daily run.
+
+The failure this exists to prevent: a stage exits 0, writes a file nobody looks
+at, and the chain ships a 0-byte mp4 -- or a video that plays as thirty seconds
+of black with silence. Every gate here probes the artifact that was actually
+written and raises on the first thing that is wrong. Nothing downstream is
+allowed to assume a stage succeeded because it did not throw.
+
+Each check is recorded (pass or fail) on a GateLog so the packet shows what was
+verified, not just what broke.
+
+
+  GateError:
+GateError
+
+  GateLog:
+GateLog
+
+      <genexpr>:
+ok
+
+  probe:
+Raw ffprobe JSON for a media file. Raises GateError if ffprobe rejects it.
+
+    <genexpr>:
+codec_type
+
+  video_playable:
+Container parses, has both streams, right shape, sane length.
+
+  audio_not_silent:
+A muxed-but-silent track is the quiet failure mode. Measure it.
+
+  frames_not_blank:
+Sample frames and reject flat ones. A black or single-colour render has
+near-zero luma spread; a real designed frame has type on a gradient.
+
+    <genexpr>:
+stddev
+
+## string constants
+
+'Verification gates for the unattended daily run.\n\nThe failure this exists to prevent: a stage exits 0, writes a file nobody looks\nat, and the chain ships a 0-byte mp4 -- or a video that plays as thirty seconds\nof black with silence. Every gate here probes the artifact that was actually\nwritten and raises on the first thing that is wrong. Nothing downstream is\nallowed to assume a stage succeeded because it did not throw.\n\nEach check is recorded (pass or fail) on a GateLog so the packet shows what was\nverified, not just what broke.\n'
+'GateError'
+'GateLog'
+'video'
+'mean_volume:\\s*(-?\\d+(?:\\.\\d+)?) dB'
+'max_volume:\\s*(-?\\d+(?:\\.\\d+)?) dB'
+'thumbnail'
+''
+'script'
+'metadata'
+'A verification gate failed. The run stops; the artifact is not shippable.'
+'list[dict]'
+'checks'
+'GATE FAILED ['
+'] '
+'ok'
+'Raw ffprobe JSON for a media file. Raises GateError if ffprobe rejects it.'
+'ffprobe'
+'-v'
+'error'
+'-print_format'
+'json'
+'-show_format'
+'-show_streams'
+'GATE FAILED [ffprobe] '
+': '
+': unparseable output ('
+')'
+'streams'
+'codec_type'
+':exists'
+'missing: '
+':size'
+' is '
+' bytes (need >= '
+'Container parses, has both streams, right shape, sane length.'
+'format'
+'audio'
+':video_stream'
+'video stream: '
+'codec_name'
+'NONE'
+':audio_stream'
+'audio stream: '
+'duration'
+':duration'
+'.2f'
+'s (need '
+'-'
+'s)'
+'width'
+'height'
+':resolution'
+'x'
+' (need '
+':pix_fmt'
+'pix_fmt'
+'yuv420p'
+'pix_fmt='
+' (need yuv420p for player compatibility)'
+'size'
+'A muxed-but-silent track is the quiet failure mode. Measure it.'
+'ffmpeg'
+'-hide_banner'
+'-nostats'
+'-i'
+'-map'
+'0:a:0'
+'-af'
+'volumedetect'
+'-f'
+'null'
+':audio_level'
+'volumedetect produced no reading: '
+'mean '
+' dB, peak '
+' dB (need mean > '
+' dB)'
+'Sample frames and reject flat ones. A black or single-colour render has\nnear-zero luma spread; a real designed frame has type on a gradient.'
+'f'
+'.png'
+'-y'
+'-ss'
+'.3f'
+'-frames:v'
+'1'
+':frame@'
+'could not extract a frame at '
+'s: '
+'L'
+':frames_not_blank'
+'lowest luma stddev '
+' across '
+' sampled frames (need >= '
+'; a flat/black frame reads ~0)'
+'stddev'
+'utf-8'
+'replace'
+':contains'
+'expected '
+' in '
+':parse] '
+':keys'
+'missing/empty keys: '
+'has '
+
+## disassembly
+
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Verification gates for the unattended daily run.\n\nThe failure this exists to prevent: a stage exits 0, writes a file nobody looks\nat, and the chain ships a 0-byte mp4 -- or a video that plays as thirty seconds\nof black with silence. Every gate here probes the artifact that was actually\nwritten and raises on the first thing that is wrong. Nothing downstream is\nallowed to assume a stage succeeded because it did not throw.\n\nEach check is recorded (pass or fail) on a GateLog so the packet shows what was\nverified, not just what broke.\n')
+              STORE_NAME               0 (__doc__)
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (json)
+              STORE_NAME               3 (json)
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              4 (re)
+              STORE_NAME               4 (re)
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              5 (subprocess)
+              STORE_NAME               5 (subprocess)
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              6 (tempfile)
+              STORE_NAME               6 (tempfile)
+
+ 19           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('dataclass', 'field'))
+              IMPORT_NAME              7 (dataclasses)
+              IMPORT_FROM              8 (dataclass)
+              STORE_NAME               8 (dataclass)
+              IMPORT_FROM              9 (field)
+              STORE_NAME               9 (field)
+              POP_TOP
+
+ 20           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('Path',))
+              IMPORT_NAME             10 (pathlib)
+              IMPORT_FROM             11 (Path)
+              STORE_NAME              11 (Path)
+              POP_TOP
+
+ 23           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               6 (<code object GateError at 0x000001D515B33BB0, file "newsvideo/gates.py", line 23>)
+              MAKE_FUNCTION
+              LOAD_CONST               7 ('GateError')
+              LOAD_NAME               12 (RuntimeError)
+              CALL                     3
+              STORE_NAME              13 (GateError)
+
+ 27           LOAD_NAME                8 (dataclass)
+
+ 28           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               8 (<code object GateLog at 0x000001D515D78290, file "newsvideo/gates.py", line 27>)
+              MAKE_FUNCTION
+              LOAD_CONST               9 ('GateLog')
+              CALL                     2
+
+ 27           CALL                     0
+
+ 28           STORE_NAME              14 (GateLog)
+
+ 50           LOAD_CONST              35 (('path', 'Path', 'return', 'dict'))
+              LOAD_CONST              10 (<code object probe at 0x000001D515BDE9D0, file "newsvideo/gates.py", line 50>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              15 (probe)
+
+ 65           LOAD_CONST              36 (('data', 'dict', 'kind', 'str', 'return', 'dict'))
+              LOAD_CONST              11 (<code object _stream at 0x000001D515D48B70, file "newsvideo/gates.py", line 65>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              16 (_stream)
+
+ 72           LOAD_CONST              37 (('log', 'GateLog', 'path', 'Path', 'min_bytes', 'int', 'label', 'str', 'return', 'int'))
+              LOAD_CONST              12 (<code object file_present at 0x000001D51588B870, file "newsvideo/gates.py", line 72>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              17 (file_present)
+
+ 84           LOAD_CONST              13 ('video')
+
+ 83           LOAD_CONST              14 (('label',))
+              BUILD_CONST_KEY_MAP      1
+
+ 84           NOP
+
+ 83           NOP
+
+ 84           NOP
+
+ 83           NOP
+
+ 84           NOP
+
+ 83           NOP
+
+ 84           NOP
+
+ 83           LOAD_CONST              38 (('log', 'GateLog', 'path', 'Path', 'min_seconds', 'float', 'max_seconds', 'float', 'width', 'int', 'height', 'int', 'label', 'str', 'return', 'dict'))
+              LOAD_CONST              15 (<code object video_playable at 0x000001D515BE0940, file "newsvideo/gates.py", line 83>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   2 (kwdefaults)
+              STORE_NAME              18 (video_playable)
+
+114           LOAD_NAME                4 (re)
+              LOAD_ATTR               38 (compile)
+              PUSH_NULL
+              LOAD_CONST              16 ('mean_volume:\\s*(-?\\d+(?:\\.\\d+)?) dB')
+              CALL                     1
+              STORE_NAME              20 (_MEAN_DB)
+
+115           LOAD_NAME                4 (re)
+              LOAD_ATTR               38 (compile)
+              PUSH_NULL
+              LOAD_CONST              17 ('max_volume:\\s*(-?\\d+(?:\\.\\d+)?) dB')
+              CALL                     1
+              STORE_NAME              21 (_MAX_DB)
+
+118           LOAD_CONST              18 (-50.0)
+
+119           LOAD_CONST              13 ('video')
+
+118           LOAD_CONST              19 (('floor_db', 'label'))
+              BUILD_CONST_KEY_MAP      2
+
+119           NOP
+
+118           NOP
+
+119           NOP
+
+118           LOAD_CONST              39 (('log', 'GateLog', 'path', 'Path', 'floor_db', 'float', 'label', 'str', 'return', 'dict'))
+              LOAD_CONST              20 (<code object audio_not_silent at 0x000001D515BE9910, file "newsvideo/gates.py", line 118>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   2 (kwdefaults)
+              STORE_NAME              22 (audio_not_silent)
+
+139           LOAD_CONST              21 ((0.15, 0.5, 0.85))
+
+140           LOAD_CONST              22 (3.0)
+              LOAD_CONST              13 ('video')
+
+139           LOAD_CONST              23 (('at_fractions', 'min_stddev', 'label'))
+              BUILD_CONST_KEY_MAP      3
+
+140           NOP
+
+139           NOP
+
+140           NOP
+
+139           NOP
+
+140           NOP
+
+139           LOAD_CONST              40 (('log', 'GateLog', 'path', 'Path', 'min_stddev', 'float', 'label', 'str', 'return', 'dict'))
+              LOAD_CONST              24 (<code object frames_not_blank at 0x000001D515BE93A0, file "newsvideo/gates.py", line 139>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   2 (kwdefaults)
+              STORE_NAME              23 (frames_not_blank)
+
+173           LOAD_CONST              25 ('thumbnail')
+
+172           LOAD_CONST              14 (('label',))
+              BUILD_CONST_KEY_MAP      1
+
+173           NOP
+
+172           NOP
+
+173           NOP
+
+172           LOAD_CONST              41 (('log', 'GateLog', 'path', 'Path', 'min_bytes', 'int', 'width', 'int', 'height', 'int', 'label', 'str', 'return', 'dict'))
+              LOAD_CONST              26 (<code object image_ok at 0x000001D51588B0F0, file "newsvideo/gates.py", line 172>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   2 (kwdefaults)
+              STORE_NAME              24 (image_ok)
+
+184           LOAD_CONST              27 ('')
+
+185           LOAD_CONST              28 ('script')
+
+184           LOAD_CONST              29 (('must_contain', 'label'))
+              BUILD_CONST_KEY_MAP      2
+
+185           NOP
+
+184           NOP
+
+185           NOP
+
+184           LOAD_CONST              42 (('log', 'GateLog', 'path', 'Path', 'min_bytes', 'int', 'must_contain', 'str', 'label', 'str', 'return', 'str'))
+              LOAD_CONST              30 (<code object text_file_ok at 0x000001D51581ED80, file "newsvideo/gates.py", line 184>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   2 (kwdefaults)
+              STORE_NAME              25 (text_file_ok)
+
+194           LOAD_CONST              31 (())
+
+195           LOAD_CONST              32 ('metadata')
+
+194           LOAD_CONST              33 (('required_keys', 'label'))
+              BUILD_CONST_KEY_MAP      2
+
+195           NOP
+
+194           NOP
+
+195           NOP
+
+194           LOAD_CONST              43 (('log', 'GateLog', 'path', 'Path', 'required_keys', 'tuple[str, ...]', 'label', 'str', 'return', 'dict'))
+              LOAD_CONST              34 (<code object json_file_ok at 0x000001D515BE15C0, file "newsvideo/gates.py", line 194>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   2 (kwdefaults)
+              STORE_NAME              26 (json_file_ok)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object GateError at 0x000001D515B33BB0, file "newsvideo/gates.py", line 23>:
+ 23           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('GateError')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (23)
+              STORE_NAME               3 (__firstlineno__)
+
+ 24           LOAD_CONST               2 ('A verification gate failed. The run stops; the artifact is not shippable.')
+              STORE_NAME               4 (__doc__)
+              LOAD_CONST               3 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             4 (None)
+
+Disassembly of <code object GateLog at 0x000001D515D78290, file "newsvideo/gates.py", line 27>:
+ 27           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('GateLog')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (27)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 29           LOAD_NAME                4 (field)
+              PUSH_NULL
+              LOAD_NAME                5 (list)
+              LOAD_CONST               2 (('default_factory',))
+              CALL_KW                  1
+              STORE_NAME               6 (checks)
+              LOAD_CONST               3 ('list[dict]')
+              LOAD_NAME                7 (__annotations__)
+              LOAD_CONST               4 ('checks')
+              STORE_SUBSCR
+
+ 31           LOAD_CONST              10 (('name', 'str', 'ok', 'bool', 'detail', 'str', 'return', 'dict'))
+              LOAD_CONST               5 (<code object record at 0x000001D515B72EF0, file "newsvideo/gates.py", line 31>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               8 (record)
+
+ 38           LOAD_NAME                9 (property)
+
+ 39           LOAD_CONST              11 (('return', 'int'))
+              LOAD_CONST               6 (<code object passed at 0x000001D515CC3440, file "newsvideo/gates.py", line 38>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 38           CALL                     0
+
+ 39           STORE_NAME              10 (passed)
+
+ 42           LOAD_NAME                9 (property)
+
+ 43           LOAD_CONST              12 (('return', 'list[dict]'))
+              LOAD_CONST               7 (<code object failures at 0x000001D515B7BA60, file "newsvideo/gates.py", line 42>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 42           CALL                     0
+
+ 43           STORE_NAME              11 (failures)
+              LOAD_CONST               8 (())
+              STORE_NAME              12 (__static_attributes__)
+              RETURN_CONST             9 (None)
+
+Disassembly of <code object record at 0x000001D515B72EF0, file "newsvideo/gates.py", line 31>:
+ 31           RESUME                   0
+
+ 32           LOAD_FAST                1 (name)
+              LOAD_GLOBAL              1 (bool + NULL)
+              LOAD_FAST                2 (ok)
+              CALL                     1
+              LOAD_FAST                3 (detail)
+              LOAD_CONST               1 (('check', 'ok', 'detail'))
+              BUILD_CONST_KEY_MAP      3
+              LOAD_FAST                4 (extra)
+              DICT_UPDATE              1
+              STORE_FAST               5 (entry)
+
+ 33           LOAD_FAST                0 (self)
+              LOAD_ATTR                2 (checks)
+              LOAD_ATTR                5 (append + NULL|self)
+              LOAD_FAST                5 (entry)
+              CALL                     1
+              POP_TOP
+
+ 34           LOAD_FAST                2 (ok)
+              TO_BOOL
+              POP_JUMP_IF_TRUE        17 (to L1)
+
+ 35           LOAD_GLOBAL              7 (GateError + NULL)
+              LOAD_CONST               2 ('GATE FAILED [')
+              LOAD_FAST                1 (name)
+              FORMAT_SIMPLE
+              LOAD_CONST               3 ('] ')
+              LOAD_FAST                3 (detail)
+              FORMAT_SIMPLE
+              BUILD_STRING             4
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 36   L1:     LOAD_FAST                5 (entry)
+              RETURN_VALUE
+
+Disassembly of <code object passed at 0x000001D515CC3440, file "newsvideo/gates.py", line 38>:
+ 38           RESUME                   0
+
+ 40           LOAD_GLOBAL              1 (sum + NULL)
+              LOAD_CONST               1 (<code object <genexpr> at 0x000001D515CC3550, file "newsvideo/gates.py", line 40>)
+              MAKE_FUNCTION
+              LOAD_FAST                0 (self)
+              LOAD_ATTR                2 (checks)
+              GET_ITER
+              CALL                     0
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object <genexpr> at 0x000001D515CC3550, file "newsvideo/gates.py", line 40>:
+  40           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+               GET_ITER
+       L2:     FOR_ITER                18 (to L5)
+               STORE_FAST_LOAD_FAST    17 (c, c)
+               LOAD_CONST               0 ('ok')
+               BINARY_SUBSCR
+               TO_BOOL
+       L3:     POP_JUMP_IF_TRUE         2 (to L4)
+               JUMP_BACKWARD           14 (to L2)
+       L4:     LOAD_CONST               1 (1)
+               YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD           20 (to L2)
+       L5:     END_FOR
+               POP_TOP
+               RETURN_CONST             2 (None)
+
+  --   L6:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L6 [0] lasti
+  L4 to L6 -> L6 [0] lasti
+
+Disassembly of <code object failures at 0x000001D515B7BA60, file "newsvideo/gates.py", line 42>:
+  42           RESUME                   0
+
+  44           LOAD_FAST                0 (self)
+               LOAD_ATTR                0 (checks)
+               GET_ITER
+               LOAD_FAST_AND_CLEAR      1 (c)
+               SWAP                     2
+       L1:     BUILD_LIST               0
+               SWAP                     2
+               GET_ITER
+       L2:     FOR_ITER                16 (to L5)
+               STORE_FAST_LOAD_FAST    17 (c, c)
+               LOAD_CONST               1 ('ok')
+               BINARY_SUBSCR
+               TO_BOOL
+       L3:     POP_JUMP_IF_FALSE        2 (to L4)
+               JUMP_BACKWARD           14 (to L2)
+       L4:     LOAD_FAST                1 (c)
+               LIST_APPEND              2
+               JUMP_BACKWARD           18 (to L2)
+       L5:     END_FOR
+               POP_TOP
+       L6:     SWAP                     2
+               STORE_FAST               1 (c)
+               RETURN_VALUE
+
+  --   L7:     SWAP                     2
+               POP_TOP
+
+  44           SWAP                     2
+               STORE_FAST               1 (c)
+               RERAISE                  0
+ExceptionTable:
+  L1 to L3 -> L7 [2]
+  L4 to L6 -> L7 [2]
+
+Disassembly of <code object probe at 0x000001D515BDE9D0, file "newsvideo/gates.py", line 50>:
+  50           RESUME                   0
+
+  52           LOAD_GLOBAL              0 (subprocess)
+               LOAD_ATTR                2 (run)
+               PUSH_NULL
+
+  53           LOAD_CONST               1 ('ffprobe')
+               LOAD_CONST               2 ('-v')
+               LOAD_CONST               3 ('error')
+               LOAD_CONST               4 ('-print_format')
+               LOAD_CONST               5 ('json')
+               LOAD_CONST               6 ('-show_format')
+               LOAD_CONST               7 ('-show_streams')
+
+  54           LOAD_GLOBAL              5 (str + NULL)
+               LOAD_FAST                0 (path)
+               CALL                     1
+
+  53           BUILD_LIST               8
+
+  55           LOAD_CONST               8 (True)
+               LOAD_CONST               8 (True)
+
+  52           LOAD_CONST               9 (('capture_output', 'text'))
+               CALL_KW                  3
+               STORE_FAST               1 (proc)
+
+  57           LOAD_FAST                1 (proc)
+               LOAD_ATTR                6 (returncode)
+               LOAD_CONST              10 (0)
+               COMPARE_OP             119 (bool(!=))
+               POP_JUMP_IF_FALSE       54 (to L1)
+
+  58           LOAD_GLOBAL              9 (GateError + NULL)
+               LOAD_CONST              11 ('GATE FAILED [ffprobe] ')
+               LOAD_FAST                0 (path)
+               LOAD_ATTR               10 (name)
+               FORMAT_SIMPLE
+               LOAD_CONST              12 (': ')
+               LOAD_FAST                1 (proc)
+               LOAD_ATTR               12 (stderr)
+               LOAD_ATTR               15 (strip + NULL|self)
+               CALL                     0
+               LOAD_CONST              13 (-500)
+               LOAD_CONST              14 (None)
+               BINARY_SLICE
+               FORMAT_SIMPLE
+               BUILD_STRING             4
+               CALL                     1
+               RAISE_VARARGS            1
+
+  59   L1:     NOP
+
+  60   L2:     LOAD_GLOBAL             16 (json)
+               LOAD_ATTR               18 (loads)
+               PUSH_NULL
+               LOAD_FAST                1 (proc)
+               LOAD_ATTR               20 (stdout)
+               CALL                     1
+       L3:     RETURN_VALUE
+
+  --   L4:     PUSH_EXC_INFO
+
+  61           LOAD_GLOBAL             16 (json)
+               LOAD_ATTR               22 (JSONDecodeError)
+               CHECK_EXC_MATCH
+               POP_JUMP_IF_FALSE       33 (to L7)
+               STORE_FAST               2 (exc)
+
+  62   L5:     LOAD_GLOBAL              9 (GateError + NULL)
+               LOAD_CONST              11 ('GATE FAILED [ffprobe] ')
+               LOAD_FAST                0 (path)
+               LOAD_ATTR               10 (name)
+               FORMAT_SIMPLE
+               LOAD_CONST              15 (': unparseable output (')
+               LOAD_FAST                2 (exc)
+               FORMAT_SIMPLE
+               LOAD_CONST              16 (')')
+               BUILD_STRING             5
+               CALL                     1
+               RAISE_VARARGS            1
+
+  --   L6:     LOAD_CONST              14 (None)
+               STORE_FAST               2 (exc)
+               DELETE_FAST              2 (exc)
+               RERAISE                  1
+
+  61   L7:     RERAISE                  0
+
+  --   L8:     COPY                     3
+               POP_EXCEPT
+               RERAISE                  1
+ExceptionTable:
+  L2 to L3 -> L4 [0]
+  L4 to L5 -> L8 [1] lasti
+  L5 to L6 -> L6 [1] lasti
+  L6 to L8 -> L8 [1] lasti
+
+Disassembly of <code object _stream at 0x000001D515D48B70, file "newsvideo/gates.py", line 65>:
+  --           MAKE_CELL                1 (kind)
+
+  65           RESUME                   0
+
+  66           LOAD_GLOBAL              1 (next + NULL)
+               LOAD_FAST                1 (kind)
+               BUILD_TUPLE              1
+               LOAD_CONST               1 (<code object <genexpr> at 0x000001D515B22AF0, file "newsvideo/gates.py", line 66>)
+               MAKE_FUNCTION
+               SET_FUNCTION_ATTRIBUTE   8 (closure)
+               LOAD_FAST                0 (data)
+               LOAD_ATTR                3 (get + NULL|self)
+               LOAD_CONST               2 ('streams')
+               BUILD_LIST               0
+               CALL                     2
+               GET_ITER
+               CALL                     0
+               BUILD_MAP                0
+               CALL                     2
+               RETURN_VALUE
+
+Disassembly of <code object <genexpr> at 0x000001D515B22AF0, file "newsvideo/gates.py", line 66>:
+  --           COPY_FREE_VARS           1
+
+  66           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+               GET_ITER
+       L2:     FOR_ITER                29 (to L5)
+               STORE_FAST_LOAD_FAST    17 (s, s)
+               LOAD_ATTR                1 (get + NULL|self)
+               LOAD_CONST               0 ('codec_type')
+               CALL                     1
+               LOAD_DEREF               2 (kind)
+               COMPARE_OP              88 (bool(==))
+       L3:     POP_JUMP_IF_TRUE         2 (to L4)
+               JUMP_BACKWARD           25 (to L2)
+       L4:     LOAD_FAST                1 (s)
+               YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD           31 (to L2)
+       L5:     END_FOR
+               POP_TOP
+               RETURN_CONST             1 (None)
+
+  --   L6:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L6 [0] lasti
+  L4 to L6 -> L6 [0] lasti
+
+Disassembly of <code object file_present at 0x000001D51588B870, file "newsvideo/gates.py", line 72>:
+ 72           RESUME                   0
+
+ 73           LOAD_GLOBAL              1 (Path + NULL)
+              LOAD_FAST                1 (path)
+              CALL                     1
+              STORE_FAST               1 (path)
+
+ 74           LOAD_FAST                1 (path)
+              LOAD_ATTR                3 (exists + NULL|self)
+              CALL                     0
+              TO_BOOL
+              POP_JUMP_IF_TRUE        25 (to L1)
+
+ 75           LOAD_FAST                0 (log)
+              LOAD_ATTR                5 (record + NULL|self)
+              LOAD_FAST                3 (label)
+              FORMAT_SIMPLE
+              LOAD_CONST               1 (':exists')
+              BUILD_STRING             2
+              LOAD_CONST               2 (False)
+              LOAD_CONST               3 ('missing: ')
+              LOAD_FAST                1 (path)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     3
+              POP_TOP
+
+ 76   L1:     LOAD_FAST                1 (path)
+              LOAD_ATTR                7 (stat + NULL|self)
+              CALL                     0
+              LOAD_ATTR                8 (st_size)
+              STORE_FAST               4 (size)
+
+ 77           LOAD_FAST                0 (log)
+              LOAD_ATTR                5 (record + NULL|self)
+              LOAD_FAST                3 (label)
+              FORMAT_SIMPLE
+              LOAD_CONST               4 (':size')
+              BUILD_STRING             2
+              LOAD_FAST_LOAD_FAST     66 (size, min_bytes)
+              COMPARE_OP             172 (>=)
+
+ 78           LOAD_FAST                1 (path)
+              LOAD_ATTR               10 (name)
+              FORMAT_SIMPLE
+              LOAD_CONST               5 (' is ')
+              LOAD_FAST                4 (size)
+              FORMAT_SIMPLE
+              LOAD_CONST               6 (' bytes (need >= ')
+              LOAD_FAST                2 (min_bytes)
+              FORMAT_SIMPLE
+              LOAD_CONST               7 (')')
+              BUILD_STRING             6
+
+ 79           LOAD_GLOBAL             13 (str + NULL)
+              LOAD_FAST                1 (path)
+              CALL                     1
+              LOAD_FAST_LOAD_FAST     66 (size, min_bytes)
+
+ 77           LOAD_CONST               8 (('path', 'bytes', 'min_bytes'))
+              CALL_KW                  6
+              POP_TOP
+
+ 80           LOAD_FAST                4 (size)
+              RETURN_VALUE
+
+Disassembly of <code object video_playable at 0x000001D515BE0940, file "newsvideo/gates.py", line 83>:
+  83            RESUME                   0
+
+  86            LOAD_GLOBAL              1 (probe + NULL)
+                LOAD_FAST                1 (path)
+                CALL                     1
+                STORE_FAST               7 (data)
+
+  87            LOAD_FAST                7 (data)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST               1 ('format')
+                BUILD_MAP                0
+                CALL                     2
+                STORE_FAST               8 (fmt)
+
+  88            LOAD_GLOBAL              5 (_stream + NULL)
+                LOAD_FAST                7 (data)
+                LOAD_CONST               2 ('video')
+                CALL                     2
+                LOAD_GLOBAL              5 (_stream + NULL)
+                LOAD_FAST                7 (data)
+                LOAD_CONST               3 ('audio')
+                CALL                     2
+                STORE_FAST_STORE_FAST  169 (a, v)
+
+  90            LOAD_FAST                0 (log)
+                LOAD_ATTR                7 (record + NULL|self)
+                LOAD_FAST                6 (label)
+                FORMAT_SIMPLE
+                LOAD_CONST               4 (':video_stream')
+                BUILD_STRING             2
+                LOAD_GLOBAL              9 (bool + NULL)
+                LOAD_FAST                9 (v)
+                CALL                     1
+
+  91            LOAD_CONST               5 ('video stream: ')
+                LOAD_FAST                9 (v)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST               6 ('codec_name')
+                CALL                     1
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L1)
+                POP_TOP
+                LOAD_CONST               7 ('NONE')
+        L1:     FORMAT_SIMPLE
+                BUILD_STRING             2
+                LOAD_FAST                9 (v)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST               6 ('codec_name')
+                CALL                     1
+
+  90            LOAD_CONST               8 (('codec',))
+                CALL_KW                  4
+                POP_TOP
+
+  92            LOAD_FAST                0 (log)
+                LOAD_ATTR                7 (record + NULL|self)
+                LOAD_FAST                6 (label)
+                FORMAT_SIMPLE
+                LOAD_CONST               9 (':audio_stream')
+                BUILD_STRING             2
+                LOAD_GLOBAL              9 (bool + NULL)
+                LOAD_FAST               10 (a)
+                CALL                     1
+
+  93            LOAD_CONST              10 ('audio stream: ')
+                LOAD_FAST               10 (a)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST               6 ('codec_name')
+                CALL                     1
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L2)
+                POP_TOP
+                LOAD_CONST               7 ('NONE')
+        L2:     FORMAT_SIMPLE
+                BUILD_STRING             2
+                LOAD_FAST               10 (a)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST               6 ('codec_name')
+                CALL                     1
+
+  92            LOAD_CONST               8 (('codec',))
+                CALL_KW                  4
+                POP_TOP
+
+  95            NOP
+
+  96    L3:     LOAD_GLOBAL             11 (float + NULL)
+                LOAD_FAST                8 (fmt)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST              11 ('duration')
+                LOAD_CONST              12 (0.0)
+                CALL                     2
+                CALL                     1
+                STORE_FAST              11 (duration)
+
+  99    L4:     LOAD_FAST                0 (log)
+                LOAD_ATTR                7 (record + NULL|self)
+                LOAD_FAST                6 (label)
+                FORMAT_SIMPLE
+                LOAD_CONST              13 (':duration')
+                BUILD_STRING             2
+                LOAD_FAST_LOAD_FAST     43 (min_seconds, duration)
+                SWAP                     2
+                COPY                     2
+                COMPARE_OP              42 (<=)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_FALSE        5 (to L5)
+                POP_TOP
+                LOAD_FAST                3 (max_seconds)
+                COMPARE_OP              42 (<=)
+                JUMP_FORWARD             2 (to L6)
+        L5:     SWAP                     2
+                POP_TOP
+
+ 100    L6:     LOAD_FAST               11 (duration)
+                LOAD_CONST              14 ('.2f')
+                FORMAT_WITH_SPEC
+                LOAD_CONST              15 ('s (need ')
+                LOAD_FAST                2 (min_seconds)
+                FORMAT_SIMPLE
+                LOAD_CONST              16 ('-')
+                LOAD_FAST                3 (max_seconds)
+                FORMAT_SIMPLE
+                LOAD_CONST              17 ('s)')
+                BUILD_STRING             6
+                LOAD_GLOBAL             17 (round + NULL)
+                LOAD_FAST               11 (duration)
+                LOAD_CONST              18 (3)
+                CALL                     2
+
+  99            LOAD_CONST              19 (('seconds',))
+                CALL_KW                  4
+                POP_TOP
+
+ 102            LOAD_FAST                9 (v)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST              20 ('width')
+                CALL                     1
+                LOAD_FAST                9 (v)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST              21 ('height')
+                CALL                     1
+                BUILD_TUPLE              2
+                STORE_FAST              12 (got)
+
+ 103            LOAD_FAST                0 (log)
+                LOAD_ATTR                7 (record + NULL|self)
+                LOAD_FAST                6 (label)
+                FORMAT_SIMPLE
+                LOAD_CONST              22 (':resolution')
+                BUILD_STRING             2
+                LOAD_FAST_LOAD_FAST    196 (got, width)
+                LOAD_FAST                5 (height)
+                BUILD_TUPLE              2
+                COMPARE_OP              72 (==)
+
+ 104            LOAD_FAST               12 (got)
+                LOAD_CONST              23 (0)
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                LOAD_CONST              24 ('x')
+                LOAD_FAST               12 (got)
+                LOAD_CONST              25 (1)
+                BINARY_SUBSCR
+                FORMAT_SIMPLE
+                LOAD_CONST              26 (' (need ')
+                LOAD_FAST                4 (width)
+                FORMAT_SIMPLE
+                LOAD_CONST              24 ('x')
+                LOAD_FAST                5 (height)
+                FORMAT_SIMPLE
+                LOAD_CONST              27 (')')
+                BUILD_STRING             8
+                LOAD_FAST               12 (got)
+                LOAD_CONST              23 (0)
+                BINARY_SUBSCR
+                LOAD_FAST               12 (got)
+                LOAD_CONST              25 (1)
+                BINARY_SUBSCR
+
+ 103            LOAD_CONST              28 (('width', 'height'))
+                CALL_KW                  5
+                POP_TOP
+
+ 106            LOAD_FAST                0 (log)
+                LOAD_ATTR                7 (record + NULL|self)
+                LOAD_FAST                6 (label)
+                FORMAT_SIMPLE
+                LOAD_CONST              29 (':pix_fmt')
+                BUILD_STRING             2
+                LOAD_FAST                9 (v)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST              30 ('pix_fmt')
+                CALL                     1
+                LOAD_CONST              31 ('yuv420p')
+                COMPARE_OP              72 (==)
+
+ 107            LOAD_CONST              32 ('pix_fmt=')
+                LOAD_FAST                9 (v)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST              30 ('pix_fmt')
+                CALL                     1
+                FORMAT_SIMPLE
+                LOAD_CONST              33 (' (need yuv420p for player compatibility)')
+                BUILD_STRING             3
+
+ 106            CALL                     3
+                POP_TOP
+
+ 109            LOAD_GLOBAL             17 (round + NULL)
+                LOAD_FAST               11 (duration)
+                LOAD_CONST              18 (3)
+                CALL                     2
+                LOAD_GLOBAL             19 (int + NULL)
+                LOAD_FAST                8 (fmt)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST              34 ('size')
+                LOAD_CONST              23 (0)
+                CALL                     2
+                CALL                     1
+
+ 110            LOAD_FAST                9 (v)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST               6 ('codec_name')
+                CALL                     1
+                LOAD_FAST               10 (a)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST               6 ('codec_name')
+                CALL                     1
+
+ 111            LOAD_FAST                9 (v)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST              20 ('width')
+                CALL                     1
+                LOAD_FAST                9 (v)
+                LOAD_ATTR                3 (get + NULL|self)
+                LOAD_CONST              21 ('height')
+                CALL                     1
+
+ 109            LOAD_CONST              35 (('duration_s', 'size_bytes', 'video_codec', 'audio_codec', 'width', 'height'))
+                BUILD_CONST_KEY_MAP      6
+                RETURN_VALUE
+
+  --    L7:     PUSH_EXC_INFO
+
+  97            LOAD_GLOBAL             12 (TypeError)
+                LOAD_GLOBAL             14 (ValueError)
+                BUILD_TUPLE              2
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE        6 (to L9)
+                POP_TOP
+
+  98            LOAD_CONST              12 (0.0)
+                STORE_FAST              11 (duration)
+        L8:     POP_EXCEPT
+                EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 327 (to L4)
+
+  97    L9:     RERAISE                  0
+
+  --   L10:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L3 to L4 -> L7 [0]
+  L7 to L8 -> L10 [1] lasti
+  L9 to L10 -> L10 [1] lasti
+
+Disassembly of <code object audio_not_silent at 0x000001D515BE9910, file "newsvideo/gates.py", line 118>:
+118           RESUME                   0
+
+121           LOAD_GLOBAL              0 (subprocess)
+              LOAD_ATTR                2 (run)
+              PUSH_NULL
+
+122           LOAD_CONST               1 ('ffmpeg')
+              LOAD_CONST               2 ('-hide_banner')
+              LOAD_CONST               3 ('-nostats')
+              LOAD_CONST               4 ('-i')
+              LOAD_GLOBAL              5 (str + NULL)
+              LOAD_FAST                1 (path)
+              CALL                     1
+              LOAD_CONST               5 ('-map')
+              LOAD_CONST               6 ('0:a:0')
+
+123           LOAD_CONST               7 ('-af')
+              LOAD_CONST               8 ('volumedetect')
+              LOAD_CONST               9 ('-f')
+              LOAD_CONST              10 ('null')
+              LOAD_CONST              11 ('-')
+
+122           BUILD_LIST              12
+
+124           LOAD_CONST              12 (True)
+              LOAD_CONST              12 (True)
+
+121           LOAD_CONST              13 (('capture_output', 'text'))
+              CALL_KW                  3
+              STORE_FAST               4 (proc)
+
+126           LOAD_GLOBAL              6 (_MEAN_DB)
+              LOAD_ATTR                9 (search + NULL|self)
+              LOAD_FAST                4 (proc)
+              LOAD_ATTR               10 (stderr)
+              CALL                     1
+              STORE_FAST               5 (mean)
+
+127           LOAD_GLOBAL             12 (_MAX_DB)
+              LOAD_ATTR                9 (search + NULL|self)
+              LOAD_FAST                4 (proc)
+              LOAD_ATTR               10 (stderr)
+              CALL                     1
+              STORE_FAST               6 (peak)
+
+128           LOAD_FAST                5 (mean)
+              TO_BOOL
+              POP_JUMP_IF_TRUE        52 (to L1)
+
+129           LOAD_FAST                0 (log)
+              LOAD_ATTR               15 (record + NULL|self)
+              LOAD_FAST                3 (label)
+              FORMAT_SIMPLE
+              LOAD_CONST              14 (':audio_level')
+              BUILD_STRING             2
+              LOAD_CONST              15 (False)
+
+130           LOAD_CONST              16 ('volumedetect produced no reading: ')
+              LOAD_FAST                4 (proc)
+              LOAD_ATTR               10 (stderr)
+              LOAD_ATTR               17 (strip + NULL|self)
+              CALL                     0
+              LOAD_CONST              17 (-300)
+              LOAD_CONST              18 (None)
+              BINARY_SLICE
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+
+129           CALL                     3
+              POP_TOP
+
+131   L1:     LOAD_GLOBAL             19 (float + NULL)
+              LOAD_FAST                5 (mean)
+              LOAD_ATTR               21 (group + NULL|self)
+              LOAD_CONST              19 (1)
+              CALL                     1
+              CALL                     1
+              STORE_FAST               7 (mean_db)
+
+132           LOAD_FAST                6 (peak)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       26 (to L2)
+              LOAD_GLOBAL             19 (float + NULL)
+              LOAD_FAST                6 (peak)
+              LOAD_ATTR               21 (group + NULL|self)
+              LOAD_CONST              19 (1)
+              CALL                     1
+              CALL                     1
+              JUMP_FORWARD             1 (to L3)
+      L2:     LOAD_CONST              18 (None)
+      L3:     STORE_FAST               8 (peak_db)
+
+133           LOAD_FAST                0 (log)
+              LOAD_ATTR               15 (record + NULL|self)
+              LOAD_FAST                3 (label)
+              FORMAT_SIMPLE
+              LOAD_CONST              14 (':audio_level')
+              BUILD_STRING             2
+              LOAD_FAST_LOAD_FAST    114 (mean_db, floor_db)
+              COMPARE_OP             132 (>)
+
+134           LOAD_CONST              20 ('mean ')
+              LOAD_FAST                7 (mean_db)
+              FORMAT_SIMPLE
+              LOAD_CONST              21 (' dB, peak ')
+              LOAD_FAST                8 (peak_db)
+              FORMAT_SIMPLE
+              LOAD_CONST              22 (' dB (need mean > ')
+              LOAD_FAST                2 (floor_db)
+              FORMAT_SIMPLE
+              LOAD_CONST              23 (' dB)')
+              BUILD_STRING             7
+
+135           LOAD_FAST_LOAD_FAST    120 (mean_db, peak_db)
+
+133           LOAD_CONST              24 (('mean_db', 'peak_db'))
+              CALL_KW                  5
+              POP_TOP
+
+136           LOAD_FAST_LOAD_FAST    120 (mean_db, peak_db)
+              LOAD_CONST              24 (('mean_db', 'peak_db'))
+              BUILD_CONST_KEY_MAP      2
+              RETURN_VALUE
+
+Disassembly of <code object frames_not_blank at 0x000001D515BE93A0, file "newsvideo/gates.py", line 139>:
+ 139            RESUME                   0
+
+ 143            LOAD_CONST               1 (0)
+                LOAD_CONST               2 (('Image', 'ImageStat'))
+                IMPORT_NAME              0 (PIL)
+                IMPORT_FROM              1 (Image)
+                STORE_FAST               5 (Image)
+                IMPORT_FROM              2 (ImageStat)
+                STORE_FAST               6 (ImageStat)
+                POP_TOP
+
+ 145            LOAD_GLOBAL              7 (float + NULL)
+                LOAD_GLOBAL              9 (probe + NULL)
+                LOAD_FAST                1 (path)
+                CALL                     1
+                LOAD_CONST               3 ('format')
+                BINARY_SUBSCR
+                LOAD_CONST               4 ('duration')
+                BINARY_SUBSCR
+                CALL                     1
+                STORE_FAST               7 (duration)
+
+ 146            BUILD_LIST               0
+                STORE_FAST               8 (readings)
+
+ 147            LOAD_GLOBAL             10 (tempfile)
+                LOAD_ATTR               12 (TemporaryDirectory)
+                PUSH_NULL
+                CALL                     0
+                BEFORE_WITH
+        L1:     STORE_FAST               9 (tmp)
+
+ 148            LOAD_FAST                2 (at_fractions)
+                GET_ITER
+        L2:     EXTENDED_ARG             1
+                FOR_ITER               333 (to L5)
+                STORE_FAST              10 (frac)
+
+ 149            LOAD_GLOBAL             15 (max + NULL)
+                LOAD_CONST               5 (0.0)
+                LOAD_GLOBAL             17 (min + NULL)
+                LOAD_FAST                7 (duration)
+                LOAD_CONST               6 (0.1)
+                BINARY_OP               10 (-)
+                LOAD_FAST_LOAD_FAST    122 (duration, frac)
+                BINARY_OP                5 (*)
+                CALL                     2
+                CALL                     2
+                STORE_FAST              11 (ts)
+
+ 150            LOAD_GLOBAL             19 (Path + NULL)
+                LOAD_FAST                9 (tmp)
+                CALL                     1
+                LOAD_CONST               7 ('f')
+                LOAD_GLOBAL             21 (int + NULL)
+                LOAD_FAST               10 (frac)
+                LOAD_CONST               8 (100)
+                BINARY_OP                5 (*)
+                CALL                     1
+                FORMAT_SIMPLE
+                LOAD_CONST               9 ('.png')
+                BUILD_STRING             3
+                BINARY_OP               11 (/)
+                STORE_FAST              12 (shot)
+
+ 151            LOAD_GLOBAL             22 (subprocess)
+                LOAD_ATTR               24 (run)
+                PUSH_NULL
+
+ 152            LOAD_CONST              10 ('ffmpeg')
+                LOAD_CONST              11 ('-y')
+                LOAD_CONST              12 ('-hide_banner')
+                LOAD_CONST              13 ('-nostats')
+                LOAD_CONST              14 ('-ss')
+                LOAD_FAST               11 (ts)
+                LOAD_CONST              15 ('.3f')
+                FORMAT_WITH_SPEC
+
+ 153            LOAD_CONST              16 ('-i')
+                LOAD_GLOBAL             27 (str + NULL)
+                LOAD_FAST                1 (path)
+                CALL                     1
+                LOAD_CONST              17 ('-frames:v')
+                LOAD_CONST              18 ('1')
+                LOAD_GLOBAL             27 (str + NULL)
+                LOAD_FAST               12 (shot)
+                CALL                     1
+
+ 152            BUILD_LIST              11
+
+ 154            LOAD_CONST              19 (True)
+                LOAD_CONST              19 (True)
+
+ 151            LOAD_CONST              20 (('capture_output', 'text'))
+                CALL_KW                  3
+                STORE_FAST              13 (proc)
+
+ 156            LOAD_FAST               13 (proc)
+                LOAD_ATTR               28 (returncode)
+                LOAD_CONST               1 (0)
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_TRUE        21 (to L3)
+                LOAD_FAST               12 (shot)
+                LOAD_ATTR               31 (exists + NULL|self)
+                CALL                     0
+                TO_BOOL
+                POP_JUMP_IF_TRUE        58 (to L4)
+
+ 157    L3:     LOAD_FAST                0 (log)
+                LOAD_ATTR               33 (record + NULL|self)
+                LOAD_FAST                4 (label)
+                FORMAT_SIMPLE
+                LOAD_CONST              21 (':frame@')
+                LOAD_FAST               10 (frac)
+                FORMAT_SIMPLE
+                BUILD_STRING             3
+                LOAD_CONST              22 (False)
+
+ 158            LOAD_CONST              23 ('could not extract a frame at ')
+                LOAD_FAST               11 (ts)
+                LOAD_CONST              24 ('.2f')
+                FORMAT_WITH_SPEC
+                LOAD_CONST              25 ('s: ')
+
+ 159            LOAD_FAST               13 (proc)
+                LOAD_ATTR               34 (stderr)
+                LOAD_ATTR               37 (strip + NULL|self)
+                CALL                     0
+                LOAD_CONST              26 (-300)
+                LOAD_CONST              27 (None)
+                BINARY_SLICE
+                FORMAT_SIMPLE
+
+ 158            BUILD_STRING             4
+
+ 157            CALL                     3
+                POP_TOP
+
+ 160    L4:     LOAD_FAST                6 (ImageStat)
+                LOAD_ATTR               39 (Stat + NULL|self)
+                LOAD_FAST                5 (Image)
+                LOAD_ATTR               41 (open + NULL|self)
+                LOAD_FAST               12 (shot)
+                CALL                     1
+                LOAD_ATTR               43 (convert + NULL|self)
+                LOAD_CONST              28 ('L')
+                CALL                     1
+                CALL                     1
+                STORE_FAST              14 (stat)
+
+ 161            LOAD_FAST                8 (readings)
+                LOAD_ATTR               45 (append + NULL|self)
+                LOAD_GLOBAL             47 (round + NULL)
+                LOAD_FAST               11 (ts)
+                LOAD_CONST              29 (2)
+                CALL                     2
+                LOAD_GLOBAL             47 (round + NULL)
+                LOAD_FAST               14 (stat)
+                LOAD_ATTR               48 (mean)
+                LOAD_CONST               1 (0)
+                BINARY_SUBSCR
+                LOAD_CONST              29 (2)
+                CALL                     2
+
+ 162            LOAD_GLOBAL             47 (round + NULL)
+                LOAD_FAST               14 (stat)
+                LOAD_ATTR               50 (stddev)
+                LOAD_CONST               1 (0)
+                BINARY_SUBSCR
+                LOAD_CONST              29 (2)
+                CALL                     2
+
+ 161            LOAD_CONST              30 (('at_s', 'mean', 'stddev'))
+                BUILD_CONST_KEY_MAP      3
+                CALL                     1
+                POP_TOP
+                EXTENDED_ARG             1
+                JUMP_BACKWARD          336 (to L2)
+
+ 148    L5:     END_FOR
+                POP_TOP
+
+ 147    L6:     LOAD_CONST              27 (None)
+                LOAD_CONST              27 (None)
+                LOAD_CONST              27 (None)
+                CALL                     2
+                POP_TOP
+
+ 164    L7:     LOAD_GLOBAL             17 (min + NULL)
+                LOAD_CONST              31 (<code object <genexpr> at 0x000001D515D1D430, file "newsvideo/gates.py", line 164>)
+                MAKE_FUNCTION
+                LOAD_FAST                8 (readings)
+                GET_ITER
+                CALL                     0
+                CALL                     1
+                STORE_FAST              15 (worst)
+
+ 165            LOAD_FAST                0 (log)
+                LOAD_ATTR               33 (record + NULL|self)
+                LOAD_FAST                4 (label)
+                FORMAT_SIMPLE
+                LOAD_CONST              32 (':frames_not_blank')
+                BUILD_STRING             2
+                LOAD_FAST_LOAD_FAST    243 (worst, min_stddev)
+                COMPARE_OP             172 (>=)
+
+ 166            LOAD_CONST              33 ('lowest luma stddev ')
+                LOAD_FAST               15 (worst)
+                FORMAT_SIMPLE
+                LOAD_CONST              34 (' across ')
+                LOAD_GLOBAL             53 (len + NULL)
+                LOAD_FAST                8 (readings)
+                CALL                     1
+                FORMAT_SIMPLE
+                LOAD_CONST              35 (' sampled frames (need >= ')
+
+ 167            LOAD_FAST                3 (min_stddev)
+                FORMAT_SIMPLE
+                LOAD_CONST              36 ('; a flat/black frame reads ~0)')
+
+ 166            BUILD_STRING             7
+
+ 168            LOAD_FAST                8 (readings)
+
+ 165            LOAD_CONST              37 (('samples',))
+                CALL_KW                  4
+                POP_TOP
+
+ 169            LOAD_FAST_LOAD_FAST    143 (readings, worst)
+                LOAD_CONST              38 (('samples', 'min_stddev'))
+                BUILD_CONST_KEY_MAP      2
+                RETURN_VALUE
+
+ 147    L8:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L9)
+                RERAISE                  2
+        L9:     POP_TOP
+       L10:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 78 (to L7)
+
+  --   L11:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L1 to L6 -> L8 [1] lasti
+  L8 to L10 -> L11 [3] lasti
+
+Disassembly of <code object <genexpr> at 0x000001D515D1D430, file "newsvideo/gates.py", line 164>:
+ 164           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+               GET_ITER
+       L2:     FOR_ITER                 9 (to L3)
+               STORE_FAST_LOAD_FAST    17 (r, r)
+               LOAD_CONST               0 ('stddev')
+               BINARY_SUBSCR
+               YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD           11 (to L2)
+       L3:     END_FOR
+               POP_TOP
+               RETURN_CONST             1 (None)
+
+  --   L4:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L4 -> L4 [0] lasti
+
+Disassembly of <code object image_ok at 0x000001D51588B0F0, file "newsvideo/gates.py", line 172>:
+ 172           RESUME                   0
+
+ 174           LOAD_CONST               1 (0)
+               LOAD_CONST               2 (('Image',))
+               IMPORT_NAME              0 (PIL)
+               IMPORT_FROM              1 (Image)
+               STORE_FAST               6 (Image)
+               POP_TOP
+
+ 176           LOAD_GLOBAL              5 (file_present + NULL)
+               LOAD_FAST_LOAD_FAST      1 (log, path)
+               LOAD_FAST_LOAD_FAST     37 (min_bytes, label)
+               CALL                     4
+               POP_TOP
+
+ 177           LOAD_FAST                6 (Image)
+               LOAD_ATTR                7 (open + NULL|self)
+               LOAD_FAST                1 (path)
+               CALL                     1
+               BEFORE_WITH
+       L1:     STORE_FAST               7 (img)
+
+ 178           LOAD_FAST                7 (img)
+               LOAD_ATTR                8 (size)
+               STORE_FAST               8 (got)
+
+ 177   L2:     LOAD_CONST               0 (None)
+               LOAD_CONST               0 (None)
+               LOAD_CONST               0 (None)
+               CALL                     2
+               POP_TOP
+
+ 179   L3:     LOAD_FAST                0 (log)
+               LOAD_ATTR               11 (record + NULL|self)
+               LOAD_FAST                5 (label)
+               FORMAT_SIMPLE
+               LOAD_CONST               3 (':resolution')
+               BUILD_STRING             2
+               LOAD_FAST_CHECK          8 (got)
+               LOAD_FAST_LOAD_FAST     52 (width, height)
+               BUILD_TUPLE              2
+               COMPARE_OP              72 (==)
+
+ 180           LOAD_FAST                8 (got)
+               LOAD_CONST               1 (0)
+               BINARY_SUBSCR
+               FORMAT_SIMPLE
+               LOAD_CONST               4 ('x')
+               LOAD_FAST                8 (got)
+               LOAD_CONST               5 (1)
+               BINARY_SUBSCR
+               FORMAT_SIMPLE
+               LOAD_CONST               6 (' (need ')
+               LOAD_FAST                3 (width)
+               FORMAT_SIMPLE
+               LOAD_CONST               4 ('x')
+               LOAD_FAST                4 (height)
+               FORMAT_SIMPLE
+               LOAD_CONST               7 (')')
+               BUILD_STRING             8
+               LOAD_FAST                8 (got)
+               LOAD_CONST               1 (0)
+               BINARY_SUBSCR
+               LOAD_FAST                8 (got)
+               LOAD_CONST               5 (1)
+               BINARY_SUBSCR
+
+ 179           LOAD_CONST               8 (('width', 'height'))
+               CALL_KW                  5
+               POP_TOP
+
+ 181           LOAD_FAST                8 (got)
+               LOAD_CONST               1 (0)
+               BINARY_SUBSCR
+               LOAD_FAST                8 (got)
+               LOAD_CONST               5 (1)
+               BINARY_SUBSCR
+               LOAD_CONST               8 (('width', 'height'))
+               BUILD_CONST_KEY_MAP      2
+               RETURN_VALUE
+
+ 177   L4:     PUSH_EXC_INFO
+               WITH_EXCEPT_START
+               TO_BOOL
+               POP_JUMP_IF_TRUE         1 (to L5)
+               RERAISE                  2
+       L5:     POP_TOP
+       L6:     POP_EXCEPT
+               POP_TOP
+               POP_TOP
+               JUMP_BACKWARD_NO_INTERRUPT 75 (to L3)
+
+  --   L7:     COPY                     3
+               POP_EXCEPT
+               RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L4 [1] lasti
+  L4 to L6 -> L7 [3] lasti
+
+Disassembly of <code object text_file_ok at 0x000001D51581ED80, file "newsvideo/gates.py", line 184>:
+184           RESUME                   0
+
+186           LOAD_GLOBAL              1 (file_present + NULL)
+              LOAD_FAST_LOAD_FAST      1 (log, path)
+              LOAD_FAST_LOAD_FAST     36 (min_bytes, label)
+              CALL                     4
+              POP_TOP
+
+187           LOAD_GLOBAL              3 (Path + NULL)
+              LOAD_FAST                1 (path)
+              CALL                     1
+              LOAD_ATTR                5 (read_text + NULL|self)
+              LOAD_CONST               1 ('utf-8')
+              LOAD_CONST               2 ('replace')
+              LOAD_CONST               3 (('encoding', 'errors'))
+              CALL_KW                  2
+              STORE_FAST               5 (text)
+
+188           LOAD_FAST                3 (must_contain)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       79 (to L1)
+
+189           LOAD_FAST                0 (log)
+              LOAD_ATTR                7 (record + NULL|self)
+              LOAD_FAST                4 (label)
+              FORMAT_SIMPLE
+              LOAD_CONST               4 (':contains')
+              BUILD_STRING             2
+              LOAD_FAST                3 (must_contain)
+              LOAD_ATTR                9 (lower + NULL|self)
+              CALL                     0
+              LOAD_FAST                5 (text)
+              LOAD_ATTR                9 (lower + NULL|self)
+              CALL                     0
+              CONTAINS_OP              0
+
+190           LOAD_CONST               5 ('expected ')
+              LOAD_FAST                3 (must_contain)
+              CONVERT_VALUE            2 (repr)
+              FORMAT_SIMPLE
+              LOAD_CONST               6 (' in ')
+              LOAD_GLOBAL              3 (Path + NULL)
+              LOAD_FAST                1 (path)
+              CALL                     1
+              LOAD_ATTR               10 (name)
+              FORMAT_SIMPLE
+              BUILD_STRING             4
+
+189           CALL                     3
+              POP_TOP
+
+191   L1:     LOAD_FAST                5 (text)
+              RETURN_VALUE
+
+Disassembly of <code object json_file_ok at 0x000001D515BE15C0, file "newsvideo/gates.py", line 194>:
+ 194            RESUME                   0
+
+ 196            LOAD_GLOBAL              1 (file_present + NULL)
+                LOAD_FAST_LOAD_FAST      1 (log, path)
+                LOAD_CONST               1 (2)
+                LOAD_FAST                3 (label)
+                CALL                     4
+                POP_TOP
+
+ 197            NOP
+
+ 198    L1:     LOAD_GLOBAL              2 (json)
+                LOAD_ATTR                4 (loads)
+                PUSH_NULL
+                LOAD_GLOBAL              7 (Path + NULL)
+                LOAD_FAST                1 (path)
+                CALL                     1
+                LOAD_ATTR                9 (read_text + NULL|self)
+                LOAD_CONST               2 ('utf-8')
+                LOAD_CONST               3 (('encoding',))
+                CALL_KW                  1
+                CALL                     1
+                STORE_FAST               4 (data)
+
+ 201    L2:     LOAD_FAST                2 (required_keys)
+                GET_ITER
+                LOAD_FAST_AND_CLEAR      6 (k)
+                SWAP                     2
+        L3:     BUILD_LIST               0
+                SWAP                     2
+                GET_ITER
+        L4:     FOR_ITER                28 (to L7)
+                STORE_FAST_LOAD_FAST   100 (k, data)
+                LOAD_ATTR               17 (get + NULL|self)
+                LOAD_FAST                6 (k)
+                CALL                     1
+                TO_BOOL
+        L5:     POP_JUMP_IF_FALSE        2 (to L6)
+                JUMP_BACKWARD           26 (to L4)
+        L6:     LOAD_FAST                6 (k)
+                LIST_APPEND              2
+                JUMP_BACKWARD           30 (to L4)
+        L7:     END_FOR
+                POP_TOP
+        L8:     STORE_FAST               7 (missing)
+                STORE_FAST               6 (k)
+
+ 202            LOAD_FAST                0 (log)
+                LOAD_ATTR               19 (record + NULL|self)
+                LOAD_FAST                3 (label)
+                FORMAT_SIMPLE
+                LOAD_CONST               7 (':keys')
+                BUILD_STRING             2
+                LOAD_FAST                7 (missing)
+                TO_BOOL
+                UNARY_NOT
+
+ 203            LOAD_FAST                7 (missing)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       11 (to L9)
+                LOAD_CONST               8 ('missing/empty keys: ')
+                LOAD_FAST                7 (missing)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 202            CALL                     3
+                POP_TOP
+
+ 204            LOAD_FAST                4 (data)
+                RETURN_VALUE
+
+ 203    L9:     LOAD_CONST               9 ('has ')
+                LOAD_GLOBAL             21 (list + NULL)
+                LOAD_FAST                2 (required_keys)
+                CALL                     1
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 202            CALL                     3
+                POP_TOP
+
+ 204            LOAD_FAST                4 (data)
+                RETURN_VALUE
+
+  --   L10:     PUSH_EXC_INFO
+
+ 199            LOAD_GLOBAL              2 (json)
+                LOAD_ATTR               10 (JSONDecodeError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       44 (to L13)
+                STORE_FAST               5 (exc)
+
+ 200   L11:     LOAD_GLOBAL             13 (GateError + NULL)
+                LOAD_CONST               4 ('GATE FAILED [')
+                LOAD_FAST                3 (label)
+                FORMAT_SIMPLE
+                LOAD_CONST               5 (':parse] ')
+                LOAD_GLOBAL              7 (Path + NULL)
+                LOAD_FAST                1 (path)
+                CALL                     1
+                LOAD_ATTR               14 (name)
+                FORMAT_SIMPLE
+                LOAD_CONST               6 (': ')
+                LOAD_FAST                5 (exc)
+                FORMAT_SIMPLE
+                BUILD_STRING             6
+                CALL                     1
+                RAISE_VARARGS            1
+
+  --   L12:     LOAD_CONST               0 (None)
+                STORE_FAST               5 (exc)
+                DELETE_FAST              5 (exc)
+                RERAISE                  1
+
+ 199   L13:     RERAISE                  0
+
+  --   L14:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L15:     SWAP                     2
+                POP_TOP
+
+ 201            SWAP                     2
+                STORE_FAST               6 (k)
+                RERAISE                  0
+ExceptionTable:
+  L1 to L2 -> L10 [0]
+  L3 to L5 -> L15 [2]
+  L6 to L8 -> L15 [2]
+  L10 to L11 -> L14 [1] lasti
+  L11 to L12 -> L12 [1] lasti
+  L12 to L14 -> L14 [1] lasti

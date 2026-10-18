@@ -1,0 +1,128 @@
+{
+  "day": "20261010",
+  "date": "2026-10-10",
+  "date_label": "October 10, 2026",
+  "title": "Yesterday's News Today - October 10, 2026 | Sloth Bear, Daughter Gets & More",
+  "story_count": 5,
+  "video": {
+    "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261010\\20261010.mp4",
+    "duration_s": 87.31,
+    "size_bytes": 11816603,
+    "video": {
+      "codec": "h264",
+      "pix_fmt": "yuv420p",
+      "width": 1080,
+      "height": 1920,
+      "fps": "30/1"
+    },
+    "audio": {
+      "codec": "aac",
+      "sample_rate": "48000",
+      "channels": 2
+    }
+  },
+  "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261010\\20261010-thumb.png",
+  "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261010\\upload.json",
+  "tts_backends": [
+    "edge"
+  ],
+  "voiceover_verified": false,
+  "segments": [
+    {
+      "segment": "intro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\frames\\intro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\audio\\intro.wav",
+      "audio_seconds": 4.608,
+      "video_seconds": 5.267,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story1",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\frames\\story1.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\audio\\story1.wav",
+      "audio_seconds": 13.656,
+      "video_seconds": 14.306,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story2",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\frames\\story2.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\audio\\story2.wav",
+      "audio_seconds": 14.28,
+      "video_seconds": 14.933,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story3",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\frames\\story3.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\audio\\story3.wav",
+      "audio_seconds": 14.664,
+      "video_seconds": 15.314,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story4",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\frames\\story4.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\audio\\story4.wav",
+      "audio_seconds": 20.472,
+      "video_seconds": 21.133,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story5",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\frames\\story5.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\audio\\story5.wav",
+      "audio_seconds": 10.752,
+      "video_seconds": 11.402,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "outro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\frames\\outro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261010\\audio\\outro.wav",
+      "audio_seconds": 4.272,
+      "video_seconds": 4.933,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    }
+  ],
+  "parse_warnings": [],
+  "sources": [
+    {
+      "story": 1,
+      "headline": "Sloth Bear Named By Julia Roberts is Flourishing After Rescue From Dancing Trade in India",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/sloth-bear-given-a-name-by-julia-roberts-is-flourishing/"
+    },
+    {
+      "story": 2,
+      "headline": "Daughter Gets to Join Dad as Co-Pilot, With Mom Serving on Flight’s Cabin Crew: A Surprise Full Circle Moment",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/daughter-gets-to-join-dad-as-co-pilot-with-mom-serving-on-cabin-crew/"
+    },
+    {
+      "story": 3,
+      "headline": "Lost Italian Statue by Trevi Fountain Artist Discovered in Salvage Yard Among the Garden Ornaments",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/lost-italian-statue-by-trevi-fountain-artist-discovered-in-salvage-yard/"
+    },
+    {
+      "story": 4,
+      "headline": "Your Weekly Horoscope – ‘Free Will Astrology’ by Rob Brezsny",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/horoscope-from-rob-brezsnys-free-will-astrology-10-10-2026/"
+    },
+    {
+      "story": 5,
+      "headline": "Good News in History, October 10",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/events061010/"
+    }
+  ]
+}

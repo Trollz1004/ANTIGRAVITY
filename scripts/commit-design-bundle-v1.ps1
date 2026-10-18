@@ -2,7 +2,7 @@
 #  commit-design-bundle-v1.ps1
 #  Commit + push the design-bundle-v1 work that Cowork dropped into the repo.
 #
-#  Run from E:\ANTIGRAVITY in PowerShell 7+ on Sabretooth.
+#  Run from E:\ANTIGRAVITY in PowerShell 7+ on T5500.
 #
 #  WHAT IT DOES
 #   - Verifies you're on branch claude/design-bundle-v1 (creates it if missing).
@@ -148,7 +148,7 @@ git commit -m "feat(mcp): scaffold hermes/paperweight/dao MCP servers (Anthropic
            -m "  apps/mcp/hermes-mcp        · routes prompts via localhost:11435 Hermes" `
            -m "                               tools: hermes.route, hermes.health," `
            -m "                                      hermes.list_models" `
-           -m "  apps/mcp/paperweight-mcp   · sticky-note delegation to localhost:3100" `
+           -m "  apps/mcp/paperweight-mcp   · sticky-note delegation to localhost:3917" `
            -m "                               tools: paperweight.{list,create,complete,audit}" `
            -m "  apps/mcp/dao-mcp           · READ-ONLY reflection of Perpetual Mission" `
            -m "                               DAO spec · refuses any mutation tool name" `

@@ -2,7 +2,7 @@
 
 ## Quick Start (verified 2026-08-26)
 
-Paperclip is the preview target on `http://127.0.0.1:3100`.
+Paperclip is the preview target on `http://127.0.0.1:3917`.
 
 ### Start all services (non-elevated, one command)
 
@@ -26,7 +26,7 @@ cmd /c "openclaw.cmd gateway --port 18789"
 ### Verify all services
 
 ```bash
-for spec in 'paperclip:3100:/api/health' 'bridge:3140:/health' 'omniroute:20128:/' 'hermes:9119:/' 'openclaw:18789:/'; do
+for spec in 'paperclip:3917:/api/health' 'bridge:3140:/health' 'omniroute:20128:/' 'hermes:9119:/' 'openclaw:18789:/'; do
   IFS=: read name port path <<< "$spec"
   code=$(curl -s --max-time 4 -o /dev/null -w "%{http_code}" "http://127.0.0.1:$port$path" 2>&1)
   echo "$name :$port → $code"
@@ -36,13 +36,13 @@ done
 ### Identity check (Paperclip)
 
 ```bash
-curl -s http://127.0.0.1:3100/api/health | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['status'], d['version'])"
+curl -s http://127.0.0.1:3917/api/health | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['status'], d['version'])"
 # Expect: ok 2026.824.0
 ```
 
 ## Architecture
 
-- **Paperclip** (:3100) — Mission Control board, agent scheduler, issue tracking
+- **Paperclip** (:3917) — Mission Control board, agent scheduler, issue tracking
 - **CEO Bridge** (:3140) — HTTP adapter for Buffy CEO heartbeat → Freebuff session
 - **OmniRoute** (:20128) — Model routing gateway (auth-gated, provides /v1/chat/completions)
 - **Hermes** (:9119) — Agent gateway for hermes_local/hermes_gateway adapters

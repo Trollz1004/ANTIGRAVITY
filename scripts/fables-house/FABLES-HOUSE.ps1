@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════════
-#  FABLE'S HOUSE — Sabretooth full-stack bootstrap, validation-gated, self-healing
+#  FABLE'S HOUSE — T5500 full-stack bootstrap, validation-gated, self-healing
 #  Built for the Shriners presentation window. 2026-08-16.
 #
 #  Rules of the House:
@@ -179,20 +179,20 @@ $Stages = @(
        # 3.8.50+: the catalog is behind the API key; an unauthenticated probe
        # reads 401 and this watchdog would heal-spawn a second gateway (and a
        # dashboard tab) every minute. That spam happened on 2026-09-06.
-       Probe = { Test-Http 'http://192.168.0.8:20128/v1/models' 20 'auto/best-coding' 'OMNI_ROUTE_API_KEY' }
+       Probe = { Test-Http 'http://192.168.0.15:20128/v1/models' 20 'auto/best-coding' 'OMNI_ROUTE_API_KEY' }
        Heal  = { $env:DATA_DIR = "$env:USERPROFILE\.omniroute\data"
                  $omni = "$env:APPDATA\npm\omniroute.cmd"
                  if (Test-Path $omni) { Start-Process -FilePath $omni -WindowStyle Hidden }
                  else { Log '  OmniRoute npm-global missing — npm i -g omniroute needed' 'Red' } } }
 
     # PARKED. Joshua, 2026-09-10: "no more paperclip". Mission Control is the
-    # v5 dashboard on :3151 again. Paperclip is not started, not healed, and its
+    # v5 dashboard on :3917 again. Paperclip is not started, not healed, and its
     # ANT-Paperclip logon task is disabled. This stage only REPORTS whether a
     # stray instance is still answering on 3100 so nobody mistakes it for the hub.
     # History kept in git: it was Mission Control from 2026-08-25 to 2026-09-10.
-    @{ Name = 'Paperclip :3100 (PARKED, report only)'; Required = $false
-       Probe = { if (Test-Http 'http://127.0.0.1:3100/api/openapi.json' 10 'Paperclip API') {
-                     Log '  Paperclip still answering on :3100 - parked, not the hub; stop it or ignore it' 'DarkGray'
+    @{ Name = 'Paperclip :3917 (PARKED, report only)'; Required = $false
+       Probe = { if (Test-Http 'http://127.0.0.1:3917/api/openapi.json' 10 'Paperclip API') {
+                     Log '  Paperclip still answering on :3917 - parked, not the hub; stop it or ignore it' 'DarkGray'
                  } else { Log '  Paperclip parked (not running) - expected' 'DarkGray' }
                  return $true }
        Heal  = { } }
@@ -229,37 +229,37 @@ $Stages = @(
 
     # 2026-09-18 fix: `Get-Process cloudflared` matches by NAME only, and an
     # unrelated OmniRoute quick-tunnel process is also named cloudflared.exe.
-    # That let this stage believe sabretooth-main was up (some cloudflared.exe
-    # was running) while sabretooth-main itself was down and never healed. The
+    # That let this stage believe t5500-main was up (some cloudflared.exe
+    # was running) while t5500-main itself was down and never healed. The
     # real tunnel is identified by its command line instead, via
     # Win32_Process, so the quick-tunnel is never mistaken for it and never
     # touched. Command lines are never logged - only the PID and the literal
-    # "sabretooth-main". The public identity probe (youandinotai.com serving
+    # "t5500-main". The public identity probe (youandinotai.com serving
     # assets/index-) stays the sole source of truth for UP; this check only
     # decides what Heal does.
     @{ Name = 'Cloudflared tunnel (site PUBLIC)'; Required = $true
        Probe = { Test-Http 'https://youandinotai.com' 20 'assets/index-' }
        Heal  = { $tunnelProcs = @(Get-CimInstance Win32_Process -Filter "Name='cloudflared.exe'" -ErrorAction SilentlyContinue |
-                     Where-Object { $_.CommandLine -match 'sabretooth-main' })
+                     Where-Object { $_.CommandLine -match 't5500-main' })
                  if ($tunnelProcs.Count -eq 0) {
-                     Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config','C:\Users\joshi\.cloudflared\config.yml','run','sabretooth-main' -WindowStyle Hidden
-                     Log '  started sabretooth-main tunnel (was not running)' 'DarkGray'
+                     Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config','C:\Users\joshi\.cloudflared\config.yml','run','t5500-main' -WindowStyle Hidden
+                     Log '  started t5500-main tunnel (was not running)' 'DarkGray'
                  } else {
                      foreach ($p in $tunnelProcs) {
-                         Log ("  stopping sabretooth-main tunnel (PID {0}) before restart" -f $p.ProcessId) 'DarkGray'
+                         Log ("  stopping t5500-main tunnel (PID {0}) before restart" -f $p.ProcessId) 'DarkGray'
                          Stop-Process -Id $p.ProcessId -Force -ErrorAction SilentlyContinue
                      }
                      $waited = 0
-                     while ($waited -lt 5 -and (Get-CimInstance Win32_Process -Filter "Name='cloudflared.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match 'sabretooth-main' })) {
+                     while ($waited -lt 5 -and (Get-CimInstance Win32_Process -Filter "Name='cloudflared.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match 't5500-main' })) {
                          Start-Sleep -Seconds 1
                          $waited++
                      }
-                     Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config','C:\Users\joshi\.cloudflared\config.yml','run','sabretooth-main' -WindowStyle Hidden
-                     Log '  restarted sabretooth-main tunnel (was running but public probe failed)' 'DarkGray'
+                     Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config','C:\Users\joshi\.cloudflared\config.yml','run','t5500-main' -WindowStyle Hidden
+                     Log '  restarted t5500-main tunnel (was running but public probe failed)' 'DarkGray'
                  } } }
 
     # JARVIS is the one Mission Control on :9150 (ruling 2026-09-17, ops/runbook/
-    # SABRETOOTH-NODE-RUNBOOK.md). AIRI dashboard is retired: this stage heals by
+    # T5500-NODE-RUNBOOK.md). AIRI dashboard is retired: this stage heals by
     # killing whatever is listening on 9150 that does NOT answer /health with
     # jarvis-dashboard (an old AIRI process included) and starting the JARVIS
     # server in its place, same env/bind conventions AIRI used (0.0.0.0, repo-.env
@@ -320,12 +320,12 @@ $Stages = @(
                          # can see - it launches `code-tunnel.exe tunnel service internal-run`
                          # directly. Re-running install is the actual repair path here and is
                          # idempotent, so it is safe to call again even when already installed.
-                         Start-Process 'code' -ArgumentList 'tunnel','service','install','--accept-server-license-terms','--name','sabretooth' -WindowStyle Hidden -Wait
+                         Start-Process 'code' -ArgumentList 'tunnel','service','install','--accept-server-license-terms','--name','t5500' -WindowStyle Hidden -Wait
                          Log '  no Windows service object for the tunnel - re-ran service install to relaunch it' 'DarkGray'
                      }
                  } else {
-                     Start-Process 'code' -ArgumentList 'tunnel','service','install','--accept-server-license-terms','--name','sabretooth' -WindowStyle Hidden -Wait
-                     Log '  installed VS Code tunnel service (name: sabretooth)' 'DarkGray'
+                     Start-Process 'code' -ArgumentList 'tunnel','service','install','--accept-server-license-terms','--name','t5500' -WindowStyle Hidden -Wait
+                     Log '  installed VS Code tunnel service (name: t5500)' 'DarkGray'
                  } } }
 
     @{ Name = 'Ollama :11434'; Required = $false

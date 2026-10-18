@@ -233,11 +233,11 @@ if (Test-CommandExists -Name "ssh") {
         Write-Result -Label "SSH t5500" -Status "FAIL" -Detail $t5500.Output
     }
 
-    $n9020 = Test-SshAlias -Alias "9020" -ExpectedOk "OK-9020"
-    if ($n9020.Success) {
-        Write-Result -Label "SSH 9020" -Status "PASS" -Detail $n9020.Output
+    $nT5500 = Test-SshAlias -Alias "T5500" -ExpectedOk "OK-T5500"
+    if ($nT5500.Success) {
+        Write-Result -Label "SSH T5500" -Status "PASS" -Detail $nT5500.Output
     } else {
-        Write-Result -Label "SSH 9020" -Status "FAIL" -Detail $n9020.Output
+        Write-Result -Label "SSH T5500" -Status "FAIL" -Detail $nT5500.Output
     }
 } else {
     Write-Result -Label "SSH" -Status "FAIL" -Detail "ssh.exe not available"

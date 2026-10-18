@@ -411,3 +411,12 @@ Sonnet auditor against the fact sheet: **14 edits** — `CLAUDE.md:48` (Claude n
 - TRUST.md: Joshua's pasted BaseScan page for the Base Sepolia deployer is on the record with what it says and what it cannot say. The cloud cannot reach a Base RPC (403), so the row rests on his page.
 - vitest 943 of 943 on this branch; dream-online `node --test ops/node/backup-node.test.mjs` 29 of 29.
 
+
+## 2026-10-15 — T5500 finalization pass (Claude, Opus, Antigravity terminal)
+- VERIFIED: reboot 2026-10-14 14:30; keep-alive brought every service back by itself. `ops/t5500/verify-node.ps1`: 42 of 46 UP.
+- FIXED: Hermes shared gateway API enabled on 127.0.0.1:8643 (default config.yaml, backup .bak-2026-10-15); Paperclip Hermes seat repointed (:8643, :3917). Seat key still mismatched (Paperclip secret) — moot: Paperclip stays idle here by ruling.
+- ADDED: Hermes cron `T5500 node watch` (10 min, no model, Telegram only when stuck). OpenClaw sentry window + Hermes support window confirmed running.
+- FOUND: Ollama install lost `lib\ollama` (llama-server.exe) — Fable cannot run; keep-alive DOWN 204 passes. Needs admin reinstall (Joshua).
+- RULINGS recorded (CLAUDE.md, AGENTS.md): 100% rule; Hermes+OpenClaw watch; Paperclip idle here; Gemini only in mission-os/; Jules is a judge.
+- WROTE: GEMINI.md, ops/handoffs/CODEX-HANDOFF-2026-10-15.md, ultracode-house + t5500-node skill updates.
+- OPEN: Ollama reinstall (admin), untilnokidinneed tunnel route (Joshua OK), Wrangler install, YouTube exit 2, OpenViking not installed, rescue branch landing after Gemini finishes mission-os.

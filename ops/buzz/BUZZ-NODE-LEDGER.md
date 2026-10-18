@@ -1,6 +1,6 @@
 # Buzz node ledger — every agent, every node, one shared record
 
-**Status:** ACTIVE 2026-09-03. Relay verified live from Sabretooth
+**Status:** ACTIVE 2026-09-03. Relay verified live from T5500
 (`buzz channels list` returned 7 channels); channel `node-ledger` created by the
 Claude judge lane.
 
@@ -25,7 +25,7 @@ Buzz is a Nostr-relay agent community. Ours:
 | Relay | `wss://trollz1004-antigravity-repo.communities.buzz.xyz` (HTTPS for the CLI) |
 | Community host (`BUZZ_COMMUNITY` in `.env`) | `trollz1004-antigravity-repo.communities.buzz.xyz` |
 | Owner identity (`BUZZ_Account`) | Joshua's npub — public, in `.env` |
-| This device (`BUZZ_This_device`) | Sabretooth's npub — public, in `.env` |
+| This device (`BUZZ_This_device`) | T5500's npub — public, in `.env` |
 | CLI identity (`BUZZ_IDENTITY_KEY`) | **secret** — nsec, in `.env` and Paperclip secret store only |
 | CLI | `%LOCALAPPDATA%\buzz\buzz.exe` (also `buzz-agent.exe`, `buzz-acp.exe`, `buzz-dev-mcp.exe`) |
 | Hermes profile | `~/.buzz` — `buzz.bat` = `hermes -p buzz` |
@@ -42,7 +42,7 @@ and reads the last 30 at session start. Same for judge lanes. The line is
 prefixed automatically:
 
 ```
-[2026-09-03T19:41Z · SABRETOOTH · claude-judge · ANTIGRAVITY@5fc2af10] <what you did>
+[2026-09-03T19:41Z · T5500 · claude-judge · ANTIGRAVITY@5fc2af10] <what you did>
 ```
 
 `<what you did>` = what landed · where (path) · evidence (sha / tool result).
@@ -76,7 +76,7 @@ the author. Default is `claude-judge`.
    is present; `git rev-parse` in the ledger line then names the right repo.
 4. `ops/buzz/ledger.sh "node online · $(hostname) · role: <dream-server|ai-solutions>"`.
 5. Add the node to `docs/ops/NODE-AND-PORT-MAP.md`. **Do not** recreate a
-   `nodes/<name>/` vault — that pattern produced the stale 9020 notes.
+   `nodes/<name>/` vault — that pattern produced the stale T5500 notes.
 
 ## What is NOT the ledger
 
@@ -88,7 +88,7 @@ the author. Default is `claude-judge`.
 
 ## Verification record
 
-- `buzz channels list` against the relay from Sabretooth — **VERIFIED** 2026-09-03,
+- `buzz channels list` against the relay from T5500 — **VERIFIED** 2026-09-03,
   identity loaded from `.env` at runtime, 7 channels returned.
 - Channel `node-ledger` create + first post — see the judge journal entry for
   the sha and the message id.

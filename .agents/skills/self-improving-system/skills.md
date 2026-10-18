@@ -19,6 +19,10 @@ Read this index on session start. DO NOT preload skills — read the SKILL.md yo
 - **workspace-memory** — Silent memory secretary
 - **hermes-evolution** — Propose agent self-improvements
 - **hermes-agent-skill-authoring** — In-repo SKILL.md authoring
+- **gemini-perpetual-wheel** — Gemini 4 Perpetual Wheel (50->10->+50 autonomous task engine, $10k revenue goal, Ollama launch wrappers, Dual OmniRoute/Ollama failover)
+- **gemini-cobuilder** — Standing co-builder protocol for Gemini on T5500
+- **ultracode-house** — Full house map (nodes, ports, MCPs, dashboards, memory, lanes)
+- **t5500-node** — T5500 production node final state and verification
 
 ## Workflows
 - **writing-plans** — Plan before multi-step code tasks
@@ -55,8 +59,8 @@ Read this index on session start. DO NOT preload skills — read the SKILL.md yo
 ## Dateapp / platform
 - **dateapp-swarm** — YouAndINotAI launch swarm dispatch
 - **dateapp-gui-agent** / **dateapp-growth-agent** / **dateapp-ops-agent** / **dateapp-payments-agent** — swarm lanes
-- **fables-house** — Bring up/verify/heal full Sabretooth stack
-- **sabretooth-ops** — Operate SABRETOOTH-NODE stack (OmniRoute :20128, Mission Control :3151)
+- **fables-house** — Bring up/verify/heal full T5500 stack
+- **t5500-ops** — Operate T5500-NODE stack (OmniRoute :20128, Mission Control :3100)
 - **payments** — Square primary + PayPal + Cash App + Plaid; Stripe banned
 - **revenue-model** — Revenue guidance for Trash Or Treasure Online Recycler LLC
 - **growth-marketer** — Growth marketing (experimentation, funnels)
@@ -87,3 +91,4 @@ Read this index on session start. DO NOT preload skills — read the SKILL.md yo
 - `/mnt/c/antigravity/...` (WSL paths, dead)
 - `skills/self-learning`, `skills/pi-planning-with-files`, `skills/planning-with-files-*` (empty dirs)
 - Any path under the `skills/` farm that has no SKILL.md (stub)
+

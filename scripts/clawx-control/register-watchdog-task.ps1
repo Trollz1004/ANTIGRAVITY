@@ -5,4 +5,4 @@ if (-not (Test-Path $installer)) {
     throw "Missing installer: $installer"
 }
 
-pwsh -NoProfile -ExecutionPolicy Bypass -File $installer -NodeProfile 9020 -RepoRoot $repoRoot
+pwsh -NoProfile -ExecutionPolicy Bypass -File $installer -NodeProfile T5500 -RepoRoot $repoRoot

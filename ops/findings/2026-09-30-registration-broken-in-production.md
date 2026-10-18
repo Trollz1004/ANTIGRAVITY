@@ -2,7 +2,7 @@
 
 **Status:** VERIFIED
 **Date:** 2026-09-30
-**Discovered by:** Hermes (Sabretooth), checking a judge's "unverified deployment ordering" remark
+**Discovered by:** Hermes (T5500), checking a judge's "unverified deployment ordering" remark
 **Severity:** Critical — no new user can create an account on the live site
 
 ## The live symptom, reproduced

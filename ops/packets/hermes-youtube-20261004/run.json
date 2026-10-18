@@ -1,0 +1,339 @@
+{
+  "day": "20261004",
+  "started": "2026-10-09T01:52:31.803962-04:00",
+  "finished": "2026-10-09T01:55:37.851264-04:00",
+  "host": "",
+  "unattended": false,
+  "shipped": false,
+  "exit_code": 0,
+  "stages": [
+    {
+      "stage": "preflight",
+      "status": "OK",
+      "detail": "ffmpeg+ffprobe on PATH, repo at C:\\ANTIGRAVITY"
+    },
+    {
+      "stage": "source",
+      "status": "SKIPPED",
+      "detail": "20261004 already sourced (3861 bytes)"
+    },
+    {
+      "stage": "parse",
+      "status": "OK",
+      "detail": "5 stories, title \"Yesterday's News Today — October 04, 2026\"",
+      "warnings": []
+    },
+    {
+      "stage": "voice",
+      "status": "OK",
+      "detail": "backend=edge (forced by --tts edge)",
+      "backend": "edge"
+    },
+    {
+      "stage": "render",
+      "status": "OK",
+      "detail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261004\\20261004.mp4 (87.704s, 11920554 bytes)"
+    },
+    {
+      "stage": "verify",
+      "status": "OK",
+      "detail": "18 gates passed: 87.704s, 1080x1920, mean audio -19.3 dB, min luma stddev 37.64"
+    },
+    {
+      "stage": "upload",
+      "status": "SKIPPED",
+      "detail": "--upload off; the mp4 stays local"
+    }
+  ],
+  "gates": {
+    "passed": 18,
+    "checks": [
+      {
+        "check": "parse:stories",
+        "ok": true,
+        "detail": "parsed 5 stories (need >= 3)"
+      },
+      {
+        "check": "parse:story1_narration",
+        "ok": true,
+        "detail": "story 1 narration is 40 words"
+      },
+      {
+        "check": "parse:story2_narration",
+        "ok": true,
+        "detail": "story 2 narration is 43 words"
+      },
+      {
+        "check": "parse:story3_narration",
+        "ok": true,
+        "detail": "story 3 narration is 51 words"
+      },
+      {
+        "check": "parse:story4_narration",
+        "ok": true,
+        "detail": "story 4 narration is 30 words"
+      },
+      {
+        "check": "parse:story5_narration",
+        "ok": true,
+        "detail": "story 5 narration is 40 words"
+      },
+      {
+        "check": "mp4:size",
+        "ok": true,
+        "detail": "20261004.mp4 is 11920554 bytes (need >= 200000)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261004\\20261004.mp4",
+        "bytes": 11920554,
+        "min_bytes": 200000
+      },
+      {
+        "check": "video:video_stream",
+        "ok": true,
+        "detail": "video stream: h264",
+        "codec": "h264"
+      },
+      {
+        "check": "video:audio_stream",
+        "ok": true,
+        "detail": "audio stream: aac",
+        "codec": "aac"
+      },
+      {
+        "check": "video:duration",
+        "ok": true,
+        "detail": "87.70s (need 20.0-900.0s)",
+        "seconds": 87.704
+      },
+      {
+        "check": "video:resolution",
+        "ok": true,
+        "detail": "1080x1920 (need 1080x1920)",
+        "width": 1080,
+        "height": 1920
+      },
+      {
+        "check": "video:pix_fmt",
+        "ok": true,
+        "detail": "pix_fmt=yuv420p (need yuv420p for player compatibility)"
+      },
+      {
+        "check": "video:audio_level",
+        "ok": true,
+        "detail": "mean -19.3 dB, peak -4.4 dB (need mean > -50.0 dB)",
+        "mean_db": -19.3,
+        "peak_db": -4.4
+      },
+      {
+        "check": "video:frames_not_blank",
+        "ok": true,
+        "detail": "lowest luma stddev 37.64 across 3 sampled frames (need >= 3.0; a flat/black frame reads ~0)",
+        "samples": [
+          {
+            "at_s": 13.16,
+            "mean": 48.49,
+            "stddev": 59.08
+          },
+          {
+            "at_s": 43.85,
+            "mean": 49.52,
+            "stddev": 60.91
+          },
+          {
+            "at_s": 74.55,
+            "mean": 38.78,
+            "stddev": 37.64
+          }
+        ]
+      },
+      {
+        "check": "thumbnail:size",
+        "ok": true,
+        "detail": "20261004-thumb.png is 89770 bytes (need >= 20000)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261004\\20261004-thumb.png",
+        "bytes": 89770,
+        "min_bytes": 20000
+      },
+      {
+        "check": "thumbnail:resolution",
+        "ok": true,
+        "detail": "1280x720 (need 1280x720)",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "check": "upload_metadata:size",
+        "ok": true,
+        "detail": "upload.json is 3184 bytes (need >= 2)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261004\\upload.json",
+        "bytes": 3184,
+        "min_bytes": 2
+      },
+      {
+        "check": "upload_metadata:keys",
+        "ok": true,
+        "detail": "has ['title', 'description', 'tags']"
+      }
+    ]
+  },
+  "video": {
+    "duration_s": 87.704,
+    "size_bytes": 11920554,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "width": 1080,
+    "height": 1920,
+    "audio": {
+      "mean_db": -19.3,
+      "peak_db": -4.4
+    },
+    "frames": {
+      "samples": [
+        {
+          "at_s": 13.16,
+          "mean": 48.49,
+          "stddev": 59.08
+        },
+        {
+          "at_s": 43.85,
+          "mean": 49.52,
+          "stddev": 60.91
+        },
+        {
+          "at_s": 74.55,
+          "mean": 38.78,
+          "stddev": 37.64
+        }
+      ],
+      "min_stddev": 37.64
+    }
+  },
+  "manifest": {
+    "day": "20261004",
+    "date": "2026-10-04",
+    "date_label": "October 04, 2026",
+    "title": "Yesterday's News Today - October 04, 2026 | Pomegranates, Walnuts, Finalists Win Big Laughs & More",
+    "story_count": 5,
+    "video": {
+      "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261004\\20261004.mp4",
+      "duration_s": 87.704,
+      "size_bytes": 11920554,
+      "video": {
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    },
+    "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261004\\20261004-thumb.png",
+    "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261004\\upload.json",
+    "tts_backends": [
+      "edge"
+    ],
+    "voiceover_verified": false,
+    "segments": [
+      {
+        "segment": "intro",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\intro.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\intro.wav",
+        "audio_seconds": 4.608,
+        "video_seconds": 5.267,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story1",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\story1.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\story1.wav",
+        "audio_seconds": 14.736,
+        "video_seconds": 15.4,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story2",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\story2.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\story2.wav",
+        "audio_seconds": 14.928,
+        "video_seconds": 15.578,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story3",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\story3.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\story3.wav",
+        "audio_seconds": 17.04,
+        "video_seconds": 17.7,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story4",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\story4.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\story4.wav",
+        "audio_seconds": 10.416,
+        "video_seconds": 11.067,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story5",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\story5.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\story5.wav",
+        "audio_seconds": 17.088,
+        "video_seconds": 17.738,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "outro",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\frames\\outro.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261004\\audio\\outro.wav",
+        "audio_seconds": 4.272,
+        "video_seconds": 4.933,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      }
+    ],
+    "parse_warnings": [],
+    "sources": [
+      {
+        "story": 1,
+        "headline": "Pomegranates, Walnuts and Berries Could Unlock Heart Failure Treatment By Producing Urolithin A",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/pomegranates-walnuts-and-berries-could-unlock-heart-failure-treatment-with-urolithin-a/"
+      },
+      {
+        "story": 2,
+        "headline": "Finalists Win Big Laughs in The Comedy Wildlife Photography Awards – LOOK",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/finalists-win-big-laughs-in-the-comedy-wildlife-photography-awards-look/"
+      },
+      {
+        "story": 3,
+        "headline": "Rare 1-in-100M ‘Ghost Lobster’ Goes to School to Help Scientists Crack Genetic Mystery–in Time for Halloween",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/100m-ghost-lobster-goes-to-college/"
+      },
+      {
+        "story": 4,
+        "headline": "AI Chatbots Will Never Replace Advice From Elders, Say Seven of 10 in New Poll",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/ai-chatbots-will-never-replace-advice-from-elders-say-seven-of-10-in-new-poll/"
+      },
+      {
+        "story": 5,
+        "headline": "Good News in History, October 4",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/events061004/"
+      }
+    ]
+  },
+  "published": null
+}

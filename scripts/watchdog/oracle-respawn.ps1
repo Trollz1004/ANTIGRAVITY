@@ -1,4 +1,4 @@
-# ANTIGRAVITY Oracle — continuous respawn loop (Sabretooth)
+# ANTIGRAVITY Oracle — continuous respawn loop (T5500)
 # Restarts down services with WindowStyle Hidden only. Never opens a browser.
 # Never uses cmd.exe. Logs to logs/oracle-respawn.log
 

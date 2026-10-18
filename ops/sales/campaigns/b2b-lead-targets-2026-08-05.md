@@ -30,17 +30,17 @@ https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/dDSMLPeCFqlOzk68juBxdK
 - 4 × Royalty/Agentic $2,500 = **$10,000**
 - 1 × Tech Debt $4,000 + 1 × Agentic $2,500 + 1 × Security $1,500 + 1 × API $1,200 ≈ **$9,200** (+ one small prepaid)
 
-## Execution blockers on Sabretooth (this node)
+## Execution blockers on T5500 (this node)
 
 - No AgentMail/Himalaya configured → cannot auto-send cold email from here
 - Reddit/Meta write needs real Chrome cookie-sync
-- X only from 9020
+- X only from T5500
 - No Square API token in session env → dedicated B2B SKU links not mintable yet (use Royalty $2.5k + email for other SKUs)
 
 ## Next operator actions
 
 1. Josh: paste Square access token into session env **or** create 4 payment links in Dashboard (Security 1500, Storefront 950, TechDebt 4000, API 1200)
-2. Josh OR 9020: post consumer caption + B2B link from live social sessions
+2. Josh OR T5500: post consumer caption + B2B link from live social sessions
 3. Hermes (when mail up): run cold pack from `cold-outreach-10k-2026-08-05.md` as an **infinite pipeline** — no 20-lead cap; keep adding ICPs and follow-ups until money lands and beyond
 4. Any paid order → update `revenue-tracker.json` collected_usd_verified with Square receipt id
 5. After $10k floor: do **not** stop — goal is continuous revenue (AI runway + taxes + growth), not a one-shot

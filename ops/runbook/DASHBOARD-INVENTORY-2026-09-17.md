@@ -31,7 +31,7 @@ Read-only survey of every dashboard/HUD/console on GitHub (`Trollz1004`, `Ai-Sol
 
 | Dashboard | Location | Port | State |
 |---|---|---|---|
-| Mission Control v5 (MC5) | `C:\ANTIGRAVITY\mission-control-v5\` | **3151** | live — current canonical Mission Control per CLAUDE.md ruling 2026-09-10 |
+| Mission Control v5 (MC5) | `C:\ANTIGRAVITY\mission-control-v5\` | **3100** | live — current canonical Mission Control per CLAUDE.md ruling 2026-09-10 |
 | AIRI | `C:\ANTIGRAVITY\ops\dashboard-airi\` | 9150 | live — embeds MC5 |
 | JARVIS | `C:\ANTIGRAVITY\ops\dashboard-jarvis\` | 9150 (per its README — same port as AIRI, unresolved overlap) | live — moved from `Trollz1004/hermes/dashboard/jarvis` today (2026-09-17) by Joshua's direction; superset of AIRI |
 | Fable's Sentry | `C:\ANTIGRAVITY\apps\fables-sentry\` | n/a (health-check tool) | live — service health wall, 8 monitored groups |
@@ -45,7 +45,7 @@ No folder named `mission-control` under `ops/` or `apps/` besides `dashboard-air
 
 Y = present with evidence, P = partial/overlaps another surface, — = not found. Emergent's cells are component-name evidence only (file list read, not content verified) — flag before treating as fully proven.
 
-| Feature | MC5 :3151 | AIRI :9150 | JARVIS :9150 | Sentry | Emergent :3210 | Hermes legacy shell | GitHub LLC-Crosslisting-OS |
+| Feature | MC5 :3100 | AIRI :9150 | JARVIS :9150 | Sentry | Emergent :3210 | Hermes legacy shell | GitHub LLC-Crosslisting-OS |
 |---|---|---|---|---|---|---|---|
 | Node cards / God's Eye | — | — | **Y** `lib/nodes.mjs`, `js/jarvis/globe.js` | P (flat health cards, no globe) | — | — | — |
 | Service health wall / Sentry | — | P (embeds MC5) | P | **Y** `apps/fables-sentry/targets.json`, `server.mjs` | P `SystemStatus.js` | — | — |

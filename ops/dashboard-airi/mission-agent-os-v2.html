@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Agent OS | Gemini Brain</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#0A0B0D',
+                        hull: '#1A1D21',
+                        panel: '#24282D',
+                        signal: '#FFD21E',
+                        hover: '#E6B800'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: theme('colors.ink'); color: #e5e7eb; }
+        .glass-panel { background: rgba(26, 29, 33, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 210, 30, 0.1); }
+        .glow-text { text-shadow: 0 0 10px rgba(255, 210, 30, 0.5); }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FFD21E; }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden selection:bg-signal selection:text-ink">
+
+    <!-- SIDEBAR -->
+    <aside class="w-72 glass-panel flex flex-col border-r border-zinc-800 relative z-20">
+        <div class="p-6 border-b border-zinc-800">
+            <div class="flex items-center gap-3 text-signal mb-2">
+                <i class="fa-solid fa-satellite-dish text-2xl"></i>
+                <h1 class="text-xl font-bold tracking-widest uppercase glow-text">Mission OS</h1>
+            </div>
+            <div class="text-xs font-mono text-zinc-500">T5500 COMMAND CENTER</div>
+        </div>
+
+        <div class="p-6 border-b border-zinc-800">
+            <div class="flex items-center gap-3 mb-1">
+                <div class="w-3 h-3 rounded-full bg-signal animate-pulse shadow-[0_0_8px_rgba(255,210,30,0.8)]"></div>
+                <h2 class="text-sm font-bold text-white tracking-widest">GEMINI ULTRA (CEO)</h2>
+            </div>
+            <div class="text-xs font-mono text-zinc-400 pl-6">Brain Active • Heartbeat 14ms</div>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto font-mono text-sm">
+            <a href="#" class="flex items-center gap-3 p-3 rounded bg-signal text-ink font-bold transition-all">
+                <i class="fa-solid fa-border-all w-5"></i>
+                <span>CEO Analytics</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 p-3 rounded text-zinc-400 hover:bg-zinc-800 hover:text-white transition-all">
+                <i class="fa-solid fa-paperclip w-5"></i>
+                <div class="flex flex-col">
+                    <span class="font-bold text-white">Paper Weights</span>
+                    <span class="text-[10px] text-zinc-500">Marketing & Outreach</span>
+                </div>
+            </a>
+            <a href="#" class="flex items-center gap-3 p-3 rounded text-zinc-400 hover:bg-zinc-800 hover:text-white transition-all">
+                <i class="fa-solid fa-heart w-5"></i>
+                <div class="flex flex-col">
+                    <span class="font-bold text-white">Paper Mates</span>
+                    <span class="text-[10px] text-zinc-500">Date App CRM</span>
+                </div>
+            </a>
+            <a href="#" class="flex items-center gap-3 p-3 rounded text-zinc-400 hover:bg-zinc-800 hover:text-white transition-all">
+                <i class="fa-solid fa-recycle w-5"></i>
+                <div class="flex flex-col">
+                    <span class="font-bold text-white">Green Papers</span>
+                    <span class="text-[10px] text-zinc-500">Online Recycle & Drops</span>
+                </div>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-zinc-800 font-mono text-[10px] text-zinc-500 flex justify-between">
+            <span>SYS: ONLINE</span>
+            <span>NODE: T5500</span>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col relative z-10 overflow-hidden bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMEEwQjBEIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMxYTFkMjEiPjwvcmVjdD4KPC9zdmc+')]">
+        
+        <!-- TOPBAR -->
+        <header class="h-16 glass-panel border-b border-zinc-800 flex items-center justify-between px-8">
+            <div class="font-mono text-xs text-zinc-400">
+                <span class="text-signal">></span> paperclip_bridge_status: <span class="text-green-500">CONNECTED</span>
+            </div>
+            <div class="flex gap-4">
+                <div class="px-3 py-1 rounded bg-zinc-800/50 border border-zinc-700 text-xs font-mono text-zinc-300">
+                    <i class="fa-brands fa-github mr-2"></i>Repo Sync: OK
+                </div>
+                <div class="px-3 py-1 rounded bg-signal/10 border border-signal/30 text-xs font-mono text-signal">
+                    <i class="fa-solid fa-bolt mr-2"></i>Offer of Offers: LIVE
+                </div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD SCROLL AREA -->
+        <div class="flex-1 overflow-y-auto p-8 space-y-8">
+            
+            <!-- OVERVIEW CARDS -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Paper Weights -->
+                <div class="glass-panel rounded-xl p-6 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-paperclip text-6xl text-white"></i>
+                    </div>
+                    <h3 class="text-zinc-400 text-xs font-mono mb-1">MARKETING HUB</h3>
+                    <h2 class="text-xl font-bold text-white mb-4">Paper Weights</h2>
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <div class="text-3xl font-bold text-signal">142</div>
+                            <div class="text-xs text-zinc-500 mt-1">Active Influencer Leads</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-mono text-green-400">+12%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paper Mates -->
+                <div class="glass-panel rounded-xl p-6 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-heart text-6xl text-white"></i>
+                    </div>
+                    <h3 class="text-zinc-400 text-xs font-mono mb-1">DATE APP CRM</h3>
+                    <h2 class="text-xl font-bold text-white mb-4">Paper Mates</h2>
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <div class="text-3xl font-bold text-white">8,405</div>
+                            <div class="text-xs text-zinc-500 mt-1">Verified Humans</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-mono text-signal">0 Bots</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Green Papers -->
+                <div class="glass-panel rounded-xl p-6 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-recycle text-6xl text-white"></i>
+                    </div>
+                    <h3 class="text-zinc-400 text-xs font-mono mb-1">FUNDING LOOP</h3>
+                    <h2 class="text-xl font-bold text-white mb-4">Green Papers</h2>
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <div class="text-3xl font-bold text-green-400">$1,240</div>
+                            <div class="text-xs text-zinc-500 mt-1">Shriners Escrow (eBay)</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-mono text-zinc-400">PayPal Giving Fund</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOWER SECTIONS -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- CEO BRAIN FEED -->
+                <div class="glass-panel rounded-xl p-6">
+                    <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-microchip text-signal"></i> CEO Brain Feed
+                    </h3>
+                    <div class="space-y-4 font-mono text-xs">
+                        <div class="flex gap-4 p-3 bg-zinc-800/50 rounded border border-zinc-700/50">
+                            <div class="text-signal">11:42 AM</div>
+                            <div class="text-zinc-300"><span class="text-white font-bold">[DIRECTIVE]</span> Pushed 'Offer of Offers' playbook.</div>
+                        </div>
+                        <div class="flex gap-4 p-3 bg-zinc-800/50 rounded border border-zinc-700/50">
+                            <div class="text-zinc-500">11:38 AM</div>
+                            <div class="text-zinc-300"><span class="text-white font-bold">[SYNC]</span> Unified .env configs across T5500.</div>
+                        </div>
+                        <div class="flex gap-4 p-3 bg-zinc-800/50 rounded border border-zinc-700/50">
+                            <div class="text-zinc-500">11:15 AM</div>
+                            <div class="text-zinc-300"><span class="text-white font-bold">[CODE]</span> Swapped Brutalism UI for Sleek Zinc/Yellow.</div>
+                        </div>
+                        <div class="flex gap-4 p-3 bg-zinc-800/50 rounded border border-zinc-700/50">
+                            <div class="text-zinc-500">10:59 AM</div>
+                            <div class="text-zinc-300"><span class="text-white font-bold">[SYSTEM]</span> Verified WhatsApp Graph API bindings.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GREEN PAPERS VERIFIED DROPS -->
+                <div class="glass-panel rounded-xl p-6">
+                    <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-file-invoice-dollar text-green-400"></i> Green Papers Log
+                    </h3>
+                    <div class="space-y-4 font-mono text-xs">
+                        <div class="flex gap-4 p-3 bg-zinc-800/50 rounded border border-zinc-700/50">
+                            <div class="text-green-400">Aug 21</div>
+                            <div class="text-zinc-300"><span class="text-white font-bold">[$7.00 USD]</span> PayPal Giving Fund to Shriners (ID: 0J035277TR...)</div>
+                        </div>
+                        <div class="flex gap-4 p-3 bg-zinc-800/50 rounded border border-zinc-700/50">
+                            <div class="text-green-400">Jul 24</div>
+                            <div class="text-zinc-300"><span class="text-white font-bold">[$1.60 USD]</span> PayPal Giving Fund to Shriners (ID: 9MV44306PD...)</div>
+                        </div>
+                        <div class="flex gap-4 p-3 bg-zinc-800/50 rounded border border-zinc-700/50">
+                            <div class="text-green-400">Jul 23</div>
+                            <div class="text-zinc-300"><span class="text-white font-bold">[$0.55 USD]</span> PayPal Giving Fund to Shriners (ID: 4MG04768XY...)</div>
+                        </div>
+                        <div class="flex gap-4 p-3 bg-zinc-800/50 rounded border border-zinc-700/50">
+                            <div class="text-green-400">Jul 17</div>
+                            <div class="text-zinc-300"><span class="text-white font-bold">[$1.20 USD]</span> PayPal Giving Fund to Shriners (ID: 6LV807674U...)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FLEET DISPATCH / PAPERCLIP TASKS -->
+                <div class="glass-panel rounded-xl p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-white font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-signal"></i> Paperclip Task Bridge
+                        </h3>
+                        <button class="text-xs font-mono bg-signal text-ink px-3 py-1 rounded hover:bg-hover font-bold">NEW TASK</button>
+                    </div>
+                    <table class="w-full text-sm text-left font-mono">
+                        <thead class="text-xs text-zinc-500 border-b border-zinc-800">
+                            <tr>
+                                <th class="pb-2 font-normal">Lane</th>
+                                <th class="pb-2 font-normal">Task</th>
+                                <th class="pb-2 font-normal">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-zinc-300 divide-y divide-zinc-800/50">
+                            <tr>
+                                <td class="py-3"><span class="text-blue-400">Emergent</span></td>
+                                <td class="py-3 text-white">Infiltrate r/Tinder</td>
+                                <td class="py-3"><span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-[10px]">EXECUTING</span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3"><span class="text-zinc-400">Grok</span></td>
+                                <td class="py-3 text-white">Attack Affiliate Grift</td>
+                                <td class="py-3"><span class="px-2 py-1 bg-zinc-700 text-zinc-300 rounded text-[10px]">QUEUED</span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3"><span class="text-pink-400">Muse</span></td>
+                                <td class="py-3 text-white">Generate QR Code Reels</td>
+                                <td class="py-3"><span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-[10px]">COMPLETED</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>
