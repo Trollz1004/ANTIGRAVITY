@@ -11,7 +11,7 @@
     "token:hash": "node dist/hash-token.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@modelcontextprotocol/sdk": "^1.32.0",
     "dotenv": "^16.4.7",
     "zod": "^3.24.2"
   },
