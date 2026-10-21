@@ -4,7 +4,7 @@
 # See RECOVERY-STATE.md. Versions below are what was installed to get
 # `python -m newsvideo.daily --status` running again, not the pinned set the
 # pipeline originally shipped against (that pin file was deleted).
-Pillow==12.3.0
+Pillow==13.0.0
 edge-tts==7.2.8
 requests==2.34.2
 
