@@ -97,4 +97,3 @@ export function SafetyTipBanner({
     </div>
   );
 }
-

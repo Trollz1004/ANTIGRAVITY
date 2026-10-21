@@ -1,15 +1,15 @@
 ﻿{
-    "checked":  "2026-10-17T13:03:41",
+    "checked":  "2026-10-19T20:20:09",
     "node":  "T5500-2-XEON-72",
     "total":  46,
-    "up":  42,
-    "notUp":  4,
+    "up":  46,
+    "notUp":  0,
     "results":  [
                     {
                         "group":  "service",
                         "name":  "Fable answers (Ollama runs models)",
-                        "status":  "DOWN",
-                        "detail":  ""
+                        "status":  "UP",
+                        "detail":  "generate returned text"
                     },
                     {
                         "group":  "service",
@@ -37,7 +37,7 @@
                     },
                     {
                         "group":  "service",
-                        "name":  "Paperclip :3917",
+                        "name":  "Paperclip :4747",
                         "status":  "UP",
                         "detail":  "200"
                     },
@@ -85,12 +85,6 @@
                     },
                     {
                         "group":  "service",
-                        "name":  "Paperclip DB :54329",
-                        "status":  "UP",
-                        "detail":  "postgres"
-                    },
-                    {
-                        "group":  "service",
                         "name":  "Cloudflare tunnel (cloudflared)",
                         "status":  "UP",
                         "detail":  "1 process(es)"
@@ -126,6 +120,12 @@
                         "detail":  "200"
                     },
                     {
+                        "group":  "domain",
+                        "name":  "https://mcp.youandinotai.com/",
+                        "status":  "UP",
+                        "detail":  "200"
+                    },
+                    {
                         "group":  "watchdog",
                         "name":  "openclaw-sentry.ps1",
                         "status":  "UP",
@@ -147,55 +147,55 @@
                         "group":  "task",
                         "name":  "ANTIGRAVITY T5500 Keepalive",
                         "status":  "UP",
-                        "detail":  "Ready, last run 2026-10-17 13:00 rc 0"
+                        "detail":  "Running, last run 2026-10-19 20:18 rc 267009"
                     },
                     {
                         "group":  "task",
                         "name":  "ANTIGRAVITY Paperclip",
                         "status":  "UP",
-                        "detail":  "Running, last run 2026-10-17 11:13 rc 267009"
+                        "detail":  "Running, last run 2026-10-19 16:42 rc 2147946720"
                     },
                     {
                         "group":  "task",
                         "name":  "ANTIGRAVITY OmniRoute",
                         "status":  "UP",
-                        "detail":  "Ready, last run 2026-10-17 08:18 rc 0"
+                        "detail":  "Ready, last run 2026-10-19 20:19 rc 0"
                     },
                     {
                         "group":  "task",
                         "name":  "ANTIGRAVITY Mission Control",
                         "status":  "UP",
-                        "detail":  "Running, last run 2026-10-17 08:17 rc 267009"
+                        "detail":  "Running, last run 2026-10-19 16:42 rc 267009"
                     },
                     {
                         "group":  "task",
                         "name":  "ANTIGRAVITY Hermes Dashboard",
                         "status":  "UP",
-                        "detail":  "Running, last run 2026-10-17 08:17 rc 267009"
+                        "detail":  "Running, last run 2026-10-19 16:42 rc 267009"
                     },
                     {
                         "group":  "task",
                         "name":  "Hermes_Gateway",
                         "status":  "UP",
-                        "detail":  "Ready, last run 2026-10-17 08:17 rc 0"
+                        "detail":  "Ready, last run 2026-10-19 16:43 rc 0"
                     },
                     {
                         "group":  "task",
                         "name":  "HermesDailyVideo",
-                        "status":  "DOWN",
-                        "detail":  "Ready, last run 2026-10-17 06:30 rc 3"
+                        "status":  "UP",
+                        "detail":  "Ready, last run 2026-10-19 06:30 rc 3"
                     },
                     {
                         "group":  "task",
                         "name":  "ANTIGRAVITY Agent Windows",
                         "status":  "UP",
-                        "detail":  "Running, last run 2026-10-17 08:17 rc 267009"
+                        "detail":  "Running, last run 2026-10-19 16:43 rc 267009"
                     },
                     {
                         "group":  "watchdog",
                         "name":  "Keepalive status.json",
                         "status":  "UP",
-                        "detail":  "0 min old"
+                        "detail":  "3 min old"
                     },
                     {
                         "group":  "rule",
@@ -248,14 +248,14 @@
                     {
                         "group":  "tool",
                         "name":  "pi",
-                        "status":  "NOT CONFIGURED",
-                        "detail":  "not installed"
+                        "status":  "UP",
+                        "detail":  "installed"
                     },
                     {
                         "group":  "tool",
                         "name":  "wrangler",
-                        "status":  "NOT CONFIGURED",
-                        "detail":  "not installed"
+                        "status":  "UP",
+                        "detail":  "installed"
                     },
                     {
                         "group":  "tool",

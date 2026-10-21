@@ -122,10 +122,10 @@ export function Login() {
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-stone-600/20 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-2 relative z-10">
-        <motion.section 
-          initial={{ opacity: 0, x: -30 }} 
-          animate={{ opacity: 1, x: 0 }} 
-          transition={{ duration: 0.6, ease: "easeOut" }}
+        <motion.section
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
           className="hidden md:flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-10 shadow-2xl shadow-amber-500/5 relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-stone-500/5 pointer-events-none" />
@@ -134,8 +134,11 @@ export function Login() {
               YouAndINotAI
             </div>
             <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-              Real people.<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-stone-400">Zero noise.</span>
+              Real people.
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-stone-400">
+                Zero noise.
+              </span>
             </h1>
             <p className="text-lg text-zinc-400 max-w-md leading-relaxed">
               Sign in to the verified side of the platform. Matching, meetups,
@@ -145,7 +148,9 @@ export function Login() {
 
           <div className="space-y-4 relative z-10 mt-12">
             <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-6 shadow-lg">
-              <div className="text-sm font-semibold text-zinc-300 uppercase tracking-widest mb-4">Inside the account</div>
+              <div className="text-sm font-semibold text-zinc-300 uppercase tracking-widest mb-4">
+                Inside the account
+              </div>
               <div className="space-y-4 text-sm font-medium text-zinc-400">
                 <div className="flex items-start gap-3">
                   <ShieldCheck size={20} className="mt-0.5 text-stone-400" />
@@ -170,29 +175,35 @@ export function Login() {
           </div>
         </motion.section>
 
-        <motion.section 
-          initial={{ opacity: 0, x: 30 }} 
-          animate={{ opacity: 1, x: 0 }} 
-          transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+        <motion.section
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
           className="flex items-center justify-center w-full"
         >
           <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl p-8 shadow-2xl relative">
             <div className="absolute inset-0 bg-gradient-to-tr from-stone-500/5 to-amber-500/5 rounded-3xl pointer-events-none" />
-            
+
             <div className="relative z-10 mb-8">
               <div className="md:hidden inline-block px-3 py-1 mb-4 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs font-semibold uppercase tracking-widest">
                 YouAndINotAI
               </div>
-              <h2 className="text-3xl font-bold text-white mb-2">Welcome back.</h2>
+              <h2 className="text-3xl font-bold text-white mb-2">
+                Welcome back.
+              </h2>
               <p className="text-sm text-zinc-400">
                 Verified humans only. Sign in to pick up where you left off.
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="relative z-10 space-y-5" noValidate>
+            <form
+              onSubmit={handleSubmit}
+              className="relative z-10 space-y-5"
+              noValidate
+            >
               <AnimatePresence>
                 {error && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
@@ -327,11 +338,11 @@ export function Login() {
             </p>
 
             <div className="relative z-10 mt-6 text-center">
-              <Link 
-                to="/" 
+              <Link
+                to="/"
                 className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-500 transition-colors hover:text-white"
               >
-                <Heart size={14} className="text-amber-500" /> 
+                <Heart size={14} className="text-amber-500" />
                 Back to YouAndINotAI
               </Link>
             </div>
@@ -341,4 +352,3 @@ export function Login() {
     </div>
   );
 }
-

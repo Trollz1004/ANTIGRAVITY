@@ -270,4 +270,3 @@ export function DiscoverSettings({ open, onClose }: DiscoverSettingsProps) {
     </AnimatePresence>
   );
 }
-

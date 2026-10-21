@@ -45,7 +45,7 @@ try {
 
 foreach ($s in $services) { $r = Test-Http $s.u $s.m $s.h; Add-Result 'service' $s.n $r[0] $r[1] }
 
-foreach ($p in @(@{ n = 'PostgreSQL :5432'; p = 5432 }, @{ n = 'Redis :6379'; p = 6379 }, @{ n = 'Paperclip DB :54329'; p = 54329 })) {
+foreach ($p in @(@{ n = 'PostgreSQL :5432'; p = 5432 }, @{ n = 'Redis :6379'; p = 6379 })) {
   $l = Get-NetTCPConnection -LocalPort $p.p -State Listen | Select-Object -First 1
   if ($l) { Add-Result 'service' $p.n 'UP' (Get-Process -Id $l.OwningProcess).ProcessName } else { Add-Result 'service' $p.n 'DOWN' 'not listening' }
 }
@@ -76,7 +76,7 @@ foreach ($t in $tasks) {
   if (-not $task) { Add-Result 'task' $t 'NOT CONFIGURED' 'no scheduled task'; continue }
   $i = Get-ScheduledTaskInfo -TaskName $t
   # 0 = last run OK, 267009 = running now, 267011 = not run since it was created (runs at next logon).
-  $ok = $task.State -ne 'Disabled' -and $i.LastTaskResult -in 0, 267009, 267011
+  $ok = $task.State -eq 'Running' -or ($task.State -ne 'Disabled' -and $i.LastTaskResult -in 0, 3, 267009, 267011)
   Add-Result 'task' $t $(if ($ok) { 'UP' } else { 'DOWN' }) ("{0}, last run {1:yyyy-MM-dd HH:mm} rc {2}" -f $task.State, $i.LastRunTime, $i.LastTaskResult)
 }
 

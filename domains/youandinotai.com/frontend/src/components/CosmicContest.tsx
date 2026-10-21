@@ -150,4 +150,3 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
     </motion.div>
   );
 }
-

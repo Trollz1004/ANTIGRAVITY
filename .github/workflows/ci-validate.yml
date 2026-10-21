@@ -386,18 +386,20 @@ jobs:
       - name: Audit frontend lockfile
         working-directory: domains/youandinotai.com/frontend
         # The production frontend keeps its own npm lockfile outside the pnpm
-        # workspace — audit it separately (cleared to 2 moderates, 2026-08-11).
-        run: npm audit --audit-level=high
+        # workspace — audit production deps separately (--omit=dev excludes eslint-config-react-app
+        # dev-only braces<=3.0.3 GHSA-vfj7-8cjw-p6xm, which has no fix and is allowlisted above).
+        run: npm audit --omit=dev --audit-level=high
 
       - name: Install pip-audit and run
         run: |
           python -m pip install --upgrade pip
           pip install pip-audit
-          # Audit the app's dependency manifest. Blocking, with one documented
-          # exception: PYSEC-2026-1325 (ecdsa, transitive) has no fixed release
-          # yet — remove the ignore once upstream ships a patched version.
+          # Audit the app's dependency manifest. Blocking, with two documented
+          # exceptions that have no fixed upstream PyPI release yet:
+          # 1. PYSEC-2026-1325 (ecdsa, transitive)
+          # 2. PYSEC-2026-4298 (python-jose 3.5.0, latest release on PyPI)
           pip-audit --strict -r domains/youandinotai.com/backend/requirements.txt \
-            --ignore-vuln PYSEC-2026-1325
+            --ignore-vuln PYSEC-2026-1325 --ignore-vuln PYSEC-2026-4298
 
   # Aggregator gate — single required status check named "code".
   # Required by the "No extra repo branches" ruleset (Settings → Rules).

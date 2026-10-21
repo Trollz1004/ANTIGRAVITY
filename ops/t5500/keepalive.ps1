@@ -1,4 +1,4 @@
-# T5500 KEEP-ALIVE — the deployed-products node's own watchdog (2026-10-05).
+﻿# T5500 KEEP-ALIVE — the deployed-products node's own watchdog (2026-10-05).
 #
 # T5500 hosts only the deployed products: the domains (through the cloudflared tunnel)
 # and the local Ollama model joshlcoleman/Fable that Hermes uses. Nobody should have to
@@ -151,7 +151,6 @@ function Test-Cloud([string]$name, [string]$url, [hashtable]$headers) {
 # Origin = local port that serves the Host header (checked directly, bypassing DNS).
 $Domains = @(
     @{ Host = 'youandinotai.com';     Mark = 'assets/index-';        Origin = 3200 },
-    @{ Host = 'mcp.youandinotai.com'; Mark = '<title>Paperclip</title>'; Origin = 4747 },
     @{ Host = 'onlinerecycle.net';    Mark = 'OnlineRecycle';        Origin = 9160 },
     @{ Host = 'dream-online.net';     Mark = 'DREAM Online';         Origin = 9160 },
     @{ Host = 'untilnokidinneed.com'; Mark = 'Until No Kid In Need'; Origin = 9160 }
@@ -163,7 +162,7 @@ function Get-NsState([string]$h) {
     if ($hit -and ((Get-Date) - $hit.At).TotalMinutes -lt 10) { return $hit.State }
     $state = 'unknown'
     try {
-        $ns = @(Resolve-DnsName $h -Type NS -DnsOnly -ErrorAction Stop | Where-Object { $_.Type -eq 'NS' } | ForEach-Object { $_.NameHost })
+        $parts = $h -split '\.'; $zone = if ($parts.Count -gt 2) { ($parts[-2..-1] -join '.') } else { $h }; $ns = @(Resolve-DnsName $zone -Type NS -DnsOnly -ErrorAction Stop | Where-Object { $_.Type -eq 'NS' } | ForEach-Object { $_.NameHost })
         if ($ns | Where-Object { $_ -match 'cloudflare\.com$' }) { $state = 'cloudflare' } elseif ($ns.Count -gt 0) { $state = 'other' }
     } catch {}
     $script:NsCache[$h] = @{ At = Get-Date; State = $state }
@@ -185,16 +184,27 @@ function Get-PublicFailures {
     foreach ($d in $Domains) {
         if ((Get-NsState $d.Host) -ne 'cloudflare') { continue }
         if (-not (Test-Origin $d)) { continue }
-        if (-not (Test-Http ('https://' + $d.Host) 20 $d.Mark)) { $bad += $d.Host }
+        $pm = if ($d.PublicMark) { $d.PublicMark } else { $d.Mark }; if (-not (Test-Http ('https://' + $d.Host) 20 $pm)) { $bad += $d.Host }
     }
     return $bad
 }
 
 # ── Stages (dependency order) ──────────────────────────────────────────────
 $Stages = @(
-    @{ Key = 'ollama'; Name = 'Ollama (Fable pinned)'; Settle = 150
-       Probe = { Test-Http 'http://127.0.0.1:11434/api/ps' 8 'joshlcoleman/Fable' }
+    @{ Key = 'ollama'; Name = 'Ollama (Fable pinned)'; Settle = 25
+       Probe = { (Test-Path 'C:\Users\joshi\AppData\Local\Programs\Ollama\lib\ollama\llama-server.exe') -and (Test-Http 'http://127.0.0.1:11434/api/tags' 8 'joshlcoleman/Fable') }
        Heal  = {
+           $llamaSrv = 'C:\Users\joshi\AppData\Local\Programs\Ollama\lib\ollama\llama-server.exe'
+           $cachedSetup = 'C:\Users\joshi\AppData\Local\Ollama\OllamaSetup.exe'
+           if (-not (Test-Path $llamaSrv) -and (Test-Path $cachedSetup)) {
+               Log '  llama-server.exe missing (broken auto-upgrade) - repairing from cached OllamaSetup.exe'
+               Get-Process ollama, 'ollama app' -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+               Start-Sleep -Seconds 3
+               Start-Process -FilePath $cachedSetup -ArgumentList @('/VERYSILENT', '/NORESTART', '/SUPPRESSMSGBOXES') -Wait -WindowStyle Hidden
+               Get-Process 'ollama app' -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+               Remove-Item 'C:\Users\joshi\AppData\Local\Ollama\updates_v2' -Recurse -Force -ErrorAction SilentlyContinue
+               Log ('  OllamaSetup repair finished (llama-server exists=' + (Test-Path $llamaSrv) + ')')
+           }
            if (-not (Test-Port 11434)) {
                Log '  starting ollama serve'
                Start-Process -FilePath $Ollama -ArgumentList 'serve' -WindowStyle Hidden
@@ -299,30 +309,20 @@ $Stages = @(
            }
        } },
 
-    @{ Key = 'paperclip'; Name = 'Paperclip HQ (single instance) :4747'; Settle = 170; Needs = @('postgres')
-       # 2026-10-17: this node runs exactly ONE Paperclip. Port 4747, upstream
-       # paperclipai, Postgres :5432/paperclip_hq, public via mcp.youandinotai.com.
-       # The :3917 embedded-Postgres instance is retired (its task, launcher and data
-       # dir are gone) - do not resurrect it.
-       # Runs under the NON-elevated task "ANTIGRAVITY Paperclip"; that launcher waits for
-       # :5432 and retries the startup doctor, so this stage only re-launches the task
-       # when :4747 stops answering.
-       Probe = { Test-Http 'http://127.0.0.1:4747/api/health' 8 '"deploymentMode"' }
+    @{ Key = 'social-command-center'; Name = 'Social Command Center & Marketing (:3130/marketing)'; Settle = 20; Needs = @('mission-control')
+       # 2026-10-20: Paperclip is permanently retired by Joshua's ruling. All marketing plans,
+       # 4-gate compliance/copy-score checks, Fable voice drafting, and 22-platform Social Command
+       # Center run natively inside Mission Agent OS on :3130 (/marketing & /api/marketing/plans).
+       Probe = { Test-Http 'http://127.0.0.1:3130/api/marketing/plans' 8 'social-command-center-v4' }
        Heal  = {
-           $t = Get-ScheduledTask -TaskName 'ANTIGRAVITY Paperclip' -ErrorAction SilentlyContinue
-           if (-not $t) { Log '  task "ANTIGRAVITY Paperclip" missing - cannot start Paperclip'; return }
-           if ($t.State -eq 'Running') {
-               $age = ((Get-Date) - (Get-ScheduledTaskInfo -TaskName 'ANTIGRAVITY Paperclip').LastRunTime).TotalMinutes
-               if ($age -lt 5) { Log ('  Paperclip task still booting ({0:N1} min) - waiting' -f $age); return }
-               Stop-ScheduledTask -TaskName 'ANTIGRAVITY Paperclip'; Start-Sleep -Seconds 3
-           }
-           Start-ScheduledTask -TaskName 'ANTIGRAVITY Paperclip'
-           Log '  started task "ANTIGRAVITY Paperclip"'
+           if (Test-Port 3130) { Stop-PortOwner 3130; Start-Sleep -Seconds 2 }
+           Start-Process -FilePath $Node -ArgumentList @('mission-os\server.mjs') -WorkingDirectory $Repo -WindowStyle Hidden
+           Log '  restarted mission-os\server.mjs (:3130) for Social Command Center'
        } },
 
     @{ Key = 'omniroute'; Name = 'OmniRoute gateway :20128'; Settle = 90
        # Non-elevated task "ANTIGRAVITY OmniRoute". 401 without a key = alive and enforcing auth.
-       Probe = { try { Invoke-WebRequest 'http://127.0.0.1:20128/v1/models' -UseBasicParsing -TimeoutSec 8 | Out-Null; $true } catch { $_.Exception.Response.StatusCode.value__ -in 401, 403 } }
+       Probe = { try { $r = Invoke-WebRequest 'http://127.0.0.1:20128/' -UseBasicParsing -TimeoutSec 10; ($r.StatusCode -eq 200) } catch { $_.Exception.Response.StatusCode.value__ -in 401, 403 } }
        Heal  = {
            $t = Get-ScheduledTask -TaskName 'ANTIGRAVITY OmniRoute' -ErrorAction SilentlyContinue
            if (-not $t) { Log '  task "ANTIGRAVITY OmniRoute" missing'; return }
@@ -423,7 +423,7 @@ function Write-Status {
     $doms = foreach ($d in $Domains) {
         $ns = Get-NsState $d.Host
         $origin = if (Test-Origin $d) { 'OK' } else { 'DOWN' }
-        $public = if ($ns -ne 'cloudflare') { 'PENDING NAMESERVERS' } elseif (Test-Http ('https://' + $d.Host) 20 $d.Mark) { 'UP' } else { 'DOWN' }
+        $pm = if ($d.PublicMark) { $d.PublicMark } else { $d.Mark }; $public = if ($ns -ne 'cloudflare') { 'PENDING NAMESERVERS' } elseif (Test-Http ('https://' + $d.Host) 20 $pm) { 'UP' } else { 'DOWN' }
         [ordered]@{ domain = $d.Host; nameservers = $ns; origin = $origin; public = $public }
     }
     $o = [ordered]@{ updated = (Get-Date).ToString('s'); node = $env:COMPUTERNAME; stages = @($stages); domains = @($doms) }

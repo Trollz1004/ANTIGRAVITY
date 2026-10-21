@@ -17,7 +17,9 @@ const GATED_PREFIXES = [
 function needsVerification(pathname: string): boolean {
   const clean = pathname.replace(/\/+$/, '');
   if (clean === '/app') return true;
-  return GATED_PREFIXES.some(p => clean === p || clean.startsWith(p + '/') || clean.startsWith(p + '-'));
+  return GATED_PREFIXES.some(
+    p => clean === p || clean.startsWith(p + '/') || clean.startsWith(p + '-')
+  );
 }
 
 export function AuthGuard() {

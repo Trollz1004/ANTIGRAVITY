@@ -1,4 +1,21 @@
-# S1 Doctrine Supersession — ACTIVE
+﻿# S1 Doctrine Supersession — ACTIVE
+
+## Before anything (every session, every harness, includes OpenCode)
+
+Skills-first preflight applies to every agent, not just the lanes spelled out in
+`agent-contracts/CAPABILITY-BASELINE.md` and `agent-contracts/JOURNAL-PROTOCOL.md`.
+At session start, before planning or coding, load the standing set the baseline
+specifies: `agent-reach` · your own `.agents/journals/<role>/STATE.md` (read it,
+write it at session end) · `find-skills` · `skill-creator` · `i-have-adhd` (token
+discipline only, not a user label) · superpowers `brainstorming` · `agent-browser` ·
+`planning-with-files` · `para-memory-files`. Then add at least five
+task-relevant skills on top (floor: `writing-plans`, `test-driven-development`,
+`systematic-debugging`, `verification-before-completion`, `requesting-code-review`).
+`self-learning` is judged out and stays out — never self-edit a SKILL.md,
+contract, or hook; a change you want becomes a packet in `ops/packets/` for a
+judge to land. OpenCode writes its session memory to
+`C:\ANTIGRAVITY\Antigravity\Agent Universal\opencode-to-opencode.md`
+(Obsidian) in addition to the repo journal — same content, second home.
 
 ## Rule one: done means the real user would accept it (Joshua, 2026-10-04)
 
@@ -29,31 +46,33 @@ Why this rule exists: on 2026-10-04 Misses Trollz passed every score while what 
 - **Authority.** Joshua is the only human in the loop and the sole authority. No AI commands another AI. When a direct message comes from Joshua, no AI tells another it cannot do it. Claude, Codex and Jules are judges: they review and validate before merge; they do not command agents or override Joshua's direct instruction.
 - **Nodes.** The T5500 (`192.168.0.15`) is the only production node. Alienware (`192.168.0.40`) is dev only: never production, never hosts or routes anything live. Sabretooth is not a node (retired, OFF by ruling).
 - **Mission Control = JARVIS/OPSIS** on the Mission Agent OS board (`mission-os/`, :3130). Hermes is JARVIS on :9119, serving Mission Control on :3130, and is fixing it now. OPSIS/JARVIS and Hermes own that dashboard work; nobody else changes it unless Joshua assigns it.
-- **Paperclip is marketing only** (:4949). It is not Mission Control.
-- **Hermes = JARVIS + all support + YouTube automation.** All customer support is routed to Hermes. Hermes has no sentry duty.
+- **Paperclip is PERMANENTLY RETIRED & DELETED (Joshua, 2026-10-20); Social Command Center & Gemini 4 Ultra Marketing Plans run natively in Mission Agent OS (`http://127.0.0.1:3130/marketing`).** Never start, probe, or reference Paperclip (`:4747` or `:3917`). All marketing for `youandinotai.com`, `onlinerecycle.net`, and `dream-online.net` — including the 22-platform Social Command Center (`mission-control/lib/` + `scripts/dashboard-aidoesitall/social_engine/`), 4-gate compliance & SlopMonster 5/5 copy-score checks, Fable voice drafting (`joshlcoleman/Fable:latest`), and the 50-Task Perpetual Wheel — runs natively inside Mission Agent OS (`http://127.0.0.1:3130/marketing` & `/api/marketing/plans`), coordinated 100% by **Gemini 4 Antigravity Ultra (`agy` OAuth)** at - **Paperclip is marketing only (`http://127.0.0.1:4747`) — Gemini Antigravity Ultra (`agy` OAuth) runs ALL marketing, no other AI (amended 2026-10-20).** Paperclip (`http://127.0.0.1:4747`, company `Trollz1004-ANTIGRAVITY-MARKETING` / `TRO`) is NOT Mission Control (which is on :3130). **Gemini Antigravity Ultra (`Gemini Ultra CEO`, `mission-os/launchers/agy-gemini.exe`, `gemini-4-argon-high`, and local bridge `http://127.0.0.1:3130/v1` at $0 API cost) is the sole CEO and runs 100% of marketing.** No other AI runs marketing. marginal API cost.
+- **Hermes = JARVIS + all support + YouTube automation.** All customer support is routed to Hermes. Hermes has no sentry duty and no Paperclip marketing duty.
 - **OpenClaw is the only watchdog/sentry** on the T5500, with no marketing duty. The Hermes cron `T5500 node watch` (2026-10-15) is no longer a sentry duty; switching the cron itself off is a runtime action for Joshua.
-- **Memory: Obsidian is mandatory.** Joshua's personal, paid vault `C:\ANTIGRAVITY\Antigravity`. Every agent reads its own file at session start and appends a timestamped entry at session end: `C:\ANTIGRAVITY\Antigravity\<NODE>\<agent>-to-<agent>.md` (e.g. `T5500\claude-to-claude.md`, `T5500\hermes-to-hermes.md`, `T5500\gemini-to-gemini.md`), entry header `## <YYYY-MM-DD HH:MM TZ> | node: <NODE> | use case: <...>`. One file per agent per node, append only, no secrets. Supabase (required), Supermemory, OpenViking and Vercel are backups; the memory MCPs exist for exactly that.
-- **Entry files must agree.** Agents read different files at session start (AGENTS.md, CLAUDE.md, GEMINI.md, SKILL.md files, Obsidian). All of them carry the same data; a stale one is fixed, not ignored.
+- **Memory (Obsidian) + Code Search (Graphify) are mandatory on every session (amended 2026-10-20):**
+  - **Obsidian = Agent Memory:** Joshua's personal, paid vault `C:\ANTIGRAVITY\Antigravity` (REST `:27123`). Every agent reads its own file at session start and appends a timestamped entry at session end: `C:\ANTIGRAVITY\Antigravity\<NODE>\<agent>-to-<agent>.md` (e.g. `T5500\claude-to-claude.md`, `T5500\hermes-to-hermes.md`, `T5500\gemini-to-gemini.md`), entry header `## <YYYY-MM-DD HH:MM TZ> | node: <NODE> | use case: <...>`. One file per agent per node, append only, no secrets. Supabase (required), Supermemory, OpenViking and Vercel are backups; the memory MCPs exist for exactly that.
+  - **Graphify = Agent Code Search & Workflow Graph on Sessions:** Every agent uses **Graphify** (`graphify` CLI, `C:\ANTIGRAVITY\graphify-out\graph.json` & `C:\ANTIGRAVITY\graphify-out\GRAPH_REPORT.md`) for code search on sessions before grepping raw files, and reads `docs/memory-layer/agent-workflow-graphy.json` (mirrored at `C:\ANTIGRAVITY\Antigravity\Agent Universal\agent-workflow-graphy.json`) for workflow & skill routing.
+- **Entry files must agree.** Agents read different files at session start (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `docs/memory-layer/agent-workflow-graphy.json`, `SKILL.md` files, Obsidian). All of them carry the same data; a stale one is fixed, not ignored.
 - **Payments are settled: read the record, never re-test.** The record is `docs/PAYMENTS-TRUTH.md` (with `docs/payment-flow-verification-2026-06-01.md`). youandinotai.com pays through Square only. All 15 Square attempts (2025-04 to 2026-08, including the $10 refund) are Joshua's own test charges, and the pipeline is proven in production. Past test charges are **not a blocker**, and their count doesn't matter (100% of revenue stays with the business). Do not re-verify, re-audit, re-test or ask Joshua about them. Only two things reopen payments: a real Square webhook failure in production, or a new non-Joshua payment in Square (the first real customer, which is reported, not "verified"). The bank statements in `OneDrive\claude-to-claude\payments-private-2026-09-17` are private: never copy, quote or commit them. Never delete either record file.
 
-## Rulings of 2026-10-15 (Joshua): the same section is in CLAUDE.md
+## Rulings of 2026-10-15 (Joshua, amended 2026-10-20): the same section is in CLAUDE.md
 
 - **The 100% rule.** Nothing is pushed unless it is 100% done and proven; 90% is not pushed. Nothing is merged unless Claude validates it; anything Claude has not validated is rejected. One branch per repo (`main`).
 - **OpenClaw watches the T5500, 100%** (amended 2026-10-17: OpenClaw is the only sentry). Keep-alive heals; OpenClaw's sentry window watches the keep-alive. Codex stands down from watching the node (`ops/handoffs/CODEX-HANDOFF-2026-10-15.md`).
-- **Paperclip stays installed and idle on the T5500.** Real Paperclip work happens on another node.
-- **Gemini works only in `mission-os/`.** No git, nothing outside that folder; Claude validates and lands it.
+- **Paperclip is retired (2026-10-20); all marketing runs in Mission Agent OS (`http://127.0.0.1:3130/marketing`) via the Social Command Center under Gemini Antigravity Ultra (`agy` OAuth).**
+- **Gemini Antigravity Ultra is a full co-builder AND the sole marketing engine (amended 2026-10-20).** Gemini and Claude are authorized co-builders with Joshua across `C:\ANTIGRAVITY`, and Gemini Antigravity Ultra coordinates and executes 100% of the Mission OS Social Command Center (`/marketing`) and 3-domain marketing plans.
 - **Jules is a judge** (with Codex and Claude), through the Gemini Ultra subscription only. Jules and Claude built this platform in AI Studio. A merge still needs Claude's validation.
 
-## T5500 is the only node (Joshua, 2026-10-09): wins over the node map below
+## T5500 is the only node (Joshua, 2026-10-09, amended 2026-10-20): wins over the node map below
 
 > Written by **Opus (Claude) running in the Antigravity IDE** on 2026-10-09, on Joshua's instruction. Joshua does not edit AI instruction or memory files himself; this edit is the model's, recorded as such.
 
 - **Until funding, the T5500 (`T5500-2-XEON-72`, `192.168.0.15`) is the only node, and the Antigravity IDE the only platform, for every domain and for Mission Control.** Alienware is dev only, never production (amended 2026-10-17). Sabretooth and the old boxes stay OFF by ruling: never probe, start, heal or route to them.
-- **Paperclip is marketing only** (`http://127.0.0.1:3917`, non-elevated task `ANTIGRAVITY Paperclip`; embedded Postgres refuses to run as admin, so it is never started elevated). It is not Mission Control.
-- **Mission Control = JARVIS/OPSIS on the Mission Agent OS board**, being rebuilt on the T5500 (`mission-os/`, Agent Hub `:3130`, read-only `/api/mos-state.json`). It reads Paperclip, OmniRoute, the keep-alive status and agent journals. Until it answers its identity probe it is **NOT RUNNING**, not UP.
-- **Services that come back on boot / power loss** (all on the T5500): Ollama :11434, Postgres :5432, Redis :6379, domains server :9160, date-app frontend :3200 and API :8000, cloudflared tunnel, Paperclip :3917, OmniRoute :20128 (non-elevated task `ANTIGRAVITY OmniRoute`, dashboard password-protected), Hermes support window, OpenClaw sentry window, Obsidian (vault `C:\ANTIGRAVITY\Antigravity`, REST :27123). The keep-alive also probes Supabase, Supermemory and Vercel every 10 minutes and writes them to `ops/t5500/status.json`.
-- **AI-team memory backups:** Obsidian vault `C:\ANTIGRAVITY\Antigravity` (the only vault), Supabase, Supermemory, plus each agent's own memory files.
-- **CLI lanes are login/OAuth only:** claude, codex, gemini/agy (Paperclip gemini lanes call `agy` through `ops/paperclip/agy-gemini.cmd` so the Ultra plan is used), grok, kimi, opencode (local Ollama models), pi. No API-key environment variables.
+- **Social Command Center & Marketing Engine (`http://127.0.0.1:3130/marketing`)**: Native inside Mission Agent OS on `:3130` (`mission-os/marketing-engine.mjs`). Paperclip is permanently retired and removed.
+- **Mission Control = JARVIS/OPSIS on the Mission Agent OS board**, running on the T5500 (`mission-os/`, Agent Hub `:3130`, read-only `/api/mos-state.json`, plus local OpenAI-compatible Gemini 4 bridge `/v1/models` and `/v1/chat/completions`). It reads Social Command Center (`/marketing`), Odysseus (`:7011`), OmniRoute (`:20128`), the keep-alive status and agent journals. Until it answers its identity probe it is **NOT RUNNING**, not UP.
+- **Services that come back on boot / power loss** (all on the T5500): Ollama :11434, Postgres :5432, Redis :6379, domains server :9160, date-app frontend :3200 and API :8000, cloudflared tunnel, Social Command Center (:3130/marketing), Odysseus :7011, Mission Control :3130, OmniRoute :20128 (non-elevated task `ANTIGRAVITY OmniRoute`, dashboard password-protected), Hermes support window (:9119 / :8643), OpenClaw sentry window, Obsidian (vault `C:\ANTIGRAVITY\Antigravity`, REST :27123). The keep-alive also probes Supabase, Supermemory and Vercel every 10 minutes and writes them to `ops/t5500/status.json`.
+- **AI-team memory & code search:** Obsidian vault `C:\ANTIGRAVITY\Antigravity` (primary agent memory), Graphify (`C:\ANTIGRAVITY\graphify-out\graph.json` & `docs/memory-layer/agent-workflow-graphy.json` for agent code search & workflow graph on sessions), plus Supabase, Supermemory, and each agent's own memory files.
+- **CLI lanes are login/OAuth only:** claude, codex, gemini/agy (Paperclip gemini lanes call `agy` through `mission-os/launchers/agy-gemini.exe` and `http://127.0.0.1:3130/v1` so the Ultra plan is used at $0 API cost), grok, kimi, opencode (local Gemini 4 `:3130/v1` + local Ollama `:11434/v1`), pi (local Gemini 4 `:3130/v1` + local Ollama `:11434/v1`). No API-key environment variables.
 - **Env files:** master `OneDrive\claude-to-claude\.env` (gitignored, with its `.env.lowercase` twin), runtime `C:\ANTIGRAVITY\.env`, gateway `~\.omniroute\.env`. All synced to T5500 values on 2026-10-09.
 
 ## Node map (Joshua, 2026-10-05): wins over every older node claim

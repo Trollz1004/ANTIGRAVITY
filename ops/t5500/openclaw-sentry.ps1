@@ -48,12 +48,16 @@ $logPos = if (Test-Path $KeepLog) { (Get-Item $KeepLog).Length } else { 0 }
 while ($true) {
     # 1. Keepalive engine alive and fresh?
     $task = Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue
+    $info = if ($task) { Get-ScheduledTaskInfo -TaskName $TaskName -ErrorAction SilentlyContinue } else { $null }
     $age = if (Test-Path $StatusFile) { ((Get-Date) - (Get-Item $StatusFile).LastWriteTime).TotalMinutes } else { 999 }
+    $runAge = if ($info -and $info.LastRunTime) { ((Get-Date) - $info.LastRunTime).TotalMinutes } else { 999 }
+    if (-not $script:LastRestart) { $script:LastRestart = Get-Date '2000-01-01' }
+    $sinceRestart = ((Get-Date) - $script:LastRestart).TotalMinutes
     if (-not $task) {
         Say "keepalive task '$TaskName' is missing - cannot self-heal; tell Joshua" 'Red'
-    } elseif ($task.State -ne 'Running' -or $age -gt 8) {
-        Say ("keepalive not healthy (state {0}, status {1:N0} min old) - restarting it" -f $task.State, $age) 'Yellow'
-        try { Stop-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue; Start-ScheduledTask -TaskName $TaskName; Say 'keepalive restarted' 'Green' }
+    } elseif ($task.State -ne 'Running' -or ($age -gt 8 -and $runAge -gt 8 -and $sinceRestart -gt 8)) {
+        Say ("keepalive not healthy (state {0}, status {1:N0} min old, run {2:N0} min old) - restarting it" -f $task.State, $age, $runAge) 'Yellow'
+        try { $script:LastRestart = Get-Date; Stop-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue; Start-ScheduledTask -TaskName $TaskName; Say 'keepalive restarted' 'Green' }
         catch { Say ('restart failed: ' + $_.Exception.Message) 'Red' }
     }
 

@@ -86,10 +86,10 @@ export function Register() {
       <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-amber-600/20 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-2 relative z-10">
-        <motion.section 
-          initial={{ opacity: 0, x: -30 }} 
-          animate={{ opacity: 1, x: 0 }} 
-          transition={{ duration: 0.6, ease: "easeOut" }}
+        <motion.section
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
           className="hidden md:flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-10 shadow-2xl shadow-stone-500/5 relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-stone-500/10 to-amber-500/5 pointer-events-none" />
@@ -98,8 +98,11 @@ export function Register() {
               Join YouAndINotAI
             </div>
             <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-              Human first.<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-stone-400 to-amber-400">Verified next.</span>
+              Human first.
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-stone-400 to-amber-400">
+                Verified next.
+              </span>
             </h1>
             <p className="text-lg text-zinc-400 max-w-md leading-relaxed">
               Create the account first, then finish profile setup, matching, and
@@ -108,7 +111,9 @@ export function Register() {
           </div>
 
           <div className="relative z-10 mt-12 rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-6 shadow-lg">
-            <div className="text-sm font-semibold text-zinc-300 uppercase tracking-widest mb-4">Before matching</div>
+            <div className="text-sm font-semibold text-zinc-300 uppercase tracking-widest mb-4">
+              Before matching
+            </div>
             <div className="space-y-4 text-sm font-medium text-zinc-400">
               <div className="flex items-start gap-3">
                 <ShieldCheck size={20} className="mt-0.5 text-stone-400" />
@@ -132,20 +137,22 @@ export function Register() {
           </div>
         </motion.section>
 
-        <motion.section 
-          initial={{ opacity: 0, x: 30 }} 
-          animate={{ opacity: 1, x: 0 }} 
-          transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+        <motion.section
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
           className="flex items-center justify-center w-full"
         >
           <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl p-8 shadow-2xl relative">
             <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 to-stone-500/5 rounded-3xl pointer-events-none" />
-            
+
             <div className="relative z-10 mb-8">
               <div className="md:hidden inline-block px-3 py-1 mb-4 rounded-full border border-stone-500/30 bg-stone-500/10 text-stone-300 text-xs font-semibold uppercase tracking-widest">
                 Create Account
               </div>
-              <h2 className="text-3xl font-bold text-white mb-2">Join the platform.</h2>
+              <h2 className="text-3xl font-bold text-white mb-2">
+                Join the platform.
+              </h2>
               <p className="text-sm text-zinc-400">
                 Set up the account, confirm the required policies, and move into
                 your profile flow.
@@ -155,7 +162,7 @@ export function Register() {
             <form onSubmit={handleSubmit} className="relative z-10 space-y-5">
               <AnimatePresence>
                 {error && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
@@ -168,7 +175,10 @@ export function Register() {
 
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="relative block md:col-span-2 group">
-                  <User size={18} className="absolute left-4 top-1/2 -tranzinc-y-1/2 text-zinc-500 transition-colors group-focus-within:text-stone-400" />
+                  <User
+                    size={18}
+                    className="absolute left-4 top-1/2 -tranzinc-y-1/2 text-zinc-500 transition-colors group-focus-within:text-stone-400"
+                  />
                   <input
                     type="text"
                     required
@@ -181,7 +191,10 @@ export function Register() {
                 </label>
 
                 <label className="relative block group">
-                  <Mail size={18} className="absolute left-4 top-1/2 -tranzinc-y-1/2 text-zinc-500 transition-colors group-focus-within:text-stone-400" />
+                  <Mail
+                    size={18}
+                    className="absolute left-4 top-1/2 -tranzinc-y-1/2 text-zinc-500 transition-colors group-focus-within:text-stone-400"
+                  />
                   <input
                     type="email"
                     required
@@ -193,12 +206,17 @@ export function Register() {
                 </label>
 
                 <label className="relative block group">
-                  <CalendarDays size={18} className="absolute left-4 top-1/2 -tranzinc-y-1/2 text-zinc-500 transition-colors group-focus-within:text-stone-400" />
+                  <CalendarDays
+                    size={18}
+                    className="absolute left-4 top-1/2 -tranzinc-y-1/2 text-zinc-500 transition-colors group-focus-within:text-stone-400"
+                  />
                   <input
                     type="text"
                     required
                     value={dateOfBirth}
-                    onChange={e => setDateOfBirth(formatDateInput(e.target.value))}
+                    onChange={e =>
+                      setDateOfBirth(formatDateInput(e.target.value))
+                    }
                     inputMode="numeric"
                     maxLength={14}
                     placeholder="MM / DD / YYYY"
@@ -207,7 +225,10 @@ export function Register() {
                 </label>
 
                 <label className="relative block md:col-span-2 group">
-                  <Lock size={18} className="absolute left-4 top-1/2 -tranzinc-y-1/2 text-zinc-500 transition-colors group-focus-within:text-stone-400" />
+                  <Lock
+                    size={18}
+                    className="absolute left-4 top-1/2 -tranzinc-y-1/2 text-zinc-500 transition-colors group-focus-within:text-stone-400"
+                  />
                   <input
                     type="password"
                     required
@@ -230,16 +251,33 @@ export function Register() {
                       <input
                         type="checkbox"
                         checked={acceptedCookiePolicy}
-                        onChange={e => setAcceptedCookiePolicy(e.target.checked)}
+                        onChange={e =>
+                          setAcceptedCookiePolicy(e.target.checked)
+                        }
                         className="peer sr-only"
                       />
                       <div className="h-5 w-5 rounded border border-white/20 bg-white/5 transition-all peer-checked:border-stone-500 peer-checked:bg-stone-500 flex items-center justify-center">
-                        <svg className="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                        <svg
+                          className="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={3}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
                       </div>
                     </div>
-                    <span className="group-hover:text-zinc-300 transition-colors">I agree to the cookie policy required for sign-in, safety, and fraud protection on this device.</span>
+                    <span className="group-hover:text-zinc-300 transition-colors">
+                      I agree to the cookie policy required for sign-in, safety,
+                      and fraud protection on this device.
+                    </span>
                   </label>
-                  
+
                   <label className="flex items-start gap-3 cursor-pointer group">
                     <div className="relative flex items-start pt-0.5">
                       <input
@@ -249,12 +287,27 @@ export function Register() {
                         className="peer sr-only"
                       />
                       <div className="h-5 w-5 rounded border border-white/20 bg-white/5 transition-all peer-checked:border-stone-500 peer-checked:bg-stone-500 flex items-center justify-center">
-                        <svg className="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                        <svg
+                          className="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={3}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
                       </div>
                     </div>
-                    <span className="group-hover:text-zinc-300 transition-colors">I accept the platform rules and privacy terms, and I understand minors are not allowed to use YouAndINotAI.</span>
+                    <span className="group-hover:text-zinc-300 transition-colors">
+                      I accept the platform rules and privacy terms, and I
+                      understand minors are not allowed to use YouAndINotAI.
+                    </span>
                   </label>
-                  
+
                   <label className="flex items-start gap-3 cursor-pointer group">
                     <div className="relative flex items-start pt-0.5">
                       <input
@@ -264,10 +317,25 @@ export function Register() {
                         className="peer sr-only"
                       />
                       <div className="h-5 w-5 rounded border border-white/20 bg-white/5 transition-all peer-checked:border-stone-500 peer-checked:bg-stone-500 flex items-center justify-center">
-                        <svg className="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                        <svg
+                          className="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={3}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
                       </div>
                     </div>
-                    <span className="group-hover:text-zinc-300 transition-colors">I confirm I am at least 18 years old and that my date of birth is accurate.</span>
+                    <span className="group-hover:text-zinc-300 transition-colors">
+                      I confirm I am at least 18 years old and that my date of
+                      birth is accurate.
+                    </span>
                   </label>
                 </div>
               </div>
@@ -300,11 +368,11 @@ export function Register() {
             </p>
 
             <div className="relative z-10 mt-6 text-center">
-              <Link 
-                to="/" 
+              <Link
+                to="/"
                 className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-500 transition-colors hover:text-white"
               >
-                <Heart size={14} className="text-amber-500" /> 
+                <Heart size={14} className="text-amber-500" />
                 Back to YouAndINotAI
               </Link>
             </div>
@@ -314,4 +382,3 @@ export function Register() {
     </div>
   );
 }
-

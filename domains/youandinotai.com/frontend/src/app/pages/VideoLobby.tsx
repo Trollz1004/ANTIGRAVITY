@@ -53,4 +53,3 @@ export function VideoLobby() {
 }
 
 export default VideoLobby;
-

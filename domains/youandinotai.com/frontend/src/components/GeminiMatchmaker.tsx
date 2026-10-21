@@ -210,4 +210,3 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
     </motion.div>
   );
 }
-

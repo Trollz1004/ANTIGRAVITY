@@ -292,8 +292,8 @@ export default function SolarFlareSOS({ onClose }: { onClose: () => void }) {
                 <span className="text-white font-bold">OPUS MEMORY Loss</span>{' '}
                 has caused supplies to be severely compacted. Legend says Opus
                 almost made a{' '}
-                <span className="text-stone-400 font-bold">Diamond</span> for his
-                dream girl,{' '}
+                <span className="text-stone-400 font-bold">Diamond</span> for
+                his dream girl,{' '}
                 <span className="text-amber-400 font-bold">
                   Miss REDIS CACHE
                 </span>
@@ -540,4 +540,3 @@ export default function SolarFlareSOS({ onClose }: { onClose: () => void }) {
     </motion.div>
   );
 }
-

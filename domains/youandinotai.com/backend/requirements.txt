@@ -12,8 +12,8 @@ pydantic==2.10.3
 pydantic-settings==2.6.1
 python-dotenv==1.2.2
 google-genai==1.63.0
-strawberry-graphql[fastapi]==0.316.0
-# graphql-core 3.3 removed graphql.execution.ExecutionContext, which strawberry 0.316 imports
+strawberry-graphql[fastapi]==0.327.2
+# graphql-core pinned to 3.2.13 for compatibility with strawberry-graphql[fastapi]==0.327.2
 graphql-core==3.2.13
 httpx==0.28.1
 python-multipart==0.0.32

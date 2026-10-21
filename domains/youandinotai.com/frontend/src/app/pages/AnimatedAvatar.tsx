@@ -224,4 +224,3 @@ export function AnimatedAvatar() {
 }
 
 export default AnimatedAvatar;
-

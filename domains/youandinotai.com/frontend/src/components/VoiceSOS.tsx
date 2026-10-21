@@ -286,4 +286,3 @@ export function VoiceSOS({ onClose }: { onClose: () => void }) {
     </motion.div>
   );
 }
-

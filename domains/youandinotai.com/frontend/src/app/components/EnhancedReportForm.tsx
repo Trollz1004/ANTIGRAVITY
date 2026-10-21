@@ -288,4 +288,3 @@ export function EnhancedReportForm({
     </form>
   );
 }
-

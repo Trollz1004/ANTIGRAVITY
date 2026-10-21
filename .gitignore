@@ -322,7 +322,14 @@ claude-to-claude/
 gemini-to-gemini/
 *gemini-to-gemini*
 gemini-to-gemini.md
-\
 
 *.exe
 *.wav
+
+# Graphify output & Mission OS runtime stores
+graphify-out/
+mission-os/deliverables/
+mission-os/marketing-plans.json
+mission-os/scc-comments.json
+mission-os/support-tickets.json
+mission-os/wheel-state.json

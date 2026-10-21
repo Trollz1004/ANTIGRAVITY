@@ -849,6 +849,7 @@ def test_stripe_webhook_is_retired(client):
     assert resp.status_code == 410
     assert "retired" in resp.json()["detail"]
 
+
 def test_square_webhook_missing_signature_is_idempotent(client, db_session_factory):
     """
     If a webhook is missing its signature, we log the failure.
@@ -856,12 +857,12 @@ def test_square_webhook_missing_signature_is_idempotent(client, db_session_facto
     both times, not 500 on the second attempt due to IntegrityError.
     """
     payload = {"type": "payment.created", "id": "test_idempotent_missing_sig"}
-    
+
     # First attempt - fails signature validation, raises 400
     resp1 = client.post(
         "/api/v1/webhooks/square-payment",
         json=payload,
-        headers={"x-square-hmacsha256-signature": ""} # missing/empty signature
+        headers={"x-square-hmacsha256-signature": ""},  # missing/empty signature
     )
     assert resp1.status_code == 400
 
@@ -869,6 +870,6 @@ def test_square_webhook_missing_signature_is_idempotent(client, db_session_facto
     resp2 = client.post(
         "/api/v1/webhooks/square-payment",
         json=payload,
-        headers={"x-square-hmacsha256-signature": ""}
+        headers={"x-square-hmacsha256-signature": ""},
     )
     assert resp2.status_code == 400

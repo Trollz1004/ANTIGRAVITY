@@ -250,7 +250,10 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
                     </div>
                   </div>
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Heart size={14} className="text-amber-500 fill-amber-500" />
+                    <Heart
+                      size={14}
+                      className="text-amber-500 fill-amber-500"
+                    />
                   </div>
                 </motion.div>
               ))}
@@ -273,4 +276,3 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
     </motion.div>
   );
 }
-

@@ -1,4 +1,4 @@
-# CLAUDE.md — Current Agent Guide — ACTIVE (S1 landed 2026-08-19)
+﻿# CLAUDE.md — Current Agent Guide — ACTIVE (S1 landed 2026-08-19)
 
 ## Rule one: done means the real user would accept it (Joshua, 2026-10-04)
 
@@ -41,11 +41,11 @@ Why this rule exists: on 2026-10-04 Misses Trollz passed every score while what 
 > Written by **Opus (Claude) running in the Antigravity IDE** on 2026-10-09, on Joshua's instruction. Joshua does not edit Claude's files or any AI memory himself; this edit is the model's, recorded as such. The same section is in `AGENTS.md`.
 
 - **Until funding, the T5500 (`T5500-2-XEON-72`, `192.168.0.15`) is the only node, and the Antigravity IDE the only platform, for every domain and for Mission Control.** Alienware is dev only, never production (amended 2026-10-17). Sabretooth and the old boxes stay OFF by ruling: never probe, start, heal or route to them.
-- **Paperclip is marketing only** (`http://127.0.0.1:3917`, non-elevated task `ANTIGRAVITY Paperclip`; embedded Postgres refuses to run as admin, so it is never started elevated). It is not Mission Control.
+- **Social Command Center & Marketing (`http://127.0.0.1:3130/marketing`)**: Native inside Mission Agent OS (`mission-os/marketing-engine.mjs`). Paperclip is permanently retired and removed.
 - **Mission Control = JARVIS/OPSIS on the Mission Agent OS board**, being rebuilt on the T5500 (`mission-os/`, Agent Hub `:3130`, read-only `/api/mos-state.json`). It reads Paperclip, OmniRoute, the keep-alive status and agent journals. Until it answers its identity probe it is **NOT RUNNING**, not UP. Nothing listens on :9150 on this fresh install.
 - **Services that come back on boot / power loss** (all on the T5500): Ollama :11434, Postgres :5432, Redis :6379, domains server :9160, date-app frontend :3200 and API :8000, cloudflared tunnel, Paperclip :3917, OmniRoute :20128 (non-elevated task `ANTIGRAVITY OmniRoute`, dashboard password-protected), Hermes support window, OpenClaw sentry window, Obsidian (vault `C:\ANTIGRAVITY\Antigravity`, REST :27123). The keep-alive also probes Supabase, Supermemory and Vercel every 10 minutes and writes them to `ops/t5500/status.json`.
 - **AI-team memory backups:** Obsidian vault `C:\ANTIGRAVITY\Antigravity` (the only vault), Supabase, Supermemory, plus each agent's own memory files.
-- **CLI lanes are login/OAuth only:** claude, codex, gemini/agy (Paperclip gemini lanes call `agy` through `ops/paperclip/agy-gemini.cmd` so the Ultra plan is used), grok, kimi, opencode (local Ollama models), pi. No API-key environment variables. Never an `ANTHROPIC_API_KEY`.
+- **CLI lanes are login/OAuth only:** claude, codex, gemini/agy (Paperclip gemini lanes call `agy` through `mission-os/launchers/agy-gemini.exe` so the Ultra plan is used), grok, kimi, opencode (local Ollama models), pi. No API-key environment variables. Never an `ANTHROPIC_API_KEY`.
 - **MCP servers (OAuth on first use, no keys):** Cloudflare, Supabase, Vercel, Supermemory registered for Claude Code (user scope), Antigravity, Codex, OpenCode and Pi on 2026-10-09.
 - **Env files:** master `OneDrive\claude-to-claude\.env` (gitignored, with its `.env.lowercase` twin), runtime `C:\ANTIGRAVITY\.env`, gateway `~\.omniroute\.env`. All synced to T5500 values on 2026-10-09.
 
@@ -53,7 +53,7 @@ Why this rule exists: on 2026-10-04 Misses Trollz passed every score while what 
 
 - **The 100% rule.** Nothing is pushed unless it is 100% done and proven; 90% is not pushed. Nothing is merged unless Claude validates it; anything Claude has not validated is rejected. One branch per repo (`main`); work lands through a pull request and its branch is deleted after merge.
 - **OpenClaw watches the T5500, 100%** (amended 2026-10-17: OpenClaw is the only sentry). The keep-alive heals. OpenClaw's sentry window (`ops/t5500/openclaw-sentry.ps1`) shows every stage and restarts the keep-alive if it stalls. The Hermes cron `T5500 node watch` (script `%LOCALAPPDATA%\hermes\scripts\t5500_node_watch.py`) is no longer a sentry duty. Codex stands down from watching the node (`ops/handoffs/CODEX-HANDOFF-2026-10-15.md`).
-- **Paperclip stays installed and idle on the T5500.** Real Paperclip work moves to another node so it never touches the finished T5500 code. Its keep-alive stage stays so it costs nothing to keep.
+- **Paperclip is permanently retired (2026-10-20).** All marketing plans and the 22-platform Social Command Center run natively in Mission OS (`http://127.0.0.1:3130/marketing`) under Gemini Antigravity Ultra (`agy` OAuth).
 - **Gemini works only in `mission-os/`** (Mission Control, made presentable for streaming). No git, no files outside that folder; Claude validates and lands it.
 - **Hermes gateway API on :8643.** Hermes runs one shared gateway for all profiles; its API server is enabled in the default `config.yaml` (`platforms.api_server`, 127.0.0.1:8643). Peers (A2A) and adapters reach Hermes there.
 - **Jules is a judge.** Joshua's ruling widens the 2026-09-03 roster (Codex and Claude) to include Jules (Google), reachable through his Gemini Ultra subscription only, never an API key. Jules and Claude built this platform together in AI Studio long ago. Jules may judge; a merge still needs Claude's validation under the 100% rule.

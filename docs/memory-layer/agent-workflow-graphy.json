@@ -1,14 +1,16 @@
 {
-  "description": "Agent Workflow Graphy - Shows agents what skills to load, tools available, and daily research targets",
-  "version": "1.3.1",
-  "lastUpdated": "2026-10-17",
-  "usedBy": "ALL agents and AI lanes on every platform (Claude, Codex, Gemini, Copilot, Hermes, OpenClaw, OpenCode, Grok, Emergent, Paperclip lanes). Read at session start.",
+  "description": "Agent Workflow Graphy - Shows agents what skills to load, tools available, code search graphy, and daily research targets",
+  "version": "1.4.0",
+  "lastUpdated": "2026-10-20",
+  "usedBy": "ALL agents and AI lanes on every platform (Claude, Codex, Gemini, Copilot, Hermes, OpenClaw, OpenCode, Grok, Emergent). Read at session start.",
   "authority": {
-    "updated": "2026-10-17 (Joshua)",
+    "updated": "2026-10-20 (Joshua)",
     "human": "Joshua is the ONLY human in the loop and the sole authority",
     "noAiCommandsAnother": "No AI commands another AI",
     "directMessageWins": "If a direct message is from Joshua, no AI tells another it cannot do it",
     "judges": "Claude, Codex and Jules are judges: they review and validate work before merge; they do not command other agents or override Joshua's direct instruction",
+    "marketingOwner": "Gemini Antigravity Ultra (agy OAuth, gemini-4-argon-high) runs ALL marketing and coordinates the native Social Command Center & Marketing Engine in Mission Agent OS (http://127.0.0.1:3130/marketing) — Paperclip is permanently retired and deleted",
+    "memoryVsCodeSearch": "Obsidian (C:\\ANTIGRAVITY\\Antigravity) is mandatory Agent Memory on sessions; Graphify (C:\\ANTIGRAVITY\\graphify-out\\graph.json & GRAPH_REPORT.md + docs/memory-layer/agent-workflow-graphy.json) is mandatory Agent Code Search & Workflow Graph on sessions",
     "entryFilesMustAgree": "Agents read different files at session start (AGENTS.md, CLAUDE.md, GEMINI.md, skill SKILL.md files, Obsidian per-agent files). All of them must carry the same correct data; a stale file is a drift source and gets fixed, not ignored"
   },
   "paymentsRecord": {

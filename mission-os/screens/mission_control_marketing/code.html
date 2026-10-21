@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Command Center · Gemini 4 Ultra Marketing Engine · Mission Agent OS</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #090d16; color: #e2e8f0; }
+    h1, h2, h3, .font-headline { font-family: 'Space Grotesk', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; vertical-align: middle; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #090d16; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00f0ff; }
+  </style>
+</head>
+<body class="h-screen overflow-hidden flex select-none bg-[#090d16] text-slate-100">
+
+  <!-- LEFT SIDEBAR (Unified Mission Agent OS Navigation) -->
+  <aside class="w-64 bg-[#0b0f19] border-r border-slate-800/80 flex flex-col justify-between shrink-0 z-30">
+    <div>
+      <div class="h-16 px-5 flex items-center gap-3 border-b border-slate-800/80">
+        <div class="w-9 h-9 rounded-lg bg-cyan-500/10 border border-cyan-400/40 flex items-center justify-center text-cyan-400 font-bold font-headline">M</div>
+        <div>
+          <div class="font-headline font-bold text-sm tracking-wider text-white">MISSION CONTROL</div>
+          <div class="font-mono text-[10px] text-emerald-400">T5500 · 192.168.0.15 · :3130</div>
+        </div>
+      </div>
+
+      <nav class="p-3 space-y-1 text-xs font-medium">
+        <a data-path="overview" href="/screens/mission_control_overview/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+          <span class="material-symbols-outlined text-base">dashboard</span> Overview
+        </a>
+        <a data-path="jarvis" href="/screens/mission_control_jarvis_command_console/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+          <span class="material-symbols-outlined text-base text-cyan-400">terminal</span> JARVIS / OPSIS
+        </a>
+        <a data-path="agents" href="/screens/mission_control_agents_fleet/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+          <span class="material-symbols-outlined text-base">smart_toy</span> Agents &amp; Skills
+        </a>
+        <a data-path="board" href="/screens/mission_control_board_journal/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+          <span class="material-symbols-outlined text-base">view_kanban</span> Board &amp; 50-Task Wheel
+        </a>
+        <a data-path="gateway" href="/screens/mission_control_omniroute_gateway/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+          <span class="material-symbols-outlined text-base">router</span> OmniRoute Gateway
+        </a>
+        <a data-path="marketing" href="/marketing" class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-semibold">
+          <span class="flex items-center gap-3"><span class="material-symbols-outlined text-base text-cyan-400">campaign</span> Marketing &amp; Social</span>
+          <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300">LIVE</span>
+        </a>
+        <a data-path="memory" href="/screens/mission_control_agent_memory_stores/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+          <span class="material-symbols-outlined text-base">neurology</span> Obsidian &amp; Graphify
+        </a>
+        <a data-path="node" href="/screens/mission_control_t5500_hardware_node/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+          <span class="material-symbols-outlined text-base">dns</span> T5500 Hardware Node
+        </a>
+        <a data-path="logs" href="/screens/mission_control_t5500_node_boot_timeline/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+          <span class="material-symbols-outlined text-base">receipt_long</span> Logs &amp; Keep-Alive
+        </a>
+        <a data-path="support" href="/screens/mission_control_hermes_support_inbox/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+          <span class="material-symbols-outlined text-base">support_agent</span> Hermes Support Desk
+        </a>
+        <a data-path="settings" href="/screens/mission_control_settings_logins/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+          <span class="material-symbols-outlined text-base">key</span> Settings &amp; OAuth
+        </a>
+      </nav>
+    </div>
+
+    <div class="p-3 border-t border-slate-800/80 space-y-2 text-[11px]">
+      <div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800">
+        <div class="flex items-center justify-between text-slate-400 font-mono text-[10px]">
+          <span>SOLE MARKETING ENGINE</span>
+          <span class="text-emerald-400 font-bold">● $0 API</span>
+        </div>
+        <div class="text-white font-semibold mt-0.5">Gemini 4 Ultra (agy OAuth)</div>
+        <div class="text-slate-400 text-[10px] mt-0.5">+ Fable Local RTX 3070 · Zero Paperclip</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN WORKSPACE -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <!-- TOP BAR -->
+    <header class="min-h-[68px] py-2.5 bg-[#0b0f19]/95 border-b border-slate-800/80 px-6 flex flex-wrap items-center justify-between gap-2 shrink-0">
+      <div class="flex items-center gap-4">
+        <div>
+          <div class="flex items-center gap-2.5">
+            <h1 class="font-headline font-bold text-lg text-white tracking-tight">SOCIAL COMMAND CENTER &amp; GEMINI 4 MARKETING ENGINE</h1>
+            <span class="px-2 py-0.5 text-[10px] font-mono font-bold rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">4-GATE + SLOPMONSTER 5/5 ACTIVE</span>
+            <span class="px-2 py-0.5 text-[10px] font-mono font-bold rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">TAGCITY 1+1+1 · 28 METROS</span>
+          </div>
+          <p class="text-xs text-slate-400 font-mono">
+            3 Domains (`youandinotai.com` · `onlinerecycle.net` · `dream-online.net`) · 24 APIs · Inbox / Comment / Thread Responder · Live SEO &amp; Reddit Publish
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <button onclick="runDailyTagCityBatch()" id="btn-daily-batch" class="px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-semibold flex items-center gap-1.5 transition">
+          <span class="material-symbols-outlined text-sm">bolt</span> Run Daily TagCity Batch
+        </button>
+        <button onclick="openAllApprovedUrls()" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-xs font-semibold flex items-center gap-1.5 transition">
+          <span class="material-symbols-outlined text-sm">open_in_new</span> Open Approved URLs
+        </button>
+        <button onclick="loadDashboard()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition">
+          <span class="material-symbols-outlined text-sm">refresh</span> Refresh
+        </button>
+      </div>
+    </header>
+
+    <!-- KPI STRIP + SUBTAB BAR -->
+    <div class="bg-[#0e1320] border-b border-slate-800/80 px-6 py-3 shrink-0">
+      <div class="grid grid-cols-8 gap-2.5 mb-3">
+        <div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800">
+          <div class="text-[10px] font-mono text-slate-400">TOTAL QUEUE</div>
+          <div id="kpi-total" class="text-xl font-bold font-headline text-white">0</div>
+        </div>
+        <div class="p-2.5 rounded-lg bg-slate-900/90 border border-amber-500/30 cursor-pointer" onclick="switchSubTab('inbox'); setInboxFilter('INBOX')">
+          <div class="text-[10px] font-mono text-amber-300">INBOX (REVIEW)</div>
+          <div id="kpi-inbox" class="text-xl font-bold font-headline text-amber-300">0</div>
+        </div>
+        <div class="p-2.5 rounded-lg bg-slate-900/90 border border-cyan-500/30 cursor-pointer" onclick="switchSubTab('inbox'); setInboxFilter('APPROVED')">
+          <div class="text-[10px] font-mono text-cyan-300">READY (APPROVED)</div>
+          <div id="kpi-approved" class="text-xl font-bold font-headline text-cyan-300">0</div>
+        </div>
+        <div class="p-2.5 rounded-lg bg-slate-900/90 border border-emerald-500/30 cursor-pointer" onclick="switchSubTab('inbox'); setInboxFilter('SENT')">
+          <div class="text-[10px] font-mono text-emerald-300">SENT (EXECUTED)</div>
+          <div id="kpi-sent" class="text-xl font-bold font-headline text-emerald-300">0</div>
+        </div>
+        <div class="p-2.5 rounded-lg bg-slate-900/90 border border-rose-500/30 cursor-pointer" onclick="switchSubTab('inbox'); setInboxFilter('REJECTED')">
+          <div class="text-[10px] font-mono text-rose-300">REJECTED</div>
+          <div id="kpi-rejected" class="text-xl font-bold font-headline text-rose-300">0</div>
+        </div>
+        <div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 cursor-pointer" onclick="switchSubTab('comments')">
+          <div class="text-[10px] font-mono text-purple-300">COMMENT REPLIES</div>
+          <div id="kpi-comments" class="text-xl font-bold font-headline text-purple-300">0</div>
+        </div>
+        <div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 cursor-pointer" onclick="switchSubTab('tagcity')">
+          <div class="text-[10px] font-mono text-cyan-300">TAGCITY METROS</div>
+          <div id="kpi-metros" class="text-xl font-bold font-headline text-cyan-300">28</div>
+        </div>
+        <div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 cursor-pointer" onclick="switchSubTab('matrix')">
+          <div class="text-[10px] font-mono text-emerald-300">WIRED APIS</div>
+          <div id="kpi-apis" class="text-xl font-bold font-headline text-emerald-300">24</div>
+        </div>
+      </div>
+
+      <!-- SUB-TABS -->
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
+          <button id="subtab-btn-inbox" onclick="switchSubTab('inbox')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500 text-slate-950 transition">
+            📥 1. Unified Approval Inbox (HQ / Inbox / Ready / Sent)
+          </button>
+          <button id="subtab-btn-comments" onclick="switchSubTab('comments')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+            💬 2. Thread &amp; Comment Responder (3-Variant TagCity + AI)
+          </button>
+          <button id="subtab-btn-tagcity" onclick="switchSubTab('tagcity')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+            🏷️ 3. TagCity 1+1+1 &amp; 28-Metro Rotation Engine
+          </button>
+          <button id="subtab-btn-composer" onclick="switchSubTab('composer')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+            ✍️ 4. Multi-Platform Post &amp; Blog Composer
+          </button>
+          <button id="subtab-btn-matrix" onclick="switchSubTab('matrix')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+            🗺️ 5. 24-API Command Matrix &amp; 3-Domain Master Plans
+          </button>
+        </div>
+        <div id="toast-banner" class="hidden px-3 py-1 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono"></div>
+      </div>
+    </div>
+
+    <!-- CONTENT AREA -->
+    <main class="flex-1 overflow-y-auto p-6 space-y-6 select-text">
+
+      <!-- ================================================================= -->
+      <!-- SUBTAB 1: UNIFIED APPROVAL INBOX                                  -->
+      <!-- ================================================================= -->
+      <section id="subtab-inbox" class="space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900/90 border border-slate-800 p-3.5 rounded-xl">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-xs font-mono text-slate-400 mr-1">QUEUE LANE:</span>
+            <button onclick="setInboxFilter('ALL')" data-qfilter="ALL" class="qfilter-btn px-3 py-1 rounded-md text-xs font-semibold bg-cyan-500 text-slate-950">All Items</button>
+            <button onclick="setInboxFilter('INBOX')" data-qfilter="INBOX" class="qfilter-btn px-3 py-1 rounded-md text-xs font-semibold bg-slate-800 text-amber-300 hover:bg-slate-700">Inbox (Review)</button>
+            <button onclick="setInboxFilter('APPROVED')" data-qfilter="APPROVED" class="qfilter-btn px-3 py-1 rounded-md text-xs font-semibold bg-slate-800 text-cyan-300 hover:bg-slate-700">Ready (Approved)</button>
+            <button onclick="setInboxFilter('SENT')" data-qfilter="SENT" class="qfilter-btn px-3 py-1 rounded-md text-xs font-semibold bg-slate-800 text-emerald-300 hover:bg-slate-700">Sent (Executed)</button>
+            <button onclick="setInboxFilter('REJECTED')" data-qfilter="REJECTED" class="qfilter-btn px-3 py-1 rounded-md text-xs font-semibold bg-slate-800 text-rose-300 hover:bg-slate-700">Rejected</button>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <select id="inbox-domain-filter" onchange="renderInbox()" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-200">
+              <option value="ALL">All 3 Domains</option>
+              <option value="youandinotai.com">youandinotai.com ($1 Bot-Shield + 50% Link Forge)</option>
+              <option value="onlinerecycle.net">onlinerecycle.net (Brevard Pickup + eBay Matrix)</option>
+              <option value="dream-online.net">dream-online.net (Live-Agent NPCs MMORPG)</option>
+            </select>
+            <select id="inbox-kind-filter" onchange="renderInbox()" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-200">
+              <option value="ALL">All Types (Posts + Comments + Threads)</option>
+              <option value="post">Posts &amp; Articles</option>
+              <option value="comment">Comment &amp; Thread Replies</option>
+            </select>
+            <input id="inbox-search" oninput="renderInbox()" type="text" placeholder="Search copy, platform, #tag, metro..." class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1 text-xs text-slate-200 w-60" />
+          </div>
+        </div>
+
+        <div id="inbox-items-container" class="space-y-3"></div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- SUBTAB 2: THREAD & COMMENT RESPONDER (3-VARIANT TAGCITY + AI)     -->
+      <!-- ================================================================= -->
+      <section id="subtab-comments" class="hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Left 7 cols: 3-Variant Comment & Thread Reply Builder -->
+          <div class="lg:col-span-7 bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div>
+                <h2 class="font-headline font-bold text-base text-white">💬 Universal Comment, Thread &amp; DM Responder</h2>
+                <p class="text-xs text-slate-400">Generates 3 distinct zero-slop variants per target with automatic TagCity 1+1+1 tags (`Brand + Niche + 28-Metro`)</p>
+              </div>
+              <span class="px-2.5 py-1 rounded bg-purple-500/15 border border-purple-500/30 text-purple-300 font-mono text-[11px]">3 VARIANTS / TARGET</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">TARGET DOMAIN</label>
+                <select id="cr-domain" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                  <option value="youandinotai.com">youandinotai.com (18+ DateApp)</option>
+                  <option value="onlinerecycle.net">onlinerecycle.net (B2B + eBay)</option>
+                  <option value="dream-online.net">dream-online.net (Live-Agent MMORPG)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">PLATFORM (ALL 24)</label>
+                <select id="cr-platform" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                  <option value="Reddit">Reddit (Subreddit Thread / Comment)</option>
+                  <option value="X / Twitter">X / Twitter (Reply / Quote Thread)</option>
+                  <option value="Facebook Groups">Facebook Groups &amp; Pages</option>
+                  <option value="Instagram">Instagram Reels / Post Comment</option>
+                  <option value="TikTok">TikTok Comment Reply</option>
+                  <option value="YouTube">YouTube Community / Video Comment</option>
+                  <option value="LinkedIn">LinkedIn Post / Group Comment</option>
+                  <option value="Threads">Threads Reply</option>
+                  <option value="Bluesky">Bluesky Reply</option>
+                  <option value="Mastodon">Mastodon Reply</option>
+                  <option value="Hacker News">Hacker News Thread Reply</option>
+                  <option value="Indie Hackers">Indie Hackers Thread Reply</option>
+                  <option value="Product Hunt">Product Hunt Discussion</option>
+                  <option value="Quora">Quora Answer / Comment</option>
+                  <option value="Medium">Medium Response</option>
+                  <option value="Substack">Substack Notes / Comment</option>
+                  <option value="Dev.to">Dev.to Discussion Comment</option>
+                  <option value="Hashnode">Hashnode Comment</option>
+                  <option value="Discord">Discord Channel / Thread</option>
+                  <option value="Telegram">Telegram Group Reply</option>
+                  <option value="Nextdoor">Nextdoor Neighborhood Thread</option>
+                  <option value="Alignable">Alignable B2B Thread</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">TARGET INTERACTION TYPE</label>
+                <select id="cr-type" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                  <option value="thread_reply">Thread Reply</option>
+                  <option value="comment_reply">Comment Reply</option>
+                  <option value="post_reply">Post Reply</option>
+                  <option value="group_post">Group Discussion Reply</option>
+                  <option value="page_comment">Page Comment</option>
+                  <option value="dm_pitch">Creator / Partner DM</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-mono text-slate-400 mb-1">QUICK-FILL FROM TARGET POST BANK (OR TYPE ANY THREAD BELOW)</label>
+              <select id="cr-preset-target" onchange="applyPresetTarget()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-cyan-300">
+                <option value="">-- Choose a pre-indexed high-intent thread or type your own below --</option>
+              </select>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">THREAD / POST TITLE OR COMMENT CONTEXT</label>
+                <input id="cr-title" type="text" value="Everyone on dating apps feels like an AI bot or engagement trap lately" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">TARGET THREAD / COMMENT URL (`Post Here` Link)</label>
+                <input id="cr-url" type="text" placeholder="https://www.reddit.com/r/datingoverthirty/..." value="https://www.reddit.com/r/dating/search/?q=bots+real+people&sort=new" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-mono" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">SLOT 2: NICHE TAG POOL (N1–N8)</label>
+                <select id="cr-niche" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                  <option value="">Auto-Rotate Niche (N1..N8)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">SLOT 3: US METRO (28 RANKED CITIES)</label>
+                <select id="cr-city" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                  <option value="">Auto-Rotate 28 US Metros</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">GENERATION ENGINE</label>
+                <select id="cr-mode" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-cyan-300 font-semibold">
+                  <option value="tagcity">⚡ Instant TagCity 1+1+1 Engine</option>
+                  <option value="gemini">🧠 Gemini 4 Argon / Ultra (agy OAuth)</option>
+                  <option value="fable">🎙️ Fable Local (RTX 3070 :11434)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 pt-1">
+              <button onclick="generateCommentVariants()" id="btn-gen-comments" class="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition">
+                <span class="material-symbols-outlined text-base">auto_awesome</span> Generate 3 Comment Variants + 1+1+1 Tags
+              </button>
+              <span id="cr-status-msg" class="text-xs font-mono text-slate-400"></span>
+            </div>
+
+            <!-- 3 Generated Variants Output -->
+            <div id="cr-variants-container" class="space-y-3 pt-2"></div>
+          </div>
+
+          <!-- Right 5 cols: Active Comment & Thread Replies Log -->
+          <div class="lg:col-span-5 bg-slate-900/90 border border-slate-800 rounded-xl p-5 flex flex-col space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div>
+                <h2 class="font-headline font-bold text-base text-white">📋 Saved Comment &amp; Thread Replies</h2>
+                <p class="text-xs text-slate-400">Ready to paste, open target thread, or mark executed</p>
+              </div>
+              <span id="cr-saved-count" class="px-2 py-0.5 rounded bg-slate-800 text-cyan-300 font-mono text-xs">0</span>
+            </div>
+            <div id="cr-saved-list" class="space-y-3 overflow-y-auto max-h-[640px] pr-1"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- SUBTAB 3: TAGCITY 1+1+1 TAG & 28-METRO ROTATION ENGINE            -->
+      <!-- ================================================================= -->
+      <section id="subtab-tagcity" class="hidden space-y-6">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-3">
+            <div>
+              <h2 class="font-headline font-bold text-base text-white">🏷️ TagCity 1+1+1 Tag Formula &amp; 28-Metro Rotation Engine (`ops/dateapp-marketing-engine/`)</h2>
+              <p class="text-xs text-slate-400">
+                Every post &amp; comment uses exactly 3 non-shadowban tags: <code class="text-cyan-300">Slot 1 Brand Anchor</code> + <code class="text-amber-300">Slot 2 Niche Pool (N1–N8)</code> + <code class="text-emerald-300">Slot 3 Ranked US Metro (1–28)</code>
+              </p>
+            </div>
+            <button onclick="runDailyTagCityBatch()" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition">
+              <span class="material-symbols-outlined text-base">bolt</span> Execute Daily Rotation Batch (`engine.js --daily`)
+            </button>
+          </div>
+
+          <!-- Interactive 1+1+1 Tag Picker -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 bg-slate-950/90 border border-slate-800 p-4 rounded-xl">
+            <div>
+              <div class="text-[10px] font-mono text-cyan-400 mb-1">SLOT 1 · BRAND ANCHOR</div>
+              <select id="tc-brand" onchange="updateTagPreview()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-mono">
+                <option value="#YouAndiNotAI">#YouAndiNotAI (youandinotai.com)</option>
+                <option value="#OnlineRecycle">#OnlineRecycle (onlinerecycle.net)</option>
+                <option value="#DreamOnline">#DreamOnline (dream-online.net)</option>
+              </select>
+            </div>
+            <div>
+              <div class="text-[10px] font-mono text-amber-400 mb-1">SLOT 2 · NICHE POOL (N1–N8)</div>
+              <select id="tc-niche" onchange="updateTagPreview()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-mono"></select>
+            </div>
+            <div>
+              <div class="text-[10px] font-mono text-emerald-400 mb-1">SLOT 3 · 28 US METROS (SINGLES RANK)</div>
+              <select id="tc-city" onchange="updateTagPreview()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-mono"></select>
+            </div>
+            <div class="flex flex-col justify-between">
+              <div class="text-[10px] font-mono text-slate-400 mb-1">READY 1+1+1 TAG LINE</div>
+              <div class="flex items-center gap-2">
+                <input id="tc-output" readonly class="flex-1 bg-slate-900 border border-cyan-500/40 rounded-lg px-3 py-2 text-xs text-cyan-300 font-mono font-bold" value="#YouAndiNotAI #DatingFatigue #NYCSingles" />
+                <button onclick="copyText(document.getElementById('tc-output').value, 'Copied 1+1+1 tag line')" class="px-3 py-2 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs">Copy</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-5 space-y-2">
+              <h3 class="font-headline font-bold text-sm text-amber-300">8 Niche Tag Pools (`N1`–`N8`)</h3>
+              <div id="tc-niches-table" class="space-y-2 max-h-[460px] overflow-y-auto pr-1"></div>
+            </div>
+            <div class="lg:col-span-7 space-y-2">
+              <h3 class="font-headline font-bold text-sm text-emerald-300">28 US Metros Ranked by Singles Population (`CITIES`)</h3>
+              <div id="tc-cities-table" class="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[460px] overflow-y-auto pr-1"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- SUBTAB 4: MULTI-PLATFORM POST & BLOG COMPOSER                     -->
+      <!-- ================================================================= -->
+      <section id="subtab-composer" class="hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7 bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
+            <h2 class="font-headline font-bold text-base text-white">✍️ Multi-Platform Post, Thread &amp; Blog Syndication Composer</h2>
+            <p class="text-xs text-slate-400">Draft with Gemini 4 Argon / Ultra (`agy` OAuth) or Fable Local (`:11434`), verify 4-Gate + SlopMonster 5/5, and publish directly via API or queue to Inbox.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">DOMAIN</label>
+                <select id="comp-domain" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                  <option value="youandinotai.com">youandinotai.com</option>
+                  <option value="onlinerecycle.net">onlinerecycle.net</option>
+                  <option value="dream-online.net">dream-online.net</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">CHANNEL / SYNDICATION API</label>
+                <select id="comp-channel" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                  <option value="X / Twitter">X / Twitter</option>
+                  <option value="Reddit">Reddit (Official OAuth API)</option>
+                  <option value="Dev.to">Dev.to (Live REST API Publish)</option>
+                  <option value="Hashnode">Hashnode (Live GraphQL API Publish)</option>
+                  <option value="WordPress">WordPress.com (Live REST API Publish)</option>
+                  <option value="Tumblr">Tumblr (Live API v2 Publish)</option>
+                  <option value="Blogger">Google Blogger (Live v3 API Publish)</option>
+                  <option value="Ghost">Ghost Admin API</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Substack">Substack</option>
+                  <option value="Instagram Reels">Instagram Reels / Facebook</option>
+                  <option value="TikTok">TikTok / YouTube Shorts</option>
+                  <option value="LinkedIn">LinkedIn</option>
+                  <option value="Bluesky">Bluesky / Mastodon / Threads</option>
+                  <option value="Hacker News">Hacker News / Indie Hackers</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">AI ENGINE</label>
+                <select id="comp-engine" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-cyan-300 font-semibold">
+                  <option value="gemini">Gemini 4 Argon / Ultra (agy OAuth)</option>
+                  <option value="fable">Fable Local (RTX 3070 :11434)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">CAMPAIGN ANGLE / PROMPT OR HEADLINE</label>
+                <input id="comp-angle" type="text" value="Why mandatory $1 Bot-Shield verification + 50% creator rev-share beats every legacy dating app" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">TARGET URL / SUBREDDIT (`r/test` OR THREAD URL)</label>
+                <input id="comp-url" type="text" placeholder="https://www.reddit.com/r/dating/ or r/test" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-mono" />
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button onclick="generateComposerDraft()" id="btn-comp-gen" class="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition">
+                <span class="material-symbols-outlined text-base">auto_awesome</span> AI Draft &amp; Auto-Queue (4-Gate Checked)
+              </button>
+              <span id="comp-status" class="text-xs font-mono text-slate-400"></span>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-mono text-slate-400 mb-1">POST / ARTICLE BODY (EDITABLE BEFORE SAVE OR LIVE PUBLISH)</label>
+              <textarea id="comp-body" rows="8" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs text-slate-100 font-mono" placeholder="Write or generate post copy here..."></textarea>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
+              <button onclick="saveManualComposerPost('INBOX')" class="px-4 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs">
+                📥 Save to Approval Inbox
+              </button>
+              <button onclick="saveManualComposerPost('APPROVED')" class="px-4 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-bold text-xs">
+                ✅ Save as Approved (Ready)
+              </button>
+              <button onclick="publishComposerDirect()" class="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs">
+                🚀 Execute Live API Publish Now
+              </button>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
+            <h2 class="font-headline font-bold text-base text-white">🛡️ 4-Gate Pre-Publish Compliance Wall</h2>
+            <div class="space-y-2.5 text-xs">
+              <div class="p-3 rounded-lg bg-slate-950 border border-emerald-500/30">
+                <div class="font-bold text-emerald-300">Gate 1 · Pre-Commit Blocklist (`compliance.mjs`)</div>
+                <div class="text-slate-400 mt-0.5">Blocks any banned medical, hospital, child, or mission-surface phrasing before approval.</div>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-950 border border-emerald-500/30">
+                <div class="font-bold text-emerald-300">Gate 2 · SlopMonster 5/5 Copy Score (`copy-score.mjs`)</div>
+                <div class="text-slate-400 mt-0.5">Auto-scrubs AI clichés (`delve`, `tapestry`, `vibrant`, `game-changer`, `seamless`) and enforces concrete proof.</div>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-950 border border-emerald-500/30">
+                <div class="font-bold text-emerald-300">Gate 3 · 18+ Adult Venue Disclosure (`social-adapters.mjs`)</div>
+                <div class="text-slate-400 mt-0.5">Every `youandinotai.com` post includes `"youandinotai.com is for adults 18 and over."`</div>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-950 border border-emerald-500/30">
+                <div class="font-bold text-emerald-300">Gate 4 · Square-Only &amp; Business-Only Copy</div>
+                <div class="text-slate-400 mt-0.5">Zero Stripe references. Pure product, verification, safety, and creator revenue math.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- SUBTAB 5: 24-API COMMAND MATRIX & 3-DOMAIN MASTER PLAYBOOKS       -->
+      <!-- ================================================================= -->
+      <section id="subtab-matrix" class="hidden space-y-6">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
+          <h2 class="font-headline font-bold text-base text-white">🔌 24 Wired APIs &amp; Endpoints (`apps/social-command-center` + `scripts/seo/post.mjs` + `mission-control/lib/`)</h2>
+          <div id="matrix-apis-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+        </div>
+
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
+          <h2 class="font-headline font-bold text-base text-white">🚀 8 High-Intent Launch Directories (1-Click Submission Portals)</h2>
+          <div id="matrix-dirs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+        </div>
+
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
+          <h2 class="font-headline font-bold text-base text-white">📘 3-Domain Master Marketing Playbooks</h2>
+          <div id="matrix-domains-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-4"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    let STATE = null;
+    let CURRENT_SUBTAB = 'inbox';
+    let INBOX_STATUS_FILTER = 'ALL';
+
+    function esc(s) {
+      return String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+
+    function showToast(msg) {
+      const el = document.getElementById('toast-banner');
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.remove('hidden');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => el.classList.add('hidden'), 4000);
+    }
+
+    async function copyText(text, label = 'Copied to clipboard') {
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('✓ ' + label);
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        showToast('✓ ' + label);
+      }
+    }
+
+    function switchSubTab(tab) {
+      CURRENT_SUBTAB = tab;
+      ['inbox', 'comments', 'tagcity', 'composer', 'matrix'].forEach((t) => {
+        const sec = document.getElementById('subtab-' + t);
+        const btn = document.getElementById('subtab-btn-' + t);
+        if (sec) sec.classList.toggle('hidden', t !== tab);
+        if (btn) {
+          btn.className = t === tab
+            ? 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500 text-slate-950 transition'
+            : 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
+        }
+      });
+    }
+
+    function setInboxFilter(status) {
+      INBOX_STATUS_FILTER = status;
+      document.querySelectorAll('.qfilter-btn').forEach((btn) => {
+        const active = btn.getAttribute('data-qfilter') === status;
+        btn.className = active
+          ? 'qfilter-btn px-3 py-1 rounded-md text-xs font-semibold bg-cyan-500 text-slate-950'
+          : 'qfilter-btn px-3 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700';
+      });
+      renderInbox();
+    }
+
+    async function loadDashboard() {
+      try {
+        const r = await fetch('/api/marketing/plans', { cache: 'no-store' });
+        STATE = await r.json();
+        updateKpis();
+        populateTagCitySelects();
+        renderInbox();
+        renderSavedComments();
+        renderTagCityTables();
+        renderMatrixTab();
+      } catch (e) {
+        showToast('Error loading Social Command Center: ' + e.message);
+      }
+    }
+
+    function updateKpis() {
+      if (!STATE) return;
+      const items = STATE.inboxItems || STATE.campaigns || [];
+      const counts = {
+        total: items.length,
+        inbox: items.filter((i) => i.status === 'INBOX').length,
+        approved: items.filter((i) => i.status === 'APPROVED').length,
+        sent: items.filter((i) => i.status === 'SENT').length,
+        rejected: items.filter((i) => i.status === 'REJECTED').length,
+        comments: (STATE.comments || []).length,
+      };
+      document.getElementById('kpi-total').textContent = counts.total;
+      document.getElementById('kpi-inbox').textContent = counts.inbox;
+      document.getElementById('kpi-approved').textContent = counts.approved;
+      document.getElementById('kpi-sent').textContent = counts.sent;
+      document.getElementById('kpi-rejected').textContent = counts.rejected;
+      document.getElementById('kpi-comments').textContent = counts.comments;
+      document.getElementById('kpi-metros').textContent = STATE.tagCity?.citiesCount || 28;
+      document.getElementById('kpi-apis').textContent = (STATE.apis24 || []).length || 24;
+    }
+
+    function renderInbox() {
+      if (!STATE) return;
+      const container = document.getElementById('inbox-items-container');
+      const domFilter = document.getElementById('inbox-domain-filter').value;
+      const kindFilter = document.getElementById('inbox-kind-filter').value;
+      const q = (document.getElementById('inbox-search').value || '').trim().toLowerCase();
+
+      const allItems = STATE.inboxItems || STATE.campaigns || [];
+      const filtered = allItems.filter((item) => {
+        if (INBOX_STATUS_FILTER !== 'ALL' && item.status !== INBOX_STATUS_FILTER) return false;
+        if (domFilter !== 'ALL' && item.domain !== domFilter) return false;
+        if (kindFilter === 'post' && item.kind === 'comment') return false;
+        if (kindFilter === 'comment' && item.kind !== 'comment') return false;
+        if (q) {
+          const hay = `${item.title} ${item.body} ${item.channel} ${item.domain} ${(item.tags?.line || '')}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (!filtered.length) {
+        container.innerHTML = `<div class="p-8 text-center bg-slate-900/60 border border-slate-800 rounded-xl text-slate-400 text-xs font-mono">No items match the current filter. Click "Run Daily TagCity Batch" or generate a post/comment!</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map((item) => {
+        const statusColors = {
+          INBOX: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+          APPROVED: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+          SENT: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+          REJECTED: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+        };
+        const sc = statusColors[item.status] || statusColors.INBOX;
+        const tagLine = item.tags?.line || (Array.isArray(item.tags) ? item.tags.join(' ') : '');
+        const score = item.gates?.gate2_copyScore?.score ?? 5;
+        const passAll = item.gates?.allPassed !== false;
+
+        return `
+        <div class="bg-slate-900/95 border border-slate-800 hover:border-slate-700 rounded-xl p-4 space-y-3 transition" id="card-${esc(item.id)}">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${sc}">${esc(item.status)}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-cyan-300 font-semibold">${esc(item.domain)}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-500/15 text-purple-300 border border-purple-500/30">${esc(item.channel)}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-300">${item.kind === 'comment' ? '💬 COMMENT / THREAD REPLY' : '📢 CAMPAIGN POST'}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono ${passAll ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-300'}">
+                4-GATE ${passAll ? 'PASS' : 'CHECK'} · SLOP ${score}/5
+              </span>
+            </div>
+            <div class="text-[11px] font-mono text-slate-400">${esc(item.id)}</div>
+          </div>
+
+          <div class="font-headline font-bold text-sm text-white">${esc(item.title)}</div>
+
+          <div id="body-view-${esc(item.id)}" class="p-3 rounded-lg bg-slate-950 border border-slate-800/90 text-xs text-slate-200 whitespace-pre-wrap font-mono leading-relaxed">${esc(item.body)}</div>
+
+          <div id="body-edit-${esc(item.id)}" class="hidden space-y-2">
+            <textarea id="textarea-${esc(item.id)}" rows="5" class="w-full bg-slate-950 border border-cyan-500/50 rounded-lg p-3 text-xs text-white font-mono">${esc(item.body)}</textarea>
+            <div class="flex items-center gap-2">
+              <button onclick="saveEditedCopy('${esc(item.id)}')" class="px-3 py-1 rounded bg-cyan-500 text-slate-950 font-bold text-xs">Save Copy &amp; Re-Score 4-Gate</button>
+              <button onclick="toggleEditCopy('${esc(item.id)}', false)" class="px-3 py-1 rounded bg-slate-800 text-slate-300 text-xs">Cancel</button>
+            </div>
+          </div>
+
+          ${tagLine ? `<div class="flex items-center gap-2 text-xs font-mono text-cyan-300"><span>🏷️ 1+1+1 Tags:</span> <code class="px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20">${esc(tagLine)}</code></div>` : ''}
+
+          <!-- Custom Thread URL + Action Controls -->
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
+            <div class="flex items-center gap-1.5 flex-1 min-w-[260px]">
+              <input id="url-${esc(item.id)}" type="text" value="${esc(item.customUrl || item.targetUrl || '')}" placeholder="Paste target thread / post URL..." class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-[11px] text-slate-200 font-mono" />
+              <button onclick="postHereUrl('${esc(item.id)}')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-[11px] font-semibold shrink-0">Copy &amp; Open URL ↗</button>
+            </div>
+
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <button onclick="copyItemWithTags('${esc(item.id)}')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-semibold">📋 Copy</button>
+              <button onclick="toggleEditCopy('${esc(item.id)}', true)" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-semibold">✏️ Edit</button>
+              <button onclick="openInCommentResponder('${esc(item.id)}')" class="px-2.5 py-1 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 text-purple-300 text-[11px] font-semibold">💬 3-Variant Reply</button>
+              <button onclick="setItemStatus('${esc(item.id)}', 'APPROVED')" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/30 text-cyan-300 text-[11px] font-semibold">✅ Approve</button>
+              <button onclick="publishItemLive('${esc(item.id)}')" class="px-2.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[11px]">🚀 Publish API / Send</button>
+              <button onclick="setItemStatus('${esc(item.id)}', 'SENT')" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 text-[11px] font-semibold">✓ Mark Sent</button>
+              <button onclick="setItemStatus('${esc(item.id)}', 'INBOX')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px]">↩ Inbox</button>
+              <button onclick="setItemStatus('${esc(item.id)}', 'REJECTED')" class="px-2 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 text-[11px]">✕ Reject</button>
+              <button onclick="setItemStatus('${esc(item.id)}', 'DELETE')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/30 text-slate-400 hover:text-rose-300 text-[11px]">🗑</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function findItem(id) {
+      const items = STATE?.inboxItems || STATE?.campaigns || [];
+      return items.find((x) => x.id === id);
+    }
+
+    function copyItemWithTags(id) {
+      const item = findItem(id);
+      if (!item) return;
+      const tagLine = item.tags?.line || '';
+      const text = tagLine && !item.body.includes(tagLine) ? `${item.body}\n\n${tagLine}` : item.body;
+      copyText(text, `Copied ${item.id}`);
+    }
+
+    function toggleEditCopy(id, show) {
+      const v = document.getElementById('body-view-' + id);
+      const e = document.getElementById('body-edit-' + id);
+      if (v && e) {
+        v.classList.toggle('hidden', show);
+        e.classList.toggle('hidden', !show);
+      }
+    }
+
+    async function saveEditedCopy(id) {
+      const ta = document.getElementById('textarea-' + id);
+      const urlIn = document.getElementById('url-' + id);
+      if (!ta) return;
+      const r = await fetch('/api/marketing/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, body: ta.value, customUrl: urlIn ? urlIn.value : undefined }),
+      });
+      const j = await r.json();
+      if (j.ok) {
+        showToast(`✓ Updated & re-scored ${id}`);
+        await loadDashboard();
+      }
+    }
+
+    async function setItemStatus(id, status) {
+      const urlIn = document.getElementById('url-' + id);
+      const r = await fetch('/api/marketing/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status, customUrl: urlIn ? urlIn.value : undefined }),
+      });
+      const j = await r.json();
+      if (j.ok) {
+        showToast(`✓ ${id} -> ${status}`);
+        await loadDashboard();
+      }
+    }
+
+    async function postHereUrl(id) {
+      const item = findItem(id);
+      const urlIn = document.getElementById('url-' + id);
+      const url = (urlIn && urlIn.value.trim()) || item?.targetUrl || 'https://www.reddit.com/';
+      if (item) copyItemWithTags(id);
+      await fetch('/api/marketing/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, customUrl: url }),
+      });
+      window.open(url, '_blank', 'noopener');
+    }
+
+    async function publishItemLive(id) {
+      const item = findItem(id);
+      if (!item) return;
+      const urlIn = document.getElementById('url-' + id);
+      const customUrl = (urlIn && urlIn.value.trim()) || item.customUrl || item.targetUrl || '';
+      showToast(`🚀 Executing publish for ${item.channel}...`);
+      const r = await fetch('/api/scc/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: item.id,
+          platform: item.channel,
+          domain: item.domain,
+          title: item.title,
+          body: item.body,
+          customUrl,
+          tags: item.tags,
+        }),
+      });
+      const j = await r.json();
+      if (j.ok) {
+        copyItemWithTags(id);
+        showToast(`✓ Published via ${j.mode}: ${j.url || item.channel}`);
+        if (customUrl && j.mode === 'handoff_approved') {
+          window.open(customUrl, '_blank', 'noopener');
+        }
+        await loadDashboard();
+      } else {
+        showToast('Publish error: ' + (j.error || 'Failed'));
+      }
+    }
+
+    function openInCommentResponder(id) {
+      const item = findItem(id);
+      if (!item) return;
+      switchSubTab('comments');
+      document.getElementById('cr-domain').value = item.domain || 'youandinotai.com';
+      document.getElementById('cr-title').value = item.title || '';
+      document.getElementById('cr-url').value = item.customUrl || item.targetUrl || '';
+      generateCommentVariants();
+    }
+
+    function populateTagCitySelects() {
+      const tc = STATE?.tagCity;
+      if (!tc) return;
+
+      const presetSel = document.getElementById('cr-preset-target');
+      if (presetSel && presetSel.options.length <= 1) {
+        (tc.targetPosts || []).forEach((tp) => {
+          const opt = document.createElement('option');
+          opt.value = JSON.stringify(tp);
+          opt.textContent = `[${tp.platform.toUpperCase()}] ${tp.title} (${tp.url})`;
+          presetSel.appendChild(opt);
+        });
+      }
+
+      const fillNiche = (selId, includeAuto) => {
+        const el = document.getElementById(selId);
+        if (!el || el.options.length > (includeAuto ? 1 : 0)) return;
+        if (!includeAuto) el.innerHTML = '';
+        (tc.niches || []).forEach((n) => {
+          const opt = document.createElement('option');
+          opt.value = n.id;
+          opt.textContent = `${n.id} · ${n.name} (${n.tags[0]})`;
+          el.appendChild(opt);
+        });
+      };
+
+      const fillCity = (selId, includeAuto) => {
+        const el = document.getElementById(selId);
+        if (!el || el.options.length > (includeAuto ? 1 : 0)) return;
+        if (!includeAuto) el.innerHTML = '';
+        (tc.cities || []).forEach((c) => {
+          const cTag = c.tag || (Array.isArray(c.tags) ? c.tags[0] : '') || '';
+          const opt = document.createElement('option');
+          opt.value = String(c.rank);
+          opt.textContent = `#${c.rank} ${c.city}, ${c.state} (${cTag})`;
+          el.appendChild(opt);
+        });
+      };
+
+      fillNiche('cr-niche', true);
+      fillCity('cr-city', true);
+      fillNiche('tc-niche', false);
+      fillCity('tc-city', false);
+      updateTagPreview();
+    }
+
+    function applyPresetTarget() {
+      const val = document.getElementById('cr-preset-target').value;
+      if (!val) return;
+      try {
+        const tp = JSON.parse(val);
+        document.getElementById('cr-title').value = tp.title || '';
+        document.getElementById('cr-url').value = tp.url || '';
+        if (tp.niche) document.getElementById('cr-niche').value = tp.niche;
+      } catch {}
+    }
+
+    function updateTagPreview() {
+      const tc = STATE?.tagCity;
+      if (!tc) return;
+      const brand = document.getElementById('tc-brand')?.value || '#YouAndiNotAI';
+      const nicheId = document.getElementById('tc-niche')?.value || 'N1';
+      const cityRank = Number(document.getElementById('tc-city')?.value || 1);
+      const nicheObj = (tc.niches || []).find((n) => n.id === nicheId) || tc.niches?.[0];
+      const cityObj = (tc.cities || []).find((c) => c.rank === cityRank) || tc.cities?.[0];
+      const nTag = nicheObj?.tags?.[0] || '#DatingFatigue';
+      const cTag = cityObj?.tag || cityObj?.tags?.[0] || '#NYCSingles';
+      const out = document.getElementById('tc-output');
+      if (out) out.value = `${brand} ${nTag} ${cTag}`;
+    }
+
+    async function generateCommentVariants() {
+      const statusEl = document.getElementById('cr-status-msg');
+      const container = document.getElementById('cr-variants-container');
+      const domain = document.getElementById('cr-domain').value;
+      const platform = document.getElementById('cr-platform').value;
+      const targetType = document.getElementById('cr-type').value;
+      const targetTitle = document.getElementById('cr-title').value;
+      const targetUrl = document.getElementById('cr-url').value;
+      const nicheId = document.getElementById('cr-niche').value || undefined;
+      const cityId = document.getElementById('cr-city').value || undefined;
+      const mode = document.getElementById('cr-mode').value;
+
+      statusEl.textContent = `Generating 3 variants via ${mode.toUpperCase()}...`;
+      try {
+        const r = await fetch('/api/scc/comments/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ domain, platform, targetType, targetTitle, targetUrl, nicheId, cityId, mode }),
+        });
+        const j = await r.json();
+        statusEl.textContent = `✓ 3 variants ready · 1+1+1 Tags: ${j.tagLine} (${j.city?.city || 'US Metro'})`;
+        window.__lastCommentGen = j;
+
+        container.innerHTML = (j.variants || []).map((v, idx) => `
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-cyan-300 font-headline">${esc(v.label)}</span>
+              <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-mono text-[10px]">4-Gate PASS · 5/5</span>
+            </div>
+            <textarea id="var-body-${idx}" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-100 font-mono">${esc(v.body)}</textarea>
+            <div class="flex flex-wrap items-center gap-2">
+              <button onclick="copyText(document.getElementById('var-body-${idx}').value, 'Copied Variant ${idx + 1}')" class="px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs">📋 Copy Reply</button>
+              <button onclick="saveVariantReply(${idx}, 'INBOX')" class="px-3 py-1 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 font-semibold text-xs">📥 Queue to Inbox</button>
+              <button onclick="saveVariantReply(${idx}, 'APPROVED')" class="px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-semibold text-xs">✅ Approve Ready</button>
+              <button onclick="saveVariantAndOpen(${idx})" class="px-3 py-1 rounded-lg bg-purple-500/25 border border-purple-500/40 text-purple-200 font-semibold text-xs">↗ Copy, Save &amp; Open Thread</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        statusEl.textContent = 'Error: ' + e.message;
+      }
+    }
+
+    async function saveVariantReply(idx, status = 'APPROVED') {
+      const gen = window.__lastCommentGen;
+      const bodyEl = document.getElementById('var-body-' + idx);
+      if (!bodyEl) return;
+      const r = await fetch('/api/scc/comments/respond', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          domain: document.getElementById('cr-domain').value,
+          platform: document.getElementById('cr-platform').value,
+          targetType: document.getElementById('cr-type').value,
+          targetTitle: document.getElementById('cr-title').value,
+          targetUrl: document.getElementById('cr-url').value,
+          body: bodyEl.value,
+          tags: gen?.tags || null,
+          status,
+        }),
+      });
+      const j = await r.json();
+      if (j.ok) {
+        showToast(`✓ Saved reply ${j.reply.id} (${status})`);
+        await loadDashboard();
+      }
+    }
+
+    async function saveVariantAndOpen(idx) {
+      const bodyEl = document.getElementById('var-body-' + idx);
+      const url = document.getElementById('cr-url').value.trim();
+      if (bodyEl) await copyText(bodyEl.value, 'Copied reply to clipboard');
+      await saveVariantReply(idx, 'APPROVED');
+      if (url) window.open(url, '_blank', 'noopener');
+    }
+
+    function renderSavedComments() {
+      const list = document.getElementById('cr-saved-list');
+      const countEl = document.getElementById('cr-saved-count');
+      const comments = STATE?.comments || [];
+      if (countEl) countEl.textContent = comments.length;
+      if (!list) return;
+      if (!comments.length) {
+        list.innerHTML = `<div class="p-4 text-xs text-slate-400 font-mono">No saved comment replies yet. Generate 3 variants on the left and click Save!</div>`;
+        return;
+      }
+      list.innerHTML = comments.map((c) => `
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-purple-300 font-bold">${esc(c.platform)} · ${esc(c.targetType)}</span>
+            <span class="text-cyan-300">${esc(c.status)}</span>
+          </div>
+          <div class="text-xs font-semibold text-white">${esc(c.targetTitle)}</div>
+          <div class="text-xs text-slate-300 font-mono whitespace-pre-wrap bg-slate-900 p-2.5 rounded border border-slate-800">${esc(c.body)}</div>
+          <div class="flex items-center gap-2">
+            <button onclick="copyText(${JSON.stringify(c.body)}, 'Copied comment')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-cyan-300 font-semibold">📋 Copy</button>
+            ${c.targetUrl ? `<a href="${esc(c.targetUrl)}" target="_blank" rel="noopener" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-emerald-300 font-semibold">↗ Open Thread</a>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderTagCityTables() {
+      const tc = STATE?.tagCity;
+      if (!tc) return;
+      const nContainer = document.getElementById('tc-niches-table');
+      if (nContainer) {
+        nContainer.innerHTML = (tc.niches || []).map((n) => `
+          <div class="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-xs text-white">${esc(n.id)} · ${esc(n.name)}</span>
+              <span class="text-[10px] font-mono text-amber-300">${esc(n.pillar)}</span>
+            </div>
+            <div class="flex flex-wrap gap-1 pt-1">
+              ${(n.tags || []).map((t) => `<button onclick="copyText('${esc(t)}', 'Copied ${esc(t)}')" class="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-[11px] font-mono text-cyan-300">${esc(t)}</button>`).join('')}
+            </div>
+          </div>
+        `).join('');
+      }
+      const cContainer = document.getElementById('tc-cities-table');
+      if (cContainer) {
+        cContainer.innerHTML = (tc.cities || []).map((c) => {
+          const cTag = c.tag || (Array.isArray(c.tags) ? c.tags[0] : '') || '';
+          return `
+          <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between gap-2">
+            <div>
+              <div class="text-xs font-bold text-white">#${c.rank} ${esc(c.city)}, ${esc(c.state)} <span class="text-[10px] text-slate-400 font-mono">(${esc(c.singlesPct)}% singles)</span></div>
+              <div class="text-[11px] font-mono text-emerald-300 mt-0.5">${esc(cTag)}</div>
+            </div>
+            <button onclick="copyText('#YouAndiNotAI #DatingFatigue ${esc(cTag)}', 'Copied 1+1+1 for ${esc(c.city)}')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-[10px] font-mono text-cyan-300 shrink-0">Copy 1+1+1</button>
+          </div>`;
+        }).join('');
+      }
+    }
+
+    async function runDailyTagCityBatch() {
+      const btn = document.getElementById('btn-daily-batch');
+      if (btn) btn.textContent = 'Running TagCity Batch...';
+      try {
+        const r = await fetch('/api/scc/tagcity/run-daily', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ count: 3 }),
+        });
+        const j = await r.json();
+        if (j.ok) {
+          showToast(`✓ Generated ${j.addedCount} TagCity 1+1+1 rotation campaigns into Inbox!`);
+          await loadDashboard();
+        }
+      } finally {
+        if (btn) btn.innerHTML = '<span class="material-symbols-outlined text-sm">bolt</span> Run Daily TagCity Batch';
+      }
+    }
+
+    function openAllApprovedUrls() {
+      const items = (STATE?.inboxItems || []).filter((i) => i.status === 'APPROVED' && (i.customUrl || i.targetUrl));
+      if (!items.length) {
+        showToast('No Approved items with target URLs found');
+        return;
+      }
+      items.slice(0, 8).forEach((i) => window.open(i.customUrl || i.targetUrl, '_blank', 'noopener'));
+      showToast(`Opened ${Math.min(8, items.length)} approved target URLs`);
+    }
+
+    async function generateComposerDraft() {
+      const statusEl = document.getElementById('comp-status');
+      const domain = document.getElementById('comp-domain').value;
+      const channel = document.getElementById('comp-channel').value;
+      const engine = document.getElementById('comp-engine').value;
+      const angle = document.getElementById('comp-angle').value;
+      statusEl.textContent = `Drafting with ${engine.toUpperCase()}...`;
+      try {
+        const r = await fetch('/api/marketing/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ domain, channel, engine, angle }),
+        });
+        const j = await r.json();
+        if (j.ok && j.campaign) {
+          document.getElementById('comp-body').value = j.campaign.body;
+          statusEl.textContent = `✓ Drafted & queued as ${j.campaign.id}`;
+          await loadDashboard();
+        } else {
+          statusEl.textContent = 'Error: ' + (j.error || 'Failed');
+        }
+      } catch (e) {
+        statusEl.textContent = 'Error: ' + e.message;
+      }
+    }
+
+    async function saveManualComposerPost(status) {
+      const domain = document.getElementById('comp-domain').value;
+      const channel = document.getElementById('comp-channel').value;
+      const title = document.getElementById('comp-angle').value;
+      const targetUrl = document.getElementById('comp-url').value;
+      const body = document.getElementById('comp-body').value;
+      if (!body.trim()) {
+        showToast('Write or generate post copy first');
+        return;
+      }
+      const r = await fetch('/api/social/proposals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ domain, channel, title, body, targetUrl }),
+      });
+      const j = await r.json();
+      if (j.ok && j.proposal) {
+        if (status !== 'APPROVED') {
+          await setItemStatus(j.proposal.id, status);
+        }
+        showToast(`✓ Saved ${j.proposal.id} (${status})`);
+        await loadDashboard();
+      }
+    }
+
+    async function publishComposerDirect() {
+      const domain = document.getElementById('comp-domain').value;
+      const platform = document.getElementById('comp-channel').value;
+      const title = document.getElementById('comp-angle').value;
+      const customUrl = document.getElementById('comp-url').value;
+      const body = document.getElementById('comp-body').value;
+      if (!body.trim()) {
+        showToast('Write or generate post copy first');
+        return;
+      }
+      const r = await fetch('/api/scc/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ domain, platform, title, body, customUrl }),
+      });
+      const j = await r.json();
+      if (j.ok) {
+        showToast(`✓ Published via ${j.mode}`);
+        await loadDashboard();
+      }
+    }
+
+    function renderMatrixTab() {
+      if (!STATE) return;
+      const apisGrid = document.getElementById('matrix-apis-grid');
+      if (apisGrid) {
+        apisGrid.innerHTML = (STATE.apis24 || []).map((a) => `
+          <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-xs text-white">${esc(a.name)}</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-300">${esc(a.category)}</span>
+              </div>
+              <div class="text-[11px] font-mono text-slate-400 mt-0.5">${esc(a.method)} · ${esc(a.endpoint)}</div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${a.configured ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-300 border border-amber-500/30'}">
+                ${a.configured ? 'WIRED' : esc(a.keyEnv)}
+              </span>
+              <a href="${esc(a.postUrl)}" target="_blank" rel="noopener" class="text-cyan-400 hover:underline text-xs font-mono">↗</a>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const dirsGrid = document.getElementById('matrix-dirs-grid');
+      if (dirsGrid) {
+        dirsGrid.innerHTML = (STATE.launchDirectories || []).map((d) => `
+          <a href="${esc(d.url)}" target="_blank" rel="noopener" class="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/50 transition block">
+            <div class="font-bold text-xs text-cyan-300">${esc(d.name)} ↗</div>
+            <div class="text-[11px] text-slate-400 mt-1">${esc(d.angle)}</div>
+          </a>
+        `).join('');
+      }
+
+      const domsGrid = document.getElementById('matrix-domains-grid');
+      if (domsGrid) {
+        domsGrid.innerHTML = (STATE.domains || []).map((d) => `
+          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="font-headline font-bold text-sm text-cyan-300">${esc(d.headline)}</div>
+            <div class="text-xs text-slate-300">${esc(d.positioning)}</div>
+            <div class="text-[11px] font-mono text-emerald-300">Primary Offer: ${esc(d.primaryOffer)}</div>
+            <div class="text-[11px] font-mono text-amber-300">Checkout Rail: ${esc(d.checkoutRail)}</div>
+            <ul class="text-xs text-slate-400 list-disc pl-4 space-y-1 pt-1">
+              ${(d.corePillars || []).map((p) => `<li>${esc(p)}</li>`).join('')}
+            </ul>
+          </div>
+        `).join('');
+      }
+    }
+
+    loadDashboard();
+    generateCommentVariants();
+  </script>
+</body>
+</html>

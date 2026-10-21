@@ -443,4 +443,3 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
 };
 
 export default LoveBot;
-

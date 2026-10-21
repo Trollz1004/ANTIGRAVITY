@@ -10,7 +10,7 @@ import {
   Users,
   X,
   ChevronRight,
-  Sparkles
+  Sparkles,
 } from 'lucide-react';
 import { useAuth } from './lib/auth';
 import { ThemeProvider } from './lib/ThemeContext';
@@ -119,7 +119,7 @@ function GlassButton({
   disabled?: boolean;
 }) {
   const baseClasses = `relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 backdrop-blur-md overflow-hidden ${className}`;
-  
+
   const variantClasses = primary
     ? 'bg-gradient-to-r from-yellow-500/80 to-amber-500/80 text-white border border-white/20 shadow-[0_0_20px_rgba(234,179,8,0.3)] hover:shadow-[0_0_30px_rgba(234,179,8,0.5)] hover:border-white/40'
     : 'bg-white/5 text-white border border-white/10 hover:bg-white/10 hover:border-white/20 shadow-lg';
@@ -168,7 +168,7 @@ function GlassButton({
 
 function SignupCTA() {
   return (
-    <motion.div 
+    <motion.div
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', damping: 20 }}
@@ -181,7 +181,11 @@ function SignupCTA() {
             Bot-Shield verification is live now.
           </span>
         </div>
-        <GlassButton href={SECURE_PLAN_LINKS.bot_shield} primary className="!py-2 !px-4 !text-xs">
+        <GlassButton
+          href={SECURE_PLAN_LINKS.bot_shield}
+          primary
+          className="!py-2 !px-4 !text-xs"
+        >
           Get Verified
         </GlassButton>
       </div>
@@ -216,7 +220,7 @@ function BetaCodeEntry() {
 
   if (success) {
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         className="mt-6 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-5 py-3 text-sm font-semibold tracking-wide text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.1)]"
@@ -255,9 +259,9 @@ function BetaCodeEntry() {
         </motion.form>
       )}
       {error && (
-        <motion.p 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 1 }} 
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           className="mt-3 text-sm font-semibold tracking-wide text-red-400"
         >
           {error}
@@ -287,9 +291,12 @@ function VerificationSteps() {
   ];
 
   return (
-    <section id="verification" className="relative z-10 py-20 px-4 md:px-12 md:py-32">
+    <section
+      id="verification"
+      className="relative z-10 py-20 px-4 md:px-12 md:py-32"
+    >
       <div className="mx-auto max-w-7xl">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -334,9 +341,12 @@ function VerificationSteps() {
 
 function PricingSection() {
   return (
-    <section id="pricing" className="relative z-10 py-20 px-4 md:px-12 md:py-32">
+    <section
+      id="pricing"
+      className="relative z-10 py-20 px-4 md:px-12 md:py-32"
+    >
       <div className="mx-auto max-w-7xl">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -349,11 +359,11 @@ function PricingSection() {
             Pick your lane.
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-zinc-300">
-            Every checkout route is account-bound. Public pricing is live, plain,
-            and tied to the actual launch flow.
+            Every checkout route is account-bound. Public pricing is live,
+            plain, and tied to the actual launch flow.
           </p>
         </motion.div>
-        
+
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
           {PRICING_PLANS.map((plan, i) => (
             <motion.a
@@ -365,15 +375,15 @@ function PricingSection() {
               transition={{ delay: i * 0.1 }}
               whileHover={{ y: -5 }}
               className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-300 ${
-                plan.popular 
-                  ? 'border-yellow-500/50 bg-yellow-500/10 shadow-[0_0_30px_rgba(234,179,8,0.15)] hover:shadow-[0_0_40px_rgba(234,179,8,0.25)]' 
+                plan.popular
+                  ? 'border-yellow-500/50 bg-yellow-500/10 shadow-[0_0_30px_rgba(234,179,8,0.15)] hover:shadow-[0_0_40px_rgba(234,179,8,0.25)]'
                   : 'border-white/10 bg-white/5 hover:bg-white/10'
               } backdrop-blur-md`}
             >
               {plan.popular && (
                 <div className="absolute inset-0 bg-gradient-to-b from-yellow-500/10 to-transparent pointer-events-none" />
               )}
-              
+
               <div className="relative z-10">
                 {plan.popular && (
                   <span className="mb-4 inline-block rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 px-3 py-1 text-xs font-bold text-white shadow-[0_0_10px_rgba(234,179,8,0.4)]">
@@ -385,7 +395,7 @@ function PricingSection() {
                     Live
                   </span>
                 )}
-                
+
                 <div className="mb-2 text-3xl font-bold text-white md:text-4xl">
                   {plan.price}
                 </div>
@@ -396,17 +406,23 @@ function PricingSection() {
                   {plan.desc}
                 </p>
               </div>
-              
+
               <div className="relative z-10 mt-8">
-                <div className={`inline-flex items-center gap-2 text-sm font-semibold ${plan.popular ? 'text-yellow-400' : 'text-zinc-300'} group-hover:text-white transition-colors`}>
-                  Select Plan <ChevronRight size={16} className="transition-transform group-hover:tranzinc-x-1" />
+                <div
+                  className={`inline-flex items-center gap-2 text-sm font-semibold ${plan.popular ? 'text-yellow-400' : 'text-zinc-300'} group-hover:text-white transition-colors`}
+                >
+                  Select Plan{' '}
+                  <ChevronRight
+                    size={16}
+                    className="transition-transform group-hover:tranzinc-x-1"
+                  />
                 </div>
               </div>
             </motion.a>
           ))}
         </div>
-        
-        <motion.p 
+
+        <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -454,7 +470,7 @@ function WaitlistForm() {
   return (
     <section id="join" className="relative z-10 py-20 px-4 md:px-12 md:py-32">
       <div className="mx-auto max-w-3xl text-center">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -466,21 +482,22 @@ function WaitlistForm() {
             Join the list.
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-zinc-300 mb-10">
-            Get early access updates without the noise. The waitlist is simple by design.
+            Get early access updates without the noise. The waitlist is simple
+            by design.
           </p>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 md:p-10 backdrop-blur-xl shadow-2xl"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-stone-500/5 pointer-events-none" />
-          
+
           <div className="relative z-10">
             {submitted ? (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="space-y-4"
@@ -488,9 +505,12 @@ function WaitlistForm() {
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20 text-green-400">
                   <Check size={32} />
                 </div>
-                <h3 className="text-2xl font-bold text-white">You're on the list.</h3>
+                <h3 className="text-2xl font-bold text-white">
+                  You're on the list.
+                </h3>
                 <p className="text-zinc-400">
-                  Launch updates will go to your address. Need help? Email support.
+                  Launch updates will go to your address. Need help? Email
+                  support.
                 </p>
               </motion.div>
             ) : (
@@ -527,7 +547,11 @@ function WaitlistForm() {
                     className="w-full rounded-full border border-white/20 bg-white/5 py-4 pl-12 pr-6 text-base font-medium text-white outline-none backdrop-blur-md transition-all focus:border-yellow-500/50 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(234,179,8,0.2)] placeholder:text-zinc-400"
                   />
                 </div>
-                <GlassButton type="submit" primary className="!py-4 sm:w-auto w-full">
+                <GlassButton
+                  type="submit"
+                  primary
+                  className="!py-4 sm:w-auto w-full"
+                >
                   Join Now
                 </GlassButton>
               </form>
@@ -582,9 +606,7 @@ function LegalModal({ type, onClose }: { type: string; onClose: () => void }) {
         onClick={e => e.stopPropagation()}
       >
         <div className="mb-6 flex items-center justify-between gap-4 border-b border-white/10 pb-4">
-          <h3 className="text-2xl font-bold text-white">
-            {content.title}
-          </h3>
+          <h3 className="text-2xl font-bold text-white">{content.title}</h3>
           <button
             onClick={onClose}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-zinc-400 transition-colors hover:bg-white/10 hover:text-white"
@@ -621,12 +643,10 @@ function SuccessModal({ onClose }: { onClose: () => void }) {
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-500/20 text-green-400 ring-4 ring-green-500/10 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
             <ShieldCheck size={40} />
           </div>
-          <h3 className="text-3xl font-bold text-white">
-            Verified.
-          </h3>
+          <h3 className="text-3xl font-bold text-white">Verified.</h3>
           <p className="mt-4 text-zinc-300 leading-relaxed">
-            Your verification is complete. Square handles receipt delivery for the
-            payment email used at checkout.
+            Your verification is complete. Square handles receipt delivery for
+            the payment email used at checkout.
           </p>
           <div className="mt-8">
             <GlassButton onClick={onClose} primary className="w-full">
@@ -659,16 +679,25 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
             Launch Links
           </h4>
           <div className="mt-6 flex flex-col gap-4 text-sm font-medium text-zinc-400">
-            <a href="#pricing" className="transition-colors hover:text-yellow-400">
+            <a
+              href="#pricing"
+              className="transition-colors hover:text-yellow-400"
+            >
               Pricing
             </a>
             <a href="#join" className="transition-colors hover:text-yellow-400">
               Waitlist
             </a>
-            <a href="/support" className="transition-colors hover:text-yellow-400">
+            <a
+              href="/support"
+              className="transition-colors hover:text-yellow-400"
+            >
               Support
             </a>
-            <a href="mailto:contact@youandinotai.com" className="transition-colors hover:text-yellow-400">
+            <a
+              href="mailto:contact@youandinotai.com"
+              className="transition-colors hover:text-yellow-400"
+            >
               Contact
             </a>
           </div>
@@ -712,12 +741,10 @@ export function PublicSupportPage() {
         <main className="flex-1 px-6 py-12 md:px-12 md:py-24">
           <div className="mx-auto max-w-4xl">
             <div className="mb-10 flex items-center justify-between">
-              <GlassButton href="/">
-                Back Home
-              </GlassButton>
+              <GlassButton href="/">Back Home</GlassButton>
             </div>
 
-            <motion.section 
+            <motion.section
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl md:p-12 shadow-2xl"
@@ -767,15 +794,11 @@ export function PublicSupportPage() {
                 <GlassButton href="/login" primary>
                   Sign In
                 </GlassButton>
-                <GlassButton href="/register">
-                  Create Account
-                </GlassButton>
+                <GlassButton href="/register">Create Account</GlassButton>
                 <GlassButton href="mailto:contact@youandinotai.com?subject=YouAndiNotAi%20Support">
                   Email Support
                 </GlassButton>
-                <GlassButton href="/app/support">
-                  Member Support
-                </GlassButton>
+                <GlassButton href="/app/support">Member Support</GlassButton>
               </div>
             </motion.section>
           </div>
@@ -806,9 +829,22 @@ export default function App() {
     } else {
       // Fallback for vanity paths (e.g. youandinotai.com/mkbhd)
       const pathParts = window.location.pathname.split('/').filter(Boolean);
-      const reservedRoutes = ['login', 'register', 'app', 'pricing', 'about', 'platform'];
-      if (pathParts.length === 1 && !reservedRoutes.includes(pathParts[0].toLowerCase())) {
-        localStorage.setItem('antigravity_partner_id', pathParts[0].toLowerCase());
+      const reservedRoutes = [
+        'login',
+        'register',
+        'app',
+        'pricing',
+        'about',
+        'platform',
+      ];
+      if (
+        pathParts.length === 1 &&
+        !reservedRoutes.includes(pathParts[0].toLowerCase())
+      ) {
+        localStorage.setItem(
+          'antigravity_partner_id',
+          pathParts[0].toLowerCase()
+        );
       }
     }
 
@@ -823,7 +859,7 @@ export default function App() {
     <ThemeProvider>
       <div className="relative min-h-screen bg-zinc-950 text-zinc-300 font-sans selection:bg-yellow-500/30 selection:text-white pb-cta">
         <HeroBackground />
-        
+
         <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-zinc-950/50 backdrop-blur-xl">
           <div className="mx-auto max-w-7xl px-4 py-4 md:px-12 flex items-center justify-between">
             <div className="text-xl font-black tracking-tight text-white md:text-2xl">
@@ -844,7 +880,11 @@ export default function App() {
 
             <div className="hidden md:flex items-center gap-4">
               <ThemeToggle />
-              <GlassButton href={SECURE_PLAN_LINKS.bot_shield} primary className="!py-2 !px-5">
+              <GlassButton
+                href={SECURE_PLAN_LINKS.bot_shield}
+                primary
+                className="!py-2 !px-5"
+              >
                 Get Verified
               </GlassButton>
             </div>
@@ -859,7 +899,7 @@ export default function App() {
 
           <AnimatePresence>
             {menuOpen && (
-              <motion.div 
+              <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
@@ -877,7 +917,11 @@ export default function App() {
                     </a>
                   ))}
                   <div className="mt-4 pt-4 border-t border-white/10 flex justify-center">
-                    <GlassButton href={SECURE_PLAN_LINKS.bot_shield} primary className="w-full">
+                    <GlassButton
+                      href={SECURE_PLAN_LINKS.bot_shield}
+                      primary
+                      className="w-full"
+                    >
                       Get Verified
                     </GlassButton>
                   </div>
@@ -894,9 +938,12 @@ export default function App() {
             </span>
           </div>
 
-          <section id="about" className="relative flex min-h-[85vh] items-center px-4 py-20 md:px-12">
+          <section
+            id="about"
+            className="relative flex min-h-[85vh] items-center px-4 py-20 md:px-12"
+          >
             <div className="mx-auto grid max-w-7xl gap-16 md:grid-cols-2 items-center">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
@@ -905,28 +952,36 @@ export default function App() {
                   <Sparkles size={14} /> Section 01 // Human Only
                 </div>
                 <h1 className="text-5xl font-bold leading-[1.1] tracking-tight text-white md:text-7xl lg:text-8xl">
-                  Real people.<br />
+                  Real people.
+                  <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-500">
                     Zero bot noise.
                   </span>
                 </h1>
                 <p className="mt-6 text-lg leading-relaxed text-zinc-300 md:text-xl max-w-lg">
                   A human-first social platform for dating, meetups, and
-                  real-world connection. AI is used to protect the experience, not
-                  perform it.
+                  real-world connection. AI is used to protect the experience,
+                  not perform it.
                 </p>
-                
+
                 <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                  <GlassButton href={SECURE_PLAN_LINKS.bot_shield} primary className="!py-4 !px-8 text-base">
+                  <GlassButton
+                    href={SECURE_PLAN_LINKS.bot_shield}
+                    primary
+                    className="!py-4 !px-8 text-base"
+                  >
                     Get Verified
                   </GlassButton>
-                  <GlassButton href="#pricing" className="!py-4 !px-8 text-base">
+                  <GlassButton
+                    href="#pricing"
+                    className="!py-4 !px-8 text-base"
+                  >
                     See Pricing
                   </GlassButton>
                 </div>
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
@@ -934,21 +989,45 @@ export default function App() {
               >
                 <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-yellow-500/30 to-amber-500/30 blur-2xl" />
                 <div className="relative rounded-3xl border border-white/10 bg-zinc-900/50 p-8 backdrop-blur-xl shadow-2xl md:p-10">
-                  <h2 className="text-2xl font-bold text-white mb-4">Launch Status</h2>
+                  <h2 className="text-2xl font-bold text-white mb-4">
+                    Launch Status
+                  </h2>
                   <p className="text-zinc-300 mb-8">
                     The public surface is product-first: verification, pricing,
                     support, and profile flow.
                   </p>
-                  
+
                   <div className="space-y-4">
                     {[
-                      { title: 'Bot-Shield Flow', status: 'Live', color: 'from-green-500/20 to-emerald-500/20', text: 'text-green-400' },
-                      { title: 'Founder Checkouts', status: 'Live', color: 'from-yellow-500/20 to-amber-500/20', text: 'text-yellow-400' },
-                      { title: 'Profiles & Social', status: 'Waitlist', color: 'from-zinc-500/20 to-zinc-400/20', text: 'text-zinc-400' },
+                      {
+                        title: 'Bot-Shield Flow',
+                        status: 'Live',
+                        color: 'from-green-500/20 to-emerald-500/20',
+                        text: 'text-green-400',
+                      },
+                      {
+                        title: 'Founder Checkouts',
+                        status: 'Live',
+                        color: 'from-yellow-500/20 to-amber-500/20',
+                        text: 'text-yellow-400',
+                      },
+                      {
+                        title: 'Profiles & Social',
+                        status: 'Waitlist',
+                        color: 'from-zinc-500/20 to-zinc-400/20',
+                        text: 'text-zinc-400',
+                      },
                     ].map((item, i) => (
-                      <div key={i} className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 p-4">
-                        <span className="font-semibold text-white">{item.title}</span>
-                        <span className={`rounded-full bg-gradient-to-r ${item.color} px-3 py-1 text-xs font-bold ${item.text}`}>
+                      <div
+                        key={i}
+                        className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 p-4"
+                      >
+                        <span className="font-semibold text-white">
+                          {item.title}
+                        </span>
+                        <span
+                          className={`rounded-full bg-gradient-to-r ${item.color} px-3 py-1 text-xs font-bold ${item.text}`}
+                        >
                           {item.status}
                         </span>
                       </div>
@@ -959,9 +1038,12 @@ export default function App() {
             </div>
           </section>
 
-          <section id="platform" className="relative z-10 py-20 px-4 md:px-12 md:py-32 bg-zinc-950/50">
+          <section
+            id="platform"
+            className="relative z-10 py-20 px-4 md:px-12 md:py-32 bg-zinc-950/50"
+          >
             <div className="mx-auto max-w-7xl">
-               <div className="grid gap-8 md:grid-cols-3">
+              <div className="grid gap-8 md:grid-cols-3">
                 {PLATFORM_CARDS.map((card, i) => (
                   <motion.div
                     key={card.title}
@@ -974,11 +1056,13 @@ export default function App() {
                     <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-white shadow-inner">
                       <card.icon size={28} />
                     </div>
-                    <h3 className="mb-4 text-2xl font-bold text-white">{card.title}</h3>
+                    <h3 className="mb-4 text-2xl font-bold text-white">
+                      {card.title}
+                    </h3>
                     <p className="text-zinc-400 leading-relaxed">{card.body}</p>
                   </motion.div>
                 ))}
-               </div>
+              </div>
             </div>
           </section>
 
@@ -993,9 +1077,10 @@ export default function App() {
 
       <AnimatePresence>
         {showSuccess && <SuccessModal onClose={() => setShowSuccess(false)} />}
-        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
+        {legalModal && (
+          <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />
+        )}
       </AnimatePresence>
     </ThemeProvider>
   );
 }
-

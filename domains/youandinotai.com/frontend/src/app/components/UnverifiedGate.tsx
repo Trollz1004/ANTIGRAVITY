@@ -14,9 +14,12 @@ export function UnverifiedGate() {
         <div className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-3">
           Bot-Shield required
         </div>
-        <h1 className="text-3xl font-black tracking-tight mb-3">prove you&apos;re human.</h1>
+        <h1 className="text-3xl font-black tracking-tight mb-3">
+          prove you&apos;re human.
+        </h1>
         <p className="text-white/60 mb-6 leading-relaxed">
-          Everyone here is verified. Finish the one-time $1 Bot-Shield check to browse, match, and message.
+          Everyone here is verified. Finish the one-time $1 Bot-Shield check to
+          browse, match, and message.
         </p>
         <Link
           to="/app/verify"
@@ -24,7 +27,10 @@ export function UnverifiedGate() {
         >
           Get verified
         </Link>
-        <Link to="/app/profile" className="block mt-4 text-sm text-white/50 hover:text-white/80">
+        <Link
+          to="/app/profile"
+          className="block mt-4 text-sm text-white/50 hover:text-white/80"
+        >
           Back to my profile
         </Link>
       </div>

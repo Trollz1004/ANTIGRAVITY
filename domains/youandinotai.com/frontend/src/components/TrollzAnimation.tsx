@@ -177,4 +177,3 @@ export function TrollzAnimation({ onComplete }: { onComplete: () => void }) {
     </div>
   );
 }
-

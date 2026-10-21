@@ -210,4 +210,3 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
     </motion.div>
   );
 }
-
