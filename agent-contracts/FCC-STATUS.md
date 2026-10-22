@@ -1,4 +1,6 @@
-# FCC — permanently banned
+# FCC — ban lifted 2026-10-22, under terms
+
+> **Status 2026-10-22 (Joshua): free-claude-code is allowed back as an MCP server and worker lane, because it is useful in many ways.** Terms, which come from the reason it was banned: it is a worker, never a judge; it never runs as `fcc-claude` or any launcher that takes over the Claude CLI login (only one Claude CLI login works at a time); it never signs anything as Claude or Opus; it never holds an Anthropic key and never sets `ANTHROPIC_BASE_URL`; its provider keys live in env files or GitHub secrets only. The hook `.claude/hookify.block-fcc.local.md` still blocks the wrapper and bridge names. Everything below is the 2026-08-23 record, kept as history.
 
 > **Status: PERMANENT. Joshua, 2026-08-23 — "no fcc at all ever again."** This is not a retirement pending review and not a dormant fallback. FCC is banned from this stack outright, and the ban has no expiry and no reinstatement path short of Joshua reversing it himself in writing.
 
