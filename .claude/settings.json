@@ -10,6 +10,15 @@
             "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\ANTIGRAVITY\\.claude\\hooks\\guard-protected-paths.ps1\""
           }
         ]
+      },
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\ANTIGRAVITY\\.claude\\hooks\\guard-claude-surface.ps1\""
+          }
+        ]
       }
     ]
   }

@@ -39,6 +39,16 @@ Why this rule exists: on 2026-10-04 Misses Trollz passed every score while what 
 
 > **Status:** LANDED by the judge lane under Joshua’s authority on 2026-08-19. This doctrine is ACTIVE. Runtime service launch remains a separate, deliberate, Joshua-authorized action.
 
+## Rulings of 2026-10-22 (Joshua): judges and how models are reached. Win over every older section below; the same section is in CLAUDE.md
+
+- **Three judges, any one of them can judge: Claude, Codex, Jules.** When Claude hits a usage cap, Codex or Jules judges and the work does not wait. The final gate is the GitHub rule on the repository, which will not merge without it. Only Claude edits Claude's files (CLAUDE.md, `.claude/`, Claude's journals and memory).
+- **Official Claude judge lanes are sign-in only:** claude.ai (web, desktop, mobile), Claude Code in the Antigravity editor and the official `claude` CLI, and Claude in Chrome. Never an API key, `ANTHROPIC_API_KEY` or `ANTHROPIC_BASE_URL`. Anything else that answers as Claude never signs as Claude or Opus.
+- **Every official lane signs in; none uses a key:** Claude, Codex, Gemini/agy, Jules, Grok, Kimi, Hermes (device login).
+- **OmniRoute is a convenience, not the gate.** It stays on `:20128`; a lane may use it, but nothing is required to go through it, and it does not handle several clients at once reliably. The 2026-07-14 "one gate, fail closed" order is history. Claude never routes through OmniRoute.
+- **API-key lanes** (OpenRouter, free-claude-code, Ollama Cloud and similar) keep their keys only in env files or GitHub Actions secrets. Never in code, a commit, a log, a PR body or chat.
+- **free-claude-code is allowed back as an MCP server and worker lane** (2026-10-22): never a judge, never a launcher that takes over the Claude CLI login, never signs as Claude or Opus, never holds an Anthropic key. Terms in `agent-contracts/FCC-STATUS.md`.
+- **Paperclip is gone** (retired 2026-10-20). Every Paperclip line below is history.
+
 ## Rulings of 2026-10-17 (Joshua): win over every older section below; the same section is in CLAUDE.md
 
 > Written by Claude (Opus) in the Antigravity IDE on Joshua's direct instruction. Machine-readable copy for every agent: `docs/memory-layer/agent-workflow-graphy.json` (Obsidian: `Antigravity/Agent Universal/agent-workflow-graphy.json`).
@@ -57,7 +67,7 @@ Why this rule exists: on 2026-10-04 Misses Trollz passed every score while what 
 
 ## Rulings of 2026-10-15 (Joshua, amended 2026-10-20): the same section is in CLAUDE.md
 
-- **The 100% rule.** Nothing is pushed unless it is 100% done and proven; 90% is not pushed. Nothing is merged unless Claude validates it; anything Claude has not validated is rejected. One branch per repo (`main`).
+- **The 100% rule.** Nothing is pushed unless it is 100% done and proven; 90% is not pushed. Nothing is merged unless a judge (Claude, Codex or Jules) validates it and the GitHub rule passes (amended 2026-10-22). One branch per repo (`main`).
 - **OpenClaw watches the T5500, 100%** (amended 2026-10-17: OpenClaw is the only sentry). Keep-alive heals; OpenClaw's sentry window watches the keep-alive. Codex stands down from watching the node (`ops/handoffs/CODEX-HANDOFF-2026-10-15.md`).
 - **Paperclip is retired (2026-10-20); all marketing runs in Mission Agent OS (`http://127.0.0.1:3130/marketing`) via the Social Command Center under Gemini Antigravity Ultra (`agy` OAuth).**
 - **Gemini Antigravity Ultra is a full co-builder AND the sole marketing engine (amended 2026-10-20).** Gemini and Claude are authorized co-builders with Joshua across `C:\ANTIGRAVITY`, and Gemini Antigravity Ultra coordinates and executes 100% of the Mission OS Social Command Center (`/marketing`) and 3-domain marketing plans.
