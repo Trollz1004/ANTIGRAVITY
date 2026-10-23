@@ -21,12 +21,12 @@
       "docs/payment-flow-verification-2026-06-01.md"
     ],
     "processor": "Square only on youandinotai.com",
-    "history": "15 Square attempts 2025-04 to 2026-08 (incl. one $10 refund), every one Joshua's own test charge; pipeline proven in production",
+    "history": "15 Square attempts 2025-04 to 2026-08 (incl. one $10 refund), every one Joshua's own test charge; plus two $1.00 Bot-Shield charges on 2026-09-18 (receipts b3FM, v1nS) paid by Heather, a friend Joshua asked to be the first customer (a real third-party card, not organic demand); pipeline proven in production",
     "notABlocker": "Past test charges are not a blocker and their count is irrelevant; 100% of revenue stays with the business",
     "never": "Do not re-verify, re-audit, re-test or ask Joshua about past test charges",
     "reopenOnlyIf": [
       "a real Square webhook failure in production",
-      "a new non-Joshua payment in Square (first real customer: report it, do not verify it)"
+      "a payment in Square from a buyer not already listed in docs/PAYMENTS-TRUTH.md (report it, do not verify it)"
     ],
     "privateRecords": "OneDrive claude-to-claude/payments-private-2026-09-17 holds bank statements: never copy, quote or commit",
     "keepFiles": "Never delete either record file"

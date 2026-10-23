@@ -9,7 +9,7 @@
 1. Only claim what a source in section 4 says. A video, a post or a podcast script that states a number not in those files is wrong by definition.
 2. The date app is **18+**. Every surface, script and caption carries the 18+ footer. Never a "younger" angle, never a picture of anyone under 18.
 3. The banned word list in `.githooks/pre-commit-canonical` (the FL §496.405 wall) applies to every customer-facing word Emergent or NotebookLM produces. This is a business. Describe it as one.
-4. Public numbers today are **zero**: zero paying users, zero affiliates, zero payouts (`docs/PAYMENTS-TRUTH.md`, `ops/handoffs/PROMPT-FOR-EMERGENT-AFFILIATE-2026-09-28.md` section 2). Say zero, or say nothing.
+4. Public numbers today: zero affiliates and zero payouts, and no customer count is stated publicly. The only outside payments on record are two $1.00 charges on 2026-09-18 from a friend Joshua asked to be the first customer; never cite them as demand (`docs/PAYMENTS-TRUTH.md`, `ops/handoffs/PROMPT-FOR-EMERGENT-AFFILIATE-2026-09-28.md` section 2). Say zero where it is zero, or say nothing.
 5. Nothing posts directly. Every public post is a JARVIS proposal (`POST /api/social/proposals`, brand `youandinotai`) that the judge lane approves. Page copy lands on a branch under `ops/marketing/affiliate/`.
 6. No secrets, no tokens, no private URLs. If a file you are handed has one, stop and say so.
 
@@ -61,7 +61,7 @@ Not tracked (gitignored, on the nodes only): the DREAM slice frames (`godot --pa
 5. `.agents/skills/ultracode-house/SKILL.md` (the one map of nodes, lanes, MCP, brains, journals).
 6. `specs/011-ultracode-house/spec.md` (the Board Room and the five collab tracks).
 7. dream-online: `STATE.md`, `docs/DREAM-DISPATCH.md`, `docs/tech/engine-decision-2026-09-20.md`, `game/godot/DreamSlice/README.md`.
-8. `docs/PAYMENTS-TRUTH.md` (the real payment record, all owner tests, zero customers).
+8. `docs/PAYMENTS-TRUTH.md` (the real payment record: Joshua's own tests through 2026-08-16, plus one friendly first customer on 2026-09-18).
 
 Good NotebookLM outputs from these: a founder-story podcast (two years, four date apps, the deleted repositories, stone skin, the mission), an explainer video on Driftus and the Board Room as the House, a DREAM Online "what is playable today" short, an affiliate-program explainer for the 18+ app with the FTC disclosure line in it. Every script comes back through the JARVIS proposal path before it is public.
 

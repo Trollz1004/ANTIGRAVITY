@@ -24,7 +24,7 @@ caught up. Treat this as the lane's first job.
 
 ## 2. What exists and what does not (real or zero)
 
-- Exists: the app, the checkout (Square, the only rail, untouched), three owner test accounts, zero paying users, zero affiliates, zero payouts. Every public number starts at zero.
+- Exists: the app, the checkout (Square, the only rail, untouched), three owner test accounts, zero affiliates, zero payouts, and one friendly first customer (two $1.00 charges on 2026-09-18, a friend Joshua asked; never cite as demand, and state no customer count publicly). Every other public number starts at zero.
 - Does not exist: referral-code capture in the app, an affiliate dashboard, automated payouts. None of that is built in this brief. The program starts manual: a code per affiliate, the code entered by the new subscriber at sign-up in the existing free-text profile field or sent by email to the support address, and a monthly reconciliation against Square by the judge lane. When the first ten paying referrals exist, the judge lane specs the code capture as a JARVIS proposal; the checkout itself stays as frozen.
 
 ## 3. The rails (unchanged, from CLAUDE.md and specs/010)
