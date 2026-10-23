@@ -11,6 +11,7 @@ from app.allocation_compat import (
 from app.models import RevenueAllocation
 from app.revenue_allocation import (
     FOUNDER_TEST_PAYMENT_IDS,
+    FRIEND_FIRST_CUSTOMER_PAYMENT_IDS,
     calculate_platform_reserve_cents,
     classify_payer_type,
     reserve_revenue_allocation,
@@ -95,6 +96,18 @@ def test_classify_payer_type_known_founder_test():
     assert FOUNDER_TEST_PAYMENT_IDS  # not empty
     for pid in FOUNDER_TEST_PAYMENT_IDS:
         assert classify_payer_type(pid) == "founder_test"
+
+
+def test_classify_payer_type_friend_first_customer_by_prefix():
+    # The two outside charges are not founder tests and not independent demand.
+    assert len(FRIEND_FIRST_CUSTOMER_PAYMENT_IDS) == 2
+    assert not FRIEND_FIRST_CUSTOMER_PAYMENT_IDS & FOUNDER_TEST_PAYMENT_IDS
+    for pid in FRIEND_FIRST_CUSTOMER_PAYMENT_IDS:
+        assert classify_payer_type(pid) == "friend_first"
+        # Square returns the longer id; a prefix match must classify it too.
+        assert classify_payer_type(pid + "WQg5d9YY") == "friend_first"
+    # The column is String(20); every label must fit.
+    assert len("friend_first") <= 20
 
 
 def test_classify_payer_type_defaults_to_customer():

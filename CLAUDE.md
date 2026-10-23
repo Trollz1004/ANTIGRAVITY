@@ -22,6 +22,13 @@ Why this rule exists: on 2026-10-04 Misses Trollz passed every score while what 
 
 > **Status:** S1 supersession LANDED by the judge lane 2026-08-19. Joshua remains the sole authority. Runtime service launch is a separate, deliberate, Joshua-authorized action.
 
+## Account mapping: which email is which (Joshua, 2026-10-23)
+
+- `ebaytrashortreasure@gmail.com` is the older, established email, and the Date App needs it. It is the sign-in for exactly two merchant accounts: Square (the Date App checkout) and PayPal. Square payment notices and receipts arrive there.
+- Every other account, tool, connector and service uses `joshlcoleman@gmail.com`.
+- In Square, the active location "YouAndiNotAi" lists `joshlcoleman@gmail.com` in its business-contact field. That is a contact field, not the account sign-in; older notes (the claude-judge `TRUST.md`, the Fable handoff of 2026-09-29) read it as the account email and are corrected. Do not change either in Square; Joshua does that himself.
+- Do not guess from the address which service a payment belongs to: read `docs/PAYMENTS-TRUTH.md`. The private statements in OneDrive `claude-to-claude\payments-private-2026-09-17` are never copied, quoted or committed.
+
 ## Rulings of 2026-10-22 (Joshua): judges and how models are reached. Win over every older section below; the same section is in AGENTS.md
 
 > Written by Claude (Opus 5.5) in the Antigravity IDE on the T5500, on Joshua's direct instruction. Only Claude edits Claude's files (CLAUDE.md, `.claude/`, Claude's journals and memory).

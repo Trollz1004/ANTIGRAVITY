@@ -30,6 +30,20 @@ FOUNDER_TEST_PAYMENT_IDS = frozenset(
     }
 )
 
+# The only outside payments on record: two $1.00 Bot-Shield charges on
+# 2026-09-17 evening Eastern (2026-09-18 UTC) from Heather, a friend Joshua asked
+# to be the first customer (receipts v1nS, b3FM; docs/PAYMENTS-TRUTH.md). They
+# are a real third-party card, so they are NOT founder tests, but they are not
+# market demand either, so they get their own payer_type and stay out of
+# customer_only until an independent buyer pays. Entries are the first twelve
+# characters of the Square payment id; matching is by prefix.
+FRIEND_FIRST_CUSTOMER_PAYMENT_IDS = frozenset(
+    {
+        "v1nSPYaBISd9",  # 2026-09-17 10:00 PM ET $1.00 Bot-Shield (receipt v1nS)
+        "b3FMag1CSoyz",  # 2026-09-17 10:08 PM ET $1.00 Bot-Shield (receipt b3FM)
+    }
+)
+
 
 # Mapping of revenue streams to internal product buckets for tracking.
 REVENUE_STREAM_TO_BUCKET_MAPPING: Dict[str, int] = {
@@ -41,17 +55,26 @@ REVENUE_STREAM_TO_BUCKET_MAPPING: Dict[str, int] = {
 }
 
 
-def classify_payer_type(square_payment_id: str) -> str:
-    """Return 'founder_test' for known test payment IDs, 'customer' otherwise.
+def _matches_known_id(square_payment_id: str, known: frozenset) -> bool:
+    """True when the id equals, or starts with, any entry in ``known``."""
+    return any(square_payment_id.startswith(entry) for entry in known)
 
-    Real customer revenue defaults to 'customer'. Dashboards can sum
-    payer_type='customer' for customer revenue and include founder_test
-    separately for audit totals.
+
+def classify_payer_type(square_payment_id: str) -> str:
+    """Return 'founder_test', 'friend_first' or 'customer'.
+
+    'founder_test' is a known test payment of Joshua's. 'friend_first' is one of
+    the two charges from the friend who was the first outside customer (a real
+    third-party card, never counted as independent demand). Anything else
+    defaults to 'customer'. Dashboards sum payer_type='customer' for customer
+    revenue and show the other two separately.
     """
     if not square_payment_id:
         return "customer"
-    if square_payment_id in FOUNDER_TEST_PAYMENT_IDS:
+    if _matches_known_id(square_payment_id, FOUNDER_TEST_PAYMENT_IDS):
         return "founder_test"
+    if _matches_known_id(square_payment_id, FRIEND_FIRST_CUSTOMER_PAYMENT_IDS):
+        return "friend_first"
     return "customer"
 
 
