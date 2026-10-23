@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { zodToJsonSchema } from 'zod-to-json-schema';
 import type Database from 'better-sqlite3';
 
 import { CreateTaskInput, ListTasksInput, UpdateTaskInput, createTask, listTasks, updateTask } from './tasks.js';
@@ -19,11 +18,30 @@ export interface ToolContext {
 export interface ToolDef {
   name: string;
   description: string;
-  inputSchema: ReturnType<typeof zodToJsonSchema>;
+  inputSchema: Record<string, unknown>;
   handler: (ctx: ToolContext, input: unknown) => unknown;
 }
 
-function makeTool<T extends z.ZodTypeAny>(opts: {
+// zod 4 emits JSON Schema natively. Keep the published tool schemas identical to
+// what zod-to-json-schema produced under zod 3: closed objects, and no synthetic
+// safe-integer bounds on z.number().int().
+function tidy(node: unknown): unknown {
+  if (Array.isArray(node)) return node.map(tidy);
+  if (!node || typeof node !== 'object') return node;
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(node)) {
+    if ((k === 'maximum' && v === Number.MAX_SAFE_INTEGER) || (k === 'minimum' && v === Number.MIN_SAFE_INTEGER)) continue;
+    out[k] = tidy(v);
+  }
+  if (out.type === 'object' && out.properties && !('additionalProperties' in out)) out.additionalProperties = false;
+  return out;
+}
+
+function toInputSchema(schema: z.ZodType): Record<string, unknown> {
+  return tidy(z.toJSONSchema(schema, { target: 'draft-7', io: 'input', reused: 'inline' })) as Record<string, unknown>;
+}
+
+function makeTool<T extends z.ZodType>(opts: {
   name: string;
   description: string;
   schema: T;
@@ -32,7 +50,7 @@ function makeTool<T extends z.ZodTypeAny>(opts: {
   return {
     name: opts.name,
     description: opts.description,
-    inputSchema: zodToJsonSchema(opts.schema, { $refStrategy: 'none' }),
+    inputSchema: toInputSchema(opts.schema),
     handler: (ctx, raw) => opts.handler(ctx, opts.schema.parse(raw)),
   };
 }
