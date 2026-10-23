@@ -58,11 +58,12 @@ $10.00, net $35.99 before $5.54 in Square fees. All via ECOMMERCE_API
 ## Standing rule for every agent (Hermes, Copilot, OpenCode, Gemini, CEO, all)
 
 PAYMENTS ARE VERIFIED. Do not re-verify, re-audit, re-test, or ask Joshua
-about date-app payments. The only trigger to touch payments again is a real
+about date-app payments. The only triggers to reopen payments are a real
 Square webhook failure in production, or a payment from a buyer not already
-in this table. To check that, list Square payments and compare against this
-table; anything new is reported, not "verified". Checking for new money is
-expected; the rule only bars re-auditing the history above.
+in this table. To check, list Square payments and compare against this table;
+every payment id not in the table is reported (including another payment from
+a buyer already listed), never "verified". Checking for new money is expected;
+the rule only bars re-auditing the history above.
 
 Re-pull command for the future (read-only, judge lane): Square connector,
 service payments, method list, sort DESC. Nothing else.
@@ -78,7 +79,7 @@ why agents kept re-verifying. It is restored beside this file as
 docs/payment-flow-verification-2026-06-01.md. Do not delete either file.
 
 ---
-sha256 of everything above this line: 319a5f4d9b7e9cddf5c49de0d9c24c41d78b4720fb47873740dadd1e34f1eed4
+sha256 of the text above the --- separator that precedes this line (separator excluded; trailing whitespace trimmed, one final newline added): be9087410a0e0eb3c7b244a82f4d4359a5331a7e06765a82c9b570a843b96626
 
 ---
 Addendum 2026-09-16 (outside the anchored body): memory token `PAYMENTS-VERIFIED-square-2026-07-14` written to Hermes durable memory (`~/.hermes/memories/01M2NDN427W04EYPPES6CNW7BA.md`); `HERMES-GATE-LOCKDOWN-2026-07-14.md` now carries a status banner marking Phase 4 superseded by this record. Ruled by Joshua: 100% of revenue stays with the business; the count of test charges is irrelevant. The lockdown doc itself stays untracked because canonical-guard rejects its 2026-07-14 history lines.
@@ -90,6 +91,6 @@ paid two $1.00 Bot-Shield charges on 2026-09-18. The 2026-09-19 addendum drafted
 this was never committed. The anchored body above was corrected to match what the
 Square connector returned on 2026-09-19 (receipts b3FM, v1nS), and the anchor was
 re-computed. Previous anchor: c73e0cba3aba14b4963021360915f9acd5fb7163f9acfc6202a608d846051bf9.
-Re-computing rule: sha256 of everything above the dashes line, with trailing
-whitespace trimmed and one newline added. The 2026-09-18 figures were not
+Re-computing rule: see the anchor line above; it is the only statement of the byte range.
+The 2026-09-18 figures were not
 re-pulled today because the Square connector needs a reconnect.

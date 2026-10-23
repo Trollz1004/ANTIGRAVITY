@@ -54,7 +54,7 @@
       {
         "title": "Weekly revenue-asset digest + next-week plan",
         "agent": "openclaw",
-        "prompt": "You are reviewing a week of generated revenue assets that were committed under mission-control-output/ (outreach drafts, directory copy, blog + social content, store copy). Write a one-page digest: what asset types exist now, which are ready to ship as-is, which need a human pass before sending (anything outbound), and a prioritized 5-item plan for next week focused on the shortest path to a FIRST verified sale via Square. Be blunt about what is blocked on Joshua (sending emails, submitting directories, posting socials — agents draft, a human ships). Output as File: reports/week-digest.md"
+        "prompt": "You are reviewing a week of generated revenue assets that were committed under mission-control-output/ (outreach drafts, directory copy, blog + social content, store copy). Write a one-page digest: what asset types exist now, which are ready to ship as-is, which need a human pass before sending (anything outbound), and a prioritized 5-item plan for next week focused on the shortest path to the next independent-demand sale via Square. Do not count Heather's charges as market demand. Be blunt about what is blocked on Joshua (sending emails, submitting directories, posting socials — agents draft, a human ships). Output as File: reports/week-digest.md"
       }
     ],
     "Saturday": [
