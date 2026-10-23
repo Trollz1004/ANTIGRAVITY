@@ -30,7 +30,8 @@ FOUNDER_TEST_PAYMENT_IDS = frozenset(
     }
 )
 
-# The only outside payments on record: two $1.00 Bot-Shield charges on
+# Two of the three outside payments on record (the third, receipt T14t on
+# 2026-02-17 from a buyer Joshua does not know, stays 'customer'): two $1.00 Bot-Shield charges on
 # 2026-09-17 evening Eastern (2026-09-18 UTC) from Heather, a friend Joshua asked
 # to be the first customer (receipts v1nS, b3FM; docs/PAYMENTS-TRUTH.md). They
 # are a real third-party card, so they are NOT founder tests, but they are not
