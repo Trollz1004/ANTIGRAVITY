@@ -21,7 +21,7 @@
       "docs/payment-flow-verification-2026-06-01.md"
     ],
     "processor": "Square only on youandinotai.com",
-    "history": "15 Square attempts 2025-04 to 2026-08 (incl. one $10 refund), every one Joshua's own test charge; plus two $1.00 Bot-Shield charges on 2026-09-18 (receipts b3FM, v1nS) paid by Heather, a friend Joshua asked to be the first customer (a real third-party card, not organic demand); pipeline proven in production",
+    "history": "16 Square attempts 2025-04 to 2026-08 (incl. one $10 refund): 15 are Joshua's own test charges and one is a $1.00 charge on 2026-02-17 (receipt T14t, second location) from a buyer Joshua does not know, left as is by Joshua on 2026-10-23; plus two $1.00 Bot-Shield charges on 2026-09-18 (receipts b3FM, v1nS) paid by Heather, a friend Joshua asked to be the first customer he arranged (a real third-party card, not organic demand); pipeline proven in production",
     "notABlocker": "Past test charges are not a blocker and their count is irrelevant; 100% of revenue stays with the business",
     "never": "Do not re-verify, re-audit, re-test or ask Joshua about past test charges",
     "reopenOnlyIf": [

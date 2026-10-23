@@ -5,19 +5,28 @@ via the claude.ai Square connector, and updated 2026-10-23 with the two 2026-09-
 LY5GN09F5AN83 "YouAndiNotAi" (CREDIT_CARD_PROCESSING). Second location
 L24ZX5WRA41TH is INACTIVE.
 
-## The whole history: 17 payment attempts, Joshua's own tests plus one friendly first customer
+## The whole history: 18 payment attempts: Joshua's own tests, one outside buyer he does not know, and one friendly customer
 
-Through 2026-08-16 (the first 15 attempts) every buyer email was one of
-Joshua's own addresses and every payment mapped to one Square customer record.
+Through 2026-08-16 every payment on the active location came from Joshua's own
+addresses, with one exception that sits on the inactive second location:
 
-On 2026-09-18 the first third-party payments arrived: two COMPLETED $1.00
-Bot-Shield charges from Heather, a friend Joshua asked to be the first customer.
+On 2026-02-17 UTC (10:11 PM Eastern, 2026-02-16) a COMPLETED, captured $1.00
+Bot-Shield charge (receipt T14t) came in on the second location. The buyer's name,
+email and card are not Joshua's, and Joshua does not recognise the buyer. Risk
+evaluation NORMAL, address check passed, no dispute, never refunded. On 2026-10-23
+Joshua decided to leave it as it is. The buyer is unidentified: do not describe
+them as a friend, a test or market demand until that is known. This payment was
+missing from earlier versions of this record because they pulled only the active
+location.
+
+On 2026-09-18 two payments arrived from a third party Joshua knows: two COMPLETED
+$1.00 Bot-Shield charges from Heather, a friend Joshua asked to be the first
+customer.
 Her card and email are not Joshua's, her Square customer record is separate from
 his, the fraud evaluation came back NORMAL and the bot_shield attestation fired
 on both. Joshua sent her a small Cash App transfer about an hour beforehand, so
 describe this as a friendly first customer through the live checkout. It is a
-real outside card and the first outside dollar; it is not an arm's-length
-purchase by a stranger. Never cite it as market demand in sales, listing or
+real outside card; it is not an arm's-length purchase by a stranger. Never cite it as market demand in sales, listing or
 diligence material. Her email, card digits and Square customer id are kept out
 of this public repository on purpose; they live in Square.
 
@@ -36,20 +45,21 @@ of this public repository on purpose; they live in Square.
 | 2026-04-10 | $1.00 | COMPLETED | 39jr | bot_shield agref present |
 | 2026-03-10 | $1.00 | COMPLETED | 1w1b | |
 | 2026-03-05 | $1.00 | COMPLETED | 9kBD | statement "ONLINE RECYCLE" |
+| 2026-02-17 | $1.00 | COMPLETED | T14t | second location L24ZX5WRA41TH; outside buyer, unidentified (Joshua does not know them) |
 | 2025-12-08 | $1.00 | COMPLETED | nLSz | |
 | 2025-12-08 | $1.00 | COMPLETED | ButD | |
 | 2025-12-06 | $10.00 | COMPLETED, fully REFUNDED | DDXf | billing name "Anthropic Claude" (test) |
 | 2025-04-18 | $10.00 | COMPLETED | 3HkX | statement "TRASH OR TREASURE" |
 
-Totals: 14 completed, 3 declined, 1 refund. Gross captured $45.99, refunded
-$10.00, net $35.99 before $5.54 in Square fees. All via ECOMMERCE_API
+Totals: 15 completed, 3 declined, 1 refund. Gross captured $46.99, refunded
+$10.00, net $36.99 before $5.87 in Square fees. All via ECOMMERCE_API
 (application sq0idp-w46nJ_NCNDMSOywaCY0mwA), all KEYED card entry.
 
 ## What this proves
 
 - The Square checkout pipeline works end to end in PRODUCTION: authorize,
   capture, decline handling, refund, order linkage, risk evaluation, and the
-  bot_shield attestation note on the order. Proven 14 times over 17 months, the last two with a third party's card.
+  bot_shield attestation note on the order. Proven 15 times over 17 months, three of them with a card that is not Joshua's.
 - youandinotai.com pays via Square ONLY (Canonical Record rule; hash
   6f75580eb974fc44c425fc5f92fc28994c7cd7d3859cd1a23fddcb5cac2f9ac7).
 - Backend coverage: backend/fastapi-app/tests/test_square_webhook_security.py,
@@ -79,7 +89,7 @@ why agents kept re-verifying. It is restored beside this file as
 docs/payment-flow-verification-2026-06-01.md. Do not delete either file.
 
 ---
-sha256 of the text above the --- separator that precedes this line (separator excluded; trailing whitespace trimmed, one final newline added): be9087410a0e0eb3c7b244a82f4d4359a5331a7e06765a82c9b570a843b96626
+sha256 of the text above the --- separator that precedes this line (separator excluded; trailing whitespace trimmed, one final newline added): 01ba5ffe56d4b58ce5b26890d1fac57adbe739ceaa2d8ea3d2259ba7c9c1a815
 
 ---
 Addendum 2026-09-16 (outside the anchored body): memory token `PAYMENTS-VERIFIED-square-2026-07-14` written to Hermes durable memory (`~/.hermes/memories/01M2NDN427W04EYPPES6CNW7BA.md`); `HERMES-GATE-LOCKDOWN-2026-07-14.md` now carries a status banner marking Phase 4 superseded by this record. Ruled by Joshua: 100% of revenue stays with the business; the count of test charges is irrelevant. The lockdown doc itself stays untracked because canonical-guard rejects its 2026-07-14 history lines.
@@ -98,3 +108,13 @@ COMPLETED and captured, $1.00 each, location LY5GN09F5AN83, risk NORMAL,
 bot_shield note present, both on a Square customer record different from
 Joshua's; the only other payment in that window is 5g4r (2026-08-16, Joshua's).
 No payment dated after 2026-09-18 exists.
+
+Addendum 2026-10-23 (b) (outside the anchored body): Joshua supplied Square exports
+(sales summaries for 2025 and for 2026 through 2026-08-16, the 2026-08-16 fee report,
+the item sales list, the catalog and the monthly statements) and asked for them to be
+reconciled. Everything ties to the cent except one payment: T14t, above. With it, the
+exports give gross $22.00 and a $10.00 return in 2025 (fees $1.84) and gross $22.99 in
+2026 through 2026-08-16 (fees $3.37); adding Heather's two charges ($2.00, fees $0.66)
+gives gross $46.99 and fees $5.87, matching the totals above. Monthly payment-processing
+credits on the statements agree with the active location's payments. The previous anchor
+was be9087410a0e0eb3c7b244a82f4d4359a5331a7e06765a82c9b570a843b96626.
