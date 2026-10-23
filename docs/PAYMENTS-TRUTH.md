@@ -92,5 +92,9 @@ this was never committed. The anchored body above was corrected to match what th
 Square connector returned on 2026-09-19 (receipts b3FM, v1nS), and the anchor was
 re-computed. Previous anchor: c73e0cba3aba14b4963021360915f9acd5fb7163f9acfc6202a608d846051bf9.
 Re-computing rule: see the anchor line above; it is the only statement of the byte range.
-The 2026-09-18 figures were not
-re-pulled today because the Square connector needs a reconnect.
+Re-checked 2026-10-23 (Claude, judge lane,
+read-only Square connector, payments list from 2026-08-01): b3FM and v1nS are
+COMPLETED and captured, $1.00 each, location LY5GN09F5AN83, risk NORMAL,
+bot_shield note present, both on a Square customer record different from
+Joshua's; the only other payment in that window is 5g4r (2026-08-16, Joshua's).
+No payment dated after 2026-09-18 exists.
