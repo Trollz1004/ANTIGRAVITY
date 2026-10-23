@@ -210,10 +210,12 @@ async def check_allocations(db: AsyncSession = Depends(get_db)):
 
 @router.get("/health/allocations/summary")
 async def allocations_summary(db: AsyncSession = Depends(get_db)):
-    """Two-figure revenue summary: gross-with-test vs customer-only.
+    """Revenue summary: customer-only, founder tests, the friend's first charges.
 
-    customer_only is real customer revenue. with_test keeps founder-test
-    payments visible for audit without counting them as customers.
+    customer_only is independent customer revenue. friend_first is the two
+    $1.00 charges from the friend who was the first outside customer: real money
+    from a third-party card, but not market demand. with_test keeps every
+    payment visible for audit.
     """
     from sqlalchemy import text
 
@@ -238,13 +240,19 @@ async def allocations_summary(db: AsyncSession = Depends(get_db)):
 
         customer = _tot("customer")
         founder_test = _tot("founder_test")
+        friend_first = _tot("friend_first")
         with_test = {
-            "payments": customer["payments"] + founder_test["payments"],
-            "gross_cents": customer["gross_cents"] + founder_test["gross_cents"],
+            "payments": customer["payments"]
+            + founder_test["payments"]
+            + friend_first["payments"],
+            "gross_cents": customer["gross_cents"]
+            + founder_test["gross_cents"]
+            + friend_first["gross_cents"],
         }
         return {
             "customer_only": customer,
             "founder_test": founder_test,
+            "friend_first": friend_first,
             "with_test": with_test,
         }
     except Exception as e:

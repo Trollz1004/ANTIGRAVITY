@@ -29,7 +29,14 @@
       "a payment in Square from a buyer not already listed in docs/PAYMENTS-TRUTH.md (report it, do not verify it)"
     ],
     "privateRecords": "OneDrive claude-to-claude/payments-private-2026-09-17 holds bank statements: never copy, quote or commit",
-    "keepFiles": "Never delete either record file"
+    "keepFiles": "Never delete either record file",
+    "accountMapping": {
+      "older_established_email": "ebaytrashortreasure@gmail.com",
+      "used_for": "the Date App; sign-in for exactly two merchant accounts: Square and PayPal",
+      "everything_else": "joshlcoleman@gmail.com",
+      "note": "The Square location business-contact field lists the joshlcoleman address; it is a contact field, not the account sign-in.",
+      "ruled": "2026-10-23 (Joshua)"
+    }
   },
   "topology": {
     "updated": "2026-10-17 (Joshua) — wins over any older node or role claim in this file",

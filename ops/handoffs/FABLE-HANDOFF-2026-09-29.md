@@ -17,7 +17,7 @@
 
 | Thing | State | Proof |
 |---|---|---|
-| Company | Trash Or Treasure Online Recycler LLC, Joshua Coleman, `joshlcoleman@gmail.com` on the Square merchant since 2025-04-18 | `.agents/journals/claude-judge/TRUST.md` |
+| Company | Trash Or Treasure Online Recycler LLC, Joshua Coleman, `joshlcoleman@gmail.com` in the Square location's contact field since 2025-04-18 (the Square account signs in with `ebaytrashortreasure@gmail.com`; Joshua 2026-10-23) | `.agents/journals/claude-judge/TRUST.md` |
 | youandinotai.com, "You and I, not AI" | live behind the `sabretooth-main` cloudflared tunnel; **not for sale** since 2026-09-28; marketed by the Emergent lane, affiliate program first | `ops/runbook/SABRETOOTH-NODE-RUNBOOK.md` §1, `CLAUDE.md` rulings |
 | Plans | Founding Member $14.99 / month, 3 months $39.99, 12 months $99.99, Square the only rail | Emergent brief section 1 |
 | Affiliate terms | up to 50% of net subscription revenue for the life of the referred subscription; the full table is in the brief and is the only version | Emergent brief section 1 |

@@ -21,7 +21,7 @@ Joshua's words: "you can verify very very far silly man ... same apis on same pa
 | Claim | Evidence this lane read |
 |---|---|
 | The work predates this repository by most of a year | `youandinotai/youandinotai` on GitHub (his organization account): initial commit 2025-10-22, 8 commits to 2026-02-25, README "Context, Joshua Coleman Ecosystem (Feb 2026)" naming Trash Or Treasure Online Recycler LLC, the dating app and the Square migration notes |
-| The payment rails are older still and are his | Square merchant `ML3C7FMTQS5KX`: the active location "YouAndiNotAi" was created 2025-04-18 with `joshlcoleman@gmail.com` as the business email; a second location 2026-01-17, inactive. Read through the Square connector 2026-09-29 |
+| The payment rails are older still and are his | Square merchant `ML3C7FMTQS5KX`: the active location "YouAndiNotAi" was created 2025-04-18 with `joshlcoleman@gmail.com` in its business-contact field (a contact field; the Square account itself signs in with `ebaytrashortreasure@gmail.com`, ruled by Joshua 2026-10-23); a second location 2026-01-17, inactive. Read through the Square connector 2026-09-29 |
 | The one-dollar test charges and the blockers over them are real | `docs/PAYMENTS-TRUTH.md`, pulled live 2026-09-15: fifteen payment attempts since 2026-03-10, every one his own, $1.00 tests among them, two of them FAILED with `TRANSACTION_LIMIT` on 2026-07-11 and 2026-05-02. Nobody else has ever paid; the record says so plainly |
 | One identity across the accounts | the Square business email, the GitHub author names on both repositories and the organization README all resolve to Joshua Coleman; the only older rails kept under other names are PayPal and Square from the eBay store, by his account |
 
