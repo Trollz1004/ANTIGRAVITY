@@ -313,7 +313,7 @@ $Stages = @(
        # 2026-10-20: Paperclip is permanently retired by Joshua's ruling. All marketing plans,
        # 4-gate compliance/copy-score checks, Fable voice drafting, and 22-platform Social Command
        # Center run natively inside Mission Agent OS on :3130 (/marketing & /api/marketing/plans).
-       Probe = { Test-Http 'http://127.0.0.1:3130/api/marketing/plans' 8 'social-command-center-v4' }
+       Probe = { Test-Http 'http://127.0.0.1:3130/api/marketing/plans' 8 'social-command-center-v5' }
        Heal  = {
            if (Test-Port 3130) { Stop-PortOwner 3130; Start-Sleep -Seconds 2 }
            Start-Process -FilePath $Node -ArgumentList @('mission-os\server.mjs') -WorkingDirectory $Repo -WindowStyle Hidden

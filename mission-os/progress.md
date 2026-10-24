@@ -3,7 +3,7 @@
 ## Session: 2026-10-15 (Gemini 4 Argon High)
 - **09:36–10:05 EDT**: Loaded `t5500-node`, `ultracode-house`, `gemini-cobuilder`, `caveman`, `omniroute`, `ceo-standing-session`, `brainstorming`, `find-skills`, `create-skills`, `paperclip`, `planning-with-files`, `product-copy-business-only`, `revenue-model`, `affiliate-offer-of-offers`.
 - **10:04 EDT**: Verified T5500 status via `gemini-node-mcp` (`t5500_status` -> all 14 stages UP; `verify_1branch` -> noted `rescue/hermes-pipeline-source` branch).
-- **10:07 EDT**: Verified `http://127.0.0.1:3130/api/mos-state.json`, `http://127.0.0.1:11434/api/ps` (`joshlcoleman/Fable:latest` running in `llamacpp`), `http://127.0.0.1:11434/api/tags` (4 local models), `http://127.0.0.1:3917/api/health`, and `http://127.0.0.1:8643/health` (`hermes-agent` v0.21.7).
+- **10:07 EDT**: Verified `http://127.0.0.1:3130/api/mos-state.json`, `http://127.0.0.1:11434/api/ps` (`joshlcoleman/Fable:latest` running in `llamacpp`), `http://127.0.0.1:11434/api/tags` (4 local models), `http://127.0.0.1:4747/api/health`, and `http://127.0.0.1:8643/health` (`hermes-agent` v0.21.7).
 - **10:10 EDT**: Created `task_plan.md`, `findings.md`, and `progress.md` in `C:\ANTIGRAVITY\mission-os\`. Launching parallel `research` subagents to audit all 16 `mission-os/screens/` and existing marketing/affiliate folders.
 
 ## Session: 2026-10-16 (Gemini 4 Argon High)

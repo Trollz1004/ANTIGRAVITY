@@ -29,6 +29,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.auth import get_current_user
 from app.config import get_settings
 from app.database import get_db
+from app.email_service import send_welcome_email
 from app.models import Match, Message, Post, User, VerificationEvent
 from app.payment_truth import (
     BOT_SHIELD_CENTS,
@@ -319,6 +320,26 @@ async def submit_challenge(
     await db.commit()
 
     settings = get_settings()
+
+    # If the user has already completed payment (e.g. payment arrived before or during liveness),
+    # promote verification immediately!
+    if await has_completed_payment(db, user.id):
+        was_verified = user.bot_shield_verified
+        promoted = await promote_user_verification_if_ready(db, user)
+        if promoted and not was_verified:
+            await send_welcome_email(
+                recipient_email=user.email,
+                display_name=user.display_name,
+                settings=settings,
+            )
+            await db.commit()
+        return ChallengeResult(
+            passed=True,
+            trust_score=await _calculate_trust_score(user, db),
+            message="Liveness verified! Your $1 Bot-Shield verification is complete.",
+            checkout_url=None,
+        )
+
     square_ready_email = email_supported_for_square_checkout(user.email)
     checkout_url = None
     if square_ready_email:

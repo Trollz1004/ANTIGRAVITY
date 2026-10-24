@@ -2,6 +2,132 @@
 
 Newest first. One entry per morning.
 
+## 2026-10-22 -- NOT SHIPPED -- rendered and verified, upload not armed
+
+- Run: 2026-10-23 06:30 Eastern Daylight Time -> 06:31, exit 3 (unattended)
+- Title: Yesterday's News Today - October 22, 2026 | Towering Figure & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261022\20261022.mp4` -- 87.712s, 12.2 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261022\20261022-thumb.png`
+- Verified: 18 gates passed (audio mean -19.4 dB, min luma stddev 55.04)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | SKIPPED | 20261022 already sourced (4272 bytes) |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 22, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261022\20261022.mp4 (87.712s, 12237156 bytes) |
+| verify | OK | 18 gates passed: 87.712s, 1080x1920, mean audio -19.4 dB, min luma stddev 55.04 |
+| upload | BLOCKED | no YouTube credentials at C:\ANTIGRAVITY\ops\youtube\.credentials\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published. |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261022`
+
+## 2026-10-22 -- RENDERED -- upload was off
+
+- Run: 2026-10-23 05:34 Eastern Daylight Time -> 05:36, exit 0
+- Title: Yesterday's News Today - October 22, 2026 | Towering Figure & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261022\20261022.mp4` -- 87.712s, 12.2 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261022\20261022-thumb.png`
+- Verified: 23 gates passed (audio mean -19.4 dB, min luma stddev 55.04)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261022 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261022 |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 22, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261022\20261022.mp4 (87.712s, 12199000 bytes) |
+| verify | OK | 23 gates passed: 87.712s, 1080x1920, mean audio -19.4 dB, min luma stddev 55.04 |
+| upload | SKIPPED | --upload off; the mp4 stays local |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261022`
+
+## 2026-10-21 -- NOT SHIPPED -- rendered and verified, upload not armed
+
+- Run: 2026-10-22 06:30 Eastern Daylight Time -> 06:35, exit 3 (unattended)
+- Title: Yesterday's News Today - October 21, 2026 | Strangers Help 86-Year-Old Who’s & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261021\20261021.mp4` -- 91.27s, 12.1 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261021\20261021-thumb.png`
+- Verified: 23 gates passed (audio mean -19.1 dB, min luma stddev 37.44)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261021 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261021 |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 21, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261021\20261021.mp4 (91.27s, 12127552 bytes) |
+| verify | OK | 23 gates passed: 91.27s, 1080x1920, mean audio -19.1 dB, min luma stddev 37.44 |
+| upload | BLOCKED | no YouTube credentials at C:\ANTIGRAVITY\ops\youtube\.credentials\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published. |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261021`
+
+## 2026-10-20 -- NOT SHIPPED -- rendered and verified, upload not armed
+
+- Run: 2026-10-21 08:34 Eastern Daylight Time -> 08:38, exit 3 (unattended)
+- Title: Yesterday's News Today - October 20, 2026 | Student Plays Truly Epic Birthday & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261020\20261020.mp4` -- 92.333s, 12.4 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261020\20261020-thumb.png`
+- Verified: 23 gates passed (audio mean -19.3 dB, min luma stddev 37.99)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261020 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261020 |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 20, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: ReadTimeout: HTTPConnectionPool(host='127.0.0.1', port=20128): Read timed out. (read timeout=45); edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261020\20261020.mp4 (92.333s, 12369671 bytes) |
+| verify | OK | 23 gates passed: 92.333s, 1080x1920, mean audio -19.3 dB, min luma stddev 37.99 |
+| upload | BLOCKED | no YouTube credentials at C:\ANTIGRAVITY\ops\youtube\.credentials\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published. |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261020`
+
+## 2026-10-19 -- NOT SHIPPED -- rendered and verified, upload not armed
+
+- Run: 2026-10-20 06:30 Eastern Daylight Time -> 06:34, exit 3 (unattended)
+- Title: Yesterday's News Today - October 19, 2026 | Mozambique Protects the ‘Butterfly Forest & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261019\20261019.mp4` -- 78.243s, 10.8 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261019\20261019-thumb.png`
+- Verified: 23 gates passed (audio mean -19.4 dB, min luma stddev 38.3)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261019 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261019 |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 19, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261019\20261019.mp4 (78.243s, 10835098 bytes) |
+| verify | OK | 23 gates passed: 78.243s, 1080x1920, mean audio -19.4 dB, min luma stddev 38.3 |
+| upload | BLOCKED | no YouTube credentials at C:\ANTIGRAVITY\ops\youtube\.credentials\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published. |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261019`
+
+## 2026-10-18 -- NOT SHIPPED -- rendered and verified, upload not armed
+
+- Run: 2026-10-19 06:30 Eastern Daylight Time -> 06:36, exit 3 (unattended)
+- Title: Yesterday's News Today - October 18, 2026 | Contact With Nature, Tiny Black Cat Stuck & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261018\20261018.mp4` -- 105.703s, 13.9 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261018\20261018-thumb.png`
+- Verified: 23 gates passed (audio mean -19.1 dB, min luma stddev 37.9)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261018 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261018 |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 18, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261018\20261018.mp4 (105.703s, 13909808 bytes) |
+| verify | OK | 23 gates passed: 105.703s, 1080x1920, mean audio -19.1 dB, min luma stddev 37.9 |
+| upload | BLOCKED | no YouTube credentials at C:\ANTIGRAVITY\ops\youtube\.credentials\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published. |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261018`
+
 ## 2026-10-17 -- NOT SHIPPED -- rendered and verified, upload not armed
 
 - Run: 2026-10-18 06:30 Eastern Daylight Time -> 06:41, exit 3 (unattended)

@@ -1,470 +1,756 @@
-<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-error-container":"#ffdad6","inverse-surface":"#d3e4fe","surface-variant":"#26364a","secondary-fixed-dim":"#d0bcff","on-surface":"#d3e4fe","primary-container":"#22d3ee","surface-tint":"#2fd9f4","on-tertiary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","on-surface-variant":"#bbc9cd","on-secondary-fixed-variant":"#5516be","surface":"#031427","primary-fixed":"#a2eeff","on-tertiary-fixed":"#2a1700","surface-bright":"#2a3a4f","surface-container-low":"#0b1c30","on-secondary-container":"#c4abff","secondary":"#d0bcff","tertiary-fixed-dim":"#ffb95f","inverse-primary":"#006877","on-primary":"#00363e","outline":"#859397","surface-container-highest":"#26364a","on-primary-fixed-variant":"#004e5a","primary":"#8aebff","on-secondary":"#3c0091","tertiary":"#ffd6a7","outline-variant":"#3c494c","error-container":"#93000a","on-secondary-fixed":"#23005c","tertiary-fixed":"#ffddb8","tertiary-container":"#ffb147","on-primary-container":"#005763","secondary-fixed":"#e9ddff","on-tertiary-container":"#704500","surface-dim":"#031427","on-tertiary":"#472a00","on-primary-fixed":"#001f25","background":"#031427","surface-container":"#102034","error":"#ffb4ab","secondary-container":"#571bc1","on-error":"#690005","surface-container-high":"#1b2b3f","primary-fixed-dim":"#2fd9f4","on-background":"#d3e4fe","inverse-on-surface":"#213145"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-xs":"0.25rem","space-xl":"1.5rem","space-md":"0.75rem","gutter-desktop":"1rem","space-sm":"0.5rem","space-lg":"1rem","margin-desktop":"1.5rem",gutter:"0.75rem",margin:"1rem"},fontFamily:{"label-code-sm":["JetBrains Mono"],"headline-lg":["Inter"],"body-md":["Inter"],"headline-xl":["Inter"],"body-sm":["Inter"],"headline-md":["Inter"],"body-lg":["Inter"],"label-status":["JetBrains Mono"],"label-code-lg":["JetBrains Mono"],"label-code-md":["JetBrains Mono"],"headline-sm":["Inter"]},fontSize:{"label-code-sm":["10px",{lineHeight:"14px",letterSpacing:"0.02em",fontWeight:"600"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"600"}],"body-md":["13px",{lineHeight:"18px",letterSpacing:"0em",fontWeight:"400"}],"headline-xl":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"body-sm":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"400"}],"headline-md":["18px",{lineHeight:"24px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-lg":["14px",{lineHeight:"20px",letterSpacing:"0em",fontWeight:"400"}],"label-status":["9px",{lineHeight:"12px",letterSpacing:"0.08em",fontWeight:"700"}],"label-code-lg":["13px",{lineHeight:"18px",letterSpacing:"-0.01em",fontWeight:"500"}],"label-code-md":["11px",{lineHeight:"16px",letterSpacing:"0em",fontWeight:"500"}],"headline-sm":["14px",{lineHeight:"20px",letterSpacing:"-0.005em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface-container-lowest font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline-variant/40 z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-14 px-space-lg flex items-center gap-space-sm border-b border-outline-variant/30 bg-surface-container-lowest/40"><img alt="ANTIGRAVITY Insignia" class="w-7 h-7 rounded object-cover ring-1 ring-primary/30" src="https://lh3.googleusercontent.com/aida/AEtjO1WxBwTvbOktWAD49gOTXZwdXizLZSIoFG0ZPLEg8E2uJqG8qiYVYNuMvoIePhjLwXhhsOEuK1aL8gmZx_nJKPVgbpvIjpeI4vA1u4MosiaeSz1NfRabDsqzEhU3PIISztIk9AijiXL15Up234WVF6HeVK4kKPyqe62VHOW8D8WXCWTSYhhilvCaXxzK7D9CkV8Pds0HZB-ey-z8muInEHWXS_R6T7ZzeAu0a0VnY31nx7psHh6FeI_-oNah"><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface font-bold uppercase leading-none truncate">ANTIGRAVITY</span><span class="font-label-code-sm text-label-code-sm text-primary tracking-wider uppercase leading-none mt-1 truncate">MISSION CONTROL v4.2</span></div></div><div class="px-space-md py-space-sm"><span class="font-label-status text-label-status uppercase text-on-surface-variant/70 tracking-widest px-space-sm">OPERATIONAL RUNTIME</span></div><nav class="flex flex-col gap-0.5 px-space-xs" data-active-classes="bg-surface-container-high text-primary border-l-2 border-primary-container shadow-[0_0_12px_-2px_rgba(34,211,238,0.35)]"><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="overview" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">grid_view</span><span class="font-body-md text-body-md font-medium truncate">Overview</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="agents" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">smart_toy</span><span class="font-body-md text-body-md font-medium truncate">Agents</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="board" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">dashboard_customize</span><span class="font-body-md text-body-md font-medium truncate">Board</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="gateway" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">router</span><span class="font-body-md text-body-md font-medium truncate">Gateway</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-2 rounded transition-all group bg-surface-container-high text-primary border-l-2 border-primary-container shadow-[0_0_12px_-2px_rgba(34,211,238,0.35)]" data-path="marketing" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">campaign</span><span class="font-body-md text-body-md font-medium truncate">Marketing</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="memory" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">memory</span><span class="font-body-md text-body-md font-medium truncate">Memory</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="node" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">hub</span><span class="font-body-md text-body-md font-medium truncate">Node</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="logs" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">terminal</span><span class="font-body-md text-body-md font-medium truncate">Logs</span></a><a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="settings" href="#"><span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">settings</span><span class="font-body-md text-body-md font-medium truncate">Settings</span></a></nav></div><div class="p-space-md border-t border-outline-variant/30 bg-surface-container-lowest/60 flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs min-w-0"><span class="relative flex h-2 w-2 flex-shrink-0"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-primary-fixed-dim"></span></span><div class="flex flex-col min-w-0"><span class="font-label-code-sm text-label-code-sm text-on-surface truncate">T5500 · 192.168.0.15</span><span class="font-label-status text-label-status text-on-surface-variant uppercase tracking-wider">SYNCHRONIZED</span></div></div><div class="flex-shrink-0"><img alt="Founder" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhmd3yP9MzJWT7qrjISzubu162hbjaLsrNF9GtgeXSI4bDcErrD-pZ48vYrYq1s0crf7_kp54urrPEhzqmEmtEajuMHiaJkQrn5X3j1TdvRaxj28d5AqdH6WdbXo44dJiCBb-28Dr7HoixoNmpA5c9eyPASYoR3KZ3eHNRDa1qF7TUpXqQzy1uqLLuKwkjx6wPrwEeVTiO984dIg9nYT8lqJ6uUzA_mE6TKZjh7eRuPZEJLsJCvs-fhw"></div></div></aside><div class="pl-64 flex flex-col min-h-screen"><header class="fixed top-0 left-64 right-0 h-14 bg-surface-container-low/90 backdrop-blur-md border-b border-outline-variant/30 z-40 px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md min-w-0"><div class="flex items-center gap-1.5 flex-shrink-0"><span class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Mission Control</span><span class="text-outline-variant font-label-code-sm text-label-code-sm">/</span><span class="font-label-code-md text-label-code-md text-primary tracking-wide">CLUSTER-ALPHA</span></div><div class="hidden xl:flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-surface-container-high border border-outline-variant/50 text-on-surface-variant"><span class="material-symbols-outlined text-xs text-primary-fixed">dns</span><span class="font-label-code-sm text-label-code-sm text-on-surface">T5500 · 192.168.0.15 · Uptime 42d 18h</span></div></div><div class="flex-1 max-w-md hidden md:flex items-center"><div class="relative w-full"><span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-outline">search</span><input class="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-lg pl-8 pr-12 py-1 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Global command palette..." readonly="" type="text"><kbd class="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/40 text-on-surface-variant font-label-code-sm text-label-code-sm">Ctrl+K</kbd></div></div><div class="flex items-center gap-space-sm flex-shrink-0"><span class="hidden lg:inline-block font-label-code-sm text-label-code-sm text-on-surface-variant/80 tracking-tight">REFRESHED 3s AGO (AUTO 5s)</span><div class="relative flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary-container/15 border border-tertiary-container/50 shadow-[0_0_10px_-1px_rgba(255,177,71,0.25)]"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-container opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary-container"></span></span><span class="font-label-status text-label-status text-tertiary-container uppercase tracking-wider font-bold">2 ATTENTION · 11/12 UP</span></div><div class="hidden 2xl:flex items-center gap-1.5 px-space-sm py-1 rounded-md bg-secondary-container/20 border border-secondary-container/40 text-secondary-fixed-dim"><span class="material-symbols-outlined text-xs text-secondary">healing</span><span class="font-label-code-sm text-label-code-sm font-medium">OpenClaw healed redis in 4s</span></div><div class="flex items-center pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="https://lh3.googleusercontent.com/aida/AEtjO1WxBwTvbOktWAD49gOTXZwdXizLZSIoFG0ZPLEg8E2uJqG8qiYVYNuMvoIePhjLwXhhsOEuK1aL8gmZx_nJKPVgbpvIjpeI4vA1u4MosiaeSz1NfRabDsqzEhU3PIISztIk9AijiXL15Up234WVF6HeVK4kKPyqe62VHOW8D8WXCWTSYhhilvCaXxzK7D9CkV8Pds0HZB-ey-z8muInEHWXS_R6T7ZzeAu0a0VnY31nx7psHh6FeI_-oNah"></div></div></header><main class="w-full pt-14 flex-1 bg-surface-container-lowest"><div class="flex flex-col w-full">
-<!-- Subtle ambient decorative glow tailored for marketing domain (violet tone) -->
-<div class="relative w-full px-gutter-desktop py-space-lg flex flex-col gap-space-lg overflow-hidden">
-<div class="absolute -top-32 left-1/3 w-96 h-96 bg-secondary-container/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
-<div class="absolute top-1/2 -right-20 w-80 h-80 bg-primary-container/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
-<!-- Paperclip Header Strip & Global Guardrail -->
-<div class="flex flex-col xl:flex-row xl:items-center justify-between gap-space-md p-space-md rounded-xl bg-surface-container-low shadow-sm">
-<div class="flex flex-wrap items-center gap-space-md">
-<div class="flex items-center gap-space-sm">
-<div class="w-9 h-9 rounded-lg bg-secondary-container/40 flex items-center justify-center text-secondary shadow-[0_0_12px_-2px_rgba(208,188,255,0.4)]">
-<span class="material-symbols-outlined text-xl">attach_file</span>
-</div>
-<div class="flex flex-col min-w-0">
-<div class="flex items-center gap-space-xs">
-<span class="font-headline-md text-headline-md text-on-surface tracking-tight font-bold">Paperclip Marketing Engine</span>
-<span class="font-label-code-sm text-label-code-sm px-1.5 py-0.5 rounded bg-surface-container-high text-secondary font-mono">:3917</span>
-</div>
-<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Autonomous Content Dispatcher &amp; Social Orchestration Relay</span>
-</div>
-</div>
-<div class="h-6 w-px bg-outline-variant/30 hidden sm:block"></div>
-<!-- Strict Draft-Only Guardrail Warning Pill -->
-<div class="flex items-center gap-space-xs px-space-md py-1 rounded-full bg-error-container/20 text-error shadow-[0_0_14px_-2px_rgba(239,68,68,0.35)]">
-<span class="material-symbols-outlined text-sm">lock</span>
-<span class="font-label-status text-label-status uppercase tracking-widest font-bold">DRAFT-ONLY ENFORCED • EVERY POST REQUIRES MANUAL FOUNDER APPROVAL</span>
-</div>
-</div>
-<div class="flex items-center gap-space-sm self-start xl:self-auto">
-<a class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-secondary text-on-secondary font-headline-sm text-headline-sm font-semibold hover:bg-secondary-fixed transition-colors shadow-[0_0_14px_-2px_rgba(208,188,255,0.4)]" href="#paperclip-runtime">
-<span>Open Paperclip Web App</span>
-<span class="material-symbols-outlined text-base">open_in_new</span>
-</a>
-</div>
-</div>
-<!-- Multi-Tenant Portfolio / Company Selector -->
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm border-b border-outline-variant/30 pb-space-xs">
-<div class="flex items-center gap-1.5 overflow-x-auto pb-1" role="tablist">
-<!-- Tab 1: Active -->
-<button aria-selected="true" class="flex items-center gap-space-sm px-space-lg py-2 rounded-lg bg-surface-container-high text-secondary shadow-[0_0_12px_-2px_rgba(208,188,255,0.25)] transition-all" role="tab">
-<span class="relative flex h-2 w-2">
-<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-<span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
-</span>
-<span class="font-headline-sm text-headline-sm font-semibold tracking-tight">YouAndINotAI</span>
-<span class="font-label-code-sm text-label-code-sm px-1.5 py-0.2 rounded-full bg-secondary-container/40 text-secondary-fixed-dim">3 QUEUED</span>
-</button>
-<!-- Tab 2: Secondary -->
-<button aria-selected="false" class="flex items-center gap-space-sm px-space-lg py-2 rounded-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" role="tab">
-<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
-<span class="font-headline-sm text-headline-sm font-medium">OnlineRecycle</span>
-<span class="font-label-status text-label-status uppercase text-outline">STANDBY</span>
-</button>
-<!-- Tab 3: Dormant -->
-<button aria-selected="false" class="flex items-center gap-space-sm px-space-lg py-2 rounded-lg bg-surface-container-low/60 text-on-surface-variant/60 hover:bg-surface-container hover:text-on-surface-variant transition-all" role="tab">
-<span class="w-2 h-2 rounded-full bg-outline-variant/40"></span>
-<span class="font-headline-sm text-headline-sm font-medium">DreamOnline</span>
-<span class="font-label-status text-label-status uppercase text-outline-variant">DORMANT</span>
-</button>
-</div>
-<div class="flex items-center gap-space-sm text-on-surface-variant font-label-code-sm text-label-code-sm">
-<span class="material-symbols-outlined text-sm text-secondary">tune</span>
-<span>GLOBAL CAMPAIGN CADENCE: <strong class="text-on-surface font-semibold">T5500 SYNCHRONIZED</strong></span>
-</div>
-</div>
-<!-- Marketing Lanes Grid: 3 Channels -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-md">
-<!-- Lane 1: Grok X Lane -->
-<div class="flex flex-col p-space-md rounded-xl bg-surface-container-low shadow-sm transition-all hover:bg-surface-container">
-<div class="flex items-start justify-between gap-space-xs pb-space-sm mb-space-sm">
-<div class="flex items-center gap-space-sm">
-<div class="w-8 h-8 rounded-lg bg-secondary-container/30 flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined text-base">forum</span>
-</div>
-<div>
-<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Grok X (Twitter) Lane</h3>
-<p class="font-label-code-sm text-label-code-sm text-secondary">OAuth X Dev v2 active</p>
-</div>
-</div>
-<span class="px-space-xs py-0.5 rounded-full bg-secondary-container/30 text-secondary-fixed-dim font-label-status text-label-status uppercase font-bold tracking-wider">
-            READY FOR APPROVAL
-          </span>
-</div>
-<div class="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
-<div class="flex items-center justify-between">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-outline">schedule</span> Window:</span>
-<span class="font-label-code-sm text-label-code-sm text-on-surface">09:00 - 11:30 • 18:00 - 20:30 UTC</span>
-</div>
-<div class="flex items-center justify-between">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-outline">smart_toy</span> Agent:</span>
-<span class="font-label-code-sm text-label-code-sm text-primary">Grok-OmniRoute</span>
-</div>
-<div class="flex items-center justify-between">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-outline">speed</span> Limit:</span>
-<span class="font-label-code-sm text-label-code-sm text-on-surface">Max 3 / day (0 posted)</span>
-</div>
-</div>
-<!-- Lane Meter -->
-<div class="mt-space-md pt-space-xs flex flex-col gap-1">
-<div class="flex justify-between items-center font-label-code-sm text-label-code-sm">
-<span class="text-on-surface-variant">Daily Quota Saturation</span>
-<span class="text-secondary font-bold">0 / 3 Posts</span>
-</div>
-<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-secondary rounded-full" style="width: 15%;"></div>
-</div>
-</div>
-</div>
-<!-- Lane 2: Reddit Technical Lane -->
-<div class="flex flex-col p-space-md rounded-xl bg-surface-container-low shadow-sm transition-all hover:bg-surface-container">
-<div class="flex items-start justify-between gap-space-xs pb-space-sm mb-space-sm">
-<div class="flex items-center gap-space-sm">
-<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
-<span class="material-symbols-outlined text-base">terminal</span>
-</div>
-<div>
-<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Reddit Technical Lane</h3>
-<p class="font-label-code-sm text-label-code-sm text-on-surface-variant">Deep Engineering Syntheses</p>
-</div>
-</div>
-<span class="px-space-xs py-0.5 rounded-full bg-primary-container/20 text-primary-fixed-dim font-label-status text-label-status uppercase font-bold tracking-wider">
-            1 DRAFT QUEUED
-          </span>
-</div>
-<div class="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
-<div class="flex items-center justify-between">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-outline">schedule</span> Window:</span>
-<span class="font-label-code-sm text-label-code-sm text-on-surface">14:00 UTC - 17:00 UTC</span>
-</div>
-<div class="flex items-center justify-between">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-outline">hub</span> Subreddits:</span>
-<span class="font-label-code-sm text-label-code-sm text-primary">r/selfhosted, r/LocalLLaMA, r/docker</span>
-</div>
-<div class="flex items-center justify-between">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-outline">speed</span> Limit:</span>
-<span class="font-label-code-sm text-label-code-sm text-on-surface">1 long-form analysis / week</span>
-</div>
-</div>
-<!-- Lane Meter -->
-<div class="mt-space-md pt-space-xs flex flex-col gap-1">
-<div class="flex justify-between items-center font-label-code-sm text-label-code-sm">
-<span class="text-on-surface-variant">Weekly Cadence</span>
-<span class="text-primary font-bold">1 In Queue</span>
-</div>
-<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-primary-container rounded-full" style="width: 50%;"></div>
-</div>
-</div>
-</div>
-<!-- Lane 3: Meta / Threads Lane -->
-<div class="flex flex-col p-space-md rounded-xl bg-surface-container-low opacity-75 shadow-sm transition-all hover:opacity-100 hover:bg-surface-container">
-<div class="flex items-start justify-between gap-space-xs pb-space-sm mb-space-sm">
-<div class="flex items-center gap-space-sm">
-<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-outline">
-<span class="material-symbols-outlined text-base">pause_circle</span>
-</div>
-<div>
-<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Meta / Threads Lane</h3>
-<p class="font-label-code-sm text-label-code-sm text-on-surface-variant">Cross-Network Sync</p>
-</div>
-</div>
-<span class="px-space-xs py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-status text-label-status uppercase font-bold tracking-wider">
-            PAUSED (MANUAL HOLD)
-          </span>
-</div>
-<div class="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
-<div class="flex items-center justify-between">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-outline">schedule</span> Window:</span>
-<span class="font-label-code-sm text-label-code-sm text-on-surface">12:00 UTC - 15:00 UTC</span>
-</div>
-<div class="flex items-center justify-between">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-outline">lock_clock</span> Lock State:</span>
-<span class="font-label-code-sm text-label-code-sm text-outline">Operator Intervention Hold</span>
-</div>
-<div class="flex items-center justify-between">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-outline">toggle_off</span> Auto-Dispatch:</span>
-<span class="font-label-code-sm text-label-code-sm text-outline">Suspended</span>
-</div>
-</div>
-<!-- Lane Meter -->
-<div class="mt-space-md pt-space-xs flex flex-col gap-1">
-<div class="flex justify-between items-center font-label-code-sm text-label-code-sm">
-<span class="text-on-surface-variant">Gate Status</span>
-<span class="text-on-surface-variant font-bold">Locked</span>
-</div>
-<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-outline-variant rounded-full" style="width: 0%;"></div>
-</div>
-</div>
-</div>
-</div>
-<!-- Main Command Layout: 2-Column Split (Review Queue + Telemetry Inspector) -->
-<div class="grid grid-cols-1 2xl:grid-cols-12 gap-space-lg items-start">
-<!-- High-Priority Approvals Queue (Span 8) -->
-<section aria-labelledby="queue-heading" class="2xl:col-span-8 flex flex-col gap-space-md">
-<div class="flex items-center justify-between px-space-xs">
-<div class="flex items-center gap-space-sm">
-<span class="material-symbols-outlined text-secondary text-xl">fact_check</span>
-<h2 class="font-headline-md text-headline-md text-on-surface font-bold tracking-tight" id="queue-heading">
-              Pending Approvals Queue
-            </h2>
-<span class="font-label-code-sm text-label-code-sm px-2 py-0.5 rounded-full bg-secondary-container/30 text-secondary-fixed-dim font-bold">
-              3 ACTIONS REQUIRED
-            </span>
-</div>
-<span class="font-label-code-sm text-label-code-sm text-on-surface-variant hidden sm:inline-block">
-            STRICT 2-SECOND TRIAGE • FOUNDER OVERRIDE
-          </span>
-</div>
-<!-- Card 1: Grok on X (Dell T5500 vs AWS) -->
-<div class="group flex flex-col p-space-lg rounded-xl bg-surface-container-low transition-all duration-150 hover:bg-surface-container shadow-sm">
-<!-- Metadata Bar -->
-<div class="flex flex-wrap items-center justify-between gap-space-sm pb-space-sm mb-space-sm border-b border-outline-variant/20">
-<div class="flex items-center gap-space-sm">
-<div class="w-6 h-6 rounded bg-secondary-container/40 flex items-center justify-center text-secondary text-xs font-bold font-mono">
-                X
-              </div>
-<span class="font-label-code-md text-label-code-md text-on-surface font-semibold">Grok on X (Twitter)</span>
-<span class="font-label-status text-label-status px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface-variant">ID: POST-8821-X</span>
-</div>
-<div class="flex items-center gap-space-sm font-label-code-sm text-label-code-sm text-on-surface-variant">
-<span>PROPOSED SLOT:</span>
-<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-secondary font-bold">09:00 UTC</span>
-<span class="text-outline">•</span>
-<span class="text-primary">Grok v2 (OmniRoute)</span>
-</div>
-</div>
-<!-- Post Content & Preview Box -->
-<div class="p-space-md rounded-lg bg-surface-container-lowest flex flex-col gap-space-sm font-body-md text-body-md text-on-surface leading-relaxed">
-<p class="font-medium text-inverse-surface">
-              Why we run 9 autonomous coding agents on a refurbished Dell T5500 server instead of AWS clusters. A breakdown of local Ollama vs OmniRoute cloud routing 🧵👇
-            </p>
-<div class="flex flex-wrap gap-space-xs font-label-code-sm text-label-code-sm text-secondary">
-<span>#LocalAI</span>
-<span>#SelfHosted</span>
-<span>#DevOps</span>
-<span>#Homelab</span>
-</div>
-</div>
-<!-- Card Graphic Context / Telemetry Snapshot -->
-<div class="mt-space-sm flex items-center justify-between text-on-surface-variant font-label-code-sm text-label-code-sm">
-<div class="flex items-center gap-space-md">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">format_align_left</span> 142 chars (Thread starter)</span>
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">psychology</span> Hallucination Check: <strong class="text-primary font-bold">0.02%</strong></span>
-</div>
-<span class="text-secondary font-mono">Simulated CTR: 4.8%</span>
-</div>
-<!-- Operator Action Bar -->
-<div class="mt-space-md pt-space-sm flex flex-wrap items-center justify-between gap-space-sm">
-<div class="flex items-center gap-space-xs">
-<button class="px-space-md py-2 rounded-lg bg-surface-container-high text-on-surface font-headline-sm text-headline-sm hover:bg-surface-bright transition-colors flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">edit_note</span>
-<span>Edit Copy</span>
-</button>
-<button class="px-space-md py-2 rounded-lg bg-error-container/20 text-error font-headline-sm text-headline-sm hover:bg-error hover:text-on-error transition-colors flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">block</span>
-<span>Reject</span>
-</button>
-</div>
-<button class="px-space-lg py-2 rounded-lg bg-secondary text-on-secondary font-headline-sm text-headline-sm font-bold shadow-[0_0_14px_-2px_rgba(208,188,255,0.4)] hover:bg-secondary-fixed transition-all flex items-center gap-1.5">
-<span class="material-symbols-outlined text-base">check_circle</span>
-<span>Approve &amp; Schedule for 09:00 UTC</span>
-</button>
-</div>
-</div>
-<!-- Card 2: Grok on X (Self-healing Redis) -->
-<div class="group flex flex-col p-space-lg rounded-xl bg-surface-container-low transition-all duration-150 hover:bg-surface-container shadow-sm">
-<!-- Metadata Bar -->
-<div class="flex flex-wrap items-center justify-between gap-space-sm pb-space-sm mb-space-sm border-b border-outline-variant/20">
-<div class="flex items-center gap-space-sm">
-<div class="w-6 h-6 rounded bg-secondary-container/40 flex items-center justify-center text-secondary text-xs font-bold font-mono">
-                X
-              </div>
-<span class="font-label-code-md text-label-code-md text-on-surface font-semibold">Grok on X (Twitter)</span>
-<span class="font-label-status text-label-status px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface-variant">ID: POST-8822-X</span>
-</div>
-<div class="flex items-center gap-space-sm font-label-code-sm text-label-code-sm text-on-surface-variant">
-<span>PROPOSED SLOT:</span>
-<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-secondary font-bold">18:30 UTC</span>
-<span class="text-outline">•</span>
-<span class="text-primary">Grok v2 (OmniRoute)</span>
-</div>
-</div>
-<!-- Post Content & Preview Box -->
-<div class="p-space-md rounded-lg bg-surface-container-lowest flex flex-col gap-space-sm font-body-md text-body-md text-on-surface leading-relaxed">
-<p class="font-medium text-inverse-surface">
-              Self-healing architecture: when Redis crashed at 02:44, OpenClaw caught the socket drop and restarted it in 4.1 seconds without human paging.
-            </p>
-<div class="flex flex-wrap gap-space-xs font-label-code-sm text-label-code-sm text-secondary">
-<span>#AutonomousAgents</span>
-<span>#SRE</span>
-<span>#AntigravityOS</span>
-</div>
-</div>
-<!-- Incident Link Attachment Indicator -->
-<div class="mt-space-sm flex items-center justify-between text-on-surface-variant font-label-code-sm text-label-code-sm">
-<div class="flex items-center gap-space-md">
-<span class="flex items-center gap-1 text-primary"><span class="material-symbols-outlined text-xs">verified</span> Verified against telemetry logs (Log #4419)</span>
-</div>
-<span class="text-secondary font-mono">Read time: 8s</span>
-</div>
-<!-- Operator Action Bar -->
-<div class="mt-space-md pt-space-sm flex flex-wrap items-center justify-between gap-space-sm">
-<div class="flex items-center gap-space-xs">
-<button class="px-space-md py-2 rounded-lg bg-surface-container-high text-on-surface font-headline-sm text-headline-sm hover:bg-surface-bright transition-colors flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">edit_note</span>
-<span>Edit Copy</span>
-</button>
-<button class="px-space-md py-2 rounded-lg bg-error-container/20 text-error font-headline-sm text-headline-sm hover:bg-error hover:text-on-error transition-colors flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">block</span>
-<span>Reject</span>
-</button>
-</div>
-<button class="px-space-lg py-2 rounded-lg bg-secondary text-on-secondary font-headline-sm text-headline-sm font-bold shadow-[0_0_14px_-2px_rgba(208,188,255,0.4)] hover:bg-secondary-fixed transition-all flex items-center gap-1.5">
-<span class="material-symbols-outlined text-base">check_circle</span>
-<span>Approve &amp; Schedule for 18:30 UTC</span>
-</button>
-</div>
-</div>
-<!-- Card 3: Reddit Technical Draft (r/LocalLLaMA) -->
-<div class="group flex flex-col p-space-lg rounded-xl bg-surface-container-low transition-all duration-150 hover:bg-surface-container shadow-sm">
-<!-- Metadata Bar -->
-<div class="flex flex-wrap items-center justify-between gap-space-sm pb-space-sm mb-space-sm border-b border-outline-variant/20">
-<div class="flex items-center gap-space-sm">
-<div class="w-6 h-6 rounded bg-primary-container/30 flex items-center justify-center text-primary text-xs font-bold font-mono">
-                RD
-              </div>
-<span class="font-label-code-md text-label-code-md text-on-surface font-semibold">Reddit Draft</span>
-<span class="font-label-code-sm text-label-code-sm text-primary px-1.5 py-0.2 rounded bg-surface-container-high">r/LocalLLaMA</span>
-<span class="font-label-status text-label-status px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface-variant">LONG-FORM</span>
-</div>
-<div class="flex items-center gap-space-sm font-label-code-sm text-label-code-sm text-on-surface-variant">
-<span>TARGET WINDOW:</span>
-<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-primary font-bold">14:00 UTC - 17:00 UTC</span>
-</div>
-</div>
-<!-- Post Content & Preview Box -->
-<div class="p-space-md rounded-lg bg-surface-container-lowest flex flex-col gap-space-sm font-body-md text-body-md text-on-surface leading-relaxed">
-<div class="font-headline-sm text-headline-sm text-inverse-surface font-semibold pb-1 border-b border-outline-variant/20">
-              Benchmarking DeepSeek-R1 32B quantized on dual Xeon X5690 + RTX 3090: CFO ledgering with zero cloud API leaks.
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Mission Control · Social Command Center &amp; Gemini 4 Ultra Marketing Plans (:3130)</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #000f21; }
+    ::-webkit-scrollbar-thumb { background: #26364a; border-radius: 3px; }
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-error-container": "#ffdad6",
+            "inverse-surface": "#d3e4fe",
+            "surface-variant": "#26364a",
+            "secondary-fixed-dim": "#d0bcff",
+            "on-surface": "#d3e4fe",
+            "primary-container": "#22d3ee",
+            "surface-tint": "#2fd9f4",
+            "on-tertiary-fixed-variant": "#653e00",
+            "surface-container-lowest": "#000f21",
+            "on-surface-variant": "#bbc9cd",
+            "on-secondary-fixed-variant": "#5516be",
+            "surface": "#031427",
+            "primary-fixed": "#a2eeff",
+            "on-tertiary-fixed": "#2a1700",
+            "surface-bright": "#2a3a4f",
+            "surface-container-low": "#0b1c30",
+            "on-secondary-container": "#c4abff",
+            "secondary": "#d0bcff",
+            "tertiary-fixed-dim": "#ffb95f",
+            "inverse-primary": "#006877",
+            "on-primary": "#00363e",
+            "outline": "#859397",
+            "surface-container-highest": "#26364a",
+            "on-primary-fixed-variant": "#004e5a",
+            "primary": "#8aebff",
+            "on-secondary": "#3c0091",
+            "tertiary": "#ffd6a7",
+            "outline-variant": "#3c494c",
+            "error-container": "#93000a",
+            "on-secondary-fixed": "#23005c",
+            "tertiary-fixed": "#ffddb8",
+            "tertiary-container": "#ffb147",
+            "on-primary-container": "#005763",
+            "secondary-fixed": "#e9ddff",
+            "on-tertiary-container": "#704500",
+            "surface-dim": "#031427",
+            "on-tertiary": "#472a00",
+            "on-primary-fixed": "#001f25",
+            "background": "#031427",
+            "surface-container": "#102034",
+            "error": "#ffb4ab",
+            "secondary-container": "#571bc1",
+            "on-error": "#690005",
+            "surface-container-high": "#1b2b3f",
+            "primary-fixed-dim": "#2fd9f4",
+            "on-background": "#d3e4fe",
+            "inverse-on-surface": "#213145"
+          },
+          borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
+          spacing: {
+            "space-xs": "0.25rem",
+            "space-xl": "1.5rem",
+            "space-md": "0.75rem",
+            "gutter-desktop": "1rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1rem",
+            "margin-desktop": "1.5rem",
+            gutter: "0.75rem",
+            margin: "1rem"
+          },
+          fontFamily: {
+            "label-code-sm": ["JetBrains Mono"],
+            "headline-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-xl": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-status": ["JetBrains Mono"],
+            "label-code-lg": ["JetBrains Mono"],
+            "label-code-md": ["JetBrains Mono"],
+            "headline-sm": ["Inter"]
+          },
+          fontSize: {
+            "label-code-sm": ["10px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "600" }],
+            "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "body-md": ["13px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "400" }],
+            "headline-xl": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "body-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }],
+            "headline-md": ["18px", { lineHeight: "24px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "body-lg": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "400" }],
+            "label-status": ["9px", { lineHeight: "12px", letterSpacing: "0.08em", fontWeight: "700" }],
+            "label-code-lg": ["13px", { lineHeight: "18px", letterSpacing: "-0.01em", fontWeight: "500" }],
+            "label-code-md": ["11px", { lineHeight: "16px", letterSpacing: "0em", fontWeight: "500" }],
+            "headline-sm": ["14px", { lineHeight: "20px", letterSpacing: "-0.005em", fontWeight: "600" }]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-surface-container-lowest font-body-md text-on-surface antialiased">
+  <!-- Left Sidebar -->
+  <aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline-variant/40 z-50 flex flex-col justify-between">
+    <div class="flex flex-col">
+      <div class="h-14 px-space-lg flex items-center gap-space-sm border-b border-outline-variant/30 bg-surface-container-lowest/40">
+        <div class="w-7 h-7 rounded bg-primary-container/20 border border-primary/40 flex items-center justify-center text-primary font-bold font-mono text-xs">AG</div>
+        <div class="flex flex-col min-w-0">
+          <span class="font-headline-sm text-headline-sm tracking-tight text-on-surface font-bold uppercase leading-none truncate">ANTIGRAVITY</span>
+          <span class="font-label-code-sm text-label-code-sm text-primary tracking-wider uppercase leading-none mt-1 truncate">MISSION AGENT OS :3130</span>
+        </div>
+      </div>
+      <div class="px-space-md py-space-sm">
+        <span class="font-label-status text-label-status uppercase text-on-surface-variant/70 tracking-widest px-space-sm">OPERATIONAL RUNTIME</span>
+      </div>
+      <nav class="flex flex-col gap-0.5 px-space-xs">
+        <a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="overview" href="/screens/mission_control_overview/">
+          <span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">grid_view</span>
+          <span class="font-body-md text-body-md font-medium truncate">Overview</span>
+        </a>
+        <a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="jarvis" href="/screens/mission_control_jarvis_command_console/">
+          <span class="material-symbols-outlined text-lg text-cyan-400">bolt</span>
+          <span class="font-body-md text-body-md font-medium truncate text-cyan-300">JARVIS / OPSIS</span>
+        </a>
+        <a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="agents" href="/screens/mission_control_agents_fleet/">
+          <span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">smart_toy</span>
+          <span class="font-body-md text-body-md font-medium truncate">Agents</span>
+        </a>
+        <a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="board" href="/screens/mission_control_board_journal/">
+          <span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">dashboard_customize</span>
+          <span class="font-body-md text-body-md font-medium truncate">Board &amp; Wheel</span>
+        </a>
+        <a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="gateway" href="/screens/mission_control_omniroute_gateway/">
+          <span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">router</span>
+          <span class="font-body-md text-body-md font-medium truncate">Gateway</span>
+        </a>
+        <a aria-current="page" class="flex items-center gap-space-sm px-space-md py-2 rounded transition-all group bg-surface-container-high text-primary border-l-2 border-primary-container shadow-[0_0_12px_-2px_rgba(34,211,238,0.35)]" data-path="marketing" href="/marketing">
+          <span class="material-symbols-outlined text-lg text-primary">campaign</span>
+          <span class="font-body-md text-body-md font-bold truncate">Social Command Center</span>
+        </a>
+        <a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="memory" href="/screens/mission_control_agent_memory_stores/">
+          <span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">memory</span>
+          <span class="font-body-md text-body-md font-medium truncate">Memory (Obsidian)</span>
+        </a>
+        <a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="node" href="/screens/mission_control_t5500_hardware_node/">
+          <span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">hub</span>
+          <span class="font-body-md text-body-md font-medium truncate">T5500 Node</span>
+        </a>
+        <a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="logs" href="/screens/mission_control_t5500_node_boot_timeline/">
+          <span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">terminal</span>
+          <span class="font-body-md text-body-md font-medium truncate">Logs</span>
+        </a>
+        <a class="flex items-center gap-space-sm px-space-md py-2 rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all group" data-path="settings" href="/screens/mission_control_settings_logins/">
+          <span class="material-symbols-outlined text-lg group-hover:text-primary transition-colors">settings</span>
+          <span class="font-body-md text-body-md font-medium truncate">Settings &amp; Logins</span>
+        </a>
+      </nav>
+    </div>
+    <div class="p-space-md border-t border-outline-variant/30 bg-surface-container-lowest/60 flex items-center justify-between gap-space-xs">
+      <div class="flex items-center gap-space-xs min-w-0">
+        <span class="relative flex h-2 w-2 flex-shrink-0">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-primary-fixed-dim"></span>
+        </span>
+        <div class="flex flex-col min-w-0">
+          <span class="font-label-code-sm text-label-code-sm text-on-surface truncate">T5500 · 192.168.0.15</span>
+          <span class="font-label-status text-label-status text-emerald-400 uppercase tracking-wider">SOCIAL COMMAND CENTER</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="pl-64 flex flex-col min-h-screen">
+    <header class="fixed top-0 left-64 right-0 h-14 bg-surface-container-low/95 backdrop-blur-md border-b border-outline-variant/30 z-40 px-space-lg flex items-center justify-between gap-space-md">
+      <div class="flex items-center gap-space-md min-w-0">
+        <div class="flex items-center gap-1.5 flex-shrink-0">
+          <span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Mission Agent OS</span>
+          <span class="text-outline-variant font-label-code-sm text-label-code-sm">/</span>
+          <span class="font-label-code-md text-label-code-md text-primary tracking-wide font-bold">MARKETING &amp; SOCIAL</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-space-sm flex-shrink-0">
+        <span class="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 font-label-status text-label-status uppercase tracking-wider font-bold">
+          22 PLATFORMS · ZERO PAPERCLIP
+        </span>
+        <a href="/live" class="px-2.5 py-1 rounded-md bg-surface-container-high border border-primary/40 text-primary font-label-code-sm text-label-code-sm hover:bg-surface-bright">
+          LIVE NODE TRUTH →
+        </a>
+      </div>
+    </header>
+
+    <main class="w-full pt-14 flex-1 bg-surface-container-lowest">
+      <div class="relative w-full px-gutter-desktop py-space-lg flex flex-col gap-space-lg">
+        <!-- Top Hero Banner -->
+        <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-space-md p-space-lg rounded-xl bg-surface-container-low border border-primary/30 shadow-md">
+          <div class="flex flex-wrap items-center gap-space-md">
+            <div class="w-11 h-11 rounded-xl bg-primary-container/20 border border-primary/40 flex items-center justify-center text-primary shadow-[0_0_16px_-2px_rgba(34,211,238,0.4)]">
+              <span class="material-symbols-outlined text-2xl">hub</span>
             </div>
-<p class="text-on-surface-variant text-body-sm font-body-sm line-clamp-3">
-              We migrated our operational ledger validation away from commercial cloud endpoints. Here is our latency curve, vRAM paging strategy via llama.cpp server, and token throughput analysis across 14,000 corporate receipts with zero external network egress...
-            </p>
-</div>
-<!-- Technical Specs Badges -->
-<div class="mt-space-sm flex items-center justify-between text-on-surface-variant font-label-code-sm text-label-code-sm">
-<div class="flex items-center gap-space-sm">
-<span class="text-secondary font-mono">824 words</span>
-<span>•</span>
-<span>4 benchmark diagrams included</span>
-</div>
-<span class="px-1.5 py-0.5 rounded bg-secondary-container/20 text-secondary-fixed-dim">COMMUNITY REPUTATION RISK: LOW</span>
-</div>
-<!-- Operator Action Bar -->
-<div class="mt-space-md pt-space-sm flex flex-wrap items-center justify-between gap-space-sm">
-<div class="flex items-center gap-space-xs">
-<button class="px-space-md py-2 rounded-lg bg-surface-container-high text-on-surface font-headline-sm text-headline-sm hover:bg-surface-bright transition-colors flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">edit_note</span>
-<span>Edit Copy</span>
-</button>
-<button class="px-space-md py-2 rounded-lg bg-error-container/20 text-error font-headline-sm text-headline-sm hover:bg-error hover:text-on-error transition-colors flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">block</span>
-<span>Reject</span>
-</button>
-</div>
-<button class="px-space-lg py-2 rounded-lg bg-secondary text-on-secondary font-headline-sm text-headline-sm font-bold shadow-[0_0_14px_-2px_rgba(208,188,255,0.4)] hover:bg-secondary-fixed transition-all flex items-center gap-1.5">
-<span class="material-symbols-outlined text-base">publish</span>
-<span>Approve Draft</span>
-</button>
-</div>
-</div>
-</section>
-<!-- Side Inspector & Operational Insights (Span 4) -->
-<aside class="2xl:col-span-4 flex flex-col gap-space-md">
-<!-- Live Marketing Pulse Visual Card -->
-<div class="flex flex-col p-space-md rounded-xl bg-surface-container-low shadow-sm">
-<div class="flex items-center justify-between pb-space-sm mb-space-sm border-b border-outline-variant/30">
-<div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-secondary text-lg">insights</span>
-<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Organic Reach Telemetry</span>
-</div>
-<span class="font-label-status text-label-status px-1.5 py-0.5 rounded bg-secondary-container/30 text-secondary font-bold">24H CYCLE</span>
-</div>
-<!-- Inline Rich SVG Reach Vector Chart -->
-<div class="w-full h-32 flex flex-col justify-end">
-<svg class="w-full h-24 overflow-visible text-secondary" preserveAspectRatio="none" viewBox="0 0 320 100">
-<defs>
-<linearGradient id="violetGradient" x1="0%" x2="0%" y1="0%" y2="100%">
-<stop offset="0%" stop-color="#d0bcff" stop-opacity="0.45"></stop>
-<stop offset="100%" stop-color="#571bc1" stop-opacity="0.0"></stop>
-</linearGradient>
-</defs>
-<!-- Filled area chart -->
-<path d="M 0 85 Q 40 70 80 50 T 160 30 T 240 60 T 320 15 L 320 100 L 0 100 Z" fill="url(#violetGradient)"></path>
-<!-- Smooth curve line -->
-<path d="M 0 85 Q 40 70 80 50 T 160 30 T 240 60 T 320 15" fill="none" stroke="currentColor" stroke-width="2.5"></path>
-<!-- Active data points -->
-<circle cx="80" cy="50" fill="#8aebff" r="3.5"></circle>
-<circle cx="160" cy="30" fill="#8aebff" r="3.5"></circle>
-<circle cx="240" cy="60" fill="#8aebff" r="3.5"></circle>
-<circle class="animate-pulse" cx="320" cy="15" fill="#d0bcff" r="4.5"></circle>
-</svg>
-<div class="flex justify-between items-center text-outline font-label-code-sm text-label-code-sm pt-2">
-<span>00:00 UTC</span>
-<span>08:00 UTC</span>
-<span>16:00 UTC</span>
-<span class="text-secondary font-bold">NOW</span>
-</div>
-</div>
-<div class="grid grid-cols-2 gap-space-sm mt-space-md pt-space-xs border-t border-outline-variant/20">
-<div class="flex flex-col">
-<span class="font-body-sm text-body-sm text-on-surface-variant">Impressions (48h)</span>
-<span class="font-headline-md text-headline-md font-bold text-on-surface">38.4k</span>
-<span class="font-label-code-sm text-label-code-sm text-primary">+22.4% vs prev</span>
-</div>
-<div class="flex flex-col">
-<span class="font-body-sm text-body-sm text-on-surface-variant">Inbound Clicks</span>
-<span class="font-headline-md text-headline-md font-bold text-secondary">1,492</span>
-<span class="font-label-code-sm text-label-code-sm text-secondary-fixed-dim">3.9% CTR</span>
-</div>
-</div>
-</div>
-<!-- Marketing Asset Media Preview -->
-<div class="flex flex-col p-space-md rounded-xl bg-surface-container-low shadow-sm">
-<div class="flex items-center justify-between pb-space-sm mb-space-sm border-b border-outline-variant/30">
-<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Attached Visual Media</span>
-<span class="font-label-code-sm text-label-code-sm text-secondary">Asset #T5500-NODE</span>
-</div>
-<div class="relative w-full h-44 rounded-lg overflow-hidden group">
-<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="Refurbished dual-processor Dell Precision T5500 server workstation glowing with violet and electric cyan LED diagnostics in a dark industrial homelab rack, cinematic technical photography with shallow depth of field, neon server rack cables, dark metallic surfaces" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRmUXArz8Y3-BBvnQzJxnkJPoK3OxDX9cJdPHNwReoqcu1gnFM91ibkpzP9oL4CdPDRJPuy6F8wZMSS_jhJgQAmpUzOalroMLi9yrJc6YZZW8u55oL42Ku-DcRLHNwFY_7cYJqN2oeRwxG-STWF4vIRSs670LMYQA6m283ZRc3Mg-rwE4JvWwbP_4W6oQLlq6SRxTzbTQDMjsP-n5FBOX_lnr26bceXH5S3U5yIaBSG4xJRc0E5YJ14Q">
-<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
-<div class="absolute bottom-2 left-2 right-2 flex items-center justify-between font-label-code-sm text-label-code-sm">
-<span class="px-2 py-0.5 rounded bg-surface-container-lowest/80 text-on-surface backdrop-blur-sm">server_t5500_rack.webp</span>
-<span class="px-1.5 py-0.5 rounded bg-secondary-container/80 text-secondary-fixed-dim">Ready for X</span>
-</div>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-sm">
-            Automatically paired with Card 1 thread to maximize engagement metrics. High visual contrast verified by Grok.
-          </p>
-</div>
-<!-- Safety & Guardrail Parameters Checklist -->
-<div class="flex flex-col p-space-md rounded-xl bg-surface-container-low shadow-sm">
-<div class="flex items-center gap-space-xs pb-space-sm mb-space-sm border-b border-outline-variant/30">
-<span class="material-symbols-outlined text-secondary text-base">security</span>
-<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Active Engine Constraints</span>
-</div>
-<ul class="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
-<li class="flex items-center justify-between py-1 border-b border-outline-variant/20">
-<span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>Zero Secret Leak Policy</span>
-<span class="font-label-code-sm text-label-code-sm text-primary">ENFORCED</span>
-</li>
-<li class="flex items-center justify-between py-1 border-b border-outline-variant/20">
-<span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>Founder Explicit Sign-off</span>
-<span class="font-label-code-sm text-label-code-sm text-secondary">MANDATORY</span>
-</li>
-<li class="flex items-center justify-between py-1 border-b border-outline-variant/20">
-<span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>Rate Limit Safeguards</span>
-<span class="font-label-code-sm text-label-code-sm text-primary">HEALTHY</span>
-</li>
-<li class="flex items-center justify-between py-1">
-<span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-outline"></span>Autonomous Direct-Post</span>
-<span class="font-label-code-sm text-label-code-sm text-error">DISABLED</span>
-</li>
-</ul>
-</div>
-</aside>
-</div>
-</div>
-</div></main></div></body></html>
+            <div class="flex flex-col min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight font-bold">Social Command Center &amp; Gemini 4 Ultra Marketing Plans</h1>
+                <span class="font-label-code-sm text-label-code-sm px-2 py-0.5 rounded bg-primary/20 text-primary border border-primary/40 font-mono">NATIVE :3130 · $0 API COST</span>
+                <span class="font-label-code-sm text-label-code-sm px-2 py-0.5 rounded bg-secondary-container/40 text-secondary font-mono">SLOPMONSTER 5/5 + 18+ GATE</span>
+              </div>
+              <p class="font-body-md text-body-md text-on-surface-variant mt-0.5">
+                Connected directly to <code class="text-primary">mission-control/lib/social-adapters.mjs</code> (dev.to, Hashnode, WordPress, Tumblr, Blogger, X, Reddit OAuth, TikTok, YouTube) + the 22-platform <code class="text-primary">social_engine</code> + Gemini 4 Antigravity Ultra (<code class="text-primary">agy</code>) &amp; local <code class="text-secondary">joshlcoleman/Fable</code> voice.
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 self-start xl:self-auto">
+            <button id="btn-focus-generator" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary-container text-on-primary-fixed font-headline-sm text-headline-sm font-bold hover:opacity-95 transition-all shadow-[0_0_14px_-2px_rgba(34,211,238,0.5)] cursor-pointer">
+              <span class="material-symbols-outlined text-base">auto_awesome</span>
+              <span>Compose / Generate Post</span>
+            </button>
+            <button id="btn-copy-all-playbooks" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-high border border-outline-variant/50 text-on-surface font-headline-sm text-headline-sm font-semibold hover:bg-surface-bright transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-base">content_copy</span>
+              <span>Export Full JSON</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Domain Filter Tabs -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm border-b border-outline-variant/30 pb-space-xs">
+          <div class="flex items-center gap-2 overflow-x-auto pb-1" id="domain-tabs" role="tablist">
+            <button type="button" data-domain="all" class="mos-domain-tab flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-container text-on-primary-fixed font-headline-sm text-headline-sm font-bold transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-base">public</span>
+              <span>All 3 Domains &amp; Playbooks</span>
+              <span id="badge-count-all" class="font-label-code-sm text-label-code-sm px-1.5 py-0.2 rounded-full bg-black/25">8 READY</span>
+            </button>
+            <button type="button" data-domain="youandinotai.com" class="mos-domain-tab flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-headline-sm text-headline-sm font-semibold border border-outline-variant/30 transition-all cursor-pointer">
+              <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+              <span>youandinotai.com ($1 Bot-Shield &amp; 50% Rev-Share)</span>
+            </button>
+            <button type="button" data-domain="onlinerecycle.net" class="mos-domain-tab flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-headline-sm text-headline-sm font-semibold border border-outline-variant/30 transition-all cursor-pointer">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>onlinerecycle.net (B2B E-Waste &amp; eBay)</span>
+            </button>
+            <button type="button" data-domain="dream-online.net" class="mos-domain-tab flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-headline-sm text-headline-sm font-semibold border border-outline-variant/30 transition-all cursor-pointer">
+              <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+              <span>dream-online.net (Live-Agent NPC MMORPG)</span>
+            </button>
+          </div>
+          <div class="flex items-center gap-2 text-on-surface-variant font-label-code-sm text-label-code-sm">
+            <span class="material-symbols-outlined text-sm text-primary">verified</span>
+            <span>4-GATE PIPELINE: <strong class="text-emerald-400">COMPLIANCE · COPY-SCORE 5/5 · 18+ VENUE · BUSINESS-ONLY</strong></span>
+          </div>
+        </div>
+
+        <!-- Strategic Master Playbooks Grid (3 Domains) -->
+        <section aria-label="Domain Strategic Marketing Plans" id="domain-playbooks-grid" class="grid grid-cols-1 xl:grid-cols-3 gap-space-md">
+          <!-- Populated dynamically from /api/marketing/plans -->
+        </section>
+
+        <!-- Live Social Command Center Compose & AI Generator Studio -->
+        <section id="generator-studio" class="p-space-lg rounded-xl bg-surface-container-low border border-primary/40 shadow-md flex flex-col gap-space-md">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-outline-variant/30 pb-space-sm">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="material-symbols-outlined text-primary text-xl">auto_awesome</span>
+              <h2 class="font-headline-md text-headline-md font-bold text-on-surface">Social Command Center · Live AI Composer &amp; 4-Gate Validator</h2>
+              <span class="font-label-code-sm text-label-code-sm px-2 py-0.5 rounded bg-primary/15 text-primary">Gemini 4 Ultra (agy) + Fable Local Voice</span>
+            </div>
+            <span id="gen-status-pill" class="font-label-code-sm text-label-code-sm text-emerald-400">READY · SOCIAL COMMAND CENTER ONLINE</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-space-md items-end">
+            <div class="md:col-span-3 flex flex-col gap-1">
+              <label class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase">Target Domain / Brand</label>
+              <select id="gen-domain" class="bg-surface-container-lowest border border-outline-variant/50 rounded-lg px-3 py-2 text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary">
+                <option value="youandinotai.com">youandinotai.com (YouAndINotAI · Adults 18+)</option>
+                <option value="onlinerecycle.net">onlinerecycle.net (Trash Or Treasure LLC · B2B/eBay)</option>
+                <option value="dream-online.net">dream-online.net (DREAM Online · Live-Agent NPCs)</option>
+              </select>
+            </div>
+            <div class="md:col-span-3 flex flex-col gap-1">
+              <label class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase">Social Command Center Platform</label>
+              <select id="gen-channel" class="bg-surface-container-lowest border border-outline-variant/50 rounded-lg px-3 py-2 text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary">
+                <option value="X / Twitter Thread">X / Twitter (Thread or Hook)</option>
+                <option value="Reddit Post (Zero-Slop Human)">Reddit (Official OAuth / Subreddit Post)</option>
+                <option value="TikTok / Reels / YouTube Short (30-60s)">TikTok / Reels / YouTube Short (30-60s)</option>
+                <option value="Creator 50% Lifetime Rev-Share DM (Link Forge)">Creator 50% Lifetime Rev-Share DM (Link Forge)</option>
+                <option value="Dev.to / Hashnode / Show HN Technical Post">Dev.to / Hashnode / Show HN Technical Post</option>
+                <option value="B2B IT Decommission Pickup Pitch">B2B IT Decommission Pickup Pitch (LinkedIn/Email)</option>
+              </select>
+            </div>
+            <div class="md:col-span-3 flex flex-col gap-1">
+              <label class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase">Custom Hook / Brief</label>
+              <input id="gen-angle" type="text" placeholder="e.g. $1 Bot-Shield verification stops catfishing cold..." class="bg-surface-container-lowest border border-outline-variant/50 rounded-lg px-3 py-2 text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary">
+            </div>
+            <div class="md:col-span-3 flex gap-2">
+              <button id="btn-run-generator" type="button" class="flex-1 py-2 px-3 rounded-lg bg-primary-container text-on-primary-fixed font-headline-sm text-headline-sm font-bold hover:opacity-95 transition-all flex items-center justify-center gap-1 cursor-pointer shadow-[0_0_12px_-2px_rgba(34,211,238,0.45)]" title="Generate with Gemini 4 Argon / Ultra (agy OAuth)">
+                <span class="material-symbols-outlined text-base">bolt</span>
+                <span>Gemini 4 Ultra</span>
+              </button>
+              <button id="btn-run-fable-draft" type="button" class="py-2 px-3 rounded-lg bg-secondary-container text-secondary-fixed font-headline-sm text-headline-sm font-bold hover:opacity-95 transition-all flex items-center justify-center gap-1 cursor-pointer" title="Draft in Joshua's Fable Voice via /api/social/draft">
+                <span class="material-symbols-outlined text-base">psychology</span>
+                <span>Fable Voice</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Main 2-Column Split: Campaign Queue (Span 8) + Social Command Center 22-Platform Matrix & $10k Goal (Span 4) -->
+        <div class="grid grid-cols-1 2xl:grid-cols-12 gap-space-lg items-start">
+          <!-- Left Column: Ready-to-Publish Campaign Cards -->
+          <section class="2xl:col-span-8 flex flex-col gap-space-md">
+            <div class="flex items-center justify-between px-space-xs">
+              <div class="flex items-center gap-space-sm">
+                <span class="material-symbols-outlined text-primary text-xl">fact_check</span>
+                <h2 class="font-headline-md text-headline-md text-on-surface font-bold tracking-tight">Social Command Center · Campaign &amp; Proposal Queue</h2>
+                <span id="queue-count-pill" class="font-label-code-sm text-label-code-sm px-2 py-0.5 rounded-full bg-primary/20 text-primary font-bold">8 CAMPAIGNS</span>
+              </div>
+              <span class="font-label-code-sm text-label-code-sm text-on-surface-variant">4-GATE VERIFIED · 1-CLICK COPY OR DISPATCH TO APPROVED INBOX</span>
+            </div>
+
+            <div id="campaign-cards-container" class="flex flex-col gap-space-md">
+              <!-- Populated by script below -->
+            </div>
+          </section>
+
+          <!-- Right Column: Social Command Center 22 Platforms + Approved Handoffs + $10k Autonomy Ledger + 50-Task Wheel -->
+          <aside class="2xl:col-span-4 flex flex-col gap-space-md">
+            <!-- Social Command Center 22-Platform Matrix -->
+            <div class="flex flex-col p-space-md rounded-xl bg-surface-container-low border border-primary/30 shadow-sm">
+              <div class="flex items-center justify-between pb-space-sm mb-space-sm border-b border-outline-variant/30">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-primary text-lg">share</span>
+                  <span class="font-headline-sm text-headline-sm text-on-surface font-bold">Social Command Center (22 Platforms)</span>
+                </div>
+                <span id="scc-posters-badge" class="font-label-status text-label-status px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">22/22 INSTALLED</span>
+              </div>
+              <p class="font-body-sm text-body-sm text-on-surface-variant mb-2">
+                Adapters in <code class="text-primary">mission-control/lib/social-adapters.mjs</code> + <code class="text-primary">scripts/dashboard-aidoesitall/social_engine/</code>:
+              </p>
+              <div id="scc-platforms-grid" class="grid grid-cols-2 gap-1.5 max-h-60 overflow-y-auto pr-1">
+                <!-- Populated dynamically -->
+              </div>
+              <div class="mt-space-sm pt-space-xs border-t border-outline-variant/20 flex items-center justify-between font-label-code-sm text-label-code-sm">
+                <span class="text-on-surface-variant">Approved Handoff Dir:</span>
+                <code class="text-primary">ops/marketing-inbox/approved/</code>
+              </div>
+            </div>
+
+            <!-- $10,000 Autonomy Goal Card -->
+            <div class="flex flex-col p-space-md rounded-xl bg-surface-container-low border border-outline-variant/30 shadow-sm">
+              <div class="flex items-center justify-between pb-space-sm mb-space-sm border-b border-outline-variant/30">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-primary text-lg">account_balance_wallet</span>
+                  <span class="font-headline-sm text-headline-sm text-on-surface font-bold">$10,000 Revenue &amp; Autonomy Target</span>
+                </div>
+                <span class="font-label-status text-label-status px-1.5 py-0.5 rounded bg-primary/20 text-primary font-bold">ACTIVE GOAL</span>
+              </div>
+              <div class="flex flex-col gap-2 font-body-sm text-body-sm">
+                <div class="flex items-center justify-between p-2 rounded bg-surface-container-lowest">
+                  <span class="text-on-surface">1. 2 Years Solo Building Runway</span>
+                  <span class="font-label-code-md text-label-code-md text-primary font-bold">$4,500</span>
+                </div>
+                <div class="flex items-center justify-between p-2 rounded bg-surface-container-lowest">
+                  <span class="text-on-surface">2. 1 Year AI Compute in Advance</span>
+                  <span class="font-label-code-md text-label-code-md text-primary font-bold">$2,400</span>
+                </div>
+                <div class="flex items-center justify-between p-2 rounded bg-surface-container-lowest">
+                  <span class="text-on-surface">3. Federal &amp; State Tax Reserve</span>
+                  <span class="font-label-code-md text-label-code-md text-primary font-bold">$2,100</span>
+                </div>
+                <div class="flex items-center justify-between p-2 rounded bg-surface-container-lowest">
+                  <span class="text-on-surface">4. Wyoming DAO LLC + Reg. Agent</span>
+                  <span class="font-label-code-md text-label-code-md text-primary font-bold">$1,000</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 50-Task Perpetual Wheel Marketing Queue -->
+            <div class="flex flex-col p-space-md rounded-xl bg-surface-container-low border border-outline-variant/30 shadow-sm">
+              <div class="flex items-center justify-between pb-space-sm mb-space-sm border-b border-outline-variant/30">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-secondary text-lg">autorenew</span>
+                  <span class="font-headline-sm text-headline-sm text-on-surface font-bold">Gemini 4 Perpetual Wheel (50 Tasks)</span>
+                </div>
+                <span id="wheel-epoch-badge" class="font-label-status text-label-status px-1.5 py-0.5 rounded bg-secondary-container/30 text-secondary font-bold">EPOCH 1</span>
+              </div>
+              <p class="font-body-sm text-body-sm text-on-surface-variant mb-2">
+                Auto-refills +50 new tasks whenever remaining open tasks drop to &le; 10.
+              </p>
+              <div id="wheel-tasks-list" class="flex flex-col gap-1.5 max-h-80 overflow-y-auto pr-1">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      let stateData = null;
+      let selectedDomain = 'all';
+
+      const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+      function domainColor(domain) {
+        if (domain === 'youandinotai.com') return { badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40', dot: 'bg-cyan-400' };
+        if (domain === 'onlinerecycle.net') return { badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40', dot: 'bg-emerald-400' };
+        if (domain === 'dream-online.net') return { badge: 'bg-purple-500/20 text-purple-300 border-purple-500/40', dot: 'bg-purple-400' };
+        return { badge: 'bg-primary/20 text-primary border-primary/40', dot: 'bg-primary' };
+      }
+
+      function renderPlaybooks() {
+        if (!stateData?.domains) return;
+        const grid = document.getElementById('domain-playbooks-grid');
+        if (!grid) return;
+        const entries = Object.values(stateData.domains).filter((d) => selectedDomain === 'all' || d.domain === selectedDomain);
+        grid.className = entries.length === 1
+          ? 'grid grid-cols-1 gap-space-md'
+          : 'grid grid-cols-1 xl:grid-cols-3 gap-space-md';
+
+        grid.innerHTML = entries.map((d) => {
+          const col = domainColor(d.domain);
+          return `
+            <div class="p-space-md rounded-xl bg-surface-container-low border border-outline-variant/40 flex flex-col gap-space-sm shadow-sm">
+              <div class="flex items-center justify-between border-b border-outline-variant/30 pb-2">
+                <div>
+                  <span class="font-label-status text-label-status px-2 py-0.5 rounded border ${col.badge} uppercase">${esc(d.status)} · BRAND: ${esc(d.brand || d.domain)}</span>
+                  <h2 class="font-headline-md text-headline-md font-bold text-on-surface mt-1">${esc(d.name)}</h2>
+                  <div class="font-label-code-sm text-label-code-sm text-on-surface-variant">${esc(d.checkoutRail)}</div>
+                </div>
+                <a href="${esc(d.url)}" target="_blank" rel="noopener" class="px-2.5 py-1 rounded bg-surface-container-high text-primary font-label-code-sm text-label-code-sm hover:bg-surface-bright">Open Site ↗</a>
+              </div>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">${esc(d.valueProp)}</p>
+              <div class="flex flex-col gap-2 mt-1">
+                ${(d.pillars || []).map((p) => `
+                  <div class="p-2.5 rounded-lg bg-surface-container-lowest border border-outline-variant/25 flex flex-col gap-1">
+                    <div class="font-headline-sm text-headline-sm font-bold text-primary">${esc(p.title)}</div>
+                    <div class="font-body-sm text-body-sm text-on-surface"><strong>Offer:</strong> ${esc(p.offer)}</div>
+                    <div class="font-label-code-sm text-label-code-sm text-on-surface-variant"><strong>Target:</strong> ${esc(p.target)}</div>
+                    <div class="font-label-code-sm text-label-code-sm text-secondary"><strong>Cadence:</strong> ${esc(p.cadence)} · <strong>KPI:</strong> ${esc(p.kpi)}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function renderChecksRow(checks) {
+        if (!checks) return '';
+        const compOk = checks.compliance?.pass !== false;
+        const score = checks.copyScore?.score ?? 5;
+        const adultOk = checks.adultVenue?.pass !== false;
+        const bizOk = checks.businessOnly?.pass !== false;
+        const pill = (ok, label) =>
+          `<span class="px-2 py-0.5 rounded font-label-code-sm text-label-code-sm border ${
+            ok ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-red-500/20 text-red-300 border-red-500/40'
+          }">${esc(label)}</span>`;
+        return `
+          <div class="flex flex-wrap items-center gap-1.5 mt-2">
+            ${pill(compOk, compOk ? 'COMPLIANCE: PASS' : 'COMPLIANCE: FAIL')}
+            ${pill(score >= 4, `SLOPMONSTER SCORE: ${score}/5`)}
+            ${pill(adultOk, adultOk ? '18+ VENUE: PASS' : '18+ VENUE: FAIL')}
+            ${pill(bizOk, bizOk ? 'BUSINESS-ONLY: PASS' : 'BUSINESS-ONLY: FAIL')}
+          </div>
+        `;
+      }
+
+      function renderCampaigns() {
+        const container = document.getElementById('campaign-cards-container');
+        if (!container || !stateData?.campaigns) return;
+        const list = stateData.campaigns.filter((c) => selectedDomain === 'all' || c.domain === selectedDomain);
+        const countPill = document.getElementById('queue-count-pill');
+        if (countPill) countPill.textContent = `${list.length} CAMPAIGNS`;
+        const allBadge = document.getElementById('badge-count-all');
+        if (allBadge) allBadge.textContent = `${stateData.campaigns.length} READY`;
+
+        container.innerHTML = list.map((c) => {
+          const col = domainColor(c.domain);
+          const tags = Array.isArray(c.hashtags) ? c.hashtags.join(' ') : '';
+          return `
+            <div class="flex flex-col p-space-lg rounded-xl bg-surface-container-low border border-outline-variant/30 hover:border-primary/40 transition-all shadow-sm" data-campaign-id="${esc(c.id)}">
+              <div class="flex flex-wrap items-center justify-between gap-2 pb-space-sm mb-space-sm border-b border-outline-variant/20">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="px-2 py-0.5 rounded border font-label-code-sm text-label-code-sm ${col.badge}">${esc(c.domain)}</span>
+                  <span class="font-label-code-md text-label-code-md text-on-surface font-bold">${esc(c.channel)}</span>
+                  <span class="font-label-status text-label-status px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant">${esc(c.id)}</span>
+                </div>
+                <div class="flex items-center gap-2 font-label-code-sm text-label-code-sm">
+                  <span class="text-on-surface-variant">${esc(c.scheduledWindow || 'Ready')}</span>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold">${esc(c.status)}</span>
+                </div>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-inverse-surface font-bold mb-2">${esc(c.title)}</h3>
+              <div class="p-space-md rounded-lg bg-surface-container-lowest border border-outline-variant/20 font-body-md text-body-md text-on-surface whitespace-pre-wrap leading-relaxed" id="body-${esc(c.id)}">${esc(c.body)}</div>
+              ${tags ? `<div class="mt-2 font-label-code-sm text-label-code-sm text-primary">${esc(tags)}</div>` : ''}
+              ${renderChecksRow(c.checks)}
+              <div class="mt-space-md pt-space-sm border-t border-outline-variant/20 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <button type="button" data-copy-id="${esc(c.id)}" class="btn-copy-campaign px-3 py-1.5 rounded-lg bg-primary-container text-on-primary-fixed font-headline-sm text-headline-sm font-bold hover:opacity-95 transition-all flex items-center gap-1 cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">content_copy</span>
+                    <span>Copy Full Post</span>
+                  </button>
+                  <button type="button" data-mark-id="${esc(c.id)}" data-next-status="DISPATCHED_SCC" class="btn-status-campaign px-3 py-1.5 rounded-lg bg-secondary-container text-secondary-fixed font-headline-sm text-headline-sm font-bold hover:opacity-95 transition-all flex items-center gap-1 cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">send</span>
+                    <span>Approve &amp; Dispatch to Social Command Center</span>
+                  </button>
+                </div>
+                <span class="font-label-code-sm text-label-code-sm text-on-surface-variant">${esc(c.modelUsed || c.category || 'Social Command Center')}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        container.querySelectorAll('.btn-copy-campaign').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-copy-id');
+            const camp = stateData.campaigns.find((x) => x.id === id);
+            if (!camp) return;
+            const fullText = `${camp.title}\n\n${camp.body}\n\n${(camp.hashtags || []).join(' ')}`.trim();
+            navigator.clipboard.writeText(fullText);
+            const span = btn.querySelector('span:last-child');
+            if (span) {
+              const orig = span.textContent;
+              span.textContent = 'Copied!';
+              setTimeout(() => { span.textContent = orig; }, 1800);
+            }
+          });
+        });
+
+        container.querySelectorAll('.btn-status-campaign').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const id = btn.getAttribute('data-mark-id');
+            const status = btn.getAttribute('data-next-status');
+            const span = btn.querySelector('span:last-child');
+            if (span) span.textContent = 'Dispatching...';
+            await fetch('/api/marketing/status', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ id, status }),
+            });
+            await loadPlans();
+          });
+        });
+      }
+
+      function renderSocialCommandCenterPlatforms() {
+        const grid = document.getElementById('scc-platforms-grid');
+        const badge = document.getElementById('scc-posters-badge');
+        const posters = stateData?.socialCommandCenter?.posters22 || [];
+        if (!grid) return;
+        const installedCount = posters.filter((p) => p.installed).length;
+        if (badge) badge.textContent = `${installedCount}/${posters.length} INSTALLED`;
+        grid.innerHTML = posters.map((p) => `
+          <div class="p-2 rounded bg-surface-container-lowest border border-outline-variant/25 flex items-center justify-between gap-1.5">
+            <div class="min-w-0">
+              <div class="font-label-code-sm text-label-code-sm text-on-surface truncate">${esc(p.name)}</div>
+              <div class="font-label-status text-label-status text-on-surface-variant">${esc(p.category)}</div>
+            </div>
+            <span class="w-2 h-2 rounded-full flex-shrink-0 ${p.installed ? 'bg-emerald-400' : 'bg-red-400'}"></span>
+          </div>
+        `).join('');
+      }
+
+      function renderWheelTasks() {
+        const listEl = document.getElementById('wheel-tasks-list');
+        const badgeEl = document.getElementById('wheel-epoch-badge');
+        if (!listEl || !stateData?.wheelSummary) return;
+        const ws = stateData.wheelSummary;
+        if (badgeEl) {
+          badgeEl.textContent = `EPOCH ${ws.epoch || 1} · ${ws.doneCount}/${ws.totalTasks} DONE`;
+        }
+        const tasks = (ws.tasks || []).filter((t) => selectedDomain === 'all' || t.domain === selectedDomain);
+        listEl.innerHTML = tasks.slice(0, 25).map((t) => {
+          const isDone = t.status === 'done';
+          const isProg = t.status === 'in_progress';
+          const pillCls = isDone
+            ? 'bg-emerald-500/20 text-emerald-300'
+            : isProg
+              ? 'bg-cyan-500/20 text-cyan-300'
+              : 'bg-surface-container-high text-on-surface-variant';
+          return `
+            <div class="p-2 rounded bg-surface-container-lowest border border-outline-variant/20 flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <div class="font-label-code-sm text-label-code-sm text-primary">${esc(t.id)} · ${esc(t.domain)}</div>
+                <div class="font-body-sm text-body-sm text-on-surface">${esc(t.title)}</div>
+              </div>
+              <span class="font-label-status text-label-status px-1.5 py-0.5 rounded uppercase flex-shrink-0 ${pillCls}">${esc(t.status)}</span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      async function loadPlans() {
+        try {
+          const r = await fetch('/api/marketing/plans');
+          if (r.ok) {
+            stateData = await r.json();
+            renderPlaybooks();
+            renderCampaigns();
+            renderSocialCommandCenterPlatforms();
+            renderWheelTasks();
+          }
+        } catch (err) {
+          console.error('Failed to load marketing plans:', err);
+        }
+      }
+
+      document.querySelectorAll('.mos-domain-tab').forEach((tab) => {
+        tab.addEventListener('click', () => {
+          selectedDomain = tab.getAttribute('data-domain') || 'all';
+          document.querySelectorAll('.mos-domain-tab').forEach((t) => {
+            const act = t.getAttribute('data-domain') === selectedDomain;
+            t.className = act
+              ? 'mos-domain-tab flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-container text-on-primary-fixed font-headline-sm text-headline-sm font-bold transition-all cursor-pointer'
+              : 'mos-domain-tab flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-headline-sm text-headline-sm font-semibold border border-outline-variant/30 transition-all cursor-pointer';
+          });
+          renderPlaybooks();
+          renderCampaigns();
+          renderWheelTasks();
+        });
+      });
+
+      const focusBtn = document.getElementById('btn-focus-generator');
+      if (focusBtn) {
+        focusBtn.addEventListener('click', () => {
+          const inp = document.getElementById('gen-angle');
+          if (inp) {
+            inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            inp.focus();
+          }
+        });
+      }
+
+      const copyAllBtn = document.getElementById('btn-copy-all-playbooks');
+      if (copyAllBtn) {
+        copyAllBtn.addEventListener('click', () => {
+          if (!stateData) return;
+          navigator.clipboard.writeText(JSON.stringify(stateData, null, 2));
+          const span = copyAllBtn.querySelector('span:last-child');
+          if (span) {
+            const orig = span.textContent;
+            span.textContent = 'Exported to Clipboard!';
+            setTimeout(() => { span.textContent = orig; }, 1800);
+          }
+        });
+      }
+
+      const genBtn = document.getElementById('btn-run-generator');
+      if (genBtn) {
+        genBtn.addEventListener('click', async () => {
+          const domain = document.getElementById('gen-domain').value;
+          const channel = document.getElementById('gen-channel').value;
+          const angle = document.getElementById('gen-angle').value.trim();
+          const statusPill = document.getElementById('gen-status-pill');
+          genBtn.disabled = true;
+          const origHtml = genBtn.innerHTML;
+          genBtn.innerHTML = '<span>Synthesizing...</span>';
+          if (statusPill) {
+            statusPill.textContent = `GENERATING VIA GEMINI 4 ULTRA (${domain})...`;
+            statusPill.className = 'font-label-code-sm text-label-code-sm text-cyan-300 animate-pulse';
+          }
+          try {
+            const r = await fetch('/api/marketing/generate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ domain, channel, angle, engine: 'gemini' }),
+            });
+            const j = await r.json();
+            if (j.ok) {
+              document.getElementById('gen-angle').value = '';
+              if (statusPill) {
+                statusPill.textContent = `GENERATED ${j.campaign.id} IN ${j.campaign.durationMs || 0}ms · 4-GATE VERIFIED`;
+                statusPill.className = 'font-label-code-sm text-label-code-sm text-emerald-400';
+              }
+              await loadPlans();
+            } else if (statusPill) {
+              statusPill.textContent = `ERROR: ${j.error || 'Generation failed'}`;
+              statusPill.className = 'font-label-code-sm text-label-code-sm text-error';
+            }
+          } catch (e) {
+            if (statusPill) {
+              statusPill.textContent = `ERROR: ${e.message || e}`;
+              statusPill.className = 'font-label-code-sm text-label-code-sm text-error';
+            }
+          } finally {
+            genBtn.disabled = false;
+            genBtn.innerHTML = origHtml;
+          }
+        });
+      }
+
+      const fableBtn = document.getElementById('btn-run-fable-draft');
+      if (fableBtn) {
+        fableBtn.addEventListener('click', async () => {
+          const domain = document.getElementById('gen-domain').value;
+          const channel = document.getElementById('gen-channel').value;
+          const angle = document.getElementById('gen-angle').value.trim() || 'Write a direct, zero-slop post about $1 human verification and zero bots.';
+          const statusPill = document.getElementById('gen-status-pill');
+          fableBtn.disabled = true;
+          const origHtml = fableBtn.innerHTML;
+          fableBtn.innerHTML = '<span>Drafting...</span>';
+          if (statusPill) {
+            statusPill.textContent = `DRAFTING IN FABLE VOICE (${domain})...`;
+            statusPill.className = 'font-label-code-sm text-label-code-sm text-purple-300 animate-pulse';
+          }
+          try {
+            const r = await fetch('/api/marketing/generate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ domain, channel, angle, engine: 'fable' }),
+            });
+            const j = await r.json();
+            if (j.ok) {
+              document.getElementById('gen-angle').value = '';
+              if (statusPill) {
+                statusPill.textContent = `FABLE DRAFT ${j.campaign.id} READY · 4-GATE VERIFIED`;
+                statusPill.className = 'font-label-code-sm text-label-code-sm text-emerald-400';
+              }
+              await loadPlans();
+            } else if (statusPill) {
+              statusPill.textContent = `ERROR: ${j.error || 'Fable draft failed'}`;
+              statusPill.className = 'font-label-code-sm text-label-code-sm text-error';
+            }
+          } catch (e) {
+            if (statusPill) {
+              statusPill.textContent = `ERROR: ${e.message || e}`;
+              statusPill.className = 'font-label-code-sm text-label-code-sm text-error';
+            }
+          } finally {
+            fableBtn.disabled = false;
+            fableBtn.innerHTML = origHtml;
+          }
+        });
+      }
+
+      loadPlans();
+    })();
+  </script>
+</body>
+</html>

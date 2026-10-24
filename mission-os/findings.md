@@ -9,7 +9,7 @@
   - `Date-app frontend :3200`: UP
   - `Date-app API :8000`: UP
   - `Cloudflared tunnel (domains PUBLIC)`: UP
-  - `Paperclip Mission Control :3917`: UP
+  - `Paperclip Mission Control :4747`: UP
   - `OmniRoute gateway :20128`: UP
   - `Obsidian vault REST :27123 (memory)`: UP
   - `Supabase (memory backup)`: UP
