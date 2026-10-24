@@ -11,7 +11,7 @@ lure, and hardcoded user paths that silently break on another node.
 Add a fact below; that is the whole maintenance burden.
 Run:  python scripts/doctrine/doctrine-check.py
 """
-import re, subprocess, sys
+import json, os, re, subprocess, sys
 
 FACTS = [
     {
@@ -102,46 +102,81 @@ SKIP = re.compile(r"(^|/)(node_modules|dist|build|\.next|vendor)/"
                   r"|\.(min\.|lock$|png$|jpg$|jpeg$|gif$|webp$|ico$|pdf$|zip$|mp4$|woff2?$)")
 
 
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+def _literal_hint(pat):
+    if "|" in pat:
+        return None
+    s = re.sub(r"\\(.)", lambda m: m.group(1) if m.group(1) in ".:/-_\\' " else "\0", pat)
+    s = re.sub(r"\[[^\]]*\]|\{[0-9,]+\}|[\^\$\*\+\?\(\)]", "\0", s)
+    parts = [p for p in s.split("\0") if len(p) >= 3]
+    return max(parts, key=len) if parts else None
+
+
 def tracked():
-    out = subprocess.run(["git", "ls-files", "-z"], capture_output=True, text=True).stdout
+    out = subprocess.run(
+        ["git", "ls-files", "-z"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    ).stdout
     return [f for f in out.split("\0") if f and not SKIP.search(f)]
 
 
 def load_baseline():
-    import json, os
-    f = os.path.join(os.path.dirname(__file__), "baseline.json")
+    f = os.path.join(os.path.dirname(os.path.abspath(__file__)), "baseline.json")
     if not os.path.exists(f):
         return set()
-    return {(e["fact"], e["file"]) for e in json.load(open(f))["entries"]}
+    with open(f, encoding="utf-8", errors="replace") as fp:
+        return {(e["fact"], e["file"]) for e in json.load(fp)["entries"]}
 
 
 def main():
+    os.chdir(REPO_ROOT)
     files, failures = tracked(), []
     baseline = load_baseline()
-    for fact in FACTS:
-        pats = [re.compile(p) for p in fact["patterns"]]
-        allow = [re.compile(a) for a in fact["allow"]]
-        for f in files:
+    compiled = [
+        (
+            fact,
+            [(_literal_hint(p), re.compile(p)) for p in fact["patterns"]],
+            [re.compile(a) for a in fact["allow"]],
+        )
+        for fact in FACTS
+    ]
+    for f in files:
+        active = []
+        for fact, pats, allow in compiled:
             if f in fact["source"] or any(a.match(f) for a in allow):
                 continue
             if (fact["name"], f) in baseline:
                 continue
-            try:
-                body = open(f, encoding="utf-8", errors="replace").read()
-            except (IsADirectoryError, FileNotFoundError, PermissionError):
-                continue
-            for p in pats:
+            active.append((fact, pats))
+        if not active:
+            continue
+        try:
+            with open(f, encoding="utf-8", errors="replace") as fp:
+                body = fp.read()
+        except OSError:
+            continue
+        for fact, pats in active:
+            for hint, p in pats:
+                if hint is not None and hint not in body:
+                    continue
                 for m in p.finditer(body):
                     line = body.count("\n", 0, m.start()) + 1
                     failures.append((fact["name"], f, line, m.group(0), fact["fix"]))
 
     if not failures:
-        print(f"doctrine-check: clean ({len(baseline)} known pre-existing, see baseline.json)")
+        print(f"doctrine-check: clean ({len(baseline)} known pre-existing, see baseline.json)", flush=True)
         return 0
-    print(f"doctrine-check: {len(failures)} violation(s)\n")
+    failures.sort(key=lambda x: (x[0], x[1], x[2]))
+    print(f"doctrine-check: {len(failures)} violation(s)\n", flush=True)
     for name, f, line, hit, fix in failures:
         print(f"  [{name}] {f}:{line}  found {hit!r}\n      fix: {fix}")
-    print("\nA settled fact lives in one file. Everything else points at it.")
+    print("\nA settled fact lives in one file. Everything else points at it.", flush=True)
     return 1
 
 
