@@ -15,7 +15,7 @@
     {
       "stage": "source",
       "status": "OK",
-      "detail": "wrote C:\\ANTIGRAVITY\\content\\yesterday-news\\20261021 from C:\\Users\\joshi\\Documents\\ANTIGRAVITY-RUNTIME\\yesterday-news\\content\\20261021",
+      "detail": "wrote C:\\ANTIGRAVITY\\content\\yesterday-news\\20261021 from $env:USERPROFILE\\Documents\\ANTIGRAVITY-RUNTIME\\yesterday-news\\content\\20261021",
       "bytes": 3740,
       "sources": 5
     },

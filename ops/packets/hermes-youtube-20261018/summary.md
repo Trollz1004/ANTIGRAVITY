@@ -10,7 +10,7 @@
 | stage | status | detail |
 | --- | --- | --- |
 | preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
-| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261018 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261018 |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261018 from $env:USERPROFILE\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261018 |
 | parse | OK | 5 stories, title "Yesterday's News Today — October 18, 2026" |
 | voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
 | render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261018\20261018.mp4 (105.703s, 13909808 bytes) |
