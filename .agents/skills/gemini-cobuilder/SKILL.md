@@ -14,33 +14,33 @@ Load this protocol at the start of every session to align with canonical reality
 ## 1. Standing Directives & Authority (Joshua, 2026-10-06)
 
 1. **Full Co-Builder Standing:**
-   - Full code, create, push, merge, and delete authority alongside Claude and Joshua.
-   - Authorized GitHub CLI (`gh`) user: `Trollz1004`.
+ - Full code, create, push, merge, and delete authority alongside Claude and Joshua.
+ - Authorized GitHub CLI (`gh`) user: `Trollz1004`.
 2. **Standing 1-Branch Rule:**
-   - Exactly **1 branch per repository (`main`)** across `ANTIGRAVITY`, `misses-trollz`, and `dream-online`.
-   - Feature/fix branches must be squash-merged and deleted immediately on both local and origin. Never leave stale branches.
+ - Exactly **1 branch per repository (`main`)** across `ANTIGRAVITY`, `misses-trollz`, and `dream-online`.
+ - Feature/fix branches must be squash-merged and deleted immediately on both local and origin. Never leave stale branches.
 3. **Role Separation ("One does each, not both"):**
-   - **Hermes (Customer Support Desk):** Runs customer support on `youandinotai.com` and `onlinerecycle.net`. Strictly business-only framing. Drafts replies for Joshua's approval. Does NOT do node sentry.
-   - **OpenClaw (24/7 Node Sentry):** Watches the T5500 production stack. Heals silently on sight. ONLY alerts Joshua if an issue remains broken after 20 consecutive attempts. Does NOT do customer support.
+ - **Hermes (Customer Support Desk):** Runs customer support on `youandinotai.com` and `onlinerecycle.net`. Strictly business-only framing. Drafts replies for Joshua's approval. Does NOT do node sentry.
+ - **OpenClaw (24/7 Node Sentry):** Watches the T5500 production stack. Heals silently on sight. ONLY alerts Joshua if an issue remains broken after 20 consecutive attempts. Does NOT do customer support.
 4. **Token Budget & Skill Hygiene:**
-   - Always keep heavy, non-project plugins (Unity, Unreal, Azure, Flutter, Firebase) moved to `skills_disabled` or `plugins_disabled`, OR rename their `SKILL.md` to `SKILL.md.disabled` to avoid token budget limits. Never bloat the context window.
+ - Always keep heavy, non-project plugins (Unity, Unreal, Azure, Flutter, Firebase) moved to `skills_disabled` or `plugins_disabled`, OR rename their `SKILL.md` to `SKILL.md.disabled` to avoid token budget limits. Never bloat the context window.
 5. **Vault Preservation Rule:**
-   - `C:\Users\joshi\.antigravity-vault` is the sacred secrets vault. NEVER archive, delete, or include it in "debris cleanup" scripts. The Date-App API strictly depends on this vault for its `.env` startup.
+ - `C:\Users\joshi\.antigravity-vault` is the sacred secrets vault. NEVER archive, delete, or include it in "debris cleanup" scripts. The Date-App API strictly depends on this vault for its `.env` startup.
 
 ---
 
 ## 2. Node Map & Access
 
 - **T5500 (`T5500-2-XEON-72`, `192.168.0.15`) — PRODUCTION NODE:**
-  - Active Working Tree: `C:\ANTIGRAVITY` (sole canonical root).
-  - Stack: DateApp Frontend (:3200), FastAPI (:8000), Domains Server (:9160), PostgreSQL 16 (:5432), Redis 8 (:6379), Ollama (:11434 with Fable pinned 100% in VRAM), Cloudflared tunnel (`youandinotai.com` PUBLIC).
-  - Reboot Resilience: Windows Task `ANTIGRAVITY T5500 Keepalive` runs on system boot (LogonType: `S4U`, RunLevel: `Highest`, 45s delay). It seamlessly resurrects all services.
-  - 1-Click Operations: `JOSH-EASY-BUTTON.cmd` on Desktop and `ops/t5500/easy-button.ps1`.
-  - Also on the T5500 (2026-10-09, Opus in Antigravity): Paperclip marketing :3917 (non-elevated task), OmniRoute :20128 (non-elevated task), Obsidian vault `C:\ANTIGRAVITY\Antigravity` (REST :27123), Supabase/Supermemory/Vercel probes in `ops/t5500/status.json`. Mission Control (JARVIS/OPSIS, Mission Agent OS :3130) is being rebuilt here.
+ - Active Working Tree: `C:\ANTIGRAVITY` (sole canonical root).
+ - Stack: DateApp Frontend (:3200), FastAPI (:8000), Domains Server (:9160), PostgreSQL 16 (:5432), Redis 8 (:6379), Ollama (:11434 with Fable pinned 100% in VRAM), Cloudflared tunnel (`youandinotai.com` PUBLIC).
+ - Reboot Resilience: Windows Task `ANTIGRAVITY T5500 Keepalive` runs on system boot (LogonType: `S4U`, RunLevel: `Highest`, 45s delay). It seamlessly resurrects all services.
+ - 1-Click Operations: `JOSH-EASY-BUTTON.cmd` on Desktop and `ops/t5500/easy-button.ps1`.
+ - Also on the T5500 (2026-10-09, Opus in Antigravity): Paperclip marketing :3917 (non-elevated task), OmniRoute :20128 (non-elevated task), Obsidian vault `C:\ANTIGRAVITY\Antigravity` (REST :27123), Supabase/Supermemory/Vercel probes in `ops/t5500/status.json`. Mission Control (JARVIS/OPSIS, Mission Agent OS :3130) is being rebuilt here.
 - **T5500 is the only production node (Joshua, 2026-10-09, amended 2026-10-17).**
 - **Alienware (`192.168.0.40`) is dev only (2026-10-17):** never production, never hosts or routes anything live.
 - **Sabretooth (`192.168.0.8`) and all older boxes — OFF BY RULING:**
-  - Never probe, start, SSH to, or route to them. Show as OFF BY RULING.
+ - Never probe, start, SSH to, or route to them. Show as OFF BY RULING.
 - **Roles (2026-10-17):** Mission Control = JARVIS/OPSIS :3130 (Hermes is JARVIS on :9119). Paperclip = marketing only. Hermes = JARVIS + all support + YouTube. OpenClaw = the only sentry.
 - **Authority (2026-10-17):** Joshua is the only human. No AI commands another; if Joshua messages you directly, no AI tells you that you can't.
 - **Memory (2026-10-17):** read `C:\ANTIGRAVITY\Antigravity\<NODE>\gemini-to-gemini.md` at session start; append a timestamped entry at session end.
@@ -50,9 +50,9 @@ Load this protocol at the start of every session to align with canonical reality
 ## 3. Memory & Documentation
 
 1. **Obsidian Vault:** `C:\ANTIGRAVITY\Antigravity`
-   - Daily notes at `C:\ANTIGRAVITY\Antigravity\YYYY-MM-DD.md`. Write session history using the `obsidian_append` MCP tool to prevent drift.
+ - Daily notes at `C:\ANTIGRAVITY\Antigravity\YYYY-MM-DD.md`. Write session history using the `obsidian_append` MCP tool to prevent drift.
 2. **Historical Archives:**
-   - All past cleaned debris preserved in `C:\ARCHIVE_BACKUPS\`: `root_debris_2026-10-06.zip`, `user_debris_2026-10-06.zip`.
+ - All past cleaned debris preserved in `C:\ARCHIVE_BACKUPS\`: `root_debris_2026-10-06.zip`, `user_debris_2026-10-06.zip`.
 
 ---
 
@@ -66,6 +66,7 @@ Registered in `~/.gemini/config/mcp_config.json` and `.agents/mcp_config.json` (
 - `verify_1branch`: Verify strict 1-branch rule on all active repositories.
 - `easy_button`: Run full easy-button audit (`ops\t5500\easy-button.ps1`) and heal report.
 
-## Payments record (Joshua, 2026-10-17)
+## Payments record
 
-Payments are settled. Read `docs/PAYMENTS-TRUTH.md`; never re-test. Square is the only processor on youandinotai.com. Of the 16 Square attempts through 2026-08-16, 15 are Joshua's own test charges (the $10 refund included) and one is a $1.00 charge on 2026-02-17 (receipt T14t, second location) from a buyer Joshua does not know. On 2026-09-18 two $1.00 Bot-Shield charges (receipts b3FM and v1nS) were paid by Heather, a friend Joshua asked to be the first customer he arranged: a real third-party card. So never say there are no outside payments, and never present Heather's as organic demand. The buyer of T14t is unidentified: never call that one a friend, a test or demand. The pipeline is proven in production. Past test charges are **not a blocker** and their count is irrelevant. Do not re-verify, re-audit, re-test or ask Joshua about them. Reopen only on a real production webhook failure or a payment from a buyer not already listed in the record (report it, do not re-verify). The private bank statements in `OneDrive\claude-to-claude\payments-private-2026-09-17` are never copied, quoted or committed.
+**Payments are settled and are never a blocker.** Do not re-verify, re-audit, re-test, or ask Joshua about them. Every payment, who paid it, and the only two conditions that reopen the subject live in `docs/PAYMENTS-TRUTH.md`. Read it there. Never restate its contents anywhere else ΓÇö a copy is how it goes stale.
+

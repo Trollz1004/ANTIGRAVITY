@@ -1,0 +1,1386 @@
+{
+ "note": "Pre-existing violations at gate introduction, measured AFTER the payments de-duplication patch. The gate fails on anything NOT listed here. Shrink this file as cleanup proceeds; never grow it.",
+ "generated": "2026-10-23",
+ "entries": [
+  {
+   "fact": "dead-surfaces",
+   "file": ".agents/journals/claude-judge/STATE.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".agents/journals/paperclip-judge/STATE.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".agents/memory/shared/current-state.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".agents/memory/shared/decisions.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".agents/memory/shared/open-issues.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".agents/skills/gemini-cobuilder/SKILL.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".claude/agents/marketing/news-droid-producer.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".claude/agents/studio-operations/compliance-guardian.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".claude/agents/studio-operations/revenue-tracker.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".claude/hookify.warn-dead-node-paths.local.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".claude/launch.json"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".env.staging.example"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".github/doctrine-drift-allowlist.txt"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".github/workflows/cloudflare-add-zones.yml"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": ".opencode.env.example"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "AGENTS.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "CLAUDE.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ClawX/docs/COPILOT_AUDIT_RECONCILIATION_2026-08-19.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ClawX/docs/OMNIROUTE_DASHBOARD_OBSERVATIONS_2026-08-19.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ClawX/docs/PUBLIC_READINESS_SWEEP_CLASSIFICATION_2026-08-19.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ClawX/src/docs/MASTER-INVENTORY.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "agents.json"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "apps/canonical-record/index.html"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "apps/orbital-studio/components/MissionControlPipeline.tsx"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "apps/social-command-center/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "backend/auth_relay.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "backend/graph.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "backend/server.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "brain-mcp/config/platform-registry.example.json"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "brain-mcp/docker-compose.t5500.yml"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "brain-mcp/src/config.ts"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "briefings/BRIEFING.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "briefings/CLAUDE-SYNTHESIS-AND-MANUS-FINALIZATION-2026-08-19.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "crm/memory/PRD.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/ARCHITECTURE-HERMES.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/FABLE-CLI.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/NODE-STATE-2026-09-17.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/OMNIROUTE-MIGRATION.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/REPO-CONSOLIDATION-2026-09-17.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/START-STACK.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/emergent-jarvis-tie-in-plan.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/omniroute-workflow-api/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/omniroute-workflow-api/examples/curl.sh"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/omniroute-workflow-api/examples/invoke.ps1"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/omniroute-workflow-api/examples/node.mjs"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/omniroute-workflow-api/examples/python.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/omniroute-workflow-api/openapi.yaml"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/ops/DNS-NAMESERVER-PLAN.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/ops/MCP-TRANSPORT-FIX-2026-08-26.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/ops/NODE-AND-PORT-MAP.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "docs/seo/FABLE-TIER-SEO.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/ai-solutions.store/Ai-README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/ai-solutions.store/CLAUDE.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/ai-solutions.store/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/ai-solutions.store/blog/01-what-is-an-ai-automation-marketplace.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/ai-solutions.store/blog/02-crosslisting-operations-dashboard-for-resellers.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/ai-solutions.store/blog/03-saas-company-types-automation-stacks.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/ai-solutions.store/blog/04-business-exchange-marketplace-guide.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/ai-solutions.store/blog/05-buy-vs-build-automations.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/ai-solutions.store/blog/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/aidoesitall.website/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/untilnokidinneed.com/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/untilnokidinneed.com/index.html"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/youandinotai.com/backend/tests/test_config.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "domains/youandinotai.com/backend/tests/test_support_service.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "frontend/launch-emergent-dashboard.cmd"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "hermes/AGENTS.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "hermes/dashboard/index.html"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "hermes/docs/fullstack-session.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "hermes/docs/handoffs/jarvis-dashboard/HERMES-JARVIS-PROMPT.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "hermes/docs/handoffs/jarvis-dashboard/crm/FABLE-5-CRM-DISPATCH.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "hermes/docs/handoffs/jarvis-dashboard/design-refs/DESIGN-dreamonline-mmorpg-gdd-2026-07-02.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "hermes/docs/handoffs/jarvis-dashboard/design-refs/standalone/DREAM GM Control.html"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "hermes/docs/handoffs/jarvis-dashboard/design-system/_ds_bundle.js"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "hermes/docs/skills.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "hermes/scripts/dream-stack.ps1"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "hermes/skills/session-memory/SKILL.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "hermes/skills/session-memory/memory.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "infra/cloudflare/aidoesitall-api-guard/src/index.js"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-control/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-control/config/screenshot-targets.json"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-control/config/sentry-targets.json"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-control/lib/config.mjs"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-control/lib/nodes.mjs"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-control/tests/app.test.js"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-control/tests/bridge-routes.test.js"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-control/tests/claude-bridge-hardening.test.js"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-control/tests/claude-bridge.test.js"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-control/tests/config.test.js"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-control/tests/jarvis.test.js"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-control/tests/nodes.test.js"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-os/live-tabs-backend.mjs"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "mission-os/ops-dashboard.test.mjs"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "nodes/9020/PAPERCLIP-SETUP-PROMPT-2026-08-22.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "nodes/9020/memory/2026-08-21.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/domains-server/server.mjs"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/env/augment-env.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/hermes-infrastructure/hermes_infrastructure.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/hermes/RECOVERY-STATE.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/hermes/TRO-7-REPORT-2026-10-09-2330.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/hermes/_recovery/bytecode/hermes-youtube/omniroute.txt"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/hermes/_recovery/bytecode/newsvideo/tts.txt"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/omniroute-nodes.env.example"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/packets/hermes-youtube-20261008/WATCHDOG-TRO-7-2026-10-09.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/packets/tro9-gateway-voice-live-20261010/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/paperclip-ceo/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/paperclip-chief-of-staff/CHIEF-OF-STAFF-AIS.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/paperclip-chief-of-staff/roles/ais/marketplace-ops.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/paperclip-chief-of-staff/roles/ais/seo-syndication-agent.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/repo-audit/2026-09-03-trollz1004-consolidation-audit.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/repo-audit/fold-into-org.sh"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/runbook/ABSORB-SURVEY-2026-09-17.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/runbook/T5500-NODE-RUNBOOK.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "ops/sales/campaigns/ai-solutions-store.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/ai-solutions-store/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/audit-lan.js"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/audit.js"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/clawx-control/.env.example"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/clawx-control/codex-fleet-watcher.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/clawx-control/opus-guardian.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/dashboard-aidoesitall/apify_content_scout.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/dashboard-aidoesitall/orchestrator.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/dashboard-aidoesitall/social_engine/platform_policy.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/dashboard-aidoesitall/social_engine/uptime_monitor.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/drift.cmd"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/fable/fable.mjs"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/load-wheel-tasks.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/revenue-playbook.json"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/seo/post.mjs"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/t5500/Deploy-Everything.ps1"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/watchdog/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "scripts/watchdog/sentry.py"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "specs/004-repo-consolidation/plan.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "specs/004-repo-consolidation/spec.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "specs/004-repo-consolidation/tasks.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "specs/006-jarvis-bridges-voice-mcp/tasks.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "specs/011-ultracode-house/spec.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "specs/011-ultracode-house/tasks.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "tools/cockpit/README.md"
+  },
+  {
+   "fact": "dead-surfaces",
+   "file": "tools/cockpit/index.html"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/journals/claude-judge/STATE.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/journals/freebuff-ceo/STATE.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/journals/hermes/STATE.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/journals/paperclip-judge/STATE.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/memory/private/claude/memory-omniroute-recovery-2026-08-16.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/memory/private/claude/memory-sabretooth-reinstall-2026-08-16.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/skills/README.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/skills/dateapp-growth-agent/SKILL.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/skills/dateapp-gui-agent/SKILL.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/skills/dateapp-payments-agent/SKILL.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/skills/fables-house/SKILL.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/skills/gemini-cobuilder/SKILL.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/skills/grok-standing/SKILL.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/skills/sabretooth-ops/SKILL.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/skills/ultracode-house/SKILL.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".agents/subagents/freebuff-ceo/SKILLS.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".claude/hookify.warn-dead-node-paths.local.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".codex/config.toml"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".mcp.json"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": ".opencode.env.example"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ANTIGRAVITY.code-workspace"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ClawX/docs/ACTIVE_INSTRUCTION_DRIFT_AUDIT_2026-08-19.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ClawX/src/docs/CLAUDE-CODE-TASKS.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "Personal Vault-Sabretooth.code-workspace"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "agent-contracts/CAPABILITY-BASELINE.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "agent-contracts/HERMES-AGENT.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "agent-contracts/OPENCLAW-AGENT.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "agent-contracts/OPENCODE-AGENT.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "agent-contracts/PAPERCLIP-MCP-CONNECTOR-EVIDENCE.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "backend/server.py"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "briefings/CLAUDE-SYNTHESIS-AND-MANUS-FINALIZATION-2026-08-19.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "briefings/GROK-CURRENT-STATE-2026-08-24.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "docs/F_PRODUCTION_SETUP.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "docs/LAUNCH-10-DAY-2026-08-14.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "docs/NODE-STATE-2026-09-17.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "docs/REPO-CONSOLIDATION-2026-09-17.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "docs/START-STACK.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "docs/mcp/mcp.universal.json"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "docs/omniroute-workflow-api/README.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "docs/omniroute-workflow-api/openapi.yaml"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "domains/youandinotai.com/backend/add_affiliate_tracking.py"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "domains/youandinotai.com/backend/test_escalation.py"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "gateway.cmd"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "infra/claude-desktop/claude_desktop_config.json"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "infra/cloudflare/start-tunnel.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "mission-os/launchers/fable-claude.cmd"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "mission-os/launchers/fable-codex.cmd"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "mission-os/launchers/fable-opencode.cmd"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "mission-os/launchers/fable-pi.cmd"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "mission-os/launchers/fable-wrapper.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "mission-os/perpetual-wheel.mjs"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "mission-os/progress.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "mission-os/server.mjs"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "nodes/9020/AGENTS.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "nodes/9020/NODE.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "nodes/9020/TOOLS.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "nodes/9020/memory/2026-08-21.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "nodes/9020/vaults/agent-workflows/remote-access.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "nodes/9020/vaults/knowledge/business-exchange.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/CLI-COMMANDS-REFERENCE.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/STALE_FILE_AUDIT_2026-08-21.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/avatar/T5500-VIDEO-PROBE-2026-10-17.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/ceo-harness/NODES.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/growth-engine/live_autoposter.py"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/heartbeat/autonomous_15min.sh"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/heartbeat/heartbeat.sh"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/heartbeat/t5500-health.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/hermes/DAILY-SUMMARY.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/hermes/RECOVERY-STATE.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/hermes/TRO-15-ITEM1-DONE-2026-10-10.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/marketing-inbox/2026-10-09-hermes-daily.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/marketing-inbox/2026-10-11-hermes-daily.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/marketing-inbox/2026-10-12-hermes-daily.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/marketing-inbox/2026-10-13-hermes-daily.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/marketing-inbox/2026-10-14-hermes-daily.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/marketing-inbox/2026-10-15-hermes-daily.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/marketing-inbox/2026-10-16-hermes-daily.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/marketing-inbox/2026-10-17-hermes-daily.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/marketing-inbox/marketing_routine.py"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/marketing-inbox/ov-sweep-2026-08-26.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261008/WATCHDOG-TRO-7-2026-10-09.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261009/run.json"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261009/summary.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261011/run.json"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261011/summary.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261012/run.json"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261012/summary.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261013/run.json"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261013/summary.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261014/run.json"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261014/summary.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261015/run.json"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261015/summary.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261016/run.json"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/packets/hermes-youtube-20261016/summary.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/paperclip-ceo/CEO-AGENTS.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/paperclip-ceo/GROK-OFFICIAL.lock.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/paperclip-ceo/JUDGE-AGENTS.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/paperclip-ceo/X-GROK-STRATEGY.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/paperclip-ceo/X-MARKETING-AGENTS.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/paperclip/fix-codex-toml.py"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/paperclip/reconfigure-agents.mjs"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/paperclip/repair_codex_toml.py"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/paperclip/start-paperclip-hq.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/postgres/install-postgres-task.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/postgres/start-postgres.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/repo-audit/2026-09-03-trollz1004-consolidation-audit.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/runbook/DASHBOARD-INVENTORY-2026-09-17.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/runbook/T5500-NODE-RUNBOOK.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/runbooks/PI-FCC-HERMES-CLI-2026-07-26.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/skills/date-app-hermes-operations/SKILL.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/skills/t5500-node/SKILL.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/startup/fix-agent-models.cjs"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/startup/start-stack.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/t5500/cleanup/archive-and-clean-downloads-desktop.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/t5500/cleanup/archive-and-clean-onedrive.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/t5500/cleanup/archive-and-clean-user-debris.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/t5500/keepalive.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/youtube/run_youtube_short.cmd"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "ops/youtube/youtube_engine.py"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/RECOVERY-README.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/clawx-control/Start-OpenClaw-Social.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/clawx-control/cleanup-t5500-user-space.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/clawx-control/fix-ssh-admin-keys.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/clawx-control/init-continuity-passphrase.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/fables-house/FABLES-HOUSE.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/fables-house/HOUSEKEEPING.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/fables-house/tab-dateapp-api.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/hermes-dashboard-start.cmd"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/hermes-dashboard-start.sh"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/locator-scan.mjs"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/mission_control_monitor.py"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/opencode-unified-launcher-wsl.sh"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/pi-noninteractive.sh"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/post-wipe-bootstrap-T5500.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/post-wipe-bootstrap-helper-node.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/run_mission_control.sh"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/seed-migration-journal.mjs"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/setup-vault-and-baseline.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/start-antigravity.bat"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/start-hermes-router.sh"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/start-hermes-workspace-windows.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/start-t5500-dateapp-cloudflared.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/sync-master-env-to-hermes.sh"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/t5500-migration/push-cert.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/t5500-migration/write-cert.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/t5500-stack-up.cmd"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/t5500-watchdog.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/t5500/Deploy-Everything.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/t5500/Install-DateAppOpsWatchdog.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/t5500/Invoke-DateAppOpsWatchdog.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/t5500/Start-YouAndINotAI-PublicStack.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/t5500/Start-YouAndINotAI-Tunnel.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "scripts/test-ceo-fallbacks.ps1"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "services/mission-mcp/README.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "services/mission-mcp/scripts/seed-income-engine.py"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "specs/002-jarvis-absorb-emergent/plan.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "specs/002-jarvis-absorb-emergent/spec.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "specs/004-repo-consolidation/plan.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "specs/004-repo-consolidation/spec.md"
+  },
+  {
+   "fact": "hardcoded-user-path",
+   "file": "specs/004-repo-consolidation/tasks.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": ".agents/memory/2026-08-26.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": ".agents/memory/shared/current-state.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": ".agents/memory/shared/decisions.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": ".agents/skills/dateapp-support-desk/SKILL.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": ".agents/skills/judge-house/SKILL.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": ".agents/skills/mission-control/SKILL.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": ".agents/skills/orchestrator-preflight/SKILL.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": ".freebuff/run.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "AGENTS.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "CLAUDE.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "agent-contracts/MISSION-CONTROL-GOVERNANCE.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "docs/FABLE-CLI.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "docs/memory-layer/agent-workflow-graphy.json"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "domains/ai-solutions.store/CLAUDE.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "get_issues.py"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "infra/cloudflare/start-tunnel.ps1"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "mission-os/progress.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/env/augment-env.py"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/marketing-inbox/README.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/paperclip-ceo/bridge/.env.example"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/paperclip-ceo/bridge/bridge.js"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/paperclip/assign_10_tasks.py"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/paperclip/check_agents.py"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/paperclip/clear-blockers.mjs"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/paperclip/clear-inbox.mjs"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/paperclip/import-env-secrets.py"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/paperclip/patch_agent_states.py"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/paperclip/reconfigure-agents.mjs"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/paperclip/start-paperclip-hq.ps1"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "ops/t5500/verify-node.ps1"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "scripts/RECOVERY-README.md"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "scripts/assign-revenue-tasks.ps1"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "scripts/bootstrap-all.sh"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "scripts/clawx-control/Setup-CloudflaredTunnel.ps1"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "scripts/complete-issue.ps1"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "scripts/doctrine/doctrine-check.py"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "scripts/fable/fable.mjs"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "scripts/fables-house/FABLES-HOUSE.ps1"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "scripts/post-comment.ps1"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "scripts/start-antigravity.bat"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "scripts/status-antigravity.bat"
+  },
+  {
+   "fact": "paperclip-retired",
+   "file": "scripts/t5500/Invoke-DateAppOpsWatchdog.ps1"
+  }
+ ]
+}

@@ -43,22 +43,22 @@ Create three independent tasks — one per harness. Use `assigned_agent_id` to r
 
 ```
 create_task:
-  title: "<objective slug> — hermes"
-  description: "<full objective paragraph>"
-  assigned_agent_id: "hermes"
-  priority: 3
+ title: "<objective slug> — hermes"
+ description: "<full objective paragraph>"
+ assigned_agent_id: "hermes"
+ priority: 3
 
 create_task:
-  title: "<objective slug> — openclaw"
-  description: "<full objective paragraph>"
-  assigned_agent_id: "openclaw"
-  priority: 3
+ title: "<objective slug> — openclaw"
+ description: "<full objective paragraph>"
+ assigned_agent_id: "openclaw"
+ priority: 3
 
 create_task:
-  title: "<objective slug> — opencode"
-  description: "<full objective paragraph>"
-  assigned_agent_id: "opencode"
-  priority: 3
+ title: "<objective slug> — opencode"
+ description: "<full objective paragraph>"
+ assigned_agent_id: "opencode"
+ priority: 3
 ```
 
 Each harness receives the SAME objective. No peeking at each other's work.
@@ -71,13 +71,13 @@ Each harness:
 2. Loads the five floor skills (writing-plans, TDD, systematic-debugging, verification-before-completion, requesting-code-review)
 3. Does the work — implementation, testing, verification
 4. Writes its packet via `write_file`:
-   - Path: `ops/packets/<task-slug>-<date>/<harness>.md`
-   - Content must include:
-     - What it verified vs assumed (VERIFIED / UNVERIFIED / BLOCKED with evidence)
-     - Proposal or diff summary
-     - Test evidence (real command output)
-     - Risks and what's missing
-     - "Unverified" is a valid answer; invented detail is not
+ - Path: `ops/packets/<task-slug>-<date>/<harness>.md`
+ - Content must include:
+ - What it verified vs assumed (VERIFIED / UNVERIFIED / BLOCKED with evidence)
+ - Proposal or diff summary
+ - Test evidence (real command output)
+ - Risks and what's missing
+ - "Unverified" is a valid answer; invented detail is not
 5. Updates its task: `update_task(id: <task_id>, status: "done", result: "<one-line summary>")`
 
 ### Step 4: Orchestrator collects and summarizes
@@ -86,10 +86,10 @@ Once all three tasks show `status: "done"` (poll via `list_tasks`):
 
 1. Read each packet via `read_file(path: "ops/packets/<task-slug>-<date>/<harness>.md")`
 2. Write `ops/packets/<task-slug>-<date>/SUMMARY.md` via `write_file`:
-   - Compare the three packets
-   - Name the strongest
-   - List disagreements
-   - State what's missing
+ - Compare the three packets
+ - Name the strongest
+ - List disagreements
+ - State what's missing
 3. Store the summary via `store_memory` for cross-session recall
 4. STOP.
 
@@ -111,6 +111,7 @@ final merge gate. Only a judge pushes, merges, or deletes.
 - All file I/O goes through mission-mcp (`read_file`, `write_file`, `patch_file`) — never raw shell writes.
 - Task lifecycle is the single source of truth — no parallel file-based status tracking.
 
-## Payments record (Joshua, 2026-10-17)
+## Payments record
 
-Payments are settled. Read `docs/PAYMENTS-TRUTH.md`; never re-test. Square is the only processor on youandinotai.com. Of the 16 Square attempts through 2026-08-16, 15 are Joshua's own test charges (the $10 refund included) and one is a $1.00 charge on 2026-02-17 (receipt T14t, second location) from a buyer Joshua does not know. On 2026-09-18 two $1.00 Bot-Shield charges (receipts b3FM and v1nS) were paid by Heather, a friend Joshua asked to be the first customer he arranged: a real third-party card. So never say there are no outside payments, and never present Heather's as organic demand. The buyer of T14t is unidentified: never call that one a friend, a test or demand. The pipeline is proven in production. Past test charges are **not a blocker** and their count is irrelevant. Do not re-verify, re-audit, re-test or ask Joshua about them. Reopen only on a real production webhook failure or a payment from a buyer not already listed in the record (report it, do not re-verify). The private bank statements in `OneDrive\claude-to-claude\payments-private-2026-09-17` are never copied, quoted or committed.
+**Payments are settled and are never a blocker.** Do not re-verify, re-audit, re-test, or ask Joshua about them. Every payment, who paid it, and the only two conditions that reopen the subject live in `docs/PAYMENTS-TRUTH.md`. Read it there. Never restate its contents anywhere else ΓÇö a copy is how it goes stale.
+

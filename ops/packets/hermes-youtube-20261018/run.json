@@ -1,0 +1,372 @@
+{
+  "day": "20261018",
+  "started": "2026-10-19T06:30:06.507801-04:00",
+  "finished": "2026-10-19T06:36:12.171308-04:00",
+  "host": "T5500-2-XEON-72",
+  "unattended": true,
+  "shipped": false,
+  "exit_code": 3,
+  "stages": [
+    {
+      "stage": "preflight",
+      "status": "OK",
+      "detail": "ffmpeg+ffprobe on PATH, repo at C:\\ANTIGRAVITY"
+    },
+    {
+      "stage": "source",
+      "status": "OK",
+      "detail": "wrote C:\\ANTIGRAVITY\\content\\yesterday-news\\20261018 from C:\\Users\\joshi\\Documents\\ANTIGRAVITY-RUNTIME\\yesterday-news\\content\\20261018",
+      "bytes": 3836,
+      "sources": 5
+    },
+    {
+      "stage": "parse",
+      "status": "OK",
+      "detail": "5 stories, title \"Yesterday's News Today — October 18, 2026\"",
+      "warnings": []
+    },
+    {
+      "stage": "voice",
+      "status": "OK",
+      "detail": "backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok)",
+      "backend": "edge"
+    },
+    {
+      "stage": "render",
+      "status": "OK",
+      "detail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261018\\20261018.mp4 (105.703s, 13909808 bytes)"
+    },
+    {
+      "stage": "verify",
+      "status": "OK",
+      "detail": "23 gates passed: 105.703s, 1080x1920, mean audio -19.1 dB, min luma stddev 37.9"
+    },
+    {
+      "stage": "upload",
+      "status": "BLOCKED",
+      "detail": "no YouTube credentials at C:\\ANTIGRAVITY\\ops\\youtube\\.credentials\\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published."
+    }
+  ],
+  "gates": {
+    "passed": 23,
+    "checks": [
+      {
+        "check": "source_script:size",
+        "ok": true,
+        "detail": "script.txt is 3836 bytes (need >= 400)",
+        "path": "C:\\ANTIGRAVITY\\content\\yesterday-news\\20261018\\script.txt",
+        "bytes": 3836,
+        "min_bytes": 400
+      },
+      {
+        "check": "source_script:contains",
+        "ok": true,
+        "detail": "expected \"Yesterday's News Today\" in script.txt"
+      },
+      {
+        "check": "source_metadata:size",
+        "ok": true,
+        "detail": "metadata.json is 1541 bytes (need >= 2)",
+        "path": "C:\\ANTIGRAVITY\\content\\yesterday-news\\20261018\\metadata.json",
+        "bytes": 1541,
+        "min_bytes": 2
+      },
+      {
+        "check": "source_metadata:keys",
+        "ok": true,
+        "detail": "has ['title', 'date', 'sources']"
+      },
+      {
+        "check": "source:story_count",
+        "ok": true,
+        "detail": "5 sources (need >= 3)"
+      },
+      {
+        "check": "parse:stories",
+        "ok": true,
+        "detail": "parsed 5 stories (need >= 3)"
+      },
+      {
+        "check": "parse:story1_narration",
+        "ok": true,
+        "detail": "story 1 narration is 55 words"
+      },
+      {
+        "check": "parse:story2_narration",
+        "ok": true,
+        "detail": "story 2 narration is 57 words"
+      },
+      {
+        "check": "parse:story3_narration",
+        "ok": true,
+        "detail": "story 3 narration is 50 words"
+      },
+      {
+        "check": "parse:story4_narration",
+        "ok": true,
+        "detail": "story 4 narration is 55 words"
+      },
+      {
+        "check": "parse:story5_narration",
+        "ok": true,
+        "detail": "story 5 narration is 50 words"
+      },
+      {
+        "check": "mp4:size",
+        "ok": true,
+        "detail": "20261018.mp4 is 13909808 bytes (need >= 200000)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261018\\20261018.mp4",
+        "bytes": 13909808,
+        "min_bytes": 200000
+      },
+      {
+        "check": "video:video_stream",
+        "ok": true,
+        "detail": "video stream: h264",
+        "codec": "h264"
+      },
+      {
+        "check": "video:audio_stream",
+        "ok": true,
+        "detail": "audio stream: aac",
+        "codec": "aac"
+      },
+      {
+        "check": "video:duration",
+        "ok": true,
+        "detail": "105.70s (need 20.0-900.0s)",
+        "seconds": 105.703
+      },
+      {
+        "check": "video:resolution",
+        "ok": true,
+        "detail": "1080x1920 (need 1080x1920)",
+        "width": 1080,
+        "height": 1920
+      },
+      {
+        "check": "video:pix_fmt",
+        "ok": true,
+        "detail": "pix_fmt=yuv420p (need yuv420p for player compatibility)"
+      },
+      {
+        "check": "video:audio_level",
+        "ok": true,
+        "detail": "mean -19.1 dB, peak -4.3 dB (need mean > -50.0 dB)",
+        "mean_db": -19.1,
+        "peak_db": -4.3
+      },
+      {
+        "check": "video:frames_not_blank",
+        "ok": true,
+        "detail": "lowest luma stddev 37.9 across 3 sampled frames (need >= 3.0; a flat/black frame reads ~0)",
+        "samples": [
+          {
+            "at_s": 15.86,
+            "mean": 46.92,
+            "stddev": 54.02
+          },
+          {
+            "at_s": 52.85,
+            "mean": 51.5,
+            "stddev": 62.12
+          },
+          {
+            "at_s": 89.85,
+            "mean": 42.13,
+            "stddev": 37.9
+          }
+        ]
+      },
+      {
+        "check": "thumbnail:size",
+        "ok": true,
+        "detail": "20261018-thumb.png is 82155 bytes (need >= 20000)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261018\\20261018-thumb.png",
+        "bytes": 82155,
+        "min_bytes": 20000
+      },
+      {
+        "check": "thumbnail:resolution",
+        "ok": true,
+        "detail": "1280x720 (need 1280x720)",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "check": "upload_metadata:size",
+        "ok": true,
+        "detail": "upload.json is 3107 bytes (need >= 2)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261018\\upload.json",
+        "bytes": 3107,
+        "min_bytes": 2
+      },
+      {
+        "check": "upload_metadata:keys",
+        "ok": true,
+        "detail": "has ['title', 'description', 'tags']"
+      }
+    ]
+  },
+  "video": {
+    "duration_s": 105.703,
+    "size_bytes": 13909808,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "width": 1080,
+    "height": 1920,
+    "audio": {
+      "mean_db": -19.1,
+      "peak_db": -4.3
+    },
+    "frames": {
+      "samples": [
+        {
+          "at_s": 15.86,
+          "mean": 46.92,
+          "stddev": 54.02
+        },
+        {
+          "at_s": 52.85,
+          "mean": 51.5,
+          "stddev": 62.12
+        },
+        {
+          "at_s": 89.85,
+          "mean": 42.13,
+          "stddev": 37.9
+        }
+      ],
+      "min_stddev": 37.9
+    }
+  },
+  "manifest": {
+    "day": "20261018",
+    "date": "2026-10-18",
+    "date_label": "October 18, 2026",
+    "title": "Yesterday's News Today - October 18, 2026 | Contact With Nature, Tiny Black Cat Stuck & More",
+    "story_count": 5,
+    "video": {
+      "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261018\\20261018.mp4",
+      "duration_s": 105.703,
+      "size_bytes": 13909808,
+      "video": {
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    },
+    "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261018\\20261018-thumb.png",
+    "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261018\\upload.json",
+    "tts_backends": [
+      "edge"
+    ],
+    "voiceover_verified": false,
+    "segments": [
+      {
+        "segment": "intro",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\frames\\intro.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\audio\\intro.wav",
+        "audio_seconds": 4.824,
+        "video_seconds": 5.474,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story1",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\frames\\story1.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\audio\\story1.wav",
+        "audio_seconds": 19.08,
+        "video_seconds": 19.733,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story2",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\frames\\story2.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\audio\\story2.wav",
+        "audio_seconds": 18.936,
+        "video_seconds": 19.6,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story3",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\frames\\story3.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\audio\\story3.wav",
+        "audio_seconds": 16.968,
+        "video_seconds": 17.633,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story4",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\frames\\story4.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\audio\\story4.wav",
+        "audio_seconds": 19.824,
+        "video_seconds": 20.474,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story5",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\frames\\story5.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\audio\\story5.wav",
+        "audio_seconds": 17.184,
+        "video_seconds": 17.834,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "outro",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\frames\\outro.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261018\\audio\\outro.wav",
+        "audio_seconds": 4.272,
+        "video_seconds": 4.933,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      }
+    ],
+    "parse_warnings": [],
+    "sources": [
+      {
+        "story": 1,
+        "headline": "Contact With Nature is Linked to Healthy Eating, Shows Encouraging New Study",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/contact-with-nature-is-linked-to-healthy-eating-study/"
+      },
+      {
+        "story": 2,
+        "headline": "Tiny Black Cat Stuck in Car Engine Brings Unexpected Joy to Couple With Halloween Wedding Anniversary",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/mystery-black-kitten-stuck-in-engine-brings-unexpected-joy-to-couple/"
+      },
+      {
+        "story": 3,
+        "headline": "Retired Couple Surprised With New HVAC System Worth $16k in a ‘Feel the Love’ Program That’s Aided 3100 Folks",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/retired-couple-surprised-with-new-hvac-system-worth-16k/"
+      },
+      {
+        "story": 4,
+        "headline": "Village Installs Knitted Traffic Cops to Slow Down Speeding Drivers",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/village-installs-knitted-traffic-cops-to-slow-speeding-drivers/"
+      },
+      {
+        "story": 5,
+        "headline": "Good News in History, October 18",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/events061018/"
+      }
+    ]
+  },
+  "published": null
+}

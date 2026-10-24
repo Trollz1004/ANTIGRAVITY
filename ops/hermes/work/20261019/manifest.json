@@ -1,0 +1,128 @@
+{
+  "day": "20261019",
+  "date": "2026-10-19",
+  "date_label": "October 19, 2026",
+  "title": "Yesterday's News Today - October 19, 2026 | Mozambique Protects the ‘Butterfly Forest & More",
+  "story_count": 5,
+  "video": {
+    "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261019\\20261019.mp4",
+    "duration_s": 78.243,
+    "size_bytes": 10835098,
+    "video": {
+      "codec": "h264",
+      "pix_fmt": "yuv420p",
+      "width": 1080,
+      "height": 1920,
+      "fps": "30/1"
+    },
+    "audio": {
+      "codec": "aac",
+      "sample_rate": "48000",
+      "channels": 2
+    }
+  },
+  "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261019\\20261019-thumb.png",
+  "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261019\\upload.json",
+  "tts_backends": [
+    "edge"
+  ],
+  "voiceover_verified": false,
+  "segments": [
+    {
+      "segment": "intro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\intro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\intro.wav",
+      "audio_seconds": 4.776,
+      "video_seconds": 5.433,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story1",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\story1.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\story1.wav",
+      "audio_seconds": 13.608,
+      "video_seconds": 14.267,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story2",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\story2.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\story2.wav",
+      "audio_seconds": 13.104,
+      "video_seconds": 13.767,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story3",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\story3.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\story3.wav",
+      "audio_seconds": 10.128,
+      "video_seconds": 10.778,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story4",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\story4.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\story4.wav",
+      "audio_seconds": 12.792,
+      "video_seconds": 13.442,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story5",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\story5.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\story5.wav",
+      "audio_seconds": 14.952,
+      "video_seconds": 15.602,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "outro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\outro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\outro.wav",
+      "audio_seconds": 4.272,
+      "video_seconds": 4.933,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    }
+  ],
+  "parse_warnings": [],
+  "sources": [
+    {
+      "story": 1,
+      "headline": "Mozambique Protects the ‘Butterfly Forest’ of Mount Mabu, Home to 200 Species",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/mozambique-protects-the-butterfly-forest-of-mount-mabu-home-to-200-species/"
+    },
+    {
+      "story": 2,
+      "headline": "Unprecedented Collab Between China and The Met Uncovers Secrets of Huge Chinese Mural in NYC",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/unprecedented-collab-between-china-and-the-met-uncovers-secrets-of-chinese-mural-during-exhaustive-reproduction/"
+    },
+    {
+      "story": 3,
+      "headline": "Brazil Ends Long Tradition of 6-Day Workweek via Constitutional Amendment",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/brazil-ends-long-tradition-of-6-day-workweek-via-constitutional-amendment/"
+    },
+    {
+      "story": 4,
+      "headline": "Simple ‘Soil Steaming’ Found as Effective Replacement for Chemicals in Organic Strawberry Farming",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/simple-soil-steaming-found-as-effective-replacement-for-chemicals-in-organic-strawberry-farming/"
+    },
+    {
+      "story": 5,
+      "headline": "Good News in History, October 19",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/events061019/"
+    }
+  ]
+}

@@ -1,0 +1,372 @@
+{
+  "day": "20261017",
+  "started": "2026-10-18T06:30:10.147995-04:00",
+  "finished": "2026-10-18T06:41:42.767456-04:00",
+  "host": "T5500-2-XEON-72",
+  "unattended": true,
+  "shipped": false,
+  "exit_code": 3,
+  "stages": [
+    {
+      "stage": "preflight",
+      "status": "OK",
+      "detail": "ffmpeg+ffprobe on PATH, repo at C:\\ANTIGRAVITY"
+    },
+    {
+      "stage": "source",
+      "status": "OK",
+      "detail": "wrote C:\\ANTIGRAVITY\\content\\yesterday-news\\20261017 from C:\\Users\\joshi\\Documents\\ANTIGRAVITY-RUNTIME\\yesterday-news\\content\\20261017",
+      "bytes": 3781,
+      "sources": 5
+    },
+    {
+      "stage": "parse",
+      "status": "OK",
+      "detail": "5 stories, title \"Yesterday's News Today — October 17, 2026\"",
+      "warnings": []
+    },
+    {
+      "stage": "voice",
+      "status": "OK",
+      "detail": "backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok)",
+      "backend": "edge"
+    },
+    {
+      "stage": "render",
+      "status": "OK",
+      "detail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261017\\20261017.mp4 (102.065s, 13219574 bytes)"
+    },
+    {
+      "stage": "verify",
+      "status": "OK",
+      "detail": "23 gates passed: 102.065s, 1080x1920, mean audio -19.2 dB, min luma stddev 37.45"
+    },
+    {
+      "stage": "upload",
+      "status": "BLOCKED",
+      "detail": "no YouTube credentials at C:\\ANTIGRAVITY\\ops\\youtube\\.credentials\\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published."
+    }
+  ],
+  "gates": {
+    "passed": 23,
+    "checks": [
+      {
+        "check": "source_script:size",
+        "ok": true,
+        "detail": "script.txt is 3781 bytes (need >= 400)",
+        "path": "C:\\ANTIGRAVITY\\content\\yesterday-news\\20261017\\script.txt",
+        "bytes": 3781,
+        "min_bytes": 400
+      },
+      {
+        "check": "source_script:contains",
+        "ok": true,
+        "detail": "expected \"Yesterday's News Today\" in script.txt"
+      },
+      {
+        "check": "source_metadata:size",
+        "ok": true,
+        "detail": "metadata.json is 1525 bytes (need >= 2)",
+        "path": "C:\\ANTIGRAVITY\\content\\yesterday-news\\20261017\\metadata.json",
+        "bytes": 1525,
+        "min_bytes": 2
+      },
+      {
+        "check": "source_metadata:keys",
+        "ok": true,
+        "detail": "has ['title', 'date', 'sources']"
+      },
+      {
+        "check": "source:story_count",
+        "ok": true,
+        "detail": "5 sources (need >= 3)"
+      },
+      {
+        "check": "parse:stories",
+        "ok": true,
+        "detail": "parsed 5 stories (need >= 3)"
+      },
+      {
+        "check": "parse:story1_narration",
+        "ok": true,
+        "detail": "story 1 narration is 46 words"
+      },
+      {
+        "check": "parse:story2_narration",
+        "ok": true,
+        "detail": "story 2 narration is 55 words"
+      },
+      {
+        "check": "parse:story3_narration",
+        "ok": true,
+        "detail": "story 3 narration is 59 words"
+      },
+      {
+        "check": "parse:story4_narration",
+        "ok": true,
+        "detail": "story 4 narration is 55 words"
+      },
+      {
+        "check": "parse:story5_narration",
+        "ok": true,
+        "detail": "story 5 narration is 31 words"
+      },
+      {
+        "check": "mp4:size",
+        "ok": true,
+        "detail": "20261017.mp4 is 13219574 bytes (need >= 200000)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261017\\20261017.mp4",
+        "bytes": 13219574,
+        "min_bytes": 200000
+      },
+      {
+        "check": "video:video_stream",
+        "ok": true,
+        "detail": "video stream: h264",
+        "codec": "h264"
+      },
+      {
+        "check": "video:audio_stream",
+        "ok": true,
+        "detail": "audio stream: aac",
+        "codec": "aac"
+      },
+      {
+        "check": "video:duration",
+        "ok": true,
+        "detail": "102.07s (need 20.0-900.0s)",
+        "seconds": 102.065
+      },
+      {
+        "check": "video:resolution",
+        "ok": true,
+        "detail": "1080x1920 (need 1080x1920)",
+        "width": 1080,
+        "height": 1920
+      },
+      {
+        "check": "video:pix_fmt",
+        "ok": true,
+        "detail": "pix_fmt=yuv420p (need yuv420p for player compatibility)"
+      },
+      {
+        "check": "video:audio_level",
+        "ok": true,
+        "detail": "mean -19.2 dB, peak -4.4 dB (need mean > -50.0 dB)",
+        "mean_db": -19.2,
+        "peak_db": -4.4
+      },
+      {
+        "check": "video:frames_not_blank",
+        "ok": true,
+        "detail": "lowest luma stddev 37.45 across 3 sampled frames (need >= 3.0; a flat/black frame reads ~0)",
+        "samples": [
+          {
+            "at_s": 15.31,
+            "mean": 48.74,
+            "stddev": 57.16
+          },
+          {
+            "at_s": 51.03,
+            "mean": 46.98,
+            "stddev": 52.86
+          },
+          {
+            "at_s": 86.76,
+            "mean": 39.42,
+            "stddev": 37.45
+          }
+        ]
+      },
+      {
+        "check": "thumbnail:size",
+        "ok": true,
+        "detail": "20261017-thumb.png is 143320 bytes (need >= 20000)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261017\\20261017-thumb.png",
+        "bytes": 143320,
+        "min_bytes": 20000
+      },
+      {
+        "check": "thumbnail:resolution",
+        "ok": true,
+        "detail": "1280x720 (need 1280x720)",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "check": "upload_metadata:size",
+        "ok": true,
+        "detail": "upload.json is 3058 bytes (need >= 2)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261017\\upload.json",
+        "bytes": 3058,
+        "min_bytes": 2
+      },
+      {
+        "check": "upload_metadata:keys",
+        "ok": true,
+        "detail": "has ['title', 'description', 'tags']"
+      }
+    ]
+  },
+  "video": {
+    "duration_s": 102.065,
+    "size_bytes": 13219574,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "width": 1080,
+    "height": 1920,
+    "audio": {
+      "mean_db": -19.2,
+      "peak_db": -4.4
+    },
+    "frames": {
+      "samples": [
+        {
+          "at_s": 15.31,
+          "mean": 48.74,
+          "stddev": 57.16
+        },
+        {
+          "at_s": 51.03,
+          "mean": 46.98,
+          "stddev": 52.86
+        },
+        {
+          "at_s": 86.76,
+          "mean": 39.42,
+          "stddev": 37.45
+        }
+      ],
+      "min_stddev": 37.45
+    }
+  },
+  "manifest": {
+    "day": "20261017",
+    "date": "2026-10-17",
+    "date_label": "October 17, 2026",
+    "title": "Yesterday's News Today - October 17, 2026 | 99-yo Woman Snags ‘World’s Oldest & More",
+    "story_count": 5,
+    "video": {
+      "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261017\\20261017.mp4",
+      "duration_s": 102.065,
+      "size_bytes": 13219574,
+      "video": {
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    },
+    "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261017\\20261017-thumb.png",
+    "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261017\\upload.json",
+    "tts_backends": [
+      "edge"
+    ],
+    "voiceover_verified": false,
+    "segments": [
+      {
+        "segment": "intro",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\frames\\intro.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\audio\\intro.wav",
+        "audio_seconds": 4.896,
+        "video_seconds": 5.546,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story1",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\frames\\story1.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\audio\\story1.wav",
+        "audio_seconds": 16.32,
+        "video_seconds": 16.97,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story2",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\frames\\story2.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\audio\\story2.wav",
+        "audio_seconds": 18.264,
+        "video_seconds": 18.914,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story3",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\frames\\story3.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\audio\\story3.wav",
+        "audio_seconds": 20.472,
+        "video_seconds": 21.133,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story4",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\frames\\story4.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\audio\\story4.wav",
+        "audio_seconds": 20.976,
+        "video_seconds": 21.633,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story5",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\frames\\story5.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\audio\\story5.wav",
+        "audio_seconds": 12.264,
+        "video_seconds": 12.914,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "outro",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\frames\\outro.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261017\\audio\\outro.wav",
+        "audio_seconds": 4.272,
+        "video_seconds": 4.933,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      }
+    ],
+    "parse_warnings": [],
+    "sources": [
+      {
+        "story": 1,
+        "headline": "99-yo Woman Snags ‘World’s Oldest Wing-Walker’ Title – 3 Months After Another Gran Did It",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/99-yo-woman-snags-worlds-oldest-wing-walker-title/"
+      },
+      {
+        "story": 2,
+        "headline": "Coral Bleaching Reversed at Record Speed Using New Stanford Method: ‘Not a Lost Cause, at All’",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/coral-bleaching-reversed-at-record-speed-using-new-stanford-method/"
+      },
+      {
+        "story": 3,
+        "headline": "Massive 70lb Dog the Size of Baby Hippo Sheds Pounds and Gets New Home",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/massive-70lb-dog-the-size-of-baby-hippo-sheds-lbs/"
+      },
+      {
+        "story": 4,
+        "headline": "Your Positive Weekly Horoscope: ‘Free Will Astrology’ by Rob Brezsny",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/horoscope-from-rob-brezsnys-free-will-astrology-10-17-2026/"
+      },
+      {
+        "story": 5,
+        "headline": "Good News in History, October 17",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/events061017/"
+      }
+    ]
+  },
+  "published": null
+}

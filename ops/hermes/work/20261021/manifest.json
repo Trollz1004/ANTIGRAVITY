@@ -1,0 +1,128 @@
+{
+  "day": "20261021",
+  "date": "2026-10-21",
+  "date_label": "October 21, 2026",
+  "title": "Yesterday's News Today - October 21, 2026 | Strangers Help 86-Year-Old Who’s & More",
+  "story_count": 5,
+  "video": {
+    "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261021\\20261021.mp4",
+    "duration_s": 91.27,
+    "size_bytes": 12127552,
+    "video": {
+      "codec": "h264",
+      "pix_fmt": "yuv420p",
+      "width": 1080,
+      "height": 1920,
+      "fps": "30/1"
+    },
+    "audio": {
+      "codec": "aac",
+      "sample_rate": "48000",
+      "channels": 2
+    }
+  },
+  "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261021\\20261021-thumb.png",
+  "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261021\\upload.json",
+  "tts_backends": [
+    "edge"
+  ],
+  "voiceover_verified": false,
+  "segments": [
+    {
+      "segment": "intro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\frames\\intro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\audio\\intro.wav",
+      "audio_seconds": 4.92,
+      "video_seconds": 5.57,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story1",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\frames\\story1.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\audio\\story1.wav",
+      "audio_seconds": 19.392,
+      "video_seconds": 20.042,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story2",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\frames\\story2.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\audio\\story2.wav",
+      "audio_seconds": 13.776,
+      "video_seconds": 14.433,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story3",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\frames\\story3.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\audio\\story3.wav",
+      "audio_seconds": 19.176,
+      "video_seconds": 19.833,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story4",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\frames\\story4.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\audio\\story4.wav",
+      "audio_seconds": 16.32,
+      "video_seconds": 16.97,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story5",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\frames\\story5.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\audio\\story5.wav",
+      "audio_seconds": 8.808,
+      "video_seconds": 9.467,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "outro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\frames\\outro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261021\\audio\\outro.wav",
+      "audio_seconds": 4.272,
+      "video_seconds": 4.933,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    }
+  ],
+  "parse_warnings": [],
+  "sources": [
+    {
+      "story": 1,
+      "headline": "Strangers Help 86-Year-Old Who’s Been Building a 62-foot Boat in his Yard Since 1987",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/total-strangers-help-86-year-old-man-make-40-year-dream-reality/"
+    },
+    {
+      "story": 2,
+      "headline": "Japan Successfully Launches Mission to Bring Home the First-Ever Martian Moon Samples",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/japan-launches-first-mission-mars-moon-samples/"
+    },
+    {
+      "story": 3,
+      "headline": "Scientists Discover a Simple, Low-Energy Way to Recycle Acrylic Glass into Brand-New Material",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/scientists-discover-way-to-recycle-acrylic-glass-into-brand-new-material/"
+    },
+    {
+      "story": 4,
+      "headline": "10-Year-Old Dog Found After a Month Lost in Yellowstone",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/10-year-old-dog-found-month-lost-in-yellowstone/"
+    },
+    {
+      "story": 5,
+      "headline": "Good News in History, October 21",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/events061021/"
+    }
+  ]
+}
