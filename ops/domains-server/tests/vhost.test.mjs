@@ -17,18 +17,20 @@ const SERVER_PATH = path.join(__dirname, "..", "server.mjs");
 const TEST_PORT = 9161; // scratch port distinct from the real 9160 service
 
 const CASES = [
-  { host: "dream-online.net", expectTitle: "DREAM Online" },
-  { host: "www.dream-online.net", expectTitle: "DREAM Online" },
-  { host: "untilnokidinneed.com", expectTitle: "Until No Kid In Need" },
-  { host: "www.untilnokidinneed.com", expectTitle: "Until No Kid In Need" },
-  { host: "onlinerecycle.net", expectTitle: "Florida Electronics Recycling | Free Drop-Off & Pickup | OnlineRecycle.net" },
-  { host: "www.onlinerecycle.net", expectTitle: "Florida Electronics Recycling | Free Drop-Off & Pickup | OnlineRecycle.net" },
+  { host: "dream-online.net", path: "/", expectTitle: "DREAM Online" },
+  { host: "www.dream-online.net", path: "/", expectTitle: "DREAM Online" },
+  { host: "dream-online.net", path: "/privacy", expectTitle: "Privacy Policy - ANTIGRAVITY Backup (dream-online.net)" },
+  { host: "dream-online.net", path: "/terms", expectTitle: "Terms of Service - ANTIGRAVITY Backup (dream-online.net)" },
+  { host: "untilnokidinneed.com", path: "/", expectTitle: "Until No Kid In Need" },
+  { host: "www.untilnokidinneed.com", path: "/", expectTitle: "Until No Kid In Need" },
+  { host: "onlinerecycle.net", path: "/", expectTitle: "Florida Electronics Recycling | Free Drop-Off & Pickup | OnlineRecycle.net" },
+  { host: "www.onlinerecycle.net", path: "/", expectTitle: "Florida Electronics Recycling | Free Drop-Off & Pickup | OnlineRecycle.net" },
 ];
 
-function get(host, port, hostHeader) {
+function get(host, port, hostHeader, urlPath = "/") {
   return new Promise((resolve, reject) => {
     const req = http.request(
-      { host, port, path: "/", method: "GET", headers: { Host: hostHeader } },
+      { host, port, path: urlPath, method: "GET", headers: { Host: hostHeader } },
       (res) => {
         let body = "";
         res.on("data", (chunk) => (body += chunk));
@@ -90,15 +92,15 @@ async function main() {
       console.log("PASS: /health ->", health.body);
     }
 
-    for (const { host, expectTitle } of CASES) {
-      const r = await get("127.0.0.1", TEST_PORT, host);
+    for (const { host, path: urlPath, expectTitle } of CASES) {
+      const r = await get("127.0.0.1", TEST_PORT, host, urlPath);
       const titleMatch = r.body.match(/<title>([^<]*)<\/title>/i);
       const title = titleMatch ? titleMatch[1] : null;
       if (r.status === 200 && title === expectTitle) {
-        console.log(`PASS: Host=${host} -> title "${title}"`);
+        console.log(`PASS: Host=${host} path=${urlPath} -> title "${title}"`);
       } else {
         console.error(
-          `FAIL: Host=${host} -> status=${r.status} title="${title}" (expected "${expectTitle}")`
+          `FAIL: Host=${host} path=${urlPath} -> status=${r.status} title="${title}" (expected "${expectTitle}")`
         );
         failures++;
       }
