@@ -41,6 +41,30 @@ jobs:
           set -euo pipefail
           python scripts/dashboard-aidoesitall/yesterday-news-today.py --mode generate
 
+      # Generated briefs copy external headline/summary text verbatim.
+      # Gate them against the business-only public-copy doctrine before they
+      # enter repository history — a hit fails the run for human review
+      # (the artifact upload below still preserves the content).
+      - name: Doctrine gate on generated content
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="${{ runner.temp }}/ag-runtime/yesterday-news/content"
+          if [ ! -d "$SRC" ] || [ -z "$(ls -A "$SRC")" ]; then
+            exit 0
+          fi
+          # Campaign-specific markers only — generic words (kids, voting,
+          # investment) appear in ordinary news headlines and would
+          # false-fail the pipeline; those cases are caught at publish
+          # review, not here.
+          HITS=$(grep -rinE '\bdonat(e|ion|ions|ing)\b|\bcharit|\bfundrais|\bcrowdfund|buy\.stripe\.com|control[- ]rights|tax[- ]deductible|ownership[- ]sale|revenue[- ]split|founder[- ]cap|\bDAO\b|investment[- ]return|100% (to|of (net |gross )?proceeds)' "$SRC" || true)
+          if [ -n "$HITS" ]; then
+            echo "::error::Generated brief contains language requiring human review before commit:"
+            echo "$HITS"
+            exit 1
+          fi
+          echo "Doctrine gate: generated content clean"
+
       - name: Collect brief into repo content dir
         shell: bash
         run: |
@@ -52,31 +76,6 @@ jobs:
           fi
           mkdir -p content/yesterday-news
           cp -r "$SRC"/. content/yesterday-news/
-
-      # Generated briefs copy external headline/summary text verbatim.
-      # Gate them against the business-only public-copy doctrine before they
-      # enter repository history — a hit fails the run for human review
-      # (the artifact upload below still preserves the content).
-      - name: Doctrine gate on generated content
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ ! -d content/yesterday-news ]; then
-            exit 0
-          fi
-          # Campaign-specific markers only — generic words (kids, voting,
-          # investment) appear in ordinary news headlines and would
-          # false-fail the pipeline; those cases are caught at publish
-          # review, not here.
-          HITS=$(grep -rinE '\bdonat(e|ion|ions|ing)\b|\bcharit|\bfundrais|\bcrowdfund|buy\.stripe\.com|control[- ]rights|tax[- ]deductible|ownership[- ]sale|revenue[- ]split|founder[- ]cap|\bDAO\b|investment[- ]return|100% (to|of (net |gross )?proceeds)' content/yesterday-news/ || true)
-          if [ -n "$HITS" ]; then
-            echo "::error::Generated brief contains language requiring human review before commit:"
-            echo "$HITS"
-            git checkout -- content/yesterday-news 2>/dev/null || true
-            git clean -fd content/yesterday-news 2>/dev/null || true
-            exit 1
-          fi
-          echo "Doctrine gate: generated content clean"
 
       - name: Upload brief artifact
         # always() so a doctrine-gate failure still preserves the generated
