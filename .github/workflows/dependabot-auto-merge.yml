@@ -1,16 +1,19 @@
 name: dependabot-auto-merge
 
-# Automatically squash-merges Dependabot PRs once CI Validate (including
-# owasp-dependency-check and the 'code' aggregator gate) finishes green.
+# Automatically squash-merges Dependabot PRs once both CI Validate (including
+# owasp-dependency-check, guardian-check, and the 'code' aggregator) AND
+# doctrine-check (doctrine.yml), plus quality-gate and Policy Guard ('Scan for
+# forbidden patterns'), have completed with conclusion == 'success' on the PR SHA.
 
 on:
   workflow_run:
-    workflows: ["CI Validate"]
+    workflows: ["CI Validate", "doctrine-check"]
     types: [completed]
 
 permissions:
   contents: write
   pull-requests: write
+  checks: read
 
 concurrency:
   group: dependabot-auto-merge-${{ github.event.workflow_run.head_branch }}
@@ -23,7 +26,7 @@ jobs:
       startsWith(github.event.workflow_run.head_branch, 'dependabot/')
     runs-on: ubuntu-latest
     steps:
-      - name: Squash-merge green Dependabot PR
+      - name: Verify required checks + CI Validate + doctrine-check and squash-merge
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: ${{ github.event.workflow_run.head_branch }}
@@ -34,4 +37,11 @@ jobs:
             echo "No open PR found for $BRANCH; skipping."
             exit 0
           fi
+          for req in "code" "doctrine-check" "quality-gate" "guardian-check" "Scan for forbidden patterns"; do
+            concl=$(gh api "repos/$GITHUB_REPOSITORY/commits/$SHA/check-runs" --jq ".check_runs[] | select(.name == "$req") | .conclusion" | head -n 1)
+            if [ "$concl" != "success" ]; then
+              echo "Check '$req' on $SHA is '$concl' (not yet 'success'); waiting for next workflow_run."
+              exit 0
+            fi
+          done
           gh pr merge "$PR_NUM" --repo "$GITHUB_REPOSITORY" --squash --delete-branch --match-head-commit "$SHA"
