@@ -7,7 +7,7 @@ name: dependabot-auto-merge
 
 on:
   workflow_run:
-    workflows: ["CI Validate", "doctrine-check"]
+    workflows: ["CI Validate", "doctrine"]
     types: [completed]
 
 permissions:
