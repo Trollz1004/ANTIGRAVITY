@@ -1,0 +1,128 @@
+{
+  "day": "20261022",
+  "date": "2026-10-22",
+  "date_label": "October 22, 2026",
+  "title": "Yesterday's News Today - October 22, 2026 | Towering Figure & More",
+  "story_count": 5,
+  "video": {
+    "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261022\\20261022.mp4",
+    "duration_s": 87.712,
+    "size_bytes": 12237156,
+    "video": {
+      "codec": "h264",
+      "pix_fmt": "yuv420p",
+      "width": 1080,
+      "height": 1920,
+      "fps": "30/1"
+    },
+    "audio": {
+      "codec": "aac",
+      "sample_rate": "48000",
+      "channels": 2
+    }
+  },
+  "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261022\\20261022-thumb.png",
+  "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261022\\upload.json",
+  "tts_backends": [
+    "edge"
+  ],
+  "voiceover_verified": false,
+  "segments": [
+    {
+      "segment": "intro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\intro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\intro.wav",
+      "audio_seconds": 4.848,
+      "video_seconds": 5.5,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story1",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\story1.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\story1.wav",
+      "audio_seconds": 5.568,
+      "video_seconds": 6.233,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story2",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\story2.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\story2.wav",
+      "audio_seconds": 24.12,
+      "video_seconds": 24.77,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story3",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\story3.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\story3.wav",
+      "audio_seconds": 13.464,
+      "video_seconds": 14.114,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story4",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\story4.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\story4.wav",
+      "audio_seconds": 15.984,
+      "video_seconds": 16.634,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story5",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\story5.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\story5.wav",
+      "audio_seconds": 14.856,
+      "video_seconds": 15.506,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "outro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\outro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\outro.wav",
+      "audio_seconds": 4.272,
+      "video_seconds": 4.933,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    }
+  ],
+  "parse_warnings": [],
+  "sources": [
+    {
+      "story": 1,
+      "headline": "A Towering Figure of Tolerance From 2,500 Years Ago Has Found a New Home in Atlanta",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/a-towering-figure-of-tolerance-from-2500-years-ago-has-found-a-new-home-in-atlanta/"
+    },
+    {
+      "story": 2,
+      "headline": "‘World’s Largest Deforestation Project’ Halted Early, Saving Potentially 4 Million Acres",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/indonesia-calls-an-early-halt-to-worlds-largest-deforestation-project-saving-potentially-4-million-acres/"
+    },
+    {
+      "story": 3,
+      "headline": "Major Supermarket Begins Wide-Scale Tests to Bring Heritage Apple Varieties to Market",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/major-supermarket-begins-wide-scale-tests-to-bring-heritage-apple-varieties-to-market/"
+    },
+    {
+      "story": 4,
+      "headline": "Coconut Oil Could Make Great Sustainable Jet Fuel, Pioneering Experiments Demonstrate",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/coconut-oil-could-make-great-sustainable-jet-fuel-pioneering-experiments-demonstrate/"
+    },
+    {
+      "story": 5,
+      "headline": "Samoan Island Witnesses Explosion of Native Wildlife Following Removal of Invasive Rats and Pigs",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/samoan-island-witnesses-explosion-of-native-wildlife-following-removal-of-invasive-rats-and-pigs/"
+    }
+  ]
+}

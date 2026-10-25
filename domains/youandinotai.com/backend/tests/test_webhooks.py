@@ -625,6 +625,122 @@ def test_completed_bot_shield_payment_with_valid_binding_promotes_user(
     assert allocations[0].status == "reserved"
 
 
+def test_completed_bot_shield_payment_when_liveness_is_pending_records_payment_and_promotes_on_liveness_pass(
+    client,
+    db_session_factory,
+):
+    """When payment arrives while liveness is still pending, the payment event
+
+    must be recorded, the user must remain unverified until liveness passes,
+    and then promote successfully once liveness is passed.
+    """
+
+    async def seed_user_and_pending_liveness() -> tuple[uuid.UUID, uuid.UUID]:
+        user_id = uuid.uuid4()
+        event_id = uuid.uuid4()
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=user_id,
+                    email="order-independent@example.com",
+                    password_hash="hashed",
+                    display_name="Order Independent",
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            session.add(
+                VerificationEvent(
+                    id=event_id,
+                    user_id=user_id,
+                    challenge_type="liveness",
+                    status="pending",
+                    amount_cents=100,
+                )
+            )
+            await session.commit()
+        return user_id, event_id
+
+    import asyncio
+
+    from app.verification_service import promote_user_verification_if_ready
+
+    user_id, event_id = asyncio.run(seed_user_and_pending_liveness())
+    checkout_ref = build_checkout_reference(
+        user_id=user_id,
+        event_id=event_id,
+        tier="bot_shield",
+        secret="test-secret-that-is-at-least-32-characters-long-for-security",
+    )
+
+    payload = make_square_payment_event(
+        event_id="evt_payment_before_liveness",
+        amount_cents=100,
+        buyer_email="order-independent@example.com",
+        note=f"Bot-Shield Verification agref:{checkout_ref}",
+        payment_status="COMPLETED",
+    )
+
+    signature = generate_square_signature(
+        json.dumps(payload, separators=(",", ":")).encode("utf-8"),
+        "test-square-signature",
+        "http://testserver/api/v1/webhooks/square-payment",
+    )
+
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=json.dumps(payload, separators=(",", ":")),
+    )
+
+    assert response.status_code == 200, response.text
+
+    # Stage 1 check: Payment is recorded, but user is NOT verified yet (Iron Wall intact)
+    async def fetch_stage1_state() -> tuple[User | None, list[VerificationEvent]]:
+        async with db_session_factory() as session:
+            user = await session.scalar(select(User).where(User.id == user_id))
+            events = list(
+                (
+                    await session.scalars(
+                        select(VerificationEvent).where(
+                            VerificationEvent.user_id == user_id
+                        )
+                    )
+                ).all()
+            )
+            return user, events
+
+    user, events = asyncio.run(fetch_stage1_state())
+    assert user is not None
+    assert user.bot_shield_verified is False  # NOT verified yet!
+    assert any(
+        event.challenge_type == "payment"
+        and event.status == "completed"
+        and event.challenge_token == checkout_ref
+        for event in events
+    )
+
+    # Stage 2 check: Liveness passes, promotion succeeds!
+    async def pass_liveness_and_promote() -> tuple[User | None, bool]:
+        async with db_session_factory() as session:
+            liveness_event = await session.get(VerificationEvent, event_id)
+            assert liveness_event is not None
+            liveness_event.status = "passed"
+            user = await session.get(User, user_id)
+            assert user is not None
+            promoted = await promote_user_verification_if_ready(session, user)
+            await session.commit()
+            return user, promoted
+
+    user, promoted = asyncio.run(pass_liveness_and_promote())
+    assert promoted is True
+    assert user is not None
+    assert user.bot_shield_verified is True
+
+
 def test_payment_webhook_skips_signature_check_when_material_missing(
     client,
     db_session_factory,

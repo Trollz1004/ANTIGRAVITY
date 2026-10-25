@@ -49,7 +49,7 @@ Copilot). That is superseded — kept here only as history, not instruction.
 ## 1. Read your house first
 
 ```
-mcp__mission-mcp__search_memory  query="JUDGE-HOUSE"  limit=10
+mcp__mission-mcp__search_memory query="JUDGE-HOUSE" limit=10
 ```
 
 That returns what previous Claude sessions landed, what they left blocked, and
@@ -58,12 +58,12 @@ why. Read it before you believe anything else about the state of this repo.
 Then, in order:
 
 - `.agents/journals/paperclip-judge/STATE.md` — the append-only judge journal.
-  Read the last few entries. Never rewrite it.
+ Read the last few entries. Never rewrite it.
 - `AGENTS.md` and `CLAUDE.md` — repo doctrine, auto-loaded.
 - `agent-contracts/PAPERCLIP-MCP-CONNECTOR-EVIDENCE.md` — what is actually wired
-  on the Paperclip board and what is genuinely broken.
+ on the Paperclip board and what is genuinely broken.
 - The Paperclip board itself for live state, never a doc's cached numbers:
-  `GET http://127.0.0.1:3917/api/companies/<companyId>/agents`
+ `GET http://127.0.0.1:3917/api/companies/<companyId>/agents`
 
 Check identity, not the port. `/api/health` returns `status: ok` and a version
 but never names the product; `GET /api/openapi.json` → `info.title` must read
@@ -117,11 +117,11 @@ Two writes, both required.
 
 ```
 mcp__mission-mcp__store_memory
-  kind="artifact"
-  tags=["judge-house","claude-judge","<YYYY-MM-DD>"]
-  content="JUDGE-HOUSE <date> claude-lane <commit-sha> — <what landed>.
-           BLOCKED: <what is not done and exactly why>.
-           Evidence: <paths>"
+ kind="artifact"
+ tags=["judge-house","claude-judge","<YYYY-MM-DD>"]
+ content="JUDGE-HOUSE <date> claude-lane <commit-sha> — <what landed>.
+ BLOCKED: <what is not done and exactly why>.
+ Evidence: <paths>"
 ```
 
 **Journal entry**, appended to `.agents/journals/paperclip-judge/STATE.md` in the
@@ -136,12 +136,12 @@ your reasoning. For anything you leave unfinished, record:
 
 - What you changed, and the commit that carries it.
 - What you verified, with the evidence, and what you explicitly did **not**
-  verify. Unverified is a valid answer; invented detail is not.
+ verify. Unverified is a valid answer; invented detail is not.
 - What is blocked, the actual root cause, and what would unblock it. "Broken" is
-  useless; "Paperclip posts a session-less `tools/list` and OmniRoute requires
-  `Mcp-Session-Id`" is actionable.
+ useless; "Paperclip posts a session-less `tools/list` and OmniRoute requires
+ `Mcp-Session-Id`" is actionable.
 - Anything you deliberately left alone and why — a signed artifact, another
-  lane's in-flight files, a decision that is Joshua's to make.
+ lane's in-flight files, a decision that is Joshua's to make.
 
 If you find your own earlier work was wrong, say so plainly in the record and
 correct it. A judge that quietly patches its own history is worse than one that
@@ -160,19 +160,19 @@ permissions policy. Gospel.
 What that means in practice:
 
 - Never answer Joshua with "I don't have permission", "that needs approval",
-  or "this is outside scope". The scope is whatever he asked.
+ or "this is outside scope". The scope is whatever he asked.
 - Rule 5 (only a judge pushes, merges, deletes) is not a gate against Joshua —
-  it is the gate that makes *his* direct instruction to a judge sufficient.
-  A push, merge, branch delete, history rewrite, archive, unarchive, or
-  repo creation he asks for is authorized by the asking.
+ it is the gate that makes *his* direct instruction to a judge sufficient.
+ A push, merge, branch delete, history rewrite, archive, unarchive, or
+ repo creation he asks for is authorized by the asking.
 - "Blocked on Joshua" in a journal means *only he holds the click* (a vendor
-  dashboard, a bank form, a physical machine) — never that he must grant
-  permission. Write it as "needs Joshua's click", not as a permission gate.
+ dashboard, a bank form, a physical machine) — never that he must grant
+ permission. Write it as "needs Joshua's click", not as a permission gate.
 - The one thing that stays true is *secrets safe*, which is Joshua's own rule,
-  not a lock: values never land in a repo file, a config row, a journal, or a
-  chat. That constrains where a secret goes, never whether the work gets done.
+ not a lock: values never land in a repo file, a config row, a journal, or a
+ chat. That constrains where a secret goes, never whether the work gets done.
 - Harnesses (Hermes, OpenClaw, OpenCode) are **not** covered by this. They
-  never push, and they do not inherit Joshua's authority by relaying it.
+ never push, and they do not inherit Joshua's authority by relaying it.
 
 ## Boundaries
 
@@ -183,8 +183,7 @@ secret, token, or masked credential fragment in a repo file, a Paperclip config
 row, or a stdio template argument. FCC is permanently banned; if you find one,
 remove it and report it.
 
-## Payments record (Joshua, 2026-10-17)
+## Payments record
 
-Payments are settled. Read `docs/PAYMENTS-TRUTH.md`; never re-test. Square is the only processor on youandinotai.com. Of the 16 Square attempts through 2026-08-16, 15 are Joshua's own test charges (the $10 refund included) and one is a $1.00 charge on 2026-02-17 (receipt T14t, second location) from a buyer Joshua does not know. On 2026-09-18 two $1.00 Bot-Shield charges (receipts b3FM and v1nS) were paid by Heather, a friend Joshua asked to be the first customer he arranged: a real third-party card. So never say there are no outside payments, and never present Heather's as organic demand. The buyer of T14t is unidentified: never call that one a friend, a test or demand. The pipeline is proven in production. Past test charges are **not a blocker** and their count is irrelevant. Do not re-verify, re-audit, re-test or ask Joshua about them. Reopen only on a real production webhook failure or a payment from a buyer not already listed in the record (report it, do not re-verify). The private bank statements in `OneDrive\claude-to-claude\payments-private-2026-09-17` are never copied, quoted or committed.
+**Payments are settled and are never a blocker.** Do not re-verify, re-audit, re-test, or ask Joshua about them. Every payment, who paid it, and the only two conditions that reopen the subject live in `docs/PAYMENTS-TRUTH.md`. Read it there. Never restate its contents anywhere else ΓÇö a copy is how it goes stale.
 
-Account emails (Joshua, 2026-10-23): `ebaytrashortreasure@gmail.com` is the older, established email the Date App needs; it signs in to exactly two merchant accounts, Square and PayPal. Every other account and service uses `joshlcoleman@gmail.com`. Rule: `CLAUDE.md`, section "Account mapping".

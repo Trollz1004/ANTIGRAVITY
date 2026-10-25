@@ -1,0 +1,128 @@
+{
+  "day": "20261020",
+  "date": "2026-10-20",
+  "date_label": "October 20, 2026",
+  "title": "Yesterday's News Today - October 20, 2026 | Student Plays Truly Epic Birthday & More",
+  "story_count": 5,
+  "video": {
+    "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261020\\20261020.mp4",
+    "duration_s": 92.333,
+    "size_bytes": 12369671,
+    "video": {
+      "codec": "h264",
+      "pix_fmt": "yuv420p",
+      "width": 1080,
+      "height": 1920,
+      "fps": "30/1"
+    },
+    "audio": {
+      "codec": "aac",
+      "sample_rate": "48000",
+      "channels": 2
+    }
+  },
+  "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261020\\20261020-thumb.png",
+  "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261020\\upload.json",
+  "tts_backends": [
+    "edge"
+  ],
+  "voiceover_verified": false,
+  "segments": [
+    {
+      "segment": "intro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\frames\\intro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\audio\\intro.wav",
+      "audio_seconds": 4.68,
+      "video_seconds": 5.333,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story1",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\frames\\story1.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\audio\\story1.wav",
+      "audio_seconds": 12.984,
+      "video_seconds": 13.634,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story2",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\frames\\story2.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\audio\\story2.wav",
+      "audio_seconds": 18.744,
+      "video_seconds": 19.4,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story3",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\frames\\story3.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\audio\\story3.wav",
+      "audio_seconds": 17.928,
+      "video_seconds": 18.578,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story4",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\frames\\story4.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\audio\\story4.wav",
+      "audio_seconds": 16.104,
+      "video_seconds": 16.767,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "story5",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\frames\\story5.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\audio\\story5.wav",
+      "audio_seconds": 13.008,
+      "video_seconds": 13.667,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    },
+    {
+      "segment": "outro",
+      "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\frames\\outro.png",
+      "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261020\\audio\\outro.wav",
+      "audio_seconds": 4.272,
+      "video_seconds": 4.933,
+      "tts_backend": "edge",
+      "tts_voice": "en-US-ChristopherNeural"
+    }
+  ],
+  "parse_warnings": [],
+  "sources": [
+    {
+      "story": 1,
+      "headline": "Student Plays Truly Epic Birthday Prank on High School Principal Who Changed His Life",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/student-plays-truly-epic-birthday-prank-on-high-school-principal-who-changed-his-life-watch/"
+    },
+    {
+      "story": 2,
+      "headline": "Isle of Jersey Expands Marine Protections to Cover 21% of Territorial Waters",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/isle-of-jersey-expands-marine-protections-to-cover-21-of-territorial-waters/"
+    },
+    {
+      "story": 3,
+      "headline": "Texas Man Finds More Than $128,000 on Top of a Bank’s ATM–and Returns Every Dollar",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/texas-man-finds-more-than-128000-on-top-of-a-banks-atm-and-returns-every-dollar/"
+    },
+    {
+      "story": 4,
+      "headline": "Man Proposes to His Girlfriend After They Were Struck by Lightning–She Restarted His Heart Twice",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/man-proposes-to-his-girlfriend-after-they-were-struck-by-lightning-she-restarted-his-heart-twice/"
+    },
+    {
+      "story": 5,
+      "headline": "Good News in History, October 20",
+      "site": "Good News Network",
+      "url": "https://www.goodnewsnetwork.org/events061020/"
+    }
+  ]
+}

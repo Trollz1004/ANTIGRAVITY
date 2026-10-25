@@ -2,6 +2,153 @@
 
 Newest first. One entry per morning.
 
+## 2026-10-23 -- NOT SHIPPED -- rendered and verified, upload not armed
+
+- Run: 2026-10-24 06:30 Eastern Daylight Time -> 06:32, exit 3 (unattended)
+- Title: Yesterday's News Today - October 23, 2026 | Rescuers Ensure Orphaned Baby Walrus & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261023\20261023.mp4` -- 97.94s, 12.5 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261023\20261023-thumb.png`
+- Verified: 23 gates passed (audio mean -19.3 dB, min luma stddev 38.12)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261023 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261023 |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 23, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261023\20261023.mp4 (97.94s, 12489591 bytes) |
+| verify | OK | 23 gates passed: 97.94s, 1080x1920, mean audio -19.3 dB, min luma stddev 38.12 |
+| upload | BLOCKED | no YouTube credentials at C:\ANTIGRAVITY\ops\youtube\.credentials\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published. |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261023`
+
+## 2026-10-22 -- NOT SHIPPED -- rendered and verified, upload not armed
+
+- Run: 2026-10-23 06:30 Eastern Daylight Time -> 06:31, exit 3 (unattended)
+- Title: Yesterday's News Today - October 22, 2026 | Towering Figure & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261022\20261022.mp4` -- 87.712s, 12.2 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261022\20261022-thumb.png`
+- Verified: 18 gates passed (audio mean -19.4 dB, min luma stddev 55.04)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | SKIPPED | 20261022 already sourced (4272 bytes) |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 22, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261022\20261022.mp4 (87.712s, 12237156 bytes) |
+| verify | OK | 18 gates passed: 87.712s, 1080x1920, mean audio -19.4 dB, min luma stddev 55.04 |
+| upload | BLOCKED | no YouTube credentials at C:\ANTIGRAVITY\ops\youtube\.credentials\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published. |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261022`
+
+## 2026-10-22 -- RENDERED -- upload was off
+
+- Run: 2026-10-23 05:34 Eastern Daylight Time -> 05:36, exit 0
+- Title: Yesterday's News Today - October 22, 2026 | Towering Figure & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261022\20261022.mp4` -- 87.712s, 12.2 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261022\20261022-thumb.png`
+- Verified: 23 gates passed (audio mean -19.4 dB, min luma stddev 55.04)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261022 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261022 |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 22, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261022\20261022.mp4 (87.712s, 12199000 bytes) |
+| verify | OK | 23 gates passed: 87.712s, 1080x1920, mean audio -19.4 dB, min luma stddev 55.04 |
+| upload | SKIPPED | --upload off; the mp4 stays local |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261022`
+
+## 2026-10-21 -- NOT SHIPPED -- rendered and verified, upload not armed
+
+- Run: 2026-10-22 06:30 Eastern Daylight Time -> 06:35, exit 3 (unattended)
+- Title: Yesterday's News Today - October 21, 2026 | Strangers Help 86-Year-Old Who’s & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261021\20261021.mp4` -- 91.27s, 12.1 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261021\20261021-thumb.png`
+- Verified: 23 gates passed (audio mean -19.1 dB, min luma stddev 37.44)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261021 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261021 |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 21, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261021\20261021.mp4 (91.27s, 12127552 bytes) |
+| verify | OK | 23 gates passed: 91.27s, 1080x1920, mean audio -19.1 dB, min luma stddev 37.44 |
+| upload | BLOCKED | no YouTube credentials at C:\ANTIGRAVITY\ops\youtube\.credentials\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published. |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261021`
+
+## 2026-10-20 -- NOT SHIPPED -- rendered and verified, upload not armed
+
+- Run: 2026-10-21 08:34 Eastern Daylight Time -> 08:38, exit 3 (unattended)
+- Title: Yesterday's News Today - October 20, 2026 | Student Plays Truly Epic Birthday & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261020\20261020.mp4` -- 92.333s, 12.4 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261020\20261020-thumb.png`
+- Verified: 23 gates passed (audio mean -19.3 dB, min luma stddev 37.99)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261020 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261020 |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 20, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: ReadTimeout: HTTPConnectionPool(host='127.0.0.1', port=20128): Read timed out. (read timeout=45); edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261020\20261020.mp4 (92.333s, 12369671 bytes) |
+| verify | OK | 23 gates passed: 92.333s, 1080x1920, mean audio -19.3 dB, min luma stddev 37.99 |
+| upload | BLOCKED | no YouTube credentials at C:\ANTIGRAVITY\ops\youtube\.credentials\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published. |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261020`
+
+## 2026-10-19 -- NOT SHIPPED -- rendered and verified, upload not armed
+
+- Run: 2026-10-20 06:30 Eastern Daylight Time -> 06:34, exit 3 (unattended)
+- Title: Yesterday's News Today - October 19, 2026 | Mozambique Protects the ‘Butterfly Forest & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261019\20261019.mp4` -- 78.243s, 10.8 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261019\20261019-thumb.png`
+- Verified: 23 gates passed (audio mean -19.4 dB, min luma stddev 38.3)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261019 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261019 |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 19, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261019\20261019.mp4 (78.243s, 10835098 bytes) |
+| verify | OK | 23 gates passed: 78.243s, 1080x1920, mean audio -19.4 dB, min luma stddev 38.3 |
+| upload | BLOCKED | no YouTube credentials at C:\ANTIGRAVITY\ops\youtube\.credentials\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published. |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261019`
+
+## 2026-10-18 -- NOT SHIPPED -- rendered and verified, upload not armed
+
+- Run: 2026-10-19 06:30 Eastern Daylight Time -> 06:36, exit 3 (unattended)
+- Title: Yesterday's News Today - October 18, 2026 | Contact With Nature, Tiny Black Cat Stuck & More
+- Video: `C:\ANTIGRAVITY\ops\hermes\out\20261018\20261018.mp4` -- 105.703s, 13.9 MB, 5 stories
+- Voice: edge (local engine, not the hosted model)
+- Thumbnail: `C:\ANTIGRAVITY\ops\hermes\out\20261018\20261018-thumb.png`
+- Verified: 23 gates passed (audio mean -19.1 dB, min luma stddev 37.9)
+
+| stage | status | detail |
+| --- | --- | --- |
+| preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261018 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261018 |
+| parse | OK | 5 stories, title "Yesterday's News Today — October 18, 2026" |
+| voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
+| render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261018\20261018.mp4 (105.703s, 13909808 bytes) |
+| verify | OK | 23 gates passed: 105.703s, 1080x1920, mean audio -19.1 dB, min luma stddev 37.9 |
+| upload | BLOCKED | no YouTube credentials at C:\ANTIGRAVITY\ops\youtube\.credentials\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published. |
+
+Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261018`
+
 ## 2026-10-17 -- NOT SHIPPED -- rendered and verified, upload not armed
 
 - Run: 2026-10-18 06:30 Eastern Daylight Time -> 06:41, exit 3 (unattended)
@@ -14,7 +161,7 @@ Newest first. One entry per morning.
 | stage | status | detail |
 | --- | --- | --- |
 | preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
-| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261017 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261017 |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261017 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261017 |
 | parse | OK | 5 stories, title "Yesterday's News Today — October 17, 2026" |
 | voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
 | render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261017\20261017.mp4 (102.065s, 13219574 bytes) |
@@ -35,7 +182,7 @@ Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261017`
 | stage | status | detail |
 | --- | --- | --- |
 | preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
-| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261016 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261016 |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261016 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261016 |
 | parse | OK | 5 stories, title "Yesterday's News Today — October 16, 2026" |
 | voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
 | render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261016\20261016.mp4 (94.224s, 13003677 bytes) |
@@ -56,7 +203,7 @@ Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261016`
 | stage | status | detail |
 | --- | --- | --- |
 | preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
-| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261015 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261015 |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261015 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261015 |
 | parse | OK | 5 stories, title "Yesterday's News Today — October 15, 2026" |
 | voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
 | render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261015\20261015.mp4 (102.77s, 13888370 bytes) |
@@ -77,7 +224,7 @@ Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261015`
 | stage | status | detail |
 | --- | --- | --- |
 | preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
-| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261014 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261014 |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261014 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261014 |
 | parse | OK | 5 stories, title "Yesterday's News Today — October 14, 2026" |
 | voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
 | render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261014\20261014.mp4 (83.955s, 11753009 bytes) |
@@ -114,7 +261,7 @@ Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261010`
 | stage | status | detail |
 | --- | --- | --- |
 | preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
-| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261013 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261013 |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261013 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261013 |
 | parse | OK | 5 stories, title "Yesterday's News Today — October 13, 2026" |
 | voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
 | run | FAILED | unhandled TTSError: edge synthesis failed: WSServerHandshakeError: 403, message='Invalid response status', url='wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4&ConnectionId=1d9f7ad783904aacb37e30b35a42c51f&Sec-MS-GEC=9EDEC178D6B9FBAE371F9EEE1671A8A07D1740AF29219BA092F8DE647EAFE478&Sec-MS-GEC-Version=1-143.0.3650.75' |
@@ -128,7 +275,7 @@ Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261013`
 | stage | status | detail |
 | --- | --- | --- |
 | preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
-| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261012 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261012 |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261012 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261012 |
 | parse | OK | 5 stories, title "Yesterday's News Today — October 12, 2026" |
 | voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
 | run | FAILED | unhandled TTSError: edge synthesis failed: WSServerHandshakeError: 403, message='Invalid response status', url='wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4&ConnectionId=b50eb612b13f4d05a2aec69b32b0eae4&Sec-MS-GEC=C6B5374B5E25E8E1FEC62CEEC7AB7B1841118F8107C2B7259435D4056104A25C&Sec-MS-GEC-Version=1-143.0.3650.75' |
@@ -142,7 +289,7 @@ Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261012`
 | stage | status | detail |
 | --- | --- | --- |
 | preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
-| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261011 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261011 |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261011 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261011 |
 | parse | OK | 4 stories, title "Yesterday's News Today — October 11, 2026" |
 | voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
 | run | FAILED | unhandled TTSError: edge synthesis failed: WSServerHandshakeError: 403, message='Invalid response status', url='wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4&ConnectionId=cd0cdf7373b84bcca84f6e4055c33ba2&Sec-MS-GEC=ED9189CEFF0ADC5C369DFDD7B4091603E61F46B0F77FC9D64073B9FFF6500DC6&Sec-MS-GEC-Version=1-143.0.3650.75' |
@@ -161,7 +308,7 @@ Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261011`
 | stage | status | detail |
 | --- | --- | --- |
 | preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
-| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261010 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261010 |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261010 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261010 |
 | parse | OK | 5 stories, title "Yesterday's News Today — October 10, 2026" |
 | voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
 | render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261010\20261010.mp4 (87.31s, 11817314 bytes) |
@@ -182,7 +329,7 @@ Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261010`
 | stage | status | detail |
 | --- | --- | --- |
 | preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
-| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261009 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261009 |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261009 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261009 |
 | parse | OK | 5 stories, title "Yesterday's News Today — October 09, 2026" |
 | voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok) |
 | render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261009\20261009.mp4 (86.176s, 12186487 bytes) |
@@ -224,7 +371,7 @@ Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261008`
 | stage | status | detail |
 | --- | --- | --- |
 | preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
-| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261008 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261008 |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261008 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261008 |
 | parse | OK | 5 stories, title "Yesterday's News Today — October 08, 2026" |
 | voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=20128): Max retries exceeded with url: /v1/audio/speech (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=20128): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")); edge: ok) |
 | render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261008\20261008.mp4 (83.619s, 11517918 bytes) |
@@ -266,7 +413,7 @@ Packet: `C:\ANTIGRAVITY\ops\packets\hermes-youtube-20261008`
 | stage | status | detail |
 | --- | --- | --- |
 | preflight | OK | ffmpeg+ffprobe on PATH, repo at C:\ANTIGRAVITY |
-| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261008 from C:\Users\joshi\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261008 |
+| source | OK | wrote C:\ANTIGRAVITY\content\yesterday-news\20261008 from ~\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\20261008 |
 | parse | OK | 5 stories, title "Yesterday's News Today — October 08, 2026" |
 | voice | OK | backend=edge (omniroute: http://127.0.0.1:20128/v1: ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=20128): Max retries exceeded with url: /v1/audio/speech (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=20128): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")); edge: ok) |
 | render | OK | C:\ANTIGRAVITY\ops\hermes\out\20261008\20261008.mp4 (83.619s, 11516379 bytes) |

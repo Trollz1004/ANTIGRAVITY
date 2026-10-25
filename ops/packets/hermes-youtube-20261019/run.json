@@ -1,0 +1,372 @@
+{
+  "day": "20261019",
+  "started": "2026-10-20T06:30:11.785966-04:00",
+  "finished": "2026-10-20T06:34:47.344686-04:00",
+  "host": "T5500-2-XEON-72",
+  "unattended": true,
+  "shipped": false,
+  "exit_code": 3,
+  "stages": [
+    {
+      "stage": "preflight",
+      "status": "OK",
+      "detail": "ffmpeg+ffprobe on PATH, repo at C:\\ANTIGRAVITY"
+    },
+    {
+      "stage": "source",
+      "status": "OK",
+      "detail": "wrote C:\\ANTIGRAVITY\\content\\yesterday-news\\20261019 from $env:USERPROFILE\\Documents\\ANTIGRAVITY-RUNTIME\\yesterday-news\\content\\20261019",
+      "bytes": 3894,
+      "sources": 5
+    },
+    {
+      "stage": "parse",
+      "status": "OK",
+      "detail": "5 stories, title \"Yesterday's News Today — October 19, 2026\"",
+      "warnings": []
+    },
+    {
+      "stage": "voice",
+      "status": "OK",
+      "detail": "backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok)",
+      "backend": "edge"
+    },
+    {
+      "stage": "render",
+      "status": "OK",
+      "detail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261019\\20261019.mp4 (78.243s, 10835098 bytes)"
+    },
+    {
+      "stage": "verify",
+      "status": "OK",
+      "detail": "23 gates passed: 78.243s, 1080x1920, mean audio -19.4 dB, min luma stddev 38.3"
+    },
+    {
+      "stage": "upload",
+      "status": "BLOCKED",
+      "detail": "no YouTube credentials at C:\\ANTIGRAVITY\\ops\\youtube\\.credentials\\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published."
+    }
+  ],
+  "gates": {
+    "passed": 23,
+    "checks": [
+      {
+        "check": "source_script:size",
+        "ok": true,
+        "detail": "script.txt is 3894 bytes (need >= 400)",
+        "path": "C:\\ANTIGRAVITY\\content\\yesterday-news\\20261019\\script.txt",
+        "bytes": 3894,
+        "min_bytes": 400
+      },
+      {
+        "check": "source_script:contains",
+        "ok": true,
+        "detail": "expected \"Yesterday's News Today\" in script.txt"
+      },
+      {
+        "check": "source_metadata:size",
+        "ok": true,
+        "detail": "metadata.json is 1647 bytes (need >= 2)",
+        "path": "C:\\ANTIGRAVITY\\content\\yesterday-news\\20261019\\metadata.json",
+        "bytes": 1647,
+        "min_bytes": 2
+      },
+      {
+        "check": "source_metadata:keys",
+        "ok": true,
+        "detail": "has ['title', 'date', 'sources']"
+      },
+      {
+        "check": "source:story_count",
+        "ok": true,
+        "detail": "5 sources (need >= 3)"
+      },
+      {
+        "check": "parse:stories",
+        "ok": true,
+        "detail": "parsed 5 stories (need >= 3)"
+      },
+      {
+        "check": "parse:story1_narration",
+        "ok": true,
+        "detail": "story 1 narration is 32 words"
+      },
+      {
+        "check": "parse:story2_narration",
+        "ok": true,
+        "detail": "story 2 narration is 36 words"
+      },
+      {
+        "check": "parse:story3_narration",
+        "ok": true,
+        "detail": "story 3 narration is 26 words"
+      },
+      {
+        "check": "parse:story4_narration",
+        "ok": true,
+        "detail": "story 4 narration is 35 words"
+      },
+      {
+        "check": "parse:story5_narration",
+        "ok": true,
+        "detail": "story 5 narration is 47 words"
+      },
+      {
+        "check": "mp4:size",
+        "ok": true,
+        "detail": "20261019.mp4 is 10835098 bytes (need >= 200000)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261019\\20261019.mp4",
+        "bytes": 10835098,
+        "min_bytes": 200000
+      },
+      {
+        "check": "video:video_stream",
+        "ok": true,
+        "detail": "video stream: h264",
+        "codec": "h264"
+      },
+      {
+        "check": "video:audio_stream",
+        "ok": true,
+        "detail": "audio stream: aac",
+        "codec": "aac"
+      },
+      {
+        "check": "video:duration",
+        "ok": true,
+        "detail": "78.24s (need 20.0-900.0s)",
+        "seconds": 78.243
+      },
+      {
+        "check": "video:resolution",
+        "ok": true,
+        "detail": "1080x1920 (need 1080x1920)",
+        "width": 1080,
+        "height": 1920
+      },
+      {
+        "check": "video:pix_fmt",
+        "ok": true,
+        "detail": "pix_fmt=yuv420p (need yuv420p for player compatibility)"
+      },
+      {
+        "check": "video:audio_level",
+        "ok": true,
+        "detail": "mean -19.4 dB, peak -4.4 dB (need mean > -50.0 dB)",
+        "mean_db": -19.4,
+        "peak_db": -4.4
+      },
+      {
+        "check": "video:frames_not_blank",
+        "ok": true,
+        "detail": "lowest luma stddev 38.3 across 3 sampled frames (need >= 3.0; a flat/black frame reads ~0)",
+        "samples": [
+          {
+            "at_s": 11.74,
+            "mean": 44.99,
+            "stddev": 54.24
+          },
+          {
+            "at_s": 39.12,
+            "mean": 45.46,
+            "stddev": 53.6
+          },
+          {
+            "at_s": 66.51,
+            "mean": 39.11,
+            "stddev": 38.3
+          }
+        ]
+      },
+      {
+        "check": "thumbnail:size",
+        "ok": true,
+        "detail": "20261019-thumb.png is 116260 bytes (need >= 20000)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261019\\20261019-thumb.png",
+        "bytes": 116260,
+        "min_bytes": 20000
+      },
+      {
+        "check": "thumbnail:resolution",
+        "ok": true,
+        "detail": "1280x720 (need 1280x720)",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "check": "upload_metadata:size",
+        "ok": true,
+        "detail": "upload.json is 3339 bytes (need >= 2)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261019\\upload.json",
+        "bytes": 3339,
+        "min_bytes": 2
+      },
+      {
+        "check": "upload_metadata:keys",
+        "ok": true,
+        "detail": "has ['title', 'description', 'tags']"
+      }
+    ]
+  },
+  "video": {
+    "duration_s": 78.243,
+    "size_bytes": 10835098,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "width": 1080,
+    "height": 1920,
+    "audio": {
+      "mean_db": -19.4,
+      "peak_db": -4.4
+    },
+    "frames": {
+      "samples": [
+        {
+          "at_s": 11.74,
+          "mean": 44.99,
+          "stddev": 54.24
+        },
+        {
+          "at_s": 39.12,
+          "mean": 45.46,
+          "stddev": 53.6
+        },
+        {
+          "at_s": 66.51,
+          "mean": 39.11,
+          "stddev": 38.3
+        }
+      ],
+      "min_stddev": 38.3
+    }
+  },
+  "manifest": {
+    "day": "20261019",
+    "date": "2026-10-19",
+    "date_label": "October 19, 2026",
+    "title": "Yesterday's News Today - October 19, 2026 | Mozambique Protects the ‘Butterfly Forest & More",
+    "story_count": 5,
+    "video": {
+      "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261019\\20261019.mp4",
+      "duration_s": 78.243,
+      "size_bytes": 10835098,
+      "video": {
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    },
+    "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261019\\20261019-thumb.png",
+    "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261019\\upload.json",
+    "tts_backends": [
+      "edge"
+    ],
+    "voiceover_verified": false,
+    "segments": [
+      {
+        "segment": "intro",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\intro.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\intro.wav",
+        "audio_seconds": 4.776,
+        "video_seconds": 5.433,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story1",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\story1.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\story1.wav",
+        "audio_seconds": 13.608,
+        "video_seconds": 14.267,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story2",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\story2.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\story2.wav",
+        "audio_seconds": 13.104,
+        "video_seconds": 13.767,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story3",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\story3.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\story3.wav",
+        "audio_seconds": 10.128,
+        "video_seconds": 10.778,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story4",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\story4.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\story4.wav",
+        "audio_seconds": 12.792,
+        "video_seconds": 13.442,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story5",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\story5.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\story5.wav",
+        "audio_seconds": 14.952,
+        "video_seconds": 15.602,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "outro",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\frames\\outro.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261019\\audio\\outro.wav",
+        "audio_seconds": 4.272,
+        "video_seconds": 4.933,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      }
+    ],
+    "parse_warnings": [],
+    "sources": [
+      {
+        "story": 1,
+        "headline": "Mozambique Protects the ‘Butterfly Forest’ of Mount Mabu, Home to 200 Species",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/mozambique-protects-the-butterfly-forest-of-mount-mabu-home-to-200-species/"
+      },
+      {
+        "story": 2,
+        "headline": "Unprecedented Collab Between China and The Met Uncovers Secrets of Huge Chinese Mural in NYC",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/unprecedented-collab-between-china-and-the-met-uncovers-secrets-of-chinese-mural-during-exhaustive-reproduction/"
+      },
+      {
+        "story": 3,
+        "headline": "Brazil Ends Long Tradition of 6-Day Workweek via Constitutional Amendment",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/brazil-ends-long-tradition-of-6-day-workweek-via-constitutional-amendment/"
+      },
+      {
+        "story": 4,
+        "headline": "Simple ‘Soil Steaming’ Found as Effective Replacement for Chemicals in Organic Strawberry Farming",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/simple-soil-steaming-found-as-effective-replacement-for-chemicals-in-organic-strawberry-farming/"
+      },
+      {
+        "story": 5,
+        "headline": "Good News in History, October 19",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/events061019/"
+      }
+    ]
+  },
+  "published": null
+}

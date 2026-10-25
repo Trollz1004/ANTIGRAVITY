@@ -18,6 +18,20 @@
         "joshlcoleman/Fable:latest": { "name": "Fable (via OmniRoute)" }
       }
     },
+    "agy_gemini": {
+      "npm": "@modelcontextprotocol/servers",
+      "name": "AGY Gemini Cmd (gemini-4-argon-high via agy CLI)",
+      "options": {
+        "command": "C:\\ANTIGRAVITY\\ops\\paperclip\\agy-gemini.cmd",
+        "args": []
+      },
+      "models": {
+        "auto/best-free": { "name": "gemini-4-argon-high" },
+        "gemini/coding": { "name": "claude-opus-5-5-high" },
+        "gemini/coding-fast": { "name": "claude-sonnet-5-5-high" },
+        "gemini/creative": { "name": "gemini-4-argon-high" }
+      }
+    },
     "ollama_local": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "Ollama Local T5500 (Direct Fail-Safe :11434/v1)",

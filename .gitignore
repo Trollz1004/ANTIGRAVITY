@@ -68,7 +68,7 @@ docker-compose.override.yml
 
 # Paperclip (revived 2026-08-23, Joshua direction: marketing/business-ops only, Freebuff CEO)
 # Historical decommission entries kept for stale paths; the live ops/paperclip-ceo code is tracked.
-paperclip-ceo/
+/paperclip-ceo/
 !ops/paperclip-ceo/
 ops/paperclip-ceo/wakes/
 ops/paperclip-ceo/state/
@@ -163,7 +163,7 @@ free/*/vendor/
 !frontend/react-app/.env.production
 
 # OmniRoute upstream source clone (1.8GB, has its own origin)
-omniroute/
+/omniroute/
 .worktrees/
 
 # ── Agent scratch output at the repo root ────────────────────────────────────
@@ -249,10 +249,7 @@ ops/*/state/
 # logs/ is ignored wholesale, but this marker is read by scripts/sabretooth-watchdog.ps1
 !logs/watchdog-boot-marker.txt
 
-# Paperclip materialized skill copies -- clones of skills already present here,
-# marked by .paperclip-materialized-skill.json. Paperclip re-creates them on
-# demand; committing them double-counts the skill inventory.
-.agents/skills/*--[0-9a-f]*/
+# .agents/skills and .agents/journals are tracked in full (hot tier).
 
 # graph.json is per-viewer Obsidian UI state, same as workspace.json above:
 # collapse-filter, hideUnresolved, showOrphans flip every time the graph pane
@@ -333,3 +330,18 @@ mission-os/marketing-plans.json
 mission-os/scc-comments.json
 mission-os/support-tickets.json
 mission-os/wheel-state.json
+
+# Unattended HermesDailyVideo daily outputs (archived to Drive cold tier per day, not git)
+ops/hermes/out/20[0-9][0-9][0-9][0-9][0-9][0-9]/
+ops/hermes/work/20[0-9][0-9][0-9][0-9][0-9][0-9]/
+content/yesterday-news/20[0-9][0-9][0-9][0-9][0-9][0-9]/
+ops/packets/hermes-youtube-20[0-9][0-9][0-9][0-9][0-9][0-9]/
+ops/marketing-inbox/20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-hermes-daily.md
+
+# Headless agy-job runtime scratch (agy-job.ps1 dispatcher itself is tracked)
+ops/agy-jobs/*.done
+ops/agy-jobs/*.meta
+ops/agy-jobs/*.out
+ops/agy-jobs/*.prompt
+ops/agy-jobs/*.worker.ps1
+ops/agy-jobs/*.txt

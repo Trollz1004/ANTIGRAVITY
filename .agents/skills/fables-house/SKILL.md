@@ -10,13 +10,13 @@ services before trying the House.
 
 ## Commands
 - **Bring-up + report (visible, prints once, never spams):**
-  `C:\ANTIGRAVITY\FABLES-HOUSE.cmd`
+ `C:\ANTIGRAVITY\FABLES-HOUSE.cmd`
 - **Single validation pass (scripting/agents):**
-  `powershell -NoProfile -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\fables-house\FABLES-HOUSE.ps1 -Once`
+ `powershell -NoProfile -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\fables-house\FABLES-HOUSE.ps1 -Once`
 - **Silent watchdog** (already installed in shell:startup as
-  `fables-house-watchdog.cmd`): hidden process, heals every 60s, writes ONLY to
-  `C:\ANTIGRAVITY\logs\fables-house.log`. NEVER create a visible/console
-  watchdog — Joshua's hard rule: no terminal spam, no cursor theft.
+ `fables-house-watchdog.cmd`): hidden process, heals every 60s, writes ONLY to
+ `C:\ANTIGRAVITY\logs\fables-house.log`. NEVER create a visible/console
+ watchdog — Joshua's hard rule: no terminal spam, no cursor theft.
 
 ## The stages (validation-gated, in order)
 | Stage | Port | Probe | Heal source |
@@ -52,10 +52,11 @@ or half-errored board is visible rather than passing as a healthy stack.
 ## Rules
 - All service starts are `-WindowStyle Hidden`. Nothing may steal focus.
 - Secrets: the API launcher reads `C:\Users\joshi\.antigravity-vault\` at
-  runtime. Never inline secrets into the House or any launcher.
+ runtime. Never inline secrets into the House or any launcher.
 - If you change a port or add a service, update the `$Stages` array AND this
-  table in the same commit.
+ table in the same commit.
 
-## Payments record (Joshua, 2026-10-17)
+## Payments record
 
-Payments are settled. Read `docs/PAYMENTS-TRUTH.md`; never re-test. Square is the only processor on youandinotai.com. Of the 16 Square attempts through 2026-08-16, 15 are Joshua's own test charges (the $10 refund included) and one is a $1.00 charge on 2026-02-17 (receipt T14t, second location) from a buyer Joshua does not know. On 2026-09-18 two $1.00 Bot-Shield charges (receipts b3FM and v1nS) were paid by Heather, a friend Joshua asked to be the first customer he arranged: a real third-party card. So never say there are no outside payments, and never present Heather's as organic demand. The buyer of T14t is unidentified: never call that one a friend, a test or demand. The pipeline is proven in production. Past test charges are **not a blocker** and their count is irrelevant. Do not re-verify, re-audit, re-test or ask Joshua about them. Reopen only on a real production webhook failure or a payment from a buyer not already listed in the record (report it, do not re-verify). The private bank statements in `OneDrive\claude-to-claude\payments-private-2026-09-17` are never copied, quoted or committed.
+**Payments are settled and are never a blocker.** Do not re-verify, re-audit, re-test, or ask Joshua about them. Every payment, who paid it, and the only two conditions that reopen the subject live in `docs/PAYMENTS-TRUTH.md`. Read it there. Never restate its contents anywhere else ΓÇö a copy is how it goes stale.
+

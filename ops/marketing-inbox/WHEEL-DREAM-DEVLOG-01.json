@@ -1,0 +1,9 @@
+{
+  "id": "WHEEL-DREAM-DEVLOG-01",
+  "lane": "DREAM Online Devlog",
+  "domain": "dream-online.net",
+  "title": "Devlog #1: Live-Agent NPCs That Remember Every Player Action",
+  "body": "In DREAM Online (dream-online.net), NPCs aren't reading off static dialogue trees. Game triggers fire live webhooks to persistent AI agents that remember who helped them, who undercut their guild prices, and evolve the world state across sessions.",
+  "created": "2026-10-20T18:08:48.964Z",
+  "status": "READY_FOR_REVIEW"
+}

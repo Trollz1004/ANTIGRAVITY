@@ -10,7 +10,7 @@ Phase 1: Context Discovery, Planning & Subagent Reconnaissance
 
 ### Phase 1: Context Discovery, Planning & Subagent Reconnaissance
 - [x] Load core standing skills (`gemini-cobuilder`, `ultracode-house`, `t5500-node`, `caveman`, `brainstorming`, `find-skills`, `create-skills`, `omniroute`, `paperclip`, `ceo-standing-session`, `planning-with-files`, `product-copy-business-only`, `revenue-model`, `affiliate-offer-of-offers`).
-- [x] Verify T5500 live status (`t5500_status` MCP: all 14 stages UP, including `Ollama (Fable pinned): UP`, `Date-app frontend :3200: UP`, `Date-app API :8000: UP`, `OmniRoute :20128: UP`, `Paperclip :3917: UP`, `Hermes :8643/:9119: UP`).
+- [x] Verify T5500 live status (`t5500_status` MCP: all 14 stages UP, including `Ollama (Fable pinned): UP`, `Date-app frontend :3200: UP`, `Date-app API :8000: UP`, `OmniRoute :20128: UP`, `Paperclip :4747: UP`, `Hermes :8643/:9119: UP`).
 - [x] Verify Ollama `api/ps` and `api/tags` (`joshlcoleman/Fable:latest` running in `llamacpp` runner, pinned until 2319; 4 models installed: `joshlcoleman/Fable:latest`, `joshlcoleman/dateapp-marketing:latest`, `hermes-support:latest`, `openclaw-sentry:latest`).
 - [ ] Survey all 16 screens in `C:\ANTIGRAVITY\mission-os\screens\` and `ops/t5500/` via parallel `research` subagents.
 - **Status:** in_progress

@@ -1,0 +1,339 @@
+{
+  "day": "20261022",
+  "started": "2026-10-23T06:30:02.794133-04:00",
+  "finished": "2026-10-23T06:31:44.974843-04:00",
+  "host": "T5500-2-XEON-72",
+  "unattended": true,
+  "shipped": false,
+  "exit_code": 3,
+  "stages": [
+    {
+      "stage": "preflight",
+      "status": "OK",
+      "detail": "ffmpeg+ffprobe on PATH, repo at C:\\ANTIGRAVITY"
+    },
+    {
+      "stage": "source",
+      "status": "SKIPPED",
+      "detail": "20261022 already sourced (4272 bytes)"
+    },
+    {
+      "stage": "parse",
+      "status": "OK",
+      "detail": "5 stories, title \"Yesterday's News Today — October 22, 2026\"",
+      "warnings": []
+    },
+    {
+      "stage": "voice",
+      "status": "OK",
+      "detail": "backend=edge (omniroute: http://127.0.0.1:20128/v1: HTTP 400: No credentials for provider: openai; edge: ok)",
+      "backend": "edge"
+    },
+    {
+      "stage": "render",
+      "status": "OK",
+      "detail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261022\\20261022.mp4 (87.712s, 12237156 bytes)"
+    },
+    {
+      "stage": "verify",
+      "status": "OK",
+      "detail": "18 gates passed: 87.712s, 1080x1920, mean audio -19.4 dB, min luma stddev 55.04"
+    },
+    {
+      "stage": "upload",
+      "status": "BLOCKED",
+      "detail": "no YouTube credentials at C:\\ANTIGRAVITY\\ops\\youtube\\.credentials\\youtube-oauth.json -- run `python ops/youtube/yt_upload.py auth --client-file ...` (TRO-3). The video is rendered and verified; it is not published."
+    }
+  ],
+  "gates": {
+    "passed": 18,
+    "checks": [
+      {
+        "check": "parse:stories",
+        "ok": true,
+        "detail": "parsed 5 stories (need >= 3)"
+      },
+      {
+        "check": "parse:story1_narration",
+        "ok": true,
+        "detail": "story 1 narration is 16 words"
+      },
+      {
+        "check": "parse:story2_narration",
+        "ok": true,
+        "detail": "story 2 narration is 55 words"
+      },
+      {
+        "check": "parse:story3_narration",
+        "ok": true,
+        "detail": "story 3 narration is 35 words"
+      },
+      {
+        "check": "parse:story4_narration",
+        "ok": true,
+        "detail": "story 4 narration is 40 words"
+      },
+      {
+        "check": "parse:story5_narration",
+        "ok": true,
+        "detail": "story 5 narration is 34 words"
+      },
+      {
+        "check": "mp4:size",
+        "ok": true,
+        "detail": "20261022.mp4 is 12237156 bytes (need >= 200000)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261022\\20261022.mp4",
+        "bytes": 12237156,
+        "min_bytes": 200000
+      },
+      {
+        "check": "video:video_stream",
+        "ok": true,
+        "detail": "video stream: h264",
+        "codec": "h264"
+      },
+      {
+        "check": "video:audio_stream",
+        "ok": true,
+        "detail": "audio stream: aac",
+        "codec": "aac"
+      },
+      {
+        "check": "video:duration",
+        "ok": true,
+        "detail": "87.71s (need 20.0-900.0s)",
+        "seconds": 87.712
+      },
+      {
+        "check": "video:resolution",
+        "ok": true,
+        "detail": "1080x1920 (need 1080x1920)",
+        "width": 1080,
+        "height": 1920
+      },
+      {
+        "check": "video:pix_fmt",
+        "ok": true,
+        "detail": "pix_fmt=yuv420p (need yuv420p for player compatibility)"
+      },
+      {
+        "check": "video:audio_level",
+        "ok": true,
+        "detail": "mean -19.4 dB, peak -4.4 dB (need mean > -50.0 dB)",
+        "mean_db": -19.4,
+        "peak_db": -4.4
+      },
+      {
+        "check": "video:frames_not_blank",
+        "ok": true,
+        "detail": "lowest luma stddev 55.04 across 3 sampled frames (need >= 3.0; a flat/black frame reads ~0)",
+        "samples": [
+          {
+            "at_s": 13.16,
+            "mean": 46.27,
+            "stddev": 55.04
+          },
+          {
+            "at_s": 43.86,
+            "mean": 46.96,
+            "stddev": 56.94
+          },
+          {
+            "at_s": 74.56,
+            "mean": 50.21,
+            "stddev": 59.04
+          }
+        ]
+      },
+      {
+        "check": "thumbnail:size",
+        "ok": true,
+        "detail": "20261022-thumb.png is 66957 bytes (need >= 20000)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261022\\20261022-thumb.png",
+        "bytes": 66957,
+        "min_bytes": 20000
+      },
+      {
+        "check": "thumbnail:resolution",
+        "ok": true,
+        "detail": "1280x720 (need 1280x720)",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "check": "upload_metadata:size",
+        "ok": true,
+        "detail": "upload.json is 3583 bytes (need >= 2)",
+        "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261022\\upload.json",
+        "bytes": 3583,
+        "min_bytes": 2
+      },
+      {
+        "check": "upload_metadata:keys",
+        "ok": true,
+        "detail": "has ['title', 'description', 'tags']"
+      }
+    ]
+  },
+  "video": {
+    "duration_s": 87.712,
+    "size_bytes": 12237156,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "width": 1080,
+    "height": 1920,
+    "audio": {
+      "mean_db": -19.4,
+      "peak_db": -4.4
+    },
+    "frames": {
+      "samples": [
+        {
+          "at_s": 13.16,
+          "mean": 46.27,
+          "stddev": 55.04
+        },
+        {
+          "at_s": 43.86,
+          "mean": 46.96,
+          "stddev": 56.94
+        },
+        {
+          "at_s": 74.56,
+          "mean": 50.21,
+          "stddev": 59.04
+        }
+      ],
+      "min_stddev": 55.04
+    }
+  },
+  "manifest": {
+    "day": "20261022",
+    "date": "2026-10-22",
+    "date_label": "October 22, 2026",
+    "title": "Yesterday's News Today - October 22, 2026 | Towering Figure & More",
+    "story_count": 5,
+    "video": {
+      "path": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261022\\20261022.mp4",
+      "duration_s": 87.712,
+      "size_bytes": 12237156,
+      "video": {
+        "codec": "h264",
+        "pix_fmt": "yuv420p",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    },
+    "thumbnail": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261022\\20261022-thumb.png",
+    "upload_metadata": "C:\\ANTIGRAVITY\\ops\\hermes\\out\\20261022\\upload.json",
+    "tts_backends": [
+      "edge"
+    ],
+    "voiceover_verified": false,
+    "segments": [
+      {
+        "segment": "intro",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\intro.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\intro.wav",
+        "audio_seconds": 4.848,
+        "video_seconds": 5.5,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story1",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\story1.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\story1.wav",
+        "audio_seconds": 5.568,
+        "video_seconds": 6.233,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story2",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\story2.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\story2.wav",
+        "audio_seconds": 24.12,
+        "video_seconds": 24.77,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story3",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\story3.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\story3.wav",
+        "audio_seconds": 13.464,
+        "video_seconds": 14.114,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story4",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\story4.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\story4.wav",
+        "audio_seconds": 15.984,
+        "video_seconds": 16.634,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "story5",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\story5.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\story5.wav",
+        "audio_seconds": 14.856,
+        "video_seconds": 15.506,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      },
+      {
+        "segment": "outro",
+        "frame": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\frames\\outro.png",
+        "audio": "C:\\ANTIGRAVITY\\ops\\hermes\\work\\20261022\\audio\\outro.wav",
+        "audio_seconds": 4.272,
+        "video_seconds": 4.933,
+        "tts_backend": "edge",
+        "tts_voice": "en-US-ChristopherNeural"
+      }
+    ],
+    "parse_warnings": [],
+    "sources": [
+      {
+        "story": 1,
+        "headline": "A Towering Figure of Tolerance From 2,500 Years Ago Has Found a New Home in Atlanta",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/a-towering-figure-of-tolerance-from-2500-years-ago-has-found-a-new-home-in-atlanta/"
+      },
+      {
+        "story": 2,
+        "headline": "‘World’s Largest Deforestation Project’ Halted Early, Saving Potentially 4 Million Acres",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/indonesia-calls-an-early-halt-to-worlds-largest-deforestation-project-saving-potentially-4-million-acres/"
+      },
+      {
+        "story": 3,
+        "headline": "Major Supermarket Begins Wide-Scale Tests to Bring Heritage Apple Varieties to Market",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/major-supermarket-begins-wide-scale-tests-to-bring-heritage-apple-varieties-to-market/"
+      },
+      {
+        "story": 4,
+        "headline": "Coconut Oil Could Make Great Sustainable Jet Fuel, Pioneering Experiments Demonstrate",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/coconut-oil-could-make-great-sustainable-jet-fuel-pioneering-experiments-demonstrate/"
+      },
+      {
+        "story": 5,
+        "headline": "Samoan Island Witnesses Explosion of Native Wildlife Following Removal of Invasive Rats and Pigs",
+        "site": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/samoan-island-witnesses-explosion-of-native-wildlife-following-removal-of-invasive-rats-and-pigs/"
+      }
+    ]
+  },
+  "published": null
+}

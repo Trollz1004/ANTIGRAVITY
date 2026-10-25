@@ -73,7 +73,15 @@ for (let i = 0; i < inArgs.length; i++) {
   if (a.startsWith("--sandbox=")) { out.push("--sandbox"); continue; }
   if (a === "--output-format") { const f = next(); streamJson = f === "stream-json"; out.push("--output-format", f); continue; }
   if (a.startsWith("--output-format=")) { streamJson = a.endsWith("=stream-json"); out.push(a); continue; }
-  if (a === "--prompt" || a === "-p" || a === "--print") { printMode = true; out.push("--print", next()); continue; }
+  if (a === "--prompt" || a === "-p" || a === "--print") {
+    printMode = true;
+    let pVal = String(next() || "");
+    if (pVal.length > 24000) {
+      pVal = pVal.slice(0, 10000) + "\n\n...[truncated for Win32 command-line length limit]...\n\n" + pVal.slice(-13500);
+    }
+    out.push("--print", pVal);
+    continue;
+  }
   if (a === "--version" || a === "-v") { out.push("--version"); continue; }
   // Model translation for OmniRoute / Paperclip agy models
   if (a === "--model" || a === "-m") { out.push("--model", mapAgyModel(next())); continue; }
@@ -81,7 +89,11 @@ for (let i = 0; i < inArgs.length; i++) {
   // gemini-cli-only flags agy does not know: drop with their values
   if (a === "--checkpointing" || a === "--debug" || a === "-d") continue;
   if (a === "--include-directories") { for (const d of String(next()).split(",")) out.push("--add-dir", d); continue; }
-  out.push(a);
+  if (typeof a === "string" && a.length > 24000) {
+    out.push(a.slice(0, 10000) + "\n\n...[truncated for Win32 command-line length limit]...\n\n" + a.slice(-13500));
+  } else {
+    out.push(a);
+  }
 }
 if (printMode && !out.includes("--print-timeout")) out.push("--print-timeout", "0s");
 

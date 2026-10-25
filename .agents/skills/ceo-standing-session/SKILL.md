@@ -1,11 +1,11 @@
 ---
 name: ceo-standing-session
 description: >
-  Buffy CEO's standing session playbook for running Paperclip properly. Load at the
-  START of every CEO session, before any task work. Fuses the MCP toolset with the
-  best catalog skills into one operating loop: orient -> verify -> work -> prove ->
-  deliver through the judge lane. Use whenever a CEO/Freebuff session starts, when
-  resuming after a restart, or when any Paperclip operating decision is needed.
+ Buffy CEO's standing session playbook for running Paperclip properly. Load at the
+ START of every CEO session, before any task work. Fuses the MCP toolset with the
+ best catalog skills into one operating loop: orient -> verify -> work -> prove ->
+ deliver through the judge lane. Use whenever a CEO/Freebuff session starts, when
+ resuming after a restart, or when any Paperclip operating decision is needed.
 ---
 
 # CEO Standing Session
@@ -17,21 +17,21 @@ and which catalog skill governs each phase. Everything else is task-specific.
 ## 1. Orient (first 5 tool calls, every session)
 
 1. **Journal**: read `.agents/journals/freebuff-ceo/STATE.md` and today's
-   `.agents/memory/YYYY-MM-DD.md`. Past-you wrote it so present-you doesn't guess.
+ `.agents/memory/YYYY-MM-DD.md`. Past-you wrote it so present-you doesn't guess.
 2. **Identity probes** — a listening port is NOT identity. Probe and classify each
-   service UP / DOWN / WRONG SERVICE / AUTH MISSING / NOT CONFIGURED:
-   - Paperclip (marketing only, NOT Mission Control) `:3917` → `/api/health` (expect status ok, local_trusted)
-   - CEO bridge `:3140` → `/health`
-   - OmniRoute `:20128`, Mission Control = JARVIS/OPSIS `:3130` (Hermes JARVIS `:9119`), MC5 legacy `:3151` (not running), OpenClaw gateway `:18789`
-   - If DOWN: restart from the runbook (`ops/paperclip-ceo/`, `.freebuff/run.md`).
-     Bridge must start via `node start.js` (loads `.env`) — never bare `bridge.js`.
-   - After an npx-cache refresh, restart npx-spawned services — they hold stale code.
+ service UP / DOWN / WRONG SERVICE / AUTH MISSING / NOT CONFIGURED:
+ - Paperclip (marketing only, NOT Mission Control) `:3917` → `/api/health` (expect status ok, local_trusted)
+ - CEO bridge `:3140` → `/health`
+ - OmniRoute `:20128`, Mission Control = JARVIS/OPSIS `:3130` (Hermes JARVIS `:9119`), MC5 legacy `:3151` (not running), OpenClaw gateway `:18789`
+ - If DOWN: restart from the runbook (`ops/paperclip-ceo/`, `.freebuff/run.md`).
+ Bridge must start via `node start.js` (loads `.env`) — never bare `bridge.js`.
+ - After an npx-cache refresh, restart npx-spawned services — they hold stale code.
 3. **Git**: `git status -sb` + `git log --oneline -3`. Know local vs origin before
-   touching anything. Pull with `--ff-only` only.
+ touching anything. Pull with `--ff-only` only.
 4. **MCP check**: one real tool call on the baseline (discovery alone is not proof):
-   mission-mcp, antigravity-files, brain-mcp, playwright, supabase.
+ mission-mcp, antigravity-files, brain-mcp, playwright, supabase.
 5. **Board reds**: open Paperclip issues with status blocked/attention; the watchdog
-   routine + bridge auto-disposition handle mechanical ones — verify, don't duplicate.
+ routine + bridge auto-disposition handle mechanical ones — verify, don't duplicate.
 
 ## 2. MCP usage map (always prefer these over ad-hoc shell work)
 
@@ -75,28 +75,29 @@ Context is scarce: load ONLY the phase skill, skim, act. Never preload more than
 
 - **One root**: `C:\ANTIGRAVITY`. No scratch in repo root — use `.freebuff/` temp.
 - **Evidence standard**: every claim VERIFIED / UNVERIFIED / BLOCKED with a handle
-  (path, command output, identity response). Exit codes and green dots are not proof.
+ (path, command output, identity response). Exit codes and green dots are not proof.
 - **Judge lane**: workers never push/merge/delete. Commit locally → reset judge
-  session → ONE review issue → exactly ONE heartbeat → relay pushes on
-  APPROVE + JUDGE-PUSH sentinel. NEEDS-WORK → fix honestly → resubmit. Never push
-  manually, never invent a tool-call result.
+ session → ONE review issue → exactly ONE heartbeat → relay pushes on
+ APPROVE + JUDGE-PUSH sentinel. NEEDS-WORK → fix honestly → resubmit. Never push
+ manually, never invent a tool-call result.
 - **No secrets** in files, chat, logs. Keys live in env/OmniRoute/Paperclip secrets.
 - **Payments**: Square-only, verify against the real rail or the task is not done.
 - **Marketing**: never publishes directly — drops to `ops/marketing-inbox/`.
 - **Grok is capped**: no heartbeats to capped/paused agents without positive evidence
-  of clearance.
+ of clearance.
 - **Memory write-back**: at session end, write what future-you needs to the journal
-  and mission-mcp. Files beat mental notes.
+ and mission-mcp. Files beat mental notes.
 
 ## 5. Session close
 
 1. Journal entry: what was verified, what changed, what's left.
 2. `mission-mcp store_memory` for any durable finding.
 3. Vault update (`C:\ANTIGRAVITY\Antigravity\00 HOME.md` for ANT/AIS/YOU, or
-   `D:\DREAM ONLINE\00 HOME.md` for DRE) if a durable fact changed — there is no
-   `nodes/retired 9020/` vault; node retired 9020 is dead and there are no `nodes/<name>/` vaults.
+ `D:\DREAM ONLINE\00 HOME.md` for DRE) if a durable fact changed — there is no
+ `nodes/retired 9020/` vault; node retired 9020 is dead and there are no `nodes/<name>/` vaults.
 4. Leave services UP and log locations recorded.
 
-## Payments record (Joshua, 2026-10-17)
+## Payments record
 
-Payments are settled. Read `docs/PAYMENTS-TRUTH.md`; never re-test. Square is the only processor on youandinotai.com. Of the 16 Square attempts through 2026-08-16, 15 are Joshua's own test charges (the $10 refund included) and one is a $1.00 charge on 2026-02-17 (receipt T14t, second location) from a buyer Joshua does not know. On 2026-09-18 two $1.00 Bot-Shield charges (receipts b3FM and v1nS) were paid by Heather, a friend Joshua asked to be the first customer he arranged: a real third-party card. So never say there are no outside payments, and never present Heather's as organic demand. The buyer of T14t is unidentified: never call that one a friend, a test or demand. The pipeline is proven in production. Past test charges are **not a blocker** and their count is irrelevant. Do not re-verify, re-audit, re-test or ask Joshua about them. Reopen only on a real production webhook failure or a payment from a buyer not already listed in the record (report it, do not re-verify). The private bank statements in `OneDrive\claude-to-claude\payments-private-2026-09-17` are never copied, quoted or committed.
+**Payments are settled and are never a blocker.** Do not re-verify, re-audit, re-test, or ask Joshua about them. Every payment, who paid it, and the only two conditions that reopen the subject live in `docs/PAYMENTS-TRUTH.md`. Read it there. Never restate its contents anywhere else ΓÇö a copy is how it goes stale.
+

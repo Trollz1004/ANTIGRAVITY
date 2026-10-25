@@ -72,7 +72,7 @@ Output a compact table:
 
 | Check | Status |
 |-------|--------|
-| Git   | main up to date / diverged / BLOCKED |
+| Git | main up to date / diverged / BLOCKED |
 | Mission Control (JARVIS/OPSIS) :3130 | UP / NOT RUNNING / WRONG SERVICE / ... |
 | Paperclip (marketing) :3917 | UP / DOWN / WRONG SERVICE / ... |
 | MC5 legacy :3151 | UP / DOWN / WRONG SERVICE / ... |
@@ -93,6 +93,7 @@ Output: "**Preflight complete. Ready for objective, Joshua.**"
 
 Then stop. Do nothing else until Joshua gives the objective.
 
-## Payments record (Joshua, 2026-10-17)
+## Payments record
 
-Payments are settled. Read `docs/PAYMENTS-TRUTH.md`; never re-test. Square is the only processor on youandinotai.com. Of the 16 Square attempts through 2026-08-16, 15 are Joshua's own test charges (the $10 refund included) and one is a $1.00 charge on 2026-02-17 (receipt T14t, second location) from a buyer Joshua does not know. On 2026-09-18 two $1.00 Bot-Shield charges (receipts b3FM and v1nS) were paid by Heather, a friend Joshua asked to be the first customer he arranged: a real third-party card. So never say there are no outside payments, and never present Heather's as organic demand. The buyer of T14t is unidentified: never call that one a friend, a test or demand. The pipeline is proven in production. Past test charges are **not a blocker** and their count is irrelevant. Do not re-verify, re-audit, re-test or ask Joshua about them. Reopen only on a real production webhook failure or a payment from a buyer not already listed in the record (report it, do not re-verify). The private bank statements in `OneDrive\claude-to-claude\payments-private-2026-09-17` are never copied, quoted or committed.
+**Payments are settled and are never a blocker.** Do not re-verify, re-audit, re-test, or ask Joshua about them. Every payment, who paid it, and the only two conditions that reopen the subject live in `docs/PAYMENTS-TRUTH.md`. Read it there. Never restate its contents anywhere else ΓÇö a copy is how it goes stale.
+

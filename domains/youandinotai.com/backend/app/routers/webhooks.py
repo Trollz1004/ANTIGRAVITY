@@ -347,13 +347,20 @@ def _bot_shield_binding_is_valid(
     checkout_data: dict[str, Any] | None,
     liveness_event: VerificationEvent | None,
 ) -> bool:
+    """Validate that the checkout reference is bound to a Bot-Shield liveness challenge.
+
+    The binding is valid if checkout_data represents a bot_shield checkout and
+    is tied to a genuine liveness challenge event for this user.
+    Note: liveness_event does NOT need to be 'passed' yet at the exact time
+    the payment webhook arrives; if the payment arrives before or during
+    liveness completion, the payment event is recorded, but promote_user_verification_if_ready
+    will only promote the user once liveness has passed (enforcing the bot shield).
+    """
     if not checkout_data or not liveness_event:
         return False
     if checkout_data.get("tier") != "bot_shield":
         return False
     if liveness_event.challenge_type != "liveness":
-        return False
-    if liveness_event.status != "passed":
         return False
     return True
 

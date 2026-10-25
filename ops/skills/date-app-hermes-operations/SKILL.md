@@ -43,8 +43,8 @@ A **200 is not a working page**. Screenshot or CDP `document.body.innerText` bef
 
 ## Money
 
-- Square **only**. Location `LY5GN09F5AN83`. 15 completed payments across the two locations (see the record). Do not add other wallets.
-- **Payments are CLOSED** (2026-09-16). Signed record: `docs/PAYMENTS-TRUTH.md` (SHA-256 `01ba5ffe56d4b58ce5b26890d1fac57adbe739ceaa2d8ea3d2259ba7c9c1a815`); memory token `PAYMENTS-VERIFIED-square-2026-07-14`. Of the 16 payment attempts through 2026-08-16, 15 are Joshua's own test charges (the count is irrelevant) and one is a $1.00 charge on 2026-02-17 (receipt T14t) from a buyer Joshua does not know, never called a friend, a test or demand; two $1.00 charges on 2026-09-18 (receipts b3FM, v1nS) were paid by Heather, a friend Joshua asked to be the first customer; and 100% of revenue stays with the business. A payments concern is only a finding if it cites a specific line of PAYMENTS-TRUTH.md that the evidence contradicts. `wallet_rails_proven:false` in dev is an artifact, not a finding.
+- Square **only**. Location `LY5GN09F5AN83`. Do not add other wallets.
+- Payments are settled; the full record is docs/PAYMENTS-TRUTH.md. Read it there; never restate it here.
 - Do **not** cycle on `wallet_rails_proven` / local `db_connected`. Prod DB is Supabase.
 - No paid ads until AI pays for AI. Free channels only (organic Reddit/X/TikTok, NotebookLM $20/mo already paid).
 - Goal: $50K in 12 months. AI services store is the path to cover ~$600/mo inference.
