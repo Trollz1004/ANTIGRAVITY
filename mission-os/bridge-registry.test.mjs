@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildCatalog, decorateFreshness, probeSingleEntry } from './bridge-registry.mjs';
+import { buildCatalog, decorateFreshness, discoverDynamicTools, probeSingleEntry } from './bridge-registry.mjs';
 
 test('catalog covers all 3 nodes and 8 lanes (24 entries) as a directory, never leaking secret values', () => {
   const catalog = buildCatalog();
@@ -54,4 +54,13 @@ test('probeSingleEntry judges services by identity string and reports WRONG_SERV
   const downRes = await probeSingleEntry(entry, { fetchImpl: fakeFetchDown, nowIso: () => '2026-10-26T00:30:05.000Z' });
   assert.equal(downRes.status, 'DOWN');
   assert.equal(downRes.last_verified_at, '2026-10-26T00:30:05.000Z');
+});
+
+test('discoverDynamicTools reads tool lists dynamically at call time and never returns a hardcoded fallback', () => {
+  assert.equal(discoverDynamicTools(null), null);
+  assert.equal(discoverDynamicTools({ status: 'ok' }), null);
+  assert.deepEqual(
+    discoverDynamicTools({ tools: [{ name: 'node_health' }, { name: 'bridges' }] }),
+    ['node_health', 'bridges']
+  );
 });

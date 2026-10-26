@@ -152,8 +152,7 @@ function Test-Cloud([string]$name, [string]$url, [hashtable]$headers) {
 $Domains = @(
     @{ Host = 'youandinotai.com';     Mark = 'assets/index-';        Origin = 3200 },
     @{ Host = 'onlinerecycle.net';    Mark = 'OnlineRecycle';        Origin = 9160 },
-    @{ Host = 'dream-online.net';     Mark = 'DREAM Online';         Origin = 9160 },
-    @{ Host = 'untilnokidinneed.com'; Mark = 'Until No Kid In Need'; Origin = 9160 }
+    @{ Host = 'dream-online.net';     Mark = 'DREAM Online';         Origin = 9160 }
 )
 $script:NsCache = @{}
 
@@ -206,7 +205,8 @@ $Stages = @(
                Log ('  OllamaSetup repair finished (llama-server exists=' + (Test-Path $llamaSrv) + ')')
            }
            if (-not (Test-Port 11434)) {
-               Log '  starting ollama serve'
+               Log '  starting ollama serve (127.0.0.1:11434)'
+               $env:OLLAMA_HOST = '127.0.0.1:11434'
                Start-Process -FilePath $Ollama -ArgumentList 'serve' -WindowStyle Hidden
                $w = 0; while ($w -lt 40 -and -not (Test-Port 11434)) { Start-Sleep -Seconds 1; $w++ }
            }
@@ -292,6 +292,18 @@ $Stages = @(
            }
            Start-Process -FilePath $Cloudflared -ArgumentList @('tunnel', '--config', $CfConfig, '--no-autoupdate', '--logfile', (Join-Path $Repo 'logs\cloudflared-t5500.log'), '--loglevel', 'info', 'run') -WindowStyle Hidden
            Log '  started cloudflared tunnel'
+       } },
+
+    @{ Key = 'hermes-gateway'; Name = 'Hermes API gateway :8643'; Settle = 25
+       Probe = { Test-Http 'http://127.0.0.1:8643/health' 6 'hermes-agent' }
+       Heal  = {
+           if (Test-Port 8643) { Stop-PortOwner 8643 }
+           $hDir = Join-Path $env:LOCALAPPDATA 'hermes'
+           $hPy = Join-Path $hDir 'tools\python-3.14.7+20260901-win32-x64\python.exe'
+           if (Test-Path $hPy) {
+               Start-Process -FilePath $hPy -ArgumentList @('-m', 'hermes_cli.main', 'gateway', 'run') -WorkingDirectory $hDir -WindowStyle Hidden
+               Log '  started Hermes API gateway :8643'
+           }
        } },
 
     @{ Key = 'mission-control'; Name = 'Mission Control (JARVIS/OPSIS) :3130'; Settle = 30

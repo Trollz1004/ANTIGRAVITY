@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -191,7 +191,7 @@ async function startServer() {
       server: {
         middlewareMode: true,
         // Public traffic arrives via the cloudflared tunnel with the real
-        // hostname — Vite's host check 403s anything not listed here.
+        // hostname â€” Vite's host check 403s anything not listed here.
         allowedHosts: ['.youandinotai.com', 'localhost', '127.0.0.1'],
       },
       appType: 'spa',

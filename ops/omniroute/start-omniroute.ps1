@@ -1,8 +1,9 @@
-# Starts OmniRoute (model gateway) on the T5500 at :20128.
+﻿# Starts OmniRoute (model gateway) on the T5500 at :20128.
 # Run by scheduled task "ANTIGRAVITY OmniRoute" (logon, non-elevated).
 # Data + keys live in %USERPROFILE%\.omniroute (never printed).
 param([int]$Port = 20128)
 $ErrorActionPreference = 'Continue'
+$env:HOSTNAME = '192.168.0.15'
 $log = 'C:\ANTIGRAVITY\logs\omniroute.log'
 New-Item -ItemType Directory -Force -Path (Split-Path $log) | Out-Null
 

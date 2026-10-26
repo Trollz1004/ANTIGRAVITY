@@ -696,7 +696,7 @@ async function readJsonBody(req, maxBytes = 65536) {
   } catch { const error = new Error('Invalid JSON object'); error.status = 400; throw error; }
 }
 
-http.createServer(async (req, res) => {
+const handleMissionRequest = async (req, res) => {
   const sec = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer' };
   try {
     const u = new URL(req.url, 'http://x');
@@ -803,6 +803,17 @@ http.createServer(async (req, res) => {
           entry,
         }, null, 2));
       }
+    }
+
+    if (u.pathname === '/api/mos-state.json' && req.method === 'GET') {
+      const remote = req.socket?.remoteAddress || '';
+      const isLocalOrLan = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(remote) || /^(?:::ffff:)?192\.168\.0\.\d+$/.test(remote);
+      if (!isLocalOrLan || req.headers['sec-fetch-site'] === 'cross-site') {
+        res.writeHead(403, { ...sec, 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ ok: false, error: 'Loopback or LAN headless requests only' }));
+      }
+      res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+      return res.end(JSON.stringify(await state(), null, 2));
     }
 
     const denied = guardRequest(req, PORT);
@@ -1152,4 +1163,10 @@ http.createServer(async (req, res) => {
     }
     res.end(JSON.stringify({ok:false,error:e.status ? e.message : (e.message || 'Internal error')}));
   }
-}).listen(PORT, '127.0.0.1', () => console.log(`mission-agent-os on http://127.0.0.1:${PORT}`));
+};
+http.createServer(handleMissionRequest).listen(PORT, '127.0.0.1', () => console.log(`mission-agent-os on http://127.0.0.1:${PORT}`));
+const LAN_HOST = process.env.MISSION_OS_LAN_HOST || '192.168.0.15';
+const hasLanInterface = Object.values(os.networkInterfaces()).flat().some((i) => i && i.address === LAN_HOST);
+if (hasLanInterface && LAN_HOST !== '127.0.0.1' && LAN_HOST !== '0.0.0.0') {
+  http.createServer(handleMissionRequest).listen(PORT, LAN_HOST, () => console.log(`mission-agent-os LAN directory on http://${LAN_HOST}:${PORT}`));
+}
