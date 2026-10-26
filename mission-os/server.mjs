@@ -45,6 +45,7 @@ import {
   getLiveSettingsTab,
 } from './live-tabs-backend.mjs';
 import { buildInbox, performAction } from '../mission-control/lib/inbox.mjs';
+import { getBridgeRegistry, verifyLane, verifyAllLanes } from './bridge-registry.mjs';
 
 const ROOT = 'C:/ANTIGRAVITY';
 const PORT = Number(process.env.MISSION_OS_PORT || 3130);
@@ -135,11 +136,11 @@ let bridgeCache = {
   data: {
     generated: new Date().toISOString(),
     bridges: [
-      { id: 'gemini', name: 'Gemini 4 Argon / Ultra (agy)', installed: fs.existsSync(BINARIES.agy), authenticated: true, inferenceVerified: true, auth: 'Google OAuth (Ultra Subscription via agy / http://127.0.0.1:3130/v1)', protocol: 'CLI / OpenAI /v1', status: fs.existsSync(BINARIES.agy) ? 'UP' : 'DOWN', version: 'agy 1.4.3', canRun: fs.existsSync(BINARIES.agy) },
-      { id: 'claude', name: 'Claude Code (Opus / Sonnet)', installed: fs.existsSync(BINARIES.claude), authenticated: true, inferenceVerified: true, auth: 'Anthropic OAuth Login Only (Zero API Key)', protocol: 'CLI / MCP', status: fs.existsSync(BINARIES.claude) ? 'UP' : 'DOWN', version: 'Claude Code 2.1.278', canRun: fs.existsSync(BINARIES.claude) },
-      { id: 'codex', name: 'OpenAI Codex', installed: fs.existsSync(BINARIES.codex), authenticated: true, inferenceVerified: true, auth: 'OpenAI OAuth Login', protocol: 'CLI / ACP (codex exec)', status: fs.existsSync(BINARIES.codex) ? 'UP' : 'DOWN', version: 'codex-cli 0.163.0', canRun: fs.existsSync(BINARIES.codex) },
-      { id: 'grok', name: 'xAI Grok', installed: fs.existsSync(BINARIES.grok), authenticated: true, inferenceVerified: true, auth: 'xAI OAuth Login', protocol: 'CLI / ACP (streaming-json)', status: fs.existsSync(BINARIES.grok) ? 'UP' : 'DOWN', version: 'grok 1.0.62', canRun: fs.existsSync(BINARIES.grok) },
-      { id: 'hermes', name: 'Hermes Agent (@t5500_bot · OmniRoute)', installed: fs.existsSync(BINARIES.hermes), authenticated: true, inferenceVerified: true, auth: 'OmniRoute (http://192.168.0.15:20128/v1 · hermes-support) + @t5500_bot', protocol: 'OmniRoute /v1 + A2A (:8643 & :9119)', status: fs.existsSync(BINARIES.hermes) ? 'UP' : 'DOWN', version: 'hermes-agent 0.21.7', canRun: true },
+      { id: 'gemini', name: 'Gemini 4 Argon / Ultra (agy)', installed: fs.existsSync(BINARIES.agy), authenticated: true, inferenceVerified: true, auth: 'Google OAuth (Ultra Subscription via agy / http://127.0.0.1:3130/v1)', protocol: 'CLI / OpenAI /v1', status: fs.existsSync(BINARIES.agy) ? 'UP' : 'DOWN', version: 'unverified', canRun: fs.existsSync(BINARIES.agy) },
+      { id: 'claude', name: 'Claude Code (Opus / Sonnet)', installed: fs.existsSync(BINARIES.claude), authenticated: true, inferenceVerified: true, auth: 'Anthropic OAuth Login Only (Zero API Key)', protocol: 'CLI / MCP', status: fs.existsSync(BINARIES.claude) ? 'UP' : 'DOWN', version: 'unverified', canRun: fs.existsSync(BINARIES.claude) },
+      { id: 'codex', name: 'OpenAI Codex', installed: fs.existsSync(BINARIES.codex), authenticated: true, inferenceVerified: true, auth: 'OpenAI OAuth Login', protocol: 'CLI / ACP (codex exec)', status: fs.existsSync(BINARIES.codex) ? 'UP' : 'DOWN', version: 'unverified', canRun: fs.existsSync(BINARIES.codex) },
+      { id: 'grok', name: 'xAI Grok', installed: fs.existsSync(BINARIES.grok), authenticated: true, inferenceVerified: true, auth: 'xAI OAuth Login', protocol: 'CLI / ACP (streaming-json)', status: fs.existsSync(BINARIES.grok) ? 'UP' : 'DOWN', version: 'unverified', canRun: fs.existsSync(BINARIES.grok) },
+      { id: 'hermes', name: 'Hermes Agent (@t5500_bot · OmniRoute)', installed: fs.existsSync(BINARIES.hermes), authenticated: true, inferenceVerified: true, auth: 'OmniRoute (http://192.168.0.15:20128/v1 · hermes-support) + @t5500_bot', protocol: 'OmniRoute /v1 + A2A (:8643 & :9119)', status: fs.existsSync(BINARIES.hermes) ? 'UP' : 'DOWN', version: 'unverified', canRun: true },
       { id: 'fable', name: 'Fable Local (RTX 3070 8GB)', installed: fs.existsSync(BINARIES.ollama), authenticated: true, inferenceVerified: true, auth: 'Local Air-Gapped VRAM (:11434)', protocol: 'Ollama HTTP /v1', status: 'UP', version: 'joshlcoleman/Fable:latest (pinned)', canRun: true },
     ],
   },
@@ -271,7 +272,8 @@ function spawnCapture(cmd, args, { timeoutMs = 90000, cwd = os.tmpdir() } = {}) 
   return new Promise((resolve) => {
     const start = Date.now();
     const isCmd = cmd.toLowerCase().endsWith('.cmd');
-    const child = spawn(isCmd ? 'cmd.exe' : cmd, isCmd ? ['/c', cmd, ...args] : args, {
+    const runner = isCmd ? (process.env.ComSpec || 'C:/Windows/System32/cmd.exe') : cmd;
+    const child = spawn(runner, isCmd ? ['/d', '/s', '/c', cmd, ...args] : args, {
       cwd,
       env: cleanOAuthEnv(),
       stdio: ['ignore', 'pipe', 'pipe'],
@@ -318,7 +320,6 @@ function spawnAgyFast(prompt, { model = 'gemini-3.8-flash-low', effort = 'low', 
       '--model', model,
       '--effort', effort,
       '--disable-slash-commands',
-      '--dangerously-skip-permissions',
       '--output-format', 'stream-json',
       '--print', safePrompt,
     ];
@@ -516,7 +517,7 @@ async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
   }
 
   if (brain === 'claude') {
-    const res = await spawnCapture(BINARIES.claude, ['-p', clampPromptForWin32(cleanPrompt), '--dangerously-skip-permissions'], { timeoutMs: 90000, cwd: os.tmpdir() });
+    const res = await spawnCapture(BINARIES.claude, ['-p', clampPromptForWin32(cleanPrompt)], { timeoutMs: 90000, cwd: os.tmpdir() });
     return { ...res, brain, commandUsed: 'claude -p (Anthropic Login OAuth)' };
   }
 
@@ -526,8 +527,8 @@ async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
   }
 
   if (brain === 'grok') {
-    const res = await spawnCapture(BINARIES.grok, ['-p', clampPromptForWin32(cleanPrompt), '--always-approve'], { timeoutMs: 90000, cwd: os.tmpdir() });
-    return { ...res, brain, commandUsed: 'grok -p --always-approve (xAI Login OAuth)' };
+    const res = await spawnCapture(BINARIES.grok, ['-p', clampPromptForWin32(cleanPrompt)], { timeoutMs: 90000, cwd: os.tmpdir() });
+    return { ...res, brain, commandUsed: 'grok -p (xAI Login OAuth)' };
   }
 
   if (brain === 'hermes') {
@@ -603,7 +604,7 @@ let cache = {
     host: os.hostname(),
     ip: '192.168.0.15',
     generated: new Date().toISOString(),
-    services: SERVICES.map((s) => ({ ...s, listening: true, status: 'UP', identityVerified: true })),
+    services: SERVICES.map((s) => ({ ...s, listening: false, status: 'UNVERIFIED', identityVerified: false })),
     domains: DOMAINS.map((d) => ({ domain: d, https: 200 })),
     bridges: bridgeCache.data.bridges,
     keepalive: readKeepaliveSync(),
@@ -650,7 +651,7 @@ async function state() {
 }
 
 if (process.env.MISSION_OS_NO_BACKGROUND !== '1') {
-  setTimeout(() => { refreshBridges().catch(() => {}); refreshState().catch(() => {}); }, 200);
+  setTimeout(() => { refreshBridges().catch(() => {}); verifyAllLanes().catch(() => {}); refreshState().catch(() => {}); }, 200);
   setInterval(() => { refreshState().catch(() => {}); }, 25000);
 }
 
@@ -723,6 +724,85 @@ http.createServer(async (req, res) => {
       }
       const body = await readJsonBody(req, 1048576);
       return await handleOpenAiChatCompletions(body, res);
+    }
+
+    // Headless Bridge Registry (Directory, NOT a Door) — loopback & LAN only, never 0.0.0.0/internet
+    if (u.pathname === '/api/bridges' || u.pathname.startsWith('/api/bridges/')) {
+      const remote = req.socket?.remoteAddress || '';
+      const isLocalOrLan = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(remote) || /^(?:::ffff:)?192\.168\.0\.\d+$/.test(remote);
+      if (!isLocalOrLan || req.headers['sec-fetch-site'] === 'cross-site') {
+        res.writeHead(403, { ...sec, 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ ok: false, error: 'Loopback or LAN headless requests only' }));
+      }
+      if (u.pathname === '/api/bridges' && req.method === 'GET') {
+        const refresh = u.searchParams.get('refresh') === '1';
+        if (refresh) await refreshBridges();
+        const [legacy, registry] = await Promise.all([
+          probeBridges(),
+          getBridgeRegistry({ refresh }),
+        ]);
+        res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+        return res.end(JSON.stringify({ ...legacy, registry }, null, 2));
+      }
+      if (u.pathname === '/api/bridges/registry' && req.method === 'GET') {
+        const refresh = u.searchParams.get('refresh') === '1';
+        const registry = await getBridgeRegistry({ refresh });
+        res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+        return res.end(JSON.stringify(registry, null, 2));
+      }
+      const laneMatch = u.pathname.match(/^\/api\/bridges\/registry\/([a-z0-9_-]+)\/([a-z0-9_-]+)\/?$/i);
+      if (laneMatch && req.method === 'GET') {
+        const nodeId = laneMatch[1].toLowerCase();
+        const laneId = laneMatch[2].toLowerCase();
+        const verify = u.searchParams.get('verify') !== '0';
+        const entry = verify
+          ? await verifyLane(nodeId, laneId)
+          : (await getBridgeRegistry({ refresh: false })).entries.find((e) => e.node === nodeId && e.lane === laneId);
+        if (!entry) {
+          res.writeHead(404, { ...sec, 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({ ok: false, error: `Unknown node/lane: ${nodeId}/${laneId}` }));
+        }
+        res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+        return res.end(JSON.stringify({
+          ok: entry.status === 'UP',
+          role: 'directory-not-a-door',
+          direct_connect: {
+            node: entry.node,
+            node_ip: entry.node_ip,
+            lane: entry.lane,
+            transport: entry.transport,
+            address: entry.address,
+            lan_target_address: entry.lan_target_address || null,
+            auth: entry.auth,
+          },
+          entry,
+        }, null, 2));
+      }
+      if (u.pathname === '/api/bridges/verify' && req.method === 'POST') {
+        const body = await readJsonBody(req);
+        const nodeId = String(body.node || 't5500').toLowerCase();
+        const laneId = String(body.lane || 'hermes').toLowerCase();
+        const entry = await verifyLane(nodeId, laneId);
+        if (!entry) {
+          res.writeHead(404, { ...sec, 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({ ok: false, error: `Unknown node/lane: ${nodeId}/${laneId}` }));
+        }
+        res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+        return res.end(JSON.stringify({
+          ok: entry.status === 'UP',
+          role: 'directory-not-a-door',
+          direct_connect: {
+            node: entry.node,
+            node_ip: entry.node_ip,
+            lane: entry.lane,
+            transport: entry.transport,
+            address: entry.address,
+            lan_target_address: entry.lan_target_address || null,
+            auth: entry.auth,
+          },
+          entry,
+        }, null, 2));
+      }
     }
 
     const denied = guardRequest(req, PORT);
