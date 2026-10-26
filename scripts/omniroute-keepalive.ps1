@@ -6,6 +6,7 @@
 $ErrorActionPreference = 'SilentlyContinue'
 $env:Path = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User')
 $env:HOSTNAME = '192.168.0.15'
+$env:OMNIROUTE_SERVER_HOST = '192.168.0.15'
 $env:PORT = '20128'
 $env:DASHBOARD_PORT = '20128'
 $env:API_PORT = '20129'

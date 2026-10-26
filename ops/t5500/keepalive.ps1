@@ -334,7 +334,7 @@ $Stages = @(
 
     @{ Key = 'omniroute'; Name = 'OmniRoute gateway :20128'; Settle = 90
        # Non-elevated task "ANTIGRAVITY OmniRoute". 401 without a key = alive and enforcing auth.
-       Probe = { try { $r = Invoke-WebRequest 'http://127.0.0.1:20128/' -UseBasicParsing -TimeoutSec 10; ($r.StatusCode -eq 200) } catch { $_.Exception.Response.StatusCode.value__ -in 401, 403 } }
+       Probe = { try { $r = Invoke-WebRequest 'http://192.168.0.15:20128/' -UseBasicParsing -TimeoutSec 10; ($r.StatusCode -eq 200) } catch { $_.Exception.Response.StatusCode.value__ -in 401, 403 } }
        Heal  = {
            $t = Get-ScheduledTask -TaskName 'ANTIGRAVITY OmniRoute' -ErrorAction SilentlyContinue
            if (-not $t) { Log '  task "ANTIGRAVITY OmniRoute" missing'; return }
