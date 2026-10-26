@@ -144,15 +144,23 @@ export function buildCatalog() {
       node: 't5500',
       node_ip: T5500_IP,
       lane: 'openclaw',
-      transport: 'http+cli',
-      address: 'http://127.0.0.1:18789',
-      lan_target_address: `http://${T5500_IP}:18789`,
-      bind_current: 'not-installed',
-      bind_recommended: 'stay-uninstalled-on-t5500 (runs on Alienware)',
-      auth: { method: 'gateway-token', header: 'Authorization: Bearer <OPENCLAW_GATEWAY_TOKEN>', source: '~/.openclaw/openclaw.json', configured: false },
+      transport: 'http+watchdog',
+      address: 'http://127.0.0.1:11434/api/chat (model: openclaw-sentry:latest)',
+      lan_target_address: `http://${T5500_IP}:11434/api/chat`,
+      secondary_addresses: {
+        watchdog_script: 'C:/ANTIGRAVITY/ops/t5500/openclaw-sentry.ps1',
+        keepalive_script: 'C:/ANTIGRAVITY/ops/t5500/keepalive.ps1',
+        status_file: 'C:/ANTIGRAVITY/ops/t5500/status.json',
+        claude_profile: '~/.claude/profiles/openclaw-sentry',
+        codex_profile: '~/.codex/openclaw-sentry.config.toml',
+        config: '~/.openclaw/openclaw.json',
+      },
+      bind_current: '127.0.0.1:11434 (openclaw-sentry:latest) + local PowerShell watchdog (openclaw-sentry.ps1 & keepalive.ps1)',
+      bind_recommended: `Keep watchdog local on T5500; expose openclaw-sentry:latest via ${T5500_IP}:11434 and status via ${T5500_IP}:3130`,
+      auth: { method: 'local-watchdog+lan-ip-gated', source: 'C:/ANTIGRAVITY/ops/t5500/openclaw-sentry.ps1 + ~/.openclaw/openclaw.json', configured: true },
       identity_probe: {
-        target: 'GET http://127.0.0.1:18789/',
-        expected_marker: 'data-openclaw-control-ui-build-id / OpenClaw Control',
+        target: 'C:/ANTIGRAVITY/ops/t5500/status.json (node === "T5500-2-XEON-72") + GET http://127.0.0.1:11434/api/tags (model "openclaw-sentry:latest")',
+        expected_marker: 'status.node === "T5500-2-XEON-72" && tags.models includes "openclaw-sentry:latest"',
       },
     },
     {
@@ -679,16 +687,44 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
     };
   }
 
-  // 6. T5500 OpenClaw (check binary & :18789)
+  // 6. T5500 OpenClaw (Node Sentry watchdog + openclaw-sentry:latest model + status.json)
   if (id === 't5500/openclaw') {
-    const binExists = fs.existsSync(resolveHomePath('~/AppData/Roaming/npm/openclaw.cmd'));
-    const r = await httpProbe('http://127.0.0.1:18789/', { fetchImpl });
-    const ok = r.ok && /OpenClaw Control|data-openclaw-control-ui-build-id/i.test(r.text);
+    const sentryScript = 'C:/ANTIGRAVITY/ops/t5500/openclaw-sentry.ps1';
+    const statusFile = 'C:/ANTIGRAVITY/ops/t5500/status.json';
+    const scriptExists = fs.existsSync(sentryScript);
+    let statusJson = null;
+    try {
+      if (fs.existsSync(statusFile)) {
+        statusJson = JSON.parse(fs.readFileSync(statusFile, 'utf8'));
+      }
+    } catch {}
+    const tags = await httpProbe('http://127.0.0.1:11434/api/tags', { fetchImpl });
+    const models = Array.isArray(tags.json?.models) ? tags.json.models.map((m) => m.name) : [];
+    const hasSentryModel = models.includes('openclaw-sentry:latest');
+    const statusOk = Boolean(statusJson && statusJson.node === 'T5500-2-XEON-72' && Array.isArray(statusJson.stages));
+    const stagesUp = statusOk ? statusJson.stages.filter((s) => s.status === 'UP' || s.status === 'HEALED').length : 0;
+    const stagesTotal = statusOk ? statusJson.stages.length : 0;
+    const ok = scriptExists && statusOk && hasSentryModel;
     return {
-      status: ok ? 'UP' : (!binExists ? 'NOT_INSTALLED' : 'DOWN'),
-      observed_identity: ok ? 'OpenClaw Control UI' : null,
-      error: ok ? null : (!binExists ? 'openclaw not installed on T5500 (runs on Alienware :18789)' : (r.error || `HTTP ${r.status}`)),
-      latency_ms: r.latencyMs,
+      status: ok ? 'UP' : (!scriptExists ? 'NOT_INSTALLED' : 'DOWN'),
+      observed_identity: ok
+        ? {
+            role: 'T5500 node sentry & watchdog (ops/t5500/openclaw-sentry.ps1 + keepalive.ps1)',
+            headless_model: 'openclaw-sentry:latest',
+            watchdog_node: statusJson.node,
+            keepalive_updated: statusJson.updated,
+            stages_up: stagesUp,
+            stages_total: stagesTotal,
+          }
+        : null,
+      error: ok
+        ? null
+        : !scriptExists
+          ? 'openclaw-sentry.ps1 not found'
+          : !statusOk
+            ? 'ops/t5500/status.json missing or invalid node identity'
+            : 'openclaw-sentry:latest model not found in T5500 Ollama (:11434)',
+      latency_ms: tags.latencyMs,
       last_verified_at: checkedAt,
       last_ok_at: ok ? checkedAt : undefined,
     };
