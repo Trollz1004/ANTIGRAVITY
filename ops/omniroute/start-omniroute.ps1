@@ -4,13 +4,14 @@
 param([int]$Port = 20128)
 $ErrorActionPreference = 'Continue'
 $env:HOSTNAME = '192.168.0.15'
+$env:OMNIROUTE_SERVER_HOST = '192.168.0.15'
 $log = 'C:\ANTIGRAVITY\logs\omniroute.log'
 New-Item -ItemType Directory -Force -Path (Split-Path $log) | Out-Null
 
 $busy = Get-NetTCPConnection -State Listen -LocalPort $Port -ErrorAction SilentlyContinue
 if ($busy) {
     try {
-        Invoke-RestMethod "http://127.0.0.1:$Port/v1/models" -TimeoutSec 5 -ErrorAction Stop | Out-Null
+        Invoke-RestMethod "http://192.168.0.15:$Port/v1/models" -TimeoutSec 5 -ErrorAction Stop | Out-Null
         Add-Content $log "$(Get-Date -Format s) already answering on :$Port, exit"
         exit 0
     } catch {
