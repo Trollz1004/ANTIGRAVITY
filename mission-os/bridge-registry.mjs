@@ -107,6 +107,19 @@ function cliProbe(rawBin, args = ['--version'], { timeoutMs = 15000 } = {}) {
   });
 }
 
+export function discoverDynamicTools(payload) {
+  if (!payload || typeof payload !== 'object') return null;
+  const raw = Array.isArray(payload.tools)
+    ? payload.tools
+    : Array.isArray(payload.capabilities?.tools)
+      ? payload.capabilities.tools
+      : Array.isArray(payload.result?.tools)
+        ? payload.result.tools
+        : null;
+  if (!raw) return null;
+  return raw.map((t) => (typeof t === 'string' ? t : t?.name || t?.id || null)).filter(Boolean);
+}
+
 export function buildCatalog() {
   const hermesKeyInfo = readHermesApiServerKey();
   const omniKeyInfo = readOmniRouteKey();
@@ -124,7 +137,7 @@ export function buildCatalog() {
         dashboard: 'http://127.0.0.1:9119',
         cli: '~/AppData/Local/hermes/bin/hermes.exe',
       },
-      bind_current: '127.0.0.1:8643',
+      bind_current: `${T5500_IP}:8643 + 127.0.0.1:8643`,
       bind_recommended: `${T5500_IP}:8643 (plus 127.0.0.1:8643)`,
       auth: {
         method: 'bearer',
@@ -220,7 +233,7 @@ export function buildCatalog() {
       address: 'http://127.0.0.1:3130/v1',
       secondary_addresses: { cli: '~/AppData/Local/Microsoft/WinGet/Links/agy.exe' },
       headless_command: 'agy.exe --print <prompt> --output-format stream-json',
-      bind_current: '127.0.0.1:3130',
+      bind_current: `127.0.0.1:3130 (/v1 loopback) + ${T5500_IP}:3130 (/api/bridges LAN directory)`,
       bind_recommended: `127.0.0.1:3130 for /v1/chat/completions; ${T5500_IP}:3130 for directory read`,
       auth: { method: 'google-ultra-oauth', source: '~/.gemini/antigravity-cli', configured: true },
       identity_probe: {
@@ -236,7 +249,7 @@ export function buildCatalog() {
       transport: 'http+cli',
       address: 'http://127.0.0.1:11434',
       lan_target_address: `http://${T5500_IP}:11434`,
-      bind_current: '127.0.0.1:11434',
+      bind_current: `${T5500_IP}:11434 + 127.0.0.1:11434`,
       bind_recommended: `${T5500_IP}:11434 (OLLAMA_HOST=${T5500_IP}:11434)`,
       auth: { method: 'none-lan-ip-gated', source: 'LAN IP binding only', configured: true },
       identity_probe: {
@@ -251,7 +264,7 @@ export function buildCatalog() {
       lane: 'omniroute',
       transport: 'http',
       address: `http://${T5500_IP}:20128/v1`,
-      bind_current: '0.0.0.0:20128',
+      bind_current: `${T5500_IP}:20128 + 127.0.0.1:20128`,
       bind_recommended: `${T5500_IP}:20128 (tighten from 0.0.0.0 to LAN IP)`,
       auth: {
         method: 'bearer',
@@ -278,9 +291,9 @@ export function buildCatalog() {
         dashboard_loopback: 'http://127.0.0.1:9119',
         cli: '~/AppData/Local/hermes/bin/hermes.exe',
       },
-      bind_current: '127.0.0.1:9119 (dashboard only; api_server :8643 not enabled yet)',
+      bind_current: `${ALIENWARE_IP}:8643 + 127.0.0.1:8643 (api_server) + 127.0.0.1:9119 (dashboard)`,
       bind_recommended: `Enable platforms.api_server on ${ALIENWARE_IP}:8643 with API_SERVER_KEY`,
-      auth: { method: 'bearer', header: 'Authorization: Bearer <API_SERVER_KEY>', source: 'Alienware ~/AppData/Local/hermes/config.yaml', configured: false },
+      auth: { method: 'bearer', header: 'Authorization: Bearer <API_SERVER_KEY>', source: 'Alienware ~/AppData/Local/hermes/config.yaml', configured: true },
       identity_probe: {
         target: `GET http://${ALIENWARE_IP}:8643/health (fallback: http://${ALIENWARE_IP}:9119/api/health)`,
         expected_marker: 'platform === "hermes-agent" || (ok === true && version)',
@@ -297,7 +310,7 @@ export function buildCatalog() {
         loopback: 'http://127.0.0.1:18789',
         cli: '~/AppData/Roaming/npm/openclaw.cmd',
       },
-      bind_current: '127.0.0.1:18789',
+      bind_current: `${ALIENWARE_IP}:18789 + 127.0.0.1:18789`,
       bind_recommended: `${ALIENWARE_IP}:18789 (with gateway.auth.token required)`,
       auth: { method: 'bearer-gateway-token', header: 'Authorization: Bearer <OPENCLAW_GATEWAY_TOKEN>', source: 'Alienware ~/.openclaw/openclaw.json', configured: true },
       identity_probe: {
@@ -375,7 +388,7 @@ export function buildCatalog() {
       lane: 'ollama',
       transport: 'http+cli',
       address: `http://${ALIENWARE_IP}:11434`,
-      bind_current: '[::]:11434',
+      bind_current: `${ALIENWARE_IP}:11434 + 127.0.0.1:11434`,
       bind_recommended: `${ALIENWARE_IP}:11434 (tighten from [::] to LAN IP)`,
       auth: { method: 'none-lan-ip-gated', source: 'LAN IP', configured: true },
       identity_probe: {
@@ -604,6 +617,7 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
         auth_verified: capsOk && sessOk,
         sessions_object: sessions.json?.object || null,
         session_count: sessOk ? sessions.json.data.length : null,
+        discovered_tools: discoverDynamicTools(caps.json),
       },
       error: allOk ? null : (caps.error || sessions.error || `caps HTTP ${caps.status}, sessions HTTP ${sessions.status}`),
       latency_ms: health.latencyMs + Math.max(caps.latencyMs || 0, sessions.latencyMs || 0),

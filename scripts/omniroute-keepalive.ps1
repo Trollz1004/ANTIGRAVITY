@@ -1,10 +1,11 @@
-# OmniRoute gateway keepalive — 24/7, headless, auto-restart. (Pattern: paperweight-keepalive.)
+﻿# OmniRoute gateway keepalive â€” 24/7, headless, auto-restart. (Pattern: paperweight-keepalive.)
 # Launched at logon by a Startup-folder cmd. Non-admin. Loops forever: if :20128
 # stops answering, relaunch the npm-global omniroute windowless. All agent model
-# traffic rides this gateway (OPENAI_COMPAT_BASE_URL=127.0.0.1:20128) — no agent
+# traffic rides this gateway (OPENAI_COMPAT_BASE_URL=127.0.0.1:20128) â€” no agent
 # holds a provider key; providers + auto-swap + compression live inside OmniRoute.
 $ErrorActionPreference = 'SilentlyContinue'
 $env:Path = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User')
+$env:HOSTNAME = '192.168.0.15'
 $env:PORT = '20128'
 $env:DASHBOARD_PORT = '20128'
 $env:API_PORT = '20129'
