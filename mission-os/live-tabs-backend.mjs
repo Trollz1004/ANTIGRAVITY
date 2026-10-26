@@ -16,7 +16,16 @@ import { SCC_24_APIS, envValue, draftWithFable } from './marketing-engine.mjs';
 const ROOT = 'C:/ANTIGRAVITY';
 const WHEEL_STATE_PATH = path.join(ROOT, 'mission-os', 'wheel-state.json');
 const SUPPORT_STORE_PATH = path.join(ROOT, 'mission-os', 'support-tickets.json');
-const OBSIDIAN_ROOT = path.join(ROOT, 'Antigravity');
+export function resolveObsidianVaultRoot() {
+  if (process.env.OBSIDIAN_VAULT_PATH && fs.existsSync(process.env.OBSIDIAN_VAULT_PATH)) {
+    return process.env.OBSIDIAN_VAULT_PATH;
+  }
+  const t5500Vault = path.join(ROOT, 'Antigravity');
+  if (fs.existsSync(t5500Vault)) return t5500Vault;
+  const userDocsVault = path.join(os.homedir(), 'Documents', 'Antigravity');
+  return userDocsVault;
+}
+const OBSIDIAN_ROOT = resolveObsidianVaultRoot();
 const GRAPHIFY_JSON = path.join(ROOT, 'graphify-out', 'graph.json');
 const GRAPHIFY_REPORT = path.join(ROOT, 'graphify-out', 'GRAPH_REPORT.md');
 const WORKFLOW_GRAPHY = path.join(ROOT, 'docs', 'memory-layer', 'agent-workflow-graphy.json');
@@ -316,11 +325,14 @@ function ensureGraphifyIndex() {
     }
 
     fs.writeFileSync(GRAPHIFY_JSON, JSON.stringify({ generatedAt: new Date().toISOString(), nodes, links }, null, 2), 'utf8');
-    fs.writeFileSync(
-      GRAPHIFY_REPORT,
-      `# Graphify Repository Knowledge Graph Report\n- **Generated:** ${new Date().toISOString()}\n- **Nodes Indexed:** ${nodes.length}\n- **Import Edges:** ${links.length}\n- **Subsystems:** ${scanDirs.join(', ')}\n`,
-      'utf8'
-    );
+    const reportMd = `# Graphify Repository Knowledge Graph Report\n- **Generated:** ${new Date().toISOString()}\n- **Nodes Indexed:** ${nodes.length}\n- **Import Edges:** ${links.length}\n- **Subsystems:** ${scanDirs.join(', ')}\n`;
+    fs.writeFileSync(GRAPHIFY_REPORT, reportMd, 'utf8');
+    syncGraphyLearningsToObsidian({
+      title: 'Graphify Repository Knowledge Graph Snapshot',
+      summary: `Indexed ${nodes.length} nodes and ${links.length} import edges across ${scanDirs.join(', ')}.`,
+      findings: reportMd,
+      source: 'Mission Control Graphy',
+    });
   } catch {}
 }
 
@@ -415,9 +427,62 @@ export function getLiveMemoryTab() {
     ok: true,
     generatedAt: new Date().toISOString(),
     vaultRoot: OBSIDIAN_ROOT,
+    memoryAuthority: {
+      authoritative: 'Obsidian vault in-repo (markdown, committed)',
+      feeds: ['Mission Control Graphy', 'Supermemory (repo_antigravity__02249b9e7104105f)', 'session-brain'],
+      recall: {
+        provider: 'Supermemory',
+        containerTag: 'repo_antigravity__02249b9e7104105f',
+        tools: ['search_memory', 'add_memory'],
+        authoritative: false,
+        conflictRule: 'when it disagrees with git, git wins and the memory is forgotten',
+      },
+    },
     obsidianFiles,
     graphify: getGraphifySummary(),
   };
+}
+
+export function syncGraphyLearningsToObsidian({
+  vaultRoot = OBSIDIAN_ROOT,
+  relPath = 'memory-graph/Graphify-Learnings.md',
+  title = 'Mission Control Graphy Learning',
+  summary = 'Graphy learning synced to authoritative Obsidian vault',
+  findings = '',
+  source = 'Mission Control Graphy',
+} = {}) {
+  const cleanRel = String(relPath).replace(/\\/g, '/').replace(/^\/+/, '');
+  const full = path.resolve(vaultRoot, cleanRel);
+  if (!full.startsWith(path.resolve(vaultRoot))) {
+    return { ok: false, error: 'Invalid Obsidian vault path' };
+  }
+  const safeBody = redact(String(findings || '').trim());
+  if (!safeBody) return { ok: false, error: 'Learning findings content is required' };
+  fs.mkdirSync(path.dirname(full), { recursive: true });
+  const nowIso = new Date().toISOString();
+  const dateOnly = nowIso.slice(0, 10);
+  if (!fs.existsSync(full)) {
+    const frontmatter = [
+      '---',
+      `title: "${redact(title).replace(/"/g, "'")}"`,
+      'type: memory-graph',
+      'tags: [memory-graph, graphy, obsidian-authoritative]',
+      `created: ${dateOnly}`,
+      `updated: ${dateOnly}`,
+      'status: active',
+      `summary: "${redact(summary).replace(/"/g, "'")}"`,
+      '---',
+      `# ${redact(title)}`,
+      '',
+      '> [!IMPORTANT]',
+      '> Obsidian vault Markdown (committed to git) is the authoritative memory layer. Mission Control Graphy, session-brain, and Supermemory (`repo_antigravity__02249b9e7104105f`, recall-only) feed this note. Anchored to [[00 HOME]].',
+      '',
+    ].join('\n');
+    fs.writeFileSync(full, frontmatter, 'utf8');
+  }
+  const entry = `\n## ${nowIso.slice(0, 16).replace('T', ' ')} UTC | source: ${redact(source)}\n\n${safeBody}\n`;
+  fs.appendFileSync(full, entry, 'utf8');
+  return { ok: true, vaultRoot, relPath: cleanRel, fullPath: full, syncedAt: nowIso };
 }
 
 export function readObsidianNote(relPath) {
