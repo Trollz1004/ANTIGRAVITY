@@ -695,7 +695,7 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
     let statusJson = null;
     try {
       if (fs.existsSync(statusFile)) {
-        statusJson = JSON.parse(fs.readFileSync(statusFile, 'utf8'));
+        statusJson = JSON.parse(fs.readFileSync(statusFile, 'utf8').replace(/^\uFEFF/, ''));
       }
     } catch {}
     const tags = await httpProbe('http://127.0.0.1:11434/api/tags', { fetchImpl });
