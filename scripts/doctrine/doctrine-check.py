@@ -84,7 +84,7 @@ FACTS = [
         # NSFW_BOTS on Alienware. A literal path works on one box and silently
         # breaks on the others.
         "name": "hardcoded-user-path",
-        "source": (),
+        "source": ("docs/memory-layer/agent-workflow-graphy.json", ".agents/harness-config/hermes.yaml"),
         "patterns": [r"C:\\\\Users\\\\joshl\b", r"C:\\Users\\joshl\b",
                      r"C:\\\\Users\\\\joshi\b", r"C:\\Users\\joshi\b",
                      r"C:\\\\Users\\\\NSFW_BOTS\b", r"C:\\Users\\NSFW_BOTS\b",

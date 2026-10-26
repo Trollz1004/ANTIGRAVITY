@@ -1,12 +1,65 @@
-version: 1
-status: draft
+version: 2
+status: active
 journal: .agents/journals/hermes/STATE.md
 knowledge:
+  authoritative: Obsidian vault in-repo (markdown, committed)
   source: repository
-  graph: Mission Control Graphy
-  obsidian_mirror: optional
+  graph: Mission Control Graphy (feeds Obsidian vault)
+  obsidian_mirror: authoritative
+  feeds:
+    - Mission Control Graphy (docs/memory-layer/agent-workflow-graphy.json + graphify-out/graph.json)
+    - Supermemory recall (containerTag repo_antigravity__02249b9e7104105f)
+    - session-brain
+  vaults:
+    T5500: C:\ANTIGRAVITY\Antigravity
+    Alienware: C:\Users\NSFW_BOTS\Documents\Antigravity
+    Sabretooth: TBD
+skill_policy:
+  mandatory:
+    - verification-before-completion
+    - find-skills
+    - create-skills
+    - brainstorming
+    - caveman
+    - i-have-adhd
+    - agent-browser
+    - agent-reach
+    - subagent-driven-development
+    - self-improving-agent
+    - self-improving-system
+  core:
+    - systematic-debugging
+    - test-driven-development
+    - supabase
+    - supabase-postgres-best-practices
+    - system-connector
+    - openviking
+  obsidian_memory_skills:
+    - obsidian-save
+    - obsidian-think
+    - obsidian-wiki-fold
+    - obsidian-markdown
+  dailyResearch: each agent researches and loads ONE new skill per day based on its role
+  memoryLayer:
+    authoritative: Obsidian vault in-repo (markdown, committed)
+    feeds:
+      - Mission Control Graphy
+      - Supermemory
+      - session-brain
+    vaults:
+      T5500: C:\ANTIGRAVITY\Antigravity
+      Alienware: C:\Users\NSFW_BOTS\Documents\Antigravity
+      Sabretooth: TBD
+    recall:
+      provider: Supermemory
+      containerTag: repo_antigravity__02249b9e7104105f
+      tools:
+        - search_memory
+        - add_memory
+      authoritative: false
+      conflictRule: when it disagrees with git, git wins and the memory is forgotten
 mcp_servers:
-  required: [brain-mcp, mission-mcp, antigravity-files, playwright]
+  required: [obsidian_antigravity, brain-mcp, mission-mcp, antigravity-files, playwright]
   optional: [supabase]   # read-first; live DB writes route through the Supabase seat + judge
   spec: agent-contracts/CAPABILITY-BASELINE.md
   remote_future:
@@ -24,12 +77,14 @@ preflight_skills:
   required:
     - i-have-adhd
     - hermes-agent-skill-authoring
+    - obsidian-think
+    - obsidian-save
   conditional:
     design: brainstorming
     research: agent-reach
     authenticated_browser: browser-use
     capability_discovery: find-skills
-    code_change: tdd
+    code_change: test-driven-development
     unexpected_behavior: systematic-debugging
     youtube_faceless_news: hermes-youtube-faceless-news
     youtube_avatar_head: hermes-youtube-avatar-head

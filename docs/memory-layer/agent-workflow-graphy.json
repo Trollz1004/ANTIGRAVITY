@@ -1,7 +1,7 @@
 {
   "description": "Agent Workflow Graphy - Shows agents what skills to load, tools available, code search graphy, and daily research targets",
-  "version": "1.4.0",
-  "lastUpdated": "2026-10-20",
+  "version": "1.5.0",
+  "lastUpdated": "2026-10-26",
   "usedBy": "ALL agents and AI lanes on every platform (Claude, Codex, Gemini, Copilot, Hermes, OpenClaw, OpenCode, Grok, Emergent). Read at session start.",
   "authority": {
     "updated": "2026-10-20 (Joshua)",
@@ -86,7 +86,6 @@
     ],
     "core": [
       "systematic-debugging",
-      "tdd",
       "test-driven-development",
       "supabase",
       "supabase-postgres-best-practices",
@@ -128,10 +127,26 @@
         "why": "Git is authoritative over every other layer. Markdown in git is diffable and `git log -S` can trace a false claim to the commit that invented it. When any layer below disagrees with git, git wins."
       },
       "obsidianVaults": {
-        "mandatory": "YES — Joshua's personal, paid Obsidian. Every agent MUST use it (read on session start, write on session end)",
-        "restApi": "Obsidian Local REST API, http://127.0.0.1:27123",
+        "mandatory": "YES — Joshua's personal, paid Obsidian. Authoritative memory layer; Graphy and Supermemory feed it.",
+        "restApi": "Obsidian Local REST API, http://127.0.0.1:27123 (HTTPS :27124)",
+        "httpMcp": {
+          "serverName": "obsidian_antigravity",
+          "port": 27200,
+          "tokenEnv": "OBSIDIAN_MCP_TOKEN",
+          "routes": {
+            "T5500": "http://127.0.0.1:27200/v1/ec30fc09-4504-403b-b6e8-19477c5bdd55/mcp",
+            "Alienware": "http://127.0.0.1:27200/v1/bda5723a-352c-487c-900e-42de3acc26fd/mcp",
+            "Sabretooth": "TBD"
+          }
+        },
+        "perNodeVaults": {
+          "T5500": "C:\\ANTIGRAVITY\\Antigravity",
+          "Alienware": "C:\\Users\\NSFW_BOTS\\Documents\\Antigravity",
+          "Sabretooth": "TBD"
+        },
         "vaults": [
           {
+            "node": "T5500",
             "path": "C:\\ANTIGRAVITY\\Antigravity",
             "shared_by": [
               "ANT (ANTIGRAVITY Marketing Co, youandinotai.com)",
@@ -141,6 +156,26 @@
             "sync": "Obsidian Sync"
           },
           {
+            "node": "Alienware",
+            "path": "C:\\Users\\NSFW_BOTS\\Documents\\Antigravity",
+            "shared_by": [
+              "ANT (ANTIGRAVITY Marketing Co, youandinotai.com)",
+              "AIS (Ai-Solutions.Store)"
+            ],
+            "entry": "00 HOME.md",
+            "sync": "Obsidian Sync"
+          },
+          {
+            "node": "Sabretooth",
+            "path": "TBD",
+            "shared_by": [
+              "ANT (ANTIGRAVITY Marketing Co, youandinotai.com)"
+            ],
+            "entry": "00 HOME.md",
+            "sync": "Obsidian Sync"
+          },
+          {
+            "node": "Alienware-DRE",
             "path": "D:\\DREAM ONLINE",
             "shared_by": [
               "DRE (DREAM Online MMORPG)"
@@ -149,6 +184,12 @@
           }
         ],
         "skills": [
+          "obsidian-save",
+          "obsidian-think",
+          "obsidian-wiki-fold",
+          "obsidian-markdown"
+        ],
+        "claudeCodePluginSkills": [
           "claude-obsidian:save",
           "claude-obsidian:think",
           "claude-obsidian:wiki-fold",
@@ -170,17 +211,25 @@
       },
       "recall": {
         "where": "Supermemory (containerTag repo_antigravity__02249b9e7104105f)",
+        "containerTag": "repo_antigravity__02249b9e7104105f",
         "tools": [
           "search_memory",
           "add_memory"
         ],
+        "authoritative": false,
         "why": "Fast cross-session recall. NEVER authoritative — it auto-injects, so a false fact re-injects forever. When it disagrees with git, git wins and the memory is FORGOTTEN, not left."
       },
       "vaults_STALE": [
         "nodes/9020/vaults/knowledge (Joshua's) — STALE, node 9020 does not exist",
         "nodes/9020/vaults/agent-workflows (the mesh) — STALE, node 9020 does not exist"
       ],
-      "ruling": "agent-contracts/MEMORY-LAYER-RULING-2026-08-28.md"
+      "ruling": "agent-contracts/MEMORY-LAYER-RULING-2026-08-28.md",
+      "authoritative": "Obsidian vault in-repo (markdown, committed)",
+      "feeds": [
+        "Mission Control Graphy (writes learnings to Obsidian vault as markdown)",
+        "Supermemory (recall-only via search_memory / add_memory)",
+        "session-brain"
+      ]
     },
     "mandatorySkillsNote": "Mandatory on EVERY bot with no exception, including bots Hermes creates. verification-before-completion is mandatory on anything that touches code."
   },
@@ -231,7 +280,10 @@
         "verification-before-completion",
         "self-improving-agent",
         "self-improving-system",
-        "claude-obsidian",
+        "obsidian-save",
+        "obsidian-think",
+        "obsidian-wiki-fold",
+        "obsidian-markdown",
         "mission-control",
         "orchestrator-preflight",
         "subagent-driven-development",
@@ -260,7 +312,6 @@
       "heartbeatLocation": ".agents/journals/opencode/STATE.md",
       "claudeFile": "CLAUDE.md",
       "skillsToLoad": [
-        "tdd",
         "test-driven-development",
         "tests-as-contract",
         "improve-codebase-architecture",
@@ -281,7 +332,10 @@
         "verification-before-completion",
         "self-improving-agent",
         "self-improving-system",
-        "claude-obsidian",
+        "obsidian-save",
+        "obsidian-think",
+        "obsidian-wiki-fold",
+        "obsidian-markdown",
         "mission-control",
         "orchestrator-to-hermes-openclaw-opencode",
         "systematic-debugging",
@@ -301,7 +355,10 @@
         "verification-before-completion",
         "self-improving-agent",
         "self-improving-system",
-        "claude-obsidian",
+        "obsidian-save",
+        "obsidian-think",
+        "obsidian-wiki-fold",
+        "obsidian-markdown",
         "design-md",
         "comfyui",
         "manim-video",
@@ -322,7 +379,10 @@
         "verification-before-completion",
         "self-improving-agent",
         "self-improving-system",
-        "claude-obsidian",
+        "obsidian-save",
+        "obsidian-think",
+        "obsidian-wiki-fold",
+        "obsidian-markdown",
         "claude-code",
         "test-driven-development",
         "requesting-code-review",
@@ -343,7 +403,10 @@
         "verification-before-completion",
         "self-improving-agent",
         "self-improving-system",
-        "claude-obsidian",
+        "obsidian-save",
+        "obsidian-think",
+        "obsidian-wiki-fold",
+        "obsidian-markdown",
         "growth-marketer",
         "social-growth-engineer",
         "product-copy-business-only",
@@ -364,12 +427,14 @@
         "verification-before-completion",
         "self-improving-agent",
         "self-improving-system",
-        "claude-obsidian",
+        "obsidian-save",
+        "obsidian-think",
+        "obsidian-wiki-fold",
+        "obsidian-markdown",
         "dateapp-support-desk",
         "humanizer",
         "systematic-debugging",
-        "requesting-code-review",
-        "agent-reach"
+        "requesting-code-review"
       ],
       "description": "Customer support profile — ALL support is routed to Hermes"
     },
@@ -387,7 +452,10 @@
         "verification-before-completion",
         "self-improving-agent",
         "self-improving-system",
-        "claude-obsidian",
+        "obsidian-save",
+        "obsidian-think",
+        "obsidian-wiki-fold",
+        "obsidian-markdown",
         "mission-control",
         "orchestrator-preflight",
         "systematic-debugging",
@@ -409,7 +477,10 @@
         "verification-before-completion",
         "self-improving-agent",
         "self-improving-system",
-        "claude-obsidian",
+        "obsidian-save",
+        "obsidian-think",
+        "obsidian-wiki-fold",
+        "obsidian-markdown",
         "himalaya",
         "email-inbox-triage"
       ],
