@@ -1,138 +1,452 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HermesLeadGen</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sabretooth (.8) Command Studio — Hermes :9119 + Free Claude Code :8082 + Dual Graphy + Harvey 3-Type Lead Gen</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header id="topbar">
-    <div class="topbar-left">
-      <h1>HermesLeadGen</h1>
-      <span class="node-badge">Sabretooth .8</span>
+  <!-- TOP RED-LIGHT / GREEN-LIGHT BAR FOR FOUNDER LOW-VISION ACCESSIBILITY -->
+  <header class="top-status-bar">
+    <div class="brand-block">
+      <div class="brand-title">SABRETOOTH (.8) COMMAND STUDIO — <code>http://192.168.0.8:8392/</code></div>
+      <div class="brand-subtitle">
+        Node-Specific Marketing, Harvey 3-Type Lead Gen, YouTube (&lt;=59s), Free Claude Code (:8082/admin) &amp; Dual Graphy
+        <span class="isolation-pill">STRICTLY SEPARATE FROM T5500 :3130 STREAMABLE OPSIS &amp; ALIENWARE .40 GAME ENGINE</span>
+      </div>
     </div>
-    <div class="topbar-stats">
-      <div class="stat" id="stat-shorts"><span class="stat-label">Shorts Today</span><span class="stat-value" id="shorts-today">0</span></div>
-      <div class="stat" id="stat-lastpub"><span class="stat-label">Last Publish</span><span class="stat-value" id="last-publish">—</span></div>
-      <div class="stat" id="stat-nextpub"><span class="stat-label">Next Legal Publish</span><span class="stat-value" id="next-publish">—</span></div>
-      <div class="stat" id="stat-emails"><span class="stat-label">Emails Sent</span><span class="stat-value" id="emails-sent">0</span></div>
-      <div class="stat" id="stat-replies"><span class="stat-label">Replies</span><span class="stat-value" id="replies">0</span></div>
-      <div class="stat" id="stat-revenue"><span class="stat-label">$ Toward 10k</span><span class="stat-value" id="revenue">$0</span></div>
-    </div>
-    <div class="topbar-right">
-      <span id="worker-status" class="worker-status">Checking worker...</span>
+    <div class="top-actions">
+      <button id="btn-self-heal" class="btn btn-green" title="Check and self-heal all Sabretooth services">
+        ⚡ Self-Heal &amp; Verify Ports
+      </button>
+      <button id="btn-sync-obsidian" class="btn btn-blue" title="Write timestamped session entry to Sabretooth/gemini-to-gemini.md & hermes-to-hermes.md + T5500 :49374">
+        📓 Write to Obsidian &amp; T5500 Memory
+      </button>
+      <a href="/proxy/hermes/chat?profile=default&resume=local-profile" target="_blank" class="btn btn-amber">
+        ↗ Open Hermes :9119 Default Chat
+      </a>
+      <a href="/proxy/fcc/admin" target="_blank" class="btn btn-purple">
+        ↗ Open :8082/admin Full Window
+      </a>
     </div>
   </header>
 
-  <nav id="tab-bar">
-    <button class="tab-btn active" data-tab="kanban" onclick="switchTab('kanban')">Kanban Board</button>
-    <button class="tab-btn" data-tab="youtube" onclick="switchTab('youtube')">YouTube Agent</button>
-    <button class="tab-btn" data-tab="editor" onclick="switchTab('editor')">Editor (REA Media)</button>
-    <button class="tab-btn" data-tab="harvey" onclick="switchTab('harvey')">Marketing Lead (Harvey)</button>
-    <button class="tab-btn" data-tab="notes" onclick="switchTab('notes')">Notes & Ideas</button>
+  <!-- LIVE RED LIGHT / GREEN LIGHT PORT LED STRIP -->
+  <section id="service-lights-strip" class="lights-strip" aria-label="Sabretooth Red Light Green Light Service Status">
+    <div class="light-pill green"><span class="led"></span> Loading Sabretooth Ports...</div>
+  </section>
+
+  <!-- MAIN NAVIGATION TABS (LARGE HIGH-CONTRAST BUTTONS) -->
+  <nav class="main-tabs" role="tablist">
+    <button class="tab-btn active" data-tab="home" role="tab">
+      🏠 1. Home: Default Jarvis (:9119) + Dual Previews + 2 Graphies
+    </button>
+    <button class="tab-btn" data-tab="harvey" role="tab">
+      🎯 2. Harvey Lead Gen (3 Lead Types + Grok/agy)
+    </button>
+    <button class="tab-btn" data-tab="fcc" role="tab">
+      🤖 3. Port :8082/admin (Free Claude Code + Chat)
+    </button>
+    <button class="tab-btn" data-tab="youtube" role="tab">
+      🎬 4. YouTube Shorts (&lt;=59.0s + Female Voices)
+    </button>
+    <button class="tab-btn" data-tab="kanban" role="tab">
+      📋 5. Kanban &amp; GitHub Judge Webhooks
+    </button>
+    <button class="tab-btn" data-tab="editor" role="tab">
+      🎞️ 6. Editor &amp; REA Media Previews
+    </button>
+    <button class="tab-btn" data-tab="notes" role="tab">
+      🧠 7. Obsidian Ledgers &amp; 6-Layer Memory
+    </button>
   </nav>
 
-  <main>
-    <div id="tab-kanban" class="tab-content active">
-      <div class="kanban-board">
-        <div class="kanban-column" data-status="todo">
-          <div class="column-header todo-header">Todo</div>
-          <div class="column-body" id="col-todo"></div>
-          <button class="add-card-btn" data-status="todo">+ Add Card</button>
+  <!-- ===================================================================== -->
+  <!-- TAB 1: HOME ORCHESTRATOR + LIVE TERMINAL & MEDIA PREVIEWS + 2 GRAPHIES -->
+  <!-- ===================================================================== -->
+  <main id="tab-home" class="tab-panel active">
+    <!-- ROW 1: DEFAULT HERMES + GEMINI AGY ORCHESTRATOR & LIVE DUAL PREVIEW PANES -->
+    <div class="home-top-grid">
+      <!-- LEFT: DEFAULT RESEARCH & MASTER ORCHESTRATOR CHAT (VOICE + TEXT) -->
+      <section class="panel-card orchestrator-card">
+        <div class="panel-header">
+          <div>
+            <h2>🎙️ Default Research &amp; Master Orchestrator (Jarvis Session)</h2>
+            <p class="panel-meta">
+              Session: <code>http://127.0.0.1:9119/chat?profile=default&amp;resume=local-profile</code> |
+              CLI: <code>agy --dangerously-skip-permissions</code> (Gemini 4 Argon High Reasoning)
+            </p>
+          </div>
+          <span class="badge-green">DEFAULT PROFILE ACTIVE</span>
         </div>
-        <div class="kanban-column" data-status="doing">
-          <div class="column-header doing-header">Doing</div>
-          <div class="column-body" id="col-doing"></div>
+
+        <div class="skills-badge-row">
+          <span class="skill-chip">Google Search</span>
+          <span class="skill-chip">agent-reach</span>
+          <span class="skill-chip">last30days</span>
+          <span class="skill-chip">rea-mcp</span>
+          <span class="skill-chip">rooflo-opsis-cut-and-reach</span>
+          <span class="skill-chip">speckit-implement</span>
+          <span class="skill-chip">TDD (node --test)</span>
+          <span class="skill-chip">humanizer</span>
+          <span class="skill-chip">caveman</span>
+          <span class="skill-chip">i-have-adhd</span>
+          <span class="skill-chip">brainstorming</span>
+          <span class="skill-chip">obsidian-save</span>
         </div>
-        <div class="kanban-column" data-status="done">
-          <div class="column-header done-header">Done</div>
-          <div class="column-body" id="col-done"></div>
+
+        <div class="orchestrator-controls">
+          <label for="orchestrate-target-profile" class="large-label">Route / Orchestrate To Bot Profile:</label>
+          <select id="orchestrate-target-profile" class="large-select">
+            <option value="auto">⚡ Auto-Orchestrate (Default Jarvis decides best specialist)</option>
+            <option value="default">🧠 Default Research Orchestrator (Gemini 4 Argon + Google + Reach + last30days + REA)</option>
+            <option value="harvey">🎯 Harvey Lead Gen Profile (Grok Auth + agy + 3 Lead Types)</option>
+            <option value="youtube">🎬 YouTube Shorts Profile (agy + &lt;=59.0s + Natural Female Voices)</option>
+            <option value="kanban">📋 Kanban &amp; GitHub Judge Webhook Profile</option>
+            <option value="editor">🎞️ Editor CapCut REA Clean-Room &amp; Screenshot Validator</option>
+            <option value="fcc">🤖 Free Claude Code (:8082/admin) Wrapper Profile</option>
+            <option value="notes">📓 Notes, Dual Graphy &amp; Obsidian Sync Profile</option>
+          </select>
         </div>
-        <div class="kanban-column" data-status="blocked">
-          <div class="column-header blocked-header">Blocked</div>
-          <div class="column-body" id="col-blocked"></div>
+
+        <div id="orchestrator-chat-log" class="chat-transcript">
+          <div class="chat-msg assistant">
+            <div class="chat-sender">Jarvis Default Orchestrator (<code>profile=default&amp;resume=local-profile</code>)</div>
+            <div class="chat-text">
+              <strong>Outcome:</strong> Default Research &amp; Master Orchestrator is online on Sabretooth (<code>192.168.0.8:8392</code>).
+              Speak with the microphone or type below to orchestrate tasks across <strong>Harvey Lead Gen</strong>, <strong>YouTube (&lt;=59s)</strong>, <strong>Kanban</strong>, <strong>Editor</strong>, or <strong>Free Claude Code (:8082/admin)</strong>. Every command streams live into the Terminal Preview Pane and Media Preview Pane on the right.
+            </div>
+          </div>
         </div>
+
+        <div class="chat-input-area">
+          <textarea id="orchestrator-input" rows="3" class="large-textarea" placeholder="Speak or type your instruction for the Default Hermes + Gemini agy Orchestrator (e.g., 'Research last 30 days anti-bot dating threads and generate 3 Harvey leads for Date App affiliates and DREAM Online funding')..."></textarea>
+          <div class="chat-btn-row">
+            <button id="btn-voice-mic" class="btn btn-amber">🎤 Speak Voice Command (Mic)</button>
+            <button id="btn-voice-tts" class="btn btn-purple">🔊 Read Last Reply Aloud (Female Voice)</button>
+            <button id="btn-send-orchestrate" class="btn btn-green btn-xl">🚀 Send &amp; Orchestrate (agy --dangerously-skip-permissions)</button>
+          </div>
+        </div>
+
+        <details class="embedded-hermes-drawer">
+          <summary>🖥️ Toggle Embedded Live Hermes <code>:9119/chat?profile=default&amp;resume=local-profile</code> Session View</summary>
+          <iframe src="/proxy/hermes/chat?profile=default&resume=local-profile" class="hermes-iframe" title="Hermes 9119 Default Profile Session"></iframe>
+        </details>
+      </section>
+
+      <!-- RIGHT: DUAL PREVIEW PANES (1. LIVE TERMINAL PANE + 2. MEDIA / THUMBNAILS / VIDEO PANE) -->
+      <div class="dual-preview-column">
+        <!-- PREVIEW PANE 1: LIVE TERMINAL WORK WATCHER -->
+        <section class="panel-card terminal-preview-card">
+          <div class="panel-header">
+            <div>
+              <h2>💻 Preview Pane 1: Live Terminal Work Stream</h2>
+              <p class="panel-meta">Watches real-time CLI execution (<code>agy --dangerously-skip-permissions</code>, <code>grok</code>, <code>node --test</code>, <code>graphify</code>)</p>
+            </div>
+            <div class="term-quick-btns">
+              <button class="btn btn-sm" data-term-cmd="agy-version">Check agy CLI</button>
+              <button class="btn btn-sm" data-term-cmd="grok-version">Check grok CLI</button>
+              <button class="btn btn-sm btn-green" data-term-cmd="run-tests">Run TDD Tests</button>
+              <button class="btn btn-sm btn-blue" data-term-cmd="graphy-update">Update Graphy</button>
+            </div>
+          </div>
+          <div id="terminal-preview-box" class="terminal-output-box" aria-live="polite"></div>
+        </section>
+
+        <!-- PREVIEW PANE 2: MEDIA, THUMBNAILS, SCREENSHOTS & VIDEO PLAYER -->
+        <section class="panel-card media-preview-card">
+          <div class="panel-header">
+            <div>
+              <h2>🖼️ Preview Pane 2: Media, Thumbnails, Screenshots &amp; Video Player</h2>
+              <p class="panel-meta">High-contrast visual proof so Founder Joshua Coleman can see and approve every asset</p>
+            </div>
+            <button id="btn-refresh-media" class="btn btn-sm btn-blue">🔄 Refresh Previews</button>
+          </div>
+          <div id="media-preview-grid" class="media-preview-grid"></div>
+        </section>
       </div>
     </div>
 
-    <div id="tab-youtube" class="tab-content">
-      <div class="agent-panel">
-        <div class="agent-header">
-          <h2>YouTube Agent</h2>
-          <span class="agent-badge">Profile: youtube-agent</span>
-          <button class="card-btn" onclick="openAgentChat('youtube')">Chat with Agent</button>
-        </div>
-        <div class="agent-body" id="youtube-agent-body"></div>
+    <!-- ROW 2: BOTH GRAPHIES SIDE-BY-SIDE ON HOME PAGE TAB -->
+    <section class="dual-graphy-section">
+      <div class="section-banner">
+        <h2>🕸️ Dual Graphy Knowledge Architecture (Live on Home Page)</h2>
+        <p>Every Sabretooth agent reads both Graphies at session start and updates Obsidian + Graphy on session end.</p>
       </div>
-    </div>
 
-    <div id="tab-editor" class="tab-content">
-      <div class="agent-panel">
-        <div class="agent-header">
-          <h2>Editor Agent (REA Media Creator)</h2>
-          <span class="agent-badge">Profile: editor-agent</span>
-          <button class="card-btn" onclick="openAgentChat('editor')">Chat with Agent</button>
+      <div class="dual-graphy-grid">
+        <!-- GRAPHY #1: AGENT WORKFLOW GRAPHY -->
+        <div class="panel-card graphy-card">
+          <div class="panel-header">
+            <div>
+              <h3>Graphy #1: Agent Workflow &amp; Multi-Profile Graphy (<code>api.workflow.json</code>)</h3>
+              <p id="graphy1-stats" class="panel-meta">Loading workflow nodes and edges...</p>
+            </div>
+            <span class="badge-blue">WORKFLOW GRAPHY</span>
+          </div>
+          <div id="graphy1-nodes-list" class="graphy-node-grid"></div>
         </div>
-        <div class="agent-body" id="editor-agent-body"></div>
-      </div>
-    </div>
 
-    <div id="tab-harvey" class="tab-content">
-      <div class="agent-panel">
-        <div class="agent-header">
-          <h2>Marketing Lead (Harvey)</h2>
-          <span class="agent-badge">Profile: harvey-agent</span>
-          <button class="card-btn" onclick="openAgentChat('harvey')">Chat with Agent</button>
+        <!-- GRAPHY #2: CODEBASE KNOWLEDGE GRAPHY (graphifyy) -->
+        <div class="panel-card graphy-card">
+          <div class="panel-header">
+            <div>
+              <h3>Graphy #2: Codebase Knowledge Graphy (<code>graphify-out/graph.json</code>)</h3>
+              <p id="graphy2-stats" class="panel-meta">Loading codebase graphifyy nodes and edges...</p>
+            </div>
+            <div class="term-quick-btns">
+              <button id="btn-rebuild-graphy" class="btn btn-sm btn-green">⚡ Rebuild Graphy</button>
+              <a href="/graphify-out/graph.html" target="_blank" class="btn btn-sm btn-blue">↗ Full Interactive Graph</a>
+            </div>
+          </div>
+          <iframe src="/graphify-out/graph.html" class="graphy-iframe" title="Interactive Codebase Knowledge Graphy"></iframe>
+          <div id="graphy2-summary" class="graphy-report-excerpt"></div>
         </div>
-        <div class="agent-body" id="harvey-agent-body"></div>
       </div>
-    </div>
+    </section>
 
-    <div id="tab-notes" class="tab-content">
-      <div class="agent-panel">
-        <div class="agent-header">
-          <h2>Notes & Ideas Agent</h2>
-          <span class="agent-badge">Profile: notes-agent</span>
-          <button class="card-btn" onclick="openAgentChat('notes')">Chat with Agent</button>
+    <!-- ROW 3: CIRCULAR TASK -> NODE ORCHESTRATOR -> MANDATORY AUTO-PUSH & PR -> CLOUD JUDGE MERGE LOOP -->
+    <section class="panel-card circular-loop-card">
+      <div class="panel-header">
+        <div>
+          <h2>🔄 Circular Node Hooks, Mandatory Auto-Push/PR (RooFlow + SpecKit) &amp; GitHub Cloud Judge Merge Pipeline</h2>
+          <p class="panel-meta">
+            Task / File Hook &rarr; Sabretooth Orchestrator (<code>:8392/:9119</code>) &rarr; Local TDD + Screenshot Proof &rarr;
+            <strong>Mandatory Auto-Commit, Branch Push &amp; PR Creation (<code>speckit.git.push-and-pr</code>)</strong> &rarr;
+            <strong>Only GitHub Cloud Judges (Gemini / Jules / Claude / Codex) Validate &amp; Merge</strong>
+          </p>
         </div>
-        <div class="agent-body" id="notes-agent-body"></div>
+        <div class="top-actions">
+          <button id="btn-trigger-hook-loop" class="btn btn-green">🚀 Commit, Push Branch &amp; Create/Update GitHub PR Now</button>
+          <a href="https://github.com/Trollz1004/ANTIGRAVITY/compare/main...sabretooth/auto-pr-sync?expand=1" target="_blank" class="btn btn-blue">↗ View Sabretooth PR on GitHub</a>
+        </div>
       </div>
+      <div id="hook-stages-grid" class="hook-stages-grid"></div>
+      <div id="hook-events-log" class="hook-events-log"></div>
+    </section>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- TAB 2: HARVEY 3-TYPE LEAD GEN (AFFILIATES, SUBSCRIPTIONS, CROWDFUNDING) -->
+  <!-- ===================================================================== -->
+  <main id="tab-harvey" class="tab-panel">
+    <section class="panel-card">
+      <div class="panel-header">
+        <div>
+          <h2>🎯 Harvey Lead Gen Studio — By Source &amp; By 3 Specific Lead Types</h2>
+          <p class="panel-meta">
+            Auth: <code>grok</code> (X/Social) + <code>agy --dangerously-skip-permissions</code> |
+            Mandatory Skills: <code>humanizer</code>, <code>caveman</code>, <code>brainstorming</code>, <code>agent-reach</code>, <code>last30days</code>, <code>test-driven-development</code>
+          </p>
+        </div>
+        <div class="harvey-prospect-btns">
+          <button class="btn btn-green" data-prospect-type="1-affiliate-dateapp">
+            + Prospect Type 1: Date App Affiliates (50% Comm)
+          </button>
+          <button class="btn btn-blue" data-prospect-type="2-subscriptions-dateapp">
+            + Prospect Type 2: Date App Subscriptions ($1 Bot-Shield)
+          </button>
+          <button class="btn btn-amber" data-prospect-type="3-funding-dream-online">
+            + Prospect Type 3: DREAM Online Crowdfunding &amp; E-Waste
+          </button>
+        </div>
+      </div>
+
+      <!-- 3 LEAD TYPE SUMMARY COUNTERS & FILTERS -->
+      <div class="lead-type-cards">
+        <button class="lead-type-card active" data-lead-type="ALL">
+          <div class="lt-title">ALL 3 LEAD TYPES</div>
+          <div class="lt-desc">View every active Harvey lead across all sources</div>
+          <div id="count-lead-all" class="lt-count">6 Active Leads</div>
+        </button>
+        <button class="lead-type-card" data-lead-type="1-affiliate-dateapp">
+          <div class="lt-title">TYPE 1: Affiliate Links for Date App</div>
+          <div class="lt-desc"><code>youandinotai.com</code> — 50% Lifetime Recurring Commission (18+ Creators &amp; Partners)</div>
+          <div id="count-lead-1" class="lt-count">2 Leads</div>
+        </button>
+        <button class="lead-type-card" data-lead-type="2-subscriptions-dateapp">
+          <div class="lt-title">TYPE 2: Subscriptions for Actual Date App</div>
+          <div class="lt-desc"><code>youandinotai.com</code> — Real Verified Human Singles &amp; $1 Bot-Shield Signups</div>
+          <div id="count-lead-2" class="lt-count">2 Leads</div>
+        </button>
+        <button class="lead-type-card" data-lead-type="3-funding-dream-online">
+          <div class="lt-title">TYPE 3: Funding Sources for DREAM Online Crowdfunding</div>
+          <div class="lt-desc"><code>opencollective.com/dream-online</code> &amp; <code>onlinerecycle.net</code> E-Waste Funding</div>
+          <div id="count-lead-3" class="lt-count">2 Leads</div>
+        </button>
+      </div>
+
+      <!-- SOURCE FILTER BAR -->
+      <div class="source-filter-bar">
+        <span class="large-label">Filter by Lead Source:</span>
+        <button class="source-pill active" data-source="ALL">All Sources</button>
+        <button class="source-pill" data-source="X / Grok">X / Grok</button>
+        <button class="source-pill" data-source="Reddit / Agent-Reach">Reddit / Agent-Reach</button>
+        <button class="source-pill" data-source="YouTube / Creators">YouTube / Creators</button>
+        <button class="source-pill" data-source="GitHub / Repos">GitHub / Repos</button>
+        <button class="source-pill" data-source="Direct B2B">Direct B2B</button>
+      </div>
+
+      <!-- HIGH-CONTRAST LEAD CARDS LIST -->
+      <div id="harvey-leads-container" class="harvey-leads-grid"></div>
+    </section>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- TAB 3: FREE CLAUDE CODE (:8082/admin) WRAPPER + HERMES PROFILE BRIDGE -->
+  <!-- ===================================================================== -->
+  <main id="tab-fcc" class="tab-panel">
+    <div class="home-top-grid">
+      <!-- LEFT: BUILT-IN FREE CLAUDE CODE (:8082) MCP CHAT BRIDGED TO HERMES PROFILES -->
+      <section class="panel-card">
+        <div class="panel-header">
+          <div>
+            <h2>🤖 Free Claude Code (<code>:8082/admin</code>) MCP Wrapper Chat</h2>
+            <p class="panel-meta">
+              Talk directly to the Sabretooth Free Claude Code wrapper (<code>fcc-claude</code> / <code>fcc-agy</code>) bridged to your Hermes profiles
+            </p>
+          </div>
+          <span class="badge-green">PORT 8082 ONLINE</span>
+        </div>
+
+        <div class="orchestrator-controls">
+          <label for="fcc-bridge-profile" class="large-label">Bridge Free Claude Code (:8082) With Hermes Profile:</label>
+          <select id="fcc-bridge-profile" class="large-select">
+            <option value="default">Default Research &amp; Master Orchestrator (:9119)</option>
+            <option value="harvey">Harvey 3-Type Lead Gen Profile</option>
+            <option value="youtube">YouTube Shorts (&lt;=59.0s) Profile</option>
+            <option value="editor">Editor CapCut REA Clean-Room Profile</option>
+            <option value="kanban">Kanban &amp; GitHub Judge Webhook Profile</option>
+            <option value="notes">Notes, Dual Graphy &amp; Obsidian Profile</option>
+          </select>
+        </div>
+
+        <div id="fcc-chat-log" class="chat-transcript">
+          <div class="chat-msg assistant">
+            <div class="chat-sender">Free Claude Code MCP Wrapper (<code>http://127.0.0.1:8082/admin</code>)</div>
+            <div class="chat-text">
+              <strong>Outcome:</strong> Free Claude Code v6.18.2 is running on Sabretooth port <code>8082</code> and bridged to all 7 Hermes profiles and OmniRoute (<code>192.168.0.15:20128</code>). Send a prompt below or manage providers in the embedded <code>:8082/admin</code> console on the right.
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <textarea id="fcc-chat-input" rows="3" class="large-textarea" placeholder="Message Free Claude Code (:8082) bridged with Hermes profiles..."></textarea>
+          <div class="chat-btn-row">
+            <button id="btn-send-fcc" class="btn btn-green btn-xl">🚀 Send to Free Claude Code (:8082) + Hermes Profile</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: LIVE EMBEDDED PORT :8082/ADMIN CONSOLE -->
+      <section class="panel-card">
+        <div class="panel-header">
+          <div>
+            <h2>⚙️ Live Port <code>:8082/admin</code> Console (<code>/proxy/fcc/admin</code>)</h2>
+            <p class="panel-meta">Direct admin view of Free Claude Code on Sabretooth (<code>127.0.0.1:8082/admin</code>)</p>
+          </div>
+          <a href="/proxy/fcc/admin" target="_blank" class="btn btn-sm btn-purple">↗ Open in New Tab</a>
+        </div>
+        <iframe src="/proxy/fcc/admin" class="fcc-iframe" title="Free Claude Code 8082 Admin"></iframe>
+      </section>
     </div>
   </main>
 
-  <!-- Agent Chat modal -->
-  <div id="chat-modal-overlay" class="modal-overlay hidden">
-    <div class="modal modal-wide">
-      <div class="modal-header">
-        <h2 id="chat-modal-title">Agent Chat</h2>
-        <button id="chat-modal-close" class="modal-close">&times;</button>
+  <!-- ===================================================================== -->
+  <!-- TAB 4: YOUTUBE SHORTS (<= 59.0s STRICT GATE & NATURAL FEMALE VOICES)   -->
+  <!-- ===================================================================== -->
+  <main id="tab-youtube" class="tab-panel">
+    <section class="panel-card">
+      <div class="panel-header">
+        <div>
+          <h2>🎬 YouTube Shorts (&lt;= 59.0s Gate) &amp; Natural Female Voice Studio</h2>
+          <p class="panel-meta">
+            CLI: <code>agy --dangerously-skip-permissions</code> | API: Official <code>youtube-data-api-v3</code> |
+            Voices: <code>Aoede</code>, <code>Kore</code>, <code>af_heart</code>, <code>af_bella</code>, <code>LFM3-Omni-2B</code> (Robotic TTS Banned)
+          </p>
+        </div>
+        <button id="btn-yt-orchestrate" class="btn btn-green">🎬 Dispatch New &lt;=58.5s Short via Default Orchestrator</button>
       </div>
-      <div class="modal-body" id="chat-modal-body"></div>
-    </div>
-  </div>
+      <div class="lead-type-cards">
+        <div class="lead-type-card">
+          <div class="lt-title">Channel 1: <code>dream-online-mmorpg</code></div>
+          <div class="lt-desc">100% AI-Built 3D Action MMORPG (<code>Built with Google Gemini</code>, Day Dream 3D, Nightmare 3D, 16-Bit Circle-Craft)</div>
+          <div class="lt-count">Target: 45.0s–58.5s (Hard Ceiling &lt;= 59.0s)</div>
+        </div>
+        <div class="lead-type-card">
+          <div class="lt-title">Channel 2: <code>until-no-kid-in-need</code></div>
+          <div class="lt-desc">Transparent Mission Storytelling &amp; Open Collective (<code>opencollective.com/dream-online</code>)</div>
+          <div class="lt-count">100% Natural Female Voice Narration</div>
+        </div>
+        <div class="lead-type-card">
+          <div class="lt-title">Channel 3: <code>ai-dream-team-studio</code></div>
+          <div class="lt-desc">Multi-Agent Engineering, Dual Graphy Workflows &amp; AI Co-Host Podcast Clips</div>
+          <div class="lt-count">4-Hour Strike Interval Active</div>
+        </div>
+      </div>
+      <div id="youtube-media-list" class="media-preview-grid"></div>
+    </section>
+  </main>
 
-  <!-- Card detail modal -->
-  <div id="modal-overlay" class="modal-overlay hidden">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 id="modal-title">Card</h2>
-        <button id="modal-close" class="modal-close">&times;</button>
+  <!-- ===================================================================== -->
+  <!-- TAB 5: KANBAN & CIRCULAR GITHUB JUDGE WEBHOOKS                        -->
+  <!-- ===================================================================== -->
+  <main id="tab-kanban" class="tab-panel">
+    <section class="panel-card">
+      <div class="panel-header">
+        <div>
+          <h2>📋 Sabretooth Kanban Board &amp; GitHub Cloud Judge PR Gate</h2>
+          <p class="panel-meta">Every task requires TDD (<code>node --test</code>) + Screenshot Preview + GitHub Cloud Judge Merge (<code>Gemini / Jules / Claude / Codex</code>)</p>
+        </div>
+        <button id="btn-kanban-sync" class="btn btn-green">🔄 Sync Kanban with Circular Webhook Loop</button>
       </div>
-      <div class="modal-body" id="modal-body"></div>
-    </div>
-  </div>
+      <div id="kanban-profiles-grid" class="graphy-node-grid"></div>
+    </section>
+  </main>
 
-  <!-- YouTube pipeline modal -->
-  <div id="yt-modal-overlay" class="modal-overlay hidden">
-    <div class="modal modal-wide">
-      <div class="modal-header">
-        <h2>YouTube Short Pipeline</h2>
-        <button id="yt-modal-close" class="modal-close">&times;</button>
+  <!-- ===================================================================== -->
+  <!-- TAB 6: EDITOR & REA CLEAN-ROOM MEDIA PREVIEWS                         -->
+  <!-- ===================================================================== -->
+  <main id="tab-editor" class="tab-panel">
+    <section class="panel-card">
+      <div class="panel-header">
+        <div>
+          <h2>🎞️ Editor — CapCut 9.7.0.4153 REA Clean-Room 6-Stage Pipeline</h2>
+          <p class="panel-meta">1. probeMedia &rarr; 2. enforceShortsGate (&lt;=59.0s) &rarr; 3. verifyNaturalFemaleVoice &rarr; 4. assembleTimeline &rarr; 5. renderThumbnails &rarr; 6. publishToPreviewPane</p>
+        </div>
       </div>
-      <div class="modal-body" id="yt-modal-body"></div>
-    </div>
-  </div>
+      <div id="editor-media-grid" class="media-preview-grid"></div>
+    </section>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- TAB 7: OBSIDIAN NODE LEDGERS & 6-LAYER MEMORY SYNC                    -->
+  <!-- ===================================================================== -->
+  <main id="tab-notes" class="tab-panel">
+    <section class="panel-card">
+      <div class="panel-header">
+        <div>
+          <h2>🧠 Sabretooth Node-Specific Obsidian Ledgers &amp; 6-Layer Fallbacks</h2>
+          <p class="panel-meta">
+            Primary: <code>C:\Ai-Dream-Team\Antigravity\Sabretooth\gemini-to-gemini.md</code> &amp; <code>hermes-to-hermes.md</code> |
+            Fallbacks: T5500 <code>ai-memory :49374</code> &rarr; Graphy &rarr; OpenViking &rarr; Supabase &rarr; Supermemory
+          </p>
+        </div>
+        <button id="btn-notes-write" class="btn btn-green">✍️ Append Timestamped Session Note Now</button>
+      </div>
+      <div class="dual-graphy-grid">
+        <div class="panel-card">
+          <h3>📘 <code>Sabretooth/gemini-to-gemini.md</code> (Latest Entries)</h3>
+          <pre id="ledger-gemini-box" class="terminal-output-box"></pre>
+        </div>
+        <div class="panel-card">
+          <h3>📙 <code>Sabretooth/hermes-to-hermes.md</code> (Latest Entries)</h3>
+          <pre id="ledger-hermes-box" class="terminal-output-box"></pre>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script src="renderer.js"></script>
 </body>

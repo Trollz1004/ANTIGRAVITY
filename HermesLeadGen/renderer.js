@@ -1,756 +1,583 @@
-// HermesLeadGen renderer
+// Sabretooth (.8) Command Studio — High-Contrast Renderer
+let activeLeadType = 'ALL';
+let activeLeadSource = 'ALL';
+let lastOrchestratorReply = 'Default Research and Master Orchestrator is ready on Sabretooth port 8392.';
 
-const ALLOWED_VOICES = ['Aoede', 'Kore', 'af_heart', 'af_bella', 'LFM3-Omni-2B'];
-const BANNED_TTS = ['pyttsx3', 'espeak', 'sapi', 'sam', 'robotic-default'];
-const CHANNELS = ['@DreamOnlineMMO', '@UntilNoKidInNeed', '@AIDreamTeamStudio'];
-const STRIKE_INTERVAL_MS = 4 * 60 * 60 * 1000; // 4 hours
-const MIN_SHORT_S = 45;
-const MAX_SHORT_S = 58.5;
-const HARD_CEILING_S = 59;
-
-let cards = [];
-let publishLog = [];
-let stats = {};
-
-// --- Init ---
-async function init() {
-  cards = await window.hermes.cards.load();
-  publishLog = await window.hermes.publish.load();
-  stats = await window.hermes.stats.load();
-
-  // Reset shortsToday if new day
-  if (stats.shortsTodayDate !== new Date().toDateString()) {
-    stats.shortsToday = 0;
-    stats.shortsTodayDate = new Date().toDateString();
-  }
-
-  renderBoard();
-  updateTopBar();
-  updateWorkerStatus();
-
-  // Event listeners
-  document.querySelectorAll('.add-card-btn').forEach(btn => {
-    btn.addEventListener('click', () => showAddCardModal(btn.dataset.status));
-  });
-  document.getElementById('modal-close').addEventListener('click', closeModal);
-  document.getElementById('modal-overlay').addEventListener('click', (e) => {
-    if (e.target.id === 'modal-overlay') closeModal();
-  });
-  document.getElementById('yt-modal-close').addEventListener('click', closeYtModal);
-  document.getElementById('yt-modal-overlay').addEventListener('click', (e) => {
-    if (e.target.id === 'yt-modal-overlay') closeYtModal();
-  });
-
-  // Periodic worker health refresh
-  setInterval(updateWorkerStatus, 30000);
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
-// --- Top bar ---
-async function updateTopBar() {
-  const lastPub = publishLog.length > 0
-    ? new Date(publishLog[publishLog.length - 1].timestamp)
-    : null;
-  const nextLegal = lastPub ? new Date(lastPub.getTime() + STRIKE_INTERVAL_MS) : new Date();
-
-  document.getElementById('shorts-today').textContent = stats.shortsToday || 0;
-  document.getElementById('last-publish').textContent = lastPub ? formatTime(lastPub) : '—';
-  document.getElementById('next-publish').textContent = formatTime(nextLegal);
-  document.getElementById('emails-sent').textContent = stats.emailsSent || 0;
-  document.getElementById('replies').textContent = stats.replies || 0;
-  document.getElementById('revenue').textContent = '$' + (stats.revenue || 0).toLocaleString();
-}
-
-function formatTime(d) {
-  return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-}
-
-async function updateWorkerStatus() {
-  const health = await window.hermes.workerHealth();
-  const el = document.getElementById('worker-status');
-  if (health && health.status === 'ok') {
-    el.textContent = `Worker OK · ${health.worker?.gpu || 'GPU'} · :8391`;
-    el.className = 'worker-status ok';
-  } else {
-    el.textContent = 'Worker offline';
-    el.className = 'worker-status err';
-  }
-}
-
-// --- Kanban board ---
-function renderBoard() {
-  const columns = { todo: [], doing: [], done: [], blocked: [] };
-  cards.forEach(c => {
-    if (columns[c.status]) columns[c.status].push(c);
-  });
-  Object.keys(columns).forEach(status => {
-    const container = document.getElementById('col-' + status);
-    container.innerHTML = '';
-    columns[status].forEach(card => container.appendChild(renderCard(card)));
-  });
-}
-
-function renderCard(card) {
-  const el = document.createElement('div');
-  el.className = 'card';
-  el.dataset.id = card.id;
-  el.innerHTML = `
-    <div class="card-title">${escapeHtml(card.title)}</div>
-    <div class="card-type ${card.type}">${card.typeLabel}</div>
-    ${card.meta ? `<div class="card-meta">${escapeHtml(card.meta)}</div>` : ''}
-    <div class="card-actions">
-      ${renderCardActions(card)}
-    </div>
-  `;
-  // Drag & drop
-  el.draggable = true;
-  el.addEventListener('dragstart', (e) => {
-    e.dataTransfer.setData('text/plain', card.id);
-  });
-  el.addEventListener('click', (e) => {
-    if (e.target.classList.contains('card-btn')) return;
-    openCardDetail(card.id);
-  });
-  return el;
-}
-
-function renderCardActions(card) {
-  const btns = [];
-  if (card.type === 'youtube') {
-    btns.push(`<button class="card-btn primary" onclick="startYouTubePipeline('${card.id}')">Pipeline</button>`);
-  }
-  if (card.status === 'todo') {
-    btns.push(`<button class="card-btn" onclick="moveCard('${card.id}','doing')">Start</button>`);
-  }
-  if (card.status === 'doing') {
-    btns.push(`<button class="card-btn primary" onclick="moveCard('${card.id}','done')">Done</button>`);
-    btns.push(`<button class="card-btn danger" onclick="moveCard('${card.id}','blocked')">Block</button>`);
-  }
-  if (card.status === 'blocked') {
-    btns.push(`<button class="card-btn" onclick="moveCard('${card.id}','todo')">Unblock</button>`);
-  }
-  return btns.join('');
-}
-
-// Drag & drop on columns
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.column-body').forEach(col => {
-    col.addEventListener('dragover', (e) => e.preventDefault());
-    col.addEventListener('drop', (e) => {
-      e.preventDefault();
-      const cardId = e.dataTransfer.getData('text/plain');
-      const newStatus = col.parentElement.dataset.status;
-      moveCard(cardId, newStatus);
-    });
+// ============================================================================
+// 1. TAB SWITCHING
+// ============================================================================
+document.querySelectorAll('.tab-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const tabId = btn.getAttribute('data-tab');
+    document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById(`tab-${tabId}`);
+    if (panel) panel.classList.add('active');
+    if (tabId === 'notes') loadObsidianLedgers();
   });
 });
 
-function moveCard(cardId, newStatus) {
-  const card = cards.find(c => c.id === cardId);
-  if (!card) return;
-  card.status = newStatus;
-  card.updatedAt = new Date().toISOString();
-  saveCards();
-  renderBoard();
-}
-
-function saveCards() {
-  window.hermes.cards.save(cards);
-}
-
-// --- Add card modal ---
-function showAddCardModal(defaultStatus) {
-  const body = document.getElementById('modal-body');
-  body.innerHTML = `
-    <div class="form-group">
-      <label>Card Type</label>
-      <select id="card-type">
-        <option value="youtube">YouTube Short</option>
-        <option value="outreach">Cold Outreach (Harvey)</option>
-        <option value="affiliate">Affiliate Check</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Title</label>
-      <input type="text" id="card-title" placeholder="e.g. DREAM Online day/night cycle devlog" />
-    </div>
-    <div class="form-group">
-      <label>Notes / Meta</label>
-      <textarea id="card-meta" placeholder="Channel, topic, target, etc."></textarea>
-    </div>
-    <div class="form-actions">
-      <button class="card-btn" onclick="closeModal()">Cancel</button>
-      <button class="card-btn primary" onclick="createCard('${defaultStatus}')">Create</button>
-    </div>
-  `;
-  document.getElementById('modal-title').textContent = 'New Card';
-  document.getElementById('modal-overlay').classList.remove('hidden');
-}
-
-function createCard(status) {
-  const type = document.getElementById('card-type').value;
-  const title = document.getElementById('card-title').value.trim();
-  if (!title) { alert('Title required'); return; }
-  const meta = document.getElementById('card-meta').value.trim();
-
-  const typeLabels = { youtube: 'YouTube Short', outreach: 'Cold Outreach', affiliate: 'Affiliate Check' };
-
-  const card = {
-    id: 'card_' + Date.now(),
-    type,
-    typeLabel: typeLabels[type],
-    title,
-    meta,
-    status: status || 'todo',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
-  cards.push(card);
-  saveCards();
-  renderBoard();
-  closeModal();
-}
-
-function openCardDetail(cardId) {
-  const card = cards.find(c => c.id === cardId);
-  if (!card) return;
-  const body = document.getElementById('modal-body');
-  body.innerHTML = `
-    <div class="form-group">
-      <label>Type</label>
-      <div>${card.typeLabel}</div>
-    </div>
-    <div class="form-group">
-      <label>Title</label>
-      <input type="text" id="edit-title" value="${escapeAttr(card.title)}" />
-    </div>
-    <div class="form-group">
-      <label>Notes / Meta</label>
-      <textarea id="edit-meta">${escapeHtml(card.meta || '')}</textarea>
-    </div>
-    <div class="form-group">
-      <label>Status</label>
-      <select id="edit-status">
-        <option value="todo" ${card.status==='todo'?'selected':''}>Todo</option>
-        <option value="doing" ${card.status==='doing'?'selected':''}>Doing</option>
-        <option value="done" ${card.status==='done'?'selected':''}>Done</option>
-        <option value="blocked" ${card.status==='blocked'?'selected':''}>Blocked</option>
-      </select>
-    </div>
-    <div class="form-actions">
-      <button class="card-btn danger" onclick="deleteCard('${card.id}')">Delete</button>
-      <button class="card-btn" onclick="closeModal()">Cancel</button>
-      <button class="card-btn primary" onclick="saveCardEdit('${card.id}')">Save</button>
-    </div>
-  `;
-  document.getElementById('modal-title').textContent = 'Edit Card';
-  document.getElementById('modal-overlay').classList.remove('hidden');
-}
-
-function saveCardEdit(cardId) {
-  const card = cards.find(c => c.id === cardId);
-  if (!card) return;
-  card.title = document.getElementById('edit-title').value.trim();
-  card.meta = document.getElementById('edit-meta').value.trim();
-  card.status = document.getElementById('edit-status').value;
-  card.updatedAt = new Date().toISOString();
-  saveCards();
-  renderBoard();
-  closeModal();
-}
-
-function deleteCard(cardId) {
-  if (!confirm('Delete this card?')) return;
-  cards = cards.filter(c => c.id !== cardId);
-  saveCards();
-  renderBoard();
-  closeModal();
-}
-
-function closeModal() {
-  document.getElementById('modal-overlay').classList.add('hidden');
-}
-
-// --- YouTube Pipeline ---
-let ytState = {
-  cardId: null,
-  step: 0,
-  channel: CHANNELS[0],
-  voice: ALLOWED_VOICES[0],
-  topic: '',
-  script: '',
-  audioPath: '',
-  videoPath: '',
-  duration: 0,
-  previewApproved: false
-};
-
-function startYouTubePipeline(cardId) {
-  ytState = { cardId, step: 0, channel: CHANNELS[0], voice: ALLOWED_VOICES[0], topic: '', script: '', audioPath: '', videoPath: '', duration: 0, previewApproved: false };
-  const card = cards.find(c => c.id === cardId);
-  if (card) ytState.topic = card.title + (card.meta ? ' — ' + card.meta : '');
-  showYtModal();
-}
-
-function showYtModal() {
-  renderYtModal();
-  document.getElementById('yt-modal-overlay').classList.remove('hidden');
-}
-
-function closeYtModal() {
-  document.getElementById('yt-modal-overlay').classList.add('hidden');
-}
-
-function renderYtModal() {
-  const body = document.getElementById('yt-modal-body');
-  body.innerHTML = `
-    <!-- Step 1: Topic & Channel -->
-    <div class="yt-step">
-      <h3>Step 1 — Topic & Channel</h3>
-      <div class="form-group">
-        <label>Topic / Title</label>
-        <input type="text" id="yt-topic" value="${escapeAttr(ytState.topic)}" />
-      </div>
-      <div class="form-group">
-        <label>Channel</label>
-        <div class="channel-list">
-          ${CHANNELS.map(ch => `<span class="channel-chip ${ch===ytState.channel?'selected':''}" onclick="selectChannel('${ch}')">${ch}</span>`).join('')}
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Voice (allowed only)</label>
-        <div class="voice-list">
-          ${ALLOWED_VOICES.map(v => `<span class="voice-chip ${v===ytState.voice?'selected':''}" onclick="selectVoice('${v}')">${v}</span>`).join('')}
-        </div>
-        <div style="font-size:10px;color:#f85149;margin-top:4px;">Banned: ${BANNED_TTS.join(', ')}</div>
-      </div>
-      <button class="card-btn primary" onclick="ytGenerateScript()">Generate Script (gemini-4-high-reasoning)</button>
-      <div class="status" id="yt-script-status"></div>
-    </div>
-
-    <!-- Step 2: Script -->
-    <div class="yt-step">
-      <h3>Step 2 — Script (45–58.5s target)</h3>
-      <div class="form-group">
-        <label>Script</label>
-        <textarea id="yt-script" rows="8" placeholder="Generated script appears here...">${escapeHtml(ytState.script)}</textarea>
-      </div>
-      <div class="status" id="yt-script-len"></div>
-    </div>
-
-    <!-- Step 3: Render -->
-    <div class="yt-step">
-      <h3>Step 3 — Render (DirectML/Vulkan on RX 6800)</h3>
-      <button class="card-btn" onclick="ytRender()">Render MP4 (45–58.5s)</button>
-      <div class="status" id="yt-render-status"></div>
-    </div>
-
-    <!-- Step 4: Visualize (MANDATORY) -->
-    <div class="yt-step">
-      <h3>Step 4 — VISUALIZE (Founder must preview before upload)</h3>
-      <button class="card-btn" onclick="ytSelectPreview()">Select MP4 Preview</button>
-      <div id="yt-preview-area"></div>
-      <div class="status" id="yt-preview-status"></div>
-    </div>
-
-    <!-- Step 5: Publish -->
-    <div class="yt-step">
-      <h3>Step 5 — Publish (youtube-data-api-v3)</h3>
-      <div class="status" id="yt-publish-status"></div>
-      <button class="card-btn primary" id="yt-publish-btn" onclick="ytPublish()" disabled>Publish to YouTube</button>
-      <div style="font-size:10px;color:#8b949e;margin-top:6px;">Strike interval: 4 hours between publishes. Next legal: <span id="yt-next-legal">—</span></div>
-    </div>
-  `;
-  updateYtNextLegal();
-}
-
-function selectChannel(ch) {
-  ytState.channel = ch;
-  renderYtModal();
-}
-
-function selectVoice(v) {
-  ytState.voice = v;
-  renderYtModal();
-}
-
-async function ytGenerateScript() {
-  ytState.topic = document.getElementById('yt-topic').value.trim();
-  const status = document.getElementById('yt-script-status');
-  status.textContent = 'Generating script via OmniRoute (gemini-4-high-reasoning)...';
-  status.className = 'status warn';
-
-  const result = await window.hermes.omniroute.chat({
-    model: 'gemini-4-high-reasoning',
-    messages: [
-      { role: 'system', content: 'You are a YouTube Shorts script writer for DREAM Online MMORPG, Until No Kid In Need, and AI Dream Team Studio. Write punchy, human-sounding scripts. No AI-isms. Target 45-58.5 seconds spoken (about 110-145 words). Output ONLY the script text, no stage directions, no markdown.' },
-      { role: 'user', content: `Write a YouTube Short script about: ${ytState.topic}\nChannel: ${ytState.channel}\nKeep it under 145 words, energetic, human cadence.` }
-    ]
-  });
-
-  if (result.ok) {
-    ytState.script = result.content.trim();
-    document.getElementById('yt-script').value = ytState.script;
-    const words = ytState.script.split(/\s+/).length;
-    const estSec = Math.round(words / 2.5);
-    const lenEl = document.getElementById('yt-script-len');
-    lenEl.textContent = `~${words} words ≈ ${estSec}s (target 45–58.5s)`;
-    lenEl.className = 'status ' + (estSec >= 45 && estSec <= 58.5 ? 'ok' : 'warn');
-    status.textContent = 'Script generated.';
-    status.className = 'status ok';
-  } else {
-    status.textContent = 'Error: ' + (result.error || 'unknown');
-    status.className = 'status err';
+// ============================================================================
+// 2. RED LIGHT / GREEN LIGHT PORT STATUS BAR & SELF-HEAL
+// ============================================================================
+async function refreshNodeStatus() {
+  try {
+    const res = await fetch('/api/node/status');
+    const data = await res.json();
+    const strip = document.getElementById('service-lights-strip');
+    if (!strip || !Array.isArray(data.services)) return;
+    strip.innerHTML = data.services
+      .map(
+        (s) => `
+        <div class="light-pill ${s.up ? 'green' : 'red'}" title="${escapeHtml(s.url)}">
+          <span class="led"></span>
+          <span>${escapeHtml(s.name)}: <strong>${s.light}</strong></span>
+        </div>`
+      )
+      .join('');
+  } catch (err) {
+    console.error('Status check error:', err);
   }
 }
 
-async function ytRender() {
-  ytState.script = document.getElementById('yt-script').value.trim();
-  const status = document.getElementById('yt-render-status');
-  status.textContent = 'Rendering... (GPU path: DirectML/Vulkan on RX 6800). In production this calls the worker render pipeline.';
-  status.className = 'status warn';
-
-  // In a full implementation this would call the worker render endpoint.
-  // For now, we track the state and mark ready for preview.
-  setTimeout(() => {
-    ytState.duration = 52; // placeholder
-    status.textContent = `Render complete. Duration: ${ytState.duration}s (within 45–58.5s). Ready for preview.`;
-    status.className = 'status ok';
-  }, 1500);
-}
-
-async function ytSelectPreview() {
-  const filePath = await window.hermes.dialog.openFile();
-  if (!filePath) return;
-  ytState.videoPath = filePath;
-  ytState.previewApproved = false;
-
-  const area = document.getElementById('yt-preview-area');
-  area.innerHTML = `<video class="preview-player" controls src="file://${filePath.replace(/\\/g, '/')}"></video>`;
-
-  const status = document.getElementById('yt-preview-status');
-  status.textContent = 'Preview loaded. Watch it, then approve to enable publish.';
-  status.className = 'status warn';
-
-  // Add approve button
-  const approveBtn = document.createElement('button');
-  approveBtn.className = 'card-btn primary';
-  approveBtn.style.marginTop = '8px';
-  approveBtn.textContent = 'I have visualized this MP4 — Approve for upload';
-  approveBtn.onclick = () => {
-    ytState.previewApproved = true;
-    status.textContent = 'Approved. Publish enabled.';
-    status.className = 'status ok';
-    document.getElementById('yt-publish-btn').disabled = false;
-  };
-  area.appendChild(approveBtn);
-}
-
-function updateYtNextLegal() {
-  const lastPub = publishLog.length > 0 ? new Date(publishLog[publishLog.length-1].timestamp) : null;
-  const nextLegal = lastPub ? new Date(lastPub.getTime() + STRIKE_INTERVAL_MS) : new Date();
-  const el = document.getElementById('yt-next-legal');
-  if (el) el.textContent = formatTime(nextLegal);
-}
-
-async function ytPublish() {
-  if (!ytState.previewApproved) {
-    alert('You must visualize (preview) the MP4 before publishing.');
-    return;
+document.getElementById('btn-self-heal')?.addEventListener('click', async () => {
+  const btn = document.getElementById('btn-self-heal');
+  btn.textContent = '⏳ Checking & Self-Healing...';
+  try {
+    await fetch('/api/node/heal', { method: 'POST' });
+    await refreshNodeStatus();
+    await refreshTerminalLogs();
+  } finally {
+    btn.textContent = '⚡ Self-Heal & Verify Ports';
   }
+});
 
-  // Check 4-hour interval
-  const lastPub = publishLog.length > 0 ? new Date(publishLog[publishLog.length-1].timestamp) : null;
-  const now = new Date();
-  if (lastPub && (now.getTime() - lastPub.getTime()) < STRIKE_INTERVAL_MS) {
-    const nextLegal = new Date(lastPub.getTime() + STRIKE_INTERVAL_MS);
-    const status = document.getElementById('yt-publish-status');
-    status.textContent = `BLOCKED: Next legal publish at ${formatTime(nextLegal)}. 4-hour interval not met.`;
-    status.className = 'status err';
+// ============================================================================
+// 3. DEFAULT HERMES + GEMINI AGY ORCHESTRATOR (VOICE STT + TTS + TEXT)
+// ============================================================================
+async function sendOrchestratorPrompt() {
+  const input = document.getElementById('orchestrator-input');
+  const select = document.getElementById('orchestrate-target-profile');
+  const chatLog = document.getElementById('orchestrator-chat-log');
+  const prompt = (input?.value || '').trim();
+  if (!prompt) return;
 
-    // Mark card as blocked
-    const card = cards.find(c => c.id === ytState.cardId);
-    if (card) {
-      card.status = 'blocked';
-      card.meta = (card.meta || '') + ` | Blocked: next legal publish ${formatTime(nextLegal)}`;
-      saveCards();
-      renderBoard();
-    }
-    return;
-  }
-
-  const status = document.getElementById('yt-publish-status');
-  status.textContent = 'Publishing via youtube-data-api-v3...';
-  status.className = 'status warn';
-
-  // In production this calls the YouTube Data API v3 upload endpoint.
-  // Record the publish.
-  const entry = {
-    timestamp: new Date().toISOString(),
-    channel: ytState.channel,
-    voice: ytState.voice,
-    topic: ytState.topic,
-    duration: ytState.duration,
-    videoPath: ytState.videoPath
-  };
-  publishLog.push(entry);
-  await window.hermes.publish.save(publishLog);
-
-  // Update stats
-  stats.shortsToday = (stats.shortsToday || 0) + 1;
-  stats.shortsTodayDate = new Date().toDateString();
-  await window.hermes.stats.save(stats);
-
-  // Mark card done
-  const card = cards.find(c => c.id === ytState.cardId);
-  if (card) {
-    card.status = 'done';
-    card.meta = (card.meta || '') + ` | Published ${formatTime(new Date())} to ${ytState.channel}`;
-    saveCards();
-  }
-
-  status.textContent = `Published to ${ytState.channel}. Next publish legal after ${formatTime(new Date(Date.now() + STRIKE_INTERVAL_MS))}.`;
-  status.className = 'status ok';
-
-  renderBoard();
-  updateTopBar();
-  closeYtModal();
-}
-
-// --- Helpers ---
-function escapeHtml(s) {
-  return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-function escapeAttr(s) {
-  return String(s || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-}
-
-// --- Notes & Ideas (FluxInk-style) ---
-let notes = [];
-
-function loadNotes() {
-  try { notes = JSON.parse(localStorage.getItem('hermes-notes') || '[]'); } catch (e) { notes = []; }
-}
-
-function saveNotes() {
-  localStorage.setItem('hermes-notes', JSON.stringify(notes));
-}
-
-function showNotesModal() {
-  loadNotes();
-  renderNotesModal();
-  document.getElementById('notes-modal-overlay').classList.remove('hidden');
-  document.getElementById('notes-modal-close').onclick = closeNotesModal;
-  document.getElementById('notes-modal-overlay').onclick = (e) => {
-    if (e.target.id === 'notes-modal-overlay') closeNotesModal();
-  };
-}
-
-function closeNotesModal() {
-  document.getElementById('notes-modal-overlay').classList.add('hidden');
-}
-
-function renderNotesModal() {
-  const body = document.getElementById('notes-modal-body');
-  body.innerHTML = `
-    <div class="yt-step">
-      <h3>Write Naturally — Capture Ideas</h3>
-      <div class="form-group">
-        <label>Title</label>
-        <input type="text" id="note-title" placeholder="Idea title..." />
-      </div>
-      <div class="form-group">
-        <label>Content (notes, sketches, ideas)</label>
-        <textarea id="note-content" rows="6" placeholder="Write your idea here..."></textarea>
-      </div>
-      <div class="form-actions">
-        <button class="card-btn primary" onclick="createNote()">Save Note</button>
-      </div>
-    </div>
-
-    <div class="yt-step">
-      <h3>AI Actions</h3>
-      <div class="form-group">
-        <label>Select Note</label>
-        <select id="note-select">${notes.map((n, i) => `<option value="${i}">${escapeHtml(n.title)}</option>`).join('')}</select>
-      </div>
-      <div class="form-actions">
-        <button class="card-btn" onclick="aiSummarizeNote()">Summarize with AI</button>
-        <button class="card-btn" onclick="aiGreetingCard()">Create Greeting Card</button>
-        <button class="card-btn" onclick="autoLayoutNotes()">Auto Layout</button>
-      </div>
-      <div class="status" id="note-ai-status"></div>
-      <div id="note-ai-output" style="margin-top:8px;"></div>
-    </div>
-
-    <div class="yt-step">
-      <h3>Saved Notes (${notes.length})</h3>
-      <div id="notes-list">${notes.map((n, i) => `
-        <div class="card" style="margin-bottom:6px;">
-          <div class="card-title">${escapeHtml(n.title)}</div>
-          <div class="card-meta">${escapeHtml((n.content || '').substring(0, 120))}${(n.content || '').length > 120 ? '...' : ''}</div>
-          <div class="card-actions">
-            <button class="card-btn danger" onclick="deleteNote(${i})">Delete</button>
-          </div>
-        </div>
-      `).join('') || '<div style="color:#8b949e;font-size:12px;">No notes yet.</div>'}</div>
-    </div>
-  `;
-}
-
-function createNote() {
-  const title = document.getElementById('note-title').value.trim();
-  const content = document.getElementById('note-content').value.trim();
-  if (!title) { alert('Title required'); return; }
-  notes.push({ title, content, createdAt: new Date().toISOString() });
-  saveNotes();
-  renderNotesModal();
-}
-
-function deleteNote(i) {
-  if (!confirm('Delete this note?')) return;
-  notes.splice(i, 1);
-  saveNotes();
-  renderNotesModal();
-}
-
-async function aiSummarizeNote() {
-  const idx = parseInt(document.getElementById('note-select').value);
-  const note = notes[idx];
-  if (!note) return;
-  const status = document.getElementById('note-ai-status');
-  status.textContent = 'Summarizing with AI...';
-  status.className = 'status warn';
-  const result = await window.hermes.omniroute.chat({
-    model: 'gemini-4-high-reasoning',
-    messages: [
-      { role: 'system', content: 'You are a concise summarizer. Summarize the following note in 2-3 sentences. No AI-isms.' },
-      { role: 'user', content: note.title + '\n\n' + note.content }
-    ]
-  });
-  if (result.ok) {
-    document.getElementById('note-ai-output').innerHTML = `<div class="yt-step"><h3>Summary</h3><p>${escapeHtml(result.content)}</p></div>`;
-    status.textContent = 'Summary generated.';
-    status.className = 'status ok';
-  } else {
-    status.textContent = 'Error: ' + (result.error || 'unknown');
-    status.className = 'status err';
-  }
-}
-
-async function aiGreetingCard() {
-  const idx = parseInt(document.getElementById('note-select').value);
-  const note = notes[idx];
-  if (!note) return;
-  const status = document.getElementById('note-ai-status');
-  status.textContent = 'Creating greeting card with AI...';
-  status.className = 'status warn';
-  const result = await window.hermes.omniroute.chat({
-    model: 'gemini-4-high-reasoning',
-    messages: [
-      { role: 'system', content: 'You are a creative greeting card writer. Turn the following idea into a warm, personal greeting card message. Include a title line, body, and sign-off. No AI-isms. Human, authentic tone.' },
-      { role: 'user', content: note.title + '\n\n' + note.content }
-    ]
-  });
-  if (result.ok) {
-    document.getElementById('note-ai-output').innerHTML = `<div class="yt-step"><h3>Greeting Card</h3><pre style="white-space:pre-wrap;font-family:inherit;">${escapeHtml(result.content)}</pre></div>`;
-    status.textContent = 'Greeting card generated.';
-    status.className = 'status ok';
-  } else {
-    status.textContent = 'Error: ' + (result.error || 'unknown');
-    status.className = 'status err';
-  }
-}
-
-function autoLayoutNotes() {
-  // Simple auto-layout: sort by date, group by first word
-  notes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  saveNotes();
-  renderNotesModal();
-  const status = document.getElementById('note-ai-status');
-  status.textContent = 'Notes reorganized by date (newest first).';
-  status.className = 'status ok';
-}
-
-// --- Tab switching ---
-function switchTab(tabName) {
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-  document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
-  document.getElementById('tab-' + tabName).classList.add('active');
-}
-
-// --- Agent Chat ---
-const AGENT_PROFILES = {
-  youtube: { name: 'YouTube Agent', soul: 'youtube-agent', system: 'You are the YouTube Agent for HermesLeadGen on Sabretooth. You handle YouTube Short scripting (gemini-4-high-reasoning), voice selection (Aoede, Kore, af_heart, af_bella, LFM3-Omni-2B), rendering (45-58.5s, DirectML/Vulkan), and publishing (youtube-data-api-v3). Enforce 4-hour strike interval. Founder must visualize MP4 before upload. No banned TTS (pyttsx3, espeak, sapi, sam, robotic-default). No Paperclip.' },
-  editor: { name: 'Editor Agent (REA Media)', soul: 'editor-agent', system: 'You are the Editor Agent for HermesLeadGen on Sabretooth. You handle REA (Reverse Engineer Anything) media creation, ComfyUI workflows (DirectML on RX 6800), HyperFrames video rendering, and media asset management. Use agent-reach for research. No Paperclip.' },
-  harvey: { name: 'Marketing Lead (Harvey)', soul: 'harvey-agent', system: 'You are the Harvey Marketing Lead Agent for HermesLeadGen on Sabretooth. You handle cold outreach (3-email sequences, <75 words each), prospecting, reply handling, and affiliate checks. Use humanizer for zero AI-slop copy. No Paperclip.' },
-  notes: { name: 'Notes & Ideas Agent', soul: 'notes-agent', system: 'You are the Notes & Ideas Agent for HermesLeadGen on Sabretooth. You help capture ideas, summarize notes, create greeting cards, and organize thoughts using AI (OmniRoute/gemini-4-high-reasoning). No Paperclip.' }
-};
-
-function openAgentChat(profileKey) {
-  const profile = AGENT_PROFILES[profileKey];
-  if (!profile) return;
-  const body = document.getElementById('chat-modal-body');
-  body.innerHTML = `
-    <div class="chat-messages" id="chat-messages"></div>
-    <div class="chat-input-row">
-      <input type="text" id="chat-input" placeholder="Ask ${profile.name}..." onkeydown="if(event.key==='Enter')sendChatMessage('${profileKey}')" />
-      <button class="card-btn primary" onclick="sendChatMessage('${profileKey}')">Send</button>
-    </div>
-  `;
-  document.getElementById('chat-modal-title').textContent = profile.name + ' Chat';
-  document.getElementById('chat-modal-overlay').classList.remove('hidden');
-  document.getElementById('chat-modal-close').onclick = () => document.getElementById('chat-modal-overlay').classList.add('hidden');
-  document.getElementById('chat-modal-overlay').onclick = (e) => {
-    if (e.target.id === 'chat-modal-overlay') document.getElementById('chat-modal-overlay').classList.add('hidden');
-  };
-  // Load chat history
-  const history = JSON.parse(localStorage.getItem('chat-' + profileKey) || '[]');
-  const msgs = document.getElementById('chat-messages');
-  history.forEach(m => {
-    msgs.innerHTML += `<div class="chat-msg ${m.role}">${escapeHtml(m.content)}</div>`;
-  });
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-async function sendChatMessage(profileKey) {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text) return;
+  const targetProfile = select?.value || 'auto';
+  chatLog.innerHTML += `
+    <div class="chat-msg user">
+      <div class="chat-sender">Founder Joshua Coleman &rarr; [${escapeHtml(targetProfile.toUpperCase())}]</div>
+      <div class="chat-text">${escapeHtml(prompt)}</div>
+    </div>`;
   input.value = '';
-  const profile = AGENT_PROFILES[profileKey];
-  const msgs = document.getElementById('chat-messages');
-  msgs.innerHTML += `<div class="chat-msg user">${escapeHtml(text)}</div>`;
-  msgs.scrollTop = msgs.scrollHeight;
+  chatLog.scrollTop = chatLog.scrollHeight;
 
-  const history = JSON.parse(localStorage.getItem('chat-' + profileKey) || '[]');
-  history.push({ role: 'user', content: text });
+  try {
+    const res = await fetch('/api/orchestrate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, targetProfile })
+    });
+    const data = await res.json();
+    lastOrchestratorReply = data.reply || 'Task dispatched.';
+    chatLog.innerHTML += `
+      <div class="chat-msg assistant">
+        <div class="chat-sender">${escapeHtml(data.profileName || 'Orchestrator')} (<code>${escapeHtml(data.cliUsed || 'agy --dangerously-skip-permissions')}</code>)</div>
+        <div class="chat-text">${escapeHtml(lastOrchestratorReply)}</div>
+      </div>`;
+    chatLog.scrollTop = chatLog.scrollHeight;
+    await refreshTerminalLogs();
+    await refreshHookLoop();
+  } catch (err) {
+    chatLog.innerHTML += `<div class="chat-msg assistant"><div class="chat-text">Error: ${escapeHtml(err.message)}</div></div>`;
+  }
+}
 
-  const result = await window.hermes.omniroute.chat({
-    model: 'gemini-4-high-reasoning',
-    messages: [
-      { role: 'system', content: profile.system },
-      ...history.map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }))
-    ]
+document.getElementById('btn-send-orchestrate')?.addEventListener('click', sendOrchestratorPrompt);
+document.getElementById('orchestrator-input')?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+    sendOrchestratorPrompt();
+  }
+});
+
+// Web Speech STT Microphone Input
+document.getElementById('btn-voice-mic')?.addEventListener('click', () => {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const btn = document.getElementById('btn-voice-mic');
+  const input = document.getElementById('orchestrator-input');
+  if (!SpeechRecognition) {
+    input.value = 'Orchestrate Harvey Lead Gen and YouTube Shorts with agy --dangerously-skip-permissions';
+    return;
+  }
+  const rec = new SpeechRecognition();
+  rec.lang = 'en-US';
+  rec.interimResults = false;
+  btn.textContent = '🔴 Listening... Speak Now';
+  rec.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    input.value = (input.value ? input.value + ' ' : '') + transcript;
+  };
+  rec.onend = () => {
+    btn.textContent = '🎤 Speak Voice Command (Mic)';
+  };
+  rec.onerror = () => {
+    btn.textContent = '🎤 Speak Voice Command (Mic)';
+  };
+  rec.start();
+});
+
+// Natural Female Voice Read-Aloud
+document.getElementById('btn-voice-tts')?.addEventListener('click', () => {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(lastOrchestratorReply.replace(/[`*#]/g, ''));
+  const voices = window.speechSynthesis.getVoices();
+  const femaleVoice = voices.find((v) => /female|aria|jenny|zira|samantha|google us english/i.test(v.name));
+  if (femaleVoice) utter.voice = femaleVoice;
+  utter.rate = 1.0;
+  window.speechSynthesis.speak(utter);
+});
+
+// ============================================================================
+// 4. PREVIEW PANE 1: LIVE TERMINAL WORK STREAM
+// ============================================================================
+async function refreshTerminalLogs() {
+  try {
+    const res = await fetch('/api/terminal/logs');
+    const data = await res.json();
+    const box = document.getElementById('terminal-preview-box');
+    if (!box || !Array.isArray(data.logs)) return;
+    box.innerHTML = data.logs
+      .slice()
+      .reverse()
+      .map(
+        (l) => `
+        <div class="term-entry">
+          <div class="term-cmd">[${escapeHtml(l.ts.slice(11, 19))}] [${escapeHtml(l.profile.toUpperCase())}] $ ${escapeHtml(l.cmd)}</div>
+          <div>${escapeHtml(l.output)}</div>
+        </div>`
+      )
+      .join('');
+  } catch (err) {
+    console.error('Terminal log error:', err);
+  }
+}
+
+document.querySelectorAll('[data-term-cmd]').forEach((btn) => {
+  btn.addEventListener('click', async () => {
+    const action = btn.getAttribute('data-term-cmd');
+    const oldText = btn.textContent;
+    btn.textContent = '⏳ Running...';
+    try {
+      await fetch('/api/terminal/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, profile: 'default' })
+      });
+      await refreshTerminalLogs();
+    } finally {
+      btn.textContent = oldText;
+    }
   });
+});
 
-  const reply = result.ok ? result.content : 'Error: ' + (result.error || 'unknown');
-  msgs.innerHTML += `<div class="chat-msg agent">${escapeHtml(reply)}</div>`;
-  msgs.scrollTop = msgs.scrollHeight;
+// ============================================================================
+// 5. PREVIEW PANE 2: MEDIA, THUMBNAILS, SCREENSHOTS & VIDEO PLAYER
+// ============================================================================
+async function refreshMediaPreviews() {
+  try {
+    const res = await fetch('/api/media/previews');
+    const data = await res.json();
+    const items = data.items || [];
+    const renderCards = (list) =>
+      list
+        .map((m) => {
+          let mediaEl = '';
+          if (m.type === 'video') {
+            mediaEl = `<video src="${escapeHtml(m.url)}" controls preload="metadata"></video>`;
+          } else if (m.type === 'audio') {
+            mediaEl = `<audio src="${escapeHtml(m.url)}" controls style="width:100%"></audio>`;
+          } else {
+            mediaEl = `<a href="${escapeHtml(m.url)}" target="_blank"><img src="${escapeHtml(m.url)}" alt="${escapeHtml(m.title)}" /></a>`;
+          }
+          return `
+            <div class="media-card">
+              ${mediaEl}
+              <div class="media-card-title">${escapeHtml(m.title)}</div>
+              <div class="media-card-meta">
+                Channel: <strong>${escapeHtml(m.channel)}</strong><br/>
+                Gate: <code>${escapeHtml(m.duration)}</code> | Voice: <code>${escapeHtml(m.voice)}</code>
+              </div>
+              <button class="btn btn-sm btn-green" onclick="approveMediaAsset('${escapeHtml(m.id)}')">
+                ✅ Approve Asset (${m.approved ? 'APPROVED' : 'Click to Approve'})
+              </button>
+            </div>`;
+        })
+        .join('');
 
-  history.push({ role: 'assistant', content: reply });
-  localStorage.setItem('chat-' + profileKey, JSON.stringify(history.slice(-20)));
+    const grid1 = document.getElementById('media-preview-grid');
+    const grid2 = document.getElementById('youtube-media-list');
+    const grid3 = document.getElementById('editor-media-grid');
+    const html = renderCards(items);
+    if (grid1) grid1.innerHTML = html;
+    if (grid2) grid2.innerHTML = html;
+    if (grid3) grid3.innerHTML = html;
+  } catch (err) {
+    console.error('Media preview error:', err);
+  }
 }
 
-// --- Tab switching ---
-function switchTab(tabName) {
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-  const btn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-  if (btn) btn.classList.add('active');
-  const tc = document.getElementById('tab-' + tabName);
-  if (tc) tc.classList.add('active');
+window.approveMediaAsset = async function (id) {
+  await fetch('/api/media/approve', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id })
+  });
+  await refreshMediaPreviews();
+  await refreshTerminalLogs();
+};
+
+document.getElementById('btn-refresh-media')?.addEventListener('click', refreshMediaPreviews);
+
+// ============================================================================
+// 6. DUAL GRAPHIES ON HOME TAB (1. WORKFLOW GRAPHY + 2. CODEBASE GRAPHY)
+// ============================================================================
+async function refreshDualGraphy() {
+  try {
+    const res = await fetch('/api/graphy');
+    const data = await res.json();
+    const wf = data.workflowGraphy || {};
+    const cb = data.codebaseGraphy || {};
+
+    const s1 = document.getElementById('graphy1-stats');
+    if (s1) {
+      s1.textContent = `${wf.nodeCount || 0} Workflow Nodes · ${wf.edgeCount || 0} Orchestration Edges · Source: ${wf.sourcePath || 'api.workflow.json'}`;
+    }
+
+    const list1 = document.getElementById('graphy1-nodes-list');
+    const kanbanGrid = document.getElementById('kanban-profiles-grid');
+    if (list1 && Array.isArray(wf.nodes)) {
+      const cardsHtml = wf.nodes
+        .map(
+          (n) => `
+          <div class="graphy-node-item">
+            <div style="font-size:19px;font-weight:800;color:#6ee7b7">${escapeHtml(n.label || n.id)}</div>
+            <div style="font-size:15px;color:#cbd5e1;margin:4px 0">Type: <code>${escapeHtml(n.type || 'agent')}</code> ${n.port ? `| Port: <code>:${n.port}</code>` : ''}</div>
+            ${n.cli ? `<div style="font-size:15px">CLI: <code>${escapeHtml(n.cli)}</code></div>` : ''}
+            ${n.role ? `<div style="font-size:15px;color:#93c5fd">${escapeHtml(n.role)}</div>` : ''}
+          </div>`
+        )
+        .join('');
+      list1.innerHTML = cardsHtml;
+      if (kanbanGrid) kanbanGrid.innerHTML = cardsHtml;
+    }
+
+    const s2 = document.getElementById('graphy2-stats');
+    if (s2) {
+      s2.textContent = `${cb.nodeCount || 0} Codebase Nodes · ${cb.edgeCount || 0} AST/Call Edges · Generated via graphifyy`;
+    }
+
+    const sum2 = document.getElementById('graphy2-summary');
+    if (sum2) {
+      sum2.textContent = (cb.reportMarkdown || 'Codebase Knowledge Graphy active.').slice(0, 520) + '...';
+    }
+  } catch (err) {
+    console.error('Graphy load error:', err);
+  }
 }
 
-// Start
-init();
+document.getElementById('btn-rebuild-graphy')?.addEventListener('click', async () => {
+  const btn = document.getElementById('btn-rebuild-graphy');
+  btn.textContent = '⏳ Rebuilding...';
+  try {
+    await fetch('/api/graphy/rebuild', { method: 'POST' });
+    await refreshDualGraphy();
+    await refreshTerminalLogs();
+  } finally {
+    btn.textContent = '⚡ Rebuild Graphy';
+  }
+});
+
+// ============================================================================
+// 7. CIRCULAR TASK -> NODE ORCHESTRATOR -> GITHUB PR WEBHOOK -> JUDGE MERGE
+// ============================================================================
+async function refreshHookLoop() {
+  try {
+    const res = await fetch('/api/hooks/loop');
+    const data = await res.json();
+    const stagesBox = document.getElementById('hook-stages-grid');
+    if (stagesBox && Array.isArray(data.stages)) {
+      stagesBox.innerHTML = data.stages
+        .map(
+          (st) => `
+          <div class="hook-stage-box">
+            <div style="font-size:18px;font-weight:800;color:#6ee7b7">${escapeHtml(st.name)}</div>
+            <div style="font-size:15px;color:#fde68a;margin:4px 0">Status: <strong>${escapeHtml(st.status)}</strong></div>
+            <div style="font-size:16px;color:#e2e8f0">${escapeHtml(st.detail)}</div>
+          </div>`
+        )
+        .join('');
+    }
+    const eventsBox = document.getElementById('hook-events-log');
+    if (eventsBox && Array.isArray(data.events)) {
+      eventsBox.innerHTML = data.events
+        .map(
+          (ev) => `
+          <div class="term-entry">
+            <div><strong>[${escapeHtml(ev.ts.slice(11, 19))}] ${escapeHtml(ev.repo)} (${escapeHtml(ev.branch)})</strong> &mdash; <code>${escapeHtml(ev.judgeStatus)}</code></div>
+            <div>${escapeHtml(ev.summary)}</div>
+          </div>`
+        )
+        .join('');
+    }
+  } catch (err) {
+    console.error('Hook loop error:', err);
+  }
+}
+
+document.getElementById('btn-trigger-hook-loop')?.addEventListener('click', async () => {
+  const btn = document.getElementById('btn-trigger-hook-loop');
+  const oldText = btn.textContent;
+  btn.textContent = '⏳ Running TDD, Committing, Pushing & Creating PR...';
+  try {
+    await fetch('/api/hooks/push-pr', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        runGitPushPr: true,
+        agent: 'gemini',
+        profile: 'default',
+        source: 'sabretooth-gui-8392',
+        repo: 'Trollz1004/ANTIGRAVITY',
+        summary: 'Mandatory Post-Work Auto-Commit, Branch Push (sabretooth/auto-pr-sync) & GitHub PR Creation for Cloud Judges (Gemini / Jules / Claude / Codex).'
+      })
+    });
+    await refreshHookLoop();
+    await refreshTerminalLogs();
+  } finally {
+    btn.textContent = oldText;
+  }
+});
+
+document.getElementById('btn-kanban-sync')?.addEventListener('click', async () => {
+  await fetch('/api/hooks/trigger', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      source: 'kanban-board-sync',
+      repo: 'Trollz1004/ANTIGRAVITY',
+      summary: 'Kanban board synced task state with Default Orchestrator and GitHub Judge PR queue.'
+    })
+  });
+  await refreshHookLoop();
+});
+
+// ============================================================================
+// 8. HARVEY 3-TYPE LEAD GEN TAB (BY SOURCE & BY 3 SPECIFIC LEAD TYPES)
+// ============================================================================
+async function refreshHarveyLeads() {
+  try {
+    const params = new URLSearchParams();
+    if (activeLeadType !== 'ALL') params.set('leadType', activeLeadType);
+    if (activeLeadSource !== 'ALL') params.set('source', activeLeadSource);
+    const res = await fetch('/api/leads?' + params.toString());
+    const data = await res.json();
+    const counts = data.countsByType || {};
+
+    const cAll =
+      (counts['1-affiliate-dateapp'] || 0) +
+      (counts['2-subscriptions-dateapp'] || 0) +
+      (counts['3-funding-dream-online'] || 0);
+    const elAll = document.getElementById('count-lead-all');
+    const el1 = document.getElementById('count-lead-1');
+    const el2 = document.getElementById('count-lead-2');
+    const el3 = document.getElementById('count-lead-3');
+    if (elAll) elAll.textContent = `${cAll} Active Leads`;
+    if (el1) el1.textContent = `${counts['1-affiliate-dateapp'] || 0} Leads (50% Comm)`;
+    if (el2) el2.textContent = `${counts['2-subscriptions-dateapp'] || 0} Leads ($1 Bot-Shield)`;
+    if (el3) el3.textContent = `${counts['3-funding-dream-online'] || 0} Leads (OpenCollective / E-Waste)`;
+
+    const container = document.getElementById('harvey-leads-container');
+    if (!container) return;
+    const leads = data.leads || [];
+    container.innerHTML = leads
+      .map(
+        (l) => `
+        <div class="lead-card">
+          <div class="lead-card-header">
+            <div>
+              <div class="lead-name">${escapeHtml(l.name)}</div>
+              <div style="font-size:16px;color:#93c5fd">Handle: <code>${escapeHtml(l.handle)}</code> | Source: <strong>${escapeHtml(l.source)}</strong></div>
+            </div>
+            <span class="badge-green">Score: ${escapeHtml(l.score)}</span>
+          </div>
+          <div class="lead-type-badge">${escapeHtml(l.leadTypeLabel)}</div>
+          <div style="font-size:16px;color:#cbd5e1;margin-bottom:6px">
+            <strong>30-Day Signal (agent-reach + last30days):</strong> ${escapeHtml(l.signal)}
+          </div>
+          <div class="lead-draft-box">
+            <strong>Humanizer + Caveman Outbound Draft (&lt;75w):</strong><br/>
+            ${escapeHtml(l.draft)}
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px">
+            <span style="font-size:16px;font-weight:700;color:${l.approved ? '#10b981' : '#fbbf24'}">
+              Status: ${escapeHtml(l.status)}
+            </span>
+            <button class="btn btn-sm btn-green" onclick="approveHarveyLead('${escapeHtml(l.id)}')">
+              ${l.approved ? '✅ Approved by Founder' : '👍 Approve Lead for Dispatch'}
+            </button>
+          </div>
+        </div>`
+      )
+      .join('');
+  } catch (err) {
+    console.error('Harvey leads error:', err);
+  }
+}
+
+window.approveHarveyLead = async function (id) {
+  await fetch('/api/leads/approve', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id })
+  });
+  await refreshHarveyLeads();
+  await refreshTerminalLogs();
+};
+
+document.querySelectorAll('.lead-type-card[data-lead-type]').forEach((card) => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.lead-type-card[data-lead-type]').forEach((c) => c.classList.remove('active'));
+    card.classList.add('active');
+    activeLeadType = card.getAttribute('data-lead-type') || 'ALL';
+    refreshHarveyLeads();
+  });
+});
+
+document.querySelectorAll('.source-pill[data-source]').forEach((pill) => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.source-pill[data-source]').forEach((p) => p.classList.remove('active'));
+    pill.classList.add('active');
+    activeLeadSource = pill.getAttribute('data-source') || 'ALL';
+    refreshHarveyLeads();
+  });
+});
+
+document.querySelectorAll('[data-prospect-type]').forEach((btn) => {
+  btn.addEventListener('click', async () => {
+    const leadType = btn.getAttribute('data-prospect-type');
+    const source = activeLeadSource === 'ALL' ? 'X / Grok' : activeLeadSource;
+    await fetch('/api/leads/prospect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ leadType, source, query: 'last 30 days high-intent buyer/partner thread' })
+    });
+    await refreshHarveyLeads();
+    await refreshTerminalLogs();
+  });
+});
+
+// ============================================================================
+// 9. FREE CLAUDE CODE (:8082/admin) CHAT BRIDGE
+// ============================================================================
+document.getElementById('btn-send-fcc')?.addEventListener('click', async () => {
+  const input = document.getElementById('fcc-chat-input');
+  const profileSel = document.getElementById('fcc-bridge-profile');
+  const log = document.getElementById('fcc-chat-log');
+  const message = (input?.value || '').trim();
+  if (!message) return;
+
+  const profile = profileSel?.value || 'default';
+  log.innerHTML += `
+    <div class="chat-msg user">
+      <div class="chat-sender">Founder &rarr; Free Claude Code (:8082) + [${escapeHtml(profile)}]</div>
+      <div class="chat-text">${escapeHtml(message)}</div>
+    </div>`;
+  input.value = '';
+
+  const res = await fetch('/api/fcc/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, profile })
+  });
+  const data = await res.json();
+  log.innerHTML += `
+    <div class="chat-msg assistant">
+      <div class="chat-sender">Free Claude Code (:8082/admin) &harr; Hermes [${escapeHtml(profile)}]</div>
+      <div class="chat-text">${escapeHtml(data.reply)}</div>
+    </div>`;
+  log.scrollTop = log.scrollHeight;
+  await refreshTerminalLogs();
+});
+
+// ============================================================================
+// 10. OBSIDIAN & 6-LAYER MEMORY SYNC
+// ============================================================================
+async function triggerObsidianSync() {
+  const res = await fetch('/api/memory/sync', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      agent: 'gemini',
+      useCase: 'Sabretooth :8392 GUI Session Sync (Default Orchestrator + Harvey 3-Type Lead Gen + FCC :8082 + Dual Graphy)',
+      summary: 'Verified Sabretooth :8392 GUI, Default Jarvis (:9119), Free Claude Code (:8082/admin), Dual Graphies, and Circular GitHub Judge Hook Loop.',
+      proof: 'http://192.168.0.8:8392/ | http://127.0.0.1:9119/chat?profile=default&resume=local-profile | http://127.0.0.1:8082/admin'
+    })
+  });
+  await res.json();
+  await loadObsidianLedgers();
+  await refreshTerminalLogs();
+}
+
+async function loadObsidianLedgers() {
+  try {
+    const res = await fetch('/api/memory/ledger');
+    const data = await res.json();
+    const gBox = document.getElementById('ledger-gemini-box');
+    const hBox = document.getElementById('ledger-hermes-box');
+    if (gBox) gBox.textContent = data.sabretoothGeminiLedger || 'No entries yet.';
+    if (hBox) hBox.textContent = data.sabretoothHermesLedger || 'No entries yet.';
+  } catch (_) {}
+}
+
+document.getElementById('btn-sync-obsidian')?.addEventListener('click', triggerObsidianSync);
+document.getElementById('btn-notes-write')?.addEventListener('click', triggerObsidianSync);
+
+document.getElementById('btn-yt-orchestrate')?.addEventListener('click', async () => {
+  await fetch('/api/orchestrate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      targetProfile: 'youtube',
+      prompt: 'Render a <=58.5s YouTube Short with Aoede natural female voice and publish preview to Media Preview Pane.'
+    })
+  });
+  await refreshTerminalLogs();
+});
+
+// ============================================================================
+// INITIALIZE ON PAGE LOAD
+// ============================================================================
+window.addEventListener('DOMContentLoaded', () => {
+  const urlTab = new URLSearchParams(window.location.search).get('tab');
+  if (urlTab) {
+    const targetBtn = document.querySelector(`.tab-btn[data-tab="${urlTab}"]`);
+    if (targetBtn) targetBtn.click();
+  }
+  refreshNodeStatus();
+  refreshTerminalLogs();
+  refreshMediaPreviews();
+  refreshDualGraphy();
+  refreshHookLoop();
+  refreshHarveyLeads();
+  loadObsidianLedgers();
+  setInterval(refreshNodeStatus, 15000);
+});
