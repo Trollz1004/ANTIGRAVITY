@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HermesLeadGen</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header id="topbar">
+    <div class="topbar-left">
+      <h1>HermesLeadGen</h1>
+      <span class="node-badge">Sabretooth .8</span>
+    </div>
+    <div class="topbar-stats">
+      <div class="stat" id="stat-shorts"><span class="stat-label">Shorts Today</span><span class="stat-value" id="shorts-today">0</span></div>
+      <div class="stat" id="stat-lastpub"><span class="stat-label">Last Publish</span><span class="stat-value" id="last-publish">—</span></div>
+      <div class="stat" id="stat-nextpub"><span class="stat-label">Next Legal Publish</span><span class="stat-value" id="next-publish">—</span></div>
+      <div class="stat" id="stat-emails"><span class="stat-label">Emails Sent</span><span class="stat-value" id="emails-sent">0</span></div>
+      <div class="stat" id="stat-replies"><span class="stat-label">Replies</span><span class="stat-value" id="replies">0</span></div>
+      <div class="stat" id="stat-revenue"><span class="stat-label">$ Toward 10k</span><span class="stat-value" id="revenue">$0</span></div>
+    </div>
+    <div class="topbar-right">
+      <span id="worker-status" class="worker-status">Checking worker...</span>
+    </div>
+  </header>
+
+  <nav id="tab-bar">
+    <button class="tab-btn active" data-tab="kanban" onclick="switchTab('kanban')">Kanban Board</button>
+    <button class="tab-btn" data-tab="youtube" onclick="switchTab('youtube')">YouTube Agent</button>
+    <button class="tab-btn" data-tab="editor" onclick="switchTab('editor')">Editor (REA Media)</button>
+    <button class="tab-btn" data-tab="harvey" onclick="switchTab('harvey')">Marketing Lead (Harvey)</button>
+    <button class="tab-btn" data-tab="notes" onclick="switchTab('notes')">Notes & Ideas</button>
+  </nav>
+
+  <main>
+    <div id="tab-kanban" class="tab-content active">
+      <div class="kanban-board">
+        <div class="kanban-column" data-status="todo">
+          <div class="column-header todo-header">Todo</div>
+          <div class="column-body" id="col-todo"></div>
+          <button class="add-card-btn" data-status="todo">+ Add Card</button>
+        </div>
+        <div class="kanban-column" data-status="doing">
+          <div class="column-header doing-header">Doing</div>
+          <div class="column-body" id="col-doing"></div>
+        </div>
+        <div class="kanban-column" data-status="done">
+          <div class="column-header done-header">Done</div>
+          <div class="column-body" id="col-done"></div>
+        </div>
+        <div class="kanban-column" data-status="blocked">
+          <div class="column-header blocked-header">Blocked</div>
+          <div class="column-body" id="col-blocked"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-youtube" class="tab-content">
+      <div class="agent-panel">
+        <div class="agent-header">
+          <h2>YouTube Agent</h2>
+          <span class="agent-badge">Profile: youtube-agent</span>
+          <button class="card-btn" onclick="openAgentChat('youtube')">Chat with Agent</button>
+        </div>
+        <div class="agent-body" id="youtube-agent-body"></div>
+      </div>
+    </div>
+
+    <div id="tab-editor" class="tab-content">
+      <div class="agent-panel">
+        <div class="agent-header">
+          <h2>Editor Agent (REA Media Creator)</h2>
+          <span class="agent-badge">Profile: editor-agent</span>
+          <button class="card-btn" onclick="openAgentChat('editor')">Chat with Agent</button>
+        </div>
+        <div class="agent-body" id="editor-agent-body"></div>
+      </div>
+    </div>
+
+    <div id="tab-harvey" class="tab-content">
+      <div class="agent-panel">
+        <div class="agent-header">
+          <h2>Marketing Lead (Harvey)</h2>
+          <span class="agent-badge">Profile: harvey-agent</span>
+          <button class="card-btn" onclick="openAgentChat('harvey')">Chat with Agent</button>
+        </div>
+        <div class="agent-body" id="harvey-agent-body"></div>
+      </div>
+    </div>
+
+    <div id="tab-notes" class="tab-content">
+      <div class="agent-panel">
+        <div class="agent-header">
+          <h2>Notes & Ideas Agent</h2>
+          <span class="agent-badge">Profile: notes-agent</span>
+          <button class="card-btn" onclick="openAgentChat('notes')">Chat with Agent</button>
+        </div>
+        <div class="agent-body" id="notes-agent-body"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Agent Chat modal -->
+  <div id="chat-modal-overlay" class="modal-overlay hidden">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h2 id="chat-modal-title">Agent Chat</h2>
+        <button id="chat-modal-close" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="chat-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Card detail modal -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-title">Card</h2>
+        <button id="modal-close" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- YouTube pipeline modal -->
+  <div id="yt-modal-overlay" class="modal-overlay hidden">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h2>YouTube Short Pipeline</h2>
+        <button id="yt-modal-close" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="yt-modal-body"></div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
