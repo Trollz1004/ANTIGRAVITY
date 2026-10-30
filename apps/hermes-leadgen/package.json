@@ -1,0 +1,23 @@
+{
+  "name": "hermes-leadgen",
+  "description": "HermesLeadGen - YouTube shorts and marketing lead-gen desktop app for Sabretooth",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "hermes",
+    "leadgen",
+    "youtube",
+    "shorts"
+  ],
+  "author": "Joshua Coleman",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^45.1.0"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
