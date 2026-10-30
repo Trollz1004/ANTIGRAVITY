@@ -11,7 +11,12 @@ const ROOT = __dirname;
 const USER_HOME = process.env.USERPROFILE || os.homedir();
 const SABRETOOTH_HOST = process.env.SABRETOOTH_HOST || '127.0.0.1';
 const T5500_HOST = process.env.T5500_HOST || 'localhost';
-const ANTIGRAVITY_ROOT = process.env.SABRETOOTH_VAULT_ROOT || (fs.existsSync('C:\\Ai-Dream-Team\\Antigravity') ? 'C:\\Ai-Dream-Team\\Antigravity' : path.resolve(ROOT, '..'));
+const REPO_ROOT_FALLBACK = fs.existsSync(path.join(ROOT, '..', 'AGENTS.md'))
+  ? path.resolve(ROOT, '..')
+  : path.resolve(ROOT, '..', '..');
+const ANTIGRAVITY_ROOT =
+  process.env.SABRETOOTH_VAULT_ROOT ||
+  (fs.existsSync('C:\\Ai-Dream-Team\\Antigravity') ? 'C:\\Ai-Dream-Team\\Antigravity' : REPO_ROOT_FALLBACK);
 const HERMES_PY = path.join(USER_HOME, 'AppData', 'Local', 'hermes', 'tools', 'python-3.14.9+20261021-win32-x64', 'python.exe');
 const SOULS_DIR = path.join(ROOT, 'souls');
 const GRAPHIFY_DIR = path.join(ROOT, 'graphify-out');
