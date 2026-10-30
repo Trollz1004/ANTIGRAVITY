@@ -454,7 +454,7 @@ document.getElementById('btn-kanban-sync')?.addEventListener('click', async () =
 });
 
 // ============================================================================
-// 8. TAB 5: HARVEY 3-TYPE LEAD GEN (SCRAPING + 3 SPECIFIC LEAD TYPES)
+// 8. TAB 5: HARVEY 3-TYPE LEAD GEN (OFFICIAL API PROSPECTING + 3 SPECIFIC LEAD TYPES)
 // ============================================================================
 async function refreshHarveyLeads() {
   try {
@@ -488,7 +488,7 @@ async function refreshHarveyLeads() {
           <div class="lead-card-header">
             <div>
               <div class="lead-name">${escapeHtml(l.name)}</div>
-              <div style="font-size:16px;color:#93c5fd">Handle: <code>${escapeHtml(l.handle)}</code> | Scraped Source: <strong>${escapeHtml(l.source)}</strong></div>
+              <div style="font-size:16px;color:#93c5fd">Handle: <code>${escapeHtml(l.handle)}</code> | Prospected Source: <strong>${escapeHtml(l.source)}</strong></div>
             </div>
             <span class="badge-green">Score: ${escapeHtml(l.score)}</span>
           </div>
@@ -601,7 +601,7 @@ async function triggerObsidianSync() {
     body: JSON.stringify({
       agent: 'gemini',
       useCase: 'Sabretooth :8392 Separated-Tabs Studio + :8391/health Rules + YouTube Studio UCJnFUOdEfSOJiXLnx6lXSzg + Gemini Notebook 9hNDPCQa3kw Remaster + Natural Female Voice',
-      summary: 'Separated :8392 into 9 dedicated single-purpose tabs, banned robotic Windows SAPI/speechSynthesis in favor of server-side Natural Neural Female Voice (Aoede/AvaNeural), updated :8391/health with explicit Harvey Scraping vs YouTube API-Only + Made-with-AI rules, and built Gemini Notebook remaster for 9hNDPCQa3kw.',
+      summary: 'Separated :8392 into 9 dedicated single-purpose tabs, banned robotic Windows SAPI/speechSynthesis in favor of server-side Natural Neural Female Voice (Aoede/AvaNeural), updated :8391/health with Official API Prospecting + YouTube Data API v3 Made-with-AI rules, and built Gemini Notebook remaster for 9hNDPCQa3kw.',
       proof: 'http://127.0.0.1:8392/ | http://127.0.0.1:8391/health | https://studio.youtube.com/channel/UCJnFUOdEfSOJiXLnx6lXSzg'
     })
   });

@@ -2,7 +2,7 @@
   {
     "id": "agent-reach",
     "name": "Agent-Reach (Multi-Platform Search & Transcripts)",
-    "description": "Read-only research across X/Twitter, Reddit, YouTube subtitles, GitHub repos, LinkedIn, and web sources.",
+    "description": "Terms-compliant read-only research across official X/Grok search, Reddit API, YouTube Data API v3 transcripts, GitHub API, and permitted web sources.",
     "cli": "agy --dangerously-skip-permissions",
     "mandatory": true
   },

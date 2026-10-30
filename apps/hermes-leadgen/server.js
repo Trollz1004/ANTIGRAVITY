@@ -57,7 +57,7 @@ const terminalLogs = [
     id: 'boot-2',
     ts: new Date().toISOString(),
     profile: 'notes',
-    cmd: 'python -m graphify update "C:\\Ai-Dream-Team\\Antigravity\\HermesLeadGen" --force',
+    cmd: `python -m graphify update "${__dirname}" --force`,
     status: 'ok',
     output: 'Graphy #1 (api.workflow.json) + Graphy #2 (graphify-out/graph.json: 118 nodes, 166 edges, 14 communities) loaded and synced with Obsidian Vault.'
   },
@@ -199,10 +199,10 @@ const DEFAULT_HOOK_LOOP = {
   nodeCanSelfMergeToMain: false,
   watcherActive: true,
   watchedPaths: [
-    'C:\\Ai-Dream-Team\\Antigravity\\HermesLeadGen\\souls',
-    'C:\\Ai-Dream-Team\\Antigravity\\HermesLeadGen\\skills.json',
-    'C:\\Ai-Dream-Team\\Antigravity\\api.workflow.json',
-    'C:\\Ai-Dream-Team\\Antigravity\\Sabretooth'
+    path.join(__dirname, 'souls'),
+    path.join(__dirname, 'skills.json'),
+    path.join(ANTIGRAVITY_ROOT, 'api.workflow.json'),
+    path.join(ANTIGRAVITY_ROOT, 'Sabretooth')
   ],
   stages: [
     { step: 1, id: 'work-intake', name: '1. Task / File Change Hook (Sabretooth Node)', status: 'ACTIVE', detail: 'fs.watch + Kanban trigger detects edits or new tasks immediately' },
@@ -730,7 +730,7 @@ function loadDualGraphy() {
   return {
     workflowGraphy: {
       title: 'Graphy #1 — Agent Workflow & Multi-Node Orchestration Graphy',
-      sourcePath: 'C:\\Ai-Dream-Team\\Antigravity\\api.workflow.json',
+      sourcePath: path.join(ANTIGRAVITY_ROOT, 'api.workflow.json'),
       nodeCount: wfNodes.length,
       edgeCount: wfEdges.length,
       nodes: wfNodes,
@@ -739,7 +739,7 @@ function loadDualGraphy() {
     },
     codebaseGraphy: {
       title: 'Graphy #2 — HermesLeadGen Codebase Knowledge Graphy (graphifyy)',
-      sourcePath: 'C:\\Ai-Dream-Team\\Antigravity\\HermesLeadGen\\graphify-out\\graph.json',
+      sourcePath: path.join(__dirname, 'graphify-out', 'graph.json'),
       htmlUrl: '/graphify-out/graph.html',
       nodeCount: Array.isArray(codebaseGraph.nodes) ? codebaseGraph.nodes.length : 0,
       edgeCount: Array.isArray(codebaseGraph.links) ? codebaseGraph.links.length : 0,
@@ -847,17 +847,33 @@ function sendJson(res, status, payload) {
   res.end(JSON.stringify(payload));
 }
 
+function buildAllowedAddresses() {
+  const addrs = new Set(['127.0.0.1', 'localhost']);
+  if (SABRETOOTH_HOST) addrs.add(String(SABRETOOTH_HOST).toLowerCase());
+  const nets = os.networkInterfaces();
+  for (const list of Object.values(nets)) {
+    for (const iface of list || []) {
+      if (iface && iface.family === 'IPv4' && iface.address) {
+        addrs.add(String(iface.address).toLowerCase());
+      }
+    }
+  }
+  return addrs;
+}
+
+const ALLOWED_ADDRESSES = buildAllowedAddresses();
+const ALLOWED_HOSTS = new Set(Array.from(ALLOWED_ADDRESSES, (a) => `${a}:${PORT}`));
+const ALLOWED_ORIGINS = new Set(Array.from(ALLOWED_ADDRESSES, (a) => `http://${a}:${PORT}`));
+
+function isAllowedHost(req) {
+  const host = String(req.headers.host || '').trim().toLowerCase();
+  return ALLOWED_HOSTS.has(host);
+}
+
 function isAllowedOrigin(req) {
   const origin = req.headers.origin;
   if (!origin) return true;
-  const hostHeader = req.headers.host || `127.0.0.1:${PORT}`;
-  const allowed = new Set([
-    `http://${hostHeader}`,
-    `http://127.0.0.1:${PORT}`,
-    `http://localhost:${PORT}`,
-    `http://${SABRETOOTH_HOST}:${PORT}`
-  ]);
-  return allowed.has(origin);
+  return ALLOWED_ORIGINS.has(String(origin).trim().toLowerCase());
 }
 
 // ============================================================================
@@ -865,6 +881,9 @@ function isAllowedOrigin(req) {
 // ============================================================================
 const server = http.createServer(async (req, res) => {
   try {
+    if (!isAllowedHost(req)) {
+      return sendJson(res, 403, { ok: false, error: 'Forbidden host' });
+    }
     if (req.method === 'POST' && !isAllowedOrigin(req)) {
       return sendJson(res, 403, { ok: false, error: 'Forbidden origin' });
     }
@@ -1262,10 +1281,11 @@ const server = http.createServer(async (req, res) => {
         workerHealth: workerHealth?.worker || null,
         splitRules: {
           harveyLeadGenerator: {
-            scrapingPermitted: true,
-            rule: 'Harvey Lead Generator IS authorized to scrape external non-YouTube lead sources (X/Grok, Reddit/Agent-Reach, GitHub, B2B e-waste directories, creator public bio links) for the 3 lead types.',
-            allowedSources: ['X / Grok', 'Reddit / Agent-Reach', 'GitHub / Repos', 'Public B2B E-Waste Directories', 'Creator Bio Links', 'Inbound Web'],
-            forbiddenSources: ['youtube.com (Never scrape YouTube — API v3 only)']
+            officialApisOnly: true,
+            scrapingPermitted: false,
+            rule: 'Harvey Lead Generator prospects strictly through official APIs and terms-compliant sources (X API or Grok X search within xAI terms, official Reddit API, GitHub API, public creator bio links, and B2B directories where terms allow; nothing for LinkedIn and zero scraping).',
+            allowedSources: ['X / Grok (within xAI terms)', 'Reddit API', 'GitHub API', 'Terms-Permitted B2B E-Waste Directories', 'Public Creator Bio Links', 'Inbound Web'],
+            forbiddenSources: ['Any scraping of X, Reddit, YouTube, or LinkedIn']
           },
           youtubePipeline: {
             scrapingPermitted: false,
@@ -1286,12 +1306,12 @@ const server = http.createServer(async (req, res) => {
           watchUrl: 'https://www.youtube.com/watch?v=9hNDPCQa3kw',
           studioEditUrl: 'https://studio.youtube.com/video/9hNDPCQa3kw/edit',
           thumbnailUrl: 'https://i.ytimg.com/vi/9hNDPCQa3kw/hqdefault.jpg',
-          originalTitle: '#ForTheKids @YouAndiNotAi @Google @anthropic-ai @PERPLEXITY @USTARMAX @OpenAI',
+          originalTitle: 'Legacy NotebookLM Episode (@YouAndiNotAi @Google @anthropic-ai @PERPLEXITY @USTARMAX @OpenAI)',
           status: 'TAKE_DOWN_REQUIRED_PRE_TRUMP_TAX_LAW',
           takedownReason: 'Made with older NotebookLM ("Gemini Notebook") and talks about outdated pre-Trump tax law changes (plus legacy @YouAndiNotAi cross-tag). Must be taken down in YouTube Studio (UCJnFUOdEfSOJiXLnx6lXSzg) and replaced with our compliant Gemini Notebook remaster below.',
           remasteredReplacement: {
             id: 'media-9hNDPCQa3kw-gemini-notebook-remaster-female-voice.mp3',
-            title: 'Gemini Notebook Remaster: DREAM Online & E-Waste Mission (Tax-Law-Clean | Built with Google Gemini)',
+            title: 'Gemini Notebook Remaster: DREAM Online & E-Waste Hardware Recovery (Tax-Law-Clean | Built with Google Gemini)',
             audioUrl: '/media-previews/9hNDPCQa3kw-gemini-notebook-remaster-female-voice.mp3',
             durationSeconds: 49.5,
             voice: 'Aoede / en-US-AvaMultilingualNeural (100% Natural Female Voice)',
@@ -1299,7 +1319,7 @@ const server = http.createServer(async (req, res) => {
             selfDeclaredMadeForKids: false,
             madeWithAiBadge: 'Made with AI — Built with Google Gemini',
             approvedByFounder: approvedMediaIds.has('media-9hNDPCQa3kw-gemini-notebook-remaster-female-voice.mp3'),
-            scriptSummary: 'Strips all outdated pre-Trump tax law claims and 18+ dating tags; highlights 100% free unlimited live AI NPCs in DREAM Online (Built with Google Gemini), responsible hardware recycling at OnlineRecycle.net, and transparent Open Collective ledger (opencollective.com/dream-online).'
+            scriptSummary: 'Strips all outdated pre-Trump tax law claims and 18+ dating tags; highlights 100% free unlimited live AI NPCs in DREAM Online (Built with Google Gemini), responsible B2B hardware recovery at OnlineRecycle.net, and transparent Open Collective ledger (opencollective.com/dream-online).'
           }
         }
       });
@@ -1377,8 +1397,8 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/hooks/loop' && req.method === 'GET') {
       const loopData = loadHookLoop();
       loopData.mandatoryPostWorkRule = 'AGENTS MUST ALWAYS COMMIT, PUSH NODE BRANCH, AND CREATE/UPDATE GITHUB PR AFTER WORK DONE (speckit.git.push-and-pr via scripts/node-auto-pr-push.ps1)';
-      loopData.specKitExtensionsPath = 'C:\\Ai-Dream-Team\\Antigravity\\.specify\\extensions.yml';
-      loopData.autoPrScriptPath = 'C:\\Ai-Dream-Team\\Antigravity\\HermesLeadGen\\scripts\\node-auto-pr-push.ps1';
+      loopData.specKitExtensionsPath = path.join(__dirname, '.specify', 'extensions.yml');
+      loopData.autoPrScriptPath = path.join(__dirname, 'scripts', 'node-auto-pr-push.ps1');
       return sendJson(res, 200, { ok: true, ...loopData });
     }
 

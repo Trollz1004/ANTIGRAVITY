@@ -35,9 +35,18 @@ test.after(async () => {
   }
 });
 
-function httpGetJson(url) {
+function httpGetJson(url, extraHeaders = {}) {
   return new Promise((resolve, reject) => {
-    http.get(url, (res) => {
+    const u = new URL(url);
+    const req = http.request({
+      hostname: u.hostname,
+      port: u.port,
+      path: u.pathname + u.search,
+      method: 'GET',
+      headers: {
+        ...extraHeaders
+      }
+    }, (res) => {
       let body = '';
       res.on('data', (c) => body += c);
       res.on('end', () => {
@@ -47,7 +56,9 @@ function httpGetJson(url) {
           resolve({ status: res.statusCode, data: null, raw: body });
         }
       });
-    }).on('error', reject);
+    });
+    req.on('error', reject);
+    req.end();
   });
 }
 
@@ -181,7 +192,7 @@ test('4. Gemini Easy Button bootstrap batch file exists, self-heals, and never c
   assert.ok(bat.includes('pause') || bat.includes('cmd /k'), 'Bootstrap must not close terminal window on error');
 });
 
-test('5. Static & Live GitHub PR Gate Check: Verifies worktree branch on origin, real PR number when pushed, and honest non-faked hook statuses', async () => {
+test('5. Static & Live GitHub PR Gate Check: Verifies worktree branch on origin, real PR number when pushed, and honest non-faked hook statuses', async (t) => {
   const loopRes = await httpGetJson('http://127.0.0.1:8392/api/hooks/loop');
   assert.equal(loopRes.status, 200);
   assert.equal(loopRes.data.nodeCanSelfMergeToMain, false, 'Nodes must never self-merge; only GitHub Cloud Judges merge');
@@ -195,34 +206,12 @@ test('5. Static & Live GitHub PR Gate Check: Verifies worktree branch on origin,
   assert.ok(!serverCode.includes('PUSHED_AND_PR_QUEUED_FOR_GITHUB_JUDGES'), 'Must never log fake PUSHED_AND_PR_QUEUED_FOR_GITHUB_JUDGES status');
   assert.ok(serverCode.includes('LOCAL_EVENT_RECORDED_NOT_PUSHED'), 'Unpushed local hook events must log LOCAL_EVENT_RECORDED_NOT_PUSHED');
 
-  // Check if sabretooth/hermes-leadgen exists on origin and verify PR number via gh when available
-  let lsRemote = '';
-  try {
-    lsRemote = execFileSync('git', ['ls-remote', '--heads', 'origin', 'sabretooth/hermes-leadgen'], {
-      cwd: REPO_ROOT,
-      encoding: 'utf8',
-      timeout: 8000
-    }).trim();
-  } catch (_) {}
-
-  if (lsRemote) {
-    assert.match(lsRemote, /^[0-9a-f]{40}\s+refs\/heads\/sabretooth\/hermes-leadgen$/m);
-    const ghExe = fs.existsSync('C:\\Program Files\\GitHub CLI\\gh.exe') ? 'C:\\Program Files\\GitHub CLI\\gh.exe' : 'gh';
-    let prJson = '';
-    try {
-      prJson = execFileSync(ghExe, ['pr', 'list', '--repo', 'Trollz1004/ANTIGRAVITY', '--head', 'sabretooth/hermes-leadgen', '--state', 'open', '--json', 'number,url'], {
-        cwd: REPO_ROOT,
-        encoding: 'utf8',
-        timeout: 8000
-      }).trim();
-    } catch (_) {}
-    if (prJson.startsWith('[')) {
-      const parsed = JSON.parse(prJson);
-      if (parsed.length > 0) {
-        assert.ok(Number.isInteger(parsed[0].number) && parsed[0].number > 0, 'Expected real numeric GitHub PR number');
-      }
-    }
-  }
+  // Verify Host header gate on GET (rejects foreign Host header with 403)
+  const foreignHostGet = await httpGetJson(
+    'http://127.0.0.1:8392/api/node/status',
+    { Host: 'evil.example.com:8392' }
+  );
+  assert.equal(foreignHostGet.status, 403, 'Foreign Host header on GET must be rejected with HTTP 403');
 
   // Verify POST Origin security gate (rejects foreign Origin with 403, allows dashboard same-origin)
   const crossOriginPost = await httpPostJson(
@@ -250,6 +239,42 @@ test('5. Static & Live GitHub PR Gate Check: Verifies worktree branch on origin,
   assert.equal(fccRes.status, 200);
   assert.equal(fccRes.data.ok, true);
   assert.ok(fccRes.data.reply.includes('8082'));
+
+  // Check gh auth status; skip live GitHub PR lookup when gh is not authenticated (e.g. CI or unauthed node)
+  const ghExe = fs.existsSync('C:\\Program Files\\GitHub CLI\\gh.exe') ? 'C:\\Program Files\\GitHub CLI\\gh.exe' : 'gh';
+  let ghAuthed = false;
+  try {
+    execFileSync(ghExe, ['auth', 'status'], {
+      cwd: REPO_ROOT,
+      encoding: 'utf8',
+      stdio: 'pipe',
+      timeout: 8000
+    });
+    ghAuthed = true;
+  } catch (_) {
+    ghAuthed = false;
+  }
+
+  if (!ghAuthed) {
+    t.skip('gh not authenticated');
+    return;
+  }
+
+  const lsRemote = execFileSync('git', ['ls-remote', '--heads', 'origin', 'sabretooth/hermes-leadgen'], {
+    cwd: REPO_ROOT,
+    encoding: 'utf8',
+    timeout: 8000
+  }).trim();
+  assert.match(lsRemote, /^[0-9a-f]{40}\s+refs\/heads\/sabretooth\/hermes-leadgen$/m);
+
+  const prJson = execFileSync(ghExe, ['pr', 'list', '--repo', 'Trollz1004/ANTIGRAVITY', '--head', 'sabretooth/hermes-leadgen', '--state', 'open', '--json', 'number,url'], {
+    cwd: REPO_ROOT,
+    encoding: 'utf8',
+    timeout: 8000
+  }).trim();
+  const parsed = JSON.parse(prJson);
+  assert.ok(Array.isArray(parsed) && parsed.length > 0, 'Expected open PR for sabretooth/hermes-leadgen');
+  assert.ok(Number.isInteger(parsed[0].number) && parsed[0].number > 0, 'Expected real numeric GitHub PR number');
 });
 
 test('6. Mandatory RooFlow + SpecKit Post-Work Git Push & PR Creation Gate (speckit.git.push-and-pr) uses worktree apps/hermes-leadgen and checks exit codes', async () => {
@@ -271,12 +296,11 @@ test('6. Mandatory RooFlow + SpecKit Post-Work Git Push & PR Creation Gate (spec
   assert.ok(!scriptText.includes('git add -A') && !scriptText.includes('git add .'), 'Auto-PR script must never run add-all');
 });
 
-test('7. Separated Tabs, :8391/health Harvey Scraping vs YouTube API-Only + Made-with-AI TOS, YouTube Studio UCJnFUOdEfSOJiXLnx6lXSzg, 9hNDPCQa3kw Gemini Notebook Remaster, and Zero Robotic TTS', async () => {
+test('7. Separated Tabs, :8391/health Official API Prospecting + YouTube Data API v3 Made-with-AI TOS, YouTube Studio UCJnFUOdEfSOJiXLnx6lXSzg, 9hNDPCQa3kw Gemini Notebook Remaster, and Zero Robotic TTS', async () => {
   try {
     const health8391 = await httpGetJson('http://127.0.0.1:8391/health');
     if (health8391.status === 200 && health8391.data?.worker) {
       const w = health8391.data.worker;
-      assert.equal(w.harvey_scraping_rules.harvey_scraping_permitted, true, 'Harvey must be authorized to scrape external non-YouTube sources');
       assert.equal(w.youtube_publish_method, 'youtube-data-api-v3', 'YouTube must remain API v3 only');
       assert.equal(w.youtube_made_with_ai_tos.containsSyntheticMedia, true, 'Made with AI (containsSyntheticMedia) must be enforced');
       assert.equal(w.youtube_studio_url, 'https://studio.youtube.com/channel/UCJnFUOdEfSOJiXLnx6lXSzg');
@@ -287,7 +311,8 @@ test('7. Separated Tabs, :8391/health Harvey Scraping vs YouTube API-Only + Made
   const ytStudio = await httpGetJson('http://127.0.0.1:8392/api/youtube/studio');
   assert.equal(ytStudio.status, 200);
   assert.equal(ytStudio.data.studioChannelId, 'UCJnFUOdEfSOJiXLnx6lXSzg');
-  assert.equal(ytStudio.data.splitRules.harveyLeadGenerator.scrapingPermitted, true);
+  assert.equal(ytStudio.data.splitRules.harveyLeadGenerator.officialApisOnly, true);
+  assert.equal(ytStudio.data.splitRules.harveyLeadGenerator.scrapingPermitted, false);
   assert.equal(ytStudio.data.splitRules.youtubePipeline.scrapingPermitted, false);
   assert.equal(ytStudio.data.splitRules.youtubePipeline.madeWithAiTos.containsSyntheticMedia, true);
   assert.equal(ytStudio.data.legacyNotebookVideo.videoId, '9hNDPCQa3kw');
