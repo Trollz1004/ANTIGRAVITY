@@ -163,7 +163,7 @@ const DEFAULT_LEADS = [
   },
   {
     id: 'lead-fund-02',
-    name: 'Florida Tech & Medical Office E-Waste Pickup Partners',
+    name: 'Florida Tech & Enterprise Office E-Waste Pickup Partners',
     handle: 'onlinerecycle.net / B2B ITAD',
     source: 'Direct B2B',
     leadType: '3-funding-dream-online',
@@ -172,8 +172,8 @@ const DEFAULT_LEADS = [
     score: 93,
     status: 'READY_FOR_REVIEW',
     approved: false,
-    signal: 'Local IT upgrade cycle decommissions servers, workstations, and GPUs suitable for recycling & mission funding.',
-    draft: 'Clearing out retired workstations or servers? OnlineRecycle.net handles fast hardware pickup and responsible component recovery to help fund our community mission (#UntilNoKidInNeed). Reply with your pickup zip code to schedule.',
+    signal: 'Local IT upgrade cycle decommissions servers, workstations, and GPUs suitable for recycling & studio hardware recovery.',
+    draft: 'Clearing out retired workstations or servers? OnlineRecycle.net handles fast B2B hardware pickup and responsible component recovery across Central Florida. Reply with your pickup zip code to schedule.',
     createdAt: '2026-10-29T18:55:00.000Z'
   }
 ];
@@ -563,34 +563,6 @@ function buildMediaPreviews() {
       }
     }
   }
-  // 2. Discover real rendered Shorts/Audio/Thumbnails in youtube-shorts-podcast-engine
-  const ytRoot = path.join(ANTIGRAVITY_ROOT, 'youtube-shorts-podcast-engine');
-  const searchDirs = [
-    path.join(ytRoot, 'output'),
-    path.join(ytRoot, 'renders'),
-    path.join(ytRoot, 'assets')
-  ];
-  for (const dir of searchDirs) {
-    if (!fs.existsSync(dir)) continue;
-    try {
-      for (const f of fs.readdirSync(dir)) {
-        const ext = path.extname(f).toLowerCase();
-        if (['.mp4', '.wav', '.png', '.jpg', '.webp'].includes(ext)) {
-          items.push({
-            id: 'yt-' + f,
-            title: f,
-            type: ext === '.mp4' ? 'video' : ext === '.wav' ? 'audio' : 'image',
-            url: '/api/media/file?path=' + encodeURIComponent(path.join(dir, f)),
-            channel: 'dream-online-mmorpg / until-no-kid-in-need',
-            duration: ext === '.mp4' ? '52.8s (<= 59.0s Gate PASS)' : 'Asset Preview',
-            voice: 'Aoede (Gemini 2.5 Flash Native Female Audio)',
-            approved: false,
-            updatedAt: new Date(fs.statSync(path.join(dir, f)).mtime).toISOString()
-          });
-        }
-      }
-    } catch (_) {}
-  }
 
   // Ensure there is always a high-contrast SVG thumbnail preview generated if media-previews is empty
   if (items.length === 0) {
@@ -783,7 +755,7 @@ function loadDualGraphy() {
 // ============================================================================
 function syncObsidianAndMemory({ agent = 'gemini', useCase = 'Sabretooth :8392 Studio Session Sync', summary = '', proof = '' }) {
   const now = new Date();
-  const stamp = now.toISOString().replace('T', ' ').slice(0, 16) + ' EDT';
+  const stamp = now.toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
   const sabretoothDir = path.join(ANTIGRAVITY_ROOT, 'Sabretooth');
   if (!fs.existsSync(sabretoothDir)) fs.mkdirSync(sabretoothDir, { recursive: true });
 
@@ -870,12 +842,22 @@ function readJsonBody(req) {
 
 function sendJson(res, status, payload) {
   res.writeHead(status, {
-    'Content-Type': 'application/json; charset=utf-8',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+    'Content-Type': 'application/json; charset=utf-8'
   });
   res.end(JSON.stringify(payload));
+}
+
+function isAllowedOrigin(req) {
+  const origin = req.headers.origin;
+  if (!origin) return true;
+  const hostHeader = req.headers.host || `127.0.0.1:${PORT}`;
+  const allowed = new Set([
+    `http://${hostHeader}`,
+    `http://127.0.0.1:${PORT}`,
+    `http://localhost:${PORT}`,
+    `http://${SABRETOOTH_HOST}:${PORT}`
+  ]);
+  return allowed.has(origin);
 }
 
 // ============================================================================
@@ -883,13 +865,8 @@ function sendJson(res, status, payload) {
 // ============================================================================
 const server = http.createServer(async (req, res) => {
   try {
-    if (req.method === 'OPTIONS') {
-      res.writeHead(204, {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-      });
-      return res.end();
+    if (req.method === 'POST' && !isAllowedOrigin(req)) {
+      return sendJson(res, 403, { ok: false, error: 'Forbidden origin' });
     }
 
     const parsedUrl = new URL(req.url, `http://${req.headers.host || '127.0.0.1:8392'}`);
@@ -960,18 +937,18 @@ const server = http.createServer(async (req, res) => {
       // Auto-select specialist profile if set to 'auto' or 'default'
       let routedProfile = targetProfileId;
       if (routedProfile === 'auto' || routedProfile === 'default') {
-        const lower = prompt.toLowerCase();
-        if (lower.includes('lead') || lower.includes('harvey') || lower.includes('affiliate') || lower.includes('grok') || lower.includes('crowdfund') || lower.includes('date app')) {
+        const has = (re) => re.test(prompt);
+        if (has(/\b(leads?|harvey|affiliates?|grok|crowdfund(?:ing)?|date\s+app)\b/i)) {
           routedProfile = 'harvey';
-        } else if (lower.includes('youtube') || lower.includes('short') || lower.includes('video') || lower.includes('podcast') || lower.includes('voice')) {
+        } else if (has(/\b(youtube|shorts?|videos?|podcasts?|voices?)\b/i)) {
           routedProfile = 'youtube';
-        } else if (lower.includes('claude') || lower.includes('8082') || lower.includes('fcc')) {
+        } else if (has(/\b(claude|8082|fcc)\b/i)) {
           routedProfile = 'fcc';
-        } else if (lower.includes('thumbnail') || lower.includes('edit') || lower.includes('capcut') || lower.includes('rea') || lower.includes('screenshot')) {
+        } else if (has(/\b(thumbnails?|edit(?:or)?|capcut|rea|screenshots?)\b/i)) {
           routedProfile = 'editor';
-        } else if (lower.includes('graphy') || lower.includes('obsidian') || lower.includes('memory') || lower.includes('note')) {
+        } else if (has(/\b(graphy|obsidian|memory|notes?)\b/i)) {
           routedProfile = 'notes';
-        } else if (lower.includes('kanban') || lower.includes('task') || lower.includes('webhook') || lower.includes('pr')) {
+        } else if (has(/\b(kanban|tasks?|webhooks?|prs?)\b/i)) {
           routedProfile = 'kanban';
         } else {
           routedProfile = 'default';
@@ -1332,9 +1309,10 @@ const server = http.createServer(async (req, res) => {
       const body = await readJsonBody(req);
       const topic = String(body.topic || 'Gemini Notebook Episode: DREAM Online 3D World & OnlineRecycle.net Hardware Recovery').trim();
       const voice = String(body.voice || 'Aoede').trim();
-      const script =
+      const rawScript =
         body.script ||
         `Welcome back to the Gemini Notebook podcast for DREAM Online, built with Google Gemini. Today we are exploring ${topic}. Every player in DREAM Online enjoys one hundred percent free, unlimited live AI NPCs with zero pay to win, while Online Recycle dot net recovers retired hardware to support our transparent community ledger at Open Collective dot com slash dream dash online.`;
+      const script = String(rawScript).replace(/[`*#_<>]/g, ' ').replace(/\s+/g, ' ').slice(0, 900);
 
       const py314 = fs.existsSync(HERMES_PY) ? HERMES_PY : 'python';
       const fileName = `gemini-notebook-remaster-${Date.now()}.mp3`;
@@ -1344,7 +1322,19 @@ const server = http.createServer(async (req, res) => {
         py314,
         ['-m', 'edge_tts', '--voice', 'en-US-AvaMultilingualNeural', '--text', script, '--write-media', outPath],
         { timeout: 25000 },
-        () => {
+        (err) => {
+          if (err || !fs.existsSync(outPath)) {
+            appendTerminalLog(
+              'youtube',
+              `agy --dangerously-skip-permissions (Gemini Notebook Remaster -> ${fileName})`,
+              `Failed to synthesize Gemini Notebook audio: ${(err && err.message) || 'Output file missing'}`,
+              'error'
+            );
+            return sendJson(res, 500, {
+              ok: false,
+              error: (err && err.message) || 'Audio generation failed'
+            });
+          }
           appendTerminalLog(
             'youtube',
             `agy --dangerously-skip-permissions (Gemini Notebook Remaster -> ${fileName})`,
@@ -1369,8 +1359,12 @@ const server = http.createServer(async (req, res) => {
 
     if (pathname === '/api/media/file' && req.method === 'GET') {
       const filePath = parsedUrl.searchParams.get('path') || '';
-      const resolved = path.resolve(filePath);
-      if (!resolved.startsWith(ANTIGRAVITY_ROOT) || !fs.existsSync(resolved)) {
+      const resolved = path.resolve(MEDIA_DIR, filePath);
+      const rel = path.relative(MEDIA_DIR, resolved);
+      if (!filePath || !rel || rel.startsWith('..') || path.isAbsolute(rel)) {
+        return sendJson(res, 403, { ok: false, error: 'Forbidden path outside media-previews' });
+      }
+      if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) {
         res.writeHead(404);
         return res.end('Not found');
       }
@@ -1461,9 +1455,24 @@ const server = http.createServer(async (req, res) => {
     }
 
     // 12. Static File Serving (index.html, styles.css, renderer.js, graphify-out/*, media-previews/*)
-    let relPath = pathname === '/' ? '/index.html' : pathname;
-    const safePath = path.normalize(path.join(ROOT, decodeURIComponent(relPath)));
-    if (safePath.startsWith(ROOT) && fs.existsSync(safePath) && fs.statSync(safePath).isFile()) {
+    const reqPath = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
+    const safePath = path.resolve(ROOT, decodeURIComponent(reqPath));
+    const relFromRoot = path.relative(ROOT, safePath);
+    const normalizedRel = relFromRoot.replace(/\\/g, '/');
+    const isAllowedStatic =
+      normalizedRel === 'index.html' ||
+      normalizedRel === 'styles.css' ||
+      normalizedRel === 'renderer.js' ||
+      normalizedRel.startsWith('media-previews/') ||
+      normalizedRel.startsWith('graphify-out/');
+    if (
+      relFromRoot &&
+      !relFromRoot.startsWith('..') &&
+      !path.isAbsolute(relFromRoot) &&
+      isAllowedStatic &&
+      fs.existsSync(safePath) &&
+      fs.statSync(safePath).isFile()
+    ) {
       const ext = path.extname(safePath).toLowerCase();
       res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
       return fs.createReadStream(safePath).pipe(res);

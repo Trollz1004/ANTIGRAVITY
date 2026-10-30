@@ -46,9 +46,28 @@ $explicitFiles = @(
 )
 
 # 1. Ensure Worktree Exists Outside Vault Root and Tracks origin/main
+if (Test-Path $VaultRepo) {
+  Set-Location $VaultRepo
+  $fetchOut = & git fetch origin 2>&1 | Out-String
+  if ($LASTEXITCODE -ne 0) {
+    $fail = @{
+      ok = $false
+      timestamp = (Get-Date).ToString("o")
+      node = "Sabretooth"
+      branch = $Branch
+      pushSuccess = $false
+      prNumber = $null
+      prUrl = $null
+      prStatus = "FAILED_GIT_FETCH"
+      error = $fetchOut.Trim()
+    }
+    $fail | ConvertTo-Json -Compress
+    exit 1
+  }
+}
+
 if (-not (Test-Path $WorktreeRoot)) {
   Set-Location $VaultRepo
-  & git fetch origin 2>&1 | Out-Null
   & git worktree add $WorktreeRoot -B $Branch "origin/$BaseBranch" 2>&1 | Out-Null
 }
 
@@ -210,36 +229,40 @@ $prUrl = $null
 $prStatus = "FAILED_PR_LOOKUP"
 $prError = $null
 
-$existingJson = (& $GhExe pr view $Branch --repo $Repo --json number,url 2>&1 | Out-String).Trim()
-if ($LASTEXITCODE -eq 0 -and $existingJson.StartsWith("{")) {
+$existingJson = (& $GhExe pr list --repo $Repo --head $Branch --base $BaseBranch --state open --json number,url 2>$null | Out-String).Trim()
+if ($LASTEXITCODE -eq 0 -and $existingJson.StartsWith("[")) {
   try {
-    $prObj = $existingJson | ConvertFrom-Json
-    $prNumber = $prObj.number
-    $prUrl = $prObj.url
-    $prStatus = "PR_#$($prNumber)_UPDATED"
+    $prList = $existingJson | ConvertFrom-Json
+    if ($prList -and $prList.Count -gt 0) {
+      $prNumber = $prList[0].number
+      $prUrl = $prList[0].url
+      $prStatus = "PR_#$($prNumber)_UPDATED"
+    }
   } catch {}
 }
 
 if (-not $prNumber) {
   $prTitle = "feat(sabretooth): add apps/hermes-leadgen Command Studio ($headSha)"
-  $prBody = @"
-## Sabretooth Automated Agent PR -> Cloud Judges Gate
-
-- **Worktree Branch**: `$Branch` -> `$BaseBranch`
-- **Scoped Path**: `apps/hermes-leadgen/` only (fenced outside Obsidian vault)
-- **Commit SHA**: `$headSha`
-- **Local TDD (`node --test`)**: PASSED
-- **Doctrine & Secret Scan (`scripts/doctrine/doctrine-check.py`)**: PASSED
-- **Judge Review Required**: Awaiting review from Claude, Codex, Gemini, or Jules before merge.
-"@
+  $prBody = @(
+    "## Sabretooth Automated Agent PR -> Cloud Judges Gate",
+    "",
+    "- **Worktree Branch**: $Branch -> $BaseBranch",
+    "- **Scoped Path**: apps/hermes-leadgen/ only (fenced outside Obsidian vault)",
+    "- **Commit SHA**: $headSha",
+    "- **Local TDD (node --test)**: PASSED",
+    "- **Doctrine & Secret Scan (scripts/doctrine/doctrine-check.py)**: PASSED",
+    "- **Judge Review Required**: Awaiting review from Claude, Codex, Gemini, or Jules before merge."
+  ) -join "`n"
   $createOut = (& $GhExe pr create --repo $Repo --base $BaseBranch --head $Branch --title "$prTitle" --body "$prBody" 2>&1 | Out-String).Trim()
   if ($LASTEXITCODE -eq 0) {
-    $viewJson = (& $GhExe pr view $Branch --repo $Repo --json number,url 2>&1 | Out-String).Trim()
-    if ($LASTEXITCODE -eq 0 -and $viewJson.StartsWith("{")) {
-      $prObj = $viewJson | ConvertFrom-Json
-      $prNumber = $prObj.number
-      $prUrl = $prObj.url
-      $prStatus = "PR_#$($prNumber)_CREATED"
+    $viewJson = (& $GhExe pr list --repo $Repo --head $Branch --base $BaseBranch --state open --json number,url 2>$null | Out-String).Trim()
+    if ($LASTEXITCODE -eq 0 -and $viewJson.StartsWith("[")) {
+      $prList = $viewJson | ConvertFrom-Json
+      if ($prList -and $prList.Count -gt 0) {
+        $prNumber = $prList[0].number
+        $prUrl = $prList[0].url
+        $prStatus = "PR_#$($prNumber)_CREATED"
+      }
     }
   } else {
     $prError = $createOut

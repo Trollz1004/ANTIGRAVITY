@@ -8,7 +8,8 @@ function escapeHtml(str) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 // ============================================================================
@@ -92,6 +93,8 @@ async function playNaturalFemaleVoice(textToSpeak) {
       if (statusLabel) {
         statusLabel.textContent = `Playing Natural Female Voice: ${data.voiceRequested} (${data.neuralVoiceUsed}) — Zero Robotic TTS`;
       }
+    } else if (statusLabel) {
+      statusLabel.textContent = data.error || 'Natural Female Audio Ready';
     }
   } catch (err) {
     if (statusLabel) statusLabel.textContent = 'Natural Female Audio Ready';
@@ -154,8 +157,11 @@ document.getElementById('btn-voice-mic')?.addEventListener('click', () => {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const btn = document.getElementById('btn-voice-mic');
   const input = document.getElementById('orchestrator-input');
+  const statusLabel = document.getElementById('tts-status-label');
   if (!SpeechRecognition) {
-    input.value = 'Remaster our Gemini Notebook video 9hNDPCQa3kw with natural female voice Aoede and prospect 3 Harvey leads';
+    if (statusLabel) {
+      statusLabel.textContent = 'Voice microphone input requires a Chromium browser with Web Speech STT enabled.';
+    }
     return;
   }
   const rec = new SpeechRecognition();
@@ -250,7 +256,7 @@ async function refreshMediaPreviews() {
                 Gate: <code>${escapeHtml(m.duration)}</code><br/>
                 Voice: <code>${escapeHtml(m.voice)}</code>
               </div>
-              <button class="btn btn-sm ${m.approved ? 'btn-green' : 'btn-amber'}" onclick="approveMediaAsset('${escapeHtml(m.id)}')">
+              <button class="btn btn-sm ${m.approved ? 'btn-green' : 'btn-amber'}" data-approve-media="${escapeHtml(m.id)}">
                 ${m.approved ? '✅ APPROVED BY FOUNDER FOR PUBLISH' : '👍 Click to Approve Content (Required Before Publish)'}
               </button>
             </div>`;
@@ -276,6 +282,18 @@ window.approveMediaAsset = async function (id) {
   await refreshMediaPreviews();
   await refreshTerminalLogs();
 };
+
+document.addEventListener('click', (e) => {
+  const mediaBtn = e.target.closest?.('[data-approve-media]');
+  if (mediaBtn) {
+    window.approveMediaAsset(mediaBtn.getAttribute('data-approve-media'));
+    return;
+  }
+  const leadBtn = e.target.closest?.('[data-approve-lead]');
+  if (leadBtn) {
+    window.approveHarveyLead(leadBtn.getAttribute('data-approve-lead'));
+  }
+});
 
 document.getElementById('btn-refresh-media')?.addEventListener('click', refreshMediaPreviews);
 
@@ -486,7 +504,7 @@ async function refreshHarveyLeads() {
             <span style="font-size:16px;font-weight:700;color:${l.approved ? '#10b981' : '#fbbf24'}">
               Status: ${escapeHtml(l.status)}
             </span>
-            <button class="btn btn-sm btn-green" onclick="approveHarveyLead('${escapeHtml(l.id)}')">
+            <button class="btn btn-sm btn-green" data-approve-lead="${escapeHtml(l.id)}">
               ${l.approved ? '✅ Approved by Founder' : '👍 Approve Lead for Dispatch'}
             </button>
           </div>

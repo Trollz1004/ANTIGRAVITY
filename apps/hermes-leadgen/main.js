@@ -48,6 +48,23 @@ function fetchWorkerHealth() {
   });
 }
 
+function ensureLocalServer() {
+  return new Promise((resolve) => {
+    const req = http.get('http://127.0.0.1:8392/api/node/status', (res) => {
+      res.resume();
+      resolve();
+    });
+    req.on('error', () => {
+      try {
+        const { server } = require('./server');
+        server.listen(8392, '0.0.0.0', () => resolve());
+      } catch (_) {
+        resolve();
+      }
+    });
+  });
+}
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1400,
@@ -62,13 +79,11 @@ function createWindow() {
       nodeIntegration: false
     }
   });
-  win.loadFile('index.html');
+  win.loadURL('http://127.0.0.1:8392/');
   win.once('ready-to-show', () => {
     win.show();
     win.focus();
   });
-  // Open devtools for debugging
-  win.webContents.openDevTools({ mode: 'detach' });
 }
 
 // Fix cache permission issues on Windows
@@ -79,7 +94,8 @@ app.setPath('cache', path.join(__dirname, '.app-cache'));
 app.commandLine.appendSwitch('disable-gpu');
 app.commandLine.appendSwitch('disable-software-rasterizer');
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  await ensureLocalServer();
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -109,12 +125,16 @@ ipcMain.handle('stats:load', () => readJSON(STATS_FILE, {
 ipcMain.handle('stats:save', (_e, stats) => { writeJSON(STATS_FILE, stats); return true; });
 
 // IPC: File dialog for MP4 preview
+const approvedDialogPaths = new Set();
 ipcMain.handle('dialog:openFile', async () => {
   const result = await dialog.showOpenDialog({
     properties: ['openFile'],
     filters: [{ name: 'Video', extensions: ['mp4', 'mov', 'mkv', 'webm'] }]
   });
-  return result.canceled ? null : result.filePaths[0];
+  if (result.canceled || !result.filePaths[0]) return null;
+  const chosen = path.resolve(result.filePaths[0]);
+  approvedDialogPaths.add(chosen);
+  return chosen;
 });
 
 // IPC: OmniRoute call (proxy through main to avoid CORS)
@@ -165,6 +185,21 @@ ipcMain.handle('missioncontrol:live', async () => {
   });
 });
 
-// IPC: Open file in default app
-ipcMain.handle('shell:openPath', (_e, filePath) => shell.openPath(filePath));
-ipcMain.handle('shell:openExternal', (_e, url) => shell.openExternal(url));
+// IPC: Open file in default app (restricted to dialog-selected paths or media-previews)
+ipcMain.handle('shell:openPath', (_e, filePath) => {
+  const resolved = path.resolve(String(filePath || ''));
+  const mediaDir = path.resolve(__dirname, 'media-previews');
+  const rel = path.relative(mediaDir, resolved);
+  const insideMedia = rel && !rel.startsWith('..') && !path.isAbsolute(rel);
+  if (!approvedDialogPaths.has(resolved) && !insideMedia) {
+    throw new Error('Blocked shell:openPath outside approved media directories');
+  }
+  return shell.openPath(resolved);
+});
+ipcMain.handle('shell:openExternal', (_e, url) => {
+  const parsed = new URL(String(url || ''));
+  if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+    throw new Error('Blocked non-HTTP(S) URL in shell:openExternal');
+  }
+  return shell.openExternal(parsed.toString());
+});

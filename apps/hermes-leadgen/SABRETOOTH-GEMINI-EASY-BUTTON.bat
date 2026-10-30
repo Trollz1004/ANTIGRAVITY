@@ -27,7 +27,7 @@ if %ERRORLEVEL% NEQ 0 (
     echo Window stays open so Founder Joshua Coleman can inspect the status.
 ) else (
     echo.
-    echo [ALL GREEN LIGHTS] Sabretooth stack (8392, 9119, 8082, 8391, 11434, 27123) is online!
+    echo [ALL GREEN LIGHTS] Sabretooth stack ^(8392, 9119, 8082, 8391, 11434, 27123^) is online!
 )
 
 echo.
