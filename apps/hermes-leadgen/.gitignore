@@ -1,0 +1,9 @@
+node_modules/
+.app-data/
+.app-cache/
+.electron-data/
+.electron-cache/
+data/
+media-previews/
+config.json
+*.log
