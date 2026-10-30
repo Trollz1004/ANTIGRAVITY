@@ -11,7 +11,7 @@ knowledge:
     - session-brain
   vaults:
     T5500: C:\ANTIGRAVITY\Antigravity
-    Alienware: C:\ANTIGRAVITY\Antigravity
+    Alienware: C:\DREAM\Antigravity
     Sabretooth: C:\Ai-Dream-Team\Antigravity
 skill_policy:
   mandatory:
@@ -47,7 +47,7 @@ skill_policy:
       - session-brain
     vaults:
       T5500: C:\ANTIGRAVITY\Antigravity
-      Alienware: C:\ANTIGRAVITY\Antigravity
+      Alienware: C:\DREAM\Antigravity
       Sabretooth: C:\Ai-Dream-Team\Antigravity
 mcp_servers:
   required: [obsidian_antigravity, brain-mcp, mission-mcp, antigravity-files, playwright]

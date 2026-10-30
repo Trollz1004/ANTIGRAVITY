@@ -1,6 +1,6 @@
 ---
 name: obsidian-markdown
-description: Formats notes in the authoritative Obsidian vault (T5500 C:\ANTIGRAVITY\Antigravity, Alienware ~/Documents/Antigravity) using valid Obsidian Flavored Markdown: YAML properties, [[wikilinks]], callouts, and backlinks.
+description: Formats notes in the authoritative Obsidian vault (T5500 C:\ANTIGRAVITY\Antigravity, Alienware C:\DREAM\Antigravity) using valid Obsidian Flavored Markdown: YAML properties, [[wikilinks]], callouts, and backlinks.
 category: memory-layer
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: obsidian-think
-description: Structured reasoning and hypothesis synthesis over the authoritative Obsidian vault graph (T5500 C:\ANTIGRAVITY\Antigravity, Alienware C:\ANTIGRAVITY\Antigravity, Sabretooth C:\Ai-Dream-Team\Antigravity) before making architectural or operational decisions.
+description: Structured reasoning and hypothesis synthesis over the authoritative Obsidian vault graph (T5500 C:\ANTIGRAVITY\Antigravity, Alienware C:\DREAM\Antigravity, Sabretooth C:\Ai-Dream-Team\Antigravity) before making architectural or operational decisions.
 category: memory-layer
 ---
 
@@ -10,7 +10,7 @@ Use this skill at session start and before mutating system state to ground reaso
 
 ## Vault Paths per Node
 - **T5500 (`192.168.0.15`)**: `C:\ANTIGRAVITY\Antigravity` (root note `00 HOME.md`)
-- **Alienware (`192.168.0.40`)**: `C:\ANTIGRAVITY\Antigravity` (root note `00 HOME.md`)
+- **Alienware (`192.168.0.40`)**: `C:\DREAM\Antigravity` (root note `00 HOME.md`)
 - **Sabretooth**: `C:\Ai-Dream-Team\Antigravity` (root note `00 HOME.md`)
 
 ## Procedure

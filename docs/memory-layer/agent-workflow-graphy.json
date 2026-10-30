@@ -141,7 +141,7 @@
         },
         "perNodeVaults": {
           "T5500": "C:\\ANTIGRAVITY\\Antigravity",
-          "Alienware": "C:\\ANTIGRAVITY\\Antigravity",
+          "Alienware": "C:\\DREAM\\Antigravity",
           "Sabretooth": "C:\\Ai-Dream-Team\\Antigravity"
         },
         "vaults": [
@@ -157,7 +157,7 @@
           },
           {
             "node": "Alienware",
-            "path": "C:\\ANTIGRAVITY\\Antigravity",
+            "path": "C:\\DREAM\\Antigravity",
             "shared_by": [
               "ANT (ANTIGRAVITY Marketing Co, youandinotai.com)",
               "AIS (Ai-Solutions.Store)"
@@ -176,7 +176,7 @@
           },
           {
             "node": "Alienware-DRE",
-            "path": "D:\\DREAM ONLINE",
+            "path": "C:\\DREAM\\dream-online\\DREAM-ONLINE",
             "shared_by": [
               "DRE (DREAM Online MMORPG)"
             ],

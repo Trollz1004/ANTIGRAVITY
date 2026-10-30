@@ -80,8 +80,8 @@ FACTS = [
                "Never download a ZIP for it. Delete the reference.",
     },
     {
-        # Usernames differ per node: joshi on the T5500 and the Alienware,
-        # joshl on Sabretooth, and NSFW_BOTS is a separate Alienware profile,
+        # Usernames differ per node: joshi on the T5500, joshl on Sabretooth
+        # and the Alienware, and NSFW_BOTS is a separate Alienware profile,
         # not a signed-in user. A literal path works on one box and silently
         # breaks on the others.
         "name": "hardcoded-user-path",
@@ -92,7 +92,7 @@ FACTS = [
                      r"/Users/joshl\b", r"/Users/joshi\b"],
         "allow": (r"^ops/runbook/PROTECTED-CHANGELOG\.md$", r"^ops/handoffs/.*$",
                   r"^archive/.*$", r"^scripts/doctrine/doctrine-check\.py$"),
-        "fix": "Usernames differ per node: joshi on the T5500 and the Alienware, joshl on Sabretooth, and NSFW_BOTS is a separate Alienware profile, not a signed-in user. Use $env:USERPROFILE or ~ instead.",
+        "fix": "Usernames differ per node: joshi on the T5500, joshl on Sabretooth and the Alienware, and NSFW_BOTS is a separate Alienware profile, not a signed-in user. Use $env:USERPROFILE or ~ instead.",
     },
 ]
 

@@ -1,6 +1,6 @@
 ---
 name: obsidian-save
-description: Saves verified session findings, architectural decisions, and learnings into the authoritative node Obsidian vault (T5500 C:\ANTIGRAVITY\Antigravity, Alienware C:\ANTIGRAVITY\Antigravity, Sabretooth C:\Ai-Dream-Team\Antigravity) backed by git.
+description: Saves verified session findings, architectural decisions, and learnings into the authoritative node Obsidian vault (T5500 C:\ANTIGRAVITY\Antigravity, Alienware C:\DREAM\Antigravity, Sabretooth C:\Ai-Dream-Team\Antigravity) backed by git.
 category: memory-layer
 ---
 
@@ -10,7 +10,7 @@ Obsidian is the authoritative agent memory layer (backed by git). Every agent wr
 
 ## Vault Paths per Node
 - **T5500 (`192.168.0.15`)**: `C:\ANTIGRAVITY\Antigravity` (root note `00 HOME.md`, Obsidian Sync)
-- **Alienware (`192.168.0.40`)**: `C:\ANTIGRAVITY\Antigravity` (root note `00 HOME.md`, Obsidian Sync)
+- **Alienware (`192.168.0.40`)**: `C:\DREAM\Antigravity` (root note `00 HOME.md`, Obsidian Sync)
 - **Sabretooth**: `C:\Ai-Dream-Team\Antigravity` (root note `00 HOME.md`, Obsidian Sync)
 
 ## Procedure
