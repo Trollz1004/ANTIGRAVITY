@@ -80,18 +80,19 @@ FACTS = [
                "Never download a ZIP for it. Delete the reference.",
     },
     {
-        # Usernames differ per node: joshl on Sabretooth, joshi on T5500,
-        # NSFW_BOTS on Alienware. A literal path works on one box and silently
+        # Usernames differ per node: joshi on the T5500 and the Alienware,
+        # joshl on Sabretooth, and NSFW_BOTS is a separate Alienware profile,
+        # not a signed-in user. A literal path works on one box and silently
         # breaks on the others.
         "name": "hardcoded-user-path",
-        "source": ("docs/memory-layer/agent-workflow-graphy.json", ".agents/harness-config/hermes.yaml"),
+        "source": (),
         "patterns": [r"C:\\\\Users\\\\joshl\b", r"C:\\Users\\joshl\b",
                      r"C:\\\\Users\\\\joshi\b", r"C:\\Users\\joshi\b",
                      r"C:\\\\Users\\\\NSFW_BOTS\b", r"C:\\Users\\NSFW_BOTS\b",
                      r"/Users/joshl\b", r"/Users/joshi\b"],
         "allow": (r"^ops/runbook/PROTECTED-CHANGELOG\.md$", r"^ops/handoffs/.*$",
                   r"^archive/.*$", r"^scripts/doctrine/doctrine-check\.py$"),
-        "fix": "Usernames differ per node (joshl / joshi / NSFW_BOTS). Use $env:USERPROFILE or ~ instead.",
+        "fix": "Usernames differ per node: joshi on the T5500 and the Alienware, joshl on Sabretooth, and NSFW_BOTS is a separate Alienware profile, not a signed-in user. Use $env:USERPROFILE or ~ instead.",
     },
 ]
 
