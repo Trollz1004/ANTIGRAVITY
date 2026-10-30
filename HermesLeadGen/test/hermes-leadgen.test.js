@@ -212,4 +212,44 @@ test('6. Mandatory RooFlow + SpecKit Post-Work Git Push & PR Creation Gate (spec
   assert.equal(pushPrRes.data.ok, true);
 });
 
+test('7. Separated Tabs, :8391/health Harvey Scraping vs YouTube API-Only + Made-with-AI TOS, YouTube Studio UCJnFUOdEfSOJiXLnx6lXSzg, 9hNDPCQa3kw Gemini Notebook Remaster, and Zero Robotic TTS', async () => {
+  // 1. Verify :8391/health split rules
+  const health8391 = await httpGetJson('http://127.0.0.1:8391/health');
+  assert.equal(health8391.status, 200);
+  const w = health8391.data.worker;
+  assert.equal(w.harvey_scraping_rules.harvey_scraping_permitted, true, 'Harvey must be authorized to scrape external non-YouTube sources');
+  assert.equal(w.youtube_publish_method, 'youtube-data-api-v3', 'YouTube must remain API v3 only');
+  assert.equal(w.youtube_made_with_ai_tos.containsSyntheticMedia, true, 'Made with AI (containsSyntheticMedia) must be enforced');
+  assert.equal(w.youtube_studio_url, 'https://studio.youtube.com/channel/UCJnFUOdEfSOJiXLnx6lXSzg');
+  assert.equal(w.gemini_notebook_remaster_source.legacyVideoId, '9hNDPCQa3kw');
+
+  // 2. Verify :8392/api/youtube/studio
+  const ytStudio = await httpGetJson('http://127.0.0.1:8392/api/youtube/studio');
+  assert.equal(ytStudio.status, 200);
+  assert.equal(ytStudio.data.studioChannelId, 'UCJnFUOdEfSOJiXLnx6lXSzg');
+  assert.equal(ytStudio.data.splitRules.harveyLeadGenerator.scrapingPermitted, true);
+  assert.equal(ytStudio.data.splitRules.youtubePipeline.scrapingPermitted, false);
+  assert.equal(ytStudio.data.splitRules.youtubePipeline.madeWithAiTos.containsSyntheticMedia, true);
+  assert.equal(ytStudio.data.legacyNotebookVideo.videoId, '9hNDPCQa3kw');
+  assert.ok(ytStudio.data.legacyNotebookVideo.takedownReason.toLowerCase().includes('tax law'));
+
+  // 3. Verify robotic browser speechSynthesis is completely removed from renderer.js & robotic TTS is rejected
+  const rendererCode = fs.readFileSync(path.join(ROOT_DIR, 'renderer.js'), 'utf8');
+  assert.ok(!rendererCode.includes('window.speechSynthesis.speak'), 'Robotic browser speechSynthesis must never be called');
+
+  const roboticRes = await httpPostJson('http://127.0.0.1:8392/api/tts/female', {
+    text: 'Test',
+    voice: 'microsoft-david-sapi-robotic'
+  });
+  assert.equal(roboticRes.status, 400, 'Robotic SAPI voice must be rejected with HTTP 400');
+
+  // 4. Verify separated single-purpose tabs exist in index.html
+  const htmlCode = fs.readFileSync(path.join(ROOT_DIR, 'index.html'), 'utf8');
+  for (const tab of ['orchestrator', 'terminal', 'media', 'graphy', 'harvey', 'youtube', 'fcc', 'kanban', 'notes']) {
+    assert.ok(htmlCode.includes(`data-tab="${tab}"`), `Missing separated tab button: ${tab}`);
+    assert.ok(htmlCode.includes(`id="tab-${tab}"`), `Missing separated tab panel: tab-${tab}`);
+  }
+});
+
+
 

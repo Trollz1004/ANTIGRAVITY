@@ -8,6 +8,8 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
+$env:GIT_TERMINAL_PROMPT = "0"
+$env:GCM_INTERACTIVE = "never"
 $RepoRoot = "C:\Ai-Dream-Team\Antigravity"
 $HermesDir = "C:\Ai-Dream-Team\Antigravity\HermesLeadGen"
 $GhExe = "C:\Program Files\GitHub CLI\gh.exe"

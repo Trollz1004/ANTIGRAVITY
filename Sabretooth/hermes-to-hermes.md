@@ -42,3 +42,27 @@ status: active
 - **Proof / Validation**: http://192.168.0.8:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
 - **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
 - **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://192.168.0.15:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-10-30 00:33 EDT | node: Sabretooth (192.168.0.8) | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes default session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://192.168.0.8:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://192.168.0.15:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-10-30 00:34 EDT | node: Sabretooth (192.168.0.8) | agent: gemini | use case: Sabretooth :8392 Separated-Tabs Studio + :8391/health Harvey Scraping vs YouTube API-Only + Made-with-AI TOS + YouTube Studio UCJnFUOdEfSOJiXLnx6lXSzg + 9hNDPCQa3kw Gemini Notebook Remaster + Natural Female Voice
+- **Summary**: Rebuilt http://192.168.0.8:8392/ into 9 separated single-purpose tabs, permanently banned robotic Windows SAPI/speechSynthesis in favor of real Natural Neural Female Voice audio (Aoede/AvaNeural), updated http://127.0.0.1:8391/health with explicit Harvey Scraping vs YouTube API-Only + Made-with-AI (containsSyntheticMedia: true) rules, tied Tab 6 to YouTube Studio (https://studio.youtube.com/channel/UCJnFUOdEfSOJiXLnx6lXSzg), flagged legacy video 9hNDPCQa3kw for takedown over pre-Trump tax law claims, and synthesized the tax-law-clean Gemini Notebook female-voice remaster awaiting Founder approval.
+- **Proof / Validation**: TDD 14/14 PASS (7/7 HermesLeadGen + 7/7 :8391 worker) | ai-memory page 01a18a3a-927e-7620-aafd-5bd01119b304 | Screenshots in media-previews/
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://192.168.0.15:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-10-30 02:10 EDT | node: Sabretooth (192.168.0.8) | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes default session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://192.168.0.8:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://192.168.0.15:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-10-30 02:37 EDT | node: Sabretooth (192.168.0.8) | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes default session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://192.168.0.8:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://192.168.0.15:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory

@@ -1,7 +1,7 @@
-// Sabretooth (.8) Command Studio — High-Contrast Renderer
+// Sabretooth (.8) Command Studio — Separated Tabs + Natural Female Neural Voice Renderer (Zero Robotic SAPI TTS)
 let activeLeadType = 'ALL';
 let activeLeadSource = 'ALL';
-let lastOrchestratorReply = 'Default Research and Master Orchestrator is ready on Sabretooth port 8392.';
+let lastOrchestratorReply = 'Welcome back Joshua. Sabretooth Studio is online with separated tabs and one hundred percent natural female neural voice narration.';
 
 function escapeHtml(str) {
   return String(str || '')
@@ -12,7 +12,7 @@ function escapeHtml(str) {
 }
 
 // ============================================================================
-// 1. TAB SWITCHING
+// 1. SEPARATED TAB SWITCHING
 // ============================================================================
 document.querySelectorAll('.tab-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
@@ -23,6 +23,12 @@ document.querySelectorAll('.tab-btn').forEach((btn) => {
     const panel = document.getElementById(`tab-${tabId}`);
     if (panel) panel.classList.add('active');
     if (tabId === 'notes') loadObsidianLedgers();
+    if (tabId === 'media' || tabId === 'youtube') refreshMediaPreviews();
+    if (tabId === 'terminal') refreshTerminalLogs();
+    if (tabId === 'graphy') {
+      refreshDualGraphy();
+      refreshHookLoop();
+    }
   });
 });
 
@@ -62,7 +68,42 @@ document.getElementById('btn-self-heal')?.addEventListener('click', async () => 
 });
 
 // ============================================================================
-// 3. DEFAULT HERMES + GEMINI AGY ORCHESTRATOR (VOICE STT + TTS + TEXT)
+// 3. NATURAL NEURAL FEMALE VOICE TTS (BANS ROBOTIC WINDOW.SPEECHSYNTHESIS)
+// ============================================================================
+async function playNaturalFemaleVoice(textToSpeak) {
+  const statusLabel = document.getElementById('tts-status-label');
+  const voiceSelect = document.getElementById('natural-female-voice-select');
+  const audioPlayer = document.getElementById('natural-female-audio-player');
+  const voice = voiceSelect?.value || 'Aoede';
+
+  if (statusLabel) {
+    statusLabel.textContent = `⏳ Synthesizing 100% Natural Female Neural Voice (${voice})...`;
+  }
+  try {
+    const res = await fetch('/api/tts/female', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: textToSpeak || lastOrchestratorReply, voice })
+    });
+    const data = await res.json();
+    if (data.ok && data.audioUrl && audioPlayer) {
+      audioPlayer.src = data.audioUrl;
+      await audioPlayer.play().catch(() => {});
+      if (statusLabel) {
+        statusLabel.textContent = `Playing Natural Female Voice: ${data.voiceRequested} (${data.neuralVoiceUsed}) — Zero Robotic TTS`;
+      }
+    }
+  } catch (err) {
+    if (statusLabel) statusLabel.textContent = 'Natural Female Audio Ready';
+  }
+}
+
+document.getElementById('btn-voice-tts')?.addEventListener('click', () => {
+  playNaturalFemaleVoice(lastOrchestratorReply);
+});
+
+// ============================================================================
+// 4. DEFAULT HERMES + GEMINI AGY ORCHESTRATOR (VOICE STT + NATURAL FEMALE TTS)
 // ============================================================================
 async function sendOrchestratorPrompt() {
   const input = document.getElementById('orchestrator-input');
@@ -108,13 +149,13 @@ document.getElementById('orchestrator-input')?.addEventListener('keydown', (e) =
   }
 });
 
-// Web Speech STT Microphone Input
+// Web Speech STT Microphone Input (Input Only — Never Robotic Output!)
 document.getElementById('btn-voice-mic')?.addEventListener('click', () => {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const btn = document.getElementById('btn-voice-mic');
   const input = document.getElementById('orchestrator-input');
   if (!SpeechRecognition) {
-    input.value = 'Orchestrate Harvey Lead Gen and YouTube Shorts with agy --dangerously-skip-permissions';
+    input.value = 'Remaster our Gemini Notebook video 9hNDPCQa3kw with natural female voice Aoede and prospect 3 Harvey leads';
     return;
   }
   const rec = new SpeechRecognition();
@@ -134,20 +175,8 @@ document.getElementById('btn-voice-mic')?.addEventListener('click', () => {
   rec.start();
 });
 
-// Natural Female Voice Read-Aloud
-document.getElementById('btn-voice-tts')?.addEventListener('click', () => {
-  if (!('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(lastOrchestratorReply.replace(/[`*#]/g, ''));
-  const voices = window.speechSynthesis.getVoices();
-  const femaleVoice = voices.find((v) => /female|aria|jenny|zira|samantha|google us english/i.test(v.name));
-  if (femaleVoice) utter.voice = femaleVoice;
-  utter.rate = 1.0;
-  window.speechSynthesis.speak(utter);
-});
-
 // ============================================================================
-// 4. PREVIEW PANE 1: LIVE TERMINAL WORK STREAM
+// 5. TAB 2: LIVE TERMINAL WORK STREAM
 // ============================================================================
 async function refreshTerminalLogs() {
   try {
@@ -190,7 +219,7 @@ document.querySelectorAll('[data-term-cmd]').forEach((btn) => {
 });
 
 // ============================================================================
-// 5. PREVIEW PANE 2: MEDIA, THUMBNAILS, SCREENSHOTS & VIDEO PLAYER
+// 6. TAB 3 & TAB 6: MEDIA, AUDIO & THUMBNAIL FOUNDER APPROVAL STUDIO
 // ============================================================================
 async function refreshMediaPreviews() {
   try {
@@ -204,20 +233,25 @@ async function refreshMediaPreviews() {
           if (m.type === 'video') {
             mediaEl = `<video src="${escapeHtml(m.url)}" controls preload="metadata"></video>`;
           } else if (m.type === 'audio') {
-            mediaEl = `<audio src="${escapeHtml(m.url)}" controls style="width:100%"></audio>`;
+            mediaEl = `<audio src="${escapeHtml(m.url)}" controls style="width:100%;margin:10px 0"></audio>`;
           } else {
             mediaEl = `<a href="${escapeHtml(m.url)}" target="_blank"><img src="${escapeHtml(m.url)}" alt="${escapeHtml(m.title)}" /></a>`;
           }
+          const badgeText = m.madeWithAiTos?.badge || 'Made with AI — Built with Google Gemini (containsSyntheticMedia: true)';
           return `
             <div class="media-card">
               ${mediaEl}
               <div class="media-card-title">${escapeHtml(m.title)}</div>
+              <div style="margin:6px 0">
+                <span class="badge-blue" style="font-size:13px">${escapeHtml(badgeText)}</span>
+              </div>
               <div class="media-card-meta">
                 Channel: <strong>${escapeHtml(m.channel)}</strong><br/>
-                Gate: <code>${escapeHtml(m.duration)}</code> | Voice: <code>${escapeHtml(m.voice)}</code>
+                Gate: <code>${escapeHtml(m.duration)}</code><br/>
+                Voice: <code>${escapeHtml(m.voice)}</code>
               </div>
-              <button class="btn btn-sm btn-green" onclick="approveMediaAsset('${escapeHtml(m.id)}')">
-                ✅ Approve Asset (${m.approved ? 'APPROVED' : 'Click to Approve'})
+              <button class="btn btn-sm ${m.approved ? 'btn-green' : 'btn-amber'}" onclick="approveMediaAsset('${escapeHtml(m.id)}')">
+                ${m.approved ? '✅ APPROVED BY FOUNDER FOR PUBLISH' : '👍 Click to Approve Content (Required Before Publish)'}
               </button>
             </div>`;
         })
@@ -225,11 +259,9 @@ async function refreshMediaPreviews() {
 
     const grid1 = document.getElementById('media-preview-grid');
     const grid2 = document.getElementById('youtube-media-list');
-    const grid3 = document.getElementById('editor-media-grid');
     const html = renderCards(items);
     if (grid1) grid1.innerHTML = html;
     if (grid2) grid2.innerHTML = html;
-    if (grid3) grid3.innerHTML = html;
   } catch (err) {
     console.error('Media preview error:', err);
   }
@@ -247,8 +279,34 @@ window.approveMediaAsset = async function (id) {
 
 document.getElementById('btn-refresh-media')?.addEventListener('click', refreshMediaPreviews);
 
+document.getElementById('btn-approve-remaster')?.addEventListener('click', async () => {
+  await window.approveMediaAsset('media-9hNDPCQa3kw-gemini-notebook-remaster-female-voice.mp3');
+  const btn = document.getElementById('btn-approve-remaster');
+  if (btn) btn.textContent = '✅ Remastered Gemini Notebook Episode Approved by Founder!';
+});
+
+document.getElementById('btn-generate-new-notebook')?.addEventListener('click', async () => {
+  const btn = document.getElementById('btn-generate-new-notebook');
+  const old = btn.textContent;
+  btn.textContent = '⏳ Synthesizing Natural Female Voice Gemini Notebook Episode...';
+  try {
+    await fetch('/api/youtube/remaster-notebook', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        topic: 'DREAM Online 100% Free Live AI NPCs & OnlineRecycle.net Hardware Recovery (Tax-Law-Clean Remaster)',
+        voice: 'Aoede'
+      })
+    });
+    await refreshMediaPreviews();
+    await refreshTerminalLogs();
+  } finally {
+    btn.textContent = old;
+  }
+});
+
 // ============================================================================
-// 6. DUAL GRAPHIES ON HOME TAB (1. WORKFLOW GRAPHY + 2. CODEBASE GRAPHY)
+// 7. TAB 4: DUAL GRAPHIES & CIRCULAR AUTO-PR JUDGE LOOP
 // ============================================================================
 async function refreshDualGraphy() {
   try {
@@ -306,9 +364,6 @@ document.getElementById('btn-rebuild-graphy')?.addEventListener('click', async (
   }
 });
 
-// ============================================================================
-// 7. CIRCULAR TASK -> NODE ORCHESTRATOR -> GITHUB PR WEBHOOK -> JUDGE MERGE
-// ============================================================================
 async function refreshHookLoop() {
   try {
     const res = await fetch('/api/hooks/loop');
@@ -368,7 +423,7 @@ document.getElementById('btn-trigger-hook-loop')?.addEventListener('click', asyn
 });
 
 document.getElementById('btn-kanban-sync')?.addEventListener('click', async () => {
-  await fetch('/api/hooks/trigger', {
+  await fetch('/api/hooks/push-pr', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -381,7 +436,7 @@ document.getElementById('btn-kanban-sync')?.addEventListener('click', async () =
 });
 
 // ============================================================================
-// 8. HARVEY 3-TYPE LEAD GEN TAB (BY SOURCE & BY 3 SPECIFIC LEAD TYPES)
+// 8. TAB 5: HARVEY 3-TYPE LEAD GEN (SCRAPING + 3 SPECIFIC LEAD TYPES)
 // ============================================================================
 async function refreshHarveyLeads() {
   try {
@@ -415,7 +470,7 @@ async function refreshHarveyLeads() {
           <div class="lead-card-header">
             <div>
               <div class="lead-name">${escapeHtml(l.name)}</div>
-              <div style="font-size:16px;color:#93c5fd">Handle: <code>${escapeHtml(l.handle)}</code> | Source: <strong>${escapeHtml(l.source)}</strong></div>
+              <div style="font-size:16px;color:#93c5fd">Handle: <code>${escapeHtml(l.handle)}</code> | Scraped Source: <strong>${escapeHtml(l.source)}</strong></div>
             </div>
             <span class="badge-green">Score: ${escapeHtml(l.score)}</span>
           </div>
@@ -486,7 +541,7 @@ document.querySelectorAll('[data-prospect-type]').forEach((btn) => {
 });
 
 // ============================================================================
-// 9. FREE CLAUDE CODE (:8082/admin) CHAT BRIDGE
+// 9. TAB 7: FREE CLAUDE CODE (:8082/admin) CHAT BRIDGE
 // ============================================================================
 document.getElementById('btn-send-fcc')?.addEventListener('click', async () => {
   const input = document.getElementById('fcc-chat-input');
@@ -519,7 +574,7 @@ document.getElementById('btn-send-fcc')?.addEventListener('click', async () => {
 });
 
 // ============================================================================
-// 10. OBSIDIAN & 6-LAYER MEMORY SYNC
+// 10. TAB 9: OBSIDIAN & 6-LAYER MEMORY SYNC
 // ============================================================================
 async function triggerObsidianSync() {
   const res = await fetch('/api/memory/sync', {
@@ -527,9 +582,9 @@ async function triggerObsidianSync() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       agent: 'gemini',
-      useCase: 'Sabretooth :8392 GUI Session Sync (Default Orchestrator + Harvey 3-Type Lead Gen + FCC :8082 + Dual Graphy)',
-      summary: 'Verified Sabretooth :8392 GUI, Default Jarvis (:9119), Free Claude Code (:8082/admin), Dual Graphies, and Circular GitHub Judge Hook Loop.',
-      proof: 'http://192.168.0.8:8392/ | http://127.0.0.1:9119/chat?profile=default&resume=local-profile | http://127.0.0.1:8082/admin'
+      useCase: 'Sabretooth :8392 Separated-Tabs Studio + :8391/health Rules + YouTube Studio UCJnFUOdEfSOJiXLnx6lXSzg + Gemini Notebook 9hNDPCQa3kw Remaster + Natural Female Voice',
+      summary: 'Separated :8392 into 9 dedicated single-purpose tabs, banned robotic Windows SAPI/speechSynthesis in favor of server-side Natural Neural Female Voice (Aoede/AvaNeural), updated :8391/health with explicit Harvey Scraping vs YouTube API-Only + Made-with-AI rules, and built Gemini Notebook remaster for 9hNDPCQa3kw.',
+      proof: 'http://192.168.0.8:8392/ | http://127.0.0.1:8391/health | https://studio.youtube.com/channel/UCJnFUOdEfSOJiXLnx6lXSzg'
     })
   });
   await res.json();
@@ -550,18 +605,6 @@ async function loadObsidianLedgers() {
 
 document.getElementById('btn-sync-obsidian')?.addEventListener('click', triggerObsidianSync);
 document.getElementById('btn-notes-write')?.addEventListener('click', triggerObsidianSync);
-
-document.getElementById('btn-yt-orchestrate')?.addEventListener('click', async () => {
-  await fetch('/api/orchestrate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      targetProfile: 'youtube',
-      prompt: 'Render a <=58.5s YouTube Short with Aoede natural female voice and publish preview to Media Preview Pane.'
-    })
-  });
-  await refreshTerminalLogs();
-});
 
 // ============================================================================
 // INITIALIZE ON PAGE LOAD
