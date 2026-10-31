@@ -100,7 +100,7 @@
         "appliesTo": "EVERY agent, every node, every session — no exceptions",
         "sessionStart": "READ your own Obsidian file (below) before any task work",
         "sessionEnd": "WRITE (append) a timestamped entry to your own Obsidian file, then mirror to the backups",
-        "perAgentFile": "C:\\ANTIGRAVITY\\Antigravity\\<NODE>\\<agent>-to-<agent>.md",
+        "perAgentFile": "<perNodeVaults[NODE]>\\<NODE>\\<agent>-to-<agent>.md (T5500 C:\\ANTIGRAVITY\\Antigravity, Alienware C:\\DREAM\\Antigravity, Sabretooth C:\\Ai-Dream-Team\\Antigravity)",
         "examples": [
           "C:\\ANTIGRAVITY\\Antigravity\\T5500\\claude-to-claude.md",
           "C:\\ANTIGRAVITY\\Antigravity\\T5500\\hermes-to-hermes.md",
@@ -141,8 +141,8 @@
         },
         "perNodeVaults": {
           "T5500": "C:\\ANTIGRAVITY\\Antigravity",
-          "Alienware": "C:\\Users\\NSFW_BOTS\\Documents\\Antigravity",
-          "Sabretooth": "TBD"
+          "Alienware": "C:\\DREAM\\Antigravity",
+          "Sabretooth": "C:\\Ai-Dream-Team\\Antigravity"
         },
         "vaults": [
           {
@@ -157,7 +157,7 @@
           },
           {
             "node": "Alienware",
-            "path": "C:\\Users\\NSFW_BOTS\\Documents\\Antigravity",
+            "path": "C:\\DREAM\\Antigravity",
             "shared_by": [
               "ANT (ANTIGRAVITY Marketing Co, youandinotai.com)",
               "AIS (Ai-Solutions.Store)"
@@ -167,7 +167,7 @@
           },
           {
             "node": "Sabretooth",
-            "path": "TBD",
+            "path": "C:\\Ai-Dream-Team\\Antigravity",
             "shared_by": [
               "ANT (ANTIGRAVITY Marketing Co, youandinotai.com)"
             ],
@@ -176,7 +176,7 @@
           },
           {
             "node": "Alienware-DRE",
-            "path": "D:\\DREAM ONLINE",
+            "path": "C:\\DREAM\\dream-online\\DREAM-ONLINE",
             "shared_by": [
               "DRE (DREAM Online MMORPG)"
             ],

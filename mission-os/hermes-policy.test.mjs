@@ -3,10 +3,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { syncGraphyLearningsToObsidian } from './live-tabs-backend.mjs';
 
-const ROOT = 'C:/ANTIGRAVITY';
-const ALIENWARE_VAULT = ['C:', 'Users', 'NSFW_BOTS', 'Documents', 'Antigravity'].join('\\');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ALIENWARE_VAULT = 'C:\\DREAM\\Antigravity';
 
 test('docs/memory-layer/agent-workflow-graphy.json is valid JSON and enforces Task 15 policy', () => {
   const raw = fs.readFileSync(path.join(ROOT, 'docs', 'memory-layer', 'agent-workflow-graphy.json'), 'utf8');
@@ -47,7 +48,7 @@ test('docs/memory-layer/agent-workflow-graphy.json is valid JSON and enforces Ta
   const perNode = mem?.obsidianVaults?.perNodeVaults;
   assert.equal(perNode?.T5500, 'C:\\ANTIGRAVITY\\Antigravity');
   assert.equal(perNode?.Alienware, ALIENWARE_VAULT);
-  assert.equal(perNode?.Sabretooth, 'TBD');
+  assert.equal(perNode?.Sabretooth, 'C:\\Ai-Dream-Team\\Antigravity');
 
   const obsSkills = mem?.obsidianVaults?.skills || [];
   assert.deepEqual(obsSkills, [
@@ -69,8 +70,8 @@ test('.agents/harness-config/hermes.yaml is well-formed and makes Obsidian autho
   assert.match(yamlText, /obsidian_mirror:\s*authoritative/);
   assert.match(yamlText, /T5500:\s*C:\\ANTIGRAVITY\\Antigravity/);
   assert.ok(yamlText.includes(`Alienware: ${ALIENWARE_VAULT}`));
-  assert.match(yamlText, /Sabretooth:\s*TBD/);
-  assert.match(yamlText, /containerTag:\s*repo_antigravity__02249b9e7104105f/);
+  assert.match(yamlText, /Sabretooth:\s*C:\\Ai-Dream-Team\\Antigravity/);
+  assert.ok(!yamlText.includes('containerTag'), 'Supermemory is retired from the Hermes config (#318)');
   assert.ok(!/^\s*-\s*tdd\s*$/m.test(yamlText), 'hermes.yaml must not list duplicate tdd skill');
   assert.ok(!yamlText.includes('claude-obsidian:'), 'hermes.yaml must not use claude-obsidian:* skill names');
 });

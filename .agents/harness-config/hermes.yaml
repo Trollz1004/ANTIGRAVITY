@@ -8,12 +8,11 @@ knowledge:
   obsidian_mirror: authoritative
   feeds:
     - Mission Control Graphy (docs/memory-layer/agent-workflow-graphy.json + graphify-out/graph.json)
-    - Supermemory recall (containerTag repo_antigravity__02249b9e7104105f)
     - session-brain
   vaults:
     T5500: C:\ANTIGRAVITY\Antigravity
-    Alienware: C:\Users\NSFW_BOTS\Documents\Antigravity
-    Sabretooth: TBD
+    Alienware: C:\DREAM\Antigravity
+    Sabretooth: C:\Ai-Dream-Team\Antigravity
 skill_policy:
   mandatory:
     - verification-before-completion
@@ -42,22 +41,14 @@ skill_policy:
   dailyResearch: each agent researches and loads ONE new skill per day based on its role
   memoryLayer:
     authoritative: Obsidian vault in-repo (markdown, committed)
+    conflictRule: git wins
     feeds:
       - Mission Control Graphy
-      - Supermemory
       - session-brain
     vaults:
       T5500: C:\ANTIGRAVITY\Antigravity
-      Alienware: C:\Users\NSFW_BOTS\Documents\Antigravity
-      Sabretooth: TBD
-    recall:
-      provider: Supermemory
-      containerTag: repo_antigravity__02249b9e7104105f
-      tools:
-        - search_memory
-        - add_memory
-      authoritative: false
-      conflictRule: when it disagrees with git, git wins and the memory is forgotten
+      Alienware: C:\DREAM\Antigravity
+      Sabretooth: C:\Ai-Dream-Team\Antigravity
 mcp_servers:
   required: [obsidian_antigravity, brain-mcp, mission-mcp, antigravity-files, playwright]
   optional: [supabase]   # read-first; live DB writes route through the Supabase seat + judge
@@ -65,8 +56,7 @@ mcp_servers:
   remote_future:
     # unreal-engine MCP — PARKED (enabled: false). Hardware split per Joshua
     # 2026-08-26: the game runs on a SEPARATE box (this node runs hot with
-    # Hermes + the stack alone). Unreal is not installed here, and Unreal's
-    # default http://127.0.0.1:8000/mcp collides with the DateApp backend that
+    # Hermes + the stack alone). Unreal is not installed here, and nothing
     # owns port 8000 on Sabretooth. When the game box is live, point Hermes at
     # the remote Unreal MCP URL there (Epic: Editor Preferences > Model Context
     # Protocol > port/path if the default conflicts). NOT enabled on this node.
