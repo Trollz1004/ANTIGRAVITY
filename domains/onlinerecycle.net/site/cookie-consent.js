@@ -6,6 +6,18 @@
   const analyticsCheckbox = document.getElementById('cb-analytics');
   const functionalCheckbox = document.getElementById('cb-functional');
   const manageCookiesLink = document.getElementById('manage-cookies-link');
+  const optionsButton = document.getElementById('cb-options-btn');
+  const checks = document.getElementById('cb-checks');
+
+  function showOptions() {
+    if (checks) checks.hidden = false;
+    if (optionsButton) {
+      optionsButton.hidden = true;
+      optionsButton.setAttribute('aria-expanded', 'true');
+    }
+    declineButton.hidden = false;
+    acceptButton.textContent = 'Accept Selected';
+  }
 
   if (!banner || !acceptButton || !declineButton) {
     return;
@@ -49,10 +61,19 @@
     saveConsent(false, false);
   });
 
+  if (optionsButton) {
+    optionsButton.addEventListener('click', showOptions);
+  }
+
   if (manageCookiesLink) {
     manageCookiesLink.addEventListener('click', function (event) {
       event.preventDefault();
-      localStorage.removeItem(consentKey);
+      try {
+        localStorage.removeItem(consentKey);
+      } catch (_error) {
+        // Storage blocked; still reopen the banner.
+      }
+      showOptions();
       banner.style.display = 'block';
     });
   }
