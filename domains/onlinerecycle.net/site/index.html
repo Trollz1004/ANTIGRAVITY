@@ -7,7 +7,7 @@
     <title>Florida Electronics Recycling | Free Drop-Off & Pickup | OnlineRecycle.net</title>
     <meta
       name="description"
-      content="Central Florida electronics recycling with free drop-off and pickup, secure device handling, and straightforward scheduling for homes and small businesses."
+      content="Central Florida electronics recycling with free drop-off and pickup, secure device handling, and direct Google Calendar scheduling for homes and small businesses."
     />
     <meta
       name="keywords"
@@ -38,18 +38,28 @@
       content="Free electronics drop-off and pickup in Central Florida with secure device handling and responsible recycling."
     />
     <link rel="canonical" href="https://onlinerecycle.net/" />
-    <link rel="stylesheet" href="/styles.css" />
-    <script src="/cookie-consent.js" defer></script>
+    <link rel="stylesheet" href="/styles.css?v=20261031" />
+    <link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet" />
+    <script src="https://calendar.google.com/calendar/scheduling-button-script.js" async></script>
+    <script src="/cookie-consent.js?v=20261031" defer></script>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
 
   <body>
-    <div class="banner">Central Florida electronics recycling with secure handling and straightforward scheduling.</div>
+    <div class="banner">Central Florida electronics recycling · Free drop-off in Sorrento &amp; free pickup across Lake, Orange &amp; Seminole Counties.</div>
 
     <header>
       <a href="/" class="brand"> <span class="brand-icon">♻️</span> OnlineRecycle.net </a>
+      <nav class="top-nav" aria-label="Primary navigation">
+        <a href="#book" data-select-service="dropoff">Book Drop-Off</a>
+        <a href="#book" data-select-service="pickup">Request Pickup</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#faq">FAQ</a>
+        <a href="/about.html">About</a>
+      </nav>
       <div class="contact-info">
-        Call or Text: <strong>(321) 396-2008</strong><br />
-        <span class="contact-subline">Address provided upon booking</span>
+        Call or Text: <a href="tel:+13213962008">(321) 396-2008</a><br />
+        <span class="contact-subline">Mon–Sun 8am–6pm · Address confirmed upon booking</span>
       </div>
     </header>
 
@@ -69,62 +79,204 @@
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
             <polyline points="9 12 11 14 15 10"></polyline>
           </svg>
-          Secure Device Handling
+          Secure Device Handling · Direct OnlineRecycle.net Scheduling
         </div>
         <h1>Florida Electronics Recycling and Device Pickup</h1>
         <p>
           Free e-waste drop-off and pickup serving Sorrento, Lake County, and Central Florida. We help households and
-          small businesses clear out old tech with secure handling, responsible recycling, and simple booking through
-          Square.
+          small businesses clear out old tech with secure handling, responsible recycling, and instant Google Calendar
+          appointment scheduling right here on OnlineRecycle.net.
         </p>
 
         <div class="cta-row">
-          <a
-            class="btn btn-primary"
-            href="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Book a Drop-Off</a
-          >
-          <a
-            class="btn btn-secondary"
-            href="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Request a Pickup</a
-          >
+          <a class="btn btn-primary" href="#book" data-select-service="dropoff">
+            📅 Book a Drop-Off Slot
+          </a>
+          <a class="btn btn-secondary" href="#book" data-select-service="pickup">
+            🚚 Request a Free Pickup
+          </a>
+          <a class="btn btn-secondary" href="tel:+13213962008">
+            📞 Call / Text (321) 396-2008
+          </a>
         </div>
       </section>
 
-      <h2>How It Works</h2>
+      <section class="booking-section" id="book" aria-label="Schedule Drop-Off or Pickup">
+        <div class="booking-header">
+          <div>
+            <div class="booking-badge">📅 Google Calendar Ultra Appointment Scheduler</div>
+            <h2 style="margin-bottom: 6px">Schedule Your Drop-Off or Free Pickup</h2>
+            <p style="margin-bottom: 0; font-size: 0.98rem">
+              Pick a convenient date and time window below. Your appointment is logged immediately and syncs directly with
+              Google Calendar &amp; email confirmation.
+            </p>
+          </div>
+          <div class="service-tabs" role="tablist" aria-label="Service type">
+            <button type="button" class="service-tab active" id="tab-dropoff" data-service="dropoff" role="tab" aria-selected="true">
+              📍 Sorrento Drop-Off
+            </button>
+            <button type="button" class="service-tab" id="tab-pickup" data-service="pickup" role="tab" aria-selected="false">
+              🚚 Central FL Pickup
+            </button>
+          </div>
+        </div>
+
+        <div id="gcal-embed-container" style="display: none; margin-bottom: 24px">
+          <iframe
+            id="gcal-schedule-iframe"
+            title="OnlineRecycle Google Calendar Appointment Schedule"
+            style="border: 0; width: 100%; height: 620px; border-radius: 12px"
+            frameborder="0"
+          ></iframe>
+        </div>
+
+        <form id="booking-form" novalidate>
+          <input type="hidden" id="bf-service-type" name="serviceType" value="dropoff" />
+          <input type="hidden" id="bf-date" name="date" value="" />
+          <input type="hidden" id="bf-slot-code" name="slotCode" value="" />
+          <input type="hidden" id="bf-slot-label" name="slotLabel" value="" />
+
+          <div class="calendar-grid-label">
+            <span>1. Select a Day (Mon–Sun · Eastern Time)</span>
+            <span id="selected-date-display" style="color: var(--accent); font-size: 0.88rem"></span>
+          </div>
+          <div class="date-strip" id="date-strip" role="listbox" aria-label="Available dates"></div>
+
+          <div class="calendar-grid-label">
+            <span id="slot-heading-text">2. Select a 30-Minute Sorrento Drop-Off Window</span>
+            <span id="selected-slot-display" style="color: var(--accent); font-size: 0.88rem"></span>
+          </div>
+          <div class="slot-strip" id="slot-strip" role="listbox" aria-label="Available time windows"></div>
+
+          <div class="calendar-grid-label">
+            <span>3. Your Contact &amp; Electronics Details</span>
+          </div>
+
+          <div class="booking-form-grid">
+            <div class="form-field">
+              <label for="bf-name">Full Name *</label>
+              <input type="text" id="bf-name" name="fullName" placeholder="Jane Doe" required />
+            </div>
+
+            <div class="form-field">
+              <label for="bf-phone">Phone Number (for SMS confirmation) *</label>
+              <input type="tel" id="bf-phone" name="phone" placeholder="(321) 555-0199" required />
+            </div>
+
+            <div class="form-field">
+              <label for="bf-email">Email Address (for Google Calendar invite)</label>
+              <input type="email" id="bf-email" name="email" placeholder="you@example.com" />
+            </div>
+
+            <div class="form-field">
+              <label for="bf-org">Business / Organization (optional)</label>
+              <input type="text" id="bf-org" name="organization" placeholder="Household or company name" />
+            </div>
+
+            <div class="form-field" id="pickup-address-field" style="display: none">
+              <label for="bf-address">Pickup Street Address *</label>
+              <input type="text" id="bf-address" name="address" placeholder="123 Main St" />
+            </div>
+
+            <div class="form-field" id="pickup-city-field" style="display: none">
+              <label for="bf-city">City &amp; ZIP *</label>
+              <input type="text" id="bf-city" name="city" placeholder="Sorrento / Mount Dora / Orlando, FL" />
+            </div>
+
+            <div class="form-field">
+              <label for="bf-count">Estimated Device Count *</label>
+              <select id="bf-count" name="deviceCount">
+                <option value="1-5 items">1–5 items (Household drop-off / small batch)</option>
+                <option value="6-15 items">6–15 items (Home office / garage cleanout)</option>
+                <option value="16-50 items">16–50 items (Small business / IT cleanout)</option>
+                <option value="50+ items">50+ items (Commercial pallet / office load)</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="bf-wipe">Data Handling Preference</label>
+              <select id="bf-wipe" name="notes">
+                <option value="Standard intake & storage wipe/destruction">Standard intake &amp; storage wipe/destruction</option>
+                <option value="Includes laptops/PCs/drives needing priority data wipe">Includes laptops/PCs/drives needing priority data wipe</option>
+                <option value="No storage media (monitors, printers, cables, peripherals)">No storage media (monitors, printers, cables, peripherals)</option>
+              </select>
+            </div>
+
+            <div class="form-field full-width">
+              <label for="bf-devices">What electronics are you dropping off or scheduling for pickup? *</label>
+              <textarea
+                id="bf-devices"
+                name="deviceList"
+                rows="3"
+                placeholder="Example: 3 Dell laptops, 2 desktop towers, 1 laser printer, box of cables & power supplies"
+                required
+              ></textarea>
+            </div>
+          </div>
+
+          <div id="booking-error" style="display: none; margin-top: 14px; color: #dc2626; font-weight: 600; font-size: 0.92rem"></div>
+
+          <div style="margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+            <button type="submit" class="btn btn-primary" id="bf-submit-btn">
+              ✅ Confirm Appointment &amp; Generate Google Calendar Invite
+            </button>
+            <span style="font-size: 0.85rem; color: var(--muted)">
+              Free service · Instant booking ID + 1-click Google Calendar &amp; SMS confirmation
+            </span>
+          </div>
+        </form>
+
+        <div class="booking-confirm-box" id="booking-confirm-box" role="status" aria-live="polite">
+          <h3 id="confirm-title">Appointment Scheduled!</h3>
+          <p id="confirm-summary" style="color: #14532d; font-size: 0.96rem; margin-bottom: 16px"></p>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px">
+            <a id="confirm-gcal-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              📅 Add to Google Calendar
+            </a>
+            <a id="confirm-ics-btn" href="#" class="btn btn-secondary">
+              ⬇️ Download .ICS Calendar File
+            </a>
+            <a id="confirm-sms-btn" href="#" class="btn btn-secondary">
+              💬 Text Confirmation to (321) 396-2008
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <h2 id="how-it-works">How It Works</h2>
       <section class="grid">
         <div class="card">
           <div class="step-number">1</div>
-          <h3>Book Online</h3>
-          <p>Use our Square scheduling flow to request a pickup or reserve a local drop-off window.</p>
+          <h3>Pick a Window on Our Calendar</h3>
+          <p>
+            Select a 30-minute Sorrento drop-off slot or a 2-hour Central Florida pickup window directly on our Google
+            Calendar scheduler above.
+          </p>
         </div>
         <div class="card">
           <div class="step-number">2</div>
           <h3>Bring or Hand Off Your Items</h3>
           <p>
-            Tell us what you have so we can prepare for computers, phones, printers, cables, batteries, and other
-            electronics.
+            Tell us what you have so we can prepare for computers, laptops, phones, servers, printers, cables, batteries,
+            and other electronics.
           </p>
         </div>
         <div class="card">
           <div class="step-number">3</div>
-          <h3>We Sort, Reuse, and Recycle</h3>
+          <h3>We Wipe, Reuse, and Recycle</h3>
           <p>
-            Usable items are evaluated for resale. Non-resalable material is dismantled and routed through responsible
-            recycling channels.
+            Storage media is wiped or physically destroyed. Tested working gear is refurbished for resale, and
+            non-resalable material is routed through responsible recycling streams.
           </p>
         </div>
       </section>
 
       <div class="cta-wrap">
-        <a class="btn btn-secondary" href="https://onlinerecycle.square.site/" target="_blank" rel="noopener noreferrer"
-          >Visit the Square Storefront</a
-        >
+        <a class="btn btn-primary" href="#book" data-select-service="dropoff">Schedule a Drop-Off</a>
+        <a class="btn btn-secondary" href="#book" data-select-service="pickup">Schedule a Free Pickup</a>
+        <a class="btn btn-secondary" href="mailto:collaboration@youandinotai.com?subject=OnlineRecycle.net%20Equipment%20or%20Service%20Inquiry">
+          ✉️ Email Equipment / Bulk Cleanout Inquiry
+        </a>
       </div>
 
       <section class="faq-section" id="faq">
@@ -134,8 +286,8 @@
           <div class="faq-question" itemprop="name">Where can I recycle electronics for free in Central Florida?</div>
           <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
             <p itemprop="text">
-              OnlineRecycle.net offers free electronics drop-off and free pickup throughout Central Florida, including
-              Sorrento, Lake County, Orange County, and Seminole County.
+              OnlineRecycle.net offers free electronics drop-off in Sorrento and free pickup throughout Central Florida,
+              including Lake County, Orange County, and Seminole County.
             </p>
           </div>
         </div>
@@ -144,8 +296,9 @@
           <div class="faq-question" itemprop="name">What electronics do you accept?</div>
           <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
             <p itemprop="text">
-              We accept computers, laptops, phones, tablets, printers, gaming consoles, cables, batteries, and most
-              other consumer electronics. If it plugs in or has a battery, ask us.
+              We accept computers, laptops, servers, networking gear, phones, tablets, printers, gaming consoles, cables,
+              batteries, and most other consumer or office electronics. If it plugs in or has a battery, book a slot or
+              ask us.
             </p>
           </div>
         </div>
@@ -154,8 +307,8 @@
           <div class="faq-question" itemprop="name">Do you offer secure data destruction?</div>
           <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
             <p itemprop="text">
-              Yes. Devices are assessed for storage media and handled through wipe or destruction workflows before
-              resale or recycling. Customers should still factory-reset devices before turning them in whenever
+              Yes. Devices are assessed for storage media and handled through wipe or physical destruction workflows
+              before resale or recycling. Customers should still factory-reset devices before turning them in whenever
               possible.
             </p>
           </div>
@@ -165,8 +318,9 @@
           <div class="faq-question" itemprop="name">Who operates this service?</div>
           <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
             <p itemprop="text">
-              OnlineRecycle is operated by Trash Or Treasure Online Recycler LLC as a for-profit recycling, resale,
-              pickup, and refurbishment service. Customer purchases and bookings are service transactions.
+              OnlineRecycle.net is operated by Trash Or Treasure Online Recycler LLC as a for-profit recycling, resale,
+              pickup, and refurbishment service in Sorrento, Florida. Customer purchases and bookings are commercial
+              service transactions.
             </p>
           </div>
         </div>
@@ -174,7 +328,10 @@
     </main>
 
     <footer class="footer">
-      <p><strong>OnlineRecycle.net</strong> | Trash Or Treasure Online Recycler LLC | Sorrento, Florida</p>
+      <p>
+        <strong>OnlineRecycle.net</strong> | Trash Or Treasure Online Recycler LLC | Sorrento, Florida ·
+        <a href="tel:+13213962008" style="color: var(--accent); text-decoration: none; font-weight: 700">(321) 396-2008</a>
+      </p>
       <div class="disclaimer">
         OnlineRecycle.net is a for-profit recycling and resale service. Customer purchases and pickup bookings are
         service transactions.
@@ -239,35 +396,288 @@
     <div id="cookie-banner" role="dialog" aria-label="Cookie consent" aria-live="polite">
       <div class="cb-inner">
         <div class="cb-text">
-          <strong class="cb-title">We use cookies</strong>
           <p class="cb-copy">
-            We use strictly necessary cookies to keep the site working. You can optionally allow analytics and
-            functional cookies to help us improve the experience. We never use advertising cookies or sell your data.
-            See our <a href="/privacy.html">Privacy Policy</a> and <a href="/disclaimer.html">Disclaimer</a>.
+            We use cookies to run this site. <a href="/privacy.html">Privacy Policy</a>
           </p>
-          <div class="cb-checks">
+          <div class="cb-checks" id="cb-checks" hidden>
             <label>
               <input type="checkbox" id="cb-necessary" checked disabled />
-              <span><strong>Strictly Necessary</strong> — required for the site to function (always on)</span>
+              <span><strong>Necessary</strong> (always on)</span>
             </label>
             <label>
               <input type="checkbox" id="cb-analytics" />
-              <span><strong>Analytics</strong> — anonymous page-view data to improve the site</span>
+              <span><strong>Analytics</strong></span>
             </label>
             <label>
               <input type="checkbox" id="cb-functional" />
-              <span><strong>Functional</strong> — remembers your preferences (for example, this banner)</span>
+              <span><strong>Functional</strong></span>
             </label>
           </div>
-          <div class="cb-actions">
-            <button class="cb-btn cb-accept" id="cb-accept-btn">Accept Selected</button>
-            <button class="cb-btn cb-decline" id="cb-decline-btn">Necessary Only</button>
-          </div>
-          <p class="cb-necessary-note">
-            Strictly necessary cookies cannot be disabled because they are required for core site functionality.
-          </p>
+        </div>
+        <div class="cb-actions">
+          <button class="cb-btn cb-accept" id="cb-accept-btn">OK</button>
+          <button class="cb-btn cb-decline" id="cb-options-btn" aria-expanded="false" aria-controls="cb-checks">Options</button>
+          <button class="cb-btn cb-decline" id="cb-decline-btn" hidden>Necessary Only</button>
         </div>
       </div>
     </div>
+
+    <script>
+      (function () {
+        const DROPOFF_SLOTS = [
+          { code: '08:00-08:30', label: '8:00 AM – 8:30 AM' },
+          { code: '09:00-09:30', label: '9:00 AM – 9:30 AM' },
+          { code: '10:00-10:30', label: '10:00 AM – 10:30 AM' },
+          { code: '11:00-11:30', label: '11:00 AM – 11:30 AM' },
+          { code: '13:00-13:30', label: '1:00 PM – 1:30 PM' },
+          { code: '14:00-14:30', label: '2:00 PM – 2:30 PM' },
+          { code: '15:00-15:30', label: '3:00 PM – 3:30 PM' },
+          { code: '16:00-16:30', label: '4:00 PM – 4:30 PM' },
+          { code: '17:00-17:30', label: '5:00 PM – 5:30 PM' }
+        ];
+
+        const PICKUP_SLOTS = [
+          { code: '08:00-10:00', label: '8:00 AM – 10:00 AM' },
+          { code: '10:00-12:00', label: '10:00 AM – 12:00 PM' },
+          { code: '12:00-14:00', label: '12:00 PM – 2:00 PM' },
+          { code: '14:00-16:00', label: '2:00 PM – 4:00 PM' },
+          { code: '16:00-18:00', label: '4:00 PM – 6:00 PM' }
+        ];
+
+        let serviceType = 'dropoff';
+        let selectedDate = '';
+        let selectedSlotCode = '';
+        let selectedSlotLabel = '';
+        let bookedSlots = [];
+        let gcalEmbeds = { dropoffUrl: '', pickupUrl: '' };
+
+        const dateStrip = document.getElementById('date-strip');
+        const slotStrip = document.getElementById('slot-strip');
+        const serviceInput = document.getElementById('bf-service-type');
+        const dateInput = document.getElementById('bf-date');
+        const slotCodeInput = document.getElementById('bf-slot-code');
+        const slotLabelInput = document.getElementById('bf-slot-label');
+        const tabDropoff = document.getElementById('tab-dropoff');
+        const tabPickup = document.getElementById('tab-pickup');
+        const slotHeading = document.getElementById('slot-heading-text');
+        const addressField = document.getElementById('pickup-address-field');
+        const cityField = document.getElementById('pickup-city-field');
+        const selectedDateDisplay = document.getElementById('selected-date-display');
+        const selectedSlotDisplay = document.getElementById('selected-slot-display');
+        const embedContainer = document.getElementById('gcal-embed-container');
+        const embedIframe = document.getElementById('gcal-schedule-iframe');
+
+        function buildNextDays(count) {
+          const days = [];
+          const now = new Date();
+          for (let i = 0; i < count; i++) {
+            const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            const iso = yyyy + '-' + mm + '-' + dd;
+            const dow = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : d.toLocaleDateString('en-US', { weekday: 'short' });
+            const dom = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            days.push({ iso, dow, dom });
+          }
+          return days;
+        }
+
+        const upcomingDays = buildNextDays(14);
+        selectedDate = upcomingDays[1] ? upcomingDays[1].iso : upcomingDays[0].iso;
+
+        function updateGcalEmbed() {
+          const targetUrl = serviceType === 'pickup' ? gcalEmbeds.pickupUrl : gcalEmbeds.dropoffUrl;
+          if (targetUrl) {
+            embedContainer.style.display = 'block';
+            if (embedIframe.src !== targetUrl) embedIframe.src = targetUrl;
+          } else {
+            embedContainer.style.display = 'none';
+          }
+        }
+
+        function renderDates() {
+          dateStrip.innerHTML = '';
+          upcomingDays.forEach(function (d) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'date-pill' + (d.iso === selectedDate ? ' selected' : '');
+            btn.innerHTML = '<span class="dow">' + d.dow + '</span><span class="dom">' + d.dom + '</span>';
+            btn.addEventListener('click', function () {
+              selectedDate = d.iso;
+              dateInput.value = selectedDate;
+              selectedDateDisplay.textContent = d.dow + ', ' + d.dom;
+              renderDates();
+              renderSlots();
+            });
+            dateStrip.appendChild(btn);
+          });
+          dateInput.value = selectedDate;
+          const activeDay = upcomingDays.find(function (x) { return x.iso === selectedDate; });
+          if (activeDay) selectedDateDisplay.textContent = activeDay.dow + ', ' + activeDay.dom;
+        }
+
+        function renderSlots() {
+          const slots = serviceType === 'pickup' ? PICKUP_SLOTS : DROPOFF_SLOTS;
+          if (!slots.some(function (s) { return s.code === selectedSlotCode; })) {
+            selectedSlotCode = slots[1] ? slots[1].code : slots[0].code;
+            selectedSlotLabel = slots[1] ? slots[1].label : slots[0].label;
+          }
+          slotStrip.innerHTML = '';
+          slots.forEach(function (s) {
+            const isTaken = bookedSlots.some(function (b) {
+              return b.date === selectedDate && b.slotCode === s.code && b.serviceType === serviceType;
+            });
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.disabled = isTaken;
+            btn.className = 'slot-btn' + (s.code === selectedSlotCode && !isTaken ? ' selected' : '');
+            btn.textContent = isTaken ? s.label + ' (Booked)' : s.label;
+            btn.addEventListener('click', function () {
+              selectedSlotCode = s.code;
+              selectedSlotLabel = s.label;
+              slotCodeInput.value = selectedSlotCode;
+              slotLabelInput.value = selectedSlotLabel;
+              selectedSlotDisplay.textContent = selectedSlotLabel;
+              renderSlots();
+            });
+            slotStrip.appendChild(btn);
+          });
+          slotCodeInput.value = selectedSlotCode;
+          slotLabelInput.value = selectedSlotLabel;
+          selectedSlotDisplay.textContent = selectedSlotLabel;
+        }
+
+        function setServiceType(nextType) {
+          serviceType = nextType === 'pickup' ? 'pickup' : 'dropoff';
+          serviceInput.value = serviceType;
+          tabDropoff.classList.toggle('active', serviceType === 'dropoff');
+          tabPickup.classList.toggle('active', serviceType === 'pickup');
+          tabDropoff.setAttribute('aria-selected', String(serviceType === 'dropoff'));
+          tabPickup.setAttribute('aria-selected', String(serviceType === 'pickup'));
+          slotHeading.textContent =
+            serviceType === 'pickup'
+              ? '2. Select a 2-Hour Central Florida Pickup Window'
+              : '2. Select a 30-Minute Sorrento Drop-Off Window';
+          addressField.style.display = serviceType === 'pickup' ? 'flex' : 'none';
+          cityField.style.display = serviceType === 'pickup' ? 'flex' : 'none';
+          updateGcalEmbed();
+          renderSlots();
+        }
+
+        tabDropoff.addEventListener('click', function () { setServiceType('dropoff'); });
+        tabPickup.addEventListener('click', function () { setServiceType('pickup'); });
+
+        document.querySelectorAll('[data-select-service]').forEach(function (el) {
+          el.addEventListener('click', function () {
+            const t = el.getAttribute('data-select-service');
+            if (t) setServiceType(t);
+          });
+        });
+
+        fetch('/api/booking-config')
+          .then(function (r) { return r.json(); })
+          .then(function (cfg) {
+            if (cfg && cfg.ok) {
+              bookedSlots = Array.isArray(cfg.bookedSlots) ? cfg.bookedSlots : [];
+              if (cfg.googleScheduleEmbed) {
+                gcalEmbeds = cfg.googleScheduleEmbed;
+                updateGcalEmbed();
+              }
+              renderSlots();
+            }
+          })
+          .catch(function () {});
+
+        renderDates();
+        setServiceType('dropoff');
+
+        const form = document.getElementById('booking-form');
+        const errBox = document.getElementById('booking-error');
+        const confirmBox = document.getElementById('booking-confirm-box');
+        const confirmTitle = document.getElementById('confirm-title');
+        const confirmSummary = document.getElementById('confirm-summary');
+        const confirmGcalBtn = document.getElementById('confirm-gcal-btn');
+        const confirmIcsBtn = document.getElementById('confirm-ics-btn');
+        const confirmSmsBtn = document.getElementById('confirm-sms-btn');
+        const submitBtn = document.getElementById('bf-submit-btn');
+
+        form.addEventListener('submit', function (ev) {
+          ev.preventDefault();
+          errBox.style.display = 'none';
+
+          const payload = {
+            serviceType: serviceInput.value,
+            date: dateInput.value,
+            slotCode: slotCodeInput.value,
+            slotLabel: slotLabelInput.value,
+            fullName: document.getElementById('bf-name').value.trim(),
+            phone: document.getElementById('bf-phone').value.trim(),
+            email: document.getElementById('bf-email').value.trim(),
+            organization: document.getElementById('bf-org').value.trim(),
+            address: document.getElementById('bf-address').value.trim(),
+            city: document.getElementById('bf-city').value.trim(),
+            deviceCount: document.getElementById('bf-count').value,
+            notes: document.getElementById('bf-wipe').value,
+            deviceList: document.getElementById('bf-devices').value.trim()
+          };
+
+          if (!payload.fullName || !payload.phone || !payload.deviceList) {
+            errBox.textContent = 'Please enter your name, phone number, and a brief list of the electronics.';
+            errBox.style.display = 'block';
+            return;
+          }
+          if (payload.serviceType === 'pickup' && !payload.address) {
+            errBox.textContent = 'Please include the pickup street address so we can schedule your route.';
+            errBox.style.display = 'block';
+            return;
+          }
+
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Scheduling...';
+
+          fetch('/api/book', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (res) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = '✅ Confirm Appointment & Generate Google Calendar Invite';
+              if (!res || !res.ok) {
+                errBox.textContent = (res && res.error) || 'Could not complete booking. Please call or text (321) 396-2008.';
+                errBox.style.display = 'block';
+                return;
+              }
+              const b = res.booking;
+              bookedSlots.push({ date: b.date, slotCode: b.slotCode, serviceType: b.serviceType });
+              renderSlots();
+              confirmTitle.textContent =
+                '✅ ' + (b.serviceType === 'pickup' ? 'Pickup' : 'Drop-Off') + ' Reserved — Ref #' + b.bookingId;
+              confirmSummary.textContent =
+                b.fullName +
+                ' · ' +
+                b.date +
+                ' (' +
+                b.slotLabel +
+                ') · ' +
+                b.deviceCount +
+                '. Click "Add to Google Calendar" below to save this appointment and send calendar notifications.';
+              confirmGcalBtn.href = res.googleCalendarUrl;
+              confirmIcsBtn.href = res.icsUrl;
+              confirmSmsBtn.href = res.smsUrl;
+              confirmBox.style.display = 'block';
+              confirmBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            })
+            .catch(function () {
+              submitBtn.disabled = false;
+              submitBtn.textContent = '✅ Confirm Appointment & Generate Google Calendar Invite';
+              errBox.textContent = 'Network error — please call or text (321) 396-2008 to confirm your slot.';
+              errBox.style.display = 'block';
+            });
+        });
+      })();
+    </script>
   </body>
 </html>
