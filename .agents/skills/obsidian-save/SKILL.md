@@ -15,4 +15,4 @@ Obsidian is the authoritative agent memory layer (backed by git). Every agent wr
 
 ## Procedure
 1. Read your per-agent vault note (`<NODE>/<agent>-to-<agent>.md` or topic note linked from `00 HOME.md`) via the `obsidian_antigravity` HTTP MCP server (`get_vault_file`) or direct file read.
-2. Append a timestamped Markdown entry with YAML frontmatter (`title`, `type`, `tags`, `created`, `updated`, `status`, `summary`). Never overwrite prior entries and never write secrets, keys, or tokens. Obsidian plus git only; git wins over everything.
+2. Append a timestamped Markdown entry with YAML frontmatter (`title`, `type`, `tags`, `created`, `updated`, `status`, `summary`). Never overwrite prior entries and never write secrets, keys, or tokens. Then mirror the entry to the backups the memory policy requires (Supabase). Git wins over everything.

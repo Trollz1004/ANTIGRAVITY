@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { syncGraphyLearningsToObsidian } from './live-tabs-backend.mjs';
 
-const ROOT = path.resolve(import.meta.dirname, '..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ALIENWARE_VAULT = 'C:\\DREAM\\Antigravity';
 
 test('docs/memory-layer/agent-workflow-graphy.json is valid JSON and enforces Task 15 policy', () => {

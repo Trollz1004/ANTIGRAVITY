@@ -100,7 +100,7 @@
         "appliesTo": "EVERY agent, every node, every session — no exceptions",
         "sessionStart": "READ your own Obsidian file (below) before any task work",
         "sessionEnd": "WRITE (append) a timestamped entry to your own Obsidian file, then mirror to the backups",
-        "perAgentFile": "C:\\ANTIGRAVITY\\Antigravity\\<NODE>\\<agent>-to-<agent>.md",
+        "perAgentFile": "<perNodeVaults[NODE]>\\<NODE>\\<agent>-to-<agent>.md (T5500 C:\\ANTIGRAVITY\\Antigravity, Alienware C:\\DREAM\\Antigravity, Sabretooth C:\\Ai-Dream-Team\\Antigravity)",
         "examples": [
           "C:\\ANTIGRAVITY\\Antigravity\\T5500\\claude-to-claude.md",
           "C:\\ANTIGRAVITY\\Antigravity\\T5500\\hermes-to-hermes.md",

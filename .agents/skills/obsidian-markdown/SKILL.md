@@ -10,8 +10,8 @@ Enforces valid Obsidian Flavored Markdown across all notes written to the node v
 
 ## Vault Paths per Node
 - **T5500 (`192.168.0.15`)**: `C:\ANTIGRAVITY\Antigravity`
-- **Alienware (`192.168.0.40`)**: `$env:USERPROFILE\Documents\Antigravity` (`~/Documents/Antigravity`)
-- **Sabretooth**: `TBD`
+- **Alienware (`192.168.0.40`)**: `C:\DREAM\Antigravity`
+- **Sabretooth**: `C:\Ai-Dream-Team\Antigravity`
 
 ## Formatting Rules
 1. Always start notes with YAML frontmatter (`title`, `type`, `tags`, `created`, `updated`, `status`, `summary`).
