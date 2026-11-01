@@ -1,0 +1,12 @@
+{
+  "name": "neta-art-world-new",
+  "private": true,
+  "type": "module",
+  "description": "Remake of https://neta.art/world/new, made with github.com/rubenhassid1/remake",
+  "scripts": {
+    "build": "node -e \"console.log('Static site: nothing to build. Files are in site/.')\""
+  },
+  "dependencies": {
+    "@vercel/functions": "^3.1.0"
+  }
+}

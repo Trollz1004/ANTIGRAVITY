@@ -1,0 +1,6 @@
+{
+  "theme": null,
+  "how": "For each entry, write `prompt`: what the NEW brand's picture should show, keeping the original's framing, orientation, light and palette (see `look`). Describe a new scene; never copy the original's people, text, logos or artwork. Optional `keywords` (3–6 words) guide the free stock search. Then run `remake images --make`.",
+  "sheets": [],
+  "entries": []
+}

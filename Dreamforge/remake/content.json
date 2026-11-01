@@ -1,0 +1,2584 @@
+{
+  "site": "https://neta.art/world/new",
+  "generatedAt": "2026-10-31T04:15:46.778Z",
+  "howToSwap": "Set a slot's `swap`, then run `remake apply`. Text and attributes: the new words. Images: a path to your file. Videos: a path to an MP4, or to a photo (it becomes a slow-zoom clip). Fonts: a Google Fonts family name (e.g. \"Inter\"). Links: the new URL. Forms: the address that should receive submissions. Colours: any CSS colour. Inline SVG logos: a path to your .svg. Leave `swap` null to keep the original.",
+  "summary": {
+    "total": 78,
+    "swapped": 78,
+    "yours": 100,
+    "groups": {
+      "Copy": {
+        "slots": 2,
+        "swapped": 2,
+        "words": 34
+      },
+      "Headlines": {
+        "slots": 2,
+        "swapped": 2,
+        "words": 12
+      },
+      "Buttons & menus": {
+        "slots": 15,
+        "swapped": 15,
+        "words": 100
+      },
+      "Logos": {
+        "slots": 2,
+        "swapped": 2,
+        "words": 0
+      },
+      "Videos": {
+        "slots": 7,
+        "swapped": 7,
+        "words": 0
+      },
+      "Fonts": {
+        "slots": 17,
+        "swapped": 17,
+        "words": 0
+      },
+      "Colours": {
+        "slots": 10,
+        "swapped": 10,
+        "words": 0
+      },
+      "Image descriptions": {
+        "slots": 15,
+        "swapped": 15,
+        "words": 0
+      },
+      "Search & sharing": {
+        "slots": 6,
+        "swapped": 6,
+        "words": 0
+      },
+      "Icons": {
+        "slots": 2,
+        "swapped": 2,
+        "words": 0
+      }
+    }
+  },
+  "slots": [
+    {
+      "id": "t-08ee413e",
+      "kind": "text",
+      "group": "Copy",
+      "value": "I want to make a POV video — I want to make a POV video — Everyone at Hogwarts wakes up as a cat. What happens next?",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "tag": "p",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [
+        "their words"
+      ],
+      "swap": "I want to make a world — one idea becomes a place you can walk through, with people, maps and stories.",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.923Z"
+    },
+    {
+      "id": "t-b3c9924d",
+      "kind": "text",
+      "group": "Copy",
+      "value": "Shoot one shot, the rest tags along.",
+      "section": "section.world-new-hero-module__zOJ8fq__hero",
+      "tag": "p",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [],
+      "swap": "Seed one line, watch a whole world grow.",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.933Z"
+    },
+    {
+      "id": "t-9b81f909",
+      "kind": "text",
+      "group": "Headlines",
+      "value": "Neta Studio — AI World Builder & Game Generator",
+      "section": "page",
+      "tag": "title",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [
+        "their words"
+      ],
+      "swap": "Dreamforge — AI World Builder & Game Generator",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.939Z"
+    },
+    {
+      "id": "t-7bed8a79",
+      "kind": "text",
+      "group": "Headlines",
+      "value": "Start withPOV Video",
+      "section": "section.world-new-hero-module__zOJ8fq__hero",
+      "tag": "h1",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [],
+      "swap": "Start with World Seed",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.945Z"
+    },
+    {
+      "id": "t-e451241e",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "Character RoleplayPick a character and roleplay with them. Every chat unfolds into a story of your own.Try it",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [
+        "their words"
+      ],
+      "swap": "Character RoleplayBecome someone new. Every chat unfolds into a story of your own.Try it",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.950Z"
+    },
+    {
+      "id": "t-d9308560",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "Scroll WorldDescribe a place and watch it grow into one continuously scrolling journeyTry it",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [
+        "their words"
+      ],
+      "swap": "Scroll WorldDescribe a place and watch it unfold into one endless journeyTry it",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.958Z"
+    },
+    {
+      "id": "t-2e565448",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "POV VideoStart with a single shot and unfold the rest from thereTry it",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [
+        "their words"
+      ],
+      "swap": "POV VideoStart with one shot and watch the rest unfurlTry it",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.962Z"
+    },
+    {
+      "id": "t-7082752a",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "World SeedWrite one line of setting and get a whole world backTry it",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [
+        "their words"
+      ],
+      "swap": "World SeedWrite one line and get a whole world backTry it",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.967Z"
+    },
+    {
+      "id": "t-31dfaa3d",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "World MapWatch your world grow into a map you can exploreTry it",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [
+        "their words"
+      ],
+      "swap": "World MapWatch your world grow into a map you can roamTry it",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.971Z"
+    },
+    {
+      "id": "t-46395e14",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "Halloween Pixel HomeBuild Your Own Halloween Pixel HomeTry it",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [
+        "their words"
+      ],
+      "swap": "Pixel HomeBuild a cozy room you can walk throughTry it",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.976Z"
+    },
+    {
+      "id": "t-b56b670e",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "Fandom WorldStart from the world you already love.Try it",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [
+        "their words"
+      ],
+      "swap": "Fandom WorldStep into a world you already love.Try it",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.982Z"
+    },
+    {
+      "id": "t-9f9739bd",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "Existing lore?",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [],
+      "swap": "Have existing lore?",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.987Z"
+    },
+    {
+      "id": "t-fb1a4530",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "World Hub",
+      "section": "nav.neta-home-navigation",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [],
+      "swap": "Worlds",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.992Z"
+    },
+    {
+      "id": "t-d2fa54e9",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "New world",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [],
+      "swap": "New world",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:12.997Z"
+    },
+    {
+      "id": "t-c65a0d30",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "Showcase",
+      "section": "nav.neta-home-navigation",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [],
+      "swap": "Gallery",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:13.002Z"
+    },
+    {
+      "id": "t-749b9803",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "Sign In",
+      "section": "div#S:0",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [],
+      "swap": "Sign In",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:13.012Z"
+    },
+    {
+      "id": "t-ab6a56bf",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "Skills",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [],
+      "swap": "Skills",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:13.016Z"
+    },
+    {
+      "id": "t-6cc664bb",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "NETA",
+      "section": "div#S:0",
+      "tag": "div",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [],
+      "swap": "Dreamforge",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:13.019Z"
+    },
+    {
+      "id": "t-52f50eae",
+      "kind": "text",
+      "group": "Buttons & menus",
+      "value": "Home",
+      "section": "nav.neta-home-navigation",
+      "tag": "button",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html",
+          "mode": "inner"
+        }
+      ],
+      "flags": [],
+      "swap": "Home",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:13.023Z"
+    },
+    {
+      "id": "i-17550924",
+      "kind": "image",
+      "group": "Logos",
+      "value": "/_ext/accounts.google.com/gsi-static/google-logo_40.png",
+      "files": [
+        "/_ext/accounts.google.com/gsi-static/google-logo_40.png"
+      ],
+      "width": 40,
+      "height": 40,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their trademark"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\brand\\logo.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:13.307Z"
+    },
+    {
+      "id": "i-79d52fa9",
+      "kind": "image",
+      "group": "Logos",
+      "value": "/_ext/accounts.google.com/gsi-static/google-logo.png",
+      "files": [
+        "/_ext/accounts.google.com/gsi-static/google-logo.png"
+      ],
+      "width": 32,
+      "height": 32,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their trademark"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\brand\\logo.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:13.320Z"
+    },
+    {
+      "id": "i-03d384a1",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/east-asian-grace-3d-animation/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/east-asian-grace-3d-animation/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\east-asian-grace-3d-animation.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:13.443Z"
+    },
+    {
+      "id": "i-05870b3f",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/clean-black-and-white-manga/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/clean-black-and-white-manga/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\clean-black-and-white-manga.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:13.654Z"
+    },
+    {
+      "id": "i-096e9c9f",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/three-color-cutout-graphic/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/three-color-cutout-graphic/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\three-color-cutout-graphic.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:13.753Z"
+    },
+    {
+      "id": "i-d5c12a2a",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/stylized-semi-real-3d-game/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/stylized-semi-real-3d-game/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\stylized-semi-real-3d-game.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:13.893Z"
+    },
+    {
+      "id": "i-5e6868a7",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/minimal-geometric-graphic/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/minimal-geometric-graphic/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\minimal-geometric-graphic.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:13.950Z"
+    },
+    {
+      "id": "i-30be22ea",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/soft-edge-pastel-airbrush/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/soft-edge-pastel-airbrush/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\soft-edge-pastel-airbrush.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:14.079Z"
+    },
+    {
+      "id": "i-0a14cd2b",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/commercial-game-painterly/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/commercial-game-painterly/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\commercial-game-painterly.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:14.225Z"
+    },
+    {
+      "id": "i-83d3d98a",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/anime-cel-painted-key-art/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/anime-cel-painted-key-art/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\anime-cel-painted-key-art.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:14.373Z"
+    },
+    {
+      "id": "i-439d5511",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/semi-realistic-painterly/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/semi-realistic-painterly/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\semi-realistic-painterly.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:14.572Z"
+    },
+    {
+      "id": "i-8810e3c4",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/high-contrast-manga-ink/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/high-contrast-manga-ink/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\high-contrast-manga-ink.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:14.732Z"
+    },
+    {
+      "id": "i-c4218466",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/stuffed-plush-rendering/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/stuffed-plush-rendering/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\stuffed-plush-rendering.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:14.898Z"
+    },
+    {
+      "id": "i-c4d62677",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/idol-semi-3d-painterly/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/idol-semi-3d-painterly/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\idol-semi-3d-painterly.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:15.038Z"
+    },
+    {
+      "id": "i-2410eda9",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/soft-polished-webtoon/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/soft-polished-webtoon/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\soft-polished-webtoon.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:15.174Z"
+    },
+    {
+      "id": "i-61059cfb",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/stop-motion-animation/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/stop-motion-animation/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\stop-motion-animation.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:15.358Z"
+    },
+    {
+      "id": "i-8687af3b",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/broad-brush-painting/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/broad-brush-painting/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\broad-brush-painting.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:15.561Z"
+    },
+    {
+      "id": "i-32b486f5",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/retro-halftone-comic/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/retro-halftone-comic/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\retro-halftone-comic.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:15.777Z"
+    },
+    {
+      "id": "i-8fc3113b",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/east-asian-style-acg/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/east-asian-style-acg/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\east-asian-style-acg.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:15.943Z"
+    },
+    {
+      "id": "i-99667635",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/toy-figure-rendering/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/toy-figure-rendering/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\toy-figure-rendering.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:16.081Z"
+    },
+    {
+      "id": "i-ab97fa5f",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/graphic-color-block/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/graphic-color-block/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\graphic-color-block.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:16.150Z"
+    },
+    {
+      "id": "i-66b886f1",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/monochrome-ink-wash/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/monochrome-ink-wash/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\monochrome-ink-wash.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:16.341Z"
+    },
+    {
+      "id": "i-9dce1bdc",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/aged-paper-painting/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/aged-paper-painting/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\aged-paper-painting.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:16.552Z"
+    },
+    {
+      "id": "i-1a3af35e",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/soft-tone-brushwork/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/soft-tone-brushwork/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\soft-tone-brushwork.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:16.679Z"
+    },
+    {
+      "id": "i-01141e9e",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/tenebrist-painterly/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/tenebrist-painterly/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\tenebrist-painterly.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:16.871Z"
+    },
+    {
+      "id": "i-95d94c12",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/realistic-3d-render/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/realistic-3d-render/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\realistic-3d-render.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:17.041Z"
+    },
+    {
+      "id": "i-1b5ec281",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/structure-flat-cel/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/structure-flat-cel/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\structure-flat-cel.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:17.122Z"
+    },
+    {
+      "id": "i-80d1040a",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/cel-shaded-3d-game/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/cel-shaded-3d-game/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\cel-shaded-3d-game.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:17.242Z"
+    },
+    {
+      "id": "i-b91c5c8b",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/high-contrast-neon/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/high-contrast-neon/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\high-contrast-neon.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:17.404Z"
+    },
+    {
+      "id": "i-45ace9f2",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/crayon-watercolor/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/crayon-watercolor/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\crayon-watercolor.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:17.635Z"
+    },
+    {
+      "id": "i-19be3498",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/watercolor-sketch/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/watercolor-sketch/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\watercolor-sketch.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:17.837Z"
+    },
+    {
+      "id": "i-c7013e32",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/animation-sketch/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/animation-sketch/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\animation-sketch.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:18.055Z"
+    },
+    {
+      "id": "i-69d8aa8d",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/ink-gesture-wash/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/ink-gesture-wash/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\ink-gesture-wash.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:18.247Z"
+    },
+    {
+      "id": "i-e164551c",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/clean-line-anime/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/clean-line-anime/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\clean-line-anime.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:18.395Z"
+    },
+    {
+      "id": "i-13b835eb",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/rough-ink-print/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/rough-ink-print/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\rough-ink-print.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:18.633Z"
+    },
+    {
+      "id": "i-d098530f",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/soft-flat-color/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/soft-flat-color/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\soft-flat-color.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:18.748Z"
+    },
+    {
+      "id": "i-fac9c1be",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/american-comics/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/american-comics/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\american-comics.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:18.912Z"
+    },
+    {
+      "id": "i-d010fd01",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/bold-line-comic/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/bold-line-comic/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\bold-line-comic.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:19.051Z"
+    },
+    {
+      "id": "i-653fb808",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/journal-doodle/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/journal-doodle/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\journal-doodle.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:19.251Z"
+    },
+    {
+      "id": "i-f2c77e50",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/line-scribble/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/line-scribble/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\line-scribble.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:19.472Z"
+    },
+    {
+      "id": "i-aef76f67",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/grainy-print/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/grainy-print/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\grainy-print.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:19.720Z"
+    },
+    {
+      "id": "i-463e62e5",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/marker-style/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/marker-style/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\marker-style.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:19.926Z"
+    },
+    {
+      "id": "i-41258c27",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/flat-webtoon/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/flat-webtoon/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\flat-webtoon.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:20.004Z"
+    },
+    {
+      "id": "i-41fabeca",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/cel-shading/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/cel-shading/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\cel-shading.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:20.140Z"
+    },
+    {
+      "id": "i-4e57dfe5",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/pixel-art/thumbnail.webp",
+      "files": [
+        "/_ext/public.cohub.run/dev/s/9e9876c1-6e00-4e38-8859-8f2efdf6b7e6/style-library-v6-thumbnails/pixel-art/thumbnail.webp"
+      ],
+      "width": 200,
+      "height": 200,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\styles\\pixel-art.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:20.268Z"
+    },
+    {
+      "id": "i-db5264f4",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/scroll-world.jpg",
+      "files": [
+        "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/scroll-world.jpg"
+      ],
+      "width": 1280,
+      "height": 720,
+      "alt": "",
+      "shown": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\scroll-world.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:20.450Z"
+    },
+    {
+      "id": "i-46e8fb88",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/pixel-room.jpg",
+      "files": [
+        "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/pixel-room.jpg"
+      ],
+      "width": 1280,
+      "height": 714,
+      "alt": "",
+      "shown": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\pixel-room.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:20.645Z"
+    },
+    {
+      "id": "i-ad9979be",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/world-seed.jpg",
+      "files": [
+        "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/world-seed.jpg"
+      ],
+      "width": 1920,
+      "height": 1080,
+      "alt": "",
+      "shown": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\world-seed.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:20.866Z"
+    },
+    {
+      "id": "i-1194b95d",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/world-map.jpg",
+      "files": [
+        "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/world-map.jpg"
+      ],
+      "width": 960,
+      "height": 540,
+      "alt": "",
+      "shown": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\world-map.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:21.076Z"
+    },
+    {
+      "id": "i-34ac859a",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/roleplay.jpg",
+      "files": [
+        "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/roleplay.jpg"
+      ],
+      "width": 1920,
+      "height": 1080,
+      "alt": "",
+      "shown": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\roleplay.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:21.279Z"
+    },
+    {
+      "id": "i-e497b9ca",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/ip-jump.jpg",
+      "files": [
+        "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/ip-jump.jpg"
+      ],
+      "width": 1280,
+      "height": 720,
+      "alt": "",
+      "shown": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\ip-jump.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:21.496Z"
+    },
+    {
+      "id": "i-7c92d30b",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/pov.jpg",
+      "files": [
+        "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/pov.jpg"
+      ],
+      "width": 960,
+      "height": 540,
+      "alt": "",
+      "shown": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\pov-video.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:21.645Z"
+    },
+    {
+      "id": "i-b1fbe0c5",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_next/static/media/dot-grid.3btpr2cloly1z.png",
+      "files": [
+        "/_next/static/media/dot-grid.3btpr2cloly1z.png"
+      ],
+      "width": 100,
+      "height": 100,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\dot-grid.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:21.653Z"
+    },
+    {
+      "id": "i-8661b15d",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/_next/image__0d5ce6f4.webp",
+      "files": [
+        "/_next/image.webp",
+        "/_next/image__0d5ce6f4.webp"
+      ],
+      "width": 96,
+      "height": 80,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\fingerprint.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:21.665Z"
+    },
+    {
+      "id": "i-c09014b5",
+      "kind": "image",
+      "group": "Photos",
+      "value": "/og.png",
+      "files": [
+        "/og.png"
+      ],
+      "width": 1200,
+      "height": 630,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [
+        "their photo"
+      ],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\brand\\og.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:21.824Z"
+    },
+    {
+      "id": "v-d6109174",
+      "kind": "video",
+      "group": "Videos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/scroll-world.mp4",
+      "streams": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [],
+      "flags": [],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\scroll-world.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:28.237Z"
+    },
+    {
+      "id": "v-b9c9d502",
+      "kind": "video",
+      "group": "Videos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/world-seed.mp4",
+      "streams": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [],
+      "flags": [],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\world-seed.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:34.620Z"
+    },
+    {
+      "id": "v-28a07f08",
+      "kind": "video",
+      "group": "Videos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/pixel-room.mp4",
+      "streams": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [],
+      "flags": [],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\pixel-room.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:41.067Z"
+    },
+    {
+      "id": "v-b256d55d",
+      "kind": "video",
+      "group": "Videos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/world-map.mp4",
+      "streams": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [],
+      "flags": [],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\world-map.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:47.502Z"
+    },
+    {
+      "id": "v-97fdf79e",
+      "kind": "video",
+      "group": "Videos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/roleplay.mp4",
+      "streams": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [],
+      "flags": [],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\roleplay.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:52:53.882Z"
+    },
+    {
+      "id": "v-6a14154e",
+      "kind": "video",
+      "group": "Videos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/ip-jump.mp4",
+      "streams": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [],
+      "flags": [],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\ip-jump.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:00.275Z"
+    },
+    {
+      "id": "v-8955990f",
+      "kind": "video",
+      "group": "Videos",
+      "value": "/_ext/public.cohub.run/s/df290a34-ff34-465b-90c5-2cc540741bb9/world-new/media/pov.mp4",
+      "streams": false,
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [],
+      "flags": [],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\assets\\pov-video.png",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:06.624Z"
+    },
+    {
+      "id": "ff-bf39c81f",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Special Elite Fallback",
+      "weights": [
+        "400"
+      ],
+      "files": [],
+      "license": "check: likely a paid license",
+      "where": [],
+      "flags": [
+        "paid font"
+      ],
+      "swap": "Cutive Mono",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.125Z"
+    },
+    {
+      "id": "ff-501a6357",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Courier Prime Fallback",
+      "weights": [
+        "400"
+      ],
+      "files": [],
+      "license": "check: likely a paid license",
+      "where": [],
+      "flags": [
+        "paid font"
+      ],
+      "swap": "Cutive Mono",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.164Z"
+    },
+    {
+      "id": "ff-9fef2d73",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Nunito Sans Fallback",
+      "weights": [
+        "400"
+      ],
+      "files": [],
+      "license": "free (open font license)",
+      "where": [],
+      "flags": [],
+      "swap": "Inter",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.203Z"
+    },
+    {
+      "id": "ff-8407ced4",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Geist Mono Fallback",
+      "weights": [
+        "400"
+      ],
+      "files": [],
+      "license": "free (open font license)",
+      "where": [],
+      "flags": [],
+      "swap": "JetBrains Mono",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.243Z"
+    },
+    {
+      "id": "ff-23269dfa",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Fraunces Fallback",
+      "weights": [
+        "400"
+      ],
+      "files": [],
+      "license": "check: likely a paid license",
+      "where": [],
+      "flags": [
+        "paid font"
+      ],
+      "swap": "Playfair Display",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.281Z"
+    },
+    {
+      "id": "ff-5b60f29d",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "figtree Fallback",
+      "weights": [
+        "400"
+      ],
+      "files": [],
+      "license": "free (open font license)",
+      "where": [],
+      "flags": [],
+      "swap": "Figtree",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.314Z"
+    },
+    {
+      "id": "ff-3d7b14cb",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Geist Fallback",
+      "weights": [
+        "400"
+      ],
+      "files": [],
+      "license": "free (open font license)",
+      "where": [],
+      "flags": [],
+      "swap": "Inter",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.386Z"
+    },
+    {
+      "id": "ff-aaa09dc3",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Anton Fallback",
+      "weights": [
+        "400"
+      ],
+      "files": [],
+      "license": "check: likely a paid license",
+      "where": [],
+      "flags": [
+        "paid font"
+      ],
+      "swap": "Oswald",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.423Z"
+    },
+    {
+      "id": "ff-bf7e46eb",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Special Elite",
+      "weights": [
+        "400"
+      ],
+      "files": [
+        "../media/09d59b9ec7493ab1-s.15_fawwn19qtj.woff2",
+        "../media/748b8b5301d2bdb2-s.1zvx97hkh1y6p.woff2"
+      ],
+      "license": "check: likely a paid license",
+      "where": [],
+      "flags": [
+        "paid font"
+      ],
+      "swap": "Cutive Mono",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.458Z"
+    },
+    {
+      "id": "ff-ed7d6823",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Courier Prime",
+      "weights": [
+        "400",
+        "700"
+      ],
+      "files": [
+        "../media/7f6e389592deb6d0-s.18kjkh28iesz_.woff2",
+        "../media/87d3ffffac5dafea-s.3a10o7es2neby.woff2",
+        "../media/69c6d7b79c8b79fe-s.1_9u50gws63pa.woff2",
+        "../media/5f440d3eea613716-s.1xmps1tcyqv34.woff2"
+      ],
+      "license": "check: likely a paid license",
+      "where": [],
+      "flags": [
+        "paid font"
+      ],
+      "swap": "Cutive Mono",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.495Z"
+    },
+    {
+      "id": "ff-eeb1865f",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Nunito Sans",
+      "weights": [
+        "400",
+        "700",
+        "800",
+        "900"
+      ],
+      "files": [
+        "../media/f813d0b748b050e0-s.109ulqh0wub5u.woff2",
+        "../media/dcd150d580a10316-s.02m2p-env-7db.woff2",
+        "../media/d261779aa92de579-s.0slsd4dj30esv.woff2",
+        "../media/24ce79ed121239f3-s.187m47s3z4syd.woff2",
+        "../media/f141b5b7abe57afc-s.380f-mwhk0aej.woff2"
+      ],
+      "license": "free (open font license)",
+      "where": [],
+      "flags": [],
+      "swap": "Inter",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.568Z"
+    },
+    {
+      "id": "ff-900e5bfa",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Geist Mono",
+      "weights": [
+        "100 900"
+      ],
+      "files": [
+        "../media/5ce348bf30bf5439-s.31988l_ccedte.woff2",
+        "../media/4fa387ec64143e14-s.2tuy5pz7dlieh.woff2",
+        "../media/6306c77e7c8268e4-s.2dbetqa9o8jxf.woff2",
+        "../media/7d817b4c03b0c5f1-s.1uyisp29ctx0d.woff2",
+        "../media/bbc41e54d2fcbd21-s.1rgnod-3esatf.woff2",
+        "../media/797e433ab948586e-s.0r6juujl39pe6.woff2"
+      ],
+      "license": "free (open font license)",
+      "where": [],
+      "flags": [],
+      "swap": "JetBrains Mono",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.610Z"
+    },
+    {
+      "id": "ff-dd7c153c",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "CJKHeavy",
+      "weights": [
+        "var(--neta-font-weight-semibold) 900"
+      ],
+      "files": [],
+      "license": "check: likely a paid license",
+      "where": [],
+      "flags": [
+        "paid font"
+      ],
+      "swap": "Noto Sans SC",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.824Z"
+    },
+    {
+      "id": "ff-0e5ef8e4",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Fraunces",
+      "weights": [
+        "300 italic",
+        "400 italic",
+        "500 italic",
+        "600 italic",
+        "300",
+        "400",
+        "500",
+        "600"
+      ],
+      "files": [
+        "../media/50a3f1070da3c6cc-s.2xm1k7t3a0pcd.woff2",
+        "../media/b887d91685b8c137-s.330vchwb4izzb.woff2",
+        "../media/3c7c6164b2587822-s.16u3vygyjnhr0.woff2",
+        "../media/1e219c03c996efbd-s.2qo5md4hn_gum.woff2",
+        "../media/b35b0dbffda7f2c4-s.1d9rlgtqyj_-l.woff2",
+        "../media/03bda585a99c6450-s.32sris142tqlb.woff2"
+      ],
+      "license": "check: likely a paid license",
+      "where": [],
+      "flags": [
+        "paid font"
+      ],
+      "swap": "Playfair Display",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.898Z"
+    },
+    {
+      "id": "ff-822eaea5",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "figtree",
+      "weights": [
+        "300 900"
+      ],
+      "files": [
+        "../media/Figtree_Variable-s.p.08sr_7r2rzxl4.woff2"
+      ],
+      "license": "free (open font license)",
+      "where": [],
+      "flags": [],
+      "swap": "Figtree",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.933Z"
+    },
+    {
+      "id": "ff-9d1f9d57",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Geist",
+      "weights": [
+        "100 900"
+      ],
+      "files": [
+        "../media/fef07dbb0973bf53-s.3p2_lha1f2xer.woff2",
+        "../media/8a480f0b521d4e75-s.1qq4vpdcun5oj.woff2",
+        "../media/53b9e256198e5412-s.390ncx5urfkfu.woff2",
+        "../media/7178b3e590c64307-s.21jp631_3pja2.woff2",
+        "../media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2"
+      ],
+      "license": "free (open font license)",
+      "where": [],
+      "flags": [],
+      "swap": "Inter",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:07.973Z"
+    },
+    {
+      "id": "ff-025371cf",
+      "kind": "font",
+      "group": "Fonts",
+      "value": "Anton",
+      "weights": [
+        "400"
+      ],
+      "files": [
+        "../media/0e7b7e0b829e3eb9-s.2j75_l12byk_u.woff2",
+        "../media/daf789e4474d0d90-s.07wt1b-68kohk.woff2",
+        "../media/9e9f04e3c37952ab-s.0pan85mumqyf3.woff2"
+      ],
+      "license": "check: likely a paid license",
+      "where": [],
+      "flags": [
+        "paid font"
+      ],
+      "swap": "Oswald",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.010Z"
+    },
+    {
+      "id": "c-7e6529f6",
+      "kind": "color",
+      "group": "Colours",
+      "value": "#ffffff",
+      "uses": 37,
+      "where": [],
+      "flags": [],
+      "swap": "#ffffff",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.011Z"
+    },
+    {
+      "id": "c-167b94e2",
+      "kind": "color",
+      "group": "Colours",
+      "value": "#000000",
+      "uses": 18,
+      "where": [],
+      "flags": [],
+      "swap": "#0b0e13",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.012Z"
+    },
+    {
+      "id": "c-f54d3e90",
+      "kind": "color",
+      "group": "Colours",
+      "value": "#161718",
+      "uses": 12,
+      "where": [],
+      "flags": [],
+      "swap": "#12161d",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.012Z"
+    },
+    {
+      "id": "c-4edca106",
+      "kind": "color",
+      "group": "Colours",
+      "value": "#f6f6f6",
+      "uses": 11,
+      "where": [],
+      "flags": [],
+      "swap": "#f7f3ea",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.012Z"
+    },
+    {
+      "id": "c-22f34192",
+      "kind": "color",
+      "group": "Colours",
+      "value": "#e3e3e3",
+      "uses": 10,
+      "where": [],
+      "flags": [],
+      "swap": "#e5ddc8",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.013Z"
+    },
+    {
+      "id": "c-22e129c0",
+      "kind": "color",
+      "group": "Colours",
+      "value": "#4c4c55",
+      "uses": 8,
+      "where": [],
+      "flags": [],
+      "swap": "#4a4438",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.013Z"
+    },
+    {
+      "id": "c-db61adb0",
+      "kind": "color",
+      "group": "Colours",
+      "value": "#ececee",
+      "uses": 6,
+      "where": [],
+      "flags": [],
+      "swap": "#efe8d8",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.013Z"
+    },
+    {
+      "id": "c-a8a9e923",
+      "kind": "color",
+      "group": "Colours",
+      "value": "#f4f4f5",
+      "uses": 6,
+      "where": [],
+      "flags": [],
+      "swap": "#f3ecdf",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.014Z"
+    },
+    {
+      "id": "c-616189b9",
+      "kind": "color",
+      "group": "Colours",
+      "value": "#f3e6c8",
+      "uses": 6,
+      "where": [],
+      "flags": [],
+      "swap": "#eab308",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.014Z"
+    },
+    {
+      "id": "c-cb60fc1d",
+      "kind": "color",
+      "group": "Colours",
+      "value": "#e9d9b4",
+      "uses": 6,
+      "where": [],
+      "flags": [],
+      "swap": "#d4961f",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.014Z"
+    },
+    {
+      "id": "a-cfbba90f",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "placeholder",
+      "value": "Everyone at Hogwarts wakes up as a cat. What happens next?",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Everyone at magic school wakes up as a cat. What happens next?",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.022Z"
+    },
+    {
+      "id": "a-fe30ba7e",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "Everyone at Hogwarts wakes up as a cat. What happens next?",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Everyone at magic school wakes up as a cat. What happens next?",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.026Z"
+    },
+    {
+      "id": "a-245845ec",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "I want to make a POV video —",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "I want to make a world —",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.032Z"
+    },
+    {
+      "id": "a-8cf2a6a9",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "Loading world creator",
+      "section": "main",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Loading world creator",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.038Z"
+    },
+    {
+      "id": "a-0bbeeb31",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "Notifications alt+T",
+      "section": "page",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Notifications alt+T",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.043Z"
+    },
+    {
+      "id": "a-76c06762",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "Pick a visual style",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Pick a visual style",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.050Z"
+    },
+    {
+      "id": "a-aa7bd333",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "Primary navigation",
+      "section": "div#S:0",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Primary navigation",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.054Z"
+    },
+    {
+      "id": "a-86ad4f45",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "Previous playstyle",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Previous world",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.060Z"
+    },
+    {
+      "id": "a-95d1aac1",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "Next playstyle",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Next world",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.065Z"
+    },
+    {
+      "id": "a-33f05307",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "Existing lore?",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Have existing lore?",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.069Z"
+    },
+    {
+      "id": "a-0d7e9e7c",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "Pick a skill",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Pick a skill",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.073Z"
+    },
+    {
+      "id": "a-3e615b2b",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "Create world",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Create world",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.078Z"
+    },
+    {
+      "id": "a-f7811660",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "Remove seed",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Remove seed",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.083Z"
+    },
+    {
+      "id": "a-9514b73e",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "aria-label",
+      "value": "Send to",
+      "section": "main.world-new-shell-module__QKWYga__main",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Send to",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.089Z"
+    },
+    {
+      "id": "a-0171b3b2",
+      "kind": "attr",
+      "group": "Image descriptions",
+      "attr": "alt",
+      "value": "NETA",
+      "section": "div#S:0",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Dreamforge",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.094Z"
+    },
+    {
+      "id": "a-c1116609",
+      "kind": "attr",
+      "group": "Search & sharing",
+      "attr": "meta description",
+      "value": "Build a living AI world with Neta Studio — agents turn a sentence into maps, games, roleplay, and worlds that grow.",
+      "section": "head",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Build a living AI world with Dreamforge — agents turn a sentence into maps, games, roleplay, and worlds that grow.",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.099Z"
+    },
+    {
+      "id": "a-6981043d",
+      "kind": "attr",
+      "group": "Search & sharing",
+      "attr": "meta og:description",
+      "value": "Build a living AI world with Neta Studio — agents turn a sentence into maps, games, roleplay, and worlds that grow.",
+      "section": "head",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Build a living AI world with Dreamforge — agents turn a sentence into maps, games, roleplay, and worlds that grow.",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.103Z"
+    },
+    {
+      "id": "a-6246481a",
+      "kind": "attr",
+      "group": "Search & sharing",
+      "attr": "meta twitter:description",
+      "value": "Build a living AI world with Neta Studio — agents turn a sentence into maps, games, roleplay, and worlds that grow.",
+      "section": "head",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Build a living AI world with Dreamforge — agents turn a sentence into maps, games, roleplay, and worlds that grow.",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.113Z"
+    },
+    {
+      "id": "a-c7fce0c4",
+      "kind": "attr",
+      "group": "Search & sharing",
+      "attr": "meta og:title",
+      "value": "Neta Studio — AI World Builder & Game Generator",
+      "section": "head",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Dreamforge — AI World Builder & Game Generator",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.124Z"
+    },
+    {
+      "id": "a-fefbfba3",
+      "kind": "attr",
+      "group": "Search & sharing",
+      "attr": "meta twitter:title",
+      "value": "Neta Studio — AI World Builder & Game Generator",
+      "section": "head",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Dreamforge — AI World Builder & Game Generator",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.134Z"
+    },
+    {
+      "id": "a-484f1905",
+      "kind": "attr",
+      "group": "Search & sharing",
+      "attr": "meta og:site_name",
+      "value": "Neta Studio",
+      "section": "head",
+      "where": [
+        {
+          "file": "site\\world\\new\\index.html"
+        }
+      ],
+      "flags": [],
+      "swap": "Dreamforge",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.138Z"
+    },
+    {
+      "id": "i-5f08bf67",
+      "kind": "image",
+      "group": "Icons",
+      "value": "/brand/favicon.ico",
+      "files": [
+        "/brand/favicon.ico"
+      ],
+      "width": null,
+      "height": null,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\brand\\favicon.ico",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.200Z"
+    },
+    {
+      "id": "i-9253cb8c",
+      "kind": "image",
+      "group": "Icons",
+      "value": "/brand/favicon.svg",
+      "files": [
+        "/brand/favicon.svg"
+      ],
+      "width": 64,
+      "height": 64,
+      "alt": "",
+      "shown": false,
+      "section": "",
+      "source": "live",
+      "where": [],
+      "flags": [],
+      "swap": "C:\\Users\\joshl\\remakes\\neta-art-world-new\\site\\brand\\favicon.svg",
+      "status": "applied",
+      "appliedAt": "2026-10-31T18:53:08.203Z"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "isMobile": false
+    },
+    "phone": {
+      "width": 390,
+      "height": 844,
+      "isMobile": true
+    }
+  },
+  "thresholds": {
+    "screen": 98,
+    "motion": 95
+  },
+  "seed": 1337,
+  "epoch": 1767268800000,
+  "settleMs": 6000,
+  "scrollSettleMs": 1500,
+  "motionFrames": 24,
+  "politeInterval": 0.5,
+  "url": "https://neta.art/world/new",
+  "origin": "https://neta.art",
+  "host": "neta.art",
+  "name": "neta-art-world-new",
+  "pages": [
+    "/world/new"
+  ],
+  "maxPages": 1,
+  "createdAt": "2026-10-31T04:07:10.755Z",
+  "captureMode": "live",
+  "archiveTs": null,
+  "capturedAt": "2026-10-31T04:08:48.274Z"
+}

@@ -1,0 +1,71 @@
+{
+  "url": "https://neta.art/world/new",
+  "at": "2026-10-31T04:07:46.761Z",
+  "pages": {
+    "/world/new": {
+      "desktop": {
+        "title": "Neta Studio — AI World Builder & Game Generator",
+        "frameworks": [
+          "Next.js"
+        ],
+        "canvases": 0,
+        "videos": 7,
+        "iframes": [],
+        "fonts": [
+          "Geist 100 900",
+          "Nunito Sans 700",
+          "Nunito Sans Fallback normal",
+          "figtree 300 900"
+        ],
+        "links": [],
+        "height": 900
+      },
+      "phone": {
+        "title": "Neta Studio — AI World Builder & Game Generator",
+        "frameworks": [
+          "Next.js"
+        ],
+        "canvases": 0,
+        "videos": 9,
+        "iframes": [],
+        "fonts": [
+          "Geist 100 900",
+          "Nunito Sans 700",
+          "Nunito Sans Fallback normal",
+          "figtree 300 900"
+        ],
+        "links": [],
+        "height": 844
+      }
+    }
+  },
+  "archive": false,
+  "stats": {
+    "files": 192,
+    "bytes": 20001043,
+    "counts": {
+      "pages": 1,
+      "fonts": 33,
+      "images": 58,
+      "styles": 11,
+      "scripts": 54,
+      "api": 24,
+      "other": 4,
+      "media": 7
+    },
+    "archived": 0,
+    "sourceMaps": {
+      "maps": 0,
+      "files": 0
+    }
+  },
+  "trackersRemoved": [
+    "googletagmanager.com",
+    "doubleclick.net",
+    "analytics.tiktok.com",
+    "googleadservices.com",
+    "connect.facebook.net"
+  ],
+  "streaming": [],
+  "blockedHosts": []
+}
