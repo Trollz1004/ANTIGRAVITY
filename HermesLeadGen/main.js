@@ -48,12 +48,30 @@ function fetchWorkerHealth() {
   });
 }
 
+function ensureLocalServer() {
+  return new Promise((resolve) => {
+    const req = http.get('http://127.0.0.1:8392/api/node/status', (res) => {
+      res.resume();
+      resolve();
+    });
+    req.on('error', () => {
+      try {
+        const { server } = require('./server');
+        server.listen(8392, '0.0.0.0', () => resolve());
+      } catch (_) {
+        resolve();
+      }
+    });
+  });
+}
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1400,
     height: 900,
     minWidth: 1000,
     minHeight: 700,
+    show: false,
     title: 'HermesLeadGen — Sabretooth',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -61,14 +79,23 @@ function createWindow() {
       nodeIntegration: false
     }
   });
-  win.loadFile('index.html');
+  win.loadURL('http://127.0.0.1:8392/');
+  win.once('ready-to-show', () => {
+    win.show();
+    win.focus();
+  });
 }
 
 // Fix cache permission issues on Windows
-app.setPath('userData', path.join(__dirname, '.electron-data'));
-app.setPath('cache', path.join(__dirname, '.electron-cache'));
+app.setPath('userData', path.join(__dirname, '.app-data'));
+app.setPath('cache', path.join(__dirname, '.app-cache'));
 
-app.whenReady().then(() => {
+// Disable GPU to avoid rendering issues on AMD Windows
+app.commandLine.appendSwitch('disable-gpu');
+app.commandLine.appendSwitch('disable-software-rasterizer');
+
+app.whenReady().then(async () => {
+  await ensureLocalServer();
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -98,15 +125,20 @@ ipcMain.handle('stats:load', () => readJSON(STATS_FILE, {
 ipcMain.handle('stats:save', (_e, stats) => { writeJSON(STATS_FILE, stats); return true; });
 
 // IPC: File dialog for MP4 preview
+const approvedDialogPaths = new Set();
 ipcMain.handle('dialog:openFile', async () => {
   const result = await dialog.showOpenDialog({
     properties: ['openFile'],
     filters: [{ name: 'Video', extensions: ['mp4', 'mov', 'mkv', 'webm'] }]
   });
-  return result.canceled ? null : result.filePaths[0];
+  if (result.canceled || !result.filePaths[0]) return null;
+  const chosen = path.resolve(result.filePaths[0]);
+  approvedDialogPaths.add(chosen);
+  return chosen;
 });
 
 // IPC: OmniRoute call (proxy through main to avoid CORS)
+const T5500_HOST = process.env.T5500_HOST || 'localhost';
 ipcMain.handle('omniroute:chat', async (_e, { model, messages }) => {
   return new Promise((resolve) => {
     const postData = JSON.stringify({
@@ -114,7 +146,7 @@ ipcMain.handle('omniroute:chat', async (_e, { model, messages }) => {
       messages: messages || [],
       temperature: 0.7
     });
-    const req = http.request('http://192.168.0.15:20128/v1/chat/completions', {
+    const req = http.request(`http://${T5500_HOST}:20128/v1/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -142,7 +174,7 @@ ipcMain.handle('omniroute:chat', async (_e, { model, messages }) => {
 // IPC: Mission control read-only
 ipcMain.handle('missioncontrol:live', async () => {
   return new Promise((resolve) => {
-    http.get('http://192.168.0.15:3130/live', (res) => {
+    http.get(`http://${T5500_HOST}:3130/live`, (res) => {
       let body = '';
       res.on('data', (c) => body += c);
       res.on('end', () => {
@@ -153,6 +185,21 @@ ipcMain.handle('missioncontrol:live', async () => {
   });
 });
 
-// IPC: Open file in default app
-ipcMain.handle('shell:openPath', (_e, filePath) => shell.openPath(filePath));
-ipcMain.handle('shell:openExternal', (_e, url) => shell.openExternal(url));
+// IPC: Open file in default app (restricted to dialog-selected paths or media-previews)
+ipcMain.handle('shell:openPath', (_e, filePath) => {
+  const resolved = path.resolve(String(filePath || ''));
+  const mediaDir = path.resolve(__dirname, 'media-previews');
+  const rel = path.relative(mediaDir, resolved);
+  const insideMedia = rel && !rel.startsWith('..') && !path.isAbsolute(rel);
+  if (!approvedDialogPaths.has(resolved) && !insideMedia) {
+    throw new Error('Blocked shell:openPath outside approved media directories');
+  }
+  return shell.openPath(resolved);
+});
+ipcMain.handle('shell:openExternal', (_e, url) => {
+  const parsed = new URL(String(url || ''));
+  if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+    throw new Error('Blocked non-HTTP(S) URL in shell:openExternal');
+  }
+  return shell.openExternal(parsed.toString());
+});

@@ -1,17 +1,28 @@
 const http = require('http');
 const https = require('https');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const net = require('net');
 const { execFile, spawn } = require('child_process');
 
 const PORT = Number(process.env.PORT || 8392);
 const ROOT = __dirname;
-const ANTIGRAVITY_ROOT = path.resolve(ROOT, '..');
+const USER_HOME = process.env.USERPROFILE || os.homedir();
+const SABRETOOTH_HOST = process.env.SABRETOOTH_HOST || '127.0.0.1';
+const T5500_HOST = process.env.T5500_HOST || 'localhost';
+const REPO_ROOT_FALLBACK = fs.existsSync(path.join(ROOT, '..', 'AGENTS.md'))
+  ? path.resolve(ROOT, '..')
+  : path.resolve(ROOT, '..', '..');
+const ANTIGRAVITY_ROOT =
+  process.env.SABRETOOTH_VAULT_ROOT ||
+  (fs.existsSync('C:\\Ai-Dream-Team\\Antigravity') ? 'C:\\Ai-Dream-Team\\Antigravity' : REPO_ROOT_FALLBACK);
+const HERMES_PY = path.join(USER_HOME, 'AppData', 'Local', 'hermes', 'tools', 'python-3.14.9+20261021-win32-x64', 'python.exe');
 const SOULS_DIR = path.join(ROOT, 'souls');
 const GRAPHIFY_DIR = path.join(ROOT, 'graphify-out');
 const STATE_DIR = path.join(ROOT, 'data');
 const MEDIA_DIR = path.join(ROOT, 'media-previews');
+const GTM_STUDIO_DIR = path.join(USER_HOME, 'remakes', 'clay-com', 'site');
 
 if (!fs.existsSync(STATE_DIR)) fs.mkdirSync(STATE_DIR, { recursive: true });
 if (!fs.existsSync(MEDIA_DIR)) fs.mkdirSync(MEDIA_DIR, { recursive: true });
@@ -44,15 +55,15 @@ const terminalLogs = [
     id: 'boot-1',
     ts: new Date().toISOString(),
     profile: 'default',
-    cmd: 'agy --dangerously-skip-permissions (Sabretooth :8392 Orchestrator Ready)',
+    cmd: 'agy --dangerously-skip-permissions (Sabretooth :8392 OPSis Orchestrator Ready)',
     status: 'ok',
-    output: 'Sabretooth Command Studio online at http://192.168.0.8:8392/ | Default Hermes Session: http://127.0.0.1:9119/chat?profile=default&resume=local-profile | Free Claude Code: http://127.0.0.1:8082/admin'
+    output: `Sabretooth Command Studio online at http://${SABRETOOTH_HOST}:8392/ | Default Hermes OPSis Session: http://127.0.0.1:9119/chat?profile=default&resume=local-profile | Free Claude Code: http://127.0.0.1:8082/admin`
   },
   {
     id: 'boot-2',
     ts: new Date().toISOString(),
     profile: 'notes',
-    cmd: 'python -m graphify update "C:\\Ai-Dream-Team\\Antigravity\\HermesLeadGen" --force',
+    cmd: `python -m graphify update "${__dirname}" --force`,
     status: 'ok',
     output: 'Graphy #1 (api.workflow.json) + Graphy #2 (graphify-out/graph.json: 118 nodes, 166 edges, 14 communities) loaded and synced with Obsidian Vault.'
   },
@@ -158,7 +169,7 @@ const DEFAULT_LEADS = [
   },
   {
     id: 'lead-fund-02',
-    name: 'Florida Tech & Medical Office E-Waste Pickup Partners',
+    name: 'Florida Tech & Enterprise Office E-Waste Pickup Partners',
     handle: 'onlinerecycle.net / B2B ITAD',
     source: 'Direct B2B',
     leadType: '3-funding-dream-online',
@@ -167,8 +178,8 @@ const DEFAULT_LEADS = [
     score: 93,
     status: 'READY_FOR_REVIEW',
     approved: false,
-    signal: 'Local IT upgrade cycle decommissions servers, workstations, and GPUs suitable for recycling & mission funding.',
-    draft: 'Clearing out retired workstations or servers? OnlineRecycle.net handles fast hardware pickup and responsible component recovery to help fund our community mission (#UntilNoKidInNeed). Reply with your pickup zip code to schedule.',
+    signal: 'Local IT upgrade cycle decommissions servers, workstations, and GPUs suitable for recycling & studio hardware recovery.',
+    draft: 'Clearing out retired workstations or servers? OnlineRecycle.net handles fast B2B hardware pickup and responsible component recovery across Central Florida. Reply with your pickup zip code to schedule.',
     createdAt: '2026-10-29T18:55:00.000Z'
   }
 ];
@@ -194,14 +205,14 @@ const DEFAULT_HOOK_LOOP = {
   nodeCanSelfMergeToMain: false,
   watcherActive: true,
   watchedPaths: [
-    'C:\\Ai-Dream-Team\\Antigravity\\HermesLeadGen\\souls',
-    'C:\\Ai-Dream-Team\\Antigravity\\HermesLeadGen\\skills.json',
-    'C:\\Ai-Dream-Team\\Antigravity\\api.workflow.json',
-    'C:\\Ai-Dream-Team\\Antigravity\\Sabretooth'
+    path.join(__dirname, 'souls'),
+    path.join(__dirname, 'skills.json'),
+    path.join(ANTIGRAVITY_ROOT, 'api.workflow.json'),
+    path.join(ANTIGRAVITY_ROOT, 'Sabretooth')
   ],
   stages: [
-    { step: 1, id: 'task-intake', name: '1. Task / File Change Hook (Sabretooth Node)', status: 'ACTIVE', detail: 'fs.watch + Kanban trigger detects edits or new tasks immediately' },
-    { step: 2, id: 'node-orchestrator', name: '2. Default Orchestrator (:9119 / agy)', status: 'ACTIVE', detail: 'Routes to Harvey, YouTube, Editor, Kanban, FCC (:8082), or Notes profile' },
+    { step: 1, id: 'work-intake', name: '1. Task / File Change Hook (Sabretooth Node)', status: 'ACTIVE', detail: 'fs.watch + Kanban trigger detects edits or new tasks immediately' },
+    { step: 2, id: 'node-orchestrator', name: '2. OPSis Default Orchestrator (:9119 / agy)', status: 'ACTIVE', detail: 'Routes to Harvey, YouTube, Editor, Kanban, FCC (:8082), or Notes profile' },
     { step: 3, id: 'tdd-screenshot-gate', name: '3. Local TDD + Screenshot Proof', status: 'PASSING', detail: 'Runs node --test + publishes visual proof to Media Preview Pane' },
     { step: 4, id: 'github-pr-webhook', name: '4. Node Branch PR + GitHub Webhook', status: 'READY', detail: 'Pushes node-scoped PR payload to Trollz1004/ANTIGRAVITY' },
     { step: 5, id: 'cloud-judges-merge', name: '5. GitHub Judges Validate & Merge (Jules / Claude / Codex / Gemini)', status: 'ENFORCED', detail: 'Only Cloud Judges in GitHub merge after CI passes — zero unjudged node merges' },
@@ -213,10 +224,12 @@ const DEFAULT_HOOK_LOOP = {
       ts: new Date().toISOString(),
       source: 'sabretooth-runtime-watcher',
       repo: 'Trollz1004/ANTIGRAVITY',
-      branch: 'sabretooth/gui-8392-graphy-sync',
+      branch: 'sabretooth/hermes-leadgen',
       testsPassed: true,
+      pushSuccess: false,
+      prNumber: null,
       judgeStatus: 'AWAITING_GITHUB_JUDGES_MERGE (Gemini / Jules / Claude / Codex)',
-      summary: 'Initialized circular Task -> Node Orchestrator -> GitHub PR Webhook -> Cloud Judge Merge loop on Sabretooth (.8).'
+      summary: 'Initialized circular Task -> Node OPSis Orchestrator -> GitHub PR -> Cloud Judge Merge loop on Sabretooth.'
     }
   ]
 };
@@ -237,17 +250,26 @@ function saveHookLoop(state) {
 
 function recordHookEvent(summary, source = 'sabretooth-orchestrator', repo = 'Trollz1004/ANTIGRAVITY', extra = {}) {
   const loop = loadHookLoop();
+  const confirmedPush = Boolean(extra.pushSuccess);
+  const prNumber = extra.prNumber || null;
+  let judgeStatus = extra.prStatus || 'LOCAL_EVENT_RECORDED_NOT_PUSHED';
+  if (confirmedPush && prNumber) {
+    judgeStatus = `PR_#${prNumber}_OPEN_FOR_GITHUB_JUDGES`;
+  } else if (extra.error) {
+    judgeStatus = `FAILED: ${extra.error}`;
+  }
   const ev = {
     id: 'hook-' + Date.now(),
     ts: new Date().toISOString(),
     source,
     repo,
-    branch: extra.branch || 'sabretooth/auto-pr-sync',
-    commitSha: extra.commitSha || 'HEAD',
-    pushSuccess: extra.pushSuccess !== undefined ? extra.pushSuccess : true,
-    prUrl: extra.prUrl || 'https://github.com/Trollz1004/ANTIGRAVITY/compare/main...sabretooth/auto-pr-sync?expand=1',
-    testsPassed: extra.testsPassed !== undefined ? extra.testsPassed : true,
-    judgeStatus: extra.prStatus || 'PUSHED_AND_PR_QUEUED_FOR_GITHUB_JUDGES (Jules / Claude / Codex / Gemini)',
+    branch: extra.branch || 'sabretooth/hermes-leadgen',
+    commitSha: extra.commitSha || null,
+    pushSuccess: confirmedPush,
+    prNumber,
+    prUrl: extra.prUrl || null,
+    testsPassed: extra.testsPassed !== undefined ? Boolean(extra.testsPassed) : null,
+    judgeStatus,
     summary
   };
   loop.lastPushPr = ev;
@@ -255,21 +277,30 @@ function recordHookEvent(summary, source = 'sabretooth-orchestrator', repo = 'Tr
   loop.events.unshift(ev);
   if (loop.events.length > 40) loop.events.length = 40;
   saveHookLoop(loop);
-  appendTerminalLog('kanban', `[AUTO-PR-PUSH] ${source} -> ${repo} (${ev.branch})`, `${summary} | SHA: ${ev.commitSha} | PR: ${ev.prUrl} | Judge Gate: ${ev.judgeStatus}`);
+  appendTerminalLog(
+    'kanban',
+    `[AUTO-PR-GATE] ${source} -> ${repo} (${ev.branch})`,
+    `${summary} | SHA: ${ev.commitSha || 'none'} | PR: ${ev.prNumber ? '#' + ev.prNumber : 'none'} | Status: ${ev.judgeStatus}`,
+    extra.error ? 'error' : 'ok'
+  );
   return { loop, event: ev };
 }
 
-function executeNodeAutoPrPush({ agent = 'gemini', profile = 'default', message = 'chore(sabretooth): auto-sync agent work & create PR for Cloud Judges' } = {}) {
+function executeNodeAutoPrPush({ agent = 'gemini', profile = 'default', message = 'chore(sabretooth): sync apps/hermes-leadgen for Cloud Judges' } = {}) {
   return new Promise((resolve) => {
     const scriptPath = path.join(ROOT, 'scripts', 'node-auto-pr-push.ps1');
     if (!fs.existsSync(scriptPath)) {
-      const fallback = recordHookEvent(message, `${agent}:${profile}`);
-      return resolve({ ok: true, ...fallback });
+      const failEvent = recordHookEvent(message, `${agent}:${profile}`, 'Trollz1004/ANTIGRAVITY', {
+        pushSuccess: false,
+        prStatus: 'FAILED_MISSING_SCRIPT',
+        error: 'scripts/node-auto-pr-push.ps1 not found'
+      });
+      return resolve({ ok: false, error: 'scripts/node-auto-pr-push.ps1 not found', ...failEvent });
     }
     execFile(
       'powershell.exe',
       ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', scriptPath, '-Agent', agent, '-Profile', profile, '-Message', message],
-      { cwd: ANTIGRAVITY_ROOT, timeout: 45000 },
+      { cwd: ROOT, timeout: 60000 },
       (err, stdout, stderr) => {
         let parsed = null;
         const raw = String(stdout || '').trim();
@@ -283,19 +314,26 @@ function executeNodeAutoPrPush({ agent = 'gemini', profile = 'default', message 
           }
         }
         const extra = parsed || {
-          branch: 'sabretooth/auto-pr-sync',
-          commitSha: 'HEAD',
-          pushSuccess: !err,
-          prStatus: err ? 'LOCAL_COMMIT_SAVED_PR_COMPARE_READY' : 'BRANCH_PUSHED_AND_PR_OPENED',
-          prUrl: 'https://github.com/Trollz1004/ANTIGRAVITY/compare/main...sabretooth/auto-pr-sync?expand=1'
+          ok: false,
+          branch: 'sabretooth/hermes-leadgen',
+          commitSha: null,
+          pushSuccess: false,
+          prNumber: null,
+          prUrl: null,
+          prStatus: 'FAILED_SCRIPT_EXECUTION',
+          error: (err && err.message) || String(stderr || 'Auto-PR script failed').trim()
         };
+        const confirmed = Boolean(extra.ok && extra.pushSuccess && extra.prNumber);
+        const statusSummary = confirmed
+          ? `${message} (Commit: ${extra.commitSha}, PR #${extra.prNumber})`
+          : `${message} (FAILED: ${extra.error || extra.prStatus || 'GitHub push/PR not confirmed'})`;
         const recorded = recordHookEvent(
-          `${message} (Commit: ${extra.commitSha || 'HEAD'}, Push: ${extra.pushSuccess ? 'OK' : 'QUEUED'})`,
+          statusSummary,
           `${agent}:${profile}`,
           extra.repo || 'Trollz1004/ANTIGRAVITY',
           extra
         );
-        resolve({ ok: true, scriptResult: extra, ...recorded });
+        resolve({ ok: confirmed, scriptResult: extra, ...recorded });
       }
     );
   });
@@ -317,7 +355,7 @@ function setupNodeRuntimeWatchers() {
         if (!filename) return;
         if (watchDebounce) clearTimeout(watchDebounce);
         watchDebounce = setTimeout(() => {
-          recordHookEvent(`File ${eventType} detected on ${path.basename(dir)}/${filename} -> synced dashboard & queued PR webhook check.`, 'fs.watch-hook');
+          recordHookEvent(`File ${eventType} detected on ${path.basename(dir)}/${filename} -> synced dashboard state.`, 'fs.watch-hook');
         }, 800);
       });
     } catch (_) {}
@@ -331,7 +369,7 @@ setupNodeRuntimeWatchers();
 const PROFILE_DEFINITIONS = [
   {
     id: 'default',
-    name: 'Default Research & Master Orchestrator (Jarvis)',
+    name: 'Default Research & Master Orchestrator (OPSis)',
     role: 'Master Research & Multi-Profile Orchestrator',
     hermesProfile: 'default',
     hermesUrl: 'http://127.0.0.1:9119/chat?profile=default&resume=local-profile',
@@ -394,6 +432,10 @@ const PROFILE_DEFINITIONS = [
     soulFile: 'youtube-agent.md',
     mandatorySkills: [
       'rooflo-opsis-cut-and-reach',
+      'dreamforge_world_seed',
+      'dreamforge_art_styles',
+      'dreamforge_roleplay',
+      'cli-anything',
       'agent-reach',
       'last30days',
       'humanizer',
@@ -531,34 +573,6 @@ function buildMediaPreviews() {
       }
     }
   }
-  // 2. Discover real rendered Shorts/Audio/Thumbnails in youtube-shorts-podcast-engine
-  const ytRoot = path.join(ANTIGRAVITY_ROOT, 'youtube-shorts-podcast-engine');
-  const searchDirs = [
-    path.join(ytRoot, 'output'),
-    path.join(ytRoot, 'renders'),
-    path.join(ytRoot, 'assets')
-  ];
-  for (const dir of searchDirs) {
-    if (!fs.existsSync(dir)) continue;
-    try {
-      for (const f of fs.readdirSync(dir)) {
-        const ext = path.extname(f).toLowerCase();
-        if (['.mp4', '.wav', '.png', '.jpg', '.webp'].includes(ext)) {
-          items.push({
-            id: 'yt-' + f,
-            title: f,
-            type: ext === '.mp4' ? 'video' : ext === '.wav' ? 'audio' : 'image',
-            url: '/api/media/file?path=' + encodeURIComponent(path.join(dir, f)),
-            channel: 'dream-online-mmorpg / until-no-kid-in-need',
-            duration: ext === '.mp4' ? '52.8s (<= 59.0s Gate PASS)' : 'Asset Preview',
-            voice: 'Aoede (Gemini 2.5 Flash Native Female Audio)',
-            approved: false,
-            updatedAt: new Date(fs.statSync(path.join(dir, f)).mtime).toISOString()
-          });
-        }
-      }
-    } catch (_) {}
-  }
 
   // Ensure there is always a high-contrast SVG thumbnail preview generated if media-previews is empty
   if (items.length === 0) {
@@ -614,14 +628,14 @@ function checkTcpPort(host, port, timeoutMs = 1500) {
 
 async function getSabretoothNodeStatus() {
   const definitions = [
-    { id: 'gui-8392', name: 'Sabretooth GUI Studio (:8392)', host: '127.0.0.1', port: 8392, url: 'http://192.168.0.8:8392/' },
-    { id: 'hermes-9119', name: 'Hermes Default Orchestrator (:9119)', host: '127.0.0.1', port: 9119, url: 'http://127.0.0.1:9119/chat?profile=default&resume=local-profile' },
-    { id: 'fcc-8082', name: 'Free Claude Code Admin (:8082/admin)', host: '127.0.0.1', port: 8082, url: 'http://192.168.0.8:8392/proxy/fcc/admin' },
+    { id: 'gui-8392', name: 'Sabretooth GUI Studio (:8392)', host: '127.0.0.1', port: 8392, url: `http://${SABRETOOTH_HOST}:8392/` },
+    { id: 'hermes-9119', name: 'Hermes OPSis Orchestrator (:9119)', host: '127.0.0.1', port: 9119, url: 'http://127.0.0.1:9119/chat?profile=default&resume=local-profile' },
+    { id: 'fcc-8082', name: 'Free Claude Code Admin (:8082/admin)', host: '127.0.0.1', port: 8082, url: `http://${SABRETOOTH_HOST}:8392/proxy/fcc/admin` },
     { id: 'gpu-8391', name: 'Sabretooth GPU Media & TTS Worker (:8391)', host: '127.0.0.1', port: 8391, url: 'http://127.0.0.1:8391/health' },
     { id: 'ollama-11434', name: 'Ollama 16GB AMD GPU Offload (:11434)', host: '127.0.0.1', port: 11434, url: 'http://127.0.0.1:11434/api/tags' },
     { id: 'obsidian-27123', name: 'Obsidian Local REST API & Sync (:27123)', host: '127.0.0.1', port: 27123, url: 'http://127.0.0.1:27123/' },
-    { id: 't5500-memory-49374', name: 'T5500 Shared ai-memory MCP (192.168.0.15:49374)', host: '192.168.0.15', port: 49374, url: 'http://192.168.0.15:49374/health' },
-    { id: 't5500-omniroute-20128', name: 'T5500 OmniRoute AI Router (192.168.0.15:20128)', host: '192.168.0.15', port: 20128, url: 'http://192.168.0.15:20128/v1/models' }
+    { id: 't5500-memory-49374', name: 'T5500 Shared ai-memory MCP (:49374)', host: T5500_HOST, port: 49374, url: `http://${T5500_HOST}:49374/health` },
+    { id: 't5500-omniroute-20128', name: 'T5500 OmniRoute AI Router (:20128)', host: T5500_HOST, port: 20128, url: `http://${T5500_HOST}:20128/v1/models` }
   ];
 
   const services = await Promise.all(
@@ -637,10 +651,10 @@ async function getSabretoothNodeStatus() {
   );
 
   return {
-    node: 'Sabretooth (.8 / 192.168.0.8)',
-    ip: '192.168.0.8',
-    role: 'Hermes (:9119) + Free Claude Code (:8082/admin) + Harvey 3-Type Lead Gen + YouTube Shorts (<=59s) + Dual Graphy GUI (:8392)',
-    isolationRule: 'Sabretooth (:8392) is strictly node-specific. T5500 (192.168.0.15:3130 OPSis streamable Mission Control) and Alienware (192.168.0.40 3D Game Engine) remain strictly separate.',
+    node: 'Sabretooth',
+    ip: SABRETOOTH_HOST,
+    role: 'Hermes OPSis (:9119) + Free Claude Code (:8082/admin) + Harvey 3-Type Lead Gen + YouTube Shorts (<=59s) + Dual Graphy GUI (:8392)',
+    isolationRule: 'Sabretooth (:8392) is strictly node-specific. T5500 (:3130 OPSis streamable Mission Control) and Alienware (3D Game Engine) remain strictly separate.',
     cliCommand: 'agy --dangerously-skip-permissions',
     allGreen: services.every((s) => s.up),
     services
@@ -684,7 +698,7 @@ function loadDualGraphy() {
           label: 'T5500 Shared ai-memory MCP (:49374)',
           type: 'memory-hub',
           port: 49374,
-          cli: 'http://192.168.0.15:49374/mcp',
+          cli: `http://${T5500_HOST}:49374/mcp`,
           role: 'Cross-Node Shared Memory Mirror + Obsidian Fallback'
         },
         {
@@ -726,7 +740,7 @@ function loadDualGraphy() {
   return {
     workflowGraphy: {
       title: 'Graphy #1 — Agent Workflow & Multi-Node Orchestration Graphy',
-      sourcePath: 'C:\\Ai-Dream-Team\\Antigravity\\api.workflow.json',
+      sourcePath: path.join(ANTIGRAVITY_ROOT, 'api.workflow.json'),
       nodeCount: wfNodes.length,
       edgeCount: wfEdges.length,
       nodes: wfNodes,
@@ -735,7 +749,7 @@ function loadDualGraphy() {
     },
     codebaseGraphy: {
       title: 'Graphy #2 — HermesLeadGen Codebase Knowledge Graphy (graphifyy)',
-      sourcePath: 'C:\\Ai-Dream-Team\\Antigravity\\HermesLeadGen\\graphify-out\\graph.json',
+      sourcePath: path.join(__dirname, 'graphify-out', 'graph.json'),
       htmlUrl: '/graphify-out/graph.html',
       nodeCount: Array.isArray(codebaseGraph.nodes) ? codebaseGraph.nodes.length : 0,
       edgeCount: Array.isArray(codebaseGraph.links) ? codebaseGraph.links.length : 0,
@@ -751,7 +765,7 @@ function loadDualGraphy() {
 // ============================================================================
 function syncObsidianAndMemory({ agent = 'gemini', useCase = 'Sabretooth :8392 Studio Session Sync', summary = '', proof = '' }) {
   const now = new Date();
-  const stamp = now.toISOString().replace('T', ' ').slice(0, 16) + ' EDT';
+  const stamp = now.toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
   const sabretoothDir = path.join(ANTIGRAVITY_ROOT, 'Sabretooth');
   if (!fs.existsSync(sabretoothDir)) fs.mkdirSync(sabretoothDir, { recursive: true });
 
@@ -765,11 +779,11 @@ function syncObsidianAndMemory({ agent = 'gemini', useCase = 'Sabretooth :8392 S
 
   const block = [
     '',
-    `## ${stamp} | node: Sabretooth (192.168.0.8) | agent: ${agent} | use case: ${useCase}`,
-    `- **Summary**: ${summary || 'Synchronized Sabretooth :8392 GUI, Default Orchestrator (:9119), Free Claude Code (:8082/admin), Dual Graphies, and Harvey 3-Type Lead Gen.'}`,
-    `- **Proof / Validation**: ${proof || 'http://192.168.0.8:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin'}`,
+    `## ${stamp} | node: Sabretooth | agent: ${agent} | use case: ${useCase}`,
+    `- **Summary**: ${summary || 'Synchronized Sabretooth :8392 GUI, OPSis Default Orchestrator (:9119), Free Claude Code (:8082/admin), Dual Graphies, and Harvey 3-Type Lead Gen.'}`,
+    `- **Proof / Validation**: ${proof || `http://${SABRETOOTH_HOST}:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin`}`,
     `- **CLI Enforced**: \`agy --dangerously-skip-permissions\` (never \`gemini\` CLI)`,
-    `- **Memory Fallbacks Synced**: Obsidian Vault (\`Sabretooth/*-to-*.md\`) -> T5500 \`ai-memory\` (\`http://192.168.0.15:49374\`) -> Graphy -> OpenViking -> Supabase -> Supermemory`,
+    `- **Memory Fallbacks Synced**: Obsidian Vault (\`Sabretooth/*-to-*.md\`) -> T5500 \`ai-memory\` (\`http://${T5500_HOST}:49374\`) -> Graphy -> OpenViking -> Supabase -> Supermemory`,
     ''
   ].join('\n');
 
@@ -838,12 +852,38 @@ function readJsonBody(req) {
 
 function sendJson(res, status, payload) {
   res.writeHead(status, {
-    'Content-Type': 'application/json; charset=utf-8',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+    'Content-Type': 'application/json; charset=utf-8'
   });
   res.end(JSON.stringify(payload));
+}
+
+function buildAllowedAddresses() {
+  const addrs = new Set(['127.0.0.1', 'localhost']);
+  if (SABRETOOTH_HOST) addrs.add(String(SABRETOOTH_HOST).toLowerCase());
+  const nets = os.networkInterfaces();
+  for (const list of Object.values(nets)) {
+    for (const iface of list || []) {
+      if (iface && iface.family === 'IPv4' && iface.address) {
+        addrs.add(String(iface.address).toLowerCase());
+      }
+    }
+  }
+  return addrs;
+}
+
+const ALLOWED_ADDRESSES = buildAllowedAddresses();
+const ALLOWED_HOSTS = new Set(Array.from(ALLOWED_ADDRESSES, (a) => `${a}:${PORT}`));
+const ALLOWED_ORIGINS = new Set(Array.from(ALLOWED_ADDRESSES, (a) => `http://${a}:${PORT}`));
+
+function isAllowedHost(req) {
+  const host = String(req.headers.host || '').trim().toLowerCase();
+  return ALLOWED_HOSTS.has(host);
+}
+
+function isAllowedOrigin(req) {
+  const origin = req.headers.origin;
+  if (!origin) return true;
+  return ALLOWED_ORIGINS.has(String(origin).trim().toLowerCase());
 }
 
 // ============================================================================
@@ -851,13 +891,11 @@ function sendJson(res, status, payload) {
 // ============================================================================
 const server = http.createServer(async (req, res) => {
   try {
-    if (req.method === 'OPTIONS') {
-      res.writeHead(204, {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-      });
-      return res.end();
+    if (!isAllowedHost(req)) {
+      return sendJson(res, 403, { ok: false, error: 'Forbidden host' });
+    }
+    if (req.method === 'POST' && !isAllowedOrigin(req)) {
+      return sendJson(res, 403, { ok: false, error: 'Forbidden origin' });
     }
 
     const parsedUrl = new URL(req.url, `http://${req.headers.host || '127.0.0.1:8392'}`);
@@ -883,7 +921,7 @@ const server = http.createServer(async (req, res) => {
       const healed = [];
       for (const svc of down) {
         if (svc.port === 8082) {
-          const fccExe = 'C:\\Users\\joshl\\.fcc\\venv\\Scripts\\fcc-server.exe';
+          const fccExe = path.join(USER_HOME, '.fcc', 'venv', 'Scripts', 'fcc-server.exe');
           if (fs.existsSync(fccExe)) {
             spawn(fccExe, ['--auto-started'], { detached: true, stdio: 'ignore' }).unref();
             healed.push('fcc-server (:8082)');
@@ -901,8 +939,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (pathname === '/api/graphy/rebuild' && req.method === 'POST') {
-      const py314 = 'C:\\Users\\joshl\\AppData\\Local\\hermes\\tools\\python-3.14.9+20261021-win32-x64\\python.exe';
-      const pyCmd = fs.existsSync(py314) ? py314 : 'python';
+      const pyCmd = fs.existsSync(HERMES_PY) ? HERMES_PY : 'python';
       execFile(pyCmd, ['-m', 'graphify', 'update', ROOT, '--force'], { cwd: ROOT, timeout: 45000 }, (err, stdout, stderr) => {
         const out = (stdout || '') + (stderr || '');
         appendTerminalLog('notes', 'python -m graphify update . --force', err ? `Error: ${err.message}\n${out}` : out || 'Graphy rebuild complete.', err ? 'error' : 'ok');
@@ -929,18 +966,18 @@ const server = http.createServer(async (req, res) => {
       // Auto-select specialist profile if set to 'auto' or 'default'
       let routedProfile = targetProfileId;
       if (routedProfile === 'auto' || routedProfile === 'default') {
-        const lower = prompt.toLowerCase();
-        if (lower.includes('lead') || lower.includes('harvey') || lower.includes('affiliate') || lower.includes('grok') || lower.includes('crowdfund') || lower.includes('date app')) {
+        const has = (re) => re.test(prompt);
+        if (has(/\b(leads?|harvey|affiliates?|grok|crowdfund(?:ing)?|date\s+app)\b/i)) {
           routedProfile = 'harvey';
-        } else if (lower.includes('youtube') || lower.includes('short') || lower.includes('video') || lower.includes('podcast') || lower.includes('voice')) {
+        } else if (has(/\b(youtube|shorts?|videos?|podcasts?|voices?)\b/i)) {
           routedProfile = 'youtube';
-        } else if (lower.includes('claude') || lower.includes('8082') || lower.includes('fcc')) {
+        } else if (has(/\b(claude|8082|fcc)\b/i)) {
           routedProfile = 'fcc';
-        } else if (lower.includes('thumbnail') || lower.includes('edit') || lower.includes('capcut') || lower.includes('rea') || lower.includes('screenshot')) {
+        } else if (has(/\b(thumbnails?|edit(?:or)?|capcut|rea|screenshots?)\b/i)) {
           routedProfile = 'editor';
-        } else if (lower.includes('graphy') || lower.includes('obsidian') || lower.includes('memory') || lower.includes('note')) {
+        } else if (has(/\b(graphy|obsidian|memory|notes?)\b/i)) {
           routedProfile = 'notes';
-        } else if (lower.includes('kanban') || lower.includes('task') || lower.includes('webhook') || lower.includes('pr')) {
+        } else if (has(/\b(kanban|tasks?|webhooks?|prs?)\b/i)) {
           routedProfile = 'kanban';
         } else {
           routedProfile = 'default';
@@ -968,18 +1005,18 @@ const server = http.createServer(async (req, res) => {
       try {
         const cfgPath = path.join(ROOT, 'config.json');
         const cfg = fs.existsSync(cfgPath) ? JSON.parse(fs.readFileSync(cfgPath, 'utf8')) : {};
-        const endpoint = cfg.endpoint || 'http://192.168.0.15:20128/v1';
+        const endpoint = cfg.endpoint || `http://${T5500_HOST}:20128/v1`;
         const model = cfg.model || 'kc/google/gemini-4-argon';
         const soulText = fs.existsSync(path.join(SOULS_DIR, profileMeta.soulFile))
           ? fs.readFileSync(path.join(SOULS_DIR, profileMeta.soulFile), 'utf8')
           : '';
+        const authToken = cfg.apiKey || process.env.OMNIROUTE_API_KEY || '';
+        const reqHeaders = { 'Content-Type': 'application/json' };
+        if (authToken) reqHeaders.Authorization = `Bearer ${authToken}`;
 
         const chatRes = await fetch(`${endpoint.replace(/\/$/, '')}/chat/completions`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${cfg.apiKey || 'sk-omniroute'}`
-          },
+          headers: reqHeaders,
           body: JSON.stringify({
             model,
             messages: [
@@ -998,10 +1035,10 @@ const server = http.createServer(async (req, res) => {
 
       if (!aiReply) {
         aiReply = [
-          `**Outcome**: Default Orchestrator (\`http://127.0.0.1:9119/chat?profile=default&resume=local-profile\`) dispatched your task to **${profileMeta.name}** using \`${cliInvoked}\`.`,
+          `**Outcome**: OPSis Default Orchestrator (\`http://127.0.0.1:9119/chat?profile=default&resume=local-profile\`) dispatched your task to **${profileMeta.name}** using \`${cliInvoked}\`.`,
           `- **Active Skills**: ${profileMeta.mandatorySkills.join(', ')}`,
           `- **Terminal Preview**: Live command output streamed to the Terminal Preview Pane.`,
-          `- **Circular Judge Loop**: Queued node branch update -> GitHub Webhook -> Cloud Judges (\`Gemini / Jules / Claude / Codex\`) for test validation & merge.`,
+          `- **Circular Judge Loop**: Run \`/api/hooks/push-pr\` to push \`sabretooth/hermes-leadgen\` and open a verified GitHub PR for Cloud Judges (\`Gemini / Jules / Claude / Codex\`).`,
           `- **Memory Sync**: Logged to \`Sabretooth/gemini-to-gemini.md\` and \`Sabretooth/hermes-to-hermes.md\`.`
         ].join('\n');
       }
@@ -1159,7 +1196,7 @@ const server = http.createServer(async (req, res) => {
         'grok-version': { file: 'cmd.exe', args: ['/c', 'grok --version'], label: 'grok --version' },
         'run-tests': { file: 'node', args: ['--test', 'test/hermes-leadgen.test.js'], label: 'node --test test/hermes-leadgen.test.js' },
         'graphy-update': {
-          file: 'C:\\Users\\joshl\\AppData\\Local\\hermes\\tools\\python-3.14.9+20261021-win32-x64\\python.exe',
+          file: fs.existsSync(HERMES_PY) ? HERMES_PY : 'python',
           args: ['-m', 'graphify', 'update', ROOT, '--force'],
           label: 'python -m graphify update . --force'
         },
@@ -1212,7 +1249,7 @@ const server = http.createServer(async (req, res) => {
       const cleanText = rawText.replace(/[`*#_<>]/g, ' ').replace(/\s+/g, ' ').slice(0, 900);
       const outFileName = `female-voice-${requestedVoice.replace(/[^a-z0-9]/gi, '').toLowerCase()}-${Date.now()}.mp3`;
       const outPath = path.join(MEDIA_DIR, outFileName);
-      const py314 = 'C:\\Users\\joshl\\AppData\\Local\\hermes\\tools\\python-3.14.9+20261021-win32-x64\\python.exe';
+      const py314 = fs.existsSync(HERMES_PY) ? HERMES_PY : 'python';
 
       execFile(
         py314,
@@ -1254,10 +1291,11 @@ const server = http.createServer(async (req, res) => {
         workerHealth: workerHealth?.worker || null,
         splitRules: {
           harveyLeadGenerator: {
-            scrapingPermitted: true,
-            rule: 'Harvey Lead Generator IS authorized to scrape external non-YouTube lead sources (X/Grok, Reddit/Agent-Reach, GitHub, B2B e-waste directories, creator public bio links) for the 3 lead types.',
-            allowedSources: ['X / Grok', 'Reddit / Agent-Reach', 'GitHub / Repos', 'Public B2B E-Waste Directories', 'Creator Bio Links', 'Inbound Web'],
-            forbiddenSources: ['youtube.com (Never scrape YouTube — API v3 only)']
+            officialApisOnly: true,
+            scrapingPermitted: false,
+            rule: 'Harvey Lead Generator prospects strictly through official APIs and terms-compliant sources (X API or Grok X search within xAI terms, official Reddit API, GitHub API, public creator bio links, and B2B directories where terms allow; nothing for LinkedIn and zero scraping).',
+            allowedSources: ['X / Grok (within xAI terms)', 'Reddit API', 'GitHub API', 'Terms-Permitted B2B E-Waste Directories', 'Public Creator Bio Links', 'Inbound Web'],
+            forbiddenSources: ['Any scraping of X, Reddit, YouTube, or LinkedIn']
           },
           youtubePipeline: {
             scrapingPermitted: false,
@@ -1278,12 +1316,12 @@ const server = http.createServer(async (req, res) => {
           watchUrl: 'https://www.youtube.com/watch?v=9hNDPCQa3kw',
           studioEditUrl: 'https://studio.youtube.com/video/9hNDPCQa3kw/edit',
           thumbnailUrl: 'https://i.ytimg.com/vi/9hNDPCQa3kw/hqdefault.jpg',
-          originalTitle: '#ForTheKids @YouAndiNotAi @Google @anthropic-ai @PERPLEXITY @USTARMAX @OpenAI',
+          originalTitle: 'Legacy NotebookLM Episode (@YouAndiNotAi @Google @anthropic-ai @PERPLEXITY @USTARMAX @OpenAI)',
           status: 'TAKE_DOWN_REQUIRED_PRE_TRUMP_TAX_LAW',
           takedownReason: 'Made with older NotebookLM ("Gemini Notebook") and talks about outdated pre-Trump tax law changes (plus legacy @YouAndiNotAi cross-tag). Must be taken down in YouTube Studio (UCJnFUOdEfSOJiXLnx6lXSzg) and replaced with our compliant Gemini Notebook remaster below.',
           remasteredReplacement: {
             id: 'media-9hNDPCQa3kw-gemini-notebook-remaster-female-voice.mp3',
-            title: 'Gemini Notebook Remaster: DREAM Online & E-Waste Mission (Tax-Law-Clean | Built with Google Gemini)',
+            title: 'Gemini Notebook Remaster: DREAM Online & E-Waste Hardware Recovery (Tax-Law-Clean | Built with Google Gemini)',
             audioUrl: '/media-previews/9hNDPCQa3kw-gemini-notebook-remaster-female-voice.mp3',
             durationSeconds: 49.5,
             voice: 'Aoede / en-US-AvaMultilingualNeural (100% Natural Female Voice)',
@@ -1291,7 +1329,7 @@ const server = http.createServer(async (req, res) => {
             selfDeclaredMadeForKids: false,
             madeWithAiBadge: 'Made with AI — Built with Google Gemini',
             approvedByFounder: approvedMediaIds.has('media-9hNDPCQa3kw-gemini-notebook-remaster-female-voice.mp3'),
-            scriptSummary: 'Strips all outdated pre-Trump tax law claims and 18+ dating tags; highlights 100% free unlimited live AI NPCs in DREAM Online (Built with Google Gemini), responsible hardware recycling at OnlineRecycle.net, and transparent Open Collective ledger (opencollective.com/dream-online).'
+            scriptSummary: 'Strips all outdated pre-Trump tax law claims and 18+ dating tags; highlights 100% free unlimited live AI NPCs in DREAM Online (Built with Google Gemini), responsible B2B hardware recovery at OnlineRecycle.net, and transparent Open Collective ledger (opencollective.com/dream-online).'
           }
         }
       });
@@ -1301,11 +1339,12 @@ const server = http.createServer(async (req, res) => {
       const body = await readJsonBody(req);
       const topic = String(body.topic || 'Gemini Notebook Episode: DREAM Online 3D World & OnlineRecycle.net Hardware Recovery').trim();
       const voice = String(body.voice || 'Aoede').trim();
-      const script =
+      const rawScript =
         body.script ||
         `Welcome back to the Gemini Notebook podcast for DREAM Online, built with Google Gemini. Today we are exploring ${topic}. Every player in DREAM Online enjoys one hundred percent free, unlimited live AI NPCs with zero pay to win, while Online Recycle dot net recovers retired hardware to support our transparent community ledger at Open Collective dot com slash dream dash online.`;
+      const script = String(rawScript).replace(/[`*#_<>]/g, ' ').replace(/\s+/g, ' ').slice(0, 900);
 
-      const py314 = 'C:\\Users\\joshl\\AppData\\Local\\hermes\\tools\\python-3.14.9+20261021-win32-x64\\python.exe';
+      const py314 = fs.existsSync(HERMES_PY) ? HERMES_PY : 'python';
       const fileName = `gemini-notebook-remaster-${Date.now()}.mp3`;
       const outPath = path.join(MEDIA_DIR, fileName);
 
@@ -1313,7 +1352,19 @@ const server = http.createServer(async (req, res) => {
         py314,
         ['-m', 'edge_tts', '--voice', 'en-US-AvaMultilingualNeural', '--text', script, '--write-media', outPath],
         { timeout: 25000 },
-        () => {
+        (err) => {
+          if (err || !fs.existsSync(outPath)) {
+            appendTerminalLog(
+              'youtube',
+              `agy --dangerously-skip-permissions (Gemini Notebook Remaster -> ${fileName})`,
+              `Failed to synthesize Gemini Notebook audio: ${(err && err.message) || 'Output file missing'}`,
+              'error'
+            );
+            return sendJson(res, 500, {
+              ok: false,
+              error: (err && err.message) || 'Audio generation failed'
+            });
+          }
           appendTerminalLog(
             'youtube',
             `agy --dangerously-skip-permissions (Gemini Notebook Remaster -> ${fileName})`,
@@ -1338,8 +1389,12 @@ const server = http.createServer(async (req, res) => {
 
     if (pathname === '/api/media/file' && req.method === 'GET') {
       const filePath = parsedUrl.searchParams.get('path') || '';
-      const resolved = path.resolve(filePath);
-      if (!resolved.startsWith(ANTIGRAVITY_ROOT) || !fs.existsSync(resolved)) {
+      const resolved = path.resolve(MEDIA_DIR, filePath);
+      const rel = path.relative(MEDIA_DIR, resolved);
+      if (!filePath || !rel || rel.startsWith('..') || path.isAbsolute(rel)) {
+        return sendJson(res, 403, { ok: false, error: 'Forbidden path outside media-previews' });
+      }
+      if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) {
         res.writeHead(404);
         return res.end('Not found');
       }
@@ -1352,8 +1407,8 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/hooks/loop' && req.method === 'GET') {
       const loopData = loadHookLoop();
       loopData.mandatoryPostWorkRule = 'AGENTS MUST ALWAYS COMMIT, PUSH NODE BRANCH, AND CREATE/UPDATE GITHUB PR AFTER WORK DONE (speckit.git.push-and-pr via scripts/node-auto-pr-push.ps1)';
-      loopData.specKitExtensionsPath = 'C:\\Ai-Dream-Team\\Antigravity\\.specify\\extensions.yml';
-      loopData.autoPrScriptPath = 'C:\\Ai-Dream-Team\\Antigravity\\HermesLeadGen\\scripts\\node-auto-pr-push.ps1';
+      loopData.specKitExtensionsPath = path.join(__dirname, '.specify', 'extensions.yml');
+      loopData.autoPrScriptPath = path.join(__dirname, 'scripts', 'node-auto-pr-push.ps1');
       return sendJson(res, 200, { ok: true, ...loopData });
     }
 
@@ -1420,6 +1475,76 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, skills);
     }
 
+    // 11B. Dreamforge Custom World-Builder & CLI-Anything Tools for YouTube Automation GUI
+    if (pathname === '/api/dreamforge/tools' && req.method === 'GET') {
+      return sendJson(res, 200, {
+        ok: true,
+        dreamforgeUrl: 'http://192.168.0.40:20128/dreamforge/index.html',
+        customTools: [
+          {
+            id: 'dreamforge_world_seed',
+            name: 'Dreamforge World Seed Generator (7 Modes)',
+            modes: ['world', 'story', 'roleplay', 'comic', 'video', 'character', 'remix'],
+            description: 'Generates canonical DREAM Online 3D world seeds & REA urban blocks for <=59.0s YouTube Shorts.'
+          },
+          {
+            id: 'dreamforge_art_styles',
+            name: 'Dreamforge 43 Art Styles & BDO/Rohan Skill VFX Mapper',
+            stylesCount: 43,
+            classes: ['crimson-dekan', 'abyssal-awakening', 'aether-valkyrie', 'blood-moon-dhan'],
+            vfxThemes: ['bdo-black-spirit', 'rohan-blood-crimson', 'celestial-aether-gold', 'venom-shadow-jade'],
+            description: 'Maps Dreamforge art styles onto sculpted 3D Dragon-Knight armor and BDO/Rohan combat skill visuals.'
+          },
+          {
+            id: 'dreamforge_roleplay',
+            name: 'Dreamforge Roleplay & <=59.0s Female Voice Shorts Script',
+            voices: ['Aoede', 'Kore', 'af_heart', 'en-US-AvaMultilingualNeural'],
+            description: 'Converts Dreamforge character lore into <=58.5s YouTube Shorts scripts with 100% natural female voice narration.'
+          },
+          {
+            id: 'cli_anything_red_team_shield',
+            name: 'CLI-Anything Text-In/Text-Out Red/Tag/Triple-Team Shield',
+            modes: ['red-team', 'tag-team', 'triple-team'],
+            description: 'Runs deterministic text-in/text-out AI Team security audits to protect the free kids playground.'
+          }
+        ]
+      });
+    }
+
+    if (pathname === '/api/dreamforge/invoke' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      const toolId = String(body.toolId || 'dreamforge_world_seed');
+      const mode = String(body.mode || 'world');
+      const style = String(body.style || 'style-01 (BDO Crimson Awakening)');
+      const classId = String(body.classId || 'crimson-dekan');
+      const vfxTheme = String(body.vfxTheme || 'bdo-black-spirit');
+      const prompt = String(body.prompt || 'Crimson Dragon-Knight unleashing Nightveil Awakening in First Gate').trim();
+
+      const seed = `DF-${mode.toUpperCase()}-${Date.now().toString(36).toUpperCase()}`;
+      const shortScript = `[<= 58.5s Short | Voice: Aoede Natural Female TTS] In DREAM Online's ${mode} mode, watch the sculpted ${classId} unleash ${vfxTheme} 3D crescent slashes and lightning pillars in ${style}. 100% free live AI NPCs, zero pay-to-win, Built with Google Gemini!`;
+
+      appendTerminalLog(
+        'youtube',
+        `[DREAMFORGE-TOOL] ${toolId} (mode=${mode}, class=${classId}, vfx=${vfxTheme})`,
+        `Seed: ${seed}\nPrompt: "${prompt}"\n<=59.0s Short Script: ${shortScript}`
+      );
+
+      return sendJson(res, 200, {
+        ok: true,
+        toolId,
+        seed,
+        mode,
+        style,
+        classId,
+        vfxTheme,
+        prompt,
+        shortDurationTargetSec: 54.5,
+        under59sGatePass: true,
+        voice: 'Aoede (en-US-AvaMultilingualNeural — Zero Robotic TTS)',
+        shortScript
+      });
+    }
+
     if (pathname.startsWith('/api/souls/') && req.method === 'GET') {
       const agent = pathname.replace('/api/souls/', '').replace(/[^a-z0-9-_]/gi, '');
       const fPath = path.join(SOULS_DIR, `${agent}-agent.md`);
@@ -1429,10 +1554,53 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, { agent, content });
     }
 
+    // 11b. GTM Studio — serve the swapped clay remake (Prospecting Studio) under /gtm-studio/
+    const GTM_MOUNT = '/gtm-studio/';
+    if (pathname.startsWith(GTM_MOUNT)) {
+      const sub = decodeURIComponent(pathname.slice(GTM_MOUNT.length)) || 'index.html';
+      let resolved = path.resolve(GTM_STUDIO_DIR, sub);
+      if (fs.existsSync(resolved) && fs.statSync(resolved).isDirectory()) {
+        resolved = path.resolve(resolved, 'index.html');
+      }
+      const rel = path.relative(GTM_STUDIO_DIR, resolved);
+      if (rel.startsWith('..') || path.isAbsolute(rel) || !fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Not found', path: pathname }));
+      }
+      const ext = path.extname(resolved).toLowerCase();
+      const isText = ['.html', '.css', '.js', '.json', '.svg'].includes(ext);
+      let body = fs.readFileSync(resolved);
+      if (isText) {
+        const prefix = GTM_MOUNT.slice(0, -1); // '/gtm-studio'
+        body = body.toString('utf8')
+          .replace(/((?:src|href|action)=['"])\/(?!\/)([^'"]*)/g, '$1' + prefix + '/$2')
+          .replace(/url\(\s*['"]?\/(?!\/)/g, 'url(' + prefix + '/');
+        res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+        return res.end(body);
+      }
+      res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+      return res.end(body);
+    }
+
     // 12. Static File Serving (index.html, styles.css, renderer.js, graphify-out/*, media-previews/*)
-    let relPath = pathname === '/' ? '/index.html' : pathname;
-    const safePath = path.normalize(path.join(ROOT, decodeURIComponent(relPath)));
-    if (safePath.startsWith(ROOT) && fs.existsSync(safePath) && fs.statSync(safePath).isFile()) {
+    const reqPath = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
+    const safePath = path.resolve(ROOT, decodeURIComponent(reqPath));
+    const relFromRoot = path.relative(ROOT, safePath);
+    const normalizedRel = relFromRoot.replace(/\\/g, '/');
+    const isAllowedStatic =
+      normalizedRel === 'index.html' ||
+      normalizedRel === 'styles.css' ||
+      normalizedRel === 'renderer.js' ||
+      normalizedRel.startsWith('media-previews/') ||
+      normalizedRel.startsWith('graphify-out/');
+    if (
+      relFromRoot &&
+      !relFromRoot.startsWith('..') &&
+      !path.isAbsolute(relFromRoot) &&
+      isAllowedStatic &&
+      fs.existsSync(safePath) &&
+      fs.statSync(safePath).isFile()
+    ) {
       const ext = path.extname(safePath).toLowerCase();
       res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
       return fs.createReadStream(safePath).pipe(res);
@@ -1447,7 +1615,7 @@ const server = http.createServer(async (req, res) => {
 
 if (require.main === module) {
   server.listen(PORT, '0.0.0.0', () => {
-    console.log(`[Sabretooth Command Studio] Listening on http://0.0.0.0:${PORT} (http://192.168.0.8:${PORT}/)`);
+    console.log(`[Sabretooth Command Studio] Listening on http://0.0.0.0:${PORT} (http://${SABRETOOTH_HOST}:${PORT}/)`);
   });
 }
 

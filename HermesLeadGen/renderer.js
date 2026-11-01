@@ -8,7 +8,8 @@ function escapeHtml(str) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 // ============================================================================
@@ -92,6 +93,8 @@ async function playNaturalFemaleVoice(textToSpeak) {
       if (statusLabel) {
         statusLabel.textContent = `Playing Natural Female Voice: ${data.voiceRequested} (${data.neuralVoiceUsed}) — Zero Robotic TTS`;
       }
+    } else if (statusLabel) {
+      statusLabel.textContent = data.error || 'Natural Female Audio Ready';
     }
   } catch (err) {
     if (statusLabel) statusLabel.textContent = 'Natural Female Audio Ready';
@@ -154,8 +157,11 @@ document.getElementById('btn-voice-mic')?.addEventListener('click', () => {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const btn = document.getElementById('btn-voice-mic');
   const input = document.getElementById('orchestrator-input');
+  const statusLabel = document.getElementById('tts-status-label');
   if (!SpeechRecognition) {
-    input.value = 'Remaster our Gemini Notebook video 9hNDPCQa3kw with natural female voice Aoede and prospect 3 Harvey leads';
+    if (statusLabel) {
+      statusLabel.textContent = 'Voice microphone input requires a Chromium browser with Web Speech STT enabled.';
+    }
     return;
   }
   const rec = new SpeechRecognition();
@@ -250,7 +256,7 @@ async function refreshMediaPreviews() {
                 Gate: <code>${escapeHtml(m.duration)}</code><br/>
                 Voice: <code>${escapeHtml(m.voice)}</code>
               </div>
-              <button class="btn btn-sm ${m.approved ? 'btn-green' : 'btn-amber'}" onclick="approveMediaAsset('${escapeHtml(m.id)}')">
+              <button class="btn btn-sm ${m.approved ? 'btn-green' : 'btn-amber'}" data-approve-media="${escapeHtml(m.id)}">
                 ${m.approved ? '✅ APPROVED BY FOUNDER FOR PUBLISH' : '👍 Click to Approve Content (Required Before Publish)'}
               </button>
             </div>`;
@@ -276,6 +282,18 @@ window.approveMediaAsset = async function (id) {
   await refreshMediaPreviews();
   await refreshTerminalLogs();
 };
+
+document.addEventListener('click', (e) => {
+  const mediaBtn = e.target.closest?.('[data-approve-media]');
+  if (mediaBtn) {
+    window.approveMediaAsset(mediaBtn.getAttribute('data-approve-media'));
+    return;
+  }
+  const leadBtn = e.target.closest?.('[data-approve-lead]');
+  if (leadBtn) {
+    window.approveHarveyLead(leadBtn.getAttribute('data-approve-lead'));
+  }
+});
 
 document.getElementById('btn-refresh-media')?.addEventListener('click', refreshMediaPreviews);
 
@@ -412,7 +430,7 @@ document.getElementById('btn-trigger-hook-loop')?.addEventListener('click', asyn
         profile: 'default',
         source: 'sabretooth-gui-8392',
         repo: 'Trollz1004/ANTIGRAVITY',
-        summary: 'Mandatory Post-Work Auto-Commit, Branch Push (sabretooth/auto-pr-sync) & GitHub PR Creation for Cloud Judges (Gemini / Jules / Claude / Codex).'
+        summary: 'Mandatory Post-Work Auto-Commit, Branch Push (sabretooth/hermes-leadgen) & GitHub PR Creation for Cloud Judges (Gemini / Jules / Claude / Codex).'
       })
     });
     await refreshHookLoop();
@@ -436,7 +454,7 @@ document.getElementById('btn-kanban-sync')?.addEventListener('click', async () =
 });
 
 // ============================================================================
-// 8. TAB 5: HARVEY 3-TYPE LEAD GEN (SCRAPING + 3 SPECIFIC LEAD TYPES)
+// 8. TAB 5: HARVEY 3-TYPE LEAD GEN (OFFICIAL API PROSPECTING + 3 SPECIFIC LEAD TYPES)
 // ============================================================================
 async function refreshHarveyLeads() {
   try {
@@ -470,7 +488,7 @@ async function refreshHarveyLeads() {
           <div class="lead-card-header">
             <div>
               <div class="lead-name">${escapeHtml(l.name)}</div>
-              <div style="font-size:16px;color:#93c5fd">Handle: <code>${escapeHtml(l.handle)}</code> | Scraped Source: <strong>${escapeHtml(l.source)}</strong></div>
+              <div style="font-size:16px;color:#93c5fd">Handle: <code>${escapeHtml(l.handle)}</code> | Prospected Source: <strong>${escapeHtml(l.source)}</strong></div>
             </div>
             <span class="badge-green">Score: ${escapeHtml(l.score)}</span>
           </div>
@@ -486,7 +504,7 @@ async function refreshHarveyLeads() {
             <span style="font-size:16px;font-weight:700;color:${l.approved ? '#10b981' : '#fbbf24'}">
               Status: ${escapeHtml(l.status)}
             </span>
-            <button class="btn btn-sm btn-green" onclick="approveHarveyLead('${escapeHtml(l.id)}')">
+            <button class="btn btn-sm btn-green" data-approve-lead="${escapeHtml(l.id)}">
               ${l.approved ? '✅ Approved by Founder' : '👍 Approve Lead for Dispatch'}
             </button>
           </div>
@@ -583,8 +601,8 @@ async function triggerObsidianSync() {
     body: JSON.stringify({
       agent: 'gemini',
       useCase: 'Sabretooth :8392 Separated-Tabs Studio + :8391/health Rules + YouTube Studio UCJnFUOdEfSOJiXLnx6lXSzg + Gemini Notebook 9hNDPCQa3kw Remaster + Natural Female Voice',
-      summary: 'Separated :8392 into 9 dedicated single-purpose tabs, banned robotic Windows SAPI/speechSynthesis in favor of server-side Natural Neural Female Voice (Aoede/AvaNeural), updated :8391/health with explicit Harvey Scraping vs YouTube API-Only + Made-with-AI rules, and built Gemini Notebook remaster for 9hNDPCQa3kw.',
-      proof: 'http://192.168.0.8:8392/ | http://127.0.0.1:8391/health | https://studio.youtube.com/channel/UCJnFUOdEfSOJiXLnx6lXSzg'
+      summary: 'Separated :8392 into 9 dedicated single-purpose tabs, banned robotic Windows SAPI/speechSynthesis in favor of server-side Natural Neural Female Voice (Aoede/AvaNeural), updated :8391/health with Official API Prospecting + YouTube Data API v3 Made-with-AI rules, and built Gemini Notebook remaster for 9hNDPCQa3kw.',
+      proof: 'http://127.0.0.1:8392/ | http://127.0.0.1:8391/health | https://studio.youtube.com/channel/UCJnFUOdEfSOJiXLnx6lXSzg'
     })
   });
   await res.json();
