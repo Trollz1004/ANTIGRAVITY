@@ -130,7 +130,7 @@
   ],
   "opsis_24x7_stream_gate": {
     "stream_name": "OPSis / Jarvis 24/7 Mission Control Live Stream",
-    "enabled": false,
+    "enabled": true,
     "public_dao_wallet_tracking": false,
     "onlinerecycle_ai_intake_verified": false,
     "dream_online_mtx_verified": false,

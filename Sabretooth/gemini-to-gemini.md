@@ -93,3 +93,85 @@ Primary memory layer for Google Gemini (Gemini 4 High Reasoning / GM #1 Marketin
 - **Proof / Validation**: http://192.168.0.8:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
 - **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
 - **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://192.168.0.15:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-10-30 03:31 EDT | node: Sabretooth (192.168.0.8) | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes OPSis session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://192.168.0.8:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://192.168.0.15:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-10-30 03:32 EDT | node: Sabretooth (192.168.0.8) | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes OPSis session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://192.168.0.8:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://192.168.0.15:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-10-30 03:51 EDT | node: Sabretooth (192.168.0.8) | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes OPSis session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://192.168.0.8:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://192.168.0.15:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-10-29 23:52 -04:00 | node: Sabretooth | agent: gemini | use case: Fenced Worktree PR #322 (sabretooth/hermes-leadgen) & Issue #321 Update
+- **Summary**: Fenced C:\Ai-Dream-Team\Antigravity with .gitignore, created external worktree C:\Ai-Dream-Team\_pr-worktree on branch sabretooth/hermes-leadgen parented onto origin/main (c5a47ee), copied 23 explicit apps/hermes-leadgen/ files (excluding graph.json, GRAPH_REPORT.md, and sabretooth_opsis_worker.mjs), renamed Jarvis -> OPSis, stripped all C:\Users\ and LAN IP literals, passed 7/7 TDD tests + scripts/doctrine/doctrine-check.py + .githooks/pre-commit, authenticated gh CLI via device flow (keyring), pushed sabretooth/hermes-leadgen (4ed4f07), opened PR #322, and posted PR #322 on issue #321.
+- **Proof / Validation**: https://github.com/Trollz1004/ANTIGRAVITY/pull/322 | https://github.com/Trollz1004/ANTIGRAVITY/issues/321#issuecomment-6514523013 | Commit 4ed4f07
+
+## 2026-10-30 20:38 UTC | node: Sabretooth | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes OPSis session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://127.0.0.1:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://localhost:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-10-30 20:39 UTC | node: Sabretooth | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes OPSis session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://127.0.0.1:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://localhost:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-10-30 21:02 UTC | node: Sabretooth | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes OPSis session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://127.0.0.1:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://localhost:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-10-30 21:03 UTC | node: Sabretooth | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes OPSis session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://127.0.0.1:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://localhost:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-10-30 21:14 UTC | node: Sabretooth | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes OPSis session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://127.0.0.1:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) + Git (`git wins over everything`)
+
+## 2026-10-31 02:04 -04:00 | node: Sabretooth (192.168.0.8) | agent: gemini | use case: Founder 2026-10-30 Directive Execution (PR #323 Merged, Integrity Issues Closed, OpenUI/SEO Skills Synced, Natural Female Voice Short Staged)
+- **Summary**: Merged PR #323 (`fix/318-node-paths` -> `main`, commit `7fe53f436fd52d01c571a8ae98b01d640f0e02f6`, 22/22 CI checks green) alongside already-merged PR #322 (`8f74582`) and PR #320 (`4182888`) on `Trollz1004/ANTIGRAVITY`; verified all 5 protected Hermes file SHA-256 hashes on `origin/main` and closed issues `#318`, `#319`, `#321`, `#324`, `#325`, `#326`, and `#330` (zero open issues remaining on `Trollz1004/ANTIGRAVITY`); opened PR #54 (`agy-handoffs-2026-10-30`) on `Trollz1004/dream-online`; synced `openui` (`@openuidev/*`) and `seo` (`claude-seo` v2.5.0) across `.agents/skills/`, `.claude/skills/`, `.codex/skills/`, `C:\Users\joshl\.gemini\skills\`, and `HermesLeadGen/skills.json`; verified T5500 (`KRAKKEN@T5500`) SSH public key in `authorized_keys` and `administrators_authorized_keys` on Sabretooth (`.8`); verified `DarLink AI` (`context: date_app_verified_18_only`) isolation in `affiliate-partners.json`; and staged natural female voice (`Aoede / en-US-AvaMultilingualNeural`, `containsSyntheticMedia: true`, `<= 59.0s`) YouTube Short preview (`media-gemini-notebook-remaster-1793426529591.mp3`) on `:8392` for Founder one-click approval.
+- **Proof / Validation**: `https://github.com/Trollz1004/ANTIGRAVITY/pull/323` (`MERGED` at `7fe53f4`) | `https://github.com/Trollz1004/dream-online/pull/54` | `http://127.0.0.1:8392/media-previews/gemini-notebook-remaster-1793426529591.mp3`
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Synced**: Obsidian Vault (`Sabretooth/gemini-to-gemini.md`) + Git (`git wins over everything`)
+
+## 2026-11-01 02:24 UTC | node: Sabretooth | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes OPSis session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://127.0.0.1:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://localhost:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-11-01 02:24 UTC | node: Sabretooth | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes OPSis session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://127.0.0.1:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://localhost:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-11-01 19:38 UTC | node: Sabretooth | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes OPSis session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://127.0.0.1:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://localhost:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory
+
+## 2026-11-01 19:39 UTC | node: Sabretooth | agent: gemini | use case: TDD Automated Memory Verification
+- **Summary**: Verified Sabretooth :8392 GUI, :9119 Hermes OPSis session, :8082 Free Claude Code, Dual Graphies, and Harvey 3-type Lead Gen.
+- **Proof / Validation**: http://127.0.0.1:8392/ + http://127.0.0.1:9119/chat?profile=default&resume=local-profile + http://127.0.0.1:8082/admin
+- **CLI Enforced**: `agy --dangerously-skip-permissions` (never `gemini` CLI)
+- **Memory Fallbacks Synced**: Obsidian Vault (`Sabretooth/*-to-*.md`) -> T5500 `ai-memory` (`http://localhost:49374`) -> Graphy -> OpenViking -> Supabase -> Supermemory

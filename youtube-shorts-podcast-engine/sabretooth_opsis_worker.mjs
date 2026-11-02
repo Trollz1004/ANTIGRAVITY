@@ -37,10 +37,69 @@ export const SABRETOOTH_WORKER_CONFIG = Object.freeze({
   min_target_seconds: 45.0,
   max_short_seconds: 58.5,
   hard_ceiling_seconds: 59.0,
-  allowed_female_voices: Object.freeze(['Aoede', 'Kore', 'af_heart', 'af_bella', 'LFM3-Omni-2B']),
-  banned_tts_engines: Object.freeze(['pyttsx3', 'espeak', 'sapi', 'sam', 'robotic-default']),
-  channels: Object.freeze(['@DreamOnlineMMO', '@UntilNoKidInNeed', '@AIDreamTeamStudio']),
+  allowed_female_voices: Object.freeze([
+    'Aoede',
+    'Kore',
+    'af_heart',
+    'af_bella',
+    'LFM3-Omni-2B',
+    'en-US-AvaMultilingualNeural',
+    'en-US-AriaNeural'
+  ]),
+  banned_tts_engines: Object.freeze([
+    'pyttsx3',
+    'espeak',
+    'sapi',
+    'window.speechsynthesis',
+    'microsoft-david',
+    'microsoft-zira',
+    'sam',
+    'robotic-default'
+  ]),
+  channels: Object.freeze([
+    '@DreamOnlineMMO',
+    '@UntilNoKidInNeed',
+    '@AIDreamTeamStudio',
+    '@FactCheckinYT'
+  ]),
+  youtube_studio_channel_id: 'UCJnFUOdEfSOJiXLnx6lXSzg',
+  youtube_studio_url: 'https://studio.youtube.com/channel/UCJnFUOdEfSOJiXLnx6lXSzg',
   youtube_publish_method: 'youtube-data-api-v3',
+  youtube_made_with_ai_tos: Object.freeze({
+    containsSyntheticMedia: true,
+    selfDeclaredMadeForKids: false,
+    alteredOrSyntheticDisclosure: 'Made with AI — Built with Google Gemini',
+    founderApprovalRequiredOnDashboard: true
+  }),
+  gemini_notebook_remaster_source: Object.freeze({
+    legacyVideoId: '9hNDPCQa3kw',
+    legacyUrl: 'https://www.youtube.com/watch?v=9hNDPCQa3kw',
+    action: 'TAKEDOWN_LEGACY_AND_REMASTER_WITH_GEMINI_NOTEBOOK',
+    takedownReason: 'Legacy NotebookLM video discusses pre-Trump tax law changes; remaster with current 90% taxable / 10% deduction ceiling compliance and 100% natural female voice.',
+    studioUrl: 'https://studio.youtube.com/channel/UCJnFUOdEfSOJiXLnx6lXSzg'
+  }),
+  harvey_scraping_rules: Object.freeze({
+    harvey_scraping_permitted: true,
+    rule_summary: 'Harvey Lead Generator is explicitly permitted to scrape external non-YouTube lead sources (X/Grok, Reddit/Agent-Reach, GitHub, B2B directories, creator bios). YouTube remains strictly Official YouTube Data API v3 ONLY.',
+    allowed_scrape_sources: Object.freeze([
+      'X / Grok',
+      'Reddit / Agent-Reach',
+      'GitHub / Repos',
+      'Public B2B E-Waste Directories',
+      'Creator Public Bio Links',
+      'Inbound Web'
+    ]),
+    forbidden_scrape_targets: Object.freeze([
+      'youtube.com (API v3 ONLY — never scrape YouTube)',
+      'google.com browser-bot scraping'
+    ]),
+    lead_types: Object.freeze([
+      '1-affiliate-dateapp',
+      '2-subscriptions-dateapp',
+      '3-funding-dream-online'
+    ]),
+    founder_approval_required: true
+  }),
   forbidden_automation: Object.freeze(['playwright', 'puppeteer', 'selenium', 'scraper']),
   strike_interval_hours: 4,
   trust_level_max_judges: TRUST_LEVEL_MAX_JUDGES,
@@ -57,7 +116,9 @@ const HANDLE_TO_CHANNEL_ID = new Map([
   ['@UntilNoKidInNeed', 'until-no-kid-in-need'],
   ['until-no-kid-in-need', 'until-no-kid-in-need'],
   ['@AIDreamTeamStudio', 'ai-dream-team-studio'],
-  ['ai-dream-team-studio', 'ai-dream-team-studio']
+  ['ai-dream-team-studio', 'ai-dream-team-studio'],
+  ['@FactCheckinYT', 'until-no-kid-in-need'],
+  ['UCJnFUOdEfSOJiXLnx6lXSzg', 'until-no-kid-in-need']
 ]);
 
 /**
@@ -237,7 +298,12 @@ export async function validateAndPrepareShort(payload = {}) {
       endpoint: 'https://www.googleapis.com/youtube/v3/videos?part=snippet,status',
       operation: 'videos.insert',
       auth: 'OAuth2',
+      studioChannelId: SABRETOOTH_WORKER_CONFIG.youtube_studio_channel_id,
+      studioUrl: SABRETOOTH_WORKER_CONFIG.youtube_studio_url,
       humanApprovalRequired: true,
+      containsSyntheticMedia: true,
+      selfDeclaredMadeForKids: false,
+      madeWithAiDisclosure: 'Made with AI — Built with Google Gemini',
       ...publication
     },
     channelValidation,
