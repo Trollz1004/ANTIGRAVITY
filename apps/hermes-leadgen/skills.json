@@ -1,16 +1,34 @@
 [
   {
     "id": "agent-reach",
-    "name": "Agent-Reach (Multi-Platform Search & Transcripts)",
-    "description": "Terms-compliant read-only research across official X/Grok search, Reddit API, YouTube Data API v3 transcripts, GitHub API, and permitted web sources.",
+    "name": "Agent-Reach (Claude Opus/Fable & Gemini Argon Only — YouTube OFF)",
+    "description": "ONLY Claude (Opus, Fable) and Gemini (Argon) may run agent-reach, never Hermes or a local model. Allowed sources: Reddit, Hacker News, GitHub, and X via official APIs. YouTube source is OFF (youtube: false).",
     "cli": "agy --dangerously-skip-permissions",
+    "allowed_models": ["claude-opus", "claude-fable", "gemini-argon"],
+    "forbidden_runners": ["hermes", "local-model"],
+    "config": {
+      "reddit": true,
+      "hackernews": true,
+      "github": true,
+      "x": true,
+      "youtube": false
+    },
     "mandatory": true
   },
   {
     "id": "last30days",
-    "name": "Last 30 Days Research Skill (last30days)",
-    "description": "Finds high-signal skills, GitHub repos, MCPs, creator threads, and buyer intent from the last 30 days.",
+    "name": "Last 30 Days Research Skill (Claude Opus/Fable & Gemini Argon Only — YouTube OFF)",
+    "description": "ONLY Claude (Opus, Fable) and Gemini (Argon) may run last30days, never Hermes or a local model. Finds 30-day signals on Reddit, Hacker News, GitHub, and X via official APIs. YouTube source is OFF (youtube: false).",
     "cli": "agy --dangerously-skip-permissions",
+    "allowed_models": ["claude-opus", "claude-fable", "gemini-argon"],
+    "forbidden_runners": ["hermes", "local-model"],
+    "config": {
+      "reddit": true,
+      "hackernews": true,
+      "github": true,
+      "x": true,
+      "youtube": false
+    },
     "mandatory": true
   },
   {

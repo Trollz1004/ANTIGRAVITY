@@ -1,0 +1,25 @@
+{
+  "skill": "agent-reach",
+  "allowed_models": [
+    "claude-opus",
+    "claude-fable",
+    "gemini-argon"
+  ],
+  "forbidden_runners": [
+    "hermes",
+    "opsis",
+    "free-claude-code",
+    "ollama",
+    "local"
+  ],
+  "sources": {
+    "reddit": true,
+    "hackernews": true,
+    "github": true,
+    "x": true,
+    "youtube": false
+  },
+  "youtube": false,
+  "youtube_enabled": false,
+  "yt_dlp_enabled": false
+}
