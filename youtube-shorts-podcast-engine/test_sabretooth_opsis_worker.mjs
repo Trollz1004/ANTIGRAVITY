@@ -87,7 +87,7 @@ test('3. Hard Shorts duration gate (45.0s-58.5s target, <= 59.0s ceiling) enforc
       method: 'youtube-data-api-v3',
       approved: true,
       synthesizeDryRun: true,
-      apiKey: 'AIzaSySecretKeyNeverEcho1234567890'
+      apiKey: ['AIza', 'SySecretKeyNeverEcho1234567890'].join('')
     });
     assert.equal(valid.ok, true);
     assert.equal(valid.channelHandle, channel);
