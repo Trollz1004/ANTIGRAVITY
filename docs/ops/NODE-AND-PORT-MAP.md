@@ -16,7 +16,7 @@ Plan for one node until a second one is physically standing up.
 
 **But separate the ROLE from the MACHINE.** The T5500 *node role* is dead — there
 is no live T5500 on this LAN and `192.168.0.8` is Sabretooth. The T5500 *machine*
-is real and owned: dual-Xeon / i7-4960X class, 64 GB RAM, AMD RX 6800 16 GB,
+is real and owned: dual-Xeon / i7-4960X class, 32 GB RAM, AMD RX 6800 16 GB,
 device name `DESKTOP-TQD7EIT`. Joshua has earmarked it as the **DREAM Online
 MMORPG server**, gated behind four things working *and tested* first: Mission
 Control, Date App, customer support, marketing.

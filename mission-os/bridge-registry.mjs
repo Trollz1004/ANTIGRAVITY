@@ -19,7 +19,7 @@ const SABRETOOTH_IP = process.env.SABRETOOTH_IP || ['192', '168', '0', '8'].join
 export const NODES = {
   t5500: { id: 't5500', name: 'T5500 (Master / ECC / Repo / DB)', ip: T5500_IP, isLocal: true },
   alienware: { id: 'alienware', name: 'Alienware (Dev / Studio)', ip: ALIENWARE_IP, isLocal: false },
-  sabretooth: { id: 'sabretooth', name: 'Sabretooth (64GB RAM / 16GB GPU)', ip: SABRETOOTH_IP, isLocal: false },
+  sabretooth: { id: 'sabretooth', name: 'Sabretooth (32GB RAM / 16GB GPU)', ip: SABRETOOTH_IP, isLocal: false },
 };
 
 export const LANES = ['hermes', 'openclaw', 'opencode', 'codex', 'claude', 'agy', 'ollama', 'omniroute'];

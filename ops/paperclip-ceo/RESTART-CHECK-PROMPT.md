@@ -18,7 +18,7 @@ NOT CONFIGURED. A port answering is NOT identity. Check identity where given.
 1. HARDWARE — this is what changed, so confirm it first.
    - GPU name and VRAM. Before the reboot this was a GTX 1070 with 8 GB.
      If the new card is in, say what it is and how much VRAM it reports.
-   - Total RAM. Was 64 GB.
+   - Total RAM. Was 32 GB.
    - List every drive letter with free space. A new SSD can shift letters —
      if anything that used to be C: moved, that is the single most important
      thing to tell Joshua, before anything else in this report.
@@ -88,7 +88,7 @@ Use this to diff. Everything below was true immediately before power-down.
 | Date App backend | `degraded` — db ✓, square ✓, **redis_connected false**, user_count 1 |
 | Public site | `https://youandinotai.com` → 200 |
 | OpenClaw :18789 | DOWN |
-| GPU / RAM | GTX 1070, 8 GB VRAM / 64 GB RAM |
+| GPU / RAM | GTX 1070, 8 GB VRAM / 32 GB RAM |
 | Free space on C: | ~277 GB |
 | HEAD | `1c97b68d`, main, matches origin |
 

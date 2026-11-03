@@ -8,7 +8,7 @@
 > **Separate the ROLE from the MACHINE.** The earlier wording here said flatly
 > "there is no T5500", and that over-corrected. The T5500 *node role* is dead —
 > there is no live T5500 on this LAN and nothing to deploy to. The T5500
-> *hardware* is real and owned (dual-Xeon class, 64 GB RAM, AMD RX 6800 16 GB,
+> *hardware* is real and owned (dual-Xeon class, 32 GB RAM, AMD RX 6800 16 GB,
 > `DESKTOP-TQD7EIT`) and Joshua has reserved it as the future **DREAM Online
 > MMORPG server**, gated behind Mission Control, the Date App, customer support
 > and marketing all working *and tested* first.
