@@ -24,7 +24,7 @@ Steps:
 3. MERGE only through the GitHub rule: required checks green, and a required review by someone other than the author. You may review and merge PRs you did not author. You never merge your own. Do not bypass, force-push, loosen a check, or change any repo setting to make something pass.
 4. Before every merge run the doctrine check: no secrets; no public mission surface without a partner (no domain, nameserver, tunnel or Pages change that puts a mission page live); business-only public copy; nothing that wraps, resells or relays a provider login or presents one model as another; free-kids-app terms intact; payments untouched. #334 needs a real look: confirm what it is derived from and that it breaks neither the in-house rule nor any provider's terms.
 5. FIX: if a PR needs a change, comment with exactly what, or push to that PR's own branch only if the fix is small and obvious. Then it needs a reviewer other than you.
-6. BLOCKED: failing or missing checks, a review that cannot be satisfied, a conflict you cannot resolve safely, a hard-rule change. Say why in one line and park it for Joshua as a single yes/no tap. Known: main's CI was failing before this file existed (a workflow points at directories that do not exist; the npm audit has failed since 33b2f99). A PR cannot go green while that holds. Report it. Do not hide it. Do not bypass it.
+6. BLOCKED: failing or missing checks, a review that cannot be satisfied, a conflict you cannot resolve safely, a hard-rule change. Say why in one line and park it for Joshua as a single yes/no tap. Known: main's CI was failing before this file existed (a workflow points at directories that do not exist; the npm audit has failed since 33b2f99). Evaluate each PR's required checks separately. While main is red, a PR whose required checks fail cannot go green. If that PR can repair the failing check itself, classify it as FIX; otherwise classify it as BLOCKED. Report it. Do not hide it. Do not bypass it.
 7. CLOSE (stale or duplicate): close with a one-line reason. Never delete an unmerged branch. After a merge, delete that branch (one branch per repo: main).
 8. Issues are not merged. Triage them: answer, label, link to the PR that fixes them, or close with a reason.
 9. Write the queue report: one table, every item, class, action taken, evidence (check names and results, review links). Mark each VERIFIED / UNVERIFIED / BLOCKED. Then write your session entry to Obsidian and the memory graph.
@@ -49,9 +49,9 @@ Each has its own config, cards, rules, outcome log, router and weekly loop.
 
 ## PART 1. HOUSE RULES
 
-a) In-house only. Third-party tools (Panda Code, Panda Router, octoroute, reaatech llm-router, OmniRoute) are reference reading only: borrow ideas, not code. Exception: Jev (TypeSafe), ruled core by Joshua.
+a) In-house only. Third-party tools (Panda Code, Panda Router, octoroute, reaatech llm-router) are reference reading only: borrow ideas, not code. Exceptions, both ruled by Joshua: Jev (TypeSafe) is core; OmniRoute is an optional lane under his 2026-10-22 rulings, usable only as 1c allows.
 b) Provider terms are Joshua's terms. Core trusted providers: Anthropic, Google, xAI, OpenAI, Meta, Perplexity. Write TERMS-PROVIDERS.md: nothing altered, no model presented as another, nothing signs as Claude or Opus unless it came from official Claude.
-c) Paths per model card, in order: direct (the provider's own official sign-in: claude, codex, agy, grok, gemini, hermes), then omniroute (192.168.0.15:20128, model-specific ids or auto/*; optional, only if needed), then key (env only; never in code, a commit, a log or chat). Read the current terms of Anthropic, Google, xAI, OpenAI, Meta, Perplexity, TypeSafe and OpenRouter on relaying subscription logins and on data retention, and report them with links. Do not decide that for Joshua.
+c) Paths per model card, in order: direct (the provider's own official sign-in: claude, codex, agy, grok, gemini, hermes), then key (env only; never in code, a commit, a log or chat). OmniRoute (192.168.0.15:20128, model-specific ids or auto/*) is an optional third path and is OFF by default: it may be enabled only after TERMS-PROVIDERS.md reports the relay terms and Joshua approves with one yes/no tap in the dashboard. Until he approves, no card may list OmniRoute as an executable path. Read the current terms of Anthropic, Google, xAI, OpenAI, Meta, Perplexity, TypeSafe and OpenRouter on relaying subscription logins and on data retention, and report them with links. Do not decide that for Joshua.
 d) Plans: Ultra agy tier includes Opus 5.5 and Sonnet officially, no Fable (Joshua-confirmed). Gemini 4 Argon (latest Google model, via agy) has a small usage pool: cards carry a quota note and a fallback to Flash.
 e) Nothing posts without Joshua's approval. PRs only. Merge only by Codex, Gemini, Jules or Claude, through the GitHub rule above. Joshua is the final authority.
 f) Existing repo rules stand: no secrets, business-only public copy, no kids/hospital/mission framing on any outward surface, payments are settled, T5500 is the only production node.
@@ -83,7 +83,7 @@ Shadow mode first: log question version, options, Jev's choice, confidence and t
 
 Model cards: one JSON card per agent: strengths, task types, nodes allowed, provider, ordered paths, quota note, limits, fallback. Effort levels (low/medium/high/xhigh) are separate cards where exposed. A deterministic policy ranks cards per task type and node. Every decision returns a fallback order; escalate after two failed loops.
 
-OmniRoute card generation (only if OmniRoute is used): read the live model list at startup (confirm /api/v1 vs /v1) and generate candidate cards from id, owned_by, parent, context_length, max_input_tokens, effort_tiers and capabilities. Entries with owned_by "combo" (auto/best-coding, auto/smart, auto/claude-opus, auto/claude-sonnet) are opaque: cards on the omniroute path only, never the decider, never counted as official Claude, and the log records the actual answering model when OmniRoute returns it. Direct-path cards have no list to read: define each by hand from the provider's own docs and mark every field VERIFIED or UNVERIFIED. Candidate cards start UNRANKED. Note for Joshua: check whether the model list endpoint is reachable without a login from the LAN.
+OmniRoute card generation (only after Joshua approves OmniRoute under Part 1c): read the live model list at startup (confirm /api/v1 vs /v1) and generate candidate cards from id, owned_by, parent, context_length, max_input_tokens, effort_tiers and capabilities. Entries with owned_by "combo" (auto/best-coding, auto/smart, auto/claude-opus, auto/claude-sonnet) are opaque: cards on the omniroute path only, never the decider, never counted as official Claude, and the log records the actual answering model when OmniRoute returns it. Direct-path cards have no list to read: define each by hand from the provider's own docs and mark every field VERIFIED or UNVERIFIED. Candidate cards start UNRANKED. Note for Joshua: check whether the model list endpoint is reachable without a login from the LAN.
 
 Ranking evidence:
 - Tier 1 (authority): Joshua's append-only outcome log in SQLite: task type, node, agent, path used, verifier result, human override.
@@ -113,7 +113,7 @@ His time is the scarce thing. No clock and no time-of-day assumptions. No token 
 
 ## PART 7. MEMORY (MANDATORY, ANY AGENT IN ANY REPO)
 
-Memory graphy: a codename workflow graph per node in docs/memory-layer/, mirrored to Obsidian. After every session append to C:\ANTIGRAVITY\Antigravity\<NODE>\<agent>-to-<agent>.md with header `## <YYYY-MM-DD HH:MM TZ> | node: <NODE> | use case: <...>`. One file per agent per node, append only, no secrets. Enforce inside the repos: session-start read, session-end write, and a CI/hook check that fails the PR if the entry or the graph update is missing. Repeated misses mean removal from the lane.
+Memory graphy: a codename workflow graph per node in docs/memory-layer/, mirrored to Obsidian. After every session append to C:\ANTIGRAVITY\Antigravity\<NODE>\<agent>-to-<agent>.md with header `## <YYYY-MM-DD HH:MM TZ> | node: <NODE> | use case: <...>`. One file per agent per node, append only, no secrets. Node-local hooks handle the session-start read and the session-end append. CI checks only the in-repository `docs/memory-layer/` graph update and fails the PR if that update is missing. Repeated misses mean removal from the lane.
 
 ## PART 8. DELIVERABLES
 
@@ -132,7 +132,7 @@ Work on a feature branch. Stop at the PR.
 
 - The Opus/Fable self-review conflict (Part 5): Fable proposes, Joshua decides.
 - Whether raw support text may ever go to Jev (Part 4 data rule). Default: redacted fields only.
-- Whether relaying a subscription login through third-party software is acceptable under each provider's terms (Part 1c): Fable reports the terms, Joshua decides.
+- Whether relaying a subscription login through third-party software is acceptable under each provider's terms, and so whether OmniRoute is enabled (Part 1c): Fable reports the terms, Joshua decides with one tap.
 - Starting the weekly schedule on a node.
 - Any change to a hard rule.
 - Closing stale or duplicate PRs is allowed with a reason (Part -1); change this to a tap if Joshua says so.
