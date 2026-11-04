@@ -28,7 +28,7 @@ Verify content and identity, not merely command or HTTP status. Record **VERIFIE
 
 ## Protected Files (ruled 2026-09-17)
 
-Only official Claude, reached through `drift` on the T5500 node, edits `scripts/fables-house/**`, `scripts/drift.cmd`, `ops/runbook/**`, `ops/skills/t5500-node/**`, `docs/PAYMENTS-TRUTH.md`, `docs/NODE-STATE-*.md`, `.github/**`, and the drop box `C:\Users\joshi\OneDrive\claude-to-claude\`. OpenCode never edits these paths and never pushes, merges, or deletes a branch. Landing on `main` goes through a `judge/*` branch and the quality-gate workflow (`.github/workflows/quality-gate.yml`), which `auto-land.yml` fast-forwards on green.
+Only official Claude, reached through `drift` on the T5500 node, edits `scripts/fables-house/**`, `scripts/drift.cmd`, `ops/runbook/**`, `ops/skills/t5500-node/**`, `docs/PAYMENTS-TRUTH.md`, `docs/NODE-STATE-*.md`, `.github/**`, and the drop box `C:\Users\joshi\OneDrive\claude-to-claude\`. OpenCode never edits these paths and never pushes, merges, or deletes a branch. PRs only; the Claude judge lane merges with a posted verdict.
 
 
 ## Date App FROZEN and FOR SALE (ruling 2026-09-16)
