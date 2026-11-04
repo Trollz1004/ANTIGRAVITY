@@ -747,6 +747,7 @@ def test_payment_webhook_returns_503_and_changes_no_tier_when_config_unset(
     monkeypatch,
 ):
     import asyncio
+
     from app.config import get_settings
 
     monkeypatch.setenv("SQUARE_WEBHOOK_VERIFY_SIGNATURE", "true")
@@ -810,6 +811,7 @@ def test_payment_webhook_rejects_wrong_signature_and_accepts_correct_signature(
     monkeypatch,
 ):
     import asyncio
+
     from app.config import get_settings
 
     dummy_key = "dummy-test-webhook-sig-key"

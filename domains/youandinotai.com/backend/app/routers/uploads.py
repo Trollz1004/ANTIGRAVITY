@@ -284,7 +284,9 @@ async def upload_chunk(
     """Upload a single chunk of a file."""
     session = _load_owned_session(upload_id, current_user)
     if session.status in ("done", "failed"):
-        raise HTTPException(status_code=400, detail=f"Upload is already {session.status}")
+        raise HTTPException(
+            status_code=400, detail=f"Upload is already {session.status}"
+        )
 
     body = await request.body()
     parsed = _parse_content_range(content_range)
@@ -298,13 +300,17 @@ async def upload_chunk(
             )
     elif index is not None:
         if index < 0 or not body:
-            raise HTTPException(status_code=400, detail="Invalid chunk index or empty chunk")
+            raise HTTPException(
+                status_code=400, detail="Invalid chunk index or empty chunk"
+            )
         chunk_dir = _get_chunk_dir(upload_id)
         existing = sorted(
             chunk_dir.glob("chunk_*_*"),
             key=lambda p: int(p.name.split("_")[1]),
         )
-        start = int(existing[-1].name.split("_")[2]) + 1 if existing and index > 0 else 0
+        start = (
+            int(existing[-1].name.split("_")[2]) + 1 if existing and index > 0 else 0
+        )
         chunk_size = len(body)
         end = start + chunk_size - 1
         total = session.total_bytes
@@ -390,7 +396,9 @@ async def finalize_chunked_upload(
     """Combine all uploaded chunks into the final file and run validation."""
     session = _load_owned_session(upload_id, current_user)
     if session.status in ("done", "failed"):
-        raise HTTPException(status_code=400, detail=f"Upload is already {session.status}")
+        raise HTTPException(
+            status_code=400, detail=f"Upload is already {session.status}"
+        )
 
     chunk_dir = _get_chunk_dir(upload_id)
 
