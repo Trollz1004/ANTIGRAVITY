@@ -69,7 +69,7 @@ Live Paperclip agents aligned to OmniRoute:
 
 ```text
 CEO OmniRoute Local Models via OpenCode -> auto/best-coding -> http://192.168.0.15:20128/api/v1
-Founding Engineer -> auto/best-coding -> http://192.168.0.15:20128/api/v1
+Founding Engineer -> auto/best-coding -> http://address in the node env file:20128/api/v1
 OpenCode Self-Hosted Models -> auto/best-coding -> http://192.168.0.15:20128/api/v1
 ```
 

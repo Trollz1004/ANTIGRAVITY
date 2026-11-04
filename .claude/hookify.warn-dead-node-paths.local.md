@@ -11,7 +11,7 @@ pattern: (nodes[\\/]9020|node-workloads[\\/]9020|C:[\\/]+Users[\\/]+joshl[\\/]|\
   node)" — Joshua: *"no 9020"*. Those notes were frozen 2026-08-21 and contradict current doctrine
   (Hermes quarantined, Ornith as CEO, business-exchange :3050 — all wrong now).
 - `C:/Users/joshl/` — the profile is `joshi`; `joshl` is a pre-reinstall path.
-- **T5500 the role is dead**; the T5500 **machine** (`DESKTOP-TQD7EIT`, 64 GB, RX 6800) is real and
+- **T5500 the role is dead**; the T5500 **machine** (`DESKTOP-TQD7EIT`, 32 GB, RX 6800) is real and
   reserved as the DREAM Online server. `192.168.0.8` is **SABRETOOTH**, this box, not a T5500.
 
 `C:\ANTIGRAVITY` is the sole canonical working tree. If you are *reading* a dead path as

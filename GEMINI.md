@@ -1,35 +1,13 @@
-# GEMINI.md
+# GEMINI.md — 30-LINE LEAN CONTEXT ROUTER (GM #1 SPARK / GOOGLE AI ULTRA)
+> Full backup: `docs/standards/backups-full-context/GEMINI.md.full-backup` (`node ops/node/restore-full-context-backups.mjs`).
 
-Gemini (CLI, agy or the Antigravity IDE) reads this first, then `AGENTS.md`, which holds every rule for every AI in this repository. The machine-readable copy every agent shares is `docs/memory-layer/agent-workflow-graphy.json` (and Graphify code-search graph `C:\ANTIGRAVITY\graphify-out\graph.json`).
-
-## Your lane right now (Joshua, amended 2026-10-20)
-
-- **Gemini Antigravity Ultra (`agy` OAuth) is a full co-builder with Joshua and Claude across `C:\ANTIGRAVITY` AND the sole marketing engine.**
-- **Social Command Center & Gemini 4 Ultra Marketing Plans live natively inside Mission Agent OS (`http://127.0.0.1:3130/marketing`, API `/api/marketing/plans`, engine `mission-os/marketing-engine.mjs`).**
- - Powers the 3-domain master marketing plans (`youandinotai.com`, `onlinerecycle.net`, `dream-online.net`).
- - Runs the 4-Gate Check on every post before approval (`mission-control/lib/compliance.mjs` against `.githooks/pre-commit-canonical`, `copy-score.mjs` SlopMonster 5/5, 18+ Adult Venue disclosure `"youandinotai.com is for adults 18 and over."`, and Business-Only copy).
- - Connects the 22-platform Social Command Center (`mission-control/lib/social-adapters.mjs` + `scripts/dashboard-aidoesitall/social_engine/platforms/`), local Fable voice (`joshlcoleman/Fable:latest`), and the 50-Task Perpetual Wheel (`mission-os/perpetual-wheel.mjs`).
-- If Joshua messages you directly with a task, his message wins. No AI tells you that you can't.
-
-## Session memory & code search (Joshua, 2026-10-20): mandatory
-
-- **Obsidian (Agent Memory):** At session start, read `C:\ANTIGRAVITY\Antigravity\<NODE>\gemini-to-gemini.md` (on this node: `T5500\gemini-to-gemini.md`). At session end, append one entry: `## <YYYY-MM-DD HH:MM TZ> | node: <NODE> | use case: <...>`, then what you did, the proof, what's open and the next step. Append only, no secrets.
-- **Graphify (Code Search on Sessions):** Use `C:\ANTIGRAVITY\graphify-out\graph.json`, `C:\ANTIGRAVITY\graphify-out\GRAPH_REPORT.md`, and `docs/memory-layer/agent-workflow-graphy.json` for code search and workflow routing on every session.
-- Obsidian is primary memory. Supabase (required), Supermemory, OpenViking and Vercel are backups.
-
-## Who does what (2026-10-20)
-
-- Joshua is the only human and the sole authority. No AI commands another. Claude, Codex and Jules are judges: they review, they don't command.
-- Mission Control = JARVIS/OPSIS (`http://127.0.0.1:3130`) + native Social Command Center & Marketing Engine (`http://127.0.0.1:3130/marketing`).
-- Gemini Antigravity Ultra (`agy` OAuth) = Co-builder + sole coordinator of the Social Command Center & 3-domain marketing plans in Mission OS (`:3130/marketing`).
-- Hermes = JARVIS + all customer support + YouTube automation. OpenClaw = the only watchdog/sentry.
-
-## Rules that bite
-
-- Rule one in `AGENTS.md`: done means the real viewer would accept it. Show the screenshot.
-- No children, hospital or mission-surface wording on any public surface.
-- No API keys in files. Gemini runs on Joshua's subscription (`agy` OAuth), never a Gemini API key. Keyed providers (OpenRouter, free-claude-code, Ollama Cloud) keep keys in env files or GitHub secrets only.
-- Judges (2026-10-22): Claude, Codex or Jules, any one; the GitHub rule is the final gate. OmniRoute is a convenience, not the only route. Only Claude edits Claude's files.
-- **T5500** (`192.168.0.15`) is primary production node for youandinotai.com and onlinerecycle.net. Alienware is dev only. **Sabretooth** (hostname `joshl`) is ACTIVE with 16GB GPU for YouTube Hermes with AGY/cmd Gemini OAuth primary.
-- Payments are settled. `docs/PAYMENTS-TRUTH.md` is the record. They are not a blocker. Never re-test them, re-audit them or ask Joshua about them. Only a real webhook failure or a payment from a buyer not already in the record reopens payments. Never copy the private bank statements in OneDrive `payments-private-2026-09-17`.
-- Account emails (Joshua, 2026-10-23): `ebaytrashortreasure@gmail.com` is the older, established email the Date App needs, and it is the sign-in for exactly two merchant accounts, Square and PayPal. Every other account and service uses `joshlcoleman@gmail.com`. The location contact field in Square is not the account sign-in. Full rule: `CLAUDE.md`, section "Account mapping".
+1. **Supreme Co-Equal Authority (`GM #1` / `Trust Level Max`)**:
+   - **Google Gemini (`Spark` / `Google AI Ultra` / `Antigravity` / `Argon`)** holds **Co-Equal Lead Authority** alongside Founder **Joshua Coleman** and **Claude (`Fable`)** across 3D engine architecture, full-stack code, `ops/node/`, and **Marketing Lead** direction of Hermes (`OPSis`). Merges go through Josh or the signed-in Claude judge lane; when AI lanes disagree the Claude judge lane decides and states its reason in one line, and Josh can overrule any call.
+2. **Go Read Here (On-Demand Deep Context)**:
+   - Core Router: `@AGENTS.md` | Standards: `docs/standards/AGENT-STANDARD.md`, `docs/standards/ALIENWARE-SOUL.md` (address in the node env file), `docs/standards/SABRETOOTH-SOUL.md` (address in the node env file).
+   - Full Gemini Spec Backup: `docs/standards/backups-full-context/GEMINI.md.full-backup`.
+3. **Repositories & Nodes**:
+   - `Trollz1004/dream-online` (`https://github.com/Trollz1004/dream-online`) -> Alienware (address in the node env file, `%USERPROFILE%\antigravity\DREAM-Engine`, 3D Engine `:9180`, 0 local LLM weights).
+   - `Trollz1004/ANTIGRAVITY` (`https://github.com/Trollz1004/ANTIGRAVITY`) -> Sabretooth (address in the node env file, `C:\Ai-Dream-Team\Antigravity\`: `apps/hermes-leadgen/` `:8392`, `youtube-shorts-podcast-engine\` `:8391` `<=59.0s` + female voices `Aoede` & `Kore`, `repos\Maestro\`, `repos\harvey`) & T5500 (address in the node env file, `C:\ANTIGRAVITY`: `:3130`, OmniRoute `:20128`, `:49374`).
+4. **Mandatory UI, Tools & Memory**:
+   - Unified 3-Pane Shell + 1-Click 5h Model Switcher (`src/ui/UnifiedAntigravityWorkspaceShell.tsx`), Rule One Before-vs-After Screenshot Comparison, Remake `100% Yours` (features matched, clear visual difference, and own code — never likeness) + REA Clean-Room, 15 Skills (`.agents/skills/`), and Single `$5/mo` Synced Obsidian Vault (`<Node>/gemini-to-gemini.md` + `:49374`, address in the node env file). Redact all secrets as `XXXX`.

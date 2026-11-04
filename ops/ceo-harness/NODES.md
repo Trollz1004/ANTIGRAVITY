@@ -23,7 +23,7 @@ otherwise is stale evidence, not instruction.
   2026-08-25. It replaced the GTX 1070 — the 1070 is out of the machine. Stale
   NVIDIA driver keys remain in the registry and `nvidia-smi` is still on PATH;
   neither means an NVIDIA card is present. Check `Win32_VideoController`.
-- RAM: 64 GB.
+- RAM: 32 GB.
 - Ollama is installed and is a **fail-safe path only** — never the default route.
   Its CUDA path went out with the 1070, so treat local-model acceleration as
   **UNVERIFIED** until someone measures it on the AMD card.

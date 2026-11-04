@@ -86,7 +86,7 @@ alone that over-corrects into "the machine does not exist." It does exist.
 machine. Nothing deploys to a T5500 today. Every T5500/9020/`E:\` reference in
 the repo remains stale evidence, never an instruction.
 
-**Machine — real, owned, reserved.** Dual-Xeon class, 64 GB RAM, AMD RX 6800
+**Machine — real, owned, reserved.** Dual-Xeon class, 32 GB RAM, AMD RX 6800
 16 GB, `DESKTOP-TQD7EIT`. Joshua has designated it the future **DREAM Online
 MMORPG server** — a Joshua-and-Claude project — gated behind four things working
 *and tested* first: Mission Control, the Date App, customer support, marketing.
