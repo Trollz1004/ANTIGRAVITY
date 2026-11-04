@@ -26,7 +26,7 @@ In accordance with `.agents/skills/security-audit/VALIDATION-AND-REPORTING.md`, 
 - **Discovered By**: `hunter-wave4-ops-scripts` | **Verified By**: `verifier-batch2-needs-val`, `verifier-phase5-records`
 
 ### Source-to-Sink Code Evidence
-In `scripts/t5500/lan-bind.ps1` (`lines 14–31` and `55–73`), `$ExposedPorts` forwards LAN IP `192.168.0.15` to `127.0.0.1` for PostgreSQL (`5432`), Redis (`6379`), Qdrant (`6333`, `6334`), FastAPI (`8000`), Domains Server (`9160`), Ollama (`11434`), OmniRoute (`20128`), and Shared AI Memory (`49374`), and opens Windows Firewall rules via `New-NetFirewallRule -Profile Private,Domain -Action Allow`:
+In `scripts/t5500/lan-bind.ps1` (`lines 14–31` and `55–73`), `$ExposedPorts` forwards LAN IP `<T5500 address, node env file>` to `127.0.0.1` for PostgreSQL (`5432`), Redis (`6379`), Qdrant (`6333`, `6334`), FastAPI (`8000`), Domains Server (`9160`), Ollama (`11434`), OmniRoute (`20128`), and Shared AI Memory (`49374`), and opens Windows Firewall rules via `New-NetFirewallRule -Profile Private,Domain -Action Allow`:
 ```powershell
 # scripts/t5500/lan-bind.ps1 lines 14-31 & 58
 $ExposedPorts = @(
@@ -44,8 +44,8 @@ Meanwhile, `scripts/fables-house/FABLES-HOUSE.ps1:163` starts `redis-server.exe`
 
 ### Exact Validation Recipe (`validation_plan`)
 On the T5500 host outside the sandbox, run:
-1. `netsh interface portproxy show v4tov4` to verify whether `192.168.0.15:6379` and `192.168.0.15:6333` are actively forwarded to `127.0.0.1`.
-2. From a second LAN interface or targeting `192.168.0.15`, test `redis-cli -h 192.168.0.15 -p 6379 PING` and `curl http://192.168.0.15:6333/collections`. If `PONG` or collection JSON is returned without authentication, promote this finding to `confirmed`.
+1. `netsh interface portproxy show v4tov4` to verify whether `<T5500 address, node env file>:6379` and `<T5500 address, node env file>:6333` are actively forwarded to `127.0.0.1`.
+2. From a second LAN interface or targeting `<T5500 address, node env file>`, test `redis-cli -h <T5500 address, node env file> -p 6379 PING` and `curl http://<T5500 address, node env file>:6333/collections`. If `PONG` or collection JSON is returned without authentication, promote this finding to `confirmed`.
 
 ### Recommended Remediation
 Remove `6379`, `6333`, `6334`, and `5432` from `$ExposedPorts` in `scripts/t5500/lan-bind.ps1` (run `scripts/t5500/lan-bind.ps1 -Remove`), and configure `--requirepass` on `redis-server.exe` in `scripts/fables-house/FABLES-HOUSE.ps1`.

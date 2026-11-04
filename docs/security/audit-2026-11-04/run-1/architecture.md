@@ -1,7 +1,7 @@
 # ANTIGRAVITY Security Architecture & Attack Surface Map (Run 1)
 
 ## 1. System Overview & Entrypoints
-`Trollz1004/ANTIGRAVITY` is a multi-service monorepo operating local AI agent control planes, customer-facing web applications, MCP servers, YouTube media pipelines, and Windows scheduled-task/boot watchdogs across node topologies (`T5500` at `192.168.0.15`, `Sabretooth` at `192.168.0.8`, and `Alienware` at `192.168.0.40`).
+`Trollz1004/ANTIGRAVITY` is a multi-service monorepo operating local AI agent control planes, customer-facing web applications, MCP servers, YouTube media pipelines, and Windows scheduled-task/boot watchdogs across node topologies (`T5500` at `<T5500 address, node env file>`, `Sabretooth` at `<Sabretooth address, node env file>`, and `Alienware` at `<Alienware address, node env file>`).
 
 Primary in-scope entrypoints:
 - **`apps/hermes-leadgen` (`:8392`)**: Electron desktop shell (`main.js`, `preload.js`, `renderer.js`) backed by a zero-dependency Node.js HTTP server (`server.js`) bound to `0.0.0.0:8392`. Exposes `/api/*` orchestration/leadgen/hook endpoints and `/proxy/fcc|hermes|paperclip/*` reverse proxies.
@@ -15,7 +15,7 @@ Primary in-scope entrypoints:
 
 ## 2. Trust Boundaries & Network Tiers
 1. **Public Internet -> Cloudflare Tunnel -> Local Origin (`:3200`, `:8000`, `:9160`)**: Public traffic terminates at `youandinotai.com` and `api.youandinotai.com`, reaching FastAPI (`:8000`) and static vhosts (`:9160`).
-2. **LAN (`192.168.0.0/24`) -> Host Listeners (`0.0.0.0` / LAN IP)**: `apps/hermes-leadgen` binds `0.0.0.0:8392`, `mission-os` binds `0.0.0.0:3130`, `tools/cockpit/index.html` fetches LAN HTTP endpoints, and `scripts/t5500/lan-bind.ps1` forwards `192.168.0.15:{5432,6333,6334,6379,8000,9160,11434,20128,49374}` to `127.0.0.1`.
+2. **LAN (`<LAN range, node env file>`) -> Host Listeners (`0.0.0.0` / LAN IP)**: `apps/hermes-leadgen` binds `0.0.0.0:8392`, `mission-os` binds `0.0.0.0:3130`, `tools/cockpit/index.html` fetches LAN HTTP endpoints, and `scripts/t5500/lan-bind.ps1` forwards `<T5500 address, node env file>:{5432,6333,6334,6379,8000,9160,11434,20128,49374}` to `127.0.0.1`.
 3. **Browser Origin -> Local Loopback/LAN HTTP Services**: Local dashboards rely on `Host` and `Origin` header checks to prevent CSRF and DNS rebinding.
 4. **Loopback Services (`127.0.0.1`) -> Elevated Host OS / Git / Credentials**: Loopback services (`:8082` FCC, `:9119` Hermes, `:8095` governance, `:3130` Mission OS) invoke local CLI binaries, read/write repository files, and trigger Git pushes.
 5. **AI Agent Prompts & External Web/Lead Data -> Persistent Agent Memory**: Scraped content and webhook/API payloads flow into Obsidian markdown vaults (`%USERPROFILE%` / `C:\ANTIGRAVITY\Antigravity`) and SQLite/JSON stores read at agent startup.
@@ -34,7 +34,7 @@ Primary in-scope entrypoints:
 
 ## 5. Deployment, Build, CI, and Runtime Topology
 - Boot and keepalive scripts (`ops/t5500/keepalive.ps1`, `scripts/fables-house/FABLES-HOUSE.ps1`, `scripts/silent-watchdog-t5500.ps1`) auto-start and heal PostgreSQL, Redis, OmniRoute, Frontend, Backend, Cloudflared, Mission OS, and Hermes.
-- `scripts/t5500/lan-bind.ps1` configures Windows `netsh interface portproxy` rules from `192.168.0.15` to `127.0.0.1` for PostgreSQL (`5432`), Qdrant (`6333`/`6334`), Redis (`6379`), and application ports.
+- `scripts/t5500/lan-bind.ps1` configures Windows `netsh interface portproxy` rules from `<T5500 address, node env file>` to `127.0.0.1` for PostgreSQL (`5432`), Qdrant (`6333`/`6334`), Redis (`6379`), and application ports.
 
 ## 6. Existing Security Controls & Shortcomings
 - `hermes-leadgen` implements `ALLOWED_HOSTS`, but dynamically adds all LAN IPv4 addresses, binds `0.0.0.0:8392`, sets `Access-Control-Allow-Origin: *`, and proxies LAN requests to loopback-only services (`:8082`, `:9119`) while rewriting `Host: 127.0.0.1`.
