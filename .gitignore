@@ -346,3 +346,7 @@ ops/agy-jobs/*.out
 ops/agy-jobs/*.prompt
 ops/agy-jobs/*.worker.ps1
 ops/agy-jobs/*.txt
+ 
+# Security audit output
+ops/security/runs/
+!/.agents/skills/**

@@ -43,6 +43,12 @@
       "skillPath": "marketing/growth-marketer/SKILL.md",
       "computedHash": "1f95ccf50f6457c5c4e730c372559ccf6cb2fe48edeb2c0a32914b8a2a6679ec"
     },
+    "hallmark": {
+      "source": "nutlope/hallmark",
+      "sourceType": "github",
+      "skillPath": "skills/hallmark/SKILL.md",
+      "computedHash": "8a79fc0d9aa813ffd9934495369ddb7c54b5ffbaff9bec88f04f39dbadb73089"
+    },
     "hermes-agent-skill-authoring": {
       "source": "nousresearch/hermes-agent",
       "sourceType": "github",
@@ -54,6 +60,12 @@
       "sourceType": "github",
       "skillPath": "skills/i-have-adhd/SKILL.md",
       "computedHash": "8a95bc49a1ac2224fa227081a5cbe386f7d2b3edee6e5324120b9555d9fbd55f"
+    },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "08c1403e2daff28509af4ca7fc5915cb748b1a6b72181b6142ba35fb2c258d89"
     },
     "paperclip": {
       "source": "paperclip-adapter-openrouter",
@@ -80,6 +92,12 @@
       "sourceType": "github",
       "skillPath": "skills/planning-with-files/SKILL.md",
       "computedHash": "648eb43044e5ccf573bdeaa1f5e715e33788ff32e218daf88f10c04c097c5e34"
+    },
+    "security-audit": {
+      "source": "cloudflare/security-audit-skill",
+      "sourceType": "github",
+      "skillPath": "skills/security-audit/SKILL.md",
+      "computedHash": "e6b2e317de75da97e9de18d842982994803f3a67a4a6d8154a82323dc3de8528"
     },
     "sleek-design-mobile-apps": {
       "source": "sleekdotdesign/agent-skills",
