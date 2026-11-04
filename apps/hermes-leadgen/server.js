@@ -4,7 +4,34 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const net = require('net');
+const crypto = require('crypto');
 const { execFile, spawn } = require('child_process');
+
+const SAFE_ID_RE = /^[a-z0-9_-]{1,32}$/i;
+const STATE_CHANGING_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
+
+function isValidIdentifier(val) {
+  return typeof val === 'string' && SAFE_ID_RE.test(val);
+}
+
+function resolveBindHost(env = process.env) {
+  const raw = String(env.HERMES_LEADGEN_BIND || '').trim();
+  return raw === '0.0.0.0' ? '0.0.0.0' : '127.0.0.1';
+}
+
+function validateBindConfig(env = process.env, explicitHost = null) {
+  const bindHost = explicitHost || resolveBindHost(env);
+  const token = String(env.HERMES_LEADGEN_TOKEN || '').trim();
+  if (bindHost === '0.0.0.0' && !token) {
+    throw new Error('Refusing to bind 0.0.0.0 without HERMES_LEADGEN_TOKEN');
+  }
+  return { bindHost, token };
+}
+
+function isStateChangingMethod(method) {
+  const m = String(method || '').toUpperCase();
+  return STATE_CHANGING_METHODS.has(m) || (m !== 'GET' && m !== 'HEAD' && m !== 'OPTIONS');
+}
 
 const PORT = Number(process.env.PORT || 8392);
 const ROOT = __dirname;
@@ -287,6 +314,9 @@ function recordHookEvent(summary, source = 'sabretooth-orchestrator', repo = 'Tr
 
 function executeNodeAutoPrPush({ agent = 'gemini', profile = 'default', message = 'chore(sabretooth): sync apps/hermes-leadgen for Cloud Judges' } = {}) {
   return new Promise((resolve) => {
+    if (!isValidIdentifier(agent) || !isValidIdentifier(profile)) {
+      return resolve({ ok: false, status: 400, error: 'Invalid agent or profile identifier' });
+    }
     const scriptPath = path.join(ROOT, 'scripts', 'node-auto-pr-push.ps1');
     if (!fs.existsSync(scriptPath)) {
       const failEvent = recordHookEvent(message, `${agent}:${profile}`, 'Trollz1004/ANTIGRAVITY', {
@@ -758,10 +788,16 @@ function loadDualGraphy() {
 // ============================================================================
 // OBSIDIAN NODE-SPECIFIC SESSION WRITE + T5500 AI-MEMORY (:49374) MIRROR
 // ============================================================================
-function syncObsidianAndMemory({ agent = 'gemini', useCase = 'Sabretooth :8392 Studio Session Sync', summary = '', proof = '' }) {
+function syncObsidianAndMemory({ agent = 'gemini', profile = 'default', useCase = 'Sabretooth :8392 Studio Session Sync', summary = '', proof = '' } = {}) {
+  if (!isValidIdentifier(agent) || !isValidIdentifier(profile)) {
+    const err = new Error('Invalid agent or profile identifier');
+    err.statusCode = 400;
+    throw err;
+  }
   const now = new Date();
   const stamp = now.toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
-  const sabretoothDir = path.join(ANTIGRAVITY_ROOT, 'Sabretooth');
+  const vaultRoot = process.env.SABRETOOTH_VAULT_ROOT || ANTIGRAVITY_ROOT;
+  const sabretoothDir = path.join(vaultRoot, 'Sabretooth');
   if (!fs.existsSync(sabretoothDir)) fs.mkdirSync(sabretoothDir, { recursive: true });
 
   const targetFiles = [
@@ -811,8 +847,6 @@ function proxyHttpRequest(req, res, targetPort, prefixToStrip) {
     },
     (proxyRes) => {
       const resHeaders = { ...proxyRes.headers };
-      delete resHeaders['x-frame-options'];
-      delete resHeaders['content-security-policy'];
       res.writeHead(proxyRes.statusCode || 200, resHeaders);
       proxyRes.pipe(res);
     }
@@ -870,15 +904,76 @@ const ALLOWED_ADDRESSES = buildAllowedAddresses();
 const ALLOWED_HOSTS = new Set(Array.from(ALLOWED_ADDRESSES, (a) => `${a}:${PORT}`));
 const ALLOWED_ORIGINS = new Set(Array.from(ALLOWED_ADDRESSES, (a) => `http://${a}:${PORT}`));
 
+function getActiveServerPort(req) {
+  const srv = req && req.socket && req.socket.server;
+  const addr = srv && typeof srv.address === 'function' ? srv.address() : null;
+  return addr && typeof addr === 'object' && addr.port ? addr.port : PORT;
+}
+
 function isAllowedHost(req) {
   const host = String(req.headers.host || '').trim().toLowerCase();
-  return ALLOWED_HOSTS.has(host);
+  if (ALLOWED_HOSTS.has(host)) return true;
+  const activePort = getActiveServerPort(req);
+  if (activePort !== PORT) {
+    for (const a of ALLOWED_ADDRESSES) {
+      if (host === `${a}:${activePort}`) return true;
+    }
+  }
+  return false;
 }
 
 function isAllowedOrigin(req) {
   const origin = req.headers.origin;
   if (!origin) return true;
-  return ALLOWED_ORIGINS.has(String(origin).trim().toLowerCase());
+  const normalized = String(origin).trim().toLowerCase();
+  if (ALLOWED_ORIGINS.has(normalized)) return true;
+  const activePort = getActiveServerPort(req);
+  if (activePort !== PORT) {
+    for (const a of ALLOWED_ADDRESSES) {
+      if (normalized === `http://${a}:${activePort}`) return true;
+    }
+  }
+  return false;
+}
+
+function isLanBound(req, env = process.env) {
+  if (resolveBindHost(env) === '0.0.0.0') return true;
+  const srv = (req && req.socket && req.socket.server) || server;
+  const addr = srv && typeof srv.address === 'function' ? srv.address() : null;
+  return Boolean(addr && typeof addr === 'object' && addr.address === '0.0.0.0');
+}
+
+function routeRequiresLanAuth(method, pathname) {
+  if (isStateChangingMethod(method)) return true;
+  if (pathname === '/proxy' || pathname.startsWith('/proxy/')) return true;
+  if (pathname === '/api/memory' || pathname.startsWith('/api/memory/')) return true;
+  return false;
+}
+
+function hasValidBearerToken(req, env = process.env) {
+  const expected = String(env.HERMES_LEADGEN_TOKEN || '').trim();
+  if (!expected) return false;
+  const rawAuth = String((req && req.headers && req.headers.authorization) || '').trim();
+  const match = /^Bearer\s+(.+)$/i.exec(rawAuth);
+  if (!match) return false;
+  const provided = match[1].trim();
+  const expectedBuf = Buffer.from(expected, 'utf8');
+  const providedBuf = Buffer.from(provided, 'utf8');
+  if (expectedBuf.length !== providedBuf.length) return false;
+  return crypto.timingSafeEqual(expectedBuf, providedBuf);
+}
+
+function validateAgentAndProfileFields(body, res) {
+  if (!body || typeof body !== 'object') return true;
+  for (const field of ['agent', 'profile', 'targetProfile']) {
+    if (body[field] !== undefined && body[field] !== null) {
+      if (!isValidIdentifier(body[field])) {
+        sendJson(res, 400, { ok: false, error: `Invalid ${field} identifier` });
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 // ============================================================================
@@ -889,12 +984,27 @@ const server = http.createServer(async (req, res) => {
     if (!isAllowedHost(req)) {
       return sendJson(res, 403, { ok: false, error: 'Forbidden host' });
     }
-    if (req.method === 'POST' && !isAllowedOrigin(req)) {
+    if (isStateChangingMethod(req.method) && !isAllowedOrigin(req)) {
       return sendJson(res, 403, { ok: false, error: 'Forbidden origin' });
     }
 
     const parsedUrl = new URL(req.url, `http://${req.headers.host || '127.0.0.1:8392'}`);
     const pathname = parsedUrl.pathname;
+
+    if (isLanBound(req) && routeRequiresLanAuth(req.method, pathname)) {
+      if (!hasValidBearerToken(req)) {
+        return sendJson(res, 401, { ok: false, error: 'Unauthorized' });
+      }
+    }
+
+    for (const paramName of ['agent', 'profile']) {
+      if (parsedUrl.searchParams.has(paramName)) {
+        const paramVal = parsedUrl.searchParams.get(paramName);
+        if (!isValidIdentifier(paramVal)) {
+          return sendJson(res, 400, { ok: false, error: `Invalid ${paramName} identifier` });
+        }
+      }
+    }
 
     // 1. Reverse proxies for Free Claude Code (:8082) & Hermes (:9119)
     if (pathname.startsWith('/proxy/fcc')) {
@@ -955,6 +1065,7 @@ const server = http.createServer(async (req, res) => {
 
     if (pathname === '/api/orchestrate' && req.method === 'POST') {
       const body = await readJsonBody(req);
+      if (!validateAgentAndProfileFields(body, res)) return;
       const prompt = String(body.prompt || body.message || '').trim();
       const targetProfileId = String(body.targetProfile || 'auto').toLowerCase();
 
@@ -1185,6 +1296,7 @@ const server = http.createServer(async (req, res) => {
 
     if (pathname === '/api/terminal/exec' && req.method === 'POST') {
       const body = await readJsonBody(req);
+      if (!validateAgentAndProfileFields(body, res)) return;
       const action = String(body.action || 'status').trim();
       const allowedCommands = {
         'agy-version': { file: 'cmd.exe', args: ['/c', 'agy --version'], label: 'agy --version' },
@@ -1409,13 +1521,22 @@ const server = http.createServer(async (req, res) => {
 
     if ((pathname === '/api/hooks/trigger' || pathname === '/api/hooks/push-pr') && req.method === 'POST') {
       const body = await readJsonBody(req);
+      if (!validateAgentAndProfileFields(body, res)) return;
+      const agent = body.agent === undefined ? 'gemini' : body.agent;
+      const profile = body.profile === undefined ? 'default' : body.profile;
+      if (!isValidIdentifier(agent) || !isValidIdentifier(profile)) {
+        return sendJson(res, 400, { ok: false, error: 'Invalid agent or profile identifier' });
+      }
       const summary = body.summary || body.message || 'Mandatory Post-Work Auto-Commit, Branch Push & GitHub PR Creation for Cloud Judges (Gemini / Jules / Claude / Codex).';
       if (body.runGitPushPr) {
         const result = await executeNodeAutoPrPush({
-          agent: body.agent || 'gemini',
-          profile: body.profile || 'default',
+          agent,
+          profile,
           message: summary
         });
+        if (result && result.status === 400) {
+          return sendJson(res, 400, result);
+        }
         return sendJson(res, 200, result);
       }
       const result = recordHookEvent(summary, body.source || 'gui-hook-trigger', body.repo || 'Trollz1004/ANTIGRAVITY');
@@ -1425,13 +1546,20 @@ const server = http.createServer(async (req, res) => {
     // 9. Obsidian & 6-Layer Memory Sync API
     if (pathname === '/api/memory/sync' && req.method === 'POST') {
       const body = await readJsonBody(req);
-      const result = syncObsidianAndMemory(body);
+      if (!validateAgentAndProfileFields(body, res)) return;
+      const agent = body.agent === undefined ? 'gemini' : body.agent;
+      const profile = body.profile === undefined ? 'default' : body.profile;
+      if (!isValidIdentifier(agent) || !isValidIdentifier(profile)) {
+        return sendJson(res, 400, { ok: false, error: 'Invalid agent or profile identifier' });
+      }
+      const result = syncObsidianAndMemory({ ...body, agent, profile });
       return sendJson(res, 200, result);
     }
 
     if (pathname === '/api/memory/ledger' && req.method === 'GET') {
-      const gemFile = path.join(ANTIGRAVITY_ROOT, 'Sabretooth', 'gemini-to-gemini.md');
-      const hermFile = path.join(ANTIGRAVITY_ROOT, 'Sabretooth', 'hermes-to-hermes.md');
+      const vaultRoot = process.env.SABRETOOTH_VAULT_ROOT || ANTIGRAVITY_ROOT;
+      const gemFile = path.join(vaultRoot, 'Sabretooth', 'gemini-to-gemini.md');
+      const hermFile = path.join(vaultRoot, 'Sabretooth', 'hermes-to-hermes.md');
       return sendJson(res, 200, {
         ok: true,
         sabretoothGeminiLedger: fs.existsSync(gemFile) ? fs.readFileSync(gemFile, 'utf8').slice(-3500) : '',
@@ -1442,6 +1570,7 @@ const server = http.createServer(async (req, res) => {
     // 10. Free Claude Code (:8082/admin) Built-In Wrapper Chat Bridge
     if (pathname === '/api/fcc/chat' && req.method === 'POST') {
       const body = await readJsonBody(req);
+      if (!validateAgentAndProfileFields(body, res)) return;
       const message = String(body.message || '').trim();
       const bridgeProfile = String(body.profile || 'default');
       appendTerminalLog('fcc', `fcc-claude (:8082) <-> Hermes [${bridgeProfile}]`, `Prompt: "${message.slice(0, 120)}"`);
@@ -1471,7 +1600,15 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (pathname.startsWith('/api/souls/') && req.method === 'GET') {
-      const agent = pathname.replace('/api/souls/', '').replace(/[^a-z0-9-_]/gi, '');
+      let agent = '';
+      try {
+        agent = decodeURIComponent(pathname.slice('/api/souls/'.length));
+      } catch (_) {
+        return sendJson(res, 400, { ok: false, error: 'Invalid agent identifier' });
+      }
+      if (!isValidIdentifier(agent)) {
+        return sendJson(res, 400, { ok: false, error: 'Invalid agent identifier' });
+      }
       const fPath = path.join(SOULS_DIR, `${agent}-agent.md`);
       const altPath = path.join(SOULS_DIR, `${agent}.md`);
       const target = fs.existsSync(fPath) ? fPath : altPath;
@@ -1506,14 +1643,55 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(404, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: 'Not found', path: pathname }));
   } catch (err) {
-    sendJson(res, 500, { ok: false, error: err.message });
+    const status = err && Number.isInteger(err.statusCode) ? err.statusCode : 500;
+    sendJson(res, status, { ok: false, error: err.message });
   }
 });
 
-if (require.main === module) {
-  server.listen(PORT, '0.0.0.0', () => {
-    console.log(`[Sabretooth Command Studio] Listening on http://0.0.0.0:${PORT} (http://${SABRETOOTH_HOST}:${PORT}/)`);
-  });
+const rawServerListen = server.listen.bind(server);
+server.listen = function patchedListen(...args) {
+  if (args.length > 0 && typeof args[0] === 'object' && args[0] !== null) {
+    const opts = { ...args[0] };
+    const host = opts.host || resolveBindHost(process.env);
+    validateBindConfig(process.env, host);
+    opts.host = host;
+    return rawServerListen(opts, ...args.slice(1));
+  }
+  const portArg = args.length > 0 ? args[0] : PORT;
+  if (typeof args[1] === 'string') {
+    validateBindConfig(process.env, args[1]);
+    return rawServerListen(...args);
+  }
+  const defaultHost = resolveBindHost(process.env);
+  validateBindConfig(process.env, defaultHost);
+  return rawServerListen(portArg, defaultHost, ...args.slice(1));
+};
+
+function startServer({ port = PORT, env = process.env } = {}, callback) {
+  const { bindHost } = validateBindConfig(env);
+  return rawServerListen(port, bindHost, callback);
 }
 
-module.exports = { server, getSabretoothNodeStatus, loadDualGraphy, loadLeads };
+if (require.main === module) {
+  try {
+    const { bindHost } = validateBindConfig(process.env);
+    server.listen(PORT, bindHost, () => {
+      console.log(`[Sabretooth Command Studio] Listening on http://${bindHost}:${PORT} (http://${SABRETOOTH_HOST}:${PORT}/)`);
+    });
+  } catch (err) {
+    console.error(`[Sabretooth Command Studio] Startup refused: ${err.message}`);
+    process.exit(1);
+  }
+}
+
+module.exports = {
+  server,
+  startServer,
+  resolveBindHost,
+  validateBindConfig,
+  isValidIdentifier,
+  proxyHttpRequest,
+  getSabretoothNodeStatus,
+  loadDualGraphy,
+  loadLeads
+};

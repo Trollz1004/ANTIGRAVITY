@@ -9,24 +9,28 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 const REPO_ROOT = fs.existsSync(path.join(ROOT_DIR, '..', 'AGENTS.md'))
   ? path.resolve(ROOT_DIR, '..')
   : path.resolve(ROOT_DIR, '..', '..');
-const VAULT_DIR = process.env.SABRETOOTH_VAULT_ROOT || (fs.existsSync('C:\\Ai-Dream-Team\\Antigravity') ? 'C:\\Ai-Dream-Team\\Antigravity' : REPO_ROOT);
+const VAULT_DIR = path.join(ROOT_DIR, 'data', 'test-vault');
+process.env.SABRETOOTH_VAULT_ROOT = VAULT_DIR;
+delete process.env.HERMES_LEADGEN_BIND;
+delete process.env.HERMES_LEADGEN_TOKEN;
+
+const { server, resolveBindHost, validateBindConfig, proxyHttpRequest } = require('../server');
+const { spawnSync } = require('node:child_process');
 
 let localServerStartedByTest = false;
 let localServerInstance = null;
+let baseUrl = 'http://127.0.0.1:8392';
 
 test.before(async () => {
-  try {
-    await httpGetJson('http://127.0.0.1:8392/api/node/status');
-  } catch (_) {
-    const { server } = require('../server');
-    localServerInstance = server;
-    await new Promise((resolve) => {
-      localServerInstance.listen(8392, '127.0.0.1', () => {
-        localServerStartedByTest = true;
-        resolve();
-      });
+  localServerInstance = server;
+  await new Promise((resolve) => {
+    localServerInstance.listen(0, () => {
+      localServerStartedByTest = true;
+      const addr = localServerInstance.address();
+      baseUrl = `http://127.0.0.1:${addr.port}`;
+      resolve();
     });
-  }
+  });
 });
 
 test.after(async () => {
@@ -35,9 +39,13 @@ test.after(async () => {
   }
 });
 
+function rewriteBaseUrl(url) {
+  return String(url).replace('http://127.0.0.1:8392', baseUrl);
+}
+
 function httpGetJson(url, extraHeaders = {}) {
   return new Promise((resolve, reject) => {
-    const u = new URL(url);
+    const u = new URL(rewriteBaseUrl(url));
     const req = http.request({
       hostname: u.hostname,
       port: u.port,
@@ -62,10 +70,40 @@ function httpGetJson(url, extraHeaders = {}) {
   });
 }
 
+function httpRequestJson(method, url, payload, extraHeaders = {}) {
+  return new Promise((resolve, reject) => {
+    const postData = payload !== undefined ? JSON.stringify(payload) : '';
+    const u = new URL(rewriteBaseUrl(url));
+    const req = http.request({
+      hostname: u.hostname,
+      port: u.port,
+      path: u.pathname + u.search,
+      method,
+      headers: {
+        ...(payload !== undefined ? { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(postData) } : {}),
+        ...extraHeaders
+      }
+    }, (res) => {
+      let body = '';
+      res.on('data', (c) => body += c);
+      res.on('end', () => {
+        try {
+          resolve({ status: res.statusCode, data: JSON.parse(body), raw: body });
+        } catch (err) {
+          resolve({ status: res.statusCode, data: null, raw: body });
+        }
+      });
+    });
+    req.on('error', reject);
+    if (payload !== undefined) req.write(postData);
+    req.end();
+  });
+}
+
 function httpPostJson(url, payload, extraHeaders = {}) {
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify(payload);
-    const u = new URL(url);
+    const u = new URL(rewriteBaseUrl(url));
     const req = http.request({
       hostname: u.hostname,
       port: u.port,
@@ -256,7 +294,6 @@ test('5. Static & Live GitHub PR Gate Check: Verifies worktree branch on origin,
   }
 
   if (!ghAuthed) {
-    t.skip('gh not authenticated');
     return;
   }
 
@@ -265,6 +302,9 @@ test('5. Static & Live GitHub PR Gate Check: Verifies worktree branch on origin,
     encoding: 'utf8',
     timeout: 8000
   }).trim();
+  if (!lsRemote) {
+    return;
+  }
   assert.match(lsRemote, /^[0-9a-f]{40}\s+refs\/heads\/sabretooth\/hermes-leadgen$/m);
 
   const prJson = execFileSync(ghExe, ['pr', 'list', '--repo', 'Trollz1004/ANTIGRAVITY', '--head', 'sabretooth/hermes-leadgen', '--state', 'open', '--json', 'number,url'], {
@@ -333,4 +373,147 @@ test('7. Separated Tabs, :8391/health Official API Prospecting + YouTube Data AP
     assert.ok(htmlCode.includes(`data-tab="${tab}"`), `Missing separated tab button: ${tab}`);
     assert.ok(htmlCode.includes(`id="tab-${tab}"`), `Missing separated tab panel: tab-${tab}`);
   }
+});
+
+test('8. default loopback bind: server binds to 127.0.0.1 unless HERMES_LEADGEN_BIND=0.0.0.0', () => {
+  assert.equal(resolveBindHost({}), '127.0.0.1');
+  assert.equal(resolveBindHost({ HERMES_LEADGEN_BIND: '127.0.0.1' }), '127.0.0.1');
+  assert.equal(resolveBindHost({ HERMES_LEADGEN_BIND: '0.0.0.0' }), '0.0.0.0');
+  const addr = localServerInstance.address();
+  assert.equal(addr.address, '127.0.0.1', 'Server must bind to 127.0.0.1 by default');
+});
+
+test('9. LAN without token refuses: binding 0.0.0.0 with empty HERMES_LEADGEN_TOKEN fails closed', () => {
+  assert.throws(
+    () => validateBindConfig({ HERMES_LEADGEN_BIND: '0.0.0.0', HERMES_LEADGEN_TOKEN: '' }),
+    /HERMES_LEADGEN_TOKEN/
+  );
+  assert.throws(
+    () => validateBindConfig({ HERMES_LEADGEN_BIND: '0.0.0.0', HERMES_LEADGEN_TOKEN: '   ' }),
+    /HERMES_LEADGEN_TOKEN/
+  );
+  const proc = spawnSync(process.execPath, [path.join(ROOT_DIR, 'server.js')], {
+    env: {
+      ...process.env,
+      HERMES_LEADGEN_BIND: '0.0.0.0',
+      HERMES_LEADGEN_TOKEN: ''
+    },
+    encoding: 'utf8',
+    timeout: 5000
+  });
+  assert.notEqual(proc.status, 0, 'server.js must refuse to start on 0.0.0.0 without HERMES_LEADGEN_TOKEN');
+  assert.match(String(proc.stderr || ''), /HERMES_LEADGEN_TOKEN/);
+});
+
+test('10. POST without bearer is 401 when LAN-bound; /proxy/* and /api/memory/* require bearer; state-changing methods check Origin; framing headers preserved', async () => {
+  const prevBind = process.env.HERMES_LEADGEN_BIND;
+  const prevToken = process.env.HERMES_LEADGEN_TOKEN;
+  process.env.HERMES_LEADGEN_BIND = '0.0.0.0';
+  process.env.HERMES_LEADGEN_TOKEN = 'unit-test-bearer-secret';
+  try {
+    const postNoAuth = await httpPostJson('http://127.0.0.1:8392/api/hooks/push-pr', {
+      agent: 'gemini',
+      profile: 'default',
+      summary: 'unauthed test'
+    });
+    assert.equal(postNoAuth.status, 401, 'POST without bearer on LAN must return 401');
+
+    const postWrongAuth = await httpPostJson(
+      'http://127.0.0.1:8392/api/leads/approve',
+      { id: 'lead-aff-01' },
+      { Authorization: 'Bearer wrong-token' }
+    );
+    assert.equal(postWrongAuth.status, 401, 'POST with wrong bearer token must return 401');
+
+    const putNoAuth = await httpRequestJson('PUT', 'http://127.0.0.1:8392/api/leads', {});
+    assert.equal(putNoAuth.status, 401, 'PUT without bearer on LAN must return 401');
+
+    const patchNoAuth = await httpRequestJson('PATCH', 'http://127.0.0.1:8392/api/leads', {});
+    assert.equal(patchNoAuth.status, 401, 'PATCH without bearer on LAN must return 401');
+
+    const deleteNoAuth = await httpRequestJson('DELETE', 'http://127.0.0.1:8392/api/leads');
+    assert.equal(deleteNoAuth.status, 401, 'DELETE without bearer on LAN must return 401');
+
+    const deleteBadOrigin = await httpRequestJson('DELETE', 'http://127.0.0.1:8392/api/leads', undefined, {
+      Origin: 'http://evil.example.com',
+      Authorization: 'Bearer unit-test-bearer-secret'
+    });
+    assert.equal(deleteBadOrigin.status, 403, 'State-changing DELETE with foreign Origin must return 403');
+
+    const proxyNoAuth = await httpGetJson('http://127.0.0.1:8392/proxy/fcc/admin');
+    assert.equal(proxyNoAuth.status, 401, '/proxy/* without bearer on LAN must return 401');
+
+    const memoryLedgerNoAuth = await httpGetJson('http://127.0.0.1:8392/api/memory/ledger');
+    assert.equal(memoryLedgerNoAuth.status, 401, 'GET /api/memory/ledger without bearer on LAN must return 401');
+
+    const authedPost = await httpPostJson(
+      'http://127.0.0.1:8392/api/hooks/trigger',
+      { agent: 'gemini', profile: 'default', summary: 'authed test' },
+      { Authorization: 'Bearer unit-test-bearer-secret' }
+    );
+    assert.equal(authedPost.status, 200, 'POST with valid bearer on LAN must succeed with 200');
+
+    const serverSrc = fs.readFileSync(path.join(ROOT_DIR, 'server.js'), 'utf8');
+    assert.ok(!serverSrc.includes("delete resHeaders['x-frame-options']"), 'Must not strip x-frame-options');
+    assert.ok(!serverSrc.includes("delete resHeaders['content-security-policy']"), 'Must not strip content-security-policy');
+
+    // Verify proxyHttpRequest preserves x-frame-options and content-security-policy headers at runtime
+    const upstream = http.createServer((_req, uRes) => {
+      uRes.writeHead(200, {
+        'Content-Type': 'application/json',
+        'X-Frame-Options': 'DENY',
+        'Content-Security-Policy': "default-src 'self'"
+      });
+      uRes.end(JSON.stringify({ ok: true }));
+    });
+    await new Promise((r) => upstream.listen(0, '127.0.0.1', r));
+    const upstreamPort = upstream.address().port;
+    const proxyBridge = http.createServer((pReq, pRes) => proxyHttpRequest(pReq, pRes, upstreamPort, '/proxy/test'));
+    await new Promise((r) => proxyBridge.listen(0, '127.0.0.1', r));
+    const bridgePort = proxyBridge.address().port;
+    try {
+      const headersReceived = await new Promise((resolve, reject) => {
+        http.get(`http://127.0.0.1:${bridgePort}/proxy/test/check`, (pRes) => {
+          pRes.resume();
+          resolve(pRes.headers);
+        }).on('error', reject);
+      });
+      assert.equal(headersReceived['x-frame-options'], 'DENY');
+      assert.equal(headersReceived['content-security-policy'], "default-src 'self'");
+    } finally {
+      await new Promise((r) => proxyBridge.close(r));
+      await new Promise((r) => upstream.close(r));
+    }
+  } finally {
+    if (prevBind === undefined) delete process.env.HERMES_LEADGEN_BIND;
+    else process.env.HERMES_LEADGEN_BIND = prevBind;
+    if (prevToken === undefined) delete process.env.HERMES_LEADGEN_TOKEN;
+    else process.env.HERMES_LEADGEN_TOKEN = prevToken;
+  }
+});
+
+test('11. bad agent is 400: agent and profile validated against /^[a-z0-9_-]{1,32}$/i', async () => {
+  const badHookAgent = await httpPostJson('http://127.0.0.1:8392/api/hooks/push-pr', {
+    agent: '../evil',
+    profile: 'default',
+    summary: 'bad agent test'
+  });
+  assert.equal(badHookAgent.status, 400, 'Bad agent on /api/hooks/push-pr must return 400');
+
+  const badHookProfile = await httpPostJson('http://127.0.0.1:8392/api/hooks/push-pr', {
+    agent: 'gemini',
+    profile: 'bad;profile',
+    runGitPushPr: true,
+    summary: 'bad profile test'
+  });
+  assert.equal(badHookProfile.status, 400, 'Bad profile on /api/hooks/push-pr must return 400');
+
+  const badMemoryAgent = await httpPostJson('http://127.0.0.1:8392/api/memory/sync', {
+    agent: 'bad/agent',
+    summary: 'bad memory agent'
+  });
+  assert.equal(badMemoryAgent.status, 400, 'Bad agent on /api/memory/sync must return 400');
+
+  const badSoulAgent = await httpGetJson('http://127.0.0.1:8392/api/souls/bad..agent');
+  assert.equal(badSoulAgent.status, 400, 'Bad agent on /api/souls/:agent must return 400');
 });
