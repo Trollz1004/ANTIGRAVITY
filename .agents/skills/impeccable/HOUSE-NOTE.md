@@ -1,0 +1,1 @@
+Turn its telemetry off in its config and note that it fetches design directions from impeccable.style when a design starts, which is allowed as research on a public catalog but no asset from it ships.
