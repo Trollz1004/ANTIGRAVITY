@@ -1081,16 +1081,26 @@ const MAX_ALERTS = 60;
 const previousServiceState = {};
 let jarvisReachable = null; // null = no poll yet
 
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function renderWatchRows(services) {
   const list = document.getElementById('watch-list');
   list.innerHTML = '';
   for (const s of services) {
     const row = document.createElement('div');
     row.className = 'watch-row';
-    row.id = 'wr-' + s.id;
+    row.id = 'wr-' + String(s.id ?? '');
+    row.dataset.serviceId = String(s.id ?? '');
     row.innerHTML =
       '<span class="dot"></span>' +
-      '<div><div class="name">' + s.label + '</div><div class="url">' + s.url + '</div></div>' +
+      '<div><div class="name">' + escapeHtml(s.label) + '</div><div class="url">' + escapeHtml(s.url) + '</div></div>' +
       '<span class="lat">—</span>' +
       '<span class="code">—</span>';
     list.appendChild(row);
@@ -1106,7 +1116,7 @@ function renderUnreachableRows() {
     row.id = 'wr-jarvis-unreachable';
     row.innerHTML =
       '<span class="dot bad"></span>' +
-      '<div><div class="name">JARVIS Mission Control</div><div class="url">' + JARVIS_BASE + '/api/nodes</div></div>' +
+      '<div><div class="name">JARVIS Mission Control</div><div class="url">' + escapeHtml(JARVIS_BASE + '/api/nodes') + '</div></div>' +
       '<span class="lat bad">—</span>' +
       '<span class="code bad">JARVIS UNREACHABLE</span>';
     list.appendChild(row);
@@ -1159,10 +1169,11 @@ function renderAlerts() {
   for (const a of alerts) {
     const row = document.createElement('div');
     row.className = 'alert-row';
+    row.dataset.alertLevel = String(a.level ?? '');
     row.innerHTML =
-      '<span class="t">' + a.ts + '</span>' +
-      '<span class="l ' + a.level + '">' + a.label + '</span>' +
-      '<span class="m">' + a.message + '</span>';
+      '<span class="t">' + escapeHtml(a.ts) + '</span>' +
+      '<span class="l ' + escapeHtml(a.level) + '">' + escapeHtml(a.label) + '</span>' +
+      '<span class="m">' + escapeHtml(a.message) + '</span>';
     wrap.appendChild(row);
   }
 }
@@ -1322,6 +1333,13 @@ document.getElementById('btn-pause-poll').addEventListener('click', (e) => {
   pill.innerHTML = '<span class="dot"></span> WATCHDOG · ' + (paused ? 'PAUSED' : '5s');
   pushAlert(paused ? 'warn' : 'info', paused ? 'PAUSED' : 'RESUMED', paused ? 'Watchdog polling paused by operator' : 'Watchdog polling resumed');
 });
+
+globalThis.CockpitRenderers = {
+  escapeHtml,
+  renderWatchRows,
+  renderAlerts,
+  pushAlert,
+};
 </script>
 
 </body>

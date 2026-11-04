@@ -133,7 +133,7 @@ async def upload_file(
 
     # Create progress tracker entry
     upload_id = create_upload(
-        total_bytes=file_size, filename=file.filename or "unknown"
+        total_bytes=file_size, filename=file.filename or "unknown", user_id=user.id
     )
 
     # Create storage directory if not exists
@@ -216,11 +216,19 @@ async def upload_file(
 # ---------------------------------------------------------------------------
 
 
+def _load_owned_session(upload_id: str, current_user: User):
+    session = get_progress(upload_id)
+    if session is None or session.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Upload not found")
+    return session
+
+
+@router.post("/init")
 @router.post("/chunked/init")
 async def init_chunked_upload(
     filename: str = Query(..., description="Original filename"),
     total_bytes: int = Query(..., description="Total file size in bytes"),
-    user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ) -> JSONResponse:
     """Initialize a chunked upload session.
 
@@ -234,7 +242,11 @@ async def init_chunked_upload(
     if total_bytes <= 0:
         raise HTTPException(status_code=400, detail="total_bytes must be positive")
 
-    upload_id = create_upload(total_bytes=total_bytes, filename=filename)
+    upload_id = create_upload(
+        total_bytes=total_bytes,
+        filename=filename,
+        user_id=current_user.id,
+    )
 
     # Pre-create the chunk directory
     _get_chunk_dir(upload_id)
@@ -258,41 +270,48 @@ async def init_chunked_upload(
 
 
 @router.post("/chunked/{upload_id}")
+@router.post("/{upload_id}/chunk/{index}")
+@router.put("/{upload_id}/chunk/{index}")
+@router.post("/chunked/{upload_id}/chunk/{index}")
+@router.put("/chunked/{upload_id}/chunk/{index}")
 async def upload_chunk(
     upload_id: str,
     request: Request,
+    index: int | None = None,
     content_range: str | None = Header(None, alias="content-range"),
-    user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ) -> JSONResponse:
-    """Upload a single chunk of a file.
+    """Upload a single chunk of a file."""
+    session = _load_owned_session(upload_id, current_user)
+    if session.status in ("done", "failed"):
+        raise HTTPException(status_code=400, detail=f"Upload is already {session.status}")
 
-    The Content-Range header must be present and follow the format:
-        bytes <start>-<end>/<total>
-
-    Chunks are stored in a temporary directory and combined on finalize.
-    """
-    prog = get_progress(upload_id)
-    if prog is None:
-        raise HTTPException(status_code=404, detail="Upload not found")
-    if prog.status in ("done", "failed"):
-        raise HTTPException(status_code=400, detail=f"Upload is already {prog.status}")
-
+    body = await request.body()
     parsed = _parse_content_range(content_range)
-    if parsed is None:
+    if parsed is not None:
+        start, end, total = parsed
+        chunk_size = end - start + 1
+        if len(body) != chunk_size:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Chunk size mismatch: expected {chunk_size} bytes, got {len(body)}",
+            )
+    elif index is not None:
+        if index < 0 or not body:
+            raise HTTPException(status_code=400, detail="Invalid chunk index or empty chunk")
+        chunk_dir = _get_chunk_dir(upload_id)
+        existing = sorted(
+            chunk_dir.glob("chunk_*_*"),
+            key=lambda p: int(p.name.split("_")[1]),
+        )
+        start = int(existing[-1].name.split("_")[2]) + 1 if existing and index > 0 else 0
+        chunk_size = len(body)
+        end = start + chunk_size - 1
+        total = session.total_bytes
+    else:
         raise HTTPException(
             status_code=400,
             detail="Missing or invalid Content-Range header. Expected format: bytes <start>-<end>/<total>",
-        )
-
-    start, end, total = parsed
-    chunk_size = end - start + 1
-
-    # Read the raw body (the chunk bytes)
-    body = await request.body()
-    if len(body) != chunk_size:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Chunk size mismatch: expected {chunk_size} bytes, got {len(body)}",
         )
 
     chunk_dir = _get_chunk_dir(upload_id)
@@ -324,54 +343,54 @@ async def upload_chunk(
             "received_start": start,
             "received_end": end,
             "uploaded_bytes": start + chunk_size,
-            "total_bytes": prog.total_bytes,
+            "total_bytes": session.total_bytes,
         },
     )
 
 
 @router.get("/progress/{upload_id}")
+@router.get("/{upload_id}/status")
+@router.get("/chunked/{upload_id}/status")
 async def get_upload_progress(
     upload_id: str,
-    user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ) -> JSONResponse:
     """Get the current progress of an upload."""
-    prog = get_progress(upload_id)
-    if prog is None:
-        raise HTTPException(status_code=404, detail="Upload not found")
+    session = _load_owned_session(upload_id, current_user)
 
     percentage = (
-        round(prog.uploaded_bytes / prog.total_bytes * 100, 1)
-        if prog.total_bytes > 0
+        round(session.uploaded_bytes / session.total_bytes * 100, 1)
+        if session.total_bytes > 0
         else 0
     )
 
     return JSONResponse(
         status_code=200,
         content={
-            "upload_id": prog.upload_id,
-            "filename": prog.filename,
-            "total_bytes": prog.total_bytes,
-            "uploaded_bytes": prog.uploaded_bytes,
+            "upload_id": session.upload_id,
+            "filename": session.filename,
+            "total_bytes": session.total_bytes,
+            "uploaded_bytes": session.uploaded_bytes,
             "percentage": percentage,
-            "status": prog.status,
-            "error": prog.error,
-            "started_at": prog.started_at,
-            "updated_at": prog.updated_at,
+            "status": session.status,
+            "error": session.error,
+            "started_at": session.started_at,
+            "updated_at": session.updated_at,
         },
     )
 
 
 @router.post("/chunked/{upload_id}/finalize")
+@router.post("/{upload_id}/complete")
+@router.post("/chunked/{upload_id}/complete")
 async def finalize_chunked_upload(
     upload_id: str,
-    user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ) -> JSONResponse:
     """Combine all uploaded chunks into the final file and run validation."""
-    prog = get_progress(upload_id)
-    if prog is None:
-        raise HTTPException(status_code=404, detail="Upload not found")
-    if prog.status in ("done", "failed"):
-        raise HTTPException(status_code=400, detail=f"Upload is already {prog.status}")
+    session = _load_owned_session(upload_id, current_user)
+    if session.status in ("done", "failed"):
+        raise HTTPException(status_code=400, detail=f"Upload is already {session.status}")
 
     chunk_dir = _get_chunk_dir(upload_id)
 
@@ -399,11 +418,11 @@ async def finalize_chunked_upload(
             )
         expected_offset = end + 1
 
-    if expected_offset != prog.total_bytes:
+    if expected_offset != session.total_bytes:
         fail_upload(upload_id, "Incomplete upload: not all bytes received")
         raise HTTPException(
             status_code=400,
-            detail=f"Incomplete upload: received {expected_offset} of {prog.total_bytes} bytes",
+            detail=f"Incomplete upload: received {expected_offset} of {session.total_bytes} bytes",
         )
 
     # Mark as processing
@@ -414,7 +433,7 @@ async def finalize_chunked_upload(
     storage_path.mkdir(parents=True, exist_ok=True)
 
     file_hash = hashlib.sha256()
-    file_ext = Path(prog.filename).suffix.lower()
+    file_ext = Path(session.filename).suffix.lower()
     secure_filename = f"{file_hash.hexdigest()}{file_ext}"
     temp_path = storage_path / f"temp_{secure_filename}"
     dest_path = storage_path / secure_filename
@@ -467,15 +486,15 @@ async def finalize_chunked_upload(
         "Chunked upload finalized: %s -> %s (%d bytes)",
         upload_id,
         secure_filename,
-        prog.total_bytes,
+        session.total_bytes,
     )
 
     return JSONResponse(
         status_code=201,
         content={
             "id": secure_filename,
-            "original_filename": prog.filename,
-            "size_bytes": prog.total_bytes,
+            "original_filename": session.filename,
+            "size_bytes": session.total_bytes,
             "mime_type": detected_type,
             "storage_path": str(dest_path),
             "upload_id": upload_id,
@@ -484,14 +503,16 @@ async def finalize_chunked_upload(
 
 
 @router.delete("/chunked/{upload_id}")
+@router.delete("/{upload_id}")
+@router.post("/{upload_id}/cancel")
+@router.delete("/{upload_id}/cancel")
+@router.post("/chunked/{upload_id}/cancel")
 async def cancel_chunked_upload(
     upload_id: str,
-    user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ) -> JSONResponse:
     """Cancel a chunked upload and clean up all temporary data."""
-    prog = get_progress(upload_id)
-    if prog is None:
-        raise HTTPException(status_code=404, detail="Upload not found")
+    _load_owned_session(upload_id, current_user)
 
     # Remove chunk directory
     chunk_dir = _get_chunk_dir(upload_id)
@@ -509,6 +530,3 @@ async def cancel_chunked_upload(
             "status": "cancelled",
         },
     )
-
-
-# Need to import Request for the chunk endpoint body reading

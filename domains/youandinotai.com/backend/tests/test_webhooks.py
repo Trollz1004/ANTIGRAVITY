@@ -153,7 +153,7 @@ class TestSquareWebhookEndpointConfig:
         assert signature_key == "legacy-key"
         assert notification_url == "https://example.com/legacy"
 
-    def test_missing_signature_material_skips_verification(self):
+    def test_missing_signature_material_never_returns_false(self):
         from app.routers.webhooks import _should_verify_square_signature
 
         settings = MagicMock(
@@ -171,7 +171,7 @@ class TestSquareWebhookEndpointConfig:
             )
         )
 
-        assert should_verify is False
+        assert should_verify is True
         assert signature_key == ""
         assert notification_url == ""
 
@@ -741,11 +741,12 @@ def test_completed_bot_shield_payment_when_liveness_is_pending_records_payment_a
     assert user.bot_shield_verified is True
 
 
-def test_payment_webhook_skips_signature_check_when_material_missing(
+def test_payment_webhook_returns_503_and_changes_no_tier_when_config_unset(
     client,
     db_session_factory,
     monkeypatch,
 ):
+    import asyncio
     from app.config import get_settings
 
     monkeypatch.setenv("SQUARE_WEBHOOK_VERIFY_SIGNATURE", "true")
@@ -755,11 +756,13 @@ def test_payment_webhook_skips_signature_check_when_material_missing(
     monkeypatch.setenv("SQUARE_WEBHOOK_NOTIFICATION_URL", "")
     get_settings.cache_clear()
 
+    user_id = uuid.uuid4()
+
     async def seed_user() -> None:
         async with db_session_factory() as session:
             session.add(
                 User(
-                    id=uuid.uuid4(),
+                    id=user_id,
                     email="nosig@example.com",
                     password_hash="hashed",
                     display_name="No Sig",
@@ -769,15 +772,13 @@ def test_payment_webhook_skips_signature_check_when_material_missing(
             )
             await session.commit()
 
-    import asyncio
-
     asyncio.run(seed_user())
 
     payload = make_square_payment_event(
         event_id="evt_missing_sig_material",
-        amount_cents=100,
+        amount_cents=1499,
         buyer_email="nosig@example.com",
-        note="Bot-Shield Verification",
+        note="Founding Member subscription",
         payment_status="COMPLETED",
     )
 
@@ -787,7 +788,98 @@ def test_payment_webhook_skips_signature_check_when_material_missing(
         content=json.dumps(payload, separators=(",", ":")),
     )
 
-    assert response.status_code == 200, response.text
+    assert response.status_code == 503, response.text
+    assert response.json().get("detail") == "webhook verification not configured"
+
+    async def fetch_user() -> User | None:
+        async with db_session_factory() as session:
+            return await session.get(User, user_id)
+
+    user = asyncio.run(fetch_user())
+    assert user is not None
+    assert user.subscription_tier is None
+    assert user.subscription_active is False
+    assert user.bot_shield_verified is False
+
+    get_settings.cache_clear()
+
+
+def test_payment_webhook_rejects_wrong_signature_and_accepts_correct_signature(
+    client,
+    db_session_factory,
+    monkeypatch,
+):
+    import asyncio
+    from app.config import get_settings
+
+    dummy_key = "dummy-test-webhook-sig-key"
+    dummy_url = "http://testserver/api/v1/webhooks/square-payment"
+    monkeypatch.setenv("SQUARE_WEBHOOK_VERIFY_SIGNATURE", "true")
+    monkeypatch.setenv("SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY", dummy_key)
+    monkeypatch.setenv("SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL", dummy_url)
+    get_settings.cache_clear()
+
+    user_id = uuid.uuid4()
+
+    async def seed_user() -> None:
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=user_id,
+                    email="sigcheck@example.com",
+                    password_hash="hashed",
+                    display_name="Sig Check",
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            await session.commit()
+
+    asyncio.run(seed_user())
+
+    payload = make_square_payment_event(
+        event_id="evt_sigcheck_flow_1",
+        amount_cents=1499,
+        buyer_email="sigcheck@example.com",
+        note="Founding Member subscription",
+        payment_status="COMPLETED",
+    )
+    raw_body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+
+    bad_resp = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "Content-Type": "application/json",
+            "x-square-hmacsha256-signature": "wrong-signature",
+        },
+        content=raw_body,
+    )
+    assert bad_resp.status_code == 400
+
+    async def fetch_user() -> User | None:
+        async with db_session_factory() as session:
+            return await session.get(User, user_id)
+
+    user_after_bad = asyncio.run(fetch_user())
+    assert user_after_bad is not None
+    assert user_after_bad.subscription_tier is None
+    assert user_after_bad.subscription_active is False
+
+    valid_sig = generate_square_signature(raw_body, dummy_key, dummy_url)
+    good_resp = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "Content-Type": "application/json",
+            "x-square-hmacsha256-signature": valid_sig,
+        },
+        content=raw_body,
+    )
+    assert good_resp.status_code == 200, good_resp.text
+
+    user_after_good = asyncio.run(fetch_user())
+    assert user_after_good is not None
+    assert user_after_good.subscription_tier == "founding_member"
+    assert user_after_good.subscription_active is True
 
     get_settings.cache_clear()
 
