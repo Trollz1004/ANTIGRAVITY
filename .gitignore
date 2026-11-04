@@ -349,3 +349,4 @@ ops/agy-jobs/*.txt
  
 # Security audit output
 ops/security/runs/
+!/.agents/skills/**
