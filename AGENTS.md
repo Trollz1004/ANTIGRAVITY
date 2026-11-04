@@ -3,7 +3,7 @@
 
 1. **GO READ HERE (Node & Role Specs)**:
    - Global Standard: `docs/standards/AGENT-STANDARD.md` | Full Canon Backup: `docs/standards/backups-full-context/AGENTS.md.full-backup`
-   - Node 1 Alienware (address in the node env file · `Trollz1004/dream-online` · `%USERPROFILE%\antigravity\DREAM-Engine`): `docs/standards/ALIENWARE-SOUL.md` (Pure 3D Engine `:20129`, 0 local LLM weights on RTX 3070).
+   - Node 1 Alienware (address in the node env file · `Trollz1004/dream-online` · `%USERPROFILE%\antigravity\DREAM-Engine`): `docs/standards/ALIENWARE-SOUL.md` (Pure 3D Engine `:9180`, 0 local LLM weights on RTX 3070).
    - Node 2 T5500 (address in the node env file · `Trollz1004/ANTIGRAVITY` · `C:\ANTIGRAVITY`): Mission Control `:3130`, OmniRoute `:20128`, Shared `ai-memory` `:49374` (address in the node env file), Production Domains.
    - Node 3 Sabretooth (address in the node env file · `Trollz1004/ANTIGRAVITY` · `C:\Ai-Dream-Team\Antigravity\`): `docs/standards/SABRETOOTH-SOUL.md` (`apps/hermes-leadgen/` `:8392`, `youtube-shorts-podcast-engine\` `:8391`, `repos\Maestro\`, `repos\harvey`, ComfyUI `:8188`, Ollama `:11434`, Hermes `:9119`, Free Claude Code `:8082`).
 2. **MANDATORY UI & RULE ONE (`200 OK IS NOT OK`)**:

@@ -44,7 +44,7 @@ points at that remote URL.
 | **8642** | python | **ox-alpha Hermes gateway.** Serves `/health`, **not** `/api/health` — a check written against `/api/health` reports it down while it runs. Restarted 2026-08-26; nothing supervises it, so it dies on reboot. |
 | **9134** | node | **official-vote-service** — council ballots, carved out of MC5 so that app can be retired. Parity with `:3151` proven byte-identical. Loopback only: governance, not a public surface. Also unsupervised. |
 | 11434 | ollama | Ollama (fail-safe route only) |
-| 20128/20129 | node | OmniRoute gateway |
+| 20128 | node | OmniRoute gateway |
 | 27017 | mongod | CRM database |
 | 54329 | postgres | Paperclip's embedded database |
 

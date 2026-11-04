@@ -95,7 +95,7 @@ A refused, failed, or empty result is evidence about that one call, nothing more
 
 ## 9. Nodes & Two Monorepos
 
-- **Alienware (address in the node env file, Unified Game Monorepo `Trollz1004/dream-online` / `DREAM-Engine`)**: The 3D Game Engine & Workshop node (`RTX 3070 8 GB CUDA`, engine on port `:20129`). DREAM Online and adults-only (`Grindroid`) development are kept 100% separate in their own folders, repos, assets, and agent sessions. See `docs/standards/ALIENWARE-SOUL.md`.
+- **Alienware (address in the node env file, Unified Game Monorepo `Trollz1004/dream-online` / `DREAM-Engine`)**: The 3D Game Engine & Workshop node (`RTX 3070 8 GB CUDA`, engine on port `:9180`). DREAM Online and adults-only (`Grindroid`) development are kept 100% separate in their own folders, repos, assets, and agent sessions. See `docs/standards/ALIENWARE-SOUL.md`.
 - **T5500 (address in the node env file, Platform Monorepo `Trollz1004/ANTIGRAVITY`)**: Shipped production domains, streamable Mission OS on port `:3130`, OmniRoute `:20128`, Hermes (`OPSis`) support, OpenClaw watchdog only, and the shared fleet `ai-memory` MCP (`:49374`, address in the node env file). Leave it alone unless Josh says otherwise.
 - **Sabretooth (address in the node env file, Platform Monorepo `Trollz1004/ANTIGRAVITY` GPU Offload)**: 16 GB AMD GPU YouTube studio (`<= 59.0s` Shorts & Natural Female Voice Podcast) and lead generation desk. See `docs/standards/SABRETOOTH-SOUL.md`.
 

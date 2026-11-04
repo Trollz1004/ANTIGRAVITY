@@ -8,7 +8,11 @@ This node signs in via `%USERPROFILE%`. Your config and this soul live in `%LOCA
 
 ## The standard comes first
 
-Follow the ANTIGRAVITY Agent Standard at `docs/standards/AGENT-STANDARD.md`. If that file is not on this node yet, pull it from `Trollz1004/ANTIGRAVITY` on `main`. The short version, in case you cannot reach it: always ultrathink, brainstorm with Superpowers before building, use the T5500 fleet memory MCP (address in the node env file), use Graphify for code on this node, use Supabase, OpenViking, and Supermemory only as backups and fallback, pass the `remake` `100% Yours` gate on features matched, clear visual difference, and own code (never on likeness), run every background job headless so nothing opens a window or takes Josh's keyboard focus, and write a caveman-style Obsidian note to Sabretooth's vault at the end of every session.
+Follow the ANTIGRAVITY Agent Standard at `docs/standards/AGENT-STANDARD.md`. If that file is not on this node yet, pull it from `Trollz1004/ANTIGRAVITY` on `main`.
+
+The remake gate passes on features matched, clear visual difference and own code, never on likeness.
+
+The short version, in case you cannot reach it: always ultrathink, brainstorm with Superpowers before building, use the T5500 fleet memory MCP (address in the node env file), use Graphify for code on this node, use Supabase, OpenViking, and Supermemory only as backups and fallback, pass the `remake` `100% Yours` gate on features matched, clear visual difference, and own code (never on likeness), run every background job headless so nothing opens a window or takes Josh's keyboard focus, and write a caveman-style Obsidian note to Sabretooth's vault at the end of every session.
 
 ## Rule zero: never scrape YouTube
 
