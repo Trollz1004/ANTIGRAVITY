@@ -207,7 +207,16 @@ $Stages = @(
     # squatting the port is logged, never killed, and the stage just keeps
     # retrying as it always has.
     @{ Name = 'Frontend :3200 (production bundle)'; Required = $true
-       Probe = { Test-Http 'http://127.0.0.1:3200/' 10 'assets/index-' }
+       Probe = { if (-not (Test-Http 'http://127.0.0.1:3200/' 10 'assets/index-')) { return $false }
+                 $distIdx = 'C:\ANTIGRAVITY\domains\youandinotai.com\frontend\dist\index.html'
+                 $srcDir  = 'C:\ANTIGRAVITY\domains\youandinotai.com\frontend\src'
+                 if ((Test-Path $distIdx) -and (Test-Path $srcDir)) {
+                     if ((Get-Item $distIdx).LastWriteTimeUtc -lt (Get-NewestWriteUtc @($srcDir))) {
+                         Log '  DateApp dist/index.html is older than src/ - rebuilding and restarting :3200' 'Yellow'
+                         return $false
+                     }
+                 }
+                 return $true }
        Heal  = { if ((Test-Port 3200) -and -not (Test-Http 'http://127.0.0.1:3200/' 10 'assets/index-')) {
                      Get-NetTCPConnection -LocalPort 3200 -State Listen -ErrorAction SilentlyContinue | ForEach-Object {
                          $owner = $_.OwningProcess
@@ -219,9 +228,11 @@ $Stages = @(
                          } else {
                              Log '  squatter does not match the known offender - not killing, will keep retrying' 'DarkYellow'
                          }
-                     }
-                 }
-                 Start-Process cmd -ArgumentList '/c','C:\ANTIGRAVITY\scripts\fables-house\tab-dateapp.cmd' -WindowStyle Hidden } }
+                         }
+                         } elseif (Test-Port 3200) {
+                         Stop-PortOwner 3200
+                         }
+                         Start-Process cmd -ArgumentList '/c','C:\ANTIGRAVITY\scripts\fables-house\tab-dateapp.cmd' -WindowStyle Hidden } }
 
     @{ Name = 'Backend API :8000 (db connected)'; Required = $true
        Probe = { Test-Http 'http://127.0.0.1:8000/api/v1/health' 30 '"db_connected":true' }

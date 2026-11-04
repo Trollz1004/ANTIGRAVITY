@@ -3,7 +3,7 @@
 Installs frontend dependencies and starts YouAndINotAI frontend on :3200
 (cloudflared origin for youandinotai.com).
 #>
-param([string]$RepoRoot = 'F:\ANTIGRAVITY')
+param([string]$RepoRoot = 'C:\ANTIGRAVITY')
 $ErrorActionPreference = 'Continue'
 $LogDir = Join-Path $RepoRoot 'logs'
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
@@ -22,7 +22,7 @@ try {
   }
 } catch {}
 
-$dir = Join-Path $RepoRoot 'frontend\react-app'
+$dir = Join-Path $RepoRoot 'domains\youandinotai.com\frontend'
 if (-not (Test-Path (Join-Path $dir 'package.json'))) {
   L "missing package.json under $dir"
   exit 1

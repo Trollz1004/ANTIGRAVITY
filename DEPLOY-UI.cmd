@@ -3,9 +3,10 @@ REM =====================================================================
 REM  youandinotai.com  -  BUILD + GO LIVE
 REM  RUN THIS ON T5500. Do not run elevated.
 REM
-REM  HOW THIS SITE ACTUALLY SERVES (verified 2026-07-12):
-REM    DNS -> Cloudflare -> cloudflared tunnel 68a2e766...
-REM        -> http://127.0.0.1:3200 on T5500  -> serves react-app\dist
+REM  HOW THIS SITE ACTUALLY SERVES (verified 2026-07-12, path updated 2026-11-04):
+REM    DNS -> Cloudflare -> cloudflared tunnel 515b70b2-9730-45af-9691-6e14fd73eff3
+REM        -> http://127.0.0.1:3200 on T5500 (.15) -> serves domains\youandinotai.com\frontend\dist
+REM        -> api.youandinotai.com -> http://127.0.0.1:8000 on T5500 (.15)
 REM
 REM    It is NOT Cloudflare Pages. wrangler.toml is a leftover.
 REM    Rebuilding dist/ IS the deploy. No wrangler needed.
@@ -17,7 +18,7 @@ REM    - white-on-white fixed (VERIFY / MATCH / PLAN, Better opener)
 REM    - "prompt" renamed to "icebreaker" everywhere
 REM =====================================================================
 setlocal
-cd /d C:\ANTIGRAVITY\frontend\react-app || (echo [X] app folder not found & pause & exit /b 1)
+cd /d C:\ANTIGRAVITY\domains\youandinotai.com\frontend || (echo [X] app folder not found & pause & exit /b 1)
 
 echo.
 echo === [1/3] TYPE CHECK ===

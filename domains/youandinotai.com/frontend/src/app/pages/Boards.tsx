@@ -62,12 +62,23 @@ export function Boards() {
   const [loading, setLoading] = useState(true);
   const [safetyOpen, setSafetyOpen] = useState(false);
   const [boardNotice, setBoardNotice] = useState<string | null>(null);
+  const [boardError, setBoardError] = useState<string | null>(null);
   const [safetyAvailable, setSafetyAvailable] = useState(false);
 
   useEffect(() => {
     api
       .get<BoardInfo[]>('/boards')
-      .then(setBoards)
+      .then(data => {
+        setBoards(data);
+        setBoardError(null);
+      })
+      .catch((err: unknown) => {
+        const message =
+          err instanceof Error && err.message
+            ? err.message
+            : 'Could not load boards.';
+        setBoardError(message);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -78,38 +89,76 @@ export function Boards() {
   const loadPosts = async (slug: string) => {
     setActiveBoard(slug);
     setActivePost(null);
-    const data = await api.get<PostData[]>(`/boards/${slug}/posts`);
-    setPosts(data);
+    setBoardError(null);
+    try {
+      const data = await api.get<PostData[]>(`/boards/${slug}/posts`);
+      setPosts(data);
+    } catch (err: unknown) {
+      setPosts([]);
+      setBoardError(
+        err instanceof Error && err.message
+          ? err.message
+          : 'Could not load posts for this board.'
+      );
+    }
   };
 
   const loadComments = async (post: PostData) => {
     setActivePost(post);
-    const data = await api.get<CommentData[]>(
-      `/boards/${post.board_slug}/posts/${post.id}/comments`
-    );
-    setComments(data);
+    setBoardError(null);
+    try {
+      const data = await api.get<CommentData[]>(
+        `/boards/${post.board_slug}/posts/${post.id}/comments`
+      );
+      setComments(data);
+    } catch (err: unknown) {
+      setComments([]);
+      setBoardError(
+        err instanceof Error && err.message
+          ? err.message
+          : 'Could not load comments.'
+      );
+    }
   };
 
   const submitPost = async () => {
     if (!activeBoard || !newTitle.trim() || !newBody.trim()) return;
-    await api.post(`/boards/${activeBoard}/posts`, {
-      title: newTitle,
-      body: newBody,
-    });
-    setNewTitle('');
-    setNewBody('');
-    setShowNewPost(false);
-    loadPosts(activeBoard);
+    setBoardError(null);
+    try {
+      await api.post(`/boards/${activeBoard}/posts`, {
+        title: newTitle,
+        body: newBody,
+      });
+      setNewTitle('');
+      setNewBody('');
+      setShowNewPost(false);
+      await loadPosts(activeBoard);
+    } catch (err: unknown) {
+      setBoardError(
+        err instanceof Error && err.message
+          ? err.message
+          : 'Could not publish post.'
+      );
+    }
   };
 
   const submitComment = async () => {
     if (!activePost || !newComment.trim()) return;
-    await api.post(
-      `/boards/${activePost.board_slug}/posts/${activePost.id}/comments`,
-      { body: newComment }
-    );
-    setNewComment('');
-    loadComments(activePost);
+    setBoardError(null);
+    try {
+      await api.post(
+        `/boards/${activePost.board_slug}/posts/${activePost.id}/comments`,
+        { body: newComment }
+      );
+      setNewComment('');
+      await loadComments(activePost);
+    } catch (err: unknown) {
+      setBoardError(
+        err instanceof Error && err.message
+          ? err.message
+          : 'Could not publish comment.'
+      );
+    }
   };
 
   const reportActivePost = async () => {
@@ -120,11 +169,19 @@ export function Boards() {
     );
     if (!reason || !reason.trim()) return;
 
-    await api.post(`/boards/posts/${activePost.id}/report`, {
-      reason: reason.trim(),
-      details: `Board=${activePost.board_slug}; post=${activePost.id}; author=${activePost.author_id}`,
-    });
-    setBoardNotice('Board post queued for moderation review.');
+    try {
+      await api.post(`/boards/posts/${activePost.id}/report`, {
+        reason: reason.trim(),
+        details: `Board=${activePost.board_slug}; post=${activePost.id}; author=${activePost.author_id}`,
+      });
+      setBoardNotice('Board post queued for moderation review.');
+    } catch (err: unknown) {
+      setBoardError(
+        err instanceof Error && err.message
+          ? err.message
+          : 'Could not report post.'
+      );
+    }
   };
 
   if (loading) {
@@ -160,6 +217,12 @@ export function Boards() {
         {boardNotice && (
           <div className="mb-4 rounded-[1.2rem] border-4 border-[#111111] bg-[#eef8ed] px-4 py-3 text-sm font-bold text-[#244f1f]">
             {boardNotice}
+          </div>
+        )}
+
+        {boardError && (
+          <div className="mb-4 rounded-[1.2rem] border-4 border-[#111111] bg-[#fff4ef] px-4 py-3 text-sm font-bold text-[#9a2c00]">
+            {boardError}
           </div>
         )}
 
@@ -309,6 +372,12 @@ export function Boards() {
           </button>
         </div>
 
+        {boardError && (
+          <div className="mb-6 rounded-[1.2rem] border-4 border-[#111111] bg-[#fff4ef] px-4 py-3 text-sm font-bold text-[#9a2c00]">
+            {boardError}
+          </div>
+        )}
+
         {showNewPost && (
           <div className="glass-strong rounded-3xl p-6 glass-highlight mb-6 space-y-4 animate-scale-in">
             <input
@@ -381,6 +450,11 @@ export function Boards() {
           main dating flow.
         </p>
       </div>
+      {boardError && (
+        <div className="mb-6 rounded-[1.2rem] border-4 border-[#111111] bg-[#fff4ef] px-4 py-3 text-sm font-bold text-[#9a2c00]">
+          {boardError}
+        </div>
+      )}
       <LazySection fallback={<SkeletonLoader />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 stagger-children">
           {boards.map(board => {

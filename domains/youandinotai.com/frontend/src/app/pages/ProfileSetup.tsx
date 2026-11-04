@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   CalendarCheck,
@@ -14,6 +14,54 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../../lib/auth';
 import { api } from '../../lib/api';
 import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
+
+interface SavedProfileResponse {
+  user_id: string;
+  display_name: string;
+  bio: string | null;
+  age: number | null;
+  gender: string | null;
+  looking_for: string | null;
+  location: string | null;
+  photos: string[];
+  interests: string[];
+  verified: boolean;
+}
+
+function parseStructuredBio(rawBio: string | null): {
+  bio: string;
+  promptAnswer: string;
+  dateComfort: string;
+  safetyPreference: string;
+} {
+  if (!rawBio) {
+    return { bio: '', promptAnswer: '', dateComfort: '', safetyPreference: '' };
+  }
+  let promptAnswer = '';
+  let dateComfort = '';
+  let safetyPreference = '';
+  const bioParts: string[] = [];
+
+  for (const block of rawBio.split(/\n\n+/)) {
+    const trimmed = block.trim();
+    if (trimmed.startsWith('Prompt: ')) {
+      promptAnswer = trimmed.slice('Prompt: '.length).trim();
+    } else if (trimmed.startsWith('Date comfort: ')) {
+      dateComfort = trimmed.slice('Date comfort: '.length).trim();
+    } else if (trimmed.startsWith('Safety preference: ')) {
+      safetyPreference = trimmed.slice('Safety preference: '.length).trim();
+    } else if (trimmed) {
+      bioParts.push(trimmed);
+    }
+  }
+
+  return {
+    bio: bioParts.join('\n\n'),
+    promptAnswer,
+    dateComfort,
+    safetyPreference,
+  };
+}
 
 const INTEREST_OPTIONS = [
   'Travel',
@@ -57,6 +105,43 @@ export function ProfileSetup() {
   const [promptAnswer, setPromptAnswer] = useState('');
   const [dateComfort, setDateComfort] = useState('');
   const [safetyPreference, setSafetyPreference] = useState('');
+
+  useEffect(() => {
+    let active = true;
+    api
+      .get<SavedProfileResponse>('/profiles/me')
+      .then(profile => {
+        if (!active || !profile) return;
+        const parsed = parseStructuredBio(profile.bio);
+        setBio(parsed.bio);
+        if (parsed.promptAnswer) setPromptAnswer(parsed.promptAnswer);
+        if (parsed.dateComfort) setDateComfort(parsed.dateComfort);
+        if (parsed.safetyPreference) {
+          setSafetyPreference(parsed.safetyPreference);
+        }
+        if (profile.age !== null && profile.age !== undefined) {
+          setAge(String(profile.age));
+        }
+        if (profile.gender) {
+          setGender(profile.gender.toLowerCase());
+        }
+        if (profile.looking_for) {
+          setLookingFor(profile.looking_for.toLowerCase());
+        }
+        if (profile.location) {
+          setLocation(profile.location);
+        }
+        if (Array.isArray(profile.interests)) {
+          setSelectedInterests(profile.interests);
+        }
+      })
+      .catch(() => {
+        // 404 is expected before the user saves their profile for the first time.
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const toggleInterest = (interest: string) => {
     setSelectedInterests(prev =>

@@ -14,8 +14,14 @@ rem machine inherits PORT.
 title dateapp (:3200)
 cd /d C:\ANTIGRAVITY\domains\youandinotai.com\frontend
 
-if not exist "dist\index.html" (
-  echo [dateapp] no production build found - building first...
+set "NEEDS_BUILD=0"
+if not exist "dist\index.html" set "NEEDS_BUILD=1"
+if "%NEEDS_BUILD%"=="0" (
+  powershell -NoProfile -Command "$dist = (Get-Item 'dist\index.html').LastWriteTimeUtc; $src = (Get-ChildItem 'src' -Recurse -File | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1).LastWriteTimeUtc; if ($src -gt $dist) { exit 1 } else { exit 0 }"
+  if errorlevel 1 set "NEEDS_BUILD=1"
+)
+if "%NEEDS_BUILD%"=="1" (
+  echo [dateapp] production build missing or older than src - building first...
   call npm run build
 )
 
