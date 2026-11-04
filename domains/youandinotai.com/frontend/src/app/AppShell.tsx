@@ -8,6 +8,7 @@ import {
   Settings,
   Sparkles,
   User,
+  Users,
   Video,
   Wand2,
 } from 'lucide-react';
@@ -26,6 +27,7 @@ const DESKTOP_NAV = [
   { to: '/app', icon: Compass, label: 'Discover', end: true },
   { to: '/app/matches', icon: Heart, label: 'Matches' },
   { to: '/app/inbox', icon: MessageCircle, label: 'Messages' },
+  { to: '/app/boards', icon: Users, label: 'Boards' },
   { to: '/app/create', icon: Wand2, label: 'Create' },
   { to: '/app/video-lobby', icon: Video, label: 'Video' },
   { to: '/app/avatar', icon: Sparkles, label: 'Animate' },

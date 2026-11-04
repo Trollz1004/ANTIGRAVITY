@@ -256,7 +256,19 @@ $Stages = @(
        } },
 
     @{ Key = 'frontend'; Name = 'Date-app frontend :3200'; Settle = 60
-       Probe = { Test-Http 'http://127.0.0.1:3200/' 10 'assets/index-' }
+       Probe = {
+           if (-not (Test-Http 'http://127.0.0.1:3200/' 10 'assets/index-')) { return $false }
+           $distIdx = Join-Path $Repo 'domains\youandinotai.com\frontend\dist\index.html'
+           $srcDir  = Join-Path $Repo 'domains\youandinotai.com\frontend\src'
+           if ((Test-Path $distIdx) -and (Test-Path $srcDir)) {
+               $newestSrc = (Get-ChildItem $srcDir -Recurse -File -ErrorAction SilentlyContinue | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1).LastWriteTimeUtc
+               if ($newestSrc -and ((Get-Item $distIdx).LastWriteTimeUtc -lt $newestSrc)) {
+                   Log '  Date-app dist/index.html is older than src/ - triggering rebuild on :3200'
+                   return $false
+               }
+           }
+           return $true
+       }
        Heal  = {
            if (Test-Port 3200) {
                $own = (Get-NetTCPConnection -LocalPort 3200 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1).OwningProcess
