@@ -1343,7 +1343,12 @@ async function ensureMarketingQrCards() {
     fs.writeFileSync(outPath, svgContent, 'utf8');
     results.push({
       ...camp,
+      cardHeader: camp.title,
+      utmUrl: camp.targetUrl,
+      productCopy: camp.valueCopy,
+      refCode: camp.ref,
       svgUrl: `/marketing/qr/${camp.fileName}`,
+      qrSvgPath: `/marketing/qr/${camp.fileName}`,
       relativePath: `apps/hermes-leadgen/marketing/qr/${camp.fileName}`,
     });
   }
