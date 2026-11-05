@@ -191,168 +191,83 @@ function appendTerminalLog(profile, cmd, output, status = 'ok') {
 
 const DEFAULT_LEADS = [
   {
-    id: 'lead-aff-01',
-    company: 'RealSinglesTalk Media LLC',
-    contact: 'Elena Vance · Partner Desk (@RealSinglesTalk)',
-    name: 'RealSinglesTalk Media LLC (@RealSinglesTalk)',
-    handle: '@RealSinglesTalk',
+    id: 'lead-sample-01',
+    company: 'SAMPLE — Dating Partner Network',
+    contact: 'SAMPLE — Elena V. (@PartnerDesk)',
+    name: 'SAMPLE — Dating Partner Network',
+    handle: '@PartnerDesk',
     stage: 'Outreach Drafted',
-    source: 'X Official API v2',
+    source: 'GitHub REST API',
     owner: 'OPSis · Harvey Desk',
-    lastTouch: '2026-11-04 18:15 ET',
+    lastTouch: '2026-11-05 11:00 ET',
     nextStep: 'Josh reviews draft & sets approval state',
     approvalState: 'Awaiting Josh Approval',
     leadType: '1-affiliate-dateapp',
     leadTypeLabel: '1 — Partner UTM Links for Date App (youandinotai.com)',
     targetProduct: 'youandinotai.com',
-    score: 94,
+    score: 90,
     status: 'READY_FOR_REVIEW',
     approved: false,
     signal:
-      'Official X API v2 intent signal: hosts weekly live audio rooms for singles seeking verified human dating communities.',
+      'Sample intent signal: Partner directory listing for creator networks seeking verified human dating partnerships.',
     draft:
-      'Hi Elena — we built YouAndINotAI.com with a $1 Bot-Shield liveness check so every member is a verified human. Members get real-time video introductions, structured bio matching, and city event boards. Would you like a custom UTM partner link and printable QR card for your listeners?',
-    createdAt: '2026-11-04T18:15:00.000Z',
+      'YouAndINotAI.com verifies every member with a $1 Bot-Shield check and offers live video introductions plus regional event boards. We provide dedicated UTM partner tracking and printable QR cards.',
+    createdAt: '2026-11-05T11:00:00.000Z',
+    isSample: true,
   },
   {
-    id: 'lead-aff-02',
-    company: 'Modern Romance Audio Network',
-    contact: 'Marcus Sterling · Executive Producer',
-    name: 'Modern Romance Audio Network (Podcast Syndicate)',
-    handle: '@ModernRomanceAudio',
-    stage: 'Partner Review',
-    source: 'Apple Podcasts Official Directory API',
-    owner: 'OPSis · Harvey Desk',
-    lastTouch: '2026-11-04 17:40 ET',
-    nextStep: 'Send UTM show-notes link after Josh approval',
-    approvalState: 'Awaiting Josh Approval',
-    leadType: '1-affiliate-dateapp',
-    leadTypeLabel: '1 — Partner UTM Links for Date App (youandinotai.com)',
-    targetProduct: 'youandinotai.com',
-    score: 91,
-    status: 'READY_FOR_REVIEW',
-    approved: false,
-    signal:
-      'Official podcast directory metadata: 3 recent episodes covering intentional dating and local singles events.',
-    draft:
-      'Hi Marcus — loved your recent episode on intentional dating. YouAndINotAI.com verifies every member with a $1 Bot-Shield check and features live video dates plus local event boards. Let us know if you want a tracked UTM link for your show notes.',
-    createdAt: '2026-11-04T17:40:00.000Z',
-  },
-  {
-    id: 'lead-sub-01',
-    company: 'Verified Singles Community Cohort',
-    contact: 'Moderator Team · r/datingoverthirty',
-    name: 'r/datingoverthirty Verified Singles Thread (High-Intent Cohort)',
-    handle: 'r/datingoverthirty',
-    stage: 'Active Sequence',
-    source: 'Reddit Official Data API',
-    owner: 'OPSis · Harvey Desk',
-    lastTouch: '2026-11-04 16:50 ET',
-    nextStep: 'Monitor UTM landing-captures on youandinotai.com',
-    approvalState: 'Approved by Josh',
-    leadType: '2-subscriptions-dateapp',
-    leadTypeLabel: '2 — Subscriptions for Actual Date App (youandinotai.com Verified Humans)',
-    targetProduct: 'youandinotai.com',
-    score: 96,
-    status: 'WORKING',
-    approved: true,
-    signal:
-      'Reddit Official Data API weekly thread: 310+ singles requesting verified human dating profiles and structured local meetups.',
-    draft:
-      'YouAndINotAI.com is live for singles who want verified human connections. Every profile passes a $1 Bot-Shield check, with structured bio matching, community discussion boards, and local event listings. Founding member access is open now.',
-    createdAt: '2026-11-04T16:50:00.000Z',
-  },
-  {
-    id: 'lead-sub-02',
-    company: 'Metro Singles Social Club',
-    contact: 'Rachel Moore · Events Director (@MetroSinglesClub)',
-    name: 'Metro Singles Social Club (Regional Meetup Organizers)',
-    handle: '@MetroSinglesClub',
-    stage: 'Qualified Signal',
-    source: 'X Official API v2',
-    owner: 'OPSis · Harvey Desk',
-    lastTouch: '2026-11-04 16:10 ET',
-    nextStep: 'Josh reviews event-board collaboration draft',
-    approvalState: 'Awaiting Josh Approval',
-    leadType: '2-subscriptions-dateapp',
-    leadTypeLabel: '2 — Subscriptions for Actual Date App (youandinotai.com Verified Humans)',
-    targetProduct: 'youandinotai.com',
-    score: 89,
-    status: 'READY_FOR_REVIEW',
-    approved: false,
-    signal:
-      'Official X API v2 post: organizing monthly in-person mixers for verified singles across Florida and Texas.',
-    draft:
-      'Hi Rachel — YouAndINotAI.com combines $1 Bot-Shield human verification with dedicated regional event boards and video introductions. We would love to feature your upcoming mixers on our community events board.',
-    createdAt: '2026-11-04T16:10:00.000Z',
-  },
-  {
-    id: 'lead-fund-01',
-    company: 'Indie WebGPU & Open-Ledger Collective',
-    contact: 'Devon K. · OpenCollective Backer Lead',
-    name: 'Open Source Indie MMO & AI Studio Backers (Open Collective)',
-    handle: 'opencollective.com/dream-online',
-    stage: 'Active Sequence',
-    source: 'GitHub REST API v3',
-    owner: 'OPSis · Harvey Desk',
-    lastTouch: '2026-11-04 15:25 ET',
-    nextStep: 'Share Volume 2 engine milestone update',
-    approvalState: 'Approved by Josh',
-    leadType: '3-funding-dream-online',
-    leadTypeLabel: '3 — Funding Sources for DREAM Online Crowdfunding (opencollective.com/dream-online)',
-    targetProduct: 'dream-online.net',
-    score: 97,
-    status: 'WORKING',
-    approved: true,
-    signal:
-      'GitHub REST API v3 stargazer & sponsor signal: WebGPU and 3D RPG builders following open-ledger studio releases.',
-    draft:
-      'DREAM Online is an in-house 3D Action MMORPG built with Google Gemini featuring live AI NPCs and an open development ledger at OpenCollective.com/dream-online. Check out our latest Volume 2 world milestones.',
-    createdAt: '2026-11-04T15:25:00.000Z',
-  },
-  {
-    id: 'lead-fund-02',
-    company: 'Florida Tech & Enterprise Office ITAD',
-    contact: 'Sarah Jenkins · VP Hardware Sustainability',
-    name: 'Florida Tech & Enterprise Office E-Waste Pickup Partners',
-    handle: 'onlinerecycle.net / B2B ITAD',
+    id: 'lead-sample-02',
+    company: 'SAMPLE — Community Syndicate',
+    contact: 'SAMPLE — Marcus S. (@CommunityDesk)',
+    name: 'SAMPLE — Community Syndicate',
+    handle: '@CommunityDesk',
     stage: 'Outreach Drafted',
-    source: 'EPA B2B Registry API',
+    source: 'xAI API',
     owner: 'OPSis · Harvey Desk',
-    lastTouch: '2026-11-04 14:45 ET',
-    nextStep: 'Josh approves Q4 office hardware pickup schedule',
+    lastTouch: '2026-11-05 10:30 ET',
+    nextStep: 'Josh reviews draft & sets approval state',
     approvalState: 'Awaiting Josh Approval',
-    leadType: '3-funding-dream-online',
-    leadTypeLabel: '3 — Funding Sources for DREAM Online Crowdfunding (onlinerecycle.net E-Waste Stream)',
-    targetProduct: 'onlinerecycle.net',
-    score: 93,
+    leadType: '2-subscriptions-dateapp',
+    leadTypeLabel: '2 — Subscriptions for Actual Date App (youandinotai.com Verified Humans)',
+    targetProduct: 'youandinotai.com',
+    score: 88,
     status: 'READY_FOR_REVIEW',
     approved: false,
-    signal: 'Official B2B directory listing: quarterly workstation refresh cycles across Tampa and Orlando tech parks.',
+    signal:
+      'Sample intent signal: Discussion community requesting bot-free dating verification and intentional relationship spaces.',
     draft:
-      'Hi Sarah — OnlineRecycle.net provides scheduled B2B workstation and server recovery across Florida with documented intake and component refurbishment. Let us know if your team has Q4 hardware slated for pickup.',
-    createdAt: '2026-11-04T14:45:00.000Z',
+      'YouAndINotAI.com is built for singles seeking verified human connections with structured profiles, community boards, and zero bot accounts.',
+    createdAt: '2026-11-05T10:30:00.000Z',
+    isSample: true,
   },
 ];
 
 function normalizeLead(l) {
-  const rawSource = String(l.source || 'X Official API v2');
-  const safeSource = /youtube/i.test(rawSource) ? 'Apple Podcasts Official Directory API' : rawSource;
-  const approved = Boolean(l.approved);
+  const rawSource = String(l.source || 'GitHub REST API');
+  const safeSource = /youtube/i.test(rawSource)
+    ? 'GitHub REST API'
+    : /reddit/i.test(rawSource)
+    ? 'GitHub REST API'
+    : /epa/i.test(rawSource)
+    ? 'GitHub REST API'
+    : /apple/i.test(rawSource)
+    ? 'xAI API'
+    : rawSource;
+  const isApproved = l.approvalState === 'Approved by Josh';
   return {
     ...l,
     company: l.company || l.name || 'Verified Partner Organization',
     contact: l.contact || l.handle || 'Primary Partner Contact',
-    stage: l.stage || (approved ? 'Active Sequence' : 'Outreach Drafted'),
+    stage: l.stage || (isApproved ? 'Active Sequence' : 'Outreach Drafted'),
     source: safeSource,
     owner: l.owner || 'OPSis · Harvey Desk',
     lastTouch:
       l.lastTouch ||
-      (l.createdAt ? String(l.createdAt).slice(0, 16).replace('T', ' ') + ' UTC' : '2026-11-04 18:00 ET'),
+      (l.createdAt ? String(l.createdAt).slice(0, 16).replace('T', ' ') + ' UTC' : '2026-11-05 11:00 ET'),
     nextStep:
-      l.nextStep || (approved ? 'Sequence active per Josh approval' : 'Josh reviews draft & sets approval state'),
-    approvalState: approved ? 'Approved by Josh' : 'Awaiting Josh Approval',
-    approved,
+      l.nextStep || (isApproved ? 'Sequence active per Josh approval' : 'Josh reviews draft & sets approval state'),
+    approvalState: isApproved ? 'Approved by Josh' : 'Awaiting Josh Approval',
+    approved: isApproved,
   };
 }
 
@@ -363,13 +278,19 @@ function loadLeads() {
       if (Array.isArray(parsed) && parsed.length > 0) return parsed.map(normalizeLead);
     }
   } catch (_) {}
-  const seeded = DEFAULT_LEADS.map(normalizeLead);
-  fs.writeFileSync(LEADS_FILE, JSON.stringify(seeded, null, 2), 'utf8');
-  return seeded;
+  return DEFAULT_LEADS.map(normalizeLead);
 }
 
 function saveLeads(leads) {
-  fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2), 'utf8');
+  try {
+    if (!fs.existsSync(STATE_DIR)) fs.mkdirSync(STATE_DIR, { recursive: true });
+    const realLeads = leads.filter(
+      (l) => !l.isSample && (!l.company || !l.company.includes('SAMPLE')) && (!l.contact || !l.contact.includes('SAMPLE')),
+    );
+    fs.writeFileSync(LEADS_FILE, JSON.stringify(realLeads, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Failed to save leads:', err);
+  }
 }
 
 const DEFAULT_HOOK_LOOP = {
@@ -1717,11 +1638,8 @@ const server = http.createServer(async (req, res) => {
       });
       const stages = ['Outreach Drafted', 'Partner Review', 'Qualified Signal', 'Active Sequence'];
       const sources = [
-        'X Official API v2',
-        'Reddit Official Data API',
-        'GitHub REST API v3',
-        'Apple Podcasts Official Directory API',
-        'EPA B2B Registry API',
+        'GitHub REST API',
+        'xAI API',
       ];
       return sendJson(res, 200, {
         ok: true,
@@ -1733,8 +1651,7 @@ const server = http.createServer(async (req, res) => {
           },
           {
             id: '3-funding-dream-online',
-            label:
-              '3 — Funding Sources for DREAM Online Crowdfunding (opencollective.com/dream-online & onlinerecycle.net)',
+            label: '3 — Funding Sources for DREAM Online Crowdfunding (onlinerecycle.net)',
           },
         ],
         stages,
@@ -1754,7 +1671,7 @@ const server = http.createServer(async (req, res) => {
       const typeMap = {
         '1-affiliate-dateapp': '1 — Partner UTM Links for Date App (youandinotai.com)',
         '2-subscriptions-dateapp': '2 — Subscriptions for Actual Date App (youandinotai.com Verified Humans)',
-        '3-funding-dream-online': '3 — Funding Sources for DREAM Online Crowdfunding (opencollective.com/dream-online)',
+        '3-funding-dream-online': '3 — Funding Sources for DREAM Online Crowdfunding (onlinerecycle.net)',
       };
       const leadType = body.leadType || '1-affiliate-dateapp';
       const newLead = normalizeLead({
@@ -1763,18 +1680,18 @@ const server = http.createServer(async (req, res) => {
         contact: body.contact || body.handle || '@partner_contact',
         name: body.name || body.company || 'New Prospect',
         handle: body.handle || '@prospect',
-        stage: body.stage || 'Outreach Drafted',
-        source: body.source || 'X Official API v2',
+        stage: 'Outreach Drafted',
+        source: body.source || 'GitHub REST API',
         owner: body.owner || 'OPSis · Harvey Desk',
-        lastTouch: body.lastTouch || '2026-11-04 22:45 ET',
-        nextStep: body.nextStep || 'Josh reviews draft & sets approval state',
-        approvalState: body.approved ? 'Approved by Josh' : 'Awaiting Josh Approval',
+        lastTouch: body.lastTouch || '2026-11-05 11:00 ET',
+        nextStep: 'Josh reviews draft & sets approval state',
+        approvalState: 'Awaiting Josh Approval',
         leadType,
         leadTypeLabel: typeMap[leadType] || typeMap['1-affiliate-dateapp'],
         targetProduct: leadType === '3-funding-dream-online' ? 'dream-online.net' : 'youandinotai.com',
         score: Number(body.score || 90),
-        status: body.status || 'READY_FOR_REVIEW',
-        approved: Boolean(body.approved),
+        status: 'READY_FOR_REVIEW',
+        approved: false,
         signal: body.signal || 'Discovered via official API signal.',
         draft: String(body.draft || '').slice(0, 500),
         createdAt: new Date().toISOString(),
@@ -1792,7 +1709,7 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/leads/prospect' && req.method === 'POST') {
       const body = await readJsonBody(req);
       const leadType = body.leadType || '1-affiliate-dateapp';
-      const source = body.source || 'X / Grok';
+      const source = body.source || 'GitHub REST API';
       const query = body.query || 'last 30 days high-intent prospects';
       const leads = loadLeads();
 
@@ -1818,11 +1735,11 @@ const server = http.createServer(async (req, res) => {
         '3-funding-dream-online': {
           name: `DREAM Online & E-Waste Backer (${source})`,
           handle: `@IndieMMOBacker_${Math.floor(100 + Math.random() * 899)}`,
-          leadTypeLabel: '3 — Funding Sources for DREAM Online Crowdfunding (opencollective.com/dream-online)',
+          leadTypeLabel: '3 — Funding Sources for DREAM Online Crowdfunding (onlinerecycle.net)',
           targetProduct: 'dream-online.net',
-          signal: `30-day signal (${query}): Backs open-ledger AI game studios & hardware recycling initiatives.`,
+          signal: `30-day signal (${query}): Backs open AI game studios & hardware recycling initiatives.`,
           draft:
-            'We are building DREAM Online, a 100% AI-built 3D Action MMORPG (Built with Google Gemini) with free unlimited live AI NPCs. Support our transparent ledger at OpenCollective.com/dream-online or recycle hardware via OnlineRecycle.net.',
+            'We are building DREAM Online, a 100% AI-built 3D Action MMORPG (Built with Google Gemini) with free unlimited live AI NPCs. Recycle hardware or partner with us via OnlineRecycle.net.',
         },
       };
 
@@ -2039,80 +1956,7 @@ const server = http.createServer(async (req, res) => {
         },
       ];
 
-      const uploads = [
-        {
-          id: 'yt-priv-short-01',
-          title: "CLAUDE's N Joshua's · YouAndINotAI $1 Bot-Shield Verification Tour (54.2s Short)",
-          lane: 'YouTube Short',
-          stage: '4. Private Upload Complete',
-          state: 'PRIVATE_WAITING_ON_JOSH',
-          dot: 'amber',
-          privacyStatus: 'private',
-          selfDeclaredMadeForKids: false,
-          containsSyntheticMedia: true,
-          syntheticMediaNote:
-            'containsSyntheticMedia: true (AI neural voice Aoede + generated motion b-roll disclosed for Studio confirmation)',
-          publishAuthorityNote: 'Josh publishes in Studio',
-          descriptionTribute: "CLAUDE's N Joshua's · #TeamClaudeForLife",
-          encoder: 'h264_amf (AMD RX 6700 XT)',
-          duration: '54.2s',
-          studioUrl: 'https://studio.youtube.com/channel/UCJnFUOdEfSOJiXLnx6lXSzg/videos/upload',
-        },
-        {
-          id: 'yt-priv-short-02',
-          title: "CLAUDE's N Joshua's · DREAM Online Volume 2 Live AI NPCs & Open Ledger (56.8s Short)",
-          lane: 'YouTube Short',
-          stage: '4. Private Upload Complete',
-          state: 'PRIVATE_WAITING_ON_JOSH',
-          dot: 'amber',
-          privacyStatus: 'private',
-          selfDeclaredMadeForKids: false,
-          containsSyntheticMedia: true,
-          syntheticMediaNote:
-            'containsSyntheticMedia: true (AI neural voice Aoede + 3D engine capture disclosed for Studio confirmation)',
-          publishAuthorityNote: 'Josh publishes in Studio',
-          descriptionTribute: "CLAUDE's N Joshua's · #TeamClaudeForLife",
-          encoder: 'h264_amf (AMD RX 6700 XT)',
-          duration: '56.8s',
-          studioUrl: 'https://studio.youtube.com/channel/UCJnFUOdEfSOJiXLnx6lXSzg/videos/upload',
-        },
-        {
-          id: 'yt-priv-pod-03',
-          title: "CLAUDE's N Joshua's · Gemini Notebook Ep. 14: Verified Human Communities & Video Dates",
-          lane: 'Podcast Episode',
-          stage: '4. Private Upload Complete',
-          state: 'PRIVATE_WAITING_ON_JOSH',
-          dot: 'amber',
-          privacyStatus: 'private',
-          selfDeclaredMadeForKids: false,
-          containsSyntheticMedia: true,
-          syntheticMediaNote:
-            'containsSyntheticMedia: true (Dual-host AI neural voices Aoede + Kore disclosed for Studio confirmation)',
-          publishAuthorityNote: 'Josh publishes in Studio',
-          descriptionTribute: "CLAUDE's N Joshua's · #TeamClaudeForLife",
-          encoder: 'hevc_amf (AMD RX 6700 XT)',
-          duration: '49.5s',
-          studioUrl: 'https://studio.youtube.com/video/9hNDPCQa3kw/edit',
-        },
-        {
-          id: 'yt-priv-pod-04',
-          title: "CLAUDE's N Joshua's · OnlineRecycle.net Florida Workstation Recovery & Studio Build",
-          lane: 'Podcast Episode',
-          stage: '3. AMD AMF Hardware Encode',
-          state: 'PRIVATE_DRAFT_QUEUED',
-          dot: 'green',
-          privacyStatus: 'private',
-          selfDeclaredMadeForKids: false,
-          containsSyntheticMedia: true,
-          syntheticMediaNote:
-            'containsSyntheticMedia: true (AI neural voice Aoede narration disclosed for Studio confirmation)',
-          publishAuthorityNote: 'Josh publishes in Studio',
-          descriptionTribute: "CLAUDE's N Joshua's · #TeamClaudeForLife",
-          encoder: 'h264_amf (AMD RX 6700 XT)',
-          duration: '52.0s',
-          studioUrl: 'https://studio.youtube.com/channel/UCJnFUOdEfSOJiXLnx6lXSzg',
-        },
-      ];
+      const uploads = [];
 
       return sendJson(res, 200, {
         ok: true,
@@ -2128,16 +1972,12 @@ const server = http.createServer(async (req, res) => {
           harveyLeadGenerator: {
             officialApisOnly: true,
             scrapingPermitted: false,
-            rule: 'Harvey Lead Generator prospects strictly through official APIs and terms-compliant sources (X API or Grok X search within xAI terms, official Reddit API, GitHub API, public creator bio links, and B2B directories where terms allow; nothing for LinkedIn and zero scraping).',
+            rule: 'Harvey Lead Generator prospects strictly through official APIs with real sign-in or keys on this node (GitHub REST API, xAI API; zero scraping).',
             allowedSources: [
-              'X / Grok (within xAI terms)',
-              'Reddit API',
-              'GitHub API',
-              'Terms-Permitted B2B E-Waste Directories',
-              'Public Creator Bio Links',
-              'Inbound Web',
+              'GitHub REST API',
+              'xAI API',
             ],
-            forbiddenSources: ['Any scraping of X, Reddit, YouTube, or LinkedIn'],
+            forbiddenSources: ['Any scraping of X, Reddit, YouTube, or LinkedIn', 'Unauthenticated APIs without keys or sign-in on this node'],
           },
           youtubePipeline: {
             scrapingPermitted: false,
@@ -2189,7 +2029,7 @@ const server = http.createServer(async (req, res) => {
             madeWithAiBadge: 'Made with AI — Built with Google Gemini',
             approvedByFounder: approvedMediaIds.has('media-9hNDPCQa3kw-gemini-notebook-remaster-female-voice.mp3'),
             scriptSummary:
-              'Strips all outdated pre-Trump tax law claims and 18+ dating tags; highlights 100% free unlimited live AI NPCs in DREAM Online (Built with Google Gemini), responsible B2B hardware recovery at OnlineRecycle.net, and transparent Open Collective ledger (opencollective.com/dream-online).',
+              'Strips all outdated pre-Trump tax law claims and 18+ dating tags; highlights 100% free unlimited live AI NPCs in DREAM Online (Built with Google Gemini) and responsible B2B hardware recovery at OnlineRecycle.net.',
           },
         },
       });
@@ -2203,7 +2043,7 @@ const server = http.createServer(async (req, res) => {
       const voice = String(body.voice || 'Aoede').trim();
       const rawScript =
         body.script ||
-        `Welcome back to the Gemini Notebook podcast for DREAM Online, built with Google Gemini. Today we are exploring ${topic}. Every player in DREAM Online enjoys one hundred percent free, unlimited live AI NPCs with zero pay to win, while Online Recycle dot net recovers retired hardware to support our transparent community ledger at Open Collective dot com slash dream dash online.`;
+        `Welcome back to the Gemini Notebook podcast for DREAM Online, built with Google Gemini. Today we are exploring ${topic}. Every player in DREAM Online enjoys one hundred percent free, unlimited live AI NPCs with zero pay to win, while Online Recycle dot net recovers retired hardware and workstation assets responsibly.`;
       const script = String(rawScript)
         .replace(/[`*#_<>]/g, ' ')
         .replace(/\s+/g, ' ')

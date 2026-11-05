@@ -196,7 +196,9 @@ function renderYoutubeDeskMarkup(payload = {}) {
     })
     .join('');
 
-  const uploadsRowsHtml = uploads
+  const uploadsRowsHtml = uploads.length === 0
+    ? `<tr><td colspan="6" style="text-align: center; color: var(--text-slate); padding: 24px;">No private uploads queued. Josh publishes in Studio.</td></tr>`
+    : uploads
     .map((u) => {
       const dot = normalizeDotColor(u.statusDot, true);
       const syntheticValue = u.containsSyntheticMedia === true ? 'true' : 'false';
@@ -249,7 +251,9 @@ function renderClayLeadGenMarkup(payload = {}, filters = {}, selectedId = null) 
 
   const activeLead = filteredLeads.find((l) => l.id === selectedId) || filteredLeads[0] || allLeads[0] || null;
 
-  const tableRowsHtml = filteredLeads
+  const tableRowsHtml = filteredLeads.length === 0
+    ? `<tr><td colspan="7" style="text-align: center; color: var(--text-slate); padding: 24px;">No leads matching current filters.</td></tr>`
+    : filteredLeads
     .map((l) => {
       const isSelected = activeLead && activeLead.id === l.id;
       const approved = l.approvalState === 'Approved by Josh' || l.approved === true;
@@ -284,17 +288,22 @@ function renderClayLeadGenMarkup(payload = {}, filters = {}, selectedId = null) 
         lastTouch: activeLead.lastTouch,
         nextStep: activeLead.nextStep,
         signal: activeLead.signal || 'Verified official API business signal.',
-        draft: activeLead.outreachDraft || 'Draft waiting on Josh.',
+        draft: activeLead.draft || activeLead.outreachDraft || 'Draft waiting on Josh.',
         approvalState:
           activeLead.approvalState || (activeLead.approved ? 'Approved by Josh' : 'Awaiting Josh Approval'),
       }
     : null;
+
+  const hasSampleLeads = allLeads.some(
+    (l) => l.isSample || (l.company && l.company.includes('SAMPLE')) || (l.contact && l.contact.includes('SAMPLE')),
+  );
 
   return {
     tableRowsHtml,
     filteredCount: filteredLeads.length,
     totalCount: allLeads.length,
     activeLead: detailData,
+    hasSampleLeads,
   };
 }
 
@@ -683,8 +692,13 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
       countEl.textContent = `Showing ${rendered.filteredCount} of ${rendered.totalCount} leads · 0 scraped · 0 from YouTube`;
     }
 
+    const banner = document.getElementById('sample-leads-banner');
+    if (banner) {
+      banner.style.display = rendered.hasSampleLeads ? 'flex' : 'none';
+    }
+
     const statLeads = document.getElementById('stage-stat-leads');
-    if (statLeads) statLeads.textContent = String(rendered.totalCount);
+    if (statLeads) statLeads.textContent = String(rendered.filteredCount);
 
     if (rendered.activeLead) {
       selectedLeadId = rendered.activeLead.id;

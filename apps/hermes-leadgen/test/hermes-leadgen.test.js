@@ -210,7 +210,16 @@ test('3. Server API provides Node Status (Red/Green Light), Dual Graphies, Leads
   const leadsRes = await httpGetJson('http://127.0.0.1:8392/api/leads');
   assert.equal(leadsRes.status, 200);
   assert.ok(Array.isArray(leadsRes.data.leads));
-  const leadTypes = new Set(leadsRes.data.leads.map((l) => l.leadType));
+  assert.ok(leadsRes.data.leads.length <= 2, 'Default leads must have at most 2 sample rows');
+  for (const l of leadsRes.data.leads) {
+    assert.ok(l.company.includes('SAMPLE'), 'Seed company must say SAMPLE');
+    assert.ok(l.contact.includes('SAMPLE'), 'Seed contact must say SAMPLE');
+    assert.equal(l.approvalState, 'Awaiting Josh Approval', 'Seeds must only produce Awaiting Josh Approval');
+    assert.equal(l.approved, false, 'Seeds must not be approved');
+    assert.ok(['GitHub REST API', 'xAI API'].includes(l.source), 'Source must be an API this node holds key for');
+  }
+  assert.ok(Array.isArray(leadsRes.data.leadTypes));
+  const leadTypes = new Set(leadsRes.data.leadTypes.map((t) => t.id));
   assert.ok(leadTypes.has('1-affiliate-dateapp'), 'Missing Type 1: Affiliate links for Date App');
   assert.ok(leadTypes.has('2-subscriptions-dateapp'), 'Missing Type 2: Subscriptions for Actual Date App');
   assert.ok(leadTypes.has('3-funding-dream-online'), 'Missing Type 3: Funding sources for DREAM Online crowdfunding');
@@ -695,12 +704,12 @@ test('15. Fake-payload unit test: View 3 Clay-type Lead Gen panel (filters by st
         company: 'Austin Singles Collective',
         contact: 'Maya Lin · Host',
         stage: 'Outreach Drafted',
-        source: 'X Official API v2',
+        source: 'xAI API',
         owner: 'Harvey',
         lastTouch: '2026-11-04',
         nextStep: 'Josh reviews draft',
         approvalState: 'Awaiting Josh Approval',
-        signal: 'Verified event post via X API v2',
+        signal: 'Verified event post via xAI API',
         outreachDraft: 'Product value draft A',
       },
       {
@@ -708,12 +717,12 @@ test('15. Fake-payload unit test: View 3 Clay-type Lead Gen panel (filters by st
         company: 'Indie Game Guild',
         contact: 'Devon Brooks · Producer',
         stage: 'Qualified Signal',
-        source: 'GitHub REST API v3',
+        source: 'GitHub REST API',
         owner: 'Harvey',
         lastTouch: '2026-11-04',
         nextStep: 'Josh approves co-op',
         approvalState: 'Approved by Josh',
-        signal: 'Public release tag via GitHub API v3',
+        signal: 'Public release tag via GitHub REST API',
         outreachDraft: 'Product value draft B',
       },
     ],
@@ -726,7 +735,7 @@ test('15. Fake-payload unit test: View 3 Clay-type Lead Gen panel (filters by st
 
   const filteredBySource = renderClayLeadGenMarkup(
     fakeLeadsPayload,
-    { stage: 'ALL', source: 'GitHub REST API v3' },
+    { stage: 'ALL', source: 'GitHub REST API' },
     'lead-a',
   );
   assert.equal(filteredBySource.filteredCount, 1);

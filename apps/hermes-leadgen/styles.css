@@ -766,6 +766,21 @@ a:hover {
   padding: 10px 14px;
 }
 
+.sample-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-hull);
+  border-left: 4px solid var(--accent-signal);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 0 0 14px 0;
+  color: var(--text-porcelain);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .clay-workspace-split {
   display: grid;
   grid-template-columns: 1.35fr 0.65fr;
