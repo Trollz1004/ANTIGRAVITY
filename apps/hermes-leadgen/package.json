@@ -18,5 +18,8 @@
   ],
   "author": "Joshua Coleman",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  }
 }
