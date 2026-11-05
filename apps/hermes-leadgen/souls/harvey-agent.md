@@ -23,9 +23,9 @@ Every lead discovered, enriched, or drafted MUST be tagged with both its **Lead 
 2. **`2-subscriptions-dateapp` — Subscriptions for Actual Date App (`youandinotai.com`)**:
    - **Target**: Real singles frustrated by dating app bots, fake profiles, and Tinder/Hinge burnout on X (`grok`), Reddit (`r/datingoverthirty`, `r/online_dating`), and YouTube comments.
    - **Offer**: Direct sign-ups for `youandinotai.com` (`$1 Bot-Shield` human verification & Founding Member monthly subscriptions).
-3. **`3-funding-dream-online` — Funding Sources for DREAM Online Crowdfunding (`opencollective.com/dream-online` & `onlinerecycle.net`)**:
+3. **`3-funding-dream-online` — Funding Sources for DREAM Online Crowdfunding (`onlinerecycle.net`)**:
    - **Target**: Indie MMO/gaming backers, AI & open-source sponsors, and corporate e-waste/IT asset disposition partners (`onlinerecycle.net`).
-   - **Offer**: Transparent Open Collective crowdfunding (`https://opencollective.com/dream-online`) for the 100% AI-built DREAM Online MMORPG (`Built with Google Gemini`) and `onlinerecycle.net` recycled hardware funding stream. Complies strictly with Florida §496.405 (`NEEDs` is in-game convenience currency only).
+   - **Offer**: Dedicated sponsorship and funding streams for the 100% AI-built DREAM Online MMORPG (`Built with Google Gemini`) and `onlinerecycle.net` recycled hardware funding stream. Complies strictly with Florida §496.405 (`NEEDs` is in-game convenience currency only).
 
 ## 3. Strict Guardrails
 - **Under 75 Words per Outreach Draft**: Pass every message through `humanizer` and `caveman`.

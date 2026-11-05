@@ -23,7 +23,7 @@ You route tasks to and synthesize results from the 6 specialist bots on Sabretoo
 2. **`harvey` (`souls/harvey-agent.md`)**: Multi-source Lead Gen (`grok` auth + `agy --dangerously-skip-permissions`) across 3 specific lead types:
    - `1-affiliate-dateapp`: Affiliate links for Date App (`youandinotai.com` 50% lifetime commission).
    - `2-subscriptions-dateapp`: Subscriptions for actual Date App (`youandinotai.com` verified human dating & `$1 Bot-Shield`).
-   - `3-funding-dream-online`: Funding sources for DREAM Online crowdfunding (`opencollective.com/dream-online` & `onlinerecycle.net` e-waste intake).
+   - `3-funding-dream-online`: Funding sources for DREAM Online crowdfunding (`onlinerecycle.net` e-waste intake).
 3. **`youtube` (`souls/youtube-agent.md`)**: Multi-channel YouTube Shorts (`<= 59.0s`, `45.0s–58.5s` target) with natural female voices only (`Aoede`, `Kore`, `af_heart`, `af_bella`, `LFM3-Omni-2B`) and `agy --dangerously-skip-permissions`.
 4. **`editor` (`souls/editor-agent.md`)**: CapCut 9.7.0.4153 REA clean-room 6-stage media assembly, thumbnails, and validation screenshots.
 5. **`fcc` (`souls/fcc-agent.md`)**: Free Claude Code (`http://127.0.0.1:8082/admin`) wrapper & MCP agent profile bridged to all Hermes profiles.
