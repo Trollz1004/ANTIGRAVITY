@@ -55,29 +55,28 @@ export function CheckoutLaunch() {
   const label = tier ? PLAN_LABELS[tier] : 'Founder plan';
 
   return (
-    <div className="mesh-gradient min-h-screen px-4 py-8">
+    <div className="min-h-screen bg-[#0A0B0D] px-4 py-8 text-[#F4F1EA]">
       <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-3xl items-center justify-center">
-        <div className="glass-strong glass-highlight w-full rounded-[2rem] p-8 text-center md:p-10">
+        <div className="glass-strong w-full rounded-xl p-8 text-center md:p-10">
           <div className="app-kicker mb-3">Secure Checkout</div>
-          <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-[1.8rem] border-4 border-[#111111] bg-[#111111] text-white shadow-[8px_8px_0_0_rgba(17,17,17,1)]">
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-xl border border-[#3A3F45] bg-[#1A1E25] text-[#FFD21E]">
             <LoaderCircle className="h-8 w-8 animate-spin" />
           </div>
 
           <h1 className="app-title mx-auto max-w-2xl">
-            {label.toLowerCase()} checkout.
+            {label} checkout.
           </h1>
           <p className="app-subtitle mx-auto mt-4 max-w-2xl">
             Preparing the account-bound Square session so the payment stays
-            linked to your actual platform account instead of a generic public
-            link.
+            linked to your actual platform account.
           </p>
 
           {error ? (
-            <div className="mt-6 rounded-[1.4rem] border-4 border-[#111111] bg-[#ffd9c7] px-4 py-4 text-sm font-semibold text-[#111111]">
+            <div className="mt-6 rounded-xl border border-[#FF6B6B] bg-[#1A1E25] px-4 py-4 text-sm font-semibold text-[#FF6B6B]">
               {error}
             </div>
           ) : (
-            <p className="mt-6 text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">
+            <p className="mt-6 font-mono text-xs font-medium uppercase tracking-[0.18em] text-[#C9CBCE]">
               Redirecting automatically
             </p>
           )}

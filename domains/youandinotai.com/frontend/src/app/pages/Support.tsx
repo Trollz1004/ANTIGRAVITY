@@ -248,8 +248,8 @@ function formatDate(value: string): string {
   return new Date(value).toLocaleString();
 }
 
-function actionButtonClasses(kind: SupportActionKind): string {
-  return 'flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-4 py-2 text-sm font-bold uppercase tracking-widest text-white backdrop-blur-md hover:bg-white/10 transition-colors shadow-sm';
+function actionButtonClasses(_kind: SupportActionKind): string {
+  return 'flex items-center gap-2 rounded-lg border border-[#3A3F45] bg-[#1A1E25] px-4 py-2 font-mono text-xs font-medium uppercase tracking-[0.12em] text-[#F4F1EA] hover:border-[#F4F1EA] transition-colors';
 }
 
 export function Support() {
@@ -428,60 +428,53 @@ export function Support() {
   const SelectedLaneIcon = selectedLane.icon;
 
   return (
-    <section className="min-h-screen bg-[#050505] text-white p-6 md:p-10 relative overflow-hidden">
-      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-amber-600/10 blur-[150px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-stone-600/10 blur-[150px] rounded-full pointer-events-none" />
-
-      <div className="relative z-10 max-w-7xl mx-auto flex flex-col gap-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-2xl"
-        >
+    <section className="min-h-screen bg-[#0A0B0D] text-[#F4F1EA] p-6 md:p-10">
+      <div className="max-w-7xl mx-auto flex flex-col gap-8">
+        <div className="bg-[#12151A] border border-[#3A3F45] rounded-xl p-6 md:p-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-3 drop-shadow-[0_0_10px_rgba(217,70,239,0.5)] block">
-                Support Center
+              <span className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#FFD21E] mb-3 block">
+                Support Center · CLAUDE&apos;s N Joshua&apos;s
               </span>
-              <h2 className="text-4xl font-black tracking-tight mb-4">
-                Guided support first. Human review when it actually matters.
+              <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-[#F4F1EA] mb-4">
+                Guided support first. Human review when it matters.
               </h2>
-              <p className="max-w-3xl text-lg text-white/60 leading-relaxed">
+              <p className="max-w-3xl text-base text-[#C9CBCE] leading-relaxed">
                 Pick a lane like receipts, verification, privacy, or app issues.
-                The support assistant stays narrow, gives preset answers, and
-                escalates only when the request needs billing, safety, access,
-                or human judgment.
+                The support assistant gives direct answers and escalates to a
+                human ticket whenever your request needs billing, safety, or
+                account review.
               </p>
             </div>
-            <div className="bg-black/30 border border-white/10 rounded-2xl px-6 py-4 text-sm text-white/50 backdrop-blur-md">
-              <div className="flex items-center gap-2 font-bold text-stone-400 mb-2 uppercase tracking-widest text-xs">
+            <div className="bg-[#1A1E25] border border-[#3A3F45] rounded-xl px-6 py-4 text-sm text-[#C9CBCE]">
+              <div className="flex items-center gap-2 font-mono font-medium text-[#FFD21E] mb-2 uppercase tracking-[0.14em] text-xs">
                 <Headset size={16} /> Live support workflow
               </div>
-              <div className="flex items-center gap-2 font-medium">
-                Lane <span className="text-white/20">{'->'}</span> Answer{' '}
-                <span className="text-white/20">{'->'}</span> Escalate
+              <div className="flex items-center gap-2 font-medium text-[#F4F1EA]">
+                Lane <span className="text-[#9DA3AA]">{'->'}</span> Answer{' '}
+                <span className="text-[#9DA3AA]">{'->'}</span> Escalate
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         <AnimatePresence>
           {error && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="rounded-2xl border border-red-500/50 bg-red-500/10 px-5 py-4 text-sm font-bold text-red-200 backdrop-blur-md shadow-[0_0_20px_rgba(239,68,68,0.2)]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="rounded-xl border border-[#FF6B6B] bg-[#1A1E25] px-5 py-4 text-sm font-semibold text-[#FF6B6B]"
             >
               {error}
             </motion.div>
           )}
           {notice && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="rounded-2xl border border-emerald-500/50 bg-emerald-500/10 px-5 py-4 text-sm font-bold text-emerald-200 backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="rounded-xl border border-[#3DDC97] bg-[#1A1E25] px-5 py-4 text-sm font-semibold text-[#3DDC97]"
             >
               {notice}
             </motion.div>
@@ -489,98 +482,87 @@ export function Support() {
         </AnimatePresence>
 
         <div className="grid gap-8 xl:grid-cols-[1.25fr_0.75fr]">
-          <motion.article
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-2xl flex flex-col"
-          >
-            <div className="flex flex-col gap-6 border-b border-white/10 pb-8">
+          <article className="bg-[#12151A] border border-[#3A3F45] rounded-xl p-6 md:p-8 flex flex-col">
+            <div className="flex flex-col gap-6 border-b border-[#3A3F45] pb-8">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <h3 className="text-xl font-black text-white uppercase tracking-widest">
+                  <h3 className="font-display text-xl font-bold text-[#F4F1EA]">
                     Choose a support lane
                   </h3>
-                  <p className="mt-2 text-sm text-white/50 leading-relaxed max-w-lg">
-                    This works more like a live help desk than an open-ended
-                    chatbot. Pick the closest lane and let the system route it.
+                  <p className="mt-2 text-sm text-[#C9CBCE] leading-relaxed max-w-lg">
+                    Pick the closest lane below and let the desk route your
+                    request or open a ticket with full context attached.
                   </p>
                 </div>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <button
                   type="button"
                   onClick={() => void handleManualEscalation()}
                   disabled={loading}
-                  className="flex items-center gap-2 rounded-xl bg-red-500/20 border border-red-500/50 px-5 py-3 text-sm font-bold uppercase tracking-widest text-red-200 shadow-[0_0_15px_rgba(239,68,68,0.3)] disabled:opacity-50 transition-colors hover:bg-red-500/30"
+                  className="flex items-center gap-2 rounded-lg bg-[#1A1E25] border border-[#FF6B6B] px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[#FF6B6B] disabled:opacity-50 transition-colors hover:bg-[#FF6B6B] hover:text-[#0A0B0D]"
                 >
                   <ShieldAlert size={16} /> Open human ticket
-                </motion.button>
+                </button>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {SUPPORT_LANES.map((lane, i) => {
+                {SUPPORT_LANES.map(lane => {
                   const Icon = lane.icon;
                   const isSelected = lane.id === selectedLane.id;
                   return (
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                    <button
                       key={lane.id}
                       type="button"
                       onClick={() => void handleLaneSelect(lane)}
                       disabled={loading}
-                      className={`relative flex flex-col text-left p-5 rounded-3xl border transition-all duration-300 disabled:opacity-50 ${isSelected ? 'bg-white/10 border-white/30 shadow-[0_0_30px_rgba(255,255,255,0.1)]' : 'bg-black/20 border-white/5 hover:bg-white/5'}`}
+                      className={`relative flex flex-col text-left p-5 rounded-xl border transition-colors disabled:opacity-50 ${
+                        isSelected
+                          ? 'bg-[#1A1E25] border-[#FFD21E]'
+                          : 'bg-[#0A0B0D] border-[#3A3F45] hover:border-[#C9CBCE]'
+                      }`}
                     >
-                      <div
-                        className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br border border-white/10 ${lane.accentClass}`}
-                      >
+                      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#12151A] border border-[#3A3F45] text-[#FFD21E]">
                         <Icon size={20} />
                       </div>
-                      <div
-                        className={`text-base font-black tracking-wide ${isSelected ? 'text-white' : 'text-white/80'}`}
-                      >
+                      <div className="font-display text-base font-bold text-[#F4F1EA]">
                         {lane.title}
                       </div>
-                      <p
-                        className={`mt-2 text-xs leading-relaxed ${isSelected ? 'text-white/70' : 'text-white/40'}`}
-                      >
+                      <p className="mt-2 text-xs leading-relaxed text-[#C9CBCE]">
                         {lane.description}
                       </p>
                       <div
-                        className={`mt-auto pt-4 text-[10px] font-bold uppercase tracking-widest ${isSelected ? 'text-amber-400' : 'text-stone-400/50'}`}
+                        className={`mt-auto pt-4 font-mono text-[11px] font-medium uppercase tracking-[0.12em] ${
+                          isSelected ? 'text-[#FFD21E]' : 'text-[#9DA3AA]'
+                        }`}
                       >
                         {isSelected ? 'Selected lane' : 'Ask support'}
                       </div>
-                    </motion.button>
+                    </button>
                   );
                 })}
               </div>
             </div>
 
-            <div className="mt-8 bg-black/30 border border-white/10 rounded-3xl p-6 backdrop-blur-md">
+            <div className="mt-8 bg-[#1A1E25] border border-[#3A3F45] rounded-xl p-6">
               <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
                 <div className="flex items-start gap-4">
-                  <div
-                    className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br ${selectedLane.accentClass}`}
-                  >
-                    <SelectedLaneIcon size={24} />
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#3A3F45] bg-[#12151A] text-[#FFD21E]">
+                    <SelectedLaneIcon size={22} />
                   </div>
                   <div>
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-amber-400 mb-1">
+                    <div className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#FFD21E] mb-1">
                       Selected lane
                     </div>
-                    <h4 className="text-xl font-black text-white tracking-wide">
+                    <h4 className="font-display text-xl font-bold text-[#F4F1EA]">
                       {selectedLane.title}
                     </h4>
-                    <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">
+                    <p className="mt-2 max-w-xl text-sm leading-relaxed text-[#C9CBCE]">
                       {selectedLane.guidance}
                     </p>
                   </div>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-xs text-white/50 leading-relaxed max-w-[200px]">
-                  The operator only gets pulled in when billing, safety, access,
-                  or uncertainty crosses the line.
+                <div className="rounded-lg border border-[#3A3F45] bg-[#12151A] px-4 py-3 text-xs text-[#C9CBCE] leading-relaxed max-w-[220px]">
+                  Human review is triggered automatically for billing, safety,
+                  and account-access escalations.
                 </div>
               </div>
 
@@ -612,26 +594,26 @@ export function Support() {
                   )
                 )}
               </div>
-              <div className="mt-4 flex flex-wrap gap-3 text-[10px] font-medium uppercase tracking-widest text-white/30">
+              <div className="mt-4 flex flex-wrap gap-3 font-mono text-[11px] text-[#9DA3AA]">
                 {selectedLane.actions.map((action, idx) => (
                   <span key={idx}>
-                    {idx > 0 && ' • '} {action.hint}
+                    {idx > 0 && ' · '} {action.hint}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="mt-8 flex max-h-[400px] flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
+            <div className="mt-8 flex max-h-[400px] flex-col gap-4 overflow-y-auto pr-2">
               <AnimatePresence>
                 {messages.map((message, index) => (
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     key={`${message.role}-${index}`}
-                    className={`max-w-[85%] rounded-3xl border px-6 py-4 text-sm leading-relaxed backdrop-blur-md ${
+                    className={`max-w-[85%] rounded-xl border px-5 py-4 text-sm leading-relaxed ${
                       message.role === 'assistant'
-                        ? 'self-start bg-white/10 border-white/20 text-white shadow-[0_4px_20px_rgba(255,255,255,0.05)] rounded-tl-sm'
-                        : 'self-end bg-gradient-to-br from-amber-600/80 to-stone-600/80 border-white/20 text-white shadow-[0_4px_20px_rgba(217,70,239,0.2)] rounded-tr-sm'
+                        ? 'self-start bg-[#1A1E25] border-[#3A3F45] text-[#F4F1EA]'
+                        : 'self-end bg-[#0A0B0D] border-[#FFD21E] text-[#F4F1EA]'
                     }`}
                   >
                     {message.content}
@@ -639,27 +621,9 @@ export function Support() {
                 ))}
               </AnimatePresence>
               {loading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="self-start rounded-3xl border border-white/20 bg-white/5 px-6 py-4 text-sm text-white/50 backdrop-blur-md rounded-tl-sm"
-                >
-                  <div className="flex gap-1">
-                    <span className="animate-bounce">.</span>
-                    <span
-                      className="animate-bounce"
-                      style={{ animationDelay: '0.1s' }}
-                    >
-                      .
-                    </span>
-                    <span
-                      className="animate-bounce"
-                      style={{ animationDelay: '0.2s' }}
-                    >
-                      .
-                    </span>
-                  </div>
-                </motion.div>
+                <div className="self-start rounded-xl border border-[#3A3F45] bg-[#1A1E25] px-5 py-4 text-sm text-[#C9CBCE]">
+                  Processing request...
+                </div>
               )}
             </div>
 
@@ -669,108 +633,91 @@ export function Support() {
                 onChange={event => setDraft(event.target.value)}
                 rows={3}
                 placeholder="Need something outside the guided lanes? Type it here."
-                className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white placeholder-white/30 focus:outline-none focus:border-stone-500/50 focus:ring-1 focus:ring-stone-500/50 transition-all backdrop-blur-sm resize-none"
+                className="w-full bg-[#0A0B0D] border border-[#3A3F45] rounded-lg p-4 text-[#F4F1EA] placeholder-[#9DA3AA] focus:outline-none focus:border-[#FFD21E] resize-none"
               />
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="text-[10px] font-bold uppercase tracking-widest text-white/40">
-                  Safety, billing disputes, and access issues auto-escalate.
+                <div className="font-mono text-xs text-[#9DA3AA]">
+                  Safety, billing, and access issues escalate with full
+                  transcript.
                 </div>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                <button
                   type="submit"
                   disabled={loading || draft.trim().length === 0}
-                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-600 to-stone-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-[0_0_20px_rgba(34,211,238,0.3)] disabled:opacity-50 transition-opacity"
+                  className="ds-btn-signal flex items-center justify-center gap-2 px-6 py-3 text-sm disabled:opacity-50"
                 >
                   <Send size={16} /> Send message
-                </motion.button>
+                </button>
               </div>
             </form>
-          </motion.article>
+          </article>
 
           <div className="grid gap-8 content-start">
-            <motion.aside
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-2xl"
-            >
-              <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-6">
-                <Ticket
-                  size={20}
-                  className="text-stone-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]"
-                />
-                <h3 className="text-lg font-black text-white uppercase tracking-widest">
+            <aside className="bg-[#12151A] border border-[#3A3F45] rounded-xl p-6 md:p-8">
+              <div className="flex items-center gap-3 border-b border-[#3A3F45] pb-4 mb-6">
+                <Ticket size={20} className="text-[#FFD21E]" />
+                <h3 className="font-display text-lg font-bold text-[#F4F1EA]">
                   My tickets
                 </h3>
               </div>
-              <p className="text-xs text-white/50 leading-relaxed mb-6">
-                Every escalation keeps the customer message and bot reply
+              <p className="text-xs text-[#C9CBCE] leading-relaxed mb-6">
+                Every escalation keeps the customer message and assistant reply
                 together.
               </p>
 
-              <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
                 {tickets.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-white/20 bg-black/20 p-6 text-center text-sm font-medium text-white/40">
-                    No support tickets yet.
+                  <div className="rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-6 text-center text-sm font-medium text-[#C9CBCE]">
+                    No open tickets yet. Select a lane above to start a support
+                    request.
                   </div>
                 ) : (
                   tickets.map(ticket => (
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
+                    <div
                       key={ticket.id}
-                      className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-md shadow-lg transition-transform"
+                      className="rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-5"
                     >
                       <div className="flex items-start justify-between gap-3 mb-4">
                         <div>
-                          <div className="text-sm font-bold text-white tracking-wide">
+                          <div className="text-sm font-bold text-[#F4F1EA]">
                             {ticket.subject}
                           </div>
-                          <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-amber-400 drop-shadow-[0_0_5px_rgba(217,70,239,0.3)]">
+                          <div className="mt-1 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-[#FFD21E]">
                             {ticket.category.replace('_', ' ')}
                           </div>
                         </div>
-                        <span className="rounded-full border border-stone-500/30 bg-stone-500/10 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-stone-400 shrink-0">
+                        <span className="rounded border border-[#3A3F45] bg-[#12151A] px-2.5 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-[#C9CBCE] shrink-0">
                           {ticket.status}
                         </span>
                       </div>
-                      <div className="text-sm text-white/80 leading-relaxed border-l-2 border-white/10 pl-3">
+                      <div className="text-sm text-[#C9CBCE] leading-relaxed border-l-2 border-[#3A3F45] pl-3">
                         {ticket.customer_message}
                       </div>
                       {ticket.bot_response && (
-                        <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-xs leading-relaxed text-white/60">
-                          <span className="font-bold text-white/80 mr-2">
-                            Bot:
+                        <div className="mt-4 rounded-lg border border-[#3A3F45] bg-[#12151A] p-4 text-xs leading-relaxed text-[#C9CBCE]">
+                          <span className="font-bold text-[#F4F1EA] mr-2">
+                            Assistant:
                           </span>
                           {ticket.bot_response}
                         </div>
                       )}
-                      <div className="mt-4 text-[10px] font-bold uppercase tracking-widest text-white/30">
+                      <div className="mt-4 font-mono text-[11px] text-[#9DA3AA]">
                         Opened {formatDate(ticket.created_at)}
                       </div>
-                    </motion.div>
+                    </div>
                   ))
                 )}
               </div>
-            </motion.aside>
+            </aside>
 
             {operatorViewEnabled && (
-              <motion.aside
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-                className="bg-red-500/5 border border-red-500/20 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-2xl"
-              >
-                <div className="flex items-center gap-3 border-b border-red-500/20 pb-4 mb-6">
-                  <ShieldAlert
-                    size={20}
-                    className="text-red-400 drop-shadow-[0_0_8px_rgba(248,113,113,0.5)]"
-                  />
-                  <h3 className="text-lg font-black text-white uppercase tracking-widest">
+              <aside className="bg-[#12151A] border border-[#FF6B6B] rounded-xl p-6 md:p-8">
+                <div className="flex items-center gap-3 border-b border-[#3A3F45] pb-4 mb-6">
+                  <ShieldAlert size={20} className="text-[#FF6B6B]" />
+                  <h3 className="font-display text-lg font-bold text-[#F4F1EA]">
                     Operator queue
                   </h3>
                 </div>
-                <p className="text-xs text-red-200/50 leading-relaxed mb-6">
+                <p className="text-xs text-[#C9CBCE] leading-relaxed mb-6">
                   Visible only to configured operator accounts.
                 </p>
 
@@ -778,22 +725,22 @@ export function Support() {
                   {operatorTickets.slice(0, 5).map(ticket => (
                     <div
                       key={ticket.id}
-                      className="rounded-2xl border border-red-500/20 bg-black/40 p-5 backdrop-blur-md"
+                      className="rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-5"
                     >
-                      <div className="text-sm font-bold text-white tracking-wide">
+                      <div className="text-sm font-bold text-[#F4F1EA]">
                         {ticket.customer_email}
                       </div>
-                      <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-red-400 drop-shadow-[0_0_5px_rgba(248,113,113,0.3)]">
+                      <div className="mt-1 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-[#FF6B6B]">
                         {ticket.category.replace('_', ' ')} ·{' '}
                         {ticket.escalation_reason || 'manual_review'}
                       </div>
-                      <div className="mt-4 text-sm text-white/80 leading-relaxed border-l-2 border-red-500/20 pl-3">
+                      <div className="mt-4 text-sm text-[#C9CBCE] leading-relaxed border-l-2 border-[#FF6B6B] pl-3">
                         {ticket.customer_message}
                       </div>
                       {ticket.bot_response && (
-                        <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-xs leading-relaxed text-white/60">
-                          <span className="font-bold text-white/80 mr-2">
-                            Bot:
+                        <div className="mt-4 rounded-lg border border-[#3A3F45] bg-[#12151A] p-4 text-xs leading-relaxed text-[#C9CBCE]">
+                          <span className="font-bold text-[#F4F1EA] mr-2">
+                            Assistant:
                           </span>
                           {ticket.bot_response}
                         </div>
@@ -801,7 +748,7 @@ export function Support() {
                     </div>
                   ))}
                 </div>
-              </motion.aside>
+              </aside>
             )}
           </div>
         </div>
