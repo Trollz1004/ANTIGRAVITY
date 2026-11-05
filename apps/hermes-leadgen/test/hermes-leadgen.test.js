@@ -635,8 +635,8 @@ test('13. Fake-payload unit test: View 1 Overview panel (cron jobs, 5 ports 8082
     ],
     jobQueue: [
       {
-        id: 'job-1',
-        title: 'Render #041',
+        id: 'sample-job-1',
+        title: 'SAMPLE — Render #041',
         lane: 'YouTube Shorts',
         stage: 'AMF Render',
         state: 'Private Ready',
@@ -669,8 +669,8 @@ test('14. Fake-payload unit test: View 2 YouTube & Podcast desk (pipeline stages
     ],
     uploads: [
       {
-        id: 'yt-fake-1',
-        title: 'AI Bottlenecks Short #99',
+        id: 'sample-upload-1',
+        title: 'SAMPLE — AI Bottlenecks Short',
         lane: '59s Short',
         encoder: 'h264_amf',
         duration: '57s',
@@ -702,7 +702,7 @@ test('15. Fake-payload unit test: View 3 Clay-type Lead Gen panel (filters by st
       {
         id: 'lead-a',
         company: 'Austin Singles Collective',
-        contact: 'Maya Lin · Host',
+        contact: 'SAMPLE — Host Contact',
         stage: 'Outreach Drafted',
         source: 'xAI API',
         owner: 'Harvey',
@@ -715,7 +715,7 @@ test('15. Fake-payload unit test: View 3 Clay-type Lead Gen panel (filters by st
       {
         id: 'lead-b',
         company: 'Indie Game Guild',
-        contact: 'Devon Brooks · Producer',
+        contact: 'SAMPLE — Producer Contact',
         stage: 'Qualified Signal',
         source: 'GitHub REST API',
         owner: 'Harvey',

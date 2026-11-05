@@ -89,91 +89,7 @@ const LEADS_FILE = path.join(STATE_DIR, 'harvey-leads.json');
 const HOOKS_FILE = path.join(STATE_DIR, 'circular-hooks-loop.json');
 const MEDIA_INDEX_FILE = path.join(STATE_DIR, 'media-previews.json');
 
-const terminalLogs = [
-  {
-    id: 'boot-1',
-    ts: '2026-11-04T22:30:01.000Z',
-    profile: 'default',
-    cmd: 'agy --dangerously-skip-permissions (Sabretooth :8392 OPSis Desk v1 Ready)',
-    status: 'ok',
-    output: `Sabretooth OPSis Desk v1 online at http://${SABRETOOTH_HOST}:8392/ | Bind: 127.0.0.1 loopback default`,
-  },
-  {
-    id: 'boot-2',
-    ts: '2026-11-04T22:31:10.000Z',
-    profile: 'notes',
-    cmd: `python -m graphify update "${__dirname}" --force`,
-    status: 'ok',
-    output:
-      'Graphy #1 (api.workflow.json) + Graphy #2 (graphify-out/graph.json: 118 nodes, 166 edges) synced with Sabretooth Vault.',
-  },
-  {
-    id: 'boot-3',
-    ts: '2026-11-04T22:32:05.000Z',
-    profile: 'harvey',
-    cmd: 'agy --dangerously-skip-permissions --profile harvey --official-apis-only',
-    status: 'ok',
-    output:
-      'Clay-type Lead Gen initialized across X Official API v2, Reddit Official Data API, GitHub REST API v3, Apple Podcasts Directory API, EPA B2B Registry API.',
-  },
-  {
-    id: 'boot-4',
-    ts: '2026-11-04T22:33:12.000Z',
-    profile: 'youtube',
-    cmd: 'ffmpeg -hwaccel amf -c:v h264_amf (Sabretooth RX 6700 XT <=59.0s Short Render)',
-    status: 'ok',
-    output:
-      'Rendered short-botshield-54s.mp4 (54.2s) with Aoede neural voice; queued for videos.insert with privacyStatus=private.',
-  },
-  {
-    id: 'boot-5',
-    ts: '2026-11-04T22:34:20.000Z',
-    profile: 'youtube',
-    cmd: 'youtube-data-api-v3 videos.insert --privacyStatus=private --containsSyntheticMedia=true',
-    status: 'ok',
-    output: 'Uploaded private draft yt-priv-01 to Studio channel UCJnFUOdEfSOJiXLnx6lXSzg. Josh publishes in Studio.',
-  },
-  {
-    id: 'boot-6',
-    ts: '2026-11-04T22:35:04.000Z',
-    profile: 'editor',
-    cmd: 'node marketing/qr/build-svg-cards.js --domain youandinotai.com',
-    status: 'ok',
-    output: 'Generated 4 MIT qrcode SVG printable cards in apps/hermes-leadgen/marketing/qr/ with UTM + ref tracking.',
-  },
-  {
-    id: 'boot-7',
-    ts: '2026-11-04T22:36:18.000Z',
-    profile: 'fcc',
-    cmd: 'probe 127.0.0.1:8082 127.0.0.1:8390 127.0.0.1:8391 127.0.0.1:8392 127.0.0.1:11434',
-    status: 'ok',
-    output: 'Sabretooth node port sweep completed; loopback bind and bearer guard verified.',
-  },
-  {
-    id: 'boot-8',
-    ts: '2026-11-04T22:37:42.000Z',
-    profile: 'kanban',
-    cmd: 'git status --short --branch (ai/opsis-desk-v1 -> origin/main)',
-    status: 'ok',
-    output: 'Branch ai/opsis-desk-v1 tracking origin/main; PR-only policy enforced (never merge, never push main).',
-  },
-  {
-    id: 'boot-9',
-    ts: '2026-11-04T22:38:55.000Z',
-    profile: 'default',
-    cmd: 'node --test test/hermes-leadgen.test.js',
-    status: 'ok',
-    output: 'All panel unit tests and WCAG AAA (>= 7:1) contrast checks passing on Sabretooth :8392.',
-  },
-  {
-    id: 'boot-10',
-    ts: '2026-11-04T22:40:00.000Z',
-    profile: 'notes',
-    cmd: 'sync Sabretooth Obsidian vault + T5500 ai-memory :49374',
-    status: 'ok',
-    output: 'Session state mirrored to Sabretooth vault; private uploads and outreach drafts flagged for Josh.',
-  },
-];
+const terminalLogs = [];
 
 function appendTerminalLog(profile, cmd, output, status = 'ok') {
   const entry = {
@@ -193,7 +109,7 @@ const DEFAULT_LEADS = [
   {
     id: 'lead-sample-01',
     company: 'SAMPLE — Dating Partner Network',
-    contact: 'SAMPLE — Elena V. (@PartnerDesk)',
+    contact: 'SAMPLE — Partner Liaison (@PartnerDesk)',
     name: 'SAMPLE — Dating Partner Network',
     handle: '@PartnerDesk',
     stage: 'Outreach Drafted',
@@ -218,7 +134,7 @@ const DEFAULT_LEADS = [
   {
     id: 'lead-sample-02',
     company: 'SAMPLE — Community Syndicate',
-    contact: 'SAMPLE — Marcus S. (@CommunityDesk)',
+    contact: 'SAMPLE — Community Desk Contact (@CommunityDesk)',
     name: 'SAMPLE — Community Syndicate',
     handle: '@CommunityDesk',
     stage: 'Outreach Drafted',
@@ -722,7 +638,7 @@ function buildMediaPreviews() {
         <rect width="800" height="450" fill="#0d1117"/>
         <rect x="16" y="16" width="768" height="418" rx="18" fill="#161b22" stroke="#10b981" stroke-width="4"/>
         <text x="48" y="85" fill="#10b981" font-family="Segoe UI, sans-serif" font-size="28" font-weight="bold">SABRETOOTH (.8) MEDIA &amp; THUMBNAIL PREVIEW</text>
-        <text x="48" y="145" fill="#ffffff" font-family="Segoe UI, sans-serif" font-size="34" font-weight="bold">DREAM ONLINE MMORPG — 54.5s Short</text>
+        <text x="48" y="145" fill="#ffffff" font-family="Segoe UI, sans-serif" font-size="34" font-weight="bold">SAMPLE — DREAM ONLINE MMORPG 54.5s Short</text>
         <text x="48" y="205" fill="#58a6ff" font-family="Segoe UI, sans-serif" font-size="24">Voice: Aoede / af_heart (100% Natural Female Voice)</text>
         <text x="48" y="255" fill="#f0f6fc" font-family="Segoe UI, sans-serif" font-size="22">CLI: agy --dangerously-skip-permissions | Gate: &lt;= 59.0s PASS</text>
         <rect x="48" y="305" width="360" height="64" rx="12" fill="#238636"/>
@@ -732,7 +648,7 @@ function buildMediaPreviews() {
     }
     items.push({
       id: 'media-sabretooth-short-preview-thumb.svg',
-      title: 'DREAM Online 54.5s Short Thumbnail & QA Card',
+      title: 'SAMPLE — DREAM Online 54.5s Short Thumbnail & QA Card',
       type: 'image',
       url: '/media-previews/sabretooth-short-preview-thumb.svg',
       channel: 'dream-online-mmorpg',
@@ -863,74 +779,37 @@ async function getSabretoothNodeStatus() {
       id: 'cron-harvey-api-sync',
       name: 'Harvey Official API Lead Poll',
       schedule: '0 */2 * * *',
-      lastRun: '2026-11-04 22:00 ET',
-      lastResult: 'PASS · 6 official-API leads synced (0 scraped)',
+      lastRun: 'Awaiting trigger',
+      lastResult: 'Standing schedule · Official APIs only',
       dot: 'green',
     },
     {
       id: 'cron-amf-shorts-render',
       name: 'Sabretooth AMF Shorts & Podcast Render Check',
       schedule: '15 */4 * * *',
-      lastRun: '2026-11-04 20:15 ET',
-      lastResult: 'PASS · h264_amf encode 54.2s ready for private upload',
+      lastRun: 'Awaiting trigger',
+      lastResult: 'Standing schedule · AMF encoder ready',
       dot: 'green',
     },
     {
       id: 'cron-youtube-private-audit',
       name: 'YouTube Studio Private Upload Gate Audit',
       schedule: '30 */6 * * *',
-      lastRun: '2026-11-04 18:30 ET',
-      lastResult: 'PASS · 4/4 uploads private · containsSyntheticMedia=true',
+      lastRun: 'Awaiting trigger',
+      lastResult: 'Standing schedule · Private gate enforced',
       dot: 'green',
     },
     {
       id: 'cron-obsidian-vault-mirror',
       name: 'Sabretooth Obsidian Vault & T5500 Memory Mirror',
       schedule: '45 * * * *',
-      lastRun: '2026-11-04 22:45 ET',
-      lastResult: 'PASS · Caveman session note + LOG.md synced',
+      lastRun: 'Awaiting trigger',
+      lastResult: 'Standing schedule · Vault mirror ready',
       dot: 'green',
     },
   ];
 
-  const jobQueue = [
-    {
-      id: 'job-yt-priv-01',
-      lane: 'YouTube Shorts',
-      title: 'DREAM Online Volume 2 Live AI NPCs (54.2s Short)',
-      stage: 'Private Upload Complete',
-      state: 'WAITING_ON_JOSH_IN_STUDIO',
-      dot: 'amber',
-      detail: 'privacyStatus=private · containsSyntheticMedia=true · Josh publishes in Studio',
-    },
-    {
-      id: 'job-pod-priv-02',
-      lane: 'Podcast Desk',
-      title: 'Gemini Notebook Ep. 14 — Hardware Recovery & Open Ledger',
-      stage: 'AMF Audio/Video Mux',
-      state: 'PRIVATE_DRAFT_STAGED',
-      dot: 'amber',
-      detail: 'Aoede neural voice · selfDeclaredMadeForKids=false · Josh publishes in Studio',
-    },
-    {
-      id: 'job-lead-03',
-      lane: 'Clay Lead Gen',
-      title: 'RealSinglesTalk Media LLC Partner UTM Outreach',
-      stage: 'Outreach Drafted',
-      state: 'AWAITING_JOSH_APPROVAL',
-      dot: 'amber',
-      detail: 'Source: X Official API v2 · Approval state set only by Josh',
-    },
-    {
-      id: 'job-qr-04',
-      lane: 'Marketing QR',
-      title: 'youandinotai.com Printable SVG QR Deck (4 Campaigns)',
-      stage: 'SVG Generated',
-      state: 'READY',
-      dot: 'green',
-      detail: 'MIT qrcode SVG in apps/hermes-leadgen/marketing/qr/',
-    },
-  ];
+  const jobQueue = [];
 
   return {
     node: 'Sabretooth',
@@ -1176,6 +1055,35 @@ const MARKETING_CAMPAIGNS = [
       'https://youandinotai.com/?utm_source=creator_partner&utm_medium=social_card_qr&utm_campaign=video_dates_launch&utm_content=creator_card_svg&ref=opsis_video',
   },
 ];
+
+function recordStartupLogs(host = resolveBindHost(process.env), port = PORT) {
+  const leads = loadLeads();
+  const sampleCount = leads.filter(
+    (l) => l.isSample || (l.company && l.company.includes('SAMPLE')) || (l.contact && l.contact.includes('SAMPLE')),
+  ).length;
+  const ts = new Date().toISOString();
+  terminalLogs.length = 0;
+  terminalLogs.push(
+    {
+      id: 'boot-1',
+      ts,
+      profile: 'default',
+      cmd: `listen ${host}:${port}`,
+      status: 'ok',
+      output: `Sabretooth OPSis Desk v1 listening on http://${host}:${port}/ (Bind: ${host})`,
+    },
+    {
+      id: 'boot-2',
+      ts,
+      profile: 'default',
+      cmd: 'load-state',
+      status: 'ok',
+      output: `Loaded data counts: ${leads.length} leads (${sampleCount} sample, 0 real), ${MARKETING_CAMPAIGNS.length} marketing campaigns, ${PROFILE_DEFINITIONS.length} agent profiles.`,
+    },
+  );
+}
+
+recordStartupLogs();
 
 function escapeXml(str) {
   return String(str || '')
@@ -2337,21 +2245,35 @@ server.listen = function patchedListen(...args) {
     const host = opts.host || resolveBindHost(process.env);
     validateBindConfig(process.env, host);
     opts.host = host;
-    return rawServerListen(opts, ...args.slice(1));
+    const cb = typeof args[1] === 'function' ? args[1] : null;
+    return rawServerListen(opts, (...cbArgs) => {
+      const addr = server.address();
+      const actualPort = addr && typeof addr === 'object' ? addr.port : opts.port || PORT;
+      recordStartupLogs(host, actualPort);
+      if (cb) cb(...cbArgs);
+    });
   }
   const portArg = args.length > 0 ? args[0] : PORT;
-  if (typeof args[1] === 'string') {
-    validateBindConfig(process.env, args[1]);
-    return rawServerListen(...args);
-  }
-  const defaultHost = resolveBindHost(process.env);
+  const cb = args.find((a) => typeof a === 'function');
+  const explicitHost = typeof args[1] === 'string' ? args[1] : null;
+  const defaultHost = explicitHost || resolveBindHost(process.env);
   validateBindConfig(process.env, defaultHost);
-  return rawServerListen(portArg, defaultHost, ...args.slice(1));
+  return rawServerListen(portArg, defaultHost, (...cbArgs) => {
+    const addr = server.address();
+    const actualPort = addr && typeof addr === 'object' ? addr.port : portArg;
+    recordStartupLogs(defaultHost, actualPort);
+    if (cb) cb(...cbArgs);
+  });
 };
 
 function startServer({ port = PORT, env = process.env } = {}, callback) {
   const { bindHost } = validateBindConfig(env);
-  return rawServerListen(port, bindHost, callback);
+  return rawServerListen(port, bindHost, (...args) => {
+    const addr = server.address();
+    const actualPort = addr && typeof addr === 'object' ? addr.port : port;
+    recordStartupLogs(bindHost, actualPort);
+    if (callback) callback(...args);
+  });
 }
 
 if (require.main === module) {

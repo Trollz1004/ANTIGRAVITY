@@ -135,7 +135,9 @@ function renderOverviewPanelMarkup(payload = {}) {
     })
     .join('');
 
-  const queueRowsHtml = jobQueue
+  const queueRowsHtml = jobQueue.length === 0
+    ? `<tr><td colspan="4" style="text-align: center; color: var(--text-slate); padding: 24px;">No queued jobs. Active tasks appear here when dispatched.</td></tr>`
+    : jobQueue
     .map((j) => {
       const dot = normalizeDotColor(j.statusDot, true);
       return `<tr data-job-id="${escapeHtml(j.id)}">
