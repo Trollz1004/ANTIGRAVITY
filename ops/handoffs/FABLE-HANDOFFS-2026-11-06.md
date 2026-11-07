@@ -124,7 +124,8 @@ Why: today's rulings landed in CLAUDE.md-style files and the handoff only. Every
 3. Generate or correct every file from step 1 so it says what the roster says. Where a format cannot carry a rule, it points at the roster by path instead of restating it.
 4. Remove from every file: NSFW_BOTS, the Mission Control dispatch endpoint, JARVIS as Hermes's name, Godot as the engine, ClawX as the vote board, Open Collective, Stripe, any revenue split, any cookie or browser-session instruction, and any charity or mission wording in files that are public-repo and not the Misses Trollz page.
 5. Add a check to `ops/startup/seed-agents.cjs` or the CI validate job that fails when a generated file no longer matches the roster, so the drift cannot come back quietly.
-6. PR carries the inventory file and a before-and-after diff summary per format. The Claude judge lane reviews it before any other section's PR is reviewed.
+6. Standing rule from Joshua, 2026-11-06, written into every agent's own file by this job: when an agent finishes work that changes a lane, a skill, a tool or a rule, it updates every definition file it owns in the same PR, so the whole team reads the same data. Each agent loads only its own file, chosen by its model. The only skills an agent keeps loaded are Superpowers (the official Anthropic one, or the skills.sh one) and the caveman token-saver skill, plus memory. Everything else loads on demand by path. Agent definitions carry no bloated skill text.
+7. PR carries the inventory file and a before-and-after diff summary per format. The Claude judge lane reviews it before any other section's PR is reviewed.
 
 ## 7. Node bridge for Fable — Joshua, at each console
 
