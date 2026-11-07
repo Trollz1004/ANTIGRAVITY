@@ -17,3 +17,5 @@ Use this skill at session start and before mutating system state to ground reaso
 1. Read `00 HOME.md` and your per-agent note (`<NODE>/<agent>-to-<agent>.md`) via `obsidian_antigravity` MCP (`get_vault_file`, `search_vault_simple`, `get_backlinks`).
 2. Cross-check vault notes against git-committed Markdown. When anything disagrees with git, git wins.
 3. Record verified hypotheses and decisions back into the vault using `obsidian-save`.
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

@@ -458,3 +458,5 @@ After a high-signal skill workflow completes, this agent can:
 - [Let's Build a Self-Improving AI Agent](https://medium.com/@nomannayeem/lets-build-a-self-improving-ai-agent-that-learns-from-your-feedback-722d2ce9c2d9)
 - [OpenCrabs local self-improving agent](https://github.com/adolfousier/opencrabs)
 - [ELL-StuLife experience-driven lifelong learning](https://github.com/ECNU-ICALK/ELL-StuLife)
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

@@ -99,3 +99,5 @@ A third write when a ruling or a design decision was made: `/obsidian-save` from
 - Git Bash mangles slash flags for Windows tools like `schtasks`; use PowerShell cmdlets for scheduled tasks.
 - The JARVIS House stage restarts on staleness, so editing files under `mission-control/` makes the next House pass restart it. That is expected.
 - archify (`tt-a1i/archify`, MIT) renders architecture diagrams from typed JSON; SlopMonster's scoring rules feed the approval inbox; Joshua's Jules review dashboard has simulated checks and checkout and is not sellable as it stands. Details: `ops/runbook/ABSORB-SURVEY-2026-09-17.md` and Phase E of the consolidation dispatch.
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).
