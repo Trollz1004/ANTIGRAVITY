@@ -82,10 +82,7 @@ export function Register() {
   return (
     <div className="min-h-screen bg-[#0A0B0D] text-[#F4F1EA] flex flex-col justify-between px-4 py-8 md:px-8">
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between border-b border-[#3A3F45] pb-4 mb-8">
-        <Link
-          to="/"
-          className="flex items-center gap-3 text-left no-underline"
-        >
+        <Link to="/" className="flex items-center gap-3 text-left no-underline">
           <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#3A3F45] bg-[#12151A] font-display text-sm font-bold text-[#FFD21E]">
             Y&amp;I
           </span>
@@ -126,7 +123,10 @@ export function Register() {
             </div>
             <div className="space-y-4 text-sm font-medium text-[#C9CBCE]">
               <div className="flex items-start gap-3">
-                <ShieldCheck size={20} className="mt-0.5 text-[#FFD21E] shrink-0" />
+                <ShieldCheck
+                  size={20}
+                  className="mt-0.5 text-[#FFD21E] shrink-0"
+                />
                 <span>Adults 18 and over. Real date of birth required.</span>
               </div>
               <div className="flex items-start gap-3">

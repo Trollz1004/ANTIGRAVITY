@@ -63,9 +63,7 @@ export function CheckoutLaunch() {
             <LoaderCircle className="h-8 w-8 animate-spin" />
           </div>
 
-          <h1 className="app-title mx-auto max-w-2xl">
-            {label} checkout.
-          </h1>
+          <h1 className="app-title mx-auto max-w-2xl">{label} checkout.</h1>
           <p className="app-subtitle mx-auto mt-4 max-w-2xl">
             Preparing the account-bound Square session so the payment stays
             linked to your actual platform account.

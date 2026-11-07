@@ -129,11 +129,7 @@ export function DreamSpaceStage() {
     const nodeAngles = [0, Math.PI * 0.5, Math.PI, Math.PI * 1.5];
     nodeAngles.forEach(angle => {
       const marker = new THREE.Mesh(nodeGeo, nodeMat);
-      marker.position.set(
-        Math.cos(angle) * 2.55,
-        Math.sin(angle) * 2.55,
-        0
-      );
+      marker.position.set(Math.cos(angle) * 2.55, Math.sin(angle) * 2.55, 0);
       signalRing.add(marker);
     });
 
