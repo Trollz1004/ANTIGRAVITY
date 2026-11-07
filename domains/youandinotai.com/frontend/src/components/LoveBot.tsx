@@ -45,7 +45,11 @@ interface GiftResponse {
 }
 
 type LoveBotResult =
-  CompatibilityResponse | QuoteResponse | TipResponse | GiftResponse | null;
+  | CompatibilityResponse
+  | QuoteResponse
+  | TipResponse
+  | GiftResponse
+  | null;
 
 const FOUNDING_MEMBER_LINK = '/app/checkout/founding_member';
 
