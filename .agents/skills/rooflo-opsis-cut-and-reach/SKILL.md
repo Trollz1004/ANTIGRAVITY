@@ -123,3 +123,5 @@ When invoked in Free Claude Code (`http://127.0.0.1:8082`), `fcc-claude`, `fcc-o
      - `powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Ai-Dream-Team\Antigravity\apps\hermes-leadgen\scripts\node-auto-pr-push.ps1"`
      - Or `POST http://127.0.0.1:8392/api/hooks/push-pr`
    - This runs `node --test`, stages and commits modified project files (excluding `.env*`), pushes `HEAD:refs/heads/sabretooth/auto-pr-sync` to `origin`, and runs `gh pr create --repo Trollz1004/ANTIGRAVITY --base main --head sabretooth/auto-pr-sync` for review.
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

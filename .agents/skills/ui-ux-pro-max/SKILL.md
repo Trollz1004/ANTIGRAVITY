@@ -673,3 +673,5 @@ Scope notice: This checklist is for App UI (iOS/Android/React Native/Flutter).
 - [ ] Color is not the only indicator
 - [ ] Reduced motion and dynamic text size are supported without layout breakage
 - [ ] Accessibility traits/roles/states (selected, disabled, expanded) are announced correctly
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

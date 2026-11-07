@@ -79,3 +79,5 @@ Readiness ≠ coverage. This file says Paperclip is *running properly*. Whether 
 covers approvals and decisions, does **not** cover the council vote engine or the
 role wall, and only partially covers uptime. Do not retire a control plane on the
 strength of this file.
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

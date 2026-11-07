@@ -128,3 +128,5 @@ If a line item turns up that is not on this list, it is added here before it is 
 3. **Where the cloud desk's session-end note is filed.** The standard requires an Obsidian note, and the cloud host has no vault. The interim answer is a fleet memory entry. Who copies it into the vault?
 4. **Reaching the T5500 from the cloud.** The cloud host cannot see the home network. This is the biggest unknown, and the memory keeper does not work without an answer.
 5. **Three jobs or four.** The role lists four duties. The soul groups the front door and the queue as one job, since the queue is where the front door puts what it hears. Say if Josh wants them separate.
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

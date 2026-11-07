@@ -520,3 +520,5 @@ Component code can be large. When saving it to `.html` files, avoid writing the 
 | Assuming `result` is present on `202`                                   | `result` is absent until status is `completed`                                                       |
 | Using `screenId` as `componentIds` in screenshots                       | `screenId` and `componentId` are different; always use `componentId` from operations for screenshots |
 | Confusing `versions[i].version` (number) with `versions[i].id` (string) | When resolving pinned versions, match by `id` (e.g. `ver_001`); `version` is the numeric index       |
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

@@ -21,3 +21,5 @@
    - `agent-workflow`, `caveman`, `i-have-adhd`, `find-skills`, `create-skills`, `brainstorming`, `superpowers`, `tdd`, `test-driven-development`, `verification-before-completion`, `obsidian-save`, `openviking`, `supabase`, `remake`, `reverse-engineer-anything`.
 6. **1-AND-ONLY-1 `$5/MO` SYNCED OBSIDIAN VAULT (`1 GB` Cap) & `[REDACTED:XXXX]` SECRETS**:
    - Write only to your separated node/agent file (`Alienware/<agent>-to-<agent>.md`, `Sabretooth/<agent>-to-<agent>.md`, `T5500/<agent>-to-<agent>.md`) + Shared `ai-memory` (`:49374`, address in the node env file). Mask all secrets/keys as `XXXX`.
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).
