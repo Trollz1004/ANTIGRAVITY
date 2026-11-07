@@ -1,6 +1,8 @@
 # Fable handoffs — 2026-11-06
 
 Rulings by Joshua in a live session on 2026-11-06, written by Fable (claude.ai, Chrome side panel).
+First step for every lane on every node, before reading further: `git fetch origin` and `git pull` on main in the repo clone you are about to work in (ANTIGRAVITY on the T5500 at `C:\ANTIGRAVITY`, the Sabretooth clone, the two game clones on the Alienware), and then branch from that fresh main. What is on origin main now wins over whatever your local clone, your cached context, your last journal entry or your own definition file says. Current beats existing. If your clone cannot fast-forward, stop and report; do not force anything.
+
 Each section is one job for one lane. PRs only. No direct push to main. No `--force`, no `--no-verify`.
 Every visual job ends at the Eyes gate: render, screenshot, side-by-side against Joshua's reference, vision judge with written reasons. No judge report, no review.
 Nothing costs money until Joshua says finalize. Never echo an env value.
