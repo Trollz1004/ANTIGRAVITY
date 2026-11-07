@@ -1,6 +1,8 @@
 # Fable handoffs — 2026-11-06
 
 Rulings by Joshua in a live session on 2026-11-06, written by Fable (claude.ai, Chrome side panel).
+First step for every lane on every node, before reading further: `git fetch origin` and `git pull` on main in the repo clone you are about to work in (ANTIGRAVITY on the T5500 at `C:\ANTIGRAVITY`, the Sabretooth clone, the two game clones on the Alienware), and then branch from that fresh main. What is on origin main now wins over whatever your local clone, your cached context, your last journal entry or your own definition file says. Current beats existing. If your clone cannot fast-forward, stop and report; do not force anything.
+
 Each section is one job for one lane. PRs only. No direct push to main. No `--force`, no `--no-verify`.
 Every visual job ends at the Eyes gate: render, screenshot, side-by-side against Joshua's reference, vision judge with written reasons. No judge report, no review.
 Nothing costs money until Joshua says finalize. Never echo an env value.
@@ -12,6 +14,7 @@ Nothing costs money until Joshua says finalize. Never echo an env value.
 3. Posting lanes, two tiers. Platform surfaces are worked by the platform's own agent through its own API or sign-in: Grok on X (Hermes xAI sign-in, paid, the default for date app and recycler launch posts), Muse on Meta surfaces once a sign-in or ruled API door exists and a terms check passes, Gemini on Google pages, Codex on OpenAI's. Every other site (Bluesky, swarm targets) is posted only by Opus or Fable through the signed-in Claude Code, or Argon at highest thinking, through that site's official API, every post logged. Reddit is the exception and is governed by ruling 4 alone. Sonnet, Flash, Kimi, GLM and local models never post anywhere. Hermes dispatches and never posts. GrinDroid never goes to Meta surfaces. YouTube unchanged: no agent posts, uploads private, Joshua publishes in Studio.
 4. Reddit is a live-session job: Joshua signed in, Claude in Chrome, one approval per post. Not a Hermes job.
 5. Public surfaces are judged by the first seven seconds with no scrolling. A site that looks fine as a normal website fails. Same bar as the game's seven seconds of playable footage.
+6. Motion is the standard on everything we ship, header included. A static header, a static hero, a static card grid is not finished. Joshua's words: we wow or it is not shipped. This applies to the date app, the game page, the recycler, Mission Control and DREAM Studio alike. Motion must still pass the accessibility rules (respect reduced-motion, keep contrast, no frame-rate drop on an ordinary laptop).
 
 ## 1. Council vote moves home — Sonnet in agy, ANTIGRAVITY, branch `council-vote-home`
 
@@ -55,9 +58,13 @@ Agent-Reach is a research tool for Opus, Fable and Argon only. It never posts.
 
 Finding from the live site on 2026-11-06: the orbit motion lives at section nine (Membership). The two rings are thin grey and dim gold on near-black and do not register at a glance. A visitor who gives the site seven seconds sees a clean dark page with a logo, a nav bar and buttons. Normal, forgettable, fails ruling 5.
 
-Reference: Joshua's scroll-driven satellite-and-world reference site, in the drop box under `images/site-look` (he is adding it). Study-tool rules: learn the motion, build our own, nothing copied ships.
+Reference, given by Joshua 2026-11-06 20:42: https://gpc-style-endurosat.vercel.app/space-service/ (a remake-skill study of the EnduroSat site style). Open it, scroll it, record it. The two things he wants from it, and only these two:
+- Scroll-driven zoom. The next section zooms in and out as the visitor scrolls, so the page feels like one continuous object rather than a stack of blocks.
+- A scroll progress bar. On that site it is the row of blue squares at the bottom that fills up as you scroll. Its job is to tell a human "keep going, there is more." Ours needs the same job done, in our own shape and colors.
+He wants the style, not the site: no copying of its layout, copy, globe, or assets. The Remake `100% Yours` gate in `.agents/skills/remake/` applies: passes on features matched, clear visual difference, and own code, never on likeness. This motion is new to most visitors too, so the progress bar is not decoration; it is the cue that makes the zoom understandable.
 
-1. The hero owns the whole first screen. The orbit motion moves to the top and becomes the main object, not a background: bright enough to read at a glance, moving on load before any scroll, with the first scroll driving a zoom or orbit change the visitor feels immediately.
+1. The header moves too. Logo, nav and the API Live pill get their own motion on load and on scroll (ruling 6); a header that just sits there fails the gate.
+2. The hero owns the whole first screen. The orbit motion moves to the top and becomes the main object, not a background: bright enough to read at a glance, moving on load before any scroll, with the first scroll driving a zoom or orbit change the visitor feels immediately.
 2. Rings and orbit lines at a contrast anyone can see on a laptop in a lit room. If Joshua cannot see it from his chair, it fails.
 3. Membership and pricing stay where they are. The hero sells the feeling; the sections below sell the product.
 4. Keep CLAUDE's N Joshua's, #TeamClaudeForLife, the API Live pill and the nav exactly as they are.
@@ -109,6 +116,18 @@ READMEs:
 - The commit guard word list is enforced mechanically; phrase around it and never list the words in a file.
 
 Not verified from this session: the live untilnokidinneed.com page (the fetch was refused by robots and the Chrome tools failed twice); the dream-online.net live page was read and matches the repo source on the items above.
+
+## 7a. Agent-definition sync — Sonnet in agy, one PR per repo, run before any lane picks up sections 1 to 6
+
+Why: today's rulings landed in CLAUDE.md-style files and the handoff only. Every other agent reads its own format. If Gemini's `gemini.toml`, the `agents.json` and `skill.json` files, `openai.yaml`, `AGENTS.md`, the `SKILL.md` files and the node souls still say something else, each lane drifts in its own direction and the drift lands in Claude's review queue. Joshua's rule: agent definitions are reconciled into one roster file in the repo, and every format is generated from it, never hand-edited separately.
+
+1. Inventory every agent-definition file in ANTIGRAVITY and dream-online: `gemini.toml`, `agents.json`, `skill.json`, `openai.yaml`, `AGENTS.md`, `CLAUDE.md`, every `SKILL.md`, the node souls in `docs/standards/`, and the Hermes skills under `hermes/skills/`. Write the list with paths into `ops/runbook/AGENT-DEFINITIONS-INVENTORY-2026-11.md`.
+2. Pick the single roster file (the spec in `ops/handoffs/FABLE-QUEUE-ROUTER-GUI-PIPELINE-2026-11-03.md` names it if one exists; otherwise `ops/roster/ROSTER.json`). Put the lanes, their nodes, their connection method, their allowed tools and their posting rights in it, matching rulings 0 to 6 in this file exactly.
+3. Generate or correct every file from step 1 so it says what the roster says. Where a format cannot carry a rule, it points at the roster by path instead of restating it.
+4. Remove from every file: NSFW_BOTS, the Mission Control dispatch endpoint, JARVIS as Hermes's name, Godot as the engine, ClawX as the vote board, Open Collective, Stripe, any revenue split, any cookie or browser-session instruction, and any charity or mission wording in files that are public-repo and not the Misses Trollz page.
+5. Add a check to `ops/startup/seed-agents.cjs` or the CI validate job that fails when a generated file no longer matches the roster, so the drift cannot come back quietly.
+6. Standing rule from Joshua, 2026-11-06, written into every agent's own file by this job: when an agent finishes work that changes a lane, a skill, a tool or a rule, it updates every definition file it owns in the same PR, so the whole team reads the same data. Each agent loads only its own file, chosen by its model. The only skills an agent keeps loaded are Superpowers (the official Anthropic one, or the skills.sh one) and the caveman token-saver skill, plus memory. Everything else loads on demand by path. Agent definitions carry no bloated skill text.
+7. PR carries the inventory file and a before-and-after diff summary per format. The Claude judge lane reviews it before any other section's PR is reviewed.
 
 ## 7. Node bridge for Fable — Joshua, at each console
 
