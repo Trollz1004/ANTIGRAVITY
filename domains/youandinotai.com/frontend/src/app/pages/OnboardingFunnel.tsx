@@ -18,7 +18,7 @@ const stepTitles = {
 };
 
 const stepDescriptions = {
-  profile: 'Add a bio, interests, and a prompt so people can find you.',
+  profile: 'Add a bio, interests, and a profile answer so people can find you.',
   verify:
     'Complete the $1 Bot-Shield verification to unlock discovery and matching.',
   subscribe: 'Founding Member at $14.99/mo. Cancel anytime.',

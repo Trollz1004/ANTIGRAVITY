@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   Check,
@@ -59,7 +59,7 @@ const LEGAL_DOCS: Record<
     sections: [
       {
         h: '1. Data We Collect',
-        p: 'We collect the account details you provide (email, display name, date of birth, profile prompts, and optional photos), verification status, and in-app activity needed to operate matching, messaging, and support.',
+        p: 'We collect the account details you provide (email, display name, date of birth, profile answers, and optional photos), verification status, and in-app activity needed to operate matching, messaging, and support.',
       },
       {
         h: '2. How Your Data Is Used',
@@ -103,7 +103,7 @@ const LEGAL_DOCS: Record<
       },
       {
         h: '3. Billing Support & Assistance',
-        p: 'For billing assistance or receipt inquiries, contact support through /app/support or email contact@youandinotai.com with your account email for prompt resolution.',
+        p: 'For billing assistance or receipt inquiries, contact support through /app/support or email contact@youandinotai.com with your account email for a quick resolution.',
       },
     ],
   },
@@ -249,18 +249,12 @@ export function PublicSupportPage() {
   );
 }
 export function LandingPage() {
-  const navigate = useNavigate();
-  const { user, betaAccess } = useAuth();
+  const { user } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeLegalDoc, setActiveLegalDoc] = useState<LegalDocKey | null>(
     null
   );
   const [waitlistEmail, setWaitlistEmail] = useState('');
-  const [betaCode, setBetaCode] = useState('');
-  const [betaStatus, setBetaStatus] = useState<{
-    type: 'idle' | 'loading' | 'error';
-    message: string;
-  }>({ type: 'idle', message: '' });
 
   const [journeyState, setJourneyState] = useState(() =>
     readSectionJourneyState()
@@ -292,29 +286,6 @@ export function LandingPage() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, []);
 
-  const handleBetaSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const cleaned = betaCode.trim();
-    if (!cleaned) {
-      setBetaStatus({
-        type: 'error',
-        message: 'Enter your beta invite code first.',
-      });
-      return;
-    }
-    setBetaStatus({ type: 'loading', message: 'Verifying invite code...' });
-    try {
-      await betaAccess(cleaned);
-      const nextUser = useAuth.getState().user;
-      navigate(nextUser?.has_profile ? '/app' : '/app/profile');
-    } catch (err: any) {
-      setBetaStatus({
-        type: 'error',
-        message: err?.message || 'Please check your beta invite code.',
-      });
-    }
-  };
-
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el && typeof el.scrollIntoView === 'function') {
@@ -322,15 +293,19 @@ export function LandingPage() {
     }
   };
 
-  const navLinks = [
-    { id: 'about', label: 'Overview', href: '#about' },
-    { id: 'platform', label: 'Platform', href: '#platform' },
-    { id: 'verification', label: 'Verification', href: '#verification' },
-    { id: 'trust', label: 'Trust & Safety', href: '#trust' },
-    { id: 'pricing', label: 'Membership', href: '#pricing' },
-    { id: 'support', label: 'Support', href: '#support' },
-    { id: 'join', label: 'Early Access', href: '#join' },
-  ];
+  // 'Join' leaves the journey and opens the existing register flow; the
+  // other links scroll to their stop. The id stays 'join' so the link still
+  // lights while the visitor is on stop 07.
+  const navLinks: { id: string; label: string; href: string; to?: string }[] =
+    [
+      { id: 'about', label: 'Overview', href: '#about' },
+      { id: 'platform', label: 'Platform', href: '#platform' },
+      { id: 'verification', label: 'Verification', href: '#verification' },
+      { id: 'trust', label: 'Trust & Safety', href: '#trust' },
+      { id: 'pricing', label: 'Membership', href: '#pricing' },
+      { id: 'support', label: 'Support', href: '#support' },
+      { id: 'join', label: 'Join', href: '/register', to: '/register' },
+    ];
 
   const pricingTiers = [
     {
@@ -433,16 +408,17 @@ export function LandingPage() {
           >
             {navLinks.map(link => {
               const isCurrent = journeyState.activeSectionId === link.id;
-              return (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className={`whitespace-nowrap border-b-2 py-1 text-[15px] font-medium no-underline transition-colors ${
-                    isCurrent
-                      ? 'border-[#FFD21E] text-[#FFD21E]'
-                      : 'border-transparent text-[#F4F1EA] hover:border-[#FFD21E] hover:text-[#FFD21E]'
-                  }`}
-                >
+              const className = `whitespace-nowrap border-b-2 py-1 text-[15px] font-medium no-underline transition-colors ${
+                isCurrent
+                  ? 'border-[#FFD21E] text-[#FFD21E]'
+                  : 'border-transparent text-[#F4F1EA] hover:border-[#FFD21E] hover:text-[#FFD21E]'
+              }`;
+              return link.to ? (
+                <Link key={link.href} to={link.to} className={className}>
+                  {link.label}
+                </Link>
+              ) : (
+                <a key={link.href} href={link.href} className={className}>
                   {link.label}
                 </a>
               );
@@ -508,16 +484,27 @@ export function LandingPage() {
               </span>
             </div>
             <div className="grid gap-1">
-              {navLinks.map(link => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
-                >
-                  {link.label}
-                </a>
-              ))}
+              {navLinks.map(link =>
+                link.to ? (
+                  <Link
+                    key={link.href}
+                    to={link.to}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
+                  >
+                    {link.label}
+                  </a>
+                )
+              )}
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#3A3F45] pt-4">
               <Link
@@ -653,8 +640,8 @@ export function LandingPage() {
                   </h3>
                   <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
                     Every active profile completes our $1 Bot-Shield check and
-                    surfaces clear relationship goals, conversation prompts, and
-                    meetup preferences.
+                    surfaces clear relationship goals, openers, and meetup
+                    preferences.
                   </p>
                 </div>
 
@@ -1036,138 +1023,49 @@ export function LandingPage() {
           </div>
         </section>
 
-        {/* STOP 07 (#join) — Pinned Section: Early Access Waitlist & Beta Invite Code */}
+        {/* STOP 07 (#join) — Pinned Section: Start Tonight (live product, three actions, no email capture) */}
         <section id="join" className="relative min-h-[135vh]">
           <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
             <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
-                  07 / EARLY ACCESS &amp; BETA
+                  07 / START TONIGHT
                 </span>
                 <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
-                  STOP 07 / 08 · PORTAL LOCK
+                  STOP 07 / 08 · START
                 </span>
               </div>
 
               <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
-                CLAIM YOUR VERIFIED SPOT OR UNLOCK BETA ACCESS.
+                Verified people are already here.
               </h2>
 
-              <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 lg:grid-cols-2">
-                {/* Panel A — Waitlist Email Form */}
-                <div className="rounded-[10px] border border-[#3A3F45] bg-[#12151A] p-5 sm:p-6">
-                  <div className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
-                    WAITLIST UPDATES
-                  </div>
-                  <h3 className="mt-1.5 font-display text-[22px] font-bold text-[#F4F1EA]">
-                    Get Launch &amp; Meetup Milestones
-                  </h3>
-                  <p className="mt-1.5 text-[15px] text-[#F4F1EA]">
-                    Add your email to receive regional rollout notices and
-                    verified member event invitations.
-                  </p>
-
-                  <form
-                    action="https://formsubmit.co/contact@youandinotai.com"
-                    method="POST"
-                    className="mt-4 space-y-3"
-                  >
-                    <input
-                      type="hidden"
-                      name="_subject"
-                      value="New YouAndINotAI Early Access Signup!"
-                    />
-                    <input type="hidden" name="_captcha" value="false" />
-                    <input type="hidden" name="_template" value="table" />
-                    <input
-                      type="hidden"
-                      name="_next"
-                      value="https://youandinotai.com/#join"
-                    />
-
-                    <div>
-                      <label
-                        htmlFor="waitlist-email-input"
-                        className="block text-[14px] font-medium text-[#F4F1EA]"
-                      >
-                        Email address
-                      </label>
-                      <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-                        <input
-                          id="waitlist-email-input"
-                          type="email"
-                          name="email"
-                          required
-                          value={waitlistEmail}
-                          onChange={e => setWaitlistEmail(e.target.value)}
-                          placeholder="you@example.com"
-                          className="app-input flex-1"
-                        />
-                        <button
-                          type="submit"
-                          className="ds-btn-signal shrink-0"
-                        >
-                          Join the Waitlist
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-
-                {/* Panel B — Beta Access Code Form */}
-                <div className="rounded-[10px] border border-[#3A3F45] bg-[#12151A] p-5 sm:p-6">
-                  <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
-                    <KeyRound size={16} />
-                    <span>INVITE CODE ACCESS</span>
-                  </div>
-                  <h3 className="mt-1.5 font-display text-[22px] font-bold text-[#F4F1EA]">
-                    Have a Beta Invite Code?
-                  </h3>
-                  <p className="mt-1.5 text-[15px] text-[#F4F1EA]">
-                    Enter your founder or beta invite code to unlock your member
-                    session immediately.
-                  </p>
-
-                  <form onSubmit={handleBetaSubmit} className="mt-4 space-y-3">
-                    <div>
-                      <label
-                        htmlFor="landing-beta-code-input"
-                        className="block text-[14px] font-medium text-[#F4F1EA]"
-                      >
-                        Beta access code
-                      </label>
-                      <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-                        <input
-                          id="landing-beta-code-input"
-                          type="text"
-                          value={betaCode}
-                          onChange={e => setBetaCode(e.target.value)}
-                          placeholder="FOUNDER-XXXX"
-                          className="app-input flex-1 font-mono uppercase"
-                        />
-                        <button
-                          type="submit"
-                          disabled={betaStatus.type === 'loading'}
-                          className="ds-btn-ghost shrink-0 border-[#FFD21E] text-[#FFD21E]"
-                        >
-                          {betaStatus.type === 'loading'
-                            ? 'Checking...'
-                            : 'Unlock Beta Access'}
-                        </button>
-                      </div>
-                    </div>
-
-                    {betaStatus.message && (
-                      <p
-                        role="status"
-                        className="text-[14px] font-medium text-[#FFD21E]"
-                      >
-                        {betaStatus.message}
-                      </p>
-                    )}
-                  </form>
-                </div>
-              </div>
+              <nav
+                aria-label="Start tonight"
+                className="mt-6 grid gap-4 border-t border-[#3A3F45] pt-6 sm:grid-cols-3"
+              >
+                <Link
+                  to="/register"
+                  className="ds-btn-signal flex min-h-[64px] w-full items-center justify-between gap-3 px-6 py-4 text-[18px] font-semibold"
+                >
+                  <span>Create Free Account</span>
+                  <ArrowRight size={20} aria-hidden="true" />
+                </Link>
+                <Link
+                  to="/app/verify"
+                  className="ds-btn-ghost flex min-h-[64px] w-full items-center justify-between gap-3 border-[#FFD21E] px-6 py-4 text-[18px] font-semibold text-[#FFD21E]"
+                >
+                  <span>Get Verified, $1 Bot-Shield</span>
+                  <ShieldCheck size={20} aria-hidden="true" />
+                </Link>
+                <Link
+                  to="/login"
+                  className="ds-btn-ghost flex min-h-[64px] w-full items-center justify-between gap-3 px-6 py-4 text-[18px] font-semibold"
+                >
+                  <span>Member Sign In</span>
+                  <KeyRound size={20} aria-hidden="true" />
+                </Link>
+              </nav>
             </div>
           </div>
         </section>
@@ -1201,7 +1099,7 @@ export function LandingPage() {
 
             <div>
               <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
-                Launch Links
+                Explore
               </h3>
               <ul className="mt-4 space-y-2.5 list-none p-0">
                 <li>
@@ -1241,7 +1139,7 @@ export function LandingPage() {
                     href="#join"
                     className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
-                    Early Access
+                    Start Tonight
                   </a>
                 </li>
               </ul>
@@ -1348,7 +1246,48 @@ export function LandingPage() {
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-[#3A3F45] pt-6 sm:flex-row sm:items-center">
+          {/* The one email box left on the page: member event invitations.
+              Same FormSubmit endpoint and hidden fields as before. */}
+          <form
+            action="https://formsubmit.co/contact@youandinotai.com"
+            method="POST"
+            className="mt-10 flex flex-col gap-3 border-t border-[#3A3F45] pt-6 sm:flex-row sm:items-center"
+          >
+            <input
+              type="hidden"
+              name="_subject"
+              value="New YouAndINotAI Early Access Signup!"
+            />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="table" />
+            <input
+              type="hidden"
+              name="_next"
+              value="https://youandinotai.com/#join"
+            />
+            <label
+              htmlFor="footer-events-email-input"
+              className="shrink-0 text-[16px] font-medium text-[#F4F1EA]"
+            >
+              Get invited to verified member events
+            </label>
+            <input
+              id="footer-events-email-input"
+              type="email"
+              name="email"
+              required
+              autoComplete="email"
+              value={waitlistEmail}
+              onChange={e => setWaitlistEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="app-input flex-1 sm:max-w-[360px]"
+            />
+            <button type="submit" className="ds-btn-ghost shrink-0">
+              Send
+            </button>
+          </form>
+
+          <div className="mt-6 flex flex-col items-start justify-between gap-4 border-t border-[#3A3F45] pt-6 sm:flex-row sm:items-center">
             <p className="text-[14px] font-medium text-[#F4F1EA]">
               &copy; 2026 Trash Or Treasure Online Recycler LLC. &middot;
               CLAUDE&apos;s N Joshua&apos;s &middot; #TeamClaudeForLife

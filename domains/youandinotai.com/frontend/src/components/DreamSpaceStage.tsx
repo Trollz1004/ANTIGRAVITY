@@ -55,9 +55,9 @@ export const SECTION_STOPS: SectionStop[] = [
   {
     id: 'join',
     index: '07',
-    label: 'Early Access',
-    shortLabel: 'ACCESS',
-    phrase: 'CLAIM YOUR VERIFIED SPOT OR UNLOCK BETA ACCESS.',
+    label: 'Start Tonight',
+    shortLabel: 'START',
+    phrase: 'VERIFIED PEOPLE ARE ALREADY HERE.',
   },
   {
     id: 'footer',

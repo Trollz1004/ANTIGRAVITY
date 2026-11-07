@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { api } from '../lib/api';
+import { formatBioForDisplay } from '../lib/profileBio';
 
 interface AuthMeResponse {
   user_id: string;
@@ -287,7 +288,9 @@ export default function DataPrivacyDashboard() {
                     Bio
                   </dt>
                   <dd className="mt-2 text-[#F4F1EA]">
-                    {data.profile?.bio || 'No bio saved.'}
+                    {data.profile?.bio
+                      ? formatBioForDisplay(data.profile.bio)
+                      : 'No bio saved.'}
                   </dd>
                 </div>
                 <div className="rounded-lg border border-[#3A3F45] bg-[#0A0B0D] p-4">

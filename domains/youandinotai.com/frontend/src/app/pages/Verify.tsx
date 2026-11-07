@@ -244,7 +244,7 @@ export function Verify() {
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#3A3F45] bg-[#0A0B0D] font-mono text-xs font-bold text-[#FFD21E]">
                     1
                   </span>
-                  <span>Answer a short liveness prompt.</span>
+                  <span>Answer a short liveness challenge.</span>
                 </div>
                 <div className="flex gap-3">
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#3A3F45] bg-[#0A0B0D] font-mono text-xs font-bold text-[#FFD21E]">

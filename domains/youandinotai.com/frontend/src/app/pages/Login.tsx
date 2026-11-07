@@ -34,7 +34,6 @@ export function Login() {
   const [betaCode, setBetaCode] = useState('');
   const [betaError, setBetaError] = useState('');
   const [betaLoading, setBetaLoading] = useState(false);
-  const [showBeta, setShowBeta] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<LoginErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const { login, betaAccess } = useAuth();
@@ -97,19 +96,24 @@ export function Login() {
     }
   };
 
+  // Founder code: moved here from the landing page (Josh, 2026-11-07). Same
+  // betaAccess handler (POST /auth/beta-access) the landing form used, and the
+  // same routing: members without a profile go to profile setup first.
   const handleBetaCode = async (e: React.FormEvent) => {
     e.preventDefault();
     setBetaError('');
-    if (!validateRequired(betaCode)) {
-      setBetaError('Access code is required');
+    const cleaned = betaCode.trim();
+    if (!validateRequired(cleaned)) {
+      setBetaError('Enter your founder code first.');
       return;
     }
     setBetaLoading(true);
     try {
-      await betaAccess(betaCode);
-      navigate(nextPath);
+      await betaAccess(cleaned);
+      const nextUser = useAuth.getState().user;
+      navigate(nextUser?.has_profile ? nextPath : '/app/profile');
     } catch (err: any) {
-      setBetaError(err.message || 'Invalid access code');
+      setBetaError(err?.message || 'Please check your founder code.');
     } finally {
       setBetaLoading(false);
     }
@@ -273,55 +277,49 @@ export function Login() {
 
             <GoogleSignInButton />
 
-            <div className="mt-6 rounded-lg border border-[#3A3F45] bg-[#1A1E25] p-4">
-              <button
-                type="button"
-                onClick={() => setShowBeta(!showBeta)}
-                className="flex w-full items-center justify-between text-sm font-semibold text-[#C9CBCE] hover:text-[#F4F1EA] transition-colors"
+            <form
+              onSubmit={handleBetaCode}
+              className="mt-6 rounded-lg border border-[#3A3F45] bg-[#1A1E25] p-4"
+              noValidate
+            >
+              <label
+                htmlFor="login-founder-code-input"
+                className="flex items-center gap-2 text-sm font-semibold text-[#F4F1EA]"
               >
-                <span className="flex items-center gap-2">
-                  <KeyRound size={16} className="text-[#FFD21E]" />
-                  Have a beta access code?
-                </span>
-                <Sparkles size={14} className="text-[#FFD21E]" />
-              </button>
-
-              <AnimatePresence>
-                {showBeta && (
-                  <motion.form
-                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                    animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
-                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                    onSubmit={handleBetaCode}
-                    className="overflow-hidden"
-                    noValidate
-                  >
-                    {betaError && (
-                      <p className="mb-3 text-sm font-medium text-[#FF6B6B]">
-                        {betaError}
-                      </p>
-                    )}
-                    <div className="flex flex-col gap-3 sm:flex-row">
-                      <input
-                        type="text"
-                        value={betaCode}
-                        onChange={e => setBetaCode(e.target.value)}
-                        autoComplete="one-time-code"
-                        placeholder="ENTER CODE"
-                        className="flex-1 rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-3 font-mono text-sm font-bold uppercase tracking-widest text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
-                      />
-                      <button
-                        type="submit"
-                        disabled={betaLoading}
-                        className="ds-btn-ghost px-6 py-3 text-sm font-semibold disabled:opacity-50"
-                      >
-                        {betaLoading ? '...' : 'Verify'}
-                      </button>
-                    </div>
-                  </motion.form>
-                )}
-              </AnimatePresence>
-            </div>
+                <KeyRound
+                  size={16}
+                  className="text-[#FFD21E]"
+                  aria-hidden="true"
+                />
+                Founder code (optional)
+              </label>
+              {betaError && (
+                <p
+                  role="alert"
+                  className="mt-3 text-sm font-medium text-[#FF6B6B]"
+                >
+                  {betaError}
+                </p>
+              )}
+              <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+                <input
+                  id="login-founder-code-input"
+                  type="text"
+                  value={betaCode}
+                  onChange={e => setBetaCode(e.target.value)}
+                  autoComplete="one-time-code"
+                  placeholder="FOUNDER-XXXX"
+                  className="flex-1 rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-3 font-mono text-sm font-bold uppercase tracking-widest text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
+                />
+                <button
+                  type="submit"
+                  disabled={betaLoading}
+                  className="ds-btn-ghost shrink-0 whitespace-nowrap px-6 py-3 text-sm font-semibold disabled:opacity-50"
+                >
+                  {betaLoading ? 'Checking...' : 'Use Code'}
+                </button>
+              </div>
+            </form>
 
             <p className="mt-8 text-center text-sm text-[#C9CBCE]">
               Need an account?{' '}

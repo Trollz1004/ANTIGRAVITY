@@ -295,7 +295,7 @@ export default function MeetupsDiscovery() {
                 ))}
               </div>
               <span className="text-[10px] text-gray-600 ml-1">
-                (geo filtering coming soon)
+                (all meetups shown)
               </span>
             </div>
           </div>

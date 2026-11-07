@@ -268,7 +268,7 @@ export function Discover() {
             </h1>
             <p className="text-white/60 text-lg max-w-2xl leading-relaxed">
               Research-backed discovery: verified profiles, clear intent,
-              prompt-specific likes, and safety tools before the first meetup.
+              opener-specific likes, and safety tools before the first meetup.
             </p>
           </div>
           <motion.button

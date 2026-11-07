@@ -34,9 +34,9 @@ const cards = [
   {
     icon: Users,
     title: 'Profiles First',
-    body: 'Profiles, founder perks, and the waitlist all stay inside one product flow. No off-platform detours needed.',
+    body: 'Profiles, founder perks, and member sign-up all stay inside one product flow. No off-platform detours needed.',
     href: '/register',
-    cta: 'Join Early',
+    cta: 'Join Now',
     color: 'from-rose-400 to-orange-500',
   },
 ];
@@ -44,7 +44,7 @@ const cards = [
 const stats = [
   { icon: ShieldCheck, label: 'Bot-Shield', value: '$1 Human Check' },
   { icon: Heart, label: 'Status', value: 'Live now' },
-  { icon: Sparkles, label: 'Waitlist', value: 'Live Now' },
+  { icon: Sparkles, label: 'Sign-Up', value: 'Open Now' },
 ];
 
 function Particle({ delay }: { delay: number }) {
@@ -114,9 +114,9 @@ export function CommunitySection() {
             transition={{ delay: 0.2 }}
             className="mx-auto max-w-3xl text-lg font-light text-gray-400"
           >
-            YouAndiNotAi keeps its launch story inside the product: Bot-Shield
-            verification, public founder pricing, and a prelaunch flow built to
-            move from waitlist to profile setup without friction.
+            YouAndiNotAi keeps everything inside the product: Bot-Shield
+            verification, public founder pricing, and a sign-up flow that
+            moves from account to profile setup without friction.
           </motion.p>
         </div>
 
