@@ -35,7 +35,9 @@ Paste into `docs/standards/SABRETOOTH-SOUL.md` under a heading `POSTING LANES â€
 - X: Grok through the built-in xAI sign-in. Grok posts nowhere but X.
 - Meta (Facebook, Instagram, Threads, Messenger, WhatsApp): Muse, Meta's own agent. NOT CONFIGURED today. Do not route Meta work anywhere else; queue it and report it as waiting on a Muse door and a terms check.
 - Google pages: Gemini, only in a live session Joshua opens. Never YouTube.
-- Reddit, Bluesky and every other site: summon the signed-in Claude Code (Opus or Fable) or Argon at highest thinking. Official API of that site only, never scraping, never a copied session. Refuse to route these to Sonnet, Flash, Kimi, GLM or any local model.
+- OpenAI surfaces: Codex, through its signed-in CLI.
+- Reddit: never routed by you. Reddit is a live-session job only: Joshua signed in, Claude in Chrome, one approval per post (ruling 4). Queue any Reddit ask and report it as waiting on a live session.
+- Bluesky and every other site: summon the signed-in Claude Code (Opus or Fable) or Argon at highest thinking. Official API of that site only, never scraping, never a copied session. Refuse to route these to Sonnet, Flash, Kimi, GLM or any local model.
 - GrinDroid content never goes to Meta surfaces.
 - Before any first post on a site, confirm a dated terms file exists for it in the drop box terms check. No file, no post; report it as blocked.
 - Log every post: timestamp, lane, model, surface, exact text, link to the live post. Append to the claude-to-claude log.
@@ -44,10 +46,10 @@ Paste into `docs/standards/SABRETOOTH-SOUL.md` under a heading `POSTING LANES â€
 
 Agent-Reach is a research tool for Opus, Fable and Argon only. It never posts.
 
-1. Reddit door: `rdt-cli` OAuth login only. The exported-cookie file door and the OpenCLI browser-session door are OFF. YouTube stays OFF.
+1. Reddit door: OFF entirely. `rdt-cli` is OFF too: its `rdt login` reads the Reddit session cookie out of the browser profile (upstream issues #8 and #9 describe exactly that), which is cookie transfer under ruling 2. It comes back only if a login that uses Reddit's own OAuth app flow with a registered client exists. The exported-cookie file door and the OpenCLI browser-session door are OFF. YouTube stays OFF. Until then, Reddit research is done the same way as Reddit posting: live session, Joshua's signed-in Chrome.
 2. On each node, look in the agent-reach folder (under `%USERPROFILE%`, never a typed user folder name) for `cookies.json` or any pasted session file. If one exists, delete it and record the path (not the contents) in the claude-to-claude log.
 3. The quick path that reads Reddit's public JSON pages with a made-up user agent is OFF until the Reddit terms file says otherwise.
-4. Update the agent-reach entry in `skills-lock.json` and `ops/skills/SKILLS-HUB.md` to say this in one line each.
+4. Update the agent-reach entry in `skills-lock.json` and `ops/skills/SKILLS-HUB.md` to say this in one line each, and edit `.agents/skills/agent-reach/SKILL.md` and its `references/` so no instruction points an agent at a cookie file, a browser profile, `rdt login` or OpenCLI for Reddit.
 
 ## 4. Date app first screen â€” Argon (DREAM lane owner may delegate to Sonnet for code), branch `first-screen-wow`
 
