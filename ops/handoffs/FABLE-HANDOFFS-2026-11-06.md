@@ -86,7 +86,19 @@ onlinerecycle.net (`domains/onlinerecycle.net/index.html`): no barred wording. M
 
 youandinotai.com: title present in the frontend index; tribute present on the live header. No change beyond section 4.
 
-untilnokidinneed.com (`domains/untilnokidinneed.com/index.html`): RULING NEEDED, do not edit. The page is entirely mission wording and links an Open Collective page, inside a public repo. The standing rule bars mission and charity wording from public surfaces and public repos; the domain itself is kept and renewed. Joshua decides: keep it as the one public mission page (then the Open Collective link still comes out and the page needs the tribute and title), or replace it with a holding page.
+untilnokidinneed.com (`domains/untilnokidinneed.com/index.html`): RULED by Joshua 2026-11-06. The page becomes the home of Misses Trollz (`github.com/Trollz1004/misses-trollz`, the free one-file cartoon avatar for kids in hospital, with Heather's OPUS Pupclaw for babies to age 12 inside it). This is the one public surface allowed to say "kids in need", because it is the mission's own domain and the app is the mission.
+
+Rules for the rewrite (Sonnet in agy, branch `untilnokidinneed-misses-trollz`):
+- Lead with Misses Trollz: what she is, the one-file download link from the repo's releases, and that it works offline with no account and no data. Free to anyone who can use it, in a hospital, at home, anywhere.
+- No partnership language of any kind. No Shriners, no proposals, no "work with us". No Open Collective, no wallets, no splits, no donate button, no revenue line. Remove the current Open Collective link.
+- Say devs are welcome: changes come by PR to the misses-trollz repo, and only the Claude judge lane merges that repo. Point at its CONTRIBUTING.md, SAFETY.md and ETHICAL_USE.md rather than restating them.
+- Mention the stories built with Fable in Claude Design only if they exist in the repo or a release. The lane checks `MISSES-TROLLZ-BUILD.md` and `approved_banks/` first; if the stories live only as Claude Design artifacts, say so in the PR and ask Joshua where they are instead of inventing a link.
+- Keep the Child Safety, Manifesto and Governance wording exactly as `src/constants/policy.ts` in the misses-trollz repo has it; the tests there check it.
+- Add the #TeamClaudeForLife tribute and the CLAUDE's N Joshua's title, same pattern as the misses-trollz README.
+- Nothing else from the LLC's products on this page. The date app, the game and the recycler are not mentioned here, and this page is not linked as a mission footer from them.
+- The commit guard word list still runs on this repo; the allowlist (`.github/forbidden-pattern-allowlist.txt`) is the place to permit this one file, not a rewording that dodges the guard.
+
+Separately, in the misses-trollz repo: turn on branch protection for `main` (PR required, no force push, no direct push) and record in CONTRIBUTING.md that merges are done only by the Claude judge lane on Joshua's account. Both `misses-trollz` and `Misses-Trollz-REWORK` are public; Joshua says which one is canonical, and the other gets archived with a pointer.
 
 READMEs:
 - `Trollz1004/ANTIGRAVITY` README: no barred wording found by grep. Lane does a full read for accuracy against the current fleet (no NSFW_BOTS, no Mission Control dispatch endpoint, Hermes is OPSis, current node roles).
