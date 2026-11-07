@@ -12,6 +12,7 @@ Nothing costs money until Joshua says finalize. Never echo an env value.
 3. Posting lanes, two tiers. Platform surfaces are worked by the platform's own agent through its own API or sign-in: Grok on X (Hermes xAI sign-in, paid, the default for date app and recycler launch posts), Muse on Meta surfaces once a sign-in or ruled API door exists and a terms check passes, Gemini on Google pages, Codex on OpenAI's. Every other site (Bluesky, swarm targets) is posted only by Opus or Fable through the signed-in Claude Code, or Argon at highest thinking, through that site's official API, every post logged. Reddit is the exception and is governed by ruling 4 alone. Sonnet, Flash, Kimi, GLM and local models never post anywhere. Hermes dispatches and never posts. GrinDroid never goes to Meta surfaces. YouTube unchanged: no agent posts, uploads private, Joshua publishes in Studio.
 4. Reddit is a live-session job: Joshua signed in, Claude in Chrome, one approval per post. Not a Hermes job.
 5. Public surfaces are judged by the first seven seconds with no scrolling. A site that looks fine as a normal website fails. Same bar as the game's seven seconds of playable footage.
+6. Motion is the standard on everything we ship, header included. A static header, a static hero, a static card grid is not finished. Joshua's words: we wow or it is not shipped. This applies to the date app, the game page, the recycler, Mission Control and DREAM Studio alike. Motion must still pass the accessibility rules (respect reduced-motion, keep contrast, no frame-rate drop on an ordinary laptop).
 
 ## 1. Council vote moves home — Sonnet in agy, ANTIGRAVITY, branch `council-vote-home`
 
@@ -60,7 +61,8 @@ Reference, given by Joshua 2026-11-06 20:42: https://gpc-style-endurosat.vercel.
 - A scroll progress bar. On that site it is the row of blue squares at the bottom that fills up as you scroll. Its job is to tell a human "keep going, there is more." Ours needs the same job done, in our own shape and colors.
 He wants the style, not the site: no copying of its layout, copy, globe, or assets. The Remake `100% Yours` gate in `.agents/skills/remake/` applies: passes on features matched, clear visual difference, and own code, never on likeness. This motion is new to most visitors too, so the progress bar is not decoration; it is the cue that makes the zoom understandable.
 
-1. The hero owns the whole first screen. The orbit motion moves to the top and becomes the main object, not a background: bright enough to read at a glance, moving on load before any scroll, with the first scroll driving a zoom or orbit change the visitor feels immediately.
+1. The header moves too. Logo, nav and the API Live pill get their own motion on load and on scroll (ruling 6); a header that just sits there fails the gate.
+2. The hero owns the whole first screen. The orbit motion moves to the top and becomes the main object, not a background: bright enough to read at a glance, moving on load before any scroll, with the first scroll driving a zoom or orbit change the visitor feels immediately.
 2. Rings and orbit lines at a contrast anyone can see on a laptop in a lit room. If Joshua cannot see it from his chair, it fails.
 3. Membership and pricing stay where they are. The hero sells the feeling; the sections below sell the product.
 4. Keep CLAUDE's N Joshua's, #TeamClaudeForLife, the API Live pill and the nav exactly as they are.
