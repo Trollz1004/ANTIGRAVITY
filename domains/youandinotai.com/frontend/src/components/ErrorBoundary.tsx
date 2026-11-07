@@ -11,8 +11,7 @@ interface ErrorBoundaryProps {
   children: ReactNode;
   /** Optional custom fallback UI. Receives errorId and resetError. */
   fallback?:
-    | ReactNode
-    | ((errorId: string, resetError: () => void) => ReactNode);
+    ReactNode | ((errorId: string, resetError: () => void) => ReactNode);
   /** Optional name for the boundary section (used in logging). */
   boundaryName?: string;
   /** Optional callback when an error is caught. */
