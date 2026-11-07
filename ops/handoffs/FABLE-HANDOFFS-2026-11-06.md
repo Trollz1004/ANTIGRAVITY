@@ -71,6 +71,7 @@ Conflict to resolve, not to act on: the preferences box says the date app backen
 1. From the repo, the Cloudflare DNS and any tunnel or Wrangler config, write `ops/runbook/DEPLOY-PATHS-2026-11.md`: for each of youandinotai.com, onlinerecycle.net, dream-online.net and untilnokidinneed.com, where the DNS points, what serves it, which node or cloud service, which repo path is the source, and how a change reaches production. Say what is verified and what is guessed, per line.
 2. Move nothing. Change no DNS. Report the conflict with evidence so Joshua can rule.
 3. Confirm the OpenClaw watchdog on the T5500 and Hermes support cover every one of those domains and the Mission OS task. List any domain not watched.
+4. Finding 2026-11-06 20:28 from Joshua's own browser: `untilnokidinneed.com` returns DNS_PROBE_FINISHED_NXDOMAIN. The domain does not resolve at all. Every domain is supposed to sit on Cloudflare DNS under joshlcoleman@gmail.com; check whether this one (and `.org`, `.online`, `.store`) was ever moved to Cloudflare and has records. Report what is missing; Joshua adds the records or approves the lane to, nothing is changed without his word. The Misses Trollz page in section 6 cannot go live until DNS exists.
 
 ## 6. Public surfaces audit — fixes for Sonnet in agy, rulings for Joshua
 
