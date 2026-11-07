@@ -115,6 +115,17 @@ READMEs:
 
 Not verified from this session: the live untilnokidinneed.com page (the fetch was refused by robots and the Chrome tools failed twice); the dream-online.net live page was read and matches the repo source on the items above.
 
+## 7a. Agent-definition sync — Sonnet in agy, one PR per repo, run before any lane picks up sections 1 to 6
+
+Why: today's rulings landed in CLAUDE.md-style files and the handoff only. Every other agent reads its own format. If Gemini's `gemini.toml`, the `agents.json` and `skill.json` files, `openai.yaml`, `AGENTS.md`, the `SKILL.md` files and the node souls still say something else, each lane drifts in its own direction and the drift lands in Claude's review queue. Joshua's rule: agent definitions are reconciled into one roster file in the repo, and every format is generated from it, never hand-edited separately.
+
+1. Inventory every agent-definition file in ANTIGRAVITY and dream-online: `gemini.toml`, `agents.json`, `skill.json`, `openai.yaml`, `AGENTS.md`, `CLAUDE.md`, every `SKILL.md`, the node souls in `docs/standards/`, and the Hermes skills under `hermes/skills/`. Write the list with paths into `ops/runbook/AGENT-DEFINITIONS-INVENTORY-2026-11.md`.
+2. Pick the single roster file (the spec in `ops/handoffs/FABLE-QUEUE-ROUTER-GUI-PIPELINE-2026-11-03.md` names it if one exists; otherwise `ops/roster/ROSTER.json`). Put the lanes, their nodes, their connection method, their allowed tools and their posting rights in it, matching rulings 0 to 6 in this file exactly.
+3. Generate or correct every file from step 1 so it says what the roster says. Where a format cannot carry a rule, it points at the roster by path instead of restating it.
+4. Remove from every file: NSFW_BOTS, the Mission Control dispatch endpoint, JARVIS as Hermes's name, Godot as the engine, ClawX as the vote board, Open Collective, Stripe, any revenue split, any cookie or browser-session instruction, and any charity or mission wording in files that are public-repo and not the Misses Trollz page.
+5. Add a check to `ops/startup/seed-agents.cjs` or the CI validate job that fails when a generated file no longer matches the roster, so the drift cannot come back quietly.
+6. PR carries the inventory file and a before-and-after diff summary per format. The Claude judge lane reviews it before any other section's PR is reviewed.
+
 ## 7. Node bridge for Fable — Joshua, at each console
 
 Desktop Commander in the claude.ai session lists one device, the old `nsfw` profile, offline. None of the three nodes is registered, so Fable cannot reach a node from claude.ai. To let Fable dispatch and verify directly next time: install the Desktop Commander device agent on the T5500, Sabretooth and the Alienware under the normal user, headless, and revoke the `nsfw` device at mcp.desktopcommander.app. Until then, these handoffs travel by PR and the signed-in Claude Code on each node is the judge.
