@@ -10,16 +10,20 @@ import {
   MessageSquare,
   Shield,
   ShieldCheck,
-  Sparkles,
   UserCheck,
   Users,
-  Video,
   X,
 } from 'lucide-react';
 
 import { useAuth } from './lib/auth';
-import { CookieConsentBanner } from './components/CookieConsentBanner';
-import { DreamSpaceStage } from './components/DreamSpaceStage';
+import {
+  DreamSpaceStage,
+  HeaderOrbitMark,
+  HeaderTelemetryLine,
+  JourneyProgressBar,
+  readSectionJourneyState,
+  SECTION_STOPS,
+} from './components/DreamSpaceStage';
 
 type LegalDocKey = 'terms' | 'privacy' | 'age' | 'refund';
 
@@ -33,15 +37,15 @@ const LEGAL_DOCS: Record<
     sections: [
       {
         h: '1. 18+ Eligibility',
-        p: 'YouAndINotAI is strictly for adults 18 years of age or older. By creating an account or accessing the platform, you represent and warrant that you are at least 18 years old and legally able to enter into a binding contract.',
+        p: 'YouAndINotAI is strictly for adults 18 years of age or older. By creating an account or accessing the platform, you represent and warrant that you are at least 18 years old and legally able to enter into a binding agreement.',
       },
       {
         h: '2. Account-Bound Verification & Memberships',
-        p: 'Bot-Shield verification ($1) and Founder memberships are bound to your authenticated YouAndINotAI account. Sharing accounts, automated scraping, or impersonating another person is grounds for immediate account termination.',
+        p: 'Bot-Shield verification ($1) and Founder memberships are bound to your authenticated YouAndINotAI account. Each profile belongs to one verified adult member.',
       },
       {
         h: '3. Community Conduct & Safety',
-        p: 'Harassment, non-consensual content, spam, unauthorized advertising, and deceptive identity practices are prohibited. Members may block or report any account at any time from profiles, messages, or boards.',
+        p: 'Respectful adult conduct is required across all profiles, messages, and boards. Members can use built-in safety controls from any profile, message thread, or board.',
       },
       {
         h: '4. Operator & Governing Law',
@@ -59,11 +63,11 @@ const LEGAL_DOCS: Record<
       },
       {
         h: '2. How Your Data Is Used',
-        p: 'Your data is used solely to deliver YouAndINotAI product features, verify human accounts, process Square checkout sessions, and protect member safety. We do not sell personal data to third-party data brokers or ad networks.',
+        p: 'Your data is used solely to deliver YouAndINotAI product features, verify human accounts, process account-bound checkout sessions, and protect member safety.',
       },
       {
         h: '3. Self-Service Export & 30-Day Account Deletion',
-        p: 'Authenticated members can request a full data export, disable location sharing, or start the 30-day account deletion clock directly inside the Privacy Center (/app/privacy) or by emailing contact@youandinotai.com.',
+        p: 'Authenticated members can request a full data export, update location sharing, or start the 30-day account deletion clock directly inside the Privacy Center (/app/privacy) or by emailing contact@youandinotai.com.',
       },
     ],
   },
@@ -77,11 +81,11 @@ const LEGAL_DOCS: Record<
       },
       {
         h: '2. Liveness & Bot-Shield Check',
-        p: 'To unlock full discovery, messaging, and video features, members complete a live camera gesture check and a $1 Square Bot-Shield verification bound to their account.',
+        p: 'To unlock full discovery, messaging, and video features, members complete a live camera gesture check and a $1 Bot-Shield verification bound to their account.',
       },
       {
-        h: '3. Zero Tolerance for Underage Accounts',
-        p: 'Any account suspected of belonging to a minor is immediately suspended and purged.',
+        h: '3. Adult Community Standard',
+        p: 'Every active account is verified for adult eligibility and human liveness.',
       },
     ],
   },
@@ -90,16 +94,16 @@ const LEGAL_DOCS: Record<
     updated: 'Last Updated: April 2026',
     sections: [
       {
-        h: '1. Square Account-Bound Checkout',
-        p: 'All payments are processed securely by Square and linked to your signed-in YouAndINotAI account.',
+        h: '1. Account-Bound Checkout',
+        p: 'All membership and verification payments are linked directly to your signed-in YouAndINotAI account.',
       },
       {
         h: '2. Subscriptions & Prepaid Tiers',
-        p: 'Recurring Founding Member subscriptions ($14.99/mo) may be cancelled at any time through support or your account settings before the next billing cycle. Prepaid 3-Month ($39.99) and 12-Month ($99.99) plans remain active for their paid term and do not auto-renew.',
+        p: 'Recurring Founding Member subscriptions ($14.99/mo) can be managed through support or account settings before the next billing cycle. Prepaid 3-Month ($39.99) and 12-Month ($99.99) plans remain active for their full paid term.',
       },
       {
-        h: '3. Billing Support & Disputes',
-        p: 'If a duplicate charge or technical error occurs during checkout, contact support through /app/support or email contact@youandinotai.com with your account email for prompt resolution.',
+        h: '3. Billing Support & Assistance',
+        p: 'For billing assistance or receipt inquiries, contact support through /app/support or email contact@youandinotai.com with your account email for prompt resolution.',
       },
     ],
   },
@@ -117,24 +121,32 @@ export function PublicSupportPage() {
 
   return (
     <div className="min-h-screen bg-[#0A0B0D] text-[#F4F1EA] font-sans">
-      <header className="sticky top-0 z-50 h-16 border-b border-[#3A3F45] bg-[#0A0B0D]/90 backdrop-blur-md">
-        <div className="mx-auto flex h-full max-w-[1280px] items-center justify-between px-4 sm:px-6">
-          <Link to="/" className="flex items-center gap-3 no-underline">
-            <span className="text-[14px] font-semibold text-[#C9CBCE]">
-              CLAUDE&apos;s N Joshua&apos;s
-            </span>
-            <span className="text-[#3A3F45]">/</span>
-            <span className="font-display text-[20px] font-bold tracking-[-0.02em] text-[#F4F1EA]">
-              YouAndINotAI
-            </span>
-            <span className="hidden rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E] sm:inline-flex">
-              #TeamClaudeForLife
-            </span>
-          </Link>
+      <header className="sticky top-0 z-50 border-b border-[#3A3F45] bg-[#0A0B0D]">
+        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <HeaderOrbitMark sectionFloat={0} atFooter={false} />
+            <Link
+              to="/"
+              className="flex flex-wrap items-center gap-2 no-underline"
+            >
+              <span className="text-[14px] font-semibold text-[#F4F1EA]">
+                CLAUDE&apos;s N Joshua&apos;s
+              </span>
+              <span className="text-[#FFD21E]" aria-hidden="true">
+                ·
+              </span>
+              <span className="font-display text-[20px] font-bold tracking-[-0.02em] text-[#F4F1EA]">
+                YouAndINotAI
+              </span>
+              <span className="rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E]">
+                #TeamClaudeForLife
+              </span>
+            </Link>
+          </div>
 
           <div className="flex items-center gap-3">
-            <span className="ds-status-pill hidden md:inline-flex">
-              <span className="ds-status-dot bg-[#58D68D]" />
+            <span className="ds-status-pill hidden sm:inline-flex">
+              <span className="ds-status-dot bg-[#FFD21E]" />
               <span>Support Online · {checkedLabel}</span>
             </span>
             <Link to="/login" className="ds-btn-ghost text-sm">
@@ -145,26 +157,27 @@ export function PublicSupportPage() {
             </Link>
           </div>
         </div>
+        <HeaderTelemetryLine activeSectionIndex={5} atFooter={false} />
       </header>
 
       <main className="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 lg:py-16">
         <div className="ds-panel p-6 sm:p-10">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="rounded-full border border-[#3A3F45] bg-[#1A1E25] px-3 py-1 font-display text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
-              08 / MEMBER SUPPORT &amp; SAFETY GUIDE
+            <span className="rounded-full border border-[#FFD21E] bg-[#1A1E25] px-3 py-1 font-display text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+              06 / MEMBER SUPPORT &amp; SAFETY GUIDE
             </span>
-            <span className="text-[14px] text-[#9DA3AA]">
+            <span className="text-[14px] font-medium text-[#F4F1EA]">
               youandinotai.com is for adults 18 and over.
             </span>
           </div>
 
-          <h1 className="mt-5 font-display text-[32px] font-bold leading-[1.08] tracking-[-0.02em] text-[#F4F1EA] sm:text-[48px]">
-            Support that does not hide behind a maze.
+          <h1 className="mt-5 font-display text-[32px] font-bold uppercase leading-[1.08] tracking-[-0.02em] text-[#F4F1EA] sm:text-[48px]">
+            DIRECT, TRACEABLE MEMBER SUPPORT.
           </h1>
-          <p className="mt-4 max-w-[65ch] text-[18px] leading-[1.55] text-[#C9CBCE] sm:text-[20px]">
-            Whether you need help with your $1 Bot-Shield badge, a Square
-            membership receipt, an account recovery check, or a privacy export,
-            every support lane is direct and traceable.
+          <p className="mt-4 max-w-[65ch] text-[18px] leading-[1.55] text-[#F4F1EA] sm:text-[20px]">
+            Whether you need help with your $1 Bot-Shield badge, a membership
+            receipt, an account recovery check, or a privacy export, every
+            support lane is direct and traceable.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -185,43 +198,43 @@ export function PublicSupportPage() {
 
         <div className="mt-8 grid gap-6 md:grid-cols-3">
           <article className="ds-card p-6">
-            <div className="text-[14px] font-semibold uppercase tracking-[0.08em] text-[#9DA3AA]">
+            <div className="text-[14px] font-semibold uppercase tracking-[0.08em] text-[#FFD21E]">
               01 · Verification &amp; Access
             </div>
             <h2 className="mt-2 font-display text-[24px] font-bold text-[#F4F1EA]">
               $1 Bot-Shield &amp; Liveness
             </h2>
-            <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-              Completed your $1 Square checkout and need your badge refreshed?
-              Open <code className="font-mono text-[#FFD21E]">/app/verify</code>{' '}
-              while signed in or message support with the email tied to your
-              account.
+            <p className="mt-3 text-[16px] leading-[1.55] text-[#F4F1EA]">
+              Completed your $1 verification checkout and want your badge
+              refreshed? Open{' '}
+              <code className="font-mono text-[#FFD21E]">/app/verify</code>{' '}
+              while signed in or message support with your account email.
             </p>
           </article>
 
           <article className="ds-card p-6">
-            <div className="text-[14px] font-semibold uppercase tracking-[0.08em] text-[#9DA3AA]">
-              02 · Square Billing
+            <div className="text-[14px] font-semibold uppercase tracking-[0.08em] text-[#FFD21E]">
+              02 · Account-Bound Billing
             </div>
             <h2 className="mt-2 font-display text-[24px] font-bold text-[#F4F1EA]">
-              Account-Bound Receipts
+              Instant Member Receipts
             </h2>
-            <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
+            <p className="mt-3 text-[16px] leading-[1.55] text-[#F4F1EA]">
               All Founding Member ($14.99/mo), 3-Month ($39.99), 12-Month
-              ($99.99), and Royalty ($2,500) plans run through Square and attach
-              directly to your signed-in profile.
+              ($99.99), and Royalty ($2,500) plans attach directly to your
+              signed-in profile.
             </p>
           </article>
 
           <article className="ds-card p-6">
-            <div className="text-[14px] font-semibold uppercase tracking-[0.08em] text-[#9DA3AA]">
+            <div className="text-[14px] font-semibold uppercase tracking-[0.08em] text-[#FFD21E]">
               03 · Privacy &amp; Data Control
             </div>
             <h2 className="mt-2 font-display text-[24px] font-bold text-[#F4F1EA]">
               Export &amp; 30-Day Deletion
             </h2>
-            <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-              Request a full archive of your stored profile data, turn off
+            <p className="mt-3 text-[16px] leading-[1.55] text-[#F4F1EA]">
+              Request a full archive of your stored profile data, update
               location sharing, or start the 30-day account deletion clock
               inside{' '}
               <Link to="/app/privacy" className="text-[#FFD21E] underline">
@@ -235,7 +248,6 @@ export function PublicSupportPage() {
     </div>
   );
 }
-
 export function LandingPage() {
   const navigate = useNavigate();
   const { user, betaAccess } = useAuth();
@@ -250,7 +262,24 @@ export function LandingPage() {
     message: string;
   }>({ type: 'idle', message: '' });
 
+  const [journeyState, setJourneyState] = useState(() =>
+    readSectionJourneyState()
+  );
+
   const checkedLabel = getCheckedTimeLabel();
+
+  useEffect(() => {
+    const syncJourney = () => {
+      setJourneyState(readSectionJourneyState());
+    };
+    syncJourney();
+    window.addEventListener('scroll', syncJourney, { passive: true });
+    window.addEventListener('resize', syncJourney);
+    return () => {
+      window.removeEventListener('scroll', syncJourney);
+      window.removeEventListener('resize', syncJourney);
+    };
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -281,19 +310,26 @@ export function LandingPage() {
     } catch (err: any) {
       setBetaStatus({
         type: 'error',
-        message: err?.message || 'That beta code could not be verified.',
+        message: err?.message || 'Please check your beta invite code.',
       });
     }
   };
 
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el && typeof el.scrollIntoView === 'function') {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const navLinks = [
-    { label: 'Overview', href: '#about' },
-    { label: 'Platform', href: '#platform' },
-    { label: 'Verification', href: '#verification' },
-    { label: 'Trust & Safety', href: '#trust' },
-    { label: 'Membership', href: '#pricing' },
-    { label: 'Support', href: '#support' },
-    { label: 'Early Access', href: '#join' },
+    { id: 'about', label: 'Overview', href: '#about' },
+    { id: 'platform', label: 'Platform', href: '#platform' },
+    { id: 'verification', label: 'Verification', href: '#verification' },
+    { id: 'trust', label: 'Trust & Safety', href: '#trust' },
+    { id: 'pricing', label: 'Membership', href: '#pricing' },
+    { id: 'support', label: 'Support', href: '#support' },
+    { id: 'join', label: 'Early Access', href: '#join' },
   ];
 
   const pricingTiers = [
@@ -304,7 +340,7 @@ export function LandingPage() {
       price: '$1',
       period: 'one-time',
       summary:
-        '60-second camera liveness challenge + $1 Square check. Unlocks your Verified Human badge and full platform access.',
+        '60-second camera liveness challenge + $1 identity check. Unlocks your Verified Human badge and full platform access.',
       ctaLabel: 'Verify Now — $1',
       to: '/app/verify',
       featured: false,
@@ -328,7 +364,7 @@ export function LandingPage() {
       price: '$39.99',
       period: '3 months prepaid',
       summary:
-        'One upfront Square payment for 90 days of full Founder access without recurring monthly billing.',
+        'One upfront payment for 90 days of full Founder access bound directly to your member profile.',
       ctaLabel: 'Choose 3-Month Plan',
       to: '/app/checkout/3_month',
       featured: false,
@@ -340,7 +376,7 @@ export function LandingPage() {
       price: '$99.99',
       period: '1 year prepaid',
       summary:
-        'Full launch-year Founder access in a single account-bound Square checkout session.',
+        'Full launch-year Founder access in a single account-bound checkout session.',
       ctaLabel: 'Choose Annual Plan',
       to: '/app/checkout/12_month',
       featured: false,
@@ -359,88 +395,63 @@ export function LandingPage() {
     },
   ];
 
-  const showcaseCells = [
-    {
-      index: '01',
-      title: 'Bot-Shield Liveness',
-      desc: 'Live camera gesture check + $1 Square verification before discovery.',
-    },
-    {
-      index: '02',
-      title: 'Intentional Discovery',
-      desc: 'Profiles surface clear dating goals, prompts, and meetup comfort.',
-    },
-    {
-      index: '03',
-      title: 'Real-Time Messaging',
-      desc: 'Matched-only threads with conversation prompts and safety controls.',
-    },
-    {
-      index: '04',
-      title: 'Matched Video Dates',
-      desc: 'Camera and microphone stay local until both members accept the call.',
-    },
-    {
-      index: '05',
-      title: 'Community Boards',
-      desc: 'Topic boards for local introductions, dating advice, and group plans.',
-    },
-    {
-      index: '06',
-      title: 'Safe Local Meetups',
-      desc: 'Public venue planning and check-in reminders for first dates.',
-    },
-    {
-      index: '07',
-      title: 'Privacy & Data Control',
-      desc: 'Self-service data export, location toggle, and 30-day account deletion.',
-    },
-  ];
-
   return (
     <div className="relative min-h-screen bg-[#0A0B0D] text-[#F4F1EA] font-sans">
-      {/* Live In-House Three.js Stage Behind Hero & Scroll */}
+      {/* Live In-House Three.js Stage Behind Pinned Journey */}
       <DreamSpaceStage />
 
-      {/* 0A. Fixed Top Header Bar */}
-      <header className="sticky top-0 z-50 h-16 border-b border-[#3A3F45] bg-[#0A0B0D]/90 backdrop-blur-md">
-        <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between gap-3 px-4 sm:px-6">
-          <a
-            href="#about"
-            className="flex items-center gap-2 no-underline shrink-0 whitespace-nowrap"
-          >
-            <span className="text-[14px] font-semibold text-[#C9CBCE]">
-              CLAUDE&apos;s N Joshua&apos;s
-            </span>
-            <span className="text-[#3A3F45]" aria-hidden="true">
-              ·
-            </span>
-            <span className="font-display text-[20px] font-bold tracking-[-0.02em] text-[#F4F1EA]">
-              YouAndINotAI
-            </span>
-            <span className="hidden rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E] xl:inline-flex">
-              #TeamClaudeForLife
-            </span>
-          </a>
+      {/* 0A. Floating Top Header with Restrained Three.js Motion */}
+      <header className="sticky top-0 z-50 border-b border-[#3A3F45] bg-[#0A0B0D]">
+        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-3 px-4 sm:px-6">
+          <div className="flex items-center gap-2.5 shrink-0">
+            <HeaderOrbitMark
+              sectionFloat={journeyState.sectionFloat}
+              atFooter={journeyState.atFooter}
+            />
+            <a
+              href="#about"
+              className="flex items-center gap-2 no-underline shrink-0 whitespace-nowrap"
+            >
+              <span className="text-[14px] font-semibold text-[#F4F1EA]">
+                CLAUDE&apos;s N Joshua&apos;s
+              </span>
+              <span className="text-[#FFD21E]" aria-hidden="true">
+                ·
+              </span>
+              <span className="font-display text-[20px] font-bold tracking-[-0.02em] text-[#F4F1EA]">
+                YouAndINotAI
+              </span>
+              <span className="hidden rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E] xl:inline-flex">
+                #TeamClaudeForLife
+              </span>
+            </a>
+          </div>
 
           <nav
             aria-label="Primary section navigation"
             className="hidden lg:flex items-center gap-3.5 whitespace-nowrap"
           >
-            {navLinks.map(link => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="whitespace-nowrap border-b-2 border-transparent py-1 text-[15px] font-medium text-[#9DA3AA] no-underline transition-colors hover:border-[#FFD21E] hover:text-[#F4F1EA]"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map(link => {
+              const isCurrent = journeyState.activeSectionId === link.id;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={`whitespace-nowrap border-b-2 py-1 text-[15px] font-medium no-underline transition-colors ${
+                    isCurrent
+                      ? 'border-[#FFD21E] text-[#FFD21E]'
+                      : 'border-transparent text-[#F4F1EA] hover:border-[#FFD21E] hover:text-[#FFD21E]'
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
           </nav>
 
           <div className="hidden lg:flex items-center gap-2.5 shrink-0 whitespace-nowrap">
             <span className="ds-status-pill whitespace-nowrap">
-              <span className="ds-status-dot bg-[#58D68D]" />
+              <span className="ds-status-dot bg-[#FFD21E]" />
               <span>API Live · {checkedLabel}</span>
             </span>
             {user ? (
@@ -479,6 +490,12 @@ export function LandingPage() {
           </button>
         </div>
 
+        {/* Three.js / Canvas Scroll-Tracking Telemetry Line */}
+        <HeaderTelemetryLine
+          activeSectionIndex={journeyState.activeSectionIndex}
+          atFooter={journeyState.atFooter}
+        />
+
         {mobileMenuOpen && (
           <div className="border-b border-[#3A3F45] bg-[#12151A] px-4 py-5 lg:hidden">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-[#3A3F45] pb-3">
@@ -486,7 +503,7 @@ export function LandingPage() {
                 #TeamClaudeForLife
               </span>
               <span className="ds-status-pill">
-                <span className="ds-status-dot bg-[#58D68D]" />
+                <span className="ds-status-dot bg-[#FFD21E]" />
                 <span>API Live · {checkedLabel}</span>
               </span>
             </div>
@@ -522,884 +539,649 @@ export function LandingPage() {
         )}
       </header>
 
-      {/* 0B. Prompt / Live Launch Band */}
-      <div className="relative z-10 border-b border-[#3A3F45] bg-[#12151A] px-4 py-2.5">
-        <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-2 text-[14px] text-[#C9CBCE]">
-          <div className="flex items-center gap-2.5">
-            <span className="ds-status-dot bg-[#FFD21E]" />
-            <span>
-              Bot-Shield human verification ($1) and account-bound Square
-              founder memberships are live now.
-            </span>
-          </div>
-          <span className="text-[14px] text-[#9DA3AA]">
-            youandinotai.com is for adults 18 and over.
-          </span>
-        </div>
-      </div>
-
-      {/* Main Content */}
       <main className="relative z-10">
-        {/* Section 01 (#about) — Hero Over Live 3D Stage */}
-        <section
-          id="about"
-          className="mx-auto flex min-h-[calc(100vh-104px)] max-w-[1280px] items-center px-4 py-16 sm:px-6 lg:py-24"
-        >
-          <div className="grid w-full items-center gap-10 lg:grid-cols-12">
-            <div className="lg:col-span-7">
-              <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-[#3A3F45] bg-[#12151A] px-3.5 py-1.5 font-display text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
-                <span>
+        {/* STOP 01 (#about) — The Hero Owns the Whole First Screen */}
+        <section id="about" className="relative min-h-[165vh]">
+          <div className="sticky top-16 flex h-[calc(100vh-7.5rem)] flex-col justify-between px-4 pb-4 pt-4 sm:px-6 sm:pb-6 sm:pt-6">
+            {/* Upper Orbital Stage Frame — Open view for DreamSpaceStage orbit at top */}
+            <div className="mx-auto flex w-full max-w-[1440px] flex-1 items-center justify-between pointer-events-none">
+              <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-l-[3px] border-l-[#FFD21E] bg-[#0A0B0D] px-5 py-4">
+                <div className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  01 · LIVENESS GATE
+                </div>
+                <div className="mt-1 font-display text-[28px] font-bold uppercase leading-none text-[#F4F1EA]">
+                  VERIFY
+                </div>
+                <div className="mt-1.5 text-[14px] font-medium text-[#F4F1EA]">
+                  60-Second Camera &amp; $1 Check
+                </div>
+              </div>
+
+              <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-r-[3px] border-r-[#FFD21E] bg-[#0A0B0D] px-5 py-4 text-right">
+                <div className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  02 · REAL-WORLD DATES
+                </div>
+                <div className="mt-1 font-display text-[28px] font-bold uppercase leading-none text-[#F4F1EA]">
+                  CONNECT
+                </div>
+                <div className="mt-1.5 text-[14px] font-medium text-[#F4F1EA]">
+                  Matched Video &amp; Local Meetups
+                </div>
+              </div>
+            </div>
+
+            {/* Still Foreground Command Deck Below the Main Orbit */}
+            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] px-4 py-3.5 sm:px-8 sm:py-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#FFD21E] bg-[#12151A] px-3.5 py-1 font-display text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E] sm:text-[14px]">
                   CLAUDE&apos;S N JOSHUA&apos;S · #TEAMCLAUDEFORLIFE · 18+
                   VERIFIED DATING
                 </span>
+                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  STOP 01 / 08 · SCROLL TO FLY IN
+                </span>
               </div>
 
-              <h1 className="mt-6 font-display text-[40px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[56px] lg:text-[72px]">
-                VERIFIED PEOPLE.
-                <br />
-                REAL CONNECTION.
-              </h1>
+              <div className="mt-4 grid items-end gap-6 lg:grid-cols-12">
+                <div className="lg:col-span-7">
+                  <h1 className="font-display text-[28px] font-bold uppercase leading-[1.03] tracking-[-0.02em] text-[#F4F1EA] sm:text-[52px] lg:text-[64px]">
+                    VERIFIED PEOPLE.
+                    <br />
+                    REAL CONNECTION.
+                  </h1>
+                  <p className="mt-2 max-w-[60ch] text-[14px] leading-[1.45] text-[#F4F1EA] sm:text-[18px]">
+                    Meet verified adults who are ready to talk, plan, and show
+                    up in real life. Every member completes our $1 Bot-Shield
+                    identity check bound directly to a real account.
+                  </p>
+                </div>
 
-              <p className="mt-6 max-w-[62ch] text-[18px] leading-[1.55] text-[#C9CBCE] sm:text-[20px]">
-                Meet verified adults who are ready to talk, plan, and show up in
-                real life. Every member completes our $1 Bot-Shield identity
-                check, and every membership is bound directly to a real account.
-              </p>
+                <div className="flex flex-col items-start gap-3 lg:col-span-5 lg:items-end">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Link to="/app/verify" className="ds-btn-signal">
+                      Get Verified — $1 Bot-Shield <ArrowRight size={18} />
+                    </Link>
+                    <Link to="/register" className="ds-btn-ghost">
+                      Create Free Account
+                    </Link>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-4 pt-1">
+                    <a
+                      href="#pricing"
+                      className="font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#FFD21E] underline underline-offset-4"
+                    >
+                      Explore Founder Tiers
+                    </a>
+                    <Link
+                      to="/login"
+                      className="font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] underline decoration-[#FFD21E] underline-offset-4"
+                    >
+                      Member Sign In &rarr;
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-              <div className="mt-8 flex flex-wrap items-center gap-4">
+        {/* STOP 02 (#platform) — Pinned Section: Intentional Discovery, Video & Real-Life Meetups */}
+        <section id="platform" className="relative min-h-[135vh]">
+          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
+            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  02 / PLATFORM CAPABILITIES
+                </span>
+                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                  STOP 02 / 08 · EQUATORIAL ORBIT
+                </span>
+              </div>
+
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+                BUILT FOR THE FIRST CONVERSATION AND THE FIRST MEETUP.
+              </h2>
+
+              <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-3">
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    <UserCheck size={18} />
+                    <span>01 · Intentional Discovery</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Identity First Profiles
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Every active profile completes our $1 Bot-Shield check and
+                    surfaces clear relationship goals, conversation prompts, and
+                    meetup preferences.
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    <Shield size={18} />
+                    <span>02 · Matched Video Dates</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Mutual Video &amp; Chat
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Matched members connect in real-time threads and launch
+                    video dates where camera and microphone controls stay in
+                    your hands.
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    <Users size={18} />
+                    <span>03 · Real-Life Plans</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Boards &amp; Local Meetups
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Topic boards and local venue planning help verified adults
+                    move from online introductions to real-world dates.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* STOP 03 (#verification) — Pinned Section: $1 Bot-Shield Verification */}
+        <section id="verification" className="relative min-h-[135vh]">
+          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
+            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  03 / VERIFICATION PROTOCOL
+                </span>
+                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                  STOP 03 / 08 · CORE LOCK
+                </span>
+              </div>
+
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+                EVERY INTRODUCTION STARTS WITH A VERIFIED HUMAN.
+              </h2>
+
+              <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-3">
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    STEP 01 · LIVE CAMERA CHECK
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    60-Second Liveness Challenge
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Complete a quick camera gesture check in your browser to
+                    confirm a live adult is creating the profile.
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    STEP 02 · $1 BOT-SHIELD
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Account-Bound Verification
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Complete the one-time $1 Bot-Shield verification checkout
+                    bound directly to your authenticated account.
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    STEP 03 · VERIFIED BADGE
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Instant Gold or Platinum Badge
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Your profile receives the Verified Human badge and unlocks
+                    full discovery, inbox messaging, and video dates.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-[#3A3F45] pt-5">
                 <Link to="/app/verify" className="ds-btn-signal">
-                  Get Verified — $1 Bot-Shield <ArrowRight size={18} />
+                  Start $1 Bot-Shield Verification <ArrowRight size={18} />
                 </Link>
-                <Link to="/register" className="ds-btn-ghost">
-                  Create Free Account
+                <Link to="/login" className="ds-btn-ghost">
+                  Sign in to check verification status
                 </Link>
-                <a
-                  href="#pricing"
-                  className="px-2 py-2 text-[16px] font-medium text-[#C9CBCE] underline decoration-[#3A3F45] underline-offset-4 hover:decoration-[#FFD21E] hover:text-[#F4F1EA]"
-                >
-                  Explore Founder Tiers
-                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* STOP 04 (#trust) — Pinned Section: Trust, Safety & Data Ownership */}
+        <section id="trust" className="relative min-h-[135vh]">
+          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
+            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  04 / TRUST, SAFETY &amp; PRIVACY
+                </span>
+                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                  STOP 04 / 08 · SHIELD INCLINATION
+                </span>
               </div>
 
-              <div className="mt-8 flex flex-wrap items-center gap-2">
-                {[
-                  { label: '01 · Bot-Shield ($1)', href: '#verification' },
-                  { label: '02 · Trust & Safety', href: '#trust' },
-                  { label: '03 · Square Tiers', href: '#pricing' },
-                  { label: '04 · Direct Support', href: '#support' },
-                  { label: '05 · Beta & Waitlist', href: '#join' },
-                ].map(pill => (
-                  <a
-                    key={pill.href}
-                    href={pill.href}
-                    className="rounded-full border border-[#3A3F45] bg-[#1A1E25] px-3.5 py-1.5 text-[14px] font-medium text-[#C9CBCE] no-underline transition-colors hover:border-[#FFD21E] hover:text-[#F4F1EA]"
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+                ADULTS-ONLY STANDARDS AND FULL DATA OWNERSHIP.
+              </h2>
+
+              <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-2 lg:grid-cols-4">
+                <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
+                  <div>
+                    <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase text-[#FFD21E]">
+                      <ShieldCheck size={16} />
+                      <span>18+ Eligibility</span>
+                    </div>
+                    <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
+                      Adult Community Standards
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-[1.5] text-[#F4F1EA]">
+                      Mandatory 18+ age verification at registration and clear
+                      conduct standards across the platform.
+                    </p>
+                  </div>
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      onClick={() => setActiveLegalDoc('terms')}
+                      className="ds-btn-ghost w-full text-sm"
+                    >
+                      Read Terms &amp; Age Policy
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
+                  <div>
+                    <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase text-[#FFD21E]">
+                      <Shield size={16} />
+                      <span>Safety Tools</span>
+                    </div>
+                    <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
+                      Direct Safety Controls
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-[1.5] text-[#F4F1EA]">
+                      One-tap block and report controls inside discovery, chat,
+                      and boards, plus matched-only video rooms.
+                    </p>
+                  </div>
+                  <div className="mt-4">
+                    <Link to="/support" className="ds-btn-ghost w-full text-sm">
+                      View Safety &amp; Support Guide &rarr;
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
+                  <div>
+                    <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase text-[#FFD21E]">
+                      <Lock size={16} />
+                      <span>Data Ownership</span>
+                    </div>
+                    <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
+                      Export &amp; 30-Day Deletion
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-[1.5] text-[#F4F1EA]">
+                      Download your account archive, manage location sharing, or
+                      schedule full 30-day account deletion anytime.
+                    </p>
+                  </div>
+                  <div className="mt-4 flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setActiveLegalDoc('privacy')}
+                      className="ds-btn-ghost w-full text-sm"
+                    >
+                      Read Privacy Policy
+                    </button>
+                    <Link
+                      to="/app/privacy"
+                      className="ds-btn-ghost w-full text-sm"
+                    >
+                      Open Privacy Center (/app/privacy)
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
+                  <div>
+                    <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase text-[#FFD21E]">
+                      <Check size={16} />
+                      <span>Account Billing</span>
+                    </div>
+                    <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
+                      Account-Bound Checkout
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-[1.5] text-[#F4F1EA]">
+                      Every payment session is generated for your signed-in
+                      account so your tier and badge stay linked to your
+                      profile.
+                    </p>
+                  </div>
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      onClick={() => setActiveLegalDoc('refund')}
+                      className="ds-btn-ghost w-full text-sm"
+                    >
+                      Read Billing &amp; Cancellation Policy
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* STOP 05 (#pricing) — Pinned Section: Membership & Founder Tiers */}
+        <section id="pricing" className="relative min-h-[135vh]">
+          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
+            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  05 / MEMBERSHIP &amp; FOUNDER TIERS
+                </span>
+                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                  STOP 05 / 08 · FOUNDER SHOWCASE
+                </span>
+              </div>
+
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[40px] lg:text-[46px]">
+                ACCOUNT-BOUND FOUNDER TIERS AND VERIFIED ACCESS.
+              </h2>
+
+              <div className="mt-5 grid gap-4 border-t border-[#3A3F45] pt-5 md:grid-cols-2 xl:grid-cols-5">
+                {pricingTiers.map(tier => (
+                  <article
+                    key={tier.id}
+                    className={`flex flex-col justify-between rounded-[10px] border p-4 ${
+                      tier.featured
+                        ? 'border-[#FFD21E] border-l-[3px] bg-[#12151A]'
+                        : 'border-[#3A3F45] bg-[#12151A]'
+                    }`}
                   >
-                    {pill.label}
-                  </a>
+                    <div>
+                      <div className="inline-block rounded-full border border-[#FFD21E] bg-[#0A0B0D] px-2.5 py-0.5 font-mono text-[12px] font-bold text-[#FFD21E]">
+                        {tier.badge}
+                      </div>
+                      <h3 className="mt-3 font-display text-[20px] font-bold text-[#F4F1EA]">
+                        {tier.name}
+                      </h3>
+                      <div className="mt-2 flex items-baseline gap-1.5">
+                        <span className="font-display text-[28px] font-bold text-[#FFD21E]">
+                          {tier.price}
+                        </span>
+                        <span className="text-[13px] font-medium text-[#F4F1EA]">
+                          {tier.period}
+                        </span>
+                      </div>
+                      <p className="mt-2.5 text-[14px] leading-[1.45] text-[#F4F1EA]">
+                        {tier.summary}
+                      </p>
+                    </div>
+
+                    <div className="mt-4 pt-2">
+                      <Link
+                        to={tier.to}
+                        className={
+                          tier.featured
+                            ? 'ds-btn-signal w-full text-center text-sm'
+                            : 'ds-btn-ghost w-full text-center text-sm'
+                        }
+                      >
+                        {tier.ctaLabel}
+                      </Link>
+                    </div>
+                  </article>
                 ))}
               </div>
             </div>
-
-            <div className="lg:col-span-5">
-              <aside className="ds-glass border-l-[3px] border-l-[#FFD21E] p-6">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="font-display text-[14px] font-bold uppercase tracking-[0.08em] text-[#9DA3AA]">
-                    LAUNCH STATUS · VERIFIED ACCESS
-                  </span>
-                  <span className="ds-status-pill">
-                    <span className="ds-status-dot bg-[#58D68D]" />
-                    <span>Live · {checkedLabel}</span>
-                  </span>
-                </div>
-
-                <div className="mt-6 divide-y divide-[#3A3F45] border-y border-[#3A3F45]">
-                  <div className="flex items-center justify-between gap-4 py-4">
-                    <div>
-                      <div className="text-[14px] font-medium text-[#9DA3AA]">
-                        01 · Bot-Shield Identity Check
-                      </div>
-                      <div className="mt-0.5 text-[16px] font-semibold text-[#F4F1EA]">
-                        Camera Liveness + Square Verification
-                      </div>
-                    </div>
-                    <span className="shrink-0 rounded-full border border-[#3A3F45] bg-[#1A1E25] px-3 py-1 font-mono text-[14px] text-[#FFD21E]">
-                      $1 Live on Square
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between gap-4 py-4">
-                    <div>
-                      <div className="text-[14px] font-medium text-[#9DA3AA]">
-                        02 · Account-Bound Memberships
-                      </div>
-                      <div className="mt-0.5 text-[16px] font-semibold text-[#F4F1EA]">
-                        Founding · 3-Mo · 12-Mo · Royalty
-                      </div>
-                    </div>
-                    <span className="shrink-0 text-[14px] font-medium text-[#C9CBCE]">
-                      Square Checkout
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between gap-4 py-4">
-                    <div>
-                      <div className="text-[14px] font-medium text-[#9DA3AA]">
-                        03 · Member Safety &amp; Privacy
-                      </div>
-                      <div className="mt-0.5 text-[16px] font-semibold text-[#F4F1EA]">
-                        18+ Gate · Data Export · 30-Day Delete
-                      </div>
-                    </div>
-                    <span className="shrink-0 text-[14px] font-medium text-[#58D68D]">
-                      Active
-                    </span>
-                  </div>
-                </div>
-
-                <div className="mt-5 flex items-center justify-between gap-3">
-                  <Link
-                    to="/login"
-                    className="text-[16px] font-medium text-[#FFD21E] no-underline hover:underline"
-                  >
-                    Already a member? Sign in to your account &rarr;
-                  </Link>
-                </div>
-              </aside>
-            </div>
           </div>
         </section>
 
-        {/* Section 02 — Statement 1: Verified Identity */}
-        <section className="border-t border-[#3A3F45] py-20 lg:py-28">
-          <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
-            <div className="max-w-[900px]">
-              <div className="font-mono text-[14px] uppercase tracking-[0.08em] text-[#9DA3AA]">
-                02 / IDENTITY
+        {/* STOP 06 (#support) — Pinned Section: Member Support */}
+        <section id="support" className="relative min-h-[135vh]">
+          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
+            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  06 / MEMBER SUPPORT
+                </span>
+                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                  STOP 06 / 08 · STARBOARD RELAY
+                </span>
               </div>
-              <h2 className="mt-4 font-display text-[32px] font-bold leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[48px] lg:text-[56px]">
-                Every introduction starts with a verified human.
+
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+                DIRECT MEMBER TRIAGE AND TRACEABLE ASSISTANCE.
               </h2>
-              <p className="mt-5 max-w-[65ch] text-[18px] leading-[1.55] text-[#C9CBCE] sm:text-[20px]">
-                A live camera liveness check and a $1 Square verification bind
-                each profile to a real person before they enter discovery or
-                messaging.
-              </p>
+
+              <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-2">
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    <MessageSquare size={18} />
+                    <span>01 · Guided Triage &amp; Live Tickets</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    In-App Support Desk
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Signed-in members open{' '}
+                    <code className="font-mono text-[#FFD21E]">
+                      /app/support
+                    </code>{' '}
+                    for instant answers on verification, billing, technical
+                    questions, or safety escalation, and file a tracked support
+                    ticket in one click.
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    <Mail size={18} />
+                    <span>02 · Direct Email &amp; Privacy Help</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Account Recovery, Billing &amp; Privacy
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Need account recovery or have a question before signing up?
+                    Visit our public support guide at{' '}
+                    <code className="font-mono text-[#FFD21E]">/support</code>{' '}
+                    or email{' '}
+                    <a
+                      href="mailto:contact@youandinotai.com"
+                      className="text-[#FFD21E] underline"
+                    >
+                      contact@youandinotai.com
+                    </a>{' '}
+                    directly.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-[#3A3F45] pt-5">
+                <Link to="/app/support" className="ds-btn-signal text-sm">
+                  In-App Support Desk
+                </Link>
+                <Link to="/support" className="ds-btn-ghost text-sm">
+                  Public Support Guide
+                </Link>
+                <Link to="/login" className="ds-btn-ghost text-sm">
+                  Sign In
+                </Link>
+                <Link to="/register" className="ds-btn-ghost text-sm">
+                  Create Account
+                </Link>
+                <a
+                  href="mailto:contact@youandinotai.com"
+                  className="ds-btn-ghost text-sm"
+                >
+                  Email Support (contact@youandinotai.com)
+                </a>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Section 03 — Statement 2: Real-Life Matching */}
-        <section className="border-t border-[#3A3F45] py-20 lg:py-28">
-          <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
-            <div className="max-w-[900px]">
-              <div className="font-mono text-[14px] uppercase tracking-[0.08em] text-[#9DA3AA]">
-                03 / INTENTION
+        {/* STOP 07 (#join) — Pinned Section: Early Access Waitlist & Beta Invite Code */}
+        <section id="join" className="relative min-h-[135vh]">
+          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
+            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  07 / EARLY ACCESS &amp; BETA
+                </span>
+                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                  STOP 07 / 08 · PORTAL LOCK
+                </span>
               </div>
-              <h2 className="mt-4 font-display text-[32px] font-bold leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[48px] lg:text-[56px]">
-                Designed for the first conversation and the first meetup.
+
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+                CLAIM YOUR VERIFIED SPOT OR UNLOCK BETA ACCESS.
               </h2>
-              <p className="mt-5 max-w-[65ch] text-[18px] leading-[1.55] text-[#C9CBCE] sm:text-[20px]">
-                Clear dating intent, shared availability, video calls, and local
-                meetup planning help members move naturally from a match to a
-                real-world plan.
-              </p>
-            </div>
-          </div>
-        </section>
 
-        {/* Section 04 (#platform) — Three Platform Pillars */}
-        <section
-          id="platform"
-          className="border-t border-[#3A3F45] py-20 lg:py-24"
-        >
-          <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
-            <div className="font-mono text-[14px] uppercase tracking-[0.08em] text-[#9DA3AA]">
-              04 / THE PLATFORM
-            </div>
-            <h2 className="mt-3 font-display text-[32px] font-bold tracking-[-0.02em] text-[#F4F1EA] sm:text-[40px]">
-              Built for genuine human connection
-            </h2>
-
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              <article className="ds-card p-6">
-                <div className="flex h-11 w-11 items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#12151A] text-[#FFD21E]">
-                  <UserCheck size={20} strokeWidth={1.75} />
-                </div>
-                <h3 className="mt-5 font-display text-[24px] font-bold text-[#F4F1EA]">
-                  Identity First
-                </h3>
-                <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                  Every active profile completes our $1 Bot-Shield check and
-                  liveness challenge so you always know a real person is on the
-                  other side of the conversation.
-                </p>
-              </article>
-
-              <article className="ds-card p-6">
-                <div className="flex h-11 w-11 items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#12151A] text-[#FFD21E]">
-                  <Shield size={20} strokeWidth={1.75} />
-                </div>
-                <h3 className="mt-5 font-display text-[24px] font-bold text-[#F4F1EA]">
-                  AI as a Shield
-                </h3>
-                <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                  Protective AI works behind the scenes to safeguard account
-                  security, verify liveness, and surface safety tools—while
-                  every profile, prompt, and message belongs to a real member.
-                </p>
-              </article>
-
-              <article className="ds-card p-6">
-                <div className="flex h-11 w-11 items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#12151A] text-[#FFD21E]">
-                  <Users size={20} strokeWidth={1.75} />
-                </div>
-                <h3 className="mt-5 font-display text-[24px] font-bold text-[#F4F1EA]">
-                  Built for Real Life
-                </h3>
-                <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                  From one-on-one discovery and matched video calls to community
-                  boards and local meetup plans, every feature is built to help
-                  you connect offline.
-                </p>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 05 — Two-Phase Member Journey */}
-        <section className="border-t border-[#3A3F45] py-20 lg:py-24">
-          <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
-            <div className="font-mono text-[14px] uppercase tracking-[0.08em] text-[#9DA3AA]">
-              05 / MEMBER JOURNEY
-            </div>
-            <div className="mt-6 grid overflow-hidden rounded-[14px] border border-[#3A3F45] bg-[#12151A] md:grid-cols-2 md:divide-x md:divide-[#3A3F45]">
-              <div className="p-8 sm:p-10">
-                <div className="font-mono text-[14px] font-medium text-[#FFD21E]">
-                  01
-                </div>
-                <h3 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.08] tracking-[-0.02em] text-[#F4F1EA] sm:text-[32px]">
-                  VERIFY
-                  <br />
-                  YOUR ACCOUNT
-                </h3>
-                <p className="mt-4 text-[16px] leading-[1.55] text-[#C9CBCE] sm:text-[18px]">
-                  Create your 18+ account, complete your profile prompts, and
-                  pass the 60-second Liveness + $1 Bot-Shield check to unlock
-                  full discovery, messaging, and video.
-                </p>
-              </div>
-
-              <div className="border-t border-[#3A3F45] p-8 sm:p-10 md:border-t-0">
-                <div className="font-mono text-[14px] font-medium text-[#FFD21E]">
-                  02
-                </div>
-                <h3 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.08] tracking-[-0.02em] text-[#F4F1EA] sm:text-[32px]">
-                  CONNECT
-                  <br />
-                  IN REAL LIFE
-                </h3>
-                <p className="mt-4 text-[16px] leading-[1.55] text-[#C9CBCE] sm:text-[18px]">
-                  Browse verified profiles with clear dating intent, start real
-                  conversations, launch matched-only video dates, and plan safe
-                  public meetups.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 06 (#verification) — How $1 Bot-Shield Verification Works */}
-        <section
-          id="verification"
-          className="border-t border-[#3A3F45] py-20 lg:py-24"
-        >
-          <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
-            <div className="font-mono text-[14px] uppercase tracking-[0.08em] text-[#9DA3AA]">
-              06 / BOT-SHIELD VERIFICATION
-            </div>
-            <h2 className="mt-3 font-display text-[32px] font-bold tracking-[-0.02em] text-[#F4F1EA] sm:text-[40px]">
-              Three steps to your Verified Human badge
-            </h2>
-            <p className="mt-4 max-w-[65ch] text-[18px] leading-[1.55] text-[#C9CBCE] sm:text-[20px]">
-              Verification takes under a minute and permanently binds your
-              Verified badge and Trust Score to your authenticated account.
-            </p>
-
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              <article className="ds-card p-6">
-                <div className="font-mono text-[14px] font-medium text-[#FFD21E]">
-                  STEP 01
-                </div>
-                <h3 className="mt-3 font-display text-[24px] font-bold text-[#F4F1EA]">
-                  Live Camera Gesture Check
-                </h3>
-                <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                  Complete a quick, in-browser camera liveness challenge (no
-                  third-party app install required). Camera frames stay local to
-                  your session.
-                </p>
-              </article>
-
-              <article className="ds-card p-6">
-                <div className="font-mono text-[14px] font-medium text-[#FFD21E]">
-                  STEP 02
-                </div>
-                <h3 className="mt-3 font-display text-[24px] font-bold text-[#F4F1EA]">
-                  $1 Square Account-Bound Checkout
-                </h3>
-                <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                  Complete a one-time $1 payment on Square tied directly to your
-                  signed-in account to confirm real-world payment ownership.
-                </p>
-              </article>
-
-              <article className="ds-card p-6">
-                <div className="font-mono text-[14px] font-medium text-[#FFD21E]">
-                  STEP 03
-                </div>
-                <h3 className="mt-3 font-display text-[24px] font-bold text-[#F4F1EA]">
-                  Instant Gold or Platinum Badge
-                </h3>
-                <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                  Your profile receives the Verified Human badge (or Founding
-                  Member Platinum badge) and unlocks discovery, inbox, and
-                  video.
-                </p>
-              </article>
-            </div>
-
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link to="/app/verify" className="ds-btn-signal">
-                Start $1 Bot-Shield Verification <ArrowRight size={18} />
-              </Link>
-              <Link
-                to="/login"
-                className="text-[16px] font-medium text-[#C9CBCE] underline decoration-[#3A3F45] underline-offset-4 hover:decoration-[#FFD21E] hover:text-[#F4F1EA]"
-              >
-                Sign in to check verification status
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 07 (#trust) — Trust, Safety, Privacy & Account Protection (Restored!) */}
-        <section
-          id="trust"
-          className="border-t border-[#3A3F45] py-20 lg:py-24"
-        >
-          <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
-            <div className="font-mono text-[14px] uppercase tracking-[0.08em] text-[#9DA3AA]">
-              07 / TRUST, SAFETY &amp; PRIVACY
-            </div>
-            <h2 className="mt-3 font-display text-[32px] font-bold tracking-[-0.02em] text-[#F4F1EA] sm:text-[40px]">
-              Safety tools, privacy controls, and clear standards built into
-              every screen
-            </h2>
-            <p className="mt-4 max-w-[65ch] text-[18px] leading-[1.55] text-[#C9CBCE] sm:text-[20px]">
-              YouAndINotAI is an adults-only (18+) platform. Your safety
-              controls, data export, and account deletion tools are always one
-              click away.
-            </p>
-
-            <div className="mt-10 grid gap-6 md:grid-cols-2">
-              <article className="ds-card flex flex-col justify-between p-6">
-                <div>
-                  <div className="flex items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.06em] text-[#FFD21E]">
-                    <ShieldCheck size={18} />
-                    <span>18+ Eligibility</span>
+              <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 lg:grid-cols-2">
+                {/* Panel A — Waitlist Email Form */}
+                <div className="rounded-[10px] border border-[#3A3F45] bg-[#12151A] p-5 sm:p-6">
+                  <div className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                    WAITLIST UPDATES
                   </div>
-                  <h3 className="mt-3 font-display text-[24px] font-bold text-[#F4F1EA]">
-                    18+ Adult Community &amp; Conduct Standards
+                  <h3 className="mt-1.5 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Get Launch &amp; Meetup Milestones
                   </h3>
-                  <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                    Mandatory 18+ age verification at registration, clear
-                    community standards, and zero tolerance for impersonation or
-                    harassment.
+                  <p className="mt-1.5 text-[15px] text-[#F4F1EA]">
+                    Add your email to receive regional rollout notices and
+                    verified member event invitations.
                   </p>
-                </div>
-                <div className="mt-6 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setActiveLegalDoc('terms')}
-                    className="ds-btn-ghost text-sm"
+
+                  <form
+                    action="https://formsubmit.co/contact@youandinotai.com"
+                    method="POST"
+                    className="mt-4 space-y-3"
                   >
-                    Read Terms &amp; Age Policy
-                  </button>
-                </div>
-              </article>
+                    <input
+                      type="hidden"
+                      name="_subject"
+                      value="New YouAndINotAI Early Access Signup!"
+                    />
+                    <input type="hidden" name="_captcha" value="false" />
+                    <input type="hidden" name="_template" value="table" />
+                    <input
+                      type="hidden"
+                      name="_next"
+                      value="https://youandinotai.com/#join"
+                    />
 
-              <article className="ds-card flex flex-col justify-between p-6">
-                <div>
-                  <div className="flex items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.06em] text-[#FFD21E]">
-                    <Shield size={18} />
-                    <span>Safety Tools</span>
-                  </div>
-                  <h3 className="mt-3 font-display text-[24px] font-bold text-[#F4F1EA]">
-                    Verified Safety &amp; Abuse Escalation
-                  </h3>
-                  <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                    One-tap block and report controls inside discovery, chat,
-                    and boards, plus matched-only video rooms where camera and
-                    mic stay local until both members accept.
-                  </p>
-                </div>
-                <div className="mt-6 pt-2">
-                  <Link to="/support" className="ds-btn-ghost text-sm">
-                    View Safety &amp; Support Guide &rarr;
-                  </Link>
-                </div>
-              </article>
-
-              <article className="ds-card flex flex-col justify-between p-6">
-                <div>
-                  <div className="flex items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.06em] text-[#FFD21E]">
-                    <Lock size={18} />
-                    <span>Data Ownership</span>
-                  </div>
-                  <h3 className="mt-3 font-display text-[24px] font-bold text-[#F4F1EA]">
-                    Privacy by Default &amp; Data Ownership
-                  </h3>
-                  <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                    Download your stored account snapshot, disable location
-                    sharing at any time, or schedule full account deletion with
-                    a transparent 30-day review window.
-                  </p>
-                </div>
-                <div className="mt-6 flex flex-wrap gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setActiveLegalDoc('privacy')}
-                    className="ds-btn-ghost text-sm"
-                  >
-                    Read Privacy Policy
-                  </button>
-                  <Link to="/app/privacy" className="ds-btn-ghost text-sm">
-                    Open Privacy Center (/app/privacy)
-                  </Link>
-                </div>
-              </article>
-
-              <article className="ds-card flex flex-col justify-between p-6">
-                <div>
-                  <div className="flex items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.06em] text-[#FFD21E]">
-                    <Check size={18} />
-                    <span>Square Checkout</span>
-                  </div>
-                  <h3 className="mt-3 font-display text-[24px] font-bold text-[#F4F1EA]">
-                    Account-Bound Square Security
-                  </h3>
-                  <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                    Every payment session is generated for your signed-in
-                    account and verified via signed Square webhooks so your tier
-                    or badge never gets lost.
-                  </p>
-                </div>
-                <div className="mt-6 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setActiveLegalDoc('refund')}
-                    className="ds-btn-ghost text-sm"
-                  >
-                    Read Billing &amp; Cancellation Policy
-                  </button>
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 08 (#support) — Member Support & Direct Assistance */}
-        <section
-          id="support"
-          className="border-t border-[#3A3F45] py-20 lg:py-24"
-        >
-          <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
-            <div className="font-mono text-[14px] uppercase tracking-[0.08em] text-[#9DA3AA]">
-              08 / MEMBER SUPPORT
-            </div>
-            <h2 className="mt-3 font-display text-[32px] font-bold tracking-[-0.02em] text-[#F4F1EA] sm:text-[40px]">
-              Direct support that never hides behind a maze
-            </h2>
-
-            <div className="mt-8 grid overflow-hidden rounded-[14px] border border-[#3A3F45] bg-[#12151A] md:grid-cols-2 md:divide-x md:divide-[#3A3F45]">
-              <div className="p-6 sm:p-8">
-                <div className="flex items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.06em] text-[#FFD21E]">
-                  <MessageSquare size={18} />
-                  <span>Guided Triage &amp; Live Tickets</span>
-                </div>
-                <h3 className="mt-3 font-display text-[24px] font-bold text-[#F4F1EA]">
-                  In-App Support Desk &amp; Guided Triage
-                </h3>
-                <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                  Signed-in members can open{' '}
-                  <code className="font-mono text-[#FFD21E]">/app/support</code>{' '}
-                  for instant answers on verification, billing, technical
-                  issues, or safety escalation, and file a tracked support
-                  ticket in one click.
-                </p>
-              </div>
-
-              <div className="border-t border-[#3A3F45] p-6 sm:p-8 md:border-t-0">
-                <div className="flex items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.06em] text-[#FFD21E]">
-                  <Mail size={18} />
-                  <span>Direct Email &amp; Privacy Requests</span>
-                </div>
-                <h3 className="mt-3 font-display text-[24px] font-bold text-[#F4F1EA]">
-                  Account Recovery, Billing &amp; Privacy Help
-                </h3>
-                <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                  Locked out of your account or have a question before signing
-                  up? Visit our public support page at{' '}
-                  <code className="font-mono text-[#FFD21E]">/support</code> or
-                  email{' '}
-                  <a
-                    href="mailto:contact@youandinotai.com"
-                    className="text-[#FFD21E] underline"
-                  >
-                    contact@youandinotai.com
-                  </a>{' '}
-                  directly.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <Link to="/login" className="ds-btn-ghost text-sm">
-                Sign In
-              </Link>
-              <Link to="/register" className="ds-btn-ghost text-sm">
-                Create Account
-              </Link>
-              <Link to="/support" className="ds-btn-ghost text-sm">
-                Public Support Guide
-              </Link>
-              <Link to="/app/support" className="ds-btn-signal text-sm">
-                In-App Support Desk
-              </Link>
-              <a
-                href="mailto:contact@youandinotai.com"
-                className="ds-btn-ghost text-sm"
-              >
-                Email Support (contact@youandinotai.com)
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 09 (#pricing) — Membership & Founder Tiers (Square Live) */}
-        <section
-          id="pricing"
-          className="border-t border-[#3A3F45] py-20 lg:py-24"
-        >
-          <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
-            <div className="font-mono text-[14px] uppercase tracking-[0.08em] text-[#9DA3AA]">
-              09 / MEMBERSHIP &amp; FOUNDER TIERS
-            </div>
-            <h2 className="mt-3 font-display text-[32px] font-bold tracking-[-0.02em] text-[#F4F1EA] sm:text-[40px]">
-              Transparent, account-bound pricing on Square
-            </h2>
-            <p className="mt-4 max-w-[65ch] text-[18px] leading-[1.55] text-[#C9CBCE] sm:text-[20px]">
-              Start with the $1 Bot-Shield check or lock in a Founding Member
-              tier. Every checkout session is created for your signed-in
-              account.
-            </p>
-
-            <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-5">
-              {pricingTiers.map(tier => (
-                <article
-                  key={tier.id}
-                  className={
-                    tier.featured
-                      ? 'ds-card-signal-left flex flex-col justify-between p-6'
-                      : 'ds-card flex flex-col justify-between p-6'
-                  }
-                >
-                  <div>
-                    <div
-                      className={`inline-block rounded-full border px-2.5 py-0.5 font-mono text-[14px] ${
-                        tier.featured
-                          ? 'border-[#FFD21E] bg-[#12151A] font-semibold text-[#FFD21E]'
-                          : 'border-[#3A3F45] bg-[#12151A] text-[#9DA3AA]'
-                      }`}
-                    >
-                      {tier.badge}
-                    </div>
-                    <h3 className="mt-4 font-display text-[24px] font-bold text-[#F4F1EA]">
-                      {tier.name}
-                    </h3>
-                    <div className="mt-3 flex items-baseline gap-1.5">
-                      <span className="font-display text-[32px] font-bold text-[#F4F1EA]">
-                        {tier.price}
-                      </span>
-                      <span className="text-[14px] text-[#9DA3AA]">
-                        {tier.period}
-                      </span>
-                    </div>
-                    <p className="mt-4 text-[16px] leading-[1.5] text-[#C9CBCE]">
-                      {tier.summary}
-                    </p>
-                  </div>
-
-                  <div className="mt-6 pt-2">
-                    <Link
-                      to={tier.to}
-                      className={
-                        tier.featured
-                          ? 'ds-btn-signal w-full text-center'
-                          : 'ds-btn-ghost w-full text-center'
-                      }
-                    >
-                      {tier.ctaLabel}
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <p className="mt-6 text-[14px] text-[#9DA3AA]">
-              All payments are processed securely by Square and bound directly
-              to your authenticated YouAndINotAI account.
-            </p>
-          </div>
-        </section>
-
-        {/* Section 10 (#join) — Early Access Waitlist & Beta Access Code */}
-        <section id="join" className="border-t border-[#3A3F45] py-20 lg:py-24">
-          <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
-            <div className="font-mono text-[14px] uppercase tracking-[0.08em] text-[#9DA3AA]">
-              10 / EARLY ACCESS &amp; BETA
-            </div>
-            <h2 className="mt-3 font-display text-[32px] font-bold tracking-[-0.02em] text-[#F4F1EA] sm:text-[40px]">
-              Join the launch list or enter your beta invite code
-            </h2>
-            <p className="mt-4 max-w-[65ch] text-[18px] leading-[1.55] text-[#C9CBCE] sm:text-[20px]">
-              Receive direct launch milestones, profile rollout notices, and
-              local meetup updates.
-            </p>
-
-            <div className="mt-10 grid gap-6 lg:grid-cols-2">
-              {/* Panel A — Waitlist Email Form */}
-              <div className="ds-panel p-6 sm:p-8">
-                <div className="font-mono text-[14px] uppercase tracking-[0.08em] text-[#FFD21E]">
-                  WAITLIST UPDATES
-                </div>
-                <h3 className="mt-2 font-display text-[24px] font-bold text-[#F4F1EA]">
-                  Get Launch &amp; Meetup Milestones
-                </h3>
-                <p className="mt-2 text-[16px] text-[#C9CBCE]">
-                  Add your email to receive regional rollout notices and
-                  verified member event invitations.
-                </p>
-
-                <form
-                  action="https://formsubmit.co/contact@youandinotai.com"
-                  method="POST"
-                  className="mt-6 space-y-4"
-                >
-                  <input
-                    type="hidden"
-                    name="_subject"
-                    value="New YouAndINotAI Early Access Signup!"
-                  />
-                  <input type="hidden" name="_captcha" value="false" />
-                  <input type="hidden" name="_template" value="table" />
-                  <input
-                    type="hidden"
-                    name="_next"
-                    value="https://youandinotai.com/#join"
-                  />
-
-                  <div>
-                    <label
-                      htmlFor="waitlist-email-input"
-                      className="block text-[14px] font-medium text-[#C9CBCE]"
-                    >
-                      Email address
-                    </label>
-                    <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-                      <input
-                        id="waitlist-email-input"
-                        type="email"
-                        name="email"
-                        required
-                        value={waitlistEmail}
-                        onChange={e => setWaitlistEmail(e.target.value)}
-                        placeholder="you@example.com"
-                        className="app-input flex-1"
-                      />
-                      <button type="submit" className="ds-btn-signal shrink-0">
-                        Join the Waitlist
-                      </button>
-                    </div>
-                  </div>
-                  <p className="text-[14px] text-[#9DA3AA]">
-                    Direct product updates only. Unsubscribe or request deletion
-                    anytime.
-                  </p>
-                </form>
-              </div>
-
-              {/* Panel B — Beta Access Code Form */}
-              <div className="ds-panel p-6 sm:p-8">
-                <div className="flex items-center gap-2 font-mono text-[14px] uppercase tracking-[0.08em] text-[#FFD21E]">
-                  <KeyRound size={16} />
-                  <span>INVITE CODE ACCESS</span>
-                </div>
-                <h3 className="mt-2 font-display text-[24px] font-bold text-[#F4F1EA]">
-                  Have a Beta Invite Code?
-                </h3>
-                <p className="mt-2 text-[16px] text-[#C9CBCE]">
-                  Enter your founder or beta invite code to unlock your member
-                  session immediately.
-                </p>
-
-                <form onSubmit={handleBetaSubmit} className="mt-6 space-y-4">
-                  <div>
-                    <label
-                      htmlFor="landing-beta-code-input"
-                      className="block text-[14px] font-medium text-[#C9CBCE]"
-                    >
-                      Beta access code
-                    </label>
-                    <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-                      <input
-                        id="landing-beta-code-input"
-                        type="text"
-                        value={betaCode}
-                        onChange={e => setBetaCode(e.target.value)}
-                        placeholder="ENTER-CODE"
-                        className="app-input flex-1 font-mono uppercase"
-                      />
-                      <button
-                        type="submit"
-                        disabled={betaStatus.type === 'loading'}
-                        className="ds-btn-ghost shrink-0"
+                    <div>
+                      <label
+                        htmlFor="waitlist-email-input"
+                        className="block text-[14px] font-medium text-[#F4F1EA]"
                       >
-                        {betaStatus.type === 'loading'
-                          ? 'Checking...'
-                          : 'Unlock Beta Access'}
-                      </button>
+                        Email address
+                      </label>
+                      <div className="mt-2 flex flex-col gap-3 sm:flex-row">
+                        <input
+                          id="waitlist-email-input"
+                          type="email"
+                          name="email"
+                          required
+                          value={waitlistEmail}
+                          onChange={e => setWaitlistEmail(e.target.value)}
+                          placeholder="you@example.com"
+                          className="app-input flex-1"
+                        />
+                        <button
+                          type="submit"
+                          className="ds-btn-signal shrink-0"
+                        >
+                          Join the Waitlist
+                        </button>
+                      </div>
                     </div>
-                  </div>
-
-                  {betaStatus.message && (
-                    <p
-                      className={`text-[14px] ${
-                        betaStatus.type === 'error'
-                          ? 'text-[#FF6B6B]'
-                          : 'text-[#C9CBCE]'
-                      }`}
-                    >
-                      {betaStatus.message}
-                    </p>
-                  )}
-                </form>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 11 — Platform by the Numbers Strip */}
-        <section className="border-t border-[#3A3F45] py-16 lg:py-20">
-          <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
-            <div className="grid overflow-hidden rounded-[14px] border border-[#3A3F45] bg-[#12151A] sm:grid-cols-2 lg:grid-cols-4">
-              {[
-                {
-                  stat: '$1',
-                  desc: 'Bot-Shield human liveness & checkout verification',
-                },
-                {
-                  stat: '3',
-                  desc: 'Verification steps from account creation to Verified badge',
-                },
-                {
-                  stat: '5',
-                  desc: 'Account-bound Square tiers from $1 check to Royalty',
-                },
-                {
-                  stat: '18+',
-                  desc: 'Adults-only community with full data export & deletion controls',
-                },
-              ].map((item, idx) => (
-                <div
-                  key={item.stat}
-                  className={`p-6 sm:p-8 ${
-                    idx > 0
-                      ? 'border-t border-[#3A3F45] lg:border-l lg:border-t-0'
-                      : ''
-                  }`}
-                >
-                  <div className="font-display text-[40px] font-bold leading-none text-[#FFD21E] sm:text-[56px]">
-                    {item.stat}
-                  </div>
-                  <p className="mt-3 text-[16px] leading-[1.45] text-[#C9CBCE]">
-                    {item.desc}
-                  </p>
+                  </form>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
-        {/* Section 12 — Climax + 4x2 Product & Trust Showcase Grid */}
-        <section className="border-t border-[#3A3F45] py-20 lg:py-24">
-          <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
-            <div className="max-w-[920px]">
-              <div className="font-display text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
-                CLAUDE&apos;S N JOSHUA&apos;S · #TEAMCLAUDEFORLIFE
-              </div>
-              <h2 className="mt-3 font-display text-[32px] font-bold uppercase leading-[1.06] tracking-[-0.02em] text-[#F4F1EA] sm:text-[48px] lg:text-[56px]">
-                REAL PEOPLE. VERIFIED PROFILES. READY WHEN YOU ARE.
-              </h2>
-            </div>
-
-            <div className="mt-12 grid overflow-hidden rounded-[14px] border border-[#3A3F45] bg-[#3A3F45] gap-px sm:grid-cols-2 lg:grid-cols-4">
-              {showcaseCells.map(cell => (
-                <div key={cell.index} className="bg-[#1A1E25] p-6">
-                  <div className="font-mono text-[14px] text-[#9DA3AA]">
-                    {cell.index}
+                {/* Panel B — Beta Access Code Form */}
+                <div className="rounded-[10px] border border-[#3A3F45] bg-[#12151A] p-5 sm:p-6">
+                  <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                    <KeyRound size={16} />
+                    <span>INVITE CODE ACCESS</span>
                   </div>
-                  <h3 className="mt-3 font-display text-[20px] font-bold text-[#F4F1EA]">
-                    {cell.title}
+                  <h3 className="mt-1.5 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Have a Beta Invite Code?
                   </h3>
-                  <p className="mt-2 text-[16px] leading-[1.5] text-[#C9CBCE]">
-                    {cell.desc}
+                  <p className="mt-1.5 text-[15px] text-[#F4F1EA]">
+                    Enter your founder or beta invite code to unlock your member
+                    session immediately.
                   </p>
-                </div>
-              ))}
 
-              <Link
-                to="/app/verify"
-                className="flex flex-col justify-between border border-[#FFD21E] bg-[#1A1E25] p-6 no-underline transition-colors hover:bg-[#12151A]"
-              >
-                <div>
-                  <div className="font-mono text-[14px] font-bold text-[#FFD21E]">
-                    YOU?
-                  </div>
-                  <h3 className="mt-3 font-display text-[24px] font-bold text-[#F4F1EA]">
-                    Claim Your Verified Spot
-                  </h3>
-                  <p className="mt-2 text-[16px] leading-[1.5] text-[#C9CBCE]">
-                    Complete Liveness + $1 Bot-Shield verification and meet real
-                    people.
-                  </p>
+                  <form onSubmit={handleBetaSubmit} className="mt-4 space-y-3">
+                    <div>
+                      <label
+                        htmlFor="landing-beta-code-input"
+                        className="block text-[14px] font-medium text-[#F4F1EA]"
+                      >
+                        Beta access code
+                      </label>
+                      <div className="mt-2 flex flex-col gap-3 sm:flex-row">
+                        <input
+                          id="landing-beta-code-input"
+                          type="text"
+                          value={betaCode}
+                          onChange={e => setBetaCode(e.target.value)}
+                          placeholder="FOUNDER-XXXX"
+                          className="app-input flex-1 font-mono uppercase"
+                        />
+                        <button
+                          type="submit"
+                          disabled={betaStatus.type === 'loading'}
+                          className="ds-btn-ghost shrink-0 border-[#FFD21E] text-[#FFD21E]"
+                        >
+                          {betaStatus.type === 'loading'
+                            ? 'Checking...'
+                            : 'Unlock Beta Access'}
+                        </button>
+                      </div>
+                    </div>
+
+                    {betaStatus.message && (
+                      <p
+                        role="status"
+                        className="text-[14px] font-medium text-[#FFD21E]"
+                      >
+                        {betaStatus.message}
+                      </p>
+                    )}
+                  </form>
                 </div>
-                <div className="mt-6 inline-flex items-center gap-2 font-semibold text-[#FFD21E]">
-                  <span>Verify your profile for $1</span>
-                  <ArrowRight size={16} />
-                </div>
-              </Link>
+              </div>
             </div>
           </div>
         </section>
       </main>
 
-      {/* Section 13 — Footer */}
-      <footer className="relative z-10 border-t border-[#3A3F45] bg-[#12151A]">
-        <div className="mx-auto max-w-[1280px] px-4 py-14 sm:px-6">
+      {/* STOP 08 (#footer) — Deliberately Quiet Footer & Legal */}
+      <footer
+        id="footer"
+        className="relative z-10 border-t border-[#3A3F45] bg-[#12151A] pb-24 pt-14"
+      >
+        <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
             <div className="lg:col-span-2">
-              <div className="text-[14px] font-semibold text-[#C9CBCE]">
+              <div className="text-[14px] font-semibold text-[#F4F1EA]">
                 CLAUDE&apos;s N Joshua&apos;s
               </div>
               <div className="mt-1 font-display text-[24px] font-bold tracking-[-0.02em] text-[#F4F1EA]">
@@ -1408,24 +1190,24 @@ export function LandingPage() {
               <div className="mt-3 inline-flex rounded-full border border-[#FFD21E] bg-[#0A0B0D] px-3 py-1 text-[14px] font-medium text-[#FFD21E]">
                 #TeamClaudeForLife
               </div>
-              <p className="mt-4 max-w-[44ch] text-[16px] leading-[1.55] text-[#C9CBCE]">
+              <p className="mt-4 max-w-[44ch] text-[16px] leading-[1.55] text-[#F4F1EA]">
                 18+ verified-human dating, matched video calls, and real-world
                 connection. Operated by Trash Or Treasure Online Recycler LLC.
               </p>
-              <p className="mt-3 text-[14px] font-medium text-[#9DA3AA]">
+              <p className="mt-3 text-[14px] font-medium text-[#FFD21E]">
                 youandinotai.com is for adults 18 and over.
               </p>
             </div>
 
             <div>
-              <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA]">
+              <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
                 Launch Links
               </h3>
               <ul className="mt-4 space-y-2.5 list-none p-0">
                 <li>
                   <a
                     href="#about"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
+                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Overview
                   </a>
@@ -1433,103 +1215,87 @@ export function LandingPage() {
                 <li>
                   <a
                     href="#platform"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
+                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
-                    Platform Pillars
+                    Platform
                   </a>
                 </li>
                 <li>
                   <a
                     href="#verification"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
+                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
-                    $1 Bot-Shield Verification
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#trust"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
-                  >
-                    Trust &amp; Safety
+                    $1 Bot-Shield
                   </a>
                 </li>
                 <li>
                   <a
                     href="#pricing"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
+                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
-                    Founder Tiers &amp; Pricing
+                    Founder Tiers
                   </a>
                 </li>
                 <li>
                   <a
                     href="#join"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
+                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
-                    Early Access &amp; Beta Code
+                    Early Access
                   </a>
                 </li>
               </ul>
             </div>
 
             <div>
-              <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA]">
-                Account &amp; Support
+              <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
+                Account &amp; Safety
               </h3>
               <ul className="mt-4 space-y-2.5 list-none p-0">
                 <li>
                   <Link
                     to="/login"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
+                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
-                    Sign In
+                    Member Sign In
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/register"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
+                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
-                    Create Account
+                    Create 18+ Account
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/app/verify"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
+                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
-                    Verify Profile ($1)
+                    Verification Center
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/support"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
+                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
-                    Public Support Guide
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/app/support"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
-                  >
-                    In-App Support Desk
+                    Support &amp; Safety Guide
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/app/privacy"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
+                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
-                    Privacy &amp; Delete Account
+                    Privacy Center
                   </Link>
                 </li>
                 <li>
                   <a
                     href="mailto:contact@youandinotai.com"
-                    className="text-[16px] text-[#C9CBCE] no-underline hover:text-[#FFD21E]"
+                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     contact@youandinotai.com
                   </a>
@@ -1538,15 +1304,15 @@ export function LandingPage() {
             </div>
 
             <div>
-              <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA]">
-                Policy &amp; Privacy
+              <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
+                Legal &amp; Policies
               </h3>
               <ul className="mt-4 space-y-2.5 list-none p-0">
                 <li>
                   <button
                     type="button"
                     onClick={() => setActiveLegalDoc('terms')}
-                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#C9CBCE] cursor-pointer hover:text-[#FFD21E]"
+                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
                   >
                     Terms of Service
                   </button>
@@ -1555,7 +1321,7 @@ export function LandingPage() {
                   <button
                     type="button"
                     onClick={() => setActiveLegalDoc('privacy')}
-                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#C9CBCE] cursor-pointer hover:text-[#FFD21E]"
+                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
                   >
                     Privacy Policy
                   </button>
@@ -1564,7 +1330,7 @@ export function LandingPage() {
                   <button
                     type="button"
                     onClick={() => setActiveLegalDoc('age')}
-                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#C9CBCE] cursor-pointer hover:text-[#FFD21E]"
+                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
                   >
                     Age Policy
                   </button>
@@ -1573,7 +1339,7 @@ export function LandingPage() {
                   <button
                     type="button"
                     onClick={() => setActiveLegalDoc('refund')}
-                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#C9CBCE] cursor-pointer hover:text-[#FFD21E]"
+                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
                   >
                     Refund Policy
                   </button>
@@ -1583,17 +1349,23 @@ export function LandingPage() {
           </div>
 
           <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-[#3A3F45] pt-6 sm:flex-row sm:items-center">
-            <p className="text-[14px] text-[#9DA3AA]">
+            <p className="text-[14px] font-medium text-[#F4F1EA]">
               &copy; 2026 Trash Or Treasure Online Recycler LLC. &middot;
               CLAUDE&apos;s N Joshua&apos;s &middot; #TeamClaudeForLife
             </p>
             <span className="ds-status-pill">
-              <span className="ds-status-dot bg-[#58D68D]" />
+              <span className="ds-status-dot bg-[#FFD21E]" />
               <span>All Systems Operational · {checkedLabel}</span>
             </span>
           </div>
         </div>
       </footer>
+
+      {/* Bottom Segmented Journey Progress Bar Map */}
+      <JourneyProgressBar
+        activeSectionIndex={journeyState.activeSectionIndex}
+        onSelectSection={scrollToSection}
+      />
 
       {/* Legal Modal Dialog (terms, privacy, age, refund) */}
       {activeLegalDoc && (
@@ -1601,7 +1373,7 @@ export function LandingPage() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="legal-modal-title"
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0A0B0D]/80 p-4 backdrop-blur-md"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0A0B0D]/90 p-4"
           onClick={() => setActiveLegalDoc(null)}
         >
           <div
@@ -1610,7 +1382,7 @@ export function LandingPage() {
           >
             <div className="flex items-start justify-between gap-4 border-b border-[#3A3F45] pb-4">
               <div>
-                <div className="font-mono text-[14px] text-[#9DA3AA]">
+                <div className="font-mono text-[14px] text-[#FFD21E]">
                   {LEGAL_DOCS[activeLegalDoc].updated}
                 </div>
                 <h2
@@ -1646,7 +1418,7 @@ export function LandingPage() {
                   className={`rounded-full border px-3 py-1 text-[14px] font-medium cursor-pointer ${
                     activeLegalDoc === key
                       ? 'border-[#FFD21E] bg-[#1A1E25] text-[#FFD21E]'
-                      : 'border-[#3A3F45] bg-[#0A0B0D] text-[#C9CBCE]'
+                      : 'border-[#3A3F45] bg-[#0A0B0D] text-[#F4F1EA]'
                   }`}
                 >
                   {label}
@@ -1657,10 +1429,10 @@ export function LandingPage() {
             <div className="mt-6 space-y-5">
               {LEGAL_DOCS[activeLegalDoc].sections.map(sec => (
                 <div key={sec.h}>
-                  <h3 className="font-display text-[18px] font-bold text-[#F4F1EA]">
+                  <h3 className="font-display text-[18px] font-bold text-[#FFD21E]">
                     {sec.h}
                   </h3>
-                  <p className="mt-1.5 text-[16px] leading-[1.55] text-[#C9CBCE]">
+                  <p className="mt-1.5 text-[16px] leading-[1.55] text-[#F4F1EA]">
                     {sec.p}
                   </p>
                 </div>
@@ -1679,8 +1451,6 @@ export function LandingPage() {
           </div>
         </div>
       )}
-
-      <CookieConsentBanner />
     </div>
   );
 }
