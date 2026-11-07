@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 /* ==========================================================================
-   Self-Hosted DREAM Space Fonts (Space Grotesk · IBM Plex Sans · JetBrains Mono)
+   Self-Hosted DREAM Space Fonts (Space Grotesk Â· IBM Plex Sans Â· JetBrains Mono)
    ========================================================================== */
 
 @font-face {
@@ -298,7 +298,7 @@ h4,
   border-radius: 999px;
   border: 1px solid var(--ds-hull);
   background-color: var(--ds-panel);
-  color: var(--ds-fog);
+  color: var(--ds-porcelain);
   font-size: 14px;
   font-weight: 500;
   line-height: 1.2;
@@ -391,7 +391,7 @@ h4,
 
 .app-subtitle {
   margin: 0;
-  color: var(--ds-fog);
+  color: var(--ds-porcelain);
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 1.05rem;
   line-height: 1.55;
@@ -425,7 +425,7 @@ h4,
 
 .app-input::placeholder,
 .app-textarea::placeholder {
-  color: var(--ds-slate);
+  color: var(--ds-porcelain);
 }
 
 .app-input:focus,
@@ -494,7 +494,7 @@ h4,
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  color: var(--ds-fog);
+  color: var(--ds-porcelain);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -642,7 +642,7 @@ h4,
   padding: 0.65rem 0.15rem;
   font-size: 16px;
   font-weight: 600;
-  color: var(--ds-slate);
+  color: var(--ds-porcelain);
   cursor: pointer;
 }
 
@@ -685,7 +685,7 @@ h4,
   padding: 0.65rem 0.9rem;
   font-size: 16px;
   font-weight: 500;
-  color: var(--ds-slate);
+  color: var(--ds-porcelain);
   text-decoration: none;
   border: 1px solid transparent;
   transition:
@@ -715,7 +715,7 @@ h4,
   padding: 0.35rem 0.25rem;
   font-size: 14px;
   font-weight: 500;
-  color: var(--ds-slate);
+  color: var(--ds-porcelain);
   text-decoration: none;
 }
 

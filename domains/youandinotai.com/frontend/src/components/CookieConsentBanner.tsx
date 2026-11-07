@@ -3,21 +3,24 @@ import { ShieldCheck } from 'lucide-react';
 import { readCookieConsent, saveCookieConsent } from '../lib/consent';
 
 export function CookieConsentBanner() {
-  const [ready, setReady] = useState(false);
-  const [essential, setEssential] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [essential, setEssential] = useState(true);
   const [preferences, setPreferences] = useState(false);
   const [performance, setPerformance] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     const existing = readCookieConsent();
     if (existing) {
-      setDismissed(true);
+      setPreferences(Boolean(existing.preferences));
+      setPerformance(Boolean(existing.performance));
     }
-    setReady(true);
+    const onOpenCookies = () => setOpen(true);
+    window.addEventListener('youandinotai:open-cookies', onOpenCookies);
+    return () =>
+      window.removeEventListener('youandinotai:open-cookies', onOpenCookies);
   }, []);
 
-  if (!ready || dismissed) {
+  if (!open) {
     return null;
   }
 
@@ -33,11 +36,11 @@ export function CookieConsentBanner() {
       preferences: nextPreferences,
       performance: nextPerformance,
     });
-    setDismissed(true);
+    setOpen(false);
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[10001] px-4 pb-4">
+    <div className="fixed inset-x-0 bottom-16 z-[10001] px-4 pb-4">
       <div className="mx-auto max-w-4xl rounded-xl border border-[#3A3F45] bg-[#12151A] p-5 shadow-2xl">
         <div className="flex items-start gap-3">
           <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-lg border border-[#3A3F45] bg-[#1A1E25]">
@@ -47,9 +50,9 @@ export function CookieConsentBanner() {
             <h2 className="font-display text-sm font-bold text-[#F4F1EA]">
               Cookie controls
             </h2>
-            <p className="mt-1 text-sm text-[#C9CBCE]">
-              Your account privacy stays in your hands. Use these three boxes to
-              decide what stays on your device.
+            <p className="mt-1 text-sm text-[#F4F1EA]">
+              Your account privacy stays in your hands. Choose your cookie
+              preferences for this device.
             </p>
 
             <div className="mt-4 space-y-3">
@@ -64,9 +67,8 @@ export function CookieConsentBanner() {
                   <span className="block text-sm font-semibold text-[#F4F1EA]">
                     Strictly necessary cookies
                   </span>
-                  <span className="block text-xs text-[#9DA3AA]">
+                  <span className="block text-xs text-[#F4F1EA]">
                     Required for sign-in, safety checks, and session security.
-                    You must tick this box yourself.
                   </span>
                 </span>
               </label>
@@ -82,7 +84,7 @@ export function CookieConsentBanner() {
                   <span className="block text-sm font-semibold text-[#F4F1EA]">
                     Preference cookies
                   </span>
-                  <span className="block text-xs text-[#9DA3AA]">
+                  <span className="block text-xs text-[#F4F1EA]">
                     Remember UI choices like theme or layout on this device.
                   </span>
                 </span>
@@ -99,7 +101,7 @@ export function CookieConsentBanner() {
                   <span className="block text-sm font-semibold text-[#F4F1EA]">
                     Performance cookies
                   </span>
-                  <span className="block text-xs text-[#9DA3AA]">
+                  <span className="block text-xs text-[#F4F1EA]">
                     Optional first-party diagnostics for app reliability and
                     session performance.
                   </span>
@@ -111,10 +113,16 @@ export function CookieConsentBanner() {
               <button
                 type="button"
                 onClick={() => persist(essential, preferences, performance)}
-                disabled={!essential}
-                className="ds-btn-signal px-5 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+                className="ds-btn-signal px-5 py-2.5 text-sm"
               >
                 Save cookie choices
+              </button>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="ds-btn-ghost px-5 py-2.5 text-sm"
+              >
+                Close
               </button>
             </div>
           </div>

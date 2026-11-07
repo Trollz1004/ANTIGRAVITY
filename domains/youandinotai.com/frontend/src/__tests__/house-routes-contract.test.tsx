@@ -474,4 +474,70 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     });
     unmountCheckout();
   });
+
+  it('renders first-screen-wow stage, header motion canvases, and 8-segment section progress bar wired to sections', () => {
+    const { container, getByLabelText, getByRole } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <LandingPage />
+      </MemoryRouter>
+    );
+
+    expect(
+      container.querySelector('#youandinotai-stage-canvas')
+    ).not.toBeNull();
+    expect(container.querySelector('#youandinotai-header-mark')).not.toBeNull();
+    expect(container.querySelector('#youandinotai-header-line')).not.toBeNull();
+
+    const progressMap = container.querySelector('#youandinotai-progress-map');
+    expect(progressMap).not.toBeNull();
+    expect(progressMap?.getAttribute('data-total-stops')).toBe('8');
+    expect(progressMap?.getAttribute('data-filled-count')).toBe('1');
+
+    const segments = progressMap?.querySelectorAll('button[data-stop-id]');
+    expect(segments?.length).toBe(8);
+
+    // Hover/focus on segment 05 shows tooltip label
+    const membershipBtn = getByLabelText('05 Membership');
+    fireEvent.focus(membershipBtn);
+    expect(getByRole('tooltip').textContent).toContain('05 · Membership');
+
+    // No charity, mission, or third-party payment processor names in visible landing text
+    const visibleText = container.textContent || '';
+    expect(visibleText).not.toMatch(
+      /\b(charity|philanthropy|nonprofit|donation|Square|Stripe)\b/i
+    );
+  });
+
+  it('respects prefers-reduced-motion by freezing the stage and keeping the progress bar interactive', () => {
+    const originalMatchMedia = window.matchMedia;
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query.includes('prefers-reduced-motion: reduce'),
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+
+    try {
+      const { container, getByLabelText } = render(
+        <MemoryRouter initialEntries={['/']}>
+          <LandingPage />
+        </MemoryRouter>
+      );
+
+      const stageCanvas = container.querySelector('#youandinotai-stage-canvas');
+      expect(stageCanvas?.getAttribute('data-stage-mode')).toBe(
+        'reduced-motion'
+      );
+
+      const joinBtn = getByLabelText('07 Early Access');
+      fireEvent.click(joinBtn);
+      expect(Element.prototype.scrollIntoView).toHaveBeenCalled();
+    } finally {
+      window.matchMedia = originalMatchMedia;
+    }
+  });
 });
