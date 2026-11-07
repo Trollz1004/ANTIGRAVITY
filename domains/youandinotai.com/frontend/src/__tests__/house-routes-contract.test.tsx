@@ -379,9 +379,7 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     });
 
     fireEvent.click(getByText(/Start the 30-day deletion clock/i));
-    fireEvent.click(
-      getByRole('button', { name: /Confirm Deletion Request/i })
-    );
+    fireEvent.click(getByRole('button', { name: /Confirm Deletion Request/i }));
 
     await waitFor(() => {
       expect(api.post).toHaveBeenCalledWith('/privacy/delete');

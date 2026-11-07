@@ -177,10 +177,7 @@ export function PublicSupportPage() {
             <Link to="/register" className="ds-btn-ghost">
               Create 18+ Account
             </Link>
-            <a
-              href="mailto:contact@youandinotai.com"
-              className="ds-btn-ghost"
-            >
+            <a href="mailto:contact@youandinotai.com" className="ds-btn-ghost">
               <Mail size={16} /> contact@youandinotai.com
             </a>
           </div>
@@ -225,7 +222,8 @@ export function PublicSupportPage() {
             </h2>
             <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
               Request a full archive of your stored profile data, turn off
-              location sharing, or start the 30-day account deletion clock inside{' '}
+              location sharing, or start the 30-day account deletion clock
+              inside{' '}
               <Link to="/app/privacy" className="text-[#FFD21E] underline">
                 /app/privacy
               </Link>
@@ -446,22 +444,33 @@ export function LandingPage() {
               <span>API Live · {checkedLabel}</span>
             </span>
             {user ? (
-              <Link to="/app" className="ds-btn-ghost whitespace-nowrap px-3.5 py-2 text-[15px]">
+              <Link
+                to="/app"
+                className="ds-btn-ghost whitespace-nowrap px-3.5 py-2 text-[15px]"
+              >
                 Open App
               </Link>
             ) : (
-              <Link to="/login" className="ds-btn-ghost whitespace-nowrap px-3.5 py-2 text-[15px]">
+              <Link
+                to="/login"
+                className="ds-btn-ghost whitespace-nowrap px-3.5 py-2 text-[15px]"
+              >
                 Sign In
               </Link>
             )}
-            <Link to="/app/verify" className="ds-btn-signal whitespace-nowrap px-4 py-2 text-[15px]">
+            <Link
+              to="/app/verify"
+              className="ds-btn-signal whitespace-nowrap px-4 py-2 text-[15px]"
+            >
               Get Verified
             </Link>
           </div>
 
           <button
             type="button"
-            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-label={
+              mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'
+            }
             aria-expanded={mobileMenuOpen}
             onClick={() => setMobileMenuOpen(prev => !prev)}
             className="inline-flex h-11 w-11 items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#12151A] text-[#F4F1EA] lg:hidden"
@@ -903,8 +912,8 @@ export function LandingPage() {
                     18+ Adult Community &amp; Conduct Standards
                   </h3>
                   <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
-                    Mandatory 18+ age verification at registration, clear community
-                    standards, and zero tolerance for impersonation or
+                    Mandatory 18+ age verification at registration, clear
+                    community standards, and zero tolerance for impersonation or
                     harassment.
                   </p>
                 </div>
@@ -981,8 +990,8 @@ export function LandingPage() {
                   </h3>
                   <p className="mt-3 text-[16px] leading-[1.55] text-[#C9CBCE]">
                     Every payment session is generated for your signed-in
-                    account and verified via signed Square webhooks so your
-                    tier or badge never gets lost.
+                    account and verified via signed Square webhooks so your tier
+                    or badge never gets lost.
                   </p>
                 </div>
                 <div className="mt-6 pt-2">
@@ -1155,10 +1164,7 @@ export function LandingPage() {
         </section>
 
         {/* Section 10 (#join) — Early Access Waitlist & Beta Access Code */}
-        <section
-          id="join"
-          className="border-t border-[#3A3F45] py-20 lg:py-24"
-        >
+        <section id="join" className="border-t border-[#3A3F45] py-20 lg:py-24">
           <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
             <div className="font-mono text-[14px] uppercase tracking-[0.08em] text-[#9DA3AA]">
               10 / EARLY ACCESS &amp; BETA
@@ -1318,7 +1324,9 @@ export function LandingPage() {
                 <div
                   key={item.stat}
                   className={`p-6 sm:p-8 ${
-                    idx > 0 ? 'border-t border-[#3A3F45] lg:border-l lg:border-t-0' : ''
+                    idx > 0
+                      ? 'border-t border-[#3A3F45] lg:border-l lg:border-t-0'
+                      : ''
                   }`}
                 >
                   <div className="font-display text-[40px] font-bold leading-none text-[#FFD21E] sm:text-[56px]">
