@@ -55,7 +55,10 @@ Agent-Reach is a research tool for Opus, Fable and Argon only. It never posts.
 
 Finding from the live site on 2026-11-06: the orbit motion lives at section nine (Membership). The two rings are thin grey and dim gold on near-black and do not register at a glance. A visitor who gives the site seven seconds sees a clean dark page with a logo, a nav bar and buttons. Normal, forgettable, fails ruling 5.
 
-Reference: Joshua's scroll-driven satellite-and-world reference site, in the drop box under `images/site-look` (he is adding it). Study-tool rules: learn the motion, build our own, nothing copied ships.
+Reference, given by Joshua 2026-11-06 20:42: https://gpc-style-endurosat.vercel.app/space-service/ (a remake-skill study of the EnduroSat site style). Open it, scroll it, record it. The two things he wants from it, and only these two:
+- Scroll-driven zoom. The next section zooms in and out as the visitor scrolls, so the page feels like one continuous object rather than a stack of blocks.
+- A scroll progress bar. On that site it is the row of blue squares at the bottom that fills up as you scroll. Its job is to tell a human "keep going, there is more." Ours needs the same job done, in our own shape and colors.
+He wants the style, not the site: no copying of its layout, copy, globe, or assets. The Remake `100% Yours` gate in `.agents/skills/remake/` applies: passes on features matched, clear visual difference, and own code, never on likeness. This motion is new to most visitors too, so the progress bar is not decoration; it is the cue that makes the zoom understandable.
 
 1. The hero owns the whole first screen. The orbit motion moves to the top and becomes the main object, not a background: bright enough to read at a glance, moving on load before any scroll, with the first scroll driving a zoom or orbit change the visitor feels immediately.
 2. Rings and orbit lines at a contrast anyone can see on a laptop in a lit room. If Joshua cannot see it from his chair, it fails.
