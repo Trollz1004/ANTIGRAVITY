@@ -1061,7 +1061,15 @@ export function JourneyProgressBar({
                     onSelectSection(stop.id);
                   }}
                   onMouseEnter={() => setHoveredIdx(idx)}
-                  onMouseLeave={() => setHoveredIdx(null)}
+                  onMouseLeave={e => {
+                    if (
+                      typeof document !== 'undefined' &&
+                      document.activeElement === e.currentTarget
+                    ) {
+                      return;
+                    }
+                    setHoveredIdx(null);
+                  }}
                   onFocus={() => setHoveredIdx(idx)}
                   onBlur={() => setHoveredIdx(null)}
                   title={`${stop.index} · ${stop.label}`}

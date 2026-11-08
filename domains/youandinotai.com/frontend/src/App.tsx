@@ -447,8 +447,8 @@ export function LandingPage() {
 
       {/* 0A. Floating Top Header with Restrained Three.js Motion */}
       <header className="sticky top-0 z-50 border-b border-[#3A3F45] bg-[#0A0B0D]">
-        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6">
-          <div className="flex min-w-0 items-center gap-2 sm:gap-2.5">
+        <div className="mx-auto flex h-16 max-w-[1680px] items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6">
+          <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-2.5">
             <HeaderOrbitMark
               sectionFloat={journeyState.sectionFloat}
               atFooter={journeyState.atFooter}
@@ -466,7 +466,7 @@ export function LandingPage() {
               <span className="font-display text-[18px] font-bold tracking-[-0.02em] text-[#F4F1EA] sm:text-[20px]">
                 YouAndINotAI
               </span>
-              <span className="hidden rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E] xl:inline-flex">
+              <span className="hidden rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E] 2xl:inline-flex">
                 #TeamClaudeForLife
               </span>
             </a>
@@ -474,11 +474,11 @@ export function LandingPage() {
 
           <nav
             aria-label="Primary section navigation"
-            className="hidden lg:flex items-center gap-2 whitespace-nowrap"
+            className="hidden lg:flex items-center gap-1 whitespace-nowrap xl:gap-1.5"
           >
             {navLinks.map(link => {
               const isCurrent = journeyState.activeSectionId === link.id;
-              const className = `inline-flex min-h-[44px] min-w-[44px] items-center justify-center whitespace-nowrap border-b-2 px-2 py-2 text-[15px] font-medium no-underline transition-colors ${
+              const className = `inline-flex min-h-[44px] min-w-[44px] items-center justify-center whitespace-nowrap border-b-2 px-1.5 py-2 text-[14px] font-medium no-underline transition-colors xl:px-2 xl:text-[15px] ${
                 isCurrent
                   ? 'border-[#FFD21E] text-[#FFD21E]'
                   : 'border-transparent text-[#F4F1EA] hover:border-[#FFD21E] hover:text-[#FFD21E]'
