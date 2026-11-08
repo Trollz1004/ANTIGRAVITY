@@ -614,7 +614,7 @@ export function LandingPage() {
             {/* Upper Orbital Stage Frame — Open view for DreamSpaceStage orbit at top */}
             <div className="mx-auto flex w-full max-w-[1440px] flex-1 items-center justify-between pointer-events-none">
               <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-l-[3px] border-l-[#FFD21E] bg-[#0A0B0D] px-5 py-4">
-                <div className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                <div className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   01 · LIVENESS GATE
                 </div>
                 <div className="mt-1 font-display text-[28px] font-bold uppercase leading-none text-[#F4F1EA]">
@@ -626,7 +626,7 @@ export function LandingPage() {
               </div>
 
               <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-r-[3px] border-r-[#FFD21E] bg-[#0A0B0D] px-5 py-4 text-right">
-                <div className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                <div className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   02 · REAL-WORLD DATES
                 </div>
                 <div className="mt-1 font-display text-[28px] font-bold uppercase leading-none text-[#F4F1EA]">
@@ -644,11 +644,11 @@ export function LandingPage() {
               className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] px-4 py-3.5 sm:px-8 sm:py-6"
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <span className="inline-flex items-center gap-2 rounded-full border border-[#FFD21E] bg-[#12151A] px-3.5 py-1 font-display text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E] sm:text-[14px]">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#FFD21E] bg-[#12151A] px-3.5 py-1 font-display text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   CLAUDE&apos;S N JOSHUA&apos;S · #TEAMCLAUDEFORLIFE · 18+
                   VERIFIED DATING
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   STOP 01 / 08 · SCROLL TO FLY IN
                 </span>
               </div>
@@ -711,7 +711,7 @@ export function LandingPage() {
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   02 / PLATFORM CAPABILITIES
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
                   STOP 02 / 08 · EQUATORIAL ORBIT
                 </span>
               </div>
@@ -789,7 +789,7 @@ export function LandingPage() {
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   03 / VERIFICATION PROTOCOL
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
                   STOP 03 / 08 · CORE LOCK
                 </span>
               </div>
@@ -866,7 +866,7 @@ export function LandingPage() {
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   04 / TRUST, SAFETY &amp; PRIVACY
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
                   STOP 04 / 08 · SHIELD INCLINATION
                 </span>
               </div>
@@ -878,7 +878,7 @@ export function LandingPage() {
               <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-2 lg:grid-cols-4">
                 <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
                   <div>
-                    <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase text-[#FFD21E]">
+                    <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
                       <ShieldCheck size={16} />
                       <span>18+ Eligibility</span>
                     </div>
@@ -903,7 +903,7 @@ export function LandingPage() {
 
                 <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
                   <div>
-                    <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase text-[#FFD21E]">
+                    <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
                       <Shield size={16} />
                       <span>Safety Tools</span>
                     </div>
@@ -924,7 +924,7 @@ export function LandingPage() {
 
                 <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
                   <div>
-                    <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase text-[#FFD21E]">
+                    <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
                       <Lock size={16} />
                       <span>Data Ownership</span>
                     </div>
@@ -955,7 +955,7 @@ export function LandingPage() {
 
                 <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
                   <div>
-                    <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase text-[#FFD21E]">
+                    <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
                       <Check size={16} />
                       <span>Account Billing</span>
                     </div>
@@ -997,7 +997,7 @@ export function LandingPage() {
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   05 / MEMBERSHIP &amp; FOUNDER TIERS
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
                   STOP 05 / 08 · FOUNDER SHOWCASE
                 </span>
               </div>
@@ -1006,32 +1006,32 @@ export function LandingPage() {
                 ACCOUNT-BOUND FOUNDER TIERS AND VERIFIED ACCESS.
               </h2>
 
-              <div className="mt-5 grid gap-4 border-t border-[#3A3F45] pt-5 md:grid-cols-2 xl:grid-cols-5">
+              <div className="mt-5 grid gap-6 border-t border-[#3A3F45] pt-5 md:grid-cols-2 xl:grid-cols-5">
                 {pricingTiers.map(tier => (
                   <article
                     key={tier.id}
-                    className={`flex flex-col justify-between rounded-[10px] border p-4 ${
+                    className={`flex flex-col justify-between pl-4 ${
                       tier.featured
-                        ? 'border-[#FFD21E] border-l-[3px] bg-[#12151A]'
-                        : 'border-[#3A3F45] bg-[#12151A]'
+                        ? 'border-l-[3px] border-[#FFD21E]'
+                        : 'border-l-2 border-[#3A3F45]'
                     }`}
                   >
                     <div>
-                      <div className="inline-block rounded-full border border-[#FFD21E] bg-[#0A0B0D] px-2.5 py-0.5 font-mono text-[12px] font-bold text-[#FFD21E]">
+                      <div className="font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
                         {tier.badge}
                       </div>
-                      <h3 className="mt-3 font-display text-[20px] font-bold text-[#F4F1EA]">
+                      <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
                         {tier.name}
                       </h3>
                       <div className="mt-2 flex items-baseline gap-1.5">
                         <span className="font-display text-[28px] font-bold text-[#FFD21E]">
                           {tier.price}
                         </span>
-                        <span className="text-[13px] font-medium text-[#F4F1EA]">
+                        <span className="text-[14px] font-medium text-[#F4F1EA]">
                           {tier.period}
                         </span>
                       </div>
-                      <p className="mt-2.5 text-[14px] leading-[1.45] text-[#F4F1EA]">
+                      <p className="mt-2.5 text-[14px] leading-[1.45] text-[#F4F1EA] text-pretty">
                         {tier.summary}
                       </p>
                     </div>
@@ -1070,7 +1070,7 @@ export function LandingPage() {
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   06 / MEMBER SUPPORT
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
                   STOP 06 / 08 · STARBOARD RELAY
                 </span>
               </div>
@@ -1130,12 +1130,6 @@ export function LandingPage() {
                 <Link to="/support" className="ds-btn-ghost text-sm">
                   Public Support Guide
                 </Link>
-                <Link to="/login" className="ds-btn-ghost text-sm">
-                  Sign In
-                </Link>
-                <Link to="/register" className="ds-btn-ghost text-sm">
-                  Create Account
-                </Link>
                 <a
                   href="mailto:contact@youandinotai.com"
                   className="ds-btn-ghost text-sm"
@@ -1169,7 +1163,7 @@ export function LandingPage() {
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   07 / START TONIGHT
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
                   STOP 07 / 08 · START
                 </span>
               </div>

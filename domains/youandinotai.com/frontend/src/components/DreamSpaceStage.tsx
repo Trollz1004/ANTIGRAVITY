@@ -1106,7 +1106,7 @@ export function JourneyProgressBar({
           })}
         </div>
 
-        <div className="hidden shrink-0 items-center gap-2 rounded-[4px] border border-[#3A3F45] bg-[#12151A] px-3 py-1.5 font-mono text-[12px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] sm:flex">
+        <div className="hidden shrink-0 items-center gap-2 rounded-[4px] border border-[#3A3F45] bg-[#12151A] px-3 py-1.5 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] sm:flex">
           <span className="text-[#FFD21E]">
             {activeSectionIndex + 1}/{SECTION_STOPS.length}
           </span>
