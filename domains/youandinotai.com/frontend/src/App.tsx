@@ -156,6 +156,12 @@ export function PublicSupportPage() {
 
   return (
     <div className="min-h-screen bg-[#0A0B0D] text-[#F4F1EA] font-sans">
+      <a
+        href="#main-support-content"
+        className="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-[100] focus:inline-flex focus:min-h-[44px] focus:min-w-[44px] focus:items-center focus:rounded-[10px] focus:border-2 focus:border-[#FFD21E] focus:bg-[#0A0B0D] focus:px-4 focus:py-2 focus:font-mono focus:text-[14px] focus:font-bold focus:uppercase focus:tracking-[0.06em] focus:text-[#FFD21E] focus:no-underline"
+      >
+        Skip to main content
+      </a>
       <header className="sticky top-0 z-50 border-b border-[#3A3F45] bg-[#0A0B0D]">
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6">
           <div className="flex items-center gap-3">
@@ -195,7 +201,11 @@ export function PublicSupportPage() {
         <HeaderTelemetryLine activeSectionIndex={5} atFooter={false} />
       </header>
 
-      <main className="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 lg:py-16">
+      <main
+        id="main-support-content"
+        tabIndex={-1}
+        className="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 lg:py-16"
+      >
         <div className="ds-panel p-6 sm:p-10">
           <div className="flex flex-wrap items-center gap-3">
             <span className="rounded-full border border-[#FFD21E] bg-[#1A1E25] px-3 py-1 font-display text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
@@ -425,6 +435,13 @@ export function LandingPage() {
 
   return (
     <div className="relative min-h-screen bg-[#0A0B0D] text-[#F4F1EA] font-sans">
+      <a
+        href="#main-content"
+        className="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-[100] focus:inline-flex focus:min-h-[44px] focus:min-w-[44px] focus:items-center focus:rounded-[10px] focus:border-2 focus:border-[#FFD21E] focus:bg-[#0A0B0D] focus:px-4 focus:py-2 focus:font-mono focus:text-[14px] focus:font-bold focus:uppercase focus:tracking-[0.06em] focus:text-[#FFD21E] focus:no-underline"
+      >
+        Skip to main content
+      </a>
+
       {/* Live In-House Three.js Stage Behind Pinned Journey */}
       <DreamSpaceStage />
 
@@ -579,7 +596,7 @@ export function LandingPage() {
         )}
       </header>
 
-      <main className="relative z-10">
+      <main id="main-content" tabIndex={-1} className="relative z-10">
         {/* STOP 01 (#about) — The Hero Owns the Whole First Screen */}
         <section
           id="about"
