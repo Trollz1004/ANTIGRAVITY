@@ -23,9 +23,9 @@ const stats = [
     color: 'text-emerald-500',
   },
   {
-    label: 'Waitlist',
+    label: 'Member Events',
     value: 'Live',
-    growth: 'Email capture ready',
+    growth: 'Email invites open',
     color: 'text-stone-500',
   },
   {
@@ -63,9 +63,9 @@ const systems = [
   },
   {
     icon: Rocket,
-    title: 'Launch Readiness',
+    title: 'Live Product',
     detail:
-      'Countdown, OG sharing tags, waitlist capture, and the mobile landing flow are all part of the pre-launch checklist.',
+      'Sign-up, verification, discovery, matches, messaging, and membership are live at youandinotai.com.',
   },
 ];
 
@@ -179,7 +179,7 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
-                  <span>Waitlist + countdown are live on the landing page</span>
+                  <span>Member event invites are open from the footer</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />

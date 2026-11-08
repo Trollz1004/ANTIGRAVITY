@@ -533,7 +533,7 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
         'reduced-motion'
       );
 
-      const joinBtn = getByLabelText('07 Early Access');
+      const joinBtn = getByLabelText('07 Start Tonight');
       fireEvent.click(joinBtn);
       expect(Element.prototype.scrollIntoView).toHaveBeenCalled();
     } finally {

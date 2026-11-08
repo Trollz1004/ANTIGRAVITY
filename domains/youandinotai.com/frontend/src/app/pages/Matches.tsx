@@ -70,8 +70,8 @@ export function Matches() {
             no matches yet.
           </h1>
           <p className="text-white/60 mb-8 leading-relaxed">
-            Like or comment on a prompt in Discover. Mutual interest opens chat,
-            then Plans helps move the conversation safely offline.
+            Like or comment on an opener in Discover. Mutual interest opens
+            chat, then Plans helps move the conversation safely offline.
           </p>
           <div className="grid gap-4 sm:grid-cols-3 text-left">
             {[

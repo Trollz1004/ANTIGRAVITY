@@ -90,11 +90,11 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          {/* Coming Soon Section */}
+          {/* Community Contest Section */}
           <div className="space-y-6 text-center">
             <h3 className="text-xl font-bold flex items-center justify-center gap-2">
               <Vote className="text-amber-500" />
-              The Contest is Coming Soon!
+              Community Contest
             </h3>
             <div className="p-8 bg-white/5 rounded-3xl border border-white/10">
               <p className="text-gray-300">

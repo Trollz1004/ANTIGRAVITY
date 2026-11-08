@@ -95,7 +95,7 @@ function HolographicCard() {
     { icon: InfinityIcon, text: 'Lifetime VIP access — never pay again' },
     { icon: Shield, text: 'Priority matching & dedicated support' },
     { icon: Star, text: 'Exclusive Royalty badge on your profile' },
-    { icon: Zap, text: 'Early access to every new feature' },
+    { icon: Zap, text: 'First access to every new feature' },
     { icon: Sparkles, text: 'Concierge onboarding for launch-era features' },
   ];
 

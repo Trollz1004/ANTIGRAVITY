@@ -12,6 +12,7 @@ import {
 import { useAuth } from '../../lib/auth';
 import { api } from '../../lib/api';
 import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
+import { STORED_PROFILE_ANSWER_KEY } from '../../lib/profileBio';
 
 interface SavedProfileResponse {
   user_id: string;
@@ -42,8 +43,8 @@ function parseStructuredBio(rawBio: string | null): {
 
   for (const block of rawBio.split(/\n\n+/)) {
     const trimmed = block.trim();
-    if (trimmed.startsWith('Prompt: ')) {
-      promptAnswer = trimmed.slice('Prompt: '.length).trim();
+    if (trimmed.startsWith(STORED_PROFILE_ANSWER_KEY)) {
+      promptAnswer = trimmed.slice(STORED_PROFILE_ANSWER_KEY.length).trim();
     } else if (trimmed.startsWith('Date comfort: ')) {
       dateComfort = trimmed.slice('Date comfort: '.length).trim();
     } else if (trimmed.startsWith('Safety preference: ')) {
@@ -169,7 +170,7 @@ export function ProfileSetup() {
     try {
       const profileBio = [
         bio,
-        promptAnswer ? `Prompt: ${promptAnswer}` : '',
+        promptAnswer ? `${STORED_PROFILE_ANSWER_KEY}${promptAnswer}` : '',
         dateComfort ? `Date comfort: ${dateComfort}` : '',
         safetyPreference ? `Safety preference: ${safetyPreference}` : '',
       ]
@@ -243,7 +244,7 @@ export function ProfileSetup() {
                   },
                   {
                     icon: Sparkles,
-                    title: 'Prompt first',
+                    title: 'Profile answer first',
                     desc: 'Make it easy for someone to comment on something specific.',
                   },
                   {
@@ -285,7 +286,7 @@ export function ProfileSetup() {
 
               <div>
                 <label className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#C9CBCE] mb-3 block">
-                  Profile Prompt
+                  Profile Answer
                 </label>
                 <textarea
                   value={promptAnswer}

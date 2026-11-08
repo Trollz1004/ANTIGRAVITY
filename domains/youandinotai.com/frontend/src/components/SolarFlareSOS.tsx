@@ -359,7 +359,7 @@ export default function SolarFlareSOS({ onClose }: { onClose: () => void }) {
 
                   <div className="space-y-4">
                     <label className="block text-xs font-bold uppercase tracking-widest text-gray-500">
-                      Distress Prompt
+                      Distress Message
                     </label>
                     <textarea
                       value={prompt}
