@@ -77,7 +77,32 @@
           <span class="tribute-pill">#TeamClaudeForLife</span>
         </div>
 
-        <nav class="top-nav" aria-label="Primary navigation">
+        <button
+          type="button"
+          class="mobile-menu-btn"
+          id="mobile-menu-btn"
+          aria-expanded="false"
+          aria-controls="primary-top-nav"
+          aria-label="Toggle navigation menu"
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <nav class="top-nav" id="primary-top-nav" aria-label="Primary navigation">
           <a href="#overview">Overview</a>
           <a href="#book" data-select-service="dropoff">Book Drop-Off</a>
           <a href="#book" data-select-service="pickup">Request Pickup</a>
@@ -787,8 +812,29 @@
         const countEl = document.getElementById('journey-readout-count');
         const labelEl = document.getElementById('journey-readout-label');
         const headerEl = document.querySelector('.site-header');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const wrapEl = document.querySelector('.wrap');
         const overviewEl = document.getElementById('overview');
+
+        if (mobileMenuBtn && headerEl) {
+          mobileMenuBtn.addEventListener('click', function () {
+            const isOpen = headerEl.classList.toggle('menu-open');
+            mobileMenuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          });
+          headerEl.querySelectorAll('.top-nav a').forEach(function (link) {
+            link.addEventListener('click', function () {
+              headerEl.classList.remove('menu-open');
+              mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            });
+          });
+          document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape' && headerEl.classList.contains('menu-open')) {
+              headerEl.classList.remove('menu-open');
+              mobileMenuBtn.setAttribute('aria-expanded', 'false');
+              mobileMenuBtn.focus();
+            }
+          });
+        }
 
         const stageCanvas = document.getElementById('onlinerecycle-stage-canvas');
         const markCanvas = document.getElementById('onlinerecycle-header-mark');
@@ -845,6 +891,10 @@
         segBtns.forEach(function (btn) {
           btn.addEventListener('click', function () {
             const id = btn.getAttribute('data-stop-id');
+            if (id === 'overview') {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              return;
+            }
             const target = id ? document.getElementById(id) : null;
             if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           });
@@ -916,12 +966,12 @@
             lineCanvas.width = Math.max(vw, 320);
             lineCanvas.height = 4;
           }
-          hdrHeightCss = headerEl ? headerEl.offsetHeight : (vw <= 760 ? 220 : 119);
+          hdrHeightCss = headerEl ? headerEl.offsetHeight : 64;
           const wrapPadTop = wrapEl ? parseFloat(window.getComputedStyle(wrapEl).paddingTop || '28') || 28 : 28;
           coldCardTopCss =
             vw <= 760
-              ? Math.round(Math.max(vh * 0.56, hdrHeightCss + 230))
-              : Math.round(vh * 0.64);
+              ? Math.round(Math.max(vh * 0.52, hdrHeightCss + 240))
+              : Math.round(vh * 0.6);
           if (overviewEl) {
             const padTop = Math.max(coldCardTopCss - hdrHeightCss - wrapPadTop, 160);
             overviewEl.style.setProperty('--stop01-pad-top', padTop + 'px');

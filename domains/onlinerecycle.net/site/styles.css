@@ -20,6 +20,8 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 76px;
+  scroll-padding-bottom: 76px;
   background-color: var(--bg);
   color: var(--text);
 }
@@ -31,13 +33,13 @@ body {
   font-family: 'IBM Plex Sans', Inter, 'Segoe UI', Arial, sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  padding-bottom: 72px;
+  padding-bottom: 84px;
 }
 
 /* Fixed Full-Viewport 3D Stage Canvas */
 #onlinerecycle-stage-canvas {
   position: fixed;
-   inset: 0;
+  inset: 0;
   width: 100vw;
   height: 100vh;
   z-index: var(--z-stage);
@@ -56,21 +58,23 @@ body {
 }
 
 .header-inner {
-  max-width: 1440px;
+  max-width: 1880px;
   margin: 0 auto;
-  padding: 12px 24px;
+  padding: 6px 20px;
+  min-height: 56px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
+  flex-wrap: nowrap;
+  gap: 12px;
 }
 
 .brand-group {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 10px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .header-mark {
@@ -85,12 +89,13 @@ body {
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-wrap: nowrap;
+  gap: 6px;
+  white-space: nowrap;
 }
 
 .brand-title-prefix {
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--text);
   letter-spacing: 0.01em;
@@ -102,7 +107,7 @@ body {
 }
 
 .brand-name {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text);
@@ -115,24 +120,51 @@ body {
   border: 1px solid var(--accent);
   background: var(--panel);
   padding: 2px 10px;
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: var(--accent);
   letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.mobile-menu-btn {
+  display: none;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 150ms ease, color 150ms ease;
+}
+
+.mobile-menu-btn:hover,
+.mobile-menu-btn:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: none;
 }
 
 .top-nav {
   display: flex;
   align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
+  gap: 6px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .top-nav a {
   color: var(--text);
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   transition: color 150ms ease;
 }
 
@@ -143,8 +175,10 @@ body {
 .header-right {
   display: flex;
   align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
+  gap: 10px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .status-pill {
@@ -156,11 +190,12 @@ body {
   background: var(--panel);
   padding: 5px 12px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: var(--text);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 .status-dot {
@@ -176,6 +211,7 @@ body {
   font-weight: 600;
   color: var(--text);
   text-align: right;
+  line-height: 1.2;
 }
 
 .contact-info a {
@@ -190,7 +226,7 @@ body {
 
 .contact-subline {
   display: block;
-  font-size: 0.76rem;
+  font-size: 0.88rem;
   font-weight: 500;
   color: var(--muted);
 }
@@ -208,22 +244,23 @@ body {
   z-index: var(--z-content);
   max-width: 1240px;
   margin: 0 auto;
-  padding: 28px 24px 64px;
+  padding: 28px 24px 88px;
 }
 
 .stage-stop {
-  min-height: 88vh;
+  min-height: auto;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: 36px 0;
+  justify-content: flex-start;
+  padding: 84px 0 40px;
+  scroll-margin-top: 76px;
 }
 
 #overview.stage-stop {
   min-height: auto;
   justify-content: flex-start;
-  padding-top: var(--stop01-pad-top, calc(64vh - 147px));
-  padding-bottom: 36px;
+  padding-top: var(--stop01-pad-top, calc(60vh - 100px));
+  padding-bottom: 40px;
 }
 
 #overview .stage-panel {
@@ -242,7 +279,7 @@ body {
 
 .stage-stop-compact {
   min-height: auto;
-  padding: 32px 0;
+  padding: 56px 0 40px;
 }
 
 .stage-panel {
@@ -904,32 +941,149 @@ p {
   border-color: var(--line);
 }
 
+@media (max-width: 1580px) {
+  .header-right .status-pill,
+  .contact-subline {
+    display: none;
+  }
+}
+
+@media (max-width: 1120px) {
+  .site-header {
+    max-height: 68px;
+  }
+
+  .header-inner {
+    position: relative;
+    padding: 8px 12px;
+    height: 60px;
+    max-height: 60px;
+    min-height: 60px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .brand-group {
+    gap: 6px;
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-wrap: nowrap;
+  }
+
+  .header-mark {
+    width: 26px;
+    height: 26px;
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    min-width: 0;
+    line-height: 1.1;
+  }
+
+  .brand-dot {
+    display: none;
+  }
+
+  .brand-title-prefix {
+    font-size: 0.75rem;
+    line-height: 1.1;
+  }
+
+  .brand-name {
+    font-size: 0.98rem;
+    line-height: 1.15;
+  }
+
+  .tribute-pill {
+    font-size: 0.72rem;
+    padding: 2px 6px;
+    flex-shrink: 0;
+  }
+
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+
+  .site-header:not(.menu-open) .top-nav,
+  .site-header:not(.menu-open) .header-right {
+    display: none;
+  }
+
+  .site-header.menu-open .top-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 16px 116px;
+    gap: 4px;
+    z-index: var(--z-nav);
+  }
+
+  .site-header.menu-open .top-nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 12px;
+    border-radius: 6px;
+  }
+
+  .site-header.menu-open .header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: fixed;
+    top: calc(64px + 332px);
+    left: 0;
+    right: 0;
+    background: var(--panel-elevated);
+    border-bottom: 1px solid var(--accent);
+    padding: 12px 16px;
+    gap: 8px;
+    z-index: var(--z-nav);
+  }
+
+  .site-header.menu-open .header-right .status-pill,
+  .site-header.menu-open .contact-subline {
+    display: inline-flex;
+  }
+}
+
 @media (max-width: 760px) {
   .wrap {
-    padding: 16px 14px 56px;
+    padding: 16px 14px 96px;
+  }
+
+  .stage-stop,
+  .stage-stop-compact {
+    min-height: auto;
+    justify-content: flex-start;
+    padding: 28px 0 36px;
+    scroll-margin-top: 72px;
   }
 
   #overview.stage-stop {
     padding-top: var(--stop01-pad-top, 230px);
+    padding-bottom: 36px;
   }
 
   #overview .stage-panel {
-    padding: 16px 16px;
+    padding: 18px 16px;
   }
 
   #overview .stop-kicker-row {
     gap: 4px;
-    margin-bottom: 8px;
-  }
-
-  #overview .stop-kicker,
-  #overview .stop-telemetry {
-    font-size: 0.75rem;
-  }
-
-  #overview .trust-badge {
-    padding: 5px 10px;
-    font-size: 0.75rem;
     margin-bottom: 8px;
   }
 
@@ -950,63 +1104,6 @@ p {
 
   .btn {
     width: 100%;
-  }
-
-  .header-inner {
-    padding: 8px 14px;
-    gap: 6px;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .brand-group {
-    gap: 8px;
-  }
-
-  .header-mark {
-    width: 24px;
-    height: 24px;
-  }
-
-  .brand-title-prefix {
-    font-size: 0.82rem;
-  }
-
-  .brand-name {
-    font-size: 1.05rem;
-  }
-
-  .tribute-pill {
-    font-size: 0.75rem;
-    padding: 1px 8px;
-  }
-
-  .top-nav {
-    gap: 6px 12px;
-  }
-
-  .top-nav a {
-    font-size: 0.84rem;
-  }
-
-  .header-right {
-    gap: 8px;
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .status-pill {
-    padding: 3px 8px;
-    font-size: 0.72rem;
-  }
-
-  .contact-info {
-    font-size: 0.8rem;
-    text-align: left;
-  }
-
-  .contact-subline {
-    font-size: 0.7rem;
   }
 
   .journey-segment-label {
