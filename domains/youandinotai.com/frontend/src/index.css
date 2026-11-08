@@ -148,6 +148,10 @@ body {
   overflow-x: hidden;
 }
 
+section[id] {
+  scroll-margin-top: 4.25rem;
+}
+
 h1,
 h2,
 h3,

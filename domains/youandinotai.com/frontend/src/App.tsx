@@ -116,6 +116,41 @@ function getCheckedTimeLabel(): string {
   return `checked ${hh}:${mm}`;
 }
 
+const TALL_MOBILE_STAGE_STOPS = new Set([
+  'platform',
+  'verification',
+  'trust',
+  'pricing',
+  'support',
+]);
+
+function readUnpinnedStops(): Record<string, boolean> {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return {};
+  }
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const headerEl = document.querySelector('header');
+  const mapEl = document.getElementById('youandinotai-progress-map');
+  const headerH = headerEl?.getBoundingClientRect().height || 68;
+  const mapH = mapEl?.getBoundingClientRect().height || 56;
+  const openStageHeight = Math.max(vh - headerH - mapH, 0);
+
+  const next: Record<string, boolean> = {};
+  for (const stop of SECTION_STOPS) {
+    if (stop.id === 'footer') continue;
+    const cardEl = document.querySelector(
+      `#${stop.id} [data-stage-card]`
+    ) as HTMLElement | null;
+    const cardH =
+      cardEl?.scrollHeight || cardEl?.getBoundingClientRect().height || 0;
+    const isShortForCard = cardH > 0 && cardH + 48 > openStageHeight;
+    next[stop.id] =
+      isShortForCard || (vw < 1024 && TALL_MOBILE_STAGE_STOPS.has(stop.id));
+  }
+  return next;
+}
+
 export function PublicSupportPage() {
   const checkedLabel = getCheckedTimeLabel();
 
@@ -259,6 +294,9 @@ export function LandingPage() {
   const [journeyState, setJourneyState] = useState(() =>
     readSectionJourneyState()
   );
+  const [unpinnedStops, setUnpinnedStops] = useState<Record<string, boolean>>(
+    () => readUnpinnedStops()
+  );
 
   const checkedLabel = getCheckedTimeLabel();
 
@@ -266,14 +304,26 @@ export function LandingPage() {
     const syncJourney = () => {
       setJourneyState(readSectionJourneyState());
     };
-    syncJourney();
+    const syncStageFlow = () => {
+      setUnpinnedStops(readUnpinnedStops());
+      setJourneyState(readSectionJourneyState());
+    };
+    syncStageFlow();
     window.addEventListener('scroll', syncJourney, { passive: true });
-    window.addEventListener('resize', syncJourney);
+    window.addEventListener('resize', syncStageFlow);
     return () => {
       window.removeEventListener('scroll', syncJourney);
-      window.removeEventListener('resize', syncJourney);
+      window.removeEventListener('resize', syncStageFlow);
     };
   }, []);
+
+  const getStageSectionClass = (id: string) =>
+    unpinnedStops[id] ? 'relative' : 'relative lg:min-h-[135vh]';
+
+  const getStageWrapperClass = (id: string) =>
+    unpinnedStops[id]
+      ? 'relative flex flex-col justify-start px-4 pb-20 pt-6 sm:px-6'
+      : 'relative flex flex-col justify-start px-4 pb-20 pt-6 sm:px-6 lg:sticky lg:top-16 lg:min-h-[calc(100vh-7.5rem)] lg:justify-end lg:pb-6';
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -528,8 +578,19 @@ export function LandingPage() {
 
       <main className="relative z-10">
         {/* STOP 01 (#about) — The Hero Owns the Whole First Screen */}
-        <section id="about" className="relative min-h-[165vh]">
-          <div className="sticky top-16 flex h-[calc(100vh-7.5rem)] flex-col justify-between px-4 pb-4 pt-4 sm:px-6 sm:pb-6 sm:pt-6">
+        <section
+          id="about"
+          className={unpinnedStops.about ? 'relative' : 'relative min-h-[165vh]'}
+        >
+          <div
+            data-stage-wrapper="about"
+            data-stage-flow={unpinnedStops.about ? 'top-aligned' : 'pinned'}
+            className={
+              unpinnedStops.about
+                ? 'relative flex flex-col justify-start px-4 pb-20 pt-4 sm:px-6 sm:pt-6'
+                : 'sticky top-16 flex h-[calc(100vh-7.5rem)] flex-col justify-between px-4 pb-4 pt-4 sm:px-6 sm:pb-6 sm:pt-6'
+            }
+          >
             {/* Upper Orbital Stage Frame — Open view for DreamSpaceStage orbit at top */}
             <div className="mx-auto flex w-full max-w-[1440px] flex-1 items-center justify-between pointer-events-none">
               <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-l-[3px] border-l-[#FFD21E] bg-[#0A0B0D] px-5 py-4">
@@ -558,7 +619,10 @@ export function LandingPage() {
             </div>
 
             {/* Still Foreground Command Deck Below the Main Orbit */}
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] px-4 py-3.5 sm:px-8 sm:py-6">
+            <div
+              data-stage-card="about"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] px-4 py-3.5 sm:px-8 sm:py-6"
+            >
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <span className="inline-flex items-center gap-2 rounded-full border border-[#FFD21E] bg-[#12151A] px-3.5 py-1 font-display text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E] sm:text-[14px]">
                   CLAUDE&apos;S N JOSHUA&apos;S · #TEAMCLAUDEFORLIFE · 18+
@@ -613,9 +677,16 @@ export function LandingPage() {
         </section>
 
         {/* STOP 02 (#platform) — Pinned Section: Intentional Discovery, Video & Real-Life Meetups */}
-        <section id="platform" className="relative min-h-[135vh]">
-          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+        <section id="platform" className={getStageSectionClass('platform')}>
+          <div
+            data-stage-wrapper="platform"
+            data-stage-flow={unpinnedStops.platform ? 'top-aligned' : 'pinned'}
+            className={getStageWrapperClass('platform')}
+          >
+            <div
+              data-stage-card="platform"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   02 / PLATFORM CAPABILITIES
@@ -679,9 +750,21 @@ export function LandingPage() {
         </section>
 
         {/* STOP 03 (#verification) — Pinned Section: $1 Bot-Shield Verification */}
-        <section id="verification" className="relative min-h-[135vh]">
-          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+        <section
+          id="verification"
+          className={getStageSectionClass('verification')}
+        >
+          <div
+            data-stage-wrapper="verification"
+            data-stage-flow={
+              unpinnedStops.verification ? 'top-aligned' : 'pinned'
+            }
+            className={getStageWrapperClass('verification')}
+          >
+            <div
+              data-stage-card="verification"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   03 / VERIFICATION PROTOCOL
@@ -749,9 +832,16 @@ export function LandingPage() {
         </section>
 
         {/* STOP 04 (#trust) — Pinned Section: Trust, Safety & Data Ownership */}
-        <section id="trust" className="relative min-h-[135vh]">
-          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+        <section id="trust" className={getStageSectionClass('trust')}>
+          <div
+            data-stage-wrapper="trust"
+            data-stage-flow={unpinnedStops.trust ? 'top-aligned' : 'pinned'}
+            className={getStageWrapperClass('trust')}
+          >
+            <div
+              data-stage-card="trust"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   04 / TRUST, SAFETY &amp; PRIVACY
@@ -873,9 +963,16 @@ export function LandingPage() {
           </div>
         </section>
         {/* STOP 05 (#pricing) — Pinned Section: Membership & Founder Tiers */}
-        <section id="pricing" className="relative min-h-[135vh]">
-          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+        <section id="pricing" className={getStageSectionClass('pricing')}>
+          <div
+            data-stage-wrapper="pricing"
+            data-stage-flow={unpinnedStops.pricing ? 'top-aligned' : 'pinned'}
+            className={getStageWrapperClass('pricing')}
+          >
+            <div
+              data-stage-card="pricing"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   05 / MEMBERSHIP &amp; FOUNDER TIERS
@@ -939,9 +1036,16 @@ export function LandingPage() {
         </section>
 
         {/* STOP 06 (#support) — Pinned Section: Member Support */}
-        <section id="support" className="relative min-h-[135vh]">
-          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+        <section id="support" className={getStageSectionClass('support')}>
+          <div
+            data-stage-wrapper="support"
+            data-stage-flow={unpinnedStops.support ? 'top-aligned' : 'pinned'}
+            className={getStageWrapperClass('support')}
+          >
+            <div
+              data-stage-card="support"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   06 / MEMBER SUPPORT
@@ -1024,9 +1128,23 @@ export function LandingPage() {
         </section>
 
         {/* STOP 07 (#join) — Pinned Section: Start Tonight (live product, three actions, no email capture) */}
-        <section id="join" className="relative min-h-[135vh]">
-          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+        <section
+          id="join"
+          className={unpinnedStops.join ? 'relative' : 'relative min-h-[135vh]'}
+        >
+          <div
+            data-stage-wrapper="join"
+            data-stage-flow={unpinnedStops.join ? 'top-aligned' : 'pinned'}
+            className={
+              unpinnedStops.join
+                ? 'relative flex flex-col justify-start px-4 pb-20 pt-6 sm:px-6'
+                : 'sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-16 pt-6 sm:px-6 lg:pb-6'
+            }
+          >
+            <div
+              data-stage-card="join"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   07 / START TONIGHT
