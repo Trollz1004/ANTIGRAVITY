@@ -168,6 +168,16 @@ h4,
   color: var(--ds-porcelain);
 }
 
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
 .font-sans {
   font-family:
     'IBM Plex Sans',

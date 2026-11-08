@@ -655,12 +655,12 @@ export function LandingPage() {
 
               <div className="mt-4 grid items-end gap-6 lg:grid-cols-12">
                 <div className="lg:col-span-7">
-                  <h1 className="font-display text-[28px] font-bold uppercase leading-[1.03] tracking-[-0.02em] text-[#F4F1EA] sm:text-[52px] lg:text-[64px]">
+                  <h1 className="font-display text-[28px] font-bold uppercase leading-[1.03] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[52px] lg:text-[64px]">
                     VERIFIED PEOPLE.
                     <br />
                     REAL CONNECTION.
                   </h1>
-                  <p className="mt-2 max-w-[60ch] text-[14px] leading-[1.45] text-[#F4F1EA] sm:text-[18px]">
+                  <p className="mt-2 max-w-[60ch] text-[14px] leading-[1.45] text-[#F4F1EA] text-pretty sm:text-[18px]">
                     Meet verified adults who are ready to talk, plan, and show
                     up in real life. Every member completes our $1 Bot-Shield
                     identity check bound directly to a real account.
@@ -716,7 +716,7 @@ export function LandingPage() {
                 </span>
               </div>
 
-              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
                 BUILT FOR THE FIRST CONVERSATION AND THE FIRST MEETUP.
               </h2>
 
@@ -794,7 +794,7 @@ export function LandingPage() {
                 </span>
               </div>
 
-              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
                 EVERY INTRODUCTION STARTS WITH A VERIFIED HUMAN.
               </h2>
 
@@ -871,7 +871,7 @@ export function LandingPage() {
                 </span>
               </div>
 
-              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
                 ADULTS-ONLY STANDARDS AND FULL DATA OWNERSHIP.
               </h2>
 
@@ -1002,7 +1002,7 @@ export function LandingPage() {
                 </span>
               </div>
 
-              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[40px] lg:text-[46px]">
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[40px] lg:text-[46px]">
                 ACCOUNT-BOUND FOUNDER TIERS AND VERIFIED ACCESS.
               </h2>
 
@@ -1075,7 +1075,7 @@ export function LandingPage() {
                 </span>
               </div>
 
-              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
                 DIRECT MEMBER TRIAGE AND TRACEABLE ASSISTANCE.
               </h2>
 
@@ -1174,7 +1174,7 @@ export function LandingPage() {
                 </span>
               </div>
 
-              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
                 Verified people are already here.
               </h2>
 
