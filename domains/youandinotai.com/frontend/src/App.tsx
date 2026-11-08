@@ -162,7 +162,7 @@ export function PublicSupportPage() {
             <HeaderOrbitMark sectionFloat={0} atFooter={false} />
             <Link
               to="/"
-              className="flex flex-wrap items-center gap-2 no-underline"
+              className="inline-flex min-h-[44px] min-w-[44px] flex-wrap items-center gap-2 no-underline"
             >
               <span className="text-[14px] font-semibold text-[#F4F1EA]">
                 CLAUDE&apos;s N Joshua&apos;s
@@ -272,7 +272,10 @@ export function PublicSupportPage() {
               Request a full archive of your stored profile data, update
               location sharing, or start the 30-day account deletion clock
               inside{' '}
-              <Link to="/app/privacy" className="text-[#FFD21E] underline">
+              <Link
+                to="/app/privacy"
+                className="inline-flex min-h-[44px] min-w-[44px] items-center text-[#FFD21E] underline"
+              >
                 /app/privacy
               </Link>
               .
@@ -427,15 +430,15 @@ export function LandingPage() {
 
       {/* 0A. Floating Top Header with Restrained Three.js Motion */}
       <header className="sticky top-0 z-50 border-b border-[#3A3F45] bg-[#0A0B0D]">
-        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-3 px-4 sm:px-6">
-          <div className="flex items-center gap-2.5 shrink-0">
+        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-2.5">
             <HeaderOrbitMark
               sectionFloat={journeyState.sectionFloat}
               atFooter={journeyState.atFooter}
             />
             <a
               href="#about"
-              className="flex items-center gap-2 no-underline shrink-0 whitespace-nowrap"
+              className="inline-flex min-h-[44px] min-w-[44px] items-center gap-1.5 no-underline whitespace-nowrap sm:gap-2"
             >
               <span className="text-[14px] font-semibold text-[#F4F1EA]">
                 CLAUDE&apos;s N Joshua&apos;s
@@ -443,7 +446,7 @@ export function LandingPage() {
               <span className="text-[#FFD21E]" aria-hidden="true">
                 ·
               </span>
-              <span className="font-display text-[20px] font-bold tracking-[-0.02em] text-[#F4F1EA]">
+              <span className="font-display text-[18px] font-bold tracking-[-0.02em] text-[#F4F1EA] sm:text-[20px]">
                 YouAndINotAI
               </span>
               <span className="hidden rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E] xl:inline-flex">
@@ -454,11 +457,11 @@ export function LandingPage() {
 
           <nav
             aria-label="Primary section navigation"
-            className="hidden lg:flex items-center gap-3.5 whitespace-nowrap"
+            className="hidden lg:flex items-center gap-2 whitespace-nowrap"
           >
             {navLinks.map(link => {
               const isCurrent = journeyState.activeSectionId === link.id;
-              const className = `whitespace-nowrap border-b-2 py-1 text-[15px] font-medium no-underline transition-colors ${
+              const className = `inline-flex min-h-[44px] min-w-[44px] items-center justify-center whitespace-nowrap border-b-2 px-2 py-2 text-[15px] font-medium no-underline transition-colors ${
                 isCurrent
                   ? 'border-[#FFD21E] text-[#FFD21E]'
                   : 'border-transparent text-[#F4F1EA] hover:border-[#FFD21E] hover:text-[#FFD21E]'
@@ -510,7 +513,7 @@ export function LandingPage() {
             }
             aria-expanded={mobileMenuOpen}
             onClick={() => setMobileMenuOpen(prev => !prev)}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#12151A] text-[#F4F1EA] lg:hidden"
+            className="inline-flex h-11 w-11 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#12151A] text-[#F4F1EA] lg:hidden"
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -540,7 +543,7 @@ export function LandingPage() {
                     key={link.href}
                     to={link.to}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
+                    className="flex min-h-[44px] min-w-[44px] items-center rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
                   >
                     {link.label}
                   </Link>
@@ -549,7 +552,7 @@ export function LandingPage() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
+                    className="flex min-h-[44px] min-w-[44px] items-center rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
                   >
                     {link.label}
                   </a>
@@ -656,16 +659,16 @@ export function LandingPage() {
                       Create Free Account
                     </Link>
                   </div>
-                  <div className="flex flex-wrap items-center gap-4 pt-1">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-0.5">
                     <a
                       href="#pricing"
-                      className="font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#FFD21E] underline underline-offset-4"
+                      className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#FFD21E] underline underline-offset-4"
                     >
                       Explore Founder Tiers
                     </a>
                     <Link
                       to="/login"
-                      className="font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] underline decoration-[#FFD21E] underline-offset-4"
+                      className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] underline decoration-[#FFD21E] underline-offset-4"
                     >
                       Member Sign In &rarr;
                     </Link>
@@ -1094,7 +1097,7 @@ export function LandingPage() {
                     or email{' '}
                     <a
                       href="mailto:contact@youandinotai.com"
-                      className="text-[#FFD21E] underline"
+                      className="inline-flex min-h-[44px] min-w-[44px] items-center text-[#FFD21E] underline"
                     >
                       contact@youandinotai.com
                     </a>{' '}
@@ -1219,11 +1222,11 @@ export function LandingPage() {
               <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
                 Explore
               </h3>
-              <ul className="mt-4 space-y-2.5 list-none p-0">
+              <ul className="mt-4 space-y-1 list-none p-0">
                 <li>
                   <a
                     href="#about"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Overview
                   </a>
@@ -1231,7 +1234,7 @@ export function LandingPage() {
                 <li>
                   <a
                     href="#platform"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Platform
                   </a>
@@ -1239,7 +1242,7 @@ export function LandingPage() {
                 <li>
                   <a
                     href="#verification"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     $1 Bot-Shield
                   </a>
@@ -1247,7 +1250,7 @@ export function LandingPage() {
                 <li>
                   <a
                     href="#pricing"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Founder Tiers
                   </a>
@@ -1255,7 +1258,7 @@ export function LandingPage() {
                 <li>
                   <a
                     href="#join"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Start Tonight
                   </a>
@@ -1267,11 +1270,11 @@ export function LandingPage() {
               <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
                 Account &amp; Safety
               </h3>
-              <ul className="mt-4 space-y-2.5 list-none p-0">
+              <ul className="mt-4 space-y-1 list-none p-0">
                 <li>
                   <Link
                     to="/login"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Member Sign In
                   </Link>
@@ -1279,7 +1282,7 @@ export function LandingPage() {
                 <li>
                   <Link
                     to="/register"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Create 18+ Account
                   </Link>
@@ -1287,7 +1290,7 @@ export function LandingPage() {
                 <li>
                   <Link
                     to="/app/verify"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Verification Center
                   </Link>
@@ -1295,7 +1298,7 @@ export function LandingPage() {
                 <li>
                   <Link
                     to="/support"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Support &amp; Safety Guide
                   </Link>
@@ -1303,7 +1306,7 @@ export function LandingPage() {
                 <li>
                   <Link
                     to="/app/privacy"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Privacy Center
                   </Link>
@@ -1311,7 +1314,7 @@ export function LandingPage() {
                 <li>
                   <a
                     href="mailto:contact@youandinotai.com"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     contact@youandinotai.com
                   </a>
@@ -1323,12 +1326,12 @@ export function LandingPage() {
               <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
                 Legal &amp; Policies
               </h3>
-              <ul className="mt-4 space-y-2.5 list-none p-0">
+              <ul className="mt-4 space-y-1 list-none p-0">
                 <li>
                   <button
                     type="button"
                     onClick={() => setActiveLegalDoc('terms')}
-                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center border-0 bg-transparent px-0 py-2 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
                   >
                     Terms of Service
                   </button>
@@ -1337,7 +1340,7 @@ export function LandingPage() {
                   <button
                     type="button"
                     onClick={() => setActiveLegalDoc('privacy')}
-                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center border-0 bg-transparent px-0 py-2 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
                   >
                     Privacy Policy
                   </button>
@@ -1346,7 +1349,7 @@ export function LandingPage() {
                   <button
                     type="button"
                     onClick={() => setActiveLegalDoc('age')}
-                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center border-0 bg-transparent px-0 py-2 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
                   >
                     Age Policy
                   </button>
@@ -1355,7 +1358,7 @@ export function LandingPage() {
                   <button
                     type="button"
                     onClick={() => setActiveLegalDoc('refund')}
-                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center border-0 bg-transparent px-0 py-2 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
                   >
                     Refund Policy
                   </button>
@@ -1453,7 +1456,7 @@ export function LandingPage() {
                 type="button"
                 aria-label="Close legal policy modal"
                 onClick={() => setActiveLegalDoc(null)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#1A1E25] text-[#F4F1EA] hover:border-[#FFD21E]"
+                className="inline-flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#1A1E25] text-[#F4F1EA] hover:border-[#FFD21E]"
               >
                 <X size={18} />
               </button>
@@ -1472,7 +1475,7 @@ export function LandingPage() {
                   key={key}
                   type="button"
                   onClick={() => setActiveLegalDoc(key)}
-                  className={`rounded-full border px-3 py-1 text-[14px] font-medium cursor-pointer ${
+                  className={`inline-flex min-h-[44px] min-w-[44px] items-center rounded-full border px-3.5 py-2 text-[14px] font-medium cursor-pointer ${
                     activeLegalDoc === key
                       ? 'border-[#FFD21E] bg-[#1A1E25] text-[#FFD21E]'
                       : 'border-[#3A3F45] bg-[#0A0B0D] text-[#F4F1EA]'
