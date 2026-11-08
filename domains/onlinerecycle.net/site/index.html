@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="google-site-verification" content="-JW5wrOzp_QU5uXMxpuqB9P6RUfEA_wloBb6LYpJccw" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Florida Electronics Recycling | Free Drop-Off & Pickup | OnlineRecycle.net</title>
+    <title>CLAUDE's N Joshua's — OnlineRecycle.net | Florida Electronics Recycling & Free Pickup</title>
     <meta
       name="description"
       content="Central Florida electronics recycling with free drop-off and pickup, secure device handling, and direct Google Calendar scheduling for homes and small businesses."
@@ -13,11 +13,15 @@
       name="keywords"
       content="Florida electronics recycling, e-waste drop off Florida, free electronics pickup Florida, electronics recycling Sorrento FL, Lake County e-waste, secure device disposal, responsible recycling"
     />
+    <meta name="theme-color" content="#0A0B0D" />
     <meta name="geo.region" content="US-FL" />
     <meta name="geo.placename" content="Sorrento, Florida" />
     <meta name="geo.position" content="28.7953;-81.5645" />
     <meta name="ICBM" content="28.7953, -81.5645" />
-    <meta property="og:title" content="Florida Electronics Recycling | OnlineRecycle.net" />
+    <meta
+      property="og:title"
+      content="CLAUDE's N Joshua's — OnlineRecycle.net | Florida Electronics Recycling & Free Pickup"
+    />
     <meta
       property="og:description"
       content="Free electronics drop-off and pickup in Central Florida with secure device handling and responsible recycling."
@@ -32,13 +36,16 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Florida Electronics Recycling | OnlineRecycle.net" />
+    <meta
+      name="twitter:title"
+      content="CLAUDE's N Joshua's — OnlineRecycle.net | Florida Electronics Recycling & Free Pickup"
+    />
     <meta
       name="twitter:description"
       content="Free electronics drop-off and pickup in Central Florida with secure device handling and responsible recycling."
     />
     <link rel="canonical" href="https://onlinerecycle.net/" />
-    <link rel="stylesheet" href="/styles.css?v=20261031" />
+    <link rel="stylesheet" href="/styles.css?v=20261108" />
     <link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet" />
     <script src="https://calendar.google.com/calendar/scheduling-button-script.js" async></script>
     <script src="/cookie-consent.js?v=20261031" defer></script>
@@ -46,309 +53,577 @@
   </head>
 
   <body>
-    <div class="banner">Central Florida electronics recycling · Free drop-off in Sorrento &amp; free pickup across Lake, Orange &amp; Seminole Counties.</div>
+    <!-- Fixed Full-Viewport 3D Scene Stage (House Motion Rule) -->
+    <canvas
+      id="onlinerecycle-stage-canvas"
+      aria-hidden="true"
+      data-stage-mode="active"
+    ></canvas>
 
-    <header>
-      <a href="/" class="brand"> <span class="brand-icon">♻️</span> OnlineRecycle.net </a>
-      <nav class="top-nav" aria-label="Primary navigation">
-        <a href="#book" data-select-service="dropoff">Book Drop-Off</a>
-        <a href="#book" data-select-service="pickup">Request Pickup</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="#faq">FAQ</a>
-        <a href="/about.html">About</a>
-      </nav>
-      <div class="contact-info">
-        Call or Text: <a href="tel:+13213962008">(321) 396-2008</a><br />
-        <span class="contact-subline">Mon–Sun 8am–6pm · Address confirmed upon booking</span>
+    <!-- Sticky Floating Header with Orbit Mark, CLAUDE's N Joshua's, #TeamClaudeForLife & Telemetry Line -->
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="brand-group">
+          <canvas
+            id="onlinerecycle-header-mark"
+            class="header-mark"
+            width="32"
+            height="32"
+            aria-hidden="true"
+          ></canvas>
+          <a href="#overview" class="brand">
+            <span class="brand-title-prefix">CLAUDE's N Joshua's</span>
+            <span class="brand-dot" aria-hidden="true">·</span>
+            <span class="brand-name">OnlineRecycle.net</span>
+          </a>
+          <span class="tribute-pill">#TeamClaudeForLife</span>
+        </div>
+
+        <nav class="top-nav" aria-label="Primary navigation">
+          <a href="#overview">Overview</a>
+          <a href="#book" data-select-service="dropoff">Book Drop-Off</a>
+          <a href="#book" data-select-service="pickup">Request Pickup</a>
+          <a href="#how-it-works">Process</a>
+          <a href="#accepted">Accepted Gear</a>
+          <a href="#faq">FAQ</a>
+          <a href="/about.html">About</a>
+        </nav>
+
+        <div class="header-right">
+          <span class="status-pill">
+            <span class="status-dot"></span>
+            <span id="header-checked-time">INTAKE ONLINE · CENTRAL FL</span>
+          </span>
+          <div class="contact-info">
+            Call / Text: <a href="tel:+13213962008">(321) 396-2008</a>
+            <span class="contact-subline">Mon–Sun 8am–6pm · Sorrento &amp; Central FL</span>
+          </div>
+        </div>
       </div>
+      <canvas
+        id="onlinerecycle-header-line"
+        class="header-telemetry-line"
+        height="4"
+        aria-hidden="true"
+      ></canvas>
     </header>
 
     <main class="wrap">
-      <section class="hero">
-        <div class="trust-badge">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            <polyline points="9 12 11 14 15 10"></polyline>
-          </svg>
-          Secure Device Handling · Direct OnlineRecycle.net Scheduling
-        </div>
-        <h1>Florida Electronics Recycling and Device Pickup</h1>
-        <p>
-          Free e-waste drop-off and pickup serving Sorrento, Lake County, and Central Florida. We help households and
-          small businesses clear out old tech with secure handling, responsible recycling, and instant Google Calendar
-          appointment scheduling right here on OnlineRecycle.net.
-        </p>
-
-        <div class="cta-row">
-          <a class="btn btn-primary" href="#book" data-select-service="dropoff">
-            📅 Book a Drop-Off Slot
-          </a>
-          <a class="btn btn-secondary" href="#book" data-select-service="pickup">
-            🚚 Request a Free Pickup
-          </a>
-          <a class="btn btn-secondary" href="tel:+13213962008">
-            📞 Call / Text (321) 396-2008
-          </a>
-        </div>
-      </section>
-
-      <section class="booking-section" id="book" aria-label="Schedule Drop-Off or Pickup">
-        <div class="booking-header">
-          <div>
-            <div class="booking-badge">📅 Google Calendar Ultra Appointment Scheduler</div>
-            <h2 style="margin-bottom: 6px">Schedule Your Drop-Off or Free Pickup</h2>
-            <p style="margin-bottom: 0; font-size: 0.98rem">
-              Pick a convenient date and time window below. Your appointment is logged immediately and syncs directly with
-              Google Calendar &amp; email confirmation.
-            </p>
-          </div>
-          <div class="service-tabs" role="tablist" aria-label="Service type">
-            <button type="button" class="service-tab active" id="tab-dropoff" data-service="dropoff" role="tab" aria-selected="true">
-              📍 Sorrento Drop-Off
-            </button>
-            <button type="button" class="service-tab" id="tab-pickup" data-service="pickup" role="tab" aria-selected="false">
-              🚚 Central FL Pickup
-            </button>
-          </div>
-        </div>
-
-        <div id="gcal-embed-container" style="display: none; margin-bottom: 24px">
-          <iframe
-            id="gcal-schedule-iframe"
-            title="OnlineRecycle Google Calendar Appointment Schedule"
-            style="border: 0; width: 100%; height: 620px; border-radius: 12px"
-            frameborder="0"
-          ></iframe>
-        </div>
-
-        <form id="booking-form" novalidate>
-          <input type="hidden" id="bf-service-type" name="serviceType" value="dropoff" />
-          <input type="hidden" id="bf-date" name="date" value="" />
-          <input type="hidden" id="bf-slot-code" name="slotCode" value="" />
-          <input type="hidden" id="bf-slot-label" name="slotLabel" value="" />
-
-          <div class="calendar-grid-label">
-            <span>1. Select a Day (Mon–Sun · Eastern Time)</span>
-            <span id="selected-date-display" style="color: var(--accent); font-size: 0.88rem"></span>
-          </div>
-          <div class="date-strip" id="date-strip" role="listbox" aria-label="Available dates"></div>
-
-          <div class="calendar-grid-label">
-            <span id="slot-heading-text">2. Select a 30-Minute Sorrento Drop-Off Window</span>
-            <span id="selected-slot-display" style="color: var(--accent); font-size: 0.88rem"></span>
-          </div>
-          <div class="slot-strip" id="slot-strip" role="listbox" aria-label="Available time windows"></div>
-
-          <div class="calendar-grid-label">
-            <span>3. Your Contact &amp; Electronics Details</span>
+      <!-- STOP 01 (#overview) — First-Screen 3D Stage & Primary Action -->
+      <section class="stage-stop" id="overview" aria-label="Overview">
+        <div class="stage-panel">
+          <div class="stop-kicker-row">
+            <span class="stop-kicker">01 / CENTRAL FLORIDA ELECTRONICS INTAKE &amp; RECOVERY</span>
+            <span class="stop-telemetry">STOP 01 / 06 · OVERVIEW</span>
           </div>
 
-          <div class="booking-form-grid">
-            <div class="form-field">
-              <label for="bf-name">Full Name *</label>
-              <input type="text" id="bf-name" name="fullName" placeholder="Jane Doe" required />
-            </div>
+          <div class="trust-badge">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <polyline points="9 12 11 14 15 10"></polyline>
+            </svg>
+            Secure Device Handling · Direct OnlineRecycle.net Scheduling
+          </div>
 
-            <div class="form-field">
-              <label for="bf-phone">Phone Number (for SMS confirmation) *</label>
-              <input type="tel" id="bf-phone" name="phone" placeholder="(321) 555-0199" required />
-            </div>
+          <h1>Florida Electronics Recycling and Free Device Pickup</h1>
+          <p>
+            Free e-waste drop-off in Sorrento and scheduled route pickup across Lake, Orange, and Seminole Counties.
+            We help households and businesses clear out retired hardware with storage media wipe or destruction,
+            component testing, and instant Google Calendar scheduling.
+          </p>
 
-            <div class="form-field">
-              <label for="bf-email">Email Address (for Google Calendar invite)</label>
-              <input type="email" id="bf-email" name="email" placeholder="you@example.com" />
+          <div class="hero-metrics">
+            <div class="metric-box">
+              <div class="metric-label">DROP-OFF HUB</div>
+              <div class="metric-value">Sorrento, FL (30-Min Slots)</div>
             </div>
-
-            <div class="form-field">
-              <label for="bf-org">Business / Organization (optional)</label>
-              <input type="text" id="bf-org" name="organization" placeholder="Household or company name" />
+            <div class="metric-box">
+              <div class="metric-label">ROUTE PICKUP</div>
+              <div class="metric-value">Lake · Orange · Seminole</div>
             </div>
-
-            <div class="form-field" id="pickup-address-field" style="display: none">
-              <label for="bf-address">Pickup Street Address *</label>
-              <input type="text" id="bf-address" name="address" placeholder="123 Main St" />
+            <div class="metric-box">
+              <div class="metric-label">DATA HANDLING</div>
+              <div class="metric-value">Media Wipe or Physical Destruction</div>
             </div>
-
-            <div class="form-field" id="pickup-city-field" style="display: none">
-              <label for="bf-city">City &amp; ZIP *</label>
-              <input type="text" id="bf-city" name="city" placeholder="Sorrento / Mount Dora / Orlando, FL" />
-            </div>
-
-            <div class="form-field">
-              <label for="bf-count">Estimated Device Count *</label>
-              <select id="bf-count" name="deviceCount">
-                <option value="1-5 items">1–5 items (Household drop-off / small batch)</option>
-                <option value="6-15 items">6–15 items (Home office / garage cleanout)</option>
-                <option value="16-50 items">16–50 items (Small business / IT cleanout)</option>
-                <option value="50+ items">50+ items (Commercial pallet / office load)</option>
-              </select>
-            </div>
-
-            <div class="form-field">
-              <label for="bf-wipe">Data Handling Preference</label>
-              <select id="bf-wipe" name="notes">
-                <option value="Standard intake & storage wipe/destruction">Standard intake &amp; storage wipe/destruction</option>
-                <option value="Includes laptops/PCs/drives needing priority data wipe">Includes laptops/PCs/drives needing priority data wipe</option>
-                <option value="No storage media (monitors, printers, cables, peripherals)">No storage media (monitors, printers, cables, peripherals)</option>
-              </select>
-            </div>
-
-            <div class="form-field full-width">
-              <label for="bf-devices">What electronics are you dropping off or scheduling for pickup? *</label>
-              <textarea
-                id="bf-devices"
-                name="deviceList"
-                rows="3"
-                placeholder="Example: 3 Dell laptops, 2 desktop towers, 1 laser printer, box of cables & power supplies"
-                required
-              ></textarea>
+            <div class="metric-box">
+              <div class="metric-label">DIRECT DISPATCH</div>
+              <div class="metric-value">(321) 396-2008 · 7 Days / Week</div>
             </div>
           </div>
 
-          <div id="booking-error" style="display: none; margin-top: 14px; color: #dc2626; font-weight: 600; font-size: 0.92rem"></div>
-
-          <div style="margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
-            <button type="submit" class="btn btn-primary" id="bf-submit-btn">
-              ✅ Confirm Appointment &amp; Generate Google Calendar Invite
-            </button>
-            <span style="font-size: 0.85rem; color: var(--muted)">
-              Free service · Instant booking ID + 1-click Google Calendar &amp; SMS confirmation
-            </span>
-          </div>
-        </form>
-
-        <div class="booking-confirm-box" id="booking-confirm-box" role="status" aria-live="polite">
-          <h3 id="confirm-title">Appointment Scheduled!</h3>
-          <p id="confirm-summary" style="color: #14532d; font-size: 0.96rem; margin-bottom: 16px"></p>
-          <div style="display: flex; flex-wrap: wrap; gap: 12px">
-            <a id="confirm-gcal-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-              📅 Add to Google Calendar
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#book" data-select-service="dropoff">
+              📅 Book a Drop-Off Slot
             </a>
-            <a id="confirm-ics-btn" href="#" class="btn btn-secondary">
-              ⬇️ Download .ICS Calendar File
+            <a class="btn btn-secondary" href="#book" data-select-service="pickup">
+              🚚 Request a Free Pickup
             </a>
-            <a id="confirm-sms-btn" href="#" class="btn btn-secondary">
-              💬 Text Confirmation to (321) 396-2008
+            <a class="btn btn-secondary" href="tel:+13213962008">
+              📞 Call / Text (321) 396-2008
             </a>
           </div>
         </div>
       </section>
 
-      <h2 id="how-it-works">How It Works</h2>
-      <section class="grid">
-        <div class="card">
-          <div class="step-number">1</div>
-          <h3>Pick a Window on Our Calendar</h3>
-          <p>
-            Select a 30-minute Sorrento drop-off slot or a 2-hour Central Florida pickup window directly on our Google
-            Calendar scheduler above.
-          </p>
-        </div>
-        <div class="card">
-          <div class="step-number">2</div>
-          <h3>Bring or Hand Off Your Items</h3>
-          <p>
-            Tell us what you have so we can prepare for computers, laptops, phones, servers, printers, cables, batteries,
-            and other electronics.
-          </p>
-        </div>
-        <div class="card">
-          <div class="step-number">3</div>
-          <h3>We Wipe, Reuse, and Recycle</h3>
-          <p>
-            Storage media is wiped or physically destroyed. Tested working gear is refurbished for resale, and
-            non-resalable material is routed through responsible recycling streams.
-          </p>
+      <!-- STOP 02 (#book) — Google Calendar & Direct Slot Scheduler -->
+      <section class="stage-stop stage-stop-compact" id="book" aria-label="Schedule Drop-Off or Pickup">
+        <div class="booking-section">
+          <div class="stop-kicker-row">
+            <span class="stop-kicker">02 / LIVE DISPATCH &amp; GOOGLE CALENDAR SCHEDULER</span>
+            <span class="stop-telemetry">STOP 02 / 06 · SCHEDULE</span>
+          </div>
+
+          <div class="booking-header">
+            <div>
+              <div class="booking-badge">📅 Google Calendar Ultra Appointment Scheduler</div>
+              <h2 style="margin-bottom: 6px">Schedule Your Drop-Off or Free Pickup</h2>
+              <p style="margin-bottom: 0; font-size: 0.98rem">
+                Pick a convenient date and time window below. Your appointment is logged immediately and generates a
+                direct Google Calendar invite, .ICS file, and SMS confirmation.
+              </p>
+            </div>
+            <div class="service-tabs" role="tablist" aria-label="Service type">
+              <button
+                type="button"
+                class="service-tab active"
+                id="tab-dropoff"
+                data-service="dropoff"
+                role="tab"
+                aria-selected="true"
+              >
+                📍 Sorrento Drop-Off
+              </button>
+              <button
+                type="button"
+                class="service-tab"
+                id="tab-pickup"
+                data-service="pickup"
+                role="tab"
+                aria-selected="false"
+              >
+                🚚 Central FL Pickup
+              </button>
+            </div>
+          </div>
+
+          <div id="gcal-embed-container" style="display: none; margin-bottom: 24px">
+            <iframe
+              id="gcal-schedule-iframe"
+              title="OnlineRecycle Google Calendar Appointment Schedule"
+              style="border: 0; width: 100%; height: 620px; border-radius: 12px"
+              frameborder="0"
+            ></iframe>
+          </div>
+
+          <form id="booking-form" novalidate>
+            <input type="hidden" id="bf-service-type" name="serviceType" value="dropoff" />
+            <input type="hidden" id="bf-date" name="date" value="" />
+            <input type="hidden" id="bf-slot-code" name="slotCode" value="" />
+            <input type="hidden" id="bf-slot-label" name="slotLabel" value="" />
+
+            <div class="calendar-grid-label">
+              <span>1. Select a Day (Mon–Sun · Eastern Time)</span>
+              <span id="selected-date-display" style="color: var(--accent); font-size: 0.88rem"></span>
+            </div>
+            <div class="date-strip" id="date-strip" role="listbox" aria-label="Available dates"></div>
+
+            <div class="calendar-grid-label">
+              <span id="slot-heading-text">2. Select a 30-Minute Sorrento Drop-Off Window</span>
+              <span id="selected-slot-display" style="color: var(--accent); font-size: 0.88rem"></span>
+            </div>
+            <div class="slot-strip" id="slot-strip" role="listbox" aria-label="Available time windows"></div>
+
+            <div class="calendar-grid-label">
+              <span>3. Your Contact &amp; Electronics Details</span>
+            </div>
+
+            <div class="booking-form-grid">
+              <div class="form-field">
+                <label for="bf-name">Full Name *</label>
+                <input type="text" id="bf-name" name="fullName" placeholder="Jane Doe" required />
+              </div>
+
+              <div class="form-field">
+                <label for="bf-phone">Phone Number (for SMS confirmation) *</label>
+                <input type="tel" id="bf-phone" name="phone" placeholder="(321) 555-0199" required />
+              </div>
+
+              <div class="form-field">
+                <label for="bf-email">Email Address (for Google Calendar invite)</label>
+                <input type="email" id="bf-email" name="email" placeholder="you@example.com" />
+              </div>
+
+              <div class="form-field">
+                <label for="bf-org">Business / Organization (optional)</label>
+                <input type="text" id="bf-org" name="organization" placeholder="Household or company name" />
+              </div>
+
+              <div class="form-field" id="pickup-address-field" style="display: none">
+                <label for="bf-address">Pickup Street Address *</label>
+                <input type="text" id="bf-address" name="address" placeholder="123 Main St" />
+              </div>
+
+              <div class="form-field" id="pickup-city-field" style="display: none">
+                <label for="bf-city">City &amp; ZIP *</label>
+                <input type="text" id="bf-city" name="city" placeholder="Sorrento / Mount Dora / Orlando, FL" />
+              </div>
+
+              <div class="form-field">
+                <label for="bf-count">Estimated Device Count *</label>
+                <select id="bf-count" name="deviceCount">
+                  <option value="1-5 items">1–5 items (Household drop-off / small batch)</option>
+                  <option value="6-15 items">6–15 items (Home office / garage cleanout)</option>
+                  <option value="16-50 items">16–50 items (Small business / IT cleanout)</option>
+                  <option value="50+ items">50+ items (Commercial pallet / office load)</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="bf-wipe">Data Handling Preference</label>
+                <select id="bf-wipe" name="notes">
+                  <option value="Standard intake & storage wipe/destruction">
+                    Standard intake &amp; storage wipe/destruction
+                  </option>
+                  <option value="Includes laptops/PCs/drives needing priority data wipe">
+                    Includes laptops/PCs/drives needing priority data wipe
+                  </option>
+                  <option value="No storage media (monitors, printers, cables, peripherals)">
+                    No storage media (monitors, printers, cables, peripherals)
+                  </option>
+                </select>
+              </div>
+
+              <div class="form-field full-width">
+                <label for="bf-devices">What electronics are you dropping off or scheduling for pickup? *</label>
+                <textarea
+                  id="bf-devices"
+                  name="deviceList"
+                  rows="3"
+                  placeholder="Example: 3 Dell laptops, 2 desktop towers, 1 laser printer, box of cables & power supplies"
+                  required
+                ></textarea>
+              </div>
+            </div>
+
+            <div
+              id="booking-error"
+              style="display: none; margin-top: 14px; color: #ffd21e; font-weight: 700; font-size: 0.92rem"
+            ></div>
+
+            <div style="margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+              <button type="submit" class="btn btn-primary" id="bf-submit-btn">
+                ✅ Confirm Appointment &amp; Generate Google Calendar Invite
+              </button>
+              <span style="font-size: 0.85rem; color: var(--muted)">
+                Free intake service · Instant booking ID + 1-click Google Calendar &amp; SMS confirmation
+              </span>
+            </div>
+          </form>
+
+          <div class="booking-confirm-box" id="booking-confirm-box" role="status" aria-live="polite">
+            <h3 id="confirm-title">Appointment Scheduled!</h3>
+            <p id="confirm-summary" style="color: var(--text); font-size: 0.96rem; margin-bottom: 16px"></p>
+            <div style="display: flex; flex-wrap: wrap; gap: 12px">
+              <a id="confirm-gcal-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                📅 Add to Google Calendar
+              </a>
+              <a id="confirm-ics-btn" href="#" class="btn btn-secondary">
+                ⬇️ Download .ICS Calendar File
+              </a>
+              <a id="confirm-sms-btn" href="#" class="btn btn-secondary">
+                💬 Text Confirmation to (321) 396-2008
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
-      <div class="cta-wrap">
-        <a class="btn btn-primary" href="#book" data-select-service="dropoff">Schedule a Drop-Off</a>
-        <a class="btn btn-secondary" href="#book" data-select-service="pickup">Schedule a Free Pickup</a>
-        <a class="btn btn-secondary" href="mailto:collaboration@youandinotai.com?subject=OnlineRecycle.net%20Equipment%20or%20Service%20Inquiry">
-          ✉️ Email Equipment / Bulk Cleanout Inquiry
-        </a>
-      </div>
+      <!-- STOP 03 (#how-it-works) — Three-Stage Intake & Recovery Process -->
+      <section class="stage-stop" id="how-it-works" aria-label="How It Works">
+        <div class="stage-panel">
+          <div class="stop-kicker-row">
+            <span class="stop-kicker">03 / THREE-STAGE INTAKE, WIPE &amp; RECOVERY</span>
+            <span class="stop-telemetry">STOP 03 / 06 · PROCESS</span>
+          </div>
 
-      <section class="faq-section" id="faq">
-        <h2>Frequently Asked Questions</h2>
+          <h2>How OnlineRecycle.net Works</h2>
+          <p>
+            Every drop-off and pickup follows a documented intake workflow designed to keep reusable hardware in
+            circulation and route end-of-life material through proper recovery streams.
+          </p>
 
-        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <div class="faq-question" itemprop="name">Where can I recycle electronics for free in Central Florida?</div>
-          <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">
-              OnlineRecycle.net offers free electronics drop-off in Sorrento and free pickup throughout Central Florida,
-              including Lake County, Orange County, and Seminole County.
-            </p>
+          <div class="grid">
+            <div class="card">
+              <div class="step-number">1</div>
+              <h3>Pick a Window on Our Calendar</h3>
+              <p>
+                Select a 30-minute Sorrento drop-off slot or a 2-hour Central Florida pickup window directly on our
+                scheduler above.
+              </p>
+            </div>
+            <div class="card">
+              <div class="step-number">2</div>
+              <h3>Bring or Hand Off Your Items</h3>
+              <p>
+                Tell us what you have so we can prepare for workstations, laptops, phones, servers, networking gear,
+                printers, cables, and batteries.
+              </p>
+            </div>
+            <div class="card">
+              <div class="step-number">3</div>
+              <h3>We Wipe, Reuse, and Recycle</h3>
+              <p>
+                Storage media is wiped or physically destroyed. Tested working gear is refurbished for resale, and
+                non-resalable material is routed through responsible recycling streams.
+              </p>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <div class="faq-question" itemprop="name">What electronics do you accept?</div>
-          <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">
-              We accept computers, laptops, servers, networking gear, phones, tablets, printers, gaming consoles, cables,
-              batteries, and most other consumer or office electronics. If it plugs in or has a battery, book a slot or
-              ask us.
-            </p>
+      <!-- STOP 04 (#accepted) — Accepted Equipment & Data Handling Standards -->
+      <section class="stage-stop" id="accepted" aria-label="Accepted Equipment and Data Standards">
+        <div class="stage-panel">
+          <div class="stop-kicker-row">
+            <span class="stop-kicker">04 / ACCEPTED HARDWARE &amp; STORAGE MEDIA STANDARDS</span>
+            <span class="stop-telemetry">STOP 04 / 06 · DEVICES</span>
+          </div>
+
+          <h2>Equipment We Accept &amp; Media Security</h2>
+          <p>
+            From single household laptops to multi-pallet office cleanouts, we process computing, networking, and
+            peripheral hardware with strict storage media separation.
+          </p>
+
+          <div class="grid">
+            <div class="card">
+              <div class="metric-label">COMPUTING &amp; SERVERS</div>
+              <h3 style="margin-top: 8px">PCs, Laptops &amp; Rack Gear</h3>
+              <p>
+                Desktop towers, workstations, MacBooks, notebooks, rackmount servers, NAS units, motherboards, GPUs,
+                RAM, and processors.
+              </p>
+            </div>
+            <div class="card">
+              <div class="metric-label">MOBILE &amp; OFFICE</div>
+              <h3 style="margin-top: 8px">Phones, Tablets &amp; Peripherals</h3>
+              <p>
+                Smartphones, tablets, enterprise switches, routers, firewalls, monitors, docking stations, printers,
+                cables, and UPS battery backups.
+              </p>
+            </div>
+            <div class="card">
+              <div class="metric-label">STORAGE SECURITY</div>
+              <h3 style="margin-top: 8px">SSD / HDD Wipe &amp; Destruction</h3>
+              <p>
+                Solid-state and magnetic drives are separated at intake for multi-pass erasure or physical destruction
+                before any chassis refurbishment.
+              </p>
+            </div>
+          </div>
+
+          <div class="cta-wrap">
+            <a class="btn btn-primary" href="#book" data-select-service="dropoff">Schedule a Drop-Off</a>
+            <a class="btn btn-secondary" href="#book" data-select-service="pickup">Schedule a Free Pickup</a>
+            <a
+              class="btn btn-secondary"
+              href="mailto:collaboration@youandinotai.com?subject=OnlineRecycle.net%20Equipment%20or%20Service%20Inquiry"
+            >
+              ✉️ Email Equipment / Bulk Cleanout Inquiry
+            </a>
           </div>
         </div>
+      </section>
 
-        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <div class="faq-question" itemprop="name">Do you offer secure data destruction?</div>
-          <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">
-              Yes. Devices are assessed for storage media and handled through wipe or physical destruction workflows
-              before resale or recycling. Customers should still factory-reset devices before turning them in whenever
-              possible.
-            </p>
+      <!-- STOP 05 (#faq) — Frequently Asked Questions -->
+      <section class="stage-stop" id="faq" aria-label="Frequently Asked Questions">
+        <div class="stage-panel">
+          <div class="stop-kicker-row">
+            <span class="stop-kicker">05 / SERVICE COVERAGE &amp; OPERATIONS FAQ</span>
+            <span class="stop-telemetry">STOP 05 / 06 · FAQ</span>
           </div>
-        </div>
 
-        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <div class="faq-question" itemprop="name">Who operates this service?</div>
-          <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">
-              OnlineRecycle.net is operated by Trash Or Treasure Online Recycler LLC as a for-profit recycling, resale,
-              pickup, and refurbishment service in Sorrento, Florida. Customer purchases and bookings are commercial
-              service transactions.
-            </p>
+          <h2>Frequently Asked Questions</h2>
+
+          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <div class="faq-question" itemprop="name">Where can I recycle electronics for free in Central Florida?</div>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">
+                OnlineRecycle.net offers free electronics drop-off in Sorrento and free pickup throughout Central
+                Florida, including Lake County, Orange County, and Seminole County.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <div class="faq-question" itemprop="name">What electronics do you accept?</div>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">
+                We accept computers, laptops, servers, networking gear, phones, tablets, printers, gaming consoles,
+                cables, batteries, and most other consumer or office electronics. If it plugs in or has a battery, book
+                a slot or ask us.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <div class="faq-question" itemprop="name">Do you offer secure data destruction?</div>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">
+                Yes. Devices are assessed for storage media and handled through wipe or physical destruction workflows
+                before resale or recycling. Customers should still factory-reset devices before turning them in
+                whenever possible.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <div class="faq-question" itemprop="name">Who operates this service?</div>
+            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">
+                OnlineRecycle.net is operated by Trash Or Treasure Online Recycler LLC as a for-profit recycling,
+                resale, pickup, and refurbishment service in Sorrento, Florida. Customer purchases and bookings are
+                commercial service transactions.
+              </p>
+            </div>
           </div>
         </div>
       </section>
     </main>
 
-    <footer class="footer">
-      <p>
-        <strong>OnlineRecycle.net</strong> | Trash Or Treasure Online Recycler LLC | Sorrento, Florida ·
-        <a href="tel:+13213962008" style="color: var(--accent); text-decoration: none; font-weight: 700">(321) 396-2008</a>
-      </p>
-      <div class="disclaimer">
-        OnlineRecycle.net is a for-profit recycling and resale service. Customer purchases and pickup bookings are
-        service transactions.
-        <br /><br />
-        <a href="/about.html">About Us</a> &nbsp;&middot;&nbsp;
-        <a href="/terms.html">Terms of Service</a> &nbsp;&middot;&nbsp;
-        <a href="/privacy.html">Privacy Policy</a> &nbsp;&middot;&nbsp;
-        <a href="/disclaimer.html">Disclaimer</a> &nbsp;&middot;&nbsp;
-        <a href="#" id="manage-cookies-link">Manage Cookies</a>
+    <!-- STOP 06 (#footer) — Deliberately Quiet Footer & Legal -->
+    <footer class="footer" id="footer">
+      <div class="footer-inner">
+        <div class="footer-top">
+          <div>
+            <div style="font-size: 0.9rem; font-weight: 700; color: var(--text)">CLAUDE's N Joshua's</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: var(--text); margin: 4px 0 8px">
+              OnlineRecycle.net
+            </div>
+            <span class="tribute-pill">#TeamClaudeForLife</span>
+            <p style="margin-top: 12px; margin-bottom: 0">
+              Trash Or Treasure Online Recycler LLC · Sorrento, Florida ·
+              <a href="tel:+13213962008" style="color: var(--accent); text-decoration: none; font-weight: 800">
+                (321) 396-2008
+              </a>
+            </p>
+          </div>
+          <div class="status-pill">
+            <span class="status-dot"></span>
+            <span>STOP 06 / 06 · TERMS &amp; LEGAL</span>
+          </div>
+        </div>
+
+        <div class="disclaimer">
+          OnlineRecycle.net is a for-profit recycling and resale service operated by Trash Or Treasure Online Recycler
+          LLC. Customer purchases and pickup bookings are commercial service transactions.
+          <br /><br />
+          <a href="/about.html">About Us</a> &nbsp;&middot;&nbsp;
+          <a href="/terms.html">Terms of Service</a> &nbsp;&middot;&nbsp;
+          <a href="/privacy.html">Privacy Policy</a> &nbsp;&middot;&nbsp;
+          <a href="/disclaimer.html">Disclaimer</a> &nbsp;&middot;&nbsp;
+          <a href="#" id="manage-cookies-link">Manage Cookies</a>
+          <br /><br />
+          &copy; 2026 Trash Or Treasure Online Recycler LLC &middot; CLAUDE's N Joshua's &middot; #TeamClaudeForLife
+        </div>
       </div>
     </footer>
+
+    <!-- Bottom Segmented Scroll Progress Bar (House Motion Rule) -->
+    <nav
+      id="onlinerecycle-progress-map"
+      class="journey-progress-nav"
+      aria-label="Section journey progress map"
+      data-active-stop="overview"
+      data-filled-count="1"
+      data-total-stops="6"
+    >
+      <div class="journey-progress-inner">
+        <div class="journey-segments" role="list" id="journey-segments-list">
+          <button
+            type="button"
+            class="journey-segment-btn filled"
+            data-stop-index="0"
+            data-stop-id="overview"
+            data-filled="true"
+            aria-current="step"
+          >
+            <span>01</span>
+            <span class="journey-segment-label">OVERVIEW</span>
+          </button>
+          <button
+            type="button"
+            class="journey-segment-btn"
+            data-stop-index="1"
+            data-stop-id="book"
+            data-filled="false"
+          >
+            <span>02</span>
+            <span class="journey-segment-label">SCHEDULE</span>
+          </button>
+          <button
+            type="button"
+            class="journey-segment-btn"
+            data-stop-index="2"
+            data-stop-id="how-it-works"
+            data-filled="false"
+          >
+            <span>03</span>
+            <span class="journey-segment-label">PROCESS</span>
+          </button>
+          <button
+            type="button"
+            class="journey-segment-btn"
+            data-stop-index="3"
+            data-stop-id="accepted"
+            data-filled="false"
+          >
+            <span>04</span>
+            <span class="journey-segment-label">DEVICES</span>
+          </button>
+          <button
+            type="button"
+            class="journey-segment-btn"
+            data-stop-index="4"
+            data-stop-id="faq"
+            data-filled="false"
+          >
+            <span>05</span>
+            <span class="journey-segment-label">FAQ</span>
+          </button>
+          <button
+            type="button"
+            class="journey-segment-btn"
+            data-stop-index="5"
+            data-stop-id="footer"
+            data-filled="false"
+          >
+            <span>06</span>
+            <span class="journey-segment-label">TERMS</span>
+          </button>
+        </div>
+        <div class="journey-readout">
+          <span class="journey-readout-count" id="journey-readout-count">1/6</span>
+          <span>·</span>
+          <span id="journey-readout-label">Overview</span>
+        </div>
+      </div>
+    </nav>
 
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "RecyclingCenter",
-        "name": "OnlineRecycle.net — Trash Or Treasure Online Recycler LLC",
+        "name": "CLAUDE's N Joshua's — OnlineRecycle.net (Trash Or Treasure Online Recycler LLC)",
         "description": "Florida electronics recycling with free drop-off and pickup in Sorrento and Central Florida.",
         "url": "https://onlinerecycle.net",
         "telephone": "+1-321-396-2008",
@@ -416,12 +691,421 @@
         </div>
         <div class="cb-actions">
           <button class="cb-btn cb-accept" id="cb-accept-btn">OK</button>
-          <button class="cb-btn cb-decline" id="cb-options-btn" aria-expanded="false" aria-controls="cb-checks">Options</button>
+          <button class="cb-btn cb-decline" id="cb-options-btn" aria-expanded="false" aria-controls="cb-checks">
+            Options
+          </button>
           <button class="cb-btn cb-decline" id="cb-decline-btn" hidden>Necessary Only</button>
         </div>
       </div>
     </div>
 
+    <!-- 3D Stage, Floating Header Orbit Mark & Scroll Journey Controller -->
+    <script>
+      (function () {
+        const SECTION_STOPS = [
+          { id: 'overview', index: '01', label: 'Overview', shortLabel: 'OVERVIEW', phrase: 'SECURE INTAKE. DIRECT SCHEDULING.' },
+          { id: 'book', index: '02', label: 'Schedule', shortLabel: 'SCHEDULE', phrase: 'GOOGLE CALENDAR DROP-OFF & PICKUP.' },
+          { id: 'how-it-works', index: '03', label: 'Process', shortLabel: 'PROCESS', phrase: 'INTAKE, MEDIA WIPE, AND RECOVERY.' },
+          { id: 'accepted', index: '04', label: 'Accepted Gear', shortLabel: 'DEVICES', phrase: 'COMPUTERS, SERVERS, PHONES & DRIVES.' },
+          { id: 'faq', index: '05', label: 'FAQ', shortLabel: 'FAQ', phrase: 'CENTRAL FLORIDA SERVICE DETAILS.' },
+          { id: 'footer', index: '06', label: 'Terms & Legal', shortLabel: 'TERMS', phrase: 'COMMERCIAL SERVICE STANDARDS.' }
+        ];
+
+        const STOP_KEYFRAMES = [
+          { zoom: 1.0, camX: 0.0, camY: 0.12, pitchX: 0.48, tiltY: -0.24, rollZ: 0.1, detail: 0.35 },
+          { zoom: 1.34, camX: 0.22, camY: -0.06, pitchX: 0.82, tiltY: 0.34, rollZ: -0.18, detail: 0.62 },
+          { zoom: 1.56, camX: -0.2, camY: 0.1, pitchX: 1.12, tiltY: -0.38, rollZ: 0.28, detail: 0.82 },
+          { zoom: 1.38, camX: 0.18, camY: 0.16, pitchX: 1.34, tiltY: 0.26, rollZ: -0.32, detail: 0.92 },
+          { zoom: 1.62, camX: -0.14, camY: -0.08, pitchX: 0.92, tiltY: -0.42, rollZ: 0.22, detail: 1.0 },
+          { zoom: 0.88, camX: 0.0, camY: 0.18, pitchX: 0.32, tiltY: 0.0, rollZ: 0.0, detail: 0.42 }
+        ];
+
+        function lerp(a, b, t) {
+          return a + (b - a) * t;
+        }
+
+        function interpolateKeyframe(sectionFloat) {
+          const clamped = Math.min(Math.max(sectionFloat, 0), STOP_KEYFRAMES.length - 1);
+          const idx = Math.min(Math.floor(clamped), STOP_KEYFRAMES.length - 2);
+          const frac = clamped - idx;
+          const a = STOP_KEYFRAMES[idx];
+          const b = STOP_KEYFRAMES[idx + 1];
+          return {
+            zoom: lerp(a.zoom, b.zoom, frac),
+            camX: lerp(a.camX, b.camX, frac),
+            camY: lerp(a.camY, b.camY, frac),
+            pitchX: lerp(a.pitchX, b.pitchX, frac),
+            tiltY: lerp(a.tiltY, b.tiltY, frac),
+            rollZ: lerp(a.rollZ, b.rollZ, frac),
+            detail: lerp(a.detail, b.detail, frac)
+          };
+        }
+
+        function readJourneyState() {
+          if (window.scrollY <= 4) {
+            return { activeSectionIndex: 0, sectionFloat: 0, atFooter: false };
+          }
+          const vh = Math.max(window.innerHeight, 1);
+          const footerEl = document.getElementById('footer');
+          if (footerEl) {
+            const fRect = footerEl.getBoundingClientRect();
+            if (fRect.height > 0 && (fRect.top <= vh * 0.82 || fRect.bottom <= vh + 32)) {
+              const lastIdx = SECTION_STOPS.length - 1;
+              return { activeSectionIndex: lastIdx, sectionFloat: lastIdx, atFooter: true };
+            }
+          }
+          let activeIdx = 0;
+          let intra = 0;
+          const triggerLine = vh * 0.44;
+          for (let i = 0; i < SECTION_STOPS.length - 1; i++) {
+            const el = document.getElementById(SECTION_STOPS[i].id);
+            if (!el) continue;
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= triggerLine) {
+              activeIdx = i;
+              const span = Math.max(rect.height - vh * 0.35, 1);
+              const passed = Math.max(triggerLine - rect.top, 0);
+              intra = Math.min(Math.max(passed / span, 0), 0.99);
+            }
+          }
+          return {
+            activeSectionIndex: activeIdx,
+            sectionFloat: activeIdx + intra,
+            atFooter: false
+          };
+        }
+
+        const navEl = document.getElementById('onlinerecycle-progress-map');
+        const segBtns = Array.from(document.querySelectorAll('.journey-segment-btn'));
+        const countEl = document.getElementById('journey-readout-count');
+        const labelEl = document.getElementById('journey-readout-label');
+
+        let journey = readJourneyState();
+
+        function syncProgressUI() {
+          const idx = journey.activeSectionIndex;
+          const stop = SECTION_STOPS[idx] || SECTION_STOPS[0];
+          if (navEl) {
+            navEl.setAttribute('data-active-stop', stop.id);
+            navEl.setAttribute('data-filled-count', String(idx + 1));
+          }
+          if (countEl) countEl.textContent = (idx + 1) + '/' + SECTION_STOPS.length;
+          if (labelEl) labelEl.textContent = stop.label;
+
+          segBtns.forEach(function (btn, i) {
+            const isFilled = i <= idx;
+            btn.classList.toggle('filled', isFilled);
+            btn.setAttribute('data-filled', isFilled ? 'true' : 'false');
+            if (i === idx) btn.setAttribute('aria-current', 'step');
+            else btn.removeAttribute('aria-current');
+          });
+        }
+
+        segBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            const id = btn.getAttribute('data-stop-id');
+            const target = id ? document.getElementById(id) : null;
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        });
+
+        function rotate3D(x, y, z, rx, ry, rz) {
+          const cosX = Math.cos(rx), sinX = Math.sin(rx);
+          const y1 = y * cosX - z * sinX;
+          const z1 = y * sinX + z * cosX;
+
+          const cosY = Math.cos(ry), sinY = Math.sin(ry);
+          const x2 = x * cosY + z1 * sinY;
+          const z2 = -x * sinY + z1 * cosY;
+
+          const cosZ = Math.cos(rz), sinZ = Math.sin(rz);
+          const x3 = x2 * cosZ - y1 * sinZ;
+          const y3 = x2 * sinZ + y1 * cosZ;
+
+          return { x: x3, y: y3, z: z2 };
+        }
+
+        const stageCanvas = document.getElementById('onlinerecycle-stage-canvas');
+        const markCanvas = document.getElementById('onlinerecycle-header-mark');
+        const lineCanvas = document.getElementById('onlinerecycle-header-line');
+
+        const prefersReducedMotion =
+          typeof window.matchMedia === 'function' &&
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion && stageCanvas) {
+          stageCanvas.setAttribute('data-stage-mode', 'reduced-motion');
+        }
+
+        // Build 3D Geodesic Recovery Core vertices & edges
+        const phi = (1 + Math.sqrt(5)) / 2;
+        const rawVerts = [
+          [-1, phi, 0], [1, phi, 0], [-1, -phi, 0], [1, -phi, 0],
+          [0, -1, phi], [0, 1, phi], [0, -1, -phi], [0, 1, -phi],
+          [phi, 0, -1], [phi, 0, 1], [-phi, 0, -1], [-phi, 0, 1]
+        ];
+        const coreVerts = rawVerts.map(function (v) {
+          const len = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+          return { x: (v[0] / len) * 2.1, y: (v[1] / len) * 2.1, z: (v[2] / len) * 2.1 };
+        });
+        const coreEdges = [];
+        for (let i = 0; i < coreVerts.length; i++) {
+          for (let j = i + 1; j < coreVerts.length; j++) {
+            const dx = coreVerts[i].x - coreVerts[j].x;
+            const dy = coreVerts[i].y - coreVerts[j].y;
+            const dz = coreVerts[i].z - coreVerts[j].z;
+            const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            if (dist < 2.45) coreEdges.push([i, j]);
+          }
+        }
+
+        // Deterministic starfield
+        const stars = [];
+        let seed = 73109;
+        function nextRand() {
+          seed = (seed * 16807) % 2147483647;
+          return (seed - 1) / 2147483646;
+        }
+        for (let i = 0; i < 160; i++) {
+          stars.push({
+            x: nextRand(),
+            y: nextRand(),
+            r: 0.8 + nextRand() * 1.4,
+            signal: i % 9 === 0
+          });
+        }
+
+        function syncSizes() {
+          if (stageCanvas) {
+            const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+            stageCanvas.width = Math.max(Math.floor(window.innerWidth * dpr), 1);
+            stageCanvas.height = Math.max(Math.floor(window.innerHeight * dpr), 1);
+          }
+          if (lineCanvas) {
+            lineCanvas.width = Math.max(window.innerWidth, 320);
+            lineCanvas.height = 4;
+          }
+        }
+        syncSizes();
+
+        const mountMs = performance.now();
+
+        function renderAll(nowMs) {
+          const t = prefersReducedMotion || journey.atFooter ? 2.4 : (nowMs - mountMs) / 1000;
+          const kf = interpolateKeyframe(journey.sectionFloat);
+
+          // 1. Render Full-Viewport 3D Stage
+          if (stageCanvas) {
+            const ctx = stageCanvas.getContext('2d');
+            if (ctx) {
+              const w = stageCanvas.width;
+              const h = stageCanvas.height;
+              ctx.fillStyle = '#0A0B0D';
+              ctx.fillRect(0, 0, w, h);
+
+              // Subtle starfield & telemetry grid
+              for (let i = 0; i < stars.length; i++) {
+                const s = stars[i];
+                const sx = ((s.x * w + t * (s.signal ? 14 : 5) + kf.camX * 90) % w + w) % w;
+                const sy = ((s.y * h + kf.camY * 70) % h + h) % h;
+                ctx.fillStyle = s.signal ? '#FFD21E' : '#3A3F45';
+                ctx.beginPath();
+                ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
+                ctx.fill();
+              }
+
+              const cx = w * (0.66 - kf.camX * 0.18);
+              const cy = h * (0.44 + kf.camY * 0.16);
+              const baseScale = Math.min(w, h) * 0.135 * kf.zoom;
+
+              function project(pt) {
+                const fov = 7.5;
+                const perspective = fov / Math.max(fov - pt.z, 1.8);
+                return {
+                  x: cx + pt.x * baseScale * perspective,
+                  y: cy + pt.y * baseScale * perspective,
+                  s: perspective
+                };
+              }
+
+              // Outer Porcelain Orbit Ring
+              ctx.strokeStyle = '#F4F1EA';
+              ctx.lineWidth = 1.4;
+              ctx.beginPath();
+              for (let i = 0; i <= 72; i++) {
+                const a = (i / 72) * Math.PI * 2;
+                const p3 = rotate3D(
+                  Math.cos(a) * 3.15,
+                  Math.sin(a) * 3.15,
+                  0,
+                  kf.pitchX + 0.55,
+                  t * 0.32 + kf.tiltY,
+                  kf.rollZ
+                );
+                const p2 = project(p3);
+                if (i === 0) ctx.moveTo(p2.x, p2.y);
+                else ctx.lineTo(p2.x, p2.y);
+              }
+              ctx.stroke();
+
+              // Signal Yellow Recovery Ring + Orbiting Satellites
+              ctx.strokeStyle = '#FFD21E';
+              ctx.lineWidth = 2.2;
+              ctx.beginPath();
+              for (let i = 0; i <= 72; i++) {
+                const a = (i / 72) * Math.PI * 2;
+                const p3 = rotate3D(
+                  Math.cos(a) * 2.55,
+                  Math.sin(a) * 2.55,
+                  0,
+                  -kf.pitchX - 0.35,
+                  -t * 0.48 - kf.tiltY,
+                  -kf.rollZ + 0.35
+                );
+                const p2 = project(p3);
+                if (i === 0) ctx.moveTo(p2.x, p2.y);
+                else ctx.lineTo(p2.x, p2.y);
+              }
+              ctx.stroke();
+
+              for (let k = 0; k < 4; k++) {
+                const satAngle = t * 0.65 + (k * Math.PI) / 2 + journey.sectionFloat * 0.4;
+                const sat3 = rotate3D(
+                  Math.cos(satAngle) * 2.55,
+                  Math.sin(satAngle) * 2.55,
+                  0,
+                  -kf.pitchX - 0.35,
+                  -t * 0.48 - kf.tiltY,
+                  -kf.rollZ + 0.35
+                );
+                const sat2 = project(sat3);
+                ctx.fillStyle = k % 2 === 0 ? '#FFD21E' : '#F4F1EA';
+                ctx.beginPath();
+                ctx.arc(sat2.x, sat2.y, 4.5 * sat2.s, 0, Math.PI * 2);
+                ctx.fill();
+              }
+
+              // 3D Geodesic Core Wireframe
+              const projectedVerts = coreVerts.map(function (v) {
+                const r3 = rotate3D(
+                  v.x,
+                  v.y,
+                  v.z,
+                  t * 0.36 + kf.pitchX,
+                  t * 0.52 + kf.tiltY,
+                  kf.rollZ
+                );
+                return project(r3);
+              });
+
+              ctx.strokeStyle = '#FFD21E';
+              ctx.lineWidth = 1.6;
+              for (let i = 0; i < coreEdges.length; i++) {
+                const e = coreEdges[i];
+                const a = projectedVerts[e[0]];
+                const b = projectedVerts[e[1]];
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(b.x, b.y);
+                ctx.stroke();
+              }
+
+              for (let i = 0; i < projectedVerts.length; i++) {
+                const pv = projectedVerts[i];
+                ctx.fillStyle = i % 3 === 0 ? '#FFD21E' : '#F4F1EA';
+                ctx.beginPath();
+                ctx.arc(pv.x, pv.y, 3.0 * pv.s, 0, Math.PI * 2);
+                ctx.fill();
+              }
+            }
+          }
+
+          // 2. Render Header Orbit Mark
+          if (markCanvas) {
+            const mctx = markCanvas.getContext('2d');
+            if (mctx) {
+              mctx.clearRect(0, 0, 32, 32);
+              const scrollAngle = journey.sectionFloat * 0.55;
+              mctx.strokeStyle = '#F4F1EA';
+              mctx.lineWidth = 1.6;
+              mctx.beginPath();
+              for (let i = 0; i <= 36; i++) {
+                const a = (i / 36) * Math.PI * 2;
+                const p = rotate3D(Math.cos(a) * 12, Math.sin(a) * 12, 0, 0.65, t * 0.75 + scrollAngle, 0.25);
+                if (i === 0) mctx.moveTo(16 + p.x, 16 + p.y);
+                else mctx.lineTo(16 + p.x, 16 + p.y);
+              }
+              mctx.stroke();
+
+              mctx.strokeStyle = '#FFD21E';
+              mctx.lineWidth = 2.0;
+              mctx.beginPath();
+              for (let i = 0; i <= 36; i++) {
+                const a = (i / 36) * Math.PI * 2;
+                const p = rotate3D(Math.cos(a) * 9, Math.sin(a) * 9, 0, -0.58, -t * 0.95 - scrollAngle, -0.2);
+                if (i === 0) mctx.moveTo(16 + p.x, 16 + p.y);
+                else mctx.lineTo(16 + p.x, 16 + p.y);
+              }
+              mctx.stroke();
+
+              mctx.fillStyle = '#FFD21E';
+              mctx.beginPath();
+              mctx.arc(16, 16, 2.5, 0, Math.PI * 2);
+              mctx.fill();
+            }
+          }
+
+          // 3. Render Header Telemetry Line
+          if (lineCanvas) {
+            const lctx = lineCanvas.getContext('2d');
+            if (lctx) {
+              const lw = lineCanvas.width;
+              const lh = lineCanvas.height;
+              lctx.fillStyle = '#3A3F45';
+              lctx.fillRect(0, 0, lw, lh);
+              const ratio = journey.atFooter
+                ? 1
+                : Math.min(Math.max((journey.activeSectionIndex + 1) / SECTION_STOPS.length, 1 / SECTION_STOPS.length), 1);
+              lctx.fillStyle = '#FFD21E';
+              lctx.fillRect(0, 0, Math.round(lw * ratio), lh);
+
+              const carrierX = Math.round((((t * 0.12) % 1 + 1) % 1) * lw);
+              lctx.fillStyle = '#F4F1EA';
+              lctx.fillRect(Math.max(0, carrierX - 18), 0, 36, lh);
+            }
+          }
+        }
+
+        syncProgressUI();
+        renderAll(performance.now());
+
+        if (!prefersReducedMotion) {
+          function tick(nowMs) {
+            if (!document.hidden) renderAll(nowMs);
+            window.requestAnimationFrame(tick);
+          }
+          window.requestAnimationFrame(tick);
+        }
+
+        window.addEventListener(
+          'scroll',
+          function () {
+            journey = readJourneyState();
+            syncProgressUI();
+            if (prefersReducedMotion) renderAll(performance.now());
+          },
+          { passive: true }
+        );
+
+        window.addEventListener('resize', function () {
+          syncSizes();
+          journey = readJourneyState();
+          syncProgressUI();
+          renderAll(performance.now());
+        });
+      })();
+    </script>
+
+    <!-- Booking Calendar & Direct Slot Logic -->
     <script>
       (function () {
         const DROPOFF_SLOTS = [
@@ -513,13 +1197,19 @@
             dateStrip.appendChild(btn);
           });
           dateInput.value = selectedDate;
-          const activeDay = upcomingDays.find(function (x) { return x.iso === selectedDate; });
+          const activeDay = upcomingDays.find(function (x) {
+            return x.iso === selectedDate;
+          });
           if (activeDay) selectedDateDisplay.textContent = activeDay.dow + ', ' + activeDay.dom;
         }
 
         function renderSlots() {
           const slots = serviceType === 'pickup' ? PICKUP_SLOTS : DROPOFF_SLOTS;
-          if (!slots.some(function (s) { return s.code === selectedSlotCode; })) {
+          if (
+            !slots.some(function (s) {
+              return s.code === selectedSlotCode;
+            })
+          ) {
             selectedSlotCode = slots[1] ? slots[1].code : slots[0].code;
             selectedSlotLabel = slots[1] ? slots[1].label : slots[0].label;
           }
@@ -565,8 +1255,12 @@
           renderSlots();
         }
 
-        tabDropoff.addEventListener('click', function () { setServiceType('dropoff'); });
-        tabPickup.addEventListener('click', function () { setServiceType('pickup'); });
+        tabDropoff.addEventListener('click', function () {
+          setServiceType('dropoff');
+        });
+        tabPickup.addEventListener('click', function () {
+          setServiceType('pickup');
+        });
 
         document.querySelectorAll('[data-select-service]').forEach(function (el) {
           el.addEventListener('click', function () {
@@ -576,7 +1270,9 @@
         });
 
         fetch('/api/booking-config')
-          .then(function (r) { return r.json(); })
+          .then(function (r) {
+            return r.json();
+          })
           .then(function (cfg) {
             if (cfg && cfg.ok) {
               bookedSlots = Array.isArray(cfg.bookedSlots) ? cfg.bookedSlots : [];
@@ -641,12 +1337,15 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           })
-            .then(function (r) { return r.json(); })
+            .then(function (r) {
+              return r.json();
+            })
             .then(function (res) {
               submitBtn.disabled = false;
               submitBtn.textContent = '✅ Confirm Appointment & Generate Google Calendar Invite';
               if (!res || !res.ok) {
-                errBox.textContent = (res && res.error) || 'Could not complete booking. Please call or text (321) 396-2008.';
+                errBox.textContent =
+                  (res && res.error) || 'Could not complete booking. Please call or text (321) 396-2008.';
                 errBox.style.display = 'block';
                 return;
               }

@@ -23,8 +23,8 @@ const CASES = [
   { host: "dream-online.net", path: "/terms", expectTitle: "Terms of Service - ANTIGRAVITY Backup (dream-online.net)" },
   { host: "untilnokidinneed.com", path: "/", expectTitle: "Until No Kid In Need" },
   { host: "www.untilnokidinneed.com", path: "/", expectTitle: "Until No Kid In Need" },
-  { host: "onlinerecycle.net", path: "/", expectTitle: "Florida Electronics Recycling | Free Drop-Off & Pickup | OnlineRecycle.net" },
-  { host: "www.onlinerecycle.net", path: "/", expectTitle: "Florida Electronics Recycling | Free Drop-Off & Pickup | OnlineRecycle.net" },
+  { host: "onlinerecycle.net", path: "/", expectTitle: "CLAUDE's N Joshua's — OnlineRecycle.net | Florida Electronics Recycling & Free Pickup" },
+  { host: "www.onlinerecycle.net", path: "/", expectTitle: "CLAUDE's N Joshua's — OnlineRecycle.net | Florida Electronics Recycling & Free Pickup" },
 ];
 
 function get(host, port, hostHeader, urlPath = "/") {
