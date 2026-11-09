@@ -92,6 +92,8 @@ body {
   flex-wrap: nowrap;
   gap: 6px;
   white-space: nowrap;
+  min-height: 44px;
+  min-width: 44px;
 }
 
 .brand-title-prefix {
@@ -161,6 +163,12 @@ body {
 }
 
 .top-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 10px;
   color: var(--text);
   text-decoration: none;
   font-weight: 600;
@@ -212,9 +220,17 @@ body {
   color: var(--text);
   text-align: right;
   line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .contact-info a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 6px;
   color: var(--accent);
   text-decoration: none;
   font-weight: 800;
@@ -413,9 +429,11 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
   gap: 8px;
   border-radius: 10px;
-  padding: 14px 24px;
+  padding: 12px 24px;
   text-decoration: none;
   font-weight: 700;
   font-size: 1rem;
@@ -494,6 +512,12 @@ p {
 }
 
 .service-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  gap: 8px;
   border: 1px solid transparent;
   background: transparent;
   color: var(--text);
@@ -529,6 +553,8 @@ p {
 }
 
 .date-pill {
+  min-height: 44px;
+  min-width: 44px;
   border: 1px solid var(--line);
   background: var(--bg);
   border-radius: 10px;
@@ -573,6 +599,11 @@ p {
 }
 
 .slot-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
   border: 1px solid var(--line);
   background: var(--bg);
   border-radius: 8px;
@@ -626,6 +657,7 @@ p {
 .form-field input,
 .form-field select,
 .form-field textarea {
+  min-height: 44px;
   padding: 12px 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -756,6 +788,14 @@ p {
   font-size: 0.95rem;
 }
 
+.footer a[href^="tel:"] {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 6px;
+}
+
 .disclaimer {
   color: var(--muted);
   font-size: 0.88rem;
@@ -763,6 +803,12 @@ p {
 }
 
 .disclaimer a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 8px;
   color: var(--text);
   text-decoration: underline;
 }
@@ -785,8 +831,8 @@ p {
 .journey-progress-inner {
   max-width: 1440px;
   margin: 0 auto;
-  height: 54px;
-  padding: 0 16px;
+  height: 58px;
+  padding: 0 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -801,7 +847,9 @@ p {
 }
 
 .journey-segment-btn {
-  height: 34px;
+  min-height: 44px;
+  min-width: 44px;
+  height: 44px;
   border-radius: 4px;
   border: 1px solid var(--line);
   background: var(--panel);
@@ -855,7 +903,7 @@ p {
 #cookie-banner {
   display: none;
   position: fixed;
-  bottom: 54px;
+  bottom: 58px;
   left: 0;
   right: 0;
   background: var(--panel-elevated);
@@ -893,6 +941,11 @@ p {
 }
 
 #cookie-banner .cb-text a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 6px;
   color: var(--accent);
 }
 
@@ -906,15 +959,17 @@ p {
 #cookie-banner .cb-checks label {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
+  min-width: 44px;
   gap: 6px;
-  font-size: 0.8rem;
+  font-size: 0.88rem;
   color: var(--text);
   cursor: pointer;
 }
 
 #cookie-banner .cb-checks input[type='checkbox'] {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
   accent-color: var(--accent);
   cursor: pointer;
   flex-shrink: 0;
@@ -928,7 +983,12 @@ p {
 }
 
 #cookie-banner .cb-btn {
-  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 18px;
   border-radius: 6px;
   font-size: 0.88rem;
   font-weight: 700;
