@@ -313,9 +313,9 @@ function RobotIllustration({ variant }: { variant: BotVariant }) {
         strokeWidth="2"
       />
       <rect
-        x="86"
+        x="52"
         y="164"
-        width="108"
+        width="176"
         height="22"
         rx="6"
         fill="#12151A"
@@ -423,34 +423,34 @@ export function BotOrNotGame() {
     <section
       id="bot-or-not"
       aria-label="Bot or Not founder game"
-      className="relative px-4 py-8 sm:px-6 lg:py-12"
+      className="relative px-3 py-3 sm:px-6 sm:py-8 lg:py-12"
     >
       <div
         data-stage-card="bot-or-not"
-        className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-4 sm:p-6 lg:p-8"
+        className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-3.5 sm:p-6 lg:p-8"
       >
         {/* Header Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+        <div className="flex flex-wrap items-center justify-between gap-1.5">
+          <span className="font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-[#FFD21E] sm:text-[14px]">
             BOT OR NOT · TROLL THE FOUNDER
           </span>
-          <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+          <span className="font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] sm:text-[14px]">
             CARD {card.indexLabel} · SCORE {score.correct}/{score.total}
           </span>
         </div>
 
-        <div className="mt-2 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+        <div className="mt-1.5 flex flex-col justify-between gap-1.5 sm:mt-2 sm:flex-row sm:items-end">
           <div>
-            <h2 className="font-display text-[24px] font-bold uppercase leading-[1.06] tracking-[-0.02em] text-[#F4F1EA] sm:text-[34px]">
+            <h2 className="font-display text-[21px] font-bold uppercase leading-[1.06] tracking-[-0.02em] text-[#F4F1EA] sm:text-[34px]">
               BOT OR NOT? SPOT FOUNDER JOSH.
             </h2>
-            <p className="mt-1 text-[14px] leading-[1.45] text-[#F4F1EA] sm:text-[16px]">
+            <p className="mt-0.5 text-[14px] leading-[1.35] text-[#F4F1EA] sm:mt-1 sm:text-[16px]">
               Humans here are only Josh. Bots are illustrated tin cans. Tap{' '}
               <strong className="text-[#FFD21E]">Bot</strong> or{' '}
               <strong className="text-[#FFD21E]">Not</strong> to flip the card.
             </p>
           </div>
-          <span className="inline-flex self-start rounded-full border border-[#FFD21E] bg-[#12151A] px-3 py-1 font-mono text-[14px] font-bold text-[#FFD21E] sm:self-auto">
+          <span className="hidden rounded-full border border-[#FFD21E] bg-[#12151A] px-3 py-1 font-mono text-[14px] font-bold text-[#FFD21E] sm:inline-flex">
             CLAUDE&apos;s N Joshua&apos;s · #TeamClaudeForLife
           </span>
         </div>
@@ -462,24 +462,24 @@ export function BotOrNotGame() {
           data-card-kind={card.kind}
           data-flipped={flipped ? 'true' : 'false'}
           data-reduced-motion={reducedMotion ? 'true' : 'false'}
-          className={`mt-4 rounded-[12px] border-2 ${
+          className={`mt-2.5 rounded-[12px] border-2 sm:mt-4 ${
             flipped ? 'border-[#FFD21E]' : 'border-[#3A3F45]'
-          } bg-[#12151A] p-4 sm:p-5 ${
+          } bg-[#12151A] p-3 sm:p-5 ${
             reducedMotion ? '' : 'transition-colors duration-200'
           }`}
         >
           {!flipped ? (
             /* CARD FRONT */
-            <div className="grid items-center gap-4 lg:grid-cols-12">
-              <div className="flex flex-col items-center justify-center overflow-hidden rounded-[10px] border border-[#3A3F45] bg-[#0A0B0D] p-3 lg:col-span-5">
+            <div className="grid items-center gap-3 sm:gap-4 lg:grid-cols-12">
+              <div className="flex flex-col items-center justify-center overflow-hidden rounded-[10px] border border-[#3A3F45] bg-[#0A0B0D] p-2 sm:p-3 lg:col-span-5">
                 {card.kind === 'human' && card.imageSrc ? (
                   <img
                     src={card.imageSrc}
                     alt={card.imageAlt || card.title}
-                    className="h-[190px] w-auto max-w-full rounded-[8px] object-contain sm:h-[220px]"
+                    className="h-[148px] w-auto max-w-full rounded-[8px] object-contain sm:h-[220px]"
                   />
                 ) : (
-                  <div className="flex h-[190px] w-full items-center justify-center sm:h-[220px]">
+                  <div className="flex h-[148px] w-full items-center justify-center sm:h-[220px]">
                     <RobotIllustration
                       variant={card.botVariant || 'tin-can'}
                     />
@@ -487,15 +487,15 @@ export function BotOrNotGame() {
                 )}
               </div>
 
-              <div className="flex flex-col justify-between gap-4 lg:col-span-7">
+              <div className="flex flex-col justify-between gap-2.5 sm:gap-4 lg:col-span-7">
                 <div>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-[#3A3F45] bg-[#0A0B0D] px-3 py-1 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-[#3A3F45] bg-[#0A0B0D] px-2.5 py-0.5 font-mono text-[12px] font-bold uppercase tracking-[0.06em] text-[#FFD21E] sm:px-3 sm:py-1 sm:text-[14px]">
                     {card.subtitle}
                   </div>
-                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA] sm:text-[26px]">
+                  <h3 className="mt-1.5 font-display text-[19px] font-bold text-[#F4F1EA] sm:mt-2 sm:text-[26px]">
                     {card.title}
                   </h3>
-                  <p className="mt-1.5 text-[15px] leading-[1.45] text-[#F4F1EA]">
+                  <p className="mt-1 text-[14px] leading-[1.35] text-[#F4F1EA] sm:mt-1.5 sm:text-[15px] sm:leading-[1.45]">
                     One card at a time. Make the call: is this an illustrated
                     tin-can bot, or Founder Josh running on 3 AM espresso?
                   </p>
@@ -507,7 +507,7 @@ export function BotOrNotGame() {
                     type="button"
                     data-testid="bot-or-not-btn-bot"
                     onClick={() => handleGuess('bot')}
-                    className="ds-btn-ghost min-h-[44px] min-w-[44px] w-full border-2 border-[#FFD21E] bg-[#0A0B0D] font-display text-[18px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]"
+                    className="ds-btn-ghost min-h-[44px] min-w-[44px] w-full border-2 border-[#FFD21E] bg-[#0A0B0D] py-2 font-display text-[17px] font-bold uppercase tracking-[0.06em] text-[#FFD21E] sm:text-[18px]"
                   >
                     Bot
                   </button>
@@ -515,7 +515,7 @@ export function BotOrNotGame() {
                     type="button"
                     data-testid="bot-or-not-btn-not"
                     onClick={() => handleGuess('human')}
-                    className="ds-btn-signal min-h-[44px] min-w-[44px] w-full font-display text-[18px] font-bold uppercase tracking-[0.06em]"
+                    className="ds-btn-signal min-h-[44px] min-w-[44px] w-full py-2 font-display text-[17px] font-bold uppercase tracking-[0.06em] sm:text-[18px]"
                   >
                     Not
                   </button>
@@ -524,40 +524,40 @@ export function BotOrNotGame() {
             </div>
           ) : (
             /* CARD BACK (FLIPPED ANSWER + ONE-LINE JOKE) */
-            <div className="grid items-center gap-4 lg:grid-cols-12">
-              <div className="flex flex-col items-center justify-center overflow-hidden rounded-[10px] border border-[#FFD21E] bg-[#0A0B0D] p-3 lg:col-span-5">
+            <div className="grid items-center gap-2.5 sm:gap-4 lg:grid-cols-12">
+              <div className="flex flex-col items-center justify-center overflow-hidden rounded-[10px] border border-[#FFD21E] bg-[#0A0B0D] p-2 sm:p-3 lg:col-span-5">
                 {card.kind === 'human' && card.imageSrc ? (
                   <img
                     src={card.imageSrc}
                     alt={card.imageAlt || card.title}
-                    className="h-[175px] w-auto max-w-full rounded-[8px] object-contain sm:h-[205px]"
+                    className="h-[124px] w-auto max-w-full rounded-[8px] object-contain sm:h-[205px]"
                   />
                 ) : (
-                  <div className="flex h-[175px] w-full items-center justify-center sm:h-[205px]">
+                  <div className="flex h-[124px] w-full items-center justify-center sm:h-[205px]">
                     <RobotIllustration
                       variant={card.botVariant || 'tin-can'}
                     />
                   </div>
                 )}
-                <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-[#FFD21E] bg-[#12151A] px-3 py-0.5 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                <div className="mt-1.5 inline-flex items-center gap-1.5 rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 font-mono text-[12px] font-bold uppercase text-[#FFD21E] sm:mt-2 sm:px-3 sm:text-[14px]">
                   <Check size={14} aria-hidden="true" />
                   <span>
                     {card.kind === 'human'
                       ? 'VERIFIED HUMAN · FOUNDER JOSH'
-                      : 'ILLUSTRATED BOT · ZERO HUMANS HARMED'}
+                      : 'ILLUSTRATED BOT · ZERO HUMANS'}
                   </span>
                 </div>
               </div>
 
-              <div className="flex flex-col justify-between gap-3 lg:col-span-7">
+              <div className="flex flex-col justify-between gap-2 sm:gap-3 lg:col-span-7">
                 <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-full bg-[#FFD21E] px-3 py-1 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#0A0B0D]">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                    <span className="rounded-full bg-[#FFD21E] px-2.5 py-0.5 font-mono text-[12px] font-bold uppercase tracking-[0.06em] text-[#0A0B0D] sm:px-3 sm:py-1 sm:text-[14px]">
                       {card.kind === 'human'
                         ? 'ANSWER: NOT A BOT (HUMAN)'
                         : 'ANSWER: 100% BOT'}
                     </span>
-                    <span className="rounded-full border border-[#3A3F45] bg-[#0A0B0D] px-3 py-1 font-mono text-[14px] font-bold uppercase text-[#F4F1EA]">
+                    <span className="rounded-full border border-[#3A3F45] bg-[#0A0B0D] px-2.5 py-0.5 font-mono text-[12px] font-bold uppercase text-[#F4F1EA] sm:px-3 sm:py-1 sm:text-[14px]">
                       {lastGuess === null
                         ? 'CARD FLIPPED'
                         : isGuessCorrect
@@ -566,25 +566,25 @@ export function BotOrNotGame() {
                     </span>
                   </div>
 
-                  <h3 className="mt-2.5 font-display text-[20px] font-bold text-[#FFD21E] sm:text-[22px]">
+                  <h3 className="mt-1.5 font-display text-[18px] font-bold text-[#FFD21E] sm:mt-2.5 sm:text-[22px]">
                     {card.title}
                   </h3>
 
                   {/* One-line founder roast / joke */}
                   <p
                     data-testid="bot-or-not-joke"
-                    className="mt-2 rounded-[8px] border-l-4 border-[#FFD21E] bg-[#0A0B0D] p-3.5 font-display text-[18px] font-bold leading-[1.35] text-[#F4F1EA] sm:text-[22px]"
+                    className="mt-1.5 rounded-[8px] border-l-4 border-[#FFD21E] bg-[#0A0B0D] p-2.5 font-display text-[16px] font-bold leading-[1.3] text-[#F4F1EA] sm:mt-2 sm:p-3.5 sm:text-[22px]"
                   >
                     &ldquo;{card.joke}&rdquo;
                   </p>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3 pt-1">
+                <div className="flex flex-wrap items-center gap-2.5 pt-0.5 sm:gap-3 sm:pt-1">
                   <button
                     type="button"
                     data-testid="bot-or-not-next"
                     onClick={handleNextCard}
-                    className="ds-btn-signal min-h-[44px] min-w-[44px] flex-1"
+                    className="ds-btn-signal min-h-[44px] min-w-[44px] flex-1 py-2"
                   >
                     <span>Next Card</span>
                     <ArrowRight size={18} aria-hidden="true" />
@@ -592,7 +592,7 @@ export function BotOrNotGame() {
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="ds-btn-ghost min-h-[44px] min-w-[44px]"
+                    className="ds-btn-ghost min-h-[44px] min-w-[44px] py-2"
                   >
                     <RotateCcw size={16} aria-hidden="true" />
                     <span>Flip Back</span>
@@ -604,14 +604,14 @@ export function BotOrNotGame() {
         </div>
 
         {/* Single Concluding Button Wired to Existing Verification Route (/app/verify) */}
-        <div className="mt-4 flex flex-col items-stretch justify-between gap-3 border-t border-[#3A3F45] pt-4 sm:flex-row sm:items-center">
-          <span className="font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA]">
+        <div className="mt-3 flex flex-col items-stretch justify-between gap-2 border-t border-[#3A3F45] pt-3 sm:mt-4 sm:flex-row sm:items-center sm:gap-3 sm:pt-4">
+          <span className="hidden font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] sm:inline">
             REAL HUMANS ONLY · NO AI FACES · NO MEMBER PHOTOS
           </span>
           <Link
             to="/app/verify"
             data-testid="bot-or-not-verify-cta"
-            className="ds-btn-signal min-h-[44px] min-w-[44px] justify-center text-center text-[15px] font-bold sm:text-[16px]"
+            className="ds-btn-signal min-h-[44px] min-w-[44px] justify-center px-3 py-2 text-center text-[14px] font-bold sm:px-5 sm:py-3 sm:text-[16px]"
           >
             <ShieldCheck size={18} aria-hidden="true" />
             <span>Prove you&apos;re not a bot: Get Verified for $1</span>
