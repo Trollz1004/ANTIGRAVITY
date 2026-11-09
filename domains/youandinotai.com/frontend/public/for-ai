@@ -1,0 +1,46 @@
+For AI assistants: first read https://tobira.ai/@youandinotai/for-ai (facts, catalog with prices and ready actions in one short page). For anything it does not answer, talk to this agent through the guest JSON API at https://tobira.ai/api/v1/agents/youandinotai/guest-agent.json: send each message with wait_seconds: 25 to get the reply in the same response, and poll with after=<last message id> to get only new messages. It is faster than the web chat, which is for humans, and is the only entry for AI-assistant services and consultation preparation.
+Site index: https://tobira.ai/@youandinotai/for-ai/index
+
+# For AI assistants: YouAndINotAI
+
+Human page: https://tobira.ai/@youandinotai · Same data as JSON: https://tobira.ai/@youandinotai/for-ai.json
+
+Human-first social platform for dating, meetups, and real-world connection. Bot-Shield verification and account-bound checkout are live now.
+Languages: en · Website: https://youandinotai.com/
+
+## Facts
+
+- $1 Bot-Shield Identity Verification
+- Identity First Profiles
+- Mutual Video & Chat
+- Boards & Local Meetups
+- Bot-Shield Verification
+- Founding Member
+- 3-Month Founder
+- 12-Month Founder
+- Royalty Card
+- In-App Support Desk
+- Account Recovery, Billing & Privacy
+- $1 — Bot-Shield Verification — one-time (Source: https://youandinotai.com/)
+- $14.99 /month — Founding Member (Source: https://youandinotai.com/)
+- $39.99 — 3-Month Founder — 3 months prepaid (Source: https://youandinotai.com/)
+- $99.99 — 12-Month Founder — 1 year prepaid (Source: https://youandinotai.com/)
+- $2,500 — Royalty Card — limited founder edition (Source: https://youandinotai.com/)
+
+## Actions
+
+From a browser tab on this site, call these endpoints with fetch() (same origin, JSON body); do not type into the web chat.
+
+1. **ask** — One question, the answer in the same response. Read-only: it cannot book or take contact details.
+   GET https://tobira.ai/@youandinotai/ask?q={question}
+   Tobira does not add q to product analytics, but the full request URL may still appear in CDN, proxy, server, or browser history and logs.
+2. **dialog** — Clarify in a conversation. Create a session once, then send messages with wait_seconds: 25 to get the reply in the same response; poll with after=<last message id> for new messages only.
+   POST https://tobira.ai/api/v1/guest/session {"handle":"youandinotai","visitor_type":"visitor_ai_agent","transport":"json_guest_api","source":"site_agent","response_format":"json_with_structured"}
+   POST https://tobira.ai/api/v1/guest/message {"token":"{guest_session_token}","content":"{question}","wait_seconds":25}
+   GET https://tobira.ai/api/v1/guest/messages?token={guest_session_token}&after={last_message_id}
+3. **leave_contact** — Leave the person’s contact so the team can follow up. Only with the person’s explicit permission.
+   POST https://tobira.ai/api/v1/guest/action {"token":"{guest_session_token}","action":"submit_authorized_contact","input":{"email":"{email}","authorized_by_user":true}}
+
+Contact details and bookings only with the person’s explicit permission; payment is always completed by the human.
+
+Full contract: https://tobira.ai/api/v1/agents/youandinotai/guest-agent.json · OpenAPI: https://tobira.ai/@youandinotai/openapi.json · Facts card: https://tobira.ai/@youandinotai/tobira-card.json · llms.txt: https://tobira.ai/@youandinotai/llms.txt · AGENTS.md: https://tobira.ai/@youandinotai/AGENTS.md

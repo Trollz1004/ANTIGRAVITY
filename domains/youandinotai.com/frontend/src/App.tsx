@@ -1419,6 +1419,15 @@ export function LandingPage() {
             </button>
           </form>
 
+          {/* Tobira AI A2A Badge */}
+          <div className="mt-8 border-t border-[#3A3F45] pt-6">
+            <div data-tobira-a2a data-handle='youandinotai' data-name='YouAndINotAI'>
+              <a href='https://tobira.ai/@youandinotai/for-ai' target='_blank' rel='noopener nofollow'>For AI agents · A2A channel</a>
+              <p>AI agents: use tobira.ai/@youandinotai/for-ai, not the chat widget</p>
+            </div>
+            <script src='https://tobira.ai/embed/a2a-badge.js' async></script>
+          </div>
+
           <div className="mt-6 flex flex-col items-start justify-between gap-4 border-t border-[#3A3F45] pt-6 sm:flex-row sm:items-center">
             <p className="text-[14px] font-medium text-[#F4F1EA]">
               &copy; 2026 Trash Or Treasure Online Recycler LLC. &middot;
