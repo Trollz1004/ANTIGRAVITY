@@ -51,6 +51,8 @@
   </head>
 
   <body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
     <!-- Fixed Full-Viewport 3D Scene Stage (House Motion Rule) -->
     <canvas
       id="onlinerecycle-stage-canvas"
@@ -131,7 +133,7 @@
       ></canvas>
     </header>
 
-    <main class="wrap">
+    <main class="wrap" id="main" tabindex="-1">
       <!-- STOP 01 (#overview) — First-Screen 3D Stage & Primary Action -->
       <section class="stage-stop" id="overview" aria-label="Overview">
         <div class="stage-panel">
@@ -762,61 +764,79 @@
             class="journey-segment-btn filled"
             data-stop-index="0"
             data-stop-id="overview"
+            data-stop-name="Overview"
             data-filled="true"
             aria-current="step"
+            aria-label="01 Overview"
+            title="01 Overview"
           >
-            <span>01</span>
-            <span class="journey-segment-label">OVERVIEW</span>
+            <span class="journey-segment-num">01</span>
+            <span class="journey-segment-label journey-segment-name">OVERVIEW</span>
           </button>
           <button
             type="button"
             class="journey-segment-btn"
             data-stop-index="1"
             data-stop-id="book"
+            data-stop-name="Schedule"
             data-filled="false"
+            aria-label="02 Schedule"
+            title="02 Schedule"
           >
-            <span>02</span>
-            <span class="journey-segment-label">SCHEDULE</span>
+            <span class="journey-segment-num">02</span>
+            <span class="journey-segment-label journey-segment-name">SCHEDULE</span>
           </button>
           <button
             type="button"
             class="journey-segment-btn"
             data-stop-index="2"
             data-stop-id="how-it-works"
+            data-stop-name="Process"
             data-filled="false"
+            aria-label="03 Process"
+            title="03 Process"
           >
-            <span>03</span>
-            <span class="journey-segment-label">PROCESS</span>
+            <span class="journey-segment-num">03</span>
+            <span class="journey-segment-label journey-segment-name">PROCESS</span>
           </button>
           <button
             type="button"
             class="journey-segment-btn"
             data-stop-index="3"
             data-stop-id="accepted"
+            data-stop-name="Accepted Gear"
             data-filled="false"
+            aria-label="04 Accepted Gear"
+            title="04 Accepted Gear"
           >
-            <span>04</span>
-            <span class="journey-segment-label">DEVICES</span>
+            <span class="journey-segment-num">04</span>
+            <span class="journey-segment-label journey-segment-name">DEVICES</span>
           </button>
           <button
             type="button"
             class="journey-segment-btn"
             data-stop-index="4"
             data-stop-id="faq"
+            data-stop-name="FAQ"
             data-filled="false"
+            aria-label="05 FAQ"
+            title="05 FAQ"
           >
-            <span>05</span>
-            <span class="journey-segment-label">FAQ</span>
+            <span class="journey-segment-num">05</span>
+            <span class="journey-segment-label journey-segment-name">FAQ</span>
           </button>
           <button
             type="button"
             class="journey-segment-btn"
             data-stop-index="5"
             data-stop-id="footer"
+            data-stop-name="Terms &amp; Legal"
             data-filled="false"
+            aria-label="06 Terms &amp; Legal"
+            title="06 Terms &amp; Legal"
           >
-            <span>06</span>
-            <span class="journey-segment-label">TERMS</span>
+            <span class="journey-segment-num">06</span>
+            <span class="journey-segment-label journey-segment-name">TERMS</span>
           </button>
         </div>
         <div class="journey-readout">
