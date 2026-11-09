@@ -258,12 +258,12 @@
                   <line x1="8" y1="2" x2="8" y2="6"></line>
                   <line x1="3" y1="10" x2="21" y2="10"></line>
                 </svg>
-                <span>Google Calendar Ultra Appointment Scheduler</span>
+                <span>Live appointment scheduler</span>
               </div>
               <h2 style="margin-bottom: 6px">Schedule Your Drop-Off or Free Pickup</h2>
               <p style="margin-bottom: 0; font-size: 0.98rem">
-                Pick a convenient date and time window below. Your appointment is logged immediately and generates a
-                direct Google Calendar invite, .ICS file, and SMS&nbsp;confirmation.
+                Pick a convenient date and time window below. Your appointment is logged immediately and provides an
+                Add to Google Calendar link and downloadable .ICS calendar&nbsp;file.
               </p>
             </div>
             <div class="service-tabs" role="tablist" aria-label="Service type">
@@ -382,12 +382,12 @@
               </div>
 
               <div class="form-field">
-                <label for="bf-phone">Phone Number (for SMS confirmation) *</label>
+                <label for="bf-phone">Phone Number *</label>
                 <input type="tel" id="bf-phone" name="phone" autocomplete="tel" placeholder="(321) 555-0199" required />
               </div>
 
               <div class="form-field">
-                <label for="bf-email">Email Address (for Google Calendar invite)</label>
+                <label for="bf-email">Email Address (optional)</label>
                 <input type="email" id="bf-email" name="email" autocomplete="email" placeholder="you@example.com" />
               </div>
 
@@ -482,10 +482,10 @@
                   <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
-                <span id="bf-submit-btn-label">Confirm Appointment &amp; Generate Google Calendar Invite</span>
+                <span id="bf-submit-btn-label">Confirm Appointment &amp; Add to Calendar</span>
               </button>
               <span style="font-size: 0.88rem; color: var(--muted)">
-                Free intake service · Instant booking ID + 1-click Google Calendar &amp; SMS confirmation
+                Free intake service · Instant booking ID + Google Calendar &amp; .ICS download
               </span>
             </div>
           </form>
@@ -1769,7 +1769,7 @@
             .then(function (res) {
               submitBtn.disabled = false;
               if (submitBtnLabel) {
-                submitBtnLabel.textContent = 'Confirm Appointment & Generate Google Calendar Invite';
+                submitBtnLabel.textContent = 'Confirm Appointment & Add to Calendar';
               }
               if (!res || !res.ok) {
                 errBox.textContent =
@@ -1790,7 +1790,7 @@
                 b.slotLabel +
                 ') · ' +
                 b.deviceCount +
-                '. Click "Add to Google Calendar" below to save this appointment and send calendar notifications.';
+                '. Click "Add to Google Calendar" or download the .ICS file below to save this appointment.';
               confirmGcalBtn.href = res.googleCalendarUrl;
               confirmIcsBtn.href = res.icsUrl;
               confirmSmsBtn.href = res.smsUrl;
@@ -1800,7 +1800,7 @@
             .catch(function () {
               submitBtn.disabled = false;
               if (submitBtnLabel) {
-                submitBtnLabel.textContent = 'Confirm Appointment & Generate Google Calendar Invite';
+                submitBtnLabel.textContent = 'Confirm Appointment & Add to Calendar';
               }
               errBox.textContent = 'Network error — please call or text (321) 396-2008 to confirm your slot.';
               errBox.style.display = 'block';
