@@ -635,6 +635,12 @@ p {
   background: var(--bg);
 }
 
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: #9da3aa;
+  opacity: 1;
+}
+
 .form-field input:focus,
 .form-field select:focus,
 .form-field textarea:focus {
