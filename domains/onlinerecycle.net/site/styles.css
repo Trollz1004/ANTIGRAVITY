@@ -386,12 +386,12 @@ body {
   justify-content: flex-end;
   padding-top: var(--stop01-pad-top, 56vh);
   padding-bottom: 112px;
-  margin-bottom: 24vh;
+  margin-bottom: 42vh;
 }
 
 .hero-first-screen {
   max-width: 680px;
-  background: rgba(18, 21, 26, 0.86);
+  background: rgba(18, 21, 26, 0.88);
   border: 1px solid var(--line);
   border-left: 3px solid var(--accent);
   border-radius: 10px;
@@ -426,17 +426,17 @@ body {
 
 /* One-Card-at-a-Time Pop-Up Book 3D Spin & Flight Stage */
 .spin-card-stage {
-  min-height: 76vh;
+  min-height: 112vh;
   display: flex;
   align-items: center;
-  padding: 10vh 0;
-  perspective: 1200px;
-  perspective-origin: 50% 50%;
+  padding: 20vh 0;
+  margin-bottom: 14vh;
 }
 
 .spin-card-stage.stage-scheduler-slot {
-  min-height: auto;
-  padding: 8vh 0 14vh;
+  min-height: 108vh;
+  padding: 18vh 0 24vh;
+  margin-bottom: 18vh;
 }
 
 .spin-card-stage.align-left {
@@ -1589,7 +1589,7 @@ p {
     min-height: calc(100vh - 64px);
     padding-top: var(--stop01-pad-top, 420px);
     padding-bottom: 84px;
-    margin-bottom: 20vh;
+    margin-bottom: 42vh;
   }
 
   .hero-first-screen {
@@ -1608,8 +1608,9 @@ p {
   }
 
   .spin-card-stage {
-    min-height: 68vh;
-    padding: 8vh 0;
+    min-height: 112vh;
+    padding: 20vh 0;
+    margin-bottom: 18vh;
   }
 
   .spin-card,
