@@ -185,27 +185,82 @@ async function startServer() {
     res.json({ status: 'ok', players: players.size });
   });
 
+  // Static discovery routes (Tobira AI / RFC 8615) - served directly in both dev and prod
+  const publicDir = path.join(__dirname, 'public');
+  const distDir = path.join(__dirname, 'dist');
+  const staticRoot = process.env.NODE_ENV === 'production' && path.isAbsolute(distDir) ? distDir : publicDir;
+
+  app.get('/llms.txt', (req, res) => {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    const target = path.join(process.env.NODE_ENV === 'production' ? distDir : publicDir, 'llms.txt');
+    res.sendFile(target);
+  });
+
+  app.get('/AGENTS.md', (req, res) => {
+    res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    const target = path.join(process.env.NODE_ENV === 'production' ? distDir : publicDir, 'AGENTS.md');
+    res.sendFile(target);
+  });
+
+  app.get('/for-ai', (req, res) => {
+    res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    const target = path.join(process.env.NODE_ENV === 'production' ? distDir : publicDir, 'for-ai');
+    res.sendFile(target);
+  });
+
+  app.get('/agent.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    const target = path.join(process.env.NODE_ENV === 'production' ? distDir : publicDir, 'agent.json');
+    res.sendFile(target);
+  });
+
+  app.get('/guest-agent.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    const target = path.join(process.env.NODE_ENV === 'production' ? distDir : publicDir, 'guest-agent.json');
+    res.sendFile(target);
+  });
+
+  app.use('/.well-known', express.static(path.join(process.env.NODE_ENV === 'production' ? distDir : publicDir, '.well-known'), {
+    dotfiles: 'allow',
+    setHeaders(res) {
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=3600');
+    }
+  }));
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
       server: {
         middlewareMode: true,
         // Public traffic arrives via the cloudflared tunnel with the real
-        // hostname â€” Vite's host check 403s anything not listed here.
+        // hostname — Vite's host check 403s anything not listed here.
         allowedHosts: ['.youandinotai.com', 'localhost', '127.0.0.1'],
       },
       appType: 'spa',
     });
     app.use(vite.middlewares);
   } else {
-    const distDir = path.join(__dirname, 'dist');
-
     // Serve static assets with CDN-ready cache headers.
     // Fingerprinted assets (containing a hash like abc1234) get long-term immutable caching.
     // Non-fingerprinted assets and HTML get short/no caching.
     app.use(
       express.static(distDir, {
         setHeaders(res, filePath) {
+          const basename = path.basename(filePath);
+          if (basename === 'llms.txt') {
+            res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+          } else if (basename === 'AGENTS.md' || basename === 'for-ai') {
+            res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+          } else if (basename.endsWith('.json')) {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+          }
+
           // HTML files: no-cache so clients always get the latest entry point
           if (filePath.endsWith('.html')) {
             res.setHeader(
@@ -217,7 +272,6 @@ async function startServer() {
 
           // Fingerprinted assets: hash in filename (e.g. main-abc1234.js, vendor-def5678.css)
           // These are safe to cache forever because the hash changes when content changes.
-          const basename = path.basename(filePath);
           const hasHash = /-[a-f0-9]{8,}\./.test(basename);
           if (hasHash) {
             res.setHeader(
@@ -236,6 +290,10 @@ async function startServer() {
     app.get('*', (req, res, next) => {
       if (req.path.startsWith('/api/')) {
         next();
+        return;
+      }
+      if (req.path.startsWith('/.') || req.path.includes('/.')) {
+        res.status(404).send('Not Found');
         return;
       }
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
