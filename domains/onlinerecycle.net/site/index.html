@@ -138,32 +138,17 @@
       <section class="stage-stop" id="overview" aria-label="Overview">
         <div class="stage-panel">
           <div class="stop-kicker-row">
-            <span class="stop-kicker">01 / CENTRAL FLORIDA ELECTRONICS INTAKE &amp; RECOVERY</span>
+            <span class="stop-kicker">
+              01 / CENTRAL FLORIDA ELECTRONICS INTAKE &amp; RECOVERY · SECURE DEVICE HANDLING · DIRECT SCHEDULING
+            </span>
             <span class="stop-telemetry">STOP 01 / 06 · OVERVIEW</span>
-          </div>
-
-          <div class="trust-badge">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              <polyline points="9 12 11 14 15 10"></polyline>
-            </svg>
-            Secure Device Handling · Direct OnlineRecycle.net Scheduling
           </div>
 
           <h1>Florida Electronics Recycling and Free Device Pickup</h1>
           <p>
             Free e-waste drop-off in Sorrento and scheduled route pickup across Lake, Orange, and Seminole Counties.
             We help households and businesses clear out retired hardware with storage media wipe or destruction,
-            component testing, and instant Google Calendar scheduling.
+            component testing, and instant Google Calendar&nbsp;scheduling.
           </p>
 
           <div class="hero-metrics">
@@ -278,7 +263,7 @@
               <h2 style="margin-bottom: 6px">Schedule Your Drop-Off or Free Pickup</h2>
               <p style="margin-bottom: 0; font-size: 0.98rem">
                 Pick a convenient date and time window below. Your appointment is logged immediately and generates a
-                direct Google Calendar invite, .ICS file, and SMS confirmation.
+                direct Google Calendar invite, .ICS file, and SMS&nbsp;confirmation.
               </p>
             </div>
             <div class="service-tabs" role="tablist" aria-label="Service type">
@@ -352,7 +337,31 @@
 
             <div class="calendar-grid-label">
               <span>1. Select a Day (Mon–Sun · Eastern Time)</span>
-              <span id="selected-date-display" style="color: var(--accent); font-size: 0.88rem"></span>
+              <div class="calendar-date-controls">
+                <span id="selected-date-display" style="color: var(--accent); font-size: 0.88rem"></span>
+                <button
+                  type="button"
+                  class="date-page-toggle"
+                  id="date-page-toggle"
+                  aria-controls="date-strip"
+                  aria-label="Show next seven days"
+                >
+                  <span id="date-page-toggle-label">Next 7 Days</span>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+              </div>
             </div>
             <div class="date-strip" id="date-strip" role="listbox" aria-label="Available dates"></div>
 
@@ -571,7 +580,7 @@
               <h3>Bring or Hand Off Your Items</h3>
               <p>
                 Tell us what you have so we can prepare for workstations, laptops, phones, servers, networking gear,
-                printers, cables, and batteries.
+                printers, cables, and&nbsp;batteries.
               </p>
             </div>
             <div class="card">
@@ -579,7 +588,7 @@
               <h3>We Wipe, Reuse, and Recycle</h3>
               <p>
                 Storage media is wiped or physically destroyed. Tested working gear is refurbished for resale, and
-                non-resalable material is routed through responsible recycling streams.
+                non-resalable material is routed through responsible recycling&nbsp;streams.
               </p>
             </div>
           </div>
@@ -597,7 +606,7 @@
           <h2>Equipment We Accept &amp; Media Security</h2>
           <p>
             From single household laptops to multi-pallet office cleanouts, we process computing, networking, and
-            peripheral hardware with strict storage media separation.
+            peripheral hardware with strict storage media&nbsp;separation.
           </p>
 
           <div class="grid">
@@ -669,7 +678,7 @@
             <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
               <p itemprop="text">
                 OnlineRecycle.net offers free electronics drop-off in Sorrento and free pickup throughout Central
-                Florida, including Lake County, Orange County, and Seminole County.
+                Florida, including Lake County, Orange County, and Seminole&nbsp;County.
               </p>
             </div>
           </div>
@@ -680,7 +689,7 @@
               <p itemprop="text">
                 We accept computers, laptops, servers, networking gear, phones, tablets, printers, gaming consoles,
                 cables, batteries, and most other consumer or office electronics. If it plugs in or has a battery, book
-                a slot or ask us.
+                a slot or ask&nbsp;us.
               </p>
             </div>
           </div>
@@ -691,7 +700,7 @@
               <p itemprop="text">
                 Yes. Devices are assessed for storage media and handled through wipe or physical destruction workflows
                 before resale or recycling. Customers should still factory-reset devices before turning them in
-                whenever possible.
+                whenever&nbsp;possible.
               </p>
             </div>
           </div>
@@ -702,7 +711,7 @@
               <p itemprop="text">
                 OnlineRecycle.net is operated by Trash Or Treasure Online Recycler LLC as a for-profit recycling,
                 resale, pickup, and refurbishment service in Sorrento, Florida. Customer purchases and bookings are
-                commercial service transactions.
+                commercial service&nbsp;transactions.
               </p>
             </div>
           </div>
@@ -1545,6 +1554,9 @@
         }
 
         const upcomingDays = buildNextDays(14);
+        let datePageOffset = 0;
+        const datePageToggle = document.getElementById('date-page-toggle');
+        const datePageToggleLabel = document.getElementById('date-page-toggle-label');
         selectedDate = upcomingDays[1] ? upcomingDays[1].iso : upcomingDays[0].iso;
 
         function updateGcalEmbed() {
@@ -1559,7 +1571,8 @@
 
         function renderDates() {
           dateStrip.innerHTML = '';
-          upcomingDays.forEach(function (d) {
+          const visibleDays = upcomingDays.slice(datePageOffset, datePageOffset + 7);
+          visibleDays.forEach(function (d) {
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'date-pill' + (d.iso === selectedDate ? ' selected' : '');
@@ -1573,11 +1586,37 @@
             });
             dateStrip.appendChild(btn);
           });
+          if (datePageToggleLabel) {
+            datePageToggleLabel.textContent = datePageOffset === 0 ? 'Next 7 Days' : 'First 7 Days';
+          }
+          if (datePageToggle) {
+            datePageToggle.setAttribute(
+              'aria-label',
+              datePageOffset === 0 ? 'Show next seven days' : 'Show first seven days'
+            );
+          }
           dateInput.value = selectedDate;
           const activeDay = upcomingDays.find(function (x) {
             return x.iso === selectedDate;
           });
           if (activeDay) selectedDateDisplay.textContent = activeDay.dow + ', ' + activeDay.dom;
+        }
+
+        if (datePageToggle) {
+          datePageToggle.addEventListener('click', function () {
+            datePageOffset = datePageOffset === 0 ? 7 : 0;
+            const visibleDays = upcomingDays.slice(datePageOffset, datePageOffset + 7);
+            if (
+              visibleDays.length > 0 &&
+              !visibleDays.some(function (d) {
+                return d.iso === selectedDate;
+              })
+            ) {
+              selectedDate = visibleDays[0].iso;
+            }
+            renderDates();
+            renderSlots();
+          });
         }
 
         function renderSlots() {
