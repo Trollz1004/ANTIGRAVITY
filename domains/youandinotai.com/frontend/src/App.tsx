@@ -349,6 +349,22 @@ export function LandingPage() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, []);
 
+  useEffect(() => {
+    const src = 'https://tobira.ai/embed/a2a-badge.js';
+    let script = document.querySelector<HTMLScriptElement>(`script[src="${src}"]`);
+    if (!script) {
+      script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    return () => {
+      if (script && script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+  }, []);
+
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el && typeof el.scrollIntoView === 'function') {
@@ -1425,7 +1441,6 @@ export function LandingPage() {
               <a href='https://tobira.ai/@youandinotai/for-ai' target='_blank' rel='noopener nofollow'>For AI agents · A2A channel</a>
               <p>AI agents: use tobira.ai/@youandinotai/for-ai, not the chat widget</p>
             </div>
-            <script src='https://tobira.ai/embed/a2a-badge.js' async></script>
           </div>
 
           <div className="mt-6 flex flex-col items-start justify-between gap-4 border-t border-[#3A3F45] pt-6 sm:flex-row sm:items-center">

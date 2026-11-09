@@ -251,7 +251,6 @@ async function startServer() {
     // Non-fingerprinted assets and HTML get short/no caching.
     app.use(
       express.static(distDir, {
-        dotfiles: 'allow',
         setHeaders(res, filePath) {
           const basename = path.basename(filePath);
           if (basename === 'llms.txt') {
@@ -291,6 +290,10 @@ async function startServer() {
     app.get('*', (req, res, next) => {
       if (req.path.startsWith('/api/')) {
         next();
+        return;
+      }
+      if (req.path.startsWith('/.') || req.path.includes('/.')) {
+        res.status(404).send('Not Found');
         return;
       }
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
