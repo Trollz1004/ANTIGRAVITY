@@ -2,7 +2,7 @@
 // Domains static site server — no dependencies.
 // Virtual-host static file server: routes by the Host header to one of
 // three landing-site document roots, plus a /health identity probe and
-// OnlineRecycle.net native Google Calendar Ultra booking endpoints (/api/booking-config, /api/book, /api/calendar.ics).
+// OnlineRecycle.net native Google Calendar booking endpoints (/api/booking-config, /api/book, /api/calendar.ics).
 //
 // Start: node ops/domains-server/server.mjs
 
@@ -234,7 +234,7 @@ function buildIcsContent(booking) {
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//OnlineRecycle.net//Google Calendar Ultra Scheduler//EN",
+    "PRODID:-//OnlineRecycle.net//Live Appointment Scheduler//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",
@@ -363,7 +363,7 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    // OnlineRecycle.net native Google Calendar Ultra booking APIs
+    // OnlineRecycle.net native Google Calendar booking APIs
     const isBookingHost = BOOKING_HOSTS.has(host);
 
     if (isBookingHost && urlPath === "/api/booking-config" && req.method === "GET") {
