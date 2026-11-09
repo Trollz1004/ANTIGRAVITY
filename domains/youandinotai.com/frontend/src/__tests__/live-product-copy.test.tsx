@@ -26,9 +26,8 @@ const BANNED =
   /\b(beta|early access|launch list|waitlist|coming soon|invite code|rollout|when we launch|milestones)\b/i;
 
 // Lines allowed to match BANNED in source: the backend route name (not copy)
-// and the hidden FormSubmit subject, which only reaches the founder's inbox
-// and is kept as is so nothing changes server-side.
-const SOURCE_ALLOWLIST = ['/auth/beta-access', 'Early Access Signup!'];
+// which is kept as is so nothing changes server-side.
+const SOURCE_ALLOWLIST = ['/auth/beta-access'];
 
 const SRC_ROOT = path.resolve(__dirname, '..');
 
