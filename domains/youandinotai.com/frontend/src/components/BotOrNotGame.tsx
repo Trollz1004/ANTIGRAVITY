@@ -394,6 +394,30 @@ export function BotOrNotGame() {
     return undefined;
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+    const params = new URLSearchParams(window.location.search);
+    if (
+      params.has('botOrNotCard') ||
+      params.has('botOrNotFlipped') ||
+      window.location.hash === '#bot-or-not'
+    ) {
+      const scrollTarget = () => {
+        const el = document.getElementById('bot-or-not');
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const top = Math.max(0, rect.top + window.scrollY - 64);
+        window.scrollTo({ top, behavior: 'instant' as ScrollBehavior });
+      };
+      scrollTarget();
+      const id = window.setTimeout(scrollTarget, 120);
+      return () => window.clearTimeout(id);
+    }
+    return undefined;
+  }, []);
+
   const card = BOT_OR_NOT_CARDS[currentIndex];
   const isGuessCorrect = lastGuess !== null && lastGuess === card.kind;
 
@@ -423,7 +447,7 @@ export function BotOrNotGame() {
     <section
       id="bot-or-not"
       aria-label="Bot or Not founder game"
-      className="relative px-3 py-3 sm:px-6 sm:py-8 lg:py-12"
+      className="relative min-h-[calc(100vh-4rem)] px-3 pb-24 pt-3 sm:px-6 sm:pb-28 sm:pt-8 lg:min-h-[120vh] lg:py-10"
     >
       <div
         data-stage-card="bot-or-not"
@@ -431,10 +455,10 @@ export function BotOrNotGame() {
       >
         {/* Header Bar */}
         <div className="flex flex-wrap items-center justify-between gap-1.5">
-          <span className="font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-[#FFD21E] sm:text-[14px]">
-            BOT OR NOT · TROLL THE FOUNDER
+          <span className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#FFD21E] sm:text-[14px]">
+            BOT OR NOT · TROLL THE FOUNDER · #TeamClaudeForLife
           </span>
-          <span className="font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] sm:text-[14px]">
+          <span className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#F4F1EA] sm:text-[14px]">
             CARD {card.indexLabel} · SCORE {score.correct}/{score.total}
           </span>
         </div>
