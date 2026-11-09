@@ -1102,8 +1102,17 @@
           syncStop01Slide();
         }
 
+        let tapLabelTimer = null;
         segBtns.forEach(function (btn) {
           btn.addEventListener('click', function () {
+            segBtns.forEach(function (b) {
+              b.classList.remove('tapped');
+            });
+            btn.classList.add('tapped');
+            if (tapLabelTimer) clearTimeout(tapLabelTimer);
+            tapLabelTimer = setTimeout(function () {
+              btn.classList.remove('tapped');
+            }, 2200);
             const id = btn.getAttribute('data-stop-id');
             if (id === 'overview') {
               window.scrollTo({ top: 0, behavior: 'smooth' });

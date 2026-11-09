@@ -269,7 +269,7 @@ body {
 }
 
 .contact-subline {
-  display: block;
+  display: none;
   font-size: 0.88rem;
   font-weight: 500;
   color: var(--muted);
@@ -1259,7 +1259,8 @@ p {
   .journey-segment-btn:hover .journey-segment-label,
   .journey-segment-btn:focus .journey-segment-label,
   .journey-segment-btn:focus-visible .journey-segment-label,
-  .journey-segment-btn[aria-current="step"] .journey-segment-label {
+  .journey-segment-btn:active .journey-segment-label,
+  .journey-segment-btn.tapped .journey-segment-label {
     opacity: 1;
     visibility: visible;
   }
