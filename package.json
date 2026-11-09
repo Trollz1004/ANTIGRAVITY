@@ -14,7 +14,7 @@
     "dev:openclaw": "pnpm --filter opuspawclaw dev",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
-    "test": "pnpm -r test",
+    "test": "node --test tests/definitions-drift.test.mjs && pnpm -r test",
     "format": "prettier --write .",
     "fable": "node scripts/fable/fable.mjs"
   },

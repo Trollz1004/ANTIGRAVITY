@@ -5,6 +5,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
 import { loadOrInitWheelState, checkAndRefillWheel, tickWheel } from './perpetual-wheel.mjs';
 import { gitPanel } from '../mission-control/lib/git-panel.mjs';
@@ -13,7 +14,7 @@ import { buildInbox, performAction } from '../mission-control/lib/inbox.mjs';
 import { redact } from '../mission-control/lib/redact.mjs';
 import { SCC_24_APIS, envValue, draftWithFable } from './marketing-engine.mjs';
 
-const ROOT = 'C:/ANTIGRAVITY';
+const ROOT = fs.existsSync('C:/ANTIGRAVITY') ? 'C:/ANTIGRAVITY' : path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WHEEL_STATE_PATH = path.join(ROOT, 'mission-os', 'wheel-state.json');
 const SUPPORT_STORE_PATH = path.join(ROOT, 'mission-os', 'support-tickets.json');
 export function resolveObsidianVaultRoot() {
@@ -186,19 +187,103 @@ export function mutateWheelTask({ taskId, status, action }) {
   return { ok: true, task, wheel: state };
 }
 
-export function readDeliverableFile(relPath) {
-  const cleanRel = String(relPath || '').replace(/\\/g, '/').replace(/^\/+/, '');
-  const full = path.resolve(ROOT, cleanRel);
-  if (!full.startsWith(path.resolve(ROOT))) {
-    return { ok: false, error: 'Path outside repository root' };
+export const MAX_REPO_FILE_BYTES = 512 * 1024;
+
+export function safeResolveRepoPath(relPath, rootDir = ROOT) {
+  if (typeof relPath !== 'string' && typeof relPath !== 'number') return null;
+  const raw = String(relPath || '').trim();
+  if (!raw || raw.includes('\0')) return null;
+  if (path.isAbsolute(raw) || /^[a-zA-Z]:/.test(raw)) return null;
+  const cleaned = raw.replace(/\\/g, '/').replace(/^\/+/, '');
+  const rootResolved = path.resolve(rootDir);
+  const resolved = path.resolve(rootResolved, cleaned);
+  const rel = path.relative(rootResolved, resolved);
+  if (!rel || rel.startsWith('..') || path.isAbsolute(rel)) {
+    return null;
+  }
+  return resolved;
+}
+
+export function isRefusedRepoFilePath(resolvedPath, rootDir = ROOT) {
+  const rootResolved = path.resolve(rootDir);
+  const rel = path.relative(rootResolved, path.resolve(resolvedPath)).replace(/\\/g, '/');
+  if (!rel || rel.startsWith('..') || path.isAbsolute(rel)) return true;
+  const segments = rel.split('/').filter(Boolean);
+  for (const seg of segments) {
+    const lowerSeg = seg.toLowerCase();
+    if (lowerSeg === '.git' || lowerSeg === 'node_modules' || lowerSeg === 'vault') {
+      return true;
+    }
+  }
+  const base = (segments[segments.length - 1] || '').toLowerCase();
+  if (
+    base === '.env' ||
+    base.startsWith('.env.') ||
+    base.endsWith('.env') ||
+    (base.startsWith('env-') && base.endsWith('.json'))
+  ) {
+    return true;
+  }
+  if (
+    base.endsWith('.pem') ||
+    base.endsWith('.key') ||
+    base.startsWith('id_') ||
+    base.endsWith('.ppk')
+  ) {
+    return true;
+  }
+  if (
+    base.includes('credentials') ||
+    base.includes('secret') ||
+    base.includes('token')
+  ) {
+    return true;
+  }
+  return false;
+}
+
+export function readRepoFile(relPath, maxBytes = MAX_REPO_FILE_BYTES, rootDir = ROOT) {
+  const full = safeResolveRepoPath(relPath, rootDir);
+  if (!full) {
+    return { ok: false, status: 403, error: 'Path outside repository root' };
+  }
+  if (isRefusedRepoFilePath(full, rootDir)) {
+    return { ok: false, status: 403, error: 'Refused sensitive or restricted path' };
   }
   if (!fs.existsSync(full) || fs.statSync(full).isDirectory()) {
-    return { ok: false, error: `Deliverable not found: ${cleanRel}` };
+    return { ok: false, status: 404, error: 'File not found' };
+  }
+  const cap = Math.min(Math.max(1, Number(maxBytes) || MAX_REPO_FILE_BYTES), MAX_REPO_FILE_BYTES);
+  const stat = fs.statSync(full);
+  const bytesToRead = Math.min(stat.size, cap);
+  const buf = Buffer.alloc(bytesToRead);
+  const fd = fs.openSync(full, 'r');
+  try {
+    fs.readSync(fd, buf, 0, bytesToRead, 0);
+  } finally {
+    fs.closeSync(fd);
   }
   return {
     ok: true,
-    path: cleanRel,
-    content: safeReadText(full, 64000),
+    status: 200,
+    path: path.relative(path.resolve(rootDir), full).replace(/\\/g, '/'),
+    size: stat.size,
+    truncated: stat.size > cap,
+    content: redact(buf.toString('utf8')),
+  };
+}
+
+export function readDeliverableFile(relPath, rootDir = ROOT) {
+  const res = readRepoFile(relPath, MAX_REPO_FILE_BYTES, rootDir);
+  if (!res.ok) {
+    return { ok: false, status: res.status, error: res.error };
+  }
+  return {
+    ok: true,
+    path: res.path,
+    size: res.size,
+    truncated: res.truncated,
+    content: res.content,
   };
 }
 
@@ -452,8 +537,8 @@ export function syncGraphyLearningsToObsidian({
   source = 'Mission Control Graphy',
 } = {}) {
   const cleanRel = String(relPath).replace(/\\/g, '/').replace(/^\/+/, '');
-  const full = path.resolve(vaultRoot, cleanRel);
-  if (!full.startsWith(path.resolve(vaultRoot))) {
+  const full = safeResolveRepoPath(cleanRel, vaultRoot);
+  if (!full) {
     return { ok: false, error: 'Invalid Obsidian vault path' };
   }
   const safeBody = redact(String(findings || '').trim());
@@ -487,8 +572,8 @@ export function syncGraphyLearningsToObsidian({
 
 export function readObsidianNote(relPath) {
   const cleanRel = String(relPath || 'T5500/gemini-to-gemini.md').replace(/\\/g, '/').replace(/^\/+/, '');
-  const full = path.resolve(OBSIDIAN_ROOT, cleanRel);
-  if (!full.startsWith(path.resolve(OBSIDIAN_ROOT))) {
+  const full = safeResolveRepoPath(cleanRel, OBSIDIAN_ROOT);
+  if (!full) {
     return { ok: false, error: 'Invalid Obsidian vault path' };
   }
   if (!fs.existsSync(full)) return { ok: false, error: `Note not found: ${cleanRel}` };
@@ -501,8 +586,8 @@ export function readObsidianNote(relPath) {
 
 export function appendObsidianNote({ relPath = 'T5500/gemini-to-gemini.md', useCase = 'Mission Agent OS session update', content = '' }) {
   const cleanRel = String(relPath).replace(/\\/g, '/').replace(/^\/+/, '');
-  const full = path.resolve(OBSIDIAN_ROOT, cleanRel);
-  if (!full.startsWith(path.resolve(OBSIDIAN_ROOT))) {
+  const full = safeResolveRepoPath(cleanRel, OBSIDIAN_ROOT);
+  if (!full) {
     return { ok: false, error: 'Invalid Obsidian vault path' };
   }
   const body = redact(String(content || '').trim());

@@ -9,6 +9,7 @@ import fs from 'node:fs';
 import net from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { execFile, spawn } from 'node:child_process';
 import { guardRequest, readOps, openBrowser, envelope } from './ops-backend.mjs';
 import {
@@ -33,6 +34,7 @@ import {
   getLiveBoardTab,
   mutateWheelTask,
   readDeliverableFile,
+  readRepoFile,
   getLiveGatewayTab,
   getLiveMemoryTab,
   readObsidianNote,
@@ -650,7 +652,8 @@ async function state() {
   return cache.data;
 }
 
-if (process.env.MISSION_OS_NO_BACKGROUND !== '1') {
+const IS_MAIN_MODULE = Boolean(process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url)));
+if (IS_MAIN_MODULE && process.env.MISSION_OS_NO_BACKGROUND !== '1') {
   setTimeout(() => { refreshBridges().catch(() => {}); verifyAllLanes().catch(() => {}); refreshState().catch(() => {}); }, 200);
   setInterval(() => { refreshState().catch(() => {}); }, 25000);
 }
@@ -696,10 +699,20 @@ async function readJsonBody(req, maxBytes = 65536) {
   } catch { const error = new Error('Invalid JSON object'); error.status = 400; throw error; }
 }
 
-const handleMissionRequest = async (req, res) => {
+export function isLoopbackAddress(remoteAddress) {
+  const remote = String(remoteAddress || '').trim();
+  return ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(remote);
+}
+
+export const handleMissionRequest = async (req, res) => {
   const sec = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer' };
   try {
     const u = new URL(req.url, 'http://x');
+
+    if (!isLoopbackAddress(req.socket?.remoteAddress)) {
+      res.writeHead(403, { ...sec, 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ ok: false, error: 'Forbidden: Mission OS is restricted to loopback' }));
+    }
 
     // Local OpenAI-compatible Gemini 4 (agy OAuth) bridge for opencode, pi, Odysseus, and Paperclip
     if (u.pathname === '/v1/models' && ['GET', 'HEAD'].includes(req.method)) {
@@ -717,23 +730,46 @@ const handleMissionRequest = async (req, res) => {
       );
     }
     if (u.pathname === '/v1/chat/completions' && req.method === 'POST') {
-      const remote = req.socket?.remoteAddress || '';
-      if (!['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(remote)) {
-        res.writeHead(403, { ...sec, 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ error: { message: 'Loopback only' } }));
-      }
       const body = await readJsonBody(req, 1048576);
       return await handleOpenAiChatCompletions(body, res);
     }
 
-    // Headless Bridge Registry (Directory, NOT a Door) — loopback & LAN only, never 0.0.0.0/internet
-    if (u.pathname === '/api/bridges' || u.pathname.startsWith('/api/bridges/')) {
-      const remote = req.socket?.remoteAddress || '';
-      const isLocalOrLan = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(remote) || /^(?:::ffff:)?192\.168\.0\.\d+$/.test(remote);
-      if (!isLocalOrLan || req.headers['sec-fetch-site'] === 'cross-site') {
-        res.writeHead(403, { ...sec, 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ ok: false, error: 'Loopback or LAN headless requests only' }));
+    const denied = guardRequest(req, PORT);
+    if (denied) { res.writeHead(denied, {...sec, 'Content-Type':'application/json'}); return res.end(JSON.stringify({ok:false,error:'Local same-origin JSON requests only'})); }
+
+    if ((u.pathname === '/api/bridge/verify' || u.pathname === '/api/bridges/verify') && req.method === 'POST') {
+      const originDenied = guardRequest(req, PORT);
+      if (originDenied) {
+        res.writeHead(originDenied, { ...sec, 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ ok: false, error: 'Local same-origin JSON requests only' }));
       }
+      const body = await readJsonBody(req);
+      const nodeId = String(body.node || 't5500').toLowerCase();
+      const laneId = String(body.lane || 'hermes').toLowerCase();
+      const entry = await verifyLane(nodeId, laneId);
+      if (!entry) {
+        res.writeHead(404, { ...sec, 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ ok: false, error: `Unknown node/lane: ${nodeId}/${laneId}` }));
+      }
+      res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+      return res.end(JSON.stringify({
+        ok: entry.status === 'UP',
+        role: 'directory-not-a-door',
+        direct_connect: {
+          node: entry.node,
+          node_ip: entry.node_ip,
+          lane: entry.lane,
+          transport: entry.transport,
+          address: entry.address,
+          lan_target_address: entry.lan_target_address || null,
+          auth: entry.auth,
+        },
+        entry,
+      }, null, 2));
+    }
+
+    // Headless Bridge Registry (Directory, NOT a Door) ? loopback only
+    if (u.pathname === '/api/bridges' || u.pathname.startsWith('/api/bridges/')) {
       if (u.pathname === '/api/bridges' && req.method === 'GET') {
         const refresh = u.searchParams.get('refresh') === '1';
         if (refresh) await refreshBridges();
@@ -778,46 +814,12 @@ const handleMissionRequest = async (req, res) => {
           entry,
         }, null, 2));
       }
-      if (u.pathname === '/api/bridges/verify' && req.method === 'POST') {
-        const body = await readJsonBody(req);
-        const nodeId = String(body.node || 't5500').toLowerCase();
-        const laneId = String(body.lane || 'hermes').toLowerCase();
-        const entry = await verifyLane(nodeId, laneId);
-        if (!entry) {
-          res.writeHead(404, { ...sec, 'Content-Type': 'application/json' });
-          return res.end(JSON.stringify({ ok: false, error: `Unknown node/lane: ${nodeId}/${laneId}` }));
-        }
-        res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
-        return res.end(JSON.stringify({
-          ok: entry.status === 'UP',
-          role: 'directory-not-a-door',
-          direct_connect: {
-            node: entry.node,
-            node_ip: entry.node_ip,
-            lane: entry.lane,
-            transport: entry.transport,
-            address: entry.address,
-            lan_target_address: entry.lan_target_address || null,
-            auth: entry.auth,
-          },
-          entry,
-        }, null, 2));
-      }
     }
 
     if (u.pathname === '/api/mos-state.json' && req.method === 'GET') {
-      const remote = req.socket?.remoteAddress || '';
-      const isLocalOrLan = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(remote) || /^(?:::ffff:)?192\.168\.0\.\d+$/.test(remote);
-      if (!isLocalOrLan || req.headers['sec-fetch-site'] === 'cross-site') {
-        res.writeHead(403, { ...sec, 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ ok: false, error: 'Loopback or LAN headless requests only' }));
-      }
       res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
       return res.end(JSON.stringify(await state(), null, 2));
     }
-
-    const denied = guardRequest(req, PORT);
-    if (denied) { res.writeHead(denied, {...sec, 'Content-Type':'application/json'}); return res.end(JSON.stringify({ok:false,error:'Local same-origin JSON requests only'})); }
     if (u.pathname.startsWith('/api/ops/')) {
       const view = u.pathname.slice('/api/ops/'.length);
       let result;
@@ -1055,20 +1057,25 @@ const handleMissionRequest = async (req, res) => {
       res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
       return res.end(JSON.stringify(payload, null, 2));
     }
-    if (u.pathname === '/api/live/board' && req.method === 'GET') {
+    if ((u.pathname === '/api/live/board' || u.pathname === '/api/wheel') && req.method === 'GET') {
       const payload = await getLiveBoardTab();
       res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
       return res.end(JSON.stringify(payload, null, 2));
     }
-    if (u.pathname === '/api/live/wheel/task' && req.method === 'POST') {
+    if ((u.pathname === '/api/live/wheel/task' || u.pathname === '/api/wheel/task') && req.method === 'POST') {
       const body = await readJsonBody(req);
       const payload = mutateWheelTask(body);
       res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
       return res.end(JSON.stringify(payload, null, 2));
     }
+    if ((u.pathname === '/api/files/read' || u.pathname === '/api/live/files/read') && req.method === 'GET') {
+      const payload = readRepoFile(u.searchParams.get('path'));
+      res.writeHead(payload.status || (payload.ok ? 200 : 403), { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+      return res.end(JSON.stringify(payload, null, 2));
+    }
     if (u.pathname === '/api/live/deliverable' && req.method === 'GET') {
       const payload = readDeliverableFile(u.searchParams.get('path'));
-      res.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+      res.writeHead(payload.status || (payload.ok ? 200 : 403), { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
       return res.end(JSON.stringify(payload, null, 2));
     }
     if (u.pathname === '/api/live/gateway' && req.method === 'GET') {
@@ -1164,9 +1171,6 @@ const handleMissionRequest = async (req, res) => {
     res.end(JSON.stringify({ok:false,error:e.status ? e.message : (e.message || 'Internal error')}));
   }
 };
-http.createServer(handleMissionRequest).listen(PORT, '127.0.0.1', () => console.log(`mission-agent-os on http://127.0.0.1:${PORT}`));
-const LAN_HOST = process.env.MISSION_OS_LAN_HOST || '192.168.0.15';
-const hasLanInterface = Object.values(os.networkInterfaces()).flat().some((i) => i && i.address === LAN_HOST);
-if (hasLanInterface && LAN_HOST !== '127.0.0.1' && LAN_HOST !== '0.0.0.0') {
-  http.createServer(handleMissionRequest).listen(PORT, LAN_HOST, () => console.log(`mission-agent-os LAN directory on http://${LAN_HOST}:${PORT}`));
+if (IS_MAIN_MODULE) {
+  http.createServer(handleMissionRequest).listen(PORT, '127.0.0.1', () => console.log(`mission-agent-os on http://127.0.0.1:${PORT}`));
 }

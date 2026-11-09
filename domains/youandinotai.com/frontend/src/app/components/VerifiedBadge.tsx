@@ -12,21 +12,17 @@ const TIER_CONFIG = {
   gold: {
     icon: ShieldCheck,
     label: 'Verified Human',
-    gradient: 'from-[#ff4f00] via-[#ff7b40] to-[#ff4f00]',
-    bgGlow: 'bg-[#ff4f00]/10',
-    borderGlow: 'border-[#111111]',
-    shadowGlow: 'shadow-[#111111]/15',
-    textColor: 'text-[#111111]',
+    bgGlow: 'bg-[#1A1E25]',
+    borderGlow: 'border-[#FFD21E]',
+    textColor: 'text-[#FFD21E]',
     iconFill: true,
   },
   platinum: {
     icon: Crown,
     label: 'Founding Member',
-    gradient: 'from-[#111111] via-[#444444] to-[#111111]',
-    bgGlow: 'bg-[#111111]/10',
-    borderGlow: 'border-[#111111]',
-    shadowGlow: 'shadow-[#111111]/15',
-    textColor: 'text-[#111111]',
+    bgGlow: 'bg-[#1A1E25]',
+    borderGlow: 'border-[#F4F1EA]',
+    textColor: 'text-[#F4F1EA]',
     iconFill: false,
   },
 } as const;
@@ -37,8 +33,8 @@ const SIZE_CONFIG = {
     icon: 10,
     pill: 'rounded-full',
   },
-  md: { badge: 'px-3 py-1.5 gap-1.5 text-xs', icon: 14, pill: 'rounded-xl' },
-  lg: { badge: 'px-4 py-2 gap-2 text-sm', icon: 18, pill: 'rounded-xl' },
+  md: { badge: 'px-3 py-1.5 gap-1.5 text-xs', icon: 14, pill: 'rounded-lg' },
+  lg: { badge: 'px-4 py-2 gap-2 text-sm', icon: 18, pill: 'rounded-lg' },
 } as const;
 
 export function VerifiedBadge({
@@ -54,18 +50,8 @@ export function VerifiedBadge({
 
   return (
     <div
-      className={`inline-flex items-center ${sizeConfig.badge} ${sizeConfig.pill} glass ${config.borderGlow} shadow-lg ${config.shadowGlow} font-bold ${config.textColor} relative overflow-hidden`}
+      className={`inline-flex items-center ${sizeConfig.badge} ${sizeConfig.pill} border ${config.borderGlow} ${config.bgGlow} font-mono font-bold ${config.textColor} relative overflow-hidden`}
     >
-      {/* Animated gradient shimmer background */}
-      <div
-        className={`absolute inset-0 opacity-20 bg-gradient-to-r ${config.gradient}`}
-        style={{
-          backgroundSize: '200% 100%',
-          animation: 'gradient-shift 4s ease infinite',
-        }}
-      />
-
-      {/* Content */}
       <div className="relative flex items-center gap-inherit">
         <Icon
           size={sizeConfig.icon}
@@ -77,7 +63,7 @@ export function VerifiedBadge({
   );
 }
 
-/** Small inline badge for card overlays — just the icon + glow dot */
+/** Small inline badge for card overlays — just the icon + dot */
 export function VerifiedDot({ tier }: { tier: BadgeTier }) {
   if (tier === 'unverified') return null;
 
@@ -86,7 +72,7 @@ export function VerifiedDot({ tier }: { tier: BadgeTier }) {
 
   return (
     <div
-      className={`w-6 h-6 rounded-full ${config.bgGlow} border ${config.borderGlow} flex items-center justify-center shadow-lg ${config.shadowGlow}`}
+      className={`w-6 h-6 rounded-full ${config.bgGlow} border ${config.borderGlow} flex items-center justify-center`}
     >
       <Icon size={12} className={config.textColor} />
     </div>
@@ -105,7 +91,7 @@ export function TrustScoreRing({
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (score / 100) * circumference;
 
-  const color = score >= 80 ? '#ff4f00' : score >= 50 ? '#111111' : '#8a8478';
+  const color = score >= 80 ? '#FFD21E' : score >= 50 ? '#F4F1EA' : '#9DA3AA';
 
   return (
     <div
@@ -119,7 +105,7 @@ export function TrustScoreRing({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(17,17,17,0.12)"
+          stroke="#3A3F45"
           strokeWidth={3}
         />
         {/* Progress ring */}
@@ -136,7 +122,7 @@ export function TrustScoreRing({
           style={{ transition: 'stroke-dashoffset 1s ease' }}
         />
       </svg>
-      <span className="absolute text-[10px] font-black text-[#111111]">
+      <span className="absolute font-mono text-[10px] font-bold text-[#F4F1EA]">
         {Math.round(score)}
       </span>
     </div>

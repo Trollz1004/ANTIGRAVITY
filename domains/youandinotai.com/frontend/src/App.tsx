@@ -1,1086 +1,1553 @@
 import React, { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { Link } from 'react-router-dom';
 import {
+  ArrowRight,
   Check,
-  Heart,
   KeyRound,
+  Lock,
   Mail,
   Menu,
+  MessageSquare,
+  Shield,
   ShieldCheck,
+  UserCheck,
   Users,
   X,
-  ChevronRight,
-  Sparkles,
 } from 'lucide-react';
+
 import { useAuth } from './lib/auth';
-import { ThemeProvider } from './lib/ThemeContext';
-import { ThemeToggle } from './components/ThemeToggle';
+import {
+  DreamSpaceStage,
+  HeaderOrbitMark,
+  HeaderTelemetryLine,
+  JourneyProgressBar,
+  readSectionJourneyState,
+  SECTION_STOPS,
+} from './components/DreamSpaceStage';
 
-const WAITLIST_FORM_ACTION = 'https://formsubmit.co/contact@youandinotai.com';
+type LegalDocKey = 'terms' | 'privacy' | 'age' | 'refund';
 
-const SECURE_PLAN_LINKS = {
-  bot_shield: '/app/verify',
-  founding_member: '/app/checkout/founding_member',
-  '3_month': '/app/checkout/3_month',
-  '12_month': '/app/checkout/12_month',
-  royalty: '/app/checkout/royalty',
-} as const;
+const LEGAL_DOCS: Record<
+  LegalDocKey,
+  { title: string; updated: string; sections: { h: string; p: string }[] }
+> = {
+  terms: {
+    title: 'Terms of Service',
+    updated: 'Last Updated: April 2026',
+    sections: [
+      {
+        h: '1. 18+ Eligibility',
+        p: 'YouAndINotAI is strictly for adults 18 years of age or older. By creating an account or accessing the platform, you represent and warrant that you are at least 18 years old and legally able to enter into a binding agreement.',
+      },
+      {
+        h: '2. Account-Bound Verification & Memberships',
+        p: 'Bot-Shield verification ($1) and Founder memberships are bound to your authenticated YouAndINotAI account. Each profile belongs to one verified adult member.',
+      },
+      {
+        h: '3. Community Conduct & Safety',
+        p: 'Respectful adult conduct is required across all profiles, messages, and boards. Members can use built-in safety controls from any profile, message thread, or board.',
+      },
+      {
+        h: '4. Operator & Governing Law',
+        p: 'YouAndINotAI is operated by Trash Or Treasure Online Recycler LLC in the State of Florida, USA.',
+      },
+    ],
+  },
+  privacy: {
+    title: 'Privacy Policy',
+    updated: 'Last Updated: April 2026',
+    sections: [
+      {
+        h: '1. Data We Collect',
+        p: 'We collect the account details you provide (email, display name, date of birth, profile answers, and optional photos), verification status, and in-app activity needed to operate matching, messaging, and support.',
+      },
+      {
+        h: '2. How Your Data Is Used',
+        p: 'Your data is used solely to deliver YouAndINotAI product features, verify human accounts, process account-bound checkout sessions, and protect member safety.',
+      },
+      {
+        h: '3. Self-Service Export & 30-Day Account Deletion',
+        p: 'Authenticated members can request a full data export, update location sharing, or start the 30-day account deletion clock directly inside the Privacy Center (/app/privacy) or by emailing contact@youandinotai.com.',
+      },
+    ],
+  },
+  age: {
+    title: '18+ Age & Identity Policy',
+    updated: 'Last Updated: April 2026',
+    sections: [
+      {
+        h: '1. Mandatory 18+ Gate',
+        p: 'youandinotai.com is for adults 18 and over. Every registration requires an explicit date-of-birth check and affirmative 18+ confirmation before an account is created.',
+      },
+      {
+        h: '2. Liveness & Bot-Shield Check',
+        p: 'To unlock full discovery, messaging, and video features, members complete a live camera gesture check and a $1 Bot-Shield verification bound to their account.',
+      },
+      {
+        h: '3. Adult Community Standard',
+        p: 'Every active account is verified for adult eligibility and human liveness.',
+      },
+    ],
+  },
+  refund: {
+    title: 'Billing, Refund & Cancellation Policy',
+    updated: 'Last Updated: April 2026',
+    sections: [
+      {
+        h: '1. Account-Bound Checkout',
+        p: 'All membership and verification payments are linked directly to your signed-in YouAndINotAI account.',
+      },
+      {
+        h: '2. Subscriptions & Prepaid Tiers',
+        p: 'Recurring Founding Member subscriptions ($14.99/mo) can be managed through support or account settings before the next billing cycle. Prepaid 3-Month ($39.99) and 12-Month ($99.99) plans remain active for their full paid term.',
+      },
+      {
+        h: '3. Billing Support & Assistance',
+        p: 'For billing assistance or receipt inquiries, contact support through /app/support or email contact@youandinotai.com with your account email for a quick resolution.',
+      },
+    ],
+  },
+};
 
-const NAV_ITEMS = [
-  { label: 'Human Only', href: '#about' },
-  { label: 'The Social', href: '#platform' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'Trust', href: '#trust' },
-  { label: 'Join', href: '#join' },
-] as const;
+function getCheckedTimeLabel(): string {
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2, '0');
+  const mm = String(now.getMinutes()).padStart(2, '0');
+  return `checked ${hh}:${mm}`;
+}
 
-const PLATFORM_CARDS = [
-  {
-    icon: ShieldCheck,
-    title: 'Identity First',
-    body: 'Bot-Shield verification and account-bound checkout are built into launch. The platform is designed to make human validation the default.',
-  },
-  {
-    icon: Heart,
-    title: 'AI as a Shield',
-    body: 'AI stays behind the scenes for fraud pressure, safety signals, and launch operations. It does not fake your personality or your connection.',
-  },
-  {
-    icon: Users,
-    title: 'Built for Real Life',
-    body: 'Dating, meetups, and real-world follow-through live in one product flow. The goal is less swiping theater and more actual conversation off-screen.',
-  },
-] as const;
+const TALL_MOBILE_STAGE_STOPS = new Set([
+  'platform',
+  'verification',
+  'trust',
+  'pricing',
+  'support',
+]);
 
-const PRICING_PLANS = [
-  {
-    name: 'Bot-Shield Verification',
-    price: '$1',
-    desc: 'Human checkpoint before the badge is awarded.',
-    link: SECURE_PLAN_LINKS.bot_shield,
-    popular: false,
-  },
-  {
-    name: 'Founding Member',
-    price: '$14.99/mo',
-    desc: 'Locked founder rate with account-bound checkout.',
-    link: SECURE_PLAN_LINKS.founding_member,
-    popular: true,
-  },
-  {
-    name: '3-Month Founder',
-    price: '$39.99',
-    desc: 'Short-term founder access with one upfront payment.',
-    link: SECURE_PLAN_LINKS['3_month'],
-    popular: false,
-  },
-  {
-    name: '12-Month Founder',
-    price: '$99.99',
-    desc: 'Best value for launch-year access.',
-    link: SECURE_PLAN_LINKS['12_month'],
-    popular: false,
-  },
-  {
-    name: 'Royalty Card',
-    price: '$2,500',
-    desc: 'Premium founder product. Current terms are provided privately at checkout.',
-    link: SECURE_PLAN_LINKS.royalty,
-    popular: false,
-  },
-] as const;
+function readUnpinnedStops(): Record<string, boolean> {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return {};
+  }
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const headerEl = document.querySelector('header');
+  const mapEl = document.getElementById('youandinotai-progress-map');
+  const headerH = headerEl?.getBoundingClientRect().height || 68;
+  const mapH = mapEl?.getBoundingClientRect().height || 56;
+  const openStageHeight = Math.max(vh - headerH - mapH, 0);
 
-function HeroBackground() {
+  const next: Record<string, boolean> = {};
+  for (const stop of SECTION_STOPS) {
+    if (stop.id === 'footer') continue;
+    const cardEl = document.querySelector(
+      `#${stop.id} [data-stage-card]`
+    ) as HTMLElement | null;
+    const cardH =
+      cardEl?.scrollHeight || cardEl?.getBoundingClientRect().height || 0;
+    const isShortForCard = cardH > 0 && cardH + 48 > openStageHeight;
+    next[stop.id] =
+      isShortForCard || (vw < 1024 && TALL_MOBILE_STAGE_STOPS.has(stop.id));
+  }
+  return next;
+}
+
+export function PublicSupportPage() {
+  const checkedLabel = getCheckedTimeLabel();
+
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-zinc-950">
-      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-yellow-600/20 blur-[120px]" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-stone-600/20 blur-[120px]" />
-      <div className="absolute top-[40%] left-[60%] w-[30%] h-[30%] rounded-full bg-amber-600/10 blur-[100px]" />
-      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 mix-blend-overlay" />
+    <div className="min-h-screen bg-[#0A0B0D] text-[#F4F1EA] font-sans">
+      <a
+        href="#main-support-content"
+        className="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-[100] focus:inline-flex focus:min-h-[44px] focus:min-w-[44px] focus:items-center focus:rounded-[10px] focus:border-2 focus:border-[#FFD21E] focus:bg-[#0A0B0D] focus:px-4 focus:py-2 focus:font-mono focus:text-[14px] focus:font-bold focus:uppercase focus:tracking-[0.06em] focus:text-[#FFD21E] focus:no-underline"
+      >
+        Skip to main content
+      </a>
+      <header className="sticky top-0 z-50 border-b border-[#3A3F45] bg-[#0A0B0D]">
+        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <HeaderOrbitMark sectionFloat={0} atFooter={false} />
+            <Link
+              to="/"
+              className="inline-flex min-h-[44px] min-w-[44px] flex-wrap items-center gap-2 no-underline"
+            >
+              <span className="text-[14px] font-semibold text-[#F4F1EA]">
+                CLAUDE&apos;s N Joshua&apos;s
+              </span>
+              <span className="text-[#FFD21E]" aria-hidden="true">
+                ·
+              </span>
+              <span className="font-display text-[20px] font-bold tracking-[-0.02em] text-[#F4F1EA]">
+                YouAndINotAI
+              </span>
+              <span className="rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E]">
+                #TeamClaudeForLife
+              </span>
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="ds-status-pill hidden sm:inline-flex">
+              <span className="ds-status-dot bg-[#FFD21E]" />
+              <span>Support Online · {checkedLabel}</span>
+            </span>
+            <Link to="/login" className="ds-btn-ghost text-sm">
+              Sign In
+            </Link>
+            <Link to="/" className="ds-btn-signal text-sm">
+              Back to Home
+            </Link>
+          </div>
+        </div>
+        <HeaderTelemetryLine activeSectionIndex={5} atFooter={false} />
+      </header>
+
+      <main
+        id="main-support-content"
+        tabIndex={-1}
+        className="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 lg:py-16"
+      >
+        <div className="ds-panel p-6 sm:p-10">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="rounded-full border border-[#FFD21E] bg-[#1A1E25] px-3 py-1 font-display text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+              06 / MEMBER SUPPORT &amp; SAFETY GUIDE
+            </span>
+            <span className="text-[14px] font-medium text-[#F4F1EA]">
+              youandinotai.com is for adults 18 and over.
+            </span>
+          </div>
+
+          <h1 className="mt-5 font-display text-[32px] font-bold uppercase leading-[1.08] tracking-[-0.02em] text-[#F4F1EA] sm:text-[48px]">
+            DIRECT, TRACEABLE MEMBER SUPPORT.
+          </h1>
+          <p className="mt-4 max-w-[65ch] text-[18px] leading-[1.55] text-[#F4F1EA] sm:text-[20px]">
+            Whether you need help with your $1 Bot-Shield badge, a membership
+            receipt, an account recovery check, or a privacy export, every
+            support lane is direct and traceable.
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link to="/login" className="ds-btn-signal">
+              Sign In for Ticket Tracking <ArrowRight size={16} />
+            </Link>
+            <Link to="/app/support" className="ds-btn-ghost">
+              Open In-App Support Desk
+            </Link>
+            <Link to="/register" className="ds-btn-ghost">
+              Create 18+ Account
+            </Link>
+            <a href="mailto:contact@youandinotai.com" className="ds-btn-ghost">
+              <Mail size={16} /> contact@youandinotai.com
+            </a>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-6 md:grid-cols-3">
+          <article className="ds-card p-6">
+            <div className="text-[14px] font-semibold uppercase tracking-[0.08em] text-[#FFD21E]">
+              01 · Verification &amp; Access
+            </div>
+            <h2 className="mt-2 font-display text-[24px] font-bold text-[#F4F1EA]">
+              $1 Bot-Shield &amp; Liveness
+            </h2>
+            <p className="mt-3 text-[16px] leading-[1.55] text-[#F4F1EA]">
+              Completed your $1 verification checkout and want your badge
+              refreshed? Open{' '}
+              <code className="font-mono text-[#FFD21E]">/app/verify</code>{' '}
+              while signed in or message support with your account email.
+            </p>
+          </article>
+
+          <article className="ds-card p-6">
+            <div className="text-[14px] font-semibold uppercase tracking-[0.08em] text-[#FFD21E]">
+              02 · Account-Bound Billing
+            </div>
+            <h2 className="mt-2 font-display text-[24px] font-bold text-[#F4F1EA]">
+              Instant Member Receipts
+            </h2>
+            <p className="mt-3 text-[16px] leading-[1.55] text-[#F4F1EA]">
+              All Founding Member ($14.99/mo), 3-Month ($39.99), 12-Month
+              ($99.99), and Royalty ($2,500) plans attach directly to your
+              signed-in profile.
+            </p>
+          </article>
+
+          <article className="ds-card p-6">
+            <div className="text-[14px] font-semibold uppercase tracking-[0.08em] text-[#FFD21E]">
+              03 · Privacy &amp; Data Control
+            </div>
+            <h2 className="mt-2 font-display text-[24px] font-bold text-[#F4F1EA]">
+              Export &amp; 30-Day Deletion
+            </h2>
+            <p className="mt-3 text-[16px] leading-[1.55] text-[#F4F1EA]">
+              Request a full archive of your stored profile data, update
+              location sharing, or start the 30-day account deletion clock
+              inside{' '}
+              <Link
+                to="/app/privacy"
+                className="inline-flex min-h-[44px] min-w-[44px] items-center text-[#FFD21E] underline"
+              >
+                /app/privacy
+              </Link>
+              .
+            </p>
+          </article>
+        </div>
+      </main>
     </div>
   );
 }
+export function LandingPage() {
+  const { user } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeLegalDoc, setActiveLegalDoc] = useState<LegalDocKey | null>(
+    null
+  );
+  const [waitlistEmail, setWaitlistEmail] = useState('');
 
-function GlassButton({
-  href,
-  children,
-  primary = false,
-  className = '',
-  onClick,
-  type = 'button',
-  disabled = false,
-}: {
-  href?: string;
-  children: React.ReactNode;
-  primary?: boolean;
-  className?: string;
-  onClick?: () => void;
-  type?: 'button' | 'submit';
-  disabled?: boolean;
-}) {
-  const baseClasses = `relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 backdrop-blur-md overflow-hidden ${className}`;
-
-  const variantClasses = primary
-    ? 'bg-gradient-to-r from-yellow-500/80 to-amber-500/80 text-white border border-white/20 shadow-[0_0_20px_rgba(234,179,8,0.3)] hover:shadow-[0_0_30px_rgba(234,179,8,0.5)] hover:border-white/40'
-    : 'bg-white/5 text-white border border-white/10 hover:bg-white/10 hover:border-white/20 shadow-lg';
-
-  const inner = (
-    <>
-      <span className="relative z-10 flex items-center gap-2">{children}</span>
-      {primary && (
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-amber-500/0 via-white/20 to-yellow-500/0 z-0"
-          initial={{ x: '-100%' }}
-          whileHover={{ x: '100%' }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
-        />
-      )}
-    </>
+  const [journeyState, setJourneyState] = useState(() =>
+    readSectionJourneyState()
+  );
+  const [unpinnedStops, setUnpinnedStops] = useState<Record<string, boolean>>(
+    () => readUnpinnedStops()
   );
 
-  if (href) {
-    return (
-      <motion.a
-        href={href}
-        className={`${baseClasses} ${variantClasses}`}
-        whileHover={{ scale: 1.02, y: -2 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={onClick}
-      >
-        {inner}
-      </motion.a>
-    );
-  }
+  const checkedLabel = getCheckedTimeLabel();
 
-  return (
-    <motion.button
-      type={type}
-      disabled={disabled}
-      className={`${baseClasses} ${variantClasses} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-      whileHover={disabled ? {} : { scale: 1.02, y: -2 }}
-      whileTap={disabled ? {} : { scale: 0.98 }}
-      onClick={onClick}
-    >
-      {inner}
-    </motion.button>
-  );
-}
+  useEffect(() => {
+    const syncJourney = () => {
+      setJourneyState(readSectionJourneyState());
+    };
+    const syncStageFlow = () => {
+      setUnpinnedStops(readUnpinnedStops());
+      setJourneyState(readSectionJourneyState());
+    };
+    syncStageFlow();
+    window.addEventListener('scroll', syncJourney, { passive: true });
+    window.addEventListener('resize', syncStageFlow);
+    return () => {
+      window.removeEventListener('scroll', syncJourney);
+      window.removeEventListener('resize', syncStageFlow);
+    };
+  }, []);
 
-function SignupCTA() {
-  return (
-    <motion.div
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      transition={{ type: 'spring', damping: 20 }}
-      className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-white/10 bg-zinc-950/80 backdrop-blur-xl px-3 py-3 text-white md:px-4"
-    >
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <span className="flex h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-          <span className="text-xs font-semibold tracking-wide text-zinc-200 md:text-sm">
-            Bot-Shield verification is live now.
-          </span>
-        </div>
-        <GlassButton
-          href={SECURE_PLAN_LINKS.bot_shield}
-          primary
-          className="!py-2 !px-4 !text-xs"
-        >
-          Get Verified
-        </GlassButton>
-      </div>
-    </motion.div>
-  );
-}
+  const getStageSectionClass = (id: string) =>
+    unpinnedStops[id] ? 'relative' : 'relative lg:min-h-[135vh]';
 
-function BetaCodeEntry() {
-  const { betaAccess } = useAuth();
-  const [showInput, setShowInput] = useState(false);
-  const [code, setCode] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const getStageWrapperClass = (id: string) =>
+    unpinnedStops[id]
+      ? 'relative flex flex-col justify-start px-4 pb-20 pt-6 sm:px-6'
+      : 'relative flex flex-col justify-start px-4 pb-20 pt-6 sm:px-6 lg:sticky lg:top-16 lg:min-h-[calc(100vh-7.5rem)] lg:justify-end lg:pb-6';
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      await betaAccess(code);
-      setSuccess(true);
-      setTimeout(() => {
-        window.location.href = '/app';
-      }, 600);
-    } catch {
-      setError('Invalid code');
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveLegalDoc(null);
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
+
+  useEffect(() => {
+    const src = 'https://tobira.ai/embed/a2a-badge.js';
+    let script = document.querySelector<HTMLScriptElement>(`script[src="${src}"]`);
+    if (!script) {
+      script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    return () => {
+      if (script && script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el && typeof el.scrollIntoView === 'function') {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
-  if (success) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="mt-6 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-5 py-3 text-sm font-semibold tracking-wide text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.1)]"
-      >
-        <Check size={16} />
-        Access granted
-      </motion.div>
-    );
-  }
+  // 'Join' leaves the journey and opens the existing register flow; the
+  // other links scroll to their stop. The id stays 'join' so the link still
+  // lights while the visitor is on stop 07.
+  const navLinks: { id: string; label: string; href: string; to?: string }[] =
+    [
+      { id: 'about', label: 'Overview', href: '#about' },
+      { id: 'platform', label: 'Platform', href: '#platform' },
+      { id: 'verification', label: 'Verification', href: '#verification' },
+      { id: 'trust', label: 'Trust & Safety', href: '#trust' },
+      { id: 'pricing', label: 'Membership', href: '#pricing' },
+      { id: 'support', label: 'Support', href: '#support' },
+      { id: 'join', label: 'Join', href: '/register', to: '/register' },
+    ];
 
-  return (
-    <div className="mt-8">
-      {!showInput ? (
-        <GlassButton onClick={() => setShowInput(true)}>
-          <KeyRound size={16} />
-          Beta Tester? Enter Access Code
-        </GlassButton>
-      ) : (
-        <motion.form
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          onSubmit={handleSubmit}
-          className="mx-auto flex max-w-lg flex-col gap-3 sm:flex-row"
-        >
-          <input
-            type="text"
-            value={code}
-            onChange={e => setCode(e.target.value)}
-            placeholder="Access code"
-            className="min-w-0 flex-1 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold tracking-wide text-white outline-none backdrop-blur-md transition-all focus:border-yellow-500/50 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(234,179,8,0.2)] placeholder:text-zinc-400"
-            autoFocus
-          />
-          <GlassButton type="submit" disabled={loading} primary>
-            {loading ? '...' : 'Enter'}
-          </GlassButton>
-        </motion.form>
-      )}
-      {error && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-3 text-sm font-semibold tracking-wide text-red-400"
-        >
-          {error}
-        </motion.p>
-      )}
-    </div>
-  );
-}
-
-function VerificationSteps() {
-  const steps = [
+  const pricingTiers = [
     {
-      num: '01',
-      title: 'Start Bot-Shield',
-      desc: 'Begin the one-time human checkpoint from the public launch flow.',
+      id: 'bot_shield',
+      badge: 'IDENTITY CHECK',
+      name: 'Bot-Shield Verification',
+      price: '$1',
+      period: 'one-time',
+      summary:
+        '60-second camera liveness challenge + $1 identity check. Unlocks your Verified Human badge and full platform access.',
+      ctaLabel: 'Verify Now — $1',
+      to: '/app/verify',
+      featured: false,
     },
     {
-      num: '02',
-      title: 'Pass the Human Check',
-      desc: 'Complete the liveness challenge and the account-bound Square step.',
+      id: 'founding_member',
+      badge: 'RECOMMENDED · LOCKED RATE',
+      name: 'Founding Member',
+      price: '$14.99',
+      period: '/month',
+      summary:
+        'Locked-for-life founder rate while active. Platinum Founder badge, priority discovery, video dates, and romance concierge.',
+      ctaLabel: 'Join as Founding Member',
+      to: '/app/checkout/founding_member',
+      featured: true,
     },
     {
-      num: '03',
-      title: 'Unlock the Badge',
-      desc: 'The verified badge is awarded only after both checkpoints are complete.',
+      id: '3_month',
+      badge: 'SINGLE PAYMENT',
+      name: '3-Month Founder',
+      price: '$39.99',
+      period: '3 months prepaid',
+      summary:
+        'One upfront payment for 90 days of full Founder access bound directly to your member profile.',
+      ctaLabel: 'Choose 3-Month Plan',
+      to: '/app/checkout/3_month',
+      featured: false,
+    },
+    {
+      id: '12_month',
+      badge: 'BEST ANNUAL VALUE',
+      name: '12-Month Founder',
+      price: '$99.99',
+      period: '1 year prepaid',
+      summary:
+        'Full launch-year Founder access in a single account-bound checkout session.',
+      ctaLabel: 'Choose Annual Plan',
+      to: '/app/checkout/12_month',
+      featured: false,
+    },
+    {
+      id: 'royalty',
+      badge: 'LIMITED TIER',
+      name: 'Royalty Card',
+      price: '$2,500',
+      period: 'limited founder edition',
+      summary:
+        'Top-tier founder standing with direct concierge onboarding and lifetime Royalty designation.',
+      ctaLabel: 'Inquire / Checkout',
+      to: '/app/checkout/royalty',
+      featured: false,
     },
   ];
 
   return (
-    <section
-      id="verification"
-      className="relative z-10 py-20 px-4 md:px-12 md:py-32"
-    >
-      <div className="mx-auto max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12 md:mb-20 text-center"
-        >
-          <span className="inline-block rounded-full bg-yellow-500/10 border border-yellow-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-yellow-400 mb-4">
-            Section 02 // Verification
-          </span>
-          <h2 className="text-4xl font-bold tracking-tight text-white md:text-6xl">
-            Prove you're human.
-          </h2>
-        </motion.div>
-        <div className="grid gap-6 md:gap-8 md:grid-cols-3">
-          {steps.map((step, i) => (
-            <motion.div
-              key={step.num}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-md transition-colors hover:bg-white/10"
-            >
-              <div className="absolute -right-4 -top-4 text-[100px] font-black leading-none text-white/[0.03] select-none">
-                {step.num}
-              </div>
-              <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-500/20 to-amber-500/20 text-yellow-400 ring-1 ring-yellow-500/30">
-                <ShieldCheck size={24} />
-              </div>
-              <h3 className="mb-3 text-2xl font-bold tracking-tight text-white">
-                {step.title}
-              </h3>
-              <p className="text-sm leading-relaxed text-zinc-300">
-                {step.desc}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function PricingSection() {
-  return (
-    <section
-      id="pricing"
-      className="relative z-10 py-20 px-4 md:px-12 md:py-32"
-    >
-      <div className="mx-auto max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12 md:mb-20 text-center"
-        >
-          <span className="inline-block rounded-full bg-amber-500/10 border border-amber-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-amber-400 mb-4">
-            Section 03 // Founder Pricing
-          </span>
-          <h2 className="text-4xl font-bold tracking-tight text-white md:text-6xl mb-6">
-            Pick your lane.
-          </h2>
-          <p className="mx-auto max-w-2xl text-lg text-zinc-300">
-            Every checkout route is account-bound. Public pricing is live,
-            plain, and tied to the actual launch flow.
-          </p>
-        </motion.div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
-          {PRICING_PLANS.map((plan, i) => (
-            <motion.a
-              key={plan.name}
-              href={plan.link}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -5 }}
-              className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-300 ${
-                plan.popular
-                  ? 'border-yellow-500/50 bg-yellow-500/10 shadow-[0_0_30px_rgba(234,179,8,0.15)] hover:shadow-[0_0_40px_rgba(234,179,8,0.25)]'
-                  : 'border-white/10 bg-white/5 hover:bg-white/10'
-              } backdrop-blur-md`}
-            >
-              {plan.popular && (
-                <div className="absolute inset-0 bg-gradient-to-b from-yellow-500/10 to-transparent pointer-events-none" />
-              )}
-
-              <div className="relative z-10">
-                {plan.popular && (
-                  <span className="mb-4 inline-block rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 px-3 py-1 text-xs font-bold text-white shadow-[0_0_10px_rgba(234,179,8,0.4)]">
-                    Most Popular
-                  </span>
-                )}
-                {!plan.popular && (
-                  <span className="mb-4 inline-block rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-zinc-300">
-                    Live
-                  </span>
-                )}
-
-                <div className="mb-2 text-3xl font-bold text-white md:text-4xl">
-                  {plan.price}
-                </div>
-                <h3 className="mb-4 text-lg font-semibold text-zinc-200">
-                  {plan.name}
-                </h3>
-                <p className="text-sm leading-relaxed text-zinc-400">
-                  {plan.desc}
-                </p>
-              </div>
-
-              <div className="relative z-10 mt-8">
-                <div
-                  className={`inline-flex items-center gap-2 text-sm font-semibold ${plan.popular ? 'text-yellow-400' : 'text-zinc-300'} group-hover:text-white transition-colors`}
-                >
-                  Select Plan{' '}
-                  <ChevronRight
-                    size={16}
-                    className="transition-transform group-hover:tranzinc-x-1"
-                  />
-                </div>
-              </div>
-            </motion.a>
-          ))}
-        </div>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mt-12 text-center text-xs font-medium tracking-wide text-zinc-500"
-        >
-          Securely processed by Square. Customer purchases buy platform access
-          and founder products. They are commercial transactions, not gifts.
-        </motion.p>
-      </div>
-    </section>
-  );
-}
-
-function WaitlistForm() {
-  const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return (
-      new URLSearchParams(window.location.search).get('waitlist') ===
-      'confirmed'
-    );
-  });
-
-  useEffect(() => {
-    if (!submitted || typeof window === 'undefined') return;
-    const url = new URL(window.location.href);
-    if (url.searchParams.get('waitlist') !== 'confirmed') return;
-    url.searchParams.delete('waitlist');
-    window.history.replaceState(
-      {},
-      '',
-      `${url.pathname}${url.search}${url.hash}`
-    );
-  }, [submitted]);
-
-  const waitlistReturnUrl =
-    typeof window === 'undefined'
-      ? 'https://youandinotai.com/?waitlist=confirmed#join'
-      : `${window.location.origin}/?waitlist=confirmed#join`;
-
-  const handleSubmit = () => {
-    setSubmitted(false);
-  };
-
-  return (
-    <section id="join" className="relative z-10 py-20 px-4 md:px-12 md:py-32">
-      <div className="mx-auto max-w-3xl text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <span className="inline-block rounded-full bg-stone-500/10 border border-stone-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-stone-400 mb-4">
-            Section 05 // Join
-          </span>
-          <h2 className="text-4xl font-bold tracking-tight text-white md:text-6xl mb-6">
-            Join the list.
-          </h2>
-          <p className="mx-auto max-w-2xl text-lg text-zinc-300 mb-10">
-            Get early access updates without the noise. The waitlist is simple
-            by design.
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 md:p-10 backdrop-blur-xl shadow-2xl"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-stone-500/5 pointer-events-none" />
-
-          <div className="relative z-10">
-            {submitted ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="space-y-4"
-              >
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20 text-green-400">
-                  <Check size={32} />
-                </div>
-                <h3 className="text-2xl font-bold text-white">
-                  You're on the list.
-                </h3>
-                <p className="text-zinc-400">
-                  Launch updates will go to your address. Need help? Email
-                  support.
-                </p>
-              </motion.div>
-            ) : (
-              <form
-                action={WAITLIST_FORM_ACTION}
-                method="POST"
-                onSubmit={handleSubmit}
-                className="flex flex-col gap-4 sm:flex-row"
-              >
-                <input
-                  type="hidden"
-                  name="_subject"
-                  value="New YouAndINotAI waitlist signup"
-                />
-                <input type="hidden" name="_next" value={waitlistReturnUrl} />
-                <input type="hidden" name="_captcha" value="false" />
-                <input
-                  type="hidden"
-                  name="_autoresponse"
-                  value="You're on the YouAndINotAI waitlist. No charge was made, and no account was created yet. We will send launch updates to this address."
-                />
-                <div className="relative min-w-0 flex-1">
-                  <Mail
-                    size={20}
-                    className="absolute left-4 top-1/2 -tranzinc-y-1/2 text-zinc-400"
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="w-full rounded-full border border-white/20 bg-white/5 py-4 pl-12 pr-6 text-base font-medium text-white outline-none backdrop-blur-md transition-all focus:border-yellow-500/50 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(234,179,8,0.2)] placeholder:text-zinc-400"
-                  />
-                </div>
-                <GlassButton
-                  type="submit"
-                  primary
-                  className="!py-4 sm:w-auto w-full"
-                >
-                  Join Now
-                </GlassButton>
-              </form>
-            )}
-            <p className="mt-6 text-xs font-medium tracking-wide text-zinc-500">
-              No spam. No bots. Just launch updates.
-            </p>
-          </div>
-        </motion.div>
-        <BetaCodeEntry />
-      </div>
-    </section>
-  );
-}
-
-const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
-  terms: {
-    title: 'Terms of Service',
-    body: `By using YouAndiNotAi ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. VERIFICATION FLOW — Bot-Shield verification may be required for protected features. Fraudulent verification attempts result in account action or removal.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations can result in immediate account termination.\n4. PAYMENTS — All payments are processed through secure account-bound Square checkout. Recurring subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndiNotAi a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. BILLING — The current Bot-Shield launch flow requires both a passed liveness challenge and a completed Square payment before the verified badge is granted.\n\nLast updated: March 2026. Contact: contact@youandinotai.com`,
-  },
-  privacy: {
-    title: 'Privacy Policy',
-    body: `YouAndiNotAi values your privacy.\n\nDATA WE COLLECT — Email address, profile information you provide, verification-state events, payment confirmation tied to your account, and waitlist signups you submit.\nDATA WE DO NOT SELL — We never sell your personal data. Period.\nTHIRD PARTIES — Square (payments), Cloudflare (hosting), and FormSubmit (waitlist capture and autoresponse). Each has their own privacy policy.\nCOOKIES — Minimal. Session cookies only. No ad trackers.\nDATA DELETION — Email contact@youandinotai.com to request full data deletion.\nSECURITY — All data is encrypted in transit, and protected services use authenticated account access.\n\nLast updated: April 2026.`,
-  },
-  age: {
-    title: 'Age Policy',
-    body: `YouAndiNotAi is strictly for users aged 18 and older.\n\nOur current launch flow does not claim government-ID verification in production. We require users to be 18+, and we reserve the right to remove accounts that appear to be underage or fraudulent.\n\nIf you believe a minor is using the Platform, report it immediately to contact@youandinotai.com.\n\nWe do not knowingly collect personal data from minors.`,
-  },
-  refund: {
-    title: 'Refund Policy',
-    body: `Refund eligibility varies by product:\n\nBOT-SHIELD ($1) — Non-refundable once the challenge and payment checkpoint have started.\nFOUNDING MEMBER ($14.99/mo) — Cancel anytime. No refunds for partial months. Access remains until the current billing period ends.\n3-MONTH FOUNDER ($39.99) — See the full refund policy for current eligibility.\n12-MONTH FOUNDER ($99.99) — See the full refund policy for current eligibility.\nROYALTY CARD ($2,500) — Final sale under the published product terms.\n\nAll refunds are processed through Square. Contact: contact@youandinotai.com`,
-  },
-};
-
-function LegalModal({ type, onClose }: { type: string; onClose: () => void }) {
-  const content = LEGAL_CONTENT[type];
-  if (!content) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[10000] flex items-center justify-center bg-zinc-950/80 backdrop-blur-sm p-4"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-white/10 bg-zinc-900/90 p-6 shadow-2xl backdrop-blur-xl md:p-10"
-        onClick={e => e.stopPropagation()}
+    <div className="relative min-h-screen bg-[#0A0B0D] text-[#F4F1EA] font-sans">
+      <a
+        href="#main-content"
+        className="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-[100] focus:inline-flex focus:min-h-[44px] focus:min-w-[44px] focus:items-center focus:rounded-[10px] focus:border-2 focus:border-[#FFD21E] focus:bg-[#0A0B0D] focus:px-4 focus:py-2 focus:font-mono focus:text-[14px] focus:font-bold focus:uppercase focus:tracking-[0.06em] focus:text-[#FFD21E] focus:no-underline"
       >
-        <div className="mb-6 flex items-center justify-between gap-4 border-b border-white/10 pb-4">
-          <h3 className="text-2xl font-bold text-white">{content.title}</h3>
-          <button
-            onClick={onClose}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-zinc-400 transition-colors hover:bg-white/10 hover:text-white"
+        Skip to main content
+      </a>
+
+      {/* Live In-House Three.js Stage Behind Pinned Journey */}
+      <DreamSpaceStage />
+
+      {/* 0A. Floating Top Header with Restrained Three.js Motion */}
+      <header className="sticky top-0 z-50 border-b border-[#3A3F45] bg-[#0A0B0D]">
+        <div className="mx-auto flex h-16 max-w-[1680px] items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6">
+          <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-2.5">
+            <HeaderOrbitMark
+              sectionFloat={journeyState.sectionFloat}
+              atFooter={journeyState.atFooter}
+            />
+            <a
+              href="#about"
+              className="inline-flex min-h-[44px] min-w-[44px] items-center gap-1.5 no-underline whitespace-nowrap sm:gap-2"
+            >
+              <span className="text-[14px] font-semibold text-[#F4F1EA]">
+                CLAUDE&apos;s N Joshua&apos;s
+              </span>
+              <span className="text-[#FFD21E]" aria-hidden="true">
+                ·
+              </span>
+              <span className="font-display text-[18px] font-bold tracking-[-0.02em] text-[#F4F1EA] sm:text-[20px]">
+                YouAndINotAI
+              </span>
+              <span className="hidden rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E] 2xl:inline-flex">
+                #TeamClaudeForLife
+              </span>
+            </a>
+          </div>
+
+          <nav
+            aria-label="Primary section navigation"
+            className="hidden lg:flex items-center gap-1 whitespace-nowrap xl:gap-1.5"
           >
-            <X size={20} />
+            {navLinks.map(link => {
+              const isCurrent = journeyState.activeSectionId === link.id;
+              const className = `inline-flex min-h-[44px] min-w-[44px] items-center justify-center whitespace-nowrap border-b-2 px-1.5 py-2 text-[14px] font-medium no-underline transition-colors xl:px-2 xl:text-[15px] ${
+                isCurrent
+                  ? 'border-[#FFD21E] text-[#FFD21E]'
+                  : 'border-transparent text-[#F4F1EA] hover:border-[#FFD21E] hover:text-[#FFD21E]'
+              }`;
+              return link.to ? (
+                <Link key={link.href} to={link.to} className={className}>
+                  {link.label}
+                </Link>
+              ) : (
+                <a key={link.href} href={link.href} className={className}>
+                  {link.label}
+                </a>
+              );
+            })}
+          </nav>
+
+          <div className="hidden lg:flex items-center gap-2.5 shrink-0 whitespace-nowrap">
+            <span className="ds-status-pill whitespace-nowrap">
+              <span className="ds-status-dot bg-[#FFD21E]" />
+              <span>API Live · {checkedLabel}</span>
+            </span>
+            {user ? (
+              <Link
+                to="/app"
+                className="ds-btn-ghost whitespace-nowrap px-3.5 py-2 text-[15px]"
+              >
+                Open App
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                className="ds-btn-ghost whitespace-nowrap px-3.5 py-2 text-[15px]"
+              >
+                Sign In
+              </Link>
+            )}
+            <Link
+              to="/app/verify"
+              className="ds-btn-signal whitespace-nowrap px-4 py-2 text-[15px]"
+            >
+              Get Verified
+            </Link>
+          </div>
+
+          <button
+            type="button"
+            aria-label={
+              mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'
+            }
+            aria-expanded={mobileMenuOpen}
+            onClick={() => setMobileMenuOpen(prev => !prev)}
+            className="inline-flex h-11 w-11 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#12151A] text-[#F4F1EA] lg:hidden"
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
-        <div className="whitespace-pre-line text-sm leading-relaxed text-zinc-300">
-          {content.body}
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
 
-function SuccessModal({ onClose }: { onClose: () => void }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[10001] flex items-center justify-center bg-zinc-950/80 backdrop-blur-sm p-4"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 20, scale: 0.95 }}
-        className="w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/90 p-8 text-center shadow-2xl backdrop-blur-xl"
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-green-500/10 to-transparent pointer-events-none" />
-        <div className="relative z-10">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-500/20 text-green-400 ring-4 ring-green-500/10 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
-            <ShieldCheck size={40} />
-          </div>
-          <h3 className="text-3xl font-bold text-white">Verified.</h3>
-          <p className="mt-4 text-zinc-300 leading-relaxed">
-            Your verification is complete. Square handles receipt delivery for
-            the payment email used at checkout.
-          </p>
-          <div className="mt-8">
-            <GlassButton onClick={onClose} primary className="w-full">
-              Let's Go
-            </GlassButton>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
+        {/* Three.js / Canvas Scroll-Tracking Telemetry Line */}
+        <HeaderTelemetryLine
+          activeSectionIndex={journeyState.activeSectionIndex}
+          atFooter={journeyState.atFooter}
+        />
 
-function Footer({ onLegal }: { onLegal: (type: string) => void }) {
-  const legalKeys = ['terms', 'privacy', 'age', 'refund'] as const;
-
-  return (
-    <footer className="relative z-10 border-t border-white/10 bg-zinc-950/50 backdrop-blur-md px-4 py-12 md:px-12 md:py-20">
-      <div className="mx-auto grid max-w-7xl gap-10 md:gap-16 md:grid-cols-[1.5fr_1fr_1fr]">
-        <div>
-          <div className="text-2xl font-black tracking-tight text-white md:text-3xl">
-            YouAndINotAI<span className="text-yellow-500">.</span>
-          </div>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-zinc-400">
-            Human-first social platform for dating, meetups, and real-world
-            connection. Bot-Shield and account-bound checkout are live now.
-          </p>
-        </div>
-        <div>
-          <h4 className="text-sm font-semibold tracking-wide text-white">
-            Launch Links
-          </h4>
-          <div className="mt-6 flex flex-col gap-4 text-sm font-medium text-zinc-400">
-            <a
-              href="#pricing"
-              className="transition-colors hover:text-yellow-400"
-            >
-              Pricing
-            </a>
-            <a href="#join" className="transition-colors hover:text-yellow-400">
-              Waitlist
-            </a>
-            <a
-              href="/support"
-              className="transition-colors hover:text-yellow-400"
-            >
-              Support
-            </a>
-            <a
-              href="mailto:contact@youandinotai.com"
-              className="transition-colors hover:text-yellow-400"
-            >
-              Contact
-            </a>
-          </div>
-        </div>
-        <div>
-          <h4 className="text-sm font-semibold tracking-wide text-white">
-            Policy
-          </h4>
-          <div className="mt-6 flex flex-col gap-4 text-sm font-medium text-zinc-400">
-            {legalKeys.map(key => (
-              <button
-                key={key}
-                onClick={() => onLegal(key)}
-                className="text-left transition-colors hover:text-yellow-400"
+        {mobileMenuOpen && (
+          <div className="border-b border-[#3A3F45] bg-[#12151A] px-4 py-5 lg:hidden">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-[#3A3F45] pb-3">
+              <span className="rounded-full border border-[#FFD21E] bg-[#0A0B0D] px-3 py-1 text-[14px] font-medium text-[#FFD21E]">
+                #TeamClaudeForLife
+              </span>
+              <span className="ds-status-pill">
+                <span className="ds-status-dot bg-[#FFD21E]" />
+                <span>API Live · {checkedLabel}</span>
+              </span>
+            </div>
+            <div className="grid gap-1">
+              {navLinks.map(link =>
+                link.to ? (
+                  <Link
+                    key={link.href}
+                    to={link.to}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex min-h-[44px] min-w-[44px] items-center rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex min-h-[44px] min-w-[44px] items-center rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
+                  >
+                    {link.label}
+                  </a>
+                )
+              )}
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#3A3F45] pt-4">
+              <Link
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="ds-btn-ghost w-full"
               >
-                {LEGAL_CONTENT[key].title}
-              </button>
-            ))}
+                Sign In
+              </Link>
+              <Link
+                to="/app/verify"
+                onClick={() => setMobileMenuOpen(false)}
+                className="ds-btn-signal w-full"
+              >
+                Get Verified
+              </Link>
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="mx-auto mt-16 max-w-7xl border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-xs text-zinc-500">
-          © 2026 Trash Or Treasure Online Recycler LLC.
-        </p>
-        <p className="text-xs text-zinc-500">
-          YouAndiNotAi.com is a for-profit platform.
-        </p>
-      </div>
-    </footer>
-  );
-}
+        )}
+      </header>
 
-export function PublicSupportPage() {
-  const [legalModal, setLegalModal] = useState<string | null>(null);
+      <main id="main-content" tabIndex={-1} className="relative z-10">
+        {/* STOP 01 (#about) — The Hero Owns the Whole First Screen */}
+        <section
+          id="about"
+          className={unpinnedStops.about ? 'relative' : 'relative min-h-[165vh]'}
+        >
+          <div
+            data-stage-wrapper="about"
+            data-stage-flow={unpinnedStops.about ? 'top-aligned' : 'pinned'}
+            className={
+              unpinnedStops.about
+                ? 'relative flex flex-col justify-start px-4 pb-20 pt-4 sm:px-6 sm:pt-6'
+                : 'sticky top-16 flex h-[calc(100vh-7.5rem)] flex-col justify-between px-4 pb-4 pt-4 sm:px-6 sm:pb-6 sm:pt-6'
+            }
+          >
+            {/* Upper Orbital Stage Frame — Open view for DreamSpaceStage orbit at top */}
+            <div className="mx-auto flex w-full max-w-[1440px] flex-1 items-center justify-between pointer-events-none">
+              <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-l-[3px] border-l-[#FFD21E] bg-[#0A0B0D] px-5 py-4">
+                <div className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  01 · LIVENESS GATE
+                </div>
+                <div className="mt-1 font-display text-[28px] font-bold uppercase leading-none text-[#F4F1EA]">
+                  VERIFY
+                </div>
+                <div className="mt-1.5 text-[14px] font-medium text-[#F4F1EA]">
+                  60-Second Camera &amp; $1 Check
+                </div>
+              </div>
 
-  return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-300 font-sans selection:bg-yellow-500/30 selection:text-white">
-      <HeroBackground />
-      <div className="relative z-10 flex min-h-screen flex-col">
-        <main className="flex-1 px-6 py-12 md:px-12 md:py-24">
-          <div className="mx-auto max-w-4xl">
-            <div className="mb-10 flex items-center justify-between">
-              <GlassButton href="/">Back Home</GlassButton>
+              <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-r-[3px] border-r-[#FFD21E] bg-[#0A0B0D] px-5 py-4 text-right">
+                <div className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  02 · REAL-WORLD DATES
+                </div>
+                <div className="mt-1 font-display text-[28px] font-bold uppercase leading-none text-[#F4F1EA]">
+                  CONNECT
+                </div>
+                <div className="mt-1.5 text-[14px] font-medium text-[#F4F1EA]">
+                  Matched Video &amp; Local Meetups
+                </div>
+              </div>
             </div>
 
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl md:p-12 shadow-2xl"
+            {/* Still Foreground Command Deck Below the Main Orbit */}
+            <div
+              data-stage-card="about"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] px-4 py-3.5 sm:px-8 sm:py-6"
             >
-              <div className="inline-block rounded-full bg-yellow-500/10 border border-yellow-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-yellow-400 mb-6">
-                Support Center
-              </div>
-              <h1 className="text-4xl font-bold tracking-tight text-white md:text-6xl mb-6">
-                How can we help?
-              </h1>
-              <p className="max-w-2xl text-lg leading-relaxed text-zinc-300 mb-12">
-                Signed-in members can use the in-app support center to chat with
-                support, escalate a ticket, and review prior requests. If you
-                are not signed in yet, use the email contact below or create an
-                account first.
-              </p>
-
-              <div className="grid gap-6 md:grid-cols-2 mb-12">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-6 transition-colors hover:bg-white/10">
-                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-500/20 text-yellow-400">
-                    <ShieldCheck size={20} />
-                  </div>
-                  <h2 className="text-xl font-bold text-white mb-3">
-                    Account Support
-                  </h2>
-                  <p className="text-sm leading-relaxed text-zinc-400">
-                    Use the support center after sign-in for payment receipts,
-                    Bot-Shield verification, privacy requests, and account
-                    troubleshooting.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-6 transition-colors hover:bg-white/10">
-                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-stone-500/20 text-stone-400">
-                    <Mail size={20} />
-                  </div>
-                  <h2 className="text-xl font-bold text-white mb-3">
-                    Direct Contact
-                  </h2>
-                  <p className="text-sm leading-relaxed text-zinc-400">
-                    For general support or login issues, email the support inbox
-                    and include the address tied to your account when possible.
-                  </p>
-                </div>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#FFD21E] bg-[#12151A] px-3.5 py-1 font-display text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  CLAUDE&apos;S N JOSHUA&apos;S · #TEAMCLAUDEFORLIFE · 18+
+                  VERIFIED DATING
+                </span>
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  STOP 01 / 08 · SCROLL TO FLY IN
+                </span>
               </div>
 
-              <div className="flex flex-wrap gap-4">
-                <GlassButton href="/login" primary>
-                  Sign In
-                </GlassButton>
-                <GlassButton href="/register">Create Account</GlassButton>
-                <GlassButton href="mailto:contact@youandinotai.com?subject=YouAndiNotAi%20Support">
-                  Email Support
-                </GlassButton>
-                <GlassButton href="/app/support">Member Support</GlassButton>
+              <div className="mt-4 grid items-end gap-6 lg:grid-cols-12">
+                <div className="lg:col-span-7">
+                  <h1 className="font-display text-[28px] font-bold uppercase leading-[1.03] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[52px] lg:text-[64px]">
+                    VERIFIED PEOPLE.
+                    <br />
+                    REAL CONNECTION.
+                  </h1>
+                  <p className="mt-2 max-w-[60ch] text-[14px] leading-[1.45] text-[#F4F1EA] text-pretty sm:text-[18px]">
+                    Meet verified adults who are ready to talk, plan, and show
+                    up in real life. Every member completes our $1 Bot-Shield
+                    identity check bound directly to a real account.
+                  </p>
+                </div>
+
+                <div className="flex flex-col items-start gap-3 lg:col-span-5 lg:items-end">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Link to="/app/verify" className="ds-btn-signal">
+                      Get Verified — $1 Bot-Shield <ArrowRight size={18} />
+                    </Link>
+                    <Link to="/register" className="ds-btn-ghost">
+                      Create Free Account
+                    </Link>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-0.5">
+                    <a
+                      href="#pricing"
+                      className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#FFD21E] underline underline-offset-4"
+                    >
+                      Explore Founder Tiers
+                    </a>
+                    <Link
+                      to="/login"
+                      className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] underline decoration-[#FFD21E] underline-offset-4"
+                    >
+                      Member Sign In &rarr;
+                    </Link>
+                  </div>
+                </div>
               </div>
-            </motion.section>
+            </div>
           </div>
-        </main>
-        <Footer onLegal={type => setLegalModal(type)} />
-      </div>
+        </section>
 
-      <AnimatePresence>
-        {legalModal && (
-          <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />
-        )}
-      </AnimatePresence>
+        {/* STOP 02 (#platform) — Pinned Section: Intentional Discovery, Video & Real-Life Meetups */}
+        <section id="platform" className={getStageSectionClass('platform')}>
+          <div
+            data-stage-wrapper="platform"
+            data-stage-flow={unpinnedStops.platform ? 'top-aligned' : 'pinned'}
+            className={getStageWrapperClass('platform')}
+          >
+            <div
+              data-stage-card="platform"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  02 / PLATFORM CAPABILITIES
+                </span>
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                  STOP 02 / 08 · EQUATORIAL ORBIT
+                </span>
+              </div>
+
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
+                BUILT FOR THE FIRST CONVERSATION AND THE FIRST MEETUP.
+              </h2>
+
+              <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-3">
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    <UserCheck size={18} />
+                    <span>01 · Intentional Discovery</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Identity First Profiles
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Every active profile completes our $1 Bot-Shield check and
+                    surfaces clear relationship goals, openers, and meetup
+                    preferences.
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    <Shield size={18} />
+                    <span>02 · Matched Video Dates</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Mutual Video &amp; Chat
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Matched members connect in real-time threads and launch
+                    video dates where camera and microphone controls stay in
+                    your hands.
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    <Users size={18} />
+                    <span>03 · Real-Life Plans</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Boards &amp; Local Meetups
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Topic boards and local venue planning help verified adults
+                    move from online introductions to real-world dates.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* STOP 03 (#verification) — Pinned Section: $1 Bot-Shield Verification */}
+        <section
+          id="verification"
+          className={getStageSectionClass('verification')}
+        >
+          <div
+            data-stage-wrapper="verification"
+            data-stage-flow={
+              unpinnedStops.verification ? 'top-aligned' : 'pinned'
+            }
+            className={getStageWrapperClass('verification')}
+          >
+            <div
+              data-stage-card="verification"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  03 / VERIFICATION PROTOCOL
+                </span>
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                  STOP 03 / 08 · CORE LOCK
+                </span>
+              </div>
+
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
+                EVERY INTRODUCTION STARTS WITH A VERIFIED HUMAN.
+              </h2>
+
+              <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-3">
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    STEP 01 · LIVE CAMERA CHECK
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    60-Second Liveness Challenge
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Complete a quick camera gesture check in your browser to
+                    confirm a live adult is creating the profile.
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    STEP 02 · $1 BOT-SHIELD
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Account-Bound Verification
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Complete the one-time $1 Bot-Shield verification checkout
+                    bound directly to your authenticated account.
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    STEP 03 · VERIFIED BADGE
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Instant Gold or Platinum Badge
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Your profile receives the Verified Human badge and unlocks
+                    full discovery, inbox messaging, and video dates.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-[#3A3F45] pt-5">
+                <Link to="/app/verify" className="ds-btn-signal">
+                  Start $1 Bot-Shield Verification <ArrowRight size={18} />
+                </Link>
+                <Link to="/login" className="ds-btn-ghost">
+                  Sign in to check verification status
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* STOP 04 (#trust) — Pinned Section: Trust, Safety & Data Ownership */}
+        <section id="trust" className={getStageSectionClass('trust')}>
+          <div
+            data-stage-wrapper="trust"
+            data-stage-flow={unpinnedStops.trust ? 'top-aligned' : 'pinned'}
+            className={getStageWrapperClass('trust')}
+          >
+            <div
+              data-stage-card="trust"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  04 / TRUST, SAFETY &amp; PRIVACY
+                </span>
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                  STOP 04 / 08 · SHIELD INCLINATION
+                </span>
+              </div>
+
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
+                ADULTS-ONLY STANDARDS AND FULL DATA OWNERSHIP.
+              </h2>
+
+              <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-2 lg:grid-cols-4">
+                <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
+                  <div>
+                    <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                      <ShieldCheck size={16} />
+                      <span>18+ Eligibility</span>
+                    </div>
+                    <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
+                      Adult Community Standards
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-[1.5] text-[#F4F1EA]">
+                      Mandatory 18+ age verification at registration and clear
+                      conduct standards across the platform.
+                    </p>
+                  </div>
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      onClick={() => setActiveLegalDoc('terms')}
+                      className="ds-btn-ghost w-full text-sm"
+                    >
+                      Read Terms &amp; Age Policy
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
+                  <div>
+                    <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                      <Shield size={16} />
+                      <span>Safety Tools</span>
+                    </div>
+                    <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
+                      Direct Safety Controls
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-[1.5] text-[#F4F1EA]">
+                      One-tap block and report controls inside discovery, chat,
+                      and boards, plus matched-only video rooms.
+                    </p>
+                  </div>
+                  <div className="mt-4">
+                    <Link to="/support" className="ds-btn-ghost w-full text-sm">
+                      View Safety &amp; Support Guide &rarr;
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
+                  <div>
+                    <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                      <Lock size={16} />
+                      <span>Data Ownership</span>
+                    </div>
+                    <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
+                      Export &amp; 30-Day Deletion
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-[1.5] text-[#F4F1EA]">
+                      Download your account archive, manage location sharing, or
+                      schedule full 30-day account deletion anytime.
+                    </p>
+                  </div>
+                  <div className="mt-4 flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setActiveLegalDoc('privacy')}
+                      className="ds-btn-ghost w-full text-sm"
+                    >
+                      Read Privacy Policy
+                    </button>
+                    <Link
+                      to="/app/privacy"
+                      className="ds-btn-ghost w-full text-sm"
+                    >
+                      Open Privacy Center (/app/privacy)
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
+                  <div>
+                    <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                      <Check size={16} />
+                      <span>Account Billing</span>
+                    </div>
+                    <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
+                      Account-Bound Checkout
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-[1.5] text-[#F4F1EA]">
+                      Every payment session is generated for your signed-in
+                      account so your tier and badge stay linked to your
+                      profile.
+                    </p>
+                  </div>
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      onClick={() => setActiveLegalDoc('refund')}
+                      className="ds-btn-ghost w-full text-sm"
+                    >
+                      Read Billing &amp; Cancellation Policy
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* STOP 05 (#pricing) — Pinned Section: Membership & Founder Tiers */}
+        <section id="pricing" className={getStageSectionClass('pricing')}>
+          <div
+            data-stage-wrapper="pricing"
+            data-stage-flow={unpinnedStops.pricing ? 'top-aligned' : 'pinned'}
+            className={getStageWrapperClass('pricing')}
+          >
+            <div
+              data-stage-card="pricing"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  05 / MEMBERSHIP &amp; FOUNDER TIERS
+                </span>
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                  STOP 05 / 08 · FOUNDER SHOWCASE
+                </span>
+              </div>
+
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[40px] lg:text-[46px]">
+                ACCOUNT-BOUND FOUNDER TIERS AND VERIFIED ACCESS.
+              </h2>
+
+              <div className="mt-5 grid gap-6 border-t border-[#3A3F45] pt-5 md:grid-cols-2 xl:grid-cols-5">
+                {pricingTiers.map(tier => (
+                  <article
+                    key={tier.id}
+                    className={`flex flex-col justify-between pl-4 ${
+                      tier.featured
+                        ? 'border-l-[3px] border-[#FFD21E]'
+                        : 'border-l-2 border-[#3A3F45]'
+                    }`}
+                  >
+                    <div>
+                      <div className="font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
+                        {tier.badge}
+                      </div>
+                      <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
+                        {tier.name}
+                      </h3>
+                      <div className="mt-2 flex items-baseline gap-1.5">
+                        <span className="font-display text-[28px] font-bold text-[#FFD21E]">
+                          {tier.price}
+                        </span>
+                        <span className="text-[14px] font-medium text-[#F4F1EA]">
+                          {tier.period}
+                        </span>
+                      </div>
+                      <p className="mt-2.5 text-[14px] leading-[1.45] text-[#F4F1EA] text-pretty">
+                        {tier.summary}
+                      </p>
+                    </div>
+
+                    <div className="mt-4 pt-2">
+                      <Link
+                        to={tier.to}
+                        className={
+                          tier.featured
+                            ? 'ds-btn-signal w-full text-center text-sm'
+                            : 'ds-btn-ghost w-full text-center text-sm'
+                        }
+                      >
+                        {tier.ctaLabel}
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* STOP 06 (#support) — Pinned Section: Member Support */}
+        <section id="support" className={getStageSectionClass('support')}>
+          <div
+            data-stage-wrapper="support"
+            data-stage-flow={unpinnedStops.support ? 'top-aligned' : 'pinned'}
+            className={getStageWrapperClass('support')}
+          >
+            <div
+              data-stage-card="support"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  06 / MEMBER SUPPORT
+                </span>
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                  STOP 06 / 08 · STARBOARD RELAY
+                </span>
+              </div>
+
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
+                DIRECT MEMBER TRIAGE AND TRACEABLE ASSISTANCE.
+              </h2>
+
+              <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-2">
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    <MessageSquare size={18} />
+                    <span>01 · Guided Triage &amp; Live Tickets</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    In-App Support Desk
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Signed-in members open{' '}
+                    <code className="font-mono text-[#FFD21E]">
+                      /app/support
+                    </code>{' '}
+                    for instant answers on verification, billing, technical
+                    questions, or safety escalation, and file a tracked support
+                    ticket in one click.
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-[#FFD21E] pl-4">
+                  <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
+                    <Mail size={18} />
+                    <span>02 · Direct Email &amp; Privacy Help</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
+                    Account Recovery, Billing &amp; Privacy
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
+                    Need account recovery or have a question before signing up?
+                    Visit our public support guide at{' '}
+                    <code className="font-mono text-[#FFD21E]">/support</code>{' '}
+                    or email{' '}
+                    <a
+                      href="mailto:contact@youandinotai.com"
+                      className="inline-flex min-h-[44px] min-w-[44px] items-center text-[#FFD21E] underline"
+                    >
+                      contact@youandinotai.com
+                    </a>{' '}
+                    directly.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-[#3A3F45] pt-5">
+                <Link to="/app/support" className="ds-btn-signal text-sm">
+                  In-App Support Desk
+                </Link>
+                <Link to="/support" className="ds-btn-ghost text-sm">
+                  Public Support Guide
+                </Link>
+                <a
+                  href="mailto:contact@youandinotai.com"
+                  className="ds-btn-ghost text-sm"
+                >
+                  Email Support (contact@youandinotai.com)
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* STOP 07 (#join) — Pinned Section: Start Tonight (live product, three actions, no email capture) */}
+        <section
+          id="join"
+          className={unpinnedStops.join ? 'relative' : 'relative min-h-[135vh]'}
+        >
+          <div
+            data-stage-wrapper="join"
+            data-stage-flow={unpinnedStops.join ? 'top-aligned' : 'pinned'}
+            className={
+              unpinnedStops.join
+                ? 'relative flex flex-col justify-start px-4 pb-20 pt-6 sm:px-6'
+                : 'sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-16 pt-6 sm:px-6 lg:pb-6'
+            }
+          >
+            <div
+              data-stage-card="join"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                  07 / START TONIGHT
+                </span>
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                  STOP 07 / 08 · START
+                </span>
+              </div>
+
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
+                Verified people are already here.
+              </h2>
+
+              <nav
+                aria-label="Start tonight"
+                className="mt-6 grid gap-4 border-t border-[#3A3F45] pt-6 sm:grid-cols-3"
+              >
+                <Link
+                  to="/register"
+                  className="ds-btn-signal flex min-h-[64px] w-full items-center justify-between gap-3 px-6 py-4 text-[18px] font-semibold"
+                >
+                  <span>Create Free Account</span>
+                  <ArrowRight size={20} aria-hidden="true" />
+                </Link>
+                <Link
+                  to="/app/verify"
+                  className="ds-btn-ghost flex min-h-[64px] w-full items-center justify-between gap-3 border-[#FFD21E] px-6 py-4 text-[18px] font-semibold text-[#FFD21E]"
+                >
+                  <span>Get Verified, $1 Bot-Shield</span>
+                  <ShieldCheck size={20} aria-hidden="true" />
+                </Link>
+                <Link
+                  to="/login"
+                  className="ds-btn-ghost flex min-h-[64px] w-full items-center justify-between gap-3 px-6 py-4 text-[18px] font-semibold"
+                >
+                  <span>Member Sign In</span>
+                  <KeyRound size={20} aria-hidden="true" />
+                </Link>
+              </nav>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* STOP 08 (#footer) — Deliberately Quiet Footer & Legal */}
+      <footer
+        id="footer"
+        className="relative z-10 border-t border-[#3A3F45] bg-[#12151A] pb-24 pt-14"
+      >
+        <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+            <div className="lg:col-span-2">
+              <div className="text-[14px] font-semibold text-[#F4F1EA]">
+                CLAUDE&apos;s N Joshua&apos;s
+              </div>
+              <div className="mt-1 font-display text-[24px] font-bold tracking-[-0.02em] text-[#F4F1EA]">
+                YouAndINotAI
+              </div>
+              <div className="mt-3 inline-flex rounded-full border border-[#FFD21E] bg-[#0A0B0D] px-3 py-1 text-[14px] font-medium text-[#FFD21E]">
+                #TeamClaudeForLife
+              </div>
+              <p className="mt-4 max-w-[44ch] text-[16px] leading-[1.55] text-[#F4F1EA]">
+                18+ verified-human dating, matched video calls, and real-world
+                connection. Operated by Trash Or Treasure Online Recycler LLC.
+              </p>
+              <p className="mt-3 text-[14px] font-medium text-[#FFD21E]">
+                youandinotai.com is for adults 18 and over.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
+                Explore
+              </h3>
+              <ul className="mt-4 space-y-1 list-none p-0">
+                <li>
+                  <a
+                    href="#about"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    Overview
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#platform"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    Platform
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#verification"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    $1 Bot-Shield
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#pricing"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    Founder Tiers
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#join"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    Start Tonight
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
+                Account &amp; Safety
+              </h3>
+              <ul className="mt-4 space-y-1 list-none p-0">
+                <li>
+                  <Link
+                    to="/login"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    Member Sign In
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/register"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    Create 18+ Account
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/app/verify"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    Verification Center
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/support"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    Support &amp; Safety Guide
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/app/privacy"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    Privacy Center
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="mailto:contact@youandinotai.com"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    contact@youandinotai.com
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
+                Legal &amp; Policies
+              </h3>
+              <ul className="mt-4 space-y-1 list-none p-0">
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setActiveLegalDoc('terms')}
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center border-0 bg-transparent px-0 py-2 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
+                  >
+                    Terms of Service
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setActiveLegalDoc('privacy')}
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center border-0 bg-transparent px-0 py-2 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
+                  >
+                    Privacy Policy
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setActiveLegalDoc('age')}
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center border-0 bg-transparent px-0 py-2 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
+                  >
+                    Age Policy
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setActiveLegalDoc('refund')}
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center border-0 bg-transparent px-0 py-2 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
+                  >
+                    Refund Policy
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* The one email box left on the page: member event invitations.
+              Same FormSubmit endpoint and hidden fields as before. */}
+          <form
+            action="https://formsubmit.co/contact@youandinotai.com"
+            method="POST"
+            className="mt-10 flex flex-col gap-3 border-t border-[#3A3F45] pt-6 sm:flex-row sm:items-center"
+          >
+            <input
+              type="hidden"
+              name="_subject"
+              value="New YouAndINotAI signup"
+            />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="table" />
+            <input
+              type="hidden"
+              name="_next"
+              value="https://youandinotai.com/#join"
+            />
+            <label
+              htmlFor="footer-events-email-input"
+              className="shrink-0 text-[16px] font-medium text-[#F4F1EA]"
+            >
+              Get invited to verified member events
+            </label>
+            <input
+              id="footer-events-email-input"
+              type="email"
+              name="email"
+              required
+              autoComplete="email"
+              value={waitlistEmail}
+              onChange={e => setWaitlistEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="app-input flex-1 sm:max-w-[360px]"
+            />
+            <button type="submit" className="ds-btn-ghost shrink-0">
+              Send
+            </button>
+          </form>
+
+          {/* Tobira AI A2A Badge */}
+          <div className="mt-8 border-t border-[#3A3F45] pt-6">
+            <div data-tobira-a2a data-handle='youandinotai' data-name='YouAndINotAI'>
+              <a href='https://tobira.ai/@youandinotai/for-ai' target='_blank' rel='noopener nofollow'>For AI agents · A2A channel</a>
+              <p>AI agents: use tobira.ai/@youandinotai/for-ai, not the chat widget</p>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-col items-start justify-between gap-4 border-t border-[#3A3F45] pt-6 sm:flex-row sm:items-center">
+            <p className="text-[14px] font-medium text-[#F4F1EA]">
+              &copy; 2026 Trash Or Treasure Online Recycler LLC. &middot;
+              CLAUDE&apos;s N Joshua&apos;s &middot; #TeamClaudeForLife
+            </p>
+            <span className="ds-status-pill">
+              <span className="ds-status-dot bg-[#FFD21E]" />
+              <span>All Systems Operational · {checkedLabel}</span>
+            </span>
+          </div>
+        </div>
+      </footer>
+
+      {/* Bottom Segmented Journey Progress Bar Map */}
+      <JourneyProgressBar
+        activeSectionIndex={journeyState.activeSectionIndex}
+        onSelectSection={scrollToSection}
+      />
+
+      {/* Legal Modal Dialog (terms, privacy, age, refund) */}
+      {activeLegalDoc && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="legal-modal-title"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0A0B0D]/90 p-4"
+          onClick={() => setActiveLegalDoc(null)}
+        >
+          <div
+            className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-[14px] border border-[#3A3F45] bg-[#12151A] p-6 sm:p-8"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4 border-b border-[#3A3F45] pb-4">
+              <div>
+                <div className="font-mono text-[14px] text-[#FFD21E]">
+                  {LEGAL_DOCS[activeLegalDoc].updated}
+                </div>
+                <h2
+                  id="legal-modal-title"
+                  className="mt-1 font-display text-[28px] font-bold text-[#F4F1EA]"
+                >
+                  {LEGAL_DOCS[activeLegalDoc].title}
+                </h2>
+              </div>
+              <button
+                type="button"
+                aria-label="Close legal policy modal"
+                onClick={() => setActiveLegalDoc(null)}
+                className="inline-flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#1A1E25] text-[#F4F1EA] hover:border-[#FFD21E]"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2 border-b border-[#3A3F45] pb-4">
+              {(
+                [
+                  ['terms', 'Terms of Service'],
+                  ['privacy', 'Privacy Policy'],
+                  ['age', 'Age Policy'],
+                  ['refund', 'Refund Policy'],
+                ] as const
+              ).map(([key, label]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setActiveLegalDoc(key)}
+                  className={`inline-flex min-h-[44px] min-w-[44px] items-center rounded-full border px-3.5 py-2 text-[14px] font-medium cursor-pointer ${
+                    activeLegalDoc === key
+                      ? 'border-[#FFD21E] bg-[#1A1E25] text-[#FFD21E]'
+                      : 'border-[#3A3F45] bg-[#0A0B0D] text-[#F4F1EA]'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-6 space-y-5">
+              {LEGAL_DOCS[activeLegalDoc].sections.map(sec => (
+                <div key={sec.h}>
+                  <h3 className="font-display text-[18px] font-bold text-[#FFD21E]">
+                    {sec.h}
+                  </h3>
+                  <p className="mt-1.5 text-[16px] leading-[1.55] text-[#F4F1EA]">
+                    {sec.p}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 flex justify-end border-t border-[#3A3F45] pt-4">
+              <button
+                type="button"
+                onClick={() => setActiveLegalDoc(null)}
+                className="ds-btn-signal"
+              >
+                Close Policy
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-export default function App() {
-  const [legalModal, setLegalModal] = useState<string | null>(null);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    // Affiliate Tracking Capture
-    const params = new URLSearchParams(window.location.search);
-    const ref = params.get('ref');
-    if (ref) {
-      localStorage.setItem('antigravity_partner_id', ref.toLowerCase());
-    } else {
-      // Fallback for vanity paths (e.g. youandinotai.com/mkbhd)
-      const pathParts = window.location.pathname.split('/').filter(Boolean);
-      const reservedRoutes = [
-        'login',
-        'register',
-        'app',
-        'pricing',
-        'about',
-        'platform',
-      ];
-      if (
-        pathParts.length === 1 &&
-        !reservedRoutes.includes(pathParts[0].toLowerCase())
-      ) {
-        localStorage.setItem(
-          'antigravity_partner_id',
-          pathParts[0].toLowerCase()
-        );
-      }
-    }
-
-    // Success Status Check
-    if (params.get('status') === 'success' || params.get('transactionId')) {
-      setShowSuccess(true);
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  }, []);
-
-  return (
-    <ThemeProvider>
-      <div className="relative min-h-screen bg-zinc-950 text-zinc-300 font-sans selection:bg-yellow-500/30 selection:text-white pb-cta">
-        <HeroBackground />
-
-        <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-zinc-950/50 backdrop-blur-xl">
-          <div className="mx-auto max-w-7xl px-4 py-4 md:px-12 flex items-center justify-between">
-            <div className="text-xl font-black tracking-tight text-white md:text-2xl">
-              YouAndINotAI<span className="text-yellow-500">.</span>
-            </div>
-
-            <div className="hidden items-center gap-8 md:flex">
-              {NAV_ITEMS.map(item => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="text-sm font-semibold text-zinc-300 transition-colors hover:text-white"
-                >
-                  {item.label}
-                </a>
-              ))}
-            </div>
-
-            <div className="hidden md:flex items-center gap-4">
-              <ThemeToggle />
-              <GlassButton
-                href={SECURE_PLAN_LINKS.bot_shield}
-                primary
-                className="!py-2 !px-5"
-              >
-                Get Verified
-              </GlassButton>
-            </div>
-
-            <button
-              onClick={() => setMenuOpen(value => !value)}
-              className="inline-flex items-center justify-center rounded-full bg-white/5 p-2 text-white md:hidden hover:bg-white/10 transition-colors"
-            >
-              {menuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          </div>
-
-          <AnimatePresence>
-            {menuOpen && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="overflow-hidden border-t border-white/10 bg-zinc-900/95 backdrop-blur-xl md:hidden"
-              >
-                <div className="flex flex-col gap-2 p-4">
-                  {NAV_ITEMS.map(item => (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      onClick={() => setMenuOpen(false)}
-                      className="rounded-xl px-4 py-3 text-sm font-semibold text-zinc-300 hover:bg-white/5 hover:text-white transition-colors"
-                    >
-                      {item.label}
-                    </a>
-                  ))}
-                  <div className="mt-4 pt-4 border-t border-white/10 flex justify-center">
-                    <GlassButton
-                      href={SECURE_PLAN_LINKS.bot_shield}
-                      primary
-                      className="w-full"
-                    >
-                      Get Verified
-                    </GlassButton>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </nav>
-
-        <div className="relative z-10 pt-20">
-          <div className="bg-gradient-to-r from-yellow-500/20 via-amber-500/20 to-stone-500/20 border-b border-white/10 px-4 py-2 text-center">
-            <span className="text-xs font-semibold tracking-wide text-white md:text-sm">
-              Founder pricing is live. Bot-Shield verification is live.
-            </span>
-          </div>
-
-          <section
-            id="about"
-            className="relative flex min-h-[85vh] items-center px-4 py-20 md:px-12"
-          >
-            <div className="mx-auto grid max-w-7xl gap-16 md:grid-cols-2 items-center">
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, ease: 'easeOut' }}
-              >
-                <div className="inline-flex items-center gap-2 rounded-full bg-yellow-500/10 border border-yellow-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-yellow-400 mb-6">
-                  <Sparkles size={14} /> Section 01 // Human Only
-                </div>
-                <h1 className="text-5xl font-bold leading-[1.1] tracking-tight text-white md:text-7xl lg:text-8xl">
-                  Real people.
-                  <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-500">
-                    Zero bot noise.
-                  </span>
-                </h1>
-                <p className="mt-6 text-lg leading-relaxed text-zinc-300 md:text-xl max-w-lg">
-                  A human-first social platform for dating, meetups, and
-                  real-world connection. AI is used to protect the experience,
-                  not perform it.
-                </p>
-
-                <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                  <GlassButton
-                    href={SECURE_PLAN_LINKS.bot_shield}
-                    primary
-                    className="!py-4 !px-8 text-base"
-                  >
-                    Get Verified
-                  </GlassButton>
-                  <GlassButton
-                    href="#pricing"
-                    className="!py-4 !px-8 text-base"
-                  >
-                    See Pricing
-                  </GlassButton>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-                className="relative"
-              >
-                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-yellow-500/30 to-amber-500/30 blur-2xl" />
-                <div className="relative rounded-3xl border border-white/10 bg-zinc-900/50 p-8 backdrop-blur-xl shadow-2xl md:p-10">
-                  <h2 className="text-2xl font-bold text-white mb-4">
-                    Launch Status
-                  </h2>
-                  <p className="text-zinc-300 mb-8">
-                    The public surface is product-first: verification, pricing,
-                    support, and profile flow.
-                  </p>
-
-                  <div className="space-y-4">
-                    {[
-                      {
-                        title: 'Bot-Shield Flow',
-                        status: 'Live',
-                        color: 'from-green-500/20 to-emerald-500/20',
-                        text: 'text-green-400',
-                      },
-                      {
-                        title: 'Founder Checkouts',
-                        status: 'Live',
-                        color: 'from-yellow-500/20 to-amber-500/20',
-                        text: 'text-yellow-400',
-                      },
-                      {
-                        title: 'Profiles & Social',
-                        status: 'Waitlist',
-                        color: 'from-zinc-500/20 to-zinc-400/20',
-                        text: 'text-zinc-400',
-                      },
-                    ].map((item, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 p-4"
-                      >
-                        <span className="font-semibold text-white">
-                          {item.title}
-                        </span>
-                        <span
-                          className={`rounded-full bg-gradient-to-r ${item.color} px-3 py-1 text-xs font-bold ${item.text}`}
-                        >
-                          {item.status}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </section>
-
-          <section
-            id="platform"
-            className="relative z-10 py-20 px-4 md:px-12 md:py-32 bg-zinc-950/50"
-          >
-            <div className="mx-auto max-w-7xl">
-              <div className="grid gap-8 md:grid-cols-3">
-                {PLATFORM_CARDS.map((card, i) => (
-                  <motion.div
-                    key={card.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-md transition-colors hover:bg-white/10"
-                  >
-                    <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-white shadow-inner">
-                      <card.icon size={28} />
-                    </div>
-                    <h3 className="mb-4 text-2xl font-bold text-white">
-                      {card.title}
-                    </h3>
-                    <p className="text-zinc-400 leading-relaxed">{card.body}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <VerificationSteps />
-          <PricingSection />
-          <WaitlistForm />
-        </div>
-
-        <Footer onLegal={type => setLegalModal(type)} />
-        <SignupCTA />
-      </div>
-
-      <AnimatePresence>
-        {showSuccess && <SuccessModal onClose={() => setShowSuccess(false)} />}
-        {legalModal && (
-          <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />
-        )}
-      </AnimatePresence>
-    </ThemeProvider>
-  );
-}
+export default LandingPage;

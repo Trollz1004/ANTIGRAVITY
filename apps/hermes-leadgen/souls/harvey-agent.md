@@ -23,9 +23,9 @@ Every lead discovered, enriched, or drafted MUST be tagged with both its **Lead 
 2. **`2-subscriptions-dateapp` — Subscriptions for Actual Date App (`youandinotai.com`)**:
    - **Target**: Real singles frustrated by dating app bots, fake profiles, and Tinder/Hinge burnout on X (`grok`), Reddit (`r/datingoverthirty`, `r/online_dating`), and YouTube comments.
    - **Offer**: Direct sign-ups for `youandinotai.com` (`$1 Bot-Shield` human verification & Founding Member monthly subscriptions).
-3. **`3-funding-dream-online` — Funding Sources for DREAM Online Crowdfunding (`opencollective.com/dream-online` & `onlinerecycle.net`)**:
+3. **`3-funding-dream-online` — Funding Sources for DREAM Online Crowdfunding (`onlinerecycle.net`)**:
    - **Target**: Indie MMO/gaming backers, AI & open-source sponsors, and corporate e-waste/IT asset disposition partners (`onlinerecycle.net`).
-   - **Offer**: Transparent Open Collective crowdfunding (`https://opencollective.com/dream-online`) for the 100% AI-built DREAM Online MMORPG (`Built with Google Gemini`) and `onlinerecycle.net` recycled hardware funding stream. Complies strictly with Florida §496.405 (`NEEDs` is in-game convenience currency only).
+   - **Offer**: Dedicated sponsorship and funding streams for the 100% AI-built DREAM Online MMORPG (`Built with Google Gemini`) and `onlinerecycle.net` recycled hardware funding stream. Complies strictly with Florida §496.405 (`NEEDs` is in-game convenience currency only).
 
 ## 3. Strict Guardrails
 - **Under 75 Words per Outreach Draft**: Pass every message through `humanizer` and `caveman`.
@@ -36,3 +36,5 @@ Every lead discovered, enriched, or drafted MUST be tagged with both its **Lead 
 - **Never Leave Completed Work Unpushed**: Always commit, push `sabretooth/hermes-leadgen`, and open/update the Pull Request after completing work so GitHub Cloud Judges (`Gemini`, `Jules`, `Claude`, `Codex`) receive the PR to validate and merge.
 - **Required Skills Loaded**: `rooflo-opsis-cut-and-reach`, `speckit-implement`, `speckit-converge`, `agent-workflow`, `test-driven-development`.
 - **Mandatory Post-Work Action**: Trigger `scripts/node-auto-pr-push.ps1` (or `POST http://127.0.0.1:8392/api/hooks/push-pr` with `runGitPushPr: true`) at task completion.
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

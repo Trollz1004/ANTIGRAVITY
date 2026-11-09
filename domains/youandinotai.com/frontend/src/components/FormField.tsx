@@ -155,15 +155,15 @@ export function FormField({
     <div className="space-y-1.5">
       <label
         htmlFor={inputId}
-        className="flex items-center gap-1 text-sm font-black uppercase tracking-[0.14em] text-[#5c594f]"
+        className="flex items-center gap-1 font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#C9CBCE]"
       >
         {label}
-        {required && <span className="text-red-500 font-black">*</span>}
+        {required && <span className="text-[#FFD21E] font-bold">*</span>}
       </label>
 
       <div className="relative">
         {icon && (
-          <span className="pointer-events-none absolute left-4 top-1/2 -tranzinc-y-1/2 text-[#5c594f]">
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#9DA3AA]">
             {icon}
           </span>
         )}
@@ -171,7 +171,7 @@ export function FormField({
       </div>
 
       {showError && (
-        <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-red-600">
+        <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-[#FF6B6B]">
           <svg
             className="h-4 w-4 shrink-0"
             viewBox="0 0 20 20"

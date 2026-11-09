@@ -30,7 +30,7 @@ export function OpenClawTerminal({ onClose }: { onClose: () => void }) {
           <p>{'>'} OpenClaw Security Terminal</p>
           <p>{'>'} Status: ONLINE</p>
           <p>{'>'} All systems nominal.</p>
-          <p className="mt-4 text-gray-500">Full terminal coming soon...</p>
+          <p className="mt-4 text-gray-500">Read-only status view.</p>
         </div>
       </motion.div>
     </motion.div>

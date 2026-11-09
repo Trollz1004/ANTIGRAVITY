@@ -102,3 +102,5 @@ A refused, failed, or empty result is evidence about that one call, nothing more
 ## 10. How to answer Josh
 
 Plain complete sentences, outcome first. Then what could go wrong and how you handled it. Then the output or the next step. Short lists only when the items are parallel. No dense tables, no ASCII art, no arrow chains; describe visuals in words and show real screenshots for any UI (Rule One). Keep the reasoning chain in your thinking and give him the summary.
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

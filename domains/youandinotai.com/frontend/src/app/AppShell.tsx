@@ -8,6 +8,7 @@ import {
   Settings,
   Sparkles,
   User,
+  Users,
   Video,
   Wand2,
 } from 'lucide-react';
@@ -26,6 +27,7 @@ const DESKTOP_NAV = [
   { to: '/app', icon: Compass, label: 'Discover', end: true },
   { to: '/app/matches', icon: Heart, label: 'Matches' },
   { to: '/app/inbox', icon: MessageCircle, label: 'Messages' },
+  { to: '/app/boards', icon: Users, label: 'Boards' },
   { to: '/app/create', icon: Wand2, label: 'Create' },
   { to: '/app/video-lobby', icon: Video, label: 'Video' },
   { to: '/app/avatar', icon: Sparkles, label: 'Animate' },
@@ -49,18 +51,28 @@ export function AppShell() {
   return (
     <div className="km-shell min-h-screen text-[var(--km-text)] md:flex">
       {/* Desktop rail */}
-      <aside className="hidden md:flex fixed inset-y-0 left-0 z-40 w-72 flex-col border-r border-[var(--km-border)] bg-[var(--km-surface)]/90 backdrop-blur-xl">
-        <div className="border-b border-[var(--km-border)] px-6 py-6">
-          <div className="flex items-center gap-2">
-            <span className="km-heart-mark" aria-hidden>
-              ♥
-            </span>
-            <div className="text-xl font-semibold tracking-tight bg-gradient-to-r from-[#facc15] via-[#f0abfc] to-[#67e8f9] bg-clip-text text-transparent">
-              YouAndINotAI
+      <aside className="hidden md:flex fixed inset-y-0 left-0 z-40 w-72 flex-col border-r border-[#3A3F45] bg-[#12151A]">
+        <div className="border-b border-[#3A3F45] px-6 py-6">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5">
+              <span className="km-heart-mark" aria-hidden>
+                ♥
+              </span>
+              <div>
+                <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#C9CBCE]">
+                  CLAUDE&apos;s N Joshua&apos;s
+                </div>
+                <div className="font-display text-lg font-bold tracking-tight text-[#F4F1EA]">
+                  YouAndINotAI
+                </div>
+              </div>
             </div>
           </div>
-          <p className="mt-3 text-sm text-[var(--km-muted)]">
-            Verified humans. Real video. Optional animated avatar.
+          <div className="mt-2 inline-block rounded border border-[#3A3F45] bg-[#1A1E25] px-2 py-0.5 font-mono text-[10px] font-medium text-[#FFD21E]">
+            #TeamClaudeForLife
+          </div>
+          <p className="mt-3 text-sm text-[#C9CBCE]">
+            Verified adults 18+. Real video. Account-bound trust.
           </p>
         </div>
 
@@ -78,15 +90,15 @@ export function AppShell() {
           ))}
         </nav>
 
-        <div className="space-y-3 border-t border-[var(--km-border)] px-4 py-5">
+        <div className="space-y-3 border-t border-[#3A3F45] px-4 py-5">
           <div className="km-card px-4 py-3">
-            <div className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--km-accent)]">
+            <div className="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[#FFD21E]">
               Signed in
             </div>
-            <div className="mt-1 truncate text-sm font-semibold">
+            <div className="mt-1 truncate text-sm font-semibold text-[#F4F1EA]">
               {user?.display_name || user?.email || 'Member'}
             </div>
-            <div className="mt-1 text-xs text-[var(--km-muted)]">Free Plan</div>
+            <div className="mt-1 text-xs text-[#9DA3AA]">Verified Member</div>
           </div>
           <button
             onClick={handleLogout}
@@ -99,15 +111,18 @@ export function AppShell() {
       </aside>
 
       <div className="flex-1 md:ml-72">
-        {/* Mobile top bar — Kiss Me style */}
-        <header className="sticky top-0 z-40 border-b border-[var(--km-border)] bg-[var(--km-bg)]/85 px-4 py-3 backdrop-blur-xl md:hidden">
+        {/* Mobile top bar */}
+        <header className="sticky top-0 z-40 border-b border-[#3A3F45] bg-[#0A0B0D]/95 px-4 py-3 backdrop-blur-md md:hidden">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <span className="km-heart-mark text-lg" aria-hidden>
                 ♥
               </span>
               <div>
-                <div className="text-base font-semibold tracking-tight bg-gradient-to-r from-[#facc15] via-[#f0abfc] to-[#67e8f9] bg-clip-text text-transparent">
+                <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#C9CBCE]">
+                  CLAUDE&apos;s N Joshua&apos;s
+                </div>
+                <div className="font-display text-base font-bold tracking-tight text-[#F4F1EA]">
                   YouAndINotAI
                 </div>
               </div>
@@ -118,7 +133,7 @@ export function AppShell() {
               </NavLink>
               <NavLink
                 to="/app/profile"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--km-border)] bg-[var(--km-surface)]"
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#3A3F45] bg-[#12151A] text-[#F4F1EA]"
               >
                 <User size={18} />
               </NavLink>

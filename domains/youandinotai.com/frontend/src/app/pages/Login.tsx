@@ -34,7 +34,6 @@ export function Login() {
   const [betaCode, setBetaCode] = useState('');
   const [betaError, setBetaError] = useState('');
   const [betaLoading, setBetaLoading] = useState(false);
-  const [showBeta, setShowBeta] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<LoginErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const { login, betaAccess } = useAuth();
@@ -97,117 +96,124 @@ export function Login() {
     }
   };
 
+  // Founder code: moved here from the landing page (Josh, 2026-11-07). Same
+  // betaAccess handler (POST /auth/beta-access) the landing form used, and the
+  // same routing: members without a profile go to profile setup first.
   const handleBetaCode = async (e: React.FormEvent) => {
     e.preventDefault();
     setBetaError('');
-    if (!validateRequired(betaCode)) {
-      setBetaError('Access code is required');
+    const cleaned = betaCode.trim();
+    if (!validateRequired(cleaned)) {
+      setBetaError('Enter your founder code first.');
       return;
     }
     setBetaLoading(true);
     try {
-      await betaAccess(betaCode);
-      navigate(nextPath);
+      await betaAccess(cleaned);
+      const nextUser = useAuth.getState().user;
+      navigate(nextUser?.has_profile ? nextPath : '/app/profile');
     } catch (err: any) {
-      setBetaError(err.message || 'Invalid access code');
+      setBetaError(err?.message || 'Please check your founder code.');
     } finally {
       setBetaLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-zinc-200 relative overflow-hidden flex items-center justify-center px-4 py-6 md:px-8">
-      {/* Neon glowing orbs in background */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-amber-600/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-stone-600/20 rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-2 relative z-10">
-        <motion.section
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="hidden md:flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-10 shadow-2xl shadow-amber-500/5 relative overflow-hidden"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-stone-500/5 pointer-events-none" />
-          <div className="relative z-10">
-            <div className="inline-block px-3 py-1 mb-6 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs font-semibold uppercase tracking-widest">
+    <div className="min-h-screen bg-[#0A0B0D] text-[#F4F1EA] flex flex-col justify-between px-4 py-8 md:px-8">
+      <header className="mx-auto flex w-full max-w-6xl items-center justify-between border-b border-[#3A3F45] pb-4 mb-8">
+        <Link to="/" className="flex items-center gap-3 text-left no-underline">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#3A3F45] bg-[#12151A] font-display text-sm font-bold text-[#FFD21E]">
+            Y&amp;I
+          </span>
+          <div>
+            <span className="block font-mono text-[11px] uppercase tracking-[0.14em] text-[#C9CBCE]">
+              CLAUDE&apos;s N Joshua&apos;s
+            </span>
+            <span className="block font-display text-base font-bold tracking-tight text-[#F4F1EA]">
               YouAndINotAI
+            </span>
+          </div>
+        </Link>
+        <span className="rounded border border-[#3A3F45] bg-[#12151A] px-2.5 py-1 font-mono text-[11px] font-medium text-[#FFD21E]">
+          #TeamClaudeForLife
+        </span>
+      </header>
+
+      <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-2 my-auto">
+        <section className="hidden md:flex flex-col justify-between rounded-xl border border-[#3A3F45] bg-[#12151A] p-10">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded border border-[#3A3F45] bg-[#1A1E25] font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#FFD21E]">
+              Verified Member Sign In · 18+ Venue
             </div>
-            <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+            <h1 className="font-display text-5xl font-bold tracking-tight text-[#F4F1EA] mb-6 leading-[1.08]">
               Real people.
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-stone-400">
-                Zero noise.
-              </span>
+              <span className="text-[#FFD21E]">Verified profiles.</span>
             </h1>
-            <p className="text-lg text-zinc-400 max-w-md leading-relaxed">
+            <p className="text-lg text-[#C9CBCE] max-w-md leading-relaxed">
               Sign in to the verified side of the platform. Matching, meetups,
               boards, and support all stay tied to a real account.
             </p>
           </div>
 
-          <div className="space-y-4 relative z-10 mt-12">
-            <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-6 shadow-lg">
-              <div className="text-sm font-semibold text-zinc-300 uppercase tracking-widest mb-4">
+          <div className="space-y-4 mt-12">
+            <div className="rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-6">
+              <div className="font-mono text-xs font-medium text-[#FFD21E] uppercase tracking-[0.14em] mb-4">
                 Inside the account
               </div>
-              <div className="space-y-4 text-sm font-medium text-zinc-400">
+              <div className="space-y-4 text-sm font-medium text-[#C9CBCE]">
                 <div className="flex items-start gap-3">
-                  <ShieldCheck size={20} className="mt-0.5 text-stone-400" />
+                  <ShieldCheck
+                    size={20}
+                    className="mt-0.5 text-[#FFD21E] shrink-0"
+                  />
                   <span>Account-bound verification and support handling.</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Sparkles size={20} className="mt-0.5 text-amber-400" />
+                  <Sparkles
+                    size={20}
+                    className="mt-0.5 text-[#FFD21E] shrink-0"
+                  />
                   <span>
-                    Dating, social boards, meetups, and volunteer surfaces in
+                    Dating, social boards, meetups, and community surfaces in
                     one shell.
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Heart size={20} className="mt-0.5 text-amber-400" />
+                  <Heart size={20} className="mt-0.5 text-[#FFD21E] shrink-0" />
                   <span>
-                    No fake platform framing. Just a real product with verified
-                    users.
+                    Direct member accountability with verified adult profiles.
                   </span>
                 </div>
               </div>
             </div>
           </div>
-        </motion.section>
+        </section>
 
-        <motion.section
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-          className="flex items-center justify-center w-full"
-        >
-          <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl p-8 shadow-2xl relative">
-            <div className="absolute inset-0 bg-gradient-to-tr from-stone-500/5 to-amber-500/5 rounded-3xl pointer-events-none" />
-
-            <div className="relative z-10 mb-8">
-              <div className="md:hidden inline-block px-3 py-1 mb-4 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs font-semibold uppercase tracking-widest">
-                YouAndINotAI
+        <section className="flex items-center justify-center w-full">
+          <div className="w-full max-w-md rounded-xl border border-[#3A3F45] bg-[#12151A] p-8">
+            <div className="mb-8">
+              <div className="md:hidden inline-block px-3 py-1 mb-4 rounded border border-[#3A3F45] bg-[#1A1E25] font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#FFD21E]">
+                YouAndINotAI · 18+
               </div>
-              <h2 className="text-3xl font-bold text-white mb-2">
+              <h2 className="font-display text-3xl font-bold text-[#F4F1EA] mb-2">
                 Welcome back.
               </h2>
-              <p className="text-sm text-zinc-400">
-                Verified humans only. Sign in to pick up where you left off.
+              <p className="text-sm text-[#C9CBCE]">
+                Verified adults 18 and over. Sign in to pick up where you left
+                off.
               </p>
             </div>
 
-            <form
-              onSubmit={handleSubmit}
-              className="relative z-10 space-y-5"
-              noValidate
-            >
+            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
               <AnimatePresence>
                 {error && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-medium text-red-400 overflow-hidden"
+                    className="rounded-lg border border-[#FF6B6B] bg-[#1A1E25] px-4 py-3 text-sm font-medium text-[#FF6B6B] overflow-hidden"
                   >
                     {error}
                   </motion.div>
@@ -227,7 +233,7 @@ export function Login() {
                   touched={touched.email}
                   placeholder="name@example.com"
                   autoComplete="email"
-                  icon={<Mail size={18} className="text-zinc-400" />}
+                  icon={<Mail size={18} className="text-[#9DA3AA]" />}
                 />
 
                 <FormField
@@ -242,113 +248,108 @@ export function Login() {
                   touched={touched.password}
                   placeholder="••••••••"
                   autoComplete="current-password"
-                  icon={<Lock size={18} className="text-zinc-400" />}
+                  icon={<Lock size={18} className="text-[#9DA3AA]" />}
                 />
               </div>
 
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+              <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-600 to-stone-600 px-5 py-3.5 text-sm font-bold text-white shadow-[0_0_20px_rgba(217,70,239,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_30px_rgba(217,70,239,0.5)]"
+                className="ds-btn-signal w-full flex items-center justify-center gap-2 px-5 py-3.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
-                  <span className="animate-pulse">Signing in...</span>
+                  <span>Signing in...</span>
                 ) : (
                   <>
                     Sign In <ArrowRight size={18} />
                   </>
                 )}
-              </motion.button>
+              </button>
             </form>
 
-            <div className="relative z-10 my-8 flex items-center gap-4">
-              <div className="h-px flex-1 bg-white/10" />
-              <span className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
+            <div className="my-8 flex items-center gap-4">
+              <div className="h-px flex-1 bg-[#3A3F45]" />
+              <span className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#9DA3AA]">
                 Or continue with
               </span>
-              <div className="h-px flex-1 bg-white/10" />
+              <div className="h-px flex-1 bg-[#3A3F45]" />
             </div>
 
-            <div className="relative z-10 rounded-xl border border-white/10 bg-white/5 p-1 transition-all hover:bg-white/10">
-              <GoogleSignInButton />
-            </div>
+            <GoogleSignInButton />
 
-            <div className="relative z-10 mt-6 rounded-xl border border-white/10 bg-black/20 p-4 backdrop-blur-sm transition-all">
-              <button
-                type="button"
-                onClick={() => setShowBeta(!showBeta)}
-                className="flex w-full items-center justify-between text-sm font-semibold text-zinc-300 hover:text-white transition-colors"
+            <form
+              onSubmit={handleBetaCode}
+              className="mt-6 rounded-lg border border-[#3A3F45] bg-[#1A1E25] p-4"
+              noValidate
+            >
+              <label
+                htmlFor="login-founder-code-input"
+                className="flex items-center gap-2 text-sm font-semibold text-[#F4F1EA]"
               >
-                <span className="flex items-center gap-2">
-                  <KeyRound size={16} className="text-amber-400" />
-                  Have a beta access code?
-                </span>
-                <Sparkles size={14} className="text-stone-400" />
-              </button>
+                <KeyRound
+                  size={16}
+                  className="text-[#FFD21E]"
+                  aria-hidden="true"
+                />
+                Founder code (optional)
+              </label>
+              {betaError && (
+                <p
+                  role="alert"
+                  className="mt-3 text-sm font-medium text-[#FF6B6B]"
+                >
+                  {betaError}
+                </p>
+              )}
+              <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+                <input
+                  id="login-founder-code-input"
+                  type="text"
+                  value={betaCode}
+                  onChange={e => setBetaCode(e.target.value)}
+                  autoComplete="one-time-code"
+                  placeholder="FOUNDER-XXXX"
+                  className="flex-1 rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-3 font-mono text-sm font-bold uppercase tracking-widest text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
+                />
+                <button
+                  type="submit"
+                  disabled={betaLoading}
+                  className="ds-btn-ghost shrink-0 whitespace-nowrap px-6 py-3 text-sm font-semibold disabled:opacity-50"
+                >
+                  {betaLoading ? 'Checking...' : 'Use Code'}
+                </button>
+              </div>
+            </form>
 
-              <AnimatePresence>
-                {showBeta && (
-                  <motion.form
-                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                    animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
-                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                    onSubmit={handleBetaCode}
-                    className="overflow-hidden"
-                    noValidate
-                  >
-                    {betaError && (
-                      <p className="mb-3 text-sm font-medium text-red-400">
-                        {betaError}
-                      </p>
-                    )}
-                    <div className="flex flex-col gap-3 sm:flex-row">
-                      <input
-                        type="text"
-                        value={betaCode}
-                        onChange={e => setBetaCode(e.target.value)}
-                        autoComplete="one-time-code"
-                        placeholder="ENTER CODE"
-                        className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold uppercase tracking-widest text-white placeholder-zinc-500 outline-none transition-all focus:border-amber-500/50 focus:bg-white/10 focus:ring-2 focus:ring-amber-500/20"
-                      />
-                      <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        type="submit"
-                        disabled={betaLoading}
-                        className="rounded-xl bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur-sm transition-all hover:bg-white/20 disabled:opacity-50"
-                      >
-                        {betaLoading ? '...' : 'Verify'}
-                      </motion.button>
-                    </div>
-                  </motion.form>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <p className="relative z-10 mt-8 text-center text-sm text-zinc-400">
+            <p className="mt-8 text-center text-sm text-[#C9CBCE]">
               Need an account?{' '}
               <Link
                 to={registerHref}
-                className="font-bold text-white transition-colors hover:text-amber-400"
+                className="font-bold text-[#FFD21E] transition-colors hover:underline"
               >
                 Create one
               </Link>
             </p>
 
-            <div className="relative z-10 mt-6 text-center">
+            <div className="mt-6 text-center">
               <Link
                 to="/"
-                className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-500 transition-colors hover:text-white"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-[#C9CBCE] transition-colors hover:text-[#F4F1EA]"
               >
-                <Heart size={14} className="text-amber-500" />
+                <Heart size={14} className="text-[#FFD21E]" />
                 Back to YouAndINotAI
               </Link>
             </div>
           </div>
-        </motion.section>
+        </section>
       </div>
+
+      <footer className="mx-auto mt-10 flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-[#3A3F45] pt-4 text-xs text-[#9DA3AA]">
+        <span>youandinotai.com is for adults 18 and over.</span>
+        <span className="font-mono text-[#C9CBCE]">
+          CLAUDE&apos;s N Joshua&apos;s · #TeamClaudeForLife
+        </span>
+      </footer>
     </div>
   );
 }

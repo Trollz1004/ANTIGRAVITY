@@ -14,3 +14,7 @@ scripts/**/*.py text eol=lf
 # phantom diff against the CRLF-normalized blob. -text disables EOL
 # conversion so on-disk bytes round-trip cleanly through both OSes.
 scripts/launch-hermes-paperclip-ceo-wsl.cmd -text
+.agents/skills/security-audit/** -filter -diff -merge
+.agents/skills/hallmark/** -filter -diff -merge
+.agents/skills/impeccable/** -filter -diff -merge
+

@@ -1,7 +1,6 @@
 name: quality-gate
 
-# Landing rule (2026-09-17): every judge/** branch must clear this gate at a
-# 90% pass rate or better before auto-land.yml fast-forwards main.
+# Landing rule (2026-09-17): PRs only; the Claude judge lane merges with a posted verdict.
 
 on:
   push:

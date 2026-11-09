@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { api } from '../lib/api';
+import { formatBioForDisplay } from '../lib/profileBio';
 
 interface AuthMeResponse {
   user_id: string;
@@ -191,137 +192,139 @@ export default function DataPrivacyDashboard() {
   const locationDisabled = data?.profile?.location_enabled === false;
 
   return (
-    <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[28px] border border-zinc-800 bg-zinc-950 px-5 py-6 text-zinc-100 shadow-[0_30px_120px_rgba(2,6,23,0.55)] sm:px-8">
-      <div className="flex flex-col gap-3 rounded-[24px] border border-stone-900/50 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.18),_transparent_42%),linear-gradient(180deg,rgba(15,23,42,0.98),rgba(2,6,23,0.98))] p-6">
-        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-stone-300">
-          Privacy Center
+    <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-xl border border-[#3A3F45] bg-[#12151A] px-5 py-6 text-[#F4F1EA] sm:px-8">
+      <div className="flex flex-col gap-3 rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-6">
+        <span className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-[#FFD21E]">
+          Privacy Center · CLAUDE&apos;s N Joshua&apos;s
         </span>
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="font-serif text-3xl text-white">
+            <h2 className="font-display text-3xl font-bold text-[#F4F1EA]">
               Control what stays, what moves, and what stops.
             </h2>
-            <p className="mt-2 max-w-2xl text-sm text-zinc-400">
+            <p className="mt-2 max-w-2xl text-sm text-[#C9CBCE]">
               Review your stored profile data, request an export, schedule
               deletion, or disable location tracking from one place.
             </p>
           </div>
           {data && (
-            <div className="rounded-2xl border border-zinc-800 bg-black/30 px-4 py-3 text-sm text-zinc-300">
+            <div className="rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-3 text-sm text-[#F4F1EA]">
               <div>{data.display_name}</div>
-              <div className="text-zinc-500">{data.email}</div>
+              <div className="text-[#9DA3AA]">{data.email}</div>
             </div>
           )}
         </div>
       </div>
 
       {error && (
-        <div className="rounded-2xl border border-rose-900 bg-rose-950/60 px-4 py-3 text-sm text-rose-200">
+        <div className="rounded-xl border border-[#FF6B6B] bg-[#1A1E25] px-4 py-3 text-sm text-[#FF6B6B]">
           {error}
         </div>
       )}
 
       {confirmation && (
-        <div className="rounded-2xl border border-emerald-900 bg-emerald-950/60 px-4 py-3 text-sm text-emerald-200">
+        <div className="rounded-xl border border-[#3DDC97] bg-[#1A1E25] px-4 py-3 text-sm text-[#3DDC97]">
           {confirmation}
         </div>
       )}
 
       {loading || !data ? (
         <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-          <div className="min-h-[220px] animate-pulse rounded-[24px] border border-zinc-800 bg-zinc-900/70" />
-          <div className="min-h-[220px] animate-pulse rounded-[24px] border border-zinc-800 bg-zinc-900/70" />
+          <div className="min-h-[220px] rounded-xl border border-[#3A3F45] bg-[#1A1E25]" />
+          <div className="min-h-[220px] rounded-xl border border-[#3A3F45] bg-[#1A1E25]" />
         </div>
       ) : (
         <>
           <div className="grid gap-4 lg:grid-cols-[1.3fr_0.7fr]">
-            <article className="rounded-[24px] border border-zinc-800 bg-zinc-900/70 p-6">
+            <article className="rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-6">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h3 className="text-lg font-semibold text-white">
+                  <h3 className="font-display text-lg font-bold text-[#F4F1EA]">
                     Stored Account Snapshot
                   </h3>
-                  <p className="mt-1 text-sm text-zinc-500">
+                  <p className="mt-1 text-sm text-[#C9CBCE]">
                     {data.created_at
                       ? `Account created ${new Date(
                           data.created_at
                         ).toLocaleDateString()}.`
-                      : 'Core account details available. Full privacy export summary is temporarily offline.'}
+                      : 'Core account details available.'}
                   </p>
                 </div>
-                <span className="rounded-full border border-stone-900/80 bg-stone-950/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-stone-300">
+                <span className="rounded border border-[#3A3F45] bg-[#0A0B0D] px-3 py-1 font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#FFD21E]">
                   User ID {data.user_id.slice(0, 8)}
                 </span>
               </div>
 
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4">
-                  <div className="text-3xl font-semibold text-white">
+                <div className="rounded-lg border border-[#3A3F45] bg-[#0A0B0D] p-4">
+                  <div className="font-display text-3xl font-bold text-[#F4F1EA]">
                     {formatMetric(data.message_count)}
                   </div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-zinc-500">
+                  <div className="mt-1 font-mono text-xs uppercase tracking-[0.14em] text-[#9DA3AA]">
                     Messages
                   </div>
                 </div>
-                <div className="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4">
-                  <div className="text-3xl font-semibold text-white">
+                <div className="rounded-lg border border-[#3A3F45] bg-[#0A0B0D] p-4">
+                  <div className="font-display text-3xl font-bold text-[#F4F1EA]">
                     {formatMetric(data.match_count)}
                   </div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-zinc-500">
+                  <div className="mt-1 font-mono text-xs uppercase tracking-[0.14em] text-[#9DA3AA]">
                     Matches
                   </div>
                 </div>
-                <div className="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4">
-                  <div className="text-3xl font-semibold text-white">
+                <div className="rounded-lg border border-[#3A3F45] bg-[#0A0B0D] p-4">
+                  <div className="font-display text-3xl font-bold text-[#F4F1EA]">
                     {formatMetric(data.photos_count)}
                   </div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-zinc-500">
+                  <div className="mt-1 font-mono text-xs uppercase tracking-[0.14em] text-[#9DA3AA]">
                     Photos
                   </div>
                 </div>
               </div>
 
-              <dl className="mt-6 grid gap-3 text-sm text-zinc-300 sm:grid-cols-2">
-                <div className="rounded-2xl border border-zinc-800 bg-black/20 p-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-zinc-500">
+              <dl className="mt-6 grid gap-3 text-sm text-[#C9CBCE] sm:grid-cols-2">
+                <div className="rounded-lg border border-[#3A3F45] bg-[#0A0B0D] p-4">
+                  <dt className="font-mono text-xs uppercase tracking-[0.14em] text-[#9DA3AA]">
                     Bio
                   </dt>
-                  <dd className="mt-2">
-                    {data.profile?.bio || 'No bio saved.'}
+                  <dd className="mt-2 text-[#F4F1EA]">
+                    {data.profile?.bio
+                      ? formatBioForDisplay(data.profile.bio)
+                      : 'No bio saved.'}
                   </dd>
                 </div>
-                <div className="rounded-2xl border border-zinc-800 bg-black/20 p-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-zinc-500">
+                <div className="rounded-lg border border-[#3A3F45] bg-[#0A0B0D] p-4">
+                  <dt className="font-mono text-xs uppercase tracking-[0.14em] text-[#9DA3AA]">
                     Looking For
                   </dt>
-                  <dd className="mt-2">
+                  <dd className="mt-2 text-[#F4F1EA]">
                     {data.profile?.looking_for || 'Not specified.'}
                   </dd>
                 </div>
-                <div className="rounded-2xl border border-zinc-800 bg-black/20 p-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-zinc-500">
+                <div className="rounded-lg border border-[#3A3F45] bg-[#0A0B0D] p-4">
+                  <dt className="font-mono text-xs uppercase tracking-[0.14em] text-[#9DA3AA]">
                     Location
                   </dt>
-                  <dd className="mt-2">
+                  <dd className="mt-2 text-[#F4F1EA]">
                     {data.profile?.location || 'Not shared.'}
                   </dd>
                 </div>
-                <div className="rounded-2xl border border-zinc-800 bg-black/20 p-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-zinc-500">
+                <div className="rounded-lg border border-[#3A3F45] bg-[#0A0B0D] p-4">
+                  <dt className="font-mono text-xs uppercase tracking-[0.14em] text-[#9DA3AA]">
                     Interests
                   </dt>
-                  <dd className="mt-2">
+                  <dd className="mt-2 text-[#F4F1EA]">
                     {data.profile?.interests?.join(', ') || 'None saved.'}
                   </dd>
                 </div>
               </dl>
             </article>
 
-            <aside className="rounded-[24px] border border-zinc-800 bg-[linear-gradient(180deg,rgba(15,23,42,0.92),rgba(15,23,42,0.72))] p-6">
-              <h3 className="text-lg font-semibold text-white">
+            <aside className="rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-6">
+              <h3 className="font-display text-lg font-bold text-[#F4F1EA]">
                 Pending Requests
               </h3>
-              <p className="mt-1 text-sm text-zinc-500">
+              <p className="mt-1 text-sm text-[#C9CBCE]">
                 {degradedMode
                   ? 'Advanced privacy request status is temporarily unavailable.'
                   : 'Any export or deletion request will appear here until processed.'}
@@ -329,7 +332,7 @@ export default function DataPrivacyDashboard() {
 
               <div className="mt-5 space-y-3">
                 {data.pending_requests.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-zinc-800 px-4 py-5 text-sm text-zinc-500">
+                  <div className="rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-5 text-sm text-[#C9CBCE]">
                     {degradedMode
                       ? 'Pending request history is temporarily unavailable.'
                       : 'No pending privacy actions.'}
@@ -338,21 +341,21 @@ export default function DataPrivacyDashboard() {
                   data.pending_requests.map(request => (
                     <div
                       key={request.id}
-                      className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-4"
+                      className="rounded-lg border border-[#3A3F45] bg-[#0A0B0D] p-4"
                     >
                       <div className="flex items-center justify-between gap-3">
-                        <span className="text-sm font-medium text-white">
+                        <span className="text-sm font-medium text-[#F4F1EA]">
                           {actionLabels[request.action] ?? request.action}
                         </span>
-                        <span className="rounded-full border border-amber-700/70 bg-amber-950/70 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-300">
+                        <span className="rounded border border-[#3A3F45] bg-[#12151A] px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#FFD21E]">
                           {request.status}
                         </span>
                       </div>
-                      <div className="mt-2 text-xs text-zinc-500">
+                      <div className="mt-2 font-mono text-xs text-[#9DA3AA]">
                         Requested {formatDateTime(request.created_at)}
                       </div>
                       {request.scheduled_for && (
-                        <div className="mt-1 text-xs text-zinc-500">
+                        <div className="mt-1 font-mono text-xs text-[#9DA3AA]">
                           Scheduled for {formatDateTime(request.scheduled_for)}
                         </div>
                       )}
@@ -377,15 +380,15 @@ export default function DataPrivacyDashboard() {
                     'Data export requested. We will keep it queued until it is ready.'
                 )
               }
-              className="rounded-[24px] border border-stone-900/80 bg-stone-950/30 p-5 text-left transition hover:border-stone-500 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-5 text-left transition hover:border-[#FFD21E] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <div className="text-xs uppercase tracking-[0.2em] text-stone-300">
+              <div className="font-mono text-xs uppercase tracking-[0.14em] text-[#FFD21E]">
                 Download My Data
               </div>
-              <div className="mt-2 text-lg font-semibold text-white">
+              <div className="mt-2 font-display text-lg font-bold text-[#F4F1EA]">
                 Queue a full export
               </div>
-              <p className="mt-2 text-sm text-zinc-400">
+              <p className="mt-2 text-sm text-[#C9CBCE]">
                 {degradedMode
                   ? 'Temporarily unavailable until the privacy service is restored.'
                   : hasPendingExport
@@ -406,15 +409,15 @@ export default function DataPrivacyDashboard() {
                   () => 'Location tracking has been disabled for your profile.'
                 )
               }
-              className="rounded-[24px] border border-zinc-800 bg-zinc-900/70 p-5 text-left transition hover:border-zinc-600 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-5 text-left transition hover:border-[#F4F1EA] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <div className="text-xs uppercase tracking-[0.2em] text-zinc-400">
+              <div className="font-mono text-xs uppercase tracking-[0.14em] text-[#C9CBCE]">
                 Disable Location Tracking
               </div>
-              <div className="mt-2 text-lg font-semibold text-white">
+              <div className="mt-2 font-display text-lg font-bold text-[#F4F1EA]">
                 Stop future location sharing
               </div>
-              <p className="mt-2 text-sm text-zinc-400">
+              <p className="mt-2 text-sm text-[#C9CBCE]">
                 {degradedMode
                   ? 'Temporarily unavailable until the privacy service is restored.'
                   : locationDisabled
@@ -429,15 +432,15 @@ export default function DataPrivacyDashboard() {
                 degradedMode || requestState.delete || Boolean(hasPendingDelete)
               }
               onClick={() => setShowDeleteModal(true)}
-              className="rounded-[24px] border border-rose-900/80 bg-rose-950/30 p-5 text-left transition hover:border-rose-500 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-5 text-left transition hover:border-[#FF6B6B] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <div className="text-xs uppercase tracking-[0.2em] text-rose-300">
+              <div className="font-mono text-xs uppercase tracking-[0.14em] text-[#FF6B6B]">
                 Delete Account
               </div>
-              <div className="mt-2 text-lg font-semibold text-white">
+              <div className="mt-2 font-display text-lg font-bold text-[#F4F1EA]">
                 Start the 30-day deletion clock
               </div>
-              <p className="mt-2 text-sm text-zinc-400">
+              <p className="mt-2 text-sm text-[#C9CBCE]">
                 {degradedMode
                   ? 'Temporarily unavailable until the privacy service is restored.'
                   : hasPendingDelete
@@ -450,15 +453,15 @@ export default function DataPrivacyDashboard() {
       )}
 
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/85 px-4">
-          <div className="w-full max-w-lg rounded-[28px] border border-rose-900 bg-zinc-950 p-6 shadow-2xl">
-            <div className="text-xs uppercase tracking-[0.24em] text-rose-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0A0B0D]/85 px-4">
+          <div className="w-full max-w-lg rounded-xl border border-[#FF6B6B] bg-[#12151A] p-6 shadow-2xl">
+            <div className="font-mono text-xs uppercase tracking-[0.16em] text-[#FF6B6B]">
               Delete Account
             </div>
-            <h3 className="mt-3 text-2xl font-semibold text-white">
+            <h3 className="mt-3 font-display text-2xl font-bold text-[#F4F1EA]">
               This starts a 30-day waiting period.
             </h3>
-            <p className="mt-3 text-sm leading-6 text-zinc-400">
+            <p className="mt-3 text-sm leading-6 text-[#C9CBCE]">
               Your account will be scheduled for deletion 30 days from
               confirmation. During that window, the request remains pending and
               can be reviewed before the final purge job runs.
@@ -467,7 +470,7 @@ export default function DataPrivacyDashboard() {
               <button
                 type="button"
                 onClick={() => setShowDeleteModal(false)}
-                className="rounded-2xl border border-zinc-700 px-4 py-3 text-sm text-zinc-300 transition hover:border-zinc-500"
+                className="ds-btn-ghost px-4 py-3 text-sm"
               >
                 Cancel
               </button>
@@ -485,7 +488,7 @@ export default function DataPrivacyDashboard() {
                       )}.`
                   );
                 }}
-                className="rounded-2xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-500 disabled:opacity-60"
+                className="rounded-lg bg-[#FF6B6B] px-4 py-3 text-sm font-semibold text-[#0A0B0D] transition hover:opacity-90 disabled:opacity-60"
               >
                 Confirm Deletion Request
               </button>
