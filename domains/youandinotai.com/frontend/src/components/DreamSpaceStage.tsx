@@ -1046,8 +1046,8 @@ export function JourneyProgressBar({
       data-total-stops={SECTION_STOPS.length}
       className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#3A3F45] bg-[#0A0B0D]"
     >
-      <div className="mx-auto flex h-12 max-w-[1440px] items-center justify-between gap-2 px-3 sm:h-14 sm:gap-4 sm:px-6">
-        <div role="list" className="grid flex-1 grid-cols-8 gap-1.5 sm:gap-2">
+      <div className="mx-auto flex min-h-[56px] max-w-[1440px] items-center justify-between gap-1.5 px-1.5 py-1.5 sm:gap-4 sm:px-6">
+        <div role="list" className="grid flex-1 grid-cols-8 gap-0.5 sm:gap-2">
           {SECTION_STOPS.map((stop, idx) => {
             const isFilled = idx <= activeSectionIndex;
             const isCurrent = idx === activeSectionIndex;
@@ -1056,16 +1056,28 @@ export function JourneyProgressBar({
               <div key={stop.id} role="listitem" className="relative">
                 <button
                   type="button"
-                  onClick={() => onSelectSection(stop.id)}
+                  onClick={() => {
+                    setHoveredIdx(idx);
+                    onSelectSection(stop.id);
+                  }}
                   onMouseEnter={() => setHoveredIdx(idx)}
-                  onMouseLeave={() => setHoveredIdx(null)}
+                  onMouseLeave={e => {
+                    if (
+                      typeof document !== 'undefined' &&
+                      document.activeElement === e.currentTarget
+                    ) {
+                      return;
+                    }
+                    setHoveredIdx(null);
+                  }}
                   onFocus={() => setHoveredIdx(idx)}
                   onBlur={() => setHoveredIdx(null)}
+                  title={`${stop.index} · ${stop.label}`}
                   aria-label={`${stop.index} ${stop.label}`}
                   aria-current={isCurrent ? 'step' : undefined}
                   data-stop-id={stop.id}
                   data-filled={isFilled ? 'true' : 'false'}
-                  className={`group flex h-8 w-full cursor-pointer items-center justify-center gap-1.5 rounded-[4px] border px-1.5 font-mono text-[12px] font-bold uppercase tracking-[0.04em] transition-colors sm:h-9 sm:px-2.5 sm:text-[13px] ${
+                  className={`group flex h-11 min-h-[44px] min-w-[44px] w-full cursor-pointer items-center justify-center gap-1.5 rounded-[4px] border px-1 font-mono text-[14px] font-bold uppercase tracking-[0.04em] transition-colors sm:px-2.5 ${
                     isFilled
                       ? 'border-[#FFD21E] bg-[#FFD21E] text-[#0A0B0D]'
                       : 'border-[#3A3F45] bg-[#12151A] text-[#F4F1EA] hover:border-[#FFD21E]'
@@ -1086,7 +1098,13 @@ export function JourneyProgressBar({
                 {hoveredIdx === idx && (
                   <div
                     role="tooltip"
-                    className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-[4px] border border-[#FFD21E] bg-[#0A0B0D] px-2.5 py-1 font-mono text-[12px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]"
+                    className={`pointer-events-none absolute bottom-full mb-2 whitespace-nowrap rounded-[4px] border border-[#FFD21E] bg-[#0A0B0D] px-2.5 py-1 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#FFD21E] ${
+                      idx === 0
+                        ? 'left-0'
+                        : idx === SECTION_STOPS.length - 1
+                          ? 'right-0'
+                          : 'left-1/2 -translate-x-1/2'
+                    }`}
                   >
                     {stop.index} · {stop.label}
                   </div>
@@ -1096,7 +1114,7 @@ export function JourneyProgressBar({
           })}
         </div>
 
-        <div className="hidden shrink-0 items-center gap-2 rounded-[4px] border border-[#3A3F45] bg-[#12151A] px-3 py-1.5 font-mono text-[12px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] sm:flex">
+        <div className="hidden shrink-0 items-center gap-2 rounded-[4px] border border-[#3A3F45] bg-[#12151A] px-3 py-1.5 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] sm:flex">
           <span className="text-[#FFD21E]">
             {activeSectionIndex + 1}/{SECTION_STOPS.length}
           </span>

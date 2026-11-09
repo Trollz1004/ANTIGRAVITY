@@ -540,4 +540,99 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
       window.matchMedia = originalMatchMedia;
     }
   });
+
+  it('enforces Impeccable phone and desktop fixes: top-aligned phone stage flow, 44px hit targets, skip-link, progress map tap/focus labels, flattened pricing tiers, and support CTA cap', () => {
+    const originalInnerWidth = window.innerWidth;
+    const originalInnerHeight = window.innerHeight;
+
+    try {
+      Object.defineProperty(window, 'innerWidth', {
+        configurable: true,
+        writable: true,
+        value: 390,
+      });
+      Object.defineProperty(window, 'innerHeight', {
+        configurable: true,
+        writable: true,
+        value: 844,
+      });
+
+      const { container, getByRole } = render(
+        <MemoryRouter initialEntries={['/']}>
+          <LandingPage />
+        </MemoryRouter>
+      );
+
+      // Skip-to-content link is the first focusable element
+      const skipLink = container.querySelector(
+        'a.skip-link[href="#main-content"]'
+      );
+      expect(skipLink).not.toBeNull();
+      const firstFocusable = container.querySelector(
+        'a[href], button:not([disabled]), input:not([disabled])'
+      );
+      expect(firstFocusable).toBe(skipLink);
+
+      // Tall phone stages (#platform, #verification, #trust, #pricing, #support) flow top-aligned with pb-20
+      for (const stopId of [
+        'platform',
+        'verification',
+        'trust',
+        'pricing',
+        'support',
+      ]) {
+        const wrapper = container.querySelector(
+          `[data-stage-wrapper="${stopId}"]`
+        );
+        expect(wrapper?.getAttribute('data-stage-flow')).toBe('top-aligned');
+        expect(wrapper?.className).toContain('justify-start');
+        expect(wrapper?.className).toContain('pb-20');
+      }
+
+      // Progress map buttons carry title and aria-label and show tooltip on tap
+      const segments = container.querySelectorAll(
+        '#youandinotai-progress-map button[data-stop-id]'
+      );
+      expect(segments.length).toBe(8);
+      segments.forEach(btn => {
+        expect(btn.getAttribute('title')).toMatch(/^\d{2}\s·\s.+/);
+        expect(btn.getAttribute('aria-label')).toMatch(/^\d{2}\s.+/);
+        expect(btn.className).toContain('min-h-[44px]');
+        expect(btn.className).toContain('min-w-[44px]');
+      });
+
+      fireEvent.click(segments[2]);
+      expect(getByRole('tooltip').textContent).toContain('03 · Verification');
+
+      // Flattened #pricing tier columns keep 3px yellow left border on recommended tier
+      const pricingArticles = container.querySelectorAll('#pricing article');
+      expect(pricingArticles.length).toBe(5);
+      expect(pricingArticles[1].className).toContain('border-l-[3px]');
+      expect(pricingArticles[1].className).toContain('border-[#FFD21E]');
+      expect(pricingArticles[0].className).not.toContain('rounded-[10px]');
+
+      // #support action row has 1 primary button and 2 secondary actions
+      const supportCtas = container.querySelectorAll(
+        '#support .ds-btn-signal, #support .ds-btn-ghost'
+      );
+      expect(supportCtas.length).toBe(3);
+      expect(
+        container.querySelectorAll('#support .ds-btn-signal').length
+      ).toBe(1);
+      expect(container.querySelectorAll('#support .ds-btn-ghost').length).toBe(
+        2
+      );
+    } finally {
+      Object.defineProperty(window, 'innerWidth', {
+        configurable: true,
+        writable: true,
+        value: originalInnerWidth,
+      });
+      Object.defineProperty(window, 'innerHeight', {
+        configurable: true,
+        writable: true,
+        value: originalInnerHeight,
+      });
+    }
+  });
 });

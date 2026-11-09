@@ -116,18 +116,59 @@ function getCheckedTimeLabel(): string {
   return `checked ${hh}:${mm}`;
 }
 
+const TALL_MOBILE_STAGE_STOPS = new Set([
+  'platform',
+  'verification',
+  'trust',
+  'pricing',
+  'support',
+]);
+
+function readUnpinnedStops(): Record<string, boolean> {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return {};
+  }
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const headerEl = document.querySelector('header');
+  const mapEl = document.getElementById('youandinotai-progress-map');
+  const headerH = headerEl?.getBoundingClientRect().height || 68;
+  const mapH = mapEl?.getBoundingClientRect().height || 56;
+  const openStageHeight = Math.max(vh - headerH - mapH, 0);
+
+  const next: Record<string, boolean> = {};
+  for (const stop of SECTION_STOPS) {
+    if (stop.id === 'footer') continue;
+    const cardEl = document.querySelector(
+      `#${stop.id} [data-stage-card]`
+    ) as HTMLElement | null;
+    const cardH =
+      cardEl?.scrollHeight || cardEl?.getBoundingClientRect().height || 0;
+    const isShortForCard = cardH > 0 && cardH + 48 > openStageHeight;
+    next[stop.id] =
+      isShortForCard || (vw < 1024 && TALL_MOBILE_STAGE_STOPS.has(stop.id));
+  }
+  return next;
+}
+
 export function PublicSupportPage() {
   const checkedLabel = getCheckedTimeLabel();
 
   return (
     <div className="min-h-screen bg-[#0A0B0D] text-[#F4F1EA] font-sans">
+      <a
+        href="#main-support-content"
+        className="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-[100] focus:inline-flex focus:min-h-[44px] focus:min-w-[44px] focus:items-center focus:rounded-[10px] focus:border-2 focus:border-[#FFD21E] focus:bg-[#0A0B0D] focus:px-4 focus:py-2 focus:font-mono focus:text-[14px] focus:font-bold focus:uppercase focus:tracking-[0.06em] focus:text-[#FFD21E] focus:no-underline"
+      >
+        Skip to main content
+      </a>
       <header className="sticky top-0 z-50 border-b border-[#3A3F45] bg-[#0A0B0D]">
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6">
           <div className="flex items-center gap-3">
             <HeaderOrbitMark sectionFloat={0} atFooter={false} />
             <Link
               to="/"
-              className="flex flex-wrap items-center gap-2 no-underline"
+              className="inline-flex min-h-[44px] min-w-[44px] flex-wrap items-center gap-2 no-underline"
             >
               <span className="text-[14px] font-semibold text-[#F4F1EA]">
                 CLAUDE&apos;s N Joshua&apos;s
@@ -160,7 +201,11 @@ export function PublicSupportPage() {
         <HeaderTelemetryLine activeSectionIndex={5} atFooter={false} />
       </header>
 
-      <main className="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 lg:py-16">
+      <main
+        id="main-support-content"
+        tabIndex={-1}
+        className="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 lg:py-16"
+      >
         <div className="ds-panel p-6 sm:p-10">
           <div className="flex flex-wrap items-center gap-3">
             <span className="rounded-full border border-[#FFD21E] bg-[#1A1E25] px-3 py-1 font-display text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
@@ -237,7 +282,10 @@ export function PublicSupportPage() {
               Request a full archive of your stored profile data, update
               location sharing, or start the 30-day account deletion clock
               inside{' '}
-              <Link to="/app/privacy" className="text-[#FFD21E] underline">
+              <Link
+                to="/app/privacy"
+                className="inline-flex min-h-[44px] min-w-[44px] items-center text-[#FFD21E] underline"
+              >
                 /app/privacy
               </Link>
               .
@@ -259,6 +307,9 @@ export function LandingPage() {
   const [journeyState, setJourneyState] = useState(() =>
     readSectionJourneyState()
   );
+  const [unpinnedStops, setUnpinnedStops] = useState<Record<string, boolean>>(
+    () => readUnpinnedStops()
+  );
 
   const checkedLabel = getCheckedTimeLabel();
 
@@ -266,14 +317,26 @@ export function LandingPage() {
     const syncJourney = () => {
       setJourneyState(readSectionJourneyState());
     };
-    syncJourney();
+    const syncStageFlow = () => {
+      setUnpinnedStops(readUnpinnedStops());
+      setJourneyState(readSectionJourneyState());
+    };
+    syncStageFlow();
     window.addEventListener('scroll', syncJourney, { passive: true });
-    window.addEventListener('resize', syncJourney);
+    window.addEventListener('resize', syncStageFlow);
     return () => {
       window.removeEventListener('scroll', syncJourney);
-      window.removeEventListener('resize', syncJourney);
+      window.removeEventListener('resize', syncStageFlow);
     };
   }, []);
+
+  const getStageSectionClass = (id: string) =>
+    unpinnedStops[id] ? 'relative' : 'relative lg:min-h-[135vh]';
+
+  const getStageWrapperClass = (id: string) =>
+    unpinnedStops[id]
+      ? 'relative flex flex-col justify-start px-4 pb-20 pt-6 sm:px-6'
+      : 'relative flex flex-col justify-start px-4 pb-20 pt-6 sm:px-6 lg:sticky lg:top-16 lg:min-h-[calc(100vh-7.5rem)] lg:justify-end lg:pb-6';
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -372,20 +435,27 @@ export function LandingPage() {
 
   return (
     <div className="relative min-h-screen bg-[#0A0B0D] text-[#F4F1EA] font-sans">
+      <a
+        href="#main-content"
+        className="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-[100] focus:inline-flex focus:min-h-[44px] focus:min-w-[44px] focus:items-center focus:rounded-[10px] focus:border-2 focus:border-[#FFD21E] focus:bg-[#0A0B0D] focus:px-4 focus:py-2 focus:font-mono focus:text-[14px] focus:font-bold focus:uppercase focus:tracking-[0.06em] focus:text-[#FFD21E] focus:no-underline"
+      >
+        Skip to main content
+      </a>
+
       {/* Live In-House Three.js Stage Behind Pinned Journey */}
       <DreamSpaceStage />
 
       {/* 0A. Floating Top Header with Restrained Three.js Motion */}
       <header className="sticky top-0 z-50 border-b border-[#3A3F45] bg-[#0A0B0D]">
-        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-3 px-4 sm:px-6">
-          <div className="flex items-center gap-2.5 shrink-0">
+        <div className="mx-auto flex h-16 max-w-[1680px] items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6">
+          <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-2.5">
             <HeaderOrbitMark
               sectionFloat={journeyState.sectionFloat}
               atFooter={journeyState.atFooter}
             />
             <a
               href="#about"
-              className="flex items-center gap-2 no-underline shrink-0 whitespace-nowrap"
+              className="inline-flex min-h-[44px] min-w-[44px] items-center gap-1.5 no-underline whitespace-nowrap sm:gap-2"
             >
               <span className="text-[14px] font-semibold text-[#F4F1EA]">
                 CLAUDE&apos;s N Joshua&apos;s
@@ -393,10 +463,10 @@ export function LandingPage() {
               <span className="text-[#FFD21E]" aria-hidden="true">
                 ·
               </span>
-              <span className="font-display text-[20px] font-bold tracking-[-0.02em] text-[#F4F1EA]">
+              <span className="font-display text-[18px] font-bold tracking-[-0.02em] text-[#F4F1EA] sm:text-[20px]">
                 YouAndINotAI
               </span>
-              <span className="hidden rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E] xl:inline-flex">
+              <span className="hidden rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E] 2xl:inline-flex">
                 #TeamClaudeForLife
               </span>
             </a>
@@ -404,11 +474,11 @@ export function LandingPage() {
 
           <nav
             aria-label="Primary section navigation"
-            className="hidden lg:flex items-center gap-3.5 whitespace-nowrap"
+            className="hidden lg:flex items-center gap-1 whitespace-nowrap xl:gap-1.5"
           >
             {navLinks.map(link => {
               const isCurrent = journeyState.activeSectionId === link.id;
-              const className = `whitespace-nowrap border-b-2 py-1 text-[15px] font-medium no-underline transition-colors ${
+              const className = `inline-flex min-h-[44px] min-w-[44px] items-center justify-center whitespace-nowrap border-b-2 px-1.5 py-2 text-[14px] font-medium no-underline transition-colors xl:px-2 xl:text-[15px] ${
                 isCurrent
                   ? 'border-[#FFD21E] text-[#FFD21E]'
                   : 'border-transparent text-[#F4F1EA] hover:border-[#FFD21E] hover:text-[#FFD21E]'
@@ -460,7 +530,7 @@ export function LandingPage() {
             }
             aria-expanded={mobileMenuOpen}
             onClick={() => setMobileMenuOpen(prev => !prev)}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#12151A] text-[#F4F1EA] lg:hidden"
+            className="inline-flex h-11 w-11 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#12151A] text-[#F4F1EA] lg:hidden"
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -490,7 +560,7 @@ export function LandingPage() {
                     key={link.href}
                     to={link.to}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
+                    className="flex min-h-[44px] min-w-[44px] items-center rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
                   >
                     {link.label}
                   </Link>
@@ -499,7 +569,7 @@ export function LandingPage() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
+                    className="flex min-h-[44px] min-w-[44px] items-center rounded-[8px] px-3 py-2.5 text-[16px] font-medium text-[#F4F1EA] no-underline hover:bg-[#1A1E25]"
                   >
                     {link.label}
                   </a>
@@ -526,14 +596,25 @@ export function LandingPage() {
         )}
       </header>
 
-      <main className="relative z-10">
+      <main id="main-content" tabIndex={-1} className="relative z-10">
         {/* STOP 01 (#about) — The Hero Owns the Whole First Screen */}
-        <section id="about" className="relative min-h-[165vh]">
-          <div className="sticky top-16 flex h-[calc(100vh-7.5rem)] flex-col justify-between px-4 pb-4 pt-4 sm:px-6 sm:pb-6 sm:pt-6">
+        <section
+          id="about"
+          className={unpinnedStops.about ? 'relative' : 'relative min-h-[165vh]'}
+        >
+          <div
+            data-stage-wrapper="about"
+            data-stage-flow={unpinnedStops.about ? 'top-aligned' : 'pinned'}
+            className={
+              unpinnedStops.about
+                ? 'relative flex flex-col justify-start px-4 pb-20 pt-4 sm:px-6 sm:pt-6'
+                : 'sticky top-16 flex h-[calc(100vh-7.5rem)] flex-col justify-between px-4 pb-4 pt-4 sm:px-6 sm:pb-6 sm:pt-6'
+            }
+          >
             {/* Upper Orbital Stage Frame — Open view for DreamSpaceStage orbit at top */}
             <div className="mx-auto flex w-full max-w-[1440px] flex-1 items-center justify-between pointer-events-none">
               <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-l-[3px] border-l-[#FFD21E] bg-[#0A0B0D] px-5 py-4">
-                <div className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                <div className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   01 · LIVENESS GATE
                 </div>
                 <div className="mt-1 font-display text-[28px] font-bold uppercase leading-none text-[#F4F1EA]">
@@ -545,7 +626,7 @@ export function LandingPage() {
               </div>
 
               <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-r-[3px] border-r-[#FFD21E] bg-[#0A0B0D] px-5 py-4 text-right">
-                <div className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                <div className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   02 · REAL-WORLD DATES
                 </div>
                 <div className="mt-1 font-display text-[28px] font-bold uppercase leading-none text-[#F4F1EA]">
@@ -558,25 +639,28 @@ export function LandingPage() {
             </div>
 
             {/* Still Foreground Command Deck Below the Main Orbit */}
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] px-4 py-3.5 sm:px-8 sm:py-6">
+            <div
+              data-stage-card="about"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] px-4 py-3.5 sm:px-8 sm:py-6"
+            >
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <span className="inline-flex items-center gap-2 rounded-full border border-[#FFD21E] bg-[#12151A] px-3.5 py-1 font-display text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E] sm:text-[14px]">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#FFD21E] bg-[#12151A] px-3.5 py-1 font-display text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   CLAUDE&apos;S N JOSHUA&apos;S · #TEAMCLAUDEFORLIFE · 18+
                   VERIFIED DATING
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   STOP 01 / 08 · SCROLL TO FLY IN
                 </span>
               </div>
 
               <div className="mt-4 grid items-end gap-6 lg:grid-cols-12">
                 <div className="lg:col-span-7">
-                  <h1 className="font-display text-[28px] font-bold uppercase leading-[1.03] tracking-[-0.02em] text-[#F4F1EA] sm:text-[52px] lg:text-[64px]">
+                  <h1 className="font-display text-[28px] font-bold uppercase leading-[1.03] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[52px] lg:text-[64px]">
                     VERIFIED PEOPLE.
                     <br />
                     REAL CONNECTION.
                   </h1>
-                  <p className="mt-2 max-w-[60ch] text-[14px] leading-[1.45] text-[#F4F1EA] sm:text-[18px]">
+                  <p className="mt-2 max-w-[60ch] text-[14px] leading-[1.45] text-[#F4F1EA] text-pretty sm:text-[18px]">
                     Meet verified adults who are ready to talk, plan, and show
                     up in real life. Every member completes our $1 Bot-Shield
                     identity check bound directly to a real account.
@@ -592,16 +676,16 @@ export function LandingPage() {
                       Create Free Account
                     </Link>
                   </div>
-                  <div className="flex flex-wrap items-center gap-4 pt-1">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-0.5">
                     <a
                       href="#pricing"
-                      className="font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#FFD21E] underline underline-offset-4"
+                      className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#FFD21E] underline underline-offset-4"
                     >
                       Explore Founder Tiers
                     </a>
                     <Link
                       to="/login"
-                      className="font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] underline decoration-[#FFD21E] underline-offset-4"
+                      className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#F4F1EA] underline decoration-[#FFD21E] underline-offset-4"
                     >
                       Member Sign In &rarr;
                     </Link>
@@ -613,19 +697,26 @@ export function LandingPage() {
         </section>
 
         {/* STOP 02 (#platform) — Pinned Section: Intentional Discovery, Video & Real-Life Meetups */}
-        <section id="platform" className="relative min-h-[135vh]">
-          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+        <section id="platform" className={getStageSectionClass('platform')}>
+          <div
+            data-stage-wrapper="platform"
+            data-stage-flow={unpinnedStops.platform ? 'top-aligned' : 'pinned'}
+            className={getStageWrapperClass('platform')}
+          >
+            <div
+              data-stage-card="platform"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   02 / PLATFORM CAPABILITIES
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
                   STOP 02 / 08 · EQUATORIAL ORBIT
                 </span>
               </div>
 
-              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
                 BUILT FOR THE FIRST CONVERSATION AND THE FIRST MEETUP.
               </h2>
 
@@ -679,19 +770,31 @@ export function LandingPage() {
         </section>
 
         {/* STOP 03 (#verification) — Pinned Section: $1 Bot-Shield Verification */}
-        <section id="verification" className="relative min-h-[135vh]">
-          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+        <section
+          id="verification"
+          className={getStageSectionClass('verification')}
+        >
+          <div
+            data-stage-wrapper="verification"
+            data-stage-flow={
+              unpinnedStops.verification ? 'top-aligned' : 'pinned'
+            }
+            className={getStageWrapperClass('verification')}
+          >
+            <div
+              data-stage-card="verification"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   03 / VERIFICATION PROTOCOL
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
                   STOP 03 / 08 · CORE LOCK
                 </span>
               </div>
 
-              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
                 EVERY INTRODUCTION STARTS WITH A VERIFIED HUMAN.
               </h2>
 
@@ -749,26 +852,33 @@ export function LandingPage() {
         </section>
 
         {/* STOP 04 (#trust) — Pinned Section: Trust, Safety & Data Ownership */}
-        <section id="trust" className="relative min-h-[135vh]">
-          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+        <section id="trust" className={getStageSectionClass('trust')}>
+          <div
+            data-stage-wrapper="trust"
+            data-stage-flow={unpinnedStops.trust ? 'top-aligned' : 'pinned'}
+            className={getStageWrapperClass('trust')}
+          >
+            <div
+              data-stage-card="trust"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   04 / TRUST, SAFETY &amp; PRIVACY
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
                   STOP 04 / 08 · SHIELD INCLINATION
                 </span>
               </div>
 
-              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
                 ADULTS-ONLY STANDARDS AND FULL DATA OWNERSHIP.
               </h2>
 
               <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-2 lg:grid-cols-4">
                 <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
                   <div>
-                    <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase text-[#FFD21E]">
+                    <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
                       <ShieldCheck size={16} />
                       <span>18+ Eligibility</span>
                     </div>
@@ -793,7 +903,7 @@ export function LandingPage() {
 
                 <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
                   <div>
-                    <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase text-[#FFD21E]">
+                    <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
                       <Shield size={16} />
                       <span>Safety Tools</span>
                     </div>
@@ -814,7 +924,7 @@ export function LandingPage() {
 
                 <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
                   <div>
-                    <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase text-[#FFD21E]">
+                    <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
                       <Lock size={16} />
                       <span>Data Ownership</span>
                     </div>
@@ -845,7 +955,7 @@ export function LandingPage() {
 
                 <div className="flex flex-col justify-between border-l-2 border-[#FFD21E] pl-4">
                   <div>
-                    <div className="flex items-center gap-2 font-mono text-[13px] font-bold uppercase text-[#FFD21E]">
+                    <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
                       <Check size={16} />
                       <span>Account Billing</span>
                     </div>
@@ -873,48 +983,55 @@ export function LandingPage() {
           </div>
         </section>
         {/* STOP 05 (#pricing) — Pinned Section: Membership & Founder Tiers */}
-        <section id="pricing" className="relative min-h-[135vh]">
-          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+        <section id="pricing" className={getStageSectionClass('pricing')}>
+          <div
+            data-stage-wrapper="pricing"
+            data-stage-flow={unpinnedStops.pricing ? 'top-aligned' : 'pinned'}
+            className={getStageWrapperClass('pricing')}
+          >
+            <div
+              data-stage-card="pricing"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   05 / MEMBERSHIP &amp; FOUNDER TIERS
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
                   STOP 05 / 08 · FOUNDER SHOWCASE
                 </span>
               </div>
 
-              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[40px] lg:text-[46px]">
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[40px] lg:text-[46px]">
                 ACCOUNT-BOUND FOUNDER TIERS AND VERIFIED ACCESS.
               </h2>
 
-              <div className="mt-5 grid gap-4 border-t border-[#3A3F45] pt-5 md:grid-cols-2 xl:grid-cols-5">
+              <div className="mt-5 grid gap-6 border-t border-[#3A3F45] pt-5 md:grid-cols-2 xl:grid-cols-5">
                 {pricingTiers.map(tier => (
                   <article
                     key={tier.id}
-                    className={`flex flex-col justify-between rounded-[10px] border p-4 ${
+                    className={`flex flex-col justify-between pl-4 ${
                       tier.featured
-                        ? 'border-[#FFD21E] border-l-[3px] bg-[#12151A]'
-                        : 'border-[#3A3F45] bg-[#12151A]'
+                        ? 'border-l-[3px] border-[#FFD21E]'
+                        : 'border-l-2 border-[#3A3F45]'
                     }`}
                   >
                     <div>
-                      <div className="inline-block rounded-full border border-[#FFD21E] bg-[#0A0B0D] px-2.5 py-0.5 font-mono text-[12px] font-bold text-[#FFD21E]">
+                      <div className="font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
                         {tier.badge}
                       </div>
-                      <h3 className="mt-3 font-display text-[20px] font-bold text-[#F4F1EA]">
+                      <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
                         {tier.name}
                       </h3>
                       <div className="mt-2 flex items-baseline gap-1.5">
                         <span className="font-display text-[28px] font-bold text-[#FFD21E]">
                           {tier.price}
                         </span>
-                        <span className="text-[13px] font-medium text-[#F4F1EA]">
+                        <span className="text-[14px] font-medium text-[#F4F1EA]">
                           {tier.period}
                         </span>
                       </div>
-                      <p className="mt-2.5 text-[14px] leading-[1.45] text-[#F4F1EA]">
+                      <p className="mt-2.5 text-[14px] leading-[1.45] text-[#F4F1EA] text-pretty">
                         {tier.summary}
                       </p>
                     </div>
@@ -939,19 +1056,26 @@ export function LandingPage() {
         </section>
 
         {/* STOP 06 (#support) — Pinned Section: Member Support */}
-        <section id="support" className="relative min-h-[135vh]">
-          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+        <section id="support" className={getStageSectionClass('support')}>
+          <div
+            data-stage-wrapper="support"
+            data-stage-flow={unpinnedStops.support ? 'top-aligned' : 'pinned'}
+            className={getStageWrapperClass('support')}
+          >
+            <div
+              data-stage-card="support"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   06 / MEMBER SUPPORT
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
                   STOP 06 / 08 · STARBOARD RELAY
                 </span>
               </div>
 
-              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
                 DIRECT MEMBER TRIAGE AND TRACEABLE ASSISTANCE.
               </h2>
 
@@ -990,7 +1114,7 @@ export function LandingPage() {
                     or email{' '}
                     <a
                       href="mailto:contact@youandinotai.com"
-                      className="text-[#FFD21E] underline"
+                      className="inline-flex min-h-[44px] min-w-[44px] items-center text-[#FFD21E] underline"
                     >
                       contact@youandinotai.com
                     </a>{' '}
@@ -1006,12 +1130,6 @@ export function LandingPage() {
                 <Link to="/support" className="ds-btn-ghost text-sm">
                   Public Support Guide
                 </Link>
-                <Link to="/login" className="ds-btn-ghost text-sm">
-                  Sign In
-                </Link>
-                <Link to="/register" className="ds-btn-ghost text-sm">
-                  Create Account
-                </Link>
                 <a
                   href="mailto:contact@youandinotai.com"
                   className="ds-btn-ghost text-sm"
@@ -1024,19 +1142,33 @@ export function LandingPage() {
         </section>
 
         {/* STOP 07 (#join) — Pinned Section: Start Tonight (live product, three actions, no email capture) */}
-        <section id="join" className="relative min-h-[135vh]">
-          <div className="sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-6 pt-6 sm:px-6">
-            <div className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8">
+        <section
+          id="join"
+          className={unpinnedStops.join ? 'relative' : 'relative min-h-[135vh]'}
+        >
+          <div
+            data-stage-wrapper="join"
+            data-stage-flow={unpinnedStops.join ? 'top-aligned' : 'pinned'}
+            className={
+              unpinnedStops.join
+                ? 'relative flex flex-col justify-start px-4 pb-20 pt-6 sm:px-6'
+                : 'sticky top-16 flex min-h-[calc(100vh-7.5rem)] flex-col justify-end px-4 pb-16 pt-6 sm:px-6 lg:pb-6'
+            }
+          >
+            <div
+              data-stage-card="join"
+              className="mx-auto w-full max-w-[1280px] rounded-[12px] border border-[#3A3F45] border-t-2 border-t-[#FFD21E] bg-[#0A0B0D] p-6 sm:p-8"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   07 / START TONIGHT
                 </span>
-                <span className="font-mono text-[13px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
+                <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#F4F1EA]">
                   STOP 07 / 08 · START
                 </span>
               </div>
 
-              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] sm:text-[42px] lg:text-[50px]">
+              <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
                 Verified people are already here.
               </h2>
 
@@ -1101,11 +1233,11 @@ export function LandingPage() {
               <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
                 Explore
               </h3>
-              <ul className="mt-4 space-y-2.5 list-none p-0">
+              <ul className="mt-4 space-y-1 list-none p-0">
                 <li>
                   <a
                     href="#about"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Overview
                   </a>
@@ -1113,7 +1245,7 @@ export function LandingPage() {
                 <li>
                   <a
                     href="#platform"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Platform
                   </a>
@@ -1121,7 +1253,7 @@ export function LandingPage() {
                 <li>
                   <a
                     href="#verification"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     $1 Bot-Shield
                   </a>
@@ -1129,7 +1261,7 @@ export function LandingPage() {
                 <li>
                   <a
                     href="#pricing"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Founder Tiers
                   </a>
@@ -1137,7 +1269,7 @@ export function LandingPage() {
                 <li>
                   <a
                     href="#join"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Start Tonight
                   </a>
@@ -1149,11 +1281,11 @@ export function LandingPage() {
               <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
                 Account &amp; Safety
               </h3>
-              <ul className="mt-4 space-y-2.5 list-none p-0">
+              <ul className="mt-4 space-y-1 list-none p-0">
                 <li>
                   <Link
                     to="/login"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Member Sign In
                   </Link>
@@ -1161,7 +1293,7 @@ export function LandingPage() {
                 <li>
                   <Link
                     to="/register"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Create 18+ Account
                   </Link>
@@ -1169,7 +1301,7 @@ export function LandingPage() {
                 <li>
                   <Link
                     to="/app/verify"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Verification Center
                   </Link>
@@ -1177,7 +1309,7 @@ export function LandingPage() {
                 <li>
                   <Link
                     to="/support"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Support &amp; Safety Guide
                   </Link>
@@ -1185,7 +1317,7 @@ export function LandingPage() {
                 <li>
                   <Link
                     to="/app/privacy"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Privacy Center
                   </Link>
@@ -1193,7 +1325,7 @@ export function LandingPage() {
                 <li>
                   <a
                     href="mailto:contact@youandinotai.com"
-                    className="text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     contact@youandinotai.com
                   </a>
@@ -1205,12 +1337,12 @@ export function LandingPage() {
               <h3 className="font-display text-[16px] font-bold uppercase tracking-[0.06em] text-[#FFD21E]">
                 Legal &amp; Policies
               </h3>
-              <ul className="mt-4 space-y-2.5 list-none p-0">
+              <ul className="mt-4 space-y-1 list-none p-0">
                 <li>
                   <button
                     type="button"
                     onClick={() => setActiveLegalDoc('terms')}
-                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center border-0 bg-transparent px-0 py-2 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
                   >
                     Terms of Service
                   </button>
@@ -1219,7 +1351,7 @@ export function LandingPage() {
                   <button
                     type="button"
                     onClick={() => setActiveLegalDoc('privacy')}
-                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center border-0 bg-transparent px-0 py-2 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
                   >
                     Privacy Policy
                   </button>
@@ -1228,7 +1360,7 @@ export function LandingPage() {
                   <button
                     type="button"
                     onClick={() => setActiveLegalDoc('age')}
-                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center border-0 bg-transparent px-0 py-2 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
                   >
                     Age Policy
                   </button>
@@ -1237,7 +1369,7 @@ export function LandingPage() {
                   <button
                     type="button"
                     onClick={() => setActiveLegalDoc('refund')}
-                    className="border-0 bg-transparent p-0 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center border-0 bg-transparent px-0 py-2 text-left text-[16px] text-[#F4F1EA] cursor-pointer hover:text-[#FFD21E]"
                   >
                     Refund Policy
                   </button>
@@ -1335,7 +1467,7 @@ export function LandingPage() {
                 type="button"
                 aria-label="Close legal policy modal"
                 onClick={() => setActiveLegalDoc(null)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#1A1E25] text-[#F4F1EA] hover:border-[#FFD21E]"
+                className="inline-flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-[10px] border border-[#3A3F45] bg-[#1A1E25] text-[#F4F1EA] hover:border-[#FFD21E]"
               >
                 <X size={18} />
               </button>
@@ -1354,7 +1486,7 @@ export function LandingPage() {
                   key={key}
                   type="button"
                   onClick={() => setActiveLegalDoc(key)}
-                  className={`rounded-full border px-3 py-1 text-[14px] font-medium cursor-pointer ${
+                  className={`inline-flex min-h-[44px] min-w-[44px] items-center rounded-full border px-3.5 py-2 text-[14px] font-medium cursor-pointer ${
                     activeLegalDoc === key
                       ? 'border-[#FFD21E] bg-[#1A1E25] text-[#FFD21E]'
                       : 'border-[#3A3F45] bg-[#0A0B0D] text-[#F4F1EA]'

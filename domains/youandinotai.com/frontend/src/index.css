@@ -148,6 +148,10 @@ body {
   overflow-x: hidden;
 }
 
+section[id] {
+  scroll-margin-top: 4.25rem;
+}
+
 h1,
 h2,
 h3,
@@ -162,6 +166,16 @@ h4,
   letter-spacing: -0.02em;
   line-height: 1.05;
   color: var(--ds-porcelain);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 .font-sans {
@@ -238,6 +252,7 @@ h4,
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  min-width: 44px;
   min-height: 44px;
   padding: 0.75rem 1.35rem;
   border-radius: 10px;
@@ -269,6 +284,7 @@ h4,
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  min-width: 44px;
   min-height: 44px;
   padding: 0.75rem 1.25rem;
   border-radius: 10px;
