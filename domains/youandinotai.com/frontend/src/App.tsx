@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 
 import { useAuth } from './lib/auth';
+import { BotOrNotGame } from './components/BotOrNotGame';
 import {
   DreamSpaceStage,
   HeaderOrbitMark,
@@ -784,6 +785,9 @@ export function LandingPage() {
             </div>
           </div>
         </section>
+
+        {/* BOT OR NOT — Founder Card Game Before Verification */}
+        <BotOrNotGame />
 
         {/* STOP 03 (#verification) — Pinned Section: $1 Bot-Shield Verification */}
         <section
