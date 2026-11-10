@@ -3,7 +3,7 @@ LOCKED-AND-SIGNED
 signer: Grok Judge
 agentId: 44a7bbb7-d01e-4f88-aa45-899b60f987de
 adapter: grok_local
-runtime: C:/Users/joshi/.grok/bin/grok.exe
+runtime: %USERPROFILE%/.grok/bin/grok.exe
 identity: official grok.com CLI grok 1.0.5 (5115b46bc9)
 not: OmniRoute, Hermes, OpenClaw, Codex, Claude, Gemini, third-party router or harness
 -->
