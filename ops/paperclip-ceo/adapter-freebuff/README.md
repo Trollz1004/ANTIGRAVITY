@@ -1,4 +1,6 @@
-# paperclip-freebuff-adapter (Freebuff / Buffy CEO)
+# paperclip-freebuff-adapter (Freebuff / Buffy CEO) [Historical]
+
+> **History Note (2026-11-09):** Paperclip is retired forever. Kept for reference.
 
 External Paperclip adapter that makes the Freebuff (Buffy CEO) session a
 native Paperclip agent type: `freebuff_local`.
