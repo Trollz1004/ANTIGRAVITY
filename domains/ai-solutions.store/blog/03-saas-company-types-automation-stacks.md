@@ -13,6 +13,8 @@ author: Ai-Solutions.Store
 canonical: https://ai-solutions.store/blog/saas-company-types-automation-stacks
 ---
 
+> History, kept for the record. Not current. (Domain not renewed).
+
 ## The problem with generic automation tools
 
 Most automation software is built for everyone, which in practice means it fits no one particularly well. A generic "AI marketing tool" doesn't know that a reseller's biggest time sink is relisting the same product across five marketplaces, or that a service business's biggest time sink is scheduling and follow-up, or that a content creator's biggest time sink is repurposing one piece of work into five formats. You end up configuring a general tool to approximate a specific job — and configuration time is exactly the time an automation was supposed to save you.

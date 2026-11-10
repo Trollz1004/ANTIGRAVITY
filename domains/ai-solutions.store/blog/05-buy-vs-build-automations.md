@@ -13,6 +13,8 @@ author: Ai-Solutions.Store
 canonical: https://ai-solutions.store/blog/buy-vs-build-automations
 ---
 
+> History, kept for the record. Not current. (Domain not renewed).
+
 ## The question is really about your task, not the tool
 
 "Should I buy this or build it myself?" sounds like a question about software. It's actually a question about the task underneath it: how repeatable is it, how much does it change from one instance to the next, and how much does it cost you if it fails once. Answer those three, and the buy-or-build decision mostly answers itself.

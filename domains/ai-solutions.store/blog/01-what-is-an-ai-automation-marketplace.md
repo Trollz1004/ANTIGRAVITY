@@ -14,6 +14,8 @@ author: Ai-Solutions.Store
 canonical: https://ai-solutions.store/blog/what-is-an-ai-automation-marketplace
 ---
 
+> History, kept for the record. Not current. (Domain not renewed).
+
 ## What "AI automation marketplace" actually means
 
 An AI automation marketplace is a storefront for prebuilt jobs, not a single piece of software. Instead of one app that does one thing, you're browsing a catalog: a listing drafter, a support-inbox sorter, a reseller catalog manager, an outreach scheduler. Each one is scoped to a specific, repeatable task that a small business already does by hand.

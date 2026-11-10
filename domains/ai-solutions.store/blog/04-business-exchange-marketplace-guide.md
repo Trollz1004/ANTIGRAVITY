@@ -13,6 +13,8 @@ author: Ai-Solutions.Store
 canonical: https://ai-solutions.store/blog/business-exchange-marketplace-guide
 ---
 
+> History, kept for the record. Not current. (Domain not renewed).
+
 ## Why small online businesses are hard to sell the normal way
 
 A small online business doesn't fit neatly into a real estate listing or a business broker's usual playbook. Its value lives in things that don't show up on a property deed: a product catalog, a customer list, marketplace seller accounts, a domain with search history behind it, maybe an automation or two quietly doing the daily work. Selling it means transferring all of that correctly, not just handing over a set of keys.
