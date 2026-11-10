@@ -45,7 +45,7 @@
       content="Free electronics drop-off and pickup in Central Florida with secure device handling and responsible recycling."
     />
     <link rel="canonical" href="https://onlinerecycle.net/" />
-    <link rel="stylesheet" href="/styles.css?v=20261108" />
+    <link rel="stylesheet" href="/styles.css?v=20261109" />
     <script src="/cookie-consent.js?v=20261031" defer></script>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
@@ -53,7 +53,10 @@
   <body>
     <a href="#main" class="skip-link">Skip to main content</a>
 
-    <!-- Fixed Full-Viewport 3D Scene Stage (House Motion Rule) -->
+    <!-- Fixed Carbon-Fibre Weave & Slow Specular Light Sheen Backdrop -->
+    <div class="carbon-fibre-backdrop" id="carbon-fibre-backdrop" aria-hidden="true"></div>
+
+    <!-- Fixed Full-Viewport 3D Scene Stage (House Motion Rule, Transparent over Carbon-Fibre Weave) -->
     <canvas
       id="onlinerecycle-stage-canvas"
       aria-hidden="true"
@@ -134,219 +137,85 @@
     </header>
 
     <main class="wrap" id="main" tabindex="-1">
-      <!-- STOP 01 (#overview) — First-Screen 3D Stage & Primary Action -->
+      <!-- STOP 01 (#overview) — First 7 Seconds: Only 3D Object, One Headline, One Line Under It, One Button -->
       <section class="stage-stop" id="overview" aria-label="Overview">
-        <div class="stage-panel">
-          <div class="stop-kicker-row">
-            <span class="stop-kicker">
-              01 / CENTRAL FLORIDA ELECTRONICS INTAKE &amp; RECOVERY · SECURE DEVICE HANDLING · DIRECT SCHEDULING
-            </span>
-            <span class="stop-telemetry">STOP 01 / 06 · OVERVIEW</span>
-          </div>
-
-          <h1>Florida Electronics Recycling and Free Device Pickup</h1>
-          <p>
-            Free e-waste drop-off in Sorrento and scheduled route pickup across Lake, Orange, and Seminole Counties.
-            We help households and businesses clear out retired hardware with storage media wipe or destruction,
-            component testing, and instant Google Calendar&nbsp;scheduling.
+        <div class="hero-first-screen">
+          <h1>Florida Electronics Recycling &amp; Free Pickup</h1>
+          <p class="hero-subline">
+            Free drop-off in Sorrento and scheduled route pickup across Lake, Orange, and Seminole Counties.
           </p>
-
-          <div class="hero-metrics">
-            <div class="metric-box">
-              <div class="metric-label">DROP-OFF HUB</div>
-              <div class="metric-value">Sorrento, FL (30-Min Slots)</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">ROUTE PICKUP</div>
-              <div class="metric-value">Lake · Orange · Seminole</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">DATA HANDLING</div>
-              <div class="metric-value">Media Wipe or Physical Destruction</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">DIRECT DISPATCH</div>
-              <div class="metric-value">(321) 396-2008 · 7 Days / Week</div>
-            </div>
-          </div>
-
-          <div class="cta-row">
-            <a class="btn btn-primary" href="#book" data-select-service="dropoff">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
-              </svg>
-              <span>Book a Drop-Off Slot</span>
-            </a>
-            <a class="btn btn-secondary" href="#book" data-select-service="pickup">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <rect x="1" y="3" width="15" height="13"></rect>
-                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                <circle cx="18.5" cy="18.5" r="2.5"></circle>
-              </svg>
-              <span>Request a Free Pickup</span>
-            </a>
-            <a class="btn btn-secondary" href="tel:+13213962008">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path
-                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
-                ></path>
-              </svg>
-              <span>Call / Text (321) 396-2008</span>
-            </a>
-          </div>
+          <a class="btn btn-primary hero-cta-btn" href="#book" data-select-service="dropoff">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span>Book a Drop-Off or Pickup Slot</span>
+          </a>
         </div>
       </section>
 
-      <!-- STOP 02 (#book) — Google Calendar & Direct Slot Scheduler -->
-      <section class="stage-stop stage-stop-compact" id="book" aria-label="Schedule Drop-Off or Pickup">
-        <div class="booking-section">
-          <div class="stop-kicker-row">
-            <span class="stop-kicker">02 / LIVE DISPATCH &amp; GOOGLE CALENDAR SCHEDULER</span>
-            <span class="stop-telemetry">STOP 02 / 06 · SCHEDULE</span>
-          </div>
+      <!-- STOP 02 (#book) — Google Calendar & Direct Slot Scheduler (Card 01: Flies in from below) -->
+      <section class="stage-stop" id="book" aria-label="Schedule Drop-Off or Pickup">
+        <div class="spin-card-stage stage-scheduler-slot align-center">
+          <div
+            class="spin-card spin-card-wide booking-section"
+            id="card-scheduler"
+            data-fly-dir="from-below"
+            data-card-index="1"
+          >
+            <div class="stop-kicker-row">
+              <span class="stop-kicker">02 / LIVE DISPATCH &amp; GOOGLE CALENDAR SCHEDULER</span>
+              <span class="stop-telemetry">STOP 02 / 06 · SCHEDULE</span>
+            </div>
 
-          <div class="booking-header">
-            <div>
-              <div class="booking-badge">
-                <svg
-                  width="15"
-                  height="15"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="16" y1="2" x2="16" y2="6"></line>
-                  <line x1="8" y1="2" x2="8" y2="6"></line>
-                  <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
-                <span>Live appointment scheduler</span>
+            <div class="booking-header">
+              <div>
+                <div class="booking-badge">
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  <span>Live appointment scheduler</span>
+                </div>
+                <h2 style="margin-bottom: 6px">Schedule Your Drop-Off or Free Pickup</h2>
+                <p style="margin-bottom: 0; font-size: 0.96rem">
+                  Pick a convenient date and time window below. Your appointment is logged immediately and provides an
+                  Add to Google Calendar link and downloadable .ICS calendar&nbsp;file.
+                </p>
               </div>
-              <h2 style="margin-bottom: 6px">Schedule Your Drop-Off or Free Pickup</h2>
-              <p style="margin-bottom: 0; font-size: 0.98rem">
-                Pick a convenient date and time window below. Your appointment is logged immediately and provides an
-                Add to Google Calendar link and downloadable .ICS calendar&nbsp;file.
-              </p>
-            </div>
-            <div class="service-tabs" role="tablist" aria-label="Service type">
-              <button
-                type="button"
-                class="service-tab active"
-                id="tab-dropoff"
-                data-service="dropoff"
-                role="tab"
-                aria-selected="true"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                  <circle cx="12" cy="10" r="3"></circle>
-                </svg>
-                <span>Sorrento Drop-Off</span>
-              </button>
-              <button
-                type="button"
-                class="service-tab"
-                id="tab-pickup"
-                data-service="pickup"
-                role="tab"
-                aria-selected="false"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <rect x="1" y="3" width="15" height="13"></rect>
-                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                  <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                  <circle cx="18.5" cy="18.5" r="2.5"></circle>
-                </svg>
-                <span>Central FL Pickup</span>
-              </button>
-            </div>
-          </div>
-
-          <div id="gcal-embed-container" style="display: none; margin-bottom: 24px">
-            <iframe
-              id="gcal-schedule-iframe"
-              title="OnlineRecycle Google Calendar Appointment Schedule"
-              style="border: 0; width: 100%; height: 620px; border-radius: 12px"
-              frameborder="0"
-            ></iframe>
-          </div>
-
-          <form id="booking-form" novalidate>
-            <input type="hidden" id="bf-service-type" name="serviceType" value="dropoff" />
-            <input type="hidden" id="bf-date" name="date" value="" />
-            <input type="hidden" id="bf-slot-code" name="slotCode" value="" />
-            <input type="hidden" id="bf-slot-label" name="slotLabel" value="" />
-
-            <div class="calendar-grid-label">
-              <span>1. Select a Day (Mon–Sun · Eastern Time)</span>
-              <div class="calendar-date-controls">
-                <span id="selected-date-display" style="color: var(--accent); font-size: 0.88rem"></span>
+              <div class="service-tabs" role="tablist" aria-label="Service type">
                 <button
                   type="button"
-                  class="date-page-toggle"
-                  id="date-page-toggle"
-                  aria-controls="date-strip"
-                  aria-label="Show next seven days"
+                  class="service-tab active"
+                  id="tab-dropoff"
+                  data-service="dropoff"
+                  role="tab"
+                  aria-selected="true"
                 >
-                  <span id="date-page-toggle-label">Next 7 Days</span>
                   <svg
                     width="16"
                     height="16"
@@ -358,400 +227,726 @@
                     stroke-linejoin="round"
                     aria-hidden="true"
                   >
-                    <polyline points="9 18 15 12 9 6"></polyline>
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
                   </svg>
+                  <span>Sorrento Drop-Off</span>
+                </button>
+                <button
+                  type="button"
+                  class="service-tab"
+                  id="tab-pickup"
+                  data-service="pickup"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect x="1" y="3" width="15" height="13"></rect>
+                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                  </svg>
+                  <span>Central FL Pickup</span>
                 </button>
               </div>
             </div>
-            <div class="date-strip" id="date-strip" role="listbox" aria-label="Available dates"></div>
 
-            <div class="calendar-grid-label">
-              <span id="slot-heading-text">2. Select a 30-Minute Sorrento Drop-Off Window</span>
-              <span id="selected-slot-display" style="color: var(--accent); font-size: 0.88rem"></span>
-            </div>
-            <div class="slot-strip" id="slot-strip" role="listbox" aria-label="Available time windows"></div>
-
-            <div class="calendar-grid-label">
-              <span>3. Your Contact &amp; Electronics Details</span>
+            <div id="gcal-embed-container" style="display: none; margin-bottom: 24px">
+              <iframe
+                id="gcal-schedule-iframe"
+                title="OnlineRecycle Google Calendar Appointment Schedule"
+                style="border: 0; width: 100%; height: 620px; border-radius: 12px"
+                frameborder="0"
+              ></iframe>
             </div>
 
-            <div class="booking-form-grid">
-              <div class="form-field">
-                <label for="bf-name">Full Name *</label>
-                <input type="text" id="bf-name" name="fullName" autocomplete="name" placeholder="Jane Doe" required />
+            <form id="booking-form" novalidate>
+              <input type="hidden" id="bf-service-type" name="serviceType" value="dropoff" />
+              <input type="hidden" id="bf-date" name="date" value="" />
+              <input type="hidden" id="bf-slot-code" name="slotCode" value="" />
+              <input type="hidden" id="bf-slot-label" name="slotLabel" value="" />
+
+              <div class="calendar-grid-label">
+                <span>1. Select a Day (Mon–Sun · Eastern Time)</span>
+                <div class="calendar-date-controls">
+                  <span id="selected-date-display" style="color: var(--accent); font-size: 0.88rem"></span>
+                  <button
+                    type="button"
+                    class="date-page-toggle"
+                    id="date-page-toggle"
+                    aria-controls="date-strip"
+                    aria-label="Show next seven days"
+                  >
+                    <span id="date-page-toggle-label">Next 7 Days</span>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="date-strip" id="date-strip" role="listbox" aria-label="Available dates"></div>
+
+              <div class="calendar-grid-label">
+                <span id="slot-heading-text">2. Select a 30-Minute Sorrento Drop-Off Window</span>
+                <span id="selected-slot-display" style="color: var(--accent); font-size: 0.88rem"></span>
+              </div>
+              <div class="slot-strip" id="slot-strip" role="listbox" aria-label="Available time windows"></div>
+
+              <div class="calendar-grid-label">
+                <span>3. Your Contact &amp; Electronics Details</span>
               </div>
 
-              <div class="form-field">
-                <label for="bf-phone">Phone Number *</label>
-                <input type="tel" id="bf-phone" name="phone" autocomplete="tel" placeholder="(321) 555-0199" required />
+              <div class="booking-form-grid">
+                <div class="form-field">
+                  <label for="bf-name">Full Name *</label>
+                  <input type="text" id="bf-name" name="fullName" autocomplete="name" placeholder="Jane Doe" required />
+                </div>
+
+                <div class="form-field">
+                  <label for="bf-phone">Phone Number *</label>
+                  <input
+                    type="tel"
+                    id="bf-phone"
+                    name="phone"
+                    autocomplete="tel"
+                    placeholder="(321) 555-0199"
+                    required
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="bf-email">Email Address (optional)</label>
+                  <input type="email" id="bf-email" name="email" autocomplete="email" placeholder="you@example.com" />
+                </div>
+
+                <div class="form-field">
+                  <label for="bf-org">Business / Organization (optional)</label>
+                  <input
+                    type="text"
+                    id="bf-org"
+                    name="organization"
+                    autocomplete="organization"
+                    placeholder="Household or company name"
+                  />
+                </div>
+
+                <div class="form-field" id="pickup-address-field" style="display: none">
+                  <label for="bf-address">Pickup Street Address *</label>
+                  <input
+                    type="text"
+                    id="bf-address"
+                    name="address"
+                    autocomplete="street-address"
+                    placeholder="123 Main St"
+                  />
+                </div>
+
+                <div class="form-field" id="pickup-city-field" style="display: none">
+                  <label for="bf-city">City &amp; ZIP *</label>
+                  <input
+                    type="text"
+                    id="bf-city"
+                    name="city"
+                    autocomplete="address-level2"
+                    placeholder="Sorrento / Mount Dora / Orlando, FL"
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="bf-count">Estimated Device Count *</label>
+                  <select id="bf-count" name="deviceCount">
+                    <option value="1-5 items">1–5 items (Household drop-off / small batch)</option>
+                    <option value="6-15 items">6–15 items (Home office / garage cleanout)</option>
+                    <option value="16-50 items">16–50 items (Small business / IT cleanout)</option>
+                    <option value="50+ items">50+ items (Commercial pallet / office load)</option>
+                  </select>
+                </div>
+
+                <div class="form-field">
+                  <label for="bf-wipe">Data Handling Preference</label>
+                  <select id="bf-wipe" name="notes">
+                    <option value="Standard intake & storage wipe/destruction">
+                      Standard intake &amp; storage wipe/destruction
+                    </option>
+                    <option value="Includes laptops/PCs/drives needing priority data wipe">
+                      Includes laptops/PCs/drives needing priority data wipe
+                    </option>
+                    <option value="No storage media (monitors, printers, cables, peripherals)">
+                      No storage media (monitors, printers, cables, peripherals)
+                    </option>
+                  </select>
+                </div>
+
+                <div class="form-field full-width">
+                  <label for="bf-devices">What electronics are you dropping off or scheduling for pickup? *</label>
+                  <textarea
+                    id="bf-devices"
+                    name="deviceList"
+                    rows="3"
+                    placeholder="Example: 3 Dell laptops, 2 desktop towers, 1 laser printer, box of cables & power supplies"
+                    required
+                  ></textarea>
+                </div>
               </div>
 
-              <div class="form-field">
-                <label for="bf-email">Email Address (optional)</label>
-                <input type="email" id="bf-email" name="email" autocomplete="email" placeholder="you@example.com" />
+              <div
+                id="booking-error"
+                style="display: none; margin-top: 14px; color: #ffd21e; font-weight: 700; font-size: 0.92rem"
+              ></div>
+
+              <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+                <button type="submit" class="btn btn-primary" id="bf-submit-btn">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                  <span id="bf-submit-btn-label">Confirm Appointment &amp; Add to Calendar</span>
+                </button>
+                <span style="font-size: 0.86rem; color: var(--muted)">
+                  Free intake service · Instant booking ID + Google Calendar &amp; .ICS download
+                </span>
               </div>
+            </form>
 
-              <div class="form-field">
-                <label for="bf-org">Business / Organization (optional)</label>
-                <input
-                  type="text"
-                  id="bf-org"
-                  name="organization"
-                  autocomplete="organization"
-                  placeholder="Household or company name"
-                />
+            <div class="booking-confirm-box" id="booking-confirm-box" role="status" aria-live="polite">
+              <h3 id="confirm-title">Appointment Scheduled!</h3>
+              <p id="confirm-summary" style="color: var(--text); font-size: 0.96rem; margin-bottom: 16px"></p>
+              <div style="display: flex; flex-wrap: wrap; gap: 12px">
+                <a id="confirm-gcal-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  <span>Add to Google Calendar</span>
+                </a>
+                <a id="confirm-ics-btn" href="#" class="btn btn-secondary">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <span>Download .ICS Calendar File</span>
+                </a>
+                <a id="confirm-sms-btn" href="#" class="btn btn-secondary">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                  <span>Text Confirmation to (321) 396-2008</span>
+                </a>
               </div>
-
-              <div class="form-field" id="pickup-address-field" style="display: none">
-                <label for="bf-address">Pickup Street Address *</label>
-                <input
-                  type="text"
-                  id="bf-address"
-                  name="address"
-                  autocomplete="street-address"
-                  placeholder="123 Main St"
-                />
-              </div>
-
-              <div class="form-field" id="pickup-city-field" style="display: none">
-                <label for="bf-city">City &amp; ZIP *</label>
-                <input
-                  type="text"
-                  id="bf-city"
-                  name="city"
-                  autocomplete="address-level2"
-                  placeholder="Sorrento / Mount Dora / Orlando, FL"
-                />
-              </div>
-
-              <div class="form-field">
-                <label for="bf-count">Estimated Device Count *</label>
-                <select id="bf-count" name="deviceCount">
-                  <option value="1-5 items">1–5 items (Household drop-off / small batch)</option>
-                  <option value="6-15 items">6–15 items (Home office / garage cleanout)</option>
-                  <option value="16-50 items">16–50 items (Small business / IT cleanout)</option>
-                  <option value="50+ items">50+ items (Commercial pallet / office load)</option>
-                </select>
-              </div>
-
-              <div class="form-field">
-                <label for="bf-wipe">Data Handling Preference</label>
-                <select id="bf-wipe" name="notes">
-                  <option value="Standard intake & storage wipe/destruction">
-                    Standard intake &amp; storage wipe/destruction
-                  </option>
-                  <option value="Includes laptops/PCs/drives needing priority data wipe">
-                    Includes laptops/PCs/drives needing priority data wipe
-                  </option>
-                  <option value="No storage media (monitors, printers, cables, peripherals)">
-                    No storage media (monitors, printers, cables, peripherals)
-                  </option>
-                </select>
-              </div>
-
-              <div class="form-field full-width">
-                <label for="bf-devices">What electronics are you dropping off or scheduling for pickup? *</label>
-                <textarea
-                  id="bf-devices"
-                  name="deviceList"
-                  rows="3"
-                  placeholder="Example: 3 Dell laptops, 2 desktop towers, 1 laser printer, box of cables & power supplies"
-                  required
-                ></textarea>
-              </div>
-            </div>
-
-            <div
-              id="booking-error"
-              style="display: none; margin-top: 14px; color: #ffd21e; font-weight: 700; font-size: 0.92rem"
-            ></div>
-
-            <div style="margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
-              <button type="submit" class="btn btn-primary" id="bf-submit-btn">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                </svg>
-                <span id="bf-submit-btn-label">Confirm Appointment &amp; Add to Calendar</span>
-              </button>
-              <span style="font-size: 0.88rem; color: var(--muted)">
-                Free intake service · Instant booking ID + Google Calendar &amp; .ICS download
-              </span>
-            </div>
-          </form>
-
-          <div class="booking-confirm-box" id="booking-confirm-box" role="status" aria-live="polite">
-            <h3 id="confirm-title">Appointment Scheduled!</h3>
-            <p id="confirm-summary" style="color: var(--text); font-size: 0.96rem; margin-bottom: 16px"></p>
-            <div style="display: flex; flex-wrap: wrap; gap: 12px">
-              <a id="confirm-gcal-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="16" y1="2" x2="16" y2="6"></line>
-                  <line x1="8" y1="2" x2="8" y2="6"></line>
-                  <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
-                <span>Add to Google Calendar</span>
-              </a>
-              <a id="confirm-ics-btn" href="#" class="btn btn-secondary">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                <span>Download .ICS Calendar File</span>
-              </a>
-              <a id="confirm-sms-btn" href="#" class="btn btn-secondary">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-                <span>Text Confirmation to (321) 396-2008</span>
-              </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- STOP 03 (#how-it-works) — Three-Stage Intake & Recovery Process -->
+      <!-- STOP 03 (#how-it-works) — One-Card-at-a-Time Pop-Up Book Process Cards -->
       <section class="stage-stop" id="how-it-works" aria-label="How It Works">
-        <div class="stage-panel">
-          <div class="stop-kicker-row">
-            <span class="stop-kicker">03 / THREE-STAGE INTAKE, WIPE &amp; RECOVERY</span>
-            <span class="stop-telemetry">STOP 03 / 06 · PROCESS</span>
-          </div>
-
-          <h2>How OnlineRecycle.net Works</h2>
-          <p>
-            Every drop-off and pickup follows a documented intake workflow designed to keep reusable hardware in
-            circulation and route end-of-life material through proper recovery streams.
-          </p>
-
-          <div class="grid">
-            <div class="card">
-              <div class="step-number">1</div>
-              <h3>Pick a Window on Our Calendar</h3>
+        <!-- Card 02: Spins in from the LEFT -->
+        <div class="spin-card-stage align-left">
+          <article
+            class="spin-card"
+            id="card-process-1"
+            data-fly-dir="from-left"
+            data-flippable="true"
+            data-card-index="2"
+          >
+            <div class="stop-kicker-row">
+              <span class="stop-kicker">03.1 / STEP 01 · CALENDAR WINDOW</span>
+              <span class="card-direction-badge">STOP 03 / 06 · PROCESS</span>
+            </div>
+            <div class="card-face-front">
+              <div class="card-flip-header">
+                <div class="step-number">1</div>
+                <span class="stop-telemetry">HOW IT WORKS</span>
+              </div>
+              <h2>Pick a Window on Our Calendar</h2>
               <p>
                 Select a 30-minute Sorrento drop-off slot or a 2-hour Central Florida pickup window directly on our
                 scheduler above.
               </p>
             </div>
-            <div class="card">
-              <div class="step-number">2</div>
-              <h3>Bring or Hand Off Your Items</h3>
+            <div class="card-face-back">
+              <div class="metric-label">STEP 01 TECHNICAL DETAIL · DISPATCH WINDOWS</div>
+              <h3 style="margin-top: 8px">Direct Sorrento &amp; Route Scheduling</h3>
+              <ul class="spec-list">
+                <li><strong>Sorrento Drop-Off:</strong> Nine daily 30-minute intake windows between 8:00 AM and 5:30 PM.</li>
+                <li><strong>Central FL Route Pickup:</strong> Five daily 2-hour windows across Lake, Orange, and Seminole Counties.</li>
+                <li><strong>Instant Calendar Record:</strong> Generates a booking reference ID, Google Calendar link, and .ICS file on submit.</li>
+              </ul>
+            </div>
+            <div class="card-flip-bar">
+              <button type="button" class="card-flip-btn" aria-expanded="false">
+                <span>Flip for Detail</span>
+              </button>
+              <a class="btn btn-secondary" href="#book" data-select-service="dropoff">Book Slot</a>
+            </div>
+          </article>
+        </div>
+
+        <!-- Card 03: Spins in from the RIGHT -->
+        <div class="spin-card-stage align-right">
+          <article
+            class="spin-card"
+            id="card-process-2"
+            data-fly-dir="from-right"
+            data-flippable="true"
+            data-card-index="3"
+          >
+            <div class="stop-kicker-row">
+              <span class="stop-kicker">03.2 / STEP 02 · HARDWARE HANDOFF</span>
+              <span class="card-direction-badge">STOP 03 / 06 · PROCESS</span>
+            </div>
+            <div class="card-face-front">
+              <div class="card-flip-header">
+                <div class="step-number">2</div>
+                <span class="stop-telemetry">INTAKE STAGING</span>
+              </div>
+              <h2>Bring or Hand Off Your Items</h2>
               <p>
                 Tell us what you have so we can prepare for workstations, laptops, phones, servers, networking gear,
-                printers, cables, and&nbsp;batteries.
+                game consoles, discs, stereos, cables, and&nbsp;batteries.
               </p>
             </div>
-            <div class="card">
-              <div class="step-number">3</div>
-              <h3>We Wipe, Reuse, and Recycle</h3>
+            <div class="card-face-back">
+              <div class="metric-label">STEP 02 TECHNICAL DETAIL · BATCH STAGING</div>
+              <h3 style="margin-top: 8px">Household &amp; Commercial Batch Intake</h3>
+              <ul class="spec-list">
+                <li><strong>Batch Tiers:</strong> 1–5 items, 6–15 items, 16–50 items, or 50+ commercial pallet loads.</li>
+                <li><strong>Immediate Separation:</strong> Data-bearing drives and lithium battery packs are isolated at intake.</li>
+                <li><strong>Direct Dispatch Line:</strong> Call or text <a href="tel:+13213962008" style="color: var(--accent)">(321) 396-2008</a> for curbside or loading-dock coordination.</li>
+              </ul>
+            </div>
+            <div class="card-flip-bar">
+              <button type="button" class="card-flip-btn" aria-expanded="false">
+                <span>Flip for Detail</span>
+              </button>
+              <a class="btn btn-secondary" href="#book" data-select-service="pickup">Request Pickup</a>
+            </div>
+          </article>
+        </div>
+
+        <!-- Card 04: Spins in DIAGONALLY from Top-Left -->
+        <div class="spin-card-stage align-left">
+          <article
+            class="spin-card"
+            id="card-process-3"
+            data-fly-dir="from-diag-tl"
+            data-flippable="true"
+            data-card-index="4"
+          >
+            <div class="stop-kicker-row">
+              <span class="stop-kicker">03.3 / STEP 03 · WIPE &amp; RECOVERY</span>
+              <span class="card-direction-badge">STOP 03 / 06 · PROCESS</span>
+            </div>
+            <div class="card-face-front">
+              <div class="card-flip-header">
+                <div class="step-number">3</div>
+                <span class="stop-telemetry">MEDIA &amp; MATERIAL</span>
+              </div>
+              <h2>We Wipe, Reuse, and Recycle</h2>
               <p>
                 Storage media is wiped or physically destroyed. Tested working gear is refurbished for resale, and
                 non-resalable material is routed through responsible recycling&nbsp;streams.
               </p>
             </div>
-          </div>
+            <div class="card-face-back">
+              <div class="metric-label">STEP 03 TECHNICAL DETAIL · SANITIZATION &amp; SORT</div>
+              <h3 style="margin-top: 8px">Storage Sanitization &amp; Material Streams</h3>
+              <ul class="spec-list">
+                <li><strong>Drive Handling:</strong> SSDs and HDDs are pulled for multi-pass erasure or physical destruction.</li>
+                <li><strong>Component Reuse:</strong> Tested working systems, consoles, and audio decks are refurbished for secondary use.</li>
+                <li><strong>Material Recovery:</strong> Non-working boards, chassis steel, aluminum, and copper wiring enter commodity recovery.</li>
+              </ul>
+            </div>
+            <div class="card-flip-bar">
+              <button type="button" class="card-flip-btn" aria-expanded="false">
+                <span>Flip for Detail</span>
+              </button>
+              <a class="btn btn-secondary" href="#accepted">Accepted Gear</a>
+            </div>
+          </article>
         </div>
       </section>
 
-      <!-- STOP 04 (#accepted) — Accepted Equipment & Data Handling Standards -->
+      <!-- STOP 04 (#accepted) — Accepted Equipment, Media Security & Pan/Zoom Visual Inspection -->
       <section class="stage-stop" id="accepted" aria-label="Accepted Equipment and Data Standards">
-        <div class="stage-panel">
-          <div class="stop-kicker-row">
-            <span class="stop-kicker">04 / ACCEPTED HARDWARE &amp; STORAGE MEDIA STANDARDS</span>
-            <span class="stop-telemetry">STOP 04 / 06 · DEVICES</span>
-          </div>
+        <!-- Card 05: Spins/Unfolds in from ABOVE -->
+        <div class="spin-card-stage align-right">
+          <article
+            class="spin-card spin-card-medium"
+            id="card-gear-computing"
+            data-fly-dir="from-above"
+            data-flippable="true"
+            data-card-index="5"
+          >
+            <div class="stop-kicker-row">
+              <span class="stop-kicker">04.1 / COMPUTING, MOBILE &amp; STORAGE SECURITY</span>
+              <span class="stop-telemetry">STOP 04 / 06 · DEVICES</span>
+            </div>
+            <div class="card-face-front">
+              <h2>Equipment We Accept &amp; Media Security</h2>
+              <p>
+                From single household laptops to multi-pallet office cleanouts, we process computing, networking, and
+                peripheral hardware with strict storage media&nbsp;separation.
+              </p>
+              <div class="category-chip-grid">
+                <div class="category-chip">
+                  <div class="metric-label">COMPUTING &amp; SERVERS</div>
+                  <h3>PCs, Laptops &amp; Rack Gear</h3>
+                  <p>Desktop towers, workstations, MacBooks, notebooks, rackmount servers, NAS units, motherboards, GPUs, RAM, and processors.</p>
+                </div>
+                <div class="category-chip">
+                  <div class="metric-label">MOBILE &amp; OFFICE</div>
+                  <h3>Phones, Tablets &amp; Peripherals</h3>
+                  <p>Smartphones, tablets, enterprise switches, routers, firewalls, monitors, docking stations, printers, cables, and UPS battery backups.</p>
+                </div>
+                <div class="category-chip">
+                  <div class="metric-label">STORAGE SECURITY</div>
+                  <h3>SSD / HDD Wipe &amp; Destruction</h3>
+                  <p>Solid-state and magnetic drives are separated at intake for multi-pass erasure or physical destruction before any chassis refurbishment.</p>
+                </div>
+              </div>
+            </div>
+            <div class="card-face-back">
+              <div class="metric-label">04.1 TECHNICAL SPEC · ENTERPRISE &amp; HOUSEHOLD IT</div>
+              <h3 style="margin-top: 8px">Intake Checklist for Computing &amp; Storage</h3>
+              <ul class="spec-list">
+                <li><strong>Servers &amp; Racks:</strong> 1U–4U rack servers, blade enclosures, patch panels, managed switches, and UPS towers.</li>
+                <li><strong>Workstations &amp; Portables:</strong> All x86 and Apple Silicon laptops, desktops, all-in-ones, and engineering workstations.</li>
+                <li><strong>Storage Media:</strong> NVMe M.2, SATA SSD, 2.5&quot;/3.5&quot; HDD, SAS enterprise drives, and external arrays.</li>
+              </ul>
+            </div>
+            <div class="card-flip-bar">
+              <button type="button" class="card-flip-btn" aria-expanded="false">
+                <span>Flip for Spec Checklist</span>
+              </button>
+              <a class="btn btn-primary" href="#book" data-select-service="dropoff">Schedule a Drop-Off</a>
+            </div>
+          </article>
+        </div>
 
-          <h2>Equipment We Accept &amp; Media Security</h2>
-          <p>
-            From single household laptops to multi-pallet office cleanouts, we process computing, networking, and
-            peripheral hardware with strict storage media&nbsp;separation.
-          </p>
-
-          <div class="grid">
-            <div class="card">
-              <div class="metric-label">COMPUTING &amp; SERVERS</div>
-              <h3 style="margin-top: 8px">PCs, Laptops &amp; Rack Gear</h3>
-              <p>
-                Desktop towers, workstations, MacBooks, notebooks, rackmount servers, NAS units, motherboards, GPUs,
-                RAM, and processors.
-              </p>
+        <!-- Card 06: Spins in DIAGONALLY from Bottom-Right -->
+        <div class="spin-card-stage align-left">
+          <article
+            class="spin-card spin-card-medium"
+            id="card-gear-media-audio"
+            data-fly-dir="from-diag-br"
+            data-flippable="true"
+            data-card-index="6"
+          >
+            <div class="stop-kicker-row">
+              <span class="stop-kicker">04.2 / GAME SYSTEMS, DIGITAL MEDIA &amp; STEREO AUDIO</span>
+              <span class="stop-telemetry">STOP 04 / 06 · DEVICES</span>
             </div>
-            <div class="card">
-              <div class="metric-label">MOBILE &amp; OFFICE</div>
-              <h3 style="margin-top: 8px">Phones, Tablets &amp; Peripherals</h3>
+            <div class="card-face-front">
+              <h2>Game Consoles, Discs &amp; Home / Car Audio</h2>
               <p>
-                Smartphones, tablets, enterprise switches, routers, firewalls, monitors, docking stations, printers,
-                cables, and UPS battery backups.
+                Alongside computers and office hardware, we accept modern and retro game systems, optical disc collections,
+                and home or car stereo components.
               </p>
+              <div class="category-chip-grid">
+                <div class="category-chip">
+                  <div class="metric-label">GAME SYSTEMS</div>
+                  <h3>Game Systems</h3>
+                  <p>Consoles and handhelds, controllers, cables and accessories.</p>
+                </div>
+                <div class="category-chip">
+                  <div class="metric-label">DIGITAL MEDIA</div>
+                  <h3>Digital Media</h3>
+                  <p>Game discs and cartridges, DVDs, Blu-rays and CDs.</p>
+                </div>
+                <div class="category-chip">
+                  <div class="metric-label">HOME AUDIO</div>
+                  <h3>Home Audio</h3>
+                  <p>Receivers, amplifiers, speakers, soundbars and home stereo systems.</p>
+                </div>
+                <div class="category-chip">
+                  <div class="metric-label">CAR AUDIO</div>
+                  <h3>Car Audio</h3>
+                  <p>Head units and car stereos, amplifiers and subwoofers.</p>
+                </div>
+              </div>
             </div>
-            <div class="card">
-              <div class="metric-label">STORAGE SECURITY</div>
-              <h3 style="margin-top: 8px">SSD / HDD Wipe &amp; Destruction</h3>
-              <p>
-                Solid-state and magnetic drives are separated at intake for multi-pass erasure or physical destruction
-                before any chassis refurbishment.
-              </p>
+            <div class="card-face-back">
+              <div class="metric-label">04.2 TECHNICAL SPEC · CONSOLES, MEDIA &amp; AUDIO</div>
+              <h3 style="margin-top: 8px">Accepted Entertainment &amp; Stereo Hardware</h3>
+              <ul class="spec-list">
+                <li><strong>Game Consoles &amp; Handhelds:</strong> PlayStation, Xbox, Nintendo, Steam Deck, retro cartridge decks, docks, and controllers.</li>
+                <li><strong>Optical &amp; Cartridge Media:</strong> Video game discs, cartridges, movie DVDs, Blu-rays, 4K UHD discs, and audio CDs.</li>
+                <li><strong>Home &amp; Car Stereo:</strong> Stereo receivers, power amplifiers, bookshelf/floor speakers, soundbars, DIN head units, and subwoofers.</li>
+              </ul>
             </div>
-            <div class="card">
-              <div class="metric-label">GAME SYSTEMS</div>
-              <h3 style="margin-top: 8px">Game Systems</h3>
-              <p>
-                Consoles and handhelds, controllers, cables and accessories.
-              </p>
-            </div>
-            <div class="card">
-              <div class="metric-label">DIGITAL MEDIA</div>
-              <h3 style="margin-top: 8px">Digital Media</h3>
-              <p>
-                Game discs and cartridges, DVDs, Blu-rays and CDs.
-              </p>
-            </div>
-            <div class="card">
-              <div class="metric-label">HOME AUDIO</div>
-              <h3 style="margin-top: 8px">Home Audio</h3>
-              <p>
-                Receivers, amplifiers, speakers, soundbars and home stereo systems.
-              </p>
-            </div>
-            <div class="card">
-              <div class="metric-label">CAR AUDIO</div>
-              <h3 style="margin-top: 8px">Car Audio</h3>
-              <p>
-                Head units and car stereos, amplifiers and subwoofers.
-              </p>
-            </div>
-          </div>
-
-          <div class="cta-wrap">
-            <a class="btn btn-primary" href="#book" data-select-service="dropoff">Schedule a Drop-Off</a>
-            <a class="btn btn-secondary" href="#book" data-select-service="pickup">Schedule a Free Pickup</a>
-            <a
-              class="btn btn-secondary"
-              href="mailto:collaboration@youandinotai.com?subject=OnlineRecycle.net%20Equipment%20or%20Service%20Inquiry"
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
+            <div class="card-flip-bar">
+              <button type="button" class="card-flip-btn" aria-expanded="false">
+                <span>Flip for Accepted List</span>
+              </button>
+              <a
+                class="btn btn-secondary"
+                href="mailto:collaboration@youandinotai.com?subject=OnlineRecycle.net%20Equipment%20or%20Service%20Inquiry"
               >
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                <polyline points="22,6 12,13 2,6"></polyline>
-              </svg>
-              <span>Email Equipment / Bulk Cleanout Inquiry</span>
-            </a>
-          </div>
+                <span>Bulk Cleanout Inquiry</span>
+              </a>
+            </div>
+          </article>
+        </div>
+
+        <!-- Card 07: Zooming & Left-to-Right / Right-to-Left Panning Hardware & Route Inspection Stage -->
+        <div class="spin-card-stage align-right">
+          <article
+            class="spin-card spin-card-medium"
+            id="card-inspection-panzoom"
+            data-fly-dir="from-left"
+            data-card-index="7"
+          >
+            <div class="stop-kicker-row">
+              <span class="stop-kicker">04.3 / OPTICAL SCAN · ROUTE &amp; HARDWARE INSPECTION</span>
+              <span class="stop-telemetry">ZOOM &amp; PAN TELEMETRY</span>
+            </div>
+            <h2>Central Florida Coverage &amp; Intake Scan</h2>
+            <p>
+              Inspect our tri-county Central Florida pickup grid, enterprise server bay recovery flow, and console/audio
+              intake schematic below.
+            </p>
+
+            <div class="pan-zoom-viewport" id="pan-zoom-viewport" aria-label="Interactive zooming and panning technical inspection diagrams">
+              <img
+                class="pan-zoom-plate active"
+                id="pz-plate-0"
+                data-plate-index="0"
+                alt="Central Florida tri-county pickup map showing Sorrento hub and Lake, Orange, and Seminole Counties"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 420'%3E%3Crect width='800' height='420' fill='%230a0b0d'/%3E%3Cg stroke='%23232832' stroke-width='1'%3E%3Cpath d='M0 70h800M0 140h800M0 210h800M0 280h800M0 350h800M100 0v420M200 0v420M300 0v420M400 0v420M500 0v420M600 0v420M700 0v420'/%3E%3C/g%3E%3Cpolygon points='150,70 370,60 390,260 170,290' fill='%2312151a' stroke='%23ffd21e' stroke-width='2.5'/%3E%3Cpolygon points='390,110 640,95 670,240 390,260' fill='%23161a22' stroke='%23f4f1ea' stroke-width='2'/%3E%3Cpolygon points='370,260 660,240 690,375 340,385' fill='%2312151a' stroke='%23ffd21e' stroke-width='2'/%3E%3Ccircle cx='355' cy='145' r='11' fill='%23ffd21e'/%3E%3Ccircle cx='355' cy='145' r='26' fill='none' stroke='%23ffd21e' stroke-width='2' stroke-dasharray='5 4'/%3E%3Cpath d='M355 145 L510 175 L520 315 L260 210 Z' fill='none' stroke='%23ffd21e' stroke-width='1.8' stroke-dasharray='6 4'/%3E%3Ctext x='190' y='125' fill='%23f4f1ea' font-family='monospace' font-size='18' font-weight='bold'%3ELAKE COUNTY%3C/text%3E%3Ctext x='440' y='155' fill='%23f4f1ea' font-family='monospace' font-size='18' font-weight='bold'%3ESEMINOLE COUNTY%3C/text%3E%3Ctext x='430' y='330' fill='%23f4f1ea' font-family='monospace' font-size='18' font-weight='bold'%3EORANGE COUNTY%3C/text%3E%3Ctext x='375' y='138' fill='%23ffd21e' font-family='monospace' font-size='15' font-weight='bold'%3ESORRENTO HUB (32776)%3C/text%3E%3C/svg%3E"
+              />
+              <img
+                class="pan-zoom-plate"
+                id="pz-plate-1"
+                data-plate-index="1"
+                alt="Enterprise server rack and workstation motherboard media sanitization schematic"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 420'%3E%3Crect width='800' height='420' fill='%230a0b0d'/%3E%3Cg stroke='%23232832' stroke-width='1'%3E%3Cpath d='M0 60h800M0 120h800M0 180h800M0 240h800M0 300h800M0 360h800M120 0v420M240 0v420M360 0v420M480 0v420M600 0v420M720 0v420'/%3E%3C/g%3E%3Crect x='90' y='55' width='260' height='310' rx='8' fill='%2312151a' stroke='%23ffd21e' stroke-width='2.5'/%3E%3Crect x='115' y='85' width='210' height='45' fill='%231a1e25' stroke='%23f4f1ea' stroke-width='1.5'/%3E%3Crect x='115' y='145' width='210' height='45' fill='%231a1e25' stroke='%23ffd21e' stroke-width='1.5'/%3E%3Crect x='115' y='205' width='210' height='45' fill='%231a1e25' stroke='%23f4f1ea' stroke-width='1.5'/%3E%3Crect x='430' y='75' width='280' height='270' rx='8' fill='%2312151a' stroke='%23f4f1ea' stroke-width='2'/%3E%3Ccircle cx='570' cy='210' r='68' fill='none' stroke='%23ffd21e' stroke-width='3'/%3E%3Ccircle cx='570' cy='210' r='24' fill='%23ffd21e'/%3E%3Ctext x='115' y='305' fill='%23ffd21e' font-family='monospace' font-size='16' font-weight='bold'%3ERACK &amp; PC INTAKE%3C/text%3E%3Ctext x='465' y='115' fill='%23f4f1ea' font-family='monospace' font-size='16' font-weight='bold'%3ESSD / HDD WIPE BAY%3C/text%3E%3C/svg%3E"
+              />
+              <img
+                class="pan-zoom-plate"
+                id="pz-plate-2"
+                data-plate-index="2"
+                alt="Game systems, optical disc media, and home and car stereo receiver inspection diagram"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 420'%3E%3Crect width='800' height='420' fill='%230a0b0d'/%3E%3Cg stroke='%23232832' stroke-width='1'%3E%3Cpath d='M0 70h800M0 140h800M0 210h800M0 280h800M0 350h800M130 0v420M260 0v420M390 0v420M520 0v420M650 0v420'/%3E%3C/g%3E%3Ccircle cx='210' cy='210' r='95' fill='%2312151a' stroke='%23ffd21e' stroke-width='3'/%3E%3Ccircle cx='210' cy='210' r='28' fill='%230a0b0d' stroke='%23f4f1ea' stroke-width='2'/%3E%3Crect x='370' y='95' width='340' height='100' rx='8' fill='%2312151a' stroke='%23f4f1ea' stroke-width='2'/%3E%3Crect x='370' y='225' width='340' height='100' rx='8' fill='%2312151a' stroke='%23ffd21e' stroke-width='2.5'/%3E%3Ccircle cx='430' cy='275' r='26' fill='none' stroke='%23ffd21e' stroke-width='2.5'/%3E%3Ccircle cx='650' cy='275' r='26' fill='none' stroke='%23ffd21e' stroke-width='2.5'/%3E%3Ctext x='125' y='345' fill='%23ffd21e' font-family='monospace' font-size='16' font-weight='bold'%3EDVD / BLU-RAY / GAME DISCS%3C/text%3E%3Ctext x='395' y='150' fill='%23f4f1ea' font-family='monospace' font-size='16' font-weight='bold'%3ECONSOLES &amp; HANDHELDS%3C/text%3E%3Ctext x='475' y='280' fill='%23ffd21e' font-family='monospace' font-size='16' font-weight='bold'%3EHOME &amp; CAR STEREO%3C/text%3E%3C/svg%3E"
+              />
+              <div class="pan-zoom-hud-overlay">
+                <span id="pz-readout-top">BAND 01 / CENTRAL FL TRI-COUNTY ROUTE GRID</span>
+                <span id="pz-readout-bottom">ZOOM 1.18x · PAN L↔R ACTIVE</span>
+              </div>
+            </div>
+
+            <div class="pan-zoom-controls" role="group" aria-label="Inspection diagram band selector">
+              <button type="button" class="viewport-band-btn active" data-band-index="0">01 Route Map</button>
+              <button type="button" class="viewport-band-btn" data-band-index="1">02 Rack &amp; PC</button>
+              <button type="button" class="viewport-band-btn" data-band-index="2">03 Consoles &amp; Audio</button>
+            </div>
+          </article>
         </div>
       </section>
 
-      <!-- STOP 05 (#faq) — Frequently Asked Questions -->
-      <section class="stage-stop" id="faq" aria-label="Frequently Asked Questions">
-        <div class="stage-panel">
-          <div class="stop-kicker-row">
-            <span class="stop-kicker">05 / SERVICE COVERAGE &amp; OPERATIONS FAQ</span>
-            <span class="stop-telemetry">STOP 05 / 06 · FAQ</span>
-          </div>
-
-          <h2>Frequently Asked Questions</h2>
-
-          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <div class="faq-question" itemprop="name">Where can I recycle electronics for free in Central Florida?</div>
-            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text">
-                OnlineRecycle.net offers free electronics drop-off in Sorrento and free pickup throughout Central
-                Florida, including Lake County, Orange County, and Seminole&nbsp;County.
-              </p>
+      <!-- STOP 05 (#faq) — FAQ & Honest Count-Up Service Telemetry Meters -->
+      <section class="stage-stop" id="faq" aria-label="Frequently Asked Questions and Service Telemetry">
+        <!-- Card 08: Spins in DIAGONALLY from Top-Right -->
+        <div class="spin-card-stage align-left">
+          <article
+            class="spin-card spin-card-medium"
+            id="card-faq"
+            data-fly-dir="from-diag-tr"
+            data-card-index="8"
+          >
+            <div class="stop-kicker-row">
+              <span class="stop-kicker">05.1 / SERVICE COVERAGE &amp; OPERATIONS FAQ</span>
+              <span class="stop-telemetry">STOP 05 / 06 · FAQ</span>
             </div>
-          </div>
 
-          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <div class="faq-question" itemprop="name">What electronics do you accept?</div>
-            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text">
-                We accept computers, laptops, servers, networking gear, phones, tablets, printers, gaming consoles,
-                cables, batteries, and most other consumer or office electronics. If it plugs in or has a battery, book
-                a slot or ask&nbsp;us.
-              </p>
-            </div>
-          </div>
+            <h2>Frequently Asked Questions</h2>
 
-          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <div class="faq-question" itemprop="name">Do you take game consoles, games, DVDs and stereos?</div>
-            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text">
-                Yes. We accept game consoles, handhelds, video games, movie discs, DVDs, Blu-rays, CDs, and home and car stereo equipment. You can bring them for drop-off in Sorrento or book a scheduled pickup through our calendar.
-              </p>
+            <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <div class="faq-question" itemprop="name">Where can I recycle electronics for free in Central Florida?</div>
+              <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p itemprop="text">
+                  OnlineRecycle.net offers free electronics drop-off in Sorrento and free pickup throughout Central
+                  Florida, including Lake County, Orange County, and Seminole&nbsp;County.
+                </p>
+              </div>
             </div>
-          </div>
 
-          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <div class="faq-question" itemprop="name">Do you offer secure data destruction?</div>
-            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text">
-                Yes. Devices are assessed for storage media and handled through wipe or physical destruction workflows
-                before resale or recycling. Customers should still factory-reset devices before turning them in
-                whenever&nbsp;possible.
-              </p>
+            <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <div class="faq-question" itemprop="name">What electronics do you accept?</div>
+              <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p itemprop="text">
+                  We accept computers, laptops, servers, networking gear, phones, tablets, printers, gaming consoles,
+                  cables, batteries, and most other consumer or office electronics. If it plugs in or has a battery, book
+                  a slot or ask&nbsp;us.
+                </p>
+              </div>
             </div>
-          </div>
 
-          <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <div class="faq-question" itemprop="name">Who operates this service?</div>
-            <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text">
-                OnlineRecycle.net is operated by Trash Or Treasure Online Recycler LLC as a for-profit recycling,
-                resale, pickup, and refurbishment service in Sorrento, Florida. Customer purchases and bookings are
-                commercial service&nbsp;transactions.
-              </p>
+            <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <div class="faq-question" itemprop="name">Do you take game consoles, games, DVDs and stereos?</div>
+              <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p itemprop="text">
+                  Yes. We accept game consoles, handhelds, video games, movie discs, DVDs, Blu-rays, CDs, and home and car stereo equipment. You can bring them for drop-off in Sorrento or book a scheduled pickup through our calendar.
+                </p>
+              </div>
             </div>
-          </div>
+
+            <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <div class="faq-question" itemprop="name">Do you offer secure data destruction?</div>
+              <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p itemprop="text">
+                  Yes. Devices are assessed for storage media and handled through wipe or physical destruction workflows
+                  before resale or recycling. Customers should still factory-reset devices before turning them in
+                  whenever&nbsp;possible.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <div class="faq-question" itemprop="name">Who operates this service?</div>
+              <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p itemprop="text">
+                  OnlineRecycle.net is operated by Trash Or Treasure Online Recycler LLC as a for-profit recycling,
+                  resale, pickup, and refurbishment service in Sorrento, Florida. Customer purchases and bookings are
+                  commercial service&nbsp;transactions.
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Card 09: Spins in from BELOW — Honest Count-Up Service Telemetry Meters -->
+        <div class="spin-card-stage align-right">
+          <article
+            class="spin-card spin-card-medium"
+            id="card-telemetry-meters"
+            data-fly-dir="from-below"
+            data-card-index="9"
+          >
+            <div class="stop-kicker-row">
+              <span class="stop-kicker">05.2 / VERIFIED OPERATIONS TELEMETRY</span>
+              <span class="stop-telemetry">LIVE COUNT-UP METERS</span>
+            </div>
+
+            <h2>Verified Coverage &amp; Scheduling Meters</h2>
+            <p>
+              Real operational parameters for Sorrento drop-off and Central Florida pickup routes—no invented statistics.
+            </p>
+
+            <div class="telemetry-meters-grid" id="telemetry-meters-grid">
+              <div class="telemetry-meter-card">
+                <div class="telemetry-meter-top">
+                  <span class="telemetry-meter-num" data-count-target="3">3</span>
+                  <span class="telemetry-meter-unit">COUNTIES SERVED</span>
+                </div>
+                <div class="telemetry-meter-bar">
+                  <div class="telemetry-meter-fill" data-meter-fill="1"></div>
+                </div>
+                <p class="telemetry-meter-caption">Lake, Orange, and Seminole Counties on scheduled pickup routes.</p>
+              </div>
+
+              <div class="telemetry-meter-card">
+                <div class="telemetry-meter-top">
+                  <span class="telemetry-meter-num" data-count-target="7">7</span>
+                  <span class="telemetry-meter-unit">DAYS / WEEK</span>
+                </div>
+                <div class="telemetry-meter-bar">
+                  <div class="telemetry-meter-fill" data-meter-fill="1"></div>
+                </div>
+                <p class="telemetry-meter-caption">Mon–Sun 8:00 AM – 6:00 PM intake &amp; dispatch window.</p>
+              </div>
+
+              <div class="telemetry-meter-card">
+                <div class="telemetry-meter-top">
+                  <span class="telemetry-meter-num" data-count-target="30">30</span>
+                  <span class="telemetry-meter-unit">MIN DROP-OFF SLOTS</span>
+                </div>
+                <div class="telemetry-meter-bar">
+                  <div class="telemetry-meter-fill" data-meter-fill="1"></div>
+                </div>
+                <p class="telemetry-meter-caption">Reserved Sorrento drop-off windows (plus 2-hour pickup windows).</p>
+              </div>
+
+              <div class="telemetry-meter-card">
+                <div class="telemetry-meter-top">
+                  <span class="telemetry-meter-num" data-count-target="6">6</span>
+                  <span class="telemetry-meter-unit">JOURNEY STOPS</span>
+                </div>
+                <div class="telemetry-meter-bar">
+                  <div class="telemetry-meter-fill" data-meter-fill="1"></div>
+                </div>
+                <p class="telemetry-meter-caption">Overview, Schedule, Process, Accepted Gear, FAQ, and Terms.</p>
+              </div>
+            </div>
+
+            <div class="cta-wrap">
+              <a class="btn btn-primary" href="#book" data-select-service="dropoff">Book Drop-Off</a>
+              <a class="btn btn-secondary" href="#book" data-select-service="pickup">Request Free Pickup</a>
+            </div>
+          </article>
         </div>
       </section>
     </main>
@@ -973,7 +1168,7 @@
       </div>
     </div>
 
-    <!-- 3D Stage, Floating Header Orbit Mark & Scroll Journey Controller -->
+    <!-- 3D Stage, Pop-Up Book Spin Cards, Pan/Zoom Imagery, Count-Up Meters & Scroll Journey Controller -->
     <script>
       (function () {
         const SECTION_STOPS = [
@@ -987,12 +1182,22 @@
 
         const STOP_KEYFRAMES = [
           { zoom: 1.0, camX: 0.0, camY: 0.0, pitchX: 0.48, tiltY: -0.24, rollZ: 0.1, detail: 0.35 },
-          { zoom: 1.46, camX: 0.16, camY: -0.06, pitchX: 0.86, tiltY: 0.36, rollZ: -0.2, detail: 0.76 },
-          { zoom: 1.58, camX: -0.2, camY: 0.1, pitchX: 1.12, tiltY: -0.38, rollZ: 0.28, detail: 0.86 },
-          { zoom: 1.38, camX: 0.18, camY: 0.14, pitchX: 1.34, tiltY: 0.26, rollZ: -0.32, detail: 0.94 },
-          { zoom: 1.62, camX: -0.14, camY: -0.08, pitchX: 0.92, tiltY: -0.42, rollZ: 0.22, detail: 1.0 },
+          { zoom: 1.44, camX: 0.22, camY: -0.05, pitchX: 0.86, tiltY: 0.36, rollZ: -0.2, detail: 0.76 },
+          { zoom: 1.56, camX: 0.24, camY: 0.08, pitchX: 1.12, tiltY: -0.38, rollZ: 0.28, detail: 0.86 },
+          { zoom: 1.38, camX: -0.22, camY: 0.12, pitchX: 1.34, tiltY: 0.26, rollZ: -0.32, detail: 0.94 },
+          { zoom: 1.58, camX: 0.2, camY: -0.06, pitchX: 0.92, tiltY: -0.42, rollZ: 0.22, detail: 1.0 },
           { zoom: 0.88, camX: 0.0, camY: 0.16, pitchX: 0.32, tiltY: 0.0, rollZ: 0.0, detail: 0.42 }
         ];
+
+        const FLIGHT_VECTORS = {
+          'from-left': { x: -240, y: 24, z: -180, rx: 14, ry: 38, rz: -7 },
+          'from-right': { x: 240, y: 24, z: -180, rx: 14, ry: -38, rz: 7 },
+          'from-diag-tl': { x: -210, y: -150, z: -200, rx: 28, ry: 32, rz: -10 },
+          'from-diag-tr': { x: 210, y: -150, z: -200, rx: 28, ry: -32, rz: 10 },
+          'from-diag-br': { x: 210, y: 150, z: -200, rx: -28, ry: -32, rz: 10 },
+          'from-above': { x: 0, y: -190, z: -200, rx: 42, ry: -12, rz: 4 },
+          'from-below': { x: 0, y: 170, z: -160, rx: -24, ry: 8, rz: -3 }
+        };
 
         function lerp(a, b, t) {
           return a + (b - a) * t;
@@ -1034,7 +1239,7 @@
           }
           let activeIdx = 0;
           let intra = 0;
-          const triggerLine = vh * 0.44;
+          const triggerLine = vh * 0.48;
           for (let i = 0; i < SECTION_STOPS.length - 1; i++) {
             const el = document.getElementById(SECTION_STOPS[i].id);
             if (!el) continue;
@@ -1064,8 +1269,8 @@
         const labelEl = document.getElementById('journey-readout-label');
         const headerEl = document.querySelector('.site-header');
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const wrapEl = document.querySelector('.wrap');
         const overviewEl = document.getElementById('overview');
+        const spinCards = Array.from(document.querySelectorAll('.spin-card'));
 
         if (mobileMenuBtn && headerEl) {
           mobileMenuBtn.addEventListener('click', function () {
@@ -1087,6 +1292,51 @@
           });
         }
 
+        // Tap-to-flip card handlers
+        document.querySelectorAll('.spin-card[data-flippable="true"]').forEach(function (card) {
+          const flipBtn = card.querySelector('.card-flip-btn');
+          if (!flipBtn) return;
+          flipBtn.addEventListener('click', function () {
+            const flipped = card.classList.toggle('is-flipped');
+            flipBtn.setAttribute('aria-expanded', flipped ? 'true' : 'false');
+            const span = flipBtn.querySelector('span');
+            if (span) {
+              span.textContent = flipped ? 'Flip Back' : 'Flip for Detail';
+            }
+          });
+        });
+
+        // Pan & Zoom band switcher
+        const pzPlates = Array.from(document.querySelectorAll('.pan-zoom-plate'));
+        const pzBtns = Array.from(document.querySelectorAll('.viewport-band-btn'));
+        const pzReadoutTop = document.getElementById('pz-readout-top');
+        const pzReadoutBottom = document.getElementById('pz-readout-bottom');
+        const BAND_TITLES = [
+          'BAND 01 / CENTRAL FL TRI-COUNTY ROUTE GRID',
+          'BAND 02 / RACK & WORKSTATION MEDIA SANITIZATION BAY',
+          'BAND 03 / CONSOLES, OPTICAL MEDIA & STEREO AUDIO DECK'
+        ];
+        let activeBandIdx = 0;
+
+        function setInspectionBand(idx) {
+          activeBandIdx = idx;
+          pzPlates.forEach(function (p, i) {
+            p.classList.toggle('active', i === idx);
+          });
+          pzBtns.forEach(function (b, i) {
+            b.classList.toggle('active', i === idx);
+          });
+          if (pzReadoutTop) {
+            pzReadoutTop.textContent = BAND_TITLES[idx] || BAND_TITLES[0];
+          }
+        }
+        pzBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            const idx = parseInt(btn.getAttribute('data-band-index') || '0', 10);
+            setInspectionBand(idx);
+          });
+        });
+
         const stageCanvas = document.getElementById('onlinerecycle-stage-canvas');
         const markCanvas = document.getElementById('onlinerecycle-header-mark');
         const lineCanvas = document.getElementById('onlinerecycle-header-line');
@@ -1098,10 +1348,166 @@
           stageCanvas.setAttribute('data-stage-mode', 'reduced-motion');
         }
 
-        let hdrHeightCss = 119;
-        let coldCardTopCss = 702;
+        let hdrHeightCss = 64;
+        let coldCardTopCss = 640;
         let journey = readJourneyState();
         let currentSectionFloat = journey.sectionFloat;
+
+        // Count-up telemetry meters state
+        const meterGrid = document.getElementById('telemetry-meters-grid');
+        const countNums = Array.from(document.querySelectorAll('[data-count-target]'));
+        const meterFills = Array.from(document.querySelectorAll('[data-meter-fill]'));
+        let metersTriggered = false;
+        let metersStartMs = 0;
+
+        function syncTelemetryMeters(nowMs) {
+          if (!meterGrid) return;
+          if (prefersReducedMotion) {
+            countNums.forEach(function (el) {
+              el.textContent = el.getAttribute('data-count-target') || '0';
+            });
+            meterFills.forEach(function (el) {
+              el.style.setProperty('--meter-scale', '1');
+            });
+            return;
+          }
+          const rect = meterGrid.getBoundingClientRect();
+          const vh = Math.max(window.innerHeight, 1);
+          const inView = rect.top <= vh * 0.88 && rect.bottom >= 40;
+          if (inView && !metersTriggered) {
+            metersTriggered = true;
+            metersStartMs = nowMs;
+          }
+          if (!metersTriggered) {
+            countNums.forEach(function (el) {
+              el.textContent = '0';
+            });
+            meterFills.forEach(function (el) {
+              el.style.setProperty('--meter-scale', '0.06');
+            });
+            return;
+          }
+          const elapsed = Math.max(nowMs - metersStartMs, 0);
+          const progress = Math.min(elapsed / 1400, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          countNums.forEach(function (el) {
+            const target = parseInt(el.getAttribute('data-count-target') || '0', 10);
+            const current = progress >= 1 ? target : Math.max(1, Math.round(target * eased));
+            el.textContent = String(current);
+          });
+          meterFills.forEach(function (el) {
+            el.style.setProperty('--meter-scale', eased.toFixed(3));
+          });
+        }
+
+        // Scroll-driven 3D Spin & Flight Card Controller (Pop-Up Book One-Card-at-a-Time)
+        function syncSpinCards() {
+          if (prefersReducedMotion) {
+            spinCards.forEach(function (card) {
+              card.style.transform = 'none';
+              card.style.opacity = '1';
+              card.style.visibility = 'visible';
+              card.setAttribute('data-flight-state', 'settled');
+            });
+            return;
+          }
+          const vh = Math.max(window.innerHeight, 1);
+          const isMobile = window.innerWidth <= 760;
+          const vwScaleX = isMobile ? 0.12 : 1.0;
+          const vwScaleY = isMobile ? 0.42 : 1.0;
+          const rotScale = isMobile ? 0.65 : 1.0;
+
+          spinCards.forEach(function (card) {
+            const dirKey = card.getAttribute('data-fly-dir') || 'from-left';
+            const vec = FLIGHT_VECTORS[dirKey] || FLIGHT_VECTORS['from-left'];
+            const stage = card.parentElement || card;
+            const rect = stage.getBoundingClientRect();
+            const isScheduler = card.id === 'card-scheduler';
+
+            if (isScheduler && window.scrollY <= 36) {
+              card.style.transform = 'translate3d(0px, 140px, 0px)';
+              card.style.opacity = '0';
+              card.style.visibility = 'hidden';
+              card.setAttribute('data-flight-state', 'offscreen');
+              return;
+            }
+
+            let flightT = 0; // 0 = settled, >0 = entering mid-flight, <0 = exiting
+            if (isScheduler) {
+              if (rect.top > vh * 0.58) {
+                flightT = Math.min(Math.max((rect.top - vh * 0.58) / (vh * 0.36), 0), 1);
+              } else if (rect.bottom < vh * 0.36) {
+                flightT = -Math.min(Math.max((vh * 0.36 - rect.bottom) / (vh * 0.28), 0), 1);
+              }
+            } else {
+              const centerY = rect.top + rect.height * 0.5;
+              const enterSettledY = vh * 0.56;
+              const enterStartY = vh * 0.94;
+              const exitStartY = vh * 0.42;
+              const exitEndY = vh * 0.08;
+
+              if (centerY > enterSettledY) {
+                flightT = Math.min(Math.max((centerY - enterSettledY) / Math.max(enterStartY - enterSettledY, 1), 0), 1);
+              } else if (centerY < exitStartY) {
+                flightT = -Math.min(Math.max((exitStartY - centerY) / Math.max(exitStartY - exitEndY, 1), 0), 1);
+              }
+            }
+
+            if (card.contains(document.activeElement) && document.activeElement !== document.body) {
+              flightT = 0;
+            }
+
+            const absT = Math.abs(flightT);
+            if (absT < 0.02) {
+              card.style.transform =
+                'perspective(1100px) translate3d(0px, 0px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)';
+              card.style.opacity = '1';
+              card.style.visibility = 'visible';
+              card.setAttribute('data-flight-state', 'settled');
+              return;
+            }
+
+            if (absT >= 0.98) {
+              card.style.transform = 'translate3d(0px, 80px, 0px)';
+              card.style.opacity = '0';
+              card.style.visibility = 'hidden';
+              card.setAttribute('data-flight-state', 'offscreen');
+              return;
+            }
+
+            const easeT = flightT >= 0 ? Math.pow(absT, 1.1) : -Math.pow(absT, 1.15);
+            const tx = Math.round(vec.x * easeT * vwScaleX);
+            const ty = Math.round(vec.y * Math.abs(easeT) * (flightT < 0 ? -0.65 : 1) * vwScaleY);
+            const tz = isScheduler ? 0 : Math.round(vec.z * Math.abs(easeT) * (isMobile ? 0.35 : 0.75));
+            const rx = ((isScheduler ? vec.rx * 0.35 : vec.rx) * easeT * rotScale).toFixed(1);
+            const ry = ((isScheduler ? vec.ry * 0.35 : vec.ry) * easeT * rotScale).toFixed(1);
+            const rz = ((isScheduler ? vec.rz * 0.35 : vec.rz) * easeT * rotScale).toFixed(1);
+            const cardScale = (1 - Math.abs(easeT) * (isMobile ? 0.14 : 0.06)).toFixed(3);
+            const rawAlpha =
+              absT <= 0.72 ? 1 - absT * 0.28 : Math.max(0, ((1 - absT) / 0.26) * 0.8);
+            const alpha = rawAlpha.toFixed(2);
+
+            card.style.visibility = 'visible';
+            card.style.transform =
+              'perspective(1100px) translate3d(' +
+              tx +
+              'px, ' +
+              ty +
+              'px, ' +
+              tz +
+              'px) rotateX(' +
+              rx +
+              'deg) rotateY(' +
+              ry +
+              'deg) rotateZ(' +
+              rz +
+              'deg) scale(' +
+              cardScale +
+              ')';
+            card.style.opacity = alpha;
+            card.setAttribute('data-flight-state', absT >= 0.18 && absT <= 0.82 ? 'mid-flight' : 'transitioning');
+          });
+        }
 
         function syncStop01Slide() {
           if (!overviewEl) return;
@@ -1137,6 +1543,7 @@
             else btn.removeAttribute('aria-current');
           });
           syncStop01Slide();
+          syncSpinCards();
         }
 
         let tapLabelTimer = null;
@@ -1205,12 +1612,12 @@
           seed = (seed * 16807) % 2147483647;
           return (seed - 1) / 2147483646;
         }
-        for (let i = 0; i < 160; i++) {
+        for (let i = 0; i < 120; i++) {
           stars.push({
             x: nextRand(),
             y: nextRand(),
-            r: 0.8 + nextRand() * 1.4,
-            signal: i % 9 === 0
+            r: 0.8 + nextRand() * 1.3,
+            signal: i % 8 === 0
           });
         }
 
@@ -1227,13 +1634,12 @@
             lineCanvas.height = 4;
           }
           hdrHeightCss = headerEl ? headerEl.offsetHeight : 64;
-          const wrapPadTop = wrapEl ? parseFloat(window.getComputedStyle(wrapEl).paddingTop || '28') || 28 : 28;
           coldCardTopCss =
             vw <= 760
-              ? Math.round(Math.max(vh * 0.52, hdrHeightCss + 240))
-              : Math.round(vh * 0.6);
+              ? Math.round(Math.max(vh * 0.56, hdrHeightCss + 250))
+              : Math.round(vh * 0.62);
           if (overviewEl) {
-            const padTop = Math.max(coldCardTopCss - hdrHeightCss - wrapPadTop, 160);
+            const padTop = Math.max(coldCardTopCss - hdrHeightCss, 200);
             overviewEl.style.setProperty('--stop01-pad-top', padTop + 'px');
           }
         }
@@ -1251,17 +1657,35 @@
           const t = prefersReducedMotion || journey.atFooter ? 2.4 : (nowMs - mountMs) / 1000;
           const kf = interpolateKeyframe(currentSectionFloat);
 
-          // 1. Render Full-Viewport 3D Stage
+          // Update Zooming & Left-to-Right / Right-to-Left Panning Inspection Plates
+          if (!prefersReducedMotion && pzPlates.length > 0) {
+            const panPhase = Math.sin(t * 0.75 + currentSectionFloat * 1.4);
+            const zoomPhase = 1.14 + 0.12 * Math.sin(t * 0.52 + currentSectionFloat * 0.9);
+            const panX = (panPhase * 7.5).toFixed(2);
+            const panY = (Math.cos(t * 0.48) * 2.5).toFixed(2);
+            pzPlates.forEach(function (plate) {
+              plate.style.setProperty('--pan-x', panX + '%');
+              plate.style.setProperty('--pan-y', panY + '%');
+              plate.style.setProperty('--zoom-s', zoomPhase.toFixed(3));
+            });
+            if (pzReadoutBottom) {
+              pzReadoutBottom.textContent =
+                'ZOOM ' + zoomPhase.toFixed(2) + 'x · PAN ' + (panPhase >= 0 ? 'L→R +' : 'R→L ') + panX + '%';
+            }
+          }
+
+          syncTelemetryMeters(nowMs);
+
+          // 1. Render Full-Viewport 3D Stage Transparently Over Carbon-Fibre Weave
           if (stageCanvas) {
             const ctx = stageCanvas.getContext('2d');
             if (ctx) {
               const w = stageCanvas.width;
               const h = stageCanvas.height;
               const dpr = Math.max(w / Math.max(window.innerWidth, 1), 1);
-              ctx.fillStyle = '#0A0B0D';
-              ctx.fillRect(0, 0, w, h);
+              ctx.clearRect(0, 0, w, h);
 
-              // Subtle starfield & telemetry grid
+              // Subtle telemetry nodes over the carbon-fibre weave
               for (let i = 0; i < stars.length; i++) {
                 const s = stars[i];
                 const sx = ((s.x * w + t * (s.signal ? 14 : 5) + kf.camX * 90) % w + w) % w;
@@ -1274,10 +1698,10 @@
 
               const stageMidCss = (hdrHeightCss + coldCardTopCss) * 0.5;
               const stageBandCss = Math.max(coldCardTopCss - hdrHeightCss, 180);
-              const cx = w * (0.5 + kf.camX * 0.16);
+              const cx = w * (0.5 + kf.camX * 0.18);
               const cy = stageMidCss * dpr + h * (kf.camY * 0.12);
-              const maxScaleByBand = (stageBandCss * dpr * 0.37) / 2.52;
-              const maxScaleByWidth = (w * 0.4) / 3.58;
+              const maxScaleByBand = (stageBandCss * dpr * 0.38) / 2.52;
+              const maxScaleByWidth = (w * 0.42) / 3.58;
               const baseScale = Math.min(maxScaleByBand, maxScaleByWidth) * kf.zoom;
 
               function project(pt) {
@@ -1302,11 +1726,11 @@
               ctx.lineTo(cx + wingSpan, cy);
               ctx.stroke();
 
-              // Inner Core Hull (surface detail rises as camera zooms in)
+              // Inner Core Hull (translucent dark carbon core so weave breathes around it)
               ctx.save();
               ctx.beginPath();
               ctx.arc(cx, cy, coreHullRadius, 0, Math.PI * 2);
-              ctx.fillStyle = kf.detail > 0.55 ? '#1A1E25' : '#12151A';
+              ctx.fillStyle = kf.detail > 0.55 ? 'rgba(26, 30, 37, 0.82)' : 'rgba(18, 21, 26, 0.78)';
               ctx.fill();
               ctx.lineWidth = 1.8 * dpr;
               ctx.strokeStyle = '#3A3F45';
