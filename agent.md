@@ -26,7 +26,7 @@ Joshua is the sole authority. An agent performs the task Joshua assigns, records
 - Official-platform governance actions use designated official bridges; they never route through OmniRoute.
 - Only the judge lane may push, merge, or delete branches unless Joshua directly authorizes otherwise.
 - Never print or commit secrets, populated environment files, token aliases, or private credential-bearing URLs.
-- Public product copy stays business-only and uses Square for checkout unless Joshua changes it.
+- Public product copy stays business-only and names no payment processor publicly unless Joshua changes it.
 - Account emails (Joshua, 2026-10-23): `ebaytrashortreasure@gmail.com` is the older email the Date App needs, for the Square and PayPal merchant accounts only. Everything else uses `joshlcoleman@gmail.com`. Rule: `CLAUDE.md`, "Account mapping".
 
 ## Completion Record

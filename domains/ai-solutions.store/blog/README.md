@@ -1,5 +1,7 @@
 # Ai-Solutions.Store Blog
 
+> History, kept for the record. Not current. (Domain not renewed).
+
 SEO posts published to `ai-solutions.store/blog`. Each file is Markdown with YAML frontmatter (`title`, `slug`, `description`, `keywords`, `date`, `author`, `canonical`).
 
 | File | Slug | Primary keyword | Words |

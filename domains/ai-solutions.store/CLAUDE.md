@@ -1,7 +1,8 @@
 # CLAUDE.md — Ai-Solutions-Store/ai-solutions
 
-This is the org repo behind the **Ai-Solutions.Store** Paperclip company (`AIS`,
-`74bbc177-bc32-4457-806e-fa6bbe6314fd`, Mission Control `http://127.0.0.1:3917`).
+> History, kept for the record. Not current. (Domain not renewed; Paperclip retired).
+
+This is the historical org repo behind the **Ai-Solutions.Store** company.
 Local clone on Sabretooth: `C:\Ai-Solutions.store`. Only branch: `main`.
 
 Doctrine lives in the monorepo and is not duplicated here: read
@@ -13,9 +14,9 @@ with ANT), last 30 node-ledger lines; journal + one ledger line at the end.
 
 Rules that bind here exactly as in the monorepo: judges are the Codex and
 Claude lanes only and are the only actors that push, merge, or delete;
-harnesses never push; one OmniRoute URL `http://192.168.0.8:20128/v1` (Claude
-never routes through it); secrets by name only, values live in `.env` and the
-Paperclip secret store; public copy is business-only and the monorepo's
+harnesses never push; one OmniRoute URL (address in the node env file; Claude
+never routes through it); secrets by name only, values live in `.env`;
+public copy is business-only and the monorepo's
 canonical-guard word list applies to every file here even though this repo has
 no hook (a judge scans before pushing).
 

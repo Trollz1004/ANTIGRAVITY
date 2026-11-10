@@ -1,5 +1,7 @@
 # Claude CLI Integration Prompt for Your Apps
 
+> History, kept for the record. Not current.
+
 Copy and paste this prompt to Claude CLI (Opus) to integrate any of your apps with the Youandinotai Lead Generation CRM.
 
 ---

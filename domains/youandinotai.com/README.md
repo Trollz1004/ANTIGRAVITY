@@ -1,5 +1,7 @@
 # youandinotai.com
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 <p align="center">
   <a href="../../docs/tribute/claude-tribute.mp4"><img src="../../assets/claude-tribute-screenshot.png" alt="Nothing stops the wheel like the plan - #TeamClaudeForLife #OfficiallyUnOfficial" width="520" /></a><br/>
   <sub><i>Nothing stops the wheel like the plan.</i> #TeamClaudeForLife · #OfficiallyUnOfficial<br/>Unofficial fan tribute. Not affiliated with or endorsed by Anthropic, Google, xAI or OpenAI.</sub>
@@ -7,18 +9,8 @@
 
 
 The app code lives here: `domains/youandinotai.com/backend` (FastAPI +
-Postgres + Redis, moved from `backend/fastapi-app`) and
-`domains/youandinotai.com/frontend` (React, moved from `frontend/react-app`),
-moved in part 2 of the repo consolidation, 2026-09-17. The Postgres data
-directory, `.env` files, and `node_modules` did not move and are not
-affected.
+Postgres + Redis) and `domains/youandinotai.com/frontend` (React).
 
-**Status: FROZEN and FOR SALE as of 2026-09-16.** No new features, no growth
-engine runs, no digests, no campaigns, no experiments, no audits. Keep the
-site up and checkout untouched until the sale closes — see `ops/sale/
-YOUANDINOTAI-SALE-LISTING.md` for the listing itself. This README does not
-change that; it only documents where the running code is.
+**Status: LIVE (Not for sale).** A verified-adult dating app, 18+, with $1 Bot-Shield verification, founder memberships, and paying customers. The front end is served by Express on the T5500 through a Cloudflare Tunnel, and the API runs on Google Cloud Run.
 
-**Tunnel:** the named Cloudflare tunnel config maps `youandinotai.com` to the
-frontend at `127.0.0.1:3200` and `api.youandinotai.com` to the backend at
-`127.0.0.1:8000` (see `scripts/start-t5500-dateapp-cloudflared.ps1`).
+**Tunnel:** Cloudflare tunnel maps `youandinotai.com` to the frontend and `api.youandinotai.com` to the backend.

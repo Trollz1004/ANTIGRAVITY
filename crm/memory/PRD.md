@@ -1,5 +1,7 @@
 # Youandinotai Marketing Automation Platform
 
+> History, kept for the record. Not current.
+
 ## Original Problem Statement
 Youandinotai.com marketing automation based off most populated cities - a social platform not just a date app, has message boards for charity and volunteer meetups. Looking for lead generation more than content creation - email maybe or fully automated anything. Multiple platforms: Youandinotai.com, recycle.org, ai-solutions.store, aidiesitall.website, about 12 apps all automated.
 

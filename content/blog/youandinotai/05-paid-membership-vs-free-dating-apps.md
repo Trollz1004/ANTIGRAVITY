@@ -24,7 +24,7 @@ Free also has a second, quieter cost: it makes fake and bot accounts nearly free
 
 ## What a paid, account-bound membership changes
 
-YouAndINotAI's membership model runs entirely through account-bound Square checkout — there's no free tier and no anonymous payment link floating separately from your account. That has two direct effects.
+YouAndINotAI's membership model runs entirely through account-bound checkout — there's no free tier and no anonymous payment link floating separately from your account. That has two direct effects.
 
 First, the platform's revenue comes from members finding the platform worth paying for, not from maximizing time spent scrolling. There's no engagement metric that pays better than the membership itself, so there's no structural reason to design the product around keeping you swiping instead of getting you to an actual conversation.
 

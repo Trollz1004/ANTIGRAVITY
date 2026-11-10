@@ -3027,7 +3027,7 @@ Schema: `HTTPValidationError`
 ## webhooks - POST /api/v1/webhooks/square-booking
 
 **Summary:** Square Booking Webhook
-**Description:** Handle Square booking webhooks for e-waste pickups (OnlineRecycle.org).
+**Description:** Handle Square booking webhooks for e-waste pickups (OnlineRecycle.net).
 
 ### Request
 

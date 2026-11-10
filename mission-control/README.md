@@ -1,4 +1,6 @@
-# JARVIS Dashboard (Mission Control)
+# OPSis Dashboard (Mission Control)
+
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
 
 <p align="center">
   <a href="../docs/tribute/claude-tribute.mp4"><img src="../assets/claude-tribute-screenshot.png" alt="Nothing stops the wheel like the plan - #TeamClaudeForLife #OfficiallyUnOfficial" width="520" /></a><br/>
@@ -6,15 +8,13 @@
 </p>
 
 
-Originally moved from `Trollz1004/hermes` `dashboard/jarvis` on 2026-09-17 by
+Originally moved from `Trollz1004/hermes` on 2026-09-17 by
 Joshua's direction, then folded from `ops/dashboard-jarvis` into this folder,
-`mission-control/`, by the repo consolidation (part 2) later the same day.
-This is the one canonical home; the hermes repo copy is left in place, not
-deleted, with a pointer README at `hermes/dashboard/jarvis/README.md`.
+`mission-control/`, by the repo consolidation. Renamed OPSis per standing canon.
 
-Serves at `http://192.168.0.8:9150/`. `crosslisting-os/` lives alongside this
+Serves at `http://127.0.0.1:9150/` (or port configured in node env). `crosslisting-os/` lives alongside this
 dashboard in this same folder — it is a separate app (the LLC crosslisting
-frontend), not a JARVIS panel.
+frontend), not an OPSis panel.
 
 Dispatch: `ops/handoffs/JARVIS-CONSOLIDATION-DISPATCH-2026-09-17.md` and
 `ops/handoffs/HERMES-DISPATCH-DREAM-WORLD-ENGINE.md`; also
@@ -112,7 +112,7 @@ Dispatch: `ops/handoffs/JARVIS-CONSOLIDATION-DISPATCH-2026-09-17.md` and
   Claude Code session with:
 
   ```
-  claude mcp add --transport http jarvis http://192.168.0.8:9150/mcp --header "Authorization: Bearer <JARVIS_MCP_TOKEN>"
+  claude mcp add --transport http opsis http://127.0.0.1:9150/mcp --header "Authorization: Bearer <OPSIS_MCP_TOKEN>"
   ```
 
 ## Board Room (specs/011-ultracode-house)

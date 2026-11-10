@@ -9,7 +9,7 @@ in one of these homes. Everything archived is in `archive/` with dated folders.
 - `backend/` — FastAPI API for api.youandinotai.com (:8000, venv at `backend/.venv`)
 - `apps/` — static/deploy surfaces (`youandinotai-static/` holds the public
   legal pages: privacy, terms, safety, child-safety, delete-account, community-guidelines)
-- `payments/` — Square statements, fee reports, proof screenshots
+- `payments/` — payment provider statements, fee reports, proof screenshots
 
 ## Infrastructure
 - `omniroute/` — model gateway (:20128) · `brain-mcp/`, `services/` — MCP servers

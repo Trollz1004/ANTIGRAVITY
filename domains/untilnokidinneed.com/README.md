@@ -1,8 +1,10 @@
 # Until No Kid In Need — landing page
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 A single-file static landing page (`index.html`) for the "Until No Kid In Need" mission
 brand, operated by Trash or Treasure Online Recycler LLC. It introduces the mission and
-links out to the family of platforms (Online Recycle, AI Solutions Store, DREAM Online)
+links out to the family of platforms (Online Recycle, DREAM Online)
 and to the public Open Collective page.
 
 No build step. No frameworks. No CDN scripts. The only external requests are to

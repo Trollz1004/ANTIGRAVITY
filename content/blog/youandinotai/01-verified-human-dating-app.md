@@ -23,14 +23,14 @@ Most dating apps never had to solve this problem when they launched, because fak
 YouAndINotAI's verification layer is called Bot-Shield. It's a three-step checkpoint that runs before a badge ever appears on a profile:
 
 1. **Start Bot-Shield** — the human checkpoint begins from the public launch flow. There's no separate download, no side app.
-2. **Pass the human check** — this step combines a liveness challenge with an account-bound Square payment. The liveness check confirms there's a live person present, not a static image or a scripted bot session. The payment step ties that person to a real financial account, not a burner email.
+2. **Pass the human check** — this step combines a liveness challenge with an account-bound payment. The liveness check confirms there's a live person present, not a static image or a scripted bot session. The payment step ties that person to a real financial account, not a burner email.
 3. **The badge is granted** — only after both checkpoints clear. Not one or the other.
 
 That badge shows up in two forms on a profile: a green "Verified" mark and a blue "Bot-Shield ✓" mark, so it's visible at a glance who has been through the check and who hasn't.
 
 ## Why the payment step matters as much as the liveness check
 
-It's tempting to think verification is only about the liveness challenge — the part that proves a human is physically present. But the account-bound checkout does something a liveness check alone can't: it raises the cost of running multiple fake accounts. Anonymous payment links are trivial to spin up over and over. An account-bound checkout tied to a real Square transaction is not. Pairing "prove you're a live person" with "prove you're one accountable account" is what makes the badge mean something instead of being a one-time trick a bot script could also pass.
+It's tempting to think verification is only about the liveness challenge — the part that proves a human is physically present. But the account-bound checkout does something a liveness check alone can't: it raises the cost of running multiple fake accounts. Anonymous payment links are trivial to spin up over and over. An account-bound checkout tied to a verified payment transaction is not. Pairing "prove you're a live person" with "prove you're one accountable account" is what makes the badge mean something instead of being a one-time trick a bot script could also pass.
 
 This is also why verification lives inside the real checkout path instead of being bolted on as a free, disposable step. A verification step that costs nothing to repeat gets repeated. One that's tied to a real account and a real payment does not.
 

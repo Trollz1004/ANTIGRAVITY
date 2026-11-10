@@ -29,7 +29,7 @@ To use YouAndINotAI, you must:
 - Not have been previously banned from the Platform
 - Complete the current Bot-Shield verification flow before using protected features
 
-Our current pre-launch verification flow uses the Bot-Shield challenge system plus a completed Square payment checkpoint. It is designed to deter automated signups and badge completed accounts. If we later add document or selfie-based identity verification, we will update these terms before that flow goes live.
+Our verification flow uses the Bot-Shield challenge system plus a completed payment checkpoint. It is designed to deter automated signups and badge completed accounts. If we later add document or selfie-based identity verification, we will update these terms before that flow goes live.
 
 ## 3. Account Registration and Security
 
@@ -50,7 +50,7 @@ You are responsible for keeping your login credentials secure. Do not share your
 The current Bot-Shield flow includes:
 
 - Completing the launch liveness challenge presented inside the Platform
-- Completing the linked Square payment checkpoint required for the badge
+- Completing the linked payment checkpoint required for the badge
 - Passing anti-bot and abuse screening tied to your account activity
 
 We record verification status, challenge state, and payment confirmation tied to your account. We do not currently claim a government-ID or selfie-based verification flow in production.
@@ -142,7 +142,7 @@ All prices are in US dollars. Prices may change, but existing subscriptions will
 
 ### 7.2 Payment Processing
 
-All payments are processed by **Square** through Square-hosted checkout links. By making a purchase, you also agree to Square's applicable checkout and payment terms. We do not store your full credit card information — Square handles that.
+All payments are processed by our authorized payment providers through secure checkout links. By making a purchase, you also agree to the applicable checkout and payment terms. We do not store your full credit card information — our payment processors handle that securely.
 
 ### 7.3 Subscription Auto-Renewal
 
@@ -156,7 +156,7 @@ The Founding Member monthly subscription ($14.99/month) **automatically renews**
 
 You can cancel your subscription at any time by:
 
-1. Using the subscription management link in your Square confirmation email
+1. Using the subscription management link in your purchase confirmation email
 2. Emailing joshlcoleman@gmail.com with the subject "Cancel Subscription"
 
 When you cancel:
@@ -268,7 +268,7 @@ To the maximum extent permitted by law:
 
 - **Trash Or Treasure Online Recycler LLC**, Joshua Coleman, and any affiliated parties shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or goodwill
 - Our total liability for any claim arising from your use of the platform shall not exceed the amount you have paid us in the **12 months** preceding the claim
-- We are not liable for the actions of other users, third-party services (Square, Google, V8 Cloud Verification, Cloudflare), or events beyond our reasonable control
+- We are not liable for the actions of other users, third-party services (payment processors, Google, V8 Cloud Verification, Cloudflare), or events beyond our reasonable control
 
 Some jurisdictions do not allow limitation of liability for certain types of damages. In those jurisdictions, our liability is limited to the maximum extent permitted by law.
 

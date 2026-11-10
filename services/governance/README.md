@@ -1,5 +1,7 @@
 # official-vote-service
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 Council ballots, carved out of `mission-control-v5` so that app can be retired
 without taking governance with it.
 

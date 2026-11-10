@@ -7,7 +7,7 @@ screensaver ("motion causes emotion"). Joshua explicitly wants this design.
 
 ## Known drift (Gemini's self-audit said NO DRIFT; judge scan found this)
 
-- `Graphy.tsx` presents "T5500 (192.168.0.15): COMMAND POST · push-to-main
+- `Graphy.tsx` presents "T5500 (address in the node env file): COMMAND POST · push-to-main
   authority" — retired IP, false authority. T5500 is the FUTURE Dream Online
   server, not a command post; the only push authority is the judge lane.
 - Node/edition claims in the HUD are Gemini's guesses, not telemetry.
