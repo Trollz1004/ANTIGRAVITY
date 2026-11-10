@@ -64,7 +64,7 @@ a split/flapping domain.
 
 - [ ] Which host (GitHub Pages vs. Cloudflare Pages) is the intended long-term home for
       `untilnokidinneed.com`.
-- [ ] Whether `onlinerecycle.net`, `ai-solutions.store`, and `dream-online.net` should
+- [ ] Whether `onlinerecycle.net`, `youandinotai.com`, and `dream-online.net` should
       all link back to this page, or whether cross-linking should go the other way too.
 - [ ] How the mission is funded is described only by linking to the Open Collective ledger — no allocation wording on this page (repo canonical-guard rule)
       (this draft deliberately omits one, per instructions).

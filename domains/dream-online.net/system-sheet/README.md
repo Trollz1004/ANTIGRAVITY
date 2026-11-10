@@ -1,5 +1,7 @@
 # DREAM Space the system sheet — design reference
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 This is a design mockup created in a visual design tool, exported as a
 standalone page. Treat it as a REFERENCE MOCKUP, not production code:
 the markup and inline styles carry the design's precise values — colors,

@@ -1,5 +1,7 @@
 # Ai-Solutions.Store Blog
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 > History, kept for the record. Not current. (Domain not renewed).
 
 SEO posts published to `ai-solutions.store/blog`. Each file is Markdown with YAML frontmatter (`title`, `slug`, `description`, `keywords`, `date`, `author`, `canonical`).

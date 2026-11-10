@@ -1,5 +1,7 @@
 # Getting Started with Create React App
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

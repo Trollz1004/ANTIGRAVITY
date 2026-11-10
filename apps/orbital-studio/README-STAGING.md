@@ -1,5 +1,7 @@
 # Orbital Studio — STAGED, NOT INTEGRATED
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 Source: Gemini AI Studio session "GEMINI / CLAUDE / CEO's / HERMES AGENT tasks",
 delivered by Joshua 2026-08-22, judge-reviewed at staging level only. The prize
 is `components/Graphy.tsx` — the 3D orbital knowledge-graph / AFK stream
