@@ -1,6 +1,6 @@
 ---
 name: t5500-node
-description: The finished state of the T5500 production node (192.168.0.15) and how to prove it. Load before touching any service, port, scheduled task, tunnel or watchdog on this node, and after every reboot.
+description: The finished state of the T5500 production node (T5500) and how to prove it. Load before touching any service, port, scheduled task, tunnel or watchdog on this node, and after every reboot.
 ---
 
 # T5500 node: finished state

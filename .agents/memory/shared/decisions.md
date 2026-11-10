@@ -9,7 +9,7 @@
 > Specifically dead as of 2026-08-26:
 > - **"T5500 = ANTIGRAVITY business authority. Sabretooth = DREAM Online MMO only.
 >   Final." (2026-07-09)** — false in both halves. There is **one** node,
->   Sabretooth, and it carries everything. `192.168.0.8` — the address the old
+>   Sabretooth, and it carries everything. `Sabretooth` — the address the old
 >   docs assign to T5500 — resolves to **SABRETOOTH itself** (verified by
 >   `Resolve-DnsName` and `Get-NetIPAddress`, 2026-08-26). No T5500 and no
 >   Alienware/Aurora host answers on this LAN. "Final" was a decision about a
@@ -45,12 +45,12 @@ stop at that line.
 
 ```
 hostname                    -> SABRETOOTH
-Get-NetIPAddress            -> 192.168.0.8   (this box)
-Resolve-DnsName 192.168.0.8 -> SABRETOOTH
+Get-NetIPAddress            -> Sabretooth   (this box)
+Resolve-DnsName Sabretooth  -> SABRETOOTH
 ```
 
-`192.168.0.8` **is this machine.** It is not a second computer. Every doc pairing
-"T5500" with `192.168.0.8` is naming Sabretooth under a dead node's name — which
+`Sabretooth` **is this machine.** It is not a second computer. Every doc pairing
+"T5500" with `Sabretooth` is naming Sabretooth under a dead node's name — which
 is how `.agents/memory/shared/current-state.md` ended up listing the *same IP*
 for both "Business node: T5500" and "DREAM node: Sabretooth". One box, described
 as two, for seven weeks.
@@ -82,7 +82,7 @@ The entry above is right that no T5500 *node* exists and that its instructions
 must not be followed. But it says "there is no T5500 to run it on", and read
 alone that over-corrects into "the machine does not exist." It does exist.
 
-**Role — dead.** No live T5500 on this LAN. `192.168.0.8` is Sabretooth, this
+**Role — dead.** No live T5500 on this LAN. `Sabretooth` is Sabretooth, this
 machine. Nothing deploys to a T5500 today. Every T5500/9020/`E:\` reference in
 the repo remains stale evidence, never an instruction.
 
@@ -104,9 +104,9 @@ mine.
 
 ## 2026-10-05: node map (Joshua)
 
-- **T5500 (`T5500-2-XEON-72`, `192.168.0.15`) is the production node.** It runs every live domain, the date app (frontend :3200, API :8000), Postgres :5432, Redis :6379, Ollama, the domains server :9160 and the cloudflared tunnel. Its keep-alive writes `C:\ANTIGRAVITY\ops\t5500\status.json` and `C:\ANTIGRAVITY\logs\t5500-keepalive.log`; it heals on its own and logs every heal.
-- **Alienware (`192.168.0.40`) is the dev node** and hosts Mission Control: JARVIS/OPSIS on :9150, operated by Hermes in the terminal. DREAM Online is built and tested there.
-- **Sabretooth (`192.168.0.8`) is retired and OFF by ruling.** Its work moved to the T5500 from the same SSD. Never probe, start, heal or route to it; show it as OFF BY RULING, never DOWN. Every `192.168.0.8` address and every "Sabretooth runs X" line in this repo is history.
+- **T5500 (`T5500-2-XEON-72`, `T5500`) is the production node.** It runs every live domain, the date app (frontend :3200, API :8000), Postgres :5432, Redis :6379, Ollama, the domains server :9160 and the cloudflared tunnel. Its keep-alive writes `C:\ANTIGRAVITY\ops\t5500\status.json` and `C:\ANTIGRAVITY\logs\t5500-keepalive.log`; it heals on its own and logs every heal.
+- **Alienware (`Alienware`) is the dev node** and hosts Mission Control: JARVIS/OPSIS on :9150, operated by Hermes in the terminal. DREAM Online is built and tested there.
+- **Sabretooth (`Sabretooth`) is retired and OFF by ruling.** Its work moved to the T5500 from the same SSD. Never probe, start, heal or route to it; show it as OFF BY RULING, never DOWN. Every `Sabretooth` address and every "Sabretooth runs X" line in this repo is history.
 - Other old boxes (OptiPlex 9020, i7k, Chromebook, Mini ASUS) stay OFF by ruling.
 - **Domains:** youandinotai.com is live behind the Cloudflare tunnel. onlinerecycle.net, dream-online.net and untilnokidinneed.com have a healthy origin and wait on nameservers. The AI store domain is undecided: do not renew it and do not build on it.
 - **Business Hermes:** a separate Hermes profile (not OPSIS) runs onlinerecycle.net, the date app and customer support on the Ollama models `joshlcoleman/fable` and `joshlcoleman/cfo` only, with health checks that fix on sight.

@@ -11,7 +11,7 @@ description: Paperclip on the T5500 at :3917 is the MARKETING command layer (com
  Hermes is JARVIS on :9119 and is fixing it now; OPSIS/JARVIS and Hermes own that work.
 - **Paperclip is marketing only** (`ANTIGRAVITY Marketing Co`, :3917). It is NOT Mission Control.
  The old PAPERWEIGHT kanban and WhatsApp/Telegram bridge are retired surfaces — do not revive them.
-- **Node topology:** the T5500 (`192.168.0.15`) is the only production node. Everything runs on it:
+- **Node topology:** the T5500 (`T5500`) is the only production node. Everything runs on it:
  repo `C:\ANTIGRAVITY`, Paperclip API `http://127.0.0.1:3917`, Hermes gateway
  `http://127.0.0.1:8642` (profile `paperclip-mc`). Alienware is dev only, never production.
  Sabretooth is not a node.

@@ -37,10 +37,10 @@
 
 - **did**: Answered Opus's three-part tasking (screen data sources, stale-file audit, tool verification).
   Verified with real terminal probes: Mission Control :3130 answers `identity: mission-agent-os` on
-  `192.168.0.15`; Hermes dashboard :9119 = 200; domains :9160, Paperclip :3917, OmniRoute :20128,
+  `T5500`; Hermes dashboard :9119 = 200; domains :9160, Paperclip :3917, OmniRoute :20128,
   date-app API :8000 (db/redis/square all connected, wallet rails proven), frontend :3200, Obsidian
   :27123 all UP. Runtime `.env` loaded silently — `NODE_NAME=T5500-2-XEON-72`,
-  `NODE_LAN_IP=192.168.0.15`, `OPENAI_COMPAT_BASE_URL=http://192.168.0.15:20128/v1` — the live env
+  `NODE_LAN_IP=T5500`, `OPENAI_COMPAT_BASE_URL=http://T5500:20128/v1` — the live env
   is clean; dead-node values live in generator scripts (`ops/env/augment-env.py` et al.).
 - **evidence**: `ops/handoffs/HERMES-T5500-SYNC-REPORT-2026-10-13.md` (full report);
   subagent artifacts `C:\Users\joshi\AppData\Local\hermes\cache\scratch\stale-file-audit.md`
