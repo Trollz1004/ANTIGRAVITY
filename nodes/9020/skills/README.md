@@ -8,4 +8,4 @@ skills/
     SKILL.md
 ```
 
-No skills are installed yet. This directory is a placeholder until the first skill lands.
+Installed skills include `devrel-content`. Layout follows the standard above.
