@@ -59,11 +59,11 @@ hour:
   ```
   schtasks /Create /TN "FableTierSEO-Hourly" /TR "node C:\ANTIGRAVITY\scripts\seo\schedule.mjs" /SC HOURLY /ST 00:00 /F
   ```
-- **Paperclip routine**: give a "process" agent this exact command on an
+- **Agent routine / runner**: give a process runner or task scheduler this exact command on an
   hourly cron/trigger and have it treat any non-zero exit from a child
   `post.mjs` invocation as a task worth surfacing, not silently swallowing.
 
-## How a Paperclip "process" agent should invoke this per account
+## How a scheduled runner or agent should invoke this per account
 
 1. One agent (or one scheduled invocation) per brand is enough — it fans out
    to all 5 platforms via `schedule.mjs`, or you can run one agent per

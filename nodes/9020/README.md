@@ -15,7 +15,7 @@ marketing-node/
   NODE.md                  Node identity: id, host, role, ports, platforms, guardrails
   AGENTS.md                Agent roster and roles on this node
   IDENTITY.md              Node/CEO identity notes
-  USER.md                  Josh (joshl) - the human on this node
+  USER.md                  Josh - the human on this node
   TOOLS.md                 Tools and services available on this host
   MEMORY.md                Durable memory index
   memory/                  Memory store
@@ -38,8 +38,7 @@ Use [[wikilinks]] between notes inside a vault; never link across vaults.
 ## Roadmap
 
 1. Confirm Ornith as node CEO agent (planned 2026-08-21; local ~5GB 9B Ollama model, chosen for built-in memory aspects) - pending final confirmation by Josh.
-2. Bring Paperclip up on port 3100 (installed, configured, not yet running).
-3. Tie SCC (Social Command Center) directly into Paperclip.
-4. Mission Control integration later, via node-agent (port 3140).
+2. Note on control plane: Paperclip is retired forever.
+3. Mission Control integration later, via node-agent (port 3140).
 
 Hard rule throughout: every piece of marketing content requires explicit approval from Josh before posting. No agent posts autonomously. See NODE.md.

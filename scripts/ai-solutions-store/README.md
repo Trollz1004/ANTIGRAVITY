@@ -1,3 +1,3 @@
-This folder is reserved for `ai-solutions.store` automation and deployment scripts.
+# ai-solutions-store (History)
 
-It is intentionally light right now because no repo-tracked site-specific scripts are active yet.
+The `ai-solutions.store` domain was retired and not renewed. Kept for historical reference only; no active scripts.

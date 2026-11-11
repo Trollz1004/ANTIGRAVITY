@@ -1,3 +1,5 @@
+History, kept for the record. Not current.
+
 # YouAndINotAI — Join
 
 Verified-human dating. Business product. Square checkout only (long URLs).
@@ -26,4 +28,4 @@ Verified-human dating. Business product. Square checkout only (long URLs).
 
 Do **not** use `square.link/u/...` short links. Always use `checkout.square.site` long URLs.
 
-LLC: Trash Or Treasure Online Recycler LLC · Contact: joshlcoleman@gmail.com
+LLC: Trash Or Treasure Online Recycler LLC · Contact: contact@youandinotai.com

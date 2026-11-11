@@ -1,3 +1,5 @@
+History, kept for the record. Not current.
+
 # Folded repos
 
 Content rescued from standalone GitHub repos before they were archived, under the

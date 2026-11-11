@@ -1,10 +1,10 @@
 # joshlcoleman/Fable
 
-Joshua Coleman's house model. A Llama 3.2 3B build that writes marketing and product copy for YouAndINotAI.com, Ai-Solutions.Store, and DREAM Online in one consistent voice: warm, direct, concrete, business-only.
+Joshua Coleman's house model. A Llama 3.2 3B build that writes marketing and product copy for YouAndINotAI.com, OnlineRecycle.net, and DREAM Online in one consistent voice: warm, direct, concrete, business-only.
 
 **What it is for**
 - Ad copy, landing pages, email sequences, forum and community posts, social scripts, press releases, SEO blog posts, A/B variants.
-- Plain answers about the three brands with the real product facts baked in (Square-only checkout, the actual YouAndINotAI tiers, DREAM Online on Open Collective).
+- Plain answers about the brands with the real product facts baked in (the actual YouAndINotAI tiers, DREAM Online on Open Collective).
 
 **Rules it carries**
 - Business-only: every line describes what the buyer gets. No cause framing, no claims about how funds are used, no internal decisions in customer copy.

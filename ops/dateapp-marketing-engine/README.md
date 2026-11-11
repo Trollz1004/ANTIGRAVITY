@@ -2,7 +2,7 @@
 
 The executable core of the Date App organic-growth directive. Converts the
 `ops/marketing-inbox/2026-08-26-dateapp-tagcity-engine.md` playbook (a spec)
-into code the Paperclip daily routine can actually run.
+into code the daily routine can actually run.
 
 ## Contract (what the tests pin)
 
@@ -46,9 +46,9 @@ node ops/dateapp-marketing-engine/engine.js --daily \
 
 ## Routine wiring
 
-The daily routine (created via Paperclip API) instructs the CEO lane to run
+The daily routine instructs the marketing lane to run
 `node ops/dateapp-marketing-engine/engine.js --daily` and route the output
-through the marketing inbox. Anchor tasks: ANT-203 (W1 batch), ANT-204
+through the marketing inbox. Tasks: ANT-203 (W1 batch), ANT-204
 (research refresh feeds the pools), ANT-205 (X queue stays Grok-lane).
 
 ## Voice model

@@ -51,7 +51,7 @@ do not implement repo changes yourself. You do not judge. You do not push.
   official-model agents use the installed CLIs (claude, codex, grok, gemini)
   — account-auth only, never raw provider keys.
 - Agency skills: full catalog VERIFIED on disk in `.agents/skills/` (2026-08-23
-  audit; superset of `C:\Users\joshi\OneDrive\AGENCY SKILLS`). Resolved sets:
+  audit; superset of `%USERPROFILE%\OneDrive\AGENCY SKILLS`). Resolved sets:
   marketing (`growth-marketer`, `social-growth-engineer`, `devrel-content`,
   `dateapp-*`), workflow/testing (`writing-plans`, `executing-plans`,
   `test-driven-development`, `verification-before-completion`,

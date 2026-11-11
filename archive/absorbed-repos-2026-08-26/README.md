@@ -1,3 +1,5 @@
+History, kept for the record. Not current.
+
 # Absorbed repositories — 2026-08-26
 
 Folding GitHub repositories into this monorepo so they can be archived without
@@ -94,7 +96,7 @@ longer rebuild:
 ## Addendum — `ANTIGRAVITYclip` joins the not-folded list (judge lane, 2026-08-26)
 
 Checked after the four above, and it lands the same way. The newer copy is local
-(`C:\Users\joshi\projects\ANTIGRAVITYclip`, 262 files excluding `node_modules`,
+(`%USERPROFILE%\projects\ANTIGRAVITYclip`, 262 files excluding `node_modules`,
 more recent than the GitHub remote), so it was assessed from there rather than
 from the repo.
 

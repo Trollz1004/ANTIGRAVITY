@@ -1,6 +1,8 @@
-# Paperclip OS + Freebuff CEO — custom adapter
+# Paperclip OS + Freebuff CEO — custom adapter (Historical)
 
-Revived 2026-08-23 at Joshua's direction on Sabretooth (192.168.0.8), and
+> **History Note (2026-11-09):** Paperclip is retired forever. This record is preserved for reference only.
+
+Revived 2026-08-23 at Joshua's direction on Sabretooth (address in the node env file), and
 designated **Mission Control** on 2026-08-25. Paperclip holds task governance
 on this node: the company board, org chart, issues, approvals, budgets, and
 heartbeats. Git delivery still runs only through the official first-party

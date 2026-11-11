@@ -1,7 +1,7 @@
 # OmniRoute Gateway — API Reference + Workflow Kit
 
 Generated 2026-09-03 from the installed package at
-`C:\Users\joshi\AppData\Roaming\npm\node_modules\omniroute\`, version **3.8.49**
+`%APPDATA%\npm\node_modules\omniroute\`, version **3.8.49**
 (VERIFIED — `package.json:3`: `"version": "3.8.49"`).
 
 Every claim below is marked **VERIFIED** (cites a `file:line` in the installed
@@ -18,8 +18,8 @@ work on this machine (per `C:\ANTIGRAVITY\CLAUDE.md`). It's a unified AI
 router/gateway (160+ providers, MCP/A2A, desktop, PWA) running as a local
 Node/Next.js service.
 
-- Base URL (Sabretooth, local): `http://192.168.0.8:20128/v1` — VERIFIED reachable (see Known State).
-- Base URL (other LAN nodes): `http://192.168.0.8:20128/v1` — VERIFIED **currently timing out**, see Known State.
+- Base URL (Sabretooth, local): `http://localhost:20128/v1` — VERIFIED reachable (see Known State).
+- Base URL (other LAN nodes): `http://<address in node env file>:20128/v1` — VERIFIED **currently timing out**, see Known State.
 - Env vars (names only, never values): `OPENAI_COMPAT_BASE_URL`, `OMNI_ROUTE_API_KEY`.
 
 ## Route table
@@ -112,9 +112,9 @@ A third, older envelope shape also exists in the codebase
 
 ## Known state — 2026-09-03
 
-- **LAN address unreachable.** `http://192.168.0.8:20128/v1/models`
+- **LAN address unreachable.** `http://<address in node env file>:20128/v1/models`
   **TIMES OUT** even from Sabretooth itself (VERIFIED: `curl --noproxy '*' -m 8`
-  → exit 28, no response in 8s). `http://192.168.0.8:20128/...` answers
+  → exit 28, no response in 8s). `http://localhost:20128/...` answers
   normally. `netstat -ano` shows the listener bound to `0.0.0.0:20128`
   (VERIFIED), owned by PID whose command line is
   `node ... omniroute\dist\server-ws.mjs` (VERIFIED via
@@ -183,4 +183,4 @@ Fix applied: `~/.omniroute/data/storage.sqlite` backed up to
 Verified after: `POST /api/v1/chat/completions` → **200**, `content: "OK"`,
 `model: codex/gpt-5.6-sol`, for `auto/best-coding` (100 s first call), `auto/best-reasoning`
 (6.8 s), `auto/best-fast` (11.5 s). `auto/fastest` is **not** a combo → 400.
-The `192.168.0.8` timeout (firewall) is a separate, still-open item.
+The LAN address timeout (firewall) is a separate, still-open item.

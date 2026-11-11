@@ -3,7 +3,7 @@
 > **Goal:** stop the drift loop. Every node auto-starts the same Claude
 > baseline at logon; a sentry per node writes health JSON to the OneDrive
 > Personal Vault; a single always-on dashboard on the mini-ASUS display
-> renders green/red blocks across every node, every Hermes, every aspect of
+> renders green/red blocks across every node, every OPSis desk, every aspect of
 > every service. Josh sees red, Josh tells Claude. Otherwise hands-off.
 >
 > **Memory protection:** two layers — Windows file ACLs (`lock-memory.ps1`)
@@ -63,8 +63,8 @@ Each node card shows three groups of green/red checks:
 - **docker** — docker_engine + each of the 5 prod containers
   (`uandinotai-app-prod`, `uandinotai-postgres-prod`, `uandinotai-redis-prod`,
   `uandinotai-nginx-prod`, `uandinotai-backup`)
-- **public surfaces** — youandinotai.com / onlinerecycle.org /
-  ai-solutions.store / dashboard.aidoesitall.website, with **content
+- **public surfaces** — youandinotai.com / onlinerecycle.net /
+  dream-online.net, with **content
   verification by `<title>` fragment match**, not just HTTP 200 (Josh's "200
   ≠ verified" rule)
 
@@ -104,5 +104,3 @@ Edit `sentry.py`:
   `URL_TITLE_EXPECTATIONS` for content verification
 
 Then `git push` from any node; bootstraps on the others pull it on next logon.
-
-#UntilNoKidInNeed

@@ -1,4 +1,6 @@
-# Paperclip Growth Engine — the "5 ways"
+# Paperclip Growth Engine — the "5 ways" (Historical)
+
+> **History Note (2026-11-09):** Paperclip is retired forever. This growth engine reference is preserved for history.
 
 The "5 ways to improve Paperclip in marketing / SEO / YouTube (faceless or
 animated, avatars ok)" deliverable, implemented as a daily routine engine that

@@ -40,7 +40,7 @@ The one rulebook for every AI platform that works in this repo (remote `origin`,
 | `scripts/` | `dream-stack.ps1` + `dream-stack.cmd`: self-healing supervisor for the whole stack on this node (identity-checked probes, restarts with back-off, logs in `%LOCALAPPDATA%\dream-stack\logs`, `-Install` registers the logon Scheduled Task "DREAM Stack"); Pester spec `dream-stack.Tests.ps1` |
 | `docs/` | `skills.md` (agent roster and skill matrix, Obsidian wikilinks), `fullstack-session.md` |
 | `dashboard/index.html`, `dashboard/applet.html` | Standalone static dashboards. No build step. |
-| `dashboard/jarvis/` | JARVIS HUD: a vanilla ES-module dashboard and a zero-dependency Node server |
+| `dashboard/jarvis/` | OPSis HUD: a vanilla ES-module dashboard and a zero-dependency Node server |
 | `dashboard/crosslisting/` | Crosslisting OS: full-stack TypeScript app for catalog, inventory and marketplace listings |
 
 The Hermes runtime (`%LOCALAPPDATA%\hermes`) and the Obsidian vault (`C:\DREAM\AlienwareDream`) are **not** in this repo.
@@ -49,17 +49,17 @@ The Hermes runtime (`%LOCALAPPDATA%\hermes`) and the Obsidian vault (`C:\DREAM\A
 
 | Node | IP | Role |
 |---|---|---|
-| **Alienware (this machine)**: i7-11700F, 40 GB RAM, AMD Radeon RX 6800 16 GB, 1 TB NVMe, 2.5 GbE, Windows 11 | `192.168.0.40` | Hosts this dashboard and the **Dream Online MMO** |
-| Sabertooth | `192.168.0.8` | OmniRoute model router (`:20128/v1`), Fable's Sentry, Mission Control |
+| **Alienware (this machine)**: i7-11700F, 40 GB RAM, AMD Radeon RX 6800 16 GB, 1 TB NVMe, 2.5 GbE, Windows 11 | *(address in node env file)* | Hosts this dashboard and the **Dream Online MMO** |
+| Sabertooth | *(address in node env file)* | OmniRoute model router (`:20128/v1`), Fable's Sentry, Mission Control |
 
-- The OmniRoute endpoint `http://192.168.0.8:20128/v1` is on **Sabertooth, not this node**. Nothing on `192.168.0.40` serves `:20128`. Call it only as a remote LAN service.
+- The OmniRoute endpoint `:20128/v1` is on **Sabertooth, not this node** (see node env file). Nothing on Alienware serves `:20128`. Call it only as a remote LAN service.
 - `dashboard/jarvis/server.mjs` reads `NODE_LAN_IP`, `ANTIGRAVITY_ROOT` and the OmniRoute URL from the repo `.env` (process.env wins, see `dashboard/jarvis/lib/config.mjs`). Start it from a plain shell, never from inside a Claude Code terminal: the Claude CLI bridge strips the nested-launch guard for its child, but the interactive launcher does not.
-- Hermes on this node (`%LOCALAPPDATA%\hermes`) is brand new (no history; not the Sabertooth Hermes). It runs through OmniRoute (`auto/best-fast`) with `opencode-free` as fallback; its web dashboard binds `127.0.0.1:9119`; the `unreal-engine` MCP (`http://127.0.0.1:8000/mcp`) is registered but stays DOWN until Unreal Editor 5.8+ runs its MCP server. Installing Unreal needs Joshua's explicit approval.
+- OPSis on this node (`%LOCALAPPDATA%\hermes`) is brand new (no history; not the Sabertooth Hermes). It runs through OmniRoute (`auto/best-fast`) with `opencode-free` as fallback; its web dashboard binds `127.0.0.1:9119`; the `unreal-engine` MCP (`http://127.0.0.1:8000/mcp`) is registered but stays DOWN until Unreal Editor 5.8+ runs its MCP server. Installing Unreal needs Joshua's explicit approval.
 - The GPU is AMD (no CUDA). Use ROCm, DirectML or Vulkan backends for local GPU work.
 
 ## Commands
 
-**JARVIS HUD** (`dashboard/jarvis`, npm):
+**OPSis HUD** (`dashboard/jarvis`, npm):
 ```bash
 npm ci
 npx vitest run          # 9 files, 87 tests
@@ -97,7 +97,7 @@ Invoke-Pester -Path .\scripts\dream-stack.Tests.ps1
 - Path aliases: `@` for `client/src`, `@shared` for `shared/`.
 - **Guardrails (enforced by tests, do not weaken):** no marketplace submission is automatic, and every listing needs approval. Available inventory (on-hand minus reserved) can never go negative. The activity ledger is append-only. Secrets stay server-side, and the browser sees only configuration status. Automation profiles cannot bypass approvals. Design doc: `docs/ARCHITECTURE.md`. Open work: `todo.md`.
 
-### JARVIS HUD (`dashboard/jarvis`)
+### OPSis HUD (`dashboard/jarvis`)
 - `index.html` has tab navigation (Dashboard, Mission Control, Agents, Knowledge Graph, Avatar, Widgets, Scenes, Image Gen, Claude CLI, Hermes AI, JARVIS, Crosslisting). It loads the `js/app.js`, `js/hermes-voice.js`, `js/jarvis/{jarvis,globe,avatar}.js` and `js/crosslisting.js` modules. Cesium comes from a CDN, and three.js/three-vrm render the avatar.
 - `server.mjs` is zero-dependency `node:http`. It serves static files (never `lib/`, `tests/`, `server.mjs` or package files) plus `/api/config`, `/api/omni/*` (an OmniRoute proxy that injects `OMNI_ROUTE_API_KEY`), `/api/agents`, `/api/nodes` (god's-eye probe of both LAN nodes, identity-checked, `lib/nodes.mjs`), `/api/vault/*`, `/api/house`, `/api/avatars` and `/health`. The repo root defaults to this checkout (override with `ANTIGRAVITY_ROOT`). The server reads secrets from `.env` at request time and never returns them.
 - `lib/bridge-routes.mjs` owns the Claude CLI bridge: `GET /api/claude/status`, `POST /api/claude/chat` (headless `claude -p --output-format stream-json` on account auth, streamed as Server-Sent Events), `POST /api/claude/stop`, `POST /api/launch/claude`, plus `GET /api/ollama/tags`, `POST /api/ollama/chat` (local Ollama as the same SSE contract), `GET /api/hermes/status`, `POST /api/hermes/chat` (a real Hermes turn in the named session `jarvis-hud`) and `GET /api/owner`. The bridge is loopback/own-IP only unless `DASHBOARD_BRIDGE_TOKEN` is set in `.env` and sent as `x-bridge-token`; the permission ceiling is `plan` unless `CLAUDE_BRIDGE_PERMISSION_MODE` raises it; `.env` files are denied to the CLI; foreign Origins and preflights get 403; one run at a time. Ollama's base comes from `JARVIS_OLLAMA_URL` or `OLLAMA_HOST` (`OLLAMA_API` in `.env` is a key, not a URL).
@@ -105,8 +105,8 @@ Invoke-Pester -Path .\scripts\dream-stack.Tests.ps1
 
 ## Conventions and constraints
 
-- **Skill files:** YAML frontmatter with `name` (kebab-case), `description` (60 characters or fewer), `version`, `author: Joshua (joshlcoleman), Hermes Agent`, `license: MIT`, `platforms`, `metadata.hermes.tags` and `metadata.hermes.related_skills`. Sections: When to Use, Quick Reference or Procedure, Pitfalls, Verification.
+- **Skill files:** YAML frontmatter with `name` (kebab-case), `description` (60 characters or fewer), `version`, `author: Joshua Coleman, Hermes Agent (OPSis)`, `license: MIT`, `platforms`, `metadata.hermes.tags` and `metadata.hermes.related_skills`. Sections: When to Use, Quick Reference or Procedure, Pitfalls, Verification.
 - **Privacy:** never commit `.env`, tokens, personal usernames or local absolute user paths (see commit `b758d49`). Crosslisting `README.md` and `todo.md` must not contain `antigravity`, `paperclip`, `nsfw`, `trollz` or `youandin`, and a test enforces this.
-- Service ports, by node (`dashboard/jarvis/lib/nodes.mjs` is the tested source of truth). Alienware `192.168.0.40`: JARVIS `:9150`, Hermes dashboard `127.0.0.1:9119`, Ollama `:11434`, Live NPC Lab `:9127`, DreamOps Bridge `:9133`, Crosslisting `:3000`, Obsidian Local REST `:27123`. Sabertooth `192.168.0.8`: OmniRoute `:20128/v1`, Fable's Sentry `:9140`, Mission Control `:3151`. Each one is up only where it has been installed. Check `/health`, `/api/nodes` or `/api/vault/status` before you assume a service is running.
+- Service ports, by node (`dashboard/jarvis/lib/nodes.mjs` is the tested source of truth). Alienware (address in node env file): OPSis `:9150`, Hermes dashboard `127.0.0.1:9119`, Ollama `:11434`, Live NPC Lab `:9127`, DreamOps Bridge `:9133`, Crosslisting `:3000`, Obsidian Local REST `:27123`. Sabertooth (address in node env file): OmniRoute `:20128/v1`, Fable's Sentry `:9140`, Mission Control `:3151`. Each one is up only where it has been installed. Check `/health`, `/api/nodes` or `/api/vault/status` before you assume a service is running.
 - House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
 - Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).
