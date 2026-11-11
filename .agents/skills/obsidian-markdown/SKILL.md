@@ -9,8 +9,8 @@ category: memory-layer
 Enforces valid Obsidian Flavored Markdown across all notes written to the node vault.
 
 ## Vault Paths per Node
-- **T5500 (`T5500`)**: `C:\ANTIGRAVITY\Antigravity`
-- **Alienware (`Alienware`)**: `C:\DREAM\Antigravity`
+- **T5500 (`192.168.0.15`)**: `C:\ANTIGRAVITY\Antigravity`
+- **Alienware (`192.168.0.40`)**: `C:\DREAM\Antigravity`
 - **Sabretooth**: `C:\Ai-Dream-Team\Antigravity`
 
 ## Formatting Rules

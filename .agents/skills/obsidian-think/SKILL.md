@@ -9,8 +9,8 @@ category: memory-layer
 Use this skill at session start and before mutating system state to ground reasoning in verified vault notes and git history.
 
 ## Vault Paths per Node
-- **T5500 (`T5500`)**: `C:\ANTIGRAVITY\Antigravity` (root note `00 HOME.md`)
-- **Alienware (`Alienware`)**: `C:\DREAM\Antigravity` (root note `00 HOME.md`)
+- **T5500 (`192.168.0.15`)**: `C:\ANTIGRAVITY\Antigravity` (root note `00 HOME.md`)
+- **Alienware (`192.168.0.40`)**: `C:\DREAM\Antigravity` (root note `00 HOME.md`)
 - **Sabretooth**: `C:\Ai-Dream-Team\Antigravity` (root note `00 HOME.md`)
 
 ## Procedure

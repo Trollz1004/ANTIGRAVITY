@@ -9,8 +9,8 @@ category: memory-layer
 Compacts multi-session logs and Graphy learnings into structured wiki topic notes inside the authoritative Obsidian vault.
 
 ## Vault Paths per Node
-- **T5500 (`T5500`)**: `C:\ANTIGRAVITY\Antigravity\wiki`
-- **Alienware (`Alienware`)**: `$env:USERPROFILE\Documents\Antigravity\wiki` (`~/Documents/Antigravity/wiki`)
+- **T5500 (`192.168.0.15`)**: `C:\ANTIGRAVITY\Antigravity\wiki`
+- **Alienware (`192.168.0.40`)**: `$env:USERPROFILE\Documents\Antigravity\wiki` (`~/Documents/Antigravity/wiki`)
 - **Sabretooth**: `TBD`
 
 ## Procedure

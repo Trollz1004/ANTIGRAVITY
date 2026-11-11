@@ -30,38 +30,38 @@ Status words only: UP, DOWN, WRONG SERVICE, AUTH MISSING, AUTH REJECTED, NOT CON
 
 > 2026-10-17 (Joshua): Mission Control = JARVIS/OPSIS on :3130; Hermes is JARVIS on :9119 and is fixing it. Hermes = JARVIS + all support + YouTube automation. OpenClaw = only sentry. Paperclip :3917 = marketing only. Alienware = dev only, never production. Obsidian per-agent memory is mandatory (`Antigravity\<NODE>\<agent>-to-<agent>.md`, read at start, timestamped entry at end; Supabase/Supermemory/OpenViking/Vercel are backups). Joshua is the only human; no AI commands another. Full text: AGENTS.md "Rulings of 2026-10-17".
 >
-> 2026-10-15: Mission Control = Mission Agent OS `mission-os/` on 127.0.0.1:3130 (Gemini's lane only). Hermes gateway API = 127.0.0.1:8643 (one shared gateway, all profiles). Paperclip :3917 installed and idle; real Paperclip work is on another node. Services bind 127.0.0.1, so LAN probes of T5500 are refused by design. The :9150 rows below are history.
+> 2026-10-15: Mission Control = Mission Agent OS `mission-os/` on 127.0.0.1:3130 (Gemini's lane only). Hermes gateway API = 127.0.0.1:8643 (one shared gateway, all profiles). Paperclip :3917 installed and idle; real Paperclip work is on another node. Services bind 127.0.0.1, so LAN probes of 192.168.0.15 are refused by design. The :9150 rows below are history.
 >
 > 2026-10-09 (Opus in Antigravity, Joshua's ruling): **T5500 is the ONLY node until funding.** Alienware joins the OFF list. Fresh Windows on the T5500: JARVIS :9150 is NOT RUNNING; Mission Control is being rebuilt as Mission Agent OS on :3130. Paperclip :3917 = marketing only. Memory = Obsidian vault `C:\ANTIGRAVITY\Antigravity` + Supabase + Supermemory. Any Alienware row below is history.
 
 | Node | Address | Job | State |
 |---|---|---|---|
-| T5500 | T5500 | THE node. Domains :9160, date app :3200/:8000, Postgres :5432, Redis :6379, Ollama :11434, tunnel, Paperclip :3917 (marketing), OmniRoute :20128, Obsidian REST :27123, Hermes support + OpenClaw sentry windows. Keep-alive heals all; `ops/t5500/status.json` | runs by ruling |
-| Alienware | Alienware | DEV ONLY (DREAM Online dev), never production | dev only by ruling 2026-10-17 |
+| T5500 | 192.168.0.15 | THE node. Domains :9160, date app :3200/:8000, Postgres :5432, Redis :6379, Ollama :11434, tunnel, Paperclip :3917 (marketing), OmniRoute :20128, Obsidian REST :27123, Hermes support + OpenClaw sentry windows. Keep-alive heals all; `ops/t5500/status.json` | runs by ruling |
+| Alienware | 192.168.0.40 | DEV ONLY (DREAM Online dev), never production | dev only by ruling 2026-10-17 |
 | Sabretooth, OptiPlex 9020, i7k (1050 Ti worker), Chromebook, Mini ASUS | none | `NODES_OFF` in `mission-control/lib/nodes.mjs` | OFF BY RULING 2026-09-28. Never start. Never probe as fault. Design naming them live is stale |
 | Pi | no address on record | Pi CLI (`pi`), Joshua's shell for API lanes. By his word 2026-09-29: Gemini and OpenClaw API lanes run here. Game repo `adapters/pi/manifest.yaml` lists cli `pi`, health `pi --version` | no host, port or config on record. NOT CONFIGURED as probe |
 | Cloud | claude.ai | Claude Code cloud sessions. Eye in the sky: `https://dashboard.aidoesitall.website/` | egress denied public hosts (claude-judge journal 2026-09-28). Node facts UNVERIFIED from here |
 | public-web | internet | `nodes.mjs` node for the landing pages, DNS should be Cloudflare | probed by identity on 443, never a fault of a LAN node |
 
 - No API key on any node for Gemini. API lanes live on the Pi only.
-- Model access: OmniRoute `http://T5500:20128/v1`, the only URL. Claude never routes through it. Ollama fail-safe only.
-- Endpoints are node LAN names, never loopback. One exception: Obsidian Local REST binds loopback only (`mission-control/lib/nodes.mjs`).
+- Model access: OmniRoute `http://192.168.0.15:20128/v1`, the only URL. Claude never routes through it. Ollama fail-safe only.
+- Endpoints are 192.168.0.x, never loopback. One exception: Obsidian Local REST binds loopback only (`mission-control/lib/nodes.mjs`).
 
 ## 3. Dashboards
 
 | Name | Address | What | Verify |
 |---|---|---|---|
-| Driftus (code name JARVIS) | `http://T5500:9150/` T5500 | the one Mission Control. House stage 8, required. Repo `mission-control/` | `/health` says `jarvis-dashboard`, then a frame |
+| Driftus (code name JARVIS) | `http://192.168.0.15:9150/` T5500 | the one Mission Control. House stage 8, required. Repo `mission-control/` | `/health` says `jarvis-dashboard`, then a frame |
 | Driftus, cloud | `https://dashboard.aidoesitall.website/` | same JARVIS behind Cloudflare Access, one-time PIN mailed to Joshua. In `/api/config` as `cloudDashboard` | correct outside state = Access sign-in page. Sign-in is Joshua's click |
-| Cockpit | `http://T5500:9150/cockpit/` | operator view, reads only `/api/nodes`. Code `tools/cockpit/` | frame. CRD links need `tools/cockpit/cockpit.local.json` (gitignored, Joshua drops it) |
-| Domains server | `http://T5500:9160/` | vhost static sites by Host header. House stage 11, optional | `/health` says `domains-server`, then a frame |
-| Hermes dashboard | `http://T5500:9119/` | Hermes. House stage 12, optional. Gateway API :8642 (`mission-control/lib/bridges.mjs`) | `/api/health` ok true plus version. Its HTML embeds a session token: report masked, never copy |
+| Cockpit | `http://192.168.0.15:9150/cockpit/` | operator view, reads only `/api/nodes`. Code `tools/cockpit/` | frame. CRD links need `tools/cockpit/cockpit.local.json` (gitignored, Joshua drops it) |
+| Domains server | `http://192.168.0.15:9160/` | vhost static sites by Host header. House stage 11, optional | `/health` says `domains-server`, then a frame |
+| Hermes dashboard | `http://192.168.0.15:9119/` | Hermes. House stage 12, optional. Gateway API :8642 (`mission-control/lib/bridges.mjs`) | `/api/health` ok true plus version. Its HTML embeds a session token: report masked, never copy |
 | Board Room | JARVIS tab `boardroom`, route `/api/boardroom` | the mission's think tank, not a ballot (Joshua 2026-09-29). Five tracks (#UntilNoKidInNeed, Marketing collab, Education collab, Pet saving collab, Joshua is learning collab), every lane as a seat, each seat's own `TRUST.md`, the drift board, affiliate links. Vote stays on the founder's ClawX board. MCP tool `boardroom` reads it | frame; drift NOT CONFIGURED without `GITHUB_TOKEN`, DOWN on a GitHub error, never a fake row |
 | God's Eye | JARVIS `/api/sentry` | probe wall, folded into JARVIS 2026-09-18. No :9140 service | frame |
 
-`nodes.mjs` SERVICES, every row JARVIS probes by identity (id, port): T5500: jarvis 9150, sentry 9150, hermes 9119, ollama 11434, domains-server 9160, crosslisting 3000, obsidian 27124 (loopback), omniroute 20128, date-app 8080, directus 8055, ludus 3010. Alienware: live-npc-lab 9127, aw-ollama 11434, dreamops 9133. public-web: dream-online-net 443, youandinotai-com 443, onlinerecycle-net 443, joshlcoleman-io 443. UP only with the identity string; port answering is nothing.
+`nodes.mjs` SERVICES, every row JARVIS probes by identity (id, port): T5500 192.168.0.15: jarvis 9150, sentry 9150, hermes 9119, ollama 11434, domains-server 9160, crosslisting 3000, obsidian 27124 (loopback), omniroute 20128, date-app 8080, directus 8055, ludus 3010. Alienware 192.168.0.40: live-npc-lab 9127, aw-ollama 11434, dreamops 9133. public-web: dream-online-net 443, youandinotai-com 443, onlinerecycle-net 443, joshlcoleman-io 443. UP only with the identity string; port answering is nothing.
 
-Game ports on Alienware (`docs/tech/local-prototype-ports.md`, game repo; JARVIS probes them at this address). Doc default bind is 127.0.0.1. Live bind UNVERIFIED.
+Game ports on Alienware 192.168.0.40 (`docs/tech/local-prototype-ports.md`, game repo; JARVIS probes them at this address). Doc default bind is 127.0.0.1. Live bind UNVERIFIED.
 
 | Port | Service | Identity |
 |---|---|---|
@@ -102,14 +102,14 @@ JARVIS `/mcp`. Read-only. No write tools.
 
 | Fact | Value |
 |---|---|
-| URL | `http://T5500:9150/mcp`, POST, Streamable HTTP, stateless. Plain HTTP on the private LAN by design (Phase F); the bearer travels in the clear there, so LAN only, never over the internet |
+| URL | `http://192.168.0.15:9150/mcp`, POST, Streamable HTTP, stateless. Plain HTTP on the private LAN by design (Phase F); the bearer travels in the clear there, so LAN only, never over the internet |
 | TLS path | `https://dashboard.aidoesitall.website/mcp` through the cloudflared tunnel behind Cloudflare Access (one-time PIN today). A machine lane needs an Access service token there: Joshua's click, UNVERIFIED |
 | Gate | `JARVIS_MCP_TOKEN` in node repo `.env`. Unset = 503. Wrong or missing bearer = 401. Output redacted |
 | Tools | `node_health`, `triggers`, `proposals`, `bridges`, `runbook`, `state_record`, `boardroom`, `backup_health`, `house_map` (nine; the last three added 2026-09-29, spec 011). Dep not wired = "<dep> is not wired on this node" |
 
 | Lane | Attach |
 |---|---|
-| Claude | `claude mcp add --transport http jarvis http://T5500:9150/mcp --header "Authorization: Bearer <JARVIS_MCP_TOKEN>"` from a LAN node only. Off the LAN use the TLS path above. Placeholder only. Never paste the real token |
+| Claude | `claude mcp add --transport http jarvis http://192.168.0.15:9150/mcp --header "Authorization: Bearer <JARVIS_MCP_TOKEN>"` from a LAN node only. Off the LAN use the TLS path above. Placeholder only. Never paste the real token |
 | Hermes | POST same URL with same bearer header. Config `.agents/harness-config/hermes.yaml`, key `mcp_servers`. JARVIS not listed there today |
 | OpenCode, OpenClaw | POST same URL with same bearer header, in that agent's own MCP config |
 | Alienware Claude | not connected yet (runbook section 10, 2026-09-19). Joshua holds the token |
@@ -192,7 +192,7 @@ Append only. Never rewrite. Entry shape: did / verified / skills / blocked / nex
 | 09-29 | Gemini back, browser side in Joshua's Chrome. Never an API key on the nodes. NOT CONFIGURED as probe |
 | 09-29 | Third-party runtimes: no Buzz, no Paperclip, no new relay. Mission Control is the hub. Vote system :9134 (red or green, human tie-breaker) belongs inside it |
 | 09-29 | Hermes is JARVIS, no extras. Official Claude and Codex CLIs only. New bridge rows are not how capability is added |
-| 09-28 | Endpoints are node LAN names, never loopback |
+| 09-28 | Endpoints are 192.168.0.x, never loopback |
 | 09-28 | Screenshot verified, not 200 OK |
 | 09-28 | Date app NOT for sale. Marketed by Emergent, affiliate program first. Listings come down on Joshua's click. Until then a buyer hears "withdrawn". Rails of 2026-09-19 stand: JARVIS inbox proposals, four checks, Fable voice, Fable-lane approval, two per brand per day, 18+ |
 | 09-28 | Node allocation: two nodes run. Rest OFF BY RULING |

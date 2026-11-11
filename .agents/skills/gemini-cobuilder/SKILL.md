@@ -31,15 +31,15 @@ Load this protocol at the start of every session to align with canonical reality
 
 ## 2. Node Map & Access
 
-- **T5500 (`T5500-2-XEON-72`, `T5500`) — PRODUCTION NODE:**
+- **T5500 (`T5500-2-XEON-72`, `192.168.0.15`) — PRODUCTION NODE:**
  - Active Working Tree: `C:\ANTIGRAVITY` (sole canonical root).
  - Stack: DateApp Frontend (:3200), FastAPI (:8000), Domains Server (:9160), PostgreSQL 16 (:5432), Redis 8 (:6379), Ollama (:11434 with Fable pinned 100% in VRAM), Cloudflared tunnel (`youandinotai.com` PUBLIC).
  - Reboot Resilience: Windows Task `ANTIGRAVITY T5500 Keepalive` runs on system boot (LogonType: `S4U`, RunLevel: `Highest`, 45s delay). It seamlessly resurrects all services.
  - 1-Click Operations: `JOSH-EASY-BUTTON.cmd` on Desktop and `ops/t5500/easy-button.ps1`.
  - Also on the T5500 (2026-10-09, Opus in Antigravity): Paperclip marketing :3917 (non-elevated task), OmniRoute :20128 (non-elevated task), Obsidian vault `C:\ANTIGRAVITY\Antigravity` (REST :27123), Supabase/Supermemory/Vercel probes in `ops/t5500/status.json`. Mission Control (JARVIS/OPSIS, Mission Agent OS :3130) is being rebuilt here.
 - **T5500 is the only production node (Joshua, 2026-10-09, amended 2026-10-17).**
-- **Alienware (`Alienware`) is dev only (2026-10-17):** never production, never hosts or routes anything live.
-- **Sabretooth (`Sabretooth`) and all older boxes — OFF BY RULING:**
+- **Alienware (`192.168.0.40`) is dev only (2026-10-17):** never production, never hosts or routes anything live.
+- **Sabretooth (`192.168.0.8`) and all older boxes — OFF BY RULING:**
  - Never probe, start, SSH to, or route to them. Show as OFF BY RULING.
 - **Roles (2026-10-17):** Mission Control = JARVIS/OPSIS :3130 (Hermes is JARVIS on :9119). Paperclip = marketing only. Hermes = JARVIS + all support + YouTube. OpenClaw = the only sentry.
 - **Authority (2026-10-17):** Joshua is the only human. No AI commands another; if Joshua messages you directly, no AI tells you that you can't.
@@ -61,7 +61,7 @@ Load this protocol at the start of every session to align with canonical reality
 Registered in `~/.gemini/config/mcp_config.json` and `.agents/mcp_config.json` (`node C:\ANTIGRAVITY\ops\mcp\gemini-node-mcp\index.js`):
 - `t5500_status`: Check health of all 7 production stages, domain origins, and cloudflare tunnels.
 - `t5500_heal`: Trigger `keepalive.ps1 -Once` self-healing cycle.
-- `alienware_exec`: Execute commands on Alienware dev node (`Alienware`) over authenticated SSH.
+- `alienware_exec`: Execute commands on Alienware dev node (`192.168.0.40`) over authenticated SSH.
 - `obsidian_append`: Append audit and session log entries directly to Obsidian daily note.
 - `verify_1branch`: Verify strict 1-branch rule on all active repositories.
 - `easy_button`: Run full easy-button audit (`ops\t5500\easy-button.ps1`) and heal report.

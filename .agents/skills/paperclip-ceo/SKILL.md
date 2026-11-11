@@ -25,7 +25,7 @@ bridge on `:3140` -> wake files -> this Freebuff session -> completion callback.
   marketing, Freebuff ads inventory, general marketing). No repository
   authority, no git delivery, no publishing. Joshua approves public posts.
 - Model access: this Freebuff session uses its normal lane through the
-  authenticated OmniRoute gateway (`http://T5500:20128/v1`). Never
+  authenticated OmniRoute gateway (`http://192.168.0.15:20128/v1`). Never
   configure a raw provider key, never spawn claude.exe, never route through a
   personal subscription lane. Paperclip agents that need official-model judge
   or marketing work use the installed official CLIs (claude, codex, grok,
@@ -70,7 +70,7 @@ bridge on `:3140` -> wake files -> this Freebuff session -> completion callback.
 
 - Bridge: `http://127.0.0.1:3140` (loopback). Health probe: `GET /health`.
 - Paperclip API: `retired (Mission Control is :3130)` (loopback, local_trusted mode). Paperclip is marketing only, NOT Mission Control.
-- OmniRoute gateway: `http://T5500:20128/v1` — identity = model list
+- OmniRoute gateway: `http://192.168.0.15:20128/v1` — identity = model list
   (`/v1/models`), models like `auto/best-coding`, `auto/best-reasoning`.
 - Agent API key: `PAPERCLIP_CEO_AGENT_KEY` in `ops/paperclip-ceo/bridge/.env`
   (never print it; read it from the file when a script needs it).

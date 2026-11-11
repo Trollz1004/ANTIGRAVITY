@@ -12,7 +12,7 @@ description: >
 # OmniRoute — operate the model gateway
 
 OmniRoute is the authenticated OpenAI-compatible gateway for this stack
-(`http://T5500:20128/v1`, identity = `GET /v1/models`). It routes requests
+(`http://192.168.0.15:20128/v1`, identity = `GET /v1/models`). It routes requests
 to providers (OpenAI, Anthropic, Gemini, 160+) with combos, fallback,
 quota tracking, and budget guards. Normal harness model access goes through
 this gateway per doctrine — never raw provider keys.
@@ -21,15 +21,15 @@ this gateway per doctrine — never raw provider keys.
 
 - API key: `OMNI_ROUTE_API_KEY` in `C:\ANTIGRAVITY\.env` (never print it;
   read it from the file when a script needs it).
-- CLI: `omniroute` (installed globally). Base `http://T5500:20128`.
-- MCP: streamable HTTP `http://T5500:20128/api/mcp/stream` with
+- CLI: `omniroute` (installed globally). Base `http://192.168.0.15:20128`.
+- MCP: streamable HTTP `http://192.168.0.15:20128/api/mcp/stream` with
   `Authorization: Bearer <key>` — wired into this session's `~/.agents/mcp.json`
   and into grok (`~/.grok/config.toml`), claude (`~/.claude.json`), codex
   (`~/.codex/config.toml`).
 
 ## Live AgentSkills catalog (45 skills)
 
-`GET http://T5500:20128/api/agent-skills` with the Bearer key returns the
+`GET http://192.168.0.15:20128/api/agent-skills` with the Bearer key returns the
 full catalog as machine-readable skills. Categories:
 
 - **API (23):** omni-auth, omni-providers, omni-models, omni-combos-routing,
