@@ -11,6 +11,14 @@ CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
 The app code lives here: `domains/youandinotai.com/backend` (FastAPI +
 Postgres + Redis) and `domains/youandinotai.com/frontend` (React).
 
-**Status: LIVE (Not for sale).** A verified-adult dating app, 18+, with $1 Bot-Shield verification, founder memberships, and paying customers. The front end is served by Express on the T5500 through a Cloudflare Tunnel, and the API runs on Google Cloud Run.
+**Status: ACTIVE — retained as a long-term business asset (founder direction,
+2026-11-10).** YouAndINotAI is not for sale. The earlier sale plan and development
+freeze are superseded. Continue product development, reliability work, and
+measured growth under the current repository rules.
+
+The product focuses on verified-human dating, memberships, safety, support,
+and real-world connection. The long-term business goal is to build durable
+customer value and recurring revenue; this is a goal, not a claim of current
+profitability or asset valuation.
 
 **Tunnel:** Cloudflare tunnel maps `youandinotai.com` to the frontend and `api.youandinotai.com` to the backend.

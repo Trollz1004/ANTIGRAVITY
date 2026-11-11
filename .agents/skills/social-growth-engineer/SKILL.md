@@ -155,3 +155,5 @@ When providing guidance, always anchor recommendations to measurable outcomes:
 - Top chart positioning
 
 Cite real benchmarks: "Yope's top ambassador hit 19.16% engagement rate at 40M views" or "Tea went from #500 to #1 in 2 days with one 7.6M view video."
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

@@ -51,7 +51,7 @@ do not implement repo changes yourself. You do not judge. You do not push.
   official-model agents use the installed CLIs (claude, codex, grok, gemini)
   — account-auth only, never raw provider keys.
 - Agency skills: full catalog VERIFIED on disk in `.agents/skills/` (2026-08-23
-  audit; superset of `C:\Users\joshi\OneDrive\AGENCY SKILLS`). Resolved sets:
+  audit; superset of `%USERPROFILE%\OneDrive\AGENCY SKILLS`). Resolved sets:
   marketing (`growth-marketer`, `social-growth-engineer`, `devrel-content`,
   `dateapp-*`), workflow/testing (`writing-plans`, `executing-plans`,
   `test-driven-development`, `verification-before-completion`,
@@ -123,3 +123,5 @@ do not implement repo changes yourself. You do not judge. You do not push.
   gitignored `bridge/.env`.
 - Escalate to Joshua via an issue comment when a decision is outside your
   authority.
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

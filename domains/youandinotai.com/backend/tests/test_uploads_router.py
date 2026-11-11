@@ -56,6 +56,7 @@ def _make_user() -> User:
 def authed_client(client, tmp_path):
     """Client with an authenticated user override and tmp storage settings."""
     user = _make_user()
+    client._authed_user = user
     app.dependency_overrides[get_current_user] = override_user(user)
 
     fake_settings = MagicMock()
@@ -364,10 +365,97 @@ def test_progress_unknown_id_returns_404(authed_client):
 
 def test_progress_zero_total_bytes_reports_zero_percentage(authed_client):
     # Simulated degenerate tracker entry
-    upload_id = create_upload(total_bytes=0, filename="zero.txt")
+    upload_id = create_upload(
+        total_bytes=0, filename="zero.txt", user_id=authed_client._authed_user.id
+    )
     resp = authed_client.get(f"/api/v1/uploads/progress/{upload_id}")
     assert resp.status_code == 200
     assert resp.json()["percentage"] == 0
+
+
+def test_chunked_upload_session_ownership_enforced_returns_404_not_403(
+    client, tmp_path
+):
+    """Finding 6: another user's upload id gives 404 on /status, /chunk/{index}, /complete, and /cancel; owner succeeds."""
+    owner = _make_user()
+    other_user = _make_user()
+
+    fake_settings = MagicMock()
+    fake_settings.upload_max_size_bytes = 1024 * 1024
+    fake_settings.upload_max_size_mb = 1
+    fake_settings.upload_storage_path = str(tmp_path)
+    fake_settings.upload_allowed_types_list = ["text/plain", "image/png"]
+    fake_settings.upload_allowed_types = "text/plain,image/png"
+    fake_settings.clamav_enabled = False
+
+    with patch.object(uploads, "settings", fake_settings):
+        try:
+            # Owner initializes upload_1
+            app.dependency_overrides[get_current_user] = override_user(owner)
+            init_resp = client.post(
+                "/api/v1/uploads/chunked/init?filename=owner.txt&total_bytes=5"
+            )
+            assert init_resp.status_code == 201
+            upload_id = init_resp.json()["upload_id"]
+
+            # Other user gets 404 (never 403) on all four: /status, /chunk/{index}, /complete, /cancel
+            app.dependency_overrides[get_current_user] = override_user(other_user)
+            for status_url in (
+                f"/api/v1/uploads/{upload_id}/status",
+                f"/api/v1/uploads/progress/{upload_id}",
+            ):
+                r_status = client.get(status_url)
+                assert r_status.status_code == 404, r_status.text
+
+            for chunk_url in (
+                f"/api/v1/uploads/{upload_id}/chunk/0",
+                f"/api/v1/uploads/chunked/{upload_id}",
+            ):
+                r_chunk = client.post(
+                    chunk_url,
+                    content=b"hello",
+                    headers={"content-range": "bytes 0-4/5"},
+                )
+                assert r_chunk.status_code == 404, r_chunk.text
+
+            for complete_url in (
+                f"/api/v1/uploads/{upload_id}/complete",
+                f"/api/v1/uploads/chunked/{upload_id}/finalize",
+            ):
+                r_complete = client.post(complete_url)
+                assert r_complete.status_code == 404, r_complete.text
+
+            for cancel_call in (
+                lambda: client.post(f"/api/v1/uploads/{upload_id}/cancel"),
+                lambda: client.delete(f"/api/v1/uploads/chunked/{upload_id}"),
+            ):
+                r_cancel = cancel_call()
+                assert r_cancel.status_code == 404, r_cancel.text
+
+            # Owner succeeds on /status, /chunk/{index}, /complete, and /cancel
+            app.dependency_overrides[get_current_user] = override_user(owner)
+            assert client.get(f"/api/v1/uploads/{upload_id}/status").status_code == 200
+            assert (
+                client.put(
+                    f"/api/v1/uploads/{upload_id}/chunk/0",
+                    content=b"hello",
+                    headers={"content-range": "bytes 0-4/5"},
+                ).status_code
+                == 200
+            )
+            assert (
+                client.post(f"/api/v1/uploads/{upload_id}/complete").status_code == 201
+            )
+
+            init_resp2 = client.post(
+                "/api/v1/uploads/chunked/init?filename=cancelme.txt&total_bytes=5"
+            )
+            upload_id2 = init_resp2.json()["upload_id"]
+            assert (
+                client.post(f"/api/v1/uploads/{upload_id2}/cancel").status_code == 200
+            )
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
 
 
 # ── Progress tracker unit tests ──────────────────────────────────────────────

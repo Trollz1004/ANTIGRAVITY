@@ -74,7 +74,7 @@ We use your information for the following purposes:
 
 - **Providing the Service:** Creating your account, displaying your profile, facilitating matches and conversations
 - **Identity Verification:** Confirming you are a real person over 18 via V8 Cloud Verification
-- **Matchmaking:** Using Google Gemini AI to suggest compatible matches and generate icebreaker prompts (see Section 7)
+- **Matchmaking:** Using Google Gemini AI to suggest compatible matches and generate conversation starters (see Section 7)
 - **Payment Processing:** Managing subscriptions and processing purchases through secure payment processors
 - **Safety and Security:** Detecting fraud, preventing abuse, enforcing our Terms of Service
 - **Communication:** Sending service-related emails (account verification, subscription confirmations, important updates)
@@ -125,7 +125,7 @@ We may share information in other ways if you specifically consent to it.
 We use **Google Gemini** to power matchmaking suggestions and generate conversation icebreakers. Here is what that means for your data:
 
 - **What we send to Gemini:** Anonymized preference data — things like interests, relationship goals, and compatibility factors. We do **not** send your real name, photos, government ID, payment information, or messages to Gemini.
-- **What Gemini does:** Suggests potential matches based on compatibility and generates conversation starter prompts.
+- **What Gemini does:** Suggests potential matches based on compatibility and generates conversation starters.
 - **What Gemini does NOT do:** Create fake profiles, impersonate users, or make autonomous decisions about your account.
 - **AI-generated profiles:** We do **not** use AI to create fake user profiles. Every profile on YouAndINotAI belongs to a verified real person.
 
@@ -171,7 +171,7 @@ We take reasonable measures to protect your information, including:
 - **Cloudflare Protection:** DDoS mitigation and web application firewall
 - **Verification Data:** Government IDs and selfies processed through V8 Cloud Verification are handled according to their security standards
 
-No system is 100% secure. We cannot guarantee absolute security, but we commit to promptly notifying affected users if a data breach occurs.
+No system is 100% secure. We cannot guarantee absolute security, but we commit to notifying affected users quickly if a data breach occurs.
 
 ## 11. Your Rights and Choices
 

@@ -96,7 +96,7 @@ def _verify_square_signature(
     if not signature_key or not notification_url:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Square webhook signature verification is enabled but not configured.",
+            detail="webhook verification not configured",
         )
 
     if not square_signature:
@@ -163,24 +163,38 @@ def _resolve_square_signature_material(
     raise ValueError(f"Unsupported Square webhook endpoint: {endpoint}")
 
 
+_STARTUP_WEBHOOK_WARNING_LOGGED = False
+
+
+def _log_startup_webhook_config_warning(settings: Any | None = None) -> None:
+    """Log one warning at startup when Square webhook verification is not configured."""
+    global _STARTUP_WEBHOOK_WARNING_LOGGED
+    if _STARTUP_WEBHOOK_WARNING_LOGGED:
+        return
+    try:
+        resolved_settings = settings if settings is not None else get_settings()
+    except Exception:
+        return
+    for ep in ("payment", "booking"):
+        sig_key, notif_url = _resolve_square_signature_material(resolved_settings, ep)
+        if not sig_key or not notif_url:
+            _STARTUP_WEBHOOK_WARNING_LOGGED = True
+            logger.warning("webhook verification not configured")
+            break
+
+
 def _should_verify_square_signature(
     settings: Any,
     endpoint: str,
 ) -> tuple[bool, str, str]:
-    """Skip verification safely when a node is missing Square webhook material."""
+    """Resolve Square webhook signature material; never return False because configuration is missing."""
     signature_key, notification_url = _resolve_square_signature_material(
         settings, endpoint
     )
-    if not settings.square_webhook_verify_signature:
-        return False, signature_key, notification_url
-    if signature_key and notification_url:
-        return True, signature_key, notification_url
+    return True, signature_key, notification_url
 
-    logger.warning(
-        "Square %s webhook signature verification skipped because configuration is incomplete.",
-        endpoint,
-    )
-    return False, signature_key, notification_url
+
+_log_startup_webhook_config_warning()
 
 
 # ── Square Payment Webhook (Bot-Shield + Subscriptions) ──
@@ -401,6 +415,12 @@ async def square_payment_webhook(
         "payment",
     )
     if should_verify:
+        if not signature_key or not notification_url:
+            _log_startup_webhook_config_warning(settings)
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="webhook verification not configured",
+            )
         try:
             _verify_square_signature(
                 payload,
@@ -842,6 +862,8 @@ async def square_booking_webhook(
         "booking",
     )
     if should_verify:
+        if not signature_key or not notification_url:
+            _log_startup_webhook_config_warning(settings)
         _verify_square_signature(
             payload,
             square_signature,

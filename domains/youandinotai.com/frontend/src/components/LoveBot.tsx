@@ -121,8 +121,8 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
         <h2 className="mb-2 text-2xl font-bold text-white">Unlock Concierge</h2>
         <p className="mx-auto mb-6 max-w-md text-gray-400">
           Concierge is reserved for Founding Member accounts with active premium
-          access. Compatibility tools, romance prompts, dating tips, and gift
-          ideas all unlock there.
+          access. Compatibility tools, conversation starters, dating tips, and
+          gift ideas all unlock there.
         </p>
         <a
           href={FOUNDING_MEMBER_LINK}
@@ -265,7 +265,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
         {activeTab === 'quotes' && (
           <div className="space-y-6">
             <p className="text-center text-sm text-gray-400">
-              Randomized romance prompts, love quotes, and sweet openers.
+              Randomized conversation starters, love quotes, and sweet openers.
             </p>
             <button
               onClick={() =>

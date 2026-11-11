@@ -21,3 +21,9 @@ npm start
 - OmniRoute at `http://$T5500_HOST:20128/v1` (called, not relocated).
 - Worker health at `http://127.0.0.1:8391/health`.
 - 4-hour strike interval between publishes. Hard ceiling 59s on shorts.
+
+## Security & LAN Access
+- Defaults to loopback (`127.0.0.1:8392`) unless `HERMES_LEADGEN_BIND=0.0.0.0` is set.
+- When bound to `0.0.0.0`, `HERMES_LEADGEN_TOKEN` must be set (fail-closed: LAN bind with an empty token refuses to start).
+- Every `POST`/`PUT`/`PATCH`/`DELETE` route, every `/proxy/*` route, and every `/api/memory/*` route on the LAN requires `Authorization: Bearer <HERMES_LEADGEN_TOKEN>`.
+- Josh's browser on the LAN needs the token once, and the Telegram path is unchanged.

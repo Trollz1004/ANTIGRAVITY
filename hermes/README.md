@@ -1,4 +1,4 @@
-# trollz1004/hermes
+# trollz1004/hermes (OPSis)
 
 <p align="center">
   <a href="../docs/tribute/claude-tribute.mp4"><img src="../assets/claude-tribute-screenshot.png" alt="Nothing stops the wheel like the plan - #TeamClaudeForLife #OfficiallyUnOfficial" width="520" /></a><br/>
@@ -6,7 +6,7 @@
 </p>
 
 
-Ultimate Hermes Agent dashboard with multi-bridge integration.
+Ultimate OPSis agent dashboard with multi-bridge integration.
 
 <p align="center">
   <img src="dashboard/jarvis/assets/tribute/teamclaudeforlife-meme.jpg" alt="Me reviewing code written by Claude before pushing it to prod - #TeamClaudeForLife" width="420" /><br/>
@@ -16,7 +16,7 @@ Ultimate Hermes Agent dashboard with multi-bridge integration.
 
 ## What's Inside
 
-- `dashboard/` — Standalone HTML dashboard (Obsidian + Hermes + Buzz + Claude Code + Copilot + Browser)
+- `dashboard/` — Standalone HTML dashboard (Obsidian + OPSis + Buzz + Claude Code + Copilot + Browser)
 - `skills/` — Custom topic-based skills (caveman, brainstorm, session-memory, etc.)
 - `docs/` — Documentation
 - `scripts/` — Utility scripts
@@ -28,7 +28,7 @@ Ultimate Hermes Agent dashboard with multi-bridge integration.
 | Overview | All systems | ✅ |
 | Buzz | Slack-like agent chat | ✅ |
 | Obsidian | Local REST API | 🔌 |
-| Hermes | Session memory + skills | ✅ |
+| OPSis | Session memory + skills | ✅ |
 | Claude Code | Headless CLI | 🔌 |
 | Copilot | BYOK endpoint | 🔌 |
 | Browser | Chrome CDP | 🔌 |
@@ -64,4 +64,3 @@ All skills load automatically on session start via AGENTS.md preload.
 ## License
 
 MIT
-# Test

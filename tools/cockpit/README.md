@@ -7,13 +7,13 @@
 
 
 `index.html` is a local-only operator console for the two-node LAN fleet
-(Alienware `192.168.0.40` = DEV node, Sabretooth `192.168.0.8` = FINISHED-PRODUCT
-node). It polls each node's real endpoints every 5 seconds and shows real or
+(Alienware = DEV node, Sabretooth = FINISHED-PRODUCT
+node; addresses in node env files). It polls each node's real endpoints every 5 seconds and shows real or
 zero — no fake greens, no invented counts.
 
 ## How to open it
 
-JARVIS serves this folder at `http://192.168.0.8:9150/cockpit/` (same origin
+OPSis serves this folder at `http://localhost:9150/cockpit/` (or see node env file; same origin
 as `/api/nodes`, which is the only thing the page reads; it never probes a
 port itself). Open it there. Opening `index.html` as a `file://` page still
 renders, but a browser will not load `cockpit.local.json` from disk, so the

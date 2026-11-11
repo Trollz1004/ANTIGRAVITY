@@ -131,3 +131,5 @@ Pushes to the repository trigger automated review and failure notification from 
 The dashboard that carries that burden is the Paperclip board itself, which reads live state. `apps/paperweight/index.html`, served at `:3100/paperweight/`, is not it: it is a static demo that makes no requests and labels its own figures as sample data. It must never be shown as evidence that anything is running, and no number from it may be repeated as a measurement.
 
 
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

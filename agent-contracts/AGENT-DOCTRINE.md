@@ -21,3 +21,5 @@ Only the judge lane pushes, merges, or deletes branches unless Joshua directly a
 ## Reporting
 
 Every report identifies the files changed, skills used, content-level verification, unresolved blocker, and one next action. Never substitute confidence, a port listener, or HTTP status for evidence. Never expose secrets or private browser credentials.
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

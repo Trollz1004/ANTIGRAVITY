@@ -12,7 +12,7 @@ $env:GIT_TERMINAL_PROMPT = "0"
 $env:GCM_INTERACTIVE = "never"
 
 $VaultRepo = "C:\Ai-Dream-Team\Antigravity"
-$SourceDir = "C:\Ai-Dream-Team\Antigravity\HermesLeadGen"
+$SourceDir = if ($env:SABRETOOTH_SOURCE_DIR) { $env:SABRETOOTH_SOURCE_DIR } else { "C:\Ai-Dream-Team\Antigravity\HermesLeadGen" }
 $WorktreeRoot = "C:\Ai-Dream-Team\_pr-worktree"
 $TargetAppDir = Join-Path $WorktreeRoot "apps\hermes-leadgen"
 $GhExe = "C:\Program Files\GitHub CLI\gh.exe"

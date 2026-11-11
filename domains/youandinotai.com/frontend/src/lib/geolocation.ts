@@ -19,7 +19,7 @@ let _cacheExpiry = 0;
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes — never persisted across sessions
 
 /**
- * Request the user's location. Shows the browser permission prompt.
+ * Request the user's location. Shows the browser permission dialog.
  * Returns null if denied or unavailable. Never throws.
  */
 export async function requestLocation(): Promise<Coords | null> {

@@ -44,3 +44,5 @@ Follow the ANTIGRAVITY Agent Standard at `docs/standards/AGENT-STANDARD.md` in t
 ## End of session
 
 End every session with a caveman-style Obsidian note in Alienware's mount of the single $5/mo synced vault (`%USERPROFILE%\Obsidian\Alienware\` or `C:\DREAM\Antigravity\Alienware\hermes-to-hermes.md` and `YYYY-MM-DD_HHMM_ALIENWARE_opsis.md`, mirrored to `memory/obsidian-vault/Alienware/`), using the `DID / BROKE / NEXT / BLOCKED / FILES` template from `docs/standards/AGENT-STANDARD.md`.
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

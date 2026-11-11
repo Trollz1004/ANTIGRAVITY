@@ -106,9 +106,9 @@ The router now requires a key on `/v1/models` where it did not in September
 | Endpoint | 2026-10-10 |
 |---|---|
 | `http://127.0.0.1:20128/v1` | **up** (`/v1/models` → 401, needs a key; `/v1/audio/speech` → works) |
-| `http://192.168.0.8:20128/v1` | **unreachable** (`WinError 10060`, timeout) |
+| LAN `:20128/v1` (see node env file) | **unreachable** (`WinError 10060`, timeout) |
 | `http://localhost:20129/v1` | **unreachable** (connection refused) |
-| `http://192.168.0.8:9140` (Fable's Sentry) | **unreachable** |
+| LAN `:9140` (Fable's Sentry) | **unreachable** |
 
 So the LAN address and the old `20129` port are both gone; `127.0.0.1:20128` is the
 live door. The pipeline already tries `127.0.0.1:20128` first, so it is pointed correctly.
@@ -221,7 +221,7 @@ It should not become the primary today:
 | Credential risk | none — no key, no account | depends on a Google credential that has died once |
 | Code change needed | **none** | two defaults in a file that does not exist |
 
-`192.168.0.8:20128`, `:20129` and Sentry were all unreachable during this very probe while
+The LAN address on port `:20128`, `:20129` and Sentry were all unreachable during this very probe while
 edge-tts synthesised fine. That is the argument: the gateway is the better voice when it is
 up, and edge is the one that is always up.
 

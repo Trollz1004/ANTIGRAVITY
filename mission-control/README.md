@@ -208,11 +208,7 @@ until Joshua sets it — this repo never sets one on his behalf.
 Nothing lands on `main` directly. The judge lane pushes finished work to a
 `judge/<topic>` branch. `.github/workflows/quality-gate.yml` runs the
 mission-control test suite on that push and fails the job below a 90
-percent pass rate or on zero tests. `.github/workflows/auto-land.yml`
-watches for a successful `quality-gate` run on a `judge/**` branch, checks
-that its head SHA is a fast-forward of `origin/main`, and — if so — pushes
-that exact SHA straight to `main` and deletes the judge branch (writing
-"needs rebase" instead if it isn't a fast-forward). A repository ruleset
+percent pass rate or on zero tests. PRs only; the Claude judge lane merges with a posted verdict. A repository ruleset
 (`scripts/github/apply-main-ruleset.ps1`) blocks direct pushes, force
 pushes, and branch deletion on `main`, and requires the `quality-gate`
 status check, with no bypass for any actor.

@@ -3,8 +3,8 @@
 Starts cloudflared tunnel for T5500 date app public route.
 #>
 $ErrorActionPreference = 'Continue'
-# Canonical repo on this node is F:\ANTIGRAVITY (E: is dead).
-$RepoRoot = 'F:\ANTIGRAVITY'
+# Canonical repo on T5500 (.15) is C:\ANTIGRAVITY.
+$RepoRoot = if (Test-Path 'C:\ANTIGRAVITY') { 'C:\ANTIGRAVITY' } else { 'F:\ANTIGRAVITY' }
 $LogDir = Join-Path $RepoRoot 'logs'
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 $log = Join-Path $LogDir 'start-t5500-dateapp-cloudflared.log'
@@ -21,16 +21,20 @@ if ($existing) {
 $cf = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
 if (-not (Test-Path $cf)) { L "cloudflared missing: $cf"; exit 1 }
 
-# Prefer named tunnel config: youandinotai.com -> 127.0.0.1:3200
-$config = 'C:\Users\joshl\.cloudflared\hermes-t5500.yml'
+# Prefer named tunnel config on T5500 (.15): youandinotai.com -> 127.0.0.1:3200, api.youandinotai.com -> 127.0.0.1:8000
+$cfDir = Join-Path $env:USERPROFILE '.cloudflared'
+$config = Join-Path $cfDir 'config.yml'
+if (-not (Test-Path $config)) {
+  $config = Join-Path $cfDir 'hermes-t5500.yml'
+}
 if (Test-Path $config) {
   L "starting named tunnel with $config"
   $proc = Start-Process -FilePath $cf -ArgumentList @(
-    'tunnel','--config',$config,'run'
+    'tunnel','--config',$config,'--no-autoupdate','run'
   ) -WindowStyle Hidden -PassThru
 } else {
   # Fallback token tunnel — still must hit FRONTEND :3200, not API :8000
-  $tokenFile = 'C:\Users\joshl\.cloudflared\t5500-dateapp.token'
+  $tokenFile = Join-Path $cfDir 't5500-dateapp.token'
   if (-not (Test-Path $tokenFile)) { L "token file missing: $tokenFile"; exit 1 }
   L 'starting token tunnel -> http://127.0.0.1:3200'
   $proc = Start-Process -FilePath $cf -ArgumentList @(

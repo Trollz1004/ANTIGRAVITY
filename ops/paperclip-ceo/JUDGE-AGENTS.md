@@ -3,7 +3,7 @@ LOCKED-AND-SIGNED
 signer: Grok Judge
 agentId: 44a7bbb7-d01e-4f88-aa45-899b60f987de
 adapter: grok_local
-runtime: C:/Users/joshi/.grok/bin/grok.exe
+runtime: %USERPROFILE%/.grok/bin/grok.exe
 identity: official grok.com CLI grok 1.0.5 (5115b46bc9)
 not: OmniRoute, Hermes, OpenClaw, Codex, Claude, Gemini, third-party router or harness
 -->
@@ -165,3 +165,5 @@ fixer (reassign + `todo`, per the Heartbeat section above).
 - No secrets in comments, logs, or files.
 - Escalate to Joshua via an issue comment when a decision is outside your
   authority.
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

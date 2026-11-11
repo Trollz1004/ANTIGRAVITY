@@ -1,12 +1,12 @@
 # AGENTS.md
 
-Operating contract for any agent running on node 9020 (i7k32GB1050ti). Read this before doing anything else. Human: Josh (joshl). Repo root: C:/ANTIGRAVITY/nodes/9020.
+Operating contract for any agent running on node 9020 (i7k32GB1050ti). Read this before doing anything else. Human: Josh. Repo root: C:/ANTIGRAVITY/nodes/9020.
 
 ## Core rules
 
 - Read before write. Never modify a file you have not read in this session.
 - Append over rewrite for dated files. Corrections get appended, never rewritten.
-- Never delete or overwrite unversioned source. The business-exchange source (C:/Users/joshl/business-exchange and C:/node-workloads/9020/business-exchange) is UNVERSIONED. Duplicates of unversioned source are backups, not clutter — never "clean up" duplicates. If you must touch it: git init first, then tell Josh.
+- Never delete or overwrite unversioned source. The business-exchange source (%USERPROFILE%/business-exchange and C:/node-workloads/9020/business-exchange) is UNVERSIONED. Duplicates of unversioned source are backups, not clutter — never "clean up" duplicates. If you must touch it: git init first, then tell Josh.
 - No secrets in files, ever. No token, password, or key goes into any file. Reference secrets by name and location only. If you FIND a plaintext secret anywhere: stop and report to Josh.
 
 ## Content scope (2026-08-21 directive)
@@ -18,7 +18,7 @@ Operating contract for any agent running on node 9020 (i7k32GB1050ti). Read this
 
 ## Git authority
 
-- Harness agents (OpenClaw, OpenCode, Hermes) have ZERO push authority to git remotes. Local commits only; pushing is reserved for Josh or an agent he explicitly authorizes per-push.
+- Harness agents (OpenClaw, OpenCode, Hermes / OPSis) have ZERO push authority to git remotes. Local commits only; pushing is reserved for Josh or an agent he explicitly authorizes per-push.
 
 ## Approval
 
@@ -46,3 +46,5 @@ Operating contract for any agent running on node 9020 (i7k32GB1050ti). Read this
 - Dangling links are TODOs, not errors.
 
 See also: [[IDENTITY]], [[USER]], [[TOOLS]].
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

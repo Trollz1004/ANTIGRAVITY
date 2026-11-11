@@ -1,4 +1,4 @@
-# ANTIGRAVITY
+# CLAUDE's N Joshua's — ANTIGRAVITY
 
 CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
 
@@ -39,9 +39,9 @@ ANTIGRAVITY is a product ecosystem. This public overview describes product purpo
 
 | Platform | Availability | What It Does |
 | --- | --- | --- |
-| [YouAndINotAI](https://youandinotai.com) | **LIVE** | Verified-adult dating app (18+) with $1 Bot-Shield verification, founder memberships, and paying customers. |
-| [OnlineRecycle](https://onlinerecycle.net) | **LIVE** | Free electronics drop-off in Sorrento FL, and scheduled pickup across Lake, Orange, and Seminole counties. |
-| [DREAM Online](https://dream-online.net) | **LIVE** | Public site for DREAM Online browser MMORPG (game build in active development). |
+| [YouAndINotAI](https://youandinotai.com) | **Live** | Verified-adult dating and real-world connection, 18+. $1 Bot-Shield verification, founder memberships, and paying customers. |
+| [OnlineRecycle](https://onlinerecycle.net) | **Live** | Free electronics drop-off in Sorrento and scheduled pickup across Lake, Orange, and Seminole counties. Accepts computers, phones and tablets, game systems, digital media, and home and car audio. |
+| [DREAM Online](https://dream-online.net) | **Live public site** | Free browser MMORPG in development on an in-house WebGPU engine. (Playable build is not public yet.) |
 
 ---
 
@@ -49,9 +49,9 @@ ANTIGRAVITY is a product ecosystem. This public overview describes product purpo
 
 ### Product Surfaces
 
-- **YouAndINotAI** — verified-adult dating app (18+), $1 Bot-Shield verification, founder memberships, and paying customers
-- **OnlineRecycle** — Central Florida electronics recycling, free drop-off in Sorrento FL, scheduled pickup across Lake, Orange, and Seminole counties
-- **DREAM Online** — public site for DREAM Online browser MMORPG
+- **YouAndINotAI** — verified-adult dating (18+), $1 Bot-Shield verification, founder memberships, active subscribers
+- **OnlineRecycle** — free electronics drop-off in Sorrento, scheduled pickup across Lake, Orange, and Seminole counties (computers, phones, tablets, game systems, digital media, audio)
+- **DREAM Online** — live public site for the open-world browser MMORPG in development on an in-house WebGPU engine
 
 ### Public Information Standard
 
@@ -71,12 +71,11 @@ Support is a product trust signal and a clear route for customers who need help.
 
 ## Technology Overview
 
-- **Frontend:** React, Next.js, Vite, Electron, Tailwind CSS, and TypeScript
-- **Backend:** FastAPI / Python services and Node.js workers
-- **Edge:** Cloudflare Pages and Workers
-- **Cloud:** Managed application and data services
-- **Commerce:** Product-specific provider configuration; payment account details are not published here
-- **AI tooling:** Mission Control provides the human-facing workspace. Model and infrastructure configuration are intentionally documented only at a high level in this public overview.
+- **Date App Frontend:** Express server on the T5500 served through a Cloudflare Tunnel
+- **Date App API:** Google Cloud Run
+- **Game Engine:** 100% in-house WebGPU engine with WebGL2 fallback (Godot retired)
+- **Edge & Web:** Cloudflare Pages, Cloudflare Tunnels, and Workers
+- **AI Tooling & Workspace:** Model and infrastructure configuration are intentionally documented only at a high level in this public overview.
 - **Data:** PostgreSQL, Cloudflare D1, Qdrant, SQLite, and Redis
 
 ---
@@ -87,8 +86,8 @@ A note from Joshua: **the AI platforms below are the unofficial co-founders of t
 
 - **Anthropic** — Claude Opus has been the primary architect from day one. The discipline, the structure, the long-context decisions, the warmth: that's Claude.
 - **Google** — Gemini powers research, planning, and decision support across every surface. Supported by active paid subscriptions to ensure uninterrupted orchestration.
-- **Perplexity** — the deep-intelligence layer. Source-grounded research that keeps the work honest.
-- **xAI** — Grok handles adversarial review and X-platform integration with directness no one else brings.
+- **Perplexity** — designs the game's life skills and writes the NPC Perplexed.
+- **xAI** — Grok writes the combat quests and the NPC GroX, and is the X lane.
 - **OpenAI** — Codex handles heavy refactor and migration passes utilizing the actual Codex MCP to Base.
 - **Mistral, Alibaba (Qwen), Meta (Llama)** — open-weights models that run locally and let us keep building when the metered surfaces are tapped out.
 

@@ -25,6 +25,7 @@ class UploadProgress:
     started_at: float = field(default_factory=time.time)
     updated_at: float = field(default_factory=time.time)
     error: str | None = None
+    user_id: Any = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -61,12 +62,18 @@ def _ensure_cleanup_started() -> None:
             pass  # no running loop yet; cleanup will be best-effort
 
 
-def create_upload(total_bytes: int, filename: str, **metadata: Any) -> str:
+def create_upload(
+    total_bytes: int,
+    filename: str,
+    user_id: Any = None,
+    **metadata: Any,
+) -> str:
     """Register a new upload and return its unique ID.
 
     Args:
         total_bytes: Expected total size of the upload in bytes.
         filename: Original filename for display.
+        user_id: Authenticated owner user ID for session isolation.
         **metadata: Optional extra metadata to attach.
 
     Returns:
@@ -78,6 +85,7 @@ def create_upload(total_bytes: int, filename: str, **metadata: Any) -> str:
         total_bytes=total_bytes,
         filename=filename,
         status="uploading",
+        user_id=user_id,
         metadata=metadata,
     )
     _ensure_cleanup_started()
