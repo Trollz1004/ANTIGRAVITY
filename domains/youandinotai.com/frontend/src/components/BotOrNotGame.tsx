@@ -456,7 +456,7 @@ export function BotOrNotGame() {
         {/* Header Bar */}
         <div className="flex flex-wrap items-center justify-between gap-1.5">
           <span className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#FFD21E] sm:text-[14px]">
-            BOT OR NOT · TROLL THE FOUNDER · #TeamClaudeForLife
+            BOT OR NOT · TROLL THE FOUNDER
           </span>
           <span className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#F4F1EA] sm:text-[14px]">
             CARD {card.indexLabel} · SCORE {score.correct}/{score.total}
@@ -474,9 +474,6 @@ export function BotOrNotGame() {
               <strong className="text-[#FFD21E]">Not</strong> to flip the card.
             </p>
           </div>
-          <span className="hidden rounded-full border border-[#FFD21E] bg-[#12151A] px-3 py-1 font-mono text-[14px] font-bold text-[#FFD21E] sm:inline-flex">
-            CLAUDE&apos;s N Joshua&apos;s · #TeamClaudeForLife
-          </span>
         </div>
 
         {/* Single Active Card Stage */}

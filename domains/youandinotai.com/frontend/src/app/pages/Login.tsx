@@ -127,17 +127,11 @@ export function Login() {
             Y&amp;I
           </span>
           <div>
-            <span className="block font-mono text-[11px] uppercase tracking-[0.14em] text-[#C9CBCE]">
-              CLAUDE&apos;s N Joshua&apos;s
-            </span>
             <span className="block font-display text-base font-bold tracking-tight text-[#F4F1EA]">
               YouAndINotAI
             </span>
           </div>
         </Link>
-        <span className="rounded border border-[#3A3F45] bg-[#12151A] px-2.5 py-1 font-mono text-[11px] font-medium text-[#FFD21E]">
-          #TeamClaudeForLife
-        </span>
       </header>
 
       <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-2 my-auto">
@@ -346,9 +340,6 @@ export function Login() {
 
       <footer className="mx-auto mt-10 flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-[#3A3F45] pt-4 text-xs text-[#9DA3AA]">
         <span>youandinotai.com is for adults 18 and over.</span>
-        <span className="font-mono text-[#C9CBCE]">
-          CLAUDE&apos;s N Joshua&apos;s · #TeamClaudeForLife
-        </span>
       </footer>
     </div>
   );

@@ -184,7 +184,7 @@ export function Verify() {
         <div className="mb-8 grid gap-4 md:grid-cols-[1.1fr_0.9fr] md:items-end">
           <div>
             <div className="app-kicker mb-3">
-              Bot-Shield · CLAUDE&apos;s N Joshua&apos;s
+              Bot-Shield
             </div>
             <h1 className="app-title">Prove you&apos;re human.</h1>
             <p className="app-subtitle mt-4 max-w-2xl">

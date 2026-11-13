@@ -202,7 +202,7 @@ export function ProfileSetup() {
         <div className="mb-10 grid gap-6 md:grid-cols-[1.15fr_0.85fr] md:items-end">
           <div>
             <div className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#FFD21E] mb-3">
-              Profile Setup · CLAUDE&apos;s N Joshua&apos;s
+              Profile Setup
             </div>
             <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-[#F4F1EA] mb-4">
               Tell people who you are.

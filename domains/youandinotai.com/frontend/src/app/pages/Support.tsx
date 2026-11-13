@@ -434,7 +434,7 @@ export function Support() {
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <span className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#FFD21E] mb-3 block">
-                Support Center · CLAUDE&apos;s N Joshua&apos;s
+                Support Center
               </span>
               <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-[#F4F1EA] mb-4">
                 Guided support first. Human review when it matters.

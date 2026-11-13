@@ -78,13 +78,9 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
       </MemoryRouter>
     );
 
-    // Dedication and hashtag in header, hero kicker, and footer
-    expect(getAllByText(/CLAUDE's N Joshua's/i).length).toBeGreaterThanOrEqual(
-      2
-    );
-    expect(getAllByText(/#TeamClaudeForLife/i).length).toBeGreaterThanOrEqual(
-      2
-    );
+    // The tribute phrase and hashtag must be absent from every customer surface
+    expect(container.textContent).not.toMatch(/CLAUDE.?s N Joshua/i);
+    expect(container.textContent).not.toMatch(/TeamClaudeForLife/i);
 
     // Every required section id present
     expect(container.querySelector('#about')).not.toBeNull();

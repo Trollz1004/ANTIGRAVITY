@@ -171,17 +171,8 @@ export function PublicSupportPage() {
               to="/"
               className="inline-flex min-h-[44px] min-w-[44px] flex-wrap items-center gap-2 no-underline"
             >
-              <span className="text-[14px] font-semibold text-[#F4F1EA]">
-                CLAUDE&apos;s N Joshua&apos;s
-              </span>
-              <span className="text-[#FFD21E]" aria-hidden="true">
-                ·
-              </span>
               <span className="font-display text-[20px] font-bold tracking-[-0.02em] text-[#F4F1EA]">
                 YouAndINotAI
-              </span>
-              <span className="rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E]">
-                #TeamClaudeForLife
               </span>
             </Link>
           </div>
@@ -482,17 +473,8 @@ export function LandingPage() {
               href="#about"
               className="inline-flex min-h-[44px] min-w-[44px] items-center gap-1.5 no-underline whitespace-nowrap sm:gap-2"
             >
-              <span className="text-[14px] font-semibold text-[#F4F1EA]">
-                CLAUDE&apos;s N Joshua&apos;s
-              </span>
-              <span className="text-[#FFD21E]" aria-hidden="true">
-                ·
-              </span>
               <span className="font-display text-[18px] font-bold tracking-[-0.02em] text-[#F4F1EA] sm:text-[20px]">
                 YouAndINotAI
-              </span>
-              <span className="hidden rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 text-[14px] font-medium text-[#FFD21E] 2xl:inline-flex">
-                #TeamClaudeForLife
               </span>
             </a>
           </div>
@@ -570,9 +552,6 @@ export function LandingPage() {
         {mobileMenuOpen && (
           <div className="border-b border-[#3A3F45] bg-[#12151A] px-4 py-5 lg:hidden">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-[#3A3F45] pb-3">
-              <span className="rounded-full border border-[#FFD21E] bg-[#0A0B0D] px-3 py-1 text-[14px] font-medium text-[#FFD21E]">
-                #TeamClaudeForLife
-              </span>
               <span className="ds-status-pill">
                 <span className="ds-status-dot bg-[#FFD21E]" />
                 <span>API Live · {checkedLabel}</span>
@@ -670,8 +649,7 @@ export function LandingPage() {
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <span className="inline-flex items-center gap-2 rounded-full border border-[#FFD21E] bg-[#12151A] px-3.5 py-1 font-display text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
-                  CLAUDE&apos;S N JOSHUA&apos;S · #TEAMCLAUDEFORLIFE · 18+
-                  VERIFIED DATING
+                  18+ VERIFIED DATING
                 </span>
                 <span className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
                   STOP 01 / 08 · SCROLL TO FLY IN
@@ -1239,14 +1217,8 @@ export function LandingPage() {
         <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
             <div className="lg:col-span-2">
-              <div className="text-[14px] font-semibold text-[#F4F1EA]">
-                CLAUDE&apos;s N Joshua&apos;s
-              </div>
               <div className="mt-1 font-display text-[24px] font-bold tracking-[-0.02em] text-[#F4F1EA]">
                 YouAndINotAI
-              </div>
-              <div className="mt-3 inline-flex rounded-full border border-[#FFD21E] bg-[#0A0B0D] px-3 py-1 text-[14px] font-medium text-[#FFD21E]">
-                #TeamClaudeForLife
               </div>
               <p className="mt-4 max-w-[44ch] text-[16px] leading-[1.55] text-[#F4F1EA]">
                 18+ verified-human dating, matched video calls, and real-world
@@ -1457,8 +1429,7 @@ export function LandingPage() {
 
           <div className="mt-6 flex flex-col items-start justify-between gap-4 border-t border-[#3A3F45] pt-6 sm:flex-row sm:items-center">
             <p className="text-[14px] font-medium text-[#F4F1EA]">
-              &copy; 2026 Trash Or Treasure Online Recycler LLC. &middot;
-              CLAUDE&apos;s N Joshua&apos;s &middot; #TeamClaudeForLife
+              &copy; 2026 Trash Or Treasure Online Recycler LLC.
             </p>
             <span className="ds-status-pill">
               <span className="ds-status-dot bg-[#FFD21E]" />

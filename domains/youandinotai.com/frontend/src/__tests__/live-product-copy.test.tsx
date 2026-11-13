@@ -155,7 +155,7 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     expect(container.textContent).not.toMatch(/founder code/i);
   });
 
-  it('header "Join" opens the register flow; brand marks and API Live stay', () => {
+  it('header "Join" opens the register flow; tribute phrase stays off and API Live stays', () => {
     const { container, getAllByText } = renderLanding();
     const nav = container.querySelector(
       'nav[aria-label="Primary section navigation"]'
@@ -164,8 +164,8 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     expect(join.getAttribute('href')).toBe('/register');
     expect(nav.textContent).not.toMatch(/early access/i);
 
-    expect(getAllByText(/CLAUDE's N Joshua's/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/#TeamClaudeForLife/i).length).toBeGreaterThan(0);
+    expect(container.textContent).not.toMatch(/CLAUDE.?s N Joshua/i);
+    expect(container.textContent).not.toMatch(/TeamClaudeForLife/i);
     expect(getAllByText(/API Live/).length).toBeGreaterThan(0);
   });
 
