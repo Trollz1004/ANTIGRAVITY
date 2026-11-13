@@ -2250,12 +2250,10 @@
                 b.slotLabel +
                 ') · ' +
                 b.deviceCount +
-                '. Click "Add to Google Calendar" or download the .ICS file below to save this appointment.';
+                '. Tap "Text us to confirm" so we know to expect you. You can also add it to your calendar below.';
               confirmGcalBtn.href = res.googleCalendarUrl;
               confirmIcsBtn.href = res.icsUrl;
-              const firstName = (b.fullName || '').trim().split(/\s+/)[0] || '';
-              const smsText = 'Pickup request ' + b.bookingId + ' for ' + b.date + ' ' + b.slotLabel + '. ' + firstName;
-              confirmSmsBtn.href = 'sms:+13213962008?&body=' + encodeURIComponent(smsText);
+              confirmSmsBtn.href = res.smsUrl;
               confirmBox.style.display = 'block';
               confirmBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             })
