@@ -273,15 +273,11 @@ async def google_login(
     else:
         if user.date_of_birth is not None:
             ensure_adult(user.date_of_birth)
-        elif payload.date_of_birth is not None:
-            user.date_of_birth = payload.date_of_birth
-            if user.adult_verified_at is None:
-                user.adult_verified_at = datetime.now(timezone.utc)
         if not user.google_id:
             # Link existing user to Google account
             user.google_id = id_info.get("sub")
-        await db.commit()
-        await db.refresh(user)
+            await db.commit()
+            await db.refresh(user)
 
     ensure_active_user(user)
 
@@ -340,15 +336,12 @@ async def beta_access(
         await db.commit()
         await db.refresh(user)
     elif not user.is_active:
-        if user.date_of_birth is None:
-            if payload.date_of_birth is None:
-                raise bad_request(
-                    message="Date of birth is required to activate this account (18+ only)"
-                )
-            user.date_of_birth = payload.date_of_birth
-            user.adult_verified_at = datetime.now(timezone.utc)
-        else:
-            ensure_adult(user.date_of_birth)
+        dob = user.date_of_birth or payload.date_of_birth
+        if dob is None:
+            raise bad_request(
+                message="Date of birth is required to activate this account (18+ only)"
+            )
+        ensure_adult(dob)
         user.is_active = True
         user.subscription_active = True
         if not user.subscription_tier or user.subscription_tier == "beta":

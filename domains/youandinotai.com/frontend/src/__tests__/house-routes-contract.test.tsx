@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor, act } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import LandingPage, { PublicSupportPage } from '../App';
@@ -251,7 +251,9 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
       await waitFor(() => {
         expect(capturedCallback).not.toBeNull();
       });
-      await capturedCallback!({ credential: 'google-id-token-1' });
+      await act(async () => {
+        await capturedCallback!({ credential: 'google-id-token-1' });
+      });
 
       const dobInput = await findByLabelText(
         /Confirm 18\+ Date of Birth to Finish Google Sign Up/i
