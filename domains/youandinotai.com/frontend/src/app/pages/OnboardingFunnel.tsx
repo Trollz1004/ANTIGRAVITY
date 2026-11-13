@@ -41,7 +41,7 @@ export function OnboardingFunnel() {
     else if (step === 'verify') navigate('/app/verify');
     else if (step === 'subscribe') navigate('/app/checkout/founding_member');
     else if (idx < STEPS.length - 1) setStep(STEPS[idx + 1]);
-    else navigate('/app/discover');
+    else navigate('/app');
   };
 
   return (
