@@ -14,13 +14,6 @@ const WS_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1')
 const UNREADABLE_MESSAGE_TEXT = 'This message could not be shown';
 
 export function decodeMessageContent(rawContent: string): string {
-  if (
-    rawContent === '[failed to decrypt]' ||
-    rawContent === '[encrypted message — key not yet available]'
-  ) {
-    return UNREADABLE_MESSAGE_TEXT;
-  }
-
   try {
     const payload = JSON.parse(rawContent) as {
       type?: unknown;
