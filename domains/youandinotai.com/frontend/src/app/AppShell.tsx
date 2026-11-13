@@ -59,17 +59,11 @@ export function AppShell() {
                 ♥
               </span>
               <div>
-                <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#C9CBCE]">
-                  CLAUDE&apos;s N Joshua&apos;s
-                </div>
                 <div className="font-display text-lg font-bold tracking-tight text-[#F4F1EA]">
                   YouAndINotAI
                 </div>
               </div>
             </div>
-          </div>
-          <div className="mt-2 inline-block rounded border border-[#3A3F45] bg-[#1A1E25] px-2 py-0.5 font-mono text-[10px] font-medium text-[#FFD21E]">
-            #TeamClaudeForLife
           </div>
           <p className="mt-3 text-sm text-[#C9CBCE]">
             Verified adults 18+. Real video. Account-bound trust.
@@ -119,9 +113,6 @@ export function AppShell() {
                 ♥
               </span>
               <div>
-                <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#C9CBCE]">
-                  CLAUDE&apos;s N Joshua&apos;s
-                </div>
                 <div className="font-display text-base font-bold tracking-tight text-[#F4F1EA]">
                   YouAndINotAI
                 </div>

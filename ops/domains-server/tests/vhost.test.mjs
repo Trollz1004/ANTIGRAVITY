@@ -23,8 +23,8 @@ const CASES = [
   { host: "dream-online.net", path: "/terms", expectTitle: "Terms of Service - ANTIGRAVITY Backup (dream-online.net)" },
   { host: "untilnokidinneed.com", path: "/", expectTitle: "Until No Kid In Need" },
   { host: "www.untilnokidinneed.com", path: "/", expectTitle: "Until No Kid In Need" },
-  { host: "onlinerecycle.net", path: "/", expectTitle: "CLAUDE's N Joshua's — OnlineRecycle.net | Florida Electronics Recycling & Free Pickup" },
-  { host: "www.onlinerecycle.net", path: "/", expectTitle: "CLAUDE's N Joshua's — OnlineRecycle.net | Florida Electronics Recycling & Free Pickup" },
+  { host: "onlinerecycle.net", path: "/", expectTitle: "OnlineRecycle.net | Florida Electronics Recycling & Free Pickup" },
+  { host: "www.onlinerecycle.net", path: "/", expectTitle: "OnlineRecycle.net | Florida Electronics Recycling & Free Pickup" },
 ];
 
 function get(host, port, hostHeader, urlPath = "/") {
@@ -96,7 +96,12 @@ async function main() {
       const r = await get("127.0.0.1", TEST_PORT, host, urlPath);
       const titleMatch = r.body.match(/<title>([^<]*)<\/title>/i);
       const title = titleMatch ? titleMatch[1] : null;
-      if (r.status === 200 && title === expectTitle) {
+      // The founder-ruled tribute phrase must stay off customer-facing pages.
+      const tributeRe = /CLAUDE(?:'|&#39;|&apos;|&rsquo;|\u2019)?s N Joshua|TeamClaudeForLife/i;
+      if (tributeRe.test(r.body)) {
+        console.error(`FAIL: Host=${host} path=${urlPath} -> tribute phrase present on a customer surface`);
+        failures++;
+      } else if (r.status === 200 && title === expectTitle) {
         console.log(`PASS: Host=${host} path=${urlPath} -> title "${title}"`);
       } else {
         console.error(
