@@ -13,6 +13,8 @@ import fsp from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { notifyBooking } from "./booking-notify.mjs";
+import { recordPageView, recordBooking } from "./booking-stats.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
@@ -20,6 +22,7 @@ const DOMAINS_ROOT = path.join(REPO_ROOT, "domains");
 const BOOKINGS_DIR = path.join(REPO_ROOT, "data", "ewaste-intake");
 const BOOKINGS_JSONL = path.join(BOOKINGS_DIR, "bookings.jsonl");
 const INQUIRIES_DIR = path.join(BOOKINGS_DIR, "inquiries");
+const STATS_DIR = path.join(BOOKINGS_DIR, "stats");
 
 // Ruled 2026-09-28 (Joshua: "use the endpoints always of 192, not localhost"):
 // listen on the T5500 LAN address and on loopback for local probes and the
@@ -519,6 +522,10 @@ const server = http.createServer(async (req, res) => {
           smsUrl,
         })
       );
+      // After the response is sent: count it and tell the owner. Neither can
+      // delay or break the booking.
+      recordBooking(STATS_DIR);
+      notifyBooking(booking, { logDir: BOOKINGS_DIR }).catch(() => {});
       return;
     }
 
@@ -557,6 +564,7 @@ const server = http.createServer(async (req, res) => {
     const data = await fsp.readFile(filePath);
     res.writeHead(200, { "Content-Type": contentTypeFor(filePath) });
     res.end(data);
+    if (isBookingHost && urlPath === "/" && req.method === "GET") recordPageView(STATS_DIR);
   } catch (err) {
     if (res.headersSent || res.destroyed) return;
     res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });
