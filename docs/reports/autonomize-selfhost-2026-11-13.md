@@ -63,6 +63,27 @@ Built on top of `ai/inbox/f5-autonomize-selfhost-code` in `%USERPROFILE%\antigra
 6. **`EMERGENT_CREDITS.md` & `.env` Hygiene**:
    - Every Emergent credit required by `EMERGENT_CREDITS.md` remains 100% intact. No `.env` file was created, opened, or printed.
 
+### Local Git Commit & Diff Stat (`%USERPROFILE%\antigravity\selfhost\autonomize`)
+
+```text
+51b4503 feat: fresh-only opportunities, permanent dedupe, Hacker News source
+6f3c6c1 feat: run without the Emergent key, label samples, honest proposals
+ae17635 chore: bind docker-compose ports to 127.0.0.1 and add empty owner_facts.md
+
+ backend/llm_router.py                     |   2 +-
+ backend/models.py                         | 140 ++++++++-
+ backend/scanners.py                       | 240 ++++++++++++++-
+ backend/server.py                         | 475 ++++++++++++++++++++++++-----
+ backend/telegram_bot.py                   | 168 +++++++++--
+ backend/tests/test_selfhost_autonomize.py | 484 +++++++++++++++++++++++++++++-
+ frontend/src/lib/api.js                   |   4 +
+ frontend/src/lib/utils.js                 |  20 ++
+ frontend/src/pages/Dashboard.jsx          |   5 +
+ frontend/src/pages/Opportunities.jsx      |  14 +-
+ frontend/src/pages/OpportunityDetail.jsx  |   7 +
+ 11 files changed, 1441 insertions(+), 118 deletions(-)
+```
+
 ### Local Test Output (`pytest backend/tests/test_selfhost_autonomize.py -v`)
 
 ```text
