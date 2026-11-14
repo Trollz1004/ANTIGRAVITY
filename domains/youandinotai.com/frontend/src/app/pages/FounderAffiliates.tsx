@@ -48,7 +48,9 @@ export function FounderAffiliates() {
     } catch (err: any) {
       const status = err?.status;
       if (status === 403 || status === 401) {
-        setError('Founder or admin access is required to view referral counts.');
+        setError(
+          'Founder or admin access is required to view referral counts.'
+        );
       } else {
         setError(err?.message || 'Unable to load referral counts.');
       }
@@ -171,6 +173,9 @@ export function FounderAffiliates() {
             aria-label="Referral code counts"
             className="overflow-x-auto rounded-xl border border-[#3A3F45] bg-[#12151A]"
           >
+            <p className="border-b border-[#3A3F45] px-5 py-3 text-base md:text-lg font-semibold text-[#FFD21E]">
+              Counts only, nothing is paid from here.
+            </p>
             <table
               role="table"
               className="w-full border-collapse text-left block md:table"
@@ -330,8 +335,8 @@ export function FounderAffiliates() {
             <p className="border-t border-[#3A3F45] px-5 py-4 text-base md:text-lg text-[#E2E0D8]">
               Refunds are not recorded on these rows (revenue_allocations keeps
               its initial reserved status after a completed Square payment
-              because refund webhooks do not update this table). Check Square for
-              refunds before paying any creator.
+              because refund webhooks do not update this table). Check Square
+              for refunds before paying any creator.
             </p>
           </section>
         )}

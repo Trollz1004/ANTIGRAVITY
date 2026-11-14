@@ -88,8 +88,7 @@ describe('Referral attribution on sign-up and read-only founder affiliate counts
     localStorage.setItem('antigravity_partner_id', 'creator-google');
 
     let capturedCallback:
-      | ((resp: { credential: string }) => Promise<void>)
-      | null = null;
+      ((resp: { credential: string }) => Promise<void>) | null = null;
     window.google = {
       accounts: {
         id: {
@@ -151,7 +150,9 @@ describe('Referral attribution on sign-up and read-only founder affiliate counts
         'input[type="checkbox"]'
       ) as HTMLInputElement;
       fireEvent.click(checkbox);
-      fireEvent.click(getByRole('button', { name: /Confirm 18\+ & Continue/i }));
+      fireEvent.click(
+        getByRole('button', { name: /Confirm 18\+ & Continue/i })
+      );
 
       await waitFor(() => {
         expect(api.post).toHaveBeenLastCalledWith('/auth/google', {
@@ -225,6 +226,12 @@ describe('Referral attribution on sign-up and read-only founder affiliate counts
     const table = getByRole('table');
     expect(table.textContent).toContain('$17.00');
     expect(table.textContent).toContain('$8.50');
+    expect(container.textContent).toMatch(
+      /counts only, nothing is paid from here/i
+    );
+    expect(container.textContent).toMatch(
+      /Refunds are not recorded on these rows/i
+    );
 
     // Calm, dark, large text, no charts
     expect(container.querySelector('canvas')).toBeNull();
