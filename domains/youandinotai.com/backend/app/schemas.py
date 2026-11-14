@@ -46,6 +46,7 @@ class AuthRefreshRequest(BaseModel):
 class GoogleLoginRequest(BaseModel):
     id_token: str
     date_of_birth: date | None = None
+    referral_code: str | None = Field(default=None, max_length=64)
 
 
 class UserMeResponse(BaseModel):

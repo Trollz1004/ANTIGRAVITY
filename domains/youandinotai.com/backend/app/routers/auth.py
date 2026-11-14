@@ -257,6 +257,7 @@ async def google_login(
             raise bad_request(
                 message="Date of birth is required to create an account (18+ only)"
             )
+        referral_code = (payload.referral_code or "").strip() or None
         # Create a new user
         user = User(
             id=uuid.uuid4(),
@@ -266,6 +267,7 @@ async def google_login(
             google_id=id_info.get("sub"),
             date_of_birth=payload.date_of_birth,
             adult_verified_at=datetime.now(timezone.utc),
+            referral_code=referral_code,
         )
         db.add(user)
         await db.commit()
