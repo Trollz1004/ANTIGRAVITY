@@ -120,15 +120,14 @@ async function main() {
       }
     }
 
-    // Service Areas content & structured data check
+    // Service Areas content, navigation link, sitemap & structured data check
+    const home = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/");
+    const sitemap = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/sitemap.xml");
     const sa = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/service-areas");
     const requiredSnippets = [
-      "Sorrento, Mount Dora, Eustis, Tavares, Leesburg",
-      "Clermont",
-      "Apopka, Orlando, Winter Park, Winter Garden",
-      "Ocoee",
-      "Sanford, Lake Mary, Longwood, Altamonte Springs",
-      "Oviedo",
+      "Sorrento, Mount Dora, Eustis, Tavares, Leesburg, and Clermont.",
+      "Apopka, Orlando, Winter Park, Winter Garden, and Ocoee.",
+      "Sanford, Lake Mary, Longwood, Altamonte Springs, and Oviedo.",
       "(321) 396-2008",
       "https://schema.org/FAQPage",
       "https://schema.org/Question",
@@ -140,8 +139,11 @@ async function main() {
     } else if (missingSnippet) {
       console.error(`FAIL: /service-areas missing expected content: ${missingSnippet}`);
       failures++;
+    } else if (!home.body.includes("/service-areas.html") || !sitemap.body.includes("https://onlinerecycle.net/service-areas.html")) {
+      console.error("FAIL: home page navigation or sitemap.xml missing /service-areas.html link");
+      failures++;
     } else {
-      console.log("PASS: /service-areas renders counties, towns, FAQ structured data, and omits 'NOT IN INPUTS'");
+      console.log("PASS: /service-areas renders counties, towns, FAQ structured data, nav/sitemap links, and omits 'NOT IN INPUTS'");
     }
   } finally {
     child.kill();
