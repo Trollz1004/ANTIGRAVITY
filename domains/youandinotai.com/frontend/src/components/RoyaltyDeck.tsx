@@ -93,7 +93,7 @@ function HolographicCard() {
 
   const benefits = [
     { icon: InfinityIcon, text: 'Lifetime VIP access — never pay again' },
-    { icon: Shield, text: 'Priority matching & dedicated support' },
+    { icon: Shield, text: 'Dedicated support' },
     { icon: Star, text: 'Exclusive Royalty badge on your profile' },
     { icon: Zap, text: 'First access to every new feature' },
     { icon: Sparkles, text: 'Concierge onboarding for launch-era features' },

@@ -60,7 +60,7 @@ const DEMO_PROFILES: Profile[] = [
     intent: 'Relationship ready',
     availability: 'Free this weekend',
     compatibility: 'Shared pace and safety-first dating',
-    verificationLevel: 'Selfie verified',
+    verificationLevel: 'Bot-Shield verified',
   },
   {
     user_id: 'demo-jordan',
@@ -78,7 +78,7 @@ const DEMO_PROFILES: Profile[] = [
     intent: 'Open to serious',
     availability: 'Weeknights after 7',
     compatibility: 'Same distance range and meetup comfort',
-    verificationLevel: 'Photo verified',
+    verificationLevel: 'Bot-Shield verified',
   },
   {
     user_id: 'demo-elena',
@@ -124,7 +124,7 @@ const DEMO_PROFILES: Profile[] = [
     intent: 'See where it goes',
     availability: 'Friday evening',
     compatibility: 'Shared date comfort and interests',
-    verificationLevel: 'Selfie verified',
+    verificationLevel: 'Bot-Shield verified',
   },
 ];
 

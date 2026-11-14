@@ -42,7 +42,7 @@ const LEGAL_DOCS: Record<
       },
       {
         h: '2. Account-Bound Verification & Memberships',
-        p: 'Bot-Shield verification ($1) and Founder memberships are bound to your authenticated YouAndINotAI account. Each profile belongs to one verified adult member.',
+        p: 'Bot-Shield verification ($1) and Founder memberships are bound to your authenticated YouAndINotAI account. Each account belongs to one adult member.',
       },
       {
         h: '3. Community Conduct & Safety',
@@ -73,7 +73,7 @@ const LEGAL_DOCS: Record<
     ],
   },
   age: {
-    title: '18+ Age & Identity Policy',
+    title: '18+ Age & Verification Policy',
     updated: 'Last Updated: April 2026',
     sections: [
       {
@@ -81,12 +81,12 @@ const LEGAL_DOCS: Record<
         p: 'youandinotai.com is for adults 18 and over. Every registration requires an explicit date-of-birth check and affirmative 18+ confirmation before an account is created.',
       },
       {
-        h: '2. Liveness & Bot-Shield Check',
-        p: 'To unlock full discovery, messaging, and video features, members complete a live camera gesture check and a $1 Bot-Shield verification bound to their account.',
+        h: '2. Human Check & $1 Bot-Shield',
+        p: 'Before a member can browse discovery, message, or start video, they complete a short timed question and a $1 Bot-Shield payment tied to their account.',
       },
       {
         h: '3. Adult Community Standard',
-        p: 'Every active account is verified for adult eligibility and human liveness.',
+        p: 'Registration requires an 18+ date-of-birth check, and messaging or video requires passing the Bot-Shield human check and $1 account payment.',
       },
     ],
   },
@@ -109,13 +109,6 @@ const LEGAL_DOCS: Record<
     ],
   },
 };
-
-function getCheckedTimeLabel(): string {
-  const now = new Date();
-  const hh = String(now.getHours()).padStart(2, '0');
-  const mm = String(now.getMinutes()).padStart(2, '0');
-  return `checked ${hh}:${mm}`;
-}
 
 const TALL_MOBILE_STAGE_STOPS = new Set([
   'platform',
@@ -153,8 +146,6 @@ function readUnpinnedStops(): Record<string, boolean> {
 }
 
 export function PublicSupportPage() {
-  const checkedLabel = getCheckedTimeLabel();
-
   return (
     <div className="min-h-screen bg-[#0A0B0D] text-[#F4F1EA] font-sans">
       <a
@@ -180,7 +171,7 @@ export function PublicSupportPage() {
           <div className="flex items-center gap-3">
             <span className="ds-status-pill hidden sm:inline-flex">
               <span className="ds-status-dot bg-[#FFD21E]" />
-              <span>Support Online · {checkedLabel}</span>
+              <span>Support Online</span>
             </span>
             <Link to="/login" className="ds-btn-ghost text-sm">
               Sign In
@@ -239,7 +230,7 @@ export function PublicSupportPage() {
               01 · Verification &amp; Access
             </div>
             <h2 className="mt-2 font-display text-[24px] font-bold text-[#F4F1EA]">
-              $1 Bot-Shield &amp; Liveness
+              $1 Bot-Shield &amp; Human Check
             </h2>
             <p className="mt-3 text-[16px] leading-[1.55] text-[#F4F1EA]">
               Completed your $1 verification checkout and want your badge
@@ -302,8 +293,6 @@ export function LandingPage() {
   const [unpinnedStops, setUnpinnedStops] = useState<Record<string, boolean>>(
     () => readUnpinnedStops()
   );
-
-  const checkedLabel = getCheckedTimeLabel();
 
   useEffect(() => {
     const syncJourney = () => {
@@ -389,12 +378,12 @@ export function LandingPage() {
   const pricingTiers = [
     {
       id: 'bot_shield',
-      badge: 'IDENTITY CHECK',
+      badge: 'HUMAN CHECK',
       name: 'Bot-Shield Verification',
       price: '$1',
       period: 'one-time',
       summary:
-        '60-second camera liveness challenge + $1 identity check. Unlocks your Verified Human badge and full platform access.',
+        'Short timed question + $1 payment tied to your account. Required before messaging or starting video, and unlocks your Verified Human badge.',
       ctaLabel: 'Verify Now — $1',
       to: '/app/verify',
       featured: false,
@@ -406,7 +395,7 @@ export function LandingPage() {
       price: '$14.99',
       period: '/month',
       summary:
-        'Locked-for-life founder rate while active. Platinum Founder badge, priority discovery, video dates, and romance concierge.',
+        'Locked-for-life founder rate while active. Platinum Founder badge, video dates, and romance concierge.',
       ctaLabel: 'Join as Founding Member',
       to: '/app/checkout/founding_member',
       featured: true,
@@ -505,7 +494,7 @@ export function LandingPage() {
           <div className="hidden lg:flex items-center gap-2.5 shrink-0 whitespace-nowrap">
             <span className="ds-status-pill whitespace-nowrap">
               <span className="ds-status-dot bg-[#FFD21E]" />
-              <span>API Live · {checkedLabel}</span>
+              <span>API Live</span>
             </span>
             {user ? (
               <Link
@@ -554,7 +543,7 @@ export function LandingPage() {
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-[#3A3F45] pb-3">
               <span className="ds-status-pill">
                 <span className="ds-status-dot bg-[#FFD21E]" />
-                <span>API Live · {checkedLabel}</span>
+                <span>API Live</span>
               </span>
             </div>
             <div className="grid gap-1">
@@ -619,13 +608,13 @@ export function LandingPage() {
             <div className="mx-auto flex w-full max-w-[1440px] flex-1 items-center justify-between pointer-events-none">
               <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-l-[3px] border-l-[#FFD21E] bg-[#0A0B0D] px-5 py-4">
                 <div className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
-                  01 · LIVENESS GATE
+                  01 · HUMAN CHECK
                 </div>
                 <div className="mt-1 font-display text-[28px] font-bold uppercase leading-none text-[#F4F1EA]">
                   VERIFY
                 </div>
                 <div className="mt-1.5 text-[14px] font-medium text-[#F4F1EA]">
-                  60-Second Camera &amp; $1 Check
+                  Timed Question &amp; $1 Check
                 </div>
               </div>
 
@@ -665,8 +654,9 @@ export function LandingPage() {
                   </h1>
                   <p className="mt-2 max-w-[60ch] text-[14px] leading-[1.45] text-[#F4F1EA] text-pretty sm:text-[18px]">
                     Meet verified adults who are ready to talk, plan, and show
-                    up in real life. Every member completes our $1 Bot-Shield
-                    identity check bound directly to a real account.
+                    up in real life. Before messaging or starting video, members
+                    complete a short human check and a $1 Bot-Shield payment
+                    tied to their account.
                   </p>
                 </div>
 
@@ -730,12 +720,12 @@ export function LandingPage() {
                     <span>01 · Intentional Discovery</span>
                   </div>
                   <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
-                    Identity First Profiles
+                    Verified Human Profiles
                   </h3>
                   <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
-                    Every active profile completes our $1 Bot-Shield check and
-                    surfaces clear relationship goals, openers, and meetup
-                    preferences.
+                    Profiles in discovery pass our short human check and $1
+                    Bot-Shield payment, and surface clear relationship goals,
+                    openers, and meetup preferences.
                   </p>
                 </div>
 
@@ -807,14 +797,14 @@ export function LandingPage() {
               <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-3">
                 <div className="border-l-2 border-[#FFD21E] pl-4">
                   <div className="font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
-                    STEP 01 · LIVE CAMERA CHECK
+                    STEP 01 · TIMED QUESTION
                   </div>
                   <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
-                    60-Second Liveness Challenge
+                    Short Human Check
                   </h3>
                   <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
-                    Complete a quick camera gesture check in your browser to
-                    confirm a live adult is creating the profile.
+                    Answer a short timed question in your browser before moving
+                    to the account-bound checkout step.
                   </p>
                 </div>
 
@@ -1433,7 +1423,7 @@ export function LandingPage() {
             </p>
             <span className="ds-status-pill">
               <span className="ds-status-dot bg-[#FFD21E]" />
-              <span>All Systems Operational · {checkedLabel}</span>
+              <span>All Systems Operational</span>
             </span>
           </div>
         </div>

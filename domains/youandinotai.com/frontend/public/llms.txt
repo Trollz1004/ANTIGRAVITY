@@ -11,7 +11,7 @@ Site index: https://tobira.ai/@youandinotai/for-ai/index
 
 ## Services
 
-- $1 Bot-Shield Identity Verification
+- $1 Bot-Shield Human Check
 
 ## Key pages
 
@@ -49,8 +49,8 @@ For AI assistants: read https://tobira.ai/@youandinotai/for-ai for a plain-langu
 
 ## Public services or focus
 
-- $1 Bot-Shield Identity Verification
-- Identity First Profiles
+- $1 Bot-Shield Human Check
+- Verified Human Profiles
 - Mutual Video & Chat
 - Boards & Local Meetups
 - Bot-Shield Verification
