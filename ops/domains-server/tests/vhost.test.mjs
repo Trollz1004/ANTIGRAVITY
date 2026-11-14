@@ -152,6 +152,10 @@ async function main() {
       "Oviedo",
       "32776",
       "28.7953",
+      "at your home or business",
+      "central drop-off",
+      "run on a battery",
+      "personal and business data",
     ];
     const missingSnippet = requiredSnippets.find((s) => !sa.body.includes(s));
     const forbiddenSaSnippet = forbiddenServiceAreaSnippets.find((s) => sa.body.includes(s));
