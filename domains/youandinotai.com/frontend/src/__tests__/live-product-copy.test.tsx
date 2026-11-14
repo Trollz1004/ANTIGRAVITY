@@ -5,6 +5,7 @@ import { render, fireEvent, waitFor, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import LandingPage, { PublicSupportPage } from '../App';
+import { UnverifiedGate } from '../app/components/UnverifiedGate';
 import { Login } from '../app/pages/Login';
 import { Verify } from '../app/pages/Verify';
 import { api } from '../lib/api';
@@ -278,9 +279,31 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
 
     expect(landingText).not.toMatch(/\b(liveness|selfie|gesture|biometric)\b/i);
     expect(landingText).not.toMatch(/camera liveness|live camera/i);
+    expect(landingText).not.toMatch(/confirm a live adult is creating the profile/i);
+    expect(landingText).not.toMatch(/every active account is verified/i);
     expect(landingText).not.toMatch(/priority discovery|priority matching/i);
     expect(landingText).not.toMatch(/checked\s+\d{2}:\d{2}/i);
     landing.unmount();
+
+    const gate = render(
+      <MemoryRouter initialEntries={['/app']}>
+        <UnverifiedGate />
+      </MemoryRouter>
+    );
+    const gateText = visibleText(gate.container);
+    expect(gateText).toContain('Messaging and video need the $1 human check.');
+    expect(gateText).not.toMatch(/everyone here is verified/i);
+    gate.unmount();
+
+    const loginView = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Login />
+      </MemoryRouter>
+    );
+    const loginText = visibleText(loginView.container);
+    expect(loginText).toContain('Member Sign In · 18+ Venue');
+    expect(loginText).not.toMatch(/Verified Member/i);
+    loginView.unmount();
 
     const support = render(
       <MemoryRouter initialEntries={['/support']}>

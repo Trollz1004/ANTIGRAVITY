@@ -86,7 +86,7 @@ const LEGAL_DOCS: Record<
       },
       {
         h: '3. Adult Community Standard',
-        p: 'Registration requires an 18+ date-of-birth check, and messaging or video requires passing the Bot-Shield human check and $1 account payment.',
+        p: 'Registration requires an 18+ date-of-birth check, and messaging and video need the $1 Bot-Shield human check.',
       },
     ],
   },
