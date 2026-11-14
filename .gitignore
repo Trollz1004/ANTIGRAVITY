@@ -350,3 +350,9 @@ ops/agy-jobs/*.txt
 # Security audit output
 ops/security/runs/
 !/.agents/skills/**
+
+# DateApp prerendered blog HTML and sitemap (generated from public/blog/*.md by build_blog_static.py)
+domains/youandinotai.com/frontend/public/sitemap.xml
+domains/youandinotai.com/frontend/public/blog/index.html
+domains/youandinotai.com/frontend/public/blog/*/index.html
+

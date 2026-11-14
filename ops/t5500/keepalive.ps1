@@ -263,17 +263,32 @@ $Stages = @(
            if ((Test-Path $distIdx) -and (Test-Path $srcDir)) {
                $newestSrc = (Get-ChildItem $srcDir -Recurse -File -ErrorAction SilentlyContinue | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1).LastWriteTimeUtc
                if ($newestSrc -and ((Get-Item $distIdx).LastWriteTimeUtc -lt $newestSrc)) {
-                   Log '  Date-app dist/index.html is older than src/ - triggering rebuild on :3200'
+                   if (-not $script:FrontendRebuildPending) {
+                       Log '  Date-app dist/index.html is older than src/ - triggering rebuild on :3200'
+                   }
                    return $false
                }
+           } elseif (-not $script:FrontendRebuildPending) {
+               Log '  Date-app rebuild skipped: dist/index.html or src/ missing'
            }
+           $script:FrontendRebuildPending = $false
            return $true
        }
        Heal  = {
+           $distIdx = Join-Path $Repo 'domains\youandinotai.com\frontend\dist\index.html'
+           $srcDir  = Join-Path $Repo 'domains\youandinotai.com\frontend\src'
+           $newestSrc = if (Test-Path $srcDir) { (Get-ChildItem $srcDir -Recurse -File -ErrorAction SilentlyContinue | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1).LastWriteTimeUtc } else { $null }
+           $needsRebuild = (-not (Test-Path $distIdx)) -or ($newestSrc -and ((Get-Item $distIdx).LastWriteTimeUtc -lt $newestSrc))
            if (Test-Port 3200) {
                $own = (Get-NetTCPConnection -LocalPort 3200 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1).OwningProcess
                $pn = (Get-Process -Id $own -ErrorAction SilentlyContinue).ProcessName
-               if ($pn -eq 'node') { Stop-PortOwner 3200 } else { Log ('  :3200 held by ' + $pn + ' - not killing'); return }
+               if ($pn -eq 'node') { Stop-PortOwner 3200 } else { Log ('  :3200 held by ' + $pn + ' - not killing; Date-app rebuild skipped'); $script:FrontendRebuildPending = $false; return }
+           }
+           if (-not $needsRebuild) {
+               Log '  Date-app rebuild skipped: dist/index.html is already up to date with src/'
+               $script:FrontendRebuildPending = $false
+           } else {
+               $script:FrontendRebuildPending = $true
            }
            Start-Process -FilePath cmd -ArgumentList @('/c', (Join-Path $Repo 'scripts\fables-house\tab-dateapp.cmd')) -WindowStyle Hidden
        } },
@@ -435,6 +450,10 @@ function Invoke-Stage($s) {
         Log ('[' + $name + '] HEALED')
         $script:Up[$key] = $true; $script:Result[$key] = 'HEALED'; $script:Fails[$key] = 0
     } else {
+        if ($key -eq 'frontend' -and $script:FrontendRebuildPending) {
+            Log '  Date-app rebuild failed: dist/index.html is still missing or older than src/'
+            $script:FrontendRebuildPending = $false
+        }
         $n = 1 + [int]$script:Fails[$key]; $script:Fails[$key] = $n
         $script:Up[$key] = $false; $script:Result[$key] = 'DOWN'
         Log ('[' + $name + '] still DOWN after heal (consecutive pass ' + $n + ')')
