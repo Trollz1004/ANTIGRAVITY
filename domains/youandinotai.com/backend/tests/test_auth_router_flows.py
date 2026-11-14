@@ -383,7 +383,10 @@ def test_every_token_issuing_route_persists_refresh_token_row(
         "name": "Google Persisted",
     }
     with patch.object(auth_router, "verify_google_token", return_value=claims):
-        google_resp = client.post("/api/v1/auth/google", json={"id_token": "token"})
+        google_resp = client.post(
+            "/api/v1/auth/google",
+            json={"id_token": "token", "date_of_birth": "1993-09-05"},
+        )
     assert google_resp.status_code == 200, google_resp.text
     google_data = google_resp.json()
 
@@ -391,7 +394,8 @@ def test_every_token_issuing_route_persists_refresh_token_row(
     settings = Settings(beta_access_codes="GOOD-CODE-1")
     with patch.object(auth_router, "get_settings", return_value=settings):
         beta_resp = client.post(
-            "/api/v1/auth/beta-access", json={"code": "GOOD-CODE-1"}
+            "/api/v1/auth/beta-access",
+            json={"code": "GOOD-CODE-1", "date_of_birth": "1990-01-01"},
         )
     assert beta_resp.status_code == 200, beta_resp.text
     beta_data = beta_resp.json()
@@ -412,6 +416,7 @@ def test_every_token_issuing_route_persists_refresh_token_row(
         assert row.expires_at is not None
         assert row.revoked_at is None
 
-        rot_resp = client.post("/api/v1/auth/refresh", json={"refresh_token": raw_token})
+        rot_resp = client.post(
+            "/api/v1/auth/refresh", json={"refresh_token": raw_token}
+        )
         assert rot_resp.status_code == 200, rot_resp.text
-

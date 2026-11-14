@@ -348,9 +348,7 @@ def test_completed_founding_member_payment_activates_subscription(
     assert user.subscription_tier == "founding_member"
 
 
-def test_completed_royalty_payment_activates_subscription(
-    client, db_session_factory
-):
+def test_completed_royalty_payment_activates_subscription(client, db_session_factory):
     import asyncio
 
     from app.subscriptions import user_has_active_subscription
