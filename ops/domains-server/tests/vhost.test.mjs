@@ -125,16 +125,38 @@ async function main() {
     const sitemap = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/sitemap.xml");
     const sa = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/service-areas");
     const requiredSnippets = [
-      "Sorrento, Mount Dora, Eustis, Tavares, Leesburg, and Clermont.",
-      "Apopka, Orlando, Winter Park, Winter Garden, and Ocoee.",
-      "Sanford, Lake Mary, Longwood, Altamonte Springs, and Oviedo.",
+      "Sorrento",
+      "Lake County",
+      "Orange County",
+      "Seminole County",
       "(321) 396-2008",
       "https://schema.org/FAQPage",
       "https://schema.org/Question",
     ];
+    const forbiddenServiceAreaSnippets = [
+      "NOT IN INPUTS",
+      "Mount Dora",
+      "Eustis",
+      "Tavares",
+      "Leesburg",
+      "Clermont",
+      "Apopka",
+      "Orlando",
+      "Winter Park",
+      "Winter Garden",
+      "Ocoee",
+      "Sanford",
+      "Lake Mary",
+      "Longwood",
+      "Altamonte Springs",
+      "Oviedo",
+      "32776",
+      "28.7953",
+    ];
     const missingSnippet = requiredSnippets.find((s) => !sa.body.includes(s));
-    if (sa.body.includes("NOT IN INPUTS")) {
-      console.error("FAIL: /service-areas contains 'NOT IN INPUTS'");
+    const forbiddenSaSnippet = forbiddenServiceAreaSnippets.find((s) => sa.body.includes(s));
+    if (forbiddenSaSnippet) {
+      console.error(`FAIL: /service-areas contains forbidden snippet '${forbiddenSaSnippet}'`);
       failures++;
     } else if (missingSnippet) {
       console.error(`FAIL: /service-areas missing expected content: ${missingSnippet}`);
@@ -143,7 +165,7 @@ async function main() {
       console.error("FAIL: home page navigation or sitemap.xml missing /service-areas.html link");
       failures++;
     } else {
-      console.log("PASS: /service-areas renders counties, towns, FAQ structured data, nav/sitemap links, and omits 'NOT IN INPUTS'");
+      console.log("PASS: /service-areas renders Sorrento and Lake, Orange, and Seminole Counties, FAQ structured data, nav/sitemap links, and omits unverified towns/postal/geo");
     }
   } finally {
     child.kill();
