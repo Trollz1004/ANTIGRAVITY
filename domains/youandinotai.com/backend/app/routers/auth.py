@@ -11,11 +11,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.age_gate import ensure_adult
 from app.auth import (
     create_access_token,
-    create_refresh_token,
     decode_token,
     ensure_active_user,
     get_current_user,
     hash_password,
+    issue_refresh_token,
     rotate_refresh_token,
     verify_google_token,
     verify_password,
@@ -170,7 +170,7 @@ async def register(
 
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
 
@@ -227,7 +227,7 @@ async def login(
 
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
 
@@ -283,7 +283,7 @@ async def google_login(
 
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
 
@@ -351,7 +351,7 @@ async def beta_access(
 
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
 

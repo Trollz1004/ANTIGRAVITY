@@ -291,3 +291,132 @@ def test_refresh_user_not_found_and_inactive(client, db_session_factory):
     asyncio.run(_seed_token())
     resp = client.post("/api/v1/auth/refresh", json={"refresh_token": raw})
     assert resp.status_code == 401
+
+
+def test_login_session_survives_past_access_token_expiry_and_refuses_refresh_reuse(
+    client,
+):
+    from datetime import timedelta
+
+    from freezegun import freeze_time
+
+    with freeze_time("2026-11-13 12:00:00+00:00") as frozen_time:
+        reg_resp = client.post(
+            "/api/v1/auth/register",
+            json=_register_payload(
+                "session-member@example.com", password="Password123!"
+            ),
+        )
+        assert reg_resp.status_code == 201, reg_resp.text
+
+        login_resp = client.post(
+            "/api/v1/auth/login",
+            json={"email": "session-member@example.com", "password": "Password123!"},
+        )
+        assert login_resp.status_code == 200, login_resp.text
+        initial_tokens = login_resp.json()
+        initial_access = initial_tokens["access_token"]
+        initial_refresh = initial_tokens["refresh_token"]
+
+        # Move clock past the 30-minute access token lifetime
+        frozen_time.tick(timedelta(minutes=31))
+
+        expired_me = client.get(
+            "/api/v1/auth/me",
+            headers={"Authorization": f"Bearer {initial_access}"},
+        )
+        assert expired_me.status_code == 401
+
+        refresh_resp = client.post(
+            "/api/v1/auth/refresh",
+            json={"refresh_token": initial_refresh},
+        )
+        assert refresh_resp.status_code == 200, refresh_resp.text
+        new_tokens = refresh_resp.json()
+        assert new_tokens["access_token"] != initial_access
+        assert new_tokens["refresh_token"] != initial_refresh
+        assert new_tokens["user_id"] == initial_tokens["user_id"]
+
+        active_me = client.get(
+            "/api/v1/auth/me",
+            headers={"Authorization": f"Bearer {new_tokens['access_token']}"},
+        )
+        assert active_me.status_code == 200, active_me.text
+
+        # Second use of the old refresh token is refused
+        reuse_resp = client.post(
+            "/api/v1/auth/refresh",
+            json={"refresh_token": initial_refresh},
+        )
+        assert reuse_resp.status_code == 401
+
+
+def test_every_token_issuing_route_persists_refresh_token_row(
+    client, db_session_factory
+):
+    from sqlalchemy import select
+
+    from app.auth import _hash_token
+    from app.config import Settings
+    from app.models_refresh_token import RefreshToken
+
+    # 1. /auth/register
+    reg_resp = client.post(
+        "/api/v1/auth/register",
+        json=_register_payload("persisted-routes@example.com", password="Password123!"),
+    )
+    assert reg_resp.status_code == 201, reg_resp.text
+    reg_data = reg_resp.json()
+
+    # 2. /auth/login
+    login_resp = client.post(
+        "/api/v1/auth/login",
+        json={"email": "persisted-routes@example.com", "password": "Password123!"},
+    )
+    assert login_resp.status_code == 200, login_resp.text
+    login_data = login_resp.json()
+
+    # 3. /auth/google
+    claims = {
+        "sub": "google-persisted-1",
+        "email": "google-persisted@example.com",
+        "name": "Google Persisted",
+    }
+    with patch.object(auth_router, "verify_google_token", return_value=claims):
+        google_resp = client.post(
+            "/api/v1/auth/google",
+            json={"id_token": "token", "date_of_birth": "1993-09-05"},
+        )
+    assert google_resp.status_code == 200, google_resp.text
+    google_data = google_resp.json()
+
+    # 4. /auth/beta-access
+    settings = Settings(beta_access_codes="GOOD-CODE-1")
+    with patch.object(auth_router, "get_settings", return_value=settings):
+        beta_resp = client.post(
+            "/api/v1/auth/beta-access",
+            json={"code": "GOOD-CODE-1", "date_of_birth": "1990-01-01"},
+        )
+    assert beta_resp.status_code == 200, beta_resp.text
+    beta_data = beta_resp.json()
+
+    for issued in (reg_data, login_data, google_data, beta_data):
+        raw_token = issued["refresh_token"]
+        expected_user_id = uuid.UUID(issued["user_id"])
+
+        async def _fetch_row(token_hash: str):
+            async with db_session_factory() as session:
+                return await session.scalar(
+                    select(RefreshToken).where(RefreshToken.token_hash == token_hash)
+                )
+
+        row = asyncio.run(_fetch_row(_hash_token(raw_token)))
+        assert row is not None
+        assert row.user_id == expected_user_id
+        assert row.expires_at is not None
+        assert row.revoked_at is None
+
+        rot_resp = client.post(
+            "/api/v1/auth/refresh", json={"refresh_token": raw_token}
+        )
+        assert rot_resp.status_code == 200, rot_resp.text

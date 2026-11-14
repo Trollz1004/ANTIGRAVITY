@@ -583,6 +583,7 @@ async def _process_square_payment_event(
                         bound_event.square_payment_id = payment_id
                         bound_event.amount_cents = payment_amount_cents
                     user.subscription_tier = tier
+                    user.subscription_active = True
                     user.subscription_expires_at = None
                     logger.info(
                         "Royalty payment completed: user=%s event=%s proof=%s",
