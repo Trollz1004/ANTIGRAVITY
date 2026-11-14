@@ -256,7 +256,7 @@ We strive for reliable service but do not guarantee 100% uptime. The platform ma
 
 ### 11.4 User Interactions
 
-We are not responsible for the conduct of users on or off the platform. While we verify identity, we do not conduct criminal background checks. Exercise your own judgment and caution when meeting people online or in person.
+We are not responsible for the conduct of users on or off the platform. We do not verify identity and we do not conduct criminal background checks. Exercise your own judgment and caution when meeting people online or in person.
 
 ### 11.5 AI Limitations
 

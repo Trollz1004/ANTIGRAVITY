@@ -124,7 +124,7 @@ We use **Google Gemini** to power matchmaking suggestions and generate conversat
 - **What we send to Gemini:** Anonymized preference data — things like interests, relationship goals, and compatibility factors. We do **not** send your real name, photos, payment information, or messages to Gemini.
 - **What Gemini does:** Suggests potential matches based on compatibility and generates conversation starters.
 - **What Gemini does NOT do:** Create fake profiles, impersonate users, or make autonomous decisions about your account.
-- **AI-generated profiles:** We do **not** use AI to create fake user profiles. Every profile on YouAndINotAI belongs to a verified real person.
+- **AI-generated profiles:** We do **not** use AI to create fake user profiles. A member must pass the timed human check and the $1 payment before they can browse, match, message, or start video.
 
 Google's privacy practices for Gemini are governed by [Google's Privacy Policy](https://policies.google.com/privacy). We encourage you to review it.
 
