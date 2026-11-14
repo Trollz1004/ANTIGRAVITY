@@ -1560,7 +1560,7 @@ p {
     flex-direction: column;
     align-items: flex-start;
     position: fixed;
-    top: calc(64px + 332px);
+    top: calc(64px + 380px);
     left: 0;
     right: 0;
     background: var(--panel-elevated);

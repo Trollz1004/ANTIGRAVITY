@@ -341,6 +341,15 @@ async function resolveFile(docRootAbs, urlPath) {
   } catch {
     const last = path.basename(cleanPath);
     if (!last.includes(".")) {
+      const htmlCandidate = `${requested.replace(/[\\/]+$/, "")}.html`;
+      if (htmlCandidate.startsWith(docRootAbs)) {
+        try {
+          const htmlStat = await fsp.stat(htmlCandidate);
+          if (htmlStat.isFile()) return htmlCandidate;
+        } catch {
+          // fall through to index.html
+        }
+      }
       const indexPath = path.join(docRootAbs, "index.html");
       try {
         const stat = await fsp.stat(indexPath);
