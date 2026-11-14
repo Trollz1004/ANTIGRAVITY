@@ -345,7 +345,7 @@ def build() -> int:
     with open(os.path.join(PUBLIC, "sitemap.xml"), "w", encoding="utf-8") as fh:
         fh.write(sitemap(sitemap_entries))
 
-    print(f"{written} post(s) + sitemap.xml ({len(sitemap_entries)} urls) written to {PUBLIC}")
+    print(f"{written} post(s) + sitemap.xml ({len(sitemap_entries)} urls) written to public")
     return 0
 
 
