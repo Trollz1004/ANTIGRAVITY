@@ -54,6 +54,9 @@ const LazyAnimatedAvatar = lazy(() => import('./app/pages/AnimatedAvatar'));
 const LazyPreOrder = lazy(() => import('./app/pages/PreOrder'));
 const LazyPayMethods = lazy(() => import('./app/pages/PayMethods'));
 const LazyVideoLobby = lazy(() => import('./app/pages/VideoLobby'));
+const LazyFounderAffiliates = lazy(
+  () => import('./app/pages/FounderAffiliates')
+);
 
 function PageErrorFallback({
   errorId,
@@ -471,6 +474,24 @@ createRoot(document.getElementById('root')!).render(
                     >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazyVideoLobby />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/app/admin/affiliates"
+                  element={
+                    <ErrorBoundary
+                      boundaryName="page:founder-affiliates"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyFounderAffiliates />
                       </Suspense>
                     </ErrorBoundary>
                   }

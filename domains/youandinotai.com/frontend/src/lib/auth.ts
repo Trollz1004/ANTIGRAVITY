@@ -4,6 +4,11 @@
 
 import { create } from 'zustand';
 import { api } from './api';
+import {
+  capturePartnerId,
+  clearPartnerId,
+  normalizeRef,
+} from './partnerAttribution';
 
 interface User {
   user_id: string;
@@ -15,6 +20,7 @@ interface User {
   subscription_expires_at?: string | null;
   has_profile: boolean;
   adult_verified: boolean;
+  member_badge?: string | null;
 }
 
 interface RegisterPayload {
@@ -32,7 +38,11 @@ interface AuthState {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  googleLogin: (idToken: string, dateOfBirth?: string) => Promise<void>;
+  googleLogin: (
+    idToken: string,
+    dateOfBirth?: string,
+    referralCode?: string | null
+  ) => Promise<void>;
   betaAccess: (code: string, dateOfBirth?: string) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
   logout: () => void;
@@ -55,7 +65,11 @@ export const useAuth = create<AuthState>(set => ({
     set({ user });
   },
 
-  googleLogin: async (idToken, dateOfBirth) => {
+  googleLogin: async (idToken, dateOfBirth, referralCode) => {
+    const resolvedReferralCode =
+      referralCode !== undefined
+        ? normalizeRef(referralCode)
+        : capturePartnerId(window.location.search);
     const data = await api.post<{
       access_token: string;
       refresh_token: string;
@@ -63,9 +77,11 @@ export const useAuth = create<AuthState>(set => ({
     }>('/auth/google', {
       id_token: idToken,
       ...(dateOfBirth ? { date_of_birth: dateOfBirth } : {}),
+      ...(resolvedReferralCode ? { referral_code: resolvedReferralCode } : {}),
     });
     localStorage.setItem('access_token', data.access_token);
     localStorage.setItem('refresh_token', data.refresh_token);
+    clearPartnerId();
     const user = await api.get<User>('/auth/me');
     set({ user });
   },

@@ -3,10 +3,11 @@
 import logging
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, Header, HTTPException, status
-from sqlalchemy import func, select
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, status
+from sqlalchemy import case, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth import get_current_user
 from app.config import get_settings
 from app.database import get_db
 from app.models import Match, Message, RevenueAllocation, User, VerificationEvent
@@ -15,6 +16,34 @@ from app.monitoring import get_metrics_response
 logger = logging.getLogger("youandinotai.metrics")
 
 router = APIRouter()
+
+COMPLETED_NON_REFUNDED_PAYMENT_STATUSES = (
+    "reserved",
+    "completed",
+    "paid",
+    "settled",
+)
+
+
+def _is_founder_or_admin(user: User) -> bool:
+    badge = (user.member_badge or "").strip().lower()
+    if badge in {"founder", "admin"}:
+        return True
+    settings = get_settings()
+    if user.email.strip().lower() in settings.support_operator_email_list:
+        return True
+    return False
+
+
+async def _require_founder_or_admin(
+    user: User = Depends(get_current_user),
+) -> User:
+    if not _is_founder_or_admin(user):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Founder or admin access required",
+        )
+    return user
 
 
 def _expected_metrics_key() -> str:
@@ -178,4 +207,119 @@ async def security_audit_metrics():
             "individual_records_exposed": 0,
             "metrics_key_required": 1,
         },
+    }
+
+
+@router.get("/metrics/affiliates", dependencies=[Depends(_require_founder_or_admin)])
+async def affiliate_metrics(
+    code: str | None = Query(
+        default=None,
+        max_length=64,
+        description="Optional referral code filter; returns zeros when the code has no activity.",
+    ),
+    db: AsyncSession = Depends(get_db),
+):
+    """Read-only per-referral-code counts for sign-ups, $1 checks, completed non-refunded payments, and 50% owed cents."""
+    normalized_filter = (code or "").strip().lower() or None
+
+    normalized_code_expr = func.lower(func.trim(User.referral_code))
+
+    user_stmt = (
+        select(
+            normalized_code_expr.label("referral_code"),
+            func.count(User.id).label("signups_count"),
+            func.coalesce(
+                func.sum(case((User.bot_shield_verified.is_(True), 1), else_=0)),
+                0,
+            ).label("verified_count"),
+        )
+        .where(
+            User.referral_code.is_not(None),
+            func.length(func.trim(User.referral_code)) > 0,
+        )
+        .group_by(normalized_code_expr)
+    )
+    if normalized_filter:
+        user_stmt = user_stmt.where(normalized_code_expr == normalized_filter)
+
+    payment_stmt = (
+        select(
+            normalized_code_expr.label("referral_code"),
+            func.count(RevenueAllocation.id).label("payments_count"),
+            func.coalesce(func.sum(RevenueAllocation.gross_amount_cents), 0).label(
+                "gross_cents"
+            ),
+        )
+        .join(User, RevenueAllocation.user_id == User.id)
+        .where(
+            User.referral_code.is_not(None),
+            func.length(func.trim(User.referral_code)) > 0,
+            RevenueAllocation.gross_amount_cents > 0,
+            func.lower(RevenueAllocation.status).in_(
+                COMPLETED_NON_REFUNDED_PAYMENT_STATUSES
+            ),
+        )
+        .group_by(normalized_code_expr)
+    )
+    if normalized_filter:
+        payment_stmt = payment_stmt.where(normalized_code_expr == normalized_filter)
+
+    user_rows = (await db.execute(user_stmt)).mappings().all()
+    payment_rows = (await db.execute(payment_stmt)).mappings().all()
+
+    payments_by_code = {
+        str(row["referral_code"]): {
+            "payments_count": int(row["payments_count"] or 0),
+            "gross_cents": int(row["gross_cents"] or 0),
+        }
+        for row in payment_rows
+    }
+
+    items = []
+    for row in sorted(user_rows, key=lambda r: str(r["referral_code"]).lower()):
+        ref_code = str(row["referral_code"])
+        signups_count = int(row["signups_count"] or 0)
+        verified_count = int(row["verified_count"] or 0)
+        pay_info = payments_by_code.get(
+            ref_code, {"payments_count": 0, "gross_cents": 0}
+        )
+        payments_count = pay_info["payments_count"]
+        gross_cents = pay_info["gross_cents"]
+        owed_cents = gross_cents // 2
+        items.append(
+            {
+                "referral_code": ref_code,
+                "signups_count": signups_count,
+                "verified_count": verified_count,
+                "payments_count": payments_count,
+                "gross_cents": gross_cents,
+                "owed_cents": owed_cents,
+            }
+        )
+
+    if normalized_filter and not items:
+        items.append(
+            {
+                "referral_code": normalized_filter,
+                "signups_count": 0,
+                "verified_count": 0,
+                "payments_count": 0,
+                "gross_cents": 0,
+                "owed_cents": 0,
+            }
+        )
+
+    totals = {
+        "codes_count": len(items),
+        "signups_count": sum(item["signups_count"] for item in items),
+        "verified_count": sum(item["verified_count"] for item in items),
+        "payments_count": sum(item["payments_count"] for item in items),
+        "gross_cents": sum(item["gross_cents"] for item in items),
+        "owed_cents": sum(item["owed_cents"] for item in items),
+    }
+
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "items": items,
+        "totals": totals,
     }
