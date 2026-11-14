@@ -81,12 +81,12 @@ const LEGAL_DOCS: Record<
         p: 'youandinotai.com is for adults 18 and over. Every registration requires an explicit date-of-birth check and affirmative 18+ confirmation before an account is created.',
       },
       {
-        h: '2. Liveness & Bot-Shield Check',
-        p: 'To unlock full discovery, messaging, and video features, members complete a live camera gesture check and a $1 Bot-Shield verification bound to their account.',
+        h: '2. Bot-Shield & Human Check',
+        p: 'To unlock full discovery, messaging, and video features, members complete a $1 human check bound to their account.',
       },
       {
         h: '3. Adult Community Standard',
-        p: 'Every active account is verified for adult eligibility and human liveness.',
+        p: 'Every active account is verified for adult eligibility and human verification.',
       },
     ],
   },
@@ -239,7 +239,7 @@ export function PublicSupportPage() {
               01 · Verification &amp; Access
             </div>
             <h2 className="mt-2 font-display text-[24px] font-bold text-[#F4F1EA]">
-              $1 Bot-Shield &amp; Liveness
+              $1 Bot-Shield Check
             </h2>
             <p className="mt-3 text-[16px] leading-[1.55] text-[#F4F1EA]">
               Completed your $1 verification checkout and want your badge
@@ -389,12 +389,12 @@ export function LandingPage() {
   const pricingTiers = [
     {
       id: 'bot_shield',
-      badge: 'IDENTITY CHECK',
+      badge: 'HUMAN CHECK',
       name: 'Bot-Shield Verification',
       price: '$1',
       period: 'one-time',
       summary:
-        '60-second camera liveness challenge + $1 identity check. Unlocks your Verified Human badge and full platform access.',
+        'Quick human check + $1 Bot-Shield check. Unlocks your Verified Human badge and full platform access.',
       ctaLabel: 'Verify Now — $1',
       to: '/app/verify',
       featured: false,
@@ -619,13 +619,13 @@ export function LandingPage() {
             <div className="mx-auto flex w-full max-w-[1440px] flex-1 items-center justify-between pointer-events-none">
               <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-l-[3px] border-l-[#FFD21E] bg-[#0A0B0D] px-5 py-4">
                 <div className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
-                  01 · LIVENESS GATE
+                  01 · HUMAN CHECK GATE
                 </div>
                 <div className="mt-1 font-display text-[28px] font-bold uppercase leading-none text-[#F4F1EA]">
                   VERIFY
                 </div>
                 <div className="mt-1.5 text-[14px] font-medium text-[#F4F1EA]">
-                  60-Second Camera &amp; $1 Check
+                  60-Second $1 Human Check
                 </div>
               </div>
 
@@ -807,13 +807,13 @@ export function LandingPage() {
               <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-3">
                 <div className="border-l-2 border-[#FFD21E] pl-4">
                   <div className="font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
-                    STEP 01 · LIVE CAMERA CHECK
+                    STEP 01 · HUMAN CHECK
                   </div>
                   <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
-                    60-Second Liveness Challenge
+                    60-Second Human Check
                   </h3>
                   <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
-                    Complete a quick camera gesture check in your browser to
+                    Complete a quick check in your browser to
                     confirm a live adult is creating the profile.
                   </p>
                 </div>

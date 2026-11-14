@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 
 import { GoogleSignInButton } from '../../components/auth/GoogleSignInButton';
+import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
 import { useAuth } from '../../lib/auth';
 import { getSafeNextPath } from '../../lib/navigation';
 import {
@@ -32,6 +33,8 @@ export function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [betaCode, setBetaCode] = useState('');
+  const [betaDateOfBirth, setBetaDateOfBirth] = useState('');
+  const [betaNeedsDob, setBetaNeedsDob] = useState(false);
   const [betaError, setBetaError] = useState('');
   const [betaLoading, setBetaLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<LoginErrors>({});
@@ -107,13 +110,34 @@ export function Login() {
       setBetaError('Enter your founder code first.');
       return;
     }
+    let birthDateIso: string | undefined;
+    if (betaNeedsDob || betaDateOfBirth) {
+      if (!betaDateOfBirth) {
+        setBetaError('Date of birth is required (18+ only).');
+        return;
+      }
+      const parsed = toIsoDate(betaDateOfBirth);
+      if (!parsed) {
+        setBetaError('Enter date of birth as MM / DD / YYYY');
+        return;
+      }
+      if (calculateAgeUtc(parsed) < 18) {
+        setBetaError('YouAndINotAI is strictly 18+ only');
+        return;
+      }
+      birthDateIso = parsed;
+    }
     setBetaLoading(true);
     try {
-      await betaAccess(cleaned);
+      await betaAccess(cleaned, birthDateIso);
       const nextUser = useAuth.getState().user;
       navigate(nextUser?.has_profile ? nextPath : '/app/profile');
     } catch (err: any) {
-      setBetaError(err?.message || 'Please check your founder code.');
+      const msg = String(err?.message || '');
+      if (/date of birth/i.test(msg)) {
+        setBetaNeedsDob(true);
+      }
+      setBetaError(msg || 'Please check your founder code.');
     } finally {
       setBetaLoading(false);
     }
@@ -313,6 +337,28 @@ export function Login() {
                   {betaLoading ? 'Checking...' : 'Use Code'}
                 </button>
               </div>
+              {betaNeedsDob && (
+                <div className="mt-3">
+                  <label
+                    htmlFor="login-founder-dob-input"
+                    className="block text-xs font-semibold text-[#C9CBCE] mb-1.5"
+                  >
+                    Date of Birth (18+ required for new founder account)
+                  </label>
+                  <input
+                    id="login-founder-dob-input"
+                    type="text"
+                    value={betaDateOfBirth}
+                    onChange={e =>
+                      setBetaDateOfBirth(formatDateInput(e.target.value))
+                    }
+                    inputMode="numeric"
+                    maxLength={14}
+                    placeholder="MM / DD / YYYY"
+                    className="w-full rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-2.5 text-sm text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
+                  />
+                </div>
+              )}
             </form>
 
             <p className="mt-8 text-center text-sm text-[#C9CBCE]">
