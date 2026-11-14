@@ -109,7 +109,7 @@ def test_google_signup_accepts_and_persists_referral_code_on_new_account(
     """Google sign-up saves referral_code when creating a new user account."""
     monkeypatch.setattr(
         "app.routers.auth.verify_google_token",
-        lambda token: {
+        lambda _token: {
             "email": "google-new-ref@example.com",
             "name": "Google New Ref",
             "sub": "google-sub-new-ref",
@@ -175,7 +175,7 @@ def test_google_signin_never_overwrites_existing_referral_code(
     # 1. Existing user with 'first-creator' logs in via Google carrying 'second-creator'
     monkeypatch.setattr(
         "app.routers.auth.verify_google_token",
-        lambda token: {
+        lambda _token: {
             "email": "existing-coded@example.com",
             "name": "Existing Coded",
             "sub": "google-sub-existing-1",
@@ -193,7 +193,7 @@ def test_google_signin_never_overwrites_existing_referral_code(
     # 2. Existing user created without a code logs in via Google carrying 'late-creator'
     monkeypatch.setattr(
         "app.routers.auth.verify_google_token",
-        lambda token: {
+        lambda _token: {
             "email": "existing-nocode@example.com",
             "name": "Existing NoCode",
             "sub": "google-sub-existing-2",
@@ -516,4 +516,3 @@ def test_affiliate_counts_endpoint_matches_seeded_rows_and_zeros_inactive_code(
         ]
     finally:
         get_settings.cache_clear()
-
