@@ -24,7 +24,7 @@ That is what https://youandinotai.com does with a one-time $1 Bot-Shield. A shor
 
 ## A simpler option
 
-https://youandinotai.com is built around one idea: a short human check and a $1 Bot-Shield payment before messaging or video. The $1 Bot-Shield keeps automated spam accounts out. If you want help once you are in, there is optional AI profile optimization at $14.99 and conversation help after that. None of it is required to meet someone.
+https://youandinotai.com is built around one idea: a short human check and a $1 Bot-Shield payment before messaging or video. The $1 Bot-Shield keeps automated spam accounts out. Paid memberships exist and none is needed to meet someone after the $1 human check.
 
 Start here: https://youandinotai.com
 
