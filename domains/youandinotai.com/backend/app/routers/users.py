@@ -4,12 +4,14 @@ import secrets
 import time
 import uuid
 from collections import defaultdict, deque
+from datetime import datetime, timezone
 from threading import Lock
 
 from fastapi import APIRouter, Depends, Request, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.age_gate import ensure_adult
 from app.config import get_settings
 from app.database import get_db
 from app.error_responses import conflict, rate_limit
@@ -91,6 +93,8 @@ async def register_user(
     client_ip = request.client.host if request.client else "unknown"
     _enforce_registration_rate_limit(client_ip)
 
+    ensure_adult(payload.date_of_birth)
+
     existing_user = await db.scalar(
         select(User).where(User.email == payload.email.lower())
     )
@@ -101,6 +105,8 @@ async def register_user(
         id=uuid.uuid4(),
         email=payload.email.lower(),
         display_name=payload.display_name.strip(),
+        date_of_birth=payload.date_of_birth,
+        adult_verified_at=datetime.now(timezone.utc),
         # Placeholder hash satisfies NOT NULL constraint.
         # This value is cryptographically random and cannot be used to log in.
         # It is overwritten when the user sets a real password via a separate endpoint.
