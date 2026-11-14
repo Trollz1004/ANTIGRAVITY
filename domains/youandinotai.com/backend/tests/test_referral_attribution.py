@@ -16,6 +16,7 @@ from datetime import date, datetime, timezone
 from sqlalchemy import select
 
 from app.auth import create_access_token, hash_password
+from app.config import get_settings
 from app.models import RevenueAllocation, User
 
 
@@ -225,8 +226,13 @@ def test_google_signin_never_overwrites_existing_referral_code(
     assert code2 is None
 
 
-def test_affiliate_counts_endpoint_refuses_non_founder(client, db_session_factory):
-    """Non-founder members and unauthenticated callers are refused with 401/403."""
+def test_affiliate_counts_endpoint_refuses_non_founder(
+    client, db_session_factory, monkeypatch
+):
+    """Non-operator members and unauthenticated callers are refused with 401/403."""
+    monkeypatch.setenv("SUPPORT_OPERATOR_EMAILS", "founder@youandinotai.com")
+    get_settings.cache_clear()
+
     non_founder_id = uuid.uuid4()
 
     async def seed_member() -> None:
@@ -249,23 +255,69 @@ def test_affiliate_counts_endpoint_refuses_non_founder(client, db_session_factor
 
     asyncio.run(seed_member())
 
-    # Unauthenticated request
-    unauth_resp = client.get("/api/v1/metrics/affiliates")
-    assert unauth_resp.status_code in (401, 403), unauth_resp.text
+    try:
+        # Unauthenticated request
+        unauth_resp = client.get("/api/v1/metrics/affiliates")
+        assert unauth_resp.status_code in (401, 403), unauth_resp.text
 
-    # Authenticated non-founder request
-    member_token = create_access_token(str(non_founder_id))
-    member_resp = client.get(
-        "/api/v1/metrics/affiliates",
-        headers={"Authorization": f"Bearer {member_token}"},
-    )
-    assert member_resp.status_code == 403, member_resp.text
+        # Authenticated non-operator request
+        member_token = create_access_token(str(non_founder_id))
+        member_resp = client.get(
+            "/api/v1/metrics/affiliates",
+            headers={"Authorization": f"Bearer {member_token}"},
+        )
+        assert member_resp.status_code == 403, member_resp.text
+    finally:
+        get_settings.cache_clear()
+
+
+def test_affiliate_counts_endpoint_refuses_founder_badge_not_on_operator_list(
+    client, db_session_factory, monkeypatch
+):
+    """A member with the Founder badge who is not on support_operator_email_list gets 403."""
+    monkeypatch.setenv("SUPPORT_OPERATOR_EMAILS", "founder@youandinotai.com")
+    get_settings.cache_clear()
+
+    badged_member_id = uuid.uuid4()
+
+    async def seed_badged_member() -> None:
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=badged_member_id,
+                    email="beta-founder-badge@example.com",
+                    password_hash=hash_password("password123"),
+                    display_name="Beta Founder Badge",
+                    date_of_birth=date(1990, 8, 20),
+                    adult_verified_at=datetime.now(timezone.utc),
+                    bot_shield_verified=True,
+                    subscription_tier="founding_member",
+                    subscription_active=True,
+                    member_badge="Founder",
+                )
+            )
+            await session.commit()
+
+    asyncio.run(seed_badged_member())
+
+    try:
+        badged_token = create_access_token(str(badged_member_id))
+        resp = client.get(
+            "/api/v1/metrics/affiliates",
+            headers={"Authorization": f"Bearer {badged_token}"},
+        )
+        assert resp.status_code == 403, resp.text
+    finally:
+        get_settings.cache_clear()
 
 
 def test_affiliate_counts_endpoint_matches_seeded_rows_and_zeros_inactive_code(
-    client, db_session_factory
+    client, db_session_factory, monkeypatch
 ):
-    """Founder endpoint returns exact sign-ups, $1 checks, completed non-refunded payments, gross cents, and 50% owed cents."""
+    """Operator endpoint returns exact sign-ups, $1 checks, completed payments, gross cents, and 50% owed cents."""
+    monkeypatch.setenv("SUPPORT_OPERATOR_EMAILS", "founder@youandinotai.com")
+    get_settings.cache_clear()
+
     founder_id = uuid.uuid4()
     u_alpha_1 = uuid.uuid4()
     u_alpha_2 = uuid.uuid4()
@@ -281,11 +333,11 @@ def test_affiliate_counts_endpoint_matches_seeded_rows_and_zeros_inactive_code(
                         id=founder_id,
                         email="founder@youandinotai.com",
                         password_hash=hash_password("password123"),
-                        display_name="Josh Founder",
+                        display_name="Josh Operator",
                         date_of_birth=date(1985, 1, 1),
                         adult_verified_at=datetime.now(timezone.utc),
                         bot_shield_verified=True,
-                        member_badge="Founder",
+                        member_badge=None,
                     ),
                     # creator-alpha: 3 sign-ups, 2 passed $1 check
                     User(
@@ -412,53 +464,56 @@ def test_affiliate_counts_endpoint_matches_seeded_rows_and_zeros_inactive_code(
 
     asyncio.run(seed_data())
 
-    founder_token = create_access_token(str(founder_id))
-    headers = {"Authorization": f"Bearer {founder_token}"}
+    try:
+        founder_token = create_access_token(str(founder_id))
+        headers = {"Authorization": f"Bearer {founder_token}"}
 
-    resp = client.get("/api/v1/metrics/affiliates", headers=headers)
-    assert resp.status_code == 200, resp.text
-    data = resp.json()
+        resp = client.get("/api/v1/metrics/affiliates", headers=headers)
+        assert resp.status_code == 200, resp.text
+        data = resp.json()
 
-    by_code = {item["referral_code"]: item for item in data["items"]}
-    assert set(by_code.keys()) == {"creator-alpha", "creator-beta"}
+        by_code = {item["referral_code"]: item for item in data["items"]}
+        assert set(by_code.keys()) == {"creator-alpha", "creator-beta"}
 
-    alpha = by_code["creator-alpha"]
-    assert alpha["signups_count"] == 3
-    assert alpha["verified_count"] == 2
-    assert alpha["payments_count"] == 3
-    assert alpha["gross_cents"] == 1700
-    assert alpha["owed_cents"] == 850
+        alpha = by_code["creator-alpha"]
+        assert alpha["signups_count"] == 3
+        assert alpha["verified_count"] == 2
+        assert alpha["payments_count"] == 3
+        assert alpha["gross_cents"] == 1700
+        assert alpha["owed_cents"] == 850
 
-    beta = by_code["creator-beta"]
-    assert beta["signups_count"] == 1
-    assert beta["verified_count"] == 0
-    assert beta["payments_count"] == 0
-    assert beta["gross_cents"] == 0
-    assert beta["owed_cents"] == 0
+        beta = by_code["creator-beta"]
+        assert beta["signups_count"] == 1
+        assert beta["verified_count"] == 0
+        assert beta["payments_count"] == 0
+        assert beta["gross_cents"] == 0
+        assert beta["owed_cents"] == 0
 
-    assert data["totals"] == {
-        "codes_count": 2,
-        "signups_count": 4,
-        "verified_count": 2,
-        "payments_count": 3,
-        "gross_cents": 1700,
-        "owed_cents": 850,
-    }
-
-    # Querying a code with zero activity returns zeros, never invented numbers
-    empty_resp = client.get(
-        "/api/v1/metrics/affiliates?code=unused-creator", headers=headers
-    )
-    assert empty_resp.status_code == 200, empty_resp.text
-    empty_data = empty_resp.json()
-    assert empty_data["items"] == [
-        {
-            "referral_code": "unused-creator",
-            "signups_count": 0,
-            "verified_count": 0,
-            "payments_count": 0,
-            "gross_cents": 0,
-            "owed_cents": 0,
+        assert data["totals"] == {
+            "codes_count": 2,
+            "signups_count": 4,
+            "verified_count": 2,
+            "payments_count": 3,
+            "gross_cents": 1700,
+            "owed_cents": 850,
         }
-    ]
+
+        # Querying a code with zero activity returns zeros, never invented numbers
+        empty_resp = client.get(
+            "/api/v1/metrics/affiliates?code=unused-creator", headers=headers
+        )
+        assert empty_resp.status_code == 200, empty_resp.text
+        empty_data = empty_resp.json()
+        assert empty_data["items"] == [
+            {
+                "referral_code": "unused-creator",
+                "signups_count": 0,
+                "verified_count": 0,
+                "payments_count": 0,
+                "gross_cents": 0,
+                "owed_cents": 0,
+            }
+        ]
+    finally:
+        get_settings.cache_clear()
 

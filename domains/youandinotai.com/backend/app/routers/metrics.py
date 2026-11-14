@@ -26,13 +26,8 @@ COMPLETED_NON_REFUNDED_PAYMENT_STATUSES = (
 
 
 def _is_founder_or_admin(user: User) -> bool:
-    badge = (user.member_badge or "").strip().lower()
-    if badge in {"founder", "admin"}:
-        return True
     settings = get_settings()
-    if user.email.strip().lower() in settings.support_operator_email_list:
-        return True
-    return False
+    return (user.email or "").strip().lower() in settings.support_operator_email_list
 
 
 async def _require_founder_or_admin(
