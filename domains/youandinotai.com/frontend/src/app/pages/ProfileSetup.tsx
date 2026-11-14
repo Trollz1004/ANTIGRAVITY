@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   CalendarCheck,
   Camera,
@@ -188,7 +188,7 @@ export function ProfileSetup() {
         interests: selectedInterests,
       });
       await fetchUser();
-      navigate('/app');
+      navigate(user?.bot_shield_verified ? '/app' : '/app/verify');
     } catch (err: any) {
       setError(err.message || 'Failed to save profile');
     } finally {
@@ -225,6 +225,25 @@ export function ProfileSetup() {
             </p>
           </div>
         </div>
+
+        {!user?.bot_shield_verified && (
+          <div className="mb-8 rounded-xl border border-[#FFD21E]/30 bg-[#FFD21E]/10 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[#FFD21E]">
+                Next Step: $1 Human Check
+              </div>
+              <p className="mt-1 text-sm text-[#F4F1EA]">
+                Complete the one-time $1 human check to activate matching and discovery.
+              </p>
+            </div>
+            <Link
+              to="/app/verify"
+              className="inline-flex items-center justify-center rounded-lg bg-[#FFD21E] px-5 py-2.5 text-sm font-bold text-black hover:bg-[#ffe066] transition-colors shrink-0 no-underline"
+            >
+              Finish your $1 human check
+            </Link>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {error && (

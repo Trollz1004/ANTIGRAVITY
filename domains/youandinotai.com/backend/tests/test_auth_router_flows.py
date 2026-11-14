@@ -72,8 +72,11 @@ def test_beta_access_creates_and_reactivates_user(client, db_session_factory):
 
     settings = Settings(beta_access_codes="GOOD-CODE-1")
     with patch.object(auth_router, "get_settings", return_value=settings):
-        # First visit creates the beta account
-        resp = client.post("/api/v1/auth/beta-access", json={"code": "GOOD-CODE-1"})
+        # First visit creates the beta account (requires 18+ date_of_birth)
+        resp = client.post(
+            "/api/v1/auth/beta-access",
+            json={"code": "GOOD-CODE-1", "date_of_birth": "1990-01-01"},
+        )
         assert resp.status_code == 200, resp.text
         data = resp.json()
         assert data["token_type"] == "bearer"
@@ -185,7 +188,10 @@ def test_google_login_creates_and_reuses_account(client, db_session_factory):
         "name": "Google User",
     }
     with patch.object(auth_router, "verify_google_token", return_value=claims):
-        resp = client.post("/api/v1/auth/google", json={"id_token": "token"})
+        resp = client.post(
+            "/api/v1/auth/google",
+            json={"id_token": "token", "date_of_birth": "1993-09-05"},
+        )
         assert resp.status_code == 200, resp.text
         user_id = resp.json()["user_id"]
 
