@@ -398,7 +398,7 @@ def test_affiliate_counts_endpoint_matches_seeded_rows_and_zeros_inactive_code(
 
             session.add_all(
                 [
-                    # Completed payment 1 for u_alpha_1 ($1.00 = 100c, default 'reserved' status from webhook)
+                    # Collected payment 1 for u_alpha_1 ($1.00 = 100c, 'reserved' set by reserve_revenue_allocation on COMPLETED webhook)
                     RevenueAllocation(
                         user_id=u_alpha_1,
                         source_event_id="evt_alpha_1_check",
@@ -410,7 +410,7 @@ def test_affiliate_counts_endpoint_matches_seeded_rows_and_zeros_inactive_code(
                         status="reserved",
                         payer_type="customer",
                     ),
-                    # Completed payment 2 for u_alpha_1 ($14.99 = 1499c, explicit 'completed' status)
+                    # Collected payment 2 for u_alpha_1 ($14.99 = 1499c, 'reserved' set by reserve_revenue_allocation on COMPLETED webhook)
                     RevenueAllocation(
                         user_id=u_alpha_1,
                         source_event_id="evt_alpha_1_sub",
@@ -419,10 +419,10 @@ def test_affiliate_counts_endpoint_matches_seeded_rows_and_zeros_inactive_code(
                         gross_amount_cents=1499,
                         reserve_amount_cents=0,
                         operating_amount_cents=1499,
-                        status="completed",
+                        status="reserved",
                         payer_type="customer",
                     ),
-                    # Refunded payment for u_alpha_1 ($14.99 = 1499c, 'refunded' — must NOT be counted)
+                    # Manually marked 'refunded' row — must NOT be counted
                     RevenueAllocation(
                         user_id=u_alpha_1,
                         source_event_id="evt_alpha_1_refunded",
@@ -434,7 +434,19 @@ def test_affiliate_counts_endpoint_matches_seeded_rows_and_zeros_inactive_code(
                         status="refunded",
                         payer_type="customer",
                     ),
-                    # Completed payment 3 for u_alpha_2 ($1.01 = 101c so total gross is 1700c -> owed 850c)
+                    # Founder-test payment row — must NOT be counted as customer revenue
+                    RevenueAllocation(
+                        user_id=u_alpha_1,
+                        source_event_id="evt_alpha_1_founder_test",
+                        square_payment_id="pay_alpha_1_founder_test",
+                        payment_tier="bot_shield",
+                        gross_amount_cents=100,
+                        reserve_amount_cents=0,
+                        operating_amount_cents=100,
+                        status="reserved",
+                        payer_type="founder_test",
+                    ),
+                    # Collected payment 3 for u_alpha_2 ($1.01 = 101c so total gross is 1700c -> owed 850c)
                     RevenueAllocation(
                         user_id=u_alpha_2,
                         source_event_id="evt_alpha_2_check",

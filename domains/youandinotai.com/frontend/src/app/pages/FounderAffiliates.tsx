@@ -106,9 +106,9 @@ export function FounderAffiliates() {
             Referral Sign-Ups and Completed Payments
           </h1>
           <p className="text-base md:text-lg text-[#E2E0D8] max-w-3xl leading-snug md:leading-relaxed">
-            Read-only counts joined from member accounts and completed,
-            non-refunded payment records. Amount owed is half of completed gross
-            receipts. Payouts are handled manually by the founder.
+            Read-only counts joined from member accounts and collected customer
+            Square payment records. Amount owed is half of collected gross
+            receipts before manual refund checks.
           </p>
         </header>
 
@@ -327,6 +327,12 @@ export function FounderAffiliates() {
                 Loading current database counts…
               </p>
             )}
+            <p className="border-t border-[#3A3F45] px-5 py-4 text-base md:text-lg text-[#E2E0D8]">
+              Refunds are not recorded on these rows (revenue_allocations keeps
+              its initial reserved status after a completed Square payment
+              because refund webhooks do not update this table). Check Square for
+              refunds before paying any creator.
+            </p>
           </section>
         )}
       </div>

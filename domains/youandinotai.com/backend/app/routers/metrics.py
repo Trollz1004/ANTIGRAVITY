@@ -17,12 +17,11 @@ logger = logging.getLogger("youandinotai.metrics")
 
 router = APIRouter()
 
-COMPLETED_NON_REFUNDED_PAYMENT_STATUSES = (
-    "reserved",
-    "completed",
-    "paid",
-    "settled",
-)
+# webhooks.py:554-572 calls reserve_revenue_allocation() only when Square
+# reports payment.status == "COMPLETED", and revenue_allocation.py:190 writes
+# status="reserved" on every collected row. Nothing in the backend writes
+# "completed", "paid", or "settled" to RevenueAllocation.status.
+COLLECTED_PAYMENT_ALLOCATION_STATUS = "reserved"
 
 
 def _is_founder_or_admin(user: User) -> bool:
@@ -214,7 +213,7 @@ async def affiliate_metrics(
     ),
     db: AsyncSession = Depends(get_db),
 ):
-    """Read-only per-referral-code counts for sign-ups, $1 checks, completed non-refunded payments, and 50% owed cents."""
+    """Read-only per-referral-code counts for sign-ups, $1 checks, collected customer payments, and 50% owed cents."""
     normalized_filter = (code or "").strip().lower() or None
 
     normalized_code_expr = func.lower(func.trim(User.referral_code))
@@ -250,9 +249,8 @@ async def affiliate_metrics(
             User.referral_code.is_not(None),
             func.length(func.trim(User.referral_code)) > 0,
             RevenueAllocation.gross_amount_cents > 0,
-            func.lower(RevenueAllocation.status).in_(
-                COMPLETED_NON_REFUNDED_PAYMENT_STATUSES
-            ),
+            RevenueAllocation.payer_type == "customer",
+            func.lower(RevenueAllocation.status) == COLLECTED_PAYMENT_ALLOCATION_STATUS,
         )
         .group_by(normalized_code_expr)
     )
