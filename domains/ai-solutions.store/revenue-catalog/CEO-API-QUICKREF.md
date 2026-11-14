@@ -1,5 +1,7 @@
 # CEO API Quick Reference Card
 
+> History, kept for the record. Not current. (Domain not renewed; Paperclip retired).
+
 Location: OneDrive synced CEO reference  
 Purpose: Clean Paperclip + AI-Solutions product-sales operations  
 Last updated: 2026-06-10  

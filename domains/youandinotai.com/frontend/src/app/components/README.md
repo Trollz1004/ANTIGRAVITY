@@ -1,5 +1,7 @@
 # Safety Components
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 This directory contains enhanced safety components for the YouAndiNotAi platform.
 
 ## Components

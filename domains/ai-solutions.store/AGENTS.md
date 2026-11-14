@@ -1,5 +1,7 @@
 # AGENTS.md — Ai-Solutions-Store/ai-solutions
 
+> History, kept for the record. Not current. (Domain not renewed; Paperclip retired).
+
 Agents working in this repo follow `Trollz1004/ANTIGRAVITY/AGENTS.md` and the
 AIS Chief of Staff prompt. Short form: load at least five skills before you
 start; report VERIFIED / UNVERIFIED / BLOCKED with evidence; UP / DOWN / WRONG

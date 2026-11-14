@@ -1,5 +1,7 @@
 # Orbital Studio — STAGED, NOT INTEGRATED
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 Source: Gemini AI Studio session "GEMINI / CLAUDE / CEO's / HERMES AGENT tasks",
 delivered by Joshua 2026-08-22, judge-reviewed at staging level only. The prize
 is `components/Graphy.tsx` — the 3D orbital knowledge-graph / AFK stream
@@ -7,7 +9,7 @@ screensaver ("motion causes emotion"). Joshua explicitly wants this design.
 
 ## Known drift (Gemini's self-audit said NO DRIFT; judge scan found this)
 
-- `Graphy.tsx` presents "T5500 (192.168.0.15): COMMAND POST · push-to-main
+- `Graphy.tsx` presents "T5500 (address in the node env file): COMMAND POST · push-to-main
   authority" — retired IP, false authority. T5500 is the FUTURE Dream Online
   server, not a command post; the only push authority is the judge lane.
 - Node/edition claims in the HUD are Gemini's guesses, not telemetry.

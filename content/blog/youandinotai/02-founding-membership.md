@@ -22,13 +22,13 @@ Here's what that actually means and why it's worth caring about now rather than 
 
 Founder pricing is live on the platform right now, across a few different commitment levels:
 
-- **Bot-Shield Verification — $1.** A one-time human checkpoint. This is the entry point: the liveness challenge plus account-bound Square payment that gets a profile its verified badge. It's not the membership itself, it's the gate that shows you're a real person before you go further.
+- **Bot-Shield Verification — $1.** A one-time human checkpoint. This is the entry point: the liveness challenge plus account-bound payment that gets a profile its verified badge. It's not the membership itself, it's the gate that shows you're a real person before you go further.
 - **Founding Member — $14.99/month.** A locked founder rate on a recurring, account-bound subscription. Cancel anytime — access continues through the end of the billing period you already paid for, and there are no refunds for partial months.
 - **3-Month Founder — $39.99.** One upfront payment for short-term founder access, instead of a recurring charge.
 - **12-Month Founder — $99.99.** The full-year option, billed once, for anyone who already knows they want to be on the platform for a while.
 - **Royalty Card — $2,500.** The top-tier founder product. Terms are provided privately at checkout, and it's a final sale under the platform's published terms.
 
-Every one of these routes through the same account-bound Square checkout as verification does. There's no separate anonymous payment link for a "founder deal" floating around outside the platform — if you're paying for founder access, it's tied to your account the same way verification is.
+Every one of these routes through the same account-bound checkout as verification does. There's no separate anonymous payment link for a "founder deal" floating around outside the platform — if you're paying for founder access, it's tied to your account the same way verification is.
 
 ## Why "locked" is the operative word
 
@@ -40,7 +40,7 @@ This is a fairly standard pattern for products that expect their price to move a
 
 It helps to separate two things: what you're paying for, and why it's cheaper now than it might be later.
 
-What you're paying for is unchanged by the "founder" label — it's platform access, the verification system, and support, delivered through Square as a normal commercial transaction. The site is explicit about this: customer purchases are for platform value delivered, full stop. There's no separate story layered on top of membership or verification checkout.
+What you're paying for is unchanged by the "founder" label — it's platform access, the verification system, and support, delivered as a normal commercial transaction. The site is explicit about this: customer purchases are for platform value delivered, full stop. There's no separate story layered on top of membership or verification checkout.
 
 Why it's cheaper now is timing. Founder pricing exists because the platform is early, and early users are taking on more uncertainty than a user who joins after the product has fully proven itself out. The locked rate is the trade the platform is offering for that: sign up while things are still being built out, keep that rate as long as your account stays active.
 

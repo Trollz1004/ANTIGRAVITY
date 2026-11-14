@@ -1,8 +1,10 @@
 # Until No Kid In Need — landing page
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 A single-file static landing page (`index.html`) for the "Until No Kid In Need" mission
 brand, operated by Trash or Treasure Online Recycler LLC. It introduces the mission and
-links out to the family of platforms (Online Recycle, AI Solutions Store, DREAM Online)
+links out to the family of platforms (Online Recycle, DREAM Online)
 and to the public Open Collective page.
 
 No build step. No frameworks. No CDN scripts. The only external requests are to
@@ -62,7 +64,7 @@ a split/flapping domain.
 
 - [ ] Which host (GitHub Pages vs. Cloudflare Pages) is the intended long-term home for
       `untilnokidinneed.com`.
-- [ ] Whether `onlinerecycle.net`, `ai-solutions.store`, and `dream-online.net` should
+- [ ] Whether `onlinerecycle.net`, `youandinotai.com`, and `dream-online.net` should
       all link back to this page, or whether cross-linking should go the other way too.
 - [ ] How the mission is funded is described only by linking to the Open Collective ledger — no allocation wording on this page (repo canonical-guard rule)
       (this draft deliberately omits one, per instructions).

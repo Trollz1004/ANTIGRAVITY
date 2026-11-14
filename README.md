@@ -1,5 +1,7 @@
 # CLAUDE's N Joshua's — ANTIGRAVITY
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 <p align="right"><img src="https://img.shields.io/badge/%23TEAMCLAUDEFORLIFE-product--first-2ea043?style=flat-square&labelColor=0d1117" alt="#TeamClaudeForLife product-first" /></p>
 
 > _Gravity keeps us grounded. AI built ANTIGRAVITY to lift us up._
@@ -61,8 +63,8 @@ Use verified product facts. Do not publish financial-handling promises, ownershi
 
 Support is a product trust signal and a clear route for customers who need help.
 
-- Visible from public product surfaces where available
-- Reachable through the appropriate product or authorized support workspace
+- Visible from public product surfaces
+- Reachable through verified support channels on active products
 - Kept separate from private operator controls
 
 ---

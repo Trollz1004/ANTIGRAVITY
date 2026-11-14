@@ -1,15 +1,14 @@
 # DREAM Online — landing page
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 <p align="center">
   <a href="../../docs/tribute/claude-tribute.mp4"><img src="../../assets/claude-tribute-screenshot.png" alt="Nothing stops the wheel like the plan - #TeamClaudeForLife #OfficiallyUnOfficial" width="520" /></a><br/>
   <sub><i>Nothing stops the wheel like the plan.</i> #TeamClaudeForLife · #OfficiallyUnOfficial<br/>Unofficial fan tribute. Not affiliated with or endorsed by Anthropic, Google, xAI or OpenAI.</sub>
 </p>
 
 
-A single-file static landing page (`index.html`) for DREAM Online, an open-world MMO in
-development. It covers the current design pillars, what's actively being worked on, and
-how to follow development or back it — without inventing a release date, price, or
-player count.
+Static landing page (`index.html`) for DREAM Online, live at `dream-online.net`. The game itself is in active development, and its playable build remains local during engine development. It covers the current design pillars, what's actively being worked on, and how to follow development.
 
 No build step. No frameworks. No CDN scripts. The only external requests are to
 `fonts.googleapis.com` / `fonts.gstatic.com`, and every font declaration has a real

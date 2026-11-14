@@ -17,7 +17,7 @@ Sole Member: Joshua Coleman
 
 We want to be fair. This refund policy explains what is refundable, what is not, and how to request a refund. Each product type has different terms because each product works differently.
 
-All refunds are processed through **Square**, our payment processor. Refunds typically take 5-10 business days to appear on your statement, depending on your bank.
+All refunds are processed through our payment provider to your original payment method. Refunds typically take 5-10 business days to appear on your statement, depending on your bank.
 
 ## 2. Refund Terms by Product
 
@@ -44,7 +44,7 @@ Exceptions:
 
 **How to cancel:**
 
-1. Use the subscription management link in your Square confirmation email, or
+1. Use the subscription management link in your purchase confirmation email, or
 2. Email joshlcoleman@gmail.com with the subject "Cancel Subscription"
 
 **Founding Member rate lock:** If you cancel and later want to rejoin, you may be subject to the then-current pricing. Your locked $14.99/month rate is only guaranteed while your subscription remains active and uninterrupted.
@@ -94,11 +94,11 @@ To request a refund, email **joshlcoleman@gmail.com** with the following informa
 - **Date of purchase**
 - **Reason for refund request** (optional but helpful)
 
-We will review your request and respond within **5 business days**. If approved, the refund will be processed through Square and returned to your original payment method.
+We will review your request and respond within **5 business days**. If approved, the refund will be processed and returned to your original payment method.
 
 ## 4. Refund Processing
 
-- All refunds are processed through **Square** to your original payment method
+- All refunds are processed to your original payment method
 - Refunds typically take **5-10 business days** to appear on your statement
 - The exact timing depends on your bank or credit card company
 - You will receive an email confirmation when your refund is processed

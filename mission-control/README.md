@@ -1,4 +1,8 @@
-# JARVIS Dashboard (Mission Control)
+# OPSis Dashboard (Mission Control)
+
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
+> Note: In accordance with standing canon, JARVIS has been renamed to OPSis, and Paperclip is retired forever. Historical file paths and environment variable prefixes (e.g. `JARVIS_*`) are retained for backwards compatibility.
 
 <p align="center">
   <a href="../docs/tribute/claude-tribute.mp4"><img src="../assets/claude-tribute-screenshot.png" alt="Nothing stops the wheel like the plan - #TeamClaudeForLife #OfficiallyUnOfficial" width="520" /></a><br/>
@@ -6,15 +10,13 @@
 </p>
 
 
-Originally moved from `Trollz1004/hermes` `dashboard/jarvis` on 2026-09-17 by
+Originally moved from `Trollz1004/hermes` on 2026-09-17 by
 Joshua's direction, then folded from `ops/dashboard-jarvis` into this folder,
-`mission-control/`, by the repo consolidation (part 2) later the same day.
-This is the one canonical home; the hermes repo copy is left in place, not
-deleted, with a pointer README at `hermes/dashboard/jarvis/README.md`.
+`mission-control/`, by the repo consolidation. Renamed OPSis per standing canon.
 
-Serves at `http://192.168.0.8:9150/`. `crosslisting-os/` lives alongside this
+Serves at `http://127.0.0.1:9150/` (or port configured in node env). `crosslisting-os/` lives alongside this
 dashboard in this same folder — it is a separate app (the LLC crosslisting
-frontend), not a JARVIS panel.
+frontend), not an OPSis panel.
 
 Dispatch: `ops/handoffs/JARVIS-CONSOLIDATION-DISPATCH-2026-09-17.md` and
 `ops/handoffs/HERMES-DISPATCH-DREAM-WORLD-ENGINE.md`; also
@@ -101,7 +103,7 @@ Dispatch: `ops/handoffs/JARVIS-CONSOLIDATION-DISPATCH-2026-09-17.md` and
   that skill's `related_skills`. Client: the "Skills + MCP" tab
   (`js/jarvis/skills.js`) — links to, rather than repeats, the existing
   Agents/AIRI skills tree.
-- **JARVIS MCP endpoint** (unit 4) — a minimal, read-only Model Context
+- **OPSis (JARVIS) MCP endpoint** (unit 4) — a minimal, read-only Model Context
   Protocol server over Streamable HTTP at `POST /mcp` on this same `:9150`
   port (`@modelcontextprotocol/sdk`), so a remote Claude Code session (e.g.
   on the Alienware node) can read this node's real state over the LAN.
@@ -112,7 +114,7 @@ Dispatch: `ops/handoffs/JARVIS-CONSOLIDATION-DISPATCH-2026-09-17.md` and
   Claude Code session with:
 
   ```
-  claude mcp add --transport http jarvis http://192.168.0.8:9150/mcp --header "Authorization: Bearer <JARVIS_MCP_TOKEN>"
+  claude mcp add --transport http opsis http://127.0.0.1:9150/mcp --header "Authorization: Bearer <OPSIS_MCP_TOKEN>"
   ```
 
 ## Board Room (specs/011-ultracode-house)
@@ -134,7 +136,7 @@ Dispatch: `ops/handoffs/JARVIS-CONSOLIDATION-DISPATCH-2026-09-17.md` and
   `scripts/backup-node.mjs` (NOT CONFIGURED before the first run, RED on a
   corrupt file, STALE after 26 hours).
 
-## Ask-JARVIS agentic loop (specs/009-jarvis-agentic-ask)
+## Ask-OPSis agentic loop (specs/009-jarvis-agentic-ask)
 
 Ruling 2026-09-19: a model in this dashboard's picker is useless unless it
 can act. `POST /api/ask {bridge:"omniroute", question, model?}` now runs a
@@ -168,7 +170,7 @@ model routes through `/api/ask`; the dock renders the tool trace as a
 collapsible list under the answer and a "Proposals filed" chip linking to
 the Inbox when the loop actually filed one.
 
-## Environment variables JARVIS reads (names only — never values, never in git)
+## Environment variables OPSis reads (names only — never values, never in git)
 
 All read from `process.env` first, then the repo `.env` (`lib/config.mjs`'s
 `resolveConfig`/`envValue`). None of these were set in this repo's `.env` as

@@ -21,7 +21,7 @@ Most dating apps talk about safety in the abstract — "your safety is our prior
 Bot-Shield is a three-part checkpoint every verified account passes:
 
 1. It starts from the public launch flow — no separate app, no side download.
-2. It combines a liveness challenge with an account-bound Square payment. The liveness check confirms a real person is present in the moment; the payment step ties the account to a real, traceable transaction instead of a free, disposable signup.
+2. It combines a liveness challenge with an account-bound payment. The liveness check confirms a real person is present in the moment; the payment step ties the account to a real, traceable transaction instead of a free, disposable signup.
 3. The verified badge is only granted once both parts clear.
 
 Verified profiles carry one of two visible marks: a green "Verified" badge or a blue "Bot-Shield ✓" badge. Either one tells you the account passed this checkpoint. Neither one is decorative — the badge only appears after the check clears, not as a default state.
@@ -47,11 +47,11 @@ The platform includes GPS-aware meetup discovery — browsing and creating local
 
 ## What data collection actually looks like
 
-The platform's privacy policy is short enough to summarize accurately: it collects your email address, the profile information you provide, verification-state events, payment confirmation tied to your account, and any waitlist signup you submit. It states plainly that personal data is never sold. Cookies are minimal — session cookies only, no ad trackers. Third parties involved are limited to Square for payments, Cloudflare for hosting, and FormSubmit for waitlist capture, each governed by its own privacy policy. If you want your data deleted, that's a direct email request, not a multi-step retention maze.
+The platform's privacy policy is short enough to summarize accurately: it collects your email address, the profile information you provide, verification-state events, payment confirmation tied to your account, and any waitlist signup you submit. It states plainly that personal data is never sold. Cookies are minimal — session cookies only, no ad trackers. Third parties involved are limited to our payment provider for payments, Cloudflare for hosting, and FormSubmit for waitlist capture, each governed by its own privacy policy. If you want your data deleted, that's a direct email request, not a multi-step retention maze.
 
 ## Why account-bound payments are a safety feature, not just a business one
 
-It's worth connecting a dot that isn't obvious at first: requiring an account-bound Square payment for verification and membership isn't only a revenue mechanism, it's a structural deterrent against the kind of mass, disposable fake-account behavior that makes other platforms feel unsafe. Anonymous payment links are trivial to reuse across an unlimited number of throwaway accounts. A real, account-bound transaction is not. That friction is doing real safety work, even though it looks, on the surface, like a normal checkout step.
+It's worth connecting a dot that isn't obvious at first: requiring an account-bound payment for verification and membership isn't only a revenue mechanism, it's a structural deterrent against the kind of mass, disposable fake-account behavior that makes other platforms feel unsafe. Anonymous payment links are trivial to reuse across an unlimited number of throwaway accounts. A real, account-bound transaction is not. That friction is doing real safety work, even though it looks, on the surface, like a normal checkout step.
 
 ## The honest summary
 

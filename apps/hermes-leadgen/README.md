@@ -1,5 +1,7 @@
 # HermesLeadGen
 
+CLAUDE's N Joshua's · #TeamClaudeForLife · Built with Google Gemini
+
 Local desktop app for Sabretooth (`$env:SABRETOOTH_HOST` / `:8392`). YouTube shorts + marketing lead-gen only.
 
 ## Run

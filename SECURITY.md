@@ -72,7 +72,7 @@ Our platform adheres to the following security standards and regulations:
 
 - Florida Statute §496.405 ( outreachs Act)
 - General Data Protection Regulation (GDPR) where applicable
-- Payment Card Industry Data Security Standard (PCI DSS) compliance through Square
+- Payment Card Industry Data Security Standard (PCI DSS) compliance through our payment providers
 - SOC 2 Type II compliance through our infrastructure providers
 
 ## Contact

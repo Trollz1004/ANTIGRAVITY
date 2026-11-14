@@ -1,5 +1,7 @@
 # FABLE 5 DISPATCH — Lead Generation CRM Integration into ANTIGRAVITY
 
+> History, kept for the record. Not current.
+
 ## Context for Fable
 Emergent-built Lead Generation CRM is running at:
 - **Preview URL**: https://civic-marketplace-1.preview.emergentagent.com
