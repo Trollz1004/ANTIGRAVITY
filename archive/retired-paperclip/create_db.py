@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 import asyncpg
 
@@ -7,7 +8,7 @@ async def main():
     # Connect to the default postgres database to create a new one
     conn = await asyncpg.connect(
         user="uandinotai",
-        password="yGKsX1ylhXCQkjr1H0F0SWYWWl_gxKPC",
+        password=os.environ['PGPASSWORD'],
         host="127.0.0.1",
         port=5432,
         database="postgres",

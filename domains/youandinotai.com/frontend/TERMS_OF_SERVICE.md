@@ -29,7 +29,7 @@ To use YouAndINotAI, you must:
 - Not have been previously banned from the Platform
 - Complete the current Bot-Shield verification flow before using protected features
 
-Our current pre-launch verification flow uses the Bot-Shield challenge system plus a completed Square payment checkpoint. It is designed to deter automated signups and badge completed accounts. If we later add document or selfie-based identity verification, we will update these terms before that flow goes live.
+Our current verification flow uses the Bot-Shield challenge system plus a completed Square payment checkpoint. It is designed to deter automated signups and badge completed accounts. If we later add document or selfie-based identity verification, we will update these terms before that flow goes live.
 
 ## 3. Account Registration and Security
 
