@@ -13,7 +13,6 @@ Risk surface:
 import uuid
 from datetime import date, datetime, timedelta, timezone
 
-import pytest
 from sqlalchemy import select
 
 from app.auth import hash_password
