@@ -17,6 +17,7 @@ import { SafetyDrawer } from '../components/SafetyDrawer';
 import { LazySection } from '../../components/LazySection';
 import { SkeletonLoader } from '../../components/SkeletonLoader';
 import MeetupsDiscovery from '../../components/MeetupsDiscovery';
+import { UnverifiedGate } from '../components/UnverifiedGate';
 
 interface Profile {
   user_id: string;
@@ -37,100 +38,10 @@ interface Profile {
   verificationLevel?: string;
 }
 
-const DEMO_PROFILES: Profile[] = [
-  {
-    user_id: 'demo-maya',
-    display_name: 'Maya',
-    bio: 'Coffee, bookstores, and honest conversation beat endless scrolling. I want something steady with someone who actually follows through.',
-    age: 31,
-    photos: [],
-    interests: [
-      'Coffee',
-      'Bookstores',
-      'Live music',
-      'Sunday walks',
-      'Verified only',
-    ],
-    location: 'Orlando, FL',
-    verified: true,
-    subscription_active: true,
-    gender: 'female',
-    prompt:
-      'My ideal first date is coffee, a bookstore, and no pressure to perform.',
-    intent: 'Relationship ready',
-    availability: 'Free this weekend',
-    compatibility: 'Shared pace and safety-first dating',
-    verificationLevel: 'Bot-Shield verified',
-  },
-  {
-    user_id: 'demo-jordan',
-    display_name: 'Jordan',
-    bio: 'Low-pressure plans, good food, and clear communication. I like people who know what they want without making it weird.',
-    age: 34,
-    photos: [],
-    interests: ['Tacos', 'Fitness', 'Dogs', 'Standup', 'Weekend plans'],
-    location: 'Tampa, FL',
-    verified: true,
-    subscription_active: false,
-    gender: 'male',
-    prompt:
-      'Green flag: you can make a plan and still leave room for real life.',
-    intent: 'Open to serious',
-    availability: 'Weeknights after 7',
-    compatibility: 'Same distance range and meetup comfort',
-    verificationLevel: 'Bot-Shield verified',
-  },
-  {
-    user_id: 'demo-elena',
-    display_name: 'Elena',
-    bio: 'Creative, direct, and allergic to ghosting. I would rather plan one good date than collect twenty dead chats.',
-    age: 28,
-    photos: [],
-    interests: [
-      'Art walks',
-      'Cooking',
-      'Theater',
-      'Road trips',
-      'Real profiles',
-    ],
-    location: 'St. Petersburg, FL',
-    verified: true,
-    subscription_active: true,
-    gender: 'male',
-    prompt: 'A small thing I care about: people who say what they mean kindly.',
-    intent: 'Intentional dating',
-    availability: 'Sunday afternoon',
-    compatibility: 'Shared values and verified profile',
-  },
-  {
-    user_id: 'demo-ari',
-    display_name: 'Ari',
-    bio: 'New to town, not new to knowing my boundaries. Looking for chemistry that can survive a normal Tuesday.',
-    age: 30,
-    photos: [],
-    interests: [
-      'Kayaking',
-      'Movies',
-      'Coffee',
-      'Mutual effort',
-      'Safety plans',
-    ],
-    location: 'Jacksonville, FL',
-    verified: true,
-    subscription_active: false,
-    gender: 'nonbinary',
-    prompt:
-      'The best plans are simple: public place, easy exit, good conversation.',
-    intent: 'See where it goes',
-    availability: 'Friday evening',
-    compatibility: 'Shared date comfort and interests',
-    verificationLevel: 'Bot-Shield verified',
-  },
-];
-
 export function Discover() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isUnverified, setIsUnverified] = useState(false);
   const [matchAlert, setMatchAlert] = useState<{
     name: string;
     matchId: string;
@@ -144,9 +55,17 @@ export function Discover() {
     setLoading(true);
     try {
       const data = await api.get<Profile[]>('/discover?limit=20');
-      setProfiles(data.length > 0 ? data : DEMO_PROFILES);
-    } catch {
-      setProfiles(DEMO_PROFILES);
+      setProfiles(Array.isArray(data) ? data : []);
+      setIsUnverified(false);
+    } catch (err: any) {
+      if (
+        err?.status === 403 ||
+        (typeof err?.message === 'string' &&
+          err.message.toLowerCase().includes('verification'))
+      ) {
+        setIsUnverified(true);
+      }
+      setProfiles([]);
     } finally {
       setLoading(false);
     }
@@ -216,6 +135,10 @@ export function Discover() {
     );
   }
 
+  if (isUnverified) {
+    return <UnverifiedGate />;
+  }
+
   if (profiles.length === 0) {
     return (
       <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center text-center relative overflow-hidden p-6">
@@ -232,12 +155,11 @@ export function Discover() {
           <div className="text-xs font-bold uppercase tracking-widest text-stone-400 mb-3 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]">
             Discover
           </div>
-          <h2 className="text-5xl font-black tracking-tight mb-4">
-            feed cleared.
+          <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
+            no one new is nearby yet.
           </h2>
           <p className="text-white/60 text-lg mx-auto max-w-sm mb-8 leading-relaxed">
-            You have worked through the current queue. Refresh when you want the
-            next batch.
+            Check back soon as more verified members join your area.
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}

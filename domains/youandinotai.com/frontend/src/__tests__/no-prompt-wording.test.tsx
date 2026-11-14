@@ -137,10 +137,28 @@ describe('no "prompt" on member-facing copy (Josh ruling 2026-11-07)', () => {
     expect(dialog.textContent).toContain('for a quick resolution');
   });
 
-  it('Discover with demo profiles shows "Profile Answer" and opener-specific likes', async () => {
-    vi.mocked(api.get).mockRejectedValue(new Error('offline'));
+  it('Discover with loaded profiles shows "Profile Answer" and opener-specific likes', async () => {
+    vi.mocked(api.get).mockResolvedValue([
+      {
+        user_id: 'member-1',
+        display_name: 'Maya',
+        bio: 'Coffee, bookstores, and honest conversation beat endless scrolling.',
+        age: 31,
+        photos: [],
+        interests: ['Coffee', 'Bookstores'],
+        location: 'Orlando, FL',
+        verified: true,
+        subscription_active: true,
+        gender: 'female',
+        prompt:
+          'My ideal first date is coffee, a bookstore, and no pressure to perform.',
+        intent: 'Relationship ready',
+        availability: 'Free this weekend',
+        compatibility: 'Shared pace and safety-first dating',
+      },
+    ]);
     const { container, findAllByText } = render(
-      <MemoryRouter initialEntries={['/app/discover']}>
+      <MemoryRouter initialEntries={['/app']}>
         <Discover />
       </MemoryRouter>
     );

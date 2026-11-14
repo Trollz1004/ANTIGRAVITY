@@ -190,6 +190,22 @@ def test_register_rejects_underage_user(client):
     assert "strictly 18+ only" in response.text
 
 
+def test_register_rejects_missing_date_of_birth(client):
+    response = client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "missingdob@example.com",
+            "password": "supersecret",
+            "display_name": "No DOB",
+            "accepted_terms": True,
+            "accepted_cookie_policy": True,
+            "confirmed_over_18": True,
+        },
+    )
+
+    assert response.status_code == 422
+
+
 def test_verify_submit_returns_square_checkout_link(
     client, db_session_factory, monkeypatch
 ):
