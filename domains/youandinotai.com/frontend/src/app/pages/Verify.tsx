@@ -188,7 +188,7 @@ export function Verify() {
             </div>
             <h1 className="app-title">Prove you&apos;re human.</h1>
             <p className="app-subtitle mt-4 max-w-2xl">
-              Complete the liveness challenge, finish the $1 Square check, and
+              Complete the human check, finish the $1 Square check, and
               activate the badge tied to your account.
             </p>
           </div>
@@ -244,7 +244,7 @@ export function Verify() {
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#3A3F45] bg-[#0A0B0D] font-mono text-xs font-bold text-[#FFD21E]">
                     1
                   </span>
-                  <span>Answer a short liveness challenge.</span>
+                  <span>Answer a short human check challenge.</span>
                 </div>
                 <div className="flex gap-3">
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#3A3F45] bg-[#0A0B0D] font-mono text-xs font-bold text-[#FFD21E]">
@@ -288,7 +288,7 @@ export function Verify() {
               <div className="glass-strong rounded-xl p-6 md:p-8">
                 <div className="app-panel-title mb-4 flex items-center gap-2">
                   <Zap size={16} className="text-[#FFD21E]" />
-                  Liveness challenge
+                  Human check challenge
                 </div>
                 <p className="mb-4 font-display text-2xl font-bold tracking-tight text-[#F4F1EA]">
                   {challenge.question}
@@ -377,7 +377,7 @@ export function Verify() {
                 <div className="app-kicker mb-3">Start</div>
                 <h2 className="app-title">Ready for badge activation?</h2>
                 <p className="app-subtitle mt-4">
-                  Start the liveness check now. When it passes, the page will
+                  Start the human check now. When it passes, the page will
                   hand you into the live Square checkout.
                 </p>
                 <button
