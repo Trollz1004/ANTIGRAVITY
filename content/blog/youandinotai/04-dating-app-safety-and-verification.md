@@ -21,14 +21,14 @@ Most dating apps talk about safety in the abstract — "your safety is our prior
 Bot-Shield is a three-part checkpoint every verified account passes:
 
 1. It starts from the public launch flow — no separate app, no side download.
-2. It combines a liveness challenge with an account-bound Square payment. The liveness check confirms a real person is present in the moment; the payment step ties the account to a real, traceable transaction instead of a free, disposable signup.
+2. It combines a short timed question with a $1 account-bound Square payment before a member can message or start video. The timed question adds a human check with a minimum solve time; the payment step ties the account to a real, traceable transaction instead of a free, disposable signup.
 3. The verified badge is only granted once both parts clear.
 
 Verified profiles carry one of two visible marks: a green "Verified" badge or a blue "Bot-Shield ✓" badge. Either one tells you the account passed this checkpoint. Neither one is decorative — the badge only appears after the check clears, not as a default state.
 
 ## What this doesn't claim
 
-Here's the part that matters most and is easiest for a platform to gloss over: Bot-Shield is not government-ID verification. The platform's own age policy says so directly — the current launch flow does not check a government-issued ID in production. What's verified is liveness and account accountability, not legal identity. That's a real, useful safety layer, but it's a different claim than "we confirm who this person legally is," and conflating the two would be dishonest.
+Here's the part that matters most and is easiest for a platform to gloss over: Bot-Shield does not check government documents or compare photos. What it checks is a short timed question and a $1 payment tied to the account. That's a real, useful safety layer against bots and throwaway signups, but it's a different claim than confirming who someone legally is, and conflating the two would be dishonest.
 
 What this means practically: a verified badge tells you the account isn't a bot and isn't a throwaway. It doesn't replace the judgment you'd use meeting anyone new, whether you met them on an app or anywhere else. The badge lowers your odds of talking to a script. It doesn't eliminate every other risk that exists in meeting strangers, because no verification system can.
 
@@ -55,7 +55,7 @@ It's worth connecting a dot that isn't obvious at first: requiring an account-bo
 
 ## The honest summary
 
-Bot-Shield verification confirms liveness and account accountability, shown as a visible badge. It does not confirm legal identity, and the platform says so rather than implying otherwise. Location data for meetups is opt-in per session and isn't stored beyond that. Personal data collected is minimal, stated plainly, and never sold. None of this replaces ordinary judgment — video chat before meeting, meeting in public, telling someone your plans — but all of it is designed to make those ordinary precautions rest on a platform that isn't working against you.
+Bot-Shield verification records a passed timed question and a $1 payment tied to the account, shown as a visible badge. It does not confirm who someone legally is, and the platform says so rather than implying otherwise. Location data for meetups is opt-in per session and isn't stored beyond that. Personal data collected is minimal, stated plainly, and never sold. None of this replaces ordinary judgment — video chat before meeting, meeting in public, telling someone your plans — but all of it is designed to make those ordinary precautions rest on a platform that isn't working against you.
 
 ## Verify your account
 
