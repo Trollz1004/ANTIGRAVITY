@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor, act } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import LandingPage, { PublicSupportPage } from '../App';
 import { Login } from '../app/pages/Login';
 import { Register } from '../app/pages/Register';
+import { GoogleSignInButton } from '../components/auth/GoogleSignInButton';
 import { Discover } from '../app/pages/Discover';
 import { LoveBotPage } from '../app/pages/LoveBotPage';
 import { Matches } from '../app/pages/Matches';
@@ -220,6 +221,93 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     });
   });
 
+  it('requires 18+ date of birth for new Google sign-in accounts before creating account', async () => {
+    useAuth.setState({ user: null, loading: false });
+    let capturedCallback:
+      | ((resp: { credential: string }) => Promise<void>)
+      | null = null;
+    window.google = {
+      accounts: {
+        id: {
+          initialize: (opts: {
+            callback: (resp: { credential: string }) => Promise<void>;
+          }) => {
+            capturedCallback = opts.callback;
+          },
+          renderButton: vi.fn(),
+        },
+      },
+    };
+
+    try {
+      vi.mocked(api.post).mockRejectedValueOnce(
+        new Error('Date of birth is required to create an account (18+ only)')
+      );
+
+      const { findByLabelText, findByText, getByRole, container } = render(
+        <GoogleSignInButton clientId="test-google-client-id" />
+      );
+
+      await waitFor(() => {
+        expect(capturedCallback).not.toBeNull();
+      });
+      await act(async () => {
+        await capturedCallback!({ credential: 'google-id-token-1' });
+      });
+
+      const dobInput = await findByLabelText(
+        /Confirm 18\+ Date of Birth to Finish Google Sign Up/i
+      );
+
+      // Missing DOB refused
+      fireEvent.click(getByRole('button', { name: /Confirm 18\+ & Continue/i }));
+      expect(await findByText('Date of birth is required')).toBeTruthy();
+
+      // Under-18 DOB refused
+      const underageYear = new Date().getUTCFullYear() - 16;
+      fireEvent.change(dobInput, {
+        target: { value: `0101${underageYear}` },
+      });
+      fireEvent.click(getByRole('button', { name: /Confirm 18\+ & Continue/i }));
+      expect(
+        await findByText('YouAndINotAI is strictly 18+ only')
+      ).toBeTruthy();
+
+      // Valid 18+ DOB + confirmation checkbox submits date_of_birth
+      vi.mocked(api.post).mockResolvedValueOnce({
+        access_token: 'tok-google',
+        refresh_token: 'ref-google',
+        user_id: 'u-google',
+      });
+      vi.mocked(api.get).mockResolvedValueOnce({
+        user_id: 'u-google',
+        email: 'google@youandinotai.com',
+        display_name: 'Google Adult',
+        bot_shield_verified: false,
+        subscription_tier: null,
+        subscription_active: false,
+        has_profile: false,
+        adult_verified: true,
+      });
+
+      fireEvent.change(dobInput, { target: { value: '05141992' } });
+      const checkbox = container.querySelector(
+        'input[type="checkbox"]'
+      ) as HTMLInputElement;
+      fireEvent.click(checkbox);
+      fireEvent.click(getByRole('button', { name: /Confirm 18\+ & Continue/i }));
+
+      await waitFor(() => {
+        expect(api.post).toHaveBeenLastCalledWith('/auth/google', {
+          id_token: 'google-id-token-1',
+          date_of_birth: '1992-05-14',
+        });
+      });
+    } finally {
+      delete window.google;
+    }
+  });
+
   it('keeps /app/profile form fields and submits PUT /profiles/me', async () => {
     vi.mocked(api.get).mockResolvedValue({
       user_id: 'user-contract-1',
@@ -275,7 +363,7 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     vi.mocked(api.post).mockResolvedValueOnce({
       challenge_id: 'chal-1',
       challenge_type: 'liveness',
-      question: 'Type HUMAN to confirm liveness',
+      question: 'What is 42 + 7?',
       issued_at: '2026-11-04T00:00:00Z',
       expires_at: '2026-11-04T00:05:00Z',
     });

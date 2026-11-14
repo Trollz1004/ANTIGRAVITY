@@ -269,7 +269,7 @@ describe('no "prompt" on member-facing copy (Josh ruling 2026-11-07)', () => {
         <Verify />
       </MemoryRouter>
     );
-    await findByText('Answer a short human check challenge.');
+    await findByText('Answer a short timed question.');
     expectNoBannedWord(container);
   });
 

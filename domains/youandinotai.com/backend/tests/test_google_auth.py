@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from unittest.mock import patch
 
 import pytest
@@ -51,7 +52,8 @@ async def test_google_login_new_user(async_client: AsyncClient):
         }
 
         response = await async_client.post(
-            "/api/v1/auth/google", json={"id_token": "fake_token"}
+            "/api/v1/auth/google",
+            json={"id_token": "fake_token", "date_of_birth": "1992-05-14"},
         )
 
         assert response.status_code == 200
@@ -65,6 +67,64 @@ async def test_google_login_new_user(async_client: AsyncClient):
             )
             assert user is not None
             assert user.google_id == "1234567890"
+            assert user.date_of_birth == date(1992, 5, 14)
+            assert user.adult_verified_at is not None
+
+
+@pytest.mark.asyncio
+async def test_google_login_new_user_refuses_missing_date_of_birth(
+    async_client: AsyncClient,
+):
+    with patch("app.routers.auth.verify_google_token") as mock_verify:
+        mock_verify.return_value = {
+            "iss": "https://accounts.google.com",
+            "sub": "missing-dob-sub",
+            "email": "missingdob@example.com",
+            "name": "Missing DOB",
+            "email_verified": True,
+        }
+
+        response = await async_client.post(
+            "/api/v1/auth/google", json={"id_token": "fake_token"}
+        )
+
+        assert response.status_code == 400
+        assert "date of birth" in response.text.lower()
+
+        async with TestingSessionLocal() as session:
+            user = await session.scalar(
+                select(User).where(User.email == "missingdob@example.com")
+            )
+            assert user is None
+
+
+@pytest.mark.asyncio
+async def test_google_login_new_user_refuses_underage_date_of_birth(
+    async_client: AsyncClient,
+):
+    underage_dob = (date.today() - timedelta(days=365 * 17)).isoformat()
+    with patch("app.routers.auth.verify_google_token") as mock_verify:
+        mock_verify.return_value = {
+            "iss": "https://accounts.google.com",
+            "sub": "underage-sub",
+            "email": "underage@example.com",
+            "name": "Underage User",
+            "email_verified": True,
+        }
+
+        response = await async_client.post(
+            "/api/v1/auth/google",
+            json={"id_token": "fake_token", "date_of_birth": underage_dob},
+        )
+
+        assert response.status_code == 400
+        assert "strictly 18+ only" in response.text
+
+        async with TestingSessionLocal() as session:
+            user = await session.scalar(
+                select(User).where(User.email == "underage@example.com")
+            )
+            assert user is None
 
 
 @pytest.mark.asyncio

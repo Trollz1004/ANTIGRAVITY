@@ -348,6 +348,66 @@ def test_completed_founding_member_payment_activates_subscription(
     assert user.subscription_tier == "founding_member"
 
 
+def test_completed_royalty_payment_activates_subscription(client, db_session_factory):
+    import asyncio
+
+    from app.subscriptions import user_has_active_subscription
+
+    async def seed_user() -> None:
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=uuid.uuid4(),
+                    email="royalty-buyer@example.com",
+                    password_hash="hashed",
+                    display_name="Royalty Buyer",
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            await session.commit()
+
+    asyncio.run(seed_user())
+
+    payload = make_square_payment_event(
+        event_id="evt_royalty_card_1",
+        amount_cents=250000,
+        buyer_email="royalty-buyer@example.com",
+        note="Royalty Card",
+        payment_status="COMPLETED",
+    )
+
+    signature = generate_square_signature(
+        json.dumps(payload, separators=(",", ":")).encode("utf-8"),
+        "test-square-signature",
+        "http://testserver/api/v1/webhooks/square-payment",
+    )
+
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=json.dumps(payload, separators=(",", ":")),
+    )
+
+    assert response.status_code == 200, response.text
+
+    async def fetch_user() -> User | None:
+        async with db_session_factory() as session:
+            return await session.scalar(
+                select(User).where(User.email == "royalty-buyer@example.com")
+            )
+
+    user = asyncio.run(fetch_user())
+    assert user is not None
+    assert user.subscription_tier == "royalty"
+    assert user.subscription_active is True
+    assert user.subscription_expires_at is None
+    assert user_has_active_subscription(user) is True
+
+
 def test_completed_bot_shield_payment_requires_checkout_binding(
     client,
     db_session_factory,

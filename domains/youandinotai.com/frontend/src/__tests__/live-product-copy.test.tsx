@@ -4,8 +4,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent, waitFor, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
-import LandingPage from '../App';
+import LandingPage, { PublicSupportPage } from '../App';
+import { UnverifiedGate } from '../app/components/UnverifiedGate';
 import { Login } from '../app/pages/Login';
+import { Verify } from '../app/pages/Verify';
 import { api } from '../lib/api';
 import { useAuth } from '../lib/auth';
 
@@ -262,5 +264,77 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     });
     fireEvent.click(getByRole('button', { name: 'Use Code' }));
     expect(await findByText('profile setup')).toBeTruthy();
+  });
+
+  it('describes Bot-Shield as a timed question + $1 payment without camera, selfie, gesture, liveness, priority discovery, or fake checked timestamps', async () => {
+    const landing = renderLanding();
+    const landingText = visibleText(landing.container);
+
+    expect(landingText).toContain('01 · HUMAN CHECK');
+    expect(landingText).toContain('Timed Question & $1 Check');
+    expect(landingText).toContain('STEP 01 · TIMED QUESTION');
+    expect(landingText).toContain('Short Human Check');
+    expect(landingText).toContain('API Live');
+    expect(landingText).toContain('All Systems Operational');
+
+    expect(landingText).not.toMatch(/\b(liveness|selfie|gesture|biometric)\b/i);
+    expect(landingText).not.toMatch(/camera liveness|live camera/i);
+    expect(landingText).not.toMatch(/confirm a live adult is creating the profile/i);
+    expect(landingText).not.toMatch(/every active account is verified/i);
+    expect(landingText).not.toMatch(/priority discovery|priority matching/i);
+    expect(landingText).not.toMatch(/checked\s+\d{2}:\d{2}/i);
+    landing.unmount();
+
+    const gate = render(
+      <MemoryRouter initialEntries={['/app']}>
+        <UnverifiedGate />
+      </MemoryRouter>
+    );
+    const gateText = visibleText(gate.container);
+    expect(gateText).toContain('Messaging and video need the $1 human check.');
+    expect(gateText).not.toMatch(/everyone here is verified/i);
+    gate.unmount();
+
+    const loginView = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Login />
+      </MemoryRouter>
+    );
+    const loginText = visibleText(loginView.container);
+    expect(loginText).toContain('Member Sign In · 18+ Venue');
+    expect(loginText).not.toMatch(/Verified Member/i);
+    loginView.unmount();
+
+    const support = render(
+      <MemoryRouter initialEntries={['/support']}>
+        <PublicSupportPage />
+      </MemoryRouter>
+    );
+    const supportText = visibleText(support.container);
+    expect(supportText).toContain('Support Online');
+    expect(supportText).toContain('$1 Bot-Shield & Human Check');
+    expect(supportText).not.toMatch(/\bliveness\b/i);
+    expect(supportText).not.toMatch(/checked\s+\d{2}:\d{2}/i);
+    support.unmount();
+
+    vi.mocked(api.get).mockResolvedValueOnce({
+      verified: false,
+      trust_score: 20,
+      tier: 'unverified',
+      bot_shield_paid: false,
+      subscription_active: false,
+      checks_completed: 0,
+    });
+    const verify = render(
+      <MemoryRouter initialEntries={['/app/verify']}>
+        <Verify />
+      </MemoryRouter>
+    );
+    await verify.findByText('Answer a short timed question.');
+    const verifyText = visibleText(verify.container);
+    expect(verifyText).not.toMatch(
+      /\b(liveness|camera|selfie|gesture|biometric)\b/i
+    );
+    verify.unmount();
   });
 });

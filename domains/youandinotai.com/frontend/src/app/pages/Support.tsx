@@ -98,7 +98,7 @@ const SUPPORT_LANES: SupportLane[] = [
   {
     id: 'verification',
     title: 'Verified Badge',
-    description: 'Human check, badge status, and access after Bot-Shield.',
+    description: 'Timed question, badge status, and access after Bot-Shield.',
     guidance:
       'Use this lane if you finished verification but the badge or access state looks wrong.',
     defaultMessage:
@@ -112,7 +112,7 @@ const SUPPORT_LANES: SupportLane[] = [
         hint: 'Open a verification review ticket.',
         kind: 'ticket',
         value:
-          'I completed the $1 human check and payment, but my verified badge still has not updated.',
+          'I completed the human check and $1 payment, but my verified badge still has not updated.',
       },
       {
         label: 'Retry help',

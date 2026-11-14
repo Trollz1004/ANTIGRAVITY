@@ -29,6 +29,7 @@ class AuthLoginRequest(BaseModel):
 
 class AuthBetaAccessRequest(BaseModel):
     code: str = Field(min_length=4, max_length=64)
+    date_of_birth: date | None = None
 
 
 class AuthTokenResponse(BaseModel):
@@ -44,6 +45,7 @@ class AuthRefreshRequest(BaseModel):
 
 class GoogleLoginRequest(BaseModel):
     id_token: str
+    date_of_birth: date | None = None
 
 
 class UserMeResponse(BaseModel):
@@ -513,6 +515,7 @@ class SupportChatResponse(BaseModel):
 class UserRegisterRequest(BaseModel):
     email: EmailStr
     display_name: str = Field(min_length=1, max_length=100)
+    date_of_birth: date
 
 
 class UserRegisterResponse(BaseModel):
