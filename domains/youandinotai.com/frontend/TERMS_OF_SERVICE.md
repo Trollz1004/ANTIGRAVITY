@@ -4,7 +4,7 @@
 Operated by Trash Or Treasure Online Recycler LLC, a Florida single-member LLC
 Sole Member: Joshua Coleman
 
-**Last Updated:** March 30, 2026
+**Last Updated:** November 13, 2026
 **Contact:** joshlcoleman@gmail.com
 
 ---
@@ -49,7 +49,7 @@ You are responsible for keeping your login credentials secure. Do not share your
 
 The current Bot-Shield flow includes:
 
-- Completing the launch liveness challenge presented inside the Platform
+- Completing the launch timed human check presented inside the Platform
 - Completing the linked Square payment checkpoint required for the badge
 - Passing anti-bot and abuse screening tied to your account activity
 
@@ -268,7 +268,7 @@ To the maximum extent permitted by law:
 
 - **Trash Or Treasure Online Recycler LLC**, Joshua Coleman, and any affiliated parties shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or goodwill
 - Our total liability for any claim arising from your use of the platform shall not exceed the amount you have paid us in the **12 months** preceding the claim
-- We are not liable for the actions of other users, third-party services (Square, Google, V8 Cloud Verification, Cloudflare), or events beyond our reasonable control
+- We are not liable for the actions of other users, third-party services (Square, Google, Cloudflare), or events beyond our reasonable control
 
 Some jurisdictions do not allow limitation of liability for certain types of damages. In those jurisdictions, our liability is limited to the maximum extent permitted by law.
 
