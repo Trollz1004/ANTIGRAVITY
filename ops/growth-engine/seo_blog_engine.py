@@ -35,8 +35,8 @@ TOPICS = [
     ("dating app scams", "How to spot a dating app scam before you waste a week"),
     ("fake profiles on dating apps", "Fake profiles on dating apps and the one fix that works"),
     ("how to spot a bot on a dating app", "How to spot a bot on a dating app in under a minute"),
-    ("safe online dating", "Safe online dating starts with proof the other person is real"),
-    ("dating app identity verification", "What dating app identity verification should actually check"),
+    ("safe online dating", "Safe online dating starts with a human check before messaging"),
+    ("dating app identity verification", "What dating app verification should actually check"),
     ("best dating app for serious relationships 2026", "What to look for in a dating app for serious relationships in 2026"),
     ("dating app profile tips", "Dating app profile tips that get replies from real people"),
     ("online dating conversation tips", "Online dating conversation tips that lead to a real date"),
@@ -77,7 +77,7 @@ def article(keyword: str, title: str) -> str:
     today = dt.date.today().isoformat()
     return f"""---
 title: "{title}"
-description: "{keyword} — a practical guide, plus how {SITE} uses a $1 Bot-Shield so every profile is a real person."
+description: "{keyword} — a practical guide, plus how {SITE} uses a short human check and a $1 Bot-Shield payment before messaging or video."
 date: {today}
 keyword: "{keyword}"
 canonical: "{SITE}/blog/{slug(keyword)}"
@@ -89,19 +89,19 @@ If you have used a dating app lately you already know the problem. A large share
 
 ## What actually fixes it
 
-Filters and report buttons do not fix it. The account costs the operator nothing, so they make another one. The fix is to make a fake profile cost something and prove the person is real before they can message anyone.
+Filters and report buttons do not fix it. The account costs the operator nothing, so they make another one. The fix is to require a short human check and a $1 payment tied to the account before a member can message or start video.
 
-That is what {SITE} does with a one-time $1 Bot-Shield. One dollar, once, tied to a real identity check. It is not a subscription and it is not a trick to keep you swiping. It exists so the people you match with had to prove they are human.
+That is what {SITE} does with a one-time $1 Bot-Shield. A short timed question and a one-dollar payment tied to the account, done before messaging or video. It is not a subscription and it is not a trick to keep you swiping. It exists so members complete a short human check and a paid account check before they can message anyone.
 
 ## What you should do
 
 1. Stop spending time on apps where a new account is free and unverified.
-2. Look for identity verification that happens before messaging, not after you have already been burned.
+2. Look for a human check and account-bound payment that happen before messaging, not after you have already been burned.
 3. Treat any profile that pushes you to another app or asks for money as a scam, full stop.
 
 ## A simpler option
 
-{SITE} is built around one idea: real people only. The $1 Bot-Shield keeps bots out. If you want help once you are in, there is optional AI profile optimization at $14.99 and conversation help after that. None of it is required to meet someone.
+{SITE} is built around one idea: a short human check and a $1 Bot-Shield payment before messaging or video. The $1 Bot-Shield keeps automated spam accounts out. If you want help once you are in, there is optional AI profile optimization at $14.99 and conversation help after that. None of it is required to meet someone.
 
 Start here: {SITE}
 

@@ -363,7 +363,7 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     vi.mocked(api.post).mockResolvedValueOnce({
       challenge_id: 'chal-1',
       challenge_type: 'liveness',
-      question: 'Type HUMAN to confirm liveness',
+      question: 'What is 42 + 7?',
       issued_at: '2026-11-04T00:00:00Z',
       expires_at: '2026-11-04T00:05:00Z',
     });

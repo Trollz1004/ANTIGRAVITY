@@ -162,7 +162,7 @@ export function Login() {
         <section className="hidden md:flex flex-col justify-between rounded-xl border border-[#3A3F45] bg-[#12151A] p-10">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded border border-[#3A3F45] bg-[#1A1E25] font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#FFD21E]">
-              Verified Member Sign In · 18+ Venue
+              Member Sign In · 18+ Venue
             </div>
             <h1 className="font-display text-5xl font-bold tracking-tight text-[#F4F1EA] mb-6 leading-[1.08]">
               Real people.

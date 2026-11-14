@@ -11,7 +11,7 @@ Site index: https://tobira.ai/@youandinotai/for-ai/index
 
 ## Services
 
-- $1 Bot-Shield Identity Verification
+- $1 Bot-Shield Human Check
 
 ## Key pages
 
