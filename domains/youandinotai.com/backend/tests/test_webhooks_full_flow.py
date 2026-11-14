@@ -134,7 +134,11 @@ def test_royalty_payment_sets_tier_and_completes_bound_event(
 
     stored = asyncio.run(_fetch_user(db_session_factory, user.id))
     assert stored.subscription_tier == "royalty"
+    assert stored.subscription_active is True
     assert stored.subscription_expires_at is None
+    from app.subscriptions import user_has_active_subscription
+
+    assert user_has_active_subscription(stored) is True
 
     async def _fetch_event():
         async with db_session_factory() as session:
