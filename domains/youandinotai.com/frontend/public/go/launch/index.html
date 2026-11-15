@@ -6,6 +6,8 @@
     <title>YouAndiNotAi</title>
     <meta name="robots" content="noindex" />
     <script>
+      // Forward to the home page and keep the creator code, so the visitor
+      // signs up first and the creator gets credit. No checkout links here.
       const SLUGS = {
         josh: { ref: 'josh' },
         launch: { ref: 'launch' },
@@ -15,20 +17,8 @@
         const parts = location.pathname.replace(/\/+$/, '').split('/');
         const slug = (parts[parts.length - 1] || '').toLowerCase();
         const entry = SLUGS[slug];
-        const ref = entry ? entry.ref : slug || 'unknown';
-        const exp = new Date(Date.now() + 30 * 24 * 3600 * 1000).toUTCString();
-        document.cookie =
-          'yni_aff=' +
-          encodeURIComponent(ref) +
-          '; path=/; expires=' +
-          exp +
-          '; SameSite=Lax';
-        location.replace(
-          '/founding.html?ref=' +
-            encodeURIComponent(ref) +
-            '&utm_source=affiliate&utm_medium=link&utm_campaign=' +
-            encodeURIComponent(ref)
-        );
+        const ref = entry ? entry.ref : /^[a-z0-9-]{3,30}$/.test(slug) && slug !== 'go' ? slug : '';
+        location.replace(ref ? '/?ref=' + encodeURIComponent(ref) : '/');
       })();
     </script>
   </head>
@@ -41,24 +31,12 @@
       place-items: center;
       min-height: 100vh;
       padding: 24px;
+      font-size: 20px;
     "
   >
     <div style="max-width: 420px; text-align: center">
-      <p>Taking you to founding checkout…</p>
-      <p>
-        <a style="color: #22d3ee" href="https://youandinotai.com/founding.html"
-          >Continue</a
-        >
-      </p>
-      <p>
-        <a style="color: #22d3ee" href="https://square.link/u/cxwjcn0s"
-          >Founding $14.99/mo</a
-        >
-        ·
-        <a style="color: #22d3ee" href="https://square.link/u/Qc5mxUy7"
-          >Bot-Shield $1</a
-        >
-      </p>
+      <p>Taking you to YouAndiNotAi…</p>
+      <p><a style="color: #22d3ee" href="/">Continue</a></p>
     </div>
   </body>
 </html>
