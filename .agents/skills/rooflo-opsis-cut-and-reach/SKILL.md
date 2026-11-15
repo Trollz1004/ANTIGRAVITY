@@ -74,7 +74,7 @@ When invoked in Free Claude Code (`http://127.0.0.1:8082`), `fcc-claude`, `fcc-o
 - **Prompts:** `.md` templates with `{{variable}}` substitution in `prompts/` dir.
 - **Brain:** Runs on Claude (headless CLI) or Codex (ChatGPT subscription) — no API key needed.
 
-### 4.5 Avatar Creation (free, non-NSFW, non-dating)
+### 4.5 Avatar Creation (free, all-ages, non-dating)
 | Option | Source | Credits | Best For |
 |--------|--------|---------|----------|
 | Google Flow + Gemini Omni Flash | `flow.google.com` | 50/day free | Quick avatar videos, @me in prompts |
