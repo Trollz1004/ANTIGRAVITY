@@ -75,6 +75,11 @@ if ((Get-Setting $values 'SQUARE_WEBHOOK_VERIFY_SIGNATURE') -notmatch '^(?i)(tru
     Write-Output "STOPPED: SQUARE_WEBHOOK_VERIFY_SIGNATURE must be true."
     exit 1
 }
+# The chat hook falls back to port 8000 when this is unset, so it must name the sandbox backend.
+if ((Get-Setting $values 'VITE_API_URL') -notmatch "^http://127\.0\.0\.1:$backendPort/api/v1/?$") {
+    Write-Output "STOPPED: VITE_API_URL must be http://127.0.0.1:$backendPort/api/v1."
+    exit 1
+}
 foreach ($n in 'SQUARE_BOT_SHIELD_PAYMENT_LINK', 'SQUARE_SUBSCRIPTION_PAYMENT_LINK') {
     if (Get-Setting $values $n) { Write-Output "STOPPED: $n must be empty in the sandbox copy."; exit 1 }
 }
