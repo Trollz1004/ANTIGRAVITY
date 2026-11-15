@@ -7,7 +7,7 @@ const pages = ['index.html', 'josh/index.html', 'launch/index.html', 'partner/in
 
 function runForward(file: string, pathname: string): string {
   const html = readFileSync(path.join(goDir, file), 'utf8');
-  const script = /<script>([\s\S]*?)<\/script>/.exec(html)![1];
+  const script = /<script\b[^>]*>([\s\S]*?)<\/script\b[^>]*>/i.exec(html)![1];
   let target = '';
   const fakeLocation = { pathname, replace: (url: string) => (target = url) };
   new Function('location', script)(fakeLocation);
