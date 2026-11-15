@@ -10,6 +10,16 @@ function Get-SandboxHome {
     Join-Path $env:LOCALAPPDATA 'dateapp-sandbox'
 }
 
+# The one sandbox env file: %USERPROFILE%\antigravity\selfhost\dateapp-sandbox\env.sandbox
+# (settings only; logs, pids and the test database stay under Get-SandboxHome).
+function Get-SandboxEnvDir {
+    Join-Path (Join-Path (Join-Path $env:USERPROFILE 'antigravity') 'selfhost') 'dateapp-sandbox'
+}
+
+function Get-SandboxEnvFile {
+    Join-Path (Get-SandboxEnvDir) 'env.sandbox'
+}
+
 function Read-SandboxEnv {
     param([Parameter(Mandatory)][string]$Path)
     $values = [ordered]@{}
@@ -93,4 +103,86 @@ function New-SandboxSecret {
     $bytes = New-Object byte[] 48
     [Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($bytes)
     return ([Convert]::ToBase64String($bytes)).TrimEnd('=').Replace('+', '-').Replace('/', '_')
+}
+
+# ---- Clipboard shape check and env line writer (used by save-sandbox-value.ps1) ----
+
+# Returns '' when the text looks like one pasted value, else a short reason. Never echoes the text.
+# One pasted value = not empty, one line, no spaces (or any other whitespace or control character).
+# A single trailing line break from the copy is ignored by the caller before this check.
+function Get-ValueShapeProblem {
+    param([AllowNull()][string]$Text)
+    if ($null -eq $Text -or $Text.Length -eq 0 -or $Text.Trim().Length -eq 0) { return 'the clipboard is empty' }
+    if ($Text -match '[\r\n]') { return 'the clipboard holds more than one line' }
+    if ($Text -match '\s') { return 'the clipboard text has spaces in it' }
+    if ($Text -match '[\x00-\x1F\x7F]') { return 'the clipboard text has hidden control characters' }
+    return ''
+}
+
+# Drops one trailing line break (copy buttons often add it). Nothing else is changed.
+function Remove-TrailingLineBreak {
+    param([AllowNull()][string]$Text)
+    if ($null -eq $Text) { return $null }
+    return ($Text -replace '(\r\n|\n|\r)\z', '')
+}
+
+# Replaces the value on the first NAME= line of an env file, or adds the line when it is missing.
+# Plain string handling only (the value is never used as a regex replacement). Prints nothing.
+function Set-SandboxEnvLine {
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory)][string]$Name,
+        [Parameter(Mandatory)][string]$Value
+    )
+    $raw = [IO.File]::ReadAllText($Path)
+    $nl = if ($raw.Contains("`r`n")) { "`r`n" } else { "`n" }
+    $lines = New-Object System.Collections.Generic.List[string]
+    foreach ($l in ($raw -split "\r?\n")) { $lines.Add($l) }
+    $pattern = '^\s*' + [regex]::Escape($Name) + '\s*='
+    $found = $false
+    for ($i = 0; $i -lt $lines.Count; $i++) {
+        if ($lines[$i] -match $pattern) { $lines[$i] = ($Name + '=' + $Value); $found = $true; break }
+    }
+    if (-not $found) {
+        $newLine = ($Name + '=' + $Value)
+        if ($lines.Count -gt 0 -and $lines[$lines.Count - 1] -eq '') { $lines.Insert($lines.Count - 1, $newLine) } else { $lines.Add($newLine) }
+    }
+    [IO.File]::WriteAllText($Path, ($lines -join $nl), (New-Object System.Text.UTF8Encoding($false)))
+}
+
+# ---- The only Square door (used by check-sandbox.ps1) ----
+
+# Refusal 3: any address that is not under Square's sandbox host is refused before anything is sent.
+function Test-SandboxSquareUri {
+    param([string]$Uri)
+    if (-not $Uri) { return $false }
+    return $Uri.StartsWith(($script:SandboxSquareHost + '/'), [StringComparison]::OrdinalIgnoreCase)
+}
+
+# Sends one GET to Square's sandbox host with a bearer token. Throws before sending when the address
+# is not on the sandbox host. Returns only the status number and the parsed body to the caller;
+# the caller decides what to print (check-sandbox.ps1 never prints either).
+function Invoke-SandboxSquareGet {
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string]$Uri,
+        [Parameter(Mandatory)][string]$Token,
+        [string]$ApiVersion = ''
+    )
+    if (-not (Test-SandboxSquareUri $Uri)) { throw 'REFUSED: not the Square sandbox host. Nothing was sent.' }
+    try { [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12 } catch { }
+    $headers = @{ Authorization = ('Bearer ' + $Token); Accept = 'application/json' }
+    if ($ApiVersion) { $headers['Square-Version'] = $ApiVersion }
+    $status = 0
+    $body = $null
+    try {
+        $r = Invoke-WebRequest -Uri $Uri -Method Get -Headers $headers -UseBasicParsing -TimeoutSec 20 -MaximumRedirection 0
+        $status = [int]$r.StatusCode
+        $body = $r.Content
+    }
+    catch {
+        $resp = $null
+        if ($_.Exception -and ($_.Exception.PSObject.Properties.Name -contains 'Response')) { $resp = $_.Exception.Response }
+        if ($resp) { $status = [int]$resp.StatusCode } else { $status = 0 }
+    }
+    return [pscustomobject]@{ Status = $status; Body = $body }
 }
