@@ -1,3 +1,5 @@
+Edited 2026-11-15: the name of an unrelated private project was removed.
+
 # Gemini on every node: AI Studio and agy (Joshua, 2026-10-22)
 
 > Written by Claude (Opus 5.5) in the Antigravity IDE on the T5500, on Joshua's instruction. Wins over anything older a Gemini lane was told. The Antigravity IDE agent has its own file: `GEMINI-ANTIGRAVITY-IDE-2026-10-22.md`.
@@ -6,7 +8,7 @@
 
 - **T5500 (`192.168.0.15`) is the only production node.** Every live domain runs there.
 - **Sabretooth is back online today as new hardware** (i7-4960X, 32 GB, 2x RX 6800 XT). Its role is Joshua's call. Until he names it, nothing live routes there.
-- **Alienware (`192.168.0.40`) is an isolated dev machine.** The adult-content (NSFW) test bots live there and only there. Alienware never touches the ANTIGRAVITY monorepo or the free kids repos (`misses-trollz` and the other free kids apps): no clone, no push, no shared files, no shared keys, no routes between them. Alienware gets its instructions from Joshua's OneDrive drop box, not from this repo.
+- **Alienware (`192.168.0.40`) is an isolated dev machine.** Other private projects also live there, in their own folders, repositories and agent sessions on a separate drive; they are not part of this repo. Alienware never touches the ANTIGRAVITY monorepo or the free kids repos (`misses-trollz` and the other free kids apps): no clone, no push, no shared files, no shared keys, no routes between them. Alienware gets its instructions from Joshua's OneDrive drop box, not from this repo.
 
 ## Who you are
 
