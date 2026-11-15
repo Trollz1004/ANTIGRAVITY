@@ -53,6 +53,10 @@ describe('affiliate-links.html creator link tool', () => {
   });
 
   it('states no payout or percentage', () => {
-    expect(html).not.toMatch(/%\s*(recurring|commission|revenue|share|lifetime)|\d+\s*%|payout|commission|\$\d/i);
+    const doc = loadTool('?name=maya-rose').document;
+    doc.querySelectorAll('script,style').forEach((n) => n.remove());
+    const words = doc.body.textContent + ' ' + doc.title;
+    expect(words).not.toMatch(/\d+\s*%|percent|payout|commission|revenue share|\$\s*\d/i);
+    expect(html).not.toMatch(/payout|commission|percent/i);
   });
 });
