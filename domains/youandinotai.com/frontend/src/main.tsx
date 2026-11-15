@@ -19,7 +19,7 @@ import { Chat } from './app/pages/Chat';
 import { VideoCallPage } from './app/pages/VideoCall';
 import { Events } from './app/pages/Events';
 
-import { capturePartnerId } from './lib/partnerAttribution';
+import { capturePartnerId, captureShortLink } from './lib/partnerAttribution';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { SkeletonLoader } from './components/SkeletonLoader';
@@ -104,6 +104,13 @@ function PageErrorFallback({
 // "/pricing" with a ref and then routing to /register client-side would
 // lose the value, because that navigation carries no query string.
 capturePartnerId(window.location.search);
+
+// Short creator link: /c/<name> saves the code like ?ref= does, then the
+// address bar becomes "/" so the visitor sees the home page. A bad name
+// saves nothing and still lands on the home page.
+if (captureShortLink(window.location.pathname).isShortLink) {
+  window.history.replaceState(null, '', '/');
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
