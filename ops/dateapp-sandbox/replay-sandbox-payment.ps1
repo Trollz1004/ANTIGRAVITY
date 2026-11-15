@@ -24,7 +24,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'sandbox-common.ps1')
-if (-not $EnvFile) { $EnvFile = Join-Path (Get-SandboxHome) 'env.sandbox' }
+if (-not $EnvFile) { $EnvFile = Get-SandboxEnvFile }
 if (-not (Test-Path -LiteralPath $EnvFile)) { Write-Output "STOPPED: sandbox env file not found. Run start-sandbox.ps1 first."; exit 1 }
 $values = Read-SandboxEnv -Path $EnvFile
 

@@ -14,7 +14,7 @@ $ErrorActionPreference = 'Stop'
 
 $sandboxHome = Get-SandboxHome
 $pidDir = Join-Path $sandboxHome 'pids'
-if (-not $EnvFile) { $EnvFile = Join-Path $sandboxHome 'env.sandbox' }
+if (-not $EnvFile) { $EnvFile = Get-SandboxEnvFile }
 
 function Stop-Tree([int]$ProcessId) {
     # taskkill /T stops child processes too (uvicorn workers, node under the tsx shim).

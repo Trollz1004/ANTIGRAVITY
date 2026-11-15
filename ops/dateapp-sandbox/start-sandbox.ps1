@@ -14,7 +14,7 @@
   Other stops: the two Josh values are empty (4), port problem (5), stray .env file (6), other (1).
 
 .PARAMETER EnvFile
-  Sandbox env file. Default: %LOCALAPPDATA%\dateapp-sandbox\env.sandbox
+  Sandbox env file. Default: %USERPROFILE%\antigravity\selfhost\dateapp-sandbox\env.sandbox
 
 .PARAMETER CheckOnly
   Run the safety checks and exit 0 without starting anything.
@@ -29,15 +29,15 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'sandbox-common.ps1')
 
 $sandboxHome = Get-SandboxHome
-if (-not $EnvFile) { $EnvFile = Join-Path $sandboxHome 'env.sandbox' }
+if (-not $EnvFile) { $EnvFile = Get-SandboxEnvFile }
 
 if (-not (Test-Path -LiteralPath $EnvFile)) {
-    $defaultPath = Join-Path $sandboxHome 'env.sandbox'
+    $defaultPath = Get-SandboxEnvFile
     if ([IO.Path]::GetFullPath($EnvFile) -ieq [IO.Path]::GetFullPath($defaultPath)) {
-        New-Item -ItemType Directory -Force -Path $sandboxHome | Out-Null
+        New-Item -ItemType Directory -Force -Path (Get-SandboxEnvDir) | Out-Null
         Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'env.sandbox.example') -Destination $defaultPath
-        Write-Output "Created %LOCALAPPDATA%\dateapp-sandbox\env.sandbox from the example."
-        Write-Output "Fill SQUARE_ACCESS_TOKEN and SQUARE_LOCATION_ID in that file, then run this script again."
+        Write-Output "Created %USERPROFILE%\antigravity\selfhost\dateapp-sandbox\env.sandbox from the example."
+        Write-Output "Save the two Square values with save-sandbox-value.ps1 (token, then location), then run this script again."
         exit 4
     }
     Write-Output "STOPPED: env file not found."

@@ -8,11 +8,21 @@ Everything runs on 127.0.0.1. Front end on port 3460, backend on port 8460.
 
 1. Install the backend packages into a local virtual environment: in `domains\youandinotai.com\backend`, run `python -m venv .venv` and then `.venv\Scripts\python -m pip install -r requirements.txt`.
 2. Install the front end packages: in `domains\youandinotai.com\frontend`, run `npm ci`.
-3. Run `powershell -NoProfile -File ops\dateapp-sandbox\start-sandbox.ps1`. The first run creates `%LOCALAPPDATA%\dateapp-sandbox\env.sandbox` from `env.sandbox.example` and stops.
-4. Open `%LOCALAPPDATA%\dateapp-sandbox\env.sandbox` and fill the two empty lines:
+3. Save the two Square sandbox values the plain way, with no file editing: see **Save the two sandbox values (plain words)** below. The settings file lives at `%USERPROFILE%\antigravity\selfhost\dateapp-sandbox\env.sandbox`; the save script creates it from `env.sandbox.example` when it is missing.
+4. Where the two values come from:
    - `SQUARE_ACCESS_TOKEN`: Square Developer page, open your application, **Credentials**, switch the toggle at the top to **Sandbox**, copy **Sandbox Access token**.
    - `SQUARE_LOCATION_ID`: same application, **Locations**, **Sandbox** tab, copy the location ID of the default test account location.
 5. Optional safety proof: `powershell -NoProfile -File ops\dateapp-sandbox\test-start-refusals.ps1` should print `8 of 8 passed`.
+
+## Save the two sandbox values (plain words)
+
+You never open or edit a file, and you never type or paste a secret. Each value goes from Square's page to the clipboard to the settings file, and the clipboard is wiped after.
+
+1. On Square's developer page, copy the **sandbox access token** (Credentials, switch to **Sandbox**, press copy). Then run `powershell -NoProfile -File ops\dateapp-sandbox\save-sandbox-value.ps1 token`. It prints `saved` and a number of characters. If it says `NOT SAVED`, copy the value again.
+2. On the same page, copy the **sandbox location id** (Locations, **Sandbox** tab, press copy). Then run `powershell -NoProfile -File ops\dateapp-sandbox\save-sandbox-value.ps1 location`.
+3. Run `powershell -NoProfile -File ops\dateapp-sandbox\check-sandbox.ps1`. It asks Square's sandbox, and only Square's sandbox, whether the token works, and prints one line: `accepted by the sandbox`, `refused by the sandbox`, or `no token saved yet`. After `accepted`, it may add `location not found in this sandbox account`, which means the location id came from a different account or from the production tab; copy it again and redo step 2.
+
+The scripts never print the value, the answer from Square, or any id. Safety proof, with fake values only: `powershell -NoProfile -File ops\dateapp-sandbox\test-save-and-check.ps1`.
 
 ## The walk
 
