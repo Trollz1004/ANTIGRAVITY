@@ -17,8 +17,8 @@
 
 ## Active Architecture
 
-- Business node: T5500 (192.168.0.8) — ANTIGRAVITY, youandinotai.com, Cloudflare, date app, Agent Hub :3130
-- DREAM node: Sabretooth (192.168.0.8) — DREAM Online MMO ONLY
+- Business node: T5500 (Sabretooth) — ANTIGRAVITY, youandinotai.com, Cloudflare, date app, Agent Hub :3130
+- DREAM node: Sabretooth (Sabretooth) — DREAM Online MMO ONLY
 - Repo: Trollz1004/ANTIGRAVITY, branch main, C:\antigravity on T5500 (restore pending — see incidents)
 
 ## Active Agents

@@ -2,7 +2,7 @@
 
 > **STALE NODE REFERENCES (judge lane, 2026-08-26; refined 2026-08-28).**
 > Issues below that target "T5500" or "9020" cannot be actioned as written.
-> `192.168.0.8` is SABRETOOTH, this machine — not a second box. Re-scope such an
+> `Sabretooth` is SABRETOOTH, this machine — not a second box. Re-scope such an
 > issue to Sabretooth or close it.
 >
 > **Separate the ROLE from the MACHINE.** The earlier wording here said flatly
