@@ -5,11 +5,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { execFile, spawn } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
 import { getNodeIp, getServiceUrl } from '../ops/fleet/fleet-map.mjs';
 
-const HERE = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(HERE, '..');
 const T5500_IP = getNodeIp('t5500');
 
 export function isLoopbackAddress(remoteAddress) {
@@ -17,26 +14,20 @@ export function isLoopbackAddress(remoteAddress) {
   return ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(remote);
 }
 
-export function readMissionOsToken({ env = process.env, repoRoot = '' } = {}) {
-  if (env && Object.prototype.hasOwnProperty.call(env, 'MISSION_OS_TOKEN')) {
-    return String(env.MISSION_OS_TOKEN || '').trim();
-  }
-  const roots = [repoRoot, REPO_ROOT, 'C:/ANTIGRAVITY'].filter(Boolean);
-  for (const r of roots) {
-    try {
-      const envFile = path.join(r, '.env');
-      if (!fs.existsSync(envFile)) continue;
-      const txt = fs.readFileSync(envFile, 'utf8');
-      const m = txt.match(/^\s*MISSION_OS_TOKEN\s*=\s*(.+)$/m);
-      if (m && m[1]) {
-        const val = m[1].trim().replace(/^['"]|['"]$/g, '');
-        if (val) return val;
-      }
-    } catch {
-      // Never print or expose .env errors
-    }
-  }
-  return '';
+function constantTimeEqualSecret(expected, candidate) {
+  const a = Buffer.from(String(expected || ''), 'utf8');
+  const b = Buffer.from(String(candidate || ''), 'utf8');
+  const len = Math.max(a.length, b.length, 1);
+  const padA = Buffer.alloc(len);
+  const padB = Buffer.alloc(len);
+  a.copy(padA);
+  b.copy(padB);
+  return crypto.timingSafeEqual(padA, padB) && a.length === b.length;
+}
+
+export function readMissionOsToken({ env = process.env } = {}) {
+  if (!env) return '';
+  return String(env.MISSION_OS_TOKEN || '').trim();
 }
 
 export function extractMissionOsToken(headers = {}) {
@@ -45,11 +36,9 @@ export function extractMissionOsToken(headers = {}) {
     return direct.trim();
   }
   const auth = headers.authorization ?? headers.Authorization ?? '';
-  if (typeof auth === 'string') {
-    const m = /^Bearer\s+(.+)$/i.exec(auth.trim());
-    if (m && m[1] && m[1].trim()) return m[1].trim();
-  }
-  return '';
+  const trimmed = String(auth || '').trim();
+  const bearer = trimmed.slice(0, 7).toLowerCase() === 'bearer ' ? trimmed.slice(7).trim() : '';
+  return bearer;
 }
 
 export function verifyMissionOsToken(req, opts = {}) {
@@ -58,19 +47,7 @@ export function verifyMissionOsToken(req, opts = {}) {
     return { ok: false, status: 503, error: 'MISSION_OS_TOKEN not configured' };
   }
   const candidate = extractMissionOsToken(req?.headers || {});
-  if (!candidate) {
-    return { ok: false, status: 401, error: 'Unauthorized' };
-  }
-  const expectedDigest = crypto.createHash('sha256').update(expected, 'utf8').digest();
-  const candidateDigest = crypto.createHash('sha256').update(candidate, 'utf8').digest();
-  const digestEqual = crypto.timingSafeEqual(expectedDigest, candidateDigest);
-  const expectedBuf = Buffer.from(expected, 'utf8');
-  const candidateBuf = Buffer.from(candidate, 'utf8');
-  const exactEqual =
-    digestEqual &&
-    expectedBuf.length === candidateBuf.length &&
-    crypto.timingSafeEqual(expectedBuf, candidateBuf);
-  if (!exactEqual) {
+  if (!candidate || !constantTimeEqualSecret(expected, candidate)) {
     return { ok: false, status: 401, error: 'Unauthorized' };
   }
   return { ok: true, status: 0, error: null };

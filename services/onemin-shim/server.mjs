@@ -37,7 +37,9 @@ function openaiError(res, status, message, type = 'invalid_request_error') {
 
 function bearerFrom(req) {
   const auth = req.headers['authorization'] || '';
-  if (auth.toLowerCase().startsWith('bearer ')) return auth.slice(7).trim();
+  const trimmed = String(auth || '').trim();
+  const bearer = trimmed.slice(0, 7).toLowerCase() === 'bearer ' ? trimmed.slice(7).trim() : '';
+  if (bearer) return bearer;
   const xkey = req.headers['x-api-key'];
   return typeof xkey === 'string' && xkey.trim() ? xkey.trim() : null;
 }
@@ -182,14 +184,23 @@ async function handleChat(req, res, body) {
   res.end();
 }
 
+function constantTimeEqualSecret(expected, candidate) {
+  const a = Buffer.from(String(expected || ''), 'utf8');
+  const b = Buffer.from(String(candidate || ''), 'utf8');
+  const len = Math.max(a.length, b.length, 1);
+  const padA = Buffer.alloc(len);
+  const padB = Buffer.alloc(len);
+  a.copy(padA);
+  b.copy(padB);
+  return crypto.timingSafeEqual(padA, padB) && a.length === b.length;
+}
+
 function guardShimToken(req) {
   const guardTok = String(process.env.ONEMIN_SHIM_TOKEN || '').trim();
   if (!guardTok) return true;
   const candidate = String(req.headers['x-shim-token'] || bearerFrom(req) || '').trim();
   if (!candidate) return false;
-  const a = crypto.createHash('sha256').update(guardTok, 'utf8').digest();
-  const b = crypto.createHash('sha256').update(candidate, 'utf8').digest();
-  return crypto.timingSafeEqual(a, b);
+  return constantTimeEqualSecret(guardTok, candidate);
 }
 
 const server = http.createServer(async (req, res) => {

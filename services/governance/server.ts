@@ -20,32 +20,25 @@ function loadT5500Host(): string {
   try {
     const raw = fs.readFileSync(path.join(REPO_ROOT, 'ops', 'fleet', 'fleet-map.json'), 'utf8');
     const fmap = JSON.parse(raw);
-    return String(fmap?.nodes?.t5500?.ip || '192.168.0.15');
+    return String(fmap?.nodes?.t5500?.ip || fmap?.nodes?.t5500?.host || '192.168.0.15');
   } catch {
     return '192.168.0.15';
   }
 }
 
+function constantTimeEqualSecret(expected: string, candidate: string): boolean {
+  const a = Buffer.from(String(expected || ''), 'utf8');
+  const b = Buffer.from(String(candidate || ''), 'utf8');
+  const len = Math.max(a.length, b.length, 1);
+  const padA = Buffer.alloc(len);
+  const padB = Buffer.alloc(len);
+  a.copy(padA);
+  b.copy(padB);
+  return crypto.timingSafeEqual(padA, padB) && a.length === b.length;
+}
+
 function readGuardToken(): string {
-  const fromEnv = String(process.env.OFFICIAL_VOTE_TOKEN || process.env.MISSION_OS_TOKEN || '').trim();
-  if (fromEnv) return fromEnv;
-  for (const root of [REPO_ROOT, 'C:/ANTIGRAVITY']) {
-    try {
-      const envFile = path.join(root, '.env');
-      if (!fs.existsSync(envFile)) continue;
-      const txt = fs.readFileSync(envFile, 'utf8');
-      for (const key of ['OFFICIAL_VOTE_TOKEN', 'MISSION_OS_TOKEN']) {
-        const m = txt.match(new RegExp(`^\\s*${key}\\s*=\\s*(.+)$`, 'm'));
-        if (m && m[1]) {
-          const val = m[1].trim().replace(/^['"]|['"]$/g, '');
-          if (val) return val;
-        }
-      }
-    } catch {
-      // Never print .env contents
-    }
-  }
-  return '';
+  return String(process.env.OFFICIAL_VOTE_TOKEN || process.env.MISSION_OS_TOKEN || '').trim();
 }
 
 function isLoopback(addr: string | undefined): boolean {
@@ -56,9 +49,10 @@ function isLoopback(addr: string | undefined): boolean {
 function requireVoteToken(req: Request, res: Response, next: NextFunction): void {
   const localRead = isLoopback(req.socket?.remoteAddress) && (req.method === 'GET' || req.method === 'HEAD');
   const directHeader = String(req.headers['x-mission-os-token'] || req.headers['x-vote-token'] || '').trim();
-  const authHeader = String(req.headers.authorization || '').trim();
-  const bearerMatch = /^Bearer\s+(.+)$/i.exec(authHeader);
-  const candidate = directHeader || (bearerMatch ? bearerMatch[1].trim() : '');
+  const auth = req.headers.authorization;
+  const trimmed = String(auth || '').trim();
+  const bearer = trimmed.slice(0, 7).toLowerCase() === 'bearer ' ? trimmed.slice(7).trim() : '';
+  const candidate = directHeader || bearer;
 
   if (localRead && !candidate) {
     next();
@@ -70,14 +64,7 @@ function requireVoteToken(req: Request, res: Response, next: NextFunction): void
     res.status(503).json({ ok: false, error: 'OFFICIAL_VOTE_TOKEN / MISSION_OS_TOKEN not configured' });
     return;
   }
-  if (!candidate) {
-    res.status(401).json({ ok: false, error: 'Unauthorized' });
-    return;
-  }
-
-  const expectedDigest = crypto.createHash('sha256').update(expected, 'utf8').digest();
-  const candidateDigest = crypto.createHash('sha256').update(candidate, 'utf8').digest();
-  if (!crypto.timingSafeEqual(expectedDigest, candidateDigest)) {
+  if (!candidate || !constantTimeEqualSecret(expected, candidate)) {
     res.status(401).json({ ok: false, error: 'Unauthorized' });
     return;
   }

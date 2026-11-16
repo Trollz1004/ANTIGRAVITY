@@ -31,16 +31,15 @@ $requestedMapPath = $MapPath
 $map = Get-FleetMap -CustomMapPath $requestedMapPath
 
 $activeNodeIds = @('t5500', 'alienware')
-$nodeProps = @($map.nodes.PSObject.Properties)
-if ($nodeProps.Count -eq 0) {
+$nodesList = @(Get-FleetNodes -FleetMap $map)
+if ($nodesList.Count -eq 0) {
     throw 'ops/fleet/fleet-map.json defines no nodes.'
 }
 
 $allowedIps = New-Object System.Collections.Generic.List[string]
 $nodeSummary = New-Object System.Collections.Generic.List[string]
 
-foreach ($prop in $nodeProps) {
-    $n = $prop.Value
+foreach ($n in $nodesList) {
     $nid = ([string]$n.id).Trim().ToLowerInvariant()
     $nip = ([string]$n.ip).Trim()
     if ($nid -notin $activeNodeIds) {
@@ -64,8 +63,7 @@ $targetNodes = if ($requestedNode -eq 'all') { $activeNodeIds } else { @($reques
 $skippedLocal = New-Object System.Collections.Generic.List[string]
 $plannedRules = New-Object System.Collections.Generic.List[pscustomobject]
 
-foreach ($svcProp in $map.services.PSObject.Properties) {
-    $svc = $svcProp.Value
+foreach ($svc in @(Get-FleetServices -FleetMap $map)) {
     $svcNode = ([string]$svc.node).Trim().ToLowerInvariant()
     if ($svcNode -notin $targetNodes) {
         continue
@@ -76,7 +74,7 @@ foreach ($svcProp in $map.services.PSObject.Properties) {
     $svcId = ([string]$svc.id).Trim()
     $svcName = ([string]$svc.name).Trim()
 
-    if ($scope -eq 'local-only') {
+    if (Test-FleetMachineLocalScope -Scope $scope) {
         $skippedLocal.Add("$svcId ($svcNode TCP $port)")
         continue
     }
@@ -86,7 +84,8 @@ foreach ($svcProp in $map.services.PSObject.Properties) {
     }
 
     $ruleName = "ANTIGRAVITY-Fleet-$svcNode-$svcId-TCP-$port"
-    $tokenSuffix = if ($svc.PSObject.Properties['tokenEnv'] -and $svc.tokenEnv) { ", token=$($svc.tokenEnv)" } else { '' }
+    $tokEnv = Get-FleetServiceTokenEnv -ServiceObj $svc
+    $tokenSuffix = if ($tokEnv) { ", token=$tokEnv" } else { '' }
     $displayName = "ANTIGRAVITY Fleet [$svcNode] $svcName (TCP $port, $scope$tokenSuffix)"
 
     $cmdText = @(

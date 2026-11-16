@@ -106,7 +106,7 @@ import { composeBoardRoom } from './lib/lanes.mjs';
 import { buildArchitecture, renderArchitectureHtml, renderArchitectureDiff } from './lib/architecture.mjs';
 import { defaultExec as gitExec } from './lib/git-panel.mjs';
 import { hostname, tmpdir } from 'node:os';
-import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
+import { randomBytes, timingSafeEqual } from 'node:crypto';
 
 const T5500_IP = getNodeIp('t5500');
 const ALIENWARE_IP = getNodeIp('alienware');
@@ -728,32 +728,39 @@ function isGuardedDashboardRoute(method, pathname) {
   );
 }
 
+function constantTimeEqualSecret(expected, candidate) {
+  const a = Buffer.from(String(expected || ''), 'utf8');
+  const b = Buffer.from(String(candidate || ''), 'utf8');
+  const len = Math.max(a.length, b.length, 1);
+  const padA = Buffer.alloc(len);
+  const padB = Buffer.alloc(len);
+  a.copy(padA);
+  b.copy(padB);
+  return timingSafeEqual(padA, padB) && a.length === b.length;
+}
+
 function verifyGuardedDashboardAccess(req) {
   if (!isSameOrigin(req.headers || {})) {
     return { ok: false, status: 403, error: 'origin refused' };
   }
   const headers = req.headers || {};
   const direct = String(headers['x-mission-os-token'] || headers['x-bridge-token'] || '').trim();
-  const auth = String(headers.authorization || '').trim();
-  const bearer = /^Bearer\s+(.+)$/i.exec(auth);
-  const candidate = direct || (bearer ? bearer[1].trim() : '');
+  const auth = headers.authorization;
+  const trimmed = String(auth || '').trim();
+  const bearer = trimmed.slice(0, 7).toLowerCase() === 'bearer ' ? trimmed.slice(7).trim() : '';
+  const candidate = direct || bearer;
 
   if (isLocalCaller(req.socket && req.socket.remoteAddress) && !candidate) {
     return { ok: true, status: 200 };
   }
 
   const expected = String(
-    envValue('MISSION_OS_TOKEN') || envValue('MISSION_CONTROL_TOKEN') || envValue('DASHBOARD_BRIDGE_TOKEN') || ''
+    process.env.MISSION_OS_TOKEN || process.env.MISSION_CONTROL_TOKEN || process.env.DASHBOARD_BRIDGE_TOKEN || ''
   ).trim();
   if (!expected) {
     return { ok: false, status: 503, error: 'MISSION_OS_TOKEN / DASHBOARD_BRIDGE_TOKEN not configured' };
   }
-  if (!candidate) {
-    return { ok: false, status: 401, error: 'Unauthorized' };
-  }
-  const a = createHash('sha256').update(expected, 'utf8').digest();
-  const b = createHash('sha256').update(candidate, 'utf8').digest();
-  if (!timingSafeEqual(a, b)) {
+  if (!candidate || !constantTimeEqualSecret(expected, candidate)) {
     return { ok: false, status: 401, error: 'Unauthorized' };
   }
   return { ok: true, status: 200 };

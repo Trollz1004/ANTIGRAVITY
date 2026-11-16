@@ -19,7 +19,10 @@ function loadDateAppFrontendConfig(): { host: string; port: number; bind: string
   try {
     const fleetPath = path.resolve(__dirname, '..', '..', '..', 'ops', 'fleet', 'fleet-map.json');
     const parsed = JSON.parse(fs.readFileSync(fleetPath, 'utf8'));
-    const svc = parsed?.services?.['dateapp-frontend'];
+    const rawServices = parsed?.services;
+    const svc = Array.isArray(rawServices)
+      ? rawServices.find((s: { id?: string }) => s?.id === 'dateapp-frontend' || s?.id === 'date-app-web')
+      : rawServices?.['dateapp-frontend'] || rawServices?.['date-app-web'];
     if (svc) {
       return {
         host: String(svc.host || '192.168.0.15'),

@@ -23,12 +23,15 @@ function loadFleetDefaults() {
     for (const p of candidates) {
       if (fs.existsSync(p)) {
         const fmap = JSON.parse(fs.readFileSync(p, 'utf8'));
-        const svc = fmap?.services?.['leadgen-desk'] || {};
+        const rawServices = fmap?.services;
+        const svc = Array.isArray(rawServices)
+          ? rawServices.find((s) => s && (s.id === 'leadgen-desk' || s.id === 'hermes-leadgen')) || {}
+          : rawServices?.['leadgen-desk'] || rawServices?.['hermes-leadgen'] || {};
         return {
           bind: String(svc.bind || '0.0.0.0'),
           port: Number(svc.port || 8392),
-          nodeHost: String(fmap?.nodes?.alienware?.ip || svc.host || '192.168.0.40'),
-          t5500Host: String(fmap?.nodes?.t5500?.ip || '192.168.0.15'),
+          nodeHost: String(fmap?.nodes?.alienware?.ip || fmap?.nodes?.alienware?.host || svc.host || '192.168.0.40'),
+          t5500Host: String(fmap?.nodes?.t5500?.ip || fmap?.nodes?.t5500?.host || '192.168.0.15'),
         };
       }
     }
@@ -39,23 +42,8 @@ function loadFleetDefaults() {
 const FLEET_DEFAULTS = loadFleetDefaults();
 
 function readLeadgenToken(env = process.env) {
-  if (env && Object.prototype.hasOwnProperty.call(env, 'HERMES_LEADGEN_TOKEN')) {
-    return String(env.HERMES_LEADGEN_TOKEN || '').trim();
-  }
-  const envRoots = [path.resolve(__dirname, '..', '..'), path.resolve(__dirname, '..')];
-  for (const r of envRoots) {
-    try {
-      const envFile = path.join(r, '.env');
-      if (!fs.existsSync(envFile)) continue;
-      const txt = fs.readFileSync(envFile, 'utf8');
-      const m = txt.match(/^\s*HERMES_LEADGEN_TOKEN\s*=\s*(.+)$/m);
-      if (m && m[1]) {
-        const val = m[1].trim().replace(/^['"]|['"]$/g, '');
-        if (val) return val;
-      }
-    } catch (_) {}
-  }
-  return '';
+  if (!env) return '';
+  return String(env.HERMES_LEADGEN_TOKEN || '').trim();
 }
 
 function isLoopbackRemote(remoteAddress) {
@@ -1355,20 +1343,25 @@ function routeRequiresLanAuth(method, pathname) {
   return false;
 }
 
+function constantTimeEqualSecret(expected, candidate) {
+  const a = Buffer.from(String(expected || ''), 'utf8');
+  const b = Buffer.from(String(candidate || ''), 'utf8');
+  const len = Math.max(a.length, b.length, 1);
+  const padA = Buffer.alloc(len);
+  const padB = Buffer.alloc(len);
+  a.copy(padA);
+  b.copy(padB);
+  return crypto.timingSafeEqual(padA, padB) && a.length === b.length;
+}
+
 function hasValidBearerToken(req, env = process.env) {
   const expected = readLeadgenToken(env);
   if (!expected) return false;
-  const rawAuth = String((req && req.headers && req.headers.authorization) || '').trim();
-  const match = /^Bearer\s+(.+)$/i.exec(rawAuth);
-  if (!match) return false;
-  const provided = match[1].trim();
-  const expectedDigest = crypto.createHash('sha256').update(expected, 'utf8').digest();
-  const providedDigest = crypto.createHash('sha256').update(provided, 'utf8').digest();
-  if (!crypto.timingSafeEqual(expectedDigest, providedDigest)) return false;
-  const expectedBuf = Buffer.from(expected, 'utf8');
-  const providedBuf = Buffer.from(provided, 'utf8');
-  if (expectedBuf.length !== providedBuf.length) return false;
-  return crypto.timingSafeEqual(expectedBuf, providedBuf);
+  const auth = req && req.headers ? req.headers.authorization : '';
+  const trimmed = String(auth || '').trim();
+  const bearer = trimmed.slice(0, 7).toLowerCase() === 'bearer ' ? trimmed.slice(7).trim() : '';
+  if (!bearer) return false;
+  return constantTimeEqualSecret(expected, bearer);
 }
 
 function validateAgentAndProfileFields(body, res) {

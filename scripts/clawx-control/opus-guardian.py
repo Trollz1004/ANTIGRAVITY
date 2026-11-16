@@ -377,22 +377,54 @@ def check_fleet_address_doctrine(result: GuardianResult):
         result.fail("FLEET_MAP", "Retired third node found in ops/fleet/fleet-map.json")
         return
 
-    nodes = sorted((data.get("nodes") or {}).keys())
+    raw_nodes = data.get("nodes") or {}
+    if isinstance(raw_nodes, list):
+        nodes = sorted(str(n.get("id", "")).strip().lower() for n in raw_nodes if isinstance(n, dict))
+    elif isinstance(raw_nodes, dict):
+        nodes = sorted(str(k).strip().lower() for k in raw_nodes.keys())
+    else:
+        nodes = []
     if nodes != ["alienware", "t5500"]:
         result.fail("FLEET_MAP", f"Expected nodes ['alienware', 't5500'], got {nodes}")
         return
 
+    raw_services = data.get("services")
+    if isinstance(raw_services, list):
+        svc_entries = [
+            (str(svc.get("id") or f"idx-{idx}"), svc)
+            for idx, svc in enumerate(raw_services)
+            if isinstance(svc, dict)
+        ]
+    elif isinstance(raw_services, dict):
+        svc_entries = [
+            (str(svc.get("id") or svc_id), svc)
+            for svc_id, svc in raw_services.items()
+            if isinstance(svc, dict)
+        ]
+    else:
+        result.fail("FLEET_MAP", "Invalid services container in ops/fleet/fleet-map.json")
+        return
+
     bad_loopback = []
-    for svc_id, svc in (data.get("services") or {}).items():
+    bad_local_bind = []
+    for svc_id, svc in svc_entries:
         port = svc.get("port")
-        host = str(svc.get("host", ""))
-        if host in ("127.0.0.1", "localhost") and port not in (5432, 6379):
+        host = str(svc.get("host", "")).strip().lower()
+        bind = str(svc.get("bind", "")).strip().lower()
+        scope = str(svc.get("scope", "")).strip().lower()
+        is_machine_local = scope in ("this machine only", "local-only")
+        if is_machine_local:
+            if host != "127.0.0.1" or (bind and bind != "127.0.0.1"):
+                bad_local_bind.append(f"{svc_id}:{port}")
+        elif host in ("127.0.0.1", "localhost"):
             bad_loopback.append(f"{svc_id}:{port}")
 
     if bad_loopback:
-        result.fail("FLEET_MAP", f"Non-DB services using loopback host: {', '.join(bad_loopback)}")
+        result.fail("FLEET_MAP", f"LAN services using loopback host: {', '.join(bad_loopback)}")
+    elif bad_local_bind:
+        result.fail("FLEET_MAP", f"Machine-local services not bound strictly to 127.0.0.1: {', '.join(bad_local_bind)}")
     else:
-        result.ok("FLEET_MAP", "Canonical 2-node fleet map verified (only :5432/:6379 local-only)")
+        result.ok("FLEET_MAP", "Canonical 2-node fleet map verified (machine-local services strictly on 127.0.0.1)")
 
 def main():
     result = GuardianResult()

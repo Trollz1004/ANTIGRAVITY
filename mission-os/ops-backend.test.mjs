@@ -1,5 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import * as ops from './ops-backend.mjs';
 
 test('origin, Host, and MISSION_OS_TOKEN guard enforces same-origin on loopback/192.168.0.15 and constant-time token auth on LAN/API calls', () => {
@@ -37,7 +40,23 @@ test('origin, Host, and MISSION_OS_TOKEN guard enforces same-origin on loopback/
     0
   );
 
-  // Non-loopback client when MISSION_OS_TOKEN is unconfigured -> 503
+  // Non-loopback client when MISSION_OS_TOKEN is unconfigured -> 503 (never opens .env files)
+  const tmpEnvDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mos-no-dotenv-'));
+  try {
+    fs.writeFileSync(path.join(tmpEnvDir, '.env'), 'MISSION_OS_TOKEN=from-disk-must-be-ignored\n', 'utf8');
+    assert.equal(ops.readMissionOsToken({ env: {}, repoRoot: tmpEnvDir }), '');
+    assert.equal(
+      ops.guardRequest(
+        req({ host: '192.168.0.15:3130', 'x-mission-os-token': 'from-disk-must-be-ignored' }, 'GET', '192.168.0.40'),
+        3130,
+        { env: {}, repoRoot: tmpEnvDir }
+      ),
+      503
+    );
+  } finally {
+    fs.rmSync(tmpEnvDir, { recursive: true, force: true });
+  }
+
   assert.equal(
     ops.guardRequest(
       req({ host: '192.168.0.15:3130' }, 'GET', '192.168.0.40'),

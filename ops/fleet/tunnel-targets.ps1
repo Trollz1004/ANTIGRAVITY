@@ -37,10 +37,12 @@ $t5500Node = Get-FleetNode -NodeId 't5500' -CustomMapPath $requestedMapPath
 $t5500Ip = ([string]$t5500Node.ip).Trim()
 
 $t5500LanPorts = New-Object 'System.Collections.Generic.HashSet[int]'
-foreach ($svcProp in $map.services.PSObject.Properties) {
-    $svc = $svcProp.Value
+foreach ($svc in @(Get-FleetServices -FleetMap $map)) {
     $svcNode = ([string]$svc.node).Trim().ToLowerInvariant()
     $svcScope = ([string]$svc.scope).Trim().ToLowerInvariant()
+    if (Test-FleetMachineLocalScope -Scope $svcScope) {
+        continue
+    }
     if ($svcNode -eq 't5500' -and $svcScope -in @('lan', 'lan-guarded')) {
         [void]$t5500LanPorts.Add([int]$svc.port)
     }
