@@ -27,17 +27,20 @@ $ErrorActionPreference = 'Continue'
 
 $Repo        = if ($RepoPath) { $RepoPath } elseif (Test-Path 'C:\ANTIGRAVITY') { 'C:\ANTIGRAVITY' } else { (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path }
 $Dir         = Join-Path $Repo 'ops\t5500'
+. (Join-Path $Repo 'ops\fleet\Get-FleetEndpoint.ps1')
+$T5500Ip     = Get-FleetEndpoint -NodeId 't5500' -SelectField 'Ip'
+$DomainsSvc  = Get-FleetService -ServiceId 'domains-server'
 $LogFile     = Join-Path $Repo 'logs\t5500-keepalive.log'
 $StatusFile  = Join-Path $Dir 'status.json'
 $Triggers    = Join-Path $Dir 'TRIGGERS.jsonl'
 $Node        = 'C:\Program Files\nodejs\node.exe'
 $Cloudflared = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
-$CfConfig    = 'C:\Users\joshi\.cloudflared\config.yml'
-$Ollama      = 'C:\Users\joshi\AppData\Local\Programs\Ollama\ollama.exe'
+$CfConfig    = Join-Path $env:USERPROFILE '.cloudflared\config.yml'
+$Ollama      = Join-Path $env:USERPROFILE 'AppData\Local\Programs\Ollama\ollama.exe'
 $FableModel  = 'joshlcoleman/Fable:latest'
-$PgBin       = 'C:\Users\joshi\pgsql16\bin'
-$PgData      = 'C:\Users\joshi\pgsql16-data'
-$RedisRoot   = 'C:\Users\joshi\redis8-win'   # Redis 8: the API's redis-py 8.x speaks RESP3 (HELLO); the Redis 5 build rejects it
+$PgBin       = Join-Path $env:USERPROFILE 'pgsql16\bin'
+$PgData      = Join-Path $env:USERPROFILE 'pgsql16-data'
+$RedisRoot   = Join-Path $env:USERPROFILE 'redis8-win'   # Redis 8: the API's redis-py 8.x speaks RESP3 (HELLO); the Redis 5 build rejects it
 
 New-Item -ItemType Directory -Force -Path ([IO.Path]::GetDirectoryName($LogFile)) | Out-Null
 New-Item -ItemType Directory -Force -Path $Dir | Out-Null
@@ -177,9 +180,9 @@ function Get-NsState([string]$h) {
 }
 
 function Test-Origin([hashtable]$d) {
-    if ($d.Origin -eq 3200) { return (Test-Http 'http://127.0.0.1:3200/' 10 $d.Mark) }
+    if ($d.Origin -eq 3200) { return (Test-Http ('http://' + $T5500Ip + ':3200/') 10 $d.Mark) }
     try {
-        $out = & curl.exe --noproxy '*' -s -m 8 -H ('Host: ' + $d.Host) ('http://127.0.0.1:' + $d.Origin + '/') 2>$null
+        $out = & curl.exe --noproxy '*' -s -m 8 -H ('Host: ' + $d.Host) ('http://' + $T5500Ip + ':' + $d.Origin + '/') 2>$null
         return ((($out | Out-String)) -match [regex]::Escape($d.Mark))
     } catch { return $false }
 }
@@ -403,17 +406,17 @@ if ($DryRun) {
 # ── Stages (dependency order) ──────────────────────────────────────────────
 $Stages = @(
     @{ Key = 'ollama'; Name = 'Ollama (Fable pinned)'; Settle = 25
-       Probe = { (Test-Path 'C:\Users\joshi\AppData\Local\Programs\Ollama\lib\ollama\llama-server.exe') -and (Test-Http 'http://127.0.0.1:11434/api/tags' 8 'joshlcoleman/Fable') }
+       Probe = { (Test-Path (Join-Path $env:USERPROFILE 'AppData\Local\Programs\Ollama\lib\ollama\llama-server.exe')) -and (Test-Http ('http://' + $T5500Ip + ':11434/api/tags') 8 'joshlcoleman/Fable') }
        Heal  = {
-           $llamaSrv = 'C:\Users\joshi\AppData\Local\Programs\Ollama\lib\ollama\llama-server.exe'
-           $cachedSetup = 'C:\Users\joshi\AppData\Local\Ollama\OllamaSetup.exe'
+           $llamaSrv = Join-Path $env:USERPROFILE 'AppData\Local\Programs\Ollama\lib\ollama\llama-server.exe'
+           $cachedSetup = Join-Path $env:USERPROFILE 'AppData\Local\Ollama\OllamaSetup.exe'
            if (-not (Test-Path $llamaSrv) -and (Test-Path $cachedSetup)) {
                Log '  llama-server.exe missing (broken auto-upgrade) - repairing from cached OllamaSetup.exe'
                Get-Process ollama, 'ollama app' -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
                Start-Sleep -Seconds 3
                Start-Process -FilePath $cachedSetup -ArgumentList @('/VERYSILENT', '/NORESTART', '/SUPPRESSMSGBOXES') -Wait -WindowStyle Hidden
                Get-Process 'ollama app' -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
-               Remove-Item 'C:\Users\joshi\AppData\Local\Ollama\updates_v2' -Recurse -Force -ErrorAction SilentlyContinue
+               Remove-Item (Join-Path $env:USERPROFILE 'AppData\Local\Ollama\updates_v2') -Recurse -Force -ErrorAction SilentlyContinue
                Log ('  OllamaSetup repair finished (llama-server exists=' + (Test-Path $llamaSrv) + ')')
            }
            if (-not (Test-Port 11434)) {
@@ -457,13 +460,14 @@ $Stages = @(
            Start-Process -FilePath $exe.FullName -ArgumentList @('--bind', '127.0.0.1', '--port', '6379', '--maxmemory', '256mb', '--maxmemory-policy', 'allkeys-lru') -WorkingDirectory $exe.DirectoryName -WindowStyle Hidden
        } },
 
-    @{ Key = 'domains'; Name = 'Domains static sites :9160'; Settle = 20
-       Probe = { Test-Http 'http://127.0.0.1:9160/health' 6 'domains-server' }
+    @{ Key = 'domains'; Name = ('Domains static sites :{0}' -f $DomainsSvc.port); Settle = 20
+       Probe = { Test-Http (Get-FleetServiceUrl -ServiceId 'domains-server' -PathSuffix '/health') 6 'domains-server' }
        Heal  = {
-           if (Test-Port 9160) { Stop-PortOwner 9160 }
-           # Loopback (this probe) plus THIS node's LAN address, per the "use the 192 endpoints" ruling;
-           # never every interface. server.mjs defaults to the dead T5500 address, so set it here.
-           $env:DOMAINS_SERVER_HOST = '127.0.0.1,192.168.0.15'
+           if (Test-Port ([int]$DomainsSvc.port)) { Stop-PortOwner ([int]$DomainsSvc.port) }
+           # Read T5500 IP/port and bind host (0.0.0.0:9160) from ops/fleet/fleet-map.json;
+           # probe http://192.168.0.15:9160/health.
+           $env:DOMAINS_SERVER_HOST = (Get-FleetBindHost -ServiceId 'domains-server')
+           $env:DOMAINS_SERVER_PORT = [string]$DomainsSvc.port
            Start-Process -FilePath $Node -ArgumentList @('ops\domains-server\server.mjs') -WorkingDirectory $Repo -WindowStyle Hidden
        } },
 
