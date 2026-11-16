@@ -121,7 +121,7 @@ export function Chat() {
                 connected ? 'text-[#F4F1EA]' : 'text-[#C9CBCE]'
               }`}
             >
-              {connected ? 'Online' : 'Verified Thread'}
+              {connected ? 'Online' : 'Connecting...'}
             </span>
           </div>
         </div>

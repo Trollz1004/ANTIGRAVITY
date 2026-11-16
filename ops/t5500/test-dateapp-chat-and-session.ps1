@@ -48,26 +48,10 @@ $FrontendBaseUrl = "http://${BindHost}:${FrontendPort}"
 $ScreenshotDir   = Join-Path $Repo 'docs\screenshots\dateapp-chat-session'
 
 if ($Apply -and (-not $env:JWT_SECRET -or -not ($env:SUPABASE_DB_URL -or $env:DATABASE_URL))) {
-    $vaultEnv = Join-Path $env:USERPROFILE '.antigravity-vault\vault-handoff\env-stash-from-documents\.env-not-for-github.txt'
-    if (Test-Path $vaultEnv) {
-        Get-Content $vaultEnv | ForEach-Object {
-            if ($_ -match '^([A-Za-z_][A-Za-z0-9_]*)=(.*)$') {
-                $k = $Matches[1]; $v = $Matches[2].Trim()
-                if ($v.Length -gt 0) { [Environment]::SetEnvironmentVariable($k, $v, 'Process') }
-            }
-        }
-        $datingDb = (Get-Content $vaultEnv | Where-Object { $_ -match '^DATABASE_URL=postgresql\+asyncpg://' } | Select-Object -First 1)
-        if ($datingDb) {
-            [Environment]::SetEnvironmentVariable('DATABASE_URL', $datingDb.Substring('DATABASE_URL='.Length).Trim(), 'Process')
-        }
-    }
-    $supaEnv = Join-Path $env:USERPROFILE '.antigravity-vault\supabase-db-url.env'
-    if (Test-Path $supaEnv) {
-        $line = (Get-Content $supaEnv | Where-Object { $_ -match '^DATABASE_URL=' } | Select-Object -First 1)
-        if ($line) {
-            [Environment]::SetEnvironmentVariable('DATABASE_URL', $line.Substring('DATABASE_URL='.Length).Trim(), 'Process')
-        }
-    }
+    # The judge runs -Apply from a shell where the service's own settings are already loaded.
+    # This script never opens an env file or a vault file; it reads settings by name only.
+    Write-Error 'JWT_SECRET and DATABASE_URL (or SUPABASE_DB_URL) must already be set in this process. Nothing was run.'
+    exit 2
 }
 
 $pyArgs = @(
