@@ -126,8 +126,8 @@ export const SCC_24_APIS = [
   { id: 'mercari', label: 'Mercari', icon: 'M', color: '#FF4655', type: 'commerce', claw: 'Crosslisting OS', api: 'Mercari Listing Pack', url: 'https://www.mercari.com/sell/' },
   { id: 'fbmkt', label: 'FB Marketplace', icon: 'FM', color: '#1877F2', type: 'commerce', claw: 'MetaClaw', api: 'Meta Marketplace Graph', url: 'https://www.facebook.com/marketplace/create/item' },
   // LLM & Dispatch & Infra (6)
-  { id: 'gemini', label: 'Gemini 4 Ultra (agy)', icon: '✦', color: '#34d399', type: 'llm', claw: 'Mission OS :3130/v1', api: 'Google AI Studio Ultra OAuth ($0)', url: 'http://127.0.0.1:3130/v1/models' },
-  { id: 'fable', label: 'Fable Local (RTX 3070)', icon: '⚡', color: '#fbbf24', type: 'llm', claw: 'Ollama :11434', api: 'joshlcoleman/Fable:latest', url: 'http://127.0.0.1:11434/api/tags' },
+  { id: 'gemini', label: 'Gemini 4 Ultra (agy)', icon: '✦', color: '#34d399', type: 'llm', claw: 'Mission OS :3130/v1', api: 'Google AI Studio Ultra OAuth ($0)', url: 'http://192.168.0.15:3130/v1/models' },
+  { id: 'fable', label: 'Fable Local (RTX 3070)', icon: '⚡', color: '#fbbf24', type: 'llm', claw: 'Ollama :11434', api: 'joshlcoleman/Fable:latest', url: 'http://192.168.0.15:11434/api/tags' },
   { id: 'claude', label: 'Claude Opus (Judge)', icon: '🛡', color: '#a78bfa', type: 'llm', claw: 'Official Claude CLI', api: 'Anthropic OAuth Login', url: 'https://claude.ai' },
   { id: 'grok', label: 'Grok (X Lane)', icon: '⬡', color: '#00ccff', type: 'llm', claw: 'Official Grok CLI', api: 'xAI OAuth Login', url: 'https://x.com/i/grok' },
   { id: 'telegram', label: 'Telegram (@t5500_bot)', icon: '✈', color: '#2CA5E0', type: 'dispatch', claw: 'Hermes / OpenClaw', api: 'Telegram Bot API', url: 'https://web.telegram.org' },

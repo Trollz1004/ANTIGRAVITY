@@ -7,7 +7,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { api } from './api';
 
-const WS_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1')
+const WS_BASE = (import.meta.env.VITE_API_URL || 'http://192.168.0.15:8000/api/v1')
   .replace(/^http/, 'ws')
   .replace('/api/v1', '');
 

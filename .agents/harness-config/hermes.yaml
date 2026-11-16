@@ -61,7 +61,7 @@ mcp_servers:
     # the remote Unreal MCP URL there (Epic: Editor Preferences > Model Context
     # Protocol > port/path if the default conflicts). NOT enabled on this node.
     unreal-engine:
-      url: http://127.0.0.1:8000/mcp
+      url: http://192.168.0.40:9180/mcp
       enabled: false
 preflight_skills:
   required:

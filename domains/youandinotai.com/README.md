@@ -24,5 +24,5 @@ customer value and recurring revenue; this is a goal, not a claim of current
 profitability or asset valuation.
 
 **Tunnel:** the named Cloudflare tunnel config maps `youandinotai.com` to the
-frontend at `127.0.0.1:3200` and `api.youandinotai.com` to the backend at
-`127.0.0.1:8000` (see `scripts/start-t5500-dateapp-cloudflared.ps1`).
+frontend at `192.168.0.15:3200` and `api.youandinotai.com` to the backend at
+`192.168.0.15:8000` (see `scripts/start-t5500-dateapp-cloudflared.ps1`).

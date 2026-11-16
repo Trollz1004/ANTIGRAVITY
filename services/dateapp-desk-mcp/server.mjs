@@ -13,11 +13,12 @@
  */
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { getServiceUrl } from '../../ops/fleet/fleet-map.mjs';
 
 const REPO = process.env.ANTIGRAVITY_ROOT || 'C:/ANTIGRAVITY';
 const INBOX = join(REPO, 'ops', 'marketing-inbox');
-const API = process.env.DATEAPP_API || 'http://127.0.0.1:8000';
-const MC = process.env.MISSION_CONTROL_API || 'http://127.0.0.1:3151';
+const API = process.env.DATEAPP_API || getServiceUrl('dateapp-api');
+const MC = process.env.MISSION_CONTROL_API || getServiceUrl('mission-os');
 
 const send = (m) => process.stdout.write(JSON.stringify(m) + '\n');
 const ok = (id, result) => send({ jsonrpc: '2.0', id, result });

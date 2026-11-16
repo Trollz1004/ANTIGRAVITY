@@ -420,15 +420,15 @@ $Stages = @(
                Log ('  OllamaSetup repair finished (llama-server exists=' + (Test-Path $llamaSrv) + ')')
            }
            if (-not (Test-Port 11434)) {
-               Log '  starting ollama serve (127.0.0.1:11434)'
-               $env:OLLAMA_HOST = '127.0.0.1:11434'
+               Log '  starting ollama serve (0.0.0.0:11434)'
+               $env:OLLAMA_HOST = '0.0.0.0:11434'
                Start-Process -FilePath $Ollama -ArgumentList 'serve' -WindowStyle Hidden
                $w = 0; while ($w -lt 40 -and -not (Test-Port 11434)) { Start-Sleep -Seconds 1; $w++ }
            }
            # Loading with keep_alive -1 pins Fable in VRAM so Hermes never pays a cold load.
            try {
                $b = @{ model = $FableModel; keep_alive = -1 } | ConvertTo-Json
-               Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/generate' -Method Post -Body $b -ContentType 'application/json' -TimeoutSec 140 | Out-Null
+               Invoke-RestMethod -Uri 'http://192.168.0.15:11434/api/generate' -Method Post -Body $b -ContentType 'application/json' -TimeoutSec 140 | Out-Null
            } catch { Log ('  pin failed: ' + $_.Exception.Message) }
        } },
 
@@ -473,7 +473,7 @@ $Stages = @(
 
     @{ Key = 'frontend'; Name = 'Date-app frontend :3200'; Settle = 60
        Probe = {
-           if (-not (Test-Http 'http://127.0.0.1:3200/' 10 'assets/index-')) { return $false }
+           if (-not (Test-Http 'http://192.168.0.15:3200/' 10 'assets/index-')) { return $false }
            $stale = Get-FrontendStaleness $Repo
            if ($stale.NeedsRebuild) {
                if (-not $script:FrontendRebuildPending) {
@@ -505,7 +505,7 @@ $Stages = @(
        } },
 
     @{ Key = 'api'; Name = 'Date-app API :8000'; Settle = 60; Needs = @('postgres', 'redis')
-       Probe = { Test-Http 'http://127.0.0.1:8000/api/v1/health' 30 '"db_connected":true' }
+       Probe = { Test-Http 'http://192.168.0.15:8000/api/v1/health' 30 '"db_connected":true' }
        Heal  = {
            $py = Join-Path $Repo 'backend\.venv\Scripts\python.exe'
            $pyOk = $false
@@ -533,7 +533,7 @@ $Stages = @(
        } },
 
     @{ Key = 'hermes-gateway'; Name = 'Hermes API gateway :8643'; Settle = 25
-       Probe = { Test-Http 'http://127.0.0.1:8643/health' 6 'hermes-agent' }
+       Probe = { Test-Http 'http://192.168.0.15:8643/health' 6 'hermes-agent' }
        Heal  = {
            if (Test-Port 8643) { Stop-PortOwner 8643 }
            $hDir = Join-Path $env:LOCALAPPDATA 'hermes'
@@ -545,7 +545,7 @@ $Stages = @(
        } },
 
     @{ Key = 'mission-control'; Name = 'Mission Control (JARVIS/OPSIS) :3130'; Settle = 30
-       Probe = { Test-Http 'http://127.0.0.1:3130/api/mos-state.json' 8 'mission-agent-os' }
+       Probe = { Test-Http 'http://192.168.0.15:3130/api/mos-state.json' 8 'mission-agent-os' }
        Heal  = {
            $t = Get-ScheduledTask -TaskName 'ANTIGRAVITY Mission Control' -ErrorAction SilentlyContinue
            if ($t) {
@@ -563,7 +563,7 @@ $Stages = @(
        # 2026-10-20: Paperclip is permanently retired by Joshua's ruling. All marketing plans,
        # 4-gate compliance/copy-score checks, Fable voice drafting, and 22-platform Social Command
        # Center run natively inside Mission Agent OS on :3130 (/marketing & /api/marketing/plans).
-       Probe = { Test-Http 'http://127.0.0.1:3130/api/marketing/plans' 8 'social-command-center-v5' }
+       Probe = { Test-Http 'http://192.168.0.15:3130/api/marketing/plans' 8 'social-command-center-v5' }
        Heal  = {
            if (Test-Port 3130) { Stop-PortOwner 3130; Start-Sleep -Seconds 2 }
            Start-Process -FilePath $Node -ArgumentList @('mission-os\server.mjs') -WorkingDirectory $Repo -WindowStyle Hidden
@@ -583,7 +583,7 @@ $Stages = @(
 
     @{ Key = 'obsidian'; Name = 'Obsidian vault REST :27123 (memory)'; Settle = 40
        # Desktop app: agent-windows.ps1 (interactive, at logon) opens it. Before logon this is DOWN by design.
-       Probe = { Test-Cloud 'obsidian' 'http://127.0.0.1:27123/' @{ Authorization = ('Bearer ' + (Get-EnvVal 'OBSIDIAN_REST_API_KEY')) } }
+       Probe = { Test-Cloud 'obsidian' 'http://192.168.0.15:27123/' @{ Authorization = ('Bearer ' + (Get-EnvVal 'OBSIDIAN_REST_API_KEY')) } }
        Heal  = { $script:CloudCache.Remove('obsidian'); Log '  Obsidian is opened by the agent-windows supervisor after logon' } },
 
     @{ Key = 'supabase'; Name = 'Supabase (memory backup)'; Settle = 0

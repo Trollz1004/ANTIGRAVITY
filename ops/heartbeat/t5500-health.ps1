@@ -64,7 +64,7 @@ function Test-TcpPort {
 }
 
 # Raw TCP PING\r\n against Redis — redis-cli.exe is not installed on this box's
-# PATH check path (the House uses the absolute path under C:\Users\joshi\redis-win,
+# PATH check path (the House uses the absolute path under $env:USERPROFILE\redis-win,
 # this probe avoids depending on that binary at all).
 function Test-RedisPing {
     param([string]$HostName = '127.0.0.1', [int]$Port = 6379, [int]$TimeoutMs = 6000)
@@ -141,7 +141,7 @@ function Invoke-ProbePass {
     $optional = [ordered]@{}
 
     # PostgreSQL 5432 — same pg_isready path the House uses.
-    $pgReady = 'C:\Users\joshi\pgsql16\bin\pg_isready.exe'
+    $pgReady = (Join-Path $env:USERPROFILE 'pgsql16\bin\pg_isready.exe')
     if (Test-Path $pgReady) {
         & $pgReady -h 127.0.0.1 -p 5432 -q 2>$null
         $pgOk = ($LASTEXITCODE -eq 0)
@@ -157,12 +157,12 @@ function Invoke-ProbePass {
 
     # OmniRoute — /api/health ok AND /api/v1/models contains auto/best-coding.
     $omniKey = Get-EnvKey 'OMNI_ROUTE_API_KEY'
-    $omniHealth = Test-HttpIdentity -Url 'http://127.0.0.1:20128/api/health' -MustContain 'ok'
+    $omniHealth = Test-HttpIdentity -Url 'http://192.168.0.15:20128/api/health' -MustContain 'ok'
     $modelsOk = $false; $modelsDetail = 'not probed'
     try {
         $hdr = @{}
         if ($omniKey) { $hdr['Authorization'] = "Bearer $omniKey" }
-        $r = Invoke-WebRequest -Uri 'http://127.0.0.1:20128/api/v1/models' -UseBasicParsing -TimeoutSec 6 -Headers $hdr -ErrorAction Stop
+        $r = Invoke-WebRequest -Uri 'http://192.168.0.15:20128/api/v1/models' -UseBasicParsing -TimeoutSec 6 -Headers $hdr -ErrorAction Stop
         $modelsOk = ($r.StatusCode -eq 200 -and $r.Content -match 'auto/best-coding')
         $modelsDetail = "HTTP $($r.StatusCode)"
     } catch { $modelsDetail = $_.Exception.Message }
@@ -170,11 +170,11 @@ function Invoke-ProbePass {
     $required['omniroute_20128'] = @{ status = $(if ($omniOk) { 'UP' } else { 'DOWN' }); detail = "health=$($omniHealth.detail); models=$modelsDetail" }
 
     # Backend API — db_connected:true.
-    $backend = Test-HttpIdentity -Url 'http://127.0.0.1:8000/api/v1/health' -MustContain '"db_connected":true'
+    $backend = Test-HttpIdentity -Url 'http://192.168.0.15:8000/api/v1/health' -MustContain '"db_connected":true'
     $required['backend_8000'] = @{ status = $(if ($backend.ok) { 'UP' } else { 'DOWN' }); detail = $backend.detail }
 
     # Frontend — production bundle marker.
-    $frontend = Test-HttpIdentity -Url 'http://127.0.0.1:3200/' -MustContain 'assets/index-'
+    $frontend = Test-HttpIdentity -Url 'http://192.168.0.15:3200/' -MustContain 'assets/index-'
     $required['frontend_3200'] = @{ status = $(if ($frontend.ok) { 'UP' } else { 'DOWN' }); detail = $frontend.detail }
 
     # Public site — SCHANNEL is recorded, not counted as a failure.
@@ -183,7 +183,7 @@ function Invoke-ProbePass {
     $required['public_youandinotai'] = @{ status = $pubStatus; detail = $public.detail }
 
     # JARVIS — required, port 9150, identity jarvis-dashboard.
-    $jarvis = Test-HttpIdentity -Url 'http://127.0.0.1:9150/health' -MustContain 'jarvis-dashboard'
+    $jarvis = Test-HttpIdentity -Url 'http://192.168.0.15:9150/health' -MustContain 'jarvis-dashboard'
     $required['jarvis_9150'] = @{ status = $(if ($jarvis.ok) { 'UP' } else { 'DOWN' }); detail = $jarvis.detail }
 
     # ── optional targets ──
@@ -196,12 +196,12 @@ function Invoke-ProbePass {
     $hermesPort = Test-TcpPort -Port 9119
     $optional['hermes_9119'] = @{ status = $(if ($hermesPort) { 'UP' } else { 'DOWN' }); detail = 'TCP probe' }
 
-    $ollama = Test-HttpIdentity -Url 'http://127.0.0.1:11434/api/tags' -TimeoutSec 6
+    $ollama = Test-HttpIdentity -Url 'http://192.168.0.15:11434/api/tags' -TimeoutSec 6
     $optional['ollama_11434'] = @{ status = $(if ($ollama.ok) { 'UP' } else { 'DOWN' }); detail = $ollama.detail }
 
     # Domains phase (2026-09-18) — local static vhost server for the three
     # landing sites (dream-online.net, untilnokidinneed.com, onlinerecycle.net).
-    $domainsSrv = Test-HttpIdentity -Url 'http://127.0.0.1:9160/health' -MustContain 'domains-server'
+    $domainsSrv = Test-HttpIdentity -Url 'http://192.168.0.15:9160/health' -MustContain 'domains-server'
     $optional['domains_9160'] = @{ status = $(if ($domainsSrv.ok) { 'UP' } else { 'DOWN' }); detail = $domainsSrv.detail }
 
     # dashboard.aidoesitall.website is gated by Cloudflare Access on purpose —
@@ -212,7 +212,7 @@ function Invoke-ProbePass {
     $optional['dashboard_access_aidoesitall'] = @{ status = $(if ($dashAccess.ok -eq $true) { 'UP' } elseif ($dashAccess.status -eq 'SCHANNEL') { 'SCHANNEL' } else { 'DOWN' }); detail = $dashAccess.detail }
 
     # The three domains are pending Joshua's one-time nameserver click at the
-    # registrar (see C:\Users\joshi\OneDrive\claude-to-claude\
+    # registrar (see $env:USERPROFILE\OneDrive\claude-to-claude\
     # DNS-NAMESERVERS-TO-SET-2026-09-18.md). Until that propagates, live NS
     # still resolves to IONOS (or fails), which is an expected, named state —
     # PENDING NAMESERVERS — not a DOWN. Once NS shows cloudflare, this probes

@@ -112,16 +112,16 @@ $Stages = @(
     # on our side (pg_ctl's own -w -t 60 plus slack) so this script always
     # regains control and keeps logging even if pg_ctl itself misbehaves.
     @{ Name = 'PostgreSQL :5432'; Required = $true
-       Probe = { $pgReady = 'C:\Users\joshi\pgsql16\bin\pg_isready.exe'
+       Probe = { $pgReady = (Join-Path $env:USERPROFILE 'pgsql16\bin\pg_isready.exe')
                  if (Test-Path $pgReady) {
                      (& $pgReady -h 127.0.0.1 -p 5432 -q 2>$null)
                      return ($LASTEXITCODE -eq 0)
                  }
                  Log '  pg_isready.exe missing - falling back to a plain TCP probe on :5432' 'DarkYellow'
                  return (Test-Port 5432) }
-       Heal  = { $pgCtl   = 'C:\Users\joshi\pgsql16\bin\pg_ctl.exe'
-                 $pgReady = 'C:\Users\joshi\pgsql16\bin\pg_isready.exe'
-                 $dataDir = 'C:\Users\joshi\pgsql16-data'
+       Heal  = { $pgCtl   = (Join-Path $env:USERPROFILE 'pgsql16\bin\pg_ctl.exe')
+                 $pgReady = (Join-Path $env:USERPROFILE 'pgsql16\bin\pg_isready.exe')
+                 $dataDir = (Join-Path $env:USERPROFILE 'pgsql16-data')
                  $pidFile = Join-Path $dataDir 'postmaster.pid'
 
                  # Already up? postmaster.pid present + pg_isready happy means a
@@ -134,13 +134,13 @@ $Stages = @(
                      if ($up) { Log '  PostgreSQL already running (postmaster.pid present, pg_isready OK) - skipping heal' 'DarkGray'; return }
                  }
 
-                 if (-not (Test-Path $pgCtl)) { Log '  pg_ctl.exe missing at C:\Users\joshi\pgsql16\bin - cannot heal PostgreSQL' 'Red'; return }
+                 if (-not (Test-Path $pgCtl)) { Log '  pg_ctl.exe missing at $env:USERPROFILE\pgsql16\bin - cannot heal PostgreSQL' 'Red'; return }
 
                  # Don't stack a second pg_ctl on top of one already in flight
                  # from a prior retry that hasn't finished its own -t 60 wait yet.
                  if (Get-Process -Name 'pg_ctl' -ErrorAction SilentlyContinue) { Log '  pg_ctl already in flight from a previous heal attempt - not starting another' 'DarkGray'; return }
 
-                 $logFile = 'C:\Users\joshi\pgsql16-data.log'
+                 $logFile = (Join-Path $env:USERPROFILE 'pgsql16-data.log')
                  $proc = Start-Process -FilePath $pgCtl -ArgumentList '-D',$dataDir,'-l',$logFile,'-w','-t','60','start' -WindowStyle Hidden -PassThru
                  # pg_ctl's own -w/-t bounds IT to 60s; we bound OURSELVES a bit
                  # past that so a misbehaving pg_ctl can never hang this script -
@@ -151,16 +151,16 @@ $Stages = @(
                  else { Log ("  pg_ctl start did not return within 75s (PID {0}) - not waiting further, will re-probe" -f $proc.Id) 'Yellow' } } }
 
     @{ Name = 'Redis :6379'; Required = $true
-       Probe = { (& 'C:\Users\joshi\redis-win\redis-cli.exe' -h 127.0.0.1 ping 2>$null) -eq 'PONG' }
+       Probe = { (& (Join-Path $env:USERPROFILE 'redis-win\redis-cli.exe') -h 127.0.0.1 ping 2>$null) -eq 'PONG' }
        # --dir is NOT optional. Without it Redis inherits the launching shell's
        # CWD as its RDB directory. On 2026-08-28 that was C:\WINDOWS\system32,
        # which is not writable: BGSAVE failed, stop-writes-on-bgsave-error
        # kicked in, and Redis answered PING with MISCONF while still LISTENING.
        # The date app's writes were disabled and the watchdog "healed" a broken
        # instance every 60s for hours because the port was open the whole time.
-       Heal  = { $rdir = 'C:\Users\joshi\redis-win\data'
+       Heal  = { $rdir = (Join-Path $env:USERPROFILE 'redis-win\data')
                  if (-not (Test-Path $rdir)) { New-Item -ItemType Directory -Force -Path $rdir | Out-Null }
-                 Start-Process 'C:\Users\joshi\redis-win\redis-server.exe' -ArgumentList '--bind','127.0.0.1','--port','6379','--dir',$rdir,'--maxmemory','256mb','--maxmemory-policy','allkeys-lru' -WindowStyle Hidden } }
+                 Start-Process (Join-Path $env:USERPROFILE 'redis-win\redis-server.exe') -ArgumentList '--bind','127.0.0.1','--port','6379','--dir',$rdir,'--maxmemory','256mb','--maxmemory-policy','allkeys-lru' -WindowStyle Hidden } }
 
     @{ Name = 'OmniRoute :20128'; Required = $true
        # UPGRADE PROCEDURE (learned 2026-09-06, 3.8.49 -> 3.8.50): npm cannot
@@ -191,7 +191,7 @@ $Stages = @(
     # stray instance is still answering on 3100 so nobody mistakes it for the hub.
     # History kept in git: it was Mission Control from 2026-08-25 to 2026-09-10.
     @{ Name = 'Paperclip :3917 (PARKED, report only)'; Required = $false
-       Probe = { if (Test-Http 'http://127.0.0.1:3917/api/openapi.json' 10 'Paperclip API') {
+       Probe = { if (Test-Http 'http://192.168.0.15:3130/api/openapi.json' 10 'Paperclip API') {
                      Log '  Paperclip still answering on :3917 - parked, not the hub; stop it or ignore it' 'DarkGray'
                  } else { Log '  Paperclip parked (not running) - expected' 'DarkGray' }
                  return $true }
@@ -207,7 +207,7 @@ $Stages = @(
     # squatting the port is logged, never killed, and the stage just keeps
     # retrying as it always has.
     @{ Name = 'Frontend :3200 (production bundle)'; Required = $true
-       Probe = { if (-not (Test-Http 'http://127.0.0.1:3200/' 10 'assets/index-')) { return $false }
+       Probe = { if (-not (Test-Http 'http://192.168.0.15:3200/' 10 'assets/index-')) { return $false }
                  $distIdx = 'C:\ANTIGRAVITY\domains\youandinotai.com\frontend\dist\index.html'
                  $srcDir  = 'C:\ANTIGRAVITY\domains\youandinotai.com\frontend\src'
                  if ((Test-Path $distIdx) -and (Test-Path $srcDir)) {
@@ -217,7 +217,7 @@ $Stages = @(
                      }
                  }
                  return $true }
-       Heal  = { if ((Test-Port 3200) -and -not (Test-Http 'http://127.0.0.1:3200/' 10 'assets/index-')) {
+       Heal  = { if ((Test-Port 3200) -and -not (Test-Http 'http://192.168.0.15:3200/' 10 'assets/index-')) {
                      Get-NetTCPConnection -LocalPort 3200 -State Listen -ErrorAction SilentlyContinue | ForEach-Object {
                          $owner = $_.OwningProcess
                          $cmd = (Get-CimInstance Win32_Process -Filter "ProcessId=$owner" -ErrorAction SilentlyContinue).CommandLine
@@ -235,7 +235,7 @@ $Stages = @(
                          Start-Process cmd -ArgumentList '/c','C:\ANTIGRAVITY\scripts\fables-house\tab-dateapp.cmd' -WindowStyle Hidden } }
 
     @{ Name = 'Backend API :8000 (db connected)'; Required = $true
-       Probe = { Test-Http 'http://127.0.0.1:8000/api/v1/health' 30 '"db_connected":true' }
+       Probe = { Test-Http 'http://192.168.0.15:8000/api/v1/health' 30 '"db_connected":true' }
        Heal  = { Start-Process powershell -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-File','C:\ANTIGRAVITY\scripts\fables-house\tab-dateapp-api.ps1' -WindowStyle Hidden } }
 
     # 2026-09-18 fix: `Get-Process cloudflared` matches by NAME only, and an
@@ -253,7 +253,7 @@ $Stages = @(
        Heal  = { $tunnelProcs = @(Get-CimInstance Win32_Process -Filter "Name='cloudflared.exe'" -ErrorAction SilentlyContinue |
                      Where-Object { $_.CommandLine -match 't5500-main' })
                  if ($tunnelProcs.Count -eq 0) {
-                     Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config','C:\Users\joshi\.cloudflared\config.yml','run','t5500-main' -WindowStyle Hidden
+                     Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config',(Join-Path $env:USERPROFILE '.cloudflared\config.yml'),'run','t5500-main' -WindowStyle Hidden
                      Log '  started t5500-main tunnel (was not running)' 'DarkGray'
                  } else {
                      foreach ($p in $tunnelProcs) {
@@ -265,7 +265,7 @@ $Stages = @(
                          Start-Sleep -Seconds 1
                          $waited++
                      }
-                     Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config','C:\Users\joshi\.cloudflared\config.yml','run','t5500-main' -WindowStyle Hidden
+                     Start-Process 'C:\Program Files (x86)\cloudflared\cloudflared.exe' -ArgumentList 'tunnel','--config',(Join-Path $env:USERPROFILE '.cloudflared\config.yml'),'run','t5500-main' -WindowStyle Hidden
                      Log '  restarted t5500-main tunnel (was running but public probe failed)' 'DarkGray'
                  } } }
 
@@ -285,8 +285,8 @@ $Stages = @(
     # Heal after the Probe has already failed, for any reason (wrong identity,
     # stale, or otherwise unhealthy), so there is nothing left to gate on here.
     @{ Name = 'JARVIS (Mission Control) :9150'; Required = $true
-       Probe = { if (-not (Test-Http 'http://127.0.0.1:9150/health' 6 'jarvis-dashboard')) { return $false }
-                 try { $hz = Invoke-RestMethod -Uri 'http://127.0.0.1:9150/health' -TimeoutSec 6 } catch { return $false }
+       Probe = { if (-not (Test-Http 'http://192.168.0.15:9150/health' 6 'jarvis-dashboard')) { return $false }
+                 try { $hz = Invoke-RestMethod -Uri 'http://192.168.0.15:9150/health' -TimeoutSec 6 } catch { return $false }
                  if ($hz.startedAt -and -not (Test-Fresh $hz.startedAt @('C:\ANTIGRAVITY\mission-control\server.mjs'))) { Log '  JARVIS dashboard server is stale - restarting' 'Yellow'; return $false }
                  return $true }
        Heal  = { Stop-PortOwner 9150
@@ -294,12 +294,12 @@ $Stages = @(
 
     # 2026-09-18: serves the three landing sites (dream-online.net,
     # untilnokidinneed.com, onlinerecycle.net) as one no-dependency vhost
-    # static server, local-only on 127.0.0.1:9160. The cloudflared tunnel
+    # static server, local-only on 192.168.0.15:9160. The cloudflared tunnel
     # ingress routes each domain's Host header at this origin (Unit 3,
     # ops/domains-server/server.mjs). Optional: none of the revenue-stack
     # stages above depend on it.
     @{ Name = 'Domains static sites :9160'; Required = $false
-       Probe = { Test-Http 'http://127.0.0.1:9160/health' 6 'domains-server' }
+       Probe = { Test-Http 'http://192.168.0.15:9160/health' 6 'domains-server' }
        Heal  = { $d = 'C:\ANTIGRAVITY\ops\domains-server\server.mjs'
                  if (Test-Path $d) { Stop-PortOwner 9160; Start-Process 'node' -ArgumentList $d -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden }
                  else { Log '  domains-server.mjs missing' 'DarkYellow' } } }
@@ -342,7 +342,7 @@ $Stages = @(
     @{ Name = 'Ollama :11434'; Required = $false
        # Identity = Joshua's house model joshlcoleman/Fable listed in /api/tags
        # (ruled the mandatory Date App voice model 2026-09-06; ops/fable-model/).
-       Probe = { Test-Http 'http://127.0.0.1:11434/api/tags' 5 'joshlcoleman/Fable' }
+       Probe = { Test-Http 'http://192.168.0.15:11434/api/tags' 5 'joshlcoleman/Fable' }
        Heal  = { $o = "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe"
                  if (Test-Path $o) { Start-Process $o -ArgumentList 'serve' -WindowStyle Hidden }
                  else { Log '  Ollama missing: winget install Ollama.Ollama' 'DarkYellow' } } }
@@ -374,7 +374,7 @@ $Stages = @(
     # Serves /health, NOT /api/health, on this build (0.20.5). A probe written
     # against /api/health reports a healthy gateway as down.
     @{ Name = 'Hermes gateway :8642 (profile paperclip-mc, Hermes lane)'; Required = $false
-       Probe = { Test-Http 'http://127.0.0.1:8642/health' 6 'hermes-agent' }
+       Probe = { Test-Http 'http://192.168.0.15:8642/health' 6 'hermes-agent' }
        Heal  = { $h = "$env:LOCALAPPDATA\hermes\hermes-agent\bin\hermes.exe"
                  if (Test-Path $h) { Start-Process $h -ArgumentList '--profile','paperclip-mc','gateway','run','--replace','--accept-hooks' -WindowStyle Hidden }
                  else { Log '  Hermes not installed - gateway skipped' 'DarkYellow' } } }
@@ -382,7 +382,7 @@ $Stages = @(
     # Council ballots, carved out of mission-control-v5 so MC5 can be retired.
     # Paperclip does NOT cover ballots; see PAPERCLIP-COVERAGE-RULING-2026-08-26.md.
     @{ Name = 'Official vote service :9134 (ballots)'; Required = $false
-       Probe = { Test-Http 'http://127.0.0.1:9134/health' 6 'official-vote-service' }
+       Probe = { Test-Http 'http://192.168.0.15:9134/health' 6 'official-vote-service' }
        Heal  = { $v = 'C:\ANTIGRAVITY\services\governance\dist\server.js'
                  if (Test-Path $v) { Start-Process 'node' -ArgumentList $v -WorkingDirectory 'C:\ANTIGRAVITY\services\governance' -WindowStyle Hidden }
                  else { Log '  vote service not built - run: cd services\governance; npm install; npm run build' 'DarkYellow' } } }
@@ -395,7 +395,7 @@ $Stages = @(
     # report it — DOWN means Obsidian or the plugin is not running, which is
     # Joshua's click, never a heal.
     @{ Name = 'Obsidian Local REST API :27123 (report only)'; Required = $false
-       Probe = { Test-Http 'http://127.0.0.1:27123/' 6 'Obsidian Local REST API' }
+       Probe = { Test-Http 'http://192.168.0.15:27123/' 6 'Obsidian Local REST API' }
        Heal  = { Log '  Obsidian REST not answering: open Obsidian (vault C:\ANTIGRAVITY\Antigravity) — plugin obsidian-local-rest-api must be enabled. Not auto-started on purpose.' 'DarkYellow' } }
 
     # FABLE'S SENTRY on :9140 was retired 2026-09-18 (Joshua's ruling): the

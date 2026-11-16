@@ -7,7 +7,7 @@
   "agents": {
     "openclaw": {
       "command": "openclaw",
-      "args": ["acp", "--url", "ws://127.0.0.1:9119"]
+      "args": ["acp", "--url", "ws://192.168.0.15:9119"]
     },
     "claude": {
       "command": "npx",

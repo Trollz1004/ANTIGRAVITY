@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     app_env: str = "development"
 
     database_url: str = Field(
-        default="postgresql+asyncpg://postgres:postgres@localhost:5432/youandinotai"
+        default="postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/youandinotai"
     )
     supabase_db_url: str = Field(
         default="",
@@ -147,14 +147,14 @@ class Settings(BaseSettings):
     # -------------------------------------------------------------------------
     # Redis
     # -------------------------------------------------------------------------
-    redis_url: str = "redis://localhost:6379/0"
+    redis_url: str = "redis://127.0.0.1:6379/0"
     redis_max_connections: int = 20
     redis_cache_default_ttl: int = 300
     redis_session_ttl: int = 3600
     redis_rate_limit_window: int = 60
 
     cors_origins: str = (
-        "https://youandinotai.com,http://localhost:3000,http://localhost:5173,http://localhost:8000,http://127.0.0.1:3200,http://[IP_ADDRESS]:8000"
+        "https://youandinotai.com,http://192.168.0.15:3200,http://192.168.0.15:8000,http://192.168.0.40:4315"
     )
     registration_rate_limit_per_minute: int = 10
     auth_rate_limit_per_minute: int = 10

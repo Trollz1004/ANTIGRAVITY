@@ -40,7 +40,7 @@
 
 - **Container-Specific Backend URL and Test Path (`frontend/src/lib/api.js` lines 3–4; `backend/tests/backend_test.py` lines 8–15):**
   - *What it does now:* `frontend/src/lib/api.js` reads `process.env.REACT_APP_BACKEND_URL` (which pointed to Emergent's cloud preview host), and `backend/tests/backend_test.py` falls back to opening `/app/frontend/.env`.
-  - *What replaces it here:* Change `BACKEND_URL` in `frontend/src/lib/api.js` to `process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000"` (or `""` when served same-origin from FastAPI), and use `Path(__file__).resolve().parents[2]` instead of `/app` in `backend/tests/backend_test.py`.
+  - *What replaces it here:* Change `BACKEND_URL` in `frontend/src/lib/api.js` to `process.env.REACT_APP_BACKEND_URL || "http://192.168.0.40:8000"` (or `""` when served same-origin from FastAPI), and use `Path(__file__).resolve().parents[2]` instead of `/app` in `backend/tests/backend_test.py`.
 
 - **Emergent Container Cron Daemon (`.emergent/` directory and `.gitconfig`):**
   - *What it does now:* `.emergent/cron/watch_crons.sh`, `dispatch_webhook.sh`, `webhook-crons`, and `webhook_crond.sh` are Linux `/bin/sh` scripts that poll `/app/.emergent/crons.yml` and POST to `https://ea.int.apis.emergentagent.com/internal/crons/reconcile`.
@@ -75,7 +75,7 @@
 
 ### Files That Change
 1. `%USERPROFILE%\antigravity\tools\swarm-command\backend\server.py`: Make MongoDB optional at startup and add `POST /api/wheel/enqueue` (writes `<slug>.md` into `Path.home() / "antigravity" / ".fable-kitchen" / "inbox" / "queued"`) and `GET /api/wheel/status` (lists `queued`, `running`, `done`, and `failed` `.md` tasks with `pr_url` parsed from `<slug>.log`).
-2. `%USERPROFILE%\antigravity\tools\swarm-command\frontend\src\lib\api.js`: Default `BACKEND_URL` to `process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000"` and export `enqueueWheelTask(body)` and `getWheelStatus()`.
+2. `%USERPROFILE%\antigravity\tools\swarm-command\frontend\src\lib\api.js`: Default `BACKEND_URL` to `process.env.REACT_APP_BACKEND_URL || "http://192.168.0.40:8000"` and export `enqueueWheelTask(body)` and `getWheelStatus()`.
 3. `%USERPROFILE%\antigravity\tools\swarm-command\frontend\src\components\SwarmEngine.jsx`: Wire the submit button to `enqueueWheelTask`, remove the automatic `createLedgerEntry` call, confirm the queued file path in the console panel, and display the live 4-bucket wheel status list (`Queued`, `Running`, `Done` with PR link, `Failed`).
 4. `%USERPROFILE%\antigravity\tools\swarm-command\frontend\src\components\HermesKanban.jsx`: Switch columns from `NOW / NEXT / BLOCKED / DONE` to `QUEUED / RUNNING / DONE / FAILED` fed by `getWheelStatus()` every 5 seconds, with a clickable `PR #<N>` badge when `pr_url` is present.
 5. `%USERPROFILE%\antigravity\tools\swarm-command\frontend\src\App.js`: Default the landing tab to `"engine"`, bypass the MongoDB-backed `AgeGate` in local operator mode, remove Tab 4, and bind the top Hero counters to `QUEUED`, `RUNNING`, `DONE`, and `FAILED`.
@@ -84,7 +84,7 @@
 ### Smallest First PR That Puts a Working Request Box on Screen
 - **3 files touched (`backend/server.py`, `frontend/src/lib/api.js`, `frontend/src/components/SwarmEngine.jsx`, plus 2 lines in `frontend/src/App.js` to open directly on `"engine"`):**
   1. In `backend/server.py`, guard `MONGO_URL` so the server boots without MongoDB, and add `POST /api/wheel/enqueue` and `GET /api/wheel/status` reading and writing `Path.home() / "antigravity" / ".fable-kitchen" / "inbox"`.
-  2. In `frontend/src/lib/api.js`, add `enqueueWheelTask` and `getWheelStatus` with an `http://127.0.0.1:8000` default `BACKEND_URL`.
+  2. In `frontend/src/lib/api.js`, add `enqueueWheelTask` and `getWheelStatus` with an `http://192.168.0.40:8000` default `BACKEND_URL`.
   3. In `frontend/src/components/SwarmEngine.jsx` (and `App.js` default tab `"engine"`), submit the typed title and prompt to `POST /api/wheel/enqueue` and poll `GET /api/wheel/status` every 5 seconds in the right-hand panel so `Queued`, `Running`, `Done` (with clickable GitHub PR link), and `Failed` appear on the same screen immediately.
 
 ---
