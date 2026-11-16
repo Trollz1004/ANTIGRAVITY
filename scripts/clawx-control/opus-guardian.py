@@ -27,7 +27,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent.parent
 
 # The customer-facing API may live at any of these paths depending on node:
-#   Sabretooth: API not local (lives on T5500) → API_DIR will not exist; checks skip
+#   Workshop (Alienware): API lives on T5500 unless checked out under domains/
 #   T5500: services/youandinotai-api/ or youandinotai-api/ at repo root
 # We resolve to the first one that exists; otherwise API_DIR stays unresolved
 # and AUTH_COVERAGE / PII / RAW_SQL checks degrade to WARN ("API not on this node").
@@ -178,8 +178,8 @@ def check_no_hardcoded_secrets(result: GuardianResult):
 def check_auth_coverage(result: GuardianResult):
     """Verify all router endpoints require authentication."""
     if not ROUTERS_DIR.exists():
-        # The customer-facing API lives on T5500, not Sabretooth. Skip with WARN
-        # rather than FAIL so a single-node guardian run doesn't false-flag.
+        # The customer-facing API lives on T5500. Skip with WARN rather than FAIL
+        # so a single-node guardian run doesn't false-flag.
         result.warn("AUTH_COVERAGE", f"API routers not on this node ({ROUTERS_DIR}); run guardian on the T5500 box for the real check")
         return
 
@@ -358,6 +358,42 @@ def check_env_file(result: GuardianResult):
     else:
         result.warn("ENV_FILE", "No local .env file found; relying on process environment")
 
+def check_fleet_address_doctrine(result: GuardianResult):
+    """Verify ops/fleet/fleet-map.json exists, defines only t5500 & alienware, and keeps non-DB services off loopback."""
+    fleet_file = ROOT / "ops" / "fleet" / "fleet-map.json"
+    if not fleet_file.exists():
+        result.fail("FLEET_MAP", "Missing ops/fleet/fleet-map.json")
+        return
+    try:
+        import json as _json
+        raw = fleet_file.read_text(encoding="utf-8")
+        data = _json.loads(raw)
+    except Exception as exc:
+        result.fail("FLEET_MAP", f"Invalid ops/fleet/fleet-map.json: {exc}")
+        return
+
+    dead_ip = ".".join(["192", "168", "0", "8"])
+    if dead_ip in raw or "sabretooth" in raw.lower():
+        result.fail("FLEET_MAP", "Retired third node found in ops/fleet/fleet-map.json")
+        return
+
+    nodes = sorted((data.get("nodes") or {}).keys())
+    if nodes != ["alienware", "t5500"]:
+        result.fail("FLEET_MAP", f"Expected nodes ['alienware', 't5500'], got {nodes}")
+        return
+
+    bad_loopback = []
+    for svc_id, svc in (data.get("services") or {}).items():
+        port = svc.get("port")
+        host = str(svc.get("host", ""))
+        if host in ("127.0.0.1", "localhost") and port not in (5432, 6379):
+            bad_loopback.append(f"{svc_id}:{port}")
+
+    if bad_loopback:
+        result.fail("FLEET_MAP", f"Non-DB services using loopback host: {', '.join(bad_loopback)}")
+    else:
+        result.ok("FLEET_MAP", "Canonical 2-node fleet map verified (only :5432/:6379 local-only)")
+
 def main():
     result = GuardianResult()
 
@@ -367,6 +403,7 @@ def main():
     print(f"  UI:   {FRONTEND_DIR}")
 
     check_no_hardcoded_secrets(result)
+    check_fleet_address_doctrine(result)
     check_auth_coverage(result)
     check_legacy_routing_boundary(result)
     check_revenue_policy(result)
