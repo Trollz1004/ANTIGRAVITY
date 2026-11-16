@@ -3,7 +3,7 @@
 // 16 Stitch screens at /screens/<name>/, a read-only state feed at /api/mos-state.json,
 // official OAuth/CLI/ACP/A2A bridge probes at /api/bridges, live JARVIS dispatch at /api/jarvis/dispatch,
 // and the local OpenAI-compatible Gemini 4 (agy OAuth) bridge at /v1/models and /v1/chat/completions.
-// Binds 127.0.0.1 only. No secrets leave this process.
+// Binds 0.0.0.0:3130 (MISSION_OS_HOST default from ops/fleet/fleet-map.json) with Host/Origin + MISSION_OS_TOKEN guard. No secrets leave this process.
 import http from 'node:http';
 import fs from 'node:fs';
 import net from 'node:net';
@@ -11,7 +11,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFile, spawn } from 'node:child_process';
-import { guardRequest, readOps, openBrowser, envelope } from './ops-backend.mjs';
+import { guardRequest, isLoopbackAddress, readOps, openBrowser, envelope } from './ops-backend.mjs';
+import { getBindHost, getNodeIp, getService, getServiceUrl } from '../ops/fleet/fleet-map.mjs';
 import {
   getFullMarketingDashboardState,
   updateCampaignStatus,
@@ -49,39 +50,45 @@ import {
 import { buildInbox, performAction } from '../mission-control/lib/inbox.mjs';
 import { getBridgeRegistry, verifyLane, verifyAllLanes } from './bridge-registry.mjs';
 
-const ROOT = 'C:/ANTIGRAVITY';
-const PORT = Number(process.env.MISSION_OS_PORT || 3130);
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = process.env.MISSION_OS_ROOT || (fs.existsSync('C:/ANTIGRAVITY') ? 'C:/ANTIGRAVITY' : path.resolve(HERE, '..'));
+export const T5500_IP = getNodeIp('t5500');
+export const ALIENWARE_IP = getNodeIp('alienware');
+const MISSION_OS_SVC = getService('mission-os');
+export const HOST = process.env.MISSION_OS_HOST || getBindHost('mission-os');
+export const PORT = Number(process.env.MISSION_OS_PORT || MISSION_OS_SVC.port);
 const BOARD = `${ROOT}/oldmissioncontrol.html`;
 const STATUS = `${ROOT}/ops/t5500/status.json`;
 const CLIENT_JS = `${ROOT}/mission-os/jarvis-bridge-client.js`;
 
+const HOME_POSIX = os.homedir().replaceAll('\\', '/');
 export const BINARIES = {
-  agy: 'C:/Users/joshi/AppData/Local/Microsoft/WinGet/Links/agy.exe',
-  agyShim: 'C:/ANTIGRAVITY/mission-os/launchers/agy-gemini.exe',
-  claude: 'C:/Users/joshi/.local/bin/claude.exe',
-  codex: 'C:/Users/joshi/AppData/Roaming/npm/codex.cmd',
-  grok: 'C:/Users/joshi/.grok/bin/grok.exe',
-  hermes: 'C:/Users/joshi/AppData/Local/hermes/bin/hermes.exe',
-  hermesAcp: 'C:/Users/joshi/AppData/Local/hermes/bin/hermes-acp.exe',
-  ollama: 'C:/Users/joshi/AppData/Local/Programs/Ollama/ollama.exe',
+  agy: `${HOME_POSIX}/AppData/Local/Microsoft/WinGet/Links/agy.exe`,
+  agyShim: `${ROOT}/mission-os/launchers/agy-gemini.exe`,
+  claude: `${HOME_POSIX}/.local/bin/claude.exe`,
+  codex: `${HOME_POSIX}/AppData/Roaming/npm/codex.cmd`,
+  grok: `${HOME_POSIX}/.grok/bin/grok.exe`,
+  hermes: `${HOME_POSIX}/AppData/Local/hermes/bin/hermes.exe`,
+  hermesAcp: `${HOME_POSIX}/AppData/Local/hermes/bin/hermes-acp.exe`,
+  ollama: `${HOME_POSIX}/AppData/Local/Programs/Ollama/ollama.exe`,
 };
 
 export const SERVICES = [
-  { id: 'mission-control', port: 3130, what: 'Mission Control (JARVIS/OPSIS board + local /v1 Gemini 4 bridge)', url: 'http://127.0.0.1:3130/' },
-  { id: 'social-command-center', port: 3130, what: 'Social Command Center & Gemini 4 Ultra Marketing Engine (/marketing)', url: 'http://127.0.0.1:3130/marketing' },
-  { id: 'odysseus', port: 7011, what: 'Odysseus AI agent & workspace UI (:7011)', url: 'http://127.0.0.1:7011/' },
-  { id: 'omniroute', port: 20128, what: 'OmniRoute AI gateway + dashboard', url: 'http://127.0.0.1:20128/' },
-  { id: 'hermes', port: 9119, what: 'Hermes desktop dashboard (Nous, the one Hermes on this node)', url: 'http://127.0.0.1:9119/' },
-  { id: 'hermes-a2a', port: 8643, what: 'Hermes shared A2A / Gateway API (hermes-agent)', url: 'http://127.0.0.1:8643/health', probe: 'http://127.0.0.1:8643/health' },
-  { id: 'ollama', port: 11434, what: 'Ollama root (ollama serve; GGUF models)', url: 'http://127.0.0.1:11434/', probe: 'http://127.0.0.1:11434/' },
-  { id: 'ollama-v1', port: 11434, what: 'Ollama OpenAI-compatible /v1', url: 'http://127.0.0.1:11434/v1/models', probe: 'http://127.0.0.1:11434/v1/models' },
-  { id: 'ollama-tags', port: 11434, what: 'Ollama installed models /api/tags', url: 'http://127.0.0.1:11434/api/tags', probe: 'http://127.0.0.1:11434/api/tags' },
-  { id: 'domains', port: 9160, what: 'Static domain origins behind the tunnel', url: 'http://127.0.0.1:9160/' },
-  { id: 'frontend', port: 3200, what: 'youandinotai.com date app frontend', url: 'http://127.0.0.1:3200/' },
-  { id: 'api', port: 8000, what: 'Date app API (api.youandinotai.com)', url: 'http://127.0.0.1:8000/docs' },
-  { id: 'postgres', port: 5432, what: 'PostgreSQL (date app + Mission OS data)' },
-  { id: 'redis', port: 6379, what: 'Redis (sessions/cache)' },
-  { id: 'obsidian', port: 27123, what: 'Obsidian Local REST (vault C:\\ANTIGRAVITY\\Antigravity)' },
+  { id: 'mission-control', port: 3130, what: 'Mission Control (JARVIS/OPSIS board + local /v1 Gemini 4 bridge)', url: getServiceUrl('mission-os', '/') },
+  { id: 'social-command-center', port: 3130, what: 'Social Command Center & Gemini 4 Ultra Marketing Engine (/marketing)', url: getServiceUrl('mission-os', '/marketing') },
+  { id: 'odysseus', port: 7011, what: 'Odysseus AI agent & workspace UI (:7011)', url: getServiceUrl('odysseus', '/') },
+  { id: 'omniroute', port: 20128, what: 'OmniRoute AI gateway + dashboard', url: getServiceUrl('omniroute', '/') },
+  { id: 'hermes', port: 9119, what: 'Hermes desktop dashboard (Nous, the one Hermes on this node)', url: getServiceUrl('hermes-dashboard', '/') },
+  { id: 'hermes-a2a', port: 8643, what: 'Hermes shared A2A / Gateway API (hermes-agent)', url: getServiceUrl('hermes-gateway', '/health'), probe: getServiceUrl('hermes-gateway', '/health') },
+  { id: 'ollama', port: 11434, what: 'Ollama root (ollama serve; GGUF models)', url: getServiceUrl('ollama-t5500', '/'), probe: getServiceUrl('ollama-t5500', '/') },
+  { id: 'ollama-v1', port: 11434, what: 'Ollama OpenAI-compatible /v1', url: getServiceUrl('ollama-t5500', '/v1/models'), probe: getServiceUrl('ollama-t5500', '/v1/models') },
+  { id: 'ollama-tags', port: 11434, what: 'Ollama installed models /api/tags', url: getServiceUrl('ollama-t5500', '/api/tags'), probe: getServiceUrl('ollama-t5500', '/api/tags') },
+  { id: 'domains', port: 9160, what: 'Static domain origins behind the tunnel', url: getServiceUrl('domains-server', '/') },
+  { id: 'frontend', port: 3200, what: 'youandinotai.com date app frontend', url: getServiceUrl('dateapp-frontend', '/') },
+  { id: 'api', port: 8000, what: 'Date app API (api.youandinotai.com)', url: getServiceUrl('dateapp-api', '/docs') },
+  { id: 'postgres', port: 5432, what: 'PostgreSQL (date app + Mission OS data · 127.0.0.1 local-only)' },
+  { id: 'redis', port: 6379, what: 'Redis (sessions/cache · 127.0.0.1 local-only)' },
+  { id: 'obsidian', port: 27123, what: 'Obsidian Local REST (vault C:\\ANTIGRAVITY\\Antigravity)', url: getServiceUrl('obsidian-t5500', '/') },
 ];
 export const DOMAINS = ['youandinotai.com', 'onlinerecycle.net', 'dream-online.net'];
 
@@ -112,7 +119,8 @@ function mapAgyModel(raw) {
 }
 
 const tcp = (port) => new Promise((res) => {
-  const s = net.connect({ host: '127.0.0.1', port, timeout: 1500 });
+  const targetHost = port === 5432 || port === 6379 ? '127.0.0.1' : T5500_IP;
+  const s = net.connect({ host: targetHost, port, timeout: 1500 });
   s.on('connect', () => { s.destroy(); res(true); });
   s.on('error', () => res(false)); s.on('timeout', () => { s.destroy(); res(false); });
 });
@@ -138,11 +146,11 @@ let bridgeCache = {
   data: {
     generated: new Date().toISOString(),
     bridges: [
-      { id: 'gemini', name: 'Gemini 4 Argon / Ultra (agy)', installed: fs.existsSync(BINARIES.agy), authenticated: true, inferenceVerified: true, auth: 'Google OAuth (Ultra Subscription via agy / http://127.0.0.1:3130/v1)', protocol: 'CLI / OpenAI /v1', status: fs.existsSync(BINARIES.agy) ? 'UP' : 'DOWN', version: 'unverified', canRun: fs.existsSync(BINARIES.agy) },
+      { id: 'gemini', name: 'Gemini 4 Argon / Ultra (agy)', installed: fs.existsSync(BINARIES.agy), authenticated: true, inferenceVerified: true, auth: `Google OAuth (Ultra Subscription via agy / ${getServiceUrl('mission-os', '/v1')})`, protocol: 'CLI / OpenAI /v1', status: fs.existsSync(BINARIES.agy) ? 'UP' : 'DOWN', version: 'unverified', canRun: fs.existsSync(BINARIES.agy) },
       { id: 'claude', name: 'Claude Code (Opus / Sonnet)', installed: fs.existsSync(BINARIES.claude), authenticated: true, inferenceVerified: true, auth: 'Anthropic OAuth Login Only (Zero API Key)', protocol: 'CLI / MCP', status: fs.existsSync(BINARIES.claude) ? 'UP' : 'DOWN', version: 'unverified', canRun: fs.existsSync(BINARIES.claude) },
       { id: 'codex', name: 'OpenAI Codex', installed: fs.existsSync(BINARIES.codex), authenticated: true, inferenceVerified: true, auth: 'OpenAI OAuth Login', protocol: 'CLI / ACP (codex exec)', status: fs.existsSync(BINARIES.codex) ? 'UP' : 'DOWN', version: 'unverified', canRun: fs.existsSync(BINARIES.codex) },
       { id: 'grok', name: 'xAI Grok', installed: fs.existsSync(BINARIES.grok), authenticated: true, inferenceVerified: true, auth: 'xAI OAuth Login', protocol: 'CLI / ACP (streaming-json)', status: fs.existsSync(BINARIES.grok) ? 'UP' : 'DOWN', version: 'unverified', canRun: fs.existsSync(BINARIES.grok) },
-      { id: 'hermes', name: 'Hermes Agent (@t5500_bot · OmniRoute)', installed: fs.existsSync(BINARIES.hermes), authenticated: true, inferenceVerified: true, auth: 'OmniRoute (http://192.168.0.15:20128/v1 · hermes-support) + @t5500_bot', protocol: 'OmniRoute /v1 + A2A (:8643 & :9119)', status: fs.existsSync(BINARIES.hermes) ? 'UP' : 'DOWN', version: 'unverified', canRun: true },
+      { id: 'hermes', name: 'Hermes Agent (@t5500_bot · OmniRoute)', installed: fs.existsSync(BINARIES.hermes), authenticated: true, inferenceVerified: true, auth: `OmniRoute (${getServiceUrl('omniroute', '/v1')} · hermes-support) + @t5500_bot`, protocol: 'OmniRoute /v1 + A2A (:8643 & :9119)', status: fs.existsSync(BINARIES.hermes) ? 'UP' : 'DOWN', version: 'unverified', canRun: true },
       { id: 'fable', name: 'Fable Local (RTX 3070 8GB)', installed: fs.existsSync(BINARIES.ollama), authenticated: true, inferenceVerified: true, auth: 'Local Air-Gapped VRAM (:11434)', protocol: 'Ollama HTTP /v1', status: 'UP', version: 'joshlcoleman/Fable:latest (pinned)', canRun: true },
     ],
   },
@@ -157,8 +165,8 @@ async function refreshBridges() {
       runVersion(BINARIES.claude, ['--version']),
       runVersion(BINARIES.codex, ['--version']),
       runVersion(BINARIES.grok, ['--version']),
-      fetch('http://127.0.0.1:8643/health', { signal: AbortSignal.timeout(2500) }).then((r) => r.json()).catch(() => null),
-      fetch('http://127.0.0.1:11434/api/tags', { signal: AbortSignal.timeout(2500) }).then((r) => r.json()).catch(() => null),
+      fetch(getServiceUrl('hermes-gateway', '/health'), { signal: AbortSignal.timeout(2500) }).then((r) => r.json()).catch(() => null),
+      fetch(getServiceUrl('ollama-t5500', '/api/tags'), { signal: AbortSignal.timeout(2500) }).then((r) => r.json()).catch(() => null),
     ]);
     const models = Array.isArray(ollamaTags?.models) ? ollamaTags.models.map((m) => m.name) : [];
     const bridges = [
@@ -168,10 +176,10 @@ async function refreshBridges() {
         installed: fs.existsSync(BINARIES.agy),
         authenticated: true,
         inferenceVerified: true,
-        auth: 'Google OAuth (Ultra Subscription via agy / http://127.0.0.1:3130/v1)',
+        auth: `Google OAuth (Ultra Subscription via agy / ${getServiceUrl('mission-os', '/v1')})`,
         protocol: 'CLI / OpenAI /v1',
         status: (agyV.ok || fs.existsSync(BINARIES.agy)) ? 'UP' : 'DOWN',
-        version: agyV.ok ? `agy ${agyV.version}` : 'agy 1.4.3',
+        version: agyV.ok ? `agy ${agyV.version}` : 'unverified',
         canRun: fs.existsSync(BINARIES.agy),
       },
       {
@@ -183,7 +191,7 @@ async function refreshBridges() {
         auth: 'Anthropic OAuth Login Only (Zero API Key)',
         protocol: 'CLI / MCP',
         status: (claudeV.ok || fs.existsSync(BINARIES.claude)) ? 'UP' : 'DOWN',
-        version: claudeV.ok ? claudeV.version : 'Claude Code 2.1.278',
+        version: claudeV.ok ? claudeV.version : 'unverified',
         canRun: fs.existsSync(BINARIES.claude),
       },
       {
@@ -195,7 +203,7 @@ async function refreshBridges() {
         auth: 'OpenAI OAuth Login',
         protocol: 'CLI / ACP (codex exec)',
         status: (codexV.ok || fs.existsSync(BINARIES.codex)) ? 'UP' : 'DOWN',
-        version: codexV.ok ? codexV.version : 'codex-cli 0.163.0',
+        version: codexV.ok ? codexV.version : 'unverified',
         canRun: fs.existsSync(BINARIES.codex),
       },
       {
@@ -207,7 +215,7 @@ async function refreshBridges() {
         auth: 'xAI OAuth Login',
         protocol: 'CLI / ACP (streaming-json)',
         status: (grokV.ok || fs.existsSync(BINARIES.grok)) ? 'UP' : 'DOWN',
-        version: grokV.ok ? grokV.version : 'grok 1.0.62',
+        version: grokV.ok ? grokV.version : 'unverified',
         canRun: fs.existsSync(BINARIES.grok),
       },
       {
@@ -415,7 +423,7 @@ async function handleOpenAiChatCompletions(body, res) {
   if (!result.ok || !result.output) {
     // Seamless local Ollama fail-safe if agy OAuth is momentarily busy
     try {
-      const r = await fetch('http://127.0.0.1:11434/api/chat', {
+      const r = await fetch(getServiceUrl('ollama-t5500', '/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -489,7 +497,7 @@ async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
 
   if (brain === 'fable') {
     try {
-      const r = await fetch('http://127.0.0.1:11434/api/chat', {
+      const r = await fetch(getServiceUrl('ollama-t5500', '/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -538,7 +546,7 @@ async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
       const orKey = readOmniRouteKey();
       const headers = { 'Content-Type': 'application/json' };
       if (orKey) headers.Authorization = `Bearer ${orKey}`;
-      const r = await fetch('http://127.0.0.1:20128/v1/chat/completions', {
+      const r = await fetch(getServiceUrl('omniroute', '/v1/chat/completions'), {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -553,14 +561,14 @@ async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
         return {
           ok: true,
           brain,
-          commandUsed: 'OmniRoute http://127.0.0.1:20128/v1 (hermes-support · @t5500_bot)',
+          commandUsed: `OmniRoute ${getServiceUrl('omniroute', '/v1')} (hermes-support · @t5500_bot)`,
           output: reply,
           durationMs: Date.now() - start,
         };
       }
     } catch {}
     try {
-      const r2 = await fetch('http://127.0.0.1:11434/api/chat', {
+      const r2 = await fetch(getServiceUrl('ollama-t5500', '/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -604,7 +612,8 @@ let cache = {
     identity: 'mission-agent-os',
     node: os.hostname(),
     host: os.hostname(),
-    ip: '192.168.0.15',
+    ip: T5500_IP,
+    alienwareIp: ALIENWARE_IP,
     generated: new Date().toISOString(),
     services: SERVICES.map((s) => ({ ...s, listening: false, status: 'UNVERIFIED', identityVerified: false })),
     domains: DOMAINS.map((d) => ({ domain: d, https: 200 })),
@@ -629,7 +638,8 @@ async function refreshState() {
         identity: 'mission-agent-os',
         node: os.hostname(),
         host: os.hostname(),
-        ip: '192.168.0.15',
+        ip: T5500_IP,
+        alienwareIp: ALIENWARE_IP,
         generated: new Date().toISOString(),
         services,
         domains,
@@ -672,7 +682,7 @@ table{width:100%;border-collapse:collapse;background:#18181b;border:1px solid #2
 td{padding:9px 12px;border-top:1px solid #27272a}a{color:#facc15}.up{color:#4ade80;font-weight:700}.down{color:#f87171;font-weight:700}
 nav a{margin-right:16px}code{color:#38bdf8;font-size:13px}</style></head><body><main>
 <h1>Mission Control — live</h1><p class="sub">${esc(s.host)} · ${esc(s.ip)} · refreshed ${esc(s.generated)} · auto-refresh 30 s</p>
-<nav style="margin-top:12px"><a href="/screens/mission_control_overview/">Overview</a><a href="/screens/mission_control_jarvis_command_console/">JARVIS / OPSIS Console</a><a href="/marketing">Social Command Center (/marketing)</a><a href="/screens/mission_control_settings_logins/">Agent Logins</a><a href="/">Board</a><a href="http://127.0.0.1:7011/" target="_blank">Odysseus (:7011)</a><a href="http://127.0.0.1:20128/" target="_blank">OmniRoute</a><a href="http://127.0.0.1:9119/" target="_blank">Hermes</a><a href="/v1/models">Gemini 4 /v1/models</a><a href="/api/bridges">bridges JSON</a><a href="/api/mos-state.json">state JSON</a></nav>
+<nav style="margin-top:12px"><a href="/screens/mission_control_overview/">Overview</a><a href="/screens/mission_control_jarvis_command_console/">JARVIS / OPSIS Console</a><a href="/marketing">Social Command Center (/marketing)</a><a href="/screens/mission_control_settings_logins/">Agent Logins</a><a href="/">Board</a><a href="${esc(getServiceUrl('odysseus', '/'))}" target="_blank">Odysseus (:7011)</a><a href="${esc(getServiceUrl('omniroute', '/'))}" target="_blank">OmniRoute</a><a href="${esc(getServiceUrl('hermes-dashboard', '/'))}" target="_blank">Hermes</a><a href="/v1/models">Gemini 4 /v1/models</a><a href="/api/bridges">bridges JSON</a><a href="/api/mos-state.json">state JSON</a></nav>
 <h2>Bridge installation and verification status</h2><table>${(s.bridges || []).map(brow).join('')}</table>
 <h2>Services on this node</h2><table>${s.services.map(row).join('')}</table>
 <h2>Public domains (through the Cloudflare tunnel)</h2><table>${s.domains.map(drow).join('')}</table>
@@ -699,50 +709,65 @@ async function readJsonBody(req, maxBytes = 65536) {
   } catch { const error = new Error('Invalid JSON object'); error.status = 400; throw error; }
 }
 
-export function isLoopbackAddress(remoteAddress) {
-  const remote = String(remoteAddress || '').trim();
-  return ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(remote);
+export { isLoopbackAddress };
+
+function writeGuardDenial(res, sec, statusCode, pathname) {
+  const error =
+    statusCode === 503
+      ? 'MISSION_OS_TOKEN not configured'
+      : statusCode === 401
+        ? 'Unauthorized'
+        : statusCode === 415
+          ? 'Content-Type must be application/json'
+          : 'Forbidden: valid Host/same-origin or MISSION_OS_TOKEN required';
+  const payload = pathname.startsWith('/api/v1')
+    ? { ok: false, apiVersion: 'v1', error }
+    : { ok: false, error };
+  res.writeHead(statusCode, { ...sec, 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+  return res.end(JSON.stringify(payload));
 }
 
 export const handleMissionRequest = async (req, res) => {
   const sec = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer' };
   try {
     const u = new URL(req.url, 'http://x');
+    const localCaller = isLoopbackAddress(req.socket?.remoteAddress);
 
-    if (!isLoopbackAddress(req.socket?.remoteAddress)) {
-      res.writeHead(403, { ...sec, 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ ok: false, error: 'Forbidden: Mission OS is restricted to loopback' }));
+    // OpenAI-compatible Gemini 4 (agy OAuth) bridge: local callers allowed on valid Host;
+    // non-loopback LAN callers require valid MISSION_OS_TOKEN.
+    if (u.pathname === '/v1/models' || u.pathname === '/v1/chat/completions') {
+      if (!localCaller) {
+        const lanDenied = guardRequest(req, PORT, { repoRoot: ROOT, requireToken: true });
+        if (lanDenied) return writeGuardDenial(res, sec, lanDenied, u.pathname);
+      } else if (req.headers?.['sec-fetch-site'] === 'cross-site') {
+        return writeGuardDenial(res, sec, 403, u.pathname);
+      }
+      if (u.pathname === '/v1/models' && ['GET', 'HEAD'].includes(req.method)) {
+        res.writeHead(200, { ...sec, 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        return res.end(
+          JSON.stringify({
+            object: 'list',
+            data: AGY_V1_MODELS.map((m) => ({
+              id: m.id,
+              object: 'model',
+              created: 1760000000,
+              owned_by: 'agy-google-ultra',
+            })),
+          })
+        );
+      }
+      if (u.pathname === '/v1/chat/completions' && req.method === 'POST') {
+        const body = await readJsonBody(req, 1048576);
+        return await handleOpenAiChatCompletions(body, res);
+      }
     }
 
-    // Local OpenAI-compatible Gemini 4 (agy OAuth) bridge for opencode, pi, Odysseus, and Paperclip
-    if (u.pathname === '/v1/models' && ['GET', 'HEAD'].includes(req.method)) {
-      res.writeHead(200, { ...sec, 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
-      return res.end(
-        JSON.stringify({
-          object: 'list',
-          data: AGY_V1_MODELS.map((m) => ({
-            id: m.id,
-            object: 'model',
-            created: 1760000000,
-            owned_by: 'agy-google-ultra',
-          })),
-        })
-      );
+    const denied = guardRequest(req, PORT, { repoRoot: ROOT });
+    if (denied) {
+      return writeGuardDenial(res, sec, denied, u.pathname);
     }
-    if (u.pathname === '/v1/chat/completions' && req.method === 'POST') {
-      const body = await readJsonBody(req, 1048576);
-      return await handleOpenAiChatCompletions(body, res);
-    }
-
-    const denied = guardRequest(req, PORT);
-    if (denied) { res.writeHead(denied, {...sec, 'Content-Type':'application/json'}); return res.end(JSON.stringify({ok:false,error:'Local same-origin JSON requests only'})); }
 
     if ((u.pathname === '/api/bridge/verify' || u.pathname === '/api/bridges/verify') && req.method === 'POST') {
-      const originDenied = guardRequest(req, PORT);
-      if (originDenied) {
-        res.writeHead(originDenied, { ...sec, 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ ok: false, error: 'Local same-origin JSON requests only' }));
-      }
       const body = await readJsonBody(req);
       const nodeId = String(body.node || 't5500').toLowerCase();
       const laneId = String(body.lane || 'hermes').toLowerCase();
@@ -1172,5 +1197,7 @@ export const handleMissionRequest = async (req, res) => {
   }
 };
 if (IS_MAIN_MODULE) {
-  http.createServer(handleMissionRequest).listen(PORT, '127.0.0.1', () => console.log(`mission-agent-os on http://127.0.0.1:${PORT}`));
+  http.createServer(handleMissionRequest).listen(PORT, HOST, () =>
+    console.log(`mission-agent-os on http://${HOST}:${PORT} (LAN http://${T5500_IP}:${PORT})`)
+  );
 }

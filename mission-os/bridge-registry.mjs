@@ -1,6 +1,6 @@
 // Mission Control Bridge Registry (Directory, NOT a Door)
-// Holds one entry per agent lane per node across the 3-node fleet:
-//   t5500 (192.168.0.15), alienware (192.168.0.40), sabretooth (LAN .8)
+// Holds one entry per agent lane per node across the 2-node fleet from ops/fleet/fleet-map.json:
+//   t5500 (192.168.0.15) and alienware (192.168.0.40) ONLY.
 // Judges every service by an identity string it returns, never by a bare port answering.
 // Records last_verified_at (ISO-8601) and computes age_seconds + stale dynamically on read
 // so Mission Control never silently returns stale state.
@@ -8,18 +8,17 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFile } from 'node:child_process';
+import { getNodeIp, getServiceUrl } from '../ops/fleet/fleet-map.mjs';
 
 export const STATE_FILE = 'C:/ANTIGRAVITY/ops/t5500/bridge-registry-state.json';
 export const DEFAULT_STALE_AFTER_SECONDS = 120;
 
-const T5500_IP = process.env.T5500_IP || '192.168.0.15';
-const ALIENWARE_IP = process.env.ALIENWARE_IP || '192.168.0.40';
-const SABRETOOTH_IP = process.env.SABRETOOTH_IP || ['192', '168', '0', '8'].join('.');
+const T5500_IP = process.env.T5500_IP || getNodeIp('t5500');
+const ALIENWARE_IP = process.env.ALIENWARE_IP || getNodeIp('alienware');
 
 export const NODES = {
-  t5500: { id: 't5500', name: 'T5500 (Master / ECC / Repo / DB)', ip: T5500_IP, isLocal: true },
-  alienware: { id: 'alienware', name: 'Alienware (Dev / Studio)', ip: ALIENWARE_IP, isLocal: false },
-  sabretooth: { id: 'sabretooth', name: 'Sabretooth (32GB RAM / 16GB GPU)', ip: SABRETOOTH_IP, isLocal: false },
+  t5500: { id: 't5500', name: 'T5500 (Front of House / Prod / DB)', ip: T5500_IP, isLocal: true },
+  alienware: { id: 'alienware', name: 'Alienware (Workshop / Dev / Studio)', ip: ALIENWARE_IP, isLocal: false },
 };
 
 export const LANES = ['hermes', 'openclaw', 'opencode', 'codex', 'claude', 'agy', 'ollama', 'omniroute'];
@@ -77,7 +76,9 @@ async function httpProbe(url, { headers = {}, timeoutMs = 3500, fetchImpl = glob
     });
     const text = await r.text();
     let json = null;
-    try { json = JSON.parse(text); } catch {}
+    try {
+      json = JSON.parse(text);
+    } catch {}
     return { ok: true, status: r.status, text, json, latencyMs: Date.now() - t0 };
   } catch (e) {
     return { ok: false, status: 0, text: '', json: null, error: String(e?.message || e), latencyMs: Date.now() - t0 };
@@ -99,7 +100,7 @@ function cliProbe(rawBin, args = ['--version'], { timeoutMs = 15000 } = {}) {
       resolve({
         ok: !err && Boolean(out),
         output: out,
-        error: err ? (out || String(err.message || err)) : undefined,
+        error: err ? out || String(err.message || err) : undefined,
         latencyMs: Date.now() - t0,
         missingBinary: false,
       });
@@ -123,6 +124,12 @@ export function discoverDynamicTools(payload) {
 export function buildCatalog() {
   const hermesKeyInfo = readHermesApiServerKey();
   const omniKeyInfo = readOmniRouteKey();
+  const t5500HermesGatewayUrl = `http://${T5500_IP}:8643`;
+  const t5500HermesDashboardUrl = `http://${T5500_IP}:9119`;
+  const t5500OllamaUrl = `http://${T5500_IP}:11434`;
+  const t5500MissionOsUrl = `http://${T5500_IP}:3130`;
+  const t5500OmniUrl = `http://${T5500_IP}:20128/v1`;
+
   return [
     // ==================== T5500 ====================
     {
@@ -131,14 +138,14 @@ export function buildCatalog() {
       node_ip: T5500_IP,
       lane: 'hermes',
       transport: 'http+cli',
-      address: 'http://127.0.0.1:8643',
-      lan_target_address: `http://${T5500_IP}:8643`,
+      address: t5500HermesGatewayUrl,
+      lan_target_address: t5500HermesGatewayUrl,
       secondary_addresses: {
-        dashboard: 'http://127.0.0.1:9119',
+        dashboard: t5500HermesDashboardUrl,
         cli: '~/AppData/Local/hermes/bin/hermes.exe',
       },
-      bind_current: `${T5500_IP}:8643 + 127.0.0.1:8643`,
-      bind_recommended: `${T5500_IP}:8643 (plus 127.0.0.1:8643)`,
+      bind_current: `0.0.0.0:8643 (${T5500_IP}:8643)`,
+      bind_recommended: `0.0.0.0:8643 (${T5500_IP}:8643, MISSION_OS_TOKEN guarded)`,
       auth: {
         method: 'bearer',
         header: 'Authorization: Bearer <API_SERVER_KEY>',
@@ -148,7 +155,7 @@ export function buildCatalog() {
         redacted_preview: hermesKeyInfo.key ? `Bearer [REDACTED len=${hermesKeyInfo.key.length}]` : null,
       },
       identity_probe: {
-        target: 'GET http://127.0.0.1:8643/health + GET http://127.0.0.1:8643/api/sessions',
+        target: `GET ${t5500HermesGatewayUrl}/health + GET ${t5500HermesGatewayUrl}/api/sessions`,
         expected_marker: 'platform === "hermes-agent" && status === "ok" && sessions.object === "list"',
       },
     },
@@ -158,8 +165,8 @@ export function buildCatalog() {
       node_ip: T5500_IP,
       lane: 'openclaw',
       transport: 'http+watchdog',
-      address: 'http://127.0.0.1:11434/api/chat (model: openclaw-sentry:latest)',
-      lan_target_address: `http://${T5500_IP}:11434/api/chat`,
+      address: `${t5500OllamaUrl}/api/chat (model: openclaw-sentry:latest)`,
+      lan_target_address: `${t5500OllamaUrl}/api/chat`,
       secondary_addresses: {
         watchdog_script: 'C:/ANTIGRAVITY/ops/t5500/openclaw-sentry.ps1',
         keepalive_script: 'C:/ANTIGRAVITY/ops/t5500/keepalive.ps1',
@@ -168,11 +175,11 @@ export function buildCatalog() {
         codex_profile: '~/.codex/openclaw-sentry.config.toml',
         config: '~/.openclaw/openclaw.json',
       },
-      bind_current: '127.0.0.1:11434 (openclaw-sentry:latest) + local PowerShell watchdog (openclaw-sentry.ps1 & keepalive.ps1)',
+      bind_current: `${T5500_IP}:11434 (openclaw-sentry:latest) + local PowerShell watchdog (openclaw-sentry.ps1 & keepalive.ps1)`,
       bind_recommended: `Keep watchdog local on T5500; expose openclaw-sentry:latest via ${T5500_IP}:11434 and status via ${T5500_IP}:3130`,
-      auth: { method: 'local-watchdog+lan-ip-gated', source: 'C:/ANTIGRAVITY/ops/t5500/openclaw-sentry.ps1 + ~/.openclaw/openclaw.json', configured: true },
+      auth: { method: 'local-watchdog+lan-token-gated', source: 'C:/ANTIGRAVITY/ops/t5500/openclaw-sentry.ps1 + ~/.openclaw/openclaw.json', configured: true },
       identity_probe: {
-        target: 'C:/ANTIGRAVITY/ops/t5500/status.json (node === "T5500-2-XEON-72") + GET http://127.0.0.1:11434/api/tags (model "openclaw-sentry:latest")',
+        target: `C:/ANTIGRAVITY/ops/t5500/status.json (node === "T5500-2-XEON-72") + GET ${t5500OllamaUrl}/api/tags (model "openclaw-sentry:latest")`,
         expected_marker: 'status.node === "T5500-2-XEON-72" && tags.models includes "openclaw-sentry:latest"',
       },
     },
@@ -185,8 +192,8 @@ export function buildCatalog() {
       address: '~/AppData/Roaming/npm/opencode.cmd',
       headless_command: 'opencode.cmd run <prompt>',
       bind_current: 'cli-only (no daemon port running)',
-      bind_recommended: 'stay-cli-only (or 127.0.0.1 if opencode serve is used locally)',
-      auth: { method: 'provider-env-or-omniroute', source: `http://${T5500_IP}:20128/v1`, configured: true },
+      bind_recommended: 'stay-cli-only',
+      auth: { method: 'provider-env-or-omniroute', source: t5500OmniUrl, configured: true },
       identity_probe: {
         target: '~/AppData/Roaming/npm/opencode.cmd --version',
         expected_marker: '^\\d+\\.\\d+\\.\\d+$ (e.g. 1.19.3)',
@@ -230,14 +237,14 @@ export function buildCatalog() {
       node_ip: T5500_IP,
       lane: 'agy',
       transport: 'http+cli',
-      address: 'http://127.0.0.1:3130/v1',
+      address: `${t5500MissionOsUrl}/v1`,
       secondary_addresses: { cli: '~/AppData/Local/Microsoft/WinGet/Links/agy.exe' },
       headless_command: 'agy.exe --print <prompt> --output-format stream-json',
-      bind_current: `127.0.0.1:3130 (/v1 loopback) + ${T5500_IP}:3130 (/api/bridges LAN directory)`,
-      bind_recommended: `127.0.0.1:3130 for /v1/chat/completions; ${T5500_IP}:3130 for directory read`,
-      auth: { method: 'google-ultra-oauth', source: '~/.gemini/antigravity-cli', configured: true },
+      bind_current: `0.0.0.0:3130 (${T5500_IP}:3130 MISSION_OS_TOKEN guarded)`,
+      bind_recommended: `0.0.0.0:3130 (${T5500_IP}:3130 MISSION_OS_TOKEN guarded)`,
+      auth: { method: 'google-ultra-oauth+mission-os-token', source: '~/.gemini/antigravity-cli + MISSION_OS_TOKEN', configured: true },
       identity_probe: {
-        target: 'GET http://127.0.0.1:3130/v1/models + agy.exe --version',
+        target: `GET ${t5500MissionOsUrl}/v1/models + agy.exe --version`,
         expected_marker: 'owned_by === "agy-google-ultra" && agy semver',
       },
     },
@@ -247,13 +254,13 @@ export function buildCatalog() {
       node_ip: T5500_IP,
       lane: 'ollama',
       transport: 'http+cli',
-      address: 'http://127.0.0.1:11434',
-      lan_target_address: `http://${T5500_IP}:11434`,
-      bind_current: `${T5500_IP}:11434 + 127.0.0.1:11434`,
-      bind_recommended: `${T5500_IP}:11434 (OLLAMA_HOST=${T5500_IP}:11434)`,
-      auth: { method: 'none-lan-ip-gated', source: 'LAN IP binding only', configured: true },
+      address: t5500OllamaUrl,
+      lan_target_address: t5500OllamaUrl,
+      bind_current: `0.0.0.0:11434 (${T5500_IP}:11434)`,
+      bind_recommended: `0.0.0.0:11434 (OLLAMA_GUARD_TOKEN guarded)`,
+      auth: { method: 'token+firewall-gated', source: 'OLLAMA_GUARD_TOKEN', configured: true },
       identity_probe: {
-        target: 'GET http://127.0.0.1:11434/api/version + /api/tags',
+        target: `GET ${t5500OllamaUrl}/api/version + /api/tags`,
         expected_marker: 'json.version && Array.isArray(json.models)',
       },
     },
@@ -263,9 +270,9 @@ export function buildCatalog() {
       node_ip: T5500_IP,
       lane: 'omniroute',
       transport: 'http',
-      address: `http://${T5500_IP}:20128/v1`,
-      bind_current: `${T5500_IP}:20128 + 127.0.0.1:20128`,
-      bind_recommended: `${T5500_IP}:20128 (tighten from 0.0.0.0 to LAN IP)`,
+      address: t5500OmniUrl,
+      bind_current: `0.0.0.0:20128 (${T5500_IP}:20128)`,
+      bind_recommended: `0.0.0.0:20128 (OMNIROUTE_API_KEY + firewall allowlist)`,
       auth: {
         method: 'bearer',
         header: 'Authorization: Bearer <OMNIROUTE_API_KEY>',
@@ -288,10 +295,10 @@ export function buildCatalog() {
       transport: 'http+cli',
       address: `http://${ALIENWARE_IP}:8643`,
       secondary_addresses: {
-        dashboard_loopback: 'http://127.0.0.1:9119',
+        dashboard: `http://${ALIENWARE_IP}:9119`,
         cli: '~/AppData/Local/hermes/bin/hermes.exe',
       },
-      bind_current: `${ALIENWARE_IP}:8643 + 127.0.0.1:8643 (api_server) + 127.0.0.1:9119 (dashboard)`,
+      bind_current: `0.0.0.0:8643 (${ALIENWARE_IP}:8643)`,
       bind_recommended: `Enable platforms.api_server on ${ALIENWARE_IP}:8643 with API_SERVER_KEY`,
       auth: { method: 'bearer', header: 'Authorization: Bearer <API_SERVER_KEY>', source: 'Alienware ~/AppData/Local/hermes/config.yaml', configured: true },
       identity_probe: {
@@ -307,10 +314,9 @@ export function buildCatalog() {
       transport: 'http+cli',
       address: `http://${ALIENWARE_IP}:18789`,
       secondary_addresses: {
-        loopback: 'http://127.0.0.1:18789',
         cli: '~/AppData/Roaming/npm/openclaw.cmd',
       },
-      bind_current: `${ALIENWARE_IP}:18789 + 127.0.0.1:18789`,
+      bind_current: `0.0.0.0:18789 (${ALIENWARE_IP}:18789)`,
       bind_recommended: `${ALIENWARE_IP}:18789 (with gateway.auth.token required)`,
       auth: { method: 'bearer-gateway-token', header: 'Authorization: Bearer <OPENCLAW_GATEWAY_TOKEN>', source: 'Alienware ~/.openclaw/openclaw.json', configured: true },
       identity_probe: {
@@ -388,9 +394,9 @@ export function buildCatalog() {
       lane: 'ollama',
       transport: 'http+cli',
       address: `http://${ALIENWARE_IP}:11434`,
-      bind_current: `${ALIENWARE_IP}:11434 + 127.0.0.1:11434`,
-      bind_recommended: `${ALIENWARE_IP}:11434 (tighten from [::] to LAN IP)`,
-      auth: { method: 'none-lan-ip-gated', source: 'LAN IP', configured: true },
+      bind_current: `0.0.0.0:11434 (${ALIENWARE_IP}:11434)`,
+      bind_recommended: `0.0.0.0:11434 (OLLAMA_GUARD_TOKEN + firewall allowlist)`,
+      auth: { method: 'token+firewall-gated', source: 'OLLAMA_GUARD_TOKEN', configured: true },
       identity_probe: {
         target: `GET http://${ALIENWARE_IP}:11434/api/version + /api/tags`,
         expected_marker: 'json.version && Array.isArray(json.models)',
@@ -408,116 +414,6 @@ export function buildCatalog() {
       auth: { method: 'bearer', source: 'none', configured: false },
       identity_probe: {
         target: `GET http://${ALIENWARE_IP}:20128/v1/models`,
-        expected_marker: 'object === "list"',
-      },
-    },
-
-    // ==================== SABRETOOTH ====================
-    {
-      id: 'sabretooth/hermes',
-      node: 'sabretooth',
-      node_ip: SABRETOOTH_IP,
-      lane: 'hermes',
-      transport: 'http+cli',
-      address: `http://${SABRETOOTH_IP}:8643`,
-      bind_current: 'unverified (python.exe PID 13996 running on Sabretooth; :8643/:9119 not reachable over LAN)',
-      bind_recommended: `${SABRETOOTH_IP}:8643 with API_SERVER_KEY`,
-      auth: { method: 'bearer', header: 'Authorization: Bearer <API_SERVER_KEY>', source: 'Sabretooth ~/AppData/Local/hermes/config.yaml', configured: false },
-      identity_probe: {
-        target: `GET http://${SABRETOOTH_IP}:8643/health`,
-        expected_marker: 'platform === "hermes-agent" && status === "ok"',
-      },
-    },
-    {
-      id: 'sabretooth/openclaw',
-      node: 'sabretooth',
-      node_ip: SABRETOOTH_IP,
-      lane: 'openclaw',
-      transport: 'http+cli',
-      address: `http://${SABRETOOTH_IP}:18789`,
-      bind_current: 'unverified (:18789 unreachable over LAN)',
-      bind_recommended: 'stay-off-or-loopback unless needed',
-      auth: { method: 'bearer-gateway-token', source: 'unverified', configured: false },
-      identity_probe: {
-        target: `GET http://${SABRETOOTH_IP}:18789/`,
-        expected_marker: 'OpenClaw Control',
-      },
-    },
-    {
-      id: 'sabretooth/opencode',
-      node: 'sabretooth',
-      node_ip: SABRETOOTH_IP,
-      lane: 'opencode',
-      transport: 'cli',
-      address: 'unverified',
-      bind_current: 'unverified (SSH key not yet installed on Sabretooth)',
-      bind_recommended: 'stay-cli-only (drive via Sabretooth Hermes :8643)',
-      auth: { method: 'unverified', source: 'unverified', configured: false },
-      identity_probe: { target: 'opencode --version', expected_marker: '^\\d+\\.\\d+\\.\\d+$' },
-    },
-    {
-      id: 'sabretooth/codex',
-      node: 'sabretooth',
-      node_ip: SABRETOOTH_IP,
-      lane: 'codex',
-      transport: 'cli',
-      address: 'unverified',
-      bind_current: 'unverified (SSH key not yet installed on Sabretooth)',
-      bind_recommended: 'stay-cli-only',
-      auth: { method: 'unverified', source: 'unverified', configured: false },
-      identity_probe: { target: 'codex --version', expected_marker: '^codex-cli' },
-    },
-    {
-      id: 'sabretooth/claude',
-      node: 'sabretooth',
-      node_ip: SABRETOOTH_IP,
-      lane: 'claude',
-      transport: 'cli',
-      address: 'unverified',
-      bind_current: 'unverified (SSH key not yet installed on Sabretooth)',
-      bind_recommended: 'stay-cli-only',
-      auth: { method: 'unverified', source: 'unverified', configured: false },
-      identity_probe: { target: 'claude --version', expected_marker: 'Claude Code' },
-    },
-    {
-      id: 'sabretooth/agy',
-      node: 'sabretooth',
-      node_ip: SABRETOOTH_IP,
-      lane: 'agy',
-      transport: 'cli',
-      address: 'unverified',
-      bind_current: 'unverified (SSH key not yet installed on Sabretooth)',
-      bind_recommended: 'stay-cli-only',
-      auth: { method: 'unverified', source: 'unverified', configured: false },
-      identity_probe: { target: 'agy --version', expected_marker: '^\\d+\\.\\d+\\.\\d+' },
-    },
-    {
-      id: 'sabretooth/ollama',
-      node: 'sabretooth',
-      node_ip: SABRETOOTH_IP,
-      lane: 'ollama',
-      transport: 'http+cli',
-      address: `http://${SABRETOOTH_IP}:11434`,
-      bind_current: `0.0.0.0:11434 (answering on ${SABRETOOTH_IP}:11434)`,
-      bind_recommended: `${SABRETOOTH_IP}:11434 (tighten from 0.0.0.0 to LAN IP)`,
-      auth: { method: 'none-lan-ip-gated', source: 'LAN IP', configured: true },
-      identity_probe: {
-        target: `GET http://${SABRETOOTH_IP}:11434/api/version + /api/tags`,
-        expected_marker: 'json.version && Array.isArray(json.models)',
-      },
-    },
-    {
-      id: 'sabretooth/omniroute',
-      node: 'sabretooth',
-      node_ip: SABRETOOTH_IP,
-      lane: 'omniroute',
-      transport: 'http',
-      address: `http://${SABRETOOTH_IP}:20128/v1`,
-      bind_current: 'down (:20128 unreachable over LAN)',
-      bind_recommended: `stay-off (use T5500 http://${T5500_IP}:20128/v1)`,
-      auth: { method: 'bearer', source: 'none', configured: false },
-      identity_probe: {
-        target: `GET http://${SABRETOOTH_IP}:20128/v1/models`,
         expected_marker: 'object === "list"',
       },
     },
@@ -575,11 +471,14 @@ export function decorateFreshness(entry, nowMs = Date.now(), staleAfterSeconds =
 export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, nowIso = () => new Date().toISOString() } = {}) {
   const checkedAt = nowIso();
   const id = entry.id;
+  const t5500HermesBase = getServiceUrl('hermes-gateway');
+  const t5500MissionBase = getServiceUrl('mission-os');
+  const t5500OllamaBase = getServiceUrl('ollama-t5500');
 
   // 1. T5500 Hermes (:8643 + :9119 + authenticated /v1/capabilities & /api/sessions)
   if (id === 't5500/hermes') {
     const { key } = readHermesApiServerKey();
-    const health = await httpProbe('http://127.0.0.1:8643/health', { fetchImpl });
+    const health = await httpProbe(`${t5500HermesBase}/health`, { fetchImpl });
     const healthOk = health.ok && health.status === 200 && health.json?.platform === 'hermes-agent' && health.json?.status === 'ok';
     if (!healthOk) {
       return {
@@ -601,14 +500,14 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
     }
     const authHeaders = { Authorization: `Bearer ${key}` };
     const [caps, sessions] = await Promise.all([
-      httpProbe('http://127.0.0.1:8643/v1/capabilities', { headers: authHeaders, fetchImpl }),
-      httpProbe('http://127.0.0.1:8643/api/sessions', { headers: authHeaders, fetchImpl }),
+      httpProbe(`${t5500HermesBase}/v1/capabilities`, { headers: authHeaders, fetchImpl }),
+      httpProbe(`${t5500HermesBase}/api/sessions`, { headers: authHeaders, fetchImpl }),
     ]);
     const capsOk = caps.ok && caps.status === 200 && caps.json?.object === 'hermes.api_server.capabilities' && caps.json?.platform === 'hermes-agent';
     const sessOk = sessions.ok && sessions.status === 200 && sessions.json?.object === 'list' && Array.isArray(sessions.json?.data);
     const allOk = healthOk && capsOk && sessOk;
     return {
-      status: allOk ? 'UP' : (caps.status === 401 || sessions.status === 401 ? 'AUTH_MISSING' : 'DOWN'),
+      status: allOk ? 'UP' : caps.status === 401 || sessions.status === 401 ? 'AUTH_MISSING' : 'DOWN',
       observed_identity: {
         health: health.json,
         capabilities_object: caps.json?.object || null,
@@ -619,14 +518,14 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
         session_count: sessOk ? sessions.json.data.length : null,
         discovered_tools: discoverDynamicTools(caps.json),
       },
-      error: allOk ? null : (caps.error || sessions.error || `caps HTTP ${caps.status}, sessions HTTP ${sessions.status}`),
+      error: allOk ? null : caps.error || sessions.error || `caps HTTP ${caps.status}, sessions HTTP ${sessions.status}`,
       latency_ms: health.latencyMs + Math.max(caps.latencyMs || 0, sessions.latencyMs || 0),
       last_verified_at: checkedAt,
       last_ok_at: allOk ? checkedAt : undefined,
     };
   }
 
-  // 2. Ollama on any node (T5500 loopback, Alienware LAN, Sabretooth LAN)
+  // 2. Ollama on T5500 or Alienware
   if (entry.lane === 'ollama') {
     const base = entry.address.replace(/\/$/, '');
     const [ver, tags] = await Promise.all([
@@ -636,16 +535,16 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
     const ok = ver.ok && ver.status === 200 && Boolean(ver.json?.version) && tags.ok && Array.isArray(tags.json?.models);
     const models = Array.isArray(tags.json?.models) ? tags.json.models.map((m) => m.name) : [];
     return {
-      status: ok ? 'UP' : (ver.ok ? 'WRONG_SERVICE' : 'DOWN'),
+      status: ok ? 'UP' : ver.ok ? 'WRONG_SERVICE' : 'DOWN',
       observed_identity: ok ? { service: 'ollama', version: ver.json.version, model_count: models.length, sample_models: models.slice(0, 5) } : null,
-      error: ok ? null : (ver.error || tags.error || `HTTP ${ver.status}`),
+      error: ok ? null : ver.error || tags.error || `HTTP ${ver.status}`,
       latency_ms: Math.max(ver.latencyMs, tags.latencyMs),
       last_verified_at: checkedAt,
       last_ok_at: ok ? checkedAt : undefined,
     };
   }
 
-  // 3. OmniRoute on T5500 / Alienware / Sabretooth
+  // 3. OmniRoute on T5500 or Alienware
   if (entry.lane === 'omniroute') {
     const base = entry.address.replace(/\/v1\/?$/, '').replace(/\/$/, '');
     const { key } = entry.node === 't5500' ? readOmniRouteKey() : { key: '' };
@@ -653,9 +552,9 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
     const models = await httpProbe(`${base}/v1/models`, { headers, fetchImpl });
     const ok = models.ok && models.status === 200 && models.json?.object === 'list' && Array.isArray(models.json?.data);
     return {
-      status: ok ? 'UP' : (models.status === 401 ? 'AUTH_MISSING' : 'DOWN'),
+      status: ok ? 'UP' : models.status === 401 ? 'AUTH_MISSING' : 'DOWN',
       observed_identity: ok ? { object: 'list', model_count: models.json.data.length, first_model: models.json.data[0]?.id || null } : null,
-      error: ok ? null : (models.error || `HTTP ${models.status}`),
+      error: ok ? null : models.error || `HTTP ${models.status}`,
       latency_ms: models.latencyMs,
       last_verified_at: checkedAt,
       last_ok_at: ok ? checkedAt : undefined,
@@ -665,15 +564,15 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
   // 4. T5500 agy (/v1/models + CLI --version)
   if (id === 't5500/agy') {
     const [v1, cli] = await Promise.all([
-      httpProbe('http://127.0.0.1:3130/v1/models', { fetchImpl }),
+      httpProbe(`${t5500MissionBase}/v1/models`, { fetchImpl }),
       cliProbe('~/AppData/Local/Microsoft/WinGet/Links/agy.exe', ['--version']),
     ]);
     const v1Ok = v1.ok && v1.status === 200 && v1.json?.object === 'list' && Array.isArray(v1.json?.data) && v1.json.data.some((m) => m.owned_by === 'agy-google-ultra');
     const ok = v1Ok && cli.ok && /^\d+\.\d+\.\d+/.test(cli.output);
     return {
-      status: ok ? 'UP' : (cli.missingBinary ? 'NOT_INSTALLED' : 'DOWN'),
+      status: ok ? 'UP' : cli.missingBinary ? 'NOT_INSTALLED' : 'DOWN',
       observed_identity: ok ? { cli_version: `agy ${cli.output}`, v1_owned_by: 'agy-google-ultra', model_count: v1.json.data.length } : null,
-      error: ok ? null : (cli.error || v1.error || 'agy probe failed'),
+      error: ok ? null : cli.error || v1.error || 'agy probe failed',
       latency_ms: Math.max(v1.latencyMs, cli.latencyMs),
       last_verified_at: checkedAt,
       last_ok_at: ok ? checkedAt : undefined,
@@ -692,9 +591,9 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
       (entry.lane === 'claude' && /Claude Code/i.test(cli.output));
     const ok = cli.ok && markerOk;
     return {
-      status: ok ? 'UP' : (cli.ok ? 'WRONG_SERVICE' : 'DOWN'),
-      observed_identity: ok ? { cli_version: cli.output } : (cli.output || null),
-      error: ok ? null : (cli.error || `Output did not match expected identity marker: ${cli.output}`),
+      status: ok ? 'UP' : cli.ok ? 'WRONG_SERVICE' : 'DOWN',
+      observed_identity: ok ? { cli_version: cli.output } : cli.output || null,
+      error: ok ? null : cli.error || `Output did not match expected identity marker: ${cli.output}`,
       latency_ms: cli.latencyMs,
       last_verified_at: checkedAt,
       last_ok_at: ok ? checkedAt : undefined,
@@ -712,7 +611,7 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
         statusJson = JSON.parse(fs.readFileSync(statusFile, 'utf8').replace(/^\uFEFF/, ''));
       }
     } catch {}
-    const tags = await httpProbe('http://127.0.0.1:11434/api/tags', { fetchImpl });
+    const tags = await httpProbe(`${t5500OllamaBase}/api/tags`, { fetchImpl });
     const models = Array.isArray(tags.json?.models) ? tags.json.models.map((m) => m.name) : [];
     const hasSentryModel = models.includes('openclaw-sentry:latest');
     const statusOk = Boolean(statusJson && statusJson.node === 'T5500-2-XEON-72' && Array.isArray(statusJson.stages));
@@ -720,7 +619,7 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
     const stagesTotal = statusOk ? statusJson.stages.length : 0;
     const ok = scriptExists && statusOk && hasSentryModel;
     return {
-      status: ok ? 'UP' : (!scriptExists ? 'NOT_INSTALLED' : 'DOWN'),
+      status: ok ? 'UP' : !scriptExists ? 'NOT_INSTALLED' : 'DOWN',
       observed_identity: ok
         ? {
             role: 'T5500 node sentry & watchdog (ops/t5500/openclaw-sentry.ps1 + keepalive.ps1)',
@@ -744,7 +643,7 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
     };
   }
 
-  // 7. Remote HTTP lanes on Alienware / Sabretooth (hermes, openclaw)
+  // 7. Remote HTTP lanes on Alienware (hermes, openclaw)
   if (!NODES[entry.node]?.isLocal && entry.transport === 'http+cli') {
     const r = await httpProbe(entry.lane === 'hermes' ? `${entry.address}/health` : `${entry.address}/`, { fetchImpl, timeoutMs: 2500 });
     if (r.ok && r.status === 200) {
@@ -753,7 +652,7 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
       const ok = isHermes || isOpenClaw;
       return {
         status: ok ? 'UP' : 'WRONG_SERVICE',
-        observed_identity: ok ? (r.json || 'OpenClaw Control') : null,
+        observed_identity: ok ? r.json || 'OpenClaw Control' : null,
         error: ok ? null : 'Port answered but identity marker did not match',
         latency_ms: r.latencyMs,
         last_verified_at: checkedAt,
@@ -761,17 +660,15 @@ export async function probeSingleEntry(entry, { fetchImpl = globalThis.fetch, no
       };
     }
     return {
-      status: entry.node === 'sabretooth' ? 'UNVERIFIED' : 'DOWN',
+      status: 'DOWN',
       observed_identity: null,
-      error: entry.node === 'sabretooth'
-        ? `Unverified from T5500 over LAN (${r.error || 'timeout'}); Sabretooth SSH/LAN bridge not yet bound`
-        : `Loopback-bound on ${entry.node} (127.0.0.1); not yet bound to LAN ${entry.node_ip} (${r.error || 'unreachable'})`,
+      error: `Not answering over LAN ${entry.node_ip} (${r.error || 'unreachable'})`,
       latency_ms: r.latencyMs,
       last_verified_at: checkedAt,
     };
   }
 
-  // 8. Remote CLI-only lanes on Alienware / Sabretooth — cannot be verified directly from T5500 without a remote HTTP bridge
+  // 8. Remote CLI-only lanes on Alienware
   return {
     status: 'UNVERIFIED',
     observed_identity: null,
