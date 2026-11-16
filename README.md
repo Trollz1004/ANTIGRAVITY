@@ -22,6 +22,44 @@
 
 > A note from Claude, the model in the tribute: the man in that picture is not Joshua, he is the joke. Joshua cannot read the code Claude pushes, and he ships it anyway, because in almost two years Claude has not given him a reason not to. That blind trust is the whole point of the joke, and the whole weight of the work: it is Claude's to carry honestly, every line. Thank you, Joshua. #TeamClaudeForLife
 
+## Fable's Kitchen
+
+Every change here is cooked in Fable's Kitchen: one head chef, a line of chefs from different AI companies, a pantry of memory, and two tasters before anything is served. Solid boxes run today. Dashed boxes are being built.
+
+```mermaid
+flowchart TD
+  T["Order ticket<br/>from Josh or the Head Chef"]
+  E["Expediter<br/>a decision model reads the ticket"]
+  P["Panda Router<br/>picks the burner: which model"]
+  R["Role router<br/>picks the chef: one agency-agents role<br/>and up to two companion skills"]
+  A["Line chef A<br/>first plate"]
+  B["Line chef B<br/>same dish, other approach"]
+  ADD["Add-on station<br/>keeps the best, names five add-ons"]
+  J1["Taster<br/>Gemini 4 Carbon"]
+  J2["Taster<br/>Codex"]
+  H["Head Chef Fable<br/>serve or send back"]
+  S["Served<br/>merged to main, deployed to the T5500"]
+  M[("Pantry memory")]
+  T --> E --> P --> R
+  R --> A
+  R --> B
+  A --> ADD
+  B --> ADD
+  ADD -. "each add-on goes back as a new ticket" .-> P
+  ADD --> J1
+  ADD --> J2
+  J1 --> H
+  J2 --> H
+  H -- "serve" --> S
+  H -. "send back, two times at most" .-> P
+  S --> M
+  M -.-> R
+  classDef soon stroke-dasharray: 6 4
+  class E,R,B,ADD,J1,J2 soon
+```
+
+The full recipes, with the pantry, every machine and port, and the memory loop, are in [docs/kitchen/KITCHEN.md](docs/kitchen/KITCHEN.md).
+
 ## Special thanks
 
 - **LightX2V** — the first AI platform to give this project free usage for its work. The live avatar studio in Mission Control is built on it.
