@@ -38,7 +38,10 @@ from app.payment_truth import (
     iter_text_hints,
     parse_checkout_reference,
 )
-from app.revenue_allocation import reserve_revenue_allocation
+from app.revenue_allocation import (
+    mark_revenue_allocation_refunded,
+    reserve_revenue_allocation,
+)
 from app.schemas import WebhookAckResponse
 from app.subscriptions import build_subscription_expiry, utc_now
 from app.verification_service import promote_user_verification_if_ready
@@ -551,7 +554,30 @@ async def _process_square_payment_event(
     # Process based on event type
     if event_type in ("payment.created", "payment.updated"):
         payment_status = str(payment_obj.get("status") or "").upper()
-        if payment_status == "COMPLETED":
+        refunded_money = payment_obj.get("refunded_money") or {}
+        refunded_amount_cents = (
+            int(refunded_money.get("amount") or 0)
+            if isinstance(refunded_money, dict)
+            else 0
+        )
+        if (
+            payment_status in ("REFUNDED", "CANCELED", "FAILED")
+            or refunded_amount_cents > 0
+        ):
+            payment_id = str(payment_obj.get("id") or "").strip()
+            if payment_id:
+                await mark_revenue_allocation_refunded(
+                    db,
+                    square_payment_id=payment_id,
+                )
+            logger.info(
+                "Square payment marked refunded: payment_id=%s status=%s refunded_cents=%s event_id=%s",
+                payment_id,
+                payment_status,
+                refunded_amount_cents,
+                event_id,
+            )
+        elif payment_status == "COMPLETED":
             payment_amount_cents = payment_obj.get("amount_money", {}).get("amount")
             payment_id = str(payment_obj.get("id") or event_id)
             tier = _extract_square_payment_tier(
@@ -681,12 +707,38 @@ async def _process_square_payment_event(
                     event_id,
                     list(iter_text_hints((payment_obj.get("note"), order_obj))),
                 )
-    elif event_type in ("payment.created", "payment.updated"):
-        logger.info(
-            "Ignoring non-authoritative Square payment event for completion state: event_type=%s event_id=%s",
-            event_type,
-            event_id,
-        )
+        else:
+            logger.info(
+                "Ignoring non-authoritative Square payment event for completion state: event_type=%s event_id=%s",
+                event_type,
+                event_id,
+            )
+
+    elif event_type in ("refund.created", "refund.updated"):
+        refund_obj = obj.get("refund") if isinstance(obj, dict) else None
+        if not isinstance(refund_obj, dict):
+            refund_obj = obj if isinstance(obj, dict) else {}
+        refund_payment_id = str(refund_obj.get("payment_id") or "").strip()
+        refund_status = str(refund_obj.get("status") or "").upper()
+        if refund_status == "COMPLETED" and refund_payment_id:
+            await mark_revenue_allocation_refunded(
+                db,
+                square_payment_id=refund_payment_id,
+            )
+            logger.info(
+                "Square refund completed: payment_id=%s event_type=%s event_id=%s",
+                refund_payment_id,
+                event_type,
+                event_id,
+            )
+        else:
+            logger.info(
+                "Ignoring non-completed Square refund event: payment_id=%s status=%s event_type=%s event_id=%s",
+                refund_payment_id,
+                refund_status,
+                event_type,
+                event_id,
+            )
 
     elif event_type == "subscription.created":
         if user:

@@ -528,3 +528,229 @@ def test_affiliate_counts_endpoint_matches_seeded_rows_and_zeros_inactive_code(
         ]
     finally:
         get_settings.cache_clear()
+
+
+def test_square_refund_webhook_marks_allocation_refunded_and_excludes_from_affiliate_counts(
+    client, db_session_factory, monkeypatch
+):
+    """Completed Square payment increments creator counts; subsequent Square refund.updated (COMPLETED)
+    or payment.updated (REFUNDED / refunded_money) marks RevenueAllocation.status='refunded'
+    and excludes it from /api/v1/metrics/affiliates.
+    """
+    import json
+
+    from tests.conftest import generate_square_signature
+
+    sig_key = "test-square-signature"
+    notif_url = "http://testserver/api/v1/webhooks/square-payment"
+    monkeypatch.setenv("SUPPORT_OPERATOR_EMAILS", "founder@youandinotai.com")
+    monkeypatch.setenv("SQUARE_WEBHOOK_VERIFY_SIGNATURE", "true")
+    monkeypatch.setenv("SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY", sig_key)
+    monkeypatch.setenv("SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL", notif_url)
+    get_settings.cache_clear()
+
+    founder_id = uuid.uuid4()
+    referred_user_id = uuid.uuid4()
+
+    async def seed_users() -> None:
+        async with db_session_factory() as session:
+            session.add_all(
+                [
+                    User(
+                        id=founder_id,
+                        email="founder@youandinotai.com",
+                        password_hash=hash_password("password123"),
+                        display_name="Josh Operator",
+                        date_of_birth=date(1985, 1, 1),
+                        adult_verified_at=datetime.now(timezone.utc),
+                        bot_shield_verified=True,
+                    ),
+                    User(
+                        id=referred_user_id,
+                        email="buyer-refund@example.com",
+                        password_hash=hash_password("password123"),
+                        display_name="Refund Buyer",
+                        date_of_birth=date(1992, 6, 15),
+                        adult_verified_at=datetime.now(timezone.utc),
+                        bot_shield_verified=True,
+                        referral_code="creator-refund-test",
+                    ),
+                ]
+            )
+            await session.commit()
+
+    asyncio.run(seed_users())
+
+    def post_signed_webhook(payload: dict):
+        raw = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+        sig = generate_square_signature(raw, sig_key, notif_url)
+        return client.post(
+            "/api/v1/webhooks/square-payment",
+            headers={
+                "Content-Type": "application/json",
+                "x-square-hmacsha256-signature": sig,
+            },
+            content=raw,
+        )
+
+    try:
+        founder_token = create_access_token(str(founder_id))
+        headers = {"Authorization": f"Bearer {founder_token}"}
+
+        # 1. Completed Founding Member payment ($14.99 = 1499c) via signed webhook
+        pay1_completed = {
+            "event_id": "evt_ref_pay_1_completed",
+            "type": "payment.updated",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "data": {
+                "object": {
+                    "payment": {
+                        "id": "pay_ref_customer_1",
+                        "status": "COMPLETED",
+                        "amount_money": {"amount": 1499, "currency": "USD"},
+                        "buyer_email_address": "buyer-refund@example.com",
+                        "note": "Founding Member subscription",
+                    }
+                }
+            },
+        }
+        r1 = post_signed_webhook(pay1_completed)
+        assert r1.status_code == 200, r1.text
+
+        # Verify creator counts include the completed payment
+        m1 = client.get(
+            "/api/v1/metrics/affiliates?code=creator-refund-test", headers=headers
+        )
+        assert m1.status_code == 200, m1.text
+        item1 = m1.json()["items"][0]
+        assert item1["signups_count"] == 1
+        assert item1["verified_count"] == 1
+        assert item1["payments_count"] == 1
+        assert item1["gross_cents"] == 1499
+        assert item1["owed_cents"] == 749
+
+        # 2. Pending refund.created should NOT exclude the payment yet
+        refund1_pending = {
+            "event_id": "evt_ref_refund_1_pending",
+            "type": "refund.created",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "data": {
+                "object": {
+                    "refund": {
+                        "id": "rfd_1",
+                        "payment_id": "pay_ref_customer_1",
+                        "status": "PENDING",
+                        "amount_money": {"amount": 1499, "currency": "USD"},
+                    }
+                }
+            },
+        }
+        r2 = post_signed_webhook(refund1_pending)
+        assert r2.status_code == 200, r2.text
+
+        m2 = client.get(
+            "/api/v1/metrics/affiliates?code=creator-refund-test", headers=headers
+        )
+        assert m2.json()["items"][0]["payments_count"] == 1
+
+        # 3. Completed refund.updated marks the allocation 'refunded' and excludes it
+        refund1_completed = {
+            "event_id": "evt_ref_refund_1_completed",
+            "type": "refund.updated",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "data": {
+                "object": {
+                    "refund": {
+                        "id": "rfd_1",
+                        "payment_id": "pay_ref_customer_1",
+                        "status": "COMPLETED",
+                        "amount_money": {"amount": 1499, "currency": "USD"},
+                    }
+                }
+            },
+        }
+        r3 = post_signed_webhook(refund1_completed)
+        assert r3.status_code == 200, r3.text
+
+        m3 = client.get(
+            "/api/v1/metrics/affiliates?code=creator-refund-test", headers=headers
+        )
+        assert m3.status_code == 200, m3.text
+        item3 = m3.json()["items"][0]
+        assert item3["payments_count"] == 0
+        assert item3["gross_cents"] == 0
+        assert item3["owed_cents"] == 0
+
+        # 4. Second completed payment followed by payment.updated with refunded_money > 0
+        pay2_completed = {
+            "event_id": "evt_ref_pay_2_completed",
+            "type": "payment.created",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "data": {
+                "object": {
+                    "payment": {
+                        "id": "pay_ref_customer_2",
+                        "status": "COMPLETED",
+                        "amount_money": {"amount": 3999, "currency": "USD"},
+                        "buyer_email_address": "buyer-refund@example.com",
+                        "note": "3-Month Founder plan",
+                    }
+                }
+            },
+        }
+        r4 = post_signed_webhook(pay2_completed)
+        assert r4.status_code == 200, r4.text
+
+        m4 = client.get(
+            "/api/v1/metrics/affiliates?code=creator-refund-test", headers=headers
+        )
+        assert m4.json()["items"][0]["payments_count"] == 1
+        assert m4.json()["items"][0]["gross_cents"] == 3999
+        assert m4.json()["items"][0]["owed_cents"] == 1999
+
+        pay2_refunded = {
+            "event_id": "evt_ref_pay_2_refunded",
+            "type": "payment.updated",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "data": {
+                "object": {
+                    "payment": {
+                        "id": "pay_ref_customer_2",
+                        "status": "COMPLETED",
+                        "amount_money": {"amount": 3999, "currency": "USD"},
+                        "refunded_money": {"amount": 3999, "currency": "USD"},
+                        "buyer_email_address": "buyer-refund@example.com",
+                        "note": "3-Month Founder plan",
+                    }
+                }
+            },
+        }
+        r5 = post_signed_webhook(pay2_refunded)
+        assert r5.status_code == 200, r5.text
+
+        m5 = client.get(
+            "/api/v1/metrics/affiliates?code=creator-refund-test", headers=headers
+        )
+        item5 = m5.json()["items"][0]
+        assert item5["payments_count"] == 0
+        assert item5["gross_cents"] == 0
+        assert item5["owed_cents"] == 0
+
+        async def fetch_statuses() -> dict[str, str]:
+            async with db_session_factory() as session:
+                rows = (
+                    await session.scalars(
+                        select(RevenueAllocation).where(
+                            RevenueAllocation.user_id == referred_user_id
+                        )
+                    )
+                ).all()
+                return {row.square_payment_id: row.status for row in rows}
+
+        statuses = asyncio.run(fetch_statuses())
+        assert statuses == {
+            "pay_ref_customer_1": "refunded",
+            "pay_ref_customer_2": "refunded",
+        }
+    finally:
+        get_settings.cache_clear()
