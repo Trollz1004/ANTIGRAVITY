@@ -24,7 +24,7 @@
 
 ## Fable's Kitchen
 
-Every change here is cooked in Fable's Kitchen: one head chef, a line of chefs from different AI companies, a pantry of memory, and two tasters before anything is served. Solid boxes run today. Dashed boxes are being built.
+Every change here is cooked in Fable's Kitchen: one head chef, a line of chefs from different AI companies, a pantry of memory, and (being built) two tasters who will check every dish before it is served. Solid boxes run today. Dashed boxes are being built.
 
 ```mermaid
 flowchart TD
