@@ -35,7 +35,8 @@ rem   Check it:    Get-Process cloudflared
 rem   Restart it:  let the House heal it, or rerun FABLES-HOUSE.cmd
 echo [dateapp] tunnel is owned by FABLE'S HOUSE (not this tab).
 
-echo [dateapp] serving production build on http://127.0.0.1:3200
+echo [dateapp] serving production build on http://192.168.0.15:3200 (bind 0.0.0.0:3200)
 set "NODE_ENV=production"
+set "HOST=0.0.0.0"
 set "PORT=3200"
 npx tsx server.ts

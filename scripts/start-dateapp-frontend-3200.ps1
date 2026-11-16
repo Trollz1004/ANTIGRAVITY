@@ -1,10 +1,19 @@
 ﻿<#
 .SYNOPSIS
-Installs frontend dependencies and starts YouAndINotAI frontend on :3200
-(cloudflared origin for youandinotai.com).
+Installs frontend dependencies and starts YouAndINotAI frontend on 0.0.0.0:3200
+(T5500 LAN + cloudflared origin for youandinotai.com).
 #>
 param([string]$RepoRoot = 'C:\ANTIGRAVITY')
 $ErrorActionPreference = 'Continue'
+if (-not (Test-Path $RepoRoot)) {
+  $RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+}
+. (Join-Path $RepoRoot 'ops\fleet\Get-FleetEndpoint.ps1')
+$feSvc    = Get-FleetService -ServiceId 'dateapp-frontend'
+$bindHost = Get-FleetBindHost -ServiceId 'dateapp-frontend'
+$port     = [int]$feSvc.port
+$probeUrl = Get-FleetServiceUrl -ServiceId 'dateapp-frontend' -PathSuffix '/'
+
 $LogDir = Join-Path $RepoRoot 'logs'
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 $log = Join-Path $LogDir 'frontend-3200.log'
@@ -15,9 +24,9 @@ L '=== start-dateapp-frontend-3200 start ==='
 
 # Already healthy? do nothing
 try {
-  $probe = Invoke-WebRequest -Uri 'http://127.0.0.1:3200/' -TimeoutSec 3 -UseBasicParsing -ErrorAction Stop
+  $probe = Invoke-WebRequest -Uri $probeUrl -TimeoutSec 3 -UseBasicParsing -ErrorAction Stop
   if ($probe.StatusCode -ge 200 -and $probe.StatusCode -lt 500) {
-    L 'frontend already up on :3200'
+    L "frontend already up on $probeUrl"
     exit 0
   }
 } catch {}
@@ -35,10 +44,12 @@ if (-not (Test-Path (Join-Path $dir 'node_modules'))) {
   Pop-Location
 }
 
-L "starting frontend in $dir on PORT=3200"
-$env:PORT = '3200'
+L "starting frontend in $dir on HOST=$bindHost PORT=$port"
+$env:HOST = $bindHost
+$env:PORT = [string]$port
+$launchCmd = "set HOST=$bindHost&& set PORT=$port&& set NODE_ENV=production&& npx.cmd tsx server.ts"
 $p = Start-Process -FilePath 'cmd.exe' `
-  -ArgumentList '/c', 'set PORT=3200&& set NODE_ENV=production&& npx.cmd tsx server.ts' `
+  -ArgumentList '/c', $launchCmd `
   -WorkingDirectory $dir `
   -WindowStyle Hidden `
   -PassThru
@@ -47,7 +58,7 @@ L "started frontend pid $($p.Id)"
 for ($i = 0; $i -lt 40; $i++) {
   Start-Sleep -Seconds 3
   try {
-    $r = Invoke-WebRequest -Uri 'http://127.0.0.1:3200/' -TimeoutSec 3 -UseBasicParsing -ErrorAction SilentlyContinue
+    $r = Invoke-WebRequest -Uri $probeUrl -TimeoutSec 3 -UseBasicParsing -ErrorAction SilentlyContinue
     if ($r.StatusCode -ge 200 -and $r.StatusCode -lt 500) {
       L 'frontend ready'
       exit 0

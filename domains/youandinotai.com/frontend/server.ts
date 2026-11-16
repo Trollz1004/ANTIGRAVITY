@@ -8,12 +8,33 @@ import { createServer as createViteServer } from 'vite';
 import { WebSocketServer, WebSocket } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
 import http from 'http';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const PORT = Number(process.env.PORT || 8080);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+function loadDateAppFrontendConfig(): { host: string; port: number; bind: string } {
+  try {
+    const fleetPath = path.resolve(__dirname, '..', '..', '..', 'ops', 'fleet', 'fleet-map.json');
+    const parsed = JSON.parse(fs.readFileSync(fleetPath, 'utf8'));
+    const svc = parsed?.services?.['dateapp-frontend'];
+    if (svc) {
+      return {
+        host: String(svc.host || '192.168.0.15'),
+        port: Number(svc.port || 3200),
+        bind: String(svc.bind || '0.0.0.0'),
+      };
+    }
+  } catch {
+    // Fallback when running outside monorepo layout
+  }
+  return { host: '192.168.0.15', port: 3200, bind: '0.0.0.0' };
+}
+
+const FLEET_FRONTEND = loadDateAppFrontendConfig();
+const PORT = Number(process.env.PORT || FLEET_FRONTEND.port);
 
 // Types
 type Vector3 = { x: number; y: number; z: number };
@@ -240,7 +261,7 @@ async function startServer() {
         middlewareMode: true,
         // Public traffic arrives via the cloudflared tunnel with the real
         // hostname — Vite's host check 403s anything not listed here.
-        allowedHosts: ['.youandinotai.com', 'localhost', '127.0.0.1'],
+        allowedHosts: ['.youandinotai.com', FLEET_FRONTEND.host, 'localhost', '127.0.0.1'],
       },
       appType: 'spa',
     });
@@ -301,9 +322,9 @@ async function startServer() {
     });
   }
 
-  const bindHost = process.env.HOST || '127.0.0.1';
+  const bindHost = process.env.HOST || FLEET_FRONTEND.bind;
   server.listen(PORT, bindHost, () => {
-    console.log(`Server running on http://${bindHost}:${PORT}`);
+    console.log(`Server running on http://${bindHost}:${PORT} (LAN http://${FLEET_FRONTEND.host}:${PORT})`);
   });
 }
 
