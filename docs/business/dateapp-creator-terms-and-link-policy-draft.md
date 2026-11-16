@@ -6,6 +6,8 @@ This document defines the single canonical creator referral link policy and inte
 
 This draft is held for the Judge go-gate and is not published on any customer-facing surface or advertised externally.
 
+The payout numbers in sections 2.2 to 2.4 (rate, $25 minimum, monthly settlement, 30-day notice) are proposals for Josh to rule on. They are not commitments until he does.
+
 ---
 
 ## 1. One Canonical Creator Link Policy
@@ -54,7 +56,7 @@ Creators and internal campaigns must never distribute or route traffic through:
 ### 2.2 Payout Calculation
 In accordance with `GET /api/v1/metrics/affiliates` in `domains/youandinotai.com/backend/app/routers/metrics.py` and `reserve_revenue_allocation()` in `domains/youandinotai.com/backend/app/revenue_allocation.py`:
 
-- **Rate:** **50%** of net collected customer payments (`owed_cents = gross_cents // 2`) for accounts whose `users.referral_code` matches the creator's normalized code.
+- **Rate:** **50%** of collected customer payments as the code computes it today (`owed_cents = gross_cents // 2`, before any processor fee) for accounts whose `users.referral_code` matches the creator's normalized code.
 - **Eligible Ledger Rows:** A payment is eligible for creator attribution if and only if the `revenue_allocations` row is joined to a `users` row (`revenue_allocations.user_id = users.id`) with a non-empty `users.referral_code` and satisfies all three conditions:
   1. `gross_amount_cents > 0`
   2. `status = 'reserved'` (`COLLECTED_PAYMENT_ALLOCATION_STATUS = "reserved"`, recorded upon confirmed Square `COMPLETED` webhook receipt)
