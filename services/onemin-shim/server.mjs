@@ -9,12 +9,15 @@
 // (set in OmniRoute's encrypted connection config) is forwarded upstream as
 // both `API-KEY` and `Authorization` headers. Never log or persist the key.
 //
-// Run: node server.mjs   (ONEMIN_SHIM_PORT=20130, binds 127.0.0.1 only)
+// Run: node server.mjs   (ONEMIN_SHIM_PORT=20130, binds 0.0.0.0 by default)
 
+import crypto from 'node:crypto';
 import http from 'node:http';
+import { getNodeIp } from '../../ops/fleet/fleet-map.mjs';
 
+const T5500_IP = getNodeIp('t5500');
 const PORT = Number(process.env.ONEMIN_SHIM_PORT || 20130);
-const HOST = process.env.ONEMIN_SHIM_HOST || '127.0.0.1';
+const HOST = process.env.ONEMIN_SHIM_HOST || '0.0.0.0';
 const UPSTREAM = process.env.ONEMIN_UPSTREAM || 'https://api.1min.ai';
 const TIMEOUT_MS = Number(process.env.ONEMIN_TIMEOUT_MS || 120000);
 
@@ -179,10 +182,24 @@ async function handleChat(req, res, body) {
   res.end();
 }
 
+function guardShimToken(req) {
+  const guardTok = String(process.env.ONEMIN_SHIM_TOKEN || '').trim();
+  if (!guardTok) return true;
+  const candidate = String(req.headers['x-shim-token'] || bearerFrom(req) || '').trim();
+  if (!candidate) return false;
+  const a = crypto.createHash('sha256').update(guardTok, 'utf8').digest();
+  const b = crypto.createHash('sha256').update(candidate, 'utf8').digest();
+  return crypto.timingSafeEqual(a, b);
+}
+
 const server = http.createServer(async (req, res) => {
   const started = Date.now();
   const url = (req.url || '').split('?')[0];
   try {
+    if (url !== '/health' && !guardShimToken(req)) {
+      openaiError(res, 401, 'Unauthorized: invalid ONEMIN_SHIM_TOKEN', 'authentication_error');
+      return;
+    }
     if (req.method === 'GET' && (url === '/v1/models' || url === '/models')) {
       res.writeHead(200, { 'content-type': 'application/json' });
       res.end(JSON.stringify({
@@ -211,5 +228,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`onemin-shim listening on http://${HOST}:${PORT} -> ${UPSTREAM} (loopback only)`);
+  console.log(`onemin-shim listening on http://${HOST}:${PORT} (LAN http://${T5500_IP}:${PORT}) -> ${UPSTREAM}`);
 });
