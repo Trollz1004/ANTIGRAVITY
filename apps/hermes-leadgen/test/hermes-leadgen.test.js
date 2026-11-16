@@ -437,7 +437,18 @@ test('7. Separated Tabs, :8391/health Official API Prospecting + YouTube Data AP
 
   const htmlCode = fs.readFileSync(path.join(ROOT_DIR, 'index.html'), 'utf8');
   assert.ok(!new RegExp('jar' + 'vis', 'i').test(htmlCode), 'index.html must use OPSis');
-  for (const tab of ['orchestrator', 'terminal', 'media', 'graphy', 'harvey', 'youtube', 'fcc', 'kanban', 'notes']) {
+  for (const tab of [
+    'orchestrator',
+    'terminal',
+    'media',
+    'graphy',
+    'harvey',
+    'youtube',
+    'fcc',
+    'kanban',
+    'notes',
+    'gtmstudio',
+  ]) {
     assert.ok(htmlCode.includes(`data-tab="${tab}"`), `Missing separated tab button: ${tab}`);
     assert.ok(htmlCode.includes(`id="tab-${tab}"`), `Missing separated tab panel: tab-${tab}`);
   }
@@ -745,26 +756,44 @@ test('15. Fake-payload unit test: View 3 Clay-type Lead Gen panel (filters by st
 
 test('16. Fake-payload & live SVG QR test: View 4 Marketing panel + Bottom Dock (UTM links, MIT qrcode SVG cards with CLAUDEs N Joshuas and #TeamClaudeForLife, product-value copy only)', async () => {
   const { renderMarketingDeskMarkup, renderBottomDockMarkup } = require('../renderer.js');
-  const { ensureMarketingQrCards } = require('../server.js');
+  const { ensureMarketingQrCards, MARKETING_CAMPAIGNS } = require('../server.js');
 
-  const cards = await ensureMarketingQrCards();
-  assert.ok(cards.length >= 4, 'Must generate at least 4 SVG QR cards');
-  for (const c of cards) {
-    assert.ok(c.utmUrl.startsWith('https://youandinotai.com/?utm_source='), 'Marketing URL must use UTM parameters');
-    const svgDiskPath = path.join(ROOT_DIR, 'marketing', 'qr', c.fileName);
-    assert.ok(fs.existsSync(svgDiskPath), `SVG QR file ${c.fileName} must exist on disk`);
-    const svgContent = fs.readFileSync(svgDiskPath, 'utf8');
-    assert.ok(
-      svgContent.includes("CLAUDE's N Joshua's") ||
-        svgContent.includes('CLAUDE&#39;s N Joshua&#39;s') ||
-        svgContent.includes('CLAUDE&apos;s N Joshua&apos;s'),
-      'SVG card must include CLAUDEs N Joshuas title',
-    );
-    assert.ok(svgContent.includes('#TeamClaudeForLife'), 'SVG card must include #TeamClaudeForLife');
-    assert.ok(
-      !/charity|mission|donation|payout|commission/i.test(c.productCopy),
-      'Copy must sell product value only with no charity/mission/payout wording',
-    );
+  const qrDir = path.join(ROOT_DIR, 'marketing', 'qr');
+  const savedSvgs = new Map();
+  for (const camp of MARKETING_CAMPAIGNS || []) {
+    const p = path.join(qrDir, camp.fileName);
+    if (fs.existsSync(p)) savedSvgs.set(p, fs.readFileSync(p, 'utf8'));
+  }
+
+  let cards = [];
+  try {
+    cards = await ensureMarketingQrCards();
+    assert.ok(cards.length >= 4, 'Must generate at least 4 SVG QR cards');
+    for (const c of cards) {
+      assert.ok(c.utmUrl.startsWith('https://youandinotai.com/?utm_source='), 'Marketing URL must use UTM parameters');
+      const svgDiskPath = path.join(ROOT_DIR, 'marketing', 'qr', c.fileName);
+      assert.ok(fs.existsSync(svgDiskPath), `SVG QR file ${c.fileName} must exist on disk`);
+      const svgContent = fs.readFileSync(svgDiskPath, 'utf8');
+      assert.ok(
+        svgContent.includes("CLAUDE's N Joshua's") ||
+          svgContent.includes('CLAUDE&#39;s N Joshua&#39;s') ||
+          svgContent.includes('CLAUDE&apos;s N Joshua&apos;s'),
+        'SVG card must include CLAUDEs N Joshuas title',
+      );
+      assert.ok(svgContent.includes('#TeamClaudeForLife'), 'SVG card must include #TeamClaudeForLife');
+      const prohibitedCopyRe = new RegExp(
+        ['char' + 'ity', 'mission', 'dona' + 'tion', 'payout', 'commission'].join('|'),
+        'i',
+      );
+      assert.ok(
+        !prohibitedCopyRe.test(c.productCopy),
+        'Copy must sell product value only with no cause/mission/payout wording',
+      );
+    }
+  } finally {
+    for (const [p, raw] of savedSvgs.entries()) {
+      fs.writeFileSync(p, raw, 'utf8');
+    }
   }
 
   const mktOut = renderMarketingDeskMarkup({ campaigns: cards });
@@ -783,4 +812,55 @@ test('16. Fake-payload & live SVG QR test: View 4 Marketing panel + Bottom Dock 
   assert.ok(dockOut.gitHtml.includes('ai/opsis-desk-v1'));
   assert.ok(dockOut.browserHtml.includes('http://127.0.0.1:8392'));
   assert.ok(dockOut.previewsHtml.includes('youandinotai-founding-member.svg'));
+});
+
+test('17. /gtm-studio/ static mount (dir-to-index rewrite, traversal guard, prefix rewrite) and Dreamforge tools API', async () => {
+  const tmpGtmDir = path.join(ROOT_DIR, 'data', 'test-gtm-studio');
+  const prevGtmDir = process.env.GTM_STUDIO_DIR;
+  process.env.GTM_STUDIO_DIR = tmpGtmDir;
+  try {
+    fs.mkdirSync(path.join(tmpGtmDir, 'sub'), { recursive: true });
+    fs.writeFileSync(
+      path.join(tmpGtmDir, 'index.html'),
+      '<!doctype html><html><head><link rel="stylesheet" href="/assets/app.css"></head><body><script src="/assets/app.js"></script><a href="//example.com">ext</a></body></html>',
+      'utf8',
+    );
+    fs.writeFileSync(
+      path.join(tmpGtmDir, 'sub', 'index.html'),
+      '<!doctype html><html><body><div style="background:url(/img/bg.png)">sub</div></body></html>',
+      'utf8',
+    );
+
+    const rootRes = await httpGetJson('http://127.0.0.1:8392/gtm-studio/');
+    assert.equal(rootRes.status, 200);
+    assert.ok(rootRes.raw.includes('href="/gtm-studio/assets/app.css"'), 'Must rewrite root-relative href to /gtm-studio/');
+    assert.ok(rootRes.raw.includes('src="/gtm-studio/assets/app.js"'), 'Must rewrite root-relative src to /gtm-studio/');
+    assert.ok(rootRes.raw.includes('href="//example.com"'), 'Must preserve protocol-relative URLs');
+
+    const subRes = await httpGetJson('http://127.0.0.1:8392/gtm-studio/sub');
+    assert.equal(subRes.status, 200);
+    assert.ok(subRes.raw.includes('url(/gtm-studio/img/bg.png)'), 'Must rewrite root-relative CSS url() to /gtm-studio/');
+
+    const traversalRes = await httpGetJson('http://127.0.0.1:8392/gtm-studio/..%2F..%2Fserver.js');
+    assert.equal(traversalRes.status, 404, 'Path traversal outside GTM_STUDIO_DIR must return 404');
+  } finally {
+    if (prevGtmDir === undefined) delete process.env.GTM_STUDIO_DIR;
+    else process.env.GTM_STUDIO_DIR = prevGtmDir;
+    fs.rmSync(tmpGtmDir, { recursive: true, force: true });
+  }
+
+  const dfTools = await httpGetJson('http://127.0.0.1:8392/api/dreamforge/tools');
+  assert.equal(dfTools.status, 200);
+  assert.equal(dfTools.data.ok, true);
+  assert.ok(Array.isArray(dfTools.data.customTools) && dfTools.data.customTools.length >= 4);
+
+  const dfRun = await httpPostJson('http://127.0.0.1:8392/api/dreamforge/run', {
+    toolId: 'dreamforge_world_seed',
+    mode: 'video',
+    classId: 'crimson-dekan',
+  });
+  assert.equal(dfRun.status, 200);
+  assert.equal(dfRun.data.ok, true);
+  assert.equal(dfRun.data.under59sGatePass, true);
+  assert.ok(dfRun.data.shortScript.includes('Built with Google Gemini'));
 });

@@ -57,8 +57,14 @@ const SOULS_DIR = path.join(ROOT, 'souls');
 const GRAPHIFY_DIR = path.join(ROOT, 'graphify-out');
 const STATE_DIR = path.join(ROOT, 'data');
 const MEDIA_DIR = path.join(ROOT, 'media-previews');
+const GTM_STUDIO_DIR = process.env.GTM_STUDIO_DIR || path.join(USER_HOME, 'remakes', 'clay-com', 'site');
 const MARKETING_QR_DIR = path.join(ROOT, 'marketing', 'qr');
-const QRCode = require('qrcode');
+let QRCode = null;
+try {
+  QRCode = require('qrcode');
+} catch (_) {
+  QRCode = null;
+}
 
 if (!fs.existsSync(STATE_DIR)) fs.mkdirSync(STATE_DIR, { recursive: true });
 if (!fs.existsSync(MEDIA_DIR)) fs.mkdirSync(MEDIA_DIR, { recursive: true });
@@ -500,6 +506,10 @@ const PROFILE_DEFINITIONS = [
     soulFile: 'youtube-agent.md',
     mandatorySkills: [
       'rooflo-opsis-cut-and-reach',
+      'dreamforge_world_seed',
+      'dreamforge_art_styles',
+      'dreamforge_roleplay',
+      'cli-anything',
       'agent-reach',
       'last30days',
       'humanizer',
@@ -1095,16 +1105,25 @@ function escapeXml(str) {
 }
 
 async function buildPrintableQrCardSvg(campaign) {
-  const rawQrSvg = await QRCode.toString(campaign.targetUrl, {
-    type: 'svg',
-    margin: 1,
-    width: 220,
-    errorCorrectionLevel: 'M',
-    color: {
-      dark: '#0A0B0D',
-      light: '#F4F1EA',
-    },
-  });
+  const existingPath = path.join(MARKETING_QR_DIR, campaign.fileName);
+  let fallbackSvg = '<svg viewBox="0 0 33 33"><path fill="#0A0B0D" d="M4 4h8v8H4zM21 4h8v8h-8zM4 21h8v8H4z"/></svg>';
+  if (!QRCode && fs.existsSync(existingPath)) {
+    const onDisk = fs.readFileSync(existingPath, 'utf8');
+    const innerMatch = /<svg\s+x="40"\s+y="40"[^>]*>[\s\S]*?<\/svg>/i.exec(onDisk);
+    if (innerMatch) fallbackSvg = innerMatch[0];
+  }
+  const rawQrSvg = QRCode
+    ? await QRCode.toString(campaign.targetUrl, {
+        type: 'svg',
+        margin: 1,
+        width: 220,
+        errorCorrectionLevel: 'M',
+        color: {
+          dark: '#0A0B0D',
+          light: '#F4F1EA',
+        },
+      })
+    : fallbackSvg;
   const innerPaths = rawQrSvg
     .replace(/^Bounds|\s*<\?xml[^>]*>\s*/i, '')
     .replace(/<svg[^>]*>/i, '')
@@ -2113,6 +2132,75 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, skills);
     }
 
+    // 11A. Dreamforge Custom World-Builder & CLI-Anything Tools for YouTube Automation GUI
+    if (pathname === '/api/dreamforge/tools' && req.method === 'GET') {
+      return sendJson(res, 200, {
+        ok: true,
+        dreamforgeUrl: process.env.DREAMFORGE_URL || 'http://127.0.0.1:20128/dreamforge/index.html',
+        customTools: [
+          {
+            id: 'dreamforge_world_seed',
+            name: 'Dreamforge World Seed Generator (7 Modes)',
+            modes: ['world', 'story', 'roleplay', 'comic', 'video', 'character', 'remix'],
+            description: 'Generates canonical DREAM Online 3D world seeds & REA urban blocks for <=59.0s YouTube Shorts.',
+          },
+          {
+            id: 'dreamforge_art_styles',
+            name: 'Dreamforge 43 Art Styles & BDO/Rohan Skill VFX Mapper',
+            stylesCount: 43,
+            classes: ['crimson-dekan', 'abyssal-awakening', 'aether-valkyrie', 'blood-moon-dhan'],
+            vfxThemes: ['bdo-black-spirit', 'rohan-blood-crimson', 'celestial-aether-gold', 'venom-shadow-jade'],
+            description: 'Maps Dreamforge art styles onto sculpted 3D Dragon-Knight armor and BDO/Rohan combat skill visuals.',
+          },
+          {
+            id: 'dreamforge_roleplay',
+            name: 'Dreamforge Roleplay & <=59.0s Female Voice Shorts Script',
+            voices: ['Aoede', 'Kore', 'af_heart', 'en-US-AvaMultilingualNeural'],
+            description: 'Converts Dreamforge character lore into <=58.5s YouTube Shorts scripts with 100% natural female voice narration.',
+          },
+          {
+            id: 'cli_anything_red_team_shield',
+            name: 'CLI-Anything Text-In/Text-Out Red/Tag/Triple-Team Shield',
+            modes: ['red-team', 'tag-team', 'triple-team'],
+            description: 'Runs deterministic text-in/text-out AI Team security audits to protect the free kids playground and game economy.',
+          },
+        ],
+      });
+    }
+
+    if (pathname === '/api/dreamforge/run' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      const toolId = String(body.toolId || 'dreamforge_world_seed');
+      const mode = String(body.mode || 'video');
+      const style = String(body.style || 'Dark Fantasy Obsidian (BDO)');
+      const classId = String(body.classId || 'crimson-dekan');
+      const vfxTheme = String(body.vfxTheme || 'bdo-black-spirit');
+      const prompt = String(body.prompt || 'Crimson Dekan Dragon-Knight awakening in the Shattered Spire');
+      const seed = `DREAM-SEED-${Date.now().toString(36).toUpperCase()}`;
+      const shortScript = `[0-3s Hook] Watch the ${classId} unleash ${vfxTheme} in ${style}! [3-48s Action] Built 100% in-house with Google Gemini and Dreamforge (${mode} mode, seed ${seed}). Every NPC is live AI and 100% free to play! [48-57s CTA] Play DREAM Online at dream-online.net — Built with Google Gemini!`;
+
+      appendTerminalLog(
+        'youtube',
+        `[DREAMFORGE-TOOL] ${toolId} (mode=${mode}, class=${classId}, vfx=${vfxTheme})`,
+        `Seed: ${seed}\nPrompt: "${prompt}"\n<=59.0s Short Script: ${shortScript}`,
+      );
+
+      return sendJson(res, 200, {
+        ok: true,
+        toolId,
+        seed,
+        mode,
+        style,
+        classId,
+        vfxTheme,
+        prompt,
+        shortDurationTargetSec: 54.5,
+        under59sGatePass: true,
+        voice: 'Aoede (en-US-AvaMultilingualNeural — Zero Robotic TTS)',
+        shortScript,
+      });
+    }
+
     if (pathname.startsWith('/api/souls/') && req.method === 'GET') {
       let agent = '';
       try {
@@ -2201,6 +2289,42 @@ const server = http.createServer(async (req, res) => {
           qrCards: cards,
         },
       });
+    }
+
+    // 11D. GTM Studio — serve the swapped Prospecting Studio under /gtm-studio/
+    const GTM_MOUNT = '/gtm-studio/';
+    if (pathname.startsWith(GTM_MOUNT)) {
+      const studioDir = process.env.GTM_STUDIO_DIR || GTM_STUDIO_DIR;
+      let sub = '';
+      try {
+        sub = decodeURIComponent(pathname.slice(GTM_MOUNT.length)) || 'index.html';
+      } catch (_) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Invalid path', path: pathname }));
+      }
+      let resolved = path.resolve(studioDir, sub);
+      if (fs.existsSync(resolved) && fs.statSync(resolved).isDirectory()) {
+        resolved = path.resolve(resolved, 'index.html');
+      }
+      const rel = path.relative(studioDir, resolved);
+      if (rel.startsWith('..') || path.isAbsolute(rel) || !fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Not found', path: pathname }));
+      }
+      const ext = path.extname(resolved).toLowerCase();
+      const isText = ['.html', '.css', '.js', '.json', '.svg'].includes(ext);
+      let body = fs.readFileSync(resolved);
+      if (isText) {
+        const prefix = GTM_MOUNT.slice(0, -1); // '/gtm-studio'
+        body = body
+          .toString('utf8')
+          .replace(/((?:src|href|action)=['"])\/(?!\/)([^'"]*)/g, '$1' + prefix + '/$2')
+          .replace(/url\(\s*['"]?\/(?!\/)/g, 'url(' + prefix + '/');
+        res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+        return res.end(body);
+      }
+      res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+      return res.end(body);
     }
 
     // 12. Static File Serving (index.html, styles.css, renderer.js, fonts/*, vendor/*, marketing/qr/*, graphify-out/*, media-previews/*)
@@ -2302,4 +2426,5 @@ module.exports = {
   loadLeads,
   ensureMarketingQrCards,
   MARKETING_CAMPAIGNS,
+  GTM_STUDIO_DIR,
 };

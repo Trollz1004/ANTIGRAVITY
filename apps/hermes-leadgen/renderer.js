@@ -601,6 +601,24 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
     });
   });
 
+  function switchLegacyTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach((btn) => {
+      const isMatch = btn.getAttribute('data-tab') === tabId;
+      btn.classList.toggle('active', isMatch);
+    });
+    document.querySelectorAll('.tab-panel').forEach((panel) => {
+      const isMatch = panel.id === `tab-${tabId}`;
+      panel.classList.toggle('active', isMatch);
+    });
+  }
+
+  document.querySelectorAll('.tab-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.getAttribute('data-tab');
+      if (tabId) switchLegacyTab(tabId);
+    });
+  });
+
   // --------------------------------------------------------------------------
   // BOTTOM DOCK SWITCHING (TERMINAL, FILES, GIT, BROWSER, PREVIEWS)
   // --------------------------------------------------------------------------
