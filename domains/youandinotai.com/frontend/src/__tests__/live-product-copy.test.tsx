@@ -82,7 +82,9 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
         .forEach((line, i) => {
           if (!BANNED.test(line)) return;
           if (SOURCE_ALLOWLIST.some(allowed => line.includes(allowed))) return;
-          hits.push(`${path.relative(SRC_ROOT, file)}:${i + 1}: ${line.trim()}`);
+          hits.push(
+            `${path.relative(SRC_ROOT, file)}:${i + 1}: ${line.trim()}`
+          );
         });
     }
     expect(hits).toEqual([]);
@@ -93,9 +95,7 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
       path.resolve(SRC_ROOT, '../PRIVACY_POLICY.md'),
       'utf8'
     );
-    expect(policy.split(/\r?\n/).filter(line => BANNED.test(line))).toEqual(
-      []
-    );
+    expect(policy.split(/\r?\n/).filter(line => BANNED.test(line))).toEqual([]);
   });
 
   it('landing page shows no banned word anywhere a visitor reads', () => {
@@ -279,7 +279,9 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
 
     expect(landingText).not.toMatch(/\b(liveness|selfie|gesture|biometric)\b/i);
     expect(landingText).not.toMatch(/camera liveness|live camera/i);
-    expect(landingText).not.toMatch(/confirm a live adult is creating the profile/i);
+    expect(landingText).not.toMatch(
+      /confirm a live adult is creating the profile/i
+    );
     expect(landingText).not.toMatch(/every active account is verified/i);
     expect(landingText).not.toMatch(/priority discovery|priority matching/i);
     expect(landingText).not.toMatch(/checked\s+\d{2}:\d{2}/i);

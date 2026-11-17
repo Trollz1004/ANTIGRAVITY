@@ -224,8 +224,7 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
   it('requires 18+ date of birth for new Google sign-in accounts before creating account', async () => {
     useAuth.setState({ user: null, loading: false });
     let capturedCallback:
-      | ((resp: { credential: string }) => Promise<void>)
-      | null = null;
+      ((resp: { credential: string }) => Promise<void>) | null = null;
     window.google = {
       accounts: {
         id: {
@@ -260,7 +259,9 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
       );
 
       // Missing DOB refused
-      fireEvent.click(getByRole('button', { name: /Confirm 18\+ & Continue/i }));
+      fireEvent.click(
+        getByRole('button', { name: /Confirm 18\+ & Continue/i })
+      );
       expect(await findByText('Date of birth is required')).toBeTruthy();
 
       // Under-18 DOB refused
@@ -268,7 +269,9 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
       fireEvent.change(dobInput, {
         target: { value: `0101${underageYear}` },
       });
-      fireEvent.click(getByRole('button', { name: /Confirm 18\+ & Continue/i }));
+      fireEvent.click(
+        getByRole('button', { name: /Confirm 18\+ & Continue/i })
+      );
       expect(
         await findByText('YouAndINotAI is strictly 18+ only')
       ).toBeTruthy();
@@ -295,7 +298,9 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
         'input[type="checkbox"]'
       ) as HTMLInputElement;
       fireEvent.click(checkbox);
-      fireEvent.click(getByRole('button', { name: /Confirm 18\+ & Continue/i }));
+      fireEvent.click(
+        getByRole('button', { name: /Confirm 18\+ & Continue/i })
+      );
 
       await waitFor(() => {
         expect(api.post).toHaveBeenLastCalledWith('/auth/google', {
@@ -700,9 +705,9 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
         '#support .ds-btn-signal, #support .ds-btn-ghost'
       );
       expect(supportCtas.length).toBe(3);
-      expect(
-        container.querySelectorAll('#support .ds-btn-signal').length
-      ).toBe(1);
+      expect(container.querySelectorAll('#support .ds-btn-signal').length).toBe(
+        1
+      );
       expect(container.querySelectorAll('#support .ds-btn-ghost').length).toBe(
         2
       );

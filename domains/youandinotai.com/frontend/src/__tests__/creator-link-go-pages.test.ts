@@ -3,7 +3,12 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const goDir = path.resolve(__dirname, '../../public/go');
-const pages = ['index.html', 'josh/index.html', 'launch/index.html', 'partner/index.html'];
+const pages = [
+  'index.html',
+  'josh/index.html',
+  'launch/index.html',
+  'partner/index.html',
+];
 
 function runForward(file: string, pathname: string): string {
   const html = readFileSync(path.join(goDir, file), 'utf8');
@@ -15,15 +20,19 @@ function runForward(file: string, pathname: string): string {
 }
 
 describe('public/go pages', () => {
-  it.each(pages)('%s contains no checkout link', (file) => {
+  it.each(pages)('%s contains no checkout link', file => {
     const html = readFileSync(path.join(goDir, file), 'utf8');
-    expect(html).not.toMatch(/square\.link|squareup|checkout|founding\.html|paypal|cash\.app/i);
+    expect(html).not.toMatch(
+      /square\.link|squareup|checkout|founding\.html|paypal|cash\.app/i
+    );
   });
 
   it('forwards to the home page keeping the code', () => {
     expect(runForward('josh/index.html', '/go/josh/')).toBe('/?ref=josh');
     expect(runForward('launch/index.html', '/go/launch')).toBe('/?ref=launch');
-    expect(runForward('partner/index.html', '/go/partner/')).toBe('/?ref=partner');
+    expect(runForward('partner/index.html', '/go/partner/')).toBe(
+      '/?ref=partner'
+    );
     expect(runForward('index.html', '/go/maya-23')).toBe('/?ref=maya-23');
   });
 
