@@ -119,3 +119,19 @@ test(
     }
   }
 );
+
+test('youandinotai frontend server preloads manifest/drift outside /health handlers, avoids route-level res.sendFile, and includes in-memory rate limiting', () => {
+  const src = fs.readFileSync(path.join(HERE, 'server.ts'), 'utf8');
+  assert.match(src, /loadEnvRequiredManifest/);
+  assert.match(src, /readAgentDriftStatus/);
+  assert.doesNotMatch(src, /res\.sendFile\s*\(/);
+  assert.match(src, /429/);
+
+  const healthBlock = src.match(/app\.get\(['"]\/health['"][\s\S]*?\}\);/)?.[0] || '';
+  const apiHealthBlock = src.match(/app\.get\(['"]\/api\/health['"][\s\S]*?\}\);/)?.[0] || '';
+  assert.ok(healthBlock.length > 0 && apiHealthBlock.length > 0);
+  assert.doesNotMatch(healthBlock, /\bfs\./);
+  assert.doesNotMatch(apiHealthBlock, /\bfs\./);
+  assert.doesNotMatch(healthBlock, /buildHealthEnvLight/);
+  assert.doesNotMatch(apiHealthBlock, /buildHealthEnvLight/);
+});

@@ -100,7 +100,7 @@ test('check-agent-drift.ps1 classifies missing, missing-block, and drifted files
       { encoding: 'utf8' },
     );
 
-    // Clean check exits 0 and writes light: green
+    // Clean check exits 0 and writes light: green (and excludes Alienware hermes entirely)
     const cleanOut = execFileSync(
       PS_EXE,
       [
@@ -113,7 +113,23 @@ test('check-agent-drift.ps1 classifies missing, missing-block, and drifted files
       { encoding: 'utf8' },
     );
     assert.match(cleanOut, /light=green/);
-    assert.match(cleanOut, /\[SKIP private-project\]/);
+    assert.match(cleanOut, /skippedPrivate=0/);
+    assert.doesNotMatch(cleanOut, /hermes[\\/]/i);
+
+    // T5500 node scope still scans %LOCALAPPDATA%\hermes and skips private SOUL.md
+    const t5500NodeOut = spawnSync(
+      PS_EXE,
+      [
+        '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', DRIFT_SCRIPT,
+        '-Node', 't5500', '-Scope', 'node',
+        '-RepoRoot', fx.repo, '-SpineSourceRepo', REPO_ROOT,
+        '-UserProfileRoot', fx.profile, '-LocalAppDataRoot', fx.localApp,
+        '-FreebuffRoot', fx.freebuff, '-NoWriteStatus', '-SoftExit',
+      ],
+      { encoding: 'utf8' },
+    );
+    assert.match(t5500NodeOut.stdout, /\[SKIP private-project\].*hermes\\SOUL\.md/);
+    assert.match(t5500NodeOut.stdout, /\[DRIFT\] \(missing\) %LOCALAPPDATA%\\hermes\\profiles\\t5500\\SOUL\.md/);
 
     const cleanBuf = fs.readFileSync(fx.statusJson);
     assert.equal(cleanBuf[0] === 0xef && cleanBuf[1] === 0xbb && cleanBuf[2] === 0xbf, false, 'Status JSON must not have UTF-8 BOM');

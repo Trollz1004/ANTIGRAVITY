@@ -73,7 +73,11 @@ Describe 'ops/agents/check-agent-drift.ps1' {
     $out = (& $driftScript -Node alienware -Scope all -RepoRoot $fx.FakeRepo -SpineSourceRepo $repoRoot -UserProfileRoot $fx.FakeProfile -LocalAppDataRoot $fx.FakeLocalApp -FreebuffRoot $fx.FakeFreebuff -StatusJsonPath $fx.StatusPath | Out-String)
     $LASTEXITCODE | Should Be 0
     $out | Should Match 'light=green'
-    $out | Should Match '\[SKIP private-project\].*hermes\\SOUL\.md'
+    $out | Should Match 'skippedPrivate=0'
+    $out | Should Not Match 'hermes[\\/]'
+
+    $t5500Out = (& $driftScript -Node t5500 -Scope node -RepoRoot $fx.FakeRepo -SpineSourceRepo $repoRoot -UserProfileRoot $fx.FakeProfile -LocalAppDataRoot $fx.FakeLocalApp -FreebuffRoot $fx.FakeFreebuff -NoWriteStatus -SoftExit | Out-String)
+    $t5500Out | Should Match '\[SKIP private-project\].*hermes\\SOUL\.md'
 
     $bytes = [System.IO.File]::ReadAllBytes($fx.StatusPath)
     ($bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) | Should Be $false
@@ -117,16 +121,19 @@ Describe 'ops/agents/check-agent-drift.ps1' {
     & $renderScript -Node alienware -Scope all -RepoRoot $fx.FakeRepo -SpineSourceRepo $repoRoot -UserProfileRoot $fx.FakeProfile -LocalAppDataRoot $fx.FakeLocalApp -FreebuffRoot $fx.FakeFreebuff -Apply | Out-Null
 
     $privateBefore = [System.IO.File]::ReadAllText((Join-Path $fx.FakeLocalApp 'hermes\SOUL.md'))
+    $aliSoulBefore = [System.IO.File]::ReadAllText((Join-Path $fx.FakeLocalApp 'hermes\ALIENWARE-SOUL.md'))
     Remove-Item -LiteralPath (Join-Path $fx.FakeProfile '.codex\AGENTS.md') -Force
     Write-Utf8NoBom -Path (Join-Path $fx.FakeProfile '.claude\CLAUDE.md') -Text "# Claude bare`n"
-    $aliSoulPath = Join-Path $fx.FakeLocalApp 'hermes\ALIENWARE-SOUL.md'
-    $staleSoul = ([System.IO.File]::ReadAllText($aliSoulPath)).Replace('192.168.0.40', '192.168.0.99')
-    Write-Utf8NoBom -Path $aliSoulPath -Text $staleSoul
+    $geminiPath = Join-Path $fx.FakeProfile '.gemini\GEMINI.md'
+    $staleGemini = ([System.IO.File]::ReadAllText($geminiPath)).Replace('192.168.0.40', '192.168.0.99')
+    Write-Utf8NoBom -Path $geminiPath -Text $staleGemini
 
     $out = (& $driftScript -Node alienware -Scope all -RepoRoot $fx.FakeRepo -SpineSourceRepo $repoRoot -UserProfileRoot $fx.FakeProfile -LocalAppDataRoot $fx.FakeLocalApp -FreebuffRoot $fx.FakeFreebuff -StatusJsonPath $fx.StatusPath | Out-String)
     $LASTEXITCODE | Should Be 1
     $out | Should Not Match ([regex]::Escape($fx.FakeProfile))
+    $out | Should Not Match 'hermes[\\/]'
     [System.IO.File]::ReadAllText((Join-Path $fx.FakeLocalApp 'hermes\SOUL.md')) | Should Be $privateBefore
+    [System.IO.File]::ReadAllText((Join-Path $fx.FakeLocalApp 'hermes\ALIENWARE-SOUL.md')) | Should Be $aliSoulBefore
 
     $parsed = ([System.IO.File]::ReadAllText($fx.StatusPath)) | ConvertFrom-Json
     $parsed.ok | Should Be $false
@@ -134,7 +141,7 @@ Describe 'ops/agents/check-agent-drift.ps1' {
     $parsed.driftedCount | Should Be 3
     ($parsed.driftedFiles | Where-Object { $_.file -eq '%USERPROFILE%\.codex\AGENTS.md' }).reason | Should Be 'missing'
     ($parsed.driftedFiles | Where-Object { $_.file -eq '%USERPROFILE%\.claude\CLAUDE.md' }).reason | Should Be 'missing-block'
-    ($parsed.driftedFiles | Where-Object { $_.file -eq '%LOCALAPPDATA%\hermes\ALIENWARE-SOUL.md' }).reason | Should Be 'drifted'
+    ($parsed.driftedFiles | Where-Object { $_.file -eq '%USERPROFILE%\.gemini\GEMINI.md' }).reason | Should Be 'drifted'
   }
 
   It 'supports -NoRun dot-sourcing and checks -Node t5500 -Scope node locally without ssh' {

@@ -313,3 +313,62 @@ test('Stage E4 (fleet-status): env.required.json exists and missing FLEET_SHARED
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
 });
+
+test('fleet-status-server sanitizes HTTP 500 errors, readAgentDrift, and TCP/HTTP probe failures without leaking error messages or stack traces', async () => {
+  const mod = await import('./fleet-status-server.mjs');
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'fleet-status-sec-'));
+  const badDriftPath = path.join(tmpDir, 'bad-agent-drift.json');
+  fs.writeFileSync(badDriftPath, '{ invalid json', 'utf8');
+
+  try {
+    const drift = mod.readAgentDrift(badDriftPath);
+    assert.equal(drift.present, true);
+    assert.equal('error' in drift, false, 'readAgentDrift must omit raw error fields');
+
+    const closedHttp = await makeMockService((_req, res) => { res.writeHead(200); res.end('ok'); });
+    const closedHttpPort = closedHttp.port;
+    await closeServer(closedHttp.server);
+
+    const closedTcp = await makeMockService((_req, res) => { res.writeHead(200); res.end('ok'); });
+    const closedTcpPort = closedTcp.port;
+    await closeServer(closedTcp.server);
+
+    const snapshot = await mod.computeNodeStatus({
+      node: 'alienware',
+      env: { FLEET_SHARED_TOKEN: 'tok' },
+      agentDriftPath: badDriftPath,
+      targets: [
+        { id: 'down-http', name: 'Down HTTP', host: LOOPBACK, port: closedHttpPort, healthPath: '/health' },
+        { id: 'down-tcp', name: 'Down TCP', host: LOOPBACK, port: closedTcpPort, protocol: 'tcp' },
+      ],
+    });
+    assert.equal(snapshot.light, 'red');
+    for (const svc of snapshot.services) {
+      assert.equal(svc.up, false);
+      assert.doesNotMatch(String(svc.detail), /127\.0\.0\.1|connect /i);
+      assert.ok(['ECONNREFUSED', 'ECONNRESET', 'ETIMEDOUT', 'unreachable'].includes(svc.detail), `Unexpected detail: ${svc.detail}`);
+    }
+
+    const { server } = mod.createFleetStatusServer({
+      node: 'alienware',
+      env: { FLEET_SHARED_TOKEN: 'tok' },
+      probeServices: async () => {
+        throw new Error('SECRET_INTERNAL_STACK at /private/path.mjs:42');
+      },
+    });
+    await new Promise((r) => server.listen(0, LOOPBACK, r));
+    try {
+      const port = server.address().port;
+      const res = await fetch(`http://${LOOPBACK}:${port}/health`);
+      assert.equal(res.status, 500);
+      const text = await res.text();
+      assert.equal(text.includes('SECRET_INTERNAL_STACK'), false);
+      assert.equal(text.includes('/private/path.mjs'), false);
+      assert.deepEqual(JSON.parse(text), { ok: false, error: 'Internal server error' });
+    } finally {
+      await closeServer(server);
+    }
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});

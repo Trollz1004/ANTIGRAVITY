@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { spawn } from 'node:child_process';
+import fs from 'node:fs';
 import net from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
@@ -99,5 +100,11 @@ describe('resolveMissionControlBind', () => {
     } finally {
       child.kill();
     }
+  });
+
+  it('never disables TLS validation or passes raw caught error messages into HTTP send()', () => {
+    const serverSrc = fs.readFileSync(SERVER_PATH, 'utf8');
+    expect(serverSrc).not.toMatch(/rejectUnauthorized\s*:\s*false/);
+    expect(serverSrc).not.toMatch(/send\([^\n]*e\.message/);
   });
 });
