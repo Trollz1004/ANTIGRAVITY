@@ -105,33 +105,249 @@ export const EXTENDED_NICHES = [
 // ── 24 Registered API Endpoints + 8 Launch Directories (from SCC & command-center) ──
 export const SCC_24_APIS = [
   // Social (8)
-  { id: 'youtube', label: 'YouTube', icon: '▶', color: '#FF0000', type: 'social', claw: 'Hermes / GeminiClaw', api: 'YouTube Data API v3', url: 'https://studio.youtube.com' },
-  { id: 'instagram', label: 'Instagram', icon: '◈', color: '#E1306C', type: 'social', claw: 'MetaClaw', api: 'Meta Graph API', url: 'https://www.instagram.com' },
-  { id: 'facebook', label: 'Facebook', icon: 'f', color: '#1877F2', type: 'social', claw: 'MetaClaw', api: 'Meta Graph API', url: 'https://business.facebook.com' },
-  { id: 'tiktok', label: 'TikTok', icon: '♪', color: '#69C9D0', type: 'social', claw: 'GensparkClaw', api: 'TikTok Content API', url: 'https://www.tiktok.com/creator-center' },
-  { id: 'twitter', label: 'X / Twitter', icon: '✕', color: '#1DA1F2', type: 'social', claw: 'Grok Lane', api: 'X API v2', url: 'https://x.com/compose/post' },
-  { id: 'linkedin', label: 'LinkedIn', icon: 'in', color: '#0A66C2', type: 'social', claw: 'Gemini Ultra', api: 'LinkedIn Marketing API', url: 'https://www.linkedin.com/feed/' },
-  { id: 'reddit', label: 'Reddit', icon: '●', color: '#FF4500', type: 'social', claw: 'Official Reddit OAuth', api: 'Reddit API v1 (/api/submit)', url: 'https://www.reddit.com/submit' },
-  { id: 'pinterest', label: 'Pinterest', icon: 'P', color: '#E60023', type: 'social', claw: 'GensparkClaw', api: 'Pinterest API v5', url: 'https://www.pinterest.com/pin-creation-tool/' },
+  {
+    id: 'youtube',
+    label: 'YouTube',
+    icon: '▶',
+    color: '#FF0000',
+    type: 'social',
+    claw: 'Hermes / GeminiClaw',
+    api: 'YouTube Data API v3',
+    url: 'https://studio.youtube.com',
+  },
+  {
+    id: 'instagram',
+    label: 'Instagram',
+    icon: '◈',
+    color: '#E1306C',
+    type: 'social',
+    claw: 'MetaClaw',
+    api: 'Meta Graph API',
+    url: 'https://www.instagram.com',
+  },
+  {
+    id: 'facebook',
+    label: 'Facebook',
+    icon: 'f',
+    color: '#1877F2',
+    type: 'social',
+    claw: 'MetaClaw',
+    api: 'Meta Graph API',
+    url: 'https://business.facebook.com',
+  },
+  {
+    id: 'tiktok',
+    label: 'TikTok',
+    icon: '♪',
+    color: '#69C9D0',
+    type: 'social',
+    claw: 'GensparkClaw',
+    api: 'TikTok Content API',
+    url: 'https://www.tiktok.com/creator-center',
+  },
+  {
+    id: 'twitter',
+    label: 'X / Twitter',
+    icon: '✕',
+    color: '#1DA1F2',
+    type: 'social',
+    claw: 'Grok Lane',
+    api: 'X API v2',
+    url: 'https://x.com/compose/post',
+  },
+  {
+    id: 'linkedin',
+    label: 'LinkedIn',
+    icon: 'in',
+    color: '#0A66C2',
+    type: 'social',
+    claw: 'Gemini Ultra',
+    api: 'LinkedIn Marketing API',
+    url: 'https://www.linkedin.com/feed/',
+  },
+  {
+    id: 'reddit',
+    label: 'Reddit',
+    icon: '●',
+    color: '#FF4500',
+    type: 'social',
+    claw: 'Official Reddit OAuth',
+    api: 'Reddit API v1 (/api/submit)',
+    url: 'https://www.reddit.com/submit',
+  },
+  {
+    id: 'pinterest',
+    label: 'Pinterest',
+    icon: 'P',
+    color: '#E60023',
+    type: 'social',
+    claw: 'GensparkClaw',
+    api: 'Pinterest API v5',
+    url: 'https://www.pinterest.com/pin-creation-tool/',
+  },
   // Blog & Syndication (6 - scripts/seo/post.mjs)
-  { id: 'devto', label: 'DEV.to', icon: '⌨', color: '#38bdf8', type: 'syndication', claw: 'scripts/seo/post.mjs', api: 'DEV.to Forem API (api-key)', url: 'https://dev.to/new' },
-  { id: 'hashnode', label: 'Hashnode', icon: '#', color: '#2962FF', type: 'syndication', claw: 'scripts/seo/post.mjs', api: 'Hashnode GraphQL publishPost', url: 'https://hashnode.com/create/story' },
-  { id: 'wordpress', label: 'WordPress.com', icon: 'W', color: '#0073AA', type: 'syndication', claw: 'scripts/seo/post.mjs', api: 'WP REST API v1.1 /posts/new', url: 'https://wordpress.com/post' },
-  { id: 'tumblr', label: 'Tumblr', icon: 't', color: '#36465D', type: 'syndication', claw: 'scripts/seo/post.mjs', api: 'Tumblr NPF v2 (OAuth 1.0a HMAC)', url: 'https://www.tumblr.com/new/text' },
-  { id: 'blogger', label: 'Blogger', icon: 'B', color: '#FF5722', type: 'syndication', claw: 'scripts/seo/post.mjs', api: 'Blogger API v3', url: 'https://www.blogger.com' },
-  { id: 'ghost', label: 'Ghost Admin', icon: 'G', color: '#10b981', type: 'syndication', claw: 'scripts/seo/post.mjs', api: 'Ghost Admin API (HS256 JWT)', url: 'https://ghost.org' },
+  {
+    id: 'devto',
+    label: 'DEV.to',
+    icon: '⌨',
+    color: '#38bdf8',
+    type: 'syndication',
+    claw: 'scripts/seo/post.mjs',
+    api: 'DEV.to Forem API (api-key)',
+    url: 'https://dev.to/new',
+  },
+  {
+    id: 'hashnode',
+    label: 'Hashnode',
+    icon: '#',
+    color: '#2962FF',
+    type: 'syndication',
+    claw: 'scripts/seo/post.mjs',
+    api: 'Hashnode GraphQL publishPost',
+    url: 'https://hashnode.com/create/story',
+  },
+  {
+    id: 'wordpress',
+    label: 'WordPress.com',
+    icon: 'W',
+    color: '#0073AA',
+    type: 'syndication',
+    claw: 'scripts/seo/post.mjs',
+    api: 'WP REST API v1.1 /posts/new',
+    url: 'https://wordpress.com/post',
+  },
+  {
+    id: 'tumblr',
+    label: 'Tumblr',
+    icon: 't',
+    color: '#36465D',
+    type: 'syndication',
+    claw: 'scripts/seo/post.mjs',
+    api: 'Tumblr NPF v2 (OAuth 1.0a HMAC)',
+    url: 'https://www.tumblr.com/new/text',
+  },
+  {
+    id: 'blogger',
+    label: 'Blogger',
+    icon: 'B',
+    color: '#FF5722',
+    type: 'syndication',
+    claw: 'scripts/seo/post.mjs',
+    api: 'Blogger API v3',
+    url: 'https://www.blogger.com',
+  },
+  {
+    id: 'ghost',
+    label: 'Ghost Admin',
+    icon: 'G',
+    color: '#10b981',
+    type: 'syndication',
+    claw: 'scripts/seo/post.mjs',
+    api: 'Ghost Admin API (HS256 JWT)',
+    url: 'https://ghost.org',
+  },
   // Commerce (4)
-  { id: 'square', label: 'Square (Primary Rail)', icon: '◼', color: '#00B388', type: 'commerce', claw: 'T5500 Production', api: 'Square Commerce API + Webhooks', url: 'https://squareup.com/dashboard' },
-  { id: 'ebay', label: 'eBay Hardware', icon: 'e', color: '#e53238', type: 'commerce', claw: 'Crosslisting OS', api: 'eBay Browse & Inventory API', url: 'https://www.ebay.com/sh/overview' },
-  { id: 'mercari', label: 'Mercari', icon: 'M', color: '#FF4655', type: 'commerce', claw: 'Crosslisting OS', api: 'Mercari Listing Pack', url: 'https://www.mercari.com/sell/' },
-  { id: 'fbmkt', label: 'FB Marketplace', icon: 'FM', color: '#1877F2', type: 'commerce', claw: 'MetaClaw', api: 'Meta Marketplace Graph', url: 'https://www.facebook.com/marketplace/create/item' },
+  {
+    id: 'square',
+    label: 'Square (Primary Rail)',
+    icon: '◼',
+    color: '#00B388',
+    type: 'commerce',
+    claw: 'T5500 Production',
+    api: 'Square Commerce API + Webhooks',
+    url: 'https://squareup.com/dashboard',
+  },
+  {
+    id: 'ebay',
+    label: 'eBay Hardware',
+    icon: 'e',
+    color: '#e53238',
+    type: 'commerce',
+    claw: 'Crosslisting OS',
+    api: 'eBay Browse & Inventory API',
+    url: 'https://www.ebay.com/sh/overview',
+  },
+  {
+    id: 'mercari',
+    label: 'Mercari',
+    icon: 'M',
+    color: '#FF4655',
+    type: 'commerce',
+    claw: 'Crosslisting OS',
+    api: 'Mercari Listing Pack',
+    url: 'https://www.mercari.com/sell/',
+  },
+  {
+    id: 'fbmkt',
+    label: 'FB Marketplace',
+    icon: 'FM',
+    color: '#1877F2',
+    type: 'commerce',
+    claw: 'MetaClaw',
+    api: 'Meta Marketplace Graph',
+    url: 'https://www.facebook.com/marketplace/create/item',
+  },
   // LLM & Dispatch & Infra (6)
-  { id: 'gemini', label: 'Gemini 4 Ultra (agy)', icon: '✦', color: '#34d399', type: 'llm', claw: 'Mission OS :3130/v1', api: 'Google AI Studio Ultra OAuth ($0)', url: 'http://192.168.0.15:3130/v1/models' },
-  { id: 'fable', label: 'Fable Local (RTX 3070)', icon: '⚡', color: '#fbbf24', type: 'llm', claw: 'Ollama :11434', api: 'joshlcoleman/Fable:latest', url: 'http://192.168.0.15:11434/api/tags' },
-  { id: 'claude', label: 'Claude Opus (Judge)', icon: '🛡', color: '#a78bfa', type: 'llm', claw: 'Official Claude CLI', api: 'Anthropic OAuth Login', url: 'https://claude.ai' },
-  { id: 'grok', label: 'Grok (X Lane)', icon: '⬡', color: '#00ccff', type: 'llm', claw: 'Official Grok CLI', api: 'xAI OAuth Login', url: 'https://x.com/i/grok' },
-  { id: 'telegram', label: 'Telegram (@t5500_bot)', icon: '✈', color: '#2CA5E0', type: 'dispatch', claw: 'Hermes / OpenClaw', api: 'Telegram Bot API', url: 'https://web.telegram.org' },
-  { id: 'cloudflare', label: 'Cloudflare Tunnel & Pages', icon: '☁', color: '#F6821F', type: 'infra', claw: 'T5500 Keepalive', api: 'Cloudflare Edge Tunnel', url: 'https://dash.cloudflare.com' },
+  {
+    id: 'gemini',
+    label: 'Gemini 4 Ultra (agy)',
+    icon: '✦',
+    color: '#34d399',
+    type: 'llm',
+    claw: 'Mission OS :3130/v1',
+    api: 'Google AI Studio Ultra OAuth ($0)',
+    url: 'http://192.168.0.15:3130/v1/models',
+  },
+  {
+    id: 'fable',
+    label: 'Fable Local (RTX 3070)',
+    icon: '⚡',
+    color: '#fbbf24',
+    type: 'llm',
+    claw: 'Ollama :11434',
+    api: 'joshlcoleman/Fable:latest',
+    url: 'http://192.168.0.15:11434/api/tags',
+  },
+  {
+    id: 'claude',
+    label: 'Claude Opus (Judge)',
+    icon: '🛡',
+    color: '#a78bfa',
+    type: 'llm',
+    claw: 'Official Claude CLI',
+    api: 'Anthropic OAuth Login',
+    url: 'https://claude.ai',
+  },
+  {
+    id: 'grok',
+    label: 'Grok (X Lane)',
+    icon: '⬡',
+    color: '#00ccff',
+    type: 'llm',
+    claw: 'Official Grok CLI',
+    api: 'xAI OAuth Login',
+    url: 'https://x.com/i/grok',
+  },
+  {
+    id: 'telegram',
+    label: 'Telegram (@t5500_bot)',
+    icon: '✈',
+    color: '#2CA5E0',
+    type: 'dispatch',
+    claw: 'Hermes / OpenClaw',
+    api: 'Telegram Bot API',
+    url: 'https://web.telegram.org',
+  },
+  {
+    id: 'cloudflare',
+    label: 'Cloudflare Tunnel & Pages',
+    icon: '☁',
+    color: '#F6821F',
+    type: 'infra',
+    claw: 'T5500 Keepalive',
+    api: 'Cloudflare Edge Tunnel',
+    url: 'https://dash.cloudflare.com',
+  },
 ];
 
 export const SCC_LAUNCH_DIRECTORIES = [
@@ -150,7 +366,9 @@ export function envValue(name) {
 }
 
 export function mapDomainToBrand(domainOrBrand) {
-  const s = String(domainOrBrand || '').trim().toLowerCase();
+  const s = String(domainOrBrand || '')
+    .trim()
+    .toLowerCase();
   if (s.includes('youandinotai') || s.includes('date')) return 'youandinotai';
   if (s.includes('dream')) return 'DREAM Online';
   if (s.includes('recycle') || s.includes('ai-solutions') || s.includes('ai solutions')) return 'AI Solutions';
@@ -158,7 +376,9 @@ export function mapDomainToBrand(domainOrBrand) {
 }
 
 export function mapBrandToDomain(brandOrDomain) {
-  const s = String(brandOrDomain || '').trim().toLowerCase();
+  const s = String(brandOrDomain || '')
+    .trim()
+    .toLowerCase();
   if (s.includes('dream')) return 'dream-online.net';
   if (s.includes('recycle') || s.includes('ai-solutions') || s.includes('ai solutions')) return 'onlinerecycle.net';
   return 'youandinotai.com';
@@ -179,29 +399,84 @@ export function mapChannelToPlatformId(channel) {
 
 // ── SlopMonster 5/5 Auto-Sanitizer (ported from ops/marketing-inbox/marketing_routine.py) ──
 const SLOP_REPLACEMENTS = {
-  foster: 'build', fostering: 'building', fosters: 'builds', fostered: 'built',
-  showcase: 'show', showcases: 'shows', showcasing: 'showing', showcased: 'showed',
-  landscape: 'market', landscapes: 'markets',
-  empower: 'help', empowers: 'helps', empowering: 'helping', empowered: 'helped',
-  innovate: 'change', innovates: 'changes', innovating: 'changing', innovation: 'change',
-  robust: 'solid', intuitive: 'simple',
-  curated: 'hand-picked', streamline: 'simplify', streamlined: 'simplified',
-  journey: 'path', journeys: 'paths', 'fast-paced': 'quick',
-  delve: 'look', delves: 'looks', delving: 'looking',
-  leverage: 'use', leverages: 'uses', leveraging: 'using', leveraged: 'used',
-  utilize: 'use', utilizes: 'uses', utilizing: 'using', utilized: 'used',
-  tapestry: 'mix', realm: 'world', beacon: 'signal', testament: 'sign',
-  vibrant: 'lively', seamless: 'smooth', seamlessly: 'smoothly',
-  elevate: 'raise', elevates: 'raises', elevating: 'raising',
-  holistic: 'full', synergy: 'fit', paradigm: 'model', 'ever-evolving': 'changing',
-  groundbreaking: 'fresh', meticulous: 'careful', bespoke: 'custom',
-  unlock: 'open', unleash: 'release', 'game-changer': 'turning point', 'game-changing': 'important',
-  revolutionize: 'change', transformative: 'real', transformation: 'change',
-  unparalleled: 'rare', supercharge: 'speed up', turbocharge: 'speed up',
-  effortless: 'easy', effortlessly: 'easily', pivotal: 'key', compelling: 'clear',
-  'dive in': 'start', "let's dive": "let's start", 'deep dive': 'look',
-  'look no further': '', 'at the end of the day': '', 'when it comes to': 'for',
-  'more than just': '', 'say goodbye to': 'stop', 'here is the thing': '', "here's the thing": '',
+  foster: 'build',
+  fostering: 'building',
+  fosters: 'builds',
+  fostered: 'built',
+  showcase: 'show',
+  showcases: 'shows',
+  showcasing: 'showing',
+  showcased: 'showed',
+  landscape: 'market',
+  landscapes: 'markets',
+  empower: 'help',
+  empowers: 'helps',
+  empowering: 'helping',
+  empowered: 'helped',
+  innovate: 'change',
+  innovates: 'changes',
+  innovating: 'changing',
+  innovation: 'change',
+  robust: 'solid',
+  intuitive: 'simple',
+  curated: 'hand-picked',
+  streamline: 'simplify',
+  streamlined: 'simplified',
+  journey: 'path',
+  journeys: 'paths',
+  'fast-paced': 'quick',
+  delve: 'look',
+  delves: 'looks',
+  delving: 'looking',
+  leverage: 'use',
+  leverages: 'uses',
+  leveraging: 'using',
+  leveraged: 'used',
+  utilize: 'use',
+  utilizes: 'uses',
+  utilizing: 'using',
+  utilized: 'used',
+  tapestry: 'mix',
+  realm: 'world',
+  beacon: 'signal',
+  testament: 'sign',
+  vibrant: 'lively',
+  seamless: 'smooth',
+  seamlessly: 'smoothly',
+  elevate: 'raise',
+  elevates: 'raises',
+  elevating: 'raising',
+  holistic: 'full',
+  synergy: 'fit',
+  paradigm: 'model',
+  'ever-evolving': 'changing',
+  groundbreaking: 'fresh',
+  meticulous: 'careful',
+  bespoke: 'custom',
+  unlock: 'open',
+  unleash: 'release',
+  'game-changer': 'turning point',
+  'game-changing': 'important',
+  revolutionize: 'change',
+  transformative: 'real',
+  transformation: 'change',
+  unparalleled: 'rare',
+  supercharge: 'speed up',
+  turbocharge: 'speed up',
+  effortless: 'easy',
+  effortlessly: 'easily',
+  pivotal: 'key',
+  compelling: 'clear',
+  'dive in': 'start',
+  "let's dive": "let's start",
+  'deep dive': 'look',
+  'look no further': '',
+  'at the end of the day': '',
+  'when it comes to': 'for',
+  'more than just': '',
+  'say goodbye to': 'stop',
+  'here is the thing': '',
+  "here's the thing": '',
 };
 
 export function sanitizeCopyToScore5(rawText, isDateApp = false) {
@@ -221,14 +496,26 @@ export function sanitizeCopyToScore5(rawText, isDateApp = false) {
     .map((sent) => {
       const parts = sent.split('—');
       if (parts.length <= 2) return sent;
-      return `${parts[0].trim()}. ${parts.slice(1).map((p) => p.trim()).join('. ')}`;
+      return `${parts[0].trim()}. ${parts
+        .slice(1)
+        .map((p) => p.trim())
+        .join('. ')}`;
     })
     .join(' ');
   if (isDateApp) {
     const minorMap = {
-      kid: 'adult', kids: 'adults', child: 'person', children: 'people',
-      teen: 'adult', teens: 'adults', teenager: 'adult', teenagers: 'adults',
-      minor: 'adult', minors: 'adults', school: 'venue', schools: 'venues',
+      kid: 'adult',
+      kids: 'adults',
+      child: 'person',
+      children: 'people',
+      teen: 'adult',
+      teens: 'adults',
+      teenager: 'adult',
+      teenagers: 'adults',
+      minor: 'adult',
+      minors: 'adults',
+      school: 'venue',
+      schools: 'venues',
     };
     for (const [mTerm, mRepl] of Object.entries(minorMap)) {
       cleaned = cleaned.replace(new RegExp(`\\b${mTerm}\\b`, 'gi'), mRepl);
@@ -286,7 +573,8 @@ export function getTagCityState() {
   let dailyBatches = [];
   try {
     if (fs.existsSync(MARKETING_INBOX_DIR)) {
-      dailyBatches = fs.readdirSync(MARKETING_INBOX_DIR)
+      dailyBatches = fs
+        .readdirSync(MARKETING_INBOX_DIR)
         .filter((f) => /dateapp-.*batch\.md$|tagcity-engine\.md$/i.test(f))
         .sort()
         .reverse()
@@ -399,7 +687,7 @@ export function generateThreeCommentVariants({
 
   const rawVariants = generateComments(
     { title: targetTitle, platform },
-    { tags: selectedTags, cities: selectedCities, brandTag }
+    { tags: selectedTags, cities: selectedCities, brandTag },
   );
 
   // Customize closers for non-dating domains so B2B & MMORPG comments read naturally
@@ -551,7 +839,10 @@ export function saveCommentReply({
     targetUrl: resolvedUrl,
     parentId: String(parentId || '').trim(),
     body: checkData.checkedBody,
-    tags: Array.isArray(tags) && tags.length ? tags.slice(0, 3) : [BRAND_TAGS[domain] || BRAND_TAG, '#RealNotAI', '#AustinSingles'],
+    tags:
+      Array.isArray(tags) && tags.length
+        ? tags.slice(0, 3)
+        : [BRAND_TAGS[domain] || BRAND_TAG, '#RealNotAI', '#AustinSingles'],
     variants,
     author,
     status,
@@ -624,7 +915,8 @@ export function listSocialEngine22Posters() {
 export const INITIAL_MARKETING_PLANS = {
   version: '3.0.0',
   updatedAt: new Date().toISOString(),
-  engine: 'Social Command Center + Gemini 4 Antigravity Ultra (agy OAuth · $0 API Cost) + TagCity 1+1+1 + Local Fable Voice',
+  engine:
+    'Social Command Center + Gemini 4 Antigravity Ultra (agy OAuth · $0 API Cost) + TagCity 1+1+1 + Local Fable Voice',
   paperclipStatus: 'RETIRED & REMOVED — 100% Native in Mission OS (:3130)',
   revenueGoalUsd: 10000,
   domains: {
@@ -635,13 +927,15 @@ export const INITIAL_MARKETING_PLANS = {
       url: 'https://youandinotai.com',
       checkoutRail: 'Square Only ($1 Bot-Shield Verification · $9.99/mo Founding Member · AI Dating Tools)',
       status: 'LIVE & ACTIVE',
-      valueProp: 'The only dating platform that charges $1 at the door to prove you are a real human. Zero bots, zero catfish, zero engagement traps. Built for adults 18 and over to meet real people offline.',
+      valueProp:
+        'The only dating platform that charges $1 at the door to prove you are a real human. Zero bots, zero catfish, zero engagement traps. Built for adults 18 and over to meet real people offline.',
       pillars: [
         {
           id: 'yani-pillar-1',
           title: '$1 Bot-Shield Verification Funnel',
           target: 'Adults 18+ on Reddit, X, TikTok, and Reels frustrated by AI bots & fake profiles',
-          offer: '$1 one-time Bot-Shield human verification (via Square) + optional AI Profile Optimizer ($14.99), Icebreakers ($7.99), Conversation Review ($12.99)',
+          offer:
+            '$1 one-time Bot-Shield human verification (via Square) + optional AI Profile Optimizer ($14.99), Icebreakers ($7.99), Conversation Review ($12.99)',
           cadence: '3x daily X posts · 1x daily Reddit thread · 1x daily vertical Short/Reel script',
           kpi: 'Verified $1 Square signups & Founding Member conversions',
         },
@@ -649,7 +943,8 @@ export const INITIAL_MARKETING_PLANS = {
           id: 'yani-pillar-2',
           title: 'Link Forge — 50% Lifetime Revenue Share ("Offer of Offers")',
           target: 'Tier-1 commentary, dating critique, livestream, and tech creators (50k–1M+ audience)',
-          offer: '50% of subscriber revenue, every month, for life via clean vanity URLs (youandinotai.com/:partnerId) + custom stream QR codes',
+          offer:
+            '50% of subscriber revenue, every month, for life via clean vanity URLs (youandinotai.com/:partnerId) + custom stream QR codes',
           cadence: '10 creator outreach DMs/emails per day + public X math threads calling out 5% affiliate grifts',
           kpi: 'Active partner vanity routes & partner-referred subscribers',
         },
@@ -657,7 +952,8 @@ export const INITIAL_MARKETING_PLANS = {
           id: 'yani-pillar-3',
           title: 'TagCity 1+1+1 Comment & Metro Rotation Engine',
           target: '28 US Single-Density Metros (NYC, LA, Chicago, Houston, Phoenix, Austin, Atlanta, Columbus...)',
-          offer: '3 comment variants per viral parent thread using 1 Brand Tag (#YouAndiNotAI) + 1 Niche Tag (#RealNotAI) + 1 City Tag (#AustinSingles)',
+          offer:
+            '3 comment variants per viral parent thread using 1 Brand Tag (#YouAndiNotAI) + 1 Niche Tag (#RealNotAI) + 1 City Tag (#AustinSingles)',
           cadence: 'Daily rotation batch (3 cities x 3 niche tags, 6-window non-repeating)',
           kpi: 'Compounding comment impressions & local metro signups',
         },
@@ -670,13 +966,15 @@ export const INITIAL_MARKETING_PLANS = {
       url: 'https://onlinerecycle.net',
       checkoutRail: 'B2B Hardware Decommission Intake & High-Margin eBay Crosslister',
       status: 'LIVE & ACTIVE',
-      valueProp: 'Fast, zero-hassle enterprise & office electronics recycling, server/workstation drop-off, and B2B hardware pickup that turns retired IT gear into high-margin eBay inventory.',
+      valueProp:
+        'Fast, zero-hassle enterprise & office electronics recycling, server/workstation drop-off, and B2B hardware pickup that turns retired IT gear into high-margin eBay inventory.',
       pillars: [
         {
           id: 'or-pillar-1',
           title: 'Local B2B IT Director & MSP Decommission Intake',
           target: 'Local offices, MSPs, CAD/render studios, data centers, and medical/legal offices upgrading hardware',
-          offer: 'Free scheduled pickup & drop-off for retired Dual Xeon/EPYC servers, workstations, GPUs, ECC RAM, and enterprise storage with NIST 800-88 sanitization receipts',
+          offer:
+            'Free scheduled pickup & drop-off for retired Dual Xeon/EPYC servers, workstations, GPUs, ECC RAM, and enterprise storage with NIST 800-88 sanitization receipts',
           cadence: 'Daily local B2B outreach + Google Business & local SEO landing pages',
           kpi: 'Inbound hardware pickup manifests & enterprise lot acquisitions',
         },
@@ -684,7 +982,8 @@ export const INITIAL_MARKETING_PLANS = {
           id: 'or-pillar-2',
           title: 'High-Margin eBay Part-Out & Crosslisting OS Engine',
           target: 'Homelab builders, local AI developers, SMB buyers on eBay',
-          offer: 'Tested Dual Xeon / RTX workstations ($280–$850/unit), enterprise GPUs ($180–$900), and ECC RAM / NVMe kits via Crosslisting OS',
+          offer:
+            'Tested Dual Xeon / RTX workstations ($280–$850/unit), enterprise GPUs ($180–$900), and ECC RAM / NVMe kits via Crosslisting OS',
           cadence: 'Automated SKU & listing generation from every intake batch',
           kpi: 'Net eBay hardware revenue toward the $10,000 Autonomy Goal',
         },
@@ -705,13 +1004,15 @@ export const INITIAL_MARKETING_PLANS = {
       url: 'https://dream-online.net',
       checkoutRail: 'Early Playtester Capture & Founder Pack Wishlist',
       status: 'LIVE & ACTIVE',
-      valueProp: 'First-of-its-kind MMORPG where NPCs are not static dialogue trees. Game triggers fire live webhooks to persistent AI agents that remember players, hold grudges, shift guild prices, and evolve the world.',
+      valueProp:
+        'First-of-its-kind MMORPG where NPCs are not static dialogue trees. Game triggers fire live webhooks to persistent AI agents that remember players, hold grudges, shift guild prices, and evolve the world.',
       pillars: [
         {
           id: 'dream-pillar-1',
           title: '"NPCs That Actually Remember" Technical Devlog Series',
           target: 'r/gamedev, r/MMORPG, r/LocalLLaMA, Hacker News (Show HN), Dev.to, Hashnode',
-          offer: 'Behind-the-scenes architecture showing live game triggers -> webhooks -> persistent memory -> local Ollama Fable / Gemini 4 NPC actions',
+          offer:
+            'Behind-the-scenes architecture showing live game triggers -> webhooks -> persistent memory -> local Ollama Fable / Gemini 4 NPC actions',
           cadence: '2x weekly technical devlogs + 60-second YouTube Shorts / TikTok clips',
           kpi: 'Early playtester signups & community Discord/wishlist growth',
         },
@@ -719,7 +1020,8 @@ export const INITIAL_MARKETING_PLANS = {
           id: 'dream-pillar-2',
           title: 'Live Emergent World Stories & Short-Form Clips',
           target: 'TikTok, YouTube Shorts, X gaming community, Reels',
-          offer: 'Short clips showing an NPC merchant remembering a player who undercut them yesterday and dynamically changing quest rewards',
+          offer:
+            'Short clips showing an NPC merchant remembering a player who undercut them yesterday and dynamically changing quest rewards',
           cadence: '3x weekly short-form clips',
           kpi: 'Viral share rate & traffic to dream-online.net',
         },
@@ -889,7 +1191,10 @@ export function saveMarketingPlans(data) {
 export function getUnifiedInboxItems() {
   const plans = loadMarketingPlans();
   const comments = loadCommentsStore();
-  const proposals = proposalStore.list().filter((x) => x.source === 'social').slice(0, 60);
+  const proposals = proposalStore
+    .list()
+    .filter((x) => x.source === 'social')
+    .slice(0, 60);
 
   const normalizeState = (st) => {
     const u = String(st || '').toUpperCase();
@@ -989,7 +1294,7 @@ export function getUnifiedInboxItems() {
       tags: [BRAND_TAGS[dom] || BRAND_TAG],
       customUrl: p.subreddit ? `https://www.reddit.com/r/${p.subreddit}/submit` : '',
       targets: [p.platform || 'x'],
-      notes: Array.isArray(p.reviewReasons) ? p.reviewReasons.join('; ') : (p.evidence || ''),
+      notes: Array.isArray(p.reviewReasons) ? p.reviewReasons.join('; ') : p.evidence || '',
       author: p.reviewActor || 'Hermes / Fable Routine',
       rawStatus: p.state,
       inboxTab: normalizeState(p.state),
@@ -1056,7 +1361,12 @@ export async function executeLiveSocialPublish({ id, platform, domain, title, bo
     brand: checkData.brand,
   });
 
-  let apiResult = { ok: true, mode: 'approved_handoff', path: handoff.path, note: `Saved approved dispatch to ${handoff.path}` };
+  let apiResult = {
+    ok: true,
+    mode: 'approved_handoff',
+    path: handoff.path,
+    note: `Saved approved dispatch to ${handoff.path}`,
+  };
 
   // 2. If platform is Reddit, run the official Reddit OAuth adapter (falls back cleanly if token unset)
   if (targetPlatform === 'reddit') {
@@ -1076,8 +1386,8 @@ export async function executeLiveSocialPublish({ id, platform, domain, title, bo
         rateStatePath: REDDIT_RATE_STATE_PATH,
       });
       apiResult = { ...rRes, handoffPath: handoff.path };
-    } catch (e) {
-      apiResult = { ok: false, error: String(e.message || e), handoffPath: handoff.path };
+    } catch {
+      apiResult = { ok: false, error: 'Social dispatch failed', handoffPath: handoff.path };
     }
   }
 
@@ -1085,10 +1395,17 @@ export async function executeLiveSocialPublish({ id, platform, domain, title, bo
   const seoPlatforms = ['devto', 'hashnode', 'wordpress', 'tumblr', 'blogger', 'ghost'];
   if (seoPlatforms.includes(targetPlatform)) {
     const brandCode = targetDomain.includes('dream') ? 'dre' : targetDomain.includes('recycle') ? 'ais' : 'ant';
-    const slug = targetTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60) || 'update';
+    const slug =
+      targetTitle
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+        .slice(0, 60) || 'update';
     const canonical = `https://${targetDomain}/blog/${slug}`;
     const tmpMd = path.join(os.tmpdir(), `scc-seo-${Date.now()}.md`);
-    const tagList = (Array.isArray(tags) && tags.length ? tags : ['#YouAndiNotAI']).map((t) => String(t).replace(/^#/, ''));
+    const tagList = (Array.isArray(tags) && tags.length ? tags : ['#YouAndiNotAI']).map((t) =>
+      String(t).replace(/^#/, ''),
+    );
     const mdContent = [
       '---',
       `title: "${targetTitle.replace(/"/g, '\\"')}"`,
@@ -1103,13 +1420,27 @@ export async function executeLiveSocialPublish({ id, platform, domain, title, bo
     const seoRun = await new Promise((resolve) => {
       execFile(
         process.execPath,
-        [`${ROOT}/scripts/seo/post.mjs`, '--brand', brandCode, '--platform', targetPlatform, '--file', tmpMd, '--canonical', canonical],
+        [
+          `${ROOT}/scripts/seo/post.mjs`,
+          '--brand',
+          brandCode,
+          '--platform',
+          targetPlatform,
+          '--file',
+          tmpMd,
+          '--canonical',
+          canonical,
+        ],
         { cwd: ROOT, timeout: 25000, windowsHide: true },
         (err, stdout, stderr) => {
-          try { fs.unlinkSync(tmpMd); } catch {}
+          try {
+            fs.unlinkSync(tmpMd);
+          } catch {}
           const out = String(stdout || stderr || '').trim();
           let parsed = null;
-          try { parsed = JSON.parse(out.split(/\r?\n/).pop() || '{}'); } catch {}
+          try {
+            parsed = JSON.parse(out.split(/\r?\n/).pop() || '{}');
+          } catch {}
           if (!err && parsed?.url) {
             resolve({ ok: true, mode: 'live_seo_api', url: parsed.url, raw: parsed });
           } else {
@@ -1117,10 +1448,11 @@ export async function executeLiveSocialPublish({ id, platform, domain, title, bo
               ok: true,
               mode: 'handoff_queued',
               handoffPath: handoff.path,
-              seoDiagnostic: parsed?.reason || out || (err ? err.message : 'queued in approved inbox'),
+              seoDiagnostic:
+                parsed?.reason || out || (err ? err.code || 'SEO dispatch failed' : 'queued in approved inbox'),
             });
           }
-        }
+        },
       );
     });
     apiResult = seoRun;
@@ -1184,12 +1516,16 @@ export function getFullMarketingDashboardState() {
 
   const socialPlatforms = listPlatforms({ envValue });
   const posters22 = listSocialEngine22Posters();
-  const proposals = proposalStore.list().filter((x) => x.source === 'social').slice(0, 40);
+  const proposals = proposalStore
+    .list()
+    .filter((x) => x.source === 'social')
+    .slice(0, 40);
 
   let approvedFiles = [];
   try {
     if (fs.existsSync(APPROVED_INBOX_DIR)) {
-      approvedFiles = fs.readdirSync(APPROVED_INBOX_DIR)
+      approvedFiles = fs
+        .readdirSync(APPROVED_INBOX_DIR)
         .filter((f) => f.endsWith('.md'))
         .sort()
         .reverse()
@@ -1207,11 +1543,18 @@ export function getFullMarketingDashboardState() {
   let seoPublished = [];
   try {
     if (fs.existsSync(SEO_PUBLISHED_FILE)) {
-      seoPublished = fs.readFileSync(SEO_PUBLISHED_FILE, 'utf8')
+      seoPublished = fs
+        .readFileSync(SEO_PUBLISHED_FILE, 'utf8')
         .split(/\r?\n/)
         .filter(Boolean)
         .slice(-20)
-        .map((l) => { try { return JSON.parse(l); } catch { return null; } })
+        .map((l) => {
+          try {
+            return JSON.parse(l);
+          } catch {
+            return null;
+          }
+        })
         .filter(Boolean)
         .reverse();
     }
@@ -1346,7 +1689,7 @@ export function updateCampaignStatus({ id, status, title, body, scheduledWindow,
         ...(checkData.brand === DATEAPP_BRAND ? { brandRuling: BRAND_RULING } : {}),
       });
       proposalStore.transition(proposal.id, { state: 'APPROVED', approvedBy: 'founder-mission-os' });
-      handoff = executeManualHandoff({
+      const rawHandoff = executeManualHandoff({
         inboxDir: APPROVED_INBOX_DIR,
         platform: ['x', 'reddit', 'tiktok', 'youtube'].includes(checkData.platform) ? checkData.platform : 'x',
         id: item.id,
@@ -1354,6 +1697,7 @@ export function updateCampaignStatus({ id, status, title, body, scheduledWindow,
         body: checkData.checkedBody,
         brand: checkData.brand,
       });
+      handoff = rawHandoff?.ok ? rawHandoff : { ok: false, error: 'Manual handoff write failed' };
     }
     saveMarketingPlans(plans);
     return { ok: true, campaign: item, proposal, handoff };
@@ -1407,7 +1751,9 @@ export function addGeneratedCampaign({
   modelUsed,
 }) {
   const plans = loadMarketingPlans();
-  const id = `CAMP-${String(domain || 'GEN').split('.')[0].toUpperCase()}-${Date.now().toString().slice(-5)}`;
+  const id = `CAMP-${String(domain || 'GEN')
+    .split('.')[0]
+    .toUpperCase()}-${Date.now().toString().slice(-5)}`;
   const checkData = runSocialCommandChecks({
     domain,
     platform: mapChannelToPlatformId(channel),
@@ -1417,9 +1763,10 @@ export function addGeneratedCampaign({
   });
 
   const defaultBrandTag = BRAND_TAGS[domain] || BRAND_TAG;
-  const cleanTags = Array.isArray(hashtags) && hashtags.length
-    ? hashtags.slice(0, 3)
-    : [defaultBrandTag, '#RealNotAI', '#AustinSingles'];
+  const cleanTags =
+    Array.isArray(hashtags) && hashtags.length
+      ? hashtags.slice(0, 3)
+      : [defaultBrandTag, '#RealNotAI', '#AustinSingles'];
 
   const entry = {
     id,
@@ -1460,11 +1807,7 @@ export function addGeneratedCampaign({
       ...(checkData.brand === DATEAPP_BRAND ? { brandRuling: BRAND_RULING } : {}),
     });
     fs.mkdirSync(MARKETING_INBOX_DIR, { recursive: true });
-    fs.writeFileSync(
-      path.join(MARKETING_INBOX_DIR, `${id}.json`),
-      JSON.stringify(entry, null, 2),
-      'utf8'
-    );
+    fs.writeFileSync(path.join(MARKETING_INBOX_DIR, `${id}.json`), JSON.stringify(entry, null, 2), 'utf8');
   } catch {}
 
   return entry;
@@ -1481,7 +1824,10 @@ export function getSocialCommandPlatforms() {
 }
 
 export function listProposals({ limit = 50 } = {}) {
-  return proposalStore.list().filter((x) => x.source === 'social').slice(0, limit);
+  return proposalStore
+    .list()
+    .filter((x) => x.source === 'social')
+    .slice(0, limit);
 }
 
 export {

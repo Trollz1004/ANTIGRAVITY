@@ -36,12 +36,69 @@ const SERVICE_ALIASES = {
   'obsidian-alienware': ['alienware-obsidian-rest', 'obsidian-rest'],
   'alienware-obsidian-rest': ['obsidian-alienware', 'obsidian-rest'],
   'obsidian-rest': ['obsidian-alienware', 'alienware-obsidian-rest'],
+  governance: ['official-vote', 'official-vote-service'],
+  'official-vote': ['governance', 'official-vote-service'],
+  'official-vote-service': ['governance', 'official-vote'],
+};
+
+/**
+ * ANTIGRAVITY repo-auxiliary services not tracked in the canonical cross-repo fleet-map.json.
+ * Looked up ONLY by single-service resolution (getService/getServiceUrl/getBindHost) when
+ * absent from fleet-map.json; never injected into listAllServices/listServicesByNode.
+ */
+export const REPO_FALLBACK_SERVICES = {
+  odysseus: {
+    id: 'odysseus',
+    name: 'Odysseus Workspace UI',
+    node: 't5500',
+    port: 7011,
+    protocol: 'http',
+    scope: 'lan-guarded',
+    bind: '0.0.0.0',
+    tokenEnv: 'MISSION_OS_TOKEN',
+    healthPath: '/',
+  },
+  governance: {
+    id: 'governance',
+    name: 'Official Vote Service',
+    node: 't5500',
+    port: 9134,
+    protocol: 'http',
+    scope: 'lan-guarded',
+    bind: '0.0.0.0',
+    tokenEnv: 'OFFICIAL_VOTE_TOKEN',
+    healthPath: '/health',
+  },
+  'mission-mcp': {
+    id: 'mission-mcp',
+    name: 'Mission MCP',
+    node: 't5500',
+    port: 3901,
+    protocol: 'http',
+    scope: 'lan-guarded',
+    bind: '0.0.0.0',
+    tokenEnv: 'MISSION_MCP_TOKEN',
+    healthPath: '/health',
+  },
+  'onemin-shim': {
+    id: 'onemin-shim',
+    name: '1min.ai OpenAI Shim',
+    node: 't5500',
+    port: 20130,
+    protocol: 'http',
+    scope: 'lan-guarded',
+    bind: '0.0.0.0',
+    tokenEnv: 'ONEMIN_SHIM_TOKEN',
+    healthPath: '/health',
+  },
 };
 
 let cachedDefaultMap = null;
 
 export function isMachineLocalScope(scope) {
-  const normalized = String(scope || '').trim().toLowerCase();
+  const normalized = String(scope || '')
+    .trim()
+    .toLowerCase();
   return normalized === 'this machine only' || normalized === 'local-only';
 }
 
@@ -67,9 +124,7 @@ function normalizeServiceEntry(svc, fallbackId = '') {
   const id = String(svc?.id || fallbackId || '').trim();
   const tokenEnv = getServiceTokenEnv(svc);
   const authTokenEnv =
-    svc?.authTokenEnv !== undefined && svc?.authTokenEnv !== null
-      ? String(svc.authTokenEnv)
-      : tokenEnv || '';
+    svc?.authTokenEnv !== undefined && svc?.authTokenEnv !== null ? String(svc.authTokenEnv) : tokenEnv || '';
   const localOnly = isMachineLocalScope(svc?.scope);
   const host = String(svc?.host || (localOnly ? '127.0.0.1' : '')).trim();
   const bind = localOnly ? '127.0.0.1' : String(svc?.bind || '0.0.0.0').trim();
@@ -100,11 +155,19 @@ export function loadFleetMap(mapPath = DEFAULT_FLEET_MAP_PATH) {
 }
 
 export function getNode(nodeId, fleetMap = loadFleetMap()) {
-  const key = String(nodeId || '').trim().toLowerCase();
+  const key = String(nodeId || '')
+    .trim()
+    .toLowerCase();
   const rawNodes = fleetMap?.nodes;
   let found = null;
   if (Array.isArray(rawNodes)) {
-    const match = rawNodes.find((n) => n && String(n.id || '').trim().toLowerCase() === key);
+    const match = rawNodes.find(
+      (n) =>
+        n &&
+        String(n.id || '')
+          .trim()
+          .toLowerCase() === key,
+    );
     if (match) found = normalizeNodeEntry(match, key);
   } else if (rawNodes && typeof rawNodes === 'object') {
     const direct = rawNodes[key];
@@ -112,7 +175,11 @@ export function getNode(nodeId, fleetMap = loadFleetMap()) {
       found = normalizeNodeEntry(direct, key);
     } else {
       const entry = Object.entries(rawNodes).find(
-        ([k, v]) => k.toLowerCase() === key || String(v?.id || '').trim().toLowerCase() === key
+        ([k, v]) =>
+          k.toLowerCase() === key ||
+          String(v?.id || '')
+            .trim()
+            .toLowerCase() === key,
       );
       if (entry) found = normalizeNodeEntry(entry[1], entry[0]);
     }
@@ -180,6 +247,13 @@ export function listAllServices(fleetMap = loadFleetMap()) {
   return [];
 }
 
+function resolveFallbackService(candidate, fleetMap) {
+  const fb = REPO_FALLBACK_SERVICES[candidate];
+  if (!fb) return null;
+  const host = isMachineLocalScope(fb.scope) ? '127.0.0.1' : getNode(fb.node, fleetMap).ip;
+  return normalizeServiceEntry({ ...fb, host }, fb.id);
+}
+
 export function getService(serviceIdOrPort, nodeIdOrMap = null, maybeMap = null) {
   let nodeId = null;
   let fleetMap = loadFleetMap();
@@ -195,28 +269,56 @@ export function getService(serviceIdOrPort, nodeIdOrMap = null, maybeMap = null)
   if (typeof serviceIdOrPort === 'number' || /^\d+$/.test(String(serviceIdOrPort || '').trim())) {
     const portNum = Number(serviceIdOrPort);
     const match = allServices.find(
-      (svc) => Number(svc.port) === portNum && (!normalizedNode || String(svc.node || '').trim().toLowerCase() === normalizedNode)
+      (svc) =>
+        Number(svc.port) === portNum &&
+        (!normalizedNode ||
+          String(svc.node || '')
+            .trim()
+            .toLowerCase() === normalizedNode),
     );
     if (match) return match;
     throw new Error(`Unknown fleet service on port ${portNum}`);
   }
 
-  const key = String(serviceIdOrPort || '').trim().toLowerCase();
+  const key = String(serviceIdOrPort || '')
+    .trim()
+    .toLowerCase();
   const candidates = [key, ...(SERVICE_ALIASES[key] || [])];
   for (const candidate of candidates) {
     const match = allServices.find(
       (svc) =>
         svc.id.toLowerCase() === candidate &&
-        (!normalizedNode || String(svc.node || '').trim().toLowerCase() === normalizedNode)
+        (!normalizedNode ||
+          String(svc.node || '')
+            .trim()
+            .toLowerCase() === normalizedNode),
     );
     if (match) return match;
   }
   if (!Array.isArray(fleetMap?.services) && fleetMap?.services && typeof fleetMap.services === 'object') {
     for (const candidate of candidates) {
       const direct = fleetMap.services[candidate];
-      if (direct && (!normalizedNode || String(direct.node || '').trim().toLowerCase() === normalizedNode)) {
+      if (
+        direct &&
+        (!normalizedNode ||
+          String(direct.node || '')
+            .trim()
+            .toLowerCase() === normalizedNode)
+      ) {
         return normalizeServiceEntry(direct, candidate);
       }
+    }
+  }
+  for (const candidate of candidates) {
+    const fallback = resolveFallbackService(candidate, fleetMap);
+    if (
+      fallback &&
+      (!normalizedNode ||
+        String(fallback.node || '')
+          .trim()
+          .toLowerCase() === normalizedNode)
+    ) {
+      return fallback;
     }
   }
   throw new Error(`Unknown fleet service "${serviceIdOrPort}"`);
@@ -256,9 +358,16 @@ export function getServicePort(serviceIdOrPort, envPortValue = '', fleetMap = lo
 }
 
 export function listServicesByNode(nodeId, fleetMap = loadFleetMap()) {
-  const key = String(nodeId || '').trim().toLowerCase();
+  const key = String(nodeId || '')
+    .trim()
+    .toLowerCase();
   getNode(key, fleetMap);
-  return listAllServices(fleetMap).filter((svc) => String(svc.node || '').trim().toLowerCase() === key);
+  return listAllServices(fleetMap).filter(
+    (svc) =>
+      String(svc.node || '')
+        .trim()
+        .toLowerCase() === key,
+  );
 }
 
 export function getServicesByNode(nodeId, fleetMap = loadFleetMap()) {
@@ -266,8 +375,15 @@ export function getServicesByNode(nodeId, fleetMap = loadFleetMap()) {
 }
 
 export function getServicesByScope(scope, fleetMap = loadFleetMap()) {
-  const key = String(scope || '').trim().toLowerCase();
-  return listAllServices(fleetMap).filter((svc) => String(svc.scope || '').trim().toLowerCase() === key);
+  const key = String(scope || '')
+    .trim()
+    .toLowerCase();
+  return listAllServices(fleetMap).filter(
+    (svc) =>
+      String(svc.scope || '')
+        .trim()
+        .toLowerCase() === key,
+  );
 }
 
 export const load_fleet_map = loadFleetMap;

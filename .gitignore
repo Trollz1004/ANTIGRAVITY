@@ -311,6 +311,8 @@ ops/heartbeat/backup-node.log
 ops/t5500/status.json
 ops/t5500/bridge-registry-state.json
 ops/t5500/TRIGGERS.jsonl
+ops/t5500/watchdog-incidents.json
+ops/t5500/chat-queue/
 
 # Private Claude<->Joshua drop box (lives in OneDrive); never copy it in
 claude-to-claude/

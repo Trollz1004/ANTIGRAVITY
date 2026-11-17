@@ -38,6 +38,58 @@ SERVICE_ALIASES: dict[str, list[str]] = {
     "obsidian-alienware": ["alienware-obsidian-rest", "obsidian-rest"],
     "alienware-obsidian-rest": ["obsidian-alienware", "obsidian-rest"],
     "obsidian-rest": ["obsidian-alienware", "alienware-obsidian-rest"],
+    "governance": ["official-vote", "official-vote-service"],
+    "official-vote": ["governance", "official-vote-service"],
+    "official-vote-service": ["governance", "official-vote"],
+}
+
+# ANTIGRAVITY repo-auxiliary services absent from canonical fleet-map.json.
+# Used ONLY in get_service when not present in fleet-map.json; never injected into list_all_services.
+REPO_FALLBACK_SERVICES: dict[str, dict[str, Any]] = {
+    "odysseus": {
+        "id": "odysseus",
+        "name": "Odysseus Workspace UI",
+        "node": "t5500",
+        "port": 7011,
+        "protocol": "http",
+        "scope": "lan-guarded",
+        "bind": "0.0.0.0",
+        "tokenEnv": "MISSION_OS_TOKEN",
+        "healthPath": "/",
+    },
+    "governance": {
+        "id": "governance",
+        "name": "Official Vote Service",
+        "node": "t5500",
+        "port": 9134,
+        "protocol": "http",
+        "scope": "lan-guarded",
+        "bind": "0.0.0.0",
+        "tokenEnv": "OFFICIAL_VOTE_TOKEN",
+        "healthPath": "/health",
+    },
+    "mission-mcp": {
+        "id": "mission-mcp",
+        "name": "Mission MCP",
+        "node": "t5500",
+        "port": 3901,
+        "protocol": "http",
+        "scope": "lan-guarded",
+        "bind": "0.0.0.0",
+        "tokenEnv": "MISSION_MCP_TOKEN",
+        "healthPath": "/health",
+    },
+    "onemin-shim": {
+        "id": "onemin-shim",
+        "name": "1min.ai OpenAI Shim",
+        "node": "t5500",
+        "port": 20130,
+        "protocol": "http",
+        "scope": "lan-guarded",
+        "bind": "0.0.0.0",
+        "tokenEnv": "ONEMIN_SHIM_TOKEN",
+        "healthPath": "/health",
+    },
 }
 
 
@@ -190,6 +242,14 @@ def list_all_services(fleet_map: dict[str, Any] | None = None) -> list[dict[str,
     return []
 
 
+def _resolve_fallback_service(candidate: str, fleet_map: dict[str, Any]) -> dict[str, Any] | None:
+    fb = REPO_FALLBACK_SERVICES.get(candidate)
+    if not fb:
+        return None
+    host = "127.0.0.1" if is_machine_local_scope(fb.get("scope")) else get_node_ip(str(fb["node"]), fleet_map)
+    return _normalize_service_entry({**fb, "host": host}, str(fb["id"]))
+
+
 def get_service(
     service_id: str | int,
     node_id_or_map: str | dict[str, Any] | None = None,
@@ -233,6 +293,12 @@ def get_service(
                 direct = raw_services[candidate]
                 if not normalized_node or str(direct.get("node") or "").strip().lower() == normalized_node:
                     return _normalize_service_entry(direct, candidate)
+    for candidate in candidates:
+        fallback = _resolve_fallback_service(candidate, fmap)
+        if fallback is not None and (
+            not normalized_node or str(fallback.get("node") or "").strip().lower() == normalized_node
+        ):
+            return fallback
     raise KeyError(f"Unknown fleet service: {service_id!r}")
 
 

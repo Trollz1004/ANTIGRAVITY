@@ -42,6 +42,58 @@ $script:FleetServiceAliases = @{
     'obsidian-alienware'      = @('alienware-obsidian-rest', 'obsidian-rest')
     'alienware-obsidian-rest' = @('obsidian-alienware', 'obsidian-rest')
     'obsidian-rest'           = @('obsidian-alienware', 'alienware-obsidian-rest')
+    'governance'              = @('official-vote', 'official-vote-service')
+    'official-vote'           = @('governance', 'official-vote-service')
+    'official-vote-service'   = @('governance', 'official-vote')
+}
+
+# ANTIGRAVITY repo-auxiliary services not tracked in canonical fleet-map.json.
+# Used ONLY in Get-FleetService when absent from fleet-map.json; never injected into Get-FleetServices.
+$script:RepoFallbackServices = @{
+    'odysseus' = @{
+        id         = 'odysseus'
+        name       = 'Odysseus Workspace UI'
+        node       = 't5500'
+        port       = 7011
+        protocol   = 'http'
+        scope      = 'lan-guarded'
+        bind       = '0.0.0.0'
+        tokenEnv   = 'MISSION_OS_TOKEN'
+        healthPath = '/'
+    }
+    'governance' = @{
+        id         = 'governance'
+        name       = 'Official Vote Service'
+        node       = 't5500'
+        port       = 9134
+        protocol   = 'http'
+        scope      = 'lan-guarded'
+        bind       = '0.0.0.0'
+        tokenEnv   = 'OFFICIAL_VOTE_TOKEN'
+        healthPath = '/health'
+    }
+    'mission-mcp' = @{
+        id         = 'mission-mcp'
+        name       = 'Mission MCP'
+        node       = 't5500'
+        port       = 3901
+        protocol   = 'http'
+        scope      = 'lan-guarded'
+        bind       = '0.0.0.0'
+        tokenEnv   = 'MISSION_MCP_TOKEN'
+        healthPath = '/health'
+    }
+    'onemin-shim' = @{
+        id         = 'onemin-shim'
+        name       = '1min.ai OpenAI Shim'
+        node       = 't5500'
+        port       = 20130
+        protocol   = 'http'
+        scope      = 'lan-guarded'
+        bind       = '0.0.0.0'
+        tokenEnv   = 'ONEMIN_SHIM_TOKEN'
+        healthPath = '/health'
+    }
 }
 
 function Test-FleetMachineLocalScope {
@@ -167,9 +219,10 @@ function Get-FleetServices {
 function Get-FleetNode {
     param(
         [Parameter(Mandatory = $true)][string]$NodeId,
-        [string]$CustomMapPath = ''
+        [string]$CustomMapPath = '',
+        [object]$FleetMap = $null
     )
-    $nodes = Get-FleetNodes -CustomMapPath $CustomMapPath
+    $nodes = Get-FleetNodes -FleetMap $FleetMap -CustomMapPath $CustomMapPath
     $key = $NodeId.Trim().ToLowerInvariant()
     foreach ($n in $nodes) {
         if (([string]$n.id).Trim().ToLowerInvariant() -eq $key) {
@@ -179,12 +232,33 @@ function Get-FleetNode {
     throw "Unknown fleet node '$NodeId'"
 }
 
+function Resolve-FleetFallbackService {
+    param(
+        [Parameter(Mandatory = $true)][string]$Candidate,
+        [Parameter(Mandatory = $true)][object]$FleetMap,
+        [string]$CustomMapPath = ''
+    )
+    if (-not $script:RepoFallbackServices.ContainsKey($Candidate)) {
+        return $null
+    }
+    $fb = $script:RepoFallbackServices[$Candidate]
+    $isLocal = Test-FleetMachineLocalScope -Scope ([string]$fb['scope'])
+    $resolvedHost = if ($isLocal) { '127.0.0.1' } else { [string](Get-FleetNode -NodeId ([string]$fb['node']) -FleetMap $FleetMap -CustomMapPath $CustomMapPath).ip }
+    $copy = [ordered]@{}
+    foreach ($k in $fb.Keys) {
+        $copy[$k] = $fb[$k]
+    }
+    $copy['host'] = $resolvedHost
+    return (ConvertTo-NormalizedFleetService -ServiceObj ([pscustomobject]$copy) -FallbackId ([string]$fb['id']))
+}
+
 function Get-FleetService {
     param(
         [Parameter(Mandatory = $true)][string]$ServiceId,
         [string]$CustomMapPath = ''
     )
-    $services = Get-FleetServices -CustomMapPath $CustomMapPath
+    $map = Get-FleetMap -CustomMapPath $CustomMapPath
+    $services = @(Get-FleetServices -FleetMap $map)
     $key = $ServiceId.Trim().ToLowerInvariant()
     $candidates = New-Object System.Collections.Generic.List[string]
     $candidates.Add($key)
@@ -198,6 +272,12 @@ function Get-FleetService {
             if (([string]$svc.id).Trim().ToLowerInvariant() -eq $candidate) {
                 return $svc
             }
+        }
+    }
+    foreach ($candidate in $candidates) {
+        $fallback = Resolve-FleetFallbackService -Candidate $candidate -FleetMap $map -CustomMapPath $CustomMapPath
+        if ($null -ne $fallback) {
+            return $fallback
         }
     }
     throw "Unknown fleet service '$ServiceId'"
