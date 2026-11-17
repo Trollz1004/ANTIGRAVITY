@@ -15,7 +15,10 @@ vi.mock('../lib/api', () => ({
     delete: vi.fn(),
   },
   ApiError: class extends Error {
-    constructor(public status: number, message: string) {
+    constructor(
+      public status: number,
+      message: string
+    ) {
       super(message);
     }
   },
@@ -25,7 +28,16 @@ vi.mock('../lib/safety', () => ({
   isSafetyToolsAvailable: () => Promise.resolve(true),
 }));
 
-const INVENTED_NAMES = ['Maya', 'Jordan', 'Elena', 'Ari', 'demo-maya', 'demo-jordan', 'demo-elena', 'demo-ari'];
+const INVENTED_NAMES = [
+  'Maya',
+  'Jordan',
+  'Elena',
+  'Ari',
+  'demo-maya',
+  'demo-jordan',
+  'demo-elena',
+  'demo-ari',
+];
 
 function assertNoInventedProfiles(container: HTMLElement) {
   for (const name of INVENTED_NAMES) {
@@ -51,12 +63,16 @@ describe('No invented people in date app feed', () => {
       expect(screen.getByText(/no one new is nearby yet/i)).toBeTruthy();
     });
 
-    expect(container.textContent).toContain('Check back soon as more verified members join your area.');
+    expect(container.textContent).toContain(
+      'Check back soon as more verified members join your area.'
+    );
     assertNoInventedProfiles(container);
   });
 
   it('renders UnverifiedGate with one button to /app/verify when the server responds with 403, with zero invented profiles', async () => {
-    vi.mocked(api.get).mockRejectedValueOnce(new ApiError(403, 'Verification required'));
+    vi.mocked(api.get).mockRejectedValueOnce(
+      new ApiError(403, 'Verification required')
+    );
 
     const { container } = render(
       <MemoryRouter initialEntries={['/app']}>
@@ -69,7 +85,9 @@ describe('No invented people in date app feed', () => {
     });
 
     expect(container.textContent).toContain('$1 Human Check');
-    const verifyLink = screen.getByRole('link', { name: /Finish your \$1 human check/i });
+    const verifyLink = screen.getByRole('link', {
+      name: /Finish your \$1 human check/i,
+    });
     expect(verifyLink.getAttribute('href')).toBe('/app/verify');
     assertNoInventedProfiles(container);
   });
@@ -145,7 +163,9 @@ describe('AppShell status label follows bot_shield_verified', () => {
       </MemoryRouter>
     );
 
-    const links = screen.getAllByRole('link', { name: /Finish your \$1 human check/i });
+    const links = screen.getAllByRole('link', {
+      name: /Finish your \$1 human check/i,
+    });
     expect(links.length).toBeGreaterThan(0);
     expect(links[0].getAttribute('href')).toBe('/app/verify');
     expect(screen.queryByText('Verified Member')).toBeNull();

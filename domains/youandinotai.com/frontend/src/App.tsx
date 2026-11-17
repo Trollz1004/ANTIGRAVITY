@@ -340,7 +340,9 @@ export function LandingPage() {
       return;
     }
     const src = 'https://tobira.ai/embed/a2a-badge.js';
-    let script = document.querySelector<HTMLScriptElement>(`script[src="${src}"]`);
+    let script = document.querySelector<HTMLScriptElement>(
+      `script[src="${src}"]`
+    );
     if (!script) {
       script = document.createElement('script');
       script.src = src;
@@ -364,16 +366,15 @@ export function LandingPage() {
   // 'Join' leaves the journey and opens the existing register flow; the
   // other links scroll to their stop. The id stays 'join' so the link still
   // lights while the visitor is on stop 07.
-  const navLinks: { id: string; label: string; href: string; to?: string }[] =
-    [
-      { id: 'about', label: 'Overview', href: '#about' },
-      { id: 'platform', label: 'Platform', href: '#platform' },
-      { id: 'verification', label: 'Verification', href: '#verification' },
-      { id: 'trust', label: 'Trust & Safety', href: '#trust' },
-      { id: 'pricing', label: 'Membership', href: '#pricing' },
-      { id: 'support', label: 'Support', href: '#support' },
-      { id: 'join', label: 'Join', href: '/register', to: '/register' },
-    ];
+  const navLinks: { id: string; label: string; href: string; to?: string }[] = [
+    { id: 'about', label: 'Overview', href: '#about' },
+    { id: 'platform', label: 'Platform', href: '#platform' },
+    { id: 'verification', label: 'Verification', href: '#verification' },
+    { id: 'trust', label: 'Trust & Safety', href: '#trust' },
+    { id: 'pricing', label: 'Membership', href: '#pricing' },
+    { id: 'support', label: 'Support', href: '#support' },
+    { id: 'join', label: 'Join', href: '/register', to: '/register' },
+  ];
 
   const pricingTiers = [
     {
@@ -593,7 +594,9 @@ export function LandingPage() {
         {/* STOP 01 (#about) — The Hero Owns the Whole First Screen */}
         <section
           id="about"
-          className={unpinnedStops.about ? 'relative' : 'relative min-h-[165vh]'}
+          className={
+            unpinnedStops.about ? 'relative' : 'relative min-h-[165vh]'
+          }
         >
           <div
             data-stage-wrapper="about"
@@ -1411,9 +1414,22 @@ export function LandingPage() {
 
           {/* Tobira AI A2A Badge */}
           <div className="mt-8 border-t border-[#3A3F45] pt-6">
-            <div data-tobira-a2a data-handle='youandinotai' data-name='YouAndINotAI'>
-              <a href='https://tobira.ai/@youandinotai/for-ai' target='_blank' rel='noopener nofollow'>For AI agents · A2A channel</a>
-              <p>AI agents: use tobira.ai/@youandinotai/for-ai, not the chat widget</p>
+            <div
+              data-tobira-a2a
+              data-handle="youandinotai"
+              data-name="YouAndINotAI"
+            >
+              <a
+                href="https://tobira.ai/@youandinotai/for-ai"
+                target="_blank"
+                rel="noopener nofollow"
+              >
+                For AI agents · A2A channel
+              </a>
+              <p>
+                AI agents: use tobira.ai/@youandinotai/for-ai, not the chat
+                widget
+              </p>
             </div>
           </div>
 

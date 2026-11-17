@@ -19,8 +19,8 @@ export function UnverifiedGate() {
         </h1>
         <p className="text-white/60 mb-6 leading-relaxed">
           Messaging and video need the $1 human check. Finish the short timed
-          question and $1 Bot-Shield payment to browse profiles, match,
-          message, and start video.
+          question and $1 Bot-Shield payment to browse profiles, match, message,
+          and start video.
         </p>
         <Link
           to="/app/verify"

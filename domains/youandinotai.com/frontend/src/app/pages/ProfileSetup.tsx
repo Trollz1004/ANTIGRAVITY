@@ -233,7 +233,8 @@ export function ProfileSetup() {
                 Next Step: $1 Human Check
               </div>
               <p className="mt-1 text-sm text-[#F4F1EA]">
-                Complete the one-time $1 human check to activate matching and discovery.
+                Complete the one-time $1 human check to activate matching and
+                discovery.
               </p>
             </div>
             <Link
