@@ -63,8 +63,12 @@ describe('resolveMissionControlBind', () => {
     });
 
     let logs = '';
-    child.stdout.on('data', (c) => { logs += String(c); });
-    child.stderr.on('data', (c) => { logs += String(c); });
+    child.stdout.on('data', (c) => {
+      logs += String(c);
+    });
+    child.stderr.on('data', (c) => {
+      logs += String(c);
+    });
 
     try {
       await new Promise((resolve, reject) => {

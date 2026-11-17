@@ -13,21 +13,22 @@ import {
   getServicePort,
   getServicesByNode,
 } from './fleet-map.mjs';
-import {
-  checkRequiredEnv,
-  logStartupEnvCheck,
-} from '../agents/env-required.mjs';
+import { checkRequiredEnv, logStartupEnvCheck } from '../agents/env-required.mjs';
 
 const FLEET_DIR = path.dirname(fileURLToPath(import.meta.url));
 
 const DEFAULT_PROBE_TIMEOUT_MS = 1500;
 
 export function resolveFleetNode(env = process.env, explicitNode = '') {
-  const candidate = String(explicitNode || env.FLEET_NODE || '').trim().toLowerCase();
+  const candidate = String(explicitNode || env.FLEET_NODE || '')
+    .trim()
+    .toLowerCase();
   if (candidate === 'alienware' || candidate === 't5500') {
     return candidate;
   }
-  const host = String(os.hostname() || '').trim().toLowerCase();
+  const host = String(os.hostname() || '')
+    .trim()
+    .toLowerCase();
   if (host.startsWith('t5500')) {
     return 't5500';
   }
@@ -109,7 +110,6 @@ export function readAgentDrift(driftPath) {
     return {
       present: true,
       driftedFiles: [{ file: path.basename(driftPath), reason: 'drifted' }],
-      error: 'unreadable',
     };
   }
 }
@@ -164,10 +164,20 @@ export async function collectMissingEnv(options = {}, env = process.env, probedS
       try {
         collected.push(...normalizeMissingEnvEntries(JSON.parse(rawEnvMissing)));
       } catch {
-        collected.push(...rawEnvMissing.split(',').map((s) => s.trim()).filter(Boolean));
+        collected.push(
+          ...rawEnvMissing
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean),
+        );
       }
     } else {
-      collected.push(...rawEnvMissing.split(',').map((s) => s.trim()).filter(Boolean));
+      collected.push(
+        ...rawEnvMissing
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
+      );
     }
   }
 
@@ -196,7 +206,7 @@ function probeTcp(host, port, timeoutMs) {
     sock.setTimeout(timeoutMs);
     sock.once('connect', () => done(true, 'tcp ok'));
     sock.once('timeout', () => done(false, 'tcp timeout'));
-    sock.once('error', (err) => done(false, err.message));
+    sock.once('error', (err) => done(false, err?.code || 'unreachable'));
     sock.connect(port, host);
   });
 }
@@ -242,11 +252,7 @@ function probeHttp(target, env, timeoutMs) {
           } catch {
             // Non-JSON response is valid for HTML health endpoints
           }
-          const detail = up
-            ? 'ok'
-            : !statusOk
-              ? `HTTP ${res.statusCode}`
-              : `missing identity '${identity}'`;
+          const detail = up ? 'ok' : !statusOk ? `HTTP ${res.statusCode}` : `missing identity '${identity}'`;
           resolve({ up, detail, missingEnv });
         });
       },
@@ -256,7 +262,7 @@ function probeHttp(target, env, timeoutMs) {
       req.destroy(new Error('timeout'));
     });
     req.on('error', (err) => {
-      resolve({ up: false, detail: err.message || 'unreachable', missingEnv: [] });
+      resolve({ up: false, detail: err?.code || 'unreachable', missingEnv: [] });
     });
     req.end();
   });
@@ -334,7 +340,9 @@ export async function computeNodeStatus(options = {}) {
 
   const reasons = [];
   for (const svc of downServices) {
-    reasons.push(`service down: ${svc.name || svc.id} (${svc.host}:${svc.port}${svc.detail ? ` - ${svc.detail}` : ''})`);
+    reasons.push(
+      `service down: ${svc.name || svc.id} (${svc.host}:${svc.port}${svc.detail ? ` - ${svc.detail}` : ''})`,
+    );
   }
   for (const d of driftedFiles) {
     reasons.push(`agent drift (${d.reason}): ${d.file}`);
@@ -381,7 +389,9 @@ export function createFleetStatusServer(options = {}) {
       res.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
       res.end(JSON.stringify({ ok: false, error: 'Not found' }));
     } catch {
-      res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+      if (!res.headersSent) {
+        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+      }
       res.end(JSON.stringify({ ok: false, error: 'Internal server error' }));
     }
   });

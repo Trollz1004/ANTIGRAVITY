@@ -39,7 +39,11 @@ test('fleet-status-server bind rule: unset FLEET_SHARED_TOKEN binds 127.0.0.1 wi
   assert.equal(withToken.warning, null);
 
   assert.throws(
-    () => mod.validateFleetStatusBindConfig({ FLEET_STATUS_BIND: '0.0.0.0', FLEET_SHARED_TOKEN: '' }, 'alienware-fleet-status'),
+    () =>
+      mod.validateFleetStatusBindConfig(
+        { FLEET_STATUS_BIND: '0.0.0.0', FLEET_SHARED_TOKEN: '' },
+        'alienware-fleet-status',
+      ),
     /FLEET_SHARED_TOKEN/,
   );
 });
@@ -64,14 +68,30 @@ test('fleet-status-server reports green, amber (drift & missingEnv), red (flashi
     // 1. Green: services UP + clean agent-drift.json + no missingEnv
     fs.writeFileSync(
       driftPath,
-      JSON.stringify({ checkedAt: '2026-11-16T00:00:00Z', node: 'alienware', ok: true, light: 'green', driftedCount: 0, driftedFiles: [] }),
+      JSON.stringify({
+        checkedAt: '2026-11-16T00:00:00Z',
+        node: 'alienware',
+        ok: true,
+        light: 'green',
+        driftedCount: 0,
+        driftedFiles: [],
+      }),
       'utf8',
     );
     const { server: s1 } = mod.createFleetStatusServer({
       node: 'alienware',
       env: healthyEnv,
       agentDriftPath: driftPath,
-      targets: [{ id: 'mock-svc', name: 'Mock Service', host: LOOPBACK, port: healthySvc.port, healthPath: '/health', expectedIdentity: 'mock-svc' }],
+      targets: [
+        {
+          id: 'mock-svc',
+          name: 'Mock Service',
+          host: LOOPBACK,
+          port: healthySvc.port,
+          healthPath: '/health',
+          expectedIdentity: 'mock-svc',
+        },
+      ],
     });
     await new Promise((r) => s1.listen(0, LOOPBACK, r));
     const p1 = s1.address().port;
@@ -118,7 +138,16 @@ test('fleet-status-server reports green, amber (drift & missingEnv), red (flashi
       node: 'alienware',
       env: healthyEnv,
       agentDriftPath: driftPath,
-      targets: [{ id: 'mock-svc', name: 'Mock Service', host: LOOPBACK, port: healthySvc.port, healthPath: '/health', expectedIdentity: 'mock-svc' }],
+      targets: [
+        {
+          id: 'mock-svc',
+          name: 'Mock Service',
+          host: LOOPBACK,
+          port: healthySvc.port,
+          healthPath: '/health',
+          expectedIdentity: 'mock-svc',
+        },
+      ],
     });
     await new Promise((r) => s2.listen(0, LOOPBACK, r));
     const p2 = s2.address().port;
@@ -136,7 +165,14 @@ test('fleet-status-server reports green, amber (drift & missingEnv), red (flashi
     // 3. Amber from serviceMissingEnv even when agent-drift.json is clean
     fs.writeFileSync(
       driftPath,
-      JSON.stringify({ checkedAt: '2026-11-16T00:00:00Z', node: 'alienware', ok: true, light: 'green', driftedCount: 0, driftedFiles: [] }),
+      JSON.stringify({
+        checkedAt: '2026-11-16T00:00:00Z',
+        node: 'alienware',
+        ok: true,
+        light: 'green',
+        driftedCount: 0,
+        driftedFiles: [],
+      }),
       'utf8',
     );
     const { server: s3 } = mod.createFleetStatusServer({
@@ -144,7 +180,16 @@ test('fleet-status-server reports green, amber (drift & missingEnv), red (flashi
       env: healthyEnv,
       agentDriftPath: driftPath,
       serviceMissingEnv: ['FLEET_SHARED_TOKEN'],
-      targets: [{ id: 'env-svc', name: 'Env Service', host: LOOPBACK, port: missingEnvSvc.port, healthPath: '/health', expectedIdentity: 'env-svc' }],
+      targets: [
+        {
+          id: 'env-svc',
+          name: 'Env Service',
+          host: LOOPBACK,
+          port: missingEnvSvc.port,
+          healthPath: '/health',
+          expectedIdentity: 'env-svc',
+        },
+      ],
     });
     await new Promise((r) => s3.listen(0, LOOPBACK, r));
     const p3 = s3.address().port;
@@ -160,7 +205,10 @@ test('fleet-status-server reports green, amber (drift & missingEnv), red (flashi
     }
 
     // 4. Red (flashing: true) when a monitored service is down, + T5500 identity
-    const downPortSvc = await makeMockService((req, res) => { res.writeHead(200); res.end('ok'); });
+    const downPortSvc = await makeMockService((req, res) => {
+      res.writeHead(200);
+      res.end('ok');
+    });
     const closedPort = downPortSvc.port;
     await closeServer(downPortSvc.server);
 
@@ -168,7 +216,16 @@ test('fleet-status-server reports green, amber (drift & missingEnv), red (flashi
       node: 't5500',
       env: healthyEnv,
       agentDriftPath: driftPath,
-      targets: [{ id: 'down-svc', name: 'Down Service', host: LOOPBACK, port: closedPort, healthPath: '/health', expectedIdentity: 'ok' }],
+      targets: [
+        {
+          id: 'down-svc',
+          name: 'Down Service',
+          host: LOOPBACK,
+          port: closedPort,
+          healthPath: '/health',
+          expectedIdentity: 'ok',
+        },
+      ],
     });
     await new Promise((r) => s4.listen(0, LOOPBACK, r));
     const p4 = s4.address().port;
@@ -225,7 +282,10 @@ test('fleet-status-server CLI live-start without FLEET_SHARED_TOKEN binds 127.0.
 
   try {
     const port = await new Promise((resolve, reject) => {
-      const timer = setTimeout(() => reject(new Error(`Timed out waiting for fleet-status start: stdout=${stdout} stderr=${stderr}`)), 10000);
+      const timer = setTimeout(
+        () => reject(new Error(`Timed out waiting for fleet-status start: stdout=${stdout} stderr=${stderr}`)),
+        10000,
+      );
       child.stdout.on('data', (c) => {
         stdout += String(c);
         const m = listenRe.exec(stdout);
@@ -279,7 +339,14 @@ test('Stage E4 (fleet-status): env.required.json exists and missing FLEET_SHARED
   const envStatusPath = path.join(tmpDir, 'env-status.json');
   fs.writeFileSync(
     driftPath,
-    JSON.stringify({ checkedAt: '2026-11-16T00:00:00Z', node: 'alienware', ok: true, light: 'green', driftedCount: 0, driftedFiles: [] }),
+    JSON.stringify({
+      checkedAt: '2026-11-16T00:00:00Z',
+      node: 'alienware',
+      ok: true,
+      light: 'green',
+      driftedCount: 0,
+      driftedFiles: [],
+    }),
     'utf8',
   );
   const healthySvc = await makeMockService((_req, res) => {
@@ -291,7 +358,16 @@ test('Stage E4 (fleet-status): env.required.json exists and missing FLEET_SHARED
     node: 'alienware',
     env: { FLEET_SHARED_TOKEN: '', ENV_STATUS_PATH: envStatusPath },
     agentDriftPath: driftPath,
-    targets: [{ id: 'mock-svc', name: 'Mock Service', host: LOOPBACK, port: healthySvc.port, healthPath: '/health', expectedIdentity: 'mock-svc' }],
+    targets: [
+      {
+        id: 'mock-svc',
+        name: 'Mock Service',
+        host: LOOPBACK,
+        port: healthySvc.port,
+        healthPath: '/health',
+        expectedIdentity: 'mock-svc',
+      },
+    ],
   });
   await new Promise((r) => server.listen(0, LOOPBACK, r));
   try {
@@ -325,11 +401,17 @@ test('fleet-status-server sanitizes HTTP 500 errors, readAgentDrift, and TCP/HTT
     assert.equal(drift.present, true);
     assert.equal('error' in drift, false, 'readAgentDrift must omit raw error fields');
 
-    const closedHttp = await makeMockService((_req, res) => { res.writeHead(200); res.end('ok'); });
+    const closedHttp = await makeMockService((_req, res) => {
+      res.writeHead(200);
+      res.end('ok');
+    });
     const closedHttpPort = closedHttp.port;
     await closeServer(closedHttp.server);
 
-    const closedTcp = await makeMockService((_req, res) => { res.writeHead(200); res.end('ok'); });
+    const closedTcp = await makeMockService((_req, res) => {
+      res.writeHead(200);
+      res.end('ok');
+    });
     const closedTcpPort = closedTcp.port;
     await closeServer(closedTcp.server);
 
@@ -346,7 +428,10 @@ test('fleet-status-server sanitizes HTTP 500 errors, readAgentDrift, and TCP/HTT
     for (const svc of snapshot.services) {
       assert.equal(svc.up, false);
       assert.doesNotMatch(String(svc.detail), /127\.0\.0\.1|connect /i);
-      assert.ok(['ECONNREFUSED', 'ECONNRESET', 'ETIMEDOUT', 'unreachable'].includes(svc.detail), `Unexpected detail: ${svc.detail}`);
+      assert.ok(
+        ['ECONNREFUSED', 'ECONNRESET', 'ETIMEDOUT', 'unreachable'].includes(svc.detail),
+        `Unexpected detail: ${svc.detail}`,
+      );
     }
 
     const { server } = mod.createFleetStatusServer({

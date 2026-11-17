@@ -55,7 +55,6 @@
  * Zero dependencies. Secrets are read from .env at request time and never logged or returned.
  */
 import { createServer } from 'node:http';
-import { request as httpRequest } from 'node:http';
 import { request as httpsRequest } from 'node:https';
 import { readFileSync, existsSync, readdirSync, statSync, writeFileSync, unlinkSync, mkdirSync } from 'node:fs';
 import { spawn, execFile } from 'node:child_process';
@@ -154,9 +153,11 @@ async function hermesBoardAsk(question) {
 // Summary providers shared with the bridge so JARVIS's HUD preamble is composed
  // from exactly the data this server serves the page.
 async function vaultStatusSummary() {
-  const r = OBSIDIAN_REST.startsWith('https:')
-    ? await getJsonInsecure(OBSIDIAN_REST + '/', 5000)
-    : await getJson(OBSIDIAN_REST + '/', 5000);
+  const caPath = envValue('OBSIDIAN_REST_CA_CERT');
+  const r =
+    OBSIDIAN_REST.startsWith('https:') && caPath && existsSync(caPath)
+      ? await getJsonWithCa(OBSIDIAN_REST + '/', caPath, 5000)
+      : await getJson(OBSIDIAN_REST + '/', 5000);
   const up = r.status === 200 && /Obsidian Local REST API/.test(r.text || '');
   return { up, state: up ? 'UP' : (r.status ? 'WRONG SERVICE' : 'DOWN'), detail: up ? 'identity ok' : (r.error || 'HTTP ' + r.status) };
 }
@@ -608,14 +609,15 @@ function vaultNote(rel) {
 async function getJson(url, ms = 20000, headers = {}) {
   const c = new AbortController(); const t = setTimeout(() => c.abort(), ms);
   try { const r = await fetch(url, { signal: c.signal, headers }); const text = await r.text(); let j = null; try { j = JSON.parse(text); } catch {} return { status: r.status, json: j, text }; }
-  catch (e) { return { status: 0, error: String(e.message || e) }; }
+  catch (e) { return { status: 0, error: (e && typeof e.code === 'string' && e.code) || 'request failed' }; }
   finally { clearTimeout(t); }
 }
-// fetch with a self-signed certificate tolerated (node:https), same shape as getJson.
-async function getJsonInsecure(url, ms = 20000) {
+// fetch using an explicit local CA bundle (never disabling TLS certificate verification).
+async function getJsonWithCa(url, caPath, ms = 20000) {
+  let ca;
+  try { ca = readFileSync(caPath); } catch { return { status: 0, error: 'invalid ca bundle' }; }
   return new Promise((resolve) => {
-    const mod = url.startsWith('https:') ? httpsRequest : httpRequest;
-    const req = mod(url, { rejectUnauthorized: false, timeout: ms }, (r) => {
+    const req = httpsRequest(url, { ca, timeout: ms }, (r) => {
       const chunks = [];
       r.on('data', (c) => chunks.push(c));
       r.on('end', () => {
@@ -624,8 +626,8 @@ async function getJsonInsecure(url, ms = 20000) {
         resolve({ status: r.statusCode, json, text });
       });
     });
-    req.on('timeout', () => { req.destroy(new Error('timeout after ' + ms + ' ms')); });
-    req.on('error', (e) => resolve({ status: 0, error: String(e.message || e) }));
+    req.on('timeout', () => { req.destroy(new Error('timeout')); });
+    req.on('error', (e) => resolve({ status: 0, error: (e && typeof e.code === 'string' && e.code) || 'request failed' }));
     req.end();
   });
 }
@@ -651,6 +653,20 @@ function send(res, code, body, type = 'application/json') {
   res.writeHead(code, { 'content-type': type, 'access-control-allow-origin': '*', 'cache-control': 'no-store' });
   res.end(typeof body === 'string' || Buffer.isBuffer(body) ? body : JSON.stringify(body));
 }
+function sanitizeServiceProbe(probe) {
+  if (!probe || typeof probe !== 'object') {
+    return { reachable: false, kind: 'unreachable', error: 'Service unreachable' };
+  }
+  const out = {
+    reachable: Boolean(probe.reachable),
+    kind: probe.kind || (probe.reachable ? 'html' : 'unreachable'),
+  };
+  if (probe.status !== undefined) out.status = probe.status;
+  if (probe.tcp !== undefined) out.tcp = Boolean(probe.tcp);
+  if (probe.data !== undefined) out.data = probe.data;
+  if (probe.error) out.error = 'Service unreachable';
+  return out;
+}
 // Same-origin reverse proxy with response headers sanitized (lib/session-proxy.mjs):
 // a session/auth cookie from Hermes or OpenClaw must never reach the browser.
 async function proxyStripped(req, res, url, base, prefix) {
@@ -663,9 +679,9 @@ async function proxyStripped(req, res, url, base, prefix) {
     const headers = sanitizeHeaders(r.headers);
     res.writeHead(r.status, { 'content-type': headers['content-type'] || 'text/html; charset=utf-8', 'cache-control': 'no-store' });
     return res.end(buf);
-  } catch (e) {
+  } catch {
     const label = base.includes('9119') ? 'Hermes' : 'OpenClaw';
-    return send(res, 502, { error: `${label} unreachable: ${String(e.message || e)}`, target });
+    return send(res, 502, { error: `${label} unreachable`, target });
   } finally { clearTimeout(t); }
 }
 function serveStatic(res, rel) {
@@ -861,7 +877,7 @@ export const server = createServer(async (req, res) => {
       const buf = Buffer.from(await r.arrayBuffer());
       res.writeHead(r.status, { 'content-type': r.headers.get('content-type') || 'text/html; charset=utf-8', 'cache-control': 'no-store' });
       return res.end(buf);
-    } catch (e) { return send(res, 502, { error: 'Crosslisting unreachable: ' + String(e.message || e), target: CROSSLISTING }); }
+    } catch { return send(res, 502, { error: 'Crosslisting unreachable', target: CROSSLISTING }); }
     finally { clearTimeout(t); }
   }
 
@@ -876,7 +892,7 @@ export const server = createServer(async (req, res) => {
       const buf = Buffer.from(await r.arrayBuffer());
       res.writeHead(r.status, { 'content-type': r.headers.get('content-type') || 'application/json', 'access-control-allow-origin': '*', 'cache-control': 'no-store' });
       return res.end(buf);
-    } catch (e) { return send(res, 502, { error: 'OmniRoute unreachable: ' + String(e.message || e) }); }
+    } catch { return send(res, 502, { error: 'OmniRoute unreachable' }); }
     finally { clearTimeout(t); }
   }
 
@@ -891,8 +907,8 @@ export const server = createServer(async (req, res) => {
   // Hermes router + OpenClaw support panels: status probe (identity-checked when JSON,
   // reachable+TCP when the service only serves HTML) and a session-stripping reverse proxy
   // so an embedded view never leaks a Set-Cookie / auth header to the browser.
-  if (p === '/api/hermes-status') return send(res, 200, await probeService({ url: HERMES_URL + '/api/health', host: T5500_IP, port: 9119 }));
-  if (p === '/api/openclaw-status') return send(res, 200, await probeService({ url: OPENCLAW_URL + '/healthz', host: ALIENWARE_IP, port: 18789 }));
+  if (p === '/api/hermes-status') return send(res, 200, sanitizeServiceProbe(await probeService({ url: HERMES_URL + '/api/health', host: T5500_IP, port: 9119 })));
+  if (p === '/api/openclaw-status') return send(res, 200, sanitizeServiceProbe(await probeService({ url: OPENCLAW_URL + '/healthz', host: ALIENWARE_IP, port: 18789 })));
   if (p === '/api/proxy/hermes' || p.startsWith('/api/proxy/hermes/')) return proxyStripped(req, res, url, HERMES_URL, '/api/proxy/hermes');
   if (p === '/api/proxy/openclaw' || p.startsWith('/api/proxy/openclaw/')) return proxyStripped(req, res, url, OPENCLAW_URL, '/api/proxy/openclaw');
   if (p === '/api/heartbeat') return send(res, 200, readHeartbeat({ jsonPath: HEARTBEAT_JSON_PATH, logPath: HEARTBEAT_LOG_PATH }));
@@ -926,7 +942,10 @@ export const server = createServer(async (req, res) => {
   if (p === '/api/crosslisting/status') {
     return send(res, 200, await crosslistingStatusSummary());
   }
-  if (p === '/api/news') return send(res, 200, await newsService.getTopStories());
+  if (p === '/api/news') {
+    const news = await newsService.getTopStories();
+    return send(res, 200, news.ok ? news : { ok: false, source: news.source, items: [], error: 'News feed unavailable' });
+  }
   if (p === '/api/trends') return send(res, 200, trendsSummary());
   if (p === '/api/house') return send(res, 200, await houseSummary({ force: url.searchParams.get('force') === '1' }));
   if (p === '/api/sentry') return send(res, 200, await getSentrySnapshot({ force: url.searchParams.get('force') === '1' }));
@@ -1071,7 +1090,7 @@ export const server = createServer(async (req, res) => {
   // one read. Redacted like every other route; the GitHub token never leaves this file.
   if (p === '/api/boardroom' && req.method === 'GET') {
     try { return send(res, 200, redact(await buildBoardRoom())); }
-    catch (e) { return send(res, 502, { error: 'Board Room unavailable: ' + String((e && e.message) || e) }); }
+    catch (e) { return send(res, 502, { error: 'Board Room unavailable: ' + ((e && typeof e.code === 'string' && e.code) || 'unavailable') }); }
   }
 
   // Architecture panel (Phase E, unit 3): typed JSON from the House stage
@@ -1193,7 +1212,7 @@ export const server = createServer(async (req, res) => {
       return res.end(r.buffer);
     }
     if (r.engine === null) { res.writeHead(204, { 'x-tts-reason': String(r.reason || '').slice(0, 200) }); return res.end(); }
-    return send(res, 502, { error: r.error || 'tts failed', engine: r.engine });
+    return send(res, 502, { error: 'tts failed', engine: r.engine });
   }
   if (p === '/api/tts/voices') return send(res, 200, { voices: EDGE_VOICES, default: 'en-US-GuyNeural' });
 
