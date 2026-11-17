@@ -110,7 +110,7 @@ FACTS = [
             r"^\.agents/skills/(?:hallmark|impeccable|security-audit|microsoft-foundry)/.*$",
             r"^tests/doctrine-address-guard\.test\.mjs$",
             r"^ops/fleet/tunnel-targets\.test\.mjs$",
-            r"^mission-os/(?:backend|ops-backend|ops-dashboard)\.test\.mjs$",
+            r"^mission-os/(?:backend|ops-backend|ops-dashboard|shell-api|node-watchdog|stream-redact)\.test\.mjs$",
             r"^apps/hermes-leadgen/test/hermes-leadgen\.test\.js$",
             r"^services/onemin-shim/test\.mjs$",
             r"^mission-control/tests/.*\.test\.js$",
