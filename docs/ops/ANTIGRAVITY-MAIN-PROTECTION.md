@@ -29,7 +29,15 @@ Enforce identical repository-ruleset guarantees on `Trollz1004/ANTIGRAVITY` (`ma
 | Block Force Push (`non_fast_forward`) | Enabled | Enabled |
 | Require Pull Request (`pull_request`) | Enabled (`allowed_merge_methods: ["merge"]`) | Enabled (`allowed_merge_methods: ["merge"]`) |
 | Unattributed Change Extra Approval | `true` | `true` |
-| Required Status Checks | `Local smoke and contract checks`, `Engine headless suite` | `quality-gate`, `doctrine-check`, `guardian-check`, `Scan for forbidden patterns` |
+| Required Status Checks (Pre-`-Apply` Live) | `Local smoke and contract checks`, `Engine headless suite` | `quality-gate`, `doctrine-check`, `guardian-check`, `Scan for forbidden patterns` |
+| Required Status Checks (Canonical Target) | `Local smoke and contract checks`, `Engine headless suite` | `quality-gate`, `doctrine-check`, `guardian-check`, `Scan for forbidden patterns`, `eslint-prettier-check`, `code`, `Validate adapter manifests`, `Cockpit never on a public path`, `Enforce Mission Control role wall` |
+
+### Why These Checks (and Not Path-Filtered Checks)
+
+- **`code`** (`.github/workflows/ci-validate.yml`) is the aggregator gate that passes only when all 7 upstream jobs succeed: `validate`, `eslint-prettier-check`, `black-ruff-check`, `run-tests`, `js-tests`, `guardian-check`, and `owasp-dependency-check`.
+- **`eslint-prettier-check`** and **`guardian-check`** are also required explicitly alongside `quality-gate`, `doctrine-check`, and `Scan for forbidden patterns`.
+- **`Validate adapter manifests`**, **`Cockpit never on a public path`**, and **`Enforce Mission Control role wall`** (`.github/workflows/policy-guard.yml`) run unconditionally on every PR to `main` and fail closed (`Pre-commit validation` is excluded because it runs with `|| true`).
+- Path-filtered checks (`Flag MD + config drift (do NOT auto-resolve)`, `dashboard`/`api`/`compliance`, `Unit and static gate`) are intentionally excluded so PRs touching unrelated paths are not stuck waiting on skipped checks.
 
 ---
 
@@ -76,7 +84,12 @@ Enforce identical repository-ruleset guarantees on `Trollz1004/ANTIGRAVITY` (`ma
           { "context": "quality-gate" },
           { "context": "doctrine-check" },
           { "context": "guardian-check" },
-          { "context": "Scan for forbidden patterns" }
+          { "context": "Scan for forbidden patterns" },
+          { "context": "eslint-prettier-check" },
+          { "context": "code" },
+          { "context": "Validate adapter manifests" },
+          { "context": "Cockpit never on a public path" },
+          { "context": "Enforce Mission Control role wall" }
         ]
       }
     }
