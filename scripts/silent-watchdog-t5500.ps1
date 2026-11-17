@@ -1,12 +1,13 @@
-# Silent Watchdog for T5500 - ZERO popups, ZERO terminal windows
+﻿# Silent Watchdog for T5500 - ZERO popups, ZERO terminal windows
 # Runs as scheduled task with -WindowStyle Hidden
-# Pure background monitoring of Mission Control :3100, OmniRoute :20128, Date App :3200
+# Background monitoring of Mission OS :3130, OmniRoute :20128, Date App :3200/:8000, Hermes :8643/:9119 (ops/fleet/fleet-map.json)
 
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
 param(
-    [string]$RepoRoot = "F:\ANTIGRAVITY",
+    [string]$RepoRoot = "C:\ANTIGRAVITY",
+    [string]$NodeLanIp = $(if ($env:NODE_LAN_IP) { $env:NODE_LAN_IP } else { "192.168.0.15" }),
     [int]$CHECK_INTERVAL = 30,  # seconds between health checks
     [int]$FAILURE_THRESHOLD = 3  # failures before restart
 )
@@ -33,7 +34,7 @@ function Test-Port {
     param([int]$Port, [string]$Service)
     try {
         $tcp = New-Object System.Net.Sockets.TcpClient
-        $tcp.Connect("127.0.0.1", $Port)
+        $tcp.Connect($NodeLanIp, $Port)
         $tcp.Close()
         return $true
     } catch {
@@ -41,37 +42,34 @@ function Test-Port {
     }
 }
 
-function Start-MissionControl {
-    Log "Attempting to start Mission Control on :3100..."
+function Start-MissionOS {
+    Log "Attempting to start Mission OS on :3130..."
     try {
-        # Kill any existing process on :3100
-        $proc = Get-NetTCPConnection -LocalPort 3100 -ErrorAction SilentlyContinue
+        $proc = Get-NetTCPConnection -LocalPort 3130 -ErrorAction SilentlyContinue
         if ($proc) {
             Get-Process -Id $proc.OwningProcess -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
             Start-Sleep -Seconds 2
         }
-        
-        # Start Mission Control via Python - NO WINDOW
-        $pythonPath = (Get-Command python -ErrorAction SilentlyContinue).Source
-        if (-not $pythonPath) { Log "ERROR: Python not found"; return }
-        
-        $backendPath = "$RepoRoot\backend"
-        $proc = Start-Process -FilePath $pythonPath -ArgumentList "-m uvicorn server:app --host 127.0.0.1 --port 3100 --log-level error" `
-            -WorkingDirectory $backendPath `
+
+        $startScript = "$RepoRoot\scripts\start-mission-control.ps1"
+        if (-not (Test-Path $startScript)) { Log "ERROR: start-mission-control.ps1 not found"; return $false }
+
+        $proc = Start-Process -FilePath "powershell.exe" `
+            -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$startScript`" -RepoRoot `"$RepoRoot`" -Port 3130" `
             -WindowStyle Hidden `
             -PassThru `
             -ErrorAction SilentlyContinue
-        
+
         if ($proc) {
-            Log "Mission Control started (PID: $($proc.Id))"
+            Log "Mission OS started (PID: $($proc.Id))"
             Start-Sleep -Seconds 3
-            if (Test-Port 3100 "Mission Control") {
-                Log "✓ Mission Control ONLINE on :3100"
+            if (Test-Port 3130 "Mission OS") {
+                Log "Mission OS ONLINE on $NodeLanIp:3130"
                 return $true
             }
         }
     } catch {
-        Log "ERROR starting Mission Control: $_"
+        Log "ERROR starting Mission OS: $_"
     }
     return $false
 }
@@ -79,29 +77,26 @@ function Start-MissionControl {
 function Start-OmniRoute {
     Log "Attempting to start OmniRoute on :20128..."
     try {
-        # Kill existing process
         $proc = Get-NetTCPConnection -LocalPort 20128 -ErrorAction SilentlyContinue
         if ($proc) {
             Get-Process -Id $proc.OwningProcess -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
             Start-Sleep -Seconds 2
         }
-        
-        # Try Docker restart first
+
         $dockerProc = Start-Process -FilePath "docker" -ArgumentList "restart omni-router" `
             -WindowStyle Hidden `
             -PassThru `
             -ErrorAction SilentlyContinue
-        
+
         if ($dockerProc) {
             Start-Sleep -Seconds 5
             if (Test-Port 20128 "OmniRoute") {
-                Log "✓ OmniRoute ONLINE on :20128 (via Docker)"
+                Log "OmniRoute ONLINE on $NodeLanIp:20128 (via Docker)"
                 return $true
             }
         }
-        
-        Log "Docker OmniRoute restart failed or port not responding, trying manual startup"
-        # Fallback: npm run omniroute:start if needed
+
+        Log "Docker OmniRoute restart failed or port not responding"
     } catch {
         Log "ERROR starting OmniRoute: $_"
     }
@@ -112,59 +107,49 @@ function Start-OmniRoute {
 # MAIN WATCHDOG LOOP - Pure background, no console, no output
 # ============================================================================
 
-Log "=== T5500 Silent Watchdog Started ==="
+Log "=== T5500 Silent Watchdog Started ($NodeLanIp) ==="
 
 $serviceStates = @{
-    "OmniRoute"       = @{Port=20128; Failures=0; LastCheck=$null; Restart=$true; Service="omni-router"}
-    "Mission Control" = @{Port=3100;  Failures=0; LastCheck=$null; Restart=$true; Service="mission-control"}
-    "DateApp"         = @{Port=3200;  Failures=0; LastCheck=$null; Restart=$true; Service="dateapp-frontend"}
-    "DateApp Backend" = @{Port=8000;  Failures=0; LastCheck=$null; Restart=$false; Service="dateapp-backend"}
-    "Paperclip"       = @{Port=3120;  Failures=0; LastCheck=$null; Restart=$false; Service="paperclip"}
-    "Hermes"          = @{Port=9119;  Failures=0; LastCheck=$null; Restart=$false; Service="hermes"}
-    "OpenClaw"        = @{Port=18789; Failures=0; LastCheck=$null; Restart=$false; Service="openclaw"}
-    "Ollama"          = @{Port=11434; Failures=0; LastCheck=$null; Restart=$false; Service="ollama"}
+    "OmniRoute"        = @{Port=20128; Failures=0; LastCheck=$null; Restart=$true;  Service="omni-router"}
+    "Mission OS"       = @{Port=3130;  Failures=0; LastCheck=$null; Restart=$true;  Service="mission-os"}
+    "DateApp"          = @{Port=3200;  Failures=0; LastCheck=$null; Restart=$false; Service="dateapp-frontend"}
+    "DateApp Backend"  = @{Port=8000;  Failures=0; LastCheck=$null; Restart=$false; Service="dateapp-backend"}
+    "Hermes API"       = @{Port=8643;  Failures=0; LastCheck=$null; Restart=$false; Service="hermes-api"}
+    "Hermes Dashboard" = @{Port=9119;  Failures=0; LastCheck=$null; Restart=$false; Service="hermes"}
+    "Ollama"           = @{Port=11434; Failures=0; LastCheck=$null; Restart=$false; Service="ollama"}
 }
 
 $startTime = Get-Date
 $maxDuration = 8 * 3600  # 8 hours
 
 while ((Get-Date).Subtract($startTime).TotalSeconds -lt $maxDuration) {
-    $allHealthy = $true
-    
     foreach ($service in $serviceStates.Keys) {
         $state = $serviceStates[$service]
         $port = $state.Port
-        
+
         if (Test-Port $port $service) {
             $state.Failures = 0
             if (-not $state.LastCheck -or $state.LastCheck -ne "OK") {
-                Log "$service (:$port) is ONLINE"
+                Log "$service ($NodeLanIp`:$port) is ONLINE"
                 $state.LastCheck = "OK"
             }
         } else {
             $state.Failures++
             $state.LastCheck = "DOWN"
-            $allHealthy = $false
-            
-            Log "$service (:$port) OFFLINE - Failure count: $($state.Failures)/$FAILURE_THRESHOLD"
-            
-            # Restart after threshold (only if service is marked for restart)
+            Log "$service ($NodeLanIp`:$port) OFFLINE - Failure count: $($state.Failures)/$FAILURE_THRESHOLD"
+
             if ($state.Failures -ge $FAILURE_THRESHOLD -and $state.Restart) {
-                Log "⚠ $($service) threshold reached, attempting restart"
-                
+                Log "$($service) threshold reached, attempting restart"
                 switch ($service) {
-                    "Mission Control" { Start-MissionControl }
-                    "OmniRoute"       { Start-OmniRoute }
-                    "DateApp"         { Log "DateApp (:3200) restart: manual intervention required" }
-                    default           { Log "No restart logic for $service — monitoring only" }
+                    "Mission OS" { Start-MissionOS | Out-Null }
+                    "OmniRoute"  { Start-OmniRoute | Out-Null }
+                    default      { Log "No restart logic for $service — monitoring only" }
                 }
-                
                 $state.Failures = 0
             }
         }
     }
-    
-    # Sleep silently - NO output to console
+
     Start-Sleep -Seconds $CHECK_INTERVAL
 }
 

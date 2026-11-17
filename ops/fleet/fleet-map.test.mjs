@@ -15,36 +15,39 @@ const GUARDIAN_PY = path.resolve(HERE, '..', '..', 'scripts', 'clawx-control', '
 const PY_MODULE = path.join(HERE, 'fleet_map.py');
 
 const EXPECTED_T5500 = [
-  ['ssh', 22, 'lan', null, '0.0.0.0'],
-  ['mission-os', 3130, 'lan-guarded', 'MISSION_OS_TOKEN', '0.0.0.0'],
-  ['dateapp-frontend', 3200, 'lan', null, '0.0.0.0'],
-  ['postgres', 5432, 'this machine only', null, '127.0.0.1'],
-  ['redis', 6379, 'this machine only', null, '127.0.0.1'],
-  ['odysseus', 7011, 'lan-guarded', 'MISSION_OS_TOKEN', '0.0.0.0'],
-  ['dateapp-api', 8000, 'lan', null, '0.0.0.0'],
-  ['hermes-gateway', 8643, 'lan-guarded', 'MISSION_OS_TOKEN', '0.0.0.0'],
-  ['hermes-dashboard', 9119, 'lan-guarded', 'MISSION_OS_TOKEN', '0.0.0.0'],
-  ['domains-server', 9160, 'lan', null, '0.0.0.0'],
-  ['ollama-t5500', 11434, 'lan-guarded', 'OLLAMA_GUARD_TOKEN', '0.0.0.0'],
-  ['omniroute', 20128, 'lan-guarded', 'OMNIROUTE_API_KEY', '0.0.0.0'],
-  ['obsidian-t5500', 27123, 'lan-guarded', 'OBSIDIAN_REST_API_KEY', '0.0.0.0'],
-  ['ai-memory', 49374, 'lan-guarded', 'AI_MEMORY_TOKEN', '0.0.0.0'],
+  ['mission-os', 3130, 'lan-guarded', 'FLEET_SHARED_TOKEN', '0.0.0.0'],
+  ['date-app-web', 3200, 'lan', '', '0.0.0.0'],
+  ['date-app-api', 8000, 'lan', '', '0.0.0.0'],
+  ['t5500-marketing-gateway', 8377, 'lan', 'API_SERVER_KEY', '0.0.0.0'],
+  ['hermes-api', 8643, 'lan-guarded', 'FLEET_SHARED_TOKEN', '0.0.0.0'],
+  ['t5500-hermes-dashboard', 9119, 'lan', '', '0.0.0.0'],
+  ['t5500-live-npc-lab', 9127, 'lan', '', '0.0.0.0'],
+  ['domains-server', 9160, 'lan', '', '0.0.0.0'],
+  ['t5500-fleet-status', 9165, 'lan', '', '0.0.0.0'],
+  ['t5500-ollama', 11434, 'lan-guarded', 'FLEET_SHARED_TOKEN', '0.0.0.0'],
+  ['omniroute', 20128, 'lan', 'OMNIROUTE_API_KEY', '192.168.0.15'],
+  ['ai-memory', 49374, 'lan', '', '0.0.0.0'],
+  ['t5500-postgres', 5432, 'this machine only', 'POSTGRES_PASSWORD', '127.0.0.1'],
+  ['t5500-redis', 6379, 'this machine only', '', '127.0.0.1'],
+  ['t5500-obsidian-rest', 27123, 'this machine only', 'OBSIDIAN_API_KEY', '127.0.0.1'],
 ];
 
 const EXPECTED_ALIENWARE = [
-  ['ssh-alienware', 22, 'lan', null, '0.0.0.0'],
-  ['preview-4315', 4315, 'lan', null, '0.0.0.0'],
-  ['swarm-command', 8000, 'lan-guarded', 'SWARM_COMMAND_TOKEN', '0.0.0.0'],
-  ['free-claude-code', 8082, 'lan-guarded', 'FCC_GUARD_TOKEN', '0.0.0.0'],
-  ['opsis-studio', 8390, 'lan', null, '0.0.0.0'],
-  ['leadgen-desk', 8392, 'lan', null, '0.0.0.0'],
-  ['panda-router', 8765, 'lan-guarded', 'PANDA_ROUTER_TOKEN', '0.0.0.0'],
-  ['npc-lab', 9127, 'lan', null, '0.0.0.0'],
-  ['dreamops-bridge', 9133, 'lan', null, '0.0.0.0'],
-  ['dream-engine', 9180, 'lan', null, '0.0.0.0'],
-  ['ollama-alienware', 11434, 'lan-guarded', 'OLLAMA_GUARD_TOKEN', '0.0.0.0'],
-  ['vite-hmr', 24678, 'lan', null, '0.0.0.0'],
-  ['obsidian-alienware', 27123, 'lan-guarded', 'OBSIDIAN_REST_API_KEY', '0.0.0.0'],
+  ['swarm-command', 8000, 'lan-guarded', 'FLEET_SHARED_TOKEN', '0.0.0.0'],
+  ['free-claude-code', 8082, 'lan-guarded', 'FLEET_SHARED_TOKEN', '0.0.0.0'],
+  ['opsis-studio', 8390, 'lan', '', '0.0.0.0'],
+  ['media-worker', 8391, 'lan', '', '0.0.0.0'],
+  ['hermes-leadgen', 8392, 'lan-guarded', 'HERMES_LEADGEN_TOKEN', '0.0.0.0'],
+  ['panda-router', 8765, 'lan-guarded', 'FLEET_SHARED_TOKEN', '0.0.0.0'],
+  ['alienware-hermes-dashboard', 9119, 'lan', '', '0.0.0.0'],
+  ['live-npc-lab', 9127, 'lan', '', '0.0.0.0'],
+  ['dreamops-bridge', 9133, 'lan', '', '0.0.0.0'],
+  ['airi-dashboard', 9150, 'lan', '', '0.0.0.0'],
+  ['alienware-fleet-status', 9165, 'lan', '', '0.0.0.0'],
+  ['dream-engine', 9180, 'lan-guarded', 'DREAM_ENGINE_TOKEN', '0.0.0.0'],
+  ['crosslisting', 3000, 'lan', '', '0.0.0.0'],
+  ['alienware-ollama', 11434, 'lan-guarded', 'FLEET_SHARED_TOKEN', '0.0.0.0'],
+  ['alienware-obsidian-rest', 27123, 'this machine only', 'OBSIDIAN_API_KEY', '127.0.0.1'],
   ['alienware-obsidian-mcp', 27200, 'lan-guarded', 'FLEET_SHARED_TOKEN', '0.0.0.0'],
 ];
 
@@ -55,48 +58,65 @@ test('fleet-map.json defines ONLY t5500 and alienware with exact services, binds
   assert.ok(!raw.includes(['192', '168', '0', '8'].join('.')), 'fleet-map.json must never contain retired .8 IP');
 
   const data = JSON.parse(raw);
+  assert.equal(data.spine, 'docs/house/SPINE.md');
   assert.deepEqual(Object.keys(data.nodes).sort(), ['alienware', 't5500']);
   assert.equal(data.nodes.t5500.ip, '192.168.0.15');
   assert.equal(data.nodes.alienware.ip, '192.168.0.40');
+  assert.ok(Array.isArray(data.nodes.t5500.repos) && data.nodes.t5500.repos.includes('Trollz1004/ANTIGRAVITY'));
+  assert.ok(Array.isArray(data.nodes.alienware.harnesses) && data.nodes.alienware.harnesses.includes('gemini'));
+  assert.ok(Array.isArray(data.services), 'canonical fleet-map.json uses array services schema');
 
-  for (const [id, port, scope, tokenEnv, bind] of EXPECTED_T5500) {
-    const svc = data.services[id];
+  const byId = new Map(data.services.map((svc) => [svc.id, svc]));
+
+  for (const [id, port, scope, authTokenEnv, bind] of EXPECTED_T5500) {
+    const svc = byId.get(id);
     assert.ok(svc, `Missing t5500 service ${id}`);
     assert.equal(svc.node, 't5500');
     assert.equal(svc.port, port);
     assert.equal(svc.scope, scope);
-    assert.equal(svc.tokenEnv, tokenEnv);
+    assert.equal(svc.authTokenEnv, authTokenEnv);
     assert.equal(svc.bind, bind);
     assert.equal(svc.host, scope === 'this machine only' || scope === 'local-only' ? '127.0.0.1' : '192.168.0.15');
   }
 
-  for (const [id, port, scope, tokenEnv, bind] of EXPECTED_ALIENWARE) {
-    const svc = data.services[id];
+  for (const [id, port, scope, authTokenEnv, bind] of EXPECTED_ALIENWARE) {
+    const svc = byId.get(id);
     assert.ok(svc, `Missing alienware service ${id}`);
     assert.equal(svc.node, 'alienware');
     assert.equal(svc.port, port);
     assert.equal(svc.scope, scope);
-    assert.equal(svc.tokenEnv, tokenEnv);
+    assert.equal(svc.authTokenEnv, authTokenEnv);
     assert.equal(svc.bind, bind);
-    assert.equal(svc.host, '192.168.0.40');
+    assert.equal(svc.host, scope === 'this machine only' || scope === 'local-only' ? '127.0.0.1' : '192.168.0.40');
   }
 
-  assert.equal(Object.keys(data.services).length, EXPECTED_T5500.length + EXPECTED_ALIENWARE.length);
+  assert.equal(data.services.length, EXPECTED_T5500.length + EXPECTED_ALIENWARE.length);
 });
 
-test('fleet-map.mjs resolves nodes, service URLs, and bind hosts', async () => {
+test('fleet-map.mjs resolves nodes, spine, service URLs, and bind hosts', async () => {
   const mod = await import('./fleet-map.mjs');
+  assert.equal(mod.getSpinePath(), 'docs/house/SPINE.md');
   assert.equal(mod.getNodeIp('t5500'), '192.168.0.15');
   assert.equal(mod.getNodeIp('alienware'), '192.168.0.40');
+  assert.equal(mod.getNodeHost('t5500'), '192.168.0.15');
+  assert.equal(mod.getNodeHost('alienware'), '192.168.0.40');
+  assert.deepEqual(mod.getAllowedNodeHosts().sort(), ['192.168.0.15', '192.168.0.40']);
+  assert.ok(mod.getNodeRepos('alienware').includes('Trollz1004/dream-online'));
+  assert.ok(mod.getNodeHarnesses('t5500').includes('hermes'));
   assert.equal(mod.getServiceUrl('mission-os'), 'http://192.168.0.15:3130');
   assert.equal(mod.getServiceUrl('mission-os', '/api/v1/status'), 'http://192.168.0.15:3130/api/v1/status');
   assert.equal(mod.getServiceUrl('domains-server', '/health'), 'http://192.168.0.15:9160/health');
   assert.equal(mod.getServiceUrl('swarm-command', '/health'), 'http://192.168.0.40:8000/health');
+  assert.equal(mod.getServiceUrl('hermes-gateway', '/health'), 'http://192.168.0.15:8643/health');
+  assert.equal(mod.getServicePort('mission-os'), 3130);
+  assert.equal(mod.getServiceBindHost('mission-os'), '0.0.0.0');
   assert.equal(mod.getBindHost('mission-os'), '0.0.0.0');
   assert.equal(mod.getBindHost('postgres'), '127.0.0.1');
   assert.equal(mod.getBindHost('redis'), '127.0.0.1');
   assert.equal(mod.listServicesByNode('t5500').length, EXPECTED_T5500.length);
   assert.equal(mod.listServicesByNode('alienware').length, EXPECTED_ALIENWARE.length);
+  assert.equal(mod.getServicesByNode('t5500').length, EXPECTED_T5500.length);
+  assert.ok(mod.getServicesByScope('this machine only').length >= 3);
 });
 
 test('fleet_map.py resolves nodes, service URLs, and bind hosts identically', () => {
@@ -110,8 +130,12 @@ test('fleet_map.py resolves nodes, service URLs, and bind hosts identically', ()
         `sys.path.insert(0, ${JSON.stringify(HERE)})`,
         'import fleet_map',
         'print(json.dumps({',
+        '  "spine": fleet_map.get_spine_path(),',
         '  "t5500": fleet_map.get_node_ip("t5500"),',
         '  "alienware": fleet_map.get_node_ip("alienware"),',
+        '  "t5500_repos": fleet_map.get_node_repos("t5500"),',
+        '  "aw_harnesses": fleet_map.get_node_harnesses("alienware"),',
+        '  "allowed_hosts": sorted(fleet_map.get_allowed_node_hosts()),',
         '  "mos": fleet_map.get_service_url("mission-os", "/api/v1/status"),',
         '  "pg_bind": fleet_map.get_bind_host("postgres"),',
         '  "mos_bind": fleet_map.get_bind_host("mission-os"),',
@@ -121,13 +145,15 @@ test('fleet_map.py resolves nodes, service URLs, and bind hosts identically', ()
     { encoding: 'utf8', timeout: 8000 }
   ).trim();
   const parsed = JSON.parse(out);
-  assert.deepEqual(parsed, {
-    t5500: '192.168.0.15',
-    alienware: '192.168.0.40',
-    mos: 'http://192.168.0.15:3130/api/v1/status',
-    pg_bind: '127.0.0.1',
-    mos_bind: '0.0.0.0',
-  });
+  assert.equal(parsed.spine, 'docs/house/SPINE.md');
+  assert.ok(parsed.t5500_repos.includes('Trollz1004/ANTIGRAVITY'));
+  assert.ok(parsed.aw_harnesses.includes('gemini'));
+  assert.deepEqual(parsed.allowed_hosts, ['192.168.0.15', '192.168.0.40']);
+  assert.equal(parsed.t5500, '192.168.0.15');
+  assert.equal(parsed.alienware, '192.168.0.40');
+  assert.equal(parsed.mos, 'http://192.168.0.15:3130/api/v1/status');
+  assert.equal(parsed.pg_bind, '127.0.0.1');
+  assert.equal(parsed.mos_bind, '0.0.0.0');
 });
 
 test('Get-FleetEndpoint.ps1 resolves service URLs, node IPs, and bind hosts via PowerShell', () => {

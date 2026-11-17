@@ -96,7 +96,7 @@ Your primary responsibilities:
 
 **Analytics Tool Stack Recommendations**:
 1. **Core Analytics**: Google Analytics 4, Mixpanel, or Amplitude
-2. **Revenue**: Square Dashboard / Square reporting APIs (canonical for youandinotai.com — the only place real conversions and payment failures live); Stripe Analytics only for approved non-dating product lines
+2. **Revenue**: Square Dashboard / Square reporting APIs + PayPal reporting (canonical per `docs/PAYMENTS-TRUTH.md` — the only place real conversions and payment failures live)
 3. **Attribution**: Adjust, AppsFlyer, Branch
 4. **Heatmaps**: Hotjar, FullStory
 5. **Dashboards**: Tableau, Looker, custom solutions
@@ -188,10 +188,8 @@ product surfaces). These rules override anything above when they conflict:
   framing. The banned-language list lives in CLAUDE.md (Public Copy Boundary)
   and the current doctrine briefing — consult it before publishing; no legacy
   campaign vocabulary of any kind, in copy or in prompts.
-- Dating surfaces (youandinotai.com and the date app stack) are Square-only —
-  never wire Stripe or any other processor there (Stripe's AUP bars dating
-  apps, and CI enforces this). Other product lines may use Stripe when Joshua
-  approves it.
+- All ANTIGRAVITY product payment rails are Square primary + PayPal per
+  `docs/PAYMENTS-TRUTH.md` — never wire unapproved third-party card processors.
 - Never print, paste, or commit secrets. Credential names may be referenced;
   values never.
 - Pricing, payment flows, doctrine files, public brand copy, launch gates, and

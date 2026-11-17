@@ -1,50 +1,15 @@
-# AGENTS.md
+# AGENTS.md — Retired Third-Node Record
 
-Operating contract for any agent running on node 9020 (i7k32GB1050ti). Read this before doing anything else. Human: Josh. Repo root: C:/ANTIGRAVITY/nodes/9020.
+**STATUS: RETIRED HARDWARE NODE RECORD (DO NOT RUN OR SCHEDULE WORKLOADS HERE).**
 
-## Core rules
+This legacy node has been permanently decommissioned. The active `Trollz1004` fleet runs on **two nodes only** as defined in `ops/fleet/fleet-map.json` and `docs/house/NODES.md`:
+- **Alienware** (`192.168.0.40`): Workshop, DREAM Engine (`:9180`), Lead-Gen Studio (`:8392`), Media/TTS Worker (`:8391`), OPSis Studio (`:8390`), Free Claude Code (`:8082`).
+- **T5500** (`192.168.0.15`): Front-of-House, Mission OS (`:3130`), OmniRoute (`:20128`), Hermes (`:8643` / `:9119`), Shared `ai-memory` MCP (`:49374`), Production Domains.
 
-- Read before write. Never modify a file you have not read in this session.
-- Append over rewrite for dated files. Corrections get appended, never rewritten.
-- Never delete or overwrite unversioned source. The business-exchange source (%USERPROFILE%/business-exchange and C:/node-workloads/9020/business-exchange) is UNVERSIONED. Duplicates of unversioned source are backups, not clutter — never "clean up" duplicates. If you must touch it: git init first, then tell Josh.
-- No secrets in files, ever. No token, password, or key goes into any file. Reference secrets by name and location only. If you FIND a plaintext secret anywhere: stop and report to Josh.
+## Disposition & Governance
 
-## Content scope (2026-08-21 directive)
-
-- This node is strictly a marketing/content engine. No payments, wallets, or treasury routing — ever.
-- No tax, deduction, or revenue-split mechanics in any prompt, memory file, or output. If you find such content, strip it and report.
-- Campaigns are 100% product marketing: YouAndINotAI (human verification, anti-bot matching, community boards, volunteer meetups), Dream Online (persistent-memory AI NPCs, kid-safe, free-to-play + cosmetics), Business Exchange & AI Solutions (utility software).
-- Zero charity buzzwords, zero solicitation language (FL §496.405 compliance).
-
-## Git authority
-
-- Harness agents (OpenClaw, OpenCode, Hermes / OPSis) have ZERO push authority to git remotes. Local commits only; pushing is reserved for Josh or an agent he explicitly authorizes per-push.
-
-## Approval
-
-- Destructive or outward actions — posting, sending, publishing, deleting, pushing — require Josh's explicit go-ahead each time. Approval never carries forward from a previous action.
-- ALL marketing content posts only after Josh approves. No agent posts autonomously. Josh is the judge of marketing content.
-
-## Memory format
-
-- One fact per file in `memory/`.
-- Frontmatter fields: `name`, `description`, `type`, `created`.
-- `type` is one of: `user`, `feedback`, `project`, `reference`.
-- Absolute dates only (e.g. 2026-08-21), never "yesterday" or "last week".
-- Update existing facts, don't duplicate them.
-- Index each fact as one line in [[MEMORY]] (MEMORY.md).
-
-## Journal
-
-- Daily journal lives at `memory/YYYY-MM-DD.md` and is append-only.
-- Corrections are appended as new entries, never rewritten in place.
-
-## Graph
-
-- Every [[wikilink]] also gets an edge in `graph/edges.jsonl`.
-- `rel` is one of: `relates-to`, `depends-on`, `supersedes`, `owned-by`, `runs-on`, `blocks`.
-- Dangling links are TODOs, not errors.
-
-See also: [[IDENTITY]], [[USER]], [[TOOLS]].
+- Any active content, product marketing, or operations guidance lives under `docs/standards/AGENT-STANDARD.md`, `docs/standards/ALIENWARE-SOUL.md`, and `ops/fleet/fleet-map.json`.
+- Never configure, target, mount, or restore services for this retired node.
+- Product-only marketing scope applies fleet-wide (`YouAndINotAI`, `DREAM Online`, `OnlineRecycle`).
 - House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
 - Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

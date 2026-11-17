@@ -15,6 +15,6 @@ pattern: .*
 - [ ] Everything landed is **committed with an explicit pathspec and pushed** — Joshua:
       *"any thing you do needs to be pushed incase i dont see this"*
 - [ ] The node ledger got a line: `ops/buzz/ledger.sh "<what> · <where> · <sha>"`
-- [ ] No secret, token, or masked fragment went into a repo file, journal, or Paperclip config row
+- [ ] No secret, token, or masked fragment went into a repo file, journal, or agent config row
 
 If any box is unchecked, do it now, then stop.

@@ -9,6 +9,10 @@ DEFAULT_FLEET_MAP_PATH = Path(__file__).resolve().parent / "fleet-map.json"
 _CACHED_DEFAULT_MAP: dict[str, Any] | None = None
 
 SERVICE_ALIASES: dict[str, list[str]] = {
+    "lead-gen": ["hermes-leadgen"],
+    "leadgen": ["hermes-leadgen"],
+    "opsis-cut-and-reach-studio": ["opsis-studio"],
+    "ollama": ["alienware-ollama"],
     "postgres": ["t5500-postgres"],
     "t5500-postgres": ["postgres"],
     "redis": ["t5500-redis"],
@@ -122,6 +126,52 @@ def get_node_ip(node_id: str, fleet_map: dict[str, Any] | None = None) -> str:
     return str(get_node(node_id, fleet_map)["ip"])
 
 
+def get_spine_path(fleet_map: dict[str, Any] | None = None) -> str:
+    fmap = fleet_map if fleet_map is not None else load_fleet_map()
+    spine = str(fmap.get("spine") or "").strip()
+    if not spine:
+        raise KeyError('Missing "spine" path in fleet-map.json')
+    return spine
+
+
+def get_node_host(node_id: str, fleet_map: dict[str, Any] | None = None) -> str:
+    return str(get_node(node_id, fleet_map)["host"])
+
+
+def get_node_repos(node_id: str, fleet_map: dict[str, Any] | None = None) -> list[str]:
+    node = get_node(node_id, fleet_map)
+    repos = node.get("repos")
+    return list(repos) if isinstance(repos, list) else []
+
+
+def get_node_harnesses(node_id: str, fleet_map: dict[str, Any] | None = None) -> list[str]:
+    node = get_node(node_id, fleet_map)
+    harnesses = node.get("harnesses")
+    return list(harnesses) if isinstance(harnesses, list) else []
+
+
+def get_allowed_node_hosts(fleet_map: dict[str, Any] | None = None) -> list[str]:
+    fmap = fleet_map if fleet_map is not None else load_fleet_map()
+    raw_nodes = fmap.get("nodes")
+    items: list[Any]
+    if isinstance(raw_nodes, list):
+        items = raw_nodes
+    elif isinstance(raw_nodes, dict):
+        items = list(raw_nodes.values())
+    else:
+        items = []
+    hosts: list[str] = []
+    seen: set[str] = set()
+    for node in items:
+        if not isinstance(node, dict):
+            continue
+        val = str(node.get("host") or node.get("ip") or "").strip()
+        if val and val not in seen:
+            seen.add(val)
+            hosts.append(val)
+    return hosts
+
+
 def list_all_services(fleet_map: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     fmap = fleet_map if fleet_map is not None else load_fleet_map()
     raw_services = fmap.get("services")
@@ -140,25 +190,54 @@ def list_all_services(fleet_map: dict[str, Any] | None = None) -> list[dict[str,
     return []
 
 
-def get_service(service_id: str, fleet_map: dict[str, Any] | None = None) -> dict[str, Any]:
-    fmap = fleet_map if fleet_map is not None else load_fleet_map()
-    key = str(service_id or "").strip().lower()
+def get_service(
+    service_id: str | int,
+    node_id_or_map: str | dict[str, Any] | None = None,
+    fleet_map: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    node_id: str | None = None
+    fmap: dict[str, Any]
+    if isinstance(node_id_or_map, str):
+        node_id = node_id_or_map
+        fmap = fleet_map if fleet_map is not None else load_fleet_map()
+    elif isinstance(node_id_or_map, dict):
+        fmap = node_id_or_map
+    else:
+        fmap = fleet_map if fleet_map is not None else load_fleet_map()
+
+    normalized_node = str(node_id).strip().lower() if node_id else None
     all_services = list_all_services(fmap)
+
+    raw_text = str(service_id or "").strip()
+    if isinstance(service_id, int) or raw_text.isdigit():
+        port_num = int(raw_text)
+        for svc in all_services:
+            if int(svc.get("port") or 0) == port_num and (
+                not normalized_node or str(svc.get("node") or "").strip().lower() == normalized_node
+            ):
+                return svc
+        raise KeyError(f"Unknown fleet service on port: {port_num!r}")
+
+    key = raw_text.lower()
     candidates = [key, *SERVICE_ALIASES.get(key, [])]
     for candidate in candidates:
         for svc in all_services:
-            if svc["id"].lower() == candidate:
+            if svc["id"].lower() == candidate and (
+                not normalized_node or str(svc.get("node") or "").strip().lower() == normalized_node
+            ):
                 return svc
     raw_services = fmap.get("services")
     if isinstance(raw_services, dict):
         for candidate in candidates:
             if candidate in raw_services and isinstance(raw_services[candidate], dict):
-                return _normalize_service_entry(raw_services[candidate], candidate)
+                direct = raw_services[candidate]
+                if not normalized_node or str(direct.get("node") or "").strip().lower() == normalized_node:
+                    return _normalize_service_entry(direct, candidate)
     raise KeyError(f"Unknown fleet service: {service_id!r}")
 
 
 def get_service_url(
-    service_id: str,
+    service_id: str | int,
     path_suffix: str = "",
     fleet_map: dict[str, Any] | None = None,
 ) -> str:
@@ -173,8 +252,17 @@ def get_service_url(
     return f"{base}{suffix}"
 
 
+def get_service_health_url(
+    service_id: str | int,
+    fleet_map: dict[str, Any] | None = None,
+) -> str:
+    svc = get_service(service_id, fleet_map)
+    health_path = str(svc.get("healthPath") or "/health")
+    return get_service_url(svc["id"], health_path, fleet_map)
+
+
 def get_bind_host(
-    service_id: str,
+    service_id: str | int,
     env_override: str | None = None,
     fleet_map: dict[str, Any] | None = None,
 ) -> str:
@@ -186,8 +274,38 @@ def get_bind_host(
     return str(svc["bind"])
 
 
+def get_service_bind_host(
+    service_id: str | int,
+    env_override: str | None = None,
+    fleet_map: dict[str, Any] | None = None,
+) -> str:
+    return get_bind_host(service_id, env_override, fleet_map)
+
+
+def get_service_port(
+    service_id: str | int,
+    env_port_value: str | int | None = None,
+    fleet_map: dict[str, Any] | None = None,
+) -> int:
+    if env_port_value is not None and str(env_port_value).strip().isdigit():
+        val = int(str(env_port_value).strip())
+        if val > 0:
+            return val
+    return int(get_service(service_id, fleet_map)["port"])
+
+
 def list_services_by_node(node_id: str, fleet_map: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     fmap = fleet_map if fleet_map is not None else load_fleet_map()
     key = str(node_id or "").strip().lower()
     get_node(key, fmap)
     return [svc for svc in list_all_services(fmap) if str(svc.get("node") or "").strip().lower() == key]
+
+
+def get_services_by_node(node_id: str, fleet_map: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    return list_services_by_node(node_id, fleet_map)
+
+
+def get_services_by_scope(scope: str, fleet_map: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    fmap = fleet_map if fleet_map is not None else load_fleet_map()
+    key = str(scope or "").strip().lower()
+    return [svc for svc in list_all_services(fmap) if str(svc.get("scope") or "").strip().lower() == key]

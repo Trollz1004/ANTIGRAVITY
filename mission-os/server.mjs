@@ -97,10 +97,18 @@ export const BINARIES = {
   ollama: `${HOME_POSIX}/AppData/Local/Programs/Ollama/ollama.exe`,
 };
 
+function getOptionalServiceUrl(serviceId, pathSuffix = '', fallbackUrl = '') {
+  try {
+    return getServiceUrl(serviceId, pathSuffix);
+  } catch {
+    return fallbackUrl;
+  }
+}
+
 export const SERVICES = [
   { id: 'mission-control', port: 3130, what: 'Mission Control (JARVIS/OPSIS board + local /v1 Gemini 4 bridge)', url: getServiceUrl('mission-os', '/') },
   { id: 'social-command-center', port: 3130, what: 'Social Command Center & Gemini 4 Ultra Marketing Engine (/marketing)', url: getServiceUrl('mission-os', '/marketing') },
-  { id: 'odysseus', port: 7011, what: 'Odysseus AI agent & workspace UI (:7011)', url: getServiceUrl('odysseus', '/') },
+  { id: 'odysseus', port: 7011, what: 'Odysseus AI agent & workspace UI (:7011)', url: getOptionalServiceUrl('odysseus', '/', `http://${T5500_IP}:7011/`) },
   { id: 'omniroute', port: 20128, what: 'OmniRoute AI gateway + dashboard', url: getServiceUrl('omniroute', '/') },
   { id: 'hermes', port: 9119, what: 'Hermes desktop dashboard (Nous, the one Hermes on this node)', url: getServiceUrl('hermes-dashboard', '/') },
   { id: 'hermes-a2a', port: 8643, what: 'Hermes shared A2A / Gateway API (hermes-agent)', url: getServiceUrl('hermes-gateway', '/health'), probe: getServiceUrl('hermes-gateway', '/health') },
@@ -695,7 +703,7 @@ table{width:100%;border-collapse:collapse;background:#18181b;border:1px solid #2
 td{padding:9px 12px;border-top:1px solid #27272a}a{color:#facc15}.up{color:#4ade80;font-weight:700}.down{color:#f87171;font-weight:700}
 nav a{margin-right:16px}code{color:#38bdf8;font-size:13px}</style></head><body><main>
 <h1>Mission Control — live</h1><p class="sub">${esc(s.host)} · ${esc(s.ip)} · refreshed ${esc(s.generated)} · auto-refresh 30 s</p>
-<nav style="margin-top:12px"><a href="/screens/mission_control_overview/">Overview</a><a href="/screens/mission_control_jarvis_command_console/">JARVIS / OPSIS Console</a><a href="/marketing">Social Command Center (/marketing)</a><a href="/screens/mission_control_settings_logins/">Agent Logins</a><a href="/">Board</a><a href="${esc(getServiceUrl('odysseus', '/'))}" target="_blank">Odysseus (:7011)</a><a href="${esc(getServiceUrl('omniroute', '/'))}" target="_blank">OmniRoute</a><a href="${esc(getServiceUrl('hermes-dashboard', '/'))}" target="_blank">Hermes</a><a href="/v1/models">Gemini 4 /v1/models</a><a href="/api/bridges">bridges JSON</a><a href="/api/mos-state.json">state JSON</a></nav>
+<nav style="margin-top:12px"><a href="/screens/mission_control_overview/">Overview</a><a href="/screens/mission_control_jarvis_command_console/">JARVIS / OPSIS Console</a><a href="/marketing">Social Command Center (/marketing)</a><a href="/screens/mission_control_settings_logins/">Agent Logins</a><a href="/">Board</a><a href="${esc(getOptionalServiceUrl('odysseus', '/', `http://${T5500_IP}:7011/`))}" target="_blank">Odysseus (:7011)</a><a href="${esc(getServiceUrl('omniroute', '/'))}" target="_blank">OmniRoute</a><a href="${esc(getServiceUrl('hermes-dashboard', '/'))}" target="_blank">Hermes</a><a href="/v1/models">Gemini 4 /v1/models</a><a href="/api/bridges">bridges JSON</a><a href="/api/mos-state.json">state JSON</a></nav>
 <h2>Bridge installation and verification status</h2><table>${(s.bridges || []).map(brow).join('')}</table>
 <h2>Services on this node</h2><table>${s.services.map(row).join('')}</table>
 <h2>Public domains (through the Cloudflare tunnel)</h2><table>${s.domains.map(drow).join('')}</table>

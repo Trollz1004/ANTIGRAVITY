@@ -19,9 +19,9 @@ This repo is **public by policy** (`SECRETS.md`: *"Restriction is not the remedy
 A secret written to any tracked file is published the moment the judge pushes.
 
 **Where it belongs instead:**
-- `.env` (gitignored) — then `ops/paperclip/import-env-secrets.py` moves it into Paperclip's encrypted store
-- Paperclip secret store, referenced by **name** from routines and agents
-- Never: a repo file, a Paperclip config row, an MCP stdio template argument, a journal, a packet
+- `.env` (gitignored) or the encrypted OneDrive vault
+- Referenced by **name** only from routines, scripts, and agents
+- Never: a repo file, an agent config row, an MCP stdio template argument, a journal, a packet
 
 If this is a *pattern* and not a value (a regex, a placeholder like `sk_live_xxx`), shorten the
 example so it no longer matches a real-key shape, or put it in a code block with `REDACTED`.
