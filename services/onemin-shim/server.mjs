@@ -16,6 +16,10 @@ import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getNodeIp } from '../../ops/fleet/fleet-map.mjs';
+import { logStartupEnvCheck } from '../../ops/agents/env-required.mjs';
+import { buildPublicHealthLight } from '../../ops/agents/node-light.mjs';
+
+const HERE = path.dirname(fileURLToPath(import.meta.url));
 
 const T5500_IP = getNodeIp('t5500');
 const PORT = Number(process.env.ONEMIN_SHIM_PORT || 20130);
@@ -266,7 +270,14 @@ export const server = http.createServer(async (req, res) => {
       }));
     } else if (req.method === 'GET' && url === '/health') {
       res.writeHead(200, { 'content-type': 'application/json' });
-      res.end(JSON.stringify({ status: 'ok', service: 'onemin-shim', upstream: UPSTREAM }));
+      res.end(
+        JSON.stringify({
+          status: 'ok',
+          service: 'onemin-shim',
+          upstream: UPSTREAM,
+          ...buildPublicHealthLight({ manifestDir: HERE }),
+        }),
+      );
     } else if (req.method === 'POST' && (url === '/v1/chat/completions' || url === '/chat/completions')) {
       let body = '';
       req.on('data', (c) => { body += c; if (body.length > 10_000_000) req.destroy(); });
@@ -290,6 +301,7 @@ const IS_MAIN_MODULE = Boolean(
 );
 
 if (IS_MAIN_MODULE) {
+  logStartupEnvCheck(HERE);
   const HOST = resolveShimBind(process.env, { port: PORT });
   server.listen(PORT, HOST, () => {
     console.log(`onemin-shim listening on http://${HOST}:${PORT} (LAN http://${T5500_IP}:${PORT}) -> ${UPSTREAM}`);

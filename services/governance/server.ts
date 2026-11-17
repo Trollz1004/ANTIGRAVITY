@@ -8,6 +8,7 @@
  */
 import crypto from 'node:crypto';
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express, { type Request, type Response, type NextFunction } from 'express';
@@ -16,6 +17,59 @@ import { isLoopbackRemote, readGuardToken, resolveVoteBind } from './bind.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(HERE, '..', '..');
+const require = createRequire(import.meta.url);
+
+type EnvHelpers = {
+  logStartupEnvCheck: (
+    manifestOrDir: string,
+    env?: Record<string, string | undefined>,
+    warn?: (msg: string) => void
+  ) => unknown;
+  buildHealthEnvLight: (opts: {
+    manifestDir: string;
+    env?: Record<string, string | undefined>;
+    driftPath?: string;
+  }) => {
+    missingEnv: string[];
+    driftedFiles: Array<{ file: string; reason: string }>;
+    driftedCount: number;
+    nodeLight: 'green' | 'amber';
+  };
+};
+
+function findManifestDir(baseDir: string): string {
+  return fs.existsSync(path.join(baseDir, 'env.required.json'))
+    ? baseDir
+    : path.resolve(baseDir, '..');
+}
+
+function loadGovernanceEnvHelpers(): EnvHelpers {
+  let dir = HERE;
+  for (let i = 0; i < 6; i += 1) {
+    const envReq = path.join(dir, 'ops', 'agents', 'env-required.cjs');
+    const nodeLight = path.join(dir, 'ops', 'agents', 'node-light.cjs');
+    if (fs.existsSync(envReq) && fs.existsSync(nodeLight)) {
+      const { logStartupEnvCheck } = require(envReq) as Pick<EnvHelpers, 'logStartupEnvCheck'>;
+      const { buildHealthEnvLight } = require(nodeLight) as Pick<EnvHelpers, 'buildHealthEnvLight'>;
+      return { logStartupEnvCheck, buildHealthEnvLight };
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return {
+    logStartupEnvCheck: () => undefined,
+    buildHealthEnvLight: () => ({
+      missingEnv: [],
+      driftedFiles: [],
+      driftedCount: 0,
+      nodeLight: 'green',
+    }),
+  };
+}
+
+const MANIFEST_DIR = findManifestDir(HERE);
+const { logStartupEnvCheck, buildHealthEnvLight } = loadGovernanceEnvHelpers();
 
 function loadT5500Host(): string {
   try {
@@ -78,7 +132,12 @@ const app = express();
 app.use(express.json());
 
 app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'official-vote-service', port: PORT });
+  res.json({
+    status: 'ok',
+    service: 'official-vote-service',
+    port: PORT,
+    ...buildHealthEnvLight({ manifestDir: MANIFEST_DIR }),
+  });
 });
 
 app.use('/api/official-votes', requireVoteToken);
@@ -91,6 +150,7 @@ const IS_MAIN_MODULE = Boolean(
 export { app, resolveVoteBind, requireVoteToken, readGuardToken, PORT };
 
 if (IS_MAIN_MODULE) {
+  logStartupEnvCheck(MANIFEST_DIR);
   const HOST = resolveVoteBind(process.env, { port: PORT });
   app.listen(PORT, HOST, () => {
     console.log(`official-vote-service listening on http://${HOST}:${PORT} (LAN http://${T5500_HOST}:${PORT})`);

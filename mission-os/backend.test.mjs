@@ -225,3 +225,55 @@ test('LAN token guard refuses unauthenticated non-loopback requests, permits val
   });
   assert.equal(crossOriginVerify.statusCode, 403);
 });
+
+test('Stage E4 /health and /api/mos-state.json show only counts and nodeLight (stream-safe: no setting names, no file names, no secret values)', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mission-os-e4-'));
+  const driftPath = path.join(tmpDir, 'agent-drift.json');
+  const prevFleet = process.env.FLEET_SHARED_TOKEN;
+  const prevMission = process.env.MISSION_OS_TOKEN;
+  const prevDrift = process.env.AGENT_DRIFT_PATH;
+  const fakeSecret = 'fake-never-expose-mos-token-7788';
+  try {
+    delete process.env.FLEET_SHARED_TOKEN;
+    delete process.env.MISSION_OS_TOKEN;
+    process.env.AGENT_DRIFT_PATH = driftPath;
+    fs.writeFileSync(driftPath, JSON.stringify({ driftedFiles: [] }), 'utf8');
+
+    const amberMissing = await invokeMissionHandler({ url: '/health' });
+    assert.equal(amberMissing.statusCode, 200);
+    assert.equal('missingEnv' in amberMissing.body, false);
+    assert.equal(JSON.stringify(amberMissing.body).includes('FLEET_SHARED_TOKEN'), false);
+    assert.equal(amberMissing.body.missingEnvCount, 1);
+    assert.equal(amberMissing.body.nodeLight, 'amber');
+
+    process.env.MISSION_OS_TOKEN = fakeSecret;
+    const greenHealth = await invokeMissionHandler({ url: '/health' });
+    assert.equal(greenHealth.statusCode, 200);
+    assert.equal(greenHealth.body.missingEnvCount, 0);
+    assert.equal(greenHealth.body.driftedCount, 0);
+    assert.equal(greenHealth.body.nodeLight, 'green');
+    assert.equal(JSON.stringify(greenHealth.body).includes(fakeSecret), false);
+
+    fs.writeFileSync(
+      driftPath,
+      JSON.stringify({ driftedFiles: [{ file: 'CLAUDE.md', reason: 'stale' }] }),
+      'utf8',
+    );
+    const mosState = await invokeMissionHandler({ url: '/api/mos-state.json' });
+    assert.equal(mosState.statusCode, 200);
+    assert.equal(mosState.body.nodeLight, 'amber');
+    assert.equal(mosState.body.driftedCount, 1);
+    assert.equal(mosState.body.agentDrift.present, true);
+    assert.equal(JSON.stringify(mosState.body).includes('CLAUDE.md'), false);
+    assert.equal('driftedFiles' in mosState.body, false);
+    assert.equal(JSON.stringify(mosState.body).includes(fakeSecret), false);
+  } finally {
+    if (prevFleet === undefined) delete process.env.FLEET_SHARED_TOKEN;
+    else process.env.FLEET_SHARED_TOKEN = prevFleet;
+    if (prevMission === undefined) delete process.env.MISSION_OS_TOKEN;
+    else process.env.MISSION_OS_TOKEN = prevMission;
+    if (prevDrift === undefined) delete process.env.AGENT_DRIFT_PATH;
+    else process.env.AGENT_DRIFT_PATH = prevDrift;
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});

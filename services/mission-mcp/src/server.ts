@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -13,6 +14,59 @@ const NAME = 'mission-mcp';
 const VERSION = '0.1.0';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(HERE, '..', '..', '..');
+const require = createRequire(import.meta.url);
+
+type EnvHelpers = {
+  logStartupEnvCheck: (
+    manifestOrDir: string,
+    env?: Record<string, string | undefined>,
+    warn?: (msg: string) => void
+  ) => unknown;
+  buildHealthEnvLight: (opts: {
+    manifestDir: string;
+    env?: Record<string, string | undefined>;
+    driftPath?: string;
+  }) => {
+    missingEnv: string[];
+    driftedFiles: Array<{ file: string; reason: string }>;
+    driftedCount: number;
+    nodeLight: 'green' | 'amber';
+  };
+};
+
+function findManifestDir(baseDir: string): string {
+  return fs.existsSync(path.join(baseDir, 'env.required.json'))
+    ? baseDir
+    : path.resolve(baseDir, '..');
+}
+
+function loadMissionMcpEnvHelpers(): EnvHelpers {
+  let dir = HERE;
+  for (let i = 0; i < 6; i += 1) {
+    const envReq = path.join(dir, 'ops', 'agents', 'env-required.cjs');
+    const nodeLight = path.join(dir, 'ops', 'agents', 'node-light.cjs');
+    if (fs.existsSync(envReq) && fs.existsSync(nodeLight)) {
+      const { logStartupEnvCheck } = require(envReq) as Pick<EnvHelpers, 'logStartupEnvCheck'>;
+      const { buildHealthEnvLight } = require(nodeLight) as Pick<EnvHelpers, 'buildHealthEnvLight'>;
+      return { logStartupEnvCheck, buildHealthEnvLight };
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return {
+    logStartupEnvCheck: () => undefined,
+    buildHealthEnvLight: () => ({
+      missingEnv: [],
+      driftedFiles: [],
+      driftedCount: 0,
+      nodeLight: 'green',
+    }),
+  };
+}
+
+const MANIFEST_DIR = findManifestDir(HERE);
+const { logStartupEnvCheck, buildHealthEnvLight } = loadMissionMcpEnvHelpers();
 
 function loadT5500Host(): string {
   try {
@@ -97,7 +151,12 @@ async function startHttp() {
   app.use(express.json());
 
   app.get('/health', (_req, res) => {
-    res.json({ ok: true, name: NAME, version: VERSION });
+    res.json({
+      ok: true,
+      name: NAME,
+      version: VERSION,
+      ...buildHealthEnvLight({ manifestDir: MANIFEST_DIR }),
+    });
   });
 
   app.post('/mcp', async (req, res) => {
@@ -126,6 +185,7 @@ const IS_MAIN_MODULE = Boolean(
 const transport = process.env.MISSION_MCP_TRANSPORT;
 
 if (IS_MAIN_MODULE) {
+  logStartupEnvCheck(MANIFEST_DIR, process.env, console.warn);
   if (transport === 'http') {
     startHttp().catch((err) => {
       process.stderr.write(`[mission-mcp] fatal: ${err.message}\n`);

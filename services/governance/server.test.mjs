@@ -80,9 +80,13 @@ test('official-vote-service HTTP server binds 127.0.0.1 with warning when token 
     });
 
     assert.match(logs, /WARNING: OFFICIAL_VOTE_TOKEN \/ MISSION_OS_TOKEN is not set/);
+    assert.match(logs, /Startup env check: missing required setting names: OFFICIAL_VOTE_TOKEN/);
 
     const health = await fetch(`http://${LOOPBACK}:${port}/health`);
     assert.equal(health.status, 200);
+    const healthBody = await health.json();
+    assert.deepEqual(healthBody.missingEnv, ['OFFICIAL_VOTE_TOKEN']);
+    assert.equal(healthBody.nodeLight, 'amber');
 
     const statusRes = await fetch(`http://${LOOPBACK}:${port}/api/official-votes/status`);
     assert.equal(statusRes.status, 200);

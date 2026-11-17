@@ -49,6 +49,7 @@ import {
 } from './live-tabs-backend.mjs';
 import { buildInbox, performAction } from '../mission-control/lib/inbox.mjs';
 import { getBridgeRegistry, verifyLane, verifyAllLanes } from './bridge-registry.mjs';
+import { getMissionOsEnvDriftLight, warnMissionOsMissingEnv } from './env-drift-light.mjs';
 import { createNodeWatchdog } from './node-watchdog.mjs';
 import { createShellApi, isHeavyBuildRequest } from './shell-api.mjs';
 import { wrapStreamSafeResponse } from './stream-redact.mjs';
@@ -942,7 +943,10 @@ async function state() {
   if (Date.now() - cache.at > 15000 && !cache.refreshing) {
     refreshState().catch(() => {});
   }
-  return cache.data;
+  return {
+    ...cache.data,
+    ...getMissionOsEnvDriftLight({ manifestDir: HERE }),
+  };
 }
 
 const IS_MAIN_MODULE = Boolean(
@@ -1247,12 +1251,31 @@ export function createMissionHandler({
       : createShellApi({ env, repoRoot: ROOT, watchdog }));
 
   return async (req, res) => {
-    const safeRes = wrapStreamSafeResponse(res, { env });
     const sec = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer' };
+    let safeRes = res;
     try {
       const u = new URL(req.url, 'http://x');
       const localCaller = isLoopbackAddress(req.socket?.remoteAddress);
       const effectivePort = Number(req.socket?.localPort) || PORT;
+
+      if (u.pathname === '/health' && (req.method === 'GET' || req.method === 'HEAD')) {
+        const envLight = getMissionOsEnvDriftLight({ manifestDir: HERE, env });
+        res.writeHead(200, { ...sec, 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        return res.end(
+          req.method === 'HEAD'
+            ? undefined
+            : JSON.stringify({
+                ok: true,
+                status: 'ok',
+                service: 'mission-os',
+                identity: 'mission-agent-os',
+                port: effectivePort,
+                ...envLight,
+              }),
+        );
+      }
+
+      safeRes = wrapStreamSafeResponse(res, { env });
 
       // OpenAI-compatible Gemini 4 (agy OAuth) bridge: local callers allowed on valid Host;
       // non-loopback LAN callers require valid MISSION_OS_TOKEN.
@@ -1820,22 +1843,37 @@ export function createMissionHandler({
       safeRes.writeHead(404, sec);
       safeRes.end('not found');
     } catch (e) {
+      const errRes = safeRes === res ? wrapStreamSafeResponse(res, { env }) : safeRes;
       const status = e?.status === 400 || e?.status === 413 ? e.status : 500;
       const safeError =
         status === 400 ? 'Invalid JSON object' : status === 413 ? 'Request body too large' : 'Internal error';
-      if (!safeRes.headersSent) {
-        safeRes.writeHead(status, { ...sec, 'Content-Type': 'application/json' });
+      if (!errRes.headersSent) {
+        errRes.writeHead(status, { ...sec, 'Content-Type': 'application/json' });
       }
-      safeRes.end(JSON.stringify({ ok: false, error: safeError }));
+      errRes.end(JSON.stringify({ ok: false, error: safeError }));
     }
   };
 }
 
 export const handleMissionRequest = createMissionHandler();
 if (IS_MAIN_MODULE) {
+  warnMissionOsMissingEnv({ manifestDir: HERE });
   http
     .createServer(handleMissionRequest)
     .listen(PORT, HOST, () =>
       console.log(`mission-agent-os on http://${HOST}:${PORT} (LAN http://${T5500_IP}:${PORT})`),
     );
+}
+
+function getOptionalServiceUrl(serviceId, pathSuffix = '', fallbackUrl = '') {
+  try {
+    return getServiceUrl(serviceId, pathSuffix);
+  } catch {
+    return fallbackUrl;
+  }
+}
+
+function safeErrorMessage(err, fallback = 'Operation failed') {
+  const msg = err && typeof err === 'object' && typeof err.message === 'string' ? err.message : '';
+  return msg ? msg.split(/\r?\n/)[0].slice(0, 240) : fallback;
 }

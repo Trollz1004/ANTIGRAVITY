@@ -42,8 +42,10 @@ $PgBin       = Join-Path $env:USERPROFILE 'pgsql16\bin'
 $PgData      = Join-Path $env:USERPROFILE 'pgsql16-data'
 $RedisRoot   = Join-Path $env:USERPROFILE 'redis8-win'   # Redis 8: the API's redis-py 8.x speaks RESP3 (HELLO); the Redis 5 build rejects it
 
-New-Item -ItemType Directory -Force -Path ([IO.Path]::GetDirectoryName($LogFile)) | Out-Null
-New-Item -ItemType Directory -Force -Path $Dir | Out-Null
+if (-not $DryRun -and -not $Test -and -not $FunctionsOnly) {
+    New-Item -ItemType Directory -Force -Path ([IO.Path]::GetDirectoryName($LogFile)) | Out-Null
+    New-Item -ItemType Directory -Force -Path $Dir | Out-Null
+}
 
 if (-not $DryRun -and -not $Test -and -not $FunctionsOnly) {
     # One keep-alive at a time; a second copy (task relaunch, manual run) exits quietly.
@@ -419,6 +421,79 @@ function Record-FrontendBuildCommit([string]$repoPath) {
     } catch {}
 }
 
+function Get-KeepaliveAgentDriftAndEnv {
+    param(
+        [string]$RepoRoot = $Repo,
+        [string]$Node = 't5500',
+        [bool]$NoWriteStatus = $false
+    )
+
+    $driftScript = Join-Path $RepoRoot 'ops\agents\check-agent-drift.ps1'
+    $envCheckScript = Join-Path $RepoRoot 'ops\agents\env-names-check.ps1'
+
+    $driftedFiles = New-Object System.Collections.Generic.List[object]
+    $scannedCount = 0
+    $driftedCount = 0
+    $driftLight = 'green'
+    $driftOk = $true
+
+    if (Test-Path -LiteralPath $driftScript) {
+        $rawLines = & $driftScript -Node $Node -RepoRoot $RepoRoot -SoftExit -NoWriteStatus:$NoWriteStatus 2>&1
+        foreach ($item in @($rawLines)) {
+            $line = [string]$item
+            if ($line -match '^\[DRIFT\]\s+\(([^)]+)\)\s+(.+)$') {
+                $driftedFiles.Add([ordered]@{ file = $matches[2].Trim(); reason = $matches[1].Trim() })
+            } elseif ($line -match '^\[CHECK\]\s+Summary\b.*light=([a-z]+),\s+ok=(true|false),\s+scanned=(\d+),\s+drifted=(\d+)') {
+                $driftLight = $matches[1]
+                $driftOk = ($matches[2] -eq 'true')
+                $scannedCount = [int]$matches[3]
+                $driftedCount = [int]$matches[4]
+            }
+        }
+        if ($driftedFiles.Count -gt 0 -and $driftedCount -eq 0) {
+            $driftedCount = $driftedFiles.Count
+            $driftOk = $false
+            $driftLight = 'amber'
+        }
+    } else {
+        $driftLight = 'amber'
+        $driftOk = $false
+    }
+
+    $targetServices = New-Object System.Collections.Generic.List[string]
+    if (Test-Path -LiteralPath $envCheckScript) {
+        $envRaw = (& $envCheckScript -RepoRoot $RepoRoot -Node $Node -ListTargetsOnly -Json 2>$null) -join "`n"
+        if (-not [string]::IsNullOrWhiteSpace($envRaw)) {
+            try {
+                $parsed = $envRaw | ConvertFrom-Json
+                foreach ($svc in @($parsed.services)) {
+                    if ($null -ne $svc -and -not [string]::IsNullOrWhiteSpace([string]$svc.service)) {
+                        $targetServices.Add([string]$svc.service)
+                    }
+                }
+            } catch {}
+        }
+    }
+
+    $nodeLight = if ($driftedCount -gt 0) { 'amber' } else { 'green' }
+    return [ordered]@{
+        agentDrift = [ordered]@{
+            light = $driftLight
+            ok = $driftOk
+            scannedCount = $scannedCount
+            driftedCount = $driftedCount
+            driftedFiles = $driftedFiles.ToArray()
+        }
+        envTargets = [ordered]@{
+            listOnly = $true
+            node = $Node
+            targetCount = $targetServices.Count
+            services = $targetServices.ToArray()
+        }
+        nodeLight = $nodeLight
+    }
+}
+
 if ($FunctionsOnly) {
     return
 }
@@ -436,6 +511,7 @@ if ($Test) {
 
 if ($DryRun) {
     $stale = Get-FrontendStaleness $Repo
+    $e4 = Get-KeepaliveAgentDriftAndEnv -RepoRoot $Repo -NoWriteStatus:$true
     Write-Host "=== Date-App Frontend Rebuild Decision (Dry-Run) ==="
     Write-Host ("Repository root:    " + $Repo)
     Write-Host ("Frontend directory: domains\youandinotai.com\frontend")
@@ -447,6 +523,7 @@ if ($DryRun) {
     Write-Host ""
     Write-Host ("DECISION:           " + $(if ($stale.NeedsRebuild) { "REBUILD NEEDED" } else { "UP TO DATE" }))
     Write-Host ("REASON:             " + $stale.Reason)
+    Write-Host ("[DRY RUN] agentDrift: light={0} ok={1} scanned={2} drifted={3} envTargets={4} nodeLight={5}" -f $e4.agentDrift.light, $e4.agentDrift.ok, $e4.agentDrift.scannedCount, $e4.agentDrift.driftedCount, $e4.envTargets.targetCount, $e4.nodeLight)
     Write-Host "===================================================="
     exit 0
 }
@@ -742,8 +819,19 @@ function Write-Status {
         $pm = if ($d.PublicMark) { $d.PublicMark } else { $d.Mark }; $public = if ($ns -ne 'cloudflare') { 'PENDING NAMESERVERS' } elseif (Test-Http ('https://' + $d.Host) 20 $pm) { 'UP' } else { 'DOWN' }
         [ordered]@{ domain = $d.Host; nameservers = $ns; origin = $origin; public = $public }
     }
-    $o = [ordered]@{ updated = (Get-Date).ToString('s'); node = $env:COMPUTERNAME; stages = @($stages); domains = @($doms) }
-    try { $o | ConvertTo-Json -Depth 5 | Set-Content -Path $StatusFile -Encoding UTF8 } catch {}
+    $e4 = Get-KeepaliveAgentDriftAndEnv -RepoRoot $Repo -NoWriteStatus:$DryRun
+    $anyStageDown = @($stages | Where-Object { $_.status -ne 'UP' }).Count -gt 0
+    $nodeLight = if ($anyStageDown) { 'red' } elseif ($e4.agentDrift.driftedCount -gt 0) { 'amber' } else { 'green' }
+    $o = [ordered]@{
+        updated = (Get-Date).ToString('s')
+        node = $env:COMPUTERNAME
+        nodeLight = $nodeLight
+        agentDrift = $e4.agentDrift
+        envTargets = $e4.envTargets
+        stages = @($stages)
+        domains = @($doms)
+    }
+    try { $o | ConvertTo-Json -Depth 6 | Set-Content -Path $StatusFile -Encoding UTF8 } catch {}
 }
 
 function Invoke-Pass {
