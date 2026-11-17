@@ -144,7 +144,11 @@ test(
           `${mode.name}: /health must return 200 without fleet token`
         );
         const healthBody = await health.json();
-        assert.equal(Array.isArray(healthBody.missingEnv), true);
+        // Public route (youandinotai.com): light and counts only, never names or file paths.
+        assert.equal('missingEnv' in healthBody, false);
+        assert.equal('driftedFiles' in healthBody, false);
+        assert.equal(JSON.stringify(healthBody).includes('FLEET_SHARED_TOKEN'), false);
+        assert.equal(typeof healthBody.missingEnvCount, 'number');
 
         const apiHealth = await fetch(`http://${LOOPBACK}:${port}/api/health`);
         assert.equal(
@@ -154,13 +158,15 @@ test(
         );
         const apiHealthBody = await apiHealth.json();
         if (mode.token) {
-          assert.deepEqual(apiHealthBody.missingEnv, []);
+          assert.equal(apiHealthBody.missingEnvCount, 0);
           assert.equal(
             JSON.stringify(apiHealthBody).includes(mode.token),
             false
           );
         } else {
-          assert.deepEqual(apiHealthBody.missingEnv, ['FLEET_SHARED_TOKEN']);
+          assert.equal('missingEnv' in apiHealthBody, false);
+          assert.equal(JSON.stringify(apiHealthBody).includes('FLEET_SHARED_TOKEN'), false);
+          assert.equal(apiHealthBody.missingEnvCount, 1);
           assert.equal(apiHealthBody.nodeLight, 'amber');
         }
 

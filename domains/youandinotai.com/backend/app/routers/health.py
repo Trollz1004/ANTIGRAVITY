@@ -190,7 +190,7 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
         wallet_rails_status=wallet_rails_status,
         payment_proof_labels=payment_proof_labels,
         user_count=user_count,
-        missingEnv=env_light["missingEnv"],
+        missingEnvCount=len(env_light["missingEnv"]),
         nodeLight=env_light["nodeLight"],
     )
 

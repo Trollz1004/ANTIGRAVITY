@@ -143,13 +143,17 @@ def test_health_check_reports_missing_env_and_node_light(monkeypatch, tmp_path):
     monkeypatch.delenv("SUPABASE_DB_URL", raising=False)
 
     amber_response = asyncio.run(health.health_check(mock_db))
-    assert amber_response.missingEnv == ["DATABASE_URL"]
+    # Public route (api.youandinotai.com/health): light and count only, never setting names.
+    amber_dump = amber_response.model_dump()
+    assert "missingEnv" not in amber_dump
+    assert "DATABASE_URL" not in str(amber_dump)
+    assert amber_response.missingEnvCount == 1
     assert amber_response.nodeLight == "amber"
 
     fake_db_secret = "postgresql+asyncpg://u:fake-secret-99@127.0.0.1/db"
     monkeypatch.setenv("DATABASE_URL", fake_db_secret)
     green_response = asyncio.run(health.health_check(mock_db))
-    assert green_response.missingEnv == []
+    assert green_response.missingEnvCount == 0
     assert green_response.nodeLight == "green"
     assert fake_db_secret not in str(green_response.model_dump())
 

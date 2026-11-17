@@ -17,7 +17,7 @@ import { notifyBooking } from "./booking-notify.mjs";
 import { recordPageView, recordBooking } from "./booking-stats.mjs";
 import { getBindHost, getNodeIp, getService } from "../fleet/fleet-map.mjs";
 import { logStartupEnvCheck } from "../agents/env-required.mjs";
-import { buildHealthEnvLight } from "../agents/node-light.mjs";
+import { buildPublicHealthLight } from "../agents/node-light.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
@@ -405,7 +405,7 @@ const server = http.createServer(async (req, res) => {
         JSON.stringify({
           service: "domains-server",
           sites: SITES,
-          ...buildHealthEnvLight({ manifestDir: __dirname }),
+          ...buildPublicHealthLight({ manifestDir: __dirname }),
         })
       );
       return;

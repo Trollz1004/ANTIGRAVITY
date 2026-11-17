@@ -230,7 +230,8 @@ class HealthResponse(BaseModel):
     wallet_rails_status: str
     payment_proof_labels: list[str] = Field(default_factory=list)
     user_count: int
-    missingEnv: list[str] = Field(default_factory=list)
+    # Public route: count and light only. Setting names go to the startup log.
+    missingEnvCount: int = 0
     nodeLight: str = "green"
     model_config = ConfigDict(from_attributes=True)
 

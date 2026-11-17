@@ -17,7 +17,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getNodeIp } from '../../ops/fleet/fleet-map.mjs';
 import { logStartupEnvCheck } from '../../ops/agents/env-required.mjs';
-import { buildHealthEnvLight } from '../../ops/agents/node-light.mjs';
+import { buildPublicHealthLight } from '../../ops/agents/node-light.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 
@@ -275,7 +275,7 @@ export const server = http.createServer(async (req, res) => {
           status: 'ok',
           service: 'onemin-shim',
           upstream: UPSTREAM,
-          ...buildHealthEnvLight({ manifestDir: HERE }),
+          ...buildPublicHealthLight({ manifestDir: HERE }),
         }),
       );
     } else if (req.method === 'POST' && (url === '/v1/chat/completions' || url === '/chat/completions')) {

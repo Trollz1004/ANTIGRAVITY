@@ -330,7 +330,8 @@ export async function startServer(
     const driftedCount = driftedFiles.length;
     const nodeLight: 'green' | 'amber' =
       missingEnv.length > 0 || driftedCount > 0 ? 'amber' : 'green';
-    return { missingEnv, driftedFiles, driftedCount, nodeLight };
+    // Public route: counts and light only. Names go to the startup log.
+    return { missingEnvCount: missingEnv.length, driftedCount, nodeLight };
   };
 
   // Broadcast loop (20Hz)

@@ -4,4 +4,5 @@ export const {
   resolveAgentDriftPath,
   readAgentDriftStatus,
   buildHealthEnvLight,
+  buildPublicHealthLight,
 } = nodeLight;

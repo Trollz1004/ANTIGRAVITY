@@ -106,8 +106,23 @@ function buildHealthEnvLight({ manifestDir, env = process.env, driftPath = '' } 
   };
 }
 
+/**
+ * Public or streamed health routes: counts and the light only.
+ * Never setting names or drifted file names; those go to the startup log
+ * and to LAN status routes behind the shared token.
+ */
+function buildPublicHealthLight(options = {}) {
+  const light = buildHealthEnvLight(options);
+  return {
+    missingEnvCount: light.missingEnv.length,
+    driftedCount: light.driftedCount,
+    nodeLight: light.nodeLight,
+  };
+}
+
 module.exports = {
   resolveAgentDriftPath,
   readAgentDriftStatus,
   buildHealthEnvLight,
+  buildPublicHealthLight,
 };

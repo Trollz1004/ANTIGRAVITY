@@ -118,3 +118,26 @@ test('readAgentDriftStatus handles missing and unreadable drift files cleanly', 
     fs.rmSync(tmp, { recursive: true, force: true });
   }
 });
+
+test('buildPublicHealthLight returns counts and the light only, never setting or file names', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'public-light-'));
+  try {
+    fs.writeFileSync(
+      path.join(tmp, 'env.required.json'),
+      JSON.stringify({ service: 'svc', required: ['PUBLIC_LIGHT_NEEDS_THIS'] }),
+      'utf8',
+    );
+    const driftPath = path.join(tmp, 'agent-drift.json');
+    fs.writeFileSync(driftPath, JSON.stringify({ driftedFiles: [{ file: 'CLAUDE.md', reason: 'stale' }] }), 'utf8');
+    const out = cjs.buildPublicHealthLight({ manifestDir: tmp, env: {}, driftPath });
+    assert.deepEqual(Object.keys(out).sort(), ['driftedCount', 'missingEnvCount', 'nodeLight']);
+    assert.equal(out.missingEnvCount, 1);
+    assert.equal(out.driftedCount, 1);
+    assert.equal(out.nodeLight, 'amber');
+    const text = JSON.stringify(out);
+    assert.equal(text.includes('PUBLIC_LIGHT_NEEDS_THIS'), false);
+    assert.equal(text.includes('CLAUDE.md'), false);
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+});

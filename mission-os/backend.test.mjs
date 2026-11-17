@@ -226,7 +226,7 @@ test('LAN token guard refuses unauthenticated non-loopback requests, permits val
   assert.equal(crossOriginVerify.statusCode, 403);
 });
 
-test('Stage E4 /health and /api/mos-state.json surface missingEnv, drift, and nodeLight without exposing secret values', async () => {
+test('Stage E4 /health and /api/mos-state.json show only counts and nodeLight (stream-safe: no setting names, no file names, no secret values)', async () => {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mission-os-e4-'));
   const driftPath = path.join(tmpDir, 'agent-drift.json');
   const prevFleet = process.env.FLEET_SHARED_TOKEN;
@@ -241,13 +241,15 @@ test('Stage E4 /health and /api/mos-state.json surface missingEnv, drift, and no
 
     const amberMissing = await invokeMissionHandler({ url: '/health' });
     assert.equal(amberMissing.statusCode, 200);
-    assert.deepEqual(amberMissing.body.missingEnv, ['FLEET_SHARED_TOKEN']);
+    assert.equal('missingEnv' in amberMissing.body, false);
+    assert.equal(JSON.stringify(amberMissing.body).includes('FLEET_SHARED_TOKEN'), false);
+    assert.equal(amberMissing.body.missingEnvCount, 1);
     assert.equal(amberMissing.body.nodeLight, 'amber');
 
     process.env.MISSION_OS_TOKEN = fakeSecret;
     const greenHealth = await invokeMissionHandler({ url: '/health' });
     assert.equal(greenHealth.statusCode, 200);
-    assert.deepEqual(greenHealth.body.missingEnv, []);
+    assert.equal(greenHealth.body.missingEnvCount, 0);
     assert.equal(greenHealth.body.driftedCount, 0);
     assert.equal(greenHealth.body.nodeLight, 'green');
     assert.equal(JSON.stringify(greenHealth.body).includes(fakeSecret), false);
@@ -262,6 +264,8 @@ test('Stage E4 /health and /api/mos-state.json surface missingEnv, drift, and no
     assert.equal(mosState.body.nodeLight, 'amber');
     assert.equal(mosState.body.driftedCount, 1);
     assert.equal(mosState.body.agentDrift.present, true);
+    assert.equal(JSON.stringify(mosState.body).includes('CLAUDE.md'), false);
+    assert.equal('driftedFiles' in mosState.body, false);
     assert.equal(JSON.stringify(mosState.body).includes(fakeSecret), false);
   } finally {
     if (prevFleet === undefined) delete process.env.FLEET_SHARED_TOKEN;

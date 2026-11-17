@@ -7,6 +7,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * Compute Stage E3/E4 env-key and agent-drift light fields without reading any .env file.
+ * Returns counts and the light only (stream-safe), never setting or file names.
  */
 export function getMissionOsEnvDriftLight({
   manifestDir = HERE,
@@ -15,13 +16,12 @@ export function getMissionOsEnvDriftLight({
 } = {}) {
   const drift = readAgentDriftStatus(driftPath, env);
   const light = buildHealthEnvLight({ manifestDir, env, driftPath });
+  // Mission OS is shown on stream: counts and light only. Setting names go to the startup log.
   return {
-    missingEnv: light.missingEnv,
-    driftedFiles: light.driftedFiles,
+    missingEnvCount: Array.isArray(light.missingEnv) ? light.missingEnv.length : 0,
     driftedCount: light.driftedCount,
     agentDrift: {
       present: drift.present,
-      driftedFiles: light.driftedFiles,
       driftedCount: light.driftedCount,
     },
     nodeLight: light.nodeLight,

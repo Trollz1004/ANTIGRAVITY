@@ -96,12 +96,15 @@ test('domains-server serves public routes (200) without fleet token in both no-t
 
       const healthJson = JSON.parse(healthRes.body);
       assert.equal(healthJson.service, 'domains-server');
-      assert.equal(Array.isArray(healthJson.missingEnv), true);
+      // Public route: counts and light only, never setting or file names.
+      assert.equal('missingEnv' in healthJson, false);
+      assert.equal('driftedFiles' in healthJson, false);
+      assert.equal(healthRes.body.includes('FLEET_SHARED_TOKEN'), false);
       if (mode.token) {
-        assert.deepEqual(healthJson.missingEnv, []);
+        assert.equal(healthJson.missingEnvCount, 0);
         assert.equal(healthRes.body.includes(mode.token), false);
       } else {
-        assert.deepEqual(healthJson.missingEnv, ['FLEET_SHARED_TOKEN']);
+        assert.equal(healthJson.missingEnvCount, 1);
         assert.equal(healthJson.nodeLight, 'amber');
       }
 
