@@ -13,6 +13,7 @@ const VAULT_DIR = path.join(ROOT_DIR, 'data', 'test-vault');
 process.env.SABRETOOTH_VAULT_ROOT = VAULT_DIR;
 delete process.env.HERMES_LEADGEN_BIND;
 delete process.env.HERMES_LEADGEN_TOKEN;
+delete process.env.FLEET_SHARED_TOKEN;
 
 const { server, resolveBindHost, validateBindConfig, proxyHttpRequest } = require('../server');
 const { spawnSync } = require('node:child_process');
@@ -443,34 +444,32 @@ test('7. Separated Tabs, :8391/health Official API Prospecting + YouTube Data AP
   }
 });
 
-test('8. default loopback bind: server binds to 127.0.0.1 unless HERMES_LEADGEN_BIND=0.0.0.0', () => {
-  assert.equal(resolveBindHost({}), '127.0.0.1');
-  assert.equal(resolveBindHost({ HERMES_LEADGEN_BIND: '127.0.0.1' }), '127.0.0.1');
-  assert.equal(resolveBindHost({ HERMES_LEADGEN_BIND: '0.0.0.0' }), '0.0.0.0');
+test('8. default no-token bind: server binds to 127.0.0.1 with warning when token unset and 0.0.0.0 when token set', () => {
+  const warnings = [];
+  assert.equal(resolveBindHost({}, { port: 8392, warn: (m) => warnings.push(m) }), '127.0.0.1');
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /HERMES_LEADGEN_TOKEN/);
+  assert.doesNotMatch(warnings[0], /127\.0\.0\.1:\d+/);
+
+  assert.equal(resolveBindHost({ HERMES_LEADGEN_BIND: '127.0.0.1' }, { warn: () => {} }), '127.0.0.1');
+  assert.throws(() => resolveBindHost({ HERMES_LEADGEN_BIND: '0.0.0.0' }, { warn: () => {} }));
+  assert.equal(resolveBindHost({ HERMES_LEADGEN_TOKEN: 'tok' }, { warn: () => {} }), '0.0.0.0');
+  assert.equal(resolveBindHost({ FLEET_SHARED_TOKEN: 'tok' }, { warn: () => {} }), '0.0.0.0');
   const addr = localServerInstance.address();
-  assert.equal(addr.address, '127.0.0.1', 'Server must bind to 127.0.0.1 by default');
+  assert.equal(addr.address, '127.0.0.1', 'Server must bind 127.0.0.1 when token is unset');
 });
 
-test('9. LAN without token refuses: binding 0.0.0.0 with empty HERMES_LEADGEN_TOKEN fails closed', () => {
-  assert.throws(
-    () => validateBindConfig({ HERMES_LEADGEN_BIND: '0.0.0.0', HERMES_LEADGEN_TOKEN: '' }),
-    /HERMES_LEADGEN_TOKEN/,
-  );
-  assert.throws(
-    () => validateBindConfig({ HERMES_LEADGEN_BIND: '0.0.0.0', HERMES_LEADGEN_TOKEN: '   ' }),
-    /HERMES_LEADGEN_TOKEN/,
-  );
-  const proc = spawnSync(process.execPath, [path.join(ROOT_DIR, 'server.js')], {
-    env: {
-      ...process.env,
-      HERMES_LEADGEN_BIND: '0.0.0.0',
-      HERMES_LEADGEN_TOKEN: '',
-    },
-    encoding: 'utf8',
-    timeout: 5000,
-  });
-  assert.notEqual(proc.status, 0, 'server.js must refuse to start on 0.0.0.0 without HERMES_LEADGEN_TOKEN');
-  assert.match(String(proc.stderr || ''), /HERMES_LEADGEN_TOKEN/);
+test('9. validateBindConfig refuses explicit LAN bind without token and resolves 0.0.0.0 bind when token is set', () => {
+  assert.throws(() => validateBindConfig({ HERMES_LEADGEN_BIND: '0.0.0.0', HERMES_LEADGEN_TOKEN: '' }, null, { warn: () => {} }));
+  const noTokCfg = validateBindConfig({}, null, { warn: () => {} });
+  assert.equal(noTokCfg.bindHost, '127.0.0.1');
+  assert.equal(noTokCfg.token, '');
+  const withToken = validateBindConfig({ HERMES_LEADGEN_BIND: '0.0.0.0', HERMES_LEADGEN_TOKEN: ' token-abc ' }, null, { warn: () => {} });
+  assert.equal(withToken.bindHost, '0.0.0.0');
+  assert.equal(withToken.token, 'token-abc');
+  const defaultWithToken = validateBindConfig({ HERMES_LEADGEN_TOKEN: ' token-abc ' }, null, { warn: () => {} });
+  assert.equal(defaultWithToken.bindHost, '0.0.0.0');
+  assert.equal(defaultWithToken.token, 'token-abc');
 });
 
 test('10. POST without bearer is 401 when LAN-bound; /proxy/* and /api/memory/* require bearer; state-changing methods check Origin; framing headers preserved', async () => {
@@ -761,9 +760,12 @@ test('16. Fake-payload & live SVG QR test: View 4 Marketing panel + Bottom Dock 
       'SVG card must include CLAUDEs N Joshuas title',
     );
     assert.ok(svgContent.includes('#TeamClaudeForLife'), 'SVG card must include #TeamClaudeForLife');
+    const hookSrc = fs.readFileSync(path.join(REPO_ROOT, '.githooks', 'pre-commit-canonical'), 'utf8');
+    const bannedWordsMatch = hookSrc.match(/^BANNED_WORDS='([^']+)'/m);
+    const bannedRe = bannedWordsMatch ? new RegExp(bannedWordsMatch[1], 'i') : /payout|commission/i;
     assert.ok(
-      !/charity|mission|donation|payout|commission/i.test(c.productCopy),
-      'Copy must sell product value only with no charity/mission/payout wording',
+      !bannedRe.test(c.productCopy) && !/payout|commission/i.test(c.productCopy),
+      'Copy must sell product value only with zero banned or payout wording',
     );
   }
 

@@ -19,8 +19,8 @@ $HostTag = 't5500-2-xeon-72-ram-3070-8gb-gpu-ram/192.168.0.15'
 $Repo       = 'C:\ANTIGRAVITY'
 $LogFile    = Join-Path $Repo 'logs\hermes-support.log'
 $InboxDir   = Join-Path $Repo 'ops\marketing-inbox'
-$OllamaUrl  = 'http://127.0.0.1:11434'
-$DateAppApi = 'http://127.0.0.1:8000'
+$OllamaUrl  = 'http://192.168.0.15:11434'
+$DateAppApi = 'http://192.168.0.15:8000'
 $ModelName  = 'joshlcoleman/Fable:latest'
 
 New-Item -ItemType Directory -Force -Path ([IO.Path]::GetDirectoryName($LogFile)) | Out-Null

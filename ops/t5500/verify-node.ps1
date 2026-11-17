@@ -25,21 +25,21 @@ function Test-Http($url, $match, $hostHeader) {
 
 # 1. Local services, checked by identity, not by the port alone.
 $services = @(
-  @{ n = 'Ollama :11434 (Fable)';        u = 'http://127.0.0.1:11434/api/tags';   m = 'fable' },
-  @{ n = 'Domains server :9160';         u = 'http://127.0.0.1:9160/';            m = '<html'; h = 'onlinerecycle.net' },
-  @{ n = 'Date-app frontend :3200';      u = 'http://127.0.0.1:3200/';            m = '<html' },
-  @{ n = 'Date-app API :8000';           u = 'http://127.0.0.1:8000/health';      m = 'ok|healthy' },
-  @{ n = 'Paperclip :4747';              u = 'http://127.0.0.1:4747/api/health';  m = '"deploymentMode"' },
-  @{ n = 'Mission Control :3130';        u = 'http://127.0.0.1:3130/live';        m = '.' },
-  @{ n = 'Hermes dashboard :9119';       u = 'http://127.0.0.1:9119/';            m = '(?i)hermes' },
-  @{ n = 'OmniRoute :20128';             u = 'http://127.0.0.1:20128/';           m = '.' },
-  @{ n = 'Obsidian REST :27123';         u = 'http://127.0.0.1:27123/';           m = '(?i)obsidian' },
-  @{ n = 'Hermes gateway API :8643';     u = 'http://127.0.0.1:8643/health';      m = 'hermes-agent' }
+  @{ n = 'Ollama :11434 (Fable)';        u = 'http://192.168.0.15:11434/api/tags';   m = 'fable' },
+  @{ n = 'Domains server :9160';         u = 'http://192.168.0.15:9160/';            m = '<html'; h = 'onlinerecycle.net' },
+  @{ n = 'Date-app frontend :3200';      u = 'http://192.168.0.15:3200/';            m = '<html' },
+  @{ n = 'Date-app API :8000';           u = 'http://192.168.0.15:8000/health';      m = 'ok|healthy' },
+  @{ n = 'Paperclip :4747';              u = 'http://192.168.0.15:3130/api/health';  m = '"deploymentMode"' },
+  @{ n = 'Mission Control :3130';        u = 'http://192.168.0.15:3130/live';        m = '.' },
+  @{ n = 'Hermes dashboard :9119';       u = 'http://192.168.0.15:9119/';            m = '(?i)hermes' },
+  @{ n = 'OmniRoute :20128';             u = 'http://192.168.0.15:20128/';           m = '.' },
+  @{ n = 'Obsidian REST :27123';         u = 'http://192.168.0.15:27123/';           m = '(?i)obsidian' },
+  @{ n = 'Hermes gateway API :8643';     u = 'http://192.168.0.15:8643/health';      m = 'hermes-agent' }
 )
 # Fable must actually run, not just be listed (2026-10-15: Ollama listed it while its runner was missing).
 try {
   $b = @{ model = 'joshlcoleman/Fable:latest'; prompt = 'Reply OK'; stream = $false; keep_alive = -1 } | ConvertTo-Json
-  $g = Invoke-RestMethod 'http://127.0.0.1:11434/api/generate' -Method Post -Body $b -ContentType 'application/json' -TimeoutSec 150
+  $g = Invoke-RestMethod 'http://192.168.0.15:11434/api/generate' -Method Post -Body $b -ContentType 'application/json' -TimeoutSec 150
   Add-Result 'service' 'Fable answers (Ollama runs models)' $(if ($g.response) { 'UP' } else { 'DOWN' }) 'generate returned text'
 } catch { Add-Result 'service' 'Fable answers (Ollama runs models)' 'DOWN' (($_.ErrorDetails.Message -replace '\s+', ' ') -replace '^(.{0,120}).*', '$1') }
 

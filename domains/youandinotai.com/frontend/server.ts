@@ -10,10 +10,15 @@ import { v4 as uuidv4 } from 'uuid';
 import http from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { loadDateAppFrontendConfig, resolveFrontendBind } from './bind.mjs';
 
-const PORT = Number(process.env.PORT || 8080);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const FLEET_FRONTEND = loadDateAppFrontendConfig();
+const PORT = Number(process.env.PORT || FLEET_FRONTEND.port);
+
+export { resolveFrontendBind };
 
 // Types
 type Vector3 = { x: number; y: number; z: number };
@@ -60,7 +65,16 @@ function broadcast(data: any, excludeId?: string) {
   }
 }
 
-async function startServer() {
+export async function startServer(
+  opts: {
+    port?: number;
+    host?: string;
+    env?: Record<string, string | undefined>;
+    warn?: ((msg: string) => void) | null;
+  } = {}
+) {
+  const env = opts.env ?? process.env;
+  const listenPort = opts.port ?? Number(env.PORT || FLEET_FRONTEND.port);
   const app = express();
   const server = http.createServer(app);
 
@@ -153,7 +167,7 @@ async function startServer() {
   });
 
   // Broadcast loop (20Hz)
-  setInterval(() => {
+  const syncTimer = setInterval(() => {
     const now = Date.now();
 
     // Clean up old force fields (e.g., after 10.5 seconds to allow client animation)
@@ -175,6 +189,8 @@ async function startServer() {
 
     broadcast(updateData);
   }, 50);
+  syncTimer.unref?.();
+  server.on('close', () => clearInterval(syncTimer));
 
   // API routes
   app.get('/health', (req, res) => {
@@ -240,7 +256,7 @@ async function startServer() {
         middlewareMode: true,
         // Public traffic arrives via the cloudflared tunnel with the real
         // hostname — Vite's host check 403s anything not listed here.
-        allowedHosts: ['.youandinotai.com', 'localhost', '127.0.0.1'],
+        allowedHosts: ['.youandinotai.com', FLEET_FRONTEND.host, 'localhost', '127.0.0.1'],
       },
       appType: 'spa',
     });
@@ -301,10 +317,28 @@ async function startServer() {
     });
   }
 
-  const bindHost = process.env.HOST || '127.0.0.1';
-  server.listen(PORT, bindHost, () => {
-    console.log(`Server running on http://${bindHost}:${PORT}`);
+  const bindHost =
+    opts.host ??
+    resolveFrontendBind(env, {
+      port: listenPort,
+      bind: FLEET_FRONTEND.bind,
+      warn: opts.warn ?? console.warn,
+    });
+  await new Promise<void>((resolve) => {
+    server.listen(listenPort, bindHost, () => {
+      const addr = server.address();
+      const activePort = addr && typeof addr === 'object' ? addr.port : listenPort;
+      console.log(`Server running on http://${bindHost}:${activePort} (LAN http://${FLEET_FRONTEND.host}:${activePort})`);
+      resolve();
+    });
   });
+  return { app, server, host: bindHost };
 }
 
-startServer();
+const IS_MAIN_MODULE = Boolean(
+  process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename)
+);
+
+if (IS_MAIN_MODULE) {
+  startServer();
+}
