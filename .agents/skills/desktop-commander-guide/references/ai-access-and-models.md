@@ -78,7 +78,7 @@ Explain the tradeoffs:
 
 Use language like:
 
-- premium options for harder tasks: `GPT-5.4` and `Claude Opus 4.6`
+- premium options for harder tasks: `Opus 5.5` / `Fable`, `Gemini 4 Carbon`, `GPT-6 Astra`, and `GPT-6.1 Sol`
 - cheaper strong alternatives: Gemini models, Grok models, and smaller or faster GPT or Claude variants
 - local option: Ollama when privacy, local execution, or cost matter more than getting the very strongest cloud model
 

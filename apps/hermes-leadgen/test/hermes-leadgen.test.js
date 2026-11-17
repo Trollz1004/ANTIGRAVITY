@@ -178,12 +178,12 @@ test('2. Agent souls and profiles include OPSis default research orchestrator, h
       text.includes('agy --dangerously-skip-permissions') || text.includes('grok') || text.includes('8082'),
       `Missing CLI auth spec in ${s}`,
     );
-    assert.ok(text.includes('Sabretooth'), `Missing node Sabretooth in ${s}`);
+    assert.ok(text.includes('Alienware'), `Missing node Alienware in ${s}`);
     assert.ok(!bannedLabel.test(text), `Soul ${s} must use OPSis`);
   }
   const defaultSoul = fs.readFileSync(path.join(ROOT_DIR, 'souls', 'default-orchestrator-agent.md'), 'utf8');
   assert.ok(defaultSoul.includes('OPSis'));
-  assert.ok(defaultSoul.includes('http://127.0.0.1:9119/chat?profile=default&resume=local-profile'));
+  assert.ok(defaultSoul.includes('http://192.168.0.15:9119/chat?profile=default&resume=local-profile'));
   assert.ok(defaultSoul.includes('agy --dangerously-skip-permissions'));
   assert.ok(defaultSoul.includes('agent-reach'));
   assert.ok(defaultSoul.includes('last30days'));

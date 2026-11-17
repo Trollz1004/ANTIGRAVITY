@@ -1,9 +1,9 @@
-# ANTIGRAVITY Oracle — one-shot bootstrap (T5500 primary node)
+﻿# ANTIGRAVITY Oracle — one-shot bootstrap (T5500 primary node)
 # NO visible console, NO browser, NO focus steal. Logs only.
 # Invoked by Scheduled Task with -WindowStyle Hidden.
 
 $ErrorActionPreference = 'Continue'
-$Repo = if (Test-Path 'E:\ANTIGRAVITY') { 'E:\ANTIGRAVITY' } else { 'E:\ANTIGRAVITY' }
+$Repo = if (Test-Path 'C:\ANTIGRAVITY') { 'C:\ANTIGRAVITY' } else { Split-Path -Parent (Split-Path -Parent $PSScriptRoot) }
 $LogDir = Join-Path $Repo 'logs'
 $LogFile = Join-Path $LogDir 'oracle-bootstrap.log'
 $Watchdog = Join-Path $Repo 'scripts\watchdog'
@@ -18,7 +18,7 @@ function Log([string]$Msg) {
 function Test-Port([int]$Port) {
     try {
         $c = New-Object System.Net.Sockets.TcpClient
-        $ar = $c.BeginConnect('127.0.0.1', $Port, $null, $null)
+        $ar = $c.BeginConnect([System.Net.IPAddress]::Loopback, $Port, $null, $null)
         $ok = $ar.AsyncWaitHandle.WaitOne(1500, $false)
         $c.Close()
         return $ok
@@ -99,24 +99,18 @@ if (-not (Test-Port 11434)) {
     }
 }
 
-# OpusHasHands / mission-control static on :4200
-if (-not (Test-Port 4200)) {
-    $candidates = @(
-        (Join-Path $Repo 'apps\mission-control\dist'),
-        (Join-Path $Repo '_handoff-staging-2026-05-26\_deploy\opushashands'),
-        (Join-Path $Repo '_deploy\aidoesitall-www')
-    )
-    $dir = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
-    if ($dir) {
-        Log "OpusHasHands :4200 down - http.server in $dir (hidden)"
-        $py = if (Get-Command py -ErrorAction SilentlyContinue) { 'py' } else { 'python' }
-        Start-Hidden $py @('-3', '-m', 'http.server', '4200', '--bind', '127.0.0.1') $dir
+# Mission OS on :3130
+if (-not (Test-Port 3130)) {
+    $startMc = Join-Path $Repo 'scripts\start-mission-control.ps1'
+    if (Test-Path $startMc) {
+        Log 'Mission OS :3130 down - starting (hidden)'
+        Start-Hidden 'powershell.exe' @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $startMc, '-RepoRoot', $Repo, '-Port', '3130') $Repo
     }
 }
 
-# Cloudflared (paperclip-hq tunnel) — hidden, no window
+# Cloudflared tunnel — hidden, no window
 $cf = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
-$cfCfg = Join-Path $Repo 'infra\cloudflare\paperclip-hq.yml'
+$cfCfg = Join-Path $Repo 'infra\cloudflare\t5500-dateapp.yml'
 if ((Test-Path $cf) -and (Test-Path $cfCfg)) {
     if (-not (Get-Process -Name 'cloudflared' -ErrorAction SilentlyContinue)) {
         Log 'cloudflared down — starting tunnel (hidden)'

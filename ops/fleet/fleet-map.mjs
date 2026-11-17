@@ -4,8 +4,13 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_FLEET_MAP_PATH = path.join(HERE, 'fleet-map.json');
+export const FLEET_MAP_PATH = DEFAULT_FLEET_MAP_PATH;
 
 const SERVICE_ALIASES = {
+  'lead-gen': ['hermes-leadgen'],
+  leadgen: ['hermes-leadgen'],
+  'opsis-cut-and-reach-studio': ['opsis-studio'],
+  ollama: ['alienware-ollama'],
   postgres: ['t5500-postgres'],
   't5500-postgres': ['postgres'],
   redis: ['t5500-redis'],
@@ -189,6 +194,44 @@ export function getNodeIp(nodeId, fleetMap = loadFleetMap()) {
   return getNode(nodeId, fleetMap).ip;
 }
 
+export function getSpinePath(fleetMap = loadFleetMap()) {
+  const spine = typeof fleetMap?.spine === 'string' ? fleetMap.spine.trim() : '';
+  if (!spine) {
+    throw new Error('Missing "spine" path in fleet-map.json');
+  }
+  return spine;
+}
+
+export function getNodeHost(nodeId, fleetMap = loadFleetMap()) {
+  return getNode(nodeId, fleetMap).host;
+}
+
+export function getNodeRepos(nodeId, fleetMap = loadFleetMap()) {
+  const node = getNode(nodeId, fleetMap);
+  return Array.isArray(node.repos) ? [...node.repos] : [];
+}
+
+export function getNodeHarnesses(nodeId, fleetMap = loadFleetMap()) {
+  const node = getNode(nodeId, fleetMap);
+  return Array.isArray(node.harnesses) ? [...node.harnesses] : [];
+}
+
+export function getAllowedNodeHosts(fleetMap = loadFleetMap()) {
+  const rawNodes = fleetMap?.nodes;
+  const list = Array.isArray(rawNodes) ? rawNodes : Object.values(rawNodes || {});
+  const seen = new Set();
+  const hosts = [];
+  for (const node of list) {
+    if (!node || typeof node !== 'object') continue;
+    const value = String(node.host || node.ip || '').trim();
+    if (value && !seen.has(value)) {
+      seen.add(value);
+      hosts.push(value);
+    }
+  }
+  return hosts;
+}
+
 export function listAllServices(fleetMap = loadFleetMap()) {
   const rawServices = fleetMap?.services;
   if (Array.isArray(rawServices)) {
@@ -211,32 +254,78 @@ function resolveFallbackService(candidate, fleetMap) {
   return normalizeServiceEntry({ ...fb, host }, fb.id);
 }
 
-export function getService(serviceId, fleetMap = loadFleetMap()) {
-  const key = String(serviceId || '')
+export function getService(serviceIdOrPort, nodeIdOrMap = null, maybeMap = null) {
+  let nodeId = null;
+  let fleetMap = loadFleetMap();
+  if (typeof nodeIdOrMap === 'string') {
+    nodeId = nodeIdOrMap;
+    fleetMap = maybeMap || loadFleetMap();
+  } else if (nodeIdOrMap && typeof nodeIdOrMap === 'object') {
+    fleetMap = nodeIdOrMap;
+  }
+  const normalizedNode = nodeId ? String(nodeId).trim().toLowerCase() : null;
+  const allServices = listAllServices(fleetMap);
+
+  if (typeof serviceIdOrPort === 'number' || /^\d+$/.test(String(serviceIdOrPort || '').trim())) {
+    const portNum = Number(serviceIdOrPort);
+    const match = allServices.find(
+      (svc) =>
+        Number(svc.port) === portNum &&
+        (!normalizedNode ||
+          String(svc.node || '')
+            .trim()
+            .toLowerCase() === normalizedNode),
+    );
+    if (match) return match;
+    throw new Error(`Unknown fleet service on port ${portNum}`);
+  }
+
+  const key = String(serviceIdOrPort || '')
     .trim()
     .toLowerCase();
-  const allServices = listAllServices(fleetMap);
   const candidates = [key, ...(SERVICE_ALIASES[key] || [])];
   for (const candidate of candidates) {
-    const match = allServices.find((svc) => svc.id.toLowerCase() === candidate);
+    const match = allServices.find(
+      (svc) =>
+        svc.id.toLowerCase() === candidate &&
+        (!normalizedNode ||
+          String(svc.node || '')
+            .trim()
+            .toLowerCase() === normalizedNode),
+    );
     if (match) return match;
   }
   if (!Array.isArray(fleetMap?.services) && fleetMap?.services && typeof fleetMap.services === 'object') {
     for (const candidate of candidates) {
-      if (fleetMap.services[candidate]) {
-        return normalizeServiceEntry(fleetMap.services[candidate], candidate);
+      const direct = fleetMap.services[candidate];
+      if (
+        direct &&
+        (!normalizedNode ||
+          String(direct.node || '')
+            .trim()
+            .toLowerCase() === normalizedNode)
+      ) {
+        return normalizeServiceEntry(direct, candidate);
       }
     }
   }
   for (const candidate of candidates) {
     const fallback = resolveFallbackService(candidate, fleetMap);
-    if (fallback) return fallback;
+    if (
+      fallback &&
+      (!normalizedNode ||
+        String(fallback.node || '')
+          .trim()
+          .toLowerCase() === normalizedNode)
+    ) {
+      return fallback;
+    }
   }
-  throw new Error(`Unknown fleet service "${serviceId}"`);
+  throw new Error(`Unknown fleet service "${serviceIdOrPort}"`);
 }
 
-export function getServiceUrl(serviceId, pathSuffix = '', fleetMap = loadFleetMap()) {
-  const svc = getService(serviceId, fleetMap);
+export function getServiceUrl(serviceIdOrPort, pathSuffix = '', fleetMap = loadFleetMap()) {
+  const svc = getService(serviceIdOrPort, fleetMap);
   const scheme = svc.protocol === 'ws' || svc.protocol === 'wss' || svc.protocol === 'https' ? svc.protocol : 'http';
   const host = isMachineLocalScope(svc.scope) ? '127.0.0.1' : svc.host;
   const base = (svc.url || `${scheme}://${host}:${svc.port}`).replace(/\/+$/, '');
@@ -245,12 +334,27 @@ export function getServiceUrl(serviceId, pathSuffix = '', fleetMap = loadFleetMa
   return `${base}${normalizedSuffix}`;
 }
 
-export function getBindHost(serviceId, envOverride = '', fleetMap = loadFleetMap()) {
+export function getServiceHealthUrl(serviceIdOrPort, fleetMap = loadFleetMap()) {
+  const svc = getService(serviceIdOrPort, fleetMap);
+  return getServiceUrl(svc.id, svc.healthPath || '/health', fleetMap);
+}
+
+export function getBindHost(serviceIdOrPort, envOverride = '', fleetMap = loadFleetMap()) {
   const trimmed = String(envOverride || '').trim();
   if (trimmed) return trimmed;
-  const svc = getService(serviceId, fleetMap);
+  const svc = getService(serviceIdOrPort, fleetMap);
   if (isMachineLocalScope(svc.scope)) return '127.0.0.1';
   return svc.bind;
+}
+
+export function getServiceBindHost(serviceIdOrPort, envOverride = '', fleetMap = loadFleetMap()) {
+  return getBindHost(serviceIdOrPort, envOverride, fleetMap);
+}
+
+export function getServicePort(serviceIdOrPort, envPortValue = '', fleetMap = loadFleetMap()) {
+  const n = Number(envPortValue);
+  if (Number.isInteger(n) && n > 0) return n;
+  return Number(getService(serviceIdOrPort, fleetMap).port);
 }
 
 export function listServicesByNode(nodeId, fleetMap = loadFleetMap()) {
@@ -265,3 +369,38 @@ export function listServicesByNode(nodeId, fleetMap = loadFleetMap()) {
         .toLowerCase() === key,
   );
 }
+
+export function getServicesByNode(nodeId, fleetMap = loadFleetMap()) {
+  return listServicesByNode(nodeId, fleetMap);
+}
+
+export function getServicesByScope(scope, fleetMap = loadFleetMap()) {
+  const key = String(scope || '')
+    .trim()
+    .toLowerCase();
+  return listAllServices(fleetMap).filter(
+    (svc) =>
+      String(svc.scope || '')
+        .trim()
+        .toLowerCase() === key,
+  );
+}
+
+export const load_fleet_map = loadFleetMap;
+export const get_spine_path = getSpinePath;
+export const get_node = getNode;
+export const get_node_ip = getNodeIp;
+export const get_node_host = getNodeHost;
+export const get_node_repos = getNodeRepos;
+export const get_node_harnesses = getNodeHarnesses;
+export const get_allowed_node_hosts = getAllowedNodeHosts;
+export const list_all_services = listAllServices;
+export const get_service = getService;
+export const get_bind_host = getBindHost;
+export const get_service_bind_host = getServiceBindHost;
+export const get_service_port = getServicePort;
+export const get_service_url = getServiceUrl;
+export const get_service_health_url = getServiceHealthUrl;
+export const list_services_by_node = listServicesByNode;
+export const get_services_by_node = getServicesByNode;
+export const get_services_by_scope = getServicesByScope;

@@ -39,7 +39,7 @@ az ad app create \
 ```bash
 az ad app create \
   --display-name "MySpaApp" \
-  --spa-redirect-uris "http://localhost:3000" \
+  --spa-redirect-uris "https://myapp.com/auth/callback" \
   --sign-in-audience "AzureADMyOrg"
 ```
 
@@ -48,7 +48,7 @@ az ad app create \
 ```bash
 az ad app create \
   --display-name "MyDesktopApp" \
-  --public-client-redirect-uris "http://localhost" \
+  --public-client-redirect-uris "myapp://auth" \
   --sign-in-audience "AzureADMyOrg"
 ```
 
@@ -127,14 +127,14 @@ az ad app update --id $APP_ID \
 
 ```bash
 az ad app update --id $APP_ID \
-  --spa-redirect-uris "http://localhost:3000" "http://localhost:5000"
+  --spa-redirect-uris "https://192.168.0.40:3000" "https://192.168.0.40:5000"
 ```
 
 **Public client:**
 
 ```bash
 az ad app update --id $APP_ID \
-  --public-client-redirect-uris "http://localhost" "myapp://auth"
+  --public-client-redirect-uris "myapp://auth" "msal<client-id>://auth"
 ```
 
 ## Client Credentials (Secrets & Certificates)
@@ -375,7 +375,7 @@ az ad user list --output table
 
 # Variables
 APP_NAME="MyApplication"
-REDIRECT_URI="http://localhost:3000"
+REDIRECT_URI="https://192.168.0.40:3000"
 
 echo "Creating app registration..."
 APP_ID=$(az ad app create \

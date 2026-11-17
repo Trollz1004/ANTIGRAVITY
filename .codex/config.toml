@@ -3,14 +3,14 @@ command = "node"
 args = ['C:\ANTIGRAVITY\brain-mcp\dist\index.js']
 
 [mcp_servers.brain-mcp.env]
-HOME = 'C:\Users\joshi'
+HOME = '%USERPROFILE%'
 
 [mcp_servers.mission-mcp]
 command = "node"
 args = ['C:\ANTIGRAVITY\services\mission-mcp\dist\server.js']
 
 [mcp_servers.mission-mcp.env]
-HOME = 'C:\Users\joshi'
+HOME = '%USERPROFILE%'
 
 [mcp_servers.playwright]
 command = "cmd"
@@ -23,3 +23,18 @@ args = [
 
 [mcp_servers.supabase]
 url = "https://mcp.supabase.com/mcp?project_ref=jmvgdqomvnkfgknmgwxp&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching%2Cstorage"
+
+# --- TROLLZ1004-SPINE:START ---
+[trollz1004_spine]
+scope = "repo"
+repo = "ANTIGRAVITY"
+alienware_ip = "192.168.0.40"
+t5500_ip = "192.168.0.15"
+spine = "docs/house/SPINE.md"
+fleet_map = "ops/fleet/fleet-map.json"
+trusted_three = ["claude-opus-5.5", "fable", "gemini-4-carbon", "gpt-6-astra", "gpt-6.1-sol", "codex"]
+
+[mcp_servers.kit]
+command = "cmd.exe"
+args = ["/d", "/c", "node", "%USERPROFILE%\\antigravity\\DREAM-Engine-runner\\ops\\kit\\server.mjs"]
+# --- TROLLZ1004-SPINE:END ---

@@ -16,7 +16,7 @@ const GUARDIAN_PY = path.resolve(HERE, '..', '..', 'scripts', 'clawx-control', '
 const PY_MODULE = path.join(HERE, 'fleet_map.py');
 
 const LOOPBACK_IP = ['127', '0', '0', '1'].join('.');
-const CANONICAL_SHA256 = 'bbb7b0425986831349062123aa003ec8cebb411430cd0ff76f2f4adb7bdab5f3';
+const CANONICAL_SHA256 = 'bfce109830341feea9f2a97960e15ed2cd0e3e0d4ea95c8bf03e658d1552cfd7';
 
 const EXPECTED_ALIENWARE = [
   ['swarm-command', 8000, 'lan-guarded', 'FLEET_SHARED_TOKEN', '0.0.0.0'],
@@ -103,9 +103,16 @@ test('fleet-map.json matches canonical dream-online origin/main array-schema wit
   );
 
   const data = JSON.parse(raw);
+  assert.equal(data.spine, 'docs/house/SPINE.md');
   assert.deepEqual(Object.keys(data.nodes).sort(), ['alienware', 't5500']);
   assert.equal(data.nodes.t5500.ip, '192.168.0.15');
   assert.equal(data.nodes.alienware.ip, '192.168.0.40');
+  assert.equal(data.nodes.alienware.githubAccount, 'Trollz1004');
+  assert.equal(data.nodes.t5500.githubAccount, 'Trollz1004');
+  assert.ok(Array.isArray(data.nodes.t5500.repos) && data.nodes.t5500.repos.includes('Trollz1004/ANTIGRAVITY'));
+  assert.ok(Array.isArray(data.nodes.alienware.repos) && data.nodes.alienware.repos.includes('Trollz1004/dream-online'));
+  assert.ok(Array.isArray(data.nodes.alienware.harnesses) && data.nodes.alienware.harnesses.includes('gemini'));
+  assert.ok(Array.isArray(data.nodes.t5500.harnesses) && data.nodes.t5500.harnesses.includes('hermes'));
   assert.ok(Array.isArray(data.services), 'canonical fleet-map.json must use array-schema for services');
 
   const byId = new Map(data.services.map((s) => [s.id, s]));
@@ -148,10 +155,23 @@ test('fleet-map.json matches canonical dream-online origin/main array-schema wit
   }
 });
 
-test('fleet-map.mjs resolves all active services, repo-auxiliary fallback services with dynamic host, and canonical-only lists', async () => {
+test('fleet-map.mjs resolves all active services, spine/repos/harnesses helpers, repo-auxiliary fallback services with dynamic host, and canonical-only lists', async () => {
   const mod = await import('./fleet-map.mjs');
+  assert.equal(mod.getSpinePath(), 'docs/house/SPINE.md');
   assert.equal(mod.getNodeIp('t5500'), '192.168.0.15');
   assert.equal(mod.getNodeIp('alienware'), '192.168.0.40');
+  assert.equal(mod.getNodeHost('t5500'), '192.168.0.15');
+  assert.equal(mod.getNodeHost('alienware'), '192.168.0.40');
+  assert.deepEqual(mod.getAllowedNodeHosts().sort(), ['192.168.0.15', '192.168.0.40']);
+  assert.ok(mod.getNodeRepos('t5500').includes('Trollz1004/ANTIGRAVITY'));
+  assert.ok(mod.getNodeRepos('alienware').includes('Trollz1004/dream-online'));
+  assert.ok(mod.getNodeHarnesses('t5500').includes('hermes'));
+  assert.ok(mod.getNodeHarnesses('alienware').includes('gemini'));
+  assert.equal(mod.getServicePort('mission-os'), 3130);
+  assert.equal(mod.getServiceBindHost('mission-os'), '0.0.0.0');
+  assert.equal(mod.getServiceHealthUrl('swarm-command'), 'http://192.168.0.40:8000/api/health');
+  assert.equal(mod.getServicesByNode('t5500').length, EXPECTED_T5500.length);
+  assert.ok(mod.getServicesByScope('this machine only').length >= 3);
 
   for (const exp of ACTIVE_SERVICE_EXPECTATIONS) {
     const svc = mod.getService(exp.id);
@@ -253,8 +273,17 @@ test('fleet_map.py resolves all active services, repo-auxiliary fallbacks with d
     '  "services": [],',
     '}',
     'print(json.dumps({',
+    '  "spine": fleet_map.get_spine_path(),',
     '  "t5500": fleet_map.get_node_ip("t5500"),',
     '  "alienware": fleet_map.get_node_ip("alienware"),',
+    '  "t5500_host": fleet_map.get_node_host("t5500"),',
+    '  "allowed_hosts": sorted(fleet_map.get_allowed_node_hosts()),',
+    '  "t5500_repos": fleet_map.get_node_repos("t5500"),',
+    '  "aw_harnesses": fleet_map.get_node_harnesses("alienware"),',
+    '  "mos_port": fleet_map.get_service_port("mission-os"),',
+    '  "mos_bind_alias": fleet_map.get_service_bind_host("mission-os"),',
+    '  "swarm_health": fleet_map.get_service_health_url("swarm-command"),',
+    '  "local_only_count": len(fleet_map.get_services_by_scope("this machine only")),',
     '  "mos_status": fleet_map.get_service_url("mission-os", "/api/v1/status"),',
     '  "official_vote": fleet_map.get_service_url("official-vote", "/health"),',
     '  "official_vote_bind": fleet_map.get_bind_host("official-vote"),',
@@ -263,6 +292,7 @@ test('fleet_map.py resolves all active services, repo-auxiliary fallbacks with d
     '  "all_ids": [s["id"] for s in fleet_map.list_all_services()],',
     '  "t5500_count": len(fleet_map.list_services_by_node("t5500")),',
     '  "alienware_count": len(fleet_map.list_services_by_node("alienware")),',
+    '  "t5500_by_node_alias": len(fleet_map.get_services_by_node("t5500")),',
     '  "custom_odysseus": fleet_map.get_service_url("odysseus", "", custom_map),',
     '  "custom_all_count": len(fleet_map.list_all_services(custom_map)),',
     '}))',
@@ -271,8 +301,18 @@ test('fleet_map.py resolves all active services, repo-auxiliary fallbacks with d
   const out = execFileSync('python', ['-c', script], { encoding: 'utf8', timeout: 8000 }).trim();
   const parsed = JSON.parse(out);
 
+  assert.equal(parsed.spine, 'docs/house/SPINE.md');
   assert.equal(parsed.t5500, '192.168.0.15');
   assert.equal(parsed.alienware, '192.168.0.40');
+  assert.equal(parsed.t5500_host, '192.168.0.15');
+  assert.deepEqual(parsed.allowed_hosts, ['192.168.0.15', '192.168.0.40']);
+  assert.ok(parsed.t5500_repos.includes('Trollz1004/ANTIGRAVITY'));
+  assert.ok(parsed.aw_harnesses.includes('gemini'));
+  assert.equal(parsed.mos_port, 3130);
+  assert.equal(parsed.mos_bind_alias, '0.0.0.0');
+  assert.equal(parsed.swarm_health, 'http://192.168.0.40:8000/api/health');
+  assert.ok(parsed.local_only_count >= 3);
+  assert.equal(parsed.t5500_by_node_alias, EXPECTED_T5500.length);
   assert.equal(parsed.mos_status, 'http://192.168.0.15:3130/api/v1/status');
   assert.equal(parsed.official_vote, 'http://192.168.0.15:9134/health');
   assert.equal(parsed.official_vote_bind, '0.0.0.0');

@@ -320,7 +320,7 @@ This database contains 100+ real case studies of apps that achieved viral growth
 **Views**: 20M+
 **Format**: 6-slide Pinterest/AI images, CTA on slide 3-4, not last slide
 
-**Production**: Automated with GPT-4o for variations + MoviePy for assembly
+**Production**: Automated with `GPT-6.1 Sol` / `Gemini 4 Carbon` / `Opus 5.5` for variations + MoviePy for assembly
 
 **Key Learning**: 90% of formats can become slideshows. Bookmarkable, aesthetic, infinitely easier to mass produce.
 

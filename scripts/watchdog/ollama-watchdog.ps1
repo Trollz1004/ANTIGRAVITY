@@ -3,7 +3,7 @@
 
 $ErrorActionPreference = 'Continue'
 
-$Repo = 'E:\ANTIGRAVITY'
+$Repo = if (Test-Path 'C:\ANTIGRAVITY') { 'C:\ANTIGRAVITY' } else { Split-Path -Parent (Split-Path -Parent $PSScriptRoot) }
 $LogDir = Join-Path $Repo 'logs'
 $LogFile = Join-Path $LogDir 'ollama-watchdog.log'
 $OllamaExe = Join-Path $env:LOCALAPPDATA 'Programs\Ollama\ollama.exe'
@@ -23,7 +23,7 @@ function Log([string]$Msg) {
 function Test-Port([int]$ListenPort) {
     try {
         $client = New-Object System.Net.Sockets.TcpClient
-        $async = $client.BeginConnect('127.0.0.1', $ListenPort, $null, $null)
+        $async = $client.BeginConnect([System.Net.IPAddress]::Loopback, $ListenPort, $null, $null)
         $ok = $async.AsyncWaitHandle.WaitOne(1500, $false)
         $client.Close()
         return $ok
