@@ -49,19 +49,12 @@ function readHermesApiServerKey() {
 }
 
 function readOmniRouteKey() {
-  const candidates = [
-    { file: 'C:/ANTIGRAVITY/.env', label: 'C:/ANTIGRAVITY/.env#OMNIROUTE_API_KEY' },
-    { file: path.join(os.homedir(), '.omniroute', '.env'), label: '~/.omniroute/.env#OMNIROUTE_API_KEY' },
-  ];
-  for (const c of candidates) {
-    try {
-      const txt = fs.readFileSync(c.file, 'utf8');
-      const m = txt.match(/^OMNI(?:_)?ROUTE_API_KEY\s*=\s*(.+)$/m);
-      if (m && m[1]) {
-        const k = m[1].trim().replace(/^['"]|['"]$/g, '');
-        if (k) return { key: k, source: c.label };
-      }
-    } catch {}
+  const omniKey = String(process.env.OMNIROUTE_API_KEY || process.env.OMNI_ROUTE_API_KEY || '').trim();
+  if (omniKey) {
+    return {
+      key: omniKey,
+      source: process.env.OMNIROUTE_API_KEY ? 'env:OMNIROUTE_API_KEY' : 'env:OMNI_ROUTE_API_KEY',
+    };
   }
   return { key: '', source: 'unconfigured' };
 }

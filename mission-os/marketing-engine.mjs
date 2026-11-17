@@ -145,34 +145,8 @@ export const SCC_LAUNCH_DIRECTORIES = [
   { id: 'sideprojectors', name: 'SideProjectors', url: 'https://www.sideprojectors.com', mode: 'Directory Pack' },
 ];
 
-function readDotEnvMap() {
-  const map = {};
-  const candidates = [
-    `${ROOT}/.env`,
-    path.join(os.homedir(), 'OneDrive', 'claude-to-claude', '.env'),
-  ];
-  for (const p of candidates) {
-    try {
-      const txt = fs.readFileSync(p, 'utf8');
-      for (const line of txt.split(/\r?\n/)) {
-        const trimmed = line.trim();
-        if (!trimmed || trimmed.startsWith('#')) continue;
-        const eq = trimmed.indexOf('=');
-        if (eq > 0) {
-          const k = trimmed.slice(0, eq).trim();
-          const v = trimmed.slice(eq + 1).trim().replace(/^['"]|['"]$/g, '');
-          if (k && v && !map[k]) map[k] = v;
-        }
-      }
-    } catch {}
-  }
-  return map;
-}
-
 export function envValue(name) {
-  if (process.env[name]) return process.env[name];
-  const map = readDotEnvMap();
-  return map[name] || '';
+  return String(process.env[name] || '').trim();
 }
 
 export function mapDomainToBrand(domainOrBrand) {

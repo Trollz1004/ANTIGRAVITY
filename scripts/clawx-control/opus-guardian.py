@@ -330,33 +330,12 @@ def check_input_validation(result: GuardianResult):
                     result.warn("INPUT_VALIDATION", f"{router_file.name}:{func_name} — has body param but no typed schema")
 
 def check_env_file(result: GuardianResult):
-    """Verify required runtime keys exist in environment or expected local env files."""
-    candidate_env_files = [
-        ROOT / ".env",
-        API_DIR / ".env",
-    ]
-
-    content_parts = []
-    existing_files = []
-    for env_file in candidate_env_files:
-        if env_file.exists():
-            existing_files.append(str(env_file.relative_to(ROOT)))
-            content_parts.append(env_file.read_text(encoding="utf-8", errors="ignore"))
-
-    content = "\n".join(content_parts)
-    missing = []
-    for key in REQUIRED_ENV_KEYS:
-        if key not in content and not os.getenv(key):
-            missing.append(key)
-
-    if missing and existing_files:
-        result.fail("ENV_FILE", f"Missing required keys: {', '.join(missing)}")
-    elif missing:
-        result.warn("ENV_FILE", f"No local backend env file found on this node; missing runtime keys in current process: {', '.join(missing)}")
-    elif existing_files:
-        result.ok("ENV_FILE", f"Required keys found via {', '.join(existing_files)}")
+    """Verify required runtime keys exist in the process environment without reading .env files."""
+    missing = [key for key in REQUIRED_ENV_KEYS if not os.getenv(key)]
+    if missing:
+        result.warn("ENV_FILE", f"Missing runtime keys in current process environment: {', '.join(missing)}")
     else:
-        result.warn("ENV_FILE", "No local .env file found; relying on process environment")
+        result.ok("ENV_FILE", "Required runtime keys present in process environment")
 
 def check_fleet_address_doctrine(result: GuardianResult):
     """Verify ops/fleet/fleet-map.json exists, defines only t5500 & alienware, and keeps non-DB services off loopback."""

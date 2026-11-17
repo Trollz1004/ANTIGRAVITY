@@ -118,16 +118,7 @@ function hostOnly(hostHeader) {
 }
 
 function readEnvValue(key) {
-  if (process.env[key]) return process.env[key];
-  try {
-    const envPath = path.join(REPO_ROOT, ".env");
-    if (!fs.existsSync(envPath)) return "";
-    const txt = fs.readFileSync(envPath, "utf8");
-    const m = txt.match(new RegExp(`^${key}\\s*=\\s*(.+)$`, "m"));
-    return m && m[1] ? m[1].trim().replace(/^['"]|['"]$/g, "") : "";
-  } catch {
-    return "";
-  }
+  return String(process.env[key] || "").trim();
 }
 
 // Every booking, cached and re-read only when bookings.jsonl changes on disk.

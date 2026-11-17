@@ -61,7 +61,7 @@ import { readFileSync, existsSync, readdirSync, statSync, writeFileSync, unlinkS
 import { spawn, execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
-import { resolveConfig, resolveVault, readEnvFile } from './lib/config.mjs';
+import { resolveConfig, resolveVault } from './lib/config.mjs';
 import { probeAll } from './lib/nodes.mjs';
 import { getSentrySnapshot, getSentrySummary } from './lib/sentry.mjs';
 import { resolveClaudeBinary, killTree, runClaude, isSameOrigin, PERMISSION_MODES, PERSONAS, sse } from './lib/claude-bridge.mjs';
@@ -112,14 +112,14 @@ const T5500_IP = getNodeIp('t5500');
 const ALIENWARE_IP = getNodeIp('alienware');
 const HERE = dirname(fileURLToPath(import.meta.url));
 // process.env > <repo>/.env > derived defaults (lib/config.mjs). The repo root is this checkout.
-const CFG = resolveConfig({ here: HERE });
+const CFG = resolveConfig({ here: HERE, readEnv: () => ({}) });
 const REPO = CFG.repo;
 const PORT = CFG.port;
 const LAN_IP = CFG.lanIp;
 const OMNI = CFG.omni;
 // Vault resolution self-heals across machines: a configured path that does not exist
 // (e.g. a Sabertooth path on Alienware) is skipped in favour of an existing candidate.
-const VAULT_CFG = resolveVault({ env: process.env, readEnv: readEnvFile, envFile: CFG.envFile, candidates: [join(REPO, 'Antigravity'), 'C:\\DREAM\\AlienwareDream'] });
+const VAULT_CFG = resolveVault({ env: process.env, readEnv: () => ({}), envFile: CFG.envFile, candidates: [join(REPO, 'Antigravity'), 'C:\\DREAM\\AlienwareDream'] });
 const VAULT = VAULT_CFG.path;
 const VAULT_NAME = VAULT_CFG.name;
 const VAULT_ID = VAULT_CFG.id; // stable Obsidian vault id for obsidian:// deep links
@@ -508,9 +508,9 @@ const STARTED_AT = new Date().toISOString(); // the House restarts this server w
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.md': 'text/markdown; charset=utf-8' };
 
-// Secrets are read from the .env at request time and never logged or returned.
+// Secrets are read strictly from process.env at request time and never logged or returned.
 function envValue(name) {
-  return process.env[name] || readEnvFile(CFG.envFile)[name] || readEnvFile(join(REPO, '.env'))[name] || '';
+  return String(process.env[name] || '').trim();
 }
 
 // ── skills = agents (live directory read; --hash clones are Paperclip copies, skipped) ──
@@ -851,7 +851,7 @@ createServer(async (req, res) => {
 
   if (p.startsWith('/api/omni/')) {
     const key = envValue('OMNI_ROUTE_API_KEY');
-    if (!key) return send(res, 503, { error: 'AUTH MISSING: OMNI_ROUTE_API_KEY not in ' + CFG.envFile });
+    if (!key) return send(res, 503, { error: 'AUTH MISSING: OMNI_ROUTE_API_KEY not configured' });
     const target = OMNI + p.slice('/api/omni'.length) + url.search;
     const c = new AbortController(); const t = setTimeout(() => c.abort(), 300000);
     try {

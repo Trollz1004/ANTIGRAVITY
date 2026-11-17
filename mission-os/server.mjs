@@ -255,18 +255,7 @@ async function probeBridges() {
 }
 
 function readOmniRouteKey() {
-  const candidates = [
-    'C:\\ANTIGRAVITY\\.env',
-    path.join(os.homedir(), '.omniroute', '.env'),
-  ];
-  for (const p of candidates) {
-    try {
-      const txt = fs.readFileSync(p, 'utf8');
-      const m = txt.match(/^OMNIROUTE_API_KEY\s*=\s*(.+)$/m);
-      if (m && m[1]) return m[1].trim().replace(/^['"]|['"]$/g, '');
-    } catch {}
-  }
-  return '';
+  return String(process.env.OMNIROUTE_API_KEY || process.env.OMNI_ROUTE_API_KEY || '').trim();
 }
 
 function cleanOAuthEnv() {
