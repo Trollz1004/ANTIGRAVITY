@@ -361,6 +361,19 @@
       "tokenEnv": "OBSIDIAN_REST_API_KEY",
       "healthPath": "/",
       "url": "http://192.168.0.40:27123"
+    },
+    "alienware-obsidian-mcp": {
+      "id": "alienware-obsidian-mcp",
+      "name": "Obsidian MCP (Alienware)",
+      "node": "alienware",
+      "host": "192.168.0.40",
+      "port": 27200,
+      "protocol": "http",
+      "scope": "lan-guarded",
+      "bind": "0.0.0.0",
+      "tokenEnv": "FLEET_SHARED_TOKEN",
+      "healthPath": "/health",
+      "url": "http://192.168.0.40:27200"
     }
   }
 }

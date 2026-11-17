@@ -13,6 +13,7 @@ const VAULT_DIR = path.join(ROOT_DIR, 'data', 'test-vault');
 process.env.SABRETOOTH_VAULT_ROOT = VAULT_DIR;
 delete process.env.HERMES_LEADGEN_BIND;
 delete process.env.HERMES_LEADGEN_TOKEN;
+delete process.env.FLEET_SHARED_TOKEN;
 
 const { server, resolveBindHost, validateBindConfig, proxyHttpRequest } = require('../server');
 const { spawnSync } = require('node:child_process');
@@ -443,21 +444,32 @@ test('7. Separated Tabs, :8391/health Official API Prospecting + YouTube Data AP
   }
 });
 
-test('8. default LAN bind: server binds to 0.0.0.0:8392 from fleet-map unless overridden via HERMES_LEADGEN_BIND', () => {
-  assert.equal(resolveBindHost({}), '0.0.0.0');
-  assert.equal(resolveBindHost({ HERMES_LEADGEN_BIND: '127.0.0.1' }), '127.0.0.1');
-  assert.equal(resolveBindHost({ HERMES_LEADGEN_BIND: '0.0.0.0' }), '0.0.0.0');
+test('8. default no-token bind: server binds to 127.0.0.1 with warning when token unset and 0.0.0.0 when token set', () => {
+  const warnings = [];
+  assert.equal(resolveBindHost({}, { port: 8392, warn: (m) => warnings.push(m) }), '127.0.0.1');
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /HERMES_LEADGEN_TOKEN/);
+  assert.doesNotMatch(warnings[0], /127\.0\.0\.1:\d+/);
+
+  assert.equal(resolveBindHost({ HERMES_LEADGEN_BIND: '127.0.0.1' }, { warn: () => {} }), '127.0.0.1');
+  assert.throws(() => resolveBindHost({ HERMES_LEADGEN_BIND: '0.0.0.0' }, { warn: () => {} }));
+  assert.equal(resolveBindHost({ HERMES_LEADGEN_TOKEN: 'tok' }, { warn: () => {} }), '0.0.0.0');
+  assert.equal(resolveBindHost({ FLEET_SHARED_TOKEN: 'tok' }, { warn: () => {} }), '0.0.0.0');
   const addr = localServerInstance.address();
-  assert.equal(addr.address, '0.0.0.0', 'Server must bind to 0.0.0.0 by default per fleet-map');
+  assert.equal(addr.address, '127.0.0.1', 'Server must bind 127.0.0.1 when token is unset');
 });
 
-test('9. validateBindConfig resolves 0.0.0.0 bind and token state cleanly', () => {
-  const emptyCfg = validateBindConfig({ HERMES_LEADGEN_BIND: '0.0.0.0', HERMES_LEADGEN_TOKEN: '' });
-  assert.equal(emptyCfg.bindHost, '0.0.0.0');
-  assert.equal(emptyCfg.token, '');
-  const withToken = validateBindConfig({ HERMES_LEADGEN_BIND: '0.0.0.0', HERMES_LEADGEN_TOKEN: ' token-abc ' });
+test('9. validateBindConfig refuses explicit LAN bind without token and resolves 0.0.0.0 bind when token is set', () => {
+  assert.throws(() => validateBindConfig({ HERMES_LEADGEN_BIND: '0.0.0.0', HERMES_LEADGEN_TOKEN: '' }, null, { warn: () => {} }));
+  const noTokCfg = validateBindConfig({}, null, { warn: () => {} });
+  assert.equal(noTokCfg.bindHost, '127.0.0.1');
+  assert.equal(noTokCfg.token, '');
+  const withToken = validateBindConfig({ HERMES_LEADGEN_BIND: '0.0.0.0', HERMES_LEADGEN_TOKEN: ' token-abc ' }, null, { warn: () => {} });
   assert.equal(withToken.bindHost, '0.0.0.0');
   assert.equal(withToken.token, 'token-abc');
+  const defaultWithToken = validateBindConfig({ HERMES_LEADGEN_TOKEN: ' token-abc ' }, null, { warn: () => {} });
+  assert.equal(defaultWithToken.bindHost, '0.0.0.0');
+  assert.equal(defaultWithToken.token, 'token-abc');
 });
 
 test('10. POST without bearer is 401 when LAN-bound; /proxy/* and /api/memory/* require bearer; state-changing methods check Origin; framing headers preserved', async () => {

@@ -1,4 +1,3 @@
-import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,6 +7,7 @@ import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprot
 
 import { openDb } from './db.js';
 import { TOOLS } from './tools/index.js';
+import { readMcpGuardToken, resolveMissionMcpBind, verifyTokenHeader } from './http-bind.mjs';
 
 const NAME = 'mission-mcp';
 const VERSION = '0.1.0';
@@ -24,38 +24,7 @@ function loadT5500Host(): string {
   }
 }
 
-function constantTimeEqualSecret(expected: string, candidate: string): boolean {
-  const a = Buffer.from(String(expected || ''), 'utf8');
-  const b = Buffer.from(String(candidate || ''), 'utf8');
-  const len = Math.max(a.length, b.length, 1);
-  const padA = Buffer.alloc(len);
-  const padB = Buffer.alloc(len);
-  a.copy(padA);
-  b.copy(padB);
-  return crypto.timingSafeEqual(padA, padB) && a.length === b.length;
-}
-
-function readMcpGuardToken(): string {
-  return String(process.env.MISSION_MCP_TOKEN || process.env.MISSION_OS_TOKEN || '').trim();
-}
-
-function verifyTokenHeader(headers: Record<string, string | string[] | undefined>): { ok: boolean; status: number; error?: string } {
-  const expected = readMcpGuardToken();
-  if (!expected) {
-    return { ok: false, status: 503, error: 'MISSION_MCP_TOKEN / MISSION_OS_TOKEN not configured' };
-  }
-  const direct = headers['x-mission-os-token'] ?? headers['x-mcp-token'];
-  const directStr = Array.isArray(direct) ? direct[0] : direct;
-  const authHeader = headers.authorization;
-  const auth = Array.isArray(authHeader) ? authHeader[0] : authHeader;
-  const trimmed = String(auth || '').trim();
-  const bearer = trimmed.slice(0, 7).toLowerCase() === 'bearer ' ? trimmed.slice(7).trim() : '';
-  const candidate = (directStr ? directStr.trim() : '') || bearer;
-  if (!candidate || !constantTimeEqualSecret(expected, candidate)) {
-    return { ok: false, status: 401, error: 'Unauthorized' };
-  }
-  return { ok: true, status: 200 };
-}
+export { readMcpGuardToken, resolveMissionMcpBind, verifyTokenHeader };
 
 async function createMcpServer() {
   const db = openDb();
@@ -119,7 +88,10 @@ async function startHttp() {
   const { StreamableHTTPServerTransport } = await import('@modelcontextprotocol/sdk/server/streamableHttp.js');
 
   const port = parseInt(process.env.MISSION_MCP_PORT ?? '3901', 10);
-  const host = process.env.MISSION_MCP_HOST ?? '0.0.0.0';
+  const host = resolveMissionMcpBind(process.env, {
+    port,
+    warn: (msg) => process.stderr.write(`${msg}\n`),
+  });
   const lanIp = loadT5500Host();
   const app = express();
   app.use(express.json());
@@ -129,7 +101,7 @@ async function startHttp() {
   });
 
   app.post('/mcp', async (req, res) => {
-    const check = verifyTokenHeader(req.headers);
+    const check = verifyTokenHeader(req.headers, { remoteAddress: req.socket?.remoteAddress });
     if (!check.ok) {
       res.status(check.status).json({ ok: false, error: check.error });
       return;
@@ -148,16 +120,21 @@ async function startHttp() {
   });
 }
 
+const IS_MAIN_MODULE = Boolean(
+  process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url))
+);
 const transport = process.env.MISSION_MCP_TRANSPORT;
 
-if (transport === 'http') {
-  startHttp().catch((err) => {
-    process.stderr.write(`[mission-mcp] fatal: ${err.message}\n`);
-    process.exit(1);
-  });
-} else {
-  startStdio().catch((err) => {
-    process.stderr.write(`[mission-mcp] fatal: ${err.message}\n`);
-    process.exit(1);
-  });
+if (IS_MAIN_MODULE) {
+  if (transport === 'http') {
+    startHttp().catch((err) => {
+      process.stderr.write(`[mission-mcp] fatal: ${err.message}\n`);
+      process.exit(1);
+    });
+  } else {
+    startStdio().catch((err) => {
+      process.stderr.write(`[mission-mcp] fatal: ${err.message}\n`);
+      process.exit(1);
+    });
+  }
 }

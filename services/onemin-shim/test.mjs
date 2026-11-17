@@ -5,10 +5,12 @@ import http from 'node:http';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { resolveShimBind, guardShimToken } from './server.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 let mock, shim;
 let mockPort, shimPort;
+let shimLogs = '';
 let lastUpstreamReq = null;
 
 before(async () => {
@@ -42,18 +44,26 @@ before(async () => {
   mockPort = mock.address().port;
 
   shimPort = 21300 + Math.floor(Math.random() * 500);
+  const shimEnv = {
+    ...process.env,
+    ONEMIN_SHIM_PORT: String(shimPort),
+    ONEMIN_UPSTREAM: `http://127.0.0.1:${mockPort}`,
+  };
+  delete shimEnv.ONEMIN_SHIM_TOKEN;
+  delete shimEnv.FLEET_SHARED_TOKEN;
+  delete shimEnv.ONEMIN_SHIM_HOST;
+
   shim = spawn(process.execPath, [join(here, 'server.mjs')], {
-    env: {
-      ...process.env,
-      ONEMIN_SHIM_PORT: String(shimPort),
-      ONEMIN_UPSTREAM: `http://127.0.0.1:${mockPort}`,
-    },
+    env: shimEnv,
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   await new Promise((resolve, reject) => {
-    const t = setTimeout(() => reject(new Error('shim did not start')), 5000);
-    shim.stdout.on('data', (d) => { if (String(d).includes('listening')) { clearTimeout(t); resolve(); } });
-    shim.stderr.on('data', (d) => console.error('shim stderr:', String(d)));
+    const t = setTimeout(() => reject(new Error(`shim did not start; logs=${shimLogs}`)), 5000);
+    shim.stdout.on('data', (d) => {
+      shimLogs += String(d);
+      if (shimLogs.includes('listening')) { clearTimeout(t); resolve(); }
+    });
+    shim.stderr.on('data', (d) => { shimLogs += String(d); });
   });
 });
 
@@ -150,4 +160,80 @@ test('upstream empty payload fails closed as 502', async () => {
   assert.ok(j.error.message.includes('empty result payload'));
   mock.removeAllListeners('request');
   mock.on('request', orig);
+});
+
+test('no-token startup binds 127.0.0.1 with warning and fails closed on explicit LAN bind', () => {
+  assert.match(shimLogs, /WARNING: ONEMIN_SHIM_TOKEN is not set/);
+  assert.ok(shimLogs.includes(`listening on http://127.0.0.1:${shimPort}`));
+
+  const warnings = [];
+  assert.equal(resolveShimBind({}, { port: 20130, warn: (m) => warnings.push(m) }), '127.0.0.1');
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /ONEMIN_SHIM_TOKEN/);
+  assert.doesNotMatch(warnings[0], /127\.0\.0\.1:\d+/);
+
+  assert.throws(() => resolveShimBind({ ONEMIN_SHIM_HOST: '0.0.0.0' }, { port: 20130, warn: () => {} }));
+  assert.throws(() => resolveShimBind({ ONEMIN_SHIM_HOST: '192.168.0.15' }, { port: 20130, warn: () => {} }));
+  assert.equal(resolveShimBind({ ONEMIN_SHIM_TOKEN: 'tok' }, { port: 20130, warn: () => {} }), '0.0.0.0');
+  assert.equal(resolveShimBind({ FLEET_SHARED_TOKEN: 'tok' }, { port: 20130, warn: () => {} }), '0.0.0.0');
+
+  assert.equal(guardShimToken({ headers: {}, socket: { remoteAddress: '192.168.0.40' } }, {}), false);
+});
+
+test('token-set mode binds 0.0.0.0 and enforces x-shim-token, x-fleet-token, or Bearer while keeping /health open', async () => {
+  const tokenPort = 22000 + Math.floor(Math.random() * 500);
+  const tokenEnv = {
+    ...process.env,
+    ONEMIN_SHIM_PORT: String(tokenPort),
+    ONEMIN_UPSTREAM: `http://127.0.0.1:${mockPort}`,
+    ONEMIN_SHIM_TOKEN: 'shim-guard-secret-2026',
+  };
+  delete tokenEnv.ONEMIN_SHIM_HOST;
+  delete tokenEnv.FLEET_SHARED_TOKEN;
+
+  const guarded = spawn(process.execPath, [join(here, 'server.mjs')], {
+    env: tokenEnv,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  let guardedLogs = '';
+  try {
+    await new Promise((resolve, reject) => {
+      const t = setTimeout(() => reject(new Error(`guarded shim did not start; logs=${guardedLogs}`)), 5000);
+      const check = () => {
+        if (guardedLogs.includes('listening')) { clearTimeout(t); resolve(); }
+      };
+      guarded.stdout.on('data', (d) => { guardedLogs += String(d); check(); });
+      guarded.stderr.on('data', (d) => { guardedLogs += String(d); check(); });
+    });
+
+    assert.ok(guardedLogs.includes(`listening on http://0.0.0.0:${tokenPort}`));
+
+    const health = await fetch(`http://127.0.0.1:${tokenPort}/health`);
+    assert.equal(health.status, 200);
+
+    const noToken = await fetch(`http://127.0.0.1:${tokenPort}/v1/models`);
+    assert.equal(noToken.status, 401);
+
+    const badToken = await fetch(`http://127.0.0.1:${tokenPort}/v1/models`, {
+      headers: { 'x-shim-token': 'wrong-token' },
+    });
+    assert.equal(badToken.status, 401);
+
+    const shimTok = await fetch(`http://127.0.0.1:${tokenPort}/v1/models`, {
+      headers: { 'x-shim-token': 'shim-guard-secret-2026' },
+    });
+    assert.equal(shimTok.status, 200);
+
+    const fleetTok = await fetch(`http://127.0.0.1:${tokenPort}/v1/models`, {
+      headers: { 'x-fleet-token': 'shim-guard-secret-2026' },
+    });
+    assert.equal(fleetTok.status, 200);
+
+    const bearerTok = await fetch(`http://127.0.0.1:${tokenPort}/v1/models`, {
+      headers: { authorization: 'Bearer shim-guard-secret-2026' },
+    });
+    assert.equal(bearerTok.status, 200);
+  } finally {
+    guarded.kill();
+  }
 });

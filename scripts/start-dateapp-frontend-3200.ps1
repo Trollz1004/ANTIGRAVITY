@@ -9,10 +9,17 @@ if (-not (Test-Path $RepoRoot)) {
   $RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 }
 . (Join-Path $RepoRoot 'ops\fleet\Get-FleetEndpoint.ps1')
-$feSvc    = Get-FleetService -ServiceId 'dateapp-frontend'
-$bindHost = Get-FleetBindHost -ServiceId 'dateapp-frontend'
-$port     = [int]$feSvc.port
-$probeUrl = Get-FleetServiceUrl -ServiceId 'dateapp-frontend' -PathSuffix '/'
+$feSvc      = Get-FleetService -ServiceId 'dateapp-frontend'
+$port       = [int]$feSvc.port
+$fleetToken = [string]$env:FLEET_SHARED_TOKEN
+$loopback   = '127.0.0.1'
+if ([string]::IsNullOrWhiteSpace($fleetToken)) {
+  $bindHost = $loopback
+  $probeUrl = "http://${loopback}:$port/"
+} else {
+  $bindHost = Get-FleetBindHost -ServiceId 'dateapp-frontend'
+  $probeUrl = Get-FleetServiceUrl -ServiceId 'dateapp-frontend' -PathSuffix '/'
+}
 
 $LogDir = Join-Path $RepoRoot 'logs'
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
@@ -21,6 +28,11 @@ function L($m) {
   Add-Content -Path $log -Value ("[{0}] {1}" -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $m) -Encoding utf8
 }
 L '=== start-dateapp-frontend-3200 start ==='
+if ([string]::IsNullOrWhiteSpace($fleetToken)) {
+  $warnMsg = "[start-dateapp-frontend-3200] WARNING: FLEET_SHARED_TOKEN is not set; binding $loopback on port $port (this machine only)."
+  Write-Warning $warnMsg
+  L $warnMsg
+}
 
 # Already healthy? do nothing
 try {

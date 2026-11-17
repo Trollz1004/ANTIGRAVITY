@@ -29,11 +29,42 @@ const STATS_DIR = path.join(BOOKINGS_DIR, "stats");
 // domains-server bound on 0.0.0.0:9160 unless overridden via DOMAINS_SERVER_HOST.
 const T5500_IP = getNodeIp("t5500");
 const DOMAINS_SERVICE = getService("domains-server");
-const HOSTS = (process.env.DOMAINS_SERVER_HOST || getBindHost("domains-server"))
-  .split(",")
-  .map((h) => h.trim())
-  .filter(Boolean);
 const PORT = Number(process.env.DOMAINS_SERVER_PORT || DOMAINS_SERVICE.port);
+
+function isLoopbackBindHost(host) {
+  const h = String(host || "").trim().toLowerCase();
+  return h === "127.0.0.1" || h === "localhost" || h === "::1";
+}
+
+function resolveDomainsServerBind(env = process.env, { port = PORT, warn = console.warn } = {}) {
+  const token = String(env?.FLEET_SHARED_TOKEN || env?.DOMAINS_SERVER_TOKEN || "").trim();
+  const explicit = String(env?.DOMAINS_SERVER_HOST || "")
+    .split(",")
+    .map((h) => h.trim())
+    .filter(Boolean);
+  if (explicit.length > 0) {
+    for (const h of explicit) {
+      if (!token && !isLoopbackBindHost(h)) {
+        throw new Error(
+          `[domains-server] Refusing to bind ${h} on port ${port} without FLEET_SHARED_TOKEN or DOMAINS_SERVER_TOKEN configured.`
+        );
+      }
+    }
+    return explicit;
+  }
+  if (!token) {
+    warn?.(
+      `[domains-server] WARNING: FLEET_SHARED_TOKEN is not set; binding 127.0.0.1 on port ${port} (this machine only).`
+    );
+    return ["127.0.0.1"];
+  }
+  return getBindHost("domains-server")
+    .split(",")
+    .map((h) => h.trim())
+    .filter(Boolean);
+}
+
+const HOSTS = resolveDomainsServerBind(process.env, { port: PORT });
 
 // Host header -> document root (relative to DOMAINS_ROOT).
 // onlinerecycle.net serves the restored static recycling site from site/
@@ -578,17 +609,35 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-const listeners = HOSTS.map((host) => {
-  const srv = host === HOSTS[0] ? server : createServerFor(server.listeners("request")[0]);
-  srv.on("error", (err) => {
-    // eslint-disable-next-line no-console
-    console.error(`domains-server cannot listen on http://${host}:${PORT}: ${err && err.code ? err.code : err}`);
-  });
-  srv.listen(PORT, host, () => {
-    // eslint-disable-next-line no-console
-    console.log(`domains-server listening on http://${host}:${PORT} (sites: ${SITES.join(", ")})`);
-  });
-  return srv;
-});
+const IS_MAIN_MODULE = Boolean(
+  process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url))
+);
 
-export { VHOSTS, SITES, HOSTS, PORT, T5500_IP, listeners, resolveFile, contentTypeFor, hostOnly };
+const listeners = IS_MAIN_MODULE
+  ? HOSTS.map((host) => {
+      const srv = host === HOSTS[0] ? server : createServerFor(server.listeners("request")[0]);
+      srv.on("error", (err) => {
+        // eslint-disable-next-line no-console
+        console.error(`domains-server cannot listen on http://${host}:${PORT}: ${err && err.code ? err.code : err}`);
+      });
+      srv.listen(PORT, host, () => {
+        // eslint-disable-next-line no-console
+        console.log(`domains-server listening on http://${host}:${PORT} (sites: ${SITES.join(", ")})`);
+      });
+      return srv;
+    })
+  : [];
+
+export {
+  VHOSTS,
+  SITES,
+  HOSTS,
+  PORT,
+  T5500_IP,
+  server,
+  listeners,
+  resolveDomainsServerBind,
+  resolveFile,
+  contentTypeFor,
+  hostOnly,
+};

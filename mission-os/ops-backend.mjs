@@ -27,7 +27,7 @@ function constantTimeEqualSecret(expected, candidate) {
 
 export function readMissionOsToken({ env = process.env } = {}) {
   if (!env) return '';
-  return String(env.MISSION_OS_TOKEN || '').trim();
+  return String(env.MISSION_OS_TOKEN || env.FLEET_SHARED_TOKEN || '').trim();
 }
 
 export function extractMissionOsToken(headers = {}) {
@@ -68,7 +68,8 @@ export function guardRequest(req, port, opts = {}) {
   const hasTokenHeader = Boolean(extractMissionOsToken(headers));
   const rawPath = String(req?.url || '').split('?')[0];
   const isApiV1 = rawPath === '/api/v1' || rawPath.startsWith('/api/v1/');
-  const needsToken = Boolean(opts.requireToken) || isNonLoopback || hasTokenHeader || isApiV1;
+  const expected = readMissionOsToken(opts);
+  const needsToken = isNonLoopback || Boolean(opts.requireToken) || (Boolean(expected) && (hasTokenHeader || isApiV1));
 
   const method = String(req?.method || 'GET').toUpperCase();
   if (needsToken) {

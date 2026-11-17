@@ -12,6 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express, { type Request, type Response, type NextFunction } from 'express';
 import { registerOfficialVoteRoutes } from './official-vote-routes.js';
+import { isLoopbackRemote, readGuardToken, resolveVoteBind } from './bind.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(HERE, '..', '..');
@@ -37,33 +38,32 @@ function constantTimeEqualSecret(expected: string, candidate: string): boolean {
   return crypto.timingSafeEqual(padA, padB) && a.length === b.length;
 }
 
-function readGuardToken(): string {
-  return String(process.env.OFFICIAL_VOTE_TOKEN || process.env.MISSION_OS_TOKEN || '').trim();
-}
-
-function isLoopback(addr: string | undefined): boolean {
-  const r = String(addr || '').trim();
-  return r === '127.0.0.1' || r === '::1' || r === '::ffff:127.0.0.1';
-}
-
 function requireVoteToken(req: Request, res: Response, next: NextFunction): void {
-  const localRead = isLoopback(req.socket?.remoteAddress) && (req.method === 'GET' || req.method === 'HEAD');
-  const directHeader = String(req.headers['x-mission-os-token'] || req.headers['x-vote-token'] || '').trim();
+  const loopbackCaller = isLoopbackRemote(req.socket?.remoteAddress);
+  const directHeader = String(
+    req.headers['x-mission-os-token'] || req.headers['x-vote-token'] || req.headers['x-fleet-token'] || ''
+  ).trim();
   const auth = req.headers.authorization;
   const trimmed = String(auth || '').trim();
   const bearer = trimmed.slice(0, 7).toLowerCase() === 'bearer ' ? trimmed.slice(7).trim() : '';
   const candidate = directHeader || bearer;
 
+  const expected = readGuardToken(process.env);
+  if (!expected) {
+    if (loopbackCaller) {
+      next();
+      return;
+    }
+    res.status(503).json({ ok: false, error: 'OFFICIAL_VOTE_TOKEN / MISSION_OS_TOKEN not configured' });
+    return;
+  }
+
+  const localRead = loopbackCaller && (req.method === 'GET' || req.method === 'HEAD');
   if (localRead && !candidate) {
     next();
     return;
   }
 
-  const expected = readGuardToken();
-  if (!expected) {
-    res.status(503).json({ ok: false, error: 'OFFICIAL_VOTE_TOKEN / MISSION_OS_TOKEN not configured' });
-    return;
-  }
   if (!candidate || !constantTimeEqualSecret(expected, candidate)) {
     res.status(401).json({ ok: false, error: 'Unauthorized' });
     return;
@@ -72,7 +72,6 @@ function requireVoteToken(req: Request, res: Response, next: NextFunction): void
 }
 
 const PORT = Number(process.env.OFFICIAL_VOTE_PORT || 9134);
-const HOST = process.env.OFFICIAL_VOTE_HOST || '0.0.0.0';
 const T5500_HOST = loadT5500Host();
 
 const app = express();
@@ -85,7 +84,16 @@ app.get('/health', (_req, res) => {
 app.use('/api/official-votes', requireVoteToken);
 registerOfficialVoteRoutes(app);
 
-app.listen(PORT, HOST, () => {
-  console.log(`official-vote-service listening on http://${HOST}:${PORT} (LAN http://${T5500_HOST}:${PORT})`);
-  console.log(`state dir: ${process.env.MISSION_CONTROL_VOTE_STATE_DIR || `${process.cwd()}/.mission-control`}`);
-});
+const IS_MAIN_MODULE = Boolean(
+  process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url))
+);
+
+export { app, resolveVoteBind, requireVoteToken, readGuardToken, PORT };
+
+if (IS_MAIN_MODULE) {
+  const HOST = resolveVoteBind(process.env, { port: PORT });
+  app.listen(PORT, HOST, () => {
+    console.log(`official-vote-service listening on http://${HOST}:${PORT} (LAN http://${T5500_HOST}:${PORT})`);
+    console.log(`state dir: ${process.env.MISSION_CONTROL_VOTE_STATE_DIR || `${process.cwd()}/.mission-control`}`);
+  });
+}

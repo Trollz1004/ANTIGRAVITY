@@ -29,7 +29,12 @@ async function get(url, ms = 10000) {
   const c = new AbortController();
   const t = setTimeout(() => c.abort(), ms);
   try {
-    const r = await fetch(url, { signal: c.signal });
+    const headers = {};
+    const missionToken = String(process.env.MISSION_OS_TOKEN || process.env.FLEET_SHARED_TOKEN || '').trim();
+    if (missionToken && String(url).startsWith(MC)) {
+      headers['x-mission-os-token'] = missionToken;
+    }
+    const r = await fetch(url, { headers, signal: c.signal });
     return { status: r.status, body: await r.text() };
   } catch (e) {
     return { status: 0, body: String(e.message || e) };

@@ -8,36 +8,17 @@ import { createServer as createViteServer } from 'vite';
 import { WebSocketServer, WebSocket } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
 import http from 'http';
-import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { loadDateAppFrontendConfig, resolveFrontendBind } from './bind.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-function loadDateAppFrontendConfig(): { host: string; port: number; bind: string } {
-  try {
-    const fleetPath = path.resolve(__dirname, '..', '..', '..', 'ops', 'fleet', 'fleet-map.json');
-    const parsed = JSON.parse(fs.readFileSync(fleetPath, 'utf8'));
-    const rawServices = parsed?.services;
-    const svc = Array.isArray(rawServices)
-      ? rawServices.find((s: { id?: string }) => s?.id === 'dateapp-frontend' || s?.id === 'date-app-web')
-      : rawServices?.['dateapp-frontend'] || rawServices?.['date-app-web'];
-    if (svc) {
-      return {
-        host: String(svc.host || '192.168.0.15'),
-        port: Number(svc.port || 3200),
-        bind: String(svc.bind || '0.0.0.0'),
-      };
-    }
-  } catch {
-    // Fallback when running outside monorepo layout
-  }
-  return { host: '192.168.0.15', port: 3200, bind: '0.0.0.0' };
-}
-
 const FLEET_FRONTEND = loadDateAppFrontendConfig();
 const PORT = Number(process.env.PORT || FLEET_FRONTEND.port);
+
+export { resolveFrontendBind };
 
 // Types
 type Vector3 = { x: number; y: number; z: number };
@@ -84,7 +65,16 @@ function broadcast(data: any, excludeId?: string) {
   }
 }
 
-async function startServer() {
+export async function startServer(
+  opts: {
+    port?: number;
+    host?: string;
+    env?: Record<string, string | undefined>;
+    warn?: ((msg: string) => void) | null;
+  } = {}
+) {
+  const env = opts.env ?? process.env;
+  const listenPort = opts.port ?? Number(env.PORT || FLEET_FRONTEND.port);
   const app = express();
   const server = http.createServer(app);
 
@@ -177,7 +167,7 @@ async function startServer() {
   });
 
   // Broadcast loop (20Hz)
-  setInterval(() => {
+  const syncTimer = setInterval(() => {
     const now = Date.now();
 
     // Clean up old force fields (e.g., after 10.5 seconds to allow client animation)
@@ -199,6 +189,8 @@ async function startServer() {
 
     broadcast(updateData);
   }, 50);
+  syncTimer.unref?.();
+  server.on('close', () => clearInterval(syncTimer));
 
   // API routes
   app.get('/health', (req, res) => {
@@ -325,10 +317,28 @@ async function startServer() {
     });
   }
 
-  const bindHost = process.env.HOST || FLEET_FRONTEND.bind;
-  server.listen(PORT, bindHost, () => {
-    console.log(`Server running on http://${bindHost}:${PORT} (LAN http://${FLEET_FRONTEND.host}:${PORT})`);
+  const bindHost =
+    opts.host ??
+    resolveFrontendBind(env, {
+      port: listenPort,
+      bind: FLEET_FRONTEND.bind,
+      warn: opts.warn ?? console.warn,
+    });
+  await new Promise<void>((resolve) => {
+    server.listen(listenPort, bindHost, () => {
+      const addr = server.address();
+      const activePort = addr && typeof addr === 'object' ? addr.port : listenPort;
+      console.log(`Server running on http://${bindHost}:${activePort} (LAN http://${FLEET_FRONTEND.host}:${activePort})`);
+      resolve();
+    });
   });
+  return { app, server, host: bindHost };
 }
 
-startServer();
+const IS_MAIN_MODULE = Boolean(
+  process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename)
+);
+
+if (IS_MAIN_MODULE) {
+  startServer();
+}

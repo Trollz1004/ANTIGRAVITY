@@ -11,7 +11,6 @@ $ErrorActionPreference = 'Stop'
 $RepoRoot = if (Test-Path 'C:\ANTIGRAVITY') { 'C:\ANTIGRAVITY' } else { (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path }
 . (Join-Path $RepoRoot 'ops\fleet\Get-FleetEndpoint.ps1')
 $ApiSvc      = Get-FleetService -ServiceId 'dateapp-api'
-$ApiBindHost = Get-FleetBindHost -ServiceId 'dateapp-api' -EnvOverride $env:DATEAPP_API_HOST
 $ApiPort     = if ($env:PORT) { [int]$env:PORT } else { [int]$ApiSvc.port }
 
 $VaultEnv = Join-Path $env:USERPROFILE '.antigravity-vault\vault-handoff\env-stash-from-documents\.env-not-for-github.txt'
@@ -55,6 +54,24 @@ $env:SQUARE_LOCATION_ID = 'LY5GN09F5AN83'
 
 $env:APP_ENV = 'production'
 $env:PORT    = [string]$ApiPort
+
+$fleetToken = [string]$env:FLEET_SHARED_TOKEN
+$explicitApiHost = [string]$env:DATEAPP_API_HOST
+if (-not [string]::IsNullOrWhiteSpace($explicitApiHost)) {
+    $trimmedHost = $explicitApiHost.Trim()
+    $isLoopbackHost = $trimmedHost.ToLowerInvariant() -in @('127.0.0.1', 'localhost', '::1')
+    if ([string]::IsNullOrWhiteSpace($fleetToken) -and -not $isLoopbackHost) {
+        Write-Error "[dateapp-api] Refusing to bind $trimmedHost on port $ApiPort without FLEET_SHARED_TOKEN configured."
+        exit 1
+    }
+    $ApiBindHost = $trimmedHost
+} elseif ([string]::IsNullOrWhiteSpace($fleetToken)) {
+    $loopback = '127.0.0.1'
+    $ApiBindHost = $loopback
+    Write-Warning "[dateapp-api] WARNING: FLEET_SHARED_TOKEN is not set; binding $loopback on port $ApiPort (this machine only)."
+} else {
+    $ApiBindHost = Get-FleetBindHost -ServiceId 'dateapp-api'
+}
 
 Set-Location $AppDir
 if ($ApiBindHost -eq '0.0.0.0' -and $ApiPort -eq 8000) {

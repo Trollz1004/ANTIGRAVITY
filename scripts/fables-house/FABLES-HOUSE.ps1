@@ -1,4 +1,4 @@
-# ═══════════════════════════════════════════════════════════════════════════
+﻿# ═══════════════════════════════════════════════════════════════════════════
 #  FABLE'S HOUSE — T5500 full-stack bootstrap, validation-gated, self-healing
 #  Built for the Shriners presentation window. 2026-08-16.
 #
@@ -74,6 +74,8 @@ function Stop-PortOwner($port) {
 # Secret for authenticated probes: read from the repo .env at probe time,
 # never logged. OmniRoute 3.8.50 gates /v1/models behind the API key.
 function Get-EnvKey($name) {
+    $fromProc = [Environment]::GetEnvironmentVariable($name)
+    if ($fromProc -and $fromProc.Trim()) { return $fromProc.Trim() }
     try {
         foreach ($line in Get-Content 'C:\ANTIGRAVITY\.env' -ErrorAction Stop) {
             if ($line -match ('^' + [regex]::Escape($name) + '=(.*)$')) { return $Matches[1].Trim('"') }
@@ -82,19 +84,57 @@ function Get-EnvKey($name) {
     return ''
 }
 
-function Test-Http($url, $timeoutSec = 10, $mustContain = $null, $bearerEnv = $null) {
-    try {
-        $hdr = @{}
-        if ($bearerEnv) {
-            $k = Get-EnvKey $bearerEnv
-            if (-not $k) { return $false }
-            $hdr['Authorization'] = "Bearer $k"
+function Get-FirstEnvToken([string[]]$names) {
+    foreach ($n in $names) {
+        if (-not $n) { continue }
+        $v = Get-EnvKey $n
+        if ($v) { return $v }
+    }
+    return ''
+}
+
+function Get-FleetProbeHeaders([string[]]$tokenEnvNames) {
+    $hdr = @{}
+    if ($tokenEnvNames -and $tokenEnvNames.Count -gt 0) {
+        $tok = Get-FirstEnvToken $tokenEnvNames
+        if ($tok) {
+            $hdr['X-Mission-OS-Token'] = $tok
+            $hdr['X-Fleet-Token'] = $tok
+            $hdr['Authorization'] = "Bearer $tok"
         }
-        $r = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec $timeoutSec -Headers $hdr
-        if ($r.StatusCode -ne 200) { return $false }
-        if ($mustContain -and ($r.Content -notmatch [regex]::Escape($mustContain))) { return $false }
-        return $true
-    } catch { return $false }
+    }
+    return $hdr
+}
+
+function Get-LoopbackFallbackUrl([string]$url) {
+    $loopback = '127.0.0.1'
+    if ($url -match '^https?://192\.168\.0\.15:') {
+        return ($url -replace '://192\.168\.0\.15:', "://${loopback}:")
+    }
+    return $null
+}
+
+function Test-Http($url, $timeoutSec = 10, $mustContain = $null, $bearerEnv = $null, [string[]]$tokenEnvNames = $null, [switch]$AllowLoopbackFallback) {
+    $hdr = Get-FleetProbeHeaders $tokenEnvNames
+    if ($bearerEnv) {
+        $k = Get-EnvKey $bearerEnv
+        if (-not $k) { return $false }
+        $hdr['Authorization'] = "Bearer $k"
+    }
+    $targets = @($url)
+    if ($AllowLoopbackFallback -or ($tokenEnvNames -and $hdr.Count -eq 0)) {
+        $fb = Get-LoopbackFallbackUrl $url
+        if ($fb) { $targets += $fb }
+    }
+    foreach ($target in $targets) {
+        try {
+            $r = Invoke-WebRequest -Uri $target -UseBasicParsing -TimeoutSec $timeoutSec -Headers $hdr
+            if ($r.StatusCode -ne 200) { continue }
+            if ($mustContain -and ($r.Content -notmatch [regex]::Escape($mustContain))) { continue }
+            return $true
+        } catch {}
+    }
+    return $false
 }
 
 # ── Stage definitions ─────────────────────────────────────────────────────
@@ -191,7 +231,7 @@ $Stages = @(
     # stray instance is still answering on 3100 so nobody mistakes it for the hub.
     # History kept in git: it was Mission Control from 2026-08-25 to 2026-09-10.
     @{ Name = 'Paperclip :3917 (PARKED, report only)'; Required = $false
-       Probe = { if (Test-Http 'http://192.168.0.15:3130/api/openapi.json' 10 'Paperclip API') {
+       Probe = { if (Test-Http 'http://192.168.0.15:3130/api/openapi.json' 10 'Paperclip API' $null @('MISSION_OS_TOKEN', 'FLEET_SHARED_TOKEN') -AllowLoopbackFallback) {
                      Log '  Paperclip still answering on :3917 - parked, not the hub; stop it or ignore it' 'DarkGray'
                  } else { Log '  Paperclip parked (not running) - expected' 'DarkGray' }
                  return $true }
@@ -207,7 +247,7 @@ $Stages = @(
     # squatting the port is logged, never killed, and the stage just keeps
     # retrying as it always has.
     @{ Name = 'Frontend :3200 (production bundle)'; Required = $true
-       Probe = { if (-not (Test-Http 'http://192.168.0.15:3200/' 10 'assets/index-')) { return $false }
+       Probe = { if (-not (Test-Http 'http://192.168.0.15:3200/' 10 'assets/index-' -AllowLoopbackFallback)) { return $false }
                  $distIdx = 'C:\ANTIGRAVITY\domains\youandinotai.com\frontend\dist\index.html'
                  $srcDir  = 'C:\ANTIGRAVITY\domains\youandinotai.com\frontend\src'
                  if ((Test-Path $distIdx) -and (Test-Path $srcDir)) {
@@ -217,7 +257,7 @@ $Stages = @(
                      }
                  }
                  return $true }
-       Heal  = { if ((Test-Port 3200) -and -not (Test-Http 'http://192.168.0.15:3200/' 10 'assets/index-')) {
+       Heal  = { if ((Test-Port 3200) -and -not (Test-Http 'http://192.168.0.15:3200/' 10 'assets/index-' -AllowLoopbackFallback)) {
                      Get-NetTCPConnection -LocalPort 3200 -State Listen -ErrorAction SilentlyContinue | ForEach-Object {
                          $owner = $_.OwningProcess
                          $cmd = (Get-CimInstance Win32_Process -Filter "ProcessId=$owner" -ErrorAction SilentlyContinue).CommandLine
@@ -235,7 +275,7 @@ $Stages = @(
                          Start-Process cmd -ArgumentList '/c','C:\ANTIGRAVITY\scripts\fables-house\tab-dateapp.cmd' -WindowStyle Hidden } }
 
     @{ Name = 'Backend API :8000 (db connected)'; Required = $true
-       Probe = { Test-Http 'http://192.168.0.15:8000/api/v1/health' 30 '"db_connected":true' }
+       Probe = { Test-Http 'http://192.168.0.15:8000/api/v1/health' 30 '"db_connected":true' -AllowLoopbackFallback }
        Heal  = { Start-Process powershell -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-File','C:\ANTIGRAVITY\scripts\fables-house\tab-dateapp-api.ps1' -WindowStyle Hidden } }
 
     # 2026-09-18 fix: `Get-Process cloudflared` matches by NAME only, and an
@@ -285,8 +325,15 @@ $Stages = @(
     # Heal after the Probe has already failed, for any reason (wrong identity,
     # stale, or otherwise unhealthy), so there is nothing left to gate on here.
     @{ Name = 'JARVIS (Mission Control) :9150'; Required = $true
-       Probe = { if (-not (Test-Http 'http://192.168.0.15:9150/health' 6 'jarvis-dashboard')) { return $false }
-                 try { $hz = Invoke-RestMethod -Uri 'http://192.168.0.15:9150/health' -TimeoutSec 6 } catch { return $false }
+       Probe = { $mcTokens = @('MISSION_OS_TOKEN', 'MISSION_CONTROL_TOKEN', 'DASHBOARD_BRIDGE_TOKEN', 'FLEET_SHARED_TOKEN')
+                 if (-not (Test-Http 'http://192.168.0.15:9150/health' 6 'jarvis-dashboard' $null $mcTokens -AllowLoopbackFallback)) { return $false }
+                 $mcHdr = Get-FleetProbeHeaders $mcTokens
+                 $hz = $null
+                 foreach ($uri in @('http://192.168.0.15:9150/health', (Get-LoopbackFallbackUrl 'http://192.168.0.15:9150/health'))) {
+                     if (-not $uri) { continue }
+                     try { $hz = Invoke-RestMethod -Uri $uri -TimeoutSec 6 -Headers $mcHdr; break } catch {}
+                 }
+                 if (-not $hz) { return $false }
                  if ($hz.startedAt -and -not (Test-Fresh $hz.startedAt @('C:\ANTIGRAVITY\mission-control\server.mjs'))) { Log '  JARVIS dashboard server is stale - restarting' 'Yellow'; return $false }
                  return $true }
        Heal  = { Stop-PortOwner 9150
@@ -299,7 +346,7 @@ $Stages = @(
     # ops/domains-server/server.mjs). Optional: none of the revenue-stack
     # stages above depend on it.
     @{ Name = 'Domains static sites :9160'; Required = $false
-       Probe = { Test-Http 'http://192.168.0.15:9160/health' 6 'domains-server' }
+       Probe = { Test-Http 'http://192.168.0.15:9160/health' 6 'domains-server' -AllowLoopbackFallback }
        Heal  = { $d = 'C:\ANTIGRAVITY\ops\domains-server\server.mjs'
                  if (Test-Path $d) { Stop-PortOwner 9160; Start-Process 'node' -ArgumentList $d -WorkingDirectory 'C:\ANTIGRAVITY' -WindowStyle Hidden }
                  else { Log '  domains-server.mjs missing' 'DarkYellow' } } }
@@ -382,7 +429,7 @@ $Stages = @(
     # Council ballots, carved out of mission-control-v5 so MC5 can be retired.
     # Paperclip does NOT cover ballots; see PAPERCLIP-COVERAGE-RULING-2026-08-26.md.
     @{ Name = 'Official vote service :9134 (ballots)'; Required = $false
-       Probe = { Test-Http 'http://192.168.0.15:9134/health' 6 'official-vote-service' }
+       Probe = { Test-Http 'http://192.168.0.15:9134/health' 6 'official-vote-service' $null @('OFFICIAL_VOTE_TOKEN', 'MISSION_OS_TOKEN', 'FLEET_SHARED_TOKEN') -AllowLoopbackFallback }
        Heal  = { $v = 'C:\ANTIGRAVITY\services\governance\dist\server.js'
                  if (Test-Path $v) { Start-Process 'node' -ArgumentList $v -WorkingDirectory 'C:\ANTIGRAVITY\services\governance' -WindowStyle Hidden }
                  else { Log '  vote service not built - run: cd services\governance; npm install; npm run build' 'DarkYellow' } } }

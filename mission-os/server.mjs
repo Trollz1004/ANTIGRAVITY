@@ -55,8 +55,32 @@ const ROOT = process.env.MISSION_OS_ROOT || (fs.existsSync('C:/ANTIGRAVITY') ? '
 export const T5500_IP = getNodeIp('t5500');
 export const ALIENWARE_IP = getNodeIp('alienware');
 const MISSION_OS_SVC = getService('mission-os');
-export const HOST = process.env.MISSION_OS_HOST || getBindHost('mission-os');
 export const PORT = Number(process.env.MISSION_OS_PORT || MISSION_OS_SVC.port);
+
+function isLoopbackBindHost(host) {
+  const h = String(host || '').trim().toLowerCase();
+  return h === '127.0.0.1' || h === 'localhost' || h === '::1';
+}
+
+export function resolveMissionOsBind({ env = process.env, port = PORT, warn = console.warn } = {}) {
+  const token = String(env?.MISSION_OS_TOKEN || env?.FLEET_SHARED_TOKEN || '').trim();
+  const explicit = String(env?.MISSION_OS_HOST || '').trim();
+  if (explicit) {
+    if (!token && !isLoopbackBindHost(explicit)) {
+      throw new Error(
+        `[mission-os] Refusing to bind ${explicit} on port ${port} without MISSION_OS_TOKEN or FLEET_SHARED_TOKEN configured.`
+      );
+    }
+    return explicit;
+  }
+  if (!token) {
+    warn?.(`[mission-os] WARNING: MISSION_OS_TOKEN is not set; binding 127.0.0.1 on port ${port} (this machine only).`);
+    return '127.0.0.1';
+  }
+  return getBindHost('mission-os');
+}
+
+export const HOST = resolveMissionOsBind({ env: process.env, port: PORT });
 const BOARD = `${ROOT}/oldmissioncontrol.html`;
 const STATUS = `${ROOT}/ops/t5500/status.json`;
 const CLIENT_JS = `${ROOT}/mission-os/jarvis-bridge-client.js`;

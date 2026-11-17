@@ -92,6 +92,28 @@ test('origin, Host, and MISSION_OS_TOKEN guard enforces same-origin on loopback/
   );
   assert.equal(
     ops.guardRequest(
+      req({ host: '192.168.0.15:3130', 'x-mission-os-token': 'fleet-shared-tok' }, 'GET', '192.168.0.40'),
+      3130,
+      { env: { FLEET_SHARED_TOKEN: 'fleet-shared-tok' } }
+    ),
+    0
+  );
+
+  // Loopback callers on /api/v1/* and other routes succeed without 503/401 when no token is configured
+  assert.equal(
+    ops.guardRequest(req({ host: '127.0.0.1:3130' }, 'GET', '127.0.0.1', '/api/v1/status'), 3130, { env: {} }),
+    0
+  );
+  assert.equal(
+    ops.guardRequest(
+      req({ host: '127.0.0.1:3130', origin: 'http://127.0.0.1:3130', 'content-type': 'application/json' }, 'POST', '127.0.0.1', '/api/v1/status'),
+      3130,
+      { env: {} }
+    ),
+    0
+  );
+  assert.equal(
+    ops.guardRequest(
       req(
         {
           host: '192.168.0.15:3130',

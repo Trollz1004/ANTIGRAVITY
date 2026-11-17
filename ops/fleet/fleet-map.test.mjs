@@ -45,6 +45,7 @@ const EXPECTED_ALIENWARE = [
   ['ollama-alienware', 11434, 'lan-guarded', 'OLLAMA_GUARD_TOKEN', '0.0.0.0'],
   ['vite-hmr', 24678, 'lan', null, '0.0.0.0'],
   ['obsidian-alienware', 27123, 'lan-guarded', 'OBSIDIAN_REST_API_KEY', '0.0.0.0'],
+  ['alienware-obsidian-mcp', 27200, 'lan-guarded', 'FLEET_SHARED_TOKEN', '0.0.0.0'],
 ];
 
 test('fleet-map.json defines ONLY t5500 and alienware with exact services, binds, and token guards', () => {

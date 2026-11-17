@@ -43,7 +43,12 @@ const FLEET_DEFAULTS = loadFleetDefaults();
 
 function readLeadgenToken(env = process.env) {
   if (!env) return '';
-  return String(env.HERMES_LEADGEN_TOKEN || '').trim();
+  return String(env.HERMES_LEADGEN_TOKEN || env.FLEET_SHARED_TOKEN || '').trim();
+}
+
+function isLoopbackBindHost(host) {
+  const h = String(host || '').trim().toLowerCase();
+  return h === '127.0.0.1' || h === 'localhost' || h === '::1';
 }
 
 function isLoopbackRemote(remoteAddress) {
@@ -51,15 +56,34 @@ function isLoopbackRemote(remoteAddress) {
   return r === '127.0.0.1' || r === '::1' || r === '::ffff:127.0.0.1';
 }
 
-function resolveBindHost(env = process.env) {
+function resolveBindHost(env = process.env, { port = PORT, warn = console.warn } = {}) {
   const raw = String((env && env.HERMES_LEADGEN_BIND) || '').trim();
-  if (raw) return raw;
+  const token = readLeadgenToken(env);
+  if (raw) {
+    if (!token && !isLoopbackBindHost(raw)) {
+      throw new Error(
+        `[LeadGen Studio] Refusing to bind ${raw} on port ${port} without HERMES_LEADGEN_TOKEN or FLEET_SHARED_TOKEN configured.`,
+      );
+    }
+    return raw;
+  }
+  if (!token) {
+    warn?.(
+      `[LeadGen Studio] WARNING: HERMES_LEADGEN_TOKEN is not set; binding 127.0.0.1 on port ${port} (this machine only).`,
+    );
+    return '127.0.0.1';
+  }
   return FLEET_DEFAULTS.bind;
 }
 
-function validateBindConfig(env = process.env, explicitHost = null) {
-  const bindHost = explicitHost || resolveBindHost(env);
+function validateBindConfig(env = process.env, explicitHost = null, opts = {}) {
+  const bindHost = explicitHost ? String(explicitHost).trim() : resolveBindHost(env, opts);
   const token = readLeadgenToken(env);
+  if (!token && !isLoopbackBindHost(bindHost)) {
+    throw new Error(
+      `[LeadGen Studio] Refusing to bind ${bindHost} on port ${opts.port || PORT} without HERMES_LEADGEN_TOKEN or FLEET_SHARED_TOKEN configured.`,
+    );
+  }
   return { bindHost, token };
 }
 
@@ -1357,11 +1381,15 @@ function constantTimeEqualSecret(expected, candidate) {
 function hasValidBearerToken(req, env = process.env) {
   const expected = readLeadgenToken(env);
   if (!expected) return false;
+  const direct = String(
+    (req && req.headers && (req.headers['x-fleet-token'] || req.headers['x-leadgen-token'])) || '',
+  ).trim();
   const auth = req && req.headers ? req.headers.authorization : '';
   const trimmed = String(auth || '').trim();
   const bearer = trimmed.slice(0, 7).toLowerCase() === 'bearer ' ? trimmed.slice(7).trim() : '';
-  if (!bearer) return false;
-  return constantTimeEqualSecret(expected, bearer);
+  const candidate = direct || bearer;
+  if (!candidate) return false;
+  return constantTimeEqualSecret(expected, candidate);
 }
 
 function validateAgentAndProfileFields(body, res) {

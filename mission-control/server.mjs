@@ -61,7 +61,7 @@ import { readFileSync, existsSync, readdirSync, statSync, writeFileSync, unlinkS
 import { spawn, execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
-import { resolveConfig, resolveVault } from './lib/config.mjs';
+import { resolveConfig, resolveVault, resolveMissionControlBind } from './lib/config.mjs';
 import { probeAll } from './lib/nodes.mjs';
 import { getSentrySnapshot, getSentrySummary } from './lib/sentry.mjs';
 import { resolveClaudeBinary, killTree, runClaude, isSameOrigin, PERMISSION_MODES, PERSONAS, sse } from './lib/claude-bridge.mjs';
@@ -474,7 +474,7 @@ setInterval(() => {
       record: { kind: 'social-review-tick-error', error: String((e && e.message) || e) },
     });
   }
-}, 60000);
+}, 60000).unref();
 
 // Ask-JARVIS agentic loop (specs/009-jarvis-agentic-ask): every tool reuses
 // the exact same live sources the rest of this file already serves — no
@@ -749,14 +749,18 @@ function verifyGuardedDashboardAccess(req) {
   const trimmed = String(auth || '').trim();
   const bearer = trimmed.slice(0, 7).toLowerCase() === 'bearer ' ? trimmed.slice(7).trim() : '';
   const candidate = direct || bearer;
+  const expected = String(
+    process.env.MISSION_OS_TOKEN ||
+      process.env.MISSION_CONTROL_TOKEN ||
+      process.env.DASHBOARD_BRIDGE_TOKEN ||
+      process.env.FLEET_SHARED_TOKEN ||
+      ''
+  ).trim();
 
-  if (isLocalCaller(req.socket && req.socket.remoteAddress) && !candidate) {
+  if (isLocalCaller(req.socket && req.socket.remoteAddress) && (!expected || !candidate)) {
     return { ok: true, status: 200 };
   }
 
-  const expected = String(
-    process.env.MISSION_OS_TOKEN || process.env.MISSION_CONTROL_TOKEN || process.env.DASHBOARD_BRIDGE_TOKEN || ''
-  ).trim();
   if (!expected) {
     return { ok: false, status: 503, error: 'MISSION_OS_TOKEN / DASHBOARD_BRIDGE_TOKEN not configured' };
   }
@@ -766,9 +770,11 @@ function verifyGuardedDashboardAccess(req) {
   return { ok: true, status: 200 };
 }
 
-const BIND_HOST = process.env.MISSION_CONTROL_HOST || '0.0.0.0';
+const BIND_HOST = resolveMissionControlBind(process.env, { port: PORT });
 
-createServer(async (req, res) => {
+export { resolveMissionControlBind, verifyGuardedDashboardAccess };
+
+export const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   const p = url.pathname;
   if (await handleBridgeRoutes(req, res, BRIDGE_DEPS)) return;
@@ -1236,6 +1242,11 @@ createServer(async (req, res) => {
   if (p === '/data/' || p.startsWith('/data/')) return send(res, 404, { error: 'not found' }); // JARVIS memory stays server-side
   if (p.startsWith('/api/')) return send(res, 404, { error: 'no such route' });
   return serveStatic(res, p);
-}).listen(PORT, BIND_HOST, () => {
-  console.log(`JARVIS dashboard on http://${BIND_HOST}:${PORT}  (LAN: http://${LAN_IP}:${PORT})  omni=${OMNI}  vault=${VAULT}`);
 });
+
+const IS_MAIN_MODULE = Boolean(process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url)));
+if (IS_MAIN_MODULE) {
+  server.listen(PORT, BIND_HOST, () => {
+    console.log(`JARVIS dashboard on http://${BIND_HOST}:${PORT}  (LAN: http://${LAN_IP}:${PORT})  omni=${OMNI}  vault=${VAULT}`);
+  });
+}
