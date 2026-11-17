@@ -80,16 +80,21 @@ export function buildWheelEnqueuePayload({
       .split(/\r?\n/)
       .map((line) => line.trim())
       .find(Boolean) || '';
-  const resolvedTitle = String(title || firstLine || `Mission OS task ${taskId || ''}`)
+  const rawTitle = String(title || firstLine || '')
+    .replace(/[\r\n]+/g, ' ')
+    .replace(/^[#\s]+/, '')
+    .trim();
+  const resolvedTitle = (rawTitle || `Mission OS task ${taskId || 'queued'}`).slice(0, 120).trim();
+  const laneNorm = String(lane || '')
     .trim()
-    .slice(0, 120);
-  const resolvedLane =
-    String(lane || '')
-      .trim()
-      .toLowerCase() === 'scout'
-      ? 'scout'
-      : 'mechanical';
-  const resolvedRepo = repo === 'Trollz1004/dream-online' || repo === 'dream-online' ? 'dream-online' : 'ANTIGRAVITY';
+    .toLowerCase();
+  const resolvedLane = laneNorm === 'engine' ? 'engine' : 'mechanical';
+  const resolvedRepo =
+    repo === 'Trollz1004/dream-online' || repo === 'dream-online'
+      ? 'dream-online'
+      : repo === 'Trollz1004/swarm-command' || repo === 'swarm-command'
+        ? 'swarm-command'
+        : 'ANTIGRAVITY';
   const resolvedBase = String(base || 'main').trim() || 'main';
   const rawSlug = slug || taskId || resolvedTitle;
   const resolvedSlug =
@@ -97,7 +102,8 @@ export function buildWheelEnqueuePayload({
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '')
-      .slice(0, 64) || 'mission-os-task';
+      .slice(0, 30)
+      .replace(/-+$/g, '') || 'mission-os-task';
 
   const promptLines = [
     cleanMsg,
@@ -125,6 +131,15 @@ export function buildWheelEnqueuePayload({
  */
 export async function defaultWheelEnqueue(payload, { env = process.env, fetchImpl = globalThis.fetch } = {}) {
   const url = getServiceUrl('swarm-command', '/api/wheel/enqueue');
+  if (payload?.repo !== 'ANTIGRAVITY' && payload?.repo !== 'dream-online') {
+    return {
+      ok: false,
+      wheelSyncStatus: 'deferred-unsupported-repo',
+      url,
+      status: 0,
+      error: `Swarm Command wheel enqueue currently accepts only ANTIGRAVITY or dream-online (got ${String(payload?.repo || '')})`,
+    };
+  }
   const token = String(env?.FLEET_SHARED_TOKEN || env?.SWARM_COMMAND_TOKEN || '').trim();
   const headers = { 'Content-Type': 'application/json' };
   if (token) {
@@ -139,11 +154,12 @@ export async function defaultWheelEnqueue(payload, { env = process.env, fetchImp
       signal: AbortSignal.timeout(5000),
     });
     if (!res || !res.ok) {
+      const status = Number(res?.status || 0);
       return {
         ok: false,
-        wheelSyncStatus: 'deferred-unreachable',
+        wheelSyncStatus: status >= 400 && status < 500 ? 'rejected' : 'deferred-unreachable',
         url,
-        status: Number(res?.status || 0),
+        status,
         error: `Swarm Command returned HTTP ${res ? res.status : 'no response'}`,
       };
     }
@@ -467,24 +483,29 @@ export function createShellApi({
           ab,
           lane: body.lane,
         });
-        try {
-          const enqueueFn = wheelEnqueueImpl || ((p) => defaultWheelEnqueue(p, { env, fetchImpl }));
-          const enqueueRes = await enqueueFn(wheelPayload, {
-            env,
-            url: getServiceUrl('swarm-command', '/api/wheel/enqueue'),
-            taskId,
-            repo,
-            author,
-          });
-          if (enqueueRes && enqueueRes.ok === false) {
-            wheelSyncStatus = enqueueRes.wheelSyncStatus || 'deferred-unreachable';
-            wheelSyncError = enqueueRes.error ? String(enqueueRes.error) : null;
-          } else {
-            wheelSyncStatus = (enqueueRes && enqueueRes.wheelSyncStatus) || 'enqueued';
+        if (wheelPayload.repo !== 'ANTIGRAVITY' && wheelPayload.repo !== 'dream-online') {
+          wheelSyncStatus = 'deferred-unsupported-repo';
+          wheelSyncError = `Swarm Command wheel enqueue accepts only ANTIGRAVITY or dream-online (got ${wheelPayload.repo})`;
+        } else {
+          try {
+            const enqueueFn = wheelEnqueueImpl || ((p) => defaultWheelEnqueue(p, { env, fetchImpl }));
+            const enqueueRes = await enqueueFn(wheelPayload, {
+              env,
+              url: getServiceUrl('swarm-command', '/api/wheel/enqueue'),
+              taskId,
+              repo,
+              author,
+            });
+            if (enqueueRes && enqueueRes.ok === false) {
+              wheelSyncStatus = enqueueRes.wheelSyncStatus || 'deferred-unreachable';
+              wheelSyncError = enqueueRes.error ? String(enqueueRes.error) : null;
+            } else {
+              wheelSyncStatus = (enqueueRes && enqueueRes.wheelSyncStatus) || 'enqueued';
+            }
+          } catch (err) {
+            wheelSyncStatus = 'deferred-unreachable';
+            wheelSyncError = String(err?.cause?.message || err?.message || err || 'Alienware unreachable');
           }
-        } catch (err) {
-          wheelSyncStatus = 'deferred-unreachable';
-          wheelSyncError = String(err?.cause?.message || err?.message || err || 'Alienware unreachable');
         }
       }
 

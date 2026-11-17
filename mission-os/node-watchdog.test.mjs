@@ -13,6 +13,7 @@ import {
   createNodeWatchdog,
   probeFleetService,
   readTelegramConfig,
+  redactSecrets,
 } from './node-watchdog.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -757,6 +758,7 @@ test('polling timer, CLI --once --json --no-telegram, and PowerShell dry-run / h
     fs.mkdirSync(path.join(psRepo, 'ops', 'fleet'), { recursive: true });
     fs.mkdirSync(path.join(psRepo, 'ops', 't5500'), { recursive: true });
     fs.copyFileSync(WATCHDOG_PATH, path.join(psRepo, 'mission-os', 'node-watchdog.mjs'));
+    fs.copyFileSync(path.join(HERE, 'stream-redact.mjs'), path.join(psRepo, 'mission-os', 'stream-redact.mjs'));
     fs.copyFileSync(
       path.join(REPO_ROOT, 'ops', 'fleet', 'fleet-map.mjs'),
       path.join(psRepo, 'ops', 'fleet', 'fleet-map.mjs'),
@@ -793,6 +795,54 @@ test('polling timer, CLI --once --json --no-telegram, and PowerShell dry-run / h
     assert.match(sentryOut, /\[watchdog\] T5500/);
     assert.ok(fs.existsSync(path.join(psRepo, 'logs', 'openclaw-watchdog.log')));
     assert.ok(fs.existsSync(path.join(psRepo, 'ops', 't5500', 'watchdog-incidents.json')));
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
+test('Carbon review remediation: watchdog redactSecrets uses stream-redact and concurrent instances send at most 1 Telegram alert', async () => {
+  const scrubbed = redactSecrets(
+    'postgres://admin:dbPassSecret99@127.0.0.1:5432/app Authorization: Bearer bearerTok99 sk-proj-abc1234567890 alice@example.com Trollz1004/mission-loop',
+    { TELEGRAM_BOT_TOKEN: 'tgBotSecret999' },
+  );
+  assert.ok(!scrubbed.includes('dbPassSecret99'));
+  assert.ok(!scrubbed.includes('bearerTok99'));
+  assert.ok(!scrubbed.includes('sk-proj-abc1234567890'));
+  assert.ok(!scrubbed.includes('alice@example.com'));
+  assert.ok(!scrubbed.includes('mission-loop'));
+
+  const tmp = makeTempDir('mos-watchdog-concurrent-');
+  try {
+    const incidentsPath = path.join(tmp, 'incidents.json');
+    let now = Date.parse('2026-11-16T22:00:00.000Z');
+    const sentMessages = [];
+    const customEnv = { TELEGRAM_BOT_TOKEN: '9876543:AATestBotSecretToken0001', TELEGRAM_CHAT_ID: '-100888999' };
+    const mk = () =>
+      createNodeWatchdog({
+        fleetMap: sampleObjectFleetMap(),
+        incidentsPath,
+        keepaliveStatusPath: path.join(tmp, 'no-status.json'),
+        env: customEnv,
+        hermesAvailable: false,
+        nowMs: () => now,
+        redAlertAfterMs: 300000,
+        fetchImpl: async (_url, init) => {
+          await new Promise((r) => setTimeout(r, 25));
+          sentMessages.push(JSON.parse(init.body));
+          return { ok: true, status: 200 };
+        },
+        probeService: async (svc) =>
+          svc.id === 'hermes-dashboard'
+            ? { up: false, status: 'DOWN', reason: 'Connection refused', lastError: 'ECONNREFUSED' }
+            : { up: true, status: 'UP', reason: 'Healthy', lastError: null },
+      });
+
+    const a = mk();
+    const b = mk();
+    await a.runOnce();
+    now += 305000;
+    await Promise.all([a.runOnce(), b.runOnce()]);
+    assert.equal(sentMessages.length, 1, 'Concurrent watchdogs sharing incidentsPath must emit only 1 Telegram alert');
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });
   }

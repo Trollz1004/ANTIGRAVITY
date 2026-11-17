@@ -96,7 +96,11 @@ test('fleet-map.json matches canonical dream-online origin/main array-schema wit
 
   const normalized = raw.replace(/\r\n/g, '\n');
   const actualSha = crypto.createHash('sha256').update(normalized, 'utf8').digest('hex');
-  assert.equal(actualSha, CANONICAL_SHA256, 'ops/fleet/fleet-map.json must match canonical dream-online origin/main bytes');
+  assert.equal(
+    actualSha,
+    CANONICAL_SHA256,
+    'ops/fleet/fleet-map.json must match canonical dream-online origin/main bytes',
+  );
 
   const data = JSON.parse(raw);
   assert.deepEqual(Object.keys(data.nodes).sort(), ['alienware', 't5500']);
@@ -205,7 +209,15 @@ test('fleet-map.mjs resolves all active services, repo-auxiliary fallback servic
   const overrideMap = {
     nodes: customMap.nodes,
     services: [
-      { id: 'odysseus', node: 't5500', host: '10.99.0.15', port: 17011, protocol: 'http', scope: 'lan', bind: '0.0.0.0' },
+      {
+        id: 'odysseus',
+        node: 't5500',
+        host: '10.99.0.15',
+        port: 17011,
+        protocol: 'http',
+        scope: 'lan',
+        bind: '0.0.0.0',
+      },
     ],
   };
   assert.equal(mod.getServiceUrl('odysseus', '', overrideMap), 'http://10.99.0.15:17011');
@@ -294,11 +306,10 @@ test('Get-FleetEndpoint.ps1 resolves active services, repo-auxiliary fallbacks w
   assert.ok(fs.existsSync(PS_SCRIPT), 'ops/fleet/Get-FleetEndpoint.ps1 must exist');
 
   const cliCheck = (args) =>
-    execFileSync(
-      'powershell',
-      ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', PS_SCRIPT, ...args],
-      { encoding: 'utf8', timeout: 8000 }
-    ).trim();
+    execFileSync('powershell', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', PS_SCRIPT, ...args], {
+      encoding: 'utf8',
+      timeout: 8000,
+    }).trim();
 
   assert.equal(cliCheck(['-Service', 'domains-server', '-Path', '/health']), 'http://192.168.0.15:9160/health');
   assert.equal(cliCheck(['-Service', 'postgres', '-Field', 'Bind']), LOOPBACK_IP);
@@ -322,7 +333,7 @@ test('Get-FleetEndpoint.ps1 resolves active services, repo-auxiliary fallbacks w
         },
         services: [],
       }),
-      'utf8'
+      'utf8',
     );
 
     const psCommand = [
@@ -351,11 +362,10 @@ test('Get-FleetEndpoint.ps1 resolves active services, repo-auxiliary fallbacks w
       `$res | ConvertTo-Json -Depth 6 -Compress`,
     ].join('\n');
 
-    const psOut = execFileSync(
-      'powershell',
-      ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', psCommand],
-      { encoding: 'utf8', timeout: 12000 }
-    ).trim();
+    const psOut = execFileSync('powershell', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', psCommand], {
+      encoding: 'utf8',
+      timeout: 12000,
+    }).trim();
     const parsed = JSON.parse(psOut);
 
     for (const exp of ACTIVE_SERVICE_EXPECTATIONS) {
@@ -471,9 +481,17 @@ test('dual-schema support: array-shaped and object-shaped services with "this ma
     ]) {
       const loaded = mod.loadFleetMap(mapFilePath);
 
-      assert.equal(mod.getServiceUrl('mission-os', '/api/v1/status', loaded), 'http://192.168.0.15:3130/api/v1/status', `${label}: mission-os`);
+      assert.equal(
+        mod.getServiceUrl('mission-os', '/api/v1/status', loaded),
+        'http://192.168.0.15:3130/api/v1/status',
+        `${label}: mission-os`,
+      );
       assert.equal(mod.getService('mission-os', loaded).tokenEnv, 'MISSION_OS_TOKEN', `${label}: tokenEnv`);
-      assert.equal(mod.getServiceUrl('dateapp-api', '/health', loaded), 'http://192.168.0.15:8000/health', `${label}: dateapp-api`);
+      assert.equal(
+        mod.getServiceUrl('dateapp-api', '/health', loaded),
+        'http://192.168.0.15:8000/health',
+        `${label}: dateapp-api`,
+      );
       assert.equal(mod.getServiceUrl('leadgen-desk', '', loaded), 'http://192.168.0.40:8392', `${label}: leadgen-desk`);
       assert.equal(mod.getBindHost('postgres', '', loaded), LOOPBACK_IP, `${label}: pg bind`);
       assert.equal(mod.getBindHost('redis', '', loaded), LOOPBACK_IP, `${label}: redis bind`);
@@ -501,7 +519,7 @@ test('dual-schema support: array-shaped and object-shaped services with "this ma
           '}))',
         ].join('\n'),
       ],
-      { encoding: 'utf8', timeout: 8000 }
+      { encoding: 'utf8', timeout: 8000 },
     ).trim();
     assert.deepEqual(JSON.parse(pyOut), {
       mos: 'http://192.168.0.15:3130/api/v1/status',
@@ -514,29 +532,65 @@ test('dual-schema support: array-shaped and object-shaped services with "this ma
 
     const psTok = execFileSync(
       'powershell',
-      ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', PS_SCRIPT, '-MapPath', arrayMapPath, '-Service', 'mission-os', '-Field', 'TokenEnv'],
-      { encoding: 'utf8', timeout: 8000 }
+      [
+        '-NoProfile',
+        '-ExecutionPolicy',
+        'Bypass',
+        '-File',
+        PS_SCRIPT,
+        '-MapPath',
+        arrayMapPath,
+        '-Service',
+        'mission-os',
+        '-Field',
+        'TokenEnv',
+      ],
+      { encoding: 'utf8', timeout: 8000 },
     ).trim();
     assert.equal(psTok, 'MISSION_OS_TOKEN');
 
     const psObjTok = execFileSync(
       'powershell',
-      ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', PS_SCRIPT, '-MapPath', objectMapPath, '-Service', 'mission-os', '-Field', 'TokenEnv'],
-      { encoding: 'utf8', timeout: 8000 }
+      [
+        '-NoProfile',
+        '-ExecutionPolicy',
+        'Bypass',
+        '-File',
+        PS_SCRIPT,
+        '-MapPath',
+        objectMapPath,
+        '-Service',
+        'mission-os',
+        '-Field',
+        'TokenEnv',
+      ],
+      { encoding: 'utf8', timeout: 8000 },
     ).trim();
     assert.equal(psObjTok, 'MISSION_OS_TOKEN');
 
     const psPgBind = execFileSync(
       'powershell',
-      ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', PS_SCRIPT, '-MapPath', arrayMapPath, '-Service', 'postgres', '-Field', 'Bind'],
-      { encoding: 'utf8', timeout: 8000 }
+      [
+        '-NoProfile',
+        '-ExecutionPolicy',
+        'Bypass',
+        '-File',
+        PS_SCRIPT,
+        '-MapPath',
+        arrayMapPath,
+        '-Service',
+        'postgres',
+        '-Field',
+        'Bind',
+      ],
+      { encoding: 'utf8', timeout: 8000 },
     ).trim();
     assert.equal(psPgBind, LOOPBACK_IP);
 
     const fwOut = execFileSync(
       'powershell',
       ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', FW_SCRIPT, '-MapPath', arrayMapPath],
-      { encoding: 'utf8', timeout: 8000 }
+      { encoding: 'utf8', timeout: 8000 },
     );
     assert.match(fwOut, /Skipped local-only services.*t5500-postgres.*t5500-redis/);
     assert.match(fwOut, /token=MISSION_OS_TOKEN/);
@@ -556,12 +610,23 @@ test('dual-schema support: array-shaped and object-shaped services with "this ma
         '  - service: http_status:404',
         '',
       ].join('\n'),
-      'utf8'
+      'utf8',
     );
     const tunnelOut = execFileSync(
       'powershell',
-      ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', TUNNEL_SCRIPT, '-ConfigPath', cfgFixturePath, '-MapPath', arrayMapPath, '-SkipProbe'],
-      { encoding: 'utf8', timeout: 8000 }
+      [
+        '-NoProfile',
+        '-ExecutionPolicy',
+        'Bypass',
+        '-File',
+        TUNNEL_SCRIPT,
+        '-ConfigPath',
+        cfgFixturePath,
+        '-MapPath',
+        arrayMapPath,
+        '-SkipProbe',
+      ],
+      { encoding: 'utf8', timeout: 8000 },
     );
     assert.match(tunnelOut, /\+\s*service: http:\/\/192\.168\.0\.15:3130/);
     assert.doesNotMatch(tunnelOut, /192\.168\.0\.15:5432/);
@@ -584,7 +649,7 @@ test('dual-schema support: array-shaped and object-shaped services with "this ma
           'print(json.dumps({"passed": len(res.passed), "failures": res.failures}))',
         ].join('\n'),
       ],
-      { encoding: 'utf8', timeout: 8000 }
+      { encoding: 'utf8', timeout: 8000 },
     ).trim();
     assert.deepEqual(JSON.parse(guardianOut), { passed: 1, failures: [] });
   } finally {

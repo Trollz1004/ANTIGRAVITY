@@ -91,7 +91,9 @@ export const REPO_FALLBACK_SERVICES = {
 let cachedDefaultMap = null;
 
 export function isMachineLocalScope(scope) {
-  const normalized = String(scope || '').trim().toLowerCase();
+  const normalized = String(scope || '')
+    .trim()
+    .toLowerCase();
   return normalized === 'this machine only' || normalized === 'local-only';
 }
 
@@ -117,9 +119,7 @@ function normalizeServiceEntry(svc, fallbackId = '') {
   const id = String(svc?.id || fallbackId || '').trim();
   const tokenEnv = getServiceTokenEnv(svc);
   const authTokenEnv =
-    svc?.authTokenEnv !== undefined && svc?.authTokenEnv !== null
-      ? String(svc.authTokenEnv)
-      : tokenEnv || '';
+    svc?.authTokenEnv !== undefined && svc?.authTokenEnv !== null ? String(svc.authTokenEnv) : tokenEnv || '';
   const localOnly = isMachineLocalScope(svc?.scope);
   const host = String(svc?.host || (localOnly ? '127.0.0.1' : '')).trim();
   const bind = localOnly ? '127.0.0.1' : String(svc?.bind || '0.0.0.0').trim();
@@ -150,11 +150,19 @@ export function loadFleetMap(mapPath = DEFAULT_FLEET_MAP_PATH) {
 }
 
 export function getNode(nodeId, fleetMap = loadFleetMap()) {
-  const key = String(nodeId || '').trim().toLowerCase();
+  const key = String(nodeId || '')
+    .trim()
+    .toLowerCase();
   const rawNodes = fleetMap?.nodes;
   let found = null;
   if (Array.isArray(rawNodes)) {
-    const match = rawNodes.find((n) => n && String(n.id || '').trim().toLowerCase() === key);
+    const match = rawNodes.find(
+      (n) =>
+        n &&
+        String(n.id || '')
+          .trim()
+          .toLowerCase() === key,
+    );
     if (match) found = normalizeNodeEntry(match, key);
   } else if (rawNodes && typeof rawNodes === 'object') {
     const direct = rawNodes[key];
@@ -162,7 +170,11 @@ export function getNode(nodeId, fleetMap = loadFleetMap()) {
       found = normalizeNodeEntry(direct, key);
     } else {
       const entry = Object.entries(rawNodes).find(
-        ([k, v]) => k.toLowerCase() === key || String(v?.id || '').trim().toLowerCase() === key
+        ([k, v]) =>
+          k.toLowerCase() === key ||
+          String(v?.id || '')
+            .trim()
+            .toLowerCase() === key,
       );
       if (entry) found = normalizeNodeEntry(entry[1], entry[0]);
     }
@@ -200,7 +212,9 @@ function resolveFallbackService(candidate, fleetMap) {
 }
 
 export function getService(serviceId, fleetMap = loadFleetMap()) {
-  const key = String(serviceId || '').trim().toLowerCase();
+  const key = String(serviceId || '')
+    .trim()
+    .toLowerCase();
   const allServices = listAllServices(fleetMap);
   const candidates = [key, ...(SERVICE_ALIASES[key] || [])];
   for (const candidate of candidates) {
@@ -240,7 +254,14 @@ export function getBindHost(serviceId, envOverride = '', fleetMap = loadFleetMap
 }
 
 export function listServicesByNode(nodeId, fleetMap = loadFleetMap()) {
-  const key = String(nodeId || '').trim().toLowerCase();
+  const key = String(nodeId || '')
+    .trim()
+    .toLowerCase();
   getNode(key, fleetMap);
-  return listAllServices(fleetMap).filter((svc) => String(svc.node || '').trim().toLowerCase() === key);
+  return listAllServices(fleetMap).filter(
+    (svc) =>
+      String(svc.node || '')
+        .trim()
+        .toLowerCase() === key,
+  );
 }

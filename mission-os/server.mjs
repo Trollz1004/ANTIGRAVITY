@@ -269,7 +269,7 @@ function runVersion(bin, args = ['--version']) {
         const out = String(stdout || stderr || '')
           .trim()
           .split(/\r?\n/)[0];
-        resolve({ ok: !err && Boolean(out), version: out || (err ? err.message : 'unknown') });
+        resolve({ ok: !err && Boolean(out), version: out || (err ? err.code || 'probe failed' : 'unknown') });
       },
     );
   });
@@ -508,7 +508,11 @@ function spawnCapture(cmd, args, { timeoutMs = 90000, cwd = os.tmpdir() } = {}) 
     });
     child.on('error', (e) => {
       clearTimeout(timer);
-      resolve({ ok: false, error: String(e.message || e), durationMs: Date.now() - start });
+      resolve({
+        ok: false,
+        error: e?.code ? `Process error (${e.code})` : 'Process execution failed',
+        durationMs: Date.now() - start,
+      });
     });
     child.on('close', (code) => {
       clearTimeout(timer);
@@ -608,7 +612,13 @@ function spawnAgyFast(
     child.stderr.on('data', (d) => {
       errText += String(d);
     });
-    child.on('error', (e) => finish({ ok: false, error: String(e.message || e), durationMs: Date.now() - start }));
+    child.on('error', (e) =>
+      finish({
+        ok: false,
+        error: e?.code ? `CLI error (${e.code})` : 'CLI execution failed',
+        durationMs: Date.now() - start,
+      }),
+    );
     child.on('close', (code) => {
       const out = accText.trim();
       finish({
@@ -753,12 +763,12 @@ export async function dispatchJarvis({ brain = 'gemini', prompt = '', repo, node
         error: !r.ok ? `HTTP ${r.status}` : undefined,
         durationMs: Date.now() - start,
       };
-    } catch (e) {
+    } catch {
       return {
         ok: false,
         brain,
         commandUsed: 'ollama /api/chat',
-        error: String(e.message || e),
+        error: 'Local Ollama bridge unreachable',
         durationMs: Date.now() - start,
       };
     }
@@ -845,12 +855,12 @@ export async function dispatchJarvis({ brain = 'gemini', prompt = '', repo, node
         error: !r2.ok ? `HTTP ${r2.status}` : undefined,
         durationMs: Date.now() - start,
       };
-    } catch (e) {
+    } catch {
       return {
         ok: false,
         brain,
         commandUsed: 'Hermes Bridge (hermes-support)',
-        error: String(e.message || e),
+        error: 'Hermes local bridge unreachable',
         durationMs: Date.now() - start,
       };
     }
@@ -939,8 +949,10 @@ const IS_MAIN_MODULE = Boolean(
   process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url)),
 );
 const defaultWatchdog = createNodeWatchdog({
+  fleetMapPath: path.join(ROOT, 'ops/fleet/fleet-map.json'),
+  incidentsPath: process.env.MISSION_OS_INCIDENTS_PATH || path.join(ROOT, 'ops/t5500/watchdog-incidents.json'),
   keepaliveStatusPath: STATUS,
-  disableTelegram: process.env.MISSION_OS_DISABLE_TELEGRAM === '1',
+  disableTelegram: process.env.MISSION_OS_DISABLE_TELEGRAM === '1' || process.env.MISSION_OS_SERVER_TELEGRAM !== '1',
 });
 const defaultShellApi = createShellApi({ repoRoot: ROOT, watchdog: defaultWatchdog });
 if (IS_MAIN_MODULE && process.env.MISSION_OS_NO_BACKGROUND !== '1') {
@@ -1164,7 +1176,9 @@ ${renderNodeLightsSection(nodeStatus)}
 const SCREENS_DIR = `${ROOT}/mission-os/screens`;
 const screens = () => {
   try {
-    return fs.readdirSync(SCREENS_DIR).filter((d) => fs.existsSync(`${SCREENS_DIR}/${d}/code.html`));
+    return fs
+      .readdirSync(SCREENS_DIR)
+      .filter((d) => /^[a-z0-9_.]+$/i.test(d) && fs.existsSync(`${SCREENS_DIR}/${d}/code.html`));
   } catch {
     return [];
   }
@@ -1174,7 +1188,7 @@ const LIVE_BADGE = () =>
   `<div style="position:fixed;left:272px;bottom:10px;z-index:99998;display:flex;gap:8px;font:700 11px Segoe UI,sans-serif"><details style="background:#18181b;color:#e4e4e7;border:1px solid #27272a;border-radius:12px;padding:6px 10px;max-height:70vh;overflow:auto"><summary style="cursor:pointer;color:#facc15">SCREENS (16)</summary>${screens()
     .map(
       (d) =>
-        `<div style="padding:2px 0"><a style="color:#e4e4e7;text-decoration:none" href="/screens/${d}/">${nice(d)}</a></div>`,
+        `<div style="padding:2px 0"><a style="color:#e4e4e7;text-decoration:none" href="/screens/${esc(encodeURIComponent(d))}/">${esc(nice(d))}</a></div>`,
     )
     .join(
       '',
@@ -1246,8 +1260,21 @@ export function createMissionHandler({
         if (!localCaller) {
           const lanDenied = guardRequest(req, effectivePort, { env, repoRoot: ROOT, requireToken: true });
           if (lanDenied) return writeGuardDenial(safeRes, sec, lanDenied, u.pathname);
-        } else if (req.headers?.['sec-fetch-site'] === 'cross-site') {
-          return writeGuardDenial(safeRes, sec, 403, u.pathname);
+        } else {
+          const hostHdr = String(req.headers?.host || '')
+            .trim()
+            .toLowerCase();
+          const validHosts = ['127.0.0.1', 'localhost', T5500_IP.toLowerCase(), ALIENWARE_IP.toLowerCase()].map(
+            (h) => `${h}:${effectivePort}`,
+          );
+          const originHdr = typeof req.headers?.origin === 'string' ? req.headers.origin.trim().toLowerCase() : '';
+          if (
+            !validHosts.includes(hostHdr) ||
+            req.headers?.['sec-fetch-site'] === 'cross-site' ||
+            (originHdr && originHdr !== `http://${hostHdr}`)
+          ) {
+            return writeGuardDenial(safeRes, sec, 403, u.pathname);
+          }
         }
         if (u.pathname === '/v1/models' && ['GET', 'HEAD'].includes(req.method)) {
           safeRes.writeHead(200, {
@@ -1649,9 +1676,9 @@ export function createMissionHandler({
         const statusMap = { approve: 'APPROVED', reject: 'REJECTED', snooze: 'INBOX' };
         const mRes = updateCampaignStatus({ id: itemId, status: statusMap[action] || 'INBOX', notes: body.notes });
         if (!mRes.ok) {
-          const sysRes = await performAction(ROOT, itemId, action, body).catch((e) => ({
+          const sysRes = await performAction(ROOT, itemId, action, body).catch(() => ({
             ok: false,
-            error: e.message,
+            error: 'Action failed',
           }));
           safeRes.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
           return safeRes.end(JSON.stringify(sysRes, null, 2));
@@ -1793,10 +1820,13 @@ export function createMissionHandler({
       safeRes.writeHead(404, sec);
       safeRes.end('not found');
     } catch (e) {
+      const status = e?.status === 400 || e?.status === 413 ? e.status : 500;
+      const safeError =
+        status === 400 ? 'Invalid JSON object' : status === 413 ? 'Request body too large' : 'Internal error';
       if (!safeRes.headersSent) {
-        safeRes.writeHead(e.status || 500, { ...sec, 'Content-Type': 'application/json' });
+        safeRes.writeHead(status, { ...sec, 'Content-Type': 'application/json' });
       }
-      safeRes.end(JSON.stringify({ ok: false, error: e.status ? e.message : e.message || 'Internal error' }));
+      safeRes.end(JSON.stringify({ ok: false, error: safeError }));
     }
   };
 }

@@ -15,6 +15,7 @@ import {
   listServicesByNode,
   loadFleetMap,
 } from '../ops/fleet/fleet-map.mjs';
+import { redactStreamText } from './stream-redact.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_ROOT = process.env.MISSION_OS_ROOT || path.resolve(HERE, '..');
@@ -54,14 +55,15 @@ export function redactSecrets(rawText, env = process.env) {
   let out = String(rawText ?? '');
   if (!out) return out;
   out = out.replace(/\/bot\d+:[^/\s]+/g, '/bot[redacted]');
-  if (!env) return out;
-  for (const name of SECRET_ENV_NAMES) {
-    const val = String(env[name] || '').trim();
-    if (val && out.includes(val)) {
-      out = out.split(val).join('[redacted]');
+  if (env) {
+    for (const name of SECRET_ENV_NAMES) {
+      const val = String(env[name] || '').trim();
+      if (val && out.includes(val)) {
+        out = out.split(val).join('[redacted]');
+      }
     }
   }
-  return out;
+  return redactStreamText(out, { env: env || {} });
 }
 
 function extractErrorMessage(err) {
@@ -422,11 +424,60 @@ function loadPersistedIncidents(incidentsPath) {
 
 function savePersistedIncidents(incidentsPath, data) {
   if (!incidentsPath) return;
+  const dir = path.dirname(incidentsPath);
+  const tmpPath = path.join(
+    dir,
+    `${path.basename(incidentsPath)}.tmp.${process.pid}.${Date.now()}-${Math.random().toString(16).slice(2, 8)}`,
+  );
   try {
-    fs.mkdirSync(path.dirname(incidentsPath), { recursive: true });
-    fs.writeFileSync(incidentsPath, JSON.stringify(data, null, 2), 'utf8');
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), 'utf8');
+    fs.renameSync(tmpPath, incidentsPath);
   } catch {
-    // Non-fatal if read-only filesystem
+    try {
+      if (fs.existsSync(tmpPath)) fs.unlinkSync(tmpPath);
+    } catch {
+      // Ignore temp cleanup errors
+    }
+  }
+}
+
+async function withIncidentsFileLock(incidentsPath, fn, { timeoutMs = 5000, staleMs = 60000 } = {}) {
+  if (!incidentsPath) return fn();
+  const lockPath = `${incidentsPath}.lock`;
+  const deadline = Date.now() + timeoutMs;
+  let acquired = false;
+  fs.mkdirSync(path.dirname(incidentsPath), { recursive: true });
+  while (!acquired) {
+    try {
+      const fd = fs.openSync(lockPath, 'wx');
+      fs.closeSync(fd);
+      acquired = true;
+    } catch (err) {
+      if (err?.code !== 'EEXIST') break;
+      try {
+        const stat = fs.statSync(lockPath);
+        if (Date.now() - stat.mtimeMs > staleMs) {
+          fs.unlinkSync(lockPath);
+          continue;
+        }
+      } catch {
+        continue;
+      }
+      if (Date.now() >= deadline) break;
+      await new Promise((r) => setTimeout(r, 15));
+    }
+  }
+  try {
+    return await fn();
+  } finally {
+    if (acquired) {
+      try {
+        fs.unlinkSync(lockPath);
+      } catch {
+        // Ignore lock cleanup errors
+      }
+    }
   }
 }
 
@@ -530,14 +581,9 @@ export function createNodeWatchdog({
     const currentMs = Number(nowMs());
     const checkedAt = new Date(currentMs).toISOString();
     const map = resolveFleetMap();
-    const persisted = loadPersistedIncidents(incidentsPath);
-    const nextServiceSince = {};
-    const nextPersistedNodes = {};
-    const statusNodes = [];
-    const watchdogNodes = {};
-    const incidents = [];
     const tgConfig = resolveTelegramConfig();
 
+    const rawNodeResults = [];
     for (const nodeId of MONITORED_NODE_IDS) {
       const nodeInfo = getNode(nodeId, map);
       const services = listServicesByNode(nodeId, map);
@@ -553,14 +599,6 @@ export function createNodeWatchdog({
             ? String(rawProbe?.reason || 'Healthy')
             : String(rawProbe?.reason || plainWordsReason(lastError));
 
-          const svcKey = `${nodeId}:${svc.id}`;
-          const prevSvc = persisted.serviceSince[svcKey];
-          const since =
-            prevSvc && Boolean(prevSvc.up) === up && typeof prevSvc.since === 'string' && prevSvc.since
-              ? prevSvc.since
-              : checkedAt;
-          nextServiceSince[svcKey] = { up, status, since };
-
           return {
             id: svc.id,
             name: svc.name || svc.id,
@@ -569,95 +607,92 @@ export function createNodeWatchdog({
             scope: svc.scope || 'lan',
             up,
             status,
-            since,
             reason,
             lastError,
           };
         }),
       );
+      rawNodeResults.push({ nodeId, nodeInfo, probedList });
+    }
 
-      const failing = probedList.filter((s) => !s.up);
-      const nodeUp = failing.length === 0;
-      const light = nodeUp ? 'green' : 'red';
-      const flashing = !nodeUp;
+    const nextServiceSince = {};
+    const nextPersistedNodes = {};
+    const statusNodes = [];
+    const watchdogNodes = {};
+    const incidents = [];
 
-      const prevNode = persisted.nodes[nodeId] || {};
-      let redSince = null;
-      let alertSentAt = null;
-      let lastAlertError = null;
+    await withIncidentsFileLock(incidentsPath, async () => {
+      const persisted = loadPersistedIncidents(incidentsPath);
 
-      if (!nodeUp) {
-        redSince = typeof prevNode.redSince === 'string' && prevNode.redSince ? prevNode.redSince : checkedAt;
-        alertSentAt = typeof prevNode.alertSentAt === 'string' && prevNode.alertSentAt ? prevNode.alertSentAt : null;
-        lastAlertError = prevNode.lastAlertError ? redactSecrets(prevNode.lastAlertError, env) : null;
+      for (const { nodeId, nodeInfo, probedList: baseProbedList } of rawNodeResults) {
+        const probedList = baseProbedList.map((svc) => {
+          const svcKey = `${nodeId}:${svc.id}`;
+          const prevSvc = persisted.serviceSince[svcKey];
+          const since =
+            prevSvc && Boolean(prevSvc.up) === svc.up && typeof prevSvc.since === 'string' && prevSvc.since
+              ? prevSvc.since
+              : checkedAt;
+          nextServiceSince[svcKey] = { up: svc.up, status: svc.status, since };
+          return { ...svc, since };
+        });
 
-        const redStartedMs = Date.parse(redSince);
-        const elapsedMs = Number.isFinite(redStartedMs) ? currentMs - redStartedMs : 0;
-        if (elapsedMs >= redAlertAfterMs && !alertSentAt && !tgConfig.disabled && tgConfig.configured) {
-          const alertText = formatWatchdogTelegramMessage({
-            nodeName: nodeInfo.name || nodeId.toUpperCase(),
-            nodeHost: nodeInfo.host || nodeInfo.ip,
-            redSince,
-            failingServices: failing,
-            env,
-          });
-          const sendRes = await sendTelegramAlert(alertText);
-          if (sendRes.sent) {
-            alertSentAt = checkedAt;
-            lastAlertError = null;
-          } else if (sendRes.error) {
-            lastAlertError = redactSecrets(sendRes.error, env);
+        const failing = probedList.filter((s) => !s.up);
+        const nodeUp = failing.length === 0;
+        const light = nodeUp ? 'green' : 'red';
+        const flashing = !nodeUp;
+
+        const prevNode = persisted.nodes[nodeId] || {};
+        let redSince = null;
+        let alertSentAt = null;
+        let lastAlertError = null;
+
+        if (!nodeUp) {
+          redSince = typeof prevNode.redSince === 'string' && prevNode.redSince ? prevNode.redSince : checkedAt;
+          alertSentAt = typeof prevNode.alertSentAt === 'string' && prevNode.alertSentAt ? prevNode.alertSentAt : null;
+          lastAlertError = prevNode.lastAlertError ? redactSecrets(prevNode.lastAlertError, env) : null;
+
+          const redStartedMs = Date.parse(redSince);
+          const elapsedMs = Number.isFinite(redStartedMs) ? currentMs - redStartedMs : 0;
+          if (elapsedMs >= redAlertAfterMs && !alertSentAt && !tgConfig.disabled && tgConfig.configured) {
+            const alertText = formatWatchdogTelegramMessage({
+              nodeName: nodeInfo.name || nodeId.toUpperCase(),
+              nodeHost: nodeInfo.host || nodeInfo.ip,
+              redSince,
+              failingServices: failing,
+              env,
+            });
+            const sendRes = await sendTelegramAlert(alertText);
+            if (sendRes.sent) {
+              alertSentAt = checkedAt;
+              lastAlertError = null;
+            } else if (sendRes.error) {
+              lastAlertError = redactSecrets(sendRes.error, env);
+            }
           }
         }
-      }
 
-      nextPersistedNodes[nodeId] = {
-        light,
-        flashing,
-        redSince,
-        alertSentAt,
-        lastAlertError,
-      };
+        nextPersistedNodes[nodeId] = {
+          light,
+          flashing,
+          redSince,
+          alertSentAt,
+          lastAlertError,
+        };
 
-      statusNodes.push({
-        id: nodeId,
-        name: nodeInfo.name || (nodeId === 't5500' ? 'T5500' : 'Alienware'),
-        host: nodeInfo.host || nodeInfo.ip,
-        up: nodeUp,
-        light,
-        flashing,
-        services: probedList,
-      });
+        statusNodes.push({
+          id: nodeId,
+          name: nodeInfo.name || (nodeId === 't5500' ? 'T5500' : 'Alienware'),
+          host: nodeInfo.host || nodeInfo.ip,
+          up: nodeUp,
+          light,
+          flashing,
+          services: probedList,
+        });
 
-      const failingSummary = failing.map((svc) => ({
-        id: svc.id,
-        serviceId: svc.id,
-        name: svc.name,
-        serviceName: svc.name,
-        host: svc.host,
-        port: svc.port,
-        status: svc.status,
-        since: svc.since,
-        reason: svc.reason,
-        lastError: svc.lastError,
-      }));
-
-      watchdogNodes[nodeId] = {
-        light,
-        flashing,
-        redSince,
-        alertSentAt,
-        failingServices: failingSummary,
-      };
-
-      for (const svc of failing) {
-        const dayTag = String(svc.since || checkedAt)
-          .slice(0, 10)
-          .replace(/-/g, '');
-        incidents.push({
-          incidentId: `inc-${nodeId}-${svc.id}-${dayTag}`,
-          node: nodeId,
+        const failingSummary = failing.map((svc) => ({
+          id: svc.id,
           serviceId: svc.id,
+          name: svc.name,
           serviceName: svc.name,
           host: svc.host,
           port: svc.port,
@@ -665,21 +700,47 @@ export function createNodeWatchdog({
           since: svc.since,
           reason: svc.reason,
           lastError: svc.lastError,
-          notifiedTelegram: Boolean(alertSentAt),
-          notifiedAt: alertSentAt,
-        });
+        }));
+
+        watchdogNodes[nodeId] = {
+          light,
+          flashing,
+          redSince,
+          alertSentAt,
+          failingServices: failingSummary,
+        };
+
+        for (const svc of failing) {
+          const dayTag = String(svc.since || checkedAt)
+            .slice(0, 10)
+            .replace(/-/g, '');
+          incidents.push({
+            incidentId: `inc-${nodeId}-${svc.id}-${dayTag}`,
+            node: nodeId,
+            serviceId: svc.id,
+            serviceName: svc.name,
+            host: svc.host,
+            port: svc.port,
+            status: svc.status,
+            since: svc.since,
+            reason: svc.reason,
+            lastError: svc.lastError,
+            notifiedTelegram: Boolean(alertSentAt),
+            notifiedAt: alertSentAt,
+          });
+        }
       }
-    }
+
+      savePersistedIncidents(incidentsPath, {
+        schema: 'antigravity.watchdog-incidents.v1',
+        updatedAt: checkedAt,
+        nodes: nextPersistedNodes,
+        serviceSince: nextServiceSince,
+        incidents,
+      });
+    });
 
     const keepalive = readKeepaliveSummary(keepaliveStatusPath);
-
-    savePersistedIncidents(incidentsPath, {
-      schema: 'antigravity.watchdog-incidents.v1',
-      updatedAt: checkedAt,
-      nodes: nextPersistedNodes,
-      serviceSince: nextServiceSince,
-      incidents,
-    });
 
     const pollIntervalSeconds = Math.max(1, Math.round(pollIntervalMs / 1000));
     const redAlertAfterSeconds = Math.max(1, Math.round(redAlertAfterMs / 1000));

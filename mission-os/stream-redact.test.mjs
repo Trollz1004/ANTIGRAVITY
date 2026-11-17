@@ -338,9 +338,7 @@ test('Category 4: redacts private repository names while preserving public domai
     assert.ok(!out.includes(repo), `Expected private repo ${repo} to be redacted`);
   }
   assert.ok(out.includes('[REDACTED_PRIVATE_REPO]'));
-  assert.ok(out.includes('youandinotai.com'));
-  assert.ok(out.includes('onlinerecycle.net'));
-  assert.ok(out.includes('dream-online.net'));
+  assert.match(out, /Public: youandinotai\.com onlinerecycle\.net dream-online\.net/);
 });
 
 test('Category 5: redacts canonical banned words/splits and mission wording', () => {
@@ -566,4 +564,77 @@ test('stream-redact.mjs and stream-redact.test.mjs contain zero pre-commit-canon
   const testSrc = fs.readFileSync(path.join(HERE, 'stream-redact.test.mjs'), 'utf8');
   assert.equal(hookRe.test(implSrc), false, 'stream-redact.mjs must have zero canonical hook matches');
   assert.equal(hookRe.test(testSrc), false, 'stream-redact.test.mjs must have zero canonical hook matches');
+});
+
+test('Carbon review remediation: JSON-quoted keys, Telegram /bot URLs, extra setting names, linear-time ReDoS, and NUL-byte text redaction', async () => {
+  // 1. JSON-quoted keys in plain/SSE text
+  const jsonInSse = 'data: {"token": "superSecret999", "apiKey": "mySecretApiKey1", "node": "T5500"}\n\n';
+  const sseOut = redactStreamText(jsonInSse, { env: {} });
+  assert.ok(!sseOut.includes('superSecret999'));
+  assert.ok(!sseOut.includes('mySecretApiKey1'));
+  assert.ok(sseOut.includes('"token": "[REDACTED_SECRET]"'));
+  assert.ok(sseOut.includes('"apiKey": "[REDACTED_SECRET]"'));
+  assert.ok(sseOut.includes('"node": "T5500"'));
+
+  // 2. Telegram /bot<id>:<token> URL without env secret present
+  const tgUrl = 'https://api.telegram.org/bot123456789:AAFakeTelegramSecretToken999/sendMessage';
+  const tgOut = redactStreamText(tgUrl, { env: {} });
+  assert.ok(!tgOut.includes('AAFakeTelegramSecretToken999'));
+  assert.ok(tgOut.includes('/bot[REDACTED_SECRET]/sendMessage'));
+
+  // 3. Additional env setting names (ENCRYPTION_KEY, *_CHAT, SENTRY_DSN, 2-char prefixes DB_SECRET/PG_PASSWORD)
+  const settingsOut = redactStreamText(
+    'Missing ENCRYPTION_KEY, TELEGRAM_HOME_CHAT, ORC_NOTIFY_TELEGRAM_CHAT, SENTRY_DSN, DB_SECRET, PG_PASSWORD',
+    { env: {} },
+  );
+  for (const name of [
+    'ENCRYPTION_KEY',
+    'TELEGRAM_HOME_CHAT',
+    'ORC_NOTIFY_TELEGRAM_CHAT',
+    'SENTRY_DSN',
+    'DB_SECRET',
+    'PG_PASSWORD',
+  ]) {
+    assert.ok(!settingsOut.includes(name), `Expected setting name ${name} to be redacted`);
+  }
+
+  // 4. ReDoS linear-time guard on adversarial repetitive strings
+  const t0 = performance.now();
+  redactStreamText(`${'A'.repeat(25000)}@${'b.'.repeat(500)}invalid`, { env: {} });
+  assert.ok(performance.now() - t0 < 300, 'ReDoS check took too long on adversarial input');
+
+  // 5. Untyped buffer containing stray NUL byte still redacts, while PNG magic buffer passes through intact
+  const req = new http.IncomingMessage(null);
+  const textRes = new http.ServerResponse(req);
+  const sink = new PassThrough();
+  const chunks = [];
+  sink.on('data', (c) => chunks.push(c));
+  textRes.assignSocket(sink);
+  wrapStreamSafeResponse(textRes, { env: {} });
+  const textDone = new Promise((r) => textRes.once('finish', r));
+  textRes.writeHead(200, { 'X-Custom': '1' });
+  textRes.end(Buffer.from('token=mySecretToken999\x00tail', 'utf8'));
+  await textDone;
+  textRes.detachSocket(sink);
+  sink.destroy();
+  const bodyStr = Buffer.concat(chunks).toString('utf8');
+  assert.ok(!bodyStr.includes('mySecretToken999'), 'Buffer with NUL byte must not bypass redaction');
+  assert.ok(bodyStr.includes('[REDACTED_SECRET]'));
+
+  const reqBin = new http.IncomingMessage(null);
+  const binRes = new http.ServerResponse(reqBin);
+  const sinkBin = new PassThrough();
+  const binChunks = [];
+  sinkBin.on('data', (c) => binChunks.push(c));
+  binRes.assignSocket(sinkBin);
+  wrapStreamSafeResponse(binRes, { env: {} });
+  const binDone = new Promise((r) => binRes.once('finish', r));
+  const pngHeader = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x01, 0x02]);
+  binRes.writeHead(200);
+  binRes.end(pngHeader);
+  await binDone;
+  binRes.detachSocket(sinkBin);
+  sinkBin.destroy();
+  const rawBin = Buffer.concat(binChunks);
+  assert.ok(rawBin.subarray(rawBin.length - pngHeader.length).equals(pngHeader));
 });

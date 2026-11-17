@@ -126,9 +126,11 @@ function buildEnvSecretRegex(env) {
   return new RegExp(sorted.join('|'), 'g');
 }
 
-// Category 1 pattern matchers
-const CONN_STRING_CRED_RE = /([a-zA-Z][a-zA-Z0-9+.-]*:\/\/[^:@/\s]+:)([^@/\s]+)(@)/g;
-const BEARER_AUTH_RE = /\b(Bearer|Basic)\s+(?!\[REDACTED_|<)([A-Za-z0-9\-_.~+/=]{6,})/gi;
+// Category 1 pattern matchers (bounded quantifiers to prevent polynomial backtracking)
+const CONN_STRING_CRED_RE =
+  /(?<![A-Za-z0-9+.-])([a-zA-Z][a-zA-Z0-9+.-]{0,20}:\/\/[^:@/\s]{1,128}:)([^@/\s]{1,256})(@)/g;
+const BEARER_AUTH_RE = /\b(Bearer|Basic)\s+(?!\[REDACTED_|<)([A-Za-z0-9\-_.~+/=]{6,2048})/gi;
+const TELEGRAM_BOT_URL_RE = /\/bot\d{6,12}:[A-Za-z0-9_-]{16,128}/g;
 const VENDOR_TOKEN_RE =
   /\b(?:github_pat_[A-Za-z0-9_]{12,}|gh[oprsu]_[A-Za-z0-9]{12,}|(?:sk|rk)[-_][A-Za-z0-9_-]{10,}|AIza[A-Za-z0-9_-]{12,}|EAAA[A-Za-z0-9_-]{12,}|eyJ[A-Za-z0-9_-]{4,}\.[A-Za-z0-9_-]{4,}\.[A-Za-z0-9_-]{4,}|\d{6,12}:AA[A-Za-z0-9_-]{16,}|SG\.[A-Za-z0-9_-]{12,}\.[A-Za-z0-9_-]{12,}|xox[baprs]-[A-Za-z0-9-]{12,}|AKIA[A-Z0-9]{12,}|(?:hf|ntn|vck)_[A-Za-z0-9]{16,}|xai-[A-Za-z0-9]{16,})\b/g;
 
@@ -158,18 +160,26 @@ const NON_SECRET_PLACEHOLDER_WORDS = new Set([
 
 const HEADER_VALUE_RE =
   /(?<![A-Za-z0-9_-])((?:X-Mission-OS-Token|X-API-Key|X-Auth-Token|Authorization)\s*:\s*)(?!(?:\[REDACTED_|<|(?:Bearer|Basic)\s))([^\s,;'"<>]{6,})/gi;
-const INLINE_KV_QUOTED_RE =
-  /(^|[\s,{("'\[&?;])((?:api[_-]?key|access[_-]?token|auth[_-]?token|client[_-]?secret|webhook[_-]?secret|session[_-]?id|sessionid|password|passwd|secret|token)\s*[:=]\s*)(?:"([^"\r\n]{4,})"|'([^'\r\n]{4,})')/gi;
-const INLINE_KV_UNQUOTED_RE =
-  /(^|[\s,{("'\[&?;])((?:api[_-]?key|access[_-]?token|auth[_-]?token|client[_-]?secret|webhook[_-]?secret|session[_-]?id|sessionid|password|passwd|secret|token)\s*[:=]\s*)([A-Za-z0-9\-_.+/=]{6,})/gi;
+const INLINE_SECRET_KEY_WORDS =
+  '(?:api[_-]?key|access[_-]?token|auth[_-]?token|client[_-]?secret|webhook[_-]?secret|session[_-]?id|sessionid|password|passwd|secret|token)';
+const INLINE_KV_QUOTED_RE = new RegExp(
+  `(?<![A-Za-z0-9_-])((?:"${INLINE_SECRET_KEY_WORDS}"|'${INLINE_SECRET_KEY_WORDS}'|${INLINE_SECRET_KEY_WORDS})\\s*[:=]\\s*)(?:"([^"\\r\\n]{4,})"|'([^'\\r\\n]{4,})')`,
+  'gi',
+);
+const INLINE_KV_UNQUOTED_RE = new RegExp(
+  `(?<![A-Za-z0-9_-])((?:"${INLINE_SECRET_KEY_WORDS}"|'${INLINE_SECRET_KEY_WORDS}'|${INLINE_SECRET_KEY_WORDS})\\s*[:=]\\s*)([A-Za-z0-9\\-_.+/=]{6,})`,
+  'gi',
+);
 
 // Category 2 setting names (strictly case-sensitive)
 const EXPLICIT_SETTING_NAMES = [
   'ORC_NOTIFY_TELEGRAM_TOKEN',
+  'ORC_NOTIFY_TELEGRAM_CHAT',
   'HERMES_LEADGEN_TOKEN',
   'OBSIDIAN_REST_API_KEY',
   'SQUARE_ACCESS_TOKEN',
   'SWARM_COMMAND_TOKEN',
+  'TELEGRAM_HOME_CHAT',
   'OFFICIAL_VOTE_TOKEN',
   'FLEET_SHARED_TOKEN',
   'TELEGRAM_BOT_TOKEN',
@@ -187,21 +197,23 @@ const EXPLICIT_SETTING_NAMES = [
   'SENDGRID_API_KEY',
   'AI_MEMORY_TOKEN',
   'FCC_GUARD_TOKEN',
+  'ENCRYPTION_KEY',
   'GEMINI_API_KEY',
   'GOOGLE_API_KEY',
   'OPENAI_API_KEY',
   'API_SERVER_KEY',
   'DATABASE_URL',
   'JWT_SECRET',
+  'SENTRY_DSN',
 ];
 const SETTING_NAME_RE = new RegExp(
-  `(?<![A-Z0-9_])(?!REDACTED_)(?:${EXPLICIT_SETTING_NAMES.join('|')}|[A-Z][A-Z0-9_]{2,}_(?:TOKEN|API_KEY|SECRET|PASSWORD|PASSWD|CHAT_ID|DB_URL|CONNECTION_STRING|ACCESS_KEY|WEBHOOK_SECRET|PRIVATE_KEY|DATABASE_URL|SERVER_KEY|CLIENT_SECRET|SIGNING_KEY|BOT_TOKEN|ACCESS_TOKEN))(?![A-Z0-9_])`,
+  `(?<![A-Z0-9_])(?!REDACTED_)(?:${EXPLICIT_SETTING_NAMES.join('|')}|[A-Z][A-Z0-9_]{1,}_(?:TOKEN|API_KEY|SECRET|PASSWORD|PASSWD|PWD|CHAT_ID|DB_URL|CONNECTION_STRING|ACCESS_KEY|WEBHOOK_SECRET|PRIVATE_KEY|DATABASE_URL|SERVER_KEY|CLIENT_SECRET|SIGNING_KEY|BOT_TOKEN|ACCESS_TOKEN|ENCRYPTION_KEY|DSN))(?![A-Z0-9_])`,
   'g',
 );
 
 // Category 3 PII patterns
 const EMAIL_RE =
-  /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.(?!(?:service|png|jpg|jpeg|webp|svg|gif|css|mjs|js|json|html|woff2?)\b)[A-Za-z]{2,}\b/g;
+  /(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]{1,64}@(?:[A-Za-z0-9-]{1,63}\.)+(?!(?:service|png|jpg|jpeg|webp|svg|gif|css|mjs|js|json|html|woff2?)\b)[A-Za-z]{2,24}\b/g;
 const SSN_RE = /(?<![\d.-])\b\d{3}-\d{2}-\d{4}\b(?![\d.-])/g;
 const PHONE_NANP_RE =
   /(?<![\w-]|\d\.)(?:\(?1\)?[\s.-])?(?:\(\d{3}\)[\s.-]?|\d{3}[\s.-])\d{3}[\s.-]\d{4}(?![\w-]|\.\d)/g;
@@ -262,20 +274,21 @@ export function redactStreamText(text, { env = process.env } = {}) {
     pass === REDACT_SECRET ? full : `${prefix}${REDACT_SECRET}${at}`,
   );
   out = out.replace(BEARER_AUTH_RE, (_, scheme) => `${scheme} ${REDACT_SECRET}`);
+  out = out.replace(TELEGRAM_BOT_URL_RE, `/bot${REDACT_SECRET}`);
   out = out.replace(VENDOR_TOKEN_RE, REDACT_SECRET);
   out = out.replace(HEADER_VALUE_RE, (full, prefix, val) => {
     if (NON_SECRET_PLACEHOLDER_WORDS.has(val.toLowerCase())) return full;
     return `${prefix}${REDACT_SECRET}`;
   });
-  out = out.replace(INLINE_KV_QUOTED_RE, (full, boundary, prefix, dqVal, sqVal) => {
+  out = out.replace(INLINE_KV_QUOTED_RE, (full, prefix, dqVal, sqVal) => {
     const val = dqVal !== undefined ? dqVal : sqVal;
     if (!val || val.startsWith('[REDACTED_')) return full;
     const quote = dqVal !== undefined ? '"' : "'";
-    return `${boundary}${prefix}${quote}${REDACT_SECRET}${quote}`;
+    return `${prefix}${quote}${REDACT_SECRET}${quote}`;
   });
-  out = out.replace(INLINE_KV_UNQUOTED_RE, (full, boundary, prefix, val) => {
+  out = out.replace(INLINE_KV_UNQUOTED_RE, (full, prefix, val) => {
     if (NON_SECRET_PLACEHOLDER_WORDS.has(val.toLowerCase())) return full;
-    return `${boundary}${prefix}${REDACT_SECRET}`;
+    return `${prefix}${REDACT_SECRET}`;
   });
 
   // 3. Customer PII (Category 3): email -> SSN -> phone
@@ -456,8 +469,21 @@ function chunkToString(chunk, encoding = 'utf8') {
 function looksBinaryBuffer(chunk) {
   if (typeof chunk === 'string') return false;
   const buf = Buffer.isBuffer(chunk) ? chunk : chunk instanceof Uint8Array ? Buffer.from(chunk) : null;
-  if (!buf) return false;
-  return buf.includes(0);
+  if (!buf || buf.length < 4) return false;
+  if (buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) return true; // PNG
+  if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return true; // JPEG
+  if (buf.subarray(0, 4).toString('ascii') === 'GIF8') return true; // GIF
+  if (
+    buf.length >= 12 &&
+    buf.subarray(0, 4).toString('ascii') === 'RIFF' &&
+    buf.subarray(8, 12).toString('ascii') === 'WEBP'
+  )
+    return true;
+  if (buf.subarray(0, 4).toString('ascii') === 'wOF2' || buf.subarray(0, 4).toString('ascii') === '%PDF') return true;
+  if (buf[0] === 0x50 && buf[1] === 0x4b && buf[2] === 0x03 && buf[3] === 0x04) return true; // ZIP
+  if (buf[0] === 0x1f && buf[1] === 0x8b) return true; // GZIP
+  if (buf[0] === 0x00 && buf[1] === 0x61 && buf[2] === 0x73 && buf[3] === 0x6d) return true; // WASM
+  return false;
 }
 
 /**

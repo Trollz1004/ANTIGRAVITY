@@ -7,7 +7,7 @@ import { Readable } from 'node:stream';
 import { fileURLToPath } from 'node:url';
 import { getServiceUrl } from '../ops/fleet/fleet-map.mjs';
 import { createNodeWatchdog } from './node-watchdog.mjs';
-import { createShellApi, isHeavyBuildRequest, buildWheelEnqueuePayload } from './shell-api.mjs';
+import { createShellApi, isHeavyBuildRequest, buildWheelEnqueuePayload, defaultWheelEnqueue } from './shell-api.mjs';
 import { createMissionHandler, mapAgyModel, AGY_V1_MODELS, dispatchJarvis } from './server.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -893,6 +893,142 @@ test('D1 Node Lights /live HTML renders dark-only carbon-fiber WCAG AAA UI with 
     assert.ok(!liveRes.rawBody.includes('MISSION_OS_TOKEN'), '/live HTML must not contain raw env setting name');
     assert.ok(!liveRes.rawBody.includes('[REDACTED_SETTING]'), '/live UI copy must not trigger env setting redaction');
     assert.ok(!liveRes.rawBody.includes(token), '/live HTML must never echo live token value');
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
+test('Carbon review remediation: WheelEnqueuePayload constraints, 4xx rejection status, swarm-command routing, and /v1 loopback Host/Origin check', async () => {
+  // 1. Engine lane preserved; invalid/scout coerced to mechanical; slug <= 30 without trailing '-'; single-line title without leading '#'
+  const enginePayload = buildWheelEnqueuePayload({
+    taskId: 'task-abcdefghijklmnopqrstuvwxyz-0123456789',
+    lane: 'engine',
+    repo: 'Trollz1004/dream-online',
+    title: '### \nBuild Desktop Shell\r\nExtra details',
+    slug: 'very-long-slug-exceeding-limit-abc',
+  });
+  assert.equal(enginePayload.lane, 'engine');
+  assert.equal(enginePayload.repo, 'dream-online');
+  assert.ok(enginePayload.slug.length <= 30, `slug exceeded 30 chars: ${enginePayload.slug}`);
+  assert.match(enginePayload.slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+  assert.doesNotMatch(enginePayload.title, /[\r\n]/);
+  assert.ok(!enginePayload.title.startsWith('#'));
+
+  const scoutCoerced = buildWheelEnqueuePayload({
+    lane: 'scout',
+    title: '###',
+    slug: 'alpha-bravo-charlie-delta-echo-foxtrot',
+  });
+  assert.equal(scoutCoerced.lane, 'mechanical');
+  assert.ok(scoutCoerced.slug.length <= 30);
+  assert.match(scoutCoerced.slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+  assert.ok(scoutCoerced.title.length > 0 && !scoutCoerced.title.startsWith('#'));
+
+  // 2. HTTP 4xx -> rejected vs HTTP 5xx -> deferred-unreachable
+  const res400 = await defaultWheelEnqueue(
+    {
+      title: 'Build app',
+      lane: 'mechanical',
+      repo: 'ANTIGRAVITY',
+      base: 'main',
+      prompt: 'Build app',
+      slug: 'build-app',
+    },
+    {
+      env: {},
+      fetchImpl: async () => ({ ok: false, status: 400 }),
+    },
+  );
+  assert.equal(res400.ok, false);
+  assert.equal(res400.wheelSyncStatus, 'rejected');
+
+  const res503 = await defaultWheelEnqueue(
+    {
+      title: 'Build app',
+      lane: 'mechanical',
+      repo: 'ANTIGRAVITY',
+      base: 'main',
+      prompt: 'Build app',
+      slug: 'build-app',
+    },
+    {
+      env: {},
+      fetchImpl: async () => ({ ok: false, status: 503 }),
+    },
+  );
+  assert.equal(res503.ok, false);
+  assert.equal(res503.wheelSyncStatus, 'deferred-unreachable');
+
+  // 3. Heavy build for swarm-command does NOT rewrite repo to ANTIGRAVITY or post invalid literal
+  const tmp = makeTempDir();
+  try {
+    const token = 'wheel-contract-token';
+    const env = { MISSION_OS_TOKEN: token, MISSION_OS_TASK_QUEUE_DIR: path.join(tmp, 'queue') };
+    const watchdog = createNodeWatchdog({
+      fleetMap: fixtureFleetMap(),
+      incidentsPath: path.join(tmp, 'incidents.json'),
+      keepaliveStatusPath: path.join(tmp, 'status.json'),
+      env,
+      disableTelegram: true,
+      probeService: async () => ({ up: true, status: 'UP', reason: 'Healthy', lastError: null }),
+    });
+    let enqueueCalls = 0;
+    const shell = createShellApi({
+      env,
+      watchdog,
+      prFetcher: async () => [],
+      fetchImpl: async () => {
+        enqueueCalls += 1;
+        return { ok: true, status: 200 };
+      },
+    });
+    const handler = createMissionHandler({ env, watchdog, shellApi: shell });
+
+    const scRes = await invokeHandler(handler, {
+      method: 'POST',
+      url: '/api/v1/chat/send',
+      headers: { 'x-mission-os-token': token },
+      body: {
+        message: 'Run pytest full test suite for swarm-command',
+        repo: 'Trollz1004/swarm-command',
+        node: 't5500',
+        author: 'Josh',
+      },
+    });
+    assert.equal(scRes.statusCode, 202);
+    assert.equal(scRes.body.node, 'alienware');
+    assert.equal(scRes.body.executionTarget, 'alienware-wheel-inbox');
+    assert.equal(scRes.body.neverRunOnT5500, true);
+    assert.equal(scRes.body.wheelSyncStatus, 'deferred-unsupported-repo');
+    assert.equal(enqueueCalls, 0);
+
+    const saved = JSON.parse(fs.readFileSync(path.join(tmp, 'queue', `${scRes.body.taskId}.json`), 'utf8'));
+    assert.equal(saved.wheelPayload.repo, 'swarm-command');
+
+    // 4. Loopback /v1/models rejects untrusted Host (DNS rebinding) & mismatched Origin while permitting CLI Host: 127.0.0.1:3130
+    const badHost = await invokeHandler(handler, {
+      method: 'GET',
+      url: '/v1/models',
+      remoteAddress: '127.0.0.1',
+      headers: { host: 'evil.example:3130' },
+    });
+    assert.equal(badHost.statusCode, 403);
+
+    const badOrigin = await invokeHandler(handler, {
+      method: 'GET',
+      url: '/v1/models',
+      remoteAddress: '127.0.0.1',
+      headers: { host: '127.0.0.1:3130', origin: 'http://127.0.0.1:9999' },
+    });
+    assert.equal(badOrigin.statusCode, 403);
+
+    const okLocalCli = await invokeHandler(handler, {
+      method: 'GET',
+      url: '/v1/models',
+      remoteAddress: '127.0.0.1',
+      headers: { host: '127.0.0.1:3130' },
+    });
+    assert.equal(okLocalCli.statusCode, 200);
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });
   }
