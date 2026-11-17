@@ -97,14 +97,6 @@ export const BINARIES = {
   ollama: `${HOME_POSIX}/AppData/Local/Programs/Ollama/ollama.exe`,
 };
 
-function getOptionalServiceUrl(serviceId, pathSuffix = '', fallbackUrl = '') {
-  try {
-    return getServiceUrl(serviceId, pathSuffix);
-  } catch {
-    return fallbackUrl;
-  }
-}
-
 export const SERVICES = [
   { id: 'mission-control', port: 3130, what: 'Mission Control (JARVIS/OPSIS board + local /v1 Gemini 4 bridge)', url: getServiceUrl('mission-os', '/') },
   { id: 'social-command-center', port: 3130, what: 'Social Command Center & Gemini 4 Ultra Marketing Engine (/marketing)', url: getServiceUrl('mission-os', '/marketing') },
@@ -320,7 +312,7 @@ function spawnCapture(cmd, args, { timeoutMs = 90000, cwd = os.tmpdir() } = {}) 
     child.stderr.on('data', (d) => { err += String(d); });
     child.on('error', (e) => {
       clearTimeout(timer);
-      resolve({ ok: false, error: String(e.message || e), durationMs: Date.now() - start });
+      resolve({ ok: false, error: safeErrorMessage(e, 'Process spawn failed'), durationMs: Date.now() - start });
     });
     child.on('close', (code) => {
       clearTimeout(timer);
@@ -409,7 +401,7 @@ function spawnAgyFast(prompt, { model = 'gemini-3.8-flash-low', effort = 'low', 
       }
     });
     child.stderr.on('data', (d) => { errText += String(d); });
-    child.on('error', (e) => finish({ ok: false, error: String(e.message || e), durationMs: Date.now() - start }));
+    child.on('error', (e) => finish({ ok: false, error: safeErrorMessage(e, 'agy launch failed'), durationMs: Date.now() - start }));
     child.on('close', (code) => {
       const out = accText.trim();
       finish({
@@ -538,7 +530,7 @@ async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
         durationMs: Date.now() - start,
       };
     } catch (e) {
-      return { ok: false, brain, commandUsed: 'ollama /api/chat', error: String(e.message || e), durationMs: Date.now() - start };
+      return { ok: false, brain, commandUsed: 'ollama /api/chat', error: safeErrorMessage(e, 'Ollama request failed'), durationMs: Date.now() - start };
     }
   }
 
@@ -613,7 +605,7 @@ async function dispatchJarvis({ brain = 'gemini', prompt = '' }) {
         ok: false,
         brain,
         commandUsed: 'Hermes Bridge (hermes-support)',
-        error: String(e.message || e),
+        error: safeErrorMessage(e, 'Hermes bridge request failed'),
         durationMs: Date.now() - start,
       };
     }
@@ -689,7 +681,7 @@ if (IS_MAIN_MODULE && process.env.MISSION_OS_NO_BACKGROUND !== '1') {
   setInterval(() => { refreshState().catch(() => {}); }, 25000);
 }
 
-const esc = (v) => String(v ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 function livePage(s) {
   const brow = (b) => `<tr><td><b>${esc(b.name)}</b></td><td><code>${esc(b.protocol)}</code></td><td class="${b.status === 'UP' ? 'up' : 'down'}">${esc(b.status)}</td><td>${esc(b.version)}</td><td>${esc(b.auth)}</td></tr>`;
   const row = (x) => `<tr><td><b>${esc(x.id)}</b></td><td>:${x.port}</td><td class="${x.listening ? 'up' : 'down'}">${esc(x.status || 'UNVERIFIED')}</td><td>${esc(x.what)}</td><td>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">open</a>` : ''}</td></tr>`;
@@ -712,9 +704,15 @@ nav a{margin-right:16px}code{color:#38bdf8;font-size:13px}</style></head><body><
 }
 
 const SCREENS_DIR = `${ROOT}/mission-os/screens`;
-const screens = () => { try { return fs.readdirSync(SCREENS_DIR).filter((d) => fs.existsSync(`${SCREENS_DIR}/${d}/code.html`)); } catch { return []; } };
+const screens = () => {
+  try {
+    return fs.readdirSync(SCREENS_DIR).filter((d) => /^[a-z0-9_.]+$/i.test(d) && fs.existsSync(`${SCREENS_DIR}/${d}/code.html`));
+  } catch {
+    return [];
+  }
+};
 const nice = (d) => d.replace(/^mission_control_/, '').replace(/_/g, ' ');
-const LIVE_BADGE = () => `<div style="position:fixed;left:272px;bottom:10px;z-index:99998;display:flex;gap:8px;font:700 11px Segoe UI,sans-serif"><details style="background:#18181b;color:#e4e4e7;border:1px solid #27272a;border-radius:12px;padding:6px 10px;max-height:70vh;overflow:auto"><summary style="cursor:pointer;color:#facc15">SCREENS (16)</summary>${screens().map((d) => `<div style="padding:2px 0"><a style="color:#e4e4e7;text-decoration:none" href="/screens/${d}/">${nice(d)}</a></div>`).join('')}</details><a href="/screens/mission_control_jarvis_command_console/" style="background:#22d3ee;color:#09090b;padding:6px 10px;border-radius:999px;text-decoration:none;align-self:flex-end">JARVIS CONSOLE →</a><a href="/live" style="background:#facc15;color:#09090b;padding:6px 10px;border-radius:999px;text-decoration:none;align-self:flex-end">LIVE TRUTH →</a></div><script src="/jarvis-bridge-client.js"></script>`;
+const LIVE_BADGE = () => `<div style="position:fixed;left:272px;bottom:10px;z-index:99998;display:flex;gap:8px;font:700 11px Segoe UI,sans-serif"><details style="background:#18181b;color:#e4e4e7;border:1px solid #27272a;border-radius:12px;padding:6px 10px;max-height:70vh;overflow:auto"><summary style="cursor:pointer;color:#facc15">SCREENS (16)</summary>${screens().map((d) => `<div style="padding:2px 0"><a style="color:#e4e4e7;text-decoration:none" href="/screens/${esc(encodeURIComponent(d))}/">${esc(nice(d))}</a></div>`).join('')}</details><a href="/screens/mission_control_jarvis_command_console/" style="background:#22d3ee;color:#09090b;padding:6px 10px;border-radius:999px;text-decoration:none;align-self:flex-end">JARVIS CONSOLE →</a><a href="/live" style="background:#facc15;color:#09090b;padding:6px 10px;border-radius:999px;text-decoration:none;align-self:flex-end">LIVE TRUTH →</a></div><script src="/jarvis-bridge-client.js"></script>`;
 
 async function readJsonBody(req, maxBytes = 65536) {
   let bytes = 0; const chunks = [];
@@ -1221,4 +1219,17 @@ if (IS_MAIN_MODULE) {
   http.createServer(handleMissionRequest).listen(PORT, HOST, () =>
     console.log(`mission-agent-os on http://${HOST}:${PORT} (LAN http://${T5500_IP}:${PORT})`)
   );
+}
+
+function getOptionalServiceUrl(serviceId, pathSuffix = '', fallbackUrl = '') {
+  try {
+    return getServiceUrl(serviceId, pathSuffix);
+  } catch {
+    return fallbackUrl;
+  }
+}
+
+function safeErrorMessage(err, fallback = 'Operation failed') {
+  const msg = err && typeof err === 'object' && typeof err.message === 'string' ? err.message : '';
+  return msg ? msg.split(/\r?\n/)[0].slice(0, 240) : fallback;
 }
