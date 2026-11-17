@@ -8,6 +8,7 @@ import { execFile, spawn } from 'node:child_process';
 import { getNodeIp, getServiceUrl } from '../ops/fleet/fleet-map.mjs';
 
 const T5500_IP = getNodeIp('t5500');
+const ALIENWARE_IP = getNodeIp('alienware');
 
 export function isLoopbackAddress(remoteAddress) {
   const remote = String(remoteAddress || '').trim();
@@ -55,8 +56,12 @@ export function verifyMissionOsToken(req, opts = {}) {
 
 export function guardRequest(req, port, opts = {}) {
   const headers = req?.headers || {};
-  const host = String(headers.host || '').trim().toLowerCase();
-  const allowedHosts = ['127.0.0.1', 'localhost', T5500_IP.toLowerCase()].map((h) => `${h}:${port}`);
+  const host = String(headers.host || '')
+    .trim()
+    .toLowerCase();
+  const allowedHosts = ['127.0.0.1', 'localhost', T5500_IP.toLowerCase(), ALIENWARE_IP.toLowerCase()].map(
+    (h) => `${h}:${port}`,
+  );
   if (!allowedHosts.includes(host)) return 403;
   if (headers['sec-fetch-site'] === 'cross-site') return 403;
 
@@ -89,9 +94,11 @@ export function guardRequest(req, port, opts = {}) {
 }
 
 export function browserURL(value) {
-  if (typeof value !== 'string' || value.length > 4096 || /[\x00-\x20]/.test(value)) throw new Error('A valid HTTP(S) URL is required');
+  if (typeof value !== 'string' || value.length > 4096 || /[\x00-\x20]/.test(value))
+    throw new Error('A valid HTTP(S) URL is required');
   const u = new URL(value);
-  if (!['http:', 'https:'].includes(u.protocol) || u.username || u.password) throw new Error('Only HTTP(S) without credentials is allowed');
+  if (!['http:', 'https:'].includes(u.protocol) || u.username || u.password)
+    throw new Error('Only HTTP(S) without credentials is allowed');
   return u.href;
 }
 
@@ -102,7 +109,13 @@ export function envelope(source, data = {}) {
 function metadata(file, root) {
   const stat = fs.lstatSync(file);
   if (!stat.isFile() || stat.isSymbolicLink()) return null;
-  return { name: path.relative(root, file).replaceAll('\\', '/'), bytes: stat.size, modified: stat.mtime.toISOString(), status: 'ON DISK', detail: `${stat.size} bytes · modified ${stat.mtime.toISOString()}` };
+  return {
+    name: path.relative(root, file).replaceAll('\\', '/'),
+    bytes: stat.size,
+    modified: stat.mtime.toISOString(),
+    status: 'ON DISK',
+    detail: `${stat.size} bytes · modified ${stat.mtime.toISOString()}`,
+  };
 }
 
 function filesIn(root, relative, depth = 2, limit = 250) {
@@ -128,7 +141,12 @@ function filesIn(root, relative, depth = 2, limit = 250) {
 function safeText(text) {
   return String(text)
     .split(/\r?\n/)
-    .filter((line) => !/(?:api.?key|token|password|secret|authorization|bearer|cookie|BEGIN .*PRIVATE KEY|sk-[A-Za-z0-9]|gh[pousr]_[A-Za-z0-9])/i.test(line))
+    .filter(
+      (line) =>
+        !/(?:api.?key|token|password|secret|authorization|bearer|cookie|BEGIN .*PRIVATE KEY|sk-[A-Za-z0-9]|gh[pousr]_[A-Za-z0-9])/i.test(
+          line,
+        ),
+    )
     .join('\n')
     .replace(/https?:\/\/[^\s<>]+/g, (raw) => {
       try {
@@ -169,8 +187,8 @@ function journal(root) {
 function run(bin, args) {
   return new Promise((resolve) =>
     execFile(bin, args, { timeout: 6000, maxBuffer: 128 * 1024, windowsHide: true, shell: false }, (error, stdout) =>
-      resolve({ ok: !error, output: error ? '' : stdout.trim() })
-    )
+      resolve({ ok: !error, output: error ? '' : stdout.trim() }),
+    ),
   );
 }
 
@@ -187,7 +205,10 @@ async function hardware() {
       if (k === 'idle') idle += delta;
     }
   });
-  const gpu = await run('nvidia-smi', ['--query-gpu=name,memory.total,memory.used,utilization.gpu,temperature.gpu', '--format=csv,noheader,nounits']);
+  const gpu = await run('nvidia-smi', [
+    '--query-gpu=name,memory.total,memory.used,utilization.gpu,temperature.gpu',
+    '--format=csv,noheader,nounits',
+  ]);
   const gpus = gpu.ok
     ? gpu.output
         .split(/\r?\n/)
@@ -195,7 +216,13 @@ async function hardware() {
         .map((line) => {
           const [name, totalMem, used, util, temp] = line.split(',').map((x) => x.trim());
           const num = (x) => (Number.isFinite(Number(x)) ? Number(x) : null);
-          return { name, memoryTotalMiB: num(totalMem), memoryUsedMiB: num(used), utilizationPercent: num(util), temperatureC: num(temp) };
+          return {
+            name,
+            memoryTotalMiB: num(totalMem),
+            memoryUsedMiB: num(used),
+            utilizationPercent: num(util),
+            temperatureC: num(temp),
+          };
         })
     : [];
   const memory = { totalBytes: os.totalmem(), freeBytes: os.freemem() };
@@ -203,13 +230,25 @@ async function hardware() {
     host: os.hostname(),
     platform: os.platform(),
     uptimeSeconds: os.uptime(),
-    cpu: { model: cpu1[0]?.model, logicalCores: cpu1.length, utilizationPercent: total ? 100 * (1 - idle / total) : null },
+    cpu: {
+      model: cpu1[0]?.model,
+      logicalCores: cpu1.length,
+      utilizationPercent: total ? 100 * (1 - idle / total) : null,
+    },
     memory,
     gpus,
     gpuStatus: gpu.ok ? 'MEASURED' : 'UNAVAILABLE',
     items: [
-      { name: os.hostname(), status: 'MEASURED', detail: `${cpu1.length} logical CPUs; ${memory.freeBytes} bytes RAM free` },
-      ...gpus.map((g) => ({ name: g.name, status: 'MEASURED', detail: `${g.memoryUsedMiB}/${g.memoryTotalMiB} MiB VRAM; ${g.utilizationPercent}% GPU; ${g.temperatureC} C` })),
+      {
+        name: os.hostname(),
+        status: 'MEASURED',
+        detail: `${cpu1.length} logical CPUs; ${memory.freeBytes} bytes RAM free`,
+      },
+      ...gpus.map((g) => ({
+        name: g.name,
+        status: 'MEASURED',
+        detail: `${g.memoryUsedMiB}/${g.memoryTotalMiB} MiB VRAM; ${g.utilizationPercent}% GPU; ${g.temperatureC} C`,
+      })),
     ],
   });
 }
@@ -220,7 +259,9 @@ async function jsonProbe(url, identify) {
     if (r.status === 401 || r.status === 403) return { status: 'AUTH REQUIRED', detail: `HTTP ${r.status}`, ok: false };
     if (!r.ok) return { status: 'DOWN', detail: `HTTP ${r.status}`, ok: false };
     const data = await r.json();
-    return identify(data) ? { status: 'UP', detail: 'Expected API identity response verified', ok: true } : { status: 'WRONG SERVICE', detail: 'API identity did not match', ok: false };
+    return identify(data)
+      ? { status: 'UP', detail: 'Expected API identity response verified', ok: true }
+      : { status: 'WRONG SERVICE', detail: 'API identity did not match', ok: false };
   } catch {
     return { status: 'UNAVAILABLE', detail: 'No valid identity response at configured endpoint', ok: false };
   }
@@ -229,9 +270,21 @@ async function jsonProbe(url, identify) {
 async function video() {
   const services = await Promise.all(
     [
-      { id: 'comfyui', name: 'ComfyUI', url: `http://${T5500_IP}:8188`, probe: '/system_stats', identify: (j) => Boolean(j.system && Array.isArray(j.devices)) },
-      { id: 'lightx2v', name: 'LightX2V', url: `http://${T5500_IP}:8001`, probe: '/openapi.json', identify: (j) => /lightx2v/i.test(j.info?.title || '') },
-    ].map(async ({ probe, identify, ...s }) => ({ ...s, ...(await jsonProbe(s.url + probe, identify)) }))
+      {
+        id: 'comfyui',
+        name: 'ComfyUI',
+        url: `http://${T5500_IP}:8188`,
+        probe: '/system_stats',
+        identify: (j) => Boolean(j.system && Array.isArray(j.devices)),
+      },
+      {
+        id: 'lightx2v',
+        name: 'LightX2V',
+        url: `http://${T5500_IP}:8001`,
+        probe: '/openapi.json',
+        identify: (j) => /lightx2v/i.test(j.info?.title || ''),
+      },
+    ].map(async ({ probe, identify, ...s }) => ({ ...s, ...(await jsonProbe(s.url + probe, identify)) })),
   );
   return envelope('T5500 ComfyUI /system_stats and LightX2V /openapi.json identity probes', {
     ok: services.some((s) => s.ok),
@@ -261,11 +314,21 @@ async function chromeStart() {
     fs.mkdirSync(chromeProfile, { recursive: true });
     // Never attach an old or personal debugging endpoint. A running old isolated profile must be closed first.
     const active = path.join(chromeProfile, 'DevToolsActivePort');
-    if (fs.existsSync(active)) throw new Error('Isolated Chrome profile already has a debugging marker. Close its Chrome instance before retrying; no existing browser was attached.');
+    if (fs.existsSync(active))
+      throw new Error(
+        'Isolated Chrome profile already has a debugging marker. Close its Chrome instance before retrying; no existing browser was attached.',
+      );
     chromeChild = spawn(
       binary,
-      [`--user-data-dir=${chromeProfile}`, '--remote-debugging-port=0', '--remote-debugging-address=127.0.0.1', '--no-first-run', '--no-default-browser-check', 'about:blank'],
-      { shell: false, stdio: 'ignore', windowsHide: false }
+      [
+        `--user-data-dir=${chromeProfile}`,
+        '--remote-debugging-port=0',
+        '--remote-debugging-address=127.0.0.1',
+        '--no-first-run',
+        '--no-default-browser-check',
+        'about:blank',
+      ],
+      { shell: false, stdio: 'ignore', windowsHide: false },
     );
     let launchError = null;
     chromeChild.on('error', (e) => {
@@ -278,11 +341,13 @@ async function chromeStart() {
       if (launchError) throw new Error('Chrome could not start');
       if (fs.existsSync(active)) {
         const [p, browserPath] = fs.readFileSync(active, 'utf8').trim().split(/\r?\n/);
-        if (!/^\d+$/.test(p) || !browserPath?.startsWith('/devtools/browser/')) throw new Error('Invalid isolated Chrome endpoint');
+        if (!/^\d+$/.test(p) || !browserPath?.startsWith('/devtools/browser/'))
+          throw new Error('Invalid isolated Chrome endpoint');
         const endpoint = `http://${CDP_LOOPBACK}:${Number(p)}`;
         const response = await fetch(endpoint + '/json/version', { signal: AbortSignal.timeout(2000) });
         const v = await response.json();
-        if (!v.webSocketDebuggerUrl?.endsWith(browserPath) || !/Chrome\//.test(v.Browser || '')) throw new Error('Chrome identity mismatch');
+        if (!v.webSocketDebuggerUrl?.endsWith(browserPath) || !/Chrome\//.test(v.Browser || ''))
+          throw new Error('Chrome identity mismatch');
         chromeEndpoint = endpoint;
         return;
       }
@@ -338,12 +403,20 @@ export async function openBrowser(value) {
   }
   try {
     await chromeStart();
-    const r = await fetch(chromeEndpoint + '/json/new?' + encodeURIComponent(url), { method: 'PUT', signal: AbortSignal.timeout(5000) });
+    const r = await fetch(chromeEndpoint + '/json/new?' + encodeURIComponent(url), {
+      method: 'PUT',
+      signal: AbortSignal.timeout(5000),
+    });
     if (!r.ok) throw new Error('Chrome refused tab creation');
     const target = await r.json();
     const result = await browser();
     const verified = result.tabs.some((t) => t.id === target.id);
-    return { ...result, ok: verified, openedId: target.id, ...(!verified ? { error: 'Tab creation not confirmed by read-back' } : {}) };
+    return {
+      ...result,
+      ok: verified,
+      openedId: target.id,
+      ...(!verified ? { error: 'Tab creation not confirmed by read-back' } : {}),
+    };
   } catch (e) {
     return envelope('Mission Control isolated Chrome', { ok: false, tabs: [], error: e.message });
   }
@@ -405,7 +478,15 @@ export async function readOps(view, { root, state, bridges }) {
           .flatMap((line) => {
             const timestamp = line.match(/\d{4}-\d{2}-\d{2}[T ][\d:.+-]+/)?.[0];
             const status = line.match(/\b(UP|DOWN|HEAL|ERROR|WARN|OK|FAIL)\b/i)?.[0];
-            return timestamp && status ? [{ timestamp, status: status.toUpperCase(), detail: 'Raw message withheld for credential/privacy safety' }] : [];
+            return timestamp && status
+              ? [
+                  {
+                    timestamp,
+                    status: status.toUpperCase(),
+                    detail: 'Raw message withheld for credential/privacy safety',
+                  },
+                ]
+              : [];
           });
       } finally {
         fs.closeSync(fd);
@@ -436,7 +517,10 @@ export async function readOps(view, { root, state, bridges }) {
   }
   if (view === 'hermes') {
     const items = journal(root).filter((j) => j.name === 'hermes');
-    const health = await jsonProbe(getServiceUrl('hermes-gateway', '/health'), (j) => j.status === 'ok' && /hermes/i.test(JSON.stringify(j)));
+    const health = await jsonProbe(
+      getServiceUrl('hermes-gateway', '/health'),
+      (j) => j.status === 'ok' && /hermes/i.test(JSON.stringify(j)),
+    );
     return envelope('Hermes journal and T5500 :8643 health', {
       ok: items.length > 0 || health.ok,
       items,
@@ -453,7 +537,8 @@ export async function readOps(view, { root, state, bridges }) {
       ok: items.length > 0,
       items,
       files: items,
-      detail: 'Local artifact inventory only. No live inbox, publishing, revenue, or automation completion is inferred.',
+      detail:
+        'Local artifact inventory only. No live inbox, publishing, revenue, or automation completion is inferred.',
     });
   }
   return envelope('No configured read source', { ok: false, error: 'Unknown operational view' });
