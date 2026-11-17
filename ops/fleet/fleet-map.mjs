@@ -31,6 +31,61 @@ const SERVICE_ALIASES = {
   'obsidian-alienware': ['alienware-obsidian-rest', 'obsidian-rest'],
   'alienware-obsidian-rest': ['obsidian-alienware', 'obsidian-rest'],
   'obsidian-rest': ['obsidian-alienware', 'alienware-obsidian-rest'],
+  governance: ['official-vote', 'official-vote-service'],
+  'official-vote': ['governance', 'official-vote-service'],
+  'official-vote-service': ['governance', 'official-vote'],
+};
+
+/**
+ * ANTIGRAVITY repo-auxiliary services not tracked in the canonical cross-repo fleet-map.json.
+ * Looked up ONLY by single-service resolution (getService/getServiceUrl/getBindHost) when
+ * absent from fleet-map.json; never injected into listAllServices/listServicesByNode.
+ */
+export const REPO_FALLBACK_SERVICES = {
+  odysseus: {
+    id: 'odysseus',
+    name: 'Odysseus Workspace UI',
+    node: 't5500',
+    port: 7011,
+    protocol: 'http',
+    scope: 'lan-guarded',
+    bind: '0.0.0.0',
+    tokenEnv: 'MISSION_OS_TOKEN',
+    healthPath: '/',
+  },
+  governance: {
+    id: 'governance',
+    name: 'Official Vote Service',
+    node: 't5500',
+    port: 9134,
+    protocol: 'http',
+    scope: 'lan-guarded',
+    bind: '0.0.0.0',
+    tokenEnv: 'OFFICIAL_VOTE_TOKEN',
+    healthPath: '/health',
+  },
+  'mission-mcp': {
+    id: 'mission-mcp',
+    name: 'Mission MCP',
+    node: 't5500',
+    port: 3901,
+    protocol: 'http',
+    scope: 'lan-guarded',
+    bind: '0.0.0.0',
+    tokenEnv: 'MISSION_MCP_TOKEN',
+    healthPath: '/health',
+  },
+  'onemin-shim': {
+    id: 'onemin-shim',
+    name: '1min.ai OpenAI Shim',
+    node: 't5500',
+    port: 20130,
+    protocol: 'http',
+    scope: 'lan-guarded',
+    bind: '0.0.0.0',
+    tokenEnv: 'ONEMIN_SHIM_TOKEN',
+    healthPath: '/health',
+  },
 };
 
 let cachedDefaultMap = null;
@@ -137,6 +192,13 @@ export function listAllServices(fleetMap = loadFleetMap()) {
   return [];
 }
 
+function resolveFallbackService(candidate, fleetMap) {
+  const fb = REPO_FALLBACK_SERVICES[candidate];
+  if (!fb) return null;
+  const host = isMachineLocalScope(fb.scope) ? '127.0.0.1' : getNode(fb.node, fleetMap).ip;
+  return normalizeServiceEntry({ ...fb, host }, fb.id);
+}
+
 export function getService(serviceId, fleetMap = loadFleetMap()) {
   const key = String(serviceId || '').trim().toLowerCase();
   const allServices = listAllServices(fleetMap);
@@ -151,6 +213,10 @@ export function getService(serviceId, fleetMap = loadFleetMap()) {
         return normalizeServiceEntry(fleetMap.services[candidate], candidate);
       }
     }
+  }
+  for (const candidate of candidates) {
+    const fallback = resolveFallbackService(candidate, fleetMap);
+    if (fallback) return fallback;
   }
   throw new Error(`Unknown fleet service "${serviceId}"`);
 }
