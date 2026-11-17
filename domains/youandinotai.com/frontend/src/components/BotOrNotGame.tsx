@@ -501,9 +501,7 @@ export function BotOrNotGame() {
                   />
                 ) : (
                   <div className="flex h-[148px] w-full items-center justify-center sm:h-[220px]">
-                    <RobotIllustration
-                      variant={card.botVariant || 'tin-can'}
-                    />
+                    <RobotIllustration variant={card.botVariant || 'tin-can'} />
                   </div>
                 )}
               </div>
@@ -555,9 +553,7 @@ export function BotOrNotGame() {
                   />
                 ) : (
                   <div className="flex h-[124px] w-full items-center justify-center sm:h-[205px]">
-                    <RobotIllustration
-                      variant={card.botVariant || 'tin-can'}
-                    />
+                    <RobotIllustration variant={card.botVariant || 'tin-can'} />
                   </div>
                 )}
                 <div className="mt-1.5 inline-flex items-center gap-1.5 rounded-full border border-[#FFD21E] bg-[#12151A] px-2.5 py-0.5 font-mono text-[12px] font-bold uppercase text-[#FFD21E] sm:mt-2 sm:px-3 sm:text-[14px]">

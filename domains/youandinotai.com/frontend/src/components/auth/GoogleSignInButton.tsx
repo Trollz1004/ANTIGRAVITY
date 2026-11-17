@@ -8,9 +8,7 @@ declare global {
   }
 }
 
-export function GoogleSignInButton({
-  clientId,
-}: { clientId?: string } = {}) {
+export function GoogleSignInButton({ clientId }: { clientId?: string } = {}) {
   const { googleLogin, user } = useAuth();
   const googleClientId = clientId ?? import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const [pendingCredential, setPendingCredential] = useState<string | null>(

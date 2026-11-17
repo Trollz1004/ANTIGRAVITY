@@ -50,7 +50,12 @@ $canonicalPayload = [ordered]@{
                     [ordered]@{ context = 'quality-gate' },
                     [ordered]@{ context = 'doctrine-check' },
                     [ordered]@{ context = 'guardian-check' },
-                    [ordered]@{ context = 'Scan for forbidden patterns' }
+                    [ordered]@{ context = 'Scan for forbidden patterns' },
+                    [ordered]@{ context = 'eslint-prettier-check' },
+                    [ordered]@{ context = 'code' },
+                    [ordered]@{ context = 'Validate adapter manifests' },
+                    [ordered]@{ context = 'Cockpit never on a public path' },
+                    [ordered]@{ context = 'Enforce Mission Control role wall' }
                 )
             }
         }
@@ -97,7 +102,7 @@ function Get-RulesetSummary([string]$repoName, [int]$id) {
 Write-Host "=================================================================="
 Write-Host " GitHub Main Branch Protection Audit & Enforcement"
 Write-Host "=================================================================="
-Write-Host ("Mode:            " + $(if ($Apply) { 'APPLY (Judge mutation mode)' } else { 'DRY-RUN (read-only audit + command plan)' }))
+Write-Host ("Mode:            " + $(if ($Apply) { 'APPLY (Judge mutation mode)' } else { 'DRY-RUN / Print-only (read-only audit + command plan)' }))
 Write-Host ("Target Ruleset:  repos/$Repo/rulesets/$RulesetId")
 Write-Host ("Reference:       repos/$ReferenceRepo/rulesets/$ReferenceRulesetId")
 Write-Host ""
