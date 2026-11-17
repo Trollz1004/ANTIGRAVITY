@@ -7,6 +7,39 @@ const net = require('net');
 const crypto = require('crypto');
 const { execFile, spawn } = require('child_process');
 
+function loadSharedAgentHelpers() {
+  let dir = __dirname;
+  for (let i = 0; i < 6; i += 1) {
+    const envReq = path.join(dir, 'ops', 'agents', 'env-required.cjs');
+    const nodeLight = path.join(dir, 'ops', 'agents', 'node-light.cjs');
+    if (fs.existsSync(envReq) && fs.existsSync(nodeLight)) {
+      return {
+        ...require(envReq),
+        ...require(nodeLight),
+      };
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return {
+    checkRequiredEnv: () => ({ service: 'hermes-leadgen', envFile: '.env', required: [], missingEnv: [], ok: true }),
+    logStartupEnvCheck: () => ({ service: 'hermes-leadgen', envFile: '.env', required: [], missingEnv: [], ok: true }),
+    resolveAgentDriftPath: (env = process.env, overridePath = '') =>
+      String(overridePath || '').trim() ||
+      String((env && env.AGENT_DRIFT_PATH) || '').trim() ||
+      path.join((env && env.LOCALAPPDATA) || os.homedir(), 'dream-boot', 'agent-drift.json'),
+    readAgentDriftStatus: () => ({ present: false, path: '', driftedFiles: [], driftedCount: 0 }),
+  };
+}
+
+const {
+  checkRequiredEnv,
+  logStartupEnvCheck,
+  resolveAgentDriftPath,
+  readAgentDriftStatus,
+} = loadSharedAgentHelpers();
+
 const SAFE_ID_RE = /^[a-z0-9_-]{1,32}$/i;
 const STATE_CHANGING_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 
@@ -741,8 +774,83 @@ function checkTcpPort(host, port, timeoutMs = 1500) {
   });
 }
 
-async function getSabretoothNodeStatus() {
-  const definitions = [
+function resolveEnvStatusPath(options = {}, env = process.env) {
+  if (options && typeof options.envStatusPath === 'string' && options.envStatusPath.trim()) {
+    return options.envStatusPath.trim();
+  }
+  if (env && typeof env.ENV_STATUS_PATH === 'string' && env.ENV_STATUS_PATH.trim()) {
+    return env.ENV_STATUS_PATH.trim();
+  }
+  if (env && typeof env.SERVICE_MISSING_ENV_PATH === 'string' && env.SERVICE_MISSING_ENV_PATH.trim()) {
+    return env.SERVICE_MISSING_ENV_PATH.trim();
+  }
+  return path.join((env && env.LOCALAPPDATA) || USER_HOME, 'dream-boot', 'env-status.json');
+}
+
+function normalizeMissingEnvEntries(input) {
+  if (!Array.isArray(input)) return [];
+  return input
+    .map((item) => {
+      if (typeof item === 'string') return item.trim();
+      if (item && typeof item === 'object') {
+        const name = item.name || item.env || item.key || '';
+        const svc = item.service ? `${item.service}:` : '';
+        return name ? `${svc}${String(name).trim()}` : '';
+      }
+      return '';
+    })
+    .filter(Boolean);
+}
+
+function collectLeadgenServiceMissingEnv(options = {}, env = process.env, probedServices = []) {
+  const collected = [];
+  if (Array.isArray(options.serviceMissingEnv)) {
+    collected.push(...normalizeMissingEnvEntries(options.serviceMissingEnv));
+  }
+
+  const envStatusPath = resolveEnvStatusPath(options, env);
+  if (envStatusPath && fs.existsSync(envStatusPath)) {
+    try {
+      const raw = fs.readFileSync(envStatusPath, 'utf8').replace(/^\uFEFF/, '');
+      if (raw.trim()) {
+        const parsed = JSON.parse(raw);
+        collected.push(
+          ...normalizeMissingEnvEntries(parsed && (parsed.serviceMissingEnv || parsed.missingEnv || parsed.missing)),
+        );
+      }
+    } catch (_) {
+      // Ignore malformed optional env-status file
+    }
+  }
+
+  const rawEnvMissing = String((env && env.SERVICE_MISSING_ENV) || '').trim();
+  if (rawEnvMissing) {
+    if (rawEnvMissing.startsWith('[')) {
+      try {
+        collected.push(...normalizeMissingEnvEntries(JSON.parse(rawEnvMissing)));
+      } catch (_) {
+        collected.push(...rawEnvMissing.split(',').map((s) => s.trim()).filter(Boolean));
+      }
+    } else {
+      collected.push(...rawEnvMissing.split(',').map((s) => s.trim()).filter(Boolean));
+    }
+  }
+
+  for (const svc of probedServices) {
+    if (Array.isArray(svc && svc.missingEnv)) {
+      collected.push(...normalizeMissingEnvEntries(svc.missingEnv));
+    }
+    if (Array.isArray(svc && svc.serviceMissingEnv)) {
+      collected.push(...normalizeMissingEnvEntries(svc.serviceMissingEnv));
+    }
+  }
+
+  return Array.from(new Set(collected));
+}
+
+async function getSabretoothNodeStatus(options = {}) {
+  const env = options.env || process.env;
+  let definitions = [
     {
       id: 'fcc-8082',
       name: 'Free Claude Code Admin (:8082)',
@@ -808,9 +916,35 @@ async function getSabretoothNodeStatus() {
     },
   ];
 
-  const services = await Promise.all(
+  const rawTargets = String((env && env.HERMES_LEADGEN_TARGETS) || '').trim();
+  if (rawTargets) {
+    try {
+      const parsedTargets = JSON.parse(rawTargets);
+      if (Array.isArray(parsedTargets)) {
+        definitions = parsedTargets;
+      }
+    } catch (_) {
+      // Ignore invalid override JSON
+    }
+  }
+
+  const probeFn = typeof options.probeService === 'function' ? options.probeService : null;
+  const probedExtraMissing = [];
+  const serviceChecks = await Promise.all(
     definitions.map(async (svc) => {
-      const up = svc.port === PORT ? true : await checkTcpPort(svc.host, svc.port);
+      let up = false;
+      if (probeFn) {
+        const res = await probeFn(svc.host, svc.port, svc);
+        if (res && typeof res === 'object') {
+          up = Boolean(res.up);
+          if (Array.isArray(res.missingEnv)) probedExtraMissing.push(...res.missingEnv);
+          if (Array.isArray(res.serviceMissingEnv)) probedExtraMissing.push(...res.serviceMissingEnv);
+        } else {
+          up = Boolean(res);
+        }
+      } else {
+        up = svc.port === PORT ? true : await checkTcpPort(svc.host, svc.port);
+      }
       return {
         ...svc,
         up,
@@ -822,7 +956,7 @@ async function getSabretoothNodeStatus() {
 
   const requiredPorts = [8082, 8390, 8391, 8392, 11434];
   const nodeHealthPorts = requiredPorts.map((port) => {
-    const match = services.find((s) => s.port === port);
+    const match = serviceChecks.find((s) => s.port === port);
     return {
       port,
       name: match ? match.name : `Port :${port}`,
@@ -832,6 +966,51 @@ async function getSabretoothNodeStatus() {
       dot: match && match.up ? 'green' : 'red',
     };
   });
+
+  const driftPath = resolveAgentDriftPath(env, options.agentDriftPath || '');
+  const rawDrift = readAgentDriftStatus(driftPath, env);
+  const agentDrift = {
+    light: rawDrift.driftedCount > 0 ? 'amber' : 'green',
+    present: rawDrift.present,
+    driftedCount: rawDrift.driftedCount,
+    driftedFiles: rawDrift.driftedFiles,
+  };
+  const ownEnvCheck = checkRequiredEnv(ROOT, env);
+  const missingEnv = ownEnvCheck.missingEnv;
+  const extraMissing = collectLeadgenServiceMissingEnv(options, env, [{ missingEnv: probedExtraMissing }]);
+  const serviceMissingEnv = Array.from(new Set([...missingEnv, ...extraMissing]));
+
+  const anyServiceDown = serviceChecks.some((s) => !s.up);
+  const nodeLight = anyServiceDown
+    ? 'RED'
+    : agentDrift.driftedFiles.length > 0 || missingEnv.length > 0 || serviceMissingEnv.length > 0
+      ? 'AMBER'
+      : 'GREEN';
+
+  const driftedNames = agentDrift.driftedFiles.map((d) => d.file);
+  const agentDriftPill = {
+    id: 'agent-drift',
+    name: 'Agent Files Sync',
+    up: agentDrift.driftedCount === 0,
+    light: agentDrift.driftedCount > 0 ? 'AMBER' : 'GREEN',
+    detail: driftedNames.length > 0 ? `Drifted: ${driftedNames.join(', ')}` : '0 drifted',
+    url: 'ops/agents/check-agent-drift.ps1',
+    checkedAt: new Date().toISOString(),
+  };
+  const envSettingsPill = {
+    id: 'env-settings',
+    name: 'Env Settings',
+    up: serviceMissingEnv.length === 0,
+    light: serviceMissingEnv.length > 0 ? 'AMBER' : 'GREEN',
+    detail:
+      serviceMissingEnv.length > 0
+        ? `Missing settings: ${serviceMissingEnv.join(', ')}`
+        : 'All required setting names set',
+    url: 'ops/agents/env-names-check.ps1',
+    checkedAt: new Date().toISOString(),
+  };
+
+  const services = [...serviceChecks, agentDriftPill, envSettingsPill];
 
   const cronJobs = [
     {
@@ -873,12 +1052,16 @@ async function getSabretoothNodeStatus() {
   return {
     node: 'Sabretooth',
     ip: NODE_LAN_HOST,
-    bindHost: resolveBindHost(process.env),
+    bindHost: resolveBindHost(env, { warn: () => {} }),
     role: 'OPSis Sabretooth Desk v1 (:8392) · House Shell · 4 Views (Overview, YouTube & Podcast, Clay Lead Gen, Marketing QR)',
     isolationRule:
       'Sabretooth (:8392) is strictly node-specific. T5500 (:3130 Mission OS) and Alienware remain strictly separate.',
     cliCommand: 'agy --dangerously-skip-permissions',
-    allGreen: services.every((s) => s.up),
+    nodeLight,
+    agentDrift,
+    missingEnv,
+    serviceMissingEnv,
+    allGreen: nodeLight === 'GREEN',
     nodeHealthPorts,
     cronJobs,
     jobQueue,
@@ -1448,10 +1631,36 @@ const server = http.createServer(async (req, res) => {
       return proxyHttpRequest(req, res, 9119, '/proxy/hermes');
     }
 
-    // 2. Node Red-Light / Green-Light Status & Self-Heal
+    // 2. Node Red-Light / Amber / Green-Light Status & Self-Heal
+    if (pathname === '/health' && req.method === 'GET') {
+      const envReport = checkRequiredEnv(ROOT, process.env);
+      const drift = readAgentDriftStatus(resolveAgentDriftPath(process.env), process.env);
+      const extraMissing = collectLeadgenServiceMissingEnv({}, process.env);
+      const serviceMissingEnv = Array.from(new Set([...envReport.missingEnv, ...extraMissing]));
+      const hasAmber = serviceMissingEnv.length > 0 || drift.driftedCount > 0;
+      return sendJson(res, 200, {
+        ok: true,
+        service: 'hermes-leadgen',
+        light: hasAmber ? 'amber' : 'green',
+        nodeLight: hasAmber ? 'amber' : 'green',
+        missingEnv: envReport.missingEnv,
+        serviceMissingEnv,
+        driftedFiles: drift.driftedFiles,
+        driftedCount: drift.driftedCount,
+      });
+    }
+
     if (pathname === '/api/node/status' && req.method === 'GET') {
       const status = await getSabretoothNodeStatus();
       return sendJson(res, 200, status);
+    }
+
+    if (pathname === '/api/overview' && req.method === 'GET') {
+      const status = await getSabretoothNodeStatus();
+      return sendJson(res, 200, {
+        ...status,
+        requiredPorts: status.nodeHealthPorts,
+      });
     }
 
     if (pathname === '/api/node/heal' && req.method === 'POST') {
@@ -2344,6 +2553,7 @@ server.listen = function patchedListen(...args) {
 
 function startServer({ port = PORT, env = process.env } = {}, callback) {
   const { bindHost } = validateBindConfig(env);
+  logStartupEnvCheck(ROOT, env);
   return rawServerListen(port, bindHost, (...args) => {
     const addr = server.address();
     const actualPort = addr && typeof addr === 'object' ? addr.port : port;
@@ -2355,9 +2565,12 @@ function startServer({ port = PORT, env = process.env } = {}, callback) {
 if (require.main === module) {
   try {
     const { bindHost } = validateBindConfig(process.env);
+    logStartupEnvCheck(ROOT, process.env);
     server.listen(PORT, bindHost, () => {
+      const addr = server.address();
+      const actualPort = addr && typeof addr === 'object' ? addr.port : PORT;
       console.log(
-        `[LeadGen Studio] Listening on http://${bindHost}:${PORT} (http://${NODE_LAN_HOST}:${PORT}/)`,
+        `[LeadGen Studio] Listening on http://${bindHost}:${actualPort} (http://${NODE_LAN_HOST}:${actualPort}/)`,
       );
     });
   } catch (err) {

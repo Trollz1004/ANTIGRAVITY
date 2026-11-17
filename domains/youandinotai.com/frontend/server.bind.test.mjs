@@ -90,13 +90,24 @@ test(
 
         if (mode.expectWarn) {
           assert.match(logs, /WARNING: FLEET_SHARED_TOKEN is not set/);
+          assert.match(logs, /Startup env check: missing required setting names: FLEET_SHARED_TOKEN/);
         }
 
         const health = await fetch(`http://${LOOPBACK}:${port}/health`);
         assert.equal(health.status, 200, `${mode.name}: /health must return 200 without fleet token`);
+        const healthBody = await health.json();
+        assert.equal(Array.isArray(healthBody.missingEnv), true);
 
         const apiHealth = await fetch(`http://${LOOPBACK}:${port}/api/health`);
         assert.equal(apiHealth.status, 200, `${mode.name}: /api/health must return 200 without fleet token`);
+        const apiHealthBody = await apiHealth.json();
+        if (mode.token) {
+          assert.deepEqual(apiHealthBody.missingEnv, []);
+          assert.equal(JSON.stringify(apiHealthBody).includes(mode.token), false);
+        } else {
+          assert.deepEqual(apiHealthBody.missingEnv, ['FLEET_SHARED_TOKEN']);
+          assert.equal(apiHealthBody.nodeLight, 'amber');
+        }
 
         if (fs.existsSync(path.join(HERE, 'dist', 'index.html'))) {
           const home = await fetch(`http://${LOOPBACK}:${port}/`);

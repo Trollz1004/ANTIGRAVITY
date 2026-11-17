@@ -91,6 +91,18 @@ test('domains-server serves public routes (200) without fleet token in both no-t
       );
       if (mode.expectWarn) {
         assert.match(logs, /WARNING: FLEET_SHARED_TOKEN is not set/);
+        assert.match(logs, /Startup env check: missing required setting names: FLEET_SHARED_TOKEN/);
+      }
+
+      const healthJson = JSON.parse(healthRes.body);
+      assert.equal(healthJson.service, 'domains-server');
+      assert.equal(Array.isArray(healthJson.missingEnv), true);
+      if (mode.token) {
+        assert.deepEqual(healthJson.missingEnv, []);
+        assert.equal(healthRes.body.includes(mode.token), false);
+      } else {
+        assert.deepEqual(healthJson.missingEnv, ['FLEET_SHARED_TOKEN']);
+        assert.equal(healthJson.nodeLight, 'amber');
       }
 
       const siteRes = await httpGet(port, '/', { Host: 'onlinerecycle.net' });

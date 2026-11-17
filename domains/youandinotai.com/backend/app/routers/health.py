@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.cache import redis_health_check
 from app.config import get_settings
 from app.database import check_db_health, get_db
+from app.env_health import get_backend_env_light
 from app.error_responses import internal_error
 from app.models import User
 from app.payment_truth import extract_payment_proof_label, proof_label_is_wallet
@@ -177,6 +178,7 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
         wallet_rails_proven = False
     wallet_rails_status = "proven" if wallet_rails_proven else "unproven"
 
+    env_light = get_backend_env_light()
     status_value = "ok" if db_connected and redis_connected else "degraded"
     return HealthResponse(
         status=status_value,
@@ -188,6 +190,8 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
         wallet_rails_status=wallet_rails_status,
         payment_proof_labels=payment_proof_labels,
         user_count=user_count,
+        missingEnv=env_light["missingEnv"],
+        nodeLight=env_light["nodeLight"],
     )
 
 

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { spawn } from 'node:child_process';
 import net from 'node:net';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveMissionControlBind } from '../lib/config.mjs';
@@ -51,6 +52,9 @@ describe('resolveMissionControlBind', () => {
     delete env.DASHBOARD_BRIDGE_TOKEN;
     delete env.FLEET_SHARED_TOKEN;
     delete env.MISSION_CONTROL_HOST;
+    delete env.OMNI_ROUTE_API_KEY;
+    delete env.OMNIROUTE_API_KEY;
+    env.AGENT_DRIFT_PATH = path.join(os.tmpdir(), `mc-missing-drift-${process.pid}-${Date.now()}.json`);
 
     const child = spawn(process.execPath, [SERVER_PATH], {
       env,
@@ -79,9 +83,13 @@ describe('resolveMissionControlBind', () => {
       });
 
       expect(logs).toMatch(/WARNING: MISSION_OS_TOKEN \/ MISSION_CONTROL_TOKEN is not set/);
+      expect(logs).toMatch(/Startup env check: missing required setting names: MISSION_OS_TOKEN, OMNI_ROUTE_API_KEY/);
 
       const healthRes = await fetch(`http://127.0.0.1:${port}/health`);
       expect(healthRes.status).toBe(200);
+      const healthBody = await healthRes.json();
+      expect(healthBody.missingEnv).toEqual(['MISSION_OS_TOKEN', 'OMNI_ROUTE_API_KEY']);
+      expect(healthBody.nodeLight).toBe('amber');
 
       const cfgRes = await fetch(`http://127.0.0.1:${port}/api/config`);
       expect(cfgRes.status).toBe(200);

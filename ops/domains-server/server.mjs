@@ -16,6 +16,8 @@ import { fileURLToPath } from "node:url";
 import { notifyBooking } from "./booking-notify.mjs";
 import { recordPageView, recordBooking } from "./booking-stats.mjs";
 import { getBindHost, getNodeIp, getService } from "../fleet/fleet-map.mjs";
+import { logStartupEnvCheck } from "../agents/env-required.mjs";
+import { buildHealthEnvLight } from "../agents/node-light.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
@@ -399,7 +401,13 @@ const server = http.createServer(async (req, res) => {
 
     if (urlPath === "/health") {
       res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
-      res.end(JSON.stringify({ service: "domains-server", sites: SITES }));
+      res.end(
+        JSON.stringify({
+          service: "domains-server",
+          sites: SITES,
+          ...buildHealthEnvLight({ manifestDir: __dirname }),
+        })
+      );
       return;
     }
 
@@ -612,6 +620,10 @@ const server = http.createServer(async (req, res) => {
 const IS_MAIN_MODULE = Boolean(
   process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url))
 );
+
+if (IS_MAIN_MODULE) {
+  logStartupEnvCheck(__dirname);
+}
 
 const listeners = IS_MAIN_MODULE
   ? HOSTS.map((host) => {

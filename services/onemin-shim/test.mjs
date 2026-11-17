@@ -210,6 +210,15 @@ test('token-set mode binds 0.0.0.0 and enforces x-shim-token, x-fleet-token, or 
 
     const health = await fetch(`http://127.0.0.1:${tokenPort}/health`);
     assert.equal(health.status, 200);
+    const healthJson = await health.json();
+    assert.deepEqual(healthJson.missingEnv, []);
+    assert.equal(JSON.stringify(healthJson).includes('shim-guard-secret-2026'), false);
+
+    const unsetHealth = await fetch(`${base()}/health`);
+    assert.equal(unsetHealth.status, 200);
+    const unsetJson = await unsetHealth.json();
+    assert.deepEqual(unsetJson.missingEnv, ['ONEMIN_SHIM_TOKEN']);
+    assert.equal(unsetJson.nodeLight, 'amber');
 
     const noToken = await fetch(`http://127.0.0.1:${tokenPort}/v1/models`);
     assert.equal(noToken.status, 401);

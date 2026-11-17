@@ -63,6 +63,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
 import { resolveConfig, resolveVault, resolveMissionControlBind } from './lib/config.mjs';
 import { probeAll } from './lib/nodes.mjs';
+import { logStartupEnvCheck } from '../ops/agents/env-required.mjs';
+import { buildHealthEnvLight } from '../ops/agents/node-light.mjs';
 import { getSentrySnapshot, getSentrySummary } from './lib/sentry.mjs';
 import { resolveClaudeBinary, killTree, runClaude, isSameOrigin, PERMISSION_MODES, PERSONAS, sse } from './lib/claude-bridge.mjs';
 import { getNodeIp, getServiceUrl } from '../ops/fleet/fleet-map.mjs';
@@ -785,7 +787,15 @@ export const server = createServer(async (req, res) => {
   }
 
   if (p === '/favicon.ico') { res.writeHead(200, { 'content-type': 'image/svg+xml', 'cache-control': 'max-age=86400' }); return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0d1117"/><circle cx="16" cy="16" r="9" fill="none" stroke="#58a6ff" stroke-width="3"/><circle cx="16" cy="16" r="3" fill="#3fb950"/></svg>'); }
-  if (p === '/health') return send(res, 200, { status: 'ok', service: 'hermes-jarvis', port: PORT, startedAt: STARTED_AT });
+  if (p === '/health') {
+    return send(res, 200, {
+      status: 'ok',
+      service: 'hermes-jarvis',
+      port: PORT,
+      startedAt: STARTED_AT,
+      ...buildHealthEnvLight({ manifestDir: HERE }),
+    });
+  }
 
   if (p === '/api/config') {
     const host = (req.headers.host || '').replace(/:\d+$/, '') || LAN_IP;
@@ -1246,6 +1256,7 @@ export const server = createServer(async (req, res) => {
 
 const IS_MAIN_MODULE = Boolean(process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url)));
 if (IS_MAIN_MODULE) {
+  logStartupEnvCheck(HERE);
   server.listen(PORT, BIND_HOST, () => {
     console.log(`JARVIS dashboard on http://${BIND_HOST}:${PORT}  (LAN: http://${LAN_IP}:${PORT})  omni=${OMNI}  vault=${VAULT}`);
   });

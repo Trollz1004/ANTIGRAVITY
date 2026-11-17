@@ -49,6 +49,7 @@ import {
 } from './live-tabs-backend.mjs';
 import { buildInbox, performAction } from '../mission-control/lib/inbox.mjs';
 import { getBridgeRegistry, verifyLane, verifyAllLanes } from './bridge-registry.mjs';
+import { getMissionOsEnvDriftLight, warnMissionOsMissingEnv } from './env-drift-light.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = process.env.MISSION_OS_ROOT || (fs.existsSync('C:/ANTIGRAVITY') ? 'C:/ANTIGRAVITY' : path.resolve(HERE, '..'));
@@ -672,7 +673,10 @@ async function state() {
   if (Date.now() - cache.at > 15000 && !cache.refreshing) {
     refreshState().catch(() => {});
   }
-  return cache.data;
+  return {
+    ...cache.data,
+    ...getMissionOsEnvDriftLight({ manifestDir: HERE }),
+  };
 }
 
 const IS_MAIN_MODULE = Boolean(process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url)));
@@ -751,6 +755,23 @@ export const handleMissionRequest = async (req, res) => {
   try {
     const u = new URL(req.url, 'http://x');
     const localCaller = isLoopbackAddress(req.socket?.remoteAddress);
+
+    if (u.pathname === '/health' && (req.method === 'GET' || req.method === 'HEAD')) {
+      const envLight = getMissionOsEnvDriftLight({ manifestDir: HERE });
+      res.writeHead(200, { ...sec, 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+      return res.end(
+        req.method === 'HEAD'
+          ? undefined
+          : JSON.stringify({
+              ok: true,
+              status: 'ok',
+              service: 'mission-os',
+              identity: 'mission-agent-os',
+              port: PORT,
+              ...envLight,
+            }),
+      );
+    }
 
     // OpenAI-compatible Gemini 4 (agy OAuth) bridge: local callers allowed on valid Host;
     // non-loopback LAN callers require valid MISSION_OS_TOKEN.
@@ -1216,6 +1237,7 @@ export const handleMissionRequest = async (req, res) => {
   }
 };
 if (IS_MAIN_MODULE) {
+  warnMissionOsMissingEnv({ manifestDir: HERE });
   http.createServer(handleMissionRequest).listen(PORT, HOST, () =>
     console.log(`mission-agent-os on http://${HOST}:${PORT} (LAN http://${T5500_IP}:${PORT})`)
   );

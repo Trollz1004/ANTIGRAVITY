@@ -7,13 +7,71 @@ import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import { WebSocketServer, WebSocket } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
 import http from 'http';
+import { createRequire } from 'module';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadDateAppFrontendConfig, resolveFrontendBind } from './bind.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
+
+type EnvLightHelpers = {
+  logStartupEnvCheck: (
+    manifestOrDir: string,
+    env?: Record<string, string | undefined>,
+    warn?: (msg: string) => void
+  ) => unknown;
+  buildHealthEnvLight: (opts: {
+    manifestDir: string;
+    env?: Record<string, string | undefined>;
+    driftPath?: string;
+  }) => {
+    missingEnv: string[];
+    driftedFiles: Array<{ file: string; reason: string }>;
+    driftedCount: number;
+    nodeLight: 'green' | 'amber';
+  };
+};
+
+function findFrontendManifestDir(): string {
+  return fs.existsSync(path.join(__dirname, 'env.required.json'))
+    ? __dirname
+    : path.resolve(__dirname, '..');
+}
+
+function loadFrontendEnvHelpers(): EnvLightHelpers {
+  let dir = __dirname;
+  for (let i = 0; i < 6; i += 1) {
+    const envReq = path.join(dir, 'ops', 'agents', 'env-required.cjs');
+    const nodeLight = path.join(dir, 'ops', 'agents', 'node-light.cjs');
+    if (fs.existsSync(envReq) && fs.existsSync(nodeLight)) {
+      const { logStartupEnvCheck } = require(envReq) as Pick<EnvLightHelpers, 'logStartupEnvCheck'>;
+      const { buildHealthEnvLight } = require(nodeLight) as Pick<
+        EnvLightHelpers,
+        'buildHealthEnvLight'
+      >;
+      return { logStartupEnvCheck, buildHealthEnvLight };
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return {
+    logStartupEnvCheck: () => undefined,
+    buildHealthEnvLight: () => ({
+      missingEnv: [],
+      driftedFiles: [],
+      driftedCount: 0,
+      nodeLight: 'green',
+    }),
+  };
+}
+
+const FRONTEND_MANIFEST_DIR = findFrontendManifestDir();
+const { logStartupEnvCheck, buildHealthEnvLight } = loadFrontendEnvHelpers();
 
 const FLEET_FRONTEND = loadDateAppFrontendConfig();
 const PORT = Number(process.env.PORT || FLEET_FRONTEND.port);
@@ -193,12 +251,22 @@ export async function startServer(
   server.on('close', () => clearInterval(syncTimer));
 
   // API routes
-  app.get('/health', (req, res) => {
-    res.json({ status: 'ok', players: players.size });
+  app.get('/health', (_req, res) => {
+    res.json({
+      status: 'ok',
+      service: 'dateapp-frontend',
+      players: players.size,
+      ...buildHealthEnvLight({ manifestDir: FRONTEND_MANIFEST_DIR, env }),
+    });
   });
 
-  app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', players: players.size });
+  app.get('/api/health', (_req, res) => {
+    res.json({
+      status: 'ok',
+      service: 'dateapp-frontend',
+      players: players.size,
+      ...buildHealthEnvLight({ manifestDir: FRONTEND_MANIFEST_DIR, env }),
+    });
   });
 
   // Static discovery routes (Tobira AI / RFC 8615) - served directly in both dev and prod
@@ -324,6 +392,9 @@ export async function startServer(
       bind: FLEET_FRONTEND.bind,
       warn: opts.warn ?? console.warn,
     });
+  if (opts.warn !== null) {
+    logStartupEnvCheck(FRONTEND_MANIFEST_DIR, env, opts.warn ?? console.warn);
+  }
   await new Promise<void>((resolve) => {
     server.listen(listenPort, bindHost, () => {
       const addr = server.address();
