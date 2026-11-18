@@ -1695,7 +1695,7 @@ p {
 .legal-page #overview.stage-stop {
   min-height: auto;
   justify-content: flex-end;
-  padding-top: 40vh;
+  padding-top: 48vh;
   padding-bottom: 28px;
   margin-bottom: 0;
 }
