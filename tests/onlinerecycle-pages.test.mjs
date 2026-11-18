@@ -161,3 +161,13 @@ for (const page of PAGES) {
 test('about page: contact email is reported, not changed (judge to rule)', () => {
   assert.match(read('about.html'), /mailto:collaboration@youandinotai\.com/);
 });
+
+// The text extractor must be a real HTML parser, not regular expressions.
+test('textOf: parser semantics (entities decoded once, any-case script and comments never leak)', () => {
+  assert.equal(textOf('<p>a &amp;lt; b</p>'), 'a &lt; b', 'double unescape');
+  assert.equal(textOf('<p>x</p><SCRIPT>alert(1)</SCRIPT><p>y</p>'), 'x y', 'upper-case script');
+  assert.equal(textOf('<p>x</p><ScRiPt type="x">alert(1)</sCrIpT><p>y</p>'), 'x y', 'mixed-case script');
+  assert.equal(textOf('<p>x</p><!-- <script>alert(1)</script> --><p>y</p>'), 'x y', 'comment');
+  assert.equal(textOf('<p>one<br>two<BR/>three</p>'), 'one two three', 'line breaks');
+  assert.equal(textOf('<p>a&nbsp;&middot;&nbsp;b &#39;q&#39; &quot;r&quot;</p>'), "a \u00b7 b 'q' \"r\"", 'entities');
+});
