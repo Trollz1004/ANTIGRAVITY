@@ -1,134 +1,131 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Terms of Service - OnlineRecycle.net</title>
+    <title>Terms of Service | OnlineRecycle.net</title>
+    <meta name="description" content="Terms of Service for OnlineRecycle.net, a Central Florida electronics recycling and resale service." />
+    <meta name="theme-color" content="#0A0B0D" />
+    <meta name="geo.region" content="US-FL" />
+    <meta name="geo.placename" content="Sorrento, Florida" />
+    <meta property="og:title" content="Terms of Service | OnlineRecycle.net" />
+    <meta property="og:description" content="Terms of Service for OnlineRecycle.net, a Central Florida electronics recycling and resale service." />
+    <meta property="og:url" content="https://onlinerecycle.net/terms.html" />
+    <meta property="og:type" content="website" />
     <meta
-      name="description"
-      content="Terms of Service for OnlineRecycle.net — Trash Or Treasure Online Recycler LLC, Sorrento, Florida."
+      property="og:image"
+      content="https://d2xsxph8kpxj0f.cloudfront.net/310519663206571867/ei6fszVC8uoKxVHB43tfro/og-image-v2-Qot8rGQdWAZNRgxhyQBwXR.png"
     />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Terms of Service | OnlineRecycle.net" />
+    <meta name="twitter:description" content="Terms of Service for OnlineRecycle.net, a Central Florida electronics recycling and resale service." />
     <link rel="canonical" href="https://onlinerecycle.net/terms.html" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet" />
-    <style>
-      :root {
-        --bg: #f8fafc;
-        --panel: #ffffff;
-        --text: #0f172a;
-        --muted: #475569;
-        --accent: #16a34a;
-        --line: #e2e8f0;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-        background: var(--bg);
-        color: var(--text);
-        font-family: 'Inter', sans-serif;
-        line-height: 1.7;
-        -webkit-font-smoothing: antialiased;
-      }
-      .topbar {
-        background: var(--accent);
-        color: #fff;
-        text-align: center;
-        padding: 10px 16px;
-        font-size: 0.9rem;
-        font-weight: 600;
-      }
-      header {
-        background: var(--panel);
-        border-bottom: 1px solid var(--line);
-        padding: 16px 24px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .brand {
-        font-size: 1.3rem;
-        font-weight: 800;
-        color: var(--text);
-        text-decoration: none;
-      }
-      .brand span {
-        color: var(--accent);
-      }
-      .wrap {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 48px 24px 80px;
-      }
-      h1 {
-        font-size: 2rem;
-        font-weight: 800;
-        margin: 0 0 8px;
-      }
-      h2 {
-        font-size: 1.2rem;
-        font-weight: 700;
-        margin: 40px 0 8px;
-        color: #1a5490;
-      }
-      p,
-      li {
-        color: var(--muted);
-        margin: 0 0 12px;
-      }
-      ul {
-        padding-left: 1.5rem;
-        margin: 0 0 16px;
-      }
-      .meta {
-        color: #94a3b8;
-        font-size: 0.85rem;
-        margin-bottom: 40px;
-      }
-      .contact-box {
-        background: #f4f4f4;
-        padding: 20px 24px;
-        border-radius: 12px;
-        margin-top: 40px;
-      }
-      .contact-box h2 {
-        margin-top: 0;
-      }
-      footer {
-        border-top: 1px solid var(--line);
-        padding: 24px;
-        text-align: center;
-        font-size: 0.85rem;
-        color: #94a3b8;
-      }
-      footer a {
-        color: var(--muted);
-        text-decoration: underline;
-        margin: 0 8px;
-      }
-      a {
-        color: #1a5490;
-      }
-    </style>
+    <link rel="stylesheet" href="/styles.css?v=20261118" />
+    <script src="/cookie-consent.js?v=20261031" defer></script>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
+
   <body>
-    <div class="topbar">OnlineRecycle.net Terms of Service</div>
-    <header>
-      <a href="/" class="brand">♻️ <span>OnlineRecycle</span>.net</a>
-      <a href="/" style="font-size: 0.9rem; color: #475569; text-decoration: none">← Back to Home</a>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Fixed Carbon-Fibre Weave & Slow Specular Light Sheen Backdrop -->
+    <div class="carbon-fibre-backdrop" id="carbon-fibre-backdrop" aria-hidden="true"></div>
+
+    <!-- Fixed Full-Viewport 3D Scene Stage (House Motion Rule, Transparent over Carbon-Fibre Weave) -->
+    <canvas
+      id="onlinerecycle-stage-canvas"
+      aria-hidden="true"
+      data-stage-mode="active"
+    ></canvas>
+
+    <!-- Sticky Floating Header with Orbit Mark & Telemetry Line -->
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="brand-group">
+          <canvas
+            id="onlinerecycle-header-mark"
+            class="header-mark"
+            width="32"
+            height="32"
+            aria-hidden="true"
+          ></canvas>
+          <a href="#overview" class="brand">
+            <span class="brand-name">OnlineRecycle.net</span>
+          </a>
+        </div>
+
+        <button
+          type="button"
+          class="mobile-menu-btn"
+          id="mobile-menu-btn"
+          aria-expanded="false"
+          aria-controls="primary-top-nav"
+          aria-label="Toggle navigation menu"
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <nav class="top-nav" id="primary-top-nav" aria-label="Primary navigation">
+          <a href="/#overview">Overview</a>
+          <a href="/#book">Book Drop-Off</a>
+          <a href="/#book">Request Pickup</a>
+          <a href="/#how-it-works">Process</a>
+          <a href="/#accepted">Accepted Gear</a>
+          <a href="/#faq">FAQ</a>
+          <a href="/service-areas.html">Service Areas</a>
+          <a href="/about.html">About</a>
+        </nav>
+
+        <div class="header-right">
+          <span class="status-pill">
+            <span class="status-dot"></span>
+            <span id="header-checked-time">INTAKE ONLINE · CENTRAL FL</span>
+          </span>
+          <div class="contact-info">
+            Call / Text: <a href="tel:+13213962008">(321) 396-2008</a>
+            <span class="contact-subline">Mon–Sun 8am–6pm · Sorrento &amp; Central FL</span>
+          </div>
+        </div>
+      </div>
+      <canvas
+        id="onlinerecycle-header-line"
+        class="header-telemetry-line"
+        height="4"
+        aria-hidden="true"
+      ></canvas>
     </header>
 
-    <div class="wrap">
-      <h1>Terms of Service</h1>
-      <p class="meta">
-        Effective Date: March 23, 2026 &nbsp;·&nbsp; Trash Or Treasure Online Recycler LLC &nbsp;·&nbsp; Sorrento,
-        Florida
-      </p>
+    <main class="wrap legal-page" id="main" tabindex="-1">
+      <section class="stage-stop" id="overview" aria-label="Overview">
+        <div class="hero-first-screen">
+          <h1>Terms of Service</h1>
+          <p class="meta hero-subline">
+                  Effective Date: March 23, 2026 &nbsp;·&nbsp; Trash Or Treasure Online Recycler LLC &nbsp;·&nbsp; Sorrento,
+                  Florida
+                </p>
+        </div>
+      </section>
 
-      <h2>1. Acceptance of Terms</h2>
+      <section class="stage-stop legal-stop" id="service" aria-label="Service & Items">
+        <div class="legal-panel">
+<h2>1. Acceptance of Terms</h2>
       <p>
         By accessing or using OnlineRecycle.net ("Service"), you agree to these Terms of Service ("Terms"). If you do
         not agree, do not use the Service.
@@ -152,8 +149,12 @@
         <li>functionality is not guaranteed unless explicitly stated as tested and working</li>
         <li>buyers are responsible for confirming compatibility and suitability for their intended use</li>
       </ul>
+        </div>
+      </section>
 
-      <h2>4. Local Pickup Terms</h2>
+      <section class="stage-stop legal-stop" id="pickup" aria-label="Pickup, Pricing & Returns">
+        <div class="legal-panel">
+<h2>4. Local Pickup Terms</h2>
       <p>For local pickup and drop-off coordination:</p>
       <ul>
         <li>appointments must be scheduled in advance</li>
@@ -188,8 +189,12 @@
         <li>refund requests must be made promptly after receipt or pickup</li>
         <li>shipping costs, when applicable, are non-refundable unless required by law</li>
       </ul>
+        </div>
+      </section>
 
-      <h2>8. User Conduct</h2>
+      <section class="stage-stop legal-stop" id="conduct" aria-label="Conduct & Law">
+        <div class="legal-panel">
+<h2>8. User Conduct</h2>
       <p>You agree not to:</p>
       <ul>
         <li>misuse the Service or attempt to disrupt its operation</li>
@@ -223,8 +228,12 @@
         We may update these Terms from time to time. Changes take effect when posted on this page with an updated
         effective date.
       </p>
+        </div>
+      </section>
 
-      <div class="contact-box">
+      <section class="stage-stop legal-stop" id="contact" aria-label="Contact">
+        <div class="legal-panel">
+<div class="contact-box">
         <h2>Contact Information</h2>
         <p>
           For questions about these Terms, contact:<br />
@@ -234,16 +243,804 @@
           <strong>Website:</strong> <a href="https://onlinerecycle.net">https://onlinerecycle.net</a>
         </p>
       </div>
-    </div>
+        </div>
+      </section>
+    </main>
 
-    <footer>
-      <a href="/">Home</a>
-      <a href="/service-areas.html">Service Areas</a>
-      <a href="/terms.html">Terms of Service</a>
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/disclaimer.html">Disclaimer</a>
-      <br /><br />
-      © 2026 Trash Or Treasure Online Recycler LLC · Sorrento, Florida
+    <!-- STOP 06 (#footer) — Deliberately Quiet Footer & Legal -->
+    <footer class="footer" id="footer">
+      <div class="footer-inner">
+        <div class="footer-top">
+          <div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: var(--text); margin: 4px 0 8px">
+              OnlineRecycle.net
+            </div>
+              <p style="margin-top: 12px; margin-bottom: 0">
+              Trash Or Treasure Online Recycler LLC · Sorrento, Florida ·
+              <a href="tel:+13213962008" style="color: var(--accent); text-decoration: none; font-weight: 800">
+                (321) 396-2008
+              </a>
+            </p>
+          </div>
+          <div class="status-pill">
+            <span class="status-dot"></span>
+            <span>STOP 06 / 06 · TERMS &amp; LEGAL</span>
+          </div>
+        </div>
+
+        <div class="disclaimer">
+          OnlineRecycle.net is a for-profit recycling and resale service operated by Trash Or Treasure Online Recycler
+          LLC. Customer purchases and pickup bookings are commercial service transactions.
+          <br /><br />
+          <a href="/service-areas.html">Service Areas</a> &nbsp;&middot;&nbsp;
+          <a href="/about.html">About Us</a> &nbsp;&middot;&nbsp;
+          <a href="/terms.html">Terms of Service</a> &nbsp;&middot;&nbsp;
+          <a href="/privacy.html">Privacy Policy</a> &nbsp;&middot;&nbsp;
+          <a href="/disclaimer.html">Disclaimer</a> &nbsp;&middot;&nbsp;
+          <a href="#" id="manage-cookies-link">Manage Cookies</a>
+          <br /><br />
+          &copy; 2026 Trash Or Treasure Online Recycler LLC
+        </div>
+      </div>
     </footer>
+
+    <!-- Bottom Segmented Scroll Progress Bar (House Motion Rule) -->
+    <nav
+      id="onlinerecycle-progress-map"
+      class="journey-progress-nav"
+      aria-label="Section journey progress map"
+      data-active-stop="overview"
+      data-filled-count="1"
+      data-total-stops="6"
+    >
+      <div class="journey-progress-inner">
+        <div class="journey-segments" role="list" id="journey-segments-list">
+          <button
+            type="button"
+            class="journey-segment-btn filled"
+            data-stop-index="0"
+            data-stop-id="overview"
+            data-stop-name="Overview"
+            data-filled="true"
+            aria-current="step"
+            aria-label="01 Overview"
+            title="01 Overview"
+          >
+            <span class="journey-segment-num">01</span>
+            <span class="journey-segment-label journey-segment-name">OVERVIEW</span>
+          </button>
+          <button
+            type="button"
+            class="journey-segment-btn"
+            data-stop-index="1"
+            data-stop-id="service"
+            data-stop-name="Service & Items"
+            data-filled="false"
+            aria-label="02 Service & Items"
+            title="02 Service & Items"
+          >
+            <span class="journey-segment-num">02</span>
+            <span class="journey-segment-label journey-segment-name">SERVICE</span>
+          </button>
+          <button
+            type="button"
+            class="journey-segment-btn"
+            data-stop-index="2"
+            data-stop-id="pickup"
+            data-stop-name="Pickup, Pricing & Returns"
+            data-filled="false"
+            aria-label="03 Pickup, Pricing & Returns"
+            title="03 Pickup, Pricing & Returns"
+          >
+            <span class="journey-segment-num">03</span>
+            <span class="journey-segment-label journey-segment-name">PICKUP</span>
+          </button>
+          <button
+            type="button"
+            class="journey-segment-btn"
+            data-stop-index="3"
+            data-stop-id="conduct"
+            data-stop-name="Conduct & Law"
+            data-filled="false"
+            aria-label="04 Conduct & Law"
+            title="04 Conduct & Law"
+          >
+            <span class="journey-segment-num">04</span>
+            <span class="journey-segment-label journey-segment-name">LAW</span>
+          </button>
+          <button
+            type="button"
+            class="journey-segment-btn"
+            data-stop-index="4"
+            data-stop-id="contact"
+            data-stop-name="Contact"
+            data-filled="false"
+            aria-label="05 Contact"
+            title="05 Contact"
+          >
+            <span class="journey-segment-num">05</span>
+            <span class="journey-segment-label journey-segment-name">CONTACT</span>
+          </button>
+          <button
+            type="button"
+            class="journey-segment-btn"
+            data-stop-index="5"
+            data-stop-id="footer"
+            data-stop-name="Terms & Legal"
+            data-filled="false"
+            aria-label="06 Terms & Legal"
+            title="06 Terms & Legal"
+          >
+            <span class="journey-segment-num">06</span>
+            <span class="journey-segment-label journey-segment-name">TERMS</span>
+          </button>
+        </div>
+        <div class="journey-readout">
+          <span class="journey-readout-count" id="journey-readout-count">1/6</span>
+          <span>·</span>
+          <span id="journey-readout-label">Overview</span>
+        </div>
+      </div>
+    </nav>
+
+    <script>
+      (function () {
+        const SECTION_STOPS = [
+          { id: 'overview', index: '01', label: 'Overview', shortLabel: 'OVERVIEW' },
+          { id: 'service', index: '02', label: 'Service & Items', shortLabel: 'SERVICE' },
+          { id: 'pickup', index: '03', label: 'Pickup, Pricing & Returns', shortLabel: 'PICKUP' },
+          { id: 'conduct', index: '04', label: 'Conduct & Law', shortLabel: 'LAW' },
+          { id: 'contact', index: '05', label: 'Contact', shortLabel: 'CONTACT' },
+          { id: 'footer', index: '06', label: 'Terms & Legal', shortLabel: 'TERMS' }
+        ];
+
+        const STOP_KEYFRAMES = [
+          { zoom: 1.0, camX: 0.0, camY: 0.0, pitchX: 0.48, tiltY: -0.24, rollZ: 0.1, detail: 0.35 },
+          { zoom: 1.44, camX: 0.22, camY: -0.05, pitchX: 0.86, tiltY: 0.36, rollZ: -0.2, detail: 0.76 },
+          { zoom: 1.56, camX: 0.24, camY: 0.08, pitchX: 1.12, tiltY: -0.38, rollZ: 0.28, detail: 0.86 },
+          { zoom: 1.38, camX: -0.22, camY: 0.12, pitchX: 1.34, tiltY: 0.26, rollZ: -0.32, detail: 0.94 },
+          { zoom: 1.58, camX: 0.2, camY: -0.06, pitchX: 0.92, tiltY: -0.42, rollZ: 0.22, detail: 1.0 },
+          { zoom: 0.88, camX: 0.0, camY: 0.16, pitchX: 0.32, tiltY: 0.0, rollZ: 0.0, detail: 0.42 }
+        ];
+
+        const FLIGHT_VECTORS = {
+          'from-left': { x: -240, y: 24, z: -180, rx: 14, ry: 38, rz: -7 },
+          'from-right': { x: 240, y: 24, z: -180, rx: 14, ry: -38, rz: 7 },
+          'from-diag-tl': { x: -210, y: -150, z: -200, rx: 28, ry: 32, rz: -10 },
+          'from-diag-tr': { x: 210, y: -150, z: -200, rx: 28, ry: -32, rz: 10 },
+          'from-diag-br': { x: 210, y: 150, z: -200, rx: -28, ry: -32, rz: 10 },
+          'from-above': { x: 0, y: -190, z: -200, rx: 42, ry: -12, rz: 4 },
+          'from-below': { x: 0, y: 170, z: -160, rx: -24, ry: 8, rz: -3 }
+        };
+
+        function lerp(a, b, t) {
+          return a + (b - a) * t;
+        }
+
+        function interpolateKeyframe(sectionFloat) {
+          const clamped = Math.min(Math.max(sectionFloat, 0), STOP_KEYFRAMES.length - 1);
+          const idx = Math.min(Math.floor(clamped), STOP_KEYFRAMES.length - 2);
+          const frac = clamped - idx;
+          const a = STOP_KEYFRAMES[idx];
+          const b = STOP_KEYFRAMES[idx + 1];
+          return {
+            zoom: lerp(a.zoom, b.zoom, frac),
+            camX: lerp(a.camX, b.camX, frac),
+            camY: lerp(a.camY, b.camY, frac),
+            pitchX: lerp(a.pitchX, b.pitchX, frac),
+            tiltY: lerp(a.tiltY, b.tiltY, frac),
+            rollZ: lerp(a.rollZ, b.rollZ, frac),
+            detail: lerp(a.detail, b.detail, frac)
+          };
+        }
+
+        function readJourneyState() {
+          const vh = Math.max(window.innerHeight, 1);
+          const firstScrollRange = window.innerWidth <= 760 ? 175 : 220;
+          const firstScrollProgress =
+            window.scrollY <= 4 ? 0 : Math.min(Math.max(window.scrollY / firstScrollRange, 0), 1);
+
+          if (window.scrollY <= 4) {
+            return { activeSectionIndex: 0, sectionFloat: 0, firstScrollProgress: 0, atFooter: false };
+          }
+          const footerEl = document.getElementById('footer');
+          if (footerEl) {
+            const fRect = footerEl.getBoundingClientRect();
+            if (fRect.height > 0 && (fRect.top <= vh * 0.82 || fRect.bottom <= vh + 32)) {
+              const lastIdx = SECTION_STOPS.length - 1;
+              return { activeSectionIndex: lastIdx, sectionFloat: lastIdx, firstScrollProgress: 1, atFooter: true };
+            }
+          }
+          let activeIdx = 0;
+          let intra = 0;
+          const triggerLine = vh * 0.48;
+          for (let i = 0; i < SECTION_STOPS.length - 1; i++) {
+            const el = document.getElementById(SECTION_STOPS[i].id);
+            if (!el) continue;
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= triggerLine) {
+              activeIdx = i;
+              const span = Math.max(rect.height - vh * 0.35, 1);
+              const passed = Math.max(triggerLine - rect.top, 0);
+              intra = Math.min(Math.max(passed / span, 0), 0.99);
+            }
+          }
+          if (activeIdx === 0 && window.scrollY > 0) {
+            const firstScrollSpan = Math.max(vh * 0.22, 180);
+            intra = Math.min(Math.max(window.scrollY / firstScrollSpan, intra), 0.96);
+          }
+          return {
+            activeSectionIndex: activeIdx,
+            sectionFloat: activeIdx + intra,
+            firstScrollProgress: firstScrollProgress,
+            atFooter: false
+          };
+        }
+
+        const navEl = document.getElementById('onlinerecycle-progress-map');
+        const segBtns = Array.from(document.querySelectorAll('.journey-segment-btn'));
+        const countEl = document.getElementById('journey-readout-count');
+        const labelEl = document.getElementById('journey-readout-label');
+        const headerEl = document.querySelector('.site-header');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const overviewEl = document.getElementById('overview');
+        const spinCards = Array.from(document.querySelectorAll('.spin-card'));
+
+        if (mobileMenuBtn && headerEl) {
+          mobileMenuBtn.addEventListener('click', function () {
+            const isOpen = headerEl.classList.toggle('menu-open');
+            mobileMenuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          });
+          headerEl.querySelectorAll('.top-nav a').forEach(function (link) {
+            link.addEventListener('click', function () {
+              headerEl.classList.remove('menu-open');
+              mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            });
+          });
+          document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape' && headerEl.classList.contains('menu-open')) {
+              headerEl.classList.remove('menu-open');
+              mobileMenuBtn.setAttribute('aria-expanded', 'false');
+              mobileMenuBtn.focus();
+            }
+          });
+        }
+
+        const stageCanvas = document.getElementById('onlinerecycle-stage-canvas');
+        const markCanvas = document.getElementById('onlinerecycle-header-mark');
+        const lineCanvas = document.getElementById('onlinerecycle-header-line');
+
+        const prefersReducedMotion =
+          typeof window.matchMedia === 'function' &&
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion && stageCanvas) {
+          stageCanvas.setAttribute('data-stage-mode', 'reduced-motion');
+        }
+
+        let hdrHeightCss = 64;
+        let coldCardTopCss = 640;
+        let journey = readJourneyState();
+        let currentSectionFloat = journey.sectionFloat;
+
+        function syncSpinCards() {
+          if (prefersReducedMotion) {
+            spinCards.forEach(function (card) {
+              card.style.transform = 'none';
+              card.style.opacity = '1';
+              card.style.visibility = 'visible';
+              card.setAttribute('data-flight-state', 'settled');
+            });
+            return;
+          }
+          const vh = Math.max(window.innerHeight, 1);
+          const isMobile = window.innerWidth <= 760;
+          const vwScaleX = isMobile ? 0.12 : 1.0;
+          const vwScaleY = isMobile ? 0.42 : 1.0;
+          const rotScale = isMobile ? 0.65 : 1.0;
+
+          spinCards.forEach(function (card) {
+            const dirKey = card.getAttribute('data-fly-dir') || 'from-left';
+            const vec = FLIGHT_VECTORS[dirKey] || FLIGHT_VECTORS['from-left'];
+            const stage = card.parentElement || card;
+            const rect = stage.getBoundingClientRect();
+
+            let flightT = 0;
+            const centerY = rect.top + rect.height * 0.5;
+            const enterSettledY = vh * 0.56;
+            const enterStartY = vh * 0.94;
+            const exitStartY = vh * 0.42;
+            const exitEndY = vh * 0.08;
+
+            if (centerY > enterSettledY) {
+              flightT = Math.min(Math.max((centerY - enterSettledY) / Math.max(enterStartY - enterSettledY, 1), 0), 1);
+            } else if (centerY < exitStartY) {
+              flightT = -Math.min(Math.max((exitStartY - centerY) / Math.max(exitStartY - exitEndY, 1), 0), 1);
+            }
+
+            if (card.contains(document.activeElement) && document.activeElement !== document.body) {
+              flightT = 0;
+            }
+
+            const absT = Math.abs(flightT);
+            if (absT < 0.02) {
+              card.style.transform =
+                'perspective(1100px) translate3d(0px, 0px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)';
+              card.style.opacity = '1';
+              card.style.visibility = 'visible';
+              card.setAttribute('data-flight-state', 'settled');
+              return;
+            }
+
+            if (absT >= 0.98) {
+              card.style.transform = 'translate3d(0px, 80px, 0px)';
+              card.style.opacity = '0';
+              card.style.visibility = 'hidden';
+              card.setAttribute('data-flight-state', 'offscreen');
+              return;
+            }
+
+            const easeT = flightT >= 0 ? Math.pow(absT, 1.1) : -Math.pow(absT, 1.15);
+            const tx = Math.round(vec.x * easeT * vwScaleX);
+            const ty = Math.round(vec.y * Math.abs(easeT) * (flightT < 0 ? -0.65 : 1) * vwScaleY);
+            const tz = Math.round(vec.z * Math.abs(easeT) * (isMobile ? 0.35 : 0.75));
+            const rx = (vec.rx * easeT * rotScale).toFixed(1);
+            const ry = (vec.ry * easeT * rotScale).toFixed(1);
+            const rz = (vec.rz * easeT * rotScale).toFixed(1);
+            const cardScale = (1 - Math.abs(easeT) * (isMobile ? 0.14 : 0.06)).toFixed(3);
+            const rawAlpha =
+              absT <= 0.72 ? 1 - absT * 0.28 : Math.max(0, ((1 - absT) / 0.26) * 0.8);
+            const alpha = rawAlpha.toFixed(2);
+
+            card.style.visibility = 'visible';
+            card.style.transform =
+              'perspective(1100px) translate3d(' +
+              tx +
+              'px, ' +
+              ty +
+              'px, ' +
+              tz +
+              'px) rotateX(' +
+              rx +
+              'deg) rotateY(' +
+              ry +
+              'deg) rotateZ(' +
+              rz +
+              'deg) scale(' +
+              cardScale +
+              ')';
+            card.style.opacity = alpha;
+            card.setAttribute('data-flight-state', absT >= 0.18 && absT <= 0.82 ? 'mid-flight' : 'transitioning');
+          });
+        }
+
+        function syncStop01Slide() {
+          if (!overviewEl) return;
+          if (prefersReducedMotion) {
+            overviewEl.style.setProperty('--stop01-slide-y', '0px');
+            overviewEl.setAttribute('data-first-screen-state', 'reduced-motion-low');
+            return;
+          }
+          const maxLift = window.innerWidth <= 760 ? 45 : 115;
+          const liftPx = Math.round((journey.firstScrollProgress || 0) * maxLift);
+          overviewEl.style.setProperty('--stop01-slide-y', -liftPx + 'px');
+          overviewEl.setAttribute(
+            'data-first-screen-state',
+            journey.firstScrollProgress > 0.05 ? 'slid-up' : 'cold-load'
+          );
+        }
+
+        function syncProgressUI() {
+          const idx = journey.activeSectionIndex;
+          const stop = SECTION_STOPS[idx] || SECTION_STOPS[0];
+          if (navEl) {
+            navEl.setAttribute('data-active-stop', stop.id);
+            navEl.setAttribute('data-filled-count', String(idx + 1));
+          }
+          if (countEl) countEl.textContent = (idx + 1) + '/' + SECTION_STOPS.length;
+          if (labelEl) labelEl.textContent = stop.label;
+
+          segBtns.forEach(function (btn, i) {
+            const isFilled = i <= idx;
+            btn.classList.toggle('filled', isFilled);
+            btn.setAttribute('data-filled', isFilled ? 'true' : 'false');
+            if (i === idx) btn.setAttribute('aria-current', 'step');
+            else btn.removeAttribute('aria-current');
+          });
+          syncStop01Slide();
+          syncSpinCards();
+        }
+
+        let tapLabelTimer = null;
+        segBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            segBtns.forEach(function (b) {
+              b.classList.remove('tapped');
+            });
+            btn.classList.add('tapped');
+            if (tapLabelTimer) clearTimeout(tapLabelTimer);
+            tapLabelTimer = setTimeout(function () {
+              btn.classList.remove('tapped');
+            }, 2200);
+            const id = btn.getAttribute('data-stop-id');
+            if (id === 'overview') {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              return;
+            }
+            const target = id ? document.getElementById(id) : null;
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        });
+
+        function rotate3D(x, y, z, rx, ry, rz) {
+          const cosX = Math.cos(rx), sinX = Math.sin(rx);
+          const y1 = y * cosX - z * sinX;
+          const z1 = y * sinX + z * cosX;
+
+          const cosY = Math.cos(ry), sinY = Math.sin(ry);
+          const x2 = x * cosY + z1 * sinY;
+          const z2 = -x * sinY + z1 * cosY;
+
+          const cosZ = Math.cos(rz), sinZ = Math.sin(rz);
+          const x3 = x2 * cosZ - y1 * sinZ;
+          const y3 = x2 * sinZ + y1 * cosZ;
+
+          return { x: x3, y: y3, z: z2 };
+        }
+
+        const phi = (1 + Math.sqrt(5)) / 2;
+        const rawVerts = [
+          [-1, phi, 0], [1, phi, 0], [-1, -phi, 0], [1, -phi, 0],
+          [0, -1, phi], [0, 1, phi], [0, -1, -phi], [0, 1, -phi],
+          [phi, 0, -1], [phi, 0, 1], [-phi, 0, -1], [-phi, 0, 1]
+        ];
+        const coreVerts = rawVerts.map(function (v) {
+          const len = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+          return { x: (v[0] / len) * 2.1, y: (v[1] / len) * 2.1, z: (v[2] / len) * 2.1 };
+        });
+        const coreEdges = [];
+        for (let i = 0; i < coreVerts.length; i++) {
+          for (let j = i + 1; j < coreVerts.length; j++) {
+            const dx = coreVerts[i].x - coreVerts[j].x;
+            const dy = coreVerts[i].y - coreVerts[j].y;
+            const dz = coreVerts[i].z - coreVerts[j].z;
+            const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            if (dist < 2.45) coreEdges.push([i, j]);
+          }
+        }
+
+        const stars = [];
+        let seed = 73109;
+        function nextRand() {
+          seed = (seed * 16807) % 2147483647;
+          return (seed - 1) / 2147483646;
+        }
+        for (let i = 0; i < 120; i++) {
+          stars.push({
+            x: nextRand(),
+            y: nextRand(),
+            r: 0.8 + nextRand() * 1.3,
+            signal: i % 8 === 0
+          });
+        }
+
+        function syncSizes() {
+          const vw = Math.max(window.innerWidth, 1);
+          const vh = Math.max(window.innerHeight, 1);
+          if (stageCanvas) {
+            const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+            stageCanvas.width = Math.max(Math.floor(vw * dpr), 1);
+            stageCanvas.height = Math.max(Math.floor(vh * dpr), 1);
+          }
+          if (lineCanvas) {
+            lineCanvas.width = Math.max(vw, 320);
+            lineCanvas.height = 4;
+          }
+          hdrHeightCss = headerEl ? headerEl.offsetHeight : 64;
+          const heroBox = overviewEl ? overviewEl.querySelector('.hero-first-screen') : null;
+          const heroH = heroBox ? heroBox.offsetHeight : 300;
+          const progressH = 58;
+          const bottomClearance = vw <= 760 ? 18 : 24;
+          const maxCardTop = Math.max(
+            hdrHeightCss + (vw <= 760 ? 180 : 220),
+            vh - progressH - bottomClearance - heroH
+          );
+          coldCardTopCss = Math.min(
+            vw <= 760 ? Math.round(vh * 0.52) : Math.round(vh * 0.58),
+            maxCardTop
+          );
+          if (overviewEl) {
+            const padTop = Math.max(coldCardTopCss - hdrHeightCss, 160);
+            overviewEl.style.setProperty('--stop01-pad-top', padTop + 'px');
+            overviewEl.style.paddingBottom = (progressH + bottomClearance) + 'px';
+          }
+        }
+        syncSizes();
+
+        const mountMs = performance.now();
+
+        function renderAll(nowMs) {
+          if (prefersReducedMotion || Math.abs(journey.sectionFloat - currentSectionFloat) < 0.002) {
+            currentSectionFloat = journey.sectionFloat;
+          } else {
+            currentSectionFloat += (journey.sectionFloat - currentSectionFloat) * 0.22;
+          }
+
+          const t = prefersReducedMotion || journey.atFooter ? 2.4 : (nowMs - mountMs) / 1000;
+          const kf = interpolateKeyframe(currentSectionFloat);
+
+          if (stageCanvas) {
+            const ctx = stageCanvas.getContext('2d');
+            if (ctx) {
+              const w = stageCanvas.width;
+              const h = stageCanvas.height;
+              const dpr = Math.max(w / Math.max(window.innerWidth, 1), 1);
+              ctx.clearRect(0, 0, w, h);
+
+              for (let i = 0; i < stars.length; i++) {
+                const s = stars[i];
+                const sx = ((s.x * w + t * (s.signal ? 14 : 5) + kf.camX * 90) % w + w) % w;
+                const sy = ((s.y * h + kf.camY * 70) % h + h) % h;
+                ctx.fillStyle = s.signal ? '#FFD21E' : '#3A3F45';
+                ctx.beginPath();
+                ctx.arc(sx, sy, s.r * dpr, 0, Math.PI * 2);
+                ctx.fill();
+              }
+
+              const stageMidCss = (hdrHeightCss + coldCardTopCss) * 0.5;
+              const stageBandCss = Math.max(coldCardTopCss - hdrHeightCss, 180);
+              const cx = w * (0.5 + kf.camX * 0.18);
+              const cy = stageMidCss * dpr + h * (kf.camY * 0.12);
+              const maxScaleByBand = (stageBandCss * dpr * 0.38) / 2.52;
+              const maxScaleByWidth = (w * 0.42) / 3.58;
+              const baseScale = Math.min(maxScaleByBand, maxScaleByWidth) * kf.zoom;
+
+              function project(pt) {
+                const fov = 7.5;
+                const perspective = fov / Math.max(fov - pt.z, 1.8);
+                return {
+                  x: cx + pt.x * baseScale * perspective,
+                  y: cy + pt.y * baseScale * perspective,
+                  s: perspective
+                };
+              }
+
+              const coreHullRadius = baseScale * 1.95;
+              const wingSpan = baseScale * 3.85;
+              ctx.strokeStyle = '#3A3F45';
+              ctx.lineWidth = 1.5 * dpr;
+              ctx.beginPath();
+              ctx.moveTo(cx - wingSpan, cy);
+              ctx.lineTo(cx - coreHullRadius * 1.15, cy);
+              ctx.moveTo(cx + coreHullRadius * 1.15, cy);
+              ctx.lineTo(cx + wingSpan, cy);
+              ctx.stroke();
+
+              ctx.save();
+              ctx.beginPath();
+              ctx.arc(cx, cy, coreHullRadius, 0, Math.PI * 2);
+              ctx.fillStyle = kf.detail > 0.55 ? 'rgba(26, 30, 37, 0.82)' : 'rgba(18, 21, 26, 0.78)';
+              ctx.fill();
+              ctx.lineWidth = 1.8 * dpr;
+              ctx.strokeStyle = '#3A3F45';
+              ctx.stroke();
+
+              if (kf.detail > 0.3) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, coreHullRadius * (0.58 + kf.detail * 0.2), 0, Math.PI * 2);
+                ctx.strokeStyle = '#FFD21E';
+                ctx.lineWidth = (1.2 + kf.detail * 1.2) * dpr;
+                ctx.stroke();
+              }
+              ctx.restore();
+
+              ctx.strokeStyle = '#F4F1EA';
+              ctx.lineWidth = 2.2 * dpr;
+              ctx.beginPath();
+              for (let i = 0; i <= 72; i++) {
+                const a = (i / 72) * Math.PI * 2;
+                const p3 = rotate3D(
+                  Math.cos(a) * 3.15,
+                  Math.sin(a) * 3.15,
+                  0,
+                  kf.pitchX + 0.55,
+                  t * 0.32 + kf.tiltY,
+                  kf.rollZ
+                );
+                const p2 = project(p3);
+                if (i === 0) ctx.moveTo(p2.x, p2.y);
+                else ctx.lineTo(p2.x, p2.y);
+              }
+              ctx.stroke();
+
+              for (let n = 0; n < 3; n++) {
+                const na = -t * 0.42 + (n * Math.PI * 2) / 3 + currentSectionFloat * 0.35;
+                const np3 = rotate3D(
+                  Math.cos(na) * 3.15,
+                  Math.sin(na) * 3.15,
+                  0,
+                  kf.pitchX + 0.55,
+                  t * 0.32 + kf.tiltY,
+                  kf.rollZ
+                );
+                const np2 = project(np3);
+                ctx.fillStyle = '#F4F1EA';
+                ctx.beginPath();
+                ctx.arc(np2.x, np2.y, 4.0 * np2.s * dpr, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#F4F1EA';
+                ctx.lineWidth = 1.4 * dpr;
+                ctx.beginPath();
+                ctx.arc(np2.x, np2.y, 8.2 * np2.s * dpr, 0, Math.PI * 2);
+                ctx.stroke();
+              }
+
+              ctx.strokeStyle = '#FFD21E';
+              ctx.lineWidth = 3.2 * dpr;
+              ctx.beginPath();
+              for (let i = 0; i <= 72; i++) {
+                const a = (i / 72) * Math.PI * 2;
+                const p3 = rotate3D(
+                  Math.cos(a) * 2.55,
+                  Math.sin(a) * 2.55,
+                  0,
+                  -kf.pitchX - 0.35,
+                  -t * 0.48 - kf.tiltY,
+                  -kf.rollZ + 0.35
+                );
+                const p2 = project(p3);
+                if (i === 0) ctx.moveTo(p2.x, p2.y);
+                else ctx.lineTo(p2.x, p2.y);
+              }
+              ctx.stroke();
+
+              for (let k = 0; k < 4; k++) {
+                const satAngle = t * 0.65 + (k * Math.PI) / 2 + currentSectionFloat * 0.4;
+                const sat3 = rotate3D(
+                  Math.cos(satAngle) * 2.55,
+                  Math.sin(satAngle) * 2.55,
+                  0,
+                  -kf.pitchX - 0.35,
+                  -t * 0.48 - kf.tiltY,
+                  -kf.rollZ + 0.35
+                );
+                const sat2 = project(sat3);
+                ctx.fillStyle = k % 2 === 0 ? '#FFD21E' : '#F4F1EA';
+                ctx.beginPath();
+                ctx.arc(sat2.x, sat2.y, 5.0 * sat2.s * dpr, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#FFD21E';
+                ctx.lineWidth = 1.8 * dpr;
+                ctx.beginPath();
+                ctx.arc(sat2.x, sat2.y, 10.5 * sat2.s * dpr, 0, Math.PI * 2);
+                ctx.stroke();
+              }
+
+              const projectedVerts = coreVerts.map(function (v) {
+                const r3 = rotate3D(
+                  v.x,
+                  v.y,
+                  v.z,
+                  t * 0.36 + kf.pitchX,
+                  t * 0.52 + kf.tiltY,
+                  kf.rollZ
+                );
+                const p2 = project(r3);
+                return { x: p2.x, y: p2.y, s: p2.s, z: r3.z };
+              });
+
+              for (let i = 0; i < coreEdges.length; i++) {
+                const e = coreEdges[i];
+                const a = projectedVerts[e[0]];
+                const b = projectedVerts[e[1]];
+                const frontEdge = (a.z + b.z) * 0.5 >= 0;
+                ctx.strokeStyle = frontEdge ? '#FFD21E' : '#F4F1EA';
+                ctx.lineWidth = (frontEdge ? 2.2 : 1.4) * dpr;
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(b.x, b.y);
+                ctx.stroke();
+              }
+
+              for (let i = 0; i < projectedVerts.length; i++) {
+                const pv = projectedVerts[i];
+                ctx.fillStyle = i % 3 === 0 ? '#FFD21E' : '#F4F1EA';
+                ctx.beginPath();
+                ctx.arc(pv.x, pv.y, 3.4 * pv.s * dpr, 0, Math.PI * 2);
+                ctx.fill();
+              }
+
+              ctx.fillStyle = '#FFD21E';
+              ctx.beginPath();
+              ctx.arc(cx, cy, 4.2 * dpr, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+
+          if (markCanvas) {
+            const mctx = markCanvas.getContext('2d');
+            if (mctx) {
+              mctx.clearRect(0, 0, 32, 32);
+              const scrollAngle = currentSectionFloat * 0.55;
+              mctx.strokeStyle = '#F4F1EA';
+              mctx.lineWidth = 1.6;
+              mctx.beginPath();
+              for (let i = 0; i <= 36; i++) {
+                const a = (i / 36) * Math.PI * 2;
+                const p = rotate3D(Math.cos(a) * 12, Math.sin(a) * 12, 0, 0.65, t * 0.75 + scrollAngle, 0.25);
+                if (i === 0) mctx.moveTo(16 + p.x, 16 + p.y);
+                else mctx.lineTo(16 + p.x, 16 + p.y);
+              }
+              mctx.stroke();
+
+              mctx.strokeStyle = '#FFD21E';
+              mctx.lineWidth = 2.0;
+              mctx.beginPath();
+              for (let i = 0; i <= 36; i++) {
+                const a = (i / 36) * Math.PI * 2;
+                const p = rotate3D(Math.cos(a) * 9, Math.sin(a) * 9, 0, -0.58, -t * 0.95 - scrollAngle, -0.2);
+                if (i === 0) mctx.moveTo(16 + p.x, 16 + p.y);
+                else mctx.lineTo(16 + p.x, 16 + p.y);
+              }
+              mctx.stroke();
+
+              mctx.fillStyle = '#FFD21E';
+              mctx.beginPath();
+              mctx.arc(16, 16, 2.5, 0, Math.PI * 2);
+              mctx.fill();
+            }
+          }
+
+          if (lineCanvas) {
+            const lctx = lineCanvas.getContext('2d');
+            if (lctx) {
+              const lw = lineCanvas.width;
+              const lh = lineCanvas.height;
+              lctx.fillStyle = '#3A3F45';
+              lctx.fillRect(0, 0, lw, lh);
+              const ratio = journey.atFooter
+                ? 1
+                : Math.min(Math.max((journey.activeSectionIndex + 1) / SECTION_STOPS.length, 1 / SECTION_STOPS.length), 1);
+              lctx.fillStyle = '#FFD21E';
+              lctx.fillRect(0, 0, Math.round(lw * ratio), lh);
+
+              const carrierX = Math.round((((t * 0.12) % 1 + 1) % 1) * lw);
+              lctx.fillStyle = '#F4F1EA';
+              lctx.fillRect(Math.max(0, carrierX - 18), 0, 36, lh);
+            }
+          }
+        }
+
+        syncProgressUI();
+        renderAll(performance.now());
+
+        if (!prefersReducedMotion) {
+          function tick(nowMs) {
+            if (!document.hidden) renderAll(nowMs);
+            window.requestAnimationFrame(tick);
+          }
+          window.requestAnimationFrame(tick);
+        }
+
+        window.addEventListener(
+          'scroll',
+          function () {
+            journey = readJourneyState();
+            if (!prefersReducedMotion) {
+              currentSectionFloat += (journey.sectionFloat - currentSectionFloat) * 0.45;
+            }
+            syncProgressUI();
+            if (prefersReducedMotion) renderAll(performance.now());
+          },
+          { passive: true }
+        );
+
+        window.addEventListener('resize', function () {
+          syncSizes();
+          journey = readJourneyState();
+          syncProgressUI();
+          renderAll(performance.now());
+        });
+      })();
+    </script>
   </body>
 </html>
