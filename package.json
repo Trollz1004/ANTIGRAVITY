@@ -21,6 +21,7 @@
   "devDependencies": {
     "eslint": "^8.57.1",
     "eslint-config-react-app": "^5.2.1",
+    "parse5": "^8.0.1",
     "prettier": "^3.8.3"
   },
   "dependencies": {
