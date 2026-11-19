@@ -41,6 +41,7 @@ When you create an account and use our platform, you may provide:
 - **Profile Information:** Photos, bio text, interests, and other profile details you choose to share
 - **Payment Information:** Billing details processed through Square-hosted checkout links (we do not store your full credit card number — Square handles that)
 - **Communications:** Messages you send through the platform, support requests, and feedback
+- **Sign-Up Source:** When you create an account we record how you reached us: a partner link, a campaign tag in the link, or the name of the site that sent you. We do not keep the full address of the page you came from.
 
 ### 4.2 Verification Information
 

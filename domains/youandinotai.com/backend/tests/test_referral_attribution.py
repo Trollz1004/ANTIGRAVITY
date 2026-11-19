@@ -754,3 +754,166 @@ def test_square_refund_webhook_marks_allocation_refunded_and_excludes_from_affil
         }
     finally:
         get_settings.cache_clear()
+
+
+def test_register_stores_signup_source(client, db_session_factory):
+    """Email sign-up accepts and persists a normalized signup_source."""
+    email = "signup-source-email@example.com"
+    response = client.post(
+        "/api/v1/auth/register",
+        json=_valid_payload(
+            email=email,
+            signup_source="  UTM:TikTok/Social/Launch_2026  ",
+        ),
+    )
+
+    assert response.status_code in (200, 201), response.text
+    user_id = uuid.UUID(response.json()["user_id"])
+
+    async def fetch_user() -> User | None:
+        async with db_session_factory() as session:
+            return await session.scalar(select(User).where(User.id == user_id))
+
+    user = asyncio.run(fetch_user())
+    assert user is not None
+    assert user.signup_source == "utm:tiktok/social/launch_2026"
+    assert user.referral_code is None
+
+
+def test_google_signup_stores_signup_source(client, db_session_factory, monkeypatch):
+    """Google sign-up accepts and persists signup_source on new account creation."""
+    monkeypatch.setattr(
+        "app.routers.auth.verify_google_token",
+        lambda _token: {
+            "email": "google-signup-source@example.com",
+            "name": "Google Source User",
+            "sub": "google-sub-signup-source",
+        },
+    )
+
+    response = client.post(
+        "/api/v1/auth/google",
+        json={
+            "id_token": "valid-google-token",
+            "date_of_birth": "1991-06-15",
+            "signup_source": "site:reddit.com",
+        },
+    )
+
+    assert response.status_code == 200, response.text
+    user_id = uuid.UUID(response.json()["user_id"])
+
+    async def fetch_user() -> User | None:
+        async with db_session_factory() as session:
+            return await session.scalar(select(User).where(User.id == user_id))
+
+    user = asyncio.run(fetch_user())
+    assert user is not None
+    assert user.signup_source == "site:reddit.com"
+    assert user.referral_code is None
+
+
+def test_register_and_google_bad_signup_source_stored_as_null_and_succeeds(
+    client, db_session_factory, monkeypatch
+):
+    """A malformed or overlong signup_source becomes None and never blocks sign-up."""
+    email = "bad-signup-source@example.com"
+    r1 = client.post(
+        "/api/v1/auth/register",
+        json=_valid_payload(
+            email=email,
+            signup_source="https://evil.example.com/path?query=1 <script>",
+        ),
+    )
+    assert r1.status_code in (200, 201), r1.text
+    u1_id = uuid.UUID(r1.json()["user_id"])
+
+    email2 = "overlong-signup-source@example.com"
+    r2 = client.post(
+        "/api/v1/auth/register",
+        json=_valid_payload(
+            email=email2,
+            signup_source="a" * 200,
+        ),
+    )
+    assert r2.status_code in (200, 201), r2.text
+    u2_id = uuid.UUID(r2.json()["user_id"])
+
+    monkeypatch.setattr(
+        "app.routers.auth.verify_google_token",
+        lambda _token: {
+            "email": "google-bad-source@example.com",
+            "name": "Google Bad Source",
+            "sub": "google-sub-bad-source",
+        },
+    )
+    r3 = client.post(
+        "/api/v1/auth/google",
+        json={
+            "id_token": "valid-google-token",
+            "date_of_birth": "1990-03-10",
+            "signup_source": "bad value with spaces!",
+        },
+    )
+    assert r3.status_code == 200, r3.text
+    u3_id = uuid.UUID(r3.json()["user_id"])
+
+    async def fetch_users() -> list[User | None]:
+        async with db_session_factory() as session:
+            return [
+                await session.scalar(select(User).where(User.id == u1_id)),
+                await session.scalar(select(User).where(User.id == u2_id)),
+                await session.scalar(select(User).where(User.id == u3_id)),
+            ]
+
+    u1, u2, u3 = asyncio.run(fetch_users())
+    assert u1 is not None and u1.signup_source is None
+    assert u2 is not None and u2.signup_source is None
+    assert u3 is not None and u3.signup_source is None
+
+
+def test_register_and_google_referral_code_alone_gives_ref_signup_source(
+    client, db_session_factory, monkeypatch
+):
+    """When signup_source is omitted and referral_code is present, store ref:<referral_code>."""
+    email = "ref-alone-source@example.com"
+    r1 = client.post(
+        "/api/v1/auth/register",
+        json=_valid_payload(email=email, referral_code="bot-slayer"),
+    )
+    assert r1.status_code in (200, 201), r1.text
+    u1_id = uuid.UUID(r1.json()["user_id"])
+
+    monkeypatch.setattr(
+        "app.routers.auth.verify_google_token",
+        lambda _token: {
+            "email": "google-ref-alone-source@example.com",
+            "name": "Google Ref Alone",
+            "sub": "google-sub-ref-alone",
+        },
+    )
+    r2 = client.post(
+        "/api/v1/auth/google",
+        json={
+            "id_token": "valid-google-token",
+            "date_of_birth": "1991-06-15",
+            "referral_code": "creator-google-2",
+        },
+    )
+    assert r2.status_code == 200, r2.text
+    u2_id = uuid.UUID(r2.json()["user_id"])
+
+    async def fetch_users() -> list[User | None]:
+        async with db_session_factory() as session:
+            return [
+                await session.scalar(select(User).where(User.id == u1_id)),
+                await session.scalar(select(User).where(User.id == u2_id)),
+            ]
+
+    u1, u2 = asyncio.run(fetch_users())
+    assert u1 is not None
+    assert u1.referral_code == "bot-slayer"
+    assert u1.signup_source == "ref:bot-slayer"
+    assert u2 is not None
+    assert u2.referral_code == "creator-google-2"
+    assert u2.signup_source == "ref:creator-google-2"
