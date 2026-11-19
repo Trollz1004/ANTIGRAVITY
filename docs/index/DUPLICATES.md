@@ -73,12 +73,12 @@
 - `domains/youandinotai.com/frontend/public/go/partner/index.html`
 
 ### Group 8: 3 files, 28253 B each (56506 B repeated) — blob `2bb8d566a8b5b2fb3ede07a0a872a69f162127b5`
-- `apps/crosslisting-os/server/db.ts`
+- `archive/2026-11-18-apps-crosslisting-os/server/db.ts`
 - `hermes/dashboard/crosslisting/server/db.ts`
 - `mission-control/crosslisting-os/server/db.ts`
 
 ### Group 9: 3 files, 13227 B each (26454 B repeated) — blob `26919a2d954b181b5ad220e75d84a6a14c8e73ba`
-- `apps/crosslisting-os/drizzle/schema.ts`
+- `archive/2026-11-18-apps-crosslisting-os/drizzle/schema.ts`
 - `hermes/dashboard/crosslisting/drizzle/schema.ts`
 - `mission-control/crosslisting-os/drizzle/schema.ts`
 
@@ -93,12 +93,12 @@
 - `agent/skills/agent-reach/references/social.md`
 
 ### Group 12: 3 files, 9714 B each (19428 B repeated) — blob `f04f95aa37dbe2dce2e900927de0d4bde09150c5`
-- `apps/crosslisting-os/client/src/pages/ListingDesk.tsx`
+- `archive/2026-11-18-apps-crosslisting-os/client/src/pages/ListingDesk.tsx`
 - `hermes/dashboard/crosslisting/client/src/pages/ListingDesk.tsx`
 - `mission-control/crosslisting-os/client/src/pages/ListingDesk.tsx`
 
 ### Group 13: 3 files, 8979 B each (17958 B repeated) — blob `fb42a06a7c1b6689832d396de9b60b8ee4157fc9`
-- `apps/crosslisting-os/drizzle/0001_cynical_king_bedlam.sql`
+- `archive/2026-11-18-apps-crosslisting-os/drizzle/0001_cynical_king_bedlam.sql`
 - `hermes/dashboard/crosslisting/drizzle/0001_cynical_king_bedlam.sql`
 - `mission-control/crosslisting-os/drizzle/0001_cynical_king_bedlam.sql`
 
@@ -123,32 +123,32 @@
 - `agent/skills/agent-reach/SKILL.md`
 
 ### Group 18: 3 files, 5399 B each (10798 B repeated) — blob `8d4a1c2749873c010183294e21cd287c8083004a`
-- `apps/crosslisting-os/docs/ARCHITECTURE.md`
+- `archive/2026-11-18-apps-crosslisting-os/docs/ARCHITECTURE.md`
 - `hermes/dashboard/crosslisting/docs/ARCHITECTURE.md`
 - `mission-control/crosslisting-os/docs/ARCHITECTURE.md`
 
 ### Group 19: 3 files, 5267 B each (10534 B repeated) — blob `26e4c56ba7dbc202647b17a3f8902f6e81944857`
-- `apps/crosslisting-os/client/src/pages/ActivityLedger.tsx`
+- `archive/2026-11-18-apps-crosslisting-os/client/src/pages/ActivityLedger.tsx`
 - `hermes/dashboard/crosslisting/client/src/pages/ActivityLedger.tsx`
 - `mission-control/crosslisting-os/client/src/pages/ActivityLedger.tsx`
 
 ### Group 20: 3 files, 4012 B each (8024 B repeated) — blob `fefe23e3e154458d61d942e8517a878038d0a9b5`
-- `apps/crosslisting-os/server/ebayOAuth.ts`
+- `archive/2026-11-18-apps-crosslisting-os/server/ebayOAuth.ts`
 - `hermes/dashboard/crosslisting/server/ebayOAuth.ts`
 - `mission-control/crosslisting-os/server/ebayOAuth.ts`
 
 ### Group 21: 3 files, 4006 B each (8012 B repeated) — blob `f62ebc9925950f467b785e8d6969953460638ef4`
-- `apps/crosslisting-os/server/__tests__/operations.test.ts`
+- `archive/2026-11-18-apps-crosslisting-os/server/__tests__/operations.test.ts`
 - `hermes/dashboard/crosslisting/server/operations.test.ts`
 - `mission-control/crosslisting-os/server/operations.test.ts`
 
 ### Group 22: 3 files, 3695 B each (7390 B repeated) — blob `b15809470ff626d39b8c1bd525741782da423f3f`
-- `apps/crosslisting-os/client/src/pages/Credits.tsx`
+- `archive/2026-11-18-apps-crosslisting-os/client/src/pages/Credits.tsx`
 - `hermes/dashboard/crosslisting/client/src/pages/Credits.tsx`
 - `mission-control/crosslisting-os/client/src/pages/Credits.tsx`
 
 ### Group 23: 3 files, 3110 B each (6220 B repeated) — blob `1b3cb41b94af9237da1b7dd7c49a84daf380e120`
-- `apps/crosslisting-os/docs/HERMES_REFERENCE_REVIEW.md`
+- `archive/2026-11-18-apps-crosslisting-os/docs/HERMES_REFERENCE_REVIEW.md`
 - `hermes/dashboard/crosslisting/docs/HERMES_REFERENCE_REVIEW.md`
 - `mission-control/crosslisting-os/docs/HERMES_REFERENCE_REVIEW.md`
 
@@ -163,22 +163,22 @@
 - `agent/skills/i-have-adhd/agents/gemini.toml`
 
 ### Group 26: 3 files, 2532 B each (5064 B repeated) — blob `dcda6e5287b4d519060cb895bfe44c6f1f9d5c1f`
-- `apps/crosslisting-os/server/__tests__/ebay.credentials.test.ts`
+- `archive/2026-11-18-apps-crosslisting-os/server/__tests__/ebay.credentials.test.ts`
 - `hermes/dashboard/crosslisting/server/ebay.credentials.test.ts`
 - `mission-control/crosslisting-os/server/ebay.credentials.test.ts`
 
 ### Group 27: 3 files, 2372 B each (4744 B repeated) — blob `661c7a5d47fce7aed43e7995e88a6e3a91f7f285`
-- `apps/crosslisting-os/docs/UPSTREAM_COMPONENT_REVIEW.md`
+- `archive/2026-11-18-apps-crosslisting-os/docs/UPSTREAM_COMPONENT_REVIEW.md`
 - `hermes/dashboard/crosslisting/docs/UPSTREAM_COMPONENT_REVIEW.md`
 - `mission-control/crosslisting-os/docs/UPSTREAM_COMPONENT_REVIEW.md`
 
 ### Group 28: 3 files, 2198 B each (4396 B repeated) — blob `16f0db971ef0c6ea01927b145f8b18e0395a72b3`
-- `apps/crosslisting-os/server/routers/drafts.ts`
+- `archive/2026-11-18-apps-crosslisting-os/server/routers/drafts.ts`
 - `hermes/dashboard/crosslisting/server/drafts.ts`
 - `mission-control/crosslisting-os/server/drafts.ts`
 
 ### Group 29: 3 files, 2078 B each (4156 B repeated) — blob `a6110bd71f9032a05b678ce0ec02ba8585296317`
-- `apps/crosslisting-os/server/index.ts`
+- `archive/2026-11-18-apps-crosslisting-os/server/index.ts`
 - `hermes/dashboard/crosslisting/server/_core/index.ts`
 - `mission-control/crosslisting-os/server/_core/index.ts`
 
@@ -203,12 +203,12 @@
 - `agent/skills/i-have-adhd/agents/openai.yaml`
 
 ### Group 34: 3 files, 1199 B each (2398 B repeated) — blob `161dd8f10f888439668a331e469032b7f98b0cf4`
-- `apps/crosslisting-os/docs/SERVER_CONFIGURATION_TEMPLATE.md`
+- `archive/2026-11-18-apps-crosslisting-os/docs/SERVER_CONFIGURATION_TEMPLATE.md`
 - `hermes/dashboard/crosslisting/docs/SERVER_CONFIGURATION_TEMPLATE.md`
 - `mission-control/crosslisting-os/docs/SERVER_CONFIGURATION_TEMPLATE.md`
 
 ### Group 35: 3 files, 1176 B each (2352 B repeated) — blob `1988c466b8451b1290cf992ee6623e495bfefd36`
-- `apps/crosslisting-os/server/routers/operations.ts`
+- `archive/2026-11-18-apps-crosslisting-os/server/routers/operations.ts`
 - `hermes/dashboard/crosslisting/server/routers/operations.ts`
 - `mission-control/crosslisting-os/server/routers/operations.ts`
 
@@ -248,22 +248,22 @@
 - `agent/skills/agent-reach/references/career.md`
 
 ### Group 43: 3 files, 721 B each (1442 B repeated) — blob `b2007d462f74bacb16342e408aaeb2bafd7a79d1`
-- `apps/crosslisting-os/drizzle/0003_military_joseph.sql`
+- `archive/2026-11-18-apps-crosslisting-os/drizzle/0003_military_joseph.sql`
 - `hermes/dashboard/crosslisting/drizzle/0003_military_joseph.sql`
 - `mission-control/crosslisting-os/drizzle/0003_military_joseph.sql`
 
 ### Group 44: 3 files, 648 B each (1296 B repeated) — blob `8c99a6acfba944f7ee222e79e14b29df0c4fff54`
-- `apps/crosslisting-os/server/routers/approvals.ts`
+- `archive/2026-11-18-apps-crosslisting-os/server/routers/approvals.ts`
 - `hermes/dashboard/crosslisting/server/routers/approvals.ts`
 - `mission-control/crosslisting-os/server/routers/approvals.ts`
 
 ### Group 45: 3 files, 435 B each (870 B repeated) — blob `8b9bcf52d420266b6c259eee296a78d4e5e6d97a`
-- `apps/crosslisting-os/drizzle/0004_colossal_purifiers.sql`
+- `archive/2026-11-18-apps-crosslisting-os/drizzle/0004_colossal_purifiers.sql`
 - `hermes/dashboard/crosslisting/drizzle/0004_colossal_purifiers.sql`
 - `mission-control/crosslisting-os/drizzle/0004_colossal_purifiers.sql`
 
 ### Group 46: 3 files, 428 B each (856 B repeated) — blob `2792b99ebd9d9a07c1194237822d8adf06ba2441`
-- `apps/crosslisting-os/server/env.ts`
+- `archive/2026-11-18-apps-crosslisting-os/server/env.ts`
 - `hermes/dashboard/crosslisting/server/_core/env.ts`
 - `mission-control/crosslisting-os/server/_core/env.ts`
 
@@ -273,12 +273,12 @@
 - `agent/skills/agent-reach/config.json`
 
 ### Group 48: 3 files, 82 B each (164 B repeated) — blob `0ab80037a8e051b5f5a6532e02dd5a17817fcde9`
-- `apps/crosslisting-os/drizzle/0002_acoustic_captain_universe.sql`
+- `archive/2026-11-18-apps-crosslisting-os/drizzle/0002_acoustic_captain_universe.sql`
 - `hermes/dashboard/crosslisting/drizzle/0002_acoustic_captain_universe.sql`
 - `mission-control/crosslisting-os/drizzle/0002_acoustic_captain_universe.sql`
 
 ### Group 49: 3 files, 66 B each (132 B repeated) — blob `9c93db43e522cf4840d25749c6607c8b6749f3a7`
-- `apps/crosslisting-os/drizzle/0005_bright_giant_girl.sql`
+- `archive/2026-11-18-apps-crosslisting-os/drizzle/0005_bright_giant_girl.sql`
 - `hermes/dashboard/crosslisting/drizzle/0005_bright_giant_girl.sql`
 - `mission-control/crosslisting-os/drizzle/0005_bright_giant_girl.sql`
 
@@ -528,7 +528,7 @@
 - `nodes/9020/skills/ui-ux-pro-max/data/stacks/swiftui.csv`
 
 ### Group 111: 2 files, 10778 B each (10778 B repeated) — blob `14e0da25a82520d5d2166cbd2a5f005e5e1eb16f`
-- `apps/crosslisting-os/server/llm.ts`
+- `archive/2026-11-18-apps-crosslisting-os/server/llm.ts`
 - `mission-control/crosslisting-os/server/_core/llm.ts`
 
 ### Group 112: 2 files, 10751 B each (10751 B repeated) — blob `9f467cace439d574903ae9d7aa6ef1068552c2f6`
@@ -552,7 +552,7 @@
 - `nodes/9020/skills/ui-ux-pro-max/data/app-interface.csv`
 
 ### Group 117: 2 files, 9724 B each (9724 B repeated) — blob `cbd0965bd329e4477f25649a8b920907034f068b`
-- `apps/crosslisting-os/client/src/layouts/DashboardLayout.tsx`
+- `archive/2026-11-18-apps-crosslisting-os/client/src/layouts/DashboardLayout.tsx`
 - `hermes/dashboard/crosslisting/client/src/components/DashboardLayout.tsx`
 
 ### Group 118: 2 files, 8434 B each (8434 B repeated) — blob `cc5562574aaace8a5da136d240e0c877d41835b8`
@@ -720,7 +720,7 @@
 - `mission-control/crosslisting-os/client/src/components/ui/form.tsx`
 
 ### Group 159: 2 files, 3651 B each (3651 B repeated) — blob `a370078e7552ea4be1bf2c1881b493fc8bcc60d0`
-- `apps/crosslisting-os/docs/README.md`
+- `archive/2026-11-18-apps-crosslisting-os/docs/README.md`
 - `mission-control/crosslisting-os/README.md`
 
 ### Group 160: 2 files, 3650 B each (3650 B repeated) — blob `e2483354dc2b62478a2624e34ca18bc0efe887b2`
@@ -748,7 +748,7 @@
 - `.agents/skills/agent-reach/SKILL_en.md`
 
 ### Group 166: 2 files, 3052 B each (3052 B repeated) — blob `1d884705258647f8b55ca07155bd454e135702a7`
-- `apps/crosslisting-os/server/storage.ts`
+- `archive/2026-11-18-apps-crosslisting-os/server/storage.ts`
 - `mission-control/crosslisting-os/server/storage.ts`
 
 ### Group 167: 2 files, 2728 B each (2728 B repeated) — blob `159aa02b52d016654fe0ef85b7626f9c3be11de6`
@@ -1393,8 +1393,8 @@
 | `.agents <-> nodes` | 71 | 1.69 MB (1776351 B) |
 | `.agents <-> agent` | 33 | 129.6 KB (132662 B) |
 | `.agents <-> .agents` | 29 | 155.1 KB (158832 B) |
-| `apps <-> mission-control` | 25 | 114.3 KB (117078 B) |
-| `apps <-> hermes` | 23 | 106.8 KB (109321 B) |
+| `archive <-> mission-control` | 26 | 114.3 KB (117078 B) |
+| `archive <-> hermes` | 24 | 106.8 KB (109321 B) |
 | `ops <-> ops` | 22 | 1.34 MB (1406994 B) |
 | `domains <-> domains` | 9 | 1.00 MB (1052977 B) |
 | `archive <-> archive` | 8 | 40.7 KB (41696 B) |
@@ -1430,8 +1430,6 @@
 | `archive <-> backend` | 1 | 0 B |
 | `archive <-> crm` | 1 | 0 B |
 | `archive <-> docs` | 1 | 0 B |
-| `archive <-> hermes` | 1 | 0 B |
-| `archive <-> mission-control` | 1 | 0 B |
 | `archive <-> ops` | 1 | 0 B |
 | `archive <-> scripts` | 1 | 0 B |
 | `backend <-> crm` | 1 | 0 B |
@@ -1466,8 +1464,8 @@
 | `hermes/dashboard <-> mission-control/crosslisting-os` | 132 | 625.9 KB (640893 B) |
 | `.agents/skills <-> nodes/9020` | 71 | 1.69 MB (1776351 B) |
 | `.agents/skills <-> agent/skills` | 33 | 129.6 KB (132662 B) |
-| `apps/crosslisting-os <-> mission-control/crosslisting-os` | 25 | 114.3 KB (117078 B) |
-| `apps/crosslisting-os <-> hermes/dashboard` | 23 | 106.8 KB (109321 B) |
+| `archive/2026-11-18-apps-crosslisting-os <-> mission-control/crosslisting-os` | 25 | 114.3 KB (117078 B) |
+| `archive/2026-11-18-apps-crosslisting-os <-> hermes/dashboard` | 23 | 106.8 KB (109321 B) |
 | `ops/marketing-inbox <-> ops/packets` | 16 | 21.0 KB (21475 B) |
 | `.agents/skills <-> .agents/skills` | 15 | 134.6 KB (137869 B) |
 | `.agents/skills <-> .agents/skills_disabled` | 10 | 15.7 KB (16034 B) |
@@ -1511,8 +1509,8 @@
 | `hermes/dashboard/crosslisting/drizzle/meta <-> mission-control/crosslisting-os/drizzle/meta` | 7 | 197.0 KB (201719 B) |
 | `.agents/skills/agent-reach--9cc5555db9/references <-> agent/skills/agent-reach/references` | 7 | 16.9 KB (17259 B) |
 | `hermes/dashboard/crosslisting/server <-> mission-control/crosslisting-os/server` | 6 | 45.1 KB (46160 B) |
-| `apps/crosslisting-os/drizzle <-> hermes/dashboard/crosslisting/drizzle` | 6 | 23.0 KB (23510 B) |
-| `apps/crosslisting-os/drizzle <-> mission-control/crosslisting-os/drizzle` | 6 | 23.0 KB (23510 B) |
+| `archive/2026-11-18-apps-crosslisting-os/drizzle <-> hermes/dashboard/crosslisting/drizzle` | 6 | 23.0 KB (23510 B) |
+| `archive/2026-11-18-apps-crosslisting-os/drizzle <-> mission-control/crosslisting-os/drizzle` | 6 | 23.0 KB (23510 B) |
 | `.agents/skills/agent-reach--9cc5555db9/references <-> .agents/skills/agent-reach/references` | 6 | 15.5 KB (15877 B) |
 | `.agents/skills/agent-reach/references <-> agent/skills/agent-reach/references` | 6 | 15.5 KB (15877 B) |
 | `ops/hermes/work/20261018/frames <-> ops/ops/hermes/work/20261018/frames` | 5 | 1.32 MB (1384083 B) |
@@ -1520,8 +1518,8 @@
 | `archive/root-cleanup-2026-08-16/agent-work-products <-> archive/root-cleanup-2026-08-16/paperclip-agents` | 5 | 33.1 KB (33882 B) |
 | `hermes/dashboard/crosslisting/client/src/components <-> mission-control/crosslisting-os/client/src/components` | 5 | 20.5 KB (20953 B) |
 | `.agents/skills_disabled/azure-deploy/references/sdk <-> .agents/skills_disabled/azure-prepare/references/sdk` | 5 | 5.2 KB (5287 B) |
-| `apps/crosslisting-os/docs <-> hermes/dashboard/crosslisting/docs` | 4 | 11.8 KB (12080 B) |
-| `apps/crosslisting-os/docs <-> mission-control/crosslisting-os/docs` | 4 | 11.8 KB (12080 B) |
+| `archive/2026-11-18-apps-crosslisting-os/docs <-> hermes/dashboard/crosslisting/docs` | 4 | 11.8 KB (12080 B) |
+| `archive/2026-11-18-apps-crosslisting-os/docs <-> mission-control/crosslisting-os/docs` | 4 | 11.8 KB (12080 B) |
 | `hermes/dashboard/crosslisting/docs <-> mission-control/crosslisting-os/docs` | 4 | 11.8 KB (12080 B) |
 | `.agents/skills/entra-app-registration/references/sdk <-> .agents/skills_disabled/azure-deploy/references/sdk` | 4 | 4.4 KB (4492 B) |
 | `.agents/skills/entra-app-registration/references/sdk <-> .agents/skills_disabled/azure-prepare/references/sdk` | 4 | 4.4 KB (4492 B) |
