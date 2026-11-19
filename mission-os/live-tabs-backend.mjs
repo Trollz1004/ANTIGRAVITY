@@ -15,7 +15,7 @@ import { redact } from '../mission-control/lib/redact.mjs';
 import { SCC_24_APIS, envValue, draftWithFable } from './marketing-engine.mjs';
 import { getNodeIp, getServiceUrl } from '../ops/fleet/fleet-map.mjs';
 
-const ROOT = fs.existsSync('C:/ANTIGRAVITY') ? 'C:/ANTIGRAVITY' : path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ROOT = fs.existsSync('C:/ANTIGRAVITY/mission-os/server.mjs') ? 'C:/ANTIGRAVITY' : path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WHEEL_STATE_PATH = path.join(ROOT, 'mission-os', 'wheel-state.json');
 const SUPPORT_STORE_PATH = path.join(ROOT, 'mission-os', 'support-tickets.json');
 export function resolveObsidianVaultRoot() {

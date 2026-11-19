@@ -8,7 +8,7 @@
 # the vault; this script only maps it into process env.
 $ErrorActionPreference = 'Stop'
 
-$RepoRoot = if (Test-Path 'C:\ANTIGRAVITY') { 'C:\ANTIGRAVITY' } else { (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path }
+$RepoRoot = if (Test-Path 'C:\ANTIGRAVITY\ops\fleet\Get-FleetEndpoint.ps1') { 'C:\ANTIGRAVITY' } else { (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path }
 . (Join-Path $RepoRoot 'ops\fleet\Get-FleetEndpoint.ps1')
 $ApiSvc      = Get-FleetService -ServiceId 'dateapp-api'
 $ApiPort     = if ($env:PORT) { [int]$env:PORT } else { [int]$ApiSvc.port }

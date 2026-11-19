@@ -48,15 +48,21 @@ async function waitForReady(port, logsRef) {
   throw new Error(`domains-server did not start on port ${port}; logs=${logsRef()}`);
 }
 
-test('resolveDomainsServerBind defaults to 127.0.0.1 with warning when token unset, fails closed on explicit LAN bind, and binds 0.0.0.0 with token', () => {
+test('resolveDomainsServerBind uses explicit DOMAINS_SERVER_HOST ("127.0.0.1,192.168.0.15") without token and never throws, defaults to 127.0.0.1 with warning when host and token are unset, and binds 0.0.0.0 with token', () => {
   const warnings = [];
   assert.deepEqual(resolveDomainsServerBind({}, { port: 9160, warn: (m) => warnings.push(m) }), [LOOPBACK]);
   assert.equal(warnings.length, 1);
   assert.match(warnings[0], /FLEET_SHARED_TOKEN/);
   assert.doesNotMatch(warnings[0], /127\.0\.0\.1:\d+/);
 
-  assert.throws(() => resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '0.0.0.0' }, { port: 9160, warn: () => {} }));
-  assert.throws(() => resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '192.168.0.15' }, { port: 9160, warn: () => {} }));
+  assert.deepEqual(
+    resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '127.0.0.1,192.168.0.15' }, { port: 9160, warn: () => {} }),
+    ['127.0.0.1', '192.168.0.15']
+  );
+  assert.deepEqual(
+    resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '0.0.0.0' }, { port: 9160, warn: () => {} }),
+    ['0.0.0.0']
+  );
   assert.deepEqual(resolveDomainsServerBind({ FLEET_SHARED_TOKEN: 'tok' }, { port: 9160, warn: () => {} }), ['0.0.0.0']);
 });
 
@@ -116,5 +122,42 @@ test('domains-server serves public routes (200) without fleet token in both no-t
     } finally {
       child.kill();
     }
+  }
+});
+test('domains-server starts with two explicit addresses of this PC in DOMAINS_SERVER_HOST and no token, and answers /health', async () => {
+  const os = await import('node:os');
+  const nets = os.default.networkInterfaces();
+  let secondAddr = '127.0.0.2';
+  for (const list of Object.values(nets)) {
+    for (const info of list || []) {
+      if (info && info.family === 'IPv4' && !info.internal && !info.address.startsWith('169.254.')) {
+        secondAddr = info.address;
+        break;
+      }
+    }
+    if (secondAddr !== '127.0.0.2') break;
+  }
+  const port = await getFreePort();
+  const env = { ...process.env, DOMAINS_SERVER_PORT: String(port), DOMAINS_SERVER_HOST: `${LOOPBACK},${secondAddr}` };
+  delete env.FLEET_SHARED_TOKEN;
+  delete env.DOMAINS_SERVER_TOKEN;
+
+  const child = spawn(process.execPath, [SERVER_PATH], {
+    env,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    windowsHide: true,
+  });
+  let logs = '';
+  child.stdout.on('data', (c) => { logs += String(c); });
+  child.stderr.on('data', (c) => { logs += String(c); });
+
+  try {
+    const healthRes = await waitForReady(port, () => logs);
+    assert.equal(healthRes.status, 200);
+    assert.match(healthRes.body, /"domains-server"/);
+    assert.ok(logs.includes(`listening on http://${LOOPBACK}:${port}`), `expected loopback listener in logs=${logs}`);
+    assert.ok(logs.includes(`listening on http://${secondAddr}:${port}`), `expected second listener in logs=${logs}`);
+  } finally {
+    child.kill();
   }
 });
