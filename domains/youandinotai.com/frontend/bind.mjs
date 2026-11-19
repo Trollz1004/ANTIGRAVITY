@@ -5,11 +5,6 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-function isLoopbackBindHost(host) {
-  const h = String(host || '').trim().toLowerCase();
-  return h === '127.0.0.1' || h === 'localhost' || h === '::1';
-}
-
 export function loadDateAppFrontendConfig() {
   try {
     const fleetPath = path.resolve(__dirname, '..', '..', '..', 'ops', 'fleet', 'fleet-map.json');
@@ -38,11 +33,6 @@ export function resolveFrontendBind(
   const token = String(env?.FLEET_SHARED_TOKEN || '').trim();
   const explicit = String(env?.HOST || '').trim();
   if (explicit) {
-    if (!token && !isLoopbackBindHost(explicit)) {
-      throw new Error(
-        `[youandinotai-frontend] Refusing to bind ${explicit} on port ${port} without FLEET_SHARED_TOKEN configured.`
-      );
-    }
     return explicit;
   }
   if (!token) {
