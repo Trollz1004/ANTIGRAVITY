@@ -19,8 +19,8 @@ Tracked files in HEAD: 4888 (52 at root, 4836 in 43 top-level folders).
 | `.vscode` | 1 | 487 B | 2026-06-09 | no README |
 | `agent` | 41 | 205.1 KB (209976 B) | 2026-11-17 | no README |
 | `agent-contracts` | 16 | 104.0 KB (106462 B) | 2026-11-06 | no README |
-| `apps` | 146 | 4.29 MB (4496812 B) | 2026-11-17 | no README |
-| `archive` | 232 | 16.38 MB (17171599 B) | 2026-11-14 | no README |
+| `apps` | 104 | 3.99 MB (4188628 B) | 2026-11-17 | no README |
+| `archive` | 274 | 16.67 MB (17479802 B) | 2026-11-18 | no README |
 | `assets` | 2 | 1.04 MB (1091427 B) | 2026-10-09 | no README |
 | `backend` | 19 | 158.9 KB (162737 B) | 2026-11-12 | no README |
 | `brain-mcp` | 14 | 92.2 KB (94435 B) | 2026-11-17 | BRAIN MCP |
