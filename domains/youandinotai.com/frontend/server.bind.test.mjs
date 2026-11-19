@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { resolveFrontendBind } from './bind.mjs';
 
@@ -26,7 +26,7 @@ function getFreePort() {
   });
 }
 
-test('resolveFrontendBind binds 127.0.0.1 with warning when FLEET_SHARED_TOKEN is unset, fails closed on explicit LAN bind, and binds 0.0.0.0 with token', () => {
+test('resolveFrontendBind uses explicit HOST without FLEET_SHARED_TOKEN and never throws, binds 127.0.0.1 when HOST and token are unset, and binds 0.0.0.0 with token', () => {
   const warnings = [];
   const host = resolveFrontendBind(
     {},
@@ -37,17 +37,19 @@ test('resolveFrontendBind binds 127.0.0.1 with warning when FLEET_SHARED_TOKEN i
   assert.match(warnings[0], /FLEET_SHARED_TOKEN/);
   assert.doesNotMatch(warnings[0], /127\.0\.0\.1:\d+/);
 
-  assert.throws(() =>
+  assert.equal(
     resolveFrontendBind(
       { HOST: '0.0.0.0' },
       { port: 3200, bind: '0.0.0.0', warn: () => {} }
-    )
+    ),
+    '0.0.0.0'
   );
-  assert.throws(() =>
+  assert.equal(
     resolveFrontendBind(
       { HOST: '192.168.0.15' },
       { port: 3200, bind: '0.0.0.0', warn: () => {} }
-    )
+    ),
+    '192.168.0.15'
   );
   assert.equal(
     resolveFrontendBind(
@@ -201,4 +203,131 @@ test('youandinotai frontend server preloads manifest/drift outside /health handl
   assert.doesNotMatch(apiHealthBlock, /\bfs\./);
   assert.doesNotMatch(healthBlock, /buildHealthEnvLight/);
   assert.doesNotMatch(apiHealthBlock, /buildHealthEnvLight/);
+});
+
+test('tab-dateapp-api.ps1 warns and uses DATEAPP_API_HOST when FLEET_SHARED_TOKEN is missing instead of exiting', () => {
+  const apiLauncherPath = path.resolve(HERE, '..', '..', '..', 'scripts', 'fables-house', 'tab-dateapp-api.ps1');
+  const src = fs.readFileSync(apiLauncherPath, 'utf8');
+  assert.doesNotMatch(src, /Refusing to bind/);
+
+  const match = src.match(/\$fleetToken\s*=\s*\[string\]\$env:FLEET_SHARED_TOKEN[\s\S]*?\$ApiBindHost\s*=\s*Get-FleetBindHost\s+-ServiceId\s+'dateapp-api'\s*\}/);
+  assert.ok(match, 'Expected bind resolution block in tab-dateapp-api.ps1');
+
+  const psSnippet = [
+    "$ErrorActionPreference = 'Stop'",
+    '$ApiPort = 8000',
+    "$env:FLEET_SHARED_TOKEN = ''",
+    "$env:DATEAPP_API_HOST = '0.0.0.0'",
+    match[0],
+    'Write-Output "BIND_HOST=$ApiBindHost"',
+  ].join('\n');
+
+  const res = spawnSync(
+    'powershell',
+    ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command', psSnippet],
+    { encoding: 'utf8', timeout: 8000 }
+  );
+  assert.equal(res.status, 0, `Expected exit 0, got ${res.status}: ${res.stdout} ${res.stderr}`);
+  assert.match(`${res.stdout}\n${res.stderr}`, /WARNING:/i);
+  assert.match(res.stdout, /BIND_HOST=0\.0\.0\.0/);
+});
+test('tab-dateapp.cmd HOST value is accepted by resolveFrontendBind with no FLEET_SHARED_TOKEN', () => {
+  const cmdPath = path.resolve(HERE, '..', '..', '..', 'scripts', 'fables-house', 'tab-dateapp.cmd');
+  const cmdSrc = fs.readFileSync(cmdPath, 'utf8');
+  const match = cmdSrc.match(/^\s*set\s+"HOST=([^"\r\n]+)"/im);
+  assert.ok(match, 'tab-dateapp.cmd must set HOST');
+  const launcherHost = match[1].trim();
+  assert.equal(
+    resolveFrontendBind(
+      { HOST: launcherHost },
+      { port: 3200, bind: '0.0.0.0', warn: () => {} }
+    ),
+    launcherHost
+  );
+});
+
+test(
+  'youandinotai frontend server starts and listens with launcher env (HOST=0.0.0.0, NODE_ENV=production, no FLEET_SHARED_TOKEN)',
+  {
+    skip: !HAS_FRONTEND_DEPS
+      ? 'requires frontend node_modules (express + tsx)'
+      : false,
+  },
+  async () => {
+    const distDir = path.join(HERE, 'dist');
+    const distIndex = path.join(distDir, 'index.html');
+    const hadDistDir = fs.existsSync(distDir);
+    const hadDistIndex = fs.existsSync(distIndex);
+    if (!hadDistIndex) {
+      fs.mkdirSync(distDir, { recursive: true });
+      fs.writeFileSync(distIndex, '<!doctype html><html><body>stub</body></html>\n', 'utf8');
+    }
+
+    const port = await getFreePort();
+    const env = {
+      ...process.env,
+      NODE_ENV: 'production',
+      HOST: '0.0.0.0',
+      PORT: String(port),
+    };
+    delete env.FLEET_SHARED_TOKEN;
+
+    const child = spawn(process.execPath, [TSX_CLI, 'server.ts'], {
+      cwd: HERE,
+      env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    let logs = '';
+    child.stdout.on('data', c => {
+      logs += String(c);
+    });
+    child.stderr.on('data', c => {
+      logs += String(c);
+    });
+
+    try {
+      await new Promise((resolve, reject) => {
+        const deadline = setTimeout(
+          () => reject(new Error(`frontend did not start; logs=${logs}`)),
+          10000
+        );
+        const check = () => {
+          if (logs.includes(`Server running on http://0.0.0.0:${port}`)) {
+            clearTimeout(deadline);
+            resolve();
+          }
+        };
+        child.stdout.on('data', check);
+        child.stderr.on('data', check);
+        child.on('exit', code => {
+          clearTimeout(deadline);
+          reject(new Error(`frontend exited early (${code}); logs=${logs}`));
+        });
+      });
+
+      const health = await fetch(`http://${LOOPBACK}:${port}/health`);
+      assert.equal(health.status, 200);
+      const home = await fetch(`http://${LOOPBACK}:${port}/`);
+      assert.equal(home.status, 200);
+    } finally {
+      child.kill();
+      if (!hadDistIndex) {
+        try {
+          fs.rmSync(distIndex, { force: true });
+          if (!hadDistDir) {
+            fs.rmSync(distDir, { recursive: true, force: true });
+          }
+        } catch {
+          // ignore cleanup error
+        }
+      }
+    }
+  }
+);
+test('start-mission-control.ps1 resolves mission-os/server.mjs for port 3130 with WindowStyle Hidden and loopback bind when token is missing', () => {
+  const launcherPath = path.resolve(HERE, '..', '..', '..', 'scripts', 'start-mission-control.ps1');
+  const src = fs.readFileSync(launcherPath, 'utf8');
+  assert.match(src, /mission-os[\\/]server\.mjs/);
+  assert.match(src, /-WindowStyle\s+Hidden/);
+  assert.match(src, /MISSION_OS_HOST/);
 });
