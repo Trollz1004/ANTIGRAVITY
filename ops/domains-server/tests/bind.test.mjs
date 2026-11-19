@@ -48,15 +48,21 @@ async function waitForReady(port, logsRef) {
   throw new Error(`domains-server did not start on port ${port}; logs=${logsRef()}`);
 }
 
-test('resolveDomainsServerBind defaults to 127.0.0.1 with warning when token unset, fails closed on explicit LAN bind, and binds 0.0.0.0 with token', () => {
+test('resolveDomainsServerBind uses explicit DOMAINS_SERVER_HOST ("127.0.0.1,192.168.0.15") without token and never throws, defaults to 127.0.0.1 with warning when host and token are unset, and binds 0.0.0.0 with token', () => {
   const warnings = [];
   assert.deepEqual(resolveDomainsServerBind({}, { port: 9160, warn: (m) => warnings.push(m) }), [LOOPBACK]);
   assert.equal(warnings.length, 1);
   assert.match(warnings[0], /FLEET_SHARED_TOKEN/);
   assert.doesNotMatch(warnings[0], /127\.0\.0\.1:\d+/);
 
-  assert.throws(() => resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '0.0.0.0' }, { port: 9160, warn: () => {} }));
-  assert.throws(() => resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '192.168.0.15' }, { port: 9160, warn: () => {} }));
+  assert.deepEqual(
+    resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '127.0.0.1,192.168.0.15' }, { port: 9160, warn: () => {} }),
+    ['127.0.0.1', '192.168.0.15']
+  );
+  assert.deepEqual(
+    resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '0.0.0.0' }, { port: 9160, warn: () => {} }),
+    ['0.0.0.0']
+  );
   assert.deepEqual(resolveDomainsServerBind({ FLEET_SHARED_TOKEN: 'tok' }, { port: 9160, warn: () => {} }), ['0.0.0.0']);
 });
 
