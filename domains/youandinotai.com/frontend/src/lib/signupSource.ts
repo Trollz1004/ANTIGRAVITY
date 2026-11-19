@@ -1,4 +1,4 @@
-﻿/**
+/**
  * First-touch sign-up source attribution.
  *
  * Stores a compact lowercase token (at most 128 chars) in localStorage using

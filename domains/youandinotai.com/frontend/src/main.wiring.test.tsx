@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Guards the ACTUAL wiring in main.tsx.
  *
  * An independent judge rejected the previous attempt because its tests called

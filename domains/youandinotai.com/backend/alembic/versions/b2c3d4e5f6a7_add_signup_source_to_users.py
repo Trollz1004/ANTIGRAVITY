@@ -1,4 +1,4 @@
-﻿"""add signup_source to users
+"""add signup_source to users
 
 Revision ID: b2c3d4e5f6a7
 Revises: a1b2c3d4e5f6
