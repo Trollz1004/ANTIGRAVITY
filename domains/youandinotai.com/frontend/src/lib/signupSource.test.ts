@@ -1,11 +1,20 @@
-﻿import { beforeEach, describe, expect, it } from 'vitest';
+﻿import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { api } from './api';
+import { useAuth } from './auth';
 import {
   captureSignupSource,
   clearSignupSource,
   getStoredSignupSource,
   normalizeSignupSource,
 } from './signupSource';
+
+vi.mock('./api', () => ({
+  api: {
+    get: vi.fn(),
+    post: vi.fn(),
+  },
+}));
 
 describe('captureSignupSource', () => {
   beforeEach(() => {
@@ -176,5 +185,84 @@ describe('captureSignupSource', () => {
     expect(normalizeSignupSource('  UTM:Google/CPC  ')).toBe('utm:google/cpc');
     expect(normalizeSignupSource('bad value with spaces')).toBeNull();
     expect(normalizeSignupSource('x'.repeat(129))).toBeNull();
+  });
+
+  it('sends signup_source with email sign-up and clears it after success', async () => {
+    vi.resetAllMocks();
+    captureSignupSource({
+      search: '?utm_source=reddit&utm_medium=organic',
+      pathname: '/',
+      referrer: '',
+    });
+    vi.mocked(api.post).mockResolvedValueOnce({
+      access_token: 'tok-1',
+      refresh_token: 'ref-1',
+      user_id: 'u-1',
+    });
+    vi.mocked(api.get).mockResolvedValueOnce({
+      user_id: 'u-1',
+      email: 'member@youandinotai.com',
+      display_name: 'Member',
+      bot_shield_verified: false,
+      subscription_tier: null,
+      subscription_active: false,
+      has_profile: false,
+      adult_verified: true,
+    });
+
+    await useAuth.getState().register({
+      email: 'member@youandinotai.com',
+      password: 'password123',
+      displayName: 'Member',
+      dateOfBirth: '1990-01-01',
+      acceptedTerms: true,
+      acceptedCookiePolicy: true,
+      confirmedOver18: true,
+    });
+
+    expect(api.post).toHaveBeenCalledWith(
+      '/auth/register',
+      expect.objectContaining({
+        email: 'member@youandinotai.com',
+        signup_source: 'utm:reddit/organic',
+      })
+    );
+    expect(getStoredSignupSource()).toBeNull();
+  });
+
+  it('sends signup_source with Google sign-up and clears it after success', async () => {
+    vi.resetAllMocks();
+    captureSignupSource({
+      search: '',
+      pathname: '/',
+      referrer: 'https://www.youtube.com/watch?v=123',
+    });
+    vi.mocked(api.post).mockResolvedValueOnce({
+      access_token: 'tok-g',
+      refresh_token: 'ref-g',
+      user_id: 'u-g',
+    });
+    vi.mocked(api.get).mockResolvedValueOnce({
+      user_id: 'u-g',
+      email: 'g@youandinotai.com',
+      display_name: 'G Member',
+      bot_shield_verified: false,
+      subscription_tier: null,
+      subscription_active: false,
+      has_profile: false,
+      adult_verified: true,
+    });
+
+    await useAuth.getState().googleLogin('google-id-token', '1992-05-14');
+
+    expect(api.post).toHaveBeenCalledWith(
+      '/auth/google',
+      expect.objectContaining({
+        id_token: 'google-id-token',
+        date_of_birth: '1992-05-14',
+        signup_source: 'site:youtube.com',
+      })
+    );
+    expect(getStoredSignupSource()).toBeNull();
   });
 });

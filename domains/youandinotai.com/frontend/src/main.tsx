@@ -20,6 +20,7 @@ import { VideoCallPage } from './app/pages/VideoCall';
 import { Events } from './app/pages/Events';
 
 import { capturePartnerId, captureShortLink } from './lib/partnerAttribution';
+import { captureSignupSource } from './lib/signupSource';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { SkeletonLoader } from './components/SkeletonLoader';
@@ -104,6 +105,7 @@ function PageErrorFallback({
 // "/pricing" with a ref and then routing to /register client-side would
 // lose the value, because that navigation carries no query string.
 capturePartnerId(window.location.search);
+captureSignupSource();
 
 // Short creator link: /c/<name> saves the code like ?ref= does, then the
 // address bar becomes "/" so the visitor sees the home page. A bad name

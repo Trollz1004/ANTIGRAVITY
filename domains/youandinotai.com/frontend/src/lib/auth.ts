@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Auth state management using Zustand.
  */
 
@@ -9,6 +9,11 @@ import {
   clearPartnerId,
   normalizeRef,
 } from './partnerAttribution';
+import {
+  clearSignupSource,
+  getStoredSignupSource,
+  normalizeSignupSource,
+} from './signupSource';
 
 interface User {
   user_id: string;
@@ -32,6 +37,7 @@ interface RegisterPayload {
   acceptedCookiePolicy: boolean;
   confirmedOver18: boolean;
   referralCode?: string | null;
+  signupSource?: string | null;
 }
 
 interface AuthState {
@@ -41,7 +47,8 @@ interface AuthState {
   googleLogin: (
     idToken: string,
     dateOfBirth?: string,
-    referralCode?: string | null
+    referralCode?: string | null,
+    signupSource?: string | null
   ) => Promise<void>;
   betaAccess: (code: string, dateOfBirth?: string) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
@@ -65,11 +72,15 @@ export const useAuth = create<AuthState>(set => ({
     set({ user });
   },
 
-  googleLogin: async (idToken, dateOfBirth, referralCode) => {
+  googleLogin: async (idToken, dateOfBirth, referralCode, signupSource) => {
     const resolvedReferralCode =
       referralCode !== undefined
         ? normalizeRef(referralCode)
         : capturePartnerId(window.location.search);
+    const resolvedSignupSource =
+      signupSource !== undefined
+        ? normalizeSignupSource(signupSource)
+        : getStoredSignupSource();
     const data = await api.post<{
       access_token: string;
       refresh_token: string;
@@ -78,10 +89,12 @@ export const useAuth = create<AuthState>(set => ({
       id_token: idToken,
       ...(dateOfBirth ? { date_of_birth: dateOfBirth } : {}),
       ...(resolvedReferralCode ? { referral_code: resolvedReferralCode } : {}),
+      ...(resolvedSignupSource ? { signup_source: resolvedSignupSource } : {}),
     });
     localStorage.setItem('access_token', data.access_token);
     localStorage.setItem('refresh_token', data.refresh_token);
     clearPartnerId();
+    clearSignupSource();
     const user = await api.get<User>('/auth/me');
     set({ user });
   },
@@ -111,7 +124,12 @@ export const useAuth = create<AuthState>(set => ({
     acceptedCookiePolicy,
     confirmedOver18,
     referralCode,
+    signupSource,
   }) => {
+    const resolvedSignupSource =
+      signupSource !== undefined
+        ? normalizeSignupSource(signupSource)
+        : getStoredSignupSource();
     const data = await api.post<{
       access_token: string;
       refresh_token: string;
@@ -127,9 +145,12 @@ export const useAuth = create<AuthState>(set => ({
       // Influencer attribution. Omitted entirely when absent so the
       // backend default (NULL) applies rather than an empty string.
       ...(referralCode ? { referral_code: referralCode } : {}),
+      ...(resolvedSignupSource ? { signup_source: resolvedSignupSource } : {}),
     });
     localStorage.setItem('access_token', data.access_token);
     localStorage.setItem('refresh_token', data.refresh_token);
+    clearPartnerId();
+    clearSignupSource();
     const user = await api.get<User>('/auth/me');
     set({ user });
   },
