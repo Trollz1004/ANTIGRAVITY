@@ -266,3 +266,26 @@ describe('captureSignupSource', () => {
     expect(getStoredSignupSource()).toBeNull();
   });
 });
+
+
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+
+describe('privacy policy disclosure for signup_source', () => {
+  const expectedSentence =
+    'When you create an account we record how you reached us: a partner link, a campaign tag in the link, or the name of the site that sent you. We do not keep the full address of the page you came from.';
+
+  it('includes the signup_source disclosure sentence in member-facing privacy policy text', () => {
+    const appSource = readFileSync(
+      path.resolve(__dirname, '../App.tsx'),
+      'utf8'
+    );
+    const privacyDoc = readFileSync(
+      path.resolve(__dirname, '../../PRIVACY_POLICY.md'),
+      'utf8'
+    );
+
+    expect(appSource).toContain(expectedSentence);
+    expect(privacyDoc).toContain(expectedSentence);
+  });
+});

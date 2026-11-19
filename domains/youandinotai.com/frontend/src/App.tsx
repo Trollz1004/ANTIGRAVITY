@@ -60,7 +60,7 @@ const LEGAL_DOCS: Record<
     sections: [
       {
         h: '1. Data We Collect',
-        p: 'We collect the account details you provide (email, display name, date of birth, profile answers, and optional photos), verification status, and in-app activity needed to operate matching, messaging, and support.',
+        p: 'We collect the account details you provide (email, display name, date of birth, profile answers, and optional photos), verification status, and in-app activity needed to operate matching, messaging, and support. When you create an account we record how you reached us: a partner link, a campaign tag in the link, or the name of the site that sent you. We do not keep the full address of the page you came from.',
       },
       {
         h: '2. How Your Data Is Used',
