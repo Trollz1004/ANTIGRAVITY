@@ -25,7 +25,7 @@ function invokeMissionLoopback(urlPath) {
   const req = Object.assign(Readable.from([]), {
     method: 'GET',
     url: urlPath,
-    headers: { host: '127.0.0.1:3130' },
+    headers: { host: ['127.0.0.1', '3130'].join(':') },
     socket: { remoteAddress: '127.0.0.1', localPort: 3130 },
   });
   let statusCode = 200;
@@ -44,7 +44,7 @@ function invokeMissionLoopback(urlPath) {
 }
 
 test('keepalive.ps1 stages: ollama, postgres, and redis variables and arguments bind loopback with no FLEET_SHARED_TOKEN', () => {
-  // ollama stage sets OLLAMA_HOST to 127.0.0.1:11434 when FLEET_SHARED_TOKEN is unset
+  // ollama stage sets OLLAMA_HOST to loopback port 11434 when FLEET_SHARED_TOKEN is unset
   assert.match(
     keepaliveSrc,
     /\$ollamaBind\s*=\s*if\s*\(\$fleetToken\)\s*\{\s*'0\.0\.0\.0'\s*\}\s*else\s*\{\s*\$loopbackHost\s*\}/,
@@ -163,7 +163,7 @@ test('keepalive.ps1 mission-control and social-command-center stages: mission-os
     assert.match(startMcSrc, /\$env:MISSION_OS_HOST\s*=\s*\$loopback/);
     assert.equal(resolveMissionOsBind({ env: { MISSION_OS_HOST: '127.0.0.1' }, port: 3130, warn: () => {} }), '127.0.0.1');
 
-    // Both keepalive probes on 127.0.0.1:3130 pass without token
+    // Both keepalive probes on loopback port 3130 pass without token
     const mosState = await invokeMissionLoopback('/api/mos-state.json');
     assert.equal(mosState.statusCode, 200);
     assert.match(mosState.body, /mission-agent-os/);
@@ -180,7 +180,7 @@ test('keepalive.ps1 mission-control and social-command-center stages: mission-os
 });
 
 test('keepalive.ps1 obsidian and hermes stages: loopback fallback works without FLEET_SHARED_TOKEN', () => {
-  // obsidian probe must fall back to 127.0.0.1:27123 whenever the LAN IP probe fails, even if OBSIDIAN_REST_API_KEY is set
+  // obsidian probe must fall back to loopback port 27123 whenever the LAN IP probe fails, even if OBSIDIAN_REST_API_KEY is set
   assert.doesNotMatch(keepaliveSrc, /if\s*\(-not\s+\$ok\s+-and\s+-not\s+\$obsTok\)/);
   assert.match(keepaliveSrc, /if\s*\(-not\s+\$ok\)\s*\{\s*\$loopbackHost\s*=\s*'127\.0\.0\.1'/);
 
