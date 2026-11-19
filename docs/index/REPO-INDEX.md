@@ -29,7 +29,7 @@ Tracked files in HEAD: 4888 (52 at root, 4836 in 43 top-level folders).
 | `config` | 3 | 2.2 KB (2234 B) | 2026-10-02 | no README |
 | `content` | 93 | 259.1 KB (265332 B) | 2026-11-14 | no README |
 | `crm` | 93 | 1.16 MB (1220595 B) | 2026-11-12 | Here are your Instructions |
-| `docs` | 167 | 29.24 MB (30659947 B) | 2026-11-18 | no README |
+| `docs` | 167 | 29.23 MB (30647276 B) | 2026-11-18 | no README |
 | `domains` | 653 | 31.03 MB (32532414 B) | 2026-11-18 | Domains |
 | `frontend` | 1 | 107 B | 2026-09-17 | no README |
 | `hardware` | 2 | 2.7 KB (2789 B) | 2026-11-15 | no README |
@@ -40,7 +40,7 @@ Tracked files in HEAD: 4888 (52 at root, 4836 in 43 top-level folders).
 | `mission-control` | 338 | 6.57 MB (6885432 B) | 2026-11-17 | JARVIS Dashboard (Mission Control) |
 | `mission-os` | 55 | 2.46 MB (2579212 B) | 2026-11-17 | no README |
 | `nodes` | 127 | 1.97 MB (2063149 B) | 2026-11-17 | no README |
-| `ops` | 676 | 194.77 MB (204229623 B) | 2026-11-18 | no README |
+| `ops` | 676 | 194.77 MB (204230022 B) | 2026-11-18 | no README |
 | `scripts` | 296 | 1.72 MB (1807633 B) | 2026-11-17 | no README |
 | `services` | 59 | 350.1 KB (358475 B) | 2026-11-17 | no README |
 | `specs` | 24 | 145.7 KB (149198 B) | 2026-09-29 | no README |

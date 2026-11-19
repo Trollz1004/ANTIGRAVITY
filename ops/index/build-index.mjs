@@ -282,6 +282,7 @@ export function buildIndex(repoRoot = process.cwd()) {
 
   const preCandidates = [];
   for (const f of files) {
+    if (f.path === 'docs/index' || f.path.startsWith('docs/index/')) continue;
     const category = classifyStaleCategory(f.path, f.base);
     if (!category) continue;
     const commit = lastCommit.get(f.path);
@@ -307,14 +308,20 @@ export function buildIndex(repoRoot = process.cwd()) {
     const chunk = uniqueTokens.slice(i, i + 100);
     const patternArgs = [];
     for (const t of chunk) patternArgs.push('-e', t);
-    const grepRes = spawnSync('git', ['grep', '-F', '-I', '--name-only', ...patternArgs, 'HEAD'], {
-      cwd: repoRoot,
-      encoding: 'utf8',
-      maxBuffer: 64 * 1024 * 1024
-    });
+    const grepRes = spawnSync(
+      'git',
+      ['grep', '-F', '-I', '--name-only', ...patternArgs, 'HEAD', '--', ':(exclude)docs/index'],
+      {
+        cwd: repoRoot,
+        encoding: 'utf8',
+        maxBuffer: 64 * 1024 * 1024
+      }
+    );
     for (const l of (grepRes.stdout || '').split(/\r?\n/)) {
       if (!l) continue;
-      matchedTreeFiles.add(l.startsWith('HEAD:') ? l.slice(5) : l);
+      const matchedPath = l.startsWith('HEAD:') ? l.slice(5) : l;
+      if (matchedPath === 'docs/index' || matchedPath.startsWith('docs/index/')) continue;
+      matchedTreeFiles.add(matchedPath);
     }
   }
 
@@ -345,7 +352,7 @@ export function buildIndex(repoRoot = process.cwd()) {
   for (const c of preCandidates) {
     let referencedElsewhere = false;
     for (const otherPath of matchedList) {
-      if (otherPath === c.path) continue;
+      if (otherPath === c.path || otherPath === 'docs/index' || otherPath.startsWith('docs/index/')) continue;
       const txt = blobTextByHash.get(pathToHash.get(otherPath)) || '';
       if (txt.includes(c.token)) {
         referencedElsewhere = true;
