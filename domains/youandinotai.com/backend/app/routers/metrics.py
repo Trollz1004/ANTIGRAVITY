@@ -1,7 +1,7 @@
 """Prometheus metrics endpoint for the ANTIGRAVITY platform."""
 
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Query, status
 from sqlalchemy import case, func, select
@@ -309,6 +309,124 @@ async def affiliate_metrics(
         "payments_count": sum(item["payments_count"] for item in items),
         "gross_cents": sum(item["gross_cents"] for item in items),
         "owed_cents": sum(item["owed_cents"] for item in items),
+    }
+
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "items": items,
+        "totals": totals,
+    }
+
+
+@router.get(
+    "/metrics/signup-sources", dependencies=[Depends(_require_founder_or_admin)]
+)
+async def signup_source_metrics(
+    db: AsyncSession = Depends(get_db),
+):
+    """Read-only per-signup-source counts for accounts, Bot-Shield passes, and collected customer payers (last 30 days and all time)."""
+    cutoff_30d = datetime.now(timezone.utc) - timedelta(days=30)
+
+    normalized_source_expr = case(
+        (
+            User.signup_source.is_(None)
+            | (func.length(func.trim(User.signup_source)) == 0),
+            "not recorded",
+        ),
+        else_=func.lower(func.trim(User.signup_source)),
+    )
+
+    user_stmt = select(
+        normalized_source_expr.label("signup_source"),
+        func.count(User.id).label("accounts_all_time"),
+        func.coalesce(
+            func.sum(case((User.created_at >= cutoff_30d, 1), else_=0)),
+            0,
+        ).label("accounts_last_30_days"),
+        func.coalesce(
+            func.sum(case((User.bot_shield_verified.is_(True), 1), else_=0)),
+            0,
+        ).label("verified_all_time"),
+        func.coalesce(
+            func.sum(
+                case(
+                    (
+                        User.bot_shield_verified.is_(True)
+                        & (User.created_at >= cutoff_30d),
+                        1,
+                    ),
+                    else_=0,
+                )
+            ),
+            0,
+        ).label("verified_last_30_days"),
+    ).group_by(normalized_source_expr)
+
+    payment_stmt = (
+        select(
+            normalized_source_expr.label("signup_source"),
+            func.count(func.distinct(User.id)).label("paid_all_time"),
+            func.count(
+                func.distinct(
+                    case((User.created_at >= cutoff_30d, User.id), else_=None)
+                )
+            ).label("paid_last_30_days"),
+        )
+        .select_from(RevenueAllocation)
+        .join(User, RevenueAllocation.user_id == User.id)
+        .where(
+            RevenueAllocation.gross_amount_cents > 0,
+            RevenueAllocation.payer_type == "customer",
+            func.lower(RevenueAllocation.status) == COLLECTED_PAYMENT_ALLOCATION_STATUS,
+        )
+        .group_by(normalized_source_expr)
+    )
+
+    user_rows = (await db.execute(user_stmt)).mappings().all()
+    payment_rows = (await db.execute(payment_stmt)).mappings().all()
+
+    payments_by_source = {
+        str(row["signup_source"]): {
+            "paid_last_30_days": int(row["paid_last_30_days"] or 0),
+            "paid_all_time": int(row["paid_all_time"] or 0),
+        }
+        for row in payment_rows
+    }
+
+    items = []
+    for row in user_rows:
+        source_key = str(row["signup_source"])
+        pay_info = payments_by_source.get(
+            source_key, {"paid_last_30_days": 0, "paid_all_time": 0}
+        )
+        items.append(
+            {
+                "signup_source": source_key,
+                "accounts_last_30_days": int(row["accounts_last_30_days"] or 0),
+                "verified_last_30_days": int(row["verified_last_30_days"] or 0),
+                "paid_last_30_days": pay_info["paid_last_30_days"],
+                "accounts_all_time": int(row["accounts_all_time"] or 0),
+                "verified_all_time": int(row["verified_all_time"] or 0),
+                "paid_all_time": pay_info["paid_all_time"],
+            }
+        )
+
+    items.sort(
+        key=lambda item: (
+            -item["accounts_last_30_days"],
+            -item["accounts_all_time"],
+            item["signup_source"],
+        )
+    )
+
+    totals = {
+        "sources_count": len(items),
+        "accounts_last_30_days": sum(item["accounts_last_30_days"] for item in items),
+        "verified_last_30_days": sum(item["verified_last_30_days"] for item in items),
+        "paid_last_30_days": sum(item["paid_last_30_days"] for item in items),
+        "accounts_all_time": sum(item["accounts_all_time"] for item in items),
+        "verified_all_time": sum(item["verified_all_time"] for item in items),
+        "paid_all_time": sum(item["paid_all_time"] for item in items),
     }
 
     return {
