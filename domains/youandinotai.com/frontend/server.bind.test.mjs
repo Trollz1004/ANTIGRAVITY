@@ -231,3 +231,96 @@ test('tab-dateapp-api.ps1 warns and uses DATEAPP_API_HOST when FLEET_SHARED_TOKE
   assert.match(`${res.stdout}\n${res.stderr}`, /WARNING:/i);
   assert.match(res.stdout, /BIND_HOST=0\.0\.0\.0/);
 });
+test('tab-dateapp.cmd HOST value is accepted by resolveFrontendBind with no FLEET_SHARED_TOKEN', () => {
+  const cmdPath = path.resolve(HERE, '..', '..', '..', 'scripts', 'fables-house', 'tab-dateapp.cmd');
+  const cmdSrc = fs.readFileSync(cmdPath, 'utf8');
+  const match = cmdSrc.match(/^\s*set\s+"HOST=([^"\r\n]+)"/im);
+  assert.ok(match, 'tab-dateapp.cmd must set HOST');
+  const launcherHost = match[1].trim();
+  assert.equal(
+    resolveFrontendBind(
+      { HOST: launcherHost },
+      { port: 3200, bind: '0.0.0.0', warn: () => {} }
+    ),
+    launcherHost
+  );
+});
+
+test(
+  'youandinotai frontend server starts and listens with launcher env (HOST=0.0.0.0, NODE_ENV=production, no FLEET_SHARED_TOKEN)',
+  {
+    skip: !HAS_FRONTEND_DEPS
+      ? 'requires frontend node_modules (express + tsx)'
+      : false,
+  },
+  async () => {
+    const distDir = path.join(HERE, 'dist');
+    const distIndex = path.join(distDir, 'index.html');
+    const hadDistDir = fs.existsSync(distDir);
+    const hadDistIndex = fs.existsSync(distIndex);
+    if (!hadDistIndex) {
+      fs.mkdirSync(distDir, { recursive: true });
+      fs.writeFileSync(distIndex, '<!doctype html><html><body>stub</body></html>\n', 'utf8');
+    }
+
+    const port = await getFreePort();
+    const env = {
+      ...process.env,
+      NODE_ENV: 'production',
+      HOST: '0.0.0.0',
+      PORT: String(port),
+    };
+    delete env.FLEET_SHARED_TOKEN;
+
+    const child = spawn(process.execPath, [TSX_CLI, 'server.ts'], {
+      cwd: HERE,
+      env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    let logs = '';
+    child.stdout.on('data', c => {
+      logs += String(c);
+    });
+    child.stderr.on('data', c => {
+      logs += String(c);
+    });
+
+    try {
+      await new Promise((resolve, reject) => {
+        const deadline = setTimeout(
+          () => reject(new Error(`frontend did not start; logs=${logs}`)),
+          10000
+        );
+        const check = () => {
+          if (logs.includes(`Server running on http://0.0.0.0:${port}`)) {
+            clearTimeout(deadline);
+            resolve();
+          }
+        };
+        child.stdout.on('data', check);
+        child.stderr.on('data', check);
+        child.on('exit', code => {
+          clearTimeout(deadline);
+          reject(new Error(`frontend exited early (${code}); logs=${logs}`));
+        });
+      });
+
+      const health = await fetch(`http://${LOOPBACK}:${port}/health`);
+      assert.equal(health.status, 200);
+      const home = await fetch(`http://${LOOPBACK}:${port}/`);
+      assert.equal(home.status, 200);
+    } finally {
+      child.kill();
+      if (!hadDistIndex) {
+        try {
+          fs.rmSync(distIndex, { force: true });
+          if (!hadDistDir) {
+            fs.rmSync(distDir, { recursive: true, force: true });
+          }
+        } catch {
+          // ignore cleanup error
+        }
+      }
+    }
+  }
+);
