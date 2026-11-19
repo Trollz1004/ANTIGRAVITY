@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { resolveFrontendBind } from './bind.mjs';
 
@@ -203,4 +203,31 @@ test('youandinotai frontend server preloads manifest/drift outside /health handl
   assert.doesNotMatch(apiHealthBlock, /\bfs\./);
   assert.doesNotMatch(healthBlock, /buildHealthEnvLight/);
   assert.doesNotMatch(apiHealthBlock, /buildHealthEnvLight/);
+});
+
+test('tab-dateapp-api.ps1 warns and uses DATEAPP_API_HOST when FLEET_SHARED_TOKEN is missing instead of exiting', () => {
+  const apiLauncherPath = path.resolve(HERE, '..', '..', '..', 'scripts', 'fables-house', 'tab-dateapp-api.ps1');
+  const src = fs.readFileSync(apiLauncherPath, 'utf8');
+  assert.doesNotMatch(src, /Refusing to bind/);
+
+  const match = src.match(/\$fleetToken\s*=\s*\[string\]\$env:FLEET_SHARED_TOKEN[\s\S]*?\$ApiBindHost\s*=\s*Get-FleetBindHost\s+-ServiceId\s+'dateapp-api'\s*\}/);
+  assert.ok(match, 'Expected bind resolution block in tab-dateapp-api.ps1');
+
+  const psSnippet = [
+    "$ErrorActionPreference = 'Stop'",
+    '$ApiPort = 8000',
+    "$env:FLEET_SHARED_TOKEN = ''",
+    "$env:DATEAPP_API_HOST = '0.0.0.0'",
+    match[0],
+    'Write-Output "BIND_HOST=$ApiBindHost"',
+  ].join('\n');
+
+  const res = spawnSync(
+    'powershell',
+    ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command', psSnippet],
+    { encoding: 'utf8', timeout: 8000 }
+  );
+  assert.equal(res.status, 0, `Expected exit 0, got ${res.status}: ${res.stdout} ${res.stderr}`);
+  assert.match(`${res.stdout}\n${res.stderr}`, /WARNING:/i);
+  assert.match(res.stdout, /BIND_HOST=0\.0\.0\.0/);
 });

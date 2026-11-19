@@ -1,4 +1,4 @@
-﻿# ── DateApp API — api.youandinotai.com backend (:8000) ────────────────────
+# ── DateApp API — api.youandinotai.com backend (:8000) ────────────────────
 # FastAPI app served by uvicorn from domains\youandinotai.com\backend (moved
 # from backend\fastapi-app by the repo consolidation, 2026-09-17) using the
 # venv that stayed at backend\.venv (it was never inside fastapi-app).
@@ -61,8 +61,7 @@ if (-not [string]::IsNullOrWhiteSpace($explicitApiHost)) {
     $trimmedHost = $explicitApiHost.Trim()
     $isLoopbackHost = $trimmedHost.ToLowerInvariant() -in @('127.0.0.1', 'localhost', '::1')
     if ([string]::IsNullOrWhiteSpace($fleetToken) -and -not $isLoopbackHost) {
-        Write-Error "[dateapp-api] Refusing to bind $trimmedHost on port $ApiPort without FLEET_SHARED_TOKEN configured."
-        exit 1
+        Write-Warning "[dateapp-api] WARNING: FLEET_SHARED_TOKEN is not set; binding $trimmedHost on port $ApiPort."
     }
     $ApiBindHost = $trimmedHost
 } elseif ([string]::IsNullOrWhiteSpace($fleetToken)) {
