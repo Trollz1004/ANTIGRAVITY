@@ -31,7 +31,6 @@ from app.error_responses import (
 from app.models import Profile, User
 from app.rate_limit_redis import enforce_route_rate_limit
 from app.schemas import (
-    normalize_signup_source,
     AuthBetaAccessRequest,
     AuthLoginRequest,
     AuthRefreshRequest,
@@ -39,6 +38,7 @@ from app.schemas import (
     AuthTokenResponse,
     GoogleLoginRequest,
     UserMeResponse,
+    normalize_signup_source,
 )
 from app.subscriptions import user_has_active_subscription
 
@@ -156,7 +156,9 @@ async def register(
         date_of_birth=payload.date_of_birth,
         adult_verified_at=datetime.now(timezone.utc),
         referral_code=payload.referral_code,
-        signup_source=_resolve_signup_source(payload.signup_source, payload.referral_code),
+        signup_source=_resolve_signup_source(
+            payload.signup_source, payload.referral_code
+        ),
     )
     db.add(user)
     await db.commit()
