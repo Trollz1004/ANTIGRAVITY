@@ -340,4 +340,188 @@ describe('Referral attribution on sign-up and read-only founder affiliate counts
     const alert = await findByRole('alert');
     expect(alert.textContent).toMatch(/Founder or admin access/i);
   });
+
+  it('renders the Where members came from section with plain-word source rows and 30-day and all-time counts', async () => {
+    useAuth.setState({
+      user: {
+        user_id: 'founder-1',
+        email: 'founder@youandinotai.com',
+        display_name: 'Josh Founder',
+        bot_shield_verified: true,
+        subscription_tier: 'founding_member',
+        subscription_active: true,
+        has_profile: true,
+        adult_verified: true,
+        member_badge: 'Founder',
+      },
+      loading: false,
+    });
+
+    vi.mocked(api.get).mockImplementation(async (path: string) => {
+      if (path.startsWith('/metrics/signup-sources')) {
+        return {
+          generated_at: '2026-11-19T12:00:00Z',
+          items: [
+            {
+              signup_source: 'ref:maya-23',
+              accounts_last_30_days: 5,
+              verified_last_30_days: 4,
+              paid_last_30_days: 3,
+              accounts_all_time: 8,
+              verified_all_time: 6,
+              paid_all_time: 4,
+            },
+            {
+              signup_source: 'utm:x/social/launch',
+              accounts_last_30_days: 4,
+              verified_last_30_days: 3,
+              paid_last_30_days: 2,
+              accounts_all_time: 4,
+              verified_all_time: 3,
+              paid_all_time: 2,
+            },
+            {
+              signup_source: 'site:reddit.com',
+              accounts_last_30_days: 3,
+              verified_last_30_days: 2,
+              paid_last_30_days: 1,
+              accounts_all_time: 5,
+              verified_all_time: 3,
+              paid_all_time: 2,
+            },
+            {
+              signup_source: 'direct',
+              accounts_last_30_days: 2,
+              verified_last_30_days: 1,
+              paid_last_30_days: 1,
+              accounts_all_time: 6,
+              verified_all_time: 4,
+              paid_all_time: 2,
+            },
+            {
+              signup_source: 'not recorded',
+              accounts_last_30_days: 0,
+              verified_last_30_days: 0,
+              paid_last_30_days: 0,
+              accounts_all_time: 16,
+              verified_all_time: 12,
+              paid_all_time: 7,
+            },
+          ],
+          totals: {
+            sources_count: 5,
+            accounts_last_30_days: 14,
+            verified_last_30_days: 10,
+            paid_last_30_days: 7,
+            accounts_all_time: 39,
+            verified_all_time: 28,
+            paid_all_time: 17,
+          },
+        };
+      }
+      return {
+        generated_at: '2026-11-19T12:00:00Z',
+        items: [],
+        totals: {
+          codes_count: 0,
+          signups_count: 0,
+          verified_count: 0,
+          payments_count: 0,
+          gross_cents: 0,
+          owed_cents: 0,
+        },
+      };
+    });
+
+    const { findByText, getByLabelText, getAllByLabelText } = render(
+      <MemoryRouter initialEntries={['/app/admin/affiliates']}>
+        <FounderAffiliates />
+      </MemoryRouter>
+    );
+
+    expect(await findByText('Where members came from')).toBeTruthy();
+    expect(await findByText('Last 30 days')).toBeTruthy();
+    expect(await findByText('All time')).toBeTruthy();
+    expect(await findByText('Partner link: maya-23')).toBeTruthy();
+    expect(await findByText('Campaign: x / social / launch')).toBeTruthy();
+    expect(await findByText('From reddit.com')).toBeTruthy();
+    expect(await findByText('Typed the address or no source')).toBeTruthy();
+    expect(await findByText('not recorded')).toBeTruthy();
+
+    const section = getByLabelText('Where members came from');
+    expect(section.textContent).toContain('Last 30 days');
+    expect(section.textContent).toContain('All time');
+    expect(section.textContent).toContain('Accounts');
+    expect(section.textContent).toContain('Passed Bot-Shield');
+    expect(section.textContent).toContain('Paid');
+    expect(section.textContent).toContain('16');
+    expect(section.textContent).toContain('39');
+
+    expect(getAllByLabelText('Accounts, last 30 days')).toHaveLength(5);
+    expect(getAllByLabelText('Passed Bot-Shield, last 30 days')).toHaveLength(
+      5
+    );
+    expect(getAllByLabelText('Paid, last 30 days')).toHaveLength(5);
+    expect(getAllByLabelText('Accounts, all time')).toHaveLength(5);
+    expect(getAllByLabelText('Passed Bot-Shield, all time')).toHaveLength(5);
+    expect(getAllByLabelText('Paid, all time')).toHaveLength(5);
+  });
+
+  it('renders the Where members came from empty state in one plain sentence when no sources exist', async () => {
+    useAuth.setState({
+      user: {
+        user_id: 'founder-1',
+        email: 'founder@youandinotai.com',
+        display_name: 'Josh Founder',
+        bot_shield_verified: true,
+        subscription_tier: 'founding_member',
+        subscription_active: true,
+        has_profile: true,
+        adult_verified: true,
+        member_badge: 'Founder',
+      },
+      loading: false,
+    });
+
+    vi.mocked(api.get).mockImplementation(async (path: string) => {
+      if (path.startsWith('/metrics/signup-sources')) {
+        return {
+          generated_at: '2026-11-19T12:00:00Z',
+          items: [],
+          totals: {
+            sources_count: 0,
+            accounts_last_30_days: 0,
+            verified_last_30_days: 0,
+            paid_last_30_days: 0,
+            accounts_all_time: 0,
+            verified_all_time: 0,
+            paid_all_time: 0,
+          },
+        };
+      }
+      return {
+        generated_at: '2026-11-19T12:00:00Z',
+        items: [],
+        totals: {
+          codes_count: 0,
+          signups_count: 0,
+          verified_count: 0,
+          payments_count: 0,
+          gross_cents: 0,
+          owed_cents: 0,
+        },
+      };
+    });
+
+    const { findByText } = render(
+      <MemoryRouter initialEntries={['/app/admin/affiliates']}>
+        <FounderAffiliates />
+      </MemoryRouter>
+    );
+
+    expect(await findByText('Where members came from')).toBeTruthy();
+    expect(
+      await findByText('No sign-up sources are recorded yet.')
+    ).toBeTruthy();
+  });
 });
