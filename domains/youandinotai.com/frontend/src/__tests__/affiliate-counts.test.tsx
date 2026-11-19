@@ -433,13 +433,15 @@ describe('Referral attribution on sign-up and read-only founder affiliate counts
       };
     });
 
-    const { findByText, getByLabelText } = render(
+    const { findByText, getByLabelText, getAllByLabelText } = render(
       <MemoryRouter initialEntries={['/app/admin/affiliates']}>
         <FounderAffiliates />
       </MemoryRouter>
     );
 
     expect(await findByText('Where members came from')).toBeTruthy();
+    expect(await findByText('Last 30 days')).toBeTruthy();
+    expect(await findByText('All time')).toBeTruthy();
     expect(await findByText('Partner link: maya-23')).toBeTruthy();
     expect(await findByText('Campaign: x / social / launch')).toBeTruthy();
     expect(await findByText('From reddit.com')).toBeTruthy();
@@ -447,8 +449,22 @@ describe('Referral attribution on sign-up and read-only founder affiliate counts
     expect(await findByText('not recorded')).toBeTruthy();
 
     const section = getByLabelText('Where members came from');
+    expect(section.textContent).toContain('Last 30 days');
+    expect(section.textContent).toContain('All time');
+    expect(section.textContent).toContain('Accounts');
+    expect(section.textContent).toContain('Passed Bot-Shield');
+    expect(section.textContent).toContain('Paid');
     expect(section.textContent).toContain('16');
     expect(section.textContent).toContain('39');
+
+    expect(getAllByLabelText('Accounts, last 30 days')).toHaveLength(5);
+    expect(getAllByLabelText('Passed Bot-Shield, last 30 days')).toHaveLength(
+      5
+    );
+    expect(getAllByLabelText('Paid, last 30 days')).toHaveLength(5);
+    expect(getAllByLabelText('Accounts, all time')).toHaveLength(5);
+    expect(getAllByLabelText('Passed Bot-Shield, all time')).toHaveLength(5);
+    expect(getAllByLabelText('Paid, all time')).toHaveLength(5);
   });
 
   it('renders the Where members came from empty state in one plain sentence when no sources exist', async () => {

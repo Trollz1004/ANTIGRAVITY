@@ -282,20 +282,35 @@ export function FounderAffiliates() {
                 </p>
               ) : (
                 <div className="w-full text-left">
-                  <div className="hidden md:grid md:grid-cols-7 border-b border-[#3A3F45] bg-[#1A1E25] text-base font-bold text-[#FFD21E]">
-                    <div className="py-4 px-5">Source</div>
-                    <div className="py-4 px-4 text-right">Accounts (30d)</div>
-                    <div className="py-4 px-4 text-right">
-                      Passed Bot-Shield (30d)
+                  <div className="hidden md:grid md:grid-cols-[4fr_0.88fr_1.54fr_0.58fr_0.88fr_1.54fr_0.58fr] border-b border-[#3A3F45] bg-[#1A1E25] text-base font-bold text-[#FFD21E]">
+                    <div aria-hidden="true" className="py-2.5 px-5" />
+                    <div className="col-span-3 py-2.5 px-2.5 pr-4 text-center whitespace-nowrap">
+                      Last 30 days
                     </div>
-                    <div className="py-4 px-4 text-right">Paid (30d)</div>
-                    <div className="py-4 px-4 text-right">
-                      Accounts (All Time)
+                    <div className="col-span-3 py-2.5 pl-4 pr-5 text-center whitespace-nowrap md:border-l md:border-[#3A3F45]">
+                      All time
                     </div>
-                    <div className="py-4 px-4 text-right">
-                      Passed Bot-Shield (All Time)
+                  </div>
+                  <div className="hidden md:grid md:grid-cols-[4fr_0.88fr_1.54fr_0.58fr_0.88fr_1.54fr_0.58fr] border-b border-[#3A3F45] bg-[#1A1E25] text-base font-bold text-[#FFD21E]">
+                    <div className="py-3.5 px-5 whitespace-nowrap">Source</div>
+                    <div className="py-3.5 px-2.5 text-right whitespace-nowrap">
+                      Accounts
                     </div>
-                    <div className="py-4 px-5 text-right">Paid (All Time)</div>
+                    <div className="py-3.5 px-2.5 text-right whitespace-nowrap">
+                      Passed Bot-Shield
+                    </div>
+                    <div className="py-3.5 pl-2.5 pr-4 text-right whitespace-nowrap">
+                      Paid
+                    </div>
+                    <div className="py-3.5 pl-4 pr-2.5 text-right whitespace-nowrap md:border-l md:border-[#3A3F45]">
+                      Accounts
+                    </div>
+                    <div className="py-3.5 px-2.5 text-right whitespace-nowrap">
+                      Passed Bot-Shield
+                    </div>
+                    <div className="py-3.5 pl-2.5 pr-5 text-right whitespace-nowrap">
+                      Paid
+                    </div>
                   </div>
                   <div
                     role="list"
@@ -305,47 +320,65 @@ export function FounderAffiliates() {
                       <div
                         key={row.signup_source}
                         role="listitem"
-                        className="block md:grid md:grid-cols-7 p-4 md:p-0 space-y-1.5 md:space-y-0"
+                        className="block md:grid md:grid-cols-[4fr_0.88fr_1.54fr_0.58fr_0.88fr_1.54fr_0.58fr] p-4 md:p-0 space-y-1.5 md:space-y-0"
                       >
-                        <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-5 font-semibold text-[#F4F1EA]">
+                        <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-5 font-semibold text-[#F4F1EA] break-normal hyphens-none">
                           <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                             Source
                           </span>
-                          <span>
+                          <span className="break-normal hyphens-none">
                             {formatSignupSourceLabel(row.signup_source)}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-4 text-right font-bold">
+                        <div
+                          aria-label="Accounts, last 30 days"
+                          className="flex items-center justify-between md:block py-1 md:py-4 md:px-2.5 text-right font-bold"
+                        >
                           <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                             Accounts (30d)
                           </span>
                           <span>{row.accounts_last_30_days}</span>
                         </div>
-                        <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-4 text-right font-bold">
+                        <div
+                          aria-label="Passed Bot-Shield, last 30 days"
+                          className="flex items-center justify-between md:block py-1 md:py-4 md:px-2.5 text-right font-bold"
+                        >
                           <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                             Passed Bot-Shield (30d)
                           </span>
                           <span>{row.verified_last_30_days}</span>
                         </div>
-                        <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-4 text-right font-bold">
+                        <div
+                          aria-label="Paid, last 30 days"
+                          className="flex items-center justify-between md:block py-1 md:py-4 md:pl-2.5 md:pr-4 text-right font-bold"
+                        >
                           <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                             Paid (30d)
                           </span>
                           <span>{row.paid_last_30_days}</span>
                         </div>
-                        <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-4 text-right font-bold">
+                        <div
+                          aria-label="Accounts, all time"
+                          className="flex items-center justify-between md:block py-1 md:py-4 md:pl-4 md:pr-2.5 text-right font-bold md:border-l md:border-[#3A3F45]"
+                        >
                           <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                             Accounts (All Time)
                           </span>
                           <span>{row.accounts_all_time}</span>
                         </div>
-                        <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-4 text-right font-bold">
+                        <div
+                          aria-label="Passed Bot-Shield, all time"
+                          className="flex items-center justify-between md:block py-1 md:py-4 md:px-2.5 text-right font-bold"
+                        >
                           <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                             Passed Bot-Shield (All Time)
                           </span>
                           <span>{row.verified_all_time}</span>
                         </div>
-                        <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-5 text-right font-bold">
+                        <div
+                          aria-label="Paid, all time"
+                          className="flex items-center justify-between md:block py-1 md:py-4 md:pl-2.5 md:pr-5 text-right font-bold"
+                        >
                           <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                             Paid (All Time)
                           </span>
@@ -354,8 +387,8 @@ export function FounderAffiliates() {
                       </div>
                     ))}
                   </div>
-                  <div className="block md:grid md:grid-cols-7 border-t-2 border-[#3A3F45] bg-[#1A1E25] p-4 md:p-0 space-y-1.5 md:space-y-0 text-lg md:text-xl font-bold text-[#F4F1EA] tabular-nums">
-                    <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-5">
+                  <div className="block md:grid md:grid-cols-[4fr_0.88fr_1.54fr_0.58fr_0.88fr_1.54fr_0.58fr] border-t-2 border-[#3A3F45] bg-[#1A1E25] p-4 md:p-0 space-y-1.5 md:space-y-0 text-lg md:text-xl font-bold text-[#F4F1EA] tabular-nums">
+                    <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-5 break-normal hyphens-none">
                       <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                         Summary
                       </span>
@@ -367,37 +400,55 @@ export function FounderAffiliates() {
                         )
                       </span>
                     </div>
-                    <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-4 text-right">
+                    <div
+                      aria-label="Total accounts, last 30 days"
+                      className="flex items-center justify-between md:block py-1 md:py-4 md:px-2.5 text-right"
+                    >
                       <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                         Total Accounts (30d)
                       </span>
                       <span>{sourceTotals.accounts_last_30_days}</span>
                     </div>
-                    <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-4 text-right">
+                    <div
+                      aria-label="Total passed Bot-Shield, last 30 days"
+                      className="flex items-center justify-between md:block py-1 md:py-4 md:px-2.5 text-right"
+                    >
                       <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                         Total Passed Bot-Shield (30d)
                       </span>
                       <span>{sourceTotals.verified_last_30_days}</span>
                     </div>
-                    <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-4 text-right">
+                    <div
+                      aria-label="Total paid, last 30 days"
+                      className="flex items-center justify-between md:block py-1 md:py-4 md:pl-2.5 md:pr-4 text-right"
+                    >
                       <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                         Total Paid (30d)
                       </span>
                       <span>{sourceTotals.paid_last_30_days}</span>
                     </div>
-                    <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-4 text-right">
+                    <div
+                      aria-label="Total accounts, all time"
+                      className="flex items-center justify-between md:block py-1 md:py-4 md:pl-4 md:pr-2.5 text-right md:border-l md:border-[#3A3F45]"
+                    >
                       <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                         Total Accounts (All Time)
                       </span>
                       <span>{sourceTotals.accounts_all_time}</span>
                     </div>
-                    <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-4 text-right">
+                    <div
+                      aria-label="Total passed Bot-Shield, all time"
+                      className="flex items-center justify-between md:block py-1 md:py-4 md:px-2.5 text-right"
+                    >
                       <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                         Total Passed Bot-Shield (All Time)
                       </span>
                       <span>{sourceTotals.verified_all_time}</span>
                     </div>
-                    <div className="flex items-center justify-between md:block py-1 md:py-4 md:px-5 text-right">
+                    <div
+                      aria-label="Total paid, all time"
+                      className="flex items-center justify-between md:block py-1 md:py-4 md:pl-2.5 md:pr-5 text-right"
+                    >
                       <span className="text-base font-semibold text-[#E2E0D8] md:hidden">
                         Total Paid (All Time)
                       </span>
