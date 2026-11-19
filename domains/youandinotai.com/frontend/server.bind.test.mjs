@@ -324,3 +324,10 @@ test(
     }
   }
 );
+test('start-mission-control.ps1 resolves mission-os/server.mjs for port 3130 with WindowStyle Hidden and loopback bind when token is missing', () => {
+  const launcherPath = path.resolve(HERE, '..', '..', '..', 'scripts', 'start-mission-control.ps1');
+  const src = fs.readFileSync(launcherPath, 'utf8');
+  assert.match(src, /mission-os[\\/]server\.mjs/);
+  assert.match(src, /-WindowStyle\s+Hidden/);
+  assert.match(src, /MISSION_OS_HOST/);
+});
