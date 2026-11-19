@@ -33,11 +33,6 @@ const T5500_IP = getNodeIp("t5500");
 const DOMAINS_SERVICE = getService("domains-server");
 const PORT = Number(process.env.DOMAINS_SERVER_PORT || DOMAINS_SERVICE.port);
 
-function isLoopbackBindHost(host) {
-  const h = String(host || "").trim().toLowerCase();
-  return h === "127.0.0.1" || h === "localhost" || h === "::1";
-}
-
 function resolveDomainsServerBind(env = process.env, { port = PORT, warn = console.warn } = {}) {
   const token = String(env?.FLEET_SHARED_TOKEN || env?.DOMAINS_SERVER_TOKEN || "").trim();
   const explicit = String(env?.DOMAINS_SERVER_HOST || "")
@@ -45,13 +40,6 @@ function resolveDomainsServerBind(env = process.env, { port = PORT, warn = conso
     .map((h) => h.trim())
     .filter(Boolean);
   if (explicit.length > 0) {
-    for (const h of explicit) {
-      if (!token && !isLoopbackBindHost(h)) {
-        throw new Error(
-          `[domains-server] Refusing to bind ${h} on port ${port} without FLEET_SHARED_TOKEN or DOMAINS_SERVER_TOKEN configured.`
-        );
-      }
-    }
     return explicit;
   }
   if (!token) {

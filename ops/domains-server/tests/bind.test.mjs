@@ -124,3 +124,40 @@ test('domains-server serves public routes (200) without fleet token in both no-t
     }
   }
 });
+test('domains-server starts with two explicit addresses of this PC in DOMAINS_SERVER_HOST and no token, and answers /health', async () => {
+  const os = await import('node:os');
+  const nets = os.default.networkInterfaces();
+  let secondAddr = '127.0.0.2';
+  for (const list of Object.values(nets)) {
+    for (const info of list || []) {
+      if (info && info.family === 'IPv4' && !info.internal && !info.address.startsWith('169.254.')) {
+        secondAddr = info.address;
+        break;
+      }
+    }
+    if (secondAddr !== '127.0.0.2') break;
+  }
+  const port = await getFreePort();
+  const env = { ...process.env, DOMAINS_SERVER_PORT: String(port), DOMAINS_SERVER_HOST: `${LOOPBACK},${secondAddr}` };
+  delete env.FLEET_SHARED_TOKEN;
+  delete env.DOMAINS_SERVER_TOKEN;
+
+  const child = spawn(process.execPath, [SERVER_PATH], {
+    env,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    windowsHide: true,
+  });
+  let logs = '';
+  child.stdout.on('data', (c) => { logs += String(c); });
+  child.stderr.on('data', (c) => { logs += String(c); });
+
+  try {
+    const healthRes = await waitForReady(port, () => logs);
+    assert.equal(healthRes.status, 200);
+    assert.match(healthRes.body, /"domains-server"/);
+    assert.ok(logs.includes(`listening on http://${LOOPBACK}:${port}`), `expected loopback listener in logs=${logs}`);
+    assert.ok(logs.includes(`listening on http://${secondAddr}:${port}`), `expected second listener in logs=${logs}`);
+  } finally {
+    child.kill();
+  }
+});
