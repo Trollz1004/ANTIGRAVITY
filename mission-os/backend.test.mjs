@@ -277,3 +277,33 @@ test('Stage E4 /health and /api/mos-state.json show only counts and nodeLight (s
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
 });
+test('GET /api/mos-state.json and GET /api/marketing/plans on loopback without token return 200 with watchdog identity strings mission-agent-os and social-command-center-v5', async () => {
+  const prevMosToken = process.env.MISSION_OS_TOKEN;
+  const prevFleetToken = process.env.FLEET_SHARED_TOKEN;
+  delete process.env.MISSION_OS_TOKEN;
+  delete process.env.FLEET_SHARED_TOKEN;
+  try {
+    const mosRes = await invokeMissionHandler({
+      method: 'GET',
+      url: '/api/mos-state.json',
+      remoteAddress: '127.0.0.1',
+      headers: { host: '127.0.0.1:3130' },
+    });
+    assert.equal(mosRes.statusCode, 200);
+    assert.equal(mosRes.body?.identity, 'mission-agent-os');
+
+    const plansRes = await invokeMissionHandler({
+      method: 'GET',
+      url: '/api/marketing/plans',
+      remoteAddress: '127.0.0.1',
+      headers: { host: '127.0.0.1:3130' },
+    });
+    assert.equal(plansRes.statusCode, 200);
+    assert.equal(plansRes.body?.identity, 'social-command-center-v5');
+  } finally {
+    if (prevMosToken === undefined) delete process.env.MISSION_OS_TOKEN;
+    else process.env.MISSION_OS_TOKEN = prevMosToken;
+    if (prevFleetToken === undefined) delete process.env.FLEET_SHARED_TOKEN;
+    else process.env.FLEET_SHARED_TOKEN = prevFleetToken;
+  }
+});

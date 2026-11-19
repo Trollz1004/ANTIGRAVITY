@@ -4,7 +4,7 @@ Starts Mission OS (:3130) or JARVIS (:9150) from canonical repo.
 #>
 param([string]$RepoRoot='C:\ANTIGRAVITY',[int]$Port=3130,[switch]$Foreground)
 $ErrorActionPreference = 'Continue'
-if (-not (Test-Path $RepoRoot)) {
+if (-not (Test-Path (Join-Path $RepoRoot 'mission-os\server.mjs'))) {
   $RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 }
 $LogDir = Join-Path $RepoRoot 'logs'

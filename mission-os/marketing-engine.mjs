@@ -23,6 +23,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
 import { loadOrInitWheelState } from './perpetual-wheel.mjs';
 import {
@@ -47,7 +48,9 @@ import { pick } from '../ops/dateapp-marketing-engine/rotation.js';
 import { generateComments } from '../ops/dateapp-marketing-engine/comments.js';
 import { runDaily as runTagCityDaily } from '../ops/dateapp-marketing-engine/engine.js';
 
-const ROOT = 'C:/ANTIGRAVITY';
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const ROOT =
+  process.env.MISSION_OS_ROOT || (fs.existsSync('C:/ANTIGRAVITY/mission-os/server.mjs') ? 'C:/ANTIGRAVITY' : path.resolve(HERE, '..'));
 const PLANS_FILE = `${ROOT}/mission-os/marketing-plans.json`;
 const COMMENTS_FILE = `${ROOT}/mission-os/scc-comments.json`;
 const MARKETING_INBOX_DIR = `${ROOT}/ops/marketing-inbox`;
@@ -1177,7 +1180,7 @@ export function loadMarketingPlans() {
       }
     }
   } catch {}
-  fs.writeFileSync(PLANS_FILE, JSON.stringify(INITIAL_MARKETING_PLANS, null, 2), 'utf8');
+  try { fs.writeFileSync(PLANS_FILE, JSON.stringify(INITIAL_MARKETING_PLANS, null, 2), 'utf8'); } catch {}
   return INITIAL_MARKETING_PLANS;
 }
 

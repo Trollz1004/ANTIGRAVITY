@@ -25,7 +25,7 @@ param(
 $ErrorActionPreference = 'Continue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$Repo        = if ($RepoPath) { $RepoPath } elseif (Test-Path 'C:\ANTIGRAVITY') { 'C:\ANTIGRAVITY' } else { (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path }
+$Repo        = if ($RepoPath) { $RepoPath } elseif (Test-Path 'C:\ANTIGRAVITY\ops\t5500\keepalive.ps1') { 'C:\ANTIGRAVITY' } else { (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path }
 $Dir         = Join-Path $Repo 'ops\t5500'
 . (Join-Path $Repo 'ops\fleet\Get-FleetEndpoint.ps1')
 $T5500Ip     = Get-FleetEndpoint -NodeId 't5500' -SelectField 'Ip'
@@ -714,16 +714,16 @@ $Stages = @(
     @{ Key = 'obsidian'; Name = 'Obsidian vault REST :27123 (memory)'; Settle = 40
        # Desktop app: agent-windows.ps1 (interactive, at logon) opens it. Before logon this is DOWN by design.
        Probe = {
-           $obsTok = Get-FirstEnvVal @('OBSIDIAN_REST_API_KEY', 'FLEET_SHARED_TOKEN')
+           $obsTok = Get-FirstEnvVal @('OBSIDIAN_REST_API_KEY', 'OBSIDIAN_API_KEY', 'FLEET_SHARED_TOKEN')
            $obsHeaders = if ($obsTok) { @{ Authorization = ('Bearer ' + $obsTok); 'X-Fleet-Token' = $obsTok; 'X-Mission-OS-Token' = $obsTok } } else { @{} }
            $ok = Test-Cloud 'obsidian' ('http://' + $T5500Ip + ':27123/') $obsHeaders
-           if (-not $ok -and -not $obsTok) {
+           if (-not $ok) {
                $loopbackHost = '127.0.0.1'
                $ok = Test-Cloud 'obsidian-loopback' ('http://' + $loopbackHost + ':27123/') $obsHeaders
            }
            return $ok
        }
-       Heal  = { $script:CloudCache.Remove('obsidian'); Log '  Obsidian is opened by the agent-windows supervisor after logon' } },
+       Heal  = { $script:CloudCache.Remove('obsidian'); $script:CloudCache.Remove('obsidian-loopback'); Log '  Obsidian is opened by the agent-windows supervisor after logon' } },
 
     @{ Key = 'supabase'; Name = 'Supabase (memory backup)'; Settle = 0
        Probe = { $k = Get-EnvVal 'SUPABASE_SECRET_KEY'; Test-Cloud 'supabase' ((Get-EnvVal 'SUPABASE_URL') + '/rest/v1/') @{ apikey = $k; Authorization = ('Bearer ' + $k) } }

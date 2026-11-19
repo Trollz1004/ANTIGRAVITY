@@ -56,7 +56,7 @@ import { wrapStreamSafeResponse } from './stream-redact.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT =
-  process.env.MISSION_OS_ROOT || (fs.existsSync('C:/ANTIGRAVITY') ? 'C:/ANTIGRAVITY' : path.resolve(HERE, '..'));
+  process.env.MISSION_OS_ROOT || (fs.existsSync('C:/ANTIGRAVITY/mission-os/server.mjs') ? 'C:/ANTIGRAVITY' : path.resolve(HERE, '..'));
 export const T5500_IP = getNodeIp('t5500');
 export const ALIENWARE_IP = getNodeIp('alienware');
 const MISSION_OS_SVC = getService('mission-os');
@@ -1477,8 +1477,9 @@ export function createMissionHandler({
         return safeRes.end(JSON.stringify(result, null, 2));
       }
       if (u.pathname === '/api/marketing/plans' && req.method === 'GET') {
+        const plansPayload = getFullMarketingDashboardState();
         safeRes.writeHead(200, { ...sec, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
-        return safeRes.end(JSON.stringify(getFullMarketingDashboardState(), null, 2));
+        return safeRes.end(JSON.stringify(plansPayload, null, 2));
       }
       if (u.pathname === '/api/marketing/status' && req.method === 'POST') {
         const body = await readJsonBody(req);
