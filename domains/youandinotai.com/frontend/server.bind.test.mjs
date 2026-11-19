@@ -26,7 +26,7 @@ function getFreePort() {
   });
 }
 
-test('resolveFrontendBind binds 127.0.0.1 with warning when FLEET_SHARED_TOKEN is unset, fails closed on explicit LAN bind, and binds 0.0.0.0 with token', () => {
+test('resolveFrontendBind uses explicit HOST without FLEET_SHARED_TOKEN and never throws, binds 127.0.0.1 when HOST and token are unset, and binds 0.0.0.0 with token', () => {
   const warnings = [];
   const host = resolveFrontendBind(
     {},
@@ -37,17 +37,19 @@ test('resolveFrontendBind binds 127.0.0.1 with warning when FLEET_SHARED_TOKEN i
   assert.match(warnings[0], /FLEET_SHARED_TOKEN/);
   assert.doesNotMatch(warnings[0], /127\.0\.0\.1:\d+/);
 
-  assert.throws(() =>
+  assert.equal(
     resolveFrontendBind(
       { HOST: '0.0.0.0' },
       { port: 3200, bind: '0.0.0.0', warn: () => {} }
-    )
+    ),
+    '0.0.0.0'
   );
-  assert.throws(() =>
+  assert.equal(
     resolveFrontendBind(
       { HOST: '192.168.0.15' },
       { port: 3200, bind: '0.0.0.0', warn: () => {} }
-    )
+    ),
+    '192.168.0.15'
   );
   assert.equal(
     resolveFrontendBind(
