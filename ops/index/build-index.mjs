@@ -21,6 +21,14 @@ function classifyStaleCategory(filePath, base) {
   return null;
 }
 
+function escapeTableText(text) {
+  return String(text)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('|', '-');
+}
+
 function extractReadmeSummary(repoRoot, blobHash) {
   if (!blobHash) return 'no README';
   const raw = execFileSync('git', ['cat-file', '-p', blobHash], {
@@ -32,12 +40,12 @@ function extractReadmeSummary(repoRoot, blobHash) {
   for (const line of lines) {
     const headingMatch = line.match(/^\s*#{1,6}\s+(.+?)\s*#*$/);
     if (headingMatch) {
-      const cleaned = headingMatch[1].replace(/<[^>]+>/g, '').replace(/\|/g, '-').trim();
+      const cleaned = escapeTableText(headingMatch[1]).trim();
       if (cleaned) return cleaned;
     }
   }
   for (const line of lines) {
-    const cleaned = line.replace(/<[^>]+>/g, '').replace(/\|/g, '-').trim();
+    const cleaned = escapeTableText(line).trim();
     if (!cleaned || cleaned.startsWith('---') || cleaned.startsWith('![')) continue;
     const firstSentence = cleaned.split(/(?<=[.!?])\s+/)[0].trim();
     if (firstSentence) return firstSentence;

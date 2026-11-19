@@ -1,6 +1,6 @@
 # Repository Index
 
-Tracked files in HEAD: 4885 (52 at root, 4833 in 43 top-level folders).
+Tracked files in HEAD: 4888 (52 at root, 4836 in 43 top-level folders).
 
 | Folder | File Count | Size | Last Commit | Description |
 | --- | ---: | ---: | --- | --- |
@@ -29,7 +29,7 @@ Tracked files in HEAD: 4885 (52 at root, 4833 in 43 top-level folders).
 | `config` | 3 | 2.2 KB (2234 B) | 2026-10-02 | no README |
 | `content` | 93 | 259.1 KB (265332 B) | 2026-11-14 | no README |
 | `crm` | 93 | 1.16 MB (1220595 B) | 2026-11-12 | Here are your Instructions |
-| `docs` | 164 | 29.14 MB (30552747 B) | 2026-11-18 | no README |
+| `docs` | 167 | 29.24 MB (30659947 B) | 2026-11-18 | no README |
 | `domains` | 653 | 31.03 MB (32532414 B) | 2026-11-18 | Domains |
 | `frontend` | 1 | 107 B | 2026-09-17 | no README |
 | `hardware` | 2 | 2.7 KB (2789 B) | 2026-11-15 | no README |

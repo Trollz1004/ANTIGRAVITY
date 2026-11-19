@@ -18,8 +18,10 @@ test('build-index reports exactly one duplicate group in a throwaway git repo', 
 
     fs.mkdirSync(path.join(tempDir, 'alpha'), { recursive: true });
     fs.mkdirSync(path.join(tempDir, 'beta'), { recursive: true });
+    fs.mkdirSync(path.join(tempDir, 'gamma'), { recursive: true });
 
     fs.writeFileSync(path.join(tempDir, 'alpha', 'README.md'), '# Alpha Module\nAlpha description.\n', 'utf8');
+    fs.writeFileSync(path.join(tempDir, 'gamma', 'README.md'), '# Gamma <script>alert(1)</script> Module\n', 'utf8');
     fs.writeFileSync(path.join(tempDir, 'alpha', 'dup.txt'), 'identical payload\n', 'utf8');
     fs.writeFileSync(path.join(tempDir, 'beta', 'dup-copy.txt'), 'identical payload\n', 'utf8');
     fs.writeFileSync(path.join(tempDir, 'beta', 'unique.txt'), 'only one of me\n', 'utf8');
@@ -41,6 +43,8 @@ test('build-index reports exactly one duplicate group in a throwaway git repo', 
 
     assert.match(repoIndexMd, /Alpha Module/);
     assert.match(repoIndexMd, /no README/);
+    assert.doesNotMatch(repoIndexMd, /<script/);
+    assert.match(repoIndexMd, /&lt;script/);
     assert.match(staleMd, /candidates/i);
     assert.match(staleMd, /nothing was checked by running it/i);
   } finally {

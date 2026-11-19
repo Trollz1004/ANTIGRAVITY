@@ -1531,4 +1531,4 @@
 
 ## Summary
 
-Summary: files: 733 (total tracked files: 4885), groups: 324, extra copies: 409, megabytes repeated: 9.33 MB
+Summary: files: 733 (total tracked files: 4888), groups: 324, extra copies: 409, megabytes repeated: 9.33 MB
