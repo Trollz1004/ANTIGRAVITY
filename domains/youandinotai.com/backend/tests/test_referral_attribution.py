@@ -11,7 +11,7 @@ Covers:
 
 import asyncio
 import uuid
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 
 from sqlalchemy import select
 
@@ -917,3 +917,317 @@ def test_register_and_google_referral_code_alone_gives_ref_signup_source(
     assert u2 is not None
     assert u2.referral_code == "creator-google-2"
     assert u2.signup_source == "ref:creator-google-2"
+
+
+def test_signup_sources_endpoint_refuses_non_founder(
+    client, db_session_factory, monkeypatch
+):
+    """Non-founder callers and unauthenticated requests to /api/v1/metrics/signup-sources are refused."""
+    monkeypatch.setenv("SUPPORT_OPERATOR_EMAILS", "founder@youandinotai.com")
+    get_settings.cache_clear()
+
+    member_id = uuid.uuid4()
+
+    async def seed_member() -> None:
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=member_id,
+                    email="nonfounder-sources@example.com",
+                    password_hash=hash_password("password123"),
+                    display_name="Regular Member",
+                    date_of_birth=date(1993, 2, 14),
+                    adult_verified_at=datetime.now(timezone.utc),
+                    bot_shield_verified=True,
+                    member_badge="Founder",
+                )
+            )
+            await session.commit()
+
+    asyncio.run(seed_member())
+
+    try:
+        unauth_resp = client.get("/api/v1/metrics/signup-sources")
+        assert unauth_resp.status_code in (401, 403), unauth_resp.text
+
+        member_token = create_access_token(str(member_id))
+        member_resp = client.get(
+            "/api/v1/metrics/signup-sources",
+            headers={"Authorization": f"Bearer {member_token}"},
+        )
+        assert member_resp.status_code == 403, member_resp.text
+    finally:
+        get_settings.cache_clear()
+
+
+def test_signup_sources_endpoint_groups_and_counts_30d_and_all_time_without_pii(
+    client, db_session_factory, monkeypatch
+):
+    """Groups users by signup_source (empty -> 'not recorded'), counts 30d and all-time accounts/verified/paid, sorts by 30d then all-time, and leaks no PII."""
+    monkeypatch.setenv("SUPPORT_OPERATOR_EMAILS", "founder@youandinotai.com")
+    get_settings.cache_clear()
+
+    now = datetime.now(timezone.utc)
+    recent = now - timedelta(days=5)
+    old = now - timedelta(days=45)
+
+    founder_id = uuid.uuid4()
+    u_maya_recent_paid = uuid.uuid4()
+    u_maya_recent_verified = uuid.uuid4()
+    u_maya_old_paid = uuid.uuid4()
+    u_utm_recent_unverified = uuid.uuid4()
+    u_legacy_old_paid = uuid.uuid4()
+    u_legacy_old_unverified = uuid.uuid4()
+    u_legacy_recent_verified = uuid.uuid4()
+
+    async def seed_data() -> None:
+        async with db_session_factory() as session:
+            session.add_all(
+                [
+                    User(
+                        id=founder_id,
+                        email="founder@youandinotai.com",
+                        password_hash=hash_password("password123"),
+                        display_name="Josh Founder",
+                        date_of_birth=date(1985, 1, 1),
+                        adult_verified_at=old,
+                        created_at=old,
+                        bot_shield_verified=True,
+                        signup_source=None,
+                    ),
+                    User(
+                        id=u_maya_recent_paid,
+                        email="maya1@example.com",
+                        password_hash=hash_password("password123"),
+                        display_name="Maya One",
+                        date_of_birth=date(1991, 1, 1),
+                        adult_verified_at=recent,
+                        created_at=recent,
+                        bot_shield_verified=True,
+                        referral_code="maya-23",
+                        signup_source="ref:maya-23",
+                    ),
+                    User(
+                        id=u_maya_recent_verified,
+                        email="maya2@example.com",
+                        password_hash=hash_password("password123"),
+                        display_name="Maya Two",
+                        date_of_birth=date(1992, 2, 2),
+                        adult_verified_at=recent,
+                        created_at=recent,
+                        bot_shield_verified=True,
+                        referral_code="maya-23",
+                        signup_source="ref:maya-23",
+                    ),
+                    User(
+                        id=u_maya_old_paid,
+                        email="maya3@example.com",
+                        password_hash=hash_password("password123"),
+                        display_name="Maya Three",
+                        date_of_birth=date(1993, 3, 3),
+                        adult_verified_at=old,
+                        created_at=old,
+                        bot_shield_verified=True,
+                        referral_code="maya-23",
+                        signup_source="ref:maya-23",
+                    ),
+                    User(
+                        id=u_utm_recent_unverified,
+                        email="utm1@example.com",
+                        password_hash=hash_password("password123"),
+                        display_name="Utm One",
+                        date_of_birth=date(1994, 4, 4),
+                        adult_verified_at=recent,
+                        created_at=recent,
+                        bot_shield_verified=False,
+                        signup_source="utm:x/social/launch",
+                    ),
+                    User(
+                        id=u_legacy_old_paid,
+                        email="legacy1@example.com",
+                        password_hash=hash_password("password123"),
+                        display_name="Legacy One",
+                        date_of_birth=date(1990, 5, 5),
+                        adult_verified_at=old,
+                        created_at=old,
+                        bot_shield_verified=True,
+                        signup_source=None,
+                    ),
+                    User(
+                        id=u_legacy_old_unverified,
+                        email="legacy2@example.com",
+                        password_hash=hash_password("password123"),
+                        display_name="Legacy Two",
+                        date_of_birth=date(1990, 6, 6),
+                        adult_verified_at=old,
+                        created_at=old,
+                        bot_shield_verified=False,
+                        signup_source="   ",
+                    ),
+                    User(
+                        id=u_legacy_recent_verified,
+                        email="legacy3@example.com",
+                        password_hash=hash_password("password123"),
+                        display_name="Legacy Three",
+                        date_of_birth=date(1990, 7, 7),
+                        adult_verified_at=recent,
+                        created_at=recent,
+                        bot_shield_verified=True,
+                        signup_source=None,
+                    ),
+                ]
+            )
+            await session.flush()
+
+            session.add_all(
+                [
+                    RevenueAllocation(
+                        user_id=u_maya_recent_paid,
+                        source_event_id="evt_src_maya_1a",
+                        square_payment_id="pay_src_maya_1a",
+                        payment_tier="bot_shield",
+                        gross_amount_cents=100,
+                        reserve_amount_cents=0,
+                        operating_amount_cents=100,
+                        status="reserved",
+                        payer_type="customer",
+                    ),
+                    RevenueAllocation(
+                        user_id=u_maya_recent_paid,
+                        source_event_id="evt_src_maya_1b",
+                        square_payment_id="pay_src_maya_1b",
+                        payment_tier="founding_member",
+                        gross_amount_cents=1499,
+                        reserve_amount_cents=0,
+                        operating_amount_cents=1499,
+                        status="reserved",
+                        payer_type="customer",
+                    ),
+                    RevenueAllocation(
+                        user_id=u_maya_recent_verified,
+                        source_event_id="evt_src_maya_2_refunded",
+                        square_payment_id="pay_src_maya_2_refunded",
+                        payment_tier="bot_shield",
+                        gross_amount_cents=100,
+                        reserve_amount_cents=0,
+                        operating_amount_cents=100,
+                        status="refunded",
+                        payer_type="customer",
+                    ),
+                    RevenueAllocation(
+                        user_id=u_maya_recent_verified,
+                        source_event_id="evt_src_maya_2_test",
+                        square_payment_id="pay_src_maya_2_test",
+                        payment_tier="bot_shield",
+                        gross_amount_cents=100,
+                        reserve_amount_cents=0,
+                        operating_amount_cents=100,
+                        status="reserved",
+                        payer_type="founder_test",
+                    ),
+                    RevenueAllocation(
+                        user_id=u_maya_old_paid,
+                        source_event_id="evt_src_maya_3",
+                        square_payment_id="pay_src_maya_3",
+                        payment_tier="bot_shield",
+                        gross_amount_cents=100,
+                        reserve_amount_cents=0,
+                        operating_amount_cents=100,
+                        status="reserved",
+                        payer_type="customer",
+                    ),
+                    RevenueAllocation(
+                        user_id=u_legacy_old_paid,
+                        source_event_id="evt_src_legacy_1",
+                        square_payment_id="pay_src_legacy_1",
+                        payment_tier="bot_shield",
+                        gross_amount_cents=100,
+                        reserve_amount_cents=0,
+                        operating_amount_cents=100,
+                        status="reserved",
+                        payer_type="customer",
+                    ),
+                ]
+            )
+            await session.commit()
+
+    asyncio.run(seed_data())
+
+    try:
+        founder_token = create_access_token(str(founder_id))
+        resp = client.get(
+            "/api/v1/metrics/signup-sources",
+            headers={"Authorization": f"Bearer {founder_token}"},
+        )
+        assert resp.status_code == 200, resp.text
+        body = resp.json()
+
+        items = body["items"]
+        assert [row["signup_source"] for row in items] == [
+            "ref:maya-23",
+            "not recorded",
+            "utm:x/social/launch",
+        ]
+
+        assert items[0] == {
+            "signup_source": "ref:maya-23",
+            "accounts_last_30_days": 2,
+            "verified_last_30_days": 2,
+            "paid_last_30_days": 1,
+            "accounts_all_time": 3,
+            "verified_all_time": 3,
+            "paid_all_time": 2,
+        }
+        assert items[1] == {
+            "signup_source": "not recorded",
+            "accounts_last_30_days": 1,
+            "verified_last_30_days": 1,
+            "paid_last_30_days": 0,
+            "accounts_all_time": 4,
+            "verified_all_time": 3,
+            "paid_all_time": 1,
+        }
+        assert items[2] == {
+            "signup_source": "utm:x/social/launch",
+            "accounts_last_30_days": 1,
+            "verified_last_30_days": 0,
+            "paid_last_30_days": 0,
+            "accounts_all_time": 1,
+            "verified_all_time": 0,
+            "paid_all_time": 0,
+        }
+
+        assert body["totals"] == {
+            "sources_count": 3,
+            "accounts_last_30_days": 4,
+            "verified_last_30_days": 3,
+            "paid_last_30_days": 1,
+            "accounts_all_time": 8,
+            "verified_all_time": 6,
+            "paid_all_time": 3,
+        }
+
+        raw = resp.text
+        for uid in (
+            founder_id,
+            u_maya_recent_paid,
+            u_maya_recent_verified,
+            u_maya_old_paid,
+            u_utm_recent_unverified,
+            u_legacy_old_paid,
+            u_legacy_old_unverified,
+            u_legacy_recent_verified,
+        ):
+            assert str(uid) not in raw
+        for forbidden in (
+            "email",
+            "display_name",
+            "user_id",
+            "@example.com",
+            "founder@youandinotai.com",
+            "Maya One",
+            "Josh Founder",
+        ):
+            assert forbidden not in raw
+    finally:
+        get_settings.cache_clear()
