@@ -95,8 +95,9 @@ function resolveCandidateSource(
     normalizeRef(params.get('ref')) ?? extractShortLinkSlug(pathname);
   if (partnerSlug) {
     return (
-      normalizeSignupSource(`ref:${partnerSlug}`.slice(0, MAX_SIGNUP_SOURCE_LENGTH)) ??
-      'direct'
+      normalizeSignupSource(
+        `ref:${partnerSlug}`.slice(0, MAX_SIGNUP_SOURCE_LENGTH)
+      ) ?? 'direct'
     );
   }
 

@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { api } from './api';
@@ -54,7 +56,8 @@ describe('captureSignupSource', () => {
     clearSignupSource();
     expect(
       captureSignupSource({
-        search: '?utm_source= TikTok &utm_medium=Social&utm_campaign=Spring_2026',
+        search:
+          '?utm_source= TikTok &utm_medium=Social&utm_campaign=Spring_2026',
         pathname: '/',
         referrer: 'https://www.tiktok.com/@creator',
       })
@@ -66,7 +69,8 @@ describe('captureSignupSource', () => {
       captureSignupSource({
         search: '',
         pathname: '/register',
-        referrer: 'https://www.Reddit.com/r/florida/comments/abc?search=private#top',
+        referrer:
+          'https://www.Reddit.com/r/florida/comments/abc?search=private#top',
       })
     ).toBe('site:reddit.com');
     expect(getStoredSignupSource()).toBe('site:reddit.com');
@@ -167,7 +171,8 @@ describe('captureSignupSource', () => {
   it('cleans or drops odd characters and never stores an IP address, full path, or query string', () => {
     expect(
       captureSignupSource({
-        search: '?utm_source=bad<>!source&utm_medium=paid%20ads&utm_campaign=c$1',
+        search:
+          '?utm_source=bad<>!source&utm_medium=paid%20ads&utm_campaign=c$1',
         pathname: '/',
         referrer: '',
       })
@@ -266,10 +271,6 @@ describe('captureSignupSource', () => {
     expect(getStoredSignupSource()).toBeNull();
   });
 });
-
-
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
 
 describe('privacy policy disclosure for signup_source', () => {
   const expectedSentence =
