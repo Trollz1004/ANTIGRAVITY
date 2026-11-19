@@ -31,6 +31,7 @@ from app.error_responses import (
 from app.models import Profile, User
 from app.rate_limit_redis import enforce_route_rate_limit
 from app.schemas import (
+    normalize_signup_source,
     AuthBetaAccessRequest,
     AuthLoginRequest,
     AuthRefreshRequest,
@@ -69,6 +70,17 @@ def _beta_password_hash(password_seed: str, secret: str, code: str) -> str:
         return hashlib.sha256(
             f"beta-stored:{secret}:{_normalize_beta_code(code)}:{password_seed}".encode()
         ).hexdigest()
+
+
+def _resolve_signup_source(
+    signup_source: str | None, referral_code: str | None
+) -> str | None:
+    if signup_source is not None:
+        return signup_source
+    cleaned_ref = (referral_code or "").strip()
+    if cleaned_ref:
+        return normalize_signup_source(f"ref:{cleaned_ref}")
+    return None
 
 
 @router.post(
@@ -144,6 +156,7 @@ async def register(
         date_of_birth=payload.date_of_birth,
         adult_verified_at=datetime.now(timezone.utc),
         referral_code=payload.referral_code,
+        signup_source=_resolve_signup_source(payload.signup_source, payload.referral_code),
     )
     db.add(user)
     await db.commit()
@@ -268,6 +281,7 @@ async def google_login(
             date_of_birth=payload.date_of_birth,
             adult_verified_at=datetime.now(timezone.utc),
             referral_code=referral_code,
+            signup_source=_resolve_signup_source(payload.signup_source, referral_code),
         )
         db.add(user)
         await db.commit()

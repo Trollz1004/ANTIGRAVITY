@@ -1,12 +1,25 @@
 """Pydantic schemas for request and response payloads."""
 
+import re
 import uuid
 from datetime import date, datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 # ── Auth ──
+
+
+_SIGNUP_SOURCE_RE = re.compile(r"^[a-z0-9._:/-]{1,128}$")
+
+
+def normalize_signup_source(value: object) -> str | None:
+    if not isinstance(value, str):
+        return None
+    cleaned = value.strip().lower()
+    if not cleaned or not _SIGNUP_SOURCE_RE.fullmatch(cleaned):
+        return None
+    return cleaned
 
 
 class AuthRegisterRequest(BaseModel):
@@ -20,6 +33,12 @@ class AuthRegisterRequest(BaseModel):
     # Optional referral code (the register route already reads it; the field
     # was missing from the schema, which made every registration raise).
     referral_code: str | None = Field(default=None, max_length=64)
+    signup_source: str | None = Field(default=None)
+
+    @field_validator("signup_source", mode="before")
+    @classmethod
+    def _validate_signup_source(cls, value: object) -> str | None:
+        return normalize_signup_source(value)
 
 
 class AuthLoginRequest(BaseModel):
@@ -47,6 +66,12 @@ class GoogleLoginRequest(BaseModel):
     id_token: str
     date_of_birth: date | None = None
     referral_code: str | None = Field(default=None, max_length=64)
+    signup_source: str | None = Field(default=None)
+
+    @field_validator("signup_source", mode="before")
+    @classmethod
+    def _validate_signup_source(cls, value: object) -> str | None:
+        return normalize_signup_source(value)
 
 
 class UserMeResponse(BaseModel):
