@@ -94,6 +94,7 @@ _handoff-staging-*/_deploy/node_modules/
 
 # Service runtime data
 services/mission-control-api/data/
+mission-control/crosslisting-os/data/
 infra/paperclip-worker/.wrangler/
 apps/paperweight/data/
 
