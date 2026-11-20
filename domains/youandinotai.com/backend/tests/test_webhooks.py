@@ -1359,6 +1359,288 @@ def test_refund_of_membership_payment_leaves_badge_alone(
     assert paid is True
 
 
+def _seed_pending_bot_shield_member(
+    db_session_factory,
+    *,
+    email: str,
+) -> tuple[uuid.UUID, uuid.UUID]:
+    import asyncio
+
+    user_id = uuid.uuid4()
+    liveness_event_id = uuid.uuid4()
+
+    async def _seed() -> None:
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=user_id,
+                    email=email,
+                    password_hash="hashed",
+                    display_name="Bot Shield Candidate",
+                    bot_shield_verified=False,
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            session.add(
+                Profile(
+                    id=uuid.uuid4(),
+                    user_id=user_id,
+                    bio="Candidate profile",
+                    verified=False,
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            session.add(
+                VerificationEvent(
+                    id=liveness_event_id,
+                    user_id=user_id,
+                    challenge_type="liveness",
+                    status="passed",
+                    amount_cents=100,
+                )
+            )
+            await session.commit()
+
+    asyncio.run(_seed())
+    return user_id, liveness_event_id
+
+
+def test_completed_bot_shield_payment_with_fingerprint_stores_card_fingerprint(
+    client,
+    db_session_factory,
+):
+    import asyncio
+
+    user_id, liveness_event_id = _seed_pending_bot_shield_member(
+        db_session_factory,
+        email="card-fp-present@example.com",
+    )
+    checkout_ref = build_checkout_reference(
+        user_id=user_id,
+        event_id=liveness_event_id,
+        tier="bot_shield",
+        secret="test-secret-that-is-at-least-32-characters-long-for-security",
+    )
+
+    fingerprint_val = "sq-1-fp-bot-shield-card-987654321"
+    payload = make_square_payment_event(
+        event_id="evt_bot_shield_with_card_fp_1",
+        amount_cents=100,
+        buyer_email="card-fp-present@example.com",
+        note=f"Bot-Shield Verification agref:{checkout_ref}",
+        payment_status="COMPLETED",
+    )
+    payload["data"]["object"]["payment"]["card_details"] = {
+        "card": {
+            "card_brand": "VISA",
+            "last_4": "4662",
+            "cardholder_name": "JANE MEMBER",
+            "fingerprint": fingerprint_val,
+        }
+    }
+
+    raw_body = json.dumps(payload, separators=(",", ":"))
+    signature = generate_square_signature(
+        raw_body.encode("utf-8"),
+        "test-square-signature",
+        "http://testserver/api/v1/webhooks/square-payment",
+    )
+
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=raw_body,
+    )
+    assert response.status_code == 200, response.text
+
+    async def _fetch_state():
+        async with db_session_factory() as session:
+            user = await session.get(User, user_id)
+            profile = await session.scalar(
+                select(Profile).where(Profile.user_id == user_id)
+            )
+            payment_event = await session.scalar(
+                select(VerificationEvent)
+                .where(VerificationEvent.user_id == user_id)
+                .where(VerificationEvent.challenge_type == "payment")
+            )
+            return user, profile, payment_event
+
+    user, profile, payment_event = asyncio.run(_fetch_state())
+    assert user is not None
+    assert user.bot_shield_verified is True
+    assert profile is not None
+    assert profile.verified is True
+    assert payment_event is not None
+    assert payment_event.status == "completed"
+    assert payment_event.card_fingerprint == fingerprint_val
+    event_columns = set(VerificationEvent.__table__.columns.keys())
+    assert "last_4" not in event_columns
+    assert "card_number" not in event_columns
+    assert "cardholder_name" not in event_columns
+
+
+def test_completed_bot_shield_payment_without_fingerprint_stores_nothing_and_checks_member(
+    client,
+    db_session_factory,
+):
+    import asyncio
+
+    user_id, liveness_event_id = _seed_pending_bot_shield_member(
+        db_session_factory,
+        email="card-fp-absent@example.com",
+    )
+    checkout_ref = build_checkout_reference(
+        user_id=user_id,
+        event_id=liveness_event_id,
+        tier="bot_shield",
+        secret="test-secret-that-is-at-least-32-characters-long-for-security",
+    )
+
+    payload = make_square_payment_event(
+        event_id="evt_bot_shield_without_card_fp_1",
+        amount_cents=100,
+        buyer_email="card-fp-absent@example.com",
+        note=f"Bot-Shield Verification agref:{checkout_ref}",
+        payment_status="COMPLETED",
+    )
+
+    raw_body = json.dumps(payload, separators=(",", ":"))
+    signature = generate_square_signature(
+        raw_body.encode("utf-8"),
+        "test-square-signature",
+        "http://testserver/api/v1/webhooks/square-payment",
+    )
+
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=raw_body,
+    )
+    assert response.status_code == 200, response.text
+
+    async def _fetch_state():
+        async with db_session_factory() as session:
+            user = await session.get(User, user_id)
+            profile = await session.scalar(
+                select(Profile).where(Profile.user_id == user_id)
+            )
+            payment_event = await session.scalar(
+                select(VerificationEvent)
+                .where(VerificationEvent.user_id == user_id)
+                .where(VerificationEvent.challenge_type == "payment")
+            )
+            return user, profile, payment_event
+
+    user, profile, payment_event = asyncio.run(_fetch_state())
+    assert user is not None
+    assert user.bot_shield_verified is True
+    assert profile is not None
+    assert profile.verified is True
+    assert payment_event is not None
+    assert payment_event.status == "completed"
+    assert payment_event.card_fingerprint is None
+
+
+def test_card_fingerprint_appears_in_no_api_answer_and_no_log_line(
+    client,
+    db_session_factory,
+    caplog,
+):
+    import asyncio
+    import logging
+
+    from app.auth import create_access_token
+
+    user_id, liveness_event_id = _seed_pending_bot_shield_member(
+        db_session_factory,
+        email="card-fp-noleak@example.com",
+    )
+    checkout_ref = build_checkout_reference(
+        user_id=user_id,
+        event_id=liveness_event_id,
+        tier="bot_shield",
+        secret="test-secret-that-is-at-least-32-characters-long-for-security",
+    )
+
+    fingerprint_val = "sq-1-fp-secret-never-logged-or-returned-555"
+    payload = make_square_payment_event(
+        event_id="evt_bot_shield_noleak_card_fp_1",
+        amount_cents=100,
+        buyer_email="card-fp-noleak@example.com",
+        note=f"Bot-Shield Verification agref:{checkout_ref}",
+        payment_status="COMPLETED",
+    )
+    payload["data"]["object"]["payment"]["card_details"] = {
+        "card": {
+            "card_brand": "MASTERCARD",
+            "fingerprint": fingerprint_val,
+        }
+    }
+
+    raw_body = json.dumps(payload, separators=(",", ":"))
+    signature = generate_square_signature(
+        raw_body.encode("utf-8"),
+        "test-square-signature",
+        "http://testserver/api/v1/webhooks/square-payment",
+    )
+
+    with caplog.at_level(logging.DEBUG):
+        webhook_resp = client.post(
+            "/api/v1/webhooks/square-payment",
+            headers={
+                "x-square-hmacsha256-signature": signature,
+                "Content-Type": "application/json",
+            },
+            content=raw_body,
+        )
+        assert webhook_resp.status_code == 200, webhook_resp.text
+
+        token = create_access_token(str(user_id))
+        auth_headers = {"Authorization": f"Bearer {token}"}
+
+        api_responses = [
+            webhook_resp,
+            client.get("/api/v1/verify/status", headers=auth_headers),
+            client.post("/api/v1/verify/confirm", headers=auth_headers),
+            client.get("/api/v1/auth/me", headers=auth_headers),
+            client.get("/api/v1/profiles/me", headers=auth_headers),
+            client.get("/api/v1/privacy/my-data", headers=auth_headers),
+            client.get("/api/v1/health"),
+            client.get("/api/v1/health/webhooks"),
+            client.get("/api/v1/health/allocations"),
+        ]
+
+    async def _fetch_payment_event():
+        async with db_session_factory() as session:
+            return await session.scalar(
+                select(VerificationEvent)
+                .where(VerificationEvent.user_id == user_id)
+                .where(VerificationEvent.challenge_type == "payment")
+            )
+
+    payment_event = asyncio.run(_fetch_payment_event())
+    assert payment_event is not None
+    assert payment_event.card_fingerprint == fingerprint_val
+
+    for api_resp in api_responses:
+        assert api_resp.status_code == 200, api_resp.text
+        assert fingerprint_val not in api_resp.text
+        assert "card_fingerprint" not in api_resp.text
+
+    assert fingerprint_val not in caplog.text
+    for record in caplog.records:
+        assert fingerprint_val not in record.getMessage()
+
+
 class TestNoStripeReferences:
     """Ensure Stripe has been fully removed from the codebase."""
 
