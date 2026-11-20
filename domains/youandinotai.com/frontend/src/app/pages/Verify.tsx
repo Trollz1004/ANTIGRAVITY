@@ -20,6 +20,7 @@ const PAYMENT_POLL_DURATION_MS = 60000;
 const PAYMENT_POLL_MAX_RETRIES = Math.floor(
   PAYMENT_POLL_DURATION_MS / PAYMENT_POLL_INTERVAL_MS
 );
+const CHALLENGE_MIN_SOLVE_MS = 3000;
 
 function isPaymentRequiredError(err: unknown): boolean {
   if (err instanceof ApiError && err.status === 402) {
@@ -82,9 +83,24 @@ export function Verify() {
   const [syncMessage, setSyncMessage] = useState<string | null>(() =>
     hasPaymentSuccessParam(location.search) ? PAYMENT_WAITING_MESSAGE : null
   );
+  const [canSubmitChallenge, setCanSubmitChallenge] = useState(false);
+  const [challengeError, setChallengeError] = useState<string | null>(null);
   const mountedRef = useRef(true);
   const pollTimerRef = useRef<number | null>(null);
   const pollRunIdRef = useRef(0);
+  const challengeDelayTimerRef = useRef<number | null>(null);
+  const challengeExpiryTimerRef = useRef<number | null>(null);
+
+  const clearChallengeTimers = () => {
+    if (challengeDelayTimerRef.current !== null) {
+      window.clearTimeout(challengeDelayTimerRef.current);
+      challengeDelayTimerRef.current = null;
+    }
+    if (challengeExpiryTimerRef.current !== null) {
+      window.clearTimeout(challengeExpiryTimerRef.current);
+      challengeExpiryTimerRef.current = null;
+    }
+  };
 
   const stopPaymentPolling = () => {
     pollRunIdRef.current += 1;
@@ -215,35 +231,81 @@ export function Verify() {
     return () => {
       mountedRef.current = false;
       stopPaymentPolling();
+      clearChallengeTimers();
     };
   }, []);
 
   const startChallenge = async () => {
+    clearChallengeTimers();
+    setCanSubmitChallenge(false);
+    setChallengeError(null);
     setResult(null);
     setAnswer('');
     try {
       const data = await api.post<ChallengeData>('/verify/challenge');
+      if (!mountedRef.current) return;
       setChallenge(data);
+      challengeDelayTimerRef.current = window.setTimeout(() => {
+        challengeDelayTimerRef.current = null;
+        if (mountedRef.current) {
+          setCanSubmitChallenge(true);
+        }
+      }, CHALLENGE_MIN_SOLVE_MS);
+
+      const issuedMs = Date.parse(data.issued_at);
+      const expiresMs = Date.parse(data.expires_at);
+      if (Number.isFinite(expiresMs)) {
+        const nowMs = Date.now();
+        const ttlMs =
+          Number.isFinite(issuedMs) && Math.abs(nowMs - issuedMs) >= 3600000
+            ? Math.max(0, expiresMs - issuedMs)
+            : Math.max(0, expiresMs - nowMs);
+        challengeExpiryTimerRef.current = window.setTimeout(() => {
+          challengeExpiryTimerRef.current = null;
+          if (mountedRef.current) {
+            clearChallengeTimers();
+            setCanSubmitChallenge(false);
+            setChallenge(null);
+            setAnswer('');
+            setChallengeError(
+              'Challenge expired. Request a new question to continue.'
+            );
+          }
+        }, ttlMs);
+      }
     } catch (err: any) {
-      alert(err.message || 'Failed to create challenge');
+      if (!mountedRef.current) return;
+      setChallenge(null);
+      setChallengeError(err?.message || 'Failed to create challenge');
     }
   };
 
   const submitAnswer = async () => {
-    if (!challenge || !answer.trim()) return;
+    if (!challenge || !answer.trim() || !canSubmitChallenge) return;
     setSubmitting(true);
+    setChallengeError(null);
     try {
       const data = await api.post<ChallengeResult>('/verify/submit', {
         challenge_id: challenge.challenge_id,
         answer: answer.trim(),
       });
+      if (!mountedRef.current) return;
+      clearChallengeTimers();
+      setCanSubmitChallenge(false);
       setResult(data);
       setChallenge(null);
       await refreshVerificationStatus();
     } catch (err: any) {
-      alert(err.message || 'Submission failed');
+      if (!mountedRef.current) return;
+      clearChallengeTimers();
+      setCanSubmitChallenge(false);
+      setChallenge(null);
+      setAnswer('');
+      setChallengeError(err?.message || 'Submission failed');
     } finally {
-      setSubmitting(false);
+      if (mountedRef.current) {
+        setSubmitting(false);
+      }
     }
   };
 
@@ -285,20 +347,203 @@ export function Verify() {
                   {status?.trust_score ?? 0}
                 </p>
               </div>
-              {status && <TrustScoreRing score={status.trust_score} />}
+              {status && <TrustScoreRing score={status.trust_score ?? 0} />}
             </div>
           </div>
         </div>
 
         <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-          <section className="glass-strong rounded-xl p-6 md:p-8">
+          <section className="space-y-6 xl:order-2">
+            {status?.verified && (
+              <div className="glass-strong rounded-xl p-6 md:p-8">
+                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl border border-[#3A3F45] bg-[#1A1E25] text-[#FFD21E]">
+                  <CheckCircle size={28} />
+                </div>
+                <div className="app-kicker mb-3">Verified</div>
+                <h2 className="app-title">Badge active.</h2>
+                <p className="app-subtitle mt-4">
+                  Your{' '}
+                  {status.tier === 'platinum'
+                    ? 'Founding Member'
+                    : 'Verified Human'}{' '}
+                  badge is live on the account.
+                </p>
+              </div>
+            )}
+
+            {!status?.verified && challenge && !result && (
+              <div className="glass-strong rounded-xl p-6 md:p-8">
+                <div className="app-panel-title mb-4 flex items-center gap-2">
+                  <Zap size={16} className="text-[#FFD21E]" />
+                  Timed question
+                </div>
+                <p className="mb-4 font-display text-2xl font-bold tracking-tight text-[#F4F1EA]">
+                  {challenge.question}
+                </p>
+                <div className="flex flex-col gap-3 md:flex-row">
+                  <input
+                    type="text"
+                    value={answer}
+                    onChange={e => setAnswer(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && void submitAnswer()}
+                    placeholder="Your answer"
+                    autoFocus
+                    className="app-input input-glow flex-1 text-center text-lg font-bold"
+                  />
+                  <button
+                    onClick={() => void submitAnswer()}
+                    disabled={
+                      submitting || !answer.trim() || !canSubmitChallenge
+                    }
+                    className="app-button-accent px-6 py-4 disabled:opacity-60"
+                  >
+                    {submitting ? 'Submitting...' : 'Submit'}
+                  </button>
+                </div>
+                <p className="mt-3 text-sm font-medium text-[#C9CBCE]">
+                  Submit stays off for three seconds because the server refuses
+                  faster answers.
+                </p>
+              </div>
+            )}
+
+            {result && (
+              <div className="glass-strong rounded-xl p-6 md:p-8">
+                <div className="mb-4 flex items-center gap-3">
+                  {result.passed ? (
+                    <CheckCircle size={26} className="text-[#3DDC97]" />
+                  ) : (
+                    <XCircle size={26} className="text-[#FF6B6B]" />
+                  )}
+                  <div className="app-panel-title">
+                    {result.passed ? 'Challenge passed' : 'Challenge failed'}
+                  </div>
+                </div>
+                <p className="text-base font-medium text-[#C9CBCE]">
+                  {result.message}
+                </p>
+
+                {result.passed &&
+                  !status?.verified &&
+                  (result.checkout_url || awaitingPayment) && (
+                    <div className="mt-6 space-y-3">
+                      {result.checkout_url && (
+                        <a
+                          href={result.checkout_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="app-button-accent w-full px-6 py-4 no-underline"
+                        >
+                          Pay $1 Bot-Shield <ExternalLink size={16} />
+                        </a>
+                      )}
+                      <button
+                        onClick={() => void checkVerificationAfterPayment()}
+                        disabled={syncingPayment}
+                        className="app-button-outline w-full px-6 py-4 disabled:opacity-60"
+                      >
+                        I paid, check my badge
+                      </button>
+                    </div>
+                  )}
+
+                {!result.passed && (
+                  <button
+                    onClick={() => void startChallenge()}
+                    className="app-button-dark mt-6 px-6 py-4"
+                  >
+                    New question
+                  </button>
+                )}
+
+                {syncMessage && (
+                  <p className="mt-4 text-sm font-medium text-[#C9CBCE]">
+                    {syncMessage}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {!status?.verified && !challenge && !result && challengeError && (
+              <div className="glass-strong rounded-xl p-6 md:p-8">
+                <div className="mb-4 flex items-center gap-3">
+                  <XCircle size={26} className="text-[#FF6B6B]" />
+                  <div className="app-panel-title">Question unavailable</div>
+                </div>
+                <p
+                  role="alert"
+                  className="text-base font-medium text-[#C9CBCE]"
+                >
+                  {challengeError}
+                </p>
+                <button
+                  onClick={() => void startChallenge()}
+                  className="app-button-dark mt-6 px-6 py-4"
+                >
+                  New question
+                </button>
+              </div>
+            )}
+
+            {!status?.verified &&
+              !challenge &&
+              !result &&
+              !challengeError &&
+              awaitingPayment && (
+                <div className="glass-strong rounded-xl p-6 md:p-8">
+                  <div className="mb-4 flex items-center gap-3">
+                    <ShieldCheck size={26} className="text-[#FFD21E]" />
+                    <div className="app-panel-title">Payment confirmation</div>
+                  </div>
+                  <p className="text-base font-medium text-[#C9CBCE]">
+                    {syncMessage || PAYMENT_WAITING_MESSAGE}
+                  </p>
+                  <div className="mt-6">
+                    <button
+                      onClick={() => void checkVerificationAfterPayment()}
+                      disabled={syncingPayment}
+                      className="app-button-outline w-full px-6 py-4 disabled:opacity-60"
+                    >
+                      I paid, check my badge
+                    </button>
+                  </div>
+                </div>
+              )}
+
+            {!status?.verified &&
+              !challenge &&
+              !result &&
+              !challengeError &&
+              !awaitingPayment && (
+                <div className="glass-strong rounded-xl p-6 md:p-8">
+                  <div className="app-kicker mb-3">Start</div>
+                  <h2 className="app-title">Ready for badge activation?</h2>
+                  <p className="app-subtitle mt-4">
+                    Start the short human check now. When you answer the timed
+                    question, the page will hand you into the $1 Square
+                    checkout.
+                  </p>
+                  <button
+                    onClick={() => void startChallenge()}
+                    className="app-button-accent mt-6 px-6 py-4"
+                  >
+                    Start Verification <ArrowRight size={18} />
+                  </button>
+                </div>
+              )}
+          </section>
+
+          <section className="glass-strong rounded-xl p-6 md:p-8 xl:order-1">
             <div className="app-panel-title mb-4">Verification summary</div>
             <div className="space-y-4 text-sm font-medium text-[#C9CBCE]">
               <div className="flex items-center justify-between gap-3 border-b border-[#3A3F45] pb-3">
                 <span>Verification tier</span>
                 <div className="flex items-center gap-2">
-                  {status && <VerifiedBadge tier={status.tier} size="sm" />}
-                  {status?.tier === 'unverified' && (
+                  {status &&
+                    (status.tier === 'gold' || status.tier === 'platinum') && (
+                      <VerifiedBadge tier={status.tier} size="sm" />
+                    )}
+                  {(!status?.tier || status.tier === 'unverified') && (
                     <span className="font-bold text-[#F4F1EA]">
                       Not verified
                     </span>
@@ -346,153 +591,6 @@ export function Verify() {
                 Google Pay on supported devices and browsers.
               </p>
             </div>
-          </section>
-
-          <section className="space-y-6">
-            {status?.verified && (
-              <div className="glass-strong rounded-xl p-6 md:p-8">
-                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl border border-[#3A3F45] bg-[#1A1E25] text-[#FFD21E]">
-                  <CheckCircle size={28} />
-                </div>
-                <div className="app-kicker mb-3">Verified</div>
-                <h2 className="app-title">Badge active.</h2>
-                <p className="app-subtitle mt-4">
-                  Your{' '}
-                  {status.tier === 'platinum'
-                    ? 'Founding Member'
-                    : 'Verified Human'}{' '}
-                  badge is live on the account.
-                </p>
-              </div>
-            )}
-
-            {!status?.verified && challenge && !result && (
-              <div className="glass-strong rounded-xl p-6 md:p-8">
-                <div className="app-panel-title mb-4 flex items-center gap-2">
-                  <Zap size={16} className="text-[#FFD21E]" />
-                  Timed question
-                </div>
-                <p className="mb-4 font-display text-2xl font-bold tracking-tight text-[#F4F1EA]">
-                  {challenge.question}
-                </p>
-                <div className="flex flex-col gap-3 md:flex-row">
-                  <input
-                    type="text"
-                    value={answer}
-                    onChange={e => setAnswer(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && submitAnswer()}
-                    placeholder="Your answer"
-                    autoFocus
-                    className="app-input input-glow flex-1 text-center text-lg font-bold"
-                  />
-                  <button
-                    onClick={submitAnswer}
-                    disabled={submitting || !answer.trim()}
-                    className="app-button-accent px-6 py-4 disabled:opacity-60"
-                  >
-                    {submitting ? 'Submitting...' : 'Submit'}
-                  </button>
-                </div>
-                <p className="mt-3 text-sm font-medium text-[#C9CBCE]">
-                  Take your time and enter the exact response shown above.
-                </p>
-              </div>
-            )}
-
-            {result && (
-              <div className="glass-strong rounded-xl p-6 md:p-8">
-                <div className="mb-4 flex items-center gap-3">
-                  {result.passed ? (
-                    <CheckCircle size={26} className="text-[#3DDC97]" />
-                  ) : (
-                    <XCircle size={26} className="text-[#FF6B6B]" />
-                  )}
-                  <div className="app-panel-title">
-                    {result.passed ? 'Challenge passed' : 'Challenge failed'}
-                  </div>
-                </div>
-                <p className="text-base font-medium text-[#C9CBCE]">
-                  {result.message}
-                </p>
-
-                {result.passed &&
-                  !status?.verified &&
-                  (result.checkout_url || awaitingPayment) && (
-                    <div className="mt-6 space-y-3">
-                      {result.checkout_url && (
-                        <a
-                          href={result.checkout_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="app-button-accent w-full px-6 py-4 no-underline"
-                        >
-                          Pay $1 Bot-Shield <ExternalLink size={16} />
-                        </a>
-                      )}
-                      <button
-                        onClick={() => void checkVerificationAfterPayment()}
-                        disabled={syncingPayment}
-                        className="app-button-outline w-full px-6 py-4 disabled:opacity-60"
-                      >
-                        I paid, check my badge
-                      </button>
-                    </div>
-                  )}
-
-                {!result.passed && (
-                  <button
-                    onClick={startChallenge}
-                    className="app-button-dark mt-6 px-6 py-4"
-                  >
-                    Try again
-                  </button>
-                )}
-
-                {syncMessage && (
-                  <p className="mt-4 text-sm font-medium text-[#C9CBCE]">
-                    {syncMessage}
-                  </p>
-                )}
-              </div>
-            )}
-
-            {!status?.verified && !challenge && !result && awaitingPayment && (
-              <div className="glass-strong rounded-xl p-6 md:p-8">
-                <div className="mb-4 flex items-center gap-3">
-                  <ShieldCheck size={26} className="text-[#FFD21E]" />
-                  <div className="app-panel-title">Payment confirmation</div>
-                </div>
-                <p className="text-base font-medium text-[#C9CBCE]">
-                  {syncMessage || PAYMENT_WAITING_MESSAGE}
-                </p>
-                <div className="mt-6">
-                  <button
-                    onClick={() => void checkVerificationAfterPayment()}
-                    disabled={syncingPayment}
-                    className="app-button-outline w-full px-6 py-4 disabled:opacity-60"
-                  >
-                    I paid, check my badge
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {!status?.verified && !challenge && !result && !awaitingPayment && (
-              <div className="glass-strong rounded-xl p-6 md:p-8">
-                <div className="app-kicker mb-3">Start</div>
-                <h2 className="app-title">Ready for badge activation?</h2>
-                <p className="app-subtitle mt-4">
-                  Start the short human check now. When you answer the timed
-                  question, the page will hand you into the $1 Square checkout.
-                </p>
-                <button
-                  onClick={startChallenge}
-                  className="app-button-accent mt-6 px-6 py-4"
-                >
-                  Start Verification <ArrowRight size={18} />
-                </button>
-              </div>
-            )}
           </section>
         </div>
       </div>

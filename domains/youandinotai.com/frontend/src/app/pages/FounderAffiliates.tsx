@@ -345,7 +345,7 @@ export function FounderAffiliates() {
                 value={tagSource}
                 onChange={handleTagSourceChange}
                 maxLength={40}
-                placeholder="e.g. youtube"
+                placeholder="e.g. facebook"
                 className="w-full min-h-[48px] rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-2.5 text-lg text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
               />
             </div>
@@ -363,7 +363,7 @@ export function FounderAffiliates() {
                 value={tagMedium}
                 onChange={handleTagMediumChange}
                 maxLength={40}
-                placeholder="e.g. shorts"
+                placeholder="e.g. post"
                 className="w-full min-h-[48px] rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-2.5 text-lg text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
               />
             </div>

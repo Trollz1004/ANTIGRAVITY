@@ -309,9 +309,7 @@ describe('Verify after $1 payment', () => {
     });
 
     expect(getByText('What is 14 + 5?')).toBeDefined();
-    expect(
-      getByText(/Submit stays off for three seconds/i)
-    ).toBeDefined();
+    expect(getByText(/Submit stays off for three seconds/i)).toBeDefined();
 
     const input = getByPlaceholderText('Your answer') as HTMLInputElement;
     await act(async () => {
