@@ -504,13 +504,13 @@ describe('Verify after $1 payment', () => {
         'Not for you? Get your $1 back within 3 days. Your badge turns off.'
       )
     ).toBeNull();
-    expect(
-      queryByRole('button', { name: 'Give me my $1 back' })
-    ).toBeNull();
+    expect(queryByRole('button', { name: 'Give me my $1 back' })).toBeNull();
   });
 
   it('shows the dollar-back line and button when refund-status says available, asks once on the page without a browser dialog, shows the server message, and flips the menu to not verified without a reload', async () => {
-    const confirmSpy = vi.spyOn(window, 'confirm').mockImplementation(() => true);
+    const confirmSpy = vi
+      .spyOn(window, 'confirm')
+      .mockImplementation(() => true);
     const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
 
     useAuth.setState({
@@ -637,6 +637,8 @@ describe('Verify after $1 payment', () => {
 
     expect(confirmSpy).not.toHaveBeenCalled();
     expect(alertSpy).not.toHaveBeenCalled();
-    expect(getAllByText('Finish your $1 human check').length).toBeGreaterThanOrEqual(1);
+    expect(
+      getAllByText('Finish your $1 human check').length
+    ).toBeGreaterThanOrEqual(1);
   });
 });

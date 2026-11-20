@@ -763,9 +763,9 @@ class TestVerifyRefundSwitchAndStatus:
         settings = Settings(_env_file=None, jwt_secret="x" * 40)
         assert settings.bot_shield_refund_enabled is False
 
-        env_example = (
-            Path(__file__).resolve().parents[1] / ".env.example"
-        ).read_text(encoding="utf-8")
+        env_example = (Path(__file__).resolve().parents[1] / ".env.example").read_text(
+            encoding="utf-8"
+        )
         assert "BOT_SHIELD_REFUND_ENABLED" in env_example
 
     def test_when_switch_off_refund_answers_404_and_refund_status_answers_unavailable(
@@ -927,4 +927,3 @@ class TestVerifyRefundSwitchAndStatus:
             assert resp_asked.json()["available"] is False
         finally:
             app.dependency_overrides.pop(get_current_user, None)
-

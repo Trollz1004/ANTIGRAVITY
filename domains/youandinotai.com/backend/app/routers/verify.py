@@ -100,6 +100,12 @@ class RefundResponse(BaseModel):
     message: str
 
 
+class RefundStatusResponse(BaseModel):
+    available: bool
+    expires_at: str | None = None
+    until: str | None = None
+
+
 REFUND_WINDOW_DAYS = 3
 
 
@@ -472,6 +478,74 @@ async def confirm_verification(
     }
 
 
+@router.get(
+    "/refund-status",
+    response_model=RefundStatusResponse,
+    response_model_exclude_none=True,
+)
+async def refund_status(
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> RefundStatusResponse:
+    """Return whether the signed-in member can request a 3-day $1 Bot-Shield refund."""
+    settings = get_settings()
+    if not settings.bot_shield_refund_enabled:
+        return RefundStatusResponse(available=False)
+
+    prior_user_refund = await db.scalar(
+        select(VerificationEvent.id)
+        .where(VerificationEvent.user_id == user.id)
+        .where(VerificationEvent.challenge_type == "payment")
+        .where(VerificationEvent.status == "refunded")
+        .limit(1)
+    )
+    if prior_user_refund is not None:
+        return RefundStatusResponse(available=False)
+
+    payment_event = await db.scalar(
+        select(VerificationEvent)
+        .where(VerificationEvent.user_id == user.id)
+        .where(VerificationEvent.challenge_type == "payment")
+        .where(VerificationEvent.status == "completed")
+        .where(VerificationEvent.amount_cents == BOT_SHIELD_CENTS)
+        .order_by(VerificationEvent.created_at.desc())
+    )
+    payment_id = (
+        str(payment_event.square_payment_id or "").strip()
+        if payment_event is not None
+        else ""
+    )
+    if payment_event is None or not payment_id:
+        return RefundStatusResponse(available=False)
+
+    fingerprint = str(payment_event.card_fingerprint or "").strip()
+    if fingerprint:
+        prior_instrument_refund = await db.scalar(
+            select(VerificationEvent.id)
+            .where(VerificationEvent.challenge_type == "payment")
+            .where(VerificationEvent.status == "refunded")
+            .where(VerificationEvent.card_fingerprint == fingerprint)
+            .limit(1)
+        )
+        if prior_instrument_refund is not None:
+            return RefundStatusResponse(available=False)
+
+    paid_at = normalize_datetime(payment_event.completed_at or payment_event.created_at)
+    if paid_at is None:
+        return RefundStatusResponse(available=False)
+
+    deadline_dt = paid_at + timedelta(days=REFUND_WINDOW_DAYS)
+    if datetime.now(timezone.utc) > deadline_dt:
+        return RefundStatusResponse(available=False)
+
+    deadline_iso = deadline_dt.isoformat()
+    return RefundStatusResponse(
+        available=True,
+        expires_at=deadline_iso,
+        until=deadline_iso,
+    )
+
+
 @router.post("/refund", response_model=RefundResponse)
 async def refund_verification(
     request: Request,
@@ -486,6 +560,11 @@ async def refund_verification(
         limit=settings.verify_rate_limit_per_minute,
         window_seconds=settings.redis_rate_limit_window,
     )
+    if not settings.bot_shield_refund_enabled:
+        raise HTTPException(
+            status_code=404,
+            detail="Not found",
+        )
 
     try:
         locked_user = await lock_user_for_verification(db, user.id)
