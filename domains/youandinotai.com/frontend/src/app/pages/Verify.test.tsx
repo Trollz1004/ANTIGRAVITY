@@ -470,4 +470,173 @@ describe('Verify after $1 payment', () => {
     ).toBeDefined();
     expect(getByRole('button', { name: 'New question' })).toBeDefined();
   });
+
+  it('hides the dollar-back box when GET /verify/refund-status returns available: false', async () => {
+    vi.mocked(api.get).mockImplementation(async (path: string) => {
+      if (path === '/verify/status') {
+        return {
+          verified: true,
+          trust_score: 60,
+          tier: 'gold',
+          bot_shield_paid: true,
+          subscription_active: false,
+          checks_completed: 2,
+        };
+      }
+      if (path === '/verify/refund-status') {
+        return { available: false };
+      }
+      throw new Error(`Unexpected GET ${path}`);
+    });
+
+    const { getByText, queryByText, queryByRole } = render(
+      <MemoryRouter initialEntries={['/app/verify']}>
+        <Verify />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(getByText('Badge active.')).toBeDefined();
+    });
+
+    expect(
+      queryByText(
+        'Not for you? Get your $1 back within 3 days. Your badge turns off.'
+      )
+    ).toBeNull();
+    expect(
+      queryByRole('button', { name: 'Give me my $1 back' })
+    ).toBeNull();
+  });
+
+  it('shows the dollar-back line and button when refund-status says available, asks once on the page without a browser dialog, shows the server message, and flips the menu to not verified without a reload', async () => {
+    const confirmSpy = vi.spyOn(window, 'confirm').mockImplementation(() => true);
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+
+    useAuth.setState({
+      user: {
+        user_id: 'user-verify-1',
+        email: 'paid@youandinotai.com',
+        display_name: 'Paid Member',
+        bot_shield_verified: true,
+        subscription_tier: null,
+        subscription_active: false,
+        has_profile: true,
+        adult_verified: true,
+      },
+      loading: false,
+    });
+
+    let refunded = false;
+    vi.mocked(api.get).mockImplementation(async (path: string) => {
+      if (path === '/verify/status') {
+        return refunded
+          ? {
+              verified: false,
+              trust_score: 20,
+              tier: 'unverified',
+              bot_shield_paid: false,
+              subscription_active: false,
+              checks_completed: 2,
+            }
+          : {
+              verified: true,
+              trust_score: 60,
+              tier: 'gold',
+              bot_shield_paid: true,
+              subscription_active: false,
+              checks_completed: 2,
+            };
+      }
+      if (path === '/verify/refund-status') {
+        return refunded
+          ? { available: false }
+          : { available: true, expires_at: '2026-11-23T12:00:00Z' };
+      }
+      if (path === '/auth/me') {
+        return {
+          user_id: 'user-verify-1',
+          email: 'paid@youandinotai.com',
+          display_name: 'Paid Member',
+          bot_shield_verified: !refunded,
+          subscription_tier: null,
+          subscription_active: false,
+          has_profile: true,
+          adult_verified: true,
+        };
+      }
+      throw new Error(`Unexpected GET ${path}`);
+    });
+
+    vi.mocked(api.post).mockImplementation(async (path: string) => {
+      if (path === '/verify/refund') {
+        refunded = true;
+        return {
+          refunded: true,
+          verified: false,
+          amount_cents: 100,
+          status: 'PENDING',
+          refund_id: 'rfnd_ui_1',
+          message:
+            'Your $1 refund has started. Your Verified Human badge is now off.',
+        };
+      }
+      throw new Error(`Unexpected POST ${path}`);
+    });
+
+    const { getByText, getByRole, getAllByText, queryByText } = render(
+      <MemoryRouter initialEntries={['/app/verify']}>
+        <Routes>
+          <Route element={<AppShell />}>
+            <Route path="/app/verify" element={<Verify />} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(
+        getByText(
+          'Not for you? Get your $1 back within 3 days. Your badge turns off.'
+        )
+      ).toBeDefined();
+    });
+
+    const askButton = getByRole('button', { name: 'Give me my $1 back' });
+    expect(askButton).toBeDefined();
+    expect(queryByText('Finish your $1 human check')).toBeNull();
+
+    // First click asks once to confirm on the page without calling POST /verify/refund or opening a browser dialog
+    await act(async () => {
+      askButton.click();
+    });
+
+    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(alertSpy).not.toHaveBeenCalled();
+    expect(api.post).not.toHaveBeenCalledWith('/verify/refund');
+
+    const confirmOnPageButton = getByRole('button', {
+      name: /Yes, give me my \$1 back/i,
+    });
+    expect(confirmOnPageButton).toBeDefined();
+
+    // Second click confirms on the page, calls POST /verify/refund, shows server message, and updates AppShell menu
+    await act(async () => {
+      confirmOnPageButton.click();
+    });
+
+    await waitFor(() => {
+      expect(api.post).toHaveBeenCalledWith('/verify/refund');
+      expect(
+        getByText(
+          'Your $1 refund has started. Your Verified Human badge is now off.'
+        )
+      ).toBeDefined();
+      expect(useAuth.getState().user?.bot_shield_verified).toBe(false);
+    });
+
+    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(alertSpy).not.toHaveBeenCalled();
+    expect(getAllByText('Finish your $1 human check').length).toBeGreaterThanOrEqual(1);
+  });
 });

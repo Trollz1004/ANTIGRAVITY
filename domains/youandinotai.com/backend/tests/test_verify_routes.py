@@ -372,6 +372,14 @@ class TestVerifyConfirm:
 class TestVerifyRefund:
     """Three-day $1 Bot-Shield refund route with Square mocked."""
 
+    @pytest.fixture(autouse=True)
+    def _enable_refund_switch(self, monkeypatch):
+        from app.config import get_settings
+
+        monkeypatch.setattr(
+            get_settings(), "bot_shield_refund_enabled", True, raising=False
+        )
+
     def test_refund_within_three_days_succeeds_once(
         self, client, db_session_factory, caplog
     ):
@@ -736,3 +744,187 @@ class TestVerifyRefund:
             "amount": 100,
             "currency": "USD",
         }
+
+
+# ── Dollar-back switch (bot_shield_refund_enabled) + GET /verify/refund-status ─
+
+
+class TestVerifyRefundSwitchAndStatus:
+    """Tests for bot_shield_refund_enabled (default False) and GET /api/v1/verify/refund-status."""
+
+    def test_bot_shield_refund_enabled_defaults_to_false_and_in_env_example(
+        self, monkeypatch
+    ):
+        from pathlib import Path
+
+        from app.config import Settings
+
+        monkeypatch.delenv("BOT_SHIELD_REFUND_ENABLED", raising=False)
+        settings = Settings(_env_file=None, jwt_secret="x" * 40)
+        assert settings.bot_shield_refund_enabled is False
+
+        env_example = (
+            Path(__file__).resolve().parents[1] / ".env.example"
+        ).read_text(encoding="utf-8")
+        assert "BOT_SHIELD_REFUND_ENABLED" in env_example
+
+    def test_when_switch_off_refund_answers_404_and_refund_status_answers_unavailable(
+        self, client, db_session_factory, monkeypatch
+    ):
+        from app.config import get_settings
+
+        monkeypatch.setattr(
+            get_settings(), "bot_shield_refund_enabled", False, raising=False
+        )
+        now = datetime.now(timezone.utc)
+        user = _make_user(
+            email="switch_off_member@example.com",
+            bot_shield_verified=True,
+        )
+        profile = verified_profile(user)
+        payment_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_switch_off_1",
+            card_fingerprint="fp_switch_off_1",
+            created_at=now - timedelta(days=1),
+            completed_at=now - timedelta(days=1),
+        )
+        seed(user, profile, payment_event, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
+        mock_refund = AsyncMock()
+        try:
+            status_resp = client.get("/api/v1/verify/refund-status")
+            assert status_resp.status_code == 200, status_resp.text
+            assert status_resp.json() == {"available": False}
+
+            with patch(
+                "app.routers.verify.refund_square_payment",
+                mock_refund,
+                create=True,
+            ):
+                refund_resp = client.post("/api/v1/verify/refund")
+            assert refund_resp.status_code == 404, refund_resp.text
+            mock_refund.assert_not_awaited()
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_when_switch_on_refund_status_says_available_and_until_when(
+        self, client, db_session_factory, monkeypatch
+    ):
+        from app.config import get_settings
+
+        monkeypatch.setattr(
+            get_settings(), "bot_shield_refund_enabled", True, raising=False
+        )
+        now = datetime.now(timezone.utc)
+        paid_at = now - timedelta(days=1)
+        user = _make_user(
+            email="switch_on_eligible@example.com",
+            bot_shield_verified=True,
+        )
+        profile = verified_profile(user)
+        payment_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_switch_on_1",
+            card_fingerprint="fp_switch_on_1",
+            created_at=paid_at,
+            completed_at=paid_at,
+        )
+        seed(user, profile, payment_event, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
+        try:
+            resp = client.get("/api/v1/verify/refund-status")
+            assert resp.status_code == 200, resp.text
+            data = resp.json()
+            assert data["available"] is True
+            expected_until = (paid_at + timedelta(days=3)).isoformat()
+            assert data.get("expires_at") == expected_until
+            assert data.get("until") == expected_until
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_when_switch_on_refund_status_unavailable_after_three_days_or_prior_ask(
+        self, client, db_session_factory, monkeypatch
+    ):
+        from app.config import get_settings
+
+        monkeypatch.setattr(
+            get_settings(), "bot_shield_refund_enabled", True, raising=False
+        )
+        now = datetime.now(timezone.utc)
+
+        expired_user = _make_user(
+            email="switch_on_expired@example.com",
+            bot_shield_verified=True,
+        )
+        expired_payment = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=expired_user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_switch_on_old",
+            card_fingerprint="fp_switch_on_old",
+            created_at=now - timedelta(days=3, minutes=5),
+            completed_at=now - timedelta(days=3, minutes=5),
+        )
+
+        already_asked_user = _make_user(
+            email="switch_on_asked@example.com",
+            bot_shield_verified=True,
+        )
+        prior_refund = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=already_asked_user.id,
+            challenge_type="payment",
+            status="refunded",
+            amount_cents=100,
+            square_payment_id="pay_prior_refund",
+            card_fingerprint="fp_prior_refund",
+            created_at=now - timedelta(days=2),
+            completed_at=now - timedelta(days=2),
+        )
+        newer_payment = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=already_asked_user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_newer_after_refund",
+            card_fingerprint="fp_newer_after_refund",
+            created_at=now - timedelta(hours=3),
+            completed_at=now - timedelta(hours=3),
+        )
+        seed(
+            expired_user,
+            expired_payment,
+            already_asked_user,
+            prior_refund,
+            newer_payment,
+            db_session_factory=db_session_factory,
+        )
+
+        app.dependency_overrides[get_current_user] = override_user(expired_user)
+        try:
+            resp_expired = client.get("/api/v1/verify/refund-status")
+            assert resp_expired.status_code == 200, resp_expired.text
+            assert resp_expired.json()["available"] is False
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+        app.dependency_overrides[get_current_user] = override_user(already_asked_user)
+        try:
+            resp_asked = client.get("/api/v1/verify/refund-status")
+            assert resp_asked.status_code == 200, resp_asked.text
+            assert resp_asked.json()["available"] is False
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
