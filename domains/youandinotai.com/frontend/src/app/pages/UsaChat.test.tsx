@@ -32,7 +32,7 @@ vi.mock('../../lib/api', () => ({
 }));
 
 vi.mock('../../lib/safety', () => ({
-  isSafetyToolsAvailable: vi.fn().mockResolvedValue(true),
+  isSafetyToolsAvailable: () => Promise.resolve(true),
 }));
 
 describe('UsaChat (/app/usa)', () => {
