@@ -248,7 +248,11 @@ export async function shootPage(options) {
       page.on('pageerror', (err) => {
         pageErrors.push(err?.message || String(err));
       });
-      await page.goto(url, { waitUntil: 'networkidle' });
+      try {
+        await page.goto(url, { waitUntil: 'networkidle', timeout: 20000 });
+      } catch {
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 20000 });
+      }
       const locator = page.locator(selector || 'body').first();
       await locator.waitFor({ state: 'visible', timeout: 15000 });
       await page.waitForTimeout(300);

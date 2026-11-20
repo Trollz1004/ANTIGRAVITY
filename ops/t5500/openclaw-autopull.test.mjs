@@ -135,7 +135,7 @@ function runAutopullAsync(repoPath, extraArgs = [], extraEnv = {}) {
 function getFreePort() {
   return new Promise((resolve, reject) => {
     const srv = net.createServer();
-    srv.listen(0, '127.0.0.1', () => {
+    srv.listen(0, LOCAL_BIND_HOST, () => {
       const addr = srv.address();
       const port = typeof addr === 'object' && addr ? addr.port : 0;
       srv.close((err) => (err ? reject(err) : resolve(port)));
@@ -148,7 +148,7 @@ function waitForPortListen(port, timeoutMs = 8000) {
   const start = Date.now();
   return new Promise((resolve, reject) => {
     const tryConnect = () => {
-      const sock = net.connect({ host: '127.0.0.1', port }, () => {
+      const sock = net.connect({ host: LOCAL_BIND_HOST, port }, () => {
         sock.destroy();
         resolve();
       });
@@ -388,27 +388,27 @@ test('openclaw-autopull.ps1 with -Apply waits for restarted services on their po
   const publicServer = http.createServer((req, res) => {
     const u = req.url || '/';
     if (u.startsWith('/public/youandinotai')) {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', Connection: 'close' });
       res.end('<!DOCTYPE html><html><head><script src="/assets/index-live2.js"></script></head><body>YouAndINotAI</body></html>');
       return;
     }
     if (u.startsWith('/public/api-health')) {
-      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', Connection: 'close' });
       res.end(JSON.stringify({ status: 'ok', db_connected: true }));
       return;
     }
     if (u.startsWith('/public/onlinerecycle')) {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', Connection: 'close' });
       res.end('<!DOCTYPE html><html><body>OnlineRecycle electronics pickup</body></html>');
       return;
     }
-    res.writeHead(404);
+    res.writeHead(404, { Connection: 'close' });
     res.end('not found');
   });
 
   await new Promise((resolve) => publicServer.listen(publicPort, LOCAL_BIND_HOST, resolve));
 
-  // When oldOwner exits (killed by openclaw-autopull.ps1), simulate keepalive bringing backendPort, domainsPort, and frontendPort back after 400ms
+  // When oldOwner exits (killed by openclaw-autopull.ps1), simulate keepalive bringing backendPort, domainsPort, and frontendPort back after 250ms
   oldOwner.on('exit', () => {
     setTimeout(() => {
       for (const [port, body] of [
@@ -417,13 +417,13 @@ test('openclaw-autopull.ps1 with -Apply waits for restarted services on their po
         [frontendPort, '<!DOCTYPE html><html><script src="/assets/index-live2.js"></script></html>'],
       ]) {
         const srv = http.createServer((_req, res) => {
-          res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+          res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8', Connection: 'close' });
           res.end(body);
         });
         srv.listen(port, LOCAL_BIND_HOST);
         replacementServers.push(srv);
       }
-    }, 400);
+    }, 250);
   });
 
   try {
@@ -505,10 +505,12 @@ test('openclaw-autopull.ps1 with -Apply waits for restarted services on their po
     } catch {}
     for (const s of replacementServers) {
       try {
+        s.closeAllConnections?.();
         s.close();
       } catch {}
     }
     try {
+      publicServer.closeAllConnections?.();
       publicServer.close();
     } catch {}
     fs.rmSync(fx.root, { recursive: true, force: true });
@@ -527,6 +529,7 @@ test('openclaw-autopull.ps1 writes FAILED in the record, creates ops\\t5500\\PAU
 
     const applyRes = await runAutopullAsync(fx.cloneDir, [
       '-Apply',
+      '-SkipProcessStop',
       '-NodeHost',
       LOCAL_BIND_HOST,
       '-BackendPort',

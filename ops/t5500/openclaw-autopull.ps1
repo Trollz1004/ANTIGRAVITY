@@ -84,10 +84,12 @@ function Stop-AutopullPortOwner([int]$Port) {
             Stop-Process -Id $procId -Force -ErrorAction SilentlyContinue
             $stoppedPids += $procId
         }
-        $waited = 0
-        while ($waited -lt 50 -and (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)) {
-            Start-Sleep -Milliseconds 100
-            $waited++
+        if ($stoppedPids.Count -gt 0) {
+            $waited = 0
+            while ($waited -lt 50 -and (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)) {
+                Start-Sleep -Milliseconds 100
+                $waited++
+            }
         }
     } catch {}
     return $stoppedPids
