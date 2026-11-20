@@ -205,8 +205,8 @@ describe("local disk storage", () => {
     );
 
     try {
-      const { port } = server.address() as AddressInfo;
-      const baseUrl = `http://127.0.0.1:${port}`;
+      const { address, port } = server.address() as AddressInfo;
+      const baseUrl = `http://${address}:${port}`;
 
       const getResp = await fetch(`${baseUrl}${stored.url}`);
       expect(getResp.status).toBe(200);
@@ -283,8 +283,8 @@ describe("local disk storage", () => {
     );
 
     try {
-      const { port } = server.address() as AddressInfo;
-      const baseUrl = `http://127.0.0.1:${port}`;
+      const { address, port } = server.address() as AddressInfo;
+      const baseUrl = `http://${address}:${port}`;
 
       const getResp = await fetch(`${baseUrl}/manus-storage/${credentialKey}`);
       expect(getResp.status).toBe(404);
