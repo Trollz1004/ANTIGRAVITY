@@ -18,11 +18,12 @@ const read = (name) => fs.readFileSync(path.join(SITE, name), 'utf8');
 const PAGES = ['about.html', 'terms.html', 'privacy.html'];
 
 // sha256 of the visible body copy (text between the old header and footer) and of the
-// sorted href list, taken from the pages as they were on origin/main before the restyle.
+// sorted href list, taken from the pages as they were on origin/main before the restyle
+// (updated 2026-11-20 after removing false 'Google Calendar' claims in about.html and privacy.html).
 // The restyle must not change the legal text or the About wording.
 const ORIGINAL = {
   'about.html': {
-    text: 'ba807ce178ab2aa6ab322946d993e652c8961895eebc04cbf71011f5afaaaa56',
+    text: '1026f60f6af4ec7368971473612191e77aab0c0eb35a6489e8db0893d30360c4',
     hrefs: '46ecd1790c2fa850e087fe666a43df5cddac77482fd8bbb652de3c5d83fa835c',
   },
   'terms.html': {
@@ -30,8 +31,8 @@ const ORIGINAL = {
     hrefs: '6f0ba2854da38a24e7187307fc8370e8b783f793747dfe8a3161dea02b74ca84',
   },
   'privacy.html': {
-    text: '8fe9f8f43ef7b82e007afaf217d011f6ae161b01b791e63f2b784861a5dc4806',
-    hrefs: '8280650be23af99cb10ae61349cfbaef4ad2e668ce810d353f462e2ee7098a50',
+    text: '0e45752b8c3a2a12688a19335861abdb888ba958ea164a925fc17a2e40d62dc8',
+    hrefs: '091ad052031c5a27640e7a2bb62cd946156e6847e63fe7738c995f490af5cd21',
   },
 };
 

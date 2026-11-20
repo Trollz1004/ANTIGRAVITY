@@ -119,7 +119,7 @@
         <nav class="top-nav" id="primary-top-nav" aria-label="Primary navigation">
           <a href="#overview">Overview</a>
           <a href="#book" data-select-service="dropoff">Book Drop-Off</a>
-          <a href="#book" data-select-service="pickup">Request Pickup</a>
+          <a href="/?service=pickup#book" data-select-service="pickup">Request Pickup</a>
           <a href="#how-it-works">Process</a>
           <a href="#accepted">Accepted Gear</a>
           <a href="#faq">FAQ</a>
@@ -176,7 +176,7 @@
         </div>
       </section>
 
-      <!-- STOP 02 (#book) — Google Calendar & Direct Slot Scheduler (Card 01: Flies in from below) -->
+      <!-- STOP 02 (#book) — Direct Slot Scheduler (Card 01: Flies in from below) -->
       <section class="stage-stop" id="book" aria-label="Schedule Drop-Off or Pickup">
         <div class="spin-card-stage stage-scheduler-slot align-center">
           <div
@@ -186,7 +186,7 @@
             data-card-index="1"
           >
             <div class="stop-kicker-row">
-              <span class="stop-kicker">02 / LIVE DISPATCH &amp; GOOGLE CALENDAR SCHEDULER</span>
+              <span class="stop-kicker">02 / LIVE DISPATCH &amp; APPOINTMENT SCHEDULER</span>
               <span class="stop-telemetry">STOP 02 / 06 · SCHEDULE</span>
             </div>
 
@@ -213,8 +213,8 @@
                 </div>
                 <h2 style="margin-bottom: 6px">Schedule Your Drop-Off or Free Pickup</h2>
                 <p style="margin-bottom: 0; font-size: 0.96rem">
-                  Pick a convenient date and time window below. Your appointment is logged immediately and provides an
-                  Add to Google Calendar link and downloadable .ICS calendar&nbsp;file.
+                  Pick a convenient date and time window below. Your appointment is logged immediately with a booking
+                  reference ID and a downloadable .ICS calendar&nbsp;file.
                 </p>
               </div>
               <div class="service-tabs" role="tablist" aria-label="Service type">
@@ -274,7 +274,7 @@
             <div id="gcal-embed-container" style="display: none; margin-bottom: 24px">
               <iframe
                 id="gcal-schedule-iframe"
-                title="OnlineRecycle Google Calendar Appointment Schedule"
+                title="OnlineRecycle Appointment Schedule"
                 style="border: 0; width: 100%; height: 620px; border-radius: 12px"
                 frameborder="0"
               ></iframe>
@@ -440,14 +440,14 @@
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                   </svg>
-                  <span id="bf-submit-btn-label">Confirm Appointment &amp; Add to Calendar</span>
+                  <span id="bf-submit-btn-label">Confirm Appointment</span>
                 </button>
                 <a
                   href="sms:+13213962008"
                   style="color: var(--accent); font-size: 0.9rem; font-weight: 600; text-decoration: underline; display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px"
                 >Or text us instead</a>
                 <span style="font-size: 0.86rem; color: var(--muted)">
-                  Free intake service · Instant booking ID + Google Calendar &amp; .ICS download
+                  Free intake service · Instant booking ID &amp; .ICS calendar download
                 </span>
               </div>
             </form>
@@ -489,7 +489,7 @@
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
-                  <span>Add to Google Calendar</span>
+                  <span>Add to Personal Calendar</span>
                 </a>
                 <a id="confirm-ics-btn" href="#" class="btn btn-secondary">
                   <svg
@@ -547,7 +547,7 @@
               <ul class="spec-list">
                 <li><strong>Sorrento Drop-Off:</strong> Nine daily 30-minute intake windows between 8:00 AM and 5:30 PM.</li>
                 <li><strong>Central FL Route Pickup:</strong> Five daily 2-hour windows across Lake, Orange, and Seminole Counties.</li>
-                <li><strong>Instant Calendar Record:</strong> Generates a booking reference ID, Google Calendar link, and .ICS file on submit.</li>
+                <li><strong>Instant Booking Record:</strong> Generates a booking reference ID and downloadable .ICS calendar file on submit.</li>
               </ul>
             </div>
             <div class="card-flip-bar">
@@ -1194,7 +1194,7 @@
       (function () {
         const SECTION_STOPS = [
           { id: 'overview', index: '01', label: 'Overview', shortLabel: 'OVERVIEW', phrase: 'SECURE INTAKE. DIRECT SCHEDULING.' },
-          { id: 'book', index: '02', label: 'Schedule', shortLabel: 'SCHEDULE', phrase: 'GOOGLE CALENDAR DROP-OFF & PICKUP.' },
+          { id: 'book', index: '02', label: 'Schedule', shortLabel: 'SCHEDULE', phrase: 'SCHEDULE DROP-OFF & PICKUP.' },
           { id: 'how-it-works', index: '03', label: 'Process', shortLabel: 'PROCESS', phrase: 'INTAKE, MEDIA WIPE, AND RECOVERY.' },
           { id: 'accepted', index: '04', label: 'Accepted Gear', shortLabel: 'DEVICES', phrase: 'COMPUTERS, SERVERS, PHONES & DRIVES.' },
           { id: 'faq', index: '05', label: 'FAQ', shortLabel: 'FAQ', phrase: 'CENTRAL FLORIDA SERVICE DETAILS.' },
@@ -2112,19 +2112,24 @@
 
         function renderSlots() {
           const slots = serviceType === 'pickup' ? PICKUP_SLOTS : DROPOFF_SLOTS;
+          const isSlotTaken = function (code) {
+            return bookedSlots.some(function (b) {
+              return b.date === selectedDate && b.slotCode === code && b.serviceType === serviceType;
+            });
+          };
           if (
             !slots.some(function (s) {
               return s.code === selectedSlotCode;
-            })
+            }) ||
+            isSlotTaken(selectedSlotCode)
           ) {
-            selectedSlotCode = slots[1] ? slots[1].code : slots[0].code;
-            selectedSlotLabel = slots[1] ? slots[1].label : slots[0].label;
+            const preferred = slots[1] && !isSlotTaken(slots[1].code) ? slots[1] : slots.find(function (s) { return !isSlotTaken(s.code); }) || slots[0];
+            selectedSlotCode = preferred.code;
+            selectedSlotLabel = preferred.label;
           }
           slotStrip.innerHTML = '';
           slots.forEach(function (s) {
-            const isTaken = bookedSlots.some(function (b) {
-              return b.date === selectedDate && b.slotCode === s.code && b.serviceType === serviceType;
-            });
+            const isTaken = isSlotTaken(s.code);
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.disabled = isTaken;
@@ -2162,6 +2167,22 @@
           renderSlots();
         }
 
+        function serviceTypeFromLocation() {
+          const searchParams = new URLSearchParams(window.location.search || '');
+          const fromQuery = (
+            searchParams.get('service') ||
+            searchParams.get('serviceType') ||
+            searchParams.get('mode') ||
+            ''
+          ).toLowerCase();
+          if (fromQuery === 'pickup') return 'pickup';
+          if (fromQuery === 'dropoff' || fromQuery === 'drop-off') return 'dropoff';
+          const hash = String(window.location.hash || '').toLowerCase();
+          if (hash.includes('pickup')) return 'pickup';
+          if (hash.includes('dropoff') || hash.includes('drop-off')) return 'dropoff';
+          return null;
+        }
+
         tabDropoff.addEventListener('click', function () {
           setServiceType('dropoff');
         });
@@ -2193,7 +2214,12 @@
           .catch(function () {});
 
         renderDates();
-        setServiceType('dropoff');
+        const initialService = serviceTypeFromLocation();
+        setServiceType(initialService || 'dropoff');
+        window.addEventListener('hashchange', function () {
+          const nextService = serviceTypeFromLocation();
+          if (nextService) setServiceType(nextService);
+        });
 
         const form = document.getElementById('booking-form');
         const errBox = document.getElementById('booking-error');
@@ -2251,7 +2277,7 @@
             .then(function (res) {
               submitBtn.disabled = false;
               if (submitBtnLabel) {
-                submitBtnLabel.textContent = 'Confirm Appointment & Add to Calendar';
+                submitBtnLabel.textContent = 'Confirm Appointment';
               }
               if (!res || !res.ok) {
                 errBox.textContent =
@@ -2282,7 +2308,7 @@
             .catch(function () {
               submitBtn.disabled = false;
               if (submitBtnLabel) {
-                submitBtnLabel.textContent = 'Confirm Appointment & Add to Calendar';
+                submitBtnLabel.textContent = 'Confirm Appointment';
               }
               errBox.textContent = 'Network error — please call or text (321) 396-2008 to confirm your slot.';
               errBox.style.display = 'block';

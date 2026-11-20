@@ -705,7 +705,7 @@ p {
   transform: translateY(-1px);
 }
 
-/* Google Calendar & Direct Slot Booking Section */
+/* Direct Slot Booking Section */
 .booking-section {
   background: var(--panel-glass);
   border: 1px solid var(--line);
