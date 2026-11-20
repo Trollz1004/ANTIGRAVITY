@@ -65,17 +65,22 @@ function findTagBlocks(html, tagName) {
   return out;
 }
 
+const HTML_ENTITY_MAP = {
+  '&amp;': '&',
+  '&nbsp;': ' ',
+  '&middot;': '·',
+  '&copy;': '©',
+  '&quot;': '"',
+  '&#39;': "'",
+  '&apos;': "'",
+};
+
 function visibleText(fragment) {
   return fragment
     .replace(/<!--[\s\S]*?-->/g, ' ')
     .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
     .replace(/<[^>]+>/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&middot;/g, '·')
-    .replace(/&copy;/g, '©')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&(?:amp|nbsp|middot|copy|quot|#39|apos);/g, (entity) => HTML_ENTITY_MAP[entity] ?? entity)
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -83,6 +88,23 @@ function visibleText(fragment) {
 function countWords(text) {
   return text.split(/\s+/).filter(Boolean).length;
 }
+
+test('visibleText decodes HTML entities in a single pass without double-unescaping', () => {
+  assert.equal(
+    visibleText('<p>a &amp;nbsp; b &amp;quot;c&amp;quot; &amp;middot; d</p>'),
+    'a &nbsp; b &quot;c&quot; &middot; d',
+  );
+});
+
+test('blog needs no stage.js: blog/stage.js is removed and blog pages work with static HTML, styles.css, and cookie-consent.js', () => {
+  assert.equal(fs.existsSync(path.join(SITE, 'blog/stage.js')), false, 'blog/stage.js must not exist');
+  for (const page of BLOG_PAGES) {
+    const raw = fs.readFileSync(path.join(SITE, page.file), 'utf8');
+    assert.doesNotMatch(raw, /stage\.js/i, `${page.file} must not reference stage.js`);
+    assert.equal(findTagBlocks(raw, 'canvas').length, 0, `${page.file} must not include unused canvas tags`);
+    assert.match(raw, /id="cookie-banner"/, `${page.file} must include #cookie-banner for cookie-consent.js`);
+  }
+});
 
 test('home page footer links to /blog/', () => {
   const homeHtml = fs.readFileSync(path.join(SITE, 'index.html'), 'utf8');
@@ -122,10 +144,7 @@ for (const page of BLOG_PAGES) {
 
     // 5. Appears in sitemap.xml
     const sitemap = fs.readFileSync(path.join(SITE, 'sitemap.xml'), 'utf8');
-    assert.ok(
-      sitemap.includes(`<loc>${page.canonical}</loc>`),
-      `${page.canonical} must appear in sitemap.xml`,
-    );
+    assert.ok(sitemap.includes(`<loc>${page.canonical}</loc>`), `${page.canonical} must appear in sitemap.xml`);
 
     // 6. Static HTML using site's own styles.css, no inline <style>
     const stylesheets = findOpenTags(raw, 'link').filter(
@@ -154,16 +173,13 @@ for (const page of BLOG_PAGES) {
       const articleHtml = articles[0].innerHtml;
       const articleText = visibleText(articleHtml);
       const words = countWords(articleText);
-      assert.ok(
-        words >= 500 && words <= 800,
-        `${page.file} article word count must be 500..800, got ${words}`,
-      );
+      assert.ok(words >= 500 && words <= 800, `${page.file} article word count must be 500..800, got ${words}`);
 
-      // No invented certificates, standards, or prices
+      // No invented certificates, standards, prices, or business claims not in index.html / about.html
       assert.doesNotMatch(
         articleText,
-        /\$|R2\b|e-Stewards|ISO\s*\d|NIST|DoD|certificate of destruction|certified destruction/i,
-        `${page.file} must not invent certificates, standards, or prices`,
+        /\$|R2\b|e-Stewards|ISO\s*\d|NIST|DoD|certificate of destruction|certified destruction|keyboards|video adapters|charging docks|loose rechargeable batteries/i,
+        `${page.file} must not state business claims, items, certificates, standards, or prices absent from index.html and about.html`,
       );
 
       // Ends with one link to the booking section already on the site (/#book)

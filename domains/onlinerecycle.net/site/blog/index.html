@@ -36,51 +36,13 @@
 
     <div class="carbon-fibre-backdrop" id="carbon-fibre-backdrop" aria-hidden="true"></div>
 
-    <canvas
-      id="onlinerecycle-stage-canvas"
-      aria-hidden="true"
-      data-stage-mode="active"
-    ></canvas>
-
     <header class="site-header">
       <div class="header-inner">
         <div class="brand-group">
-          <canvas
-            id="onlinerecycle-header-mark"
-            class="header-mark"
-            width="32"
-            height="32"
-            aria-hidden="true"
-          ></canvas>
           <a href="/" class="brand">
             <span class="brand-name">OnlineRecycle.net</span>
           </a>
         </div>
-
-        <button
-          type="button"
-          class="mobile-menu-btn"
-          id="mobile-menu-btn"
-          aria-expanded="false"
-          aria-controls="primary-top-nav"
-          aria-label="Toggle navigation menu"
-        >
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
 
         <nav class="top-nav" id="primary-top-nav" aria-label="Primary navigation">
           <a href="/#overview">Overview</a>
@@ -105,16 +67,10 @@
           </div>
         </div>
       </div>
-      <canvas
-        id="onlinerecycle-header-line"
-        class="header-telemetry-line"
-        height="4"
-        aria-hidden="true"
-      ></canvas>
     </header>
 
     <main class="wrap legal-page" id="main" tabindex="-1">
-      <section class="stage-stop" id="overview" aria-label="Overview">
+      <section class="stage-stop legal-stop" id="blog-overview" aria-label="Overview">
         <div class="hero-first-screen">
           <h1>OnlineRecycle.net Electronics Recycling Blog</h1>
           <p class="hero-subline">
@@ -201,6 +157,7 @@
           OnlineRecycle.net is a for-profit recycling and resale service operated by Trash Or Treasure Online Recycler
           LLC. Customer purchases and pickup bookings are commercial service transactions.
           <br /><br />
+          <a href="/">Home</a> &nbsp;&middot;&nbsp;
           <a href="/service-areas.html">Service Areas</a> &nbsp;&middot;&nbsp;
           <a href="/blog/">Blog</a> &nbsp;&middot;&nbsp;
           <a href="/about.html">About Us</a> &nbsp;&middot;&nbsp;
@@ -244,7 +201,5 @@
         </div>
       </div>
     </div>
-
-    <script src="/blog/stage.js" defer></script>
   </body>
 </html>

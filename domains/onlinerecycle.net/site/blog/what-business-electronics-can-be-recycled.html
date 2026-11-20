@@ -36,51 +36,13 @@
 
     <div class="carbon-fibre-backdrop" id="carbon-fibre-backdrop" aria-hidden="true"></div>
 
-    <canvas
-      id="onlinerecycle-stage-canvas"
-      aria-hidden="true"
-      data-stage-mode="active"
-    ></canvas>
-
     <header class="site-header">
       <div class="header-inner">
         <div class="brand-group">
-          <canvas
-            id="onlinerecycle-header-mark"
-            class="header-mark"
-            width="32"
-            height="32"
-            aria-hidden="true"
-          ></canvas>
           <a href="/" class="brand">
             <span class="brand-name">OnlineRecycle.net</span>
           </a>
         </div>
-
-        <button
-          type="button"
-          class="mobile-menu-btn"
-          id="mobile-menu-btn"
-          aria-expanded="false"
-          aria-controls="primary-top-nav"
-          aria-label="Toggle navigation menu"
-        >
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
 
         <nav class="top-nav" id="primary-top-nav" aria-label="Primary navigation">
           <a href="/#overview">Overview</a>
@@ -105,17 +67,11 @@
           </div>
         </div>
       </div>
-      <canvas
-        id="onlinerecycle-header-line"
-        class="header-telemetry-line"
-        height="4"
-        aria-hidden="true"
-      ></canvas>
     </header>
 
     <main class="wrap legal-page" id="main" tabindex="-1">
       <article class="blog-post-article">
-        <section class="stage-stop" id="overview" aria-label="Overview">
+        <section class="stage-stop legal-stop" id="blog-overview" aria-label="Overview">
           <div class="hero-first-screen">
             <h1>What Business Electronics Can Be Recycled</h1>
             <p class="hero-subline">
@@ -142,10 +98,10 @@
             <div class="section-sub">Category 2: Networking, Mobile, and Peripherals</div>
             <h2>Switches, Phones, Monitors, Printers, and UPS Units</h2>
             <p>
-              Office cleanouts almost always include more than computers. We accept enterprise switches, managed switches, routers, firewalls, company smartphones, and tablets. Around the workstation, we take monitors, docking stations, laser and office printers, power supplies, and boxes of mixed network and power cables. Cleared desk accessories, power cords, video adapters, and charging docks can all be packed into the same intake batch.
+              Office cleanouts almost always include more than computers. We accept enterprise switches, managed switches, routers, firewalls, company smartphones, and tablets. Around the workstation, we take monitors, docking stations, laser and office printers, power supplies, and boxes of cables. Monitors, printers, cables, power supplies, docking stations, and other office peripherals can all be packed into the same intake batch.
             </p>
             <p>
-              We also accept UPS battery backups and loose rechargeable batteries. Lithium battery packs and backup power units are isolated at intake so they are handled safely alongside your computing gear. If your office breakroom, lobby, or conference room has older media or audio equipment, we also accept game systems, DVDs, Blu-rays, CDs, stereo receivers, power amplifiers, speakers, soundbars, and car audio gear.
+              We also accept UPS battery backups, UPS towers, and batteries. Data-bearing drives and lithium battery packs are isolated at intake so they are handled safely alongside your computing gear. If your office breakroom, lobby, or conference room has older media or audio equipment, we also accept game systems, DVDs, Blu-rays, CDs, stereo receivers, power amplifiers, speakers, soundbars, and car audio gear.
             </p>
           </div>
         </section>
@@ -205,6 +161,7 @@
           OnlineRecycle.net is a for-profit recycling and resale service operated by Trash Or Treasure Online Recycler
           LLC. Customer purchases and pickup bookings are commercial service transactions.
           <br /><br />
+          <a href="/">Home</a> &nbsp;&middot;&nbsp;
           <a href="/service-areas.html">Service Areas</a> &nbsp;&middot;&nbsp;
           <a href="/blog/">Blog</a> &nbsp;&middot;&nbsp;
           <a href="/about.html">About Us</a> &nbsp;&middot;&nbsp;
@@ -218,6 +175,35 @@
       </div>
     </footer>
 
-    <script src="/blog/stage.js" defer></script>
+    <div id="cookie-banner" role="dialog" aria-label="Cookie consent" aria-live="polite">
+      <div class="cb-inner">
+        <div class="cb-text">
+          <p class="cb-copy">
+            We use cookies to run this site. <a href="/privacy.html">Privacy Policy</a>
+          </p>
+          <div class="cb-checks" id="cb-checks" hidden>
+            <label>
+              <input type="checkbox" id="cb-necessary" checked disabled />
+              <span><strong>Necessary</strong> (always on)</span>
+            </label>
+            <label>
+              <input type="checkbox" id="cb-analytics" />
+              <span><strong>Analytics</strong></span>
+            </label>
+            <label>
+              <input type="checkbox" id="cb-functional" />
+              <span><strong>Functional</strong></span>
+            </label>
+          </div>
+        </div>
+        <div class="cb-actions">
+          <button class="cb-btn cb-accept" id="cb-accept-btn">OK</button>
+          <button class="cb-btn cb-decline" id="cb-options-btn" aria-expanded="false" aria-controls="cb-checks">
+            Options
+          </button>
+          <button class="cb-btn cb-decline" id="cb-decline-btn" hidden>Necessary Only</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
