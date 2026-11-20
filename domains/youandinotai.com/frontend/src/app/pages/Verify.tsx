@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   ArrowRight,
   CheckCircle,
@@ -9,7 +10,37 @@ import {
 } from 'lucide-react';
 
 import { ApiError, api } from '../../lib/api';
+import { useAuth } from '../../lib/auth';
 import { TrustScoreRing, VerifiedBadge } from '../components/VerifiedBadge';
+
+const PAYMENT_WAITING_MESSAGE =
+  'We are waiting for Square to confirm your payment.';
+const PAYMENT_POLL_INTERVAL_MS = 3000;
+const PAYMENT_POLL_DURATION_MS = 60000;
+const PAYMENT_POLL_MAX_RETRIES = Math.floor(
+  PAYMENT_POLL_DURATION_MS / PAYMENT_POLL_INTERVAL_MS
+);
+
+function isPaymentRequiredError(err: unknown): boolean {
+  if (err instanceof ApiError && err.status === 402) {
+    return true;
+  }
+  return (
+    typeof err === 'object' &&
+    err !== null &&
+    'status' in err &&
+    (err as { status?: unknown }).status === 402
+  );
+}
+
+function hasPaymentSuccessParam(routerSearch: string): boolean {
+  const windowParams = new URLSearchParams(window.location.search);
+  const routerParams = new URLSearchParams(routerSearch);
+  return (
+    windowParams.get('status') === 'success' ||
+    routerParams.get('status') === 'success'
+  );
+}
 
 interface ChallengeData {
   challenge_id: string;
@@ -36,6 +67,8 @@ interface VerificationStatus {
 }
 
 export function Verify() {
+  const { fetchUser } = useAuth();
+  const location = useLocation();
   const [status, setStatus] = useState<VerificationStatus | null>(null);
   const [challenge, setChallenge] = useState<ChallengeData | null>(null);
   const [answer, setAnswer] = useState('');
@@ -43,12 +76,35 @@ export function Verify() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [syncingPayment, setSyncingPayment] = useState(false);
-  const [syncMessage, setSyncMessage] = useState<string | null>(null);
+  const [awaitingPayment, setAwaitingPayment] = useState(() =>
+    hasPaymentSuccessParam(location.search)
+  );
+  const [syncMessage, setSyncMessage] = useState<string | null>(() =>
+    hasPaymentSuccessParam(location.search) ? PAYMENT_WAITING_MESSAGE : null
+  );
+  const mountedRef = useRef(true);
+  const pollTimerRef = useRef<number | null>(null);
+  const pollRunIdRef = useRef(0);
+
+  const stopPaymentPolling = () => {
+    pollRunIdRef.current += 1;
+    if (pollTimerRef.current !== null) {
+      window.clearTimeout(pollTimerRef.current);
+      pollTimerRef.current = null;
+    }
+  };
 
   const refreshVerificationStatus = async () => {
     const updated = await api.get<VerificationStatus>('/verify/status');
     setStatus(updated);
     return updated;
+  };
+
+  const refreshSignedInUser = async () => {
+    const authState =
+      typeof useAuth.getState === 'function' ? useAuth.getState() : null;
+    const runFetchUser = authState?.fetchUser ?? fetchUser;
+    await runFetchUser();
   };
 
   const clearPaymentReturnParams = () => {
@@ -62,75 +118,103 @@ export function Verify() {
     window.history.replaceState({}, document.title, nextUrl);
   };
 
-  const checkVerificationAfterPayment = async (retries = 0) => {
+  const confirmPaymentOnce = async (): Promise<
+    'confirmed' | 'waiting' | 'error'
+  > => {
     setSyncingPayment(true);
     try {
-      for (let attempt = 0; attempt <= retries; attempt += 1) {
-        try {
-          await api.post('/verify/confirm');
-          const updated = await refreshVerificationStatus();
-          setResult({
-            passed: true,
-            trust_score: updated.trust_score,
-            message:
-              'Payment confirmed. Your Verified Human badge is now active.',
-            checkout_url: null,
-          });
-          setSyncMessage('Payment confirmed.');
-          clearPaymentReturnParams();
-          return;
-        } catch (err) {
-          if (
-            err instanceof ApiError &&
-            err.status === 402 &&
-            attempt < retries
-          ) {
-            setSyncMessage(
-              'Payment received. Waiting for Square webhook to finish syncing...'
-            );
-            await new Promise(resolve => window.setTimeout(resolve, 2000));
-            continue;
-          }
-
-          if (err instanceof Error) {
-            setSyncMessage(err.message);
-          } else {
-            setSyncMessage(
-              'We could not confirm your payment yet. Try again in a few seconds.'
-            );
-          }
-          return;
-        }
+      await api.post('/verify/confirm');
+      const [updated] = await Promise.all([
+        refreshVerificationStatus(),
+        refreshSignedInUser(),
+      ]);
+      if (!mountedRef.current) return 'confirmed';
+      stopPaymentPolling();
+      setAwaitingPayment(false);
+      setResult({
+        passed: true,
+        trust_score: updated.trust_score,
+        message: 'Payment confirmed. Your Verified Human badge is now active.',
+        checkout_url: null,
+      });
+      setSyncMessage('Payment confirmed.');
+      clearPaymentReturnParams();
+      return 'confirmed';
+    } catch (err) {
+      if (!mountedRef.current) return 'error';
+      if (isPaymentRequiredError(err)) {
+        setAwaitingPayment(true);
+        setSyncMessage(PAYMENT_WAITING_MESSAGE);
+        return 'waiting';
       }
+
+      if (err instanceof Error) {
+        setSyncMessage(err.message);
+      } else {
+        setSyncMessage(
+          'We could not confirm your payment yet. Try again in a few seconds.'
+        );
+      }
+      return 'error';
     } finally {
-      setSyncingPayment(false);
+      if (mountedRef.current) {
+        setSyncingPayment(false);
+      }
     }
   };
 
+  const checkVerificationAfterPayment = async (retries = 0) => {
+    stopPaymentPolling();
+    const runId = pollRunIdRef.current;
+
+    const firstOutcome = await confirmPaymentOnce();
+    if (!mountedRef.current || pollRunIdRef.current !== runId) return;
+    if (firstOutcome !== 'waiting' || retries <= 0) return;
+
+    void (async () => {
+      for (let attempt = 1; attempt <= retries; attempt += 1) {
+        await new Promise<void>(resolve => {
+          pollTimerRef.current = window.setTimeout(() => {
+            pollTimerRef.current = null;
+            resolve();
+          }, PAYMENT_POLL_INTERVAL_MS);
+        });
+        if (!mountedRef.current || pollRunIdRef.current !== runId) return;
+        const outcome = await confirmPaymentOnce();
+        if (!mountedRef.current || pollRunIdRef.current !== runId) return;
+        if (outcome !== 'waiting') return;
+      }
+    })();
+  };
+
   useEffect(() => {
-    let cancelled = false;
+    mountedRef.current = true;
+    const returningFromPayment = hasPaymentSuccessParam(location.search);
+    if (returningFromPayment) {
+      setAwaitingPayment(true);
+      setSyncMessage(PAYMENT_WAITING_MESSAGE);
+    }
 
     const bootstrap = async () => {
       try {
         const updated = await api.get<VerificationStatus>('/verify/status');
-        if (cancelled) return;
+        if (!mountedRef.current) return;
         setStatus(updated);
 
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('status') === 'success') {
-          setSyncMessage('Checking your Square payment now...');
-          await checkVerificationAfterPayment(3);
+        if (returningFromPayment) {
+          await checkVerificationAfterPayment(PAYMENT_POLL_MAX_RETRIES);
         }
       } finally {
-        if (!cancelled) {
+        if (mountedRef.current) {
           setLoading(false);
         }
       }
     };
 
-    bootstrap();
+    void bootstrap();
     return () => {
-      cancelled = true;
+      mountedRef.current = false;
+      stopPaymentPolling();
     };
   }, []);
 
@@ -331,27 +415,29 @@ export function Verify() {
                   {result.message}
                 </p>
 
-                {result.passed && result.checkout_url && (
-                  <div className="mt-6 space-y-3">
-                    <a
-                      href={result.checkout_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="app-button-accent w-full px-6 py-4 no-underline"
-                    >
-                      Pay $1 Bot-Shield <ExternalLink size={16} />
-                    </a>
-                    <button
-                      onClick={() => checkVerificationAfterPayment()}
-                      disabled={syncingPayment}
-                      className="app-button-outline w-full px-6 py-4 disabled:opacity-60"
-                    >
-                      {syncingPayment
-                        ? 'Checking payment...'
-                        : 'I paid, check my badge'}
-                    </button>
-                  </div>
-                )}
+                {result.passed &&
+                  !status?.verified &&
+                  (result.checkout_url || awaitingPayment) && (
+                    <div className="mt-6 space-y-3">
+                      {result.checkout_url && (
+                        <a
+                          href={result.checkout_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="app-button-accent w-full px-6 py-4 no-underline"
+                        >
+                          Pay $1 Bot-Shield <ExternalLink size={16} />
+                        </a>
+                      )}
+                      <button
+                        onClick={() => void checkVerificationAfterPayment()}
+                        disabled={syncingPayment}
+                        className="app-button-outline w-full px-6 py-4 disabled:opacity-60"
+                      >
+                        I paid, check my badge
+                      </button>
+                    </div>
+                  )}
 
                 {!result.passed && (
                   <button
@@ -370,7 +456,28 @@ export function Verify() {
               </div>
             )}
 
-            {!status?.verified && !challenge && !result && (
+            {!status?.verified && !challenge && !result && awaitingPayment && (
+              <div className="glass-strong rounded-xl p-6 md:p-8">
+                <div className="mb-4 flex items-center gap-3">
+                  <ShieldCheck size={26} className="text-[#FFD21E]" />
+                  <div className="app-panel-title">Payment confirmation</div>
+                </div>
+                <p className="text-base font-medium text-[#C9CBCE]">
+                  {syncMessage || PAYMENT_WAITING_MESSAGE}
+                </p>
+                <div className="mt-6">
+                  <button
+                    onClick={() => void checkVerificationAfterPayment()}
+                    disabled={syncingPayment}
+                    className="app-button-outline w-full px-6 py-4 disabled:opacity-60"
+                  >
+                    I paid, check my badge
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {!status?.verified && !challenge && !result && !awaitingPayment && (
               <div className="glass-strong rounded-xl p-6 md:p-8">
                 <div className="app-kicker mb-3">Start</div>
                 <h2 className="app-title">Ready for badge activation?</h2>
