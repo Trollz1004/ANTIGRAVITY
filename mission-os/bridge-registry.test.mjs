@@ -1,15 +1,22 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildCatalog, decorateFreshness, discoverDynamicTools, probeSingleEntry } from './bridge-registry.mjs';
+import { NODES, buildCatalog, decorateFreshness, discoverDynamicTools, probeSingleEntry } from './bridge-registry.mjs';
 
-test('catalog covers all 3 nodes and 8 lanes (24 entries) as a directory, never leaking secret values', () => {
+test('catalog covers ONLY t5500 and alienware (2 nodes x 8 lanes = 16 entries) from fleet-map, never leaking secrets or retired nodes', () => {
+  assert.deepEqual(Object.keys(NODES).sort(), ['alienware', 't5500']);
+  assert.equal(NODES.t5500.ip, '192.168.0.15');
+  assert.equal(NODES.alienware.ip, '192.168.0.40');
+
   const catalog = buildCatalog();
-  assert.equal(catalog.length, 24);
+  assert.equal(catalog.length, 16);
   const raw = JSON.stringify(catalog);
   assert.doesNotMatch(raw, /sk-[A-Za-z0-9]{16,}|ghp_[A-Za-z0-9]{16,}/);
+  assert.doesNotMatch(raw, /sabretooth/i);
+  assert.ok(!raw.includes(['192', '168', '0', '8'].join('.')));
+
   const t5500Hermes = catalog.find((e) => e.id === 't5500/hermes');
   assert.ok(t5500Hermes);
-  assert.equal(t5500Hermes.address, 'http://127.0.0.1:8643');
+  assert.equal(t5500Hermes.address, 'http://192.168.0.15:8643');
   assert.equal(t5500Hermes.auth.method, 'bearer');
 });
 

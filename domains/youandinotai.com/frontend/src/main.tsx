@@ -19,7 +19,8 @@ import { Chat } from './app/pages/Chat';
 import { VideoCallPage } from './app/pages/VideoCall';
 import { Events } from './app/pages/Events';
 
-import { capturePartnerId } from './lib/partnerAttribution';
+import { capturePartnerId, captureShortLink } from './lib/partnerAttribution';
+import { captureSignupSource } from './lib/signupSource';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { SkeletonLoader } from './components/SkeletonLoader';
@@ -46,6 +47,7 @@ const LazyVolunteering = lazy(() => import('./app/pages/Volunteering'));
 const LazyCosmicWall = lazy(() => import('./components/CosmicWall'));
 const LazyDiscover = lazy(() => import('./app/pages/Discover'));
 const LazyBoards = lazy(() => import('./app/pages/Boards'));
+const LazyUsaChat = lazy(() => import('./app/pages/UsaChat'));
 const LazySupport = lazy(() => import('./app/pages/Support'));
 const LazyVerify = lazy(() => import('./app/pages/Verify'));
 const LazyCheckoutLaunch = lazy(() => import('./app/pages/CheckoutLaunch'));
@@ -54,6 +56,9 @@ const LazyAnimatedAvatar = lazy(() => import('./app/pages/AnimatedAvatar'));
 const LazyPreOrder = lazy(() => import('./app/pages/PreOrder'));
 const LazyPayMethods = lazy(() => import('./app/pages/PayMethods'));
 const LazyVideoLobby = lazy(() => import('./app/pages/VideoLobby'));
+const LazyFounderAffiliates = lazy(
+  () => import('./app/pages/FounderAffiliates')
+);
 
 function PageErrorFallback({
   errorId,
@@ -85,7 +90,7 @@ function PageErrorFallback({
             <RotateCw size={16} /> Try Again
           </button>
           <a
-            href="/app"
+            href="/"
             className="app-button-dark px-6 py-3 text-sm no-underline"
           >
             <Home size={16} /> Go Home
@@ -101,6 +106,14 @@ function PageErrorFallback({
 // "/pricing" with a ref and then routing to /register client-side would
 // lose the value, because that navigation carries no query string.
 capturePartnerId(window.location.search);
+captureSignupSource();
+
+// Short creator link: /c/<name> saves the code like ?ref= does, then the
+// address bar becomes "/" so the visitor sees the home page. A bad name
+// saves nothing and still lands on the home page.
+if (captureShortLink(window.location.pathname).isShortLink) {
+  window.history.replaceState(null, '', '/');
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -249,6 +262,24 @@ createRoot(document.getElementById('root')!).render(
                     >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazyBoards />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/app/usa"
+                  element={
+                    <ErrorBoundary
+                      boundaryName="page:usa-chat"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyUsaChat />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -471,6 +502,24 @@ createRoot(document.getElementById('root')!).render(
                     >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazyVideoLobby />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/app/admin/affiliates"
+                  element={
+                    <ErrorBoundary
+                      boundaryName="page:founder-affiliates"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyFounderAffiliates />
                       </Suspense>
                     </ErrorBoundary>
                   }

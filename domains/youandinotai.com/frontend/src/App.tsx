@@ -42,7 +42,7 @@ const LEGAL_DOCS: Record<
       },
       {
         h: '2. Account-Bound Verification & Memberships',
-        p: 'Bot-Shield verification ($1) and Founder memberships are bound to your authenticated YouAndINotAI account. Each profile belongs to one verified adult member.',
+        p: 'Bot-Shield verification ($1) and Founder memberships are bound to your authenticated YouAndINotAI account. Each account belongs to one adult member.',
       },
       {
         h: '3. Community Conduct & Safety',
@@ -60,7 +60,7 @@ const LEGAL_DOCS: Record<
     sections: [
       {
         h: '1. Data We Collect',
-        p: 'We collect the account details you provide (email, display name, date of birth, profile answers, and optional photos), verification status, and in-app activity needed to operate matching, messaging, and support.',
+        p: 'We collect the account details you provide (email, display name, date of birth, profile answers, and optional photos), verification status, and in-app activity needed to operate matching, messaging, and support. When you create an account we record how you reached us: a partner link, a campaign tag in the link, or the name of the site that sent you. We do not keep the full address of the page you came from.',
       },
       {
         h: '2. How Your Data Is Used',
@@ -73,7 +73,7 @@ const LEGAL_DOCS: Record<
     ],
   },
   age: {
-    title: '18+ Age & Identity Policy',
+    title: '18+ Age & Verification Policy',
     updated: 'Last Updated: April 2026',
     sections: [
       {
@@ -81,12 +81,12 @@ const LEGAL_DOCS: Record<
         p: 'youandinotai.com is for adults 18 and over. Every registration requires an explicit date-of-birth check and affirmative 18+ confirmation before an account is created.',
       },
       {
-        h: '2. Liveness & Bot-Shield Check',
-        p: 'To unlock full discovery, messaging, and video features, members complete a live camera gesture check and a $1 Bot-Shield verification bound to their account.',
+        h: '2. Human Check & $1 Bot-Shield',
+        p: 'Before a member can browse discovery, message, or start video, they complete a short timed question and a $1 Bot-Shield payment tied to their account.',
       },
       {
         h: '3. Adult Community Standard',
-        p: 'Every active account is verified for adult eligibility and human liveness.',
+        p: 'Registration requires an 18+ date-of-birth check, and messaging and video need the $1 Bot-Shield human check.',
       },
     ],
   },
@@ -109,13 +109,6 @@ const LEGAL_DOCS: Record<
     ],
   },
 };
-
-function getCheckedTimeLabel(): string {
-  const now = new Date();
-  const hh = String(now.getHours()).padStart(2, '0');
-  const mm = String(now.getMinutes()).padStart(2, '0');
-  return `checked ${hh}:${mm}`;
-}
 
 const TALL_MOBILE_STAGE_STOPS = new Set([
   'platform',
@@ -153,7 +146,20 @@ function readUnpinnedStops(): Record<string, boolean> {
 }
 
 export function PublicSupportPage() {
-  const checkedLabel = getCheckedTimeLabel();
+  useEffect(() => {
+    document.title = 'Member Support & Safety Guide | YouAndINotAI';
+    const canonical = document.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]'
+    );
+    if (canonical) canonical.href = 'https://youandinotai.com/support';
+    const desc = document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]'
+    );
+    if (desc) {
+      desc.content =
+        'Direct, traceable member support for $1 Bot-Shield verification, account-bound billing receipts, account recovery, and privacy exports on YouAndINotAI.';
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0A0B0D] text-[#F4F1EA] font-sans">
@@ -180,7 +186,7 @@ export function PublicSupportPage() {
           <div className="flex items-center gap-3">
             <span className="ds-status-pill hidden sm:inline-flex">
               <span className="ds-status-dot bg-[#FFD21E]" />
-              <span>Support Online · {checkedLabel}</span>
+              <span>Support Online</span>
             </span>
             <Link to="/login" className="ds-btn-ghost text-sm">
               Sign In
@@ -227,6 +233,9 @@ export function PublicSupportPage() {
             <Link to="/register" className="ds-btn-ghost">
               Create 18+ Account
             </Link>
+            <a href="/blog/" className="ds-btn-ghost">
+              Dating Safety &amp; Verification Guides
+            </a>
             <a href="mailto:contact@youandinotai.com" className="ds-btn-ghost">
               <Mail size={16} /> contact@youandinotai.com
             </a>
@@ -239,7 +248,7 @@ export function PublicSupportPage() {
               01 · Verification &amp; Access
             </div>
             <h2 className="mt-2 font-display text-[24px] font-bold text-[#F4F1EA]">
-              $1 Bot-Shield &amp; Liveness
+              $1 Bot-Shield &amp; Human Check
             </h2>
             <p className="mt-3 text-[16px] leading-[1.55] text-[#F4F1EA]">
               Completed your $1 verification checkout and want your badge
@@ -278,7 +287,7 @@ export function PublicSupportPage() {
                 to="/app/privacy"
                 className="inline-flex min-h-[44px] min-w-[44px] items-center text-[#FFD21E] underline"
               >
-                /app/privacy
+                Privacy Center
               </Link>
               .
             </p>
@@ -296,14 +305,28 @@ export function LandingPage() {
   );
   const [waitlistEmail, setWaitlistEmail] = useState('');
 
+  useEffect(() => {
+    document.title =
+      'YouAndINotAI | Verified Human Dating & Real-World Connection';
+    const canonical = document.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]'
+    );
+    if (canonical) canonical.href = 'https://youandinotai.com/';
+    const desc = document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]'
+    );
+    if (desc) {
+      desc.content =
+        'Human-first social platform for dating, meetups, and real-world connection. Bot-Shield verification and account-bound checkout are live now.';
+    }
+  }, []);
+
   const [journeyState, setJourneyState] = useState(() =>
     readSectionJourneyState()
   );
   const [unpinnedStops, setUnpinnedStops] = useState<Record<string, boolean>>(
     () => readUnpinnedStops()
   );
-
-  const checkedLabel = getCheckedTimeLabel();
 
   useEffect(() => {
     const syncJourney = () => {
@@ -351,7 +374,9 @@ export function LandingPage() {
       return;
     }
     const src = 'https://tobira.ai/embed/a2a-badge.js';
-    let script = document.querySelector<HTMLScriptElement>(`script[src="${src}"]`);
+    let script = document.querySelector<HTMLScriptElement>(
+      `script[src="${src}"]`
+    );
     if (!script) {
       script = document.createElement('script');
       script.src = src;
@@ -375,26 +400,25 @@ export function LandingPage() {
   // 'Join' leaves the journey and opens the existing register flow; the
   // other links scroll to their stop. The id stays 'join' so the link still
   // lights while the visitor is on stop 07.
-  const navLinks: { id: string; label: string; href: string; to?: string }[] =
-    [
-      { id: 'about', label: 'Overview', href: '#about' },
-      { id: 'platform', label: 'Platform', href: '#platform' },
-      { id: 'verification', label: 'Verification', href: '#verification' },
-      { id: 'trust', label: 'Trust & Safety', href: '#trust' },
-      { id: 'pricing', label: 'Membership', href: '#pricing' },
-      { id: 'support', label: 'Support', href: '#support' },
-      { id: 'join', label: 'Join', href: '/register', to: '/register' },
-    ];
+  const navLinks: { id: string; label: string; href: string; to?: string }[] = [
+    { id: 'about', label: 'Overview', href: '#about' },
+    { id: 'platform', label: 'Platform', href: '#platform' },
+    { id: 'verification', label: 'Verification', href: '#verification' },
+    { id: 'trust', label: 'Trust & Safety', href: '#trust' },
+    { id: 'pricing', label: 'Membership', href: '#pricing' },
+    { id: 'support', label: 'Support', href: '#support' },
+    { id: 'join', label: 'Join', href: '/register', to: '/register' },
+  ];
 
   const pricingTiers = [
     {
       id: 'bot_shield',
-      badge: 'IDENTITY CHECK',
+      badge: 'HUMAN CHECK',
       name: 'Bot-Shield Verification',
       price: '$1',
       period: 'one-time',
       summary:
-        '60-second camera liveness challenge + $1 identity check. Unlocks your Verified Human badge and full platform access.',
+        'Short timed question + $1 payment tied to your account. Required before messaging or starting video, and unlocks your Verified Human badge.',
       ctaLabel: 'Verify Now — $1',
       to: '/app/verify',
       featured: false,
@@ -406,7 +430,7 @@ export function LandingPage() {
       price: '$14.99',
       period: '/month',
       summary:
-        'Locked-for-life founder rate while active. Platinum Founder badge, priority discovery, video dates, and romance concierge.',
+        'Locked-for-life founder rate while active. Platinum Founder badge, video dates, and romance concierge.',
       ctaLabel: 'Join as Founding Member',
       to: '/app/checkout/founding_member',
       featured: true,
@@ -505,7 +529,7 @@ export function LandingPage() {
           <div className="hidden lg:flex items-center gap-2.5 shrink-0 whitespace-nowrap">
             <span className="ds-status-pill whitespace-nowrap">
               <span className="ds-status-dot bg-[#FFD21E]" />
-              <span>API Live · {checkedLabel}</span>
+              <span>API Live</span>
             </span>
             {user ? (
               <Link
@@ -554,7 +578,7 @@ export function LandingPage() {
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-[#3A3F45] pb-3">
               <span className="ds-status-pill">
                 <span className="ds-status-dot bg-[#FFD21E]" />
-                <span>API Live · {checkedLabel}</span>
+                <span>API Live</span>
               </span>
             </div>
             <div className="grid gap-1">
@@ -604,7 +628,9 @@ export function LandingPage() {
         {/* STOP 01 (#about) — The Hero Owns the Whole First Screen */}
         <section
           id="about"
-          className={unpinnedStops.about ? 'relative' : 'relative min-h-[165vh]'}
+          className={
+            unpinnedStops.about ? 'relative' : 'relative min-h-[165vh]'
+          }
         >
           <div
             data-stage-wrapper="about"
@@ -619,13 +645,13 @@ export function LandingPage() {
             <div className="mx-auto flex w-full max-w-[1440px] flex-1 items-center justify-between pointer-events-none">
               <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-l-[3px] border-l-[#FFD21E] bg-[#0A0B0D] px-5 py-4">
                 <div className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
-                  01 · LIVENESS GATE
+                  01 · HUMAN CHECK
                 </div>
                 <div className="mt-1 font-display text-[28px] font-bold uppercase leading-none text-[#F4F1EA]">
                   VERIFY
                 </div>
                 <div className="mt-1.5 text-[14px] font-medium text-[#F4F1EA]">
-                  60-Second Camera &amp; $1 Check
+                  Timed Question &amp; $1 Check
                 </div>
               </div>
 
@@ -665,8 +691,9 @@ export function LandingPage() {
                   </h1>
                   <p className="mt-2 max-w-[60ch] text-[14px] leading-[1.45] text-[#F4F1EA] text-pretty sm:text-[18px]">
                     Meet verified adults who are ready to talk, plan, and show
-                    up in real life. Every member completes our $1 Bot-Shield
-                    identity check bound directly to a real account.
+                    up in real life. Before messaging or starting video, members
+                    complete a short human check and a $1 Bot-Shield payment
+                    tied to their account.
                   </p>
                 </div>
 
@@ -730,12 +757,12 @@ export function LandingPage() {
                     <span>01 · Intentional Discovery</span>
                   </div>
                   <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
-                    Identity First Profiles
+                    Verified Human Profiles
                   </h3>
                   <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
-                    Every active profile completes our $1 Bot-Shield check and
-                    surfaces clear relationship goals, openers, and meetup
-                    preferences.
+                    Profiles in discovery pass our short human check and $1
+                    Bot-Shield payment, and surface clear relationship goals,
+                    openers, and meetup preferences.
                   </p>
                 </div>
 
@@ -807,14 +834,14 @@ export function LandingPage() {
               <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-3">
                 <div className="border-l-2 border-[#FFD21E] pl-4">
                   <div className="font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
-                    STEP 01 · LIVE CAMERA CHECK
+                    STEP 01 · TIMED QUESTION
                   </div>
                   <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
-                    60-Second Liveness Challenge
+                    Short Human Check
                   </h3>
                   <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
-                    Complete a quick camera gesture check in your browser to
-                    confirm a live adult is creating the profile.
+                    Answer a short timed question in your browser before moving
+                    to the account-bound checkout step.
                   </p>
                 </div>
 
@@ -954,7 +981,7 @@ export function LandingPage() {
                       to="/app/privacy"
                       className="ds-btn-ghost w-full text-sm"
                     >
-                      Open Privacy Center (/app/privacy)
+                      Open Privacy Center
                     </Link>
                   </div>
                 </div>
@@ -1274,6 +1301,14 @@ export function LandingPage() {
                     Start Tonight
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="/blog/"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    Dating Safety &amp; Verification Guides
+                  </a>
+                </li>
               </ul>
             </div>
 
@@ -1421,9 +1456,22 @@ export function LandingPage() {
 
           {/* Tobira AI A2A Badge */}
           <div className="mt-8 border-t border-[#3A3F45] pt-6">
-            <div data-tobira-a2a data-handle='youandinotai' data-name='YouAndINotAI'>
-              <a href='https://tobira.ai/@youandinotai/for-ai' target='_blank' rel='noopener nofollow'>For AI agents · A2A channel</a>
-              <p>AI agents: use tobira.ai/@youandinotai/for-ai, not the chat widget</p>
+            <div
+              data-tobira-a2a
+              data-handle="youandinotai"
+              data-name="YouAndINotAI"
+            >
+              <a
+                href="https://tobira.ai/@youandinotai/for-ai"
+                target="_blank"
+                rel="noopener nofollow"
+              >
+                For AI agents · A2A channel
+              </a>
+              <p>
+                AI agents: use tobira.ai/@youandinotai/for-ai, not the chat
+                widget
+              </p>
             </div>
           </div>
 
@@ -1433,7 +1481,7 @@ export function LandingPage() {
             </p>
             <span className="ds-status-pill">
               <span className="ds-status-dot bg-[#FFD21E]" />
-              <span>All Systems Operational · {checkedLabel}</span>
+              <span>All Systems Operational</span>
             </span>
           </div>
         </div>

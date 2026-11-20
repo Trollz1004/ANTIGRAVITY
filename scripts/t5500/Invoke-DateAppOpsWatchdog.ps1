@@ -5,7 +5,8 @@ param(
     [string]$StaticDeployDir = "C:\antigravity\apps\youandinotai-static",
     [string]$PagesProjectName = "youandinotai",
     [string]$RuntimeEnvFile = "C:\ProgramData\Antigravity\secrets\cloudflare-wrangler.env",
-    [string]$FallbackRuntimeEnvFile = "C:\Users\joshl\OneDrive\Personal Vault\ENV-AUTHORITY-20260608-082127\derived-platform-envs\runtime-misc.env",
+    [string]$FallbackRuntimeEnvFile = "$env:USERPROFILE\OneDrive\Personal Vault\ENV-AUTHORITY-20260608-082127\derived-platform-envs\runtime-misc.env",
+    [string]$NodeLanIp = $(if ($env:NODE_LAN_IP) { $env:NODE_LAN_IP } else { "192.168.0.15" }),
     [int]$TimeoutSec = 10
 )
 
@@ -90,7 +91,7 @@ function Get-WranglerPath {
     if ($cmd -and (Test-Path -LiteralPath $cmd.Source)) { return $cmd.Source }
 
     $candidates = @(
-        "C:\Users\joshl\AppData\Roaming\npm\wrangler.cmd",
+        "$env:APPDATA\npm\wrangler.cmd",
         "C:\Program Files\nodejs\wrangler.cmd"
     )
 
@@ -245,35 +246,28 @@ function Invoke-WranglerPagesAgent {
 }
 
 function Invoke-DateAppLocalAgent {
-    $localStatic = Test-HttpHealth -Agent "dateapp-local-agent" -Name "date app local static" -Url "http://127.0.0.1:3200/" -WarnOnly
+    $localStatic = Test-HttpHealth -Agent "dateapp-local-agent" -Name "date app local static" -Url "http://${NodeLanIp}:3200/" -WarnOnly
     if (-not $localStatic) {
         Start-RepairTask -Agent "dateapp-local-agent" -TaskName "ANTIGRAVITY-DateApp-Static-3200-SYSTEM" | Out-Null
         Start-Sleep -Seconds 12
-        Test-HttpHealth -Agent "dateapp-local-agent" -Name "date app local static after repair" -Url "http://127.0.0.1:3200/" -WarnOnly | Out-Null
+        Test-HttpHealth -Agent "dateapp-local-agent" -Name "date app local static after repair" -Url "http://${NodeLanIp}:3200/" -WarnOnly | Out-Null
     }
 
-    $localApi = Test-HttpHealth -Agent "dateapp-local-agent" -Name "date app local api" -Url "http://127.0.0.1:8000/api/v1/health" -WarnOnly
+    $localApi = Test-HttpHealth -Agent "dateapp-local-agent" -Name "date app local api" -Url "http://${NodeLanIp}:8000/api/v1/health" -WarnOnly
     if (-not $localApi) {
         Start-RepairTask -Agent "dateapp-local-agent" -TaskName "ANTIGRAVITY-YouAndINotAI-PublicStack-T5500" | Out-Null
     }
 }
 
-function Invoke-PaperclipAgent {
-    $paperclip = Test-HttpHealth -Agent "paperclip-agent" -Name "paperclip local api" -Url "http://127.0.0.1:3917/api/health"
-    if (-not $paperclip) {
-        Start-RepairTask -Agent "paperclip-agent" -TaskName "PaperclipDateAppLoopback" -Restart | Out-Null
-        Start-Sleep -Seconds 25
-        Test-HttpHealth -Agent "paperclip-agent" -Name "paperclip local api after repair" -Url "http://127.0.0.1:3917/api/health" | Out-Null
+function Invoke-MissionOSAgent {
+    $missionOs = Test-HttpHealth -Agent "mission-os-agent" -Name "mission os local api" -Url "http://${NodeLanIp}:3130/"
+    if (-not $missionOs) {
+        Start-RepairTask -Agent "mission-os-agent" -TaskName "MissionControlWatchdog" -Restart | Out-Null
+        Start-Sleep -Seconds 15
+        Test-HttpHealth -Agent "mission-os-agent" -Name "mission os local api after repair" -Url "http://${NodeLanIp}:3130/" | Out-Null
     }
 
-    $proxy = Test-HttpHealth -Agent "paperclip-agent" -Name "paperclip private proxy" -Url "http://127.0.0.1:3110/healthz"
-    if (-not $proxy) {
-        Start-RepairTask -Agent "paperclip-agent" -TaskName "PaperclipPrivateAuthProxy" -Restart | Out-Null
-        Start-Sleep -Seconds 10
-        Test-HttpHealth -Agent "paperclip-agent" -Name "paperclip private proxy after repair" -Url "http://127.0.0.1:3110/healthz" | Out-Null
-    }
-
-    Test-LocalPort -Agent "paperclip-agent" -Name "embedded paperclip postgres" -Port 54329 -WarnOnly | Out-Null
+    Test-LocalPort -Agent "mission-os-agent" -Name "postgres 5432" -Port 5432 -WarnOnly | Out-Null
 }
 
 function Invoke-CloudflaredAgent {
@@ -288,23 +282,21 @@ function Invoke-CloudflaredAgent {
         Start-Sleep -Seconds 10
     }
 
-    $paperclipPublic = Test-HttpHealth -Agent "cloudflared-agent" -Name "paperclip public health" -Url "https://paperclip.youandinotai.com/healthz"
-    $paperclipHqPublic = Test-HttpHealth -Agent "cloudflared-agent" -Name "paperclip hq public health" -Url "https://paperclip-hq.youandinotai.com/healthz"
-    $localProxy = Test-HttpHealth -Agent "cloudflared-agent" -Name "paperclip local proxy for tunnel" -Url "http://127.0.0.1:3110/healthz"
+    $apiPublic = Test-HttpHealth -Agent "cloudflared-agent" -Name "dateapp api public health" -Url "https://api.youandinotai.com/api/v1/health" -WarnOnly
+    $localApi = Test-HttpHealth -Agent "cloudflared-agent" -Name "dateapp local api for tunnel" -Url "http://${NodeLanIp}:8000/api/v1/health" -WarnOnly
 
-    if ((-not $paperclipPublic -or -not $paperclipHqPublic) -and $localProxy -and -not $NoRepair) {
-        Write-OpsEvent -Agent "cloudflared-agent" -Level "warn" -Message "Public tunnel unhealthy while local proxy is healthy; restarting cloudflared"
+    if (-not $apiPublic -and $localApi -and -not $NoRepair) {
+        Write-OpsEvent -Agent "cloudflared-agent" -Level "warn" -Message "Public tunnel unhealthy while local API is healthy; restarting cloudflared"
         Get-Process cloudflared -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
         Start-Sleep -Seconds 4
         Start-RepairTask -Agent "cloudflared-agent" -TaskName "ANTIGRAVITY-T5500-DateApp-Cloudflared-SYSTEM" | Out-Null
         Start-Sleep -Seconds 15
-        Test-HttpHealth -Agent "cloudflared-agent" -Name "paperclip public health after tunnel repair" -Url "https://paperclip.youandinotai.com/healthz" | Out-Null
-        Test-HttpHealth -Agent "cloudflared-agent" -Name "paperclip hq public health after tunnel repair" -Url "https://paperclip-hq.youandinotai.com/healthz" | Out-Null
+        Test-HttpHealth -Agent "cloudflared-agent" -Name "dateapp api public health after tunnel repair" -Url "https://api.youandinotai.com/api/v1/health" -WarnOnly | Out-Null
     }
 }
 
 function Invoke-DomainAgent {
-    foreach ($hostName in @("youandinotai.com", "www.youandinotai.com", "app.youandinotai.com", "api.youandinotai.com", "paperclip.youandinotai.com", "paperclip-hq.youandinotai.com")) {
+    foreach ($hostName in @("youandinotai.com", "www.youandinotai.com", "app.youandinotai.com", "api.youandinotai.com")) {
         try {
             $records = Resolve-DnsName -Name $hostName -ErrorAction Stop
             Write-OpsEvent -Agent "dns-agent" -Level "green" -Message "DNS resolves for $hostName" -Data @{ name = $hostName; records = @($records | Select-Object -First 5 Name, Type, IPAddress, NameHost) }
@@ -367,7 +359,7 @@ Write-OpsEvent -Agent "orchestrator" -Level "green" -Message "T5500 date app ops
 
 Invoke-SystemAgent
 Invoke-DateAppLocalAgent
-Invoke-PaperclipAgent
+Invoke-MissionOSAgent
 Invoke-CloudflaredAgent
 Invoke-DomainAgent
 Invoke-WranglerPagesAgent

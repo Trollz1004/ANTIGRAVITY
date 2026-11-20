@@ -55,7 +55,7 @@ def create_refresh_token(user_id: str) -> str:
         days=settings.refresh_token_expire_days
     )
     return jwt.encode(
-        {"sub": user_id, "exp": expire, "type": "refresh"},
+        {"sub": user_id, "exp": expire, "type": "refresh", "jti": str(uuid.uuid4())},
         settings.jwt_secret,
         algorithm=ALGORITHM,
     )
@@ -156,6 +156,44 @@ def _hash_token(raw_token: str) -> str:
     return hashlib.sha256(raw_token.encode()).hexdigest()
 
 
+async def issue_refresh_token(
+    db: AsyncSession,
+    user_id: uuid.UUID | str,
+    ip_address: str | None = None,
+    user_agent: str | None = None,
+    *,
+    replaced_token: RefreshToken | None = None,
+    revoked_at: datetime | None = None,
+) -> str:
+    """Create a raw refresh token and persist its RefreshToken row (hash, user, expiry)."""
+    parsed_user_id = (
+        user_id if isinstance(user_id, uuid.UUID) else uuid.UUID(str(user_id))
+    )
+    new_raw_token = create_refresh_token(str(parsed_user_id))
+    new_expires = datetime.now(timezone.utc) + timedelta(
+        days=settings.refresh_token_expire_days
+    )
+    new_token = RefreshToken(
+        id=uuid.uuid4(),
+        user_id=parsed_user_id,
+        token_hash=_hash_token(new_raw_token),
+        expires_at=new_expires,
+        ip_address=ip_address,
+        user_agent=user_agent,
+    )
+    db.add(new_token)
+    await db.flush()
+
+    if replaced_token is not None:
+        replaced_token.revoked_at = revoked_at or datetime.now(timezone.utc)
+        replaced_token.replaced_by = new_token.id
+
+    if hasattr(db, "sync_session"):
+        db.sync_session.expire_on_commit = False
+    await db.commit()
+    return new_raw_token
+
+
 async def rotate_refresh_token(
     db: AsyncSession,
     raw_token: str,
@@ -210,28 +248,14 @@ async def rotate_refresh_token(
     payload = decode_token(raw_token)
     token_user_id = uuid.UUID(str(payload["sub"]))
 
-    # Create the new token record
-    new_raw_token = create_refresh_token(str(token_user_id))
-    new_expires = datetime.now(timezone.utc) + timedelta(
-        days=settings.refresh_token_expire_days
-    )
-    new_token = RefreshToken(
-        id=uuid.uuid4(),
+    return await issue_refresh_token(
+        db=db,
         user_id=token_user_id,
-        token_hash=_hash_token(new_raw_token),
-        expires_at=new_expires,
         ip_address=ip_address,
         user_agent=user_agent,
+        replaced_token=stored_token,
+        revoked_at=now,
     )
-    db.add(new_token)
-    await db.flush()  # get the new token's id
-
-    # Revoke the old token and link it to the new one
-    stored_token.revoked_at = now
-    stored_token.replaced_by = new_token.id
-
-    await db.commit()
-    return new_raw_token
 
 
 async def revoke_all_user_tokens(db: AsyncSession, user_id: uuid.UUID) -> int:

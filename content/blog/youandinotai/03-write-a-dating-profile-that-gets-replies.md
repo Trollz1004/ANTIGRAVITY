@@ -16,7 +16,7 @@ canonical: https://youandinotai.com/blog/write-a-dating-profile-that-gets-replie
 
 Most dating profiles fail for a boring reason: there's nothing in them for a stranger to respond to. "I love traveling and trying new restaurants" isn't a bad sentence, it's just a sentence that could sit on ten thousand other profiles without changing a word. Nobody knows what to say back to it, so they don't say anything at all.
 
-On a verified, human-first platform, this problem is actually worth fixing, because the person reading your profile is real and is going to make a real decision about whether to reply. That's the whole point of matching on a platform where accounts pass a live-human check before a badge shows up — the effort you put into your profile is being read by someone, not filtered by an algorithm optimizing for swipe volume.
+On a verified, human-first platform, this problem is actually worth fixing, because the person reading your profile is real and is going to make a real decision about whether to reply. That's the whole point of matching on a platform where accounts pass a human check and $1 payment before messaging — the effort you put into your profile is being read by someone, not filtered by an algorithm optimizing for swipe volume.
 
 ## Specificity is the entire game
 
@@ -54,4 +54,4 @@ Write like you're describing yourself to a specific friend, not marketing yourse
 
 ## Ready to put a real profile in front of real people
 
-A good profile matters more on a platform where the person reading it passed a live-human verification check to be there. If you haven't started yet, [get Bot-Shield verified](https://youandinotai.com/app/verify) and build a profile worth the badge next to it, or [check founder pricing](https://youandinotai.com/#pricing) for full membership. Not ready yet? [Join the list](https://youandinotai.com/#join) for updates first.
+A good profile matters more on a platform where the person reading it passed a human verification check to message you. If you haven't started yet, [get Bot-Shield verified](https://youandinotai.com/app/verify) and build a profile worth the badge next to it, or [check founder pricing](https://youandinotai.com/#pricing) for full membership. Not ready yet? [Join the list](https://youandinotai.com/#join) for updates first.

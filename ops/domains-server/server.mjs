@@ -15,6 +15,9 @@ import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { notifyBooking } from "./booking-notify.mjs";
 import { recordPageView, recordBooking } from "./booking-stats.mjs";
+import { getBindHost, getNodeIp, getService } from "../fleet/fleet-map.mjs";
+import { logStartupEnvCheck } from "../agents/env-required.mjs";
+import { buildPublicHealthLight } from "../agents/node-light.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
@@ -24,15 +27,34 @@ const BOOKINGS_JSONL = path.join(BOOKINGS_DIR, "bookings.jsonl");
 const INQUIRIES_DIR = path.join(BOOKINGS_DIR, "inquiries");
 const STATS_DIR = process.env.ORC_STATS_DIR || path.join(BOOKINGS_DIR, "stats");
 
-// Ruled 2026-09-28 (Joshua: "use the endpoints always of 192, not localhost"):
-// listen on the T5500 LAN address and on loopback for local probes and the
-// cloudflared tunnel. Never every interface, and never Sabretooth (.8), which
-// does not host live domains.
-const HOSTS = (process.env.DOMAINS_SERVER_HOST || "127.0.0.1,192.168.0.15")
-  .split(",")
-  .map((h) => h.trim())
-  .filter(Boolean);
-const PORT = Number(process.env.DOMAINS_SERVER_PORT || 9160);
+// Fleet Map authority (ops/fleet/fleet-map.json): T5500 (192.168.0.15) hosts
+// domains-server bound on 0.0.0.0:9160 unless overridden via DOMAINS_SERVER_HOST.
+const T5500_IP = getNodeIp("t5500");
+const DOMAINS_SERVICE = getService("domains-server");
+const PORT = Number(process.env.DOMAINS_SERVER_PORT || DOMAINS_SERVICE.port);
+
+function resolveDomainsServerBind(env = process.env, { port = PORT, warn = console.warn } = {}) {
+  const token = String(env?.FLEET_SHARED_TOKEN || env?.DOMAINS_SERVER_TOKEN || "").trim();
+  const explicit = String(env?.DOMAINS_SERVER_HOST || "")
+    .split(",")
+    .map((h) => h.trim())
+    .filter(Boolean);
+  if (explicit.length > 0) {
+    return explicit;
+  }
+  if (!token) {
+    warn?.(
+      `[domains-server] WARNING: FLEET_SHARED_TOKEN is not set; binding 127.0.0.1 on port ${port} (this machine only).`
+    );
+    return ["127.0.0.1"];
+  }
+  return getBindHost("domains-server")
+    .split(",")
+    .map((h) => h.trim())
+    .filter(Boolean);
+}
+
+const HOSTS = resolveDomainsServerBind(process.env, { port: PORT });
 
 // Host header -> document root (relative to DOMAINS_ROOT).
 // onlinerecycle.net serves the restored static recycling site from site/
@@ -56,11 +78,16 @@ const BOOK_LIMIT = 10;
 const BOOK_WINDOW_MS = 60 * 60 * 1000;
 const bookHits = new Map();
 
-// cf-connecting-ip is trusted only from loopback, where cloudflared connects;
-// a LAN client could otherwise invent a fresh address per request.
+// cf-connecting-ip is trusted only from the local T5500 tunnel connector;
+// an external LAN client could otherwise invent a fresh address per request.
 function clientIp(req) {
   const remote = String(req.socket.remoteAddress || "unknown");
-  const viaTunnel = remote === "127.0.0.1" || remote === "::1" || remote === "::ffff:127.0.0.1";
+  const viaTunnel =
+    remote === "127.0.0.1" ||
+    remote === "::1" ||
+    remote === "::ffff:127.0.0.1" ||
+    remote === T5500_IP ||
+    remote === `::ffff:${T5500_IP}`;
   return viaTunnel && req.headers["cf-connecting-ip"] ? String(req.headers["cf-connecting-ip"]) : remote;
 }
 
@@ -112,16 +139,7 @@ function hostOnly(hostHeader) {
 }
 
 function readEnvValue(key) {
-  if (process.env[key]) return process.env[key];
-  try {
-    const envPath = path.join(REPO_ROOT, ".env");
-    if (!fs.existsSync(envPath)) return "";
-    const txt = fs.readFileSync(envPath, "utf8");
-    const m = txt.match(new RegExp(`^${key}\\s*=\\s*(.+)$`, "m"));
-    return m && m[1] ? m[1].trim().replace(/^['"]|['"]$/g, "") : "";
-  } catch {
-    return "";
-  }
+  return String(process.env[key] || "").trim();
 }
 
 // Every booking, cached and re-read only when bookings.jsonl changes on disk.
@@ -341,6 +359,15 @@ async function resolveFile(docRootAbs, urlPath) {
   } catch {
     const last = path.basename(cleanPath);
     if (!last.includes(".")) {
+      const htmlCandidate = `${requested.replace(/[\\/]+$/, "")}.html`;
+      if (htmlCandidate.startsWith(docRootAbs)) {
+        try {
+          const htmlStat = await fsp.stat(htmlCandidate);
+          if (htmlStat.isFile()) return htmlCandidate;
+        } catch {
+          // fall through to index.html
+        }
+      }
       const indexPath = path.join(docRootAbs, "index.html");
       try {
         const stat = await fsp.stat(indexPath);
@@ -357,12 +384,18 @@ const server = http.createServer(async (req, res) => {
   try {
     const host = hostOnly(req.headers.host);
     const rawUrl = req.url || "/";
-    const parsedUrl = new URL(rawUrl, `http://${host || "localhost"}`);
+    const parsedUrl = new URL(rawUrl, `http://${host || T5500_IP}`);
     const urlPath = parsedUrl.pathname;
 
     if (urlPath === "/health") {
       res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
-      res.end(JSON.stringify({ service: "domains-server", sites: SITES }));
+      res.end(
+        JSON.stringify({
+          service: "domains-server",
+          sites: SITES,
+          ...buildPublicHealthLight({ manifestDir: __dirname }),
+        })
+      );
       return;
     }
 
@@ -574,17 +607,39 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-const listeners = HOSTS.map((host) => {
-  const srv = host === HOSTS[0] ? server : createServerFor(server.listeners("request")[0]);
-  srv.on("error", (err) => {
-    // eslint-disable-next-line no-console
-    console.error(`domains-server cannot listen on http://${host}:${PORT}: ${err && err.code ? err.code : err}`);
-  });
-  srv.listen(PORT, host, () => {
-    // eslint-disable-next-line no-console
-    console.log(`domains-server listening on http://${host}:${PORT} (sites: ${SITES.join(", ")})`);
-  });
-  return srv;
-});
+const IS_MAIN_MODULE = Boolean(
+  process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url))
+);
 
-export { VHOSTS, SITES, HOSTS, listeners, resolveFile, contentTypeFor, hostOnly };
+if (IS_MAIN_MODULE) {
+  logStartupEnvCheck(__dirname);
+}
+
+const listeners = IS_MAIN_MODULE
+  ? HOSTS.map((host) => {
+      const srv = host === HOSTS[0] ? server : createServerFor(server.listeners("request")[0]);
+      srv.on("error", (err) => {
+        // eslint-disable-next-line no-console
+        console.error(`domains-server cannot listen on http://${host}:${PORT}: ${err && err.code ? err.code : err}`);
+      });
+      srv.listen(PORT, host, () => {
+        // eslint-disable-next-line no-console
+        console.log(`domains-server listening on http://${host}:${PORT} (sites: ${SITES.join(", ")})`);
+      });
+      return srv;
+    })
+  : [];
+
+export {
+  VHOSTS,
+  SITES,
+  HOSTS,
+  PORT,
+  T5500_IP,
+  server,
+  listeners,
+  resolveDomainsServerBind,
+  resolveFile,
+  contentTypeFor,
+  hostOnly,
+};

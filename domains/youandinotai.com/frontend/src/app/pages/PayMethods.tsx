@@ -139,7 +139,7 @@ export function PayMethods() {
       id: 'plaid',
       name: 'Plaid verify',
       icon: Landmark,
-      note: 'Bank identity / account verification (not card charge)',
+      note: 'Bank account verification (not card charge)',
     },
   ];
 

@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 
+import fs from 'node:fs';
 import { createServer, IncomingMessage, ServerResponse } from 'node:http';
 import { createHash, timingSafeEqual } from 'node:crypto';
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import 'dotenv/config';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
@@ -10,6 +14,64 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { loadBrainConfig } from './config.js';
 import { createBrainServer, type AuthContext } from './server.js';
 import { BrainStateStore } from './state.js';
+
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
+
+type BrainEnvHelpers = {
+  logStartupEnvCheck: (
+    manifestOrDir: string,
+    env?: Record<string, string | undefined>,
+    warn?: (msg: string) => void
+  ) => unknown;
+  buildHealthEnvLight: (opts: {
+    manifestDir: string;
+    env?: Record<string, string | undefined>;
+    driftPath?: string;
+  }) => {
+    missingEnv: string[];
+    driftedFiles: Array<{ file: string; reason: string }>;
+    driftedCount: number;
+    nodeLight: 'green' | 'amber';
+  };
+};
+
+function findBrainManifestDir(baseDir: string): string {
+  return fs.existsSync(path.join(baseDir, 'env.required.json'))
+    ? baseDir
+    : path.resolve(baseDir, '..');
+}
+
+function loadBrainEnvHelpers(): BrainEnvHelpers {
+  let dir = HERE;
+  for (let i = 0; i < 6; i += 1) {
+    const envReq = path.join(dir, 'ops', 'agents', 'env-required.cjs');
+    const nodeLight = path.join(dir, 'ops', 'agents', 'node-light.cjs');
+    if (fs.existsSync(envReq) && fs.existsSync(nodeLight)) {
+      const { logStartupEnvCheck } = require(envReq) as Pick<BrainEnvHelpers, 'logStartupEnvCheck'>;
+      const { buildHealthEnvLight } = require(nodeLight) as Pick<
+        BrainEnvHelpers,
+        'buildHealthEnvLight'
+      >;
+      return { logStartupEnvCheck, buildHealthEnvLight };
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return {
+    logStartupEnvCheck: () => undefined,
+    buildHealthEnvLight: () => ({
+      missingEnv: [],
+      driftedFiles: [],
+      driftedCount: 0,
+      nodeLight: 'green',
+    }),
+  };
+}
+
+const MANIFEST_DIR = findBrainManifestDir(HERE);
+const { logStartupEnvCheck, buildHealthEnvLight } = loadBrainEnvHelpers();
 
 const config = loadBrainConfig();
 const state = new BrainStateStore(config);
@@ -115,6 +177,7 @@ async function runHttpServer(): Promise<void> {
           auth_required: config.http.requireAuth,
           host: config.http.host,
           port: config.http.port,
+          ...buildHealthEnvLight({ manifestDir: MANIFEST_DIR }),
         }),
       );
       return;
@@ -151,6 +214,9 @@ async function runHttpServer(): Promise<void> {
 }
 
 async function main(): Promise<void> {
+  logStartupEnvCheck(MANIFEST_DIR, process.env, (msg) => {
+    process.stderr.write(`${msg}\n`);
+  });
   if ((process.env.BRAIN_TRANSPORT ?? 'stdio') === 'http') {
     await runHttpServer();
     return;

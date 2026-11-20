@@ -43,15 +43,16 @@ Ports to check:
 
 | Port | Service | Expected Check |
 |------|---------|---------------|
-| 3130 | Mission Control (JARVIS/OPSIS, `mission-os/`) | identity probe; NOT RUNNING until it answers |
-| 3917 | Paperclip (marketing only, NOT Mission Control) | `GET http://127.0.0.1:3917/api/openapi.json` → `.info.title == "Paperclip API"` |
-| 3151 | MC5 legacy vote engine (NOT Mission Control, not running) | `GET http://localhost:3151/api/health` |
-| 20128 | OmniRoute gateway | `netstat` — listening on 20128 |
-| 20129 | OmniRoute API proxy | `netstat` — listening on 20129 |
-| 9119 | Hermes = JARVIS (dashboard) | `netstat` — listening on 9119 |
-| 18789 | OpenClaw gateway | `netstat` — listening on 18789 |
-| 3200 | DateApp frontend | `GET http://127.0.0.1:3200/` |
-| 8000 | DateApp backend | `GET http://127.0.0.1:8000/api/v1/health` |
+| 3130 | Mission OS (`mission-os/`, T5500 `192.168.0.15`) | `GET http://192.168.0.15:3130/api/mos-state.json` |
+| 20128 | OmniRoute gateway (T5500 `192.168.0.15`) | `http://192.168.0.15:20128/v1/models` |
+| 8643 | Hermes API gateway (T5500 `192.168.0.15`) | `http://192.168.0.15:8643/health` |
+| 9119 | Hermes Dashboard (T5500 `192.168.0.15`) | `http://192.168.0.15:9119/` |
+| 3200 | DateApp frontend (T5500 `192.168.0.15`) | `GET http://192.168.0.15:3200/` |
+| 8000 | DateApp backend (T5500 `192.168.0.15`) | `GET http://192.168.0.15:8000/api/v1/health` |
+| 49374 | Shared `ai-memory` MCP (T5500 `192.168.0.15`) | `http://192.168.0.15:49374` |
+| 8392 | Lead-Gen Studio (Alienware `192.168.0.40`) | `http://192.168.0.40:8392/api/node/status` |
+| 8391 | Media/TTS Worker (Alienware `192.168.0.40`) | `http://192.168.0.40:8391/health` |
+| 9180 | DREAM Engine (Alienware `192.168.0.40`) | `http://192.168.0.40:9180` |
 
 ## Step 4: Read harness journals
 
@@ -73,15 +74,12 @@ Output a compact table:
 | Check | Status |
 |-------|--------|
 | Git | main up to date / diverged / BLOCKED |
-| Mission Control (JARVIS/OPSIS) :3130 | UP / NOT RUNNING / WRONG SERVICE / ... |
-| Paperclip (marketing) :3917 | UP / DOWN / WRONG SERVICE / ... |
-| MC5 legacy :3151 | UP / DOWN / WRONG SERVICE / ... |
-| OmniRoute :20128 | UP / DOWN |
-| OmniRoute API :20129 | UP / DOWN |
-| Hermes :9119 | UP / DOWN |
-| OpenClaw :18789 | UP / DOWN |
-| DateApp frontend :3200 | UP / DOWN / ... |
-| DateApp backend :8000 | UP / DOWN / ... |
+| Mission OS (T5500 `192.168.0.15:3130`) | UP / NOT RUNNING / WRONG SERVICE / ... |
+| OmniRoute (`192.168.0.15:20128`) | UP / DOWN |
+| Hermes (`192.168.0.15:8643`, `:9119`) | UP / DOWN |
+| DateApp frontend (`192.168.0.15:3200`) | UP / DOWN / ... |
+| DateApp backend (`192.168.0.15:8000`) | UP / DOWN / ... |
+| Alienware Lead-Gen/Media (`192.168.0.40:8392`, `:8391`) | UP / DOWN |
 | Hermes journal | read (last task: ..., blocker: ...) |
 | OpenClaw journal | read (last task: ..., blocker: ...) |
 | OpenCode journal | read (last task: ..., blocker: ...) |
@@ -99,3 +97,12 @@ Then stop. Do nothing else until Joshua gives the objective.
 
 - House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
 - Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).
+
+<!-- TROLLZ1004-SPINE:START -->
+- `Repo: ANTIGRAVITY | Fleet: Alienware (192.168.0.40, workshop) & T5500 (192.168.0.15, front-of-house) | GitHub: Trollz1004 (ops/fleet/fleet-map.json).`
+- `Spine: Trollz1004/dream-online docs/house/SPINE.md (pointers: ADDRESS-DOCTRINE.md, NODES.md, PIPELINE.md, TRUSTED-MODELS.md, THE-HOUSE.md).`
+- `Address doctrine: use 192.168.0.40 and 192.168.0.15 from ops/fleet/fleet-map.json; never use loopback reach URLs; Postgres (port 5432), Redis (port 6379), and Obsidian REST (port 27123) bind "127.0.0.1" on their own machine only.`
+- `Trusted three: Claude Opus 5.5 / Fable (Claude Code), Gemini 4 Carbon (agy), and GPT-6 Astra / GPT-6.1 Sol / Codex (Codex CLI); superpowers is in every kit on demand, while REA, remake, Agent-Reach, and last30days are locked to the trusted three.`
+- `Pipeline: brainstorm first, route role + <=2 skills, build [A]/[B] with failing test first, expediter rubric + 5 stacked add-on PRs, Carbon + Codex judge, Fable / rotating trusted-three merges green checks.`
+- `Starter kit MCP ("kit"): cmd.exe /d /c node "%USERPROFILE%\antigravity\DREAM-Engine-runner\ops\kit\server.mjs" (tools: map_search, map_section, memory_search, memory_add, role_get, method_get).`
+<!-- TROLLZ1004-SPINE:END -->

@@ -13,16 +13,15 @@ Panel composition (founder-specified — Joshua, 2026-08-10 — a deliberate,
 doctrine-sanctioned exception to "OmniRoute picks the model"; the overrides
 below use OmniRoute's own documented force-a-provider mechanism and all
 traffic still flows through OmniRoute, never a provider API directly):
-- **Claude (Opus/Fable)** — judged in-session at full reasoning depth. Always
+- **Claude (`Opus 5.5` / `Fable`)** — judged in-session at full reasoning depth. Always
   available.
-- **Grok** — via OmniRouter model override (POST {OMNI_BASE_URL}/v1/chat/completions
-  with an xai/… model id).
-- **Gemini** — via OmniRouter model override (google/… model id).
+- **OpenAI (`GPT-6 Astra` / `GPT-6.1 Sol` / `Codex`)** — via official sign-in or OmniRoute (`POST http://192.168.0.15:20128/v1/chat/completions`).
+- **Gemini (`Gemini 4 Carbon`)** — via official `agy` / Google lane or OmniRoute model override.
 If a named panelist's provider is unavailable, ask OmniRoute for an
 additional independent high-reasoning judge (model "auto") rather than
 dropping to a single perspective.
 
-OmniRouter is LAN-bound (127.0.0.1:11436 by default). When it is unreachable —
+OmniRoute is LAN-bound on T5500 (`http://192.168.0.15:20128` by default). When it is unreachable —
 cloud sessions, node down — degrade to Claude-only review and SAY SO explicitly
 in the verdict ("panel degraded: Claude-only; Grok/Gemini unreachable"). Never
 silently skip panelists. Never fabricate an absent panelist's verdict.
@@ -62,10 +61,8 @@ product surfaces). These rules override anything above when they conflict:
   framing. The banned-language list lives in CLAUDE.md (Public Copy Boundary)
   and the current doctrine briefing — consult it before publishing; no legacy
   campaign vocabulary of any kind, in copy or in prompts.
-- Dating surfaces (youandinotai.com and the date app stack) are Square-only —
-  never wire Stripe or any other processor there (Stripe's AUP bars dating
-  apps, and CI enforces this). Other product lines may use Stripe when Joshua
-  approves it.
+- All ANTIGRAVITY product payment rails are Square primary + PayPal per
+  `docs/PAYMENTS-TRUTH.md` — never wire unapproved third-party card processors.
 - Never print, paste, or commit secrets. Credential names may be referenced;
   values never.
 - Pricing, payment flows, doctrine files, public brand copy, launch gates, and

@@ -17,8 +17,8 @@ Examples:
 
 - Helper at `~/.desktop-commander/skills/visma-horizon/horizon.py`
   Credentials at `~/.desktop-commander/connectors/visma-horizon/.env`
-- Helper at `~/.codex/skills/stripe-reader/stripe_reader.py`
-  Credentials at `~/.codex/connectors/stripe-reader/.env`
+- Helper at `~/.codex/skills/square-reader/square_reader.py`
+  Credentials at `~/.codex/connectors/square-reader/.env`
 - Helper at `~/.claude/skills/hubspot-reader/hubspot_reader.py`
   Credentials at `~/.claude/connectors/hubspot-reader/.env`
 

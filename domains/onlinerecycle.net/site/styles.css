@@ -1542,7 +1542,7 @@ p {
     right: 0;
     background: var(--panel);
     border-bottom: 1px solid var(--line);
-    padding: 12px 16px 116px;
+    padding: 12px 16px 136px;
     gap: 4px;
     z-index: var(--z-nav);
   }
@@ -1559,8 +1559,10 @@ p {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    flex-wrap: wrap;
+    white-space: normal;
     position: fixed;
-    top: calc(64px + 332px);
+    top: calc(64px + 396px);
     left: 0;
     right: 0;
     background: var(--panel-elevated);
@@ -1570,9 +1572,17 @@ p {
     z-index: var(--z-nav);
   }
 
+  .site-header.menu-open .contact-info {
+    flex-wrap: wrap;
+    white-space: normal;
+    text-align: left;
+    max-width: 100%;
+  }
+
   .site-header.menu-open .header-right .status-pill,
   .site-header.menu-open .contact-subline {
     display: inline-flex;
+    white-space: normal;
   }
 }
 
@@ -1677,5 +1687,168 @@ p {
 
   .journey-readout {
     display: none;
+  }
+}
+
+/* Legal and About pages (about, terms, privacy): same dark design as home, reading layout.
+   Uses the home tokens, header, hero card, footer and numbered section bar. No animation of its own. */
+.legal-page #overview.stage-stop {
+  min-height: auto;
+  justify-content: flex-end;
+  padding-top: 48vh;
+  padding-bottom: 28px;
+  margin-bottom: 0;
+}
+
+.legal-page .meta {
+  font-size: 0.95rem;
+}
+
+.legal-stop {
+  padding: 18px 0;
+}
+
+.legal-panel {
+  width: 100%;
+  max-width: 900px;
+  background: var(--panel-glass);
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--accent);
+  border-radius: 12px;
+  padding: 28px 30px;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.65);
+}
+
+.legal-panel h2 {
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  margin: 28px 0 10px;
+}
+
+.legal-panel > h2:first-child,
+.legal-panel > div > h2:first-child,
+.legal-panel .section-sub + h2 {
+  margin-top: 0;
+}
+
+.legal-panel h3 {
+  font-size: 1.05rem;
+  margin: 20px 0 8px;
+}
+
+.legal-panel p,
+.legal-panel li {
+  color: var(--text);
+  max-width: 72ch;
+}
+
+.legal-panel ul {
+  padding-left: 1.4rem;
+  margin: 0 0 16px;
+}
+
+.legal-panel li {
+  margin: 0 0 8px;
+}
+
+.legal-panel a:not(.btn) {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.legal-panel a:not(.btn):hover {
+  color: var(--accent-hover);
+}
+
+.legal-panel .section-sub {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.legal-panel .card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.legal-panel .card {
+  background: var(--panel-elevated);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.legal-panel .card-icon {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.legal-panel .card h3 {
+  margin: 0 0 8px;
+}
+
+.legal-panel .card p {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.legal-panel .split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-top: 22px;
+}
+
+.legal-panel .note,
+.legal-panel .contact-box {
+  background: var(--panel-elevated);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-top: 8px;
+}
+
+.legal-panel .cta-row {
+  margin-top: 24px;
+}
+
+.legal-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 0.98rem;
+}
+
+.legal-panel th,
+.legal-panel td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+}
+
+.legal-panel th {
+  background: var(--panel-elevated);
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .legal-page #overview.stage-stop {
+    padding-top: 28vh;
+  }
+
+  .legal-panel {
+    padding: 22px 18px;
+  }
+
+  .legal-panel .split-grid {
+    grid-template-columns: 1fr;
   }
 }

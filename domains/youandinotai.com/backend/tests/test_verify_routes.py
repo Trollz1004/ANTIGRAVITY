@@ -9,16 +9,18 @@ Coverage targets:
 Risk surface: FL §496.405 compliance gate; no-free-verification Iron Wall.
 """
 
+import logging
 import uuid
-from datetime import date, datetime, timezone
-from unittest.mock import patch
+from datetime import date, datetime, timedelta, timezone
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
+from sqlalchemy import select
 
 from app.auth import create_access_token, get_current_user, hash_password
 from app.main import app
-from app.models import User, VerificationEvent
-from tests.helpers import override_user, seed
+from app.models import Profile, User, VerificationEvent
+from tests.helpers import override_user, seed, verified_profile
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -360,5 +362,568 @@ class TestVerifyConfirm:
             data = resp.json()
             assert data["verified"] is True
             assert data["tier"] in ("gold", "platinum")
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+
+# ── POST /verify/refund ───────────────────────────────────────────────────────
+
+
+class TestVerifyRefund:
+    """Three-day $1 Bot-Shield refund route with Square mocked."""
+
+    @pytest.fixture(autouse=True)
+    def _enable_refund_switch(self, monkeypatch):
+        from app.config import get_settings
+
+        monkeypatch.setattr(
+            get_settings(), "bot_shield_refund_enabled", True, raising=False
+        )
+
+    def test_refund_within_three_days_succeeds_once(
+        self, client, db_session_factory, caplog
+    ):
+        now = datetime.now(timezone.utc)
+        user = _make_user(
+            email="refund_happy@example.com",
+            bot_shield_verified=True,
+        )
+        profile = verified_profile(user)
+        liveness_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="liveness",
+            status="passed",
+            amount_cents=100,
+            challenge_token="tok:hash",
+            created_at=now - timedelta(days=2),
+            completed_at=now - timedelta(days=2),
+        )
+        payment_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_dollar_back_1",
+            card_fingerprint="fp_member_alpha_1",
+            created_at=now - timedelta(days=2),
+            completed_at=now - timedelta(days=2),
+        )
+        seed(
+            user,
+            profile,
+            liveness_event,
+            payment_event,
+            db_session_factory=db_session_factory,
+        )
+        app.dependency_overrides[get_current_user] = override_user(user)
+        mock_refund = AsyncMock(
+            return_value={
+                "id": "rfnd_dollar_back_1",
+                "status": "PENDING",
+                "payment_id": "pay_dollar_back_1",
+            }
+        )
+        try:
+            with (
+                caplog.at_level(logging.INFO),
+                patch(
+                    "app.routers.verify.refund_square_payment",
+                    mock_refund,
+                    create=True,
+                ),
+            ):
+                resp = client.post("/api/v1/verify/refund")
+
+            assert resp.status_code == 200, resp.text
+            data = resp.json()
+            assert data["refunded"] is True
+            assert data["verified"] is False
+            assert mock_refund.await_count == 1
+            call_kwargs = mock_refund.await_args.kwargs
+            assert call_kwargs["payment_id"] == "pay_dollar_back_1"
+            assert call_kwargs["amount_cents"] == 100
+            assert "pay_dollar_back_1" in call_kwargs["idempotency_key"]
+
+            assert "card" not in resp.text.lower()
+            assert "fp_member_alpha_1" not in resp.text.lower()
+            assert "card" not in caplog.text.lower()
+            assert "fp_member_alpha_1" not in caplog.text.lower()
+
+            import asyncio
+
+            async def _fetch_state():
+                async with db_session_factory() as session:
+                    db_user = await session.scalar(
+                        select(User).where(User.id == user.id)
+                    )
+                    db_profile = await session.scalar(
+                        select(Profile).where(Profile.user_id == user.id)
+                    )
+                    db_payment = await session.scalar(
+                        select(VerificationEvent).where(
+                            VerificationEvent.id == payment_event.id
+                        )
+                    )
+                    return db_user, db_profile, db_payment
+
+            db_user, db_profile, db_payment = asyncio.run(_fetch_state())
+            assert db_user.bot_shield_verified is False
+            assert db_profile.verified is False
+            assert db_payment.status == "refunded"
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_refund_second_ask_is_refused(self, client, db_session_factory, caplog):
+        now = datetime.now(timezone.utc)
+        user = _make_user(
+            email="refund_second_ask@example.com",
+            bot_shield_verified=True,
+        )
+        profile = verified_profile(user)
+        first_payment = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_first_1",
+            card_fingerprint="fp_first_1",
+            created_at=now - timedelta(days=1),
+            completed_at=now - timedelta(days=1),
+        )
+        seed(user, profile, first_payment, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
+        mock_refund = AsyncMock(
+            return_value={
+                "id": "rfnd_first_1",
+                "status": "PENDING",
+                "payment_id": "pay_first_1",
+            }
+        )
+        try:
+            with (
+                caplog.at_level(logging.INFO),
+                patch(
+                    "app.routers.verify.refund_square_payment",
+                    mock_refund,
+                    create=True,
+                ),
+            ):
+                first_resp = client.post("/api/v1/verify/refund")
+                assert first_resp.status_code == 200, first_resp.text
+
+                # Seed a second completed payment on the same account to prove a second ask is still refused
+                second_payment = VerificationEvent(
+                    id=uuid.uuid4(),
+                    user_id=user.id,
+                    challenge_type="payment",
+                    status="completed",
+                    amount_cents=100,
+                    square_payment_id="pay_second_2",
+                    card_fingerprint="fp_second_2",
+                    created_at=now - timedelta(hours=2),
+                    completed_at=now - timedelta(hours=2),
+                )
+                seed(second_payment, db_session_factory=db_session_factory)
+
+                second_resp = client.post("/api/v1/verify/refund")
+
+            assert second_resp.status_code == 409, second_resp.text
+            assert mock_refund.await_count == 1
+            assert "card" not in second_resp.text.lower()
+            assert "fp_first_1" not in second_resp.text.lower()
+            assert "fp_second_2" not in second_resp.text.lower()
+            assert "card" not in caplog.text.lower()
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_refund_card_fingerprint_already_refunded_is_refused(
+        self, client, db_session_factory, caplog
+    ):
+        now = datetime.now(timezone.utc)
+        user_a = _make_user(
+            email="refund_fp_a@example.com",
+            bot_shield_verified=False,
+        )
+        refunded_event_a = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user_a.id,
+            challenge_type="payment",
+            status="refunded",
+            amount_cents=100,
+            square_payment_id="pay_fp_a",
+            card_fingerprint="fp_shared_instrument_99",
+            created_at=now - timedelta(days=5),
+            completed_at=now - timedelta(days=5),
+        )
+        user_b = _make_user(
+            email="refund_fp_b@example.com",
+            bot_shield_verified=True,
+        )
+        profile_b = verified_profile(user_b)
+        payment_event_b = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user_b.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_fp_b",
+            card_fingerprint="fp_shared_instrument_99",
+            created_at=now - timedelta(days=1),
+            completed_at=now - timedelta(days=1),
+        )
+        seed(
+            user_a,
+            refunded_event_a,
+            user_b,
+            profile_b,
+            payment_event_b,
+            db_session_factory=db_session_factory,
+        )
+        app.dependency_overrides[get_current_user] = override_user(user_b)
+        mock_refund = AsyncMock()
+        try:
+            with (
+                caplog.at_level(logging.INFO),
+                patch(
+                    "app.routers.verify.refund_square_payment",
+                    mock_refund,
+                    create=True,
+                ),
+            ):
+                resp = client.post("/api/v1/verify/refund")
+
+            assert resp.status_code == 409, resp.text
+            mock_refund.assert_not_awaited()
+            assert "card" not in resp.text.lower()
+            assert "fp_shared_instrument_99" not in resp.text.lower()
+            assert "card" not in caplog.text.lower()
+            assert "fp_shared_instrument_99" not in caplog.text.lower()
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_refund_after_three_days_is_refused(
+        self, client, db_session_factory, caplog
+    ):
+        now = datetime.now(timezone.utc)
+        user = _make_user(
+            email="refund_expired@example.com",
+            bot_shield_verified=True,
+        )
+        profile = verified_profile(user)
+        old_payment = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_old_1",
+            card_fingerprint="fp_old_1",
+            created_at=now - timedelta(days=3, minutes=5),
+            completed_at=now - timedelta(days=3, minutes=5),
+        )
+        seed(user, profile, old_payment, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
+        mock_refund = AsyncMock()
+        try:
+            with (
+                caplog.at_level(logging.INFO),
+                patch(
+                    "app.routers.verify.refund_square_payment",
+                    mock_refund,
+                    create=True,
+                ),
+            ):
+                resp = client.post("/api/v1/verify/refund")
+
+            assert resp.status_code == 400, resp.text
+            mock_refund.assert_not_awaited()
+            assert "card" not in resp.text.lower()
+            assert "card" not in caplog.text.lower()
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_refund_no_payment_is_refused(self, client, db_session_factory, caplog):
+        user = _make_user(
+            email="refund_nopay@example.com",
+            bot_shield_verified=False,
+        )
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
+        mock_refund = AsyncMock()
+        try:
+            with (
+                caplog.at_level(logging.INFO),
+                patch(
+                    "app.routers.verify.refund_square_payment",
+                    mock_refund,
+                    create=True,
+                ),
+            ):
+                resp = client.post("/api/v1/verify/refund")
+
+            assert resp.status_code == 404, resp.text
+            assert "payment" in resp.json()["detail"].lower()
+            mock_refund.assert_not_awaited()
+            assert "card" not in resp.text.lower()
+            assert "card" not in caplog.text.lower()
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_refund_unsigned_returns_401(self, client):
+        resp_missing = client.post("/api/v1/verify/refund")
+        assert resp_missing.status_code == 401, resp_missing.text
+
+        resp_invalid = client.post(
+            "/api/v1/verify/refund",
+            headers={"Authorization": "Bearer not.a.valid.token"},
+        )
+        assert resp_invalid.status_code == 401, resp_invalid.text
+
+    def test_refund_rate_limited_like_other_verify_routes(
+        self, client, db_session_factory
+    ):
+        user = _make_user(email="refund_rl@example.com")
+        seed(user, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
+        try:
+            statuses = [
+                client.post("/api/v1/verify/refund").status_code for _ in range(6)
+            ]
+            assert statuses[:5] == [404] * 5
+            assert statuses[5] == 429
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_square_client_wrapper_refund_square_payment(self):
+        import asyncio
+
+        from app import square_checkout
+
+        assert hasattr(square_checkout, "refund_square_payment")
+        mock_response = MagicMock()
+        mock_response.raise_for_status = MagicMock()
+        mock_response.json = MagicMock(
+            return_value={
+                "refund": {
+                    "id": "rfnd_unit_1",
+                    "status": "PENDING",
+                    "payment_id": "pay_unit_1",
+                }
+            }
+        )
+        settings = MagicMock(
+            square_access_token="sq0atp-mock-token",
+            square_api_base_url="https://connect.squareup.com",
+            square_api_version="2026-01-22",
+        )
+        with patch(
+            "app.square_checkout.httpx.AsyncClient.post",
+            AsyncMock(return_value=mock_response),
+        ) as mock_post:
+            result = asyncio.run(
+                square_checkout.refund_square_payment(
+                    payment_id="pay_unit_1",
+                    amount_cents=100,
+                    idempotency_key="bot-shield-refund-pay_unit_1",
+                    settings=settings,
+                )
+            )
+        assert result is not None
+        assert result["id"] == "rfnd_unit_1"
+        assert mock_post.await_count == 1
+        assert mock_post.await_args.args[0] == "/v2/refunds"
+        assert (
+            mock_post.await_args.kwargs["json"]["idempotency_key"]
+            == "bot-shield-refund-pay_unit_1"
+        )
+        assert mock_post.await_args.kwargs["json"]["payment_id"] == "pay_unit_1"
+        assert mock_post.await_args.kwargs["json"]["amount_money"] == {
+            "amount": 100,
+            "currency": "USD",
+        }
+
+
+# ── Dollar-back switch (bot_shield_refund_enabled) + GET /verify/refund-status ─
+
+
+class TestVerifyRefundSwitchAndStatus:
+    """Tests for bot_shield_refund_enabled (default False) and GET /api/v1/verify/refund-status."""
+
+    def test_bot_shield_refund_enabled_defaults_to_false_and_in_env_example(
+        self, monkeypatch
+    ):
+        from pathlib import Path
+
+        from app.config import Settings
+
+        monkeypatch.delenv("BOT_SHIELD_REFUND_ENABLED", raising=False)
+        settings = Settings(_env_file=None, jwt_secret="x" * 40)
+        assert settings.bot_shield_refund_enabled is False
+
+        env_example = (Path(__file__).resolve().parents[1] / ".env.example").read_text(
+            encoding="utf-8"
+        )
+        assert "BOT_SHIELD_REFUND_ENABLED" in env_example
+
+    def test_when_switch_off_refund_answers_404_and_refund_status_answers_unavailable(
+        self, client, db_session_factory, monkeypatch
+    ):
+        from app.config import get_settings
+
+        monkeypatch.setattr(
+            get_settings(), "bot_shield_refund_enabled", False, raising=False
+        )
+        now = datetime.now(timezone.utc)
+        user = _make_user(
+            email="switch_off_member@example.com",
+            bot_shield_verified=True,
+        )
+        profile = verified_profile(user)
+        payment_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_switch_off_1",
+            card_fingerprint="fp_switch_off_1",
+            created_at=now - timedelta(days=1),
+            completed_at=now - timedelta(days=1),
+        )
+        seed(user, profile, payment_event, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
+        mock_refund = AsyncMock()
+        try:
+            status_resp = client.get("/api/v1/verify/refund-status")
+            assert status_resp.status_code == 200, status_resp.text
+            assert status_resp.json() == {"available": False}
+
+            with patch(
+                "app.routers.verify.refund_square_payment",
+                mock_refund,
+                create=True,
+            ):
+                refund_resp = client.post("/api/v1/verify/refund")
+            assert refund_resp.status_code == 404, refund_resp.text
+            mock_refund.assert_not_awaited()
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_when_switch_on_refund_status_says_available_and_until_when(
+        self, client, db_session_factory, monkeypatch
+    ):
+        from app.config import get_settings
+
+        monkeypatch.setattr(
+            get_settings(), "bot_shield_refund_enabled", True, raising=False
+        )
+        now = datetime.now(timezone.utc)
+        paid_at = now - timedelta(days=1)
+        user = _make_user(
+            email="switch_on_eligible@example.com",
+            bot_shield_verified=True,
+        )
+        profile = verified_profile(user)
+        payment_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_switch_on_1",
+            card_fingerprint="fp_switch_on_1",
+            created_at=paid_at,
+            completed_at=paid_at,
+        )
+        seed(user, profile, payment_event, db_session_factory=db_session_factory)
+        app.dependency_overrides[get_current_user] = override_user(user)
+        try:
+            resp = client.get("/api/v1/verify/refund-status")
+            assert resp.status_code == 200, resp.text
+            data = resp.json()
+            assert data["available"] is True
+            expected_until = (paid_at + timedelta(days=3)).isoformat()
+            assert data.get("expires_at") == expected_until
+            assert data.get("until") == expected_until
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_when_switch_on_refund_status_unavailable_after_three_days_or_prior_ask(
+        self, client, db_session_factory, monkeypatch
+    ):
+        from app.config import get_settings
+
+        monkeypatch.setattr(
+            get_settings(), "bot_shield_refund_enabled", True, raising=False
+        )
+        now = datetime.now(timezone.utc)
+
+        expired_user = _make_user(
+            email="switch_on_expired@example.com",
+            bot_shield_verified=True,
+        )
+        expired_payment = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=expired_user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_switch_on_old",
+            card_fingerprint="fp_switch_on_old",
+            created_at=now - timedelta(days=3, minutes=5),
+            completed_at=now - timedelta(days=3, minutes=5),
+        )
+
+        already_asked_user = _make_user(
+            email="switch_on_asked@example.com",
+            bot_shield_verified=True,
+        )
+        prior_refund = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=already_asked_user.id,
+            challenge_type="payment",
+            status="refunded",
+            amount_cents=100,
+            square_payment_id="pay_prior_refund",
+            card_fingerprint="fp_prior_refund",
+            created_at=now - timedelta(days=2),
+            completed_at=now - timedelta(days=2),
+        )
+        newer_payment = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=already_asked_user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_newer_after_refund",
+            card_fingerprint="fp_newer_after_refund",
+            created_at=now - timedelta(hours=3),
+            completed_at=now - timedelta(hours=3),
+        )
+        seed(
+            expired_user,
+            expired_payment,
+            already_asked_user,
+            prior_refund,
+            newer_payment,
+            db_session_factory=db_session_factory,
+        )
+
+        app.dependency_overrides[get_current_user] = override_user(expired_user)
+        try:
+            resp_expired = client.get("/api/v1/verify/refund-status")
+            assert resp_expired.status_code == 200, resp_expired.text
+            assert resp_expired.json()["available"] is False
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+        app.dependency_overrides[get_current_user] = override_user(already_asked_user)
+        try:
+            resp_asked = client.get("/api/v1/verify/refund-status")
+            assert resp_asked.status_code == 200, resp_asked.text
+            assert resp_asked.json()["available"] is False
         finally:
             app.dependency_overrides.pop(get_current_user, None)

@@ -26,8 +26,11 @@ const CASES = [
   { host: "dream-online.net", path: "/terms", expectTitle: "Terms of Service - ANTIGRAVITY Backup (dream-online.net)" },
   { host: "untilnokidinneed.com", path: "/", expectTitle: "Until No Kid In Need" },
   { host: "www.untilnokidinneed.com", path: "/", expectTitle: "Until No Kid In Need" },
-  { host: "onlinerecycle.net", path: "/", expectTitle: "OnlineRecycle.net | Florida Electronics Recycling & Free Pickup" },
-  { host: "www.onlinerecycle.net", path: "/", expectTitle: "OnlineRecycle.net | Florida Electronics Recycling & Free Pickup" },
+  { host: "onlinerecycle.net", path: "/", expectTitle: "OnlineRecycle.net | Central Florida Electronics Recycling & Free Pickup (Sorrento, Lake, Orange & Seminole)" },
+  { host: "www.onlinerecycle.net", path: "/", expectTitle: "OnlineRecycle.net | Central Florida Electronics Recycling & Free Pickup (Sorrento, Lake, Orange & Seminole)" },
+  { host: "onlinerecycle.net", path: "/service-areas", expectTitle: "Lake, Orange & Seminole County Electronics Pickup & Sorrento Drop-Off | OnlineRecycle.net", forbidText: ["NOT IN INPUTS", "Refused Equipment"] },
+  { host: "onlinerecycle.net", path: "/service-areas.html", expectTitle: "Lake, Orange & Seminole County Electronics Pickup & Sorrento Drop-Off | OnlineRecycle.net", forbidText: ["NOT IN INPUTS", "Refused Equipment"] },
+  { host: "www.onlinerecycle.net", path: "/service-areas", expectTitle: "Lake, Orange & Seminole County Electronics Pickup & Sorrento Drop-Off | OnlineRecycle.net", forbidText: ["NOT IN INPUTS", "Refused Equipment"] },
 ];
 
 function get(host, port, hostHeader, urlPath = "/", extraHeaders = {}) {
@@ -96,19 +99,25 @@ async function main() {
       console.log("PASS: /health ->", health.body);
     }
 
-    for (const { host, path: urlPath, expectTitle } of CASES) {
+    for (const { host, path: urlPath, expectTitle, forbidText } of CASES) {
       const r = await get("127.0.0.1", TEST_PORT, host, urlPath, {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36",
       });
       const titleMatch = r.body.match(/<title>([^<]*)<\/title>/i);
-      const title = titleMatch ? titleMatch[1] : null;
+      const title = titleMatch ? titleMatch[1].replace(/&amp;/g, "&") : null;
       // The founder-ruled tribute phrase must stay off customer-facing pages.
       const tributeRe = /CLAUDE(?:'|&#39;|&apos;|&rsquo;|\u2019)?s N Joshua|TeamClaudeForLife/i;
+      const forbiddenHit = Array.isArray(forbidText)
+        ? forbidText.find((needle) => r.body.toLowerCase().includes(needle.toLowerCase()))
+        : null;
       if (tributeRe.test(r.body)) {
         console.error(`FAIL: Host=${host} path=${urlPath} -> tribute phrase present on a customer surface`);
         failures++;
+      } else if (forbiddenHit) {
+        console.error(`FAIL: Host=${host} path=${urlPath} -> forbidden text "${forbiddenHit}" present`);
+        failures++;
       } else if (r.status === 200 && title === expectTitle) {
-        console.log(`PASS: Host=${host} path=${urlPath} -> title "${title}"`);
+        console.log(`PASS: Host=${host} path=${urlPath} -> title "${title}" (no forbidden text)`);
       } else {
         console.error(
           `FAIL: Host=${host} path=${urlPath} -> status=${r.status} title="${title}" (expected "${expectTitle}")`
@@ -130,6 +139,56 @@ async function main() {
       failures++;
     } else {
       console.log(`PASS: daily stats crawler filter -> ${JSON.stringify(stats)}`);
+    }
+
+    // Service Areas content, navigation link, sitemap & structured data check
+    const home = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/");
+    const sitemap = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/sitemap.xml");
+    const sa = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/service-areas");
+    const requiredSnippets = [
+      "Sorrento",
+      "Lake County",
+      "Orange County",
+      "Seminole County",
+      "(321) 396-2008",
+      '"@type": "FAQPage"',
+      '"@type": "Question"',
+    ];
+    const forbiddenServiceAreaSnippets = [
+      "NOT IN INPUTS",
+      "Mount Dora",
+      "Eustis",
+      "Tavares",
+      "Leesburg",
+      "Clermont",
+      "Apopka",
+      "Orlando",
+      "Winter Park",
+      "Winter Garden",
+      "Ocoee",
+      "Sanford",
+      "Lake Mary",
+      "Longwood",
+      "Altamonte Springs",
+      "Oviedo",
+      "at your home or business",
+      "central drop-off",
+      "run on a battery",
+      "personal and business data",
+    ];
+    const missingSnippet = requiredSnippets.find((s) => !sa.body.includes(s));
+    const forbiddenSaSnippet = forbiddenServiceAreaSnippets.find((s) => sa.body.includes(s));
+    if (forbiddenSaSnippet) {
+      console.error(`FAIL: /service-areas contains forbidden snippet '${forbiddenSaSnippet}'`);
+      failures++;
+    } else if (missingSnippet) {
+      console.error(`FAIL: /service-areas missing expected content: ${missingSnippet}`);
+      failures++;
+    } else if (!home.body.includes("/service-areas.html") || !sitemap.body.includes("https://onlinerecycle.net/service-areas.html")) {
+      console.error("FAIL: home page navigation or sitemap.xml missing /service-areas.html link");
+      failures++;
+    } else {
+      console.log("PASS: /service-areas renders Sorrento and Lake, Orange, and Seminole Counties, FAQ structured data, nav/sitemap links, and omits unverified towns/postal/geo");
     }
   } finally {
     child.kill();

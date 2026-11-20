@@ -65,6 +65,9 @@ class User(Base):
     referral_code: Mapped[str | None] = mapped_column(
         String(64), nullable=True, index=True
     )
+    signup_source: Mapped[str | None] = mapped_column(
+        String(128), nullable=True, index=True
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
@@ -476,6 +479,9 @@ class VerificationEvent(Base):
     )  # pending, passed, failed, expired
     trust_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     square_payment_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    card_fingerprint: Mapped[str | None] = mapped_column(
+        String(255), nullable=True, index=True
+    )
     # DEPRECATED: stripe_checkout_id removed — Square is sole payment processor
     amount_cents: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
