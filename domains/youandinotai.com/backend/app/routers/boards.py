@@ -1,9 +1,10 @@
 """Social boards router — posts, comments, likes."""
 
 import uuid
+from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import func, select
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import case, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user, require_verified_profile
@@ -23,6 +24,11 @@ router = APIRouter(prefix="/boards")
 
 # Default boards created on first access
 DEFAULT_BOARDS = [
+    (
+        "usa",
+        "USA Group Chat",
+        "Open to every verified member, anywhere in the country.",
+    ),
     ("general", "General", "Chat about anything"),
     ("dating-tips", "Dating Tips", "Share your best dating advice"),
     ("success-stories", "Success Stories", "Celebrate your matches"),
@@ -33,10 +39,13 @@ DEFAULT_BOARDS = [
 
 async def _ensure_boards(db: AsyncSession) -> None:
     """Create default boards if they don't exist."""
-    count = await db.scalar(select(func.count()).select_from(Board))
-    if count == 0:
-        for slug, name, desc in DEFAULT_BOARDS:
+    existing_slugs = set((await db.scalars(select(Board.slug))).all())
+    added = False
+    for slug, name, desc in DEFAULT_BOARDS:
+        if slug not in existing_slugs:
             db.add(Board(id=uuid.uuid4(), name=name, description=desc, slug=slug))
+            added = True
+    if added:
         await db.commit()
 
 
@@ -46,7 +55,14 @@ async def list_boards(
     db: AsyncSession = Depends(get_db),
 ):
     await _ensure_boards(db)
-    boards = (await db.scalars(select(Board).order_by(Board.name))).all()
+    boards = (
+        await db.scalars(
+            select(Board).order_by(
+                case((Board.slug == "usa", 0), else_=1),
+                Board.name,
+            )
+        )
+    ).all()
     return [
         {"slug": b.slug, "name": b.name, "description": b.description} for b in boards
     ]
@@ -57,8 +73,9 @@ async def list_posts(
     slug: str,
     _user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
-    limit: int = 30,
+    limit: int = Query(default=30, ge=1, le=100),
     offset: int = 0,
+    order: Literal["asc", "desc"] = Query(default="desc"),
 ) -> list[PostResponse]:
     board = await db.scalar(select(Board).where(Board.slug == slug))
     if not board:
@@ -70,12 +87,13 @@ async def list_posts(
     # unverified posts were excluded, and neither board client in the
     # frontend advances `offset`, so those posts would become permanently
     # invisible instead of just reordered.
+    created_order = Post.created_at.asc() if order == "asc" else Post.created_at.desc()
     rows = (
         await db.execute(
             select(Post, User)
             .join(User, User.id == Post.author_id)
             .where(Post.board_id == board.id, User.bot_shield_verified.is_(True))
-            .order_by(Post.created_at.desc())
+            .order_by(created_order)
             .offset(offset)
             .limit(limit)
         )
