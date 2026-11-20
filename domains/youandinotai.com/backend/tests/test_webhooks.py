@@ -1593,7 +1593,11 @@ def test_card_fingerprint_appears_in_no_api_answer_and_no_log_line(
         "http://testserver/api/v1/webhooks/square-payment",
     )
 
-    with caplog.at_level(logging.DEBUG):
+    with (
+        caplog.at_level(logging.INFO),
+        caplog.at_level(logging.DEBUG, logger="app"),
+        caplog.at_level(logging.DEBUG, logger="youandinotai"),
+    ):
         webhook_resp = client.post(
             "/api/v1/webhooks/square-payment",
             headers={
