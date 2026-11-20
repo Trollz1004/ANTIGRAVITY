@@ -30,7 +30,7 @@ Duplicate extra copies: Live extra copies: 366 (outside `archive/`, 308 groups, 
 | `config` | 3 | 2.2 KB (2234 B) | 2026-10-02 | no README |
 | `content` | 93 | 259.1 KB (265332 B) | 2026-11-14 | no README |
 | `crm` | 93 | 1.16 MB (1220595 B) | 2026-11-12 | Here are your Instructions |
-| `docs` | 167 | 29.24 MB (30660482 B) | 2026-11-18 | no README |
+| `docs` | 167 | 29.24 MB (30660537 B) | 2026-11-20 | no README |
 | `domains` | 659 | 31.13 MB (32638123 B) | 2026-11-20 | Domains |
 | `frontend` | 1 | 107 B | 2026-09-17 | no README |
 | `hardware` | 2 | 2.7 KB (2789 B) | 2026-11-15 | no README |
