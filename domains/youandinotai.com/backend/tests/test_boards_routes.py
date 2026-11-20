@@ -125,6 +125,22 @@ def test_list_posts_empty(client, db_session_factory):
         app.dependency_overrides.pop(get_current_user, None)
 
 
+def test_list_usa_posts_without_list_boards_returns_200_empty(
+    client, db_session_factory
+):
+    """On a fresh database where GET /boards was never called, GET /boards/usa/posts answers 200 with []."""
+    user = _make_user(email="usa_posts_fresh_get@example.com")
+    user.bot_shield_verified = True
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
+    try:
+        resp = client.get("/api/v1/boards/usa/posts")
+        assert resp.status_code == 200
+        assert resp.json() == []
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
 def test_list_posts_unknown_board_returns_404(client, db_session_factory):
     user = _make_user(email="posts_404@example.com")
     user.bot_shield_verified = True
@@ -156,6 +172,27 @@ def test_create_post_returns_201(client, db_session_factory):
         assert data["title"] == "Hello World"
         assert data["author_name"] == "Alice"
         assert data["like_count"] == 0
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_create_usa_post_without_list_boards_returns_201(client, db_session_factory):
+    """On a fresh database where GET /boards was never called, POST /boards/usa/posts answers 201 for a checked member."""
+    user = _make_user(email="usa_posts_fresh_post@example.com", display_name="Alice")
+    user.bot_shield_verified = True
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
+    try:
+        resp = client.post(
+            "/api/v1/boards/usa/posts",
+            json={"title": "USA hello", "body": "First message in USA room"},
+        )
+        assert resp.status_code == 201
+        data = resp.json()
+        assert data["board_slug"] == "usa"
+        assert data["title"] == "USA hello"
+        assert data["body"] == "First message in USA room"
+        assert data["author_name"] == "Alice"
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 
