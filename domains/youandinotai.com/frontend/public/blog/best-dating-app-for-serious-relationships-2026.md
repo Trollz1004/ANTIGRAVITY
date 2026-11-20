@@ -1,6 +1,6 @@
 ---
 title: "What to look for in a dating app for serious relationships in 2026"
-description: "best dating app for serious relationships 2026 — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging or video."
+description: "best dating app for serious relationships 2026 — a practical guide, plus how https://youandinotai.com uses a short human check and $1 Bot-Shield check."
 date: 2026-09-30
 keyword: "best dating app for serious relationships 2026"
 canonical: "https://youandinotai.com/blog/best-dating-app-for-serious-relationships-2026/"

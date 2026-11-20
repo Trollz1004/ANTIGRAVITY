@@ -90,6 +90,9 @@ describe('blog posts front matter and three new guides', () => {
   it('includes the three new search guides with 600-900 words, strict style, and prerendered output', () => {
     const sitemap = readFileSync(SITEMAP_PATH, 'utf8');
     const bannedWords = /\b(beta|waitlist|launch|prompt)\b/i;
+    const bannedAdverbs =
+      /\b(?!(?:reply|rely|apply|family)\b)(?:[a-z]{3,}ly|very|quite|too|almost|always|never|often|soon|already|still|just|even|perhaps|maybe|rather|instead|ever|seldom|sometimes|also)\b/i;
+    const notXButY = /\bnot\b[^.!?\n]*\bbut\b/i;
 
     for (const { slug, keyword } of NEW_POSTS) {
       const mdPath = path.join(BLOG_DIR, `${slug}.md`);
@@ -113,6 +116,11 @@ describe('blog posts front matter and three new guides', () => {
 
       expect(raw).not.toContain('\u2014');
       expect(raw).not.toMatch(bannedWords);
+      expect(body).not.toMatch(bannedAdverbs);
+      expect(body).not.toMatch(notXButY);
+      expect(body).toContain(
+        'one timed question plus a one dollar payment, once, before a member can message, swipe or post'
+      );
       expect(body).toContain('/app/usa');
 
       const htmlPath = path.join(BLOG_DIR, slug, 'index.html');
