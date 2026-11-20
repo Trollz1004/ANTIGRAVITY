@@ -6,6 +6,7 @@ import { create } from 'zustand';
 import { api } from './api';
 
 interface User {
+  id?: string;
   user_id: string;
   email: string;
   display_name: string;
