@@ -308,12 +308,14 @@ async function loadPlaywrightChromium() {
     const parentDir = path.dirname(REPO_ROOT);
     const entries = fs.existsSync(parentDir) ? fs.readdirSync(parentDir, { withFileTypes: true }) : [];
     const candidateRoots = [
+      __dirname,
       REPO_ROOT,
       FRONTEND_DIR,
       ...entries
-        .filter((e) => e.isDirectory() && e.name.startsWith('ANTIGRAVITY'))
+        .filter((e) => e.isDirectory())
         .flatMap((e) => [
           path.join(parentDir, e.name),
+          path.join(parentDir, e.name, 'ops', 'eyes'),
           path.join(parentDir, e.name, 'domains', 'youandinotai.com', 'frontend'),
         ]),
     ];
