@@ -3,7 +3,7 @@ title: "Why a dating app without bots is worth paying a dollar for"
 description: "dating app without bots — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging or video."
 date: 2026-09-24
 keyword: "dating app without bots"
-canonical: "https://youandinotai.com/blog/dating-app-without-bots"
+canonical: "https://youandinotai.com/blog/dating-app-without-bots/"
 ---
 
 # Why a dating app without bots is worth paying a dollar for

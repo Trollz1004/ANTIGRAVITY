@@ -3,7 +3,7 @@ title: "What dating app verification should actually check"
 description: "dating app verification — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging or video."
 date: 2026-09-30
 keyword: "dating app verification"
-canonical: "https://youandinotai.com/blog/dating-app-identity-verification"
+canonical: "https://youandinotai.com/blog/dating-app-identity-verification/"
 ---
 
 # What dating app verification should actually check

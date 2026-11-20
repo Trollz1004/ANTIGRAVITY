@@ -3,7 +3,7 @@ title: "Safe online dating starts with a human check before messaging"
 description: "safe online dating — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging or video."
 date: 2026-09-30
 keyword: "safe online dating"
-canonical: "https://youandinotai.com/blog/safe-online-dating"
+canonical: "https://youandinotai.com/blog/safe-online-dating/"
 ---
 
 # Safe online dating starts with a human check before messaging

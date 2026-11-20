@@ -37,17 +37,16 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import os
 import re
-import sys
-from datetime import date
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PUBLIC = os.path.join(HERE, "public")
 BLOG_DIR = os.path.join(PUBLIC, "blog")
 
 SITE = "https://youandinotai.com"
-BRAND = "YouAndiNotAi"
+BRAND = "YouAndINotAI"
 TAGLINE = "Human Connection. No Bot Noise."
 
 # The site palette, taken from the live CSS.
@@ -56,6 +55,7 @@ BLACK = "#111111"
 CREAM = "#fffaf2"
 
 FRONT_MATTER = re.compile(r"^---\s*\n(.*?)\n---\s*\n", re.DOTALL)
+MD_LINK_RE = re.compile(r"\[([^\]]+)\]\((https?://[^\s)]+|/[^\s)]*)\)")
 URL_RE = re.compile(r"(?<![\"'>=])(https?://[^\s<>\"']+[^\s<>\"'.,;:)])")
 ORDERED_RE = re.compile(r"^\s*(\d+)\.\s+(.*)$")
 
@@ -86,8 +86,15 @@ def slug_from_filename(name: str) -> str:
 
 
 def inline(text: str) -> str:
-    """Escape, then autolink bare URLs so they are clickable in the output."""
+    """Escape, then convert markdown [label](url) links and bare URLs into anchors."""
     escaped = html.escape(text, quote=False)
+
+    def md_link(m: re.Match[str]) -> str:
+        label = m.group(1)
+        url = html.escape(m.group(2), quote=True)
+        return f'<a href="{url}">{label}</a>'
+
+    escaped = MD_LINK_RE.sub(md_link, escaped)
 
     def link(m: re.Match[str]) -> str:
         url = m.group(1)
@@ -153,6 +160,27 @@ def render_body(body: str) -> str:
 def page(meta: dict[str, str], body_html: str, canonical: str) -> str:
     title = meta.get("title") or "Untitled"
     description = meta.get("description") or ""
+    post_date = meta.get("date") or "2026-10-01"
+    og_image = f"{SITE}/og-image.png"
+    og_image_alt = "YouAndINotAI 18+ verified-human dating and social platform with $1 Bot-Shield check"
+    ld_json = json.dumps(
+        {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": title,
+            "description": description,
+            "datePublished": post_date,
+            "mainEntityOfPage": canonical,
+            "author": {"@type": "Organization", "name": BRAND, "url": f"{SITE}/"},
+            "publisher": {
+                "@type": "Organization",
+                "name": BRAND,
+                "url": f"{SITE}/",
+                "logo": {"@type": "ImageObject", "url": f"{SITE}/logo.png"},
+            },
+        },
+        ensure_ascii=False,
+    )
 
     return f"""<!doctype html>
 <html lang="en">
@@ -163,9 +191,18 @@ def page(meta: dict[str, str], body_html: str, canonical: str) -> str:
     <meta name="description" content="{html.escape(description, quote=True)}" />
     <link rel="canonical" href="{canonical}" />
     <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="{BRAND}" />
     <meta property="og:title" content="{html.escape(title, quote=True)}" />
     <meta property="og:description" content="{html.escape(description, quote=True)}" />
     <meta property="og:url" content="{canonical}" />
+    <meta property="og:image" content="{og_image}" />
+    <meta property="og:image:alt" content="{html.escape(og_image_alt, quote=True)}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{html.escape(title, quote=True)}" />
+    <meta name="twitter:description" content="{html.escape(description, quote=True)}" />
+    <meta name="twitter:image" content="{og_image}" />
+    <meta name="twitter:image:alt" content="{html.escape(og_image_alt, quote=True)}" />
+    <script type="application/ld+json">{ld_json}</script>
     <style>
       :root {{ color-scheme: light; }}
       * {{ box-sizing: border-box; }}
@@ -250,14 +287,31 @@ def blog_index(found: list[tuple[str, dict[str, str], str]]) -> str:
             f'<span>{desc}</span></li>'
         )
 
+    hub_title = f"Verified Human Dating & Safety Guides | {BRAND}"
+    hub_desc = "Guides on real people, verified profiles and avoiding bots in online dating."
+    og_image = f"{SITE}/og-image.png"
+    og_image_alt = "YouAndINotAI 18+ verified-human dating and social platform with $1 Bot-Shield check"
+
     return f"""<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Writing | {BRAND}</title>
-    <meta name="description" content="Guides on real people, verified profiles and avoiding bots in online dating." />
+    <title>{html.escape(hub_title)}</title>
+    <meta name="description" content="{html.escape(hub_desc, quote=True)}" />
     <link rel="canonical" href="{SITE}/blog/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="{BRAND}" />
+    <meta property="og:title" content="{html.escape(hub_title, quote=True)}" />
+    <meta property="og:description" content="{html.escape(hub_desc, quote=True)}" />
+    <meta property="og:url" content="{SITE}/blog/" />
+    <meta property="og:image" content="{og_image}" />
+    <meta property="og:image:alt" content="{html.escape(og_image_alt, quote=True)}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{html.escape(hub_title, quote=True)}" />
+    <meta name="twitter:description" content="{html.escape(hub_desc, quote=True)}" />
+    <meta name="twitter:image" content="{og_image}" />
+    <meta name="twitter:image:alt" content="{html.escape(og_image_alt, quote=True)}" />
     <style>
       :root {{ color-scheme: light; }}
       * {{ box-sizing: border-box; }}
@@ -287,7 +341,7 @@ def blog_index(found: list[tuple[str, dict[str, str], str]]) -> str:
   <body>
     <main>
       <a class="kicker" href="/">{BRAND}</a>
-      <h1>Writing</h1>
+      <h1>Verified Human Dating &amp; Safety Guides</h1>
       <ul>
 {chr(10).join(cards)}
       </ul>
@@ -321,10 +375,12 @@ def build() -> int:
         print("no blog posts found — nothing to prerender")
         return 0
 
+    latest_date = max((m.get("date") or "" for _, m, _ in found), default="") or "2026-10-01"
     written = 0
     sitemap_entries: list[tuple[str, str, str]] = [
-        (f"{SITE}/", date.today().isoformat(), "1.0"),
-        (f"{SITE}/blog/", date.today().isoformat(), "0.9"),
+        (f"{SITE}/", latest_date, "1.0"),
+        (f"{SITE}/support", latest_date, "0.8"),
+        (f"{SITE}/blog/", latest_date, "0.9"),
     ]
 
     with open(os.path.join(BLOG_DIR, "index.html"), "w", encoding="utf-8") as fh:
@@ -338,7 +394,7 @@ def build() -> int:
         os.makedirs(out_dir, exist_ok=True)
         with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8") as fh:
             fh.write(page(meta, body_html, url))
-        sitemap_entries.append((url, meta.get("date") or date.today().isoformat(), "0.8"))
+        sitemap_entries.append((url, meta.get("date") or latest_date, "0.8"))
         written += 1
         print(f"prerendered {slug} -> blog/{slug}/index.html")
 
