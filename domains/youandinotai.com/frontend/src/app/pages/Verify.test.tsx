@@ -25,6 +25,7 @@ describe('Verify after $1 payment', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
+    window.scrollTo = vi.fn() as unknown as typeof window.scrollTo;
     localStorage.clear();
     localStorage.setItem('access_token', 'tok-paid-member');
     window.history.replaceState({}, '', '/app/verify');
@@ -775,19 +776,20 @@ describe('Verify after $1 payment', () => {
   });
 
   it('at 412 wide scrolls both confirm buttons above the bottom menu and scrolls the refund message into view below the top bar after refund', async () => {
-    const scrollToSpy = vi
-      .spyOn(window, 'scrollTo')
-      .mockImplementation(((arg1?: number | ScrollToOptions, arg2?: number) => {
-        const nextY =
-          typeof arg1 === 'object' && arg1 !== null
-            ? Number(arg1.top ?? 0)
-            : Number(arg2 ?? 0);
-        Object.defineProperty(window, 'scrollY', {
-          value: nextY,
-          configurable: true,
-          writable: true,
-        });
-      }) as typeof window.scrollTo);
+    const scrollToSpy = vi.spyOn(window, 'scrollTo').mockImplementation(((
+      arg1?: number | ScrollToOptions,
+      arg2?: number
+    ) => {
+      const nextY =
+        typeof arg1 === 'object' && arg1 !== null
+          ? Number(arg1.top ?? 0)
+          : Number(arg2 ?? 0);
+      Object.defineProperty(window, 'scrollY', {
+        value: nextY,
+        configurable: true,
+        writable: true,
+      });
+    }) as typeof window.scrollTo);
 
     Object.defineProperty(window, 'innerWidth', {
       value: 412,

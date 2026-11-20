@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import inspect
 import uuid
 
 from sqlalchemy import select
@@ -82,6 +83,7 @@ async def revoke_user_verification_for_refund(
     *,
     user: User | None = None,
     payment_event: VerificationEvent | None = None,
+    square_refund_id: str | None = None,
 ) -> bool:
     if payment_event is None:
         cleaned_id = str(square_payment_id or "").strip()
@@ -98,7 +100,35 @@ async def revoke_user_verification_for_refund(
     if payment_event.amount_cents is not None and payment_event.amount_cents != 100:
         return False
 
+    cleaned_refund_id = str(square_refund_id or "").strip() or None
     payment_event.status = "refunded"
+    if cleaned_refund_id is not None:
+        payment_event.square_refund_id = cleaned_refund_id
+
+    scalars_result = await db.scalars(
+        select(VerificationEvent)
+        .where(VerificationEvent.user_id == payment_event.user_id)
+        .where(VerificationEvent.challenge_type == "payment")
+        .where(VerificationEvent.status == "completed")
+        .where(
+            (VerificationEvent.amount_cents == 100)
+            | (VerificationEvent.amount_cents.is_(None))
+        )
+    )
+    all_fn = (
+        getattr(scalars_result, "all", None) if scalars_result is not None else None
+    )
+    extra_payments = (
+        all_fn() if callable(all_fn) and not inspect.iscoroutinefunction(all_fn) else []
+    )
+    if isinstance(extra_payments, (list, tuple)):
+        for row in extra_payments:
+            row.status = "refunded"
+            if (
+                cleaned_refund_id is not None
+                and getattr(row, "square_refund_id", None) is None
+            ):
+                row.square_refund_id = cleaned_refund_id
 
     target_user = user
     if target_user is None or target_user.id != payment_event.user_id:

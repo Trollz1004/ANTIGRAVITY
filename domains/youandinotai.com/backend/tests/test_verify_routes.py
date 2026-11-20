@@ -655,9 +655,7 @@ class TestVerifyRefund:
         )
         assert '"square_refund_id"' in db_source
 
-        versions_dir = (
-            Path(__file__).resolve().parents[1] / "alembic" / "versions"
-        )
+        versions_dir = Path(__file__).resolve().parents[1] / "alembic" / "versions"
         matching = list(
             versions_dir.glob("*add_square_refund_id_to_verification_events.py")
         )

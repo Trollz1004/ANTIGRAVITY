@@ -479,6 +479,7 @@ class VerificationEvent(Base):
     )  # pending, passed, failed, expired
     trust_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     square_payment_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    square_refund_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     card_fingerprint: Mapped[str | None] = mapped_column(
         String(255), nullable=True, index=True
     )
