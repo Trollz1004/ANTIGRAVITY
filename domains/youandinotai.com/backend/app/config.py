@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     square_bot_shield_payment_link: str = (
         ""  # Pre-configured Square payment link for $1 Bot-Shield
     )
+    bot_shield_refund_enabled: bool = False
     square_subscription_payment_link: str = (
         ""  # Pre-configured Square payment link for subscriptions
     )

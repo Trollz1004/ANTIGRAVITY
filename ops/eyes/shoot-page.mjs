@@ -23,22 +23,32 @@ const STATIC_MIME = {
   '.ico': 'image/x-icon',
 };
 
-function resolveStaticSitePath(siteRoot, rawUrlPath) {
-  let cleanPath = decodeURIComponent(String(rawUrlPath || '/').split('?')[0]);
+function isWithinRoot(normRoot, candidatePath) {
+  return candidatePath === normRoot || candidatePath.startsWith(`${normRoot}${path.sep}`);
+}
+
+export function resolveStaticSitePath(siteRoot, rawUrlPath) {
+  let cleanPath;
+  try {
+    cleanPath = decodeURIComponent(String(rawUrlPath || '/').split('?')[0]);
+  } catch {
+    return null;
+  }
   if (cleanPath === '' || cleanPath === '/') cleanPath = '/index.html';
-  const requested = path.normalize(path.join(siteRoot, cleanPath));
-  if (!requested.startsWith(siteRoot)) return null;
+  const normRoot = path.resolve(siteRoot);
+  const requested = path.resolve(normRoot, `.${cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`}`);
+  if (!isWithinRoot(normRoot, requested)) return null;
   try {
     const st = fs.statSync(requested);
     if (st.isDirectory()) {
       const idx = path.join(requested, 'index.html');
-      if (fs.existsSync(idx) && fs.statSync(idx).isFile()) return idx;
+      if (isWithinRoot(normRoot, idx) && fs.existsSync(idx) && fs.statSync(idx).isFile()) return idx;
       return null;
     }
     if (st.isFile()) return requested;
   } catch {
     const htmlCandidate = `${requested.replace(/[\\/]+$/, '')}.html`;
-    if (htmlCandidate.startsWith(siteRoot) && fs.existsSync(htmlCandidate) && fs.statSync(htmlCandidate).isFile()) {
+    if (isWithinRoot(normRoot, htmlCandidate) && fs.existsSync(htmlCandidate) && fs.statSync(htmlCandidate).isFile()) {
       return htmlCandidate;
     }
   }
@@ -48,8 +58,15 @@ function resolveStaticSitePath(siteRoot, rawUrlPath) {
 function startStaticSiteServer(siteRoot, port) {
   return new Promise((resolve, reject) => {
     const srv = http.createServer((req, res) => {
-      const urlPath = (req.url || '/').split('?')[0];
-      if (urlPath === '/api/booking-config') {
+      const rawPath = (req.url || '/').split('?')[0];
+      try {
+        decodeURIComponent(rawPath);
+      } catch {
+        res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('Bad request\n');
+        return;
+      }
+      if (rawPath === '/api/booking-config') {
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
         res.end(JSON.stringify({ ok: true, timezone: 'America/New_York', bookedSlots: [] }));
         return;
@@ -202,7 +219,7 @@ export function parseCliArgs(argv) {
     flags.site === 'onlinerecycle.net' ||
     flags.site === 'onlinerecycle' ||
     (!flags.site && !route.startsWith('/app') && Boolean(resolveStaticSitePath(ONLINERECYCLE_SITE_DIR, route)));
-  const staticSiteDir = isOnlineRecycleStatic ? ONLINERECYCLE_SITE_DIR : flags.dir ? path.resolve(flags.dir) : null;
+  const staticSiteDir = flags.dir ? path.resolve(flags.dir) : isOnlineRecycleStatic ? ONLINERECYCLE_SITE_DIR : null;
 
   const fixturePath = path.resolve(
     rawFixture && fs.existsSync(path.resolve(rawFixture))
@@ -227,8 +244,9 @@ export function parseCliArgs(argv) {
       ? 'eyes-founder-page'
       : `eyes-${fixtureStem}`;
   const namePrefix = flags.name || flags.prefix || defaultPrefix;
+  const url = flags.url || '';
 
-  return { route, fixturePath, outDir, selector, namePrefix, staticSiteDir };
+  return { route, fixturePath, outDir, selector, namePrefix, staticSiteDir, url };
 }
 
 async function captureViewport(
@@ -332,10 +350,71 @@ async function loadPlaywrightChromium() {
 }
 
 export async function shootPage(options) {
-  const { route, fixturePath, outDir, selector, namePrefix, staticSiteDir } = options;
-  const fixture = fixturePath && fs.existsSync(fixturePath) ? JSON.parse(fs.readFileSync(fixturePath, 'utf8')) : {};
+  const { route, fixturePath, outDir, selector, namePrefix, staticSiteDir, url } = options;
   fs.mkdirSync(outDir, { recursive: true });
 
+  if (url) {
+    let browser;
+    try {
+      const chromium = await loadPlaywrightChromium();
+      try {
+        browser = await chromium.launch({
+          channel: 'msedge',
+          headless: true,
+        });
+      } catch {
+        browser = await chromium.launch({ headless: true });
+      }
+      const context = await browser.newContext({
+        viewport: { width: 1440, height: 900 },
+      });
+      const pageErrors = [];
+      const page = await context.newPage();
+      page.on('pageerror', (err) => {
+        pageErrors.push(err?.message || String(err));
+      });
+      try {
+        await page.goto(url, { waitUntil: 'networkidle', timeout: 20000 });
+      } catch {
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 20000 });
+      }
+      const locator = page.locator(selector || 'body').first();
+      await locator.waitFor({ state: 'visible', timeout: 15000 });
+      await page.waitForTimeout(300);
+      const picturePath = path.join(outDir, `${namePrefix}.png`);
+      await page.screenshot({ path: picturePath, fullPage: true });
+      const visibleText = (await locator.innerText()).trim();
+      const scrollsSideways = await page.evaluate(
+        () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      );
+      await context.close();
+      const report = {
+        route: url,
+        finalPath: url,
+        phoneFinalPath: url,
+        selector: selector || 'body',
+        visibleText,
+        scrollsSideways,
+        desktopScrollsSideways: scrollsSideways,
+        phoneScrollsSideways: false,
+        pageErrors,
+        desktopPicture: maskUserPath(picturePath),
+        phonePicture: maskUserPath(picturePath),
+      };
+      return {
+        report,
+        reportPath: '',
+        desktopPath: maskUserPath(picturePath),
+        phonePath: maskUserPath(picturePath),
+      };
+    } finally {
+      if (browser) {
+        await browser.close().catch(() => {});
+      }
+    }
+  }
+
+  const fixture = fixturePath && fs.existsSync(fixturePath) ? JSON.parse(fs.readFileSync(fixturePath, 'utf8')) : {};
   const port = await findSparePort();
   const baseUrl = `http://${LOCAL_BIND_HOST}:${port}`;
 
@@ -345,24 +424,21 @@ export async function shootPage(options) {
     staticSrv = await startStaticSiteServer(staticSiteDir, port);
   } else {
     const viteBin = ensureFrontendNodeModules();
-    viteProc = spawn(
-      process.execPath,
-      [viteBin, '--host', LOCAL_BIND_HOST, '--port', String(port), '--strictPort'],
-      {
-        cwd: FRONTEND_DIR,
-        env: {
-          ...process.env,
-          VITE_API_URL: `${baseUrl}/api/v1`,
-        },
-        stdio: ['ignore', 'pipe', 'pipe'],
-        windowsHide: true,
+    viteProc = spawn(process.execPath, [viteBin, '--host', LOCAL_BIND_HOST, '--port', String(port), '--strictPort'], {
+      cwd: FRONTEND_DIR,
+      env: {
+        ...process.env,
+        VITE_API_URL: `${baseUrl}/api/v1`,
       },
-    );
+      stdio: ['ignore', 'pipe', 'pipe'],
+      windowsHide: true,
+    });
   }
 
   let browser;
   try {
-    await waitForServer(baseUrl);
+    const readyUrl = staticSiteDir ? `${baseUrl}${route.startsWith('/') ? route : `/${route}`}` : baseUrl;
+    await waitForServer(readyUrl);
 
     const chromium = await loadPlaywrightChromium();
     browser = await chromium.launch({

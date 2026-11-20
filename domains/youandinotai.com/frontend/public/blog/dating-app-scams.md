@@ -3,7 +3,7 @@ title: "How to spot a dating app scam before you waste a week"
 description: "dating app scams — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging or video."
 date: 2026-09-25
 keyword: "dating app scams"
-canonical: "https://youandinotai.com/blog/dating-app-scams"
+canonical: "https://youandinotai.com/blog/dating-app-scams/"
 ---
 
 # How to spot a dating app scam before you waste a week
