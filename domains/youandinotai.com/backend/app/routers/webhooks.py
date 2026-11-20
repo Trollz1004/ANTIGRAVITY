@@ -44,7 +44,10 @@ from app.revenue_allocation import (
 )
 from app.schemas import WebhookAckResponse
 from app.subscriptions import build_subscription_expiry, utc_now
-from app.verification_service import promote_user_verification_if_ready
+from app.verification_service import (
+    promote_user_verification_if_ready,
+    revoke_user_verification_for_refund,
+)
 from app.webhook_event_store import (
     create_webhook_event,
     mark_webhook_event_processed,
@@ -570,6 +573,10 @@ async def _process_square_payment_event(
                     db,
                     square_payment_id=payment_id,
                 )
+                await revoke_user_verification_for_refund(
+                    db,
+                    square_payment_id=payment_id,
+                )
             logger.info(
                 "Square payment marked refunded: payment_id=%s status=%s refunded_cents=%s event_id=%s",
                 payment_id,
@@ -722,6 +729,10 @@ async def _process_square_payment_event(
         refund_status = str(refund_obj.get("status") or "").upper()
         if refund_status == "COMPLETED" and refund_payment_id:
             await mark_revenue_allocation_refunded(
+                db,
+                square_payment_id=refund_payment_id,
+            )
+            await revoke_user_verification_for_refund(
                 db,
                 square_payment_id=refund_payment_id,
             )
