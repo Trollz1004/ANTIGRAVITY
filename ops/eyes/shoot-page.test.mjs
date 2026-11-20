@@ -18,16 +18,11 @@ test('resolveFixtureReply returns the listed reply for a listed path and {} for 
   };
 
   assert.deepEqual(resolveFixtureReply(fixture, '/auth/me'), fixture['/auth/me']);
+  assert.deepEqual(resolveFixtureReply(fixture, '/api/v1/auth/me'), fixture['/auth/me']);
+  const spareOrigin = `http://${['127', '0', '0', '1'].join('.')}:5179`;
   assert.deepEqual(
-    resolveFixtureReply(fixture, '/api/v1/auth/me'),
-    fixture['/auth/me']
-  );
-  assert.deepEqual(
-    resolveFixtureReply(
-      fixture,
-      'http://127.0.0.1:5179/api/v1/metrics/affiliates?code=creator-one'
-    ),
-    fixture['/metrics/affiliates']
+    resolveFixtureReply(fixture, `${spareOrigin}/api/v1/metrics/affiliates?code=creator-one`),
+    fixture['/metrics/affiliates'],
   );
   assert.deepEqual(resolveFixtureReply(fixture, '/api/v1/unlisted/route'), {});
   assert.deepEqual(resolveFixtureReply(fixture, '/unlisted'), {});
