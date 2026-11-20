@@ -5,12 +5,14 @@ import {
   waitFor,
   fireEvent,
   act,
+  within,
 } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { UsaChat } from './UsaChat';
 import { Discover } from './Discover';
 import { AppShell } from '../AppShell';
 import { api, ApiError } from '../../lib/api';
+import { useAuth } from '../../lib/auth';
 
 vi.mock('../../lib/api', () => ({
   api: {
@@ -35,7 +37,8 @@ vi.mock('../../lib/safety', () => ({
 
 describe('UsaChat (/app/usa)', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
+    useAuth.setState({ user: null, loading: false });
     Object.defineProperty(document, 'visibilityState', {
       configurable: true,
       get: () => 'visible',
@@ -46,7 +49,7 @@ describe('UsaChat (/app/usa)', () => {
     vi.useRealTimers();
   });
 
-  it('shows lines oldest to newest with name and time and polls every 10 seconds only while visible', async () => {
+  it('asks GET /boards/usa/posts?order=desc&limit=100 and shows the lines oldest at the top, newest at the bottom, polling every 10 seconds only while visible', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     vi.mocked(api.get).mockResolvedValue([
       {
@@ -79,7 +82,7 @@ describe('UsaChat (/app/usa)', () => {
 
     await waitFor(() => {
       expect(api.get).toHaveBeenCalledWith(
-        '/boards/usa/posts?order=asc&limit=100'
+        '/boards/usa/posts?order=desc&limit=100'
       );
       expect(screen.getByText('First message from Seattle')).toBeTruthy();
       expect(screen.getByText('Second message from Austin')).toBeTruthy();
@@ -112,6 +115,210 @@ describe('UsaChat (/app/usa)', () => {
       await vi.advanceTimersByTimeAsync(10000);
     });
     expect(api.get).toHaveBeenCalledTimes(2);
+  });
+
+  it('after loading and after sending, scrolls the list to its last line', async () => {
+    let currentScrollHeight = 480;
+    const scrollHeightDescriptor = Object.getOwnPropertyDescriptor(
+      HTMLElement.prototype,
+      'scrollHeight'
+    );
+    Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
+      configurable: true,
+      get: () => currentScrollHeight,
+    });
+    const scrollIntoViewMock = vi.fn();
+    HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
+
+    try {
+      const initialPosts = [
+        {
+          id: 'post-2',
+          board_slug: 'usa',
+          author_id: 'u-2',
+          author_name: 'Casey',
+          title: 'Second message from Austin',
+          body: 'Second message from Austin',
+          like_count: 0,
+          created_at: '2026-11-20T14:05:00Z',
+        },
+        {
+          id: 'post-1',
+          board_slug: 'usa',
+          author_id: 'u-1',
+          author_name: 'Morgan',
+          title: 'First message from Seattle',
+          body: 'First message from Seattle',
+          like_count: 0,
+          created_at: '2026-11-20T14:00:00Z',
+        },
+      ];
+      const sentPost = {
+        id: 'post-3',
+        board_slug: 'usa',
+        author_id: 'u-3',
+        author_name: 'Riley',
+        title: 'Third message from Denver',
+        body: 'Third message from Denver',
+        like_count: 0,
+        created_at: '2026-11-20T14:10:00Z',
+      };
+
+      vi.mocked(api.get)
+        .mockResolvedValueOnce(initialPosts)
+        .mockResolvedValueOnce([sentPost, ...initialPosts]);
+      vi.mocked(api.post).mockResolvedValueOnce(sentPost);
+
+      render(
+        <MemoryRouter initialEntries={['/app/usa']}>
+          <UsaChat />
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Second message from Austin')).toBeTruthy();
+      });
+
+      const list = screen.getByTestId('usa-chat-list');
+      expect(list.scrollTop).toBe(480);
+
+      list.scrollTop = 0;
+      currentScrollHeight = 760;
+      scrollIntoViewMock.mockClear();
+
+      const input = screen.getByRole('textbox');
+      fireEvent.change(input, {
+        target: { value: 'Third message from Denver' },
+      });
+      fireEvent.click(screen.getByRole('button', { name: /send/i }));
+
+      await waitFor(() => {
+        expect(screen.getByText('Third message from Denver')).toBeTruthy();
+        expect(list.scrollTop).toBe(760);
+      });
+    } finally {
+      if (scrollHeightDescriptor) {
+        Object.defineProperty(
+          HTMLElement.prototype,
+          'scrollHeight',
+          scrollHeightDescriptor
+        );
+      } else {
+        delete (HTMLElement.prototype as { scrollHeight?: number })
+          .scrollHeight;
+      }
+    }
+  });
+
+  it('hides the Report control on the signed-in member own lines and keeps it on other members lines', async () => {
+    useAuth.setState({
+      user: {
+        user_id: 'u-self',
+        email: 'self@youandinotai.com',
+        display_name: 'Morgan',
+        bot_shield_verified: true,
+        subscription_tier: 'founding_member',
+        subscription_active: true,
+        has_profile: true,
+        adult_verified: true,
+      },
+      loading: false,
+    });
+
+    vi.mocked(api.get).mockResolvedValueOnce([
+      {
+        id: 'post-own',
+        board_slug: 'usa',
+        author_id: 'u-self',
+        author_name: 'Morgan',
+        title: 'My own hello from Seattle',
+        body: 'My own hello from Seattle',
+        like_count: 0,
+        created_at: '2026-11-20T14:00:00Z',
+      },
+      {
+        id: 'post-other',
+        board_slug: 'usa',
+        author_id: 'u-other',
+        author_name: 'Casey',
+        title: 'Hello back from Austin',
+        body: 'Hello back from Austin',
+        like_count: 0,
+        created_at: '2026-11-20T14:05:00Z',
+      },
+    ]);
+
+    render(
+      <MemoryRouter initialEntries={['/app/usa']}>
+        <UsaChat />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('My own hello from Seattle')).toBeTruthy();
+      expect(screen.getByText('Hello back from Austin')).toBeTruthy();
+    });
+
+    const ownArticle = screen
+      .getByText('My own hello from Seattle')
+      .closest('article');
+    const otherArticle = screen
+      .getByText('Hello back from Austin')
+      .closest('article');
+
+    expect(ownArticle).toBeTruthy();
+    expect(otherArticle).toBeTruthy();
+    expect(
+      within(ownArticle as HTMLElement).queryByRole('button', {
+        name: /report/i,
+      })
+    ).toBeNull();
+    expect(
+      within(otherArticle as HTMLElement).getByRole('button', {
+        name: /report/i,
+      })
+    ).toBeTruthy();
+  });
+
+  it('shows the date with the time for a line from an earlier day', async () => {
+    const earlierIso = '2026-11-18T14:30:00Z';
+    const earlierDate = new Date(earlierIso);
+    const expectedDatePart = earlierDate.toLocaleDateString([], {
+      month: 'short',
+      day: 'numeric',
+    });
+    const expectedTimePart = earlierDate.toLocaleTimeString([], {
+      hour: 'numeric',
+      minute: '2-digit',
+    });
+
+    vi.mocked(api.get).mockResolvedValueOnce([
+      {
+        id: 'post-earlier',
+        board_slug: 'usa',
+        author_id: 'u-1',
+        author_name: 'Morgan',
+        title: 'Message from two days ago',
+        body: 'Message from two days ago',
+        like_count: 0,
+        created_at: earlierIso,
+      },
+    ]);
+
+    const { container } = render(
+      <MemoryRouter initialEntries={['/app/usa']}>
+        <UsaChat />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Message from two days ago')).toBeTruthy();
+    });
+
+    const timeEl = container.querySelector('time');
+    expect(timeEl).toBeTruthy();
+    expect(timeEl?.textContent).toContain(expectedDatePart);
+    expect(timeEl?.textContent).toContain(expectedTimePart);
   });
 
   it('sending calls POST /boards/usa/posts with body = the text and title = its first 60 characters', async () => {
