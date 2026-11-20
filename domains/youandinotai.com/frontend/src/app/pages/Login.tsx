@@ -27,7 +27,11 @@ interface LoginErrors {
   password?: string;
 }
 
-export function Login() {
+export function Login({
+  googleClientId,
+}: {
+  googleClientId?: string;
+} = {}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -44,6 +48,11 @@ export function Login() {
   const location = useLocation();
   const nextPath = getSafeNextPath(location.search, '/app');
   const registerHref = `/register?next=${encodeURIComponent(nextPath)}`;
+  const resolvedGoogleClientId = (
+    googleClientId ??
+    import.meta.env.VITE_GOOGLE_CLIENT_ID ??
+    ''
+  ).trim();
 
   const validateLoginField = useCallback(
     (name: string, value: string): string | undefined => {
@@ -285,15 +294,19 @@ export function Login() {
               </button>
             </form>
 
-            <div className="my-8 flex items-center gap-4">
-              <div className="h-px flex-1 bg-[#3A3F45]" />
-              <span className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#9DA3AA]">
-                Or continue with
-              </span>
-              <div className="h-px flex-1 bg-[#3A3F45]" />
-            </div>
+            {resolvedGoogleClientId && (
+              <>
+                <div className="my-8 flex items-center gap-4">
+                  <div className="h-px flex-1 bg-[#3A3F45]" />
+                  <span className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#9DA3AA]">
+                    Or continue with
+                  </span>
+                  <div className="h-px flex-1 bg-[#3A3F45]" />
+                </div>
 
-            <GoogleSignInButton />
+                <GoogleSignInButton clientId={resolvedGoogleClientId} />
+              </>
+            )}
 
             <form
               onSubmit={handleBetaCode}

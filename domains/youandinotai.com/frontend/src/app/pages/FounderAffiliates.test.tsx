@@ -87,4 +87,18 @@ describe('FounderAffiliates tagged link builder', () => {
 
     expect(await findByText('Copied')).toBeDefined();
   });
+
+  it('shows "e.g. facebook" for Source and "e.g. post" for Medium example text', async () => {
+    const { getByLabelText } = render(<FounderAffiliates />);
+
+    await waitFor(() => {
+      expect(api.get).toHaveBeenCalled();
+    });
+
+    const sourceInput = getByLabelText(/^Source$/i) as HTMLInputElement;
+    const mediumInput = getByLabelText(/^Medium$/i) as HTMLInputElement;
+
+    expect(sourceInput.placeholder).toBe('e.g. facebook');
+    expect(mediumInput.placeholder).toBe('e.g. post');
+  });
 });

@@ -212,4 +212,262 @@ describe('Verify after $1 payment', () => {
     ).toBeDefined();
     expect(queryByText(/Start Verification/i)).toBeNull();
   });
+
+  it('places the waiting line and "I paid, check my badge" button above the summary box when returning with ?status=success', async () => {
+    vi.useFakeTimers();
+    window.history.replaceState({}, '', '/app/verify?status=success');
+
+    vi.mocked(api.get).mockResolvedValue({
+      verified: false,
+      trust_score: 60,
+      tier: 'unverified',
+      bot_shield_paid: false,
+      subscription_active: false,
+      checks_completed: 1,
+    });
+    vi.mocked(api.post).mockRejectedValue(
+      new ApiError(
+        402,
+        'Payment required. Complete the $1 Bot-Shield payment before verification.'
+      )
+    );
+
+    const { getByText, getByRole } = render(
+      <MemoryRouter initialEntries={['/app/verify?status=success']}>
+        <Verify />
+      </MemoryRouter>
+    );
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    const waitingLine = getByText(
+      'We are waiting for Square to confirm your payment.'
+    );
+    const checkBadgeButton = getByRole('button', {
+      name: 'I paid, check my badge',
+    });
+    const summaryHeading = getByText('Verification summary');
+
+    expect(
+      waitingLine.compareDocumentPosition(summaryHeading) &
+        Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(
+      checkBadgeButton.compareDocumentPosition(summaryHeading) &
+        Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+
+  it('keeps Submit disabled for three seconds on a timed question with one plain line saying so', async () => {
+    vi.useFakeTimers();
+
+    vi.mocked(api.get).mockResolvedValue({
+      verified: false,
+      trust_score: 20,
+      tier: 'unverified',
+      bot_shield_paid: false,
+      subscription_active: false,
+      checks_completed: 0,
+    });
+    vi.mocked(api.post).mockImplementation(async (path: string) => {
+      if (path === '/verify/challenge') {
+        return {
+          challenge_id: 'chal-3s-1',
+          challenge_type: 'liveness_math',
+          question: 'What is 14 + 5?',
+          issued_at: '2026-11-20T12:00:00Z',
+          expires_at: '2026-11-20T12:05:00Z',
+        };
+      }
+      if (path === '/verify/submit') {
+        return {
+          passed: true,
+          trust_score: 60,
+          message:
+            'Liveness verified! Complete the $1 Bot-Shield payment to earn your badge.',
+          checkout_url: 'https://square.link/u/test-checkout',
+        };
+      }
+      throw new Error(`Unexpected POST ${path}`);
+    });
+
+    const { getByRole, getByPlaceholderText, getByText } = render(
+      <MemoryRouter initialEntries={['/app/verify']}>
+        <Verify />
+      </MemoryRouter>
+    );
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    await act(async () => {
+      getByRole('button', { name: /Start Verification/i }).click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    expect(getByText('What is 14 + 5?')).toBeDefined();
+    expect(getByText(/Submit stays off for three seconds/i)).toBeDefined();
+
+    const input = getByPlaceholderText('Your answer') as HTMLInputElement;
+    await act(async () => {
+      input.focus();
+      input.value = '19';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    const reactPropsKey = Object.keys(input).find(k =>
+      k.startsWith('__reactProps$')
+    );
+    if (reactPropsKey) {
+      await act(async () => {
+        (input as any)[reactPropsKey].onChange({ target: { value: '19' } });
+      });
+    }
+
+    const submitButton = getByRole('button', {
+      name: 'Submit',
+    }) as HTMLButtonElement;
+    expect(submitButton.disabled).toBe(true);
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(2900);
+    });
+    expect(submitButton.disabled).toBe(true);
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(100);
+    });
+    expect(submitButton.disabled).toBe(false);
+  });
+
+  it('clears an expired or failed question, shows a "New question" button, and replaces both browser alert() calls with a line on the page', async () => {
+    vi.useFakeTimers();
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vi.mocked(api.get).mockResolvedValue({
+      verified: false,
+      trust_score: 20,
+      tier: 'unverified',
+      bot_shield_paid: false,
+      subscription_active: false,
+      checks_completed: 0,
+    });
+
+    let challengeAttempt = 0;
+    let submitAttempt = 0;
+    vi.mocked(api.post).mockImplementation(async (path: string) => {
+      if (path === '/verify/challenge') {
+        challengeAttempt += 1;
+        if (challengeAttempt === 1) {
+          throw new Error('Could not create a question right now.');
+        }
+        return {
+          challenge_id: `chal-attempt-${challengeAttempt}`,
+          challenge_type: 'liveness_math',
+          question:
+            challengeAttempt === 2 ? 'What is 10 + 7?' : 'What is 20 + 8?',
+          issued_at: '2026-11-20T12:00:00Z',
+          expires_at: '2026-11-20T12:05:00Z',
+        };
+      }
+      if (path === '/verify/submit') {
+        submitAttempt += 1;
+        if (submitAttempt === 1) {
+          throw new ApiError(410, 'Challenge expired');
+        }
+        return {
+          passed: false,
+          trust_score: 20,
+          message: 'Incorrect answer. You can try a new challenge.',
+          checkout_url: null,
+        };
+      }
+      throw new Error(`Unexpected POST ${path}`);
+    });
+
+    const { getByRole, getByPlaceholderText, getByText, queryByText } = render(
+      <MemoryRouter initialEntries={['/app/verify']}>
+        <Verify />
+      </MemoryRouter>
+    );
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    // 1. Challenge creation error shows inline line without alert()
+    await act(async () => {
+      getByRole('button', { name: /Start Verification/i }).click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+    expect(alertSpy).not.toHaveBeenCalled();
+    expect(getByText('Could not create a question right now.')).toBeDefined();
+
+    // 2. Retry starts question; expired submission clears question, shows line without alert(), and shows "New question"
+    await act(async () => {
+      getByRole('button', { name: /New question|Start Verification/i }).click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+    expect(getByText('What is 10 + 7?')).toBeDefined();
+
+    const firstInput = getByPlaceholderText('Your answer') as HTMLInputElement;
+    const firstPropsKey = Object.keys(firstInput).find(k =>
+      k.startsWith('__reactProps$')
+    );
+    if (firstPropsKey) {
+      await act(async () => {
+        (firstInput as any)[firstPropsKey].onChange({
+          target: { value: '17' },
+        });
+      });
+    }
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+    await act(async () => {
+      getByRole('button', { name: 'Submit' }).click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    expect(alertSpy).not.toHaveBeenCalled();
+    expect(queryByText('What is 10 + 7?')).toBeNull();
+    expect(getByText(/Challenge expired/i)).toBeDefined();
+    const newQuestionBtn = getByRole('button', { name: 'New question' });
+    expect(newQuestionBtn).toBeDefined();
+
+    // 3. Clicking "New question" loads next question; failed answer clears question and shows "New question"
+    await act(async () => {
+      newQuestionBtn.click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+    expect(getByText('What is 20 + 8?')).toBeDefined();
+
+    const secondInput = getByPlaceholderText('Your answer') as HTMLInputElement;
+    const secondPropsKey = Object.keys(secondInput).find(k =>
+      k.startsWith('__reactProps$')
+    );
+    if (secondPropsKey) {
+      await act(async () => {
+        (secondInput as any)[secondPropsKey].onChange({
+          target: { value: '99' },
+        });
+      });
+    }
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+    await act(async () => {
+      getByRole('button', { name: 'Submit' }).click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    expect(alertSpy).not.toHaveBeenCalled();
+    expect(queryByText('What is 20 + 8?')).toBeNull();
+    expect(
+      getByText('Incorrect answer. You can try a new challenge.')
+    ).toBeDefined();
+    expect(getByRole('button', { name: 'New question' })).toBeDefined();
+  });
 });
