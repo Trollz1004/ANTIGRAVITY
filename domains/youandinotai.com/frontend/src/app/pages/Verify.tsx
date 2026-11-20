@@ -67,6 +67,21 @@ interface VerificationStatus {
   checks_completed: number;
 }
 
+interface RefundStatus {
+  available: boolean;
+  expires_at?: string | null;
+  until?: string | null;
+}
+
+interface RefundResult {
+  refunded: boolean;
+  verified: boolean;
+  amount_cents: number;
+  status: string;
+  refund_id: string | null;
+  message: string;
+}
+
 export function Verify() {
   const { fetchUser } = useAuth();
   const location = useLocation();
@@ -85,6 +100,10 @@ export function Verify() {
   );
   const [canSubmitChallenge, setCanSubmitChallenge] = useState(false);
   const [challengeError, setChallengeError] = useState<string | null>(null);
+  const [refundAvailable, setRefundAvailable] = useState(false);
+  const [confirmingRefund, setConfirmingRefund] = useState(false);
+  const [refunding, setRefunding] = useState(false);
+  const [refundMessage, setRefundMessage] = useState<string | null>(null);
   const mountedRef = useRef(true);
   const pollTimerRef = useRef<number | null>(null);
   const pollRunIdRef = useRef(0);
@@ -110,9 +129,35 @@ export function Verify() {
     }
   };
 
+  const refreshRefundStatus = async () => {
+    try {
+      const data = await api.get<RefundStatus>('/verify/refund-status');
+      const available = Boolean(
+        data &&
+        typeof data === 'object' &&
+        'available' in data &&
+        data.available === true
+      );
+      if (mountedRef.current) {
+        setRefundAvailable(available);
+        if (!available) {
+          setConfirmingRefund(false);
+        }
+      }
+      return available;
+    } catch {
+      if (mountedRef.current) {
+        setRefundAvailable(false);
+        setConfirmingRefund(false);
+      }
+      return false;
+    }
+  };
+
   const refreshVerificationStatus = async () => {
     const updated = await api.get<VerificationStatus>('/verify/status');
     setStatus(updated);
+    await refreshRefundStatus();
     return updated;
   };
 
@@ -213,7 +258,10 @@ export function Verify() {
 
     const bootstrap = async () => {
       try {
-        const updated = await api.get<VerificationStatus>('/verify/status');
+        const [updated] = await Promise.all([
+          api.get<VerificationStatus>('/verify/status'),
+          refreshRefundStatus(),
+        ]);
         if (!mountedRef.current) return;
         setStatus(updated);
 
@@ -309,6 +357,38 @@ export function Verify() {
     }
   };
 
+  const confirmRefund = async () => {
+    setRefunding(true);
+    try {
+      const res = await api.post<RefundResult>('/verify/refund');
+      const currentUser =
+        typeof useAuth.getState === 'function' ? useAuth.getState().user : null;
+      if (currentUser && typeof useAuth.setState === 'function') {
+        useAuth.setState({
+          user: { ...currentUser, bot_shield_verified: false },
+        });
+      }
+      await Promise.all([refreshVerificationStatus(), refreshSignedInUser()]);
+      if (!mountedRef.current) return;
+      setRefundAvailable(false);
+      setConfirmingRefund(false);
+      setRefundMessage(
+        res?.message ||
+          'Your $1 refund has started. Your Verified Human badge is now off.'
+      );
+    } catch (err: any) {
+      if (!mountedRef.current) return;
+      setConfirmingRefund(false);
+      setRefundMessage(
+        err?.message || 'We could not process your $1 refund right now.'
+      );
+    } finally {
+      if (mountedRef.current) {
+        setRefunding(false);
+      }
+    }
+  };
+
   if (loading) {
     return (
       <div className="app-page flex items-center justify-center">
@@ -368,6 +448,65 @@ export function Verify() {
                     : 'Verified Human'}{' '}
                   badge is live on the account.
                 </p>
+              </div>
+            )}
+
+            {(refundAvailable || refundMessage) && (
+              <div className="glass-strong rounded-xl p-6 md:p-8">
+                {refundAvailable && (
+                  <>
+                    <p className="text-base font-medium text-[#C9CBCE]">
+                      Not for you? Get your $1 back within 3 days. Your badge
+                      turns off.
+                    </p>
+                    {!confirmingRefund ? (
+                      <button
+                        type="button"
+                        onClick={() => setConfirmingRefund(true)}
+                        className="app-button-outline mt-4 px-6 py-4"
+                      >
+                        Give me my $1 back
+                      </button>
+                    ) : (
+                      <div className="mt-4 space-y-3">
+                        <p className="text-sm font-medium text-[#F4F1EA]">
+                          Confirm your $1 refund? Your badge will turn off right
+                          away.
+                        </p>
+                        <div className="flex flex-col gap-3 sm:flex-row">
+                          <button
+                            type="button"
+                            onClick={() => void confirmRefund()}
+                            disabled={refunding}
+                            className="app-button-accent px-6 py-4 disabled:opacity-60"
+                          >
+                            {refunding
+                              ? 'Refunding...'
+                              : 'Yes, give me my $1 back'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setConfirmingRefund(false)}
+                            disabled={refunding}
+                            className="app-button-dark px-6 py-4 disabled:opacity-60"
+                          >
+                            Keep my badge
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+                {refundMessage && (
+                  <p
+                    role="status"
+                    className={`${
+                      refundAvailable ? 'mt-4 ' : ''
+                    }text-base font-medium text-[#C9CBCE]`}
+                  >
+                    {refundMessage}
+                  </p>
+                )}
               </div>
             )}
 
