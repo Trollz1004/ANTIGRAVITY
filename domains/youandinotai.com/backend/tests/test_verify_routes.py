@@ -691,6 +691,7 @@ class TestVerifyRefund:
 
     def test_square_client_wrapper_refund_square_payment(self):
         import asyncio
+
         from app import square_checkout
 
         assert hasattr(square_checkout, "refund_square_payment")
@@ -735,4 +736,3 @@ class TestVerifyRefund:
             "amount": 100,
             "currency": "USD",
         }
-
