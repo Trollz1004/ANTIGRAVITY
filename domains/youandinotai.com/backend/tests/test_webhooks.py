@@ -23,8 +23,9 @@ os.environ["JWT_SECRET"] = (
 
 from sqlalchemy import select
 
-from app.models import RevenueAllocation, User, VerificationEvent
+from app.models import Profile, RevenueAllocation, User, VerificationEvent
 from app.payment_truth import build_checkout_reference
+from app.verification_service import has_completed_payment
 from tests.conftest import (
     generate_square_signature,
     make_square_booking_event,
@@ -944,6 +945,418 @@ def test_payment_webhook_rejects_wrong_signature_and_accepts_correct_signature(
     assert user_after_good.subscription_active is True
 
     get_settings.cache_clear()
+
+
+def _make_signed_refund_webhook_request(
+    *,
+    event_id: str,
+    payment_id: str,
+    event_type: str = "refund.updated",
+    refund_status: str = "COMPLETED",
+    amount_cents: int = 100,
+) -> tuple[str, str]:
+    payload = {
+        "event_id": event_id,
+        "type": event_type,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "data": {
+            "object": {
+                "refund": {
+                    "id": f"rfnd_{uuid.uuid4().hex[:16]}",
+                    "status": refund_status,
+                    "payment_id": payment_id,
+                    "amount_money": {"amount": amount_cents, "currency": "USD"},
+                }
+            }
+        },
+    }
+    raw_body = json.dumps(payload, separators=(",", ":"))
+    signature = generate_square_signature(
+        raw_body.encode("utf-8"),
+        "test-square-signature",
+        "http://testserver/api/v1/webhooks/square-payment",
+    )
+    return raw_body, signature
+
+
+def _seed_verified_bot_shield_member(
+    db_session_factory,
+    *,
+    email: str,
+    payment_id: str,
+    membership_payment_id: str | None = None,
+) -> tuple[uuid.UUID, uuid.UUID, uuid.UUID | None]:
+    import asyncio
+
+    user_id = uuid.uuid4()
+    payment_event_id = uuid.uuid4()
+    membership_event_id = uuid.uuid4() if membership_payment_id else None
+
+    async def _seed() -> None:
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=user_id,
+                    email=email,
+                    password_hash="hashed",
+                    display_name="Verified Member",
+                    bot_shield_verified=True,
+                    subscription_active=bool(membership_payment_id),
+                    subscription_tier=(
+                        "founding_member" if membership_payment_id else None
+                    ),
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            session.add(
+                Profile(
+                    id=uuid.uuid4(),
+                    user_id=user_id,
+                    bio="Checked profile",
+                    verified=True,
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            session.add(
+                VerificationEvent(
+                    id=uuid.uuid4(),
+                    user_id=user_id,
+                    challenge_type="liveness",
+                    status="passed",
+                    amount_cents=100,
+                )
+            )
+            session.add(
+                VerificationEvent(
+                    id=payment_event_id,
+                    user_id=user_id,
+                    challenge_type="payment",
+                    status="completed",
+                    amount_cents=100,
+                    square_payment_id=payment_id,
+                )
+            )
+            session.add(
+                RevenueAllocation(
+                    id=uuid.uuid4(),
+                    user_id=user_id,
+                    source_event_id=f"evt_seed_{payment_id}",
+                    square_payment_id=payment_id,
+                    payment_tier="bot_shield",
+                    gross_amount_cents=100,
+                    reserve_amount_cents=0,
+                    operating_amount_cents=100,
+                    status="reserved",
+                )
+            )
+            if membership_payment_id and membership_event_id:
+                session.add(
+                    VerificationEvent(
+                        id=membership_event_id,
+                        user_id=user_id,
+                        challenge_type="payment",
+                        status="completed",
+                        amount_cents=1499,
+                        square_payment_id=membership_payment_id,
+                    )
+                )
+                session.add(
+                    RevenueAllocation(
+                        id=uuid.uuid4(),
+                        user_id=user_id,
+                        source_event_id=f"evt_seed_{membership_payment_id}",
+                        square_payment_id=membership_payment_id,
+                        payment_tier="founding_member",
+                        gross_amount_cents=1499,
+                        reserve_amount_cents=0,
+                        operating_amount_cents=1499,
+                        status="reserved",
+                    )
+                )
+            await session.commit()
+
+    asyncio.run(_seed())
+    return user_id, payment_event_id, membership_event_id
+
+
+def test_bot_shield_refund_webhook_revokes_badge_and_payment_event(
+    client,
+    db_session_factory,
+):
+    import asyncio
+
+    user_id, payment_event_id, _ = _seed_verified_bot_shield_member(
+        db_session_factory,
+        email="refund-bot-shield@example.com",
+        payment_id="pay_bot_shield_refund_1",
+    )
+
+    raw_body, signature = _make_signed_refund_webhook_request(
+        event_id="evt_refund_bot_shield_1",
+        payment_id="pay_bot_shield_refund_1",
+    )
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=raw_body,
+    )
+    assert response.status_code == 200, response.text
+
+    async def _fetch_state():
+        async with db_session_factory() as session:
+            user = await session.get(User, user_id)
+            profile = await session.scalar(
+                select(Profile).where(Profile.user_id == user_id)
+            )
+            payment_event = await session.get(VerificationEvent, payment_event_id)
+            paid = await has_completed_payment(session, user_id)
+            return user, profile, payment_event, paid
+
+    user, profile, payment_event, paid = asyncio.run(_fetch_state())
+    assert payment_event is not None
+    assert payment_event.status == "refunded"
+    assert user is not None
+    assert user.bot_shield_verified is False
+    assert profile is not None
+    assert profile.verified is False
+    assert paid is False
+
+
+def test_bot_shield_payment_updated_refund_branch_revokes_badge(
+    client,
+    db_session_factory,
+):
+    import asyncio
+
+    user_id, payment_event_id, _ = _seed_verified_bot_shield_member(
+        db_session_factory,
+        email="refund-payment-branch@example.com",
+        payment_id="pay_bot_shield_refund_branch_1",
+    )
+
+    payload = make_square_payment_event(
+        event_id="evt_payment_updated_refunded_1",
+        event_type="payment.updated",
+        amount_cents=100,
+        buyer_email="refund-payment-branch@example.com",
+        note="Bot-Shield Verification",
+        payment_status="REFUNDED",
+    )
+    payload["data"]["object"]["payment"]["id"] = "pay_bot_shield_refund_branch_1"
+    payload["data"]["object"]["payment"]["refunded_money"] = {
+        "amount": 100,
+        "currency": "USD",
+    }
+    raw_body = json.dumps(payload, separators=(",", ":"))
+    signature = generate_square_signature(
+        raw_body.encode("utf-8"),
+        "test-square-signature",
+        "http://testserver/api/v1/webhooks/square-payment",
+    )
+
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=raw_body,
+    )
+    assert response.status_code == 200, response.text
+
+    async def _fetch_state():
+        async with db_session_factory() as session:
+            user = await session.get(User, user_id)
+            profile = await session.scalar(
+                select(Profile).where(Profile.user_id == user_id)
+            )
+            payment_event = await session.get(VerificationEvent, payment_event_id)
+            paid = await has_completed_payment(session, user_id)
+            return user, profile, payment_event, paid
+
+    user, profile, payment_event, paid = asyncio.run(_fetch_state())
+    assert payment_event is not None
+    assert payment_event.status == "refunded"
+    assert user is not None
+    assert user.bot_shield_verified is False
+    assert profile is not None
+    assert profile.verified is False
+    assert paid is False
+
+
+def test_refund_for_unknown_payment_changes_nothing(
+    client,
+    db_session_factory,
+):
+    import asyncio
+
+    user_id, payment_event_id, _ = _seed_verified_bot_shield_member(
+        db_session_factory,
+        email="unknown-refund@example.com",
+        payment_id="pay_known_bot_shield_1",
+    )
+
+    raw_body, signature = _make_signed_refund_webhook_request(
+        event_id="evt_refund_unknown_payment_1",
+        payment_id="pay_unknown_does_not_exist",
+    )
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=raw_body,
+    )
+    assert response.status_code == 200, response.text
+
+    async def _fetch_state():
+        async with db_session_factory() as session:
+            user = await session.get(User, user_id)
+            profile = await session.scalar(
+                select(Profile).where(Profile.user_id == user_id)
+            )
+            payment_event = await session.get(VerificationEvent, payment_event_id)
+            paid = await has_completed_payment(session, user_id)
+            return user, profile, payment_event, paid
+
+    user, profile, payment_event, paid = asyncio.run(_fetch_state())
+    assert payment_event is not None
+    assert payment_event.status == "completed"
+    assert user is not None
+    assert user.bot_shield_verified is True
+    assert profile is not None
+    assert profile.verified is True
+    assert paid is True
+
+
+def test_same_refund_event_sent_twice_changes_nothing_more(
+    client,
+    db_session_factory,
+):
+    import asyncio
+
+    user_id, payment_event_id, _ = _seed_verified_bot_shield_member(
+        db_session_factory,
+        email="duplicate-refund@example.com",
+        payment_id="pay_bot_shield_dup_refund_1",
+    )
+
+    raw_body, signature = _make_signed_refund_webhook_request(
+        event_id="evt_refund_duplicate_1",
+        payment_id="pay_bot_shield_dup_refund_1",
+    )
+    headers = {
+        "x-square-hmacsha256-signature": signature,
+        "Content-Type": "application/json",
+    }
+
+    first_resp = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers=headers,
+        content=raw_body,
+    )
+    assert first_resp.status_code == 200, first_resp.text
+    assert first_resp.json()["duplicate"] is False
+
+    second_resp = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers=headers,
+        content=raw_body,
+    )
+    assert second_resp.status_code == 200, second_resp.text
+    assert second_resp.json()["duplicate"] is True
+
+    async def _fetch_state():
+        async with db_session_factory() as session:
+            user = await session.get(User, user_id)
+            profile = await session.scalar(
+                select(Profile).where(Profile.user_id == user_id)
+            )
+            payment_event = await session.get(VerificationEvent, payment_event_id)
+            all_events = list(
+                (
+                    await session.scalars(
+                        select(VerificationEvent).where(
+                            VerificationEvent.user_id == user_id
+                        )
+                    )
+                ).all()
+            )
+            paid = await has_completed_payment(session, user_id)
+            return user, profile, payment_event, all_events, paid
+
+    user, profile, payment_event, all_events, paid = asyncio.run(_fetch_state())
+    assert payment_event is not None
+    assert payment_event.status == "refunded"
+    assert user is not None
+    assert user.bot_shield_verified is False
+    assert profile is not None
+    assert profile.verified is False
+    assert paid is False
+    assert len(all_events) == 2
+
+
+def test_refund_of_membership_payment_leaves_badge_alone(
+    client,
+    db_session_factory,
+):
+    import asyncio
+
+    user_id, bot_payment_event_id, membership_event_id = (
+        _seed_verified_bot_shield_member(
+            db_session_factory,
+            email="membership-refund@example.com",
+            payment_id="pay_bot_shield_keep_1",
+            membership_payment_id="pay_founding_member_refund_1",
+        )
+    )
+
+    raw_body, signature = _make_signed_refund_webhook_request(
+        event_id="evt_refund_membership_1",
+        payment_id="pay_founding_member_refund_1",
+        amount_cents=1499,
+    )
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=raw_body,
+    )
+    assert response.status_code == 200, response.text
+
+    async def _fetch_state():
+        async with db_session_factory() as session:
+            user = await session.get(User, user_id)
+            profile = await session.scalar(
+                select(Profile).where(Profile.user_id == user_id)
+            )
+            bot_event = await session.get(VerificationEvent, bot_payment_event_id)
+            membership_event = (
+                await session.get(VerificationEvent, membership_event_id)
+                if membership_event_id
+                else None
+            )
+            paid = await has_completed_payment(session, user_id)
+            return user, profile, bot_event, membership_event, paid
+
+    user, profile, bot_event, membership_event, paid = asyncio.run(_fetch_state())
+    assert bot_event is not None
+    assert bot_event.status == "completed"
+    assert membership_event is not None
+    assert membership_event.status == "completed"
+    assert user is not None
+    assert user.bot_shield_verified is True
+    assert profile is not None
+    assert profile.verified is True
+    assert paid is True
 
 
 class TestNoStripeReferences:

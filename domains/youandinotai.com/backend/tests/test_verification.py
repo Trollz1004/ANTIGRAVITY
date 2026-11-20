@@ -227,6 +227,39 @@ class TestVerificationPromotion:
         assert user.bot_shield_verified is True
         assert user.profile.verified is True
 
+    def test_revoke_user_verification_for_refund_clears_badge_and_payment_event(self):
+        import asyncio
+
+        from app.verification_service import revoke_user_verification_for_refund
+
+        user = MagicMock()
+        user.id = uuid.uuid4()
+        user.bot_shield_verified = True
+        user.profile = MagicMock()
+        user.profile.verified = True
+
+        payment_event = MagicMock()
+        payment_event.user_id = user.id
+        payment_event.challenge_type = "payment"
+        payment_event.status = "completed"
+        payment_event.amount_cents = 100
+        payment_event.square_payment_id = "pay_unit_1"
+
+        mock_db = AsyncMock()
+        mock_db.scalar = AsyncMock(side_effect=[payment_event, user])
+
+        revoked = asyncio.run(
+            revoke_user_verification_for_refund(
+                mock_db,
+                square_payment_id="pay_unit_1",
+            )
+        )
+
+        assert revoked is True
+        assert payment_event.status == "refunded"
+        assert user.bot_shield_verified is False
+        assert user.profile.verified is False
+
 
 class TestVerificationStatusTruth:
     def test_status_reports_actual_payment_state_not_badge_flag(self, monkeypatch):
