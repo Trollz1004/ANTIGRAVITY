@@ -290,6 +290,42 @@ async function main() {
     } else {
       console.log("PASS: booking record stores notified=false and /health reports unnotifiedBookings=1");
     }
+
+    // Verify /health reports 'booking notices: on' when token and chat are configured
+    const onPort = 9162;
+    const onBookingsDir = fs.mkdtempSync(path.join(os.tmpdir(), "orc-vhost-on-"));
+    const onChild = spawn(process.execPath, [SERVER_PATH], {
+      env: {
+        ...process.env,
+        DOMAINS_SERVER_PORT: String(onPort),
+        DOMAINS_SERVER_HOST: "127.0.0.1",
+        FLEET_SHARED_TOKEN: "test-fleet-token",
+        ORC_NOTIFY_TELEGRAM_TOKEN: "test-token",
+        ORC_NOTIFY_TELEGRAM_CHAT: "test-chat",
+        ORC_BOOKINGS_DIR: onBookingsDir,
+      },
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    try {
+      const onUp = await waitForServer(onPort);
+      const onHealth = onUp ? await getPath("127.0.0.1", onPort, "/health") : { status: 0, body: "{}" };
+      const onBody = JSON.parse(onHealth.body);
+      if (
+        !onUp ||
+        onHealth.status !== 200 ||
+        onBody.bookingNotices !== "on" ||
+        !onHealth.body.includes("booking notices: on") ||
+        onBody.unnotifiedBookings !== 0
+      ) {
+        console.error("FAIL: /health did not report 'booking notices: on' when configured:", onHealth.body);
+        failures++;
+      } else {
+        console.log("PASS: /health reports 'booking notices: on' when configured ->", onHealth.body);
+      }
+    } finally {
+      onChild.kill();
+      fs.rmSync(onBookingsDir, { recursive: true, force: true });
+    }
   } finally {
     child.kill();
     fs.rmSync(tmpBookingsDir, { recursive: true, force: true });
