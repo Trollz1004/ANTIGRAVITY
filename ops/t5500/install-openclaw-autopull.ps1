@@ -33,8 +33,22 @@ if (-not (Test-Path $AutopullScript)) {
     throw "OpenClaw autopull script not found at: $AutopullScript"
 }
 
+function Format-SafePath([string]$RawPath) {
+    $out = [string]$RawPath
+    if ($env:LOCALAPPDATA) {
+        $out = $out.Replace($env:LOCALAPPDATA, '%LOCALAPPDATA%')
+    }
+    if ($env:USERPROFILE) {
+        $out = $out.Replace($env:USERPROFILE, '%USERPROFILE%')
+    }
+    return $out
+}
+
+$DisplayRepoPath = Format-SafePath $RepoPath
+$DisplayAutopullScript = Format-SafePath $AutopullScript
 $PsExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
 $TaskArgs = "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$AutopullScript`" -RepoPath `"$RepoPath`" -Apply"
+$DisplayTaskArgs = Format-SafePath $TaskArgs
 
 $modeLabel = if ($Apply) { 'APPLY (live Windows Task Scheduler registration)' } else { 'DRY-RUN (print-only; pass -Apply on T5500 to register)' }
 
@@ -42,13 +56,13 @@ Write-Output '# ANTIGRAVITY T5500 OpenClaw Hourly Autopull Scheduled Task'
 Write-Output "# Mode: $modeLabel"
 Write-Output "# TaskName: $TaskName"
 Write-Output '# Schedule: Hourly (every 1 hour)'
-Write-Output "# RepoPath: $RepoPath"
-Write-Output "# Script: $AutopullScript"
+Write-Output "# RepoPath: $DisplayRepoPath"
+Write-Output "# Script: $DisplayAutopullScript"
 Write-Output '# WindowStyle: Hidden | ScheduledTaskSettingsSet Hidden = $true'
 Write-Output ''
 
 if (-not $Apply) {
-    Write-Output "`$action = New-ScheduledTaskAction -Execute '$PsExe' -Argument '$TaskArgs' -WorkingDirectory '$RepoPath'"
+    Write-Output "`$action = New-ScheduledTaskAction -Execute '$PsExe' -Argument '$DisplayTaskArgs' -WorkingDirectory '$DisplayRepoPath'"
     Write-Output '$triggerHourly = New-ScheduledTaskTrigger -Once -At (Get-Date).Date.AddHours(1) -RepetitionInterval (New-TimeSpan -Hours 1) -RepetitionDuration (New-TimeSpan -Days 3650)'
     Write-Output '$settings = New-ScheduledTaskSettingsSet -Hidden -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Minutes 15)'
     Write-Output "Register-ScheduledTask -TaskName '$TaskName' -Action `$action -Trigger `$triggerHourly -Settings `$settings -Description 'Hourly T5500 OpenClaw fast-forward autopull, service health verifier, and pause way-back' -Force"
