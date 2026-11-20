@@ -77,6 +77,7 @@ async def list_posts(
     offset: int = 0,
     order: Literal["asc", "desc"] = Query(default="desc"),
 ) -> list[PostResponse]:
+    await _ensure_boards(db)
     board = await db.scalar(select(Board).where(Board.slug == slug))
     if not board:
         raise HTTPException(status_code=404, detail="Board not found")
@@ -121,6 +122,7 @@ async def create_post(
     user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> PostResponse:
+    await _ensure_boards(db)
     board = await db.scalar(select(Board).where(Board.slug == slug))
     if not board:
         raise HTTPException(status_code=404, detail="Board not found")
