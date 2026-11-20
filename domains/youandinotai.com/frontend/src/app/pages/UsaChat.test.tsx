@@ -453,6 +453,11 @@ describe('UsaChat (/app/usa)', () => {
     });
     expect(joinLink.getAttribute('href')).toBe('/app/usa');
 
+    const topLink = screen.getByRole('link', {
+      name: 'USA group chat',
+    });
+    expect(topLink.getAttribute('href')).toBe('/app/usa');
+
     render(
       <MemoryRouter initialEntries={['/app']}>
         <AppShell />
@@ -461,5 +466,38 @@ describe('UsaChat (/app/usa)', () => {
 
     const navLink = screen.getByRole('link', { name: 'USA chat' });
     expect(navLink.getAttribute('href')).toBe('/app/usa');
+  });
+
+  it("shows a link 'USA group chat' to /app/usa at the top of Discover when profiles are showing", async () => {
+    vi.mocked(api.get).mockResolvedValueOnce([
+      {
+        user_id: 'profile-riley',
+        display_name: 'Riley',
+        bio: 'Hiking and bookstores on weekends.',
+        age: 29,
+        photos: [],
+        interests: ['Hiking', 'Bookstores'],
+        location: 'Denver, CO',
+        verified: true,
+        subscription_active: true,
+        intent: 'Relationship ready',
+      },
+    ]);
+
+    const { container } = render(
+      <MemoryRouter initialEntries={['/app']}>
+        <Discover />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Riley')).toBeTruthy();
+    });
+
+    const usaLink = screen.getByRole('link', { name: 'USA group chat' });
+    expect(usaLink.getAttribute('href')).toBe('/app/usa');
+
+    const text = container.textContent || '';
+    expect(text.indexOf('USA group chat')).toBeLessThan(text.indexOf('Riley'));
   });
 });
