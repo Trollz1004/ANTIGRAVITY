@@ -150,8 +150,9 @@ export function parseCliArgs(argv) {
       ? 'eyes-founder-page'
       : `eyes-${fixtureStem}`;
   const namePrefix = flags.name || flags.prefix || defaultPrefix;
+  const url = flags.url || '';
 
-  return { route, fixturePath, outDir, selector, namePrefix };
+  return { route, fixturePath, outDir, selector, namePrefix, url };
 }
 
 async function captureViewport(
@@ -224,9 +225,67 @@ function maskUserPath(filePath) {
 }
 
 export async function shootPage(options) {
-  const { route, fixturePath, outDir, selector, namePrefix } = options;
-  const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+  const { route, fixturePath, outDir, selector, namePrefix, url } = options;
   fs.mkdirSync(outDir, { recursive: true });
+
+  if (url) {
+    let browser;
+    try {
+      const { chromium } = await import('playwright');
+      try {
+        browser = await chromium.launch({
+          channel: 'msedge',
+          headless: true,
+        });
+      } catch {
+        browser = await chromium.launch({ headless: true });
+      }
+      const context = await browser.newContext({
+        viewport: { width: 1440, height: 900 },
+      });
+      const pageErrors = [];
+      const page = await context.newPage();
+      page.on('pageerror', (err) => {
+        pageErrors.push(err?.message || String(err));
+      });
+      await page.goto(url, { waitUntil: 'networkidle' });
+      const locator = page.locator(selector || 'body').first();
+      await locator.waitFor({ state: 'visible', timeout: 15000 });
+      await page.waitForTimeout(300);
+      const picturePath = path.join(outDir, `${namePrefix}.png`);
+      await page.screenshot({ path: picturePath, fullPage: true });
+      const visibleText = (await locator.innerText()).trim();
+      const scrollsSideways = await page.evaluate(
+        () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      );
+      await context.close();
+      const report = {
+        route: url,
+        finalPath: url,
+        phoneFinalPath: url,
+        selector: selector || 'body',
+        visibleText,
+        scrollsSideways,
+        desktopScrollsSideways: scrollsSideways,
+        phoneScrollsSideways: false,
+        pageErrors,
+        desktopPicture: maskUserPath(picturePath),
+        phonePicture: maskUserPath(picturePath),
+      };
+      return {
+        report,
+        reportPath: '',
+        desktopPath: maskUserPath(picturePath),
+        phonePath: maskUserPath(picturePath),
+      };
+    } finally {
+      if (browser) {
+        await browser.close().catch(() => {});
+      }
+    }
+  }
+
+  const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
 
   const viteBin = ensureFrontendNodeModules();
   const port = await findSparePort();
