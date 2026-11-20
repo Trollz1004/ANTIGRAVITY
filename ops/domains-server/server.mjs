@@ -22,7 +22,7 @@ const DOMAINS_ROOT = path.join(REPO_ROOT, "domains");
 const BOOKINGS_DIR = path.join(REPO_ROOT, "data", "ewaste-intake");
 const BOOKINGS_JSONL = path.join(BOOKINGS_DIR, "bookings.jsonl");
 const INQUIRIES_DIR = path.join(BOOKINGS_DIR, "inquiries");
-const STATS_DIR = path.join(BOOKINGS_DIR, "stats");
+const STATS_DIR = process.env.ORC_STATS_DIR || path.join(BOOKINGS_DIR, "stats");
 
 // Ruled 2026-09-28 (Joshua: "use the endpoints always of 192, not localhost"):
 // listen on the T5500 LAN address and on loopback for local probes and the
@@ -564,7 +564,9 @@ const server = http.createServer(async (req, res) => {
     const data = await fsp.readFile(filePath);
     res.writeHead(200, { "Content-Type": contentTypeFor(filePath) });
     res.end(data);
-    if (isBookingHost && urlPath === "/" && req.method === "GET") recordPageView(STATS_DIR);
+    if (isBookingHost && urlPath === "/" && req.method === "GET") {
+      recordPageView(STATS_DIR, new Date(), req.headers["user-agent"]);
+    }
   } catch (err) {
     if (res.headersSent || res.destroyed) return;
     res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });

@@ -3,7 +3,7 @@
 What was added to the domains server for onlinerecycle.net:
 
 - `booking-notify.mjs` sends the owner a plain-text Telegram message after each saved booking (name, phone, city and ZIP, device-count tier, data-handling notes, requested window, first 160 characters of the item list). It runs after the response is sent, catches every error, and appends failures to `data/ewaste-intake/notify-errors.log`. The token is never logged.
-- `booking-stats.mjs` keeps `data/ewaste-intake/stats/YYYY-MM-DD.json` with `page_views` (successful GETs of the onlinerecycle.net home page) and `bookings` (successful POSTs to /api/book). Days are Florida time. No IPs, user agents or cookies are stored, and no endpoint exposes the numbers.
+- `booking-stats.mjs` keeps `data/ewaste-intake/stats/YYYY-MM-DD.json` with `page_views` (successful GETs of the onlinerecycle.net home page excluding known crawler user agents), `page_views_all` (all successful GETs of the home page including known crawlers), and `bookings` (successful POSTs to /api/book). Days are Florida time. No IPs, user agents or cookies are stored, and no endpoint exposes the numbers.
 
 Environment variables on the T5500 (domains-server process):
 
