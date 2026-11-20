@@ -3,7 +3,7 @@ title: "Online dating conversation tips that lead to a real date"
 description: "online dating conversation tips — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging or video."
 date: 2026-10-01
 keyword: "online dating conversation tips"
-canonical: "https://youandinotai.com/blog/online-dating-conversation-tips"
+canonical: "https://youandinotai.com/blog/online-dating-conversation-tips/"
 ---
 
 # Online dating conversation tips that lead to a real date

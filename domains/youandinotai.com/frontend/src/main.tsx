@@ -90,7 +90,7 @@ function PageErrorFallback({
             <RotateCw size={16} /> Try Again
           </button>
           <a
-            href="/app"
+            href="/"
             className="app-button-dark px-6 py-3 text-sm no-underline"
           >
             <Home size={16} /> Go Home
