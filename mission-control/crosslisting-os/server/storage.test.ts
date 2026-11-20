@@ -235,4 +235,63 @@ describe("local disk storage", () => {
       );
     }
   });
+
+  it("writes a credentials/ key under data/credentials with its given name, replaces it on a second write, reads it with storageRead, and answers 404 on GET /manus-storage/", async () => {
+    const credentialKey = "credentials/ebay-refresh-token.enc";
+    const firstPayload = Buffer.from(
+      JSON.stringify({ v: 1, ciphertext: "first-token-payload" }),
+      "utf8"
+    );
+    const secondPayload = Buffer.from(
+      JSON.stringify({ v: 1, ciphertext: "second-token-payload" }),
+      "utf8"
+    );
+
+    const firstStored = await storagePut(
+      credentialKey,
+      firstPayload,
+      "application/json"
+    );
+    expect(firstStored.key).toBe(credentialKey);
+
+    const credentialDiskPath = path.join(
+      tempDir,
+      "data",
+      "credentials",
+      "ebay-refresh-token.enc"
+    );
+    const firstDiskBytes = await fs.readFile(credentialDiskPath);
+    expect(firstDiskBytes.equals(firstPayload)).toBe(true);
+
+    const secondStored = await storagePut(
+      credentialKey,
+      secondPayload,
+      "application/json"
+    );
+    expect(secondStored.key).toBe(credentialKey);
+
+    const secondDiskBytes = await fs.readFile(credentialDiskPath);
+    expect(secondDiskBytes.equals(secondPayload)).toBe(true);
+
+    const readBack = await storageRead(credentialKey);
+    expect(readBack.key).toBe(credentialKey);
+    expect(readBack.data.equals(secondPayload)).toBe(true);
+
+    const server = createTestServerWithStorageRoute();
+    await new Promise<void>(resolve =>
+      server.listen(0, "127.0.0.1", () => resolve())
+    );
+
+    try {
+      const { port } = server.address() as AddressInfo;
+      const baseUrl = `http://127.0.0.1:${port}`;
+
+      const getResp = await fetch(`${baseUrl}/manus-storage/${credentialKey}`);
+      expect(getResp.status).toBe(404);
+    } finally {
+      await new Promise<void>((resolve, reject) =>
+        server.close(err => (err ? reject(err) : resolve()))
+      );
+    }
+  });
 });
