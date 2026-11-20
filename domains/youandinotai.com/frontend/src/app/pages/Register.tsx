@@ -34,9 +34,13 @@ export function Register() {
 
   useEffect(() => {
     document.title = 'Create 18+ Account | YouAndINotAI';
-    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    const canonical = document.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]'
+    );
     if (canonical) canonical.href = 'https://youandinotai.com/register';
-    const desc = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    const desc = document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]'
+    );
     if (desc) {
       desc.content =
         'Create your 18+ YouAndINotAI account and complete the $1 Bot-Shield human check to unlock verified human dating, messaging, video, and boards.';

@@ -47,9 +47,13 @@ export function Login() {
 
   useEffect(() => {
     document.title = 'Member Sign In | YouAndINotAI';
-    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    const canonical = document.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]'
+    );
     if (canonical) canonical.href = 'https://youandinotai.com/login';
-    const desc = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    const desc = document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]'
+    );
     if (desc) {
       desc.content =
         'Sign in to your 18+ YouAndINotAI account to access verified human profiles, $1 Bot-Shield verification, chat, video, and local boards.';

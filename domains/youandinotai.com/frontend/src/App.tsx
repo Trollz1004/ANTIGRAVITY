@@ -148,9 +148,13 @@ function readUnpinnedStops(): Record<string, boolean> {
 export function PublicSupportPage() {
   useEffect(() => {
     document.title = 'Member Support & Safety Guide | YouAndINotAI';
-    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    const canonical = document.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]'
+    );
     if (canonical) canonical.href = 'https://youandinotai.com/support';
-    const desc = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    const desc = document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]'
+    );
     if (desc) {
       desc.content =
         'Direct, traceable member support for $1 Bot-Shield verification, account-bound billing receipts, account recovery, and privacy exports on YouAndINotAI.';
@@ -304,9 +308,13 @@ export function LandingPage() {
   useEffect(() => {
     document.title =
       'YouAndINotAI | Verified Human Dating & Real-World Connection';
-    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    const canonical = document.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]'
+    );
     if (canonical) canonical.href = 'https://youandinotai.com/';
-    const desc = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    const desc = document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]'
+    );
     if (desc) {
       desc.content =
         'Human-first social platform for dating, meetups, and real-world connection. Bot-Shield verification and account-bound checkout are live now.';

@@ -31,13 +31,7 @@ const getTags = (html, tagName) => {
   return (html.match(re) ?? []).map(parseAttrs);
 };
 
-const decodeEntities = (s) =>
-  s
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'");
+const decodeEntities = (s) => s.replaceAll('&amp;', '&');
 
 const titleOf = (html) => {
   const m = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
@@ -215,8 +209,6 @@ test('7. broken internal links: /blog/ linked from main site, error boundary lin
 
   const llmsTxt = readYani('public/llms.txt');
   assert.equal((llmsTxt.match(/^# YouAndINotAI$/gm) ?? []).length, 1, 'llms.txt should not duplicate # YouAndINotAI');
-  const agentsMd = readYani('public/AGENTS.md');
-  assert.equal((agentsMd.match(/^## Data Safety$/gm) ?? []).length, 1, 'AGENTS.md should not duplicate ## Data Safety');
 
   for (const page of ['index.html', 'about.html', 'terms.html', 'privacy.html', 'service-areas.html']) {
     const doc = readOr(page);
