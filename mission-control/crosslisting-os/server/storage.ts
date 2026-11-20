@@ -56,6 +56,12 @@ const EXTENSION_CONTENT_TYPES: Record<string, string> = {
 const CROSSLISTER_ROOT = path.resolve(import.meta.dirname, "..");
 const REPO_ROOT = path.resolve(CROSSLISTER_ROOT, "..", "..");
 const DEFAULT_UPLOADS_PATH = path.resolve(CROSSLISTER_ROOT, "data", "uploads");
+const DEFAULT_CREDENTIALS_PATH = path.resolve(
+  CROSSLISTER_ROOT,
+  "data",
+  "credentials"
+);
+const CREDENTIALS_PREFIX = "credentials/";
 
 export function getStorageDir(): string {
   const configured = (process.env.STORAGE_DIR ?? ENV.storageDir ?? "").trim();
@@ -73,6 +79,29 @@ export function getStorageDir(): string {
     return path.resolve(REPO_ROOT, configured);
   }
   return path.resolve(process.cwd(), configured);
+}
+
+export function getCredentialsDir(): string {
+  const configured = (process.env.STORAGE_DIR ?? ENV.storageDir ?? "").trim();
+  if (!configured || configured.replace(/\\/g, "/") === DEFAULT_STORAGE_DIR) {
+    return DEFAULT_CREDENTIALS_PATH;
+  }
+  const storageDir = getStorageDir();
+  if (path.basename(storageDir).toLowerCase() === "uploads") {
+    const parentDir = path.dirname(storageDir);
+    if (path.basename(parentDir).toLowerCase() === "data") {
+      return path.resolve(parentDir, "credentials");
+    }
+    return path.resolve(parentDir, "data", "credentials");
+  }
+  return path.resolve(storageDir, "data", "credentials");
+}
+
+export function isCredentialsKey(relKey: string): boolean {
+  const normalized = relKey.replace(/^\/+/, "").trim();
+  return (
+    normalized === "credentials" || normalized.startsWith(CREDENTIALS_PREFIX)
+  );
 }
 
 function validateRelativeKey(relKey: string): string {
@@ -110,6 +139,24 @@ export function resolveStoragePath(relKey: string): {
   storageRoot: string;
 } {
   const key = validateRelativeKey(relKey);
+  if (isCredentialsKey(key)) {
+    const credentialRelPath = key.slice(CREDENTIALS_PREFIX.length);
+    if (!credentialRelPath) {
+      throw new Error("Invalid storage path: missing credential file name");
+    }
+    const storageRoot = getCredentialsDir();
+    const filePath = path.resolve(storageRoot, credentialRelPath);
+    const relative = path.relative(storageRoot, filePath);
+
+    if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) {
+      throw new Error(
+        "Invalid storage path: target leaves credentials directory"
+      );
+    }
+
+    return { key, filePath, storageRoot };
+  }
+
   const storageRoot = getStorageDir();
   const filePath = path.resolve(storageRoot, key);
   const relative = path.relative(storageRoot, filePath);
@@ -152,7 +199,7 @@ export async function storagePut(
   contentType = "application/octet-stream"
 ): Promise<{ key: string; url: string }> {
   // Validate caller-supplied relative path first so any ../ or ..\ attempt is refused.
-  resolveStoragePath(relKey);
+  const requestedTarget = resolveStoragePath(relKey);
 
   const { ext } = normalizeContentType(contentType);
   const buffer = toBuffer(data);
@@ -167,6 +214,13 @@ export async function storagePut(
     throw new Error(
       `File size ${buffer.byteLength} bytes exceeds maximum allowed limit of ${maxBytes} bytes`
     );
+  }
+
+  if (isCredentialsKey(requestedTarget.key)) {
+    const { key, filePath } = requestedTarget;
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    await fs.writeFile(filePath, buffer);
+    return { key, url: `/manus-storage/${key}` };
   }
 
   // Server-generated file name only; never uses the upload's original name.

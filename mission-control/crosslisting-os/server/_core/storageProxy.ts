@@ -1,5 +1,5 @@
 import type { Express } from "express";
-import { resolveStoragePath, storageRead } from "../storage";
+import { isCredentialsKey, resolveStoragePath, storageRead } from "../storage";
 
 export function registerStorageProxy(app: Express) {
   app.get("/manus-storage/*", async (req, res) => {
@@ -17,6 +17,14 @@ export function registerStorageProxy(app: Express) {
     const key = (req.params as Record<string, string> | undefined)?.[0] ?? "";
     if (!key) {
       res.status(400).send("Missing storage key");
+      return;
+    }
+
+    if (
+      isCredentialsKey(key) ||
+      key.replace(/^\/+/, "").startsWith("data/credentials/")
+    ) {
+      res.status(404).send("Stored file not found");
       return;
     }
 
