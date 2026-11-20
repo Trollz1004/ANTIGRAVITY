@@ -7,7 +7,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { notifyBooking, formatBookingMessage, NOT_CONFIGURED_LINE } from "../booking-notify.mjs";
-import { recordPageView, recordBooking, dayKey } from "../booking-stats.mjs";
+import { recordPageView, recordBooking, dayKey, isKnownCrawler } from "../booking-stats.mjs";
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "orc-notify-"));
 const booking = {
@@ -69,7 +69,7 @@ await t("failing send does not throw, logs without token", async () => {
   assert.ok(!log.includes("SECRETTOKEN"));
 });
 
-await t("counter keeps two numbers per day, nothing else", () => {
+await t("counter keeps page_views, page_views_all, and bookings per day, nothing else", () => {
   const dir = path.join(tmp, "stats");
   const now = new Date("2026-11-13T15:00:00Z");
   recordPageView(dir, now);
@@ -77,9 +77,62 @@ await t("counter keeps two numbers per day, nothing else", () => {
   recordBooking(dir, now);
   const file = path.join(dir, `${dayKey(now)}.json`);
   assert.equal(path.basename(file), "2026-11-13.json");
-  assert.deepEqual(JSON.parse(fs.readFileSync(file, "utf8")), { page_views: 2, bookings: 1 });
+  assert.deepEqual(JSON.parse(fs.readFileSync(file, "utf8")), {
+    page_views: 2,
+    page_views_all: 2,
+    bookings: 1,
+  });
   recordBooking(dir, new Date("2026-11-14T15:00:00Z"));
-  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, "2026-11-14.json"), "utf8")), { page_views: 0, bookings: 1 });
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, "2026-11-14.json"), "utf8")), {
+    page_views: 0,
+    page_views_all: 0,
+    bookings: 1,
+  });
+});
+
+await t("known crawler user agents are left out of page_views and counted in page_views_all", () => {
+  const dir = path.join(tmp, "stats-crawlers");
+  const now = new Date("2026-11-15T15:00:00Z");
+  const crawlers = [
+    "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+    "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)",
+    "DuckDuckBot/1.1; (+http://duckduckgo.com/duckduckbot.html)",
+    "Mozilla/5.0 (compatible; AhrefsBot/7.0; +http://ahrefs.com/robot/)",
+    "Mozilla/5.0 (compatible; GPTBot/1.0; +https://openai.com/gptbot)",
+    "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
+    "curl/8.5.0",
+  ];
+  for (const ua of crawlers) {
+    assert.equal(isKnownCrawler(ua), true, `expected crawler UA to be detected: ${ua}`);
+    recordPageView(dir, now, ua);
+  }
+  const file = path.join(dir, `${dayKey(now)}.json`);
+  assert.deepEqual(JSON.parse(fs.readFileSync(file, "utf8")), {
+    page_views: 0,
+    page_views_all: crawlers.length,
+    bookings: 0,
+  });
+});
+
+await t("human browser user agents increment both page_views and page_views_all", () => {
+  const dir = path.join(tmp, "stats-humans");
+  const now = new Date("2026-11-16T15:00:00Z");
+  const browsers = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0",
+  ];
+  for (const ua of browsers) {
+    assert.equal(isKnownCrawler(ua), false, `expected browser UA not to be detected as crawler: ${ua}`);
+    recordPageView(dir, now, ua);
+  }
+  recordPageView(dir, now, "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
+  const file = path.join(dir, `${dayKey(now)}.json`);
+  assert.deepEqual(JSON.parse(fs.readFileSync(file, "utf8")), {
+    page_views: 3,
+    page_views_all: 4,
+    bookings: 0,
+  });
 });
 
 fs.rmSync(tmp, { recursive: true, force: true });
