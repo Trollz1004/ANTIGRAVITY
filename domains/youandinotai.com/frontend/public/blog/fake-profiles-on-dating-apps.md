@@ -3,7 +3,7 @@ title: "Fake profiles on dating apps and the one fix that works"
 description: "fake profiles on dating apps — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging or video."
 date: 2026-09-25
 keyword: "fake profiles on dating apps"
-canonical: "https://youandinotai.com/blog/fake-profiles-on-dating-apps"
+canonical: "https://youandinotai.com/blog/fake-profiles-on-dating-apps/"
 ---
 
 # Fake profiles on dating apps and the one fix that works

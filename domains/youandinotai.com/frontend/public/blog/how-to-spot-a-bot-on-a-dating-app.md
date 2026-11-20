@@ -3,7 +3,7 @@ title: "How to spot a bot on a dating app in under a minute"
 description: "how to spot a bot on a dating app — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging or video."
 date: 2026-09-25
 keyword: "how to spot a bot on a dating app"
-canonical: "https://youandinotai.com/blog/how-to-spot-a-bot-on-a-dating-app"
+canonical: "https://youandinotai.com/blog/how-to-spot-a-bot-on-a-dating-app/"
 ---
 
 # How to spot a bot on a dating app in under a minute

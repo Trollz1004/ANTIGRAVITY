@@ -3,7 +3,7 @@ title: "Dating app profile tips that get replies from real people"
 description: "dating app profile tips — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging or video."
 date: 2026-09-30
 keyword: "dating app profile tips"
-canonical: "https://youandinotai.com/blog/dating-app-profile-tips"
+canonical: "https://youandinotai.com/blog/dating-app-profile-tips/"
 ---
 
 # Dating app profile tips that get replies from real people

@@ -3,7 +3,7 @@ title: "What verified dating profiles actually change for you"
 description: "verified dating profiles — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging or video."
 date: 2026-09-24
 keyword: "verified dating profiles"
-canonical: "https://youandinotai.com/blog/verified-dating-profiles"
+canonical: "https://youandinotai.com/blog/verified-dating-profiles/"
 ---
 
 # What verified dating profiles actually change for you

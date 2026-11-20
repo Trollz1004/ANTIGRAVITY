@@ -3,7 +3,7 @@ title: "Dating app catfishing: the signs and the one-dollar fix"
 description: "dating app catfishing — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging or video."
 date: 2026-10-01
 keyword: "dating app catfishing"
-canonical: "https://youandinotai.com/blog/dating-app-catfishing"
+canonical: "https://youandinotai.com/blog/dating-app-catfishing/"
 ---
 
 # Dating app catfishing: the signs and the one-dollar fix

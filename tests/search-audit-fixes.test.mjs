@@ -2,6 +2,7 @@
 // Run: node --test tests/search-audit-fixes.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -150,6 +151,9 @@ test('4. sitemap entries: /support included, deterministic lastmod dates, and up
   const blogScript = readYani('build_blog_static.py');
   assert.doesNotMatch(blogScript, /date\.today\(\)\.isoformat\(\)/);
   assert.match(blogScript, /\{SITE\}\/support/);
+
+  execFileSync('python', [path.join(YANI, 'build_blog_static.py')], { stdio: 'pipe' });
+  execFileSync('python', [path.join(YANI, 'build_blog_static.py'), '--check'], { stdio: 'pipe' });
 
   const yaniSitemapPath = path.join(YANI, 'public', 'sitemap.xml');
   assert.ok(fs.existsSync(yaniSitemapPath), 'youandinotai public/sitemap.xml must exist');

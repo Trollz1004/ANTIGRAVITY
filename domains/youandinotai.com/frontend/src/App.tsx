@@ -146,6 +146,17 @@ function readUnpinnedStops(): Record<string, boolean> {
 }
 
 export function PublicSupportPage() {
+  useEffect(() => {
+    document.title = 'Member Support & Safety Guide | YouAndINotAI';
+    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (canonical) canonical.href = 'https://youandinotai.com/support';
+    const desc = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    if (desc) {
+      desc.content =
+        'Direct, traceable member support for $1 Bot-Shield verification, account-bound billing receipts, account recovery, and privacy exports on YouAndINotAI.';
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#0A0B0D] text-[#F4F1EA] font-sans">
       <a
@@ -218,6 +229,9 @@ export function PublicSupportPage() {
             <Link to="/register" className="ds-btn-ghost">
               Create 18+ Account
             </Link>
+            <a href="/blog/" className="ds-btn-ghost">
+              Dating Safety &amp; Verification Guides
+            </a>
             <a href="mailto:contact@youandinotai.com" className="ds-btn-ghost">
               <Mail size={16} /> contact@youandinotai.com
             </a>
@@ -269,7 +283,7 @@ export function PublicSupportPage() {
                 to="/app/privacy"
                 className="inline-flex min-h-[44px] min-w-[44px] items-center text-[#FFD21E] underline"
               >
-                /app/privacy
+                Privacy Center
               </Link>
               .
             </p>
@@ -286,6 +300,18 @@ export function LandingPage() {
     null
   );
   const [waitlistEmail, setWaitlistEmail] = useState('');
+
+  useEffect(() => {
+    document.title =
+      'YouAndINotAI | Verified Human Dating & Real-World Connection';
+    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (canonical) canonical.href = 'https://youandinotai.com/';
+    const desc = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    if (desc) {
+      desc.content =
+        'Human-first social platform for dating, meetups, and real-world connection. Bot-Shield verification and account-bound checkout are live now.';
+    }
+  }, []);
 
   const [journeyState, setJourneyState] = useState(() =>
     readSectionJourneyState()
@@ -947,7 +973,7 @@ export function LandingPage() {
                       to="/app/privacy"
                       className="ds-btn-ghost w-full text-sm"
                     >
-                      Open Privacy Center (/app/privacy)
+                      Open Privacy Center
                     </Link>
                   </div>
                 </div>
@@ -1265,6 +1291,14 @@ export function LandingPage() {
                     className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
                   >
                     Start Tonight
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/blog/"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center py-2 text-[16px] text-[#F4F1EA] no-underline hover:text-[#FFD21E]"
+                  >
+                    Dating Safety &amp; Verification Guides
                   </a>
                 </li>
               </ul>

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -44,6 +44,17 @@ export function Login() {
   const location = useLocation();
   const nextPath = getSafeNextPath(location.search, '/app');
   const registerHref = `/register?next=${encodeURIComponent(nextPath)}`;
+
+  useEffect(() => {
+    document.title = 'Member Sign In | YouAndINotAI';
+    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (canonical) canonical.href = 'https://youandinotai.com/login';
+    const desc = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    if (desc) {
+      desc.content =
+        'Sign in to your 18+ YouAndINotAI account to access verified human profiles, $1 Bot-Shield verification, chat, video, and local boards.';
+    }
+  }, []);
 
   const validateLoginField = useCallback(
     (name: string, value: string): string | undefined => {
@@ -367,7 +378,7 @@ export function Login() {
                 to={registerHref}
                 className="font-bold text-[#FFD21E] transition-colors hover:underline"
               >
-                Create one
+                Create an 18+ Account
               </Link>
             </p>
 
