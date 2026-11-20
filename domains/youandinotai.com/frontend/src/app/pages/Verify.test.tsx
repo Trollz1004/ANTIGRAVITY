@@ -507,7 +507,7 @@ describe('Verify after $1 payment', () => {
     expect(queryByRole('button', { name: 'Give me my $1 back' })).toBeNull();
   });
 
-  it("shows a member with the badge the headline \"You're verified.\" and one line on what that unlocks, not \"Prove you're human\" and not the how-it-works box", async () => {
+  it('shows a member with the badge the headline "You\'re verified." and one line on what that unlocks, not "Prove you\'re human" and not the how-it-works box', async () => {
     vi.mocked(api.get).mockImplementation(async (path: string) => {
       if (path === '/verify/status') {
         return {

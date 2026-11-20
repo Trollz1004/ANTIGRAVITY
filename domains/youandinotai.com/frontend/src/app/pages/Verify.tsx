@@ -410,10 +410,13 @@ export function Verify() {
         <div className="mb-8 grid gap-4 md:grid-cols-[1.1fr_0.9fr] md:items-end">
           <div>
             <div className="app-kicker mb-3">Bot-Shield</div>
-            <h1 className="app-title">Prove you&apos;re human.</h1>
+            <h1 className="app-title">
+              {status?.verified ? "You're verified." : "Prove you're human."}
+            </h1>
             <p className="app-subtitle mt-4 max-w-2xl">
-              Answer a short timed question, finish the $1 Square payment tied
-              to your account, and unlock messaging and video.
+              {status?.verified
+                ? 'Your badge unlocks discovery, messaging, and video on your account.'
+                : 'Answer a short timed question, finish the $1 Square payment tied to your account, and unlock messaging and video.'}
             </p>
           </div>
           <div className="glass rounded-xl p-5">
@@ -703,33 +706,35 @@ export function Verify() {
               </div>
             </div>
 
-            <div className="mt-6 rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-5">
-              <div className="app-panel-title mb-3">How the flow works</div>
-              <div className="space-y-3 text-sm font-medium text-[#C9CBCE]">
-                <div className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#3A3F45] bg-[#0A0B0D] font-mono text-xs font-bold text-[#FFD21E]">
-                    1
-                  </span>
-                  <span>Answer a short timed question.</span>
+            {!status?.verified && (
+              <div className="mt-6 rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-5">
+                <div className="app-panel-title mb-3">How the flow works</div>
+                <div className="space-y-3 text-sm font-medium text-[#C9CBCE]">
+                  <div className="flex gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#3A3F45] bg-[#0A0B0D] font-mono text-xs font-bold text-[#FFD21E]">
+                      1
+                    </span>
+                    <span>Answer a short timed question.</span>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#3A3F45] bg-[#0A0B0D] font-mono text-xs font-bold text-[#FFD21E]">
+                      2
+                    </span>
+                    <span>Complete the $1 Bot-Shield checkout in Square.</span>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#3A3F45] bg-[#0A0B0D] font-mono text-xs font-bold text-[#FFD21E]">
+                      3
+                    </span>
+                    <span>Sync the badge back to your account.</span>
+                  </div>
                 </div>
-                <div className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#3A3F45] bg-[#0A0B0D] font-mono text-xs font-bold text-[#FFD21E]">
-                    2
-                  </span>
-                  <span>Complete the $1 Bot-Shield checkout in Square.</span>
-                </div>
-                <div className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#3A3F45] bg-[#0A0B0D] font-mono text-xs font-bold text-[#FFD21E]">
-                    3
-                  </span>
-                  <span>Sync the badge back to your account.</span>
-                </div>
+                <p className="mt-4 text-xs font-medium leading-6 text-[#9DA3AA]">
+                  Square-hosted checkout supports card entry, Apple Pay, and
+                  Google Pay on supported devices and browsers.
+                </p>
               </div>
-              <p className="mt-4 text-xs font-medium leading-6 text-[#9DA3AA]">
-                Square-hosted checkout supports card entry, Apple Pay, and
-                Google Pay on supported devices and browsers.
-              </p>
-            </div>
+            )}
           </section>
         </div>
       </div>

@@ -86,9 +86,7 @@ describe('AppShell phone bottom menu', () => {
 
     // Every link labelled "Video" in AppShell must point to a video page
     const allLinks = Array.from(container.querySelectorAll('a'));
-    const videoLinks = allLinks.filter(
-      a => a.textContent?.trim() === 'Video'
-    );
+    const videoLinks = allLinks.filter(a => a.textContent?.trim() === 'Video');
     expect(videoLinks.length).toBeGreaterThan(0);
     for (const link of videoLinks) {
       expect(link.getAttribute('href')).toBe('/app/video-lobby');

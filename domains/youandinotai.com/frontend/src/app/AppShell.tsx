@@ -5,7 +5,6 @@ import {
   LogOut,
   MessageCircle,
   Plus,
-  Settings,
   ShieldCheck,
   Sparkles,
   User,
@@ -16,12 +15,12 @@ import {
 
 import { useAuth } from '../lib/auth';
 
-const MOBILE_NAV = [
-  { to: '/app', icon: Heart, label: 'Chats', end: true },
-  { to: '/app/inbox', icon: MessageCircle, label: 'Message' },
+export const MOBILE_NAV = [
+  { to: '/app', icon: Compass, label: 'Discover', end: true },
+  { to: '/app/inbox', icon: MessageCircle, label: 'Messages' },
   { to: '/app/create', icon: Plus, label: 'Create', center: true },
-  { to: '/app/matches', icon: Video, label: 'Video' },
-  { to: '/app/profile', icon: Settings, label: 'Settings' },
+  { to: '/app/matches', icon: Heart, label: 'Matches' },
+  { to: '/app/profile', icon: User, label: 'Profile' },
 ] as const;
 
 const DESKTOP_NAV = [
@@ -166,7 +165,7 @@ export function AppShell() {
           <Outlet />
         </main>
 
-        {/* Mobile bottom nav — Chats / Message / Create / Video / Settings */}
+        {/* Mobile bottom nav — Discover / Messages / Create / Matches / Profile */}
         <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--km-border)] bg-[var(--km-bg)]/92 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl md:hidden">
           <div className="grid grid-cols-5 items-end gap-1">
             {MOBILE_NAV.map(item => {
@@ -176,6 +175,7 @@ export function AppShell() {
                   key={item.to}
                   to={item.to}
                   end={'end' in item ? item.end : false}
+                  aria-label={isCenter ? item.label : undefined}
                   className={({ isActive }) =>
                     isCenter
                       ? `km-fab-nav ${isActive ? 'km-fab-nav-active' : ''}`
