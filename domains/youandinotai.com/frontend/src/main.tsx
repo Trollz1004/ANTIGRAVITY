@@ -47,6 +47,7 @@ const LazyVolunteering = lazy(() => import('./app/pages/Volunteering'));
 const LazyCosmicWall = lazy(() => import('./components/CosmicWall'));
 const LazyDiscover = lazy(() => import('./app/pages/Discover'));
 const LazyBoards = lazy(() => import('./app/pages/Boards'));
+const LazyUsaChat = lazy(() => import('./app/pages/UsaChat'));
 const LazySupport = lazy(() => import('./app/pages/Support'));
 const LazyVerify = lazy(() => import('./app/pages/Verify'));
 const LazyCheckoutLaunch = lazy(() => import('./app/pages/CheckoutLaunch'));
@@ -261,6 +262,24 @@ createRoot(document.getElementById('root')!).render(
                     >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazyBoards />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/app/usa"
+                  element={
+                    <ErrorBoundary
+                      boundaryName="page:usa-chat"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyUsaChat />
                       </Suspense>
                     </ErrorBoundary>
                   }
