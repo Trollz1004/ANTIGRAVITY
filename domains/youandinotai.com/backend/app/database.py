@@ -132,6 +132,7 @@ async def reconcile_legacy_schema() -> None:
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL",
             "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS square_payment_id VARCHAR(255)",
+            "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS card_fingerprint VARCHAR(255)",
             "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS trust_score FLOAT",
             "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS amount_cents INTEGER",
             "ALTER TABLE IF EXISTS webhook_events ADD COLUMN IF NOT EXISTS event_source_id VARCHAR(255)",
@@ -154,6 +155,7 @@ async def reconcile_legacy_schema() -> None:
             "CREATE INDEX IF NOT EXISTS ix_users_square_customer_id ON users(square_customer_id)",
             "CREATE INDEX IF NOT EXISTS ix_users_referral_code ON users(referral_code)",
             "CREATE INDEX IF NOT EXISTS ix_users_signup_source ON users(signup_source)",
+            "CREATE INDEX IF NOT EXISTS ix_verification_events_card_fingerprint ON verification_events(card_fingerprint)",
         )
 
         for statement in statements:
@@ -328,6 +330,12 @@ async def _reconcile_sqlite_schema(connection) -> None:
         verification_columns,
         "square_payment_id",
         "square_payment_id VARCHAR(255)",
+    )
+    await add_column(
+        "verification_events",
+        verification_columns,
+        "card_fingerprint",
+        "card_fingerprint VARCHAR(255)",
     )
     await add_column(
         "verification_events", verification_columns, "trust_score", "trust_score FLOAT"

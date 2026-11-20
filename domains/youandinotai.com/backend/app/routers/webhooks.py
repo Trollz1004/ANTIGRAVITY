@@ -300,6 +300,25 @@ def _extract_square_customer_email(payment_obj: dict[str, Any]) -> str | None:
     return None
 
 
+def _extract_square_card_fingerprint(payment_obj: dict[str, Any]) -> str | None:
+    """Extract Square card fingerprint (card_details.card.fingerprint) when present."""
+    if not isinstance(payment_obj, dict):
+        return None
+    card_details = payment_obj.get("card_details")
+    if not isinstance(card_details, dict):
+        return None
+    card = card_details.get("card")
+    if not isinstance(card, dict):
+        return None
+    raw_fingerprint = card.get("fingerprint")
+    if not isinstance(raw_fingerprint, str):
+        return None
+    fingerprint = raw_fingerprint.strip()
+    if not fingerprint:
+        return None
+    return fingerprint[:255]
+
+
 async def _get_user_by_email(
     db: AsyncSession,
     email: str | None,
@@ -660,6 +679,7 @@ async def _process_square_payment_event(
                             payment_id=payment_id,
                         )
                     )
+                    card_fingerprint = _extract_square_card_fingerprint(payment_obj)
                     if not existing_payment_event:
                         payment_event = VerificationEvent(
                             user_id=user.id,
@@ -668,8 +688,13 @@ async def _process_square_payment_event(
                             status="completed",
                             amount_cents=payment_amount_cents,
                             square_payment_id=payment_id,
+                            card_fingerprint=card_fingerprint,
                         )
                         db.add(payment_event)
+                    elif (
+                        card_fingerprint and not existing_payment_event.card_fingerprint
+                    ):
+                        existing_payment_event.card_fingerprint = card_fingerprint
                     logger.info(
                         "Bot-Shield payment completed: user=%s event=%s proof=%s checkout_ref_bound=%s",
                         user.id,
