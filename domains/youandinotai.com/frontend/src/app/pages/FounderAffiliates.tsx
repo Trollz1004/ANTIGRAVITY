@@ -52,6 +52,38 @@ function formatCentsUsd(cents: number): string {
   return `$${(safeCents / 100).toFixed(2)}`;
 }
 
+const TAGGED_LINK_BASE = 'https://youandinotai.com/';
+
+export function cleanTagField(raw: string): string {
+  return (raw || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '');
+}
+
+export function buildTaggedLink(
+  source: string,
+  medium: string,
+  campaign: string
+): string {
+  const cleanSource = cleanTagField(source);
+  const cleanMedium = cleanTagField(medium);
+  const cleanCampaign = cleanTagField(campaign);
+  const params: string[] = [];
+  if (cleanSource) {
+    params.push(`utm_source=${cleanSource}`);
+  }
+  if (cleanMedium) {
+    params.push(`utm_medium=${cleanMedium}`);
+  }
+  if (cleanCampaign) {
+    params.push(`utm_campaign=${cleanCampaign}`);
+  }
+  return params.length > 0
+    ? `${TAGGED_LINK_BASE}?${params.join('&')}`
+    : TAGGED_LINK_BASE;
+}
+
 export function formatSignupSourceLabel(rawSource: string): string {
   const trimmed = (rawSource || '').trim();
   if (!trimmed || trimmed.toLowerCase() === 'not recorded') {
@@ -89,6 +121,38 @@ export function FounderAffiliates() {
   const [error, setError] = useState('');
   const [codeFilter, setCodeFilter] = useState('');
   const [activeCodeQuery, setActiveCodeQuery] = useState('');
+  const [tagSource, setTagSource] = useState('');
+  const [tagMedium, setTagMedium] = useState('');
+  const [tagCampaign, setTagCampaign] = useState('');
+  const [tagLinkCopied, setTagLinkCopied] = useState(false);
+
+  const builtTaggedLink = buildTaggedLink(tagSource, tagMedium, tagCampaign);
+
+  const handleTagSourceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagSource(cleanTagField(e.target.value));
+    setTagLinkCopied(false);
+  };
+
+  const handleTagMediumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagMedium(cleanTagField(e.target.value));
+    setTagLinkCopied(false);
+  };
+
+  const handleTagCampaignChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagCampaign(cleanTagField(e.target.value));
+    setTagLinkCopied(false);
+  };
+
+  const handleCopyTaggedLink = async () => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(builtTaggedLink);
+      }
+    } catch {
+      // Clipboard may be blocked in restricted browser contexts.
+    }
+    setTagLinkCopied(true);
+  };
 
   const loadCounts = useCallback(async (codeToQuery: string) => {
     setLoading(true);
@@ -252,6 +316,104 @@ export function FounderAffiliates() {
             </button>
           </div>
         </form>
+
+        <section
+          aria-label="Build a tagged link"
+          className="rounded-xl border border-[#3A3F45] bg-[#12151A] p-4 md:p-6 space-y-4"
+        >
+          <div className="space-y-1">
+            <h2 className="font-display text-xl md:text-2xl font-bold text-[#F4F1EA]">
+              Build a tagged link
+            </h2>
+            <p className="text-base text-[#E2E0D8]">
+              Lowercase letters, digits, and dashes only. Visits from this link
+              appear under Where members came from.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+            <div>
+              <label
+                htmlFor="tagged-link-source"
+                className="block text-base font-semibold text-[#F4F1EA] mb-1.5"
+              >
+                Source
+              </label>
+              <input
+                id="tagged-link-source"
+                type="text"
+                value={tagSource}
+                onChange={handleTagSourceChange}
+                maxLength={40}
+                placeholder="e.g. youtube"
+                className="w-full min-h-[48px] rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-2.5 text-lg text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="tagged-link-medium"
+                className="block text-base font-semibold text-[#F4F1EA] mb-1.5"
+              >
+                Medium
+              </label>
+              <input
+                id="tagged-link-medium"
+                type="text"
+                value={tagMedium}
+                onChange={handleTagMediumChange}
+                maxLength={40}
+                placeholder="e.g. shorts"
+                className="w-full min-h-[48px] rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-2.5 text-lg text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="tagged-link-campaign"
+                className="block text-base font-semibold text-[#F4F1EA] mb-1.5"
+              >
+                Campaign
+              </label>
+              <input
+                id="tagged-link-campaign"
+                type="text"
+                value={tagCampaign}
+                onChange={handleTagCampaignChange}
+                maxLength={40}
+                placeholder="e.g. winter-date-night"
+                className="w-full min-h-[48px] rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-2.5 text-lg text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row md:items-center gap-3 pt-1">
+            <div
+              data-testid="built-tagged-link"
+              aria-label="Built tagged link"
+              className="flex-1 min-h-[48px] rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-2.5 font-mono text-base md:text-lg text-[#FFD21E] break-all flex items-center"
+            >
+              {builtTaggedLink}
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => void handleCopyTaggedLink()}
+                className="min-h-[48px] rounded-lg bg-[#FFD21E] px-5 py-2.5 text-base font-bold text-[#0A0B0D] transition-colors hover:bg-[#ffe055]"
+              >
+                Copy Link
+              </button>
+              {tagLinkCopied && (
+                <span
+                  role="status"
+                  className="text-base font-bold text-[#FFD21E]"
+                >
+                  Copied
+                </span>
+              )}
+            </div>
+          </div>
+        </section>
 
         {error ? (
           <div

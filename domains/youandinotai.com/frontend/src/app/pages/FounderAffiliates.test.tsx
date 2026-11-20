@@ -29,6 +29,10 @@ describe('FounderAffiliates tagged link builder', () => {
   it('builds a tagged link from the source, medium, and campaign boxes with lowercase letters, digits, and dashes only', async () => {
     const { getByLabelText, getByTestId } = render(<FounderAffiliates />);
 
+    await waitFor(() => {
+      expect(api.get).toHaveBeenCalled();
+    });
+
     const sourceInput = getByLabelText(/^Source$/i) as HTMLInputElement;
     const mediumInput = getByLabelText(/^Medium$/i) as HTMLInputElement;
     const campaignInput = getByLabelText(/^Campaign$/i) as HTMLInputElement;
