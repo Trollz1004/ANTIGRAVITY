@@ -31,8 +31,8 @@ test('build-index reports duplicate groups and keeps stale candidates stable acr
       env: {
         ...process.env,
         GIT_AUTHOR_DATE: pastDate,
-        GIT_COMMITTER_DATE: pastDate
-      }
+        GIT_COMMITTER_DATE: pastDate,
+      },
     });
 
     fs.mkdirSync(path.join(tempDir, 'alpha'), { recursive: true });
@@ -79,6 +79,64 @@ test('build-index reports duplicate groups and keeps stale candidates stable acr
     const countRun2 = parseCandidateCount(staleMdRun2);
     assert.match(staleMdRun2, /old-orphan-script\.ps1/);
     assert.equal(countRun2, countRun1);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test('build-index counts live extra copies outside archive/ separately from whole-repo extra copies', () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'repo-index-archive-test-'));
+  try {
+    execFileSync('git', ['init'], { cwd: tempDir, stdio: 'ignore' });
+    execFileSync('git', ['config', 'user.name', 'Test Runner'], { cwd: tempDir, stdio: 'ignore' });
+    execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: tempDir, stdio: 'ignore' });
+
+    fs.mkdirSync(path.join(tempDir, 'live-a'), { recursive: true });
+    fs.mkdirSync(path.join(tempDir, 'live-b'), { recursive: true });
+    fs.mkdirSync(path.join(tempDir, 'archive', '2026-11-18-old'), { recursive: true });
+
+    // Pair 1: both copies in the live tree -> 1 live extra copy, 1 whole-repo extra copy
+    fs.writeFileSync(path.join(tempDir, 'live-a', 'pair-one.txt'), 'live duplicate payload\n', 'utf8');
+    fs.writeFileSync(path.join(tempDir, 'live-b', 'pair-one-copy.txt'), 'live duplicate payload\n', 'utf8');
+
+    // Pair 2: second copy sits in archive/ -> 0 live extra copies, 1 whole-repo extra copy
+    fs.writeFileSync(path.join(tempDir, 'live-a', 'pair-two.txt'), 'archived duplicate payload\n', 'utf8');
+    fs.writeFileSync(
+      path.join(tempDir, 'archive', '2026-11-18-old', 'pair-two.txt'),
+      'archived duplicate payload\n',
+      'utf8',
+    );
+
+    execFileSync('git', ['add', '.'], { cwd: tempDir, stdio: 'ignore' });
+    execFileSync('git', ['commit', '-m', 'seed live and archive duplicate pairs'], { cwd: tempDir, stdio: 'ignore' });
+
+    const out = execFileSync(process.execPath, [scriptPath], { cwd: tempDir, encoding: 'utf8' });
+    const summary = JSON.parse(out.trim());
+    assert.equal(summary.liveExtraCopies, 1);
+    assert.equal(summary.wholeRepoExtraCopies, 2);
+    assert.equal(summary.extraCopies, 2);
+
+    const duplicatesMd = fs.readFileSync(path.join(tempDir, 'docs', 'index', 'DUPLICATES.md'), 'utf8');
+    const repoIndexMd = fs.readFileSync(path.join(tempDir, 'docs', 'index', 'REPO-INDEX.md'), 'utf8');
+
+    const topSection = duplicatesMd.split(/^##\s+/m)[0];
+    assert.match(topSection, /Live extra copies:\s*1\b/i);
+    assert.match(topSection, /Whole-repo extra copies:\s*2\b/i);
+
+    assert.match(repoIndexMd, /Live extra copies:\s*1\b/i);
+    assert.match(repoIndexMd, /Whole-repo extra copies:\s*2\b/i);
+
+    const archiveHeading = '## Duplicate Groups Whose Only Extra Copies Are in archive/';
+    assert.ok(duplicatesMd.includes(archiveHeading), 'Expected dedicated heading for archive-only extra copies');
+
+    const [beforeArchiveHeading, afterArchiveHeading] = duplicatesMd.split(archiveHeading);
+    assert.match(beforeArchiveHeading, /live-a\/pair-one\.txt/);
+    assert.match(beforeArchiveHeading, /live-b\/pair-one-copy\.txt/);
+    assert.doesNotMatch(beforeArchiveHeading, /pair-two\.txt/);
+
+    const archiveSection = afterArchiveHeading.split(/^##\s+/m)[0];
+    assert.match(archiveSection, /archive\/2026-11-18-old\/pair-two\.txt/);
+    assert.match(archiveSection, /live-a\/pair-two\.txt/);
   } finally {
     fs.rmSync(tempDir, { recursive: true, force: true });
   }
