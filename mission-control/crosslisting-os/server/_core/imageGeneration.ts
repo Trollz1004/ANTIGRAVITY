@@ -15,7 +15,7 @@
  *     }]
  *   });
  */
-import { storagePut } from "server/storage";
+import { storagePut } from "../storage";
 import { ENV } from "./env";
 
 // Default model for generated sites. "MODEL_GPT_IMAGE_2" is the forge images.v1
@@ -43,17 +43,17 @@ export type GenerateImageResponse = {
 export async function generateImage(
   options: GenerateImageOptions
 ): Promise<GenerateImageResponse> {
-  if (!ENV.forgeApiUrl) {
-    throw new Error("BUILT_IN_FORGE_API_URL is not configured");
+  if (!ENV.apiBaseUrl) {
+    throw new Error("OPENAI_BASE_URL is not configured");
   }
-  if (!ENV.forgeApiKey) {
-    throw new Error("BUILT_IN_FORGE_API_KEY is not configured");
+  if (!ENV.apiKey) {
+    throw new Error("OPENAI_API_KEY is not configured");
   }
 
   // Build the full URL by appending the service path to the base URL
-  const baseUrl = ENV.forgeApiUrl.endsWith("/")
-    ? ENV.forgeApiUrl
-    : `${ENV.forgeApiUrl}/`;
+  const baseUrl = ENV.apiBaseUrl.endsWith("/")
+    ? ENV.apiBaseUrl
+    : `${ENV.apiBaseUrl}/`;
   const fullUrl = new URL(
     "images.v1.ImageService/GenerateImage",
     baseUrl
@@ -61,7 +61,8 @@ export async function generateImage(
 
   const model = options.model ?? DEFAULT_IMAGE_MODEL;
   const quality =
-    options.quality ?? (model === DEFAULT_IMAGE_MODEL ? DEFAULT_IMAGE_QUALITY : undefined);
+    options.quality ??
+    (model === DEFAULT_IMAGE_MODEL ? DEFAULT_IMAGE_QUALITY : undefined);
 
   const response = await fetch(fullUrl, {
     method: "POST",
@@ -69,7 +70,7 @@ export async function generateImage(
       accept: "application/json",
       "content-type": "application/json",
       "connect-protocol-version": "1",
-      authorization: `Bearer ${ENV.forgeApiKey}`,
+      authorization: `Bearer ${ENV.apiKey}`,
     },
     body: JSON.stringify({
       prompt: options.prompt,
@@ -95,7 +96,7 @@ export async function generateImage(
   const base64Data = result.image.b64Json;
   const buffer = Buffer.from(base64Data, "base64");
 
-  // Save to S3
+  // Save to local disk storage
   const { url } = await storagePut(
     `generated/${Date.now()}.png`,
     buffer,
@@ -122,16 +123,16 @@ export type ListImageModelsResponse = {
  * Feed a returned `model` value into generateImage({ model }).
  */
 export async function listImageModels(): Promise<ListImageModelsResponse> {
-  if (!ENV.forgeApiUrl) {
-    throw new Error("BUILT_IN_FORGE_API_URL is not configured");
+  if (!ENV.apiBaseUrl) {
+    throw new Error("OPENAI_BASE_URL is not configured");
   }
-  if (!ENV.forgeApiKey) {
-    throw new Error("BUILT_IN_FORGE_API_KEY is not configured");
+  if (!ENV.apiKey) {
+    throw new Error("OPENAI_API_KEY is not configured");
   }
 
-  const baseUrl = ENV.forgeApiUrl.endsWith("/")
-    ? ENV.forgeApiUrl
-    : `${ENV.forgeApiUrl}/`;
+  const baseUrl = ENV.apiBaseUrl.endsWith("/")
+    ? ENV.apiBaseUrl
+    : `${ENV.apiBaseUrl}/`;
   const fullUrl = new URL(
     "images.v1.ImageService/ListModels",
     baseUrl
@@ -143,7 +144,7 @@ export async function listImageModels(): Promise<ListImageModelsResponse> {
       accept: "application/json",
       "content-type": "application/json",
       "connect-protocol-version": "1",
-      authorization: `Bearer ${ENV.forgeApiKey}`,
+      authorization: `Bearer ${ENV.apiKey}`,
     },
     body: "{}",
   });

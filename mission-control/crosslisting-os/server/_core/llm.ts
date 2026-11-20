@@ -19,7 +19,12 @@ export type FileContent = {
   type: "file_url";
   file_url: {
     url: string;
-    mime_type?: "audio/mpeg" | "audio/wav" | "application/pdf" | "audio/mp4" | "video/mp4" ;
+    mime_type?:
+      | "audio/mpeg"
+      | "audio/wav"
+      | "application/pdf"
+      | "audio/mp4"
+      | "video/mp4";
   };
 };
 
@@ -51,9 +56,7 @@ export type ToolChoiceExplicit = {
 };
 
 export type ToolChoice =
-  | ToolChoicePrimitive
-  | ToolChoiceByName
-  | ToolChoiceExplicit;
+  ToolChoicePrimitive | ToolChoiceByName | ToolChoiceExplicit;
 
 export type InvokeParams = {
   messages: Message[];
@@ -213,12 +216,12 @@ const normalizeToolChoice = (
 };
 
 const resolveApiUrl = () =>
-  ENV.forgeApiUrl && ENV.forgeApiUrl.trim().length > 0
-    ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/chat/completions`
-    : "https://forge.manus.im/v1/chat/completions";
+  ENV.apiBaseUrl && ENV.apiBaseUrl.trim().length > 0
+    ? `${ENV.apiBaseUrl.replace(/\/$/, "")}/v1/chat/completions`
+    : "https://api.openai.com/v1/chat/completions";
 
 const assertApiKey = () => {
-  if (!ENV.forgeApiKey) {
+  if (!ENV.apiKey) {
     throw new Error("OPENAI_API_KEY is not configured");
   }
 };
@@ -312,9 +315,7 @@ const fetchWithBackoff = async (
         return response;
       }
 
-      const retryAfterMs = parseRetryAfter(
-        response.headers.get("retry-after")
-      );
+      const retryAfterMs = parseRetryAfter(response.headers.get("retry-after"));
       try {
         await response.body?.cancel();
       } catch {
@@ -405,7 +406,7 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
     method: "POST",
     headers: {
       "content-type": "application/json",
-      authorization: `Bearer ${ENV.forgeApiKey}`,
+      authorization: `Bearer ${ENV.apiKey}`,
     },
     body: JSON.stringify(payload),
   });
@@ -435,12 +436,13 @@ export type ModelsResponse = {
 export async function listLLMModels(): Promise<ModelsResponse> {
   assertApiKey();
 
-  const url = ENV.forgeApiUrl && ENV.forgeApiUrl.trim().length > 0
-    ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/models`
-    : "https://forge.manus.im/v1/models";
+  const url =
+    ENV.apiBaseUrl && ENV.apiBaseUrl.trim().length > 0
+      ? `${ENV.apiBaseUrl.replace(/\/$/, "")}/v1/models`
+      : "https://api.openai.com/v1/models";
 
   const response = await fetchWithBackoff(url, {
-    headers: { authorization: `Bearer ${ENV.forgeApiKey}` },
+    headers: { authorization: `Bearer ${ENV.apiKey}` },
   });
 
   if (!response.ok) {

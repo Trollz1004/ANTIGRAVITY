@@ -9,5 +9,6 @@ Copy these **names only** into the project’s secure server-side credential set
 | Facebook Marketplace | `FACEBOOK_MARKETPLACE_ACCESS_TOKEN` | Prepared review mode until approved marketplace access is confirmed. |
 | Mercari | `MERCARI_API_ACCESS_TOKEN` | Prepared review mode until the eligible API product and account are confirmed. |
 | Poshmark | `POSHMARK_ACCESS_TOKEN` | Prepared workflow only unless authorized access is supplied. |
+| Local file storage | `STORAGE_DIR` | Defaults to `mission-control/crosslisting-os/data/uploads` on the local disk when unset. |
 
 The dashboard reports only whether a required secret is configured. It never receives, displays, returns, or logs a secret value.

@@ -14,9 +14,7 @@ const isNonEmptyString = (value: unknown): value is string =>
   typeof value === "string" && value.trim().length > 0;
 
 const buildEndpointUrl = (baseUrl: string): string => {
-  const normalizedBase = baseUrl.endsWith("/")
-    ? baseUrl
-    : `${baseUrl}/`;
+  const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   return new URL(
     "webdevtoken.v1.WebDevService/SendNotification",
     normalizedBase
@@ -68,28 +66,28 @@ export async function notifyOwner(
 ): Promise<boolean> {
   const { title, content } = validatePayload(payload);
 
-  if (!ENV.forgeApiUrl) {
+  if (!ENV.apiBaseUrl) {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
       message: "Notification service URL is not configured.",
     });
   }
 
-  if (!ENV.forgeApiKey) {
+  if (!ENV.apiKey) {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
       message: "Notification service API key is not configured.",
     });
   }
 
-  const endpoint = buildEndpointUrl(ENV.forgeApiUrl);
+  const endpoint = buildEndpointUrl(ENV.apiBaseUrl);
 
   try {
     const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         accept: "application/json",
-        authorization: `Bearer ${ENV.forgeApiKey}`,
+        authorization: `Bearer ${ENV.apiKey}`,
         "content-type": "application/json",
         "connect-protocol-version": "1",
       },

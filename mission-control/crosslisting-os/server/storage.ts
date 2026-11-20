@@ -1,97 +1,217 @@
-// Preconfigured storage helpers for Manus WebDev templates
-// Uploads via Forge Server presigned URL to S3 (PUT direct).
-// Downloads return /manus-storage/{key} paths served via 307 redirect.
+// Local disk storage helpers for LLC Crosslisting OS.
+// Stores files inside STORAGE_DIR (default mission-control/crosslisting-os/data/uploads)
+// with server-generated file names and serves them read-only via /manus-storage/{key}.
 
-import { ENV } from "./_core/env";
+import crypto from "node:crypto";
+import fs from "node:fs/promises";
+import path from "node:path";
+import { DEFAULT_STORAGE_DIR, ENV } from "./_core/env";
 
-function getForgeConfig() {
-  const forgeUrl = ENV.forgeApiUrl;
-  const forgeKey = ENV.forgeApiKey;
+export const MAX_STORAGE_FILE_BYTES = 16 * 1024 * 1024;
 
-  if (!forgeUrl || !forgeKey) {
-    throw new Error(
-      "Storage config missing: set BUILT_IN_FORGE_API_URL and BUILT_IN_FORGE_API_KEY",
-    );
+export const ALLOWED_CONTENT_TYPE_EXTENSIONS: Record<string, string> = {
+  "image/png": ".png",
+  "image/jpeg": ".jpg",
+  "image/jpg": ".jpg",
+  "image/webp": ".webp",
+  "image/gif": ".gif",
+  "image/avif": ".avif",
+  "video/mp4": ".mp4",
+  "video/webm": ".webm",
+  "audio/mpeg": ".mp3",
+  "audio/mp3": ".mp3",
+  "audio/wav": ".wav",
+  "audio/wave": ".wav",
+  "audio/ogg": ".ogg",
+  "audio/webm": ".webm",
+  "audio/m4a": ".m4a",
+  "audio/mp4": ".m4a",
+  "application/pdf": ".pdf",
+  "application/json": ".json",
+  "text/plain": ".txt",
+  "text/csv": ".csv",
+  "application/octet-stream": ".bin",
+};
+
+const EXTENSION_CONTENT_TYPES: Record<string, string> = {
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
+  ".gif": "image/gif",
+  ".avif": "image/avif",
+  ".mp4": "video/mp4",
+  ".webm": "video/webm",
+  ".mp3": "audio/mpeg",
+  ".wav": "audio/wav",
+  ".ogg": "audio/ogg",
+  ".m4a": "audio/mp4",
+  ".pdf": "application/pdf",
+  ".json": "application/json",
+  ".txt": "text/plain; charset=utf-8",
+  ".csv": "text/csv; charset=utf-8",
+  ".bin": "application/octet-stream",
+};
+
+const CROSSLISTER_ROOT = path.resolve(import.meta.dirname, "..");
+const REPO_ROOT = path.resolve(CROSSLISTER_ROOT, "..", "..");
+const DEFAULT_UPLOADS_PATH = path.resolve(CROSSLISTER_ROOT, "data", "uploads");
+
+export function getStorageDir(): string {
+  const configured = (process.env.STORAGE_DIR ?? ENV.storageDir ?? "").trim();
+  if (!configured || configured.replace(/\\/g, "/") === DEFAULT_STORAGE_DIR) {
+    return DEFAULT_UPLOADS_PATH;
+  }
+  if (path.isAbsolute(configured)) {
+    return path.resolve(configured);
+  }
+  if (
+    configured
+      .replace(/\\/g, "/")
+      .startsWith("mission-control/crosslisting-os/")
+  ) {
+    return path.resolve(REPO_ROOT, configured);
+  }
+  return path.resolve(process.cwd(), configured);
+}
+
+function validateRelativeKey(relKey: string): string {
+  if (typeof relKey !== "string" || !relKey.trim()) {
+    throw new Error("Invalid storage path: key must be a non-empty string");
+  }
+  if (relKey.includes("\0")) {
+    throw new Error("Invalid storage path: null bytes are not allowed");
+  }
+  if (relKey.includes("..") || relKey.includes("\\")) {
+    throw new Error("Invalid storage path: path traversal is not allowed");
+  }
+  if (/^[a-zA-Z]:/.test(relKey) || relKey.startsWith("/")) {
+    throw new Error("Invalid storage path: absolute paths are not allowed");
   }
 
-  return { forgeUrl: forgeUrl.replace(/\/+$/, ""), forgeKey };
+  const normalized = relKey.replace(/^\/+/, "").trim();
+  if (!normalized) {
+    throw new Error("Invalid storage path: empty key");
+  }
+
+  const segments = normalized.split("/");
+  for (const segment of segments) {
+    if (!segment || segment === "." || segment === "..") {
+      throw new Error("Invalid storage path: invalid path segment");
+    }
+  }
+
+  return normalized;
 }
 
-function normalizeKey(relKey: string): string {
-  return relKey.replace(/^\/+/, "");
+export function resolveStoragePath(relKey: string): {
+  key: string;
+  filePath: string;
+  storageRoot: string;
+} {
+  const key = validateRelativeKey(relKey);
+  const storageRoot = getStorageDir();
+  const filePath = path.resolve(storageRoot, key);
+  const relative = path.relative(storageRoot, filePath);
+
+  if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) {
+    throw new Error("Invalid storage path: target leaves STORAGE_DIR");
+  }
+
+  return { key, filePath, storageRoot };
 }
 
-function appendHashSuffix(relKey: string): string {
-  const hash = crypto.randomUUID().replace(/-/g, "").slice(0, 8);
-  const lastDot = relKey.lastIndexOf(".");
-  if (lastDot === -1) return `${relKey}_${hash}`;
-  return `${relKey.slice(0, lastDot)}_${hash}${relKey.slice(lastDot)}`;
+function normalizeContentType(contentType: string): {
+  mime: string;
+  ext: string;
+} {
+  const mime = (contentType || "application/octet-stream")
+    .split(";")[0]
+    ?.trim()
+    .toLowerCase();
+  const ext = mime ? ALLOWED_CONTENT_TYPE_EXTENSIONS[mime] : undefined;
+  if (!mime || !ext) {
+    throw new Error(`Unsupported file content type: ${contentType}`);
+  }
+  return { mime, ext };
+}
+
+function toBuffer(data: Buffer | Uint8Array | string): Buffer {
+  if (typeof data === "string") {
+    return Buffer.from(data, "utf8");
+  }
+  if (Buffer.isBuffer(data)) {
+    return data;
+  }
+  return Buffer.from(data.buffer, data.byteOffset, data.byteLength);
 }
 
 export async function storagePut(
   relKey: string,
   data: Buffer | Uint8Array | string,
-  contentType = "application/octet-stream",
+  contentType = "application/octet-stream"
 ): Promise<{ key: string; url: string }> {
-  const { forgeUrl, forgeKey } = getForgeConfig();
-  const key = appendHashSuffix(normalizeKey(relKey));
+  // Validate caller-supplied relative path first so any ../ or ..\ attempt is refused.
+  resolveStoragePath(relKey);
 
-  // 1. Get presigned PUT URL from Forge
-  const presignUrl = new URL("v1/storage/presign/put", forgeUrl + "/");
-  presignUrl.searchParams.set("path", key);
+  const { ext } = normalizeContentType(contentType);
+  const buffer = toBuffer(data);
 
-  const presignResp = await fetch(presignUrl, {
-    headers: { Authorization: `Bearer ${forgeKey}` },
-  });
+  const configuredLimit = Number(process.env.STORAGE_MAX_BYTES);
+  const maxBytes =
+    Number.isFinite(configuredLimit) && configuredLimit > 0
+      ? configuredLimit
+      : MAX_STORAGE_FILE_BYTES;
 
-  if (!presignResp.ok) {
-    const msg = await presignResp.text().catch(() => presignResp.statusText);
-    throw new Error(`Storage presign failed (${presignResp.status}): ${msg}`);
+  if (buffer.byteLength > maxBytes) {
+    throw new Error(
+      `File size ${buffer.byteLength} bytes exceeds maximum allowed limit of ${maxBytes} bytes`
+    );
   }
 
-  const { url: s3Url } = (await presignResp.json()) as { url: string };
-  if (!s3Url) throw new Error("Forge returned empty presign URL");
+  // Server-generated file name only; never uses the upload's original name.
+  const serverKey = `${crypto.randomUUID()}${ext}`;
+  const { key, filePath, storageRoot } = resolveStoragePath(serverKey);
 
-  // 2. PUT file directly to S3
-  const blob =
-    typeof data === "string"
-      ? new Blob([data], { type: contentType })
-      : new Blob([data as any], { type: contentType });
-
-  const uploadResp = await fetch(s3Url, {
-    method: "PUT",
-    headers: { "Content-Type": contentType },
-    body: blob,
-  });
-
-  if (!uploadResp.ok) {
-    throw new Error(`Storage upload to S3 failed (${uploadResp.status})`);
-  }
+  await fs.mkdir(storageRoot, { recursive: true });
+  await fs.writeFile(filePath, buffer, { flag: "wx" });
 
   return { key, url: `/manus-storage/${key}` };
 }
 
-export async function storageGet(relKey: string): Promise<{ key: string; url: string }> {
-  const key = normalizeKey(relKey);
+export async function storageGet(
+  relKey: string
+): Promise<{ key: string; url: string }> {
+  const { key } = resolveStoragePath(relKey);
   return { key, url: `/manus-storage/${key}` };
 }
 
 export async function storageGetSignedUrl(relKey: string): Promise<string> {
-  const { forgeUrl, forgeKey } = getForgeConfig();
-  const key = normalizeKey(relKey);
+  const { key } = resolveStoragePath(relKey);
+  return `/manus-storage/${key}`;
+}
 
-  const getUrl = new URL("v1/storage/presign/get", forgeUrl + "/");
-  getUrl.searchParams.set("path", key);
+export async function storageRead(
+  relKey: string
+): Promise<{ key: string; data: Buffer; contentType: string }> {
+  const { key, filePath, storageRoot } = resolveStoragePath(relKey);
+  const realRoot = await fs.realpath(storageRoot);
+  const realFile = await fs.realpath(filePath);
+  const rel = path.relative(realRoot, realFile);
 
-  const resp = await fetch(getUrl, {
-    headers: { Authorization: `Bearer ${forgeKey}` },
-  });
-
-  if (!resp.ok) {
-    const msg = await resp.text().catch(() => resp.statusText);
-    throw new Error(`Storage signed URL failed (${resp.status}): ${msg}`);
+  if (!rel || rel.startsWith("..") || path.isAbsolute(rel)) {
+    throw new Error("Invalid storage path: resolved path leaves STORAGE_DIR");
   }
 
-  const { url } = (await resp.json()) as { url: string };
-  return url;
+  const stat = await fs.stat(realFile);
+  if (!stat.isFile()) {
+    throw new Error("Requested storage path is not a regular file");
+  }
+
+  const data = await fs.readFile(realFile);
+  const ext = path.extname(realFile).toLowerCase();
+  const contentType =
+    EXTENSION_CONTENT_TYPES[ext] ?? "application/octet-stream";
+
+  return { key, data, contentType };
 }

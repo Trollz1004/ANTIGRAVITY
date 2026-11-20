@@ -5,7 +5,13 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { registerStorageProxy } from "./_core/storageProxy";
-import { storageGet, storageGetSignedUrl, storagePut } from "./storage";
+import {
+  getStorageDir,
+  storageGet,
+  storageGetSignedUrl,
+  storagePut,
+  storageRead,
+} from "./storage";
 
 type RouteHandler = (req: any, res: any) => unknown | Promise<unknown>;
 
@@ -135,11 +141,21 @@ describe("local disk storage", () => {
     const diskBytes = await fs.readFile(diskPath);
     expect(diskBytes.equals(payload)).toBe(true);
 
+    const readBack = await storageRead(stored.key);
+    expect(readBack.key).toBe(stored.key);
+    expect(readBack.contentType).toBe("image/png");
+    expect(readBack.data.equals(payload)).toBe(true);
+
     const got = await storageGet(stored.key);
     expect(got).toEqual({ key: stored.key, url: stored.url });
 
     const signedUrl = await storageGetSignedUrl(stored.key);
     expect(signedUrl).toBe(stored.url);
+
+    delete process.env.STORAGE_DIR;
+    expect(getStorageDir().replace(/\\/g, "/")).toMatch(
+      /mission-control\/crosslisting-os\/data\/uploads$/
+    );
   });
 
   it("refuses any file name or key with ..\\ or ../ or leaving the storage folder", async () => {
