@@ -161,14 +161,22 @@ export function Discover() {
           <p className="text-white/60 text-lg mx-auto max-w-sm mb-8 leading-relaxed">
             Check back soon as more verified members join your area.
           </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={loadProfiles}
-            className="flex items-center justify-center gap-2 mx-auto rounded-2xl bg-gradient-to-r from-amber-600 to-stone-600 px-8 py-4 text-sm font-bold uppercase tracking-widest shadow-[0_0_30px_rgba(217,70,239,0.4)]"
-          >
-            <RefreshCw size={18} /> Refresh
-          </motion.button>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={loadProfiles}
+              className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-600 to-stone-600 px-8 py-4 text-sm font-bold uppercase tracking-widest shadow-[0_0_30px_rgba(217,70,239,0.4)]"
+            >
+              <RefreshCw size={18} /> Refresh
+            </motion.button>
+            <Link
+              to="/app/usa"
+              className="flex items-center justify-center gap-2 rounded-2xl border border-white/20 bg-white/5 px-8 py-4 text-sm font-bold uppercase tracking-widest text-white backdrop-blur-md hover:bg-white/10 transition-colors"
+            >
+              <MessageCircle size={18} /> Join the USA group chat
+            </Link>
+          </div>
         </motion.div>
       </div>
     );

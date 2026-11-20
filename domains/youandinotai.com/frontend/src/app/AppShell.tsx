@@ -30,6 +30,7 @@ const DESKTOP_NAV = [
   { to: '/app/inbox', icon: MessageCircle, label: 'Messages' },
   { to: '/app/verify', icon: ShieldCheck, label: 'Verify' },
   { to: '/app/boards', icon: Users, label: 'Boards' },
+  { to: '/app/usa', icon: MessageCircle, label: 'USA chat' },
   { to: '/app/create', icon: Wand2, label: 'Create' },
   { to: '/app/video-lobby', icon: Video, label: 'Video' },
   { to: '/app/avatar', icon: Sparkles, label: 'Animate' },
