@@ -25,11 +25,11 @@ const CASES = [
   { host: "dream-online.net", path: "/terms", expectTitle: "Terms of Service - ANTIGRAVITY Backup (dream-online.net)" },
   { host: "untilnokidinneed.com", path: "/", expectTitle: "Until No Kid In Need" },
   { host: "www.untilnokidinneed.com", path: "/", expectTitle: "Until No Kid In Need" },
-  { host: "onlinerecycle.net", path: "/", expectTitle: "OnlineRecycle.net | Florida Electronics Recycling & Free Pickup" },
-  { host: "www.onlinerecycle.net", path: "/", expectTitle: "OnlineRecycle.net | Florida Electronics Recycling & Free Pickup" },
-  { host: "onlinerecycle.net", path: "/service-areas", expectTitle: "Central Florida Electronics Recycling & Free Pickup Areas", forbidText: ["NOT IN INPUTS", "Refused Equipment"] },
-  { host: "onlinerecycle.net", path: "/service-areas.html", expectTitle: "Central Florida Electronics Recycling & Free Pickup Areas", forbidText: ["NOT IN INPUTS", "Refused Equipment"] },
-  { host: "www.onlinerecycle.net", path: "/service-areas", expectTitle: "Central Florida Electronics Recycling & Free Pickup Areas", forbidText: ["NOT IN INPUTS", "Refused Equipment"] },
+  { host: "onlinerecycle.net", path: "/", expectTitle: "OnlineRecycle.net | Central Florida Electronics Recycling & Free Pickup (Sorrento, Lake, Orange & Seminole)" },
+  { host: "www.onlinerecycle.net", path: "/", expectTitle: "OnlineRecycle.net | Central Florida Electronics Recycling & Free Pickup (Sorrento, Lake, Orange & Seminole)" },
+  { host: "onlinerecycle.net", path: "/service-areas", expectTitle: "Lake, Orange & Seminole County Electronics Pickup & Sorrento Drop-Off | OnlineRecycle.net", forbidText: ["NOT IN INPUTS", "Refused Equipment"] },
+  { host: "onlinerecycle.net", path: "/service-areas.html", expectTitle: "Lake, Orange & Seminole County Electronics Pickup & Sorrento Drop-Off | OnlineRecycle.net", forbidText: ["NOT IN INPUTS", "Refused Equipment"] },
+  { host: "www.onlinerecycle.net", path: "/service-areas", expectTitle: "Lake, Orange & Seminole County Electronics Pickup & Sorrento Drop-Off | OnlineRecycle.net", forbidText: ["NOT IN INPUTS", "Refused Equipment"] },
 ];
 
 function get(host, port, hostHeader, urlPath = "/") {
@@ -175,8 +175,8 @@ async function main() {
       "Orange County",
       "Seminole County",
       "(321) 396-2008",
-      "https://schema.org/FAQPage",
-      "https://schema.org/Question",
+      '"@type": "FAQPage"',
+      '"@type": "Question"',
     ];
     const forbiddenServiceAreaSnippets = [
       "NOT IN INPUTS",
@@ -195,8 +195,6 @@ async function main() {
       "Longwood",
       "Altamonte Springs",
       "Oviedo",
-      "32776",
-      "28.7953",
       "at your home or business",
       "central drop-off",
       "run on a battery",
