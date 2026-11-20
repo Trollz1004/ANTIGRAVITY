@@ -16,6 +16,7 @@ import {
 } from './signupSource';
 
 interface User {
+  id?: string;
   user_id: string;
   email: string;
   display_name: string;
