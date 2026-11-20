@@ -12,8 +12,10 @@ import { recordPageView, recordBooking, dayKey, isKnownCrawler } from "../bookin
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "orc-notify-"));
 const booking = {
   bookingId: "OR-20261120-AAAA",
+  serviceType: "pickup",
   fullName: "Pat Jones",
   phone: "555-0100",
+  address: "123 Main St",
   city: "Mount Dora",
   zip: "32757",
   deviceCount: "6-20",
@@ -22,6 +24,19 @@ const booking = {
   slotLabel: "9am-12pm",
   deviceList: "x".repeat(300),
 };
+const dropoffBooking = {
+  bookingId: "OR-20261121-BBBB",
+  serviceType: "dropoff",
+  fullName: "Sam Lee",
+  phone: "555-0199",
+  city: "Sorrento",
+  zip: "32776",
+  deviceCount: "1-5",
+  notes: "Standard intake",
+  date: "2026-11-21",
+  slotLabel: "9:00 AM - 9:30 AM",
+  deviceList: "2 laptops",
+};
 let n = 0;
 async function t(name, fn) {
   await fn();
@@ -29,12 +44,24 @@ async function t(name, fn) {
   console.log(`ok - ${name}`);
 }
 
-await t("message format and 160 char cap", () => {
+await t("message format carries booking id, service type, street address, name, phone, time, and 160 char cap", () => {
   const m = formatBookingMessage(booking);
-  assert.ok(m.startsWith("New pickup request\nName: Pat Jones\nPhone: 555-0100"));
+  assert.ok(m.startsWith("New pickup request\n"), `unexpected header: ${m}`);
+  assert.ok(m.includes("Booking ID: OR-20261120-AAAA"), "missing bookingId");
+  assert.ok(m.includes("Service: pickup"), "missing pickup service type");
+  assert.ok(m.includes("Address: 123 Main St"), "missing street address");
+  assert.ok(m.includes("Name: Pat Jones") && m.includes("Phone: 555-0100"));
   assert.ok(m.includes("Mount Dora 32757") && m.includes("6-20") && m.includes("Certified wipe"));
-  assert.ok(m.includes("2026-11-20 9am-12pm"));
+  assert.ok(m.includes("2026-11-20 9am-12pm"), "missing time window");
   assert.ok(m.endsWith(`Items: ${"x".repeat(160)}`));
+
+  const dm = formatBookingMessage(dropoffBooking);
+  assert.ok(dm.startsWith("New drop-off request\n"), `unexpected drop-off header: ${dm}`);
+  assert.ok(dm.includes("Booking ID: OR-20261121-BBBB"), "missing drop-off bookingId");
+  assert.ok(dm.includes("Service: drop-off"), "missing drop-off service type");
+  assert.ok(!dm.includes("New pickup request"), "drop-off must not say pickup");
+  assert.ok(dm.includes("Name: Sam Lee") && dm.includes("Phone: 555-0199"));
+  assert.ok(dm.includes("2026-11-21 9:00 AM - 9:30 AM"));
 });
 
 await t("configured sends to Telegram", async () => {
@@ -58,14 +85,67 @@ await t("not configured does nothing but log one line", async () => {
   assert.deepEqual(logs, [NOT_CONFIGURED_LINE]);
 });
 
-await t("failing send does not throw, logs without token", async () => {
+await t("failed owner notice is retried three times with a timeout, logs without token", async () => {
   const env = { ORC_NOTIFY_TELEGRAM_TOKEN: "SECRETTOKEN", ORC_NOTIFY_TELEGRAM_CHAT: "42" };
-  const ok = await notifyBooking(booking, { env, fetchImpl: async () => { throw new Error("boom botSECRETTOKEN"); }, logDir: tmp });
+  let errCalls = 0;
+  const ok = await notifyBooking(booking, {
+    env,
+    fetchImpl: async () => {
+      errCalls += 1;
+      throw new Error("boom botSECRETTOKEN");
+    },
+    logDir: tmp,
+    retryDelayMs: 5,
+    timeoutMs: 50,
+  });
   assert.equal(ok, false);
-  const ok2 = await notifyBooking(booking, { env, fetchImpl: async () => ({ ok: false, status: 500 }), logDir: tmp });
+  assert.equal(errCalls, 4, "initial attempt + 3 retries = 4 calls");
+
+  let httpCalls = 0;
+  const ok2 = await notifyBooking(booking, {
+    env,
+    fetchImpl: async () => {
+      httpCalls += 1;
+      return { ok: false, status: 500 };
+    },
+    logDir: tmp,
+    retryDelayMs: 5,
+    timeoutMs: 50,
+  });
   assert.equal(ok2, false);
+  assert.equal(httpCalls, 4, "HTTP 500 retried three times");
+
+  let recoverCalls = 0;
+  const ok3 = await notifyBooking(booking, {
+    env,
+    fetchImpl: async () => {
+      recoverCalls += 1;
+      if (recoverCalls < 3) return { ok: false, status: 502 };
+      return { ok: true, status: 200 };
+    },
+    logDir: tmp,
+    retryDelayMs: 5,
+    timeoutMs: 50,
+  });
+  assert.equal(ok3, true, "succeeds when retry succeeds");
+  assert.equal(recoverCalls, 3);
+
+  let hangCalls = 0;
+  const ok4 = await notifyBooking(booking, {
+    env,
+    fetchImpl: async () => {
+      hangCalls += 1;
+      return new Promise(() => {});
+    },
+    logDir: tmp,
+    retryDelayMs: 5,
+    timeoutMs: 25,
+  });
+  assert.equal(ok4, false, "hanging request times out and returns false");
+  assert.equal(hangCalls, 4, "timed-out request is retried three times");
+
   const log = fs.readFileSync(path.join(tmp, "notify-errors.log"), "utf8");
-  assert.ok(log.includes("boom") && log.includes("HTTP 500"));
+  assert.ok(log.includes("boom") && log.includes("HTTP 500") && log.includes("timeout"));
   assert.ok(!log.includes("SECRETTOKEN"));
 });
 

@@ -2,7 +2,7 @@
 // Domains static site server — no dependencies.
 // Virtual-host static file server: routes by the Host header to one of
 // three landing-site document roots, plus a /health identity probe and
-// OnlineRecycle.net native Google Calendar booking endpoints (/api/booking-config, /api/book, /api/calendar.ics).
+// OnlineRecycle.net native appointment booking endpoints (/api/booking-config, /api/book, /api/calendar.ics).
 //
 // Start: node ops/domains-server/server.mjs
 
@@ -13,7 +13,7 @@ import fsp from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { notifyBooking } from "./booking-notify.mjs";
+import { notifyBooking, isBookingNotifyConfigured } from "./booking-notify.mjs";
 import { recordPageView, recordBooking } from "./booking-stats.mjs";
 import { getBindHost, getNodeIp, getService } from "../fleet/fleet-map.mjs";
 import { logStartupEnvCheck } from "../agents/env-required.mjs";
@@ -22,7 +22,9 @@ import { buildPublicHealthLight } from "../agents/node-light.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
 const DOMAINS_ROOT = path.join(REPO_ROOT, "domains");
-const BOOKINGS_DIR = path.join(REPO_ROOT, "data", "ewaste-intake");
+const BOOKINGS_DIR = process.env.ORC_BOOKINGS_DIR
+  ? path.resolve(process.env.ORC_BOOKINGS_DIR)
+  : path.join(REPO_ROOT, "data", "ewaste-intake");
 const BOOKINGS_JSONL = path.join(BOOKINGS_DIR, "bookings.jsonl");
 const INQUIRIES_DIR = path.join(BOOKINGS_DIR, "inquiries");
 const STATS_DIR = process.env.ORC_STATS_DIR || path.join(BOOKINGS_DIR, "stats");
@@ -166,6 +168,34 @@ function readBookings() {
   } catch {
     return [];
   }
+}
+
+function updateBookingNotified(bookingId, notified) {
+  try {
+    const list = readBookings();
+    let changed = false;
+    const updated = list.map((b) => {
+      if (b && b.bookingId === bookingId) {
+        changed = true;
+        return { ...b, notified: Boolean(notified) };
+      }
+      return b;
+    });
+    if (changed) {
+      fs.writeFileSync(
+        BOOKINGS_JSONL,
+        `${updated.map((b) => JSON.stringify(b)).join("\n")}\n`,
+        "utf8"
+      );
+      bookingCache = { mtimeMs: -1, size: -1, list: [] };
+    }
+  } catch {
+    // keep going if file update fails
+  }
+}
+
+function countUnnotifiedBookings() {
+  return readBookings().filter((b) => b && b.status !== "CANCELLED" && b.notified !== true).length;
 }
 
 function toGoogleCalDateRange(dateStr, slotStr) {
@@ -388,18 +418,26 @@ const server = http.createServer(async (req, res) => {
     const urlPath = parsedUrl.pathname;
 
     if (urlPath === "/health") {
+      const baseLight = buildPublicHealthLight({ manifestDir: __dirname });
+      const noticesOn = isBookingNotifyConfigured(process.env);
+      const unnotifiedBookings = countUnnotifiedBookings();
+      const nodeLight = !noticesOn || baseLight.nodeLight !== "green" ? "amber" : "green";
       res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
       res.end(
         JSON.stringify({
           service: "domains-server",
           sites: SITES,
-          ...buildPublicHealthLight({ manifestDir: __dirname }),
+          ...baseLight,
+          nodeLight,
+          bookingNotices: noticesOn ? "on" : "off",
+          bookingNoticesStatus: `booking notices: ${noticesOn ? "on" : "off"}`,
+          unnotifiedBookings,
         })
       );
       return;
     }
 
-    // OnlineRecycle.net native Google Calendar booking APIs
+    // OnlineRecycle.net native appointment booking APIs
     const isBookingHost = BOOKING_HOSTS.has(host);
 
     if (isBookingHost && urlPath === "/api/booking-config" && req.method === "GET") {
@@ -505,6 +543,7 @@ const server = http.createServer(async (req, res) => {
         deviceList,
         notes,
         status: "SCHEDULED",
+        notified: false,
       };
 
       await fsp.mkdir(INQUIRIES_DIR, { recursive: true });
@@ -518,6 +557,7 @@ const server = http.createServer(async (req, res) => {
         return;
       }
       fs.appendFileSync(BOOKINGS_JSONL, `${JSON.stringify(booking)}\n`, "utf8");
+      bookingCache = { mtimeMs: -1, size: -1, list: [] };
 
       const inquiryMd = [
         `Full Name: ${fullName}`,
@@ -536,14 +576,23 @@ const server = http.createServer(async (req, res) => {
       ]
         .filter(Boolean)
         .join("\n");
-      await fsp.writeFile(path.join(INQUIRIES_DIR, `${bookingId}.txt`), `${inquiryMd}\n`, "utf8");
+      try {
+        await fsp.writeFile(path.join(INQUIRIES_DIR, `${bookingId}.txt`), `${inquiryMd}\n`, "utf8");
+      } catch {
+        // secondary inquiry file failure must never abort a saved booking
+      }
+
+      const notified = await notifyBooking(booking, { logDir: BOOKINGS_DIR }).catch(() => false);
+      booking.notified = Boolean(notified);
+      updateBookingNotified(bookingId, booking.notified);
+      recordBooking(STATS_DIR);
 
       const googleCalendarUrl = buildGoogleCalendarUrl(booking);
       const icsUrl = `/api/calendar.ics?id=${encodeURIComponent(bookingId)}`;
       const smsBody = `OnlineRecycle.net ${serviceType.toUpperCase()} Booking ${bookingId}: ${fullName}, ${date} (${slotLabel}). Items (${deviceCount}): ${deviceList}${
         serviceType === "pickup" ? ` | Address: ${address}, ${city} ${zip}` : ""
       }`;
-      const smsUrl = `sms:+13213962008?&body=${encodeURIComponent(smsBody)}`;
+      const smsUrl = `sms:+13213962008?body=${encodeURIComponent(smsBody)}`;
 
       res.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
       res.end(
@@ -555,10 +604,6 @@ const server = http.createServer(async (req, res) => {
           smsUrl,
         })
       );
-      // After the response is sent: count it and tell the owner. Neither can
-      // delay or break the booking.
-      recordBooking(STATS_DIR);
-      notifyBooking(booking, { logDir: BOOKINGS_DIR }).catch(() => {});
       return;
     }
 
