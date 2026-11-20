@@ -31,7 +31,6 @@ interface Profile {
   subscription_active?: boolean;
   gender?: string;
   founder?: boolean;
-  prompt?: string;
   intent?: string;
   availability?: string;
   compatibility?: string;
@@ -141,13 +140,24 @@ export function Discover() {
 
   if (profiles.length === 0) {
     return (
-      <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center text-center relative overflow-hidden p-6">
+      <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center text-center relative overflow-hidden p-6">
         <div className="absolute top-1/4 left-1/4 w-[30%] h-[30%] bg-amber-600/20 blur-[150px] rounded-full pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/4 w-[30%] h-[30%] bg-stone-600/20 blur-[150px] rounded-full pointer-events-none" />
+        <div className="z-10 mb-6 flex w-full max-w-7xl items-center justify-between">
+          <div className="text-xs font-bold uppercase tracking-widest text-amber-400">
+            Discover
+          </div>
+          <Link
+            to="/app/usa"
+            className="inline-flex items-center gap-2 rounded-2xl border border-amber-400/40 bg-amber-500/10 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-amber-300 backdrop-blur-md hover:bg-amber-500/20 transition-colors"
+          >
+            <MessageCircle size={16} /> USA group chat
+          </Link>
+        </div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="z-10 bg-white/5 border border-white/10 backdrop-blur-xl max-w-xl w-full rounded-[3rem] p-12 shadow-2xl"
+          className="z-10 my-auto bg-white/5 border border-white/10 backdrop-blur-xl max-w-xl w-full rounded-[3rem] p-12 shadow-2xl"
         >
           <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-3xl bg-white/5 border border-white/10 shadow-[0_0_40px_rgba(34,211,238,0.3)]">
             <Compass size={44} className="text-stone-400" />
@@ -201,14 +211,22 @@ export function Discover() {
               opener-specific likes, and safety tools before the first meetup.
             </p>
           </div>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setSettingsOpen(true)}
-            className="flex items-center gap-2 rounded-2xl border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white backdrop-blur-md hover:bg-white/10 transition-colors"
-          >
-            <Sliders size={18} /> Feed options
-          </motion.button>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              to="/app/usa"
+              className="flex items-center gap-2 rounded-2xl border border-amber-400/40 bg-amber-500/10 px-6 py-3 text-sm font-bold uppercase tracking-widest text-amber-300 backdrop-blur-md hover:bg-amber-500/20 transition-colors"
+            >
+              <MessageCircle size={18} /> USA group chat
+            </Link>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setSettingsOpen(true)}
+              className="flex items-center gap-2 rounded-2xl border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white backdrop-blur-md hover:bg-white/10 transition-colors"
+            >
+              <Sliders size={18} /> Feed options
+            </motion.button>
+          </div>
         </div>
 
         <DiscoverSettings

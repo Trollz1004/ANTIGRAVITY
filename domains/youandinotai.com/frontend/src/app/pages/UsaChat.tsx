@@ -1,7 +1,14 @@
-import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from 'react';
 import { Flag, MessageCircle, Send, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api } from '../../lib/api';
+import { useAuth } from '../../lib/auth';
 
 interface UsaPost {
   id: string;
@@ -15,10 +22,10 @@ interface UsaPost {
 }
 
 const POLL_INTERVAL_MS = 10_000;
-const USA_POSTS_PATH = '/boards/usa/posts?order=asc&limit=100';
+const USA_POSTS_PATH = '/boards/usa/posts?order=desc&limit=100';
 
 function sortOldestToNewest(items: UsaPost[]): UsaPost[] {
-  return [...items].sort((a, b) => {
+  return [...items].reverse().sort((a, b) => {
     const timeA = new Date(a.created_at).getTime();
     const timeB = new Date(b.created_at).getTime();
     if (Number.isNaN(timeA) || Number.isNaN(timeB)) return 0;
@@ -26,13 +33,31 @@ function sortOldestToNewest(items: UsaPost[]): UsaPost[] {
   });
 }
 
-function formatTime(iso: string): string {
+function isSameLocalDay(a: Date, b: Date): boolean {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
+function formatTime(iso: string, now: Date = new Date()): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return iso;
-  return date.toLocaleTimeString([], {
+  const timePart = date.toLocaleTimeString([], {
     hour: 'numeric',
     minute: '2-digit',
   });
+  if (isSameLocalDay(date, now)) {
+    return timePart;
+  }
+  const includeYear = date.getFullYear() !== now.getFullYear();
+  const datePart = date.toLocaleDateString([], {
+    month: 'short',
+    day: 'numeric',
+    ...(includeYear ? { year: 'numeric' } : {}),
+  });
+  return `${datePart}, ${timePart}`;
 }
 
 function isForbiddenError(err: unknown): boolean {
@@ -76,14 +101,38 @@ function usePrefersReducedMotion(): boolean {
 }
 
 export function UsaChat() {
+  const user = useAuth(state => state.user);
   const [posts, setPosts] = useState<UsaPost[]>([]);
+  const [ownAuthorIds, setOwnAuthorIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [isUnverified, setIsUnverified] = useState(false);
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [scrollTick, setScrollTick] = useState(0);
+  const listRef = useRef<HTMLDivElement | null>(null);
   const reducedMotion = usePrefersReducedMotion();
+
+  const currentUserId = user?.user_id || user?.id || null;
+
+  const scrollToLastLine = useCallback(() => {
+    const listEl = listRef.current;
+    if (!listEl) return;
+    listEl.scrollTop = listEl.scrollHeight;
+    const articles = listEl.querySelectorAll('article');
+    const lastArticle = articles[articles.length - 1];
+    if (lastArticle && typeof lastArticle.scrollIntoView === 'function') {
+      lastArticle.scrollIntoView({ block: 'nearest' });
+    }
+    listEl.scrollTop = listEl.scrollHeight;
+  }, []);
+
+  useEffect(() => {
+    if (scrollTick > 0) {
+      scrollToLastLine();
+    }
+  }, [posts, scrollTick, scrollToLastLine]);
 
   const loadPosts = useCallback(async (isBackground = false) => {
     if (!isBackground) {
@@ -93,6 +142,9 @@ export function UsaChat() {
       const data = await api.get<UsaPost[]>(USA_POSTS_PATH);
       if (Array.isArray(data)) {
         setPosts(sortOldestToNewest(data));
+      }
+      if (!isBackground) {
+        setScrollTick(prev => prev + 1);
       }
       setIsUnverified(false);
       setErrorMessage(null);
@@ -144,6 +196,13 @@ export function UsaChat() {
       });
       setText('');
       if (created && typeof created === 'object' && 'id' in created) {
+        if (created.author_id) {
+          setOwnAuthorIds(prev =>
+            prev.includes(created.author_id)
+              ? prev
+              : [...prev, created.author_id]
+          );
+        }
         setPosts(prev =>
           sortOldestToNewest([
             ...prev.filter(item => item.id !== created.id),
@@ -151,7 +210,9 @@ export function UsaChat() {
           ])
         );
       }
+      setScrollTick(prev => prev + 1);
       await loadPosts(true);
+      setScrollTick(prev => prev + 1);
     } catch (err: unknown) {
       if (isForbiddenError(err)) {
         setIsUnverified(true);
@@ -211,20 +272,20 @@ export function UsaChat() {
   return (
     <div
       data-motion={reducedMotion ? 'reduced' : 'full'}
-      className="min-h-screen bg-[#050505] text-white relative overflow-x-hidden p-6 md:p-10"
+      className="bg-[#050505] text-white relative flex flex-col overflow-hidden h-[calc(100vh-8.75rem)] -mb-28 p-3 md:mb-0 md:h-auto md:min-h-screen md:overflow-x-hidden md:p-10"
     >
       <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-amber-600/10 blur-[150px] rounded-full pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-stone-600/10 blur-[150px] rounded-full pointer-events-none" />
 
-      <div className="relative z-10 flex flex-col w-full max-w-4xl mx-auto">
-        <header className="mb-6">
-          <div className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-2">
+      <div className="relative z-10 flex flex-1 min-h-0 flex-col w-full max-w-4xl mx-auto">
+        <header className="mb-3 md:mb-6 shrink-0">
+          <div className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-1 md:mb-2">
             USA Group Chat
           </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2">
+          <h1 className="text-3xl md:text-5xl font-black tracking-tight mb-1 md:mb-2">
             usa group chat.
           </h1>
-          <div className="text-white/60 text-base leading-relaxed">
+          <div className="text-white/60 text-xs md:text-base leading-snug md:leading-relaxed">
             One room for verified members across the country, oldest at the top
             and newest at the bottom.
           </div>
@@ -233,7 +294,7 @@ export function UsaChat() {
         {notice && (
           <div
             role="status"
-            className="mb-4 rounded-2xl border border-emerald-500/50 bg-emerald-500/10 px-5 py-3 text-sm font-bold text-emerald-200 backdrop-blur-md"
+            className="shrink-0 mb-3 md:mb-4 rounded-2xl border border-emerald-500/50 bg-emerald-500/10 px-4 py-2.5 md:px-5 md:py-3 text-sm font-bold text-emerald-200 backdrop-blur-md"
           >
             {notice}
           </div>
@@ -242,14 +303,18 @@ export function UsaChat() {
         {errorMessage && (
           <div
             role="alert"
-            className="mb-4 rounded-2xl border border-rose-500/50 bg-rose-500/10 px-5 py-3 text-sm font-bold text-rose-200 backdrop-blur-md"
+            className="shrink-0 mb-3 md:mb-4 rounded-2xl border border-rose-500/50 bg-rose-500/10 px-4 py-2.5 md:px-5 md:py-3 text-sm font-bold text-rose-200 backdrop-blur-md"
           >
             {errorMessage}
           </div>
         )}
 
-        <section className="bg-white/5 border border-white/10 backdrop-blur-2xl w-full rounded-[2.5rem] p-6 shadow-2xl flex flex-col gap-6">
-          <div className="flex flex-col gap-3 max-h-[60vh] overflow-y-auto pr-1">
+        <section className="bg-white/5 border border-white/10 backdrop-blur-2xl w-full rounded-3xl md:rounded-[2.5rem] p-4 md:p-6 shadow-2xl flex flex-1 min-h-0 md:flex-initial flex-col gap-3 md:gap-6">
+          <div
+            ref={listRef}
+            data-testid="usa-chat-list"
+            className="flex flex-1 min-h-0 flex-col gap-3 md:flex-initial md:max-h-[60vh] overflow-y-auto pr-1"
+          >
             {loading && posts.length === 0 ? (
               <div className="py-12 text-center text-sm font-bold uppercase tracking-widest text-stone-400">
                 Loading conversation
@@ -265,43 +330,51 @@ export function UsaChat() {
                 </p>
               </div>
             ) : (
-              posts.map(post => (
-                <article
-                  key={post.id}
-                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 flex flex-col gap-1.5"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2.5 text-xs">
-                      <span className="font-bold text-amber-300">
-                        {post.author_name}
-                      </span>
-                      <time
-                        dateTime={post.created_at}
-                        className="text-white/50 font-medium"
-                      >
-                        {formatTime(post.created_at)}
-                      </time>
+              posts.map(post => {
+                const isOwnLine =
+                  (Boolean(currentUserId) &&
+                    post.author_id === currentUserId) ||
+                  ownAuthorIds.includes(post.author_id);
+                return (
+                  <article
+                    key={post.id}
+                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 flex flex-col gap-1.5"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2.5 text-xs">
+                        <span className="font-bold text-amber-300">
+                          {post.author_name}
+                        </span>
+                        <time
+                          dateTime={post.created_at}
+                          className="text-white/50 font-medium"
+                        >
+                          {formatTime(post.created_at)}
+                        </time>
+                      </div>
+                      {!isOwnLine && (
+                        <button
+                          type="button"
+                          onClick={() => void handleReport(post)}
+                          className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-white/70 hover:bg-white/10 hover:text-white motion-reduce:transition-none"
+                        >
+                          <Flag size={12} className="text-amber-400" />
+                          Report
+                        </button>
+                      )}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => void handleReport(post)}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-white/70 hover:bg-white/10 hover:text-white motion-reduce:transition-none"
-                    >
-                      <Flag size={12} className="text-amber-400" />
-                      Report
-                    </button>
-                  </div>
-                  <p className="text-sm text-white/90 whitespace-pre-wrap break-words leading-relaxed">
-                    {post.body || post.title}
-                  </p>
-                </article>
-              ))
+                    <p className="text-sm text-white/90 whitespace-pre-wrap break-words leading-relaxed">
+                      {post.body || post.title}
+                    </p>
+                  </article>
+                );
+              })
             )}
           </div>
 
           <form
             onSubmit={handleSend}
-            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 border-t border-white/10 pt-4"
+            className="shrink-0 flex flex-row items-center gap-2 sm:gap-3 border-t border-white/10 pt-3 md:pt-4"
           >
             <input
               type="text"
@@ -309,12 +382,12 @@ export function UsaChat() {
               onChange={e => setText(e.target.value)}
               placeholder="Write to the USA group chat..."
               aria-label="Write to the USA group chat"
-              className="flex-1 rounded-2xl border border-white/15 bg-black/50 px-4 py-3.5 text-sm text-white placeholder:text-white/40 focus:border-amber-400 focus:outline-none"
+              className="min-w-0 flex-1 rounded-2xl border border-white/15 bg-black/50 px-3.5 py-2.5 md:px-4 md:py-3.5 text-sm text-white placeholder:text-white/40 focus:border-amber-400 focus:outline-none"
             />
             <button
               type="submit"
               disabled={!text.trim() || sending}
-              className={`inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-600 to-stone-600 px-6 py-3.5 text-sm font-bold uppercase tracking-widest text-white shadow-[0_0_24px_rgba(217,70,239,0.3)] disabled:opacity-40 ${
+              className={`shrink-0 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-600 to-stone-600 px-4 py-2.5 md:px-6 md:py-3.5 text-sm font-bold uppercase tracking-widest text-white shadow-[0_0_24px_rgba(217,70,239,0.3)] disabled:opacity-40 ${
                 reducedMotion
                   ? 'transition-none'
                   : 'transition-all hover:brightness-110'
