@@ -472,8 +472,199 @@ class TestVerifyRefund:
             assert db_user.bot_shield_verified is False
             assert db_profile.verified is False
             assert db_payment.status == "refunded"
+            assert getattr(db_payment, "square_refund_id", None) == "rfnd_dollar_back_1"
         finally:
             app.dependency_overrides.pop(get_current_user, None)
+
+    def test_refund_marks_every_completed_one_dollar_payment_so_confirm_cannot_restore_badge(
+        self, client, db_session_factory
+    ):
+        now = datetime.now(timezone.utc)
+        user = _make_user(
+            email="refund_multi_pay@example.com",
+            bot_shield_verified=True,
+        )
+        profile = verified_profile(user)
+        liveness_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="liveness",
+            status="passed",
+            amount_cents=100,
+            challenge_token="tok:hash",
+            created_at=now - timedelta(days=2),
+            completed_at=now - timedelta(days=2),
+        )
+        older_payment = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_multi_older_1",
+            card_fingerprint="fp_multi_1",
+            created_at=now - timedelta(days=2),
+            completed_at=now - timedelta(days=2),
+        )
+        newer_payment = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_multi_newer_2",
+            card_fingerprint="fp_multi_1",
+            created_at=now - timedelta(days=1),
+            completed_at=now - timedelta(days=1),
+        )
+        seed(
+            user,
+            profile,
+            liveness_event,
+            older_payment,
+            newer_payment,
+            db_session_factory=db_session_factory,
+        )
+        app.dependency_overrides[get_current_user] = override_user(user)
+        mock_refund = AsyncMock(
+            return_value={
+                "id": "rfnd_multi_newer_2",
+                "status": "PENDING",
+                "payment_id": "pay_multi_newer_2",
+            }
+        )
+        try:
+            with patch(
+                "app.routers.verify.refund_square_payment",
+                mock_refund,
+                create=True,
+            ):
+                refund_resp = client.post("/api/v1/verify/refund")
+            assert refund_resp.status_code == 200, refund_resp.text
+
+            import asyncio
+
+            async def _fetch_payments():
+                async with db_session_factory() as session:
+                    rows = (
+                        await session.scalars(
+                            select(VerificationEvent)
+                            .where(VerificationEvent.user_id == user.id)
+                            .where(VerificationEvent.challenge_type == "payment")
+                        )
+                    ).all()
+                    return rows
+
+            payment_rows = asyncio.run(_fetch_payments())
+            assert len(payment_rows) == 2
+            assert all(row.status == "refunded" for row in payment_rows)
+
+            confirm_resp = client.post("/api/v1/verify/confirm")
+            assert confirm_resp.status_code == 402, confirm_resp.text
+
+            status_resp = client.get("/api/v1/verify/status")
+            assert status_resp.status_code == 200, status_resp.text
+            assert status_resp.json()["verified"] is False
+            assert status_resp.json()["bot_shield_paid"] is False
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_trust_score_after_refund_does_not_equal_verified_score(
+        self, client, db_session_factory
+    ):
+        now = datetime.now(timezone.utc)
+        user = _make_user(
+            email="refund_trust_score@example.com",
+            bot_shield_verified=True,
+        )
+        profile = verified_profile(user)
+        liveness_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="liveness",
+            status="passed",
+            amount_cents=100,
+            challenge_token="tok:hash",
+            created_at=now - timedelta(days=1),
+            completed_at=now - timedelta(days=1),
+        )
+        payment_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_trust_1",
+            card_fingerprint="fp_trust_1",
+            created_at=now - timedelta(days=1),
+            completed_at=now - timedelta(days=1),
+        )
+        seed(
+            user,
+            profile,
+            liveness_event,
+            payment_event,
+            db_session_factory=db_session_factory,
+        )
+        app.dependency_overrides[get_current_user] = override_user(user)
+        mock_refund = AsyncMock(
+            return_value={
+                "id": "rfnd_trust_1",
+                "status": "PENDING",
+                "payment_id": "pay_trust_1",
+            }
+        )
+        try:
+            before_resp = client.get("/api/v1/verify/status")
+            assert before_resp.status_code == 200, before_resp.text
+            verified_score = before_resp.json()["trust_score"]
+            assert verified_score == 60.0
+
+            with patch(
+                "app.routers.verify.refund_square_payment",
+                mock_refund,
+                create=True,
+            ):
+                refund_resp = client.post("/api/v1/verify/refund")
+            assert refund_resp.status_code == 200, refund_resp.text
+
+            after_resp = client.get("/api/v1/verify/status")
+            assert after_resp.status_code == 200, after_resp.text
+            after_score = after_resp.json()["trust_score"]
+            assert after_resp.json()["verified"] is False
+            assert after_score != verified_score
+            assert after_score < verified_score
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_square_refund_id_column_reconcile_and_alembic_revision(self):
+        import inspect
+        from pathlib import Path
+
+        from app import database
+        from app.models import VerificationEvent
+
+        col = VerificationEvent.__table__.columns.get("square_refund_id")
+        assert col is not None
+        assert col.nullable is True
+
+        db_source = inspect.getsource(database)
+        assert (
+            "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS square_refund_id VARCHAR(255)"
+            in db_source
+        )
+        assert '"square_refund_id"' in db_source
+
+        versions_dir = (
+            Path(__file__).resolve().parents[1] / "alembic" / "versions"
+        )
+        matching = list(
+            versions_dir.glob("*add_square_refund_id_to_verification_events.py")
+        )
+        assert len(matching) == 1
+        migration_text = matching[0].read_text(encoding="utf-8")
+        assert 'COLUMN_NAME = "square_refund_id"' in migration_text
+        assert 'down_revision: Union[str, None] = "c3d4e5f6a7b8"' in migration_text
 
     def test_refund_second_ask_is_refused(self, client, db_session_factory, caplog):
         now = datetime.now(timezone.utc)
