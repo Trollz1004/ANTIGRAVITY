@@ -27,7 +27,7 @@ const BOOKINGS_DIR = process.env.ORC_BOOKINGS_DIR
   : path.join(REPO_ROOT, "data", "ewaste-intake");
 const BOOKINGS_JSONL = path.join(BOOKINGS_DIR, "bookings.jsonl");
 const INQUIRIES_DIR = path.join(BOOKINGS_DIR, "inquiries");
-const STATS_DIR = path.join(BOOKINGS_DIR, "stats");
+const STATS_DIR = process.env.ORC_STATS_DIR || path.join(BOOKINGS_DIR, "stats");
 
 // Fleet Map authority (ops/fleet/fleet-map.json): T5500 (192.168.0.15) hosts
 // domains-server bound on 0.0.0.0:9160 unless overridden via DOMAINS_SERVER_HOST.
@@ -642,7 +642,9 @@ const server = http.createServer(async (req, res) => {
     const data = await fsp.readFile(filePath);
     res.writeHead(200, { "Content-Type": contentTypeFor(filePath) });
     res.end(data);
-    if (isBookingHost && urlPath === "/" && req.method === "GET") recordPageView(STATS_DIR);
+    if (isBookingHost && urlPath === "/" && req.method === "GET") {
+      recordPageView(STATS_DIR, new Date(), req.headers["user-agent"]);
+    }
   } catch (err) {
     if (res.headersSent || res.destroyed) return;
     res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });
