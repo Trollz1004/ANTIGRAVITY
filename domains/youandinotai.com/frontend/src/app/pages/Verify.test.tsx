@@ -507,6 +507,46 @@ describe('Verify after $1 payment', () => {
     expect(queryByRole('button', { name: 'Give me my $1 back' })).toBeNull();
   });
 
+  it("shows a member with the badge the headline \"You're verified.\" and one line on what that unlocks, not \"Prove you're human\" and not the how-it-works box", async () => {
+    vi.mocked(api.get).mockImplementation(async (path: string) => {
+      if (path === '/verify/status') {
+        return {
+          verified: true,
+          trust_score: 60,
+          tier: 'gold',
+          bot_shield_paid: true,
+          subscription_active: false,
+          checks_completed: 2,
+        };
+      }
+      if (path === '/verify/refund-status') {
+        return { available: false };
+      }
+      throw new Error(`Unexpected GET ${path}`);
+    });
+
+    const { getByRole, getByText, queryByText } = render(
+      <MemoryRouter initialEntries={['/app/verify']}>
+        <Verify />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(
+        getByRole('heading', { level: 1, name: "You're verified." })
+      ).toBeDefined();
+    });
+
+    expect(
+      getByText(
+        'Your badge unlocks discovery, messaging, and video on your account.'
+      )
+    ).toBeDefined();
+    expect(queryByText(/Prove you're human/i)).toBeNull();
+    expect(queryByText(/How the flow works/i)).toBeNull();
+    expect(queryByText(/Answer a short timed question\./i)).toBeNull();
+  });
+
   it('shows the dollar-back line and button when refund-status says available, asks once on the page without a browser dialog, shows the server message, and flips the menu to not verified without a reload', async () => {
     const confirmSpy = vi
       .spyOn(window, 'confirm')
