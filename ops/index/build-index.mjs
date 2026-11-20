@@ -22,11 +22,7 @@ function classifyStaleCategory(filePath, base) {
 }
 
 function escapeTableText(text) {
-  return String(text)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('|', '-');
+  return String(text).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('|', '-');
 }
 
 function extractReadmeSummary(repoRoot, blobHash) {
@@ -34,7 +30,7 @@ function extractReadmeSummary(repoRoot, blobHash) {
   const raw = execFileSync('git', ['cat-file', '-p', blobHash], {
     cwd: repoRoot,
     encoding: 'utf8',
-    maxBuffer: 16 * 1024 * 1024
+    maxBuffer: 16 * 1024 * 1024,
   });
   const lines = raw.split(/\r?\n/);
   for (const line of lines) {
@@ -77,11 +73,15 @@ function computeFolderPairs(dupGroups, folderFn) {
   return [...pairs.values()].sort((a, b) => b.groups - a.groups || b.bytes - a.bytes || a.pair.localeCompare(b.pair));
 }
 
+function isArchivedPath(filePath) {
+  return filePath === 'archive' || filePath.startsWith('archive/');
+}
+
 export function buildIndex(repoRoot = process.cwd()) {
   const treeOut = execFileSync('git', ['ls-tree', '-r', '-l', 'HEAD'], {
     cwd: repoRoot,
     encoding: 'utf8',
-    maxBuffer: 64 * 1024 * 1024
+    maxBuffer: 64 * 1024 * 1024,
   });
 
   const files = [];
@@ -104,7 +104,7 @@ export function buildIndex(repoRoot = process.cwd()) {
   const logOut = execFileSync(
     'git',
     ['log', '--first-parent', '-m', '--no-renames', '--format=COMMIT:%ct %cs', '--name-only', 'HEAD'],
-    { cwd: repoRoot, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }
+    { cwd: repoRoot, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 },
   );
 
   const lastCommit = new Map();
@@ -163,25 +163,8 @@ export function buildIndex(repoRoot = process.cwd()) {
   }
 
   const folderRows = [...folders.values()].sort((a, b) => a.name.localeCompare(b.name));
-  const repoIndexLines = [
-    '# Repository Index',
-    '',
-    `Tracked files in HEAD: ${files.length} (${rootFilesCount} at root, ${files.length - rootFilesCount} in ${folderRows.length} top-level folders).`,
-    '',
-    '| Folder | File Count | Size | Last Commit | Description |',
-    '| --- | ---: | ---: | --- | --- |'
-  ];
 
-  for (const r of folderRows) {
-    const desc = extractReadmeSummary(repoRoot, r.readmeHash);
-    repoIndexLines.push(`| \`${r.name}\` | ${r.files} | ${formatBytes(r.size)} | ${r.lastDate} | ${desc} |`);
-  }
-  if (rootFilesCount > 0) {
-    repoIndexLines.push('', `Root-level tracked files (not inside a subfolder): ${rootFilesCount} files, ${formatBytes(rootFilesSize)}, last commit ${rootLastDate}.`);
-  }
-  repoIndexLines.push('');
-
-  // 2. DUPLICATES.md
+  // 2. DUPLICATES.md (computed before REPO-INDEX.md so both files report live and whole-repo counts)
   const byHash = new Map();
   for (const f of files) {
     if (!byHash.has(f.hash)) {
@@ -194,45 +177,114 @@ export function buildIndex(repoRoot = process.cwd()) {
   }
 
   const dupGroups = [...byHash.values()]
-    .filter(g => g.paths.length > 1)
-    .sort((a, b) =>
-      b.paths.length - a.paths.length ||
-      (b.size * (b.paths.length - 1)) - (a.size * (a.paths.length - 1)) ||
-      a.hash.localeCompare(b.hash)
+    .filter((g) => g.paths.length > 1)
+    .map((g) => {
+      const livePaths = g.paths.filter((p) => !isArchivedPath(p));
+      const archivePaths = g.paths.filter((p) => isArchivedPath(p));
+      const groupLiveExtra = Math.max(0, livePaths.length - 1);
+      const groupWholeExtra = g.paths.length - 1;
+      return {
+        ...g,
+        livePaths,
+        archivePaths,
+        liveExtraCopies: groupLiveExtra,
+        wholeExtraCopies: groupWholeExtra,
+        liveRepeatedBytes: g.size * groupLiveExtra,
+        repeatedBytes: g.size * groupWholeExtra,
+      };
+    })
+    .sort(
+      (a, b) => b.paths.length - a.paths.length || b.repeatedBytes - a.repeatedBytes || a.hash.localeCompare(b.hash),
     );
 
+  const liveDupGroups = dupGroups.filter((g) => g.liveExtraCopies > 0);
+  const archiveOnlyDupGroups = dupGroups.filter((g) => g.liveExtraCopies === 0);
+
   let filesInDupGroups = 0;
+  let liveExtraCopies = 0;
   let extraCopies = 0;
+  let liveRepeatedBytes = 0;
   let repeatedBytes = 0;
   for (const g of dupGroups) {
     filesInDupGroups += g.paths.length;
-    extraCopies += g.paths.length - 1;
-    repeatedBytes += g.size * (g.paths.length - 1);
+    liveExtraCopies += g.liveExtraCopies;
+    extraCopies += g.wholeExtraCopies;
+    liveRepeatedBytes += g.liveRepeatedBytes;
+    repeatedBytes += g.repeatedBytes;
   }
+  const liveRepeatedMB = (liveRepeatedBytes / (1024 * 1024)).toFixed(2);
   const repeatedMB = (repeatedBytes / (1024 * 1024)).toFixed(2);
 
-  const topLevelPairs = computeFolderPairs(dupGroups, p => (p.includes('/') ? p.split('/')[0] : '(root)'));
-  const twoLevelPairs = computeFolderPairs(dupGroups, p => {
+  const repoIndexLines = [
+    '# Repository Index',
+    '',
+    `Tracked files in HEAD: ${files.length} (${rootFilesCount} at root, ${files.length - rootFilesCount} in ${folderRows.length} top-level folders).`,
+    `Duplicate extra copies: Live extra copies: ${liveExtraCopies} (outside \`archive/\`, ${liveDupGroups.length} groups, ${liveRepeatedMB} MB repeated) | Whole-repo extra copies: ${extraCopies} (including \`archive/\`, ${dupGroups.length} groups, ${repeatedMB} MB repeated).`,
+    '',
+    '| Folder | File Count | Size | Last Commit | Description |',
+    '| --- | ---: | ---: | --- | --- |',
+  ];
+
+  for (const r of folderRows) {
+    const desc = extractReadmeSummary(repoRoot, r.readmeHash);
+    repoIndexLines.push(`| \`${r.name}\` | ${r.files} | ${formatBytes(r.size)} | ${r.lastDate} | ${desc} |`);
+  }
+  if (rootFilesCount > 0) {
+    repoIndexLines.push(
+      '',
+      `Root-level tracked files (not inside a subfolder): ${rootFilesCount} files, ${formatBytes(rootFilesSize)}, last commit ${rootLastDate}.`,
+    );
+  }
+  repoIndexLines.push('');
+
+  const topLevelPairs = computeFolderPairs(dupGroups, (p) => (p.includes('/') ? p.split('/')[0] : '(root)'));
+  const twoLevelPairs = computeFolderPairs(dupGroups, (p) => {
     const parts = p.split('/');
-    return parts.length >= 3 ? `${parts[0]}/${parts[1]}` : (parts.length === 2 ? parts[0] : '(root)');
+    return parts.length >= 3 ? `${parts[0]}/${parts[1]}` : parts.length === 2 ? parts[0] : '(root)';
   });
-  const dirPairs = computeFolderPairs(dupGroups, p => path.posix.dirname(p));
+  const dirPairs = computeFolderPairs(dupGroups, (p) => path.posix.dirname(p));
 
   const dupLines = [
     '# Duplicate Files in HEAD',
     '',
+    `- Live extra copies: ${liveExtraCopies} (outside \`archive/\`, ${liveDupGroups.length} groups, ${liveRepeatedMB} MB repeated)`,
+    `- Whole-repo extra copies: ${extraCopies} (including \`archive/\`, ${dupGroups.length} groups, ${repeatedMB} MB repeated)`,
+    '',
     '## Duplicate Groups (Biggest Group First)',
-    ''
+    '',
   ];
 
-  dupGroups.forEach((g, idx) => {
-    const repeated = g.size * (g.paths.length - 1);
-    dupLines.push(`### Group ${idx + 1}: ${g.paths.length} files, ${g.size} B each (${ repeated } B repeated) — blob \`${g.hash}\``);
-    for (const p of g.paths) {
-      dupLines.push(`- \`${p}\``);
-    }
-    dupLines.push('');
-  });
+  if (liveDupGroups.length === 0) {
+    dupLines.push('None.', '');
+  } else {
+    liveDupGroups.forEach((g, idx) => {
+      const repeated = g.size * (g.paths.length - 1);
+      dupLines.push(
+        `### Group ${idx + 1}: ${g.paths.length} files, ${g.size} B each (${repeated} B repeated) — blob \`${g.hash}\``,
+      );
+      for (const p of g.paths) {
+        dupLines.push(`- \`${p}\``);
+      }
+      dupLines.push('');
+    });
+  }
+
+  dupLines.push('## Duplicate Groups Whose Only Extra Copies Are in archive/', '');
+
+  if (archiveOnlyDupGroups.length === 0) {
+    dupLines.push('None.', '');
+  } else {
+    archiveOnlyDupGroups.forEach((g, idx) => {
+      const repeated = g.size * (g.paths.length - 1);
+      dupLines.push(
+        `### Archive Group ${idx + 1}: ${g.paths.length} files, ${g.size} B each (${repeated} B repeated) — blob \`${g.hash}\``,
+      );
+      for (const p of g.paths) {
+        dupLines.push(`- \`${p}\``);
+      }
+      dupLines.push('');
+    });
+  }
 
   dupLines.push(
     '## Folder Pairs Sharing the Most Identical Files',
@@ -240,7 +292,7 @@ export function buildIndex(repoRoot = process.cwd()) {
     '### Top-Level Folder Pairs',
     '',
     '| Folder Pair | Shared Identical File Groups | Shared Bytes (1 copy) |',
-    '| --- | ---: | ---: |'
+    '| --- | ---: | ---: |',
   );
   for (const pair of topLevelPairs) {
     dupLines.push(`| \`${pair.pair}\` | ${pair.groups} | ${formatBytes(pair.bytes)} |`);
@@ -251,7 +303,7 @@ export function buildIndex(repoRoot = process.cwd()) {
     '### Two-Level Subtree Pairs',
     '',
     '| Subtree Pair | Shared Identical File Groups | Shared Bytes (1 copy) |',
-    '| --- | ---: | ---: |'
+    '| --- | ---: | ---: |',
   );
   for (const pair of twoLevelPairs.slice(0, 30)) {
     dupLines.push(`| \`${pair.pair}\` | ${pair.groups} | ${formatBytes(pair.bytes)} |`);
@@ -262,7 +314,7 @@ export function buildIndex(repoRoot = process.cwd()) {
     '### Exact Parent Directory Pairs (Top 30)',
     '',
     '| Directory Pair | Shared Identical File Groups | Shared Bytes (1 copy) |',
-    '| --- | ---: | ---: |'
+    '| --- | ---: | ---: |',
   );
   for (const pair of dirPairs.slice(0, 30)) {
     dupLines.push(`| \`${pair.pair}\` | ${pair.groups} | ${formatBytes(pair.bytes)} |`);
@@ -272,8 +324,8 @@ export function buildIndex(repoRoot = process.cwd()) {
     '',
     '## Summary',
     '',
-    `Summary: files: ${filesInDupGroups} (total tracked files: ${files.length}), groups: ${dupGroups.length}, extra copies: ${extraCopies}, megabytes repeated: ${repeatedMB} MB`,
-    ''
+    `Summary: files: ${filesInDupGroups} (total tracked files: ${files.length}), groups: ${dupGroups.length} (live: ${liveDupGroups.length}, archive-only: ${archiveOnlyDupGroups.length}), live extra copies: ${liveExtraCopies}, whole-repo extra copies: ${extraCopies} (extra copies: ${extraCopies}), live megabytes repeated: ${liveRepeatedMB} MB, megabytes repeated: ${repeatedMB} MB`,
+    '',
   );
 
   // 3. STALE-CANDIDATES.md
@@ -298,11 +350,11 @@ export function buildIndex(repoRoot = process.cwd()) {
       category,
       lastCommit: commit.date,
       ts: commit.ts,
-      token
+      token,
     });
   }
 
-  const uniqueTokens = [...new Set(preCandidates.map(c => c.token))];
+  const uniqueTokens = [...new Set(preCandidates.map((c) => c.token))];
   const matchedTreeFiles = new Set();
   for (let i = 0; i < uniqueTokens.length; i += 100) {
     const chunk = uniqueTokens.slice(i, i + 100);
@@ -314,8 +366,8 @@ export function buildIndex(repoRoot = process.cwd()) {
       {
         cwd: repoRoot,
         encoding: 'utf8',
-        maxBuffer: 64 * 1024 * 1024
-      }
+        maxBuffer: 64 * 1024 * 1024,
+      },
     );
     for (const l of (grepRes.stdout || '').split(/\r?\n/)) {
       if (!l) continue;
@@ -326,13 +378,13 @@ export function buildIndex(repoRoot = process.cwd()) {
   }
 
   const matchedList = [...matchedTreeFiles];
-  const hashesToFetch = [...new Set(matchedList.map(p => pathToHash.get(p)).filter(Boolean))];
+  const hashesToFetch = [...new Set(matchedList.map((p) => pathToHash.get(p)).filter(Boolean))];
   const blobTextByHash = new Map();
   if (hashesToFetch.length > 0) {
     const batchOut = execFileSync('git', ['cat-file', '--batch'], {
       cwd: repoRoot,
       input: `${hashesToFetch.join('\n')}\n`,
-      maxBuffer: 128 * 1024 * 1024
+      maxBuffer: 128 * 1024 * 1024,
     });
     let offset = 0;
     while (offset < batchOut.length) {
@@ -374,7 +426,7 @@ export function buildIndex(repoRoot = process.cwd()) {
     `Total candidates found: ${staleCandidates.length}`,
     '',
     '| Path | Category | Last Commit | Size |',
-    '| --- | --- | --- | ---: |'
+    '| --- | --- | --- | ---: |',
   ];
 
   for (const c of staleCandidates) {
@@ -393,9 +445,14 @@ export function buildIndex(repoRoot = process.cwd()) {
     topLevelFolders: folderRows.length,
     filesInDupGroups,
     duplicateGroups: dupGroups.length,
+    liveDuplicateGroups: liveDupGroups.length,
+    archiveOnlyDuplicateGroups: archiveOnlyDupGroups.length,
+    liveExtraCopies,
+    wholeRepoExtraCopies: extraCopies,
     extraCopies,
+    liveRepeatedMB: Number(liveRepeatedMB),
     repeatedMB: Number(repeatedMB),
-    staleCandidates: staleCandidates.length
+    staleCandidates: staleCandidates.length,
   };
 }
 
