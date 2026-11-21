@@ -26,7 +26,16 @@ interface LoginErrors {
   password?: string;
 }
 
-export function Login() {
+export interface LoginProps {
+  betaAccessEnabled?: boolean;
+}
+
+export function Login({ betaAccessEnabled }: LoginProps = {}) {
+  const isBetaAccessEnabled =
+    betaAccessEnabled ??
+    ['true', '1'].includes(
+      String(import.meta.env.VITE_BETA_ACCESS_ENABLED ?? '').toLowerCase()
+    );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -271,49 +280,51 @@ export function Login() {
 
             <GoogleSignInButton />
 
-            <form
-              onSubmit={handleBetaCode}
-              className="mt-6 rounded-lg border border-[#3A3F45] bg-[#1A1E25] p-4"
-              noValidate
-            >
-              <label
-                htmlFor="login-founder-code-input"
-                className="flex items-center gap-2 text-sm font-semibold text-[#F4F1EA]"
+            {isBetaAccessEnabled && (
+              <form
+                onSubmit={handleBetaCode}
+                className="mt-6 rounded-lg border border-[#3A3F45] bg-[#1A1E25] p-4"
+                noValidate
               >
-                <KeyRound
-                  size={16}
-                  className="text-[#FFD21E]"
-                  aria-hidden="true"
-                />
-                Founder code (optional)
-              </label>
-              {betaError && (
-                <p
-                  role="alert"
-                  className="mt-3 text-sm font-medium text-[#FF6B6B]"
+                <label
+                  htmlFor="login-founder-code-input"
+                  className="flex items-center gap-2 text-sm font-semibold text-[#F4F1EA]"
                 >
-                  {betaError}
-                </p>
-              )}
-              <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-                <input
-                  id="login-founder-code-input"
-                  type="text"
-                  value={betaCode}
-                  onChange={e => setBetaCode(e.target.value)}
-                  autoComplete="one-time-code"
-                  placeholder="FOUNDER-XXXX"
-                  className="flex-1 rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-3 font-mono text-sm font-bold uppercase tracking-widest text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
-                />
-                <button
-                  type="submit"
-                  disabled={betaLoading}
-                  className="ds-btn-ghost shrink-0 whitespace-nowrap px-6 py-3 text-sm font-semibold disabled:opacity-50"
-                >
-                  {betaLoading ? 'Checking...' : 'Use Code'}
-                </button>
-              </div>
-            </form>
+                  <KeyRound
+                    size={16}
+                    className="text-[#FFD21E]"
+                    aria-hidden="true"
+                  />
+                  Founder code (optional)
+                </label>
+                {betaError && (
+                  <p
+                    role="alert"
+                    className="mt-3 text-sm font-medium text-[#FF6B6B]"
+                  >
+                    {betaError}
+                  </p>
+                )}
+                <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+                  <input
+                    id="login-founder-code-input"
+                    type="text"
+                    value={betaCode}
+                    onChange={e => setBetaCode(e.target.value)}
+                    autoComplete="one-time-code"
+                    placeholder="FOUNDER-XXXX"
+                    className="flex-1 rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-3 font-mono text-sm font-bold uppercase tracking-widest text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
+                  />
+                  <button
+                    type="submit"
+                    disabled={betaLoading}
+                    className="ds-btn-ghost shrink-0 whitespace-nowrap px-6 py-3 text-sm font-semibold disabled:opacity-50"
+                  >
+                    {betaLoading ? 'Checking...' : 'Use Code'}
+                  </button>
+                </div>
+              </form>
+            )}
 
             <p className="mt-8 text-center text-sm text-[#C9CBCE]">
               Need an account?{' '}
