@@ -410,6 +410,115 @@ async function resolveFile(docRootAbs, urlPath) {
   }
 }
 
+const DROPOFF_SLOTS = [
+  { code: "08:00-08:30", label: "8:00 AM – 8:30 AM" },
+  { code: "09:00-09:30", label: "9:00 AM – 9:30 AM" },
+  { code: "10:00-10:30", label: "10:00 AM – 10:30 AM" },
+  { code: "11:00-11:30", label: "11:00 AM – 11:30 AM" },
+  { code: "13:00-13:30", label: "1:00 PM – 1:30 PM" },
+  { code: "14:00-14:30", label: "2:00 PM – 2:30 PM" },
+  { code: "15:00-15:30", label: "3:00 PM – 3:30 PM" },
+  { code: "16:00-16:30", label: "4:00 PM – 4:30 PM" },
+  { code: "17:00-17:30", label: "5:00 PM – 5:30 PM" },
+];
+
+const PICKUP_SLOTS = [
+  { code: "08:00-10:00", label: "8:00 AM – 10:00 AM" },
+  { code: "10:00-12:00", label: "10:00 AM – 12:00 PM" },
+  { code: "12:00-14:00", label: "12:00 PM – 2:00 PM" },
+  { code: "14:00-16:00", label: "2:00 PM – 4:00 PM" },
+  { code: "16:00-18:00", label: "4:00 PM – 6:00 PM" },
+];
+
+function getNewYorkNowParts(nowInput = new Date()) {
+  const d = nowInput instanceof Date ? nowInput : new Date(nowInput);
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(d);
+  const map = {};
+  for (const p of parts) {
+    if (p.type !== "literal") map[p.type] = p.value;
+  }
+  const hour = Number(map.hour) === 24 ? 0 : Number(map.hour);
+  const minute = Number(map.minute);
+  return {
+    year: Number(map.year),
+    month: Number(map.month),
+    day: Number(map.day),
+    iso: `${map.year}-${map.month}-${map.day}`,
+    minutesOfDay: hour * 60 + minute,
+  };
+}
+
+export function buildNextDays(count = 14, now = new Date()) {
+  const days = [];
+  const ny = getNewYorkNowParts(now);
+  for (let i = 0; i < count; i++) {
+    const d = new Date(Date.UTC(ny.year, ny.month - 1, ny.day + i, 12, 0, 0));
+    const yyyy = d.getUTCFullYear();
+    const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+    const dd = String(d.getUTCDate()).padStart(2, "0");
+    const iso = `${yyyy}-${mm}-${dd}`;
+    const dow =
+      i === 0
+        ? "Today"
+        : i === 1
+          ? "Tomorrow"
+          : d.toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "short" });
+    const dom = d.toLocaleDateString("en-US", { timeZone: "America/New_York", month: "short", day: "numeric" });
+    days.push({ iso, dow, dom });
+  }
+  return days;
+}
+
+export function isSlotElapsed(dateIso, slotCode, now = new Date()) {
+  if (!dateIso || !slotCode) return false;
+  const ny = getNewYorkNowParts(now);
+  if (dateIso < ny.iso) return true;
+  if (dateIso > ny.iso) return false;
+  const m = String(slotCode).match(/^(\d{2}):(\d{2})\s*-\s*(\d{2}):(\d{2})$/);
+  if (!m) return false;
+  const startMinutes = Number(m[1]) * 60 + Number(m[2]);
+  return startMinutes <= ny.minutesOfDay;
+}
+
+export function selectDefaultSlot({
+  serviceType = "dropoff",
+  date = "",
+  bookedSlots = [],
+  currentSlotCode = "",
+  now = new Date(),
+} = {}) {
+  const normalizedType = serviceType === "pickup" ? "pickup" : "dropoff";
+  const slots = normalizedType === "pickup" ? PICKUP_SLOTS : DROPOFF_SLOTS;
+  const isUnavailable = (code) =>
+    bookedSlots.some((b) => b.date === date && b.slotCode === code && b.serviceType === normalizedType) ||
+    isSlotElapsed(date, code, now);
+  if (currentSlotCode && slots.some((s) => s.code === currentSlotCode) && !isUnavailable(currentSlotCode)) {
+    return slots.find((s) => s.code === currentSlotCode) || null;
+  }
+  if (slots[1] && !isUnavailable(slots[1].code)) {
+    return slots[1];
+  }
+  return slots.find((s) => !isUnavailable(s.code)) || null;
+}
+
+export function isValidBookingPhone(phone) {
+  return String(phone || "").replace(/\D/g, "").length >= 10;
+}
+
+export function isValidBookingEmail(email) {
+  const trimmed = String(email || "").trim();
+  if (!trimmed) return true;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
+}
+
 function buildDomainsHealthPayload(
   env = process.env,
   { manifestDir = __dirname, driftPath = "", unnotifiedBookings = countUnnotifiedBookings() } = {}
@@ -462,6 +571,7 @@ const server = http.createServer(async (req, res) => {
         JSON.stringify({
           ok: true,
           timezone: "America/New_York",
+          upcomingDays: buildNextDays(14),
           googleScheduleEmbed: {
             dropoffUrl: dropoffScheduleUrl,
             pickupUrl: pickupScheduleUrl,
@@ -514,10 +624,22 @@ const server = http.createServer(async (req, res) => {
         sendJson(res, 400, { ok: false, error: "Please choose a date from today onward and one of the listed time windows." });
         return;
       }
-      if (serviceType === "pickup" && !address) {
+      if (isSlotElapsed(date, slotCode)) {
+        sendJson(res, 400, { ok: false, error: "Please choose a date from today onward and one of the listed time windows." });
+        return;
+      }
+      if (!isValidBookingPhone(phone)) {
+        sendJson(res, 400, { ok: false, error: "Please enter a valid 10-digit phone number so we can confirm your appointment." });
+        return;
+      }
+      if (!isValidBookingEmail(email)) {
+        sendJson(res, 400, { ok: false, error: "Please enter a valid email address or leave the email field blank." });
+        return;
+      }
+      if (serviceType === "pickup" && (!address || !city)) {
         sendJson(res, 400, {
           ok: false,
-          error: "Please provide the pickup street address so we can route your Central Florida pickup.",
+          error: "Please provide the pickup street address and city so we can route your Central Florida pickup.",
         });
         return;
       }
@@ -550,7 +672,7 @@ const server = http.createServer(async (req, res) => {
         notified: false,
       };
 
-      await fsp.mkdir(INQUIRIES_DIR, { recursive: true });
+      await fsp.mkdir(BOOKINGS_DIR, { recursive: true });
       // Check and record in one synchronous step so two requests for the same
       // window cannot both pass the check.
       const taken = readBookings().some(
@@ -581,6 +703,7 @@ const server = http.createServer(async (req, res) => {
         .filter(Boolean)
         .join("\n");
       try {
+        await fsp.mkdir(INQUIRIES_DIR, { recursive: true });
         await fsp.writeFile(path.join(INQUIRIES_DIR, `${bookingId}.txt`), `${inquiryMd}\n`, "utf8");
       } catch {
         // secondary inquiry file failure must never abort a saved booking
