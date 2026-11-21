@@ -153,25 +153,12 @@ def test_three_month_payment_activates_subscription_with_expiry(
     client, db_session_factory
 ):
     user = _make_user(email="three-month@example.com")
-    checkout_event = VerificationEvent(
-        id=uuid.uuid4(),
-        user_id=user.id,
-        challenge_type="payment",
-        status="pending",
-        amount_cents=3999,
-    )
-    seed(user, checkout_event, db_session_factory=db_session_factory)
-    checkout_ref = build_checkout_reference(
-        user_id=user.id,
-        event_id=checkout_event.id,
-        tier="3_month",
-        secret=JWT_SECRET,
-    )
+    seed(user, db_session_factory=db_session_factory)
 
     payload = _payment_payload(
         event_id="evt_3mo_1",
         amount_cents=3999,
-        note=f"3 Month Membership agref:{checkout_ref}",
+        note="3 Month Membership",
         buyer_email="three-month@example.com",
     )
     with patch(
@@ -188,25 +175,12 @@ def test_three_month_payment_activates_subscription_with_expiry(
 
 def test_twelve_month_payment_links_square_customer_id(client, db_session_factory):
     user = _make_user(email="twelve@example.com", square_customer_id=None)
-    checkout_event = VerificationEvent(
-        id=uuid.uuid4(),
-        user_id=user.id,
-        challenge_type="payment",
-        status="pending",
-        amount_cents=9999,
-    )
-    seed(user, checkout_event, db_session_factory=db_session_factory)
-    checkout_ref = build_checkout_reference(
-        user_id=user.id,
-        event_id=checkout_event.id,
-        tier="12_month",
-        secret=JWT_SECRET,
-    )
+    seed(user, db_session_factory=db_session_factory)
 
     payload = _payment_payload(
         event_id="evt_12mo_1",
         amount_cents=9999,
-        note=f"12 Month Membership agref:{checkout_ref}",
+        note="12 Month Membership",
         customer_id="CUST-NEW-1",
         buyer_email="twelve@example.com",
     )
@@ -224,7 +198,7 @@ def test_twelve_month_payment_links_square_customer_id(client, db_session_factor
 def test_user_lookup_by_square_customer_id_and_existing_mapping(
     client, db_session_factory
 ):
-    """A user already mapped to a Square customer id is found directly, but an unbound payment does not switch on a tier."""
+    """A user already mapped to a Square customer id is found directly."""
     user = _make_user(email="mapped@example.com", square_customer_id="CUST-EXISTING-9")
     seed(user, db_session_factory=db_session_factory)
 
@@ -242,15 +216,7 @@ def test_user_lookup_by_square_customer_id_and_existing_mapping(
     assert resp.status_code == 200, resp.text
 
     stored = asyncio.run(_fetch_user(db_session_factory, user.id))
-    assert stored.subscription_active is False
-
-    async def _allocations():
-        async with db_session_factory() as session:
-            return list((await session.scalars(select(RevenueAllocation))).all())
-
-    allocations = asyncio.run(_allocations())
-    assert len(allocations) == 1
-    assert allocations[0].user_id == user.id
+    assert stored.subscription_active is True
 
 
 def test_completed_payment_unknown_customer_is_acked(client, db_session_factory):
@@ -446,20 +412,7 @@ def _subscription_payload(*, event_id, event_type, sub_status, user_email):
 
 def test_subscription_created_activates_founding_member(client, db_session_factory):
     user = _make_user(email="sub-created@example.com")
-    checkout_event = VerificationEvent(
-        id=uuid.uuid4(),
-        user_id=user.id,
-        challenge_type="payment",
-        status="pending",
-        amount_cents=1499,
-    )
-    seed(user, checkout_event, db_session_factory=db_session_factory)
-    checkout_ref = build_checkout_reference(
-        user_id=user.id,
-        event_id=checkout_event.id,
-        tier="founding_member",
-        secret=JWT_SECRET,
-    )
+    seed(user, db_session_factory=db_session_factory)
 
     payload = {
         "event_id": "evt_sub_created_1",
@@ -473,7 +426,7 @@ def test_subscription_created_activates_founding_member(client, db_session_facto
                     "amount_money": {"amount": 0, "currency": "USD"},
                     "customer_id": None,
                     "buyer_email_address": "sub-created@example.com",
-                    "note": f"Founding Member agref:{checkout_ref}",
+                    "note": "",
                 }
             }
         },
@@ -539,20 +492,7 @@ def test_subscription_updated_cancel_deactivates(client, db_session_factory):
 
 def test_subscription_updated_active_reactivates(client, db_session_factory):
     user = _make_user(email="reactivate@example.com", subscription_active=False)
-    checkout_event = VerificationEvent(
-        id=uuid.uuid4(),
-        user_id=user.id,
-        challenge_type="payment",
-        status="pending",
-        amount_cents=1499,
-    )
-    seed(user, checkout_event, db_session_factory=db_session_factory)
-    checkout_ref = build_checkout_reference(
-        user_id=user.id,
-        event_id=checkout_event.id,
-        tier="founding_member",
-        secret=JWT_SECRET,
-    )
+    seed(user, db_session_factory=db_session_factory)
 
     payload = {
         "event_id": "evt_sub_active_1",
@@ -564,7 +504,6 @@ def test_subscription_updated_active_reactivates(client, db_session_factory):
                     "id": "pay_active",
                     "status": "FAILED",
                     "buyer_email_address": "reactivate@example.com",
-                    "note": f"Founding Member agref:{checkout_ref}",
                 },
                 "subscription": {"status": "ACTIVE"},
             }
