@@ -281,6 +281,7 @@ class RevenueAllocation(Base):
     square_payment_id: Mapped[str] = mapped_column(
         String(255), nullable=False, index=True
     )
+    square_refund_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     payment_tier: Mapped[str] = mapped_column(
         String(50), default="unknown", nullable=False
     )

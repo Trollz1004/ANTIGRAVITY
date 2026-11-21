@@ -409,9 +409,9 @@ async def verification_status(
     bot_shield_paid = await has_completed_payment(db, user.id)
     checks = (
         await db.scalar(
-            select(func.count(VerificationEvent.id)).where(
-                VerificationEvent.user_id == user.id
-            )
+            select(func.count(VerificationEvent.id))
+            .where(VerificationEvent.user_id == user.id)
+            .where(VerificationEvent.status != "refunded")
         )
         or 0
     )
@@ -674,6 +674,7 @@ async def refund_verification(
         await mark_revenue_allocation_refunded(
             db,
             square_payment_id=payment_id,
+            square_refund_id=refund_id,
         )
         await db.commit()
     except HTTPException:

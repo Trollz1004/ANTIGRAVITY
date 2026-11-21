@@ -680,7 +680,9 @@ class TestVerifyRefund:
         alloc_migration_text = alloc_matching[0].read_text(encoding="utf-8")
         assert 'COLUMN_NAME = "square_refund_id"' in alloc_migration_text
         assert 'TABLE = "revenue_allocations"' in alloc_migration_text
-        assert 'down_revision: Union[str, None] = "d4e5f6a7b8c9"' in alloc_migration_text
+        assert (
+            'down_revision: Union[str, None] = "d4e5f6a7b8c9"' in alloc_migration_text
+        )
 
     def test_checks_completed_does_not_count_refunded_payment(
         self, client, db_session_factory
