@@ -34,7 +34,7 @@ const LEGAL_DOCS: Record<
 > = {
   terms: {
     title: 'Terms of Service',
-    updated: 'Last Updated: April 2026',
+    updated: 'Effective: April 2026 · Last Updated: November 21, 2026',
     sections: [
       {
         h: '1. 18+ Eligibility',
@@ -56,7 +56,7 @@ const LEGAL_DOCS: Record<
   },
   privacy: {
     title: 'Privacy Policy',
-    updated: 'Last Updated: April 2026',
+    updated: 'Effective: April 2026 · Last Updated: November 21, 2026',
     sections: [
       {
         h: '1. Data We Collect',
@@ -74,7 +74,7 @@ const LEGAL_DOCS: Record<
   },
   age: {
     title: '18+ Age & Verification Policy',
-    updated: 'Last Updated: April 2026',
+    updated: 'Effective: April 2026 · Last Updated: November 21, 2026',
     sections: [
       {
         h: '1. Mandatory 18+ Gate',
@@ -82,7 +82,7 @@ const LEGAL_DOCS: Record<
       },
       {
         h: '2. Human Check & $1 Bot-Shield',
-        p: 'Before a member can browse discovery, message, or start video, they complete a short timed question and a $1 Bot-Shield payment tied to their account.',
+        p: 'Before a member can browse discovery, message, or start video, they complete a short timed question and a $1 Bot-Shield payment tied to their account (or sign in with an authorized founder code). Where the app offers it, you can ask for the dollar back within three days; the badge turns off.',
       },
       {
         h: '3. Adult Community Standard',
@@ -92,15 +92,15 @@ const LEGAL_DOCS: Record<
   },
   refund: {
     title: 'Billing, Refund & Cancellation Policy',
-    updated: 'Last Updated: April 2026',
+    updated: 'Effective: April 2026 · Last Updated: November 21, 2026',
     sections: [
       {
         h: '1. Account-Bound Checkout',
-        p: 'All membership and verification payments are linked directly to your signed-in YouAndINotAI account.',
+        p: 'All membership and verification payments are linked directly to your signed-in YouAndINotAI account. For the $1 Bot-Shield check, where the app offers it, you can ask for the dollar back within three days; the badge turns off.',
       },
       {
         h: '2. Subscriptions & Prepaid Tiers',
-        p: 'Recurring Founding Member subscriptions ($14.99/mo) can be managed through support or account settings before the next billing cycle. Prepaid 3-Month ($39.99) and 12-Month ($99.99) plans remain active for their full paid term.',
+        p: 'Recurring Founding Member subscriptions ($14.99/mo) can be canceled before the next billing cycle using the subscription link in your confirmation email or by contacting support. Prepaid 3-Month ($39.99) and 12-Month ($99.99) plans remain active for their full paid term.',
       },
       {
         h: '3. Billing Support & Assistance',

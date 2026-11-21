@@ -4,7 +4,8 @@
 Operated by Trash Or Treasure Online Recycler LLC, a Florida single-member LLC
 Sole Member: Joshua Coleman
 
-**Last Updated:** November 13, 2026
+**Effective Date:** March 30, 2026 (previously updated November 13, 2026)
+**Last Updated:** November 21, 2026
 **Contact:** joshlcoleman@gmail.com
 
 ---
@@ -37,7 +38,7 @@ YouAndINotAI is exclusively for users aged **18 and older**. We do not knowingly
 
 When you create an account and use our platform, you may provide:
 
-- **Account Information:** Name, email address, date of birth, gender, sexual orientation, and relationship preferences
+- **Account Information:** Display name, email address, date of birth, gender, and what you are looking for
 - **Profile Information:** Photos, bio text, interests, and other profile details you choose to share
 - **Payment Information:** Billing details processed through Square-hosted checkout links (we do not store your full credit card number — Square handles that)
 - **Communications:** Messages you send through the platform, support requests, and feedback
@@ -73,7 +74,7 @@ We use your information for the following purposes:
 
 - **Providing the Service:** Creating your account, displaying your profile, facilitating matches and conversations
 - **Verification:** Recording your verification status, the result of the timed question, and the Square payment confirmation for the $1 check
-- **Matchmaking:** Using Google Gemini AI to suggest compatible matches and generate conversation starters (see Section 7)
+- **Icebreakers and Optional AI Tools:** Requesting optional conversation icebreakers or responses when you use an AI feature (see Section 7)
 - **Payment Processing:** Managing subscriptions and processing purchases through Square
 - **Safety and Security:** Detecting fraud, preventing abuse, enforcing our Terms of Service
 - **Communication:** Sending service-related emails (account verification, subscription confirmations, important updates)
@@ -98,13 +99,12 @@ Your profile information (name, photos, bio, interests) is visible to other user
 
 We use the following third-party services that process data on our behalf:
 
-| Service                          | Purpose                            | What They Receive                                                            |
-| -------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------- |
-| **Square**                       | Payment processing                 | Name, email, payment method, billing address                                 |
-| **Square**                       | Merchandise sales (separate store) | Name, email, shipping address, payment method                                |
-| **Google Gemini**                | AI matchmaking and icebreakers     | Anonymized profile preferences (no real names, no photos)                    |
-| **Cloudflare**                   | Security, DNS, CDN                 | IP address, request headers, traffic data                                    |
-| **GitHub Pages / GCP Cloud Run** | Hosting                            | Server logs, IP addresses                                                    |
+| Service           | Purpose                            | What They Receive                                                                                            |
+| ----------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Square**        | Payment processing                 | Name, email, payment method, billing address                                                                 |
+| **Square**        | Merchandise sales (separate store) | Name, email, shipping address, payment method                                                                |
+| **Google Gemini** | Optional icebreakers and AI tools  | Icebreaker requests and text you submit to optional AI tools (no profile preferences, real names, or photos) |
+| **Cloudflare**    | Security, DNS, CDN                 | IP address, request headers, traffic data                                                                    |
 
 ### 6.3 For Legal Reasons
 
@@ -120,12 +120,12 @@ We may share information in other ways if you specifically consent to it.
 
 ## 7. AI Usage — Google Gemini
 
-We use **Google Gemini** to power matchmaking suggestions and generate conversation icebreakers. Here is what that means for your data:
+We use **Google Gemini** to generate optional conversation icebreakers in chat and to respond when you use optional AI tools. Here is what that means for your data:
 
-- **What we send to Gemini:** Anonymized preference data — things like interests, relationship goals, and compatibility factors. We do **not** send your real name, photos, payment information, or messages to Gemini.
-- **What Gemini does:** Suggests potential matches based on compatibility and generates conversation starters.
+- **What we send to Gemini:** A generic icebreaker request when you ask for a conversation starter in chat, or the text you type when you use an optional AI tool. We do **not** send your profile preferences, real name, photos, payment information, or member-to-member chat history to Gemini.
+- **What Gemini does:** Generates optional conversation starters and replies inside optional AI tools; profile discovery and matching run directly in our database without sending your profile to Gemini.
 - **What Gemini does NOT do:** Create fake profiles, impersonate users, or make autonomous decisions about your account.
-- **AI-generated profiles:** We do **not** use AI to create fake user profiles. A member must pass the timed human check and the $1 payment before they can browse, match, message, or start video.
+- **AI-generated profiles:** We do **not** use AI to create fake user profiles. A member must hold an active Verified Human badge (from the timed human check and $1 payment, or an authorized founder code) before they can browse discovery, match, message, or start video.
 
 Google's privacy practices for Gemini are governed by [Google's Privacy Policy](https://policies.google.com/privacy). We encourage you to review it.
 
@@ -213,14 +213,14 @@ We retain your data for as long as your account is active, plus a reasonable per
 
 Specific retention periods:
 
-| Data Type                      | Retention Period                                                                      |
-| ------------------------------ | ------------------------------------------------------------------------------------- |
-| Account/profile data           | Until you delete your account + 30 days                                               |
-| Payment records                | 7 years (tax/legal requirements)                                                      |
-| Verification status, the result of the timed question, and the Square payment confirmation for the $1 check | Until you delete your account + 30 days                                               |
-| Server logs                    | 90 days                                                                               |
-| Messages between users         | Until either user deletes their account                                               |
-| Support emails                 | 2 years after resolution                                                              |
+| Data Type                                                                                                   | Retention Period                        |
+| ----------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| Account/profile data                                                                                        | Until you delete your account + 30 days |
+| Payment records                                                                                             | 7 years (tax/legal requirements)        |
+| Verification status, the result of the timed question, and the Square payment confirmation for the $1 check | Until you delete your account + 30 days |
+| Server logs                                                                                                 | 90 days                                 |
+| Messages between users                                                                                      | Until either user deletes their account |
+| Support emails                                                                                              | 2 years after resolution                |
 
 After these periods, data is permanently deleted or anonymized.
 
