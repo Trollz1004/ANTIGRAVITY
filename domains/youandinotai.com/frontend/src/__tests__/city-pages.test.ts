@@ -5,9 +5,10 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 const FRONTEND_ROOT = path.resolve(__dirname, '../..');
 const CITIES_DIR = path.join(FRONTEND_ROOT, 'public', 'cities');
+const CITIES_INDEX_PATH = path.join(CITIES_DIR, 'index.html');
 const SITEMAP_PATH = path.join(FRONTEND_ROOT, 'public', 'sitemap.xml');
 
-const TOP_TEN_CITIES = [
+const TOP_THIRTY_CITIES = [
   { slug: 'new-york', name: 'New York' },
   { slug: 'los-angeles', name: 'Los Angeles' },
   { slug: 'chicago', name: 'Chicago' },
@@ -18,6 +19,26 @@ const TOP_TEN_CITIES = [
   { slug: 'san-diego', name: 'San Diego' },
   { slug: 'dallas', name: 'Dallas' },
   { slug: 'jacksonville', name: 'Jacksonville' },
+  { slug: 'austin', name: 'Austin' },
+  { slug: 'fort-worth', name: 'Fort Worth' },
+  { slug: 'san-jose', name: 'San Jose' },
+  { slug: 'columbus', name: 'Columbus' },
+  { slug: 'charlotte', name: 'Charlotte' },
+  { slug: 'indianapolis', name: 'Indianapolis' },
+  { slug: 'san-francisco', name: 'San Francisco' },
+  { slug: 'seattle', name: 'Seattle' },
+  { slug: 'denver', name: 'Denver' },
+  { slug: 'oklahoma-city', name: 'Oklahoma City' },
+  { slug: 'nashville', name: 'Nashville' },
+  { slug: 'washington-dc', name: 'Washington DC' },
+  { slug: 'el-paso', name: 'El Paso' },
+  { slug: 'las-vegas', name: 'Las Vegas' },
+  { slug: 'boston', name: 'Boston' },
+  { slug: 'detroit', name: 'Detroit' },
+  { slug: 'portland', name: 'Portland' },
+  { slug: 'louisville', name: 'Louisville' },
+  { slug: 'memphis', name: 'Memphis' },
+  { slug: 'baltimore', name: 'Baltimore' },
 ] as const;
 
 function parseFrontMatter(raw: string): {
@@ -59,16 +80,20 @@ function countWords(body: string): number {
   return cleaned.split(/\s+/).filter(Boolean).length;
 }
 
-describe('ten city pages by population (/cities/<slug>/)', () => {
+describe('thirty city pages by population (/cities/<slug>/)', () => {
   beforeAll(() => {
     execFileSync('python', [path.join(FRONTEND_ROOT, 'build_blog_static.py')], {
       stdio: 'pipe',
     });
   });
 
-  it('builds all ten city pages with title, description under 160 chars, canonical, one h1, 250-350 words, sign-up UTM button, and sitemap entry', () => {
+  it('builds all thirty city pages with title, description under 160 chars, canonical, one h1, 250-350 words, sign-up UTM button, cities index link, and sitemap entry', () => {
     expect(existsSync(SITEMAP_PATH), 'sitemap.xml must exist').toBe(true);
+    expect(existsSync(CITIES_INDEX_PATH), 'cities/index.html must exist').toBe(
+      true
+    );
     const sitemap = readFileSync(SITEMAP_PATH, 'utf8');
+    const citiesIndex = readFileSync(CITIES_INDEX_PATH, 'utf8');
     const bannedWords =
       /\b(beta|waitlist|launch|prompt|liveness|selfie|gesture|biometric)\b/i;
     const memberCountClaims =
@@ -76,7 +101,7 @@ describe('ten city pages by population (/cities/<slug>/)', () => {
 
     const normalizedBodies: string[] = [];
 
-    for (const { slug, name } of TOP_TEN_CITIES) {
+    for (const { slug, name } of TOP_THIRTY_CITIES) {
       const mdPath = path.join(CITIES_DIR, `${slug}.md`);
       expect(existsSync(mdPath), `cities/${slug}.md must exist`).toBe(true);
 
@@ -164,6 +189,7 @@ describe('ten city pages by population (/cities/<slug>/)', () => {
       expect(sitemap).toContain(
         `<loc>https://youandinotai.com/cities/${slug}/</loc>`
       );
+      expect(citiesIndex).toContain(`href="/cities/${slug}/"`);
 
       const maskCity = body
         .replace(new RegExp(name, 'gi'), '<CITY>')
@@ -174,6 +200,6 @@ describe('ten city pages by population (/cities/<slug>/)', () => {
     }
 
     const uniqueBodies = new Set(normalizedBodies);
-    expect(uniqueBodies.size).toBe(TOP_TEN_CITIES.length);
+    expect(uniqueBodies.size).toBe(TOP_THIRTY_CITIES.length);
   });
 });
