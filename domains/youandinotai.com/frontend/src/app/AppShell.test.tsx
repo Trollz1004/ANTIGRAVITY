@@ -37,6 +37,10 @@ describe('AppShell phone bottom menu', () => {
               element={<div data-testid="page-out">messages-page</div>}
             />
             <Route
+              path="/app/boards"
+              element={<div data-testid="page-out">boards-page</div>}
+            />
+            <Route
               path="/app/create"
               element={<div data-testid="page-out">create-page</div>}
             />
@@ -95,5 +99,12 @@ describe('AppShell phone bottom menu', () => {
     // Clicking "Messages" in the phone bottom nav opens the messages route
     fireEvent.click(messagesLink);
     expect(getByTestId('page-out').textContent).toBe('messages-page');
+
+    const boardsLink = within(mobileNav!).getByRole('link', {
+      name: 'Boards',
+    });
+    expect(boardsLink.getAttribute('href')).toBe('/app/boards');
+    fireEvent.click(boardsLink);
+    expect(getByTestId('page-out').textContent).toBe('boards-page');
   });
 });

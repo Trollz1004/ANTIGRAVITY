@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query, status
 from sqlalchemy import case, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
+from app.auth import is_founder_or_admin, require_founder_or_admin
 from app.config import get_settings
 from app.database import get_db
 from app.models import Match, Message, RevenueAllocation, User, VerificationEvent
@@ -23,21 +23,8 @@ router = APIRouter()
 # "completed", "paid", or "settled" to RevenueAllocation.status.
 COLLECTED_PAYMENT_ALLOCATION_STATUS = "reserved"
 
-
-def _is_founder_or_admin(user: User) -> bool:
-    settings = get_settings()
-    return (user.email or "").strip().lower() in settings.support_operator_email_list
-
-
-async def _require_founder_or_admin(
-    user: User = Depends(get_current_user),
-) -> User:
-    if not _is_founder_or_admin(user):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Founder or admin access required",
-        )
-    return user
+_is_founder_or_admin = is_founder_or_admin
+_require_founder_or_admin = require_founder_or_admin
 
 
 def _expected_metrics_key() -> str:
