@@ -447,6 +447,21 @@ test(
         res.end(JSON.stringify({ status: 'ok', db_connected: true }));
         return;
       }
+      if (u.startsWith('/public/onlinerecycle/health')) {
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', Connection: 'close' });
+        res.end(
+          JSON.stringify({
+            service: 'domains-server',
+            sites: ['dream-online.net', 'untilnokidinneed.com', 'onlinerecycle.net'],
+            nodeLight: 'green',
+            missingEnvCount: 0,
+            bookingNotices: 'on',
+            bookingNoticesStatus: 'booking notices: on',
+            unnotifiedBookings: 0,
+          }),
+        );
+        return;
+      }
       if (u.startsWith('/public/onlinerecycle')) {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', Connection: 'close' });
         res.end('<!DOCTYPE html><html><body>OnlineRecycle electronics pickup</body></html>');
@@ -458,7 +473,8 @@ test(
 
     await new Promise((resolve) => publicServer.listen(publicPort, LOCAL_BIND_HOST, resolve));
 
-    // When oldOwner exits (killed by openclaw-autopull.ps1), simulate keepalive bringing backendPort, domainsPort, and frontendPort back after 250ms
+    const replacementChildren = [];
+    // When oldOwner exits (killed by openclaw-autopull.ps1), simulate keepalive bringing backendPort, domainsPort, and frontendPort back after 250ms in new child processes
     oldOwner.on('exit', () => {
       setTimeout(() => {
         for (const [port, body] of [
@@ -466,12 +482,15 @@ test(
           [domainsPort, JSON.stringify({ status: 'ok', service: 'domains-server' })],
           [frontendPort, '<!DOCTYPE html><html><script src="/assets/index-live2.js"></script></html>'],
         ]) {
-          const srv = http.createServer((_req, res) => {
-            res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8', Connection: 'close' });
-            res.end(body);
-          });
-          srv.listen(port, LOCAL_BIND_HOST);
-          replacementServers.push(srv);
+          const child = spawn(
+            process.execPath,
+            [
+              '-e',
+              `const http = require('node:http'); const body = ${JSON.stringify(body)}; const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8', Connection: 'close' }); res.end(body); }); srv.listen(${port}, '${LOCAL_BIND_HOST}'); setInterval(() => {}, 1000);`,
+            ],
+            { stdio: 'ignore', windowsHide: true },
+          );
+          replacementChildren.push(child);
         }
       }, 250);
     });
@@ -557,6 +576,11 @@ test(
       try {
         oldOwner.kill('SIGKILL');
       } catch {}
+      for (const c of replacementChildren) {
+        try {
+          c.kill('SIGKILL');
+        } catch {}
+      }
       for (const s of replacementServers) {
         try {
           s.closeAllConnections?.();
@@ -665,7 +689,10 @@ test(
     assert.match(dryRes.stdout, /DRY-RUN/i);
     assert.match(dryRes.stdout, /openclaw-autopull\.ps1/);
     assert.match(dryRes.stdout, /New-TimeSpan\s+-Hours\s+1|hourly/i);
-    assert.match(dryRes.stdout, /Register-ScheduledTask/);
+    assert.match(dryRes.stdout, /New-ScheduledTaskPrincipal/);
+    assert.match(dryRes.stdout, /-RunLevel\s+Highest/);
+    assert.match(dryRes.stdout, /ANTIGRAVITY T5500 Keepalive/);
+    assert.match(dryRes.stdout, /Register-ScheduledTask[\s\S]*?-Principal/);
   },
 );
 
@@ -914,6 +941,406 @@ test(
         localServer.close();
       } catch {}
       fs.rmSync(fxLocalOnly.root, { recursive: true, force: true });
+    }
+  },
+);
+
+test(
+  'openclaw-autopull.ps1 records port owner pid and start time before and after, and counts a restart only when the id changed and the new start time is after the pull',
+  { concurrency: true },
+  async () => {
+    const fx = createGitFixture();
+    const domainsPort = await getFreePort();
+    const publicPort = await getFreePort();
+
+    const oldOwner = spawn(
+      process.execPath,
+      [
+        '-e',
+        `const http = require('node:http'); const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ service: 'domains-server' })); }); srv.listen(${domainsPort}, '${LOCAL_BIND_HOST}'); setInterval(() => {}, 1000);`,
+      ],
+      { stdio: 'ignore', windowsHide: true },
+    );
+
+    const publicServer = http.createServer((_req, res) => {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', Connection: 'close' });
+      res.end(
+        JSON.stringify({
+          service: 'domains-server',
+          sites: ['dream-online.net', 'untilnokidinneed.com', 'onlinerecycle.net'],
+          nodeLight: 'green',
+          missingEnvCount: 0,
+          bookingNotices: 'on',
+          bookingNoticesStatus: 'booking notices: on',
+          unnotifiedBookings: 0,
+        }),
+      );
+    });
+    await new Promise((resolve) => publicServer.listen(publicPort, LOCAL_BIND_HOST, resolve));
+
+    let newOwner = null;
+    oldOwner.on('exit', () => {
+      setTimeout(() => {
+        newOwner = spawn(
+          process.execPath,
+          [
+            '-e',
+            `const http = require('node:http'); const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ service: 'domains-server', restarted: true })); }); srv.listen(${domainsPort}, '${LOCAL_BIND_HOST}'); setInterval(() => {}, 1000);`,
+          ],
+          { stdio: 'ignore', windowsHide: true },
+        );
+      }, 200);
+    });
+
+    // Pre-spawn a process BEFORE the second pull that waits to bind domainsPort until newOwner exits,
+    // proving that a PID change whose process start time is BEFORE the pull does NOT count as a restart.
+    let prePullSpawnedOwner = null;
+
+    try {
+      await waitForPortListen(domainsPort);
+      // Ensure oldOwner start time is clearly before the pull
+      await new Promise((r) => setTimeout(r, 250));
+
+      pushUpstreamCommit(
+        fx.seedDir,
+        { 'ops/domains-server/server.mjs': 'export const v = 2;\n' },
+        'Update domains-server (#501)',
+      );
+
+      const res = await runAutopullAsync(fx.cloneDir, [
+        '-Apply',
+        '-NodeHost',
+        LOCAL_BIND_HOST,
+        '-DomainsPort',
+        String(domainsPort),
+        '-PublicRecycleUrl',
+        `http://${LOCAL_BIND_HOST}:${publicPort}/public/onlinerecycle`,
+        '-WaitTimeoutSeconds',
+        '6',
+        '-PollIntervalMs',
+        '100',
+      ]);
+
+      assert.equal(res.status, 0, `Expected exit 0 on proven restart: ${res.stderr}\n${res.stdout}`);
+      const logDir = path.join(fx.cloneDir, 'logs', 'autopull');
+      const recFile = fs.readdirSync(logDir).find((f) => f.endsWith('.json'));
+      const record = JSON.parse(fs.readFileSync(path.join(logDir, recFile), 'utf8'));
+
+      assert.equal(record.status, 'LIVE');
+      const domSvc = record.changedServices.find((s) => s.service === 'domains-server');
+      assert.ok(domSvc, 'domains-server must be in changedServices');
+      assert.equal(domSvc.beforePid, oldOwner.pid, 'beforePid must record the pre-pull process id');
+      assert.ok(
+        domSvc.beforeStartTime && !Number.isNaN(Date.parse(domSvc.beforeStartTime)),
+        `beforeStartTime must be a valid ISO timestamp, got ${domSvc.beforeStartTime}`,
+      );
+      assert.ok(newOwner && newOwner.pid, 'newOwner child process must have started');
+      assert.equal(domSvc.afterPid, newOwner.pid, 'afterPid must record the post-pull process id');
+      assert.notEqual(domSvc.afterPid, domSvc.beforePid, 'afterPid must differ from beforePid');
+      assert.ok(
+        domSvc.afterStartTime && !Number.isNaN(Date.parse(domSvc.afterStartTime)),
+        `afterStartTime must be a valid ISO timestamp, got ${domSvc.afterStartTime}`,
+      );
+      assert.ok(
+        Date.parse(domSvc.afterStartTime) > Date.parse(domSvc.beforeStartTime),
+        `afterStartTime (${domSvc.afterStartTime}) must be after beforeStartTime (${domSvc.beforeStartTime})`,
+      );
+      assert.ok(
+        domSvc.pullTime && Date.parse(domSvc.afterStartTime) > Date.parse(domSvc.pullTime),
+        `afterStartTime (${domSvc.afterStartTime}) must be after pullTime (${domSvc.pullTime})`,
+      );
+      assert.equal(domSvc.restarted, true, 'restarted must be true when pid changed and start time is after pull');
+      assert.equal(domSvc.status, 'LIVE');
+
+      // Case 2: A process started BEFORE the pull takes over the port after newOwner is stopped ->
+      // pid changed, but afterStartTime is before pullTime, so restarted must be false and status FAILED-TO-RESTART
+      prePullSpawnedOwner = spawn(
+        process.execPath,
+        [
+          '-e',
+          `const http = require('node:http'); const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ service: 'domains-server' })); }); const tryListen = () => { srv.listen(${domainsPort}, '${LOCAL_BIND_HOST}'); }; srv.on('error', () => setTimeout(tryListen, 80)); setTimeout(tryListen, 80); setInterval(() => {}, 1000);`,
+        ],
+        { stdio: 'ignore', windowsHide: true },
+      );
+      await new Promise((r) => setTimeout(r, 300));
+
+      pushUpstreamCommit(
+        fx.seedDir,
+        { 'ops/domains-server/server.mjs': 'export const v = 3;\n' },
+        'Update domains-server pre-started (#505)',
+      );
+
+      const resPreStarted = await runAutopullAsync(fx.cloneDir, [
+        '-Apply',
+        '-NodeHost',
+        LOCAL_BIND_HOST,
+        '-DomainsPort',
+        String(domainsPort),
+        '-PublicRecycleUrl',
+        `http://${LOCAL_BIND_HOST}:${publicPort}/public/onlinerecycle`,
+        '-WaitTimeoutSeconds',
+        '4',
+        '-PollIntervalMs',
+        '100',
+      ]);
+
+      assert.equal(resPreStarted.status, 0);
+      assert.equal(fs.existsSync(path.join(fx.cloneDir, 'ops', 't5500', 'PAUSE-AUTOPULL')), false);
+      const recordsAll = fs
+        .readdirSync(logDir)
+        .filter((f) => f.endsWith('.json'))
+        .sort();
+      const record2 = JSON.parse(fs.readFileSync(path.join(logDir, recordsAll[recordsAll.length - 1]), 'utf8'));
+      const domSvc2 = record2.changedServices.find((s) => s.service === 'domains-server');
+      assert.equal(domSvc2.beforePid, newOwner.pid);
+      assert.equal(domSvc2.afterPid, prePullSpawnedOwner.pid);
+      assert.notEqual(domSvc2.afterPid, domSvc2.beforePid, 'pid changed to prePullSpawnedOwner');
+      assert.ok(
+        Date.parse(domSvc2.afterStartTime) <= Date.parse(domSvc2.pullTime),
+        `Expected pre-started owner afterStartTime (${domSvc2.afterStartTime}) <= pullTime (${domSvc2.pullTime})`,
+      );
+      assert.equal(domSvc2.restarted, false, 'restarted must be false when new owner started before the pull');
+      assert.equal(domSvc2.status, 'FAILED-TO-RESTART');
+      assert.equal(record2.status, 'FAILED-TO-RESTART');
+    } finally {
+      try {
+        oldOwner.kill('SIGKILL');
+      } catch {}
+      try {
+        newOwner?.kill('SIGKILL');
+      } catch {}
+      try {
+        prePullSpawnedOwner?.kill('SIGKILL');
+      } catch {}
+      try {
+        publicServer.closeAllConnections?.();
+        publicServer.close();
+      } catch {}
+      fs.rmSync(fx.root, { recursive: true, force: true });
+    }
+  },
+);
+
+test(
+  'openclaw-autopull.ps1 records "restart refused: access denied" and marks the service FAILED-TO-RESTART (not LIVE) without pausing when Stop-Process is refused',
+  { concurrency: true },
+  async () => {
+    const fx = createGitFixture();
+    const domainsPort = await getFreePort();
+    const publicPort = await getFreePort();
+
+    const sessionZeroOwner = spawn(
+      process.execPath,
+      [
+        '-e',
+        `const http = require('node:http'); const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ service: 'domains-server', oldCode: true })); }); srv.listen(${domainsPort}, '${LOCAL_BIND_HOST}'); setInterval(() => {}, 1000);`,
+      ],
+      { stdio: 'ignore', windowsHide: true },
+    );
+
+    const publicServer = http.createServer((_req, res) => {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', Connection: 'close' });
+      res.end(
+        JSON.stringify({
+          service: 'domains-server',
+          sites: ['dream-online.net', 'untilnokidinneed.com', 'onlinerecycle.net'],
+          nodeLight: 'green',
+          missingEnvCount: 0,
+          bookingNotices: 'on',
+          bookingNoticesStatus: 'booking notices: on',
+          unnotifiedBookings: 0,
+        }),
+      );
+    });
+    await new Promise((resolve) => publicServer.listen(publicPort, LOCAL_BIND_HOST, resolve));
+
+    try {
+      await waitForPortListen(domainsPort);
+
+      pushUpstreamCommit(
+        fx.seedDir,
+        { 'ops/domains-server/server.mjs': 'export const v = 3;\n' },
+        'Update domains-server (#502)',
+      );
+
+      const res = await runAutopullAsync(fx.cloneDir, [
+        '-Apply',
+        '-SimulateStopAccessDenied',
+        '-NodeHost',
+        LOCAL_BIND_HOST,
+        '-DomainsPort',
+        String(domainsPort),
+        '-PublicRecycleUrl',
+        `http://${LOCAL_BIND_HOST}:${publicPort}/public/onlinerecycle`,
+        '-WaitTimeoutSeconds',
+        '3',
+        '-PollIntervalMs',
+        '150',
+      ]);
+
+      assert.match(res.stdout, /restart refused:\s*access denied/i);
+      assert.equal(
+        fs.existsSync(path.join(fx.cloneDir, 'ops', 't5500', 'PAUSE-AUTOPULL')),
+        false,
+        'PAUSE-AUTOPULL must NOT be created when Stop-Process is refused with access denied',
+      );
+
+      const logDir = path.join(fx.cloneDir, 'logs', 'autopull');
+      const recFile = fs.readdirSync(logDir).find((f) => f.endsWith('.json'));
+      const record = JSON.parse(fs.readFileSync(path.join(logDir, recFile), 'utf8'));
+
+      assert.equal(record.pausedAutopull, false, 'pausedAutopull must be false');
+      assert.notEqual(record.status, 'LIVE', 'Overall status must not be LIVE when restart was refused');
+      assert.equal(record.status, 'FAILED-TO-RESTART');
+
+      const domSvc = record.changedServices.find((s) => s.service === 'domains-server');
+      assert.ok(domSvc, 'domains-server must be in changedServices');
+      assert.equal(domSvc.beforePid, sessionZeroOwner.pid, 'beforePid must match unstopped owner pid');
+      assert.equal(domSvc.afterPid, sessionZeroOwner.pid, 'afterPid must still match unstopped owner pid');
+      assert.ok(domSvc.beforeStartTime, 'beforeStartTime must be recorded');
+      assert.ok(domSvc.afterStartTime, 'afterStartTime must be recorded');
+      assert.equal(domSvc.restarted, false, 'restarted must be false');
+      assert.match(String(domSvc.restartNote || domSvc.restartError || ''), /restart refused:\s*access denied/i);
+      assert.equal(domSvc.status, 'FAILED-TO-RESTART', 'Service status must be FAILED-TO-RESTART, not LIVE');
+    } finally {
+      try {
+        sessionZeroOwner.kill('SIGKILL');
+      } catch {}
+      try {
+        publicServer.closeAllConnections?.();
+        publicServer.close();
+      } catch {}
+      fs.rmSync(fx.root, { recursive: true, force: true });
+    }
+  },
+);
+
+test(
+  'openclaw-autopull.ps1 public content check for domains-server reads /health and requires the commit-specific field list or a build stamp, rejecting plain HTML or stale /health payloads',
+  { concurrency: true },
+  async () => {
+    // 1. Plain HTML or old pre-notices /health JSON must fail publicCheckPassed
+    const fxStale = createGitFixture();
+    const deadLocalPort = await getFreePort();
+    const publicPort = await getFreePort();
+    let healthMode = 'old-health';
+    let currentTargetCommit = '';
+
+    const publicServer = http.createServer((req, res) => {
+      const u = req.url || '/';
+      if (u.endsWith('/health')) {
+        if (healthMode === 'html') {
+          res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', Connection: 'close' });
+          res.end('<!DOCTYPE html><html><body>OnlineRecycle electronics pickup</body></html>');
+          return;
+        }
+        if (healthMode === 'old-health') {
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', Connection: 'close' });
+          res.end(
+            JSON.stringify({
+              status: 'ok',
+              service: 'domains-server',
+              sites: ['dream-online.net', 'untilnokidinneed.com', 'onlinerecycle.net'],
+            }),
+          );
+          return;
+        }
+        if (healthMode === 'build-stamp') {
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', Connection: 'close' });
+          res.end(
+            JSON.stringify({
+              service: 'domains-server',
+              buildStamp: currentTargetCommit,
+            }),
+          );
+          return;
+        }
+      }
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', Connection: 'close' });
+      res.end('<!DOCTYPE html><html><body>OnlineRecycle homepage only</body></html>');
+    });
+    await new Promise((resolve) => publicServer.listen(publicPort, LOCAL_BIND_HOST, resolve));
+
+    try {
+      pushUpstreamCommit(
+        fxStale.seedDir,
+        { 'domains/onlinerecycle.net/index.html': '<html>v2</html>\n' },
+        'OnlineRecycle update (#503)',
+      );
+
+      const resOldHealth = await runAutopullAsync(fxStale.cloneDir, [
+        '-Apply',
+        '-SkipProcessStop',
+        '-NodeHost',
+        ALT_LOOPBACK_HOST,
+        '-DomainsPort',
+        String(deadLocalPort),
+        '-PublicRecycleUrl',
+        `http://${LOCAL_BIND_HOST}:${publicPort}/public/onlinerecycle`,
+        '-WaitTimeoutSeconds',
+        '1',
+        '-PollIntervalMs',
+        '150',
+      ]);
+
+      // Both local (deadLocalPort) and public (stale /health missing commit-specific fields and buildStamp) must fail
+      assert.notEqual(
+        resOldHealth.status,
+        0,
+        'Expected non-zero exit when both local and stale /health public check fail',
+      );
+      const logDir1 = path.join(fxStale.cloneDir, 'logs', 'autopull');
+      const rec1 = JSON.parse(
+        fs.readFileSync(
+          path.join(
+            logDir1,
+            fs.readdirSync(logDir1).find((f) => f.endsWith('.json')),
+          ),
+          'utf8',
+        ),
+      );
+      const domSvc1 = rec1.changedServices.find((s) => s.service === 'domains-server');
+      assert.ok(domSvc1);
+      assert.match(domSvc1.publicUrl, /\/health$/);
+      assert.equal(domSvc1.publicCheckPassed, false, 'Stale /health payload missing commit-specific fields must fail');
+
+      // 2. When /health returns a buildStamp matching newCommit, publicCheckPassed must pass
+      fs.rmSync(path.join(fxStale.cloneDir, 'ops', 't5500', 'PAUSE-AUTOPULL'), { force: true });
+      healthMode = 'build-stamp';
+      currentTargetCommit = pushUpstreamCommit(
+        fxStale.seedDir,
+        { 'domains/onlinerecycle.net/index.html': '<html>v3</html>\n' },
+        'OnlineRecycle build stamp (#504)',
+      );
+
+      const resStamp = await runAutopullAsync(fxStale.cloneDir, [
+        '-Apply',
+        '-SkipProcessStop',
+        '-NodeHost',
+        ALT_LOOPBACK_HOST,
+        '-DomainsPort',
+        String(deadLocalPort),
+        '-PublicRecycleUrl',
+        `http://${LOCAL_BIND_HOST}:${publicPort}/public/onlinerecycle`,
+        '-WaitTimeoutSeconds',
+        '2',
+        '-PollIntervalMs',
+        '150',
+      ]);
+      assert.equal(resStamp.status, 0, `Expected pass when /health has matching buildStamp: ${resStamp.stdout}`);
+      const records2 = fs
+        .readdirSync(logDir1)
+        .filter((f) => f.endsWith('.json'))
+        .sort();
+      const rec2 = JSON.parse(fs.readFileSync(path.join(logDir1, records2[records2.length - 1]), 'utf8'));
+      const domSvc2 = rec2.changedServices.find((s) => s.service === 'domains-server');
+      assert.equal(domSvc2.publicCheckPassed, true, '/health with matching buildStamp must pass');
+    } finally {
+      try {
+        publicServer.closeAllConnections?.();
+        publicServer.close();
+      } catch {}
+      fs.rmSync(fxStale.root, { recursive: true, force: true });
     }
   },
 );

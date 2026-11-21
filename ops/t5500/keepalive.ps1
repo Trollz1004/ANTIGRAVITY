@@ -279,7 +279,10 @@ function Get-FrontendBuildInputs([string]$repoPath) {
                 $rel -ieq 'sitemap.xml' -or
                 $rel -ieq 'blog\index.html' -or
                 $rel -ieq 'blog/index.html' -or
-                $rel -imatch '^blog[\\/][^\\/]+[\\/]index\.html$'
+                $rel -imatch '^blog[\\/][^\\/]+[\\/]index\.html$' -or
+                $rel -ieq 'cities\index.html' -or
+                $rel -ieq 'cities/index.html' -or
+                $rel -imatch '^cities[\\/][^\\/]+[\\/]index\.html$'
             )
         }
         if ($pubItems) { $files.AddRange([System.IO.FileInfo[]]@($pubItems)) }

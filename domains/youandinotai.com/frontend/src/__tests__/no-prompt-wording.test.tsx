@@ -112,7 +112,7 @@ describe('no "prompt" on member-facing copy (Josh ruling 2026-11-07)', () => {
     );
     expectNoBannedWord(container);
     expect(container.textContent).toMatch(
-      /relationship goals, openers, and\s+meetup preferences/
+      /relationship goals, openers, and\s+first-date comfort\s+preferences/
     );
 
     fireEvent.click(getAllByText('Terms of Service')[0]);

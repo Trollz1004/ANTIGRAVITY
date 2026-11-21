@@ -82,11 +82,11 @@ const LEGAL_DOCS: Record<
       },
       {
         h: '2. Human Check & $1 Bot-Shield',
-        p: 'Before a member can browse discovery, message, or start video, they complete a short timed question and a $1 Bot-Shield payment tied to their account (or sign in with an authorized founder code). Where the app offers it, you can ask for the dollar back within three days; the badge turns off.',
+        p: 'Before a member can browse discovery, message, or post in topic boards and the USA group chat, they complete a short timed question and a $1 Bot-Shield payment through Square checkout tied to their account (or sign in with an authorized founder code). Where the app offers it, you can ask for the dollar back within three days; the badge turns off.',
       },
       {
         h: '3. Adult Community Standard',
-        p: 'Registration requires an 18+ date-of-birth check, and messaging and video need the $1 Bot-Shield human check.',
+        p: 'Registration requires an 18+ date-of-birth check, and discovery, messaging, topic boards, and the USA group chat require the $1 Bot-Shield human check.',
       },
     ],
   },
@@ -303,7 +303,7 @@ export function LandingPage() {
   const [activeLegalDoc, setActiveLegalDoc] = useState<LegalDocKey | null>(
     null
   );
-  const [waitlistEmail, setWaitlistEmail] = useState('');
+  const [eventInviteEmail, setEventInviteEmail] = useState('');
 
   useEffect(() => {
     document.title =
@@ -317,7 +317,7 @@ export function LandingPage() {
     );
     if (desc) {
       desc.content =
-        'Human-first social platform for dating, meetups, and real-world connection. Bot-Shield verification and account-bound checkout are live now.';
+        'Human-first 18+ dating platform with a timed question and $1 Bot-Shield check before messaging, topic boards, the USA group chat, and Square checkout.';
     }
   }, []);
 
@@ -418,7 +418,7 @@ export function LandingPage() {
       price: '$1',
       period: 'one-time',
       summary:
-        'Short timed question + $1 payment tied to your account. Required before messaging or starting video, and unlocks your Verified Human badge.',
+        'Short timed question + $1 Square checkout payment tied to your account. Required before anyone can message, swipe, or post in topic boards and the USA group chat, and unlocks your Verified Human badge.',
       ctaLabel: 'Verify Now — $1',
       to: '/app/verify',
       featured: false,
@@ -430,7 +430,7 @@ export function LandingPage() {
       price: '$14.99',
       period: '/month',
       summary:
-        'Locked-for-life founder rate while active. Platinum Founder badge, video dates, and romance concierge.',
+        'Locked $14.99/month founder rate while active, Platinum Founding Member badge on your verified profile, and account-bound Square checkout.',
       ctaLabel: 'Join as Founding Member',
       to: '/app/checkout/founding_member',
       featured: true,
@@ -442,7 +442,7 @@ export function LandingPage() {
       price: '$39.99',
       period: '3 months prepaid',
       summary:
-        'One upfront payment for 90 days of full Founder access bound directly to your member profile.',
+        'One upfront Square checkout payment for 90 days of active Founder status and the Platinum Founding Member badge bound directly to your profile.',
       ctaLabel: 'Choose 3-Month Plan',
       to: '/app/checkout/3_month',
       featured: false,
@@ -454,7 +454,7 @@ export function LandingPage() {
       price: '$99.99',
       period: '1 year prepaid',
       summary:
-        'Full launch-year Founder access in a single account-bound checkout session.',
+        'One upfront Square checkout payment for 365 days of active Founder status and the Platinum Founding Member badge in a single account-bound session.',
       ctaLabel: 'Choose Annual Plan',
       to: '/app/checkout/12_month',
       featured: false,
@@ -466,7 +466,7 @@ export function LandingPage() {
       price: '$2,500',
       period: 'limited founder edition',
       summary:
-        'Top-tier founder standing with direct concierge onboarding and lifetime Royalty designation.',
+        'One-time account-bound Square checkout payment for non-expiring active Founder status and the Platinum Founding Member badge on your verified profile.',
       ctaLabel: 'Inquire / Checkout',
       to: '/app/checkout/royalty',
       featured: false,
@@ -657,13 +657,13 @@ export function LandingPage() {
 
               <div className="hidden lg:block rounded-[8px] border border-[#3A3F45] border-r-[3px] border-r-[#FFD21E] bg-[#0A0B0D] px-5 py-4 text-right">
                 <div className="font-mono text-[14px] font-bold uppercase tracking-[0.08em] text-[#FFD21E]">
-                  02 · REAL-WORLD DATES
+                  02 · LIVE COMMUNITY
                 </div>
                 <div className="mt-1 font-display text-[28px] font-bold uppercase leading-none text-[#F4F1EA]">
                   CONNECT
                 </div>
                 <div className="mt-1.5 text-[14px] font-medium text-[#F4F1EA]">
-                  Matched Video &amp; Local Meetups
+                  Topic Boards &amp; USA Group Chat
                 </div>
               </div>
             </div>
@@ -690,10 +690,10 @@ export function LandingPage() {
                     REAL CONNECTION.
                   </h1>
                   <p className="mt-2 max-w-[60ch] text-[14px] leading-[1.45] text-[#F4F1EA] text-pretty sm:text-[18px]">
-                    Meet verified adults who are ready to talk, plan, and show
-                    up in real life. Before messaging or starting video, members
-                    complete a short human check and a $1 Bot-Shield payment
-                    tied to their account.
+                    Meet verified adults in discovery, topic boards, and the USA
+                    group chat. Before anyone can message, swipe, or post, every
+                    member completes a short timed question and a $1 Bot-Shield
+                    check through Square checkout tied to their account.
                   </p>
                 </div>
 
@@ -726,7 +726,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        {/* STOP 02 (#platform) — Pinned Section: Intentional Discovery, Video & Real-Life Meetups */}
+        {/* STOP 02 (#platform) — Pinned Section: Verified Discovery, Messaging, Topic Boards & USA Group Chat */}
         <section id="platform" className={getStageSectionClass('platform')}>
           <div
             data-stage-wrapper="platform"
@@ -747,7 +747,7 @@ export function LandingPage() {
               </div>
 
               <h2 className="mt-3 font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-[#F4F1EA] text-balance sm:text-[42px] lg:text-[50px]">
-                BUILT FOR THE FIRST CONVERSATION AND THE FIRST MEETUP.
+                BUILT FOR VERIFIED CONVERSATION AND COMMUNITY.
               </h2>
 
               <div className="mt-6 grid gap-6 border-t border-[#3A3F45] pt-6 md:grid-cols-3">
@@ -760,38 +760,39 @@ export function LandingPage() {
                     Verified Human Profiles
                   </h3>
                   <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
-                    Profiles in discovery pass our short human check and $1
-                    Bot-Shield payment, and surface clear relationship goals,
-                    openers, and meetup preferences.
+                    Profiles in discovery pass our short timed question and $1
+                    Bot-Shield check via Square checkout, and surface clear
+                    relationship goals, openers, and first-date comfort
+                    preferences.
                   </p>
                 </div>
 
                 <div className="border-l-2 border-[#FFD21E] pl-4">
                   <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
                     <Shield size={18} />
-                    <span>02 · Matched Video Dates</span>
+                    <span>02 · Mutual-Match Messaging</span>
                   </div>
                   <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
-                    Mutual Video &amp; Chat
+                    Direct Member Chat
                   </h3>
                   <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
-                    Matched members connect in real-time threads and launch
-                    video dates where camera and microphone controls stay in
-                    your hands.
+                    When two verified members like each other in discovery, a
+                    direct message thread opens with built-in block and report
+                    controls.
                   </p>
                 </div>
 
                 <div className="border-l-2 border-[#FFD21E] pl-4">
                   <div className="flex items-center gap-2 font-mono text-[14px] font-bold uppercase text-[#FFD21E]">
                     <Users size={18} />
-                    <span>03 · Real-Life Plans</span>
+                    <span>03 · Community Rooms</span>
                   </div>
                   <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
-                    Boards &amp; Local Meetups
+                    Topic Boards &amp; USA Group Chat
                   </h3>
                   <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
-                    Topic boards and local venue planning help verified adults
-                    move from online introductions to real-world dates.
+                    Verified members post and comment across six topic boards
+                    and talk countrywide in the live USA group chat room.
                   </p>
                 </div>
               </div>
@@ -841,7 +842,7 @@ export function LandingPage() {
                   </h3>
                   <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
                     Answer a short timed question in your browser before moving
-                    to the account-bound checkout step.
+                    to the account-bound Square checkout step.
                   </p>
                 </div>
 
@@ -850,11 +851,12 @@ export function LandingPage() {
                     STEP 02 · $1 BOT-SHIELD
                   </div>
                   <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
-                    Account-Bound Verification
+                    Account-Bound Square Checkout
                   </h3>
                   <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
-                    Complete the one-time $1 Bot-Shield verification checkout
-                    bound directly to your authenticated account.
+                    Complete the one-time $1 Bot-Shield verification payment
+                    through Square checkout bound directly to your authenticated
+                    account.
                   </p>
                 </div>
 
@@ -863,11 +865,12 @@ export function LandingPage() {
                     STEP 03 · VERIFIED BADGE
                   </div>
                   <h3 className="mt-2 font-display text-[22px] font-bold text-[#F4F1EA]">
-                    Instant Gold or Platinum Badge
+                    Verified Human Badge
                   </h3>
                   <p className="mt-2 text-[16px] leading-[1.5] text-[#F4F1EA]">
                     Your profile receives the Verified Human badge and unlocks
-                    full discovery, inbox messaging, and video dates.
+                    full discovery, inbox messaging, topic boards, and the USA
+                    group chat.
                   </p>
                 </div>
               </div>
@@ -944,8 +947,9 @@ export function LandingPage() {
                       Direct Safety Controls
                     </h3>
                     <p className="mt-2 text-[15px] leading-[1.5] text-[#F4F1EA]">
-                      One-tap block and report controls inside discovery, chat,
-                      and boards, plus matched-only video rooms.
+                      One-tap block and report controls across discovery
+                      profiles, direct message threads, topic boards, and the
+                      USA group chat.
                     </p>
                   </div>
                   <div className="mt-4">
@@ -993,12 +997,12 @@ export function LandingPage() {
                       <span>Account Billing</span>
                     </div>
                     <h3 className="mt-2 font-display text-[20px] font-bold text-[#F4F1EA]">
-                      Account-Bound Checkout
+                      Account-Bound Square Checkout
                     </h3>
                     <p className="mt-2 text-[15px] leading-[1.5] text-[#F4F1EA]">
-                      Every payment session is generated for your signed-in
-                      account so your tier and badge stay linked to your
-                      profile.
+                      Every Square checkout session is generated for your
+                      signed-in account so your tier and badge stay linked to
+                      your profile.
                     </p>
                   </div>
                   <div className="mt-4">
@@ -1248,8 +1252,10 @@ export function LandingPage() {
                 YouAndINotAI
               </div>
               <p className="mt-4 max-w-[44ch] text-[16px] leading-[1.55] text-[#F4F1EA]">
-                18+ verified-human dating, matched video calls, and real-world
-                connection. Operated by Trash Or Treasure Online Recycler LLC.
+                18+ verified-human dating with a timed question and $1
+                Bot-Shield check before messaging, topic boards, the USA group
+                chat, and account-bound Square checkout. Operated by Trash Or
+                Treasure Online Recycler LLC.
               </p>
               <p className="mt-3 text-[14px] font-medium text-[#FFD21E]">
                 youandinotai.com is for adults 18 and over.
@@ -1444,8 +1450,8 @@ export function LandingPage() {
               name="email"
               required
               autoComplete="email"
-              value={waitlistEmail}
-              onChange={e => setWaitlistEmail(e.target.value)}
+              value={eventInviteEmail}
+              onChange={e => setEventInviteEmail(e.target.value)}
               placeholder="you@example.com"
               className="app-input flex-1 sm:max-w-[360px]"
             />

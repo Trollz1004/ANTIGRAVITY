@@ -112,5 +112,18 @@ describe('Date app refund policy, terms, and privacy match the code', () => {
     expect(dialog.textContent).toContain(
       'Effective: April 2026 · Last Updated: November 21, 2026'
     );
+
+    fireEvent.click(
+      getByText('Age Policy', { selector: 'div[role="dialog"] button' })
+    );
+    expect(dialog.textContent).toContain(
+      'post in topic boards and the USA group chat'
+    );
+    expect(dialog.textContent).toContain('Square checkout');
+    expect(dialog.textContent).toContain('authorized founder code');
+    expect(dialog.textContent?.toLowerCase()).toContain(
+      'where the app offers it, you can ask for the dollar back within three days; the badge turns off'
+    );
+    expect(dialog.textContent?.toLowerCase()).not.toContain('start video');
   });
 });
