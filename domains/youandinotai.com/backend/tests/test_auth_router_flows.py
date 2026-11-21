@@ -60,7 +60,9 @@ def test_beta_access_invalid_code_rejected(client):
     with patch.object(auth_router, "get_settings") as mock_settings:
         from app.config import Settings
 
-        mock_settings.return_value = Settings(beta_access_codes="GOOD-CODE-1")
+        mock_settings.return_value = Settings(
+            beta_access_enabled=True, beta_access_codes="GOOD-CODE-1"
+        )
         resp = client.post("/api/v1/auth/beta-access", json={"code": "BAD-CODE-2"})
     assert resp.status_code == 401
     assert "BETA_ACCESS_DENIED" in resp.text
@@ -70,7 +72,7 @@ def test_beta_access_creates_and_reactivates_user(client, db_session_factory):
     from app.config import Settings
     from app.models import User
 
-    settings = Settings(beta_access_codes="GOOD-CODE-1")
+    settings = Settings(beta_access_enabled=True, beta_access_codes="GOOD-CODE-1")
     with patch.object(auth_router, "get_settings", return_value=settings):
         # First visit creates the beta account
         resp = client.post("/api/v1/auth/beta-access", json={"code": "GOOD-CODE-1"})
