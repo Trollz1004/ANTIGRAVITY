@@ -270,6 +270,60 @@ def test_beta_access_rejects_invalid_code(client, monkeypatch):
     get_settings.cache_clear()
 
 
+def test_beta_access_enforces_rate_limit_before_reading_code(
+    client, db_session_factory, monkeypatch
+):
+    import app.routers.auth as auth_mod
+
+    monkeypatch.setenv("BETA_ACCESS_ENABLED", "true")
+    monkeypatch.setenv("BETA_ACCESS_CODES", "FOUNDING100")
+    get_settings.cache_clear()
+    limit = get_settings().verify_rate_limit_per_minute
+
+    for _ in range(limit):
+        resp = client.post("/api/v1/auth/beta-access", json={"code": "WRONG"})
+        assert resp.status_code == 401
+
+    with patch.object(
+        auth_mod,
+        "_normalize_beta_code",
+        wraps=auth_mod._normalize_beta_code,
+    ) as normalize_spy:
+        blocked = client.post(
+            "/api/v1/auth/beta-access",
+            json={"code": "FOUNDING100", "date_of_birth": "1990-01-01"},
+        )
+        assert blocked.status_code == 429
+        assert normalize_spy.call_count == 0
+
+    get_settings.cache_clear()
+
+
+def test_beta_access_compares_codes_in_constant_time(client, monkeypatch):
+    import inspect
+
+    import app.routers.auth as auth_mod
+
+    source = inspect.getsource(auth_mod.beta_access)
+    assert "hmac.compare_digest" in source
+    assert "not in allowed_codes" not in source
+
+    monkeypatch.setenv("BETA_ACCESS_ENABLED", "true")
+    monkeypatch.setenv("BETA_ACCESS_CODES", "FOUNDING100,SECOND200")
+    get_settings.cache_clear()
+
+    with patch.object(
+        auth_mod.hmac,
+        "compare_digest",
+        wraps=auth_mod.hmac.compare_digest,
+    ) as compare_spy:
+        resp = client.post("/api/v1/auth/beta-access", json={"code": "NOPE"})
+        assert resp.status_code == 401
+        assert compare_spy.call_count >= 2
+
+    get_settings.cache_clear()
+
+
 def test_inactive_user_is_blocked_across_auth_routes(client, db_session_factory):
     inactive_user_id = uuid.uuid4()
 
