@@ -1049,12 +1049,17 @@ describe('Verify after $1 payment', () => {
       throw new Error(`Unexpected POST ${path}`);
     });
 
-    const { container, getByRole, getByPlaceholderText, getByText, queryByText } =
-      render(
-        <MemoryRouter initialEntries={['/app/verify']}>
-          <Verify />
-        </MemoryRouter>
-      );
+    const {
+      container,
+      getByRole,
+      getByPlaceholderText,
+      getByText,
+      queryByText,
+    } = render(
+      <MemoryRouter initialEntries={['/app/verify']}>
+        <Verify />
+      </MemoryRouter>
+    );
 
     await act(async () => {
       await vi.advanceTimersByTimeAsync(0);

@@ -375,8 +375,7 @@ class TestVerifyConfirm:
 
         now = datetime.now(timezone.utc)
         user = _make_user(email="late_payment_48h@example.com")
-        profile = verified_profile(user)
-        profile.verified = False
+        profile = verified_profile(user, verified=False)
         stale_liveness = VerificationEvent(
             id=uuid.uuid4(),
             user_id=user.id,

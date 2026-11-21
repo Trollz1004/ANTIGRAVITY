@@ -15,6 +15,8 @@ import { TrustScoreRing, VerifiedBadge } from '../components/VerifiedBadge';
 
 const PAYMENT_WAITING_MESSAGE =
   'We are waiting for Square to confirm your payment.';
+const PAID_NEEDS_NEW_QUESTION_MESSAGE =
+  'Your $1 payment is confirmed. Answer one new timed question to activate your badge with no new charge.';
 const PAYMENT_POLL_INTERVAL_MS = 3000;
 const PAYMENT_POLL_DURATION_MS = 60000;
 const PAYMENT_POLL_MAX_RETRIES = Math.floor(
@@ -234,6 +236,15 @@ export function Verify() {
         return 'waiting';
       }
 
+      if (status?.bot_shield_paid && !status?.verified) {
+        stopPaymentPolling();
+        setAwaitingPayment(false);
+        setResult(null);
+        setSyncMessage(null);
+        clearPaymentReturnParams();
+        return 'error';
+      }
+
       if (err instanceof Error) {
         setSyncMessage(err.message);
       } else {
@@ -367,7 +378,10 @@ export function Verify() {
       setCanSubmitChallenge(false);
       setResult(data);
       setChallenge(null);
-      await refreshVerificationStatus();
+      const updated = await refreshVerificationStatus();
+      if (updated.verified) {
+        await refreshSignedInUser();
+      }
     } catch (err: any) {
       if (!mountedRef.current) return;
       clearChallengeTimers();
@@ -765,9 +779,9 @@ export function Verify() {
                   <div className="app-kicker mb-2 md:mb-3">Start</div>
                   <h2 className="app-title">Ready for badge activation?</h2>
                   <p className="app-subtitle mt-2 md:mt-4">
-                    Start the short human check now. When you answer the timed
-                    question, the page will hand you into the $1 Square
-                    checkout.
+                    {status?.bot_shield_paid
+                      ? PAID_NEEDS_NEW_QUESTION_MESSAGE
+                      : 'Start the short human check now. When you answer the timed question, the page will hand you into the $1 Square checkout.'}
                   </p>
                   <button
                     onClick={() => void startChallenge()}
