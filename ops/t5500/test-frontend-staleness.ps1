@@ -4,7 +4,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$Repo = if ($RepoPath) { $RepoPath } elseif (Test-Path 'C:\ANTIGRAVITY') { 'C:\ANTIGRAVITY' } else { (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path }
+$Repo = if ($RepoPath) { $RepoPath } elseif (Test-Path 'C:\ANTIGRAVITY\ops\t5500\keepalive.ps1') { 'C:\ANTIGRAVITY' } else { (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path }
 
 Write-Host "=========================================================="
 Write-Host " TEST SUITE: Date-App Frontend Staleness & Rebuild Logic"
@@ -235,6 +235,77 @@ try {
 
 } finally {
     Remove-Item -Recurse -Force $tempRoot -ErrorAction SilentlyContinue
+}
+
+# -----------------------------------------------------------------------------
+# Section 3: Pause File ($Repo\ops\t5500\PAUSE) Probe-And-Log Without Healing
+# -----------------------------------------------------------------------------
+Write-Host "`n-- Section 3: Pause File Probe-And-Log Without Healing --"
+
+$pauseTempRoot = Join-Path $env:TEMP ("keepalive-pause-ps1-test-" + [System.Guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Force -Path (Join-Path $pauseTempRoot 'ops\t5500') | Out-Null
+New-Item -ItemType Directory -Force -Path (Join-Path $pauseTempRoot 'logs') | Out-Null
+
+$savedRepo       = $Repo
+$savedDir        = $Dir
+$savedLogFile    = $LogFile
+$savedStatusFile = $StatusFile
+$savedTriggers   = $Triggers
+$savedStages     = $Stages
+$savedDomains    = $Domains
+
+try {
+    $Repo       = $pauseTempRoot
+    $Dir        = Join-Path $pauseTempRoot 'ops\t5500'
+    $LogFile    = Join-Path $pauseTempRoot 'logs\t5500-keepalive.log'
+    $StatusFile = Join-Path $Dir 'status.json'
+    $Triggers   = Join-Path $Dir 'TRIGGERS.jsonl'
+    $pausePath  = Join-Path $Dir 'PAUSE'
+    [IO.File]::WriteAllText($pausePath, "paused`n", (New-Object Text.UTF8Encoding $false))
+
+    $hasInvokePass = $null -ne (Get-Command Invoke-Pass -ErrorAction SilentlyContinue)
+    Assert-Condition "Scenario 12a: Invoke-Pass is loaded under -FunctionsOnly" $hasInvokePass
+
+    if ($hasInvokePass) {
+        $script:MockProbes = @{ healthy = 0; broken = 0 }
+        $script:MockHeals  = @{ healthy = 0; broken = 0 }
+        $Domains = @()
+        $Stages = @(
+            @{ Key = 'healthy'; Name = 'Mock Healthy Stage'; Settle = 0
+               Probe = { $script:MockProbes['healthy']++; return $true }
+               Heal  = { $script:MockHeals['healthy']++ } },
+            @{ Key = 'broken'; Name = 'Mock Broken Stage'; Settle = 0
+               Probe = { $script:MockProbes['broken']++; return $false }
+               Heal  = { $script:MockHeals['broken']++ } }
+        )
+
+        Invoke-Pass
+        Invoke-Pass
+
+        Assert-Condition "Scenario 12b: Paused pass probes every stage each pass" ($script:MockProbes['healthy'] -eq 2 -and $script:MockProbes['broken'] -eq 2) "healthy=$($script:MockProbes['healthy']) broken=$($script:MockProbes['broken'])"
+        Assert-Condition "Scenario 12c: Paused pass runs no heal action" ($script:MockHeals['healthy'] -eq 0 -and $script:MockHeals['broken'] -eq 0) "healthyHeals=$($script:MockHeals['healthy']) brokenHeals=$($script:MockHeals['broken'])"
+
+        $logExists = Test-Path -LiteralPath $LogFile
+        $logLines = if ($logExists) { @(Get-Content -LiteralPath $LogFile) } else { @() }
+        $pausePassLines = @($logLines | Where-Object { $_ -match 'PAUSE' -and $_ -match 'healing is paused' -and $_ -notmatch 'Mock Broken Stage|Mock Healthy Stage' })
+        $brokenPauseLines = @($logLines | Where-Object { $_ -match '\[Mock Broken Stage\]' -and $_ -match 'DOWN' -and $_ -match 'paused' })
+
+        Assert-Condition "Scenario 12d: Log says every pass that healing is paused" ($pausePassLines.Count -eq 2) "Found $($pausePassLines.Count) pass pause log lines"
+        Assert-Condition "Scenario 12e: Log records probe result for down stage while paused every pass" ($brokenPauseLines.Count -eq 2) "Found $($brokenPauseLines.Count) stage pause log lines"
+
+        Remove-Item -LiteralPath $pausePath -Force
+        Invoke-Pass
+        Assert-Condition "Scenario 12f: Removing PAUSE file resumes healing on next pass" ($script:MockHeals['broken'] -eq 1) "brokenHeals=$($script:MockHeals['broken'])"
+    }
+} finally {
+    $Repo       = $savedRepo
+    $Dir        = $savedDir
+    $LogFile    = $savedLogFile
+    $StatusFile = $savedStatusFile
+    $Triggers   = $savedTriggers
+    $Stages     = $savedStages
+    $Domains    = $savedDomains
+    Remove-Item -Recurse -Force $pauseTempRoot -ErrorAction SilentlyContinue
 }
 
 Write-Host "=========================================================="

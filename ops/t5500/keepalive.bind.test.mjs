@@ -53,7 +53,10 @@ test('keepalive.ps1 stages: ollama, postgres, and redis variables and arguments 
 
   // postgres stage probes 127.0.0.1:5432 and starts ANTIGRAVITY Postgres or pg_ctl.exe hidden
   assert.match(keepaliveSrc, /pg_isready\.exe[\s\S]*?-h\s+127\.0\.0\.1\s+-p\s+5432/);
-  assert.match(keepaliveSrc, /Start-Process\s+-FilePath\s+\(Join-Path\s+\$PgBin\s+'pg_ctl\.exe'\)[\s\S]*?-WindowStyle\s+Hidden/);
+  assert.match(
+    keepaliveSrc,
+    /Start-Process\s+-FilePath\s+\(Join-Path\s+\$PgBin\s+'pg_ctl\.exe'\)[\s\S]*?-WindowStyle\s+Hidden/,
+  );
 
   // redis stage binds 127.0.0.1:6379 hidden
   assert.match(
@@ -71,7 +74,10 @@ test('keepalive.ps1 domains stage: DOMAINS_SERVER_HOST values (both main and old
 
   // Main keepalive.ps1 with no FLEET_SHARED_TOKEN sets DOMAINS_SERVER_HOST=127.0.0.1
   assert.deepEqual(
-    resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '127.0.0.1', DOMAINS_SERVER_PORT: '9160' }, { port: 9160, warn: () => {} }),
+    resolveDomainsServerBind(
+      { DOMAINS_SERVER_HOST: '127.0.0.1', DOMAINS_SERVER_PORT: '9160' },
+      { port: 9160, warn: () => {} },
+    ),
     ['127.0.0.1'],
   );
 
@@ -82,10 +88,9 @@ test('keepalive.ps1 domains stage: DOMAINS_SERVER_HOST values (both main and old
   );
 
   // Fleet bind 0.0.0.0 with no token also never throws
-  assert.deepEqual(
-    resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '0.0.0.0' }, { port: 9160, warn: () => {} }),
-    ['0.0.0.0'],
-  );
+  assert.deepEqual(resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '0.0.0.0' }, { port: 9160, warn: () => {} }), [
+    '0.0.0.0',
+  ]);
 });
 
 test('keepalive.ps1 frontend stage: tab-dateapp.cmd variables are accepted by resolveFrontendBind with no token', () => {
@@ -113,7 +118,11 @@ test('keepalive.ps1 api stage: tab-dateapp-api.ps1 variables start uvicorn with 
   try {
     const vaultDir = path.join(tmpDir, '.antigravity-vault', 'vault-handoff', 'env-stash-from-documents');
     fs.mkdirSync(vaultDir, { recursive: true });
-    fs.writeFileSync(path.join(vaultDir, '.env-not-for-github.txt'), 'DATABASE_URL=sqlite+aiosqlite:///./test.db\n', 'utf8');
+    fs.writeFileSync(
+      path.join(vaultDir, '.env-not-for-github.txt'),
+      'DATABASE_URL=sqlite+aiosqlite:///./test.db\n',
+      'utf8',
+    );
 
     const fakePy = path.join(tmpDir, 'fake-python.cmd');
     fs.writeFileSync(fakePy, '@echo off\r\necho PY_ARGS=%*\r\nexit /b 0\r\n', 'utf8');
@@ -161,7 +170,10 @@ test('keepalive.ps1 mission-control and social-command-center stages: mission-os
     // Scheduled task / scripts/start-mission-control.ps1 launch (MISSION_OS_HOST=127.0.0.1 when token missing)
     const startMcSrc = fs.readFileSync(START_MISSION_CONTROL_PS1, 'utf8');
     assert.match(startMcSrc, /\$env:MISSION_OS_HOST\s*=\s*\$loopback/);
-    assert.equal(resolveMissionOsBind({ env: { MISSION_OS_HOST: '127.0.0.1' }, port: 3130, warn: () => {} }), '127.0.0.1');
+    assert.equal(
+      resolveMissionOsBind({ env: { MISSION_OS_HOST: '127.0.0.1' }, port: 3130, warn: () => {} }),
+      '127.0.0.1',
+    );
 
     // Both keepalive probes on loopback port 3130 pass without token
     const mosState = await invokeMissionLoopback('/api/mos-state.json');
@@ -187,4 +199,117 @@ test('keepalive.ps1 obsidian and hermes stages: loopback fallback works without 
   // hermes-support.ps1 must fall back to 127.0.0.1 for Ollama (:11434) and DateApp API (:8000) when FLEET_SHARED_TOKEN is unset
   assert.match(hermesSupportSrc, /FLEET_SHARED_TOKEN/);
   assert.match(hermesSupportSrc, /127\.0\.0\.1/);
+});
+
+test('keepalive.ps1 pause file: when $Repo\\ops\\t5500\\PAUSE exists, each pass probes and logs that healing is paused and runs no heal action', () => {
+  const tmpRepo = fs.mkdtempSync(path.join(os.tmpdir(), 'keepalive-pause-test-'));
+  try {
+    const pauseDir = path.join(tmpRepo, 'ops', 't5500');
+    const logDir = path.join(tmpRepo, 'logs');
+    fs.mkdirSync(pauseDir, { recursive: true });
+    fs.mkdirSync(logDir, { recursive: true });
+
+    const pauseFile = path.join(pauseDir, 'PAUSE');
+    fs.writeFileSync(pauseFile, 'paused for maintenance\n', 'utf8');
+
+    const harnessPath = path.join(tmpRepo, 'run-pause-pass.ps1');
+    const harnessScript = [
+      '$ErrorActionPreference = "Stop"',
+      `$repoRoot = '${tmpRepo.replace(/'/g, "''")}'`,
+      `$keepalive = '${KEEPALIVE_PATH.replace(/'/g, "''")}'`,
+      '. $keepalive -FunctionsOnly -RepoPath $repoRoot',
+      'if (-not (Get-Command Invoke-Pass -ErrorAction SilentlyContinue)) { throw "Invoke-Pass not loaded under -FunctionsOnly" }',
+      '$script:ProbeCalls = @{ up_stage = 0; down_stage = 0 }',
+      '$script:HealCalls = @{ up_stage = 0; down_stage = 0 }',
+      '$script:TunnelStopCalls = 0',
+      'function Get-TunnelProcs { return @([pscustomobject]@{ ProcessId = 999991; CreationDate = "20260101" }, [pscustomobject]@{ ProcessId = 999992; CreationDate = "20260102" }) }',
+      '$Domains = @()',
+      '$Stages = @(',
+      '  @{ Key = "up_stage"; Name = "Mock Healthy Stage"; Settle = 0',
+      '     Probe = { $script:ProbeCalls["up_stage"]++; return $true }',
+      '     Heal  = { $script:HealCalls["up_stage"]++ } },',
+      '  @{ Key = "down_stage"; Name = "Mock Down Stage"; Settle = 0',
+      '     Probe = { $script:ProbeCalls["down_stage"]++; return $false }',
+      '     Heal  = { $script:HealCalls["down_stage"]++ } }',
+      ')',
+      'Invoke-Pass',
+      'Invoke-Pass',
+      '$pausedSummary = [ordered]@{',
+      '  upProbes = $script:ProbeCalls["up_stage"]',
+      '  downProbes = $script:ProbeCalls["down_stage"]',
+      '  upHeals = $script:HealCalls["up_stage"]',
+      '  downHeals = $script:HealCalls["down_stage"]',
+      '  upResult = $script:Result["up_stage"]',
+      '  downResult = $script:Result["down_stage"]',
+      '  downFails = [int]$script:Fails["down_stage"]',
+      '}',
+      'Remove-Item -LiteralPath (Join-Path $repoRoot "ops\\t5500\\PAUSE") -Force',
+      'Invoke-Pass',
+      '$unpausedSummary = [ordered]@{',
+      '  upProbes = $script:ProbeCalls["up_stage"]',
+      '  downProbes = $script:ProbeCalls["down_stage"]',
+      '  upHeals = $script:HealCalls["up_stage"]',
+      '  downHeals = $script:HealCalls["down_stage"]',
+      '}',
+      '[ordered]@{ paused = $pausedSummary; unpaused = $unpausedSummary } | ConvertTo-Json -Compress',
+    ].join('\r\n');
+    fs.writeFileSync(harnessPath, harnessScript, 'utf8');
+
+    const res = spawnSync(
+      'powershell.exe',
+      ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', harnessPath],
+      { encoding: 'utf8', timeout: 20000, windowsHide: true },
+    );
+    const combined = `${res.stdout || ''}\n${res.stderr || ''}`.trim();
+    assert.equal(res.status, 0, `Expected harness exit 0, got ${res.status}: ${combined}`);
+
+    const jsonLine = String(res.stdout || '')
+      .trim()
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter(Boolean)
+      .pop();
+    assert.ok(jsonLine, `Expected JSON output from harness, got: ${combined}`);
+    const summary = JSON.parse(jsonLine);
+
+    // While PAUSE exists (2 passes): every stage is probed each pass, zero heals run.
+    assert.equal(summary.paused.upProbes, 2);
+    assert.equal(summary.paused.downProbes, 2);
+    assert.equal(summary.paused.upHeals, 0);
+    assert.equal(summary.paused.downHeals, 0);
+    assert.equal(summary.paused.upResult, 'UP');
+    assert.equal(summary.paused.downResult, 'DOWN');
+    assert.equal(summary.paused.downFails, 2);
+
+    // Log file must exist, contain probe results, and state every pass that healing is paused.
+    const logPath = path.join(logDir, 't5500-keepalive.log');
+    assert.ok(fs.existsSync(logPath), 'Expected logs/t5500-keepalive.log to be written');
+    const logLines = fs.readFileSync(logPath, 'utf8').split(/\r?\n/).filter(Boolean);
+    const passPauseLines = logLines.filter(
+      (line) =>
+        /PAUSE/i.test(line) && /healing is paused/i.test(line) && !/Mock Down Stage|Mock Healthy Stage/.test(line),
+    );
+    assert.equal(
+      passPauseLines.length,
+      2,
+      `Expected a pass-level pause log entry on each of the 2 paused passes, got ${passPauseLines.length}:\n${logLines.join('\n')}`,
+    );
+    const downPauseLines = logLines.filter(
+      (line) => /\[Mock Down Stage\]/.test(line) && /DOWN/i.test(line) && /paused/i.test(line),
+    );
+    assert.equal(
+      downPauseLines.length,
+      2,
+      `Expected Mock Down Stage to log DOWN while paused on each of the 2 passes, got ${downPauseLines.length}:\n${logLines.join('\n')}`,
+    );
+    assert.ok(
+      !logLines.slice(0, -2).some((line) => /\[Mock Down Stage\] DOWN - healing\b/.test(line)),
+      `Expected no healing log while PAUSE existed:\n${logLines.join('\n')}`,
+    );
+
+    // Once PAUSE is removed (3rd pass), the down stage heal action runs.
+    assert.equal(summary.unpaused.downHeals, 1);
+  } finally {
+    fs.rmSync(tmpRepo, { recursive: true, force: true });
+  }
 });
