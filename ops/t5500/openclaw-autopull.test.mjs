@@ -992,10 +992,14 @@ test(
       }, 200);
     });
 
+    // Pre-spawn a process BEFORE the second pull that waits to bind domainsPort until newOwner exits,
+    // proving that a PID change whose process start time is BEFORE the pull does NOT count as a restart.
+    let prePullSpawnedOwner = null;
+
     try {
       await waitForPortListen(domainsPort);
       // Ensure oldOwner start time is clearly before the pull
-      await new Promise((r) => setTimeout(r, 300));
+      await new Promise((r) => setTimeout(r, 250));
 
       pushUpstreamCommit(
         fx.seedDir,
@@ -1012,9 +1016,9 @@ test(
         '-PublicRecycleUrl',
         `http://${LOCAL_BIND_HOST}:${publicPort}/public/onlinerecycle`,
         '-WaitTimeoutSeconds',
-        '10',
+        '6',
         '-PollIntervalMs',
-        '150',
+        '100',
       ]);
 
       assert.equal(res.status, 0, `Expected exit 0 on proven restart: ${res.stderr}\n${res.stdout}`);
@@ -1047,12 +1051,66 @@ test(
       );
       assert.equal(domSvc.restarted, true, 'restarted must be true when pid changed and start time is after pull');
       assert.equal(domSvc.status, 'LIVE');
+
+      // Case 2: A process started BEFORE the pull takes over the port after newOwner is stopped ->
+      // pid changed, but afterStartTime is before pullTime, so restarted must be false and status FAILED-TO-RESTART
+      prePullSpawnedOwner = spawn(
+        process.execPath,
+        [
+          '-e',
+          `const http = require('node:http'); const srv = http.createServer((_req, res) => { res.writeHead(200, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ service: 'domains-server' })); }); const tryListen = () => { srv.listen(${domainsPort}, '${LOCAL_BIND_HOST}'); }; srv.on('error', () => setTimeout(tryListen, 80)); setTimeout(tryListen, 80); setInterval(() => {}, 1000);`,
+        ],
+        { stdio: 'ignore', windowsHide: true },
+      );
+      await new Promise((r) => setTimeout(r, 300));
+
+      pushUpstreamCommit(
+        fx.seedDir,
+        { 'ops/domains-server/server.mjs': 'export const v = 3;\n' },
+        'Update domains-server pre-started (#505)',
+      );
+
+      const resPreStarted = await runAutopullAsync(fx.cloneDir, [
+        '-Apply',
+        '-NodeHost',
+        LOCAL_BIND_HOST,
+        '-DomainsPort',
+        String(domainsPort),
+        '-PublicRecycleUrl',
+        `http://${LOCAL_BIND_HOST}:${publicPort}/public/onlinerecycle`,
+        '-WaitTimeoutSeconds',
+        '4',
+        '-PollIntervalMs',
+        '100',
+      ]);
+
+      assert.equal(resPreStarted.status, 0);
+      assert.equal(fs.existsSync(path.join(fx.cloneDir, 'ops', 't5500', 'PAUSE-AUTOPULL')), false);
+      const recordsAll = fs
+        .readdirSync(logDir)
+        .filter((f) => f.endsWith('.json'))
+        .sort();
+      const record2 = JSON.parse(fs.readFileSync(path.join(logDir, recordsAll[recordsAll.length - 1]), 'utf8'));
+      const domSvc2 = record2.changedServices.find((s) => s.service === 'domains-server');
+      assert.equal(domSvc2.beforePid, newOwner.pid);
+      assert.equal(domSvc2.afterPid, prePullSpawnedOwner.pid);
+      assert.notEqual(domSvc2.afterPid, domSvc2.beforePid, 'pid changed to prePullSpawnedOwner');
+      assert.ok(
+        Date.parse(domSvc2.afterStartTime) <= Date.parse(domSvc2.pullTime),
+        `Expected pre-started owner afterStartTime (${domSvc2.afterStartTime}) <= pullTime (${domSvc2.pullTime})`,
+      );
+      assert.equal(domSvc2.restarted, false, 'restarted must be false when new owner started before the pull');
+      assert.equal(domSvc2.status, 'FAILED-TO-RESTART');
+      assert.equal(record2.status, 'FAILED-TO-RESTART');
     } finally {
       try {
         oldOwner.kill('SIGKILL');
       } catch {}
       try {
         newOwner?.kill('SIGKILL');
+      } catch {}
+      try {
+        prePullSpawnedOwner?.kill('SIGKILL');
       } catch {}
       try {
         publicServer.closeAllConnections?.();
