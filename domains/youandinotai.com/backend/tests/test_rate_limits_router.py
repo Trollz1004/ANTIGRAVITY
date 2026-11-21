@@ -35,6 +35,7 @@ def authed_client(client):
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
+    user.is_admin = True
 
     async def _dep():
         return user
