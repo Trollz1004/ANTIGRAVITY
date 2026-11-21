@@ -6,6 +6,7 @@ from pathlib import Path
 from sqlalchemy import JSON, Boolean, Column, DateTime, MetaData, String, Table, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
+import app.webhook_event_store as webhook_event_store
 from app.webhook_event_store import (
     create_webhook_event,
     get_webhook_event_schema,
@@ -81,3 +82,47 @@ def test_legacy_webhook_event_schema_supports_payment_audit(tmp_path: Path):
         await engine.dispose()
 
     asyncio.run(scenario())
+
+
+def test_webhook_event_schema_reflection_is_cached_across_repeated_health_calls(
+    client, db_session_factory, monkeypatch
+):
+    """Repeated GET /health calls must reuse cached WebhookEventSchema reflection."""
+    from unittest.mock import AsyncMock
+
+    from app.routers import health
+
+    monkeypatch.setattr(
+        health, "redis_health_check", AsyncMock(return_value={"status": "ok"})
+    )
+    real_table = webhook_event_store.Table
+    reflection_calls = 0
+
+    def counting_table(*args, **kwargs):
+        nonlocal reflection_calls
+        if args and args[0] == "webhook_events" and "autoload_with" in kwargs:
+            reflection_calls += 1
+        return real_table(*args, **kwargs)
+
+    monkeypatch.setattr(webhook_event_store, "Table", counting_table)
+
+    first = client.get("/health")
+    second = client.get("/health")
+    third = client.get("/api/v1/health")
+
+    assert first.status_code == 200
+    assert second.status_code == 200
+    assert third.status_code == 200
+    assert reflection_calls == 1
+
+    async def check_same_schema_instance() -> None:
+        async with db_session_factory() as session_one:
+            schema_one = await get_webhook_event_schema(session_one)
+        async with db_session_factory() as session_two:
+            schema_two = await get_webhook_event_schema(session_two)
+        assert schema_one is not None
+        assert schema_one is schema_two
+
+    asyncio.run(check_same_schema_instance())
+    assert reflection_calls == 1
+

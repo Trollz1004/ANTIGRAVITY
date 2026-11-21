@@ -388,6 +388,48 @@ def test_list_usa_posts_refuses_invalid_order_and_limit_above_100(
         app.dependency_overrides.pop(get_current_user, None)
 
 
+def test_list_posts_does_not_rerun_ensure_boards_select_once_default_boards_exist(
+    client, db_session_factory
+):
+    """Once default boards exist, repeated GET /api/v1/boards/{slug}/posts calls must not re-run _ensure_boards SELECT queries."""
+    from sqlalchemy import event
+
+    user = _make_user(email="boards_seed_memo@example.com")
+    user.bot_shield_verified = True
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
+    sync_engine = db_session_factory.kw["bind"].sync_engine
+    statements: list[str] = []
+
+    def record_sql(_conn, _cursor, statement, _parameters, _context, _executemany):
+        statements.append(statement)
+
+    try:
+        # First call seeds the default boards.
+        initial_resp = client.get("/api/v1/boards/usa/posts")
+        assert initial_resp.status_code == 200
+
+        event.listen(sync_engine, "before_cursor_execute", record_sql)
+        try:
+            second_resp = client.get("/api/v1/boards/usa/posts")
+            third_resp = client.get("/api/v1/boards/general/posts")
+        finally:
+            event.remove(sync_engine, "before_cursor_execute", record_sql)
+
+        assert second_resp.status_code == 200
+        assert third_resp.status_code == 200
+
+        ensure_boards_selects = [
+            sql
+            for sql in statements
+            if "FROM boards" in sql and "WHERE" not in sql.upper()
+        ]
+        assert ensure_boards_selects == []
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+
 # ── GET /api/v1/boards/{slug}/posts/{post_id}/comments ───────────────────────
 
 
