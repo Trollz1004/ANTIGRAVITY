@@ -44,6 +44,7 @@ import re
 HERE = os.path.dirname(os.path.abspath(__file__))
 PUBLIC = os.path.join(HERE, "public")
 BLOG_DIR = os.path.join(PUBLIC, "blog")
+CITIES_DIR = os.path.join(PUBLIC, "cities")
 
 SITE = "https://youandinotai.com"
 BRAND = "YouAndINotAI"
@@ -91,8 +92,11 @@ def inline(text: str) -> str:
 
     def md_link(m: re.Match[str]) -> str:
         label = m.group(1)
-        url = html.escape(m.group(2), quote=True)
-        return f'<a href="{url}">{label}</a>'
+        raw_url = html.unescape(m.group(2))
+        safe_url = raw_url.replace('"', "%22")
+        if raw_url.startswith("/register?"):
+            return f'<a class="cta-button" role="button" href="{safe_url}">{label}</a>'
+        return f'<a href="{safe_url}">{label}</a>'
 
     escaped = MD_LINK_RE.sub(md_link, escaped)
 
@@ -223,6 +227,11 @@ def page(meta: dict[str, str], body_html: str, canonical: str) -> str:
       p, li {{ margin: 0 0 1rem; }}
       ol {{ padding-left: 1.25rem; }}
       a {{ color: {ORANGE}; overflow-wrap: anywhere; }}
+      a.cta-button {{
+        display: inline-block; margin-top: .5rem; padding: .8rem 1.4rem;
+        background: {ORANGE}; color: {CREAM}; font-weight: 700;
+        border-radius: .45rem; text-decoration: none;
+      }}
       footer {{
         margin-top: 3rem; padding-top: 1.25rem;
         border-top: 1px solid rgba(17,17,17,.12);
@@ -256,6 +265,13 @@ def canonical_for(meta: dict[str, str], slug: str) -> str:
     return f"{SITE}/blog/{slug}/"
 
 
+def canonical_for_city(meta: dict[str, str], slug: str) -> str:
+    declared = (meta.get("canonical") or "").strip()
+    if declared:
+        return declared if declared.endswith("/") else declared + "/"
+    return f"{SITE}/cities/{slug}/"
+
+
 def posts() -> list[tuple[str, dict[str, str], str]]:
     if not os.path.isdir(BLOG_DIR):
         return []
@@ -267,6 +283,94 @@ def posts() -> list[tuple[str, dict[str, str], str]]:
             meta, body = parse_front_matter(fh.read())
         found.append((slug_from_filename(name), meta, body))
     return found
+
+
+def cities() -> list[tuple[str, dict[str, str], str]]:
+    if not os.path.isdir(CITIES_DIR):
+        return []
+    found = []
+    for name in sorted(os.listdir(CITIES_DIR)):
+        if not name.endswith(".md"):
+            continue
+        with open(os.path.join(CITIES_DIR, name), encoding="utf-8") as fh:
+            meta, body = parse_front_matter(fh.read())
+        found.append((slug_from_filename(name), meta, body))
+    return found
+
+
+def cities_index(found: list[tuple[str, dict[str, str], str]]) -> str:
+    cards = []
+    for slug, meta, _body in found:
+        title = html.escape(meta.get("title") or slug)
+        desc = html.escape(meta.get("description") or "", quote=True)
+        cards.append(
+            f'      <li><a href="/cities/{slug}/"><strong>{title}</strong></a>'
+            f'<span>{desc}</span></li>'
+        )
+
+    hub_title = f"Dating Without Bots by City | {BRAND}"
+    hub_desc = "City guides on verified human dating, the timed question, the $1 Bot-Shield check, and the USA group chat on YouAndINotAI."
+    og_image = f"{SITE}/og-image.png"
+    og_image_alt = "YouAndINotAI 18+ verified-human dating and social platform with $1 Bot-Shield check"
+
+    return f"""<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{html.escape(hub_title)}</title>
+    <meta name="description" content="{html.escape(hub_desc, quote=True)}" />
+    <link rel="canonical" href="{SITE}/cities/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="{BRAND}" />
+    <meta property="og:title" content="{html.escape(hub_title, quote=True)}" />
+    <meta property="og:description" content="{html.escape(hub_desc, quote=True)}" />
+    <meta property="og:url" content="{SITE}/cities/" />
+    <meta property="og:image" content="{og_image}" />
+    <meta property="og:image:alt" content="{html.escape(og_image_alt, quote=True)}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{html.escape(hub_title, quote=True)}" />
+    <meta name="twitter:description" content="{html.escape(hub_desc, quote=True)}" />
+    <meta name="twitter:image" content="{og_image}" />
+    <meta name="twitter:image:alt" content="{html.escape(og_image_alt, quote=True)}" />
+    <style>
+      :root {{ color-scheme: light; }}
+      * {{ box-sizing: border-box; }}
+      body {{
+        margin: 0; padding: 2.5rem 1.25rem 5rem;
+        background: {CREAM}; color: {BLACK};
+        font: 17px/1.65 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      }}
+      main {{ max-width: 44rem; margin: 0 auto; }}
+      .kicker {{
+        display: inline-block; margin-bottom: 1.75rem;
+        font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+        font-size: .75rem; color: {ORANGE}; text-decoration: none;
+      }}
+      h1 {{ font-size: 2rem; line-height: 1.2; margin: 0 0 1.5rem; }}
+      ul {{ list-style: none; padding: 0; }}
+      li {{ margin: 0 0 1.5rem; }}
+      li a {{ color: {ORANGE}; font-size: 1.1rem; }}
+      li span {{ display: block; opacity: .8; }}
+      footer {{
+        margin-top: 3rem; padding-top: 1.25rem;
+        border-top: 1px solid rgba(17,17,17,.12);
+        font-size: .85rem; opacity: .75;
+      }}
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="kicker" href="/">{BRAND}</a>
+      <h1>Dating Without Bots by City</h1>
+      <ul>
+{chr(10).join(cards)}
+      </ul>
+      <footer>{TAGLINE} · <a href="/">youandinotai.com</a></footer>
+    </main>
+  </body>
+</html>
+"""
 
 
 def blog_index(found: list[tuple[str, dict[str, str], str]]) -> str:
@@ -398,16 +502,39 @@ def build() -> int:
         written += 1
         print(f"prerendered {slug} -> blog/{slug}/index.html")
 
+    found_cities = cities()
+    city_written = 0
+    if found_cities:
+        os.makedirs(CITIES_DIR, exist_ok=True)
+        with open(os.path.join(CITIES_DIR, "index.html"), "w", encoding="utf-8") as fh:
+            fh.write(cities_index(found_cities))
+        sitemap_entries.append((f"{SITE}/cities/", latest_date, "0.8"))
+        print("prerendered cities index -> cities/index.html")
+
+        for slug, meta, body in found_cities:
+            body_html = render_body(body)
+            url = canonical_for_city(meta, slug)
+            out_dir = os.path.join(CITIES_DIR, slug)
+            os.makedirs(out_dir, exist_ok=True)
+            with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8") as fh:
+                fh.write(page(meta, body_html, url))
+            sitemap_entries.append((url, meta.get("date") or latest_date, "0.8"))
+            city_written += 1
+            print(f"prerendered city {slug} -> cities/{slug}/index.html")
+
     with open(os.path.join(PUBLIC, "sitemap.xml"), "w", encoding="utf-8") as fh:
         fh.write(sitemap(sitemap_entries))
 
-    print(f"{written} post(s) + sitemap.xml ({len(sitemap_entries)} urls) written to public")
+    print(
+        f"{written} post(s) + {city_written} city page(s) + sitemap.xml ({len(sitemap_entries)} urls) written to public"
+    )
     return 0
 
 
 def check() -> int:
-    """Verify every post has generated HTML containing its own text."""
+    """Verify every post and city page has generated HTML containing its own text."""
     found = posts()
+    found_cities = cities()
     problems: list[str] = []
 
     for slug, _meta, body in found:
@@ -430,6 +557,25 @@ def check() -> int:
         if "<div id=\"root\">" in rendered:
             problems.append(f"{slug}: served the SPA shell instead of content")
 
+    for slug, _meta, body in found_cities:
+        index = os.path.join(CITIES_DIR, slug, "index.html")
+        if not os.path.exists(index):
+            problems.append(f"city {slug}: no cities/{slug}/index.html")
+            continue
+        with open(index, encoding="utf-8") as fh:
+            rendered = fh.read()
+
+        first = next(
+            (ln.strip() for ln in body.splitlines() if ln.strip() and not ln.startswith("#")),
+            "",
+        )
+        probe = first[:60]
+        if probe and probe not in rendered:
+            problems.append(f"city {slug}: body text absent from generated HTML")
+
+        if "<div id=\"root\">" in rendered:
+            problems.append(f"city {slug}: served the SPA shell instead of content")
+
     sm = os.path.join(PUBLIC, "sitemap.xml")
     if not os.path.exists(sm):
         problems.append("sitemap.xml missing")
@@ -441,6 +587,9 @@ def check() -> int:
         for slug, _meta, _body in found:
             if f"/blog/{slug}" not in content:
                 problems.append(f"sitemap.xml omits /blog/{slug}")
+        for slug, _meta, _body in found_cities:
+            if f"/cities/{slug}/" not in content:
+                problems.append(f"sitemap.xml omits /cities/{slug}/")
 
     # /blog/ is served from blog/index.html. Without it that URL falls through
     # to the SPA shell, which is the exact defect this script exists to fix.
@@ -456,12 +605,25 @@ def check() -> int:
             if f'href="/blog/{slug}/"' not in hub:
                 problems.append(f"/blog/ hub does not link /blog/{slug}/")
 
-    print(f"checked {len(found)} post(s)")
+    if found_cities:
+        cities_index_path = os.path.join(CITIES_DIR, "index.html")
+        if not os.path.exists(cities_index_path):
+            problems.append("/cities/ has no index.html — falls through to the SPA shell")
+        else:
+            with open(cities_index_path, encoding="utf-8") as fh:
+                city_hub = fh.read()
+            if "<div id=\"root\">" in city_hub:
+                problems.append("/cities/ serves the SPA shell")
+            for slug, _meta, _body in found_cities:
+                if f'href="/cities/{slug}/"' not in city_hub:
+                    problems.append(f"/cities/ hub does not link /cities/{slug}/")
+
+    print(f"checked {len(found)} post(s) and {len(found_cities)} city page(s)")
     if problems:
         for p in problems:
             print(f"  FAIL {p}")
         return 1
-    print("PASS — every post has static HTML containing its own text, and the sitemap covers them")
+    print("PASS — every post and city page has static HTML containing its own text, and the sitemap covers them")
     return 0
 
 
