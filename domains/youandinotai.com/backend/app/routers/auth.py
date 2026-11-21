@@ -1,6 +1,7 @@
 """Authentication router - register, login, refresh, me."""
 
 import hashlib
+import hmac
 import uuid
 from datetime import datetime, timezone
 
@@ -314,12 +315,24 @@ async def beta_access(
     db: AsyncSession = Depends(get_db),
 ) -> AuthTokenResponse:
     settings = get_settings()
+    await enforce_route_rate_limit(
+        request,
+        bucket="auth:beta_access",
+        limit=settings.verify_rate_limit_per_minute,
+        window_seconds=settings.redis_rate_limit_window,
+    )
     if not settings.beta_access_enabled:
         raise not_found(message="Beta access is not enabled")
 
     normalized_code = _normalize_beta_code(payload.code)
     allowed_codes = settings.beta_access_code_list
-    if not allowed_codes or normalized_code not in allowed_codes:
+    if not allowed_codes or not any(
+        hmac.compare_digest(
+            normalized_code.encode("utf-8"),
+            candidate.encode("utf-8"),
+        )
+        for candidate in allowed_codes
+    ):
         raise unauthorized(
             message="Invalid beta access code",
             details={"code": ErrorCode.BETA_ACCESS_DENIED},
