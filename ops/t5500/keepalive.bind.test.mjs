@@ -222,6 +222,7 @@ test('keepalive.ps1 pause file: when $Repo\\ops\\t5500\\PAUSE exists, each pass 
       '$script:ProbeCalls = @{ up_stage = 0; down_stage = 0 }',
       '$script:HealCalls = @{ up_stage = 0; down_stage = 0 }',
       '$script:TunnelStopCalls = 0',
+      'function Stop-Process { param($Id, [switch]$Force, $ErrorAction) $script:TunnelStopCalls++ }',
       'function Get-TunnelProcs { return @([pscustomobject]@{ ProcessId = 999991; CreationDate = "20260101" }, [pscustomobject]@{ ProcessId = 999992; CreationDate = "20260102" }) }',
       '$Domains = @()',
       '$Stages = @(',
@@ -234,14 +235,17 @@ test('keepalive.ps1 pause file: when $Repo\\ops\\t5500\\PAUSE exists, each pass 
       ')',
       'Invoke-Pass',
       'Invoke-Pass',
+      '$pausedLogCount = if (Test-Path -LiteralPath $LogFile) { @(Get-Content -LiteralPath $LogFile).Count } else { 0 }',
       '$pausedSummary = [ordered]@{',
       '  upProbes = $script:ProbeCalls["up_stage"]',
       '  downProbes = $script:ProbeCalls["down_stage"]',
       '  upHeals = $script:HealCalls["up_stage"]',
       '  downHeals = $script:HealCalls["down_stage"]',
+      '  tunnelStops = $script:TunnelStopCalls',
       '  upResult = $script:Result["up_stage"]',
       '  downResult = $script:Result["down_stage"]',
       '  downFails = [int]$script:Fails["down_stage"]',
+      '  logCount = $pausedLogCount',
       '}',
       'Remove-Item -LiteralPath (Join-Path $repoRoot "ops\\t5500\\PAUSE") -Force',
       'Invoke-Pass',
@@ -251,7 +255,7 @@ test('keepalive.ps1 pause file: when $Repo\\ops\\t5500\\PAUSE exists, each pass 
       '  upHeals = $script:HealCalls["up_stage"]',
       '  downHeals = $script:HealCalls["down_stage"]',
       '}',
-      '[ordered]@{ paused = $pausedSummary; unpaused = $unpausedSummary } | ConvertTo-Json -Compress',
+      '[ordered]@{ paused = $pausedSummary; unpaused = $unpausedSummary } | ConvertTo-Json -Depth 5 -Compress',
     ].join('\r\n');
     fs.writeFileSync(harnessPath, harnessScript, 'utf8');
 
@@ -277,6 +281,7 @@ test('keepalive.ps1 pause file: when $Repo\\ops\\t5500\\PAUSE exists, each pass 
     assert.equal(summary.paused.downProbes, 2);
     assert.equal(summary.paused.upHeals, 0);
     assert.equal(summary.paused.downHeals, 0);
+    assert.equal(summary.paused.tunnelStops, 0);
     assert.equal(summary.paused.upResult, 'UP');
     assert.equal(summary.paused.downResult, 'DOWN');
     assert.equal(summary.paused.downFails, 2);
@@ -284,27 +289,30 @@ test('keepalive.ps1 pause file: when $Repo\\ops\\t5500\\PAUSE exists, each pass 
     // Log file must exist, contain probe results, and state every pass that healing is paused.
     const logPath = path.join(logDir, 't5500-keepalive.log');
     assert.ok(fs.existsSync(logPath), 'Expected logs/t5500-keepalive.log to be written');
-    const logLines = fs.readFileSync(logPath, 'utf8').split(/\r?\n/).filter(Boolean);
-    const passPauseLines = logLines.filter(
+    const allLogLines = fs.readFileSync(logPath, 'utf8').split(/\r?\n/).filter(Boolean);
+    const pausedLogLines = allLogLines.slice(0, summary.paused.logCount);
+    const passPauseLines = pausedLogLines.filter(
       (line) =>
         /PAUSE/i.test(line) && /healing is paused/i.test(line) && !/Mock Down Stage|Mock Healthy Stage/.test(line),
     );
     assert.equal(
       passPauseLines.length,
       2,
-      `Expected a pass-level pause log entry on each of the 2 paused passes, got ${passPauseLines.length}:\n${logLines.join('\n')}`,
+      `Expected a pass-level pause log entry on each of the 2 paused passes, got ${passPauseLines.length}:\n${pausedLogLines.join('\n')}`,
     );
-    const downPauseLines = logLines.filter(
+    const downPauseLines = pausedLogLines.filter(
       (line) => /\[Mock Down Stage\]/.test(line) && /DOWN/i.test(line) && /paused/i.test(line),
     );
     assert.equal(
       downPauseLines.length,
       2,
-      `Expected Mock Down Stage to log DOWN while paused on each of the 2 passes, got ${downPauseLines.length}:\n${logLines.join('\n')}`,
+      `Expected Mock Down Stage to log DOWN while paused on each of the 2 passes, got ${downPauseLines.length}:\n${pausedLogLines.join('\n')}`,
     );
     assert.ok(
-      !logLines.slice(0, -2).some((line) => /\[Mock Down Stage\] DOWN - healing\b/.test(line)),
-      `Expected no healing log while PAUSE existed:\n${logLines.join('\n')}`,
+      !pausedLogLines.some(
+        (line) => /\[Mock Down Stage\] DOWN - healing$/.test(line) || /duplicate tunnel connector stopped/.test(line),
+      ),
+      `Expected no healing or process stop log while PAUSE existed:\n${pausedLogLines.join('\n')}`,
     );
 
     // Once PAUSE is removed (3rd pass), the down stage heal action runs.
