@@ -1308,18 +1308,6 @@
   },
   {
    "fact": "loopback-address",
-   "file": "apps/crosslisting-os/docs/HERMES_HANDOFF.md"
-  },
-  {
-   "fact": "loopback-address",
-   "file": "apps/crosslisting-os/research/pasted_content.txt"
-  },
-  {
-   "fact": "loopback-address",
-   "file": "apps/crosslisting-os/server/index.ts"
-  },
-  {
-   "fact": "loopback-address",
    "file": "apps/hermes-leadgen/README.md"
   },
   {
