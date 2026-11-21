@@ -1,6 +1,6 @@
 ---
 title: "Dating after divorce over 40 without wading through fake profiles"
-description: "dating after divorce over 40 — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging or video."
+description: "dating after divorce over 40 — a practical guide, plus how https://youandinotai.com uses a short human check and a $1 Bot-Shield payment before messaging."
 date: 2026-10-01
 keyword: "dating after divorce over 40"
 canonical: "https://youandinotai.com/blog/dating-after-divorce-over-40/"
