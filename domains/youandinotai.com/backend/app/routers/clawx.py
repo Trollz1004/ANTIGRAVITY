@@ -15,7 +15,7 @@ from typing import Any
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
-from app.auth import get_current_user
+from app.auth import require_founder_or_admin
 from app.clawx_integration import (
     ClawxClient,
     InvalidKeyError,
@@ -86,7 +86,7 @@ class HealthCheckResponse(BaseModel):
 
 @router.get("/agents", response_model=AgentListResponse, summary="List ClawX agents")
 async def list_clawx_agents(
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
 ) -> dict[str, Any]:
     """Return all 6 ClawX operator agents and their configuration status.
 
@@ -110,7 +110,7 @@ async def list_clawx_agents(
 async def rotate_agent_key(
     agent_name: str,
     body: KeyRotateRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
 ) -> dict[str, Any]:
     """Replace the API key for *agent_name* with the provided ``new_key``.
 
@@ -129,7 +129,7 @@ async def rotate_agent_key(
 
 @router.get("/health", response_model=HealthCheckResponse, summary="ClawX health check")
 async def clawx_health(
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
 ) -> dict[str, Any]:
     """Check connectivity to the ClawX service.
 

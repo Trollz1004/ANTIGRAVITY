@@ -398,7 +398,7 @@ def test_webhook_retry_and_dead_letter_access_control(client, db_session_factory
     )
 
 
-def test_migrations_router_access_control(db_session_factory):
+def test_migrations_router_access_control(client, db_session_factory):
     from app.database import get_db
 
     member, founder = (
