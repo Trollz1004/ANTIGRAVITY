@@ -992,4 +992,114 @@ describe('Verify after $1 payment', () => {
     expect(refundCard?.className).toContain('p-5');
     expect(askButton.className).toContain('mt-3');
   });
+
+  it('shows a paid member whose question result is too old one plain line asking for one new timed question with no new charge, never says prompt, and activates the badge on passing without a second checkout', async () => {
+    vi.useFakeTimers();
+
+    let verified = false;
+    vi.mocked(api.get).mockImplementation(async (path: string) => {
+      if (path === '/verify/status') {
+        return {
+          verified,
+          trust_score: verified ? 60 : 20,
+          tier: verified ? 'gold' : 'unverified',
+          bot_shield_paid: true,
+          subscription_active: false,
+          checks_completed: verified ? 3 : 2,
+        };
+      }
+      if (path === '/verify/refund-status') {
+        return { available: false };
+      }
+      if (path === '/auth/me') {
+        return {
+          user_id: 'user-verify-1',
+          email: 'paid@youandinotai.com',
+          display_name: 'Paid Member',
+          bot_shield_verified: verified,
+          subscription_tier: null,
+          subscription_active: false,
+          has_profile: true,
+          adult_verified: true,
+        };
+      }
+      throw new Error(`Unexpected GET ${path}`);
+    });
+
+    vi.mocked(api.post).mockImplementation(async (path: string) => {
+      if (path === '/verify/challenge') {
+        return {
+          challenge_id: 'chal-late-paid-1',
+          challenge_type: 'liveness_math',
+          question: 'What is 15 + 4?',
+          issued_at: '2026-11-21T12:00:00Z',
+          expires_at: '2026-11-21T12:05:00Z',
+        };
+      }
+      if (path === '/verify/submit') {
+        verified = true;
+        return {
+          passed: true,
+          trust_score: 60,
+          message:
+            'Liveness verified! Your $1 Bot-Shield verification is complete.',
+          checkout_url: null,
+        };
+      }
+      throw new Error(`Unexpected POST ${path}`);
+    });
+
+    const { container, getByRole, getByPlaceholderText, getByText, queryByText } =
+      render(
+        <MemoryRouter initialEntries={['/app/verify']}>
+          <Verify />
+        </MemoryRouter>
+      );
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    expect(
+      getByText(
+        'Your $1 payment is confirmed. Answer one new timed question to activate your badge with no new charge.'
+      )
+    ).toBeDefined();
+    expect(
+      queryByText(
+        /When you answer the timed question, the page will hand you into the \$1 Square checkout\./i
+      )
+    ).toBeNull();
+    expect(container.textContent?.toLowerCase()).not.toContain('prompt');
+
+    await act(async () => {
+      getByRole('button', { name: /Start Verification/i }).click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    expect(getByText('What is 15 + 4?')).toBeDefined();
+
+    const input = getByPlaceholderText('Your answer') as HTMLInputElement;
+    const reactPropsKey = Object.keys(input).find(k =>
+      k.startsWith('__reactProps$')
+    );
+    if (reactPropsKey) {
+      await act(async () => {
+        (input as any)[reactPropsKey].onChange({ target: { value: '19' } });
+      });
+    }
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+
+    await act(async () => {
+      getByRole('button', { name: 'Submit' }).click();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    expect(getByText('Badge active.')).toBeDefined();
+    expect(queryByText(/Pay \$1 Bot-Shield/i)).toBeNull();
+    expect(container.textContent?.toLowerCase()).not.toContain('prompt');
+  });
 });
