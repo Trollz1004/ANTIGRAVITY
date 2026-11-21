@@ -249,6 +249,51 @@ export function parseCliArgs(argv) {
   return { route, fixturePath, outDir, selector, namePrefix, staticSiteDir, url };
 }
 
+const MAX_FULL_PAGE_WINDOW_HEIGHT = 16384;
+
+export function pickFullPageWindowHeight(minHeight, pageHeight, maxHeight = MAX_FULL_PAGE_WINDOW_HEIGHT) {
+  const floor = Number.isFinite(Number(minHeight)) && Number(minHeight) > 0 ? Math.ceil(Number(minHeight)) : 900;
+  const ceiling =
+    Number.isFinite(Number(maxHeight)) && Number(maxHeight) >= floor
+      ? Math.floor(Number(maxHeight))
+      : MAX_FULL_PAGE_WINDOW_HEIGHT;
+  const rawCandidates = Array.isArray(pageHeight)
+    ? pageHeight
+    : pageHeight && typeof pageHeight === 'object'
+      ? Object.values(pageHeight)
+      : [pageHeight];
+  let tallest = floor;
+  for (const candidate of rawCandidates) {
+    const numeric = Number(candidate);
+    if (Number.isFinite(numeric) && numeric > 0) {
+      tallest = Math.max(tallest, Math.ceil(numeric));
+    }
+  }
+  return Math.min(ceiling, tallest);
+}
+
+export async function shootFullPageWindow(page, { width, height, screenshotPath }) {
+  const measuredHeight = await page.evaluate(() => {
+    if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+      window.scrollTo(0, 0);
+    }
+    const doc = document.documentElement;
+    const body = document.body;
+    return Math.max(
+      doc ? doc.scrollHeight : 0,
+      doc ? doc.offsetHeight : 0,
+      doc ? doc.clientHeight : 0,
+      body ? body.scrollHeight : 0,
+      body ? body.offsetHeight : 0,
+      body ? body.clientHeight : 0,
+    );
+  });
+  const fullHeight = pickFullPageWindowHeight(height, measuredHeight);
+  await page.setViewportSize({ width, height: fullHeight });
+  await page.screenshot({ path: screenshotPath, fullPage: false });
+  return fullHeight;
+}
+
 async function captureViewport(
   browser,
   { baseUrl, route, fixture, selector, width, height, screenshotPath, pageErrors },
@@ -295,7 +340,7 @@ async function captureViewport(
   await locator.waitFor({ state: 'visible', timeout: 15000 });
   await page.waitForTimeout(300);
 
-  await page.screenshot({ path: screenshotPath, fullPage: true });
+  await shootFullPageWindow(page, { width, height, screenshotPath });
 
   const finalPath = new URL(page.url()).pathname;
   const visibleText = (await locator.innerText()).trim();
@@ -382,7 +427,7 @@ export async function shootPage(options) {
       await locator.waitFor({ state: 'visible', timeout: 15000 });
       await page.waitForTimeout(300);
       const picturePath = path.join(outDir, `${namePrefix}.png`);
-      await page.screenshot({ path: picturePath, fullPage: true });
+      await shootFullPageWindow(page, { width: 1440, height: 900, screenshotPath: picturePath });
       const visibleText = (await locator.innerText()).trim();
       const scrollsSideways = await page.evaluate(
         () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
