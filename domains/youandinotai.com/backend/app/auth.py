@@ -135,6 +135,25 @@ async def require_verified_profile(
     return user
 
 
+def is_founder_or_admin(user: User) -> bool:
+    if getattr(user, "is_admin", False) is True:
+        return True
+    current_settings = get_settings()
+    email = (getattr(user, "email", None) or "").strip().lower()
+    return bool(email) and email in current_settings.support_operator_email_list
+
+
+async def require_founder_or_admin(
+    user: User = Depends(get_current_user),
+) -> User:
+    if not is_founder_or_admin(user):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Founder or admin access required",
+        )
+    return user
+
+
 def verify_google_token(token: str) -> dict:
     try:
         id_info = id_token.verify_oauth2_token(
