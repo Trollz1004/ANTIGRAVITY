@@ -381,6 +381,9 @@ async def _get_user_by_checkout_reference(
     return user, verification_event, checkout_data
 
 
+SUBSCRIPTION_TIERS = {"founding_member", "3_month", "12_month", "royalty"}
+
+
 def _bot_shield_binding_is_valid(
     *,
     checkout_data: dict[str, Any] | None,
@@ -400,6 +403,36 @@ def _bot_shield_binding_is_valid(
     if checkout_data.get("tier") != "bot_shield":
         return False
     if liveness_event.challenge_type != "liveness":
+        return False
+    return True
+
+
+def _subscription_binding_is_valid(
+    *,
+    user: User | None,
+    checkout_data: dict[str, Any] | None,
+    bound_event: VerificationEvent | None,
+    tier: str | None = None,
+    checkout_ref: str | None = None,
+) -> bool:
+    """Validate that a subscription event is bound to a checkout record created for this user and tier."""
+    if not user or not checkout_data or not bound_event:
+        return False
+    bound_tier = checkout_data.get("tier")
+    if bound_tier not in SUBSCRIPTION_TIERS:
+        return False
+    if tier is not None and bound_tier != tier:
+        return False
+    if bound_event.user_id != user.id or checkout_data.get("user_id") != user.id:
+        return False
+    if bound_event.id != checkout_data.get("event_id"):
+        return False
+    if (
+        checkout_ref
+        and bound_event.challenge_token
+        and bound_event.challenge_type != "liveness"
+        and bound_event.challenge_token != checkout_ref
+    ):
         return False
     return True
 
@@ -551,10 +584,15 @@ async def _process_square_payment_event(
     )
 
     # Resolve user from signed checkout ref first, then Square customer/email fallbacks.
+    subscription_obj = (
+        obj.get("subscription") if isinstance(obj.get("subscription"), dict) else {}
+    )
     checkout_ref = extract_checkout_reference(
         str(payment_obj.get("note") or ""),
         str(payment_obj.get("reference_id") or ""),
         str(order_obj.get("reference_id") or "") if isinstance(order_obj, dict) else "",
+        str(subscription_obj.get("note") or ""),
+        str(subscription_obj.get("reference_id") or ""),
     )
     user, bound_event, checkout_data = await _get_user_by_checkout_reference(
         db,
@@ -569,8 +607,8 @@ async def _process_square_payment_event(
     if not user and buyer_email:
         user = await _get_user_by_email(db, buyer_email)
 
-    # Link Square customer ID to user for future lookups
-    if user and customer_id and not user.square_customer_id:
+    # Link Square customer ID to user for future lookups only when checkout-bound
+    if user and bound_event and customer_id and not user.square_customer_id:
         user.square_customer_id = customer_id
 
     # Process based on event type
@@ -633,47 +671,71 @@ async def _process_square_payment_event(
 
             if user and tier:
                 if tier == "royalty":
-                    if (
-                        bound_event
-                        and checkout_data
-                        and checkout_data.get("tier") == tier
+                    if _subscription_binding_is_valid(
+                        user=user,
+                        checkout_data=checkout_data,
+                        bound_event=bound_event,
+                        tier=tier,
+                        checkout_ref=checkout_ref,
                     ):
                         bound_event.status = "completed"
                         bound_event.completed_at = observed_at
                         bound_event.square_payment_id = payment_id
                         bound_event.amount_cents = payment_amount_cents
-                    user.subscription_tier = tier
-                    user.subscription_active = True
-                    user.subscription_expires_at = None
-                    logger.info(
-                        "Royalty payment completed: user=%s event=%s proof=%s",
-                        user.id,
-                        event_id,
-                        proof_label,
-                    )
+                        user.subscription_tier = tier
+                        user.subscription_active = True
+                        user.subscription_expires_at = None
+                        logger.info(
+                            "Royalty payment completed: user=%s event=%s proof=%s",
+                            user.id,
+                            event_id,
+                            proof_label,
+                        )
+                    else:
+                        logger.warning(
+                            "Subscription payment ignored because checkout binding failed: user=%s tier=%s event_id=%s payment_id=%s checkout_ref=%s checkout_bound=%s",
+                            user.id,
+                            tier,
+                            event_id,
+                            payment_id,
+                            bool(checkout_ref),
+                            bool(bound_event),
+                        )
                 elif tier in {"founding_member", "3_month", "12_month"}:
-                    user.subscription_tier = tier
-                    user.subscription_active = True
-                    user.subscription_expires_at = build_subscription_expiry(
-                        tier,
-                        activated_at=observed_at,
-                    )
-                    if (
-                        bound_event
-                        and checkout_data
-                        and checkout_data.get("tier") == tier
+                    if _subscription_binding_is_valid(
+                        user=user,
+                        checkout_data=checkout_data,
+                        bound_event=bound_event,
+                        tier=tier,
+                        checkout_ref=checkout_ref,
                     ):
+                        user.subscription_tier = tier
+                        user.subscription_active = True
+                        user.subscription_expires_at = build_subscription_expiry(
+                            tier,
+                            activated_at=observed_at,
+                        )
                         bound_event.status = "completed"
                         bound_event.completed_at = observed_at
                         bound_event.square_payment_id = payment_id
                         bound_event.amount_cents = payment_amount_cents
-                    logger.info(
-                        "Subscription payment completed: user=%s tier=%s event=%s proof=%s",
-                        user.id,
-                        tier,
-                        event_id,
-                        proof_label,
-                    )
+                        logger.info(
+                            "Subscription payment completed: user=%s tier=%s event=%s proof=%s",
+                            user.id,
+                            tier,
+                            event_id,
+                            proof_label,
+                        )
+                    else:
+                        logger.warning(
+                            "Subscription payment ignored because checkout binding failed: user=%s tier=%s event_id=%s payment_id=%s checkout_ref=%s checkout_bound=%s",
+                            user.id,
+                            tier,
+                            event_id,
+                            payment_id,
+                            bool(checkout_ref),
+                            bool(bound_event),
+                        )
                 elif (
                     _bot_shield_binding_is_valid(
                         checkout_data=checkout_data,
@@ -789,14 +851,36 @@ async def _process_square_payment_event(
 
     elif event_type == "subscription.created":
         if user:
-            user.subscription_active = True
-            user.subscription_tier = "founding_member"
-            user.subscription_expires_at = None
-            logger.info(
-                "Square subscription created: user=%s event=%s",
-                user.id,
-                event_id,
-            )
+            if _subscription_binding_is_valid(
+                user=user,
+                checkout_data=checkout_data,
+                bound_event=bound_event,
+                checkout_ref=checkout_ref,
+            ):
+                bound_tier = str(checkout_data["tier"])
+                observed_at = utc_now()
+                bound_event.status = "completed"
+                bound_event.completed_at = observed_at
+                user.subscription_active = True
+                user.subscription_tier = bound_tier
+                user.subscription_expires_at = build_subscription_expiry(
+                    bound_tier,
+                    activated_at=observed_at,
+                )
+                logger.info(
+                    "Square subscription created: user=%s tier=%s event=%s",
+                    user.id,
+                    bound_tier,
+                    event_id,
+                )
+            else:
+                logger.warning(
+                    "Square subscription.created ignored because checkout binding failed: user=%s event_id=%s checkout_ref=%s checkout_bound=%s",
+                    user.id,
+                    event_id,
+                    bool(checkout_ref),
+                    bool(bound_event),
+                )
 
     elif event_type in ("subscription.updated",):
         # Check if subscription was cancelled
@@ -813,8 +897,30 @@ async def _process_square_payment_event(
                     event_id,
                 )
             elif sub_status == "ACTIVE":
-                user.subscription_active = True
-                user.subscription_expires_at = None
+                if _subscription_binding_is_valid(
+                    user=user,
+                    checkout_data=checkout_data,
+                    bound_event=bound_event,
+                    checkout_ref=checkout_ref,
+                ):
+                    bound_tier = str(checkout_data["tier"])
+                    observed_at = utc_now()
+                    bound_event.status = "completed"
+                    bound_event.completed_at = observed_at
+                    user.subscription_active = True
+                    user.subscription_tier = bound_tier
+                    user.subscription_expires_at = build_subscription_expiry(
+                        bound_tier,
+                        activated_at=observed_at,
+                    )
+                else:
+                    logger.warning(
+                        "Square subscription.updated ACTIVE ignored because checkout binding failed: user=%s event_id=%s checkout_ref=%s checkout_bound=%s",
+                        user.id,
+                        event_id,
+                        bool(checkout_ref),
+                        bool(bound_event),
+                    )
 
     await mark_webhook_event_processed(db, event_id)
 

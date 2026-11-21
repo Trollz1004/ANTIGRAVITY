@@ -561,11 +561,14 @@ def test_completed_royalty_payment_activates_subscription(client, db_session_fac
 
     from app.subscriptions import user_has_active_subscription
 
-    async def seed_user() -> None:
+    user_id = uuid.uuid4()
+    event_id = uuid.uuid4()
+
+    async def seed_user_and_checkout() -> None:
         async with db_session_factory() as session:
             session.add(
                 User(
-                    id=uuid.uuid4(),
+                    id=user_id,
                     email="royalty-buyer@example.com",
                     password_hash="hashed",
                     display_name="Royalty Buyer",
@@ -573,15 +576,30 @@ def test_completed_royalty_payment_activates_subscription(client, db_session_fac
                     updated_at=datetime.now(timezone.utc),
                 )
             )
+            session.add(
+                VerificationEvent(
+                    id=event_id,
+                    user_id=user_id,
+                    challenge_type="payment",
+                    status="pending",
+                    amount_cents=250000,
+                )
+            )
             await session.commit()
 
-    asyncio.run(seed_user())
+    asyncio.run(seed_user_and_checkout())
+    checkout_ref = build_checkout_reference(
+        user_id=user_id,
+        event_id=event_id,
+        tier="royalty",
+        secret="test-secret-that-is-at-least-32-characters-long-for-security",
+    )
 
     payload = make_square_payment_event(
         event_id="evt_royalty_card_1",
         amount_cents=250000,
         buyer_email="royalty-buyer@example.com",
-        note="Royalty Card",
+        note=f"Royalty Card agref:{checkout_ref}",
         payment_status="COMPLETED",
     )
 
@@ -1090,6 +1108,7 @@ def test_payment_webhook_rejects_wrong_signature_and_accepts_correct_signature(
     get_settings.cache_clear()
 
     user_id = uuid.uuid4()
+    event_id = uuid.uuid4()
 
     async def seed_user() -> None:
         async with db_session_factory() as session:
@@ -1103,15 +1122,30 @@ def test_payment_webhook_rejects_wrong_signature_and_accepts_correct_signature(
                     updated_at=datetime.now(timezone.utc),
                 )
             )
+            session.add(
+                VerificationEvent(
+                    id=event_id,
+                    user_id=user_id,
+                    challenge_type="payment",
+                    status="pending",
+                    amount_cents=1499,
+                )
+            )
             await session.commit()
 
     asyncio.run(seed_user())
+    checkout_ref = build_checkout_reference(
+        user_id=user_id,
+        event_id=event_id,
+        tier="founding_member",
+        secret="test-secret-that-is-at-least-32-characters-long-for-security",
+    )
 
     payload = make_square_payment_event(
         event_id="evt_sigcheck_flow_1",
         amount_cents=1499,
         buyer_email="sigcheck@example.com",
-        note="Founding Member subscription",
+        note=f"Founding Member subscription agref:{checkout_ref}",
         payment_status="COMPLETED",
     )
     raw_body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
