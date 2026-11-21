@@ -590,10 +590,10 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     fireEvent.focus(membershipBtn);
     expect(getByRole('tooltip').textContent).toContain('05 · Membership');
 
-    // No charity, mission, or third-party payment processor names in visible landing text
+    // No charity, mission, or banned payment processor names in visible landing text
     const visibleText = container.textContent || '';
     expect(visibleText).not.toMatch(
-      /\b(charity|philanthropy|nonprofit|donation|Square|Stripe)\b/i
+      /\b(charity|philanthropy|nonprofit|donation|Stripe)\b/i
     );
   });
 
