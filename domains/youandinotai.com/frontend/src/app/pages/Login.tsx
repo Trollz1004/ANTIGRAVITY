@@ -27,11 +27,17 @@ interface LoginErrors {
   password?: string;
 }
 
-export function Login({
-  googleClientId,
-}: {
+export interface LoginProps {
+  betaAccessEnabled?: boolean;
   googleClientId?: string;
-} = {}) {
+}
+
+export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
+  const isBetaAccessEnabled =
+    betaAccessEnabled ??
+    ['true', '1'].includes(
+      String(import.meta.env.VITE_BETA_ACCESS_ENABLED ?? '').toLowerCase()
+    );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -323,71 +329,73 @@ export function Login({
               </>
             )}
 
-            <form
-              onSubmit={handleBetaCode}
-              className="mt-6 rounded-lg border border-[#3A3F45] bg-[#1A1E25] p-4"
-              noValidate
-            >
-              <label
-                htmlFor="login-founder-code-input"
-                className="flex items-center gap-2 text-sm font-semibold text-[#F4F1EA]"
+            {isBetaAccessEnabled && (
+              <form
+                onSubmit={handleBetaCode}
+                className="mt-6 rounded-lg border border-[#3A3F45] bg-[#1A1E25] p-4"
+                noValidate
               >
-                <KeyRound
-                  size={16}
-                  className="text-[#FFD21E]"
-                  aria-hidden="true"
-                />
-                Founder code (optional)
-              </label>
-              {betaError && (
-                <p
-                  role="alert"
-                  className="mt-3 text-sm font-medium text-[#FF6B6B]"
+                <label
+                  htmlFor="login-founder-code-input"
+                  className="flex items-center gap-2 text-sm font-semibold text-[#F4F1EA]"
                 >
-                  {betaError}
-                </p>
-              )}
-              <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-                <input
-                  id="login-founder-code-input"
-                  type="text"
-                  value={betaCode}
-                  onChange={e => setBetaCode(e.target.value)}
-                  autoComplete="one-time-code"
-                  placeholder="FOUNDER-XXXX"
-                  className="flex-1 rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-3 font-mono text-sm font-bold uppercase tracking-widest text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
-                />
-                <button
-                  type="submit"
-                  disabled={betaLoading}
-                  className="ds-btn-ghost shrink-0 whitespace-nowrap px-6 py-3 text-sm font-semibold disabled:opacity-50"
-                >
-                  {betaLoading ? 'Checking...' : 'Use Code'}
-                </button>
-              </div>
-              {betaNeedsDob && (
-                <div className="mt-3">
-                  <label
-                    htmlFor="login-founder-dob-input"
-                    className="block text-xs font-semibold text-[#C9CBCE] mb-1.5"
-                  >
-                    Date of Birth (18+ required for new founder account)
-                  </label>
-                  <input
-                    id="login-founder-dob-input"
-                    type="text"
-                    value={betaDateOfBirth}
-                    onChange={e =>
-                      setBetaDateOfBirth(formatDateInput(e.target.value))
-                    }
-                    inputMode="numeric"
-                    maxLength={14}
-                    placeholder="MM / DD / YYYY"
-                    className="w-full rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-2.5 text-sm text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
+                  <KeyRound
+                    size={16}
+                    className="text-[#FFD21E]"
+                    aria-hidden="true"
                   />
+                  Founder code (optional)
+                </label>
+                {betaError && (
+                  <p
+                    role="alert"
+                    className="mt-3 text-sm font-medium text-[#FF6B6B]"
+                  >
+                    {betaError}
+                  </p>
+                )}
+                <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+                  <input
+                    id="login-founder-code-input"
+                    type="text"
+                    value={betaCode}
+                    onChange={e => setBetaCode(e.target.value)}
+                    autoComplete="one-time-code"
+                    placeholder="FOUNDER-XXXX"
+                    className="flex-1 rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-3 font-mono text-sm font-bold uppercase tracking-widest text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
+                  />
+                  <button
+                    type="submit"
+                    disabled={betaLoading}
+                    className="ds-btn-ghost shrink-0 whitespace-nowrap px-6 py-3 text-sm font-semibold disabled:opacity-50"
+                  >
+                    {betaLoading ? 'Checking...' : 'Use Code'}
+                  </button>
                 </div>
-              )}
-            </form>
+                {betaNeedsDob && (
+                  <div className="mt-3">
+                    <label
+                      htmlFor="login-founder-dob-input"
+                      className="block text-xs font-semibold text-[#C9CBCE] mb-1.5"
+                    >
+                      Date of Birth (18+ required for new founder account)
+                    </label>
+                    <input
+                      id="login-founder-dob-input"
+                      type="text"
+                      value={betaDateOfBirth}
+                      onChange={e =>
+                        setBetaDateOfBirth(formatDateInput(e.target.value))
+                      }
+                      inputMode="numeric"
+                      maxLength={14}
+                      placeholder="MM / DD / YYYY"
+                      className="w-full rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-2.5 text-sm text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
+                    />
+                  </div>
+                )}
+              </form>
+            )}
 
             <p className="mt-8 text-center text-sm text-[#C9CBCE]">
               Need an account?{' '}

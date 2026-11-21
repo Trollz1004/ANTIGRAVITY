@@ -181,6 +181,17 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     );
   });
 
+  it('hides the founder code box on Sign In by default when beta access is off', () => {
+    const { queryByLabelText, queryByRole } = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Login />
+      </MemoryRouter>
+    );
+
+    expect(queryByLabelText('Founder code (optional)')).toBeNull();
+    expect(queryByRole('button', { name: 'Use Code' })).toBeNull();
+  });
+
   it('Sign In has one optional "Founder code (optional)" field wired to /auth/beta-access', async () => {
     vi.mocked(api.post).mockResolvedValueOnce({
       access_token: 'tok-founder',
@@ -201,7 +212,7 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     const { container, getByLabelText, getByRole, findByText } = render(
       <MemoryRouter initialEntries={['/login']}>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login betaAccessEnabled />} />
           <Route path="/app" element={<p>member home</p>} />
           <Route path="/app/profile" element={<p>profile setup</p>} />
         </Routes>
@@ -252,7 +263,7 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     const { getByLabelText, getByRole, findByText } = render(
       <MemoryRouter initialEntries={['/login']}>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login betaAccessEnabled />} />
           <Route path="/app" element={<p>member home</p>} />
           <Route path="/app/profile" element={<p>profile setup</p>} />
         </Routes>

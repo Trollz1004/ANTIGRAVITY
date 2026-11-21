@@ -26,9 +26,10 @@ from app.error_responses import (
     ErrorCode,
     bad_request,
     conflict,
+    not_found,
     unauthorized,
 )
-from app.models import Profile, User
+from app.models import Profile, User, VerificationEvent
 from app.rate_limit_redis import enforce_route_rate_limit
 from app.schemas import (
     AuthBetaAccessRequest,
@@ -312,8 +313,12 @@ async def beta_access(
     request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> AuthTokenResponse:
+    settings = get_settings()
+    if not settings.beta_access_enabled:
+        raise not_found(message="Beta access is not enabled")
+
     normalized_code = _normalize_beta_code(payload.code)
-    allowed_codes = get_settings().beta_access_code_list
+    allowed_codes = settings.beta_access_code_list
     if not allowed_codes or normalized_code not in allowed_codes:
         raise unauthorized(
             message="Invalid beta access code",
@@ -323,7 +328,6 @@ async def beta_access(
     if payload.date_of_birth is not None:
         ensure_adult(payload.date_of_birth)
 
-    settings = get_settings()
     email, password_seed, display_name = _beta_identity(
         normalized_code, settings.jwt_secret
     )
@@ -334,6 +338,7 @@ async def beta_access(
             raise bad_request(
                 message="Date of birth is required to create an account (18+ only)"
             )
+        now = datetime.now(timezone.utc)
         user = User(
             id=uuid.uuid4(),
             email=email,
@@ -342,8 +347,8 @@ async def beta_access(
             ),
             display_name=display_name,
             date_of_birth=payload.date_of_birth,
-            adult_verified_at=datetime.now(timezone.utc),
-            bot_shield_verified=True,
+            adult_verified_at=now,
+            bot_shield_verified=False,
             subscription_tier="founding_member",
             subscription_active=True,
             is_active=True,
@@ -351,6 +356,18 @@ async def beta_access(
             member_badge="Founder",
         )
         db.add(user)
+        await db.flush()
+        db.add(
+            VerificationEvent(
+                id=uuid.uuid4(),
+                user_id=user.id,
+                challenge_type="payment",
+                challenge_token="beta_access",
+                status="completed",
+                amount_cents=0,
+                completed_at=now,
+            )
+        )
         await db.commit()
         await db.refresh(user)
     elif not user.is_active:
