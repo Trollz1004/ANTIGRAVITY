@@ -294,11 +294,14 @@ class TestSquarePaymentEventFactory:
 def test_completed_founding_member_payment_activates_subscription(
     client, db_session_factory
 ):
-    async def seed_user() -> None:
+    user_id = uuid.uuid4()
+    event_id = uuid.uuid4()
+
+    async def seed_user_and_checkout() -> None:
         async with db_session_factory() as session:
             session.add(
                 User(
-                    id=uuid.uuid4(),
+                    id=user_id,
                     email="founder@example.com",
                     password_hash="hashed",
                     display_name="Founder",
@@ -306,17 +309,32 @@ def test_completed_founding_member_payment_activates_subscription(
                     updated_at=datetime.now(timezone.utc),
                 )
             )
+            session.add(
+                VerificationEvent(
+                    id=event_id,
+                    user_id=user_id,
+                    challenge_type="payment",
+                    status="pending",
+                    amount_cents=1499,
+                )
+            )
             await session.commit()
 
     import asyncio
 
-    asyncio.run(seed_user())
+    asyncio.run(seed_user_and_checkout())
+    checkout_ref = build_checkout_reference(
+        user_id=user_id,
+        event_id=event_id,
+        tier="founding_member",
+        secret="test-secret-that-is-at-least-32-characters-long-for-security",
+    )
 
     payload = make_square_payment_event(
         event_id="evt_founding_member_1",
         amount_cents=1499,
         buyer_email="founder@example.com",
-        note="Founding Member subscription",
+        note=f"Founding Member subscription agref:{checkout_ref}",
         payment_status="COMPLETED",
     )
 
@@ -337,31 +355,39 @@ def test_completed_founding_member_payment_activates_subscription(
 
     assert response.status_code == 200, response.text
 
-    async def fetch_user() -> User | None:
+    async def fetch_user() -> tuple[User | None, VerificationEvent | None]:
         async with db_session_factory() as session:
-            return await session.scalar(
+            u = await session.scalar(
                 select(User).where(User.email == "founder@example.com")
             )
+            ev = await session.get(VerificationEvent, event_id)
+            return u, ev
 
-    user = asyncio.run(fetch_user())
+    user, checkout_event = asyncio.run(fetch_user())
     assert user is not None
     assert user.subscription_active is True
     assert user.subscription_tier == "founding_member"
+    assert checkout_event is not None
+    assert checkout_event.status == "completed"
 
 
-def test_completed_royalty_payment_activates_subscription(client, db_session_factory):
+def test_completed_subscription_payment_without_checkout_record_changes_nothing(
+    client, db_session_factory
+):
     import asyncio
 
-    from app.subscriptions import user_has_active_subscription
+    from app.models import WebhookEvent
+
+    user_id = uuid.uuid4()
 
     async def seed_user() -> None:
         async with db_session_factory() as session:
             session.add(
                 User(
-                    id=uuid.uuid4(),
-                    email="royalty-buyer@example.com",
+                    id=user_id,
+                    email="unbound-sub@example.com",
                     password_hash="hashed",
-                    display_name="Royalty Buyer",
+                    display_name="Unbound Sub",
                     created_at=datetime.now(timezone.utc),
                     updated_at=datetime.now(timezone.utc),
                 )
@@ -370,11 +396,210 @@ def test_completed_royalty_payment_activates_subscription(client, db_session_fac
 
     asyncio.run(seed_user())
 
+    for payload in (
+        make_square_payment_event(
+            event_id="evt_unbound_founding_member_1",
+            amount_cents=1499,
+            buyer_email="unbound-sub@example.com",
+            note="Founding Member subscription",
+            payment_status="COMPLETED",
+        ),
+        make_square_payment_event(
+            event_id="evt_unbound_royalty_1",
+            amount_cents=250000,
+            buyer_email="unbound-sub@example.com",
+            note="Royalty Card",
+            payment_status="COMPLETED",
+        ),
+        {
+            "event_id": "evt_unbound_sub_created_1",
+            "type": "subscription.created",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "data": {
+                "object": {
+                    "payment": {
+                        "id": "pay_unbound_sub_1",
+                        "status": "COMPLETED",
+                        "buyer_email_address": "unbound-sub@example.com",
+                    }
+                }
+            },
+        },
+        {
+            "event_id": "evt_unbound_sub_updated_active_1",
+            "type": "subscription.updated",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "data": {
+                "object": {
+                    "payment": {
+                        "id": "pay_unbound_act_1",
+                        "status": "COMPLETED",
+                        "buyer_email_address": "unbound-sub@example.com",
+                    },
+                    "subscription": {"status": "ACTIVE"},
+                }
+            },
+        },
+    ):
+        raw_body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+        signature = generate_square_signature(
+            raw_body,
+            "test-square-signature",
+            "http://testserver/api/v1/webhooks/square-payment",
+        )
+        response = client.post(
+            "/api/v1/webhooks/square-payment",
+            headers={
+                "x-square-hmacsha256-signature": signature,
+                "Content-Type": "application/json",
+            },
+            content=raw_body,
+        )
+        assert response.status_code == 200, response.text
+
+    async def fetch_state() -> (
+        tuple[User | None, list[VerificationEvent], list[WebhookEvent]]
+    ):
+        async with db_session_factory() as session:
+            u = await session.get(User, user_id)
+            events = list(
+                (
+                    await session.scalars(
+                        select(VerificationEvent).where(
+                            VerificationEvent.user_id == user_id
+                        )
+                    )
+                ).all()
+            )
+            webhooks_logged = list((await session.scalars(select(WebhookEvent))).all())
+            return u, events, webhooks_logged
+
+    user, verification_events, webhooks_logged = asyncio.run(fetch_state())
+    assert user is not None
+    assert user.subscription_active is False
+    assert user.subscription_tier is None
+    assert user.subscription_expires_at is None
+    assert verification_events == []
+    assert len(webhooks_logged) == 4
+
+
+def test_unbound_subscription_event_leaves_existing_subscriber_untouched(
+    client, db_session_factory
+):
+    import asyncio
+    from datetime import timedelta
+
+    user_id = uuid.uuid4()
+    existing_expiry = datetime.now(timezone.utc) + timedelta(days=25)
+
+    async def seed_subscriber() -> None:
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=user_id,
+                    email="existing-sub@example.com",
+                    password_hash="hashed",
+                    display_name="Existing Subscriber",
+                    bot_shield_verified=True,
+                    subscription_active=True,
+                    subscription_tier="founding_member",
+                    subscription_expires_at=existing_expiry,
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            await session.commit()
+
+    asyncio.run(seed_subscriber())
+
+    payload = make_square_payment_event(
+        event_id="evt_unbound_tier_change_attempt",
+        amount_cents=3999,
+        buyer_email="existing-sub@example.com",
+        note="3-Month Founder",
+        payment_status="COMPLETED",
+    )
+    raw_body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+    signature = generate_square_signature(
+        raw_body,
+        "test-square-signature",
+        "http://testserver/api/v1/webhooks/square-payment",
+    )
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=raw_body,
+    )
+    assert response.status_code == 200, response.text
+
+    async def fetch_user() -> User | None:
+        async with db_session_factory() as session:
+            return await session.get(User, user_id)
+
+    user = asyncio.run(fetch_user())
+    assert user is not None
+    assert user.bot_shield_verified is True
+    assert user.subscription_active is True
+    assert user.subscription_tier == "founding_member"
+    assert user.subscription_expires_at is not None
+    assert (
+        abs(
+            (
+                user.subscription_expires_at.replace(tzinfo=timezone.utc)
+                - existing_expiry
+            ).total_seconds()
+        )
+        < 1
+    )
+
+
+def test_completed_royalty_payment_activates_subscription(client, db_session_factory):
+    import asyncio
+
+    from app.subscriptions import user_has_active_subscription
+
+    user_id = uuid.uuid4()
+    event_id = uuid.uuid4()
+
+    async def seed_user_and_checkout() -> None:
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=user_id,
+                    email="royalty-buyer@example.com",
+                    password_hash="hashed",
+                    display_name="Royalty Buyer",
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            session.add(
+                VerificationEvent(
+                    id=event_id,
+                    user_id=user_id,
+                    challenge_type="payment",
+                    status="pending",
+                    amount_cents=250000,
+                )
+            )
+            await session.commit()
+
+    asyncio.run(seed_user_and_checkout())
+    checkout_ref = build_checkout_reference(
+        user_id=user_id,
+        event_id=event_id,
+        tier="royalty",
+        secret="test-secret-that-is-at-least-32-characters-long-for-security",
+    )
+
     payload = make_square_payment_event(
         event_id="evt_royalty_card_1",
         amount_cents=250000,
         buyer_email="royalty-buyer@example.com",
-        note="Royalty Card",
+        note=f"Royalty Card agref:{checkout_ref}",
         payment_status="COMPLETED",
     )
 
@@ -883,6 +1108,7 @@ def test_payment_webhook_rejects_wrong_signature_and_accepts_correct_signature(
     get_settings.cache_clear()
 
     user_id = uuid.uuid4()
+    event_id = uuid.uuid4()
 
     async def seed_user() -> None:
         async with db_session_factory() as session:
@@ -896,15 +1122,30 @@ def test_payment_webhook_rejects_wrong_signature_and_accepts_correct_signature(
                     updated_at=datetime.now(timezone.utc),
                 )
             )
+            session.add(
+                VerificationEvent(
+                    id=event_id,
+                    user_id=user_id,
+                    challenge_type="payment",
+                    status="pending",
+                    amount_cents=1499,
+                )
+            )
             await session.commit()
 
     asyncio.run(seed_user())
+    checkout_ref = build_checkout_reference(
+        user_id=user_id,
+        event_id=event_id,
+        tier="founding_member",
+        secret="test-secret-that-is-at-least-32-characters-long-for-security",
+    )
 
     payload = make_square_payment_event(
         event_id="evt_sigcheck_flow_1",
         amount_cents=1499,
         buyer_email="sigcheck@example.com",
-        note="Founding Member subscription",
+        note=f"Founding Member subscription agref:{checkout_ref}",
         payment_status="COMPLETED",
     )
     raw_body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
