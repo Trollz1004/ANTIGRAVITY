@@ -664,6 +664,175 @@ class TestVerifyRefund:
         assert 'COLUMN_NAME = "square_refund_id"' in migration_text
         assert 'down_revision: Union[str, None] = "c3d4e5f6a7b8"' in migration_text
 
+        from app.models import RevenueAllocation
+
+        alloc_col = RevenueAllocation.__table__.columns.get("square_refund_id")
+        assert alloc_col is not None
+        assert alloc_col.nullable is True
+        assert (
+            "ALTER TABLE IF EXISTS revenue_allocations ADD COLUMN IF NOT EXISTS square_refund_id VARCHAR(255)"
+            in db_source
+        )
+        alloc_matching = list(
+            versions_dir.glob("*add_square_refund_id_to_revenue_allocations.py")
+        )
+        assert len(alloc_matching) == 1
+        alloc_migration_text = alloc_matching[0].read_text(encoding="utf-8")
+        assert 'COLUMN_NAME = "square_refund_id"' in alloc_migration_text
+        assert 'TABLE = "revenue_allocations"' in alloc_migration_text
+        assert (
+            'down_revision: Union[str, None] = "d4e5f6a7b8c9"' in alloc_migration_text
+        )
+
+    def test_checks_completed_does_not_count_refunded_payment(
+        self, client, db_session_factory
+    ):
+        now = datetime.now(timezone.utc)
+        user = _make_user(
+            email="refund_checks_count@example.com",
+            bot_shield_verified=True,
+        )
+        profile = verified_profile(user)
+        liveness_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="liveness",
+            status="passed",
+            amount_cents=100,
+            challenge_token="tok:hash",
+            created_at=now - timedelta(days=1),
+            completed_at=now - timedelta(days=1),
+        )
+        payment_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_checks_count_1",
+            card_fingerprint="fp_checks_count_1",
+            created_at=now - timedelta(days=1),
+            completed_at=now - timedelta(days=1),
+        )
+        seed(
+            user,
+            profile,
+            liveness_event,
+            payment_event,
+            db_session_factory=db_session_factory,
+        )
+        app.dependency_overrides[get_current_user] = override_user(user)
+        mock_refund = AsyncMock(
+            return_value={
+                "id": "rfnd_checks_count_1",
+                "status": "PENDING",
+                "payment_id": "pay_checks_count_1",
+            }
+        )
+        try:
+            before_resp = client.get("/api/v1/verify/status")
+            assert before_resp.status_code == 200, before_resp.text
+            assert before_resp.json()["checks_completed"] == 2
+
+            with patch(
+                "app.routers.verify.refund_square_payment",
+                mock_refund,
+                create=True,
+            ):
+                refund_resp = client.post("/api/v1/verify/refund")
+            assert refund_resp.status_code == 200, refund_resp.text
+
+            after_resp = client.get("/api/v1/verify/status")
+            assert after_resp.status_code == 200, after_resp.text
+            assert after_resp.json()["checks_completed"] == 1
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    def test_refund_marks_revenue_allocation_refunded_with_square_refund_id(
+        self, client, db_session_factory
+    ):
+        from app.models import RevenueAllocation
+
+        now = datetime.now(timezone.utc)
+        user = _make_user(
+            email="refund_alloc_id@example.com",
+            bot_shield_verified=True,
+        )
+        profile = verified_profile(user)
+        liveness_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="liveness",
+            status="passed",
+            amount_cents=100,
+            challenge_token="tok:hash",
+            created_at=now - timedelta(days=1),
+            completed_at=now - timedelta(days=1),
+        )
+        payment_event = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_alloc_route_1",
+            card_fingerprint="fp_alloc_route_1",
+            created_at=now - timedelta(days=1),
+            completed_at=now - timedelta(days=1),
+        )
+        allocation = RevenueAllocation(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            source_event_id="evt_seed_pay_alloc_route_1",
+            square_payment_id="pay_alloc_route_1",
+            payment_tier="bot_shield",
+            gross_amount_cents=100,
+            reserve_amount_cents=0,
+            operating_amount_cents=100,
+            status="reserved",
+        )
+        seed(
+            user,
+            profile,
+            liveness_event,
+            payment_event,
+            allocation,
+            db_session_factory=db_session_factory,
+        )
+        app.dependency_overrides[get_current_user] = override_user(user)
+        mock_refund = AsyncMock(
+            return_value={
+                "id": "rfnd_alloc_route_1",
+                "status": "COMPLETED",
+                "payment_id": "pay_alloc_route_1",
+            }
+        )
+        try:
+            with patch(
+                "app.routers.verify.refund_square_payment",
+                mock_refund,
+                create=True,
+            ):
+                resp = client.post("/api/v1/verify/refund")
+            assert resp.status_code == 200, resp.text
+
+            import asyncio
+
+            async def _fetch_alloc():
+                async with db_session_factory() as session:
+                    return await session.scalar(
+                        select(RevenueAllocation).where(
+                            RevenueAllocation.id == allocation.id
+                        )
+                    )
+
+            db_alloc = asyncio.run(_fetch_alloc())
+            assert db_alloc is not None
+            assert db_alloc.status == "refunded"
+            assert getattr(db_alloc, "square_refund_id", None) == "rfnd_alloc_route_1"
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
     def test_refund_second_ask_is_refused(self, client, db_session_factory, caplog):
         now = datetime.now(timezone.utc)
         user = _make_user(

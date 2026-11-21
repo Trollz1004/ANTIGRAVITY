@@ -198,12 +198,14 @@ async def mark_revenue_allocation_refunded(
     db: AsyncSession,
     *,
     square_payment_id: str | None,
+    square_refund_id: str | None = None,
 ) -> list[RevenueAllocation]:
     """Mark matching RevenueAllocation row(s) for ``square_payment_id`` as refunded."""
     cleaned_id = str(square_payment_id or "").strip()
     if not cleaned_id:
         return []
 
+    cleaned_refund_id = str(square_refund_id or "").strip() or None
     rows = list(
         (
             await db.scalars(
@@ -215,4 +217,6 @@ async def mark_revenue_allocation_refunded(
     )
     for row in rows:
         row.status = "refunded"
+        if cleaned_refund_id is not None:
+            row.square_refund_id = cleaned_refund_id
     return rows
