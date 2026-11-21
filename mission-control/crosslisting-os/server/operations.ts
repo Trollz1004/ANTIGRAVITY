@@ -1,17 +1,32 @@
+import fs from "node:fs";
+import { resolveStoragePath } from "./storage";
+
+export const EBAY_REFRESH_TOKEN_STORAGE_KEY =
+  "credentials/ebay-refresh-token.enc";
+
 export const channelBlueprint = [
   {
     code: "ebay",
     displayName: "eBay",
     capability: "api" as const,
     initialMode: "review" as const,
-    requiredSecrets: ["EBAY_CLIENT_ID", "EBAY_CLIENT_SECRET", "EBAY_REFRESH_TOKEN"],
+    requiredSecrets: [
+      "EBAY_CLIENT_ID",
+      "EBAY_CLIENT_SECRET",
+      "EBAY_REFRESH_TOKEN",
+    ],
   },
   {
     code: "google_merchant",
     displayName: "Google Merchant",
     capability: "api" as const,
     initialMode: "review" as const,
-    requiredSecrets: ["GOOGLE_MERCHANT_CLIENT_ID", "GOOGLE_MERCHANT_CLIENT_SECRET", "GOOGLE_MERCHANT_REFRESH_TOKEN", "GOOGLE_MERCHANT_ACCOUNT_ID"],
+    requiredSecrets: [
+      "GOOGLE_MERCHANT_CLIENT_ID",
+      "GOOGLE_MERCHANT_CLIENT_SECRET",
+      "GOOGLE_MERCHANT_REFRESH_TOKEN",
+      "GOOGLE_MERCHANT_ACCOUNT_ID",
+    ],
   },
   {
     code: "facebook_marketplace",
@@ -53,20 +68,48 @@ export type ListingPreflightInput = {
 
 export function validateListingPreflight(input: ListingPreflightInput) {
   const errors: string[] = [];
-  if (input.verificationStatus !== "verified") errors.push("Catalog record requires factual verification.");
+  if (input.verificationStatus !== "verified")
+    errors.push("Catalog record requires factual verification.");
   if (!input.title?.trim()) errors.push("Listing title is required.");
-  if (!input.description?.trim()) errors.push("Listing description is required.");
-  if (!input.price || input.price <= 0) errors.push("A positive listing price is required.");
-  if (!input.availableQuantity || input.availableQuantity <= 0) errors.push("Available inventory is required.");
-  if (!input.imageCount || input.imageCount < 1) errors.push("At least one verified image is required.");
-  if (input.approvalStatus !== "approved") errors.push("An approved request is required before submission.");
-  if (!input.channelEnabled) errors.push("The channel is disabled by LLC configuration.");
-  if (input.capability !== "api") errors.push("This channel is limited to a prepared review workflow.");
+  if (!input.description?.trim())
+    errors.push("Listing description is required.");
+  if (!input.price || input.price <= 0)
+    errors.push("A positive listing price is required.");
+  if (!input.availableQuantity || input.availableQuantity <= 0)
+    errors.push("Available inventory is required.");
+  if (!input.imageCount || input.imageCount < 1)
+    errors.push("At least one verified image is required.");
+  if (input.approvalStatus !== "approved")
+    errors.push("An approved request is required before submission.");
+  if (!input.channelEnabled)
+    errors.push("The channel is disabled by LLC configuration.");
+  if (input.capability !== "api")
+    errors.push("This channel is limited to a prepared review workflow.");
   return { ready: errors.length === 0, errors };
 }
 
+function hasStoredEbayRefreshTokenFile(): boolean {
+  try {
+    const { filePath } = resolveStoragePath(EBAY_REFRESH_TOKEN_STORAGE_KEY);
+    const stat = fs.statSync(filePath);
+    return stat.isFile() && stat.size > 0;
+  } catch {
+    return false;
+  }
+}
+
+function isSecretConfigured(key: string): boolean {
+  if (Boolean(process.env[key]?.trim())) {
+    return true;
+  }
+  if (key === "EBAY_REFRESH_TOKEN") {
+    return hasStoredEbayRefreshTokenFile();
+  }
+  return false;
+}
+
 export function getSafeCredentialState(requiredSecrets: readonly string[]) {
-  const configuredCount = requiredSecrets.filter(key => Boolean(process.env[key]?.trim())).length;
+  const configuredCount = requiredSecrets.filter(isSecretConfigured).length;
   return {
     configured: configuredCount === requiredSecrets.length,
     configuredCount,
@@ -87,10 +130,16 @@ export function buildSafeChannelStatus() {
 
 export type InventoryMovementType = "receive" | "reserve" | "release" | "sale";
 
-export function canApplyInventoryMovement(input: { onHand: number; reserved: number; quantity: number; movementType: InventoryMovementType }) {
+export function canApplyInventoryMovement(input: {
+  onHand: number;
+  reserved: number;
+  quantity: number;
+  movementType: InventoryMovementType;
+}) {
   if (!Number.isInteger(input.quantity) || input.quantity <= 0) return false;
   if (input.movementType === "receive") return true;
-  if (input.movementType === "reserve") return input.onHand - input.reserved >= input.quantity;
+  if (input.movementType === "reserve")
+    return input.onHand - input.reserved >= input.quantity;
   if (input.movementType === "release") return input.reserved >= input.quantity;
   return input.onHand >= input.quantity && input.reserved >= input.quantity;
 }
@@ -123,13 +172,26 @@ export function buildChannelPayload(input: {
   };
 }
 
-export function decideChannelSaleReconciliation(input: { eventAlreadyRecorded: boolean; onHand: number; reserved: number; quantity: number }) {
+export function decideChannelSaleReconciliation(input: {
+  eventAlreadyRecorded: boolean;
+  onHand: number;
+  reserved: number;
+  quantity: number;
+}) {
   if (input.eventAlreadyRecorded) return "duplicate" as const;
-  return canApplyInventoryMovement({ onHand: input.onHand, reserved: input.reserved, quantity: input.quantity, movementType: "sale" })
-    ? "apply" as const
-    : "block" as const;
+  return canApplyInventoryMovement({
+    onHand: input.onHand,
+    reserved: input.reserved,
+    quantity: input.quantity,
+    movementType: "sale",
+  })
+    ? ("apply" as const)
+    : ("block" as const);
 }
 
-export function synchronizePayloadQuantity(payload: Record<string, unknown> | null, availableQuantity: number) {
+export function synchronizePayloadQuantity(
+  payload: Record<string, unknown> | null,
+  availableQuantity: number
+) {
   return { ...(payload ?? {}), quantity: Math.max(0, availableQuantity) };
 }
