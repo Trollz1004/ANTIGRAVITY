@@ -939,4 +939,57 @@ describe('Verify after $1 payment', () => {
 
     expect(scrollToSpy).toHaveBeenCalled();
   });
+
+  it('at 412 wide keeps "Give me my $1 back" in first view above the bottom menu with compact mobile spacing', async () => {
+    Object.defineProperty(window, 'innerWidth', {
+      value: 412,
+      configurable: true,
+      writable: true,
+    });
+    Object.defineProperty(window, 'innerHeight', {
+      value: 915,
+      configurable: true,
+      writable: true,
+    });
+
+    vi.mocked(api.get).mockImplementation(async (path: string) => {
+      if (path === '/verify/status') {
+        return {
+          verified: true,
+          trust_score: 60,
+          tier: 'gold',
+          bot_shield_paid: true,
+          subscription_active: false,
+          checks_completed: 2,
+        };
+      }
+      if (path === '/verify/refund-status') {
+        return {
+          available: true,
+          expires_at: '2026-11-23T12:00:00Z',
+          until: '2026-11-23T12:00:00Z',
+        };
+      }
+      throw new Error(`Unexpected GET ${path}`);
+    });
+
+    const { container, getByRole, getByText } = render(
+      <MemoryRouter initialEntries={['/app/verify']}>
+        <Verify />
+      </MemoryRouter>
+    );
+
+    const askButton = await waitFor(() =>
+      getByRole('button', { name: 'Give me my $1 back' })
+    );
+    const badgeHeading = getByText('Badge active.');
+    const badgeCard = badgeHeading.closest('div.glass-strong');
+    const refundCard = askButton.closest('div.glass-strong');
+    const pageRoot = container.querySelector('.app-page');
+
+    expect(pageRoot?.className).toContain('pt-4');
+    expect(badgeCard?.className).toContain('p-5');
+    expect(refundCard?.className).toContain('p-5');
+    expect(askButton.className).toContain('mt-3');
+  });
 });

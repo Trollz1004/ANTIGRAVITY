@@ -229,8 +229,12 @@ class TestVerificationPromotion:
 
     def test_revoke_user_verification_for_refund_clears_badge_and_payment_event(self):
         import asyncio
+        import inspect
 
+        from app import verification_service
         from app.verification_service import revoke_user_verification_for_refund
+
+        assert "inspect" not in inspect.getsource(verification_service)
 
         user = MagicMock()
         user.id = uuid.uuid4()
@@ -244,19 +248,36 @@ class TestVerificationPromotion:
         payment_event.status = "completed"
         payment_event.amount_cents = 100
         payment_event.square_payment_id = "pay_unit_1"
+        payment_event.square_refund_id = None
+
+        extra_payment = MagicMock()
+        extra_payment.user_id = user.id
+        extra_payment.challenge_type = "payment"
+        extra_payment.status = "completed"
+        extra_payment.amount_cents = 100
+        extra_payment.square_payment_id = "pay_unit_extra"
+        extra_payment.square_refund_id = None
+
+        scalars_result = MagicMock()
+        scalars_result.all.return_value = [extra_payment]
 
         mock_db = AsyncMock()
         mock_db.scalar = AsyncMock(side_effect=[payment_event, user])
+        mock_db.scalars = AsyncMock(return_value=scalars_result)
 
         revoked = asyncio.run(
             revoke_user_verification_for_refund(
                 mock_db,
                 square_payment_id="pay_unit_1",
+                square_refund_id="rfnd_unit_1",
             )
         )
 
         assert revoked is True
         assert payment_event.status == "refunded"
+        assert payment_event.square_refund_id == "rfnd_unit_1"
+        assert extra_payment.status == "refunded"
+        assert extra_payment.square_refund_id == "rfnd_unit_1"
         assert user.bot_shield_verified is False
         assert user.profile.verified is False
 
