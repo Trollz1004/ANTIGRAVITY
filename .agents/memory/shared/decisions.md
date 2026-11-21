@@ -1,118 +1,15 @@
 # Shared Decisions Log
 
-> **PARTIALLY SUPERSEDED — read this before acting on anything below (judge lane,
-> 2026-08-26).** This file is append-only, so the historical entries stay exactly
-> as written. Several are no longer true, and one of them says "Final." Do not
-> treat any line here as binding without checking it against `CLAUDE.md`,
-> `AGENTS.md`, and `agent-contracts/MISSION-CONTROL-GOVERNANCE.md`, which win.
->
-> Specifically dead as of 2026-08-26:
-> - **"T5500 = ANTIGRAVITY business authority. Sabretooth = DREAM Online MMO only.
->   Final." (2026-07-09)** — false in both halves. There is **one** node,
->   Sabretooth, and it carries everything. `192.168.0.8` — the address the old
->   docs assign to T5500 — resolves to **SABRETOOTH itself** (verified by
->   `Resolve-DnsName` and `Get-NetIPAddress`, 2026-08-26). No T5500 and no
->   Alienware/Aurora host answers on this LAN. "Final" was a decision about a
->   topology that no longer exists; a dated decision does not outrank the machine.
-> - **OmniRouter cost/decision policy (2026-07-09)** — superseded by the routing
->   policy in `CLAUDE.md`: authenticated OmniRoute is the normal worker route and
->   Ollama is explicit fail-safe only, never the first hop.
->
-> Still current: the Square-only rule for youandinotai.com, the memory layout, and
-> the no-reading-another-agent's-private-journal rule.
+> **ALIGNED TO CANONICAL DOCTRINE & FLEET MAP (`ops/fleet/fleet-map.json`)**
+> Authority for current state, in order: `CLAUDE.md`, `AGENTS.md`, `docs/standards/AGENT-STANDARD.md`, `ops/fleet/fleet-map.json`.
 
+## Active Architectural Decisions
 
-> append-only, dated
-
-## 2026-07-09
-
-- T5500 = ANTIGRAVITY business authority. Sabretooth = DREAM Online MMO only. Final.
-- OmniRouter cost policy: Ollama (free) → OpenRouter free NVIDIA/Nemotron → OpenRouter paid → OpenAI
-- OmniRouter decision policy: OpenAI → OpenRouter paid → xAI → NVIDIA → OpenRouter free → Ollama
-- Square ONLY on youandinotai.com. Stripe OK for other surfaces.
-- Memory structure: .agents/memory/shared/ (all agents read/append), .agents/memory/private/<agent>/ (agent-only)
-- No AI reads or modifies another agent's private/ journal. Joshua deletes offenders.
-
-## 2026-08-26 — the 2026-07-09 node ruling is DEAD (judge lane)
-
-The 2026-07-09 entry above reads *"T5500 = ANTIGRAVITY business authority.
-Sabretooth = DREAM Online MMO only. Final."* **That is no longer true, and its
-"Final." is the reason it kept getting believed.** Appending rather than editing,
-because this log is append-only — but a cold agent reading top-to-bottom must not
-stop at that line.
-
-**Verified on the machine, 2026-08-26:**
-
-```
-hostname                    -> SABRETOOTH
-Get-NetIPAddress            -> 192.168.0.8   (this box)
-Resolve-DnsName 192.168.0.8 -> SABRETOOTH
-```
-
-`192.168.0.8` **is this machine.** It is not a second computer. Every doc pairing
-"T5500" with `192.168.0.8` is naming Sabretooth under a dead node's name — which
-is how `.agents/memory/shared/current-state.md` ended up listing the *same IP*
-for both "Business node: T5500" and "DREAM node: Sabretooth". One box, described
-as two, for seven weeks.
-
-**What is actually true:**
-
-- **One node: Sabretooth.** No live T5500. No live 9020. No Aurora/Alienware on
-  this LAN. Other ARP neighbours exist but none answers, and none is identified
-  as a project node.
-- **One working tree: `C:\ANTIGRAVITY`.** There is no `E:` drive and never was.
-- **Mission Control is Paperclip** at `http://127.0.0.1:3917` — identity verified
-  via `GET /api/openapi.json` → `.info.title == "Paperclip API"`. Not an Agent Hub,
-  not `:3130`, not PAPERWEIGHT.
-- **Sabretooth runs everything**, business and DREAM both: 15 services bound
-  simultaneously. See `docs/ops/NODE-AND-PORT-MAP.md` for the live table.
-
-**Do not act on any T5500 instruction in this repo.** In particular
-`current-state.md` still says *"Run `Desktop\RUN-NOW-restore-and-verify.bat` on
-T5500 FIRST before any code work"* — there is no T5500 to run it on, and that file
-is already banner-marked SUPERSEDED. Treat T5500/9020/`E:\` references as stale
-evidence to report, never as instructions to follow.
-
-Authority for current state, in order: `CLAUDE.md`, `AGENTS.md`,
-`agent-contracts/MISSION-CONTROL-GOVERNANCE.md`, `docs/ops/NODE-AND-PORT-MAP.md`.
-
-## 2026-08-28 — refinement: the T5500 MACHINE is real, only its ROLE is dead
-
-The entry above is right that no T5500 *node* exists and that its instructions
-must not be followed. But it says "there is no T5500 to run it on", and read
-alone that over-corrects into "the machine does not exist." It does exist.
-
-**Role — dead.** No live T5500 on this LAN. `192.168.0.8` is Sabretooth, this
-machine. Nothing deploys to a T5500 today. Every T5500/9020/`E:\` reference in
-the repo remains stale evidence, never an instruction.
-
-**Machine — real, owned, reserved.** Dual-Xeon class, 32 GB RAM, AMD RX 6800
-16 GB, `DESKTOP-TQD7EIT`. Joshua has designated it the future **DREAM Online
-MMORPG server** — a Joshua-and-Claude project — gated behind four things working
-*and tested* first: Mission Control, the Date App, customer support, marketing.
-
-Both halves are load-bearing. Saying "there is no T5500" will make someone
-discard hardware that has a job waiting; treating T5500 as a live node will send
-them chasing a box that is not on the network. Say instead: *T5500 is not a live
-node; it is reserved hardware behind a gate.*
-
-Caught because a memory search returned Joshua's own earlier words — *"T5500
-isn't scrap, it's the future Dream Online MMORPG server. The IP sweep only
-retired its old role, not the machine."* The sweep that retired the role was
-correct; generalising it to the hardware was not, and that generalisation was
-mine.
-
-## 2026-10-05: node map (Joshua)
-
-- **T5500 (`T5500-2-XEON-72`, `192.168.0.15`) is the production node.** It runs every live domain, the date app (frontend :3200, API :8000), Postgres :5432, Redis :6379, Ollama, the domains server :9160 and the cloudflared tunnel. Its keep-alive writes `C:\ANTIGRAVITY\ops\t5500\status.json` and `C:\ANTIGRAVITY\logs\t5500-keepalive.log`; it heals on its own and logs every heal.
-- **Alienware (`192.168.0.40`) is the dev node** and hosts Mission Control: JARVIS/OPSIS on :9150, operated by Hermes in the terminal. DREAM Online is built and tested there.
-- **Sabretooth (`192.168.0.8`) is retired and OFF by ruling.** Its work moved to the T5500 from the same SSD. Never probe, start, heal or route to it; show it as OFF BY RULING, never DOWN. Every `192.168.0.8` address and every "Sabretooth runs X" line in this repo is history.
-- Other old boxes (OptiPlex 9020, i7k, Chromebook, Mini ASUS) stay OFF by ruling.
-- **Domains:** youandinotai.com is live behind the Cloudflare tunnel. onlinerecycle.net, dream-online.net and untilnokidinneed.com have a healthy origin and wait on nameservers. The AI store domain is undecided: do not renew it and do not build on it.
-- **Business Hermes:** a separate Hermes profile (not OPSIS) runs onlinerecycle.net, the date app and customer support on the Ollama models `joshlcoleman/fable` and `joshlcoleman/cfo` only, with health checks that fix on sight.
-- **Editors and lanes:** each node gets the Antigravity editor (VS Code-based) with Claude as a signed-in extension (never an API key), Codex for code changes and Gemini for chat. Hermes runs in the terminal as JARVIS/OPSIS. The build prompt for OPSIS and Gemini's updated instructions are in `ops/handoffs/OPSIS-MISSION-AGENT-OS-2026-10-05.md` and `ops/handoffs/GEMINI-SPARK-INSTRUCTIONS-2026-10-05.md`.
-- **Never** introduce an `ANTHROPIC_API_KEY`. Official Claude is login/OAuth only.
-
-## 2026-10-05: mission details stay with Claude and Codex (Joshua)
-
-Some mission details are restricted to the Claude and Codex lanes and are kept only in their own memory, never in this shared file or in any other lane's instructions. Other lanes (Spark, Gemini, Hermes, Emergent, Jules and any new one) defer those questions to Joshua. Spark is its own agent, separate from Gemini chat, and is not yet trusted; its scope is logistics, email, calendar, research and drafts. Its instructions are in `ops/handoffs/GEMINI-SPARK-INSTRUCTIONS-2026-10-05.md`.
+- **Two Active Fleet Nodes Only**:
+  - **T5500 (`192.168.0.15`, Front-of-House)**: Live production domains (`youandinotai.com`, `onlinerecycle.net`, `dream-online.net`), DateApp Frontend (`:3200`), DateApp API (`:8000`), PostgreSQL (`127.0.0.1:5432`), Redis (`127.0.0.1:6379`), Mission OS (`:3130`), OmniRoute (`:20128`), Hermes API (`:8643`), Hermes Dashboard (`:9119`), Domains Static Server (`:9160`), Shared `ai-memory` MCP (`:49374`), and Obsidian Local REST (`192.168.0.15:27123`).
+  - **Alienware (`192.168.0.40`, Workshop)**: DREAM Engine (`:9180`), Lead-Gen Studio (`:8392`), Media/TTS Worker (`:8391`), OPSis Studio (`:8390`), Free Claude Code (`:8082`), Swarm Command (`:8000`), Ollama (`:11434`), and Obsidian MCP (`:27200`) / REST (`:27123`).
+- **Retired Legacy Nodes**: Third-node hosts and retired workstation paths are permanently decommissioned and never targeted.
+- **Payment Rails (`docs/PAYMENTS-TRUTH.md`)**: Square is the primary checkout rail alongside PayPal (`ebaytrashortreasure@gmail.com`). No legacy third-party card processor is active anywhere in the fleet.
+- **Models & Routing**: Official Claude (`Opus 5.5` / `Fable`) runs sign-in only (never OmniRoute). Official Google (`Gemini 4 Carbon` via `agy`) and OpenAI (`GPT-6 Astra`, `GPT-6.1 Sol`, `Codex`) operate alongside authenticated OmniRoute (`http://192.168.0.15:20128/v1`), with local Ollama as fail-safe only. Free Claude Code (`192.168.0.40:8082`) is a worker lane only, never a judge.
+- **Memory Separation**: `.agents/memory/shared/` is shared read/append; each agent maintains its own `.agents/journals/<agent>/STATE.md` and separated node Obsidian vault log (`Alienware/<agent>-to-<agent>.md`, `T5500/<agent>-to-<agent>.md`). No agent edits another lane's private files.
+- **Business Hermes & Copy Scope**: Customer support runs through Hermes (`OPSis`) on `joshlcoleman/fable` and `joshlcoleman/cfo`; Mission OS (`/marketing`, `192.168.0.15:3130`) replaces all retired coordination boards; customer copy stays strictly product-value only.

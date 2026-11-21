@@ -2,7 +2,7 @@
 
 import asyncio
 import uuid
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from unittest.mock import patch
 
 from sqlalchemy import select
@@ -30,7 +30,10 @@ def test_beta_access_issues_real_tokens(client, db_session_factory, monkeypatch)
     monkeypatch.setenv("BETA_ACCESS_CODES", "FOUNDING100,JOKER0001,TWINPOWER")
     get_settings.cache_clear()
 
-    response = client.post("/api/v1/auth/beta-access", json={"code": "founding100"})
+    response = client.post(
+        "/api/v1/auth/beta-access",
+        json={"code": "founding100", "date_of_birth": "1990-01-01"},
+    )
 
     assert response.status_code == 200, response.text
     payload = response.json()
@@ -50,6 +53,32 @@ def test_beta_access_issues_real_tokens(client, db_session_factory, monkeypatch)
     assert user.subscription_tier == "founding_member"
     assert user.engagement_score == 5.0
     assert user.member_badge == "Founder"
+    assert user.date_of_birth == date(1990, 1, 1)
+
+    get_settings.cache_clear()
+
+
+def test_beta_access_refuses_missing_and_underage_date_of_birth(
+    client, db_session_factory, monkeypatch
+):
+    monkeypatch.setenv("BETA_ACCESS_ENABLED", "true")
+    monkeypatch.setenv("BETA_ACCESS_CODES", "AGEGATE100")
+    get_settings.cache_clear()
+
+    missing_resp = client.post(
+        "/api/v1/auth/beta-access",
+        json={"code": "AGEGATE100"},
+    )
+    assert missing_resp.status_code == 400
+    assert "date of birth" in missing_resp.text.lower()
+
+    underage_dob = (date.today() - timedelta(days=365 * 17)).isoformat()
+    underage_resp = client.post(
+        "/api/v1/auth/beta-access",
+        json={"code": "AGEGATE100", "date_of_birth": underage_dob},
+    )
+    assert underage_resp.status_code == 400
+    assert "strictly 18+ only" in underage_resp.text
 
     get_settings.cache_clear()
 
@@ -100,7 +129,10 @@ def test_beta_access_account_not_in_discovery_until_timed_question_passed(
     asyncio.run(seed_viewer_and_board())
     viewer_headers = {"Authorization": f"Bearer {create_access_token(str(viewer_id))}"}
 
-    beta_resp = client.post("/api/v1/auth/beta-access", json={"code": "FOUNDING100"})
+    beta_resp = client.post(
+        "/api/v1/auth/beta-access",
+        json={"code": "FOUNDING100", "date_of_birth": "1994-06-15"},
+    )
     assert beta_resp.status_code == 200, beta_resp.text
     beta_data = beta_resp.json()
     beta_user_id = beta_data["user_id"]

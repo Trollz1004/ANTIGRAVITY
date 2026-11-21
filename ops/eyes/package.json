@@ -1,0 +1,13 @@
+{
+  "name": "@antigravity/eyes",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "shoot": "node shoot-page.mjs",
+    "test": "node --test shoot-page.test.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.52.0"
+  }
+}

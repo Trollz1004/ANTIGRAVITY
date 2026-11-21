@@ -171,7 +171,8 @@ export function executeManualHandoff({ inboxDir, platform, id, title, body, bran
     writeFileSync(full, md, 'utf8');
     return { ok: true, path: full, fileName };
   } catch (e) {
-    return { ok: false, error: String((e && e.message) || e) };
+    const msg = e && typeof e.message === 'string' ? e.message.split(/\r?\n/)[0].slice(0, 240) : 'Manual handoff failed';
+    return { ok: false, error: msg };
   }
 }
 

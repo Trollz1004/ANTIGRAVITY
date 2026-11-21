@@ -417,7 +417,7 @@ def call_claude(prompt: str) -> str:
 
             client = anthropic.Anthropic(api_key=api_key, timeout=CLAUDE_CALL_TIMEOUT_SECONDS)
             msg = client.messages.create(
-                model=os.environ.get("CAVEMAN_MODEL", "claude-sonnet-4-5"),
+                model=os.environ.get("CAVEMAN_MODEL", "claude-opus-5.5"),
                 max_tokens=8192,
                 messages=[{"role": "user", "content": prompt}],
             )

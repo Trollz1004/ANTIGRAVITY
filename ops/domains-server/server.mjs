@@ -2,7 +2,7 @@
 // Domains static site server — no dependencies.
 // Virtual-host static file server: routes by the Host header to one of
 // three landing-site document roots, plus a /health identity probe and
-// OnlineRecycle.net native Google Calendar booking endpoints (/api/booking-config, /api/book, /api/calendar.ics).
+// OnlineRecycle.net native appointment booking endpoints (/api/booking-config, /api/book, /api/calendar.ics).
 //
 // Start: node ops/domains-server/server.mjs
 
@@ -13,26 +13,50 @@ import fsp from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { notifyBooking } from "./booking-notify.mjs";
+import { notifyBooking, isBookingNotifyConfigured } from "./booking-notify.mjs";
 import { recordPageView, recordBooking } from "./booking-stats.mjs";
+import { getBindHost, getNodeIp, getService } from "../fleet/fleet-map.mjs";
+import { logStartupEnvCheck } from "../agents/env-required.mjs";
+import { buildPublicHealthLight } from "../agents/node-light.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
 const DOMAINS_ROOT = path.join(REPO_ROOT, "domains");
-const BOOKINGS_DIR = path.join(REPO_ROOT, "data", "ewaste-intake");
+const BOOKINGS_DIR = process.env.ORC_BOOKINGS_DIR
+  ? path.resolve(process.env.ORC_BOOKINGS_DIR)
+  : path.join(REPO_ROOT, "data", "ewaste-intake");
 const BOOKINGS_JSONL = path.join(BOOKINGS_DIR, "bookings.jsonl");
 const INQUIRIES_DIR = path.join(BOOKINGS_DIR, "inquiries");
-const STATS_DIR = path.join(BOOKINGS_DIR, "stats");
+const STATS_DIR = process.env.ORC_STATS_DIR || path.join(BOOKINGS_DIR, "stats");
 
-// Ruled 2026-09-28 (Joshua: "use the endpoints always of 192, not localhost"):
-// listen on the T5500 LAN address and on loopback for local probes and the
-// cloudflared tunnel. Never every interface, and never Sabretooth (.8), which
-// does not host live domains.
-const HOSTS = (process.env.DOMAINS_SERVER_HOST || "127.0.0.1,192.168.0.15")
-  .split(",")
-  .map((h) => h.trim())
-  .filter(Boolean);
-const PORT = Number(process.env.DOMAINS_SERVER_PORT || 9160);
+// Fleet Map authority (ops/fleet/fleet-map.json): T5500 (192.168.0.15) hosts
+// domains-server bound on 0.0.0.0:9160 unless overridden via DOMAINS_SERVER_HOST.
+const T5500_IP = getNodeIp("t5500");
+const DOMAINS_SERVICE = getService("domains-server");
+const PORT = Number(process.env.DOMAINS_SERVER_PORT || DOMAINS_SERVICE.port);
+
+function resolveDomainsServerBind(env = process.env, { port = PORT, warn = console.warn } = {}) {
+  const token = String(env?.FLEET_SHARED_TOKEN || env?.DOMAINS_SERVER_TOKEN || "").trim();
+  const explicit = String(env?.DOMAINS_SERVER_HOST || "")
+    .split(",")
+    .map((h) => h.trim())
+    .filter(Boolean);
+  if (explicit.length > 0) {
+    return explicit;
+  }
+  if (!token) {
+    warn?.(
+      `[domains-server] WARNING: FLEET_SHARED_TOKEN is not set; binding 127.0.0.1 on port ${port} (this machine only).`
+    );
+    return ["127.0.0.1"];
+  }
+  return getBindHost("domains-server")
+    .split(",")
+    .map((h) => h.trim())
+    .filter(Boolean);
+}
+
+const HOSTS = resolveDomainsServerBind(process.env, { port: PORT });
 
 // Host header -> document root (relative to DOMAINS_ROOT).
 // onlinerecycle.net serves the restored static recycling site from site/
@@ -56,11 +80,16 @@ const BOOK_LIMIT = 10;
 const BOOK_WINDOW_MS = 60 * 60 * 1000;
 const bookHits = new Map();
 
-// cf-connecting-ip is trusted only from loopback, where cloudflared connects;
-// a LAN client could otherwise invent a fresh address per request.
+// cf-connecting-ip is trusted only from the local T5500 tunnel connector;
+// an external LAN client could otherwise invent a fresh address per request.
 function clientIp(req) {
   const remote = String(req.socket.remoteAddress || "unknown");
-  const viaTunnel = remote === "127.0.0.1" || remote === "::1" || remote === "::ffff:127.0.0.1";
+  const viaTunnel =
+    remote === "127.0.0.1" ||
+    remote === "::1" ||
+    remote === "::ffff:127.0.0.1" ||
+    remote === T5500_IP ||
+    remote === `::ffff:${T5500_IP}`;
   return viaTunnel && req.headers["cf-connecting-ip"] ? String(req.headers["cf-connecting-ip"]) : remote;
 }
 
@@ -112,16 +141,7 @@ function hostOnly(hostHeader) {
 }
 
 function readEnvValue(key) {
-  if (process.env[key]) return process.env[key];
-  try {
-    const envPath = path.join(REPO_ROOT, ".env");
-    if (!fs.existsSync(envPath)) return "";
-    const txt = fs.readFileSync(envPath, "utf8");
-    const m = txt.match(new RegExp(`^${key}\\s*=\\s*(.+)$`, "m"));
-    return m && m[1] ? m[1].trim().replace(/^['"]|['"]$/g, "") : "";
-  } catch {
-    return "";
-  }
+  return String(process.env[key] || "").trim();
 }
 
 // Every booking, cached and re-read only when bookings.jsonl changes on disk.
@@ -148,6 +168,34 @@ function readBookings() {
   } catch {
     return [];
   }
+}
+
+function updateBookingNotified(bookingId, notified) {
+  try {
+    const list = readBookings();
+    let changed = false;
+    const updated = list.map((b) => {
+      if (b && b.bookingId === bookingId) {
+        changed = true;
+        return { ...b, notified: Boolean(notified) };
+      }
+      return b;
+    });
+    if (changed) {
+      fs.writeFileSync(
+        BOOKINGS_JSONL,
+        `${updated.map((b) => JSON.stringify(b)).join("\n")}\n`,
+        "utf8"
+      );
+      bookingCache = { mtimeMs: -1, size: -1, list: [] };
+    }
+  } catch {
+    // keep going if file update fails
+  }
+}
+
+function countUnnotifiedBookings() {
+  return readBookings().filter((b) => b && b.status !== "CANCELLED" && b.notified !== true).length;
 }
 
 function toGoogleCalDateRange(dateStr, slotStr) {
@@ -341,6 +389,15 @@ async function resolveFile(docRootAbs, urlPath) {
   } catch {
     const last = path.basename(cleanPath);
     if (!last.includes(".")) {
+      const htmlCandidate = `${requested.replace(/[\\/]+$/, "")}.html`;
+      if (htmlCandidate.startsWith(docRootAbs)) {
+        try {
+          const htmlStat = await fsp.stat(htmlCandidate);
+          if (htmlStat.isFile()) return htmlCandidate;
+        } catch {
+          // fall through to index.html
+        }
+      }
       const indexPath = path.join(docRootAbs, "index.html");
       try {
         const stat = await fsp.stat(indexPath);
@@ -353,20 +410,38 @@ async function resolveFile(docRootAbs, urlPath) {
   }
 }
 
+function buildDomainsHealthPayload(
+  env = process.env,
+  { manifestDir = __dirname, driftPath = "", unnotifiedBookings = countUnnotifiedBookings() } = {}
+) {
+  const baseLight = buildPublicHealthLight({ manifestDir, env, driftPath });
+  const noticesOn = isBookingNotifyConfigured(env);
+  const unnotifiedCount = Math.max(0, Number(unnotifiedBookings) || 0);
+  const nodeLight = !noticesOn || unnotifiedCount > 0 || baseLight.nodeLight !== "green" ? "amber" : "green";
+  return {
+    service: "domains-server",
+    sites: SITES,
+    ...baseLight,
+    nodeLight,
+    bookingNotices: noticesOn ? "on" : "off",
+    bookingNoticesStatus: `booking notices: ${noticesOn ? "on" : "off"}`,
+    unnotifiedBookings: unnotifiedCount,
+  };
+}
+
 const server = http.createServer(async (req, res) => {
   try {
     const host = hostOnly(req.headers.host);
     const rawUrl = req.url || "/";
-    const parsedUrl = new URL(rawUrl, `http://${host || "localhost"}`);
+    const parsedUrl = new URL(rawUrl, `http://${host || T5500_IP}`);
     const urlPath = parsedUrl.pathname;
 
-    if (urlPath === "/health") {
-      res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
-      res.end(JSON.stringify({ service: "domains-server", sites: SITES }));
+    if (urlPath === "/health" || urlPath === "/health/" || urlPath === "/api/health") {
+      sendJson(res, 200, buildDomainsHealthPayload(process.env, { manifestDir: __dirname }));
       return;
     }
 
-    // OnlineRecycle.net native Google Calendar booking APIs
+    // OnlineRecycle.net native appointment booking APIs
     const isBookingHost = BOOKING_HOSTS.has(host);
 
     if (isBookingHost && urlPath === "/api/booking-config" && req.method === "GET") {
@@ -472,6 +547,7 @@ const server = http.createServer(async (req, res) => {
         deviceList,
         notes,
         status: "SCHEDULED",
+        notified: false,
       };
 
       await fsp.mkdir(INQUIRIES_DIR, { recursive: true });
@@ -485,6 +561,7 @@ const server = http.createServer(async (req, res) => {
         return;
       }
       fs.appendFileSync(BOOKINGS_JSONL, `${JSON.stringify(booking)}\n`, "utf8");
+      bookingCache = { mtimeMs: -1, size: -1, list: [] };
 
       const inquiryMd = [
         `Full Name: ${fullName}`,
@@ -503,14 +580,23 @@ const server = http.createServer(async (req, res) => {
       ]
         .filter(Boolean)
         .join("\n");
-      await fsp.writeFile(path.join(INQUIRIES_DIR, `${bookingId}.txt`), `${inquiryMd}\n`, "utf8");
+      try {
+        await fsp.writeFile(path.join(INQUIRIES_DIR, `${bookingId}.txt`), `${inquiryMd}\n`, "utf8");
+      } catch {
+        // secondary inquiry file failure must never abort a saved booking
+      }
+
+      const notified = await notifyBooking(booking, { logDir: BOOKINGS_DIR }).catch(() => false);
+      booking.notified = Boolean(notified);
+      updateBookingNotified(bookingId, booking.notified);
+      recordBooking(STATS_DIR);
 
       const googleCalendarUrl = buildGoogleCalendarUrl(booking);
       const icsUrl = `/api/calendar.ics?id=${encodeURIComponent(bookingId)}`;
       const smsBody = `OnlineRecycle.net ${serviceType.toUpperCase()} Booking ${bookingId}: ${fullName}, ${date} (${slotLabel}). Items (${deviceCount}): ${deviceList}${
         serviceType === "pickup" ? ` | Address: ${address}, ${city} ${zip}` : ""
       }`;
-      const smsUrl = `sms:+13213962008?&body=${encodeURIComponent(smsBody)}`;
+      const smsUrl = `sms:+13213962008?body=${encodeURIComponent(smsBody)}`;
 
       res.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
       res.end(
@@ -522,10 +608,6 @@ const server = http.createServer(async (req, res) => {
           smsUrl,
         })
       );
-      // After the response is sent: count it and tell the owner. Neither can
-      // delay or break the booking.
-      recordBooking(STATS_DIR);
-      notifyBooking(booking, { logDir: BOOKINGS_DIR }).catch(() => {});
       return;
     }
 
@@ -564,7 +646,9 @@ const server = http.createServer(async (req, res) => {
     const data = await fsp.readFile(filePath);
     res.writeHead(200, { "Content-Type": contentTypeFor(filePath) });
     res.end(data);
-    if (isBookingHost && urlPath === "/" && req.method === "GET") recordPageView(STATS_DIR);
+    if (isBookingHost && urlPath === "/" && req.method === "GET") {
+      recordPageView(STATS_DIR, new Date(), req.headers["user-agent"]);
+    }
   } catch (err) {
     if (res.headersSent || res.destroyed) return;
     res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });
@@ -572,17 +656,40 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-const listeners = HOSTS.map((host) => {
-  const srv = host === HOSTS[0] ? server : createServerFor(server.listeners("request")[0]);
-  srv.on("error", (err) => {
-    // eslint-disable-next-line no-console
-    console.error(`domains-server cannot listen on http://${host}:${PORT}: ${err && err.code ? err.code : err}`);
-  });
-  srv.listen(PORT, host, () => {
-    // eslint-disable-next-line no-console
-    console.log(`domains-server listening on http://${host}:${PORT} (sites: ${SITES.join(", ")})`);
-  });
-  return srv;
-});
+const IS_MAIN_MODULE = Boolean(
+  process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url))
+);
 
-export { VHOSTS, SITES, HOSTS, listeners, resolveFile, contentTypeFor, hostOnly };
+if (IS_MAIN_MODULE) {
+  logStartupEnvCheck(__dirname);
+}
+
+const listeners = IS_MAIN_MODULE
+  ? HOSTS.map((host) => {
+      const srv = host === HOSTS[0] ? server : createServerFor(server.listeners("request")[0]);
+      srv.on("error", (err) => {
+        // eslint-disable-next-line no-console
+        console.error(`domains-server cannot listen on http://${host}:${PORT}: ${err && err.code ? err.code : err}`);
+      });
+      srv.listen(PORT, host, () => {
+        // eslint-disable-next-line no-console
+        console.log(`domains-server listening on http://${host}:${PORT} (sites: ${SITES.join(", ")})`);
+      });
+      return srv;
+    })
+  : [];
+
+export {
+  VHOSTS,
+  SITES,
+  HOSTS,
+  PORT,
+  T5500_IP,
+  server,
+  listeners,
+  resolveDomainsServerBind,
+  buildDomainsHealthPayload,
+  resolveFile,
+  contentTypeFor,
+  hostOnly,
+};

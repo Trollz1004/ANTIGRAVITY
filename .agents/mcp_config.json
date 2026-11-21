@@ -2,25 +2,22 @@
   "mcpServers": {
     "gemini-node-mcp": {
       "command": "node",
-      "args": [
-        "C:\\ANTIGRAVITY\\ops\\mcp\\gemini-node-mcp\\index.js"
-      ],
-      "env": {}
+      "args": ["C:\\ANTIGRAVITY\\ops\\mcp\\gemini-node-mcp\\index.js"],
+      "env": {},
+      "timeoutSeconds": 180
     },
     "omniroute": {
       "type": "http",
       "url": "http://192.168.0.15:20128/api/mcp/stream",
       "headers": {
         "Authorization": "Bearer ${OMNIROUTE_API_KEY}"
-      }
+      },
+      "timeoutSeconds": 300
     },
     "omniroute-cli": {
       "command": "cmd",
-      "args": [
-        "/c",
-        "omniroute",
-        "mcp"
-      ]
+      "args": ["/c", "omniroute", "mcp"],
+      "timeoutSeconds": 300
     }
   }
 }

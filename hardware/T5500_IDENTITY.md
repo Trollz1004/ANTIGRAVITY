@@ -19,5 +19,5 @@ Written by Opus (Claude) in the Antigravity IDE, 2026-10-09. Machine-readable tw
 - Stitch package is `@google/stitch-sdk`. Never use `@withgoogle/stitch-sdk`.
 - In the Jarvis model picker, "Grok (official)" (`grok_official`) means a real Grok login only. It never quietly falls back to OmniRoute or Ollama under that name.
 - Live date-app domain: youandinotai.com only (the `.online` domain was not renewed).
-- GrinDroid is not on this node; it has not been built yet.
+- Other private projects live in their own folders, repositories and agent sessions on a separate drive, not on this node. They are not part of this repo. Never open, read, copy or mix their files, prompts or memory with this repo. A task for one of them is written as a handoff file for its own session in the drop box, and nothing else is done.
 - No secrets in git.

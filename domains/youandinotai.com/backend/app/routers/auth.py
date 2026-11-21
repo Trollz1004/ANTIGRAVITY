@@ -11,11 +11,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.age_gate import ensure_adult
 from app.auth import (
     create_access_token,
-    create_refresh_token,
     decode_token,
     ensure_active_user,
     get_current_user,
     hash_password,
+    issue_refresh_token,
     rotate_refresh_token,
     verify_google_token,
     verify_password,
@@ -39,6 +39,7 @@ from app.schemas import (
     AuthTokenResponse,
     GoogleLoginRequest,
     UserMeResponse,
+    normalize_signup_source,
 )
 from app.subscriptions import user_has_active_subscription
 
@@ -70,6 +71,17 @@ def _beta_password_hash(password_seed: str, secret: str, code: str) -> str:
         return hashlib.sha256(
             f"beta-stored:{secret}:{_normalize_beta_code(code)}:{password_seed}".encode()
         ).hexdigest()
+
+
+def _resolve_signup_source(
+    signup_source: str | None, referral_code: str | None
+) -> str | None:
+    if signup_source is not None:
+        return signup_source
+    cleaned_ref = (referral_code or "").strip()
+    if cleaned_ref:
+        return normalize_signup_source(f"ref:{cleaned_ref}")
+    return None
 
 
 @router.post(
@@ -135,6 +147,8 @@ async def register(
     if existing:
         raise conflict(message="Email already registered")
 
+    ensure_adult(payload.date_of_birth)
+
     user = User(
         id=uuid.uuid4(),
         email=payload.email.lower(),
@@ -143,8 +157,10 @@ async def register(
         date_of_birth=payload.date_of_birth,
         adult_verified_at=datetime.now(timezone.utc),
         referral_code=payload.referral_code,
+        signup_source=_resolve_signup_source(
+            payload.signup_source, payload.referral_code
+        ),
     )
-    ensure_adult(payload.date_of_birth)
     db.add(user)
     await db.commit()
     await db.refresh(user)
@@ -170,7 +186,7 @@ async def register(
 
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
 
@@ -227,7 +243,7 @@ async def login(
 
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
 
@@ -247,9 +263,17 @@ async def google_login(
     if not email:
         raise bad_request(message="Email not present in Google token")
 
+    if payload.date_of_birth is not None:
+        ensure_adult(payload.date_of_birth)
+
     user = await db.scalar(select(User).where(User.email == email.lower()))
 
     if not user:
+        if payload.date_of_birth is None:
+            raise bad_request(
+                message="Date of birth is required to create an account (18+ only)"
+            )
+        referral_code = (payload.referral_code or "").strip() or None
         # Create a new user
         user = User(
             id=uuid.uuid4(),
@@ -257,22 +281,28 @@ async def google_login(
             password_hash=hash_password(str(uuid.uuid4())),  # Create a random password
             display_name=id_info.get("name", "New User"),
             google_id=id_info.get("sub"),
+            date_of_birth=payload.date_of_birth,
             adult_verified_at=datetime.now(timezone.utc),
+            referral_code=referral_code,
+            signup_source=_resolve_signup_source(payload.signup_source, referral_code),
         )
         db.add(user)
         await db.commit()
         await db.refresh(user)
-    elif not user.google_id:
-        # Link existing user to Google account
-        user.google_id = id_info.get("sub")
-        await db.commit()
-        await db.refresh(user)
+    else:
+        if user.date_of_birth is not None:
+            ensure_adult(user.date_of_birth)
+        if not user.google_id:
+            # Link existing user to Google account
+            user.google_id = id_info.get("sub")
+            await db.commit()
+            await db.refresh(user)
 
     ensure_active_user(user)
 
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
 
@@ -295,12 +325,19 @@ async def beta_access(
             details={"code": ErrorCode.BETA_ACCESS_DENIED},
         )
 
+    if payload.date_of_birth is not None:
+        ensure_adult(payload.date_of_birth)
+
     email, password_seed, display_name = _beta_identity(
         normalized_code, settings.jwt_secret
     )
     user = await db.scalar(select(User).where(User.email == email))
 
     if not user:
+        if payload.date_of_birth is None:
+            raise bad_request(
+                message="Date of birth is required to create an account (18+ only)"
+            )
         now = datetime.now(timezone.utc)
         user = User(
             id=uuid.uuid4(),
@@ -309,7 +346,7 @@ async def beta_access(
                 password_seed, settings.jwt_secret, normalized_code
             ),
             display_name=display_name,
-            date_of_birth=datetime(2000, 1, 1, tzinfo=timezone.utc).date(),
+            date_of_birth=payload.date_of_birth,
             adult_verified_at=now,
             bot_shield_verified=False,
             subscription_tier="founding_member",
@@ -334,6 +371,12 @@ async def beta_access(
         await db.commit()
         await db.refresh(user)
     elif not user.is_active:
+        dob = user.date_of_birth or payload.date_of_birth
+        if dob is None:
+            raise bad_request(
+                message="Date of birth is required to activate this account (18+ only)"
+            )
+        ensure_adult(dob)
         user.is_active = True
         user.subscription_active = True
         if not user.subscription_tier or user.subscription_tier == "beta":
@@ -343,7 +386,7 @@ async def beta_access(
 
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
 

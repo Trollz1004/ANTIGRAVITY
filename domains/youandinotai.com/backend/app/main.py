@@ -26,6 +26,7 @@ from app.database import (
     get_db,
     reconcile_legacy_schema,
 )
+from app.env_health import warn_backend_missing_env
 from app.error_responses import ErrorCode, ErrorResponse
 from app.graphql.schema import schema
 from app.logging_config import setup_logging
@@ -171,6 +172,7 @@ async def lifespan(app: FastAPI):
 
     # Startup: Start background scheduler
     scheduler = setup_scheduler()
+    warn_backend_missing_env(logger_fn=logger.warning)
 
     logger.info("Application startup complete")
     yield

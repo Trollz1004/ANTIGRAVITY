@@ -33,10 +33,10 @@ function Test-HttpEndpoint([string]$url, [int]$timeoutSec = 5) {
 $services = @(
     @{ Name = "PostgreSQL Database"; Port = 5432; Check = { Test-TcpPort 5432 } },
     @{ Name = "Redis Cache"; Port = 6379; Check = { Test-TcpPort 6379 } },
-    @{ Name = "Ollama AI Server"; Port = 11434; Check = { Test-HttpEndpoint "http://127.0.0.1:11434/api/tags" } },
-    @{ Name = "Domains Static Server"; Port = 9160; Check = { Test-HttpEndpoint "http://127.0.0.1:9160/health" } },
-    @{ Name = "DateApp Frontend"; Port = 3200; Check = { Test-HttpEndpoint "http://127.0.0.1:3200" } },
-    @{ Name = "DateApp FastAPI"; Port = 8000; Check = { Test-HttpEndpoint "http://127.0.0.1:8000/api/v1/health" } }
+    @{ Name = "Ollama AI Server"; Port = 11434; Check = { Test-HttpEndpoint "http://192.168.0.15:11434/api/tags" } },
+    @{ Name = "Domains Static Server"; Port = 9160; Check = { Test-HttpEndpoint "http://192.168.0.15:9160/health" } },
+    @{ Name = "DateApp Frontend"; Port = 3200; Check = { Test-HttpEndpoint "http://192.168.0.15:3200" } },
+    @{ Name = "DateApp FastAPI"; Port = 8000; Check = { Test-HttpEndpoint "http://192.168.0.15:8000/api/v1/health" } }
 )
 
 $allGreen = $true
@@ -87,9 +87,9 @@ if ($allGreen) {
 Write-Host "===============================================================================" -ForegroundColor Cyan
 Write-Host "`nLive Domains & Endpoints:" -ForegroundColor Gray
 Write-Host "  - https://youandinotai.com          [PUBLIC LIVE]" -ForegroundColor Cyan
-Write-Host "  - http://127.0.0.1:3200             [LOCAL FRONTEND]" -ForegroundColor Gray
-Write-Host "  - http://127.0.0.1:8000/docs        [FASTAPI SWAGGER DOCS]" -ForegroundColor Gray
-Write-Host "  - http://127.0.0.1:9160             [ORIGIN STATIC DOMAINS]" -ForegroundColor Gray
+Write-Host "  - http://192.168.0.15:3200             [LOCAL FRONTEND]" -ForegroundColor Gray
+Write-Host "  - http://192.168.0.15:8000/docs        [FASTAPI SWAGGER DOCS]" -ForegroundColor Gray
+Write-Host "  - http://192.168.0.15:9160             [ORIGIN STATIC DOMAINS]" -ForegroundColor Gray
 
 if (-not $NoPause -and $Host.Name -notmatch "ServerRemoteHost") {
     Write-Host "`nAll good! Window will stay open so you can see status." -ForegroundColor Gray

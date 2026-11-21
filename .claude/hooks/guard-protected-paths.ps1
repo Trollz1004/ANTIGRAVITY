@@ -1,4 +1,4 @@
-# guard-protected-paths.ps1 - PreToolUse guard for Edit/Write/MultiEdit.
+﻿# guard-protected-paths.ps1 - PreToolUse guard for Edit/Write/MultiEdit.
 #
 # Blocks any agent (including me) from writing to files that, when corrupted,
 # take the whole platform down. Every rule here exists because the failure
@@ -84,11 +84,11 @@ $protectedPatterns = @(
   '\\scripts\\fables-house\\',
   '\\scripts\\drift\.cmd$',
   '\\ops\\runbook\\',
-  '\\ops\\skills\\sabretooth-node\\',
+  '\\ops\\skills\\(t5500|[s]abretooth)-node\\',
   '\\docs\\payments-truth\.md$',
   '\\docs\\node-state-.*\.md$',
   '\\\.github\\',
-  '^c:\\users\\joshi\\onedrive\\claude-to-claude\\'
+  '^c:\\users\\[^\\]+\\onedrive\\claude-to-claude\\'
 )
 foreach ($pat in $protectedPatterns) {
   if ($p -match $pat) {

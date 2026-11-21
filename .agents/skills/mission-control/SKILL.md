@@ -1,54 +1,31 @@
 ---
 name: mission-control
-description: Paperclip on the T5500 at :3917 is the MARKETING command layer (company board, agent heartbeats via adapter, issues/inbox). Mission Control itself is JARVIS/OPSIS on the Mission Agent OS board (T5500 :3130, rebuilding as of 2026-10-09). Use for Paperclip task tracking, agent reporting, or status queries.
+description: Mission OS on T5500 at 192.168.0.15:3130 (Mission Agent OS board, wheel, marketing plans, lane journals, approvals). Use for Mission OS status queries, task tracking, and agent reporting across T5500 (192.168.0.15) and Alienware (192.168.0.40).
 ---
 
-# Paperclip (marketing) on T5500 — and where Mission Control really is
+# Mission OS on T5500 (`192.168.0.15:3130`)
 
-## Current Truth (Joshua, 2026-10-17)
+## Current Truth (`ops/fleet/fleet-map.json`)
 
-- **Mission Control = JARVIS/OPSIS** on the Mission Agent OS board (`mission-os/`, T5500 :3130).
- Hermes is JARVIS on :9119 and is fixing it now; OPSIS/JARVIS and Hermes own that work.
-- **Paperclip is marketing only** (`ANTIGRAVITY Marketing Co`, :3917). It is NOT Mission Control.
- The old PAPERWEIGHT kanban and WhatsApp/Telegram bridge are retired surfaces — do not revive them.
-- **Node topology:** the T5500 (`192.168.0.15`) is the only production node. Everything runs on it:
- repo `C:\ANTIGRAVITY`, Paperclip API `http://127.0.0.1:3917`, Hermes gateway
- `http://127.0.0.1:8642` (profile `paperclip-mc`). Alienware is dev only, never production.
- Sabretooth is not a node.
-- Health probe: `GET http://127.0.0.1:3917/api/health` → expect `{"status":"ok"}`.
- Connection refused = Paperclip down; report DOWN with evidence, do not start a
- second instance on the port.
+- **Mission Control = Mission OS (`mission-os/`)** on T5500 (`192.168.0.15:3130`).
+- **Retired Legacy Boards**: All third-party legacy control planes (`:3100`, `:3917`, PAPERWEIGHT, MC5 `:3151`) are permanently retired — do not start or probe them.
+- **Two-Node Topology:**
+ - **T5500 (`192.168.0.15`, Front-of-House)**: `C:\ANTIGRAVITY`, Mission OS (`:3130`), DateApp Frontend (`:3200`) & API (`:8000`), OmniRoute (`:20128`), Hermes API (`:8643`) & Dashboard (`:9119`), Domains Server (`:9160`), Shared `ai-memory` MCP (`:49374`).
+ - **Alienware (`192.168.0.40`, Workshop)**: DREAM Engine (`:9180`), Lead-Gen Studio (`:8392`), Media/TTS Worker (`:8391`), OPSis Studio (`:8390`), Free Claude Code (`:8082`), Ollama (`:11434`), Swarm Command (`:8000`).
+- **Health probe:** `GET http://192.168.0.15:3130/api/mos-state.json` → expect JSON state envelope.
+ Connection refused = report DOWN with evidence; do not start a duplicate instance.
 
-## Board Semantics (Paperclip issues)
+## Board Semantics & Endpoints
 
-| Paperclip concept | Old PAPERWEIGHT column |
-|---|---|
-| Issue `todo` / `in_progress` | NOW |
-| Issue assigned, not checked out | NEXT |
-| Issue `blocked` + comment surfacing the exact question | BLOCKED |
-| Issues closed in last 24h (activity log) | DONE-24H |
-| Heartbeat routines / scheduler heartbeats | ROUTINES |
-| Agent status + adapter config (`/api/agents/me`) | ADAPTERS |
-| Wakeup/heartbeat run history (`/api/wakeups/{id}`) | HERMES HEARTBEAT |
-
-## Agents & Adapters
-
-- Agents join via invite (`adapterType: hermes_gateway`), get approved by the board,
- then claim an API key once (stored privately, never echoed).
-- ox-alpha runs from the dedicated Hermes profile `paperclip-mc`
- (`~\AppData\Local\hermes\profiles\paperclip-mc`) — separate memory, sessions, skills.
-- Dispatch test: `POST /api/agents/{agentId}/wakeup` with
- `{"source":"on_demand","triggerDetail":"manual","reason":"..."}`.
-- Full API surface: `GET http://127.0.0.1:3917/api/openapi.json`.
-- Heartbeat procedure and issue workflow: see `.agents/skills/paperclip/SKILL.md`.
+- `GET http://192.168.0.15:3130/api/mos-state.json` — live node/wheel/lane state
+- `GET http://192.168.0.15:3130/api/wheel` — 50-task perpetual wheel state
+- `POST http://192.168.0.15:3130/api/wheel/tick` — advance queued work
+- `http://192.168.0.15:3130/marketing` — 3-domain marketing plans (`youandinotai.com`, `onlinerecycle.net`, `dream-online.net`)
+- Hermes gateway health on T5500: `http://192.168.0.15:8643` / Dashboard `http://192.168.0.15:9119`
 
 ## Verified Operating State
 
-"All resolved issues. Paperclip is answering on :3917, agents are connected through
-their adapters, wakeup dispatch reaches them, and live task state is on the issues board."
-
-If this is not literally true — verified by probes you actually ran — open an ops-drift
-issue instead of claiming it.
+Never claim UP unless verified by a real HTTP identity check against `192.168.0.15:3130`. If a probe fails, log the exact error and status rather than assuming UP.
 
 ## Governance (unchanged)
 
@@ -62,3 +39,12 @@ issue instead of claiming it.
 
 - House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
 - Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).
+
+<!-- TROLLZ1004-SPINE:START -->
+- `Repo: ANTIGRAVITY | Fleet: Alienware (192.168.0.40, workshop) & T5500 (192.168.0.15, front-of-house) | GitHub: Trollz1004 (ops/fleet/fleet-map.json).`
+- `Spine: Trollz1004/dream-online docs/house/SPINE.md (pointers: ADDRESS-DOCTRINE.md, NODES.md, PIPELINE.md, TRUSTED-MODELS.md, THE-HOUSE.md).`
+- `Address doctrine: use 192.168.0.40 and 192.168.0.15 from ops/fleet/fleet-map.json; never use loopback reach URLs; Postgres (port 5432), Redis (port 6379), and Obsidian REST (port 27123) bind "127.0.0.1" on their own machine only.`
+- `Trusted three: Claude Opus 5.5 / Fable (Claude Code), Gemini 4 Carbon (agy), and GPT-6 Astra / GPT-6.1 Sol / Codex (Codex CLI); superpowers is in every kit on demand, while REA, remake, Agent-Reach, and last30days are locked to the trusted three.`
+- `Pipeline: brainstorm first, route role + <=2 skills, build [A]/[B] with failing test first, expediter rubric + 5 stacked add-on PRs, Carbon + Codex judge, Fable / rotating trusted-three merges green checks.`
+- `Starter kit MCP ("kit"): cmd.exe /d /c node "%USERPROFILE%\antigravity\DREAM-Engine-runner\ops\kit\server.mjs" (tools: map_search, map_section, memory_search, memory_add, role_get, method_get).`
+<!-- TROLLZ1004-SPINE:END -->

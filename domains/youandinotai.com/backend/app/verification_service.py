@@ -74,3 +74,74 @@ async def promote_user_verification_if_ready(
     if profile:
         profile.verified = True
     return True
+
+
+async def revoke_user_verification_for_refund(
+    db: AsyncSession,
+    square_payment_id: str | None = None,
+    *,
+    user: User | None = None,
+    payment_event: VerificationEvent | None = None,
+    square_refund_id: str | None = None,
+) -> bool:
+    if payment_event is None:
+        cleaned_id = str(square_payment_id or "").strip()
+        if not cleaned_id:
+            return False
+        payment_event = await db.scalar(
+            select(VerificationEvent)
+            .where(VerificationEvent.challenge_type == "payment")
+            .where(VerificationEvent.square_payment_id == cleaned_id)
+            .order_by(VerificationEvent.created_at.desc())
+        )
+    if payment_event is None or payment_event.challenge_type != "payment":
+        return False
+    if payment_event.amount_cents is not None and payment_event.amount_cents != 100:
+        return False
+
+    cleaned_refund_id = str(square_refund_id or "").strip() or None
+    payment_event.status = "refunded"
+    if cleaned_refund_id is not None:
+        payment_event.square_refund_id = cleaned_refund_id
+
+    extra_payments = list(
+        (
+            await db.scalars(
+                select(VerificationEvent)
+                .where(VerificationEvent.user_id == payment_event.user_id)
+                .where(VerificationEvent.challenge_type == "payment")
+                .where(VerificationEvent.status == "completed")
+                .where(
+                    (VerificationEvent.amount_cents == 100)
+                    | (VerificationEvent.amount_cents.is_(None))
+                )
+            )
+        ).all()
+    )
+    for row in extra_payments:
+        row.status = "refunded"
+        if (
+            cleaned_refund_id is not None
+            and getattr(row, "square_refund_id", None) is None
+        ):
+            row.square_refund_id = cleaned_refund_id
+
+    target_user = user
+    if target_user is None or target_user.id != payment_event.user_id:
+        target_user = await db.scalar(
+            select(User).where(User.id == payment_event.user_id)
+        )
+    if target_user is None:
+        return True
+
+    target_user.bot_shield_verified = False
+    profile = None
+    if hasattr(target_user, "__dict__"):
+        profile = target_user.__dict__.get("profile")
+    if profile is None:
+        profile = await db.scalar(
+            select(Profile).where(Profile.user_id == target_user.id)
+        )
+    if profile:
+        profile.verified = False
+    return True

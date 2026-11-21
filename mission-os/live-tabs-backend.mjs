@@ -13,8 +13,9 @@ import { listFeatures, readConstitution } from '../mission-control/lib/speckit.m
 import { buildInbox, performAction } from '../mission-control/lib/inbox.mjs';
 import { redact } from '../mission-control/lib/redact.mjs';
 import { SCC_24_APIS, envValue, draftWithFable } from './marketing-engine.mjs';
+import { getNodeIp, getServiceUrl } from '../ops/fleet/fleet-map.mjs';
 
-const ROOT = fs.existsSync('C:/ANTIGRAVITY') ? 'C:/ANTIGRAVITY' : path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ROOT = fs.existsSync('C:/ANTIGRAVITY/mission-os/server.mjs') ? 'C:/ANTIGRAVITY' : path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WHEEL_STATE_PATH = path.join(ROOT, 'mission-os', 'wheel-state.json');
 const SUPPORT_STORE_PATH = path.join(ROOT, 'mission-os', 'support-tickets.json');
 export function resolveObsidianVaultRoot() {
@@ -295,16 +296,16 @@ export async function getLiveGatewayTab() {
   const orHeaders = orKey ? { Authorization: `Bearer ${orKey}` } : {};
 
   const [omniModels, agyModels, ollamaTags, ollamaPs] = await Promise.all([
-    fetch('http://127.0.0.1:20128/v1/models', { headers: orHeaders, signal: AbortSignal.timeout(3000) })
+    fetch(getServiceUrl('omniroute', '/v1/models'), { headers: orHeaders, signal: AbortSignal.timeout(3000) })
       .then((r) => r.json())
       .catch(() => null),
-    fetch('http://127.0.0.1:3130/v1/models', { signal: AbortSignal.timeout(3000) })
+    fetch(getServiceUrl('mission-os', '/v1/models'), { signal: AbortSignal.timeout(3000) })
       .then((r) => r.json())
       .catch(() => null),
-    fetch('http://127.0.0.1:11434/api/tags', { signal: AbortSignal.timeout(3000) })
+    fetch(getServiceUrl('ollama-t5500', '/api/tags'), { signal: AbortSignal.timeout(3000) })
       .then((r) => r.json())
       .catch(() => null),
-    fetch('http://127.0.0.1:11434/api/ps', { signal: AbortSignal.timeout(3000) })
+    fetch(getServiceUrl('ollama-t5500', '/api/ps'), { signal: AbortSignal.timeout(3000) })
       .then((r) => r.json())
       .catch(() => null),
   ]);
@@ -328,7 +329,7 @@ export async function getLiveGatewayTab() {
       {
         id: 'omniroute',
         name: 'OmniRoute AI Gateway (:20128)',
-        endpoint: 'http://127.0.0.1:20128/v1',
+        endpoint: getServiceUrl('omniroute', '/v1'),
         status: omniList.length > 0 ? 'UP' : 'DEGRADED',
         authConfigured: Boolean(orKey),
         modelCount: omniList.length,
@@ -337,7 +338,7 @@ export async function getLiveGatewayTab() {
       {
         id: 'agy-v1',
         name: 'Mission OS Local Gemini 4 Ultra Bridge (:3130/v1)',
-        endpoint: 'http://127.0.0.1:3130/v1',
+        endpoint: getServiceUrl('mission-os', '/v1'),
         status: agyList.length > 0 ? 'UP' : 'DOWN',
         authConfigured: true,
         modelCount: agyList.length,
@@ -346,7 +347,7 @@ export async function getLiveGatewayTab() {
       {
         id: 'ollama',
         name: 'Local Ollama RTX 3070 8GB (:11434/v1)',
-        endpoint: 'http://127.0.0.1:11434/v1',
+        endpoint: getServiceUrl('ollama-t5500', '/v1'),
         status: ollamaList.length > 0 ? 'UP' : 'DOWN',
         authConfigured: true,
         modelCount: ollamaList.length,
@@ -646,12 +647,11 @@ export async function getLiveNodeTab({ state }) {
     ok: true,
     generatedAt: new Date().toISOString(),
     hostname: os.hostname(),
-    ip: '192.168.0.15',
+    ip: getNodeIp('t5500'),
     role: 'PRODUCTION (Sole Production Node)',
     topology: [
-      { node: 'T5500-2-XEON-72', ip: '192.168.0.15', role: 'PRODUCTION', status: 'UP' },
-      { node: 'Alienware', ip: '192.168.0.40', role: 'DEV ONLY (Never Production)', status: 'STANDBY' },
-      { node: 'Sabretooth', ip: '192.168.0.8', role: 'RETIRED', status: 'OFF BY RULING' },
+      { node: 'T5500-2-XEON-72', ip: getNodeIp('t5500'), role: 'PRODUCTION', status: 'UP' },
+      { node: 'Alienware', ip: getNodeIp('alienware'), role: 'DEV ONLY (Never Production)', status: 'STANDBY' },
     ],
     cpu: {
       model: cpus[0]?.model || 'Intel Xeon',

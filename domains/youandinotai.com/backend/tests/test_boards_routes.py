@@ -63,6 +63,51 @@ def test_list_boards_idempotent(client, db_session_factory):
         app.dependency_overrides.pop(get_current_user, None)
 
 
+def test_list_boards_creates_usa_when_other_boards_already_exist(
+    client, db_session_factory
+):
+    """When other boards exist and usa does not, GET /boards creates usa."""
+    user = _make_user(email="boards_backfill_usa@example.com")
+    existing_board = Board(
+        id=uuid.uuid4(),
+        name="General",
+        slug="general",
+        description="Chat about anything",
+    )
+    seed(user, existing_board, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
+    try:
+        resp = client.get("/api/v1/boards")
+        assert resp.status_code == 200
+        boards = resp.json()
+        by_slug = {b["slug"]: b for b in boards}
+        assert "usa" in by_slug
+        assert by_slug["usa"] == {
+            "slug": "usa",
+            "name": "USA Group Chat",
+            "description": "Open to every verified member, anywhere in the country.",
+        }
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_list_boards_orders_usa_first_then_by_name(client, db_session_factory):
+    """GET /boards lists usa first, and the remaining boards sorted by name."""
+    user = _make_user(email="boards_order_usa@example.com")
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
+    try:
+        resp = client.get("/api/v1/boards")
+        assert resp.status_code == 200
+        boards = resp.json()
+        assert boards[0]["slug"] == "usa"
+        assert boards[0]["name"] == "USA Group Chat"
+        rest_names = [b["name"] for b in boards[1:]]
+        assert rest_names == sorted(rest_names)
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
 # ── GET /api/v1/boards/{slug}/posts ──────────────────────────────────────────
 
 
@@ -74,6 +119,22 @@ def test_list_posts_empty(client, db_session_factory):
     try:
         client.get("/api/v1/boards")  # ensure default boards exist
         resp = client.get("/api/v1/boards/general/posts")
+        assert resp.status_code == 200
+        assert resp.json() == []
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_list_usa_posts_without_list_boards_returns_200_empty(
+    client, db_session_factory
+):
+    """On a fresh database where GET /boards was never called, GET /boards/usa/posts answers 200 with []."""
+    user = _make_user(email="usa_posts_fresh_get@example.com")
+    user.bot_shield_verified = True
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
+    try:
+        resp = client.get("/api/v1/boards/usa/posts")
         assert resp.status_code == 200
         assert resp.json() == []
     finally:
@@ -111,6 +172,27 @@ def test_create_post_returns_201(client, db_session_factory):
         assert data["title"] == "Hello World"
         assert data["author_name"] == "Alice"
         assert data["like_count"] == 0
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_create_usa_post_without_list_boards_returns_201(client, db_session_factory):
+    """On a fresh database where GET /boards was never called, POST /boards/usa/posts answers 201 for a checked member."""
+    user = _make_user(email="usa_posts_fresh_post@example.com", display_name="Alice")
+    user.bot_shield_verified = True
+    seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = override_user(user)
+    try:
+        resp = client.post(
+            "/api/v1/boards/usa/posts",
+            json={"title": "USA hello", "body": "First message in USA room"},
+        )
+        assert resp.status_code == 201
+        data = resp.json()
+        assert data["board_slug"] == "usa"
+        assert data["title"] == "USA hello"
+        assert data["body"] == "First message in USA room"
+        assert data["author_name"] == "Alice"
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 
@@ -219,6 +301,89 @@ def test_list_posts_pagination_does_not_hide_verified_post_behind_unverified(
         data = resp.json()
         assert len(data) == 1
         assert data[0]["title"] == "Older verified post"
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_list_usa_posts_supports_order_asc_and_desc_default_desc(
+    client, db_session_factory
+):
+    """GET /boards/usa/posts orders desc by default, supports order=asc and order=desc."""
+    user = _make_user(email="usa_posts_order@example.com", display_name="Verified")
+    user.bot_shield_verified = True
+    usa_board = Board(
+        id=uuid.uuid4(),
+        name="USA Group Chat",
+        slug="usa",
+        description="Open to every verified member, anywhere in the country.",
+    )
+    older_post = Post(
+        id=uuid.uuid4(),
+        board_id=usa_board.id,
+        author_id=user.id,
+        title="First message",
+        body="Older post in USA Group Chat",
+        created_at=datetime(2026, 1, 1, 10, 0, tzinfo=timezone.utc),
+    )
+    newer_post = Post(
+        id=uuid.uuid4(),
+        board_id=usa_board.id,
+        author_id=user.id,
+        title="Second message",
+        body="Newer post in USA Group Chat",
+        created_at=datetime(2026, 1, 1, 12, 0, tzinfo=timezone.utc),
+    )
+    seed(
+        user,
+        usa_board,
+        older_post,
+        newer_post,
+        db_session_factory=db_session_factory,
+    )
+
+    app.dependency_overrides[get_current_user] = override_user(user)
+    try:
+        default_resp = client.get("/api/v1/boards/usa/posts")
+        assert default_resp.status_code == 200
+        assert [p["title"] for p in default_resp.json()] == [
+            "Second message",
+            "First message",
+        ]
+
+        desc_resp = client.get("/api/v1/boards/usa/posts?order=desc")
+        assert desc_resp.status_code == 200
+        assert [p["title"] for p in desc_resp.json()] == [
+            "Second message",
+            "First message",
+        ]
+
+        asc_resp = client.get("/api/v1/boards/usa/posts?order=asc")
+        assert asc_resp.status_code == 200
+        assert [p["title"] for p in asc_resp.json()] == [
+            "First message",
+            "Second message",
+        ]
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_list_usa_posts_refuses_invalid_order_and_limit_above_100(
+    client, db_session_factory
+):
+    """GET /boards/usa/posts refuses order values other than asc/desc and limit > 100."""
+    user = _make_user(email="usa_posts_validation@example.com")
+    user.bot_shield_verified = True
+    seed(user, db_session_factory=db_session_factory)
+
+    app.dependency_overrides[get_current_user] = override_user(user)
+    try:
+        client.get("/api/v1/boards")
+
+        bad_order = client.get("/api/v1/boards/usa/posts?order=invalid")
+        assert bad_order.status_code == 422
+
+        bad_limit = client.get("/api/v1/boards/usa/posts?limit=101")
+        assert bad_limit.status_code == 422
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 

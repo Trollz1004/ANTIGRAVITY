@@ -35,7 +35,9 @@ describe('Bot or Not landing page game (trolling the founder)', () => {
 
     const jokes = BOT_OR_NOT_CARDS.map(c => c.joke);
     expect(jokes).toContain('Human. Verified. Still debugging at 3 AM.');
-    expect(jokes).toContain("Bot? No. Just hasn't slept since the last deploy.");
+    expect(jokes).toContain(
+      "Bot? No. Just hasn't slept since the last deploy."
+    );
     expect(jokes).toContain(
       'Real human. The beard is not AI-generated, we checked.'
     );
@@ -61,7 +63,9 @@ describe('Bot or Not landing page game (trolling the founder)', () => {
     // First card is Human (Josh) — renders img from /bot-or-not/
     const img = card.querySelector('img') as HTMLImageElement;
     expect(img).not.toBeNull();
-    expect(img.getAttribute('src')).toBe('/bot-or-not/josh-portrait-blazer.jpg');
+    expect(img.getAttribute('src')).toBe(
+      '/bot-or-not/josh-portrait-blazer.jpg'
+    );
 
     // Tap "Not" to flip the human card
     const notBtn = within(section).getByRole('button', { name: /^Not$/i });
@@ -101,7 +105,7 @@ describe('Bot or Not landing page game (trolling the founder)', () => {
   it('ends on one verification CTA button wired to /app/verify and enforces 44px minimum hit targets', () => {
     const { container } = render(
       <MemoryRouter initialEntries={['/']}>
-        < BotOrNotGame />
+        <BotOrNotGame />
       </MemoryRouter>
     );
 
