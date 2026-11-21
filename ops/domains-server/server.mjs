@@ -410,6 +410,25 @@ async function resolveFile(docRootAbs, urlPath) {
   }
 }
 
+function buildDomainsHealthPayload(
+  env = process.env,
+  { manifestDir = __dirname, driftPath = "", unnotifiedBookings = countUnnotifiedBookings() } = {}
+) {
+  const baseLight = buildPublicHealthLight({ manifestDir, env, driftPath });
+  const noticesOn = isBookingNotifyConfigured(env);
+  const unnotifiedCount = Math.max(0, Number(unnotifiedBookings) || 0);
+  const nodeLight = !noticesOn || unnotifiedCount > 0 || baseLight.nodeLight !== "green" ? "amber" : "green";
+  return {
+    service: "domains-server",
+    sites: SITES,
+    ...baseLight,
+    nodeLight,
+    bookingNotices: noticesOn ? "on" : "off",
+    bookingNoticesStatus: `booking notices: ${noticesOn ? "on" : "off"}`,
+    unnotifiedBookings: unnotifiedCount,
+  };
+}
+
 const server = http.createServer(async (req, res) => {
   try {
     const host = hostOnly(req.headers.host);
@@ -417,23 +436,8 @@ const server = http.createServer(async (req, res) => {
     const parsedUrl = new URL(rawUrl, `http://${host || T5500_IP}`);
     const urlPath = parsedUrl.pathname;
 
-    if (urlPath === "/health") {
-      const baseLight = buildPublicHealthLight({ manifestDir: __dirname });
-      const noticesOn = isBookingNotifyConfigured(process.env);
-      const unnotifiedBookings = countUnnotifiedBookings();
-      const nodeLight = !noticesOn || baseLight.nodeLight !== "green" ? "amber" : "green";
-      res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
-      res.end(
-        JSON.stringify({
-          service: "domains-server",
-          sites: SITES,
-          ...baseLight,
-          nodeLight,
-          bookingNotices: noticesOn ? "on" : "off",
-          bookingNoticesStatus: `booking notices: ${noticesOn ? "on" : "off"}`,
-          unnotifiedBookings,
-        })
-      );
+    if (urlPath === "/health" || urlPath === "/health/" || urlPath === "/api/health") {
+      sendJson(res, 200, buildDomainsHealthPayload(process.env, { manifestDir: __dirname }));
       return;
     }
 
@@ -684,6 +688,7 @@ export {
   server,
   listeners,
   resolveDomainsServerBind,
+  buildDomainsHealthPayload,
   resolveFile,
   contentTypeFor,
   hostOnly,
