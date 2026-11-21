@@ -11,6 +11,7 @@ from app.auth import get_current_user, require_verified_profile
 from app.config import get_settings
 from app.database import get_db
 from app.models import Board, Comment, Post, SupportTicket, User
+from app.moderation import blocked_by_user_subquery, blocked_user_subquery
 from app.schemas import (
     CommentCreateRequest,
     CommentResponse,
@@ -71,7 +72,7 @@ async def list_boards(
 @router.get("/{slug}/posts", response_model=list[PostResponse])
 async def list_posts(
     slug: str,
-    _user: User = Depends(require_verified_profile),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
     limit: int = Query(default=30, ge=1, le=100),
     offset: int = 0,
@@ -82,18 +83,26 @@ async def list_posts(
     if not board:
         raise HTTPException(status_code=404, detail="Board not found")
 
-    # Join and filter on the author's verification BEFORE offset/limit --
-    # filtering in Python after the SQL page was cut would silently drop
-    # verified posts that fell past the page boundary once legacy
-    # unverified posts were excluded, and neither board client in the
-    # frontend advances `offset`, so those posts would become permanently
-    # invisible instead of just reordered.
+    blocked_by_me = blocked_by_user_subquery(user.id)
+    blocked_me = blocked_user_subquery(user.id)
+
+    # Join and filter on the author's verification and block status BEFORE
+    # offset/limit -- filtering in Python after the SQL page was cut would
+    # silently drop verified posts that fell past the page boundary once
+    # legacy unverified or blocked posts were excluded, and neither board
+    # client in the frontend advances `offset`, so those posts would become
+    # permanently invisible instead of just reordered.
     created_order = Post.created_at.asc() if order == "asc" else Post.created_at.desc()
     rows = (
         await db.execute(
             select(Post, User)
             .join(User, User.id == Post.author_id)
-            .where(Post.board_id == board.id, User.bot_shield_verified.is_(True))
+            .where(
+                Post.board_id == board.id,
+                User.bot_shield_verified.is_(True),
+                Post.author_id.notin_(blocked_by_me),
+                Post.author_id.notin_(blocked_me),
+            )
             .order_by(created_order)
             .offset(offset)
             .limit(limit)
@@ -154,13 +163,19 @@ async def create_post(
 async def list_comments(
     slug: str,
     post_id: uuid.UUID,
-    _user: User = Depends(require_verified_profile),
+    user: User = Depends(require_verified_profile),
     db: AsyncSession = Depends(get_db),
 ) -> list[CommentResponse]:
+    blocked_by_me = blocked_by_user_subquery(user.id)
+    blocked_me = blocked_user_subquery(user.id)
     comments = (
         await db.scalars(
             select(Comment)
-            .where(Comment.post_id == post_id)
+            .where(
+                Comment.post_id == post_id,
+                Comment.author_id.notin_(blocked_by_me),
+                Comment.author_id.notin_(blocked_me),
+            )
             .order_by(Comment.created_at.asc())
         )
     ).all()

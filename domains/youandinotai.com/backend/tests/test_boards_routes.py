@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 
 from app.auth import get_current_user
 from app.main import app
-from app.models import Board, Comment, Post, User
+from app.models import Board, Comment, Post, User, UserBlock
 from tests.helpers import override_user, seed
 
 
@@ -451,6 +451,194 @@ def test_list_comments_excludes_unverified_author(client, db_session_factory):
         resp = client.get(f"/api/v1/boards/c-board/posts/{post.id}/comments")
         assert resp.status_code == 200
         assert resp.json() == []
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_list_posts_excludes_blocked_authors_in_both_directions(
+    client, db_session_factory
+):
+    """Posts from authors in blocked_by_user_subquery or blocked_user_subquery must be hidden."""
+    reader = _make_user(email="posts_block_reader@example.com", display_name="Reader")
+    reader.bot_shield_verified = True
+
+    blocked_by_reader = _make_user(
+        email="posts_blocked_by_reader@example.com", display_name="Blocked By Reader"
+    )
+    blocked_by_reader.bot_shield_verified = True
+
+    blocked_reader = _make_user(
+        email="posts_blocked_reader@example.com", display_name="Blocked Reader"
+    )
+    blocked_reader.bot_shield_verified = True
+
+    allowed_author = _make_user(
+        email="posts_allowed_author@example.com", display_name="Allowed Author"
+    )
+    allowed_author.bot_shield_verified = True
+
+    board = Board(
+        id=uuid.uuid4(),
+        name="Block Filter Board",
+        slug="block-filter-board",
+        description="",
+    )
+    post_blocked_by_me = Post(
+        id=uuid.uuid4(),
+        board_id=board.id,
+        author_id=blocked_by_reader.id,
+        title="Post from user I blocked",
+        body="Should be filtered out",
+    )
+    post_blocked_me = Post(
+        id=uuid.uuid4(),
+        board_id=board.id,
+        author_id=blocked_reader.id,
+        title="Post from user who blocked me",
+        body="Should also be filtered out",
+    )
+    post_allowed = Post(
+        id=uuid.uuid4(),
+        board_id=board.id,
+        author_id=allowed_author.id,
+        title="Visible post",
+        body="Should remain visible",
+    )
+    block_outbound = UserBlock(
+        id=uuid.uuid4(),
+        blocker_id=reader.id,
+        blocked_id=blocked_by_reader.id,
+    )
+    block_inbound = UserBlock(
+        id=uuid.uuid4(),
+        blocker_id=blocked_reader.id,
+        blocked_id=reader.id,
+    )
+    seed(
+        reader,
+        blocked_by_reader,
+        blocked_reader,
+        allowed_author,
+        board,
+        post_blocked_by_me,
+        post_blocked_me,
+        post_allowed,
+        block_outbound,
+        block_inbound,
+        db_session_factory=db_session_factory,
+    )
+
+    app.dependency_overrides[get_current_user] = override_user(reader)
+    try:
+        resp = client.get("/api/v1/boards/block-filter-board/posts")
+        assert resp.status_code == 200
+        posts = resp.json()
+        assert [p["title"] for p in posts] == ["Visible post"]
+        assert [p["author_id"] for p in posts] == [str(allowed_author.id)]
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_list_comments_excludes_blocked_authors_in_both_directions(
+    client, db_session_factory
+):
+    """Comments from authors in blocked_by_user_subquery or blocked_user_subquery must be hidden."""
+    reader = _make_user(
+        email="comments_block_reader@example.com", display_name="Reader"
+    )
+    reader.bot_shield_verified = True
+
+    post_author = _make_user(
+        email="comments_block_post_author@example.com", display_name="Post Author"
+    )
+    post_author.bot_shield_verified = True
+
+    blocked_by_reader = _make_user(
+        email="comments_blocked_by_reader@example.com",
+        display_name="Blocked By Reader",
+    )
+    blocked_by_reader.bot_shield_verified = True
+
+    blocked_reader = _make_user(
+        email="comments_blocked_reader@example.com", display_name="Blocked Reader"
+    )
+    blocked_reader.bot_shield_verified = True
+
+    allowed_commenter = _make_user(
+        email="comments_allowed_commenter@example.com",
+        display_name="Allowed Commenter",
+    )
+    allowed_commenter.bot_shield_verified = True
+
+    board = Board(
+        id=uuid.uuid4(),
+        name="Comment Block Board",
+        slug="comment-block-board",
+        description="",
+    )
+    post = Post(
+        id=uuid.uuid4(),
+        board_id=board.id,
+        author_id=post_author.id,
+        title="Discussion post",
+        body="Open thread",
+    )
+    comment_blocked_by_me = Comment(
+        id=uuid.uuid4(),
+        post_id=post.id,
+        author_id=blocked_by_reader.id,
+        body="Comment from user I blocked",
+        created_at=datetime(2026, 1, 1, 10, 0, tzinfo=timezone.utc),
+    )
+    comment_blocked_me = Comment(
+        id=uuid.uuid4(),
+        post_id=post.id,
+        author_id=blocked_reader.id,
+        body="Comment from user who blocked me",
+        created_at=datetime(2026, 1, 1, 11, 0, tzinfo=timezone.utc),
+    )
+    comment_allowed = Comment(
+        id=uuid.uuid4(),
+        post_id=post.id,
+        author_id=allowed_commenter.id,
+        body="Visible comment",
+        created_at=datetime(2026, 1, 1, 12, 0, tzinfo=timezone.utc),
+    )
+    block_outbound = UserBlock(
+        id=uuid.uuid4(),
+        blocker_id=reader.id,
+        blocked_id=blocked_by_reader.id,
+    )
+    block_inbound = UserBlock(
+        id=uuid.uuid4(),
+        blocker_id=blocked_reader.id,
+        blocked_id=reader.id,
+    )
+    seed(
+        reader,
+        post_author,
+        blocked_by_reader,
+        blocked_reader,
+        allowed_commenter,
+        board,
+        post,
+        comment_blocked_by_me,
+        comment_blocked_me,
+        comment_allowed,
+        block_outbound,
+        block_inbound,
+        db_session_factory=db_session_factory,
+    )
+
+    app.dependency_overrides[get_current_user] = override_user(reader)
+    try:
+        resp = client.get(
+            f"/api/v1/boards/comment-block-board/posts/{post.id}/comments"
+        )
+        assert resp.status_code == 200
+        comments = resp.json()
+        assert [c["body"] for c in comments] == ["Visible comment"]
+        assert [c["author_id"] for c in comments] == [str(allowed_commenter.id)]
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 
