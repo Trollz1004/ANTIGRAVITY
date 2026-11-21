@@ -62,7 +62,11 @@ test('keepalive.ps1 stages: ollama, postgres, and redis variables and arguments 
   );
 });
 
-test('keepalive.ps1 domains stage: DOMAINS_SERVER_HOST values (both main and old 4d226122 watchdog) are accepted by resolveDomainsServerBind with no token', () => {
+test('keepalive.ps1 domains stage: DOMAINS_SERVER_HOST values (both main and old 4d226122 watchdog) are accepted by resolveDomainsServerBind with no token and probe requires bookingNotices in /health', () => {
+  assert.match(
+    keepaliveSrc,
+    /Get-FleetServiceUrl\s+-ServiceId\s+'domains-server'\s+-PathSuffix\s+'\/health'\)\s+6\s+'bookingNotices'/,
+  );
   assert.match(
     keepaliveSrc,
     /\$env:DOMAINS_SERVER_HOST\s*=\s*if\s*\(\$fleetToken\)\s*\{\s*Get-FleetBindHost\s+-ServiceId\s+'domains-server'\s*\}\s*else\s*\{\s*\$loopbackHost\s*\}/,
