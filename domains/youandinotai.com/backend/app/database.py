@@ -132,6 +132,7 @@ async def reconcile_legacy_schema() -> None:
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL",
             "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS square_payment_id VARCHAR(255)",
+            "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS square_refund_id VARCHAR(255)",
             "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS card_fingerprint VARCHAR(255)",
             "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS trust_score FLOAT",
             "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS amount_cents INTEGER",
@@ -330,6 +331,12 @@ async def _reconcile_sqlite_schema(connection) -> None:
         verification_columns,
         "square_payment_id",
         "square_payment_id VARCHAR(255)",
+    )
+    await add_column(
+        "verification_events",
+        verification_columns,
+        "square_refund_id",
+        "square_refund_id VARCHAR(255)",
     )
     await add_column(
         "verification_events",

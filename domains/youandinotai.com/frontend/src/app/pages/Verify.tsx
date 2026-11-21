@@ -43,6 +43,22 @@ function hasPaymentSuccessParam(routerSearch: string): boolean {
   );
 }
 
+function formatRefundLastDay(
+  isoValue: string | null | undefined
+): string | null {
+  if (!isoValue || typeof isoValue !== 'string') return null;
+  const trimmed = isoValue.trim();
+  if (!trimmed) return null;
+  const parsed = new Date(trimmed);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(parsed);
+}
+
 interface ChallengeData {
   challenge_id: string;
   challenge_type: string;
@@ -101,9 +117,11 @@ export function Verify() {
   const [canSubmitChallenge, setCanSubmitChallenge] = useState(false);
   const [challengeError, setChallengeError] = useState<string | null>(null);
   const [refundAvailable, setRefundAvailable] = useState(false);
+  const [refundUntil, setRefundUntil] = useState<string | null>(null);
   const [confirmingRefund, setConfirmingRefund] = useState(false);
   const [refunding, setRefunding] = useState(false);
   const [refundMessage, setRefundMessage] = useState<string | null>(null);
+  const refundBoxRef = useRef<HTMLDivElement | null>(null);
   const mountedRef = useRef(true);
   const pollTimerRef = useRef<number | null>(null);
   const pollRunIdRef = useRef(0);
@@ -138,8 +156,14 @@ export function Verify() {
         'available' in data &&
         data.available === true
       );
+      const nextUntil = available
+        ? (typeof data?.until === 'string' && data.until.trim()) ||
+          (typeof data?.expires_at === 'string' && data.expires_at.trim()) ||
+          null
+        : null;
       if (mountedRef.current) {
         setRefundAvailable(available);
+        setRefundUntil(nextUntil);
         if (!available) {
           setConfirmingRefund(false);
         }
@@ -148,6 +172,7 @@ export function Verify() {
     } catch {
       if (mountedRef.current) {
         setRefundAvailable(false);
+        setRefundUntil(null);
         setConfirmingRefund(false);
       }
       return false;
@@ -357,6 +382,65 @@ export function Verify() {
     }
   };
 
+  useEffect(() => {
+    if (!confirmingRefund) return;
+    const box = refundBoxRef.current;
+    if (!box || typeof window === 'undefined') return;
+
+    const bottomNav = document.querySelector('nav.fixed.bottom-0');
+    const bottomNavRect = bottomNav?.getBoundingClientRect();
+    const safeBottom =
+      (bottomNavRect && bottomNavRect.height > 0
+        ? bottomNavRect.top
+        : window.innerHeight - 76) - 16;
+    const boxRect = box.getBoundingClientRect();
+
+    if (boxRect.height > 0) {
+      if (boxRect.bottom > safeBottom) {
+        const nextTop = Math.max(
+          0,
+          window.scrollY + (boxRect.bottom - safeBottom)
+        );
+        window.scrollTo({
+          top: nextTop,
+          behavior: 'instant' as ScrollBehavior,
+        });
+      }
+    } else if (typeof window.scrollTo === 'function') {
+      window.scrollTo({
+        top: 180,
+        behavior: 'instant' as ScrollBehavior,
+      });
+    }
+  }, [confirmingRefund]);
+
+  useEffect(() => {
+    if (!refundMessage) return;
+    if (typeof window === 'undefined' || typeof window.scrollTo !== 'function')
+      return;
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'instant' as ScrollBehavior,
+    });
+
+    const box = refundBoxRef.current;
+    if (!box) return;
+    const topHeader = document.querySelector('header.sticky.top-0');
+    const topHeaderRect = topHeader?.getBoundingClientRect();
+    const safeTop =
+      (topHeaderRect && topHeaderRect.height > 0 ? topHeaderRect.bottom : 65) +
+      16;
+    const boxRect = box.getBoundingClientRect();
+    if (boxRect.height > 0 && boxRect.top < safeTop) {
+      const nextTop = Math.max(0, window.scrollY - (safeTop - boxRect.top));
+      window.scrollTo({
+        top: nextTop,
+        behavior: 'instant' as ScrollBehavior,
+      });
+    }
+  }, [refundMessage]);
+
   const confirmRefund = async () => {
     setRefunding(true);
     try {
@@ -370,7 +454,17 @@ export function Verify() {
       }
       await Promise.all([refreshVerificationStatus(), refreshSignedInUser()]);
       if (!mountedRef.current) return;
+      stopPaymentPolling();
+      clearChallengeTimers();
+      setCanSubmitChallenge(false);
+      setAwaitingPayment(false);
+      setResult(null);
+      setSyncMessage(null);
+      setChallenge(null);
+      setAnswer('');
+      setChallengeError(null);
       setRefundAvailable(false);
+      setRefundUntil(null);
       setConfirmingRefund(false);
       setRefundMessage(
         res?.message ||
@@ -404,8 +498,10 @@ export function Verify() {
     );
   }
 
+  const refundLastDay = formatRefundLastDay(refundUntil);
+
   return (
-    <div className="app-page">
+    <div className="app-page pb-36 md:pb-14">
       <div className="app-page-inner max-w-5xl">
         <div className="mb-8 grid gap-4 md:grid-cols-[1.1fr_0.9fr] md:items-end">
           <div>
@@ -455,13 +551,21 @@ export function Verify() {
             )}
 
             {(refundAvailable || refundMessage) && (
-              <div className="glass-strong rounded-xl p-6 md:p-8">
+              <div
+                ref={refundBoxRef}
+                className="glass-strong scroll-mt-24 scroll-mb-28 rounded-xl p-6 md:p-8"
+              >
                 {refundAvailable && (
                   <>
                     <p className="text-base font-medium text-[#C9CBCE]">
                       Not for you? Get your $1 back within 3 days. Your badge
                       turns off.
                     </p>
+                    {refundLastDay && (
+                      <p className="mt-2 text-sm font-medium text-[#F4F1EA]">
+                        Last day to ask for your $1 back: {refundLastDay}.
+                      </p>
+                    )}
                     {!confirmingRefund ? (
                       <button
                         type="button"
