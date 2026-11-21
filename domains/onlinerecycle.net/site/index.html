@@ -2029,20 +2029,57 @@
         const embedContainer = document.getElementById('gcal-embed-container');
         const embedIframe = document.getElementById('gcal-schedule-iframe');
 
-        function buildNextDays(count) {
+        function getNewYorkNowParts(nowInput) {
+          const d = nowInput instanceof Date ? nowInput : new Date(nowInput !== undefined ? nowInput : Date.now());
+          const parts = new Intl.DateTimeFormat('en-US', {
+            timeZone: 'America/New_York',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          }).formatToParts(d);
+          const map = {};
+          parts.forEach(function (p) {
+            if (p.type !== 'literal') map[p.type] = p.value;
+          });
+          const hour = Number(map.hour) === 24 ? 0 : Number(map.hour);
+          const minute = Number(map.minute);
+          return {
+            year: Number(map.year),
+            month: Number(map.month),
+            day: Number(map.day),
+            iso: map.year + '-' + map.month + '-' + map.day,
+            minutesOfDay: hour * 60 + minute
+          };
+        }
+
+        function buildNextDays(count, nowInput) {
           const days = [];
-          const now = new Date();
+          const ny = getNewYorkNowParts(nowInput);
           for (let i = 0; i < count; i++) {
-            const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
-            const yyyy = d.getFullYear();
-            const mm = String(d.getMonth() + 1).padStart(2, '0');
-            const dd = String(d.getDate()).padStart(2, '0');
+            const d = new Date(Date.UTC(ny.year, ny.month - 1, ny.day + i, 12, 0, 0));
+            const yyyy = d.getUTCFullYear();
+            const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+            const dd = String(d.getUTCDate()).padStart(2, '0');
             const iso = yyyy + '-' + mm + '-' + dd;
-            const dow = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : d.toLocaleDateString('en-US', { weekday: 'short' });
-            const dom = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const dow = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : d.toLocaleDateString('en-US', { timeZone: 'America/New_York', weekday: 'short' });
+            const dom = d.toLocaleDateString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric' });
             days.push({ iso, dow, dom });
           }
           return days;
+        }
+
+        function isSlotElapsed(dateIso, slotCode, nowInput) {
+          if (!dateIso || !slotCode) return false;
+          const ny = getNewYorkNowParts(nowInput);
+          if (dateIso < ny.iso) return true;
+          if (dateIso > ny.iso) return false;
+          const m = String(slotCode).match(/^(\d{2}):(\d{2})\s*-\s*(\d{2}):(\d{2})$/);
+          if (!m) return false;
+          const startMinutes = Number(m[1]) * 60 + Number(m[2]);
+          return startMinutes <= ny.minutesOfDay;
         }
 
         const upcomingDays = buildNextDays(14);
@@ -2118,25 +2155,31 @@
               return b.date === selectedDate && b.slotCode === code && b.serviceType === serviceType;
             });
           };
+          const isSlotUnavailable = function (code) {
+            return isSlotTaken(code) || isSlotElapsed(selectedDate, code);
+          };
           if (
             !slots.some(function (s) {
               return s.code === selectedSlotCode;
             }) ||
-            isSlotTaken(selectedSlotCode)
+            isSlotUnavailable(selectedSlotCode)
           ) {
-            const preferred = slots[1] && !isSlotTaken(slots[1].code) ? slots[1] : slots.find(function (s) { return !isSlotTaken(s.code); }) || slots[0];
-            selectedSlotCode = preferred.code;
-            selectedSlotLabel = preferred.label;
+            const preferred = slots[1] && !isSlotUnavailable(slots[1].code) ? slots[1] : slots.find(function (s) { return !isSlotUnavailable(s.code); }) || null;
+            selectedSlotCode = preferred ? preferred.code : '';
+            selectedSlotLabel = preferred ? preferred.label : '';
           }
           slotStrip.innerHTML = '';
           slots.forEach(function (s) {
             const isTaken = isSlotTaken(s.code);
+            const isElapsed = isSlotElapsed(selectedDate, s.code);
+            const isUnavailable = isTaken || isElapsed;
             const btn = document.createElement('button');
             btn.type = 'button';
-            btn.disabled = isTaken;
-            btn.className = 'slot-btn' + (s.code === selectedSlotCode && !isTaken ? ' selected' : '');
-            btn.textContent = isTaken ? s.label + ' (Booked)' : s.label;
+            btn.disabled = isUnavailable;
+            btn.className = 'slot-btn' + (s.code === selectedSlotCode && !isUnavailable ? ' selected' : '');
+            btn.textContent = isTaken ? s.label + ' (Booked)' : isElapsed ? s.label + ' (Passed)' : s.label;
             btn.addEventListener('click', function () {
+              if (isUnavailable) return;
               selectedSlotCode = s.code;
               selectedSlotLabel = s.label;
               slotCodeInput.value = selectedSlotCode;
@@ -2164,6 +2207,10 @@
               : '2. Select a 30-Minute Sorrento Drop-Off Window';
           addressField.style.display = serviceType === 'pickup' ? 'flex' : 'none';
           cityField.style.display = serviceType === 'pickup' ? 'flex' : 'none';
+          const addressInput = document.getElementById('bf-address');
+          const cityInput = document.getElementById('bf-city');
+          if (addressInput) addressInput.required = serviceType === 'pickup';
+          if (cityInput) cityInput.required = serviceType === 'pickup';
           updateGcalEmbed();
           renderSlots();
         }
@@ -2258,8 +2305,23 @@
             errBox.style.display = 'block';
             return;
           }
-          if (payload.serviceType === 'pickup' && !payload.address) {
-            errBox.textContent = 'Please include the pickup street address so we can schedule your route.';
+          if (payload.phone.replace(/\D/g, '').length < 10) {
+            errBox.textContent = 'Please enter a valid 10-digit phone number so we can confirm your appointment.';
+            errBox.style.display = 'block';
+            return;
+          }
+          if (payload.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+            errBox.textContent = 'Please enter a valid email address or leave the email field blank.';
+            errBox.style.display = 'block';
+            return;
+          }
+          if (!payload.date || !payload.slotCode) {
+            errBox.textContent = 'Please select an available date and time window.';
+            errBox.style.display = 'block';
+            return;
+          }
+          if (payload.serviceType === 'pickup' && (!payload.address || !payload.city)) {
+            errBox.textContent = 'Please include the pickup street address and city so we can schedule your route.';
             errBox.style.display = 'block';
             return;
           }
