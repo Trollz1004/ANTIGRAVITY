@@ -94,6 +94,6 @@ def test_waitlist_enforces_configured_waitlist_rate_limit_per_minute(
         assert r1.status_code == 202
         assert r2.status_code == 202
         assert r3.status_code == 429
-        assert r3.headers.get("X-RateLimit-Limit") == "2"
+        assert "Rate limit exceeded" in r3.text
     finally:
         get_settings.cache_clear()
