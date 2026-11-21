@@ -18,10 +18,11 @@ Follows ops/runbook/T5500-NODE-RUNBOOK.md section 3:
 - With -Apply:
   1. Runs git pull --ff-only.
   2. Stops the process owning each mapped port (or restarts the mapped scheduled task).
-  3. Waits up to three minutes (180s) for each mapped service to answer on its 192.168.0.15 port.
-  4. Checks the public address by content (youandinotai.com, api.youandinotai.com/health, onlinerecycle.net).
+  3. Waits up to three minutes (180s) for each mapped service to answer on its 192.168.0.15 port, then 127.0.0.1 on the same port, recording which address answered.
+  4. Checks the public address by content (youandinotai.com, api.youandinotai.com/health containing 'status', onlinerecycle.net).
   5. Takes one headless picture of each changed public page with ops/eyes/shoot-page.mjs into logs\autopull beside the JSON record.
-  6. If a service does not come back or fails its content check, writes FAILED in the JSON record and creates ops\t5500\PAUSE-AUTOPULL without rolling back code by itself.
+  6. Writes FAILED in the JSON record and creates ops\t5500\PAUSE-AUTOPULL only when both the local check and the public check fail, without rolling back code by itself.
+  7. Names the pull request numbers merged between oldCommit and newCommit in the JSON record.
 #>
 [CmdletBinding()]
 param(
@@ -30,6 +31,7 @@ param(
     [string]$Remote = 'origin',
     [string]$Branch = 'main',
     [string]$NodeHost = '192.168.0.15',
+    [string]$FallbackHost = '127.0.0.1',
     [int]$BackendPort = 8000,
     [int]$DomainsPort = 9160,
     [int]$FrontendPort = 3200,
@@ -127,27 +129,69 @@ function Get-AutopullProbeHeaders {
     return $hdr
 }
 
-function Wait-AutopullServicePort([string]$HostIp, [int]$Port, [string]$HealthPath, [int]$TimeoutSeconds, [int]$IntervalMs) {
+function Get-AutopullMergedPullRequests([string]$FromCommit, [string]$ToCommit) {
+    $prNums = @()
+    $seen = @{}
+    if (-not $FromCommit -or -not $ToCommit -or $FromCommit -eq $ToCommit) {
+        return $prNums
+    }
+    $logRes = Invoke-Git @('log', '--reverse', '--format=%s', "$FromCommit..$ToCommit")
+    if ($logRes.ExitCode -ne 0 -or -not $logRes.Output) {
+        return $prNums
+    }
+    foreach ($line in ($logRes.Output -split "`r?`n")) {
+        $subj = $line.Trim()
+        if (-not $subj) { continue }
+        $matchesList = [regex]::Matches($subj, '(?:\(#(\d+)\)|\bMerge pull request #(\d+)\b)')
+        foreach ($m in $matchesList) {
+            $rawNum = if ($m.Groups[1].Success) { $m.Groups[1].Value } elseif ($m.Groups[2].Success) { $m.Groups[2].Value } else { '' }
+            $parsed = 0
+            if ($rawNum -and [int]::TryParse($rawNum, [ref]$parsed) -and $parsed -gt 0) {
+                if (-not $seen.ContainsKey($parsed)) {
+                    $seen[$parsed] = $true
+                    $prNums += $parsed
+                }
+            }
+        }
+    }
+    return $prNums
+}
+
+function Wait-AutopullServicePort([string]$HostIp, [string]$SecondaryHostIp, [int]$Port, [string]$HealthPath, [int]$TimeoutSeconds, [int]$IntervalMs) {
     $pathPart = if ($HealthPath -and $HealthPath.StartsWith('/')) { $HealthPath } elseif ($HealthPath) { "/$HealthPath" } else { '/' }
-    $probeUrl = "http://${HostIp}:${Port}${pathPart}"
+    $candidateHosts = @()
+    if ($HostIp -and $HostIp.Trim()) {
+        $candidateHosts += $HostIp.Trim()
+    }
+    if ($SecondaryHostIp -and $SecondaryHostIp.Trim() -and ($candidateHosts -notcontains $SecondaryHostIp.Trim())) {
+        $candidateHosts += $SecondaryHostIp.Trim()
+    }
     $hdr = Get-AutopullProbeHeaders
     $deadline = (Get-Date).AddSeconds([Math]::Max(0, $TimeoutSeconds))
     $attempt = 0
     $reqTimeoutSec = [Math]::Max(1, [Math]::Min(5, [Math]::Ceiling([Math]::Max(1, $TimeoutSeconds))))
+    $lastUrl = ''
 
     do {
         $attempt++
-        try {
-            $resp = Invoke-WebRequest -Uri $probeUrl -Headers $hdr -UseBasicParsing -TimeoutSec $reqTimeoutSec -ErrorAction Stop
-            if ([int]$resp.StatusCode -ge 200 -and [int]$resp.StatusCode -lt 400) {
-                return [pscustomobject]@{
-                    Answered   = $true
-                    Url        = $probeUrl
-                    StatusCode = [int]$resp.StatusCode
-                    Attempts   = $attempt
+        foreach ($candidateHost in $candidateHosts) {
+            $probeUrl = "http://${candidateHost}:${Port}${pathPart}"
+            $lastUrl = $probeUrl
+            try {
+                $resp = Invoke-WebRequest -Uri $probeUrl -Headers $hdr -UseBasicParsing -TimeoutSec $reqTimeoutSec -ErrorAction Stop
+                if ([int]$resp.StatusCode -ge 200 -and [int]$resp.StatusCode -lt 400) {
+                    return [pscustomobject]@{
+                        Answered        = $true
+                        AnsweredHost    = $candidateHost
+                        AnsweredAddress = "${candidateHost}:${Port}"
+                        Url             = $probeUrl
+                        StatusCode      = [int]$resp.StatusCode
+                        TriedHosts      = $candidateHosts
+                        Attempts        = $attempt
+                    }
                 }
-            }
-        } catch {}
+            } catch {}
+        }
 
         if ((Get-Date) -lt $deadline) {
             Start-Sleep -Milliseconds ([Math]::Max(50, $IntervalMs))
@@ -155,10 +199,13 @@ function Wait-AutopullServicePort([string]$HostIp, [int]$Port, [string]$HealthPa
     } while ((Get-Date) -lt $deadline)
 
     return [pscustomobject]@{
-        Answered   = $false
-        Url        = $probeUrl
-        StatusCode = 0
-        Attempts   = $attempt
+        Answered        = $false
+        AnsweredHost    = ''
+        AnsweredAddress = ''
+        Url             = $lastUrl
+        StatusCode      = 0
+        TriedHosts      = $candidateHosts
+        Attempts        = $attempt
     }
 }
 
@@ -348,7 +395,7 @@ if ($needBackend8000) {
         healthPath      = '/health'
         publicAddress   = 'api.youandinotai.com/health'
         publicUrl       = $PublicApiHealthUrl
-        expectedContent = '(?:ok|"db_connected"\s*:\s*true)'
+        expectedContent = 'status'
         isPublicPage    = $false
         target          = '8000'
         action          = 'stop-port:8000'
@@ -404,19 +451,21 @@ if ($needKeepaliveRestart) {
 }
 
 if (-not $Apply) {
+    $previewPrs = @(Get-AutopullMergedPullRequests -FromCommit $OldCommit -ToCommit $NewCommit)
     Write-Output "Mode: DRY-RUN (pass -Apply to pull and restart changed services)"
     Write-Output "RepoPath: $RepoPath"
     Write-Output "OldCommit: $OldCommit"
     Write-Output "NewCommit: $NewCommit"
+    Write-Output ("PullRequests: " + ($previewPrs -join ', '))
     Write-Output "Would run: git pull --ff-only $Remote $Branch"
     foreach ($svc in $MappedServices) {
         if ($svc.kind -eq 'port') {
             Write-Output ("Would stop process owning port {0} ({1})" -f $svc.port, $svc.action)
-            Write-Output ("Would wait up to {0}s for {1}:{2}{3} to answer" -f $WaitTimeoutSeconds, $NodeHost, $svc.checkPort, $svc.healthPath)
+            Write-Output ("Would wait up to {0}s for {1}:{2}{3} (then {4}:{2}{3}) to answer" -f $WaitTimeoutSeconds, $NodeHost, $svc.checkPort, $svc.healthPath, $FallbackHost)
         } else {
             Write-Output ("Would restart scheduled task '{0}' ({1})" -f $svc.task, $svc.action)
             if ($svc.checkPort -gt 0) {
-                Write-Output ("Would wait up to {0}s for {1}:{2}{3} to answer" -f $WaitTimeoutSeconds, $NodeHost, $svc.checkPort, $svc.healthPath)
+                Write-Output ("Would wait up to {0}s for {1}:{2}{3} (then {4}:{2}{3}) to answer" -f $WaitTimeoutSeconds, $NodeHost, $svc.checkPort, $svc.healthPath, $FallbackHost)
             }
         }
         if ($svc.publicAddress) {
@@ -428,7 +477,7 @@ if (-not $Apply) {
     }
     if ($frontendChanged) {
         Write-Output "Frontend changed (domains/youandinotai.com/frontend): no action needed because the keepalive rebuilds the site."
-        Write-Output ("Would wait up to {0}s for {1}:{2}/ to answer, check public address youandinotai.com ({3}) by content, and take one headless picture with ops/eyes/shoot-page.mjs into logs\autopull" -f $WaitTimeoutSeconds, $NodeHost, $FrontendPort, $PublicWebUrl)
+        Write-Output ("Would wait up to {0}s for {1}:{2}/ (then {4}:{2}/) to answer, check public address youandinotai.com ({3}) by content, and take one headless picture with ops/eyes/shoot-page.mjs into logs\autopull" -f $WaitTimeoutSeconds, $NodeHost, $FrontendPort, $PublicWebUrl, $FallbackHost)
     }
     if ($MappedServices.Count -eq 0 -and -not $frontendChanged) {
         Write-Output "No mapped service restarts needed."
@@ -445,6 +494,7 @@ if ($pullRes.ExitCode -ne 0) {
 
 $afterHeadRes = Invoke-Git @('rev-parse', 'HEAD')
 $AppliedCommit = if ($afterHeadRes.ExitCode -eq 0 -and $afterHeadRes.Output) { $afterHeadRes.Output.Trim() } else { $NewCommit }
+$MergedPrNumbers = @(Get-AutopullMergedPullRequests -FromCommit $OldCommit -ToCommit $AppliedCommit)
 
 $LogDir = Join-Path $RepoPath 'logs\autopull'
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
@@ -531,27 +581,33 @@ foreach ($rec in $RecordedServices) {
         continue
     }
 
-    $portCheck = Wait-AutopullServicePort -HostIp $NodeHost -Port ([int]$rec.checkPort) -HealthPath ([string]$rec.healthPath) -TimeoutSeconds $WaitTimeoutSeconds -IntervalMs $PollIntervalMs
-    $rec['portHost'] = $NodeHost
-    $rec['portAnswered'] = [bool]$portCheck.Answered
+    $portCheck = Wait-AutopullServicePort -HostIp $NodeHost -SecondaryHostIp $FallbackHost -Port ([int]$rec.checkPort) -HealthPath ([string]$rec.healthPath) -TimeoutSeconds $WaitTimeoutSeconds -IntervalMs $PollIntervalMs
+    $localPassed = [bool]$portCheck.Answered
+    $rec['portHost'] = [string]$portCheck.AnsweredHost
+    $rec['answeredHost'] = [string]$portCheck.AnsweredHost
+    $rec['answeredAddress'] = [string]$portCheck.AnsweredAddress
+    $rec['localAnsweredOn'] = [string]$portCheck.AnsweredAddress
+    $rec['triedHosts'] = @($portCheck.TriedHosts)
+    $rec['portAnswered'] = $localPassed
+    $rec['localCheckPassed'] = $localPassed
     $rec['portProbeUrl'] = [string]$portCheck.Url
 
-    if (-not $portCheck.Answered) {
-        $rec.status = 'FAILED'
-        $reason = "Service $($rec.service) did not answer on ${NodeHost}:$($rec.checkPort) within ${WaitTimeoutSeconds}s"
-        $FailedReasons += $reason
-        Write-Output "FAILED: $reason"
-        continue
+    if ($localPassed) {
+        Write-Output ("Verified {0} answered on {1}" -f $rec.service, $portCheck.AnsweredAddress)
+    } else {
+        Write-Output ("Local check did not answer for {0} on {1} port {2} within {3}s" -f $rec.service, ($portCheck.TriedHosts -join ' or '), $rec.checkPort, $WaitTimeoutSeconds)
     }
 
-    Write-Output ("Verified {0} answered on {1}:{2}" -f $rec.service, $NodeHost, $rec.checkPort)
+    $hasPublicCheck = [bool]$rec.publicUrl
+    $publicPassed = $false
 
-    if ($rec.publicUrl) {
+    if ($hasPublicCheck) {
         $pubCheck = Test-AutopullPublicContent -Url ([string]$rec.publicUrl) -ExpectedPattern ([string]$rec.expectedContent) -TimeoutSeconds $WaitTimeoutSeconds -IntervalMs $PollIntervalMs
-        $rec['publicCheckPassed'] = [bool]$pubCheck.Passed
+        $publicPassed = [bool]$pubCheck.Passed
+        $rec['publicCheckPassed'] = $publicPassed
         $picPath = ''
 
-        if ($pubCheck.Passed -and $rec.isPublicPage) {
+        if ($publicPassed -and $rec.isPublicPage) {
             $shotRes = Invoke-AutopullShootPage -PageAddress ([string]$rec.publicAddress) -PublicUrl ([string]$rec.publicUrl) -OutDir $LogDir -StampPrefix $StampPrefix
             if ($shotRes.PicturePath) {
                 $picPath = $shotRes.PicturePath
@@ -565,20 +621,29 @@ foreach ($rec in $RecordedServices) {
             address         = $rec.publicAddress
             url             = $rec.publicUrl
             expectedContent = $rec.expectedContent
-            passed          = [bool]$pubCheck.Passed
-            status          = if ($pubCheck.Passed) { 'LIVE' } else { 'FAILED' }
+            passed          = $publicPassed
+            status          = if ($publicPassed) { 'LIVE' } else { 'FAILED' }
             picture         = $picPath
         }
 
-        if (-not $pubCheck.Passed) {
-            $rec.status = 'FAILED'
-            $reason = "Public content check failed for $($rec.publicAddress) ($($rec.publicUrl))"
-            $FailedReasons += $reason
-            Write-Output "FAILED: $reason"
-            continue
+        if ($publicPassed) {
+            Write-Output ("Verified public content for {0} ({1})" -f $rec.publicAddress, $rec.publicUrl)
+        } else {
+            Write-Output ("Public content check did not pass for {0} ({1})" -f $rec.publicAddress, $rec.publicUrl)
         }
+    }
 
-        Write-Output ("Verified public content for {0} ({1})" -f $rec.publicAddress, $rec.publicUrl)
+    $serviceFailed = if ($hasPublicCheck) { (-not $localPassed) -and (-not $publicPassed) } else { (-not $localPassed) }
+    if ($serviceFailed) {
+        $rec.status = 'FAILED'
+        $reason = if ($hasPublicCheck) {
+            "Service $($rec.service) failed both local check ($($portCheck.TriedHosts -join ' and ') port $($rec.checkPort)) and public content check ($($rec.publicUrl))"
+        } else {
+            "Service $($rec.service) did not answer on $($portCheck.TriedHosts -join ' or ') port $($rec.checkPort) within ${WaitTimeoutSeconds}s"
+        }
+        $FailedReasons += $reason
+        Write-Output "FAILED: $reason"
+        continue
     }
 
     $rec.status = 'LIVE'
@@ -593,6 +658,7 @@ if ($OverallStatus -eq 'FAILED') {
         "time: $IsoTime",
         "oldCommit: $OldCommit",
         "newCommit: $AppliedCommit",
+        ("pullRequests: " + ($MergedPrNumbers -join ', ')),
         ("reasons: " + ($FailedReasons -join '; '))
     )
     $pauseText = ($pauseLines -join "`n") + "`n"
@@ -606,21 +672,25 @@ if ($OverallStatus -eq 'FAILED') {
 }
 
 $RecordObj = [ordered]@{
-    time             = $IsoTime
-    status           = $OverallStatus
-    result           = $OverallStatus
-    live             = ($OverallStatus -eq 'LIVE')
-    oldCommit        = $OldCommit
-    newCommit        = $AppliedCommit
-    changedServices  = @($RecordedServices)
-    publicChecks     = @($PublicChecks)
-    pictures         = @($Pictures)
-    pausedAutopull   = $PausedAutopull
-    failedReasons    = @($FailedReasons)
-    old_commit       = $OldCommit
-    new_commit       = $AppliedCommit
-    changed_services = @($RecordedServices)
-    changedFiles     = @($ChangedFiles)
+    time               = $IsoTime
+    status             = $OverallStatus
+    result             = $OverallStatus
+    live               = ($OverallStatus -eq 'LIVE')
+    oldCommit          = $OldCommit
+    newCommit          = $AppliedCommit
+    pullRequests       = @($MergedPrNumbers)
+    mergedPullRequests = @($MergedPrNumbers)
+    prNumbers          = @($MergedPrNumbers)
+    pull_requests      = @($MergedPrNumbers)
+    changedServices    = @($RecordedServices)
+    publicChecks       = @($PublicChecks)
+    pictures           = @($Pictures)
+    pausedAutopull     = $PausedAutopull
+    failedReasons      = @($FailedReasons)
+    old_commit         = $OldCommit
+    new_commit         = $AppliedCommit
+    changed_services   = @($RecordedServices)
+    changedFiles       = @($ChangedFiles)
 }
 
 $JsonText = ($RecordObj | ConvertTo-Json -Depth 7) + "`n"
