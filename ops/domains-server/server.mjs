@@ -76,8 +76,9 @@ const BOOKING_HOSTS = new Set(["onlinerecycle.net", "www.onlinerecycle.net"]);
 
 // Public, unauthenticated booking form: cap submissions per client so a
 // script cannot fill the disk. In-memory, resets on restart.
-const BOOK_LIMIT = 10;
-const BOOK_WINDOW_MS = 60 * 60 * 1000;
+const BOOK_LIMIT = 2;
+const BOOK_WINDOW_MS = 24 * 60 * 60 * 1000;
+const BOOK_HITS_MAX = 5000;
 const bookHits = new Map();
 
 // cf-connecting-ip is trusted only from the local T5500 tunnel connector;
@@ -95,15 +96,19 @@ function clientIp(req) {
 
 function bookingAllowed(ip) {
   const now = Date.now();
-  if (bookHits.size > 5000) {
-    for (const [key, times] of bookHits) {
-      if (!times.some((t) => now - t < BOOK_WINDOW_MS)) bookHits.delete(key);
-    }
-  }
   const hits = (bookHits.get(ip) || []).filter((t) => now - t < BOOK_WINDOW_MS);
   if (hits.length >= BOOK_LIMIT) {
     bookHits.set(ip, hits);
     return false;
+  }
+  bookHits.delete(ip);
+  if (bookHits.size >= BOOK_HITS_MAX) {
+    for (const [key, times] of bookHits) {
+      if (!times.some((t) => now - t < BOOK_WINDOW_MS)) bookHits.delete(key);
+    }
+    while (bookHits.size >= BOOK_HITS_MAX) {
+      bookHits.delete(bookHits.keys().next().value);
+    }
   }
   hits.push(now);
   bookHits.set(ip, hits);
@@ -310,8 +315,8 @@ class BadRequest extends Error {
   }
 }
 
-// Rejects with BadRequest (413 or 400) so the caller can answer the client;
-// an oversized body is drained, not destroyed, so the response still arrives.
+// Rejects with BadRequest (413 or 400) so the caller can answer the client
+// and closes the socket on oversized bodies.
 function readJsonBody(req, maxBytes = 32768) {
   return new Promise((resolve, reject) => {
     let bytes = 0;
@@ -320,16 +325,17 @@ function readJsonBody(req, maxBytes = 32768) {
     req.on("data", (chunk) => {
       bytes += chunk.length;
       if (bytes > maxBytes) {
-        tooLarge = true;
+        if (!tooLarge) {
+          tooLarge = true;
+          req.pause?.();
+          reject(new BadRequest(413, "That request was too large. Please shorten the device list or notes."));
+        }
         return;
       }
       chunks.push(chunk);
     });
     req.on("end", () => {
-      if (tooLarge) {
-        reject(new BadRequest(413, "That request was too large. Please shorten the device list or notes."));
-        return;
-      }
+      if (tooLarge) return;
       try {
         const raw = Buffer.concat(chunks).toString("utf8");
         const parsed = raw ? JSON.parse(raw) : {};
@@ -338,7 +344,9 @@ function readJsonBody(req, maxBytes = 32768) {
         reject(new BadRequest(400, "We could not read that booking request. Please try again."));
       }
     });
-    req.on("error", reject);
+    req.on("error", (err) => {
+      if (!tooLarge) reject(err);
+    });
   });
 }
 
@@ -354,12 +362,14 @@ function todayInFlorida() {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date());
 }
 
-// A real calendar date, YYYY-MM-DD, today or later.
+// A real calendar date, YYYY-MM-DD, from today to 14 days ahead (Florida time).
 function validBookingDate(date) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return false;
   const d = new Date(`${date}T00:00:00Z`);
   if (Number.isNaN(d.getTime()) || d.toISOString().slice(0, 10) !== date) return false;
-  return date >= todayInFlorida();
+  const today = todayInFlorida();
+  const maxDate = new Date(new Date(`${today}T00:00:00Z`).getTime() + 14 * 86400000).toISOString().slice(0, 10);
+  return date >= today && date <= maxDate;
 }
 
 function sendJson(res, status, payload) {
@@ -451,7 +461,7 @@ const server = http.createServer(async (req, res) => {
         readEnvValue("GOOGLE_CALENDAR_PICKUP_URL") || readEnvValue("GOOGLE_CALENDAR_SCHEDULE_URL") || "";
       const today = todayInFlorida();
       const bookedSlots = readBookings()
-        .filter((b) => String(b.date || "") >= today)
+        .filter((b) => String(b.date || "") >= today && b.status !== "CANCELLED")
         .map((b) => ({
         date: b.date,
         slotCode: b.slotCode,
@@ -473,15 +483,26 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (isBookingHost && urlPath === "/api/book" && req.method === "POST") {
-      if (!bookingAllowed(clientIp(req))) {
-        sendJson(res, 429, { ok: false, error: "Too many booking requests. Please call or text (321) 396-2008." });
-        return;
-      }
       let body;
       try {
         body = await readJsonBody(req);
       } catch (err) {
         if (err instanceof BadRequest) {
+          if (err.status === 413) {
+            const closeSocket = () => {
+              req.socket?.destroy?.();
+              req.destroy?.();
+            };
+            if (typeof res.once === "function") res.once("finish", closeSocket);
+            res.writeHead(413, {
+              "Content-Type": "application/json; charset=utf-8",
+              "Cache-Control": "no-store",
+              Connection: "close",
+            });
+            res.end(JSON.stringify({ ok: false, error: err.message }));
+            if (typeof res.once !== "function") closeSocket();
+            return;
+          }
           sendJson(res, err.status, { ok: false, error: err.message });
           return;
         }
@@ -508,6 +529,10 @@ const server = http.createServer(async (req, res) => {
           ok: false,
           error: "Please fill in your name, phone number, preferred date/time window, and device list.",
         });
+        return;
+      }
+      if (phone.replace(/\D/g, "").length < 10) {
+        sendJson(res, 400, { ok: false, error: "Please enter a valid 10-digit phone number." });
         return;
       }
       if (!validBookingDate(date) || !SLOT_CODES[serviceType].has(slotCode)) {
@@ -558,6 +583,10 @@ const server = http.createServer(async (req, res) => {
       );
       if (taken) {
         sendJson(res, 409, { ok: false, error: "That time window was just booked. Please pick another one." });
+        return;
+      }
+      if (!bookingAllowed(clientIp(req))) {
+        sendJson(res, 429, { ok: false, error: "Too many booking requests. Please call or text (321) 396-2008." });
         return;
       }
       fs.appendFileSync(BOOKINGS_JSONL, `${JSON.stringify(booking)}\n`, "utf8");
@@ -692,4 +721,7 @@ export {
   resolveFile,
   contentTypeFor,
   hostOnly,
+  bookingAllowed,
+  bookHits,
+  validBookingDate,
 };
