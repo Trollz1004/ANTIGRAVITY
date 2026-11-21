@@ -1,287 +1,481 @@
 import {
-  boolean,
   index,
-  int,
-  json,
-  mysqlEnum,
-  mysqlTable,
+  integer,
+  sqliteTable,
   text,
-  timestamp,
   uniqueIndex,
-  varchar,
-} from "drizzle-orm/mysql-core";
+} from "drizzle-orm/sqlite-core";
 
-export const users = mysqlTable("users", {
-  id: int("id").autoincrement().primaryKey(),
-  openId: varchar("openId", { length: 64 }).notNull().unique(),
+export const users = sqliteTable("users", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  openId: text("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
-  email: varchar("email", { length: 320 }),
-  loginMethod: varchar("loginMethod", { length: 64 }),
-  role: mysqlEnum("role", ["admin", "user"]).default("user").notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-  lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
+  email: text("email", { length: 320 }),
+  loginMethod: text("loginMethod", { length: 64 }),
+  role: text("role", { enum: ["admin", "user"] })
+    .default("user")
+    .notNull(),
+  createdAt: integer("createdAt", { mode: "timestamp_ms" })
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: integer("updatedAt", { mode: "timestamp_ms" })
+    .$defaultFn(() => new Date())
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+  lastSignedIn: integer("lastSignedIn", { mode: "timestamp_ms" })
+    .$defaultFn(() => new Date())
+    .notNull(),
 });
 
-export const products = mysqlTable(
+export const products = sqliteTable(
   "products",
   {
-    id: int("id").autoincrement().primaryKey(),
-    sku: varchar("sku", { length: 128 }).notNull(),
-    upc: varchar("upc", { length: 32 }),
-    title: varchar("title", { length: 255 }).notNull(),
-    condition: varchar("condition", { length: 64 }).notNull(),
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    sku: text("sku", { length: 128 }).notNull(),
+    upc: text("upc", { length: 32 }),
+    title: text("title", { length: 255 }).notNull(),
+    condition: text("condition", { length: 64 }).notNull(),
     conditionNotes: text("conditionNotes"),
-    brandOrStudio: varchar("brandOrStudio", { length: 160 }),
-    format: varchar("format", { length: 80 }),
-    attributes: json("attributes"),
+    brandOrStudio: text("brandOrStudio", { length: 160 }),
+    format: text("format", { length: 80 }),
+    attributes: text("attributes", { mode: "json" }),
     description: text("description"),
-    verificationStatus: mysqlEnum("verificationStatus", ["needs_review", "verified", "blocked"])
+    verificationStatus: text("verificationStatus", {
+      enum: ["needs_review", "verified", "blocked"],
+    })
       .default("needs_review")
       .notNull(),
-    verifiedAt: timestamp("verifiedAt"),
-    verifiedByUserId: int("verifiedByUserId"),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+    verifiedAt: integer("verifiedAt", { mode: "timestamp_ms" }),
+    verifiedByUserId: integer("verifiedByUserId", { mode: "number" }),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updatedAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .$onUpdateFn(() => new Date())
+      .notNull(),
   },
-  table => [uniqueIndex("products_sku_unique").on(table.sku), index("products_upc_index").on(table.upc)]
+  table => [
+    uniqueIndex("products_sku_unique").on(table.sku),
+    index("products_upc_index").on(table.upc),
+  ]
 );
 
-export const productMedia = mysqlTable(
+export const productMedia = sqliteTable(
   "product_media",
   {
-    id: int("id").autoincrement().primaryKey(),
-    productId: int("productId").notNull(),
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    productId: integer("productId", { mode: "number" }).notNull(),
     url: text("url").notNull(),
-    altText: varchar("altText", { length: 255 }),
-    mediaType: mysqlEnum("mediaType", ["image", "video", "document"]).default("image").notNull(),
-    isPrimary: boolean("isPrimary").default(false).notNull(),
-    verified: boolean("verified").default(false).notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    altText: text("altText", { length: 255 }),
+    mediaType: text("mediaType", { enum: ["image", "video", "document"] })
+      .default("image")
+      .notNull(),
+    isPrimary: integer("isPrimary", { mode: "boolean" })
+      .default(false)
+      .notNull(),
+    verified: integer("verified", { mode: "boolean" }).default(false).notNull(),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .notNull(),
   },
   table => [index("product_media_product_index").on(table.productId)]
 );
 
-export const inventoryRecords = mysqlTable(
+export const inventoryRecords = sqliteTable(
   "inventory_records",
   {
-    id: int("id").autoincrement().primaryKey(),
-    productId: int("productId").notNull(),
-    onHandQuantity: int("onHandQuantity").default(0).notNull(),
-    reservedQuantity: int("reservedQuantity").default(0).notNull(),
-    locationKey: varchar("locationKey", { length: 128 }).default("llc-primary").notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    productId: integer("productId", { mode: "number" }).notNull(),
+    onHandQuantity: integer("onHandQuantity", { mode: "number" })
+      .default(0)
+      .notNull(),
+    reservedQuantity: integer("reservedQuantity", { mode: "number" })
+      .default(0)
+      .notNull(),
+    locationKey: text("locationKey", { length: 128 })
+      .default("llc-primary")
+      .notNull(),
+    updatedAt: integer("updatedAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .$onUpdateFn(() => new Date())
+      .notNull(),
   },
   table => [uniqueIndex("inventory_records_product_unique").on(table.productId)]
 );
 
-export const inventoryMovements = mysqlTable(
+export const inventoryMovements = sqliteTable(
   "inventory_movements",
   {
-    id: int("id").autoincrement().primaryKey(),
-    productId: int("productId").notNull(),
-    movementType: mysqlEnum("movementType", ["receive", "reserve", "release", "sale", "adjustment"])
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    productId: integer("productId", { mode: "number" }).notNull(),
+    movementType: text("movementType", {
+      enum: ["receive", "reserve", "release", "sale", "adjustment"],
+    }).notNull(),
+    onHandDelta: integer("onHandDelta", { mode: "number" })
+      .default(0)
       .notNull(),
-    onHandDelta: int("onHandDelta").default(0).notNull(),
-    reservedDelta: int("reservedDelta").default(0).notNull(),
-    reason: varchar("reason", { length: 255 }).notNull(),
-    correlationId: varchar("correlationId", { length: 128 }).notNull(),
-    actorUserId: int("actorUserId"),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    reservedDelta: integer("reservedDelta", { mode: "number" })
+      .default(0)
+      .notNull(),
+    reason: text("reason", { length: 255 }).notNull(),
+    correlationId: text("correlationId", { length: 128 }).notNull(),
+    actorUserId: integer("actorUserId", { mode: "number" }),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .notNull(),
   },
-  table => [index("inventory_movements_product_index").on(table.productId), index("inventory_movements_correlation_index").on(table.correlationId)]
+  table => [
+    index("inventory_movements_product_index").on(table.productId),
+    index("inventory_movements_correlation_index").on(table.correlationId),
+  ]
 );
 
-export const marketplaceChannels = mysqlTable(
+export const marketplaceChannels = sqliteTable(
   "marketplace_channels",
   {
-    id: int("id").autoincrement().primaryKey(),
-    code: mysqlEnum("code", ["ebay", "google_merchant", "facebook_marketplace", "mercari", "poshmark"])
-      .notNull(),
-    displayName: varchar("displayName", { length: 100 }).notNull(),
-    capability: mysqlEnum("capability", ["api", "conditional", "prepared"])
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    code: text("code", {
+      enum: [
+        "ebay",
+        "google_merchant",
+        "facebook_marketplace",
+        "mercari",
+        "poshmark",
+      ],
+    }).notNull(),
+    displayName: text("displayName", { length: 100 }).notNull(),
+    capability: text("capability", {
+      enum: ["api", "conditional", "prepared"],
+    })
       .default("prepared")
       .notNull(),
-    operationMode: mysqlEnum("operationMode", ["disabled", "review", "enabled"])
+    operationMode: text("operationMode", {
+      enum: ["disabled", "review", "enabled"],
+    })
       .default("disabled")
       .notNull(),
-    enabled: boolean("enabled").default(false).notNull(),
-    lastSyncAt: timestamp("lastSyncAt"),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+    enabled: integer("enabled", { mode: "boolean" }).default(false).notNull(),
+    lastSyncAt: integer("lastSyncAt", { mode: "timestamp_ms" }),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updatedAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .$onUpdateFn(() => new Date())
+      .notNull(),
   },
   table => [uniqueIndex("marketplace_channels_code_unique").on(table.code)]
 );
 
-export const credentialConnections = mysqlTable(
+export const credentialConnections = sqliteTable(
   "credential_connections",
   {
-    id: int("id").autoincrement().primaryKey(),
-    channelId: int("channelId").notNull(),
-    secretKeyName: varchar("secretKeyName", { length: 128 }).notNull(),
-    secretRef: varchar("secretRef", { length: 512 }),
-    configured: boolean("configured").default(false).notNull(),
-    lastVerifiedAt: timestamp("lastVerifiedAt"),
-    lastVerificationStatus: mysqlEnum("lastVerificationStatus", ["not_checked", "valid", "invalid", "unavailable"])
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    channelId: integer("channelId", { mode: "number" }).notNull(),
+    secretKeyName: text("secretKeyName", { length: 128 }).notNull(),
+    secretRef: text("secretRef", { length: 512 }),
+    configured: integer("configured", { mode: "boolean" })
+      .default(false)
+      .notNull(),
+    lastVerifiedAt: integer("lastVerifiedAt", { mode: "timestamp_ms" }),
+    lastVerificationStatus: text("lastVerificationStatus", {
+      enum: ["not_checked", "valid", "invalid", "unavailable"],
+    })
       .default("not_checked")
       .notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updatedAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .$onUpdateFn(() => new Date())
+      .notNull(),
   },
-  table => [uniqueIndex("credential_connections_channel_key_unique").on(table.channelId, table.secretKeyName)]
+  table => [
+    uniqueIndex("credential_connections_channel_key_unique").on(
+      table.channelId,
+      table.secretKeyName
+    ),
+  ]
 );
 
-export const policyMappings = mysqlTable(
+export const policyMappings = sqliteTable(
   "policy_mappings",
   {
-    id: int("id").autoincrement().primaryKey(),
-    channelId: int("channelId").notNull(),
-    policyType: mysqlEnum("policyType", ["fulfillment", "return", "payment", "location", "category", "listing_rule"])
-      .notNull(),
-    policyKey: varchar("policyKey", { length: 128 }).notNull(),
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    channelId: integer("channelId", { mode: "number" }).notNull(),
+    policyType: text("policyType", {
+      enum: [
+        "fulfillment",
+        "return",
+        "payment",
+        "location",
+        "category",
+        "listing_rule",
+      ],
+    }).notNull(),
+    policyKey: text("policyKey", { length: 128 }).notNull(),
     policyValue: text("policyValue").notNull(),
-    active: boolean("active").default(true).notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+    active: integer("active", { mode: "boolean" }).default(true).notNull(),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updatedAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .$onUpdateFn(() => new Date())
+      .notNull(),
   },
   table => [index("policy_mappings_channel_index").on(table.channelId)]
 );
 
-export const channelListings = mysqlTable(
+export const channelListings = sqliteTable(
   "channel_listings",
   {
-    id: int("id").autoincrement().primaryKey(),
-    productId: int("productId").notNull(),
-    channelId: int("channelId").notNull(),
-    externalListingId: varchar("externalListingId", { length: 160 }),
-    state: mysqlEnum("state", ["draft", "review", "approved", "submitted", "active", "sold", "ended", "error"])
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    productId: integer("productId", { mode: "number" }).notNull(),
+    channelId: integer("channelId", { mode: "number" }).notNull(),
+    externalListingId: text("externalListingId", { length: 160 }),
+    state: text("state", {
+      enum: [
+        "draft",
+        "review",
+        "approved",
+        "submitted",
+        "active",
+        "sold",
+        "ended",
+        "error",
+      ],
+    })
       .default("draft")
       .notNull(),
-    payload: json("payload"),
-    validationErrors: json("validationErrors"),
-    lastSubmittedAt: timestamp("lastSubmittedAt"),
-    lastSynchronizedAt: timestamp("lastSynchronizedAt"),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+    payload: text("payload", { mode: "json" }),
+    validationErrors: text("validationErrors", { mode: "json" }),
+    lastSubmittedAt: integer("lastSubmittedAt", { mode: "timestamp_ms" }),
+    lastSynchronizedAt: integer("lastSynchronizedAt", {
+      mode: "timestamp_ms",
+    }),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updatedAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .$onUpdateFn(() => new Date())
+      .notNull(),
   },
-  table => [uniqueIndex("channel_listings_product_channel_unique").on(table.productId, table.channelId), index("channel_listings_state_index").on(table.state)]
+  table => [
+    uniqueIndex("channel_listings_product_channel_unique").on(
+      table.productId,
+      table.channelId
+    ),
+    index("channel_listings_state_index").on(table.state),
+  ]
 );
 
-export const channelSaleEvents = mysqlTable(
+export const channelSaleEvents = sqliteTable(
   "channel_sale_events",
   {
-    id: int("id").autoincrement().primaryKey(),
-    channelId: int("channelId").notNull(),
-    productId: int("productId").notNull(),
-    externalEventId: varchar("externalEventId", { length: 160 }).notNull(),
-    externalListingId: varchar("externalListingId", { length: 160 }).notNull(),
-    quantity: int("quantity").notNull(),
-    status: mysqlEnum("status", ["received", "applied", "duplicate", "blocked"]).default("received").notNull(),
-    details: json("details"),
-    occurredAt: timestamp("occurredAt").notNull(),
-    reconciledAt: timestamp("reconciledAt"),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    channelId: integer("channelId", { mode: "number" }).notNull(),
+    productId: integer("productId", { mode: "number" }).notNull(),
+    externalEventId: text("externalEventId", { length: 160 }).notNull(),
+    externalListingId: text("externalListingId", { length: 160 }).notNull(),
+    quantity: integer("quantity", { mode: "number" }).notNull(),
+    status: text("status", {
+      enum: ["received", "applied", "duplicate", "blocked"],
+    })
+      .default("received")
+      .notNull(),
+    details: text("details", { mode: "json" }),
+    occurredAt: integer("occurredAt", { mode: "timestamp_ms" }).notNull(),
+    reconciledAt: integer("reconciledAt", { mode: "timestamp_ms" }),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .notNull(),
   },
-  table => [uniqueIndex("channel_sale_events_channel_external_unique").on(table.channelId, table.externalEventId), index("channel_sale_events_product_index").on(table.productId)]
+  table => [
+    uniqueIndex("channel_sale_events_channel_external_unique").on(
+      table.channelId,
+      table.externalEventId
+    ),
+    index("channel_sale_events_product_index").on(table.productId),
+  ]
 );
 
-export const approvalRequests = mysqlTable(
+export const approvalRequests = sqliteTable(
   "approval_requests",
   {
-    id: int("id").autoincrement().primaryKey(),
-    subjectType: mysqlEnum("subjectType", ["listing", "inventory", "profile", "channel"])
-      .notNull(),
-    subjectId: int("subjectId").notNull(),
-    action: varchar("action", { length: 100 }).notNull(),
-    status: mysqlEnum("status", ["pending", "approved", "rejected", "expired"])
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    subjectType: text("subjectType", {
+      enum: ["listing", "inventory", "profile", "channel"],
+    }).notNull(),
+    subjectId: integer("subjectId", { mode: "number" }).notNull(),
+    action: text("action", { length: 100 }).notNull(),
+    status: text("status", {
+      enum: ["pending", "approved", "rejected", "expired"],
+    })
       .default("pending")
       .notNull(),
-    requestedByUserId: int("requestedByUserId"),
-    decidedByUserId: int("decidedByUserId"),
+    requestedByUserId: integer("requestedByUserId", { mode: "number" }),
+    decidedByUserId: integer("decidedByUserId", { mode: "number" }),
     decisionNote: text("decisionNote"),
-    correlationId: varchar("correlationId", { length: 128 }).default("system").notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    decidedAt: timestamp("decidedAt"),
+    correlationId: text("correlationId", { length: 128 })
+      .default("system")
+      .notNull(),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    decidedAt: integer("decidedAt", { mode: "timestamp_ms" }),
   },
-  table => [index("approval_requests_status_index").on(table.status), index("approval_requests_subject_index").on(table.subjectType, table.subjectId), index("approval_requests_correlation_index").on(table.correlationId)]
+  table => [
+    index("approval_requests_status_index").on(table.status),
+    index("approval_requests_subject_index").on(
+      table.subjectType,
+      table.subjectId
+    ),
+    index("approval_requests_correlation_index").on(table.correlationId),
+  ]
 );
 
-export const exceptionQueue = mysqlTable(
+export const exceptionQueue = sqliteTable(
   "exception_queue",
   {
-    id: int("id").autoincrement().primaryKey(),
-    subjectType: mysqlEnum("subjectType", ["product", "listing", "inventory", "channel", "profile"])
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    subjectType: text("subjectType", {
+      enum: ["product", "listing", "inventory", "channel", "profile"],
+    }).notNull(),
+    subjectId: integer("subjectId", { mode: "number" }).notNull(),
+    category: text("category", {
+      enum: [
+        "incomplete",
+        "unsupported",
+        "validation",
+        "submission",
+        "inventory",
+        "security",
+      ],
+    }).notNull(),
+    severity: text("severity", {
+      enum: ["low", "medium", "high", "critical"],
+    })
+      .default("medium")
       .notNull(),
-    subjectId: int("subjectId").notNull(),
-    category: mysqlEnum("category", ["incomplete", "unsupported", "validation", "submission", "inventory", "security"])
-      .notNull(),
-    severity: mysqlEnum("severity", ["low", "medium", "high", "critical"]).default("medium").notNull(),
     message: text("message").notNull(),
-    details: json("details"),
-    status: mysqlEnum("status", ["open", "resolved", "dismissed"]).default("open").notNull(),
-    resolvedByUserId: int("resolvedByUserId"),
-    resolvedAt: timestamp("resolvedAt"),
-    correlationId: varchar("correlationId", { length: 128 }).default("system").notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    details: text("details", { mode: "json" }),
+    status: text("status", { enum: ["open", "resolved", "dismissed"] })
+      .default("open")
+      .notNull(),
+    resolvedByUserId: integer("resolvedByUserId", { mode: "number" }),
+    resolvedAt: integer("resolvedAt", { mode: "timestamp_ms" }),
+    correlationId: text("correlationId", { length: 128 })
+      .default("system")
+      .notNull(),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .notNull(),
   },
-  table => [index("exception_queue_status_index").on(table.status), index("exception_queue_severity_index").on(table.severity), index("exception_queue_correlation_index").on(table.correlationId)]
+  table => [
+    index("exception_queue_status_index").on(table.status),
+    index("exception_queue_severity_index").on(table.severity),
+    index("exception_queue_correlation_index").on(table.correlationId),
+  ]
 );
 
-export const automationProfiles = mysqlTable(
+export const automationProfiles = sqliteTable(
   "automation_profiles",
   {
-    id: int("id").autoincrement().primaryKey(),
-    name: varchar("name", { length: 120 }).notNull(),
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    name: text("name", { length: 120 }).notNull(),
     purpose: text("purpose").notNull(),
     memorySummary: text("memorySummary"),
-    skillKeys: json("skillKeys"),
-    allowedActions: json("allowedActions"),
-    channelScope: json("channelScope"),
-    approvalRequired: boolean("approvalRequired").default(true).notNull(),
-    enabled: boolean("enabled").default(false).notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+    skillKeys: text("skillKeys", { mode: "json" }),
+    allowedActions: text("allowedActions", { mode: "json" }),
+    channelScope: text("channelScope", { mode: "json" }),
+    approvalRequired: integer("approvalRequired", { mode: "boolean" })
+      .default(true)
+      .notNull(),
+    enabled: integer("enabled", { mode: "boolean" }).default(false).notNull(),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updatedAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .$onUpdateFn(() => new Date())
+      .notNull(),
   },
   table => [uniqueIndex("automation_profiles_name_unique").on(table.name)]
 );
 
-export const externalComponents = mysqlTable(
+export const externalComponents = sqliteTable(
   "external_components",
   {
-    id: int("id").autoincrement().primaryKey(),
-    name: varchar("name", { length: 160 }).notNull(),
-    sourceUrl: varchar("sourceUrl", { length: 512 }).notNull(),
-    sourceReference: varchar("sourceReference", { length: 160 }),
-    license: varchar("license", { length: 120 }),
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    name: text("name", { length: 160 }).notNull(),
+    sourceUrl: text("sourceUrl", { length: 512 }).notNull(),
+    sourceReference: text("sourceReference", { length: 160 }),
+    license: text("license", { length: 120 }),
     attributionText: text("attributionText"),
     integrationBoundary: text("integrationBoundary").notNull(),
-    reviewStatus: mysqlEnum("reviewStatus", ["pending", "approved", "rejected"])
+    reviewStatus: text("reviewStatus", {
+      enum: ["pending", "approved", "rejected"],
+    })
       .default("pending")
       .notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: integer("updatedAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
+      .$onUpdateFn(() => new Date())
+      .notNull(),
   },
-  table => [uniqueIndex("external_components_source_unique").on(table.sourceUrl)]
+  table => [
+    uniqueIndex("external_components_source_unique").on(table.sourceUrl),
+  ]
 );
 
-export const activityLogs = mysqlTable(
+export const activityLogs = sqliteTable(
   "activity_logs",
   {
-    id: int("id").autoincrement().primaryKey(),
-    category: mysqlEnum("category", ["catalog", "inventory", "listing", "approval", "channel", "profile", "system"])
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    category: text("category", {
+      enum: [
+        "catalog",
+        "inventory",
+        "listing",
+        "approval",
+        "channel",
+        "profile",
+        "system",
+      ],
+    }).notNull(),
+    action: text("action", { length: 160 }).notNull(),
+    subjectType: text("subjectType", { length: 80 }).notNull(),
+    subjectId: integer("subjectId", { mode: "number" }),
+    actorUserId: integer("actorUserId", { mode: "number" }),
+    profileId: integer("profileId", { mode: "number" }),
+    correlationId: text("correlationId", { length: 128 }).notNull(),
+    outcome: text("outcome", {
+      enum: [
+        "requested",
+        "approved",
+        "rejected",
+        "succeeded",
+        "failed",
+        "blocked",
+      ],
+    }).notNull(),
+    details: text("details", { mode: "json" }),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+      .$defaultFn(() => new Date())
       .notNull(),
-    action: varchar("action", { length: 160 }).notNull(),
-    subjectType: varchar("subjectType", { length: 80 }).notNull(),
-    subjectId: int("subjectId"),
-    actorUserId: int("actorUserId"),
-    profileId: int("profileId"),
-    correlationId: varchar("correlationId", { length: 128 }).notNull(),
-    outcome: mysqlEnum("outcome", ["requested", "approved", "rejected", "succeeded", "failed", "blocked"])
-      .notNull(),
-    details: json("details"),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
   },
-  table => [index("activity_logs_category_index").on(table.category), index("activity_logs_correlation_index").on(table.correlationId), index("activity_logs_created_index").on(table.createdAt)]
+  table => [
+    index("activity_logs_category_index").on(table.category),
+    index("activity_logs_correlation_index").on(table.correlationId),
+    index("activity_logs_created_index").on(table.createdAt),
+  ]
 );
 
 export type User = typeof users.$inferSelect;

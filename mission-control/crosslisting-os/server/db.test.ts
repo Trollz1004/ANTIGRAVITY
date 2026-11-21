@@ -70,6 +70,9 @@ describe("crosslisting-os better-sqlite3 and sqlite-core database layer", () => 
     expect(ENV.databaseUrl.replace(/\\/g, "/")).toBe(
       "data/crosslisting.sqlite3"
     );
+    expect(dbModule.resolveDatabasePath().replace(/\\/g, "/")).toMatch(
+      /mission-control\/crosslisting-os\/data\/crosslisting\.sqlite3$/
+    );
 
     const drizzleConfigMod = await import("../drizzle.config");
     const drizzleConfig = drizzleConfigMod.default as {
