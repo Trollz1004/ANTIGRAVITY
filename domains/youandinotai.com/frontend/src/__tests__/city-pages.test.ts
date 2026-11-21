@@ -137,6 +137,7 @@ describe('thirty city pages by population (/cities/<slug>/)', () => {
       expect(raw).not.toMatch(memberCountClaims);
       expect(body.toLowerCase()).toContain('timed question');
       expect(body.toLowerCase()).toMatch(/one dollar|\$1/);
+      expect(body.toLowerCase()).toContain('board');
       expect(body.toLowerCase()).toContain('usa group chat');
 
       const htmlPath = path.join(CITIES_DIR, slug, 'index.html');
