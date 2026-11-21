@@ -5,7 +5,6 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parse } from 'parse5';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const SITE = path.join(here, '..', 'domains', 'onlinerecycle.net', 'site');
@@ -41,41 +40,66 @@ const AREAS = [
   },
 ];
 
-const isEl = (n) => typeof n.tagName === 'string';
-const kids = (n) => (n.nodeName === 'template' ? n.content.childNodes : n.childNodes) ?? [];
-const attr = (n, name) => n.attrs?.find((a) => a.name === name)?.value;
-const hasClass = (n, cls) => (attr(n, 'class') ?? '').split(/\s+/).includes(cls);
-
-function* descend(node) {
-  for (const child of kids(node)) {
-    yield child;
-    yield* descend(child);
+function parseAttrs(attrString) {
+  const attrs = {};
+  const re = /([a-zA-Z0-9_:-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g;
+  let m;
+  while ((m = re.exec(attrString)) !== null) {
+    attrs[m[1].toLowerCase()] = m[2] ?? m[3] ?? m[4] ?? '';
   }
+  return attrs;
 }
 
-const all = (root, pred) => [...descend(root)].filter((n) => isEl(n) && pred(n));
-const DROPPED = new Set(['script', 'style']);
-
-const collectText = (node, skip, out) => {
-  for (const child of kids(node)) {
-    if (child.nodeName === '#text') out.push(child.value);
-    else if (isEl(child)) {
-      if (DROPPED.has(child.tagName) || skip(child)) continue;
-      if (child.tagName === 'br') out.push(' ');
-      else collectText(child, skip, out);
-    }
+function findOpenTags(html, tagName) {
+  const re = new RegExp(`<${tagName}\\b([^>]*?)\\/?>`, 'gi');
+  const out = [];
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    out.push(parseAttrs(m[1] || ''));
   }
   return out;
+}
+
+function findTagBlocks(html, tagName) {
+  const re = new RegExp(`<${tagName}\\b([^>]*)>([\\s\\S]*?)<\\/${tagName}>`, 'gi');
+  const out = [];
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    out.push({
+      attrs: parseAttrs(m[1] || ''),
+      innerHtml: m[2] || '',
+    });
+  }
+  return out;
+}
+
+const HTML_ENTITY_MAP = {
+  '&amp;': '&',
+  '&nbsp;': ' ',
+  '&middot;': '·',
+  '&copy;': '©',
+  '&quot;': '"',
+  '&#39;': "'",
+  '&apos;': "'",
 };
 
-const textOfNode = (node, skip = () => false) => collectText(node, skip, []).join(' ').replace(/\s+/g, ' ').trim();
+function visibleText(fragment) {
+  return fragment
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&(?:amp|nbsp|middot|copy|quot|#39|apos);/g, (entity) => HTML_ENTITY_MAP[entity] ?? entity)
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
-const countWords = (text) => text.split(/\s+/).filter(Boolean).length;
+function countWords(text) {
+  return text.split(/\s+/).filter(Boolean).length;
+}
 
 test('service-areas.html names only the served areas and links to every /areas/<slug>/ page', () => {
   const serviceAreasHtml = fs.readFileSync(path.join(SITE, 'service-areas.html'), 'utf8');
-  const doc = parse(serviceAreasHtml);
-  const hrefs = all(doc, (n) => n.tagName === 'a' && attr(n, 'href') !== undefined).map((a) => attr(a, 'href'));
+  const hrefs = findOpenTags(serviceAreasHtml, 'a').map((a) => a.href);
 
   for (const area of AREAS) {
     assert.ok(serviceAreasHtml.includes(area.town), `service-areas.html must name ${area.town}`);
@@ -88,19 +112,18 @@ for (const area of AREAS) {
     const fullPath = path.join(SITE, area.file);
     assert.ok(fs.existsSync(fullPath), `missing area page ${area.file}`);
     const raw = fs.readFileSync(fullPath, 'utf8');
-    const doc = parse(raw);
 
     // 1. Title
-    const titles = all(doc, (n) => n.tagName === 'title');
+    const titles = findTagBlocks(raw, 'title');
     assert.equal(titles.length, 1, `${area.file} must have exactly one <title>`);
-    const titleText = textOfNode(titles[0]);
+    const titleText = visibleText(titles[0].innerHtml);
     assert.ok(titleText.includes(area.town), `${area.file} <title> must include ${area.town}`);
     assert.ok(titleText.includes('OnlineRecycle.net'), `${area.file} <title> must include OnlineRecycle.net`);
 
     // 2. Meta description
-    const descriptions = all(doc, (n) => n.tagName === 'meta' && attr(n, 'name') === 'description');
+    const descriptions = findOpenTags(raw, 'meta').filter((m) => m.name === 'description');
     assert.equal(descriptions.length, 1, `${area.file} must have one meta description`);
-    const descContent = (attr(descriptions[0], 'content') ?? '').trim();
+    const descContent = (descriptions[0].content ?? '').trim();
     assert.ok(
       descContent.length >= 50 && descContent.length <= 160,
       `${area.file} meta description must be 50..160 chars, got ${descContent.length}`,
@@ -108,49 +131,53 @@ for (const area of AREAS) {
     assert.ok(descContent.includes(area.town), `${area.file} meta description must mention ${area.town}`);
 
     // 3. Canonical
-    const canonicals = all(doc, (n) => n.tagName === 'link' && attr(n, 'rel') === 'canonical');
+    const canonicals = findOpenTags(raw, 'link').filter((l) => l.rel === 'canonical');
     assert.equal(canonicals.length, 1, `${area.file} must have one canonical link`);
-    assert.equal(attr(canonicals[0], 'href'), area.canonical, `${area.file} canonical mismatch`);
+    assert.equal(canonicals[0].href, area.canonical, `${area.file} canonical mismatch`);
 
     // 4. Exactly one h1 with exact headline
-    const h1s = all(doc, (n) => n.tagName === 'h1');
+    const h1s = findTagBlocks(raw, 'h1');
     assert.equal(h1s.length, 1, `${area.file} must have exactly one <h1>`);
-    assert.equal(textOfNode(h1s[0]), `Free electronics recycling pickup in ${area.town}`, `${area.file} <h1> mismatch`);
+    assert.equal(
+      visibleText(h1s[0].innerHtml),
+      `Free electronics recycling pickup in ${area.town}`,
+      `${area.file} <h1> mismatch`,
+    );
 
     // 5. Listed in sitemap.xml
     const sitemap = fs.readFileSync(path.join(SITE, 'sitemap.xml'), 'utf8');
     assert.ok(sitemap.includes(`<loc>${area.canonical}</loc>`), `${area.canonical} must appear in sitemap.xml`);
 
     // 6. Uses site's own styles.css without inline <style>
-    const htmlEl = all(doc, (n) => n.tagName === 'html')[0];
-    assert.equal(attr(htmlEl, 'class'), 'dark', `${area.file} html element must have class="dark"`);
-    const stylesheets = all(
-      doc,
-      (n) => n.tagName === 'link' && attr(n, 'rel') === 'stylesheet' && /^\/styles\.css/.test(attr(n, 'href') ?? ''),
+    const htmlTags = findOpenTags(raw, 'html');
+    assert.equal(htmlTags[0]?.class, 'dark', `${area.file} html element must have class="dark"`);
+    const stylesheets = findOpenTags(raw, 'link').filter(
+      (l) => l.rel === 'stylesheet' && /^\/styles\.css/.test(l.href ?? ''),
     );
     assert.equal(stylesheets.length, 1, `${area.file} must link to /styles.css`);
-    assert.equal(all(doc, (n) => n.tagName === 'style').length, 0, `${area.file} must not have inline <style>`);
+    assert.equal(findTagBlocks(raw, 'style').length, 0, `${area.file} must not have inline <style>`);
   });
 
   test(`${area.file}: 200 to 300 words drawn only from existing facts, one button to /?service=pickup#book, and no invented prices, certificates, distances or drive times`, () => {
     const fullPath = path.join(SITE, area.file);
     assert.ok(fs.existsSync(fullPath), `missing area page ${area.file}`);
     const raw = fs.readFileSync(fullPath, 'utf8');
-    const doc = parse(raw);
 
-    const mains = all(doc, (n) => n.tagName === 'main');
+    const mains = findTagBlocks(raw, 'main');
     assert.equal(mains.length, 1, `${area.file} must have one <main>`);
-    const mainEl = mains[0];
+    const mainInner = mains[0].innerHtml;
 
-    const mainText = textOfNode(mainEl);
+    const mainText = visibleText(mainInner);
     const mainWords = countWords(mainText);
     assert.ok(mainWords >= 200 && mainWords <= 300, `${area.file} main word count must be 200..300, got ${mainWords}`);
 
-    const bodyOnlyText = textOfNode(mainEl, (n) => n.tagName === 'h1' || hasClass(n, 'btn'));
-    const bodyOnlyWords = countWords(bodyOnlyText);
+    const paragraphsText = findTagBlocks(mainInner, 'p')
+      .map((p) => visibleText(p.innerHtml))
+      .join(' ');
+    const paragraphWords = countWords(paragraphsText);
     assert.ok(
-      bodyOnlyWords >= 200 && bodyOnlyWords <= 300,
-      `${area.file} body copy word count (excluding h1 and button) must also be 200..300, got ${bodyOnlyWords}`,
+      paragraphWords >= 200 && paragraphWords <= 300,
+      `${area.file} paragraph word count must also be 200..300, got ${paragraphWords}`,
     );
 
     // Covers the four required topics from index.html, about.html, and service-areas.html:
@@ -170,18 +197,15 @@ for (const area of AREAS) {
     assert.match(mainText, /wipe|erasure|destruction/i, `${area.file} must mention data wiping or destruction`);
 
     // One button to /?service=pickup#book
-    const buttons = all(mainEl, (n) => n.tagName === 'a' && hasClass(n, 'btn'));
+    const mainLinks = findOpenTags(mainInner, 'a');
+    const buttons = mainLinks.filter((a) => (a.class ?? '').split(/\s+/).includes('btn'));
     assert.equal(buttons.length, 1, `${area.file} must have exactly one button in <main>`);
-    assert.equal(
-      attr(buttons[0], 'href'),
-      '/?service=pickup#book',
-      `${area.file} button must link to /?service=pickup#book`,
-    );
+    assert.equal(buttons[0].href, '/?service=pickup#book', `${area.file} button must link to /?service=pickup#book`);
 
     // No invented prices, certificates, distances, drive times, or false Google Calendar claims
     assert.doesNotMatch(
       mainText,
-      /\$|R2\b|e-Stewards|ISO\s*\d|NIST|DoD|certificate|certified|\bmiles?\b|\bkm\b|\pkilometers?\b|drive time|minutes away|hour drive|Google Calendar/i,
+      /\$|R2\b|e-Stewards|ISO\s*\d|NIST|DoD|certificate|certified|\bmiles?\b|\bkm\b|\bkilometers?\b|drive time|minutes away|hour drive|Google Calendar/i,
       `${area.file} must not contain invented prices, certificates, distances, drive times, or false Google Calendar claims`,
     );
   });
@@ -191,11 +215,11 @@ test('area pages are worded differently from each other', () => {
   const texts = AREAS.map((area) => {
     const fullPath = path.join(SITE, area.file);
     assert.ok(fs.existsSync(fullPath), `missing area page ${area.file}`);
-    const doc = parse(fs.readFileSync(fullPath, 'utf8'));
-    const mainEl = all(doc, (n) => n.tagName === 'main')[0];
-    const paragraphs = all(mainEl, (n) => n.tagName === 'p').map((p) => textOfNode(p));
+    const raw = fs.readFileSync(fullPath, 'utf8');
+    const mainInner = findTagBlocks(raw, 'main')[0].innerHtml;
+    const paragraphs = findTagBlocks(mainInner, 'p').map((p) => visibleText(p.innerHtml));
     assert.ok(paragraphs.length >= 3, `${area.file} must have at least 3 paragraphs`);
-    return { area: area.slug, paragraphs, fullText: textOfNode(mainEl) };
+    return { area: area.slug, paragraphs, fullText: visibleText(mainInner) };
   });
 
   // No two pages may share any identical paragraph
