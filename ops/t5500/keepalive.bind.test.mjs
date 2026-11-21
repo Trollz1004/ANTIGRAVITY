@@ -53,7 +53,10 @@ test('keepalive.ps1 stages: ollama, postgres, and redis variables and arguments 
 
   // postgres stage probes 127.0.0.1:5432 and starts ANTIGRAVITY Postgres or pg_ctl.exe hidden
   assert.match(keepaliveSrc, /pg_isready\.exe[\s\S]*?-h\s+127\.0\.0\.1\s+-p\s+5432/);
-  assert.match(keepaliveSrc, /Start-Process\s+-FilePath\s+\(Join-Path\s+\$PgBin\s+'pg_ctl\.exe'\)[\s\S]*?-WindowStyle\s+Hidden/);
+  assert.match(
+    keepaliveSrc,
+    /Start-Process\s+-FilePath\s+\(Join-Path\s+\$PgBin\s+'pg_ctl\.exe'\)[\s\S]*?-WindowStyle\s+Hidden/,
+  );
 
   // redis stage binds 127.0.0.1:6379 hidden
   assert.match(
@@ -75,7 +78,10 @@ test('keepalive.ps1 domains stage: DOMAINS_SERVER_HOST values (both main and old
 
   // Main keepalive.ps1 with no FLEET_SHARED_TOKEN sets DOMAINS_SERVER_HOST=127.0.0.1
   assert.deepEqual(
-    resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '127.0.0.1', DOMAINS_SERVER_PORT: '9160' }, { port: 9160, warn: () => {} }),
+    resolveDomainsServerBind(
+      { DOMAINS_SERVER_HOST: '127.0.0.1', DOMAINS_SERVER_PORT: '9160' },
+      { port: 9160, warn: () => {} },
+    ),
     ['127.0.0.1'],
   );
 
@@ -86,10 +92,9 @@ test('keepalive.ps1 domains stage: DOMAINS_SERVER_HOST values (both main and old
   );
 
   // Fleet bind 0.0.0.0 with no token also never throws
-  assert.deepEqual(
-    resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '0.0.0.0' }, { port: 9160, warn: () => {} }),
-    ['0.0.0.0'],
-  );
+  assert.deepEqual(resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '0.0.0.0' }, { port: 9160, warn: () => {} }), [
+    '0.0.0.0',
+  ]);
 });
 
 test('keepalive.ps1 frontend stage: tab-dateapp.cmd variables are accepted by resolveFrontendBind with no token', () => {
@@ -117,7 +122,11 @@ test('keepalive.ps1 api stage: tab-dateapp-api.ps1 variables start uvicorn with 
   try {
     const vaultDir = path.join(tmpDir, '.antigravity-vault', 'vault-handoff', 'env-stash-from-documents');
     fs.mkdirSync(vaultDir, { recursive: true });
-    fs.writeFileSync(path.join(vaultDir, '.env-not-for-github.txt'), 'DATABASE_URL=sqlite+aiosqlite:///./test.db\n', 'utf8');
+    fs.writeFileSync(
+      path.join(vaultDir, '.env-not-for-github.txt'),
+      'DATABASE_URL=sqlite+aiosqlite:///./test.db\n',
+      'utf8',
+    );
 
     const fakePy = path.join(tmpDir, 'fake-python.cmd');
     fs.writeFileSync(fakePy, '@echo off\r\necho PY_ARGS=%*\r\nexit /b 0\r\n', 'utf8');
@@ -165,7 +174,10 @@ test('keepalive.ps1 mission-control and social-command-center stages: mission-os
     // Scheduled task / scripts/start-mission-control.ps1 launch (MISSION_OS_HOST=127.0.0.1 when token missing)
     const startMcSrc = fs.readFileSync(START_MISSION_CONTROL_PS1, 'utf8');
     assert.match(startMcSrc, /\$env:MISSION_OS_HOST\s*=\s*\$loopback/);
-    assert.equal(resolveMissionOsBind({ env: { MISSION_OS_HOST: '127.0.0.1' }, port: 3130, warn: () => {} }), '127.0.0.1');
+    assert.equal(
+      resolveMissionOsBind({ env: { MISSION_OS_HOST: '127.0.0.1' }, port: 3130, warn: () => {} }),
+      '127.0.0.1',
+    );
 
     // Both keepalive probes on loopback port 3130 pass without token
     const mosState = await invokeMissionLoopback('/api/mos-state.json');

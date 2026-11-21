@@ -57,13 +57,14 @@ test('resolveDomainsServerBind uses explicit DOMAINS_SERVER_HOST ("127.0.0.1,192
 
   assert.deepEqual(
     resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '127.0.0.1,192.168.0.15' }, { port: 9160, warn: () => {} }),
-    ['127.0.0.1', '192.168.0.15']
+    ['127.0.0.1', '192.168.0.15'],
   );
-  assert.deepEqual(
-    resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '0.0.0.0' }, { port: 9160, warn: () => {} }),
-    ['0.0.0.0']
-  );
-  assert.deepEqual(resolveDomainsServerBind({ FLEET_SHARED_TOKEN: 'tok' }, { port: 9160, warn: () => {} }), ['0.0.0.0']);
+  assert.deepEqual(resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '0.0.0.0' }, { port: 9160, warn: () => {} }), [
+    '0.0.0.0',
+  ]);
+  assert.deepEqual(resolveDomainsServerBind({ FLEET_SHARED_TOKEN: 'tok' }, { port: 9160, warn: () => {} }), [
+    '0.0.0.0',
+  ]);
 });
 
 test('domains-server serves public routes (200) without fleet token in both no-token (127.0.0.1) and token-set (0.0.0.0) modes', async () => {
@@ -85,15 +86,19 @@ test('domains-server serves public routes (200) without fleet token in both no-t
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     let logs = '';
-    child.stdout.on('data', (c) => { logs += String(c); });
-    child.stderr.on('data', (c) => { logs += String(c); });
+    child.stdout.on('data', (c) => {
+      logs += String(c);
+    });
+    child.stderr.on('data', (c) => {
+      logs += String(c);
+    });
 
     try {
       const healthRes = await waitForReady(port, () => logs);
       assert.equal(healthRes.status, 200, `${mode.name}: /health must return 200 without token`);
       assert.ok(
         logs.includes(`listening on http://${mode.expectedBind}:${port}`),
-        `${mode.name}: expected bind ${mode.expectedBind}; logs=${logs}`
+        `${mode.name}: expected bind ${mode.expectedBind}; logs=${logs}`,
       );
       if (mode.expectWarn) {
         assert.match(logs, /WARNING: FLEET_SHARED_TOKEN is not set/);
@@ -104,7 +109,7 @@ test('domains-server serves public routes (200) without fleet token in both no-t
       assert.equal(healthJson.service, 'domains-server');
       assert.ok(
         healthJson.bookingNotices === 'on' || healthJson.bookingNotices === 'off',
-        `expected bookingNotices 'on' or 'off', got ${ JSON.stringify(healthJson) }`,
+        `expected bookingNotices 'on' or 'off', got ${JSON.stringify(healthJson)}`,
       );
       assert.equal(typeof healthJson.unnotifiedBookings, 'number');
       // Public route: counts and light only, never setting or file names.
@@ -159,8 +164,12 @@ test('domains-server starts with two explicit addresses of this PC in DOMAINS_SE
     windowsHide: true,
   });
   let logs = '';
-  child.stdout.on('data', (c) => { logs += String(c); });
-  child.stderr.on('data', (c) => { logs += String(c); });
+  child.stdout.on('data', (c) => {
+    logs += String(c);
+  });
+  child.stderr.on('data', (c) => {
+    logs += String(c);
+  });
 
   try {
     const healthRes = await waitForReady(port, () => logs);
