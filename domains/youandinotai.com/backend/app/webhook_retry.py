@@ -433,19 +433,24 @@ router = APIRouter(prefix="/webhooks", tags=["webhooks"])
 security = HTTPBearer()
 
 
-async def _require_current_user(
+async def require_founder_or_admin(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: AsyncSession = Depends(get_db),
 ):
     from app.auth import get_current_user
+    from app.auth import require_founder_or_admin as _require_founder_or_admin
 
-    return await get_current_user(credentials=credentials, db=db)
+    user = await get_current_user(credentials=credentials, db=db)
+    return await _require_founder_or_admin(user=user)
+
+
+_require_current_user = require_founder_or_admin
 
 
 @router.post("/retry/{event_id}")
 async def retry_webhook_event(
     event_id: str,
-    _current_user=Depends(_require_current_user),
+    _current_user=Depends(require_founder_or_admin),
     db: AsyncSession = Depends(get_db),
 ) -> dict[str, Any]:
     """Manually retry a failed webhook event.
@@ -467,7 +472,7 @@ async def retry_webhook_event(
 async def list_dead_letter(
     limit: int = 50,
     offset: int = 0,
-    _current_user=Depends(_require_current_user),
+    _current_user=Depends(require_founder_or_admin),
     db: AsyncSession = Depends(get_db),
 ) -> list[dict[str, Any]]:
     """List webhook events that exhausted all retries and were moved to dead-letter."""
@@ -491,7 +496,7 @@ async def list_dead_letter(
 async def list_retry_queue(
     limit: int = 50,
     offset: int = 0,
-    _current_user=Depends(_require_current_user),
+    _current_user=Depends(require_founder_or_admin),
     db: AsyncSession = Depends(get_db),
 ) -> list[dict[str, Any]]:
     """List active webhook events in the retry queue."""
