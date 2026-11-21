@@ -5,7 +5,7 @@ import http from 'node:http';
 import net from 'node:net';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolveDomainsServerBind, buildDomainsHealthPayload } from '../server.mjs';
+import { resolveDomainsServerBind, buildDomainsHealthPayload, server } from '../server.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SERVER_PATH = path.resolve(HERE, '..', 'server.mjs');
@@ -57,14 +57,13 @@ test('resolveDomainsServerBind uses explicit DOMAINS_SERVER_HOST ("127.0.0.1,192
 
   assert.deepEqual(
     resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '127.0.0.1,192.168.0.15' }, { port: 9160, warn: () => {} }),
-    ['127.0.0.1', '192.168.0.15'],
+    ['127.0.0.1', '192.168.0.15']
   );
-  assert.deepEqual(resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '0.0.0.0' }, { port: 9160, warn: () => {} }), [
-    '0.0.0.0',
-  ]);
-  assert.deepEqual(resolveDomainsServerBind({ FLEET_SHARED_TOKEN: 'tok' }, { port: 9160, warn: () => {} }), [
-    '0.0.0.0',
-  ]);
+  assert.deepEqual(
+    resolveDomainsServerBind({ DOMAINS_SERVER_HOST: '0.0.0.0' }, { port: 9160, warn: () => {} }),
+    ['0.0.0.0']
+  );
+  assert.deepEqual(resolveDomainsServerBind({ FLEET_SHARED_TOKEN: 'tok' }, { port: 9160, warn: () => {} }), ['0.0.0.0']);
 });
 
 test('domains-server serves public routes (200) without fleet token in both no-token (127.0.0.1) and token-set (0.0.0.0) modes', async () => {
@@ -86,19 +85,15 @@ test('domains-server serves public routes (200) without fleet token in both no-t
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     let logs = '';
-    child.stdout.on('data', (c) => {
-      logs += String(c);
-    });
-    child.stderr.on('data', (c) => {
-      logs += String(c);
-    });
+    child.stdout.on('data', (c) => { logs += String(c); });
+    child.stderr.on('data', (c) => { logs += String(c); });
 
     try {
       const healthRes = await waitForReady(port, () => logs);
       assert.equal(healthRes.status, 200, `${mode.name}: /health must return 200 without token`);
       assert.ok(
         logs.includes(`listening on http://${mode.expectedBind}:${port}`),
-        `${mode.name}: expected bind ${mode.expectedBind}; logs=${logs}`,
+        `${mode.name}: expected bind ${mode.expectedBind}; logs=${logs}`
       );
       if (mode.expectWarn) {
         assert.match(logs, /WARNING: FLEET_SHARED_TOKEN is not set/);
@@ -107,10 +102,7 @@ test('domains-server serves public routes (200) without fleet token in both no-t
 
       const healthJson = JSON.parse(healthRes.body);
       assert.equal(healthJson.service, 'domains-server');
-      assert.ok(
-        healthJson.bookingNotices === 'on' || healthJson.bookingNotices === 'off',
-        `expected bookingNotices 'on' or 'off', got ${JSON.stringify(healthJson)}`,
-      );
+      assert.ok(healthJson.bookingNotices === 'on' || healthJson.bookingNotices === 'off');
       assert.equal(typeof healthJson.unnotifiedBookings, 'number');
       // Public route: counts and light only, never setting or file names.
       assert.equal('missingEnv' in healthJson, false);
@@ -124,8 +116,14 @@ test('domains-server serves public routes (200) without fleet token in both no-t
         assert.equal(healthJson.nodeLight, 'amber');
       }
 
+      const publicHealthRes = await httpGet(port, '/health', { Host: 'onlinerecycle.net' });
+      assert.equal(publicHealthRes.status, 200);
+      const publicHealthJson = JSON.parse(publicHealthRes.body);
+      assert.equal(publicHealthJson.bookingNotices, healthJson.bookingNotices);
+      assert.equal(publicHealthJson.unnotifiedBookings, healthJson.unnotifiedBookings);
+
       const apiHealthRes = await httpGet(port, '/api/health', { Host: 'onlinerecycle.net' });
-      assert.equal(apiHealthRes.status, 200, `${mode.name}: /api/health must return 200`);
+      assert.equal(apiHealthRes.status, 200);
       const apiHealthJson = JSON.parse(apiHealthRes.body);
       assert.equal(apiHealthJson.bookingNotices, healthJson.bookingNotices);
       assert.equal(apiHealthJson.unnotifiedBookings, healthJson.unnotifiedBookings);
@@ -164,12 +162,8 @@ test('domains-server starts with two explicit addresses of this PC in DOMAINS_SE
     windowsHide: true,
   });
   let logs = '';
-  child.stdout.on('data', (c) => {
-    logs += String(c);
-  });
-  child.stderr.on('data', (c) => {
-    logs += String(c);
-  });
+  child.stdout.on('data', (c) => { logs += String(c); });
+  child.stderr.on('data', (c) => { logs += String(c); });
 
   try {
     const healthRes = await waitForReady(port, () => logs);
@@ -193,7 +187,7 @@ test('buildDomainsHealthPayload reports bookingNotices on/off, unnotifiedBooking
 
   const offWithFleet = buildDomainsHealthPayload(
     { FLEET_SHARED_TOKEN: 'fleet-tok' },
-    { unnotifiedBookings: 0, driftPath: 'nonexistent-drift.json' },
+    { unnotifiedBookings: 0, driftPath: 'nonexistent-drift.json' }
   );
   assert.equal(offWithFleet.missingEnvCount, 0);
   assert.equal(offWithFleet.bookingNotices, 'off');
@@ -205,7 +199,7 @@ test('buildDomainsHealthPayload reports bookingNotices on/off, unnotifiedBooking
       ORC_NOTIFY_TELEGRAM_TOKEN: 'tg-tok',
       ORC_NOTIFY_TELEGRAM_CHAT: 'tg-chat',
     },
-    { unnotifiedBookings: 0, driftPath: 'nonexistent-drift.json' },
+    { unnotifiedBookings: 0, driftPath: 'nonexistent-drift.json' }
   );
   assert.equal(onClean.missingEnvCount, 0);
   assert.equal(onClean.bookingNotices, 'on');
@@ -219,9 +213,44 @@ test('buildDomainsHealthPayload reports bookingNotices on/off, unnotifiedBooking
       ORC_NOTIFY_TELEGRAM_TOKEN: 'tg-tok',
       ORC_NOTIFY_TELEGRAM_CHAT: 'tg-chat',
     },
-    { unnotifiedBookings: 2, driftPath: 'nonexistent-drift.json' },
+    { unnotifiedBookings: 2, driftPath: 'nonexistent-drift.json' }
   );
   assert.equal(onWithUnnotified.bookingNotices, 'on');
   assert.equal(onWithUnnotified.unnotifiedBookings, 2);
   assert.equal(onWithUnnotified.nodeLight, 'amber');
+});
+
+test('public /health code path (server request handler for Host: onlinerecycle.net) answers with bookingNotices and unnotifiedBookings', async () => {
+  const handler = server.listeners('request')[0];
+  assert.equal(typeof handler, 'function');
+  for (const url of ['/health', '/health/', '/api/health']) {
+    let status = 0;
+    let headers = {};
+    let rawBody = '';
+    const req = {
+      method: 'GET',
+      url,
+      headers: { host: 'onlinerecycle.net', 'cf-connecting-ip': '203.0.113.10' },
+      socket: { remoteAddress: '127.0.0.1' },
+    };
+    const res = {
+      headersSent: false,
+      destroyed: false,
+      writeHead(code, hdrs) {
+        status = code;
+        headers = hdrs || {};
+        this.headersSent = true;
+      },
+      end(chunk = '') {
+        rawBody += String(chunk);
+      },
+    };
+    await handler(req, res);
+    assert.equal(status, 200, `expected 200 on ${url}`);
+    assert.equal(headers['Cache-Control'], 'no-store');
+    const parsed = JSON.parse(rawBody);
+    assert.equal(parsed.service, 'domains-server');
+    assert.ok(parsed.bookingNotices === 'on' || parsed.bookingNotices === 'off');
+    assert.equal(typeof parsed.unnotifiedBookings, 'number');
+  }
 });
