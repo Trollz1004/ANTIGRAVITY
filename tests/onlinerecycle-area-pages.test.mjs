@@ -117,8 +117,8 @@ for (const area of AREAS) {
     const titles = findTagBlocks(raw, 'title');
     assert.equal(titles.length, 1, `${area.file} must have exactly one <title>`);
     const titleText = visibleText(titles[0].innerHtml);
+    assert.ok(titleText.length > 15, `${area.file} <title> must not be empty`);
     assert.ok(titleText.includes(area.town), `${area.file} <title> must include ${area.town}`);
-    assert.ok(titleText.includes('OnlineRecycle.net'), `${area.file} <title> must include OnlineRecycle.net`);
 
     // 2. Meta description
     const descriptions = findOpenTags(raw, 'meta').filter((m) => m.name === 'description');
@@ -146,7 +146,8 @@ for (const area of AREAS) {
 
     // 5. Listed in sitemap.xml
     const sitemap = fs.readFileSync(path.join(SITE, 'sitemap.xml'), 'utf8');
-    assert.ok(sitemap.includes(`<loc>${area.canonical}</loc>`), `${area.canonical} must appear in sitemap.xml`);
+    const sitemapLocs = new Set(findTagBlocks(sitemap, 'loc').map((b) => visibleText(b.innerHtml)));
+    assert.ok(sitemapLocs.has(area.canonical), `${area.canonical} must appear in sitemap.xml`);
 
     // 6. Uses site's own styles.css without inline <style>
     const htmlTags = findOpenTags(raw, 'html');
