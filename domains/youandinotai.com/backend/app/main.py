@@ -508,7 +508,8 @@ app.include_router(notifications.router, prefix="/api/v1", tags=["notifications"
 app.include_router(rate_limits.router)
 
 graphql_app = GraphQLRouter(schema)
-app.include_router(graphql_app, prefix="/graphql")
+if settings.graphql_enabled:
+    app.include_router(graphql_app, prefix="/graphql")
 
 
 # Secure file uploads (replaces direct static mount)

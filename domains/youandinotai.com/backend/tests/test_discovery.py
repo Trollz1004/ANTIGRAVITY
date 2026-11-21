@@ -62,12 +62,50 @@ def test_discovery_like_requires_auth(client: TestClient):
     )
 
 
-def test_discovery_preview_public(client: TestClient):
-    """Test discovery preview is publicly accessible."""
-    response = client.get("/api/v1/discover/preview")
-    assert response.status_code == status.HTTP_200_OK
-    data = response.json()
-    assert isinstance(data, list)
+def test_discovery_preview_requires_verified_member(
+    client: TestClient, db_session_factory
+):
+    """GET /api/v1/discover/preview requires a signed-in verified member."""
+    unauth_resp = client.get("/api/v1/discover/preview")
+    assert unauth_resp.status_code in (
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_403_FORBIDDEN,
+    )
+
+    unchecked_actor = _make_user(email="unchecked_preview_actor@example.com")
+    checked_actor = _make_user(email="checked_preview_actor@example.com")
+    checked_target = _make_user(
+        email="checked_preview_target@example.com", display_name="Verified Target"
+    )
+    seed(
+        unchecked_actor,
+        checked_actor,
+        checked_target,
+        verified_profile(unchecked_actor, verified=False),
+        verified_profile(checked_actor),
+        verified_profile(checked_target),
+        db_session_factory=db_session_factory,
+    )
+
+    app.dependency_overrides[get_current_user] = override_user(unchecked_actor)
+    try:
+        unchecked_resp = client.get("/api/v1/discover/preview")
+        assert unchecked_resp.status_code == status.HTTP_403_FORBIDDEN
+        assert "verification" in unchecked_resp.json()["detail"].lower()
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+    app.dependency_overrides[get_current_user] = override_user(checked_actor)
+    try:
+        checked_resp = client.get("/api/v1/discover/preview")
+        assert checked_resp.status_code == status.HTTP_200_OK
+        data = checked_resp.json()
+        assert isinstance(data, list)
+        user_ids = {item["user_id"] for item in data}
+        assert str(checked_target.id) in user_ids
+        assert str(checked_actor.id) not in user_ids
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
 
 
 def test_discover_unchecked_actor_returns_403(client: TestClient, db_session_factory):

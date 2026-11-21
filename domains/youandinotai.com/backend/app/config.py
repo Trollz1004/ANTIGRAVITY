@@ -105,6 +105,7 @@ class Settings(BaseSettings):
     # ClawX 6-AI Council Integration
     # -------------------------------------------------------------------------
     clawx_enabled: bool = False
+    graphql_enabled: bool = False
     clawx_base_url: str = "https://api.clawx.example.com"
     clawx_agent_keys: str = "{}"  # JSON dict of agent_name: api_key
 

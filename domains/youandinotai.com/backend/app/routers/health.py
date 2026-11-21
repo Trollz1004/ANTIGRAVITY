@@ -3,10 +3,12 @@
 import logging
 from collections.abc import Iterable
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app import auth as _auth_module
+from app.auth import get_current_user
 from app.cache import redis_health_check
 from app.config import get_settings
 from app.database import check_db_health, get_db
@@ -20,6 +22,25 @@ from app.webhook_event_store import recent_processed_payment_payloads
 router = APIRouter()
 settings = get_settings()
 logger = logging.getLogger(__name__)
+
+
+async def _require_health_founder_or_admin(
+    user: User = Depends(get_current_user),
+) -> User:
+    auth_gate = getattr(_auth_module, "require_founder_or_admin", None)
+    if callable(auth_gate):
+        return await auth_gate(user=user)
+    if getattr(user, "is_admin", False) is True:
+        return user
+    current_settings = get_settings()
+    email = (getattr(user, "email", None) or "").strip().lower()
+    if email and email in current_settings.support_operator_email_list:
+        return user
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="Founder or admin access required",
+    )
+
 
 # Standing Square proof from docs/PAYMENTS-TRUTH.md (judge-lane, 2026-09-15).
 # Local webhook_events can be empty after a DB reset / SQLite overlay without
@@ -195,7 +216,10 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
     )
 
 
-@router.get("/health/allocations")
+@router.get(
+    "/health/allocations",
+    dependencies=[Depends(_require_health_founder_or_admin)],
+)
 async def check_allocations(db: AsyncSession = Depends(get_db)):
     from sqlalchemy import text
 
@@ -212,7 +236,10 @@ async def check_allocations(db: AsyncSession = Depends(get_db)):
         raise internal_error(message=f"Failed to retrieve allocations: {e}")
 
 
-@router.get("/health/allocations/summary")
+@router.get(
+    "/health/allocations/summary",
+    dependencies=[Depends(_require_health_founder_or_admin)],
+)
 async def allocations_summary(db: AsyncSession = Depends(get_db)):
     """Revenue summary: customer-only, founder tests, the friend's first charges.
 
@@ -266,7 +293,10 @@ async def allocations_summary(db: AsyncSession = Depends(get_db)):
 # Temporarily removed wipe-users endpoint
 
 
-@router.get("/health/webhooks")
+@router.get(
+    "/health/webhooks",
+    dependencies=[Depends(_require_health_founder_or_admin)],
+)
 async def check_webhooks(db: AsyncSession = Depends(get_db)):
     from sqlalchemy import text
 
