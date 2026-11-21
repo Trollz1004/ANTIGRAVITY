@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth import require_founder_or_admin
 from app.cache import redis_health_check
 from app.config import get_settings
 from app.database import check_db_health, get_db
@@ -20,6 +21,7 @@ from app.webhook_event_store import recent_processed_payment_payloads
 router = APIRouter()
 settings = get_settings()
 logger = logging.getLogger(__name__)
+
 
 # Standing Square proof from docs/PAYMENTS-TRUTH.md (judge-lane, 2026-09-15).
 # Local webhook_events can be empty after a DB reset / SQLite overlay without
@@ -195,7 +197,10 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
     )
 
 
-@router.get("/health/allocations")
+@router.get(
+    "/health/allocations",
+    dependencies=[Depends(require_founder_or_admin)],
+)
 async def check_allocations(db: AsyncSession = Depends(get_db)):
     from sqlalchemy import text
 
@@ -212,7 +217,10 @@ async def check_allocations(db: AsyncSession = Depends(get_db)):
         raise internal_error(message=f"Failed to retrieve allocations: {e}")
 
 
-@router.get("/health/allocations/summary")
+@router.get(
+    "/health/allocations/summary",
+    dependencies=[Depends(require_founder_or_admin)],
+)
 async def allocations_summary(db: AsyncSession = Depends(get_db)):
     """Revenue summary: customer-only, founder tests, the friend's first charges.
 
@@ -266,7 +274,10 @@ async def allocations_summary(db: AsyncSession = Depends(get_db)):
 # Temporarily removed wipe-users endpoint
 
 
-@router.get("/health/webhooks")
+@router.get(
+    "/health/webhooks",
+    dependencies=[Depends(require_founder_or_admin)],
+)
 async def check_webhooks(db: AsyncSession = Depends(get_db)):
     from sqlalchemy import text
 

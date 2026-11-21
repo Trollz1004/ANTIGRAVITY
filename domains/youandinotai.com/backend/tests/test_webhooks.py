@@ -1565,11 +1565,16 @@ def test_card_fingerprint_appears_in_no_api_answer_and_no_log_line(
     client,
     db_session_factory,
     caplog,
+    monkeypatch,
 ):
     import asyncio
     import logging
 
     from app.auth import create_access_token
+    from app.config import get_settings
+
+    monkeypatch.setenv("SUPPORT_OPERATOR_EMAILS", "card-fp-noleak@example.com")
+    get_settings.cache_clear()
 
     user_id, liveness_event_id = _seed_pending_bot_shield_member(
         db_session_factory,
@@ -1604,35 +1609,38 @@ def test_card_fingerprint_appears_in_no_api_answer_and_no_log_line(
         "http://testserver/api/v1/webhooks/square-payment",
     )
 
-    with (
-        caplog.at_level(logging.INFO),
-        caplog.at_level(logging.DEBUG, logger="app"),
-        caplog.at_level(logging.DEBUG, logger="youandinotai"),
-    ):
-        webhook_resp = client.post(
-            "/api/v1/webhooks/square-payment",
-            headers={
-                "x-square-hmacsha256-signature": signature,
-                "Content-Type": "application/json",
-            },
-            content=raw_body,
-        )
-        assert webhook_resp.status_code == 200, webhook_resp.text
+    try:
+        with (
+            caplog.at_level(logging.INFO),
+            caplog.at_level(logging.DEBUG, logger="app"),
+            caplog.at_level(logging.DEBUG, logger="youandinotai"),
+        ):
+            webhook_resp = client.post(
+                "/api/v1/webhooks/square-payment",
+                headers={
+                    "x-square-hmacsha256-signature": signature,
+                    "Content-Type": "application/json",
+                },
+                content=raw_body,
+            )
+            assert webhook_resp.status_code == 200, webhook_resp.text
 
-        token = create_access_token(str(user_id))
-        auth_headers = {"Authorization": f"Bearer {token}"}
+            token = create_access_token(str(user_id))
+            auth_headers = {"Authorization": f"Bearer {token}"}
 
-        api_responses = [
-            webhook_resp,
-            client.get("/api/v1/verify/status", headers=auth_headers),
-            client.post("/api/v1/verify/confirm", headers=auth_headers),
-            client.get("/api/v1/auth/me", headers=auth_headers),
-            client.get("/api/v1/profiles/me", headers=auth_headers),
-            client.get("/api/v1/privacy/my-data", headers=auth_headers),
-            client.get("/api/v1/health"),
-            client.get("/api/v1/health/webhooks"),
-            client.get("/api/v1/health/allocations"),
-        ]
+            api_responses = [
+                webhook_resp,
+                client.get("/api/v1/verify/status", headers=auth_headers),
+                client.post("/api/v1/verify/confirm", headers=auth_headers),
+                client.get("/api/v1/auth/me", headers=auth_headers),
+                client.get("/api/v1/profiles/me", headers=auth_headers),
+                client.get("/api/v1/privacy/my-data", headers=auth_headers),
+                client.get("/api/v1/health"),
+                client.get("/api/v1/health/webhooks", headers=auth_headers),
+                client.get("/api/v1/health/allocations", headers=auth_headers),
+            ]
+    finally:
+        get_settings.cache_clear()
 
     async def _fetch_payment_event():
         async with db_session_factory() as session:
