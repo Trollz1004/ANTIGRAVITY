@@ -190,11 +190,32 @@ describe('blog posts front matter and three new guides', () => {
         `${file} body must not contain raw URLs outside [label](url) links`
       ).not.toMatch(/https?:\/\/|(?<![a-z0-9-])youandinotai\.com/i);
 
-      if (
-        (ORIGINAL_TWELVE_POSTS as readonly string[]).includes(
-          file.replace(/\.md$/, '')
-        )
-      ) {
+      const slug = file.replace(/\.md$/, '');
+      const htmlPath = path.join(BLOG_DIR, slug, 'index.html');
+      expect(existsSync(htmlPath), `blog/${slug}/index.html must exist`).toBe(
+        true
+      );
+      const renderedHtml = readFileSync(htmlPath, 'utf8');
+      const articleMatch = renderedHtml.match(
+        /<article>([\s\S]*?)<\/article>/i
+      );
+      expect(articleMatch, `${slug} HTML must contain <article>`).toBeTruthy();
+      const articleAnchors = [
+        ...(articleMatch?.[1].matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi) ?? []),
+      ];
+      expect(
+        articleAnchors.length,
+        `${slug} rendered article must contain descriptive anchor tags`
+      ).toBeGreaterThanOrEqual(2);
+      for (const anchor of articleAnchors) {
+        const anchorText = anchor[1].trim();
+        expect(
+          anchorText,
+          `${slug} rendered anchor text "${anchorText}" must not be a raw URL`
+        ).not.toMatch(/https?:\/\/|www\.|youandinotai\.com|^\/[a-z0-9/_-]*$/i);
+      }
+
+      if ((ORIGINAL_TWELVE_POSTS as readonly string[]).includes(slug)) {
         expect(
           countWords(body),
           `${file} must be a substantive topic-specific guide`
