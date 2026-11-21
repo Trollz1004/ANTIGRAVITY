@@ -591,7 +591,7 @@ $Stages = @(
        } },
 
     @{ Key = 'domains'; Name = ('Domains static sites :{0}' -f $DomainsSvc.port); Settle = 20
-       Probe = { Test-Http (Get-FleetServiceUrl -ServiceId 'domains-server' -PathSuffix '/health') 6 'bookingNotices' @('FLEET_SHARED_TOKEN', 'DOMAINS_SERVER_TOKEN') -AllowLoopbackFallback }
+       Probe = { Test-Http (Get-FleetServiceUrl -ServiceId 'domains-server' -PathSuffix '/health') 6 'domains-server' @('FLEET_SHARED_TOKEN', 'DOMAINS_SERVER_TOKEN') -AllowLoopbackFallback }
        Heal  = {
            if (Test-Port ([int]$DomainsSvc.port)) { Stop-PortOwner ([int]$DomainsSvc.port) }
            $loopbackHost = '127.0.0.1'
