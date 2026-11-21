@@ -25,9 +25,7 @@ describe('SafetyDrawer', () => {
     expect(
       screen.getByRole('button', { name: /File Detailed Report/i })
     ).toBeDefined();
-    expect(
-      screen.getByRole('button', { name: /Quick Submit/i })
-    ).toBeDefined();
+    expect(screen.getByRole('button', { name: /Quick Submit/i })).toBeDefined();
     expect(screen.getByRole('button', { name: /Block User/i })).toBeDefined();
 
     expect(screen.queryByRole('button', { name: /Mute/i })).toBeNull();
