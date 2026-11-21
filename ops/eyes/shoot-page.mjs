@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
+import http from 'node:http';
 import net from 'node:net';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,7 +9,82 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const FRONTEND_DIR = path.join(REPO_ROOT, 'domains', 'youandinotai.com', 'frontend');
+const ONLINERECYCLE_SITE_DIR = path.join(REPO_ROOT, 'domains', 'onlinerecycle.net', 'site');
 const LOCAL_BIND_HOST = ['127', '0', '0', '1'].join('.');
+
+const STATIC_MIME = {
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.xml': 'application/xml; charset=utf-8',
+  '.ico': 'image/x-icon',
+};
+
+function isWithinRoot(normRoot, candidatePath) {
+  return candidatePath === normRoot || candidatePath.startsWith(`${normRoot}${path.sep}`);
+}
+
+export function resolveStaticSitePath(siteRoot, rawUrlPath) {
+  let cleanPath;
+  try {
+    cleanPath = decodeURIComponent(String(rawUrlPath || '/').split('?')[0]);
+  } catch {
+    return null;
+  }
+  if (cleanPath === '' || cleanPath === '/') cleanPath = '/index.html';
+  const normRoot = path.resolve(siteRoot);
+  const requested = path.resolve(normRoot, `.${cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`}`);
+  if (!isWithinRoot(normRoot, requested)) return null;
+  try {
+    const st = fs.statSync(requested);
+    if (st.isDirectory()) {
+      const idx = path.join(requested, 'index.html');
+      if (isWithinRoot(normRoot, idx) && fs.existsSync(idx) && fs.statSync(idx).isFile()) return idx;
+      return null;
+    }
+    if (st.isFile()) return requested;
+  } catch {
+    const htmlCandidate = `${requested.replace(/[\\/]+$/, '')}.html`;
+    if (isWithinRoot(normRoot, htmlCandidate) && fs.existsSync(htmlCandidate) && fs.statSync(htmlCandidate).isFile()) {
+      return htmlCandidate;
+    }
+  }
+  return null;
+}
+
+function startStaticSiteServer(siteRoot, port) {
+  return new Promise((resolve, reject) => {
+    const srv = http.createServer((req, res) => {
+      const rawPath = (req.url || '/').split('?')[0];
+      try {
+        decodeURIComponent(rawPath);
+      } catch {
+        res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('Bad request\n');
+        return;
+      }
+      if (rawPath === '/api/booking-config') {
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ ok: true, timezone: 'America/New_York', bookedSlots: [] }));
+        return;
+      }
+      const filePath = resolveStaticSitePath(siteRoot, req.url || '/');
+      if (!filePath) {
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('Not found\n');
+        return;
+      }
+      const ext = path.extname(filePath).toLowerCase();
+      res.writeHead(200, { 'Content-Type': STATIC_MIME[ext] || 'application/octet-stream' });
+      res.end(fs.readFileSync(filePath));
+    });
+    srv.on('error', reject);
+    srv.listen(port, LOCAL_BIND_HOST, () => resolve(srv));
+  });
+}
 
 /**
  * Look up a reply from a fixture path-to-reply map for any /api/v1 request path or URL.
@@ -138,21 +214,39 @@ export function parseCliArgs(argv) {
   }
 
   const route = flags.route || positional[0] || '/app/admin/affiliates';
+  const rawFixture = flags.fixture || positional[1];
+  const isOnlineRecycleStatic =
+    flags.site === 'onlinerecycle.net' ||
+    flags.site === 'onlinerecycle' ||
+    (!flags.site && !route.startsWith('/app') && Boolean(resolveStaticSitePath(ONLINERECYCLE_SITE_DIR, route)));
+  const staticSiteDir = flags.dir ? path.resolve(flags.dir) : isOnlineRecycleStatic ? ONLINERECYCLE_SITE_DIR : null;
+
   const fixturePath = path.resolve(
-    flags.fixture || positional[1] || path.join(__dirname, 'fixtures', 'founder-affiliates.json'),
+    rawFixture && fs.existsSync(path.resolve(rawFixture))
+      ? rawFixture
+      : path.join(__dirname, 'fixtures', 'founder-affiliates.json'),
   );
-  const outDir = path.resolve(flags.out || flags.output || positional[2] || path.join(__dirname, 'out'));
+  const outArg =
+    rawFixture && !fs.existsSync(path.resolve(rawFixture)) && !rawFixture.endsWith('.json')
+      ? rawFixture
+      : flags.out || flags.output || positional[2];
+  const outDir = path.resolve(outArg || path.join(__dirname, 'out'));
   const selector = flags.selector || positional[3] || 'main';
 
   const fixtureStem = path.basename(fixturePath, path.extname(fixturePath));
-  const defaultPrefix =
-    fixtureStem === 'founder-affiliates' || route === '/app/admin/affiliates'
+  const routeSlug = route
+    .replace(/^\/+|\/+$/g, '')
+    .replace(/\.html$/i, '')
+    .replace(/[^a-zA-Z0-9_-]+/g, '-');
+  const defaultPrefix = staticSiteDir
+    ? `eyes-${routeSlug || 'home'}`
+    : fixtureStem === 'founder-affiliates' || route === '/app/admin/affiliates'
       ? 'eyes-founder-page'
       : `eyes-${fixtureStem}`;
   const namePrefix = flags.name || flags.prefix || defaultPrefix;
   const url = flags.url || '';
 
-  return { route, fixturePath, outDir, selector, namePrefix, url };
+  return { route, fixturePath, outDir, selector, namePrefix, staticSiteDir, url };
 }
 
 async function captureViewport(
@@ -224,14 +318,45 @@ function maskUserPath(filePath) {
   return out;
 }
 
+async function loadPlaywrightChromium() {
+  try {
+    const mod = await import('playwright');
+    return mod.chromium;
+  } catch {
+    const parentDir = path.dirname(REPO_ROOT);
+    const entries = fs.existsSync(parentDir) ? fs.readdirSync(parentDir, { withFileTypes: true }) : [];
+    const candidateRoots = [
+      __dirname,
+      REPO_ROOT,
+      FRONTEND_DIR,
+      ...entries
+        .filter((e) => e.isDirectory())
+        .flatMap((e) => [
+          path.join(parentDir, e.name),
+          path.join(parentDir, e.name, 'ops', 'eyes'),
+          path.join(parentDir, e.name, 'domains', 'youandinotai.com', 'frontend'),
+        ]),
+    ];
+    for (const root of candidateRoots) {
+      const candidate = path.join(root, 'node_modules', 'playwright', 'index.mjs');
+      if (fs.existsSync(candidate)) {
+        const { pathToFileURL } = await import('node:url');
+        const mod = await import(pathToFileURL(candidate).href);
+        return mod.chromium;
+      }
+    }
+    throw new Error('Playwright not found in local or sibling node_modules.');
+  }
+}
+
 export async function shootPage(options) {
-  const { route, fixturePath, outDir, selector, namePrefix, url } = options;
+  const { route, fixturePath, outDir, selector, namePrefix, staticSiteDir, url } = options;
   fs.mkdirSync(outDir, { recursive: true });
 
   if (url) {
     let browser;
     try {
-      const { chromium } = await import('playwright');
+      const chromium = await loadPlaywrightChromium();
       try {
         browser = await chromium.launch({
           channel: 'msedge',
@@ -289,16 +414,17 @@ export async function shootPage(options) {
     }
   }
 
-  const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
-
-  const viteBin = ensureFrontendNodeModules();
+  const fixture = fixturePath && fs.existsSync(fixturePath) ? JSON.parse(fs.readFileSync(fixturePath, 'utf8')) : {};
   const port = await findSparePort();
   const baseUrl = `http://${LOCAL_BIND_HOST}:${port}`;
 
-  const viteProc = spawn(
-    process.execPath,
-    [viteBin, '--host', LOCAL_BIND_HOST, '--port', String(port), '--strictPort'],
-    {
+  let viteProc = null;
+  let staticSrv = null;
+  if (staticSiteDir) {
+    staticSrv = await startStaticSiteServer(staticSiteDir, port);
+  } else {
+    const viteBin = ensureFrontendNodeModules();
+    viteProc = spawn(process.execPath, [viteBin, '--host', LOCAL_BIND_HOST, '--port', String(port), '--strictPort'], {
       cwd: FRONTEND_DIR,
       env: {
         ...process.env,
@@ -306,14 +432,15 @@ export async function shootPage(options) {
       },
       stdio: ['ignore', 'pipe', 'pipe'],
       windowsHide: true,
-    },
-  );
+    });
+  }
 
   let browser;
   try {
-    await waitForServer(baseUrl);
+    const readyUrl = staticSiteDir ? `${baseUrl}${route.startsWith('/') ? route : `/${route}`}` : baseUrl;
+    await waitForServer(readyUrl);
 
-    const { chromium } = await import('playwright');
+    const chromium = await loadPlaywrightChromium();
     browser = await chromium.launch({
       channel: 'msedge',
       headless: true,
@@ -371,7 +498,10 @@ export async function shootPage(options) {
     if (browser) {
       await browser.close().catch(() => {});
     }
-    if (!viteProc.killed) {
+    if (staticSrv) {
+      await new Promise((r) => staticSrv.close(() => r()));
+    }
+    if (viteProc && !viteProc.killed) {
       viteProc.kill();
     }
   }
