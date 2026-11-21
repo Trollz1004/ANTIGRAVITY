@@ -49,7 +49,12 @@ function parseFrontMatter(raw: string): {
 function countWords(body: string): number {
   const cleaned = body
     .split(/\r?\n/)
-    .map(line => line.replace(/^#{1,6}\s+/, '').replace(/^\d+\.\s+/, '').trim())
+    .map(line =>
+      line
+        .replace(/^#{1,6}\s+/, '')
+        .replace(/^\d+\.\s+/, '')
+        .trim()
+    )
     .filter(Boolean)
     .join(' ');
   return cleaned.split(/\s+/).filter(Boolean).length;
