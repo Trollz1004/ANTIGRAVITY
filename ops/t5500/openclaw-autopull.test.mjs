@@ -13,6 +13,7 @@ const REPO_ROOT = path.resolve(HERE, '..', '..');
 const SCRIPT_PATH = path.join(HERE, 'openclaw-autopull.ps1');
 const INSTALL_SCRIPT_PATH = path.join(HERE, 'install-openclaw-autopull.ps1');
 const LOCAL_BIND_HOST = ['127', '0', '0', '1'].join('.');
+const ALT_LOOPBACK_HOST = ['127', '0', '0', '2'].join('.');
 
 const FORBIDDEN_USERS = ['josh' + 'l', 'josh' + 'i', 'NSFW_' + 'BOTS'];
 const HARDCODED_USER_PATH_RE = new RegExp(
@@ -591,6 +592,8 @@ test(
         LOCAL_BIND_HOST,
         '-BackendPort',
         String(deadPort),
+        '-PublicApiHealthUrl',
+        `http://${LOCAL_BIND_HOST}:${deadPort}/health`,
         '-WaitTimeoutSeconds',
         '1',
         '-PollIntervalMs',
@@ -663,5 +666,254 @@ test(
     assert.match(dryRes.stdout, /openclaw-autopull\.ps1/);
     assert.match(dryRes.stdout, /New-TimeSpan\s+-Hours\s+1|hourly/i);
     assert.match(dryRes.stdout, /Register-ScheduledTask/);
+  },
+);
+
+test(
+  'openclaw-autopull.ps1 tries NodeHost then 127.0.0.1 on the same port, records which address answered, checks api.youandinotai.com/health for status, and records merged pull request numbers between oldCommit and newCommit',
+  { concurrency: true },
+  async () => {
+    const fx = createGitFixture();
+    const backendPort = await getFreePort();
+    const publicPort = await getFreePort();
+
+    // Listen ONLY on 127.0.0.1 (LOCAL_BIND_HOST), NOT on ALT_LOOPBACK_HOST (simulating a service bound only to 127.0.0.1 while NodeHost is 192.168.0.15)
+    const localApiServer = http.createServer((_req, res) => {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', Connection: 'close' });
+      res.end(JSON.stringify({ status: 'listening-on-loopback-only' }));
+    });
+    const publicServer = http.createServer((req, res) => {
+      if ((req.url || '').startsWith('/health')) {
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', Connection: 'close' });
+        // Contains 'status', intentionally omits 'ok' and 'db_connected' to prove expectedContent is 'status'
+        res.end(JSON.stringify({ status: 'healthy' }));
+        return;
+      }
+      res.writeHead(404, { Connection: 'close' });
+      res.end('not found');
+    });
+
+    await new Promise((resolve) => localApiServer.listen(backendPort, LOCAL_BIND_HOST, resolve));
+    await new Promise((resolve) => publicServer.listen(publicPort, LOCAL_BIND_HOST, resolve));
+
+    try {
+      const oldCommit = git(fx.cloneDir, ['rev-parse', 'HEAD']);
+      pushUpstreamCommit(
+        fx.seedDir,
+        { 'domains/youandinotai.com/backend/app/main.py': 'print("v2-pr-481")\n' },
+        '[2026-11-20] Date app API route update, by Gemini 4 Argon (High) (#481)',
+      );
+      const newCommit = pushUpstreamCommit(
+        fx.seedDir,
+        { 'domains/youandinotai.com/backend/app/main.py': 'print("v3-pr-482")\n' },
+        'Merge pull request #482 from Trollz1004/ai/inbox/api-tune',
+      );
+
+      const applyRes = await runAutopullAsync(fx.cloneDir, [
+        '-Apply',
+        '-SkipProcessStop',
+        '-NodeHost',
+        ALT_LOOPBACK_HOST,
+        '-BackendPort',
+        String(backendPort),
+        '-PublicApiHealthUrl',
+        `http://${LOCAL_BIND_HOST}:${publicPort}/health`,
+        '-WaitTimeoutSeconds',
+        '2',
+        '-PollIntervalMs',
+        '100',
+      ]);
+
+      assert.equal(
+        applyRes.status,
+        0,
+        `Expected exit 0 when 127.0.0.1 fallback and public health pass, got ${applyRes.status}: ${applyRes.stderr}\n${applyRes.stdout}`,
+      );
+      assert.equal(
+        fs.existsSync(path.join(fx.cloneDir, 'ops', 't5500', 'PAUSE-AUTOPULL')),
+        false,
+        'PAUSE-AUTOPULL must not exist when fallback port and public check pass',
+      );
+
+      const logDir = path.join(fx.cloneDir, 'logs', 'autopull');
+      const records = fs.readdirSync(logDir).filter((f) => f.endsWith('.json'));
+      assert.equal(records.length, 1);
+      const record = JSON.parse(fs.readFileSync(path.join(logDir, records[0]), 'utf8'));
+
+      assert.equal(record.status, 'LIVE');
+      assert.equal(record.oldCommit, oldCommit);
+      assert.equal(record.newCommit, newCommit);
+      assert.deepEqual(
+        record.pullRequests,
+        [481, 482],
+        'JSON record must list merged PR numbers between oldCommit and newCommit',
+      );
+
+      const apiSvc = record.changedServices.find((s) => s.service === 'date-app-api');
+      assert.ok(apiSvc, 'date-app-api must be present in changedServices');
+      assert.equal(apiSvc.portAnswered, true);
+      assert.equal(
+        apiSvc.portHost,
+        LOCAL_BIND_HOST,
+        'portHost must record the host that actually answered (127.0.0.1)',
+      );
+      assert.equal(apiSvc.answeredHost, LOCAL_BIND_HOST, 'answeredHost must record 127.0.0.1');
+      assert.equal(
+        apiSvc.answeredAddress,
+        `${LOCAL_BIND_HOST}:${backendPort}`,
+        'answeredAddress must record 127.0.0.1:<port>',
+      );
+      assert.equal(apiSvc.expectedContent, 'status', 'date-app-api public check expectedContent must be status');
+      assert.equal(apiSvc.publicCheckPassed, true);
+    } finally {
+      try {
+        localApiServer.closeAllConnections?.();
+        localApiServer.close();
+      } catch {}
+      try {
+        publicServer.closeAllConnections?.();
+        publicServer.close();
+      } catch {}
+      fs.rmSync(fx.root, { recursive: true, force: true });
+    }
+  },
+);
+
+test(
+  'openclaw-autopull.ps1 writes FAILED and PAUSE-AUTOPULL only when both the local check and the public check fail',
+  { concurrency: true },
+  async () => {
+    // Case 1: Local check fails (neither NodeHost nor 127.0.0.1 answers), but public content check passes -> LIVE, no PAUSE-AUTOPULL
+    const fxPublicOnly = createGitFixture();
+    const deadLocalPort = await getFreePort();
+    const publicPort = await getFreePort();
+    const publicServer = http.createServer((_req, res) => {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', Connection: 'close' });
+      res.end(JSON.stringify({ status: 'ok' }));
+    });
+    await new Promise((resolve) => publicServer.listen(publicPort, LOCAL_BIND_HOST, resolve));
+
+    try {
+      pushUpstreamCommit(
+        fxPublicOnly.seedDir,
+        { 'domains/youandinotai.com/backend/app/main.py': 'print("v2-public-ok")\n' },
+        'Fix API health (#490)',
+      );
+
+      const resPubOnly = await runAutopullAsync(fxPublicOnly.cloneDir, [
+        '-Apply',
+        '-SkipProcessStop',
+        '-NodeHost',
+        ALT_LOOPBACK_HOST,
+        '-BackendPort',
+        String(deadLocalPort),
+        '-PublicApiHealthUrl',
+        `http://${LOCAL_BIND_HOST}:${publicPort}/health`,
+        '-WaitTimeoutSeconds',
+        '1',
+        '-PollIntervalMs',
+        '150',
+      ]);
+
+      assert.equal(
+        resPubOnly.status,
+        0,
+        `Expected LIVE (exit 0) when public check passes even if local check fails, got ${resPubOnly.status}: ${resPubOnly.stdout}`,
+      );
+      assert.equal(
+        fs.existsSync(path.join(fxPublicOnly.cloneDir, 'ops', 't5500', 'PAUSE-AUTOPULL')),
+        false,
+        'PAUSE-AUTOPULL must not be written when public check passes',
+      );
+      const logDir1 = path.join(fxPublicOnly.cloneDir, 'logs', 'autopull');
+      const rec1 = JSON.parse(
+        fs.readFileSync(
+          path.join(
+            logDir1,
+            fs.readdirSync(logDir1).find((f) => f.endsWith('.json')),
+          ),
+          'utf8',
+        ),
+      );
+      assert.equal(rec1.status, 'LIVE');
+      assert.equal(rec1.pausedAutopull, false);
+      assert.deepEqual(rec1.pullRequests, [490]);
+      assert.equal(rec1.changedServices[0].portAnswered, false);
+      assert.equal(rec1.changedServices[0].publicCheckPassed, true);
+      assert.equal(rec1.changedServices[0].status, 'LIVE');
+    } finally {
+      try {
+        publicServer.closeAllConnections?.();
+        publicServer.close();
+      } catch {}
+      fs.rmSync(fxPublicOnly.root, { recursive: true, force: true });
+    }
+
+    // Case 2: Local check passes (127.0.0.1 answers), but public check fails -> LIVE, no PAUSE-AUTOPULL
+    const fxLocalOnly = createGitFixture();
+    const liveLocalPort = await getFreePort();
+    const deadPublicPort = await getFreePort();
+    const localServer = http.createServer((_req, res) => {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', Connection: 'close' });
+      res.end(JSON.stringify({ status: 'ok' }));
+    });
+    await new Promise((resolve) => localServer.listen(liveLocalPort, LOCAL_BIND_HOST, resolve));
+
+    try {
+      pushUpstreamCommit(
+        fxLocalOnly.seedDir,
+        { 'domains/youandinotai.com/backend/app/main.py': 'print("v2-local-ok")\n' },
+        'Fix API local (#491)',
+      );
+
+      const resLocalOnly = await runAutopullAsync(fxLocalOnly.cloneDir, [
+        '-Apply',
+        '-SkipProcessStop',
+        '-NodeHost',
+        ALT_LOOPBACK_HOST,
+        '-BackendPort',
+        String(liveLocalPort),
+        '-PublicApiHealthUrl',
+        `http://${LOCAL_BIND_HOST}:${deadPublicPort}/health`,
+        '-WaitTimeoutSeconds',
+        '1',
+        '-PollIntervalMs',
+        '150',
+      ]);
+
+      assert.equal(
+        resLocalOnly.status,
+        0,
+        `Expected LIVE (exit 0) when local check passes even if public check fails, got ${resLocalOnly.status}: ${resLocalOnly.stdout}`,
+      );
+      assert.equal(
+        fs.existsSync(path.join(fxLocalOnly.cloneDir, 'ops', 't5500', 'PAUSE-AUTOPULL')),
+        false,
+        'PAUSE-AUTOPULL must not be written when local check passes',
+      );
+      const logDir2 = path.join(fxLocalOnly.cloneDir, 'logs', 'autopull');
+      const rec2 = JSON.parse(
+        fs.readFileSync(
+          path.join(
+            logDir2,
+            fs.readdirSync(logDir2).find((f) => f.endsWith('.json')),
+          ),
+          'utf8',
+        ),
+      );
+      assert.equal(rec2.status, 'LIVE');
+      assert.equal(rec2.pausedAutopull, false);
+      assert.deepEqual(rec2.pullRequests, [491]);
+      assert.equal(rec2.changedServices[0].portAnswered, true);
+      assert.equal(rec2.changedServices[0].answeredHost, LOCAL_BIND_HOST);
+      assert.equal(rec2.changedServices[0].publicCheckPassed, false);
+      assert.equal(rec2.changedServices[0].status, 'LIVE');
+    } finally {
+      try {
+        localServer.closeAllConnections?.();
+        localServer.close();
+      } catch {}
+      fs.rmSync(fxLocalOnly.root, { recursive: true, force: true });
+    }
   },
 );
