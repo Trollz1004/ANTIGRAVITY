@@ -18,6 +18,7 @@ import { useAuth } from '../lib/auth';
 export const MOBILE_NAV = [
   { to: '/app', icon: Compass, label: 'Discover', end: true },
   { to: '/app/inbox', icon: MessageCircle, label: 'Messages' },
+  { to: '/app/boards', icon: Users, label: 'Boards' },
   { to: '/app/create', icon: Plus, label: 'Create', center: true },
   { to: '/app/matches', icon: Heart, label: 'Matches' },
   { to: '/app/profile', icon: User, label: 'Profile' },
@@ -165,9 +166,9 @@ export function AppShell() {
           <Outlet />
         </main>
 
-        {/* Mobile bottom nav — Discover / Messages / Create / Matches / Profile */}
+        {/* Mobile bottom nav — Discover / Messages / Boards / Create / Matches / Profile */}
         <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--km-border)] bg-[var(--km-bg)]/92 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl md:hidden">
-          <div className="grid grid-cols-5 items-end gap-1">
+          <div className="grid grid-cols-6 items-end gap-1">
             {MOBILE_NAV.map(item => {
               const isCenter = 'center' in item && item.center;
               return (
