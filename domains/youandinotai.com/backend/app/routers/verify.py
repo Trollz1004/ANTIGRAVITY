@@ -183,7 +183,7 @@ async def _calculate_trust_score(user: User, db: AsyncSession) -> float:
     # Email verified: 20 pts (they registered, so email is confirmed)
     score += 20.0
 
-    # Liveness passed: 40 pts
+    # Liveness passed: 40 pts (withheld when verification was revoked by a refund)
     passed = (
         await db.scalar(
             select(func.count(VerificationEvent.id))
@@ -193,7 +193,20 @@ async def _calculate_trust_score(user: User, db: AsyncSession) -> float:
         )
         or 0
     )
+    has_refund_without_active_badge = False
     if passed > 0:
+        refunded_count = (
+            await db.scalar(
+                select(func.count(VerificationEvent.id))
+                .where(VerificationEvent.user_id == user.id)
+                .where(VerificationEvent.challenge_type == "payment")
+                .where(VerificationEvent.status == "refunded")
+            )
+            or 0
+        )
+        if refunded_count > 0 and not await has_completed_payment(db, user.id):
+            has_refund_without_active_badge = True
+    if passed > 0 and not has_refund_without_active_badge:
         score += 40.0
 
     # Account age: up to 20 pts (1 per day, max 20)
@@ -647,12 +660,17 @@ async def refund_verification(
                 detail="Square refund is temporarily unavailable. Please try again shortly.",
             )
 
+        refund_id = str(refund_result.get("id") or "").strip() or None
+        refund_status = str(refund_result.get("status") or "PENDING").strip().upper()
+
         await revoke_user_verification_for_refund(
             db,
             payment_id,
             user=locked_user,
             payment_event=payment_event,
+            square_refund_id=refund_id,
         )
+        user.bot_shield_verified = False
         await mark_revenue_allocation_refunded(
             db,
             square_payment_id=payment_id,
@@ -667,8 +685,6 @@ async def refund_verification(
             await db.rollback()
         raise
 
-    refund_id = str(refund_result.get("id") or "").strip() or None
-    refund_status = str(refund_result.get("status") or "PENDING").strip().upper()
     logger.info(
         "Bot-Shield refund initiated: user=%s payment_id=%s refund_id=%s status=%s",
         locked_user.id,
