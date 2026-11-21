@@ -125,4 +125,3 @@ def test_webhook_event_schema_reflection_is_cached_across_repeated_health_calls(
 
     asyncio.run(check_same_schema_instance())
     assert reflection_calls == 1
-

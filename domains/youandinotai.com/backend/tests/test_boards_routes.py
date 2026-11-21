@@ -429,7 +429,6 @@ def test_list_posts_does_not_rerun_ensure_boards_select_once_default_boards_exis
         app.dependency_overrides.pop(get_current_user, None)
 
 
-
 # ── GET /api/v1/boards/{slug}/posts/{post_id}/comments ───────────────────────
 
 
