@@ -56,6 +56,7 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
   beforeEach(() => {
     vi.resetAllMocks();
     localStorage.clear();
+    sessionStorage.clear();
     Element.prototype.scrollIntoView = vi.fn();
     useAuth.setState({
       user: {
@@ -311,6 +312,232 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     } finally {
       delete window.google;
     }
+  });
+
+  it('navigates /login after Google sign-in to user.has_profile ? nextPath : /app/profile', async () => {
+    useAuth.setState({ user: null, loading: false });
+    let capturedCallback:
+      ((resp: { credential: string }) => Promise<void>) | null = null;
+    window.google = {
+      accounts: {
+        id: {
+          initialize: (opts: {
+            callback: (resp: { credential: string }) => Promise<void>;
+          }) => {
+            capturedCallback = opts.callback;
+          },
+          renderButton: vi.fn(),
+        },
+      },
+    };
+
+    try {
+      vi.mocked(api.post).mockResolvedValueOnce({
+        access_token: 'tok-google-no-profile',
+        refresh_token: 'ref-google-no-profile',
+        user_id: 'u-google-no-profile',
+      });
+      vi.mocked(api.get).mockImplementation(async (path: string) => {
+        if (path === '/health') return { status: 'ok', mail: 'off' };
+        return {
+          user_id: 'u-google-no-profile',
+          email: 'noprofile@youandinotai.com',
+          display_name: 'No Profile Member',
+          bot_shield_verified: false,
+          subscription_tier: null,
+          subscription_active: false,
+          has_profile: false,
+          adult_verified: true,
+        };
+      });
+
+      const firstRender = render(
+        <MemoryRouter initialEntries={['/login?next=%2Fapp%2Fverify']}>
+          <Routes>
+            <Route
+              path="/login"
+              element={<Login googleClientId="test-google-client-id" />}
+            />
+            <Route
+              path="/app/profile"
+              element={<div>Profile Setup Destination</div>}
+            />
+            <Route path="/app/verify" element={<div>Verify Destination</div>} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(capturedCallback).not.toBeNull();
+      });
+      await act(async () => {
+        await capturedCallback!({ credential: 'google-token-no-profile' });
+      });
+
+      expect(
+        await firstRender.findByText('Profile Setup Destination')
+      ).toBeTruthy();
+      firstRender.unmount();
+
+      useAuth.setState({ user: null, loading: false });
+      capturedCallback = null;
+      vi.mocked(api.post).mockResolvedValueOnce({
+        access_token: 'tok-google-with-profile',
+        refresh_token: 'ref-google-with-profile',
+        user_id: 'u-google-with-profile',
+      });
+      vi.mocked(api.get).mockImplementation(async (path: string) => {
+        if (path === '/health') return { status: 'ok', mail: 'off' };
+        return {
+          user_id: 'u-google-with-profile',
+          email: 'withprofile@youandinotai.com',
+          display_name: 'With Profile Member',
+          bot_shield_verified: false,
+          subscription_tier: null,
+          subscription_active: false,
+          has_profile: true,
+          adult_verified: true,
+        };
+      });
+
+      const secondRender = render(
+        <MemoryRouter initialEntries={['/login?next=%2Fapp%2Fverify']}>
+          <Routes>
+            <Route
+              path="/login"
+              element={<Login googleClientId="test-google-client-id" />}
+            />
+            <Route
+              path="/app/profile"
+              element={<div>Profile Setup Destination</div>}
+            />
+            <Route path="/app/verify" element={<div>Verify Destination</div>} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(capturedCallback).not.toBeNull();
+      });
+      await act(async () => {
+        await capturedCallback!({ credential: 'google-token-with-profile' });
+      });
+
+      expect(await secondRender.findByText('Verify Destination')).toBeTruthy();
+      secondRender.unmount();
+    } finally {
+      delete window.google;
+    }
+  });
+
+  it('persists non-password draft fields on /register in sessionStorage across reloads and clears them on submit', async () => {
+    const firstRender = render(
+      <MemoryRouter initialEntries={['/register?next=%2Fapp%2Fverify']}>
+        <Register />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(firstRender.getByPlaceholderText('Display name'), {
+      target: { value: 'Draft Member' },
+    });
+    fireEvent.change(firstRender.getByPlaceholderText('Email'), {
+      target: { value: 'draft@youandinotai.com' },
+    });
+    fireEvent.change(firstRender.getByPlaceholderText('MM / DD / YYYY'), {
+      target: { value: '04151990' },
+    });
+    fireEvent.change(
+      firstRender.getByPlaceholderText('Password (8+ characters)'),
+      {
+        target: { value: 'password123' },
+      }
+    );
+
+    const firstCheckboxes = firstRender.container.querySelectorAll(
+      'input[type="checkbox"]'
+    );
+    firstCheckboxes.forEach(cb => fireEvent.click(cb));
+
+    const storedSnapshot = JSON.stringify(sessionStorage);
+    expect(storedSnapshot).toContain('Draft Member');
+    expect(storedSnapshot).toContain('draft@youandinotai.com');
+    expect(storedSnapshot).not.toContain('password123');
+
+    firstRender.unmount();
+
+    const reloadedRender = render(
+      <MemoryRouter initialEntries={['/register?next=%2Fapp%2Fverify']}>
+        <Register />
+      </MemoryRouter>
+    );
+
+    expect(
+      (reloadedRender.getByPlaceholderText('Display name') as HTMLInputElement)
+        .value
+    ).toBe('Draft Member');
+    expect(
+      (reloadedRender.getByPlaceholderText('Email') as HTMLInputElement).value
+    ).toBe('draft@youandinotai.com');
+    expect(
+      (
+        reloadedRender.getByPlaceholderText(
+          'MM / DD / YYYY'
+        ) as HTMLInputElement
+      ).value
+    ).toBe('04 / 15 / 1990');
+    expect(
+      (
+        reloadedRender.getByPlaceholderText(
+          'Password (8+ characters)'
+        ) as HTMLInputElement
+      ).value
+    ).toBe('');
+
+    const reloadedCheckboxes = reloadedRender.container.querySelectorAll(
+      'input[type="checkbox"]'
+    ) as NodeListOf<HTMLInputElement>;
+    reloadedCheckboxes.forEach(cb => {
+      expect(cb.checked).toBe(true);
+    });
+
+    vi.mocked(api.post).mockResolvedValueOnce({
+      access_token: 'tok-reg-draft',
+      refresh_token: 'ref-reg-draft',
+      user_id: 'u-reg-draft',
+    });
+    vi.mocked(api.get).mockResolvedValueOnce({
+      user_id: 'u-reg-draft',
+      email: 'draft@youandinotai.com',
+      display_name: 'Draft Member',
+      bot_shield_verified: false,
+      subscription_tier: null,
+      subscription_active: false,
+      has_profile: false,
+      adult_verified: true,
+    });
+
+    fireEvent.change(
+      reloadedRender.getByPlaceholderText('Password (8+ characters)'),
+      {
+        target: { value: 'password123' },
+      }
+    );
+    fireEvent.click(
+      reloadedRender.getByRole('button', { name: /Create Account/i })
+    );
+
+    await waitFor(() => {
+      expect(api.post).toHaveBeenCalledWith(
+        '/auth/register',
+        expect.objectContaining({
+          email: 'draft@youandinotai.com',
+          display_name: 'Draft Member',
+        })
+      );
+    });
+
+    expect(sessionStorage.length).toBe(0);
+    reloadedRender.unmount();
   });
 
   it('keeps /app/profile form fields and submits PUT /profiles/me', async () => {
