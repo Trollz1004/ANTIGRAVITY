@@ -1,101 +1,16 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { and, eq } from "drizzle-orm";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { channelListings } from "../drizzle/schema";
 import {
-  channelListings,
-  inventoryRecords,
-  marketplaceChannels,
-  productMedia,
-  products,
-} from "../drizzle/schema";
-
-const mockDbState = vi.hoisted(() => ({
-  insertedChannelListingValues: null as Record<string, unknown> | null,
-  conflictChannelListingSet: null as Record<string, unknown> | null,
-}));
-
-vi.mock("drizzle-orm/mysql2", () => ({
-  drizzle: vi.fn(() => ({
-    select: () => ({
-      from: (table: unknown) => ({
-        where: () => {
-          let rows: unknown[] = [];
-          if (table === products) {
-            rows = [
-              {
-                id: 1,
-                sku: "SKU-EBAY-1",
-                upc: "012345678901",
-                title: "Verified listing item",
-                description: "Verified listing description",
-                condition: "Used",
-                format: "DVD",
-                brandOrStudio: "Studio",
-                verificationStatus: "verified",
-              },
-            ];
-          } else if (table === inventoryRecords) {
-            rows = [{ productId: 1, onHandQuantity: 4, reservedQuantity: 1 }];
-          } else if (table === marketplaceChannels) {
-            rows = [
-              {
-                id: 7,
-                code: "ebay",
-                displayName: "eBay",
-                capability: "api",
-                operationMode: "review",
-                enabled: true,
-              },
-            ];
-          } else if (table === productMedia) {
-            rows = [
-              {
-                id: 10,
-                productId: 1,
-                url: "https://example.com/photo.jpg",
-                verified: true,
-              },
-            ];
-          } else if (table === channelListings) {
-            rows = [
-              {
-                id: 99,
-                productId: 1,
-                channelId: 7,
-                state: "error",
-                payload:
-                  mockDbState.conflictChannelListingSet?.payload ??
-                  mockDbState.insertedChannelListingValues?.payload ??
-                  null,
-              },
-            ];
-          }
-          return Object.assign(Promise.resolve(rows), {
-            limit: () => Promise.resolve(rows),
-          });
-        },
-      }),
-    }),
-    insert: (table: unknown) => ({
-      values: (val: Record<string, unknown>) => {
-        if (table === channelListings) {
-          mockDbState.insertedChannelListingValues = val;
-        }
-        return Object.assign(Promise.resolve([{ affectedRows: 1 }]), {
-          onDuplicateKeyUpdate: (arg: { set: Record<string, unknown> }) => {
-            if (table === channelListings) {
-              mockDbState.conflictChannelListingSet = arg.set;
-            }
-            return Promise.resolve([{ affectedRows: 1 }]);
-          },
-        });
-      },
-    }),
-  })),
-}));
-
-import { createListingPayloadPreview } from "./db";
+  closeDb,
+  createCatalogProduct,
+  createListingPayloadPreview,
+  getDb,
+  requestListingApproval,
+} from "./db";
 import { decryptToken, encryptToken } from "./ebayOAuth";
 import { buildSafeChannelStatus, getSafeCredentialState } from "./operations";
 import { storagePut, storageRead } from "./storage";
@@ -118,13 +33,15 @@ describe("eBay server credentials", () => {
     );
     process.env.STORAGE_DIR = tempDir;
     process.env.JWT_SECRET = "test-jwt-secret-for-ebay-credentials";
-    process.env.DATABASE_URL = "mysql://local-test-db/crosslisting";
+    process.env.DATABASE_URL = path.join(
+      tempDir,
+      "data",
+      "crosslisting.sqlite3"
+    );
     process.env.EBAY_CLIENT_ID = "test-ebay-client-id";
     process.env.EBAY_CLIENT_SECRET = "test-ebay-client-secret";
     process.env.EBAY_RU_NAME = "test-ebay-ru-name";
     delete process.env.EBAY_REFRESH_TOKEN;
-    mockDbState.insertedChannelListingValues = null;
-    mockDbState.conflictChannelListingSet = null;
 
     vi.spyOn(globalThis, "fetch").mockImplementation(async (_input, init) => {
       const bodyText =
@@ -164,6 +81,7 @@ describe("eBay server credentials", () => {
   });
 
   afterEach(async () => {
+    closeDb();
     vi.restoreAllMocks();
     for (const [key, value] of Object.entries(originalEnv)) {
       if (value === undefined) {
@@ -337,19 +255,51 @@ describe("eBay server credentials", () => {
   });
 
   it("saves persistedPayload with workflowCorrelationId on conflict in createListingPayloadPreview", async () => {
-    const preview = await createListingPayloadPreview({
-      productId: 1,
+    const product = await createCatalogProduct({
+      sku: "SKU-EBAY-1",
+      upc: "012345678901",
+      title: "Verified listing item",
+      description: "Verified listing description",
+      condition: "Used",
+      format: "DVD",
+      brandOrStudio: "Studio",
+      actorUserId: 1,
+    });
+
+    const firstPreview = await createListingPayloadPreview({
+      productId: product.id,
+      channelCode: "ebay",
+      price: 19.99,
+      actorUserId: 1,
+    });
+
+    const secondPreview = await createListingPayloadPreview({
+      productId: product.id,
       channelCode: "ebay",
       price: 29.99,
       actorUserId: 1,
     });
 
-    expect(preview.payload.workflowCorrelationId).toMatch(/^payload-1-ebay-/);
-    expect(mockDbState.insertedChannelListingValues?.payload).toEqual(
-      preview.payload
+    expect(secondPreview.listingId).toBe(firstPreview.listingId);
+    expect(secondPreview.payload.workflowCorrelationId).toMatch(
+      new RegExp(`^payload-${product.id}-ebay-`)
     );
-    expect(mockDbState.conflictChannelListingSet?.payload).toEqual(
-      preview.payload
+
+    const db = await getDb();
+    const [persistedListing] = await db!
+      .select()
+      .from(channelListings)
+      .where(
+        and(
+          eq(channelListings.id, secondPreview.listingId),
+          eq(channelListings.productId, product.id)
+        )
+      );
+    expect(persistedListing?.payload).toEqual(secondPreview.payload);
+
+    const approval = await requestListingApproval(secondPreview.listingId, 1);
+    expect(approval.correlationId).toBe(
+      secondPreview.payload.workflowCorrelationId
     );
   });
 });

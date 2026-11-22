@@ -365,6 +365,102 @@ class TestVerifyConfirm:
         finally:
             app.dependency_overrides.pop(get_current_user, None)
 
+    def test_late_payment_over_48h_after_question_requires_one_new_question_and_verifies_without_second_charge(
+        self, client, db_session_factory
+    ):
+        """When payment lands >48h after the passed question, confirm asks for one new question,
+        and passing that new question verifies the member immediately with no new Square charge.
+        """
+        import app.routers.verify as verify_mod
+
+        now = datetime.now(timezone.utc)
+        user = _make_user(email="late_payment_48h@example.com")
+        profile = verified_profile(user, verified=False)
+        stale_liveness = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="liveness",
+            status="passed",
+            amount_cents=100,
+            challenge_token="tok:hash",
+            created_at=now - timedelta(hours=49),
+            completed_at=now - timedelta(hours=49),
+        )
+        late_payment = VerificationEvent(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            challenge_type="payment",
+            status="completed",
+            amount_cents=100,
+            square_payment_id="pay_late_48h_1",
+            created_at=now,
+            completed_at=now,
+        )
+        seed(
+            user,
+            profile,
+            stale_liveness,
+            late_payment,
+            db_session_factory=db_session_factory,
+        )
+        app.dependency_overrides[get_current_user] = override_user(user)
+        mock_square_link = AsyncMock(
+            return_value="https://square.link/u/should-not-be-called"
+        )
+        try:
+            confirm_resp = client.post("/api/v1/verify/confirm")
+            assert confirm_resp.status_code == 400, confirm_resp.text
+            confirm_detail = confirm_resp.json()["detail"]
+            assert "prompt" not in confirm_detail.lower()
+            assert "new timed question" in confirm_detail.lower()
+            assert "no new charge" in confirm_detail.lower()
+
+            status_before = client.get("/api/v1/verify/status")
+            assert status_before.status_code == 200, status_before.text
+            assert status_before.json()["verified"] is False
+            assert status_before.json()["bot_shield_paid"] is True
+
+            with (
+                patch.object(
+                    verify_mod,
+                    "_generate_math_challenge",
+                    return_value=("What is 12 + 7?", "19"),
+                ),
+                patch.object(verify_mod, "MIN_SOLVE_TIME_SECONDS", 0),
+                patch.object(
+                    verify_mod,
+                    "create_square_payment_link",
+                    mock_square_link,
+                ),
+                patch.object(
+                    verify_mod,
+                    "send_welcome_email",
+                    AsyncMock(return_value=True),
+                ),
+            ):
+                chal_resp = client.post("/api/v1/verify/challenge")
+                assert chal_resp.status_code == 200, chal_resp.text
+                challenge_id = chal_resp.json()["challenge_id"]
+
+                submit_resp = client.post(
+                    "/api/v1/verify/submit",
+                    json={"challenge_id": challenge_id, "answer": "19"},
+                )
+
+            assert submit_resp.status_code == 200, submit_resp.text
+            submit_data = submit_resp.json()
+            assert submit_data["passed"] is True
+            assert submit_data["checkout_url"] is None
+            mock_square_link.assert_not_awaited()
+
+            status_after = client.get("/api/v1/verify/status")
+            assert status_after.status_code == 200, status_after.text
+            assert status_after.json()["verified"] is True
+            assert status_after.json()["bot_shield_paid"] is True
+            assert status_after.json()["tier"] == "gold"
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
 
 # ── POST /verify/refund ───────────────────────────────────────────────────────
 

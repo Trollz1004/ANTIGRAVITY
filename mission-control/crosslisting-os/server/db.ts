@@ -1,22 +1,25 @@
+import fs from "node:fs";
+import path from "node:path";
+import Database from "better-sqlite3";
 import { and, count, desc, eq, gte, sql } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/mysql2";
+import { drizzle } from "drizzle-orm/better-sqlite3";
 import {
   activityLogs,
-  automationProfiles,
   approvalRequests,
+  automationProfiles,
   channelListings,
   channelSaleEvents,
   credentialConnections,
   exceptionQueue,
   InsertUser,
-  inventoryRecords,
   inventoryMovements,
+  inventoryRecords,
   marketplaceChannels,
   productMedia,
   products,
   users,
 } from "../drizzle/schema";
-import { ENV } from "./_core/env";
+import { DEFAULT_DATABASE_PATH, ENV } from "./_core/env";
 import {
   buildChannelPayload,
   channelBlueprint,
@@ -26,16 +29,292 @@ import {
   validateListingPreflight,
 } from "./operations";
 
-let _db: ReturnType<typeof drizzle> | null = null;
+const CROSSLISTER_ROOT = path.resolve(import.meta.dirname, "..");
+const REPO_ROOT = path.resolve(CROSSLISTER_ROOT, "..", "..");
+const DEFAULT_SQLITE_FILE = path.resolve(
+  CROSSLISTER_ROOT,
+  "data",
+  "crosslisting.sqlite3"
+);
 
-// Lazily create the drizzle instance so local tooling can run without a DB.
-export async function getDb() {
-  if (!_db && process.env.DATABASE_URL) {
+const SCHEMA_BOOTSTRAP_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    openId TEXT NOT NULL UNIQUE,
+    name TEXT,
+    email TEXT,
+    loginMethod TEXT,
+    role TEXT NOT NULL DEFAULT 'user',
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL,
+    lastSignedIn INTEGER NOT NULL
+  )`,
+  `CREATE TABLE IF NOT EXISTS products (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sku TEXT NOT NULL,
+    upc TEXT,
+    title TEXT NOT NULL,
+    condition TEXT NOT NULL,
+    conditionNotes TEXT,
+    brandOrStudio TEXT,
+    format TEXT,
+    attributes TEXT,
+    description TEXT,
+    verificationStatus TEXT NOT NULL DEFAULT 'needs_review',
+    verifiedAt INTEGER,
+    verifiedByUserId INTEGER,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS products_sku_unique ON products (sku)`,
+  `CREATE INDEX IF NOT EXISTS products_upc_index ON products (upc)`,
+  `CREATE TABLE IF NOT EXISTS product_media (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    productId INTEGER NOT NULL,
+    url TEXT NOT NULL,
+    altText TEXT,
+    mediaType TEXT NOT NULL DEFAULT 'image',
+    isPrimary INTEGER NOT NULL DEFAULT 0,
+    verified INTEGER NOT NULL DEFAULT 0,
+    createdAt INTEGER NOT NULL
+  )`,
+  `CREATE INDEX IF NOT EXISTS product_media_product_index ON product_media (productId)`,
+  `CREATE TABLE IF NOT EXISTS inventory_records (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    productId INTEGER NOT NULL,
+    onHandQuantity INTEGER NOT NULL DEFAULT 0,
+    reservedQuantity INTEGER NOT NULL DEFAULT 0,
+    locationKey TEXT NOT NULL DEFAULT 'llc-primary',
+    updatedAt INTEGER NOT NULL
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS inventory_records_product_unique ON inventory_records (productId)`,
+  `CREATE TABLE IF NOT EXISTS inventory_movements (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    productId INTEGER NOT NULL,
+    movementType TEXT NOT NULL,
+    onHandDelta INTEGER NOT NULL DEFAULT 0,
+    reservedDelta INTEGER NOT NULL DEFAULT 0,
+    reason TEXT NOT NULL,
+    correlationId TEXT NOT NULL,
+    actorUserId INTEGER,
+    createdAt INTEGER NOT NULL
+  )`,
+  `CREATE INDEX IF NOT EXISTS inventory_movements_product_index ON inventory_movements (productId)`,
+  `CREATE INDEX IF NOT EXISTS inventory_movements_correlation_index ON inventory_movements (correlationId)`,
+  `CREATE TABLE IF NOT EXISTS marketplace_channels (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    code TEXT NOT NULL,
+    displayName TEXT NOT NULL,
+    capability TEXT NOT NULL DEFAULT 'prepared',
+    operationMode TEXT NOT NULL DEFAULT 'disabled',
+    enabled INTEGER NOT NULL DEFAULT 0,
+    lastSyncAt INTEGER,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS marketplace_channels_code_unique ON marketplace_channels (code)`,
+  `CREATE TABLE IF NOT EXISTS credential_connections (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    channelId INTEGER NOT NULL,
+    secretKeyName TEXT NOT NULL,
+    secretRef TEXT,
+    configured INTEGER NOT NULL DEFAULT 0,
+    lastVerifiedAt INTEGER,
+    lastVerificationStatus TEXT NOT NULL DEFAULT 'not_checked',
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS credential_connections_channel_key_unique ON credential_connections (channelId, secretKeyName)`,
+  `CREATE TABLE IF NOT EXISTS policy_mappings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    channelId INTEGER NOT NULL,
+    policyType TEXT NOT NULL,
+    policyKey TEXT NOT NULL,
+    policyValue TEXT NOT NULL,
+    active INTEGER NOT NULL DEFAULT 1,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+  )`,
+  `CREATE INDEX IF NOT EXISTS policy_mappings_channel_index ON policy_mappings (channelId)`,
+  `CREATE TABLE IF NOT EXISTS channel_listings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    productId INTEGER NOT NULL,
+    channelId INTEGER NOT NULL,
+    externalListingId TEXT,
+    state TEXT NOT NULL DEFAULT 'draft',
+    payload TEXT,
+    validationErrors TEXT,
+    lastSubmittedAt INTEGER,
+    lastSynchronizedAt INTEGER,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS channel_listings_product_channel_unique ON channel_listings (productId, channelId)`,
+  `CREATE INDEX IF NOT EXISTS channel_listings_state_index ON channel_listings (state)`,
+  `CREATE TABLE IF NOT EXISTS channel_sale_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    channelId INTEGER NOT NULL,
+    productId INTEGER NOT NULL,
+    externalEventId TEXT NOT NULL,
+    externalListingId TEXT NOT NULL,
+    quantity INTEGER NOT NULL,
+    status TEXT NOT NULL DEFAULT 'received',
+    details TEXT,
+    occurredAt INTEGER NOT NULL,
+    reconciledAt INTEGER,
+    createdAt INTEGER NOT NULL
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS channel_sale_events_channel_external_unique ON channel_sale_events (channelId, externalEventId)`,
+  `CREATE INDEX IF NOT EXISTS channel_sale_events_product_index ON channel_sale_events (productId)`,
+  `CREATE TABLE IF NOT EXISTS approval_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    subjectType TEXT NOT NULL,
+    subjectId INTEGER NOT NULL,
+    action TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending',
+    requestedByUserId INTEGER,
+    decidedByUserId INTEGER,
+    decisionNote TEXT,
+    correlationId TEXT NOT NULL DEFAULT 'system',
+    createdAt INTEGER NOT NULL,
+    decidedAt INTEGER
+  )`,
+  `CREATE INDEX IF NOT EXISTS approval_requests_status_index ON approval_requests (status)`,
+  `CREATE INDEX IF NOT EXISTS approval_requests_subject_index ON approval_requests (subjectType, subjectId)`,
+  `CREATE INDEX IF NOT EXISTS approval_requests_correlation_index ON approval_requests (correlationId)`,
+  `CREATE TABLE IF NOT EXISTS exception_queue (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    subjectType TEXT NOT NULL,
+    subjectId INTEGER NOT NULL,
+    category TEXT NOT NULL,
+    severity TEXT NOT NULL DEFAULT 'medium',
+    message TEXT NOT NULL,
+    details TEXT,
+    status TEXT NOT NULL DEFAULT 'open',
+    resolvedByUserId INTEGER,
+    resolvedAt INTEGER,
+    correlationId TEXT NOT NULL DEFAULT 'system',
+    createdAt INTEGER NOT NULL
+  )`,
+  `CREATE INDEX IF NOT EXISTS exception_queue_status_index ON exception_queue (status)`,
+  `CREATE INDEX IF NOT EXISTS exception_queue_severity_index ON exception_queue (severity)`,
+  `CREATE INDEX IF NOT EXISTS exception_queue_correlation_index ON exception_queue (correlationId)`,
+  `CREATE TABLE IF NOT EXISTS automation_profiles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    purpose TEXT NOT NULL,
+    memorySummary TEXT,
+    skillKeys TEXT,
+    allowedActions TEXT,
+    channelScope TEXT,
+    approvalRequired INTEGER NOT NULL DEFAULT 1,
+    enabled INTEGER NOT NULL DEFAULT 0,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS automation_profiles_name_unique ON automation_profiles (name)`,
+  `CREATE TABLE IF NOT EXISTS external_components (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    sourceUrl TEXT NOT NULL,
+    sourceReference TEXT,
+    license TEXT,
+    attributionText TEXT,
+    integrationBoundary TEXT NOT NULL,
+    reviewStatus TEXT NOT NULL DEFAULT 'pending',
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS external_components_source_unique ON external_components (sourceUrl)`,
+  `CREATE TABLE IF NOT EXISTS activity_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category TEXT NOT NULL,
+    action TEXT NOT NULL,
+    subjectType TEXT NOT NULL,
+    subjectId INTEGER,
+    actorUserId INTEGER,
+    profileId INTEGER,
+    correlationId TEXT NOT NULL,
+    outcome TEXT NOT NULL,
+    details TEXT,
+    createdAt INTEGER NOT NULL
+  )`,
+  `CREATE INDEX IF NOT EXISTS activity_logs_category_index ON activity_logs (category)`,
+  `CREATE INDEX IF NOT EXISTS activity_logs_correlation_index ON activity_logs (correlationId)`,
+  `CREATE INDEX IF NOT EXISTS activity_logs_created_index ON activity_logs (createdAt)`,
+];
+
+let _sqlite: Database.Database | null = null;
+let _db: ReturnType<typeof drizzle> | null = null;
+let _dbPath: string | null = null;
+
+export function resolveDatabasePath(configuredUrl?: string): string {
+  const raw = (
+    configuredUrl ??
+    process.env.DATABASE_URL ??
+    ENV.databaseUrl ??
+    DEFAULT_DATABASE_PATH
+  ).trim();
+  if (raw === ":memory:") {
+    return ":memory:";
+  }
+  const stripped = raw.startsWith("file:") ? raw.slice("file:".length) : raw;
+  const normalized = stripped.replace(/\\/g, "/").replace(/^\.\//, "");
+  if (
+    !normalized ||
+    normalized === DEFAULT_DATABASE_PATH ||
+    normalized === "mission-control/crosslisting-os/data/crosslisting.sqlite3"
+  ) {
+    return DEFAULT_SQLITE_FILE;
+  }
+  if (path.isAbsolute(stripped)) {
+    return path.resolve(stripped);
+  }
+  if (normalized.startsWith("mission-control/crosslisting-os/")) {
+    return path.resolve(REPO_ROOT, stripped);
+  }
+  return path.resolve(CROSSLISTER_ROOT, stripped);
+}
+
+function bootstrapSqliteSchema(sqlite: Database.Database): void {
+  for (const statement of SCHEMA_BOOTSTRAP_STATEMENTS) {
+    sqlite.prepare(statement).run();
+  }
+}
+
+export function closeDb(): void {
+  if (_sqlite) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      _sqlite.close();
+    } catch {
+      // Ignore close errors on cleanup
+    }
+  }
+  _sqlite = null;
+  _db = null;
+  _dbPath = null;
+}
+
+// Lazily create the better-sqlite3 drizzle instance at data/crosslisting.sqlite3.
+export async function getDb() {
+  const targetPath = resolveDatabasePath();
+  if (!_db || _dbPath !== targetPath) {
+    closeDb();
+    try {
+      if (targetPath !== ":memory:") {
+        fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+      }
+      const sqlite = new Database(targetPath);
+      sqlite.pragma("journal_mode = WAL");
+      sqlite.pragma("foreign_keys = ON");
+      sqlite.pragma("busy_timeout = 5000");
+      bootstrapSqliteSchema(sqlite);
+      _sqlite = sqlite;
+      _db = drizzle(sqlite);
+      _dbPath = targetPath;
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
-      _db = null;
+      closeDb();
     }
   }
   return _db;
@@ -91,7 +370,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       updateSet.lastSignedIn = new Date();
     }
 
-    await db.insert(users).values(values).onDuplicateKeyUpdate({
+    await db.insert(users).values(values).onConflictDoUpdate({
+      target: users.openId,
       set: updateSet,
     });
   } catch (error) {
@@ -400,15 +680,22 @@ export async function listInventoryRecords() {
     .orderBy(desc(inventoryRecords.updatedAt));
 }
 
-function getAffectedRows(result: unknown) {
+export function getAffectedRows(result: unknown) {
   if (Array.isArray(result)) {
     return Number(
-      (result[0] as { affectedRows?: number } | undefined)?.affectedRows ?? 0
+      (result[0] as { changes?: number; affectedRows?: number } | undefined)
+        ?.changes ??
+        (result[0] as { affectedRows?: number } | undefined)?.affectedRows ??
+        0
     );
   }
   return Number(
-    (result as { rowsAffected?: number; affectedRows?: number } | undefined)
-      ?.rowsAffected ??
+    (
+      result as
+        | { changes?: number; rowsAffected?: number; affectedRows?: number }
+        | undefined
+    )?.changes ??
+      (result as { rowsAffected?: number } | undefined)?.rowsAffected ??
       (result as { affectedRows?: number } | undefined)?.affectedRows ??
       0
   );
@@ -544,7 +831,10 @@ async function ensureMarketplaceChannels() {
         operationMode: channel.initialMode,
         enabled: false,
       })
-      .onDuplicateKeyUpdate({ set: { displayName: channel.displayName } });
+      .onConflictDoUpdate({
+        target: marketplaceChannels.code,
+        set: { displayName: channel.displayName },
+      });
   }
 }
 
@@ -622,7 +912,8 @@ export async function createListingPayloadPreview(input: {
       payload: persistedPayload,
       validationErrors: preflight.errors,
     })
-    .onDuplicateKeyUpdate({
+    .onConflictDoUpdate({
+      target: [channelListings.productId, channelListings.channelId],
       set: {
         state,
         payload: persistedPayload,
@@ -718,7 +1009,11 @@ export async function persistEbayRefreshTokenReference(secretRef: string) {
       configured: true,
       lastVerificationStatus: "unavailable",
     })
-    .onDuplicateKeyUpdate({
+    .onConflictDoUpdate({
+      target: [
+        credentialConnections.channelId,
+        credentialConnections.secretKeyName,
+      ],
       set: {
         secretRef,
         configured: true,
@@ -1032,7 +1327,11 @@ export async function ingestChannelSaleEvent(input: {
         : relatedListing.state;
     await db
       .update(channelListings)
-      .set({ payload: nextPayload, state: nextState, lastSynchronizedAt: now })
+      .set({
+        payload: nextPayload,
+        state: nextState,
+        lastSynchronizedAt: now,
+      })
       .where(eq(channelListings.id, relatedListing.id));
     await db.insert(activityLogs).values({
       category: "channel",

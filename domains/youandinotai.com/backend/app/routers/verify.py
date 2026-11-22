@@ -359,13 +359,17 @@ async def submit_challenge(
     if await has_completed_payment(db, user.id):
         was_verified = user.bot_shield_verified
         promoted = await promote_user_verification_if_ready(db, user)
-        if promoted and not was_verified:
-            await send_welcome_email(
-                recipient_email=user.email,
-                display_name=user.display_name,
-                settings=settings,
-            )
+        if promoted:
+            db_user = await lock_user_for_verification(db, user.id)
+            if db_user is not None:
+                db_user.bot_shield_verified = True
             await db.commit()
+            if not was_verified:
+                await send_welcome_email(
+                    recipient_email=user.email,
+                    display_name=user.display_name,
+                    settings=settings,
+                )
         return ChallengeResult(
             passed=True,
             trust_score=await _calculate_trust_score(user, db),
@@ -460,6 +464,11 @@ async def confirm_verification(
 
         # Check 1: Must have a passed liveness event
         if not await has_passed_liveness(db, locked_user.id):
+            if await has_completed_payment(db, locked_user.id):
+                raise HTTPException(
+                    status_code=400,
+                    detail="Your $1 payment is confirmed. Answer one new timed question to activate your badge with no new charge.",
+                )
             raise HTTPException(
                 status_code=400,
                 detail="No passed liveness challenge found. Complete the Bot-Shield challenge first.",
@@ -472,7 +481,13 @@ async def confirm_verification(
                 detail="Payment required. Complete the $1 Bot-Shield payment before verification.",
             )
 
-        await promote_user_verification_if_ready(db, locked_user)
+        promoted = await promote_user_verification_if_ready(db, locked_user)
+        if not promoted:
+            raise HTTPException(
+                status_code=400,
+                detail="Your $1 payment is confirmed. Answer one new timed question to activate your badge with no new charge.",
+            )
+        user.bot_shield_verified = True
         trust = await _calculate_trust_score(locked_user, db)
         await db.commit()
     except HTTPException:

@@ -1,5 +1,6 @@
 """Prometheus metrics endpoint for the ANTIGRAVITY platform."""
 
+import hmac
 import logging
 from datetime import datetime, timedelta, timezone
 
@@ -29,14 +30,18 @@ _require_founder_or_admin = require_founder_or_admin
 
 def _expected_metrics_key() -> str:
     settings = get_settings()
-    return settings.metrics_api_key or settings.jwt_secret
+    return (settings.metrics_api_key or "").strip()
 
 
 def _require_metrics_key(
     x_metrics_key: str | None = Header(default=None, alias="X-Metrics-Key"),
 ) -> None:
     expected = _expected_metrics_key()
-    if not x_metrics_key or x_metrics_key != expected:
+    if (
+        not expected
+        or not x_metrics_key
+        or not hmac.compare_digest(x_metrics_key, expected)
+    ):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid metrics key",
@@ -101,7 +106,7 @@ async def _impact_payload(db: AsyncSession) -> dict:
     }
 
 
-@router.get("/metrics")
+@router.get("/metrics", dependencies=[Depends(_require_metrics_key)])
 async def prometheus_metrics():
     """Expose Prometheus metrics for scraping.
 

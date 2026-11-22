@@ -49,7 +49,7 @@ If a match skips your question twice in a row and replies with generic flattery,
 
 Spotting fake accounts by hand takes effort that daters would prefer to spend meeting real people. Unverified apps fill up with bots because creating a thousand accounts costs the operator nothing.
 
-https://youandinotai.com changes that rule at the door. Every member completes one timed question plus a one dollar payment, once, before a member can message, swipe or post. Because that requirement happens before swiping, posting, or messaging, an automated script cannot flood the feed or send mass openers. Verified members have access to a USA group chat at [/app/usa](https://youandinotai.com/app/usa), where verified members talk in an active national room.
+[The YouAndINotAI dating platform](https://youandinotai.com) changes that rule at the door. Every member completes one timed question plus a one dollar payment, once, before a member can message, swipe or post. Because that requirement happens before swiping, posting, or messaging, an automated script cannot flood the feed or send mass openers. Verified members have access to a USA group chat at [the USA group chat room](https://youandinotai.com/app/usa), where verified members talk in an active national room.
 
 ## Five-step routine before you invest in a match
 
@@ -59,6 +59,6 @@ Use this short sequence whenever you evaluate a new profile on any dating app.
 2. Read the bio for concrete personal details and skip profiles that push external social handles.
 3. Open with a question tied to a specific photo or profile detail to test for a relevant human answer.
 4. Move from text chat to a simple public meetup plan within a reasonable number of messages.
-5. Prefer platforms like https://youandinotai.com where one timed question plus a one dollar payment, once, gates every member before they can message, swipe or post, and where verified members gather at https://youandinotai.com/app/usa.
+5. Prefer platforms like [the YouAndINotAI verified dating app](https://youandinotai.com) where one timed question plus a one dollar payment, once, gates every member before they can message, swipe or post, and where verified members gather inside [the national USA group chat](https://youandinotai.com/app/usa).
 
-youandinotai.com is for adults 18 and over.
+YouAndINotAI welcomes single adults 18 and over who verify before messaging.

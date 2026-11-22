@@ -63,7 +63,7 @@ Avoid habits that make your message look like a mass copy-and-paste opener.
 
 The best opener fails when it lands in the inbox of an abandoned bot account. On unverified platforms, a large share of your energy goes toward profiles that cannot hold a real conversation.
 
-https://youandinotai.com removes that friction by requiring one timed question plus a one dollar payment, once, before a member can message, swipe or post. When you send a thoughtful first message, you reach an account that completed the same human step and one dollar payment. Verified members can join a USA group chat at [/app/usa](https://youandinotai.com/app/usa) to talk with verified members across the country in an open room.
+[The YouAndINotAI dating platform](https://youandinotai.com) removes that friction by requiring one timed question plus a one dollar payment, once, before a member can message, swipe or post. When you send a thoughtful first message, you reach an account that completed the same human step and one dollar payment. Verified members can join a USA group chat at [the USA group chat room](https://youandinotai.com/app/usa) to talk with verified members across the country in an open room.
 
 ## How to turn the first reply into a real date
 
@@ -73,6 +73,6 @@ When your match answers your opener, keep the momentum steady.
 2. After four to six good exchanges, suggest a thirty-minute coffee or walk at a specific public place.
 3. Offer two clear day options so scheduling stays simple.
 
-Try these openers with verified members at https://youandinotai.com and visit the USA group chat at https://youandinotai.com/app/usa.
+Try these openers with verified members on [the YouAndINotAI home page](https://youandinotai.com) and visit [the national USA group chat](https://youandinotai.com/app/usa).
 
-youandinotai.com is for adults 18 and over.
+The YouAndINotAI platform serves adult daters 18 and over who want real replies.
