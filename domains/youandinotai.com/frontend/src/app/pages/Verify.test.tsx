@@ -1164,6 +1164,8 @@ describe('Verify after $1 payment', () => {
     });
 
     const startButton = getByRole('button', { name: /Start Verification/i });
+    expect(startButton.className).toContain('mt-3');
+    expect(startButton.className).toContain('py-3.5');
 
     await act(async () => {
       startButton.click();

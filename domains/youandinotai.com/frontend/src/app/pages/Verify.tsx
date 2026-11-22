@@ -707,6 +707,19 @@ export function Verify() {
                     </div>
                   )}
 
+                {result.passed &&
+                  !status?.verified &&
+                  !result.checkout_url &&
+                  !awaitingPayment && (
+                    <button
+                      type="button"
+                      onClick={() => void startChallenge()}
+                      className="app-button-dark mt-6 px-6 py-4"
+                    >
+                      Try again
+                    </button>
+                  )}
+
                 {!result.passed && (
                   <button
                     onClick={() => void startChallenge()}
@@ -785,7 +798,7 @@ export function Verify() {
                   </p>
                   <button
                     onClick={() => void startChallenge()}
-                    className="app-button-accent mt-4 px-6 py-4 md:mt-6"
+                    className="app-button-accent mt-3 px-6 py-3.5 md:mt-6 md:py-4"
                   >
                     Start Verification <ArrowRight size={18} />
                   </button>
