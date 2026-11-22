@@ -42,34 +42,127 @@ describe('Password reset flow screens (412px phone-first, plain words, no banned
     });
   });
 
-  it('renders a "Forgot password?" link on /login pointing to /forgot-password', () => {
-    const { container, getByRole } = render(
+  it('hides "Forgot password?" on /login when /health reports mail is "off"', async () => {
+    vi.mocked(api.get).mockResolvedValueOnce({
+      status: 'ok',
+      mail: 'off',
+    });
+
+    const { container, queryByRole } = render(
       <MemoryRouter initialEntries={['/login']}>
         <Login />
       </MemoryRouter>
     );
 
-    const forgotLink = getByRole('link', { name: /Forgot password\?/i });
-    expect(forgotLink.getAttribute('href')).toBe('/forgot-password');
+    await waitFor(() => {
+      expect(api.get).toHaveBeenCalledWith('/health');
+    });
+    expect(queryByRole('link', { name: /Forgot password\?/i })).toBeNull();
     expect(collectVisibleAndAccessibleText(container)).not.toMatch(BANNED_WORD);
   });
 
-  it('submits the /forgot-password request screen and shows the plain confirmation message', async () => {
+  it('shows the mail-off sentence, existing support path, and no email form on /forgot-password when mail is "off"', async () => {
+    vi.mocked(api.get).mockResolvedValueOnce({
+      status: 'ok',
+      mail: 'off',
+    });
+
+    const { container, getByText, queryByLabelText, queryByRole } = render(
+      <MemoryRouter initialEntries={['/forgot-password']}>
+        <ForgotPassword />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(api.get).toHaveBeenCalledWith('/health');
+    });
+
+    expect(
+      getByText('Password reset by email is not switched on yet.')
+    ).toBeTruthy();
+    const mailtoLink = container.querySelector(
+      'a[href="mailto:contact@youandinotai.com"]'
+    );
+    expect(mailtoLink).not.toBeNull();
+    const supportLinks = container.querySelectorAll('a[href="/support"]');
+    expect(supportLinks.length).toBeGreaterThan(0);
+    expect(container.querySelector('form')).toBeNull();
+    expect(queryByLabelText(/Email/i)).toBeNull();
+    expect(queryByRole('button', { name: /Send Reset Link/i })).toBeNull();
+    expect(collectVisibleAndAccessibleText(container)).not.toMatch(BANNED_WORD);
+  });
+
+  it('treats a failing /health call as mail off and reads /health once across /login and /forgot-password', async () => {
+    vi.mocked(api.get).mockRejectedValueOnce(
+      new Error('Health check unavailable')
+    );
+
+    const { container, getByText, queryByLabelText, queryByRole } = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Login />
+        <ForgotPassword />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(api.get).toHaveBeenCalledTimes(1);
+    });
+    expect(api.get).toHaveBeenCalledWith('/health');
+    expect(queryByRole('link', { name: /Forgot password\?/i })).toBeNull();
+    expect(
+      getByText('Password reset by email is not switched on yet.')
+    ).toBeTruthy();
+    expect(queryByLabelText(/Email/i)).toBeNull();
+    expect(collectVisibleAndAccessibleText(container)).not.toMatch(BANNED_WORD);
+  });
+
+  it('renders a "Forgot password?" link on /login and reads /health once when navigating to /forgot-password with mail "on"', async () => {
+    vi.mocked(api.get).mockResolvedValueOnce({
+      status: 'ok',
+      mail: 'on',
+    });
+
+    const { container, findByLabelText, findByRole } = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const forgotLink = await findByRole('link', { name: /Forgot password\?/i });
+    expect(forgotLink.getAttribute('href')).toBe('/forgot-password');
+    expect(collectVisibleAndAccessibleText(container)).not.toMatch(BANNED_WORD);
+
+    fireEvent.click(forgotLink);
+    expect(await findByLabelText(/Email/i)).toBeTruthy();
+    expect(api.get).toHaveBeenCalledTimes(1);
+    expect(api.get).toHaveBeenCalledWith('/health');
+    expect(collectVisibleAndAccessibleText(container)).not.toMatch(BANNED_WORD);
+  });
+
+  it('submits the /forgot-password request screen and shows the plain confirmation message when mail is "on"', async () => {
+    vi.mocked(api.get).mockResolvedValueOnce({
+      status: 'ok',
+      mail: 'on',
+    });
     vi.mocked(api.post).mockResolvedValueOnce({
       received: true,
       message:
         'If an account exists for that email address, we sent a password reset link. It expires in 30 minutes.',
     });
 
-    const { container, getByLabelText, getByRole, findByText } = render(
+    const { container, findByLabelText, getByRole, findByText } = render(
       <MemoryRouter initialEntries={['/forgot-password']}>
         <ForgotPassword />
       </MemoryRouter>
     );
 
+    const emailInput = await findByLabelText(/Email/i);
     expect(collectVisibleAndAccessibleText(container)).not.toMatch(BANNED_WORD);
 
-    fireEvent.change(getByLabelText(/Email/i), {
+    fireEvent.change(emailInput, {
       target: { value: 'member@youandinotai.com' },
     });
     fireEvent.click(getByRole('button', { name: /Send Reset Link/i }));
