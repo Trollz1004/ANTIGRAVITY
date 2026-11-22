@@ -525,8 +525,8 @@ export function Verify() {
             </h1>
             <p className="app-subtitle mt-2 max-w-2xl md:mt-4">
               {status?.verified
-                ? 'Your badge unlocks discovery, messaging, and video on your account.'
-                : 'Answer a short timed question, finish the $1 Square payment tied to your account, and unlock messaging and video.'}
+                ? 'Your badge unlocks discovery, messaging, topic boards, and the USA group chat on your account.'
+                : 'Answer a short timed question, finish the $1 Square payment tied to your account, and unlock discovery, messaging, topic boards, and the USA group chat.'}
             </p>
           </div>
           <div className="glass rounded-xl p-4 md:p-5">

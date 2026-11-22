@@ -43,7 +43,7 @@ export function Register() {
     );
     if (desc) {
       desc.content =
-        'Create your 18+ YouAndINotAI account and complete the $1 Bot-Shield human check to unlock verified human dating, messaging, video, and boards.';
+        'Create your 18+ YouAndINotAI account and complete the $1 Bot-Shield human check to unlock verified human discovery, messaging, topic boards, and the USA group chat.';
     }
   }, []);
 
