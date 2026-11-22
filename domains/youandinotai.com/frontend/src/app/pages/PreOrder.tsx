@@ -76,7 +76,8 @@ export function PreOrder() {
       </div>
       <h1 className="text-3xl font-semibold tracking-tight">Founder Plans</h1>
       <p className="mt-2 text-sm text-[var(--km-muted)]">
-        Verified-human dating is live now. Complete your{' '}
+        Verified-human dating with discovery, messaging, topic boards, and the
+        USA group chat is live now. Complete your{' '}
         <strong className="text-[var(--km-text)]">$1 Bot-Shield</strong> human
         check first, then choose a locked founder rate. Payments: Square primary
         · PayPal · Cash App Business. No Stripe.

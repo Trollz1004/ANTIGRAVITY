@@ -11,15 +11,15 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-$OllamaExe = 'C:\Users\joshi\AppData\Local\Programs\Ollama\ollama.exe'
-$env:OLLAMA_HOST = 'http://127.0.0.1:11434'
+$OllamaExe = (Join-Path $env:USERPROFILE 'AppData\Local\Programs\Ollama\ollama.exe')
+$env:OLLAMA_HOST = 'http://192.168.0.15:11434'
 $env:OPENAI_COMPAT_BASE_URL = 'http://192.168.0.15:20128/v1'
-$env:OPENAI_BASE_URL = 'http://127.0.0.1:11434/v1'
+$env:OPENAI_BASE_URL = 'http://192.168.0.15:11434/v1'
 
 # Ensure Fable is pinned in VRAM before launching the harness
 try {
     $b = @{ model = $Model; keep_alive = -1 } | ConvertTo-Json
-    Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/generate' -Method Post -Body $b -ContentType 'application/json' -TimeoutSec 30 | Out-Null
+    Invoke-RestMethod -Uri 'http://192.168.0.15:11434/api/generate' -Method Post -Body $b -ContentType 'application/json' -TimeoutSec 30 | Out-Null
 } catch {}
 
 if ($Harness -in @('claude', 'pi', 'opencode', 'codex')) {

@@ -23,9 +23,9 @@ roster including retired Ornith, and is not the contract):
   lands, the judge panel (`testing/judge-panel.md` — Opus/Fable, Grok, Gemini
   at max reasoning via OmniRoute) reviews the diff and reports an advisory
   verdict to the active lead.
-- **Mission Control v5 on `:3151` is the board** where this work is
-  coordinated. Mission Control v6 on `:8787` is a *health monitor only* — a
-  different program; never treat it as the board.
+- **Mission OS on `192.168.0.15:3130` is the active board** where this work is
+  coordinated (`ops/fleet/fleet-map.json`: Alienware `192.168.0.40` + T5500 `192.168.0.15`).
+  Legacy Mission Control v6 on `:8787` was a health monitor only.
 
 Claude Code sessions also discover these files automatically (recursively)
 and can delegate directly when a task matches a description — that's the
@@ -102,7 +102,7 @@ format). Don't duplicate content between them.
 | workflow-optimizer | Human-agent workflow efficiency |
 | performance-benchmarker | Speed profiling and fixes |
 | test-results-analyzer | Failure patterns and quality metrics |
-| judge-panel | Multi-model pre-merge review (Claude + Grok/Gemini via OmniRouter) |
+| judge-panel | Multi-model pre-merge review (`Opus 5.5` / `Fable` + `Gemini 4 Carbon` / `GPT-6.1 Sol` via OmniRoute `192.168.0.15:20128`) |
 
 ### bonus/
 | Agent | Purpose |
@@ -116,8 +116,8 @@ format). Don't duplicate content between them.
   support, uptime, platform access — only that product framing, in copy and in
   prompts. The banned-language list lives in CLAUDE.md (Public Copy Boundary)
   and the current doctrine briefing.
-- Dating surfaces are Square-only (Stripe AUP bars dating apps; CI enforces).
-  Other product lines may use Stripe with Joshua's approval.
+- Payment rails are Square primary + PayPal per `docs/PAYMENTS-TRUTH.md`
+  (CI enforces; zero legacy third-party card processors).
 - No secrets in output, files, or commits — names only, never values.
 - Pricing, payments, doctrine, public brand copy, launch gates, node roles:
   founder (Joshua) approval required.

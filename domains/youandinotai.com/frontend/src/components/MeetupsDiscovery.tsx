@@ -13,11 +13,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '../lib/api';
 import {
   requestLocation,
-  boundingBox,
   isGeolocationSupported,
-  distanceMiles,
   type Coords,
-  type RadiusMiles,
 } from '../lib/geolocation';
 
 // ── Types — match backend EventResponse exactly ─────────────────────────────
@@ -44,8 +41,6 @@ interface CreateEventPayload {
   max_attendees: number;
   category: string;
 }
-
-const RADIUS_OPTIONS: RadiusMiles[] = [5, 10, 25];
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -79,7 +74,6 @@ export default function MeetupsDiscovery() {
   // GPS
   const [coords, setCoords] = useState<Coords | null>(null);
   const [gpsRequesting, setGpsRequesting] = useState(false);
-  const [radius, setRadius] = useState<RadiusMiles>(10);
 
   // Create modal
   const [showCreate, setShowCreate] = useState(false);
@@ -117,24 +111,10 @@ export default function MeetupsDiscovery() {
     fetchEvents();
   }, [fetchEvents]);
 
-  // Client-side geo filtering when coords or radius change
+  // Show all events (backend Event model has no lat/lng fields)
   useEffect(() => {
-    if (!coords) {
-      setFilteredEvents(allEvents);
-      return;
-    }
-    const box = boundingBox(coords, radius);
-    // Note: events don't have lat/lng fields on the backend,
-    // so we just show all events when GPS is active.
-    // Future: add lat/lng to Event model for real geo filtering.
-    // For now, all events pass through.
     setFilteredEvents(allEvents);
-    // If events had coordinates:
-    // setFilteredEvents(allEvents.filter(e => {
-    //   if (!e.lat || !e.lng) return true;
-    //   return distanceMiles(coords, { lat: e.lat, lng: e.lng }) <= radius;
-    // }));
-  }, [coords, radius, allEvents]);
+  }, [coords, allEvents]);
 
   // ── GPS opt-in ───────────────────────────────────────────────────────────
 
@@ -261,43 +241,17 @@ export default function MeetupsDiscovery() {
             </button>
           </div>
         ) : (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-green-400 flex items-center gap-1.5">
-                <span className="inline-block w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                Location active
-              </p>
-              <button
-                onClick={clearGps}
-                className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
-              >
-                Clear
-              </button>
-            </div>
-
-            {/* Radius toggle */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500">Radius:</span>
-              <div className="flex bg-gray-800 rounded-lg p-0.5 gap-0.5">
-                {RADIUS_OPTIONS.map(r => (
-                  <button
-                    key={r}
-                    id={`meetups-radius-${r}`}
-                    onClick={() => setRadius(r)}
-                    className={`text-xs px-3 py-1.5 rounded-md transition-all duration-200 ${
-                      radius === r
-                        ? 'bg-yellow-600 text-white shadow-md shadow-yellow-600/30'
-                        : 'text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    {r} mi
-                  </button>
-                ))}
-              </div>
-              <span className="text-[10px] text-gray-600 ml-1">
-                (all meetups shown)
-              </span>
-            </div>
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-green-400 flex items-center gap-1.5">
+              <span className="inline-block w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              Location active (all meetups shown)
+            </p>
+            <button
+              onClick={clearGps}
+              className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              Clear
+            </button>
           </div>
         )}
       </div>

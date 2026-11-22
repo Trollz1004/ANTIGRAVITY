@@ -3,8 +3,9 @@
 One-shot Mission Control watchdog. Run by Windows Scheduled Task.
 #>
 param(
-    [string]$RepoRoot = 'E:\ANTIGRAVITY',
-    [int]$Port = 8787,
+    [string]$RepoRoot = 'C:\ANTIGRAVITY',
+    [string]$HostIp = '192.168.0.15',
+    [int]$Port = 3130,
     [int]$MaxRestarts = 2,
     [int]$IntervalSec = 5
 )
@@ -16,7 +17,7 @@ L '=== mission-control-watchdog one-shot start ==='
 $start = Join-Path $RepoRoot 'scripts\start-mission-control.ps1'
 if (-not (Test-Path $start)) { L "missing start script: $start"; exit 1 }
 for ($i=0; $i -lt $MaxRestarts; $i++) {
-  try { $r = Invoke-WebRequest -Uri "http://127.0.0.1:$Port/" -TimeoutSec 3 -UseBasicParsing -ErrorAction Stop; if ($r.StatusCode -ge 200 -and $r.StatusCode -lt 500) { L 'mission-control healthy'; exit 0 } } catch {}
+  try { $r = Invoke-WebRequest -Uri "http://${HostIp}:$Port/" -TimeoutSec 3 -UseBasicParsing -ErrorAction Stop; if ($r.StatusCode -ge 200 -and $r.StatusCode -lt 500) { L 'mission-control healthy'; exit 0 } } catch {}
   L "restarting mission-control attempt $($i+1)"; Start-Process -FilePath 'powershell.exe' -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-File',$start,'-RepoRoot',$RepoRoot,'-Port',([string]$Port) -WindowStyle Hidden; Start-Sleep -Seconds $IntervalSec
 }
 L 'mission-control-watchdog finished with restarts exhausted'; exit 1

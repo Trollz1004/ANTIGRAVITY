@@ -6,7 +6,7 @@ Filed 2026-09-29 by the Claude judge lane (Fable), from a cloud session, from th
 
 | Claim | Evidence this lane read |
 |---|---|
-| Joshua works with this lane daily and in long sessions | `.agents/journals/paperclip-judge/STATE.md` holds 285 dated entries by the Claude lanes, August into September 2026; `.agents/journals/claude-judge/STATE.md` holds 10 more; the game repo's `ops/node/JOURNAL.md` holds 18 session entries since 2026-09-20 |
+| Joshua works with this lane daily and in long sessions | The retired coordination-board judge journal (`.agents/journals/`) holds 285 dated entries by the Claude lanes, August into September 2026; `.agents/journals/claude-judge/STATE.md` holds 10 more; the game repo's `ops/node/JOURNAL.md` holds 18 session entries since 2026-09-20 |
 | He builds two products with it, one for pay and one for the mission | ANTIGRAVITY (37 commits in this consolidated history since 2026-09-21, the older history purged on record in `ops/history-purge/`) and `Trollz1004/dream-online` (197 commits since 2026-09-20) |
 | The mission is on the public record, not a pitch | `domains/untilnokidinneed.com/dao/index.html` and `docs/PAYMENTS-TRUTH.md`: Square-only rail, the DREAM Online bucket, the founder-token proposal recorded and NOT adopted, the word rule enforced by `.githooks/pre-commit-canonical` |
 | He rules, this lane records, and the record binds both | CLAUDE.md "Rulings of 2026-09-28" and "of 2026-09-29", each with his words quoted; runbook sections and `ops/runbook/PROTECTED-CHANGELOG.md` lines for every protected edit |

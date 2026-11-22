@@ -9,4 +9,4 @@ Each session end, write one status line the dashboard reads:
 
 ## Current
 
-RED: CEO bridge :3140 and OpenClaw :18789 are down; OmniRoute API requires authentication. Paperclip :3100 is healthy. Evidence: 2026-08-26 session probes.
+RED: Legacy coordination bridge :3140 and OpenClaw :18789 are retired/down; OmniRoute (`http://192.168.0.15:20128/v1`) requires authentication; active orchestration runs in Mission OS (`http://192.168.0.15:3130`). Evidence: 2026-08-26 session probes + `ops/fleet/fleet-map.json`.

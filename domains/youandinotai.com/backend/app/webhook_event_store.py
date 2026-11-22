@@ -12,7 +12,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
-from sqlalchemy import MetaData, Table, desc, insert, select, update
+from sqlalchemy import MetaData, Table, desc, event, insert, select, update
 from sqlalchemy.exc import NoSuchTableError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -34,9 +34,40 @@ class WebhookEventSchema:
         return "created_at" in self.columns
 
 
+_WEBHOOK_EVENT_SCHEMA_CACHE: dict[object, WebhookEventSchema] = {}
+
+
+def clear_webhook_event_schema_cache(*_args: object, **_kwargs: object) -> None:
+    """Clear cached webhook_events table reflections."""
+    _WEBHOOK_EVENT_SCHEMA_CACHE.clear()
+
+
+event.listen(WebhookEvent.metadata, "after_drop", clear_webhook_event_schema_cache)
+event.listen(WebhookEvent.metadata, "after_create", clear_webhook_event_schema_cache)
+
+
+def _schema_cache_key(db: AsyncSession) -> object:
+    if isinstance(db, AsyncSession):
+        try:
+            bind = db.get_bind()
+        except Exception:
+            bind = getattr(db, "bind", None)
+    else:
+        bind = getattr(db, "bind", None)
+    if bind is None:
+        return id(db)
+    engine = getattr(bind, "engine", bind)
+    return (id(engine), str(getattr(engine, "url", "")))
+
+
 async def get_webhook_event_schema(
     db: AsyncSession,
 ) -> WebhookEventSchema | None:
+    cache_key = _schema_cache_key(db)
+    cached = _WEBHOOK_EVENT_SCHEMA_CACHE.get(cache_key)
+    if cached is not None:
+        return cached
+
     connection = await db.connection()
 
     def _load(sync_connection) -> WebhookEventSchema | None:
@@ -56,7 +87,10 @@ async def get_webhook_event_schema(
             external_id_column=external_id_column,
         )
 
-    return await connection.run_sync(_load)
+    schema = await connection.run_sync(_load)
+    if schema is not None:
+        _WEBHOOK_EVENT_SCHEMA_CACHE[cache_key] = schema
+    return schema
 
 
 async def webhook_event_exists(db: AsyncSession, event_id: str) -> bool:

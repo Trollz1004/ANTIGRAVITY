@@ -2,7 +2,7 @@ from playwright.sync_api import sync_playwright
 
 # Example: Capturing console logs during browser automation
 
-url = 'http://localhost:5173'  # Replace with your URL
+url = 'http://192.168.0.40:5173'  # Replace with your LAN target URL from ops/fleet/fleet-map.json
 
 console_logs = []
 

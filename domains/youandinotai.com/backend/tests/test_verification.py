@@ -227,6 +227,102 @@ class TestVerificationPromotion:
         assert user.bot_shield_verified is True
         assert user.profile.verified is True
 
+    def test_promote_user_rejects_liveness_older_than_48_hours_until_new_question_passes(
+        self,
+    ):
+        import asyncio
+
+        from app.verification_service import promote_user_verification_if_ready
+
+        now = datetime.now(timezone.utc)
+        user = MagicMock()
+        user.id = uuid.uuid4()
+        user.bot_shield_verified = False
+        user.profile = MagicMock()
+        user.profile.verified = False
+
+        stale_liveness = MagicMock()
+        stale_liveness.created_at = now - timedelta(hours=49)
+        stale_liveness.completed_at = now - timedelta(hours=49)
+
+        late_payment = MagicMock()
+        late_payment.created_at = now
+        late_payment.completed_at = now
+
+        mock_db = AsyncMock()
+        mock_db.scalar = AsyncMock(side_effect=[stale_liveness, late_payment])
+
+        promoted_stale = asyncio.run(promote_user_verification_if_ready(mock_db, user))
+
+        assert promoted_stale is False
+        assert user.bot_shield_verified is False
+        assert user.profile.verified is False
+
+        fresh_liveness = MagicMock()
+        fresh_liveness.created_at = now
+        fresh_liveness.completed_at = now
+
+        mock_db.scalar = AsyncMock(side_effect=[fresh_liveness, late_payment])
+        promoted_fresh = asyncio.run(promote_user_verification_if_ready(mock_db, user))
+
+        assert promoted_fresh is True
+        assert user.bot_shield_verified is True
+        assert user.profile.verified is True
+
+    def test_revoke_user_verification_for_refund_clears_badge_and_payment_event(self):
+        import asyncio
+        import inspect
+
+        from app import verification_service
+        from app.verification_service import revoke_user_verification_for_refund
+
+        assert "inspect" not in inspect.getsource(verification_service)
+
+        user = MagicMock()
+        user.id = uuid.uuid4()
+        user.bot_shield_verified = True
+        user.profile = MagicMock()
+        user.profile.verified = True
+
+        payment_event = MagicMock()
+        payment_event.user_id = user.id
+        payment_event.challenge_type = "payment"
+        payment_event.status = "completed"
+        payment_event.amount_cents = 100
+        payment_event.square_payment_id = "pay_unit_1"
+        payment_event.square_refund_id = None
+
+        extra_payment = MagicMock()
+        extra_payment.user_id = user.id
+        extra_payment.challenge_type = "payment"
+        extra_payment.status = "completed"
+        extra_payment.amount_cents = 100
+        extra_payment.square_payment_id = "pay_unit_extra"
+        extra_payment.square_refund_id = None
+
+        scalars_result = MagicMock()
+        scalars_result.all.return_value = [extra_payment]
+
+        mock_db = AsyncMock()
+        mock_db.scalar = AsyncMock(side_effect=[payment_event, user])
+        mock_db.scalars = AsyncMock(return_value=scalars_result)
+
+        revoked = asyncio.run(
+            revoke_user_verification_for_refund(
+                mock_db,
+                square_payment_id="pay_unit_1",
+                square_refund_id="rfnd_unit_1",
+            )
+        )
+
+        assert revoked is True
+        assert payment_event.status == "refunded"
+        assert payment_event.square_refund_id == "rfnd_unit_1"
+        assert extra_payment.status == "refunded"
+        assert extra_payment.square_refund_id == "rfnd_unit_1"
+        assert user.bot_shield_verified is False
+        assert user.profile.verified is False
+
 
 class TestVerificationStatusTruth:
     def test_status_reports_actual_payment_state_not_badge_flag(self, monkeypatch):

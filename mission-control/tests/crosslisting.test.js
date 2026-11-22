@@ -133,4 +133,18 @@ describe('Crosslisting package is local + no-login ready', () => {
 
     expect(appRouter).toContain('curbAlerts: curbAlertsRouter')
   })
+
+  it('Curb Alerts screen labels the seven built-in items plainly as sample data when no live source is active', () => {
+    const curbRouter = fs.readFileSync(path.join(pkgRoot, 'server', 'routers', 'curbAlerts.ts'), 'utf-8')
+    const curbPage = fs.readFileSync(path.join(pkgRoot, 'client', 'src', 'pages', 'CurbAlerts.tsx'), 'utf-8')
+
+    expect(curbRouter).toContain('liveSourceActive: false')
+    expect(curbRouter).toContain('isSampleData: true')
+    expect(curbRouter).toContain('sampleLabel: "Sample data"')
+
+    expect(curbPage).toContain('data-testid="curb-alerts-sample-banner"')
+    expect(curbPage).toContain('data-testid="curb-alert-sample-badge"')
+    expect(curbPage).toMatch(/Sample data/i)
+    expect(curbPage).toMatch(/no live source/i)
+  })
 })
