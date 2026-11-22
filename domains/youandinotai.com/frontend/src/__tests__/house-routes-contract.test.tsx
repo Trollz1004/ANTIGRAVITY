@@ -693,9 +693,9 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
         '#support .ds-btn-signal, #support .ds-btn-ghost'
       );
       expect(supportCtas.length).toBe(3);
-      expect(
-        container.querySelectorAll('#support .ds-btn-signal').length
-      ).toBe(1);
+      expect(container.querySelectorAll('#support .ds-btn-signal').length).toBe(
+        1
+      );
       expect(container.querySelectorAll('#support .ds-btn-ghost').length).toBe(
         2
       );

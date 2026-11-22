@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -26,8 +26,13 @@ interface LoginErrors {
   password?: string;
 }
 
+function getEmailFromSearch(search: string): string {
+  return new URLSearchParams(search).get('email')?.trim() || '';
+}
+
 export function Login() {
-  const [email, setEmail] = useState('');
+  const location = useLocation();
+  const [email, setEmail] = useState(() => getEmailFromSearch(location.search));
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -38,9 +43,15 @@ export function Login() {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const { login, betaAccess } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const nextPath = getSafeNextPath(location.search, '/app');
   const registerHref = `/register?next=${encodeURIComponent(nextPath)}`;
+
+  useEffect(() => {
+    const prefilledEmail = getEmailFromSearch(location.search);
+    if (prefilledEmail) {
+      setEmail(prefilledEmail);
+    }
+  }, [location.search]);
 
   const validateLoginField = useCallback(
     (name: string, value: string): string | undefined => {
