@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /app/
+Disallow: /api/
+Disallow: /c/
+Disallow: /go/
 
 Sitemap: https://youandinotai.com/sitemap.xml
