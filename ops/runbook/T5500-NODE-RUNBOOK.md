@@ -1,177 +1,138 @@
-> **RETIRED 2026-10-05.** T5500 is OFF by ruling and the T5500 (`192.168.0.15`) is the production node. Read the node map at the top of `AGENTS.md` before anything here; every T5500 fact below is history.
+# T5500 Node Runbook
 
-# T5500 NODE — RUNBOOK
+This runbook describes the T5500 node (`192.168.0.15`) as it runs today from the 2026-11-19 and 2026-11-20 deploy records, `ops/t5500/keepalive.ps1`, `ops/fleet/fleet-map.json`, `scripts/fables-house/tab-dateapp.cmd`, and `scripts/fables-house/tab-dateapp-api.ps1`.
 
-**Ruled by Joshua 2026-09-17. Written by Claude Fable 5.1, the judge lane.** This is the only runbook for this box. If a doc, skill, or dashboard disagrees with it, this wins and that gets fixed. Companion inventory: `ops/runbook/DASHBOARD-INVENTORY-2026-09-17.md`. Launch skill for Claude: `~/.claude/skills/t5500-node/SKILL.md` (tracked copy at `ops/skills/t5500-node/SKILL.md`).
+## 1. Supervisor: ANTIGRAVITY T5500 Keepalive
 
-## 1. What this node is for
+- The supervisor on the T5500 is the Windows scheduled task `ANTIGRAVITY T5500 Keepalive`.
+- The task runs `C:\ANTIGRAVITY\ops\t5500\keepalive.ps1` in a continuous loop with a single-instance mutex (`Local\ANTIGRAVITY-T5500-Keepalive`).
+- It runs one full pass every 60 seconds (`Start-Sleep -Seconds 60`).
+- External cloud checks (`obsidian`, `supabase`, `supermemory`, `vercel`) and Cloudflare DNS nameserver lookups are cached for 10 minutes between live calls.
+- It writes its log to `C:\ANTIGRAVITY\logs\t5500-keepalive.log` and rotates the file to `C:\ANTIGRAVITY\logs\t5500-keepalive.log.1` when it exceeds 4 MB.
+- After every pass it writes current stage and domain health to `C:\ANTIGRAVITY\ops\t5500\status.json`.
+- When a stage fails 20 consecutive passes (and every 20 passes after that), it appends a `stage_failed` JSON line to `C:\ANTIGRAVITY\ops\t5500\TRIGGERS.jsonl`.
+- In `ops/t5500/keepalive.ps1` on disk, HTTP stages probe the T5500 LAN address `192.168.0.15` (`http://192.168.0.15:<port><path>`) using the node IP from `ops/fleet/fleet-map.json`, with automatic fallback to `127.0.0.1` on the same port when `-AllowLoopbackFallback` is set or when no token is present in the process environment.
+- Machine-local database stages probe `127.0.0.1:5432` for PostgreSQL and `127.0.0.1:6379` for Redis.
+- Public domain checks probe `https://youandinotai.com`, `https://onlinerecycle.net`, and `https://dream-online.net` when each zone's nameservers resolve to `cloudflare.com` and its local origin on port `3200` or port `9160` is up.
+- On 2026-11-19 and 2026-11-20, the running `ANTIGRAVITY T5500 Keepalive` process in memory was still the copy loaded on 2026-11-13 (which probed local HTTP origins on loopback and `http://192.168.0.15:20128/` for OmniRoute); the updated `ops/t5500/keepalive.ps1` on disk loads on the next reboot or task restart.
 
-T5500 runs exactly four things for the business, plus the infrastructure under them:
+### What the supervisor probes on each 60-second pass
 
-1. **youandinotai.com** — the date app. **Not for sale since 2026-09-28** (Joshua withdrew the September listing: it gets marketed instead, by the Emergent lane, affiliate program first). Features and checkout stay as they are until he rules on them; the sale record in `ops/sale/` is history.
-2. **ai-solutions.store** — the AI Solutions storefront (org `Ai-Solutions-Store`). Served through Cloudflare, not from a local port on this node today; the code and the crosslisting OS live in the org repo.
-3. **onlinerecycle.net** — recycling and crosslisting (OpenCode lane). Served off-node today; it appears in the Sentry target registry so the node reports it, but nothing here starts it.
-4. **JARVIS Mission Control** — the one operator surface, `http://192.168.0.15:9150/`.
+- `ollama`: checks that `%USERPROFILE%\AppData\Local\Programs\Ollama\lib\ollama\llama-server.exe` exists and probes `http://192.168.0.15:11434/api/tags` (with loopback fallback) for `joshlcoleman/Fable`.
+- `postgres`: runs `%USERPROFILE%\pgsql16\bin\pg_isready.exe -h 127.0.0.1 -p 5432 -q` (or tests TCP connection to `127.0.0.1:5432` if `pg_isready.exe` is missing).
+- `redis`: opens a TCP socket to `127.0.0.1:6379`, sends `PING`, and checks for `PONG`.
+- `domains`: probes `http://192.168.0.15:9160/health` (with loopback fallback) for `domains-server`.
+- `frontend`: probes `http://192.168.0.15:3200/` (with loopback fallback) for `assets/index-` and checks whether `domains\youandinotai.com\frontend\dist\index.html` is missing or stale compared to `dist\build-commit.txt` (`git rev-parse HEAD`) or the frontend build inputs (`src`, `public`, `index.html`, `content\blog`, `build_blog_static.py`, `vite.config.ts`, `package.json`, `package-lock.json`).
+- `api`: probes `http://192.168.0.15:8000/api/v1/health` (with loopback fallback) for `"db_connected":true`.
+- `tunnel`: checks that at least one `cloudflared.exe` process is running with `.cloudflared\config.yml` (stopping any extra connectors beyond the oldest) and checks `https://youandinotai.com` for `assets/index-`, `https://onlinerecycle.net` for `OnlineRecycle`, and `https://dream-online.net` for `DREAM Online` whenever DNS nameservers are on `cloudflare.com` and the local origin answers.
+- `hermes-gateway`: probes `http://192.168.0.15:8643/health` (with loopback fallback) for `hermes-agent`.
+- `mission-control`: probes `http://192.168.0.15:3130/api/mos-state.json` (with loopback fallback) for `mission-agent-os`.
+- `social-command-center`: probes `http://192.168.0.15:3130/api/marketing/plans` (with loopback fallback) for `social-command-center-v5`.
+- `omniroute`: probes `http://192.168.0.15:20128/` and accepts HTTP status `200`, `401`, or `403`.
+- `obsidian`: probes `http://192.168.0.15:27123/` (with loopback fallback on port `27123`) at most once every 10 minutes with token headers (`OBSIDIAN_REST_API_KEY`, `OBSIDIAN_API_KEY`, or `FLEET_SHARED_TOKEN`) for HTTP status `200`.
+- `supabase`: probes `<SUPABASE_URL>/rest/v1/` at most once every 10 minutes with `SUPABASE_SECRET_KEY` for HTTP status `200`.
+- `supermemory`: probes `https://api.supermemory.ai/v3/settings` at most once every 10 minutes with `SUPER_MEMORY_API_KEY` for HTTP status `200`.
+- `vercel`: probes `https://api.vercel.com/v2/user` at most once every 10 minutes with `VERCEL_API_KEY` for HTTP status `200`.
+- `hermes`: checks `Win32_Process` for a process whose command line contains `hermes-support.ps1` (requiring a visible `-Console` process when `agent-windows.ps1` is running).
 
-**Node allocation (ruled by Joshua 2026-09-28).** Two nodes run, nothing else. `192.168.0.40` Alienware is the **dev node**: DREAM Online is built and tested there, and only there. `192.168.0.15` T5500 (this box) is the **finished-product node**: what is done and public runs here (JARVIS, the domains, the frozen date app, OmniRoute) and the Hermes health cron watches it. Every other node in the old fleet — T5500, the OptiPlex T5500, the i7k worker, the Chromebook, the Mini ASUS — is **OFF by ruling**: not started, not probed as a fault, listed in JARVIS God's Eye as `NODES_OFF` so a missing box reads OFF BY RULING and never DOWN. A design or a runbook that still names those boxes as live is stale.
+## 2. Services on the T5500
 
-Everything else that used to run here is either parked, retired, or moved:
+### Supervised by ANTIGRAVITY T5500 Keepalive
 
-| Thing | State | Where it went |
-|---|---|---|
-| DREAM Online | moved | Alienware node, separate Claude runbook, dispatch in `ops/handoffs/` |
-| Paperclip | parked | not started, report-only stage, history in git |
-| AIRI dashboard (:9150) | retired | JARVIS took the port and the panels; folder stays until a cleanup commit |
-| Mission Control v5 (:3100) | demoted | optional stage, embedded data source for JARVIS, no human opens it |
-| Emergent dashboard (:3210) | off restart path | its views (mission ribbon, task commander, git, Hermes/OpenClaw status, system status, runbooks, ledger) now live as JARVIS panels (Phase B, `mission-control/`) |
-| Growth engine, digests, social crons | frozen | files gitignored; Hermes crons to stop are Joshua's click |
-| Stack Health (:8787), vote service (:9134) | optional | untouched, not required |
+- **Ollama (`t5500-ollama`, stage `ollama`)**
+  - Port: `11434` (`http://192.168.0.15:11434`, binds `0.0.0.0` when `FLEET_SHARED_TOKEN` is set or `127.0.0.1` when unset).
+  - What starts it: `keepalive.ps1` runs `%USERPROFILE%\AppData\Local\Programs\Ollama\ollama.exe serve` hidden (repairing from `%USERPROFILE%\AppData\Local\Ollama\OllamaSetup.exe` if `llama-server.exe` is missing) and posts `model = "joshlcoleman/Fable:latest"` with `keep_alive = -1` to `/api/generate` to pin the model in memory.
+  - Identity string: `keepalive.ps1` checks `/api/tags` for `joshlcoleman/Fable`. `ops/fleet/fleet-map.json` lists `/api/tags` with expected identity `"models":[`.
 
-## 2. One Mission Control
+- **PostgreSQL (`t5500-postgres`, stage `postgres`)**
+  - Port: `5432` on `127.0.0.1:5432` (this machine only).
+  - What starts it: `keepalive.ps1` starts the scheduled task `ANTIGRAVITY Postgres` if present; otherwise it removes any stale `postmaster.pid` and starts `%USERPROFILE%\pgsql16\bin\pg_ctl.exe start -D %USERPROFILE%\pgsql16-data -w -t 80 -l C:\ANTIGRAVITY\logs\pg-t5500.log` hidden.
+  - Identity string: `keepalive.ps1` checks `pg_isready.exe -h 127.0.0.1 -p 5432 -q` for exit code `0`. `ops/fleet/fleet-map.json` lists `/tcp` with expected identity `postgres`.
 
-**Display name and cloud address (ruled 2026-09-29).** On screen the dashboard is **Driftus**; JARVIS stays the code name everywhere on disk. Its cloud address, the one Joshua opens from any Claude Code session, is `https://dashboard.aidoesitall.website/` (Cloudflare Access, one-time PIN) — the same JARVIS, no second dashboard. The Emergent wing chat (affiliate swarm) and Gemini in Chrome are bridge rows: Emergent as a link (LINKED, never "up"), Gemini browser-side with nothing to probe. The Claude judge lane merges its own green pull requests.
+- **Redis (`t5500-redis`, stage `redis`)**
+  - Port: `6379` on `127.0.0.1:6379` (this machine only).
+  - What starts it: `keepalive.ps1` finds `redis-server.exe` under `%USERPROFILE%\redis8-win` and starts it hidden with `--bind 127.0.0.1 --port 6379 --maxmemory 256mb --maxmemory-policy allkeys-lru`.
+  - Identity string: `keepalive.ps1` sends `PING` and checks for `PONG` (matching `ops/fleet/fleet-map.json` expected identity `PONG`).
 
-**JARVIS** is the single dashboard. Reasoning, so nobody relitigates it: it is the newest, it is a superset of AIRI, and its dispatch already defines the panels that absorb every other surface on this box and on GitHub:
+- **Domains Server (`domains-server`, stage `domains`)**
+  - Port: `9160` (`http://192.168.0.15:9160`). On 2026-11-19 the running watchdog started it with `DOMAINS_SERVER_HOST=127.0.0.1,192.168.0.15` so it listens on both `127.0.0.1` and `192.168.0.15`. On disk, `keepalive.ps1` sets `DOMAINS_SERVER_HOST` to `0.0.0.0` when `FLEET_SHARED_TOKEN` is set or `127.0.0.1` when unset.
+  - What starts it: `keepalive.ps1` stops any process on port `9160` and runs `C:\Program Files\nodejs\node.exe ops\domains-server\server.mjs` hidden from `C:\ANTIGRAVITY`.
+  - Identity string: `keepalive.ps1` checks `/health` for `domains-server` (and checks origin content on port `9160` for `OnlineRecycle` with `Host: onlinerecycle.net` and `DREAM Online` with `Host: dream-online.net`). `ops/fleet/fleet-map.json` lists `/health` with expected identity `domains`.
 
-| Feature | Came from | JARVIS panel |
-|---|---|---|
-| Service health wall with identity probes | Fable's Sentry (:9140) | God's Eye (the probe engine lives inside JARVIS at `/api/sentry`, folded in 2026-09-18 — no separate :9140 service) |
-| Node cards, LAN probe, topology | JARVIS gods-eye | God's Eye |
-| Agent fleet, token spend | MC5 (:3100), Paperclip board | Mission Control |
-| Proposal feed, Claude and Codex verdicts, founder approval | judge journals | Judge Lanes |
-| Obsidian vault graph, skills tree, avatar, OmniRoute widgets, Claude CLI button | AIRI | carried over |
-| Crosslisting and eBay ops | hermes legacy shell, crosslisting OS | CRM / Crosslisting |
-| Dispatch log | Fable's House ledger | Fable's House |
-| Game admin, Unreal lane | DREAM GM Control | present as panels, wired only on Alienware |
-| Task commander, runbook viewer, git panel | Emergent (:3210) | absorbed into Mission Control as JARVIS grows; Emergent not started here |
+- **Date App Frontend (`date-app-web`, stage `frontend`)**
+  - Port: `3200` (`http://192.168.0.15:3200`, listening on `0.0.0.0:3200`).
+  - What starts it: `keepalive.ps1` stops `node` on port `3200` (deleting `domains\youandinotai.com\frontend\dist\index.html` first if a rebuild is needed) and runs `cmd /c C:\ANTIGRAVITY\scripts\fables-house\tab-dateapp.cmd` hidden. `tab-dateapp.cmd` runs `npm run build` in `C:\ANTIGRAVITY\domains\youandinotai.com\frontend` when `dist\index.html` is missing or older than `src`, sets `NODE_ENV=production`, `HOST=0.0.0.0`, and `PORT=3200`, and runs `npx tsx server.ts`.
+  - Identity string: `keepalive.ps1` checks `/` for `assets/index-` and verifies `dist\index.html` is not stale. `ops/fleet/fleet-map.json` lists `/` with expected identity `<!DOCTYPE html>`.
 
-Rule for future dashboards: nobody builds a new one. A new view is a JARVIS panel or it does not exist.
+- **Date App API (`date-app-api`, stage `api`)**
+  - Port: `8000` (`http://192.168.0.15:8000`). On 2026-11-19 and 2026-11-20 it listened on `127.0.0.1` on port `8000` on the box. In `scripts/fables-house/tab-dateapp-api.ps1`, it binds `DATEAPP_API_HOST` if set, or `0.0.0.0` when `FLEET_SHARED_TOKEN` is set, or `127.0.0.1` on port `8000` when `FLEET_SHARED_TOKEN` is not set.
+  - What starts it: `keepalive.ps1` waits for `postgres` and `redis`, stops any listener on port `8000`, and runs `powershell -NoProfile -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\fables-house\tab-dateapp-api.ps1` hidden. `tab-dateapp-api.ps1` loads variables from `%USERPROFILE%\.antigravity-vault\vault-handoff\env-stash-from-documents\.env-not-for-github.txt` (and `%USERPROFILE%\.antigravity-vault\supabase-db-url.env` if present), pins the `postgresql+asyncpg://` `DATABASE_URL`, sets `REDIS_URL=redis://127.0.0.1:6379/0`, sets `SQUARE_LOCATION_ID`, `APP_ENV=production`, and `PORT=8000`, and runs `C:\ANTIGRAVITY\backend\.venv\Scripts\python.exe -m uvicorn app.main:app` from `C:\ANTIGRAVITY\domains\youandinotai.com\backend`. At startup, `reconcile_legacy_schema` runs before the server finishes starting.
+  - Identity string: `keepalive.ps1` checks `/api/v1/health` for `"db_connected":true`. `ops/fleet/fleet-map.json` lists `/health` with expected identity `ok`.
 
-## 3. Restart set
+- **Cloudflared Tunnel (stage `tunnel`)**
+  - Port: no local service port (outbound connector process).
+  - What starts it: `keepalive.ps1` stops duplicate connectors and runs `C:\Program Files (x86)\cloudflared\cloudflared.exe tunnel --config %USERPROFILE%\.cloudflared\config.yml --no-autoupdate --logfile C:\ANTIGRAVITY\logs\cloudflared-t5500.log --loglevel info run` hidden.
+  - Identity string: `keepalive.ps1` checks that `cloudflared.exe` is running with `.cloudflared\config.yml` and checks public responses on `https://youandinotai.com` for `assets/index-`, `https://onlinerecycle.net` for `OnlineRecycle`, and `https://dream-online.net` for `DREAM Online`.
 
-The House (`C:\ANTIGRAVITY\FABLES-HOUSE.cmd`, script `scripts/fables-house/FABLES-HOUSE.ps1`) starts from two scheduled tasks, and the House is idempotent (the "one House at a time" guard in the script kills whichever instance started earlier), so both are safe to have registered together: `ANTIGRAVITY Fables House Boot-Start` fires **at boot**, 45 seconds in, principal S4U/Highest under `joshi` — S4U runs the task whether or not anyone is logged on and stores no password — so the stack starts in session 0 with nobody signed in; `ANTIGRAVITY Fables House Auto-Start` still fires **at logon**, Interactive/Highest, for the normal sign-in path. The health probe task `ANTIGRAVITY-T5500-Health` is also S4U now, so it runs pre-login too. Session 0 (S4U) loads `joshi`'s file-system profile (`%APPDATA%`, `%USERPROFILE%`) but not Windows Credential Manager/DPAPI secrets tied to an interactive logon; every required stage here (Postgres, Redis, OmniRoute, the date app, the tunnel, JARVIS) reads its config from plain files or env vars, so all of them come up pre-login. The one stage that depends on Joshua's credential store is the optional VS Code tunnel (row 9) — it needs his one-time `code tunnel user login`, so it stays NOT CONFIGURED until he signs in; that is expected, not a fault. Task XML definitions for the record: `scripts/fables-house/tasks/ANTIGRAVITY Fables House Boot-Start.xml` and `scripts/fables-house/tasks/ANTIGRAVITY-T5500-Health.xml`.
+- **Hermes API Gateway (`hermes-api`, stage `hermes-gateway`)**
+  - Port: `8643` (`http://192.168.0.15:8643`).
+  - What starts it: `keepalive.ps1` stops any listener on port `8643` and runs `%LOCALAPPDATA%\hermes\tools\python-3.14.7+20260901-win32-x64\python.exe -m hermes_cli.main gateway run` hidden in `%LOCALAPPDATA%\hermes`.
+  - Identity string: `keepalive.ps1` checks `/health` for `hermes-agent`. `ops/fleet/fleet-map.json` lists `/health` with expected identity `hermes`.
 
-| # | Stage | Port | Identity probe | Required |
-|---|---|---|---|---|
-| 1 | PostgreSQL | 5432 | `pg_isready` | yes |
-| 2 | Redis | 6379 | `PING` = `PONG` | yes |
-| 3 | OmniRoute | 20128 | `/api/v1/models` lists `auto/best-coding` | yes |
-| 4 | Paperclip | 3100 | report-only | parked |
-| 5 | Date app frontend | 3200 | `/` contains `assets/index-` | yes |
-| 6 | Date app API | 8000 | `/api/v1/health` has `"db_connected":true` | yes |
-| 7 | Cloudflared tunnel `t5500-main` | — | `https://youandinotai.com` contains `assets/index-` | yes |
-| 8 | **JARVIS Mission Control** | 9150 | `/health` says `jarvis-dashboard`, LAN bind | **yes** |
-| 9 | VS Code tunnel (JARVIS remote) | — | `code tunnel status` reports a running tunnel | optional |
-| 10 | MC5 | 3100 | title `MISSION CONTROL` | optional |
-| 11 | Domains static sites | 9160 | `/health` says `domains-server` | optional |
-| 12 | Hermes | 9119 | TCP | optional (YouTube lane) |
-| 13 | Ollama | 11434 | `/api/tags` lists `joshlcoleman/Fable` | optional, fail-safe only |
-| 14 | OpenClaw | 18789 | TCP | optional |
-| 15 | Obsidian Local REST | 27123 | report-only | Joshua opens Obsidian |
+- **Mission OS / Mission Control (`mission-os`, stage `mission-control` and stage `social-command-center`)**
+  - Port: `3130` (`http://192.168.0.15:3130`). On 2026-11-19 it listened on `127.0.0.1` on port `3130` on the box; `ops/fleet/fleet-map.json` lists bind `0.0.0.0` with `FLEET_SHARED_TOKEN`.
+  - What starts it: `keepalive.ps1` starts the scheduled task `ANTIGRAVITY Mission Control` if present (confirmed on 2026-11-19); if that task is absent, or when the `social-command-center` stage heals, `keepalive.ps1` stops port `3130` and runs `C:\Program Files\nodejs\node.exe mission-os\server.mjs` hidden from `C:\ANTIGRAVITY`.
+  - Identity string: `keepalive.ps1` checks `/api/mos-state.json` for `mission-agent-os` (stage `mission-control`) and checks `/api/marketing/plans` for `social-command-center-v5` (stage `social-command-center`). `ops/fleet/fleet-map.json` lists `/live` with expected identity `mission-os`.
 
-Fable's Sentry (:9140) is no longer a House stage — 2026-09-18, it was folded into JARVIS itself (row 8 above already carries it; the probe engine lives at `/api/sentry`).
+- **OmniRoute (`omniroute`, stage `omniroute`)**
+  - Port: `20128` (`http://192.168.0.15:20128`, binds `192.168.0.15`).
+  - What starts it: `keepalive.ps1` starts the scheduled task `ANTIGRAVITY OmniRoute`.
+  - Identity string: `keepalive.ps1` checks `http://192.168.0.15:20128/` for HTTP status `200`, `401`, or `403`. `ops/fleet/fleet-map.json` lists `/v1/models` with expected identity `"data":[`.
 
-A port answering is never UP. Every stage is judged by its identity string. Report **UP**, **DOWN**, **WRONG SERVICE**, **AUTH MISSING**, **AUTH REJECTED**, or **NOT CONFIGURED**.
+- **Obsidian Local REST API (`t5500-obsidian-rest`, stage `obsidian`)**
+  - Port: `27123` (bound to `127.0.0.1` on port `27123`, this machine only).
+  - What starts it: opened after interactive logon by the `agent-windows.ps1` supervisor (`keepalive.ps1` does not start it).
+  - Identity string: `keepalive.ps1` checks `/` on port `27123` for HTTP status `200`. `ops/fleet/fleet-map.json` lists `/` with expected identity `obsidian`.
 
-## 4. Commands
+- **Hermes Customer Support Desk (stage `hermes`)**
+  - Port: none (worker loop).
+  - What starts it: waits for `ollama` and `api`. Before logon, `keepalive.ps1` starts `powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File C:\ANTIGRAVITY\ops\t5500\hermes-support.ps1` hidden. After logon, when `agent-windows.ps1` is running, `keepalive.ps1` defers to `agent-windows.ps1` (which runs `hermes-support.ps1 -Console` in a visible window) and stops any hidden copy.
+  - Identity string: `keepalive.ps1` checks `Win32_Process` for a command line matching `hermes-support.ps1` (and `-Console` when `agent-windows.ps1` is active).
 
-| Command | Does |
-|---|---|
-| `drift` | House up in the background, then opens Claude with the `t5500-node` skill loaded |
-| `drift bare` | Claude only, touches nothing (skill still loads) |
-| `drift house` | House one pass, no Claude |
-| `drift health` | runs the 30-minute health probe now, prints the table |
-| `drift audit` | Sentry-target audit via `npm run fable -- audit` (probes `mission-control/config/sentry-targets.json`, diffs against JARVIS's own live `/api/sentry`) |
-| `drift mc` / `drift jarvis` / `drift avatar` | open JARVIS |
-| `drift wall` | open JARVIS's God's Eye (the Sentry probe engine lives inside JARVIS now, not a separate :9140 page) |
-| `drift ledger` / `drift dns` | ledger tail / DNS report |
-| `FABLES-HOUSE.cmd -Once` | one heal pass, elevated |
+### Listed in `ops/fleet/fleet-map.json` for T5500 but not started by `keepalive.ps1`
 
-Tracked copy of drift: `scripts/drift.cmd`. Installed copy: `C:\Users\joshi\.local\bin\drift.cmd`. They are kept identical.
+- **Hermes Marketing Gateway (`t5500-marketing-gateway`)**: port `8377` (`http://192.168.0.15:8377`), health path `/health`, expected identity `"platform":"hermes-agent"`. What starts it is not known from the files.
+- **Hermes Dashboard (`t5500-hermes-dashboard`)**: port `9119` (`http://192.168.0.15:9119`), health path `/api/health`, expected identity `"ok":true`. What starts it is not known from the files.
+- **Live NPC Lab (`t5500-live-npc-lab`)**: port `9127` (`http://192.168.0.15:9127`), health path `/health`, expected identity `dream-live-npc-lab`. What starts it is not known from the files.
+- **T5500 Fleet Status (`t5500-fleet-status`)**: port `9165` (`http://192.168.0.15:9165`), health path `/health`, expected identity `t5500-fleet-status`. What starts it is not known from the files.
+- **Shared ai-memory MCP (`ai-memory`)**: port `49374` (`http://192.168.0.15:49374`), health path `/health`, expected identity `ai-memory`. What starts it is not known from the files.
 
-## 5. Health loop and triggers
+## 3. How a Deploy Goes
 
-`ops/heartbeat/t5500-health.ps1` runs every 30 minutes from the scheduled task `ANTIGRAVITY-T5500-Health` (no tokens spent). It probes every stage in §3 by identity, checks both repos are clean and equal to origin, records the last sale status line, and writes `ops/heartbeat/t5500-health.json` with `overall` GREEN, YELLOW, or RED, plus one line in `ops/heartbeat/health.log`.
+1. Pull the latest `main` in `C:\ANTIGRAVITY` with `git pull --ff-only`.
+2. Let the watchdog rebuild and restart the date app site on port `3200` by itself: on its next 60-second pass, `ANTIGRAVITY T5500 Keepalive` sees that `domains\youandinotai.com\frontend\dist\index.html` is older than `src` (or behind `HEAD`), stops `node` on port `3200`, runs `scripts\fables-house\tab-dateapp.cmd` to run `npm run build` and start `npx tsx server.ts`, and brings port `3200` back in about 40 to 55 seconds.
+3. For each changed backend or node service (`8000` for Date App API, `9160` for Domains Server, or `3130` for Mission OS), stop the process listening on that service's port and let `ANTIGRAVITY T5500 Keepalive` bring it back on its next pass (about 50 to 120 seconds).
+4. Never stop or restart the `ANTIGRAVITY T5500 Keepalive` scheduled task during a deploy, because stopping the task may terminate the services it started.
+5. Check every changed public page and API by its real content, never by HTTP `200` alone:
+   - Check `https://youandinotai.com` and `https://www.youandinotai.com` for the new `assets/index-<hash>.js` bundle name and verify the expected screen text inside the built bundle.
+   - Check `https://api.youandinotai.com/health` (and local `/api/v1/health`) for `"db_connected":true`, the expected account count (`user_count`), `missingEnvCount` of `0`, and expected new route responses (such as OpenAPI entries or `401` on protected routes without sign-in).
+   - Check `https://onlinerecycle.net` (home, `about.html`, `terms`, `privacy`, and `/api/booking-config`) for the expected page content, phone number, byte length, and booking configuration response.
+   - Check `https://dream-online.net` for `DREAM Online`.
 
-On RED it does three things in order, and stops at the first that works:
+## 4. What the Tunnel Sends Where
 
-1. Appends the failure to `ops/heartbeat/TRIGGERS.jsonl` and runs the House one pass.
-2. Re-probes and rewrites the JSON with the post-heal result. An optional third step exists but is OFF by default: if Joshua creates `ops/heartbeat/.auto-heal-enabled` whose first line is a command (for example a bounded `claude -p --model sonnet --max-turns 12 "/t5500-node heal"`), the script runs that command once per 60 minutes while still RED. Nobody but Joshua creates that file; it is his opt-in to an unattended model run.
-3. Leaves the trigger in place. The next `drift` opens Claude with the skill, which reads `TRIGGERS.jsonl` first and acts on it before anything else.
+- `youandinotai.com`: port `3200`
+- `www.youandinotai.com`: port `3200`
+- `api.youandinotai.com`: port `8000`
+- `onlinerecycle.net`: port `9160`
+- `dream-online.net`: port `9160`
 
-That is the trigger path beyond any timer Claude sets for itself: the machine notices, the machine tries the House, and the judge lane sees the trigger the moment Joshua types `drift`. The unattended model step is available, documented, and off until he turns it on.
+## 5. What Is Not Known from the Files
 
-**Operator cockpit.** `tools/cockpit/` (from the May design handoff) is served by JARVIS at `http://192.168.0.15:9150/cockpit/`, same origin as `/api/nodes`, which is the only thing it reads; it probes no port itself. Its CRD session links come from `tools/cockpit/cockpit.local.json` (gitignored, Joshua drops it there). It never enters `domains/` (CI job `cockpit-local-only`).
-
-**Screenshot health (ruled 2026-09-28: "screen shot verified, not 200 ok").** The port probe above says a service answers; it cannot say a page is right. `mission-control/scripts/screenshot-health.mjs` opens every target in `mission-control/config/screenshot-targets.json` (JARVIS, the domains server, every public domain, the Cloudflare Access sign-in for the dashboard hostname, Hermes as optional) in headless Chromium, keeps one PNG per target under `evidence/health-shots/<date>/` (gitignored), reads the page's visible text, and records UP only when the target's identity string is on the page; a 200 with the wrong page is WRONG SERVICE, a DNS miss is PENDING NAMESERVERS, the Access gate is the expected state for the dashboard hostname. It writes `ops/heartbeat/screenshot-health.json` and one line in `ops/heartbeat/screenshot-health.log` (both gitignored). Every LAN target in that file is a `192.168.0.x` address, never localhost (Joshua, 2026-09-28); the public targets keep their `https://` hostnames on purpose, since they exist to check public DNS and the tunnel ingress. **Hermes runs it** from its gateway cron every 30 minutes (`node C:\ANTIGRAVITY\mission-control\scripts\screenshot-health.mjs`; the job and its id are recorded in `ops/skills/date-app-hermes-operations/SKILL.md` and Hermes's journal) — that is the lane Hermes keeps on this node now that the date-app marketing lane moved to Emergent. JARVIS reads the result at `/api/screenshot-health` and serves each frame at `/api/screenshot-health/shot/<id>`; until the cron's first run the route reports NOT CONFIGURED, never a sample row. When Playwright is not installed for Node on the node the result file says NOT CONFIGURED and the cron exits 0. This cron is not a healer: it records, and the House stays the only thing that starts or heals a service.
-
-The old `ANTIGRAVITY-Heartbeat-15min` task ran the social growth loop for the date app. It is disabled with the freeze.
-
-## 6. Date app: not for sale, marketed (ruling 2026-09-28); keep-alive rules
-
-**Ruling 2026-09-28.** Joshua withdrew the sale: the app is marketed, not sold. The Emergent lane runs the marketing under the 2026-09-19 rails, starting with the affiliate program (`ops/handoffs/PROMPT-FOR-EMERGENT-AFFILIATE-2026-09-28.md`). The Afternic, Dan and Atom listings come down on Joshua's click; a buyer who writes gets "withdrawn". The bullets below are the September sale record, kept as history.
-
-- The site and API stay up (stages 5, 6, 7). Nothing else changes: no features, no growth, no digests, no audits, no experiments.
-- Listing is live on Afternic (buy-now $12,500, minimum $8,000) and on Atom (Standard tier, pending Joshua's ownership-verify click). Ownership TXT records are on the Cloudflare zone.
-- Eight outreach drafts sit in Joshua's Gmail; he sends them by hand.
-- Inbound goes to joshlcoleman@gmail.com. When a buyer writes, the Claude judge lane prepares the handover: repository export, environment template, deployment notes, registrar transfer. That is the only date-app work permitted.
-- Hermes crons still to stop (Joshua's click in the Hermes gateway): Social Media Auto-Poster, Daily Growth Digest, OmniRoute Social Sub-Agent. Date App Health Monitor stays as keep-alive.
-- **Marketing lane moved (Joshua, 2026-09-28).** No buyer wrote in the week after the unfreeze, so the date-app marketing lane leaves Hermes and goes to the Emergent lane (`.agents/journals/emergent/STATE.md`, a JARVIS Fleet row, NOT CONFIGURED until it has a runtime). The rules do not move: every post is still a JARVIS inbox proposal under the four checks, drafted in the Fable voice, approved by the Fable judge lane, two per brand per day; nothing posts directly. Hermes keeps YouTube and the screenshot health cron (§5). Joshua's standing preference is that the app is sold rather than marketed; marketing continues only because it costs nothing while the listing is up.
-
-## 7. Model access and secrets
-
-- Harnesses use OmniRoute at `http://192.168.0.15:20128/v1`, the only URL. Claude never routes through OmniRoute. Ollama is fail-safe only.
-- No credentials in the repo, in a dashboard config, or in a stdio argument. `.env` is gitignored. If a key shows up in a page body (Hermes :9119 embeds a session token in its HTML), it is reported masked and never copied.
-- Known OmniRoute gates: `api_keys.access_schedule` and `api_keys.allowed_quotas` in `~/.omniroute/data/storage.sqlite`. Read the 403 body before calling anything a hang.
-
-## 8. Git
-
-- `C:\ANTIGRAVITY` on `main`, `C:\Users\joshi\hermes` on `master`. Both expected clean and equal to origin at all times; the health loop flags drift as YELLOW.
-- Only the judge lane pushes. Every commit uses an explicit pathspec. The commit guard rejects restricted words in any staged file.
-- Untracked-on-purpose (gitignored): `HERMES-GATE-LOCKDOWN-2026-07-14.md` (its 07-14 lines trip the guard; superseded banner on top), `data/`, `evidence/`, the frozen growth-engine scripts and browser profile, `ops/heartbeat/t5500-health.json`, `ops/heartbeat/TRIGGERS.jsonl`.
-
-## 9. What is validated, and how
-
-Validation is a House one-pass plus probes, not a reboot. Recorded in the judge journal on the day it ran. A reboot test is Joshua's call; when he does one, `drift health` afterwards is the evidence and its table goes in the journal.
-
-2026-09-17: a real reboot at 18:11 proved the logon path (all required stages back by 19:01 after sign-in); the boot task was added the same day and validated by a manual session-0 run; the next reboot is its full test, and health.log will show UP lines before any login. That manual run also surfaced a pre-existing, unrelated bug: JARVIS's own code changed after its running process started, the House's freshness check correctly flags it "stale", but the Heal for that stage only kills the old process when the identity probe fails outright — since the stale process still answers `/health` correctly, Heal never kills it and the stage retries forever. Confirmed present under the old logon-task watchdog before the boot task ever ran, so it is not an S4U effect. Not fixed here per instruction not to touch `FABLES-HOUSE.ps1` logic; flagged for a follow-up session.
-
-## 10. Where DREAM Online goes from here
-
-Not this node. Alienware (`192.168.0.40`, the dev node by the 2026-09-28 ruling) runs Godot 4.7.2 (the engine decision of 2026-09-20 in the game repo), Hermes with the game skills, and the world engine; Unreal stays parked there for cinematics and reference. This node contributes: the dispatch (`ops/handoffs/HERMES-DISPATCH-DREAM-WORLD-ENGINE.md`), the crowdfund package (`ops/marketing/dream-online-crowdfund/`), the Open Collective, and Claude's design sessions with Joshua. A separate Claude runbook for Alienware is the next document, written there.
-
-## 11. Remote access (VS Code dev tunnel)
-
-Single-port rule: through a forwarded tunnel the browser reaches only the JARVIS origin (`:9150`) — no other LAN/loopback port, no separate iframe origin. Every source JARVIS shows (Crosslisting, OmniRoute, vault, node probes) is proxied server-side in `server.mjs` (`/api/omni/*`, `/api/proxy/crosslisting/*`, etc.); the client uses only relative paths, nothing hardcodes another port for a fetch or iframe. Links meant to open a LAN-only service in a new tab (Hermes) stay absolute but are built from `/api/config`, so a tunnel user sees the real LAN URL as a label, not a dead link.
-
-To reach JARVIS remotely: VS Code **Ports** panel → forward `9150` → visibility **Private** → sign in with GitHub on each device — VS Code's tunnel handles auth, JARVIS adds none. Boot persistence needs Joshua's one-time interactive sign-in, `code tunnel user login` — his click, never automated. Once that has happened once, the House's optional "VS Code tunnel (JARVIS remote)" stage (§3, row 9) keeps the tunnel service installed and running after every reboot: it proves the sign-in with the non-interactive `code tunnel user show`, installs `code tunnel service` if missing, and restarts it if stopped, all without ever prompting for login itself.
-
-Later alternative: Cloudflare Access in front of `:9150` (or a Cloudflare Tunnel hostname) — same single-origin constraint, Cloudflare's identity gate instead of GitHub sign-in. Not set up; noted for when the VS Code tunnel isn't the right shape.
-
-## 12. Domains
-
-Three landing sites and the JARVIS dashboard hostname were brought onto the same cloudflared tunnel (`t5500-main`) and DNS-in-Cloudflare setup that already serves youandinotai.com, so nothing here is a second tunnel or a second dashboard.
-
-**What serves each domain now.** `ops/domains-server/server.mjs` is a dependency-free Node vhost static file server on port 9160 (since 2026-09-28 it listens on loopback for the House probe and the tunnel, and on `192.168.0.15` for the screenshot health cron and JARVIS — Joshua: "use the endpoints always of 192, not localhost" — never on every interface; `DOMAINS_SERVER_HOST` is a comma-separated override), routing by Host header: `dream-online.net`/`www` and `untilnokidinneed.com`/`www` serve their plain `domains/<name>/index.html`; `onlinerecycle.net`/`www` serves the built Vite/React app from `domains/onlinerecycle.net/dist/` (built with `npm install && npm run build`; the repo now carries its `package-lock.json`). `GET /health` reports `{"service":"domains-server","sites":[...]}`. The House runs it as the optional stage "Domains static sites :9160" (§3), probing `/health` and healing with `node ops\domains-server\server.mjs`, same probe/heal shape as the JARVIS stage. The cloudflared ingress (`~/.cloudflared/config.yml`, tunnel id and credentials path never printed) routes all six hostnames plus `dashboard.aidoesitall.website` at this one origin, inserted before the existing catch-all; `youandinotai.com`, `www.youandinotai.com`, and `api.youandinotai.com` are unchanged. In Cloudflare DNS, each of the three zones (already existed, `status: initializing`) got proxied CNAME records at `@` and `www` pointing at the tunnel's `.cfargotunnel.com` target, replacing the IONOS-imported A/AAAA records that had been auto-scanned in when the zones were added.
-
-**Access sign-in for the dashboard hostname.** `dashboard.aidoesitall.website` is intentionally gated by Cloudflare Access (Zero Trust org `youandinotaionline - Cloudflare Access`, already existed from an earlier zone), app "JARVIS Mission Control" (`self_hosted`, 24h session), one `allow` policy including `joshlcoleman@gmail.com`, identity provider left as the default One-time PIN — Joshua signs in with a code emailed to that address, never a password. Browser-verified with Playwright: the hostname redirects to `https://<team>.cloudflareaccess.com/cdn-cgi/access/login/...`, page title "Sign in ・ Cloudflare Access", not error 1033. Screenshot: `evidence/domains-2026-09-18/dashboard-aidoesitall-website-access-signin.png`. No sign-in was attempted — that is Joshua's click.
-
-**The pending registrar click.** `dream-online.net` and `onlinerecycle.net` are still parked at IONOS; `untilnokidinneed.com` is also still on IONOS today (an earlier assumption that it was already on Cloudflare nameservers did not hold up against a live NS check). All three need Joshua's one-time nameserver change at IONOS — the exact two Cloudflare nameservers per domain, and today's registrar state, are written out in `C:\Users\joshi\OneDrive\claude-to-claude\DNS-NAMESERVERS-TO-SET-2026-09-18.md`. Nothing on this node needs to change once he clicks; the zones flip from `initializing` to `active` on their own as DNS propagates.
-
-**Health probes.** `ops/heartbeat/t5500-health.ps1` adds, all optional: `domains_9160` (identity-checks `/health` for `domains-server`); `dashboard_access_aidoesitall` (UP means the Access sign-in markers are present at `https://dashboard.aidoesitall.website/` — that is the correct state, not a working dashboard response); and one probe per pending domain (`domain_dream_online_net`, `domain_untilnokidinneed_com`, `domain_onlinerecycle_net`) that reads live NS with `Resolve-DnsName -Type NS` and reports the named state `PENDING NAMESERVERS` — not `DOWN` — for as long as NS still resolves to IONOS or fails to resolve; once NS shows Cloudflare it falls through to the same identity-checked HTTP probe as any other public site.
-
-## 13. Backups and data tools
-
-Judged 2026-09-29, full page `ops/runbook/BACKUPS-AND-DATA-TOOLS-2026-09-29.md`. In one paragraph: the Supabase ANTIGRAVITY project (`jmvgdqomvnkfgknmgwxp`) is healthy, its advisors are clean after the 2026-09-29 migration, and its date-app tables are empty; the vault `C:\ANTIGRAVITY\Antigravity` and that project are backed up nightly by `mission-control/scripts/backup-node.mjs` (Hermes cron 03:00, `pg_dump` verified by header, vault copy verified by file count and bytes, 14 usable dated sets kept under `ops/backups/` plus the newest set holding each item's last good copy, gitignored; the script reads the repo `.env` itself), and JARVIS reports the last run at `/api/backup-health` (an operator endpoint; no dashboard tile yet). It is a local snapshot on the same disk as the vault, not disaster recovery: point `BACKUP_DIR` at a second volume for that, and an off-node copy is a separate ruling. Vercel: the connected account has no projects and nothing of this house is deployed there; the key in the node's `.env` is dormant. The first real run on this node is the proof; until then `/api/backup-health` says NOT CONFIGURED and that is the truth.
-
-## 14. The one map, the Board Room, the universal MCP (spec 011, 2026-09-29)
-
-Spec `specs/011-ultracode-house/spec.md`. Three things landed together on Joshua's ask ("create the skill that combines all tools structure mcp dashboards brains memory journals ... a universal hermes mcp dashboard ... the ai board room of drift branches"):
-
-- **The one map.** `.agents/skills/ultracode-house/SKILL.md`, ALWAYS LOAD, caveman full, 240 lines or fewer (raised from 220 on 2026-09-29 to hold the whole service registry): nodes, dashboards, lanes, MCP, brains and memory, journals, rulings digest, token savers, Joshua's open clicks. Every fact points at a repo file; where the repo has no proof it says NOT CONFIGURED or UNVERIFIED. Disk beats the skill; fix the skill, journal the fix. JARVIS MCP tool `house_map` serves it.
-- **The Board Room** (JARVIS tab `boardroom`, `GET /api/boardroom`, code `mission-control/lib/lanes.mjs` and `lib/drift.mjs`): the mission's think tank, the House; the founder's ClawX board is the Supreme Court and keeps the vote. Blocks: `tracks` (five, ON RECORD when the record file exists, else NOT CONFIGURED), `lanes` (nine seats joined with the live bridge and fleet rows), `attestations` (each seat's own `.agents/journals/<lane>/TRUST.md`, FILED or NOT FILED; nobody files for another), `drift` (GitHub branches and open pull requests for both repositories, DEAD / STALE / LIVE / WORKING with per-lane badges; NOT CONFIGURED without `GITHUB_TOKEN` in the node `.env`, DOWN on a GitHub error, cached 5 minutes, never a fake row), `affiliate` (the Emergent wing, the approved brief, the terms), `founderBoard`. Nothing executes and nothing votes from this tab.
-- **The universal MCP.** JARVIS `/mcp` on :9150 now has nine read-only tools: the six from Phase F plus `boardroom`, `backup_health`, `house_map`. Same bearer gate (`JARVIS_MCP_TOKEN`; unset = 503). Every lane reads the same board: Claude by `claude mcp add --transport http jarvis http://192.168.0.15:9150/mcp` with the bearer header, Hermes, OpenCode and OpenClaw by Streamable HTTP POST to that URL from their own MCP config. **Transport, stated plainly (CodeRabbit CWE-319 on pull request 262):** `:9150/mcp` is plain HTTP on the private LAN by the Phase F design, so the bearer travels in the clear between two LAN hosts; it is a read-only token and it stays on the LAN, never on the internet. The TLS path is `https://dashboard.aidoesitall.website/mcp` through the cloudflared tunnel behind Cloudflare Access; a machine lane needs an Access service token there (Joshua's click, §12), and until one exists no off-LAN attach is recorded. No lane attach has a recorded live call yet; the first is the proof.
-
-Follow-up landed 2026-09-29 (pull request after 262): the attestation date is the seat's own `Filed <date>` line, never the checkout's file time; a 2xx that is not JSON is DOWN; a branch that is the base of an open pull request is LIVE; a token that cannot travel in a header is NOT CONFIGURED before any request; `/api/backup-health` is redacted like every other route; the MCP layer masks string results too; the backup runner refuses a `SUPABASE_DB_URL` that is not a `postgresql://` URL rather than putting it on a command line or in the record; the Board Room re-reads on every tab click and prints its read time.
-
-Verified from the cloud on 2026-09-29: vitest 929 of 929; a frame of the Board Room tab on a local JARVIS (two tracks ON RECORD, the Claude seat FILED, every other seat NOT FILED, drift DOWN with GitHub's own reason because the container token is not a GitHub token); `/mcp` answers 503 without the token. Node-side: the first real drift read with the node's `GITHUB_TOKEN` and the first lane attach are UNVERIFIED until they happen.
+- **Task Scheduler definitions**: The exact Task Scheduler triggers, user accounts, and action XML for `ANTIGRAVITY T5500 Keepalive`, `ANTIGRAVITY Postgres`, `ANTIGRAVITY Mission Control`, and `ANTIGRAVITY OmniRoute` are **not known** from the files.
+- **Starters and live state for five `fleet-map.json` services**: What starts `t5500-marketing-gateway` (port `8377`), `t5500-hermes-dashboard` (port `9119`), `t5500-live-npc-lab` (port `9127`), `t5500-fleet-status` (port `9165`), and `ai-memory` (port `49374`), and whether each is currently running on the T5500, is **not known** from the files.
+- **Starter for `agent-windows.ps1`**: `keepalive.ps1` notes that `agent-windows.ps1` runs interactively at logon to open Obsidian (`:27123`) and the visible `hermes-support.ps1 -Console` window, but what starts `agent-windows.ps1` is **not known** from the files.
+- **Complete tunnel ingress table**: `%USERPROFILE%\.cloudflared\config.yml` is outside the repo on the T5500, so any tunnel hostnames beyond `youandinotai.com`, `www.youandinotai.com`, `api.youandinotai.com`, `onlinerecycle.net`, and `dream-online.net` are **not known** from the files.
+- **Whether the in-memory `keepalive.ps1` has reloaded since 2026-11-20 09:46**: `DEPLOY-NOTE.txt` records that the running `ANTIGRAVITY T5500 Keepalive` process in memory was still the copy loaded on 2026-11-13; whether the box has rebooted or reloaded the new `keepalive.ps1` since 2026-11-20 09:46 is **not known** from the files.
+- **Direct PostgreSQL table read and signed-in live browser verification**: Direct `psql` queries without a password were refused on 2026-11-19 (the `users.signup_source` column is known only from `reconcile_legacy_schema` succeeding at startup and appearing in OpenAPI), and the signed-in `/app/usa` room on the live site was not checked because it requires a signed-in browser session; both are **not known** from the files.
+- **Contents of the local `odysseus` change**: `DEPLOY-NOTE.txt` notes one tracked change in the `odysseus` folder on the T5500 that was left untouched; its contents are **not known** from the files.

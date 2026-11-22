@@ -41,14 +41,14 @@ hono, js-yaml, nanoid, ip-address, postcss, brace-expansion, fast-uri.
 fast-uri also needed bumping in the separate `brain-mcp` and
 `services/mission-mcp` npm lockfiles.
 
-**Killed:** `daily-doctrine-audit.yml` ("Daily Paperclip Agent Audit") —
-zombie calling deleted `scripts/paperclip/agent-audit.sh`, emailed a failure
-daily at 06:00 UTC. Deleted per the Paperclip retirement; do not restore.
+**Killed:** `daily-doctrine-audit.yml` (legacy daily agent audit) —
+zombie calling deleted audit script, emailed a failure daily at 06:00 UTC.
+Deleted per control-plane retirement; do not restore.
 
 **Actions are on Node 24 majors** (checkout v7, setup-python v7, setup-node
 v7, cache v6, upload-artifact v7, github-script v9, pnpm/action-setup v6,
 google auth/setup-gcloud v3). Keep new workflow steps on these majors or the
 node20 deprecation warnings return.
 
-Related: [[sabretooth-reinstall-2026-08-16]] (gh CLI restored — the tool used
-to drive all of this), [[judge-governance-2026-08-16]] (push rules).
+Related: archived post-reinstall hardware note (2026-08-16, retired third-node
+record) and [[judge-governance-2026-08-16]] (push rules).

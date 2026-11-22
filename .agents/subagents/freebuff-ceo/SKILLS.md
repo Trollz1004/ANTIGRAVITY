@@ -6,15 +6,13 @@ agent-reach · journal (`.agents/journals/freebuff-ceo/STATE.md`) · find-skills
 skill-creator · i-have-adhd · brainstorming · agent-browser ·
 planning-with-files · para-memory-files
 
-Role-specific, loaded at session start:
+Role-specific (legacy retired coordination-board contract -> superseded by Mission OS `http://192.168.0.15:3130`):
 
-- `paperclip` — the Paperclip API heartbeat procedure (identity, inbox,
-  checkout, status, run-id header). Required for every heartbeat.
-- `paperclip-ceo` — this adapter's session procedure (bridge health, wakes,
-  drop contract, completion). Required for every heartbeat.
+- `mission-control` — Mission OS API and task workflow (`http://192.168.0.15:3130`).
+- `ceo-standing-session` — standing executive checklist and fleet coordination.
 
 Resolved catalog (VERIFIED on disk in `.agents/skills/`, 2026-08-23). The
-upstream source at `C:\Users\joshi\OneDrive\AGENCY SKILLS` was audited: every
+upstream source at `%USERPROFILE%\OneDrive\AGENCY SKILLS` was audited: every
 skill there is already present here in newer form — this repo catalog is a
 superset. Task-relevant floor: pick a minimum of five per task, then add as
 needed:

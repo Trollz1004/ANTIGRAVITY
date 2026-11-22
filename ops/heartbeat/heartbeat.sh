@@ -2,7 +2,7 @@
 # Heartbeat health check for ANTIGRAVITY date app
 # Runs every 15 minutes via Task Scheduler
 
-API="http://127.0.0.1:8000/api/v1"
+API="http://192.168.0.15:8000/api/v1"
 LOG="C:/ANTIGRAVITY/ops/heartbeat/heartbeat.log"
 MAX_LOG_SIZE=1048576  # 1MB
 
@@ -28,7 +28,7 @@ else
 fi
 
 # Check frontend
-FRONTEND=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3200/" 2>/dev/null)
+FRONTEND=$(curl -s -o /dev/null -w "%{http_code}" "http://192.168.0.15:3200/" 2>/dev/null)
 if [ "$FRONTEND" = "200" ]; then
     echo "FRONTEND: OK ($FRONTEND)" >> "$LOG"
 else
@@ -41,7 +41,7 @@ if [ "$REDIS" = "PONG" ]; then
     echo "REDIS: OK" >> "$LOG"
 else
     echo "REDIS: FAIL - restarting..." >> "$LOG"
-    cd "C:/Users/joshi/redis-win" && powershell -Command "Start-Process 'C:\Users\joshi\redis-win\redis-server.exe' -ArgumentList '--dir','C:\Users\joshi\redis-win\data' -WindowStyle Hidden"
+    cd "$HOME/redis-win" && powershell -Command "Start-Process '$HOME\redis-win\redis-server.exe' -ArgumentList '--dir','$HOME\redis-win\data' -WindowStyle Hidden"
     sleep 2
     echo "REDIS: restarted" >> "$LOG"
 fi

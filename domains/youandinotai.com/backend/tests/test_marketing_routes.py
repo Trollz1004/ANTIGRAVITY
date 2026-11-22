@@ -24,7 +24,7 @@ from tests.helpers import override_user, seed
 
 
 def _make_user(*, email: str = "marketing@example.com") -> User:
-    return User(
+    user = User(
         id=uuid.uuid4(),
         email=email,
         password_hash="hashed",
@@ -32,6 +32,8 @@ def _make_user(*, email: str = "marketing@example.com") -> User:
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
+    user.is_admin = True
+    return user
 
 
 def _valid_payload(**overrides):

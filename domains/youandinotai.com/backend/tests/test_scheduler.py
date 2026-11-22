@@ -614,6 +614,7 @@ def test_feature_flags_router_list_returns_flags(client):
     mock_user = MagicMock()
     mock_user.id = uuid.uuid4()
     mock_user.email = "flagadmin@example.com"
+    mock_user.is_admin = True
 
     async def _override():
         return mock_user
@@ -639,6 +640,7 @@ def test_feature_flags_router_read_existing_flag(client):
 
     mock_user = MagicMock()
     mock_user.id = uuid.uuid4()
+    mock_user.is_admin = True
 
     async def _override():
         return mock_user
@@ -662,6 +664,7 @@ def test_feature_flags_router_read_unknown_flag_returns_404(client):
 
     mock_user = MagicMock()
     mock_user.id = uuid.uuid4()
+    mock_user.is_admin = True
 
     async def _override():
         return mock_user
@@ -685,6 +688,7 @@ def test_feature_flags_router_update_flag(client):
 
     mock_user = MagicMock()
     mock_user.id = uuid.uuid4()
+    mock_user.is_admin = True
 
     async def _override():
         return mock_user
@@ -716,6 +720,7 @@ def test_feature_flags_router_update_unknown_flag_returns_404(client):
 
     mock_user = MagicMock()
     mock_user.id = uuid.uuid4()
+    mock_user.is_admin = True
 
     async def _override():
         return mock_user

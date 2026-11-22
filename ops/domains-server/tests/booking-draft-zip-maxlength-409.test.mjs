@@ -233,6 +233,7 @@ function mountBookingDom({ sessionStorage = createFakeStorage(), onFetch } = {})
     Map,
     Set,
     Promise,
+    URLSearchParams,
     encodeURIComponent,
     decodeURIComponent,
     parseInt,
@@ -326,12 +327,24 @@ test('pickup bookings extract a 5-digit zip into payload.zip and server.mjs reco
   const { getEl, fetchCalls } = mountBookingDom();
   await new Promise((r) => setTimeout(r, 20));
 
+  // Pickup without a 5-digit ZIP in city or address shows the ZIP error before POST /api/book
   getEl('tab-pickup').click();
   getEl('bf-name').value = 'Jordan Blake';
   getEl('bf-phone').value = '(321) 555-0144';
+  getEl('bf-address').value = '400 Lakeview Ave';
+  getEl('bf-city').value = 'Mount Dora, FL';
+  getEl('bf-devices').value = '4 laptops and 2 monitors';
+  getEl('booking-form').dispatchEvent('submit');
+  assert.equal(
+    fetchCalls.filter((c) => c.url === '/api/book').length,
+    0,
+    'pickup submit without 5-digit ZIP must not POST /api/book',
+  );
+  assert.equal(getEl('booking-error').style.display, 'block');
+  assert.match(getEl('booking-error').textContent, /ZIP/i);
+
   getEl('bf-address').value = '12345 Orange Blossom Trail';
   getEl('bf-city').value = 'Sorrento, FL 32776-4102';
-  getEl('bf-devices').value = '4 laptops and 2 monitors';
 
   getEl('booking-form').dispatchEvent('submit');
   await new Promise((r) => setTimeout(r, 20));

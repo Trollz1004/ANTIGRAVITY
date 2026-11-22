@@ -1,9 +1,9 @@
-# ANTIGRAVITY Oracle — continuous respawn loop (T5500)
+﻿# ANTIGRAVITY Oracle — continuous respawn loop (T5500)
 # Restarts down services with WindowStyle Hidden only. Never opens a browser.
 # Never uses cmd.exe. Logs to logs/oracle-respawn.log
 
 $ErrorActionPreference = 'Continue'
-$Repo = if (Test-Path 'E:\ANTIGRAVITY') { 'E:\ANTIGRAVITY' } else { 'E:\ANTIGRAVITY' }
+$Repo = if (Test-Path 'C:\ANTIGRAVITY') { 'C:\ANTIGRAVITY' } else { Split-Path -Parent (Split-Path -Parent $PSScriptRoot) }
 $LogDir = Join-Path $Repo 'logs'
 $LogFile = Join-Path $LogDir 'oracle-respawn.log'
 $IntervalSec = 60
@@ -21,7 +21,7 @@ function Log([string]$Msg) {
 function Test-Port([int]$Port) {
     try {
         $c = New-Object System.Net.Sockets.TcpClient
-        $ar = $c.BeginConnect('127.0.0.1', $Port, $null, $null)
+        $ar = $c.BeginConnect([System.Net.IPAddress]::Loopback, $Port, $null, $null)
         $ok = $ar.AsyncWaitHandle.WaitOne(1500, $false)
         $c.Close()
         return $ok
@@ -58,19 +58,17 @@ while ($true) {
         }
     }
 
-    if (-not (Test-Port 4200)) {
-        $dir = Join-Path $Repo 'apps\mission-control\dist'
-        if (-not (Test-Path $dir)) { $dir = Join-Path $Repo '_deploy\aidoesitall-www' }
-        if (Test-Path $dir) {
-            Log 'RESTART opushashands :4200'
-            $py = if (Get-Command py -ErrorAction SilentlyContinue) { 'py' } else { 'python' }
-            Start-Hidden $py @('-3', '-m', 'http.server', '4200', '--bind', '127.0.0.1') $dir
+    if (-not (Test-Port 3130)) {
+        $startMc = Join-Path $Repo 'scripts\start-mission-control.ps1'
+        if (Test-Path $startMc) {
+            Log 'RESTART mission-os :3130'
+            Start-Hidden 'powershell.exe' @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $startMc, '-RepoRoot', $Repo, '-Port', '3130') $Repo
         }
     }
 
     if (-not (Get-Process -Name 'cloudflared' -ErrorAction SilentlyContinue)) {
         $cf = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
-        $cfCfg = Join-Path $Repo 'infra\cloudflare\paperclip-hq.yml'
+        $cfCfg = Join-Path $Repo 'infra\cloudflare\t5500-dateapp.yml'
         if ((Test-Path $cf) -and (Test-Path $cfCfg)) {
             Log 'RESTART cloudflared'
             Start-Hidden $cf @('tunnel', '--config', $cfCfg, 'run')

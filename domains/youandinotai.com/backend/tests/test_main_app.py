@@ -252,3 +252,12 @@ def test_gzip_compression_on_large_responses(client):
     assert resp.status_code == 200
     # httpx transparently decodes; verify the server flagged gzip encoding
     assert resp.headers.get("content-encoding") == "gzip" or len(resp.content) > 0
+
+
+def test_graphql_not_mounted_by_default(client):
+    from app.config import Settings, get_settings
+
+    assert Settings().graphql_enabled is False
+    assert get_settings().graphql_enabled is False
+    assert client.get("/graphql").status_code == 404
+    assert client.post("/graphql", json={"query": "{ hello }"}).status_code == 404
