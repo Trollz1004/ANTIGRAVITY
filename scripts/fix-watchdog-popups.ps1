@@ -3,14 +3,16 @@
 Fix watchdog popup storm using native PowerShell scheduled-task cmdlets.
 Requires: elevated PowerShell 5.1+ or 7+.
 #>
-param([switch]$DryRun)
+param(
+    [switch]$DryRun,
+    [string]$RepoRoot = 'C:\ANTIGRAVITY'
+)
 $ErrorActionPreference = 'Continue'
-$repo = 'E:\ANTIGRAVITY'
 
 function L($m){ Write-Host "[fix-watchdogs] $m" }
 
-# --- 1. remove ALL existing target tasks ---
-$kill = @('PaperclipDateAppWatchdog','MissionControlWatchdog','ANTIGRAVITY-T5500-RuntimeOps-Health30m','PaperclipDateAppLoopback','ANTIGRAVITY-T5500-RuntimeOps')
+# --- 1. remove retired and stale target tasks ---
+$kill = @('MissionControlWatchdog','ANTIGRAVITY-T5500-RuntimeOps-Health30m','ANTIGRAVITY-T5500-RuntimeOps')
 foreach ($n in $kill) {
   $ts = Get-ScheduledTask -TaskName $n -ErrorAction SilentlyContinue
   if ($ts) {
@@ -23,13 +25,12 @@ foreach ($n in $kill) {
   }
 }
 
-# --- 2. ensure scripts exist ---
+# --- 2. ensure canonical scripts exist ---
 $ensure = @(
-  "$repo\ops\paperclip-runtime\watchdog-paperclip-loopback.ps1",
-  "$repo\scripts\mission-control-watchdog.ps1",
-  "$repo\scripts\start-mission-control.ps1",
-  "$repo\scripts\t5500\Start-T5500-RuntimeOps.ps1",
-  "$repo\scripts\start-t5500-dateapp-cloudflared.ps1"
+  "$RepoRoot\scripts\mission-control-watchdog.ps1",
+  "$RepoRoot\scripts\start-mission-control.ps1",
+  "$RepoRoot\scripts\t5500\Start-T5500-RuntimeOps.ps1",
+  "$RepoRoot\scripts\start-t5500-dateapp-cloudflared.ps1"
 )
 foreach ($p in $ensure) {
   if (-not (Test-Path $p)) { L "MISSING script: $p" }
@@ -41,18 +42,13 @@ $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType S4U -Ru
 
 $tasks = @(
   @{
-    Name = 'PaperclipDateAppWatchdog'
-    Action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$repo\ops\paperclip-runtime\watchdog-paperclip-loopback.ps1`""
-    Triggers = @((New-ScheduledTaskTrigger -AtStartup),(New-ScheduledTaskTrigger -AtLogOn))
-  },
-  @{
     Name = 'MissionControlWatchdog'
-    Action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -NonInteractive -WindowStyle Hidden -File `"$repo\scripts\mission-control-watchdog.ps1`" -RepoRoot `"$repo`" -Port 8787"
+    Action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -NonInteractive -WindowStyle Hidden -File `"$RepoRoot\scripts\mission-control-watchdog.ps1`" -RepoRoot `"$RepoRoot`" -Port 3130"
     Triggers = @((New-ScheduledTaskTrigger -AtStartup),(New-ScheduledTaskTrigger -AtLogOn))
   },
   @{
     Name = 'ANTIGRAVITY-T5500-RuntimeOps-Health30m'
-    Action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$repo\scripts\t5500\Start-T5500-RuntimeOps.ps1`" -RepoRoot `"$repo`""
+    Action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$RepoRoot\scripts\t5500\Start-T5500-RuntimeOps.ps1`" -RepoRoot `"$RepoRoot`""
     Triggers = @((New-ScheduledTaskTrigger -AtStartup))
   }
 )

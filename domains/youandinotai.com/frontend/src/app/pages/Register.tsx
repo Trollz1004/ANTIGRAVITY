@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -32,6 +32,21 @@ export function Register() {
   const location = useLocation();
   const nextPath = getSafeNextPath(location.search, '/app/profile');
   const [partnerId] = useState(() => capturePartnerId(location.search));
+
+  useEffect(() => {
+    document.title = 'Create 18+ Account | YouAndINotAI';
+    const canonical = document.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]'
+    );
+    if (canonical) canonical.href = 'https://youandinotai.com/register';
+    const desc = document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]'
+    );
+    if (desc) {
+      desc.content =
+        'Create your 18+ YouAndINotAI account and complete the $1 Bot-Shield human check to unlock verified human discovery, messaging, topic boards, and the USA group chat.';
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

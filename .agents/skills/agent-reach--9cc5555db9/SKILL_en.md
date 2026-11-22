@@ -1,15 +1,18 @@
 ---
 name: agent-reach
 description: >
-  TRUST GATE: Only Claude (Opus, Fable) and Gemini (Argon) may run this skill,
-  never Hermes or a local model. YouTube source is OFF (youtube: false; no yt-dlp).
+  TRUST GATE: Only Claude (`Opus 5.5` / `Fable`), Gemini (`Gemini 4 Carbon`), and
+  OpenAI (`GPT-6 Astra` / `GPT-6.1 Sol` / `Codex` code verification) follow this trust boundary —
+  never Hermes or a local model for browser/search scraping. YouTube source is OFF (youtube: false; no yt-dlp).
   Allowed sources: Reddit, Hacker News, GitHub, and X through official APIs.
 metadata:
   homepage: https://github.com/Panniantong/Agent-Reach
   allowed_models:
-    - claude-opus
+    - claude-opus-5.5
     - claude-fable
-    - gemini-argon
+    - gemini-4-carbon
+    - gpt-6-astra
+    - gpt-6.1-sol
   forbidden_runners:
     - hermes
     - local-model
@@ -19,15 +22,15 @@ metadata:
 # Agent Reach — internet capability router
 
 > **TRUST & SOURCE GATE (MANDATORY — `docs/standards/AGENT-STANDARD.md` §8)**:
-> - **Who may run this skill**: Only **Claude (Opus, Fable)** and **Gemini (Argon)** may run `agent-reach` — **never Hermes (`OPSis`), Free Claude Code, or any local model**.
+> - **Who may run this skill**: Only **Claude (`Opus 5.5` / `Fable`)** and **Gemini (`Gemini 4 Carbon`)** (with `GPT-6 Astra` / `GPT-6.1 Sol` alongside on official code review lanes) may run `agent-reach` — **never Hermes (`OPSis`), Free Claude Code, or any local model**.
 > - **Sources ON**: Reddit, Hacker News, GitHub, and X through their official APIs.
 > - **YouTube source OFF (`youtube: false`)**: The YouTube source and any downloader (`yt-dlp`, `youtube-dl`, `opencli youtube`) are permanently switched **OFF** for every agent and every node.
 
-15 platforms, multiple backends each. **Only Claude (Opus, Fable) and Gemini (Argon) may run this skill; the YouTube source is permanently OFF (`youtube: false`).**
+15 platforms, multiple backends each. **Only Claude (`Opus 5.5` / `Fable`) and Gemini (`Gemini 4 Carbon`) may run this skill; the YouTube source is permanently OFF (`youtube: false`).**
 
 ## Standing rules (apply for the whole session)
 
-1. **Model gate first**: Verify you are running as an official **Claude (Opus, Fable)** or **Gemini (Argon)** session. Hermes (`OPSis`) and local models must never execute this skill.
+1. **Model gate first**: Verify you are running as an official **Claude (`Opus 5.5` / `Fable`)** or **Gemini (`Gemini 4 Carbon`)** session. Hermes (`OPSis`) and local models must never execute this skill.
 2. **YouTube stays OFF**: Never invoke `yt-dlp`, `youtube-dl`, or `opencli youtube`. YouTube is disabled in `config.json` (`"youtube": false`).
 3. **Health-check before acting**: run `agent-reach doctor --json` first for permitted sources.
 4. **Announce what you use**: say "using agent-reach, platform X via backend Y" before starting.

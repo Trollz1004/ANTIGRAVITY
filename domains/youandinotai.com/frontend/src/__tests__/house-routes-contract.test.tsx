@@ -1,10 +1,13 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor, act } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import LandingPage, { PublicSupportPage } from '../App';
 import { Login } from '../app/pages/Login';
 import { Register } from '../app/pages/Register';
+import { GoogleSignInButton } from '../components/auth/GoogleSignInButton';
 import { Discover } from '../app/pages/Discover';
 import { LoveBotPage } from '../app/pages/LoveBotPage';
 import { Matches } from '../app/pages/Matches';
@@ -301,6 +304,98 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     expect(ageLink).not.toBeNull();
   });
 
+  it('requires 18+ date of birth for new Google sign-in accounts before creating account', async () => {
+    useAuth.setState({ user: null, loading: false });
+    let capturedCallback:
+      ((resp: { credential: string }) => Promise<void>) | null = null;
+    window.google = {
+      accounts: {
+        id: {
+          initialize: (opts: {
+            callback: (resp: { credential: string }) => Promise<void>;
+          }) => {
+            capturedCallback = opts.callback;
+          },
+          renderButton: vi.fn(),
+        },
+      },
+    };
+
+    try {
+      vi.mocked(api.post).mockRejectedValueOnce(
+        new Error('Date of birth is required to create an account (18+ only)')
+      );
+
+      const { findByLabelText, findByText, getByRole, container } = render(
+        <GoogleSignInButton clientId="test-google-client-id" />
+      );
+
+      await waitFor(() => {
+        expect(capturedCallback).not.toBeNull();
+      });
+      await act(async () => {
+        await capturedCallback!({ credential: 'google-id-token-1' });
+      });
+
+      const dobInput = await findByLabelText(
+        /Confirm 18\+ Date of Birth to Finish Google Sign Up/i
+      );
+
+      // Missing DOB refused
+      fireEvent.click(
+        getByRole('button', { name: /Confirm 18\+ & Continue/i })
+      );
+      expect(await findByText('Date of birth is required')).toBeTruthy();
+
+      // Under-18 DOB refused
+      const underageYear = new Date().getUTCFullYear() - 16;
+      fireEvent.change(dobInput, {
+        target: { value: `0101${underageYear}` },
+      });
+      fireEvent.click(
+        getByRole('button', { name: /Confirm 18\+ & Continue/i })
+      );
+      expect(
+        await findByText('YouAndINotAI is strictly 18+ only')
+      ).toBeTruthy();
+
+      // Valid 18+ DOB + confirmation checkbox submits date_of_birth
+      vi.mocked(api.post).mockResolvedValueOnce({
+        access_token: 'tok-google',
+        refresh_token: 'ref-google',
+        user_id: 'u-google',
+      });
+      vi.mocked(api.get).mockResolvedValueOnce({
+        user_id: 'u-google',
+        email: 'google@youandinotai.com',
+        display_name: 'Google Adult',
+        bot_shield_verified: false,
+        subscription_tier: null,
+        subscription_active: false,
+        has_profile: false,
+        adult_verified: true,
+      });
+
+      fireEvent.change(dobInput, { target: { value: '05141992' } });
+      const checkbox = container.querySelector(
+        'input[type="checkbox"]'
+      ) as HTMLInputElement;
+      fireEvent.click(checkbox);
+      fireEvent.click(
+        getByRole('button', { name: /Confirm 18\+ & Continue/i })
+      );
+
+      await waitFor(() => {
+        expect(api.post).toHaveBeenLastCalledWith('/auth/google', {
+          id_token: 'google-id-token-1',
+          date_of_birth: '1992-05-14',
+        });
+      });
+    } finally {
+      delete window.google;
+    }
+  });
+
   it('keeps /app/profile form fields and submits PUT /profiles/me', async () => {
     vi.mocked(api.get).mockResolvedValue({
       user_id: 'user-contract-1',
@@ -356,7 +451,7 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     vi.mocked(api.post).mockResolvedValueOnce({
       challenge_id: 'chal-1',
       challenge_type: 'liveness',
-      question: 'Type HUMAN to confirm liveness',
+      question: 'What is 42 + 7?',
       issued_at: '2026-11-04T00:00:00Z',
       expires_at: '2026-11-04T00:05:00Z',
     });
@@ -578,10 +673,10 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     fireEvent.focus(membershipBtn);
     expect(getByRole('tooltip').textContent).toContain('05 · Membership');
 
-    // No charity, mission, or third-party payment processor names in visible landing text
+    // No charity, mission, or banned payment processor names in visible landing text
     const visibleText = container.textContent || '';
     expect(visibleText).not.toMatch(
-      /\b(charity|philanthropy|nonprofit|donation|Square|Stripe)\b/i
+      /\b(charity|philanthropy|nonprofit|donation|Stripe)\b/i
     );
   });
 
@@ -711,5 +806,93 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
         value: originalInnerHeight,
       });
     }
+  });
+
+  it('CheckoutLaunch hides the spinner on checkout-link error, displays the selected tier price, and renders Try Again and /app/preorder links', async () => {
+    vi.mocked(api.post).mockRejectedValueOnce(
+      new Error('Square checkout link failed')
+    );
+
+    const { container, getByRole, getByText } = render(
+      <MemoryRouter initialEntries={['/app/checkout/founding_member']}>
+        <Routes>
+          <Route path="/app/checkout/:tier" element={<CheckoutLaunch />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(api.post).toHaveBeenCalledWith('/billing/checkout-link', {
+        tier: 'founding_member',
+      });
+      expect(getByText('Square checkout link failed')).toBeTruthy();
+    });
+
+    // Spinner is hidden when error state is active
+    expect(container.querySelector('.animate-spin')).toBeNull();
+
+    // Selected tier price summary is visible
+    expect(container.textContent).toContain('$14.99/mo');
+
+    // Renders a link to /app/preorder and a Try Again button that retries checkout
+    const preorderLink = container.querySelector('a[href="/app/preorder"]');
+    expect(preorderLink).not.toBeNull();
+
+    const tryAgainButton = getByRole('button', { name: /Try Again/i });
+    expect(tryAgainButton).toBeTruthy();
+
+    vi.mocked(api.post).mockRejectedValueOnce(
+      new Error('Square checkout retry failed')
+    );
+    fireEvent.click(tryAgainButton);
+
+    await waitFor(() => {
+      expect(api.post).toHaveBeenCalledTimes(2);
+      expect(api.post).toHaveBeenLastCalledWith('/billing/checkout-link', {
+        tier: 'founding_member',
+      });
+    });
+  });
+
+  it('renders the wildcard 404 screen on unknown routes with meta robots noindex and links to / and /register', async () => {
+    const rootDiv = document.createElement('div');
+    rootDiv.id = 'root';
+    document.body.appendChild(rootDiv);
+    window.history.pushState({}, '', '/nonexistent-unknown-route-404');
+
+    try {
+      vi.resetModules();
+      await import('../main');
+
+      await waitFor(() => {
+        const robotsMeta = document.head.querySelector(
+          'meta[name="robots"]'
+        ) as HTMLMetaElement | null;
+        expect(robotsMeta).not.toBeNull();
+        expect(robotsMeta?.getAttribute('content')).toContain('noindex');
+      });
+
+      expect(rootDiv.textContent).toMatch(/404|not found/i);
+      expect(rootDiv.querySelector('a[href="/"]')).not.toBeNull();
+      expect(rootDiv.querySelector('a[href="/register"]')).not.toBeNull();
+    } finally {
+      window.history.pushState({}, '', '/');
+      document.head
+        .querySelectorAll('meta[name="robots"]')
+        .forEach(el => el.remove());
+      rootDiv.remove();
+    }
+  });
+
+  it('disallows /app/, /api/, /c/, and /go/ in public/robots.txt', () => {
+    const robotsTxt = readFileSync(
+      path.resolve(__dirname, '../../public/robots.txt'),
+      'utf8'
+    );
+    expect(robotsTxt).toContain('User-agent: *');
+    expect(robotsTxt).toContain('Disallow: /app/');
+    expect(robotsTxt).toContain('Disallow: /api/');
+    expect(robotsTxt).toContain('Disallow: /c/');
+    expect(robotsTxt).toContain('Disallow: /go/');
   });
 });

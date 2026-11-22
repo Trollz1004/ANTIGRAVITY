@@ -99,9 +99,9 @@ export function PreOrder() {
       <p className="mt-2 text-sm text-[var(--km-muted)]">
         Target launch:{' '}
         <strong className="text-[var(--km-text)]">Aug 14, 2026</strong> (10-day
-        window). Fallback: Aug 18 (14 days). Verified-human dating with video +
-        optional animated avatar. Payments: Square primary · PayPal · Cash App
-        Business · Plaid verify. No Stripe.
+        window). Fallback: Aug 18 (14 days). Verified-human dating with
+        discovery, messaging, topic boards, and the USA group chat. Payments:
+        Square primary · PayPal · Cash App Business · Plaid verify. No Stripe.
       </p>
 
       <section className="km-card km-card-glow mt-6 p-5">

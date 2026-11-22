@@ -7,13 +7,15 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { notifyBooking, formatBookingMessage, NOT_CONFIGURED_LINE } from "../booking-notify.mjs";
-import { recordPageView, recordBooking, dayKey } from "../booking-stats.mjs";
+import { recordPageView, recordBooking, dayKey, isKnownCrawler } from "../booking-stats.mjs";
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "orc-notify-"));
 const booking = {
   bookingId: "OR-20261120-AAAA",
+  serviceType: "pickup",
   fullName: "Pat Jones",
   phone: "555-0100",
+  address: "123 Main St",
   city: "Mount Dora",
   zip: "32757",
   deviceCount: "6-20",
@@ -22,6 +24,19 @@ const booking = {
   slotLabel: "9am-12pm",
   deviceList: "x".repeat(300),
 };
+const dropoffBooking = {
+  bookingId: "OR-20261121-BBBB",
+  serviceType: "dropoff",
+  fullName: "Sam Lee",
+  phone: "555-0199",
+  city: "Sorrento",
+  zip: "32776",
+  deviceCount: "1-5",
+  notes: "Standard intake",
+  date: "2026-11-21",
+  slotLabel: "9:00 AM - 9:30 AM",
+  deviceList: "2 laptops",
+};
 let n = 0;
 async function t(name, fn) {
   await fn();
@@ -29,12 +44,24 @@ async function t(name, fn) {
   console.log(`ok - ${name}`);
 }
 
-await t("message format and 160 char cap", () => {
+await t("message format carries booking id, service type, street address, name, phone, time, and 160 char cap", () => {
   const m = formatBookingMessage(booking);
-  assert.ok(m.startsWith("New pickup request\nName: Pat Jones\nPhone: 555-0100"));
+  assert.ok(m.startsWith("New pickup request\n"), `unexpected header: ${m}`);
+  assert.ok(m.includes("Booking ID: OR-20261120-AAAA"), "missing bookingId");
+  assert.ok(m.includes("Service: pickup"), "missing pickup service type");
+  assert.ok(m.includes("Address: 123 Main St"), "missing street address");
+  assert.ok(m.includes("Name: Pat Jones") && m.includes("Phone: 555-0100"));
   assert.ok(m.includes("Mount Dora 32757") && m.includes("6-20") && m.includes("Certified wipe"));
-  assert.ok(m.includes("2026-11-20 9am-12pm"));
+  assert.ok(m.includes("2026-11-20 9am-12pm"), "missing time window");
   assert.ok(m.endsWith(`Items: ${"x".repeat(160)}`));
+
+  const dm = formatBookingMessage(dropoffBooking);
+  assert.ok(dm.startsWith("New drop-off request\n"), `unexpected drop-off header: ${dm}`);
+  assert.ok(dm.includes("Booking ID: OR-20261121-BBBB"), "missing drop-off bookingId");
+  assert.ok(dm.includes("Service: drop-off"), "missing drop-off service type");
+  assert.ok(!dm.includes("New pickup request"), "drop-off must not say pickup");
+  assert.ok(dm.includes("Name: Sam Lee") && dm.includes("Phone: 555-0199"));
+  assert.ok(dm.includes("2026-11-21 9:00 AM - 9:30 AM"));
 });
 
 await t("configured sends to Telegram", async () => {
@@ -58,18 +85,71 @@ await t("not configured does nothing but log one line", async () => {
   assert.deepEqual(logs, [NOT_CONFIGURED_LINE]);
 });
 
-await t("failing send does not throw, logs without token", async () => {
+await t("failed owner notice is retried three times with a timeout, logs without token", async () => {
   const env = { ORC_NOTIFY_TELEGRAM_TOKEN: "SECRETTOKEN", ORC_NOTIFY_TELEGRAM_CHAT: "42" };
-  const ok = await notifyBooking(booking, { env, fetchImpl: async () => { throw new Error("boom botSECRETTOKEN"); }, logDir: tmp });
+  let errCalls = 0;
+  const ok = await notifyBooking(booking, {
+    env,
+    fetchImpl: async () => {
+      errCalls += 1;
+      throw new Error("boom botSECRETTOKEN");
+    },
+    logDir: tmp,
+    retryDelayMs: 5,
+    timeoutMs: 50,
+  });
   assert.equal(ok, false);
-  const ok2 = await notifyBooking(booking, { env, fetchImpl: async () => ({ ok: false, status: 500 }), logDir: tmp });
+  assert.equal(errCalls, 4, "initial attempt + 3 retries = 4 calls");
+
+  let httpCalls = 0;
+  const ok2 = await notifyBooking(booking, {
+    env,
+    fetchImpl: async () => {
+      httpCalls += 1;
+      return { ok: false, status: 500 };
+    },
+    logDir: tmp,
+    retryDelayMs: 5,
+    timeoutMs: 50,
+  });
   assert.equal(ok2, false);
+  assert.equal(httpCalls, 4, "HTTP 500 retried three times");
+
+  let recoverCalls = 0;
+  const ok3 = await notifyBooking(booking, {
+    env,
+    fetchImpl: async () => {
+      recoverCalls += 1;
+      if (recoverCalls < 3) return { ok: false, status: 502 };
+      return { ok: true, status: 200 };
+    },
+    logDir: tmp,
+    retryDelayMs: 5,
+    timeoutMs: 50,
+  });
+  assert.equal(ok3, true, "succeeds when retry succeeds");
+  assert.equal(recoverCalls, 3);
+
+  let hangCalls = 0;
+  const ok4 = await notifyBooking(booking, {
+    env,
+    fetchImpl: async () => {
+      hangCalls += 1;
+      return new Promise(() => {});
+    },
+    logDir: tmp,
+    retryDelayMs: 5,
+    timeoutMs: 25,
+  });
+  assert.equal(ok4, false, "hanging request times out and returns false");
+  assert.equal(hangCalls, 4, "timed-out request is retried three times");
+
   const log = fs.readFileSync(path.join(tmp, "notify-errors.log"), "utf8");
-  assert.ok(log.includes("boom") && log.includes("HTTP 500"));
+  assert.ok(log.includes("boom") && log.includes("HTTP 500") && log.includes("timeout"));
   assert.ok(!log.includes("SECRETTOKEN"));
 });
 
-await t("counter keeps two numbers per day, nothing else", () => {
+await t("counter keeps page_views, page_views_all, and bookings per day, nothing else", () => {
   const dir = path.join(tmp, "stats");
   const now = new Date("2026-11-13T15:00:00Z");
   recordPageView(dir, now);
@@ -77,9 +157,62 @@ await t("counter keeps two numbers per day, nothing else", () => {
   recordBooking(dir, now);
   const file = path.join(dir, `${dayKey(now)}.json`);
   assert.equal(path.basename(file), "2026-11-13.json");
-  assert.deepEqual(JSON.parse(fs.readFileSync(file, "utf8")), { page_views: 2, bookings: 1 });
+  assert.deepEqual(JSON.parse(fs.readFileSync(file, "utf8")), {
+    page_views: 2,
+    page_views_all: 2,
+    bookings: 1,
+  });
   recordBooking(dir, new Date("2026-11-14T15:00:00Z"));
-  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, "2026-11-14.json"), "utf8")), { page_views: 0, bookings: 1 });
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, "2026-11-14.json"), "utf8")), {
+    page_views: 0,
+    page_views_all: 0,
+    bookings: 1,
+  });
+});
+
+await t("known crawler user agents are left out of page_views and counted in page_views_all", () => {
+  const dir = path.join(tmp, "stats-crawlers");
+  const now = new Date("2026-11-15T15:00:00Z");
+  const crawlers = [
+    "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+    "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)",
+    "DuckDuckBot/1.1; (+http://duckduckgo.com/duckduckbot.html)",
+    "Mozilla/5.0 (compatible; AhrefsBot/7.0; +http://ahrefs.com/robot/)",
+    "Mozilla/5.0 (compatible; GPTBot/1.0; +https://openai.com/gptbot)",
+    "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
+    "curl/8.5.0",
+  ];
+  for (const ua of crawlers) {
+    assert.equal(isKnownCrawler(ua), true, `expected crawler UA to be detected: ${ua}`);
+    recordPageView(dir, now, ua);
+  }
+  const file = path.join(dir, `${dayKey(now)}.json`);
+  assert.deepEqual(JSON.parse(fs.readFileSync(file, "utf8")), {
+    page_views: 0,
+    page_views_all: crawlers.length,
+    bookings: 0,
+  });
+});
+
+await t("human browser user agents increment both page_views and page_views_all", () => {
+  const dir = path.join(tmp, "stats-humans");
+  const now = new Date("2026-11-16T15:00:00Z");
+  const browsers = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0",
+  ];
+  for (const ua of browsers) {
+    assert.equal(isKnownCrawler(ua), false, `expected browser UA not to be detected as crawler: ${ua}`);
+    recordPageView(dir, now, ua);
+  }
+  recordPageView(dir, now, "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
+  const file = path.join(dir, `${dayKey(now)}.json`);
+  assert.deepEqual(JSON.parse(fs.readFileSync(file, "utf8")), {
+    page_views: 3,
+    page_views_all: 4,
+    bookings: 0,
+  });
 });
 
 fs.rmSync(tmp, { recursive: true, force: true });

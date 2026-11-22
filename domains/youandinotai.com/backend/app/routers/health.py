@@ -7,9 +7,12 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth import require_founder_or_admin
 from app.cache import redis_health_check
 from app.config import get_settings
 from app.database import check_db_health, get_db
+from app.email_service import _smtp_is_configured
+from app.env_health import get_backend_env_light
 from app.error_responses import internal_error
 from app.models import User
 from app.payment_truth import extract_payment_proof_label, proof_label_is_wallet
@@ -19,6 +22,7 @@ from app.webhook_event_store import recent_processed_payment_payloads
 router = APIRouter()
 settings = get_settings()
 logger = logging.getLogger(__name__)
+
 
 # Standing Square proof from docs/PAYMENTS-TRUTH.md (judge-lane, 2026-09-15).
 # Local webhook_events can be empty after a DB reset / SQLite overlay without
@@ -57,6 +61,20 @@ def _square_signature_configured() -> bool:
     if not bool(getattr(settings, "square_webhook_verify_signature", False)):
         return False
     return bool(_payment_signature_key()) and bool(_payment_notification_url())
+
+
+def _mail_status() -> str:
+    current = settings
+    if not hasattr(current, "smtp_host"):
+        current = get_settings()
+    elif not getattr(current, "smtp_host", "") and not getattr(
+        current, "email_from_address", ""
+    ):
+        try:
+            current = get_settings()
+        except Exception:
+            pass
+    return "on" if _smtp_is_configured(current) else "off"
 
 
 def _iter_payment_objects(payload: object) -> Iterable[dict]:
@@ -177,6 +195,7 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
         wallet_rails_proven = False
     wallet_rails_status = "proven" if wallet_rails_proven else "unproven"
 
+    env_light = get_backend_env_light()
     status_value = "ok" if db_connected and redis_connected else "degraded"
     return HealthResponse(
         status=status_value,
@@ -188,10 +207,16 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
         wallet_rails_status=wallet_rails_status,
         payment_proof_labels=payment_proof_labels,
         user_count=user_count,
+        mail=_mail_status(),
+        missingEnvCount=len(env_light["missingEnv"]),
+        nodeLight=env_light["nodeLight"],
     )
 
 
-@router.get("/health/allocations")
+@router.get(
+    "/health/allocations",
+    dependencies=[Depends(require_founder_or_admin)],
+)
 async def check_allocations(db: AsyncSession = Depends(get_db)):
     from sqlalchemy import text
 
@@ -208,7 +233,10 @@ async def check_allocations(db: AsyncSession = Depends(get_db)):
         raise internal_error(message=f"Failed to retrieve allocations: {e}")
 
 
-@router.get("/health/allocations/summary")
+@router.get(
+    "/health/allocations/summary",
+    dependencies=[Depends(require_founder_or_admin)],
+)
 async def allocations_summary(db: AsyncSession = Depends(get_db)):
     """Revenue summary: customer-only, founder tests, the friend's first charges.
 
@@ -262,7 +290,10 @@ async def allocations_summary(db: AsyncSession = Depends(get_db)):
 # Temporarily removed wipe-users endpoint
 
 
-@router.get("/health/webhooks")
+@router.get(
+    "/health/webhooks",
+    dependencies=[Depends(require_founder_or_admin)],
+)
 async def check_webhooks(db: AsyncSession = Depends(get_db)):
     from sqlalchemy import text
 

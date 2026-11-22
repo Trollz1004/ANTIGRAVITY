@@ -20,7 +20,7 @@ log() {
 log "=== AUTONOMOUS CYCLE START ==="
 
 # Check backend API
-BACKEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:8000/api/v1/health" 2>/dev/null)
+BACKEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" "http://192.168.0.15:8000/api/v1/health" 2>/dev/null)
 if [ "$BACKEND_HEALTH" = "200" ]; then
     log "Backend API: OK (HTTP $BACKEND_HEALTH)"
 else
@@ -30,12 +30,12 @@ else
     cd "C:/ANTIGRAVITY/backend/fastapi-app"
     powershell -Command "Start-Process 'C:\ANTIGRAVITY\backend\fastapi-app\.venv\Scripts\python.exe' -ArgumentList '-m','uvicorn','app.main:app','--host','127.0.0.1','--port','8000' -WorkingDirectory 'C:\ANTIGRAVITY\backend\fastapi-app' -WindowStyle Hidden"
     sleep 5
-    RESTARTED=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:8000/api/v1/health" 2>/dev/null)
+    RESTARTED=$(curl -s -o /dev/null -w "%{http_code}" "http://192.168.0.15:8000/api/v1/health" 2>/dev/null)
     log "Backend API: RESTARTED (HTTP $RESTARTED)"
 fi
 
 # Check frontend
-FRONTEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3200/" 2>/dev/null)
+FRONTEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" "http://192.168.0.15:3200/" 2>/dev/null)
 if [ "$FRONTEND_HEALTH" = "200" ]; then
     log "Frontend: OK (HTTP $FRONTEND_HEALTH)"
 else
@@ -48,8 +48,8 @@ if [ "$REDIS_PING" = "PONG" ]; then
     log "Redis: OK"
 else
     log "Redis: DOWN - RESTARTING..."
-    cd "C:/Users/joshi/redis-win"
-    powershell -Command "Start-Process 'C:\Users\joshi\redis-win\redis-server.exe' -ArgumentList '--dir','C:\Users\joshi\redis-win\data' -WindowStyle Hidden"
+    cd "$HOME/redis-win"
+    powershell -Command "Start-Process '$HOME\redis-win\redis-server.exe' -ArgumentList '--dir','$HOME\redis-win\data' -WindowStyle Hidden"
     sleep 2
     log "Redis: RESTARTED"
 fi

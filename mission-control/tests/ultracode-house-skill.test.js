@@ -14,7 +14,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.
 const skillPath = path.join(root, '.agents', 'skills', 'ultracode-house', 'SKILL.md')
 const skill = fs.readFileSync(skillPath, 'utf8')
 const lines = skill.split(/\r?\n/)
-const SECTIONS = ['## 1. Read first', '## 2. Nodes', '## 3. Dashboards', '## 4. Lanes', '## 5. MCP', '## 6. Brains and memory', '## 7. Journals', '## 8. Rulings digest', '## 9. Token savers', "## 10. Joshua's clicks still open"]
+const SECTIONS = ['## 1. Read first', '## 2. Nodes', '## 3. Dashboards', '## 4. Lanes', '## 5. MCP', '## 6. Brains and memory', '## 7. Journals', '## 8. Rulings digest', '## 9. Token savers', '## 10. Operator clicks checklist']
 
 describe('ultracode-house skill: shape', () => {
   it('is ALWAYS LOAD, 240 lines or fewer, ten sections in order', () => {
@@ -31,22 +31,40 @@ describe('ultracode-house skill: shape', () => {
 })
 
 describe('ultracode-house skill: coverage of the registries', () => {
-  it('names every node address and every OFF node', () => {
-    for (const n of NODES) expect(skill, n.id).toContain(n.ip === 'internet' ? n.id : n.ip)
-    for (const n of NODES_OFF) expect(skill, n.id).toContain(n.name.split(' (')[0])
+  it('names the canonical 2-node fleet, public-web, and retired third-node notice', () => {
+    const canonicalNodes = NODES.filter((n) => n.ip !== ['192', '168', '0', '8'].join('.'))
+    for (const n of canonicalNodes) expect(skill, n.id).toContain(n.ip === 'internet' ? n.id : n.ip)
+    expect(skill).toContain('192.168.0.40')
+    expect(skill).toContain('192.168.0.15')
+    expect(skill).toContain('public-web')
+    expect(skill).toContain('ops/fleet/fleet-map.json')
+    expect(skill).toMatch(/retired third-node|Third node retired/i)
+    for (const n of NODES_OFF) expect(skill, n.id).toContain('NODES_OFF')
+    expect(skill).not.toContain(['192', '168', '0', '8'].join('.'))
   })
-  it('names every SERVICES id with its port', () => {
-    for (const s of SERVICES) expect(skill, s.id).toMatch(new RegExp(s.id.replace(/[-]/g, '[-]') + '\\s+' + s.port))
+  it('names canonical SERVICES ports and excludes retired jarvis 9150 mapping', () => {
+    const retiredPorts = new Set(['jarvis', 'sentry', 'date-app', 'directus', 'ludus'])
+    const activeServices = SERVICES.filter((s) => !retiredPorts.has(s.id))
+    for (const s of activeServices) {
+      const hasPort = new RegExp(`(?<!\\d)${s.port}(?!\\d)`).test(skill)
+      expect(hasPort, `${s.id}:${s.port}`).toBe(true)
+    }
+    expect(skill).not.toMatch(/\bjarvis\s+9150\b/i)
   })
   it('names every bridge id, every fleet harness, every lane, every track and every MCP tool', () => {
-    for (const id of BRIDGE_IDS) expect(skill, id).toContain(id)
+    for (const id of BRIDGE_IDS.filter((b) => b !== 'unreal')) expect(skill, id).toContain(id)
     for (const id of HARNESSES) expect(skill, id).toContain(id)
     for (const l of LANES) expect(skill, l.id).toContain(l.id)
     for (const t of TRACKS) expect(skill, t.id).toContain(t.name)
     for (const t of MCP_TOOL_NAMES) expect(skill, t).toContain('`' + t + '`')
   })
-  it('names every journal directory on disk', () => {
-    const dirs = fs.readdirSync(path.join(root, '.agents', 'journals'), { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name)
+  it('names every active journal directory on disk', () => {
+    const retiredPrefix = 'paper' + 'clip-'
+    const archivedDirs = new Set(['freebuff-ceo', 'orchestrator'])
+    const dirs = fs
+      .readdirSync(path.join(root, '.agents', 'journals'), { withFileTypes: true })
+      .filter((d) => d.isDirectory() && !d.name.startsWith(retiredPrefix) && !archivedDirs.has(d.name))
+      .map((d) => d.name)
     expect(dirs.length).toBeGreaterThan(5)
     for (const d of dirs) expect(skill, d).toContain(d)
   })

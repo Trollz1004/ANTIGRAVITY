@@ -36,7 +36,7 @@
       "npm": "@ai-sdk/openai-compatible",
       "name": "Ollama Local T5500 (Direct Fail-Safe :11434/v1)",
       "options": {
-        "baseURL": "http://127.0.0.1:11434/v1",
+        "baseURL": "http://192.168.0.15:11434/v1",
         "apiKey": "ollama"
       },
       "models": {

@@ -553,7 +553,7 @@ This is a comprehensive library of proven viral hooks, video formats, and conten
 **Production**:
 
 - Download Pinterest images
-- Run through GPT-4o for variations
+- Run through `GPT-6.1 Sol` / `Gemini 4 Carbon` / `Opus 5.5` for variations
 - Use MoviePy to automate transitions
 - Bulk export and schedule
 

@@ -15,5 +15,5 @@ populated environment files or token values.
 **Do this instead:**
 - Key **names** only: `grep -oE '^[A-Za-z_][A-Za-z0-9_]*=' .env | sed 's/=$//'`
 - Load at runtime without printing: `set -a; . <(grep '^NAME=' .env); set +a` then call the tool
-- Push into Paperclip: `python ops/paperclip/import-env-secrets.py --env .env --company <id>`
+- Store credentials only in `.env` (gitignored) or the encrypted OneDrive vault (never paste into repo files or configs)
 - Test a key: print only the HTTP status, never the body of an auth response that echoes the token

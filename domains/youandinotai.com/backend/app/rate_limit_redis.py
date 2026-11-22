@@ -85,15 +85,12 @@ async def check_rate_limit(
         allowed = count <= limit
 
         if not allowed:
-            logger.warning(
-                "Rate limit exceeded",
-                extra={"key": key, "count": count, "limit": limit},
-            )
+            logger.warning("Rate limit exceeded")
 
         return allowed, remaining, reset_time
-    except Exception as exc:
+    except Exception:
         # Fail open: if Redis is down, allow the request
-        logger.error("Redis rate limit check failed (%s): %s", key, exc)
+        logger.error("Redis rate limit check failed")
         return True, limit, now + window_seconds
 
 
