@@ -3,11 +3,48 @@
 from __future__ import annotations
 
 import uuid
+from datetime import datetime, timedelta, timezone
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import Profile, User, VerificationEvent
+
+LIVENESS_MAX_AGE_SECONDS = 172_800  # 48 hours
+
+
+def _extract_event_timestamp(event: object) -> datetime | None:
+    for attr in ("completed_at", "created_at"):
+        raw = getattr(event, attr, None)
+        if isinstance(raw, datetime):
+            if raw.tzinfo is None:
+                return raw.replace(tzinfo=timezone.utc)
+            return raw.astimezone(timezone.utc)
+    return None
+
+
+def _is_liveness_event_fresh(
+    liveness_event: object,
+    *,
+    payment_event: object | None = None,
+    now: datetime | None = None,
+    max_age_seconds: int = LIVENESS_MAX_AGE_SECONDS,
+) -> bool:
+    if liveness_event is None:
+        return False
+    liveness_at = _extract_event_timestamp(liveness_event)
+    if liveness_at is None:
+        return True
+    max_age = timedelta(seconds=max_age_seconds)
+    reference_now = now or datetime.now(timezone.utc)
+    if (reference_now - liveness_at) > max_age:
+        return False
+    payment_at = (
+        _extract_event_timestamp(payment_event) if payment_event is not None else None
+    )
+    if payment_at is not None and (payment_at - liveness_at) > max_age:
+        return False
+    return True
 
 
 def build_user_verification_lock_stmt(user_id: uuid.UUID):
@@ -38,7 +75,13 @@ async def has_passed_liveness(db: AsyncSession, user_id: uuid.UUID) -> bool:
         .where(VerificationEvent.user_id == user_id)
         .where(VerificationEvent.status == "passed")
         .where(VerificationEvent.challenge_type == "liveness")
-        .order_by(VerificationEvent.created_at.desc())
+        .order_by(
+            func.coalesce(
+                VerificationEvent.completed_at,
+                VerificationEvent.created_at,
+            ).desc(),
+            VerificationEvent.created_at.desc(),
+        )
     )
     return event is not None
 
@@ -49,7 +92,13 @@ async def has_completed_payment(db: AsyncSession, user_id: uuid.UUID) -> bool:
         .where(VerificationEvent.user_id == user_id)
         .where(VerificationEvent.status == "completed")
         .where(VerificationEvent.challenge_type == "payment")
-        .order_by(VerificationEvent.created_at.desc())
+        .order_by(
+            func.coalesce(
+                VerificationEvent.completed_at,
+                VerificationEvent.created_at,
+            ).desc(),
+            VerificationEvent.created_at.desc(),
+        )
     )
     return event is not None
 
@@ -60,9 +109,37 @@ async def promote_user_verification_if_ready(
 ) -> bool:
     if user.bot_shield_verified:
         return True
-    if not await has_passed_liveness(db, user.id):
+    liveness_event = await db.scalar(
+        select(VerificationEvent)
+        .where(VerificationEvent.user_id == user.id)
+        .where(VerificationEvent.status == "passed")
+        .where(VerificationEvent.challenge_type == "liveness")
+        .order_by(
+            func.coalesce(
+                VerificationEvent.completed_at,
+                VerificationEvent.created_at,
+            ).desc(),
+            VerificationEvent.created_at.desc(),
+        )
+    )
+    if liveness_event is None:
         return False
-    if not await has_completed_payment(db, user.id):
+    payment_event = await db.scalar(
+        select(VerificationEvent)
+        .where(VerificationEvent.user_id == user.id)
+        .where(VerificationEvent.status == "completed")
+        .where(VerificationEvent.challenge_type == "payment")
+        .order_by(
+            func.coalesce(
+                VerificationEvent.completed_at,
+                VerificationEvent.created_at,
+            ).desc(),
+            VerificationEvent.created_at.desc(),
+        )
+    )
+    if payment_event is None:
+        return False
+    if not _is_liveness_event_fresh(liveness_event, payment_event=payment_event):
         return False
 
     user.bot_shield_verified = True
