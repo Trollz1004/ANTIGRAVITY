@@ -19,7 +19,9 @@ import { recordPageView, recordBooking } from "./booking-stats.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
 const DOMAINS_ROOT = path.join(REPO_ROOT, "domains");
-const BOOKINGS_DIR = path.join(REPO_ROOT, "data", "ewaste-intake");
+const BOOKINGS_DIR = process.env.ORC_BOOKINGS_DIR
+  ? path.resolve(process.env.ORC_BOOKINGS_DIR)
+  : path.join(REPO_ROOT, "data", "ewaste-intake");
 const BOOKINGS_JSONL = path.join(BOOKINGS_DIR, "bookings.jsonl");
 const INQUIRIES_DIR = path.join(BOOKINGS_DIR, "inquiries");
 const STATS_DIR = path.join(BOOKINGS_DIR, "stats");
@@ -314,6 +316,16 @@ function validBookingDate(date) {
   return date >= todayInFlorida();
 }
 
+function extractPickupZip(rawZip, city, address) {
+  for (const src of [rawZip, city, address]) {
+    const matches = String(src || "").match(/\b(\d{5})(?:-\d{4})?\b/g);
+    if (matches && matches.length > 0) {
+      return matches[matches.length - 1].slice(0, 5);
+    }
+  }
+  return "";
+}
+
 function sendJson(res, status, payload) {
   res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
   res.end(JSON.stringify(payload));
@@ -425,7 +437,8 @@ const server = http.createServer(async (req, res) => {
       const organization = field("organization", "", 200);
       const address = field("address", "", 200);
       const city = field("city", "", 100);
-      const zip = field("zip", "", 10);
+      const rawZip = field("zip", "", 10);
+      const zip = serviceType === "pickup" ? extractPickupZip(rawZip, city, address) || rawZip : rawZip;
       const notes = field("notes", "", 2000);
 
       if (!fullName || !phone || !date || !slotCode || !deviceList) {
@@ -485,6 +498,7 @@ const server = http.createServer(async (req, res) => {
         return;
       }
       fs.appendFileSync(BOOKINGS_JSONL, `${JSON.stringify(booking)}\n`, "utf8");
+      bookingCache = { mtimeMs: -1, size: -1, list: [] };
 
       const inquiryMd = [
         `Full Name: ${fullName}`,
@@ -572,17 +586,23 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-const listeners = HOSTS.map((host) => {
-  const srv = host === HOSTS[0] ? server : createServerFor(server.listeners("request")[0]);
-  srv.on("error", (err) => {
-    // eslint-disable-next-line no-console
-    console.error(`domains-server cannot listen on http://${host}:${PORT}: ${err && err.code ? err.code : err}`);
-  });
-  srv.listen(PORT, host, () => {
-    // eslint-disable-next-line no-console
-    console.log(`domains-server listening on http://${host}:${PORT} (sites: ${SITES.join(", ")})`);
-  });
-  return srv;
-});
+const IS_MAIN_MODULE = Boolean(
+  process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url))
+);
 
-export { VHOSTS, SITES, HOSTS, listeners, resolveFile, contentTypeFor, hostOnly };
+const listeners = IS_MAIN_MODULE
+  ? HOSTS.map((host) => {
+      const srv = host === HOSTS[0] ? server : createServerFor(server.listeners("request")[0]);
+      srv.on("error", (err) => {
+        // eslint-disable-next-line no-console
+        console.error(`domains-server cannot listen on http://${host}:${PORT}: ${err && err.code ? err.code : err}`);
+      });
+      srv.listen(PORT, host, () => {
+        // eslint-disable-next-line no-console
+        console.log(`domains-server listening on http://${host}:${PORT} (sites: ${SITES.join(", ")})`);
+      });
+      return srv;
+    })
+  : [];
+
+export { VHOSTS, SITES, HOSTS, listeners, resolveFile, contentTypeFor, hostOnly, extractPickupZip };
