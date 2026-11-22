@@ -676,6 +676,7 @@ class MarketingContent(Base):
 
 
 # RefreshToken model for OPU-47 JWT refresh token rotation
+from app.models_password_reset import PasswordResetToken  # noqa: F401, E402
 from app.models_refresh_token import RefreshToken  # noqa: F401, E402
 
 # Import webhook retry models for table creation and scheduler access

@@ -2,6 +2,7 @@
 
 import hashlib
 import hmac
+import logging
 import uuid
 from datetime import datetime, timezone
 
@@ -11,11 +12,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.age_gate import ensure_adult
 from app.auth import (
+    consume_password_reset_token,
     create_access_token,
     decode_token,
     ensure_active_user,
     get_current_user,
     hash_password,
+    issue_password_reset_token,
     issue_refresh_token,
     rotate_refresh_token,
     verify_google_token,
@@ -23,6 +26,7 @@ from app.auth import (
 )
 from app.config import get_settings
 from app.database import get_db
+from app.email_service import _smtp_is_configured, send_password_reset_email
 from app.error_responses import (
     ErrorCode,
     bad_request,
@@ -34,9 +38,13 @@ from app.models import Profile, User, VerificationEvent
 from app.rate_limit_redis import enforce_route_rate_limit
 from app.schemas import (
     AuthBetaAccessRequest,
+    AuthForgotPasswordRequest,
+    AuthForgotPasswordResponse,
     AuthLoginRequest,
     AuthRefreshRequest,
     AuthRegisterRequest,
+    AuthResetPasswordRequest,
+    AuthResetPasswordResponse,
     AuthTokenResponse,
     GoogleLoginRequest,
     UserMeResponse,
@@ -44,6 +52,7 @@ from app.schemas import (
 )
 from app.subscriptions import user_has_active_subscription
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/auth")
 
 
@@ -186,7 +195,9 @@ async def register(
             )
 
     return AuthTokenResponse(
-        access_token=create_access_token(str(user.id)),
+        access_token=create_access_token(
+            str(user.id), password_hash=user.password_hash
+        ),
         refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
@@ -243,7 +254,9 @@ async def login(
     ensure_active_user(user)
 
     return AuthTokenResponse(
-        access_token=create_access_token(str(user.id)),
+        access_token=create_access_token(
+            str(user.id), password_hash=user.password_hash
+        ),
         refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
@@ -302,7 +315,9 @@ async def google_login(
     ensure_active_user(user)
 
     return AuthTokenResponse(
-        access_token=create_access_token(str(user.id)),
+        access_token=create_access_token(
+            str(user.id), password_hash=user.password_hash
+        ),
         refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
@@ -398,7 +413,9 @@ async def beta_access(
         await db.refresh(user)
 
     return AuthTokenResponse(
-        access_token=create_access_token(str(user.id)),
+        access_token=create_access_token(
+            str(user.id), password_hash=user.password_hash
+        ),
         refresh_token=await issue_refresh_token(db, user.id),
         user_id=user.id,
     )
@@ -481,13 +498,92 @@ async def refresh_token(
         user_agent=user_agent,
     )
 
-    new_access_token = create_access_token(str(user.id))
+    new_access_token = create_access_token(
+        str(user.id), password_hash=user.password_hash
+    )
 
     return AuthTokenResponse(
         access_token=new_access_token,
         refresh_token=new_refresh_token,
         user_id=user.id,
     )
+
+
+@router.post(
+    "/forgot-password",
+    response_model=AuthForgotPasswordResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Request a password reset link",
+    description="Issue a single-use 30-minute password reset link. Returns the same response whether or not the email exists.",
+)
+async def forgot_password(
+    request: Request,
+    payload: AuthForgotPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+) -> AuthForgotPasswordResponse:
+    settings = get_settings()
+    await enforce_route_rate_limit(
+        request,
+        bucket="auth:forgot-password",
+        limit=settings.password_reset_rate_limit_per_minute,
+        window_seconds=settings.redis_rate_limit_window,
+    )
+
+    mail_configured = _smtp_is_configured(settings)
+    if not mail_configured:
+        logger.warning("Password reset requested while SMTP mail is not configured.")
+
+    normalized_email = payload.email.strip().lower()
+    user = await db.scalar(select(User).where(User.email == normalized_email))
+    if user and user.is_active:
+        ip_address = request.client.host if request.client else None
+        raw_token = await issue_password_reset_token(
+            db,
+            user.id,
+            ip_address=ip_address,
+        )
+        if mail_configured:
+            app_url = (
+                str(settings.app_url or "https://youandinotai.com").strip()
+                or "https://youandinotai.com"
+            ).rstrip("/")
+            reset_url = f"{app_url}/reset-password?token={raw_token}"
+            try:
+                await send_password_reset_email(
+                    recipient_email=user.email,
+                    display_name=user.display_name,
+                    reset_url=reset_url,
+                    expires_minutes=settings.password_reset_expire_minutes,
+                    settings=settings,
+                )
+            except Exception:
+                logger.warning("Password reset email delivery failed")
+
+    return AuthForgotPasswordResponse()
+
+
+@router.post(
+    "/reset-password",
+    response_model=AuthResetPasswordResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Reset password with single-use token",
+    description="Set a new password using a valid 30-minute reset token, burn the token, and end existing sessions.",
+)
+async def reset_password(
+    request: Request,
+    payload: AuthResetPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+) -> AuthResetPasswordResponse:
+    settings = get_settings()
+    await enforce_route_rate_limit(
+        request,
+        bucket="auth:reset-password",
+        limit=settings.password_reset_rate_limit_per_minute,
+        window_seconds=settings.redis_rate_limit_window,
+    )
+
+    await consume_password_reset_token(db, payload.token, payload.new_password)
+    return AuthResetPasswordResponse()
 
 
 @router.get(
