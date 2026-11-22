@@ -53,7 +53,7 @@ You can test a suspicious match with four straightforward actions before you inv
 
 Romance scam rings rely on free, automated account creation. When an operator can spin up hundreds of profiles at zero cost, blocking one account does not stop the operation.
 
-https://youandinotai.com requires one timed question plus a one dollar payment, once, before a member can message, swipe or post. That gate puts a human step and a one dollar payment in front of every action on the platform. Verified members talk in a USA group chat at [/app/usa](https://youandinotai.com/app/usa), where verified members across the country talk in an open room outside isolated private threads.
+[The YouAndINotAI dating platform](https://youandinotai.com) requires one timed question plus a one dollar payment, once, before a member can message, swipe or post. That gate puts a human step and a one dollar payment in front of every action on the platform. Verified members talk in a USA group chat at [the USA group chat room](https://youandinotai.com/app/usa), where verified members across the country talk in an open room outside isolated private threads.
 
 ## A practical checklist for every new match
 
@@ -63,6 +63,6 @@ Keep three boundaries in place whenever you use an online dating site.
 2. Refuse every request for money, gift cards, crypto, or investment advice without exception.
 3. Choose platforms that require verification before a profile can swipe, post, or send a message.
 
-Start at https://youandinotai.com or join verified members in the USA group chat at https://youandinotai.com/app/usa.
+Start on [the YouAndINotAI home page](https://youandinotai.com) or join verified members inside [the national USA group chat](https://youandinotai.com/app/usa).
 
-youandinotai.com is for adults 18 and over.
+Every account on YouAndINotAI is restricted to verified adults 18 and over.
