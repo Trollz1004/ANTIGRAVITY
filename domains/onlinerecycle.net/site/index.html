@@ -1445,11 +1445,13 @@
             const stage = card.parentElement || card;
             const rect = stage.getBoundingClientRect();
             const isScheduler = card.id === 'card-scheduler';
+            const confirmBoxEl = isScheduler ? document.getElementById('booking-confirm-box') : null;
+            const hasVisibleConfirm = Boolean(confirmBoxEl && confirmBoxEl.style.display && confirmBoxEl.style.display !== 'none');
 
-            if (isScheduler && window.scrollY <= 36) {
+            if (isScheduler && !hasVisibleConfirm && window.scrollY <= 36) {
               card.style.transform = 'translate3d(0px, 140px, 0px)';
               card.style.opacity = '0';
-              card.style.visibility = 'hidden';
+              card.style.visibility = 'visible';
               card.setAttribute('data-flight-state', 'offscreen');
               return;
             }
@@ -1475,7 +1477,7 @@
               }
             }
 
-            if (card.contains(document.activeElement) && document.activeElement !== document.body) {
+            if (hasVisibleConfirm || (card.contains(document.activeElement) && document.activeElement !== document.body)) {
               flightT = 0;
             }
 
@@ -1492,7 +1494,7 @@
             if (absT >= 0.98) {
               card.style.transform = 'translate3d(0px, 80px, 0px)';
               card.style.opacity = '0';
-              card.style.visibility = 'hidden';
+              card.style.visibility = 'visible';
               card.setAttribute('data-flight-state', 'offscreen');
               return;
             }
