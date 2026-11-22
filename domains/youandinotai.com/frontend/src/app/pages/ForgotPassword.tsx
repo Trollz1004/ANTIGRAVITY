@@ -4,12 +4,14 @@ import { ArrowLeft, ArrowRight, Heart, Mail } from 'lucide-react';
 
 import { FormField } from '../../components/FormField';
 import { api } from '../../lib/api';
+import { isMailEnabled } from '../../lib/mailHealth';
 import { validateEmail, validateRequired } from '../../lib/validation';
 
 const DEFAULT_CONFIRMATION =
   'If an account exists for that email address, we sent a password reset link. It expires in 30 minutes.';
 
 export function ForgotPassword() {
+  const [mailEnabled, setMailEnabled] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState<string | undefined>(undefined);
   const [touched, setTouched] = useState(false);
@@ -19,6 +21,15 @@ export function ForgotPassword() {
 
   useEffect(() => {
     document.title = 'Forgot Password | YouAndINotAI';
+    let cancelled = false;
+    void isMailEnabled().then(enabled => {
+      if (!cancelled) {
+        setMailEnabled(enabled);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const validateEmailValue = useCallback(
@@ -83,13 +94,47 @@ export function ForgotPassword() {
             <h1 className="font-display text-2xl sm:text-3xl font-bold text-[#F4F1EA] mb-2">
               Forgot your password?
             </h1>
-            <p className="text-sm text-[#C9CBCE] leading-relaxed">
-              Enter your account email and we will send a single-use reset link
-              that stays valid for 30 minutes.
-            </p>
+            {mailEnabled && (
+              <p className="text-sm text-[#C9CBCE] leading-relaxed">
+                Enter your account email and we will send a single-use reset
+                link that stays valid for 30 minutes.
+              </p>
+            )}
           </div>
 
-          {confirmation ? (
+          {!mailEnabled ? (
+            <div className="space-y-5">
+              <div
+                role="status"
+                className="rounded-lg border border-[#3A3F45] bg-[#1A1E25] px-4 py-4 text-sm text-[#F4F1EA] leading-relaxed space-y-3"
+              >
+                <p>Password reset by email is not switched on yet.</p>
+                <p className="text-[#C9CBCE]">
+                  Need account recovery help? Visit our support guide at{' '}
+                  <Link
+                    to="/support"
+                    className="font-semibold text-[#FFD21E] underline"
+                  >
+                    /support
+                  </Link>{' '}
+                  or email{' '}
+                  <a
+                    href="mailto:contact@youandinotai.com"
+                    className="font-semibold text-[#FFD21E] underline"
+                  >
+                    contact@youandinotai.com
+                  </a>{' '}
+                  from your account email.
+                </p>
+              </div>
+              <Link
+                to="/support"
+                className="ds-btn-signal w-full min-h-[44px] flex items-center justify-center gap-2 px-5 py-3.5 text-sm no-underline"
+              >
+                Open Support Guide <ArrowRight size={18} />
+              </Link>
+            </div>
+          ) : confirmation ? (
             <div className="space-y-5">
               <div
                 role="status"

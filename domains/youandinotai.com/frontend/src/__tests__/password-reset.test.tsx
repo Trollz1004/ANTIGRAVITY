@@ -97,10 +97,9 @@ describe('Password reset flow screens (412px phone-first, plain words, no banned
       new Error('Health check unavailable')
     );
 
-    const { container, getByText, queryByLabelText, queryByRole } = render(
+    const loginView = render(
       <MemoryRouter initialEntries={['/login']}>
         <Login />
-        <ForgotPassword />
       </MemoryRouter>
     );
 
@@ -108,12 +107,28 @@ describe('Password reset flow screens (412px phone-first, plain words, no banned
       expect(api.get).toHaveBeenCalledTimes(1);
     });
     expect(api.get).toHaveBeenCalledWith('/health');
-    expect(queryByRole('link', { name: /Forgot password\?/i })).toBeNull();
     expect(
-      getByText('Password reset by email is not switched on yet.')
+      loginView.queryByRole('link', { name: /Forgot password\?/i })
+    ).toBeNull();
+    expect(collectVisibleAndAccessibleText(loginView.container)).not.toMatch(
+      BANNED_WORD
+    );
+    loginView.unmount();
+
+    const forgotView = render(
+      <MemoryRouter initialEntries={['/forgot-password']}>
+        <ForgotPassword />
+      </MemoryRouter>
+    );
+
+    expect(
+      forgotView.getByText('Password reset by email is not switched on yet.')
     ).toBeTruthy();
-    expect(queryByLabelText(/Email/i)).toBeNull();
-    expect(collectVisibleAndAccessibleText(container)).not.toMatch(BANNED_WORD);
+    expect(forgotView.queryByLabelText(/Email/i)).toBeNull();
+    expect(api.get).toHaveBeenCalledTimes(1);
+    expect(collectVisibleAndAccessibleText(forgotView.container)).not.toMatch(
+      BANNED_WORD
+    );
   });
 
   it('renders a "Forgot password?" link on /login and reads /health once when navigating to /forgot-password with mail "on"', async () => {

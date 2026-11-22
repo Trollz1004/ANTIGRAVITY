@@ -14,6 +14,7 @@ import {
 import { GoogleSignInButton } from '../../components/auth/GoogleSignInButton';
 import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
 import { useAuth } from '../../lib/auth';
+import { isMailEnabled } from '../../lib/mailHealth';
 import { getSafeNextPath } from '../../lib/navigation';
 import {
   validateRequired,
@@ -40,6 +41,7 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
     );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [mailEnabled, setMailEnabled] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [betaCode, setBetaCode] = useState('');
@@ -73,6 +75,15 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
       desc.content =
         'Sign in to your 18+ YouAndINotAI account to access verified human profiles, $1 Bot-Shield verification, chat, video, and local boards.';
     }
+    let cancelled = false;
+    void isMailEnabled().then(enabled => {
+      if (!cancelled) {
+        setMailEnabled(enabled);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const validateLoginField = useCallback(
@@ -299,14 +310,16 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
                   icon={<Lock size={18} className="text-[#9DA3AA]" />}
                 />
 
-                <div className="flex justify-end">
-                  <Link
-                    to="/forgot-password"
-                    className="inline-flex min-h-[44px] items-center text-xs font-semibold text-[#FFD21E] transition-colors hover:underline"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
+                {mailEnabled && (
+                  <div className="flex justify-end">
+                    <Link
+                      to="/forgot-password"
+                      className="inline-flex min-h-[44px] items-center text-xs font-semibold text-[#FFD21E] transition-colors hover:underline"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                )}
               </div>
 
               <button
