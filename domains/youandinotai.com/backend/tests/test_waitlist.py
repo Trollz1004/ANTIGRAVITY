@@ -59,12 +59,41 @@ def test_waitlist_rate_limit_is_active(client, monkeypatch):
         AsyncMock(return_value=True),
     )
 
-    last_response = None
-    for i in range(6):
-        last_response = client.post(
+    responses = [
+        client.post(
             "/api/v1/waitlist",
             json={"email": f"waitlist-{i}@example.com"},
         )
+        for i in range(6)
+    ]
 
-    assert last_response is not None
-    # No more direct rate limit resets required as it's Redis-backed
+    assert all(r.status_code == 202 for r in responses[:5])
+    assert responses[5].status_code == 429
+
+
+def test_waitlist_enforces_configured_waitlist_rate_limit_per_minute(
+    client, monkeypatch
+):
+    from app.config import get_settings
+
+    monkeypatch.setenv("WAITLIST_RATE_LIMIT_PER_MINUTE", "2")
+    get_settings.cache_clear()
+    monkeypatch.setattr(
+        "app.routers.waitlist.send_waitlist_confirmation",
+        AsyncMock(return_value=True),
+    )
+    monkeypatch.setattr(
+        "app.routers.waitlist.send_waitlist_operator_notice",
+        AsyncMock(return_value=True),
+    )
+
+    try:
+        r1 = client.post("/api/v1/waitlist", json={"email": "w1@example.com"})
+        r2 = client.post("/api/v1/waitlist", json={"email": "w2@example.com"})
+        r3 = client.post("/api/v1/waitlist", json={"email": "w3@example.com"})
+        assert r1.status_code == 202
+        assert r2.status_code == 202
+        assert r3.status_code == 429
+        assert "Rate limit exceeded" in r3.text
+    finally:
+        get_settings.cache_clear()

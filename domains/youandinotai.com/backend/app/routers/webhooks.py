@@ -455,32 +455,12 @@ async def square_payment_webhook(
                 request_url=str(request.url).split("?", 1)[0],
             )
         except HTTPException as exc:
-            try:
-                payload_json = json.loads(payload.decode("utf-8"))
-            except Exception:
-                payload_json = {
-                    "raw_payload": payload.decode("utf-8", errors="replace")
-                }
-            event_id = f"sigfail-{hashlib.sha256(payload).hexdigest()[:15]}"
-
-            try:
-                await create_webhook_event(
-                    db,
-                    event_id=event_id,
-                    event_type="verification_failed",
-                    payload={
-                        "error": str(exc.detail),
-                        "url": str(request.url),
-                        "headers": dict(request.headers),
-                        "payload": payload_json,
-                    },
-                    processed=True,
-                    event_source="square",
-                )
-                await db.commit()
-            except IntegrityError:
-                await db.rollback()
-            raise exc
+            logger.warning(
+                "Square payment webhook signature check failed (skipping sigfail-* DB write): detail=%s payload_bytes=%d",
+                exc.detail,
+                len(payload),
+            )
+            raise
 
     try:
         payload_json = json.loads(payload.decode("utf-8"))
