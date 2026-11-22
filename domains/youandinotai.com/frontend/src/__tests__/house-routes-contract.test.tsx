@@ -220,6 +220,87 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     });
   });
 
+  it('renders a direct Sign in with this email link to /login?next=<nextPath>&email=<email> when POST /auth/register returns 409 Email already registered', async () => {
+    vi.mocked(api.post).mockRejectedValueOnce(
+      Object.assign(new Error('Email already registered'), { status: 409 })
+    );
+
+    const { getByPlaceholderText, container, getByRole, getByLabelText } =
+      render(
+        <MemoryRouter initialEntries={['/register?next=%2Fapp%2Fverify']}>
+          <Routes>
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+    fireEvent.change(getByPlaceholderText('Display name'), {
+      target: { value: 'Existing Member' },
+    });
+    fireEvent.change(getByPlaceholderText('Email'), {
+      target: { value: 'existing@youandinotai.com' },
+    });
+    fireEvent.change(getByPlaceholderText('MM / DD / YYYY'), {
+      target: { value: '04151990' },
+    });
+    fireEvent.change(getByPlaceholderText('Password (8+ characters)'), {
+      target: { value: 'password123' },
+    });
+
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => fireEvent.click(cb));
+
+    fireEvent.click(getByRole('button', { name: /Create Account/i }));
+
+    const handoffLink = await waitFor(() =>
+      getByRole('link', { name: /Sign in with this email/i })
+    );
+    expect(handoffLink.getAttribute('href')).toBe(
+      '/login?next=%2Fapp%2Fverify&email=existing%40youandinotai.com'
+    );
+
+    fireEvent.click(handoffLink);
+
+    await waitFor(() => {
+      expect((getByLabelText(/Email/i) as HTMLInputElement).value).toBe(
+        'existing@youandinotai.com'
+      );
+    });
+  });
+
+  it('prefills email on /login from ?email= query parameter', () => {
+    const { getByLabelText } = render(
+      <MemoryRouter
+        initialEntries={[
+          '/login?next=%2Fapp%2Fverify&email=prefill%40youandinotai.com',
+        ]}
+      >
+        <Login />
+      </MemoryRouter>
+    );
+
+    expect((getByLabelText(/Email/i) as HTMLInputElement).value).toBe(
+      'prefill@youandinotai.com'
+    );
+  });
+
+  it('links consent labels on /register to /?policy=terms, /?policy=privacy, and /?policy=age', () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/register']}>
+        <Register />
+      </MemoryRouter>
+    );
+
+    const termsLink = container.querySelector('a[href="/?policy=terms"]');
+    const privacyLink = container.querySelector('a[href="/?policy=privacy"]');
+    const ageLink = container.querySelector('a[href="/?policy=age"]');
+
+    expect(termsLink).not.toBeNull();
+    expect(privacyLink).not.toBeNull();
+    expect(ageLink).not.toBeNull();
+  });
+
   it('keeps /app/profile form fields and submits PUT /profiles/me', async () => {
     vi.mocked(api.get).mockResolvedValue({
       user_id: 'user-contract-1',
