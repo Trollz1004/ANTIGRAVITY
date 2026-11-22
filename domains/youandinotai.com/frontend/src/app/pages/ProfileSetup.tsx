@@ -92,16 +92,8 @@ const INTEREST_OPTIONS = [
 const PROFILE_DRAFT_STORAGE_KEY = 'youandinotai_profile_setup_draft';
 
 interface ProfileDraft {
-  bio?: string;
-  age?: string;
-  dateOfBirth?: string;
-  gender?: string;
-  lookingFor?: string;
-  location?: string;
-  selectedInterests?: string[];
-  promptAnswer?: string;
-  dateComfort?: string;
-  safetyPreference?: string;
+  email?: string;
+  displayName?: string;
 }
 
 function readProfileDraft(): ProfileDraft {
@@ -109,7 +101,13 @@ function readProfileDraft(): ProfileDraft {
     const raw = sessionStorage.getItem(PROFILE_DRAFT_STORAGE_KEY);
     if (!raw) return {};
     const parsed = JSON.parse(raw);
-    return parsed && typeof parsed === 'object' ? (parsed as ProfileDraft) : {};
+    if (!parsed || typeof parsed !== 'object') return {};
+    const record = parsed as Record<string, unknown>;
+    return {
+      email: typeof record.email === 'string' ? record.email : undefined,
+      displayName:
+        typeof record.displayName === 'string' ? record.displayName : undefined,
+    };
   } catch {
     return {};
   }
@@ -119,94 +117,38 @@ export function ProfileSetup() {
   const { user, fetchUser } = useAuth();
   const navigate = useNavigate();
   const [initialDraft] = useState<ProfileDraft>(() => readProfileDraft());
+  const draftEmail = user?.email ?? initialDraft.email ?? '';
+  const draftDisplayName = user?.display_name ?? initialDraft.displayName ?? '';
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [bio, setBio] = useState(() =>
-    typeof initialDraft.bio === 'string' ? initialDraft.bio : ''
-  );
-  const [age, setAge] = useState(() =>
-    typeof initialDraft.age === 'string' ? initialDraft.age : ''
-  );
-  const [dateOfBirth, setDateOfBirth] = useState(() =>
-    typeof initialDraft.dateOfBirth === 'string' ? initialDraft.dateOfBirth : ''
-  );
-  const [gender, setGender] = useState(() =>
-    typeof initialDraft.gender === 'string' ? initialDraft.gender : ''
-  );
-  const [lookingFor, setLookingFor] = useState(() =>
-    typeof initialDraft.lookingFor === 'string' ? initialDraft.lookingFor : ''
-  );
-  const [location, setLocation] = useState(() =>
-    typeof initialDraft.location === 'string' ? initialDraft.location : ''
-  );
-  const [selectedInterests, setSelectedInterests] = useState<string[]>(() =>
-    Array.isArray(initialDraft.selectedInterests)
-      ? initialDraft.selectedInterests.filter(
-          (item): item is string => typeof item === 'string'
-        )
-      : []
-  );
-  const [promptAnswer, setPromptAnswer] = useState(() =>
-    typeof initialDraft.promptAnswer === 'string'
-      ? initialDraft.promptAnswer
-      : ''
-  );
-  const [dateComfort, setDateComfort] = useState(() =>
-    typeof initialDraft.dateComfort === 'string' ? initialDraft.dateComfort : ''
-  );
-  const [safetyPreference, setSafetyPreference] = useState(() =>
-    typeof initialDraft.safetyPreference === 'string'
-      ? initialDraft.safetyPreference
-      : ''
-  );
+  const [bio, setBio] = useState('');
+  const [age, setAge] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [gender, setGender] = useState('');
+  const [lookingFor, setLookingFor] = useState('');
+  const [location, setLocation] = useState('');
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [promptAnswer, setPromptAnswer] = useState('');
+  const [dateComfort, setDateComfort] = useState('');
+  const [safetyPreference, setSafetyPreference] = useState('');
 
   useEffect(() => {
     try {
-      if (
-        !bio &&
-        !age &&
-        !dateOfBirth &&
-        !gender &&
-        !lookingFor &&
-        !location &&
-        selectedInterests.length === 0 &&
-        !promptAnswer &&
-        !dateComfort &&
-        !safetyPreference
-      ) {
+      if (!draftEmail && !draftDisplayName) {
         sessionStorage.removeItem(PROFILE_DRAFT_STORAGE_KEY);
         return;
       }
       sessionStorage.setItem(
         PROFILE_DRAFT_STORAGE_KEY,
         JSON.stringify({
-          bio,
-          age,
-          dateOfBirth,
-          gender,
-          lookingFor,
-          location,
-          selectedInterests,
-          promptAnswer,
-          dateComfort,
-          safetyPreference,
+          email: draftEmail,
+          displayName: draftDisplayName,
         })
       );
     } catch {
       // Ignore sessionStorage errors
     }
-  }, [
-    bio,
-    age,
-    dateOfBirth,
-    gender,
-    lookingFor,
-    location,
-    selectedInterests,
-    promptAnswer,
-    dateComfort,
-    safetyPreference,
-  ]);
+  }, [draftEmail, draftDisplayName]);
 
   useEffect(() => {
     let active = true;
@@ -215,32 +157,30 @@ export function ProfileSetup() {
       .then(profile => {
         if (!active || !profile) return;
         const parsed = parseStructuredBio(profile.bio);
-        setBio(prev => prev || parsed.bio);
+        setBio(parsed.bio);
         if (parsed.promptAnswer) {
-          setPromptAnswer(prev => prev || parsed.promptAnswer);
+          setPromptAnswer(parsed.promptAnswer);
         }
         if (parsed.dateComfort) {
-          setDateComfort(prev => prev || parsed.dateComfort);
+          setDateComfort(parsed.dateComfort);
         }
         if (parsed.safetyPreference) {
-          setSafetyPreference(prev => prev || parsed.safetyPreference);
+          setSafetyPreference(parsed.safetyPreference);
         }
         if (profile.age !== null && profile.age !== undefined) {
-          setAge(prev => prev || String(profile.age));
+          setAge(String(profile.age));
         }
         if (profile.gender) {
-          setGender(prev => prev || profile.gender!.toLowerCase());
+          setGender(profile.gender.toLowerCase());
         }
         if (profile.looking_for) {
-          setLookingFor(prev => prev || profile.looking_for!.toLowerCase());
+          setLookingFor(profile.looking_for.toLowerCase());
         }
         if (profile.location) {
-          setLocation(prev => prev || profile.location!);
+          setLocation(profile.location);
         }
         if (Array.isArray(profile.interests)) {
-          setSelectedInterests(prev =>
-            prev.length > 0 ? prev : profile.interests
-          );
+          setSelectedInterests(profile.interests);
         }
       })
       .catch(() => {
@@ -287,7 +227,7 @@ export function ProfileSetup() {
         .join('\n\n');
 
       await api.put('/profiles/me', {
-        display_name: user?.display_name || null,
+        display_name: draftDisplayName || null,
         bio: profileBio || null,
         age: age ? parseInt(age, 10) : derivedAge,
         date_of_birth: birthDateIso,
@@ -331,7 +271,7 @@ export function ProfileSetup() {
               Current account
             </div>
             <p className="font-display text-xl font-bold tracking-tight text-[#F4F1EA]">
-              {user?.display_name}
+              {draftDisplayName}
             </p>
             <p className="mt-3 text-sm text-[#C9CBCE] leading-relaxed">
               This profile becomes the public side of your account inside

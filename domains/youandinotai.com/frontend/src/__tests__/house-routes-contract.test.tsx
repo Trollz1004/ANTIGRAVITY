@@ -432,7 +432,7 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     }
   });
 
-  it('persists non-password draft fields on /register in sessionStorage across reloads and clears them on submit', async () => {
+  it('persists only email and displayName on /register in sessionStorage without date of birth, gender, or password and clears them on submit', async () => {
     const firstRender = render(
       <MemoryRouter initialEntries={['/register?next=%2Fapp%2Fverify']}>
         <Register />
@@ -460,10 +460,29 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     );
     firstCheckboxes.forEach(cb => fireEvent.click(cb));
 
+    const rawDraft = sessionStorage.getItem('youandinotai_register_draft');
+    expect(rawDraft).not.toBeNull();
+    const parsedDraft = JSON.parse(rawDraft!) as Record<string, unknown>;
+    expect(Object.keys(parsedDraft).sort()).toEqual(['displayName', 'email']);
+    expect(parsedDraft).toEqual({
+      email: 'draft@youandinotai.com',
+      displayName: 'Draft Member',
+    });
+    for (const key of Object.keys(parsedDraft)) {
+      expect(key).not.toMatch(/dateOfBirth|date_of_birth|dob|birth|gender/i);
+    }
+    for (const value of Object.values(parsedDraft)) {
+      expect(String(value)).not.toMatch(
+        /04151990|04\s*\/\s*15\s*\/\s*1990|1990-04-15|male|female|nonbinary/i
+      );
+    }
+
     const storedSnapshot = JSON.stringify(sessionStorage);
     expect(storedSnapshot).toContain('Draft Member');
     expect(storedSnapshot).toContain('draft@youandinotai.com');
-    expect(storedSnapshot).not.toContain('password123');
+    expect(storedSnapshot).not.toMatch(
+      /dateOfBirth|date_of_birth|04151990|04\s*\/\s*15\s*\/\s*1990|1990-04-15|gender|password123/i
+    );
 
     firstRender.unmount();
 
@@ -486,7 +505,7 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
           'MM / DD / YYYY'
         ) as HTMLInputElement
       ).value
-    ).toBe('04 / 15 / 1990');
+    ).toBe('');
     expect(
       (
         reloadedRender.getByPlaceholderText(
@@ -499,7 +518,7 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
       'input[type="checkbox"]'
     ) as NodeListOf<HTMLInputElement>;
     reloadedCheckboxes.forEach(cb => {
-      expect(cb.checked).toBe(true);
+      expect(cb.checked).toBe(false);
     });
 
     vi.mocked(api.post).mockResolvedValueOnce({
@@ -518,12 +537,16 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
       adult_verified: true,
     });
 
+    fireEvent.change(reloadedRender.getByPlaceholderText('MM / DD / YYYY'), {
+      target: { value: '04151990' },
+    });
     fireEvent.change(
       reloadedRender.getByPlaceholderText('Password (8+ characters)'),
       {
         target: { value: 'password123' },
       }
     );
+    reloadedCheckboxes.forEach(cb => fireEvent.click(cb));
     fireEvent.click(
       reloadedRender.getByRole('button', { name: /Create Account/i })
     );
@@ -534,6 +557,7 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
         expect.objectContaining({
           email: 'draft@youandinotai.com',
           display_name: 'Draft Member',
+          date_of_birth: '1990-04-15',
         })
       );
     });

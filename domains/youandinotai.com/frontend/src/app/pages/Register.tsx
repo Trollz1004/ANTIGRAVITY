@@ -21,10 +21,6 @@ const REGISTER_DRAFT_STORAGE_KEY = 'youandinotai_register_draft';
 interface RegisterDraft {
   email?: string;
   displayName?: string;
-  dateOfBirth?: string;
-  acceptedCookiePolicy?: boolean;
-  acceptedTerms?: boolean;
-  confirmedOver18?: boolean;
 }
 
 function readRegisterDraft(): RegisterDraft {
@@ -32,9 +28,13 @@ function readRegisterDraft(): RegisterDraft {
     const raw = sessionStorage.getItem(REGISTER_DRAFT_STORAGE_KEY);
     if (!raw) return {};
     const parsed = JSON.parse(raw);
-    return parsed && typeof parsed === 'object'
-      ? (parsed as RegisterDraft)
-      : {};
+    if (!parsed || typeof parsed !== 'object') return {};
+    const record = parsed as Record<string, unknown>;
+    return {
+      email: typeof record.email === 'string' ? record.email : undefined,
+      displayName:
+        typeof record.displayName === 'string' ? record.displayName : undefined,
+    };
   } catch {
     return {};
   }
@@ -49,18 +49,10 @@ export function Register() {
   const [displayName, setDisplayName] = useState(() =>
     typeof initialDraft.displayName === 'string' ? initialDraft.displayName : ''
   );
-  const [dateOfBirth, setDateOfBirth] = useState(() =>
-    typeof initialDraft.dateOfBirth === 'string' ? initialDraft.dateOfBirth : ''
-  );
-  const [acceptedCookiePolicy, setAcceptedCookiePolicy] = useState(() =>
-    Boolean(initialDraft.acceptedCookiePolicy)
-  );
-  const [acceptedTerms, setAcceptedTerms] = useState(() =>
-    Boolean(initialDraft.acceptedTerms)
-  );
-  const [confirmedOver18, setConfirmedOver18] = useState(() =>
-    Boolean(initialDraft.confirmedOver18)
-  );
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [acceptedCookiePolicy, setAcceptedCookiePolicy] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [confirmedOver18, setConfirmedOver18] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
@@ -71,14 +63,7 @@ export function Register() {
 
   useEffect(() => {
     try {
-      if (
-        !email &&
-        !displayName &&
-        !dateOfBirth &&
-        !acceptedCookiePolicy &&
-        !acceptedTerms &&
-        !confirmedOver18
-      ) {
+      if (!email && !displayName) {
         sessionStorage.removeItem(REGISTER_DRAFT_STORAGE_KEY);
         return;
       }
@@ -87,23 +72,12 @@ export function Register() {
         JSON.stringify({
           email,
           displayName,
-          dateOfBirth,
-          acceptedCookiePolicy,
-          acceptedTerms,
-          confirmedOver18,
         })
       );
     } catch {
       // Ignore sessionStorage errors
     }
-  }, [
-    email,
-    displayName,
-    dateOfBirth,
-    acceptedCookiePolicy,
-    acceptedTerms,
-    confirmedOver18,
-  ]);
+  }, [email, displayName]);
 
   useEffect(() => {
     document.title = 'Create 18+ Account | YouAndINotAI';
