@@ -89,21 +89,124 @@ const INTEREST_OPTIONS = [
   'Safety First',
 ];
 
+const PROFILE_DRAFT_STORAGE_KEY = 'youandinotai_profile_setup_draft';
+
+interface ProfileDraft {
+  bio?: string;
+  age?: string;
+  dateOfBirth?: string;
+  gender?: string;
+  lookingFor?: string;
+  location?: string;
+  selectedInterests?: string[];
+  promptAnswer?: string;
+  dateComfort?: string;
+  safetyPreference?: string;
+}
+
+function readProfileDraft(): ProfileDraft {
+  try {
+    const raw = sessionStorage.getItem(PROFILE_DRAFT_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' ? (parsed as ProfileDraft) : {};
+  } catch {
+    return {};
+  }
+}
+
 export function ProfileSetup() {
   const { user, fetchUser } = useAuth();
   const navigate = useNavigate();
+  const [initialDraft] = useState<ProfileDraft>(() => readProfileDraft());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [bio, setBio] = useState('');
-  const [age, setAge] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [gender, setGender] = useState('');
-  const [lookingFor, setLookingFor] = useState('');
-  const [location, setLocation] = useState('');
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
-  const [promptAnswer, setPromptAnswer] = useState('');
-  const [dateComfort, setDateComfort] = useState('');
-  const [safetyPreference, setSafetyPreference] = useState('');
+  const [bio, setBio] = useState(() =>
+    typeof initialDraft.bio === 'string' ? initialDraft.bio : ''
+  );
+  const [age, setAge] = useState(() =>
+    typeof initialDraft.age === 'string' ? initialDraft.age : ''
+  );
+  const [dateOfBirth, setDateOfBirth] = useState(() =>
+    typeof initialDraft.dateOfBirth === 'string' ? initialDraft.dateOfBirth : ''
+  );
+  const [gender, setGender] = useState(() =>
+    typeof initialDraft.gender === 'string' ? initialDraft.gender : ''
+  );
+  const [lookingFor, setLookingFor] = useState(() =>
+    typeof initialDraft.lookingFor === 'string' ? initialDraft.lookingFor : ''
+  );
+  const [location, setLocation] = useState(() =>
+    typeof initialDraft.location === 'string' ? initialDraft.location : ''
+  );
+  const [selectedInterests, setSelectedInterests] = useState<string[]>(() =>
+    Array.isArray(initialDraft.selectedInterests)
+      ? initialDraft.selectedInterests.filter(
+          (item): item is string => typeof item === 'string'
+        )
+      : []
+  );
+  const [promptAnswer, setPromptAnswer] = useState(() =>
+    typeof initialDraft.promptAnswer === 'string'
+      ? initialDraft.promptAnswer
+      : ''
+  );
+  const [dateComfort, setDateComfort] = useState(() =>
+    typeof initialDraft.dateComfort === 'string' ? initialDraft.dateComfort : ''
+  );
+  const [safetyPreference, setSafetyPreference] = useState(() =>
+    typeof initialDraft.safetyPreference === 'string'
+      ? initialDraft.safetyPreference
+      : ''
+  );
+
+  useEffect(() => {
+    try {
+      if (
+        !bio &&
+        !age &&
+        !dateOfBirth &&
+        !gender &&
+        !lookingFor &&
+        !location &&
+        selectedInterests.length === 0 &&
+        !promptAnswer &&
+        !dateComfort &&
+        !safetyPreference
+      ) {
+        sessionStorage.removeItem(PROFILE_DRAFT_STORAGE_KEY);
+        return;
+      }
+      sessionStorage.setItem(
+        PROFILE_DRAFT_STORAGE_KEY,
+        JSON.stringify({
+          bio,
+          age,
+          dateOfBirth,
+          gender,
+          lookingFor,
+          location,
+          selectedInterests,
+          promptAnswer,
+          dateComfort,
+          safetyPreference,
+        })
+      );
+    } catch {
+      // Ignore sessionStorage errors
+    }
+  }, [
+    bio,
+    age,
+    dateOfBirth,
+    gender,
+    lookingFor,
+    location,
+    selectedInterests,
+    promptAnswer,
+    dateComfort,
+    safetyPreference,
+  ]);
 
   useEffect(() => {
     let active = true;
@@ -112,26 +215,32 @@ export function ProfileSetup() {
       .then(profile => {
         if (!active || !profile) return;
         const parsed = parseStructuredBio(profile.bio);
-        setBio(parsed.bio);
-        if (parsed.promptAnswer) setPromptAnswer(parsed.promptAnswer);
-        if (parsed.dateComfort) setDateComfort(parsed.dateComfort);
+        setBio(prev => prev || parsed.bio);
+        if (parsed.promptAnswer) {
+          setPromptAnswer(prev => prev || parsed.promptAnswer);
+        }
+        if (parsed.dateComfort) {
+          setDateComfort(prev => prev || parsed.dateComfort);
+        }
         if (parsed.safetyPreference) {
-          setSafetyPreference(parsed.safetyPreference);
+          setSafetyPreference(prev => prev || parsed.safetyPreference);
         }
         if (profile.age !== null && profile.age !== undefined) {
-          setAge(String(profile.age));
+          setAge(prev => prev || String(profile.age));
         }
         if (profile.gender) {
-          setGender(profile.gender.toLowerCase());
+          setGender(prev => prev || profile.gender!.toLowerCase());
         }
         if (profile.looking_for) {
-          setLookingFor(profile.looking_for.toLowerCase());
+          setLookingFor(prev => prev || profile.looking_for!.toLowerCase());
         }
         if (profile.location) {
-          setLocation(profile.location);
+          setLocation(prev => prev || profile.location!);
         }
         if (Array.isArray(profile.interests)) {
-          setSelectedInterests(profile.interests);
+          setSelectedInterests(prev =>
+            prev.length > 0 ? prev : profile.interests
+          );
         }
       })
       .catch(() => {
@@ -187,6 +296,11 @@ export function ProfileSetup() {
         location: location || null,
         interests: selectedInterests,
       });
+      try {
+        sessionStorage.removeItem(PROFILE_DRAFT_STORAGE_KEY);
+      } catch {
+        // Ignore sessionStorage errors
+      }
       await fetchUser();
       navigate(user?.bot_shield_verified ? '/app' : '/app/verify');
     } catch (err: any) {

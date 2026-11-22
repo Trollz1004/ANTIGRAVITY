@@ -51,7 +51,7 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
   const [betaLoading, setBetaLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<LoginErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const { login, betaAccess } = useAuth();
+  const { user, login, betaAccess } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const nextPath = getSafeNextPath(location.search, '/app');
@@ -61,6 +61,11 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
     import.meta.env.VITE_GOOGLE_CLIENT_ID ??
     ''
   ).trim();
+
+  useEffect(() => {
+    if (!user) return;
+    navigate(user.has_profile ? nextPath : '/app/profile');
+  }, [user, navigate, nextPath]);
 
   useEffect(() => {
     document.title = 'Member Sign In | YouAndINotAI';
