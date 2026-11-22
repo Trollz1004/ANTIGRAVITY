@@ -298,6 +298,15 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
                   autoComplete="current-password"
                   icon={<Lock size={18} className="text-[#9DA3AA]" />}
                 />
+
+                <div className="flex justify-end">
+                  <Link
+                    to="/forgot-password"
+                    className="inline-flex min-h-[44px] items-center text-xs font-semibold text-[#FFD21E] transition-colors hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
               </div>
 
               <button

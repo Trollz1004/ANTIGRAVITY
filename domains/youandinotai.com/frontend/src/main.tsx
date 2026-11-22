@@ -10,6 +10,8 @@ import { AlertTriangle, Home, RotateCw } from 'lucide-react';
 import LandingPage, { PublicSupportPage } from './App';
 import { Login } from './app/pages/Login';
 import { Register } from './app/pages/Register';
+import { ForgotPassword } from './app/pages/ForgotPassword';
+import { ResetPassword } from './app/pages/ResetPassword';
 import { AuthGuard } from './app/AuthGuard';
 import { AppShell } from './app/AppShell';
 import { Matches } from './app/pages/Matches';
@@ -126,6 +128,8 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/support" element={<PublicSupportPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
             {/* Authenticated app routes */}
             <Route element={<AuthGuard />}>

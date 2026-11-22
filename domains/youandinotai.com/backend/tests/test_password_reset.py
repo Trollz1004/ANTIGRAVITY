@@ -13,7 +13,6 @@ from sqlalchemy import select
 
 from app.auth import _hash_token
 from app.config import get_settings
-from app.models import User
 
 
 def _register_payload(
