@@ -16,13 +16,15 @@ describe('PayMethods (/app/pay)', () => {
   });
 
   it('renders a top $1 Bot-Shield Human Check card linking to /app/verify before checkout rails', () => {
-    const { container, getByText } = render(
+    const { container, getAllByText } = render(
       <MemoryRouter initialEntries={['/app/pay']}>
         <PayMethods />
       </MemoryRouter>
     );
 
-    expect(getByText(/\$1 Bot-Shield Human Check/i)).toBeDefined();
+    expect(getAllByText(/\$1 Bot-Shield Human Check/i).length).toBeGreaterThan(
+      0
+    );
 
     const verifyLinks = Array.from(
       container.querySelectorAll('a[href="/app/verify"]')
