@@ -557,7 +557,7 @@ async def forgot_password(
                     settings=settings,
                 )
             except Exception:
-                logger.exception("Password reset email delivery failed")
+                logger.warning("Password reset email delivery failed")
 
     return AuthForgotPasswordResponse()
 

@@ -384,3 +384,81 @@ def test_forgot_and_reset_password_enforce_route_rate_limit_429(client, monkeypa
     assert blocked_reset.status_code == 429
 
     get_settings.cache_clear()
+
+
+def test_rate_limiter_log_line_never_contains_password_or_reset_token(
+    client, caplog, monkeypatch
+):
+    from unittest.mock import AsyncMock
+
+    from app.rate_limit_redis import check_rate_limit
+
+    class _OverLimitPipe:
+        def incr(self, _key):
+            return self
+
+        def expire(self, _key, _ttl):
+            return self
+
+        async def execute(self):
+            return [99, True]
+
+    class _OverLimitRedis:
+        def pipeline(self):
+            return _OverLimitPipe()
+
+    class _BrokenRedis:
+        def pipeline(self):
+            raise RuntimeError("redis unavailable")
+
+    reset_token = "ResetTokenSecretValue9876543210abcdef1234567"
+    password = "SuperSecretResetPassword99!"
+
+    with caplog.at_level(logging.WARNING, logger="youandinotai.rate_limit"):
+        caplog.clear()
+        with patch(
+            "app.rate_limit_redis.get_redis",
+            AsyncMock(return_value=_OverLimitRedis()),
+        ):
+            allowed, _, _ = asyncio.run(
+                check_rate_limit(
+                    f"rl:auth:reset-password:{reset_token}:{password}",
+                    limit=5,
+                    window_seconds=60,
+                )
+            )
+            assert allowed is False
+
+            monkeypatch.setenv("APP_ENV", "production")
+            get_settings.cache_clear()
+            blocked = client.post(
+                "/api/v1/auth/reset-password",
+                json={"token": reset_token, "new_password": password},
+            )
+            assert blocked.status_code == 429
+
+        with patch(
+            "app.rate_limit_redis.get_redis",
+            AsyncMock(return_value=_BrokenRedis()),
+        ):
+            allowed, _, _ = asyncio.run(
+                check_rate_limit(
+                    f"rl:auth:reset-password:{reset_token}:{password}",
+                    limit=5,
+                    window_seconds=60,
+                )
+            )
+            assert allowed is True
+
+    monkeypatch.setenv("APP_ENV", "test")
+    get_settings.cache_clear()
+
+    limiter_lines = [
+        f"{rec.getMessage()} {getattr(rec, 'key', '')}"
+        for rec in caplog.records
+        if rec.name == "youandinotai.rate_limit"
+    ]
+    assert len(limiter_lines) == 3
+    for line in limiter_lines:
+        assert password not in line
+        assert reset_token not in line
