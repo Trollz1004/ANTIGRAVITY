@@ -69,7 +69,7 @@ export function AppShell() {
             </div>
           </div>
           <p className="mt-3 text-sm text-[#C9CBCE]">
-            Verified adults 18+. Real video. Account-bound trust.
+            Verified adults 18+. Direct messaging. Account-bound trust.
           </p>
         </div>
 
