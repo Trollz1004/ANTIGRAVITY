@@ -55,7 +55,10 @@ test('domains/onlinerecycle.net/site/index.html has itemscope itemtype="https://
   const html = fs.readFileSync(INDEX_HTML_PATH, 'utf8');
   const faqCard = findElementOpenTagById(html, 'card-faq');
   assert.ok(faqCard, 'index.html must contain #card-faq');
-  assert.ok(Object.prototype.hasOwnProperty.call(faqCard.attrs, 'itemscope'), '#card-faq must have itemscope attribute');
+  assert.ok(
+    Object.prototype.hasOwnProperty.call(faqCard.attrs, 'itemscope'),
+    '#card-faq must have itemscope attribute',
+  );
   assert.equal(
     faqCard.attrs.itemtype,
     'https://schema.org/FAQPage',
@@ -63,8 +66,10 @@ test('domains/onlinerecycle.net/site/index.html has itemscope itemtype="https://
   );
 
   const faqInner = extractArticleInnerHtmlById(html, 'card-faq');
-  const questionMatches = faqInner.match(/itemprop=["']mainEntity["'][^>]*itemtype=["']https:\/\/schema\.org\/Question["']/g) || [];
-  const answerMatches = faqInner.match(/itemprop=["']acceptedAnswer["'][^>]*itemtype=["']https:\/\/schema\.org\/Answer["']/g) || [];
+  const questionMatches =
+    faqInner.match(/itemprop=["']mainEntity["'][^>]*itemtype=["']https:\/\/schema\.org\/Question["']/g) || [];
+  const answerMatches =
+    faqInner.match(/itemprop=["']acceptedAnswer["'][^>]*itemtype=["']https:\/\/schema\.org\/Answer["']/g) || [];
   assert.equal(questionMatches.length, 5, '#card-faq must enclose all 5 Question microdata items');
   assert.equal(answerMatches.length, 5, '#card-faq must enclose all 5 Answer microdata items');
 });
