@@ -78,7 +78,7 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
     );
     if (desc) {
       desc.content =
-        'Sign in to your 18+ YouAndINotAI account to access verified human profiles, $1 Bot-Shield verification, chat, video, and local boards.';
+        'Sign in to your 18+ YouAndINotAI account to access verified human profiles, $1 Bot-Shield verification, messaging, topic boards, and the USA group chat.';
     }
     let cancelled = false;
     void isMailEnabled().then(enabled => {

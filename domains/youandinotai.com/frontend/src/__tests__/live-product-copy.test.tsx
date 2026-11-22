@@ -304,7 +304,10 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
       </MemoryRouter>
     );
     const gateText = visibleText(gate.container);
-    expect(gateText).toContain('Messaging and video need the $1 human check.');
+    expect(gateText).toContain(
+      'Discovery, messaging, and boards need the $1 human check.'
+    );
+    expect(gateText).not.toMatch(/\bvideo\b/i);
     expect(gateText).not.toMatch(/everyone here is verified/i);
     gate.unmount();
 
@@ -346,7 +349,7 @@ describe('live product copy (Josh ruling 2026-11-07 03:43)', () => {
     await verify.findByText('Answer a short timed question.');
     const verifyText = visibleText(verify.container);
     expect(verifyText).not.toMatch(
-      /\b(liveness|camera|selfie|gesture|biometric)\b/i
+      /\b(liveness|camera|selfie|gesture|biometric|video)\b/i
     );
     verify.unmount();
   });

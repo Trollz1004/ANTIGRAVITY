@@ -525,8 +525,8 @@ export function Verify() {
             </h1>
             <p className="app-subtitle mt-2 max-w-2xl md:mt-4">
               {status?.verified
-                ? 'Your badge unlocks discovery, messaging, and video on your account.'
-                : 'Answer a short timed question, finish the $1 Square payment tied to your account, and unlock messaging and video.'}
+                ? 'Your badge unlocks discovery, messaging, topic boards, and the USA group chat on your account.'
+                : 'Answer a short timed question, finish the $1 Square payment tied to your account, and unlock discovery, messaging, topic boards, and the USA group chat.'}
             </p>
           </div>
           <div className="glass rounded-xl p-4 md:p-5">
@@ -707,6 +707,19 @@ export function Verify() {
                     </div>
                   )}
 
+                {result.passed &&
+                  !status?.verified &&
+                  !result.checkout_url &&
+                  !awaitingPayment && (
+                    <button
+                      type="button"
+                      onClick={() => void startChallenge()}
+                      className="app-button-dark mt-6 px-6 py-4"
+                    >
+                      Try again
+                    </button>
+                  )}
+
                 {!result.passed && (
                   <button
                     onClick={() => void startChallenge()}
@@ -785,7 +798,7 @@ export function Verify() {
                   </p>
                   <button
                     onClick={() => void startChallenge()}
-                    className="app-button-accent mt-4 px-6 py-4 md:mt-6"
+                    className="app-button-accent mt-3 px-6 py-3.5 md:mt-6 md:py-4"
                   >
                     Start Verification <ArrowRight size={18} />
                   </button>

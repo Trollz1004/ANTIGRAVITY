@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent, waitFor, act } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -950,5 +952,93 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
         value: originalInnerHeight,
       });
     }
+  });
+
+  it('CheckoutLaunch hides the spinner on checkout-link error, displays the selected tier price, and renders Try Again and /app/preorder links', async () => {
+    vi.mocked(api.post).mockRejectedValueOnce(
+      new Error('Square checkout link failed')
+    );
+
+    const { container, getByRole, getByText } = render(
+      <MemoryRouter initialEntries={['/app/checkout/founding_member']}>
+        <Routes>
+          <Route path="/app/checkout/:tier" element={<CheckoutLaunch />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(api.post).toHaveBeenCalledWith('/billing/checkout-link', {
+        tier: 'founding_member',
+      });
+      expect(getByText('Square checkout link failed')).toBeTruthy();
+    });
+
+    // Spinner is hidden when error state is active
+    expect(container.querySelector('.animate-spin')).toBeNull();
+
+    // Selected tier price summary is visible
+    expect(container.textContent).toContain('$14.99/mo');
+
+    // Renders a link to /app/preorder and a Try Again button that retries checkout
+    const preorderLink = container.querySelector('a[href="/app/preorder"]');
+    expect(preorderLink).not.toBeNull();
+
+    const tryAgainButton = getByRole('button', { name: /Try Again/i });
+    expect(tryAgainButton).toBeTruthy();
+
+    vi.mocked(api.post).mockRejectedValueOnce(
+      new Error('Square checkout retry failed')
+    );
+    fireEvent.click(tryAgainButton);
+
+    await waitFor(() => {
+      expect(api.post).toHaveBeenCalledTimes(2);
+      expect(api.post).toHaveBeenLastCalledWith('/billing/checkout-link', {
+        tier: 'founding_member',
+      });
+    });
+  });
+
+  it('renders the wildcard 404 screen on unknown routes with meta robots noindex and links to / and /register', async () => {
+    const rootDiv = document.createElement('div');
+    rootDiv.id = 'root';
+    document.body.appendChild(rootDiv);
+    window.history.pushState({}, '', '/nonexistent-unknown-route-404');
+
+    try {
+      vi.resetModules();
+      await import('../main');
+
+      await waitFor(() => {
+        const robotsMeta = document.head.querySelector(
+          'meta[name="robots"]'
+        ) as HTMLMetaElement | null;
+        expect(robotsMeta).not.toBeNull();
+        expect(robotsMeta?.getAttribute('content')).toContain('noindex');
+      });
+
+      expect(rootDiv.textContent).toMatch(/404|not found/i);
+      expect(rootDiv.querySelector('a[href="/"]')).not.toBeNull();
+      expect(rootDiv.querySelector('a[href="/register"]')).not.toBeNull();
+    } finally {
+      window.history.pushState({}, '', '/');
+      document.head
+        .querySelectorAll('meta[name="robots"]')
+        .forEach(el => el.remove());
+      rootDiv.remove();
+    }
+  });
+
+  it('disallows /app/, /api/, /c/, and /go/ in public/robots.txt', () => {
+    const robotsTxt = readFileSync(
+      path.resolve(__dirname, '../../public/robots.txt'),
+      'utf8'
+    );
+    expect(robotsTxt).toContain('User-agent: *');
+    expect(robotsTxt).toContain('Disallow: /app/');
+    expect(robotsTxt).toContain('Disallow: /api/');
+    expect(robotsTxt).toContain('Disallow: /c/');
+    expect(robotsTxt).toContain('Disallow: /go/');
   });
 });
