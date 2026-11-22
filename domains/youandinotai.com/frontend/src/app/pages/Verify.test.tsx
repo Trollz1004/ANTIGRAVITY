@@ -540,9 +540,11 @@ describe('Verify after $1 payment', () => {
 
     expect(
       getByText(
-        'Your badge unlocks discovery, messaging, and video on your account.'
+        'Your badge unlocks discovery, messaging, topic boards, and the USA group chat on your account.'
       )
     ).toBeDefined();
+    expect(queryByText(/video/i)).toBeNull();
+    expect(queryByText(/prompt/i)).toBeNull();
     expect(queryByText(/Prove you're human/i)).toBeNull();
     expect(queryByText(/How the flow works/i)).toBeNull();
     expect(queryByText(/Answer a short timed question\./i)).toBeNull();
