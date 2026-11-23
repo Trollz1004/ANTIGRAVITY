@@ -171,7 +171,7 @@ export default function ListingDesk() {
         </p>
       </section>
       <section className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+        <div className="min-w-0 rounded-2xl border border-border bg-card p-6 shadow-sm">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
@@ -238,7 +238,7 @@ export default function ListingDesk() {
             </p>
           ) : null}
         </div>
-        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+        <div className="min-w-0 rounded-2xl border border-border bg-card p-6 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
             Draft output
           </p>
@@ -349,7 +349,7 @@ export default function ListingDesk() {
         </div>
       </section>
       <section className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+        <div className="min-w-0 rounded-2xl border border-border bg-card p-6 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
             Persisted payload preview
           </p>
@@ -361,7 +361,7 @@ export default function ListingDesk() {
             incomplete or the channel is not enabled, it is also routed to the
             exception queue.
           </p>
-          <div className="mt-5 grid gap-3">
+          <div className="mt-5 grid min-w-0 gap-3">
             <select
               value={selectedProductId}
               onChange={event =>
@@ -369,7 +369,7 @@ export default function ListingDesk() {
                   event.target.value ? Number(event.target.value) : ""
                 )
               }
-              className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
+              className="h-10 w-full min-w-0 truncate rounded-lg border border-input bg-background px-3 text-sm"
             >
               <option value="">Select a catalog record</option>
               {(catalog.data ?? []).map(product => (
@@ -383,7 +383,7 @@ export default function ListingDesk() {
               onChange={event =>
                 setSelectedChannel(event.target.value as typeof selectedChannel)
               }
-              className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
+              className="h-10 w-full min-w-0 rounded-lg border border-input bg-background px-3 text-sm"
             >
               <option value="ebay">eBay</option>
               <option value="google_merchant">Google Merchant</option>
@@ -397,7 +397,7 @@ export default function ListingDesk() {
               step="0.01"
               value={price}
               onChange={event => setPrice(Number(event.target.value))}
-              className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
+              className="h-10 w-full min-w-0 rounded-lg border border-input bg-background px-3 text-sm"
             />
             <Button
               disabled={!selectedProductId || preview.isPending}
@@ -425,7 +425,7 @@ export default function ListingDesk() {
             ) : null}
           </div>
         </div>
-        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+        <div className="min-w-0 rounded-2xl border border-border bg-card p-6 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
             Preflight result
           </p>
