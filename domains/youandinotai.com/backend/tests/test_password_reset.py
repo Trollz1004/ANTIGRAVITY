@@ -2,7 +2,11 @@
 
 import asyncio
 import logging
+import logging.handlers
+import os
 import re
+import smtplib
+import tempfile
 import urllib.parse
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -462,3 +466,109 @@ def test_rate_limiter_log_line_never_contains_password_or_reset_token(
     for line in limiter_lines:
         assert password not in line
         assert reset_token not in line
+
+
+def _reset_audit_lines(caplog) -> list[str]:
+    return [
+        rec.getMessage()
+        for rec in caplog.records
+        if rec.name == "app.routers.auth" and "password reset" in rec.getMessage()
+    ]
+
+
+def test_forgot_password_log_line_records_match_and_mail_without_personal_data(
+    client, caplog, monkeypatch
+):
+    """Every forgot-password request logs one line: time, matched or not matched,
+    and mail sent, mail skipped or mail failed. Never the email, the token, or
+    the request body. Matched and unmatched requests return the same body."""
+    from app.logging_config import setup_logging
+
+    monkeypatch.setenv("SMTP_HOST", "smtp.example.com")
+    monkeypatch.setenv("EMAIL_FROM_ADDRESS", "noreply@youandinotai.com")
+    get_settings.cache_clear()
+
+    email = "audit-member@example.com"
+    reg_resp = client.post(
+        "/api/v1/auth/register", json=_register_payload(email, "OldPassword123!")
+    )
+    assert reg_resp.status_code == 201, reg_resp.text
+
+    with patch("app.email_service._deliver_email") as mock_deliver:
+        with caplog.at_level(logging.INFO, logger="app.routers.auth"):
+            caplog.clear()
+            matched = client.post("/api/v1/auth/forgot-password", json={"email": email})
+            unmatched = client.post(
+                "/api/v1/auth/forgot-password",
+                json={"email": "nobody-audit@example.com"},
+            )
+        raw_token = _extract_token_from_deliver_mock(mock_deliver)
+
+    assert matched.status_code == 200
+    assert unmatched.status_code == 200
+    assert matched.json() == unmatched.json()
+
+    audit_lines = _reset_audit_lines(caplog)
+    assert len(audit_lines) == 2
+    assert "matched" in audit_lines[0] and "not matched" not in audit_lines[0]
+    assert "mail sent" in audit_lines[0]
+    assert "not matched" in audit_lines[1]
+    assert "mail skipped" in audit_lines[1]
+    for line in audit_lines:
+        assert "@" not in line
+        assert raw_token not in line
+        assert email not in line
+
+    with caplog.at_level(logging.INFO, logger="app.routers.auth"):
+        caplog.clear()
+        skipped = client.post(
+            "/api/v1/auth/forgot-password",
+            json={"email": "second-nobody@example.com"},
+        )
+    assert skipped.status_code == 200
+    skipped_lines = _reset_audit_lines(caplog)
+    assert len(skipped_lines) == 1
+    assert "not matched" in skipped_lines[0]
+    assert "mail skipped" in skipped_lines[0]
+    assert "@" not in skipped_lines[0]
+
+    def _boom(*_args, **_kwargs):
+        raise smtplib.SMTPException("relay refused the message")
+
+    with patch("app.email_service._deliver_email", side_effect=_boom):
+        with caplog.at_level(logging.INFO, logger="app.routers.auth"):
+            caplog.clear()
+            failed = client.post("/api/v1/auth/forgot-password", json={"email": email})
+    assert failed.status_code == 200
+    assert failed.json() == matched.json()
+    failed_lines = _reset_audit_lines(caplog)
+    assert len(failed_lines) == 1
+    assert "matched" in failed_lines[0] and "not matched" not in failed_lines[0]
+    assert "mail failed" in failed_lines[0]
+    assert "SMTPException" in failed_lines[0]
+    assert "@" not in failed_lines[0]
+    assert email not in failed_lines[0]
+    assert "relay refused" not in failed_lines[0]
+
+    log_dir = tempfile.mkdtemp(prefix="dateapp-log-")
+    log_path = os.path.join(log_dir, "dateapp-api.log")
+    setup_logging(log_file=log_path)
+    root_logger = logging.getLogger()
+    file_handlers = [
+        h
+        for h in root_logger.handlers
+        if isinstance(h, logging.handlers.RotatingFileHandler)
+    ]
+    assert len(file_handlers) == 1
+    assert file_handlers[0].baseFilename == os.path.abspath(log_path)
+    assert file_handlers[0].maxBytes == 5 * 1024 * 1024
+    assert file_handlers[0].backupCount == 5
+
+    logging.getLogger("app.routers.auth").info("password reset probe")
+    for handler in file_handlers:
+        handler.flush()
+    with open(log_path, encoding="utf-8") as handle:
+        written = handle.read()
+    assert "password reset probe" in written
+
+    get_settings.cache_clear()

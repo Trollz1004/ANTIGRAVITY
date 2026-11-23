@@ -535,7 +535,9 @@ async def forgot_password(
 
     normalized_email = payload.email.strip().lower()
     user = await db.scalar(select(User).where(User.email == normalized_email))
-    if user and user.is_active:
+    matched = bool(user and user.is_active)
+    mail_outcome = "mail skipped"
+    if matched:
         ip_address = request.client.host if request.client else None
         raw_token = await issue_password_reset_token(
             db,
@@ -556,8 +558,18 @@ async def forgot_password(
                     expires_minutes=settings.password_reset_expire_minutes,
                     settings=settings,
                 )
-            except Exception:
+                mail_outcome = "mail sent"
+            except Exception as exc:
+                mail_outcome = f"mail failed {type(exc).__name__}"
                 logger.warning("Password reset email delivery failed")
+
+    # One line per request, with nothing personal: no email, no token, no body.
+    logger.info(
+        "password reset %s %s %s",
+        datetime.now(timezone.utc).isoformat(),
+        "matched" if matched else "not matched",
+        mail_outcome,
+    )
 
     return AuthForgotPasswordResponse()
 
