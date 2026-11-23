@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent, waitFor, act } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 import LandingPage, { PublicSupportPage } from '../App';
 import { Login } from '../app/pages/Login';
@@ -58,6 +58,7 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
   beforeEach(() => {
     vi.resetAllMocks();
     localStorage.clear();
+    sessionStorage.clear();
     Element.prototype.scrollIntoView = vi.fn();
     useAuth.setState({
       user: {
@@ -223,6 +224,96 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     });
   });
 
+  it('renders a direct Sign in with this email link to /login?next=<nextPath> without email in the address and prefills email via navigation state when POST /auth/register returns 409 Email already registered', async () => {
+    useAuth.setState({ user: null, loading: false });
+    vi.mocked(api.post).mockRejectedValueOnce(
+      Object.assign(new Error('Email already registered'), { status: 409 })
+    );
+
+    let currentAddress = '';
+    function LocationTracker() {
+      const loc = useLocation();
+      currentAddress = `${loc.pathname}${loc.search}${loc.hash}`;
+      return null;
+    }
+
+    const { getByPlaceholderText, container, getByRole, getByLabelText } =
+      render(
+        <MemoryRouter initialEntries={['/register?next=%2Fapp%2Fverify']}>
+          <LocationTracker />
+          <Routes>
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+    fireEvent.change(getByPlaceholderText('Display name'), {
+      target: { value: 'Existing Member' },
+    });
+    fireEvent.change(getByPlaceholderText('Email'), {
+      target: { value: 'existing@youandinotai.com' },
+    });
+    fireEvent.change(getByPlaceholderText('MM / DD / YYYY'), {
+      target: { value: '04151990' },
+    });
+    fireEvent.change(getByPlaceholderText('Password (8+ characters)'), {
+      target: { value: 'password123' },
+    });
+
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => fireEvent.click(cb));
+
+    fireEvent.click(getByRole('button', { name: /Create Account/i }));
+
+    const handoffLink = await waitFor(() =>
+      getByRole('link', { name: /Sign in with this email/i })
+    );
+    expect(handoffLink.getAttribute('href')).toBe(
+      '/login?next=%2Fapp%2Fverify'
+    );
+    expect(handoffLink.getAttribute('href')).not.toContain('@');
+    expect(handoffLink.getAttribute('href')).not.toContain('email=');
+
+    fireEvent.click(handoffLink);
+
+    await waitFor(() => {
+      expect(currentAddress).toBe('/login?next=%2Fapp%2Fverify');
+      expect(currentAddress).not.toContain('@');
+      expect(currentAddress).not.toContain('email=');
+      expect((getByLabelText(/Email/i) as HTMLInputElement).value).toBe(
+        'existing@youandinotai.com'
+      );
+    });
+  });
+
+  it('does NOT prefill email when opening /login?email=someone@example.com directly', () => {
+    useAuth.setState({ user: null, loading: false });
+    const { getByLabelText } = render(
+      <MemoryRouter initialEntries={['/login?email=someone@example.com']}>
+        <Login />
+      </MemoryRouter>
+    );
+
+    expect((getByLabelText(/Email/i) as HTMLInputElement).value).toBe('');
+  });
+
+  it('links consent labels on /register to /?policy=terms, /?policy=privacy, and /?policy=age', () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/register']}>
+        <Register />
+      </MemoryRouter>
+    );
+
+    const termsLink = container.querySelector('a[href="/?policy=terms"]');
+    const privacyLink = container.querySelector('a[href="/?policy=privacy"]');
+    const ageLink = container.querySelector('a[href="/?policy=age"]');
+
+    expect(termsLink).not.toBeNull();
+    expect(privacyLink).not.toBeNull();
+    expect(ageLink).not.toBeNull();
+  });
+
   it('requires 18+ date of birth for new Google sign-in accounts before creating account', async () => {
     useAuth.setState({ user: null, loading: false });
     let capturedCallback:
@@ -313,6 +404,256 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     } finally {
       delete window.google;
     }
+  });
+
+  it('navigates /login after Google sign-in to user.has_profile ? nextPath : /app/profile', async () => {
+    useAuth.setState({ user: null, loading: false });
+    let capturedCallback:
+      ((resp: { credential: string }) => Promise<void>) | null = null;
+    window.google = {
+      accounts: {
+        id: {
+          initialize: (opts: {
+            callback: (resp: { credential: string }) => Promise<void>;
+          }) => {
+            capturedCallback = opts.callback;
+          },
+          renderButton: vi.fn(),
+        },
+      },
+    };
+
+    try {
+      vi.mocked(api.post).mockResolvedValueOnce({
+        access_token: 'tok-google-no-profile',
+        refresh_token: 'ref-google-no-profile',
+        user_id: 'u-google-no-profile',
+      });
+      vi.mocked(api.get).mockImplementation(async (path: string) => {
+        if (path === '/health') return { status: 'ok', mail: 'off' };
+        return {
+          user_id: 'u-google-no-profile',
+          email: 'noprofile@youandinotai.com',
+          display_name: 'No Profile Member',
+          bot_shield_verified: false,
+          subscription_tier: null,
+          subscription_active: false,
+          has_profile: false,
+          adult_verified: true,
+        };
+      });
+
+      const firstRender = render(
+        <MemoryRouter initialEntries={['/login?next=%2Fapp%2Fverify']}>
+          <Routes>
+            <Route
+              path="/login"
+              element={<Login googleClientId="test-google-client-id" />}
+            />
+            <Route
+              path="/app/profile"
+              element={<div>Profile Setup Destination</div>}
+            />
+            <Route path="/app/verify" element={<div>Verify Destination</div>} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(capturedCallback).not.toBeNull();
+      });
+      await act(async () => {
+        await capturedCallback!({ credential: 'google-token-no-profile' });
+      });
+
+      expect(
+        await firstRender.findByText('Profile Setup Destination')
+      ).toBeTruthy();
+      firstRender.unmount();
+
+      useAuth.setState({ user: null, loading: false });
+      capturedCallback = null;
+      vi.mocked(api.post).mockResolvedValueOnce({
+        access_token: 'tok-google-with-profile',
+        refresh_token: 'ref-google-with-profile',
+        user_id: 'u-google-with-profile',
+      });
+      vi.mocked(api.get).mockImplementation(async (path: string) => {
+        if (path === '/health') return { status: 'ok', mail: 'off' };
+        return {
+          user_id: 'u-google-with-profile',
+          email: 'withprofile@youandinotai.com',
+          display_name: 'With Profile Member',
+          bot_shield_verified: false,
+          subscription_tier: null,
+          subscription_active: false,
+          has_profile: true,
+          adult_verified: true,
+        };
+      });
+
+      const secondRender = render(
+        <MemoryRouter initialEntries={['/login?next=%2Fapp%2Fverify']}>
+          <Routes>
+            <Route
+              path="/login"
+              element={<Login googleClientId="test-google-client-id" />}
+            />
+            <Route
+              path="/app/profile"
+              element={<div>Profile Setup Destination</div>}
+            />
+            <Route path="/app/verify" element={<div>Verify Destination</div>} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(capturedCallback).not.toBeNull();
+      });
+      await act(async () => {
+        await capturedCallback!({ credential: 'google-token-with-profile' });
+      });
+
+      expect(await secondRender.findByText('Verify Destination')).toBeTruthy();
+      secondRender.unmount();
+    } finally {
+      delete window.google;
+    }
+  });
+
+  it('persists only email and displayName on /register in sessionStorage without date of birth, gender, or password and clears them on submit', async () => {
+    const firstRender = render(
+      <MemoryRouter initialEntries={['/register?next=%2Fapp%2Fverify']}>
+        <Register />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(firstRender.getByPlaceholderText('Display name'), {
+      target: { value: 'Draft Member' },
+    });
+    fireEvent.change(firstRender.getByPlaceholderText('Email'), {
+      target: { value: 'draft@youandinotai.com' },
+    });
+    fireEvent.change(firstRender.getByPlaceholderText('MM / DD / YYYY'), {
+      target: { value: '04151990' },
+    });
+    fireEvent.change(
+      firstRender.getByPlaceholderText('Password (8+ characters)'),
+      {
+        target: { value: 'password123' },
+      }
+    );
+
+    const firstCheckboxes = firstRender.container.querySelectorAll(
+      'input[type="checkbox"]'
+    );
+    firstCheckboxes.forEach(cb => fireEvent.click(cb));
+
+    const rawDraft = sessionStorage.getItem('youandinotai_register_draft');
+    expect(rawDraft).not.toBeNull();
+    const parsedDraft = JSON.parse(rawDraft!) as Record<string, unknown>;
+    expect(Object.keys(parsedDraft).sort()).toEqual(['displayName', 'email']);
+    expect(parsedDraft).toEqual({
+      email: 'draft@youandinotai.com',
+      displayName: 'Draft Member',
+    });
+    for (const key of Object.keys(parsedDraft)) {
+      expect(key).not.toMatch(/dateOfBirth|date_of_birth|dob|birth|gender/i);
+    }
+    for (const value of Object.values(parsedDraft)) {
+      expect(String(value)).not.toMatch(
+        /04151990|04\s*\/\s*15\s*\/\s*1990|1990-04-15|male|female|nonbinary/i
+      );
+    }
+
+    const storedSnapshot = JSON.stringify(sessionStorage);
+    expect(storedSnapshot).toContain('Draft Member');
+    expect(storedSnapshot).toContain('draft@youandinotai.com');
+    expect(storedSnapshot).not.toMatch(
+      /dateOfBirth|date_of_birth|04151990|04\s*\/\s*15\s*\/\s*1990|1990-04-15|gender|password123/i
+    );
+
+    firstRender.unmount();
+
+    const reloadedRender = render(
+      <MemoryRouter initialEntries={['/register?next=%2Fapp%2Fverify']}>
+        <Register />
+      </MemoryRouter>
+    );
+
+    expect(
+      (reloadedRender.getByPlaceholderText('Display name') as HTMLInputElement)
+        .value
+    ).toBe('Draft Member');
+    expect(
+      (reloadedRender.getByPlaceholderText('Email') as HTMLInputElement).value
+    ).toBe('draft@youandinotai.com');
+    expect(
+      (
+        reloadedRender.getByPlaceholderText(
+          'MM / DD / YYYY'
+        ) as HTMLInputElement
+      ).value
+    ).toBe('');
+    expect(
+      (
+        reloadedRender.getByPlaceholderText(
+          'Password (8+ characters)'
+        ) as HTMLInputElement
+      ).value
+    ).toBe('');
+
+    const reloadedCheckboxes = reloadedRender.container.querySelectorAll(
+      'input[type="checkbox"]'
+    ) as NodeListOf<HTMLInputElement>;
+    reloadedCheckboxes.forEach(cb => {
+      expect(cb.checked).toBe(false);
+    });
+
+    vi.mocked(api.post).mockResolvedValueOnce({
+      access_token: 'tok-reg-draft',
+      refresh_token: 'ref-reg-draft',
+      user_id: 'u-reg-draft',
+    });
+    vi.mocked(api.get).mockResolvedValueOnce({
+      user_id: 'u-reg-draft',
+      email: 'draft@youandinotai.com',
+      display_name: 'Draft Member',
+      bot_shield_verified: false,
+      subscription_tier: null,
+      subscription_active: false,
+      has_profile: false,
+      adult_verified: true,
+    });
+
+    fireEvent.change(reloadedRender.getByPlaceholderText('MM / DD / YYYY'), {
+      target: { value: '04151990' },
+    });
+    fireEvent.change(
+      reloadedRender.getByPlaceholderText('Password (8+ characters)'),
+      {
+        target: { value: 'password123' },
+      }
+    );
+    reloadedCheckboxes.forEach(cb => fireEvent.click(cb));
+    fireEvent.click(
+      reloadedRender.getByRole('button', { name: /Create Account/i })
+    );
+
+    await waitFor(() => {
+      expect(api.post).toHaveBeenCalledWith(
+        '/auth/register',
+        expect.objectContaining({
+          email: 'draft@youandinotai.com',
+          display_name: 'Draft Member',
+          date_of_birth: '1990-04-15',
+        })
+      );
+    });
+
+    expect(sessionStorage.length).toBe(0);
+    reloadedRender.unmount();
   });
 
   it('keeps /app/profile form fields and submits PUT /profiles/me', async () => {

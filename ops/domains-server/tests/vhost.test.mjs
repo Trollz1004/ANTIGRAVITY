@@ -523,7 +523,7 @@ async function main() {
       "/api/book",
       {
         serviceType: "dropoff",
-        date: flToday,
+        date: flDay(1),
         slotCode: "09:00-09:30",
         fullName: "Saved One",
         phone: "(321) 555-0191",
@@ -538,7 +538,7 @@ async function main() {
       "/api/book",
       {
         serviceType: "dropoff",
-        date: flToday,
+        date: flDay(1),
         slotCode: "10:00-10:30",
         fullName: "Saved Two",
         phone: "(321) 555-0192",
@@ -553,7 +553,7 @@ async function main() {
       "/api/book",
       {
         serviceType: "dropoff",
-        date: flToday,
+        date: flDay(1),
         slotCode: "11:00-11:30",
         fullName: "Third Blocked",
         phone: "(321) 555-0193",
@@ -597,12 +597,12 @@ async function main() {
 
     // 5. Cancelled bookings free their slot in /api/booking-config
     const cancelledSlot = {
-      bookingId: `OR-${flToday.replace(/-/g, "")}-CANC0001`,
+      bookingId: `OR-${flDay(1).replace(/-/g, "")}-CANC0001`,
       createdAt: new Date().toISOString(),
       serviceType: "dropoff",
       fullName: "Cancelled Customer",
       phone: "321-555-0199",
-      date: flToday,
+      date: flDay(1),
       slotCode: "15:00-15:30",
       slotLabel: "3:00 PM - 3:30 PM",
       deviceCount: "1-5",
@@ -614,10 +614,10 @@ async function main() {
     const cfgRes = await get("127.0.0.1", TEST_PORT, "onlinerecycle.net", "/api/booking-config");
     const cfgJson = JSON.parse(cfgRes.body);
     const hasCancelled = (cfgJson.bookedSlots || []).some(
-      (s) => s.date === flToday && s.slotCode === "15:00-15:30" && s.serviceType === "dropoff"
+      (s) => s.date === flDay(1) && s.slotCode === "15:00-15:30" && s.serviceType === "dropoff"
     );
     const hasScheduled = (cfgJson.bookedSlots || []).some(
-      (s) => s.date === flToday && s.slotCode === "09:00-09:30" && s.serviceType === "dropoff"
+      (s) => s.date === flDay(1) && s.slotCode === "09:00-09:30" && s.serviceType === "dropoff"
     );
     if (hasCancelled || !hasScheduled) {
       console.error(
