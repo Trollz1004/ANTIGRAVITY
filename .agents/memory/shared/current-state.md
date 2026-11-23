@@ -1,65 +1,15 @@
 # Shared Agent Memory — Current State
 
-> **SUPERSEDED — DO NOT READ AS CURRENT (marked 2026-08-25, judge lane).**
-> Everything below is a snapshot from 2026-07-09 describing a topology that no
-> longer exists: a T5500 business node, Sabretooth as a DREAM-only node, an
-> Agent Hub, an OmniRouter on :11436, and FCC agents on :8082. None of that is
-> true now. Sabretooth is the only node, `C:\ANTIGRAVITY` is the sole working
-> tree, Mission Control is Paperclip at `http://127.0.0.1:3917`, and **FCC is
-> permanently banned** (`agent-contracts/FCC-STATUS.md`). Any `fcc-claude`
-> provider entry in the table below is a dead record, not a configured agent.
-> For real current state read `AGENTS.md`, `CLAUDE.md`, and
-> `agent-contracts/MISSION-CONTROL-GOVERNANCE.md`. Kept only as append-only
-> history.
+> **ALIGNED TO CANONICAL 2-NODE FLEET (`ops/fleet/fleet-map.json`)**
+> Previous July/August 2026 snapshots pointing to legacy hosts, retired control-plane servers, or unsupported payment rails are superseded. For authoritative rules, read `AGENTS.md`, `CLAUDE.md`, `docs/standards/AGENT-STANDARD.md`, and `ops/fleet/fleet-map.json`.
 
-> Append-only after decisions. All agents may READ. No agent may SUMMARIZE or MODIFY another agent's private journal.
-> updated: 2026-07-09T07:41:00Z
+## Active Two-Node Fleet Architecture
 
-## Active Architecture
+- **Node 1 — Alienware (`192.168.0.40`, Workshop)**: `Trollz1004/dream-online` & `Trollz1004/ANTIGRAVITY` Workshop — DREAM Engine (`:9180`), Lead-Gen Studio (`:8392`), Media/TTS Worker (`:8391`), OPSis Studio (`:8390`), Free Claude Code (`:8082`), Swarm Command (`:8000`), Ollama (`:11434`), Obsidian MCP (`:27200`) / REST (`:27123`).
+- **Node 2 — T5500 (`192.168.0.15`, Front-of-House)**: `Trollz1004/ANTIGRAVITY` Production — Mission OS (`:3130`), DateApp Frontend (`:3200`), DateApp API (`:8000`), PostgreSQL (`127.0.0.1:5432`, local only), Redis (`127.0.0.1:6379`, local only), OmniRoute (`:20128`), Hermes API (`:8643`), Hermes Dashboard (`:9119`), Domains Static Server (`:9160`), Shared `ai-memory` MCP (`:49374`), Obsidian REST (`192.168.0.15:27123`, bind `"127.0.0.1"` on port `27123`).
 
-- Business node: T5500 (192.168.0.8) — ANTIGRAVITY, youandinotai.com, Cloudflare, date app, Agent Hub :3130
-- DREAM node: Sabretooth (192.168.0.8) — DREAM Online MMO ONLY
-- Repo: Trollz1004/ANTIGRAVITY, branch main, C:\antigravity on T5500 (restore pending — see incidents)
+## Active Models & Payment Truth
 
-## Active Agents
-
-| Agent           | Status     | Node  | Provider             |
-| --------------- | ---------- | ----- | -------------------- |
-| ceo             | configured | t5500 | fcc/claude           |
-| hermes-ceo      | configured | t5500 | hermes-router        |
-| fcc-claude      | configured | t5500 | fcc :8082            |
-| hermes          | configured | t5500 | hermes-router :11435 |
-| ollama-worker   | configured | t5500 | ollama :11434        |
-| opencode-worker | configured | t5500 | opencode             |
-| ant-dev         | configured | t5500 | fcc-claude           |
-| ant-reviewer    | configured | t5500 | fcc-claude           |
-| ant-devops      | configured | t5500 | fcc-claude           |
-| ant-compliance  | configured | t5500 | fcc-claude           |
-| ant-growth      | configured | t5500 | hermes               |
-| ant-support     | configured | t5500 | clawx                |
-| ebay-lister     | configured | t5500 | ollama               |
-| aisol-dev       | configured | t5500 | fcc-claude           |
-
-## Services (T5500)
-
-- OmniRouter :11436 — token routing (start: scripts/start-omni-router.ps1)
-- Agent Hub :3130 — task dispatch + leads CRM
-- Hermes dashboard :9119 (factory port; the :3000 workspace GUI is retired)
-- FCC proxy :8082
-- YouAndINotAI API :8000
-- Ollama :11434
-- PaperclipAI :3110
-
-## Open Incidents
-
-- RESTORE PENDING: Gordon force-push orphaned true tip 66c8390. Run Desktop\RUN-NOW-restore-and-verify.bat on T5500 FIRST before any code work.
-- GitHub branch protection on main: not yet enabled (30-sec job after restore)
-- Codex governance prompt: not yet run (pending restore)
-- Desktop Commander: disabled in claude.ai — re-enable after restore
-
-## Revenue Status (2026-07-09)
-
-- Stripe: $0 revenue, 0 active subscriptions
-- GA4: near-zero traffic across all 3 properties
-- Square on youandinotai.com: payment rail configured but no live customers yet
-- Next action: first paying customer
+- **Models**: `Gemini 4 Carbon`, `GPT-6 Astra`, `GPT-6.1 Sol`, `Opus 5.5` / `Fable` (Claude uses official OAuth sign-in only, never OmniRoute).
+- **Payments (`docs/PAYMENTS-TRUTH.md`)**: Square is the primary checkout rail across live products alongside PayPal (account mapping rules in `CLAUDE.md`).
+- **Live Domains**: `youandinotai.com`, `onlinerecycle.net`, `dream-online.net`.

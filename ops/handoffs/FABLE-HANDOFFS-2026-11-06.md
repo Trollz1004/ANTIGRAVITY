@@ -1,3 +1,5 @@
+Edited 2026-11-15: the name of an unrelated private project was removed.
+
 # Fable handoffs — 2026-11-06
 
 Rulings by Joshua in a live session on 2026-11-06, written by Fable (claude.ai, Chrome side panel).
@@ -11,7 +13,7 @@ Nothing costs money until Joshua says finalize. Never echo an env value.
 
 1. The founder's vote board no longer lives on ClawX (Manus). It moves into Mission Control. The 2026-09-29 note "votes stay on ClawX" is reversed.
 2. No cookie transfer, ever. No tool, router or wrapper may export, copy or reuse a browser session or cookie from any site, on any node. Every lane reaches a site through that site's own OAuth sign-in or official API, or not at all.
-3. Posting lanes, two tiers. Platform surfaces are worked by the platform's own agent through its own API or sign-in: Grok on X (Hermes xAI sign-in, paid, the default for date app and recycler launch posts), Muse on Meta surfaces once a sign-in or ruled API door exists and a terms check passes, Gemini on Google pages, Codex on OpenAI's. Every other site (Bluesky, swarm targets) is posted only by Opus or Fable through the signed-in Claude Code, or Argon at highest thinking, through that site's official API, every post logged. Reddit is the exception and is governed by ruling 4 alone. Sonnet, Flash, Kimi, GLM and local models never post anywhere. Hermes dispatches and never posts. GrinDroid never goes to Meta surfaces. YouTube unchanged: no agent posts, uploads private, Joshua publishes in Studio.
+3. Posting lanes, two tiers. Platform surfaces are worked by the platform's own agent through its own API or sign-in: Grok on X (Hermes xAI sign-in, paid, the default for date app and recycler launch posts), Muse on Meta surfaces once a sign-in or ruled API door exists and a terms check passes, Gemini on Google pages, Codex on OpenAI's. Every other site (Bluesky, swarm targets) is posted only by Opus or Fable through the signed-in Claude Code, or Argon at highest thinking, through that site's official API, every post logged. Reddit is the exception and is governed by ruling 4 alone. Sonnet, Flash, Kimi, GLM and local models never post anywhere. Hermes dispatches and never posts. Content from other private projects never goes to Meta surfaces. YouTube unchanged: no agent posts, uploads private, Joshua publishes in Studio.
 4. Reddit is a live-session job: Joshua signed in, Claude in Chrome, one approval per post. Not a Hermes job.
 5. Public surfaces are judged by the first seven seconds with no scrolling. A site that looks fine as a normal website fails. Same bar as the game's seven seconds of playable footage.
 6. Motion is the standard on everything we ship, header included. A static header, a static hero, a static card grid is not finished. Joshua's words: we wow or it is not shipped. This applies to the date app, the game page, the recycler, Mission Control and DREAM Studio alike. Motion must still pass the accessibility rules (respect reduced-motion, keep contrast, no frame-rate drop on an ordinary laptop).
@@ -41,7 +43,7 @@ Paste into `docs/standards/SABRETOOTH-SOUL.md` under a heading `POSTING LANES �
 - OpenAI surfaces: Codex, through its signed-in CLI.
 - Reddit: never routed by you. Reddit is a live-session job only: Joshua signed in, Claude in Chrome, one approval per post (ruling 4). Queue any Reddit ask and report it as waiting on a live session.
 - Bluesky and every other site: summon the signed-in Claude Code (Opus or Fable) or Argon at highest thinking. Official API of that site only, never scraping, never a copied session. Refuse to route these to Sonnet, Flash, Kimi, GLM or any local model.
-- GrinDroid content never goes to Meta surfaces.
+- Content from other private projects never goes to Meta surfaces.
 - Before any first post on a site, confirm a dated terms file exists for it in the drop box terms check. No file, no post; report it as blocked.
 - Log every post: timestamp, lane, model, surface, exact text, link to the live post. Append to the claude-to-claude log.
 
@@ -111,7 +113,7 @@ Rules for the rewrite (Sonnet in agy, branch `untilnokidinneed-misses-trollz`):
 Separately, in the misses-trollz repo: turn on branch protection for `main` (PR required, no force push, no direct push) and record in CONTRIBUTING.md that merges are done only by the Claude judge lane on Joshua's account. Both `misses-trollz` and `Misses-Trollz-REWORK` are public; Joshua says which one is canonical, and the other gets archived with a pointer.
 
 READMEs:
-- `Trollz1004/ANTIGRAVITY` README: no barred wording found by grep. Lane does a full read for accuracy against the current fleet (no NSFW_BOTS, no Mission Control dispatch endpoint, Hermes is OPSis, current node roles).
+- `Trollz1004/ANTIGRAVITY` README: no barred wording found by grep. Lane does a full read for accuracy against the current fleet (no old separate profile name, no Mission Control dispatch endpoint, Hermes is OPSis, current node roles).
 - `Trollz1004/dream-online` README line 95 mentions pediatric hospital / sick child accessibility. Mission wording in a public repo. Remove in a dream-online PR. Also check every doc still naming Godot as the engine; the engine is in-house.
 - The commit guard word list is enforced mechanically; phrase around it and never list the words in a file.
 
@@ -124,11 +126,11 @@ Why: today's rulings landed in CLAUDE.md-style files and the handoff only. Every
 1. Inventory every agent-definition file in ANTIGRAVITY and dream-online: `gemini.toml`, `agents.json`, `skill.json`, `openai.yaml`, `AGENTS.md`, `CLAUDE.md`, every `SKILL.md`, the node souls in `docs/standards/`, and the Hermes skills under `hermes/skills/`. Write the list with paths into `ops/runbook/AGENT-DEFINITIONS-INVENTORY-2026-11.md`.
 2. Pick the single roster file (the spec in `ops/handoffs/FABLE-QUEUE-ROUTER-GUI-PIPELINE-2026-11-03.md` names it if one exists; otherwise `ops/roster/ROSTER.json`). Put the lanes, their nodes, their connection method, their allowed tools and their posting rights in it, matching rulings 0 to 6 in this file exactly.
 3. Generate or correct every file from step 1 so it says what the roster says. Where a format cannot carry a rule, it points at the roster by path instead of restating it.
-4. Remove from every file: NSFW_BOTS, the Mission Control dispatch endpoint, JARVIS as Hermes's name, Godot as the engine, ClawX as the vote board, Open Collective, Stripe, any revenue split, any cookie or browser-session instruction, and any charity or mission wording in files that are public-repo and not the Misses Trollz page.
+4. Remove from every file: the old separate profile name, the Mission Control dispatch endpoint, JARVIS as Hermes's name, Godot as the engine, ClawX as the vote board, Open Collective, Stripe, any revenue split, any cookie or browser-session instruction, and any charity or mission wording in files that are public-repo and not the Misses Trollz page.
 5. Add a check to `ops/startup/seed-agents.cjs` or the CI validate job that fails when a generated file no longer matches the roster, so the drift cannot come back quietly.
 6. Standing rule from Joshua, 2026-11-06, written into every agent's own file by this job: when an agent finishes work that changes a lane, a skill, a tool or a rule, it updates every definition file it owns in the same PR, so the whole team reads the same data. Each agent loads only its own file, chosen by its model. The only skills an agent keeps loaded are Superpowers (the official Anthropic one, or the skills.sh one) and the caveman token-saver skill, plus memory. Everything else loads on demand by path. Agent definitions carry no bloated skill text.
 7. PR carries the inventory file and a before-and-after diff summary per format. The Claude judge lane reviews it before any other section's PR is reviewed.
 
 ## 7. Node bridge for Fable — Joshua, at each console
 
-Desktop Commander in the claude.ai session lists one device, the old `nsfw` profile, offline. None of the three nodes is registered, so Fable cannot reach a node from claude.ai. To let Fable dispatch and verify directly next time: install the Desktop Commander device agent on the T5500, Sabretooth and the Alienware under the normal user, headless, and revoke the `nsfw` device at mcp.desktopcommander.app. Until then, these handoffs travel by PR and the signed-in Claude Code on each node is the judge.
+Desktop Commander in the claude.ai session lists one device, an old separate profile, offline. None of the three nodes is registered, so Fable cannot reach a node from claude.ai. To let Fable dispatch and verify directly next time: install the Desktop Commander device agent on the T5500, Sabretooth and the Alienware under the normal user, headless, and revoke that old device at mcp.desktopcommander.app. Until then, these handoffs travel by PR and the signed-in Claude Code on each node is the judge.

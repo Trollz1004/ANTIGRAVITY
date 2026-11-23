@@ -94,7 +94,10 @@ function loadBooking(fetchImpl) {
   const fetchCalls = [];
   const context = {
     document,
-    window: {},
+    location: { search: "", hash: "" },
+    URLSearchParams,
+    Date,
+    Intl,
     console,
     fetch: async (url, opts) => {
       fetchCalls.push({ url, opts });
@@ -106,6 +109,7 @@ function loadBooking(fetchImpl) {
   };
   context.window = context;
   context.globalThis = context;
+  context.addEventListener = function () {};
   const exposed = booking.replace(
     "form.addEventListener('submit'",
     "globalThis.__booking = { renderSlots, selectedDate, bookedSlots, selectedSlotCode }; form.addEventListener('submit'"
@@ -175,7 +179,7 @@ test("POST /api/book shows a plain-text server error with the phone number inste
   });
 
   byId["bf-name"].value = "Pat Jones";
-  byId["bf-phone"].value = "555-0100";
+  byId["bf-phone"].value = "(321) 555-0199";
   byId["bf-devices"].value = "2 laptops";
   assert.equal(byId["bf-submit-btn"].disabled, false, "an open day must leave submit enabled");
 

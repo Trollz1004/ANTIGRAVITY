@@ -21,7 +21,7 @@ Specify a model name. Discover available models with `listModels()`.
 const models = await client.listModels();
 // Pick from available models
 const session = await client.createSession({
-  model: 'o4-mini',
+  model: 'gpt-6-astra',
 });
 ```
 
@@ -35,9 +35,9 @@ Use your own Azure AI deployment. For local development use `DefaultAzureCredent
 
 | Family               | Models                                                                            |
 | -------------------- | --------------------------------------------------------------------------------- |
-| **o-series**         | o3, o3-mini, o4-mini (cheapest)                                                   |
-| **gpt-5 family**     | gpt-5, gpt-5-mini, gpt-5.1, gpt-5.1-mini, gpt-5.1-nano, gpt-5.2-codex, codex-mini |
-| ❌ **NOT supported** | gpt-4o, gpt-4.1, gpt-4.1-nano, and other non-o/non-gpt-5 models                   |
+| **Reasoning series** | Approved reasoning deployments supporting BYOM encrypted content                  |
+| **GPT-6 / house**    | `gpt-6-astra`, `gpt-6.1-sol` (also see `Gemini 4 Carbon`, `Opus 5.5` / `Fable`)   |
+| ❌ **NOT supported** | Legacy chat deployments lacking encrypted-content BYOM support                    |
 
 ### Required API Settings
 
@@ -64,7 +64,7 @@ const credential = new DefaultAzureCredential();
 const { token } = await credential.getToken('https://cognitiveservices.azure.com/.default');
 
 const session = await client.createSession({
-  model: process.env.MODEL_NAME || 'o4-mini',
+  model: process.env.MODEL_NAME || 'gpt-6-astra',
   provider: {
     type: 'azure',
     baseUrl: process.env.AZURE_OPENAI_ENDPOINT,
@@ -113,10 +113,10 @@ The template uses env vars for model path selection:
 
 | Error                                    | Cause                                       | Fix                                        |
 | ---------------------------------------- | ------------------------------------------- | ------------------------------------------ |
-| `400 Encrypted content is not supported` | Model doesn't support SDK encryption        | Use o-series or gpt-5 family only          |
-| `400` with tool calls / multi-turn       | `wireApi: "responses"` with `store: false`  | Use `wireApi: "completions"` instead       |
-| `CAPIError: 404 Resource not found`      | `apiVersion` at top level instead of nested | Use `azure: { apiVersion: "..." }`         |
-| Silent timeout                           | Unsupported model (e.g., gpt-4o, gpt-4.1)   | Switch to o4-mini or gpt-5 family          |
+| `400 Encrypted content is not supported` | Model doesn't support SDK encryption        | Use BYOM-supported reasoning or GPT-6 family |
+| `400` with tool calls / multi-turn       | `wireApi: "responses"` with `store: false`  | Use `wireApi: "completions"` instead         |
+| `CAPIError: 404 Resource not found`      | `apiVersion` at top level instead of nested | Use `azure: { apiVersion: "..." }`           |
+| Silent timeout                           | Unsupported legacy deployment               | Switch to `gpt-6-astra` or `gpt-6.1-sol`     |
 | `model is required`                      | Missing `model` in BYOM config              | Set `MODEL_NAME` env var                   |
 | `401 Unauthorized`                       | Token expired or wrong scope                | Refresh via `DefaultAzureCredential`       |
 | `404 Not Found`                          | Wrong endpoint or deployment name           | Verify URL and deployment exists           |

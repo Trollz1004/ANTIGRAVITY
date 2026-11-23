@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -16,15 +16,45 @@ import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
 import { getSafeNextPath } from '../../lib/navigation';
 import { capturePartnerId, clearPartnerId } from '../../lib/partnerAttribution';
 
+const REGISTER_DRAFT_STORAGE_KEY = 'youandinotai_register_draft';
+
+interface RegisterDraft {
+  email?: string;
+  displayName?: string;
+}
+
+function readRegisterDraft(): RegisterDraft {
+  try {
+    const raw = sessionStorage.getItem(REGISTER_DRAFT_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') return {};
+    const record = parsed as Record<string, unknown>;
+    return {
+      email: typeof record.email === 'string' ? record.email : undefined,
+      displayName:
+        typeof record.displayName === 'string' ? record.displayName : undefined,
+    };
+  } catch {
+    return {};
+  }
+}
+
 export function Register() {
-  const [email, setEmail] = useState('');
+  const [initialDraft] = useState<RegisterDraft>(() => readRegisterDraft());
+  const [email, setEmail] = useState(() =>
+    typeof initialDraft.email === 'string' ? initialDraft.email : ''
+  );
   const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [displayName, setDisplayName] = useState(() =>
+    typeof initialDraft.displayName === 'string' ? initialDraft.displayName : ''
+  );
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [acceptedCookiePolicy, setAcceptedCookiePolicy] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [confirmedOver18, setConfirmedOver18] = useState(false);
   const [error, setError] = useState('');
+  const [duplicateEmailConflict, setDuplicateEmailConflict] = useState(false);
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -32,9 +62,43 @@ export function Register() {
   const nextPath = getSafeNextPath(location.search, '/app/profile');
   const [partnerId] = useState(() => capturePartnerId(location.search));
 
+  useEffect(() => {
+    try {
+      if (!email && !displayName) {
+        sessionStorage.removeItem(REGISTER_DRAFT_STORAGE_KEY);
+        return;
+      }
+      sessionStorage.setItem(
+        REGISTER_DRAFT_STORAGE_KEY,
+        JSON.stringify({
+          email,
+          displayName,
+        })
+      );
+    } catch {
+      // Ignore sessionStorage errors
+    }
+  }, [email, displayName]);
+
+  useEffect(() => {
+    document.title = 'Create 18+ Account | YouAndINotAI';
+    const canonical = document.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]'
+    );
+    if (canonical) canonical.href = 'https://youandinotai.com/register';
+    const desc = document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]'
+    );
+    if (desc) {
+      desc.content =
+        'Create your 18+ YouAndINotAI account and complete the $1 Bot-Shield human check to unlock verified human discovery, messaging, topic boards, and the USA group chat.';
+    }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setDuplicateEmailConflict(false);
     if (password.length < 8) {
       setError('Password must be at least 8 characters');
       return;
@@ -70,10 +134,20 @@ export function Register() {
         confirmedOver18,
         referralCode: partnerId,
       });
+      try {
+        sessionStorage.removeItem(REGISTER_DRAFT_STORAGE_KEY);
+      } catch {
+        // Ignore sessionStorage errors
+      }
       clearPartnerId();
       navigate(nextPath);
     } catch (err: any) {
-      setError(err.message || 'Registration failed');
+      const message = err?.message || 'Registration failed';
+      const isDuplicate =
+        err?.status === 409 ||
+        /email already registered/i.test(String(message));
+      setDuplicateEmailConflict(isDuplicate);
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -165,7 +239,16 @@ export function Register() {
                     exit={{ opacity: 0, height: 0 }}
                     className="rounded-lg border border-[#FF6B6B] bg-[#1A1E25] px-4 py-3 text-sm font-medium text-[#FF6B6B] overflow-hidden"
                   >
-                    {error}
+                    <div>{error}</div>
+                    {duplicateEmailConflict && (
+                      <Link
+                        to={`/login?next=${encodeURIComponent(nextPath)}`}
+                        state={{ email: email.trim() }}
+                        className="mt-2 inline-flex items-center gap-1.5 font-bold text-[#FFD21E] underline transition-colors hover:text-[#F4F1EA]"
+                      >
+                        Sign in with this email <ArrowRight size={14} />
+                      </Link>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -271,7 +354,14 @@ export function Register() {
                     </div>
                     <span>
                       I agree to the cookie policy required for sign-in, safety,
-                      and session security on this device.
+                      and session security on this device.{' '}
+                      <Link
+                        to="/?policy=privacy"
+                        onClick={e => e.stopPropagation()}
+                        className="font-semibold text-[#FFD21E] underline hover:text-[#F4F1EA]"
+                      >
+                        Privacy Policy
+                      </Link>
                     </span>
                   </label>
 
@@ -301,7 +391,14 @@ export function Register() {
                     </div>
                     <span>
                       I accept the platform rules and privacy terms, and I
-                      confirm YouAndINotAI is an adult 18+ platform.
+                      confirm YouAndINotAI is an adult 18+ platform.{' '}
+                      <Link
+                        to="/?policy=terms"
+                        onClick={e => e.stopPropagation()}
+                        className="font-semibold text-[#FFD21E] underline hover:text-[#F4F1EA]"
+                      >
+                        Terms of Service
+                      </Link>
                     </span>
                   </label>
 
@@ -331,7 +428,14 @@ export function Register() {
                     </div>
                     <span>
                       I confirm I am at least 18 years old and that my date of
-                      birth is accurate.
+                      birth is accurate.{' '}
+                      <Link
+                        to="/?policy=age"
+                        onClick={e => e.stopPropagation()}
+                        className="font-semibold text-[#FFD21E] underline hover:text-[#F4F1EA]"
+                      >
+                        18+ Age Policy
+                      </Link>
                     </span>
                   </label>
                 </div>

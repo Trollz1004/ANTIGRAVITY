@@ -46,7 +46,7 @@ No,Category,Icon Name,Keywords,Library,Import Code,Usage,Best For,Style
 45,Media,camera,photo capture snapshot picture,Phosphor,import { Camera } from '@phosphor-icons/react',<Camera size={20} weight="regular" />,Camera photo capture,Outline
 46,Commerce,shopping-cart,cart checkout basket buy,Phosphor,import { ShoppingCart } from '@phosphor-icons/react',<ShoppingCart size={20} weight="regular" />,Shopping cart e-commerce,Outline
 47,Commerce,shopping-bag,purchase buy store bag,Phosphor,import { ShoppingBag } from '@phosphor-icons/react',<ShoppingBag size={20} weight="regular" />,Shopping bag purchase,Outline
-48,Commerce,credit-card,payment card checkout stripe,Phosphor,import { CreditCard } from '@phosphor-icons/react',<CreditCard size={20} weight="regular" />,Payment credit card,Outline
+48,Commerce,credit-card,payment card checkout square,Phosphor,import { CreditCard } from '@phosphor-icons/react',<CreditCard size={20} weight="regular" />,Payment credit card,Outline
 49,Commerce,currency-dollar,money price currency cost,Phosphor,import { CurrencyDollar } from '@phosphor-icons/react',<CurrencyDollar size={20} weight="regular" />,Price money currency,Outline
 50,Commerce,tag,label price discount sale,Phosphor,import { Tag } from '@phosphor-icons/react',<Tag size={20} weight="regular" />,Price tag label,Outline
 51,Commerce,gift,present reward bonus offer,Phosphor,import { Gift } from '@phosphor-icons/react',<Gift size={20} weight="regular" />,Gift reward offer,Outline

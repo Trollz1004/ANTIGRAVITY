@@ -43,6 +43,9 @@ describe('main.tsx actually captures the ref at boot (wiring guard)', () => {
     await import('./main');
 
     expect(localStorage.getItem('antigravity_partner_id')).toBe('bot-slayer');
+    expect(localStorage.getItem('antigravity_signup_source')).toBe(
+      'ref:bot-slayer'
+    );
   });
 
   it('persists a ref when booting on /pricing (not /register)', async () => {
@@ -53,14 +56,29 @@ describe('main.tsx actually captures the ref at boot (wiring guard)', () => {
     expect(localStorage.getItem('antigravity_partner_id')).toBe(
       'skeptic-squad'
     );
+    expect(localStorage.getItem('antigravity_signup_source')).toBe(
+      'ref:skeptic-squad'
+    );
   });
 
-  it('stores nothing when booting without a ref', async () => {
+  it('stores nothing for partner id and stores direct for signup_source when booting without a ref', async () => {
     window.history.replaceState({}, '', '/');
 
     await import('./main');
 
     expect(localStorage.getItem('antigravity_partner_id')).toBeNull();
+    expect(localStorage.getItem('antigravity_signup_source')).toBe('direct');
+  });
+
+  it('persists signup_source for /c/<name> short creator link before replacing url', async () => {
+    window.history.replaceState({}, '', '/c/maya-23');
+
+    await import('./main');
+
+    expect(localStorage.getItem('antigravity_partner_id')).toBe('maya-23');
+    expect(localStorage.getItem('antigravity_signup_source')).toBe(
+      'ref:maya-23'
+    );
   });
 
   it('still boots the app when a ref is present', async () => {

@@ -12,7 +12,7 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from app.auth import get_current_user
+from app.auth import require_founder_or_admin
 from app.feature_flags import get_all_flags, get_flag, set_flag
 from app.models import User
 
@@ -25,7 +25,7 @@ class FlagUpdate(BaseModel):
 
 @router.get("/", summary="List all feature flags")
 async def list_flags(
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
 ) -> dict[str, Any]:
     return get_all_flags()
 
@@ -33,7 +33,7 @@ async def list_flags(
 @router.get("/{name}", summary="Get a feature flag value")
 async def read_flag(
     name: str,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
 ) -> dict[str, Any]:
     all_flags = get_all_flags()
     if name not in all_flags:
@@ -45,7 +45,7 @@ async def read_flag(
 async def update_flag(
     name: str,
     body: FlagUpdate,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_founder_or_admin),
 ) -> dict[str, Any]:
     all_flags = get_all_flags()
     if name not in all_flags:

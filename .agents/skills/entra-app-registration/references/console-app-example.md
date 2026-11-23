@@ -43,7 +43,7 @@ namespace EntraAuthConsole
                 var app = PublicClientApplicationBuilder
                     .Create(ClientId)
                     .WithAuthority(AzureCloudInstance.AzurePublic, TenantId)
-                    .WithRedirectUri("http://localhost")
+                    .WithRedirectUri("myapp://auth")
                     .Build();
 
                 // Try to get token silently from cache first
@@ -279,7 +279,7 @@ async function acquireTokenInteractive() {
 
   const authCodeUrlParameters = {
     scopes: scopes,
-    redirectUri: 'http://localhost:3000',
+    redirectUri: 'https://192.168.0.40:3000',
   };
 
   // This opens the browser for authentication
