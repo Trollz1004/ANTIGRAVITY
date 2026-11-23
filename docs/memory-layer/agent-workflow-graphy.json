@@ -9,7 +9,7 @@
     "noAiCommandsAnother": "No AI commands another AI",
     "directMessageWins": "If a direct message is from Joshua, no AI tells another it cannot do it",
     "judges": "Claude, Codex and Jules are judges: they review and validate work before merge; they do not command other agents or override Joshua's direct instruction",
-    "marketingOwner": "Gemini Antigravity Ultra (agy OAuth, gemini-4-argon-high) runs ALL marketing and coordinates the native Social Command Center & Marketing Engine in Mission Agent OS (http://127.0.0.1:3130/marketing) — Paperclip is permanently retired and deleted",
+    "marketingOwner": "Gemini Antigravity Ultra (agy OAuth, gemini-4-argon-high) runs ALL marketing and coordinates the native Social Command Center & Marketing Engine in Mission Agent OS (http://192.168.0.15:3130/marketing) — Paperclip is permanently retired and deleted",
     "memoryVsCodeSearch": "Obsidian (C:\\ANTIGRAVITY\\Antigravity) is mandatory Agent Memory on sessions; Graphify (C:\\ANTIGRAVITY\\graphify-out\\graph.json & GRAPH_REPORT.md + docs/memory-layer/agent-workflow-graphy.json) is mandatory Agent Code Search & Workflow Graph on sessions",
     "entryFilesMustAgree": "Agents read different files at session start (AGENTS.md, CLAUDE.md, GEMINI.md, skill SKILL.md files, Obsidian per-agent files). All of them must carry the same correct data; a stale file is a drift source and gets fixed, not ignored"
   },
@@ -62,7 +62,7 @@
       "rule": "Dashboard work is in progress — do NOT modify mission-os/ or the dashboard unless Joshua assigns it"
     },
     "paperclip": {
-      "where": "T5500, http://127.0.0.1:3917",
+      "where": "T5500, http://192.168.0.15:3917",
       "role": "MARKETING ONLY — Paperclip is NOT Mission Control"
     },
     "roles": {
@@ -119,7 +119,7 @@
         "why": "The memory MCPs exist for exactly this reason: backups of the Obsidian record. Obsidian stays primary.",
         "supabase": "REQUIRED backup — mirror each session entry",
         "supermemory": "backup + fast recall (see recall below)",
-        "openviking": "backup + L0/L1/L2 context (viking://, http://127.0.0.1:1933)",
+        "openviking": "backup + L0/L1/L2 context (viking://, http://192.168.0.15:1933)",
         "vercel": "backup"
       },
       "git": {
@@ -128,14 +128,14 @@
       },
       "obsidianVaults": {
         "mandatory": "YES — Joshua's personal, paid Obsidian. Authoritative memory layer; Graphy and Supermemory feed it.",
-        "restApi": "Obsidian Local REST API, http://127.0.0.1:27123 (HTTPS :27124)",
+        "restApi": "Obsidian Local REST API, http://192.168.0.15:27123 (HTTPS :27124)",
         "httpMcp": {
           "serverName": "obsidian_antigravity",
           "port": 27200,
           "tokenEnv": "OBSIDIAN_MCP_TOKEN",
           "routes": {
-            "T5500": "http://127.0.0.1:27200/v1/ec30fc09-4504-403b-b6e8-19477c5bdd55/mcp",
-            "Alienware": "http://127.0.0.1:27200/v1/bda5723a-352c-487c-900e-42de3acc26fd/mcp",
+            "T5500": "http://192.168.0.40:27200/v1/ec30fc09-4504-403b-b6e8-19477c5bdd55/mcp",
+            "Alienware": "http://192.168.0.40:27200/v1/bda5723a-352c-487c-900e-42de3acc26fd/mcp",
             "Sabretooth": "TBD"
           }
         },
@@ -624,7 +624,7 @@
     "benefit": "Reduces context bloat, prevents hallucinations from spam",
     "openviking": {
       "role": "L0/L1/L2 hierarchical context - heartbeats reference locations via viking:// URIs",
-      "server": "http://127.0.0.1:1933",
+      "server": "http://192.168.0.15:1933",
       "recall": "ov find '<topic>' before loading large files",
       "commit": "ov session commit / MCP remember at end of meaningful work",
       "antiHallucination": "verify against knowledge base instead of pattern-matching"

@@ -1,6 +1,6 @@
 /**
- * ChatWindow — real-time encrypted chat UI for YouAndINotAI matches.
- * Connects via WebSocket through useChat hook. E2E encrypted via Web Crypto.
+ * ChatWindow — real-time chat UI for YouAndINotAI matches.
+ * Connects via WebSocket through useChat hook.
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -110,11 +110,6 @@ export default function ChatWindow({
             <div className="text-center text-gray-500 text-sm mt-8">
               <p className="text-2xl mb-2">💬</p>
               <p>Start the conversation.</p>
-              {connectionState === 'connected' && (
-                <p className="text-xs mt-1 text-green-500">
-                  🔒 End-to-end encrypted
-                </p>
-              )}
             </div>
           )}
 
@@ -144,14 +139,6 @@ export default function ChatWindow({
                         minute: '2-digit',
                       })}
                     </span>
-                    {msg.encrypted && (
-                      <span
-                        className="text-[10px] opacity-40"
-                        title="End-to-end encrypted"
-                      >
-                        🔒
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
@@ -159,13 +146,6 @@ export default function ChatWindow({
           })}
           <div ref={bottomRef} />
         </div>
-
-        {/* ── E2E notice ── */}
-        {connectionState === 'connected' && (
-          <div className="text-center text-[10px] text-gray-600 py-1 bg-gray-900 border-t border-gray-800">
-            🔒 Messages are end-to-end encrypted
-          </div>
-        )}
 
         {/* ── Input ── */}
         <div className="px-4 py-3 bg-gray-900 border-t border-gray-800">

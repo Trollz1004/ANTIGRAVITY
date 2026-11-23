@@ -12,7 +12,6 @@ knowledge:
   vaults:
     T5500: C:\ANTIGRAVITY\Antigravity
     Alienware: C:\DREAM\Antigravity
-    Sabretooth: C:\Ai-Dream-Team\Antigravity
 skill_policy:
   mandatory:
     - verification-before-completion
@@ -48,20 +47,15 @@ skill_policy:
     vaults:
       T5500: C:\ANTIGRAVITY\Antigravity
       Alienware: C:\DREAM\Antigravity
-      Sabretooth: C:\Ai-Dream-Team\Antigravity
 mcp_servers:
   required: [obsidian_antigravity, brain-mcp, mission-mcp, antigravity-files, playwright]
   optional: [supabase]   # read-first; live DB writes route through the Supabase seat + judge
   spec: agent-contracts/CAPABILITY-BASELINE.md
   remote_future:
-    # unreal-engine MCP — PARKED (enabled: false). Hardware split per Joshua
-    # 2026-08-26: the game runs on a SEPARATE box (this node runs hot with
-    # Hermes + the stack alone). Unreal is not installed here, and nothing
-    # owns port 8000 on Sabretooth. When the game box is live, point Hermes at
-    # the remote Unreal MCP URL there (Epic: Editor Preferences > Model Context
-    # Protocol > port/path if the default conflicts). NOT enabled on this node.
-    unreal-engine:
-      url: http://127.0.0.1:8000/mcp
+    # dream-engine MCP — PARKED (enabled: false). Runs on Alienware (192.168.0.40:9180)
+    # on the DREAM Engine workshop lane; NOT enabled on T5500.
+    dream-engine:
+      url: http://192.168.0.40:9180/mcp
       enabled: false
 preflight_skills:
   required:

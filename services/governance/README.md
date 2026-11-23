@@ -15,7 +15,7 @@ deleted with MC5.
 
 ## Status: RUNNING, PARITY PROVEN
 
-Built and running on `127.0.0.1:9134`. Identity verified:
+Built and running on `192.168.0.15:9134`. Identity verified:
 `GET /health` -> `{"status":"ok","service":"official-vote-service","port":9134}`.
 
 **Parity against live MC5 is proven, not assumed** — measured 2026-08-26 with
@@ -36,13 +36,13 @@ on this machine — so the migration carries no historical state at risk.
 cd services/governance
 npm install
 npm run build
-npm start                       # binds 127.0.0.1:9134
+npm start                       # binds 192.168.0.15:9134
 ```
 
 **1. Verify identity, not just that a port answers** (operating rule 7):
 
 ```bash
-curl -s http://127.0.0.1:9134/health
+curl -s http://192.168.0.15:9134/health
 # -> {"status":"ok","service":"official-vote-service","port":9134}
 ```
 
@@ -52,8 +52,8 @@ this is safe to run against live state:
 
 ```bash
 MISSION_CONTROL_VOTE_STATE_DIR=<MC5's state dir> npm start
-diff <(curl -s http://127.0.0.1:3151/api/official-votes/view) \
-     <(curl -s http://127.0.0.1:9134/api/official-votes/view)
+diff <(curl -s http://192.168.0.15:3151/api/official-votes/view) \
+     <(curl -s http://192.168.0.15:9134/api/official-votes/view)
 ```
 
 Identical output is the evidence the cutover is safe. **Do not skip this** — the
@@ -69,7 +69,7 @@ currently resolve nowhere. That app is staged, not integrated
 is not installed. **It is not a live consumer.**
 
 The real consumer is **MC5's own client**: `mission-control-v5/client/vite.config`
-proxies `/api` to `http://localhost:3151`. The vote API's only live consumer is
+proxies `/api` to `http://192.168.0.15:3151`. The vote API's only live consumer is
 the app that serves it. Nothing external breaks when MC5 goes.
 
 **4. Only then** retire `mission-control-v5/`. CI is already prepared:

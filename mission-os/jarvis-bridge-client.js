@@ -1019,7 +1019,7 @@
           <h1 class="text-xl font-bold text-white">OMNIROUTE (:20128) + LOCAL GEMINI 4 (:3130/v1) + OLLAMA RTX 3070 (:11434/v1)</h1>
           <p class="text-xs text-slate-400 font-mono">Live OpenAI-compatible model routers on T5500 (<code>192.168.0.15</code>)</p>
         </div>
-        <a href="http://127.0.0.1:20128/" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs">Open OmniRoute Dashboard (:20128) ↗</a>
+        <a href="http://192.168.0.15:20128/" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs">Open OmniRoute Dashboard (:20128) ↗</a>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">

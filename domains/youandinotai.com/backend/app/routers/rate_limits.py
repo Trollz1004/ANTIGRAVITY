@@ -11,7 +11,7 @@ from collections import defaultdict
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
-from app.auth import get_current_user
+from app.auth import require_founder_or_admin
 from app.config import get_settings
 from app.models import User
 
@@ -107,7 +107,7 @@ def _current_status() -> RateLimitStatus:
 
 @router.get("/status", response_model=RateLimitStatus)
 async def get_rate_limit_status(
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_founder_or_admin),
 ) -> RateLimitStatus:
     """Return current rate limit status and usage statistics."""
     return _current_status()
@@ -115,7 +115,7 @@ async def get_rate_limit_status(
 
 @router.get("/stats", response_model=RateLimitStatus)
 async def get_rate_limit_stats(
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_founder_or_admin),
 ) -> RateLimitStatus:
     """Return rate limit statistics for authenticated dashboard users."""
     return _current_status()
@@ -123,7 +123,7 @@ async def get_rate_limit_stats(
 
 @router.get("/config", response_model=RateLimitConfig)
 async def get_rate_limit_config(
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_founder_or_admin),
 ) -> RateLimitConfig:
     """Return rate limit configuration."""
     return RateLimitConfig(
@@ -135,7 +135,7 @@ async def get_rate_limit_config(
 
 @router.post("/reset")
 async def reset_rate_limit_stats(
-    user: User = Depends(get_current_user),
+    user: User = Depends(require_founder_or_admin),
 ) -> dict[str, str]:
     """Reset rate limit statistics (admin only)."""
     global _request_counts, _requests_this_minute, _total_today, _window_start, _day_start

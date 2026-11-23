@@ -123,7 +123,7 @@ export function loadOnRestart({ launchCmdText, roots, readFile = readFileSync, e
   const file = findSkillFile(name, roots, { exists });
   if (!file) return { skill: name, relatedSkills: [], error: 'SKILL.md not found for ' + name };
   let fm = {};
-  try { fm = parseFrontmatter(readFile(file, 'utf8')); } catch (e) { return { skill: name, relatedSkills: [], error: String((e && e.message) || e) }; }
+  try { fm = parseFrontmatter(readFile(file, 'utf8')); } catch { return { skill: name, relatedSkills: [], error: 'SKILL.md unreadable' }; }
   return { skill: name, relatedSkills: fm.relatedSkills || [] };
 }
 

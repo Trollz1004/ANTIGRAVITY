@@ -1,26 +1,21 @@
-# CLAUDE.md — Ai-Solutions-Store/ai-solutions
+# CLAUDE.md — Retired Dead Surface Pointer
 
-This is the org repo behind the **Ai-Solutions.Store** Paperclip company (`AIS`,
-`74bbc177-bc32-4457-806e-fa6bbe6314fd`, Mission Control `http://127.0.0.1:3917`).
-Local clone on Sabretooth: `C:\Ai-Solutions.store`. Only branch: `main`.
+**STATUS: RETIRED SURFACE. DO NOT DEPLOY, LINK, OR ROUTE TRAFFIC HERE.**
 
-Doctrine lives in the monorepo and is not duplicated here: read
-`Trollz1004/ANTIGRAVITY` → `CLAUDE.md`, `AGENTS.md`, `agent-contracts/`, and the
-Chief of Staff prompt `ops/paperclip-chief-of-staff/CHIEF-OF-STAFF-AIS.md`.
-Session contract: `.agents/skills/self-improving-system/SKILL.md` (v3) — skills
-index, own journal, vault `00 HOME.md` (`C:\ANTIGRAVITY\Antigravity`, shared
-with ANT), last 30 node-ledger lines; journal + one ledger line at the end.
+This legacy domain directory is preserved only as a historical marker. No orchestration company, local control-plane endpoint, or storefront runs here.
 
-Rules that bind here exactly as in the monorepo: judges are the Codex and
-Claude lanes only and are the only actors that push, merge, or delete;
-harnesses never push; one OmniRoute URL `http://192.168.0.8:20128/v1` (Claude
-never routes through it); secrets by name only, values live in `.env` and the
-Paperclip secret store; public copy is business-only and the monorepo's
-canonical-guard word list applies to every file here even though this repo has
-no hook (a judge scans before pushing).
+## Live Surfaces
 
-Contents: `crosslisting-os/` (the live crosslisting operations dashboard, folded
-from `Trollz1004/llc-crosslisting-os` with history), `revenue-catalog/` (folded
-from `revenue-first-products`; `CEO-API-QUICKREF.md` trips the guard rules and
-awaits Joshua's decision to strip or drop), `blog/` (5 SEO posts, canonical →
-ai-solutions.store/blog/<slug>).
+All active `Trollz1004` product work lives on:
+- `youandinotai.com` (Human-verified social and dating platform)
+- `onlinerecycle.net` (Online electronics recycling and marketplace operations)
+- `dream-online.net` (`Trollz1004/dream-online` — DREAM Engine & persistent-memory AI world)
+
+## Active Fleet & Governance
+
+- Fleet topology (`2` nodes only: Alienware `192.168.0.40` and T5500 `192.168.0.15`) is defined in `ops/fleet/fleet-map.json`.
+- Doctrine and agent governance live in `AGENTS.md`, `CLAUDE.md`, `docs/standards/AGENT-STANDARD.md`, and `agent-contracts/`.
+- Canonical OmniRoute gateway endpoint lives on T5500 at `http://192.168.0.15:20128/v1` (Claude never routes through it; signed-in judge lanes decide merges).
+- Public copy is strictly product value only (Square / PayPal payments per `docs/PAYMENTS-TRUTH.md`).
+- House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
+- Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).

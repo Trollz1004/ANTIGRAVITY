@@ -116,10 +116,12 @@ function runPage({ fetchImpl, hash = "" }) {
     },
   };
   const listeners = {};
-  const location = { hash, href: "https://onlinerecycle.net/" + hash };
+  const location = { hash, search: "", href: "https://onlinerecycle.net/" + hash };
   const window = {
     document,
     location,
+    URLSearchParams,
+    localStorage: { getItem: () => null, setItem() {}, removeItem() {} },
     fetch: fetchImpl,
     addEventListener(type, fn) {
       (listeners[type] ||= []).push(fn);

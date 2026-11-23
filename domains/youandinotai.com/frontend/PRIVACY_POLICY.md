@@ -4,7 +4,8 @@
 Operated by Trash Or Treasure Online Recycler LLC, a Florida single-member LLC
 Sole Member: Joshua Coleman
 
-**Last Updated:** March 30, 2026
+**Effective Date:** March 30, 2026 (previously updated November 13, 2026)
+**Last Updated:** November 21, 2026
 **Contact:** joshlcoleman@gmail.com
 
 ---
@@ -37,20 +38,19 @@ YouAndINotAI is exclusively for users aged **18 and older**. We do not knowingly
 
 When you create an account and use our platform, you may provide:
 
-- **Account Information:** Name, email address, date of birth, gender, sexual orientation, and relationship preferences
+- **Account Information:** Display name, email address, date of birth, gender, and what you are looking for
 - **Profile Information:** Photos, bio text, interests, and other profile details you choose to share
 - **Payment Information:** Billing details processed through Square-hosted checkout links (we do not store your full credit card number — Square handles that)
 - **Communications:** Messages you send through the platform, support requests, and feedback
+- **Sign-Up Source:** When you create an account we record how you reached us: a partner link, a campaign tag in the link, or the name of the site that sent you. We do not keep the full address of the page you came from.
 
-### 4.2 Verification Information (V8 Cloud Verification)
+### 4.2 Verification Information
 
-To protect our community from bots and bad actors, we use **V8 Cloud Verification**, which collects:
+For the human check, we collect:
 
-- **Government-issued photo ID** (driver's license, passport, or state ID)
-- **Selfie / liveness check photo** (a real-time photo to confirm you are a real person and match your ID)
-- **Anti-bot screening data** (device fingerprinting and behavioral signals to detect automated accounts)
-
-> **BIOMETRIC DATA NOTICE:** The selfie liveness check and facial comparison process involve **biometric-adjacent data** — meaning your facial geometry is analyzed to confirm your identity. This data is used solely for verification purposes. We do not use it for advertising, profiling, or any purpose beyond confirming you are who you say you are. V8 Cloud Verification processes this data on our behalf. If you are a resident of Illinois, Texas, Washington, or any other state with biometric privacy laws, please be aware of this collection before proceeding with verification. By completing verification, you consent to this processing. You may request deletion of your verification data at any time (see Section 11).
+- **Verification status**
+- **The result of the timed question**
+- **The Square payment confirmation for the $1 check** (card details are handled by Square and are not stored by the site)
 
 ### 4.3 Information Collected Automatically
 
@@ -73,8 +73,8 @@ When you use our platform, we automatically collect:
 We use your information for the following purposes:
 
 - **Providing the Service:** Creating your account, displaying your profile, facilitating matches and conversations
-- **Identity Verification:** Confirming you are a real person over 18 via V8 Cloud Verification
-- **Matchmaking:** Using Google Gemini AI to suggest compatible matches and generate conversation starters (see Section 7)
+- **Verification:** Recording your verification status, the result of the timed question, and the Square payment confirmation for the $1 check
+- **Icebreakers and Optional AI Tools:** Requesting optional conversation icebreakers or responses when you use an AI feature (see Section 7)
 - **Payment Processing:** Managing subscriptions and processing purchases through Square
 - **Safety and Security:** Detecting fraud, preventing abuse, enforcing our Terms of Service
 - **Communication:** Sending service-related emails (account verification, subscription confirmations, important updates)
@@ -93,20 +93,18 @@ We share your information only in these circumstances:
 
 ### 6.1 With Other Users
 
-Your profile information (name, photos, bio, interests) is visible to other users of the platform. That is the core function of a dating app. Your government ID, verification photos, payment details, and email address are **never** shared with other users.
+Your profile information (name, photos, bio, interests) is visible to other users of the platform. That is the core function of a dating app. Your payment details and email address are **never** shared with other users.
 
 ### 6.2 With Service Providers
 
 We use the following third-party services that process data on our behalf:
 
-| Service                          | Purpose                            | What They Receive                                                            |
-| -------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------- |
-| **Square**                       | Payment processing                 | Name, email, payment method, billing address                                 |
-| **Square**                       | Merchandise sales (separate store) | Name, email, shipping address, payment method                                |
-| **Google Gemini**                | AI matchmaking and icebreakers     | Anonymized profile preferences (no real names, no photos, no government IDs) |
-| **Cloudflare**                   | Security, DNS, CDN                 | IP address, request headers, traffic data                                    |
-| **V8 Cloud Verification**        | Identity verification              | Government ID photo, selfie, device data                                     |
-| **GitHub Pages / GCP Cloud Run** | Hosting                            | Server logs, IP addresses                                                    |
+| Service           | Purpose                            | What They Receive                                                                                            |
+| ----------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Square**        | Payment processing                 | Name, email, payment method, billing address                                                                 |
+| **Square**        | Merchandise sales (separate store) | Name, email, shipping address, payment method                                                                |
+| **Google Gemini** | Optional icebreakers and AI tools  | Icebreaker requests and text you submit to optional AI tools (no profile preferences, real names, or photos) |
+| **Cloudflare**    | Security, DNS, CDN                 | IP address, request headers, traffic data                                                                    |
 
 ### 6.3 For Legal Reasons
 
@@ -122,12 +120,12 @@ We may share information in other ways if you specifically consent to it.
 
 ## 7. AI Usage — Google Gemini
 
-We use **Google Gemini** to power matchmaking suggestions and generate conversation icebreakers. Here is what that means for your data:
+We use **Google Gemini** to generate optional conversation icebreakers in chat and to respond when you use optional AI tools. Here is what that means for your data:
 
-- **What we send to Gemini:** Anonymized preference data — things like interests, relationship goals, and compatibility factors. We do **not** send your real name, photos, government ID, payment information, or messages to Gemini.
-- **What Gemini does:** Suggests potential matches based on compatibility and generates conversation starters.
+- **What we send to Gemini:** A generic icebreaker request when you ask for a conversation starter in chat, or the text you type when you use an optional AI tool. We do **not** send your profile preferences, real name, photos, payment information, or member-to-member chat history to Gemini.
+- **What Gemini does:** Generates optional conversation starters and replies inside optional AI tools; profile discovery and matching run directly in our database without sending your profile to Gemini.
 - **What Gemini does NOT do:** Create fake profiles, impersonate users, or make autonomous decisions about your account.
-- **AI-generated profiles:** We do **not** use AI to create fake user profiles. Every profile on YouAndINotAI belongs to a verified real person.
+- **AI-generated profiles:** We do **not** use AI to create fake user profiles. A member must hold an active Verified Human badge (from the timed human check and $1 payment, or an authorized founder code) before they can browse discovery, match, message, or start video.
 
 Google's privacy practices for Gemini are governed by [Google's Privacy Policy](https://policies.google.com/privacy). We encourage you to review it.
 
@@ -169,7 +167,7 @@ We take reasonable measures to protect your information, including:
 - **Access Control:** Only authorized personnel (currently, that is just Joshua Coleman) have access to user data
 - **Square PCI Compliance:** Payment data is handled by Square, which maintains PCI-compliant payment infrastructure
 - **Cloudflare Protection:** DDoS mitigation and web application firewall
-- **Verification Data:** Government IDs and selfies processed through V8 Cloud Verification are handled according to their security standards
+- **Verification Data:** We store only verification status, the result of the timed question, and the Square payment confirmation for the $1 check; card details are handled by Square and are not stored by the site
 
 No system is 100% secure. We cannot guarantee absolute security, but we commit to notifying affected users quickly if a data breach occurs.
 
@@ -183,7 +181,6 @@ Regardless of where you live, you can:
 - **Correct your data:** Update inaccurate information in your profile settings or by contacting us
 - **Delete your account:** Request deletion of your account and associated data by emailing joshlcoleman@gmail.com
 - **Opt out of marketing emails:** Unsubscribe links are included in any marketing email (note: we will still send essential service emails like payment confirmations)
-- **Request verification data deletion:** Ask us to delete your government ID and selfie verification data
 
 ### 11.2 California Residents (CCPA / CPRA Rights)
 
@@ -194,7 +191,7 @@ If you are a California resident, you have additional rights under the Californi
 - **Right to Opt-Out of Sale:** We do **not** sell your personal information. There is nothing to opt out of.
 - **Right to Non-Discrimination:** We will not discriminate against you for exercising your CCPA rights.
 - **Right to Correct:** You can request correction of inaccurate personal information.
-- **Right to Limit Use of Sensitive Personal Information:** You can request that we limit our use of sensitive personal information (such as precise geolocation or government ID data) to what is necessary to provide the service.
+- **Right to Limit Use of Sensitive Personal Information:** You can request that we limit our use of sensitive personal information to what is necessary to provide the service.
 
 To exercise any of these rights, email **joshlcoleman@gmail.com** with the subject line "CCPA Request." We will verify your identity before processing your request and respond within 45 days.
 
@@ -216,14 +213,14 @@ We retain your data for as long as your account is active, plus a reasonable per
 
 Specific retention periods:
 
-| Data Type                      | Retention Period                                                                      |
-| ------------------------------ | ------------------------------------------------------------------------------------- |
-| Account/profile data           | Until you delete your account + 30 days                                               |
-| Payment records                | 7 years (tax/legal requirements)                                                      |
-| Verification data (ID, selfie) | 90 days after verification is complete, unless required longer for dispute resolution |
-| Server logs                    | 90 days                                                                               |
-| Messages between users         | Until either user deletes their account                                               |
-| Support emails                 | 2 years after resolution                                                              |
+| Data Type                                                                                                   | Retention Period                        |
+| ----------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| Account/profile data                                                                                        | Until you delete your account + 30 days |
+| Payment records                                                                                             | 7 years (tax/legal requirements)        |
+| Verification status, the result of the timed question, and the Square payment confirmation for the $1 check | Until you delete your account + 30 days |
+| Server logs                                                                                                 | 90 days                                 |
+| Messages between users                                                                                      | Until either user deletes their account |
+| Support emails                                                                                              | 2 years after resolution                |
 
 After these periods, data is permanently deleted or anonymized.
 

@@ -10,7 +10,7 @@ Read this index on session start. DO NOT preload skills — read the SKILL.md yo
 - **self-improving-system** — THIS skill: journal + index contract
 - **find-skills** — Discover/install new skills
 - **skill-creator** — Author SKILL.md files
-- **grok-standing** — Grok Paperclip standing preload (caveman ultra + quality/X on demand). Locked to official grok.com CLI.
+- **grok-standing** — Grok X-marketing standing preload (caveman ultra + quality/X on demand). Locked to official grok.com CLI.
 - **caveman** — Ultra-compressed communication (mandatory)
 - **i-have-adhd** — Concise action-forward output discipline (mandatory)
 - **brainstorming** — Ideation/decomposition before creative work
@@ -48,20 +48,17 @@ Read this index on session start. DO NOT preload skills — read the SKILL.md yo
 - **browser-use** — CDP browser control
 - **agent-browser** — Browser automation CLI
 
-## Paperclip / CEO
-- **paperclip** — Paperclip control plane API (tasks, agents, issues)
-- **paperclip-ceo** — Process Paperclip CEO heartbeats as Freebuff CEO
-- **paperclip-create-agent** — Governance-aware agent hiring
-- **paperclip-create-plugin** — Paperclip plugin SDK/runtime
-- **mission-control** — PAPERWEIGHT kanban + heartbeat board
-- **omniroute** — Operate OmniRoute AI gateway (45-skill AgentSkills catalog, MCP, providers, combos, budget, resilience)
+## Orchestration / Mission OS
+- **mission-control** — Mission OS on T5500 (`192.168.0.15:3130`)
+- **ceo-standing-session** — Executive / orchestrator standing loop
+- **omniroute** — Operate OmniRoute AI gateway (`192.168.0.15:20128`)
 
 ## Dateapp / platform
 - **dateapp-swarm** — YouAndINotAI launch swarm dispatch
 - **dateapp-gui-agent** / **dateapp-growth-agent** / **dateapp-ops-agent** / **dateapp-payments-agent** — swarm lanes
 - **fables-house** — Bring up/verify/heal full T5500 stack
-- **t5500-ops** — Operate T5500-NODE stack (OmniRoute :20128, Mission Control :3100)
-- **payments** — Square primary + PayPal + Cash App + Plaid; Stripe banned
+- **t5500-node** — Operate T5500 node (`192.168.0.15`, Mission OS `:3130`, OmniRoute `:20128`)
+- **payments** — Square primary + PayPal (`docs/PAYMENTS-TRUTH.md`); unapproved card processors disabled
 - **revenue-model** — Revenue guidance for Trash Or Treasure Online Recycler LLC
 - **growth-marketer** — Growth marketing (experimentation, funnels)
 - **social-growth-engineer** — Viral app growth (TikTok/IG Reels)
@@ -81,11 +78,9 @@ Read this index on session start. DO NOT preload skills — read the SKILL.md yo
 - **desktop-commander-guide** — Desktop Commander capability guide
 
 ## Journal locations (memory)
-- `.agents/journals/freebuff-ceo/STATE.md` — Freebuff CEO session memory
-- `.agents/journals/hermes/STATE.md`, `.agents/journals/openclaw/STATE.md`, `.agents/journals/opencode/STATE.md`, `.agents/journals/orchestrator/STATE.md` — harness memories
-- `.agents/journals/paperclip-ceo/STATE.md` — Paperclip CEO memory
-- `.agents/journals/paperclip-judge/STATE.md` — Paperclip judge-lane memory
-- `.agents/journals/paperclip-xmarketing/STATE.md` — Paperclip X.com marketing memory
+- `.agents/journals/freebuff-ceo/STATE.md` — Freebuff CEO archived session memory
+- `.agents/journals/claude-judge/STATE.md`, `.agents/journals/codex/STATE.md` — judge-lane memories
+- `.agents/journals/hermes/STATE.md`, `.agents/journals/openclaw/STATE.md`, `.agents/journals/opencode/STATE.md`, `.agents/journals/emergent/STATE.md`, `.agents/journals/genspark/STATE.md` — lane memories
 
 ## Stale paths — do not use
 - `/mnt/c/antigravity/...` (WSL paths, dead)

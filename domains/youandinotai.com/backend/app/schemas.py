@@ -1,12 +1,25 @@
 """Pydantic schemas for request and response payloads."""
 
+import re
 import uuid
 from datetime import date, datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 # ── Auth ──
+
+
+_SIGNUP_SOURCE_RE = re.compile(r"^[a-z0-9._:/-]{1,128}$")
+
+
+def normalize_signup_source(value: object) -> str | None:
+    if not isinstance(value, str):
+        return None
+    cleaned = value.strip().lower()
+    if not cleaned or not _SIGNUP_SOURCE_RE.fullmatch(cleaned):
+        return None
+    return cleaned
 
 
 class AuthRegisterRequest(BaseModel):
@@ -20,6 +33,12 @@ class AuthRegisterRequest(BaseModel):
     # Optional referral code (the register route already reads it; the field
     # was missing from the schema, which made every registration raise).
     referral_code: str | None = Field(default=None, max_length=64)
+    signup_source: str | None = Field(default=None)
+
+    @field_validator("signup_source", mode="before")
+    @classmethod
+    def _validate_signup_source(cls, value: object) -> str | None:
+        return normalize_signup_source(value)
 
 
 class AuthLoginRequest(BaseModel):
@@ -29,6 +48,7 @@ class AuthLoginRequest(BaseModel):
 
 class AuthBetaAccessRequest(BaseModel):
     code: str = Field(min_length=4, max_length=64)
+    date_of_birth: date | None = None
 
 
 class AuthTokenResponse(BaseModel):
@@ -42,8 +62,40 @@ class AuthRefreshRequest(BaseModel):
     refresh_token: str
 
 
+class AuthForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+
+class AuthForgotPasswordResponse(BaseModel):
+    received: bool = True
+    message: str = (
+        "If an account exists for that email address, we sent a password reset link. "
+        "It expires in 30 minutes."
+    )
+
+
+class AuthResetPasswordRequest(BaseModel):
+    token: str = Field(min_length=32, max_length=256)
+    new_password: str = Field(min_length=8, max_length=128)
+
+
+class AuthResetPasswordResponse(BaseModel):
+    reset: bool = True
+    message: str = (
+        "Your password has been updated. Please sign in with your new password."
+    )
+
+
 class GoogleLoginRequest(BaseModel):
     id_token: str
+    date_of_birth: date | None = None
+    referral_code: str | None = Field(default=None, max_length=64)
+    signup_source: str | None = Field(default=None)
+
+    @field_validator("signup_source", mode="before")
+    @classmethod
+    def _validate_signup_source(cls, value: object) -> str | None:
+        return normalize_signup_source(value)
 
 
 class UserMeResponse(BaseModel):
@@ -227,6 +279,10 @@ class HealthResponse(BaseModel):
     wallet_rails_status: str
     payment_proof_labels: list[str] = Field(default_factory=list)
     user_count: int
+    mail: Literal["on", "off"] = "off"
+    # Public route: count and light only. Setting names go to the startup log.
+    missingEnvCount: int = 0
+    nodeLight: str = "green"
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -513,6 +569,7 @@ class SupportChatResponse(BaseModel):
 class UserRegisterRequest(BaseModel):
     email: EmailStr
     display_name: str = Field(min_length=1, max_length=100)
+    date_of_birth: date
 
 
 class UserRegisterResponse(BaseModel):

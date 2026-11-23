@@ -119,6 +119,7 @@ async def reconcile_legacy_schema() -> None:
             f"ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS {MEMBER_BADGE_COLUMN} VARCHAR(50)",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255) UNIQUE",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS referral_code VARCHAR(64)",
+            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS signup_source VARCHAR(128)",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS bio TEXT",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS age INTEGER",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS gender VARCHAR(50)",
@@ -131,6 +132,9 @@ async def reconcile_legacy_schema() -> None:
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL",
             "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS square_payment_id VARCHAR(255)",
+            "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS square_refund_id VARCHAR(255)",
+            "ALTER TABLE IF EXISTS revenue_allocations ADD COLUMN IF NOT EXISTS square_refund_id VARCHAR(255)",
+            "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS card_fingerprint VARCHAR(255)",
             "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS trust_score FLOAT",
             "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS amount_cents INTEGER",
             "ALTER TABLE IF EXISTS webhook_events ADD COLUMN IF NOT EXISTS event_source_id VARCHAR(255)",
@@ -152,6 +156,8 @@ async def reconcile_legacy_schema() -> None:
             "CREATE INDEX IF NOT EXISTS ix_matches_user_b ON matches(user_b)",
             "CREATE INDEX IF NOT EXISTS ix_users_square_customer_id ON users(square_customer_id)",
             "CREATE INDEX IF NOT EXISTS ix_users_referral_code ON users(referral_code)",
+            "CREATE INDEX IF NOT EXISTS ix_users_signup_source ON users(signup_source)",
+            "CREATE INDEX IF NOT EXISTS ix_verification_events_card_fingerprint ON verification_events(card_fingerprint)",
         )
 
         for statement in statements:
@@ -218,6 +224,12 @@ async def _reconcile_sqlite_schema(connection) -> None:
             await connection.execute(text("PRAGMA table_info(verification_events)"))
         )
     }
+    revenue_allocation_columns = {
+        row[1]
+        for row in (
+            await connection.execute(text("PRAGMA table_info(revenue_allocations)"))
+        )
+    }
     webhook_columns = {
         row[1]
         for row in (await connection.execute(text("PRAGMA table_info(webhook_events)")))
@@ -251,6 +263,9 @@ async def _reconcile_sqlite_schema(connection) -> None:
     )
     await add_column(
         "users", user_columns, "referral_code", "referral_code VARCHAR(64)"
+    )
+    await add_column(
+        "users", user_columns, "signup_source", "signup_source VARCHAR(128)"
     )
     await add_column(
         "users", user_columns, "is_active", "is_active BOOLEAN DEFAULT 1 NOT NULL"
@@ -323,6 +338,24 @@ async def _reconcile_sqlite_schema(connection) -> None:
         verification_columns,
         "square_payment_id",
         "square_payment_id VARCHAR(255)",
+    )
+    await add_column(
+        "verification_events",
+        verification_columns,
+        "square_refund_id",
+        "square_refund_id VARCHAR(255)",
+    )
+    await add_column(
+        "revenue_allocations",
+        revenue_allocation_columns,
+        "square_refund_id",
+        "square_refund_id VARCHAR(255)",
+    )
+    await add_column(
+        "verification_events",
+        verification_columns,
+        "card_fingerprint",
+        "card_fingerprint VARCHAR(255)",
     )
     await add_column(
         "verification_events", verification_columns, "trust_score", "trust_score FLOAT"
