@@ -284,4 +284,140 @@ describe("crosslisting-os better-sqlite3 and sqlite-core database layer", () => 
     expect(overview.catalogCount).toBe(1);
     expect(overview.verifiedCatalogCount).toBe(1);
   });
+
+  it("persists externalOfferId on channel_listings with SQLite bootstrap column guard and wires policy_mappings into eBay preview payloads", async () => {
+    // Pre-create a legacy channel_listings table without externalOfferId to test the bootstrap column guard
+    fs.mkdirSync(path.dirname(tempDbPath), { recursive: true });
+    const Database = (await import("better-sqlite3")).default;
+    const rawSqlite = new Database(tempDbPath);
+    rawSqlite
+      .prepare(
+        `CREATE TABLE channel_listings (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          productId INTEGER NOT NULL,
+          channelId INTEGER NOT NULL,
+          externalListingId TEXT,
+          state TEXT NOT NULL DEFAULT 'draft',
+          payload TEXT,
+          validationErrors TEXT,
+          lastSubmittedAt INTEGER,
+          lastSynchronizedAt INTEGER,
+          createdAt INTEGER NOT NULL,
+          updatedAt INTEGER NOT NULL
+        )`
+      )
+      .run();
+    rawSqlite.close();
+
+    const db = await getDb();
+    expect(db).toBeTruthy();
+
+    const channelListingsConfig = getTableConfig(channelListings);
+    expect(
+      channelListingsConfig.columns.some(col => col.name === "externalOfferId")
+    ).toBe(true);
+
+    await persistEbayRefreshTokenReference("credentials/ebay-token-offer.enc");
+    const [ebayChannel] = await db!
+      .select()
+      .from(marketplaceChannels)
+      .where(eq(marketplaceChannels.code, "ebay"))
+      .limit(1);
+    expect(ebayChannel).toBeTruthy();
+
+    await db!.insert(policyMappings).values([
+      {
+        channelId: ebayChannel!.id,
+        policyType: "fulfillment",
+        policyKey: "default",
+        policyValue: "EBAY-FULFILL-10",
+        active: true,
+      },
+      {
+        channelId: ebayChannel!.id,
+        policyType: "payment",
+        policyKey: "default",
+        policyValue: "EBAY-PAY-20",
+        active: true,
+      },
+      {
+        channelId: ebayChannel!.id,
+        policyType: "return",
+        policyKey: "default",
+        policyValue: "EBAY-RET-30",
+        active: true,
+      },
+      {
+        channelId: ebayChannel!.id,
+        policyType: "location",
+        policyKey: "default",
+        policyValue: "EBAY-LOC-PRIMARY",
+        active: true,
+      },
+      {
+        channelId: ebayChannel!.id,
+        policyType: "category",
+        policyKey: "default",
+        policyValue: "11232",
+        active: true,
+      },
+    ]);
+
+    const product = await createCatalogProduct({
+      sku: "SKU-EBAY-OFFER-001",
+      upc: "098765432109",
+      title: "Verified eBay Offer Mapper Item",
+      condition: "Like New",
+      brandOrStudio: "A24",
+      format: "4K UHD",
+      description: "Verified 4K disc and slipcover.",
+      actorUserId: 1,
+    });
+
+    const preview = await createListingPayloadPreview({
+      productId: product.id,
+      channelCode: "ebay",
+      price: 34.5,
+      actorUserId: 1,
+    });
+
+    const previewPayload = preview.payload as Record<string, any>;
+    expect(previewPayload.ebayInventoryItem?.condition).toBe("LIKE_NEW");
+    expect(previewPayload.ebayOffer?.marketplaceId).toBe("EBAY_US");
+    expect(previewPayload.ebayOffer?.pricingSummary).toEqual({
+      price: { value: "34.50", currency: "USD" },
+    });
+    expect(previewPayload.ebayOffer?.listingPolicies).toEqual({
+      fulfillmentPolicyId: "EBAY-FULFILL-10",
+      paymentPolicyId: "EBAY-PAY-20",
+      returnPolicyId: "EBAY-RET-30",
+    });
+    expect(previewPayload.ebayOffer?.merchantLocationKey).toBe(
+      "EBAY-LOC-PRIMARY"
+    );
+    expect(previewPayload.ebayOffer?.categoryId).toBe("11232");
+    expect(previewPayload.policy_mappings).toEqual({
+      fulfillmentPolicyId: "EBAY-FULFILL-10",
+      paymentPolicyId: "EBAY-PAY-20",
+      returnPolicyId: "EBAY-RET-30",
+      merchantLocationKey: "EBAY-LOC-PRIMARY",
+      categoryId: "11232",
+    });
+
+    await db!
+      .update(channelListings)
+      .set({
+        externalOfferId: "OFFER-998877",
+        externalListingId: "LISTING-112233",
+      } as any)
+      .where(eq(channelListings.id, preview.listingId));
+
+    const [storedListing] = await db!
+      .select()
+      .from(channelListings)
+      .where(eq(channelListings.id, preview.listingId))
+      .limit(1);
+    expect((storedListing as any)?.externalOfferId).toBe("OFFER-998877");
+    expect(storedListing?.externalListingId).toBe("LISTING-112233");
+  });
 });
