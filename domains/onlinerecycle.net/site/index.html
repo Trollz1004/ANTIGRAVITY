@@ -2082,16 +2082,18 @@
         function isSlotElapsed(dateIso, slotCode, nowInput) {
           if (!dateIso || !slotCode) return false;
           const ny = getNewYorkNowParts(nowInput);
-          if (dateIso < ny.iso) return true;
-          if (dateIso > ny.iso) return false;
+          const todayIso = (upcomingDays && upcomingDays[0] && upcomingDays[0].iso) || ny.iso;
+          if (dateIso < todayIso) return true;
+          if (dateIso > todayIso) return false;
           const m = String(slotCode).match(/^(\d{2}):(\d{2})\s*-\s*(\d{2}):(\d{2})$/);
           if (!m) return false;
           const startMinutes = Number(m[1]) * 60 + Number(m[2]);
           return startMinutes <= ny.minutesOfDay;
         }
 
-        const upcomingDays = buildNextDays(14);
+        let upcomingDays = buildNextDays(14);
         let datePageOffset = 0;
+        let userPickedDate = false;
         const datePageToggle = document.getElementById('date-page-toggle');
         const datePageToggleLabel = document.getElementById('date-page-toggle-label');
         selectedDate = upcomingDays[1] ? upcomingDays[1].iso : upcomingDays[0].iso;
@@ -2183,6 +2185,7 @@
                 return d.iso === draft.date;
               });
               if (dayIdx !== -1) {
+                userPickedDate = true;
                 selectedDate = draft.date;
                 datePageOffset = dayIdx >= 7 ? 7 : 0;
                 renderDates();
@@ -2211,6 +2214,7 @@
             btn.className = 'date-pill' + (d.iso === selectedDate ? ' selected' : '');
             btn.innerHTML = '<span class="dow">' + d.dow + '</span><span class="dom">' + d.dom + '</span>';
             btn.addEventListener('click', function () {
+              userPickedDate = true;
               selectedDate = d.iso;
               dateInput.value = selectedDate;
               selectedDateDisplay.textContent = d.dow + ', ' + d.dom;
@@ -2238,6 +2242,7 @@
 
         if (datePageToggle) {
           datePageToggle.addEventListener('click', function () {
+            userPickedDate = true;
             datePageOffset = datePageOffset === 0 ? 7 : 0;
             const visibleDays = upcomingDays.slice(datePageOffset, datePageOffset + 7);
             if (
@@ -2365,6 +2370,18 @@
             })
             .then(function (cfg) {
               if (cfg && cfg.ok) {
+                if (Array.isArray(cfg.upcomingDays) && cfg.upcomingDays.length > 0) {
+                  upcomingDays = cfg.upcomingDays;
+                  if (
+                    !userPickedDate ||
+                    !upcomingDays.some(function (d) {
+                      return d && d.iso === selectedDate;
+                    })
+                  ) {
+                    selectedDate = upcomingDays[1] ? upcomingDays[1].iso : upcomingDays[0].iso;
+                  }
+                  renderDates();
+                }
                 bookedSlots = Array.isArray(cfg.bookedSlots) ? cfg.bookedSlots : [];
                 if (cfg.googleScheduleEmbed) {
                   gcalEmbeds = cfg.googleScheduleEmbed;

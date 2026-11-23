@@ -94,8 +94,7 @@ function clientIp(req) {
   return viaTunnel && req.headers["cf-connecting-ip"] ? String(req.headers["cf-connecting-ip"]) : remote;
 }
 
-function bookingAllowed(ip) {
-  const now = Date.now();
+function bookingAllowed(ip, now = Date.now()) {
   const hits = (bookHits.get(ip) || []).filter((t) => now - t < BOOK_WINDOW_MS);
   if (hits.length >= BOOK_LIMIT) {
     bookHits.set(ip, hits);
@@ -104,7 +103,9 @@ function bookingAllowed(ip) {
   bookHits.delete(ip);
   if (bookHits.size >= BOOK_HITS_MAX) {
     for (const [key, times] of bookHits) {
-      if (!times.some((t) => now - t < BOOK_WINDOW_MS)) bookHits.delete(key);
+      const fresh = times.filter((t) => now - t < BOOK_WINDOW_MS);
+      if (fresh.length === 0) bookHits.delete(key);
+      else if (fresh.length !== times.length) bookHits.set(key, fresh);
     }
     while (bookHits.size >= BOOK_HITS_MAX) {
       bookHits.delete(bookHits.keys().next().value);
@@ -201,6 +202,24 @@ function updateBookingNotified(bookingId, notified) {
 
 function countUnnotifiedBookings() {
   return readBookings().filter((b) => b && b.status !== "CANCELLED" && b.notified !== true).length;
+}
+
+function bookingCreatedDayInFlorida(booking) {
+  if (!booking || !booking.createdAt) return "";
+  const d = new Date(booking.createdAt);
+  if (Number.isNaN(d.getTime())) return "";
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(d);
+}
+
+function countTodayBookings() {
+  const today = todayInFlorida();
+  return readBookings().filter(
+    (b) => b && b.status !== "CANCELLED" && (b.date === today || bookingCreatedDayInFlorida(b) === today)
+  ).length;
+}
+
+function countTotalBookings() {
+  return readBookings().filter((b) => b && b.status !== "CANCELLED").length;
 }
 
 function toGoogleCalDateRange(dateStr, slotStr) {
@@ -541,11 +560,19 @@ export function isValidBookingEmail(email) {
 
 function buildDomainsHealthPayload(
   env = process.env,
-  { manifestDir = __dirname, driftPath = "", unnotifiedBookings = countUnnotifiedBookings() } = {}
+  {
+    manifestDir = __dirname,
+    driftPath = "",
+    unnotifiedBookings = countUnnotifiedBookings(),
+    todayBookings = countTodayBookings(),
+    totalBookings = countTotalBookings(),
+  } = {}
 ) {
   const baseLight = buildPublicHealthLight({ manifestDir, env, driftPath });
   const noticesOn = isBookingNotifyConfigured(env);
   const unnotifiedCount = Math.max(0, Number(unnotifiedBookings) || 0);
+  const todayCount = Math.max(0, Number(todayBookings) || 0);
+  const totalCount = Math.max(0, Number(totalBookings) || 0);
   const nodeLight = !noticesOn || unnotifiedCount > 0 || baseLight.nodeLight !== "green" ? "amber" : "green";
   return {
     service: "domains-server",
@@ -555,6 +582,8 @@ function buildDomainsHealthPayload(
     bookingNotices: noticesOn ? "on" : "off",
     bookingNoticesStatus: `booking notices: ${noticesOn ? "on" : "off"}`,
     unnotifiedBookings: unnotifiedCount,
+    todayBookings: todayCount,
+    totalBookings: totalCount,
   };
 }
 
@@ -848,10 +877,14 @@ export {
   HOSTS,
   PORT,
   T5500_IP,
+  BOOK_HITS_MAX,
+  BOOK_WINDOW_MS,
   server,
   listeners,
   resolveDomainsServerBind,
   buildDomainsHealthPayload,
+  countTodayBookings,
+  countTotalBookings,
   resolveFile,
   contentTypeFor,
   hostOnly,
