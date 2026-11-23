@@ -576,3 +576,87 @@ test('HTTP 409 from POST /api/book re-fetches /api/booking-config and disables n
   assert.equal(getEl('bf-devices').value, '3 servers and 2 stereo receivers');
   assert.ok(sessionStorage.length > 0, 'sessionStorage draft must remain intact after HTTP 409');
 });
+
+test('POST /api/book rejects a booking for today in a time window whose end time has passed with 400 and accepts the same window tomorrow', async () => {
+  // Pin server wall-clock to 2026-11-22 14:00:00 America/New_York (19:00:00Z),
+  // after the 08:00-08:30 drop-off window end time has passed on today (2026-11-22).
+  const fixedNowIso = '2026-11-22T19:00:00.000Z';
+  const todayIso = '2026-11-22';
+  const tomorrowIso = '2026-11-23';
+  const slotCode = '08:00-08:30';
+  const clockHook = `data:text/javascript,${encodeURIComponent(
+    `const RealDate = Date;
+const FIXED_MS = new RealDate(${JSON.stringify(fixedNowIso)}).getTime();
+class FixedDate extends RealDate {
+  constructor(...args) {
+    if (args.length === 0) {
+      super(FIXED_MS);
+    } else {
+      super(...args);
+    }
+  }
+  static now() {
+    return FIXED_MS;
+  }
+}
+globalThis.Date = FixedDate;`,
+  )}`;
+
+  const port = await getFreePort();
+  const tmpBookingsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'orc-b55b-bookings-'));
+  const tmpStatsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'orc-b55b-stats-'));
+  const child = spawn(process.execPath, ['--import', clockHook, SERVER_PATH], {
+    env: {
+      ...process.env,
+      DOMAINS_SERVER_PORT: String(port),
+      DOMAINS_SERVER_HOST: LOOPBACK,
+      ORC_BOOKINGS_DIR: tmpBookingsDir,
+      ORC_STATS_DIR: tmpStatsDir,
+    },
+    stdio: ['ignore', 'pipe', 'pipe'],
+    windowsHide: true,
+  });
+
+  try {
+    await waitForServer(port);
+
+    // 1. Booking for today in a window whose end time has already passed -> 400
+    const passedTodayRes = await httpRequestJson(port, 'POST', '/api/book', {
+      serviceType: 'dropoff',
+      date: todayIso,
+      slotCode,
+      slotLabel: '8:00 AM – 8:30 AM',
+      fullName: 'Morgan Vance',
+      phone: '(321) 555-0188',
+      deviceCount: '1-5 items',
+      deviceList: '2 laptops and 1 desktop tower',
+    });
+    assert.equal(passedTodayRes.status, 400);
+    assert.equal(passedTodayRes.json?.ok, false);
+    assert.equal(
+      passedTodayRes.json?.error,
+      'Please choose a date from today onward and one of the listed time windows.',
+    );
+
+    // 2. The same time window tomorrow is accepted -> 200
+    const tomorrowRes = await httpRequestJson(port, 'POST', '/api/book', {
+      serviceType: 'dropoff',
+      date: tomorrowIso,
+      slotCode,
+      slotLabel: '8:00 AM – 8:30 AM',
+      fullName: 'Morgan Vance',
+      phone: '(321) 555-0188',
+      deviceCount: '1-5 items',
+      deviceList: '2 laptops and 1 desktop tower',
+    });
+    assert.equal(tomorrowRes.status, 200);
+    assert.equal(tomorrowRes.json?.ok, true);
+    assert.equal(tomorrowRes.json?.booking?.date, tomorrowIso);
+    assert.equal(tomorrowRes.json?.booking?.slotCode, slotCode);
+  } finally {
+    child.kill();
+    fs.rmSync(tmpBookingsDir, { recursive: true, force: true });
+    fs.rmSync(tmpStatsDir, { recursive: true, force: true });
+  }
+});
+
