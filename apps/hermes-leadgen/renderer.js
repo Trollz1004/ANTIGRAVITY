@@ -96,6 +96,49 @@ function buildRuntimeAuthHeaders(runtimeToken, extraHeaders = {}) {
 // PURE DATA PANEL RENDERERS (USED BY BROWSER + NODE FAKE-PAYLOAD UNIT TESTS)
 // ============================================================================
 
+function renderNodeStatusBannerMarkup(data = {}) {
+  const light = String(data.nodeLight || 'GREEN').toUpperCase();
+  const missingEnvNames = Array.isArray(data.serviceMissingEnv)
+    ? data.serviceMissingEnv
+    : Array.isArray(data.missingEnv)
+      ? data.missingEnv
+      : [];
+  const driftedFiles =
+    data.agentDrift && Array.isArray(data.agentDrift.driftedFiles)
+      ? data.agentDrift.driftedFiles.map((d) => (typeof d === 'string' ? d : d && d.file)).filter(Boolean)
+      : [];
+  const items = Array.isArray(data.services) ? data.services : [];
+  const downServices = items
+    .filter((s) => s && s.id !== 'agent-drift' && s.id !== 'env-settings' && !s.up)
+    .map((s) => s.name)
+    .filter(Boolean);
+
+  if (light !== 'AMBER' && light !== 'RED') {
+    return { className: 'node-status-banner hidden', innerHTML: '' };
+  }
+
+  const parts = [];
+  if (downServices.length > 0) {
+    parts.push(`Services offline: ${downServices.map((n) => `<code>${escapeHtml(n)}</code>`).join(', ')}.`);
+  }
+  if (missingEnvNames.length > 0) {
+    parts.push(
+      `Missing required setting names: ${missingEnvNames.map((n) => `<code>${escapeHtml(n)}</code>`).join(', ')}.`,
+    );
+  }
+  if (driftedFiles.length > 0) {
+    parts.push(`Drifted agent files: ${driftedFiles.map((f) => `<code>${escapeHtml(f)}</code>`).join(', ')}.`);
+  }
+  parts.push('Only setting names are shown; values are never read or displayed.');
+
+  const bannerMode = light === 'RED' ? 'red' : 'amber';
+  const badgeText = light === 'RED' ? 'RED LIGHT' : 'AMBER LIGHT';
+  return {
+    className: `node-status-banner ${bannerMode}`,
+    innerHTML: `<span class="node-status-banner-badge">${badgeText}</span><span>${parts.join(' ')}</span>`,
+  };
+}
+
 function renderOverviewPanelMarkup(payload = {}) {
   const ports = Array.isArray(payload.requiredPorts) ? payload.requiredPorts : [];
   const cronJobs = Array.isArray(payload.cronJobs) ? payload.cronJobs : [];
@@ -653,6 +696,13 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
       if (skillsBox && rendered.skillsHtml) {
         skillsBox.innerHTML = rendered.skillsHtml;
       }
+
+      const banner = document.getElementById('node-status-banner');
+      if (banner) {
+        const renderedBanner = renderNodeStatusBannerMarkup(data);
+        banner.className = renderedBanner.className;
+        banner.innerHTML = renderedBanner.innerHTML;
+      }
     } catch (err) {
       console.error('Overview load error:', err);
     }
@@ -834,6 +884,7 @@ if (typeof module !== 'undefined' && module.exports) {
     contrastRatio,
     verifyWcagAaaPalette,
     buildRuntimeAuthHeaders,
+    renderNodeStatusBannerMarkup,
     renderOverviewPanelMarkup,
     renderYoutubeDeskMarkup,
     renderClayLeadGenMarkup,

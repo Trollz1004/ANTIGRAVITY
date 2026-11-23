@@ -57,12 +57,12 @@ function Run-Audit {
     $statusData = if (Test-Path $StatusFile) { Get-Content $StatusFile -Raw | ConvertFrom-Json } else { $null }
 
     # 2. Independent Real-Time Probes (NO TRUST ME BRO)
-    $port3200 = Test-Http "http://127.0.0.1:3200" 5
-    $port8000 = Test-Http "http://127.0.0.1:8000/docs" 5
-    $port9160 = Test-Http "http://127.0.0.1:9160/health" 5
+    $port3200 = Test-Http "http://192.168.0.15:3200" 5
+    $port8000 = Test-Http "http://192.168.0.15:8000/docs" 5
+    $port9160 = Test-Http "http://192.168.0.15:9160/health" 5
     $port5432 = Test-Port 5432
     $port6379 = Test-Port 6379
-    $port11434 = Test-Http "http://127.0.0.1:11434/api/tags" 5
+    $port11434 = Test-Http "http://192.168.0.15:11434/api/tags" 5
     $port27123 = Test-Port 27123  # Obsidian Local REST API
     $tunnelProc = Get-Process -Name cloudflared -ErrorAction SilentlyContinue
     $tunnelUp = ($tunnelProc -ne $null)

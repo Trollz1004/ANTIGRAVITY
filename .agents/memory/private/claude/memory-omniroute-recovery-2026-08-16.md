@@ -14,7 +14,7 @@ the `data` SUBDIR set by `scripts\omniroute-keepalive.ps1`, not `~\.omniroute`
 itself). Restored 2026-08-16 evening.
 
 **The restore payload:**
-`C:\Users\joshi\.antigravity-vault\omniroute-legacy-backup-2026-08-16T05-20-49-555Z.json`
+`%USERPROFILE%\.antigravity-vault\omniroute-legacy-backup-2026-08-16T05-20-49-555Z.json`
 — full export (17 provider connections with PLAINTEXT tokens, coder-cascade
 combo of 13 models, 86 settings, 1 API key). Re-import it any time via
 `POST /api/settings/import-json` (session cookie auth), then RESTART the
@@ -25,19 +25,21 @@ keepalive relaunches it (~30-60s).
 **Admin password:** the vault's old INITIAL_PASSWORD does NOT work. Current
 admin password: `~\.antigravity-vault\omniroute-admin-password-2026-08-16.txt`
 (set via the official tool:
-`printf "<pw>" | DATA_DIR="C:\Users\joshi\.omniroute\data" node <npm-global>\omniroute\bin\reset-password.mjs --password-stdin`
+`printf "<pw>" | DATA_DIR="%USERPROFILE%\.omniroute\data" node <npm-global>\omniroute\bin\reset-password.mjs --password-stdin`
 — must pass DATA_DIR or it looks in the wrong dir; server restart required).
 
 **API access:** `OMNI_ROUTE_API_KEY` in `C:\ANTIGRAVITY\.env` matches the
-imported API key and works on `/v1/chat/completions`. Login endpoint:
+imported API key and works on `http://192.168.0.15:20128/v1/chat/completions`. Login endpoint:
 `POST /api/auth/login {"password":...}` → session cookie (no token in body).
 The CLI (`omniroute sync ...`) authenticates with the API key but its bundle
 format ≠ the legacy JSON export format; use import-json for this file.
 
 **State after restore:** 17 configured / 16 active. `claude` connection is
-INACTIVE by design (was inactive in the backup). `grok-cli` OAuth token was
-already EXPIRED pre-backup — needs re-login to use. Verified live: completion
-routed to nvidia/gpt-oss-120b via auto-fallback.
+INACTIVE by design (official Claude uses OAuth sign-in, never OmniRoute).
+`grok-cli` OAuth token was already EXPIRED pre-backup — needs re-login to use.
+Current fleet models via official/gateway lanes include `Gemini 4 Carbon`,
+`GPT-6 Astra`, `GPT-6.1 Sol`, and `Opus 5.5` / `Fable` (fallback verification
+at that time routed via `auto-fallback`).
 
 **Other vault OmniRoute files:** `hermes-omniroute.env` (full env incl.
 STORAGE_ENCRYPTION_KEY, OAuth client IDs), `laptop-omniroute-home.env`.
@@ -45,5 +47,5 @@ STORAGE_ENCRYPTION_KEY, OAuth client IDs), `laptop-omniroute-home.env`.
 `C:\ANTIGRAVITY\omniroute\` is a trimmed source copy (no src/, no data);
 its `config\config.json` is just the OpenCode config SCHEMA — not a config.
 
-Related: [[sabretooth-reinstall-2026-08-16]],
-[[tunnel-and-secrets-recovery-2026-08-16]]
+Related: archived post-reinstall hardware note (2026-08-16, retired third-node
+record), [[tunnel-and-secrets-recovery-2026-08-16]]

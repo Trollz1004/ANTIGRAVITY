@@ -85,7 +85,7 @@ Added in migration 002. Type: `number | null` (Unix ms).
 
 ## Data
 
-SQLite at `C:\Users\joshl\.hermes\state.db` (override: `MISSION_MCP_DB`).
+SQLite at `%USERPROFILE%\.hermes\state.db` (override: `MISSION_MCP_DB`).
 
 Migrations run automatically on first connect:
 
@@ -112,7 +112,7 @@ MISSION_MCP_TRANSPORT=http MISSION_MCP_PORT=4000 node dist/server.js
 ## Health check
 
 ```sh
-curl http://127.0.0.1:3901/health
+curl http://192.168.0.15:3901/health
 ```
 
 ## Tests

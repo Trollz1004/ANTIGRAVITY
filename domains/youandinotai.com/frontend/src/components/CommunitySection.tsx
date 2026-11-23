@@ -115,8 +115,8 @@ export function CommunitySection() {
             className="mx-auto max-w-3xl text-lg font-light text-gray-400"
           >
             YouAndiNotAi keeps everything inside the product: Bot-Shield
-            verification, public founder pricing, and a sign-up flow that
-            moves from account to profile setup without friction.
+            verification, public founder pricing, and a sign-up flow that moves
+            from account to profile setup without friction.
           </motion.p>
         </div>
 

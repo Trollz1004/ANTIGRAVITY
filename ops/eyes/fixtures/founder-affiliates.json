@@ -1,0 +1,109 @@
+{
+  "/auth/me": {
+    "user_id": "00000000-0000-4000-8000-000000000001",
+    "email": "founder-demo@youandinotai.com",
+    "display_name": "Founder Preview",
+    "bot_shield_verified": true,
+    "subscription_tier": "founding_member",
+    "subscription_active": true,
+    "subscription_expires_at": null,
+    "has_profile": true,
+    "adult_verified": true
+  },
+  "/metrics/affiliates": {
+    "generated_at": "2026-11-20T12:00:00Z",
+    "items": [
+      {
+        "referral_code": "maya-lin",
+        "signups_count": 42,
+        "verified_count": 31,
+        "payments_count": 18,
+        "gross_cents": 29982,
+        "owed_cents": 14991
+      },
+      {
+        "referral_code": "devon-cole",
+        "signups_count": 27,
+        "verified_count": 19,
+        "payments_count": 11,
+        "gross_cents": 17889,
+        "owed_cents": 8944
+      },
+      {
+        "referral_code": "aria-vance",
+        "signups_count": 15,
+        "verified_count": 10,
+        "payments_count": 6,
+        "gross_cents": 9994,
+        "owed_cents": 4997
+      }
+    ],
+    "totals": {
+      "codes_count": 3,
+      "signups_count": 84,
+      "verified_count": 60,
+      "payments_count": 35,
+      "gross_cents": 57865,
+      "owed_cents": 28932
+    }
+  },
+  "/metrics/signup-sources": {
+    "generated_at": "2026-11-20T12:00:00Z",
+    "items": [
+      {
+        "signup_source": "direct",
+        "accounts_last_30_days": 38,
+        "verified_last_30_days": 29,
+        "paid_last_30_days": 14,
+        "accounts_all_time": 96,
+        "verified_all_time": 74,
+        "paid_all_time": 39
+      },
+      {
+        "signup_source": "ref:maya-lin",
+        "accounts_last_30_days": 24,
+        "verified_last_30_days": 18,
+        "paid_last_30_days": 10,
+        "accounts_all_time": 42,
+        "verified_all_time": 31,
+        "paid_all_time": 18
+      },
+      {
+        "signup_source": "ref:devon-cole",
+        "accounts_last_30_days": 16,
+        "verified_last_30_days": 12,
+        "paid_last_30_days": 7,
+        "accounts_all_time": 27,
+        "verified_all_time": 19,
+        "paid_all_time": 11
+      },
+      {
+        "signup_source": "utm:winter-date-night/reels",
+        "accounts_last_30_days": 21,
+        "verified_last_30_days": 15,
+        "paid_last_30_days": 8,
+        "accounts_all_time": 33,
+        "verified_all_time": 23,
+        "paid_all_time": 12
+      },
+      {
+        "signup_source": "site:news.ycombinator.com",
+        "accounts_last_30_days": 11,
+        "verified_last_30_days": 8,
+        "paid_last_30_days": 4,
+        "accounts_all_time": 19,
+        "verified_all_time": 14,
+        "paid_all_time": 6
+      }
+    ],
+    "totals": {
+      "sources_count": 5,
+      "accounts_last_30_days": 110,
+      "verified_last_30_days": 82,
+      "paid_last_30_days": 43,
+      "accounts_all_time": 217,
+      "verified_all_time": 161,
+      "paid_all_time": 86
+    }
+  }
+}

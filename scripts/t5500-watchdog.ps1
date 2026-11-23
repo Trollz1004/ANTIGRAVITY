@@ -1,21 +1,23 @@
+# T5500 Always-On Watchdog â€” canonical 2-node stack (ops/fleet/fleet-map.json)
+param(
+    [string]$RepoRoot = 'C:\ANTIGRAVITY',
+    [string]$NodeLanIp = $(if ($env:NODE_LAN_IP) { $env:NODE_LAN_IP } else { '192.168.0.15' })
+)
+
 $ErrorActionPreference = 'Continue'
 
-$LogDir     = 'E:\ANTIGRAVITY\logs'
-$LogFile    = "$LogDir\t5500-watchdog.log"
+$LogDir      = Join-Path $RepoRoot 'logs'
+$LogFile     = Join-Path $LogDir 't5500-watchdog.log'
 $MaxLogBytes = 10MB
 
-$OllamaExe        = 'C:\Users\joshl\AppData\Local\Programs\Ollama\ollama.exe'
-$PaperclipExe     = 'C:\Users\joshl\AppData\Roaming\npm\paperclipai.cmd'
-$CloudflaredExe   = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
-$TunnelConfig     = 'E:\ANTIGRAVITY\infra\cloudflare\paperclip-hq.yml'
-$ClaudeExe        = 'C:\Users\joshl\.local\bin\claude.exe'
-$OpenCodeExe      = 'C:\Users\joshl\AppData\Local\Microsoft\WinGet\Packages\SST.opencode_Microsoft.Winget.Source_8wekyb3d8bbwe\opencode.exe'
-$PythonExe        = 'C:\Windows\py.exe'
-$OpusHasHandsDir  = 'E:\ANTIGRAVITY\_handoff-staging-2026-05-26\_deploy\opushashands'
-$PaperclipPort    = 3100
-$OllamaPort       = 11434
-$OpusHasHandsPort = 4200
-$CheckInterval    = 30
+$OllamaExe      = Join-Path $env:LOCALAPPDATA 'Programs\Ollama\ollama.exe'
+$CloudflaredExe = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
+$TunnelConfig   = Join-Path $RepoRoot 'infra\cloudflare\t5500-dateapp.yml'
+$ClaudeExe      = Join-Path $env:USERPROFILE '.local\bin\claude.exe'
+$OpenCodeExe    = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages\SST.opencode_Microsoft.Winget.Source_8wekyb3d8bbwe\opencode.exe'
+$MissionPort    = 3130
+$OllamaPort     = 11434
+$CheckInterval  = 30
 
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 
@@ -30,10 +32,10 @@ function Rotate-Log {
     }
 }
 
-function Test-LocalPort($port) {
+function Test-NodePort($port) {
     try {
         $client = New-Object System.Net.Sockets.TcpClient
-        $async  = $client.BeginConnect('127.0.0.1', $port, $null, $null)
+        $async  = $client.BeginConnect([System.Net.IPAddress]::Loopback, $port, $null, $null)
         $ok     = $async.AsyncWaitHandle.WaitOne(2000, $false)
         $client.Close()
         return $ok
@@ -43,35 +45,42 @@ function Test-LocalPort($port) {
 }
 
 function Ensure-Ollama {
-    if (Test-LocalPort $OllamaPort) { return }
-    Log 'Ollama DOWN — starting serve...'
+    if (Test-NodePort $OllamaPort) { return }
+    if (-not (Test-Path $OllamaExe)) { return }
+    Log 'Ollama DOWN â€” starting serve...'
     Start-Process -FilePath $OllamaExe -ArgumentList 'serve' -WindowStyle Hidden -ErrorAction SilentlyContinue
     Start-Sleep -Seconds 10
-    if (Test-LocalPort $OllamaPort) {
+    if (Test-NodePort $OllamaPort) {
         Log 'Ollama UP after restart.'
     } else {
         Log 'Ollama still DOWN after restart attempt.'
     }
 }
 
-function Ensure-Paperclip {
-    if (Test-LocalPort $PaperclipPort) { return }
-    Log 'Paperclip DOWN — starting...'
+function Ensure-MissionOS {
+    if (Test-NodePort $MissionPort) { return }
+    $startScript = Join-Path $RepoRoot 'scripts\start-mission-control.ps1'
+    if (-not (Test-Path $startScript)) {
+        Log "Mission OS start script missing: $startScript"
+        return
+    }
+    Log 'Mission OS DOWN â€” starting...'
     Start-Process -FilePath 'powershell.exe' `
-        -ArgumentList '-NonInteractive', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-File', 'E:\ANTIGRAVITY\scripts\start-paperclip.ps1' `
+        -ArgumentList '-NonInteractive', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-File', $startScript, '-RepoRoot', $RepoRoot, '-Port', "$MissionPort" `
         -WindowStyle Hidden -ErrorAction SilentlyContinue
     Start-Sleep -Seconds 15
-    if (Test-LocalPort $PaperclipPort) {
-        Log 'Paperclip UP after restart.'
+    if (Test-NodePort $MissionPort) {
+        Log "Mission OS UP on http://${NodeLanIp}:$MissionPort."
     } else {
-        Log 'Paperclip still DOWN after restart attempt.'
+        Log 'Mission OS still DOWN after restart attempt.'
     }
 }
 
 function Ensure-Cloudflared {
     $proc = Get-Process -Name 'cloudflared' -ErrorAction SilentlyContinue
     if ($null -ne $proc) { return }
-    Log 'Cloudflared DOWN — starting tunnel...'
+    if (-not (Test-Path $CloudflaredExe) -or -not (Test-Path $TunnelConfig)) { return }
+    Log 'Cloudflared DOWN â€” starting tunnel...'
     Start-Process -FilePath $CloudflaredExe `
         -ArgumentList "tunnel --config `"$TunnelConfig`" run" `
         -WindowStyle Hidden -ErrorAction SilentlyContinue
@@ -81,54 +90,32 @@ function Ensure-Cloudflared {
 
 function Ensure-ClaudeCLI {
     if ($env:ANTIGRAVITY_FULL_AUTOSTART -ne '1') { return }
+    if (-not (Test-Path $ClaudeExe)) { return }
     $proc = Get-Process -Name 'claude' -ErrorAction SilentlyContinue | Where-Object { $_.Path -like '*\.local\bin*' }
     if ($null -ne $proc) { return }
-    Log 'Claude CLI not running — launching headless in E:\ANTIGRAVITY...'
+    Log "Claude CLI not running â€” launching headless in $RepoRoot..."
     Start-Process -FilePath $ClaudeExe `
-        -ArgumentList '--dangerously-skip-permissions', '--cwd', 'E:\ANTIGRAVITY' `
+        -ArgumentList '--dangerously-skip-permissions', '--cwd', $RepoRoot `
         -WindowStyle Hidden -ErrorAction SilentlyContinue
     Log 'Claude CLI start command issued.'
 }
 
 function Ensure-OpenCodeCLI {
     if ($env:ANTIGRAVITY_FULL_AUTOSTART -ne '1') { return }
+    if (-not (Test-Path $OpenCodeExe)) { return }
     $proc = Get-Process -Name 'opencode' -ErrorAction SilentlyContinue
     if ($null -ne $proc) { return }
-    Log 'OpenCode CLI not running — launching headless in E:\ANTIGRAVITY...'
+    Log "OpenCode CLI not running â€” launching headless in $RepoRoot..."
     Start-Process -FilePath $OpenCodeExe `
-        -ArgumentList '--workdir', 'E:\ANTIGRAVITY' `
+        -ArgumentList '--workdir', $RepoRoot `
         -WindowStyle Hidden -ErrorAction SilentlyContinue
     Log 'OpenCode CLI start command issued.'
-}
-
-function Ensure-OpusHasHands {
-    # Serves OpusHasHands hub on 127.0.0.1:4200.
-    # Cloudflare tunnel ingress (paperclip-antigravity, c7bc9665-...) routes
-    # opushashands.youandinotai.com -> http://127.0.0.1:4200.
-    if (Test-LocalPort $OpusHasHandsPort) { return }
-    Log 'OpusHasHands DOWN — starting python http.server on 4200...'
-    if (-not (Test-Path $OpusHasHandsDir)) {
-        Log "OpusHasHands dir missing: $OpusHasHandsDir — cannot start."
-        return
-    }
-    Start-Process -FilePath $PythonExe `
-        -ArgumentList '-m', 'http.server', $OpusHasHandsPort, '--bind', '127.0.0.1' `
-        -WorkingDirectory $OpusHasHandsDir `
-        -RedirectStandardOutput "$LogDir\opushashands-server.log" `
-        -RedirectStandardError "$LogDir\opushashands-server.log.err" `
-        -WindowStyle Hidden -ErrorAction SilentlyContinue
-    Start-Sleep -Seconds 3
-    if (Test-LocalPort $OpusHasHandsPort) {
-        Log 'OpusHasHands UP — opushashands.youandinotai.com now live.'
-    } else {
-        Log 'OpusHasHands still DOWN after restart attempt.'
-    }
 }
 
 function Open-DashboardBrowser {
     if ($env:ANTIGRAVITY_FULL_AUTOSTART -ne '1') { return }
     $chrome = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
-    $urls = @('http://localhost:3100', 'https://paperclip-hq.youandinotai.com')
+    $urls = @("http://${NodeLanIp}:$MissionPort", 'https://youandinotai.com')
     if (Test-Path $chrome) {
         Start-Process -FilePath $chrome -ArgumentList $urls -ErrorAction SilentlyContinue
     } else {
@@ -137,7 +124,7 @@ function Open-DashboardBrowser {
     Log 'Dashboard browser tabs opened.'
 }
 
-$bootFile = "$LogDir\watchdog-boot-marker.txt"
+$bootFile = Join-Path $LogDir 'watchdog-boot-marker.txt'
 if (-not (Test-Path $bootFile) -or (Get-Content $bootFile -ErrorAction SilentlyContinue) -ne (Get-Date -Format 'yyyy-MM-dd')) {
     Set-Content -Path $bootFile -Value (Get-Date -Format 'yyyy-MM-dd') -ErrorAction SilentlyContinue
     Start-Sleep -Seconds 5
@@ -145,13 +132,12 @@ if (-not (Test-Path $bootFile) -or (Get-Content $bootFile -ErrorAction SilentlyC
 }
 
 Log '====== T5500 Always-On Watchdog Started ======'
-Log "Ollama:$OllamaPort | Paperclip:$PaperclipPort | OpusHasHands:$OpusHasHandsPort | Cloudflared | Claude CLI | OpenCode CLI | Interval:${CheckInterval}s"
+Log "Ollama:$OllamaPort | MissionOS:$MissionPort | Cloudflared | Claude CLI | OpenCode CLI | Interval:${CheckInterval}s"
 
 while ($true) {
     Rotate-Log
     Ensure-Ollama
-    Ensure-Paperclip
-    Ensure-OpusHasHands
+    Ensure-MissionOS
     Ensure-Cloudflared
     Ensure-ClaudeCLI
     Ensure-OpenCodeCLI

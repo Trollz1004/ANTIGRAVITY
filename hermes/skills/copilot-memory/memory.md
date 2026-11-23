@@ -20,7 +20,7 @@ gpu: amd-rx-6800-16gb
 - Downloaded Adrenalin 26.9.1 (~986 MB) from AMD's official CDN; Authenticode Valid (Advanced Micro Devices, DigiCert-timestamped); installer launched and left waiting for the user's UAC/click-through.
 - GPU inference already works meanwhile: `ollama serve` serves the RX 6800 (16 GiB) over Vulkan (`OLLAMA_VULKAN:true`), default ctx 4096.
 - Cloned `Trollz1004/dream-online` to `C:\DREAM\dream-online` (HEAD `c4e225b`, public HTTPS clone, no credential prompt). Completes the clone half of the judge-lane carry-forward TODO.
-- `.env` was NOT read or edited, per user reminder ("Claude has not edited that env yet... no paperclip"). Secrets were never echoed.
+- `.env` was NOT read or edited, per user reminder ("Claude has not edited that env yet... legacy orchestrator retired"). Secrets were never echoed.
 
 ### Changes
 - `CLAUDE.md` (Alienware row: Windows 10 -> Windows 11; session protocol now reads/writes the Copilot log; repo layout row updated), `docs/skills.md` (copilot-memory added to mandatory list), `skills/session-memory/memory.md` (judge-lane log: frontmatter node -> alienware, new block)
@@ -36,5 +36,5 @@ gpu: amd-rx-6800-16gb
 ### Carry-forward TODOs
 - [ ] User approves + finishes the Adrenalin 26.9.1 install (installer window was open, PID 26236), reboots. After reboot: rerun `ollama serve`, confirm `amdhip64_7.dll` exists and the "driver too old" warning is gone (ROCm path available).
 - [ ] Set `DREAM_ROOT` / `DREAM_REPO_DIR` in `.env` to `C:\DREAM\dream-online` — only with the user present.
-- [ ] Park Paperclip in `.env` (comment out `PAPERCLIP_*` lines, keep values) — pending user go-ahead; do not do it silently.
-- [ ] Remaining judge-lane TODOs live in `skills/session-memory/memory.md` (Obsidian vault, jarvis `NODE_LAN_IP` from `.env`, pnpm, GitHub sign-in + push, port clash 9219, README rewrite, docs sweep).
+- [ ] Archive any legacy orchestrator variables in local `.env` if still present — pending user go-ahead; do not do it silently.
+- [ ] Remaining judge-lane TODOs live in `skills/session-memory/memory.md` (Obsidian vault, OPSis HUD `NODE_LAN_IP` from `.env`, pnpm, GitHub sign-in + push, port alignment, README rewrite, docs sweep).

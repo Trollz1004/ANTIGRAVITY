@@ -17,13 +17,13 @@ param signInAudience string = 'AzureADMyOrg'
 
 @description('Redirect URIs for web application')
 param webRedirectUris array = [
-  'https://localhost:5001/signin-oidc'
+  'https://192.168.0.40:5001/signin-oidc'
   'https://myapp.azurewebsites.net/signin-oidc'
 ]
 
 @description('Redirect URIs for single-page application')
 param spaRedirectUris array = [
-  'http://localhost:3000'
+  'https://192.168.0.40:3000'
   'https://myapp.azurewebsites.net'
 ]
 
@@ -64,7 +64,6 @@ resource appRegistration 'Microsoft.Graph/applications@v1.0' = {
   // Public client (mobile/desktop) settings
   publicClient: {
     redirectUris: [
-      'http://localhost'
       'myapp://auth'
       'https://login.microsoftonline.com/common/oauth2/nativeclient'
     ]
