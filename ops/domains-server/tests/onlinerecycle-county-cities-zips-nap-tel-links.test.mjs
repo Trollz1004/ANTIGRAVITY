@@ -11,12 +11,16 @@ function readSiteFile(relPath) {
   return fs.readFileSync(path.join(SITE_DIR, relPath), 'utf8');
 }
 
+const HTML_ENTITY_MAP = {
+  '&amp;': '&',
+  '&nbsp;': ' ',
+  '&middot;': '·',
+  '&copy;': '©',
+};
+
 function decodeEntities(text) {
   return text
-    .replaceAll('&amp;', '&')
-    .replaceAll('&nbsp;', ' ')
-    .replaceAll('&middot;', '·')
-    .replaceAll('&copy;', '©')
+    .replace(/&(?:amp|nbsp|middot|copy);/g, (entity) => HTML_ENTITY_MAP[entity] ?? entity)
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -29,6 +33,13 @@ function visibleText(html) {
       .replace(/<[^>]+>/g, ' '),
   );
 }
+
+test('decodeEntities unescapes HTML entities in one pass without double-unescaping &amp;', () => {
+  assert.equal(
+    visibleText('<p>Lake &amp; Orange &amp;nbsp; &amp;middot; &amp;copy; &nbsp; &middot; &copy;</p>'),
+    'Lake & Orange &nbsp; &middot; &copy; · ©',
+  );
+});
 
 const COUNTY_COVERAGE = [
   {
