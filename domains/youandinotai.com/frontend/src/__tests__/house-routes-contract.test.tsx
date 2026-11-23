@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent, waitFor, act } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 import LandingPage, { PublicSupportPage } from '../App';
 import { Login } from '../app/pages/Login';
@@ -224,14 +224,23 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
     });
   });
 
-  it('renders a direct Sign in with this email link to /login?next=<nextPath>&email=<email> when POST /auth/register returns 409 Email already registered', async () => {
+  it('renders a direct Sign in with this email link to /login?next=<nextPath> without email in the address and prefills email via navigation state when POST /auth/register returns 409 Email already registered', async () => {
+    useAuth.setState({ user: null, loading: false });
     vi.mocked(api.post).mockRejectedValueOnce(
       Object.assign(new Error('Email already registered'), { status: 409 })
     );
 
+    let currentAddress = '';
+    function LocationTracker() {
+      const loc = useLocation();
+      currentAddress = `${loc.pathname}${loc.search}${loc.hash}`;
+      return null;
+    }
+
     const { getByPlaceholderText, container, getByRole, getByLabelText } =
       render(
         <MemoryRouter initialEntries={['/register?next=%2Fapp%2Fverify']}>
+          <LocationTracker />
           <Routes>
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
@@ -261,32 +270,32 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
       getByRole('link', { name: /Sign in with this email/i })
     );
     expect(handoffLink.getAttribute('href')).toBe(
-      '/login?next=%2Fapp%2Fverify&email=existing%40youandinotai.com'
+      '/login?next=%2Fapp%2Fverify'
     );
+    expect(handoffLink.getAttribute('href')).not.toContain('@');
+    expect(handoffLink.getAttribute('href')).not.toContain('email=');
 
     fireEvent.click(handoffLink);
 
     await waitFor(() => {
+      expect(currentAddress).toBe('/login?next=%2Fapp%2Fverify');
+      expect(currentAddress).not.toContain('@');
+      expect(currentAddress).not.toContain('email=');
       expect((getByLabelText(/Email/i) as HTMLInputElement).value).toBe(
         'existing@youandinotai.com'
       );
     });
   });
 
-  it('prefills email on /login from ?email= query parameter', () => {
+  it('does NOT prefill email when opening /login?email=someone@example.com directly', () => {
+    useAuth.setState({ user: null, loading: false });
     const { getByLabelText } = render(
-      <MemoryRouter
-        initialEntries={[
-          '/login?next=%2Fapp%2Fverify&email=prefill%40youandinotai.com',
-        ]}
-      >
+      <MemoryRouter initialEntries={['/login?email=someone@example.com']}>
         <Login />
       </MemoryRouter>
     );
 
-    expect((getByLabelText(/Email/i) as HTMLInputElement).value).toBe(
-      'prefill@youandinotai.com'
-    );
+    expect((getByLabelText(/Email/i) as HTMLInputElement).value).toBe('');
   });
 
   it('links consent labels on /register to /?policy=terms, /?policy=privacy, and /?policy=age', () => {

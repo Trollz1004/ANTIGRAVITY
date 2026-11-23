@@ -28,8 +28,10 @@ interface LoginErrors {
   password?: string;
 }
 
-function getEmailFromSearch(search: string): string {
-  return new URLSearchParams(search).get('email')?.trim() || '';
+function getEmailFromNavigationState(state: unknown): string {
+  if (!state || typeof state !== 'object') return '';
+  const record = state as Record<string, unknown>;
+  return typeof record.email === 'string' ? record.email.trim() : '';
 }
 
 export interface LoginProps {
@@ -44,7 +46,9 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
     ['true', '1'].includes(
       String(import.meta.env.VITE_BETA_ACCESS_ENABLED ?? '').toLowerCase()
     );
-  const [email, setEmail] = useState(() => getEmailFromSearch(location.search));
+  const [email, setEmail] = useState(() =>
+    getEmailFromNavigationState(location.state)
+  );
   const [password, setPassword] = useState('');
   const [mailEnabled, setMailEnabled] = useState(false);
   const [error, setError] = useState('');
@@ -96,11 +100,11 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
   }, []);
 
   useEffect(() => {
-    const prefilledEmail = getEmailFromSearch(location.search);
+    const prefilledEmail = getEmailFromNavigationState(location.state);
     if (prefilledEmail) {
       setEmail(prefilledEmail);
     }
-  }, [location.search]);
+  }, [location.state]);
 
   const validateLoginField = useCallback(
     (name: string, value: string): string | undefined => {

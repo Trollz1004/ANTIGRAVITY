@@ -242,7 +242,8 @@ export function Register() {
                     <div>{error}</div>
                     {duplicateEmailConflict && (
                       <Link
-                        to={`/login?next=${encodeURIComponent(nextPath)}&email=${encodeURIComponent(email.trim())}`}
+                        to={`/login?next=${encodeURIComponent(nextPath)}`}
+                        state={{ email: email.trim() }}
                         className="mt-2 inline-flex items-center gap-1.5 font-bold text-[#FFD21E] underline transition-colors hover:text-[#F4F1EA]"
                       >
                         Sign in with this email <ArrowRight size={14} />
