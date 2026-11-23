@@ -40,3 +40,10 @@ def test_primary_database_url_falls_back_to_database_url(monkeypatch) -> None:
     )
 
     assert settings.primary_database_url == fallback_url
+
+
+def test_bot_shield_refund_enabled_defaults_to_false(monkeypatch) -> None:
+    monkeypatch.delenv("BOT_SHIELD_REFUND_ENABLED", raising=False)
+    settings = Settings(_env_file=None, jwt_secret="x" * 40)
+
+    assert settings.bot_shield_refund_enabled is False

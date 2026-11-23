@@ -8,6 +8,7 @@ from fastapi import APIRouter, HTTPException, Request, status
 
 from app.config import get_settings
 from app.email_service import send_waitlist_confirmation, send_waitlist_operator_notice
+from app.rate_limit_redis import enforce_route_rate_limit
 from app.schemas import WaitlistSignupRequest, WaitlistSignupResponse
 
 router = APIRouter(prefix="/waitlist")
@@ -22,6 +23,12 @@ async def signup_waitlist(
     payload: WaitlistSignupRequest,
 ) -> WaitlistSignupResponse:
     settings = get_settings()
+    await enforce_route_rate_limit(
+        request,
+        bucket="waitlist:signup",
+        limit=settings.waitlist_rate_limit_per_minute,
+        window_seconds=settings.redis_rate_limit_window,
+    )
     recipient_email = payload.email.strip().lower()
 
     try:

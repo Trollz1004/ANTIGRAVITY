@@ -33,14 +33,14 @@ which is not *OpenAI* compatibility. The only chat endpoint is
 node C:\ANTIGRAVITY\services\onemin-shim\server.mjs
 ```
 
-Health check: `GET http://127.0.0.1:20130/health`
+Health check: `GET http://192.168.0.15:20130/health`
 
 ## Wire into OmniRoute (one-time, Joshua does the key step)
 
 1. Start the shim (above).
 2. OmniRoute dashboard → **Providers → New connection** → custom
    **OpenAI-compatible** type:
-   - Base URL: `http://127.0.0.1:20130/v1`
+   - Base URL: `http://192.168.0.15:20130/v1`
    - API key: *paste the 1min.ai API key* (from app.1min.ai → API)
 3. **Test** the connection, then place it high in the fallback chain / combos —
    it is prepaid lifetime capacity, so it should absorb bulk work before any

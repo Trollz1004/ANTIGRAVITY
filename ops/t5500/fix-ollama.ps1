@@ -18,8 +18,8 @@ Get-Process ollama, 'ollama app' -ErrorAction SilentlyContinue | Stop-Process -F
 $exe = "C:\Users\$user\AppData\Local\Programs\Ollama\ollama.exe"
 if (-not (Test-Path "C:\Users\$user\AppData\Local\Programs\Ollama\lib\ollama\llama-server.exe")) { Write-Host 'llama-server.exe still missing - stop and tell Opus' -ForegroundColor Red; exit 1 }
 
-Write-Host '3/4 logon task "ANTIGRAVITY Ollama" (NOT elevated): ollama serve on 127.0.0.1:11434'
-$cmd = "`$env:OLLAMA_HOST='127.0.0.1:11434'; & '$exe' serve *>> 'C:\ANTIGRAVITY\logs\ollama-serve.log'"
+Write-Host '3/4 logon task "ANTIGRAVITY Ollama" (NOT elevated): ollama serve on 192.168.0.15:11434'
+$cmd = "`$env:OLLAMA_HOST='192.168.0.15:11434'; & '$exe' serve *>> 'C:\ANTIGRAVITY\logs\ollama-serve.log'"
 $a = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -WindowStyle Hidden -Command `"$cmd`""
 $t = New-ScheduledTaskTrigger -AtLogOn -User $user
 $s = New-ScheduledTaskSettingsSet -RestartCount 999 -RestartInterval (New-TimeSpan -Minutes 1) -ExecutionTimeLimit 0 -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
@@ -32,10 +32,10 @@ Start-ScheduledTask 'ANTIGRAVITY Ollama'
 Start-Sleep 8
 
 Write-Host '4/4 checks: root, /v1, /api/tags, Fable load'
-foreach ($u in 'http://127.0.0.1:11434/', 'http://127.0.0.1:11434/v1/models', 'http://127.0.0.1:11434/api/tags') {
+foreach ($u in 'http://192.168.0.15:11434/', 'http://192.168.0.15:11434/v1/models', 'http://192.168.0.15:11434/api/tags') {
     try { $r = Invoke-WebRequest $u -UseBasicParsing -TimeoutSec 10; "{0}  {1}" -f $r.StatusCode, $u } catch { "FAIL  $u" }
 }
 try {
-    Invoke-RestMethod http://127.0.0.1:11434/api/generate -Method Post -ContentType application/json -Body '{"model":"joshlcoleman/Fable:latest","keep_alive":-1}' -TimeoutSec 180 | Out-Null
+    Invoke-RestMethod http://192.168.0.15:11434/api/generate -Method Post -ContentType application/json -Body '{"model":"joshlcoleman/Fable:latest","keep_alive":-1}' -TimeoutSec 180 | Out-Null
     'Fable loaded and pinned'
 } catch { "Fable load FAILED: $($_.ErrorDetails.Message)" }

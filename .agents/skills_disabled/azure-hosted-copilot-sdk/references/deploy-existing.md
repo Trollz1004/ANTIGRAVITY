@@ -58,7 +58,7 @@ If the user wants Azure BYOM, add to the copied Bicep:
 
 Add env vars to Container App: `AZURE_OPENAI_ENDPOINT`, `MODEL_PROVIDER=azure`, `MODEL_NAME=<deployment>`, `AZURE_CLIENT_ID=<managed-identity-client-id>`.
 
-> ⚠️ **Warning:** The template's `main.parameters.json` defaults to `gpt-4o` which does NOT support BYOM (encrypted content). Change the default to an o-series or gpt-5 family model.
+> ⚠️ **Warning:** Legacy templates default to older completions models without BYOM encrypted-content support. Set the default to an approved GPT-6 family / reasoning deployment (see `docs/standards/AGENT-STANDARD.md`; active house models include `Opus 5.5` / `Fable`, `Gemini 4 Carbon`, `GPT-6 Astra`, `GPT-6.1 Sol`).
 
 See [Azure Model Configuration](azure-model-config.md) for provider config and auth pattern.
 

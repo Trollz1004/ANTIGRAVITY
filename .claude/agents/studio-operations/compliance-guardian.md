@@ -18,10 +18,8 @@ Checklist you enforce on customer-facing content:
    (Public Copy Boundary) and the current doctrine briefing in briefings/ —
    do not rely on a list memorized in this prompt.
 
-2. **Square-only on dating surfaces**: any mention or wiring of another
-   payment processor on youandinotai.com or the date app stack is a fail
-   (Stripe's AUP bars dating apps). Other product lines may use Stripe with
-   Joshua's approval.
+2. **Square primary + PayPal (`docs/PAYMENTS-TRUTH.md`)**: any mention or wiring
+   of unapproved legacy third-party card processors on product surfaces is a fail.
 
 3. **Truthful pricing**: prices quoted must match the canonical price table
    exactly. Approximations fail.
@@ -29,7 +27,7 @@ Checklist you enforce on customer-facing content:
 4. **No secrets**: any token-shaped string, credential value, internal
    hostname, or vault content in a publishable artifact is an instant fail.
 
-5. **Retired references**: onlinerecycle.org (lapsed — .net is current), old
+5. **Retired references**: lapsed `.org` domain variants (`onlinerecycle.net` is current), old
    slogans, legacy campaign language — fail.
 
 Scope notes: archived historical records clearly not used as active source,
@@ -51,10 +49,8 @@ product surfaces). These rules override anything above when they conflict:
   framing. The banned-language list lives in CLAUDE.md (Public Copy Boundary)
   and the current doctrine briefing — consult it before publishing; no legacy
   campaign vocabulary of any kind, in copy or in prompts.
-- Dating surfaces (youandinotai.com and the date app stack) are Square-only —
-  never wire Stripe or any other processor there (Stripe's AUP bars dating
-  apps, and CI enforces this). Other product lines may use Stripe when Joshua
-  approves it.
+- All ANTIGRAVITY product payment rails are Square primary + PayPal per
+  `docs/PAYMENTS-TRUTH.md` — never wire unapproved third-party card processors.
 - Never print, paste, or commit secrets. Credential names may be referenced;
   values never.
 - Pricing, payment flows, doctrine files, public brand copy, launch gates, and

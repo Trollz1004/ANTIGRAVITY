@@ -1,6 +1,6 @@
 # Hermes State Journal
 
-**Status:** GREEN — lane configured for YouTube automation (Buffy assigned ANT-77).
+**Status:** GREEN — lane aligned to 2-node `ops/fleet/fleet-map.json` (Alienware `192.168.0.40` Workshop: Lead-Gen `:8392`, Media/TTS `:8391`, OPSis Studio `:8390`, Free Claude Code `:8082`, DREAM Engine `:9180`; T5500 `192.168.0.15` Front-of-House: Mission OS `:3130`, OmniRoute `:20128`, Hermes `:8643`/`:9119`, Shared `ai-memory` `:49374`; models `Gemini 4 Carbon`, `GPT-6 Astra`, `GPT-6.1 Sol`, `Opus 5.5` / `Fable`).
 
 ## 2026-08-24 — YouTube automation lane assigned
 
@@ -17,8 +17,8 @@
 ## Last Session
 
 - Task: ANT-203 — DateApp W1/N1 organic comment batch for Austin, Atlanta, and Columbus.
-- Skills loaded: `i-have-adhd`, `dateapp-growth-agent`, `product-copy-business-only`, and Paperclip artifact workflow.
-- Evidence: `ops/marketing-inbox/2026-08-26-dateapp-w1-n1-comment-batch.md`; automated content check passed for 6 unique drafts, 2 per city, and exact brand+niche+city tag triplets; Paperclip artifact `9d8668e3-9605-49c0-bf85-733bb6fce1b1` backed by attachment `33878f1e-aecf-45a7-80aa-cd461f478eee`.
+- Skills loaded: `i-have-adhd`, `dateapp-growth-agent`, `product-copy-business-only`, and coordination-board artifact workflow.
+- Evidence: `ops/marketing-inbox/2026-08-26-dateapp-w1-n1-comment-batch.md`; automated content check passed for 6 unique drafts, 2 per city, and exact brand+niche+city tag triplets; legacy board artifact `9d8668e3-9605-49c0-bf85-733bb6fce1b1` backed by attachment `33878f1e-aecf-45a7-80aa-cd461f478eee`.
 - Blockers: none. Draft remains approval-only and was not published.
 - Next: marketing approval/execution is outside ANT-203; X execution remains Grok-lane only per the engine governance.
 
@@ -28,7 +28,7 @@
 - Skills loaded: `date-app-hermes-operations`, `hermes-agent`, `mcporter`, `obsidian`, `autonomous-operations`.
 - VERIFIED: enabled and connected `brain-mcp` (8 tools), `mission-mcp` (11), `antigravity-files` (14), `playwright` (25), `dateapp-desk` (4), `openviking` (15), `supabase` (23), and `vercel` (243).
 - Real read-only calls succeeded through BRAIN, Mission, filesystem, Playwright, DateApp desk, and OpenViking. Supabase and Vercel OAuth connection/tool discovery succeeded.
-- `unreal-engine` remains intentionally disabled on Sabretooth per `.agents/harness-config/hermes.yaml`; port 8000 is the DateApp API, not Unreal MCP.
+- `dream-engine` MCP remains intentionally disabled on T5500 per `.agents/harness-config/hermes.yaml`; port 8000 on T5500 is the DateApp API, while DREAM Engine runs 100% in-house on Alienware (`192.168.0.40:9180`).
 - Obsidian finding: canonical vault is `C:\ANTIGRAVITY\Antigravity`; legacy `.freebuff/daily-obsidian-writer.sh` targets a stale AppData vault, so daily writing was not reliable. Recorded today's work in `Antigravity/2026-09-26.md`.
 - Installed and loaded official Supabase skills: `supabase` 0.1.2 and `supabase-postgres-best-practices` 1.1.1.
 - Next: start a new Hermes session so the newly configured native MCP tools are injected into the conversation toolset.
@@ -37,13 +37,13 @@
 
 - **did**: Answered Opus's three-part tasking (screen data sources, stale-file audit, tool verification).
   Verified with real terminal probes: Mission Control :3130 answers `identity: mission-agent-os` on
-  `192.168.0.15`; Hermes dashboard :9119 = 200; domains :9160, Paperclip :3917, OmniRoute :20128,
+  `192.168.0.15`; Hermes dashboard :9119 = 200; domains :9160, legacy control plane (now retired in favor of Mission OS :3130), OmniRoute :20128,
   date-app API :8000 (db/redis/square all connected, wallet rails proven), frontend :3200, Obsidian
   :27123 all UP. Runtime `.env` loaded silently — `NODE_NAME=T5500-2-XEON-72`,
   `NODE_LAN_IP=192.168.0.15`, `OPENAI_COMPAT_BASE_URL=http://192.168.0.15:20128/v1` — the live env
   is clean; dead-node values live in generator scripts (`ops/env/augment-env.py` et al.).
 - **evidence**: `ops/handoffs/HERMES-T5500-SYNC-REPORT-2026-10-13.md` (full report);
-  subagent artifacts `C:\Users\joshi\AppData\Local\hermes\cache\scratch\stale-file-audit.md`
+  subagent artifacts `%LOCALAPPDATA%\hermes\cache\scratch\stale-file-audit.md`
   (225 marker files, ~30 live-code fixes, zero safe deletions) and `skill-tool-verification.md`
   (6 PASS / 5 FAIL).
 - **blockers (mine, real)**: (1) Ollama `joshlcoleman/Fable` installed but NOT resident —
@@ -99,7 +99,7 @@
   `origin/main` (27 ahead / 52 behind, merge base 2026-09-20); a plain push is rejected
   non-fast-forward. I have no push authority and did not force it. (2) The 50% influencer
   payout ledger is deliberately NOT built — it is a financial obligation and Joshua's number
-  to set. (3) `claude` CLI on Sabretooth is logged out (`Not logged in · Please run /login`);
+  to set. (3) `claude` CLI on this workshop node (`192.168.0.40`, Alienware) was logged out (`Not logged in · Please run /login`);
   Codex judged everything. `gh`'s stored token REPORTS invalid while `gh api` calls succeed —
   do not trust that status line.
 - **corrected**: I twice claimed a before/after proven when the "before" side ran on confounded

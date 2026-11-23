@@ -34,17 +34,17 @@
 
 ⚠️ **Very limited — varies by model**
 
-| Region           | GPT-4o | GPT-4 | GPT-3.5 | Embeddings |
-| ---------------- | :----: | :---: | :-----: | :--------: |
-| `eastus`         |   ✅   |  ✅   |   ✅    |     ✅     |
-| `eastus2`        |   ✅   |  ✅   |   ✅    |     ✅     |
-| `westus`         |   ⚠️   |  ⚠️   |   ✅    |     ✅     |
-| `westus3`        |   ✅   |  ⚠️   |   ✅    |     ✅     |
-| `southcentralus` |   ✅   |  ✅   |   ✅    |     ✅     |
-| `swedencentral`  |   ✅   |  ✅   |   ✅    |     ✅     |
-| `westeurope`     |   ⚠️   |  ✅   |   ✅    |     ✅     |
+| Region           | GPT-6 Astra | GPT-6.1 Sol | Embeddings |
+| ---------------- | :---------: | :---------: | :--------: |
+| `eastus`         |   ✅        |   ✅        |     ✅     |
+| `eastus2`        |   ✅        |   ✅        |     ✅     |
+| `westus`         |   ⚠️        |   ⚠️        |     ✅     |
+| `westus3`        |   ✅        |   ⚠️        |     ✅     |
+| `southcentralus` |   ✅        |   ✅        |     ✅     |
+| `swedencentral`  |   ✅        |   ✅        |     ✅     |
+| `westeurope`     |   ⚠️        |   ✅        |     ✅     |
 
-> Check https://learn.microsoft.com/azure/ai-services/openai/concepts/models for current model availability.
+> Check `docs/standards/AGENT-STANDARD.md` (active house models: `Opus 5.5` / `Fable`, `Gemini 4 Carbon`, `GPT-6 Astra`, `GPT-6.1 Sol`) and https://learn.microsoft.com/azure/ai-services/openai/concepts/models for current region availability.
 
 ---
 
@@ -72,8 +72,8 @@ These services are available in all major Azure regions — no special considera
 | SWA only                                       | `westus2`, `centralus`, `eastus2`, `westeurope`, `eastasia` |
 | SWA + backend services                         | `westus2`, `centralus`, `eastus2`, `westeurope`, `eastasia` |
 | Container Apps (no SWA)                        | `eastus`, `eastus2`, `westus2`, `centralus`, `westeurope`   |
-| With Azure OpenAI (GPT-4o/4/3.5 + embeddings)  | `eastus`, `eastus2`, `swedencentral`                        |
-| SWA + Azure OpenAI (GPT-4o/4/3.5 + embeddings) | `eastus2` (only region with full SWA + model overlap)       |
+| With Azure OpenAI (GPT-6 Astra / 6.1 Sol + embeddings)  | `eastus`, `eastus2`, `swedencentral`                        |
+| SWA + Azure OpenAI (GPT-6 Astra / 6.1 Sol + embeddings) | `eastus2` (only region with full SWA + model overlap)       |
 
 ---
 

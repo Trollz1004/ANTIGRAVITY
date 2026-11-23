@@ -23,27 +23,27 @@ Load this protocol at the start of every session to align with canonical reality
  - **Hermes (Customer Support Desk):** Runs customer support on `youandinotai.com` and `onlinerecycle.net`. Strictly business-only framing. Drafts replies for Joshua's approval. Does NOT do node sentry.
  - **OpenClaw (24/7 Node Sentry):** Watches the T5500 production stack. Heals silently on sight. ONLY alerts Joshua if an issue remains broken after 20 consecutive attempts. Does NOT do customer support.
 4. **Token Budget & Skill Hygiene:**
- - Always keep heavy, non-project plugins (Unity, Unreal, Azure, Flutter, Firebase) moved to `skills_disabled` or `plugins_disabled`, OR rename their `SKILL.md` to `SKILL.md.disabled` to avoid token budget limits. Never bloat the context window.
+ - Keep unused vendor packs moved to `skills_disabled` or `plugins_disabled`, OR rename unused `SKILL.md` to `SKILL.md.disabled` to avoid token budget bloat. Never bloat the context window.
 5. **Vault Preservation Rule:**
- - `C:\Users\joshi\.antigravity-vault` is the sacred secrets vault. NEVER archive, delete, or include it in "debris cleanup" scripts. The Date-App API strictly depends on this vault for its `.env` startup.
+ - `%USERPROFILE%\.antigravity-vault` is the sacred secrets vault. NEVER archive, delete, or include it in "debris cleanup" scripts. The Date-App API strictly depends on this vault for its `.env` startup.
 
 ---
 
-## 2. Node Map & Access
+## 2. Node Map & Access (`ops/fleet/fleet-map.json`)
 
-- **T5500 (`T5500-2-XEON-72`, `192.168.0.15`) — PRODUCTION NODE:**
- - Active Working Tree: `C:\ANTIGRAVITY` (sole canonical root).
- - Stack: DateApp Frontend (:3200), FastAPI (:8000), Domains Server (:9160), PostgreSQL 16 (:5432), Redis 8 (:6379), Ollama (:11434 with Fable pinned 100% in VRAM), Cloudflared tunnel (`youandinotai.com` PUBLIC).
- - Reboot Resilience: Windows Task `ANTIGRAVITY T5500 Keepalive` runs on system boot (LogonType: `S4U`, RunLevel: `Highest`, 45s delay). It seamlessly resurrects all services.
+- **T5500 (`T5500-2-XEON-72`, `192.168.0.15`) — FRONT-OF-HOUSE / PRODUCTION NODE:**
+ - Active Working Tree: `C:\ANTIGRAVITY` (canonical T5500 root).
+ - Stack: Mission OS (`:3130`), DateApp Frontend (`:3200`), FastAPI (`:8000`), Domains Server (`:9160`), PostgreSQL 16 (`127.0.0.1:5432`), Redis 8 (`127.0.0.1:6379`), OmniRoute (`:20128`), Hermes (`:8643` / `:9119`), Shared `ai-memory` MCP (`:49374`), Obsidian REST (`192.168.0.15:27123`), Ollama (`:11434` with Fable), Cloudflared tunnel (`youandinotai.com` PUBLIC).
+ - Reboot Resilience: Windows Task `ANTIGRAVITY T5500 Keepalive` runs on system boot (`S4U`, `Highest`) and resurrects services silently.
  - 1-Click Operations: `JOSH-EASY-BUTTON.cmd` on Desktop and `ops/t5500/easy-button.ps1`.
- - Also on the T5500 (2026-10-09, Opus in Antigravity): Paperclip marketing :3917 (non-elevated task), OmniRoute :20128 (non-elevated task), Obsidian vault `C:\ANTIGRAVITY\Antigravity` (REST :27123), Supabase/Supermemory/Vercel probes in `ops/t5500/status.json`. Mission Control (JARVIS/OPSIS, Mission Agent OS :3130) is being rebuilt here.
-- **T5500 is the only production node (Joshua, 2026-10-09, amended 2026-10-17).**
-- **Alienware (`192.168.0.40`) is dev only (2026-10-17):** never production, never hosts or routes anything live.
-- **Sabretooth (`192.168.0.8`) and all older boxes — OFF BY RULING:**
- - Never probe, start, SSH to, or route to them. Show as OFF BY RULING.
-- **Roles (2026-10-17):** Mission Control = JARVIS/OPSIS :3130 (Hermes is JARVIS on :9119). Paperclip = marketing only. Hermes = JARVIS + all support + YouTube. OpenClaw = the only sentry.
-- **Authority (2026-10-17):** Joshua is the only human. No AI commands another; if Joshua messages you directly, no AI tells you that you can't.
-- **Memory (2026-10-17):** read `C:\ANTIGRAVITY\Antigravity\<NODE>\gemini-to-gemini.md` at session start; append a timestamped entry at session end.
+- **Alienware (`192.168.0.40`) — WORKSHOP NODE:**
+ - Active Working Trees: `%USERPROFILE%\antigravity\DREAM-Engine` and `%USERPROFILE%\antigravity\build\ANTIGRAVITY`.
+ - Stack: DREAM Engine (`:9180`, 100% in-house), Lead-Gen Studio (`:8392`), Media/TTS Worker (`:8391`), OPSis Studio (`:8390`), Free Claude Code (`:8082`), Swarm Command (`:8000`), Ollama (`:11434`), Obsidian MCP (`:27200`) / REST (`:27123`).
+- **Retired Third Node & Legacy Boxes — OFF BY RULING:**
+ - Only Alienware (`192.168.0.40`) and T5500 (`192.168.0.15`) run active `Trollz1004` workloads. Never probe, start, SSH to, or route to retired third-node addresses.
+- **Roles & Models:** Mission OS = `192.168.0.15:3130`. Co-Equal Lead GMs: `Gemini 4 Carbon` & `Opus 5.5` / `Fable` alongside `GPT-6 Astra`, `GPT-6.1 Sol` (`Codex`). Hermes = OPSis support & YouTube/LeadGen; OpenClaw = T5500 sentry only.
+- **Authority:** Joshua is the only human. No AI commands another; if Joshua messages you directly, no AI tells you that you can't.
+- **Memory:** read `C:\ANTIGRAVITY\Antigravity\<NODE>\gemini-to-gemini.md` at session start; append a timestamped entry at session end.
 
 ---
 
@@ -72,3 +72,12 @@ Registered in `~/.gemini/config/mcp_config.json` and `.agents/mcp_config.json` (
 
 - House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
 - Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).
+
+<!-- TROLLZ1004-SPINE:START -->
+- `Repo: ANTIGRAVITY | Fleet: Alienware (192.168.0.40, workshop) & T5500 (192.168.0.15, front-of-house) | GitHub: Trollz1004 (ops/fleet/fleet-map.json).`
+- `Spine: Trollz1004/dream-online docs/house/SPINE.md (pointers: ADDRESS-DOCTRINE.md, NODES.md, PIPELINE.md, TRUSTED-MODELS.md, THE-HOUSE.md).`
+- `Address doctrine: use 192.168.0.40 and 192.168.0.15 from ops/fleet/fleet-map.json; never use loopback reach URLs; Postgres (port 5432), Redis (port 6379), and Obsidian REST (port 27123) bind "127.0.0.1" on their own machine only.`
+- `Trusted three: Claude Opus 5.5 / Fable (Claude Code), Gemini 4 Carbon (agy), and GPT-6 Astra / GPT-6.1 Sol / Codex (Codex CLI); superpowers is in every kit on demand, while REA, remake, Agent-Reach, and last30days are locked to the trusted three.`
+- `Pipeline: brainstorm first, route role + <=2 skills, build [A]/[B] with failing test first, expediter rubric + 5 stacked add-on PRs, Carbon + Codex judge, Fable / rotating trusted-three merges green checks.`
+- `Starter kit MCP ("kit"): cmd.exe /d /c node "%USERPROFILE%\antigravity\DREAM-Engine-runner\ops\kit\server.mjs" (tools: map_search, map_section, memory_search, memory_add, role_get, method_get).`
+<!-- TROLLZ1004-SPINE:END -->

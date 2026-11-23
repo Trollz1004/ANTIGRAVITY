@@ -5,8 +5,8 @@ REM  RUN THIS ON T5500. Do not run elevated.
 REM
 REM  HOW THIS SITE ACTUALLY SERVES (verified 2026-07-12, path updated 2026-11-04):
 REM    DNS -> Cloudflare -> cloudflared tunnel 515b70b2-9730-45af-9691-6e14fd73eff3
-REM        -> http://127.0.0.1:3200 on T5500 (.15) -> serves domains\youandinotai.com\frontend\dist
-REM        -> api.youandinotai.com -> http://127.0.0.1:8000 on T5500 (.15)
+REM        -> http://192.168.0.15:3200 on T5500 (.15) -> serves domains\youandinotai.com\frontend\dist
+REM        -> api.youandinotai.com -> http://192.168.0.15:8000 on T5500 (.15)
 REM
 REM    It is NOT Cloudflare Pages. wrangler.toml is a leftover.
 REM    Rebuilding dist/ IS the deploy. No wrangler needed.
@@ -49,7 +49,7 @@ echo [OK] build succeeded
 
 echo.
 echo === [3/3] VERIFY THE TUNNEL IS SERVING IT ===
-curl -s -o nul -w "  localhost:3200 -> HTTP %%{http_code}\n" http://127.0.0.1:3200
+curl -s -o nul -w "  192.168.0.15:3200 -> HTTP %%{http_code}\n" http://192.168.0.15:3200
 echo.
 echo   If 3200 does not answer, the static server is down. Restart it, then re-check.
 echo   Tunnel service: Cloudflared agent  (should be Running)

@@ -8,7 +8,7 @@
  *   - Whenever remaining open tasks (todo + in_progress) <= 10, automatically
  *     synthesizes +50 new tasks for Epoch N+1 so the wheel never stops.
  *   - Routes cloud inference through OmniRoute (http://192.168.0.15:20128/v1)
- *     with local Ollama (http://127.0.0.1:11434/v1, joshlcoleman/Fable:latest) fail-safe.
+ *     with local Ollama (http://192.168.0.15:11434/v1, joshlcoleman/Fable:latest) fail-safe.
  *   - Enforces strict business-only public doctrine (zero external-cause/medical/kids wording,
  *     Square-only checkout, zero exposed API keys).
  */
@@ -35,7 +35,7 @@ export const GOAL_SPEC = {
   routing: {
     primaryGateway: "http://192.168.0.15:20128/v1",
     omnirouteMcp: "http://192.168.0.15:20128/api/mcp/stream",
-    localFailSafe: "http://127.0.0.1:11434/v1",
+    localFailSafe: "http://192.168.0.15:11434/v1",
     pinnedModel: "joshlcoleman/Fable:latest",
     launchWrappers: [
       "ollama launch claude --model joshlcoleman/Fable",
@@ -102,7 +102,7 @@ export function buildEpochTasks(epoch = 1) {
     { id: `${prefix}-42`, lane: "OmniRoute & Ollama", domain: "mission-os", assignee: "Gemini", title: "Wire `192.168.0.15:20128/v1` + Local Ollama `joshlcoleman/Fable` Fail-Safe & MCP", status: "done", deliverable: "mission-os/launchers/fable-wrapper.ps1" },
     { id: `${prefix}-43`, lane: "Ollama Launch Wrappers", domain: "mission-os", assignee: "Gemini", title: "Create `ollama launch` CLI wrappers for `claude`, `pi`, `opencode`, `codex`", status: "done", deliverable: "mission-os/launchers/fable-claude.cmd" },
     { id: `${prefix}-44`, lane: "Mission Control :3130", domain: "mission-os", assignee: "Gemini", title: "Scrub mock keys, remove blocking modal, and wire live Perpetual Wheel HUD", status: "done", deliverable: "mission-os/server.mjs" },
-    { id: `${prefix}-45`, lane: "Tunnel Compliance", domain: "t5500-node", assignee: "Gemini", title: "Remove `untilnokidinneed.com` ingress route from `.cloudflared/config.yml`", status: "done", deliverable: "C:/Users/joshi/.cloudflared/config.yml" },
+    { id: `${prefix}-45`, lane: "Tunnel Compliance", domain: "t5500-node", assignee: "Gemini", title: "Remove `untilnokidinneed.com` ingress route from `.cloudflared/config.yml`", status: "done", deliverable: "~/.cloudflared/config.yml" },
     { id: `${prefix}-46`, lane: "WY DAO LLC & Finance", domain: "mission-os", assignee: "Gemini", title: "$10,000 Revenue Allocation Ledger (2yr Solo + 1yr AI + Taxes + WY DAO LLC)", status: "done", deliverable: "mission-os/deliverables/10k-autonomy-ledger.md" },
     { id: `${prefix}-47`, lane: "YouTube Automation", domain: "mission-os", assignee: "Hermes", title: "Daily Faceless AI & Platform Recap Script Queue (7-Day Buffer)", status: "in_progress" },
     { id: `${prefix}-48`, lane: "Obsidian Brain Sync", domain: "mission-os", assignee: "Gemini", title: "Sync Gemini 4 Perpetual Wheel state & 50-task manifest to Obsidian Vault", status: "done", deliverable: "Antigravity/Agent Universal/GEMINI-4-PERPETUAL-WHEEL.md" },

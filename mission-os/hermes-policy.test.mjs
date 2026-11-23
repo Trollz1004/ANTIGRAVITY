@@ -70,7 +70,7 @@ test('.agents/harness-config/hermes.yaml is well-formed and makes Obsidian autho
   assert.match(yamlText, /obsidian_mirror:\s*authoritative/);
   assert.match(yamlText, /T5500:\s*C:\\ANTIGRAVITY\\Antigravity/);
   assert.ok(yamlText.includes(`Alienware: ${ALIENWARE_VAULT}`));
-  assert.match(yamlText, /Sabretooth:\s*C:\\Ai-Dream-Team\\Antigravity/);
+  assert.ok(!/sabretooth/i.test(yamlText), 'hermes.yaml must not list retired Sabretooth node');
   assert.ok(!yamlText.includes('containerTag'), 'Supermemory is retired from the Hermes config (#318)');
   assert.ok(!/^\s*-\s*tdd\s*$/m.test(yamlText), 'hermes.yaml must not list duplicate tdd skill');
   assert.ok(!yamlText.includes('claude-obsidian:'), 'hermes.yaml must not use claude-obsidian:* skill names');

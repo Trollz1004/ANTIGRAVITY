@@ -5,6 +5,8 @@ interface BlockConfirmationDialogProps {
   onConfirm: () => void;
   onCancel: () => void;
   isLoading?: boolean;
+  onMuteInstead?: () => void;
+  onRestrictInstead?: () => void;
 }
 
 export function BlockConfirmationDialog({
