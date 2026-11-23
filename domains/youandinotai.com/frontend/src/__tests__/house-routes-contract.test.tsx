@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent, waitFor, act } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 import LandingPage, { PublicSupportPage } from '../App';
 import { Login } from '../app/pages/Login';
@@ -222,6 +222,96 @@ describe('YouAndINotAI House Look v1 — Route & Form Endpoint Contract', () => 
         })
       );
     });
+  });
+
+  it('renders a direct Sign in with this email link to /login?next=<nextPath> without email in the address and prefills email via navigation state when POST /auth/register returns 409 Email already registered', async () => {
+    useAuth.setState({ user: null, loading: false });
+    vi.mocked(api.post).mockRejectedValueOnce(
+      Object.assign(new Error('Email already registered'), { status: 409 })
+    );
+
+    let currentAddress = '';
+    function LocationTracker() {
+      const loc = useLocation();
+      currentAddress = `${loc.pathname}${loc.search}${loc.hash}`;
+      return null;
+    }
+
+    const { getByPlaceholderText, container, getByRole, getByLabelText } =
+      render(
+        <MemoryRouter initialEntries={['/register?next=%2Fapp%2Fverify']}>
+          <LocationTracker />
+          <Routes>
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+    fireEvent.change(getByPlaceholderText('Display name'), {
+      target: { value: 'Existing Member' },
+    });
+    fireEvent.change(getByPlaceholderText('Email'), {
+      target: { value: 'existing@youandinotai.com' },
+    });
+    fireEvent.change(getByPlaceholderText('MM / DD / YYYY'), {
+      target: { value: '04151990' },
+    });
+    fireEvent.change(getByPlaceholderText('Password (8+ characters)'), {
+      target: { value: 'password123' },
+    });
+
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => fireEvent.click(cb));
+
+    fireEvent.click(getByRole('button', { name: /Create Account/i }));
+
+    const handoffLink = await waitFor(() =>
+      getByRole('link', { name: /Sign in with this email/i })
+    );
+    expect(handoffLink.getAttribute('href')).toBe(
+      '/login?next=%2Fapp%2Fverify'
+    );
+    expect(handoffLink.getAttribute('href')).not.toContain('@');
+    expect(handoffLink.getAttribute('href')).not.toContain('email=');
+
+    fireEvent.click(handoffLink);
+
+    await waitFor(() => {
+      expect(currentAddress).toBe('/login?next=%2Fapp%2Fverify');
+      expect(currentAddress).not.toContain('@');
+      expect(currentAddress).not.toContain('email=');
+      expect((getByLabelText(/Email/i) as HTMLInputElement).value).toBe(
+        'existing@youandinotai.com'
+      );
+    });
+  });
+
+  it('does NOT prefill email when opening /login?email=someone@example.com directly', () => {
+    useAuth.setState({ user: null, loading: false });
+    const { getByLabelText } = render(
+      <MemoryRouter initialEntries={['/login?email=someone@example.com']}>
+        <Login />
+      </MemoryRouter>
+    );
+
+    expect((getByLabelText(/Email/i) as HTMLInputElement).value).toBe('');
+  });
+
+  it('links consent labels on /register to /?policy=terms, /?policy=privacy, and /?policy=age', () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/register']}>
+        <Register />
+      </MemoryRouter>
+    );
+
+    const termsLink = container.querySelector('a[href="/?policy=terms"]');
+    const privacyLink = container.querySelector('a[href="/?policy=privacy"]');
+    const ageLink = container.querySelector('a[href="/?policy=age"]');
+
+    expect(termsLink).not.toBeNull();
+    expect(privacyLink).not.toBeNull();
+    expect(ageLink).not.toBeNull();
   });
 
   it('requires 18+ date of birth for new Google sign-in accounts before creating account', async () => {
