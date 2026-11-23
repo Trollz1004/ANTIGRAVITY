@@ -372,6 +372,16 @@ function validBookingDate(date) {
   return date >= today && date <= maxDate;
 }
 
+function extractPickupZip(rawZip, city, address) {
+  for (const src of [rawZip, city, address]) {
+    const matches = String(src || "").match(/\b(\d{5})(?:-\d{4})?\b/g);
+    if (matches && matches.length > 0) {
+      return matches[matches.length - 1].slice(0, 5);
+    }
+  }
+  return "";
+}
+
 function sendJson(res, status, payload) {
   res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
   res.end(JSON.stringify(payload));
@@ -631,7 +641,8 @@ const server = http.createServer(async (req, res) => {
       const organization = field("organization", "", 200);
       const address = field("address", "", 200);
       const city = field("city", "", 100);
-      const zip = field("zip", "", 10);
+      const rawZip = field("zip", "", 10);
+      const zip = serviceType === "pickup" ? extractPickupZip(rawZip, city, address) || rawZip : rawZip;
       const notes = field("notes", "", 2000);
 
       if (!fullName || !phone || !date || !slotCode || !deviceList) {
@@ -847,4 +858,5 @@ export {
   bookingAllowed,
   bookHits,
   validBookingDate,
+  extractPickupZip,
 };
