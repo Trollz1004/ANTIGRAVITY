@@ -1481,6 +1481,7 @@ p {
   }
 
   .brand-group {
+    order: 1;
     gap: 6px;
     flex: 1 1 auto;
     min-width: 0;
@@ -1488,8 +1489,8 @@ p {
   }
 
   .header-mark {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
   }
 
   .brand {
@@ -1512,7 +1513,7 @@ p {
   }
 
   .brand-name {
-    font-size: 0.98rem;
+    font-size: 0.94rem;
     line-height: 1.15;
   }
 
@@ -1523,12 +1524,44 @@ p {
     flex-shrink: 0;
   }
 
+  .header-right {
+    order: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .header-right .status-pill,
+  .contact-subline {
+    display: none;
+  }
+
+  .contact-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .contact-info a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0 4px;
+    font-size: 0.78rem;
+  }
+
   .mobile-menu-btn {
+    order: 3;
     display: inline-flex;
   }
 
-  .site-header:not(.menu-open) .top-nav,
-  .site-header:not(.menu-open) .header-right {
+  .site-header:not(.menu-open) .top-nav {
     display: none;
   }
 
@@ -1805,6 +1838,7 @@ p {
   margin-top: 22px;
 }
 
+.legal-panel .callout,
 .legal-panel .note,
 .legal-panel .contact-box {
   background: var(--panel-elevated);

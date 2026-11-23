@@ -459,7 +459,9 @@
 
             <div class="booking-confirm-box" id="booking-confirm-box" role="status" aria-live="polite">
               <h3 id="confirm-title">Appointment Scheduled!</h3>
-              <p id="confirm-summary" style="color: var(--text); font-size: 0.96rem; margin-bottom: 16px"></p>
+              <p id="confirm-summary" style="color: var(--text); font-size: 0.96rem; margin-bottom: 16px">
+                Call or text (321) 396-2008 to confirm or update your appointment.
+              </p>
               <div style="display: flex; flex-wrap: wrap; gap: 12px">
                 <a id="confirm-sms-btn" href="#" class="btn btn-primary">
                   <svg
@@ -2525,7 +2527,7 @@
                 b.slotLabel +
                 ') · ' +
                 b.deviceCount +
-                '. Tap "Text us to confirm" so we know to expect you. You can also add it to your calendar below.';
+                '. Tap "Text us to confirm" or call/text (321) 396-2008 so we know to expect you. You can also add it to your calendar below.';
               confirmGcalBtn.href = res.googleCalendarUrl;
               confirmIcsBtn.href = res.icsUrl;
               confirmSmsBtn.href = res.smsUrl;
