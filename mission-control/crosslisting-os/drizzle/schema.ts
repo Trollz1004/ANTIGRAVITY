@@ -236,6 +236,7 @@ export const channelListings = sqliteTable(
     productId: integer("productId", { mode: "number" }).notNull(),
     channelId: integer("channelId", { mode: "number" }).notNull(),
     externalListingId: text("externalListingId", { length: 160 }),
+    externalOfferId: text("externalOfferId", { length: 160 }),
     state: text("state", {
       enum: [
         "draft",
