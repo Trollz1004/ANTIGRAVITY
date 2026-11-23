@@ -329,7 +329,7 @@
               <div class="booking-form-grid">
                 <div class="form-field">
                   <label for="bf-name">Full Name *</label>
-                  <input type="text" id="bf-name" name="fullName" autocomplete="name" placeholder="Jane Doe" required />
+                  <input type="text" id="bf-name" name="fullName" autocomplete="name" maxlength="120" placeholder="Jane Doe" required />
                 </div>
 
                 <div class="form-field">
@@ -339,6 +339,7 @@
                     id="bf-phone"
                     name="phone"
                     autocomplete="tel"
+                    maxlength="40"
                     placeholder="(321) 555-0199"
                     required
                   />
@@ -346,7 +347,7 @@
 
                 <div class="form-field">
                   <label for="bf-email">Email Address (optional)</label>
-                  <input type="email" id="bf-email" name="email" autocomplete="email" placeholder="you@example.com" />
+                  <input type="email" id="bf-email" name="email" autocomplete="email" maxlength="200" placeholder="you@example.com" />
                 </div>
 
                 <div class="form-field">
@@ -356,6 +357,7 @@
                     id="bf-org"
                     name="organization"
                     autocomplete="organization"
+                    maxlength="200"
                     placeholder="Household or company name"
                   />
                 </div>
@@ -367,6 +369,7 @@
                     id="bf-address"
                     name="address"
                     autocomplete="street-address"
+                    maxlength="200"
                     placeholder="123 Main St"
                   />
                 </div>
@@ -378,6 +381,7 @@
                     id="bf-city"
                     name="city"
                     autocomplete="address-level2"
+                    maxlength="100"
                     placeholder="Sorrento / Mount Dora / Orlando, FL"
                   />
                 </div>
@@ -413,6 +417,7 @@
                     id="bf-devices"
                     name="deviceList"
                     rows="3"
+                    maxlength="2000"
                     placeholder="Example: 3 Dell laptops, 2 desktop towers, 1 laser printer, box of cables & power supplies"
                     required
                   ></textarea>
@@ -2101,6 +2106,102 @@
           }
         }
 
+        const DRAFT_STORAGE_KEY = 'onlinerecycle_booking_draft';
+        const DRAFT_FIELD_IDS = [
+          'bf-name',
+          'bf-phone',
+          'bf-email',
+          'bf-org',
+          'bf-address',
+          'bf-city',
+          'bf-count',
+          'bf-wipe',
+          'bf-devices'
+        ];
+        let restoringDraft = true;
+
+        function isSlotTaken(code) {
+          return bookedSlots.some(function (b) {
+            return b.date === selectedDate && b.slotCode === code && b.serviceType === serviceType;
+          });
+        }
+
+        function extractPickupZip(cityText, addressText, explicitZip) {
+          const sources = [explicitZip || '', cityText || '', addressText || ''];
+          for (let i = 0; i < sources.length; i++) {
+            const matches = String(sources[i]).match(/\b(\d{5})(?:-\d{4})?\b/g);
+            if (matches && matches.length > 0) {
+              return matches[matches.length - 1].slice(0, 5);
+            }
+          }
+          return '';
+        }
+
+        function saveDraft() {
+          if (restoringDraft) return;
+          try {
+            if (typeof sessionStorage === 'undefined' || !sessionStorage) return;
+            const draft = {
+              serviceType: serviceType,
+              date: selectedDate,
+              slotCode: selectedSlotCode,
+              slotLabel: selectedSlotLabel
+            };
+            DRAFT_FIELD_IDS.forEach(function (id) {
+              const el = document.getElementById(id);
+              if (el) draft[id] = el.value;
+            });
+            sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+          } catch (e) {}
+        }
+
+        function clearDraft() {
+          try {
+            if (typeof sessionStorage === 'undefined' || !sessionStorage) return;
+            sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+          } catch (e) {}
+        }
+
+        function restoreDraft() {
+          try {
+            if (typeof sessionStorage === 'undefined' || !sessionStorage) return;
+            const raw = sessionStorage.getItem(DRAFT_STORAGE_KEY);
+            if (!raw) return;
+            const draft = JSON.parse(raw);
+            if (!draft || typeof draft !== 'object') return;
+            DRAFT_FIELD_IDS.forEach(function (id) {
+              if (typeof draft[id] === 'string') {
+                const el = document.getElementById(id);
+                if (el) el.value = draft[id];
+              }
+            });
+            if (draft.serviceType === 'pickup' || draft.serviceType === 'dropoff') {
+              setServiceType(draft.serviceType);
+            }
+            if (typeof draft.date === 'string' && draft.date) {
+              const dayIdx = upcomingDays.findIndex(function (d) {
+                return d.iso === draft.date;
+              });
+              if (dayIdx !== -1) {
+                selectedDate = draft.date;
+                datePageOffset = dayIdx >= 7 ? 7 : 0;
+                renderDates();
+              }
+            }
+            if (typeof draft.slotCode === 'string' && draft.slotCode) {
+              const slots = serviceType === 'pickup' ? PICKUP_SLOTS : DROPOFF_SLOTS;
+              const foundSlot = slots.find(function (s) {
+                return s.code === draft.slotCode;
+              });
+              if (foundSlot) {
+                selectedSlotCode = foundSlot.code;
+                selectedSlotLabel = foundSlot.label;
+              }
+            }
+            renderSlots();
+          } catch (e) {}
+        }
+
         function renderDates() {
           dateStrip.innerHTML = '';
           const visibleDays = upcomingDays.slice(datePageOffset, datePageOffset + 7);
@@ -2115,6 +2216,7 @@
               selectedDateDisplay.textContent = d.dow + ', ' + d.dom;
               renderDates();
               renderSlots();
+              saveDraft();
             });
             dateStrip.appendChild(btn);
           });
@@ -2148,6 +2250,7 @@
             }
             renderDates();
             renderSlots();
+            saveDraft();
           });
         }
 
@@ -2167,7 +2270,12 @@
             }) ||
             isSlotUnavailable(selectedSlotCode)
           ) {
-            const preferred = slots[1] && !isSlotUnavailable(slots[1].code) ? slots[1] : slots.find(function (s) { return !isSlotUnavailable(s.code); }) || null;
+            const preferred =
+              slots[1] && !isSlotUnavailable(slots[1].code)
+                ? slots[1]
+                : slots.find(function (s) {
+                    return !isSlotUnavailable(s.code);
+                  }) || null;
             selectedSlotCode = preferred ? preferred.code : '';
             selectedSlotLabel = preferred ? preferred.label : '';
           }
@@ -2189,6 +2297,7 @@
               slotLabelInput.value = selectedSlotLabel;
               selectedSlotDisplay.textContent = selectedSlotLabel;
               renderSlots();
+              saveDraft();
             });
             slotStrip.appendChild(btn);
           });
@@ -2216,6 +2325,7 @@
           if (cityInput) cityInput.required = serviceType === 'pickup';
           updateGcalEmbed();
           renderSlots();
+          saveDraft();
         }
 
         function serviceTypeFromLocation() {
@@ -2248,29 +2358,45 @@
           });
         });
 
-        fetch('/api/booking-config')
-          .then(function (r) {
-            return r.json();
-          })
-          .then(function (cfg) {
-            if (cfg && cfg.ok) {
-              bookedSlots = Array.isArray(cfg.bookedSlots) ? cfg.bookedSlots : [];
-              if (cfg.googleScheduleEmbed) {
-                gcalEmbeds = cfg.googleScheduleEmbed;
-                updateGcalEmbed();
+        function loadBookingConfig() {
+          return fetch('/api/booking-config')
+            .then(function (r) {
+              return r.json();
+            })
+            .then(function (cfg) {
+              if (cfg && cfg.ok) {
+                bookedSlots = Array.isArray(cfg.bookedSlots) ? cfg.bookedSlots : [];
+                if (cfg.googleScheduleEmbed) {
+                  gcalEmbeds = cfg.googleScheduleEmbed;
+                  updateGcalEmbed();
+                }
+                renderSlots();
               }
-              renderSlots();
-            }
-          })
-          .catch(function () {});
+              return cfg;
+            })
+            .catch(function () {});
+        }
+
+        loadBookingConfig();
 
         renderDates();
         const initialService = serviceTypeFromLocation();
         setServiceType(initialService || 'dropoff');
-        window.addEventListener('hashchange', function () {
-          const nextService = serviceTypeFromLocation();
-          if (nextService) setServiceType(nextService);
+        restoreDraft();
+        restoringDraft = false;
+
+        DRAFT_FIELD_IDS.forEach(function (id) {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.addEventListener('input', saveDraft);
+          el.addEventListener('change', saveDraft);
         });
+        if (typeof window.addEventListener === 'function') {
+          window.addEventListener('hashchange', function () {
+            const nextService = serviceTypeFromLocation();
+            if (nextService) setServiceType(nextService);
+          });
+        }
 
         const form = document.getElementById('booking-form');
         const errBox = document.getElementById('booking-error');
@@ -2286,7 +2412,10 @@
         form.addEventListener('submit', function (ev) {
           ev.preventDefault();
           errBox.style.display = 'none';
+          saveDraft();
 
+          const addressVal = document.getElementById('bf-address').value.trim();
+          const cityVal = document.getElementById('bf-city').value.trim();
           const payload = {
             serviceType: serviceInput.value,
             date: dateInput.value,
@@ -2296,8 +2425,9 @@
             phone: document.getElementById('bf-phone').value.trim(),
             email: document.getElementById('bf-email').value.trim(),
             organization: document.getElementById('bf-org').value.trim(),
-            address: document.getElementById('bf-address').value.trim(),
-            city: document.getElementById('bf-city').value.trim(),
+            address: addressVal,
+            city: cityVal,
+            zip: serviceInput.value === 'pickup' ? extractPickupZip(cityVal, addressVal) : '',
             deviceCount: document.getElementById('bf-count').value,
             notes: document.getElementById('bf-wipe').value,
             deviceList: document.getElementById('bf-devices').value.trim()
@@ -2324,7 +2454,12 @@
             return;
           }
           if (payload.serviceType === 'pickup' && (!payload.address || !payload.city)) {
-            errBox.textContent = 'Please include the pickup street address and city so we can schedule your route.';
+            errBox.textContent = 'Please include the pickup street address, city, and 5-digit ZIP code so we can schedule your route.';
+            errBox.style.display = 'block';
+            return;
+          }
+          if (payload.serviceType === 'pickup' && !payload.zip) {
+            errBox.textContent = 'Please include a 5-digit Central Florida ZIP code in the City & ZIP field so we can schedule your pickup.';
             errBox.style.display = 'block';
             return;
           }
@@ -2338,9 +2473,14 @@
             body: JSON.stringify(payload)
           })
             .then(function (r) {
-              return r.json();
+              const status = r && typeof r.status === 'number' ? r.status : 0;
+              return r.json().then(function (res) {
+                return { status: status, res: res };
+              });
             })
-            .then(function (res) {
+            .then(function (outcome) {
+              const status = outcome.status;
+              const res = outcome.res;
               submitBtn.disabled = false;
               if (submitBtnLabel) {
                 submitBtnLabel.textContent = 'Confirm Appointment';
@@ -2349,8 +2489,12 @@
                 errBox.textContent =
                   (res && res.error) || 'Could not complete booking. Please call or text (321) 396-2008.';
                 errBox.style.display = 'block';
+                if (status === 409 || (res && /just booked/i.test(String(res.error || '')))) {
+                  loadBookingConfig();
+                }
                 return;
               }
+              clearDraft();
               const b = res.booking;
               bookedSlots.push({ date: b.date, slotCode: b.slotCode, serviceType: b.serviceType });
               renderSlots();
