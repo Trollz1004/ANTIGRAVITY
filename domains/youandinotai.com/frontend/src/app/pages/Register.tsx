@@ -16,10 +16,39 @@ import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
 import { getSafeNextPath } from '../../lib/navigation';
 import { capturePartnerId, clearPartnerId } from '../../lib/partnerAttribution';
 
+const REGISTER_DRAFT_STORAGE_KEY = 'youandinotai_register_draft';
+
+interface RegisterDraft {
+  email?: string;
+  displayName?: string;
+}
+
+function readRegisterDraft(): RegisterDraft {
+  try {
+    const raw = sessionStorage.getItem(REGISTER_DRAFT_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') return {};
+    const record = parsed as Record<string, unknown>;
+    return {
+      email: typeof record.email === 'string' ? record.email : undefined,
+      displayName:
+        typeof record.displayName === 'string' ? record.displayName : undefined,
+    };
+  } catch {
+    return {};
+  }
+}
+
 export function Register() {
-  const [email, setEmail] = useState('');
+  const [initialDraft] = useState<RegisterDraft>(() => readRegisterDraft());
+  const [email, setEmail] = useState(() =>
+    typeof initialDraft.email === 'string' ? initialDraft.email : ''
+  );
   const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [displayName, setDisplayName] = useState(() =>
+    typeof initialDraft.displayName === 'string' ? initialDraft.displayName : ''
+  );
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [acceptedCookiePolicy, setAcceptedCookiePolicy] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -32,6 +61,24 @@ export function Register() {
   const location = useLocation();
   const nextPath = getSafeNextPath(location.search, '/app/profile');
   const [partnerId] = useState(() => capturePartnerId(location.search));
+
+  useEffect(() => {
+    try {
+      if (!email && !displayName) {
+        sessionStorage.removeItem(REGISTER_DRAFT_STORAGE_KEY);
+        return;
+      }
+      sessionStorage.setItem(
+        REGISTER_DRAFT_STORAGE_KEY,
+        JSON.stringify({
+          email,
+          displayName,
+        })
+      );
+    } catch {
+      // Ignore sessionStorage errors
+    }
+  }, [email, displayName]);
 
   useEffect(() => {
     document.title = 'Create 18+ Account | YouAndINotAI';
@@ -87,6 +134,11 @@ export function Register() {
         confirmedOver18,
         referralCode: partnerId,
       });
+      try {
+        sessionStorage.removeItem(REGISTER_DRAFT_STORAGE_KEY);
+      } catch {
+        // Ignore sessionStorage errors
+      }
       clearPartnerId();
       navigate(nextPath);
     } catch (err: any) {
