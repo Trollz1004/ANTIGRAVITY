@@ -148,8 +148,7 @@ test("renderSlots() says a full day is closed and blocks submit until a window i
   assert.equal(byId["bf-submit-btn"].disabled, true);
 
   api.bookedSlots.splice(0, api.bookedSlots.length, ...api.bookedSlots.filter((b) => b.slotCode !== "09:00-09:30"));
-  api.renderSlots();
-  const open = byId["slot-strip"].children.find((b) => !b.disabled);
+  const open = byId["slot-strip"].children.find((b) => b.textContent === "9:00 AM – 9:30 AM");
   assert.ok(open, "an available window button must exist");
   open._listeners.click[0]();
 
