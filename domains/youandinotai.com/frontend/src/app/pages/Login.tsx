@@ -28,18 +28,27 @@ interface LoginErrors {
   password?: string;
 }
 
+function getEmailFromNavigationState(state: unknown): string {
+  if (!state || typeof state !== 'object') return '';
+  const record = state as Record<string, unknown>;
+  return typeof record.email === 'string' ? record.email.trim() : '';
+}
+
 export interface LoginProps {
   betaAccessEnabled?: boolean;
   googleClientId?: string;
 }
 
 export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
+  const location = useLocation();
   const isBetaAccessEnabled =
     betaAccessEnabled ??
     ['true', '1'].includes(
       String(import.meta.env.VITE_BETA_ACCESS_ENABLED ?? '').toLowerCase()
     );
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(() =>
+    getEmailFromNavigationState(location.state)
+  );
   const [password, setPassword] = useState('');
   const [mailEnabled, setMailEnabled] = useState(false);
   const [error, setError] = useState('');
@@ -53,7 +62,6 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const { user, login, betaAccess } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const nextPath = getSafeNextPath(location.search, '/app');
   const registerHref = `/register?next=${encodeURIComponent(nextPath)}`;
   const resolvedGoogleClientId = (
@@ -90,6 +98,13 @@ export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    const prefilledEmail = getEmailFromNavigationState(location.state);
+    if (prefilledEmail) {
+      setEmail(prefilledEmail);
+    }
+  }, [location.state]);
 
   const validateLoginField = useCallback(
     (name: string, value: string): string | undefined => {
