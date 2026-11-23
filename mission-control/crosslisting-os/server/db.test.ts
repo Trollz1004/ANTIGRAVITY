@@ -409,7 +409,7 @@ describe("crosslisting-os better-sqlite3 and sqlite-core database layer", () => 
       .set({
         externalOfferId: "OFFER-998877",
         externalListingId: "LISTING-112233",
-      } as any)
+      })
       .where(eq(channelListings.id, preview.listingId));
 
     const [storedListing] = await db!
@@ -417,7 +417,7 @@ describe("crosslisting-os better-sqlite3 and sqlite-core database layer", () => 
       .from(channelListings)
       .where(eq(channelListings.id, preview.listingId))
       .limit(1);
-    expect((storedListing as any)?.externalOfferId).toBe("OFFER-998877");
+    expect(storedListing?.externalOfferId).toBe("OFFER-998877");
     expect(storedListing?.externalListingId).toBe("LISTING-112233");
   });
 });

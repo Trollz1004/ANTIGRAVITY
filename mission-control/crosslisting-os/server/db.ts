@@ -15,6 +15,7 @@ import {
   inventoryMovements,
   inventoryRecords,
   marketplaceChannels,
+  policyMappings,
   productMedia,
   products,
   users,
@@ -141,6 +142,7 @@ const SCHEMA_BOOTSTRAP_STATEMENTS = [
     productId INTEGER NOT NULL,
     channelId INTEGER NOT NULL,
     externalListingId TEXT,
+    externalOfferId TEXT,
     state TEXT NOT NULL DEFAULT 'draft',
     payload TEXT,
     validationErrors TEXT,
@@ -279,6 +281,14 @@ export function resolveDatabasePath(configuredUrl?: string): string {
 function bootstrapSqliteSchema(sqlite: Database.Database): void {
   for (const statement of SCHEMA_BOOTSTRAP_STATEMENTS) {
     sqlite.prepare(statement).run();
+  }
+  const channelListingColumns = sqlite
+    .prepare("PRAGMA table_info(channel_listings)")
+    .all() as Array<{ name: string }>;
+  if (!channelListingColumns.some(col => col.name === "externalOfferId")) {
+    sqlite
+      .prepare("ALTER TABLE channel_listings ADD COLUMN externalOfferId TEXT")
+      .run();
   }
 }
 
@@ -876,14 +886,29 @@ export async function createListingPayloadPreview(input: {
 
   const availableQuantity =
     inventory.onHandQuantity - inventory.reservedQuantity;
+  const activePolicies = await db
+    .select()
+    .from(policyMappings)
+    .where(
+      and(
+        eq(policyMappings.channelId, channel.id),
+        eq(policyMappings.active, true)
+      )
+    );
   const payload = buildChannelPayload({
     sku: product.sku,
     upc: product.upc,
     title: product.title,
     description: product.description,
     condition: product.condition,
+    conditionNotes: product.conditionNotes,
     format: product.format,
     brandOrStudio: product.brandOrStudio,
+    attributes:
+      (product.attributes as Record<string, unknown> | null | undefined) ??
+      null,
+    locationKey: inventory.locationKey,
+    policyMappings: activePolicies,
     price: input.price,
     quantity: Math.max(availableQuantity, 0),
     imageUrls: media.map(item => item.url),
