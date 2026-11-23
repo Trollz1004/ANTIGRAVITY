@@ -660,6 +660,10 @@ const server = http.createServer(async (req, res) => {
         sendJson(res, 400, { ok: false, error: "Please choose a date from today onward and one of the listed time windows." });
         return;
       }
+      if (isSlotElapsed(date, slotCode)) {
+        sendJson(res, 400, { ok: false, error: "Please choose a date from today onward and one of the listed time windows." });
+        return;
+      }
       if (!isValidBookingPhone(phone)) {
         sendJson(res, 400, { ok: false, error: "Please enter a valid 10-digit phone number so we can confirm your appointment." });
         return;
