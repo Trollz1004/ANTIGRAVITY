@@ -28,11 +28,11 @@ const ORIGINAL = {
   },
   'terms.html': {
     text: 'ffc3de1f9b8edcaf719b46de31e83c3600cc230dcc124b98d8ebc1d2705c087f',
-    hrefs: '6f0ba2854da38a24e7187307fc8370e8b783f793747dfe8a3161dea02b74ca84',
+    hrefs: '7fad2ce7104360ec31361adf5e8cbffa6b28641f0c04f58a8a062a7763ebd834',
   },
   'privacy.html': {
     text: '0e45752b8c3a2a12688a19335861abdb888ba958ea164a925fc17a2e40d62dc8',
-    hrefs: '091ad052031c5a27640e7a2bb62cd946156e6847e63fe7738c995f490af5cd21',
+    hrefs: 'a25e2624c147850c2f69720168fbab22fc1745cd521fcda5749d9887dad683d4',
   },
 };
 
