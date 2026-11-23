@@ -659,4 +659,3 @@ globalThis.Date = FixedDate;`,
     fs.rmSync(tmpStatsDir, { recursive: true, force: true });
   }
 });
-
