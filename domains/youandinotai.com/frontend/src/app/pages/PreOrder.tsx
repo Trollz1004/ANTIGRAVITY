@@ -1,12 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, Copy, Crown, Shield, Sparkles, Zap } from 'lucide-react';
 
-/** Launch window: 10 days from 2026-08-04 → 2026-08-14 (14-day alt: Aug 18) */
-const LAUNCH_ISO = '2026-08-14T17:00:00-04:00';
-const LANDING =
-  'https://trollz1004.github.io/youandinotai-links/?ref=clean-repo';
-const AFFILIATE_BASE = 'https://trollz1004.github.io/youandinotai-links/';
+const LANDING = 'https://youandinotai.com/?ref=clean-repo';
+const AFFILIATE_BASE = 'https://youandinotai.com/';
 
 const PLANS = [
   {
@@ -40,7 +37,7 @@ const PLANS = [
     id: '12_month',
     name: '12-Month Founder',
     price: '$99.99',
-    blurb: 'Best value for launch-year access.',
+    blurb: 'Best value for full-year founder access.',
     checkout: '/app/checkout/12_month',
     rail: 'Square · PayPal · Cash App',
     highlight: false,
@@ -56,23 +53,7 @@ const PLANS = [
   },
 ] as const;
 
-function useCountdown(targetIso: string) {
-  const target = useMemo(() => new Date(targetIso).getTime(), [targetIso]);
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    const id = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => window.clearInterval(id);
-  }, []);
-  const diff = Math.max(0, target - now);
-  const days = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins = Math.floor((diff % 3600000) / 60000);
-  const secs = Math.floor((diff % 60000) / 1000);
-  return { days, hours, mins, secs, done: diff <= 0 };
-}
-
 export function PreOrder() {
-  const c = useCountdown(LAUNCH_ISO);
   const [copied, setCopied] = useState(false);
   const [affCode, setAffCode] = useState('elite');
 
@@ -91,45 +72,24 @@ export function PreOrder() {
   return (
     <div className="km-page mx-auto max-w-2xl px-4 py-5">
       <div className="mb-2 flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-[var(--km-accent)]">
-        <Crown size={14} /> Launch · Pre-order
+        <Crown size={14} /> Live · Founder Plans
       </div>
-      <h1 className="text-3xl font-semibold tracking-tight">
-        Elite access before launch day
-      </h1>
+      <h1 className="text-3xl font-semibold tracking-tight">Founder Plans</h1>
       <p className="mt-2 text-sm text-[var(--km-muted)]">
-        Target launch:{' '}
-        <strong className="text-[var(--km-text)]">Aug 14, 2026</strong> (10-day
-        window). Fallback: Aug 18 (14 days). Verified-human dating with
-        discovery, messaging, topic boards, and the USA group chat. Payments:
-        Square primary · PayPal · Cash App Business · Plaid verify. No Stripe.
+        Verified-human dating with discovery, messaging, topic boards, and the
+        USA group chat is live now. Complete your{' '}
+        <strong className="text-[var(--km-text)]">$1 Bot-Shield</strong> human
+        check first, then choose a locked founder rate. Payments: Square primary
+        · PayPal · Cash App Business. No Stripe.
       </p>
 
       <section className="km-card km-card-glow mt-6 p-5">
         <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--km-muted)]">
-          Countdown
+          Live Status
         </div>
-        {c.done ? (
-          <div className="mt-3 text-2xl font-semibold">We&apos;re live.</div>
-        ) : (
-          <div className="mt-3 grid grid-cols-4 gap-2 text-center">
-            {[
-              [c.days, 'Days'],
-              [c.hours, 'Hrs'],
-              [c.mins, 'Min'],
-              [c.secs, 'Sec'],
-            ].map(([v, l]) => (
-              <div
-                key={String(l)}
-                className="rounded-2xl bg-[var(--km-surface-2)] px-2 py-3"
-              >
-                <div className="text-2xl font-semibold tabular-nums">{v}</div>
-                <div className="text-[0.65rem] uppercase tracking-wider text-[var(--km-muted)]">
-                  {l}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="mt-3 text-2xl font-semibold">
+          We&apos;re live — Founder Plans active.
+        </div>
         <a
           href={LANDING}
           target="_blank"
@@ -164,7 +124,7 @@ export function PreOrder() {
                 to={p.checkout}
                 className="km-btn-gradient shrink-0 no-underline text-sm"
               >
-                Pre-order
+                {p.id === 'bot_shield' ? 'Verify now' : 'Select plan'}
               </Link>
             </div>
           </div>
