@@ -259,6 +259,10 @@
             </div>
 
             <div id="gcal-embed-container" style="display: none; margin-bottom: 24px">
+              <p id="gcal-embed-note" style="color: var(--text); font-size: 1.05rem; margin-bottom: 12px">
+                This calendar shows open windows only. Submitting the form below (#booking-form) is what issues your
+                instant OR- reference ID, the .ics file, and the SMS confirmation link.
+              </p>
               <iframe
                 id="gcal-schedule-iframe"
                 title="OnlineRecycle Google Calendar Appointment Schedule"
@@ -301,7 +305,7 @@
                   </button>
                 </div>
               </div>
-              <div class="date-strip" id="date-strip" role="listbox" aria-label="Available dates"></div>
+              <div class="date-strip" id="date-strip" role="listbox" aria-label="Available dates" tabindex="-1"></div>
 
               <div class="calendar-grid-label">
                 <span id="slot-heading-text">2. Select a 30-Minute Sorrento Drop-Off Window</span>
@@ -492,6 +496,9 @@
                   </svg>
                   <span>Text Confirmation to (321) 396-2008</span>
                 </a>
+                <button type="button" id="schedule-another-btn" class="btn btn-secondary">
+                  Schedule another window
+                </button>
               </div>
             </div>
           </div>
@@ -2179,6 +2186,32 @@
         const confirmSmsBtn = document.getElementById('confirm-sms-btn');
         const submitBtn = document.getElementById('bf-submit-btn');
         const submitBtnLabel = document.getElementById('bf-submit-btn-label');
+        const scheduleAnotherBtn = document.getElementById('schedule-another-btn');
+
+        // Schedule another window: clear this confirmation, move to the next
+        // open slot, and put focus back on the date strip.
+        if (scheduleAnotherBtn) {
+          scheduleAnotherBtn.addEventListener('click', function () {
+            const slots = serviceType === 'pickup' ? PICKUP_SLOTS : DROPOFF_SLOTS;
+            const currentIndex = slots.findIndex(function (s) {
+              return s.code === selectedSlotCode;
+            });
+            for (let step = 1; step <= slots.length; step++) {
+              const candidate = slots[(currentIndex + step) % slots.length];
+              const taken = bookedSlots.some(function (b) {
+                return b.date === selectedDate && b.slotCode === candidate.code && b.serviceType === serviceType;
+              });
+              if (!taken && candidate.code !== selectedSlotCode) {
+                selectedSlotCode = candidate.code;
+                selectedSlotLabel = candidate.label;
+                break;
+              }
+            }
+            document.getElementById('booking-confirm-box').style.display = 'none';
+            renderSlots();
+            document.getElementById('date-strip').focus();
+          });
+        }
 
         form.addEventListener('submit', function (ev) {
           ev.preventDefault();
