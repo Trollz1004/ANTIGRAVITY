@@ -2358,6 +2358,18 @@
           setServiceType('pickup');
         });
 
+        function serviceFromHref(href) {
+          const m = /[?&]service=(pickup|dropoff)/.exec(String(href || ''));
+          return m ? m[1] : '';
+        }
+
+        if (typeof document.addEventListener === 'function') document.addEventListener('click', function (ev) {
+          const link = ev.target && ev.target.closest ? ev.target.closest('a') : null;
+          const href = link ? link.getAttribute('href') : '';
+          const t = serviceFromHref(href);
+          if (t) setServiceType(t);
+        });
+
         document.querySelectorAll('[data-select-service]').forEach(function (el) {
           el.addEventListener('click', function () {
             const t = el.getAttribute('data-select-service');
@@ -2365,9 +2377,24 @@
           });
         });
 
+        function showSlotLoadWarning() {
+          const slotErr = document.getElementById('booking-error');
+          slotErr.textContent = 'Slot times could not be loaded. You can still book, or try again. ';
+          const retryBtn = document.createElement('button');
+          retryBtn.type = 'button';
+          retryBtn.textContent = 'Retry loading slots';
+          retryBtn.addEventListener('click', function () {
+            slotErr.style.display = 'none';
+            loadBookingConfig();
+          });
+          slotErr.appendChild(retryBtn);
+          slotErr.style.display = 'block';
+        }
+
         function loadBookingConfig() {
           return fetch('/api/booking-config')
             .then(function (r) {
+              if (r.ok === false) throw new Error('booking-config ' + r.status);
               return r.json();
             })
             .then(function (cfg) {
@@ -2393,7 +2420,7 @@
               }
               return cfg;
             })
-            .catch(function () {});
+            .catch(showSlotLoadWarning);
         }
 
         loadBookingConfig();
