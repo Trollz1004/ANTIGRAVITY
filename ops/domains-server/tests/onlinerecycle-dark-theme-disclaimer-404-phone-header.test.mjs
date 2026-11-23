@@ -184,20 +184,12 @@ test('disclaimer.html and 404.html have no fonts.googleapis.com links and includ
       /<footer\b[^>]*\bclass=["'][^"']*\bfooter\b[^"']*["'][^>]*\bid=["']footer["'][^>]*>/i,
       `${page} must include shared <footer class="footer" id="footer">`,
     );
-    assert.match(
-      html,
-      /\bid=["']manage-cookies-link["']/i,
-      `${page} footer must include #manage-cookies-link`,
-    );
+    assert.match(html, /\bid=["']manage-cookies-link["']/i, `${page} footer must include #manage-cookies-link`);
 
     // 5. #cookie-banner outside <main>
     const mainMatch = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
     assert.ok(mainMatch, `${page} must include <main>...</main>`);
-    assert.doesNotMatch(
-      mainMatch[1],
-      /\bid=["']cookie-banner["']/i,
-      `${page} #cookie-banner must be outside <main>`,
-    );
+    assert.doesNotMatch(mainMatch[1], /\bid=["']cookie-banner["']/i, `${page} #cookie-banner must be outside <main>`);
     const outsideMain = html.slice(0, mainMatch.index) + html.slice(mainMatch.index + mainMatch[0].length);
     for (const id of [
       'cookie-banner',
@@ -209,11 +201,7 @@ test('disclaimer.html and 404.html have no fonts.googleapis.com links and includ
       'cb-options-btn',
       'cb-decline-btn',
     ]) {
-      assert.match(
-        outsideMain,
-        new RegExp(`\\bid=["']${id}["']`, 'i'),
-        `${page} must include #${id} outside <main>`,
-      );
+      assert.match(outsideMain, new RegExp(`\\bid=["']${id}["']`, 'i'), `${page} must include #${id} outside <main>`);
     }
   }
 });
@@ -240,11 +228,7 @@ test('styles.css keeps a compact Call / Text (321) 396-2008 link visible on view
 
     for (const sel of selectors) {
       if (hasDisplayNone) {
-        if (
-          sel.includes('.header-right') &&
-          !sel.includes('.status-pill') &&
-          !sel.includes('.contact-subline')
-        ) {
+        if (sel.includes('.header-right') && !sel.includes('.status-pill') && !sel.includes('.contact-subline')) {
           headerRightHiddenWhenClosed = true;
         }
         if (sel.includes('.contact-info') && !sel.includes('.contact-subline')) {
