@@ -5,13 +5,13 @@ A settled fact lives in exactly ONE file. Every other file points at it.
 This fails the build the moment someone copies the fact somewhere else,
 which is how a fact goes stale and how an agent rebuilds a dead blocker.
 
-It also refuses a few things that are not facts but hazards: a supply-chain
-lure, and hardcoded user paths that silently break on another node.
+It also refuses hazards: live credentials, supply-chain lures, hardcoded
+user paths, and non-DB loopback addresses outside ops/fleet/fleet-map.json.
 
 Add a fact below; that is the whole maintenance burden.
-Run:  python scripts/doctrine/doctrine-check.py
+Run:  python scripts/doctrine/doctrine-check.py [--root <repo_path>]
 """
-import json, os, re, subprocess, sys
+import argparse, json, os, re, subprocess, sys
 
 FACTS = [
     {
@@ -80,10 +80,8 @@ FACTS = [
                "Never download a ZIP for it. Delete the reference.",
     },
     {
-        # Usernames differ per node: joshi on the T5500, joshl on Sabretooth
-        # and the Alienware, and NSFW_BOTS is a separate Alienware profile,
-        # not a signed-in user. A literal path works on one box and silently
-        # breaks on the others.
+        # Usernames differ per node. A literal user path works on one box and
+        # silently breaks on the others.
         "name": "hardcoded-user-path",
         "source": (),
         "patterns": [r"C:\\\\Users\\\\joshl\b", r"C:\\Users\\joshl\b",
@@ -92,7 +90,33 @@ FACTS = [
                      r"/Users/joshl\b", r"/Users/joshi\b"],
         "allow": (r"^ops/runbook/PROTECTED-CHANGELOG\.md$", r"^ops/handoffs/.*$",
                   r"^archive/.*$", r"^scripts/doctrine/doctrine-check\.py$"),
-        "fix": "Usernames differ per node: joshi on the T5500, joshl on Sabretooth and the Alienware, and NSFW_BOTS is a separate Alienware profile, not a signed-in user. Use $env:USERPROFILE or ~ instead.",
+        "fix": "Usernames differ per node. Use $env:USERPROFILE, %USERPROFILE%, os.homedir(), or ~ instead.",
+    },
+    {
+        # FLEET ADDRESS DOCTRINE. Every service reach URL uses its fleet LAN
+        # address from ops/fleet/fleet-map.json (192.168.0.15 or 192.168.0.40),
+        # never loopback. Only PostgreSQL (:5432) and Redis (:6379) stay local.
+        "name": "loopback-address",
+        "source": ("ops/fleet/fleet-map.json",),
+        "patterns": [
+            r"\b(?:(?:https?|wss?)://(?:localhost|127\.0\.0\.1)\b(?::(?!5432\b|6379\b)\d+\b|(?!:(?:5432|6379)\b))|(?:localhost|127\.0\.0\.1):(?!5432\b|6379\b)\d+\b)",
+        ],
+        "allow": (
+            r"^ops/fleet/fleet-map\.json$",
+            r"^ops/runbook/PROTECTED-CHANGELOG\.md$",
+            r"^ops/handoffs/.*$",
+            r"^archive/.*$",
+            r"^scripts/doctrine/.*$",
+            r"^\.agents/skills/(?:hallmark|impeccable|security-audit|microsoft-foundry)/.*$",
+            r"^tests/doctrine-address-guard\.test\.mjs$",
+            r"^ops/fleet/tunnel-targets\.test\.mjs$",
+            r"^mission-os/(?:backend|ops-backend|ops-dashboard|shell-api|node-watchdog|stream-redact)\.test\.mjs$",
+            r"^apps/hermes-leadgen/test/hermes-leadgen\.test\.js$",
+            r"^services/onemin-shim/test\.mjs$",
+            r"^mission-control/tests/.*\.test\.js$",
+        ),
+        "fix": "Read node IP/port from ops/fleet/fleet-map.json (192.168.0.15 or 192.168.0.40). "
+               "Only PostgreSQL (:5432) and Redis (:6379) stay on 127.0.0.1.",
     },
 ]
 
@@ -103,11 +127,11 @@ SKIP = re.compile(r"(^|/)(node_modules|dist|build|\.next|vendor)/"
                   r"|\.(min\.|lock$|png$|jpg$|jpeg$|gif$|webp$|ico$|pdf$|zip$|mp4$|woff2?$)")
 
 
-REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DEFAULT_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def _literal_hint(pat):
-    if "|" in pat:
+    if "|" in pat or "(?!" in pat or "(?<" in pat:
         return None
     s = re.sub(r"\\(.)", lambda m: m.group(1) if m.group(1) in ".:/-_\\' " else "\0", pat)
     s = re.sub(r"\[[^\]]*\]|\{[0-9,]+\}|[\^\$\*\+\?\(\)]", "\0", s)
@@ -115,10 +139,10 @@ def _literal_hint(pat):
     return max(parts, key=len) if parts else None
 
 
-def tracked():
+def tracked(repo_root):
     out = subprocess.run(
         ["git", "ls-files", "-z"],
-        cwd=REPO_ROOT,
+        cwd=repo_root,
         capture_output=True,
         text=True,
         encoding="utf-8",
@@ -127,18 +151,23 @@ def tracked():
     return [f for f in out.split("\0") if f and not SKIP.search(f)]
 
 
-def load_baseline():
-    f = os.path.join(os.path.dirname(os.path.abspath(__file__)), "baseline.json")
+def load_baseline(repo_root):
+    f = os.path.join(repo_root, "scripts", "doctrine", "baseline.json")
     if not os.path.exists(f):
         return set()
     with open(f, encoding="utf-8", errors="replace") as fp:
         return {(e["fact"], e["file"]) for e in json.load(fp)["entries"]}
 
 
-def main():
-    os.chdir(REPO_ROOT)
-    files, failures = tracked(), []
-    baseline = load_baseline()
+def main(argv=None):
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--root", default=os.environ.get("DOCTRINE_REPO_ROOT", DEFAULT_REPO_ROOT))
+    args, _ = parser.parse_known_args(argv)
+    repo_root = os.path.abspath(args.root)
+
+    os.chdir(repo_root)
+    files, failures = tracked(repo_root), []
+    baseline = load_baseline(repo_root)
     compiled = [
         (
             fact,

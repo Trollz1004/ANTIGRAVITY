@@ -55,16 +55,18 @@
  * Zero dependencies. Secrets are read from .env at request time and never logged or returned.
  */
 import { createServer } from 'node:http';
-import { request as httpRequest } from 'node:http';
 import { request as httpsRequest } from 'node:https';
 import { readFileSync, existsSync, readdirSync, statSync, writeFileSync, unlinkSync, mkdirSync } from 'node:fs';
 import { spawn, execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, resolve, sep } from 'node:path';
-import { resolveConfig, resolveVault, readEnvFile } from './lib/config.mjs';
+import { resolveConfig, resolveVault, resolveMissionControlBind } from './lib/config.mjs';
 import { probeAll } from './lib/nodes.mjs';
+import { logStartupEnvCheck } from '../ops/agents/env-required.mjs';
+import { buildHealthEnvLight } from '../ops/agents/node-light.mjs';
 import { getSentrySnapshot, getSentrySummary } from './lib/sentry.mjs';
-import { resolveClaudeBinary, killTree, runClaude, PERMISSION_MODES, PERSONAS, sse } from './lib/claude-bridge.mjs';
+import { resolveClaudeBinary, killTree, runClaude, isSameOrigin, PERMISSION_MODES, PERSONAS, sse } from './lib/claude-bridge.mjs';
+import { getNodeIp, getServiceUrl } from '../ops/fleet/fleet-map.mjs';
 import { resolveHermesBinary } from './lib/bridge-routes.mjs';
 import { handleBridgeRoutes } from './lib/bridge-routes.mjs';
 import { buildBridges, findBridge, createBridgeRunProposal, executeBridgeRun, BRIDGE_IDS } from './lib/bridges.mjs';
@@ -105,18 +107,20 @@ import { composeBoardRoom } from './lib/lanes.mjs';
 import { buildArchitecture, renderArchitectureHtml, renderArchitectureDiff } from './lib/architecture.mjs';
 import { defaultExec as gitExec } from './lib/git-panel.mjs';
 import { hostname, tmpdir } from 'node:os';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, timingSafeEqual } from 'node:crypto';
 
+const T5500_IP = getNodeIp('t5500');
+const ALIENWARE_IP = getNodeIp('alienware');
 const HERE = dirname(fileURLToPath(import.meta.url));
 // process.env > <repo>/.env > derived defaults (lib/config.mjs). The repo root is this checkout.
-const CFG = resolveConfig({ here: HERE });
+const CFG = resolveConfig({ here: HERE, readEnv: () => ({}) });
 const REPO = CFG.repo;
 const PORT = CFG.port;
 const LAN_IP = CFG.lanIp;
 const OMNI = CFG.omni;
 // Vault resolution self-heals across machines: a configured path that does not exist
 // (e.g. a Sabertooth path on Alienware) is skipped in favour of an existing candidate.
-const VAULT_CFG = resolveVault({ env: process.env, readEnv: readEnvFile, envFile: CFG.envFile, candidates: [join(REPO, 'Antigravity'), 'C:\\DREAM\\AlienwareDream'] });
+const VAULT_CFG = resolveVault({ env: process.env, readEnv: () => ({}), envFile: CFG.envFile, candidates: [join(REPO, 'Antigravity'), 'C:\\DREAM\\AlienwareDream'] });
 const VAULT = VAULT_CFG.path;
 const VAULT_NAME = VAULT_CFG.name;
 const VAULT_ID = VAULT_CFG.id; // stable Obsidian vault id for obsidian:// deep links
@@ -149,9 +153,11 @@ async function hermesBoardAsk(question) {
 // Summary providers shared with the bridge so JARVIS's HUD preamble is composed
  // from exactly the data this server serves the page.
 async function vaultStatusSummary() {
-  const r = OBSIDIAN_REST.startsWith('https:')
-    ? await getJsonInsecure(OBSIDIAN_REST + '/', 5000)
-    : await getJson(OBSIDIAN_REST + '/', 5000);
+  const caPath = envValue('OBSIDIAN_REST_CA_CERT');
+  const r =
+    OBSIDIAN_REST.startsWith('https:') && caPath && existsSync(caPath)
+      ? await getJsonWithCa(OBSIDIAN_REST + '/', caPath, 5000)
+      : await getJson(OBSIDIAN_REST + '/', 5000);
   const up = r.status === 200 && /Obsidian Local REST API/.test(r.text || '');
   return { up, state: up ? 'UP' : (r.status ? 'WRONG SERVICE' : 'DOWN'), detail: up ? 'identity ok' : (r.error || 'HTTP ' + r.status) };
 }
@@ -207,9 +213,9 @@ const JUDGE_STATE_PATH = join(REPO, '.agents', 'journals', 'paperclip-judge', 'S
 const GIT_REPOS = [
   { id: 'antigravity', path: REPO },
 ];
-// Hermes router + OpenClaw support (Phase B): same-node services, loopback by default.
-const HERMES_URL = (envValue('HERMES_URL') || 'http://127.0.0.1:9119').replace(/\/$/, '');
-const OPENCLAW_URL = (envValue('OPENCLAW_URL') || 'http://127.0.0.1:18789').replace(/\/$/, '');
+// Hermes router + OpenClaw support (Phase B): fleet LAN addresses from ops/fleet/fleet-map.json.
+const HERMES_URL = (envValue('HERMES_URL') || getServiceUrl('hermes-dashboard')).replace(/\/$/, '');
+const OPENCLAW_URL = (envValue('OPENCLAW_URL') || `http://${ALIENWARE_IP}:18789`).replace(/\/$/, '');
 // System status (Phase B, merged into the Mission Control tab): the 30-minute health probe's own files.
 const HEARTBEAT_JSON_PATH = join(REPO, 'ops', 'heartbeat', 'sabretooth-health.json');
 const HEARTBEAT_LOG_PATH = join(REPO, 'ops', 'heartbeat', 'health.log');
@@ -243,8 +249,8 @@ const JUDGE_REPOS = GIT_REPOS;
 // 2026-09-17 (checked ops/ and .agents/harness-config/) — its `probe` stays
 // null, which lib/fleet.mjs reports honestly as NOT CONFIGURED.
 const FLEET_HARNESSES = [
-  { lane: 'hermes', stateMdPath: join(REPO, '.agents', 'journals', 'hermes', 'STATE.md'), probe: { url: HERMES_URL + '/api/health', host: '127.0.0.1', port: 9119 } },
-  { lane: 'openclaw', stateMdPath: join(REPO, '.agents', 'journals', 'openclaw', 'STATE.md'), probe: { url: OPENCLAW_URL + '/healthz', host: '127.0.0.1', port: 18789 } },
+  { lane: 'hermes', stateMdPath: join(REPO, '.agents', 'journals', 'hermes', 'STATE.md'), probe: { url: HERMES_URL + '/api/health', host: T5500_IP, port: 9119 } },
+  { lane: 'openclaw', stateMdPath: join(REPO, '.agents', 'journals', 'openclaw', 'STATE.md'), probe: { url: OPENCLAW_URL + '/healthz', host: ALIENWARE_IP, port: 18789 } },
   { lane: 'opencode', stateMdPath: join(REPO, '.agents', 'journals', 'opencode', 'STATE.md'), probe: null },
   { lane: 'emergent', stateMdPath: join(REPO, '.agents', 'journals', 'emergent', 'STATE.md'), probe: null },
   { lane: 'genspark', stateMdPath: join(REPO, '.agents', 'journals', 'genspark', 'STATE.md'), probe: null },
@@ -272,16 +278,16 @@ const EMERGENT_WING_URL = envValue('EMERGENT_WING_URL') || 'https://app.emergent
 // The cloud address of this dashboard (Cloudflare Access in front, one-time PIN
 // to Joshua's address): the "eye in the sky" he opens from any Claude Code
 // session, cloud or node. Same JARVIS, same origin rules, no second dashboard.
-const CLOUD_DASHBOARD_URL = envValue('CLOUD_DASHBOARD_URL') || 'https://dashboard.aidoesitall.website/';
+const CLOUD_DASHBOARD_URL = envValue('CLOUD_DASHBOARD_URL') || getServiceUrl('mission-os', '/');
 // Display name (Joshua, 2026-09-29): the product is called Driftus on screen;
 // JARVIS stays the code name in files, routes and identity strings.
 const DISPLAY_NAME = 'Driftus';
 const BRIDGE_DEPS_LIVE = {
-  hermes: { dashboardUrl: HERMES_URL + '/', gatewayUrl: 'http://127.0.0.1:8642/health', resolveHermesBin: resolveHermesBinary },
+  hermes: { dashboardUrl: HERMES_URL + '/', gatewayUrl: getServiceUrl('hermes-gateway', '/health'), resolveHermesBin: resolveHermesBinary },
   openclaw: { dashboardUrl: OPENCLAW_URL + '/' },
   claude: { resolveBin: () => resolveClaudeBinary() },
   codex: { resolveBin: () => resolveCodexBinary() },
-  ollama: { base: envValue('JARVIS_OLLAMA_URL') || 'http://127.0.0.1:11434' },
+  ollama: { base: envValue('JARVIS_OLLAMA_URL') || getServiceUrl('ollama-t5500') },
   omniroute: { base: OMNI, key: envValue('OMNI_ROUTE_API_KEY') },
   obsidian: { vaultPath: VAULT, restUrl: OBSIDIAN_REST, restProbe: vaultStatusSummary },
   browserCdp: {},
@@ -327,7 +333,7 @@ const bridgeExecutorAdapters = {
     deps: {
       cwd: REPO, resolveHermesBin: resolveHermesBinary, spawn,
       runClaudeImpl: runClaude,
-      ollamaBase: envValue('JARVIS_OLLAMA_URL') || 'http://127.0.0.1:11434',
+      ollamaBase: envValue('JARVIS_OLLAMA_URL') || getServiceUrl('ollama-t5500'),
       ollamaModel: envValue('JARVIS_OLLAMA_MODEL'),
       streamOllamaChatImpl: streamOllamaChat, fetch: globalThis.fetch,
     },
@@ -471,7 +477,7 @@ setInterval(() => {
       record: { kind: 'social-review-tick-error', error: String((e && e.message) || e) },
     });
   }
-}, 60000);
+}, 60000).unref();
 
 // Ask-JARVIS agentic loop (specs/009-jarvis-agentic-ask): every tool reuses
 // the exact same live sources the rest of this file already serves — no
@@ -505,9 +511,9 @@ const STARTED_AT = new Date().toISOString(); // the House restarts this server w
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.md': 'text/markdown; charset=utf-8' };
 
-// Secrets are read from the .env at request time and never logged or returned.
+// Secrets are read strictly from process.env at request time and never logged or returned.
 function envValue(name) {
-  return process.env[name] || readEnvFile(CFG.envFile)[name] || readEnvFile(join(REPO, '.env'))[name] || '';
+  return String(process.env[name] || '').trim();
 }
 
 // ── skills = agents (live directory read; --hash clones are Paperclip copies, skipped) ──
@@ -603,14 +609,15 @@ function vaultNote(rel) {
 async function getJson(url, ms = 20000, headers = {}) {
   const c = new AbortController(); const t = setTimeout(() => c.abort(), ms);
   try { const r = await fetch(url, { signal: c.signal, headers }); const text = await r.text(); let j = null; try { j = JSON.parse(text); } catch {} return { status: r.status, json: j, text }; }
-  catch (e) { return { status: 0, error: String(e.message || e) }; }
+  catch (e) { return { status: 0, error: (e && typeof e.code === 'string' && e.code) || 'request failed' }; }
   finally { clearTimeout(t); }
 }
-// fetch with a self-signed certificate tolerated (node:https), same shape as getJson.
-async function getJsonInsecure(url, ms = 20000) {
+// fetch using an explicit local CA bundle (never disabling TLS certificate verification).
+async function getJsonWithCa(url, caPath, ms = 20000) {
+  let ca;
+  try { ca = readFileSync(caPath); } catch { return { status: 0, error: 'invalid ca bundle' }; }
   return new Promise((resolve) => {
-    const mod = url.startsWith('https:') ? httpsRequest : httpRequest;
-    const req = mod(url, { rejectUnauthorized: false, timeout: ms }, (r) => {
+    const req = httpsRequest(url, { ca, timeout: ms }, (r) => {
       const chunks = [];
       r.on('data', (c) => chunks.push(c));
       r.on('end', () => {
@@ -619,8 +626,8 @@ async function getJsonInsecure(url, ms = 20000) {
         resolve({ status: r.statusCode, json, text });
       });
     });
-    req.on('timeout', () => { req.destroy(new Error('timeout after ' + ms + ' ms')); });
-    req.on('error', (e) => resolve({ status: 0, error: String(e.message || e) }));
+    req.on('timeout', () => { req.destroy(new Error('timeout')); });
+    req.on('error', (e) => resolve({ status: 0, error: (e && typeof e.code === 'string' && e.code) || 'request failed' }));
     req.end();
   });
 }
@@ -646,6 +653,20 @@ function send(res, code, body, type = 'application/json') {
   res.writeHead(code, { 'content-type': type, 'access-control-allow-origin': '*', 'cache-control': 'no-store' });
   res.end(typeof body === 'string' || Buffer.isBuffer(body) ? body : JSON.stringify(body));
 }
+function sanitizeServiceProbe(probe) {
+  if (!probe || typeof probe !== 'object') {
+    return { reachable: false, kind: 'unreachable', error: 'Service unreachable' };
+  }
+  const out = {
+    reachable: Boolean(probe.reachable),
+    kind: probe.kind || (probe.reachable ? 'html' : 'unreachable'),
+  };
+  if (probe.status !== undefined) out.status = probe.status;
+  if (probe.tcp !== undefined) out.tcp = Boolean(probe.tcp);
+  if (probe.data !== undefined) out.data = probe.data;
+  if (probe.error) out.error = 'Service unreachable';
+  return out;
+}
 // Same-origin reverse proxy with response headers sanitized (lib/session-proxy.mjs):
 // a session/auth cookie from Hermes or OpenClaw must never reach the browser.
 async function proxyStripped(req, res, url, base, prefix) {
@@ -658,9 +679,9 @@ async function proxyStripped(req, res, url, base, prefix) {
     const headers = sanitizeHeaders(r.headers);
     res.writeHead(r.status, { 'content-type': headers['content-type'] || 'text/html; charset=utf-8', 'cache-control': 'no-store' });
     return res.end(buf);
-  } catch (e) {
+  } catch {
     const label = base.includes('9119') ? 'Hermes' : 'OpenClaw';
-    return send(res, 502, { error: `${label} unreachable: ${String(e.message || e)}`, target });
+    return send(res, 502, { error: `${label} unreachable`, target });
   } finally { clearTimeout(t); }
 }
 function serveStatic(res, rel) {
@@ -699,14 +720,98 @@ const BRIDGE_DEPS = {
   },
 };
 
-createServer(async (req, res) => {
+function isLocalCaller(remoteAddress) {
+  const r = String(remoteAddress || '').trim();
+  return (
+    r === '127.0.0.1' ||
+    r === '::1' ||
+    r === '::ffff:127.0.0.1' ||
+    (Boolean(LAN_IP) && (r === LAN_IP || r === `::ffff:${LAN_IP}`))
+  );
+}
+
+function isGuardedDashboardRoute(method, pathname) {
+  if (/^\/api\/inbox\/[^/]+\/(approve|reject|snooze)$/.test(pathname)) return false;
+  if (/^\/api\/judge\/[^/]+\/verdict$/.test(pathname)) return false;
+  if (pathname === '/mcp') return false;
+  const m = String(method || 'GET').toUpperCase();
+  if (m !== 'GET' && m !== 'HEAD' && m !== 'OPTIONS') return true;
+  return (
+    pathname.startsWith('/api/omni/') ||
+    pathname === '/api/ask' ||
+    pathname === '/api/proxy/crosslisting' ||
+    pathname.startsWith('/api/proxy/') ||
+    pathname.startsWith('/api/vault/') ||
+    pathname === '/api/skills'
+  );
+}
+
+function constantTimeEqualSecret(expected, candidate) {
+  const a = Buffer.from(String(expected || ''), 'utf8');
+  const b = Buffer.from(String(candidate || ''), 'utf8');
+  const len = Math.max(a.length, b.length, 1);
+  const padA = Buffer.alloc(len);
+  const padB = Buffer.alloc(len);
+  a.copy(padA);
+  b.copy(padB);
+  return timingSafeEqual(padA, padB) && a.length === b.length;
+}
+
+function verifyGuardedDashboardAccess(req) {
+  if (!isSameOrigin(req.headers || {})) {
+    return { ok: false, status: 403, error: 'origin refused' };
+  }
+  const headers = req.headers || {};
+  const direct = String(headers['x-mission-os-token'] || headers['x-bridge-token'] || '').trim();
+  const auth = headers.authorization;
+  const trimmed = String(auth || '').trim();
+  const bearer = trimmed.slice(0, 7).toLowerCase() === 'bearer ' ? trimmed.slice(7).trim() : '';
+  const candidate = direct || bearer;
+  const expected = String(
+    process.env.MISSION_OS_TOKEN ||
+      process.env.MISSION_CONTROL_TOKEN ||
+      process.env.DASHBOARD_BRIDGE_TOKEN ||
+      process.env.FLEET_SHARED_TOKEN ||
+      ''
+  ).trim();
+
+  if (isLocalCaller(req.socket && req.socket.remoteAddress) && (!expected || !candidate)) {
+    return { ok: true, status: 200 };
+  }
+
+  if (!expected) {
+    return { ok: false, status: 503, error: 'MISSION_OS_TOKEN / DASHBOARD_BRIDGE_TOKEN not configured' };
+  }
+  if (!candidate || !constantTimeEqualSecret(expected, candidate)) {
+    return { ok: false, status: 401, error: 'Unauthorized' };
+  }
+  return { ok: true, status: 200 };
+}
+
+const BIND_HOST = resolveMissionControlBind(process.env, { port: PORT });
+
+export { resolveMissionControlBind, verifyGuardedDashboardAccess };
+
+export const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   const p = url.pathname;
   if (await handleBridgeRoutes(req, res, BRIDGE_DEPS)) return;
   if (req.method === 'OPTIONS') { res.writeHead(204, { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET,POST,OPTIONS' }); return res.end(); }
+  if (isGuardedDashboardRoute(req.method, p)) {
+    const guard = verifyGuardedDashboardAccess(req);
+    if (!guard.ok) return send(res, guard.status, { ok: false, error: guard.error });
+  }
 
   if (p === '/favicon.ico') { res.writeHead(200, { 'content-type': 'image/svg+xml', 'cache-control': 'max-age=86400' }); return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0d1117"/><circle cx="16" cy="16" r="9" fill="none" stroke="#58a6ff" stroke-width="3"/><circle cx="16" cy="16" r="3" fill="#3fb950"/></svg>'); }
-  if (p === '/health') return send(res, 200, { status: 'ok', service: 'hermes-jarvis', port: PORT, startedAt: STARTED_AT });
+  if (p === '/health') {
+    return send(res, 200, {
+      status: 'ok',
+      service: 'hermes-jarvis',
+      port: PORT,
+      startedAt: STARTED_AT,
+      ...buildHealthEnvLight({ manifestDir: HERE }),
+    });
+  }
 
   if (p === '/api/config') {
     const host = (req.headers.host || '').replace(/:\d+$/, '') || LAN_IP;
@@ -772,13 +877,13 @@ createServer(async (req, res) => {
       const buf = Buffer.from(await r.arrayBuffer());
       res.writeHead(r.status, { 'content-type': r.headers.get('content-type') || 'text/html; charset=utf-8', 'cache-control': 'no-store' });
       return res.end(buf);
-    } catch (e) { return send(res, 502, { error: 'Crosslisting unreachable: ' + String(e.message || e), target: CROSSLISTING }); }
+    } catch { return send(res, 502, { error: 'Crosslisting unreachable', target: CROSSLISTING }); }
     finally { clearTimeout(t); }
   }
 
   if (p.startsWith('/api/omni/')) {
     const key = envValue('OMNI_ROUTE_API_KEY');
-    if (!key) return send(res, 503, { error: 'AUTH MISSING: OMNI_ROUTE_API_KEY not in ' + CFG.envFile });
+    if (!key) return send(res, 503, { error: 'AUTH MISSING: OMNI_ROUTE_API_KEY not configured' });
     const target = OMNI + p.slice('/api/omni'.length) + url.search;
     const c = new AbortController(); const t = setTimeout(() => c.abort(), 300000);
     try {
@@ -787,7 +892,7 @@ createServer(async (req, res) => {
       const buf = Buffer.from(await r.arrayBuffer());
       res.writeHead(r.status, { 'content-type': r.headers.get('content-type') || 'application/json', 'access-control-allow-origin': '*', 'cache-control': 'no-store' });
       return res.end(buf);
-    } catch (e) { return send(res, 502, { error: 'OmniRoute unreachable: ' + String(e.message || e) }); }
+    } catch { return send(res, 502, { error: 'OmniRoute unreachable' }); }
     finally { clearTimeout(t); }
   }
 
@@ -802,8 +907,8 @@ createServer(async (req, res) => {
   // Hermes router + OpenClaw support panels: status probe (identity-checked when JSON,
   // reachable+TCP when the service only serves HTML) and a session-stripping reverse proxy
   // so an embedded view never leaks a Set-Cookie / auth header to the browser.
-  if (p === '/api/hermes-status') return send(res, 200, await probeService({ url: HERMES_URL + '/api/health', host: '127.0.0.1', port: 9119 }));
-  if (p === '/api/openclaw-status') return send(res, 200, await probeService({ url: OPENCLAW_URL + '/healthz', host: '127.0.0.1', port: 18789 }));
+  if (p === '/api/hermes-status') return send(res, 200, sanitizeServiceProbe(await probeService({ url: HERMES_URL + '/api/health', host: T5500_IP, port: 9119 })));
+  if (p === '/api/openclaw-status') return send(res, 200, sanitizeServiceProbe(await probeService({ url: OPENCLAW_URL + '/healthz', host: ALIENWARE_IP, port: 18789 })));
   if (p === '/api/proxy/hermes' || p.startsWith('/api/proxy/hermes/')) return proxyStripped(req, res, url, HERMES_URL, '/api/proxy/hermes');
   if (p === '/api/proxy/openclaw' || p.startsWith('/api/proxy/openclaw/')) return proxyStripped(req, res, url, OPENCLAW_URL, '/api/proxy/openclaw');
   if (p === '/api/heartbeat') return send(res, 200, readHeartbeat({ jsonPath: HEARTBEAT_JSON_PATH, logPath: HEARTBEAT_LOG_PATH }));
@@ -837,7 +942,10 @@ createServer(async (req, res) => {
   if (p === '/api/crosslisting/status') {
     return send(res, 200, await crosslistingStatusSummary());
   }
-  if (p === '/api/news') return send(res, 200, await newsService.getTopStories());
+  if (p === '/api/news') {
+    const news = await newsService.getTopStories();
+    return send(res, 200, news.ok ? news : { ok: false, source: news.source, items: [], error: 'News feed unavailable' });
+  }
   if (p === '/api/trends') return send(res, 200, trendsSummary());
   if (p === '/api/house') return send(res, 200, await houseSummary({ force: url.searchParams.get('force') === '1' }));
   if (p === '/api/sentry') return send(res, 200, await getSentrySnapshot({ force: url.searchParams.get('force') === '1' }));
@@ -921,7 +1029,7 @@ createServer(async (req, res) => {
     catch { return send(res, 400, { error: 'invalid JSON body' }); }
     const r = await draftWithFable({
       brand: body.brand, platform: body.platform, brief: body.brief,
-      fetch: globalThis.fetch, ollamaBase: envValue('JARVIS_OLLAMA_URL') || 'http://127.0.0.1:11434',
+      fetch: globalThis.fetch, ollamaBase: envValue('JARVIS_OLLAMA_URL') || getServiceUrl('ollama-t5500'),
       hookPath: COMPLIANCE_HOOK_PATH,
     });
     return send(res, r.status, redact(r.body));
@@ -982,7 +1090,7 @@ createServer(async (req, res) => {
   // one read. Redacted like every other route; the GitHub token never leaves this file.
   if (p === '/api/boardroom' && req.method === 'GET') {
     try { return send(res, 200, redact(await buildBoardRoom())); }
-    catch (e) { return send(res, 502, { error: 'Board Room unavailable: ' + String((e && e.message) || e) }); }
+    catch (e) { return send(res, 502, { error: 'Board Room unavailable: ' + ((e && typeof e.code === 'string' && e.code) || 'unavailable') }); }
   }
 
   // Architecture panel (Phase E, unit 3): typed JSON from the House stage
@@ -1104,7 +1212,7 @@ createServer(async (req, res) => {
       return res.end(r.buffer);
     }
     if (r.engine === null) { res.writeHead(204, { 'x-tts-reason': String(r.reason || '').slice(0, 200) }); return res.end(); }
-    return send(res, 502, { error: r.error || 'tts failed', engine: r.engine });
+    return send(res, 502, { error: 'tts failed', engine: r.engine });
   }
   if (p === '/api/tts/voices') return send(res, 200, { voices: EDGE_VOICES, default: 'en-US-GuyNeural' });
 
@@ -1163,6 +1271,12 @@ createServer(async (req, res) => {
   if (p === '/data/' || p.startsWith('/data/')) return send(res, 404, { error: 'not found' }); // JARVIS memory stays server-side
   if (p.startsWith('/api/')) return send(res, 404, { error: 'no such route' });
   return serveStatic(res, p);
-}).listen(PORT, '0.0.0.0', () => {
-  console.log(`JARVIS dashboard on http://0.0.0.0:${PORT}  (LAN: http://${LAN_IP}:${PORT})  omni=${OMNI}  vault=${VAULT}`);
 });
+
+const IS_MAIN_MODULE = Boolean(process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url)));
+if (IS_MAIN_MODULE) {
+  logStartupEnvCheck(HERE);
+  server.listen(PORT, BIND_HOST, () => {
+    console.log(`JARVIS dashboard on http://${BIND_HOST}:${PORT}  (LAN: http://${LAN_IP}:${PORT})  omni=${OMNI}  vault=${VAULT}`);
+  });
+}

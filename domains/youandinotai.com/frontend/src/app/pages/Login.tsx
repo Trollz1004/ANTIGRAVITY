@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -12,7 +12,9 @@ import {
 } from 'lucide-react';
 
 import { GoogleSignInButton } from '../../components/auth/GoogleSignInButton';
+import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
 import { useAuth } from '../../lib/auth';
+import { isMailEnabled } from '../../lib/mailHealth';
 import { getSafeNextPath } from '../../lib/navigation';
 import {
   validateRequired,
@@ -26,21 +28,83 @@ interface LoginErrors {
   password?: string;
 }
 
-export function Login() {
-  const [email, setEmail] = useState('');
+function getEmailFromNavigationState(state: unknown): string {
+  if (!state || typeof state !== 'object') return '';
+  const record = state as Record<string, unknown>;
+  return typeof record.email === 'string' ? record.email.trim() : '';
+}
+
+export interface LoginProps {
+  betaAccessEnabled?: boolean;
+  googleClientId?: string;
+}
+
+export function Login({ betaAccessEnabled, googleClientId }: LoginProps = {}) {
+  const location = useLocation();
+  const isBetaAccessEnabled =
+    betaAccessEnabled ??
+    ['true', '1'].includes(
+      String(import.meta.env.VITE_BETA_ACCESS_ENABLED ?? '').toLowerCase()
+    );
+  const [email, setEmail] = useState(() =>
+    getEmailFromNavigationState(location.state)
+  );
   const [password, setPassword] = useState('');
+  const [mailEnabled, setMailEnabled] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [betaCode, setBetaCode] = useState('');
+  const [betaDateOfBirth, setBetaDateOfBirth] = useState('');
+  const [betaNeedsDob, setBetaNeedsDob] = useState(false);
   const [betaError, setBetaError] = useState('');
   const [betaLoading, setBetaLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<LoginErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const { login, betaAccess } = useAuth();
+  const { user, login, betaAccess } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const nextPath = getSafeNextPath(location.search, '/app');
   const registerHref = `/register?next=${encodeURIComponent(nextPath)}`;
+  const resolvedGoogleClientId = (
+    googleClientId ??
+    import.meta.env.VITE_GOOGLE_CLIENT_ID ??
+    ''
+  ).trim();
+
+  useEffect(() => {
+    if (!user) return;
+    navigate(user.has_profile ? nextPath : '/app/profile');
+  }, [user, navigate, nextPath]);
+
+  useEffect(() => {
+    document.title = 'Member Sign In | YouAndINotAI';
+    const canonical = document.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]'
+    );
+    if (canonical) canonical.href = 'https://youandinotai.com/login';
+    const desc = document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]'
+    );
+    if (desc) {
+      desc.content =
+        'Sign in to your 18+ YouAndINotAI account to access verified human profiles, $1 Bot-Shield verification, messaging, topic boards, and the USA group chat.';
+    }
+    let cancelled = false;
+    void isMailEnabled().then(enabled => {
+      if (!cancelled) {
+        setMailEnabled(enabled);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const prefilledEmail = getEmailFromNavigationState(location.state);
+    if (prefilledEmail) {
+      setEmail(prefilledEmail);
+    }
+  }, [location.state]);
 
   const validateLoginField = useCallback(
     (name: string, value: string): string | undefined => {
@@ -107,13 +171,34 @@ export function Login() {
       setBetaError('Enter your founder code first.');
       return;
     }
+    let birthDateIso: string | undefined;
+    if (betaNeedsDob || betaDateOfBirth) {
+      if (!betaDateOfBirth) {
+        setBetaError('Date of birth is required (18+ only).');
+        return;
+      }
+      const parsed = toIsoDate(betaDateOfBirth);
+      if (!parsed) {
+        setBetaError('Enter date of birth as MM / DD / YYYY');
+        return;
+      }
+      if (calculateAgeUtc(parsed) < 18) {
+        setBetaError('YouAndINotAI is strictly 18+ only');
+        return;
+      }
+      birthDateIso = parsed;
+    }
     setBetaLoading(true);
     try {
-      await betaAccess(cleaned);
+      await betaAccess(cleaned, birthDateIso);
       const nextUser = useAuth.getState().user;
       navigate(nextUser?.has_profile ? nextPath : '/app/profile');
     } catch (err: any) {
-      setBetaError(err?.message || 'Please check your founder code.');
+      const msg = String(err?.message || '');
+      if (/date of birth/i.test(msg)) {
+        setBetaNeedsDob(true);
+      }
+      setBetaError(msg || 'Please check your founder code.');
     } finally {
       setBetaLoading(false);
     }
@@ -138,7 +223,7 @@ export function Login() {
         <section className="hidden md:flex flex-col justify-between rounded-xl border border-[#3A3F45] bg-[#12151A] p-10">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded border border-[#3A3F45] bg-[#1A1E25] font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#FFD21E]">
-              Verified Member Sign In · 18+ Venue
+              Member Sign In · 18+ Venue
             </div>
             <h1 className="font-display text-5xl font-bold tracking-tight text-[#F4F1EA] mb-6 leading-[1.08]">
               Real people.
@@ -244,6 +329,17 @@ export function Login() {
                   autoComplete="current-password"
                   icon={<Lock size={18} className="text-[#9DA3AA]" />}
                 />
+
+                {mailEnabled && (
+                  <div className="flex justify-end">
+                    <Link
+                      to="/forgot-password"
+                      className="inline-flex min-h-[44px] items-center text-xs font-semibold text-[#FFD21E] transition-colors hover:underline"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                )}
               </div>
 
               <button
@@ -261,59 +357,87 @@ export function Login() {
               </button>
             </form>
 
-            <div className="my-8 flex items-center gap-4">
-              <div className="h-px flex-1 bg-[#3A3F45]" />
-              <span className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#9DA3AA]">
-                Or continue with
-              </span>
-              <div className="h-px flex-1 bg-[#3A3F45]" />
-            </div>
+            {resolvedGoogleClientId && (
+              <>
+                <div className="my-8 flex items-center gap-4">
+                  <div className="h-px flex-1 bg-[#3A3F45]" />
+                  <span className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-[#9DA3AA]">
+                    Or continue with
+                  </span>
+                  <div className="h-px flex-1 bg-[#3A3F45]" />
+                </div>
 
-            <GoogleSignInButton />
+                <GoogleSignInButton clientId={resolvedGoogleClientId} />
+              </>
+            )}
 
-            <form
-              onSubmit={handleBetaCode}
-              className="mt-6 rounded-lg border border-[#3A3F45] bg-[#1A1E25] p-4"
-              noValidate
-            >
-              <label
-                htmlFor="login-founder-code-input"
-                className="flex items-center gap-2 text-sm font-semibold text-[#F4F1EA]"
+            {isBetaAccessEnabled && (
+              <form
+                onSubmit={handleBetaCode}
+                className="mt-6 rounded-lg border border-[#3A3F45] bg-[#1A1E25] p-4"
+                noValidate
               >
-                <KeyRound
-                  size={16}
-                  className="text-[#FFD21E]"
-                  aria-hidden="true"
-                />
-                Founder code (optional)
-              </label>
-              {betaError && (
-                <p
-                  role="alert"
-                  className="mt-3 text-sm font-medium text-[#FF6B6B]"
+                <label
+                  htmlFor="login-founder-code-input"
+                  className="flex items-center gap-2 text-sm font-semibold text-[#F4F1EA]"
                 >
-                  {betaError}
-                </p>
-              )}
-              <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-                <input
-                  id="login-founder-code-input"
-                  type="text"
-                  value={betaCode}
-                  onChange={e => setBetaCode(e.target.value)}
-                  autoComplete="one-time-code"
-                  placeholder="FOUNDER-XXXX"
-                  className="flex-1 rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-3 font-mono text-sm font-bold uppercase tracking-widest text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
-                />
-                <button
-                  type="submit"
-                  disabled={betaLoading}
-                  className="ds-btn-ghost shrink-0 whitespace-nowrap px-6 py-3 text-sm font-semibold disabled:opacity-50"
-                >
-                  {betaLoading ? 'Checking...' : 'Use Code'}
-                </button>
-              </div>
-            </form>
+                  <KeyRound
+                    size={16}
+                    className="text-[#FFD21E]"
+                    aria-hidden="true"
+                  />
+                  Founder code (optional)
+                </label>
+                {betaError && (
+                  <p
+                    role="alert"
+                    className="mt-3 text-sm font-medium text-[#FF6B6B]"
+                  >
+                    {betaError}
+                  </p>
+                )}
+                <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+                  <input
+                    id="login-founder-code-input"
+                    type="text"
+                    value={betaCode}
+                    onChange={e => setBetaCode(e.target.value)}
+                    autoComplete="one-time-code"
+                    placeholder="FOUNDER-XXXX"
+                    className="flex-1 rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-3 font-mono text-sm font-bold uppercase tracking-widest text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
+                  />
+                  <button
+                    type="submit"
+                    disabled={betaLoading}
+                    className="ds-btn-ghost shrink-0 whitespace-nowrap px-6 py-3 text-sm font-semibold disabled:opacity-50"
+                  >
+                    {betaLoading ? 'Checking...' : 'Use Code'}
+                  </button>
+                </div>
+                {betaNeedsDob && (
+                  <div className="mt-3">
+                    <label
+                      htmlFor="login-founder-dob-input"
+                      className="block text-xs font-semibold text-[#C9CBCE] mb-1.5"
+                    >
+                      Date of Birth (18+ required for new founder account)
+                    </label>
+                    <input
+                      id="login-founder-dob-input"
+                      type="text"
+                      value={betaDateOfBirth}
+                      onChange={e =>
+                        setBetaDateOfBirth(formatDateInput(e.target.value))
+                      }
+                      inputMode="numeric"
+                      maxLength={14}
+                      placeholder="MM / DD / YYYY"
+                      className="w-full rounded-lg border border-[#3A3F45] bg-[#0A0B0D] px-4 py-2.5 text-sm text-[#F4F1EA] placeholder-[#9DA3AA] outline-none focus:border-[#FFD21E]"
+                    />
+                  </div>
+                )}
+              </form>
+            )}
 
             <p className="mt-8 text-center text-sm text-[#C9CBCE]">
               Need an account?{' '}
@@ -321,7 +445,7 @@ export function Login() {
                 to={registerHref}
                 className="font-bold text-[#FFD21E] transition-colors hover:underline"
               >
-                Create one
+                Create an 18+ Account
               </Link>
             </p>
 

@@ -1,168 +1,36 @@
 ---
-name: t5500-ops
-description: Operate the T5500-NODE stack end to end — start/verify OmniRoute (:20128) and MC5, the legacy vote-engine board (:3151, not running; Mission Control is JARVIS/OPSIS on :3130, Paperclip :3917 is marketing only — see the `mission-control` skill), run the judge-gated swarm, search the repo knowledge graph, build/deploy the date app, and follow the session + git governance protocol. Use for any infra, swarm, gateway, build, or repo-ops task on this box.
+name: legacy-third-node-ops-retired
+description: RETIRED third-node operations note — superseded by the 2-node fleet in ops/fleet/fleet-map.json (T5500 192.168.0.15 and Alienware 192.168.0.40). Load t5500-node or docs/standards/ALIENWARE-SOUL.md instead.
 ---
 
-# T5500 Ops — the whole stack, one skill
+# Retired Third-Node Operations Record (Superseded)
 
-Written 2026-08-16 from a full live rebuild (post-Windows-reinstall). Every
-command here was executed and verified on this machine that day.
+**STATUS: RETIRED SKILL RECORD. DO NOT EXECUTE OR ROUTE WORK TO A THIRD NODE.**
 
-## Machine truth (verify, don't assume)
+This legacy folder documented a former standalone workstation node that is permanently decommissioned. The active `Trollz1004` fleet runs on **two nodes only** (`ops/fleet/fleet-map.json`):
 
-- User profile: `C:\Users\joshi` (old `joshl` is gone). Repo: `C:\ANTIGRAVITY`,
- branch `main`, remote `Trollz1004/ANTIGRAVITY`.
-- Installed: Claude Code (`~\.local\bin\claude.exe`), git, Node 24 + pnpm via
- corepack, Python 3.13, Docker (daemon flaky — don't depend on it),
- OmniRoute (npm global), OpenWork desktop (`%LOCALAPPDATA%\Programs\@openworkdesktop`).
-- Harnesses (Hermes, OpenClaw, OpenCode) were wiped 2026-08-16 and now run as
- lanes on the Paperclip board rather than as standalone installs; check the
- board for their real state instead of assuming. Ollama is installed and is a
- fail-safe path only. FCC is permanently purged — not "not installed" but
- banned; see agent-contracts/FCC-STATUS.md.
-- `drift.cmd` (in `~\.local\bin`, Win+R-able) = resume Claude in C:\ANTIGRAVITY
- with permissions bypassed.
+- **T5500 (`192.168.0.15`, Front-of-House)**: Mission OS (`:3130`), DateApp Frontend (`:3200`), DateApp API (`:8000`), PostgreSQL (`127.0.0.1:5432`), Redis (`127.0.0.1:6379`), OmniRoute (`:20128/v1`), Hermes (`:8643` / `:9119`), Domains Static Server (`:9160`), Shared `ai-memory` MCP (`:49374`), Obsidian REST (`192.168.0.15:27123`). See `.agents/skills/t5500-node/SKILL.md`.
+- **Alienware (`192.168.0.40`, Workshop)**: DREAM Engine (`:9180`), Lead-Gen Studio (`:8392`), Media/TTS Worker (`:8391`), OPSis Studio (`:8390`), Free Claude Code (`:8082`), Ollama (`:11434`), Swarm Command (`:8000`), Obsidian MCP (`:27200`). See `docs/standards/ALIENWARE-SOUL.md`.
 
-## Session protocol (mandatory)
+## Active Guidance
 
-1. **Start:** read your own Obsidian file `C:\ANTIGRAVITY\Antigravity\<NODE>\<agent>-to-<agent>.md`
- (mandatory, 2026-10-17), then `MEMORY.md` / journal. Legacy MC5 knowledge
- search (only if MC5 is running): `GET http://127.0.0.1:3151/api/knowledge/search?q=<term>`
- (full map: `/api/knowledge/graph`; preview: `/api/knowledge/file?path=`).
-2. **End:** append a timestamped entry to your own Obsidian file, then mirror to
- the backups (Supabase, Supermemory, OpenViking, Vercel).
- Uncommitted work and unwritten state are how work dies here.
-
-## OmniRoute gateway (:20128 dashboard+/v1, :20129 API)
-
-One endpoint for ALL model traffic. No agent holds a provider key — providers,
-auto-swap, and compression live inside the gateway. Clients need only
-`OPENAI_COMPAT_BASE_URL=http://192.168.0.15:20128` (+ optional key).
-
-```powershell
-# Health (also what the keepalive probes):
-Invoke-WebRequest http://192.168.0.15:20128/v1/models -UseBasicParsing -TimeoutSec 5
-# Real end-to-end test (free pool, no keys needed):
-# POST :20129/v1/chat/completions {"model":"auto/best-free", ...} → expect a completion.
-```
-
-- Runs from npm global (`omniroute.cmd` in `%APPDATA%\npm`). Data dir:
- `%USERPROFILE%\.omniroute\data` — OUTSIDE the repo on purpose (sqlite + keys
- must never be committed). Provider sign-ins live there; losing it = re-onboard.
-- Keepalive: `C:\ANTIGRAVITY\scripts\omniroute-keepalive.ps1`, launched at logon
- by `omniroute-keepalive.cmd` copied into the Startup folder. First boot
- compiles ~60-90s before :20128 answers — wait, don't respawn.
-- Model routes that actually work on a fresh instance: `auto/best-free` (verified),
- `auto/best-reasoning` (judge). `auto/coding:free` pool can be degraded
- (felo 400/429, opencode 401) — if workers fail with 429s, point
- `OMNI_MODEL_*` / `EXEC_AUTO_MODEL` at `auto/best-free` in MC5 `server/.env`.
-
-## MC5 legacy vote engine (:3151) — NOT Mission Control
-
-> **Current truth (2026-10-17):** Mission Control is JARVIS/OPSIS on `:3130`
-> (Hermes is JARVIS on `:9119`). Paperclip `:3917` is marketing only. MC5 below is
-> the legacy vote-engine board (not running) — historical section, kept as written.
-
-```powershell
-# Start (background) — NEVER pipe a server through Select-Object -First: the
-# closed pipe can kill it. Redirect to a file instead:
-Set-Location C:\ANTIGRAVITY\mission-control-v5\server; npm start 2>&1 | Out-File $env:TEMP\mc5.log
-# Stop:
-Get-CimInstance Win32_Process -Filter "Name='node.exe'" |
- Where-Object { $_.CommandLine -like '*mission-control*' } |
- ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
-```
-
-- Health: `/api/health` — note `routerLive`/"OMNIROUTE LIVE" means *configured*,
- not *answering*. Probe :20128 directly for the truth.
-- Serves: board UI, `/paperweight/` (static command center; sample data),
- knowledge graph API, bridge (`/api/bridge/openclaw`), MCP at `/api/mcp`.
-- Typecheck/build: `npm run typecheck` / `npm run build` at `mission-control-v5\`.
-
-## The judge-gated swarm (governance — AGENTS.md §7)
-
-- Every task runs on ALL assigned orchestrators independently (tri-execution).
-- All versions go to THE JUDGE (`judge` executor → `EXEC_JUDGE_MODEL`, default
- `auto/best-reasoning`, no local floor, never a worker model). Judge ACCEPTS
- one version (may edit) or DENIES all → task BLOCKED for human review.
- Judge-unreachable also blocks. Nothing ships by default.
-- **Only the judge lane (or a session Joshua directly leads) pushes, merges,
- or deletes branches.** Workers/sub-agents never `git push`.
-- E2E validation recipe (verified working):
- `POST :3151/api/tasks {"title":"...","prompt":"..."}` → poll `/api/tasks`
- until DONE → winner's phases must contain
- `validate: judge (auto/best-reasoning) ACCEPTED version N (...)`.
- Retry after fixes: `POST /api/tasks/<id>/retry`.
-
-## Date app (frontend/react-app)
-
-```powershell
-Set-Location C:\ANTIGRAVITY\frontend\react-app; npm run build
-# PROOF of a good build: dist\assets\index-<hash>.js exists.
-# PROOF of a good SERVE: the public page references that hash and NOT /@vite/client
-# (serving unbuilt source has happened twice — NODE_ENV=production must be set;
-# start via mission-control-v5\scripts\tab-dateapp.cmd).
-```
-
-Python services: `backend\.venv` (skips `emergentintegrations` — Emergent's
-private index, lazy-imported, backend boots without it) and `mission-control-v6\.venv`.
-
-## Git flow (this box)
-
-```bash
-git add -- <only your files> # never -A; other agents share this tree
-git commit -m "type(scope): ..." # end body with Co-Authored-By trailer
-git pull --rebase --autostash origin main
-git push origin main # judge lane / Joshua-led sessions only
-git log --oneline -1 origin/main # confirm it landed
-```
-
-`main` is the only branch — merge and delete anything else on sight.
-
-## Secrets (hard rules)
-
-- Never print, commit, or echo values. Inspect `.env` files by NAMES only:
- `grep -oE '^[A-Z_]+=' file`. Model route names (`auto/best-free`) are not
- secrets and may be written; keys/tokens are and may not.
-- Repo secret presence is audited by `.github/workflows/secrets-audit.yml`
- (manual + weekly, names only). YouTube + platform API keys belong in GitHub
- Actions secrets, never in the tree.
-- The knowledge graph excludes `.env`/vault/credential paths at walk time —
- keep it that way when editing `knowledge.ts`.
-
-## Pitfalls that already burned time (don't repeat)
-
-- `Select-Object -First N` on a background server pipe → server dies when the
- pipe closes. Use `Out-File`.
-- Windows drive letters are per-install: after a reinstall the data disk came
- back as D: and had to be re-lettered to F: (`Set-Partition -DriveLetter D -NewDriveLetter F`).
-- `claude --teleport` needs a checkout of the repo with a CLEAN tree — stash
- with `-u` first (`git stash push -u -m "..."`).
-- A fresh gateway's `auto/coding:free` pool may be rate-limited while
- `auto/best-free` works — swap models via env, don't debug providers.
-- PowerShell here-strings: closing `'@` must be at column 0.
-
-## New-node bootstrap (any machine, always the same path)
-
-```powershell
-git clone https://github.com/Trollz1004/ANTIGRAVITY C:\ANTIGRAVITY
-Set-Location C:\ANTIGRAVITY
-corepack enable; pnpm install # monorepo root
-npm --prefix frontend\react-app install
-npm --prefix mission-control-v5 install; npm --prefix mission-control-v5 run install:all
-npm --prefix brain-mcp install; npm --prefix services\mission-mcp install
-python -m venv backend\.venv; backend\.venv\Scripts\pip install -r backend\requirements.txt # emergentintegrations optional
-python -m venv mission-control-v6\.venv; mission-control-v6\.venv\Scripts\pip install -r mission-control-v6\requirements.txt
-npm install -g omniroute # the gateway
-# .env files come from the vault — NEVER from another node's tree, never echoed.
-# Activate keepalives: copy scripts\omniroute-keepalive.cmd into the Startup folder.
-```
-
-The path is `C:\ANTIGRAVITY` on EVERY node — that is doctrine, not preference.
+- Never hardcode literal user directories; always use `%USERPROFILE%`, `%LOCALAPPDATA%`, or `$env:USERPROFILE`.
+- Active fleet models: `Gemini 4 Carbon`, `GPT-6 Astra`, `GPT-6.1 Sol`, `Opus 5.5` / `Fable` (Claude uses OAuth sign-in only, never OmniRoute; Free Claude Code `:8082` is worker-only).
+- Never launch retired coordination-board servers (`:3100` / `:3917` / MC5 `:3151`).
+- Keep background jobs 100% hidden (`-WindowStyle Hidden`, `conhost.exe --headless`).
 
 ## Payments record
 
-**Payments are settled and are never a blocker.** Do not re-verify, re-audit, re-test, or ask Joshua about them. Every payment, who paid it, and the only two conditions that reopen the subject live in `docs/PAYMENTS-TRUTH.md`. Read it there. Never restate its contents anywhere else ΓÇö a copy is how it goes stale.
+**Payments are settled and are never a blocker.** Do not re-verify, re-audit, re-test, or ask Joshua about them. Every payment, who paid it, and the only two conditions that reopen the subject live in `docs/PAYMENTS-TRUTH.md`. Read it there. Never restate its contents anywhere else — a copy is how it goes stale.
 
 - House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
 - Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).
+
+<!-- TROLLZ1004-SPINE:START -->
+- `Repo: ANTIGRAVITY | Fleet: Alienware (192.168.0.40, workshop) & T5500 (192.168.0.15, front-of-house) | GitHub: Trollz1004 (ops/fleet/fleet-map.json).`
+- `Spine: Trollz1004/dream-online docs/house/SPINE.md (pointers: ADDRESS-DOCTRINE.md, NODES.md, PIPELINE.md, TRUSTED-MODELS.md, THE-HOUSE.md).`
+- `Address doctrine: use 192.168.0.40 and 192.168.0.15 from ops/fleet/fleet-map.json; never use loopback reach URLs; Postgres (port 5432), Redis (port 6379), and Obsidian REST (port 27123) bind "127.0.0.1" on their own machine only.`
+- `Trusted three: Claude Opus 5.5 / Fable (Claude Code), Gemini 4 Carbon (agy), and GPT-6 Astra / GPT-6.1 Sol / Codex (Codex CLI); superpowers is in every kit on demand, while REA, remake, Agent-Reach, and last30days are locked to the trusted three.`
+- `Pipeline: brainstorm first, route role + <=2 skills, build [A]/[B] with failing test first, expediter rubric + 5 stacked add-on PRs, Carbon + Codex judge, Fable / rotating trusted-three merges green checks.`
+- `Starter kit MCP ("kit"): cmd.exe /d /c node "%USERPROFILE%\antigravity\DREAM-Engine-runner\ops\kit\server.mjs" (tools: map_search, map_section, memory_search, memory_add, role_get, method_get).`
+<!-- TROLLZ1004-SPINE:END -->

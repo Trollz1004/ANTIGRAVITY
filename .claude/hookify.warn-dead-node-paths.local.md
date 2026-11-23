@@ -2,18 +2,13 @@
 name: warn-dead-node-paths
 enabled: true
 event: all
-pattern: (nodes[\\/]9020|node-workloads[\\/]9020|C:[\\/]+Users[\\/]+joshl[\\/]|\bT5500\b.*(node|role|move to)|i7k32GB1050ti)
+pattern: (nodes[\\/][9]020|node-workloads[\\/][9]020|C:[\\/]+Users[\\/]+josh[li][\\/]|192\.168\.0\.[8]|sabre[t]ooth|i7k32GB1050ti)
 ---
 
-⚠️ **That path or node name is dead.**
+⚠️ **That path or node name is retired or hardcoded.**
 
-- `nodes/9020/…`, `C:/node-workloads/9020/…`, host `i7k32GB1050ti`, "node 9020 (the marketing
-  node)" — Joshua: *"no 9020"*. Those notes were frozen 2026-08-21 and contradict current doctrine
-  (Hermes quarantined, Ornith as CEO, business-exchange :3050 — all wrong now).
-- `C:/Users/joshl/` — the profile is `joshi`; `joshl` is a pre-reinstall path.
-- **T5500 the role is dead**; the T5500 **machine** (`DESKTOP-TQD7EIT`, 32 GB, RX 6800) is real and
-  reserved as the DREAM Online server. `192.168.0.8` is **SABRETOOTH**, this box, not a T5500.
-
-`C:\ANTIGRAVITY` is the sole canonical working tree. If you are *reading* a dead path as
-evidence, fine — label it stale. If you are *writing* it into doctrine, a vault, a target
-registry, or a config, stop and use the current truth in `docs/ops/NODE-AND-PORT-MAP.md`.
+- Third-node paths, retired workstation names, and legacy node IPs are permanently decommissioned. Never configure, probe, or route traffic to them.
+- Never hardcode literal Windows user folder paths; always use `%USERPROFILE%`, `%LOCALAPPDATA%`, or `$env:USERPROFILE`.
+- Canonical fleet topology runs on **two nodes only** as defined in `ops/fleet/fleet-map.json`:
+  - **Alienware (`192.168.0.40`, Workshop)**: DREAM Engine `:9180`, Lead-Gen `:8392`, Media/TTS `:8391`, OPSis Studio `:8390`, Free Claude Code `:8082`.
+  - **T5500 (`192.168.0.15`, Front-of-House)**: Mission OS `:3130`, DateApp Frontend `:3200`, DateApp API `:8000`, OmniRoute `:20128`, Hermes `:8643`/`:9119`, Shared `ai-memory` MCP `:49374`.

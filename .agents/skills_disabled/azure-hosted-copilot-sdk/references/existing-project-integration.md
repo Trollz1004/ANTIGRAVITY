@@ -62,7 +62,7 @@ See [Azure Model Configuration](azure-model-config.md).
 ## Testing
 
 ```bash
-curl -s -X POST http://localhost:<port>/api/chat \
+curl -s -X POST http://192.168.0.40:<port>/api/chat \
   -H "Content-Type: application/json" \
   -d '{"message":"test"}'
 ```

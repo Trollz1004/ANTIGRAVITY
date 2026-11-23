@@ -1,22 +1,20 @@
 ---
 name: payments
-description: Square primary + PayPal + Cash App Business + Plaid verify for dating surface. Stripe banned on youandinotai. Use for checkout, webhooks, pricing, pre-order rails.
+description: Square primary + PayPal per docs/PAYMENTS-TRUTH.md. Zero unapproved legacy card processors across Trollz1004 surfaces. Use for checkout, webhooks, pricing, pre-order rails.
 version: 2.0.0
 ---
 
-# Payments (Dating Surface — Multi-Rail, No Stripe)
+# Payments (Square Primary + PayPal)
 
-> **Current truth check (2026-09-03 fact sheet):** governance doctrine states
-> "Date App is Square only (never Stripe)." This file's multi-rail design
-> (Square + PayPal + Cash App + Plaid) below predates that and has not been
-> independently re-confirmed in this audit — treat PayPal/Cash App/Plaid rails
-> as UNVERIFIED against current doctrine and confirm with Joshua before relying
-> on them; Stripe stays banned either way.
+> **Current truth check (`docs/PAYMENTS-TRUTH.md`):** governance doctrine states
+> Square is primary alongside PayPal (`ebaytrashortreasure@gmail.com`). Never wire
+> legacy third-party card SDKs. Any optional legacy wallet endpoints below are
+> treated as UNVERIFIED unless confirmed with Joshua.
 
 ## Hard Rules
 
-- youandinotai dating surface: **Square primary**, plus **PayPal**, **Cash App Business**, **Plaid** (verification).
-- **STRIPE IS BANNED** on dating — AUP + founder iron wall. Never import stripe SDK here.
+- youandinotai dating surface & live products: **Square primary**, plus **PayPal** (`docs/PAYMENTS-TRUTH.md`).
+- **UNAPPROVED LEGACY CARD RAILS ARE BANNED** — never import legacy external card SDKs here.
 - All money through LLC merchant / normal tax workflows.
 - Affiliate traffic: `https://trollz1004.github.io/youandinotai-links/?ref=CODE` (never raw square short links for ref tracking).
 
@@ -39,7 +37,7 @@ PLAID_ENV=sandbox
 
 | Method | Path | Rail |
 | ------ | ------------------------------ | ---------------------------------- |
-| GET | `/billing/rails` | status flags (stripe always false) |
+| GET | `/billing/rails` | status flags (legacy card rails always false) |
 | POST | `/billing/checkout-link` | Square |
 | POST | `/billing/paypal/create-order` | PayPal |
 | POST | `/billing/cashapp/checkout` | Cash App / Square fallback |
@@ -74,3 +72,12 @@ Any pricing, membership, Bot-Shield, founder plan, pre-order, webhook, or ledger
 
 - House rules: `docs/house/HOUSE-MOTION-RULE.md` and `docs/standards/AGENT-STANDARD.md`. Read before any design, site, dashboard or header job. Pointers only; do not restate rules here.
 - Current beats existing: fetch and pull main first; origin main wins over clone, cache, journal and definition file; a clone that cannot fast-forward stops and reports (`ops/handoffs/FABLE-HANDOFFS-2026-11-06.md` section 0).
+
+<!-- TROLLZ1004-SPINE:START -->
+- `Repo: ANTIGRAVITY | Fleet: Alienware (192.168.0.40, workshop) & T5500 (192.168.0.15, front-of-house) | GitHub: Trollz1004 (ops/fleet/fleet-map.json).`
+- `Spine: Trollz1004/dream-online docs/house/SPINE.md (pointers: ADDRESS-DOCTRINE.md, NODES.md, PIPELINE.md, TRUSTED-MODELS.md, THE-HOUSE.md).`
+- `Address doctrine: use 192.168.0.40 and 192.168.0.15 from ops/fleet/fleet-map.json; never use loopback reach URLs; Postgres (port 5432), Redis (port 6379), and Obsidian REST (port 27123) bind "127.0.0.1" on their own machine only.`
+- `Trusted three: Claude Opus 5.5 / Fable (Claude Code), Gemini 4 Carbon (agy), and GPT-6 Astra / GPT-6.1 Sol / Codex (Codex CLI); superpowers is in every kit on demand, while REA, remake, Agent-Reach, and last30days are locked to the trusted three.`
+- `Pipeline: brainstorm first, route role + <=2 skills, build [A]/[B] with failing test first, expediter rubric + 5 stacked add-on PRs, Carbon + Codex judge, Fable / rotating trusted-three merges green checks.`
+- `Starter kit MCP ("kit"): cmd.exe /d /c node "%USERPROFILE%\antigravity\DREAM-Engine-runner\ops\kit\server.mjs" (tools: map_search, map_section, memory_search, memory_add, role_get, method_get).`
+<!-- TROLLZ1004-SPINE:END -->

@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { Readable } from 'node:stream';
 import { safeResolveRepoPath, readRepoFile, MAX_REPO_FILE_BYTES } from './live-tabs-backend.mjs';
-import { handleMissionRequest, isLoopbackAddress } from './server.mjs';
+import { HOST, PORT, handleMissionRequest, isLoopbackAddress, resolveMissionOsBind } from './server.mjs';
 
 const source = fs.readFileSync(new URL('./server.mjs', import.meta.url), 'utf8');
 
@@ -14,7 +14,7 @@ function invokeMissionHandler({ method = 'GET', url = '/', remoteAddress = '127.
   const req = Object.assign(Readable.from(chunks), {
     method,
     url,
-    headers: { host: '127.0.0.1:3130', ...headers },
+    headers: { host: '192.168.0.15:3130', ...headers },
     socket: { remoteAddress },
   });
   let statusCode = 200;
@@ -31,15 +31,25 @@ function invokeMissionHandler({ method = 'GET', url = '/', remoteAddress = '127.
       responseBody += String(payload || '');
     },
   };
-  return handleMissionRequest(req, res).then(() => ({
-    statusCode,
-    headers: responseHeaders,
-    body: responseBody ? JSON.parse(responseBody) : null,
-  }));
+  return handleMissionRequest(req, res).then(() => {
+    let parsed = null;
+    try {
+      parsed = responseBody ? JSON.parse(responseBody) : null;
+    } catch {
+      parsed = responseBody;
+    }
+    return {
+      statusCode,
+      headers: responseHeaders,
+      body: parsed,
+    };
+  });
 }
 
-test('startup does not fabricate health or versions', () => {
+test('startup does not fabricate health or versions and contains zero hardcoded user paths or retired nodes', () => {
   assert.doesNotMatch(source, /listening: true|version: 'agy 1\.4\.0'|version: 'Claude Code 2\.1\.278'/);
+  assert.doesNotMatch(source, /Users[\\/]+(?:joshl|joshi|NSFW_BOTS)/i);
+  assert.doesNotMatch(source, /sabretooth/i);
 });
 
 test('dispatch never bypasses permissions or passes user input into cmd', () => {
@@ -47,12 +57,47 @@ test('dispatch never bypasses permissions or passes user input into cmd', () => 
   assert.doesNotMatch(source, /spawn\(isCmd \? 'cmd.exe'/);
 });
 
-test('server is loopback-only and guards request origin', () => {
-  assert.doesNotMatch(source, /\.listen\(PORT, '0\.0\.0\.0'/);
+test('resolveMissionOsBind binds 127.0.0.1 with warning when token is unset, fails closed on explicit LAN bind without token, and binds 0.0.0.0 with token', () => {
+  const warnings = [];
+  const noTokenHost = resolveMissionOsBind({ env: {}, port: 3130, warn: (msg) => warnings.push(msg) });
+  assert.equal(noTokenHost, '127.0.0.1');
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /MISSION_OS_TOKEN/);
+  assert.doesNotMatch(warnings[0], /127\.0\.0\.1:\d+/);
+
+  assert.throws(() => resolveMissionOsBind({ env: { MISSION_OS_HOST: '0.0.0.0' }, port: 3130, warn: () => {} }));
+  assert.throws(() => resolveMissionOsBind({ env: { MISSION_OS_HOST: '192.168.0.15' }, port: 3130, warn: () => {} }));
+  assert.equal(resolveMissionOsBind({ env: { MISSION_OS_TOKEN: 'tok' }, port: 3130, warn: () => {} }), '0.0.0.0');
+  assert.equal(resolveMissionOsBind({ env: { FLEET_SHARED_TOKEN: 'tok' }, port: 3130, warn: () => {} }), '0.0.0.0');
+
+  assert.ok(['127.0.0.1', '0.0.0.0'].includes(HOST));
+  assert.equal(PORT, 3130);
   assert.match(source, /guardRequest\(req/);
   assert.equal(isLoopbackAddress('127.0.0.1'), true);
   assert.equal(isLoopbackAddress('::1'), true);
-  assert.equal(isLoopbackAddress('192.168.0.50'), false);
+  assert.equal(isLoopbackAddress('192.168.0.40'), false);
+});
+
+test('loopback requests to mission-os guarded routes succeed cleanly without 503 when MISSION_OS_TOKEN is unset', async () => {
+  const prevToken = process.env.MISSION_OS_TOKEN;
+  const prevFleet = process.env.FLEET_SHARED_TOKEN;
+  delete process.env.MISSION_OS_TOKEN;
+  delete process.env.FLEET_SHARED_TOKEN;
+  try {
+    const res = await invokeMissionHandler({
+      method: 'GET',
+      url: '/api/mos-state.json',
+      remoteAddress: '127.0.0.1',
+      headers: { host: '127.0.0.1:3130' },
+    });
+    assert.equal(res.statusCode, 200);
+    assert.equal(res.body?.identity, 'mission-agent-os');
+  } finally {
+    if (prevToken === undefined) delete process.env.MISSION_OS_TOKEN;
+    else process.env.MISSION_OS_TOKEN = prevToken;
+    if (prevFleet === undefined) delete process.env.FLEET_SHARED_TOKEN;
+    else process.env.FLEET_SHARED_TOKEN = prevFleet;
+  }
 });
 
 test('Finding 5: safeResolveRepoPath and readRepoFile refuse sibling traversal and sensitive files while allowing normal files', () => {
@@ -83,13 +128,11 @@ test('Finding 5: safeResolveRepoPath and readRepoFile refuse sibling traversal a
     fs.writeFileSync(path.join(repoDir, 'vault', 'note.md'), 'vault note', 'utf8');
     fs.writeFileSync(path.join(repoDir, 'README.md'), 'Normal documentation content', 'utf8');
 
-    // Sibling traversal refused
     assert.equal(safeResolveRepoPath('../repo-sibling/escape.txt', repoDir), null);
     const siblingRes = readRepoFile('../repo-sibling/escape.txt', MAX_REPO_FILE_BYTES, repoDir);
     assert.equal(siblingRes.ok, false);
     assert.equal(siblingRes.status, 403);
 
-    // Env, key, credential, and restricted folder files refused
     for (const deniedRel of [
       '.env',
       '.env.local',
@@ -111,7 +154,6 @@ test('Finding 5: safeResolveRepoPath and readRepoFile refuse sibling traversal a
       assert.equal(deniedRes.status, 403, `Expected 403 for ${deniedRel}`);
     }
 
-    // Normal file allowed and cap stays 512 KB
     assert.equal(MAX_REPO_FILE_BYTES, 512 * 1024);
     const normalRes = readRepoFile('README.md', MAX_REPO_FILE_BYTES, repoDir);
     assert.equal(normalRes.ok, true);
@@ -122,14 +164,52 @@ test('Finding 5: safeResolveRepoPath and readRepoFile refuse sibling traversal a
   }
 });
 
-test('Finding 8: non-loopback request to /api/wheel is refused and cross-origin POST to /api/bridge/verify is refused', async () => {
-  for (const preGuardRoute of ['/api/wheel', '/api/marketing/plans', '/api/live/agents', '/api/mos-state.json']) {
-    const lanRes = await invokeMissionHandler({
+test('LAN token guard refuses unauthenticated non-loopback requests, permits valid MISSION_OS_TOKEN, and refuses cross-origin POST', async () => {
+  const prevToken = process.env.MISSION_OS_TOKEN;
+  process.env.MISSION_OS_TOKEN = 'test-mission-os-lan-token-999';
+  try {
+    for (const route of ['/api/wheel', '/api/marketing/plans', '/api/live/agents', '/api/mos-state.json', '/v1/models']) {
+      const unauthed = await invokeMissionHandler({
+        method: 'GET',
+        url: route,
+        remoteAddress: '192.168.0.40',
+      });
+      assert.equal(unauthed.statusCode, 401, `Expected unauthenticated LAN ${route} to return 401`);
+    }
+
+    const authedHeader = await invokeMissionHandler({
       method: 'GET',
-      url: preGuardRoute,
-      remoteAddress: '192.168.0.99',
+      url: '/api/mos-state.json',
+      remoteAddress: '192.168.0.40',
+      headers: {
+        host: '192.168.0.15:3130',
+        'x-mission-os-token': 'test-mission-os-lan-token-999',
+      },
     });
-    assert.equal(lanRes.statusCode, 403, `Expected non-loopback ${preGuardRoute} to be refused`);
+    assert.equal(authedHeader.statusCode, 200);
+    assert.equal(authedHeader.body?.identity, 'mission-agent-os');
+
+    const authedBearer = await invokeMissionHandler({
+      method: 'GET',
+      url: '/api/mos-state.json',
+      remoteAddress: '192.168.0.40',
+      headers: {
+        host: '192.168.0.15:3130',
+        authorization: 'Bearer test-mission-os-lan-token-999',
+      },
+    });
+    assert.equal(authedBearer.statusCode, 200);
+
+    process.env.MISSION_OS_TOKEN = '';
+    const unconfigured = await invokeMissionHandler({
+      method: 'GET',
+      url: '/api/mos-state.json',
+      remoteAddress: '192.168.0.40',
+    });
+    assert.equal(unconfigured.statusCode, 503);
+  } finally {
+    if (prevToken === undefined) delete process.env.MISSION_OS_TOKEN;
+    else process.env.MISSION_OS_TOKEN = prevToken;
   }
 
   const crossOriginVerify = await invokeMissionHandler({
@@ -137,11 +217,93 @@ test('Finding 8: non-loopback request to /api/wheel is refused and cross-origin 
     url: '/api/bridge/verify',
     remoteAddress: '127.0.0.1',
     headers: {
-      host: '127.0.0.1:3130',
+      host: '192.168.0.15:3130',
       origin: 'https://evil.example',
       'content-type': 'application/json',
     },
     body: { node: 't5500', lane: 'hermes' },
   });
   assert.equal(crossOriginVerify.statusCode, 403);
+});
+
+test('Stage E4 /health and /api/mos-state.json show only counts and nodeLight (stream-safe: no setting names, no file names, no secret values)', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mission-os-e4-'));
+  const driftPath = path.join(tmpDir, 'agent-drift.json');
+  const prevFleet = process.env.FLEET_SHARED_TOKEN;
+  const prevMission = process.env.MISSION_OS_TOKEN;
+  const prevDrift = process.env.AGENT_DRIFT_PATH;
+  const fakeSecret = 'fake-never-expose-mos-token-7788';
+  try {
+    delete process.env.FLEET_SHARED_TOKEN;
+    delete process.env.MISSION_OS_TOKEN;
+    process.env.AGENT_DRIFT_PATH = driftPath;
+    fs.writeFileSync(driftPath, JSON.stringify({ driftedFiles: [] }), 'utf8');
+
+    const amberMissing = await invokeMissionHandler({ url: '/health' });
+    assert.equal(amberMissing.statusCode, 200);
+    assert.equal('missingEnv' in amberMissing.body, false);
+    assert.equal(JSON.stringify(amberMissing.body).includes('FLEET_SHARED_TOKEN'), false);
+    assert.equal(amberMissing.body.missingEnvCount, 1);
+    assert.equal(amberMissing.body.nodeLight, 'amber');
+
+    process.env.MISSION_OS_TOKEN = fakeSecret;
+    const greenHealth = await invokeMissionHandler({ url: '/health' });
+    assert.equal(greenHealth.statusCode, 200);
+    assert.equal(greenHealth.body.missingEnvCount, 0);
+    assert.equal(greenHealth.body.driftedCount, 0);
+    assert.equal(greenHealth.body.nodeLight, 'green');
+    assert.equal(JSON.stringify(greenHealth.body).includes(fakeSecret), false);
+
+    fs.writeFileSync(
+      driftPath,
+      JSON.stringify({ driftedFiles: [{ file: 'CLAUDE.md', reason: 'stale' }] }),
+      'utf8',
+    );
+    const mosState = await invokeMissionHandler({ url: '/api/mos-state.json' });
+    assert.equal(mosState.statusCode, 200);
+    assert.equal(mosState.body.nodeLight, 'amber');
+    assert.equal(mosState.body.driftedCount, 1);
+    assert.equal(mosState.body.agentDrift.present, true);
+    assert.equal(JSON.stringify(mosState.body).includes('CLAUDE.md'), false);
+    assert.equal('driftedFiles' in mosState.body, false);
+    assert.equal(JSON.stringify(mosState.body).includes(fakeSecret), false);
+  } finally {
+    if (prevFleet === undefined) delete process.env.FLEET_SHARED_TOKEN;
+    else process.env.FLEET_SHARED_TOKEN = prevFleet;
+    if (prevMission === undefined) delete process.env.MISSION_OS_TOKEN;
+    else process.env.MISSION_OS_TOKEN = prevMission;
+    if (prevDrift === undefined) delete process.env.AGENT_DRIFT_PATH;
+    else process.env.AGENT_DRIFT_PATH = prevDrift;
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+test('GET /api/mos-state.json and GET /api/marketing/plans on loopback without token return 200 with watchdog identity strings mission-agent-os and social-command-center-v5', async () => {
+  const prevMosToken = process.env.MISSION_OS_TOKEN;
+  const prevFleetToken = process.env.FLEET_SHARED_TOKEN;
+  delete process.env.MISSION_OS_TOKEN;
+  delete process.env.FLEET_SHARED_TOKEN;
+  try {
+    const mosRes = await invokeMissionHandler({
+      method: 'GET',
+      url: '/api/mos-state.json',
+      remoteAddress: '127.0.0.1',
+      headers: { host: '127.0.0.1:3130' },
+    });
+    assert.equal(mosRes.statusCode, 200);
+    assert.equal(mosRes.body?.identity, 'mission-agent-os');
+
+    const plansRes = await invokeMissionHandler({
+      method: 'GET',
+      url: '/api/marketing/plans',
+      remoteAddress: '127.0.0.1',
+      headers: { host: '127.0.0.1:3130' },
+    });
+    assert.equal(plansRes.statusCode, 200);
+    assert.equal(plansRes.body?.identity, 'social-command-center-v5');
+  } finally {
+    if (prevMosToken === undefined) delete process.env.MISSION_OS_TOKEN;
+    else process.env.MISSION_OS_TOKEN = prevMosToken;
+    if (prevFleetToken === undefined) delete process.env.FLEET_SHARED_TOKEN;
+    else process.env.FLEET_SHARED_TOKEN = prevFleetToken;
+  }
 });

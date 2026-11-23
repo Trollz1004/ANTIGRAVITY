@@ -3,14 +3,13 @@ import { Link } from 'react-router-dom';
 import {
   Banknote,
   CreditCard,
-  Landmark,
   QrCode,
   ShieldCheck,
   Wallet,
 } from 'lucide-react';
 import { api } from '../../lib/api';
 
-type Rail = 'square' | 'paypal' | 'paypal_qr' | 'cashapp' | 'plaid';
+type Rail = 'square' | 'paypal' | 'paypal_qr' | 'cashapp';
 
 /** Public PayPal managed QR links decoded from Telegram screenshots 2026-08-04 */
 export const PAYPAL_QR = {
@@ -27,8 +26,8 @@ export const PAYPAL_QR = {
 } as const;
 
 /**
- * Multi-rail checkout picker.
- * Square = primary (live). PayPal API + QR / Cash App / Plaid.
+ * Multi-rail checkout picker for live Founder Plans.
+ * Square = primary (live). PayPal API + QR / Cash App.
  * STRIPE IS HARD-BANNED on dating surface.
  */
 export function PayMethods() {
@@ -88,16 +87,6 @@ export function PayMethods() {
         window.location.href = res.checkout_url;
         return;
       }
-      if (rail === 'plaid') {
-        const res = await api.post<{ link_token: string }>(
-          '/billing/plaid/link-token',
-          {}
-        );
-        setMsg(
-          `Plaid Link token ready (${res.link_token.slice(0, 12)}…). Wire Plaid Link JS in production build to open the bank UI.`
-        );
-        return;
-      }
     } catch (err: any) {
       setMsg(err?.message || 'Checkout unavailable for this rail right now.');
     } finally {
@@ -135,12 +124,6 @@ export function PayMethods() {
       icon: Banknote,
       note: 'Cash App Business / Square Cash App rail',
     },
-    {
-      id: 'plaid',
-      name: 'Plaid verify',
-      icon: Landmark,
-      note: 'Bank identity / account verification (not card charge)',
-    },
   ];
 
   const activeQr = PAYPAL_QR[qrWhich];
@@ -148,17 +131,36 @@ export function PayMethods() {
   return (
     <div className="km-page mx-auto max-w-lg px-4 py-5">
       <div className="mb-2 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-[var(--km-accent)]">
-        Payments
+        Payments · Founder Plans
       </div>
       <h1 className="text-2xl font-semibold">Checkout rails</h1>
       <p className="mt-2 text-sm text-[var(--km-muted)]">
-        Dating surface uses Square, PayPal, Cash App Business, and optional
-        Plaid verification.
+        Dating surface uses Square, PayPal, and Cash App Business for live
+        Founder Plans.
         <span className="font-semibold text-[#f87171]">
           {' '}
           Stripe is not used here.
         </span>
       </p>
+
+      <section className="km-card km-card-glow mt-5 p-4">
+        <div className="flex items-center gap-2 font-semibold">
+          <ShieldCheck size={18} className="text-emerald-400" />
+          <span>$1 Bot-Shield Human Check</span>
+        </div>
+        <p className="mt-1 text-sm text-[var(--km-muted)]">
+          Unverified members must complete the $1 Bot-Shield liveness and
+          payment check first to activate their verified badge and unlock member
+          routes. Subscription tiers below do not replace Bot-Shield
+          verification.
+        </p>
+        <Link
+          to="/app/verify"
+          className="km-btn-gradient mt-3 inline-flex w-full justify-center no-underline text-sm"
+        >
+          Start $1 Bot-Shield Human Check
+        </Link>
+      </section>
 
       <div className="mt-5 grid gap-2">
         {rails.map(r => (
@@ -219,9 +221,9 @@ export function PayMethods() {
         </section>
       )}
 
-      {rail !== 'plaid' && rail !== 'paypal_qr' && (
+      {rail !== 'paypal_qr' && (
         <label className="mt-5 block text-xs text-[var(--km-muted)]">
-          Plan tier
+          Founder Plans tier
           <select
             className="km-input mt-1"
             value={tier}
@@ -243,11 +245,9 @@ export function PayMethods() {
       >
         {busy
           ? 'Starting…'
-          : rail === 'plaid'
-            ? 'Start Plaid verify'
-            : rail === 'paypal_qr'
-              ? `Open ${activeQr.label} PayPal`
-              : `Pay with ${rail}`}
+          : rail === 'paypal_qr'
+            ? `Open ${activeQr.label} PayPal`
+            : `Pay with ${rail}`}
       </button>
 
       {msg && (
@@ -263,7 +263,7 @@ export function PayMethods() {
           Affiliate traffic must enter via{' '}
           <a
             className="text-[var(--km-accent)] underline"
-            href="https://trollz1004.github.io/youandinotai-links/?ref=clean-repo"
+            href="https://youandinotai.com/?ref=clean-repo"
           >
             the public landing
           </a>
@@ -276,7 +276,7 @@ export function PayMethods() {
         to="/app/preorder"
         className="km-btn-ghost mt-4 inline-flex no-underline"
       >
-        Back to pre-order
+        Back to Founder Plans
       </Link>
     </div>
   );

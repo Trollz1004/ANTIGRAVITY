@@ -16,11 +16,12 @@ $env:PYTHONIOENCODING = 'utf-8'; $env:PYTHONUTF8 = '1'; $env:HERMES_TTS_BACKEND 
 try { [Console]::OutputEncoding = [Text.Encoding]::UTF8; $OutputEncoding = [Text.Encoding]::UTF8 } catch {}
 $HostTag = 't5500-2-xeon-72-ram-3070-8gb-gpu-ram/192.168.0.15'
 
-$Repo       = 'C:\ANTIGRAVITY'
+$Repo       = if (Test-Path 'C:\ANTIGRAVITY\ops\t5500\hermes-support.ps1') { 'C:\ANTIGRAVITY' } else { (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path }
+$BindHost   = if ([Environment]::GetEnvironmentVariable('FLEET_SHARED_TOKEN')) { '192.168.0.15' } else { '127.0.0.1' }
 $LogFile    = Join-Path $Repo 'logs\hermes-support.log'
 $InboxDir   = Join-Path $Repo 'ops\marketing-inbox'
-$OllamaUrl  = 'http://127.0.0.1:11434'
-$DateAppApi = 'http://127.0.0.1:8000'
+$OllamaUrl  = "http://${BindHost}:11434"
+$DateAppApi = "http://${BindHost}:8000"
 $ModelName  = 'joshlcoleman/Fable:latest'
 
 New-Item -ItemType Directory -Force -Path ([IO.Path]::GetDirectoryName($LogFile)) | Out-Null

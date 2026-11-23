@@ -64,8 +64,8 @@ Read `AGENTS.md` FIRST — it lists every source file with its purpose. Then:
 | Check         | Command                                                                                                          |
 | ------------- | ---------------------------------------------------------------------------------------------------------------- |
 | Run locally   | `azd app run` — starts API + UI                                                                                  |
-| Health check  | `curl -s http://localhost:3000/health`                                                                           |
-| Test endpoint | `curl -s -X POST http://localhost:3000/api/<endpoint> -H "Content-Type: application/json" -d '{"input":"test"}'` |
+| Health check  | `curl -s http://192.168.0.40:3000/health`                                                                           |
+| Test endpoint | `curl -s -X POST http://192.168.0.40:3000/api/<endpoint> -H "Content-Type: application/json" -d '{"input":"test"}'` |
 
 ## Errors
 

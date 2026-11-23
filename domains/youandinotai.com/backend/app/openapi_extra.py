@@ -283,7 +283,7 @@ members, accountable profiles, support workflows, and real-world plans.
 | Environment | URL |
 |-------------|-----|
 | **Production** | `https://api.youandinotai.com` |
-| **Local Dev** | `http://localhost:8000` |
+| **Local Dev** | `http://192.168.0.15:8000` |
 
 ### Quick Start
 
@@ -491,7 +491,7 @@ LICENSE_INFO: dict = {
 }
 
 SERVERS: list[dict] = [
-    {"url": "http://localhost:8000", "description": "Local development"},
+    {"url": "http://192.168.0.15:8000", "description": "Local development"},
     {"url": "https://api.youandinotai.com", "description": "Production"},
     {"url": "https://staging-api.youandinotai.com", "description": "Staging"},
 ]
