@@ -23,6 +23,7 @@ import {
 import { DEFAULT_DATABASE_PATH, ENV } from "./_core/env";
 import {
   buildChannelPayload,
+  buildSafeChannelStatus,
   channelBlueprint,
   ChannelCode,
   decideChannelSaleReconciliation,
@@ -1102,6 +1103,177 @@ async function ensureMarketplaceChannels() {
   }
 }
 
+export async function listMarketplaceChannels() {
+  const baseStatuses = buildSafeChannelStatus();
+  const db = await getDb();
+  if (!db) return baseStatuses;
+  await ensureMarketplaceChannels();
+  const [rows, credentials] = await Promise.all([
+    db.select().from(marketplaceChannels),
+    db.select().from(credentialConnections),
+  ]);
+  return baseStatuses.map(base => {
+    const row = rows.find(item => item.code === base.code);
+    const blueprint = channelBlueprint.find(item => item.code === base.code);
+    const requiredSecrets = blueprint?.requiredSecrets ?? [];
+    const configuredCount = requiredSecrets.filter(key => {
+      if (Boolean(process.env[key]?.trim())) return true;
+      if (!row) return false;
+      return credentials.some(
+        cred =>
+          cred.channelId === row.id &&
+          cred.secretKeyName === key &&
+          Boolean(cred.configured)
+      );
+    }).length;
+    return {
+      ...base,
+      id: row?.id,
+      enabled: row ? Boolean(row.enabled) : base.enabled,
+      operationMode: row?.operationMode ?? base.operationMode,
+      credentialState: {
+        configured: configuredCount === requiredSecrets.length,
+        configuredCount,
+        requiredCount: requiredSecrets.length,
+      },
+    };
+  });
+}
+
+export async function setMarketplaceChannelEnabled(input: {
+  channelCode: ChannelCode;
+  enabled: boolean;
+  operationMode?: "disabled" | "review" | "enabled";
+  actorUserId: number;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database connection is unavailable.");
+  await ensureMarketplaceChannels();
+  const [channel] = await db
+    .select()
+    .from(marketplaceChannels)
+    .where(eq(marketplaceChannels.code, input.channelCode))
+    .limit(1);
+  if (!channel) throw new Error("The selected channel is unavailable.");
+  const nextOperationMode =
+    input.operationMode ?? (input.enabled ? "enabled" : "review");
+  await db
+    .update(marketplaceChannels)
+    .set({
+      enabled: input.enabled,
+      operationMode: nextOperationMode,
+      updatedAt: new Date(),
+    })
+    .where(eq(marketplaceChannels.id, channel.id));
+  const correlationId = `channel-${input.channelCode}-${Date.now()}`;
+  await db.insert(activityLogs).values({
+    category: "channel",
+    action: input.enabled
+      ? "marketplace_channel_enabled"
+      : "marketplace_channel_disabled",
+    subjectType: "channel",
+    subjectId: channel.id,
+    actorUserId: input.actorUserId,
+    correlationId,
+    outcome: "succeeded",
+    details: {
+      channel: input.channelCode,
+      enabled: input.enabled,
+      operationMode: nextOperationMode,
+    },
+  });
+  const [updated] = await db
+    .select()
+    .from(marketplaceChannels)
+    .where(eq(marketplaceChannels.id, channel.id))
+    .limit(1);
+  if (!updated) throw new Error("Updated channel record could not be loaded.");
+  return updated;
+}
+
+export async function applyDraftToCatalogProduct(input: {
+  productId: number;
+  title?: string | null;
+  description?: string | null;
+  categoryHint?: string | null;
+  attributes?:
+    Array<{ name: string; value: string }> | Record<string, unknown> | null;
+  actorUserId: number;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database connection is unavailable.");
+  const [product] = await db
+    .select()
+    .from(products)
+    .where(eq(products.id, input.productId))
+    .limit(1);
+  if (!product) throw new Error("The selected catalog record is unavailable.");
+
+  const nextTitle = input.title?.trim() ? input.title.trim() : product.title;
+  const nextDescription = input.description?.trim()
+    ? input.description.trim()
+    : product.description;
+
+  const existingAttributes =
+    product.attributes &&
+    typeof product.attributes === "object" &&
+    !Array.isArray(product.attributes)
+      ? (product.attributes as Record<string, unknown>)
+      : {};
+  const mergedAttributes: Record<string, unknown> = { ...existingAttributes };
+  if (input.categoryHint?.trim()) {
+    mergedAttributes.categoryHint = input.categoryHint.trim();
+  }
+  if (Array.isArray(input.attributes)) {
+    for (const attr of input.attributes) {
+      if (attr.name?.trim()) {
+        mergedAttributes[attr.name.trim()] = attr.value;
+      }
+    }
+  } else if (input.attributes && typeof input.attributes === "object") {
+    Object.assign(mergedAttributes, input.attributes);
+  }
+  const nextAttributes =
+    Object.keys(mergedAttributes).length > 0
+      ? mergedAttributes
+      : product.attributes;
+
+  await db
+    .update(products)
+    .set({
+      title: nextTitle,
+      description: nextDescription,
+      attributes: nextAttributes,
+      updatedAt: new Date(),
+    })
+    .where(eq(products.id, input.productId));
+
+  const correlationId = `catalog-draft-${input.productId}-${Date.now()}`;
+  await db.insert(activityLogs).values({
+    category: "catalog",
+    action: "reviewed_draft_applied_to_catalog",
+    subjectType: "product",
+    subjectId: input.productId,
+    actorUserId: input.actorUserId,
+    correlationId,
+    outcome: "succeeded",
+    details: {
+      titleUpdated: Boolean(input.title?.trim()),
+      descriptionUpdated: Boolean(input.description?.trim()),
+      categoryHint: input.categoryHint?.trim() || null,
+    },
+  });
+
+  const [updated] = await db
+    .select()
+    .from(products)
+    .where(eq(products.id, input.productId))
+    .limit(1);
+  if (!updated)
+    throw new Error("Catalog record could not be loaded after applying draft.");
+  return updated;
+}
+
 export async function createListingPayloadPreview(input: {
   productId: number;
   channelCode: ChannelCode;
@@ -1137,6 +1309,36 @@ export async function createListingPayloadPreview(input: {
     );
   if (!product || !inventory || !channel)
     throw new Error("The selected product or channel is unavailable.");
+
+  const [existingListing] = await db
+    .select()
+    .from(channelListings)
+    .where(
+      and(
+        eq(channelListings.productId, input.productId),
+        eq(channelListings.channelId, channel.id)
+      )
+    )
+    .limit(1);
+  const [latestApproval] = existingListing
+    ? await db
+        .select()
+        .from(approvalRequests)
+        .where(
+          and(
+            eq(approvalRequests.subjectType, "listing"),
+            eq(approvalRequests.subjectId, existingListing.id)
+          )
+        )
+        .orderBy(desc(approvalRequests.createdAt), desc(approvalRequests.id))
+        .limit(1)
+    : [];
+  const approvalStatus: "pending" | "approved" | "rejected" =
+    latestApproval?.status === "approved"
+      ? "approved"
+      : latestApproval?.status === "rejected"
+        ? "rejected"
+        : "pending";
 
   const availableQuantity =
     inventory.onHandQuantity - inventory.reservedQuantity;
@@ -1175,12 +1377,21 @@ export async function createListingPayloadPreview(input: {
     price: input.price,
     availableQuantity,
     imageCount: media.length,
-    approvalStatus: "pending",
+    approvalStatus,
     capability: channel.capability,
-    channelEnabled: channel.enabled,
+    channelEnabled: Boolean(channel.enabled),
   });
-  const correlationId = `payload-${input.productId}-${input.channelCode}-${Date.now()}`;
-  const state = preflight.ready ? "review" : "error";
+  const existingCorrelationId = (
+    existingListing?.payload as { workflowCorrelationId?: string } | null
+  )?.workflowCorrelationId;
+  const correlationId =
+    existingCorrelationId ||
+    `payload-${input.productId}-${input.channelCode}-${Date.now()}`;
+  const state = preflight.ready
+    ? approvalStatus === "approved"
+      ? "approved"
+      : "review"
+    : "error";
   const persistedPayload = { ...payload, workflowCorrelationId: correlationId };
   await db
     .insert(channelListings)
@@ -1267,6 +1478,66 @@ export async function listOpenExceptions() {
     .where(eq(exceptionQueue.status, "open"))
     .orderBy(desc(exceptionQueue.createdAt))
     .limit(50);
+}
+
+export async function resolveException(input: {
+  exceptionId: number;
+  status?: "resolved" | "dismissed";
+  note?: string;
+  actorUserId: number;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database connection is unavailable.");
+  const [exception] = await db
+    .select()
+    .from(exceptionQueue)
+    .where(eq(exceptionQueue.id, input.exceptionId))
+    .limit(1);
+  if (!exception || exception.status !== "open") {
+    throw new Error("Only an open exception can be resolved.");
+  }
+  const nextStatus = input.status ?? "resolved";
+  const resolvedAt = new Date();
+  const existingDetails =
+    exception.details &&
+    typeof exception.details === "object" &&
+    !Array.isArray(exception.details)
+      ? (exception.details as Record<string, unknown>)
+      : {};
+  const nextDetails = input.note
+    ? { ...existingDetails, resolutionNote: input.note }
+    : existingDetails;
+  await db
+    .update(exceptionQueue)
+    .set({
+      status: nextStatus,
+      resolvedByUserId: input.actorUserId,
+      resolvedAt,
+      details: nextDetails,
+    })
+    .where(eq(exceptionQueue.id, input.exceptionId));
+  await db.insert(activityLogs).values({
+    category: "system",
+    action: `exception_${nextStatus}`,
+    subjectType: exception.subjectType,
+    subjectId: exception.subjectId,
+    actorUserId: input.actorUserId,
+    correlationId: exception.correlationId,
+    outcome: "succeeded",
+    details: {
+      exceptionId: exception.id,
+      status: nextStatus,
+      note: input.note || null,
+    },
+  });
+  const [updated] = await db
+    .select()
+    .from(exceptionQueue)
+    .where(eq(exceptionQueue.id, input.exceptionId))
+    .limit(1);
+  if (!updated)
+    throw new Error("Exception record could not be loaded after resolution.");
+  return updated;
 }
 
 export async function persistEbayRefreshTokenReference(secretRef: string) {
@@ -1364,15 +1635,25 @@ export async function decideApprovalRequest(input: {
     .limit(1);
   if (!approval || approval.status !== "pending")
     throw new Error("Only a pending approval can be decided.");
+  const decidedAt = new Date();
   await db
     .update(approvalRequests)
     .set({
       status: input.decision,
       decisionNote: input.note || null,
       decidedByUserId: input.actorUserId,
-      decidedAt: new Date(),
+      decidedAt,
     })
     .where(eq(approvalRequests.id, input.approvalId));
+  if (approval.subjectType === "listing") {
+    await db
+      .update(channelListings)
+      .set({
+        state: input.decision === "approved" ? "approved" : "error",
+        updatedAt: decidedAt,
+      })
+      .where(eq(channelListings.id, approval.subjectId));
+  }
   await db.insert(activityLogs).values({
     category: "approval",
     action: `listing_approval_${input.decision}`,
@@ -1381,7 +1662,15 @@ export async function decideApprovalRequest(input: {
     actorUserId: input.actorUserId,
     correlationId: approval.correlationId,
     outcome: input.decision,
-    details: { approvalId: approval.id },
+    details: {
+      approvalId: approval.id,
+      listingState:
+        approval.subjectType === "listing"
+          ? input.decision === "approved"
+            ? "approved"
+            : "error"
+          : undefined,
+    },
   });
 }
 
