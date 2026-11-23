@@ -502,7 +502,23 @@ export async function getUnifiedActivityLedger() {
 export async function listCatalogProducts() {
   const db = await getDb();
   if (!db) return [];
-  return db.select().from(products).orderBy(desc(products.updatedAt));
+  const [productRows, mediaRows] = await Promise.all([
+    db.select().from(products).orderBy(desc(products.updatedAt)),
+    db
+      .select()
+      .from(productMedia)
+      .orderBy(desc(productMedia.isPrimary), productMedia.id),
+  ]);
+  const mediaByProductId = new Map<number, (typeof mediaRows)[number][]>();
+  for (const item of mediaRows) {
+    const bucket = mediaByProductId.get(item.productId) ?? [];
+    bucket.push(item);
+    mediaByProductId.set(item.productId, bucket);
+  }
+  return productRows.map(product => ({
+    ...product,
+    media: mediaByProductId.get(product.id) ?? [],
+  }));
 }
 
 export async function createCatalogProduct(input: {
@@ -510,21 +526,29 @@ export async function createCatalogProduct(input: {
   upc?: string | null;
   title: string;
   condition: string;
+  conditionNotes?: string | null;
   brandOrStudio?: string | null;
+  category?: string | null;
   format?: string | null;
+  attributes?: Record<string, unknown> | null;
   description?: string | null;
   actorUserId: number;
 }) {
   const db = await getDb();
   if (!db) throw new Error("Database connection is unavailable.");
 
+  const attributes =
+    input.attributes ?? (input.category ? { category: input.category } : null);
+
   await db.insert(products).values({
     sku: input.sku,
     upc: input.upc || null,
     title: input.title,
     condition: input.condition,
+    conditionNotes: input.conditionNotes || null,
     brandOrStudio: input.brandOrStudio || null,
     format: input.format || null,
+    attributes,
     description: input.description || null,
   });
   const [created] = await db
@@ -552,6 +576,241 @@ export async function createCatalogProduct(input: {
     },
   });
   return created;
+}
+
+export async function updateCatalogProduct(input: {
+  productId: number;
+  sku?: string;
+  upc?: string | null;
+  title?: string;
+  condition?: string;
+  conditionNotes?: string | null;
+  brandOrStudio?: string | null;
+  format?: string | null;
+  attributes?: Record<string, unknown> | null;
+  description?: string | null;
+  actorUserId: number;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database connection is unavailable.");
+
+  const [existing] = await db
+    .select()
+    .from(products)
+    .where(eq(products.id, input.productId))
+    .limit(1);
+  if (!existing) {
+    throw new Error("The selected catalog record is unavailable.");
+  }
+
+  const updateSet: Record<string, unknown> = {
+    updatedAt: new Date(),
+  };
+  if (input.sku !== undefined) updateSet.sku = input.sku.trim();
+  if (input.upc !== undefined) updateSet.upc = input.upc?.trim() || null;
+  if (input.title !== undefined) updateSet.title = input.title.trim();
+  if (input.condition !== undefined)
+    updateSet.condition = input.condition.trim();
+  if (input.conditionNotes !== undefined)
+    updateSet.conditionNotes = input.conditionNotes?.trim() || null;
+  if (input.brandOrStudio !== undefined)
+    updateSet.brandOrStudio = input.brandOrStudio?.trim() || null;
+  if (input.format !== undefined)
+    updateSet.format = input.format?.trim() || null;
+  if (input.attributes !== undefined)
+    updateSet.attributes = input.attributes ?? null;
+  if (input.description !== undefined)
+    updateSet.description = input.description?.trim() || null;
+
+  await db
+    .update(products)
+    .set(updateSet)
+    .where(eq(products.id, input.productId));
+
+  const [updated] = await db
+    .select()
+    .from(products)
+    .where(eq(products.id, input.productId))
+    .limit(1);
+  if (!updated) {
+    throw new Error("Catalog record could not be loaded after update.");
+  }
+
+  const updatedFields = Object.keys(updateSet).filter(
+    key => key !== "updatedAt"
+  );
+  await db.insert(activityLogs).values({
+    category: "catalog",
+    action: "catalog_record_updated",
+    subjectType: "product",
+    subjectId: updated.id,
+    actorUserId: input.actorUserId,
+    correlationId: `catalog-update-${updated.id}-${Date.now()}`,
+    outcome: "succeeded",
+    details: {
+      sku: updated.sku,
+      updatedFields,
+      verificationStatus: updated.verificationStatus,
+    },
+  });
+
+  return updated;
+}
+
+export async function addProductMedia(input: {
+  productId: number;
+  url: string;
+  altText?: string | null;
+  mediaType?: "image" | "video" | "document";
+  isPrimary?: boolean;
+  actorUserId: number;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database connection is unavailable.");
+
+  const [product] = await db
+    .select()
+    .from(products)
+    .where(eq(products.id, input.productId))
+    .limit(1);
+  if (!product) {
+    throw new Error("The selected catalog record is unavailable.");
+  }
+
+  const normalizedUrl = input.url.trim();
+  if (!normalizedUrl) {
+    throw new Error("A valid media URL is required.");
+  }
+
+  if (input.isPrimary) {
+    await db
+      .update(productMedia)
+      .set({ isPrimary: false })
+      .where(eq(productMedia.productId, input.productId));
+  }
+
+  const insertResult = await db.insert(productMedia).values({
+    productId: input.productId,
+    url: normalizedUrl,
+    altText: input.altText?.trim() || null,
+    mediaType: input.mediaType ?? "image",
+    isPrimary: Boolean(input.isPrimary),
+    verified: false,
+  });
+
+  const insertedId = Number(
+    (insertResult as { lastInsertRowid?: number | bigint } | undefined)
+      ?.lastInsertRowid ?? 0
+  );
+  const [createdMedia] = insertedId
+    ? await db
+        .select()
+        .from(productMedia)
+        .where(eq(productMedia.id, insertedId))
+        .limit(1)
+    : await db
+        .select()
+        .from(productMedia)
+        .where(
+          and(
+            eq(productMedia.productId, input.productId),
+            eq(productMedia.url, normalizedUrl)
+          )
+        )
+        .orderBy(desc(productMedia.id))
+        .limit(1);
+
+  if (!createdMedia) {
+    throw new Error("Product media could not be loaded after attachment.");
+  }
+
+  await db.insert(activityLogs).values({
+    category: "catalog",
+    action: "product_media_attached",
+    subjectType: "product_media",
+    subjectId: createdMedia.id,
+    actorUserId: input.actorUserId,
+    correlationId: `media-add-${input.productId}-${createdMedia.id}-${Date.now()}`,
+    outcome: "succeeded",
+    details: {
+      productId: input.productId,
+      mediaId: createdMedia.id,
+      url: createdMedia.url,
+      mediaType: createdMedia.mediaType,
+      isPrimary: createdMedia.isPrimary,
+      verified: createdMedia.verified,
+    },
+  });
+
+  return createdMedia;
+}
+
+export async function verifyProductMedia(
+  mediaIdOrInput:
+    number | { mediaId: number; productId?: number; actorUserId: number },
+  actorUserIdArg?: number
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database connection is unavailable.");
+
+  const mediaId =
+    typeof mediaIdOrInput === "number"
+      ? mediaIdOrInput
+      : mediaIdOrInput.mediaId;
+  const productId =
+    typeof mediaIdOrInput === "number" ? undefined : mediaIdOrInput.productId;
+  const actorUserId =
+    typeof mediaIdOrInput === "number"
+      ? (actorUserIdArg ?? 1)
+      : mediaIdOrInput.actorUserId;
+
+  const filter =
+    productId !== undefined
+      ? and(eq(productMedia.id, mediaId), eq(productMedia.productId, productId))
+      : eq(productMedia.id, mediaId);
+
+  const [existing] = await db
+    .select()
+    .from(productMedia)
+    .where(filter)
+    .limit(1);
+  if (!existing) {
+    throw new Error("The selected product media record is unavailable.");
+  }
+
+  await db
+    .update(productMedia)
+    .set({ verified: true })
+    .where(eq(productMedia.id, mediaId));
+
+  const [verifiedMedia] = await db
+    .select()
+    .from(productMedia)
+    .where(eq(productMedia.id, mediaId))
+    .limit(1);
+  if (!verifiedMedia) {
+    throw new Error(
+      "Product media record could not be loaded after verification."
+    );
+  }
+
+  await db.insert(activityLogs).values({
+    category: "catalog",
+    action: "product_media_verified",
+    subjectType: "product_media",
+    subjectId: verifiedMedia.id,
+    actorUserId,
+    correlationId: `media-verify-${verifiedMedia.productId}-${verifiedMedia.id}-${Date.now()}`,
+    outcome: "approved",
+    details: {
+      productId: verifiedMedia.productId,
+      mediaId: verifiedMedia.id,
+      url: verifiedMedia.url,
+      verified: true,
+    },
+  });
+
+  return verifiedMedia;
 }
 
 export async function verifyCatalogProduct(
@@ -594,12 +853,7 @@ export async function recordOperationsActivity(input: {
   actorUserId: number;
   correlationId: string;
   outcome:
-    | "requested"
-    | "approved"
-    | "rejected"
-    | "succeeded"
-    | "failed"
-    | "blocked";
+    "requested" | "approved" | "rejected" | "succeeded" | "failed" | "blocked";
   details: Record<string, unknown>;
 }) {
   const db = await getDb();
