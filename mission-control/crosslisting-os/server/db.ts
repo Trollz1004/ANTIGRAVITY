@@ -513,6 +513,7 @@ export async function createCatalogProduct(input: {
   condition: string;
   brandOrStudio?: string | null;
   format?: string | null;
+  category?: string | null;
   description?: string | null;
   actorUserId: number;
 }) {
