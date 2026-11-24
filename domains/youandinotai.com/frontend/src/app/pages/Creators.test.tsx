@@ -5,12 +5,14 @@ import { Creators } from './Creators';
 
 function visibleText(root: HTMLElement): string {
   const parts = [root.textContent || ''];
-  root.querySelectorAll('[placeholder],[aria-label],[title],[alt]').forEach(el => {
-    for (const attr of ['placeholder', 'aria-label', 'title', 'alt']) {
-      const value = el.getAttribute(attr);
-      if (value) parts.push(value);
-    }
-  });
+  root
+    .querySelectorAll('[placeholder],[aria-label],[title],[alt]')
+    .forEach(el => {
+      for (const attr of ['placeholder', 'aria-label', 'title', 'alt']) {
+        const value = el.getAttribute(attr);
+        if (value) parts.push(value);
+      }
+    });
   return parts.join('\n');
 }
 
@@ -106,7 +108,9 @@ describe('Creators page (/creators)', () => {
     expect(writeText).toHaveBeenCalledWith(
       'https://youandinotai.com/c/maya-rose'
     );
-    await waitFor(() => expect(screen.getByRole('status').textContent).toMatch(/copied/i));
+    await waitFor(() =>
+      expect(screen.getByRole('status').textContent).toMatch(/copied/i)
+    );
   });
 
   it('downloads the QR as a PNG named after the creator', () => {
@@ -114,7 +118,9 @@ describe('Creators page (/creators)', () => {
     fireEvent.change(screen.getByLabelText(/your name/i), {
       target: { value: 'maya-rose' },
     });
-    fireEvent.click(screen.getByRole('button', { name: /download qr as png/i }));
+    fireEvent.click(
+      screen.getByRole('button', { name: /download qr as png/i })
+    );
     expect(anchorClicks).toHaveLength(1);
     expect(anchorClicks[0].download).toBe('youandinotai-maya-rose-qr.png');
     expect(anchorClicks[0].getAttribute('href')).toBe(

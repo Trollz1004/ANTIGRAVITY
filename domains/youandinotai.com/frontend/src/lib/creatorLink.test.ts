@@ -61,10 +61,13 @@ describe('creatorLink (shared with public/affiliate-links.html)', () => {
     expect(buildCreatorLink('')).toBeNull();
   });
 
-  it.each(SAMPLES)('gives the same name and link as the HTML tool for %j', raw => {
-    expect(toShortName(raw)).toBe(tool.toShortName(raw));
-    expect(buildCreatorLink(raw)).toBe(tool.buildCreatorLink(raw));
-  });
+  it.each(SAMPLES)(
+    'gives the same name and link as the HTML tool for %j',
+    raw => {
+      expect(toShortName(raw)).toBe(tool.toShortName(raw));
+      expect(buildCreatorLink(raw)).toBe(tool.buildCreatorLink(raw));
+    }
+  );
 
   it.each([
     'https://youandinotai.com/c/maya-rose',

@@ -196,12 +196,17 @@ export function makeQr(text: string): Qr | null {
     for (let y = 0; y < size - 1; y++)
       for (let x = 0; x < size - 1; x++) {
         const k = mod[y][x];
-        if (k === mod[y][x + 1] && k === mod[y + 1][x] && k === mod[y + 1][x + 1])
+        if (
+          k === mod[y][x + 1] &&
+          k === mod[y + 1][x] &&
+          k === mod[y + 1][x + 1]
+        )
           p += 3;
       }
     for (let y = 0; y < size; y++)
       for (let x = 0; x < size; x++) if (mod[y][x]) dark++;
-    p += Math.floor(Math.abs(dark * 20 - size * size * 10) / (size * size)) * 10;
+    p +=
+      Math.floor(Math.abs(dark * 20 - size * size * 10) / (size * size)) * 10;
     return p;
   };
   let best = 0;

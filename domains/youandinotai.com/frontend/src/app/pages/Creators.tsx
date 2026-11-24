@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { buildCreatorLink, drawQr, toShortName } from '../../lib/creatorLink';
 
-const DISCLOSURE_LINE =
-  'I earn money when you sign up through this link.';
+const DISCLOSURE_LINE = 'I earn money when you sign up through this link.';
 
 /**
  * Public page: anyone types a short name and gets their link and QR code.
@@ -155,7 +154,10 @@ export function Creators() {
                 >
                   Copy link
                 </button>
-                <span role="status" className="text-lg font-bold text-[#86EFAC]">
+                <span
+                  role="status"
+                  className="text-lg font-bold text-[#86EFAC]"
+                >
                   {copied ? 'Copied' : ''}
                 </span>
               </div>
