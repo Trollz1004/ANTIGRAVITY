@@ -59,9 +59,14 @@ afterEach(() => {
 describe("upsertEbayInventoryItem", () => {
   it("PUTs the item to inventory_item/{sku} and accepts 204 No Content", async () => {
     const fetchStub = stubFetch(() => new Response(null, { status: 204 }));
-    const result = await upsertEbayInventoryItem("OPT 7010/001", itemPayload, TOKEN, {
-      fetch: fetchStub,
-    });
+    const result = await upsertEbayInventoryItem(
+      "OPT 7010/001",
+      itemPayload,
+      TOKEN,
+      {
+        fetch: fetchStub,
+      }
+    );
 
     expect(result).toEqual({ ok: true, status: 204, warnings: [] });
     expect(fetchStub).toHaveBeenCalledTimes(1);
