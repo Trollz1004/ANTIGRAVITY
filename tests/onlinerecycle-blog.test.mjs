@@ -30,6 +30,16 @@ const BLOG_PAGES = [
     canonical: 'https://onlinerecycle.net/blog/what-business-electronics-can-be-recycled.html',
     isPost: true,
   },
+  {
+    file: 'blog/where-to-recycle-old-computers-in-lake-county-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-lake-county-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/what-to-do-with-a-broken-laptop-in-orlando.html',
+    canonical: 'https://onlinerecycle.net/blog/what-to-do-with-a-broken-laptop-in-orlando.html',
+    isPost: true,
+  },
 ];
 
 function parseAttrs(attrString) {
@@ -195,7 +205,7 @@ for (const page of BLOG_PAGES) {
   }
 }
 
-test('blog/index.html links to all three posts', () => {
+test('blog/index.html links to all posts', () => {
   const indexPath = path.join(SITE, 'blog/index.html');
   assert.ok(fs.existsSync(indexPath), 'missing blog/index.html');
   const raw = fs.readFileSync(indexPath, 'utf8');
