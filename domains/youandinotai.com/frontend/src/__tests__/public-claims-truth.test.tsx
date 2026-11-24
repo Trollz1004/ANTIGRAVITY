@@ -71,6 +71,59 @@ describe('public pages claim only what the date app does today', () => {
   });
 });
 
+describe('the Discover page shows no nearby or location feature', () => {
+  // The events API has no coordinates (see the Events test above), so a
+  // "Nearby Meetups" block with an "Enable Location" button promises a
+  // filter that does not exist. The component file stays; Discover does not
+  // render it.
+  it('Discover.tsx does not render MeetupsDiscovery, Nearby Meetups or Enable Location', () => {
+    const discover = read('src', 'app', 'pages', 'Discover.tsx');
+    expect(discover).not.toMatch(/MeetupsDiscovery/);
+    expect(discover).not.toMatch(/Nearby\s+Meetups?/i);
+    expect(discover).not.toMatch(/Enable\s+Location/i);
+    expect(discover).not.toMatch(/safe\s+meetups/i);
+  });
+
+  it('the MeetupsDiscovery component file is kept', () => {
+    expect(() =>
+      read('src', 'components', 'MeetupsDiscovery.tsx')
+    ).not.toThrow();
+  });
+});
+
+describe('public AI files claim video only while video calls exist in code', () => {
+  // Video calls exist today: the match list and the chat page link to
+  // /app/video/:matchId, VideoChat.tsx runs a WebRTC peer connection, and the
+  // backend signals it on /ws/video/{call_id}. If any of that goes, the
+  // "Mutual Video & Chat" line in the public AI files must go with it.
+  const VIDEO_CLAIM_FILES = [
+    'public/llms.txt',
+    'public/for-ai',
+    'public/.well-known/agent-card.json',
+  ];
+
+  it.each(VIDEO_CLAIM_FILES)(
+    '%s only says "Mutual Video" while the video call code is in place',
+    file => {
+      const claimsVideo = /mutual\s+video/i.test(read(...file.split('/')));
+      if (!claimsVideo) return;
+      expect(read('src', 'main.tsx')).toMatch(/path="\/app\/video\/:matchId"/);
+      expect(read('src', 'app', 'pages', 'Matches.tsx')).toMatch(
+        /\/app\/video\/\$\{match\.match_id\}/
+      );
+      expect(read('src', 'app', 'pages', 'Chat.tsx')).toMatch(
+        /\/app\/video\/\$\{matchId\}/
+      );
+      expect(read('src', 'components', 'VideoChat.tsx')).toMatch(
+        /new RTCPeerConnection/
+      );
+      expect(read('..', 'backend', 'app', 'routers', 'video.py')).toMatch(
+        /@router\.websocket\("\/ws\/video\/\{call_id\}"\)/
+      );
+    }
+  );
+});
+
 describe('/app/events is reachable from the app navigation', () => {
   it('links to /app/events from the desktop rail and the mobile top bar', () => {
     render(
