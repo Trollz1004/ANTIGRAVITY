@@ -127,7 +127,7 @@ export function AppShell() {
                 ♥
               </span>
               <div>
-                <div className="font-display text-base font-bold tracking-tight text-[#F4F1EA]">
+                <div className="font-display text-base font-bold tracking-tight text-[#F4F1EA] max-[430px]:sr-only">
                   YouAndINotAI
                 </div>
               </div>
