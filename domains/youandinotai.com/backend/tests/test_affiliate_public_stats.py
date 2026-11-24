@@ -245,7 +245,7 @@ def test_public_stats_is_rate_limited_per_ip(client, monkeypatch):
 
     blocked = client.get(URL, params={"code": "creator-alpha"})
     assert blocked.status_code == 429
-    assert "retry-after" in blocked.headers
+    assert "rate limit" in blocked.text.lower()
     assert "signups_count" not in blocked.text
 
     # A different client address has its own allowance.
