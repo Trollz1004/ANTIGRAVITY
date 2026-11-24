@@ -67,7 +67,7 @@ describe('Creators page (/creators)', () => {
   it('shows no link or QR until a usable name is typed', () => {
     renderPage();
     expect(screen.queryByRole('button', { name: /copy link/i })).toBeNull();
-    expect(screen.queryByLabelText(/QR code/i)).toBeNull();
+    expect(screen.queryByLabelText(/QR code for your link/i)).toBeNull();
     fireEvent.change(screen.getByLabelText(/your name/i), {
       target: { value: 'ab' },
     });
