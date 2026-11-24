@@ -219,8 +219,8 @@ export function PublicSupportPage() {
           </h1>
           <p className="mt-4 max-w-[65ch] text-[18px] leading-[1.55] text-[#F4F1EA] sm:text-[20px]">
             Whether you need help with your $1 Bot-Shield badge, a membership
-            receipt, an account recovery check, or a copy of your account data, every
-            support lane is direct and traceable.
+            receipt, an account recovery check, or a copy of your account data,
+            every support lane is direct and traceable.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -280,9 +280,9 @@ export function PublicSupportPage() {
               Data Copy &amp; 30-Day Deletion
             </h2>
             <p className="mt-3 text-[16px] leading-[1.55] text-[#F4F1EA]">
-              Request a copy of your account data (the founder sends it on request), update
-              location sharing, or start the 30-day account deletion clock
-              inside{' '}
+              Request a copy of your account data (the founder sends it on
+              request), update location sharing, or start the 30-day account
+              deletion clock inside{' '}
               <Link
                 to="/app/privacy"
                 className="inline-flex min-h-[44px] min-w-[44px] items-center text-[#FFD21E] underline"
@@ -969,8 +969,9 @@ export function LandingPage() {
                       Data Copy &amp; 30-Day Deletion
                     </h3>
                     <p className="mt-2 text-[15px] leading-[1.5] text-[#F4F1EA]">
-                      Request a copy of your account data (the founder sends it on request), manage location sharing, or
-                      schedule full 30-day account deletion anytime.
+                      Request a copy of your account data (the founder sends it
+                      on request), manage location sharing, or schedule full
+                      30-day account deletion anytime.
                     </p>
                   </div>
                   <div className="mt-4 flex flex-col gap-2">
