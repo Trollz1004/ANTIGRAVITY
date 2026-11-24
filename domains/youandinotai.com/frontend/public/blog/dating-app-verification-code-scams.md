@@ -8,7 +8,7 @@ canonical: 'https://youandinotai.com/blog/dating-app-verification-code-scams/'
 
 # How to avoid dating app verification code scams and account takeovers
 
-Dating app verification code scams target people who look for real connections online. Scammers create fake accounts to steal phone numbers, personal email addresses, and account credentials. In February 2024, the [Federal Trade Commission report](https://www.ftc.gov) stated that romance fraud caused $1.14 billion in reported losses in 2023. Understanding how verification code requests work helps you protect your personal information.
+Dating app verification code scams target people who look for real connections online. Scammers create fake accounts to steal phone numbers, personal email addresses, and account credentials. In February 2024, the [Federal Trade Commission report](https://www.ftc.gov/business-guidance/blog/2024/02/love-stinks-when-scammer-involved) stated that romance fraud caused $1.14 billion in reported losses in 2023. Understanding how verification code requests work helps you protect your personal information.
 
 ## How the verification code trick works
 
@@ -48,4 +48,4 @@ Fast action limits the damage and prevents scammers from accessing other linked 
 
 ## How YouAndINotAI protects member accounts
 
-YouAndINotAI keeps accounts safe from automated attacks. Members earn a Verified Human badge after a one dollar check. The platform provides messaging, topic boards, member events, discovery, block and report, and 30-day deletion. Founder prices are $14.99 a month, $39.99 for 3 months, and $99.99 for 12 months. You can create an account on the [member sign-up page](https://youandinotai.com/register).
+Members earn a Verified Human badge after a one dollar check. The platform provides messaging, topic boards, member events, discovery, block and report, and 30-day deletion. Founder prices are $14.99 a month, $39.99 for 3 months, and $99.99 for 12 months. You can create an account on the [member sign-up page](https://youandinotai.com/register).
