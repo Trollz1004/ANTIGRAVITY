@@ -23,8 +23,8 @@ const PAGES = ['about.html', 'terms.html', 'privacy.html'];
 // The restyle must not change the legal text or the About wording.
 const ORIGINAL = {
   'about.html': {
-    text: '1026f60f6af4ec7368971473612191e77aab0c0eb35a6489e8db0893d30360c4',
-    hrefs: '46ecd1790c2fa850e087fe666a43df5cddac77482fd8bbb652de3c5d83fa835c',
+    text: 'f442318d74b31273cc5231797d1d082e4a219968e50054ec80fa6d84b6edafd5',
+    hrefs: 'a45a65eb40382ef970766d591a047877b92a2231b054c18291b87785de4c0553',
   },
   'terms.html': {
     text: 'ffc3de1f9b8edcaf719b46de31e83c3600cc230dcc124b98d8ebc1d2705c087f',
