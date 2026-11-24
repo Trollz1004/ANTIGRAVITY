@@ -272,6 +272,10 @@
             </div>
 
             <div id="gcal-embed-container" style="display: none; margin-bottom: 24px">
+              <p id="gcal-embed-note" style="color: var(--text); font-size: 1.05rem; margin-bottom: 12px">
+                This calendar shows open windows only. To book, fill in the form below. You get your reference number,
+                a calendar file and a text confirmation link as soon as you submit.
+              </p>
               <iframe
                 id="gcal-schedule-iframe"
                 title="OnlineRecycle Appointment Schedule"
@@ -314,7 +318,7 @@
                   </button>
                 </div>
               </div>
-              <div class="date-strip" id="date-strip" role="listbox" aria-label="Available dates"></div>
+              <div class="date-strip" id="date-strip" role="listbox" aria-label="Available dates" tabindex="-1"></div>
 
               <div class="calendar-grid-label">
                 <span id="slot-heading-text">2. Select a 30-Minute Sorrento Drop-Off Window</span>
@@ -516,6 +520,9 @@
                   </svg>
                   <span>Download .ICS Calendar File</span>
                 </a>
+                <button type="button" id="schedule-another-btn" class="btn btn-secondary">
+                  Schedule another window
+                </button>
               </div>
             </div>
           </div>
@@ -2036,6 +2043,7 @@
         const cityField = document.getElementById('pickup-city-field');
         const selectedDateDisplay = document.getElementById('selected-date-display');
         const selectedSlotDisplay = document.getElementById('selected-slot-display');
+        const submitBtn = document.getElementById('bf-submit-btn');
         const embedContainer = document.getElementById('gcal-embed-container');
         const embedIframe = document.getElementById('gcal-schedule-iframe');
 
@@ -2287,6 +2295,26 @@
             selectedSlotLabel = preferred ? preferred.label : '';
           }
           slotStrip.innerHTML = '';
+          const openSlots = slots.filter(function (s) {
+            return !isSlotUnavailable(s.code);
+          });
+          if (openSlots.length === 0) {
+            selectedSlotCode = '';
+            selectedSlotLabel = '';
+            slotCodeInput.value = '';
+            slotLabelInput.value = '';
+            selectedSlotDisplay.textContent = 'No windows left on this day — choose another date';
+            submitBtn.disabled = true;
+            return;
+          }
+          if (
+            !openSlots.some(function (s) {
+              return s.code === selectedSlotCode;
+            })
+          ) {
+            selectedSlotCode = '';
+            selectedSlotLabel = '';
+          }
           slots.forEach(function (s) {
             const isTaken = isSlotTaken(s.code);
             const isElapsed = isSlotElapsed(selectedDate, s.code);
@@ -2310,7 +2338,10 @@
           });
           slotCodeInput.value = selectedSlotCode;
           slotLabelInput.value = selectedSlotLabel;
-          selectedSlotDisplay.textContent = selectedSlotLabel;
+          selectedSlotDisplay.textContent = selectedSlotCode
+            ? selectedSlotLabel
+            : 'No windows left on this day — choose another date';
+          submitBtn.disabled = !selectedSlotCode;
         }
 
         function setServiceType(nextType) {
@@ -2452,8 +2483,31 @@
         const confirmGcalBtn = document.getElementById('confirm-gcal-btn');
         const confirmIcsBtn = document.getElementById('confirm-ics-btn');
         const confirmSmsBtn = document.getElementById('confirm-sms-btn');
-        const submitBtn = document.getElementById('bf-submit-btn');
         const submitBtnLabel = document.getElementById('bf-submit-btn-label');
+        const scheduleAnotherBtn = document.getElementById('schedule-another-btn');
+
+        // Schedule another window: clear this confirmation, move to the next
+        // open slot, and put focus back on the date strip.
+        if (scheduleAnotherBtn) {
+          scheduleAnotherBtn.addEventListener('click', function () {
+            const slots = serviceType === 'pickup' ? PICKUP_SLOTS : DROPOFF_SLOTS;
+            const currentIndex = slots.findIndex(function (s) {
+              return s.code === selectedSlotCode;
+            });
+            for (let step = 1; step <= slots.length; step++) {
+              const candidate = slots[(currentIndex + step) % slots.length];
+              const taken = isSlotTaken(candidate.code) || isSlotElapsed(selectedDate, candidate.code);
+              if (!taken && candidate.code !== selectedSlotCode) {
+                selectedSlotCode = candidate.code;
+                selectedSlotLabel = candidate.label;
+                break;
+              }
+            }
+            document.getElementById('booking-confirm-box').style.display = 'none';
+            renderSlots();
+            document.getElementById('date-strip').focus();
+          });
+        }
 
         form.addEventListener('submit', function (ev) {
           ev.preventDefault();
@@ -2520,7 +2574,19 @@
           })
             .then(function (r) {
               const status = r && typeof r.status === 'number' ? r.status : 0;
-              return r.json().then(function (res) {
+              const readRaw = typeof r.text === 'function' ? r.text() : r.json().then(function (v) { return JSON.stringify(v); });
+              return readRaw.then(function (raw) {
+                let res;
+                try {
+                  res = JSON.parse(raw);
+                } catch (e) {
+                  res = {
+                    ok: false,
+                    error: r.ok
+                      ? ''
+                      : 'Server error — please call or text (321) 396-2008 to confirm your slot.'
+                  };
+                }
                 return { status: status, res: res };
               });
             })
