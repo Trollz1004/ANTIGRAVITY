@@ -3,9 +3,8 @@
  * "Schedule another window" reset. Run: node --test ops/domains-server/
  *
  * Pins the static page contract for domains/onlinerecycle.net/site/index.html:
- *   1. #gcal-embed-container carries a note saying the form below (#booking-form)
- *      is what issues the instant OR- reference ID, the .ics file, and the SMS
- *      confirmation link.
+ *   1. #gcal-embed-container carries a plain note saying to fill in the form below
+ *      to get the reference number, calendar file, and text confirmation link.
  *   2. #booking-confirm-box has a "Schedule another window" button whose handler
  *      hides #booking-confirm-box, selects the next available slot in
  *      renderSlots(), and focuses #date-strip.
@@ -31,16 +30,17 @@ function sliceBetween(html, startMarker, endMarker) {
   return html.slice(start, end);
 }
 
-test("calendar embed note: submitting the form below issues the OR- id, .ics file, and SMS link", () => {
+test("calendar embed note: filling in the form below issues the reference number, calendar file, and text confirmation link", () => {
   const html = readPage();
   const embed = sliceBetween(html, 'id="gcal-embed-container"', "</div>");
   const note = embed.toLowerCase();
-  assert.match(note, /#booking-form/, "note names #booking-form");
-  assert.match(note, /\bor-/, "note names the instant OR- reference ID");
-  assert.match(note, /\.ics/, "note names the .ics file");
-  assert.match(note, /sms/, "note names the SMS confirmation link");
-  assert.match(note, /below/, "note says the form below is what issues them");
-  assert.match(note, /submitting|submit/, "note says submitting the form issues them");
+  assert.doesNotMatch(note, /#booking-form/, "note does not show customers the element id #booking-form");
+  assert.doesNotMatch(note, /\bor-\b/, "note does not show the prefix OR-");
+  assert.match(note, /reference number/, "note names the reference number in plain words");
+  assert.match(note, /calendar file/, "note names the calendar file in plain words");
+  assert.match(note, /text confirmation link/, "note names the text confirmation link in plain words");
+  assert.match(note, /form below/, "note says to fill in the form below");
+  assert.match(note, /submit/, "note says as soon as you submit");
 });
 
 test("confirm box has a Schedule another window button that resets the booking window", () => {
