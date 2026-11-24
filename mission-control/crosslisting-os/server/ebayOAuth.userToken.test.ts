@@ -50,7 +50,9 @@ async function storeRefreshToken() {
 }
 
 beforeEach(async () => {
-  savedEnv = Object.fromEntries(ENV_NAMES.map(name => [name, process.env[name]]));
+  savedEnv = Object.fromEntries(
+    ENV_NAMES.map(name => [name, process.env[name]])
+  );
   tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "ebay-user-token-"));
   credentialFile = path.join(
     tempRoot,
@@ -222,7 +224,10 @@ describe("getEbayUserAccessToken", () => {
     });
     await getEbayUserAccessToken({
       fetchImpl: (async () =>
-        jsonResponse({ error: "invalid_grant" }, 400)) as unknown as typeof fetch,
+        jsonResponse(
+          { error: "invalid_grant" },
+          400
+        )) as unknown as typeof fetch,
     }).catch(() => undefined);
 
     const output = written.join("\n");
