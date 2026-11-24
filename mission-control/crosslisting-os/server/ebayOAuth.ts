@@ -13,11 +13,23 @@ function readCookie(req: Request, name: string) {
     ?.slice(name.length + 1);
 }
 
+/**
+ * Derives the AES key for stored eBay tokens from JWT_SECRET. Refuses to run
+ * when the secret is unset, empty or only spaces: an empty secret would give
+ * every install the same well-known key. The message never holds the value.
+ */
+function deriveTokenKey(): Buffer {
+  const secret = process.env.JWT_SECRET;
+  if (!secret || !secret.trim()) {
+    throw new Error(
+      "JWT_SECRET is not set; refusing to encrypt or decrypt eBay tokens."
+    );
+  }
+  return crypto.createHash("sha256").update(secret).digest();
+}
+
 export function encryptToken(token: string) {
-  const key = crypto
-    .createHash("sha256")
-    .update(process.env.JWT_SECRET ?? "")
-    .digest();
+  const key = deriveTokenKey();
   const iv = crypto.randomBytes(12);
   const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
   const encrypted = Buffer.concat([
@@ -56,10 +68,7 @@ export function decryptToken(encryptedPayload: string | Buffer): string {
   if (iv.length !== 12 || tag.length !== 16) {
     throw new Error("Invalid encrypted token parameters.");
   }
-  const key = crypto
-    .createHash("sha256")
-    .update(process.env.JWT_SECRET ?? "")
-    .digest();
+  const key = deriveTokenKey();
   const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
   decipher.setAuthTag(tag);
   const decrypted = Buffer.concat([

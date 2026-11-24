@@ -2,9 +2,10 @@
 
 import hmac
 import logging
+import re
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Query, status
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request, status
 from sqlalchemy import case, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,10 +14,24 @@ from app.config import get_settings
 from app.database import get_db
 from app.models import Match, Message, RevenueAllocation, User, VerificationEvent
 from app.monitoring import get_metrics_response
+from app.rate_limit_redis import enforce_route_rate_limit
 
 logger = logging.getLogger("youandinotai.metrics")
 
 router = APIRouter()
+
+# Same short-name pattern the creator links use on the front end
+# (frontend/src/lib/partnerAttribution.ts SHORT_NAME_PATTERN).
+SHORT_NAME_PATTERN = re.compile(r"[a-z0-9-]{3,30}")
+
+# Only these numbers ever leave the public creator endpoint.
+_PUBLIC_STATS_FIELDS = (
+    "signups_count",
+    "verified_count",
+    "payments_count",
+    "gross_cents",
+    "owed_cents",
+)
 
 # webhooks.py:554-572 calls reserve_revenue_allocation() only when Square
 # reports payment.status == "COMPLETED", and revenue_allocation.py:190 writes
@@ -307,6 +322,47 @@ async def affiliate_metrics(
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "items": items,
         "totals": totals,
+    }
+
+
+@router.get("/affiliates/public-stats")
+async def affiliate_public_stats(
+    request: Request,
+    code: str = Query(
+        default="",
+        description="Creator short name, 3 to 30 characters of a-z, 0-9 and hyphen.",
+    ),
+    db: AsyncSession = Depends(get_db),
+):
+    """Creator self-serve numbers for one referral code. No login.
+
+    Counts and cents only: never a name, email or account id. An unknown code
+    answers with the same shape (all zeros) as a code with no activity yet.
+    Read-only; the numbers come from the same query the founder report uses.
+    """
+    settings = get_settings()
+    # Limit first so junk guesses count against the caller too.
+    await enforce_route_rate_limit(
+        request,
+        bucket="affiliates:public-stats",
+        limit=settings.public_stats_rate_limit_per_minute,
+        window_seconds=settings.redis_rate_limit_window,
+    )
+
+    slug = code.lower()
+    if not code.isascii() or not SHORT_NAME_PATTERN.fullmatch(slug):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Creator code must be 3 to 30 characters of a-z, 0-9 and hyphen.",
+        )
+
+    # Calling the handler directly skips the founder-only dependency declared
+    # on its route decorator; only the whitelisted fields below are returned.
+    report = await affiliate_metrics(code=slug, db=db)
+    item = report["items"][0]
+    return {
+        "referral_code": slug,
+        **{field: int(item[field]) for field in _PUBLIC_STATS_FIELDS},
     }
 
 
