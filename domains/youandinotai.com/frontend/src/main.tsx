@@ -12,6 +12,7 @@ import { Login } from './app/pages/Login';
 import { Register } from './app/pages/Register';
 import { ForgotPassword } from './app/pages/ForgotPassword';
 import { ResetPassword } from './app/pages/ResetPassword';
+import { Creators } from './app/pages/Creators';
 import { AuthGuard } from './app/AuthGuard';
 import { AppShell } from './app/AppShell';
 import { Matches } from './app/pages/Matches';
@@ -190,6 +191,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/creators" element={<Creators />} />
 
             {/* Authenticated app routes */}
             <Route element={<AuthGuard />}>
