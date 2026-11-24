@@ -78,7 +78,7 @@ const IDS = [
 
 function loadBooking(fetchImpl) {
   const html = fs.readFileSync(PAGE, "utf8");
-  const blocks = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
+  const blocks = [...html.matchAll(/<script>([\s\S]*?)<\/script>/gi)].map((m) => m[1]);
   const booking = blocks.find((b) => b.includes("function renderSlots"));
   assert.ok(booking, "booking script with renderSlots() must exist");
 
