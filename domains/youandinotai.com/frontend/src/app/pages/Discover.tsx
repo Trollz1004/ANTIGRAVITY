@@ -14,9 +14,6 @@ import { isSafetyToolsAvailable } from '../../lib/safety';
 import { SwipeCard, SwipeButtons } from '../components/SwipeCard';
 import { DiscoverSettings } from '../components/DiscoverSettings';
 import { SafetyDrawer } from '../components/SafetyDrawer';
-import { LazySection } from '../../components/LazySection';
-import { SkeletonLoader } from '../../components/SkeletonLoader';
-import MeetupsDiscovery from '../../components/MeetupsDiscovery';
 import { UnverifiedGate } from '../components/UnverifiedGate';
 
 interface Profile {
@@ -412,15 +409,6 @@ export function Discover() {
             }}
           />
         )}
-
-        <LazySection fallback={<SkeletonLoader />}>
-          <div className="mt-16 w-full max-w-6xl">
-            <h2 className="text-2xl font-black tracking-tight text-white mb-8 border-b border-white/10 pb-4">
-              Plans and safe meetups
-            </h2>
-            <MeetupsDiscovery />
-          </div>
-        </LazySection>
       </div>
     </div>
   );
