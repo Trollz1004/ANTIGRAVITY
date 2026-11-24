@@ -7,6 +7,7 @@ import {
   ClipboardCheck,
   FileCheck2,
   Loader2,
+  Send,
   ShieldCheck,
   Sparkles,
   XCircle,
@@ -67,6 +68,14 @@ export default function ListingDesk() {
     onSuccess: () => {
       utils.operations.ledger.invalidate();
       utils.operations.overview.invalidate();
+    },
+  });
+  const publish = trpc.listings.publish.useMutation({
+    onSuccess: () => {
+      utils.operations.ledger.invalidate();
+      utils.operations.overview.invalidate();
+      utils.exceptions.listOpen.invalidate();
+      utils.inventory.list.invalidate();
     },
   });
   const applyDraft = trpc.operations.applyDraftToCatalog.useMutation({
@@ -484,6 +493,68 @@ export default function ListingDesk() {
                 <p className="text-sm text-destructive">
                   {approval.error.message}
                 </p>
+              ) : null}
+              {preview.data.channel.code === "ebay" ? (
+                <div className="space-y-3 rounded-xl border border-border bg-muted/20 p-4">
+                  <Button
+                    size="lg"
+                    data-testid="publish-to-ebay"
+                    disabled={
+                      preview.data.state !== "approved" ||
+                      publish.isPending ||
+                      publish.data?.published === true
+                    }
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "Publish this listing live on eBay now? Your stock will be held for it."
+                        )
+                      ) {
+                        publish.mutate({ listingId: preview.data.listingId });
+                      }
+                    }}
+                    className="w-full gap-2 text-base"
+                  >
+                    {publish.isPending ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <Send className="h-5 w-5" />
+                    )}{" "}
+                    Publish to eBay
+                  </Button>
+                  {preview.data.state !== "approved" &&
+                  publish.data?.published !== true ? (
+                    <p className="text-sm leading-6 text-muted-foreground">
+                      This unlocks once the listing is approved. After you
+                      approve it on the Activity ledger, save the preview again
+                      here.
+                    </p>
+                  ) : null}
+                  {publish.data?.published ? (
+                    <p
+                      data-testid="publish-result"
+                      className="text-base font-medium text-emerald-800"
+                    >
+                      Live on eBay. Listing {publish.data.externalListingId},
+                      offer {publish.data.externalOfferId}.
+                    </p>
+                  ) : null}
+                  {publish.data && !publish.data.published ? (
+                    <p
+                      role="alert"
+                      data-testid="publish-error"
+                      className="text-base font-medium text-destructive"
+                    >
+                      Not published. {publish.data.error} The listing is still
+                      approved.
+                    </p>
+                  ) : null}
+                  {publish.error ? (
+                    <p role="alert" className="text-base text-destructive">
+                      {publish.error.message}
+                    </p>
+                  ) : null}
+                </div>
               ) : null}
             </div>
           ) : (

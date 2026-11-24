@@ -1387,11 +1387,17 @@ export async function createListingPayloadPreview(input: {
   const correlationId =
     existingCorrelationId ||
     `payload-${input.productId}-${input.channelCode}-${Date.now()}`;
-  const state = preflight.ready
-    ? approvalStatus === "approved"
-      ? "approved"
-      : "review"
-    : "error";
+  // A listing already sent to eBay keeps its state when its preview is run
+  // again, so it can never fall back to approved and be published twice.
+  const sentStates = ["submitted", "active", "sold", "ended"] as const;
+  const sentState = sentStates.find(value => value === existingListing?.state);
+  const state =
+    sentState ??
+    (preflight.ready
+      ? approvalStatus === "approved"
+        ? "approved"
+        : "review"
+      : "error");
   const persistedPayload = { ...payload, workflowCorrelationId: correlationId };
   await db
     .insert(channelListings)
