@@ -173,7 +173,11 @@ describe("listings.publish (stubbed eBay client)", () => {
 
   beforeEach(() => {
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "crosslister-e3-test-"));
-    process.env.DATABASE_URL = path.join(tempDir, "data", "crosslisting.sqlite3");
+    process.env.DATABASE_URL = path.join(
+      tempDir,
+      "data",
+      "crosslisting.sqlite3"
+    );
   });
 
   afterEach(() => {
