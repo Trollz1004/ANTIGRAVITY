@@ -2036,6 +2036,7 @@
         const cityField = document.getElementById('pickup-city-field');
         const selectedDateDisplay = document.getElementById('selected-date-display');
         const selectedSlotDisplay = document.getElementById('selected-slot-display');
+        const submitBtn = document.getElementById('bf-submit-btn');
         const embedContainer = document.getElementById('gcal-embed-container');
         const embedIframe = document.getElementById('gcal-schedule-iframe');
 
@@ -2287,6 +2288,26 @@
             selectedSlotLabel = preferred ? preferred.label : '';
           }
           slotStrip.innerHTML = '';
+          const openSlots = slots.filter(function (s) {
+            return !isSlotUnavailable(s.code);
+          });
+          if (openSlots.length === 0) {
+            selectedSlotCode = '';
+            selectedSlotLabel = '';
+            slotCodeInput.value = '';
+            slotLabelInput.value = '';
+            selectedSlotDisplay.textContent = 'No windows left on this day — choose another date';
+            submitBtn.disabled = true;
+            return;
+          }
+          if (
+            !openSlots.some(function (s) {
+              return s.code === selectedSlotCode;
+            })
+          ) {
+            selectedSlotCode = '';
+            selectedSlotLabel = '';
+          }
           slots.forEach(function (s) {
             const isTaken = isSlotTaken(s.code);
             const isElapsed = isSlotElapsed(selectedDate, s.code);
@@ -2310,7 +2331,10 @@
           });
           slotCodeInput.value = selectedSlotCode;
           slotLabelInput.value = selectedSlotLabel;
-          selectedSlotDisplay.textContent = selectedSlotLabel;
+          selectedSlotDisplay.textContent = selectedSlotCode
+            ? selectedSlotLabel
+            : 'No windows left on this day — choose another date';
+          submitBtn.disabled = !selectedSlotCode;
         }
 
         function setServiceType(nextType) {
@@ -2452,7 +2476,6 @@
         const confirmGcalBtn = document.getElementById('confirm-gcal-btn');
         const confirmIcsBtn = document.getElementById('confirm-ics-btn');
         const confirmSmsBtn = document.getElementById('confirm-sms-btn');
-        const submitBtn = document.getElementById('bf-submit-btn');
         const submitBtnLabel = document.getElementById('bf-submit-btn-label');
 
         form.addEventListener('submit', function (ev) {
@@ -2520,7 +2543,19 @@
           })
             .then(function (r) {
               const status = r && typeof r.status === 'number' ? r.status : 0;
-              return r.json().then(function (res) {
+              const readRaw = typeof r.text === 'function' ? r.text() : r.json().then(function (v) { return JSON.stringify(v); });
+              return readRaw.then(function (raw) {
+                let res;
+                try {
+                  res = JSON.parse(raw);
+                } catch (e) {
+                  res = {
+                    ok: false,
+                    error: r.ok
+                      ? ''
+                      : 'Server error — please call or text (321) 396-2008 to confirm your slot.'
+                  };
+                }
                 return { status: status, res: res };
               });
             })
