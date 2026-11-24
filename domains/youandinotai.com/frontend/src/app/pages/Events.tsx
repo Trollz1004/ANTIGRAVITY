@@ -6,11 +6,9 @@ import {
   Plus,
   Check,
   Clock,
-  Navigation,
   ShieldCheck,
 } from 'lucide-react';
 import { api } from '../../lib/api';
-import MeetupsDiscovery from '../../components/MeetupsDiscovery';
 
 interface EventData {
   id: string;
@@ -36,7 +34,6 @@ export function Events() {
   const [eventDate, setEventDate] = useState('');
   const [maxAttendees, setMaxAttendees] = useState('');
   const [rsvpd, setRsvpd] = useState<Set<string>>(new Set());
-  const [showNearby, setShowNearby] = useState(false);
 
   const loadEvents = () => {
     api
@@ -143,30 +140,6 @@ export function Events() {
           </p>
         </div>
       </section>
-
-      {/* Find Nearby — collapsible GPS-aware meetup discovery */}
-      <div className="mb-6 animate-fade-in">
-        <button
-          id="events-toggle-nearby"
-          onClick={() => setShowNearby(!showNearby)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-medium transition-all duration-200 ${
-            showNearby
-              ? 'glass text-[#111111] border-[#111111]'
-              : 'glass text-[#5c594f] hover:text-[#111111]'
-          }`}
-        >
-          <Navigation
-            size={14}
-            className={showNearby ? 'text-[#ff4f00]' : ''}
-          />
-          {showNearby ? 'Hide Nearby' : 'Find Nearby Meetups'}
-        </button>
-        {showNearby && (
-          <div className="mt-4 glass-strong rounded-3xl p-4 glass-highlight animate-scale-in">
-            <MeetupsDiscovery />
-          </div>
-        )}
-      </div>
 
       {showCreate && (
         <div className="glass-strong rounded-3xl p-6 glass-highlight mb-6 space-y-4 animate-scale-in">

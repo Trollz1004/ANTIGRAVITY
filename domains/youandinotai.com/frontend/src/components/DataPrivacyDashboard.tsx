@@ -377,16 +377,16 @@ export default function DataPrivacyDashboard() {
                   'export',
                   '/privacy/export',
                   () =>
-                    'Data export requested. We will keep it queued until it is ready.'
+                    'Data copy requested. The founder sends your copy to you.'
                 )
               }
               className="rounded-xl border border-[#3A3F45] bg-[#1A1E25] p-5 text-left transition hover:border-[#FFD21E] disabled:cursor-not-allowed disabled:opacity-60"
             >
               <div className="font-mono text-xs uppercase tracking-[0.14em] text-[#FFD21E]">
-                Download My Data
+                Request My Data
               </div>
               <div className="mt-2 font-display text-lg font-bold text-[#F4F1EA]">
-                Queue a full export
+                Request a copy
               </div>
               <p className="mt-2 text-sm text-[#C9CBCE]">
                 {degradedMode
