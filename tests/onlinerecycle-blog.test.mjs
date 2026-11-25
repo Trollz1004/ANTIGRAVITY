@@ -60,6 +60,22 @@ const BLOG_PAGES = [
     canonical: 'https://onlinerecycle.net/blog/where-to-recycle-old-computers-in-mount-dora-florida.html',
     isPost: true,
   },
+  {
+    file: 'blog/how-to-recycle-phones-and-tablets-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-phones-and-tablets-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-servers-and-network-gear-in-central-florida.html',
+    canonical: 'https://onlinerecycle.net/blog/how-to-recycle-servers-and-network-gear-in-central-florida.html',
+    isPost: true,
+  },
+  {
+    file: 'blog/how-to-recycle-home-stereo-receivers-and-speakers-in-central-florida.html',
+    canonical:
+      'https://onlinerecycle.net/blog/how-to-recycle-home-stereo-receivers-and-speakers-in-central-florida.html',
+    isPost: true,
+  },
 ];
 
 function parseAttrs(attrString) {
