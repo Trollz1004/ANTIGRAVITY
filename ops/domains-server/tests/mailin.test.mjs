@@ -9,6 +9,23 @@ import http from 'node:http';
 import net from 'node:net';
 import { fileURLToPath } from 'node:url';
 import { formatBookingMessage } from '../booking-notify.mjs';
+import { dayKey } from '../booking-stats.mjs';
+import * as serverMod from '../server.mjs';
+
+const HTML_ENTITY_MAP = {
+  '&amp;': '&',
+  '&#39;': "'",
+  '&apos;': "'",
+  '&quot;': '"',
+  '&nbsp;': ' ',
+};
+
+function decodeMailInEntities(text) {
+  return String(text || '')
+    .replace(/&(?:amp|#39|apos|quot|nbsp);/g, (entity) => HTML_ENTITY_MAP[entity] ?? entity)
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(HERE, '..', '..', '..');
@@ -541,7 +558,7 @@ test('mail-in section in index.html has the exact required copy, USPS Publicatio
   const endIdx = html.indexOf('<!-- STOP 03 (#how-it-works)', startIdx);
   assert.notEqual(endIdx, -1, '#mailin-section must sit before STOP 03');
   const sectionHtml = html.slice(startIdx, endIdx);
-  const plainText = sectionHtml.replace(/\s+/g, ' ').trim();
+  const plainText = decodeMailInEntities(sectionHtml);
 
   const requiredLines = [
     'Mail-in is for phones, tablets, laptops and small electronics from anywhere in the United States. You pay the postage. We do not pay for mailed devices.',
@@ -567,4 +584,208 @@ test('mail-in section in index.html has the exact required copy, USPS Publicatio
     plainText,
     /\bimmediately\b|\blandfill\b|\benvironment(?:al)?\b|\bsecure\b|\bITAD\b|\$\d|\bwarehouse\b|\btruck\b|\bvan\b|\bstaff\b|\bteam\b/i,
   );
+});
+
+test('decodeMailInEntities unescapes HTML entities in one pass without double-unescaping &amp;', () => {
+  assert.equal(
+    decodeMailInEntities(
+      'Write &#39;Restricted&#39; &amp; &quot;Surface&quot; &amp;quot; &amp;#39; &amp;apos; &amp;amp;',
+    ),
+    'Write \'Restricted\' & "Surface" &quot; &#39; &apos; &amp;',
+  );
+});
+
+test('mail-in record uses status MAILIN_REQUESTED, does not take or block any drop-off or pickup slot, does not appear in /api/calendar.ics, and does not break /api/booking-config or booking stats', async () => {
+  const port = await getFreePort();
+  const tmpBookingsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'orc-mailin-isolation-bookings-'));
+  const tmpStatsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'orc-mailin-isolation-stats-'));
+  const env = {
+    ...process.env,
+    DOMAINS_SERVER_PORT: String(port),
+    DOMAINS_SERVER_HOST: LOOPBACK,
+    ORC_BOOKINGS_DIR: tmpBookingsDir,
+    ORC_STATS_DIR: tmpStatsDir,
+    RECYCLE_MAILIN_ADDRESS: TEST_MAILIN_ADDRESS,
+  };
+
+  const child = spawn(process.execPath, [SERVER_PATH], {
+    env,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    windowsHide: true,
+  });
+
+  try {
+    await waitForServer(port);
+
+    const cfgBefore = await httpRequest(port, 'GET', '/api/booking-config');
+    assert.equal(cfgBefore.status, 200);
+    const tomorrowIso = cfgBefore.json?.upcomingDays?.[1]?.iso;
+    assert.match(String(tomorrowIso || ''), /^\d{4}-\d{2}-\d{2}$/);
+
+    // Seed a legacy mail-in record in bookings.jsonl with status SCHEDULED and no date/slot,
+    // plus one with a date/slot to prove neither can block a slot, appear in calendar.ics, or leak into bookedSlots.
+    const legacyNoDateId = 'OR-20261125-LEGACYMAIL000001';
+    const legacyWithDateId = 'OR-20261125-LEGACYMAIL000002';
+    const legacyRecords = [
+      {
+        bookingId: legacyNoDateId,
+        referenceId: legacyNoDateId,
+        createdAt: new Date().toISOString(),
+        serviceType: 'mailin',
+        fullName: 'Legacy Mail No Date',
+        email: 'legacy1@example.com',
+        state: 'GA',
+        deviceKind: '1 phone',
+        deviceCount: 1,
+        deviceList: '1 (1 phone)',
+        status: 'SCHEDULED',
+        notified: true,
+      },
+      {
+        bookingId: legacyWithDateId,
+        referenceId: legacyWithDateId,
+        createdAt: new Date().toISOString(),
+        serviceType: 'mailin',
+        fullName: 'Legacy Mail With Date',
+        email: 'legacy2@example.com',
+        state: 'SC',
+        date: tomorrowIso,
+        slotCode: '09:00-09:30',
+        deviceKind: '1 tablet',
+        deviceCount: 1,
+        deviceList: '1 (1 tablet)',
+        status: 'SCHEDULED',
+        notified: true,
+      },
+    ];
+    fs.writeFileSync(
+      path.join(tmpBookingsDir, 'bookings.jsonl'),
+      `${legacyRecords.map((r) => JSON.stringify(r)).join('\n')}\n`,
+      'utf8',
+    );
+
+    // Submit a new mail-in request (even passing date and slotCode in the payload)
+    const mailInRes = await httpRequest(port, 'POST', '/api/mailin', {
+      fullName: 'robin Carter',
+      email: 'robin@example.com',
+      state: 'NC',
+      deviceKind: '2 phones',
+      deviceCount: 2,
+      date: tomorrowIso,
+      slotCode: '09:00-09:30',
+    });
+    assert.equal(mailInRes.status, 200);
+    assert.equal(mailInRes.json?.ok, true);
+    const mailInId = mailInRes.json?.referenceId;
+    assert.match(String(mailInId || ''), /^OR-\d{8}-[0-9A-F]{16}$/);
+
+    // Verify the saved mail-in record in bookings.jsonl has status MAILIN_REQUESTED and no date or slotCode
+    const allSaved = fs
+      .readFileSync(path.join(tmpBookingsDir, 'bookings.jsonl'), 'utf8')
+      .trim()
+      .split(/\r?\n/)
+      .map((l) => JSON.parse(l));
+    const savedMailIn = allSaved.find((b) => b.bookingId === mailInId);
+    assert.ok(savedMailIn, 'mail-in record must be written to bookings.jsonl');
+    assert.equal(savedMailIn.status, 'MAILIN_REQUESTED', 'mail-in record must use its own status MAILIN_REQUESTED');
+    assert.equal(savedMailIn.date, undefined, 'mail-in record must not store a date');
+    assert.equal(savedMailIn.slotCode, undefined, 'mail-in record must not store a slotCode');
+
+    // 1. Mail-in records must NOT appear in /api/calendar.ics
+    for (const id of [mailInId, legacyNoDateId, legacyWithDateId]) {
+      const icsRes = await httpRequest(port, 'GET', `/api/calendar.ics?id=${encodeURIComponent(id)}`);
+      assert.equal(icsRes.status, 404, `mail-in record ${id} must not appear in /api/calendar.ics`);
+      assert.equal(icsRes.raw.includes('BEGIN:VCALENDAR'), false);
+    }
+
+    // 2. Mail-in records must NOT break /api/booking-config or appear in bookedSlots
+    const cfgAfterMailIn = await httpRequest(port, 'GET', '/api/booking-config');
+    assert.equal(cfgAfterMailIn.status, 200);
+    assert.equal(cfgAfterMailIn.json?.ok, true);
+    assert.equal(Array.isArray(cfgAfterMailIn.json?.upcomingDays), true);
+    assert.equal(cfgAfterMailIn.json?.upcomingDays?.length, 14);
+    assert.deepEqual(
+      cfgAfterMailIn.json?.bookedSlots,
+      [],
+      'mail-in records must never appear in /api/booking-config bookedSlots',
+    );
+
+    // Also verify selectDefaultSlot with raw records never treats a mail-in record as a taken slot
+    const defaultDropoff = serverMod.selectDefaultSlot({
+      serviceType: 'dropoff',
+      date: '',
+      bookedSlots: allSaved,
+    });
+    assert.equal(defaultDropoff?.code, '09:00-09:30');
+
+    // 3. Mail-in records must NOT take or block any drop-off or pickup slot
+    const dropoffRes = await httpRequest(port, 'POST', '/api/book', {
+      serviceType: 'dropoff',
+      date: tomorrowIso,
+      slotCode: '09:00-09:30',
+      slotLabel: '9:00 AM – 9:30 AM',
+      fullName: 'Casey Dropoff',
+      phone: '(321) 555-0140',
+      email: 'casey@example.com',
+      deviceCount: '1-5 items',
+      deviceList: '1 laptop',
+    });
+    assert.equal(dropoffRes.status, 200, `drop-off booking must succeed, got ${dropoffRes.status}: ${dropoffRes.raw}`);
+    assert.equal(dropoffRes.json?.ok, true);
+
+    const pickupRes = await httpRequest(port, 'POST', '/api/book', {
+      serviceType: 'pickup',
+      date: tomorrowIso,
+      slotCode: '10:00-12:00',
+      slotLabel: '10:00 AM – 12:00 PM',
+      fullName: 'Morgan Pickup',
+      phone: '(321) 555-0141',
+      email: 'morgan@example.com',
+      address: '100 Main St',
+      city: 'Sorrento, FL 32776',
+      zip: '32776',
+      deviceCount: '1-5 items',
+      deviceList: '2 desktop towers',
+    });
+    assert.equal(pickupRes.status, 200, `pickup booking must succeed, got ${pickupRes.status}: ${pickupRes.raw}`);
+    assert.equal(pickupRes.json?.ok, true);
+
+    // Real drop-off and pickup bookings DO appear in /api/calendar.ics and /api/booking-config
+    const dropoffIcs = await httpRequest(
+      port,
+      'GET',
+      `/api/calendar.ics?id=${encodeURIComponent(dropoffRes.json.booking.bookingId)}`,
+    );
+    assert.equal(dropoffIcs.status, 200);
+    assert.match(dropoffIcs.raw, /BEGIN:VCALENDAR/);
+
+    const cfgAfterSlots = await httpRequest(port, 'GET', '/api/booking-config');
+    assert.equal(cfgAfterSlots.status, 200);
+    assert.deepEqual(cfgAfterSlots.json?.bookedSlots, [
+      { date: tomorrowIso, slotCode: '09:00-09:30', serviceType: 'dropoff' },
+      { date: tomorrowIso, slotCode: '10:00-12:00', serviceType: 'pickup' },
+    ]);
+
+    // 4. Mail-in records must NOT break booking stats or /health counts
+    await httpRequest(port, 'GET', '/', undefined, {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/131.0.0.0 Safari/537.36',
+    });
+    const statsPath = path.join(tmpStatsDir, `${dayKey()}.json`);
+    assert.equal(fs.existsSync(statsPath), true, 'daily booking stats file must exist');
+    const statsJson = JSON.parse(fs.readFileSync(statsPath, 'utf8'));
+    assert.equal(statsJson.page_views, 1);
+    assert.equal(statsJson.page_views_all, 1);
+    assert.equal(statsJson.bookings, 3, 'stats bookings count must stay valid integer without breaking');
+
+    const healthRes = await httpRequest(port, 'GET', '/health');
+    assert.equal(healthRes.status, 200);
+    assert.equal(typeof healthRes.json?.todayBookings, 'number');
+    assert.equal(typeof healthRes.json?.totalBookings, 'number');
+    assert.equal(healthRes.json?.todayBookings >= 2, true);
+    assert.equal(healthRes.json?.totalBookings >= 2, true);
+  } finally {
+    child.kill();
+    fs.rmSync(tmpBookingsDir, { recursive: true, force: true });
+    fs.rmSync(tmpStatsDir, { recursive: true, force: true });
+  }
 });

@@ -545,6 +545,16 @@ export function isSlotElapsed(dateIso, slotCode, now = new Date()) {
   return startMinutes <= ny.minutesOfDay;
 }
 
+export function isScheduledSlotBooking(booking) {
+  if (!booking || typeof booking !== 'object') return false;
+  if (booking.serviceType !== 'dropoff' && booking.serviceType !== 'pickup') return false;
+  if (booking.status !== 'SCHEDULED') return false;
+  const date = String(booking.date || '').trim();
+  const slotCode = String(booking.slotCode || '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return false;
+  return Boolean(SLOT_CODES[booking.serviceType]?.has(slotCode));
+}
+
 export function selectDefaultSlot({
   serviceType = 'dropoff',
   date = '',
@@ -555,8 +565,16 @@ export function selectDefaultSlot({
   const normalizedType = serviceType === 'pickup' ? 'pickup' : 'dropoff';
   const slots = normalizedType === 'pickup' ? PICKUP_SLOTS : DROPOFF_SLOTS;
   const isUnavailable = (code) =>
-    bookedSlots.some((b) => b.date === date && b.slotCode === code && b.serviceType === normalizedType) ||
-    isSlotElapsed(date, code, now);
+    bookedSlots.some(
+      (b) =>
+        b &&
+        Boolean(b.date) &&
+        Boolean(b.slotCode) &&
+        b.date === date &&
+        b.slotCode === code &&
+        b.serviceType === normalizedType &&
+        b.status !== 'CANCELLED',
+    ) || isSlotElapsed(date, code, now);
   if (currentSlotCode && slots.some((s) => s.code === currentSlotCode) && !isUnavailable(currentSlotCode)) {
     return slots.find((s) => s.code === currentSlotCode) || null;
   }
@@ -716,7 +734,7 @@ const server = http.createServer(async (req, res) => {
         });
         return;
       }
-      if (!bookingAllowed(clientIp(req))) {
+      if (!bookingAllowed(`mailin:${clientIp(req)}`)) {
         sendJson(res, 429, { ok: false, error: 'Too many booking requests. Please call or text (321) 396-2008.' });
         return;
       }
@@ -738,7 +756,7 @@ const server = http.createServer(async (req, res) => {
         deviceKind,
         deviceCount: parsedCount,
         deviceList,
-        status: 'SCHEDULED',
+        status: 'MAILIN_REQUESTED',
         notified: false,
       };
 
@@ -788,7 +806,7 @@ const server = http.createServer(async (req, res) => {
         readEnvValue('GOOGLE_CALENDAR_PICKUP_URL') || readEnvValue('GOOGLE_CALENDAR_SCHEDULE_URL') || '';
       const today = todayInFlorida();
       const bookedSlots = readBookings()
-        .filter((b) => String(b.date || '') >= today && b.status !== 'CANCELLED')
+        .filter((b) => isScheduledSlotBooking(b) && b.date >= today)
         .map((b) => ({
           date: b.date,
           slotCode: b.slotCode,
@@ -937,7 +955,7 @@ const server = http.createServer(async (req, res) => {
       // Check and record in one synchronous step so two requests for the same
       // window cannot both pass the check.
       const taken = readBookings().some(
-        (b) => b.date === date && b.slotCode === slotCode && b.serviceType === serviceType && b.status !== 'CANCELLED',
+        (b) => isScheduledSlotBooking(b) && b.date === date && b.slotCode === slotCode && b.serviceType === serviceType,
       );
       if (taken) {
         sendJson(res, 409, { ok: false, error: 'That time window was just booked. Please pick another one.' });
@@ -1001,7 +1019,9 @@ const server = http.createServer(async (req, res) => {
 
     if (isBookingHost && urlPath === '/api/calendar.ics' && req.method === 'GET') {
       const id = String(parsedUrl.searchParams.get('id') || '').trim();
-      const found = /^OR-\d{8}-[0-9A-F]{4,16}$/.test(id) ? readBookings().find((b) => b.bookingId === id) : null;
+      const found = /^OR-\d{8}-[0-9A-F]{4,16}$/.test(id)
+        ? readBookings().find((b) => b.bookingId === id && isScheduledSlotBooking(b))
+        : null;
       if (!found) {
         res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
         res.end('Booking not found\n');
